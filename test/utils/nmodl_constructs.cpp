@@ -1405,6 +1405,16 @@ std::map<std::string, NmodlTestCase> nmodl_valid_constructs{
                 }
             )"
         }
+    },
+    {
+        "empty_unit_declaration",
+        {
+            "Declaration with empty units",
+            R"(
+                FUNCTION ssCB(kdf(), kds()) (mM) {
+                }
+            )"
+        }
     }
     // clang-format on
 };
