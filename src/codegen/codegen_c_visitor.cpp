@@ -3893,6 +3893,11 @@ void CodegenCVisitor::print_codegen_routines() {
 }
 
 
+void CodegenCVisitor::print_wrapper_routines() {
+    // nothing to do
+}
+
+
 void CodegenCVisitor::visit_program(Program* node) {
     program_symtab = node->get_symbol_table();
 
@@ -3907,6 +3912,7 @@ void CodegenCVisitor::visit_program(Program* node) {
     update_index_semantics();
     rename_function_arguments();
     print_codegen_routines();
+    print_wrapper_routines();
 }
 
 }  // namespace codegen
