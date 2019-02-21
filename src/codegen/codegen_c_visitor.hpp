@@ -108,7 +108,7 @@ struct IndexVariableInfo {
 
 /**
  * \enum LayoutType
- * \brief Represent memory layout to use for code generation
+ * \brief Represents memory layout to use for code generation
  *
  */
 enum class LayoutType {
@@ -122,9 +122,9 @@ enum class LayoutType {
 
 /**
  * \class ShadowUseStatement
- * \brief Represent ion write statement during code generation
+ * \brief Represents ion write statement during code generation
  *
- * Ion update statement need use of shadow vectors for certain backends
+ * Ion update statement needs use of shadow vectors for certain backends
  * as atomics operations are not supported on cpu backend.
  *
  * \todo : if shadow_lhs is empty then we assume shadow statement not required
@@ -155,6 +155,9 @@ class CodegenCVisitor: public AstVisitor {
     /// flag to indicate if visitor should print the visited nodes
     bool codegen = false;
 
+    /// flag to indicate if visitor should print the the wrapper code
+    bool wrapper_codegen = false;
+
     /// variable name should be converted to instance name (but not for function arguments)
     bool enable_variable_name_lookup = true;
 
@@ -168,7 +171,7 @@ class CodegenCVisitor: public AstVisitor {
     std::vector<IndexVariableInfo> codegen_int_variables;
 
     /// all global variables for the model
-    /// todo : this has become different than CodegenInfo
+    /// @todo: this has become different than CodegenInfo
     std::vector<SymbolType> codegen_global_variables;
 
     /// all ion variables that could be possibly written
@@ -195,8 +198,14 @@ class CodegenCVisitor: public AstVisitor {
     /// all ast information for code generation
     codegen::CodegenInfo info;
 
-    /// code printer object
-    std::unique_ptr<CodePrinter> printer;
+    /// code printer object for target (C, CUDA, ispc, ...)
+    std::shared_ptr<CodePrinter> target_printer;
+
+    /// code printer object for wrappers
+    std::shared_ptr<CodePrinter> wrapper_printer;
+
+    /// pointer to active code printer
+    std::shared_ptr<CodePrinter> printer;
 
     /// list of shadow statements in the current block
     std::vector<ShadowUseStatement> shadow_statements;
@@ -876,7 +885,7 @@ class CodegenCVisitor: public AstVisitor {
 
 
     /// all includes
-    void print_headers_include();
+    virtual void print_headers_include();
 
 
     /// start of namespaces
@@ -903,13 +912,18 @@ class CodegenCVisitor: public AstVisitor {
     virtual void print_codegen_routines();
 
 
+    /// entry point to code generation for wrappers
+    virtual void print_wrapper_routines();
+
+
   public:
     CodegenCVisitor(std::string mod_filename,
                     std::string output_dir,
                     LayoutType layout,
                     std::string float_type,
                     std::string extension = ".cpp")
-        : printer(new CodePrinter(output_dir + "/" + mod_filename + extension))
+        : target_printer(new CodePrinter(output_dir + "/" + mod_filename + extension))
+        , printer(target_printer)
         , mod_filename(mod_filename)
         , layout(layout)
         , float_type(float_type) {}
@@ -919,7 +933,8 @@ class CodegenCVisitor: public AstVisitor {
                     std::stringstream& stream,
                     LayoutType layout,
                     std::string float_type)
-        : printer(new CodePrinter(stream))
+        : target_printer(new CodePrinter(stream))
+        , printer(target_printer)
         , mod_filename(mod_filename)
         , layout(layout)
         , float_type(float_type) {}
