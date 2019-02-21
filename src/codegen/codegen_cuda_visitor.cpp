@@ -184,7 +184,7 @@ void CodegenCudaVisitor::print_wrapper_routine(std::string wraper_function, Bloc
 
 void CodegenCudaVisitor::codegen_wrapper_routines() {
     print_wrapper_routine("nrn_cur", BlockType::Equation);
-    print_wrapper_routine("nrn_sate", BlockType::State);
+    print_wrapper_routine("nrn_state", BlockType::State);
 }
 
 
