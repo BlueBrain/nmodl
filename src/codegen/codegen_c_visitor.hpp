@@ -916,6 +916,22 @@ class CodegenCVisitor: public AstVisitor {
     virtual void print_wrapper_routines();
 
 
+    CodegenCVisitor(std::string mod_filename,
+                    std::string output_dir,
+                    LayoutType layout,
+                    std::string float_type,
+                    std::string extension,
+                    bool generate_wrappers,
+                    std::string wrapper_ext = ".cpp")
+        : target_printer(new CodePrinter(output_dir + "/" + mod_filename + extension))
+        , wrapper_printer(new CodePrinter(output_dir + "/" + mod_filename + wrapper_ext))
+        , printer(target_printer)
+        , wrapper_codegen(generate_wrappers)
+        , mod_filename(mod_filename)
+        , layout(layout)
+        , float_type(float_type) {}
+
+
   public:
     CodegenCVisitor(std::string mod_filename,
                     std::string output_dir,
