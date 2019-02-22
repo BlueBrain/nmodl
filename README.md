@@ -93,7 +93,7 @@ Alternatively, we can build the project using pip as:
 pip3 install nmodl/. --target=$HOME/nmodl   # remove --target option if want to install 
 ```
 
-And set PYTHONPATH as:
+And if --target option was used, set PYTHONPATH as:
 
 ```
 export PYTHONPATH=$HOME/nmodl:$PYTHONPATH
