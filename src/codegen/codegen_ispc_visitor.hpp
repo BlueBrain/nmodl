@@ -10,6 +10,9 @@
 #include "codegen/codegen_c_visitor.hpp"
 
 
+namespace nmodl {
+namespace codegen {
+
 /**
  * \class CodegenIspcVisitor
  * \brief Visitor for printing ispc backend
@@ -22,12 +25,10 @@ class CodegenIspcVisitor: public CodegenCVisitor {
     /// name of the code generation backend
     std::string backend_name() override;
 
-    /// if variable is qualified as constant
-    bool is_constant_variable(std::string name) override;
-
     /// return name of main compute kernels
     std::string compute_method_name(BlockType type) override;
 
+    std::string ptr_type_qualifier() override;
 
     /// common includes : standard c/c++, coreneuron and backend specific
     void print_backend_includes() override;
@@ -47,6 +48,10 @@ class CodegenIspcVisitor: public CodegenCVisitor {
     /// if reduction block in nrn_cur required
     bool nrn_cur_reduction_loop_required() override;
     */
+    void print_ispc_helper_ds();
+
+
+    void print_global_function_common_code(BlockType type) override;
 
     /// backend specific channel instance iteration block start
     void print_channel_iteration_block_begin() override;
@@ -72,7 +77,6 @@ class CodegenIspcVisitor: public CodegenCVisitor {
     void print_device_method_annotation() override;
     */
 
-    void print_ispc_includes();
     void print_headers_include() override;
     void print_wrapper_headers_include();
 
@@ -87,6 +91,14 @@ class CodegenIspcVisitor: public CodegenCVisitor {
 
     /// wrapper/caller routines for nrn_state and nrn_cur
     void codegen_wrapper_routines();
+
+    /// structure that wraps all global variables in the mod file
+    void print_mechanism_global_var_structure() override;
+
+    void print_mechanism_range_var_structure() override;
+
+    void print_data_structures() override;
+    void print_wrapper_data_structures();
 
 
     /// entry point to code generation
@@ -107,3 +119,6 @@ class CodegenIspcVisitor: public CodegenCVisitor {
                        std::string float_type)
         : CodegenCVisitor(mod_file, stream, layout, float_type) {}
 };
+
+}  // namespace codegen
+}  // namespace nmodl
