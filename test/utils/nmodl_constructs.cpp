@@ -156,19 +156,7 @@ std::map<std::string, NmodlTestCase> nmdol_invalid_constructs{
                 }
             )"
         }
-    },
-
-    {
-        "unit_block_1",
-        {
-            "UNITS block with empty unit",
-            R"(
-                UNITS {
-                    () = (millivolt)
-                }
-            )"
-        }
-    },
+    }
 
     // clang-format on
 };
@@ -503,6 +491,18 @@ std::map<std::string, NmodlTestCase> nmodl_valid_constructs{
                     cc = 1.1 (dd)
                     ee = (ff) (gg)
                     hh = (ii) -> (jj)
+                }
+            )"
+        }
+    },
+
+    {
+        "unit_block_3",
+        {
+            "UNITS block with empty unit (called default unit)",
+            R"(
+                UNITS {
+                    () = (millivolt)
                 }
             )"
         }
