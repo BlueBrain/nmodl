@@ -1225,7 +1225,7 @@ std::string CodegenCVisitor::compute_method_name(BlockType type) {
 
 
 // note extra empty space for pretty-printing if we skip the symbol
-std::string CodegenCVisitor::k_restrict() {
+std::string CodegenCVisitor::ptr_type_qualifier() {
     return "__restrict__ ";
 }
 
@@ -2349,7 +2349,7 @@ void CodegenCVisitor::print_mechanism_global_var_structure() {
     }
 
     if (info.vectorize) {
-        printer->add_line("ThreadDatum* {}ext_call_thread;"_format(k_restrict()));
+        printer->add_line("ThreadDatum* {}ext_call_thread;"_format(ptr_type_qualifier()));
         codegen_global_variables.push_back(make_symbol("ext_call_thread"));
     }
 
@@ -2650,23 +2650,24 @@ void CodegenCVisitor::print_mechanism_range_var_structure() {
         auto name = var->get_name();
         auto type = get_range_var_float_type(var);
         auto qualifier = is_constant_variable(name) ? k_const() : "";
-        printer->add_line("{}{}* {}{};"_format(qualifier, type, k_restrict(), name));
+        printer->add_line("{}{}* {}{};"_format(qualifier, type, ptr_type_qualifier(), name));
     }
     for (auto& var: codegen_int_variables) {
         auto name = var.symbol->get_name();
         if (var.is_index || var.is_integer) {
             auto qualifier = var.is_constant ? k_const() : "";
-            printer->add_line("{}{}* {}{};"_format(qualifier, int_type, k_restrict(), name));
+            printer->add_line(
+                "{}{}* {}{};"_format(qualifier, int_type, ptr_type_qualifier(), name));
         } else {
             auto qualifier = var.is_constant ? k_const() : "";
             auto type = var.is_vdata ? "void*" : default_float_data_type();
-            printer->add_line("{}{}* {}{};"_format(qualifier, type, k_restrict(), name));
+            printer->add_line("{}{}* {}{};"_format(qualifier, type, ptr_type_qualifier(), name));
         }
     }
     if (channel_task_dependency_enabled()) {
         for (auto& var: codegen_shadow_variables) {
             auto name = var->get_name();
-            printer->add_line("{}* {}{};"_format(float_type, k_restrict(), name));
+            printer->add_line("{}* {}{};"_format(float_type, ptr_type_qualifier(), name));
         }
     }
     printer->end_block();
@@ -3011,24 +3012,26 @@ void CodegenCVisitor::print_global_function_common_code(BlockType type) {
     print_kernel_data_present_annotation_block_begin();
     printer->add_line("int nodecount = ml->nodecount;");
     printer->add_line("int pnodecount = ml->_nodecount_padded;");
-    printer->add_line("{}int* {}node_index = ml->nodeindices;"_format(k_const(), k_restrict()));
-    printer->add_line("double* {}data = ml->data;"_format(k_restrict()));
-    printer->add_line("{}double* {}voltage = nt->_actual_v;"_format(k_const(), k_restrict()));
+    printer->add_line(
+        "{}int* {}node_index = ml->nodeindices;"_format(k_const(), ptr_type_qualifier()));
+    printer->add_line("double* {}data = ml->data;"_format(ptr_type_qualifier()));
+    printer->add_line(
+        "{}double* {}voltage = nt->_actual_v;"_format(k_const(), ptr_type_qualifier()));
 
     if (type == BlockType::Equation) {
-        printer->add_line("double* {} vec_rhs = nt->_actual_rhs;"_format(k_restrict()));
-        printer->add_line("double* {} vec_d = nt->_actual_d;"_format(k_restrict()));
+        printer->add_line("double* {} vec_rhs = nt->_actual_rhs;"_format(ptr_type_qualifier()));
+        printer->add_line("double* {} vec_d = nt->_actual_d;"_format(ptr_type_qualifier()));
         print_rhs_d_shadow_variables();
     }
-    printer->add_line("Datum* {}indexes = ml->pdata;"_format(k_restrict()));
-    printer->add_line("ThreadDatum* {}thread = ml->_thread;"_format(k_restrict()));
+    printer->add_line("Datum* {}indexes = ml->pdata;"_format(ptr_type_qualifier()));
+    printer->add_line("ThreadDatum* {}thread = ml->_thread;"_format(ptr_type_qualifier()));
 
     if (type == BlockType::Initial) {
         printer->add_newline();
         printer->add_line("setup_instance(nt, ml);");
     }
     // clang-format off
-    printer->add_line("{0}* {1}inst = ({0}*) ml->instance;"_format(instance_struct(), k_restrict()));
+    printer->add_line("{0}* {1}inst = ({0}*) ml->instance;"_format(instance_struct(), ptr_type_qualifier()));
     // clang-format on
     printer->add_newline(1);
 }
