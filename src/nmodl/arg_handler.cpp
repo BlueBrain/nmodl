@@ -25,7 +25,7 @@ ArgumentHandler::ArgumentHandler(const int& argc, const char** argv) {
         TCLAP::CmdLine cmd("NMODL :: Code Generator Toolkit for NMODL", ' ', version);
 
         // clang-format off
-        string_vector_type host_val = {"SERIAL", "OPENMP", "OPENACC"};
+        string_vector_type host_val = {"SERIAL", "OPENMP", "OPENACC", "ISPC"};
         value_constraint_type host_constr(host_val);
         value_arg_type host_arg(
                 "",

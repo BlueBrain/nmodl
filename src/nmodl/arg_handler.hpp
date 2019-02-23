@@ -87,6 +87,10 @@ struct ArgumentHandler {
         return host_backend == "OPENMP";
     }
 
+    bool host_ispc_backend() {
+        return host_backend == "ISPC";
+    }
+
     bool host_acc_backend() {
         return host_backend == "OPENACC";
     }

@@ -524,7 +524,7 @@ class CodegenCVisitor: public AstVisitor {
 
 
     /// restrict keyword
-    virtual std::string k_restrict();
+    virtual std::string ptr_type_qualifier();
 
 
     /// const keyword
@@ -600,11 +600,11 @@ class CodegenCVisitor: public AstVisitor {
 
 
     /// structure that wraps all global variables in the mod file
-    void print_mechanism_global_var_structure();
+    virtual void print_mechanism_global_var_structure();
 
 
     /// structure that wraps all range and int variables required for mod file
-    void print_mechanism_range_var_structure();
+    virtual void print_mechanism_range_var_structure();
 
 
     /// structure of ion variables used for local copies
@@ -858,7 +858,7 @@ class CodegenCVisitor: public AstVisitor {
 
 
     /// common code for global functions like nrn_init, nrn_cur and nrn_state
-    void print_global_function_common_code(BlockType type);
+    virtual void print_global_function_common_code(BlockType type);
 
 
     /// nrn_init function definition
@@ -897,12 +897,12 @@ class CodegenCVisitor: public AstVisitor {
     void print_namespace_end();
 
 
-    /// common getter
+    /// common getters
     void print_common_getters();
 
 
     /// all classes
-    void print_data_structures();
+    virtual void print_data_structures();
 
 
     /// all compute functions for every backend

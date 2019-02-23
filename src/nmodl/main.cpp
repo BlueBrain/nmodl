@@ -14,6 +14,7 @@
 #include "codegen/codegen_acc_visitor.hpp"
 #include "codegen/codegen_c_visitor.hpp"
 #include "codegen/codegen_cuda_visitor.hpp"
+#include "codegen/codegen_ispc_visitor.hpp"
 #include "codegen/codegen_omp_visitor.hpp"
 #include "parser/nmodl_driver.hpp"
 #include "utils/common_utils.hpp"
@@ -193,6 +194,9 @@ int main(int argc, const char* argv[]) {
 
             if (arg.host_c_backend()) {
                 CodegenCVisitor visitor(mod_file, arg.output_dir, layout, arg.dtype);
+                visitor.visit_program(ast.get());
+            } else if (arg.host_ispc_backend()) {
+                CodegenIspcVisitor visitor(mod_file, arg.output_dir, layout, arg.dtype);
                 visitor.visit_program(ast.get());
             } else if (arg.host_omp_backend()) {
                 CodegenOmpVisitor visitor(mod_file, arg.output_dir, layout, arg.dtype);
