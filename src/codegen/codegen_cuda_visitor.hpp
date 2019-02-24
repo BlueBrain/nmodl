@@ -43,6 +43,7 @@ class CodegenCudaVisitor: public CodegenCVisitor {
     /// setup method for setting matrix shadow vectors
     void print_rhs_d_shadow_variables() override;
 
+
     /// if reduction block in nrn_cur required
     bool nrn_cur_reduction_loop_required() override;
 

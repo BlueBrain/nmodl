@@ -47,6 +47,31 @@ std::string CodegenIspcVisitor::backend_name() {
 }
 
 
+void CodegenIspcVisitor::print_atomic_op(const std::string& lhs,
+                                         const std::string& op,
+                                         const std::string& rhs) {
+    std::string function;
+    if (op == "+") {
+        function = "atomic_add_local";
+    } else if (op == "-") {
+        function = "atomic_subtract_local";
+    } else {
+        throw std::runtime_error("ISPC backend error : {} not supported"_format(op));
+    }
+    printer->add_line("{}(&{}, {});"_format(function, lhs, rhs));
+}
+
+
+void CodegenIspcVisitor::print_nrn_cur_matrix_shadow_update() {
+    auto rhs_op = operator_for_rhs();
+    auto d_op = operator_for_d();
+    stringutils::remove_character(rhs_op, '=');
+    stringutils::remove_character(d_op, '=');
+    print_atomic_op("vec_rhs[node_id]", rhs_op, "rhs");
+    print_atomic_op("vec_d[node_id]", d_op, "g");
+}
+
+
 /*
  * Depending on the backend, print condition/loop for iterating over channels
  *
@@ -62,7 +87,6 @@ void CodegenIspcVisitor::print_channel_iteration_block_end() {
     printer->add_newline();
 }
 
-/* @todo : check why in CUDA those are off?
 void CodegenIspcVisitor::print_nrn_cur_matrix_shadow_reduction() {
     // do nothing
 }
@@ -75,7 +99,6 @@ void CodegenIspcVisitor::print_rhs_d_shadow_variables() {
 bool CodegenIspcVisitor::nrn_cur_reduction_loop_required() {
     return false;
 }
-*/
 
 std::string CodegenIspcVisitor::ptr_type_qualifier() {
     return "uniform "; // @note: extra space needed to separate qualifier from var name.
@@ -92,6 +115,8 @@ void CodegenIspcVisitor::print_backend_namespace_stop() {
     printer->add_newline();
 }
 
+// @todo : use base visitor function with provision to override specific qualifiers
+//         hh_ is hardcoded
 void CodegenIspcVisitor::print_global_function_common_code(BlockType type) {
     std::string method = compute_method_name(type);
     auto args = "{0} {1}* {0} {2}, {0} {3}* {0} {4}, {0} {5}* {0} {6}, {7} {8}"_format(
@@ -137,10 +162,13 @@ void CodegenIspcVisitor::print_compute_functions() {
             print_function(function);
         }
     }
+    //print_net_receive_kernel();
+    //print_net_receive_buffering();
     print_nrn_cur();
     print_nrn_state();
 }
 
+// @todo : use base visitor function with provision to override specific qualifiers
 void CodegenIspcVisitor::print_mechanism_global_var_structure() {
     auto float_type = default_float_data_type();
     printer->add_newline(2);
@@ -275,6 +303,7 @@ void CodegenIspcVisitor::print_mechanism_global_var_structure() {
 }
 
 
+// @todo : use base visitor function with provision to override specific qualifiers
 void CodegenIspcVisitor::print_mechanism_range_var_structure() {
     auto float_type = default_float_data_type();
     auto int_type = default_int_data_type();

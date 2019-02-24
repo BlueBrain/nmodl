@@ -796,6 +796,10 @@ class CodegenCVisitor: public AstVisitor {
     void print_net_receive_buffering();
 
 
+    /// net_receive kernel function definition
+    void print_net_receive_kernel();
+
+
     /// net_receive function definition
     void print_net_receive();
 
