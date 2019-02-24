@@ -3430,13 +3430,15 @@ void CodegenCVisitor::print_net_send_buffering() {
 }
 
 
-void CodegenCVisitor::print_net_receive() {
+void CodegenCVisitor::print_net_receive_kernel() {
     if (!net_receive_required()) {
         return;
     }
+    codegen = true;
+    printing_net_receive = true;
     auto node = info.net_receive_node;
 
-    /// rename arguments but need to see if they are actually used
+    /// rename arguments if same name is used
     auto parameters = node->get_parameters();
     for (auto& parameter: parameters) {
         auto name = parameter->get_node_name();
@@ -3447,39 +3449,43 @@ void CodegenCVisitor::print_net_receive() {
         }
     }
 
-    codegen = true;
-    printing_net_receive = true;
-    std::string function_name = method_name("net_receive_kernel");
-    std::string function_arguments = "double t, Point_process* pnt, int weight_index, double flag";
+    std::string name = method_name("net_receive_kernel");
+    std::string arguments = "double t, Point_process* pnt, int weight_index, double flag";
 
     if (info.artificial_cell) {
-        function_name = method_name("net_receive");
-        function_arguments = "Point_process* pnt, int weight_index, double flag";
+        name = method_name("net_receive");
+        arguments = "Point_process* pnt, int weight_index, double flag";
     }
 
-    /// net receive kernel
     printer->add_newline(2);
-    printer->start_block("static void {}({}) "_format(function_name, function_arguments));
+    printer->start_block("static void {}({}) "_format(name, arguments));
     print_net_receive_common_code(node);
-
     if (info.artificial_cell) {
         printer->add_line("double t = nt->_t;");
     }
-
     printer->add_line("{} = t;"_format(get_variable_name("tsave")));
-
     printer->add_indent();
     node->get_statement_block()->accept(this);
     printer->add_newline();
     printer->end_block();
     printer->add_newline();
 
-    /// net receive function
+    printing_net_receive = false;
+    codegen = false;
+}
+
+
+void CodegenCVisitor::print_net_receive() {
+    if (!net_receive_required()) {
+        return;
+    }
+    codegen = true;
+    printing_net_receive = true;
     if (!info.artificial_cell) {
-        function_name = method_name("net_receive");
-        function_arguments = "Point_process* pnt, int weight_index, double flag";
+        std::string name = method_name("net_receive");
+        std::string arguments = "Point_process* pnt, int weight_index, double flag";
         printer->add_newline(2);
-        printer->start_block("static void {}({}) "_format(function_name, function_arguments));
+        printer->start_block("static void {}({}) "_format(name, arguments));
         printer->add_line("NrnThread* nt = nrn_threads + pnt->_tid;");
         printer->add_line("Memb_list* ml = get_memb_list(nt);");
         printer->add_line("NetReceiveBuffer_t* nrb = ml->_net_receive_buffer;");
@@ -3866,6 +3872,7 @@ void CodegenCVisitor::print_compute_functions() {
     print_net_send_buffering();
     print_watch_activate();
     print_watch_check();
+    print_net_receive_kernel();
     print_net_receive();
     print_net_receive_buffering();
     print_nrn_init();
