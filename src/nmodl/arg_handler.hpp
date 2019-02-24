@@ -10,6 +10,8 @@
 #include <string>
 #include <vector>
 
+#include "instrumentor/instrumentor.hpp"
+
 /**
  * \class ArgumentHandler
  * \brief Parser comamnd line arguments
@@ -72,6 +74,9 @@ struct ArgumentHandler {
 
     /// directory for intermediate files from code generation
     std::string scratch_dir;
+
+    /// code instrumentor
+    instrument::InstrumentorType instrumentation_type;
 
     ArgumentHandler(const int& argc, const char* argv[]);
 

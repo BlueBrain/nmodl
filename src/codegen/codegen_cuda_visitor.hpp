@@ -21,6 +21,7 @@ class CodegenCudaVisitor: public CodegenCVisitor {
     /// name of the code generation backend
     std::string backend_name() override;
 
+
     /// if variable is qualified as constant
     bool is_constant_variable(std::string name) override;
 
@@ -90,12 +91,14 @@ class CodegenCudaVisitor: public CodegenCVisitor {
     CodegenCudaVisitor(std::string mod_file,
                        std::string output_dir,
                        LayoutType layout,
-                       std::string float_type)
-        : CodegenCVisitor(mod_file, output_dir, layout, float_type, ".cu") {}
+                       std::string float_type,
+                       InstrumentorType instrumentor_type)
+        : CodegenCVisitor(mod_file, output_dir, layout, float_type, instrumentor_type, ".cu") {}
 
     CodegenCudaVisitor(std::string mod_file,
                        std::stringstream& stream,
                        LayoutType layout,
-                       std::string float_type)
-        : CodegenCVisitor(mod_file, stream, layout, float_type) {}
+                       std::string float_type,
+                       InstrumentorType instrumentor_type)
+        : CodegenCVisitor(mod_file, stream, layout, float_type, instrumentor_type) {}
 };

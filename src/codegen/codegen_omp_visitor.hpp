@@ -60,12 +60,14 @@ class CodegenOmpVisitor: public CodegenCVisitor {
     CodegenOmpVisitor(std::string mod_file,
                       std::string output_dir,
                       LayoutType layout,
-                      std::string float_type)
-        : CodegenCVisitor(mod_file, output_dir, layout, float_type) {}
+                      std::string float_type,
+                      InstrumentorType instrumentor_type)
+        : CodegenCVisitor(mod_file, output_dir, layout, float_type, instrumentor_type) {}
 
     CodegenOmpVisitor(std::string mod_file,
                       std::stringstream& stream,
                       LayoutType layout,
-                      std::string float_type)
-        : CodegenCVisitor(mod_file, stream, layout, float_type) {}
+                      std::string float_type,
+                      InstrumentorType instrumentor_type)
+        : CodegenCVisitor(mod_file, stream, layout, float_type, instrumentor_type) {}
 };

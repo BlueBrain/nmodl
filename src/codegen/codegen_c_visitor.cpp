@@ -2168,6 +2168,12 @@ void CodegenCVisitor::print_coreneuron_includes() {
 }
 
 
+void CodegenCVisitor::print_instrumentor_includes() {
+    printer->add_newline();
+    instrument->header_include();
+}
+
+
 /**
  * Print all static variables at file scope
  *
@@ -3004,6 +3010,7 @@ void CodegenCVisitor::print_nrn_init() {
         // clang-format on
     }
 
+    instrument->region_begin("NRN_INIT:{}"_format(info.mod_suffix));
     printer->start_block("if (_nrn_skip_initmodel == 0)");
 
     print_channel_iteration_tiling_block_begin(BlockType::Initial);
@@ -3021,6 +3028,7 @@ void CodegenCVisitor::print_nrn_init() {
     print_shadow_reduction_statements();
     print_channel_iteration_tiling_block_end();
     printer->end_block(1);
+    instrument->region_end("NRN_INIT:{}"_format(info.mod_suffix));
 
     if (info.derivimplicit_used) {
         printer->add_line("*deriv{}_advance(thread) = 1;"_format(info.derivimplicit_list_num));
@@ -3321,6 +3329,7 @@ void CodegenCVisitor::print_net_receive_buffering() {
     printer->add_line("}");
     printer->add_newline();
 
+    instrument->region_begin("NET_BUF_RECEIVE:{}"_format(info.mod_suffix));
     auto net_receive = method_name("net_receive_kernel");
     printer->add_line("NetReceiveBuffer_t* nrb = ml->_net_receive_buffer;");
     printer->add_line("int count = nrb->_displ_cnt;");
@@ -3337,6 +3346,7 @@ void CodegenCVisitor::print_net_receive_buffering() {
     printer->add_line("        {}(t, point_process, weight_index, flag);"_format(net_receive));
     printer->add_line("    }");
     printer->add_line("}");
+    instrument->region_end("NET_BUF_RECEIVE:{}"_format(info.mod_suffix));
 
     if (info.net_send_used || info.net_event_used) {
         print_send_event_move();
@@ -3558,6 +3568,7 @@ void CodegenCVisitor::print_nrn_state() {
     printer->add_newline(2);
     printer->add_line("/** update state */");
     print_global_function_common_code(BlockType::State);
+    instrument->region_begin("NRN_STATE:{}"_format(info.mod_suffix));
     print_channel_iteration_tiling_block_begin(BlockType::State);
     print_channel_iteration_block_begin();
     print_post_channel_iteration_common_code();
@@ -3617,6 +3628,7 @@ void CodegenCVisitor::print_nrn_state() {
         print_shadow_reduction_block_end();
     }
     print_channel_iteration_tiling_block_end();
+    instrument->region_end("NRN_STATE:{}"_format(info.mod_suffix));
 
     print_kernel_data_present_annotation_block_end();
     printer->end_block(1);
@@ -3759,6 +3771,7 @@ void CodegenCVisitor::print_nrn_cur() {
     printer->add_newline(2);
     printer->add_line("/** update current */");
     print_global_function_common_code(BlockType::Equation);
+    instrument->region_begin("NRN_CUR:{}"_format(info.mod_suffix));
     print_channel_iteration_tiling_block_begin(BlockType::Equation);
     print_channel_iteration_block_begin();
     print_post_channel_iteration_common_code();
@@ -3774,6 +3787,7 @@ void CodegenCVisitor::print_nrn_cur() {
     }
 
     print_channel_iteration_tiling_block_end();
+    instrument->region_end("NRN_CUR:{}"_format(info.mod_suffix));
     print_kernel_data_present_annotation_block_end();
     printer->end_block(1);
     codegen = false;
@@ -3789,6 +3803,7 @@ void CodegenCVisitor::print_headers_include() {
     print_standard_includes();
     print_backend_includes();
     print_coreneuron_includes();
+    print_instrumentor_includes();
 }
 
 

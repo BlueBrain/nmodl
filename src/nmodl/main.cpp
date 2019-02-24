@@ -188,23 +188,28 @@ int main(int argc, const char* argv[]) {
             v.visit_program(ast.get());
 
             auto layout = arg.aos_memory_layout() ? LayoutType::aos : LayoutType::soa;
+            auto instrumentor = arg.instrumentation_type;
 
             logger->info("Generating host code with {} backend", arg.host_backend);
 
             if (arg.host_c_backend()) {
-                CodegenCVisitor visitor(mod_file, arg.output_dir, layout, arg.dtype);
+                CodegenCVisitor visitor(mod_file, arg.output_dir, layout, arg.dtype,
+                                        arg.instrumentation_type);
                 visitor.visit_program(ast.get());
             } else if (arg.host_omp_backend()) {
-                CodegenOmpVisitor visitor(mod_file, arg.output_dir, layout, arg.dtype);
+                CodegenOmpVisitor visitor(mod_file, arg.output_dir, layout, arg.dtype,
+                                          arg.instrumentation_type);
                 visitor.visit_program(ast.get());
             } else if (arg.host_acc_backend()) {
-                CodegenAccVisitor visitor(mod_file, arg.output_dir, layout, arg.dtype);
+                CodegenAccVisitor visitor(mod_file, arg.output_dir, layout, arg.dtype,
+                                          arg.instrumentation_type);
                 visitor.visit_program(ast.get());
             }
 
             if (arg.device_cuda_backend()) {
                 logger->info("Generating device code with {} backend", arg.accel_backend);
-                CodegenCudaVisitor visitor(mod_file, arg.output_dir, layout, arg.dtype);
+                CodegenCudaVisitor visitor(mod_file, arg.output_dir, layout, arg.dtype,
+                                           arg.instrumentation_type);
                 visitor.visit_program(ast.get());
             }
         }

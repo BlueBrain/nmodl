@@ -17,12 +17,16 @@
 
 #include "codegen/codegen_info.hpp"
 #include "codegen/codegen_naming.hpp"
+#include "instrumentor/instrumentor.hpp"
 #include "printer/code_printer.hpp"
 #include "symtab/symbol_table.hpp"
 #include "visitors/ast_visitor.hpp"
 
 
 using namespace fmt::literals;
+using instrument::Instrumentor;
+using instrument::InstrumentorBase;
+using instrument::InstrumentorType;
 
 
 /**
@@ -194,6 +198,9 @@ class CodegenCVisitor: public AstVisitor {
 
     /// code printer object
     std::unique_ptr<CodePrinter> printer;
+
+    /// code instrumentor
+    std::shared_ptr<InstrumentorBase> instrument;
 
     /// list of shadow statements in the current block
     std::vector<ShadowUseStatement> shadow_statements;
@@ -558,6 +565,10 @@ class CodegenCVisitor: public AstVisitor {
     void print_coreneuron_includes();
 
 
+    /// includes from instrumentor
+    void print_instrumentor_includes();
+
+
     /// backend specific includes
     virtual void print_backend_includes();
 
@@ -903,27 +914,43 @@ class CodegenCVisitor: public AstVisitor {
     /// entry point to code generation
     virtual void print_codegen_routines();
 
+    void setup_instrumentor(InstrumentorType type) {
+        if (type == InstrumentorType::Caliper) {
+            instrument = std::make_shared<Instrumentor<InstrumentorType::Caliper>>(printer.get());
+        } else if (type == InstrumentorType::Likwid) {
+            instrument = std::make_shared<Instrumentor<InstrumentorType::Likwid>>(printer.get());
+        } else {
+            instrument = std::make_shared<Instrumentor<InstrumentorType::None>>(printer.get());
+        }
+    }
+
 
   public:
     CodegenCVisitor(std::string mod_filename,
                     std::string output_dir,
                     LayoutType layout,
                     std::string float_type,
+                    InstrumentorType instrumentor_type,
                     std::string extension = ".cpp")
         : printer(new CodePrinter(output_dir + "/" + mod_filename + extension))
         , mod_filename(mod_filename)
         , layout(layout)
-        , float_type(float_type) {}
+        , float_type(float_type) {
+        setup_instrumentor(instrumentor_type);
+    }
 
 
     CodegenCVisitor(std::string mod_filename,
                     std::stringstream& stream,
                     LayoutType layout,
-                    std::string float_type)
+                    std::string float_type,
+                    InstrumentorType instrumentor_type)
         : printer(new CodePrinter(stream))
         , mod_filename(mod_filename)
         , layout(layout)
-        , float_type(float_type) {}
+        , float_type(float_type) {
+        setup_instrumentor(instrumentor_type);
+    }
 
     virtual void visit_binary_expression(ast::BinaryExpression* node) override;
     virtual void visit_binary_operator(ast::BinaryOperator* node) override;

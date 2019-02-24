@@ -14,7 +14,7 @@ set(UTIL_SOURCE_FILES
     ${CMAKE_BINARY_DIR}/version.cpp)
 
 # =============================================================================
-# Symbol table library
+# Utility library
 # =============================================================================
 
 add_library(util_obj OBJECT ${UTIL_SOURCE_FILES})

@@ -177,6 +177,17 @@ ArgumentHandler::ArgumentHandler(const int& argc, const char** argv) {
                 true,
                 "string",
                 cmd);
+
+        string_vector_type instrumentor_val = {"CALIPER", "LIKWID"};
+        value_constraint_type instrumentor_constr(instrumentor_val);
+        value_arg_type instrumentor_arg(
+                "",
+                "instrumentor",
+                "Instrumentor type [" + instrumentor_val[0] + "]",
+                false,
+                "",
+                &instrumentor_constr,
+                cmd);
         // clang-format on
 
         cmd.parse(argc, argv);
@@ -200,6 +211,13 @@ ArgumentHandler::ArgumentHandler(const int& argc, const char** argv) {
         scratch_dir = scratch_dir_arg.getValue();
         ast_to_nmodl = nmodl_state_arg.getValue();
         ast_to_json = ast_to_json_arg.getValue();
+        if (instrumentor_arg.getValue() == "CALIPER") {
+            instrumentation_type = instrument::InstrumentorType::Caliper;
+        } else if (instrumentor_arg.getValue() == "LIKWID") {
+            instrumentation_type = instrument::InstrumentorType::Likwid;
+        } else {
+            instrumentation_type = instrument::InstrumentorType::None;
+        }
     } catch (TCLAP::ArgException& e) {
         std::cout << "Argument Error: " << e.error() << " for arg " << e.argId() << std::endl;
     }
