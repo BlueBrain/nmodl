@@ -33,7 +33,6 @@ class CodegenIspcVisitor: public CodegenCVisitor {
     /// common includes : standard c/c++, coreneuron and backend specific
     void print_backend_includes() override;
 
-    /*
     /// update to matrix elements with/without shadow vectors
     void print_nrn_cur_matrix_shadow_update() override;
 
@@ -45,9 +44,12 @@ class CodegenIspcVisitor: public CodegenCVisitor {
     /// setup method for setting matrix shadow vectors
     void print_rhs_d_shadow_variables() override;
 
+
     /// if reduction block in nrn_cur required
     bool nrn_cur_reduction_loop_required() override;
-    */
+
+
+    /// helper data structure for ispc backend
     void print_ispc_helper_ds();
 
 

@@ -159,7 +159,7 @@ void CodegenCudaVisitor::print_compute_functions() {
     }
 
     print_net_send_buffering();
-    print_net_receive();
+    print_net_receive_kernel();
     print_net_receive_buffering();
     print_nrn_cur();
     print_nrn_state();
