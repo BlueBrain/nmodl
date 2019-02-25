@@ -27,7 +27,7 @@ std::vector<std::string> SympyConductanceVisitor::generate_statement_strings(
         // look for a current name that matches lhs of expr (current write name)
         auto it = i_name.find(lhs_str);
         if (it != i_name.end()) {
-            auto equation_string = ordered_binary_exprs[binary_expr_index[lhs_str]];
+            const auto& equation_string = ordered_binary_exprs[binary_expr_index[lhs_str]];
             std::string i_name_str = it->second;
             // SymPy needs the current expression & all previous expressions
             std::vector<std::string> expressions(ordered_binary_exprs.begin(),
@@ -39,11 +39,11 @@ std::vector<std::string> SympyConductanceVisitor::generate_statement_strings(
                             from nmodl.ode import differentiate2c
                             exception_message = ""
                             try:
-                                rhs = expressions[-1].split("=")[1]
+                                rhs = expressions[-1].split("=", 1)[1]
                                 solution = differentiate2c(rhs,
                                                            "v",
                                                            vars,
-                                                           expressions[0:-1]
+                                                           expressions[:-1]
                                            )
                             except Exception as e:
                                 # if we fail, fail silently and return empty string
@@ -159,7 +159,7 @@ void SympyConductanceVisitor::visit_conductance_hint(ConductanceHint* node) {
 
 void SympyConductanceVisitor::visit_breakpoint_block(BreakpointBlock* node) {
     // add any breakpoint local variables to vars
-    if (const auto symtab = node->get_statement_block()->get_symbol_table()) {
+    if (auto* symtab = node->get_statement_block()->get_symbol_table()) {
         for (const auto& localvar: symtab->get_variables_with_properties(NmodlType::local_var)) {
             vars.insert(localvar->get_name());
         }

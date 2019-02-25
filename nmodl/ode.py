@@ -67,7 +67,9 @@ def integrate2c(diff_string, t_var, dt_var, vars, use_pade_approx=False):
     sympy_vars[t_var] = t
 
     # parse string into SymPy equation
-    diffeq = sp.Eq(x.diff(t), sp.sympify(diff_string.split("=")[1], locals=sympy_vars))
+    diffeq = sp.Eq(
+        x.diff(t), sp.sympify(diff_string.split("=", 1)[1], locals=sympy_vars)
+    )
 
     # classify ODE, if it is too hard then exit
     ode_properties = set(sp.classify_ode(diffeq))
@@ -97,7 +99,7 @@ def integrate2c(diff_string, t_var, dt_var, vars, use_pade_approx=False):
     return f"{sp.ccode(x_0)} = {sp.ccode(solution)}"
 
 
-def differentiate2c(expression, dependent_var, vars, prev_expressions=[]):
+def differentiate2c(expression, dependent_var, vars, prev_expressions=None):
     """Analytically differentiate supplied expression, return solution as C code.
 
     Expression should be of the form "f(x)", where "x" is
@@ -128,7 +130,7 @@ def differentiate2c(expression, dependent_var, vars, prev_expressions=[]):
         String containing analytic derivative of expression (including any substitutions
         of variables from supplied prev_expressions) w.r.t dependent_var as C code.
     """
-
+    prev_expressions = prev_expressions or []
     # every symbol (a.k.a variable) that SymPy
     # is going to manipulate needs to be declared
     # explicitly
@@ -145,8 +147,8 @@ def differentiate2c(expression, dependent_var, vars, prev_expressions=[]):
     # parse previous equations into (lhs, rhs) pairs & reverse order
     prev_eqs = [
         (
-            sp.sympify(e.split("=")[0], locals=sympy_vars),
-            sp.sympify(e.split("=")[1], locals=sympy_vars),
+            sp.sympify(e.split("=", 1)[0], locals=sympy_vars),
+            sp.sympify(e.split("=", 1)[1], locals=sympy_vars),
         )
         for e in prev_expressions
     ]
