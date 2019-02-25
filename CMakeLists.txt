@@ -41,8 +41,7 @@ add_subdirectory(cmake/hpc-coding-conventions/cpp)
 # =============================================================================
 # Include cmake modules
 # =============================================================================
-list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake
-            ${PROJECT_SOURCE_DIR}/hpc-coding-conventions/cpp/cmake)
+list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 include(ClangTidyHelper)
 include(CompilerHelper)
 include(FindClangFormat)
