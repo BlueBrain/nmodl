@@ -21,6 +21,9 @@ class CodegenIspcVisitor: public CodegenCVisitor {
     void print_atomic_op(const std::string& lhs, const std::string& op, const std::string& rhs);
 
 
+    /// flag to indicate if visitor should print the the wrapper code
+    bool wrapper_codegen = false;
+
   protected:
     /// doubles are differently represented in ispc than in C
     std::string double_to_string(double value) override;
@@ -124,7 +127,7 @@ class CodegenIspcVisitor: public CodegenCVisitor {
                        std::string output_dir,
                        LayoutType layout,
                        std::string float_type)
-        : CodegenCVisitor(mod_file, output_dir, layout, float_type, ".ispc", true) {}
+        : CodegenCVisitor(mod_file, output_dir, layout, float_type, ".ispc", ".cpp") {}
 
     CodegenIspcVisitor(std::string mod_file,
                        std::stringstream& stream,

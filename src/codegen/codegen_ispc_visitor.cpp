@@ -113,6 +113,7 @@ void CodegenIspcVisitor::print_nrn_cur_matrix_shadow_update() {
     }
 }
 
+
 void CodegenIspcVisitor::print_channel_iteration_tiling_block_begin(BlockType type) {
     // no tiling for ispc backend but make sure variables are declared as uniform
     printer->add_line("int uniform start = 0;");
@@ -134,6 +135,7 @@ void CodegenIspcVisitor::print_channel_iteration_block_end() {
     printer->add_newline();
 }
 
+
 void CodegenIspcVisitor::print_nrn_cur_matrix_shadow_reduction() {
     // do nothing
 }
@@ -143,9 +145,11 @@ void CodegenIspcVisitor::print_rhs_d_shadow_variables() {
     // do nothing
 }
 
+
 bool CodegenIspcVisitor::nrn_cur_reduction_loop_required() {
     return false;
 }
+
 
 std::string CodegenIspcVisitor::ptr_type_qualifier() {
     if (wrapper_codegen) {
@@ -155,6 +159,7 @@ std::string CodegenIspcVisitor::ptr_type_qualifier() {
     }
 }
 
+
 std::string CodegenIspcVisitor::param_tp_qualifier() {
     if (wrapper_codegen) {
         return CodegenCVisitor::param_tp_qualifier();
@@ -163,6 +168,7 @@ std::string CodegenIspcVisitor::param_tp_qualifier() {
     }
 }
 
+
 std::string CodegenIspcVisitor::param_ptr_qualifier() {
     if (wrapper_codegen) {
         return CodegenCVisitor::param_ptr_qualifier();
@@ -170,6 +176,7 @@ std::string CodegenIspcVisitor::param_ptr_qualifier() {
         return "uniform ";
     }
 }
+
 
 void CodegenIspcVisitor::print_backend_namespace_start() {
     printer->add_newline(1);
@@ -182,10 +189,12 @@ void CodegenIspcVisitor::print_backend_namespace_stop() {
     printer->add_newline();
 }
 
+
 std::string CodegenIspcVisitor::print_global_function_args(std::string arg_qualifier) {
     return "{0} {1}* {0} {2}, {0} {3}* {0} {4}, {0} {5}* {0} {6}, {7} {8}"_format(
         arg_qualifier, "hh_Instance", "inst", "NrnThread", "nt", "Memb_list", "ml", "int", "type");
 }
+
 
 void CodegenIspcVisitor::print_global_function_common_code(BlockType type) {
     std::string method = compute_method_name(type);

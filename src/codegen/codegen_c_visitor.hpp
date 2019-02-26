@@ -149,14 +149,13 @@ class CodegenCVisitor: public AstVisitor {
   protected:
     using SymbolType = std::shared_ptr<symtab::Symbol>;
 
+    using ParamVector = std::vector<std::tuple<std::string, std::string, std::string, std::string>>;
+
     /// name of mod file (without .mod suffix)
     std::string mod_filename;
 
     /// flag to indicate if visitor should print the visited nodes
     bool codegen = false;
-
-    /// flag to indicate if visitor should print the the wrapper code
-    bool wrapper_codegen = false;
 
     /// variable name should be converted to instance name (but not for function arguments)
     bool enable_variable_name_lookup = true;
@@ -440,6 +439,7 @@ class CodegenCVisitor: public AstVisitor {
                                const std::string& separator,
                                const std::string& prefix = "");
 
+    void print_parameters(const ParamVector& params);
 
     /// check if function or procedure has argument with same name
     template <typename T>
@@ -499,7 +499,7 @@ class CodegenCVisitor: public AstVisitor {
 
 
     /// parameters for internally defined functions
-    std::string internal_method_parameters();
+    ParamVector internal_method_parameters();
 
 
     /// arguments for external functions
@@ -932,12 +932,10 @@ class CodegenCVisitor: public AstVisitor {
                     LayoutType layout,
                     std::string float_type,
                     std::string extension,
-                    bool generate_wrappers,
-                    std::string wrapper_ext = ".cpp")
+                    std::string wrapper_ext)
         : target_printer(new CodePrinter(output_dir + "/" + mod_filename + extension))
         , wrapper_printer(new CodePrinter(output_dir + "/" + mod_filename + wrapper_ext))
         , printer(target_printer)
-        , wrapper_codegen(generate_wrappers)
         , mod_filename(mod_filename)
         , layout(layout)
         , float_type(float_type) {}
@@ -1043,10 +1041,14 @@ bool has_parameter_of_name(const T& node, const std::string& name) {
 template <typename T>
 void CodegenCVisitor::print_function_declaration(const T& node, const std::string& name) {
     enable_variable_name_lookup = false;
+    auto type = default_float_data_type();
 
     /// internal and user provided arguments
     auto internal_params = internal_method_parameters();
     auto params = node->get_parameters();
+    for (const auto& param: params) {
+        internal_params.emplace_back("", type, "", param.get()->get_node_name());
+    }
 
     /// procedures have "int" return type by default
     std::string return_type = "int";
@@ -1056,14 +1058,8 @@ void CodegenCVisitor::print_function_declaration(const T& node, const std::strin
 
     print_device_method_annotation();
     printer->add_indent();
-    printer->add_text("inline {} {}({}"_format(return_type, method_name(name), internal_params));
-
-    /// print remaining of arguments to the function
-    if (!params.empty() && !internal_params.empty()) {
-        printer->add_text(", ");
-    }
-    auto type = default_float_data_type() + " ";
-    print_vector_elements(params, ", ", type);
+    printer->add_text("inline {} {}("_format(return_type, method_name(name)));
+    print_parameters(internal_params);
     printer->add_text(")");
 
     enable_variable_name_lookup = true;
