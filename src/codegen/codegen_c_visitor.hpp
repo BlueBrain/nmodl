@@ -384,7 +384,11 @@ class CodegenCVisitor: public AstVisitor {
 
 
     /// convert given double value to string (for printing)
-    std::string double_to_string(double value);
+    virtual std::string double_to_string(double value);
+
+
+    /// convert given float value to string (for printing)
+    virtual std::string float_to_string(float value);
 
 
     /// get variable name for float variable
@@ -529,6 +533,9 @@ class CodegenCVisitor: public AstVisitor {
     /// restrict keyword
     virtual std::string ptr_type_qualifier();
 
+    virtual std::string param_tp_qualifier();
+
+    virtual std::string param_ptr_qualifier();
 
     /// const keyword
     virtual std::string k_const();
@@ -607,7 +614,7 @@ class CodegenCVisitor: public AstVisitor {
 
 
     /// structure that wraps all range and int variables required for mod file
-    virtual void print_mechanism_range_var_structure();
+    void print_mechanism_range_var_structure();
 
 
     /// structure of ion variables used for local copies

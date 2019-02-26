@@ -65,7 +65,8 @@ void CodegenCVisitor::visit_float(Float* node) {
     if (!codegen) {
         return;
     }
-    printer->add_text(std::to_string(node->eval()));
+    auto value = node->eval();
+    printer->add_text(float_to_string(value));
 }
 
 
@@ -441,6 +442,13 @@ std::string CodegenCVisitor::double_to_string(double value) {
         return "{:.1f}"_format(value);
     }
     return "{:.16g}"_format(value);
+}
+
+std::string CodegenCVisitor::float_to_string(float value) {
+    if (ceilf(value) == value) {
+        return "{:.1f}f"_format(value);
+    }
+    return "{:.16g}f"_format(value);
 }
 
 
@@ -1668,15 +1676,23 @@ std::string CodegenCVisitor::internal_method_arguments() {
     return "id, pnodecount, inst, data, indexes, thread, nt, v";
 }
 
+std::string CodegenCVisitor::param_tp_qualifier() {
+    return "";
+}
+
+std::string CodegenCVisitor::param_ptr_qualifier() {
+    return "";
+}
 
 std::string CodegenCVisitor::internal_method_parameters() {
     std::string ion_var_arg;
     if (ion_variable_struct_required()) {
-        ion_var_arg = " IonCurVar& ionvar,";
+        ion_var_arg = " IonCurVar& ionvar";
     }
-    return "int id, int pnodecount, {}* inst,{} double* data, "
-           "{}Datum* indexes, ThreadDatum* thread, "
-           "NrnThread* nt, double v"_format(instance_struct(), ion_var_arg, k_const());
+    return "{0}int id, {0}int pnodecount, {2}* {1}inst,{0}{3}, double* {1}data, "
+           "{4}Datum* {1}indexes, ThreadDatum* {1}thread, "
+           "NrnThread* {1}nt, {0}double v"_format(param_tp_qualifier(), param_ptr_qualifier(),
+                                                  instance_struct(), ion_var_arg, k_const());
 }
 
 
