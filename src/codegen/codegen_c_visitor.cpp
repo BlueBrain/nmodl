@@ -974,6 +974,18 @@ std::vector<SymbolType> CodegenCVisitor::get_shadow_variables() {
 /*                      Routines must be overloaded in backend                          */
 /****************************************************************************************/
 
+/**
+ * Print parameters
+ */
+void CodegenCVisitor::print_parameters(const ParamVector& params) {
+    for (auto iter = params.begin(); iter != params.end(); iter++) {
+        printer->add_text("{}{} {}{}"_format(std::get<0>(*iter), std::get<1>(*iter),
+                                             std::get<2>(*iter), std::get<3>(*iter)));
+        if (!is_last(iter, params)) {
+            printer->add_text(", ");
+        }
+    }
+}
 
 void CodegenCVisitor::print_channel_iteration_task_begin(BlockType type) {
     // backend specific, do nothing
@@ -1425,7 +1437,9 @@ void CodegenCVisitor::print_table_check_function(ast::Block* node) {
 
     printer->add_newline(2);
     print_device_method_annotation();
-    printer->start_block("void check_{}({})"_format(method_name(name), internal_params));
+    printer->start_block("void check_{}("_format(method_name(name)));
+    print_parameters(internal_params);
+    printer->add_text(")");
     {
         printer->add_line("if ( {} == 0) {}"_format(use_table_var, "{"));
         printer->add_line("    return;");
@@ -1644,15 +1658,22 @@ std::string CodegenCVisitor::param_ptr_qualifier() {
     return "";
 }
 
-std::string CodegenCVisitor::internal_method_parameters() {
+
+CodegenCVisitor::ParamVector CodegenCVisitor::internal_method_parameters() {
     std::string ion_var_arg;
+    auto params = ParamVector();
+    params.emplace_back(param_tp_qualifier(), "int", "", "id");
+    params.emplace_back(param_tp_qualifier(), "int", "", "pnodecount");
+    params.emplace_back("", "{}*"_format(instance_struct()), param_ptr_qualifier(), "inst");
     if (ion_variable_struct_required()) {
-        ion_var_arg = " IonCurVar& ionvar";
+        params.emplace_back(param_tp_qualifier(), "IonCurVar&", "", "ionvar");
     }
-    return "{0}int id, {0}int pnodecount, {2}* {1}inst,{0}{3}, double* {1}data, "
-           "{4}Datum* {1}indexes, ThreadDatum* {1}thread, "
-           "NrnThread* {1}nt, {0}double v"_format(param_tp_qualifier(), param_ptr_qualifier(),
-                                                  instance_struct(), ion_var_arg, k_const());
+    params.emplace_back("", "double*", param_ptr_qualifier(), "data");
+    params.emplace_back(k_const(), "Datum*", param_ptr_qualifier(), "indexes");
+    params.emplace_back("", "ThreadDatum*", param_ptr_qualifier(), "thread");
+    params.emplace_back("", "NrnThread*", param_ptr_qualifier(), "nt");
+    params.emplace_back(param_tp_qualifier(), "double", "", "v");
+    return params;
 }
 
 
@@ -3627,7 +3648,9 @@ void CodegenCVisitor::print_nrn_current(BreakpointBlock* node) {
     auto block = node->get_statement_block().get();
     printer->add_newline(2);
     print_device_method_annotation();
-    printer->start_block("static inline double nrn_current({})"_format(args));
+    printer->start_block("static inline double nrn_current(");
+    print_parameters(args);
+    printer->add_text(")");
     printer->add_line("double current = 0.0;");
     print_statement_block(block, false, false);
     for (auto& current: info.currents) {
