@@ -6,6 +6,7 @@
  *************************************************************************/
 
 #include <fmt/format.h>
+#include <src/visitors/rename_visitor.hpp>
 
 #include "codegen/codegen_ispc_visitor.hpp"
 #include "codegen/codegen_naming.hpp"
@@ -17,12 +18,43 @@ using namespace fmt::literals;
 namespace nmodl {
 namespace codegen {
 
-
 using symtab::syminfo::Status;
+
+/****************************************************************************************/
+/*                            Overloaded visitor methods                                */
+/****************************************************************************************/
+
+/*
+ * Rename math functions for ISPC backend
+ */
+void CodegenIspcVisitor::visit_function_call(ast::FunctionCall* node) {
+    if (!codegen) {
+        return;
+    }
+    auto fname = node->get_name().get();
+    RenameVisitor("fabs", "abs").visit_name(fname);
+    RenameVisitor("exp", "vexp").visit_name(fname);
+    CodegenCVisitor::visit_function_call(node);
+}
 
 /****************************************************************************************/
 /*                      Routines must be overloaded in backend                          */
 /****************************************************************************************/
+
+std::string CodegenIspcVisitor::double_to_string(double value) {
+    if (ceilf(value) == value) {
+        return "{:.1f}d"_format(value);
+    }
+    return "{:f}d"_format(value);
+}
+
+
+std::string CodegenIspcVisitor::float_to_string(float value) {
+    if (ceilf(value) == value) {
+        return "{:.1f}"_format(value);
+    }
+    return "{:f}"_format(value);
+}
 
 
 std::string CodegenIspcVisitor::compute_method_name(BlockType type) {
@@ -41,6 +73,9 @@ std::string CodegenIspcVisitor::compute_method_name(BlockType type) {
 
 void CodegenIspcVisitor::print_backend_includes() {
     printer->add_line("#include \"fast_math.ispc\"");
+    printer->add_line("#include \"coreneuron.ispc\"");
+    printer->add_newline();
+    printer->add_newline();
 }
 
 
@@ -67,12 +102,22 @@ void CodegenIspcVisitor::print_atomic_op(const std::string& lhs,
 void CodegenIspcVisitor::print_nrn_cur_matrix_shadow_update() {
     auto rhs_op = operator_for_rhs();
     auto d_op = operator_for_d();
-    stringutils::remove_character(rhs_op, '=');
-    stringutils::remove_character(d_op, '=');
-    print_atomic_op("vec_rhs[node_id]", rhs_op, "rhs");
-    print_atomic_op("vec_d[node_id]", d_op, "g");
+    if (info.point_process) {
+        stringutils::remove_character(rhs_op, '=');
+        stringutils::remove_character(d_op, '=');
+        print_atomic_op("vec_rhs[node_id]", rhs_op, "rhs");
+        print_atomic_op("vec_d[node_id]", d_op, "g");
+    } else {
+        printer->add_line("vec_rhs[node_id] {} rhs;"_format(rhs_op));
+        printer->add_line("vec_d[node_id] {} g;"_format(d_op));
+    }
 }
 
+void CodegenIspcVisitor::print_channel_iteration_tiling_block_begin(BlockType type) {
+    // no tiling for ispc backend but make sure variables are declared as uniform
+    printer->add_line("int uniform start = 0;");
+    printer->add_line("int uniform end = nodecount;");
+}
 
 /*
  * Depending on the backend, print condition/loop for iterating over channels
@@ -80,7 +125,7 @@ void CodegenIspcVisitor::print_nrn_cur_matrix_shadow_update() {
  * Use ispc foreach loop
  */
 void CodegenIspcVisitor::print_channel_iteration_block_begin() {
-    printer->start_block("foreach (int id = start ... end) ");
+    printer->start_block("foreach (id = start ... end) ");
 }
 
 
@@ -103,7 +148,27 @@ bool CodegenIspcVisitor::nrn_cur_reduction_loop_required() {
 }
 
 std::string CodegenIspcVisitor::ptr_type_qualifier() {
-    return "uniform ";  // @note: extra space needed to separate qualifier from var name.
+    if (wrapper_codegen) {
+        return CodegenCVisitor::ptr_type_qualifier();
+    } else {
+        return "uniform ";  // @note: extra space needed to separate qualifier from var name.
+    }
+}
+
+std::string CodegenIspcVisitor::param_tp_qualifier() {
+    if (wrapper_codegen) {
+        return CodegenCVisitor::param_tp_qualifier();
+    } else {
+        return "uniform ";
+    }
+}
+
+std::string CodegenIspcVisitor::param_ptr_qualifier() {
+    if (wrapper_codegen) {
+        return CodegenCVisitor::param_ptr_qualifier();
+    } else {
+        return "uniform ";
+    }
 }
 
 void CodegenIspcVisitor::print_backend_namespace_start() {
@@ -117,18 +182,20 @@ void CodegenIspcVisitor::print_backend_namespace_stop() {
     printer->add_newline();
 }
 
-// @todo : use base visitor function with provision to override specific qualifiers
-//         hh_ is hardcoded
+std::string CodegenIspcVisitor::print_global_function_args(std::string arg_qualifier) {
+    return "{0} {1}* {0} {2}, {0} {3}* {0} {4}, {0} {5}* {0} {6}, {7} {8}"_format(
+        arg_qualifier, "hh_Instance", "inst", "NrnThread", "nt", "Memb_list", "ml", "int", "type");
+}
+
 void CodegenIspcVisitor::print_global_function_common_code(BlockType type) {
     std::string method = compute_method_name(type);
-    auto args = "{0} {1}* {0} {2}, {0} {3}* {0} {4}, {0} {5}* {0} {6}, {7} {8}"_format(
-        ptr_type_qualifier(), "hh_Instance", "inst", "hh_thread", "nt", "hh_memb_list", "ml", "int",
-        "type");
+    auto args = print_global_function_args(ptr_type_qualifier());
     print_global_method_annotation();
     printer->start_block("void {}({})"_format(method, args));
+
     print_kernel_data_present_annotation_block_begin();
-    printer->add_line("int nodecount = ml->nodecount;");
-    printer->add_line("int pnodecount = ml->_nodecount_padded;");
+    printer->add_line("uniform int nodecount = ml->nodecount;");
+    printer->add_line("uniform int pnodecount = ml->_nodecount_padded;");
     printer->add_line(
         "{}int* {}node_index = ml->nodeindices;"_format(k_const(), ptr_type_qualifier()));
     printer->add_line("double* {}data = ml->data;"_format(ptr_type_qualifier()));
@@ -147,9 +214,6 @@ void CodegenIspcVisitor::print_global_function_common_code(BlockType type) {
         printer->add_newline();
         printer->add_line("setup_instance(nt, ml);");
     }
-    // clang-format off
-    printer->add_line("{0}* {1}inst = ({0}*) ml->instance;"_format(instance_struct(), ptr_type_qualifier()));
-    // clang-format on
     printer->add_newline(1);
 }
 
@@ -164,8 +228,15 @@ void CodegenIspcVisitor::print_compute_functions() {
             print_function(function);
         }
     }
-    //print_net_receive_kernel();
-    //print_net_receive_buffering();
+    for (const auto& procedure: info.procedures) {
+        if (!program_symtab->lookup(procedure->get_node_name())
+                 .get()
+                 ->has_all_status(Status::inlined)) {
+            print_procedure(procedure);
+        }
+    }
+    // print_net_receive_kernel();
+    // print_net_receive_buffering();
     print_nrn_cur();
     print_nrn_state();
 }
@@ -304,79 +375,10 @@ void CodegenIspcVisitor::print_mechanism_global_var_structure() {
     printer->add_line("{} {}_global;"_format(global_struct(), info.mod_suffix));
 }
 
-
-// @todo : use base visitor function with provision to override specific qualifiers
-void CodegenIspcVisitor::print_mechanism_range_var_structure() {
-    auto float_type = default_float_data_type();
-    auto int_type = default_int_data_type();
-    printer->add_newline(2);
-    printer->add_line("/** all mechanism instance variables */");
-    printer->start_block("struct {} "_format(instance_struct()));
-    for (auto& var: codegen_float_variables) {
-        auto name = var->get_name();
-        auto type = get_range_var_float_type(var);
-        auto qualifier = is_constant_variable(name) ? k_const() : "";
-        printer->add_line("{}{}* {}{};"_format(qualifier, type, ptr_type_qualifier(), name));
-    }
-    for (auto& var: codegen_int_variables) {
-        auto name = var.symbol->get_name();
-        if (var.is_index || var.is_integer) {
-            auto qualifier = var.is_constant ? k_const() : "";
-            printer->add_line(
-                "{}{}* {}{};"_format(qualifier, int_type, ptr_type_qualifier(), name));
-        } else {
-            auto qualifier = var.is_constant ? k_const() : "";
-            auto type = var.is_vdata ? "void*" : default_float_data_type();
-            printer->add_line("{}{}* {}{};"_format(qualifier, type, ptr_type_qualifier(), name));
-        }
-    }
-    if (channel_task_dependency_enabled()) {
-        for (auto& var: codegen_shadow_variables) {
-            auto name = var->get_name();
-            printer->add_line("{}* {}{};"_format(float_type, ptr_type_qualifier(), name));
-        }
-    }
-    printer->end_block();
-    printer->add_text(";");
-    printer->add_newline();
-}
-
-void CodegenIspcVisitor::print_ispc_helper_ds() {
-    auto float_type = default_float_data_type();
-    auto int_type = default_int_data_type();
-    auto qualifier = "uniform ";
-    printer->add_newline(2);
-    printer->add_line("/** helper structures for ispc */");
-    printer->start_block("struct {} "_format("hh_memb_list"));
-    printer->add_line("{}{} {};"_format(qualifier, int_type, "nodecount"));
-    printer->add_line("{}{} {};"_format(qualifier, int_type, "_nodecount_padded"));
-    printer->add_line(
-        "{}{}* {}{};"_format("const uniform ", int_type, ptr_type_qualifier(), "node_index"));
-    printer->add_line("{}* {}{};"_format(float_type, ptr_type_qualifier(), "data"));
-    printer->add_line(
-        "{}* {}{};"_format(int_type, ptr_type_qualifier(), "indexes"));  // @todo: Datum, not int
-    // ThreadDatum* uniform thread;
-    printer->end_block();
-    printer->add_text(";");
-    printer->add_newline();
-
-    printer->add_newline(2);
-    printer->start_block("struct {} "_format("hh_thread"));
-    printer->add_line("{}{} {};"_format(qualifier, float_type, "_dt"));
-    printer->add_line("{}{} {};"_format(qualifier, float_type, "celsius"));
-    printer->add_line("{}{}* {}{};"_format("const ", float_type, ptr_type_qualifier(), "voltage"));
-    printer->add_line("{}* {}{};"_format(float_type, ptr_type_qualifier(), "vec_rhs"));
-    printer->add_line("{}* {}{};"_format(float_type, ptr_type_qualifier(), "vec_d"));
-    printer->end_block();
-    printer->add_text(";");
-    printer->add_newline();
-}
-
 void CodegenIspcVisitor::print_data_structures() {
     print_mechanism_global_var_structure();
     print_mechanism_range_var_structure();
     print_ion_var_structure();
-    print_ispc_helper_ds();
 }
 
 void CodegenIspcVisitor::print_wrapper_data_structures() {
@@ -407,14 +409,22 @@ void CodegenIspcVisitor::print_wrapper_routine(std::string wraper_function, Bloc
     printer->add_newline(2);
     printer->start_block("void {}({})"_format(wraper_function, args));
     printer->add_line("int nodecount = ml->nodecount;");
-    printer->add_line("int nthread = 256;");
-    printer->add_line("int nblock = (nodecount+nthread-1)/nthread;");
-    printer->add_line("{}<<<nblock, nthread>>>(nt, ml, type);"_format(compute_function));
-    printer->add_line("cudaDeviceSynchronize();");
+    // clang-format off
+    printer->add_line("{0}* {1}inst = ({0}*) ml->instance;"_format(instance_struct(), ptr_type_qualifier()));
+    // clang-format on
+    printer->add_line("{}(inst, nt, ml, type);"_format(compute_function));
     printer->end_block();
     printer->add_newline();
 }
 
+void CodegenIspcVisitor::print_backend_compute_routine_decl() {
+    auto args = print_global_function_args("");
+    auto compute_function = compute_method_name(BlockType::Equation);
+    printer->add_line("extern \"C\" void {}({});"_format(compute_function, args));
+
+    compute_function = compute_method_name(BlockType::State);
+    printer->add_line("extern \"C\" void {}({});"_format(compute_function, args));
+}
 
 void CodegenIspcVisitor::codegen_wrapper_routines() {
     print_wrapper_routine("nrn_cur", BlockType::Equation);
@@ -455,13 +465,12 @@ void CodegenIspcVisitor::print_codegen_wrapper_routines() {
     print_nrn_alloc();
     print_check_table_thread_function();
 
-    for (const auto& procedure: info.procedures) {
-        print_procedure(procedure);
-    }
 
     print_net_send_buffering();
     print_net_receive();
     print_net_receive_buffering();
+
+    print_backend_compute_routine_decl();
 
     codegen_wrapper_routines();
 

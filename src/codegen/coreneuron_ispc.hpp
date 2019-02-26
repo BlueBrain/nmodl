@@ -23,18 +23,6 @@ struct NetReceiveBuffer_t {
     int _pnt_offset;
 };
 
-struct NetSendBuffer_t {
-    int* _sendtype;
-    int* _vdata_index;
-    int* _pnt_index;
-    int* _weight_index;
-    double* _nsb_t;
-    double* _nsb_flag;
-    int _cnt;
-    int _size;
-    int reallocated;
-};
-
 struct Memb_list {
     int* nodeindices;
     int* _permute;

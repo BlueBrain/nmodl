@@ -22,6 +22,14 @@ class CodegenIspcVisitor: public CodegenCVisitor {
 
 
   protected:
+    /// doubles are differently represented in ispc than in C
+    std::string double_to_string(double value) override;
+
+
+    /// floats are differently represented in ispc than in C
+    std::string float_to_string(float value) override;
+
+
     /// name of the code generation backend
     std::string backend_name() override;
 
@@ -29,6 +37,10 @@ class CodegenIspcVisitor: public CodegenCVisitor {
     std::string compute_method_name(BlockType type) override;
 
     std::string ptr_type_qualifier() override;
+
+    std::string param_tp_qualifier() override;
+
+    std::string param_ptr_qualifier() override;
 
     /// common includes : standard c/c++, coreneuron and backend specific
     void print_backend_includes() override;
@@ -48,15 +60,15 @@ class CodegenIspcVisitor: public CodegenCVisitor {
     /// if reduction block in nrn_cur required
     bool nrn_cur_reduction_loop_required() override;
 
-
-    /// helper data structure for ispc backend
-    void print_ispc_helper_ds();
-
+    std::string print_global_function_args(std::string arg_qualifier);
 
     void print_global_function_common_code(BlockType type) override;
 
     /// backend specific channel instance iteration block start
     void print_channel_iteration_block_begin() override;
+
+    /// backend specific channel iteration bounds
+    void print_channel_iteration_tiling_block_begin(BlockType type) override;
 
 
     /// backend specific channel instance iteration block end
@@ -86,8 +98,9 @@ class CodegenIspcVisitor: public CodegenCVisitor {
     /// all compute functions for every backend
     void print_compute_functions() override;
 
+    void print_backend_compute_routine_decl();
 
-    /// print wrapper function that calls cuda kernel
+    /// print wrapper function that calls ispc kernel
     void print_wrapper_routine(std::string wraper_function, BlockType type);
 
 
@@ -96,8 +109,6 @@ class CodegenIspcVisitor: public CodegenCVisitor {
 
     /// structure that wraps all global variables in the mod file
     void print_mechanism_global_var_structure() override;
-
-    void print_mechanism_range_var_structure() override;
 
     void print_data_structures() override;
     void print_wrapper_data_structures();
@@ -120,6 +131,8 @@ class CodegenIspcVisitor: public CodegenCVisitor {
                        LayoutType layout,
                        std::string float_type)
         : CodegenCVisitor(mod_file, stream, layout, float_type) {}
+
+    void visit_function_call(ast::FunctionCall* node) override;
 };
 
 }  // namespace codegen
