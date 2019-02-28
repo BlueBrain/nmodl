@@ -12,6 +12,7 @@
 #include "codegen/codegen_naming.hpp"
 #include "symtab/symbol_table.hpp"
 #include "utils/string_utils.hpp"
+#include "visitors/visitor_utils.hpp"
 
 using namespace fmt::literals;
 
@@ -37,6 +38,18 @@ void CodegenIspcVisitor::visit_function_call(ast::FunctionCall* node) {
     CodegenCVisitor::visit_function_call(node);
 }
 
+/*
+ * Rename special global variables
+ */
+void CodegenIspcVisitor::visit_var_name(ast::VarName* node) {
+    if (!codegen) {
+        return;
+    }
+    auto celsius_rename = RenameVisitor("celsius", "ispc_celsius");
+    node->accept(&celsius_rename);
+    CodegenCVisitor::visit_var_name(node);
+}
+
 /****************************************************************************************/
 /*                      Routines must be overloaded in backend                          */
 /****************************************************************************************/
@@ -58,9 +71,9 @@ std::string CodegenIspcVisitor::float_to_string(float value) {
 
 
 std::string CodegenIspcVisitor::compute_method_name(BlockType type) {
-    /*if (type == BlockType::Initial) { @todo : init method could be added later into ispc
-        return method_name("nrn_init");
-    }*/
+    if (type == BlockType::Initial) {
+        return method_name("ispc_nrn_init");
+    }
     if (type == BlockType::State) {
         return method_name("ispc_nrn_state");
     }
@@ -190,39 +203,39 @@ void CodegenIspcVisitor::print_backend_namespace_stop() {
 }
 
 
-std::string CodegenIspcVisitor::print_global_function_args(std::string arg_qualifier) {
-    return "{0} {1}* {0} {2}, {0} {3}* {0} {4}, {0} {5}* {0} {6}, {7} {8}"_format(
-        arg_qualifier, "hh_Instance", "inst", "NrnThread", "nt", "Memb_list", "ml", "int", "type");
+CodegenIspcVisitor::ParamVector CodegenIspcVisitor::get_global_function_parms(
+    std::string arg_qualifier) {
+    auto params = ParamVector();
+    params.emplace_back(param_tp_qualifier(), "{}*"_format(instance_struct()),
+                        param_ptr_qualifier(), "inst");
+    params.emplace_back(param_tp_qualifier(), "NrnThread*", param_ptr_qualifier(), "nt");
+    params.emplace_back(param_tp_qualifier(), "Memb_list*", param_ptr_qualifier(), "ml");
+    params.emplace_back("", "int", "", "type");
+    return params;
 }
 
 
 void CodegenIspcVisitor::print_global_function_common_code(BlockType type) {
     std::string method = compute_method_name(type);
-    auto args = print_global_function_args(ptr_type_qualifier());
+
+    auto params = get_global_function_parms(ptr_type_qualifier());
     print_global_method_annotation();
-    printer->start_block("void {}({})"_format(method, args));
+    printer->start_block("void {}({})"_format(method, get_parameter_str(params)));
 
     print_kernel_data_present_annotation_block_begin();
     printer->add_line("uniform int nodecount = ml->nodecount;");
     printer->add_line("uniform int pnodecount = ml->_nodecount_padded;");
-    printer->add_line(
-        "{}int* {}node_index = ml->nodeindices;"_format(k_const(), ptr_type_qualifier()));
-    printer->add_line("double* {}data = ml->data;"_format(ptr_type_qualifier()));
-    printer->add_line(
-        "{}double* {}voltage = nt->_actual_v;"_format(k_const(), ptr_type_qualifier()));
+    printer->add_line("{}int* {}node_index = ml->nodeindices;"_format(k_const(), ""));
+    printer->add_line("double* {}data = ml->data;"_format(""));
+    printer->add_line("{}double* {}voltage = nt->_actual_v;"_format(k_const(), ""));
 
     if (type == BlockType::Equation) {
-        printer->add_line("double* {} vec_rhs = nt->_actual_rhs;"_format(ptr_type_qualifier()));
-        printer->add_line("double* {} vec_d = nt->_actual_d;"_format(ptr_type_qualifier()));
+        printer->add_line("double* {} vec_rhs = nt->_actual_rhs;"_format(""));
+        printer->add_line("double* {} vec_d = nt->_actual_d;"_format(""));
         print_rhs_d_shadow_variables();
     }
-    printer->add_line("Datum* {}indexes = ml->pdata;"_format(ptr_type_qualifier()));
-    printer->add_line("ThreadDatum* {}thread = ml->_thread;"_format(ptr_type_qualifier()));
-
-    if (type == BlockType::Initial) {
-        printer->add_newline();
-        printer->add_line("setup_instance(nt, ml);");
-    }
+    printer->add_line("Datum* {}indexes = ml->pdata;"_format(""));
+    printer->add_line("ThreadDatum* {}thread = ml->_thread;"_format(""));
     printer->add_newline(1);
 }
 
@@ -246,6 +259,7 @@ void CodegenIspcVisitor::print_compute_functions() {
     }
     // print_net_receive_kernel();
     // print_net_receive_buffering();
+    print_nrn_init(false);
     print_nrn_cur();
     print_nrn_state();
 }
@@ -342,12 +356,12 @@ void CodegenIspcVisitor::print_mechanism_global_var_structure() {
     }
 
     if (info.primes_size != 0) {
-        printer->add_line("int* uniform slist1;");
-        printer->add_line("int* uniform dlist1;");
+        printer->add_line("int* {} slist1;"_format(""));
+        printer->add_line("int* {} dlist1;"_format(""));
         codegen_global_variables.push_back(make_symbol("slist1"));
         codegen_global_variables.push_back(make_symbol("dlist1"));
         if (info.derivimplicit_used) {
-            printer->add_line("int* uniform slist2;");
+            printer->add_line("int* slist2;");
             codegen_global_variables.push_back(make_symbol("slist2"));
         }
     }
@@ -372,7 +386,7 @@ void CodegenIspcVisitor::print_mechanism_global_var_structure() {
     }
 
     if (info.vectorize) {
-        printer->add_line("ThreadDatum* {}ext_call_thread;"_format(ptr_type_qualifier()));
+        printer->add_line("ThreadDatum* {}ext_call_thread;"_format(""));
         codegen_global_variables.push_back(make_symbol("ext_call_thread"));
     }
 
@@ -394,6 +408,11 @@ void CodegenIspcVisitor::print_wrapper_data_structures() {
     print_mechanism_global_var_structure();
     print_mechanism_range_var_structure();
     print_ion_var_structure();
+}
+void CodegenIspcVisitor::print_ispc_globals() {
+    printer->start_block("extern \"C\"");
+    printer->add_line("double ispc_celsius;");
+    printer->end_block();
 }
 
 /****************************************************************************************/
@@ -421,21 +440,40 @@ void CodegenIspcVisitor::print_wrapper_routine(std::string wraper_function, Bloc
     // clang-format off
     printer->add_line("{0}* {1}inst = ({0}*) ml->instance;"_format(instance_struct(), ptr_type_qualifier()));
     // clang-format on
+
+    if (type == BlockType::Initial) {
+        printer->add_newline();
+        printer->add_line("setup_instance(nt, ml);");
+        printer->add_line("ispc_celsius = celsius;");
+        printer->add_newline();
+        printer->start_block("if (_nrn_skip_initmodel)");
+        printer->add_line("return;");
+        printer->end_block();
+        printer->add_newline();
+    }
+
     printer->add_line("{}(inst, nt, ml, type);"_format(compute_function));
     printer->end_block();
     printer->add_newline();
 }
 
 void CodegenIspcVisitor::print_backend_compute_routine_decl() {
-    auto args = print_global_function_args("");
-    auto compute_function = compute_method_name(BlockType::Equation);
-    printer->add_line("extern \"C\" void {}({});"_format(compute_function, args));
+    auto params = get_global_function_parms("");
+    auto compute_function = compute_method_name(BlockType::Initial);
+    printer->add_line(
+        "extern \"C\" void {}({});"_format(compute_function, get_parameter_str(params)));
+
+    compute_function = compute_method_name(BlockType::Equation);
+    printer->add_line(
+        "extern \"C\" void {}({});"_format(compute_function, get_parameter_str(params)));
 
     compute_function = compute_method_name(BlockType::State);
-    printer->add_line("extern \"C\" void {}({});"_format(compute_function, args));
+    printer->add_line(
+        "extern \"C\" void {}({});"_format(compute_function, get_parameter_str(params)));
 }
 
 void CodegenIspcVisitor::codegen_wrapper_routines() {
+    print_wrapper_routine("nrn_init", BlockType::Initial);
     print_wrapper_routine("nrn_cur", BlockType::Equation);
     print_wrapper_routine("nrn_state", BlockType::State);
 }
@@ -459,6 +497,7 @@ void CodegenIspcVisitor::print_codegen_wrapper_routines() {
     wrapper_codegen = true;
     print_backend_info();
     print_wrapper_headers_include();
+    print_ispc_globals();
     print_namespace_begin();
 
     print_nmodl_constant();

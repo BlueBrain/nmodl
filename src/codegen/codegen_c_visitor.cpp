@@ -978,14 +978,16 @@ std::vector<SymbolType> CodegenCVisitor::get_shadow_variables() {
 /**
  * Print parameters
  */
-void CodegenCVisitor::print_parameters(const ParamVector& params) {
+std::string CodegenCVisitor::get_parameter_str(const ParamVector& params) {
+    std::stringstream param_ss;
     for (auto iter = params.begin(); iter != params.end(); iter++) {
-        printer->add_text("{}{} {}{}"_format(std::get<0>(*iter), std::get<1>(*iter),
-                                             std::get<2>(*iter), std::get<3>(*iter)));
+        param_ss << "{}{} {}{}"_format(std::get<0>(*iter), std::get<1>(*iter), std::get<2>(*iter),
+                                       std::get<3>(*iter));
         if (!is_last(iter, params)) {
-            printer->add_text(", ");
+            param_ss << ", ";
         }
     }
+    return param_ss.str();
 }
 
 void CodegenCVisitor::print_channel_iteration_task_begin(BlockType type) {
@@ -1438,9 +1440,8 @@ void CodegenCVisitor::print_table_check_function(ast::Block* node) {
 
     printer->add_newline(2);
     print_device_method_annotation();
-    printer->start_block("void check_{}("_format(method_name(name)));
-    print_parameters(internal_params);
-    printer->add_text(")");
+    printer->start_block(
+        "void check_{}({})"_format(method_name(name), get_parameter_str(internal_params)));
     {
         printer->add_line("if ( {} == 0) {}"_format(use_table_var, "{"));
         printer->add_line("    return;");
@@ -1685,9 +1686,9 @@ void CodegenCVisitor::visit_eigen_newton_solver_block(ast::EigenNewtonSolverBloc
 
 std::string CodegenCVisitor::internal_method_arguments() {
     if (ion_variable_struct_required()) {
-        return "id, pnodecount, inst, ionvar, data, indexes, thread, nt, v";
+        return "id, pnodecount, inst, ionvar, data, indexes, thread, nt";
     }
-    return "id, pnodecount, inst, data, indexes, thread, nt, v";
+    return "id, pnodecount, inst, data, indexes, thread, nt";
 }
 
 std::string CodegenCVisitor::param_tp_qualifier() {
@@ -1700,19 +1701,20 @@ std::string CodegenCVisitor::param_ptr_qualifier() {
 
 
 CodegenCVisitor::ParamVector CodegenCVisitor::internal_method_parameters() {
-    std::string ion_var_arg;
     auto params = ParamVector();
-    params.emplace_back(param_tp_qualifier(), "int", "", "id");
+    params.emplace_back("", "int", "",
+                        "id");  // @todo: figure out how to correctly handle qualifiers
     params.emplace_back(param_tp_qualifier(), "int", "", "pnodecount");
-    params.emplace_back("", "{}*"_format(instance_struct()), param_ptr_qualifier(), "inst");
+    params.emplace_back(param_tp_qualifier(), "{}*"_format(instance_struct()),
+                        param_ptr_qualifier(), "inst");
     if (ion_variable_struct_required()) {
-        params.emplace_back(param_tp_qualifier(), "IonCurVar&", "", "ionvar");
+        params.emplace_back("", "IonCurVar&", "", "ionvar");
     }
-    params.emplace_back("", "double*", param_ptr_qualifier(), "data");
-    params.emplace_back(k_const(), "Datum*", param_ptr_qualifier(), "indexes");
-    params.emplace_back("", "ThreadDatum*", param_ptr_qualifier(), "thread");
-    params.emplace_back("", "NrnThread*", param_ptr_qualifier(), "nt");
-    params.emplace_back(param_tp_qualifier(), "double", "", "v");
+    params.emplace_back("", "double*", "", "data");
+    params.emplace_back(param_tp_qualifier(), "ThreadDatum*", "", "thread");
+    params.emplace_back(k_const(), "Datum*", "", "indexes");
+    params.emplace_back(param_tp_qualifier(), "NrnThread*", param_ptr_qualifier(), "nt");
+    // params.emplace_back(param_tp_qualifier(), "double", "", "v");
     return params;
 }
 
@@ -3074,7 +3076,7 @@ void CodegenCVisitor::print_global_function_common_code(BlockType type) {
 }
 
 
-void CodegenCVisitor::print_nrn_init() {
+void CodegenCVisitor::print_nrn_init(bool skip_init_check) {
     codegen = true;
     printer->add_newline(2);
     printer->add_line("/** initialize channel */");
@@ -3093,7 +3095,9 @@ void CodegenCVisitor::print_nrn_init() {
         // clang-format on
     }
 
-    printer->start_block("if (_nrn_skip_initmodel == 0)");
+    if (skip_init_check) {
+        printer->start_block("if (_nrn_skip_initmodel == 0)");
+    }
 
     print_channel_iteration_tiling_block_begin(BlockType::Initial);
     print_channel_iteration_block_begin();
@@ -3115,7 +3119,9 @@ void CodegenCVisitor::print_nrn_init() {
         printer->add_line("*deriv{}_advance(thread) = 1;"_format(info.derivimplicit_list_num));
     }
     print_kernel_data_present_annotation_block_end();
-    printer->end_block(1);
+    if (skip_init_check) {
+        printer->end_block(1);
+    }
     codegen = false;
 }
 
@@ -3708,8 +3714,7 @@ void CodegenCVisitor::print_nrn_current(BreakpointBlock* node) {
     auto block = node->get_statement_block().get();
     printer->add_newline(2);
     print_device_method_annotation();
-    printer->start_block("static inline double nrn_current(");
-    print_parameters(args);
+    printer->start_block("static inline double nrn_current({})"_format(get_parameter_str(args)));
     printer->add_text(")");
     printer->add_line("double current = 0.0;");
     print_statement_block(block, false, false);

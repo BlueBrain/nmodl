@@ -439,7 +439,7 @@ class CodegenCVisitor: public AstVisitor {
                                const std::string& separator,
                                const std::string& prefix = "");
 
-    void print_parameters(const ParamVector& params);
+    std::string get_parameter_str(const ParamVector& params);
 
     /// check if function or procedure has argument with same name
     template <typename T>
@@ -872,7 +872,7 @@ class CodegenCVisitor: public AstVisitor {
 
 
     /// nrn_init function definition
-    void print_nrn_init();
+    void print_nrn_init(bool skip_init_check = true);
 
 
     /// nrn_state / state update function definition
@@ -1058,9 +1058,8 @@ void CodegenCVisitor::print_function_declaration(const T& node, const std::strin
 
     print_device_method_annotation();
     printer->add_indent();
-    printer->add_text("inline {} {}("_format(return_type, method_name(name)));
-    print_parameters(internal_params);
-    printer->add_text(")");
+    printer->add_text("inline {} {}({})"_format(return_type, method_name(name),
+                                                get_parameter_str(internal_params)));
 
     enable_variable_name_lookup = true;
 }
