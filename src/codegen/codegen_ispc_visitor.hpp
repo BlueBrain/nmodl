@@ -63,7 +63,7 @@ class CodegenIspcVisitor: public CodegenCVisitor {
     /// if reduction block in nrn_cur required
     bool nrn_cur_reduction_loop_required() override;
 
-    std::string print_global_function_args(std::string arg_qualifier);
+    ParamVector get_global_function_parms(std::string arg_qualifier);
 
     void print_global_function_common_code(BlockType type) override;
 
@@ -116,6 +116,7 @@ class CodegenIspcVisitor: public CodegenCVisitor {
     void print_data_structures() override;
     void print_wrapper_data_structures();
 
+    void print_ispc_globals();
 
     /// entry point to code generation
     void print_codegen_routines() override;
@@ -136,6 +137,7 @@ class CodegenIspcVisitor: public CodegenCVisitor {
         : CodegenCVisitor(mod_file, stream, layout, float_type) {}
 
     void visit_function_call(ast::FunctionCall* node) override;
+    void visit_var_name(ast::VarName* node) override;
 };
 
 }  // namespace codegen

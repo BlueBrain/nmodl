@@ -5,19 +5,19 @@ typedef int Datum;
 
 struct ThreadDatum {
     int i;
-    double* uniform pval;
-    void* uniform _pvoid;
+    double* pval;
+    void* _pvoid;
 };
 
 
 struct NetReceiveBuffer_t {
-    int* uniform _displ;
-    int* uniform _nrb_index;
+    int* _displ;
+    int* _nrb_index;
 
-    int* uniform _pnt_index;
-    int* uniform _weight_index;
-    double* uniform _nrb_t;
-    double* uniform _nrb_flag;
+    int* _pnt_index;
+    int* _weight_index;
+    double* _nrb_t;
+    double* _nrb_flag;
     int _cnt;
     int _displ_cnt;
     int _size;
@@ -26,12 +26,12 @@ struct NetReceiveBuffer_t {
 
 
 struct Memb_list {
-    int* uniform nodeindices;
-    int* uniform _permute;
-    double* uniform data;
-    Datum* uniform pdata;
-    ThreadDatum* _thread;
-    NetReceiveBuffer_t* uniform _net_receive_buffer;
+    uniform int* nodeindices;
+    uniform int* _permute;
+    uniform double* data;
+    uniform Datum* pdata;
+    uniform ThreadDatum* _thread;
+    uniform NetReceiveBuffer_t* _net_receive_buffer;
     // NetSendBuffer_t* _net_send_buffer; // not needed
     int nodecount;
     int _nodecount_padded;
@@ -84,7 +84,4 @@ struct NrnThread {
     //int* _net_send_buffer;
 };
 
-
-extern uniform double celsius;
-extern uniform double t;
-extern uniform double dt;
+uniform double ispc_celsius;
