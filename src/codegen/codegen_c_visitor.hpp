@@ -802,6 +802,15 @@ class CodegenCVisitor: public AstVisitor {
     void print_send_event_move();
 
 
+    virtual std::string net_receive_buffering_declaration();
+
+
+    virtual void print_get_memb_list();
+
+    virtual void print_net_receive_loop_begin();
+    virtual void print_net_receive_loop_end();
+
+
     /// kernel for buffering net_receive events
     void print_net_receive_buffering();
 

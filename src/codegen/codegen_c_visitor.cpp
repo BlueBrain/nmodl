@@ -1646,9 +1646,9 @@ void CodegenCVisitor::print_function(ast::FunctionBlock* node) {
 
 std::string CodegenCVisitor::internal_method_arguments() {
     if (ion_variable_struct_required()) {
-        return "id, pnodecount, inst, ionvar, data, indexes, thread, nt";
+        return "id, pnodecount, inst, ionvar, data, indexes, thread, nt, v";
     }
-    return "id, pnodecount, inst, data, indexes, thread, nt";
+    return "id, pnodecount, inst, data, indexes, thread, nt, v";
 }
 
 std::string CodegenCVisitor::param_tp_qualifier() {
@@ -1671,10 +1671,10 @@ CodegenCVisitor::ParamVector CodegenCVisitor::internal_method_parameters() {
         params.emplace_back("", "IonCurVar&", "", "ionvar");
     }
     params.emplace_back("", "double*", "", "data");
-    params.emplace_back(param_tp_qualifier(), "ThreadDatum*", "", "thread");
     params.emplace_back(k_const(), "Datum*", "", "indexes");
+    params.emplace_back(param_tp_qualifier(), "ThreadDatum*", "", "thread");
     params.emplace_back(param_tp_qualifier(), "NrnThread*", param_ptr_qualifier(), "nt");
-    // params.emplace_back(param_tp_qualifier(), "double", "", "v");
+    params.emplace_back("", "double", "", "v");
     return params;
 }
 
@@ -2552,7 +2552,8 @@ void CodegenCVisitor::print_mechanism_register() {
         printer->add_line("add_nrn_artcell(mech_type, {});"_format(info.tqitem_index));
     }
     if (net_receive_buffering_required()) {
-        printer->add_line("hoc_register_net_receive_buffering(net_buf_receive, mech_type);");
+        printer->add_line("hoc_register_net_receive_buffering({}, mech_type);"_format(
+            method_name("net_buf_receive")));
     }
     if (info.num_net_receive_parameters != 0) {
         printer->add_line("pnt_receive[mech_type] = {};"_format(method_name("net_receive")));
@@ -3209,8 +3210,6 @@ void CodegenCVisitor::print_net_receive_common_code(Block* node) {
     printer->add_line("int tid = pnt->_tid;");
     printer->add_line("int id = pnt->_i_instance;");
     printer->add_line("double v = 0;");
-    printer->add_line("NrnThread* nt = nrn_threads + tid;");
-    printer->add_line("Memb_list* ml = nt->_ml_list[pnt->_type];");
     printer->add_line("int nodecount = ml->nodecount;");
     printer->add_line("int pnodecount = ml->_nodecount_padded;");
     printer->add_line("double* data = ml->data;");
@@ -3356,34 +3355,56 @@ void CodegenCVisitor::print_send_event_move() {
     // todo : update net send buffer count on device
 }
 
-void CodegenCVisitor::print_net_receive_buffering() {
-    if (!net_receive_required() || info.artificial_cell) {
-        return;
-    }
-    printer->add_newline(2);
-    printer->start_block("static inline void net_buf_receive(NrnThread* nt)");
+
+std::string CodegenCVisitor::net_receive_buffering_declaration() {
+    return "void {}(NrnThread* nt)"_format(method_name("net_buf_receive"));
+}
+
+void CodegenCVisitor::print_get_memb_list() {
     printer->add_line("Memb_list* ml = get_memb_list(nt);");
     printer->add_line("if (ml == NULL) {");
     printer->add_line("    return;");
     printer->add_line("}");
     printer->add_newline();
+}
+
+
+void CodegenCVisitor::print_net_receive_loop_begin() {
+    printer->add_line("int count = nrb->_displ_cnt;");
+    printer->start_block("for (int i = 0; i < count; i++)");
+}
+
+void CodegenCVisitor::print_net_receive_loop_end() {
+    printer->end_block(1);
+}
+
+
+void CodegenCVisitor::print_net_receive_buffering() {
+    if (!net_receive_required() || info.artificial_cell) {
+        return;
+    }
+    printer->add_newline(2);
+    printer->start_block(net_receive_buffering_declaration());
+
+    print_get_memb_list();
 
     auto net_receive = method_name("net_receive_kernel");
-    printer->add_line("NetReceiveBuffer_t* nrb = ml->_net_receive_buffer;");
-    printer->add_line("int count = nrb->_displ_cnt;");
-    printer->add_line("for (int i = 0; i < count; i++) {");
-    printer->add_line("    int start = nrb->_displ[i];");
-    printer->add_line("    int end = nrb->_displ[i+1];");
-    printer->add_line("    for (int j = start; j < end; j++) {");
-    printer->add_line("        int index = nrb->_nrb_index[j];");
-    printer->add_line("        int offset = nrb->_pnt_index[index];");
-    printer->add_line("        double t = nrb->_nrb_t[index];");
-    printer->add_line("        int weight_index = nrb->_weight_index[index];");
-    printer->add_line("        double flag = nrb->_nrb_flag[index];");
-    printer->add_line("        Point_process* point_process = nt->pntprocs + offset;");
-    printer->add_line("        {}(t, point_process, weight_index, flag);"_format(net_receive));
-    printer->add_line("    }");
-    printer->add_line("}");
+
+    printer->add_line(
+        "NetReceiveBuffer_t* {}nrb = ml->_net_receive_buffer;"_format(ptr_type_qualifier()));
+    print_net_receive_loop_begin();
+    printer->add_line("int start = nrb->_displ[i];");
+    printer->add_line("int end = nrb->_displ[i+1];");
+    printer->start_block("for (int j = start; j < end; j++)");
+    printer->add_line("int index = nrb->_nrb_index[j];");
+    printer->add_line("int offset = nrb->_pnt_index[index];");
+    printer->add_line("double t = nrb->_nrb_t[index];");
+    printer->add_line("int weight_index = nrb->_weight_index[index];");
+    printer->add_line("double flag = nrb->_nrb_flag[index];");
+    printer->add_line("Point_process* point_process = nt->pntprocs + offset;");
+    printer->add_line("{}(t, point_process, nt, ml, weight_index, flag);"_format(net_receive));
+    printer->end_block(1);
+    print_net_receive_loop_end();
 
     if (info.net_send_used || info.net_event_used) {
         print_send_event_move();
@@ -3445,15 +3466,17 @@ void CodegenCVisitor::print_net_receive_kernel() {
     }
 
     std::string name = method_name("net_receive_kernel");
-    std::string arguments = "double t, Point_process* pnt, int weight_index, double flag";
+    std::string arguments =
+        "double t, Point_process* pnt, NrnThread* nt, Memb_list* ml, int weight_index, double flag";
 
     if (info.artificial_cell) {
         name = method_name("net_receive");
-        arguments = "Point_process* pnt, int weight_index, double flag";
+        arguments =
+            "Point_process* pnt, NrnThread* nt, Memb_list* ml, int weight_index, double flag";
     }
 
     printer->add_newline(2);
-    printer->start_block("static void {}({}) "_format(name, arguments));
+    printer->start_block("static inline void {}({}) "_format(name, arguments));
     print_net_receive_common_code(node);
     if (info.artificial_cell) {
         printer->add_line("double t = nt->_t;");
@@ -3655,7 +3678,6 @@ void CodegenCVisitor::print_nrn_current(BreakpointBlock* node) {
     printer->add_newline(2);
     print_device_method_annotation();
     printer->start_block("static inline double nrn_current({})"_format(get_parameter_str(args)));
-    printer->add_text(")");
     printer->add_line("double current = 0.0;");
     print_statement_block(block, false, false);
     for (auto& current: info.currents) {

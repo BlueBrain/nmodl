@@ -1,3 +1,11 @@
+/*************************************************************************
+ * Copyright (C) 2018-2019 Blue Brain Project
+ *
+ * This file is part of NMODL distributed under the terms of the GNU
+ * Lesser General Public License. See top-level LICENSE file for details.
+ *************************************************************************/
+
+
 /// list of data structures required for ISPC backend
 
 typedef int Datum;
@@ -84,4 +92,4 @@ struct NrnThread {
     //int* _net_send_buffer;
 };
 
-uniform double ispc_celsius;
+static uniform double ispc_celsius;
