@@ -39,6 +39,8 @@ class CodegenIspcVisitor: public CodegenCVisitor {
     /// return name of main compute kernels
     std::string compute_method_name(BlockType type) override;
 
+    std::string net_receive_buffering_declaration() override;
+
     std::string ptr_type_qualifier() override;
 
     std::string param_tp_qualifier() override;
@@ -117,6 +119,12 @@ class CodegenIspcVisitor: public CodegenCVisitor {
     void print_wrapper_data_structures();
 
     void print_ispc_globals();
+
+    void print_get_memb_list() override;
+
+    void print_net_receive_loop_begin() override;
+
+    void print_net_receive_buffering_wrapper();
 
     /// entry point to code generation
     void print_codegen_routines() override;

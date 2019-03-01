@@ -83,6 +83,10 @@ std::string CodegenIspcVisitor::compute_method_name(BlockType type) {
     throw std::runtime_error("compute_method_name not implemented");
 }
 
+std::string CodegenIspcVisitor::net_receive_buffering_declaration() {
+    return "void {}(uniform NrnThread* uniform nt, uniform Memb_list* uniform ml)"_format(
+        method_name("ispc_net_buf_receive"));
+}
 
 void CodegenIspcVisitor::print_backend_includes() {
     printer->add_line("#include \"fast_math.ispc\"");
@@ -139,7 +143,7 @@ void CodegenIspcVisitor::print_channel_iteration_tiling_block_begin(BlockType ty
  * Use ispc foreach loop
  */
 void CodegenIspcVisitor::print_channel_iteration_block_begin() {
-    printer->start_block("foreach (id = start ... end) ");
+    printer->start_block("foreach (id = start ... end)");
 }
 
 
@@ -148,6 +152,14 @@ void CodegenIspcVisitor::print_channel_iteration_block_end() {
     printer->add_newline();
 }
 
+void CodegenIspcVisitor::print_net_receive_loop_begin() {
+    printer->add_line("uniform int count = nrb->_displ_cnt;");
+    printer->start_block("foreach (i = 0 ... count)");
+}
+
+void CodegenIspcVisitor::print_get_memb_list() {
+    // do nothing
+}
 
 void CodegenIspcVisitor::print_nrn_cur_matrix_shadow_reduction() {
     // do nothing
@@ -257,8 +269,8 @@ void CodegenIspcVisitor::print_compute_functions() {
             print_procedure(procedure);
         }
     }
-    // print_net_receive_kernel();
-    // print_net_receive_buffering();
+    print_net_receive_kernel();
+    print_net_receive_buffering();
     print_nrn_init(false);
     print_nrn_cur();
     print_nrn_state();
@@ -419,6 +431,23 @@ void CodegenIspcVisitor::print_ispc_globals() {
 /*                    Main code printing entry points and wrappers                      */
 /****************************************************************************************/
 
+void CodegenIspcVisitor::print_net_receive_buffering_wrapper() {
+    if (!net_receive_required() || info.artificial_cell) {
+        return;
+    }
+    printer->add_newline(2);
+    printer->start_block("void {}(NrnThread* nt)"_format(method_name("net_buf_receive")));
+    printer->add_line("Memb_list* ml = get_memb_list(nt);");
+    printer->start_block("if (ml == NULL)");
+    printer->add_line("return;");
+    printer->end_block();
+    printer->add_newline();
+
+    printer->add_line("{}(nt, ml);"_format(method_name("ispc_net_buf_receive")));
+
+    printer->end_block(1);
+}
+
 void CodegenIspcVisitor::print_headers_include() {
     print_backend_includes();
 }
@@ -470,6 +499,9 @@ void CodegenIspcVisitor::print_backend_compute_routine_decl() {
     compute_function = compute_method_name(BlockType::State);
     printer->add_line(
         "extern \"C\" void {}({});"_format(compute_function, get_parameter_str(params)));
+
+    printer->add_line("extern \"C\" void {}(NrnThread* nt, Memb_list* ml);"_format(
+        method_name("ispc_net_buf_receive")));
 }
 
 void CodegenIspcVisitor::codegen_wrapper_routines() {
@@ -516,10 +548,10 @@ void CodegenIspcVisitor::print_codegen_wrapper_routines() {
 
     print_net_send_buffering();
     print_net_receive();
-    print_net_receive_buffering();
 
     print_backend_compute_routine_decl();
 
+    print_net_receive_buffering_wrapper();
     codegen_wrapper_routines();
 
     print_mechanism_register();
