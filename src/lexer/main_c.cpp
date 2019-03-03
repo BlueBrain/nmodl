@@ -6,7 +6,6 @@
  *************************************************************************/
 
 #include <fstream>
-#include <iostream>
 
 #include "CLI/CLI.hpp"
 #include "lexer/c11_lexer.hpp"
@@ -22,30 +21,27 @@ int main(int argc, const char* argv[]) {
     CLI::App app{"C-Lexer : Standalone Lexer for C Code"};
 
     std::vector<std::string> files;
-    app.add_option("-f,--file,file", files, "One or multiple C files to process")
+    app.add_option("-f,--file,file", files, "One or more C files to process")
         ->required()
         ->check(CLI::ExistingFile);
 
-    try {
-        app.parse(argc, argv);
-        for (const auto& f: files) {
-            nmodl::logger->info("Processing {}", f);
-            std::ifstream file(f);
-            nmodl::parser::CDriver driver;
-            nmodl::parser::CLexer scanner(driver, &file);
+    CLI11_PARSE(app, argc, argv);
 
-            /// parse C file and print token until EOF
-            while (true) {
-                auto sym = scanner.next_token();
-                auto token = sym.token();
-                if (token == nmodl::parser::CParser::token::END) {
-                    break;
-                }
-                std::cout << sym.value.as<std::string>() << std::endl;
+    for (const auto& f: files) {
+        nmodl::logger->info("Processing {}", f);
+        std::ifstream file(f);
+        nmodl::parser::CDriver driver;
+        nmodl::parser::CLexer scanner(driver, &file);
+
+        /// parse C file and print token until EOF
+        while (true) {
+            auto sym = scanner.next_token();
+            auto token = sym.token();
+            if (token == nmodl::parser::CParser::token::END) {
+                break;
             }
+            std::cout << sym.value.as<std::string>() << std::endl;
         }
-    } catch (const CLI::ParseError& e) {
-        return app.exit(e);
     }
     return 0;
 }
