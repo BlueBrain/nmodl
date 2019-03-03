@@ -10,7 +10,6 @@
 #include "utils/string_utils.hpp"
 #include "version/version.h"
 
-
 namespace nmodl {
 
 ArgumentHandler::ArgumentHandler(const int& argc, const char** argv) {
