@@ -229,6 +229,10 @@ int main(int argc, const char* argv[]) {
             auto file = scratch_dir + "/" + modfile + ".ast.json";
             JSONVisitor v(file);
             v.visit_program(ast.get());
+            {
+                SymtabVisitor v(false);
+                v.visit_program(ast.get());
+            }
         }
 
         if (verbatim_rename) {

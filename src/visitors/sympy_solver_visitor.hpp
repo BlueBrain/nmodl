@@ -75,7 +75,7 @@ class SympySolverVisitor: public AstVisitor {
     static std::string to_nmodl_for_sympy(ast::AST* node) {
         return nmodl::to_nmodl(node, {ast::AstNodeType::UNIT});
     }
-
+    
   public:
     SympySolverVisitor(bool use_pade_approx = false, bool elimination = true)
         : use_pade_approx(use_pade_approx)
