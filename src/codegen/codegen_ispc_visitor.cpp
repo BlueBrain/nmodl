@@ -84,7 +84,7 @@ std::string CodegenIspcVisitor::compute_method_name(BlockType type) {
 }
 
 std::string CodegenIspcVisitor::net_receive_buffering_declaration() {
-    return "void {}(uniform NrnThread* uniform nt, uniform Memb_list* uniform ml)"_format(
+    return "export void {}(uniform NrnThread* uniform nt, uniform Memb_list* uniform ml)"_format(
         method_name("ispc_net_buf_receive"));
 }
 
@@ -204,14 +204,12 @@ std::string CodegenIspcVisitor::param_ptr_qualifier() {
 
 
 void CodegenIspcVisitor::print_backend_namespace_start() {
-    printer->add_newline(1);
-    printer->start_block("namespace ispc");
+    // no ispc namespace
 }
 
 
 void CodegenIspcVisitor::print_backend_namespace_stop() {
-    printer->end_block();
-    printer->add_newline();
+    // no ispc namespace
 }
 
 
@@ -222,7 +220,7 @@ CodegenIspcVisitor::ParamVector CodegenIspcVisitor::get_global_function_parms(
                         param_ptr_qualifier(), "inst");
     params.emplace_back(param_tp_qualifier(), "NrnThread*", param_ptr_qualifier(), "nt");
     params.emplace_back(param_tp_qualifier(), "Memb_list*", param_ptr_qualifier(), "ml");
-    params.emplace_back("", "int", "", "type");
+    params.emplace_back(param_tp_qualifier(), "int", "", "type");
     return params;
 }
 
@@ -232,22 +230,22 @@ void CodegenIspcVisitor::print_global_function_common_code(BlockType type) {
 
     auto params = get_global_function_parms(ptr_type_qualifier());
     print_global_method_annotation();
-    printer->start_block("void {}({})"_format(method, get_parameter_str(params)));
+    printer->start_block("export void {}({})"_format(method, get_parameter_str(params)));
 
     print_kernel_data_present_annotation_block_begin();
     printer->add_line("uniform int nodecount = ml->nodecount;");
     printer->add_line("uniform int pnodecount = ml->_nodecount_padded;");
-    printer->add_line("{}int* {}node_index = ml->nodeindices;"_format(k_const(), ""));
-    printer->add_line("double* {}data = ml->data;"_format(""));
-    printer->add_line("{}double* {}voltage = nt->_actual_v;"_format(k_const(), ""));
+    printer->add_line("{}int* {}node_index = ml->nodeindices;"_format(k_const(), "uniform "));
+    printer->add_line("double* {}data = ml->data;"_format("uniform "));
+    printer->add_line("{}double* {}voltage = nt->_actual_v;"_format(k_const(), "uniform "));
 
     if (type == BlockType::Equation) {
-        printer->add_line("double* {} vec_rhs = nt->_actual_rhs;"_format(""));
-        printer->add_line("double* {} vec_d = nt->_actual_d;"_format(""));
+        printer->add_line("double* {}vec_rhs = nt->_actual_rhs;"_format("uniform "));
+        printer->add_line("double* {}vec_d = nt->_actual_d;"_format("uniform "));
         print_rhs_d_shadow_variables();
     }
-    printer->add_line("Datum* {}indexes = ml->pdata;"_format(""));
-    printer->add_line("ThreadDatum* {}thread = ml->_thread;"_format(""));
+    printer->add_line("Datum* {}indexes = ml->pdata;"_format("uniform "));
+    printer->add_line("ThreadDatum* {}thread = ml->_thread;"_format("uniform "));
     printer->add_newline(1);
 }
 
@@ -423,7 +421,7 @@ void CodegenIspcVisitor::print_wrapper_data_structures() {
 }
 void CodegenIspcVisitor::print_ispc_globals() {
     printer->start_block("extern \"C\"");
-    printer->add_line("double ispc_celsius;");
+    printer->add_line("extern double ispc_celsius;");
     printer->end_block();
 }
 
