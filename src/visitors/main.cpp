@@ -36,9 +36,10 @@ int main(int argc, const char* argv[]) {
     std::vector<std::string> files;
 
     app.add_flag("-v,--verbose", verbose, "Show intermediate output");
-    app.add_option("-f,--file,file", files, "One or more NMODL files to process")
+    app.add_option("-f,--file,file", files, "One or more MOD files to process")
         ->required()
         ->check(CLI::ExistingFile);
+
     CLI11_PARSE(app, argc, argv);
 
     for (const auto& filename: files) {

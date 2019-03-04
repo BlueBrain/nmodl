@@ -118,16 +118,10 @@ void tokenize(const std::string& mod_text) {
 int main(int argc, const char* argv[]) {
     CLI::App app{"NMODL-Lexer : Standalone Lexer for NMODL Code"};
 
-    auto file_command = app.add_subcommand("file", "Run lexer on provided files");
-    auto string_command = app.add_subcommand("string", "Run lexer on provided NMODL codes");
-
     std::vector<std::string> files;
-    file_command->add_option("file", files, "One or more NMODL files")
+    app.add_option("-f,--file,file", files, "One or more NMODL files")
         ->required()
         ->check(CLI::ExistingFile);
-
-    std::vector<std::string> modls;
-    string_command->add_option("mod", modls, "One or more NMODL codes as string")->required();
 
     CLI11_PARSE(app, argc, argv);
 
@@ -135,11 +129,6 @@ int main(int argc, const char* argv[]) {
         logger->info("Processing file : {}", file);
         std::ifstream f(file);
         std::string mod((std::istreambuf_iterator<char>(f)), std::istreambuf_iterator<char>());
-        tokenize(mod);
-    }
-
-    for (const auto& mod: modls) {
-        logger->info("Processing string : {}", mod);
         tokenize(mod);
     }
     return 0;
