@@ -3210,8 +3210,8 @@ void CodegenCVisitor::print_net_receive_common_code(Block* node) {
     printer->add_line("int tid = pnt->_tid;");
     printer->add_line("int id = pnt->_i_instance;");
     printer->add_line("double v = 0;");
-    printer->add_line("int nodecount = ml->nodecount;");
-    printer->add_line("int pnodecount = ml->_nodecount_padded;");
+    printer->add_line("{}int nodecount = ml->nodecount;"_format(param_tp_qualifier()));
+    printer->add_line("{}int pnodecount = ml->_nodecount_padded;"_format(param_tp_qualifier()));
     printer->add_line("double* data = ml->data;");
     printer->add_line("double* weights = nt->weights;");
     printer->add_line("Datum* indexes = ml->pdata;");

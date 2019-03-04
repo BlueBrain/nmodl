@@ -32,6 +32,18 @@ struct NetReceiveBuffer_t {
     int _pnt_offset;
 };
 
+struct NetSendBuffer_t {
+  int* _sendtype;  // net_send, net_event, net_move
+  int* _vdata_index;
+  int* _pnt_index;
+  int* _weight_index;
+  double* _nsb_t;
+  double* _nsb_flag;
+  uniform int _cnt;
+  uniform int _size;       /* capacity */
+  uniform int reallocated; /* if buffer resized/reallocated, needs to be copy to cpu */
+};
+
 
 struct Memb_list {
     uniform int* nodeindices;
@@ -40,9 +52,9 @@ struct Memb_list {
     uniform Datum* pdata;
     uniform ThreadDatum* _thread;
     uniform NetReceiveBuffer_t* _net_receive_buffer;
-    // NetSendBuffer_t* _net_send_buffer; // not needed
-    int nodecount;
-    int _nodecount_padded;
+    uniform NetSendBuffer_t* _net_send_buffer; // not needed
+    uniform int nodecount;
+    uniform int _nodecount_padded;
     void* uniform instance;
 };
 
@@ -52,25 +64,54 @@ struct Point_process {
     int16 _tid;
 };
 
+struct NrnThreadMembList {
+
+};
+
+struct PreSyn {
+
+};
+
+struct PreSynHelper {
+
+};
+
+struct NetCon {
+
+};
+
+struct NrnThreadBAList {
+
+};
 
 struct NrnThread {
-    double _t;
-    double _dt;
-    double cj;
+    uniform double _t;
+    uniform double _dt;
+    uniform double cj;
 
+    uniform NrnThreadMembList* uniform tml;
     uniform Memb_list** uniform _ml_list;
+    PreSyn* uniform presyns;
+    PreSynHelper* uniform presyns_helper;
     Point_process* uniform pntprocs;
+    int** uniform pnt2presyn_ix;
+    NetCon* uniform netcons;
     double* uniform weights;
 
-    int n_pntproc, n_presyn, n_input_presyn, n_netcon, n_weight;
+    uniform int n_pntproc, n_presyn, n_input_presyn, n_netcon, n_weight;
 
-    int ncell;
-    int end;
-    int id;
+    uniform int ncell;
+    uniform int end;
+    uniform int id;
+    uniform int _stop_stepping;
+    uniform int n_vecplay;
 
-    size_t _ndata, _nidata, _nvdata;
+    uniform unsigned int64 _ndata, _nidata, _nvdata;
     double* uniform _data;
     int* uniform _idata;
+
+    void** uniform _vdata;
+    void** uniform _vecplay;
 
     double* uniform _actual_rhs;
     double* uniform _actual_d;
@@ -83,13 +124,19 @@ struct NrnThread {
     double* uniform _shadow_d;
     int* uniform _v_parent_index;
     int* uniform _permute;
+    int8* uniform _sp13mat;
+    Memb_list* _ecell_memb_list;
+    double _ctime;
+    NrnThreadBAList* tbl[1];
 
-    int shadow_rhs_cnt;
-    int compute_gpu;
-    int stream_id;
-    //int _net_send_buffer_size;
-    //int _net_send_buffer_cnt;
-    //int* _net_send_buffer;
+    uniform int shadow_rhs_cnt;
+    uniform int compute_gpu;
+    uniform int stream_id;
+    uniform int _net_send_buffer_size;
+    uniform int _net_send_buffer_cnt;
+    int* _net_send_buffer;
+    int* _watch_types;
+    void* mapping;
 };
 
-static uniform double ispc_celsius;
+extern uniform double ispc_celsius;
