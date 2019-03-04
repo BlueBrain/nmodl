@@ -1969,7 +1969,9 @@ SCENARIO("Searching for ast nodes using AstLookupVisitor") {
 // SympySolver visitor tests
 //=============================================================================
 
-std::vector<std::string> run_sympy_solver_visitor(const std::string& text) {
+std::vector<std::string> run_sympy_solver_visitor(const std::string& text,
+                                                  bool pade = false,
+                                                  bool cse = false) {
     std::vector<std::string> results;
 
     // construct AST from text
@@ -1982,7 +1984,7 @@ std::vector<std::string> run_sympy_solver_visitor(const std::string& text) {
     v_symtab.visit_program(ast.get());
 
     // run SympySolver on AST
-    SympySolverVisitor v_sympy;
+    SympySolverVisitor v_sympy(pade, cse);
     v_sympy.visit_program(ast.get());
 
     // run lookup visitor to extract results from AST
@@ -2144,6 +2146,26 @@ SCENARIO("SympySolver visitor", "[sympy]") {
             REQUIRE(AST_string == ast_to_string(ast.get()));
         }
     }
+    GIVEN("Derivative block of coupled & linear ODES, solver method sparse, no CSE") {
+        std::string nmodl_text = R"(
+            BREAKPOINT  {
+                SOLVE states METHOD sparse
+            }
+            DERIVATIVE states {
+                x' = a*z + b*h
+                y' = c + 2*x
+                z' = d*z - y
+            }
+        )";
+        THEN("Construct & solve linear system for backwards Euler") {
+            auto result = run_sympy_solver_visitor(nmodl_text, false, false);
+            REQUIRE(result.size() == 3);
+            REQUIRE(result[0] == "tmp_x_old = x");
+            REQUIRE(result[1] == "tmp_y_old = y");
+            REQUIRE(result[2] == "tmp_z_old = z");
+            // TODO: also check other statements added to block by solver
+        }
+    }
 }
 
 
@@ -2214,6 +2236,158 @@ void run_sympy_conductance_passes(ast::Program* node) {
 SCENARIO("SympyConductance visitor", "[sympy]") {
     // Test mod files below all based on:
     // nmodldb/models/db/bluebrain/CortexSimplified/mod/Ca.mod
+    GIVEN("breakpoint block containing VERBATIM statement") {
+        std::string nmodl_text = R"(
+            NEURON  {
+                SUFFIX Ca
+                USEION ca READ eca WRITE ica
+                RANGE gCabar, gCa, ica
+            }
+
+            UNITS   {
+                (S) = (siemens)
+                (mV) = (millivolt)
+                (mA) = (milliamp)
+            }
+
+            PARAMETER   {
+                gCabar = 0.00001 (S/cm2)
+            }
+
+            ASSIGNED    {
+                v   (mV)
+                eca (mV)
+                ica (mA/cm2)
+                gCa (S/cm2)
+                mInf
+                mTau
+                mAlpha
+                mBeta
+                hInf
+                hTau
+                hAlpha
+                hBeta
+            }
+
+            STATE   {
+                m
+                h
+            }
+
+            BREAKPOINT  {
+                CONDUCTANCE gCa USEION ca
+                SOLVE states METHOD cnexp
+                VERBATIM
+                double z=0;
+                ENDVERBATIM
+                gCa = gCabar*m*m*h
+                ica = gCa*(v-eca)
+            }
+
+            DERIVATIVE states   {
+                m' = (mInf-m)/mTau
+                h' = (hInf-h)/hTau
+            }
+
+            INITIAL{
+                m = mInf
+                h = hInf
+            }
+        )";
+        std::string breakpoint_text = R"(
+            BREAKPOINT  {
+                CONDUCTANCE gCa USEION ca
+                SOLVE states METHOD cnexp
+                VERBATIM
+                double z=0;
+                ENDVERBATIM
+                gCa = gCabar*m*m*h
+                ica = gCa*(v-eca)
+            }
+        )";
+        THEN("Do nothing") {
+            auto result = run_sympy_conductance_visitor(nmodl_text);
+            REQUIRE(result == breakpoint_to_nmodl(breakpoint_text));
+        }
+    }
+    GIVEN("breakpoint block containing IF/ELSE block") {
+        std::string nmodl_text = R"(
+            NEURON  {
+                SUFFIX Ca
+                USEION ca READ eca WRITE ica
+                RANGE gCabar, gCa, ica
+            }
+
+            UNITS   {
+                (S) = (siemens)
+                (mV) = (millivolt)
+                (mA) = (milliamp)
+            }
+
+            PARAMETER   {
+                gCabar = 0.00001 (S/cm2)
+            }
+
+            ASSIGNED    {
+                v   (mV)
+                eca (mV)
+                ica (mA/cm2)
+                gCa (S/cm2)
+                mInf
+                mTau
+                mAlpha
+                mBeta
+                hInf
+                hTau
+                hAlpha
+                hBeta
+            }
+
+            STATE   {
+                m
+                h
+            }
+
+            BREAKPOINT  {
+                CONDUCTANCE gCa USEION ca
+                SOLVE states METHOD cnexp
+                IF(gCabar<1){
+                    gCa = gCabar*m*m*h
+                    ica = gCa*(v-eca)
+                } ELSE {
+                    gCa = 0
+                    ica = 0
+                }
+            }
+
+            DERIVATIVE states   {
+                m' = (mInf-m)/mTau
+                h' = (hInf-h)/hTau
+            }
+
+            INITIAL{
+                m = mInf
+                h = hInf
+            }
+        )";
+        std::string breakpoint_text = R"(
+            BREAKPOINT  {
+                CONDUCTANCE gCa USEION ca
+                SOLVE states METHOD cnexp
+                IF(gCabar<1){
+                    gCa = gCabar*m*m*h
+                    ica = gCa*(v-eca)
+                } ELSE {
+                    gCa = 0
+                    ica = 0
+                }
+            }
+        )";
+        THEN("Do nothing") {
+            auto result = run_sympy_conductance_visitor(nmodl_text);
+            REQUIRE(result == breakpoint_to_nmodl(breakpoint_text));
+        }
+    }
     GIVEN("ion current, existing CONDUCTANCE hint & var") {
         std::string nmodl_text = R"(
             NEURON  {

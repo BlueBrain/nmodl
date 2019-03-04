@@ -42,6 +42,9 @@ int main(int argc, const char* argv[]) {
     /// list of mod files to process
     std::vector<std::string> mod_files;
 
+    /// true if debug logger statements should be shown
+    bool verbose(false);
+
     /// true if serial c code to be generated
     bool c_backend(true);
 
@@ -59,6 +62,9 @@ int main(int argc, const char* argv[]) {
 
     /// true if Pade approximation to be used
     bool sympy_pade(false);
+
+    /// true if CSE (temp variables) to be used
+    bool sympy_cse(false);
 
     /// true if conductance keyword can be added to breakpoint
     bool sympy_conductance(false);
@@ -108,6 +114,8 @@ int main(int argc, const char* argv[]) {
     app.get_formatter()->column_width(40);
     app.set_help_all_flag("-H,--help-all", "Print this help message including all sub-commands");
 
+    app.add_flag("-v,--verbose", verbose, "Verbose logger output")->ignore_case();
+
     app.add_option("file", mod_files, "One or more MOD files to process")
         ->ignore_case()
         ->required()
@@ -130,6 +138,7 @@ int main(int argc, const char* argv[]) {
     auto sympy_opt = app.add_subcommand("sympy", "SymPy based analysis and optimizations")->ignore_case();
     sympy_opt->add_flag("--analytic", sympy_analytic, "Solve ODEs using SymPy analytic integration")->ignore_case();
     sympy_opt->add_flag("--pade", sympy_pade, "Pade approximation in SymPy analytic integration")->ignore_case();
+    sympy_opt->add_flag("--cse", sympy_cse, "CSE (Common Sub Expressions) in SymPy analytic integration")->ignore_case();
     sympy_opt->add_flag("--conductance", sympy_conductance, "Add CONDUCTANCE keyword in BREAKPOINT")->ignore_case();
 
     auto passes_opt = app.add_subcommand("passes", "Analyse/Optimization passes")->ignore_case();
@@ -156,6 +165,10 @@ int main(int argc, const char* argv[]) {
 
     if (sympy_opt) {
         pybind11::initialize_interpreter();
+    }
+
+    if (verbose) {
+        logger->set_level(spdlog::level::debug);
     }
 
     /// write ast to nmodl
@@ -214,6 +227,10 @@ int main(int argc, const char* argv[]) {
             auto file = scratch_dir + "/" + modfile + ".ast.json";
             JSONVisitor v(file);
             v.visit_program(ast.get());
+            {
+                SymtabVisitor v(false);
+                v.visit_program(ast.get());
+            }
         }
 
         if (verbatim_rename) {
@@ -234,7 +251,7 @@ int main(int argc, const char* argv[]) {
 
         if (sympy_analytic) {
             logger->info("Running sympy solve visitor");
-            SympySolverVisitor v(sympy_pade);
+            SympySolverVisitor v(sympy_pade, sympy_cse);
             v.visit_program(ast.get());
             ast_to_nmodl(ast.get(), filepath("sympy_solve"));
         }
