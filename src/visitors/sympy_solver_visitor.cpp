@@ -11,6 +11,7 @@
 #include "symtab/symbol.hpp"
 #include "utils/logger.hpp"
 #include "visitor_utils.hpp"
+#include "visitors/sympy_helper_visitor.hpp"
 #include "visitors/sympy_solver_visitor.hpp"
 
 
@@ -49,12 +50,12 @@ void SympySolverVisitor::visit_diff_eq_expression(ast::DiffEqExpression* node) {
         logger->warn("SympySolverVisitor :: LHS of differential equation is not a PrimeName");
         return;
     }
-    auto locals = py::dict("equation_string"_a = nmodl::to_nmodl(node),
+    auto locals = py::dict("equation_string"_a = nmodl::to_sympy_nmodl(node),
                            "t_var"_a = codegen::naming::NTHREAD_T_VARIABLE,
                            "dt_var"_a = codegen::naming::NTHREAD_DT_VARIABLE, "vars"_a = vars,
                            "use_pade_approx"_a = use_pade_approx);
     if (solve_method == euler_method) {
-        logger->debug("SympySolverVisitor :: EULER - solving: {}", nmodl::to_nmodl(node));
+        logger->debug("SympySolverVisitor :: EULER - solving: {}", nmodl::to_sympy_nmodl(node));
         // replace x' = f(x) differential equation
         // with forwards Euler timestep:
         // x = x + f(x) * dt
@@ -73,7 +74,7 @@ void SympySolverVisitor::visit_diff_eq_expression(ast::DiffEqExpression* node) {
         // replace x' = f(x) differential equation
         // with analytic solution for x(t+dt) in terms of x(t)
         // x = ...
-        logger->debug("SympySolverVisitor :: CNEXP - solving: {}", nmodl::to_nmodl(node));
+        logger->debug("SympySolverVisitor :: CNEXP - solving: {}", nmodl::to_sympy_nmodl(node));
         py::exec(R"(
                 from nmodl.ode import integrate2c
                 exception_message = ""
