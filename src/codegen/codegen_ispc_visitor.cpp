@@ -84,8 +84,14 @@ std::string CodegenIspcVisitor::compute_method_name(BlockType type) {
 }
 
 std::string CodegenIspcVisitor::net_receive_buffering_declaration() {
-    return "export void {}(uniform NrnThread* uniform nt, uniform Memb_list* uniform ml)"_format(
-        method_name("ispc_net_buf_receive"));
+    auto params = ParamVector();
+    params.emplace_back(param_tp_qualifier(), "{}*"_format(instance_struct()),
+                        param_ptr_qualifier(), "inst");
+    params.emplace_back(param_tp_qualifier(), "NrnThread*", param_ptr_qualifier(), "nt");
+    params.emplace_back(param_tp_qualifier(), "Memb_list*", param_ptr_qualifier(), "ml");
+
+    return "export void {}({})"_format(method_name("ispc_net_buf_receive"),
+                                       get_parameter_str(params));
 }
 
 void CodegenIspcVisitor::print_backend_includes() {
@@ -235,17 +241,19 @@ void CodegenIspcVisitor::print_global_function_common_code(BlockType type) {
     print_kernel_data_present_annotation_block_begin();
     printer->add_line("uniform int nodecount = ml->nodecount;");
     printer->add_line("uniform int pnodecount = ml->_nodecount_padded;");
-    printer->add_line("{}int* {}node_index = ml->nodeindices;"_format(k_const(), "uniform "));
-    printer->add_line("double* {}data = ml->data;"_format("uniform "));
-    printer->add_line("{}double* {}voltage = nt->_actual_v;"_format(k_const(), "uniform "));
+    printer->add_line(
+        "{}int* {}node_index = ml->nodeindices;"_format(k_const(), ptr_type_qualifier()));
+    printer->add_line("double* {}data = ml->data;"_format(ptr_type_qualifier()));
+    printer->add_line(
+        "{}double* {}voltage = nt->_actual_v;"_format(k_const(), ptr_type_qualifier()));
 
     if (type == BlockType::Equation) {
-        printer->add_line("double* {}vec_rhs = nt->_actual_rhs;"_format("uniform "));
-        printer->add_line("double* {}vec_d = nt->_actual_d;"_format("uniform "));
+        printer->add_line("double* {}vec_rhs = nt->_actual_rhs;"_format(ptr_type_qualifier()));
+        printer->add_line("double* {}vec_d = nt->_actual_d;"_format(ptr_type_qualifier()));
         print_rhs_d_shadow_variables();
     }
-    printer->add_line("Datum* {}indexes = ml->pdata;"_format("uniform "));
-    printer->add_line("ThreadDatum* {}thread = ml->_thread;"_format("uniform "));
+    printer->add_line("Datum* {}indexes = ml->pdata;"_format(ptr_type_qualifier()));
+    printer->add_line("ThreadDatum* {}thread = ml->_thread;"_format(ptr_type_qualifier()));
     printer->add_newline(1);
 }
 
@@ -438,10 +446,11 @@ void CodegenIspcVisitor::print_net_receive_buffering_wrapper() {
     printer->add_line("Memb_list* ml = get_memb_list(nt);");
     printer->start_block("if (ml == NULL)");
     printer->add_line("return;");
-    printer->end_block();
-    printer->add_newline();
+    printer->end_block(1);
+    printer->add_line(
+        "{0}* {1}inst = ({0}*) ml->instance;"_format(instance_struct(), ptr_type_qualifier()));
 
-    printer->add_line("{}(nt, ml);"_format(method_name("ispc_net_buf_receive")));
+    printer->add_line("{}(inst, nt, ml);"_format(method_name("ispc_net_buf_receive")));
 
     printer->end_block(1);
 }
@@ -498,8 +507,12 @@ void CodegenIspcVisitor::print_backend_compute_routine_decl() {
     printer->add_line(
         "extern \"C\" void {}({});"_format(compute_function, get_parameter_str(params)));
 
-    printer->add_line("extern \"C\" void {}(NrnThread* nt, Memb_list* ml);"_format(
-        method_name("ispc_net_buf_receive")));
+    auto net_recv_params = ParamVector();
+    net_recv_params.emplace_back("", "{}*"_format(instance_struct()), "", "inst");
+    net_recv_params.emplace_back("", "NrnThread*", "", "nt");
+    net_recv_params.emplace_back("", "Memb_list*", "", "ml");
+    printer->add_line("extern \"C\" void {}({});"_format(method_name("ispc_net_buf_receive"),
+                                                         get_parameter_str(net_recv_params)));
 }
 
 void CodegenIspcVisitor::codegen_wrapper_routines() {
@@ -544,7 +557,10 @@ void CodegenIspcVisitor::print_codegen_wrapper_routines() {
     print_check_table_thread_function();
 
 
+    print_net_init();
     print_net_send_buffering();
+    print_watch_activate();
+    print_watch_check();
     print_net_receive();
 
     print_backend_compute_routine_decl();

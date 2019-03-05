@@ -791,7 +791,7 @@ class CodegenCVisitor: public AstVisitor {
 
 
     /// common code section for net receive related methods
-    void print_net_receive_common_code(ast::Block* node);
+    void print_net_receive_common_code(ast::Block* node, bool need_inst = true);
 
 
     /// kernel for buffering net_send events
