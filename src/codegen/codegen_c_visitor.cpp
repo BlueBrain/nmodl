@@ -3206,7 +3206,7 @@ void CodegenCVisitor::print_watch_check() {
 }
 
 
-void CodegenCVisitor::print_net_receive_common_code(Block* node) {
+void CodegenCVisitor::print_net_receive_common_code(Block* node, bool need_inst) {
     printer->add_line("int tid = pnt->_tid;");
     printer->add_line("int id = pnt->_i_instance;");
     printer->add_line("double v = 0;");
@@ -3216,7 +3216,9 @@ void CodegenCVisitor::print_net_receive_common_code(Block* node) {
     printer->add_line("double* weights = nt->weights;");
     printer->add_line("Datum* indexes = ml->pdata;");
     printer->add_line("ThreadDatum* thread = ml->_thread;");
-    printer->add_line("{0}* inst = ({0}*) ml->instance;"_format(instance_struct()));
+    if (need_inst) {
+        printer->add_line("{0}* inst = ({0}*) ml->instance;"_format(instance_struct()));
+    }
 
     /// rename variables but need to see if they are actually used
     auto parameters = info.net_receive_node->get_parameters();
@@ -3402,7 +3404,8 @@ void CodegenCVisitor::print_net_receive_buffering() {
     printer->add_line("int weight_index = nrb->_weight_index[index];");
     printer->add_line("double flag = nrb->_nrb_flag[index];");
     printer->add_line("Point_process* point_process = nt->pntprocs + offset;");
-    printer->add_line("{}(t, point_process, nt, ml, weight_index, flag);"_format(net_receive));
+    printer->add_line(
+        "{}(t, point_process, inst, nt, ml, weight_index, flag);"_format(net_receive));
     printer->end_block(1);
     print_net_receive_loop_end();
 
@@ -3465,19 +3468,32 @@ void CodegenCVisitor::print_net_receive_kernel() {
         }
     }
 
-    std::string name = method_name("net_receive_kernel");
-    std::string arguments =
-        "double t, Point_process* pnt, NrnThread* nt, Memb_list* ml, int weight_index, double flag";
-
-    if (info.artificial_cell) {
+    std::string name;
+    auto params = ParamVector();
+    if (!info.artificial_cell) {
+        name = method_name("net_receive_kernel");
+        params.emplace_back("", "double", "", "t");
+        params.emplace_back("", "Point_process*", "", "pnt");
+        params.emplace_back(param_tp_qualifier(), "{}*"_format(instance_struct()),
+                            param_ptr_qualifier(), "inst");
+        params.emplace_back(param_tp_qualifier(), "NrnThread*", param_ptr_qualifier(), "nt");
+        params.emplace_back(param_tp_qualifier(), "Memb_list*", param_ptr_qualifier(), "ml");
+        params.emplace_back("", "int", "", "weight_index");
+        params.emplace_back("", "double", "", "flag");
+    } else {
         name = method_name("net_receive");
-        arguments =
-            "Point_process* pnt, NrnThread* nt, Memb_list* ml, int weight_index, double flag";
+        params.emplace_back("", "Point_process*", "", "pnt");
+        params.emplace_back(param_tp_qualifier(), "{}*"_format(instance_struct()),
+                            param_ptr_qualifier(), "inst");
+        params.emplace_back(param_tp_qualifier(), "NrnThread*", param_ptr_qualifier(), "nt");
+        params.emplace_back(param_tp_qualifier(), "Memb_list*", param_ptr_qualifier(), "ml");
+        params.emplace_back("", "int", "", "weight_index");
+        params.emplace_back("", "double", "", "flag");
     }
 
     printer->add_newline(2);
-    printer->start_block("static inline void {}({}) "_format(name, arguments));
-    print_net_receive_common_code(node);
+    printer->start_block("static inline void {}({}) "_format(name, get_parameter_str(params)));
+    print_net_receive_common_code(node, false);
     if (info.artificial_cell) {
         printer->add_line("double t = nt->_t;");
     }
@@ -3501,9 +3517,12 @@ void CodegenCVisitor::print_net_receive() {
     printing_net_receive = true;
     if (!info.artificial_cell) {
         std::string name = method_name("net_receive");
-        std::string arguments = "Point_process* pnt, int weight_index, double flag";
+        auto params = ParamVector();
+        params.emplace_back("", "Point_process*", "", "pnt");
+        params.emplace_back("", "int", "", "weight_index");
+        params.emplace_back("", "double", "", "flag");
         printer->add_newline(2);
-        printer->start_block("static void {}({}) "_format(name, arguments));
+        printer->start_block("static void {}({}) "_format(name, get_parameter_str(params)));
         printer->add_line("NrnThread* nt = nrn_threads + pnt->_tid;");
         printer->add_line("Memb_list* ml = get_memb_list(nt);");
         printer->add_line("NetReceiveBuffer_t* nrb = ml->_net_receive_buffer;");

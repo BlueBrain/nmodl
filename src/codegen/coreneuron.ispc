@@ -13,24 +13,25 @@ typedef int Datum;
 
 struct ThreadDatum {
     int i;
-    double* pval;
-    void* _pvoid;
+    double* uniform pval;
+    void* uniform _pvoid;
 };
 
 
 struct NetReceiveBuffer_t {
-    int* _displ;
-    int* _nrb_index;
+    int* uniform _displ;
+    int* uniform _nrb_index;
 
-    int* _pnt_index;
-    int* _weight_index;
-    double* _nrb_t;
-    double* _nrb_flag;
+    int* uniform _pnt_index;
+    int* uniform _weight_index;
+    double* uniform _nrb_t;
+    double* uniform _nrb_flag;
     int _cnt;
     int _displ_cnt;
     int _size;
     int _pnt_offset;
 };
+
 
 struct NetSendBuffer_t {
   int* _sendtype;  // net_send, net_event, net_move
@@ -59,9 +60,9 @@ struct Memb_list {
 };
 
 struct Point_process {
-    int _i_instance;
-    int16 _type;
-    int16 _tid;
+    uniform int _i_instance;
+    uniform int16 _type;
+    uniform int16 _tid;
 };
 
 struct NrnThreadMembList {
@@ -91,9 +92,9 @@ struct NrnThread {
 
     uniform NrnThreadMembList* uniform tml;
     uniform Memb_list** uniform _ml_list;
+    Point_process* uniform pntprocs;
     PreSyn* uniform presyns;
     PreSynHelper* uniform presyns_helper;
-    Point_process* uniform pntprocs;
     int** uniform pnt2presyn_ix;
     NetCon* uniform netcons;
     double* uniform weights;
