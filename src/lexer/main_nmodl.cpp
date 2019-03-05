@@ -119,9 +119,7 @@ int main(int argc, const char* argv[]) {
     CLI::App app{"NMODL-Lexer : Standalone Lexer for NMODL Code"};
 
     std::vector<std::string> files;
-    app.add_option("-f,--file,file", files, "One or more NMODL files")
-        ->required()
-        ->check(CLI::ExistingFile);
+    app.add_option("file", files, "One or more NMODL files")->required()->check(CLI::ExistingFile);
 
     CLI11_PARSE(app, argc, argv);
 

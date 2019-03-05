@@ -169,18 +169,21 @@ Main code generation program is `nmodl`. You can see all sub-commands supported 
 $ ./bin/nmodl -h
 
 NMODL : Source-to-Source Code Generation Framework
-Usage: ./bin/nmodl [OPTIONS] [SUBCOMMAND]
+Usage: ./bin/nmodl [OPTIONS] file... [SUBCOMMAND]
+
+Positionals:
+  file TEXT:FILE ... REQUIRED           One or more MOD files to process
 
 Options:
   -h,--help                             Print this help message and exit
   -H,--help-all                         Print this help message including all sub-commands
+  -o,--output TEXT=.                    Directory for backend code output
+  --scratch TEXT=tmp                    Directory for intermediate code output
 
 Subcommands:
-  file                                  List of mod files
   host                                  HOST/CPU code backends
   acc                                   Accelerator code backends
   sympy                                 SymPy based analysis and optimizations
-  output                                Code output
   passes                                Analyse/Optimization passes
   codegen                               Code generation options
 ```
@@ -189,19 +192,20 @@ To see all command line options from every sub-command, you can do:
 
 ```
 $ ./bin/nmodl -H
+
 NMODL : Source-to-Source Code Generation Framework
-Usage: ./bin/nmodl [OPTIONS] [SUBCOMMAND]
+Usage: ./bin/nmodl [OPTIONS] file... [SUBCOMMAND]
+
+Positionals:
+  file TEXT:FILE ... REQUIRED           One or more MOD files to process
 
 Options:
   -h,--help                             Print this help message and exit
   -H,--help-all                         Print this help message including all sub-commands
+  -o,--output TEXT=.                    Directory for backend code output
+  --scratch TEXT=tmp                    Directory for intermediate code output
 
 Subcommands:
-file
-  List of mod files
-  Positionals:
-    file TEXT:FILE ... REQUIRED           One or more MOD files to process
-
 host
   HOST/CPU code backends
   Options:
@@ -221,16 +225,6 @@ sympy
     --pade                                Pade approximation in SymPy analytic integration
     --conductance                         Add CONDUCTANCE keyword in BREAKPOINT
 
-output
-  Code output
-  Options:
-    --dir TEXT                            Directory for backend code output
-    --scratch TEXT                        Directory for intermediate code output
-    --json-ast                            Write AST to JSON file
-    --nmodl-ast                           Write AST to NMODL file
-    --json-perf                           Write performance statistics to JSON file
-    --show-symtab                         Write symbol table to stdout
-
 passes
   Analyse/Optimization passes
   Options:
@@ -240,19 +234,22 @@ passes
     --local-rename                        Rename LOCAL variable if variable of same name exist in global scope
     --verbatim-inline                     Inline even if verbatim block exist
     --verbatim-rename                     Rename variables in verbatim block
+    --json-ast                            Write AST to JSON file
+    --nmodl-ast                           Write AST to NMODL file
+    --json-perf                           Write performance statistics to JSON file
+    --show-symtab                         Write symbol table to stdout
 
 codegen
   Code generation options
   Options:
-    --layout TEXT:{aos,soa}               Memory layout for code generation
-    --datatype TEXT:{float,double}        Data type for floating point variables
-
+    --layout TEXT:{aos,soa}=soa           Memory layout for code generation
+    --datatype TEXT:{float,double}=soa    Data type for floating point variables
 ```
 
 To use code generation capability you can do:
 
 ```
-$ nmodl file <path>/hh.mod \
+$ nmodl <path>/hh.mod \
 		host --c \
 		sympy --analytic --pade --conductance \
 		passes --inline --localize --localize-verbatim \

@@ -20,7 +20,7 @@ int main(int argc, const char* argv[]) {
     CLI::App app{"C-Parser : Standalone Parser for C Code"};
 
     std::vector<std::string> files;
-    app.add_option("-f,--file,file", files, "One or more C files to process")
+    app.add_option("file", files, "One or more C files to process")
         ->required()
         ->check(CLI::ExistingFile);
 

@@ -43,43 +43,43 @@ int main(int argc, const char* argv[]) {
     std::vector<std::string> mod_files;
 
     /// true if serial c code to be generated
-    bool c_backend = true;
+    bool c_backend(true);
 
     /// true if c code with openmp to be generated
-    bool omp_backend = false;
-
-    /// true if sympy should be used for solving ODEs analytically
-    bool sympy_analytic = false;
-
-    /// true if Pade approximation to be used
-    bool sympy_pade = false;
-
-    /// true if conductance keyword can be added to breakpoint
-    bool sympy_conductance = false;
+    bool omp_backend(false);
 
     /// true if c code with openacc to be generated
-    bool oacc_backend = false;
+    bool oacc_backend(false);
 
     /// true if cuda code to be generated
-    bool cuda_backend = false;
+    bool cuda_backend(false);
+
+    /// true if sympy should be used for solving ODEs analytically
+    bool sympy_analytic(false);
+
+    /// true if Pade approximation to be used
+    bool sympy_pade(false);
+
+    /// true if conductance keyword can be added to breakpoint
+    bool sympy_conductance(false);
 
     /// true if inlining at nmodl level to be done
-    bool nmodl_inline = false;
+    bool nmodl_inline(false);
 
     /// true if range variables to be converted to local
-    bool localize = false;
+    bool localize(false);
 
     /// true if localize variables even if verbatim block is used
-    bool localize_verbatim = false;
+    bool localize_verbatim(false);
 
     /// true if local variables to be renamed
-    bool local_rename = false;
+    bool local_rename(false);
 
     /// true if inline even if verbatim block exist
-    bool verbatim_inline = false;
+    bool verbatim_inline(false);
 
     /// true if verbatim blocks
-    bool verbatim_rename = false;
+    bool verbatim_rename(false);
 
     /// directory where code will be generated
     std::string output_dir(".");
@@ -108,11 +108,15 @@ int main(int argc, const char* argv[]) {
     app.get_formatter()->column_width(40);
     app.set_help_all_flag("-H,--help-all", "Print this help message including all sub-commands");
 
-    auto file_opt = app.add_subcommand("file", "List of mod files")->ignore_case();
-    file_opt->add_option("file", mod_files, "One or more MOD files to process")
-        ->required()
+    app.add_option("file", mod_files, "One or more MOD files to process")
         ->ignore_case()
+        ->required()
         ->check(CLI::ExistingFile);
+
+    app.add_option("-o,--output", output_dir, "Directory for backend code output", true)
+        ->ignore_case();
+    app.add_option("--scratch", scratch_dir, "Directory for intermediate code output", true)
+        ->ignore_case();
 
     auto host_opt = app.add_subcommand("host", "HOST/CPU code backends")->ignore_case();
     host_opt->add_flag("--c", c_backend, "C/C++ backend")->ignore_case();
@@ -128,25 +132,21 @@ int main(int argc, const char* argv[]) {
     sympy_opt->add_flag("--pade", sympy_pade, "Pade approximation in SymPy analytic integration")->ignore_case();
     sympy_opt->add_flag("--conductance", sympy_conductance, "Add CONDUCTANCE keyword in BREAKPOINT")->ignore_case();
 
-    auto output_opt = app.add_subcommand("output", "Code output")->ignore_case();
-    output_opt->add_option("--dir", output_dir, "Directory for backend code output")->ignore_case();
-    output_opt->add_option("--scratch", scratch_dir, "Directory for intermediate code output")->ignore_case();
-    output_opt->add_flag("--json-ast", json_ast, "Write AST to JSON file")->ignore_case();
-    output_opt->add_flag("--nmodl-ast", nmodl_ast, "Write AST to NMODL file")->ignore_case();
-    output_opt->add_flag("--json-perf", json_perfstat, "Write performance statistics to JSON file")->ignore_case();
-    output_opt->add_flag("--show-symtab", show_symtab, "Write symbol table to stdout")->ignore_case();
-
-    auto optimize_opt = app.add_subcommand("passes", "Analyse/Optimization passes")->ignore_case();
-    optimize_opt->add_flag("--inline", nmodl_inline, "Perform inlining at NMODL level")->ignore_case();
-    optimize_opt->add_flag("--localize", localize, "Convert RANGE variables to LOCAL")->ignore_case();
-    optimize_opt->add_flag("--localize-verbatim", localize_verbatim, "Convert RANGE variables to LOCAL even if verbatim block exist")->ignore_case();
-    optimize_opt->add_flag("--local-rename", local_rename, "Rename LOCAL variable if variable of same name exist in global scope")->ignore_case();
-    optimize_opt->add_flag("--verbatim-inline", verbatim_inline, "Inline even if verbatim block exist")->ignore_case();
-    optimize_opt->add_flag("--verbatim-rename", verbatim_rename, "Rename variables in verbatim block")->ignore_case();
+    auto passes_opt = app.add_subcommand("passes", "Analyse/Optimization passes")->ignore_case();
+    passes_opt->add_flag("--inline", nmodl_inline, "Perform inlining at NMODL level")->ignore_case();
+    passes_opt->add_flag("--localize", localize, "Convert RANGE variables to LOCAL")->ignore_case();
+    passes_opt->add_flag("--localize-verbatim", localize_verbatim, "Convert RANGE variables to LOCAL even if verbatim block exist")->ignore_case();
+    passes_opt->add_flag("--local-rename", local_rename, "Rename LOCAL variable if variable of same name exist in global scope")->ignore_case();
+    passes_opt->add_flag("--verbatim-inline", verbatim_inline, "Inline even if verbatim block exist")->ignore_case();
+    passes_opt->add_flag("--verbatim-rename", verbatim_rename, "Rename variables in verbatim block")->ignore_case();
+    passes_opt->add_flag("--json-ast", json_ast, "Write AST to JSON file")->ignore_case();
+    passes_opt->add_flag("--nmodl-ast", nmodl_ast, "Write AST to NMODL file")->ignore_case();
+    passes_opt->add_flag("--json-perf", json_perfstat, "Write performance statistics to JSON file")->ignore_case();
+    passes_opt->add_flag("--show-symtab", show_symtab, "Write symbol table to stdout")->ignore_case();
 
     auto codegen_opt = app.add_subcommand("codegen", "Code generation options")->ignore_case();
-    codegen_opt->add_option("--layout", layout, "Memory layout for code generation")->ignore_case()->check(CLI::IsMember({"aos", "soa"}));
-    codegen_opt->add_option("--datatype", layout, "Data type for floating point variables")->ignore_case()->check(CLI::IsMember({"float", "double"}));
+    codegen_opt->add_option("--layout", layout, "Memory layout for code generation", true)->ignore_case()->check(CLI::IsMember({"aos", "soa"}));
+    codegen_opt->add_option("--datatype", layout, "Data type for floating point variables", true)->ignore_case()->check(CLI::IsMember({"float", "double"}));
     // clang-format on
 
     CLI11_PARSE(app, argc, argv);
@@ -197,6 +197,14 @@ int main(int argc, const char* argv[]) {
             logger->info("Running symtab visitor");
             SymtabVisitor v(false);
             v.visit_program(ast.get());
+        }
+
+        if (show_symtab) {
+            logger->info("Printing symbol table");
+            std::stringstream stream;
+            auto symtab = ast->get_model_symbol_table();
+            symtab->print(stream);
+            std::cout << stream.str();
         }
 
         ast_to_nmodl(ast.get(), filepath("ast"));
@@ -273,18 +281,9 @@ int main(int argc, const char* argv[]) {
             v.visit_program(ast.get());
         }
 
-        if (show_symtab) {
-            logger->info("Printing symbol table");
-            std::stringstream stream;
-            auto symtab = ast->get_model_symbol_table();
-            symtab->print(stream);
-            std::cout << stream.str();
-        }
-
         {
             // make sure to run perf visitor because code generator
             // looks for read/write counts const/non-const declaration
-            logger->info("Running perf visitor");
             PerfVisitor v;
             v.visit_program(ast.get());
         }

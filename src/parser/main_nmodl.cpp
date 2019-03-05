@@ -19,7 +19,7 @@ int main(int argc, const char* argv[]) {
     CLI::App app{"NMODL-Parser : Standalone Parser for NMODL"};
 
     std::vector<std::string> files;
-    app.add_option("-f,--file,file", files, "One or more MOD files to process")
+    app.add_option("file", files, "One or more MOD files to process")
         ->required()
         ->check(CLI::ExistingFile);
 
