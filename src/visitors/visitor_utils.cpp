@@ -114,14 +114,6 @@ std::string to_nmodl(ast::AST* node, std::vector<ast::AstNodeType> exclude_types
     return stream.str();
 }
 
-
-/// Convert ast to nmodl excluding node types which are not
-/// compatible / not needed with SymPy
-std::string to_nmodl_for_sympy(ast::AST* node) {
-    return nmodl::to_nmodl(node, {AstNodeType::UNIT});
-}
-
-
 std::string to_json(ast::AST* node, bool compact, bool expand) {
     std::stringstream stream;
     JSONVisitor v(stream);

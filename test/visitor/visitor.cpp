@@ -2905,10 +2905,8 @@ SCENARIO("Sympy specific AST to NMODL conversion") {
             NmodlDriver driver;
             driver.parse_string(input);
             auto ast = driver.ast();
-            auto result1 = to_nmodl(ast.get(), {AstNodeType::UNIT});
-            auto result2 = to_nmodl_for_sympy(ast.get());
-            REQUIRE(result1 == reindent_text(expected));
-            REQUIRE(result2 == reindent_text(expected));
+            auto result = to_nmodl(ast.get(), {AstNodeType::UNIT});
+            REQUIRE(result == reindent_text(expected));
         }
     }
 }
