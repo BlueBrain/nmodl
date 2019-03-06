@@ -46,7 +46,7 @@ class SympySolverVisitor: public AstVisitor {
     /// optionally replace cnexp solution with (1,1) pade approx
     bool use_pade_approx;
 
-    std::string to_nmodl_for_sympy(ast::AST* node) {
+    static std::string to_nmodl_for_sympy(ast::AST* node) {
         return nmodl::to_nmodl(node, {ast::AstNodeType::UNIT});
     }
 

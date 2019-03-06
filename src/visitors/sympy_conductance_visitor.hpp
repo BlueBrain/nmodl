@@ -84,7 +84,7 @@ class SympyConductanceVisitor: public AstVisitor {
     void lookup_useion_statements();
     void lookup_nonspecific_statements();
 
-    std::string to_nmodl_for_sympy(ast::AST* node) {
+    static std::string to_nmodl_for_sympy(ast::AST* node) {
         return to_nmodl(node, {ast::AstNodeType::UNIT});
     }
 

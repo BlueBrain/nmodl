@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include <set>
+
 #include "ast/ast.hpp"
 #include "printer/nmodl_printer.hpp"
 
@@ -19,18 +21,18 @@ class NmodlPrintVisitor : public Visitor {
         std::unique_ptr<NMODLPrinter> printer;
 
          /// node types to exclude while printing
-        std::vector<ast::AstNodeType> exclude_types;
+        std::set<ast::AstNodeType> exclude_types;
 
         /// check if node is to be excluded while printing
         bool is_exclude_type(ast::AstNodeType type) const {
-            return std::find(exclude_types.begin(), exclude_types.end(), type) != exclude_types.end();
+            return exclude_types.find(type) != exclude_types.end();
         }
 
     public:
         NmodlPrintVisitor() : printer(new NMODLPrinter()) {}
         NmodlPrintVisitor(std::string filename) : printer(new NMODLPrinter(filename)) {}
         NmodlPrintVisitor(std::ostream& stream) : printer(new NMODLPrinter(stream)) {}
-        NmodlPrintVisitor(std::ostream& stream, const std::vector<ast::AstNodeType>& types)
+        NmodlPrintVisitor(std::ostream& stream, const std::set<ast::AstNodeType>& types)
             : printer(new NMODLPrinter(stream)),
               exclude_types(types) {}
 
