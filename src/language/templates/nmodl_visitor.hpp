@@ -17,10 +17,22 @@ class NmodlPrintVisitor : public Visitor {
 
     private:
         std::unique_ptr<NMODLPrinter> printer;
+
+         /// node types to exclude while printing
+        std::vector<ast::AstNodeType> exclude_types;
+
+        /// check if node is to be excluded while printing
+        bool is_exclude_type(ast::AstNodeType type) {
+            return std::find(exclude_types.begin(), exclude_types.end(), type) != exclude_types.end();
+        }
+
     public:
         NmodlPrintVisitor() : printer(new NMODLPrinter()) {}
         NmodlPrintVisitor(std::string filename) : printer(new NMODLPrinter(filename)) {}
         NmodlPrintVisitor(std::ostream& stream) : printer(new NMODLPrinter(stream)) {}
+        NmodlPrintVisitor(std::ostream& stream, std::vector<ast::AstNodeType> types)
+            : printer(new NMODLPrinter(stream)),
+              exclude_types(types) {}
 
         {% for node in nodes %}
         virtual void visit_{{ node.class_name|snake_case }}(ast::{{ node.class_name }}* node) override;

@@ -27,7 +27,6 @@
 #include "visitors/perf_visitor.hpp"
 #include "visitors/rename_visitor.hpp"
 #include "visitors/sympy_conductance_visitor.hpp"
-#include "visitors/sympy_helper_visitor.hpp"
 #include "visitors/sympy_solver_visitor.hpp"
 #include "visitors/symtab_visitor.hpp"
 #include "visitors/verbatim_var_rename_visitor.hpp"
@@ -2901,13 +2900,15 @@ SCENARIO("Sympy specific AST to NMODL conversion") {
             }
         )";
 
-        THEN("to_sympy_nmodl ignores all units specification") {
+        THEN("to_nmodl_for_sympy ignores all units specification") {
             auto input = reindent_text(nmodl);
             NmodlDriver driver;
             driver.parse_string(input);
             auto ast = driver.ast();
-            auto result = to_sympy_nmodl(ast.get());
-            REQUIRE(result == reindent_text(expected));
+            auto result1 = to_nmodl(ast.get(), {AstNodeType::UNIT});
+            auto result2 = to_nmodl_for_sympy(ast.get());
+            REQUIRE(result1 == reindent_text(expected));
+            REQUIRE(result2 == reindent_text(expected));
         }
     }
 }

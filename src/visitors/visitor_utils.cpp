@@ -107,11 +107,18 @@ std::set<std::string> get_global_vars(Program* node) {
 }
 
 
-std::string to_nmodl(ast::AST* node) {
+std::string to_nmodl(ast::AST* node, std::vector<ast::AstNodeType> exclude_types) {
     std::stringstream stream;
-    NmodlPrintVisitor v(stream);
+    NmodlPrintVisitor v(stream, exclude_types);
     node->accept(&v);
     return stream.str();
+}
+
+
+/// Convert ast to nmodl excluding node types which are not
+/// compatible / not needed with SymPy
+std::string to_nmodl_for_sympy(ast::AST* node) {
+    return nmodl::to_nmodl(node, {AstNodeType::UNIT});
 }
 
 
