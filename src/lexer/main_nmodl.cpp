@@ -124,7 +124,7 @@ int main(int argc, const char* argv[]) {
     for (const auto& file: mod_files) {
         logger->info("Processing file : {}", file);
         std::ifstream f(file);
-        std::string mod((std::istreambuf_iterator<char>(f)), std::istreambuf_iterator<char>());
+        std::string mod{std::istreambuf_iterator<char>{f}, {}};
         tokenize(mod);
     }
 
