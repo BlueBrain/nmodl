@@ -22,7 +22,7 @@ class NmodlPrintVisitor : public Visitor {
         std::vector<ast::AstNodeType> exclude_types;
 
         /// check if node is to be excluded while printing
-        bool is_exclude_type(ast::AstNodeType type) {
+        bool is_exclude_type(ast::AstNodeType type) const {
             return std::find(exclude_types.begin(), exclude_types.end(), type) != exclude_types.end();
         }
 
@@ -30,7 +30,7 @@ class NmodlPrintVisitor : public Visitor {
         NmodlPrintVisitor() : printer(new NMODLPrinter()) {}
         NmodlPrintVisitor(std::string filename) : printer(new NMODLPrinter(filename)) {}
         NmodlPrintVisitor(std::ostream& stream) : printer(new NMODLPrinter(stream)) {}
-        NmodlPrintVisitor(std::ostream& stream, std::vector<ast::AstNodeType> types)
+        NmodlPrintVisitor(std::ostream& stream, const std::vector<ast::AstNodeType>& types)
             : printer(new NMODLPrinter(stream)),
               exclude_types(types) {}
 

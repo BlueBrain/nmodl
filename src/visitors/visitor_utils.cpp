@@ -107,7 +107,7 @@ std::set<std::string> get_global_vars(Program* node) {
 }
 
 
-std::string to_nmodl(ast::AST* node, std::vector<ast::AstNodeType> exclude_types) {
+std::string to_nmodl(ast::AST* node, const std::vector<ast::AstNodeType>& exclude_types) {
     std::stringstream stream;
     NmodlPrintVisitor v(stream, exclude_types);
     node->accept(&v);

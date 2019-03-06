@@ -2879,7 +2879,7 @@ SCENARIO("SympyConductance visitor", "[sympy]") {
 
 
 //=============================================================================
-// Sympy specific nmodl printer
+// Sympy specific to_nmodl
 //=============================================================================
 
 SCENARIO("Sympy specific AST to NMODL conversion") {
@@ -2900,7 +2900,7 @@ SCENARIO("Sympy specific AST to NMODL conversion") {
             }
         )";
 
-        THEN("to_nmodl_for_sympy ignores all units specification") {
+        THEN("to_nmodl can ignore all units") {
             auto input = reindent_text(nmodl);
             NmodlDriver driver;
             driver.parse_string(input);
