@@ -12,6 +12,9 @@
 #include "catch/catch.hpp"
 #include "newton/newton.hpp"
 
+
+using namespace nmodl;
+
 constexpr double max_error_norm = 1e-12;
 
 SCENARIO("Non-linear system to solve with Newton") {

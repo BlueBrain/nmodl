@@ -6,12 +6,20 @@
  *************************************************************************/
 
 #pragma once
+
 // Implementation of Newton method for solving
 // system of non-linear equations using Eigen
-#include "Eigen/LU"
+
 #include <iostream>
 
+#include "Eigen/LU"
+
+namespace nmodl {
 namespace newton {
+
+constexpr int MAX_ITER = 1e3;
+constexpr double EPS = 1e-12;
+
 // Newton method
 // given initial vector X
 // and a functor that calculates F(X), J(X)
@@ -26,14 +34,15 @@ namespace newton {
 template <int N, typename FUNC>
 int newton_solver(Eigen::Matrix<double, N, 1>& X,
                   FUNC functor,
-                  double eps = 1e-12,
-                  int max_iter = 1e3) {
+                  double eps = EPS,
+                  int max_iter = MAX_ITER) {
     // Vector to store result of function F(X):
     Eigen::Matrix<double, N, 1> F;
     // Matrix to store jacobian of F(X):
     Eigen::Matrix<double, N, N> J;
     // Solver iteration count:
     int iter = -1;
+
     while (++iter < max_iter) {
         // calculate F, J from X using user-supplied functor
         functor(X, F, J);
@@ -77,32 +86,34 @@ int solver(Eigen::Matrix<double, N, 1>& X, FUNC functor, double eps, int max_ite
 template <typename FUNC>
 int newton_solver(Eigen::Matrix<double, 1, 1>& X,
                   FUNC functor,
-                  double eps = 1e-12,
-                  int max_iter = 1e3) {
+                  double eps = EPS,
+                  int max_iter = MAX_ITER) {
     return solver<FUNC, 1>(X, functor, eps, max_iter);
 }
 
 template <typename FUNC>
 int newton_solver(Eigen::Matrix<double, 2, 1>& X,
                   FUNC functor,
-                  double eps = 1e-12,
-                  int max_iter = 1e3) {
+                  double eps = EPS,
+                  int max_iter = MAX_ITER) {
     return solver<FUNC, 2>(X, functor, eps, max_iter);
 }
 
 template <typename FUNC>
 int newton_solver(Eigen::Matrix<double, 3, 1>& X,
                   FUNC functor,
-                  double eps = 1e-12,
-                  int max_iter = 1e3) {
+                  double eps = EPS,
+                  int max_iter = MAX_ITER) {
     return solver<FUNC, 3>(X, functor, eps, max_iter);
 }
 
 template <typename FUNC>
 int newton_solver(Eigen::Matrix<double, 4, 1>& X,
                   FUNC functor,
-                  double eps = 1e-12,
-                  int max_iter = 1e3) {
+                  double eps = EPS,
+                  int max_iter = MAX_ITER) {
     return solver<FUNC, 4>(X, functor, eps, max_iter);
 }
+
 }  // namespace newton
+}  // namespace nmodl
