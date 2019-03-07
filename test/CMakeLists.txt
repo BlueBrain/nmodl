@@ -22,7 +22,7 @@ add_executable(testparser parser/parser.cpp)
 add_executable(testvisitor visitor/visitor.cpp)
 add_executable(testprinter printer/printer.cpp)
 add_executable(testsymtab symtab/symbol_table.cpp)
-add_executable(testnewton newton/newton.cpp ${PROJECT_SOURCE_DIR}/src/solver/newton/newton.hpp)
+add_executable(testnewton newton/newton.cpp ${SOLVER_SOURCE_FILES})
 
 target_link_libraries(testmodtoken lexer)
 target_link_libraries(testlexer lexer)
