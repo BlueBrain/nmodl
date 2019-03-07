@@ -8,8 +8,8 @@
 #pragma once
 // Implementation of Newton method for solving
 // system of non-linear equations using Eigen
-#include <iostream>
 #include "Eigen/LU"
+#include <iostream>
 
 namespace newton {
 // Newton method
@@ -72,7 +72,7 @@ int newton_solver(Eigen::Matrix<double, 1, 1>& X,
         if (error < eps) {
             return iter;
         }
-	    X -= J.inverse() * F;
+        X -= J.inverse() * F;
     }
     return -1;
 }
@@ -91,7 +91,7 @@ int newton_solver(Eigen::Matrix<double, 2, 1>& X,
         if (error < eps) {
             return iter;
         }
-	    X -= J.inverse() * F;
+        X -= J.inverse() * F;
     }
     return -1;
 }
@@ -110,7 +110,7 @@ int newton_solver(Eigen::Matrix<double, 3, 1>& X,
         if (error < eps) {
             return iter;
         }
-	    X -= J.inverse() * F;
+        X -= J.inverse() * F;
     }
     return -1;
 }
@@ -129,8 +129,8 @@ int newton_solver(Eigen::Matrix<double, 4, 1>& X,
         if (error < eps) {
             return iter;
         }
-	    X -= J.inverse() * F;
+        X -= J.inverse() * F;
     }
     return -1;
 }
-}
+}  // namespace newton

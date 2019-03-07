@@ -2,7 +2,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/test)
 
 include_directories(${PYBIND11_INCLUDE_DIR} ${PYTHON_INCLUDE_DIRS})
 include_directories(${PROJECT_SOURCE_DIR}/ext/catch ${PROJECT_SOURCE_DIR}/test)
-include_directories(${PROJECT_SOURCE_DIR}/ext/newton)
+include_directories(${PROJECT_SOURCE_DIR}/src/solver)
+include_directories(${PROJECT_SOURCE_DIR}/ext/eigen)
 
 # =============================================================================
 # Common input data library
