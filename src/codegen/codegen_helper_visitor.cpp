@@ -489,6 +489,14 @@ void CodegenHelperVisitor::visit_function_block(ast::FunctionBlock* node) {
 }
 
 
+void CodegenHelperVisitor::visit_functor_block(ast::FunctorBlock* node) {
+    info.functors.push_back(node);
+    // temporary hack
+    info.derivimplicit_used = false;
+    // info.cnexp_used = true;
+}
+
+
 void CodegenHelperVisitor::visit_function_call(FunctionCall* node) {
     auto name = node->get_node_name();
     if (name == naming::NET_SEND_METHOD) {

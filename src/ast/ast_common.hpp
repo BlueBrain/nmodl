@@ -306,6 +306,10 @@ struct AST: public std::enable_shared_from_this<AST> {
         return false;
     }
 
+    virtual bool is_functor_block() {
+        return false;
+    }
+
     virtual bool is_procedure_block() {
         return false;
     }

@@ -745,6 +745,10 @@ class CodegenCVisitor: public AstVisitor {
     void print_function(ast::FunctionBlock* node);
 
 
+    /// nmodl function definition
+    void print_functor(ast::FunctorBlock* node);
+
+
     /// nmodl procedure definition
     void print_procedure(ast::ProcedureBlock* node);
 

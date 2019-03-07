@@ -21,6 +21,19 @@ namespace nmodl {
 
 using symtab::syminfo::NmodlType;
 
+std::shared_ptr<ast::FunctorBlock> SympySolverVisitor::construct_functor_block(
+    const std::string& name,
+    const std::vector<std::string>& statements) {
+    ast::StatementVector statement_vector;
+    for (const auto& statement: statements) {
+        statement_vector.push_back(create_statement(statement));
+    }
+    auto statement_block = std::make_shared<ast::StatementBlock>(statement_vector);
+    auto name_str = std::make_shared<ast::String>(name);
+    auto ast_name = std::make_shared<ast::Name>(name_str);
+    return std::make_shared<ast::FunctorBlock>(ast_name, statement_block);
+}
+
 void SympySolverVisitor::replace_binary_expression(ast::BinaryExpression* bin_expr,
                                                    const std::string& new_binary_expr) {
     auto& lhs = bin_expr->lhs;
@@ -128,7 +141,7 @@ void SympySolverVisitor::visit_derivative_block(ast::DerivativeBlock* node) {
     node->visit_children(this);
 
     // solve system of ODEs in ode_system
-    if (solve_method == "sparse" && !ode_system.empty()) {
+    if (!ode_system.empty()) {
         logger->debug("SympySolverVisitor :: Solving {} system of ODEs", solve_method);
         auto locals = py::dict("equation_strings"_a = ode_system,
                                "t_var"_a = codegen::naming::NTHREAD_T_VARIABLE,
@@ -169,25 +182,40 @@ void SympySolverVisitor::visit_derivative_block(ast::DerivativeBlock* node) {
                 add_local_variable(node->get_statement_block().get(), new_local_var);
             }
         }
-        // add new statements: firstly by replacing old ODE binary expressions
-        auto sol = solutions.cbegin();
-        for (auto binary_expr: binary_expressions_to_replace) {
-            logger->debug("SympySolverVisitor :: -> replacing {} with statement: {}",
-                          to_nmodl_for_sympy(binary_expr.get()), *sol);
-            replace_binary_expression(binary_expr.get(), *sol);
-            ++sol;
+        if (solve_method == "sparse") {
+            // add new statements: firstly by replacing old ODE binary expressions
+            auto sol = solutions.cbegin();
+            for (auto binary_expr: binary_expressions_to_replace) {
+                logger->debug("SympySolverVisitor :: -> replacing {} with statement: {}",
+                              to_nmodl_for_sympy(binary_expr.get()), *sol);
+                replace_binary_expression(binary_expr.get(), *sol);
+                ++sol;
+            }
+            // then by adding the rest as new statements to the block
+            // get a copy of existing statements in block
+            auto statements = node->get_statement_block()->get_statements();
+            while (sol != solutions.cend()) {
+                // add new statements to block
+                logger->debug("SympySolverVisitor :: -> adding statement: {}", *sol);
+                statements.push_back(create_statement(*sol));
+                ++sol;
+            }
+            // replace old set of statements in AST with new one
+            node->get_statement_block()->set_statements(std::move(statements));
+        } else if (solve_method == "derivimplicit") {
+            // replace old ODE binary expressions
+            auto sol = solutions.cbegin();
+            for (auto binary_expr: binary_expressions_to_replace) {
+                logger->debug("SympySolverVisitor :: -> replacing {} with statement: {}",
+                              to_nmodl_for_sympy(binary_expr.get()), *sol);
+                replace_binary_expression(binary_expr.get(), *sol);
+                ++sol;
+            }
+            // put F, J into new functor with same name as this block
+            auto functor_eqs = std::vector<std::string>{sol, solutions.cend()};
+            new_functor_blocks.push_back(
+                construct_functor_block(node->get_node_name(), functor_eqs));
         }
-        // then by adding the rest as new statements to the block
-        // get a copy of existing statements in block
-        auto statements = node->get_statement_block()->get_statements();
-        while (sol != solutions.cend()) {
-            // add new statements to block
-            logger->debug("SympySolverVisitor :: -> adding statement: {}", *sol);
-            statements.push_back(create_statement(*sol));
-            ++sol;
-        }
-        // replace old set of statements in AST with new one
-        node->get_statement_block()->set_statements(std::move(statements));
     }
 }
 
@@ -204,10 +232,20 @@ void SympySolverVisitor::visit_program(ast::Program* node) {
             logger->debug("SympySolverVisitor :: Found SOLVE statement: using {} for {}",
                           solve_method, block_name);
             derivative_block_solve_method[block_name] = solve_method;
+            // temporary hack to avoid current derivimplicit codegen:
+            if (solve_method == "derivimplicit") {
+                auto s = std::make_shared<ast::String>("euler");
+                block_ptr->get_method()->set_value(std::move(s));
+            }
         }
     }
 
     node->visit_children(this);
+
+    for (auto functor_block: new_functor_blocks) {
+        node->addNode(functor_block);
+        std::cout << to_nmodl(functor_block.get()) << std::endl;
+    }
 }
 
 }  // namespace nmodl

@@ -44,6 +44,9 @@ class SympySolverVisitor: public AstVisitor {
   private:
     void replace_binary_expression(ast::BinaryExpression* bin_expr,
                                    const std::string& new_binary_expr);
+    std::shared_ptr<ast::FunctorBlock> construct_functor_block(
+        const std::string& name,
+        const std::vector<std::string>& statements);
     /// global variables
     std::set<std::string> global_vars;
 
@@ -71,6 +74,9 @@ class SympySolverVisitor: public AstVisitor {
 
     /// vector of binary expressions to replace
     std::vector<std::shared_ptr<ast::BinaryExpression>> binary_expressions_to_replace;
+
+    /// functor block(s) to add for derivimplicit
+    std::vector<std::shared_ptr<ast::FunctorBlock>> new_functor_blocks;
 
     static std::string to_nmodl_for_sympy(ast::AST* node) {
         return nmodl::to_nmodl(node, {ast::AstNodeType::UNIT});

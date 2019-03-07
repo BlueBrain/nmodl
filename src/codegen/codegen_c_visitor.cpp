@@ -1615,6 +1615,23 @@ void CodegenCVisitor::print_function(ast::FunctionBlock* node) {
     codegen = false;
 }
 
+void CodegenCVisitor::print_functor(ast::FunctorBlock* node) {
+    // TODO the "2" hard coded in template params below should be number of states
+    printer->add_line("// solution vector to store copy of state vars for Newton solver");
+    printer->add_line("Eigen::Matrix<double, 2, 1> X;");
+    printer->add_line("// functor that evaluates F(X) and J(X) for Newton solver");
+    printer->add_indent();
+    printer->add_text("struct functor ");
+    printer->start_block();
+    printer->add_indent();
+    printer->add_text(
+        "void operator()(const Eigen::Matrix<double, 2, 1>& X, Eigen::Matrix<double, 2, 1>& F, "
+        "Eigen::Matrix<double, 2, 2>& J) const");
+    printer->start_block();
+    print_statement_block(node->get_statement_block().get(), false, false);
+    printer->end_block(1);
+    printer->end_block(1);
+}
 
 /****************************************************************************************/
 /*                           Code-specific helper routines                              */
@@ -3584,6 +3601,23 @@ void CodegenCVisitor::print_nrn_state() {
         if (info.solve_node != nullptr) {
             auto block = info.solve_node->get_statement_block();
             print_statement_block(block.get(), false, false);
+            // [temporary hack]
+            // if there is a functor, assume it is the only one,
+            // and generate the code for newton solver
+            if (!info.functors.empty()) {
+                // print functor
+                print_functor(info.functors[0]);
+                // call newton solver with functor and X matrix that contains state vars
+                printer->add_line("// call newton solver");
+                printer->add_line("functor newton_functor;");
+                printer->add_line(
+                    "int newton_iterations = newton::newton_solver(X, newton_functor);");
+                // assign newton solver results in matrix X to state vars
+                // TODO: generate these lines using state vars
+                printer->add_line("// assign results to state vars");
+                printer->add_line("inst->m[id] = X[0];");
+                printer->add_line("inst->h[id] = X[1];");
+            }
         }
     }
 
