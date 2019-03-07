@@ -172,7 +172,7 @@ int main(int argc, const char* argv[]) {
     }
 
     /// write ast to nmodl
-    auto ast_to_nmodl = [&](ast::Program* ast, const std::string& filepath) {
+    auto ast_to_nmodl = [nmodl_ast](ast::Program* ast, const std::string& filepath) {
         if (nmodl_ast) {
             NmodlPrintVisitor v(filepath);
             v.visit_program(ast);

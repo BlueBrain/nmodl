@@ -96,9 +96,8 @@ def solve_ode_system(diff_strings, t_var, dt_var, vars, do_cse=False):
         for x_new, x_old, dxdt in zip(state_vars, old_state_vars, diff_eqs):
             eqs.append(sp.Eq(x_new, x_old + dt * dxdt))
         for rhs in sp.linsolve(eqs, state_vars):
-            for x in old_state_vars:
-                new_local_vars.append(sp.ccode(x))
             for x, x_old in zip(state_vars, old_state_vars):
+                new_local_vars.append(sp.ccode(x_old))
                 code.append(f"{sp.ccode(x_old)} = {sp.ccode(x)}")
             if do_cse:
                 my_symbols = sp.utilities.iterables.numbered_symbols(
@@ -107,9 +106,8 @@ def solve_ode_system(diff_strings, t_var, dt_var, vars, do_cse=False):
                 sub_exprs, simplified_rhs = sp.cse(
                     rhs, symbols=my_symbols, optimizations="basic", order="canonical"
                 )
-                for v, _ in sub_exprs:
-                    new_local_vars.append(sp.ccode(v))
                 for v, e in sub_exprs:
+                    new_local_vars.append(sp.ccode(v))
                     code.append(f"{v} = {sp.ccode(e.evalf())}")
                 rhs = simplified_rhs[0]
             for v, e in zip(state_vars, rhs):
