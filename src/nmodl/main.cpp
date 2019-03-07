@@ -10,12 +10,14 @@
 #include <vector>
 
 #include "CLI/CLI.hpp"
+#include "fmt/format.h"
+#include "pybind11/embed.h"
+
 #include "codegen/codegen_acc_visitor.hpp"
 #include "codegen/codegen_c_visitor.hpp"
 #include "codegen/codegen_cuda_visitor.hpp"
 #include "codegen/codegen_omp_visitor.hpp"
 #include "parser/nmodl_driver.hpp"
-#include "pybind11/embed.h"
 #include "utils/common_utils.hpp"
 #include "utils/logger.hpp"
 #include "visitors/ast_visitor.hpp"
@@ -32,6 +34,7 @@
 #include "visitors/verbatim_var_rename_visitor.hpp"
 #include "visitors/verbatim_visitor.hpp"
 
+using namespace fmt::literals;
 using namespace nmodl;
 using namespace codegen;
 using nmodl::parser::NmodlDriver;
@@ -186,10 +189,9 @@ int main(int argc, const char* argv[]) {
         auto modfile = remove_extension(base_name(file));
 
         /// create file path for nmodl file
-        auto filepath = [&](std::string suffix) {
+        auto filepath = [scratch_dir, modfile](std::string suffix) {
             static int count = 0;
-            return scratch_dir + "/" + modfile + "." + std::to_string(count++) + "." + suffix +
-                   ".mod";
+            return "{}/{}.{}.{}.mod"_format(scratch_dir, modfile, std::to_string(count++), suffix);
         };
 
         /// driver object creates lexer and parser, just call parser method
@@ -227,10 +229,6 @@ int main(int argc, const char* argv[]) {
             auto file = scratch_dir + "/" + modfile + ".ast.json";
             JSONVisitor v(file);
             v.visit_program(ast.get());
-            {
-                SymtabVisitor v(false);
-                v.visit_program(ast.get());
-            }
         }
 
         if (verbatim_rename) {
