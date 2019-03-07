@@ -63,8 +63,8 @@ class SympySolverVisitor: public AstVisitor {
     /// optionally replace cnexp solution with (1,1) pade approx
     bool use_pade_approx;
 
-    // optionally generate CSE (common sub-expressions) for sparse solver
-    bool use_common_sub_expressions;
+    // optionally do CSE (common subexpression elimination) for sparse solver
+    bool elimination;
 
     /// vector of coupled ODE equations to solve
     std::vector<std::string> ode_system;
@@ -75,11 +75,11 @@ class SympySolverVisitor: public AstVisitor {
     static std::string to_nmodl_for_sympy(ast::AST* node) {
         return nmodl::to_nmodl(node, {ast::AstNodeType::UNIT});
     }
-    
+
   public:
-    SympySolverVisitor(bool use_pade_approx = false, bool use_common_sub_expressions = true)
+    SympySolverVisitor(bool use_pade_approx = false, bool elimination = true)
         : use_pade_approx(use_pade_approx)
-        , use_common_sub_expressions(use_common_sub_expressions){};
+        , elimination(elimination){};
 
     void visit_diff_eq_expression(ast::DiffEqExpression* node) override;
     void visit_derivative_block(ast::DerivativeBlock* node) override;

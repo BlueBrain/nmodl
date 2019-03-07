@@ -2243,37 +2243,6 @@ SCENARIO("SympyConductance visitor", "[sympy]") {
                 USEION ca READ eca WRITE ica
                 RANGE gCabar, gCa, ica
             }
-
-            UNITS   {
-                (S) = (siemens)
-                (mV) = (millivolt)
-                (mA) = (milliamp)
-            }
-
-            PARAMETER   {
-                gCabar = 0.00001 (S/cm2)
-            }
-
-            ASSIGNED    {
-                v   (mV)
-                eca (mV)
-                ica (mA/cm2)
-                gCa (S/cm2)
-                mInf
-                mTau
-                mAlpha
-                mBeta
-                hInf
-                hTau
-                hAlpha
-                hBeta
-            }
-
-            STATE   {
-                m
-                h
-            }
-
             BREAKPOINT  {
                 CONDUCTANCE gCa USEION ca
                 SOLVE states METHOD cnexp
@@ -2282,16 +2251,6 @@ SCENARIO("SympyConductance visitor", "[sympy]") {
                 ENDVERBATIM
                 gCa = gCabar*m*m*h
                 ica = gCa*(v-eca)
-            }
-
-            DERIVATIVE states   {
-                m' = (mInf-m)/mTau
-                h' = (hInf-h)/hTau
-            }
-
-            INITIAL{
-                m = mInf
-                h = hInf
             }
         )";
         std::string breakpoint_text = R"(
@@ -2317,37 +2276,6 @@ SCENARIO("SympyConductance visitor", "[sympy]") {
                 USEION ca READ eca WRITE ica
                 RANGE gCabar, gCa, ica
             }
-
-            UNITS   {
-                (S) = (siemens)
-                (mV) = (millivolt)
-                (mA) = (milliamp)
-            }
-
-            PARAMETER   {
-                gCabar = 0.00001 (S/cm2)
-            }
-
-            ASSIGNED    {
-                v   (mV)
-                eca (mV)
-                ica (mA/cm2)
-                gCa (S/cm2)
-                mInf
-                mTau
-                mAlpha
-                mBeta
-                hInf
-                hTau
-                hAlpha
-                hBeta
-            }
-
-            STATE   {
-                m
-                h
-            }
-
             BREAKPOINT  {
                 CONDUCTANCE gCa USEION ca
                 SOLVE states METHOD cnexp
@@ -2358,16 +2286,6 @@ SCENARIO("SympyConductance visitor", "[sympy]") {
                     gCa = 0
                     ica = 0
                 }
-            }
-
-            DERIVATIVE states   {
-                m' = (mInf-m)/mTau
-                h' = (hInf-h)/hTau
-            }
-
-            INITIAL{
-                m = mInf
-                h = hInf
             }
         )";
         std::string breakpoint_text = R"(

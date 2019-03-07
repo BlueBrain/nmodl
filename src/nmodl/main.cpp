@@ -138,7 +138,7 @@ int main(int argc, const char* argv[]) {
     auto sympy_opt = app.add_subcommand("sympy", "SymPy based analysis and optimizations")->ignore_case();
     sympy_opt->add_flag("--analytic", sympy_analytic, "Solve ODEs using SymPy analytic integration")->ignore_case();
     sympy_opt->add_flag("--pade", sympy_pade, "Pade approximation in SymPy analytic integration")->ignore_case();
-    sympy_opt->add_flag("--cse", sympy_cse, "CSE (Common Sub Expressions) in SymPy analytic integration")->ignore_case();
+    sympy_opt->add_flag("--cse", sympy_cse, "CSE (Common Subexpression Elimination) in SymPy analytic integration")->ignore_case();
     sympy_opt->add_flag("--conductance", sympy_conductance, "Add CONDUCTANCE keyword in BREAKPOINT")->ignore_case();
 
     auto passes_opt = app.add_subcommand("passes", "Analyse/Optimization passes")->ignore_case();

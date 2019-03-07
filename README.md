@@ -219,7 +219,7 @@ sympy
   Options:
     --analytic                            Solve ODEs using SymPy analytic integration
     --pade                                Pade approximation in SymPy analytic integration
-    --cse                                 CSE (Common Sub Expressions) in SymPy analytic integration
+    --cse                                 CSE (Common Subexpression Elimination) in SymPy analytic integration
     --conductance                         Add CONDUCTANCE keyword in BREAKPOINT
 
 passes

@@ -38,12 +38,35 @@ def make_unique_prefix(vars, default_prefix="tmp"):
 
 
 def solve_ode_system(diff_strings, t_var, dt_var, vars, do_cse=False):
+    """Solve system of ODEs, return solution as C code.
+
+    If system is linear, constructs the backwards Euler linear 
+    system and solves analytically, optionally also
+    with Common Subexpression Elimination if do_cse is true.
+
+    Otherwise, constructs F(x) such that F(x)=0 is solution
+    of backwards Euler equation, along with Jacobian of F,
+    for use in a non-linear solver such as Newton.
+
+    Args:
+        diff_string: list of ODEs e.g. ["x' = a*x", "y' = 3"]
+        t_var: name of time variable in NEURON
+        dt_var: name of dt variable in NEURON
+        vars: set of variables used in expression, e.g. {"x", "y", a"}
+        do_cse: if True, do Common Subexpression Elimination
+
+    Returns:
+        List of strings containing analytic integral of derivative as C code
+        List of strings containing new local variables
+
+    Raises:
+        ImportError: if SymPy version is too old (<1.2)
+    """
 
     sympy_vars = {var: sp.symbols(var, real=True) for var in vars}
 
     # generate prefix for new local vars that avoids clashes
     prefix = make_unique_prefix(vars)
-    # print(sympy_vars)
 
     old_state_vars = []
     for s in diff_strings:
@@ -60,8 +83,6 @@ def solve_ode_system(diff_strings, t_var, dt_var, vars, do_cse=False):
     sympy_vars[t_var] = t
 
     jacobian = sp.Matrix(diff_eqs).jacobian(state_vars)
-
-    # display(state_vars, old_state_vars, diff_eqs, jacobian)
 
     dt = sp.symbols(dt_var, real=True)
     sympy_vars[dt_var] = dt
@@ -95,7 +116,7 @@ def solve_ode_system(diff_strings, t_var, dt_var, vars, do_cse=False):
                 code.append(f"{sp.ccode(v)} = {sp.ccode(e.evalf())}")
     else:
         # otherwise: construct implicit euler solution in form F(x) = 0
-        # also construct jacobian of this function dFdx
+        # also construct jacobian of this function dF/dx
         eqs = []
         for x_new, x_old, dxdt in zip(state_vars, old_state_vars, diff_eqs):
             eqs.append(x_new - dt * dxdt - x_old)
@@ -126,7 +147,7 @@ def integrate2c(diff_string, t_var, dt_var, vars, use_pade_approx=False):
         t_var: name of time variable in NEURON
         dt_var: name of dt variable in NEURON
         vars: set of variables used in expression, e.g. {"x", "a"}
-        ues_pade_approx: if False:  return exact solution
+        use_pade_approx: if False:  return exact solution
                          if True:   return (1,1) Pade approx to solution
                                     correct to second order in dt_var
 

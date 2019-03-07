@@ -133,7 +133,7 @@ void SympySolverVisitor::visit_derivative_block(ast::DerivativeBlock* node) {
         auto locals = py::dict("equation_strings"_a = ode_system,
                                "t_var"_a = codegen::naming::NTHREAD_T_VARIABLE,
                                "dt_var"_a = codegen::naming::NTHREAD_DT_VARIABLE, "vars"_a = vars,
-                               "do_cse"_a = use_common_sub_expressions);
+                               "do_cse"_a = elimination);
         py::exec(R"(
                 from nmodl.ode import solve_ode_system
                 exception_message = ""
@@ -199,8 +199,8 @@ void SympySolverVisitor::visit_program(ast::Program* node) {
     auto solve_block_nodes = ast_lookup_visitor.lookup(node, ast::AstNodeType::SOLVE_BLOCK);
     for (const auto& block: solve_block_nodes) {
         if (auto block_ptr = std::dynamic_pointer_cast<ast::SolveBlock>(block)) {
-            std::string solve_method = block_ptr.get()->get_method()->get_value()->eval();
-            std::string block_name = block_ptr.get()->get_block_name()->get_value()->eval();
+            std::string solve_method = block_ptr->get_method()->get_value()->eval();
+            std::string block_name = block_ptr->get_block_name()->get_value()->eval();
             logger->debug("SympySolverVisitor :: Found SOLVE statement: using {} for {}",
                           solve_method, block_name);
             derivative_block_solve_method[block_name] = solve_method;
