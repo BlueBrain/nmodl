@@ -1969,9 +1969,11 @@ SCENARIO("Searching for ast nodes using AstLookupVisitor") {
 // SympySolver visitor tests
 //=============================================================================
 
-std::vector<std::string> run_sympy_solver_visitor(const std::string& text,
-                                                  bool pade = false,
-                                                  bool cse = false) {
+std::vector<std::string> run_sympy_solver_visitor(
+    const std::string& text,
+    bool pade = false,
+    bool cse = false,
+    AstNodeType ret_nodetype = AstNodeType::DIFF_EQ_EXPRESSION) {
     std::vector<std::string> results;
 
     // construct AST from text
@@ -1989,7 +1991,7 @@ std::vector<std::string> run_sympy_solver_visitor(const std::string& text,
 
     // run lookup visitor to extract results from AST
     AstLookupVisitor v_lookup;
-    auto res = v_lookup.lookup(ast.get(), AstNodeType::DIFF_EQ_EXPRESSION);
+    auto res = v_lookup.lookup(ast.get(), ret_nodetype);
     for (const auto& r: res) {
         results.push_back(to_nmodl(r.get()));
     }
@@ -2157,13 +2159,42 @@ SCENARIO("SympySolver visitor", "[sympy]") {
                 z' = d*z - y
             }
         )";
+
+        std::string expected_result = R"(
+            DERIVATIVE states {
+                LOCAL tmp_x_old, tmp_y_old, tmp_z_old
+                tmp_x_old = x
+                tmp_y_old = y
+                tmp_z_old = z
+                x = (-a*dt*(dt*(c*dt+2*dt*(b*dt*h+tmp_x_old)+tmp_y_old)-tmp_z_old)+(b*dt*h+tmp_x_old)*(2*a*pow(dt, 3)-d*dt+1))/(2*a*pow(dt, 3)-d*dt+1)
+                y = (-2*a*pow(dt, 2)*(dt*(c*dt+2*dt*(b*dt*h+tmp_x_old)+tmp_y_old)-tmp_z_old)+(2*a*pow(dt, 3)-d*dt+1)*(c*dt+2*dt*(b*dt*h+tmp_x_old)+tmp_y_old))/(2*a*pow(dt, 3)-d*dt+1)
+                z = (-dt*(c*dt+2*dt*(b*dt*h+tmp_x_old)+tmp_y_old)+tmp_z_old)/(2*a*pow(dt, 3)-d*dt+1)
+            })";
+
+        std::string expected_cse_result = R"(
+            DERIVATIVE states {
+                LOCAL tmp_x_old, tmp_y_old, tmp_z_old, tmp0, tmp1, tmp2, tmp3, tmp4, tmp5
+                tmp_x_old = x
+                tmp_y_old = y
+                tmp_z_old = z
+                tmp0 = 2*a
+                tmp1 = -d*dt+pow(dt, 3)*tmp0+1
+                tmp2 = 1/tmp1
+                tmp3 = b*dt*h+tmp_x_old
+                tmp4 = c*dt+2*dt*tmp3+tmp_y_old
+                tmp5 = dt*tmp4-tmp_z_old
+                x = -tmp2*(a*dt*tmp5-tmp1*tmp3)
+                y = -tmp2*(pow(dt, 2)*tmp0*tmp5-tmp1*tmp4)
+                z = -tmp2*tmp5
+            })";
+
         THEN("Construct & solve linear system for backwards Euler") {
-            auto result = run_sympy_solver_visitor(nmodl_text, false, false);
-            REQUIRE(result.size() == 3);
-            REQUIRE(result[0] == "tmp_x_old = x");
-            REQUIRE(result[1] == "tmp_y_old = y");
-            REQUIRE(result[2] == "tmp_z_old = z");
-            // TODO: also check other statements added to block by solver
+            auto result = run_sympy_solver_visitor(nmodl_text, false, false,
+                                                   AstNodeType::DERIVATIVE_BLOCK);
+            auto result_cse = run_sympy_solver_visitor(nmodl_text, true, true,
+                                                       AstNodeType::DERIVATIVE_BLOCK);
+            REQUIRE(result[0] == reindent_text(expected_result));
+            REQUIRE(result_cse[0] == reindent_text(expected_cse_result));
         }
     }
 }
