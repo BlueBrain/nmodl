@@ -55,6 +55,22 @@ int newton_solver(Eigen::Matrix<double, N, 1>& X,
     return -1;
 }
 
+template <typename FUNC, int N>
+int solver(Eigen::Matrix<double, N, 1>& X, FUNC functor, double eps, int max_iter) {
+    Eigen::Matrix<double, N, 1> F;
+    Eigen::Matrix<double, N, N> J;
+    int iter = -1;
+    while (++iter < max_iter) {
+        functor(X, F, J);
+        double error = F.norm();
+        if (error < eps) {
+            return iter;
+        }
+        X -= J.inverse() * F;
+    }
+    return -1;
+}
+
 // template specializations for N <= 4
 // use explicit inverse of F instead of LU decomposition
 // (more efficient for small matrices - not safe for large matrices)
@@ -63,18 +79,7 @@ int newton_solver(Eigen::Matrix<double, 1, 1>& X,
                   FUNC functor,
                   double eps = 1e-12,
                   int max_iter = 1e3) {
-    Eigen::Matrix<double, 1, 1> F;
-    Eigen::Matrix<double, 1, 1> J;
-    int iter = -1;
-    while (++iter < max_iter) {
-        functor(X, F, J);
-        double error = F.norm();
-        if (error < eps) {
-            return iter;
-        }
-        X -= J.inverse() * F;
-    }
-    return -1;
+    return solver<FUNC, 1>(X, functor, eps, max_iter);
 }
 
 template <typename FUNC>
@@ -82,18 +87,7 @@ int newton_solver(Eigen::Matrix<double, 2, 1>& X,
                   FUNC functor,
                   double eps = 1e-12,
                   int max_iter = 1e3) {
-    Eigen::Matrix<double, 2, 1> F;
-    Eigen::Matrix<double, 2, 2> J;
-    int iter = -1;
-    while (++iter < max_iter) {
-        functor(X, F, J);
-        double error = F.norm();
-        if (error < eps) {
-            return iter;
-        }
-        X -= J.inverse() * F;
-    }
-    return -1;
+    return solver<FUNC, 2>(X, functor, eps, max_iter);
 }
 
 template <typename FUNC>
@@ -101,18 +95,7 @@ int newton_solver(Eigen::Matrix<double, 3, 1>& X,
                   FUNC functor,
                   double eps = 1e-12,
                   int max_iter = 1e3) {
-    Eigen::Matrix<double, 3, 1> F;
-    Eigen::Matrix<double, 3, 3> J;
-    int iter = -1;
-    while (++iter < max_iter) {
-        functor(X, F, J);
-        double error = F.norm();
-        if (error < eps) {
-            return iter;
-        }
-        X -= J.inverse() * F;
-    }
-    return -1;
+    return solver<FUNC, 3>(X, functor, eps, max_iter);
 }
 
 template <typename FUNC>
@@ -120,17 +103,6 @@ int newton_solver(Eigen::Matrix<double, 4, 1>& X,
                   FUNC functor,
                   double eps = 1e-12,
                   int max_iter = 1e3) {
-    Eigen::Matrix<double, 4, 1> F;
-    Eigen::Matrix<double, 4, 4> J;
-    int iter = -1;
-    while (++iter < max_iter) {
-        functor(X, F, J);
-        double error = F.norm();
-        if (error < eps) {
-            return iter;
-        }
-        X -= J.inverse() * F;
-    }
-    return -1;
+    return solver<FUNC, 4>(X, functor, eps, max_iter);
 }
 }  // namespace newton
