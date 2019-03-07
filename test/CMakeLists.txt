@@ -1,7 +1,8 @@
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/test)
 
 include_directories(${PYBIND11_INCLUDE_DIR} ${PYTHON_INCLUDE_DIRS})
-include_directories(${PROJECT_SOURCE_DIR}/src/ext/catch ${PROJECT_SOURCE_DIR}/test)
+include_directories(${PROJECT_SOURCE_DIR}/ext/catch ${PROJECT_SOURCE_DIR}/test)
+include_directories(${PROJECT_SOURCE_DIR}/ext/newton)
 
 # =============================================================================
 # Common input data library
@@ -20,6 +21,7 @@ add_executable(testparser parser/parser.cpp)
 add_executable(testvisitor visitor/visitor.cpp)
 add_executable(testprinter printer/printer.cpp)
 add_executable(testsymtab symtab/symbol_table.cpp)
+add_executable(testnewton newton/newton.cpp)
 
 target_link_libraries(testmodtoken lexer)
 target_link_libraries(testlexer lexer)
@@ -34,6 +36,7 @@ add_test(NAME Parser COMMAND testparser)
 add_test(NAME Visitor COMMAND testvisitor)
 add_test(NAME Printer COMMAND testprinter)
 add_test(NAME Symtab COMMAND testsymtab)
+add_test(NAME Newton COMMAND testnewton)
 
 set_tests_properties(Visitor PROPERTIES ENVIRONMENT PYTHONPATH=${CMAKE_BINARY_DIR}:$ENV{PYTHONPATH})
 
