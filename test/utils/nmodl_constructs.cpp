@@ -934,7 +934,16 @@ std::map<std::string, NmodlTestCase> nmodl_valid_constructs{
                     ~ nai << (-f*ina*PI*diam*(10000)/(FARADAY))
                     ~ g -> (1/tau)
                 }
-            )"
+            )",
+            R"(
+                KINETIC kstates {
+                    ~  1c1 <->  1i1 (Con, Coff)
+                    ~  1ca[i] <->  1ca[i+1] (DCa*frat[i+1], DCa*frat[i+1])
+                    ~  1ca[0] << (in*PI*diam*(0.1)*1(um))
+                    ~  1nai << (-f*ina*PI*diam*(10000)/(FARADAY))
+                    ~  1g -> (1/tau)
+                }
+            )"            
         }
     },
 
@@ -1203,7 +1212,19 @@ std::map<std::string, NmodlTestCase> nmodl_valid_constructs{
                     ~ cac <-> cao (alphaa, betaa)
                     CONSERVE c+cac+o+cao = 1
                 }
-            )"
+            )",
+            R"(
+                KINETIC kin {
+                    LOCAL qa
+                    qa = q10a^((celsius-22(degC))/10(degC))
+                    rates(v)
+                    ~  1c <->  1o (alpha, beta)
+                    ~  1c <->  1cac (kon*qa*ai/bf, koff*qa*b/bf)
+                    ~  1o <->  1cao (kon*qa*ai, koff*qa)
+                    ~  1cac <->  1cao (alphaa, betaa)
+                    CONSERVE c+cac+o+cao = 1
+                }
+            )"            
         }
     },
 

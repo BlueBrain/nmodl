@@ -1635,9 +1635,11 @@ senslist        :   varname
                 ;
 
 
-conserve        :   CONSERVE react "=" expr
+conserve        :   CONSERVE expr "=" expr
                     {
-                        $$ = new ast::Conserve($2, $4);
+                        auto op = ast::BinaryOperator(ast::BOP_ASSIGN);
+                        auto expr = new ast::BinaryExpression($2, op, $4);
+                        $$ = new ast::Conserve(expr);
                     }
                 |   CONSERVE error
                     {
@@ -1711,7 +1713,11 @@ reaction        :   REACTION react REACT1 react "(" expr "," expr ")"
                 ;
 
 
-react           :   varname     { $$ = $1; }
+react           :   varname
+                    {
+                        auto one = new ast::Integer(1, nullptr);
+                        $$ = new ast::ReactVarName(one, $1);
+                    }
                 |   integer varname
                     {
                         $$ = new ast::ReactVarName($1, $2);
@@ -1719,7 +1725,9 @@ react           :   varname     { $$ = $1; }
                 |   react "+" varname
                     {
                         auto op = ast::BinaryOperator(ast::BOP_ADDITION);
-                        $$ = new ast::BinaryExpression($1, op, $3);
+                        auto one = new ast::Integer(1, nullptr);
+                        auto variable = new ast::ReactVarName(one, $3);
+                        $$ = new ast::BinaryExpression($1, op, variable);
                     }
                 |   react "+" integer varname
                     {
