@@ -24,3 +24,8 @@ set(CODEGEN_SOURCE_FILES
 add_library(codegen STATIC ${CODEGEN_SOURCE_FILES})
 
 add_dependencies(codegen lexer util)
+
+# =============================================================================
+# Install include files
+# =============================================================================
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/fast_math.ispc DESTINATION include/nmodl)
