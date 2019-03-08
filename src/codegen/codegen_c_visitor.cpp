@@ -1617,20 +1617,32 @@ void CodegenCVisitor::print_function(ast::FunctionBlock* node) {
 
 void CodegenCVisitor::print_functor(ast::FunctorBlock* node) {
     // TODO the "2" hard coded in template params below should be number of states
-    printer->add_line("// solution vector to store copy of state vars for Newton solver");
-    printer->add_line("Eigen::Matrix<double, 2, 1> X;");
+    int nstates = info.num_primes;
     printer->add_line("// functor that evaluates F(X) and J(X) for Newton solver");
-    printer->add_indent();
-    printer->add_text("struct functor ");
-    printer->start_block();
-    printer->add_indent();
-    printer->add_text(
-        "void operator()(const Eigen::Matrix<double, 2, 1>& X, Eigen::Matrix<double, 2, 1>& F, "
-        "Eigen::Matrix<double, 2, 2>& J) const");
-    printer->start_block();
-    print_statement_block(node->get_statement_block().get(), false, false);
-    printer->end_block(1);
-    printer->end_block(1);
+
+    printer->start_block("struct functor");
+    {
+        printer->add_line("NrnThread* nt;");
+        printer->add_line("{0}* inst;"_format(instance_struct()));
+        printer->add_line("int id;");
+
+        printer->add_line(
+            "functor(NrnThread* nt, {}* inst, int id) : nt(nt), inst(inst), id(id) {}"_format(
+                instance_struct(), "{}"));
+
+        printer->add_indent();
+        printer->add_text(
+            "void operator()(const Eigen::Matrix<double, {0}, 1>& X, Eigen::Matrix<double, {0}, "
+            "1>& F, "
+            "Eigen::Matrix<double, {0}, {0}>& Jmat) const"_format(nstates));
+        printer->start_block();
+        printer->add_line("double* J = Jmat.data();");
+        print_statement_block(node->get_statement_block().get(), false, false);
+        printer->end_block(1);
+    }
+    printer->end_block(0);
+    printer->add_text(";");
+    printer->add_newline();
 }
 
 /****************************************************************************************/
@@ -2184,6 +2196,10 @@ void CodegenCVisitor::print_coreneuron_includes() {
     printer->add_line("#include <coreneuron/mech/mod2c_core_thread.h>");
     printer->add_line("#include <coreneuron/scopmath_core/newton_struct.h>");
     printer->add_line("#include <_kinderiv.h>");
+
+    if (!info.functors.empty()) {
+        printer->add_line("#include <newton/newton.hpp>");
+    }
 }
 
 
@@ -3599,6 +3615,12 @@ void CodegenCVisitor::print_nrn_state() {
         printer->add_line(statement);
     } else {
         if (info.solve_node != nullptr) {
+            if (!info.functors.empty()) {
+                int nstates = info.num_primes;
+                printer->add_line(
+                    "// solution vector to store copy of state vars for Newton solver");
+                printer->add_line("Eigen::Matrix<double, {}, 1> X;"_format(nstates));
+            }
             auto block = info.solve_node->get_statement_block();
             print_statement_block(block.get(), false, false);
             // [temporary hack]
@@ -3609,14 +3631,18 @@ void CodegenCVisitor::print_nrn_state() {
                 print_functor(info.functors[0]);
                 // call newton solver with functor and X matrix that contains state vars
                 printer->add_line("// call newton solver");
-                printer->add_line("functor newton_functor;");
+                printer->add_line("functor newton_functor(nt, inst, id);");
                 printer->add_line(
-                    "int newton_iterations = newton::newton_solver(X, newton_functor);");
+                    "int newton_iterations = nmodl::newton::newton_solver(X, newton_functor);");
                 // assign newton solver results in matrix X to state vars
                 // TODO: generate these lines using state vars
                 printer->add_line("// assign results to state vars");
-                printer->add_line("inst->m[id] = X[0];");
-                printer->add_line("inst->h[id] = X[1];");
+                // TODO : this may not be ordered one!! FIX THIS
+                auto primes = program_symtab->get_variables_with_properties(NmodlType::prime_name);
+                for (int i = 0; i < primes.size(); i++) {
+                    auto var = get_variable_name(primes[i]->get_name());
+                    printer->add_line("{} = X[{}];"_format(var, i));
+                }
             }
         }
     }

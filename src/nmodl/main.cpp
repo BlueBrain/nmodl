@@ -254,7 +254,7 @@ int main(int argc, const char* argv[]) {
         if (sympy_analytic) {
             logger->info("Running sympy solve visitor");
             SympySolverVisitor v1(sympy_pade, sympy_cse);
-            SymtabVisitor v2(false);
+            SymtabVisitor v2(true);
             v1.visit_program(ast.get());
             v2.visit_program(ast.get());
             ast_to_nmodl(ast.get(), filepath("sympy_solve"));
