@@ -354,6 +354,7 @@
                                   type: Statement
                                   vector: true
                                   public: true
+                                  add: true
                         - DerivativeBlock:
                             description: ".."
                             nmodl: "DERIVATIVE "
@@ -478,17 +479,18 @@
                                   description: "..."
                                   type: StatementBlock
                                   getter: {override: true}
-                        - FunctorBlock:
-                            description: ".."
+                        - EigenNewtonSolverBlock:
+                            description: "TODO : temporarily added here"
                             members:
-                              - name:
-                                  description: "..."
-                                  type: Name
-                                  node_name: true
-                              - statement_block:
-                                  description: "..."
+                              - setup_x_block:
+                                  description: "update X from states"
                                   type: StatementBlock
-                                  getter: {override: true}
+                              - functor_block:
+                                  description: "odes as functor for eigen"
+                                  type: StatementBlock
+                              - update_states_block:
+                                  description: "update back states from X"
+                                  type: StatementBlock
                         - ProcedureBlock:
                             description: ".."
                             nmodl: "PROCEDURE "
@@ -760,6 +762,7 @@
                         - expression:
                             description: "..."
                             type: Expression
+                            optional: true
                   - ParenExpression:
                       description: ".."
                       members:

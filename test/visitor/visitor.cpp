@@ -1968,6 +1968,7 @@ SCENARIO("Searching for ast nodes using AstLookupVisitor") {
 //=============================================================================
 // SympySolver visitor tests
 //=============================================================================
+
 std::vector<std::string> run_sympy_solver_visitor(
     const std::string& text,
     bool pade = false,
@@ -2158,6 +2159,7 @@ SCENARIO("SympySolver visitor", "[sympy]") {
                 z' = d*z - y
             }
         )";
+
         std::string expected_result = R"(
             DERIVATIVE states {
                 LOCAL tmp_x_old, tmp_y_old, tmp_z_old

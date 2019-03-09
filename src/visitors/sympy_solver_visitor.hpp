@@ -42,11 +42,17 @@ namespace nmodl {
 
 class SympySolverVisitor: public AstVisitor {
   private:
-    void replace_binary_expression(ast::BinaryExpression* bin_expr,
-                                   const std::string& new_binary_expr);
-    std::shared_ptr<ast::FunctorBlock> construct_functor_block(
-        const std::string& name,
-        const std::vector<std::string>& statements);
+    /** Replace binary expression with new expression provided as string */
+    static void replace_diffeq_expression(ast::DiffEqExpression* expr, const std::string& new_expr);
+
+    /** Remove statements from given statement block if they exist */
+    static void remove_statements_from_block(ast::StatementBlock* block,
+                                             const std::set<ast::Node*> statements);
+
+    std::shared_ptr<ast::EigenNewtonSolverBlock> construct_eigen_newton_solver_block(
+        const std::vector<std::string>& setup_x,
+        const std::vector<std::string>& functor,
+        const std::vector<std::string>& update_state);
     /// global variables
     std::set<std::string> global_vars;
 
@@ -56,12 +62,20 @@ class SympySolverVisitor: public AstVisitor {
     /// map between derivative block names and associated solver method
     std::map<std::string, std::string> derivative_block_solve_method{};
 
+    /// prime variables from LHS of ODEs
+    std::vector<std::string> prime_variables;
+
+    /// ODE statements appeared in the derivative block
+    std::set<ast::Node*> diffeq_statements;
+
+    /// current expression statement being visited (to track ODEs)
+    ast::ExpressionStatement* current_diffeq_statement;
+
+    /// current statement block being visited
+    ast::StatementBlock* current_statement_block;
+
     /// method specified in solve block
     std::string solve_method;
-
-    /// solver method names
-    const std::string euler_method = "euler";
-    const std::string cnexp_method = "cnexp";
 
     /// optionally replace cnexp solution with (1,1) pade approx
     bool use_pade_approx;
@@ -73,10 +87,7 @@ class SympySolverVisitor: public AstVisitor {
     std::vector<std::string> ode_system;
 
     /// vector of binary expressions to replace
-    std::vector<std::shared_ptr<ast::BinaryExpression>> binary_expressions_to_replace;
-
-    /// functor block(s) to add for derivimplicit
-    std::vector<std::shared_ptr<ast::FunctorBlock>> new_functor_blocks;
+    std::vector<ast::DiffEqExpression*> diff_eqs_to_replace;
 
     static std::string to_nmodl_for_sympy(ast::AST* node) {
         return nmodl::to_nmodl(node, {ast::AstNodeType::UNIT});
@@ -88,7 +99,9 @@ class SympySolverVisitor: public AstVisitor {
         , elimination(elimination){};
 
     void visit_diff_eq_expression(ast::DiffEqExpression* node) override;
+    void visit_expression_statement(ast::ExpressionStatement* node) override;
     void visit_derivative_block(ast::DerivativeBlock* node) override;
+    void visit_statement_block(ast::StatementBlock* node) override;
     void visit_program(ast::Program* node) override;
 };
 

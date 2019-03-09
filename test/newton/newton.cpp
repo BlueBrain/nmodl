@@ -12,6 +12,7 @@
 #include "catch/catch.hpp"
 #include "nmodl/nmodl.hpp"
 
+
 using namespace nmodl;
 
 constexpr double max_error_norm = 1e-12;

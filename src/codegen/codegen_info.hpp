@@ -261,9 +261,6 @@ struct CodegenInfo {
     /// all functions defined in the mod file
     std::vector<ast::FunctionBlock*> functions;
 
-    /// all functors defined in the mod file
-    std::vector<ast::FunctorBlock*> functors;
-
     /// ions used in the mod file
     std::vector<Ion> ions;
 
@@ -347,6 +344,9 @@ struct CodegenInfo {
     /// all watch statements
     std::vector<ast::WatchStatement*> watch_statements;
 
+    /// true if eigen newton solver is used
+    bool eigen_newton_solver_exist = false;
+
     /// if any ion has write variable
     bool ion_has_write_variable();
 
@@ -370,6 +370,9 @@ struct CodegenInfo {
     bool emit_table_thread() const {
         return (table_count > 0 && vectorize == true);
     }
+
+    /// if legacy derivimplicit solver from coreneuron to be used
+    bool derivimplicit_coreneuron_solver();
 
     bool function_uses_table(std::string& name) const;
 };

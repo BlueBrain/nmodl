@@ -78,7 +78,7 @@ class CodegenHelperVisitor: public AstVisitor {
     void visit_conductance_hint(ast::ConductanceHint* node) override;
     void visit_procedure_block(ast::ProcedureBlock* node) override;
     void visit_function_block(ast::FunctionBlock* node) override;
-    void visit_functor_block(ast::FunctorBlock* node) override;
+    void visit_eigen_newton_solver_block(ast::EigenNewtonSolverBlock* node) override;
     void visit_solve_block(ast::SolveBlock* node) override;
     void visit_statement_block(ast::StatementBlock* node) override;
     void visit_initial_block(ast::InitialBlock* node) override;

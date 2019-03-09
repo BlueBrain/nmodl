@@ -306,7 +306,7 @@ struct AST: public std::enable_shared_from_this<AST> {
         return false;
     }
 
-    virtual bool is_functor_block() {
+    virtual bool is_eigen_newton_solver_block() {
         return false;
     }
 

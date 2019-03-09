@@ -198,6 +198,10 @@ int main(int argc, const char* argv[]) {
         NmodlDriver driver;
         driver.parse_file(file);
 
+        /// whether to update exisiting symbol table or create new
+        /// one whenever we run symtab visitor.
+        bool update_symtab = false;
+
         /// parse mod file and construct ast
         auto ast = driver.ast();
 
@@ -210,7 +214,7 @@ int main(int argc, const char* argv[]) {
         /// construct symbol table
         {
             logger->info("Running symtab visitor");
-            SymtabVisitor v(false);
+            SymtabVisitor v(update_symtab);
             v.visit_program(ast.get());
         }
 
@@ -229,10 +233,6 @@ int main(int argc, const char* argv[]) {
             auto file = scratch_dir + "/" + modfile + ".ast.json";
             JSONVisitor v(file);
             v.visit_program(ast.get());
-            {
-                SymtabVisitor v(false);
-                v.visit_program(ast.get());
-            }
         }
 
         if (verbatim_rename) {
@@ -245,16 +245,21 @@ int main(int argc, const char* argv[]) {
         if (sympy_conductance) {
             logger->info("Running sympy conductance visitor");
             SympyConductanceVisitor v1;
-            SymtabVisitor v2(false);
+            SymtabVisitor v2(update_symtab);
             v1.visit_program(ast.get());
             v2.visit_program(ast.get());
             ast_to_nmodl(ast.get(), filepath("sympy_conductance"));
         }
 
+        /// once we start modifying (especially rmeoving) older constructs
+        /// from ast then we should run symtab visitor in update mode so
+        /// that old symbols (e.g. prime variables) are not lost
+        update_symtab = true;
+
         if (sympy_analytic) {
             logger->info("Running sympy solve visitor");
             SympySolverVisitor v1(sympy_pade, sympy_cse);
-            SymtabVisitor v2(true);
+            SymtabVisitor v2(update_symtab);
             v1.visit_program(ast.get());
             v2.visit_program(ast.get());
             ast_to_nmodl(ast.get(), filepath("sympy_solve"));
@@ -277,7 +282,7 @@ int main(int argc, const char* argv[]) {
         if (local_rename) {
             logger->info("Running local variable rename visitor");
             LocalVarRenameVisitor v1;
-            SymtabVisitor v2(true);
+            SymtabVisitor v2(update_symtab);
             v1.visit_program(ast.get());
             v2.visit_program(ast.get());
             ast_to_nmodl(ast.get(), filepath("local_rename"));
@@ -288,7 +293,7 @@ int main(int argc, const char* argv[]) {
             logger->info("Running localize visitor");
             LocalizeVisitor v1(localize_verbatim);
             LocalVarRenameVisitor v2;
-            SymtabVisitor v3(true);
+            SymtabVisitor v3(update_symtab);
             v1.visit_program(ast.get());
             v2.visit_program(ast.get());
             v3.visit_program(ast.get());

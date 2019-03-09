@@ -489,11 +489,8 @@ void CodegenHelperVisitor::visit_function_block(ast::FunctionBlock* node) {
 }
 
 
-void CodegenHelperVisitor::visit_functor_block(ast::FunctorBlock* node) {
-    info.functors.push_back(node);
-    // temporary hack
-    info.derivimplicit_used = false;
-    // info.cnexp_used = true;
+void CodegenHelperVisitor::visit_eigen_newton_solver_block(ast::EigenNewtonSolverBlock* node) {
+    info.eigen_newton_solver_exist = true;
 }
 
 
