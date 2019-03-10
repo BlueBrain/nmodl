@@ -37,6 +37,7 @@ if clang_format:
 nmodl_nodes = LanguageParser("nmodl.yaml").parse_file()
 codegen_nodes = LanguageParser("codegen.yaml").parse_file()
 
+# combine ast nodes from NMODL specification and codegen specification
 nodes = nmodl_nodes
 nodes.extend(x for x in codegen_nodes if x not in nodes)
 

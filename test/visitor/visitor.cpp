@@ -2197,6 +2197,52 @@ SCENARIO("SympySolver visitor", "[sympy]") {
             REQUIRE(result_cse[0] == reindent_text(expected_cse_result));
         }
     }
+    GIVEN("Derivative block including ODES with derivimplicit method") {
+        std::string nmodl_text = R"(
+            BREAKPOINT  {
+                SOLVE states METHOD derivimplicit
+            }
+            DERIVATIVE states {
+                rates(v)
+                m' =  (minf-m)/mtau - 3*h
+                h' = (hinf-h)/htau + m*m
+                n' = (ninf-n)/ntau
+            }
+        )";
+        /// new derivative block with EigenNewtonSolverBlock node
+        std::string expected_result = R"(
+            DERIVATIVE states {
+                rates(v)
+                {
+                    X[0] = m
+                    X[1] = h
+                    X[2] = n
+                }{
+                    F[0] = (dt*(X[0]+3*X[1]*mtau-minf)+mtau*(X[0]-m))/mtau
+                    F[1] = (-dt*(pow(X[0], 2)*htau-X[1]+hinf)+htau*(X[1]-h))/htau
+                    F[2] = (dt*(X[2]-ninf)+ntau*(X[2]-n))/ntau
+                    J[0] = dt/mtau+1
+                    J[3] = 3*dt
+                    J[6] = 0
+                    J[1] = -2*X[0]*dt
+                    J[4] = dt/htau+1
+                    J[7] = 0
+                    J[2] = 0
+                    J[5] = 0
+                    J[8] = dt/ntau+1
+                }{
+                    m = X[0]
+                    h = X[1]
+                    n = X[2]
+                }
+            })";
+
+        THEN("Construct & solver linear system using newton solver") {
+            auto result = run_sympy_solver_visitor(nmodl_text, false, false,
+                                                   AstNodeType::DERIVATIVE_BLOCK);
+            REQUIRE(result[0] == reindent_text(expected_result));
+        }
+    }
 }
 
 

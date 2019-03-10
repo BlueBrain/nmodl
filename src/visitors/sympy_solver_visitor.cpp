@@ -262,10 +262,15 @@ void SympySolverVisitor::visit_derivative_block(ast::DerivativeBlock* node) {
             }
 
             /// create newton solution block and add that as statement back in the blockw
-            auto solver = construct_eigen_newton_solver_block(setup_x_eqs, functor_eqs,
-                                                              update_state_eqs);
+            auto solver_block = construct_eigen_newton_solver_block(setup_x_eqs, functor_eqs,
+                                                                    update_state_eqs);
+
+            if (vars.find("X") != vars.end()) {
+                logger->error("SympySolverVisitor :: -> X conflicts with NMODL variable");
+            }
+
             current_statement_block->addStatement(
-                std::make_shared<ast::ExpressionStatement>(solver));
+                std::make_shared<ast::ExpressionStatement>(solver_block));
         }
     }
 }

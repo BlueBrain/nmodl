@@ -37,7 +37,6 @@ namespace nmodl {
  * ODEs, solves resulting linear algebraic equation by
  * Gaussian substitution, replaces differential equations
  * with explicit solution of backwards Euler equations
- *
  */
 
 class SympySolverVisitor: public AstVisitor {

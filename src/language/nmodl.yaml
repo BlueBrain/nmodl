@@ -750,7 +750,6 @@
                         - expression:
                             description: "..."
                             type: Expression
-                            optional: true
                   - ParenExpression:
                       description: ".."
                       members:
