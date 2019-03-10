@@ -215,26 +215,16 @@ void SympySolverVisitor::visit_derivative_block(ast::DerivativeBlock* node) {
         }
 
         if (solve_method == codegen::naming::SPARSE_METHOD) {
-            // add new statements: firstly by replacing old ODE binary expressions
-            auto sol = solutions.cbegin();
-            for (auto diff_eq: diff_eqs_to_replace) {
-                logger->debug("SympySolverVisitor :: -> replacing {} with statement: {}",
-                              to_nmodl_for_sympy(diff_eq), *sol);
-                replace_diffeq_expression(diff_eq, *sol);
-                ++sol;
-            }
-            // then by adding the rest as new statements to the block
+            remove_statements_from_block(current_statement_block, diffeq_statements);
             // get a copy of existing statements in block
             auto statements = current_statement_block->get_statements();
-            while (sol != solutions.cend()) {
-                // add new statements to block
-                logger->debug("SympySolverVisitor :: -> adding statement: {}", *sol);
-                statements.push_back(create_statement(*sol));
-                ++sol;
+            // add new statements
+            for (const auto& sol: solutions) {
+                logger->debug("SympySolverVisitor :: -> adding statement: {}", sol);
+                statements.push_back(create_statement(sol));
             }
             // replace old set of statements in AST with new one
             current_statement_block->set_statements(std::move(statements));
-
         } else if (solve_method == codegen::naming::DERIVIMPLICIT_METHOD) {
             auto sol = solutions.cbegin();
 
@@ -261,7 +251,7 @@ void SympySolverVisitor::visit_derivative_block(ast::DerivativeBlock* node) {
                 update_state_eqs.push_back(statement);
             }
 
-            /// create newton solution block and add that as statement back in the blockw
+            /// create newton solution block and add that as statement back in the block
             auto solver_block = construct_eigen_newton_solver_block(setup_x_eqs, functor_eqs,
                                                                     update_state_eqs);
 

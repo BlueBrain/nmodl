@@ -2197,6 +2197,35 @@ SCENARIO("SympySolver visitor", "[sympy]") {
             REQUIRE(result_cse[0] == reindent_text(expected_cse_result));
         }
     }
+    GIVEN("Derivative block including ODES with sparse method (from nmodl paper)") {
+        std::string nmodl_text = R"(
+            STATE {
+                mc
+                m
+            }
+            BREAKPOINT  {
+                SOLVE scheme1 METHOD sparse
+            }
+            DERIVATIVE scheme1 {
+                mc' = -a*mc + b*m
+                m' = a*mc - b*m
+            }
+        )";
+        std::string expected_result = R"(
+            DERIVATIVE scheme1 {
+                LOCAL tmp_mc_old, tmp_m_old
+                tmp_mc_old = mc
+                tmp_m_old = m
+                mc = (b*dt*tmp_m_old+b*dt*tmp_mc_old+tmp_mc_old)/(a*dt+b*dt+1)
+                m = (a*dt*tmp_m_old+a*dt*tmp_mc_old+tmp_m_old)/(a*dt+b*dt+1)
+            })";
+
+        THEN("Construct & solver linear system") {
+            auto result = run_sympy_solver_visitor(nmodl_text, false, false,
+                                                   AstNodeType::DERIVATIVE_BLOCK);
+            REQUIRE(result[0] == reindent_text(expected_result));
+        }
+    }
     GIVEN("Derivative block including ODES with derivimplicit method") {
         std::string nmodl_text = R"(
             BREAKPOINT  {

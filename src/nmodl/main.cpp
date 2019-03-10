@@ -198,7 +198,7 @@ int main(int argc, const char* argv[]) {
         NmodlDriver driver;
         driver.parse_file(file);
 
-        /// whether to update exisiting symbol table or create new
+        /// whether to update existing symbol table or create new
         /// one whenever we run symtab visitor.
         bool update_symtab = false;
 
@@ -251,7 +251,7 @@ int main(int argc, const char* argv[]) {
             ast_to_nmodl(ast.get(), filepath("sympy_conductance"));
         }
 
-        /// once we start modifying (especially rmeoving) older constructs
+        /// once we start modifying (especially removing) older constructs
         /// from ast then we should run symtab visitor in update mode so
         /// that old symbols (e.g. prime variables) are not lost
         update_symtab = true;
