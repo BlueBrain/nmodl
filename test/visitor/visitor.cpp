@@ -3002,7 +3002,7 @@ SCENARIO("SympyConductance visitor", "[sympy]") {
 
 
 //=============================================================================
-// Sympy specific to_nmodl
+// to_nmodl with excluding set of node types
 //=============================================================================
 
 SCENARIO("Sympy specific AST to NMODL conversion") {

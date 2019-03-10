@@ -479,18 +479,6 @@
                                   description: "..."
                                   type: StatementBlock
                                   getter: {override: true}
-                        - EigenNewtonSolverBlock:
-                            description: "TODO : temporarily added here"
-                            members:
-                              - setup_x_block:
-                                  description: "update X from states"
-                                  type: StatementBlock
-                              - functor_block:
-                                  description: "odes as functor for eigen"
-                                  type: StatementBlock
-                              - update_states_block:
-                                  description: "update back states from X"
-                                  type: StatementBlock
                         - ProcedureBlock:
                             description: ".."
                             nmodl: "PROCEDURE "
