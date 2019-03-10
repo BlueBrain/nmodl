@@ -2243,6 +2243,66 @@ SCENARIO("SympySolver visitor", "[sympy]") {
             REQUIRE(result[0] == reindent_text(expected_result));
         }
     }
+    GIVEN("Multiple derivative blocks each with derivimplicit method") {
+        std::string nmodl_text = R"(
+            BREAKPOINT {
+                SOLVE states1 METHOD derivimplicit
+                SOLVE states2 METHOD derivimplicit
+            }
+
+            DERIVATIVE states1 {
+                m' =  (minf-m)/mtau
+                h' = (hinf-h)/htau + m*m
+            }
+
+            DERIVATIVE states2 {
+                m' =  (minf-m)/mtau + h
+                h' = (hinf-h)/htau + m*m
+            }
+        )";
+        /// EigenNewtonSolverBlock in each derivative block
+        std::string expected_result_0 = R"(
+            DERIVATIVE states1 {
+                {
+                    X[0] = m
+                    X[1] = h
+                }{
+                    F[0] = (dt*(X[0]-minf)+mtau*(X[0]-m))/mtau
+                    F[1] = (-dt*(pow(X[0], 2)*htau-X[1]+hinf)+htau*(X[1]-h))/htau
+                    J[0] = dt/mtau+1
+                    J[2] = 0
+                    J[1] = -2*X[0]*dt
+                    J[3] = dt/htau+1
+                }{
+                    m = X[0]
+                    h = X[1]
+                }
+            })";
+        std::string expected_result_1 = R"(
+            DERIVATIVE states2 {
+                {
+                    X[0] = m
+                    X[1] = h
+                }{
+                    F[0] = (-dt*(-X[0]+X[1]*mtau+minf)+mtau*(X[0]-m))/mtau
+                    F[1] = (-dt*(pow(X[0], 2)*htau-X[1]+hinf)+htau*(X[1]-h))/htau
+                    J[0] = dt/mtau+1
+                    J[2] = -dt
+                    J[1] = -2*X[0]*dt
+                    J[3] = dt/htau+1
+                }{
+                    m = X[0]
+                    h = X[1]
+                }
+            })";
+
+        THEN("Construct & solver linear system using newton solver") {
+            auto result = run_sympy_solver_visitor(nmodl_text, false, false,
+                                                   AstNodeType::DERIVATIVE_BLOCK);
+            REQUIRE(result[0] == reindent_text(expected_result_0));
+            REQUIRE(result[1] == reindent_text(expected_result_1));
+        }
+    }
 }
 
 
