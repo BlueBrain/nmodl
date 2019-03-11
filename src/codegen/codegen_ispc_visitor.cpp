@@ -96,7 +96,7 @@ std::string CodegenIspcVisitor::net_receive_buffering_declaration() {
 
 void CodegenIspcVisitor::print_backend_includes() {
     printer->add_line("#include \"nmodl/fast_math.ispc\"");
-    printer->add_line("#include \"nrnoc_ml.ispc\"");
+    printer->add_line("#include \"coreneuron/nrnoc/nrnoc_ml.ispc\"");
     printer->add_newline();
     printer->add_newline();
 }
@@ -499,26 +499,36 @@ void CodegenIspcVisitor::print_backend_compute_routine_decl() {
     printer->add_line(
         "extern \"C\" void {}({});"_format(compute_function, get_parameter_str(params)));
 
-    compute_function = compute_method_name(BlockType::Equation);
-    printer->add_line(
-        "extern \"C\" void {}({});"_format(compute_function, get_parameter_str(params)));
+    if (nrn_cur_required()) {
+        compute_function = compute_method_name(BlockType::Equation);
+        printer->add_line(
+            "extern \"C\" void {}({});"_format(compute_function, get_parameter_str(params)));
+    }
 
-    compute_function = compute_method_name(BlockType::State);
-    printer->add_line(
-        "extern \"C\" void {}({});"_format(compute_function, get_parameter_str(params)));
+    if (nrn_state_required()) {
+        compute_function = compute_method_name(BlockType::State);
+        printer->add_line(
+            "extern \"C\" void {}({});"_format(compute_function, get_parameter_str(params)));
+    }
 
-    auto net_recv_params = ParamVector();
-    net_recv_params.emplace_back("", "{}*"_format(instance_struct()), "", "inst");
-    net_recv_params.emplace_back("", "NrnThread*", "", "nt");
-    net_recv_params.emplace_back("", "Memb_list*", "", "ml");
-    printer->add_line("extern \"C\" void {}({});"_format(method_name("ispc_net_buf_receive"),
-                                                         get_parameter_str(net_recv_params)));
+    if (net_receive_required()) {
+        auto net_recv_params = ParamVector();
+        net_recv_params.emplace_back("", "{}*"_format(instance_struct()), "", "inst");
+        net_recv_params.emplace_back("", "NrnThread*", "", "nt");
+        net_recv_params.emplace_back("", "Memb_list*", "", "ml");
+        printer->add_line("extern \"C\" void {}({});"_format(method_name("ispc_net_buf_receive"),
+                                                             get_parameter_str(net_recv_params)));
+    }
 }
 
 void CodegenIspcVisitor::codegen_wrapper_routines() {
     print_wrapper_routine("nrn_init", BlockType::Initial);
-    print_wrapper_routine("nrn_cur", BlockType::Equation);
-    print_wrapper_routine("nrn_state", BlockType::State);
+    if (nrn_cur_required()) {
+        print_wrapper_routine("nrn_cur", BlockType::Equation);
+    }
+    if (nrn_state_required()) {
+        print_wrapper_routine("nrn_state", BlockType::State);
+    }
 }
 
 

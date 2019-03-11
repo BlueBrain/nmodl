@@ -173,6 +173,11 @@ int main(int argc, const char* argv[]) {
 
     CLI11_PARSE(app, argc, argv);
 
+    // if any of the other backends is used we force the C backend to be off.
+    if (omp_backend || ispc_backend) {
+        c_backend = false;
+    }
+
     make_path(output_dir);
     make_path(scratch_dir);
 
