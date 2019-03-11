@@ -2280,13 +2280,13 @@ SCENARIO("SympySolver visitor", "[sympy]") {
             }
 
             DERIVATIVE states1 {
-                m' =  (minf-m)/mtau
+                m' = (minf-m)/mtau
                 h' = (hinf-h)/htau + m*m
             }
 
             DERIVATIVE states2 {
-                m' =  (minf-m)/mtau + h
                 h' = (hinf-h)/htau + m*m
+                m' = (minf-m)/mtau + h
             }
         )";
         /// EigenNewtonSolverBlock in each derivative block
@@ -2310,18 +2310,18 @@ SCENARIO("SympySolver visitor", "[sympy]") {
         std::string expected_result_1 = R"(
             DERIVATIVE states2 {
                 {
-                    X[0] = m
-                    X[1] = h
+                    X[0] = h
+                    X[1] = m
                 }{
-                    F[0] = (-dt*(-X[0]+X[1]*mtau+minf)+mtau*(X[0]-m))/mtau
-                    F[1] = (-dt*(pow(X[0], 2)*htau-X[1]+hinf)+htau*(X[1]-h))/htau
-                    J[0] = dt/mtau+1
-                    J[2] = -dt
-                    J[1] = -2*X[0]*dt
-                    J[3] = dt/htau+1
+                    F[0] = (-dt*(-X[0]+pow(X[1], 2)*htau+hinf)+htau*(X[0]-h))/htau
+                    F[1] = (-dt*(X[0]*mtau-X[1]+minf)+mtau*(X[1]-m))/mtau
+                    J[0] = dt/htau+1
+                    J[2] = -2*X[1]*dt
+                    J[1] = -dt
+                    J[3] = dt/mtau+1
                 }{
-                    m = X[0]
-                    h = X[1]
+                    h = X[0]
+                    m = X[1]
                 }
             })";
 
