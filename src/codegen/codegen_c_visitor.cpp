@@ -3258,6 +3258,10 @@ void CodegenCVisitor::print_net_receive_common_code(Block* node, bool need_inst)
     printer->add_line("int tid = pnt->_tid;");
     printer->add_line("int id = pnt->_i_instance;");
     printer->add_line("double v = 0;");
+    if (info.artificial_cell) {
+        printer->add_line("NrnThread* nt = nrn_threads + tid;");
+        printer->add_line("Memb_list* ml = nt->_ml_list[pnt->_type];");
+    }
     printer->add_line("{}int nodecount = ml->nodecount;"_format(param_tp_qualifier()));
     printer->add_line("{}int pnodecount = ml->_nodecount_padded;"_format(param_tp_qualifier()));
     printer->add_line("double* data = ml->data;");
@@ -3531,17 +3535,17 @@ void CodegenCVisitor::print_net_receive_kernel() {
     } else {
         name = method_name("net_receive");
         params.emplace_back("", "Point_process*", "", "pnt");
-        params.emplace_back(param_tp_qualifier(), "{}*"_format(instance_struct()),
-                            param_ptr_qualifier(), "inst");
-        params.emplace_back(param_tp_qualifier(), "NrnThread*", param_ptr_qualifier(), "nt");
-        params.emplace_back(param_tp_qualifier(), "Memb_list*", param_ptr_qualifier(), "ml");
         params.emplace_back("", "int", "", "weight_index");
         params.emplace_back("", "double", "", "flag");
     }
 
     printer->add_newline(2);
     printer->start_block("static inline void {}({}) "_format(name, get_parameter_str(params)));
-    print_net_receive_common_code(node, false);
+    if (!info.artificial_cell) {
+        print_net_receive_common_code(node, false);
+    } else {
+        print_net_receive_common_code(node, true);
+    }
     if (info.artificial_cell) {
         printer->add_line("double t = nt->_t;");
     }

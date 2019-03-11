@@ -95,7 +95,7 @@ std::string CodegenIspcVisitor::net_receive_buffering_declaration() {
 }
 
 void CodegenIspcVisitor::print_backend_includes() {
-    printer->add_line("#include \"fast_math.ispc\"");
+    printer->add_line("#include \"nmodl/fast_math.ispc\"");
     printer->add_line("#include \"nrnoc_ml.ispc\"");
     printer->add_newline();
     printer->add_newline();
