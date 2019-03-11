@@ -85,9 +85,6 @@ class SympySolverVisitor: public AstVisitor {
     /// vector of coupled ODE equations to solve
     std::vector<std::string> ode_system;
 
-    /// vector of binary expressions to replace
-    std::vector<ast::DiffEqExpression*> diff_eqs_to_replace;
-
     static std::string to_nmodl_for_sympy(ast::AST* node) {
         return nmodl::to_nmodl(node, {ast::AstNodeType::UNIT});
     }

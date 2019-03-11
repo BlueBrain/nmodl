@@ -121,7 +121,6 @@ void SympySolverVisitor::visit_diff_eq_expression(ast::DiffEqExpression* node) {
         // for other solver methods: just collect the ODEs & return
         logger->debug("SympySolverVisitor :: adding ODE system: {}", to_nmodl_for_sympy(node));
         ode_system.push_back(to_nmodl_for_sympy(node));
-        diff_eqs_to_replace.push_back(node);
         return;
     }
 
@@ -156,7 +155,6 @@ void SympySolverVisitor::visit_derivative_block(ast::DerivativeBlock* node) {
     solve_method = derivative_block_solve_method[node->get_node_name()];
 
     /// clear information from previous derivative block if any
-    diff_eqs_to_replace.clear();
     diffeq_statements.clear();
     prime_variables.clear();
     ode_system.clear();
@@ -200,7 +198,7 @@ void SympySolverVisitor::visit_derivative_block(ast::DerivativeBlock* node) {
         }
 
         // sanity check: must have at least as many solutions as ODE's to replace:
-        if (solutions.size() < diff_eqs_to_replace.size()) {
+        if (solutions.size() < ode_system.size()) {
             logger->warn("SympySolverVisitor :: Solve failed: fewer solutions than ODE's");
             return;
         }
@@ -226,30 +224,24 @@ void SympySolverVisitor::visit_derivative_block(ast::DerivativeBlock* node) {
             // replace old set of statements in AST with new one
             current_statement_block->set_statements(std::move(statements));
         } else if (solve_method == codegen::naming::DERIVIMPLICIT_METHOD) {
-            auto sol = solutions.cbegin();
-
-            /// first construct X from the state variables by using the original
-            /// ODE statements in the block and then remove those statements from
-            /// the block where they initially appear
+            /// Construct X from the state variables by using the original
+            /// ODE statements in the block. Also create statements to update
+            /// state variables from X
             std::vector<std::string> setup_x_eqs;
-            for (auto diffeq_expr: diff_eqs_to_replace) {
-                logger->debug("SympySolverVisitor :: -> replacing {} with statement: {}",
-                              to_nmodl_for_sympy(diffeq_expr), *sol);
-                setup_x_eqs.push_back(*sol);
-                ++sol;
+            std::vector<std::string> update_state_eqs;
+            for (int i = 0; i < prime_variables.size(); i++) {
+                auto statement = prime_variables[i] + " = " + "X[ " + std::to_string(i) + "]";
+                auto rev_statement = "X[ " + std::to_string(i) + "]" + " = " + prime_variables[i];
+                update_state_eqs.push_back(statement);
+                setup_x_eqs.push_back(rev_statement);
             }
+
+            /// remove original ODE statements from the block where they initially appear
             remove_statements_from_block(current_statement_block, diffeq_statements);
 
             /// rest of the statements in solutions : put F, J into new functor to
             /// be created for eigen
-            auto functor_eqs = std::vector<std::string>{sol, solutions.cend()};
-
-            /// update state variables from X
-            std::vector<std::string> update_state_eqs;
-            for (int i = 0; i < prime_variables.size(); i++) {
-                auto statement = prime_variables[i] + " = " + "X[ " + std::to_string(i) + "]";
-                update_state_eqs.push_back(statement);
-            }
+            auto functor_eqs = std::vector<std::string>{solutions.cbegin(), solutions.cend()};
 
             /// create newton solution block and add that as statement back in the block
             auto solver_block = construct_eigen_newton_solver_block(setup_x_eqs, functor_eqs,

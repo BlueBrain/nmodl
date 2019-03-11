@@ -40,7 +40,7 @@ def make_unique_prefix(vars, default_prefix="tmp"):
 def solve_ode_system(diff_strings, t_var, dt_var, vars, do_cse=False):
     """Solve system of ODEs, return solution as C code.
 
-    If system is linear, constructs the backwards Euler linear 
+    If system is linear, constructs the backwards Euler linear
     system and solves analytically, optionally also
     with Common Subexpression Elimination if do_cse is true.
 
@@ -121,8 +121,6 @@ def solve_ode_system(diff_strings, t_var, dt_var, vars, do_cse=False):
         for i, x_new in enumerate(state_vars):
             Xvecsubs[x_new] = sp.symbols(f"X[{i}]")
         eqs = []
-        for i, x in enumerate(state_vars):
-            code.append(f"X[{i}] = {sp.ccode(x)}")
         for x_new, x_old, dxdt in zip(state_vars, old_state_vars, diff_eqs):
             eqs.append((x_new - dt * dxdt).subs(Xvecsubs) - x_new)
         for i, eq in enumerate(eqs):
