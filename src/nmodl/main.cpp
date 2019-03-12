@@ -177,8 +177,7 @@ int main(int argc, const char* argv[]) {
     /// write ast to nmodl
     auto ast_to_nmodl = [nmodl_ast](ast::Program* ast, const std::string& filepath) {
         if (nmodl_ast) {
-            NmodlPrintVisitor v(filepath);
-            v.visit_program(ast);
+            NmodlPrintVisitor(filepath).visit_program(ast);
             logger->info("AST to NMODL transformation written to {}", filepath);
         }
     };
@@ -205,17 +204,13 @@ int main(int argc, const char* argv[]) {
         /// parse mod file and construct ast
         auto ast = driver.ast();
 
-        /// just visit the astt
-        {
-            AstVisitor v;
-            v.visit_program(ast.get());
-        }
+        /// just visit the ast
+        AstVisitor().visit_program(ast.get());
 
         /// construct symbol table
         {
             logger->info("Running symtab visitor");
-            SymtabVisitor v(update_symtab);
-            v.visit_program(ast.get());
+            SymtabVisitor(update_symtab).visit_program(ast.get());
         }
 
         if (show_symtab) {
@@ -231,23 +226,19 @@ int main(int argc, const char* argv[]) {
         if (json_ast) {
             logger->info("Writing AST into {}", file);
             auto file = scratch_dir + "/" + modfile + ".ast.json";
-            JSONVisitor v(file);
-            v.visit_program(ast.get());
+            JSONVisitor(file).visit_program(ast.get());
         }
 
         if (verbatim_rename) {
             logger->info("Running verbatim rename visitor");
-            VerbatimVarRenameVisitor v;
-            v.visit_program(ast.get());
+            VerbatimVarRenameVisitor().visit_program(ast.get());
             ast_to_nmodl(ast.get(), filepath("verbatim_rename"));
         }
 
         if (sympy_conductance) {
             logger->info("Running sympy conductance visitor");
-            SympyConductanceVisitor v1;
-            SymtabVisitor v2(update_symtab);
-            v1.visit_program(ast.get());
-            v2.visit_program(ast.get());
+            SympyConductanceVisitor().visit_program(ast.get());
+            SymtabVisitor(update_symtab).visit_program(ast.get());
             ast_to_nmodl(ast.get(), filepath("sympy_conductance"));
         }
 
@@ -258,60 +249,49 @@ int main(int argc, const char* argv[]) {
 
         if (sympy_analytic) {
             logger->info("Running sympy solve visitor");
-            SympySolverVisitor v1(sympy_pade, sympy_cse);
-            SymtabVisitor v2(update_symtab);
-            v1.visit_program(ast.get());
-            v2.visit_program(ast.get());
+            SympySolverVisitor(sympy_pade, sympy_cse).visit_program(ast.get());
+            SymtabVisitor(update_symtab).visit_program(ast.get());
             ast_to_nmodl(ast.get(), filepath("sympy_solve"));
         }
 
         {
             logger->info("Running cnexp visitor");
-            CnexpSolveVisitor v;
-            v.visit_program(ast.get());
+            CnexpSolveVisitor().visit_program(ast.get());
             ast_to_nmodl(ast.get(), filepath("cnexp"));
         }
 
         if (nmodl_inline) {
             logger->info("Running nmodl inline visitor");
-            InlineVisitor v;
-            v.visit_program(ast.get());
+            InlineVisitor().visit_program(ast.get());
             ast_to_nmodl(ast.get(), filepath("inline"));
         }
 
         if (local_rename) {
             logger->info("Running local variable rename visitor");
-            LocalVarRenameVisitor v1;
-            SymtabVisitor v2(update_symtab);
-            v1.visit_program(ast.get());
-            v2.visit_program(ast.get());
+            LocalVarRenameVisitor().visit_program(ast.get());
+            SymtabVisitor(update_symtab).visit_program(ast.get());
             ast_to_nmodl(ast.get(), filepath("local_rename"));
         }
 
         if (localize) {
             // localize pass must follow rename pass to avoid conflict
             logger->info("Running localize visitor");
-            LocalizeVisitor v1(localize_verbatim);
-            LocalVarRenameVisitor v2;
-            SymtabVisitor v3(update_symtab);
-            v1.visit_program(ast.get());
-            v2.visit_program(ast.get());
-            v3.visit_program(ast.get());
+            LocalizeVisitor(localize_verbatim).visit_program(ast.get());
+            LocalVarRenameVisitor().visit_program(ast.get());
+            SymtabVisitor(update_symtab).visit_program(ast.get());
             ast_to_nmodl(ast.get(), filepath("localize"));
         }
 
         if (json_perfstat) {
             auto file = scratch_dir + "/" + modfile + ".perf.json";
             logger->info("Writing performance statistics to {}", file);
-            PerfVisitor v(file);
-            v.visit_program(ast.get());
+            PerfVisitor(file).visit_program(ast.get());
         }
 
         {
             // make sure to run perf visitor because code generator
             // looks for read/write counts const/non-const declaration
-            PerfVisitor v;
-            v.visit_program(ast.get());
+            PerfVisitor().visit_program(ast.get());
         }
 
         {
