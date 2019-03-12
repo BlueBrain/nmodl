@@ -239,12 +239,9 @@ void SympySolverVisitor::visit_derivative_block(ast::DerivativeBlock* node) {
             /// remove original ODE statements from the block where they initially appear
             remove_statements_from_block(current_statement_block, diffeq_statements);
 
-            /// rest of the statements in solutions : put F, J into new functor to
-            /// be created for eigen
-            auto functor_eqs = std::vector<std::string>{solutions.cbegin(), solutions.cend()};
-
             /// create newton solution block and add that as statement back in the block
-            auto solver_block = construct_eigen_newton_solver_block(setup_x_eqs, functor_eqs,
+            /// statements in solutions : put F, J into new functor to be created for eigen
+            auto solver_block = construct_eigen_newton_solver_block(setup_x_eqs, solutions,
                                                                     update_state_eqs);
 
             if (vars.find("X") != vars.end()) {
