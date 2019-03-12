@@ -65,7 +65,7 @@ macro(find_python_module module)
                                       VERSION_VAR
                                       ${module_upper}_VERSION_STRING)
     if(NOT ${module}_FIND_OPTIONAL AND NOT _${module_upper}_VERSION_MATCH)
-        message(FATAL_ERROR "Missing python module ${module}")
+      message(FATAL_ERROR "Missing python module ${module}")
     endif()
     mark_as_advanced(${module_upper}_LOCATION)
   endif(NOT ${module_upper}_FOUND)
