@@ -58,7 +58,7 @@ find_python_module(jinja2 2.9.3 REQUIRED)
 find_python_module(pytest 3.3.0 REQUIRED)
 find_python_module(sympy 1.2 REQUIRED)
 find_python_module(textwrap 0.9 REQUIRED)
-find_python_module(yaml 3.13 REQUIRED)
+find_python_module(yaml 3.12 REQUIRED)
 
 include_directories(${PROJECT_SOURCE_DIR}
                     ${PROJECT_SOURCE_DIR}/src
