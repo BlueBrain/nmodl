@@ -3,50 +3,49 @@
  *
  * This file is part of NMODL distributed under the terms of the GNU
  * Lesser General Public License. See top-level LICENSE file for details.
- *************************************************************************/
-
-/**************************************************************************
- * Fast ISPC exponentials Based on VDT implementation of D. Piparo et al.
- * https://github.com/dpiparo/vdt
+ *
+ * Note that the fast ISPC exponentials Based on VDT implementation of
+ * D. Piparo et al. See https://github.com/dpiparo/vdt for additional
+ * license information.
  *************************************************************************/
 
 
 static inline double uint642dp(unsigned int64 ll) {
-  return *((varying double*)(&ll));
+    return *((varying double*) (&ll));
 }
 
 static inline unsigned int64 dp2uint64(double x) {
-  return *((varying unsigned int64*)(&x));
+    return *((varying unsigned int64*) (&x));
 }
 
 static inline float uint322sp(int32 x) {
-  return *((varying float*)(&x));
+    return *((varying float*) (&x));
 }
 
 static inline unsigned int sp2uint32(float x) {
-  return *((varying unsigned int32*)(&x));
+    return *((varying unsigned int32*) (&x));
 }
 
 static inline double dpfloor(const double x) {
-  int32 ret = x;
-  ret -= (sp2uint32(x) >> 31);
-  return ret;
+    int32 ret = x;
+    ret -= (sp2uint32(x) >> 31);
+    return ret;
 }
 
 static inline float spfloor(const float x) {
-  int32 ret = x;
-  ret -= (sp2uint32(x) >> 31);
-  return ret;
+    int32 ret = x;
+    ret -= (sp2uint32(x) >> 31);
+    return ret;
 }
 
 static inline uniform float f_inf() {
-  uniform unsigned int32 v = 0x7F800000;
-  return *((float*)(&v));
+    uniform unsigned int32 v = 0x7F800000;
+    return *((float*) (&v));
 }
 
 static inline uniform double inf() {
-  uniform unsigned int64 v = 0x7FF0000000000000;
-  return *((double*)(&v));
+    uniform unsigned int64 v = 0x7FF0000000000000;
+    return *((double*) (&v));
 }
 
 
@@ -79,75 +78,70 @@ static const uniform float LOG2EF = 1.44269504088896341f;
 
 
 static inline double vexp(double initial_x) {
+    double x = initial_x;
+    double px = dpfloor(LOG2E * x + 0.5d);
+    const int32 n = px;
 
-  double x = initial_x;
-  double px = dpfloor(LOG2E * x + 0.5d);
-  
-  const int32 n = px;
+    x -= px * (6.93145751953125d * 0.1d);
+    x -= px * (1.42860682030941723212d * 0.000001d);
 
-  x -= px * (6.93145751953125d * 0.1d);
-  x -= px * (1.42860682030941723212d * 0.000001d);
+    const double xx = x * x;
 
-  const double xx = x * x;
+    px = PX1exp;
+    px *= xx;
+    px += PX2exp;
+    px *= xx;
+    px += PX3exp;
+    px *= x;
 
-  px = PX1exp;
-  px *= xx;
-  px += PX2exp;
-  px *= xx;
-  px += PX3exp;
-  px *= x;
+    double qx = QX1exp;
+    qx *= xx;
+    qx += QX2exp;
+    qx *= xx;
+    qx += QX3exp;
+    qx *= xx;
+    qx += QX4exp;
 
-  double qx = QX1exp;
-  qx *= xx;
-  qx += QX2exp;
-  qx *= xx;
-  qx += QX3exp;
-  qx *= xx;
-  qx += QX4exp;
+    x = px / (qx - px);
+    x = 1.0d + 2.0d * x;
+    x *= uint642dp((((unsigned int64) n) + 1023) << 52);
 
-  x = px / (qx - px);
-  x = 1.0d + 2.0d * x;
-  x *= uint642dp((((unsigned int64)n) + 1023) << 52);
+    if (initial_x > EXP_LIMIT)
+        x = inf();
+    if (initial_x < -EXP_LIMIT)
+        x = 0.d;
 
-  if (initial_x > EXP_LIMIT)
-    x = inf();
-  if (initial_x < -EXP_LIMIT)
-    x = 0.d;
-
-  return x;
+    return x;
 }
 
 static inline float vexp(float initial_x) {
-  float x = initial_x;
-  float z = spfloor(LOG2EF * x + 0.5f);
+    float x = initial_x;
+    float z = spfloor(LOG2EF * x + 0.5f);
 
-  x -= z * C1F;
-  x -= z * C2F;
-  const int32 n = z;
+    x -= z * C1F;
+    x -= z * C2F;
+    const int32 n = z;
+    const float x2 = x * x;
 
-  const float x2 = x * x;
+    z = x * PX1expf;
+    z += PX2expf;
+    z *= x;
+    z += PX3expf;
+    z *= x;
+    z += PX4expf;
+    z *= x;
+    z += PX5expf;
+    z *= x;
+    z += PX6expf;
+    z *= x2;
+    z += x + 1.0f;
 
-  z = x * PX1expf;
-  z += PX2expf;
-  z *= x;
-  z += PX3expf;
-  z *= x;
-  z += PX4expf;
-  z *= x;
-  z += PX5expf;
-  z *= x;
-  z += PX6expf;
-  z *= x2;
-  z += x + 1.0f;
+    z *= uint322sp((n + 0x7f) << 23);
 
-  z *= uint322sp((n + 0x7f) << 23);
+    if (initial_x > MAXLOGF)
+        z = f_inf();
+    if (initial_x < MINLOGF)
+        z = 0.f;
 
-  if (initial_x > MAXLOGF)
-    z = f_inf();
-  if (initial_x < MINLOGF)
-    z = 0.f;
-
-  return z;
+    return z;
 }
-
-
