@@ -45,6 +45,16 @@ static double compute(double lhs, ast::BinaryOp op, double rhs) {
 }
 
 
+void ConstantFolderVisitor::visit_paren_expression(ast::ParenExpression* node) {
+    auto expr = node->get_expression();
+    if (expr->is_wrapped_expression()) {
+        auto e = std::dynamic_pointer_cast<ast::WrappedExpression>(expr);
+        node->set_expression(e->get_expression());
+    }
+    node->visit_children(this);
+}
+
+
 void ConstantFolderVisitor::visit_wrapped_expression(ast::WrappedExpression* node) {
     std::cout << "Before -> " << to_nmodl(node) << "\n";
 
@@ -52,6 +62,13 @@ void ConstantFolderVisitor::visit_wrapped_expression(ast::WrappedExpression* nod
     node->visit_children(this);
 
     auto expr = node->get_expression();
+
+    if (expr->is_paren_expression()) {
+        auto e = std::dynamic_pointer_cast<ast::ParenExpression>(expr);
+        node->set_expression(e->get_expression());
+        expr = node->get_expression();
+    }
+
     if (!expr->is_binary_expression()) {
         return;
     }
@@ -60,18 +77,6 @@ void ConstantFolderVisitor::visit_wrapped_expression(ast::WrappedExpression* nod
     auto lhs = binary_expr->get_lhs();
     auto rhs = binary_expr->get_rhs();
     auto op = binary_expr->get_op().get_value();
-
-    if (lhs->is_paren_expression()) {
-        auto e = std::dynamic_pointer_cast<ast::ParenExpression>(lhs);
-        binary_expr->set_lhs(e->get_expression());
-        lhs = binary_expr->get_lhs();
-    }
-
-    if (rhs->is_paren_expression()) {
-        auto e = std::dynamic_pointer_cast<ast::ParenExpression>(rhs);
-        binary_expr->set_rhs(e->get_expression());
-        rhs = binary_expr->get_rhs();
-    }
 
     if (lhs->is_wrapped_expression()) {
         auto e = std::dynamic_pointer_cast<ast::WrappedExpression>(lhs);
@@ -96,6 +101,7 @@ void ConstantFolderVisitor::visit_wrapped_expression(ast::WrappedExpression* nod
     } else {
         node->set_expression(std::make_shared<ast::Double>(value));
     }
+
     std::cout << "After -> " << to_nmodl(node) << "\n";
 }
 

@@ -1048,7 +1048,11 @@ varname         :   name
 
 intexpr         :   Name                    { $$ = $1; }
                 |   integer                 { $$ = $1; }
-                |   "(" intexpr ")"         { $$ = new ast::ParenExpression($2); }
+                |   "(" intexpr ")"
+                    {
+                        auto expr = new ast::ParenExpression($2);
+                        $$ = new ast::WrappedExpression(expr);
+                    }
                 |   intexpr "+" intexpr
                     {
                         auto expr = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_ADDITION), $3);
@@ -1085,7 +1089,11 @@ expr            :   varname             { $$ = $1; }
                             $$ = $1;
                     }
                 |   funccall            { $$ = $1; }
-                |   "(" expr ")"        { $$ = new ast::ParenExpression($2); }
+                |   "(" expr ")"
+                    {
+                        auto expr = new ast::ParenExpression($2);
+                        $$ = new ast::WrappedExpression(expr);
+                    }
                 |   expr "+" expr
                     {
                         auto expr  = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_ADDITION), $3);
