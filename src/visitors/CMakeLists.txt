@@ -12,6 +12,8 @@ set(VISITOR_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/local_var_rename_visitor.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/localize_visitor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/localize_visitor.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/loop_unroller.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/loop_unroller.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/nmodl_visitor_helper.ipp
     ${CMAKE_CURRENT_SOURCE_DIR}/perf_visitor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/perf_visitor.hpp
@@ -28,6 +30,8 @@ set(VISITOR_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/verbatim_var_rename_visitor.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/verbatim_visitor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/verbatim_visitor.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/constant_folder_visitor.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/constant_folder_visitor.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/visitor_utils.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/visitor_utils.hpp)
 

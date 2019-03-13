@@ -1051,23 +1051,27 @@ intexpr         :   Name                    { $$ = $1; }
                 |   "(" intexpr ")"         { $$ = new ast::ParenExpression($2); }
                 |   intexpr "+" intexpr
                     {
-                        $$ = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_ADDITION), $3);
+                        auto expr = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_ADDITION), $3);
+                        $$ = new ast::WrappedExpression(expr);
                     }
                 |   intexpr "-" intexpr
                     {
-                        $$ = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_SUBTRACTION), $3);
+                        auto expr = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_SUBTRACTION), $3);
+                        $$ = new ast::WrappedExpression(expr);
                     }
                 |   intexpr "*" intexpr
                     {
-                        $$ = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_MULTIPLICATION), $3);
+                        auto expr = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_MULTIPLICATION), $3);
+                        $$ = new ast::WrappedExpression(expr);
                     }
                 |   intexpr "/" intexpr
                     {
-                        $$ = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_DIVISION), $3);
+                        auto expr = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_DIVISION), $3);
+                        $$ = new ast::WrappedExpression(expr);
                     }
                 |   error
                     {
-
+                        error(scanner.loc, "intexpr");
                     }
                 ;
 
@@ -1084,23 +1088,28 @@ expr            :   varname             { $$ = $1; }
                 |   "(" expr ")"        { $$ = new ast::ParenExpression($2); }
                 |   expr "+" expr
                     {
-                        $$ = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_ADDITION), $3);
+                        auto expr  = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_ADDITION), $3);
+                        $$ = new ast::WrappedExpression(expr);
                     }
                 |   expr "-" expr
                     {
-                        $$ = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_SUBTRACTION), $3);
+                        auto expr  = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_SUBTRACTION), $3);
+                        $$ = new ast::WrappedExpression(expr);
                     }
                 |   expr "*" expr
                     {
-                        $$ = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_MULTIPLICATION), $3);
+                        auto expr  = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_MULTIPLICATION), $3);
+                        $$ = new ast::WrappedExpression(expr);
                     }
                 |   expr "/" expr
                     {
-                        $$ = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_DIVISION), $3);
+                        auto expr  = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_DIVISION), $3);
+                        $$ = new ast::WrappedExpression(expr);
                     }
                 |   expr "^" expr
                     {
-                        $$ = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_POWER), $3);
+                        auto expr  = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_POWER), $3);
+                        $$ = new ast::WrappedExpression(expr);
                     }
                 |   expr OR expr
                     {
