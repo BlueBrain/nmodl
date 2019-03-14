@@ -11,7 +11,6 @@
 #include <string>
 
 #include "ast/ast.hpp"
-#include "symtab/symbol_table.hpp"
 #include "utils/logger.hpp"
 #include "visitors/ast_visitor.hpp"
 
