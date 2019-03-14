@@ -62,8 +62,8 @@ static double compute(double lhs, ast::BinaryOp op, double rhs) {
  * Visit parenthesis expression and simplify it
  * @param node AST node representing an expression with parenthesis
  *
- * AST could has expression like (1+2). In this case, it has following
- * for in the AST :
+ * AST could have expression like (1+2). In this case, it has following
+ * form in the AST :
  *
  *  parenthesis_exp => wrapped_expr => binary_expression => ...
  *
@@ -89,7 +89,7 @@ void ConstantFolderVisitor::visit_paren_expression(ast::ParenExpression* node) {
  *
  * a = 1 + 2
  * DEFINE NN 10
- * FROM i=0 TO NANN-2 {
+ * FROM i=0 TO NN-2 {
  *
  * }
  *
@@ -129,7 +129,7 @@ void ConstantFolderVisitor::visit_wrapped_expression(ast::WrappedExpression* nod
     /// in case of expression like
     /// a = 2 + ((1) + (3))
     /// we are in the innermost expression i.e. ((1) + (3))
-    /// where (1) and (2) are wrapped expression themself. we can
+    /// where (1) and (3) are wrapped expression themself. we can
     /// remove these extra wrapped expressions
 
     if (lhs->is_wrapped_expression()) {
