@@ -12,22 +12,31 @@
 
 #include "ast/ast.hpp"
 #include "symtab/symbol_table.hpp"
+#include "utils/logger.hpp"
 #include "visitors/ast_visitor.hpp"
 
 namespace nmodl {
 
 /**
  * \class ConstantFolderVisitor
- * \brief Perform constant folding of inter/float expressions
+ * \brief Perform constant folding of integer/float/double expressions
  *
- * Add....
+ * MOD file from user could have binary expressions that could be
+ * expanded at compile time. For example, KINETIC blocks could have
  *
+ * DEFINE NANN 10
+ *
+ * KINETIC states {
+ *      FROM i=0 TO NANN-2 {
+ *          ....
+ *      }
+ * }
+ *
+ * For passes like loop unroll, we need to evaluate NANN-2 at
+ * compile time and this pass perform such operations.
  */
 
 class ConstantFolderVisitor: public AstVisitor {
-  private:
-    std::stack<ast::WrappedExpression*> visited_wrapped_expressions;
-
   public:
     ConstantFolderVisitor() = default;
     void visit_wrapped_expression(ast::WrappedExpression* node) override;

@@ -6,25 +6,33 @@
  *************************************************************************/
 
 #include "visitors/constant_folder_visitor.hpp"
-#include "visitors/visitor_utils.hpp"
 
 
 namespace nmodl {
 
-static bool is_number(ast::Expression* node) {
-    return node->is_integer() || node->is_double();
+/// check if given expression is a number
+/// note that the DEFINE node is already expanded to integer
+static bool is_number(std::shared_ptr<ast::Expression> node) {
+    return node->is_integer() || node->is_double() || node->is_float();
 }
 
-static double get_value(ast::Expression* node) {
+/// get value of a number node
+/// TODO : eval method can be added to virtual base class
+static double get_value(std::shared_ptr<ast::Expression> node) {
     if (node->is_integer()) {
-        return dynamic_cast<ast::Integer*>(node)->eval();
+        return std::dynamic_pointer_cast<ast::Integer>(node)->eval();
+    }
+    if (node->is_float()) {
+        return std::dynamic_pointer_cast<ast::Float>(node)->eval();
     }
     if (node->is_double()) {
-        return dynamic_cast<ast::Double*>(node)->eval();
+        return std::dynamic_pointer_cast<ast::Double>(node)->eval();
     }
     throw std::runtime_error("Invalid type passed to is_number()");
 }
 
+/// Evaluate binary operation
+/// TODO : add support for other binary operators like ^ (pow)
 static double compute(double lhs, ast::BinaryOp op, double rhs) {
     switch (op) {
     case ast::BOP_ADDITION:
@@ -44,31 +52,65 @@ static double compute(double lhs, ast::BinaryOp op, double rhs) {
     }
 }
 
-
+/**
+ * Visit parenthesis expression and simplify it
+ * @param node AST node representing an expression with parenthesis
+ *
+ * AST could has expression like (1+2). In this case, it has following
+ * for in the AST :
+ *
+ *  parenthesis_exp => wrapped_expr => binary_expression => ...
+ *
+ * To make constant folding simple, we can remove intermediate wrapped_expr
+ * and directly replace binary_expression inside parenthesis_exp :
+ *
+ *  parenthesis_exp => binary_expression => ...
+ */
 void ConstantFolderVisitor::visit_paren_expression(ast::ParenExpression* node) {
+    node->visit_children(this);
     auto expr = node->get_expression();
     if (expr->is_wrapped_expression()) {
         auto e = std::dynamic_pointer_cast<ast::WrappedExpression>(expr);
         node->set_expression(e->get_expression());
     }
-    node->visit_children(this);
 }
 
-
+/**
+ * Visit wrapped node type and perform costant folding
+ * @param node AST node that wrap other node types
+ *
+ * MOD file has expressions like
+ *
+ * a = 1 + 2
+ * DEFINE NN 10
+ * FROM i=0 TO NANN-2 {
+ *
+ * }
+ *
+ * which need to be turned into
+ *
+ * a = 1 + 2
+ * DEFINE NN 10
+ * FROM i=0 TO 8 {
+ *
+ * }
+ */
 void ConstantFolderVisitor::visit_wrapped_expression(ast::WrappedExpression* node) {
-    std::cout << "Before -> " << to_nmodl(node) << "\n";
-
-    visited_wrapped_expressions.push(node);
     node->visit_children(this);
 
+    /// first expression which is wrapped
     auto expr = node->get_expression();
 
+    /// opposite to visit_paren_expression, we might have
+    /// a = (2+1)
+    /// in this case we can eliminate paren expression and eliminate
     if (expr->is_paren_expression()) {
         auto e = std::dynamic_pointer_cast<ast::ParenExpression>(expr);
         node->set_expression(e->get_expression());
         expr = node->get_expression();
     }
 
+    /// we want to simplify binary expressions only
     if (!expr->is_binary_expression()) {
         return;
     }
@@ -77,6 +119,12 @@ void ConstantFolderVisitor::visit_wrapped_expression(ast::WrappedExpression* nod
     auto lhs = binary_expr->get_lhs();
     auto rhs = binary_expr->get_rhs();
     auto op = binary_expr->get_op().get_value();
+
+    /// in case of expression like
+    /// a = 2 + ((1) + (3))
+    /// we are in the innermost expression i.e. ((1) + (3))
+    /// where (1) and (2) are wrapped expression themself. we can
+    /// remove these extra wrapped expressions
 
     if (lhs->is_wrapped_expression()) {
         auto e = std::dynamic_pointer_cast<ast::WrappedExpression>(lhs);
@@ -90,19 +138,22 @@ void ConstantFolderVisitor::visit_wrapped_expression(ast::WrappedExpression* nod
         rhs = binary_expr->get_rhs();
     }
 
-    if (!is_number(lhs.get()) || !is_number(rhs.get())) {
+    /// once we simplify, lhs and rhs must be numbers for constant folding
+    if (!is_number(lhs) || !is_number(rhs)) {
         return;
     }
 
-    auto value = compute(get_value(lhs.get()), op, get_value(rhs.get()));
+    /// compute the value of expression
+    auto value = compute(get_value(lhs), op, get_value(rhs));
 
+    /// if both operands are not integers or floats, result is double
     if (lhs->is_integer() && rhs->is_integer()) {
         node->set_expression(std::make_shared<ast::Integer>(int(value), nullptr));
+    } else if (lhs->is_float() && rhs->is_float()) {
+        node->set_expression(std::make_shared<ast::Float>(float(value)));
     } else {
         node->set_expression(std::make_shared<ast::Double>(value));
     }
-
-    std::cout << "After -> " << to_nmodl(node) << "\n";
 }
 
 
