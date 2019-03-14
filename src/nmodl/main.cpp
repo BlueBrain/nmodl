@@ -269,8 +269,6 @@ int main(int argc, const char* argv[]) {
             logger->info("Running nmodl constant folding visitor");
             ConstantFolderVisitor().visit_program(ast.get());
             ast_to_nmodl(ast.get(), filepath("constfold"));
-            auto file = scratch_dir + "/" + modfile + ".ast.json";
-            JSONVisitor(file).visit_program(ast.get());
         }
 
         if (nmodl_inline) {
