@@ -142,14 +142,12 @@ void ConstantFolderVisitor::visit_wrapped_expression(ast::WrappedExpression* nod
 
     if (lhs->is_wrapped_expression()) {
         auto e = std::dynamic_pointer_cast<ast::WrappedExpression>(lhs);
-        binary_expr->set_lhs(e->get_expression());
-        lhs = binary_expr->get_lhs();
+        lhs = e->get_expression();
     }
 
     if (rhs->is_wrapped_expression()) {
         auto e = std::dynamic_pointer_cast<ast::WrappedExpression>(rhs);
-        binary_expr->set_rhs(e->get_expression());
-        rhs = binary_expr->get_rhs();
+        rhs = e->get_expression();
     }
 
     /// once we simplify, lhs and rhs must be numbers for constant folding
