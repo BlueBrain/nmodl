@@ -3227,16 +3227,19 @@ TEST_CASE("Constant Folding Visitor") {
         GIVEN("Integer expression with define statement") {
             std::string nmodl_text = R"(
                 DEFINE N 10
+
                 PROCEDURE dummy() {
                     a = N + (2*N) + (N / 2) + (((1+((N)))))
-                    FROM i=0 TO N-2 {
+                    FROM i = 0 TO N-2 {
                     }
                 }
             )";
             std::string expected_text = R"(
+                DEFINE N 10
+
                 PROCEDURE dummy() {
                     a = 46
-                    FROM i=0 TO 8 {
+                    FROM i = 0 TO 8 {
                     }
                 }
             )";
@@ -3249,15 +3252,22 @@ TEST_CASE("Constant Folding Visitor") {
         GIVEN("Only fold part of the statement") {
             std::string nmodl_text = R"(
                 DEFINE N 10
+
                 PROCEDURE dummy() {
                     a = N + 2.0 + b
                     c = a + d
+                    d = 2^3
+                    e = 2 || 3
                 }
             )";
             std::string expected_text = R"(
+                DEFINE N 10
+
                 PROCEDURE dummy() {
-                    a = 12 + b
-                    c = a + d
+                    a = 12+b
+                    c = a+d
+                    d = 2^3
+                    e = 2 || 3
                 }
             )";
             THEN("successfully folds and keep other statements untouched") {

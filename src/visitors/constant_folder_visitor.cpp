@@ -12,13 +12,13 @@ namespace nmodl {
 
 /// check if given expression is a number
 /// note that the DEFINE node is already expanded to integer
-static bool is_number(std::shared_ptr<ast::Expression> node) {
+static bool is_number(const std::shared_ptr<ast::Expression>& node) {
     return node->is_integer() || node->is_double() || node->is_float();
 }
 
 /// get value of a number node
 /// TODO : eval method can be added to virtual base class
-static double get_value(std::shared_ptr<ast::Expression> node) {
+static double get_value(const std::shared_ptr<ast::Expression>& node) {
     if (node->is_integer()) {
         return std::dynamic_pointer_cast<ast::Integer>(node)->eval();
     }
@@ -29,6 +29,12 @@ static double get_value(std::shared_ptr<ast::Expression> node) {
         return std::dynamic_pointer_cast<ast::Double>(node)->eval();
     }
     throw std::runtime_error("Invalid type passed to is_number()");
+}
+
+/// operators that currently implemented
+static bool supported_operator(ast::BinaryOp op) {
+    return op == ast::BOP_ADDITION || op == ast::BOP_SUBTRACTION || op == ast::BOP_MULTIPLICATION ||
+           op == ast::BOP_DIVISION;
 }
 
 /// Evaluate binary operation
@@ -76,7 +82,7 @@ void ConstantFolderVisitor::visit_paren_expression(ast::ParenExpression* node) {
 }
 
 /**
- * Visit wrapped node type and perform costant folding
+ * Visit wrapped node type and perform constant folding
  * @param node AST node that wrap other node types
  *
  * MOD file has expressions like
@@ -139,7 +145,7 @@ void ConstantFolderVisitor::visit_wrapped_expression(ast::WrappedExpression* nod
     }
 
     /// once we simplify, lhs and rhs must be numbers for constant folding
-    if (!is_number(lhs) || !is_number(rhs)) {
+    if (!is_number(lhs) || !is_number(rhs) || !supported_operator(op)) {
         return;
     }
 
