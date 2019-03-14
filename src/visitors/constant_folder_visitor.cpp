@@ -107,17 +107,25 @@ void ConstantFolderVisitor::visit_wrapped_expression(ast::WrappedExpression* nod
     /// first expression which is wrapped
     auto expr = node->get_expression();
 
+    /// if wrapped expressesion is parentheses
+    bool is_parentheses = false;
+
     /// opposite to visit_paren_expression, we might have
     /// a = (2+1)
-    /// in this case we can eliminate paren expression and eliminate
+    /// in this case we can pick inner expression.
     if (expr->is_paren_expression()) {
         auto e = std::dynamic_pointer_cast<ast::ParenExpression>(expr);
-        node->set_expression(e->get_expression());
-        expr = node->get_expression();
+        expr = e->get_expression();
+        is_parentheses = true;
     }
 
     /// we want to simplify binary expressions only
     if (!expr->is_binary_expression()) {
+        /// wrapped expression might be parenthesis expression like (2)
+        /// which we can simplify to 2 to help next evaluations
+        if (is_parentheses) {
+            node->set_expression(std::move(expr));
+        }
         return;
     }
 
@@ -155,12 +163,11 @@ void ConstantFolderVisitor::visit_wrapped_expression(ast::WrappedExpression* nod
     /// if both operands are not integers or floats, result is double
     if (lhs->is_integer() && rhs->is_integer()) {
         node->set_expression(std::make_shared<ast::Integer>(int(value), nullptr));
-    } else if (lhs->is_float() && rhs->is_float()) {
-        node->set_expression(std::make_shared<ast::Float>(float(value)));
-    } else {
+    } else if (lhs->is_double() || rhs->is_double()) {
         node->set_expression(std::make_shared<ast::Double>(value));
+    } else {
+        node->set_expression(std::make_shared<ast::Float>(value));
     }
 }
-
 
 }  // namespace nmodl

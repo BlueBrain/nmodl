@@ -3275,5 +3275,26 @@ TEST_CASE("Constant Folding Visitor") {
                 REQUIRE(reindent_text(result) == reindent_text(expected_text));
             }
         }
+
+        GIVEN("Don't remove parentheses if not simplifying") {
+            std::string nmodl_text = R"(
+                DEFINE N 10
+
+                PROCEDURE dummy() {
+                    a = ((N+1)+5)*(c+1+N)/(b - 2)
+                }
+            )";
+            std::string expected_text = R"(
+                DEFINE N 10
+
+                PROCEDURE dummy() {
+                    a = 16*(c+1+10)/(b-2)
+                }
+            )";
+            THEN("successfully folds and keep other statements untouched") {
+                auto result = run_constant_folding_visitor(nmodl_text);
+                REQUIRE(reindent_text(result) == reindent_text(expected_text));
+            }
+        }
     }
 }
