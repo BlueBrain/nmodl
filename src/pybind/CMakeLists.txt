@@ -3,15 +3,10 @@
 # =============================================================================
 set_source_files_properties(${AUTO_GENERATED_FILES} PROPERTIES GENERATED TRUE)
 
-set(NMODL_PYTHON_FILES_IN
-    ${PROJECT_SOURCE_DIR}/nmodl/ode.py
-    ${PROJECT_SOURCE_DIR}/nmodl/dsl.py
-    ${PROJECT_SOURCE_DIR}/nmodl/__init__.py)
-
-set(NMODL_PYTHON_FILES_OUT
-    ${PROJECT_BINARY_DIR}/nmodl/ode.py
-    ${PROJECT_BINARY_DIR}/nmodl/dsl.py
-    ${PROJECT_BINARY_DIR}/nmodl/__init__.py)
+foreach(file ode.py dsl.py __init__.py)
+  list(APPEND NMODL_PYTHON_FILES_IN ${PROJECT_SOURCE_DIR}/nmodl/${file})
+  list(APPEND NMODL_PYTHON_FILES_OUT ${PROJECT_BINARY_DIR}/nmodl/${file})
+endforeach()
 
 set(PYNMODL_SOURCES
     ${PROJECT_BINARY_DIR}/src/pybind/pyast.cpp
