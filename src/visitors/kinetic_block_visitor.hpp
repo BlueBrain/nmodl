@@ -74,6 +74,9 @@ class KineticBlockVisitor: public AstVisitor {
     /// map from state variable to corresponding index
     std::map<std::string, int> state_var_index;
 
+    /// true if we are visiting a reaction statement
+    bool in_reaction_statement = false;
+
     /// true if we are visiting the left hand side of reaction statement
     bool in_reaction_statement_lhs = false;
 

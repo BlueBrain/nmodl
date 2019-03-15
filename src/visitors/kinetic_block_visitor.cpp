@@ -56,10 +56,13 @@ void KineticBlockVisitor::process_reac_var(const std::string& varname, int count
 }
 
 void KineticBlockVisitor::visit_conserve(ast::Conserve* node) {
-    // NOTE! CONSERVE statement "implicitly takes into account COMPARTMENT factors"
-    // so need to check that we do this in the same way as old nmodl
-    logger->debug("KineticBlockVisitor :: CONSERVE TODO : {}",
-                  to_nmodl(node->get_expression().get()));
+    // NOTE! CONSERVE statement "implicitly takes into account COMPARTMENT factors on LHS"
+    // see p244 of NEURON book
+    // need to ensure that we do this in the same way: presumably need
+    // to either multiply or divide state vars on LHS of conserve statement by their COMPARTMENT factors?
+    logger->debug("KineticBlockVisitor :: CONSERVE statement ignored (for now): {} = {}",
+                  to_nmodl(node->get_react().get()), to_nmodl(node->get_expr().get()));
+    statements_to_remove.insert(node);
 }
 
 void KineticBlockVisitor::visit_compartment(ast::Compartment* node) {
@@ -99,9 +102,11 @@ void KineticBlockVisitor::visit_react_var_name(ast::ReactVarName* node) {
     // react_var_name node contains var_name and integer
     // var_name is the state variable which we convert to an index
     // integer is the value to be added to the stochiometric matrix at this index
-    auto varname = node->get_node_name();
-    int count = node->get_value() ? node->get_value()->eval() : 1;
-    process_reac_var(varname, count);
+    if(in_reaction_statement){
+        auto varname = node->get_node_name();
+        int count = node->get_value() ? node->get_value()->eval() : 1;
+        process_reac_var(varname, count);
+    }
 }
 
 void KineticBlockVisitor::visit_reaction_statement(ast::ReactionStatement* node) {
@@ -182,8 +187,10 @@ void KineticBlockVisitor::visit_reaction_statement(ast::ReactionStatement* node)
 
     // visit each term in reaction statement and
     // add the corresponding integer to the new row in the matrix
+    in_reaction_statement = true;
     in_reaction_statement_lhs = true;
     node->visit_children(this);
+    in_reaction_statement = false;
 
     // increment statement counter
     ++i_statement;

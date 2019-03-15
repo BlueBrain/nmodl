@@ -2074,6 +2074,26 @@ SCENARIO("KineticBlock visitor", "[kinetic]") {
             REQUIRE(result[0] == reindent_text(output_nmodl_text));
         }
     }
+    GIVEN("KINETIC block with -> reaction statement, 2 state vars, CONSERVE statement") {
+        std::string input_nmodl_text = R"(
+            STATE {
+                x y
+            }
+            KINETIC states {
+                ~ x + y -> (f(v))
+                CONSERVE x + y = 1
+            })";
+        std::string output_nmodl_text = R"(
+            DERIVATIVE states {
+                x' = (-1*(f(v)*x*y))
+                y' = (-1*(f(v)*x*y))
+            })";
+        THEN("Convert to equivalent DERIVATIVE block (ignore CONSERVE for now)") {
+            auto result = run_kinetic_block_visitor(input_nmodl_text);
+            CAPTURE(input_nmodl_text);
+            REQUIRE(result[0] == reindent_text(output_nmodl_text));
+        }
+    }
     GIVEN("KINETIC block with one reaction statement, 1 state var, 1 non-state var") {
         // Here c is NOT a state variable
         // see 9.9.2.1 of NEURON book
@@ -2111,6 +2131,26 @@ SCENARIO("KineticBlock visitor", "[kinetic]") {
                 y' = (1*(a*x-b*y))
             })";
         THEN("Convert to equivalent DERIVATIVE block") {
+            auto result = run_kinetic_block_visitor(input_nmodl_text);
+            CAPTURE(input_nmodl_text);
+            REQUIRE(result[0] == reindent_text(output_nmodl_text));
+        }
+    }
+    GIVEN("KINETIC block with one reaction statement, 2 state vars, CONSERVE statement") {
+        std::string input_nmodl_text = R"(
+            STATE {
+                x y
+            }
+            KINETIC states {
+                ~ x <-> y (a, b)
+                CONSERVE x + y = 0
+            })";
+        std::string output_nmodl_text = R"(
+            DERIVATIVE states {
+                x' = (-1*(a*x-b*y))
+                y' = (1*(a*x-b*y))
+            })";
+        THEN("Convert to equivalent DERIVATIVE block (ignore CONSERVE for now)") {
             auto result = run_kinetic_block_visitor(input_nmodl_text);
             CAPTURE(input_nmodl_text);
             REQUIRE(result[0] == reindent_text(output_nmodl_text));

@@ -1287,10 +1287,14 @@
                       description: ".."
                       nmodl: CONSERVE
                       members:
-                        - expression:
-                            description: "Conserve Statement"
-                            type: BinaryExpression
+                        - react:
+                            description: "..."
+                            type: Expression
                             prefix: {value: " "}
+                        - expr:
+                            description: "..."
+                            type: Expression
+                            prefix: {value: " = "}
                   - Compartment:
                       description: ".."
                       nmodl: COMPARTMENT

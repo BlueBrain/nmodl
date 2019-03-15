@@ -1637,9 +1637,7 @@ senslist        :   varname
 
 conserve        :   CONSERVE react "=" expr
                     {
-                        auto op = ast::BinaryOperator(ast::BOP_ASSIGN);
-                        auto expr = new ast::BinaryExpression($2, op, $4);
-                        $$ = new ast::Conserve(expr);
+                        $$ = new ast::Conserve($2, $4);
                     }
                 |   CONSERVE error
                     {
