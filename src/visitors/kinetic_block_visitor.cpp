@@ -100,7 +100,7 @@ void KineticBlockVisitor::visit_react_var_name(ast::ReactVarName* node) {
     // var_name is the state variable which we convert to an index
     // integer is the value to be added to the stochiometric matrix at this index
     auto varname = node->get_node_name();
-    int count = node->get_value()->eval();
+    int count = node->get_value() ? node->get_value()->eval() : 1;
     process_reac_var(varname, count);
 }
 
@@ -118,8 +118,17 @@ void KineticBlockVisitor::visit_reaction_statement(ast::ReactionStatement* node)
         // ~ x << (a*b)
         // translates to the ODE contribution x' += a*b
         auto lhs = node->get_reaction1();
-        if (!lhs->is_react_var_name() ||
-            (std::dynamic_pointer_cast<ast::ReactVarName>(lhs)->get_value()->eval() != 1)) {
+
+        /// check if reaction statement is a single state variable
+        bool single_state_var = true;
+        if (lhs->is_react_var_name()) {
+            auto value = std::dynamic_pointer_cast<ast::ReactVarName>(lhs)->get_value();
+            if (value && (value->eval() != 1)) {
+                single_state_var = false;
+            }
+        }
+
+        if (!lhs->is_react_var_name() || !single_state_var) {
             logger->warn(
                 "KineticBlockVisitor :: LHS of \"<<\" reaction statement must be a single state "
                 "var, but instead found {}: ignoring this statement",
