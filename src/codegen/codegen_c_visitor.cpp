@@ -182,12 +182,14 @@ void CodegenCVisitor::visit_else_statement(ElseStatement* node) {
     node->visit_children(this);
 }
 
+
 void CodegenCVisitor::visit_while_statement(WhileStatement* node) {
     printer->add_text("while (");
     node->get_condition()->accept(this);
     printer->add_text(") ");
     node->get_statement_block()->accept(this);
 }
+
 
 void CodegenCVisitor::visit_from_statement(ast::FromStatement* node) {
     if (!codegen) {
@@ -443,6 +445,7 @@ std::string CodegenCVisitor::double_to_string(double value) {
     }
     return "{:.16g}"_format(value);
 }
+
 
 std::string CodegenCVisitor::float_to_string(float value) {
     if (ceilf(value) == value) {
@@ -990,6 +993,7 @@ std::string CodegenCVisitor::get_parameter_str(const ParamVector& params) {
     return param_ss.str();
 }
 
+
 void CodegenCVisitor::print_channel_iteration_task_begin(BlockType type) {
     // backend specific, do nothing
 }
@@ -1505,6 +1509,7 @@ void CodegenCVisitor::print_table_check_function(ast::Block* node) {
     printer->end_block(1);
 }
 
+
 void CodegenCVisitor::print_table_replacement_function(ast::Block* node) {
     auto name = node->get_node_name();
     auto statement = get_table_statement(node);
@@ -1589,6 +1594,7 @@ void CodegenCVisitor::print_check_table_thread_function() {
     printer->add_line("}");
 }
 
+
 void CodegenCVisitor::print_function_or_procedure(ast::Block* node, std::string& name) {
     printer->add_newline(2);
     print_function_declaration(node, name);
@@ -1607,6 +1613,7 @@ void CodegenCVisitor::print_function_or_procedure(ast::Block* node, std::string&
     printer->add_line("return ret_{};"_format(name));
     printer->end_block(1);
 }
+
 
 void CodegenCVisitor::print_procedure(ast::ProcedureBlock* node) {
     codegen = true;
@@ -1638,6 +1645,7 @@ void CodegenCVisitor::print_function(ast::FunctionBlock* node) {
     print_function_or_procedure(node, name);
     codegen = false;
 }
+
 
 void CodegenCVisitor::visit_eigen_newton_solver_block(ast::EigenNewtonSolverBlock* node) {
     // solution vector to store copy of state vars for Newton solver
@@ -1691,29 +1699,31 @@ std::string CodegenCVisitor::internal_method_arguments() {
     return "id, pnodecount, inst, data, indexes, thread, nt, v";
 }
 
-std::string CodegenCVisitor::param_tp_qualifier() {
+
+std::string CodegenCVisitor::param_type_qualifier() {
     return "";
 }
+
 
 std::string CodegenCVisitor::param_ptr_qualifier() {
     return "";
 }
 
 
+/// @todo: figure out how to correctly handle qualifiers
 CodegenCVisitor::ParamVector CodegenCVisitor::internal_method_parameters() {
     auto params = ParamVector();
-    params.emplace_back("", "int", "",
-                        "id");  // @todo: figure out how to correctly handle qualifiers
-    params.emplace_back(param_tp_qualifier(), "int", "", "pnodecount");
-    params.emplace_back(param_tp_qualifier(), "{}*"_format(instance_struct()),
+    params.emplace_back("", "int", "", "id");
+    params.emplace_back(param_type_qualifier(), "int", "", "pnodecount");
+    params.emplace_back(param_type_qualifier(), "{}*"_format(instance_struct()),
                         param_ptr_qualifier(), "inst");
     if (ion_variable_struct_required()) {
         params.emplace_back("", "IonCurVar&", "", "ionvar");
     }
     params.emplace_back("", "double*", "", "data");
     params.emplace_back(k_const(), "Datum*", "", "indexes");
-    params.emplace_back(param_tp_qualifier(), "ThreadDatum*", "", "thread");
-    params.emplace_back(param_tp_qualifier(), "NrnThread*", param_ptr_qualifier(), "nt");
+    params.emplace_back(param_type_qualifier(), "ThreadDatum*", "", "thread");
+    params.emplace_back(param_type_qualifier(), "NrnThread*", param_ptr_qualifier(), "nt");
     params.emplace_back("", "double", "", "v");
     return params;
 }
@@ -1781,6 +1791,7 @@ std::string CodegenCVisitor::replace_if_verbatim_variable(std::string name) {
     }
     return name;
 }
+
 
 /**
  * Processing commonly used constructs in the verbatim blocks.
@@ -3181,12 +3192,12 @@ void CodegenCVisitor::print_watch_activate() {
     codegen = false;
 }
 
+
 /**
  * Print kernel for watch activation
  * todo : similar to print_watch_activate, we are using only
  * first watch. need to verify with neuron/coreneuron about rest.
  */
-
 void CodegenCVisitor::print_watch_check() {
     if (info.watch_statements.empty()) {
         return;
@@ -3254,7 +3265,7 @@ void CodegenCVisitor::print_watch_check() {
 }
 
 
-void CodegenCVisitor::print_net_receive_common_code(Block* node, bool need_inst) {
+void CodegenCVisitor::print_net_receive_common_code(Block* node, bool need_mech_inst) {
     printer->add_line("int tid = pnt->_tid;");
     printer->add_line("int id = pnt->_i_instance;");
     printer->add_line("double v = 0;");
@@ -3262,13 +3273,13 @@ void CodegenCVisitor::print_net_receive_common_code(Block* node, bool need_inst)
         printer->add_line("NrnThread* nt = nrn_threads + tid;");
         printer->add_line("Memb_list* ml = nt->_ml_list[pnt->_type];");
     }
-    printer->add_line("{}int nodecount = ml->nodecount;"_format(param_tp_qualifier()));
-    printer->add_line("{}int pnodecount = ml->_nodecount_padded;"_format(param_tp_qualifier()));
+    printer->add_line("{}int nodecount = ml->nodecount;"_format(param_type_qualifier()));
+    printer->add_line("{}int pnodecount = ml->_nodecount_padded;"_format(param_type_qualifier()));
     printer->add_line("double* data = ml->data;");
     printer->add_line("double* weights = nt->weights;");
     printer->add_line("Datum* indexes = ml->pdata;");
     printer->add_line("ThreadDatum* thread = ml->_thread;");
-    if (need_inst) {
+    if (need_mech_inst) {
         printer->add_line("{0}* inst = ({0}*) ml->instance;"_format(instance_struct()));
     }
 
@@ -3389,6 +3400,7 @@ void CodegenCVisitor::print_net_init() {
     codegen = false;
 }
 
+
 void CodegenCVisitor::print_send_event_move() {
     printer->add_newline();
     printer->add_line("NetSendBuffer_t* nsb = ml->_net_send_buffer;");
@@ -3414,6 +3426,7 @@ std::string CodegenCVisitor::net_receive_buffering_declaration() {
     return "void {}(NrnThread* nt)"_format(method_name("net_buf_receive"));
 }
 
+
 void CodegenCVisitor::print_get_memb_list() {
     printer->add_line("Memb_list* ml = get_memb_list(nt);");
     printer->add_line("if (ml == NULL) {");
@@ -3427,6 +3440,7 @@ void CodegenCVisitor::print_net_receive_loop_begin() {
     printer->add_line("int count = nrb->_displ_cnt;");
     printer->start_block("for (int i = 0; i < count; i++)");
 }
+
 
 void CodegenCVisitor::print_net_receive_loop_end() {
     printer->end_block(1);
@@ -3526,10 +3540,10 @@ void CodegenCVisitor::print_net_receive_kernel() {
         name = method_name("net_receive_kernel");
         params.emplace_back("", "double", "", "t");
         params.emplace_back("", "Point_process*", "", "pnt");
-        params.emplace_back(param_tp_qualifier(), "{}*"_format(instance_struct()),
+        params.emplace_back(param_type_qualifier(), "{}*"_format(instance_struct()),
                             param_ptr_qualifier(), "inst");
-        params.emplace_back(param_tp_qualifier(), "NrnThread*", param_ptr_qualifier(), "nt");
-        params.emplace_back(param_tp_qualifier(), "Memb_list*", param_ptr_qualifier(), "ml");
+        params.emplace_back(param_type_qualifier(), "NrnThread*", param_ptr_qualifier(), "nt");
+        params.emplace_back(param_type_qualifier(), "Memb_list*", param_ptr_qualifier(), "ml");
         params.emplace_back("", "int", "", "weight_index");
         params.emplace_back("", "double", "", "flag");
     } else {
@@ -3541,11 +3555,7 @@ void CodegenCVisitor::print_net_receive_kernel() {
 
     printer->add_newline(2);
     printer->start_block("static inline void {}({}) "_format(name, get_parameter_str(params)));
-    if (!info.artificial_cell) {
-        print_net_receive_common_code(node, false);
-    } else {
-        print_net_receive_common_code(node, true);
-    }
+    print_net_receive_common_code(node, info.artificial_cell);
     if (info.artificial_cell) {
         printer->add_line("double t = nt->_t;");
     }
@@ -3909,7 +3919,6 @@ void CodegenCVisitor::print_nrn_cur() {
 /****************************************************************************************/
 /*                            Main code printing entry points                            */
 /****************************************************************************************/
-
 
 void CodegenCVisitor::print_headers_include() {
     print_standard_includes();

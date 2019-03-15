@@ -5,6 +5,7 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
+#include <cmath>
 #include <fmt/format.h>
 #include <src/visitors/rename_visitor.hpp>
 
@@ -38,6 +39,7 @@ void CodegenIspcVisitor::visit_function_call(ast::FunctionCall* node) {
     CodegenCVisitor::visit_function_call(node);
 }
 
+
 /*
  * Rename special global variables
  */
@@ -50,23 +52,46 @@ void CodegenIspcVisitor::visit_var_name(ast::VarName* node) {
     CodegenCVisitor::visit_var_name(node);
 }
 
+
 /****************************************************************************************/
 /*                      Routines must be overloaded in backend                          */
 /****************************************************************************************/
 
 std::string CodegenIspcVisitor::double_to_string(double value) {
-    if (ceilf(value) == value) {
+    if (std::ceil(value) == value) {
         return "{:.1f}d"_format(value);
     }
-    return "{:f}d"_format(value);
+    if ((value <= 1.0) or (value >= -1.0)) {
+        return "{:f}d"_format(value);
+    } else {
+        auto e = std::log10(std::abs(value));
+        if (e < 0.0) {
+            e = std::pow(10, std::ceil(-e));
+            return "({:f}d / {:.1f}d)"_format(value * e, e);
+        } else {
+            e = std::pow(10, std::floor(e));
+            return "({:f}d * {:.1f}d)"_format(value / e, e);
+        }
+    }
 }
 
 
 std::string CodegenIspcVisitor::float_to_string(float value) {
-    if (ceilf(value) == value) {
+    if (std::ceil(value) == value) {
         return "{:.1f}"_format(value);
     }
-    return "{:f}"_format(value);
+    if ((value <= 1.0f) or (value >= -1.0f)) {
+        return "{:f}"_format(value);
+    } else {
+        auto e = std::log10(std::abs(value));
+        if (e < 0.0f) {
+            e = std::pow(10, std::ceil(-e));
+            return "({:f} / {:.1f})"_format(value * e, e);
+        } else {
+            e = std::pow(10, std::floor(e));
+            return "({:f} * {:.1f})"_format(value / e, e);
+        }
+    }
 }
 
 
@@ -83,16 +108,18 @@ std::string CodegenIspcVisitor::compute_method_name(BlockType type) {
     throw std::runtime_error("compute_method_name not implemented");
 }
 
+
 std::string CodegenIspcVisitor::net_receive_buffering_declaration() {
     auto params = ParamVector();
-    params.emplace_back(param_tp_qualifier(), "{}*"_format(instance_struct()),
+    params.emplace_back(param_type_qualifier(), "{}*"_format(instance_struct()),
                         param_ptr_qualifier(), "inst");
-    params.emplace_back(param_tp_qualifier(), "NrnThread*", param_ptr_qualifier(), "nt");
-    params.emplace_back(param_tp_qualifier(), "Memb_list*", param_ptr_qualifier(), "ml");
+    params.emplace_back(param_type_qualifier(), "NrnThread*", param_ptr_qualifier(), "nt");
+    params.emplace_back(param_type_qualifier(), "Memb_list*", param_ptr_qualifier(), "ml");
 
     return "export void {}({})"_format(method_name("ispc_net_buf_receive"),
                                        get_parameter_str(params));
 }
+
 
 void CodegenIspcVisitor::print_backend_includes() {
     printer->add_line("#include \"nmodl/fast_math.ispc\"");
@@ -143,6 +170,7 @@ void CodegenIspcVisitor::print_channel_iteration_tiling_block_begin(BlockType ty
     printer->add_line("int uniform end = nodecount;");
 }
 
+
 /*
  * Depending on the backend, print condition/loop for iterating over channels
  *
@@ -158,14 +186,17 @@ void CodegenIspcVisitor::print_channel_iteration_block_end() {
     printer->add_newline();
 }
 
+
 void CodegenIspcVisitor::print_net_receive_loop_begin() {
     printer->add_line("uniform int count = nrb->_displ_cnt;");
     printer->start_block("foreach (i = 0 ... count)");
 }
 
+
 void CodegenIspcVisitor::print_get_memb_list() {
     // do nothing
 }
+
 
 void CodegenIspcVisitor::print_nrn_cur_matrix_shadow_reduction() {
     // do nothing
@@ -191,9 +222,9 @@ std::string CodegenIspcVisitor::ptr_type_qualifier() {
 }
 
 
-std::string CodegenIspcVisitor::param_tp_qualifier() {
+std::string CodegenIspcVisitor::param_type_qualifier() {
     if (wrapper_codegen) {
-        return CodegenCVisitor::param_tp_qualifier();
+        return CodegenCVisitor::param_type_qualifier();
     } else {
         return "uniform ";
     }
@@ -222,11 +253,11 @@ void CodegenIspcVisitor::print_backend_namespace_stop() {
 CodegenIspcVisitor::ParamVector CodegenIspcVisitor::get_global_function_parms(
     std::string arg_qualifier) {
     auto params = ParamVector();
-    params.emplace_back(param_tp_qualifier(), "{}*"_format(instance_struct()),
+    params.emplace_back(param_type_qualifier(), "{}*"_format(instance_struct()),
                         param_ptr_qualifier(), "inst");
-    params.emplace_back(param_tp_qualifier(), "NrnThread*", param_ptr_qualifier(), "nt");
-    params.emplace_back(param_tp_qualifier(), "Memb_list*", param_ptr_qualifier(), "ml");
-    params.emplace_back(param_tp_qualifier(), "int", "", "type");
+    params.emplace_back(param_type_qualifier(), "NrnThread*", param_ptr_qualifier(), "nt");
+    params.emplace_back(param_type_qualifier(), "Memb_list*", param_ptr_qualifier(), "ml");
+    params.emplace_back(param_type_qualifier(), "int", "", "type");
     return params;
 }
 
@@ -281,6 +312,7 @@ void CodegenIspcVisitor::print_compute_functions() {
     print_nrn_cur();
     print_nrn_state();
 }
+
 
 // @todo : use base visitor function with provision to override specific qualifiers
 void CodegenIspcVisitor::print_mechanism_global_var_structure() {
@@ -416,22 +448,27 @@ void CodegenIspcVisitor::print_mechanism_global_var_structure() {
     printer->add_line("{} {}_global;"_format(global_struct(), info.mod_suffix));
 }
 
+
 void CodegenIspcVisitor::print_data_structures() {
     print_mechanism_global_var_structure();
     print_mechanism_range_var_structure();
     print_ion_var_structure();
 }
 
+
 void CodegenIspcVisitor::print_wrapper_data_structures() {
     print_mechanism_global_var_structure();
     print_mechanism_range_var_structure();
     print_ion_var_structure();
 }
+
+
 void CodegenIspcVisitor::print_ispc_globals() {
     printer->start_block("extern \"C\"");
     printer->add_line("extern double ispc_celsius;");
     printer->end_block();
 }
+
 
 /****************************************************************************************/
 /*                    Main code printing entry points and wrappers                      */
@@ -455,9 +492,11 @@ void CodegenIspcVisitor::print_net_receive_buffering_wrapper() {
     printer->end_block(1);
 }
 
+
 void CodegenIspcVisitor::print_headers_include() {
     print_backend_includes();
 }
+
 
 void CodegenIspcVisitor::print_wrapper_headers_include() {
     print_standard_includes();
@@ -493,6 +532,7 @@ void CodegenIspcVisitor::print_wrapper_routine(std::string wraper_function, Bloc
     printer->add_newline();
 }
 
+
 void CodegenIspcVisitor::print_backend_compute_routine_decl() {
     auto params = get_global_function_parms("");
     auto compute_function = compute_method_name(BlockType::Initial);
@@ -521,6 +561,7 @@ void CodegenIspcVisitor::print_backend_compute_routine_decl() {
     }
 }
 
+
 void CodegenIspcVisitor::codegen_wrapper_routines() {
     print_wrapper_routine("nrn_init", BlockType::Initial);
     if (nrn_cur_required()) {
@@ -544,6 +585,7 @@ void CodegenIspcVisitor::print_codegen_routines() {
     // now print the ispc wrapper code
     print_codegen_wrapper_routines();
 }
+
 
 void CodegenIspcVisitor::print_codegen_wrapper_routines() {
     printer = wrapper_printer;

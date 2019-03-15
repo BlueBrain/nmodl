@@ -36,19 +36,26 @@ class CodegenIspcVisitor: public CodegenCVisitor {
     /// name of the code generation backend
     std::string backend_name() override;
 
+
     /// return name of main compute kernels
     std::string compute_method_name(BlockType type) override;
 
+
     std::string net_receive_buffering_declaration() override;
+
 
     std::string ptr_type_qualifier() override;
 
-    std::string param_tp_qualifier() override;
+
+    std::string param_type_qualifier() override;
+
 
     std::string param_ptr_qualifier() override;
 
+
     /// common includes : standard c/c++, coreneuron and backend specific
     void print_backend_includes() override;
+
 
     /// update to matrix elements with/without shadow vectors
     void print_nrn_cur_matrix_shadow_update() override;
@@ -65,12 +72,16 @@ class CodegenIspcVisitor: public CodegenCVisitor {
     /// if reduction block in nrn_cur required
     bool nrn_cur_reduction_loop_required() override;
 
+
     ParamVector get_global_function_parms(std::string arg_qualifier);
+
 
     void print_global_function_common_code(BlockType type) override;
 
+
     /// backend specific channel instance iteration block start
     void print_channel_iteration_block_begin() override;
+
 
     /// backend specific channel iteration bounds
     void print_channel_iteration_tiling_block_begin(BlockType type) override;
@@ -87,23 +98,19 @@ class CodegenIspcVisitor: public CodegenCVisitor {
     /// end of backend namespace
     void print_backend_namespace_stop() override;
 
-    /*
-    /// backend specific global method annotation
-    void print_global_method_annotation() override;
-
-
-    /// backend specific device method annotation
-    void print_device_method_annotation() override;
-    */
 
     void print_headers_include() override;
+
+
     void print_wrapper_headers_include();
 
 
     /// all compute functions for every backend
     void print_compute_functions() override;
 
+
     void print_backend_compute_routine_decl();
+
 
     /// print wrapper function that calls ispc kernel
     void print_wrapper_routine(std::string wraper_function, BlockType type);
@@ -112,22 +119,32 @@ class CodegenIspcVisitor: public CodegenCVisitor {
     /// wrapper/caller routines for nrn_state and nrn_cur
     void codegen_wrapper_routines();
 
+
     /// structure that wraps all global variables in the mod file
     void print_mechanism_global_var_structure() override;
 
+
     void print_data_structures() override;
+
+
     void print_wrapper_data_structures();
+
 
     void print_ispc_globals();
 
+
     void print_get_memb_list() override;
+
 
     void print_net_receive_loop_begin() override;
 
+
     void print_net_receive_buffering_wrapper();
+
 
     /// entry point to code generation
     void print_codegen_routines() override;
+
 
     void print_codegen_wrapper_routines();
 
@@ -137,6 +154,7 @@ class CodegenIspcVisitor: public CodegenCVisitor {
                        LayoutType layout,
                        std::string float_type)
         : CodegenCVisitor(mod_file, output_dir, layout, float_type, ".ispc", ".cpp") {}
+
 
     CodegenIspcVisitor(std::string mod_file,
                        std::stringstream& stream,

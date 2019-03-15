@@ -533,9 +533,12 @@ class CodegenCVisitor: public AstVisitor {
     /// restrict keyword
     virtual std::string ptr_type_qualifier();
 
-    virtual std::string param_tp_qualifier();
+
+    virtual std::string param_type_qualifier();
+
 
     virtual std::string param_ptr_qualifier();
+
 
     /// const keyword
     virtual std::string k_const();
@@ -791,7 +794,7 @@ class CodegenCVisitor: public AstVisitor {
 
 
     /// common code section for net receive related methods
-    void print_net_receive_common_code(ast::Block* node, bool need_inst = true);
+    void print_net_receive_common_code(ast::Block* node, bool need_mech_inst = true);
 
 
     /// kernel for buffering net_send events
@@ -808,6 +811,8 @@ class CodegenCVisitor: public AstVisitor {
     virtual void print_get_memb_list();
 
     virtual void print_net_receive_loop_begin();
+
+
     virtual void print_net_receive_loop_end();
 
 
