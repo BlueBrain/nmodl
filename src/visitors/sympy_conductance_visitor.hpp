@@ -51,10 +51,10 @@ class SympyConductanceVisitor: public AstVisitor {
 
   private:
     /// true while visiting breakpoint block
-    bool breakpoint_block = false;
+    bool under_breakpoint_block = false;
 
     // set of all variables for SymPy
-    string_set vars;
+    string_set all_vars;
 
     // set of currents to ignore
     string_set i_ignore;
