@@ -37,16 +37,31 @@ def make_unique_prefix(vars, default_prefix="tmp"):
             return prefix
 
 
-def solve_ode_system(diff_strings, t_var, dt_var, vars, do_cse=False):
+def solve_ode_system(
+    diff_strings, t_var, dt_var, vars, do_cse=False, force_non_linear=False
+):
     """Solve system of ODEs, return solution as C code.
 
-    If system is linear, constructs the backwards Euler linear
-    system and solves analytically, optionally also
-    with Common Subexpression Elimination if do_cse is true.
+    Constructs system of algebraic equations for backwards Euler
 
-    Otherwise, constructs F(x) such that F(x)=0 is solution
-    of backwards Euler equation, along with Jacobian of F,
-    for use in a non-linear solver such as Newton.
+    If system is linear and small (N<=3):
+      - solve analytically by gaussian elimination
+      - optionally do Common Subexpression Elimination if do_cse is true
+
+    If system is linear and large (N>3):
+      - gaussian elimination may not be stable at runtime
+      - instead return a matrix J and vector F, where J X(t+dt) = F
+      - this linear system can then be solved by e.g. LU factorization
+
+    If system is non-linear:
+      - construct F(x) such that F(x)=0 is solution of backwards Euler 
+      - equation, along with the Jacobian J = dF(x)_i/dx_j,
+      - for use in a non-linear solver such as Newton
+
+    User can optionally set the force_non_linear boolean flag to True,
+    in which case the non-linear solution is returned even if the system
+    to be solved is linear.
+    (This corresponds to specifying the "derivimplicit" solver in NEURON)
 
     Args:
         diff_string: list of ODEs e.g. ["x' = a*x", "y' = 3"]
@@ -54,6 +69,7 @@ def solve_ode_system(diff_strings, t_var, dt_var, vars, do_cse=False):
         dt_var: name of dt variable in NEURON
         vars: set of variables used in expression, e.g. {"x", "y", a"}
         do_cse: if True, do Common Subexpression Elimination
+        force_non_linear: if True always return non-linear solution
 
     Returns:
         List of strings containing analytic integral of derivative as C code
@@ -90,28 +106,49 @@ def solve_ode_system(diff_strings, t_var, dt_var, vars, do_cse=False):
     code = []
     new_local_vars = []
 
-    if jacobian_is_linear(jacobian, state_vars):
-        # if linear system: construct implicit euler solution & solve by gaussian elimination
+    if jacobian_is_linear(jacobian, state_vars) and not force_non_linear:
+        # construct implicit Euler equations to solve:
         eqs = []
         for x_new, x_old, dxdt in zip(state_vars, old_state_vars, diff_eqs):
-            eqs.append(sp.Eq(x_new, x_old + dt * dxdt))
-        for rhs in sp.linsolve(eqs, state_vars):
-            for x, x_old in zip(state_vars, old_state_vars):
-                new_local_vars.append(sp.ccode(x_old))
-                code.append(f"{sp.ccode(x_old)} = {sp.ccode(x)}")
-            if do_cse:
-                my_symbols = sp.utilities.iterables.numbered_symbols(prefix=prefix)
-                sub_exprs, simplified_rhs = sp.cse(
-                    rhs, symbols=my_symbols, optimizations="basic", order="canonical"
+            eqs.append(sp.expand(x_old + dt * dxdt - x_new))
+        if len(state_vars) <= 3:
+            # small linear system: construct implicit euler solution & solve by gaussian elimination
+            for rhs in sp.linsolve(eqs, state_vars):
+                for x, x_old in zip(state_vars, old_state_vars):
+                    new_local_vars.append(sp.ccode(x_old))
+                    code.append(f"{sp.ccode(x_old)} = {sp.ccode(x)}")
+                if do_cse:
+                    my_symbols = sp.utilities.iterables.numbered_symbols(prefix=prefix)
+                    sub_exprs, simplified_rhs = sp.cse(
+                        rhs,
+                        symbols=my_symbols,
+                        optimizations="basic",
+                        order="canonical",
+                    )
+                    for v, e in sub_exprs:
+                        new_local_vars.append(sp.ccode(v))
+                        code.append(f"{v} = {sp.ccode(e.evalf())}")
+                    rhs = simplified_rhs[0]
+                for v, e in zip(state_vars, rhs):
+                    code.append(f"{sp.ccode(v)} = {sp.ccode(e.evalf())}")
+        else:
+            # large linear system: construct and return matrix J, vector F such that
+            # J X(t+dt) = F is the Euler linear system to be solved by e.g. LU factorization
+            matJ, vecF = sp.linear_eq_to_matrix(eqs, state_vars)
+            # substitute back state_vars for old_state_vars
+            subs_old_new = {old: new for old, new in zip(old_state_vars, state_vars)}
+            # construct vector F
+            for i, v in enumerate(vecF):
+                code.append(
+                    f"F[{i}] = {sp.ccode(v.subs(subs_old_new).simplify().evalf())}"
                 )
-                for v, e in sub_exprs:
-                    new_local_vars.append(sp.ccode(v))
-                    code.append(f"{v} = {sp.ccode(e.evalf())}")
-                rhs = simplified_rhs[0]
-            for v, e in zip(state_vars, rhs):
-                code.append(f"{sp.ccode(v)} = {sp.ccode(e.evalf())}")
+            # construct matrix J
+            for i, element in enumerate(matJ):
+                # todo: fix indexing to be ascending order
+                flat_index = matJ.rows * (i % matJ.rows) + (i // matJ.rows)
+                code.append(f"J[{flat_index}] = {sp.ccode(element.simplify().evalf())}")
     else:
-        # otherwise: construct implicit euler solution in form F(x) = 0
+        # non-linear system: construct implicit euler solution in form F(x) = 0
         # also construct jacobian of this function dF/dx
 
         # state vars to be stored in vector X for Newton solver
@@ -129,7 +166,173 @@ def solve_ode_system(diff_strings, t_var, dt_var, vars, do_cse=False):
             code.append(
                 f"J[{flat_index}] = {sp.ccode(jac.subs(Xvecsubs).evalf().simplify())}"
             )
+
     return code, new_local_vars
+
+
+def _sympify_eqs(eq_strings, vars, constants):
+    sympy_vars = {constant: sp.symbols(constant, real=True) for constant in constants}
+    state_vars = []
+    for var in vars:
+        v = sp.symbols(var, real=True)
+        sympy_vars[var] = v
+        state_vars.append(v)
+    eqs = [
+        sp.sympify(eq.split("=", 1)[1], locals=sympy_vars)
+        - sp.sympify(eq.split("=", 1)[0], locals=sympy_vars)
+        for eq in eq_strings
+    ]
+    return eqs, state_vars, sympy_vars
+
+
+def solve_lin_system(eq_strings, vars, constants, small_system=False, do_cse=False):
+    """Solve linear system of equations, return solution as C code.
+
+    If system is small (small_system=True, typically N<=3):
+      - solve analytically by gaussian elimination
+      - optionally do Common Subexpression Elimination if do_cse is true
+
+    If system is large (default):
+      - gaussian elimination may not be numerically stable at runtime
+      - instead return a matrix J and vector F, where J X = F
+      - this linear system can then be solved for X by e.g. LU factorization
+
+    Args:
+        eqs: list of equations e.g. ["x + y = a", "y = 3 + b"]
+        vars: list of variables to solve for, e.g. ["x", "y"]
+        constants: set of any other symbolic expressions used, e.g. {"a", "b"}
+        small_system: if True, solve analytically by gaussian elimination
+                      otherwise return matrix system to be solved
+        do_cse: if True, do Common Subexpression Elimination
+
+    Returns:
+        List of strings containing assignment statements
+        List of strings containing new local variables
+    """
+
+    eqs, state_vars, sympy_vars = _sympify_eqs(eq_strings, vars, constants)
+
+    code = []
+    new_local_vars = []
+
+    if small_system:
+        # small linear system: solve by gaussian elimination
+        for rhs in sp.linsolve(eqs, state_vars):
+            if do_cse:
+                # generate prefix for new local vars that avoids clashes
+                prefix = make_unique_prefix(vars)
+                my_symbols = sp.utilities.iterables.numbered_symbols(prefix=prefix)
+                sub_exprs, simplified_rhs = sp.cse(
+                    rhs, symbols=my_symbols, optimizations="basic", order="canonical"
+                )
+                for v, e in sub_exprs:
+                    new_local_vars.append(sp.ccode(v))
+                    code.append(f"{v} = {sp.ccode(e.evalf())}")
+                rhs = simplified_rhs[0]
+            for v, e in zip(state_vars, rhs):
+                code.append(f"{sp.ccode(v)} = {sp.ccode(e.evalf())}")
+    else:
+        # large linear system: construct and return matrix J, vector F such that
+        # J X(t+dt) = F is the Euler linear system to be solved by e.g. LU factorization
+        matJ, vecF = sp.linear_eq_to_matrix(eqs, state_vars)
+        # construct vector F
+        for i, v in enumerate(vecF):
+            code.append(f"F[{i}] = {sp.ccode(v.simplify().evalf())}")
+        # construct matrix J
+        for i, element in enumerate(matJ):
+            # todo: fix indexing to be ascending order
+            flat_index = matJ.rows * (i % matJ.rows) + (i // matJ.rows)
+            code.append(f"J[{flat_index}] = {sp.ccode(element.simplify().evalf())}")
+
+    return code, new_local_vars
+
+
+def solve_non_lin_system(eq_strings, vars, constants):
+    """Solve non-linear system of equations, return solution as C code.
+
+      - returns a vector F, and its Jacobian J, both in terms of X
+      - where F(X) = 0 is the implicit equation to solve for X
+      - this non-linear system can then be solved with the newton solver
+
+    Args:
+        eqs: list of equations e.g. ["x + y = a", "y = 3 + b"]
+        vars: list of variables to solve for, e.g. ["x", "y"]
+        constants: set of any other symbolic expressions used, e.g. {"a", "b"}
+
+    Returns:
+        List of strings containing assignment statements
+    """
+
+    eqs, state_vars, sympy_vars = _sympify_eqs(eq_strings, vars, constants)
+
+    jacobian = sp.Matrix(eqs).jacobian(state_vars)
+
+    Xvecsubs = {x_new: sp.symbols(f"X[{i}]") for i, x_new in enumerate(state_vars)}
+
+    code = []
+    for i, eq in enumerate(eqs):
+        code.append(f"F[{i}] = {sp.ccode(eq.simplify().subs(Xvecsubs).evalf())}")
+    for i, jac in enumerate(jacobian):
+        # todo: fix indexing to be ascending order
+        flat_index = jacobian.rows * (i % jacobian.rows) + (i // jacobian.rows)
+        code.append(
+            f"J[{flat_index}] = {sp.ccode(jac.simplify().subs(Xvecsubs).evalf())}"
+        )
+
+    return code
+
+
+def solve_lin_ode_system(
+    eq_strings, dt_var, vars, constants, small_system=False, do_cse=False
+):
+    """Solve linear system of ODEs, return solution as C code.
+
+    If system is small (small_system=True, typically N<=3):
+      - solve analytically by gaussian elimination
+      - optionally do Common Subexpression Elimination if do_cse is true
+
+    If system is large (default):
+      - gaussian elimination may not be numerically stable at runtime
+      - instead return a matrix J and vector F, where J X = F
+      - this linear system can then be solved for X by e.g. LU factorization
+
+    Args:
+        eq_strings: list of ODEs e.g. ["x' = a*x", "y' = 3*x/b"]
+        dt_var: name of dt variable in NEURON
+        vars: ordered list of state variables to solve for, e.g. ["x", "y"]
+        constants: set of any symbolic constants used, e.g. {"a", "b"}
+        small_system: if True, solve analytically by gaussian elimination
+                      otherwise return matrix system to be solved
+        do_cse: if True, do Common Subexpression Elimination
+
+    Returns:
+        List of strings containing assignment statements
+        List of strings containing new local variables
+    """
+
+    # from each equation of form: x' = f(x)
+    # declare x_old
+    # assign x_old = x
+    # construct implicit Euler eq: x = x_old + dt * f(x)
+    old_prefix = make_unique_prefix(constants, "old")
+    euler_eqs = []
+    euler_code = []
+    euler_new_local_vars = []
+    for eq in eqs:
+        x = s.split("'")[0].strip()
+        dxdt = s.split("'")[1].strip()
+        old_x = f"{old_prefix}_{x}"
+        constants.append(old_x)
+        euler_new_local_vars.append(old_x)
+        euler_code.append(f"{old_x}={x}")
+        euler_eqs.append(f"{x} = {old_x} + {dt_var} * ({dxdt})")
+
+    # solve Euler eqs using linear solver
+    code, new_local_vars = solve_lin_system(
+        euler_eqs, vars, constants, small_system, do_cse
+    )
+
+    return euler_code + code, euler_new_local_vars + new_local_vars
 
 
 def integrate2c(diff_string, t_var, dt_var, vars, use_pade_approx=False):
@@ -344,9 +547,6 @@ def forwards_euler2c(diff_string, dt_var, vars):
 
     Returns:
         String containing forwards Euler timestep as C code
-
-    Raises:
-        ImportError: if SymPy version is too old (<1.2)
     """
 
     # every symbol (a.k.a variable) that SymPy

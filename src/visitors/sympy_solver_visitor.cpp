@@ -10,6 +10,7 @@
 #include "codegen/codegen_naming.hpp"
 #include "symtab/symbol.hpp"
 #include "utils/logger.hpp"
+#include "utils/string_utils.hpp"
 #include "visitors/sympy_solver_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
 
@@ -21,6 +22,13 @@ namespace nmodl {
 
 using symtab::syminfo::NmodlType;
 
+void SympySolverVisitor::clear_previous_block_data() {
+    expression_statements.clear();
+    eq_system.clear();
+    last_expression_statement = nullptr;
+    block_with_expression_statements = nullptr;
+}
+
 void SympySolverVisitor::replace_diffeq_expression(ast::DiffEqExpression* expr,
                                                    const std::string& new_expr) {
     auto new_statement = create_statement(new_expr);
@@ -28,6 +36,39 @@ void SympySolverVisitor::replace_diffeq_expression(ast::DiffEqExpression* expr,
     auto new_bin_expr = std::dynamic_pointer_cast<ast::BinaryExpression>(
         new_expr_statement->get_expression());
     expr->set_expression(std::move(new_bin_expr));
+}
+
+void SympySolverVisitor::check_expr_statements_in_same_block() {
+    /// all ode/kinetic/(non)linear statements (typically) appear in the same statement block
+    /// if this is not the case, for now return an error (and should instead use fallback solver)
+    if (block_with_expression_statements != nullptr &&
+        block_with_expression_statements != current_statement_block) {
+        logger->error("SympySolverVisitor :: coupled equations are appearing in different blocks");
+    }
+    block_with_expression_statements = current_statement_block;
+}
+
+ast::StatementVector::iterator SympySolverVisitor::get_solution_location_iterator(
+    ast::StatementVector& statements) {
+    // find out where to insert solutions in statement block
+    // returns iterator pointing to the first element after the last (non)linear eq
+    // so if there are no such elements, it returns statements.end()
+    auto it = statements.begin();
+    if (last_expression_statement != nullptr) {
+        while ((it != statements.end()) &&
+               (std::dynamic_pointer_cast<ast::ExpressionStatement>(*it).get() !=
+                last_expression_statement)) {
+            logger->debug("SympySolverVisitor :: {} != {}", to_nmodl((*it).get()),
+                          to_nmodl(last_expression_statement));
+            ++it;
+        }
+        if (it != statements.end()) {
+            logger->debug("SympySolverVisitor :: {} == {}",
+                          to_nmodl(std::dynamic_pointer_cast<ast::ExpressionStatement>(*it).get()),
+                          to_nmodl(last_expression_statement));
+        }
+    }
+    return it;
 }
 
 std::shared_ptr<ast::EigenNewtonSolverBlock>
@@ -42,16 +83,145 @@ SympySolverVisitor::construct_eigen_newton_solver_block(
                                                          update_state_block);
 }
 
-void SympySolverVisitor::visit_statement_block(ast::StatementBlock* node) {
-    auto prev_statement_block = current_statement_block;
-    current_statement_block = node;
-    node->visit_children(this);
-    current_statement_block = prev_statement_block;
+void SympySolverVisitor::solve_linear_system(const std::vector<std::string>& pre_solve_statements) {
+    // call sympy linear solver
+    bool small_system = (eq_system.size() <= SMALL_LINEAR_SYSTEM_MAX_STATES);
+    auto locals = py::dict("eq_strings"_a = eq_system, "state_vars"_a = state_vars, "vars"_a = vars,
+                           "small_system"_a = small_system, "do_cse"_a = elimination);
+    py::exec(R"(
+                from nmodl.ode import solve_lin_system
+                exception_message = ""
+                try:
+                    solutions, new_local_vars = solve_lin_system(eq_strings,
+                                                                 state_vars,
+                                                                 vars,
+                                                                 small_system,
+                                                                 do_cse)
+                except Exception as e:
+                    # if we fail, fail silently and return empty string
+                    solutions = [""]
+                    new_local_vars = [""]
+                    exception_message = str(e)
+                )",
+             py::globals(), locals);
+    // returns a vector of solutions, i.e. new statements to add to block:
+    auto solutions = locals["solutions"].cast<std::vector<std::string>>();
+    // and a vector of new local variables that need to be declared in the block:
+    auto new_local_vars = locals["new_local_vars"].cast<std::vector<std::string>>();
+    // may also return a python exception message:
+    auto exception_message = locals["exception_message"].cast<std::string>();
+    if (!exception_message.empty()) {
+        logger->warn("SympySolverVisitor :: solve_lin_system python exception: " +
+                     exception_message);
+        return;
+    }
+    // find out where to insert solutions in statement block
+    auto& statements = block_with_expression_statements->statements;
+    auto it = get_solution_location_iterator(statements);
+    // insert pre-solve statements below last linear eq in block
+    for (const auto& statement: pre_solve_statements) {
+        logger->debug("SympySolverVisitor :: -> adding statement: {}", statement);
+        it = statements.insert(it, create_statement(statement));
+        ++it;
+    }
+    if (small_system) {
+        // for small number of state vars, linear solver
+        // directly returns solution by solving symbolically at compile time
+        logger->debug("SympySolverVisitor :: Solving *small* linear system of eqs");
+        // declare new local vars
+        if (!new_local_vars.empty()) {
+            for (const auto& new_local_var: new_local_vars) {
+                logger->debug("SympySolverVisitor :: -> declaring new local variable: {}",
+                              new_local_var);
+                add_local_variable(block_with_expression_statements, new_local_var);
+            }
+        }
+        // insert new statements below last linear eq & any pre-solve statements in block
+        for (const auto& sol: solutions) {
+            logger->debug("SympySolverVisitor :: -> adding statement: {}", sol);
+            it = statements.insert(it, create_statement(sol));
+            ++it;
+        }
+    } else {
+        // otherwise it returns a matrix system to solve
+        logger->debug("SympySolverVisitor :: Solving linear system of eqs");
+        // insert new statements below last linear eq in block
+        // these are matrix & vector assignment statements
+        // NB should these go into an EigenLinearSolverBlock for the codegen?
+        // need to preserve the location where they should go
+        for (const auto& sol: solutions) {
+            logger->debug("SympySolverVisitor :: -> adding statement: {}", sol);
+            it = statements.insert(it, create_statement(sol));
+            ++it;
+        }
+    }
+    /// remove original lineq statements from the block
+    remove_statements_from_block(block_with_expression_statements, expression_statements);
 }
 
-void SympySolverVisitor::visit_expression_statement(ast::ExpressionStatement* node) {
-    current_diffeq_statement = node;
-    node->visit_children(this);
+void SympySolverVisitor::solve_non_linear_system(
+    const std::vector<std::string>& pre_solve_statements) {
+    if (!eq_system.empty()) {
+        // call sympy non-linear solver
+        auto locals = py::dict("equation_strings"_a = eq_system, "state_vars"_a = state_vars,
+                               "vars"_a = vars);
+        py::exec(R"(
+                from nmodl.ode import solve_non_lin_system
+                exception_message = ""
+                try:
+                    solutions = solve_non_lin_system(equation_strings,
+                                                     state_vars,
+                                                     vars)
+                except Exception as e:
+                    # if we fail, fail silently and return empty string
+                    solutions = [""]
+                    new_local_vars = [""]
+                    exception_message = str(e)
+                )",
+                 py::globals(), locals);
+        // returns a vector of solutions, i.e. new statements to add to block:
+        auto solutions = locals["solutions"].cast<std::vector<std::string>>();
+        // may also return a python exception message:
+        auto exception_message = locals["exception_message"].cast<std::string>();
+        if (!exception_message.empty()) {
+            logger->warn("SympySolverVisitor :: solve_non_lin_system python exception: " +
+                         exception_message);
+            return;
+        }
+        // find out where to insert solution in statement block
+        auto& statements = block_with_expression_statements->statements;
+        auto it = get_solution_location_iterator(statements);
+        // insert pre-solve statements below last linear eq in block
+        for (const auto& statement: pre_solve_statements) {
+            logger->debug("SympySolverVisitor :: -> adding statement: {}", statement);
+            it = statements.insert(it, create_statement(statement));
+            ++it;
+        }
+        logger->debug("SympySolverVisitor :: Solving non-linear system of eqs");
+        std::vector<std::string> setup_x_eqs;
+        std::vector<std::string> update_state_eqs;
+        for (int i = 0; i < state_vars.size(); i++) {
+            auto statement = state_vars[i] + " = X[" + std::to_string(i) + "]";
+            auto rev_statement = "X[" + std::to_string(i) + "] = " + state_vars[i];
+            update_state_eqs.push_back(statement);
+            setup_x_eqs.push_back(rev_statement);
+            logger->debug("SympySolverVisitor :: setup_x: {}", rev_statement);
+            logger->debug("SympySolverVisitor :: update_state: {}", statement);
+        }
+        if (vars.find("X") != vars.end()) {
+            logger->error("SympySolverVisitor :: -> X conflicts with NMODL variable");
+        }
+
+        /// create newton solution block and insert after last diff/linear/non-linear statement
+        auto solver_block = construct_eigen_newton_solver_block(setup_x_eqs, solutions,
+                                                                update_state_eqs);
+        statements.insert(it, std::make_shared<ast::ExpressionStatement>(solver_block));
+        for (const auto& sol: solutions) {
+            logger->debug("SympySolverVisitor :: -> adding statement: {}", sol);
+        }
+        /// remove original diff/linear/non-linear statements from the block
+        remove_statements_from_block(block_with_expression_statements, expression_statements);
+    }
 }
 
 void SympySolverVisitor::visit_diff_eq_expression(ast::DiffEqExpression* node) {
@@ -68,16 +238,7 @@ void SympySolverVisitor::visit_diff_eq_expression(ast::DiffEqExpression* node) {
         return;
     }
 
-    /// all ode statements (typically) appear in the same statement block
-    /// so for now don't track track different blocks
-    if (block_with_odes != nullptr && block_with_odes != current_statement_block) {
-        logger->error(
-            "SympySolverVisitor :: differential equations are appearing in different blocks");
-    }
-    block_with_odes = current_statement_block;
-
-    prime_variables.push_back(lhs->get_node_name());
-    diffeq_statements.insert(current_diffeq_statement);
+    check_expr_statements_in_same_block();
 
     const auto node_as_nmodl = to_nmodl_for_sympy(node);
     const auto locals = py::dict("equation_string"_a = node_as_nmodl,
@@ -120,7 +281,9 @@ void SympySolverVisitor::visit_diff_eq_expression(ast::DiffEqExpression* node) {
     } else {
         // for other solver methods: just collect the ODEs & return
         logger->debug("SympySolverVisitor :: adding ODE system: {}", to_nmodl_for_sympy(node));
-        ode_system.push_back(to_nmodl_for_sympy(node));
+        eq_system.push_back(to_nmodl_for_sympy(node));
+        expression_statements.insert(current_expression_statement);
+        last_expression_statement = current_expression_statement;
         return;
     }
 
@@ -155,102 +318,119 @@ void SympySolverVisitor::visit_derivative_block(ast::DerivativeBlock* node) {
     solve_method = derivative_block_solve_method[node->get_node_name()];
 
     /// clear information from previous derivative block if any
-    diffeq_statements.clear();
-    prime_variables.clear();
-    ode_system.clear();
+    clear_previous_block_data();
 
     // visit each differential equation:
     //  - for CNEXP or EULER, each equation is independent & is replaced with its solution
-    //  - otherwise, each equation is added to ode_system (and to binary_expressions_to_replace)
+    //  - otherwise, each equation is added to eq_system
     node->visit_children(this);
 
-    /// if there are no odes collected then there is nothing to do
-    if (!ode_system.empty()) {
-        // solve system of ODEs in ode_system
+    if (!eq_system.empty()) {
+        // solve system of ODEs in eq_system
         logger->debug("SympySolverVisitor :: Solving {} system of ODEs", solve_method);
-        auto locals = py::dict("equation_strings"_a = ode_system,
-                               "t_var"_a = codegen::naming::NTHREAD_T_VARIABLE,
-                               "dt_var"_a = codegen::naming::NTHREAD_DT_VARIABLE, "vars"_a = vars,
-                               "do_cse"_a = elimination);
-        py::exec(R"(
-                from nmodl.ode import solve_ode_system
-                exception_message = ""
-                try:
-                    solutions, new_local_vars = solve_ode_system(equation_strings, t_var, dt_var, vars, do_cse)
-                except Exception as e:
-                    # if we fail, fail silently and return empty string
-                    solutions = [""]
-                    new_local_vars = [""]
-                    exception_message = str(e)
-            )",
-                 py::globals(), locals);
 
-        // returns a vector of solutions, i.e. new statements to add to block:
-        auto solutions = locals["solutions"].cast<std::vector<std::string>>();
-        // and a vector of new local variables that need to be declared in the block:
-        auto new_local_vars = locals["new_local_vars"].cast<std::vector<std::string>>();
-        auto exception_message = locals["exception_message"].cast<std::string>();
-
-        if (!exception_message.empty()) {
-            logger->warn("SympySolverVisitor :: solve_ode_system python exception: " +
-                         exception_message);
-            return;
-        }
-
-        // sanity check: must have at least as many solutions as ODE's to replace:
-        if (solutions.size() < ode_system.size()) {
-            logger->warn("SympySolverVisitor :: Solve failed: fewer solutions than ODE's");
-            return;
-        }
-
-        // declare new local vars
-        if (!new_local_vars.empty()) {
-            for (const auto& new_local_var: new_local_vars) {
-                logger->debug("SympySolverVisitor :: -> declaring new local variable: {}",
-                              new_local_var);
-                add_local_variable(block_with_odes, new_local_var);
-            }
+        // construct implicit Euler equations from ODEs
+        std::vector<std::string> pre_solve_statements;
+        for (auto& eq: eq_system) {
+            auto split_eq = stringutils::split_string(eq, '=');
+            auto x_prime_split = stringutils::split_string(split_eq[0], '\'');
+            auto x = stringutils::trim(x_prime_split[0]);
+            auto dxdt = stringutils::trim(split_eq[1]);
+            auto old_x = "old_" + x;  // TODO: do this properly, check name is unique
+            // declare old_x
+            logger->debug("SympySolverVisitor :: -> declaring new local variable: {}", old_x);
+            add_local_variable(block_with_expression_statements, old_x);
+            // assign old_x = x
+            pre_solve_statements.push_back(old_x + " = " + x);
+            eq = x + " = " + old_x + " + " + codegen::naming::NTHREAD_DT_VARIABLE + " * (" + dxdt +
+                 ")";
+            logger->debug("SympySolverVisitor :: -> constructed euler eq: {}", eq);
         }
 
         if (solve_method == codegen::naming::SPARSE_METHOD) {
-            remove_statements_from_block(block_with_odes, diffeq_statements);
-            // get a copy of existing statements in block
-            auto statements = block_with_odes->get_statements();
-            // add new statements
-            for (const auto& sol: solutions) {
-                logger->debug("SympySolverVisitor :: -> adding statement: {}", sol);
-                statements.push_back(create_statement(sol));
-            }
-            // replace old set of statements in AST with new one
-            block_with_odes->set_statements(std::move(statements));
+            solve_linear_system(pre_solve_statements);
         } else if (solve_method == codegen::naming::DERIVIMPLICIT_METHOD) {
-            /// Construct X from the state variables by using the original
-            /// ODE statements in the block. Also create statements to update
-            /// state variables from X
-            std::vector<std::string> setup_x_eqs;
-            std::vector<std::string> update_state_eqs;
-            for (int i = 0; i < prime_variables.size(); i++) {
-                auto statement = prime_variables[i] + " = " + "X[ " + std::to_string(i) + "]";
-                auto rev_statement = "X[ " + std::to_string(i) + "]" + " = " + prime_variables[i];
-                update_state_eqs.push_back(statement);
-                setup_x_eqs.push_back(rev_statement);
-            }
-
-            /// remove original ODE statements from the block where they initially appear
-            remove_statements_from_block(block_with_odes, diffeq_statements);
-
-            /// create newton solution block and add that as statement back in the block
-            /// statements in solutions : put F, J into new functor to be created for eigen
-            auto solver_block = construct_eigen_newton_solver_block(setup_x_eqs, solutions,
-                                                                    update_state_eqs);
-
-            if (vars.find("X") != vars.end()) {
-                logger->error("SympySolverVisitor :: -> X conflicts with NMODL variable");
-            }
-
-            block_with_odes->addStatement(std::make_shared<ast::ExpressionStatement>(solver_block));
+            solve_non_linear_system(pre_solve_statements);
+        } else {
+            logger->error("SympySolverVisitor :: Solve method {} not supported", solve_method);
         }
     }
+}
+
+void SympySolverVisitor::visit_lin_equation(ast::LinEquation* node) {
+    check_expr_statements_in_same_block();
+    std::string lin_eq = to_nmodl_for_sympy(node->get_left_linxpression().get());
+    lin_eq += " = ";
+    lin_eq += to_nmodl_for_sympy(node->get_linxpression().get());
+    eq_system.push_back(lin_eq);
+    expression_statements.insert(current_expression_statement);
+    last_expression_statement = current_expression_statement;
+    logger->debug("SympySolverVisitor :: adding linear eq: {}", lin_eq);
+}
+
+void SympySolverVisitor::visit_linear_block(ast::LinearBlock* node) {
+    logger->debug("SympySolverVisitor :: found LINEAR block: {}", node->get_node_name());
+
+    // get all vars for this block, i.e. global vars + local vars
+    vars = global_vars;
+    if (auto symtab = node->get_statement_block()->get_symbol_table()) {
+        auto localvars = symtab->get_variables_with_properties(NmodlType::local_var);
+        for (const auto& v: localvars) {
+            vars.insert(v->get_name());
+        }
+    }
+
+    /// clear information from previous derivative block if any
+    clear_previous_block_data();
+
+    // collect linear equations
+    node->visit_children(this);
+
+    solve_linear_system();
+}
+
+void SympySolverVisitor::visit_non_lin_equation(ast::NonLinEquation* node) {
+    check_expr_statements_in_same_block();
+    std::string non_lin_eq = to_nmodl_for_sympy(node->get_lhs().get());
+    non_lin_eq += " = ";
+    non_lin_eq += to_nmodl_for_sympy(node->get_rhs().get());
+    eq_system.push_back(non_lin_eq);
+    expression_statements.insert(current_expression_statement);
+    last_expression_statement = current_expression_statement;
+    logger->debug("SympySolverVisitor :: adding non-linear eq: {}", non_lin_eq);
+}
+
+void SympySolverVisitor::visit_non_linear_block(ast::NonLinearBlock* node) {
+    logger->debug("SympySolverVisitor :: found NONLINEAR block: {}", node->get_node_name());
+
+    // get all vars for this block, i.e. global vars + local vars
+    vars = global_vars;
+    if (auto symtab = node->get_statement_block()->get_symbol_table()) {
+        auto localvars = symtab->get_variables_with_properties(NmodlType::local_var);
+        for (const auto& v: localvars) {
+            vars.insert(v->get_name());
+        }
+    }
+
+    /// clear information from previous derivative block if any
+    clear_previous_block_data();
+
+    // collect non-linear equations
+    node->visit_children(this);
+
+    solve_non_linear_system();
+}
+
+void SympySolverVisitor::visit_expression_statement(ast::ExpressionStatement* node) {
+    current_expression_statement = node;
+    node->visit_children(this);
+}
+
+void SympySolverVisitor::visit_statement_block(ast::StatementBlock* node) {
+    auto prev_statement_block = current_statement_block;
+    current_statement_block = node;
+    node->visit_children(this);
+    current_statement_block = prev_statement_block;
 }
 
 void SympySolverVisitor::visit_program(ast::Program* node) {
@@ -263,14 +443,24 @@ void SympySolverVisitor::visit_program(ast::Program* node) {
         if (auto block_ptr = std::dynamic_pointer_cast<ast::SolveBlock>(block)) {
             std::string solve_method;
             if (block_ptr->get_method()) {
-                // Note: solve method name is an optional especially LINEAR and NONLINEAR
-                // blocks do not have solve method specified
+                // Note: solve method name is an optional parameter
+                //   - LINEAR and NONLINEAR blocks do not have solve method specified
                 solve_method = block_ptr->get_method()->get_value()->eval();
             }
             std::string block_name = block_ptr->get_block_name()->get_value()->eval();
             logger->debug("SympySolverVisitor :: Found SOLVE statement: using {} for {}",
                           solve_method, block_name);
             derivative_block_solve_method[block_name] = solve_method;
+        }
+    }
+
+    // get list of state vars
+    state_vars.clear();
+    if (auto symtab = node->get_symbol_table()) {
+        auto statevars = symtab->get_variables_with_properties(NmodlType::state_var);
+        for (const auto& v: statevars) {
+            const auto& varname = v->get_name();
+            state_vars.push_back(varname);
         }
     }
 
