@@ -2559,6 +2559,8 @@ SCENARIO("SympySolver visitor", "[sympy]") {
                 m' = (mInf-m)/mTau
             }
         )";
+        /// TODO : Note that the test is not correct because the ode is linear so the python
+        /// sympy solver call is returning the sparse solution, not the derivimplicit one
         std::string expected_text = R"(
             BREAKPOINT {
                 SOLVE states METHOD derivimplicit
