@@ -33,7 +33,14 @@
                       children:
                         - EigenNewtonSolverBlock:
                             description: "Represent newton solver solution block based on Eigen"
+                            nmodl: "EIGEN_SOLVE"
                             members:
+                              - variable_block:
+                                  description: "Statements to be declared in the functor"
+                                  type: StatementBlock
+                              - initialize_block:
+                                  description: "Statement block to be executed before calling newton solver"
+                                  type: StatementBlock
                               - setup_x_block:
                                   description: "update X from states"
                                   type: StatementBlock
@@ -42,6 +49,9 @@
                                   type: StatementBlock
                               - update_states_block:
                                   description: "update back states from X"
+                                  type: StatementBlock
+                              - finalize_block:
+                                  description: "Statement block to be executed after calling newton solver"
                                   type: StatementBlock
                   - WrappedExpression:
                       description: "Wrap any other expression type"

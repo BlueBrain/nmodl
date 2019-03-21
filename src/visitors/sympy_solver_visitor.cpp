@@ -10,6 +10,7 @@
 #include "codegen/codegen_naming.hpp"
 #include "symtab/symbol.hpp"
 #include "utils/logger.hpp"
+#include "visitors/lookup_visitor.hpp"
 #include "visitors/sympy_solver_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
 
@@ -30,16 +31,62 @@ void SympySolverVisitor::replace_diffeq_expression(ast::DiffEqExpression* expr,
     expr->set_expression(std::move(new_bin_expr));
 }
 
+static bool has_differential_equation(std::shared_ptr<ast::Statement> statement) {
+    return !AstLookupVisitor()
+                .lookup(statement.get(), ast::AstNodeType::DIFF_EQ_EXPRESSION)
+                .empty();
+}
+
+static bool has_local_statement(std::shared_ptr<ast::Statement> statement) {
+    return !AstLookupVisitor().lookup(statement.get(), ast::AstNodeType::LOCAL_VAR).empty();
+}
+
+
 std::shared_ptr<ast::EigenNewtonSolverBlock>
 SympySolverVisitor::construct_eigen_newton_solver_block(
+    ast::DerivativeBlock* node,
     const std::vector<std::string>& setup_x,
     const std::vector<std::string>& functor,
     const std::vector<std::string>& update_state) {
+    /// create functor related blocks
     auto setup_x_block = create_statement_block(setup_x);
     auto functor_block = create_statement_block(functor);
     auto update_state_block = create_statement_block(update_state);
-    return std::make_shared<ast::EigenNewtonSolverBlock>(setup_x_block, functor_block,
-                                                         update_state_block);
+
+    /// now blocks related to variables, initialization and finzalization
+    auto& statements = node->get_statement_block()->statements;
+    auto it = statements.begin();
+
+    /// TODO : simple & stupid implementation as a draft until linear/non-linear
+    /// changes get into master from Liam/Omar
+
+    auto variable_block = std::make_shared<ast::StatementBlock>(ast::StatementVector());
+    auto initialize_block = std::make_shared<ast::StatementBlock>(ast::StatementVector());
+    auto finalize_block = std::make_shared<ast::StatementBlock>(ast::StatementVector());
+
+    /// local variables if any
+    while (it != statements.end() && has_local_statement(*it)) {
+        variable_block->addStatement(*it++);
+    }
+
+    /// non-ode statements before odes
+    while (it != statements.end() && !has_differential_equation(*it)) {
+        initialize_block->addStatement(*it++);
+    }
+
+    /// ignore odes as they are in functor
+    while (it != statements.end() && has_differential_equation(*it)) {
+        ++it;
+    }
+
+    /// statements after odes
+    while (it != statements.end()) {
+        finalize_block->addStatement(*it++);
+    }
+
+    return std::make_shared<ast::EigenNewtonSolverBlock>(variable_block, initialize_block,
+                                                         setup_x_block, functor_block,
+                                                         update_state_block, finalize_block);
 }
 
 void SympySolverVisitor::visit_statement_block(ast::StatementBlock* node) {
@@ -236,19 +283,20 @@ void SympySolverVisitor::visit_derivative_block(ast::DerivativeBlock* node) {
                 setup_x_eqs.push_back(rev_statement);
             }
 
-            /// remove original ODE statements from the block where they initially appear
-            remove_statements_from_block(block_with_odes, diffeq_statements);
-
-            /// create newton solution block and add that as statement back in the block
-            /// statements in solutions : put F, J into new functor to be created for eigen
-            auto solver_block = construct_eigen_newton_solver_block(setup_x_eqs, solutions,
-                                                                    update_state_eqs);
-
+            /// X is being used as matrix name
+            /// TODO : this should be handled by previous renaming passes
             if (vars.find("X") != vars.end()) {
                 logger->error("SympySolverVisitor :: -> X conflicts with NMODL variable");
             }
 
-            block_with_odes->addStatement(std::make_shared<ast::ExpressionStatement>(solver_block));
+            /// create newton solution block and add that as statement back in the block
+            /// statements in solutions : put F, J into new functor to be created for eigen
+            auto solver_block = construct_eigen_newton_solver_block(node, setup_x_eqs, solutions,
+                                                                    update_state_eqs);
+            /// replace derivative block as solver block contains all statements
+            ast::StatementVector statements{
+                std::make_shared<ast::ExpressionStatement>(solver_block)};
+            node->get_statement_block()->set_statements(std::move(statements));
         }
     }
 }

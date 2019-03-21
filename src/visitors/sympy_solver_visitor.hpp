@@ -46,9 +46,11 @@ class SympySolverVisitor: public AstVisitor {
     static void replace_diffeq_expression(ast::DiffEqExpression* expr, const std::string& new_expr);
 
     std::shared_ptr<ast::EigenNewtonSolverBlock> construct_eigen_newton_solver_block(
+        ast::DerivativeBlock* node,
         const std::vector<std::string>& setup_x,
         const std::vector<std::string>& functor,
         const std::vector<std::string>& update_state);
+
     /// global variables
     std::set<std::string> global_vars;
 
