@@ -246,7 +246,6 @@ int main(int argc, const char* argv[]) {
         }
 
         ast_to_nmodl(ast.get(), filepath("ast"));
-        { NrnCallbacksVisitor(ast).visit_program(ast.get()); }
 
         if (json_ast) {
             logger->info("Writing AST into {}", file);
@@ -337,6 +336,11 @@ int main(int argc, const char* argv[]) {
             // make sure to run perf visitor because code generator
             // looks for read/write counts const/non-const declaration
             PerfVisitor().visit_program(ast.get());
+        }
+
+        {
+            NrnCallbacksVisitor(ast).visit_program(ast.get());
+            ast_to_nmodl(ast.get(), filepath("solveblock"));
         }
 
         {

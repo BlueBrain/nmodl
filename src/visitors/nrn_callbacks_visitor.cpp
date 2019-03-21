@@ -25,7 +25,7 @@ void NrnCallbacksVisitor::visit_breakpoint_block(ast::BreakpointBlock* node) {
 void NrnCallbacksVisitor::visit_expression_statement(ast::ExpressionStatement* node) {
     AstVisitor::visit_expression_statement(node);
     auto symtab = program->get_symbol_table();
-    if (node->get_expression()->get_node_type() == ast::AstNodeType::SOLVE_BLOCK) {
+    if (node->get_expression()->is_solve_block()) {
         auto solve_block = std::dynamic_pointer_cast<ast::SolveBlock>(node->get_expression());
         auto sb_name = solve_block->get_block_name();
         auto solve_func = symtab->lookup(sb_name->get_node_name());

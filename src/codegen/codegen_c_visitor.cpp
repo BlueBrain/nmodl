@@ -3693,6 +3693,23 @@ void CodegenCVisitor::print_derivative_kernel_for_derivimplicit(SolveExpression*
     codegen = false;
 }
 
+/*
+void CodegenCVisitor::print_solve_block(SolveExpression* sexp) {
+    auto expr = std::dynamic_pointer_cast<ast::ExpressionStatement>(sexp)
+        ->get_expression();
+    auto sb = std::dynamic_pointer_cast<ast::SolveExpression>(expr)->get_solve_block();
+    // if ....
+    // else if ...
+    // else if ...
+    auto sb_name = sb->get_block_name()->get_node_name();
+    auto args =
+        "{}, {}, {}, _derivimplicit_{}_{}, {}"
+        ""_format(num_primes, slist, dlist, sb_name, suffix, thread_args);
+    auto statement = "derivimplicit_thread({});"_format(args);
+    printer->add_line(statement);
+
+}
+*/
 
 /****************************************************************************************/
 /*                                Print nrn_state routine                                */

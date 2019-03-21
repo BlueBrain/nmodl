@@ -79,10 +79,12 @@ void CnexpSolveVisitor::visit_binary_expression(ast::BinaryExpression* node) {
             auto varname = "D" + name->get_node_name();
             auto variable = new ast::Name(new ast::String(varname));
             lhs.reset(variable);
-            auto symbol = std::make_shared<symtab::Symbol>(varname, ModToken());
-            symbol->set_original_name(name->get_node_name());
-            symbol->created_from_state();
-            program_symtab->insert(symbol);
+            if (program_symtab->lookup(varname) == nullptr) {
+                auto symbol = std::make_shared<symtab::Symbol>(varname, ModToken());
+                symbol->set_original_name(name->get_node_name());
+                symbol->created_from_state();
+                program_symtab->insert(symbol);
+            }
         } else {
             logger->error("solver method '{}' not supported", solve_method);
         }

@@ -11,8 +11,8 @@
 #include "codegen/codegen_helper_visitor.hpp"
 #include "codegen/codegen_naming.hpp"
 #include "visitors/rename_visitor.hpp"
+#include "visitors/lookup_visitor.hpp"
 
-#include <cmake-build-debug-llvm-system/src/visitors/lookup_visitor.hpp>
 #include <fmt/format.h>
 
 using namespace fmt::literals;
@@ -456,7 +456,6 @@ void CodegenHelperVisitor::visit_net_receive_block(NetReceiveBlock* node) {
 
 void CodegenHelperVisitor::visit_derivative_block(DerivativeBlock* node) {
     under_derivative_block = true;
-    // info.solve_node = node;
     node->visit_children(this);
     under_derivative_block = false;
 }
