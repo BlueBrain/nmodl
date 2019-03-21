@@ -32,6 +32,7 @@
 #include "visitors/localize_visitor.hpp"
 #include "visitors/loop_unroll_visitor.hpp"
 #include "visitors/nmodl_visitor.hpp"
+#include "visitors/nrn_callbacks_visitor.hpp"
 #include "visitors/perf_visitor.hpp"
 #include "visitors/sympy_conductance_visitor.hpp"
 #include "visitors/sympy_solver_visitor.hpp"
@@ -245,6 +246,7 @@ int main(int argc, const char* argv[]) {
         }
 
         ast_to_nmodl(ast.get(), filepath("ast"));
+        { NrnCallbacksVisitor(ast).visit_program(ast.get()); }
 
         if (json_ast) {
             logger->info("Writing AST into {}", file);

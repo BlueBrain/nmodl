@@ -43,10 +43,24 @@
                               - update_states_block:
                                   description: "update back states from X"
                                   type: StatementBlock
+                        - NrnStateBlock:
+                            description: "Represents the coreneuron nrn_state callback function"
+                            members:
+                              - solve_statements:
+                                  description: "solve blocks to be called or generated"
+                                  type: Statement
+                                  vector: true
                   - WrappedExpression:
                       description: "Wrap any other expression type"
                       members:
                         - expression:
                             description: "Expression that is being wrapped"
                             type: Expression
+                  - SolveExpression:
+                      description: "The block to solve and SolveBlock"
+                      members:
+                        - solve_block:
+                            type: SolveBlock
+                        - block_to_solve:
+                            type: StatementBlock
             - Statement:

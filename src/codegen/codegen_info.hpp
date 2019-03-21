@@ -173,6 +173,9 @@ struct CodegenInfo {
     /// if for_netcon is used
     bool for_netcon_used = false;
 
+    /// if nrn_state node is available
+    bool has_nrn_state_node = false;
+
     /// number of watch expressions
     int watch_count = 0;
 
@@ -230,18 +233,14 @@ struct CodegenInfo {
     /// typically equal to number of primes
     int num_equations = 0;
 
-    /// block used in solve statement
-    /// typically derivative block or procedure
-    ast::Block* solve_node = nullptr;
-
-    /// \todo: name of the solve block
-    std::string solve_block_name;
-
     /// solve method used
     std::string solve_method;
 
     /// derivative block
     ast::BreakpointBlock* breakpoint_node = nullptr;
+
+    /// nrn_state block
+    ast::NrnStateBlock* nrn_state_block = nullptr;
 
     /// net receive block for point process
     ast::NetReceiveBlock* net_receive_node = nullptr;
