@@ -32,8 +32,8 @@
 #include "visitors/localize_visitor.hpp"
 #include "visitors/loop_unroll_visitor.hpp"
 #include "visitors/nmodl_visitor.hpp"
-#include "visitors/nrn_callbacks_visitor.hpp"
 #include "visitors/perf_visitor.hpp"
+#include "visitors/solve_block_visitor.hpp"
 #include "visitors/sympy_conductance_visitor.hpp"
 #include "visitors/sympy_solver_visitor.hpp"
 #include "visitors/symtab_visitor.hpp"
@@ -321,6 +321,13 @@ int main(int argc, const char* argv[]) {
         }
 
         {
+            SolveBlockVisitor(ast).visit_program(ast.get());
+            ast_to_nmodl(ast.get(), filepath("solveblock"));
+            auto file = scratch_dir + "/" + modfile + ".final.ast.json";
+            JSONVisitor(file).visit_program(ast.get());
+        }
+
+        {
             logger->info("Running cnexp visitor");
             CnexpSolveVisitor().visit_program(ast.get());
             ast_to_nmodl(ast.get(), filepath("cnexp"));
@@ -336,11 +343,6 @@ int main(int argc, const char* argv[]) {
             // make sure to run perf visitor because code generator
             // looks for read/write counts const/non-const declaration
             PerfVisitor().visit_program(ast.get());
-        }
-
-        {
-            NrnCallbacksVisitor(ast).visit_program(ast.get());
-            ast_to_nmodl(ast.get(), filepath("solveblock"));
         }
 
         {

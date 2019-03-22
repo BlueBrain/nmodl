@@ -44,6 +44,7 @@
                                   description: "update back states from X"
                                   type: StatementBlock
                         - NrnStateBlock:
+                            nmodl: "NRN_STATE "
                             description: "Represents the coreneuron nrn_state callback function"
                             members:
                               - solve_statements:

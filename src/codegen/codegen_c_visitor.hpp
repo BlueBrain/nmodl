@@ -829,7 +829,7 @@ class CodegenCVisitor: public AstVisitor {
 
 
     /// derivative kernel when derivimplicit method is used
-    void print_derivative_kernel_for_derivimplicit(ast::SolveExpression* solve_expr);
+    void print_derivative_kernel(ast::DerivativeBlock* derivative);
 
 
     /// block / loop for statement requiring reduction

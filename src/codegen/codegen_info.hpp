@@ -257,6 +257,9 @@ struct CodegenInfo {
     /// all procedures defined in the mod file
     std::vector<ast::ProcedureBlock*> procedures;
 
+    /// all derivative blocks in the mod file
+    std::map<std::string, ast::DerivativeBlock*> derivative_blocks;
+
     /// all functions defined in the mod file
     std::vector<ast::FunctionBlock*> functions;
 

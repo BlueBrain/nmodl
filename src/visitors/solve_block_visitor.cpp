@@ -5,14 +5,14 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
-#include "visitors/nrn_callbacks_visitor.hpp"
+#include "visitors/solve_block_visitor.hpp"
 #include "utils/logger.hpp"
 #include "visitors/lookup_visitor.hpp"
 
 namespace nmodl {
 
 
-void NrnCallbacksVisitor::visit_breakpoint_block(ast::BreakpointBlock* node) {
+void SolveBlockVisitor::visit_breakpoint_block(ast::BreakpointBlock* node) {
     in_breakpoint_block = true;
     AstVisitor::visit_breakpoint_block(node);
     in_breakpoint_block = false;
@@ -22,7 +22,7 @@ void NrnCallbacksVisitor::visit_breakpoint_block(ast::BreakpointBlock* node) {
 }
 
 
-void NrnCallbacksVisitor::visit_expression_statement(ast::ExpressionStatement* node) {
+void SolveBlockVisitor::visit_expression_statement(ast::ExpressionStatement* node) {
     AstVisitor::visit_expression_statement(node);
     auto symtab = program->get_symbol_table();
     if (node->get_expression()->is_solve_block()) {

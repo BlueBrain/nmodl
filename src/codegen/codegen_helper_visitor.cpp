@@ -456,6 +456,9 @@ void CodegenHelperVisitor::visit_net_receive_block(NetReceiveBlock* node) {
 
 void CodegenHelperVisitor::visit_derivative_block(DerivativeBlock* node) {
     under_derivative_block = true;
+    auto name = node->get_name()->get_node_name();
+    info.derivative_blocks[name] = node;
+    info.derivimplicit_used = true;
     node->visit_children(this);
     under_derivative_block = false;
 }

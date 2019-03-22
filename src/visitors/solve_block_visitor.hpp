@@ -13,7 +13,7 @@
 
 namespace nmodl {
 
-class NrnCallbacksVisitor: public AstVisitor {
+class SolveBlockVisitor: public AstVisitor {
   private:
     std::shared_ptr<ast::Program> program;
 
@@ -21,7 +21,7 @@ class NrnCallbacksVisitor: public AstVisitor {
     ast::StatementVector solve_expresisons;
 
   public:
-    explicit NrnCallbacksVisitor(std::shared_ptr<ast::Program> program)
+    explicit SolveBlockVisitor(std::shared_ptr<ast::Program> program)
         : program(std::move(program))
         , solve_expresisons() {}
 

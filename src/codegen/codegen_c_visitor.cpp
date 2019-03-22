@@ -304,10 +304,10 @@ void CodegenCVisitor::visit_verbatim(Verbatim* node) {
     }
 }
 
-
+/*
 void CodegenCVisitor::visit_solve_expression(ast::SolveExpression* node)  {
     node->get_block_to_solve()->accept(this);
-}
+}*/
 
 
 /****************************************************************************************/
@@ -3129,6 +3129,7 @@ void CodegenCVisitor::print_nrn_init(bool skip_init_check) {
         printer->add_line("{} = -1e20;"_format(get_variable_name("tsave")));
     }
 
+    // @todo: check how to deal with solve blocks
     print_initial_block(info.initial_node);
     print_channel_iteration_block_end();
     print_shadow_reduction_statements();
@@ -3622,24 +3623,22 @@ void CodegenCVisitor::print_net_receive() {
  * actual variable names? [resolved now?]
  * slist needs to added as local variable
  */
-void CodegenCVisitor::print_derivative_kernel_for_derivimplicit(SolveExpression* solve_expr) {
+void CodegenCVisitor::print_derivative_kernel(DerivativeBlock* derivative) {
     // auto node = info.solve_node;
-    const auto solve_block = solve_expr->get_solve_block();
-    auto block_to_solve = solve_expr->get_block_to_solve();
     codegen = true;
 
     auto ext_args = external_method_arguments();
     auto ext_params = external_method_parameters();
     auto suffix = info.mod_suffix;
     auto list_num = info.derivimplicit_list_num;
-    auto solve_block_name = solve_block->get_block_name()->get_node_name();
+    auto derivative_name = derivative->get_node_name();
     auto primes_size = info.primes_size;
     auto stride = (layout == LayoutType::aos) ? "" : "*pnodecount+id";
 
     printer->add_newline(2);
 
     // clang-format off
-    printer->start_block("int {}_{}({})"_format(solve_block_name, suffix, ext_params));
+    printer->start_block("int {}_{}({})"_format(derivative_name, suffix, ext_params));
     auto instance = "{0}* inst = ({0}*)get_memb_list(nt)->instance;"_format(instance_struct());
     auto slist1 = "int* slist{} = {};"_format(list_num, get_variable_name("slist{}"_format(list_num)));
     auto slist2 = "int* slist{} = {};"_format(list_num+1, get_variable_name("slist{}"_format(list_num+1)));
@@ -3655,7 +3654,7 @@ void CodegenCVisitor::print_derivative_kernel_for_derivimplicit(SolveExpression*
     printer->add_line("    savstate{}[i{}] = data[slist{}[i]{}];"_format(list_num, stride, list_num, stride));
     printer->add_line("}");
 
-    auto argument = "{}, slist{}, _derivimplicit_{}_{}, dlist{}, {}"_format(primes_size, list_num+1, solve_block_name, suffix, list_num + 1, ext_args);
+    auto argument = "{}, slist{}, _derivimplicit_{}_{}, dlist{}, {}"_format(primes_size, list_num+1, derivative_name, suffix, list_num + 1, ext_args);
     printer->add_line("int reset = nrn_newton_thread(static_cast<NewtonSpace*>(*newtonspace{}(thread)), {});"_format(list_num, argument));
     printer->add_line("return reset;");
     printer->end_block(3);
@@ -3665,10 +3664,10 @@ void CodegenCVisitor::print_derivative_kernel_for_derivimplicit(SolveExpression*
      * comment marker in the generated cpp file for kinderiv.py to
      * process it and generate correct _kinderiv.h
      */
-    printer->add_line("/* _derivimplicit_ {} _{} */"_format(solve_block_name, info.mod_suffix));
+    printer->add_line("/* _derivimplicit_ {} _{} */"_format(derivative_name, info.mod_suffix));
     printer->add_newline(1);
 
-    printer->start_block("int _newton_{}_{}({}) "_format(solve_block_name, info.mod_suffix, external_method_parameters()));
+    printer->start_block("int _newton_{}_{}({}) "_format(derivative_name, info.mod_suffix, external_method_parameters()));
     printer->add_line(instance);
     if (ion_variable_struct_required()) {
         printer->add_line("IonCurVar ionvar = {0};");
@@ -3677,7 +3676,7 @@ void CodegenCVisitor::print_derivative_kernel_for_derivimplicit(SolveExpression*
     printer->add_line(slist1);
     printer->add_line(dlist1);
     printer->add_line(dlist2);
-    print_statement_block(block_to_solve.get(), false, false);
+    print_statement_block(derivative->get_statement_block().get(), false, false);
     printer->add_line("int counter = -1;");
     printer->add_line("for (int i=0; i<{}; i++) {}"_format(info.num_primes, "{"));
     printer->add_line("    if (*deriv{}_advance(thread)) {}"_format(list_num, "{"));
@@ -3693,23 +3692,31 @@ void CodegenCVisitor::print_derivative_kernel_for_derivimplicit(SolveExpression*
     codegen = false;
 }
 
-/*
-void CodegenCVisitor::print_solve_block(SolveExpression* sexp) {
-    auto expr = std::dynamic_pointer_cast<ast::ExpressionStatement>(sexp)
-        ->get_expression();
-    auto sb = std::dynamic_pointer_cast<ast::SolveExpression>(expr)->get_solve_block();
-    // if ....
-    // else if ...
-    // else if ...
-    auto sb_name = sb->get_block_name()->get_node_name();
-    auto args =
-        "{}, {}, {}, _derivimplicit_{}_{}, {}"
-        ""_format(num_primes, slist, dlist, sb_name, suffix, thread_args);
-    auto statement = "derivimplicit_thread({});"_format(args);
-    printer->add_line(statement);
 
+void CodegenCVisitor::visit_solve_expression(SolveExpression* sexp) {
+
+    auto sb = sexp->get_solve_block();
+    auto sb_name = sb->get_block_name()->get_node_name();
+    if (info.derivative_blocks.find(sb_name) != info.derivative_blocks.end()) {
+        auto thread_args = external_method_arguments();
+        auto num_primes = info.num_primes;
+        auto suffix = info.mod_suffix;
+        auto num = info.derivimplicit_coreneuron_solver() ? info.derivimplicit_list_num
+                                                          : info.euler_list_num;
+        auto slist = get_variable_name("slist{}"_format(num));
+        auto dlist = get_variable_name("dlist{}"_format(num));
+        auto args =
+            "{}, {}, {}, _derivimplicit_{}_{}, {}"
+            ""_format(num_primes, slist, dlist, sb_name, suffix, thread_args);
+        auto statement = "derivimplicit_thread({});"_format(args);
+        printer->add_line(statement);
+
+    } else {
+        auto bts = sexp->get_block_to_solve();
+        print_statement_block(bts.get(), false, false);
+    }
 }
-*/
+
 
 /****************************************************************************************/
 /*                                Print nrn_state routine                                */
@@ -3721,15 +3728,6 @@ void CodegenCVisitor::print_nrn_state() {
         return;
     }
     codegen = true;
-
-    if (info.derivimplicit_coreneuron_solver()) {
-        for (auto& solve_statement: info.nrn_state_block->get_solve_statements()) {
-            auto expr = std::dynamic_pointer_cast<ast::ExpressionStatement>(solve_statement)
-                            ->get_expression();
-            print_derivative_kernel_for_derivimplicit(
-                std::dynamic_pointer_cast<SolveExpression>(expr).get());
-        }
-    }
 
     printer->add_newline(2);
     printer->add_line("/** update state */");
@@ -3758,24 +3756,19 @@ void CodegenCVisitor::print_nrn_state() {
     auto dlist = get_variable_name("dlist{}"_format(num));
 
 
-    if (info.derivimplicit_coreneuron_solver()) {
-        for (auto& solve_statement: info.nrn_state_block->get_solve_statements()) {
-            auto expr = std::dynamic_pointer_cast<ast::ExpressionStatement>(solve_statement)
-                            ->get_expression();
-            auto sb = std::dynamic_pointer_cast<ast::SolveExpression>(expr)->get_solve_block();
-            auto sb_name = sb->get_block_name()->get_node_name();
+    for (auto& solve_statement: info.nrn_state_block->get_solve_statements()) {
+        auto expr = std::dynamic_pointer_cast<ast::ExpressionStatement>(solve_statement)
+                        ->get_expression();
+        auto sb = std::dynamic_pointer_cast<ast::SolveExpression>(expr)->get_solve_block();
+        auto sb_name = sb->get_block_name()->get_node_name();
+        if (info.derivative_blocks.find(sb_name) != info.derivative_blocks.end()) {
             auto args =
                 "{}, {}, {}, _derivimplicit_{}_{}, {}"
                 ""_format(num_primes, slist, dlist, sb_name, suffix, thread_args);
             auto statement = "derivimplicit_thread({});"_format(args);
             printer->add_line(statement);
-        }
-    } else {
-        for (auto& solve_statement: info.nrn_state_block->get_solve_statements()) {
-            auto expr = std::dynamic_pointer_cast<ast::ExpressionStatement>(solve_statement)
-                            ->get_expression();
-            auto sb = std::dynamic_pointer_cast<ast::SolveExpression>(expr)->get_solve_block();
-            auto sb_name = sb->get_block_name()->get_node_name();
+
+        } else {
             auto bts = std::dynamic_pointer_cast<ast::SolveExpression>(expr)->get_block_to_solve();
             print_statement_block(bts.get(), false, false);
         }
@@ -4010,6 +4003,9 @@ void CodegenCVisitor::print_compute_functions() {
     }
     for (const auto& function: info.functions) {
         print_function(function);
+    }
+    for (const auto& derivative: info.derivative_blocks) {
+        print_derivative_kernel(derivative.second);
     }
     print_net_init();
     print_net_send_buffering();
