@@ -62,16 +62,16 @@ class SympySolverVisitor: public AstVisitor {
     /// replace binary expression with new expression provided as string
     static void replace_diffeq_expression(ast::DiffEqExpression* expr, const std::string& new_expr);
 
-    // raise error if kinetic/ode/(non)linear statements are spread over multiple blocks
+    /// raise error if kinetic/ode/(non)linear statements are spread over multiple blocks
     void check_expr_statements_in_same_block();
 
-    // return iterator pointing to where solution should be inserted in statement block
+    /// return iterator pointing to where solution should be inserted in statement block
     ast::StatementVector::iterator get_solution_location_iterator(ast::StatementVector& statements);
 
-    std::shared_ptr<ast::EigenNewtonSolverBlock> construct_eigen_newton_solver_block(
-        const std::vector<std::string>& setup_x,
-        const std::vector<std::string>& functor,
-        const std::vector<std::string>& update_state);
+    /// construct solver block
+    void construct_eigen_solver_block(const std::vector<std::string>& pre_solve_statements,
+                                      const std::vector<std::string>& solutions,
+                                      bool linear);
 
     /// solve linear system (for "sparse" and "LINEAR")
     void solve_linear_system(const std::vector<std::string>& pre_solve_statements = {});
