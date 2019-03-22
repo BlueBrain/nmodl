@@ -22,11 +22,21 @@ namespace nmodl {
 
 using symtab::syminfo::NmodlType;
 
-void SympySolverVisitor::clear_previous_block_data() {
+void SympySolverVisitor::init_block_data(ast::Node* node) {
+    // clear any previous data
     expression_statements.clear();
     eq_system.clear();
     last_expression_statement = nullptr;
     block_with_expression_statements = nullptr;
+    eq_system_is_valid = true;
+    // get set of local block vars & global vars
+    vars = global_vars;
+    if (auto symtab = node->get_statement_block()->get_symbol_table()) {
+        auto localvars = symtab->get_variables_with_properties(NmodlType::local_var);
+        for (const auto& localvar: localvars) {
+            vars.insert(localvar->get_name());
+        }
+    }
 }
 
 void SympySolverVisitor::replace_diffeq_expression(ast::DiffEqExpression* expr,
@@ -43,7 +53,10 @@ void SympySolverVisitor::check_expr_statements_in_same_block() {
     /// if this is not the case, for now return an error (and should instead use fallback solver)
     if (block_with_expression_statements != nullptr &&
         block_with_expression_statements != current_statement_block) {
-        logger->error("SympySolverVisitor :: coupled equations are appearing in different blocks");
+        logger->warn(
+            "SympySolverVisitor :: Coupled equations are appearing in different blocks - not "
+            "supported");
+        eq_system_is_valid = false;
     }
     block_with_expression_statements = current_statement_block;
 }
@@ -305,27 +318,18 @@ void SympySolverVisitor::visit_diff_eq_expression(ast::DiffEqExpression* node) {
 }
 
 void SympySolverVisitor::visit_derivative_block(ast::DerivativeBlock* node) {
-    // get all vars for this block, i.e. global vars + local vars
-    vars = global_vars;
-    if (auto symtab = node->get_statement_block()->get_symbol_table()) {
-        auto localvars = symtab->get_variables_with_properties(NmodlType::local_var);
-        for (const auto& v: localvars) {
-            vars.insert(v->get_name());
-        }
-    }
+    /// clear information from previous block, get global vars + block local vars
+    init_block_data(node);
 
     // get user specified solve method for this block
     solve_method = derivative_block_solve_method[node->get_node_name()];
-
-    /// clear information from previous derivative block if any
-    clear_previous_block_data();
 
     // visit each differential equation:
     //  - for CNEXP or EULER, each equation is independent & is replaced with its solution
     //  - otherwise, each equation is added to eq_system
     node->visit_children(this);
 
-    if (!eq_system.empty()) {
+    if (eq_system_is_valid && !eq_system.empty()) {
         // solve system of ODEs in eq_system
         logger->debug("SympySolverVisitor :: Solving {} system of ODEs", solve_method);
 
@@ -371,22 +375,15 @@ void SympySolverVisitor::visit_lin_equation(ast::LinEquation* node) {
 void SympySolverVisitor::visit_linear_block(ast::LinearBlock* node) {
     logger->debug("SympySolverVisitor :: found LINEAR block: {}", node->get_node_name());
 
-    // get all vars for this block, i.e. global vars + local vars
-    vars = global_vars;
-    if (auto symtab = node->get_statement_block()->get_symbol_table()) {
-        auto localvars = symtab->get_variables_with_properties(NmodlType::local_var);
-        for (const auto& v: localvars) {
-            vars.insert(v->get_name());
-        }
-    }
-
-    /// clear information from previous derivative block if any
-    clear_previous_block_data();
+    /// clear information from previous block, get global vars + block local vars
+    init_block_data(node);
 
     // collect linear equations
     node->visit_children(this);
 
-    solve_linear_system();
+    if (eq_system_is_valid) {
+        solve_linear_system();
+    }
 }
 
 void SympySolverVisitor::visit_non_lin_equation(ast::NonLinEquation* node) {
@@ -403,27 +400,22 @@ void SympySolverVisitor::visit_non_lin_equation(ast::NonLinEquation* node) {
 void SympySolverVisitor::visit_non_linear_block(ast::NonLinearBlock* node) {
     logger->debug("SympySolverVisitor :: found NONLINEAR block: {}", node->get_node_name());
 
-    // get all vars for this block, i.e. global vars + local vars
-    vars = global_vars;
-    if (auto symtab = node->get_statement_block()->get_symbol_table()) {
-        auto localvars = symtab->get_variables_with_properties(NmodlType::local_var);
-        for (const auto& v: localvars) {
-            vars.insert(v->get_name());
-        }
-    }
-
-    /// clear information from previous derivative block if any
-    clear_previous_block_data();
+    /// clear information from previous block, get global vars + block local vars
+    init_block_data(node);
 
     // collect non-linear equations
     node->visit_children(this);
 
-    solve_non_linear_system();
+    if (eq_system_is_valid) {
+        solve_non_linear_system();
+    }
 }
 
 void SympySolverVisitor::visit_expression_statement(ast::ExpressionStatement* node) {
+    auto prev_expression_statement = current_expression_statement;
     current_expression_statement = node;
     node->visit_children(this);
+    current_expression_statement = prev_expression_statement;
 }
 
 void SympySolverVisitor::visit_statement_block(ast::StatementBlock* node) {

@@ -56,8 +56,8 @@ namespace nmodl {
 
 class SympySolverVisitor: public AstVisitor {
   private:
-    /// clear any data from previous block
-    void clear_previous_block_data();
+    /// clear any data from previous block & get set of block local vars + global vars
+    void init_block_data(ast::Node* node);
 
     /// replace binary expression with new expression provided as string
     static void replace_diffeq_expression(ast::DiffEqExpression* expr, const std::string& new_expr);
@@ -114,6 +114,9 @@ class SympySolverVisitor: public AstVisitor {
 
     /// vector of {ODE, linear eq, non-linear eq} system to solve
     std::vector<std::string> eq_system;
+
+    /// only solve eq_system system of equations if this is true:
+    bool eq_system_is_valid = true;
 
     /// state variables vector
     std::vector<std::string> state_vars;
