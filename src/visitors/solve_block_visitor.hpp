@@ -15,20 +15,22 @@ namespace nmodl {
 
 class SolveBlockVisitor: public AstVisitor {
   private:
-    std::shared_ptr<ast::Program> program;
-
-    bool in_breakpoint_block = false;
+    symtab::SymbolTable* symtab = nullptr;
     ast::StatementVector solve_expresisons;
+    bool in_breakpoint_block = false;
 
   public:
-    explicit SolveBlockVisitor(std::shared_ptr<ast::Program> program)
-        : program(std::move(program))
-        , solve_expresisons() {}
-
+    SolveBlockVisitor() = default;
 
     void visit_breakpoint_block(ast::BreakpointBlock* node) override;
-
     void visit_expression_statement(ast::ExpressionStatement* node) override;
+
+    virtual void visit_program(ast::Program* node) override {
+        symtab = node->get_symbol_table();
+        node->visit_children(this);
+        auto nrn_state = new ast::NrnStateBlock(solve_expresisons);
+        node->addNode(nrn_state);
+    }
 };
 
 }  // namespace nmodl

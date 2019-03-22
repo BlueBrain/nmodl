@@ -14,17 +14,13 @@ namespace nmodl {
 
 void SolveBlockVisitor::visit_breakpoint_block(ast::BreakpointBlock* node) {
     in_breakpoint_block = true;
-    AstVisitor::visit_breakpoint_block(node);
+    node->visit_children(this);
     in_breakpoint_block = false;
-
-    auto nrn_state = new ast::NrnStateBlock(solve_expresisons);
-    program.get()->addNode(nrn_state);
 }
 
 
 void SolveBlockVisitor::visit_expression_statement(ast::ExpressionStatement* node) {
-    AstVisitor::visit_expression_statement(node);
-    auto symtab = program->get_symbol_table();
+    node->visit_children(this);
     if (node->get_expression()->is_solve_block()) {
         auto solve_block = std::dynamic_pointer_cast<ast::SolveBlock>(node->get_expression());
         auto sb_name = solve_block->get_block_name();

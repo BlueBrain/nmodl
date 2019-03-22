@@ -1751,10 +1751,8 @@ std::string run_cnexp_solve_visitor(const std::string& text) {
     auto ast = driver.ast();
 
     {
-        SymtabVisitor v1;
-        v1.visit_program(ast.get());
-        CnexpSolveVisitor v2;
-        v2.visit_program(ast.get());
+        SymtabVisitor().visit_program(ast.get());
+        CnexpSolveVisitor().visit_program(ast.get());
     }
 
     std::stringstream stream;

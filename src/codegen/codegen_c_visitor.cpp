@@ -3694,7 +3694,6 @@ void CodegenCVisitor::print_derivative_kernel(DerivativeBlock* derivative) {
 
 
 void CodegenCVisitor::visit_solve_expression(SolveExpression* sexp) {
-
     auto sb = sexp->get_solve_block();
     auto sb_name = sb->get_block_name()->get_node_name();
     if (info.derivative_blocks.find(sb_name) != info.derivative_blocks.end()) {
@@ -3755,10 +3754,9 @@ void CodegenCVisitor::print_nrn_state() {
     auto slist = get_variable_name("slist{}"_format(num));
     auto dlist = get_variable_name("dlist{}"_format(num));
 
-
     for (auto& solve_statement: info.nrn_state_block->get_solve_statements()) {
-        auto expr = std::dynamic_pointer_cast<ast::ExpressionStatement>(solve_statement)
-                        ->get_expression();
+        auto expr =
+            std::dynamic_pointer_cast<ast::ExpressionStatement>(solve_statement)->get_expression();
         auto sb = std::dynamic_pointer_cast<ast::SolveExpression>(expr)->get_solve_block();
         auto sb_name = sb->get_block_name()->get_node_name();
         if (info.derivative_blocks.find(sb_name) != info.derivative_blocks.end()) {

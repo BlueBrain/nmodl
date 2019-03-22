@@ -109,12 +109,12 @@ void CnexpSolveVisitor::visit_program(ast::Program* node) {
     // now be removed
     auto program_blocks = node->get_blocks();
     bool update = false;
-    for(auto block_it = program_blocks.begin(); block_it < program_blocks.end(); block_it++) {
+    for (auto block_it = program_blocks.begin(); block_it < program_blocks.end(); block_it++) {
         if ((*block_it)->is_derivative_block()) {
             auto deriv_block = std::dynamic_pointer_cast<ast::DerivativeBlock>(*block_it);
             auto deriv_block_name = deriv_block->get_name()->get_node_name();
-            if((keep_derivative_block.find(deriv_block_name) != keep_derivative_block.cend()) and
-               !keep_derivative_block[deriv_block_name]) {
+            if ((keep_derivative_block.find(deriv_block_name) != keep_derivative_block.cend()) &&
+                !keep_derivative_block[deriv_block_name]) {
                 program_blocks.erase(block_it);
                 update = true;
             }
