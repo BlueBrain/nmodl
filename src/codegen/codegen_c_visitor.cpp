@@ -481,6 +481,7 @@ bool CodegenCVisitor::need_semicolon(Statement* node) {
         auto expression = dynamic_cast<ExpressionStatement*>(node)->get_expression();
         if (expression->is_statement_block()
             || expression->is_eigen_newton_solver_block()
+            || expression->is_eigen_linear_solver_block()
             || expression->is_solution_expression()) {
             return false;
         }
@@ -1689,6 +1690,25 @@ void CodegenCVisitor::visit_eigen_newton_solver_block(ast::EigenNewtonSolverBloc
     print_statement_block(node->get_update_states_block().get(), false, false);
 }
 
+void CodegenCVisitor::visit_eigen_linear_solver_block(ast::EigenLinearSolverBlock* node) {
+    printer->add_newline();
+    std::string float_type = default_float_data_type();
+    int N = info.num_primes;
+    printer->add_line("Eigen::Matrix<{0}, {1}, 1> X, F;"_format(float_type, N));
+    printer->add_line("Eigen::Matrix<{0}, {1}, {1}> Jm;"_format(float_type, N));
+    printer->add_line("{}* J = Jm.data();"_format(float_type));
+    print_statement_block(node->get_variable_block().get(), false, false);
+    print_statement_block(node->get_initialize_block().get(), false, false);
+    print_statement_block(node->get_setup_x_block().get(), false, false);
+
+    printer->add_newline();
+    printer->add_line(
+        "X = Eigen::PartialPivLU<Eigen::Ref<Eigen::Matrix<{0}, {1}, {1}>>>(Jm).solve(F);"_format(
+            float_type, N));
+    print_statement_block(node->get_update_states_block().get(), false, false);
+    print_statement_block(node->get_finalize_block().get(), false, false);
+}
+
 /****************************************************************************************/
 /*                           Code-specific helper routines                              */
 /****************************************************************************************/
@@ -2261,6 +2281,9 @@ void CodegenCVisitor::print_coreneuron_includes() {
     printer->add_line("#include <_kinderiv.h>");
     if (info.eigen_newton_solver_exist) {
         printer->add_line("#include <newton/newton.hpp>");
+    }
+    if (info.eigen_linear_solver_exist) {
+        printer->add_line("#include <Eigen/LU>");
     }
 }
 
