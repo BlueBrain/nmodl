@@ -43,7 +43,8 @@ ast::SolutionExpression* SolveBlockVisitor::create_solution_expression(
 
     /// in case of derivimplicit method if neuron solver is used (i.e. not sympy) then
     /// the solution is not in place but we have to create a callback to newton solver
-    std::string solve_method = solve_block->get_method()->get_node_name();
+    auto method = solve_block->get_method();
+    std::string solve_method = method ? method->get_node_name() : "";
     if (solve_method == codegen::naming::DERIVIMPLICIT_METHOD &&
         !has_sympy_solution(node_to_solve)) {
         /// typically derivimplicit is used for derivative block only
