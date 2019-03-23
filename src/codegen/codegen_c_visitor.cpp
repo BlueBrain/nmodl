@@ -1655,6 +1655,7 @@ void CodegenCVisitor::visit_eigen_newton_solver_block(ast::EigenNewtonSolverBloc
     printer->add_newline();
     auto float_type = default_float_data_type();
     printer->add_line("Eigen::Matrix<{}, {}, 1> X;"_format(float_type, info.num_primes));
+
     print_statement_block(node->get_setup_x_block().get(), false, false);
 
     // functor that evaluates F(X) and J(X) for Newton solver
@@ -1662,9 +1663,18 @@ void CodegenCVisitor::visit_eigen_newton_solver_block(ast::EigenNewtonSolverBloc
     printer->add_line("NrnThread* nt;");
     printer->add_line("{0}* inst;"_format(instance_struct()));
     printer->add_line("int id;");
+    printer->add_line("double v;");
+    printer->add_line("Datum* indexes;");
+
+    print_statement_block(node->get_variable_block().get(), false, false);
+    printer->add_newline();
+
+    printer->start_block("void initialize()");
+    print_statement_block(node->get_initialize_block().get(), false, false);
+    printer->end_block(2);
 
     printer->add_line(
-        "functor(NrnThread* nt, {}* inst, int id) : nt(nt), inst(inst), id(id) {}"_format(
+        "functor(NrnThread* nt, {}* inst, int id, double v, Datum* indexes) : nt(nt), inst(inst), id(id), v(v), indexes(indexes) {}"_format(
             instance_struct(), "{}"));
 
     printer->add_indent();
@@ -1675,19 +1685,26 @@ void CodegenCVisitor::visit_eigen_newton_solver_block(ast::EigenNewtonSolverBloc
     printer->start_block();
     printer->add_line("{}* J = Jm.data();"_format(float_type));
     print_statement_block(node->get_functor_block().get(), false, false);
+    printer->end_block(2);
+
+    // assign newton solver results in matrix X to state vars
+    printer->start_block("void finalize()");
+    print_statement_block(node->get_finalize_block().get(), false, false);
     printer->end_block(1);
+
     printer->end_block(0);
     printer->add_text(";");
     printer->add_newline();
 
     // call newton solver with functor and X matrix that contains state vars
     printer->add_line("// call newton solver");
-    printer->add_line("functor newton_functor(nt, inst, id);");
+    printer->add_line("functor newton_functor(nt, inst, id, v, indexes);");
+    printer->add_line("newton_functor.initialize();");
     printer->add_line("int newton_iterations = nmodl::newton::newton_solver(X, newton_functor);");
 
     // assign newton solver results in matrix X to state vars
-    printer->add_line("// assign results to state vars");
     print_statement_block(node->get_update_states_block().get(), false, false);
+    printer->add_line("newton_functor.finalize();");
 }
 
 void CodegenCVisitor::visit_eigen_linear_solver_block(ast::EigenLinearSolverBlock* node) {
