@@ -456,11 +456,14 @@ void CodegenHelperVisitor::visit_net_receive_block(NetReceiveBlock* node) {
 
 void CodegenHelperVisitor::visit_derivative_block(DerivativeBlock* node) {
     under_derivative_block = true;
-    auto name = node->get_name()->get_node_name();
-    info.derivative_blocks[name] = node;
-    info.derivimplicit_used = true;
     node->visit_children(this);
     under_derivative_block = false;
+}
+
+void CodegenHelperVisitor::visit_derivimplicit_callback_expression(
+    ast::DerivimplicitCallbackExpression* node) {
+    info.derivimplicit_used = true;
+    info.derivimplicit_callbacks.push_back(node);
 }
 
 
@@ -473,11 +476,8 @@ void CodegenHelperVisitor::visit_breakpoint_block(BreakpointBlock* node) {
 
 
 void CodegenHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock* node) {
-    under_nrn_state_block = true;
     info.nrn_state_block = node;
-    info.has_nrn_state_node = true;
     node->visit_children(this);
-    under_nrn_state_block = false;
 }
 
 

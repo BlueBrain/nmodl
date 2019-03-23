@@ -49,9 +49,6 @@ class CodegenHelperVisitor: public AstVisitor {
     /// if visiting breakpoint block
     bool under_breakpoint_block = false;
 
-    /// if visiting nrn_state block
-    bool under_nrn_state_block = false;
-
     /// table statement found
     bool table_statement_used = false;
 
@@ -61,7 +58,6 @@ class CodegenHelperVisitor: public AstVisitor {
     /// lhs of assignment in derivative block
     std::shared_ptr<ast::Expression> assign_lhs;
 
-    void find_nrn_state_node();
     void find_ion_variables();
     void find_table_variables();
     void find_range_variables();
@@ -86,6 +82,8 @@ class CodegenHelperVisitor: public AstVisitor {
     void visit_initial_block(ast::InitialBlock* node) override;
     void visit_breakpoint_block(ast::BreakpointBlock* node) override;
     void visit_derivative_block(ast::DerivativeBlock* node) override;
+    void visit_derivimplicit_callback_expression(
+        ast::DerivimplicitCallbackExpression* node) override;
     void visit_net_receive_block(ast::NetReceiveBlock* node) override;
     void visit_bbcore_ptr(ast::BbcorePtr* node) override;
     void visit_watch(ast::Watch* node) override;

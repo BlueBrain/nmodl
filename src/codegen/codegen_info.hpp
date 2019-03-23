@@ -7,7 +7,6 @@
 
 #pragma once
 
-#include <map>
 #include <string>
 
 #include "ast/ast.hpp"
@@ -173,9 +172,6 @@ struct CodegenInfo {
     /// if for_netcon is used
     bool for_netcon_used = false;
 
-    /// if nrn_state node is available
-    bool has_nrn_state_node = false;
-
     /// number of watch expressions
     int watch_count = 0;
 
@@ -233,9 +229,6 @@ struct CodegenInfo {
     /// typically equal to number of primes
     int num_equations = 0;
 
-    /// solve method used
-    std::string solve_method;
-
     /// derivative block
     ast::BreakpointBlock* breakpoint_node = nullptr;
 
@@ -257,8 +250,8 @@ struct CodegenInfo {
     /// all procedures defined in the mod file
     std::vector<ast::ProcedureBlock*> procedures;
 
-    /// all derivative blocks in the mod file
-    std::map<std::string, ast::DerivativeBlock*> derivative_blocks;
+    /// derivimplicit callbacks need to be emited
+    std::vector<ast::DerivimplicitCallbackExpression*> derivimplicit_callbacks;
 
     /// all functions defined in the mod file
     std::vector<ast::FunctionBlock*> functions;
@@ -361,7 +354,7 @@ struct CodegenInfo {
     /// if either read or write variable
     bool is_ion_variable(const std::string& name);
 
-    /// if a current
+    /// if given variable is a current
     bool is_current(const std::string& name);
 
     /// if watch statements are used

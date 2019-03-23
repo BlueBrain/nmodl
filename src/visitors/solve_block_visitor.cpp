@@ -6,11 +6,11 @@
  *************************************************************************/
 
 #include "visitors/solve_block_visitor.hpp"
+#include "codegen/codegen_naming.hpp"
 #include "utils/logger.hpp"
 #include "visitors/lookup_visitor.hpp"
 
 namespace nmodl {
-
 
 void SolveBlockVisitor::visit_breakpoint_block(ast::BreakpointBlock* node) {
     in_breakpoint_block = true;
@@ -18,21 +18,69 @@ void SolveBlockVisitor::visit_breakpoint_block(ast::BreakpointBlock* node) {
     in_breakpoint_block = false;
 }
 
+/// check if given node contains sympy solution
+static bool has_sympy_solution(ast::AST* node) {
+    return !AstLookupVisitor().lookup(node, ast::AstNodeType::EIGEN_NEWTON_SOLVER_BLOCK).empty();
+}
 
+/**
+ * Create solve expression node that will be used for solve block
+ * @param solve_block solve block used to describe node to solve and method
+ * @return solve expression that will be used to replace the solve block
+ *
+ * Depending on the solver used, solve block is converted to solve expression statement
+ * that will be used to replace solve block. Note that the blocks are clones instead of
+ * shared_ptr because DerivimplicitCallbackExpression is currently contain whole node
+ * instead of just pointer.
+ */
+ast::SolveExpression* SolveBlockVisitor::create_solve_expression(ast::SolveBlock* solve_block) {
+    /// find out the block that is going to solved
+    std::string block_name = solve_block->get_block_name()->get_node_name();
+    auto solve_node_symbol = symtab->lookup(block_name);
+    assert(solve_node_symbol != nullptr);
+    auto node_to_solve = solve_node_symbol->get_node();
+
+    /// in case of derivimplicit method if neuron solver is used (i.e. not sympy) then
+    /// the solution is not in place but we have to create a callback to newton solver
+    std::string solve_method = solve_block->get_method()->get_node_name();
+    if (solve_method == codegen::naming::DERIVIMPLICIT_METHOD &&
+        !has_sympy_solution(node_to_solve)) {
+        /// typically derivimplicit is used for derivative block only
+        assert(node_to_solve->get_node_type() == ast::AstNodeType::DERIVATIVE_BLOCK);
+        auto derivative_block = dynamic_cast<ast::DerivativeBlock*>(node_to_solve);
+        auto callback_expr = new ast::DerivimplicitCallbackExpression(derivative_block->clone());
+        return new ast::SolveExpression(solve_block->clone(), callback_expr);
+    }
+
+    auto block_to_solve = node_to_solve->get_statement_block();
+    return new ast::SolveExpression(solve_block->clone(), block_to_solve->clone());
+}
+
+/**
+ * Replace solve blocks with solve expression
+ * @param node Ast node for SOLVE statement in the mod file
+ */
 void SolveBlockVisitor::visit_expression_statement(ast::ExpressionStatement* node) {
     node->visit_children(this);
     if (node->get_expression()->is_solve_block()) {
-        auto solve_block = std::dynamic_pointer_cast<ast::SolveBlock>(node->get_expression());
-        auto sb_name = solve_block->get_block_name();
-        auto solve_func = symtab->lookup(sb_name->get_node_name());
-        auto block_to_solve = solve_func->get_node()->get_statement_block();
-        auto sexp = new ast::SolveExpression(solve_block, block_to_solve);
+        auto solve_block = dynamic_cast<ast::SolveBlock*>(node->get_expression().get());
+        auto solve_expr = create_solve_expression(solve_block);
         if (in_breakpoint_block) {
-            logger->debug("found in breakpoint solve block and func {}", solve_func->get_name());
-            solve_expresisons.emplace_back(new ast::ExpressionStatement(sexp));
+            nrn_state_solve_statements.emplace_back(new ast::ExpressionStatement(solve_expr));
         } else {
-            node->set_expression(std::shared_ptr<ast::SolveExpression>(sexp));
+            node->set_expression(std::shared_ptr<ast::SolveExpression>(solve_expr));
         }
+    }
+}
+
+
+void SolveBlockVisitor::visit_program(ast::Program* node) {
+    symtab = node->get_symbol_table();
+    node->visit_children(this);
+    /// add new node NrnState with solve blocks from breakpoint block
+    if (!nrn_state_solve_statements.empty()) {
+        auto nrn_state = new ast::NrnStateBlock(nrn_state_solve_statements);
+        node->addNode(nrn_state);
     }
 }
 

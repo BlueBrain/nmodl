@@ -679,6 +679,10 @@ struct AST: public std::enable_shared_from_this<AST> {
     virtual bool is_diff_eq_expression() {
         return false;
     }
+
+    virtual bool is_derivimplicit_callback_expression() {
+        return false;
+    }
 };
 
 }  // namespace ast
