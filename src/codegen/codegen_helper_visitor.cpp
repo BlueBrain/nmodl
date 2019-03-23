@@ -228,10 +228,6 @@ void CodegenHelperVisitor::find_non_range_variables() {
         info.thread_callback_register = true;
     }
 
-    if (info.euler_used) {
-        info.euler_list_num = 1;
-    }
-
     /// next thread id is allocated for top local variables
     if (info.vectorize && !info.top_local_variables.empty()) {
         info.top_local_thread_id = info.thread_data_index++;
@@ -460,8 +456,7 @@ void CodegenHelperVisitor::visit_derivative_block(DerivativeBlock* node) {
     under_derivative_block = false;
 }
 
-void CodegenHelperVisitor::visit_derivimplicit_callback_expression(
-    ast::DerivimplicitCallbackExpression* node) {
+void CodegenHelperVisitor::visit_derivimplicit_callback(ast::DerivimplicitCallback* node) {
     info.derivimplicit_used = true;
     info.derivimplicit_callbacks.push_back(node);
 }
@@ -625,7 +620,6 @@ codegen::CodegenInfo CodegenHelperVisitor::analyze(ast::Program* node) {
     node->accept(this);
     return info;
 }
-
 
 }  // namespace codegen
 }  // namespace nmodl

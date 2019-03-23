@@ -24,16 +24,17 @@ static bool has_sympy_solution(ast::AST* node) {
 }
 
 /**
- * Create solve expression node that will be used for solve block
+ * Create solution expression node that will be used for solve block
  * @param solve_block solve block used to describe node to solve and method
- * @return solve expression that will be used to replace the solve block
+ * @return solution expression that will be used to replace the solve block
  *
  * Depending on the solver used, solve block is converted to solve expression statement
  * that will be used to replace solve block. Note that the blocks are clones instead of
- * shared_ptr because DerivimplicitCallbackExpression is currently contain whole node
+ * shared_ptr because DerivimplicitCallback is currently contain whole node
  * instead of just pointer.
  */
-ast::SolveExpression* SolveBlockVisitor::create_solve_expression(ast::SolveBlock* solve_block) {
+ast::SolutionExpression* SolveBlockVisitor::create_solution_expression(
+    ast::SolveBlock* solve_block) {
     /// find out the block that is going to solved
     std::string block_name = solve_block->get_block_name()->get_node_name();
     auto solve_node_symbol = symtab->lookup(block_name);
@@ -48,27 +49,27 @@ ast::SolveExpression* SolveBlockVisitor::create_solve_expression(ast::SolveBlock
         /// typically derivimplicit is used for derivative block only
         assert(node_to_solve->get_node_type() == ast::AstNodeType::DERIVATIVE_BLOCK);
         auto derivative_block = dynamic_cast<ast::DerivativeBlock*>(node_to_solve);
-        auto callback_expr = new ast::DerivimplicitCallbackExpression(derivative_block->clone());
-        return new ast::SolveExpression(solve_block->clone(), callback_expr);
+        auto callback_expr = new ast::DerivimplicitCallback(derivative_block->clone());
+        return new ast::SolutionExpression(solve_block->clone(), callback_expr);
     }
 
     auto block_to_solve = node_to_solve->get_statement_block();
-    return new ast::SolveExpression(solve_block->clone(), block_to_solve->clone());
+    return new ast::SolutionExpression(solve_block->clone(), block_to_solve->clone());
 }
 
 /**
- * Replace solve blocks with solve expression
+ * Replace solve blocks with solution expression
  * @param node Ast node for SOLVE statement in the mod file
  */
 void SolveBlockVisitor::visit_expression_statement(ast::ExpressionStatement* node) {
     node->visit_children(this);
     if (node->get_expression()->is_solve_block()) {
         auto solve_block = dynamic_cast<ast::SolveBlock*>(node->get_expression().get());
-        auto solve_expr = create_solve_expression(solve_block);
+        auto sol_expr = create_solution_expression(solve_block);
         if (in_breakpoint_block) {
-            nrn_state_solve_statements.emplace_back(new ast::ExpressionStatement(solve_expr));
+            nrn_state_solve_statements.emplace_back(new ast::ExpressionStatement(sol_expr));
         } else {
-            node->set_expression(std::shared_ptr<ast::SolveExpression>(solve_expr));
+            node->set_expression(std::shared_ptr<ast::SolutionExpression>(sol_expr));
         }
     }
 }

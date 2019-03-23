@@ -82,8 +82,7 @@ class CodegenHelperVisitor: public AstVisitor {
     void visit_initial_block(ast::InitialBlock* node) override;
     void visit_breakpoint_block(ast::BreakpointBlock* node) override;
     void visit_derivative_block(ast::DerivativeBlock* node) override;
-    void visit_derivimplicit_callback_expression(
-        ast::DerivimplicitCallbackExpression* node) override;
+    void visit_derivimplicit_callback(ast::DerivimplicitCallback* node) override;
     void visit_net_receive_block(ast::NetReceiveBlock* node) override;
     void visit_bbcore_ptr(ast::BbcorePtr* node) override;
     void visit_watch(ast::Watch* node) override;

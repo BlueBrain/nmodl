@@ -314,7 +314,11 @@ struct AST: public std::enable_shared_from_this<AST> {
         return false;
     }
 
-    virtual bool is_solve_expression() {
+    virtual bool is_solution_expression() {
+        return false;
+    }
+
+    virtual bool is_derivimplicit_callback() {
         return false;
     }
 
@@ -677,10 +681,6 @@ struct AST: public std::enable_shared_from_this<AST> {
     }
 
     virtual bool is_diff_eq_expression() {
-        return false;
-    }
-
-    virtual bool is_derivimplicit_callback_expression() {
         return false;
     }
 };

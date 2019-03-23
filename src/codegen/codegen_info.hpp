@@ -213,9 +213,6 @@ struct CodegenInfo {
     /// slist/dlist id for derivimplicit block
     int derivimplicit_list_num = -1;
 
-    /// slist/dlist id for for euler block
-    int euler_list_num = -1;
-
     /// number of solve blocks in mod file
     int num_solve_blocks = 0;
 
@@ -251,7 +248,7 @@ struct CodegenInfo {
     std::vector<ast::ProcedureBlock*> procedures;
 
     /// derivimplicit callbacks need to be emited
-    std::vector<ast::DerivimplicitCallbackExpression*> derivimplicit_callbacks;
+    std::vector<ast::DerivimplicitCallback*> derivimplicit_callbacks;
 
     /// all functions defined in the mod file
     std::vector<ast::FunctionBlock*> functions;
@@ -323,12 +320,6 @@ struct CodegenInfo {
 
     /// if mod file used dervimplicit method
     bool derivimplicit_used = false;
-
-    /// if mod file used euler method
-    bool euler_used = false;
-
-    /// if mod file used cnexp method
-    bool cnexp_used = false;
 
     /// all top level global blocks
     std::vector<ast::Node*> top_blocks;

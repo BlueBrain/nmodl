@@ -57,18 +57,18 @@
                         - expression:
                             description: "Expression that is being wrapped"
                             type: Expression
-                  - DerivimplicitCallbackExpression:
-                      description: "Callback to exisiting NEURON solver with derivimplicit method"
+                  - DerivimplicitCallback:
+                      description: "Represent a callback to NEURON's derivimplicit solver"
                       members:
-                        - block_to_call:
-                            description: "Block being used as a callback (typically derivative block)"
+                        - node_to_solve:
+                            description: "Block to be solved (typically derivative)"
                             type: Block
-                  - SolveExpression:
-                      description: "The block to solve and SolveBlock"
+                  - SolutionExpression:
+                      description: "Represent solution of a block in the AST"
                       members:
                         - solve_block:
                             type: SolveBlock
-                        - block_to_solve:
-                            description: "Block being solved : could be SolverCallbackExpression or StatementBlock"
+                        - node_to_solve:
+                            description: "Block to be solved (callback node or solution node itself)"
                             type: Expression
             - Statement:

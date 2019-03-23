@@ -481,7 +481,7 @@ bool CodegenCVisitor::need_semicolon(Statement* node) {
         auto expression = dynamic_cast<ExpressionStatement*>(node)->get_expression();
         if (expression->is_statement_block()
             || expression->is_eigen_newton_solver_block()
-            || expression->is_solve_expression()) {
+            || expression->is_solution_expression()) {
             return false;
         }
     }
@@ -3682,29 +3682,27 @@ void CodegenCVisitor::print_derivimplicit_kernel(Block* block) {
     // clang-format on
 }
 
-void CodegenCVisitor::visit_derivimplicit_callback_expression(
-    ast::DerivimplicitCallbackExpression* node) {
+void CodegenCVisitor::visit_derivimplicit_callback(ast::DerivimplicitCallback* node) {
     if (!codegen) {
         return;
     }
     auto thread_args = external_method_arguments();
     auto num_primes = info.num_primes;
     auto suffix = info.mod_suffix;
-
     int num = info.derivimplicit_list_num;
     auto slist = get_variable_name("slist{}"_format(num));
     auto dlist = get_variable_name("dlist{}"_format(num));
-    auto sb_name = node->get_block_to_call()->get_node_name();
+    auto block_name = node->get_node_to_solve()->get_node_name();
 
     auto args =
         "{}, {}, {}, _derivimplicit_{}_{}, {}"
-        ""_format(num_primes, slist, dlist, sb_name, suffix, thread_args);
+        ""_format(num_primes, slist, dlist, block_name, suffix, thread_args);
     auto statement = "derivimplicit_thread({});"_format(args);
     printer->add_line(statement);
 }
 
-void CodegenCVisitor::visit_solve_expression(SolveExpression* node) {
-    auto block = node->get_block_to_solve().get();
+void CodegenCVisitor::visit_solution_expression(SolutionExpression* node) {
+    auto block = node->get_node_to_solve().get();
     if (block->is_statement_block()) {
         auto statement_block = dynamic_cast<ast::StatementBlock*>(block);
         print_statement_block(statement_block, false, false);
@@ -3977,7 +3975,7 @@ void CodegenCVisitor::print_compute_functions() {
         print_function(function);
     }
     for (const auto& callback: info.derivimplicit_callbacks) {
-        auto block = callback->get_block_to_call().get();
+        auto block = callback->get_node_to_solve().get();
         print_derivimplicit_kernel(block);
     }
     print_net_init();
