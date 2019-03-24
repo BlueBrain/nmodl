@@ -2652,7 +2652,7 @@ SCENARIO("SympySolver visitor: derivimplicit or sparse", "[sympy][derivimplicit]
         )";
         std::string expected_result = R"(
             DERIVATIVE states {
-                EIGEN_NEWTON_SOLVE{
+                EIGEN_NEWTON_SOLVE[1]{
                     LOCAL old_m
                 }{
                     IF (mInf == 1) {
@@ -2777,7 +2777,7 @@ SCENARIO("SympySolver visitor: derivimplicit or sparse", "[sympy][derivimplicit]
         /// new derivative block with EigenNewtonSolverBlock node
         std::string expected_result = R"(
             DERIVATIVE states {
-                EIGEN_NEWTON_SOLVE{
+                EIGEN_NEWTON_SOLVE[3]{
                     LOCAL old_m, old_h, old_n
                 }{
                     rates(v)
@@ -2839,7 +2839,7 @@ SCENARIO("SympySolver visitor: derivimplicit or sparse", "[sympy][derivimplicit]
         /// EigenNewtonSolverBlock in each derivative block
         std::string expected_result_0 = R"(
             DERIVATIVE states1 {
-                EIGEN_NEWTON_SOLVE{
+                EIGEN_NEWTON_SOLVE[2]{
                     LOCAL old_m, old_h
                 }{
                     old_m = m
@@ -2862,7 +2862,7 @@ SCENARIO("SympySolver visitor: derivimplicit or sparse", "[sympy][derivimplicit]
             })";
         std::string expected_result_1 = R"(
             DERIVATIVE states2 {
-                EIGEN_NEWTON_SOLVE{
+                EIGEN_NEWTON_SOLVE[2]{
                     LOCAL old_h, old_m
                 }{
                     old_h = h
@@ -4114,7 +4114,7 @@ SCENARIO("LINEAR solve block (SympySolver Visitor)", "[sympy][linear]") {
             })";
         std::string expected_text = R"(
             LINEAR lin {
-                EIGEN_LINEAR_SOLVE{
+                EIGEN_LINEAR_SOLVE[4]{
                 }{
                 }{
                     X[0] = w
@@ -4176,7 +4176,7 @@ SCENARIO("LINEAR solve block (SympySolver Visitor)", "[sympy][linear]") {
             })";
         std::string expected_text = R"(
             LINEAR seqinitial {
-                EIGEN_LINEAR_SOLVE{
+                EIGEN_LINEAR_SOLVE[12]{
                 }{
                 }{
                     X[0] = C1
@@ -4386,7 +4386,7 @@ SCENARIO("NONLINEAR solve block (SympySolver Visitor)", "[sympy][nonlinear]") {
             })";
         std::string expected_text = R"(
             NONLINEAR nonlin {
-                EIGEN_NEWTON_SOLVE{
+                EIGEN_NEWTON_SOLVE[1]{
                 }{
                 }{
                     X[0] = x

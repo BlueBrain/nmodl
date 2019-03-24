@@ -59,6 +59,9 @@ class SympySolverVisitor: public AstVisitor {
     /// clear any data from previous block & get set of block local vars + global vars
     void init_block_data(ast::Node* node);
 
+    /// construct vector from set of state vars in correct order
+    void init_state_vars_vector();
+
     /// replace binary expression with new expression provided as string
     static void replace_diffeq_expression(ast::DiffEqExpression* expr, const std::string& new_expr);
 
@@ -118,7 +121,16 @@ class SympySolverVisitor: public AstVisitor {
     /// only solve eq_system system of equations if this is true:
     bool eq_system_is_valid = true;
 
-    /// state variables vector
+    /// true for (non)linear eqs, to identify all state vars used in equations
+    bool collect_state_vars = false;
+
+    /// vector of all state variables (in order specified in STATE block in mod file)
+    std::vector<std::string> all_state_vars;
+
+    /// set of state variables used in block
+    std::set<std::string> state_vars_in_block;
+
+    /// vector of state vars used *in block* (in same order as all_state_vars)
     std::vector<std::string> state_vars;
 
     /// optionally replace cnexp solution with (1,1) pade approx
@@ -138,6 +150,7 @@ class SympySolverVisitor: public AstVisitor {
         , elimination(elimination)
         , SMALL_LINEAR_SYSTEM_MAX_STATES(SMALL_LINEAR_SYSTEM_MAX_STATES){};
 
+    void visit_var_name(ast::VarName* node) override;
     void visit_diff_eq_expression(ast::DiffEqExpression* node) override;
     void visit_derivative_block(ast::DerivativeBlock* node) override;
     void visit_lin_equation(ast::LinEquation* node) override;

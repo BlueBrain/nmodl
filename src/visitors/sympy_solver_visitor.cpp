@@ -26,6 +26,7 @@ void SympySolverVisitor::init_block_data(ast::Node* node) {
     // clear any previous data
     expression_statements.clear();
     eq_system.clear();
+    state_vars_in_block.clear();
     last_expression_statement = nullptr;
     block_with_expression_statements = nullptr;
     eq_system_is_valid = true;
@@ -35,6 +36,15 @@ void SympySolverVisitor::init_block_data(ast::Node* node) {
         auto localvars = symtab->get_variables_with_properties(NmodlType::local_var);
         for (const auto& localvar: localvars) {
             vars.insert(localvar->get_name());
+        }
+    }
+}
+
+void SympySolverVisitor::init_state_vars_vector() {
+    state_vars.clear();
+    for (const auto& state_var: all_state_vars) {
+        if (state_vars_in_block.find(state_var) != state_vars_in_block.cend()) {
+            state_vars.push_back(state_var);
         }
     }
 }
@@ -138,6 +148,7 @@ void SympySolverVisitor::construct_eigen_solver_block(
         }
     }
     // make statement blocks
+    auto n_state_vars = std::make_shared<ast::Integer>(state_vars.size(), nullptr);
     auto variable_block = std::make_shared<ast::StatementBlock>(std::move(variable_statements));
     auto initialize_block = std::make_shared<ast::StatementBlock>(std::move(initialize_statements));
     auto update_state_block = create_statement_block(update_state_eqs);
@@ -147,8 +158,10 @@ void SympySolverVisitor::construct_eigen_solver_block(
         /// create eigen linear solver block
         setup_x_eqs.insert(setup_x_eqs.end(), solutions.begin(), solutions.end());
         auto setup_x_block = create_statement_block(setup_x_eqs);
-        auto solver_block = std::make_shared<ast::EigenLinearSolverBlock>(
-            variable_block, initialize_block, setup_x_block, update_state_block, finalize_block);
+        auto solver_block =
+            std::make_shared<ast::EigenLinearSolverBlock>(n_state_vars, variable_block,
+                                                          initialize_block, setup_x_block,
+                                                          update_state_block, finalize_block);
         /// replace statement block with solver block as it contains all statements
         ast::StatementVector solver_block_statements{
             std::make_shared<ast::ExpressionStatement>(solver_block)};
@@ -157,10 +170,9 @@ void SympySolverVisitor::construct_eigen_solver_block(
         /// create eigen newton solver block
         auto setup_x_block = create_statement_block(setup_x_eqs);
         auto functor_block = create_statement_block(solutions);
-        auto solver_block =
-            std::make_shared<ast::EigenNewtonSolverBlock>(variable_block, initialize_block,
-                                                          setup_x_block, functor_block,
-                                                          update_state_block, finalize_block);
+        auto solver_block = std::make_shared<ast::EigenNewtonSolverBlock>(
+            n_state_vars, variable_block, initialize_block, setup_x_block, functor_block,
+            update_state_block, finalize_block);
 
         /// replace statement block with solver block as it contains all statements
         ast::StatementVector solver_block_statements{
@@ -170,6 +182,8 @@ void SympySolverVisitor::construct_eigen_solver_block(
 }
 
 void SympySolverVisitor::solve_linear_system(const std::vector<std::string>& pre_solve_statements) {
+    // construct ordered vector of state vars used in linear system
+    init_state_vars_vector();
     // call sympy linear solver
     bool small_system = (eq_system.size() <= SMALL_LINEAR_SYSTEM_MAX_STATES);
     auto locals = py::dict("eq_strings"_a = eq_system, "state_vars"_a = state_vars, "vars"_a = vars,
@@ -239,6 +253,8 @@ void SympySolverVisitor::solve_linear_system(const std::vector<std::string>& pre
 
 void SympySolverVisitor::solve_non_linear_system(
     const std::vector<std::string>& pre_solve_statements) {
+    // construct ordered vector of state vars used in non-linear system
+    init_state_vars_vector();
     // call sympy non-linear solver
     auto locals = py::dict("equation_strings"_a = eq_system, "state_vars"_a = state_vars,
                            "vars"_a = vars);
@@ -267,6 +283,18 @@ void SympySolverVisitor::solve_non_linear_system(
     }
     logger->debug("SympySolverVisitor :: Constructing eigen newton solve block");
     construct_eigen_solver_block(pre_solve_statements, solutions, false);
+}
+
+void SympySolverVisitor::visit_var_name(ast::VarName* node) {
+    if (collect_state_vars) {
+        std::string var_name = node->get_node_name();
+        // if var_name is a state var, add it to set
+        if (std::find(all_state_vars.cbegin(), all_state_vars.cend(), var_name) !=
+            all_state_vars.cend()) {
+            logger->debug("SympySolverVisitor :: adding state var: {}", var_name);
+            state_vars_in_block.insert(var_name);
+        }
+    }
 }
 
 void SympySolverVisitor::visit_diff_eq_expression(ast::DiffEqExpression* node) {
@@ -325,8 +353,12 @@ void SympySolverVisitor::visit_diff_eq_expression(ast::DiffEqExpression* node) {
                  py::globals(), locals);
     } else {
         // for other solver methods: just collect the ODEs & return
-        logger->debug("SympySolverVisitor :: adding ODE system: {}", to_nmodl_for_sympy(node));
-        eq_system.push_back(to_nmodl_for_sympy(node));
+        std::string eq_str = to_nmodl_for_sympy(node);
+        std::string state_var_name = lhs_name->get_node_name();
+        logger->debug("SympySolverVisitor :: adding ODE system: {}", eq_str);
+        eq_system.push_back(eq_str);
+        logger->debug("SympySolverVisitor :: adding state var: {}", state_var_name);
+        state_vars_in_block.insert(state_var_name);
         expression_statements.insert(current_expression_statement);
         last_expression_statement = current_expression_statement;
         return;
@@ -402,6 +434,9 @@ void SympySolverVisitor::visit_lin_equation(ast::LinEquation* node) {
     expression_statements.insert(current_expression_statement);
     last_expression_statement = current_expression_statement;
     logger->debug("SympySolverVisitor :: adding linear eq: {}", lin_eq);
+    collect_state_vars = true;
+    node->visit_children(this);
+    collect_state_vars = false;
 }
 
 void SympySolverVisitor::visit_linear_block(ast::LinearBlock* node) {
@@ -427,6 +462,9 @@ void SympySolverVisitor::visit_non_lin_equation(ast::NonLinEquation* node) {
     expression_statements.insert(current_expression_statement);
     last_expression_statement = current_expression_statement;
     logger->debug("SympySolverVisitor :: adding non-linear eq: {}", non_lin_eq);
+    collect_state_vars = true;
+    node->visit_children(this);
+    collect_state_vars = false;
 }
 
 void SympySolverVisitor::visit_non_linear_block(ast::NonLinearBlock* node) {
@@ -478,13 +516,13 @@ void SympySolverVisitor::visit_program(ast::Program* node) {
         }
     }
 
-    // get list of state vars
-    state_vars.clear();
+    // get set of all state vars
+    all_state_vars.clear();
     if (auto symtab = node->get_symbol_table()) {
         auto statevars = symtab->get_variables_with_properties(NmodlType::state_var);
         for (const auto& v: statevars) {
             const auto& varname = v->get_name();
-            state_vars.push_back(varname);
+            all_state_vars.push_back(varname);
         }
     }
 

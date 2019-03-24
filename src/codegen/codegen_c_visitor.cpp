@@ -1654,7 +1654,8 @@ void CodegenCVisitor::visit_eigen_newton_solver_block(ast::EigenNewtonSolverBloc
     // solution vector to store copy of state vars for Newton solver
     printer->add_newline();
     auto float_type = default_float_data_type();
-    printer->add_line("Eigen::Matrix<{}, {}, 1> X;"_format(float_type, info.num_primes));
+    int N = node->get_n_state_vars()->get_value();
+    printer->add_line("Eigen::Matrix<{}, {}, 1> X;"_format(float_type, N));
 
     print_statement_block(node->get_setup_x_block().get(), false, false);
 
@@ -1681,7 +1682,7 @@ void CodegenCVisitor::visit_eigen_newton_solver_block(ast::EigenNewtonSolverBloc
     printer->add_text(
         "void operator()(const Eigen::Matrix<{0}, {1}, 1>& X, Eigen::Matrix<{0}, {1}, "
         "1>& F, "
-        "Eigen::Matrix<{0}, {1}, {1}>& Jm) const"_format(float_type, info.num_primes));
+        "Eigen::Matrix<{0}, {1}, {1}>& Jm) const"_format(float_type, N));
     printer->start_block();
     printer->add_line("{}* J = Jm.data();"_format(float_type));
     print_statement_block(node->get_functor_block().get(), false, false);
@@ -1710,7 +1711,7 @@ void CodegenCVisitor::visit_eigen_newton_solver_block(ast::EigenNewtonSolverBloc
 void CodegenCVisitor::visit_eigen_linear_solver_block(ast::EigenLinearSolverBlock* node) {
     printer->add_newline();
     std::string float_type = default_float_data_type();
-    int N = info.num_primes;
+    int N = node->get_n_state_vars()->get_value();
     printer->add_line("Eigen::Matrix<{0}, {1}, 1> X, F;"_format(float_type, N));
     printer->add_line("Eigen::Matrix<{0}, {1}, {1}> Jm;"_format(float_type, N));
     printer->add_line("{}* J = Jm.data();"_format(float_type));
