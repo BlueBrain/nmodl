@@ -61,7 +61,7 @@ std::string CodegenIspcVisitor::double_to_string(double value) {
     if (std::ceil(value) == value) {
         return "{:.1f}d"_format(value);
     }
-    if ((value <= 1.0) and (value >= -1.0)) {
+    if ((value <= 1.0) && (value >= -1.0)) {
         return "{:f}d"_format(value);
     } else {
         auto e = std::log10(std::abs(value));
@@ -82,7 +82,7 @@ std::string CodegenIspcVisitor::float_to_string(float value) {
     if (std::ceil(value) == value) {
         return "{:.1f}"_format(value);
     }
-    if ((value <= 1.0f) or (value >= -1.0f)) {
+    if ((value <= 1.0f) && (value >= -1.0f)) {
         return "{:f}"_format(value);
     } else {
         auto e = std::log10(std::abs(value));
