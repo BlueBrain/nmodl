@@ -901,18 +901,6 @@ class CodegenCVisitor: public AstVisitor {
     virtual void print_global_function_common_code(BlockType type);
 
 
-    /// nrn_init function definition
-    void print_nrn_init(bool skip_init_check = true);
-
-
-    /// nrn_state / state update function definition
-    void print_nrn_state();
-
-
-    /// nrn_cur / current update function definition
-    void print_nrn_cur();
-
-
     /// mechanism registration function
     void print_mechanism_register();
 
@@ -993,6 +981,35 @@ class CodegenCVisitor: public AstVisitor {
         , mod_filename(mod_filename)
         , layout(layout)
         , float_type(float_type) {}
+
+
+    CodegenCVisitor(std::string mod_filename,
+                    LayoutType layout,
+                    std::string float_type,
+                    std::shared_ptr<CodePrinter>& target_printer)
+        : target_printer(target_printer)
+        , printer(target_printer)
+        , mod_filename(mod_filename)
+        , layout(layout)
+        , float_type(float_type) {}
+
+
+    /// nrn_init function definition
+    void print_nrn_init(bool skip_init_check = true);
+
+
+    /// nrn_state / state update function definition
+    void print_nrn_state();
+
+
+    /// nrn_cur / current update function definition
+    void print_nrn_cur();
+
+    /** setup the Codgen, typically called from within visit_program but may be called from
+     *  specialized targets to setup this Code generator as fallback.
+     */
+    void setup(ast::Program* node);
+
 
     virtual void visit_binary_expression(ast::BinaryExpression* node) override;
     virtual void visit_binary_operator(ast::BinaryOperator* node) override;

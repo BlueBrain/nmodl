@@ -363,16 +363,8 @@ int main(int argc, const char* argv[]) {
 
             if (ispc_backend) {
                 logger->info("Running ISPC backend code generator");
-                if(AstLookupVisitor().lookup(ast.get(), ast::AstNodeType::VERBATIM).empty())  {
-                    // only run the ISPC code generator when we don't find VERBATIM blocks
-                    CodegenIspcVisitor visitor(modfile, output_dir, mem_layout, data_type);
-                    visitor.visit_program(ast.get());
-                } else {
-                    // we found verbatim blocks, so fall back to the C backend
-                    logger->warn("Found VERBATIM code, running C backend code generator instead");
-                    CodegenCVisitor visitor(modfile, output_dir, mem_layout, data_type);
-                    visitor.visit_program(ast.get());
-                }
+                CodegenIspcVisitor visitor(modfile, output_dir, mem_layout, data_type);
+                visitor.visit_program(ast.get());
             }
 
             else if (oacc_backend) {

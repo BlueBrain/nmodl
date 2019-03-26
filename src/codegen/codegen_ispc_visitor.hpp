@@ -24,6 +24,12 @@ class CodegenIspcVisitor: public CodegenCVisitor {
     /// flag to indicate if visitor should print the the wrapper code
     bool wrapper_codegen = false;
 
+    /// fallback C code generator used to emit C code in the wrapper when emitting ISPC is not
+    /// supported
+    CodegenCVisitor fallback;
+
+    std::map<BlockType, bool> emit_fallback;
+
   protected:
     /// doubles are differently represented in ispc than in C
     std::string double_to_string(double value) override;
@@ -148,6 +154,10 @@ class CodegenIspcVisitor: public CodegenCVisitor {
     void print_ion_variable() override;
 
 
+    /// find out for main compute routines whether they are suitable to be emitted in ISPC backend
+    void determine_target();
+
+
     /// entry point to code generation
     void print_codegen_routines() override;
 
@@ -159,17 +169,20 @@ class CodegenIspcVisitor: public CodegenCVisitor {
                        std::string output_dir,
                        LayoutType layout,
                        std::string float_type)
-        : CodegenCVisitor(mod_file, output_dir, layout, float_type, ".ispc", ".cpp") {}
+        : CodegenCVisitor(mod_file, output_dir, layout, float_type, ".ispc", ".cpp")
+        , fallback(mod_file, layout, float_type, wrapper_printer) {}
 
 
     CodegenIspcVisitor(std::string mod_file,
                        std::stringstream& stream,
                        LayoutType layout,
                        std::string float_type)
-        : CodegenCVisitor(mod_file, stream, layout, float_type) {}
+        : CodegenCVisitor(mod_file, stream, layout, float_type)
+        , fallback(mod_file, layout, float_type, wrapper_printer) {}
 
     void visit_function_call(ast::FunctionCall* node) override;
     void visit_var_name(ast::VarName* node) override;
+    void visit_program(ast::Program* node) override;
 };
 
 }  // namespace codegen

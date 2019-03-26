@@ -4106,8 +4106,7 @@ void CodegenCVisitor::print_wrapper_routines() {
     // nothing to do
 }
 
-
-void CodegenCVisitor::visit_program(Program* node) {
+void CodegenCVisitor::setup(Program* node) {
     program_symtab = node->get_symbol_table();
 
     CodegenHelperVisitor v;
@@ -4124,6 +4123,11 @@ void CodegenCVisitor::visit_program(Program* node) {
 
     update_index_semantics();
     rename_function_arguments();
+}
+
+
+void CodegenCVisitor::visit_program(Program* node) {
+    setup(node);
     print_codegen_routines();
     print_wrapper_routines();
 }

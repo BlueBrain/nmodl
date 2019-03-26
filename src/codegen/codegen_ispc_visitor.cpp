@@ -12,7 +12,9 @@
 #include "codegen/codegen_ispc_visitor.hpp"
 #include "codegen/codegen_naming.hpp"
 #include "symtab/symbol_table.hpp"
+#include "utils/logger.hpp"
 #include "utils/string_utils.hpp"
+#include "visitors/lookup_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
 
 using namespace fmt::literals;
@@ -101,13 +103,16 @@ std::string CodegenIspcVisitor::float_to_string(float value) {
 
 std::string CodegenIspcVisitor::compute_method_name(BlockType type) {
     if (type == BlockType::Initial) {
-        return method_name("ispc_nrn_init");
+        return method_name(naming::NRN_INIT_METHOD);
     }
     if (type == BlockType::State) {
-        return method_name("ispc_nrn_state");
+        return method_name(naming::NRN_STATE_METHOD);
     }
     if (type == BlockType::Equation) {
-        return method_name("ispc_nrn_cur");
+        return method_name(naming::NRN_CUR_METHOD);
+    }
+    if (type == BlockType::Watch) {
+        return method_name(naming::NRN_WATCH_CHECK_METHOD);
     }
     throw std::runtime_error("compute_method_name not implemented");
 }
@@ -312,9 +317,15 @@ void CodegenIspcVisitor::print_compute_functions() {
     }
     print_net_receive_kernel();
     print_net_receive_buffering(false);
-    print_nrn_init(false);
-    print_nrn_cur();
-    print_nrn_state();
+    if (!emit_fallback[BlockType::Initial]) {
+        print_nrn_init(false);
+    }
+    if (!emit_fallback[BlockType::Equation]) {
+        print_nrn_cur();
+    }
+    if (!emit_fallback[BlockType::State]) {
+        print_nrn_state();
+    }
 }
 
 
@@ -551,16 +562,18 @@ void CodegenIspcVisitor::print_wrapper_routine(std::string wraper_function, Bloc
 void CodegenIspcVisitor::print_backend_compute_routine_decl() {
     auto params = get_global_function_parms("");
     auto compute_function = compute_method_name(BlockType::Initial);
-    printer->add_line(
-        "extern \"C\" void {}({});"_format(compute_function, get_parameter_str(params)));
+    if (!emit_fallback[BlockType::Initial]) {
+        printer->add_line(
+            "extern \"C\" void {}({});"_format(compute_function, get_parameter_str(params)));
+    }
 
-    if (nrn_cur_required()) {
+    if (nrn_cur_required() && !emit_fallback[BlockType::Equation]) {
         compute_function = compute_method_name(BlockType::Equation);
         printer->add_line(
             "extern \"C\" void {}({});"_format(compute_function, get_parameter_str(params)));
     }
 
-    if (nrn_state_required()) {
+    if (nrn_state_required() && !emit_fallback[BlockType::State]) {
         compute_function = compute_method_name(BlockType::State);
         printer->add_line(
             "extern \"C\" void {}({});"_format(compute_function, get_parameter_str(params)));
@@ -576,20 +589,71 @@ void CodegenIspcVisitor::print_backend_compute_routine_decl() {
     }
 }
 
+void CodegenIspcVisitor::determine_target() {
+    auto lv = AstLookupVisitor(ast::AstNodeType::VERBATIM);
+
+    if (info.initial_node) {
+        emit_fallback[BlockType::Initial] = !lv.lookup(info.initial_node).empty();
+    } else if (info.net_receive_initial_node) {
+        emit_fallback[BlockType::Initial] = true;
+    } else {
+        emit_fallback[BlockType::Initial] = false;
+    }
+
+    if (nrn_cur_required()) {
+        if (info.breakpoint_node) {
+            emit_fallback[BlockType::Equation] = !lv.lookup(info.breakpoint_node).empty();
+        } else {
+            emit_fallback[BlockType::Equation] = false;
+        }
+    }
+
+    if (nrn_state_required()) {
+        if (info.nrn_state_block) {
+            emit_fallback[BlockType::State] = !lv.lookup(info.nrn_state_block).empty();
+        } else {
+            emit_fallback[BlockType::State] = false;
+        }
+    }
+}
 
 void CodegenIspcVisitor::codegen_wrapper_routines() {
-    print_wrapper_routine("nrn_init", BlockType::Initial);
+    if (emit_fallback[BlockType::Initial]) {
+        logger->warn("Found VERBATIM code in Initial block, falling back to C backend");
+        fallback.print_nrn_init();
+    } else {
+        print_wrapper_routine("nrn_init", BlockType::Initial);
+    }
+
     if (nrn_cur_required()) {
-        print_wrapper_routine("nrn_cur", BlockType::Equation);
+        if (emit_fallback[BlockType::Equation]) {
+            logger->warn("Found VERBATIM code in breakpoint block, falling back to C backend");
+            fallback.print_nrn_cur();
+        } else {
+            print_wrapper_routine(naming::NRN_CUR_METHOD, BlockType::Equation);
+        }
     }
+
     if (nrn_state_required()) {
-        print_wrapper_routine("nrn_state", BlockType::State);
+        if (emit_fallback[BlockType::State]) {
+            logger->warn("Found VERBATIM code in state block, falling back to C backend");
+            fallback.print_nrn_state();
+        } else {
+            print_wrapper_routine(naming::NRN_STATE_METHOD, BlockType::State);
+        }
     }
+}
+
+
+void CodegenIspcVisitor::visit_program(ast::Program* node) {
+    fallback.setup(node);
+    CodegenCVisitor::visit_program(node);
 }
 
 
 void CodegenIspcVisitor::print_codegen_routines() {
     codegen = true;
+    determine_target();
     print_backend_info();
     print_headers_include();
 
