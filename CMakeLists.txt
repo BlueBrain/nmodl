@@ -82,7 +82,7 @@ add_subdirectory(ext/pybind11)
 # =============================================================================
 # Include path from external libraries
 # =============================================================================
-include_directories(${PROJECT_SOURCE_DIR}/ext/cli11/include)
+include_directories(${PROJECT_SOURCE_DIR}/ext)
 
 # =============================================================================
 # Project version from git and project directories

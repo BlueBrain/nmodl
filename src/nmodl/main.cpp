@@ -9,7 +9,7 @@
 #include <string>
 #include <vector>
 
-#include "CLI/CLI.hpp"
+#include "CLI/CLI11.hpp"
 #include "fmt/format.h"
 #include "pybind11/embed.h"
 

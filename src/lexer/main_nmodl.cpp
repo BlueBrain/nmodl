@@ -8,7 +8,7 @@
 #include <fstream>
 #include <streambuf>
 
-#include "CLI/CLI.hpp"
+#include "CLI/CLI11.hpp"
 #include "fmt/format.h"
 
 #include "ast/ast.hpp"

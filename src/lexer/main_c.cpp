@@ -7,7 +7,7 @@
 
 #include <fstream>
 
-#include "CLI/CLI.hpp"
+#include "CLI/CLI11.hpp"
 #include "fmt/format.h"
 
 #include "lexer/c11_lexer.hpp"
