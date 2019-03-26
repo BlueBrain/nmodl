@@ -130,6 +130,12 @@ add_subdirectory(src/pybind)
 add_subdirectory(src/solver)
 
 # =============================================================================
+# Install Eigen headers
+# =============================================================================
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/ext/Eigen
+        DESTINATION include)
+
+# =============================================================================
 # Memory checker options and add tests
 # =============================================================================
 find_program(MEMORYCHECK_COMMAND valgrind)
