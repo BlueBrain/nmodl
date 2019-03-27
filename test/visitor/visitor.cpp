@@ -30,6 +30,7 @@
 #include "visitors/perf_visitor.hpp"
 #include "visitors/rename_visitor.hpp"
 #include "visitors/solve_block_visitor.hpp"
+#include "visitors/steadystate_visitor.hpp"
 #include "visitors/sympy_conductance_visitor.hpp"
 #include "visitors/sympy_solver_visitor.hpp"
 #include "visitors/symtab_visitor.hpp"
@@ -4885,6 +4886,125 @@ TEST_CASE("Loop Unroll visitor") {
                 auto result = run_loop_unroll_visitor(input_nmodl);
                 REQUIRE(reindent_text(output_nmodl) == reindent_text(result));
             }
+        }
+    }
+}
+
+//=============================================================================
+// STEADYSTATE visitor tests
+//=============================================================================
+std::vector<std::string> run_steadystate_visitor(
+    const std::string& text,
+    std::vector<AstNodeType> ret_nodetypes = {AstNodeType::SOLVE_BLOCK, AstNodeType::LINEAR_BLOCK,
+                                              AstNodeType::NON_LINEAR_BLOCK}) {
+    std::vector<std::string> results;
+    // construct AST from text
+    NmodlDriver driver;
+    driver.parse_string(text);
+    auto ast = driver.ast();
+
+    // construct symbol table from AST
+    SymtabVisitor().visit_program(ast.get());
+
+    // unroll loops and fold constants
+    ConstantFolderVisitor().visit_program(ast.get());
+    LoopUnrollVisitor().visit_program(ast.get());
+    ConstantFolderVisitor().visit_program(ast.get());
+    SymtabVisitor().visit_program(ast.get());
+
+    // Run kinetic block visitor first, so any kinetic blocks
+    // are converted into derivative blocks
+    KineticBlockVisitor().visit_program(ast.get());
+    SymtabVisitor().visit_program(ast.get());
+
+    // run SteadystateVisitor on AST
+    SteadystateVisitor().visit_program(ast.get());
+
+    // run lookup visitor to extract results from AST
+    auto res = AstLookupVisitor().lookup(ast.get(), ret_nodetypes);
+    for (const auto& r: res) {
+        results.push_back(to_nmodl(r.get()));
+    }
+    return results;
+}
+
+SCENARIO("SteadystateSolver visitor", "[steadystate]") {
+    GIVEN("STEADYSTATE sparse solve") {
+        std::string nmodl_text = R"(
+            BREAKPOINT  {
+                SOLVE states STEADYSTATE sparse
+            }
+            DERIVATIVE states {
+                m' = m + h
+            }
+        )";
+        std::string expected_text = R"(
+            LINEAR states_steadystate {
+                ~ m+h = 0
+            })";
+        THEN("Construct LINEAR block with steadystate solution") {
+            auto result = run_steadystate_visitor(nmodl_text);
+            REQUIRE(result.size() == 2);
+            REQUIRE(result[0] == "SOLVE states_steadystate");
+            REQUIRE(reindent_text(result[1]) == reindent_text(expected_text));
+        }
+    }
+    GIVEN("STEADYSTATE derivimplicit solve") {
+        std::string nmodl_text = R"(
+            BREAKPOINT  {
+                SOLVE states STEADYSTATE derivimplicit
+            }
+            DERIVATIVE states {
+                m' = m + h
+            }
+        )";
+        std::string expected_text = R"(
+            NONLINEAR states_steadystate {
+                ~ m+h = 0
+            })";
+        THEN("Construct NONLINEAR block with steadystate solution") {
+            auto result = run_steadystate_visitor(nmodl_text);
+            REQUIRE(result.size() == 2);
+            REQUIRE(result[0] == "SOLVE states_steadystate");
+            REQUIRE(reindent_text(result[1]) == reindent_text(expected_text));
+        }
+    }
+    GIVEN("two STEADYSTATE solves") {
+        std::string nmodl_text = R"(
+            STATE {
+                Z[3]
+                x
+            }
+            BREAKPOINT  {
+                SOLVE states0 STEADYSTATE derivimplicit
+                SOLVE states1 STEADYSTATE sparse
+            }
+            DERIVATIVE states0 {
+                Z'[0] = Z[1] - Z[2]
+                Z'[1] = Z[0] + 2*Z[2]
+                Z'[2] = Z[0]*Z[0] - 3.10
+            }
+            DERIVATIVE states1 {
+                x' = x + c
+            }
+        )";
+        std::string expected_text0 = R"(
+            NONLINEAR states0_steadystate {
+                ~ Z[1]-Z[2] = 0
+                ~ Z[0]+2*Z[2] = 0
+                ~ Z[0]*Z[0]-3.1 = 0
+            })";
+        std::string expected_text1 = R"(
+            LINEAR states1_steadystate {
+                ~ x+c = 0
+            })";
+        THEN("Construct NONLINEAR block with steadystate solution") {
+            auto result = run_steadystate_visitor(nmodl_text);
+            REQUIRE(result.size() == 4);
+            REQUIRE(result[0] == "SOLVE states0_steadystate");
+            REQUIRE(result[1] == "SOLVE states1_steadystate");
+            REQUIRE(reindent_text(result[2]) == reindent_text(expected_text0));
+            REQUIRE(reindent_text(result[3]) == reindent_text(expected_text1));
         }
     }
 }

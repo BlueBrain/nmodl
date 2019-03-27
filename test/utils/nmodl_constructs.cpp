@@ -1323,15 +1323,10 @@ std::map<std::string, NmodlTestCase> nmodl_valid_constructs{
     {
         "steadystate_statement_1",
         {
-            "SOLVE statement using STEADYSTATE (which gets replaced with METHOD)",
+            "SOLVE statement using STEADYSTATE",
             R"(
                 INITIAL {
                     SOLVE kin STEADYSTATE sparse
-                }
-            )",
-            R"(
-                INITIAL {
-                    SOLVE kin METHOD sparse
                 }
             )"
         }
