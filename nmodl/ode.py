@@ -167,8 +167,6 @@ def solve_lin_system(eq_strings, vars, constants, small_system=False, do_cse=Fal
 
     eqs, state_vars, sympy_vars = _sympify_eqs(eq_strings, vars, constants)
 
-    print("statevars ", state_vars)
-
     code = []
     new_local_vars = []
 
@@ -366,7 +364,6 @@ def forwards_euler2c(diff_string, dt_var, vars):
     Returns:
         String containing forwards Euler timestep as C code
     """
-
     x, dxdt = _sympify_diff_eq(diff_string, vars)
     # forwards Euler solution is x + dx/dt * dt
     dt = sp.symbols(dt_var, real=True, positive=True)

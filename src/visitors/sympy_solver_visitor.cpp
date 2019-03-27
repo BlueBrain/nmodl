@@ -36,9 +36,8 @@ void SympySolverVisitor::init_block_data(ast::Node* node) {
         auto localvars = symtab->get_variables_with_properties(NmodlType::local_var);
         for (const auto& localvar: localvars) {
             std::string var_name = localvar->get_name();
-            int var_len = localvar->get_length();
-            if (var_len > 1) {
-                var_name += "[" + std::to_string(var_len) + "]";
+            if (localvar->is_array()) {
+                var_name += "[" + std::to_string(localvar->get_length()) + "]";
             }
             vars.insert(var_name);
         }
@@ -292,8 +291,8 @@ void SympySolverVisitor::solve_non_linear_system(
 void SympySolverVisitor::visit_var_name(ast::VarName* node) {
     if (collect_state_vars) {
         std::string var_name = node->get_node_name();
-        auto index_name = std::dynamic_pointer_cast<ast::IndexedName>(node->get_name());
-        if (index_name != nullptr) {
+        if (node->get_name()->is_indexed_name()) {
+            auto index_name = std::dynamic_pointer_cast<ast::IndexedName>(node->get_name());
             var_name +=
                 "[" +
                 std::to_string(
@@ -368,8 +367,8 @@ void SympySolverVisitor::visit_diff_eq_expression(ast::DiffEqExpression* node) {
         // for other solver methods: just collect the ODEs & return
         std::string eq_str = to_nmodl_for_sympy(node);
         std::string var_name = lhs_name->get_node_name();
-        auto index_name = std::dynamic_pointer_cast<ast::IndexedName>(lhs_name);
-        if (index_name != nullptr) {
+        if (lhs_name->is_indexed_name()) {
+            auto index_name = std::dynamic_pointer_cast<ast::IndexedName>(lhs_name);
             var_name +=
                 "[" +
                 std::to_string(
@@ -549,9 +548,8 @@ void SympySolverVisitor::visit_program(ast::Program* node) {
         auto statevars = symtab->get_variables_with_properties(NmodlType::state_var);
         for (const auto& v: statevars) {
             std::string var_name = v->get_name();
-            int var_len = v->get_length();
-            if (var_len > 1) {
-                for (int i = 0; i < var_len; ++i) {
+            if (v->is_array()) {
+                for (int i = 0; i < v->get_length(); ++i) {
                     std::string var_name_i = var_name + "[" + std::to_string(i) + "]";
                     all_state_vars.push_back(var_name_i);
                 }

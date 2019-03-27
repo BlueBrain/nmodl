@@ -322,11 +322,10 @@ void KineticBlockVisitor::visit_program(ast::Program* node) {
         auto statevars = symtab->get_variables_with_properties(NmodlType::state_var);
         for (const auto& v: statevars) {
             std::string var_name = v->get_name();
-            int var_len = v->get_length();
-            if (var_len > 1) {
+            if (v->is_array()) {
                 // for array state vars we need to add each element of the array separately
                 var_name += "[";
-                for (int i = 0; i < var_len; ++i) {
+                for (int i = 0; i < v->get_length(); ++i) {
                     std::string var_name_i = var_name + std::to_string(i) + "]";
                     logger->debug("KineticBlockVisitor :: state_var_index[{}] = {}", var_name_i,
                                   state_var_count);
