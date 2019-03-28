@@ -53,6 +53,11 @@ class SteadystateVisitor: public AstVisitor {
     /// new equations to add to block
     std::vector<std::string> new_eqs;
 
+    /// create new steady state derivative block for given solve block
+    std::shared_ptr<ast::DerivativeBlock> create_steadystate_block(
+        std::shared_ptr<ast::SolveBlock> solve_block,
+        const std::vector<std::shared_ptr<ast::AST>>& deriv_blocks);
+
   public:
     SteadystateVisitor() = default;
 

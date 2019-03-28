@@ -456,10 +456,10 @@ void SympySolverVisitor::visit_derivative_block(ast::DerivativeBlock* node) {
             add_local_variable(block_with_expression_statements, old_x);
             // assign old_x = x
             pre_solve_statements.push_back(old_x + " = " + x + x_array_index);
-            // replace ODE with euler equation
+            // replace ODE with Euler equation
             eq = x + x_array_index + " = " + old_x + " + " + codegen::naming::NTHREAD_DT_VARIABLE +
                  " * (" + dxdt + ")";
-            logger->debug("SympySolverVisitor :: -> constructed euler eq: {}", eq);
+            logger->debug("SympySolverVisitor :: -> constructed Euler eq: {}", eq);
         }
 
         if (solve_method == codegen::naming::SPARSE_METHOD) {
@@ -552,7 +552,7 @@ void SympySolverVisitor::visit_program(ast::Program* node) {
     auto solve_block_nodes = ast_lookup_visitor.lookup(node, ast::AstNodeType::SOLVE_BLOCK);
     for (const auto& block: solve_block_nodes) {
         if (auto block_ptr = std::dynamic_pointer_cast<ast::SolveBlock>(block)) {
-            std::string block_name = block_ptr->get_block_name()->get_value()->eval();
+            const auto block_name = block_ptr->get_block_name()->get_value()->eval();
             if (block_ptr->get_method()) {
                 // Note: solve method name is an optional parameter
                 // LINEAR and NONLINEAR blocks do not have solve method specified
