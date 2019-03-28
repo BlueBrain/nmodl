@@ -30,6 +30,9 @@ class CodegenIspcVisitor: public CodegenCVisitor {
 
     std::map<BlockType, bool> emit_fallback;
 
+    std::vector<ast::ProcedureBlock*> wrapper_procedures;
+    std::vector<ast::FunctionBlock*> wrapper_functions;
+
   protected:
     /// doubles are differently represented in ispc than in C
     std::string double_to_string(double value) override;
@@ -110,6 +113,8 @@ class CodegenIspcVisitor: public CodegenCVisitor {
 
     void print_wrapper_headers_include();
 
+    void print_nmodl_constant() override;
+
 
     /// all compute functions for every backend
     void print_compute_functions() override;
@@ -157,6 +162,8 @@ class CodegenIspcVisitor: public CodegenCVisitor {
     /// find out for main compute routines whether they are suitable to be emitted in ISPC backend
     void determine_target();
 
+    /// move procedures and functions unused by compute kernels into the wrapper
+    void move_procs_to_wrapper();
 
     /// entry point to code generation
     void print_codegen_routines() override;

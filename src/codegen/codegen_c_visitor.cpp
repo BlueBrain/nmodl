@@ -1949,9 +1949,9 @@ std::string CodegenCVisitor::process_shadow_update_statement(ShadowUseStatement&
 void CodegenCVisitor::print_nmodl_constant() {
     printer->add_newline(2);
     printer->add_line("/** constants used in nmodl */");
-    printer->add_line("static double FARADAY = 96485.3;");
-    printer->add_line("static double PI = 3.14159;");
-    printer->add_line("static double R = 8.3145;");
+    printer->add_line("static const double FARADAY = 96485.3;");
+    printer->add_line("static const double PI = 3.14159;");
+    printer->add_line("static const double R = 8.3145;");
 }
 
 
@@ -3796,6 +3796,7 @@ void CodegenCVisitor::visit_solution_expression(SolutionExpression* node) {
     }
 }
 
+
 /****************************************************************************************/
 /*                                Print nrn_state routine                                */
 /****************************************************************************************/
@@ -4105,6 +4106,12 @@ void CodegenCVisitor::print_codegen_routines() {
 void CodegenCVisitor::print_wrapper_routines() {
     // nothing to do
 }
+
+
+void CodegenCVisitor::set_codegen_global_variables(std::vector<SymbolType>& global_vars) {
+    codegen_global_variables = global_vars;
+}
+
 
 void CodegenCVisitor::setup(Program* node) {
     program_symtab = node->get_symbol_table();
