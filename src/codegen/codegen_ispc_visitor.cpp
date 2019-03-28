@@ -277,6 +277,14 @@ CodegenIspcVisitor::ParamVector CodegenIspcVisitor::get_global_function_parms(
 }
 
 
+void CodegenIspcVisitor::print_procedure(ast::ProcedureBlock* node) {
+    codegen = true;
+    auto name = node->get_node_name();
+    print_function_or_procedure(node, name);
+    codegen = false;
+}
+
+
 void CodegenIspcVisitor::print_global_function_common_code(BlockType type) {
     std::string method = compute_method_name(type);
 
@@ -668,10 +676,12 @@ void CodegenIspcVisitor::move_procs_to_wrapper() {
             nameset.insert(name->get_node_name());
         }
     }
+    auto verb_lv = AstLookupVisitor(ast::AstNodeType::VERBATIM);
     auto target_procedures = std::vector<ast::ProcedureBlock*>();
     for (auto it = info.procedures.begin(); it != info.procedures.end(); it++) {
         auto procname = (*it)->get_name()->get_node_name();
-        if (nameset.find(procname) == nameset.end()) {
+        if (nameset.find(procname) == nameset.end() || !verb_lv.lookup(*it).empty() ||
+            info.function_uses_table(procname)) {
             wrapper_procedures.push_back(*it);
         } else {
             target_procedures.push_back(*it);
@@ -681,7 +691,7 @@ void CodegenIspcVisitor::move_procs_to_wrapper() {
     auto target_functions = std::vector<ast::FunctionBlock*>();
     for (auto it = info.functions.begin(); it != info.functions.end(); it++) {
         auto procname = (*it)->get_name()->get_node_name();
-        if (nameset.find(procname) == nameset.end()) {
+        if (nameset.find(procname) == nameset.end() || !verb_lv.lookup(*it).empty()) {
             wrapper_functions.push_back(*it);
         } else {
             target_functions.push_back(*it);

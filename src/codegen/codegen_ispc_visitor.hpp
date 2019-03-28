@@ -120,6 +120,10 @@ class CodegenIspcVisitor: public CodegenCVisitor {
     void print_compute_functions() override;
 
 
+    /// nmodl procedure definition
+    void print_procedure(ast::ProcedureBlock* node) override;
+
+
     void print_backend_compute_routine_decl();
 
 

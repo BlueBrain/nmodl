@@ -767,14 +767,6 @@ class CodegenCVisitor: public AstVisitor {
     void print_function_prototypes();
 
 
-    /// print check_function() for function/procedure using table
-    void print_table_check_function(ast::Block* node);
-
-
-    /// print replacement function for function/procedure using table
-    void print_table_replacement_function(ast::Block* node);
-
-
     /// print check_table functions
     void print_check_table_thread_function();
 
@@ -1001,12 +993,20 @@ class CodegenCVisitor: public AstVisitor {
     void print_watch_check();
 
 
+    /// print check_function() for function/procedure using table
+    void print_table_check_function(ast::Block* node);
+
+
+    /// print replacement function for function/procedure using table
+    void print_table_replacement_function(ast::Block* node);
+
+
     /// nmodl function definition
     void print_function(ast::FunctionBlock* node);
 
 
     /// nmodl procedure definition
-    void print_procedure(ast::ProcedureBlock* node);
+    virtual void print_procedure(ast::ProcedureBlock* node);
 
 
     /** setup the Codgen, typically called from within visit_program but may be called from
