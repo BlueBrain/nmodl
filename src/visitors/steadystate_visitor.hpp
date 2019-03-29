@@ -17,54 +17,40 @@ namespace nmodl {
  * \class SteadystateVisitor
  * \brief Visitor for STEADYSTATE solve statements
  *
- * For each STEADYSTATE solve statement, creates a new
- * LINEAR or NONLINEAR block whose solution
- * gives the steady state solution of the
- * corresponding derivative block.
+ * For each STEADYSTATE solve statement, creates a clone
+ * of the corresponding DERIVATIVE block, with "_steadystate"
+ * appended to the name of the block
  *
- * If the derivative block was called "X", the
- * new (NON)LINEAR block will be called "X_steadystate"
+ * If the original DERIVATIVE block was called "X", the
+ * new DERIVATIVE block will be called "X_steadystate"
  *
- * Updates the solve statement to point to the new
- * (NON)LINEAR block "X_steadystate"
+ * Only difference in new block is that the value of dt
+ * is changed for the solve, to:
+ *   - dt = 1e9 for sparse
+ *   - dt = 1e-9 for derivimplicit
+ * where these values for dt in the steady state solves are taken from NEURON
+ * see https://github.com/neuronsimulator/nrn/blob/master/src/scopmath/ssimplic_thread.c
+ *
+ * Also updates the solve statement to point to the new DERIVATIVE block
+ * as a METHOD solve, not a STEADYSTATE one, e.g.
+ * SOLVE X STEADYSTATE derivimplicit
+ * becomes
+ * SOLVE X_steadystate METHOD derivimplicit
  *
  */
 
 class SteadystateVisitor: public AstVisitor {
   private:
-    /// set of steadystate sparse (i.e. linear) derivative block nodes
-    std::set<ast::DerivativeBlock*> ss_linear_blocks;
-
-    /// set of steadystate derivimplicit(i.e. nonlinear) derivative block nodes
-    std::set<ast::DerivativeBlock*> ss_nonlinear_blocks;
-
-    /// true if we are visiting an ss deriv block
-    bool is_ss_deriv_block = false;
-
-    /// statements to remove from block
-    std::set<ast::Node*> statements_to_remove;
-
-    /// current statement block being visited
-    ast::StatementBlock* current_statement_block = nullptr;
-
-    /// current expression statement being visited
-    ast::ExpressionStatement* current_expression_statement = nullptr;
-
-    /// new equations to add to block
-    std::vector<std::string> new_eqs;
-
     /// create new steady state derivative block for given solve block
     std::shared_ptr<ast::DerivativeBlock> create_steadystate_block(
         std::shared_ptr<ast::SolveBlock> solve_block,
         const std::vector<std::shared_ptr<ast::AST>>& deriv_blocks);
+    const double STEADYSTATE_SPARSE_DT = 1e9;
+    const double STEADYSTATE_DERIVIMPLICIT_DT = 1e-9;
 
   public:
     SteadystateVisitor() = default;
 
-    void visit_diff_eq_expression(ast::DiffEqExpression* node) override;
-    void visit_expression_statement(ast::ExpressionStatement* node) override;
-    void visit_statement_block(ast::StatementBlock* node) override;
-    void visit_derivative_block(ast::DerivativeBlock* node) override;
     void visit_program(ast::Program* node) override;
 };
 

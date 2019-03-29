@@ -8,7 +8,7 @@
 #include <iostream>
 
 #include "codegen/codegen_naming.hpp"
-#include "parser/nmodl_driver.hpp"
+#include "fmt/format.h"
 #include "steadystate_visitor.hpp"
 #include "symtab/symbol.hpp"
 #include "utils/logger.hpp"
@@ -16,93 +16,11 @@
 #include "visitor_utils.hpp"
 #include "visitors/lookup_visitor.hpp"
 
+using namespace fmt::literals;
+
 namespace nmodl {
 
 using symtab::syminfo::NmodlType;
-
-std::shared_ptr<ast::Program> create_ast(const std::string& nmod_str) {
-    nmodl::parser::NmodlDriver driver;
-    driver.parse_string(nmod_str);
-    return driver.ast();
-}
-
-std::shared_ptr<ast::Statement> create_eq(const std::string& eq, bool is_linear) {
-    std::shared_ptr<ast::StatementBlock> statement_block;
-    if (is_linear) {
-        auto ast = create_ast("LINEAR dummy { " + eq + " }");
-        auto linblock = std::dynamic_pointer_cast<ast::LinearBlock>(ast->blocks[0]);
-        statement_block = linblock->get_statement_block();
-    } else {
-        auto ast = create_ast("NONLINEAR dummy { " + eq + " }");
-        auto nonlinblock = std::dynamic_pointer_cast<ast::NonLinearBlock>(ast->blocks[0]);
-        statement_block = nonlinblock->get_statement_block();
-    }
-    return std::shared_ptr<ast::Statement>(statement_block->get_statements()[0]->clone());
-}
-
-void SteadystateVisitor::visit_diff_eq_expression(ast::DiffEqExpression* node) {
-    if (is_ss_deriv_block) {
-        auto& lhs = node->get_expression()->lhs;
-        auto& rhs = node->get_expression()->rhs;
-        if (!lhs->is_var_name()) {
-            logger->warn(
-                "SteadystateVisitor :: LHS of differential equation is not a VariableName");
-            return;
-        }
-        auto lhs_name = std::dynamic_pointer_cast<ast::VarName>(lhs)->get_name();
-        if ((lhs_name->is_indexed_name() &&
-             !std::dynamic_pointer_cast<ast::IndexedName>(lhs_name)->get_name()->is_prime_name()) ||
-            (!lhs_name->is_indexed_name() && !lhs_name->is_prime_name())) {
-            logger->warn("SteadystateVisitor :: LHS of differential equation is not a PrimeName");
-            return;
-        }
-        // replace "x' = ..." with "~ ... = 0"
-        std::string new_eq = "~ " + to_nmodl(rhs.get()) + " = 0";
-        new_eqs.push_back(new_eq);
-        statements_to_remove.insert(current_expression_statement);
-    }
-}
-
-void SteadystateVisitor::visit_expression_statement(ast::ExpressionStatement* node) {
-    auto prev_expression_statement = current_expression_statement;
-    current_expression_statement = node;
-    node->visit_children(this);
-    current_expression_statement = prev_expression_statement;
-}
-
-void SteadystateVisitor::visit_statement_block(ast::StatementBlock* node) {
-    auto prev_statement_block = current_statement_block;
-    current_statement_block = node;
-    node->visit_children(this);
-    // remove processed statements from current statement block
-    remove_statements_from_block(current_statement_block, statements_to_remove);
-    current_statement_block = prev_statement_block;
-}
-
-void SteadystateVisitor::visit_derivative_block(ast::DerivativeBlock* node) {
-    new_eqs.clear();
-    statements_to_remove.clear();
-    current_statement_block = nullptr;
-    current_expression_statement = nullptr;
-
-    bool is_ss_linear_block = (ss_linear_blocks.find(node) != ss_linear_blocks.cend());
-    bool is_ss_nonlinear_block = (ss_nonlinear_blocks.find(node) != ss_nonlinear_blocks.cend());
-
-    is_ss_deriv_block = is_ss_linear_block || is_ss_nonlinear_block;
-
-    node->visit_children(this);
-
-    if (is_ss_deriv_block) {
-        auto ss_deriv_block = node->get_statement_block();
-        // remove any remaining statements to be replaced
-        remove_statements_from_block(ss_deriv_block.get(), statements_to_remove);
-        // add new statements
-        for (const auto& eq: new_eqs) {
-            logger->debug("SteadystateVisitor :: -> adding statement: {}", eq);
-            ss_deriv_block->addStatement(create_eq(eq, is_ss_linear_block));
-        }
-    }
-}
 
 std::shared_ptr<ast::DerivativeBlock> SteadystateVisitor::create_steadystate_block(
     std::shared_ptr<ast::SolveBlock> solve_block,
@@ -131,21 +49,48 @@ std::shared_ptr<ast::DerivativeBlock> SteadystateVisitor::create_steadystate_blo
         ss_name->set_name(ss_name->get_value()->get_value() + "_steadystate");
         auto ss_name_clone = std::shared_ptr<ast::Name>(ss_name->clone());
         ss_block->set_name(std::move(ss_name));
-        logger->debug("SteadystateVisitor :: Adding new DERIVATIVE block: {}",
+        logger->debug("SteadystateVisitor :: -> adding new DERIVATIVE block: {}",
                       ss_block->get_node_name());
-        // add it to the set of either linear or non-linear steadystate blocks
+
+        // create statements to alter value of dt within DERIVATIVE block
+        // TODO: make sure dt_tmp_var_name variable name does not clash
+        std::string dt_tmp_var_name = codegen::naming::NTHREAD_DT_VARIABLE + "_saved_value";
+        std::string dt_save = dt_tmp_var_name + " = " + codegen::naming::NTHREAD_DT_VARIABLE;
+        std::string dt_assign = codegen::naming::NTHREAD_DT_VARIABLE + " = ";
+        std::string dt_restore = dt_assign + dt_tmp_var_name;
         if (steadystate_method == codegen::naming::SPARSE_METHOD) {
-            ss_linear_blocks.insert(ss_block.get());
+            dt_assign += "{:.16g}"_format(STEADYSTATE_SPARSE_DT);
         } else if (steadystate_method == codegen::naming::DERIVIMPLICIT_METHOD) {
-            ss_nonlinear_blocks.insert(ss_block.get());
+            dt_assign += "{:.16g}"_format(STEADYSTATE_DERIVIMPLICIT_DT);
         } else {
             logger->warn("SteadystateVisitor :: solve method {} not supported for STEADYSTATE",
                          steadystate_method);
+            return nullptr;
         }
+        auto statement_block = ss_block->get_statement_block();
+        // declare tmp variable to save dt value (this will go into the LOCAL statement at the top
+        // of the statement block)
+        add_local_variable(statement_block.get(), dt_tmp_var_name);
+        // get a copy of existing statements
+        auto statements = statement_block->get_statements();
+        // insert dt_save and dt_assign statements just below first LOCAL statement
+        auto insertion_point = statements.begin();
+        while ((*insertion_point)->is_local_list_statement()) {
+            ++insertion_point;
+        }
+        insertion_point = statements.insert(insertion_point, create_statement(dt_save));
+        ++insertion_point;
+        statements.insert(insertion_point, create_statement(dt_assign));
+        // insert dt_restore statement at the end
+        statements.push_back(create_statement(dt_restore));
+        // replace old set of statements in AST with new one
+        statement_block->set_statements(std::move(statements));
+
         // update SOLVE statement:
-        // set name to point to new (NON)LINEAR block
+        // set name to point to new DERIVATIVE block
         solve_block->set_block_name(std::move(ss_name_clone));
-        // set STEADYSTATE to nullptr for (NON)LINEAR block
+        // change from STEADYSTATE to METHOD
+        solve_block->set_method(std::move(solve_block->get_steadystate()));
         solve_block->set_steadystate(nullptr);
     } else {
         logger->warn("SteadystateVisitor :: Could not find derivative block {} for STEADYSTATE",
@@ -156,11 +101,6 @@ std::shared_ptr<ast::DerivativeBlock> SteadystateVisitor::create_steadystate_blo
 }
 
 void SteadystateVisitor::visit_program(ast::Program* node) {
-    ss_linear_blocks.clear();
-    ss_nonlinear_blocks.clear();
-    current_statement_block = nullptr;
-    current_expression_statement = nullptr;
-
     // get DERIVATIVE blocks
     const auto& deriv_blocks = AstLookupVisitor().lookup(node, ast::AstNodeType::DERIVATIVE_BLOCK);
 
@@ -178,46 +118,6 @@ void SteadystateVisitor::visit_program(ast::Program* node) {
             }
         }
     }
-
-    // replace each DiffEq
-    // x' = ...
-    // in the new steadystate derivative blocks with
-    // the corresponding (NON)LINEAR steady state equation
-    // ~ ... = 0
-    node->visit_children(this);
-
-    // change the steady state DERIVATIVE blocks to (NON)LINEAR blocks
-    auto blocks = node->get_blocks();
-    for (auto* ss_linear_block: ss_linear_blocks) {
-        for (auto it = blocks.begin(); it != blocks.end(); ++it) {
-            if (it->get() == ss_linear_block) {
-                logger->debug("SteadystateVisitor :: changing block {} from DERIVATIVE to LINEAR",
-                              ss_linear_block->get_node_name());
-                auto linblock = std::make_shared<ast::LinearBlock>(
-                    std::move(ss_linear_block->get_name()), ast::NameVector{},
-                    std::move(ss_linear_block->get_statement_block()));
-                ModToken tok{};
-                linblock->set_token(tok);
-                *it = linblock;
-            }
-        }
-    }
-    for (auto* ss_nonlinear_block: ss_nonlinear_blocks) {
-        for (auto it = blocks.begin(); it != blocks.end(); ++it) {
-            if (it->get() == ss_nonlinear_block) {
-                logger->debug(
-                    "SteadystateVisitor :: changing block {} from DERIVATIVE to NONLINEAR",
-                    ss_nonlinear_block->get_node_name());
-                auto nonlinblock = std::make_shared<ast::NonLinearBlock>(
-                    std::move(ss_nonlinear_block->get_name()), ast::NameVector{},
-                    std::move(ss_nonlinear_block->get_statement_block()));
-                ModToken tok{};
-                nonlinblock->set_token(tok);
-                *it = nonlinblock;
-            }
-        }
-    }
-    node->set_blocks(std::move(blocks));
 }
 
 }  // namespace nmodl

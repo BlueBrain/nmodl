@@ -91,6 +91,7 @@ void NmodlPrintVisitor::visit_{{ node.class_name|snake_case}}({{ node.class_name
             }
         {% else %}
             std::stringstream ss;
+            ss << std::setprecision(16);
             ss << node->eval();
             printer->add_element(ss.str());
         {% endif %}
