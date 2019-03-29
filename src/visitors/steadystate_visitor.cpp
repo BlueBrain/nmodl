@@ -7,14 +7,15 @@
 
 #include <iostream>
 
-#include "codegen/codegen_naming.hpp"
 #include "fmt/format.h"
-#include "steadystate_visitor.hpp"
+
+#include "codegen/codegen_naming.hpp"
 #include "symtab/symbol.hpp"
 #include "utils/logger.hpp"
 #include "utils/string_utils.hpp"
-#include "visitor_utils.hpp"
 #include "visitors/lookup_visitor.hpp"
+#include "visitors/steadystate_visitor.hpp"
+#include "visitors/visitor_utils.hpp"
 
 using namespace fmt::literals;
 
@@ -25,13 +26,16 @@ using symtab::syminfo::NmodlType;
 std::shared_ptr<ast::DerivativeBlock> SteadystateVisitor::create_steadystate_block(
     std::shared_ptr<ast::SolveBlock> solve_block,
     const std::vector<std::shared_ptr<ast::AST>>& deriv_blocks) {
-    // new block to be returned:
+    // new block to be returned
     std::shared_ptr<ast::DerivativeBlock> ss_block;
+
     // get method & derivative block
     const auto solve_block_name = solve_block->get_block_name()->get_value()->eval();
     const auto steadystate_method = solve_block->get_steadystate()->get_value()->eval();
+
     logger->debug("SteadystateVisitor :: Found STEADYSTATE SOLVE statement: using {} for {}",
                   steadystate_method, solve_block_name);
+
     ast::DerivativeBlock* deriv_block_ptr = nullptr;
     for (const auto& block_ptr: deriv_blocks) {
         auto deriv_block = std::dynamic_pointer_cast<ast::DerivativeBlock>(block_ptr);
@@ -42,6 +46,7 @@ std::shared_ptr<ast::DerivativeBlock> SteadystateVisitor::create_steadystate_blo
             break;
         }
     }
+
     if (deriv_block_ptr != nullptr) {
         // make a clone of derivative block with "_steadystate" suffix
         ss_block = std::shared_ptr<ast::DerivativeBlock>(deriv_block_ptr->clone());
