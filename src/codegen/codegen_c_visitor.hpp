@@ -616,7 +616,7 @@ class CodegenCVisitor: public AstVisitor {
 
 
     /// structure that wraps all global variables in the mod file
-    virtual void print_mechanism_global_var_structure();
+    virtual void print_mechanism_global_var_structure(bool wrapper = false);
 
 
     /// structure that wraps all range and int variables required for mod file
