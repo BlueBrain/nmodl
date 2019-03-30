@@ -244,8 +244,8 @@ void KineticBlockVisitor::visit_wrapped_expression(ast::WrappedExpression* node)
     // this variable should be replaced by the expression for the corresponding flux
     // which depends on the previous reaction statement. The current expressions are
     // stored as strings in "modfile_fflux" and "modfile_bflux"
-    if (node->get_expression()->is_var_name()) {
-        auto var_name = std::dynamic_pointer_cast<ast::VarName>(node->get_expression());
+    if (node->get_expression()->is_name()) {
+        auto var_name = std::dynamic_pointer_cast<ast::Name>(node->get_expression());
         if (var_name->get_node_name() == "f_flux") {
             auto expr = create_expr(modfile_fflux);
             logger->debug("KineticBlockVisitor :: replacing f_flux with {}", to_nmodl(expr.get()));

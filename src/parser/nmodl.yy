@@ -189,6 +189,7 @@
 %token  <std::string>           LINE_COMMENT
 %token  <std::string>           LINE_PART
 %token  <ast::String>           STRING
+%token  <ast::Name>             FLUX_VAR
 %token  <ModToken>              OPEN_BRACE          "{"
 %token  <ModToken>              CLOSE_BRACE         "}"
 %token  <ModToken>              OPEN_PARENTHESIS    "("
@@ -350,6 +351,7 @@
 %type   <ast::Integer*>                  INTEGER_PTR
 %type   <ast::Name*>                     NAME_PTR
 %type   <ast::String*>                   STRING_PTR
+%type   <ast::WrappedExpression*>        flux_variable
 
 /** Precedence and Associativity : specify operator precedency and
  *  associativity (from lower to higher. Note that '^' represent
@@ -1084,14 +1086,8 @@ intexpr         :   Name                    { $$ = $1; }
                 ;
 
 
-expr            :   varname
-                    { 
-                        if(($1->get_node_name() == "f_flux") || ($1->get_node_name() == "b_flux")){
-                            $$ = new ast::WrappedExpression($1);
-                        } else {
-                            $$ = $1;
-                        }
-                    }
+expr            :   varname             { $$ = $1; }
+                |   flux_variable       { $$ = $1; }
                 |   real units
                     {
                         if($2)
@@ -2236,6 +2232,11 @@ valence         :   { $$ = nullptr; }
                     }
                  ;
 
+ flux_variable   :  FLUX_VAR
+                    {
+                        $$ = new ast::WrappedExpression($1.clone());
+                    }
+                 ;
 %%
 
 
