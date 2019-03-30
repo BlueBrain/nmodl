@@ -20,6 +20,10 @@ namespace codegen {
 class CodegenIspcVisitor: public CodegenCVisitor {
     void print_atomic_op(const std::string& lhs, const std::string& op, const std::string& rhs);
 
+    /// ast nodes which are not compatible with ISPC target
+    const std::vector<ast::AstNodeType> incompatible_node_types{
+        ast::AstNodeType::VERBATIM, ast::AstNodeType::EIGEN_NEWTON_SOLVER_BLOCK,
+        ast::AstNodeType ::EIGEN_LINEAR_SOLVER_BLOCK};
 
     /// flag to indicate if visitor should print the the wrapper code
     bool wrapper_codegen = false;

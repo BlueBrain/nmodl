@@ -625,7 +625,7 @@ void CodegenIspcVisitor::print_backend_compute_routine_decl() {
 }
 
 void CodegenIspcVisitor::determine_target() {
-    auto lv = AstLookupVisitor(ast::AstNodeType::VERBATIM);
+    auto node_lv = AstLookupVisitor(incompatible_node_types);
 
     auto calls_net_send = [](ast::AST* node) {
         auto lv = AstLookupVisitor(ast::AstNodeType::FUNCTION_CALL);
@@ -638,7 +638,7 @@ void CodegenIspcVisitor::determine_target() {
     };
 
     if (info.initial_node) {
-        emit_fallback[BlockType::Initial] = !lv.lookup(info.initial_node).empty() ||
+        emit_fallback[BlockType::Initial] = !node_lv.lookup(info.initial_node).empty() ||
                                             calls_net_send(info.initial_node) ||
                                             info.require_wrote_conc;
     } else {
@@ -647,13 +647,13 @@ void CodegenIspcVisitor::determine_target() {
     }
 
     if (info.net_receive_node) {
-        emit_fallback[BlockType::NetReceive] = !lv.lookup(info.net_receive_node).empty() ||
+        emit_fallback[BlockType::NetReceive] = !node_lv.lookup(info.net_receive_node).empty() ||
                                                calls_net_send(info.net_receive_node);
     }
 
     if (nrn_cur_required()) {
         if (info.breakpoint_node) {
-            emit_fallback[BlockType::Equation] = !lv.lookup(info.breakpoint_node).empty();
+            emit_fallback[BlockType::Equation] = !node_lv.lookup(info.breakpoint_node).empty();
         } else {
             emit_fallback[BlockType::Equation] = false;
         }
@@ -661,7 +661,7 @@ void CodegenIspcVisitor::determine_target() {
 
     if (nrn_state_required()) {
         if (info.nrn_state_block) {
-            emit_fallback[BlockType::State] = !lv.lookup(info.nrn_state_block).empty();
+            emit_fallback[BlockType::State] = !node_lv.lookup(info.nrn_state_block).empty();
         } else {
             emit_fallback[BlockType::State] = false;
         }
@@ -669,31 +669,31 @@ void CodegenIspcVisitor::determine_target() {
 }
 
 void CodegenIspcVisitor::move_procs_to_wrapper() {
-    auto lv = AstLookupVisitor(ast::AstNodeType::NAME);
+    auto name_lv = AstLookupVisitor(ast::AstNodeType::NAME);
     auto nameset = std::set<std::string>();
     if (info.initial_node) {
-        auto names = lv.lookup(info.initial_node);
+        auto names = name_lv.lookup(info.initial_node);
         for (const auto& name: names) {
             nameset.insert(name->get_node_name());
         }
     }
     if (info.nrn_state_block) {
-        auto names = lv.lookup(info.nrn_state_block);
+        auto names = name_lv.lookup(info.nrn_state_block);
         for (const auto& name: names) {
             nameset.insert(name->get_node_name());
         }
     }
     if (info.breakpoint_node) {
-        auto names = lv.lookup(info.breakpoint_node);
+        auto names = name_lv.lookup(info.breakpoint_node);
         for (const auto& name: names) {
             nameset.insert(name->get_node_name());
         }
     }
-    auto verb_lv = AstLookupVisitor(ast::AstNodeType::VERBATIM);
+    auto node_lv = AstLookupVisitor(incompatible_node_types);
     auto target_procedures = std::vector<ast::ProcedureBlock*>();
     for (auto it = info.procedures.begin(); it != info.procedures.end(); it++) {
         auto procname = (*it)->get_name()->get_node_name();
-        if (nameset.find(procname) == nameset.end() || !verb_lv.lookup(*it).empty() ||
+        if (nameset.find(procname) == nameset.end() || !node_lv.lookup(*it).empty() ||
             info.function_uses_table(procname)) {
             wrapper_procedures.push_back(*it);
         } else {
@@ -704,7 +704,7 @@ void CodegenIspcVisitor::move_procs_to_wrapper() {
     auto target_functions = std::vector<ast::FunctionBlock*>();
     for (auto it = info.functions.begin(); it != info.functions.end(); it++) {
         auto procname = (*it)->get_name()->get_node_name();
-        if (nameset.find(procname) == nameset.end() || !verb_lv.lookup(*it).empty()) {
+        if (nameset.find(procname) == nameset.end() || !node_lv.lookup(*it).empty()) {
             wrapper_functions.push_back(*it);
         } else {
             target_functions.push_back(*it);
