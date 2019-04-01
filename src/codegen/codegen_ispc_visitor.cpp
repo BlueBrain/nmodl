@@ -36,7 +36,7 @@ void CodegenIspcVisitor::visit_function_call(ast::FunctionCall* node) {
         return;
     }
     if (node->get_node_name() == "printf") {
-        logger->warn("printf not emitted in ispc");
+        logger->warn("Not emitted in ispc: {}"_format(to_nmodl(node)));
         return;
     }
     auto fname = node->get_name().get();
@@ -627,19 +627,9 @@ void CodegenIspcVisitor::print_backend_compute_routine_decl() {
 void CodegenIspcVisitor::determine_target() {
     auto node_lv = AstLookupVisitor(incompatible_node_types);
 
-    auto calls_net_send = [](ast::AST* node) {
-        auto lv = AstLookupVisitor(ast::AstNodeType::FUNCTION_CALL);
-        for (auto f: lv.lookup(node)) {
-            if (std::dynamic_pointer_cast<ast::FunctionCall>(f)->get_node_name() == "net_send") {
-                return true;
-            }
-        }
-        return false;
-    };
-
     if (info.initial_node) {
         emit_fallback[BlockType::Initial] = !node_lv.lookup(info.initial_node).empty() ||
-                                            calls_net_send(info.initial_node) ||
+                                            calls_function(info.initial_node, "net_send") ||
                                             info.require_wrote_conc;
     } else {
         emit_fallback[BlockType::Initial] = info.net_receive_initial_node ||
@@ -648,7 +638,7 @@ void CodegenIspcVisitor::determine_target() {
 
     if (info.net_receive_node) {
         emit_fallback[BlockType::NetReceive] = !node_lv.lookup(info.net_receive_node).empty() ||
-                                               calls_net_send(info.net_receive_node);
+                                               calls_function(info.net_receive_node, "net_send");
     }
 
     if (nrn_cur_required()) {
@@ -669,32 +659,26 @@ void CodegenIspcVisitor::determine_target() {
 }
 
 void CodegenIspcVisitor::move_procs_to_wrapper() {
-    auto name_lv = AstLookupVisitor(ast::AstNodeType::NAME);
     auto nameset = std::set<std::string>();
-    if (info.initial_node) {
-        auto names = name_lv.lookup(info.initial_node);
-        for (const auto& name: names) {
-            nameset.insert(name->get_node_name());
+
+    auto populate_nameset = [&nameset](ast::Block* block) {
+        auto name_lv = AstLookupVisitor(ast::AstNodeType::NAME);
+        if (block) {
+            auto names = name_lv.lookup(block);
+            for (const auto& name: names) {
+                nameset.insert(name->get_node_name());
+            }
         }
-    }
-    if (info.nrn_state_block) {
-        auto names = name_lv.lookup(info.nrn_state_block);
-        for (const auto& name: names) {
-            nameset.insert(name->get_node_name());
-        }
-    }
-    if (info.breakpoint_node) {
-        auto names = name_lv.lookup(info.breakpoint_node);
-        for (const auto& name: names) {
-            nameset.insert(name->get_node_name());
-        }
-    }
+    };
+    populate_nameset(info.initial_node);
+    populate_nameset(info.nrn_state_block);
+    populate_nameset(info.breakpoint_node);
+
     auto node_lv = AstLookupVisitor(incompatible_node_types);
     auto target_procedures = std::vector<ast::ProcedureBlock*>();
     for (auto it = info.procedures.begin(); it != info.procedures.end(); it++) {
         auto procname = (*it)->get_name()->get_node_name();
-        if (nameset.find(procname) == nameset.end() || !node_lv.lookup(*it).empty() ||
-            info.function_uses_table(procname)) {
+        if (nameset.find(procname) == nameset.end() || !node_lv.lookup(*it).empty()) {
             wrapper_procedures.push_back(*it);
         } else {
             target_procedures.push_back(*it);
@@ -715,17 +699,16 @@ void CodegenIspcVisitor::move_procs_to_wrapper() {
 
 void CodegenIspcVisitor::codegen_wrapper_routines() {
     if (emit_fallback[BlockType::Initial]) {
-        logger->warn(
-            "Found VERBATIM (or nrn callback) code in Initial block, falling back to C backend");
-        fallback.print_nrn_init();
+        logger->warn("Falling back to C backend for emitting Initial block");
+        fallback_codegen.print_nrn_init();
     } else {
-        print_wrapper_routine("nrn_init", BlockType::Initial);
+        print_wrapper_routine(naming::NRN_INIT_METHOD, BlockType::Initial);
     }
 
     if (nrn_cur_required()) {
         if (emit_fallback[BlockType::Equation]) {
-            logger->warn("Found VERBATIM code in breakpoint block, falling back to C backend");
-            fallback.print_nrn_cur();
+            logger->warn("Falling back to C backend for emitting breakpoint block");
+            fallback_codegen.print_nrn_cur();
         } else {
             print_wrapper_routine(naming::NRN_CUR_METHOD, BlockType::Equation);
         }
@@ -733,8 +716,8 @@ void CodegenIspcVisitor::codegen_wrapper_routines() {
 
     if (nrn_state_required()) {
         if (emit_fallback[BlockType::State]) {
-            logger->warn("Found VERBATIM code in state block, falling back to C backend");
-            fallback.print_nrn_state();
+            logger->warn("Falling back to C backend for emitting state block");
+            fallback_codegen.print_nrn_state();
         } else {
             print_wrapper_routine(naming::NRN_STATE_METHOD, BlockType::State);
         }
@@ -743,7 +726,7 @@ void CodegenIspcVisitor::codegen_wrapper_routines() {
 
 
 void CodegenIspcVisitor::visit_program(ast::Program* node) {
-    fallback.setup(node);
+    fallback_codegen.setup(node);
     CodegenCVisitor::visit_program(node);
 }
 
@@ -785,7 +768,7 @@ void CodegenIspcVisitor::print_codegen_wrapper_routines() {
     /* this is a godawful mess.. the global variables have to be copied over into the fallback
      * such that they are available to the fallback generator.
      */
-    fallback.set_codegen_global_variables(codegen_global_variables);
+    fallback_codegen.set_codegen_global_variables(codegen_global_variables);
     print_instance_variable_setup();
     print_nrn_alloc();
     print_top_verbatim_blocks();
@@ -795,14 +778,14 @@ void CodegenIspcVisitor::print_codegen_wrapper_routines() {
         if (!program_symtab->lookup(function->get_node_name())
                  .get()
                  ->has_all_status(Status::inlined)) {
-            fallback.print_function(function);
+            fallback_codegen.print_function(function);
         }
     }
     for (const auto& procedure: wrapper_procedures) {
         if (!program_symtab->lookup(procedure->get_node_name())
                  .get()
                  ->has_all_status(Status::inlined)) {
-            fallback.print_procedure(procedure);
+            fallback_codegen.print_procedure(procedure);
         }
     }
 
@@ -811,12 +794,12 @@ void CodegenIspcVisitor::print_codegen_wrapper_routines() {
     print_net_init();
     print_net_send_buffering();
     print_watch_activate();
-    fallback.print_watch_check();  // requires C style variable declarations and loops
+    fallback_codegen.print_watch_check();  // requires C style variable declarations and loops
 
     if (emit_fallback[BlockType::NetReceive]) {
         logger->warn("Found VERBATIM code in net_receive block, falling back to C backend");
-        fallback.print_net_receive_kernel();
-        fallback.print_net_receive_buffering();
+        fallback_codegen.print_net_receive_kernel();
+        fallback_codegen.print_net_receive_buffering();
     }
 
     print_net_receive();

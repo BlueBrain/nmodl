@@ -23,14 +23,15 @@ class CodegenIspcVisitor: public CodegenCVisitor {
     /// ast nodes which are not compatible with ISPC target
     const std::vector<ast::AstNodeType> incompatible_node_types{
         ast::AstNodeType::VERBATIM, ast::AstNodeType::EIGEN_NEWTON_SOLVER_BLOCK,
-        ast::AstNodeType ::EIGEN_LINEAR_SOLVER_BLOCK};
+        ast::AstNodeType::EIGEN_LINEAR_SOLVER_BLOCK, ast::AstNodeType::WATCH_STATEMENT,
+        ast::AstNodeType::TABLE_STATEMENT};
 
     /// flag to indicate if visitor should print the the wrapper code
     bool wrapper_codegen = false;
 
     /// fallback C code generator used to emit C code in the wrapper when emitting ISPC is not
     /// supported
-    CodegenCVisitor fallback;
+    CodegenCVisitor fallback_codegen;
 
     std::map<BlockType, bool> emit_fallback;
 
@@ -170,8 +171,10 @@ class CodegenIspcVisitor: public CodegenCVisitor {
     /// find out for main compute routines whether they are suitable to be emitted in ISPC backend
     void determine_target();
 
+
     /// move procedures and functions unused by compute kernels into the wrapper
     void move_procs_to_wrapper();
+
 
     /// entry point to code generation
     void print_codegen_routines() override;
@@ -185,7 +188,7 @@ class CodegenIspcVisitor: public CodegenCVisitor {
                        LayoutType layout,
                        std::string float_type)
         : CodegenCVisitor(mod_file, output_dir, layout, float_type, ".ispc", ".cpp")
-        , fallback(mod_file, layout, float_type, wrapper_printer) {}
+        , fallback_codegen(mod_file, layout, float_type, wrapper_printer) {}
 
 
     CodegenIspcVisitor(std::string mod_file,
@@ -193,7 +196,7 @@ class CodegenIspcVisitor: public CodegenCVisitor {
                        LayoutType layout,
                        std::string float_type)
         : CodegenCVisitor(mod_file, stream, layout, float_type)
-        , fallback(mod_file, layout, float_type, wrapper_printer) {}
+        , fallback_codegen(mod_file, layout, float_type, wrapper_printer) {}
 
     void visit_function_call(ast::FunctionCall* node) override;
     void visit_var_name(ast::VarName* node) override;
