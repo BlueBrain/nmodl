@@ -110,8 +110,8 @@ list
      }
     | list item {
         if($2){
-            std::cout << "insert item " << $2->get_name() << " " << $2->get_factor() << std::endl;
-            $1->insert($2); $$ = $1;
+            $1->insert($2);
+            $$ = $1;
          }
         else {
             std::cout << "insert nothing" << std::endl;
@@ -171,9 +171,9 @@ item
         $$ = nullptr;
       }
     | UNIT BASE_UNIT NEWLINE {
-        std::cout << "UNIT " << $1 << std::endl;
-        std::cout << "BASE UNIT " << $2 << std::endl;
-        $$ = nullptr;
+        unit::table *newunit = new unit::table($1);
+        newunit->addBaseUnit($2);
+        $$ = newunit;
       }
     | UNIT nominator NEWLINE {
         $2->addUnit($1);
