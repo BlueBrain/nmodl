@@ -41,24 +41,24 @@ yocto-			1e-24
 semi-			.5
 demi-			.5
 /
-Y-			yotta
-Z-			zetta
-E-			exa
-P-			peta
-T-			tera
-G-			giga
-M-			mega
-k-			kilo
-h-			hecto
-da-			deka
-d-			deci
-c-			centi
-m-			milli
-p-			pico
-f-			femto
-a-			atto
-z-			zopto
-y-			yocto
+/Y-			yotta
+/Z-			zetta
+/E-			exa
+/P-			peta
+/T-			tera
+/G-			giga
+/M-			mega
+/k-			kilo
+/h-			hecto
+/da-			deka
+/d-			deci
+/c-			centi
+/m-			milli
+/p-			pico
+/f-			femto
+/a-			atto
+/z-			zopto
+/y-			yocto
 
 / constants
 

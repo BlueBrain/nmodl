@@ -47,6 +47,7 @@ int main(int argc, const char* argv[]) {
         // driver.print_tokens();
 
         /// Print Units and their factors
+        std::cout << " -- PRINTING TABLE -- " << std::endl;
         driver.Table->printUnits();
     }
 

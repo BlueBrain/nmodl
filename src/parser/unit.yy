@@ -67,10 +67,11 @@
 %token <std::string> UNIT_PROD
 %token <std::string> DIVISION
 
-%type <unit::table*> units_nom
-%type <unit::table*> units_denom
+%type <std::vector<std::string>*> units_nom
+%type <std::vector<std::string>*> units_denom
 %type <unit::table*> nominator
 %type <unit::table*> item
+%type <unit::prefix*> prefix
 %type <unit::UnitTable*> list
 
 %{
@@ -98,18 +99,14 @@ list_option
     | list END { std::cout << "reset" << std::endl; if($1){ driver.Table.reset($1); } }
 
 list
-    : item {
-        if($1){
-            std::cout << "new UnitTable" << std::endl;
-            $$ = new unit::UnitTable($1);
-        }
-        else{
-            std::cout << "new empty UnitTable" << std::endl;
-            $$ = new unit::UnitTable();
-        }
+    : {
+        std::cout << "new empty UnitTable" << std::endl;
+        $$ = new unit::UnitTable();
+
      }
-    | list item {
+    | list item  {
         if($2){
+            std::cout << "inserting item: " << $2->get_name() << " " << $2->get_factor() << std::endl;
             $1->insert($2);
             $$ = $1;
          }
@@ -118,59 +115,89 @@ list
             $$ = $1;
         }
      }
+    | list prefix  {
+        std::cout << "inserting prefix: " << $2->get_name() << " " << $2->get_factor()<< std::endl;
+        $1->insertPrefix($2);
+        $$ = $1;
+     }
+    | list no_insert {
+        $$ = $1;
+     }
     ;
 
 units_nom
     : {
-        std::cout << "new unit" << std::endl;
-        unit::table *newunit = new unit::table();
-        $$ = newunit;
+        std::cout << "new vector of nominators" << std::endl;
+        $$ = new std::vector<std::string>;
       }
     | UNIT units_nom {
         std::cout << $1 << std::endl;
-        $2->addUnit($1);
+        $2->push_back($1);
         $$ = $2;
       }
     | UNIT_POWER units_nom {
         std::cout << $1 << std::endl;
-        $2->addUnit($1);
+        $2->push_back($1);
         $$ = $2;
       }
     | UNIT_PROD units_nom { $$ = $2; }
     ;
 
 units_denom
-    : { std::cout << "denominator" << std::endl; }
-    | UNIT units_denom { std::cout << $1 << std::endl; }
-    | UNIT_POWER units_denom { std::cout << $1 << std::endl; }
-    | UNIT_PROD units_denom {}
+    : {
+        std::cout << "new vector of denominators" << std::endl;
+        $$ = new std::vector<std::string>;
+      }
+    | UNIT units_denom {
+        std::cout << $1 << std::endl;
+        $2->push_back($1);
+        $$ = $2;
+      }
+    | UNIT_POWER units_denom {
+        std::cout << $1 << std::endl;
+        $2->push_back($1);
+        $$ = $2;
+      }
+    | UNIT_PROD units_denom { $$ = $2; }
     ;
 
 nominator
-    : units_nom { $$ = $1; }
+    : units_nom { unit::table* newunit = new unit::table(); newunit->addNominatorUnit($1); $$ = newunit; }
     | DOUBLE units_nom {
-        $2->addNominatorDouble($1);
-        std::cout << "DOUBLE = " << $2->get_factor() << std::endl;
-        $$ = $2;
+        unit::table* newunit = new unit::table();
+        newunit->addNominatorUnit($2);
+        newunit->addNominatorDouble($1);
+        std::cout << "DOUBLE = " << newunit->get_factor() << std::endl;
+        $$ = newunit;
       }
     | FRACTION units_nom {
+        unit::table* newunit = new unit::table();
         std::cout << "FRACTION = " << $1 << std::endl;
-        $$ = $2;
+        newunit->addNominatorUnit($2);
+        newunit->addFraction($1);
+        std::cout << "DOUBLE = " << newunit->get_factor() << std::endl;
+        $$ = newunit;
       }
     ;
 
-item
+prefix
     : PREFIX DOUBLE NEWLINE {
-        std::cout << "PREFIX " << $1 << std::endl;
-        std::cout << "DOUBLE " << $2 << std::endl;
-        $$ = nullptr;
+        $$ = new unit::prefix($1,$2);
       }
     | PREFIX UNIT NEWLINE {
-        std::cout << "PREFIX " << $1 << std::endl;
-        std::cout << "UNIT " << $2 << std::endl;
-        $$ = nullptr;
+        $$ = new unit::prefix($1,$2);
       }
-    | UNIT BASE_UNIT NEWLINE {
+
+no_insert
+    : COMMENT NEWLINE {
+        std::cout << "COMMENT " << $1 << std::endl;
+      }
+    | NEWLINE {}
+    | INVALID_TOKEN {
+        error(scanner.loc, "item");
+     }
+item
+    : UNIT BASE_UNIT NEWLINE {
         unit::table *newunit = new unit::table($1);
         newunit->addBaseUnit($2);
         $$ = newunit;
@@ -178,20 +205,31 @@ item
     | UNIT nominator NEWLINE {
         $2->addUnit($1);
         std::cout << "newunit: " << $2->get_name() << ", " << $2->get_factor() << std::endl;
-        $$ =$2;
+        std::cout << "Nominators: " << std::endl;
+        std::vector<std::string> nominator = $2->getNominatorUnit();
+        for(auto it : nominator){
+            std::cout << it << " ";
+        }
+        std:: cout << std::endl;
+        $$ = $2;
       }
     | UNIT nominator DIVISION units_denom NEWLINE {
-        std::cout << "UNIT " <<  "DIV" << std::endl;
-        $$ = nullptr;
-      }
-    | COMMENT NEWLINE {
-        std::cout << "COMMENT " << $1 << std::endl;
-        $$ = nullptr;
-      }
-    | NEWLINE { $$ = nullptr; }
-    | INVALID_TOKEN {
-        error(scanner.loc, "item");
-        $$ = nullptr;
+        $2->addUnit($1);
+        std::cout << "newunit: " << $2->get_name() << ", " << $2->get_factor() << std::endl;
+        std::cout << "Nominators: " << std::endl;
+        std::vector<std::string> nominator = $2->getNominatorUnit();
+        for(auto it : nominator){
+            std::cout << it << " ";
+        }
+        std:: cout << std::endl;
+        $2->addDenominatorUnit($4);
+        std::cout << "Denominators: "<< std::endl;
+        std::vector<std::string> denominator = $2->getDenominatorUnit();
+        for(auto it : denominator){
+            std::cout << it << " ";
+        }
+        std:: cout << std::endl;
+        $$ = $2;
       }
     ;
 
