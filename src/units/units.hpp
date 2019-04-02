@@ -11,6 +11,8 @@
 #include <unordered_map>
 #include <vector>
 #include <cmath>
+#include <iomanip>
+
 
 namespace unit {
 
@@ -237,10 +239,8 @@ class UnitTable {
             throw std::runtime_error(ss.str());
         }
         else{
-            if(nominator_prefix_factor != 1.0){
-                unit->mulFactor(nominator_prefix_factor);
-            }
             for(int i = 0; i < nominator_power; i++) {
+                unit->mulFactor(nominator_prefix_factor*nominator->second->get_factor());
                 unit->addNominatorDims(nominator->second->get_dims());
             }
         }
@@ -266,25 +266,23 @@ class UnitTable {
             }
         }
 
-        char nominator_back = denominator_name.back();
-        if(nominator_back >= '2' && nominator_back <= '9'){
-            denominator_power = nominator_back - '0';
+        char denominator_back = denominator_name.back();
+        if(denominator_back >= '2' && denominator_back <= '9'){
+            denominator_power = denominator_back - '0';
             denominator_name.pop_back();
         }
 
-        auto nominator = Table.find(denominator_name);
+        auto denominator = Table.find(denominator_name);
 
-        if(nominator == Table.end()){
+        if(denominator == Table.end()){
             std::stringstream ss;
             ss << "Unit " << denominator_name << " not defined!" << std::endl;
             throw std::runtime_error(ss.str());
         }
         else{
-            if(denominator_prefix_factor != 1.0){
-                unit->mulFactor(1.0/denominator_prefix_factor);
-            }
             for(int i = 0; i < denominator_power; i++) {
-                unit->addDenominatorDims(nominator->second->get_dims());
+                unit->mulFactor(1.0/(denominator_prefix_factor*denominator->second->get_factor()));
+                unit->addDenominatorDims(denominator->second->get_dims());
             }
         }
 
@@ -317,7 +315,7 @@ class UnitTable {
     }
     void printUnits() {
         for (auto it = Table.begin(); it != Table.end(); it++) {
-            std::cout << (*it).first << " " << (*it).second->get_factor() << ": ";
+            std::cout << std::fixed << std::setprecision(8) << (*it).first << " " << (*it).second->get_factor() << ": ";
             for(auto dims : (*it).second->get_dims()){
                 std::cout << dims << " ";
             }
