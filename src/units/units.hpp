@@ -211,27 +211,32 @@ class UnitTable {
         double nominator_prefix_factor = 1.0;
         int nominator_power = 1;
 
-        int changed_nominator_name = 1;
+        auto nominator = Table.find(nominator_name);
 
-        while(changed_nominator_name) {
-            changed_nominator_name = 0;
-            for (auto it : Prefixes) {
-                auto res = std::mismatch(it.first.begin(), it.first.end(), nominator_name.begin());
-                if (res.first == it.first.end()) {
-                    changed_nominator_name = 1;
-                    nominator_prefix_factor = it.second;
-                    nominator_name.erase(nominator_name.begin(), nominator_name.begin() + it.first.size());
+        if(nominator == Table.end()) {
+
+            int changed_nominator_name = 1;
+
+            while (changed_nominator_name) {
+                changed_nominator_name = 0;
+                for (auto it : Prefixes) {
+                    auto res = std::mismatch(it.first.begin(), it.first.end(), nominator_name.begin());
+                    if (res.first == it.first.end()) {
+                        changed_nominator_name = 1;
+                        nominator_prefix_factor = it.second;
+                        nominator_name.erase(nominator_name.begin(), nominator_name.begin() + it.first.size());
+                    }
                 }
             }
-        }
 
-        char nominator_back = nominator_name.back();
-        if(nominator_back >= '2' && nominator_back <= '9'){
-            nominator_power = nominator_back - '0';
-            nominator_name.pop_back();
-        }
+            char nominator_back = nominator_name.back();
+            if (nominator_back >= '2' && nominator_back <= '9') {
+                nominator_power = nominator_back - '0';
+                nominator_name.pop_back();
+            }
 
-        auto nominator = Table.find(nominator_name);
+            nominator = Table.find(nominator_name);
+        }
 
         if(nominator == Table.end()){
             std::stringstream ss;
@@ -252,27 +257,33 @@ class UnitTable {
         double denominator_prefix_factor = 1.0;
         int denominator_power = 1;
 
-        int changed_denominator_name = 1;
+        auto denominator = Table.find(denominator_name);
 
-        while(changed_denominator_name) {
-            changed_denominator_name = 0;
-            for (auto it : Prefixes) {
-                auto res = std::mismatch(it.first.begin(), it.first.end(), denominator_name.begin());
-                if (res.first == it.first.end()) {
-                    changed_denominator_name = 1;
-                    denominator_prefix_factor = it.second;
-                    denominator_name.erase(denominator_name.begin(), denominator_name.begin() + it.first.size());
+        if(denominator == Table.end()) {
+
+            int changed_denominator_name = 1;
+
+            while (changed_denominator_name) {
+                changed_denominator_name = 0;
+                for (auto it : Prefixes) {
+                    auto res = std::mismatch(it.first.begin(), it.first.end(), denominator_name.begin());
+                    if (res.first == it.first.end()) {
+                        changed_denominator_name = 1;
+                        denominator_prefix_factor = it.second;
+                        denominator_name.erase(denominator_name.begin(), denominator_name.begin() + it.first.size());
+                    }
                 }
             }
-        }
 
-        char denominator_back = denominator_name.back();
-        if(denominator_back >= '2' && denominator_back <= '9'){
-            denominator_power = denominator_back - '0';
-            denominator_name.pop_back();
-        }
+            char denominator_back = denominator_name.back();
+            if (denominator_back >= '2' && denominator_back <= '9') {
+                denominator_power = denominator_back - '0';
+                denominator_name.pop_back();
+            }
 
-        auto denominator = Table.find(denominator_name);
+            denominator = Table.find(denominator_name);
+
+        }
 
         if(denominator == Table.end()){
             std::stringstream ss;
