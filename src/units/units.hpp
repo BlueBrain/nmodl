@@ -1,3 +1,5 @@
+#include <utility>
+
 /*************************************************************************
  * Copyright (C) 2018-2019 Blue Brain Project
  *
@@ -20,28 +22,37 @@
 namespace nmodl {
 namespace units {
 
-    static const int max_dims = 10;
+/// Maximum number of dimensions of units (maximum number of base units)
+static const int MAX_DIMS = 10;
 
-    class UnitTable;
-
+/**
+ * \class unit
+ * \brief Class that stores all the data of a unit
+ */
 class unit {
 private:
+    /// Double factor of the unit
     double m_factor = 1.0;
-    std::array<int, max_dims> m_dim = {0};
+    
+    /// Array of MAX_DIMS size that keeps the unit's dimensions
+    std::array<int, MAX_DIMS> m_dim = {0};
+
+    /// Name of the unit
     std::string m_name;
+
+    /// Vector of nominators of the unit
     std::vector<std::string> nominator;
+
+    /// Vector of denominators of the unit
     std::vector<std::string> denominator;
 
 public:
     unit() = default;
 
-    unit(const std::string t_name)
+    explicit unit(std::string t_name)
             : m_name(std::move(t_name)) {}
 
-    // table(std::string&& t_name) noexcept
-    //        : m_name(std::move(t_name)) {}
-
-    unit(const double t_factor, std::array<int, max_dims> t_dim, std::string t_name)
+    unit(const double t_factor, std::array<int, MAX_DIMS> t_dim, std::string t_name)
             : m_factor(t_factor), m_dim(t_dim), m_name(std::move(t_name)) {}
 
     void addUnit(std::string t_name);
@@ -50,9 +61,9 @@ public:
 
     void addNominatorDouble(std::string t_double);
 
-    void addNominatorDims(std::array<int, max_dims> t_dim);
+    void addNominatorDims(std::array<int, MAX_DIMS> t_dim);
 
-    void addDenominatorDims(std::array<int, max_dims> t_dim);
+    void addDenominatorDims(std::array<int, MAX_DIMS> t_dim);
 
     void addNominatorUnit(std::string t_nom);
 
@@ -84,20 +95,28 @@ public:
         return m_factor;
     }
 
-    std::array<int, max_dims> get_dims() const {
+    std::array<int, MAX_DIMS> get_dims() const {
         return m_dim;
     }
 
 };
 
+/**
+ * \class prefix
+ * \brief Class that stores all the data of a prefix
+ */
 class prefix {
 private:
+    /// Prefix's double factor
     double m_factor = 1;
+
+    /// Prefix's name
     std::string m_name;
+
+    /// Prefix's name that this prefix is based on
     std::string m_factorname;
 
 public:
-
     prefix() = default;
 
     prefix(std::string t_name, std::string t_factor) {
@@ -126,11 +145,20 @@ public:
 
 };
 
+/**
+ * \class UnitTable
+ * \brief Class that stores all the units, prefixes and names of base units used
+ */
 class UnitTable {
 private:
+    /// Hash map that stores all the units
     std::unordered_map<std::string, unit *> Table;
+
+    /// Hash map that stores all the prefixes
     std::unordered_map<std::string, double> Prefixes;
-    std::array<std::string, max_dims> BaseUnitsNames;
+
+    /// Hash map that stores all the base units' names
+    std::array<std::string, MAX_DIMS> BaseUnitsNames;
 
 public:
 

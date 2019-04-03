@@ -31,11 +31,11 @@ void nmodl::units::unit::addNominatorDouble(const std::string t_double) {
     m_factor = doubleParsing(t_double);
 }
 
-void nmodl::units::unit::addNominatorDims(std::array<int, max_dims> t_dim) {
+void nmodl::units::unit::addNominatorDims(std::array<int, MAX_DIMS> t_dim) {
     std::transform(m_dim.begin(), m_dim.end(), t_dim.begin(), m_dim.begin(), std::plus<int>());
 }
 
-void nmodl::units::unit::addDenominatorDims(std::array<int, max_dims> t_dim) {
+void nmodl::units::unit::addDenominatorDims(std::array<int, MAX_DIMS> t_dim) {
     std::transform(m_dim.begin(), m_dim.end(), t_dim.begin(), m_dim.begin(), std::minus<int>());
 }
 
@@ -213,7 +213,7 @@ void nmodl::units::UnitTable::insert(unit* unit) {
 }
 
 void nmodl::units::UnitTable::insertPrefix(prefix* prfx) {
-    // if the factorname is not empty, then this prefix is a rename of another one
+    // if the factorname is not empty, then this prefix is based on another one (rename)
     // else the factor of the prefix is calculated and should be added to the Prefixes
     auto rename = !prfx->get_factorname().empty();
     if (rename) {
