@@ -95,70 +95,60 @@
 %%
 
 list_option
-    : END { std::cout << "end" << std::endl; }
-    | list END { std::cout << "reset" << std::endl; if($1){ driver.Table.reset($1); } }
+    : END
+    | list END {
+        driver.Table.reset($1);
+      }
 
 list
     : {
-        std::cout << "new empty UnitTable" << std::endl;
         $$ = new nmodl::units::UnitTable();
-
-     }
+      }
     | list item  {
-        if($2){
-            std::cout << "inserting item: " << $2->get_name() << " " << $2->get_factor() << std::endl;
-            $1->insert($2);
-            $$ = $1;
-         }
-        else {
-            std::cout << "insert nothing" << std::endl;
-            $$ = $1;
-        }
-     }
+        $1->insert($2);
+        $$ = $1;
+      }
     | list prefix  {
-        std::cout << "inserting prefix: " << $2->get_name() << " " << $2->get_factor()<< std::endl;
         $1->insertPrefix($2);
         $$ = $1;
-     }
+      }
     | list no_insert {
         $$ = $1;
-     }
+      }
     ;
 
 units_nom
     : {
-        std::cout << "new vector of nominators" << std::endl;
         $$ = new std::vector<std::string>;
       }
     | UNIT units_nom {
-        std::cout << $1 << std::endl;
         $2->push_back($1);
         $$ = $2;
       }
     | UNIT_POWER units_nom {
-        std::cout << $1 << std::endl;
         $2->push_back($1);
         $$ = $2;
       }
-    | UNIT_PROD units_nom { $$ = $2; }
+    | UNIT_PROD units_nom {
+        $$ = $2;
+      }
     ;
 
 units_denom
     : {
-        std::cout << "new vector of denominators" << std::endl;
         $$ = new std::vector<std::string>;
       }
     | UNIT units_denom {
-        std::cout << $1 << std::endl;
         $2->push_back($1);
         $$ = $2;
       }
     | UNIT_POWER units_denom {
-        std::cout << $1 << std::endl;
         $2->push_back($1);
         $$ = $2;
       }
-    | UNIT_PROD units_denom { $$ = $2; }
+    | UNIT_PROD units_denom {
+        $$ = $2;
+      }
     ;
 
 nominator
@@ -171,15 +161,12 @@ nominator
         nmodl::units::unit* newunit = new nmodl::units::unit();
         newunit->addNominatorUnit($2);
         newunit->addNominatorDouble($1);
-        std::cout << "DOUBLE = " << newunit->get_factor() << std::endl;
         $$ = newunit;
       }
     | FRACTION units_nom {
         nmodl::units::unit* newunit = new nmodl::units::unit();
-        std::cout << "FRACTION = " << $1 << std::endl;
         newunit->addNominatorUnit($2);
         newunit->addFraction($1);
-        std::cout << "DOUBLE = " << newunit->get_factor() << std::endl;
         $$ = newunit;
       }
     ;
@@ -193,10 +180,8 @@ prefix
       }
 
 no_insert
-    : COMMENT NEWLINE {
-        std::cout << "COMMENT " << $1 << std::endl;
-      }
-    | NEWLINE {}
+    : COMMENT NEWLINE
+    | NEWLINE
     | INVALID_TOKEN {
         error(scanner.loc, "item");
       }
@@ -208,31 +193,14 @@ item
       }
     | UNIT nominator NEWLINE {
         $2->addUnit($1);
-        std::cout << "newunit: " << $2->get_name() << ", " << $2->get_factor() << std::endl;
-        std::cout << "Nominators: " << std::endl;
         std::vector<std::string> nominator = $2->getNominatorUnit();
-        for(auto it : nominator){
-            std::cout << it << " ";
-        }
-        std:: cout << std::endl;
         $$ = $2;
       }
     | UNIT nominator DIVISION units_denom NEWLINE {
         $2->addUnit($1);
-        std::cout << "newunit: " << $2->get_name() << ", " << $2->get_factor() << std::endl;
-        std::cout << "Nominators: " << std::endl;
         std::vector<std::string> nominator = $2->getNominatorUnit();
-        for(auto it : nominator){
-            std::cout << it << " ";
-        }
-        std:: cout << std::endl;
         $2->addDenominatorUnit($4);
-        std::cout << "Denominators: "<< std::endl;
         std::vector<std::string> denominator = $2->getDenominatorUnit();
-        for(auto it : denominator){
-            std::cout << it << " ";
-        }
-        std:: cout << std::endl;
         $$ = $2;
       }
     ;
