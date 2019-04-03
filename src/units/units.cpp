@@ -199,6 +199,7 @@ void nmodl::units::UnitTable::insert(unit* unit) {
         unit_nominator.size() == 1 && unit_nominator.front().size() == 3 &&
         (unit_nominator.front().front() == '*' && unit_nominator.front().back() == '*');
     if (only_base_unit_nominator) {
+        // BaseUnitsNames[i] = "*i-th base unit*" (ex. BaseUnitsNames[0] = "*a*")
         BaseUnitsNames[unit_nominator.front()[1] - 'a'] = unit->get_name();
         Table.insert({unit->get_name(), unit});
         return;
