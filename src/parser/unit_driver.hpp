@@ -50,7 +50,7 @@ class UnitDriver {
     bool verbose = false;
 
   public:
-    std::shared_ptr<unit::UnitTable> Table = nullptr;
+    std::shared_ptr<nmodl::units::UnitTable> Table = nullptr;
     /// file or input stream name (used by scanner for position), see todo
     std::string streamname;
 

@@ -49,6 +49,9 @@ int main(int argc, const char* argv[]) {
         /// Print Units and their factors
         std::cout << " -- PRINTING TABLE -- " << std::endl;
         driver.Table->printUnits();
+
+        std::cout << " -- PRINTING BASE UNITS -- " << std::endl;
+        driver.Table->printBaseUnits();
     }
 
     return 0;

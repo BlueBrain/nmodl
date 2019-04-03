@@ -69,10 +69,10 @@
 
 %type <std::vector<std::string>*> units_nom
 %type <std::vector<std::string>*> units_denom
-%type <unit::table*> nominator
-%type <unit::table*> item
-%type <unit::prefix*> prefix
-%type <unit::UnitTable*> list
+%type <nmodl::units::unit*> nominator
+%type <nmodl::units::unit*> item
+%type <nmodl::units::prefix*> prefix
+%type <nmodl::units::UnitTable*> list
 
 %{
     #include "lexer/unit_lexer.hpp"
@@ -101,7 +101,7 @@ list_option
 list
     : {
         std::cout << "new empty UnitTable" << std::endl;
-        $$ = new unit::UnitTable();
+        $$ = new nmodl::units::UnitTable();
 
      }
     | list item  {
@@ -162,16 +162,20 @@ units_denom
     ;
 
 nominator
-    : units_nom { unit::table* newunit = new unit::table(); newunit->addNominatorUnit($1); $$ = newunit; }
+    : units_nom {
+        nmodl::units::unit* newunit = new nmodl::units::unit();
+        newunit->addNominatorUnit($1);
+        $$ = newunit;
+      }
     | DOUBLE units_nom {
-        unit::table* newunit = new unit::table();
+        nmodl::units::unit* newunit = new nmodl::units::unit();
         newunit->addNominatorUnit($2);
         newunit->addNominatorDouble($1);
         std::cout << "DOUBLE = " << newunit->get_factor() << std::endl;
         $$ = newunit;
       }
     | FRACTION units_nom {
-        unit::table* newunit = new unit::table();
+        nmodl::units::unit* newunit = new nmodl::units::unit();
         std::cout << "FRACTION = " << $1 << std::endl;
         newunit->addNominatorUnit($2);
         newunit->addFraction($1);
@@ -182,10 +186,10 @@ nominator
 
 prefix
     : PREFIX DOUBLE NEWLINE {
-        $$ = new unit::prefix($1,$2);
+        $$ = new nmodl::units::prefix($1,$2);
       }
     | PREFIX UNIT NEWLINE {
-        $$ = new unit::prefix($1,$2);
+        $$ = new nmodl::units::prefix($1,$2);
       }
 
 no_insert
@@ -195,10 +199,10 @@ no_insert
     | NEWLINE {}
     | INVALID_TOKEN {
         error(scanner.loc, "item");
-     }
+      }
 item
     : UNIT BASE_UNIT NEWLINE {
-        unit::table *newunit = new unit::table($1);
+        nmodl::units::unit *newunit = new nmodl::units::unit($1);
         newunit->addBaseUnit($2);
         $$ = newunit;
       }
