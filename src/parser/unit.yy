@@ -57,6 +57,7 @@
 %token               INVALID_TOKEN
 
 %token <std::string> BASE_UNIT
+%token <std::string> INVALID_BASE_UNIT
 %token <std::string> UNIT
 %token <std::string> UNIT_POWER
 %token <std::string> PREFIX
@@ -72,7 +73,7 @@
 %type <nmodl::units::unit*> nominator
 %type <nmodl::units::unit*> item
 %type <nmodl::units::prefix*> prefix
-%type <nmodl::units::UnitTable*> list
+%type <std::shared_ptr<nmodl::units::UnitTable>> list
 
 %{
     #include "lexer/unit_lexer.hpp"
@@ -96,13 +97,11 @@
 
 list_option
     : END
-    | list END {
-        driver.Table.reset($1);
-      }
+    | list END
 
 list
     : {
-        $$ = new nmodl::units::UnitTable();
+        $$ = driver.Table;
       }
     | list item  {
         $1->insert($2);
@@ -191,6 +190,9 @@ item
         newunit->addBaseUnit($2);
         $$ = newunit;
       }
+    | UNIT INVALID_BASE_UNIT NEWLINE {
+            error(scanner.loc, "Base units should be named by characters a-j");
+          }
     | UNIT nominator NEWLINE {
         $2->addUnit($1);
         std::vector<std::string> nominator = $2->getNominatorUnit();

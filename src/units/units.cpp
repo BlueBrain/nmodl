@@ -7,10 +7,13 @@
 
 #include "units.hpp"
 #include <fstream>
+#include <string>
+#include <sstream>
 #include <iostream>
 #include <map>
 #include <regex>
 #include <vector>
+#include <array>
 
 namespace nmodl {
 namespace units {
@@ -201,7 +204,14 @@ void nmodl::units::UnitTable::insert(unit* unit) {
     if (only_base_unit_nominator) {
         // BaseUnitsNames[i] = "*i-th base unit*" (ex. BaseUnitsNames[0] = "*a*")
         BaseUnitsNames[unit_nominator.front()[1] - 'a'] = unit->get_name();
-        Table.insert({unit->get_name(), unit});
+        auto find_unit_name = Table.find(unit->get_name());
+        if(find_unit_name == Table.end()) {
+            Table.insert({unit->get_name(), unit});
+        }
+        else{
+            Table.erase(unit->get_name());
+            Table.insert({unit->get_name(), unit});
+        }
         return;
     }
     for (const auto& it: unit->getNominatorUnit()) {
@@ -210,7 +220,14 @@ void nmodl::units::UnitTable::insert(unit* unit) {
     for (const auto& it: unit->getDenominatorUnit()) {
         calcDenominatorDims(unit, it);
     }
-    Table.insert({unit->get_name(), unit});
+    auto find_unit_name = Table.find(unit->get_name());
+    if(find_unit_name == Table.end()) {
+        Table.insert({unit->get_name(), unit});
+    }
+    else{
+        Table.erase(unit->get_name());
+        Table.insert({unit->get_name(), unit});
+    }
 }
 
 void nmodl::units::UnitTable::insertPrefix(prefix* prfx) {

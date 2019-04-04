@@ -92,9 +92,15 @@ DBL  ({D})|({D}+"."{D}*({E})?)|({D}*"."{D}+({E})?)|({D}+{E})
 
 %%
 
-"*"[a-z]"*" {
+"*"[a-j]"*" {
                 driver.add_token(yytext);
                 return UnitParser::make_BASE_UNIT(yytext, loc);
+
+            }
+
+"*"[k-zA-Z]"*" {
+                driver.add_token(yytext);
+                return UnitParser::make_INVALID_BASE_UNIT(yytext, loc);
 
             }
 

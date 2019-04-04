@@ -11,12 +11,15 @@
 
 #include <utility>
 #include <fstream>
+#include <string>
+#include <sstream>
 #include <iostream>
 #include <regex>
 #include <unordered_map>
 #include <vector>
 #include <cmath>
 #include <iomanip>
+#include <array>
 
 
 namespace nmodl {
