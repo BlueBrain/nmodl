@@ -58,35 +58,35 @@ public:
     unit(const double t_factor, std::array<int, MAX_DIMS> t_dim, std::string t_name)
             : m_factor(t_factor), m_dim(t_dim), m_name(std::move(t_name)) {}
 
-    void addUnit(std::string t_name);
+    void add_unit(std::string t_name);
 
-    void addBaseUnit(std::string t_name);
+    void add_base_unit(std::string t_name);
 
-    void addNominatorDouble(std::string t_double);
+    void add_nominator_double(std::string t_double);
 
-    void addNominatorDims(std::array<int, MAX_DIMS> t_dim);
+    void add_nominator_dims(std::array<int, MAX_DIMS> t_dim);
 
-    void addDenominatorDims(std::array<int, MAX_DIMS> t_dim);
+    void add_denominator_dims(std::array<int, MAX_DIMS> t_dim);
 
-    void addNominatorUnit(std::string t_nom);
+    void add_nominator_unit(std::string t_nom);
 
-    void addNominatorUnit(const std::vector<std::string> *t_nom);
+    void add_nominator_unit(const std::vector<std::string> *t_nom);
 
-    void addDenominatorUnit(std::string t_denom);
+    void add_denominator_unit(std::string t_denom);
 
-    void addDenominatorUnit(const std::vector<std::string> *t_denom);
+    void add_denominator_unit(const std::vector<std::string> *t_denom);
 
-    void mulFactor(double prefixFactor);
+    void mul_factor(double prefixFactor);
 
-    void addFraction(const std::string& t_fraction);
+    void add_fraction(const std::string &t_fraction);
 
-    double doubleParsing(const std::string& t_double);
+    double double_parsing(const std::string &t_double);
 
-    std::vector<std::string> getNominatorUnit() const {
+    std::vector<std::string> get_nominator_unit() const {
         return nominator;
     }
 
-    std::vector<std::string> getDenominatorUnit() const {
+    std::vector<std::string> get_denominator_unit() const {
         return denominator;
     }
 
@@ -167,17 +167,17 @@ public:
 
     UnitTable() = default;
 
-    void calcNominatorDims(unit *unit, std::string nominator_name);
+    void calc_nominator_dims(unit *unit, std::string nominator_name);
 
-    void calcDenominatorDims(unit *unit, std::string denominator_name);
+    void calc_denominator_dims(unit *unit, std::string denominator_name);
 
     void insert(unit *unit);
 
-    void insertPrefix(prefix *prfx);
+    void insert_prefix(prefix *prfx);
 
-    void printUnits() const;
+    void print_units() const;
 
-    void printBaseUnits() const;
+    void print_base_units() const;
 };
 
 }  // namespace unit

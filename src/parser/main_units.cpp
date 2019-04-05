@@ -48,10 +48,10 @@ int main(int argc, const char* argv[]) {
 
         /// Print Units and their factors
         std::cout << " -- PRINTING TABLE -- " << std::endl;
-        driver.Table->printUnits();
+        driver.Table->print_units();
 
         std::cout << " -- PRINTING BASE UNITS -- " << std::endl;
-        driver.Table->printBaseUnits();
+        driver.Table->print_base_units();
     }
 
     return 0;

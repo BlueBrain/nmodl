@@ -108,7 +108,7 @@ list
         $$ = $1;
       }
     | list prefix  {
-        $1->insertPrefix($2);
+        $1->insert_prefix($2);
         $$ = $1;
       }
     | list no_insert {
@@ -153,19 +153,19 @@ units_denom
 nominator
     : units_nom {
         nmodl::units::unit* newunit = new nmodl::units::unit();
-        newunit->addNominatorUnit($1);
+        newunit->add_nominator_unit($1);
         $$ = newunit;
       }
     | DOUBLE units_nom {
         nmodl::units::unit* newunit = new nmodl::units::unit();
-        newunit->addNominatorUnit($2);
-        newunit->addNominatorDouble($1);
+        newunit->add_nominator_unit($2);
+        newunit->add_nominator_double($1);
         $$ = newunit;
       }
     | FRACTION units_nom {
         nmodl::units::unit* newunit = new nmodl::units::unit();
-        newunit->addNominatorUnit($2);
-        newunit->addFraction($1);
+        newunit->add_nominator_unit($2);
+        newunit->add_fraction($1);
         $$ = newunit;
       }
     ;
@@ -187,22 +187,22 @@ no_insert
 item
     : UNIT BASE_UNIT NEWLINE {
         nmodl::units::unit *newunit = new nmodl::units::unit($1);
-        newunit->addBaseUnit($2);
+        newunit->add_base_unit($2);
         $$ = newunit;
       }
     | UNIT INVALID_BASE_UNIT NEWLINE {
             error(scanner.loc, "Base units should be named by characters a-j");
           }
     | UNIT nominator NEWLINE {
-        $2->addUnit($1);
-        std::vector<std::string> nominator = $2->getNominatorUnit();
+        $2->add_unit($1);
+        std::vector<std::string> nominator = $2->get_nominator_unit();
         $$ = $2;
       }
     | UNIT nominator DIVISION units_denom NEWLINE {
-        $2->addUnit($1);
-        std::vector<std::string> nominator = $2->getNominatorUnit();
-        $2->addDenominatorUnit($4);
-        std::vector<std::string> denominator = $2->getDenominatorUnit();
+        $2->add_unit($1);
+        std::vector<std::string> nominator = $2->get_nominator_unit();
+        $2->add_denominator_unit($4);
+        std::vector<std::string> denominator = $2->get_denominator_unit();
         $$ = $2;
       }
     ;
