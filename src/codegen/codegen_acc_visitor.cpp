@@ -32,15 +32,17 @@ namespace codegen {
  *
  */
 void CodegenAccVisitor::print_channel_iteration_block_parallel_hint(BlockType type) {
-    if (!info.artificial_cell) {
-        std::string present_clause = "present(node_index, data, voltage, indexes, thread";
-
-        if (type == BlockType::Equation) {
-            present_clause += ", vec_rhs, vec_d";
-        }
-        present_clause += ")";
-        printer->add_line("#pragma acc parallel loop {}"_format(present_clause));
+    if (info.artificial_cell || info.eigen_newton_solver_exist || info.eigen_linear_solver_exist) {
+        return;
     }
+
+    std::string present_clause = "present(node_index, data, voltage, indexes, thread";
+
+    if (type == BlockType::Equation) {
+        present_clause += ", vec_rhs, vec_d";
+    }
+    present_clause += ")";
+    printer->add_line("#pragma acc parallel loop {}"_format(present_clause));
 }
 
 

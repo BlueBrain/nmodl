@@ -3032,7 +3032,12 @@ void CodegenCVisitor::print_instance_variable_setup() {
         auto default_type = default_float_data_type();
         auto range_var_type = get_range_var_float_type(var);
         if (default_type == range_var_type) {
-            printer->add_line("inst->{} = ml->data+{}{};"_format(name, id, stride));
+            if (info.artificial_cell) {
+                printer->add_line("inst->{} = ml->data+{}{};"_format(name, id, stride));
+            } else {
+                printer->add_line(
+                    "inst->{} = (double*) acc_deviceptr(ml->data+{}{});"_format(name, id, stride));
+            }
         } else {
             printer->add_line("inst->{} = setup_range_variable(ml->data+{}{}, pnodecount);"_format(
                 name, id, stride));
@@ -3043,11 +3048,25 @@ void CodegenCVisitor::print_instance_variable_setup() {
 
     for (auto& var: codegen_int_variables) {
         auto name = var.symbol->get_name();
-        if (var.is_index || var.is_integer) {
-            printer->add_line("inst->{} = ml->pdata;"_format(name));
+        if (info.artificial_cell) {
+            if (var.is_index || var.is_integer) {
+                printer->add_line("inst->{} = ml->pdata;"_format(name));
+            } else {
+                auto data = var.is_vdata ? "_vdata" : "_data";
+                printer->add_line("inst->{} = nt->{};"_format(name, data));
+            }
         } else {
-            auto data = var.is_vdata ? "_vdata" : "_data";
-            printer->add_line("inst->{} = nt->{};"_format(name, data));
+            if (var.is_index || var.is_integer) {
+                printer->add_line("inst->{} = (int*) acc_deviceptr(ml->pdata);"_format(name));
+            } else {
+                if (var.is_vdata) {
+                    printer->add_line(
+                        "inst->{} = (void**)acc_deviceptr(nt->{});"_format(name, "_vdata"));
+                } else {
+                    printer->add_line(
+                        "inst->{} = (double*) acc_deviceptr(nt->{});"_format(name, "_data"));
+                }
+            }
         }
     }
 
