@@ -21,6 +21,7 @@
 #include "codegen/codegen_omp_visitor.hpp"
 #include "config/config.h"
 #include "parser/nmodl_driver.hpp"
+#include "parser/unit_driver.hpp"
 #include "utils/common_utils.hpp"
 #include "utils/logger.hpp"
 #include "visitors/ast_visitor.hpp"
@@ -39,6 +40,7 @@
 #include "visitors/sympy_conductance_visitor.hpp"
 #include "visitors/sympy_solver_visitor.hpp"
 #include "visitors/symtab_visitor.hpp"
+#include "visitors/units_visitor.hpp"
 #include "visitors/verbatim_var_rename_visitor.hpp"
 #include "visitors/verbatim_visitor.hpp"
 
@@ -295,6 +297,12 @@ int main(int argc, const char* argv[]) {
             SteadystateVisitor().visit_program(ast.get());
             SymtabVisitor(update_symtab).visit_program(ast.get());
             ast_to_nmodl(ast.get(), filepath("steadystate"));
+        }
+
+        /// Parsing units fron "nrnunits.lib" and mod files
+        {
+            logger->info("Parsing Units");
+            UnitsVisitor().visit_program(ast.get());
         }
 
         /// once we start modifying (especially removing) older constructs
