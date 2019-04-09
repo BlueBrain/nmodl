@@ -175,6 +175,10 @@ public:
 
     void insert_prefix(prefix *prfx);
 
+    unit* get_unit(std::string unit_name){
+        return Table[unit_name];
+    }
+
     void print_units() const;
 
     void print_base_units() const;

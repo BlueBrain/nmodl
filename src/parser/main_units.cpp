@@ -22,16 +22,7 @@
 using namespace fmt::literals;
 using namespace nmodl;
 
-int main(int argc, const char* argv[]) {
-    CLI::App app{"Unit-Parser : Standalone Parser for Units({})"_format(version::to_string())};
-
-    std::vector<std::string> files;
-    app.add_option("file", files, "One or more Units files to process")
-        ->required()
-        ->check(CLI::ExistingFile);
-
-    CLI11_PARSE(app, argc, argv);
-
+extern void parse_units(std::vector<std::string> files) {
     for (const auto& f: files) {
         logger->info("Processing {}", f);
         std::ifstream file(f);
@@ -47,12 +38,25 @@ int main(int argc, const char* argv[]) {
         // driver.print_tokens();
 
         /// Print Units and their factors
-        std::cout << " -- PRINTING TABLE -- " << std::endl;
-        driver.Table->print_units();
+        // std::cout << " -- PRINTING TABLE -- " << std::endl;
+        // driver.Table->print_units();
 
-        std::cout << " -- PRINTING BASE UNITS -- " << std::endl;
-        driver.Table->print_base_units();
+        // std::cout << " -- PRINTING BASE UNITS -- " << std::endl;
+        // driver.Table->print_base_units();
     }
+}
+
+int main(int argc, const char* argv[]) {
+    CLI::App app{"Unit-Parser : Standalone Parser for Units({})"_format(version::to_string())};
+
+    std::vector<std::string> files;
+    app.add_option("file", files, "One or more Units files to process")
+        ->required()
+        ->check(CLI::ExistingFile);
+
+    CLI11_PARSE(app, argc, argv);
+
+    parse_units(files);
 
     return 0;
 }

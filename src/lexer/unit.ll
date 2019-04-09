@@ -104,6 +104,11 @@ DBL  ({D})|({D}+"."{D}*({E})?)|({D}*"."{D}+({E})?)|({D}+{E})
 
             }
 
+^[a-zA-Z$\%]+   {
+                driver.add_token(yytext);
+                return UnitParser::make_NEW_UNIT(yytext, loc);
+            }
+
 [a-zA-Z$\%]+   {
                 driver.add_token(yytext);
                 return UnitParser::make_UNIT(yytext, loc);
@@ -140,7 +145,7 @@ DBL  ({D})|({D}+"."{D}*({E})?)|({D}*"."{D}+({E})?)|({D}+{E})
                 return UnitParser::make_COMMENT(yytext, loc);
             }
 
-"/"         {
+"/"|"1/"        {
                 driver.add_token(yytext);
                 return UnitParser::make_DIVISION(yytext, loc);
             }

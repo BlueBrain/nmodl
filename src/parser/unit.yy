@@ -59,6 +59,7 @@
 %token <std::string> BASE_UNIT
 %token <std::string> INVALID_BASE_UNIT
 %token <std::string> UNIT
+%token <std::string> NEW_UNIT
 %token <std::string> UNIT_POWER
 %token <std::string> PREFIX
 %token <std::string> DOUBLE
@@ -171,38 +172,35 @@ nominator
     ;
 
 prefix
-    : PREFIX DOUBLE NEWLINE {
+    : PREFIX DOUBLE {
         $$ = new nmodl::units::prefix($1,$2);
       }
-    | PREFIX UNIT NEWLINE {
+    | PREFIX UNIT {
         $$ = new nmodl::units::prefix($1,$2);
       }
 
 no_insert
-    : COMMENT NEWLINE
+    : COMMENT
     | NEWLINE
     | INVALID_TOKEN {
         error(scanner.loc, "item");
       }
 item
-    : UNIT BASE_UNIT NEWLINE {
+    : NEW_UNIT BASE_UNIT {
         nmodl::units::unit *newunit = new nmodl::units::unit($1);
         newunit->add_base_unit($2);
         $$ = newunit;
       }
-    | UNIT INVALID_BASE_UNIT NEWLINE {
+    | NEW_UNIT INVALID_BASE_UNIT {
             error(scanner.loc, "Base units should be named by characters a-j");
           }
-    | UNIT nominator NEWLINE {
+    | NEW_UNIT nominator {
         $2->add_unit($1);
-        std::vector<std::string> nominator = $2->get_nominator_unit();
         $$ = $2;
       }
-    | UNIT nominator DIVISION units_denom NEWLINE {
+    | NEW_UNIT nominator DIVISION units_denom {
         $2->add_unit($1);
-        std::vector<std::string> nominator = $2->get_nominator_unit();
         $2->add_denominator_unit($4);
-        std::vector<std::string> denominator = $2->get_denominator_unit();
         $$ = $2;
       }
     ;

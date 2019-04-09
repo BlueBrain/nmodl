@@ -55,7 +55,7 @@ TEST_CASE("Lexer tests for valid tokens", "[Lexer]") {
     SECTION("Tests for units") {
         REQUIRE(token_type("*a*") == Token::BASE_UNIT);
         REQUIRE(token_type("*k*") == Token::INVALID_BASE_UNIT);
-        REQUIRE(token_type("planck") == Token::UNIT);
+        REQUIRE(token_type("planck") == Token::NEW_UNIT);
         REQUIRE(token_type("m2") == Token::UNIT_POWER);
         REQUIRE(token_type("yotta-") == Token::PREFIX);
     }

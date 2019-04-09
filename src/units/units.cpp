@@ -6,14 +6,14 @@
  *************************************************************************/
 
 #include "units.hpp"
+#include <array>
 #include <fstream>
-#include <string>
-#include <sstream>
 #include <iostream>
 #include <map>
 #include <regex>
+#include <sstream>
+#include <string>
 #include <vector>
-#include <array>
 
 namespace nmodl {
 namespace units {
@@ -46,7 +46,7 @@ void nmodl::units::unit::add_nominator_unit(std::string t_nom) {
     nominator.push_back(t_nom);
 }
 
-void nmodl::units::unit::add_nominator_unit(const std::vector<std::string> *t_nom) {
+void nmodl::units::unit::add_nominator_unit(const std::vector<std::string>* t_nom) {
     nominator.insert(nominator.end(), t_nom->begin(), t_nom->end());
 }
 
@@ -54,7 +54,7 @@ void nmodl::units::unit::add_denominator_unit(std::string t_denom) {
     denominator.push_back(t_denom);
 }
 
-void nmodl::units::unit::add_denominator_unit(const std::vector<std::string> *t_denom) {
+void nmodl::units::unit::add_denominator_unit(const std::vector<std::string>* t_denom) {
     denominator.insert(denominator.end(), t_denom->begin(), t_denom->end());
 }
 
@@ -62,7 +62,7 @@ void nmodl::units::unit::mul_factor(const double prefixFactor) {
     m_factor *= prefixFactor;
 }
 
-void nmodl::units::unit::add_fraction(const std::string &t_fraction) {
+void nmodl::units::unit::add_fraction(const std::string& t_fraction) {
     double nom, denom;
     std::string nominator;
     std::string denominator;
@@ -80,7 +80,7 @@ void nmodl::units::unit::add_fraction(const std::string &t_fraction) {
     m_factor = nom / denom;
 }
 
-double nmodl::units::unit::double_parsing(const std::string &t_double) {
+double nmodl::units::unit::double_parsing(const std::string& t_double) {
     double d_number, d_magnitude;
     std::string s_number;
     std::string s_magnitude;
@@ -105,10 +105,10 @@ double nmodl::units::unit::double_parsing(const std::string &t_double) {
     return d_number * std::pow(10.0, d_magnitude);
 }
 
-void nmodl::units::UnitTable::calc_nominator_dims(unit *unit, std::string nominator_name) {
+void nmodl::units::UnitTable::calc_nominator_dims(unit* unit, std::string nominator_name) {
     double nominator_prefix_factor = 1.0;
     int nominator_power = 1;
-
+    std::string nom_name = nominator_name;
     auto nominator = Table.find(nominator_name);
 
     // if the nominator_name is not in the table, check if there are any prefixes or power
@@ -121,9 +121,19 @@ void nmodl::units::UnitTable::calc_nominator_dims(unit *unit, std::string nomina
                 auto res = std::mismatch(it.first.begin(), it.first.end(), nominator_name.begin());
                 if (res.first == it.first.end()) {
                     changed_nominator_name = 1;
-                    nominator_prefix_factor = it.second;
+                    nominator_prefix_factor *= it.second;
                     nominator_name.erase(nominator_name.begin(),
                                          nominator_name.begin() + it.first.size());
+                }
+            }
+        }
+        // if the nominator is only a prefix, just multiply the prefix factor with the unit factor
+        if (nominator_name.empty()) {
+            for (const auto& it: Prefixes) {
+                auto res = std::mismatch(it.first.begin(), it.first.end(), nom_name.begin());
+                if (res.first == it.first.end()) {
+                    unit->mul_factor(it.second);
+                    return;
                 }
             }
         }
@@ -135,6 +145,13 @@ void nmodl::units::UnitTable::calc_nominator_dims(unit *unit, std::string nomina
         }
 
         nominator = Table.find(nominator_name);
+
+        if (nominator == Table.end()) {
+            if (nominator_name.back() == 's') {
+                nominator_name.pop_back();
+            }
+            nominator = Table.find(nominator_name);
+        }
     }
 
     if (nominator == Table.end()) {
@@ -149,10 +166,10 @@ void nmodl::units::UnitTable::calc_nominator_dims(unit *unit, std::string nomina
     }
 }
 
-void nmodl::units::UnitTable::calc_denominator_dims(unit *unit, std::string denominator_name) {
+void nmodl::units::UnitTable::calc_denominator_dims(unit* unit, std::string denominator_name) {
     double denominator_prefix_factor = 1.0;
     int denominator_power = 1;
-
+    std::string denom_name = denominator_name;
     auto denominator = Table.find(denominator_name);
 
     // if the denominator_name is not in the table, check if there are any prefixes or power
@@ -166,9 +183,19 @@ void nmodl::units::UnitTable::calc_denominator_dims(unit *unit, std::string deno
                                          denominator_name.begin());
                 if (res.first == it.first.end()) {
                     changed_denominator_name = 1;
-                    denominator_prefix_factor = it.second;
+                    denominator_prefix_factor *= it.second;
                     denominator_name.erase(denominator_name.begin(),
                                            denominator_name.begin() + it.first.size());
+                }
+            }
+        }
+        // if the denominator is only a prefix, just multiply the prefix factor with the unit factor
+        if (denominator_name.empty()) {
+            for (const auto& it: Prefixes) {
+                auto res = std::mismatch(it.first.begin(), it.first.end(), denom_name.begin());
+                if (res.first == it.first.end()) {
+                    unit->mul_factor(it.second);
+                    return;
                 }
             }
         }
@@ -180,6 +207,13 @@ void nmodl::units::UnitTable::calc_denominator_dims(unit *unit, std::string deno
         }
 
         denominator = Table.find(denominator_name);
+
+        if (denominator == Table.end()) {
+            if (denominator_name.back() == 's') {
+                denominator_name.pop_back();
+            }
+            denominator = Table.find(denominator_name);
+        }
     }
 
     if (denominator == Table.end()) {
@@ -206,10 +240,9 @@ void nmodl::units::UnitTable::insert(unit* unit) {
         BaseUnitsNames[unit_nominator.front()[1] - 'a'] = unit->get_name();
         // if  unit is found in table replace it
         auto find_unit_name = Table.find(unit->get_name());
-        if(find_unit_name == Table.end()) {
+        if (find_unit_name == Table.end()) {
             Table.insert({unit->get_name(), unit});
-        }
-        else{
+        } else {
             Table.erase(unit->get_name());
             Table.insert({unit->get_name(), unit});
         }
@@ -223,16 +256,15 @@ void nmodl::units::UnitTable::insert(unit* unit) {
     }
     // if  unit is found in table replace it
     auto find_unit_name = Table.find(unit->get_name());
-    if(find_unit_name == Table.end()) {
+    if (find_unit_name == Table.end()) {
         Table.insert({unit->get_name(), unit});
-    }
-    else{
+    } else {
         Table.erase(unit->get_name());
         Table.insert({unit->get_name(), unit});
     }
 }
 
-void nmodl::units::UnitTable::insert_prefix(prefix *prfx) {
+void nmodl::units::UnitTable::insert_prefix(prefix* prfx) {
     // if the factorname is not empty, then this prefix is based on another one (rename)
     // else the factor of the prefix is calculated and should be added to the Prefixes
     auto rename = !prfx->get_factorname().empty();
@@ -257,7 +289,7 @@ void nmodl::units::UnitTable::print_units() const {
         for (const auto& dims: it.second->get_dims()) {
             std::cout << dims << " ";
         }
-        std::cout << std::endl;
+        std::cout << "\n";
     }
 }
 
@@ -265,7 +297,7 @@ void nmodl::units::UnitTable::print_base_units() const {
     for (const auto& it: BaseUnitsNames) {
         std::cout << it << " ";
     }
-    std::cout << std::endl;
+    std::cout << "\n";
 }
 
 }  // namespace units
