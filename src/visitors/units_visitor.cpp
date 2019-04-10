@@ -26,11 +26,18 @@ void UnitsVisitor::visit_unit_def(ast::UnitDef* node) {
     } else {
         ss << node->get_unit1()->get_node_name() << "\t" << node->get_unit2()->get_node_name();
     }
-    if (verbose) {
-        std::cout << to_nmodl(node) << std::endl;
-        std::cout << ss.str() << std::endl;
-    }
+
     unit_driver.parse_string(ss.str());
+
+    if (verbose) {
+        auto unit = unit_driver.Table->get_unit(node->get_node_name());
+        *units_details << std::fixed << std::setprecision(8) << unit->get_name() << " "
+                       << unit->get_factor() << ":";
+        for (const auto& dims: unit->get_dims()) {
+            *units_details << " " << dims;
+        }
+        *units_details << "\n";
+    }
 }
 
 void UnitsVisitor::visit_factor_def(ast::FactorDef* node) {
@@ -47,10 +54,7 @@ void UnitsVisitor::visit_factor_def(ast::FactorDef* node) {
     } else {
         ss << node->get_node_name() << "\t" << node->get_unit1()->get_node_name();
     }
-    if (verbose) {
-        std::cout << to_nmodl(node) << std::endl;
-        std::cout << ss.str() << std::endl;
-    }
+
     unit_driver.parse_string(ss.str());
 
     // Save factor of unit calculated in the UnitsTable to the AST node
@@ -58,6 +62,16 @@ void UnitsVisitor::visit_factor_def(ast::FactorDef* node) {
     auto unit_factor = unit_driver.Table->get_unit(node_unit_name)->get_factor();
     auto double_value_ptr = std::make_shared<ast::Double>(ast::Double(unit_factor));
     node->set_value(static_cast<std::shared_ptr<ast::Double>&&>(double_value_ptr));
+
+    if (verbose) {
+        auto unit = unit_driver.Table->get_unit(node->get_node_name());
+        *units_details << std::fixed << std::setprecision(8) << unit->get_name() << " "
+                       << unit->get_factor() << ":";
+        for (const auto& dims: unit->get_dims()) {
+            *units_details << " " << dims;
+        }
+        *units_details << "\n";
+    }
 }
 
 }  // namespace nmodl

@@ -37,13 +37,15 @@ class UnitsVisitor: public AstVisitor {
     /// Units Driver needed to parse the units file and the string produces by mod files' units
     parser::UnitDriver unit_driver;
 
+    /// Stringstream to store the units details that are added by the mod files
+    std::stringstream* units_details;
 
   public:
     UnitsVisitor() = default;
 
-    UnitsVisitor(bool flag) {
-        verbose = flag;
-    }
+    UnitsVisitor(std::stringstream& t_units_details):
+        verbose(true),
+        units_details(&t_units_details) {}
 
     void visit_unit_def(ast::UnitDef* node) override;
     void visit_factor_def(ast::FactorDef* node) override;

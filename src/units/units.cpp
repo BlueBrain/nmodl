@@ -321,9 +321,9 @@ void UnitTable::insert_prefix(std::shared_ptr<Prefix> prfx) {
 void UnitTable::print_units() const {
     for (const auto& it: table) {
         std::cout << std::fixed << std::setprecision(8) << it.first << " "
-                  << it.second->get_factor() << ": ";
+                  << it.second->get_factor() << ":";
         for (const auto& dims: it.second->get_dims()) {
-            std::cout << dims << " ";
+            std::cout << " " << dims;
         }
         std::cout << "\n";
     }

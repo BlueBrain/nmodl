@@ -34,7 +34,11 @@ class location;
 
 /**
  * \class UnitDriver
+<<<<<<< HEAD
  * \brief Class that binds all pieces together for parsing C units
+=======
+ * \brief Class that binds all pieces together for parsing C unit blocks
+>>>>>>> Added test for Unit Visitor and small fixes
  */
 class UnitDriver {
   private:
@@ -54,8 +58,13 @@ class UnitDriver {
     bool verbose = false;
 
   public:
+<<<<<<< HEAD
     /// shared pointer to the UnitTable that stores all the unit definitions
     std::shared_ptr<nmodl::units::UnitTable> table = std::make_shared<nmodl::units::UnitTable>();
+=======
+    /// Table that stores all the units defitions
+    std::shared_ptr<nmodl::units::UnitTable> Table = std::make_shared<nmodl::units::UnitTable>();
+>>>>>>> Added test for Unit Visitor and small fixes
 
     /// file or input stream name (used by scanner for position), see todo
     std::string stream_name;
