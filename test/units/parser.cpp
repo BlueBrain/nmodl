@@ -65,6 +65,11 @@ SCENARIO("Unit parser can read definition of units") {
                 REQUIRE(is_valid_construct("fuzz\t\t\t1\n"));
             }
         }
+        WHEN("Double number is negative") {
+            THEN("parser accepts without an error") {
+                REQUIRE(is_valid_construct("ckan\t\t\t-32.19976 m\n"));
+            }
+        }
     }
     GIVEN("A dimensionless constant") {
         WHEN("Constant expression is double / constant") {

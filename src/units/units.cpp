@@ -80,11 +80,16 @@ void nmodl::units::unit::add_fraction(const std::string& t_fraction) {
     m_factor = nom / denom;
 }
 
-double nmodl::units::unit::double_parsing(const std::string& t_double) {
+double nmodl::units::unit::double_parsing(std::string t_double) {
     double d_number, d_magnitude;
     std::string s_number;
     std::string s_magnitude;
     std::string::const_iterator it;
+    int sign = 1;
+    if (t_double.front() == '-') {
+        sign = -1;
+        t_double.erase(t_double.begin());
+    }
     // if *it reached an exponent related char, then the whole double number is read
     for (it = t_double.begin(); it != t_double.end() && *it != 'e' && *it != '+' && *it != '-';
          ++it) {
@@ -102,7 +107,7 @@ double nmodl::units::unit::double_parsing(const std::string& t_double) {
     } else {
         d_magnitude = std::stod(s_magnitude);
     }
-    return d_number * std::pow(10.0, d_magnitude);
+    return d_number * std::pow(10.0, d_magnitude) * sign;
 }
 
 void nmodl::units::UnitTable::calc_nominator_dims(unit* unit, std::string nominator_name) {

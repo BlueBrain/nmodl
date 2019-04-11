@@ -80,7 +80,7 @@ public:
 
     void add_fraction(const std::string &t_fraction);
 
-    double double_parsing(const std::string &t_double);
+    double double_parsing(std::string t_double);
 
     std::vector<std::string> get_nominator_unit() const {
         return nominator;

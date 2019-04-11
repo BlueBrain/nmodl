@@ -35,7 +35,7 @@
 
 D   [0-9]
 E   [Ee]*[-+]?{D}+
-DBL  ({D})|({D}+"."{D}*({E})?)|({D}*"."{D}+({E})?)|({D}+{E})
+DBL  ([-+]?{D})|([-+]?{D}+"."{D}*({E})?)|([-+]?{D}*"."{D}+({E})?)|([-+]?{D}+{E})
 
 /** we do use yymore feature in copy modes */
 %option yymore
@@ -104,7 +104,7 @@ DBL  ({D})|({D}+"."{D}*({E})?)|({D}*"."{D}+({E})?)|({D}+{E})
 
             }
 
-^[a-zA-Z$\%]+   {
+^[a-zA-Z$\%]+{D}*   {
                 driver.add_token(yytext);
                 return UnitParser::make_NEW_UNIT(yytext, loc);
             }
