@@ -5,6 +5,7 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
+#include <experimental/filesystem>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -122,6 +123,13 @@ int main(int argc, const char* argv[]) {
     /// directory where intermediate file will be generated
     std::string scratch_dir("tmp");
 
+    /// directory where units lib file is located
+    std::experimental::filesystem::path path = std::string(__FILE__);
+    std::string units_lib_path;
+    units_lib_path = path.parent_path().parent_path().parent_path();
+    units_lib_path.append("/share/nrnunit.lib");
+    std::string units_dir(units_lib_path);
+
     /// true if ast should be converted to json
     bool json_ast(false);
 
@@ -154,6 +162,7 @@ int main(int argc, const char* argv[]) {
         ->ignore_case();
     app.add_option("--scratch", scratch_dir, "Directory for intermediate code output", true)
         ->ignore_case();
+    app.add_option("-u,--units", units_dir, "Directory of units lib file", true)->ignore_case();
 
     auto host_opt = app.add_subcommand("host", "HOST/CPU code backends")->ignore_case();
     host_opt->add_flag("--c", c_backend, "C/C++ backend")->ignore_case();
@@ -302,7 +311,7 @@ int main(int argc, const char* argv[]) {
         /// Parsing units fron "nrnunits.lib" and mod files
         {
             logger->info("Parsing Units");
-            UnitsVisitor().visit_program(ast.get());
+            UnitsVisitor(units_dir).visit_program(ast.get());
         }
 
         /// once we start modifying (especially removing) older constructs

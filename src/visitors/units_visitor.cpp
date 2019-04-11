@@ -15,6 +15,11 @@
 
 namespace nmodl {
 
+void UnitsVisitor::visit_program(ast::Program* node) {
+    unit_driver.parse_file(units_dir);
+    node->visit_children(this);
+}
+
 void UnitsVisitor::visit_unit_def(ast::UnitDef* node) {
     std::stringstream ss;
     // Unit definition is based only on pre-defined units, parse only the new unit
@@ -48,11 +53,24 @@ void UnitsVisitor::visit_factor_def(ast::FactorDef* node) {
     // (ex. FARADAY = (faraday) (coulomb) => FARADAY faraday) or parse the new unit, with
     // its factor and the units that it's based on in the second case   (ex. dummy   =
     // 123.45  (m/sec2) => dummy    123.45 m/sec2)
+    // Also takes care of case (dhummy  = (12345e-2) (m/sec2) => dhummy  = 12345e-2 m/sec2)
     if (node->get_value() != NULL) {
         ss << node->get_node_name() << "\t" << node->get_value()->get_value() << " "
            << node->get_unit1()->get_node_name();
     } else {
-        ss << node->get_node_name() << "\t" << node->get_unit1()->get_node_name();
+        auto node1_is_number = node->get_unit1()->get_node_name().front() >= '0' &&
+                               node->get_unit1()->get_node_name().front() <= '9';
+        if (node1_is_number) {
+            if (node->get_unit2()->get_node_name() == "1") {
+                ss << node->get_node_name() << "\t" << node->get_unit1()->get_node_name() << " "
+                   << "fuzz";
+            } else {
+                ss << node->get_node_name() << "\t" << node->get_unit1()->get_node_name() << "-"
+                   << node->get_unit2()->get_node_name();
+            }
+        } else {
+            ss << node->get_node_name() << "\t" << node->get_unit1()->get_node_name();
+        }
     }
 
     unit_driver.parse_string(ss.str());

@@ -11,6 +11,7 @@
 
 #include "catch/catch.hpp"
 #include "utils/logger.hpp"
+#include <experimental/filesystem>
 #include <pybind11/embed.h>
 
 #include "parser/nmodl_driver.hpp"
@@ -5158,7 +5159,11 @@ std::string run_units_visitor(const std::string& text) {
     auto ast = driver.ast();
 
     std::stringstream ss;
-    UnitsVisitor(ss).visit_program(ast.get());
+    std::experimental::filesystem::path path = std::string(__FILE__);
+    std::string units_lib_path;
+    units_lib_path = path.parent_path().parent_path().parent_path();
+    units_lib_path.append("/share/nrnunit.lib");
+    UnitsVisitor(units_lib_path, ss).visit_program(ast.get());
     return ss.str();
 }
 
@@ -5179,8 +5184,9 @@ SCENARIO("Units Visitor") {
                 FARADAY = (faraday) (coulomb)
                 PI      = (pi)      (1)
                 R       = (k-mole)  (joule/degC)
-                dummy  = 123.45    (m 1/sec2)
-                dammy  = 123.45e3  (millimeters/sec2)
+                dummy   = 123.45    (m 1/sec2)
+                dammy   = 123.45e3  (millimeters/sec2)
+                dhummy  = (12345e-2) (m/sec2)
             }
         )";
 
@@ -5199,6 +5205,7 @@ SCENARIO("Units Visitor") {
         R 8.31449872: 2 1 -2 0 0 0 0 0 0 -1
         dummy 123.45000000: 1 0 -2 0 0 0 0 0 0 0
         dammy 123.45000000: 1 0 -2 0 0 0 0 0 0 0
+        dhummy 123.45000000: 1 0 -2 0 0 0 0 0 0 0
         )";
 
         THEN("Print the units that were added") {

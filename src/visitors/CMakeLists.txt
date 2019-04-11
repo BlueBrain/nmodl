@@ -1,9 +1,6 @@
 # =============================================================================
 # Visitor sources
 # =============================================================================
-set(NMODLUNIT "${CMAKE_SOURCE_DIR}/share/nrnunit.lib")
-configure_file(units_visitor.hpp.in ${CMAKE_CURRENT_BINARY_DIR}/units_visitor.hpp @ONLY)
-
 set(VISITOR_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/neuron_solve_visitor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/neuron_solve_visitor.hpp
@@ -43,7 +40,8 @@ set(VISITOR_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/verbatim_visitor.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/visitor_utils.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/visitor_utils.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/units_visitor.cpp)
+    ${CMAKE_CURRENT_SOURCE_DIR}/units_visitor.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/units_visitor.hpp)
 
 set(VISITOR_GENERATED_SOURCES
     ${CMAKE_CURRENT_BINARY_DIR}/ast_visitor.cpp
@@ -54,8 +52,7 @@ set(VISITOR_GENERATED_SOURCES
     ${CMAKE_CURRENT_BINARY_DIR}/nmodl_visitor.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/nmodl_visitor.hpp
     ${CMAKE_CURRENT_BINARY_DIR}/symtab_visitor.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/symtab_visitor.hpp
-    ${CMAKE_CURRENT_BINARY_DIR}/units_visitor.hpp)
+    ${CMAKE_CURRENT_BINARY_DIR}/symtab_visitor.hpp)
 
 set_source_files_properties(${VISITOR_GENERATED_SOURCES} PROPERTIES GENERATED TRUE)
 
@@ -69,7 +66,7 @@ set_property(TARGET visitor_obj PROPERTY POSITION_INDEPENDENT_CODE ON)
 add_dependencies(visitor_obj lexer_obj)
 
 add_library(visitor STATIC $<TARGET_OBJECTS:visitor_obj>)
-target_link_libraries(visitor PRIVATE pybind11::embed)
+target_link_libraries(visitor PRIVATE pybind11::embed stdc++fs)
 
 add_dependencies(visitor lexer util)
 

@@ -11,7 +11,7 @@
 #include "parser/unit_driver.hpp"
 #include "visitors/ast_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
-#include <cstdlib>
+#include <experimental/filesystem>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -40,20 +40,23 @@ class UnitsVisitor: public AstVisitor {
     /// Stringstream to store the units details that are added by the mod files
     std::stringstream* units_details;
 
+    /// Directory of units lib file that defines all the basic units
+    std::string units_dir;
+
   public:
     UnitsVisitor() = default;
 
-    UnitsVisitor(std::stringstream& t_units_details):
-        verbose(true),
-        units_details(&t_units_details) {}
+    UnitsVisitor(std::string& t_units_dir, std::stringstream& t_units_details)
+        : verbose(true)
+        , units_dir(t_units_dir)
+        , units_details(&t_units_details) {}
+
+    UnitsVisitor(std::string& t_units_dir)
+        : units_dir(t_units_dir) {}
 
     void visit_unit_def(ast::UnitDef* node) override;
     void visit_factor_def(ast::FactorDef* node) override;
-
-    void visit_program(ast::Program* node) override {
-        unit_driver.parse_file("@NMODLUNIT@");
-        node->visit_children(this);
-    }
+    void visit_program(ast::Program* node) override;
 };
 
 }  // namespace nmodl
