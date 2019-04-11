@@ -57,6 +57,7 @@ class UnitsVisitor: public AstVisitor {
     void visit_unit_def(ast::UnitDef* node) override;
     void visit_factor_def(ast::FactorDef* node) override;
     void visit_program(ast::Program* node) override;
+    void visit_constant_var(ast::ConstantVar* node) override;
 };
 
 }  // namespace nmodl

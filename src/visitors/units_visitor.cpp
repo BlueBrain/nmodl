@@ -76,9 +76,39 @@ void UnitsVisitor::visit_factor_def(ast::FactorDef* node) {
     unit_driver.parse_string(ss.str());
 
     // Save factor of unit calculated in the UnitsTable to the AST node
-    auto node_unit_name = node->get_node_name();
-    auto unit_factor = unit_driver.Table->get_unit(node_unit_name)->get_factor();
-    auto double_value_ptr = std::make_shared<ast::Double>(ast::Double(unit_factor));
+    auto double_value_ptr = std::make_shared<ast::Double>(ast::Double(node->get_value()->get_value()));
+    node->set_value(static_cast<std::shared_ptr<ast::Double>&&>(double_value_ptr));
+
+    if (verbose) {
+        auto unit = unit_driver.Table->get_unit(node->get_node_name());
+        *units_details << std::fixed << std::setprecision(8) << unit->get_name() << " "
+                       << unit->get_factor() << ":";
+        for (const auto& dims: unit->get_dims()) {
+            *units_details << " " << dims;
+        }
+        *units_details << "\n";
+    }
+}
+
+void UnitsVisitor::visit_constant_var(ast::ConstantVar* node){
+    std::stringstream ss;
+    if(node->get_unit() != nullptr) {
+        if(node->get_unit()->get_node_name() == "1"){
+            ss << node->get_node_name() << "\t" << node->get_value()->to_double() << " "
+               << "fuzz";
+        }
+        else {
+            ss << node->get_node_name() << "\t" << node->get_value()->to_double() << " "
+               << node->get_unit()->get_node_name();
+        }
+    }
+    else{
+        ss << node->get_node_name() << "\t" << node->get_value()->to_double();
+    }
+    unit_driver.parse_string(ss.str());
+
+    // Save factor of unit calculated in the UnitsTable to the AST node
+    auto double_value_ptr = std::make_shared<ast::Double>(ast::Double(node->get_value()->to_double()));
     node->set_value(static_cast<std::shared_ptr<ast::Double>&&>(double_value_ptr));
 
     if (verbose) {
