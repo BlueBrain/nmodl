@@ -693,7 +693,7 @@ int CFlexLexer::yylex() {
 }
 
 
-nmodl::parser::CParser::symbol_type nmodl::parser::CLexer::check_type() {
+nmodl::parser::CParser::symbol_type nmodl::parser::CLexer::get_token_type() {
     if (driver.is_typedef(yytext)) {
         return CParser::make_TYPEDEF_NAME(yytext, loc);
     }

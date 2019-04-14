@@ -192,7 +192,7 @@ ELSE                    {
                                     case Token::LINEAR:
                                     case Token::PARTIAL:
                                     case Token::KINETIC:
-                                        lexcontext = type;
+                                        lexical_context = type;
                                         break;
                                 }
 
@@ -200,7 +200,7 @@ ELSE                    {
                                 return token_symbol(yytext, loc, type);
                             } else {
                                 /** if flux variable is used in the kinetic block */
-                                if ( lexcontext == Token::KINETIC &&
+                                if ( lexical_context == Token::KINETIC &&
                                      (strcmp(yytext, "f_flux") == 0 || strcmp(yytext, "b_flux") == 0)) {
                                      nmodl::ast::Name value( new nmodl::ast::String(yytext) );
                                      ModToken tok(yytext, Token::FLUX_VAR, loc);
@@ -280,19 +280,19 @@ ELSE                    {
 
 "~"                     {
                             /** return token depending on the reaction context */
-                            if (lexcontext == Token::NONLINEAR) {
+                            if (lexical_context == Token::NONLINEAR) {
                                 return token_symbol(yytext, loc, Token::NONLIN1);
                             }
 
-                            if (lexcontext == Token::LINEAR) {
+                            if (lexical_context == Token::LINEAR) {
                                 return token_symbol(yytext, loc, Token::LIN1);
                             }
 
-                            if (lexcontext == Token::PARTIAL) {
+                            if (lexical_context == Token::PARTIAL) {
                                 return token_symbol(yytext, loc, Token::TILDE);
                             }
 
-                            if (lexcontext == Token::KINETIC) {
+                            if (lexical_context == Token::KINETIC) {
                                 return token_symbol(yytext, loc, Token::REACTION);
                             }
 
