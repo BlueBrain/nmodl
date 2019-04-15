@@ -36,6 +36,7 @@ using SymbolType = parser::NmodlParser::symbol_type;
 using Token = parser::NmodlParser::token;
 using TokenType = parser::NmodlParser::token_type;
 
+
 void tokenize(const std::string& mod_text) {
     std::istringstream in(mod_text);
 
