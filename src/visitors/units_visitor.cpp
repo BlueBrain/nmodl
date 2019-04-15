@@ -47,74 +47,51 @@ void UnitsVisitor::visit_unit_def(ast::UnitDef* node) {
 
 void UnitsVisitor::visit_factor_def(ast::FactorDef* node) {
     std::stringstream ss;
-
+    std::cout << node->get_node_name() << std::endl;
     // The new unit definition is based on the factor of other defined units or a factor which is a
-    // number, parse only the new unit with the units that it's based on in the first case
-    // (ex. FARADAY = (faraday) (coulomb) => FARADAY faraday) or parse the new unit, with
-    // its factor and the units that it's based on in the second case   (ex. dummy   =
-    // 123.45  (m/sec2) => dummy    123.45 m/sec2)
-    // Also takes care of case (dhummy  = (12345e-2) (m/sec2) => dhummy  = 12345e-2 m/sec2)
-    if (node->get_value() != NULL) {
-        ss << node->get_node_name() << "\t" << node->get_value()->get_value() << " "
-           << node->get_unit1()->get_node_name();
+    // number
+    // Parse only the new unit with the units that it's based on in the first case
+    // (ex. FARADAY = (faraday) (coulomb) => FARADAY faraday)
+    // Parse the new unit, with its factor and the units that it's based on in the second case
+    // (ex. dummy   = 123.45  (m/sec2) => dummy    123.45 m/sec2)
+    std::string node1_name;
+    if (node->get_unit1()->get_node_name() == "1") {
+        node1_name = "fuzz";
     } else {
-        auto node1_is_number = node->get_unit1()->get_node_name().front() >= '0' &&
-                               node->get_unit1()->get_node_name().front() <= '9';
-        if (node1_is_number) {
-            if (node->get_unit2()->get_node_name() == "1") {
-                ss << node->get_node_name() << "\t" << node->get_unit1()->get_node_name() << " "
-                   << "fuzz";
-            } else {
-                ss << node->get_node_name() << "\t" << node->get_unit1()->get_node_name() << "-"
-                   << node->get_unit2()->get_node_name();
+        node1_name = node->get_unit1()->get_node_name();
+    }
+    if (node->get_value() != NULL) {
+        ss << node->get_node_name() << "\t" << node->get_value()->get_value() << " " << node1_name;
+    } else {
+        // If there is an integer in the unit2, divide the factor of the node->unit with the integer
+        std::istringstream iss(node->get_unit2()->get_node_name());
+        std::vector<std::string> results(std::istream_iterator<std::string>{iss},
+                                         std::istream_iterator<std::string>());
+        std::string unit_nominator_factor;
+        for (const auto& it: results) {
+            if (it.front() >= '1' && it.front() <= '9') {
+                unit_nominator_factor.append(it + " ");
             }
-        } else {
-            ss << node->get_node_name() << "\t" << node->get_unit1()->get_node_name();
         }
+        ss << node->get_node_name() << "\t" << node1_name << " " << unit_nominator_factor;
     }
 
     unit_driver.parse_string(ss.str());
 
-    // Save factor of unit calculated in the UnitsTable to the AST node
-    auto double_value_ptr = std::make_shared<ast::Double>(ast::Double(node->get_value()->get_value()));
-    node->set_value(static_cast<std::shared_ptr<ast::Double>&&>(double_value_ptr));
-
+    // Save factor of unit calculated in the UnitsTable to the AST node if it was not defined in the
+    // mod file
+    if (node->get_value() == NULL) {
+        auto node_unit_name = node->get_node_name();
+        auto unit_factor = unit_driver.Table->get_unit(node_unit_name)->get_factor();
+        auto double_value_ptr = std::make_shared<ast::Double>(ast::Double(unit_factor));
+        node->set_value(static_cast<std::shared_ptr<ast::Double>&&>(double_value_ptr));
+    }
     if (verbose) {
         auto unit = unit_driver.Table->get_unit(node->get_node_name());
+        // print value of unit that will be printed to the .cpp file and not the value that is
+        // calculated based on the UnitTable units value
         *units_details << std::fixed << std::setprecision(8) << unit->get_name() << " "
-                       << unit->get_factor() << ":";
-        for (const auto& dims: unit->get_dims()) {
-            *units_details << " " << dims;
-        }
-        *units_details << "\n";
-    }
-}
-
-void UnitsVisitor::visit_constant_var(ast::ConstantVar* node){
-    std::stringstream ss;
-    if(node->get_unit() != nullptr) {
-        if(node->get_unit()->get_node_name() == "1"){
-            ss << node->get_node_name() << "\t" << node->get_value()->to_double() << " "
-               << "fuzz";
-        }
-        else {
-            ss << node->get_node_name() << "\t" << node->get_value()->to_double() << " "
-               << node->get_unit()->get_node_name();
-        }
-    }
-    else{
-        ss << node->get_node_name() << "\t" << node->get_value()->to_double();
-    }
-    unit_driver.parse_string(ss.str());
-
-    // Save factor of unit calculated in the UnitsTable to the AST node
-    auto double_value_ptr = std::make_shared<ast::Double>(ast::Double(node->get_value()->to_double()));
-    node->set_value(static_cast<std::shared_ptr<ast::Double>&&>(double_value_ptr));
-
-    if (verbose) {
-        auto unit = unit_driver.Table->get_unit(node->get_node_name());
-        *units_details << std::fixed << std::setprecision(8) << unit->get_name() << " "
-                       << unit->get_factor() << ":";
+                       << node->get_value()->get_value() << ":";
         for (const auto& dims: unit->get_dims()) {
             *units_details << " " << dims;
         }

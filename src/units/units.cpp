@@ -114,7 +114,8 @@ void Unit::add_fraction(const std::string& fraction_string) {
 }
 
 double Unit::parse_double(std::string double_string) {
-    double d_number, d_magnitude;
+    long double d_number;
+    double d_magnitude;
     std::string s_number;
     std::string s_magnitude;
     std::string::const_iterator it;
@@ -137,13 +138,13 @@ double Unit::parse_double(std::string double_string) {
             s_magnitude.push_back(*itm);
         }
     }
-    d_number = std::stod(s_number);
+    d_number = std::stold(s_number);
     if (s_magnitude.empty()) {
         d_magnitude = 0.0;
     } else {
         d_magnitude = std::stod(s_magnitude);
     }
-    return d_number * std::pow(10.0, d_magnitude) * sign;
+    return static_cast<double>(d_number * powl(10.0, d_magnitude) * sign);
 }
 
 void UnitTable::calc_nominator_dims(std::shared_ptr<Unit> unit, std::string nominator_name) {

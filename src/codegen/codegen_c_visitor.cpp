@@ -1921,14 +1921,16 @@ std::string CodegenCVisitor::process_shadow_update_statement(ShadowUseStatement&
  * NMODL constants from unit database
  *
  */
-void CodegenCVisitor::print_nmodl_constants() {
-    printer->add_newline(2);
-    printer->add_line("/** constants used in nmodl */");
-    for (const auto& it: info.factor_definitions) {
-        std::stringstream ss;
-        ss << "static const double " << it->get_node_name() << " = " << it->get_value()->get_value()
-           << ";";
-        printer->add_line(ss.str());
+void CodegenCVisitor::print_nmodl_constant() {
+    if (!info.factor_definitions.empty()) {
+        printer->add_newline(2);
+        printer->add_line("/** constants used in nmodl */");
+        for (const auto& it: info.factor_definitions) {
+            std::stringstream ss;
+            ss << "static const double " << it->get_node_name() << " = "
+               << it->get_value()->get_value() << ";";
+            printer->add_line(ss.str());
+        }
     }
 }
 

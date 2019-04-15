@@ -5181,12 +5181,32 @@ SCENARIO("Units Visitor") {
                 (um)    = (micrometers)
                 (mM)    = (milli/liter)
                 (uM)    = (micro/liter)
-                FARADAY = (faraday) (coulomb)
+                (msM) = (ms mM)
+                (fAm) = (femto amp meter)
+                (mol) = (1)
+                (M) = (1/liter)
+                (uM) = (micro M)
+                (mA/cm2) = (nanoamp/cm2)
+                (molar) = (1 / liter)
+                (S ) = (siemens)
+                (mse-1) = (1/millisec)
+                (um3) = (liter/1e15)
+                (molar) = (/liter)
+                FARADAY1 = (faraday) (coulomb)
+                FARADAY2 = (faraday) (kilocoulombs)
+                FARADAY3 = (faraday) (10000 coulomb2 / 10 coulomb)
                 PI      = (pi)      (1)
-                R       = (k-mole)  (joule/degC)
-                dummy   = 123.45    (m 1/sec2)
-                dammy   = 123.45e3  (millimeters/sec2)
-                dhummy  = (12345e-2) (m/sec2)
+                R1       = (k-mole)  (joule/degC)
+                R2 = 8.314 (volt-coul/degC)
+                R3 = (mole k) (mV-coulomb/degC)
+                R4 = 8.314 (volt-coul/degK)
+                R5 = 8.314500000000001 (volt coul/kelvin)
+                dummy1  = 123.45    (m 1/sec2)
+                dummy2  = 123.45e3  (millimeters/sec2)
+                dummy3  = 12345e-2  (m/sec2)
+                KTOMV = 0.0853 (mV/degC)
+                B = 0.26 (mM-cm2/mA-ms)
+                TEMP = 25 (degC)
             }
         )";
 
@@ -5203,9 +5223,10 @@ SCENARIO("Units Visitor") {
         FARADAY 96485.30900000: 0 0 0 1 0 0 0 0 0 0
         PI 3.14159265: 0 0 0 0 0 0 0 0 0 0
         R 8.31449872: 2 1 -2 0 0 0 0 0 0 -1
-        dummy 123.45000000: 1 0 -2 0 0 0 0 0 0 0
-        dammy 123.45000000: 1 0 -2 0 0 0 0 0 0 0
-        dhummy 123.45000000: 1 0 -2 0 0 0 0 0 0 0
+        dummy1 123.45000000: 1 0 -2 0 0 0 0 0 0 0
+        dummy2 123450.00000000: 1 0 -2 0 0 0 0 0 0 0
+        dummy3 123.45000000: 1 0 -2 0 0 0 0 0 0 0
+        FARADAY1 96.4853090: 0 0 0 1 0 0 0 0 0 0
         )";
 
         THEN("Print the units that were added") {
