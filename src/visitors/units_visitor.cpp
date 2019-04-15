@@ -63,17 +63,7 @@ void UnitsVisitor::visit_factor_def(ast::FactorDef* node) {
     if (node->get_value() != NULL) {
         ss << node->get_node_name() << "\t" << node->get_value()->get_value() << " " << node1_name;
     } else {
-        // If there is an integer in the unit2, divide the factor of the node->unit with the integer
-        std::istringstream iss(node->get_unit2()->get_node_name());
-        std::vector<std::string> results(std::istream_iterator<std::string>{iss},
-                                         std::istream_iterator<std::string>());
-        std::string unit_nominator_factor;
-        for (const auto& it: results) {
-            if (it.front() >= '1' && it.front() <= '9') {
-                unit_nominator_factor.append(it + " ");
-            }
-        }
-        ss << node->get_node_name() << "\t" << node1_name << " " << unit_nominator_factor;
+        ss << node->get_node_name() << "\t" << node1_name;
     }
 
     unit_driver.parse_string(ss.str());
