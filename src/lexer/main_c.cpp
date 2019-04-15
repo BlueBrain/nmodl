@@ -16,8 +16,11 @@
 #include "version/version.h"
 
 /**
- * Example of standalone lexer program for C codes that
- * demonstrate use of CLexer and CDriver classes.
+ * \file
+ * \brief Example of standalone lexer program for C code
+ *
+ * This example demonstrate use of CLexer and CDriver classes
+ * to scan arbitrary C code.
  */
 
 using namespace fmt::literals;

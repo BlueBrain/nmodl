@@ -19,7 +19,7 @@ using Token = parser::NmodlParser::token;
 using TokenType = parser::NmodlParser::token_type;
 using Parser = parser::NmodlParser;
 
-/// Internal details of lexer
+/// details of lexer tokens
 namespace details {
 
 // clang-format off

@@ -64,6 +64,9 @@ class CLexer: public CFlexLexer {
     /// location of the parsed token
     location loc;
 
+    /// \name Ctor & dtor
+    /// \{
+
     /**
      * \brief CLexer constructor
      *
@@ -76,6 +79,8 @@ class CLexer: public CFlexLexer {
         , driver(drv) {}
 
     ~CLexer() override = default;
+
+    /// \}
 
     /**
      * \brief Function for lexer to scan token (replacement for \c yylex())

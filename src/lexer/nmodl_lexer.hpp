@@ -79,6 +79,9 @@ class NmodlLexer: public NmodlFlexLexer {
     /// location of the parsed token
     location loc;
 
+    /// \name Ctor & dtor
+    /// \{
+
     /**
      * \brief NmodlLexer constructor
      *
@@ -93,6 +96,8 @@ class NmodlLexer: public NmodlFlexLexer {
         , driver(driver) {}
 
     ~NmodlLexer() override = default;
+
+    /// \}
 
     /**
      * \brief Reset the column position of lexer to 0

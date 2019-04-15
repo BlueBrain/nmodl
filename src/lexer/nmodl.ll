@@ -4,6 +4,8 @@
  *
  * This file is part of NMODL distributed under the terms of the GNU
  * Lesser General Public License. See top-level LICENSE file for details.
+ *
+ * @brief Lexer for NMODL specification
  *************************************************************************/
 
 %{
@@ -481,13 +483,17 @@ ELSE                    {
 %%
 
 
-/** Some of the utility functions can't be defined outside due to macros.
-  * These are utility functions ported from original nmodl implementation. */
+/**
+ * Some of the utility functions can't be defined outside due to macros.
+ * These are utility functions ported from original nmodl implementation.
+ */
 
 
-/** This implementation of NmodlFlexLexer::yylex() is required to fill the
-  * vtable of the class NmodlFlexLexer. We define the scanner's main yylex
-  * function via YY_DECL to reside in the Lexer class instead. */
+/**
+ * This implementation of NmodlFlexLexer::yylex() is required to fill the
+ * vtable of the class NmodlFlexLexer. We define the scanner's main yylex
+ * function via YY_DECL to reside in the Lexer class instead.
+ */
 int NmodlFlexLexer::yylex() {
   throw std::runtime_error("next_token() should be used instead of yylex()");
 }
@@ -497,11 +503,15 @@ void nmodl::parser::NmodlLexer::set_debug(bool b) {
     yy_flex_debug = b;
 }
 
-/** Scan unit which is a string between opening and closing parenthesis.
-  * We store this in lexer itself and then consumed later from the parser. */
+/**
+ * Scan unit which is a string between opening and closing parenthesis.
+ * We store this in lexer itself and then consumed later from the parser.
+ */
 void nmodl::parser::NmodlLexer::scan_unit() {
-    /** We are interested in unit after first parenthesis.
-     * So to get correct position update the location. */
+    /**
+     * We are interested in unit after first parenthesis.
+     * So to get correct position update the location.
+     */
     loc.step();
     std::string str;
 
@@ -520,7 +530,8 @@ void nmodl::parser::NmodlLexer::scan_unit() {
     }
 
     /** YY_USER_ACTION is not executed if are consuming input
-      * using yyinput and hence increase location */
+     * using yyinput and hence increase location
+     */
     loc.columns(str.size());
 
     ModToken tok(str, Token::UNITS, loc);
@@ -528,7 +539,7 @@ void nmodl::parser::NmodlLexer::scan_unit() {
     last_unit->set_token(tok);
 }
 
-/** return last scanned unit, it shouln't be null pointer */
+/** Return last scanned unit, it shouln't be null pointer */
 nmodl::ast::String* nmodl::parser::NmodlLexer::get_unit() {
     if (last_unit == nullptr) {
         throw std::runtime_error("Trying to get unscanned empty unit");

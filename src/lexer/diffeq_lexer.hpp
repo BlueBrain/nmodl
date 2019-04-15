@@ -49,6 +49,9 @@ class DiffeqLexer: public DiffEqFlexLexer {
     /// location of the parsed token
     location loc;
 
+    /// \name Ctor & dtor
+    /// \{
+
     /*
      * \brief DiffeqLexer constructor
      *
@@ -59,6 +62,8 @@ class DiffeqLexer: public DiffEqFlexLexer {
         : DiffEqFlexLexer(in, out) {}
 
     ~DiffeqLexer() override = default;
+
+    /// \}
 
     /**
      * \brief Function for lexer to scan token (replacement for \c yylex())
