@@ -150,6 +150,13 @@ double Unit::parse_double(std::string double_string) {
 void UnitTable::calc_nominator_dims(std::shared_ptr<Unit> unit, std::string nominator_name) {
     double nominator_prefix_factor = 1.0;
     int nominator_power = 1;
+
+    // if the nominator is INTEGER, divide it from the unit factor
+    if (nominator_name.front() >= '1' && nominator_name.front() <= '9') {
+        unit->mul_factor(1 / std::stod(nominator_name));
+        return;
+    }
+
     std::string nom_name = nominator_name;
     auto nominator = table.find(nominator_name);
 
@@ -216,6 +223,13 @@ void UnitTable::calc_nominator_dims(std::shared_ptr<Unit> unit, std::string nomi
 void UnitTable::calc_denominator_dims(std::shared_ptr<Unit> unit, std::string denominator_name) {
     double denominator_prefix_factor = 1.0;
     int denominator_power = 1;
+
+    // if the denominator is INTEGER, divide it from the unit factor
+    if (denominator_name.front() >= '1' && denominator_name.front() <= '9') {
+        unit->mul_factor(std::stod(denominator_name));
+        return;
+    }
+
     std::string denom_name = denominator_name;
     auto denominator = table.find(denominator_name);
 
