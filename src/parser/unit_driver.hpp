@@ -31,9 +31,6 @@ class location;
  */
 class UnitDriver {
   private:
-    /// all tokens encountered
-    std::vector<std::string> tokens;
-
     /// enable debug output in the flex scanner
     bool trace_scanner = false;
 
@@ -50,7 +47,9 @@ class UnitDriver {
     bool verbose = false;
 
   public:
-    std::shared_ptr<nmodl::units::UnitTable> Table = std::make_shared<nmodl::units::UnitTable>();
+    /// Shared pointer to the UnitTable that stores all the unit definitions
+    std::shared_ptr<nmodl::units::UnitTable> table = std::make_shared<nmodl::units::UnitTable>();
+
     /// file or input stream name (used by scanner for position), see todo
     std::string streamname;
 
@@ -58,12 +57,10 @@ class UnitDriver {
     UnitDriver(bool strace, bool ptrace);
 
     void error(const std::string& m);
-
     bool parse_stream(std::istream& in);
     bool parse_string(const std::string& input);
     bool parse_file(const std::string& filename);
     void scan_string(std::string& text);
-    void add_token(const std::string&);
 
     void error(const std::string& m, const location& l);
 
@@ -73,23 +70,6 @@ class UnitDriver {
 
     bool is_verbose() const {
         return verbose;
-    }
-
-    std::vector<std::string> all_tokens() const {
-        return tokens;
-    }
-
-    void print_tokens() {
-        for (auto it: tokens) {
-            std::cout << it << std::endl;
-        }
-    }
-
-    bool has_token(std::string token) {
-        if (std::find(tokens.begin(), tokens.end(), token) != tokens.end()) {
-            return true;
-        }
-        return false;
     }
 };
 

@@ -7,12 +7,14 @@
 
 #define CATCH_CONFIG_MAIN
 
+#include <sstream>
 #include <string>
 #include <utility>
 
 #include "catch/catch.hpp"
 #include "parser/diffeq_driver.hpp"
 #include "parser/unit_driver.hpp"
+#include "test/utils/test_utils.hpp"
 
 //=============================================================================
 // Parser tests
@@ -26,11 +28,19 @@ bool is_valid_construct(const std::string& construct) {
     return driver.parse_string(construct);
 }
 
-SCENARIO("Unit parser can read definition of units") {
+std::string parse_string(const std::string& unit_definition) {
+    driver.parse_string(unit_definition);
+    std::stringstream ss;
+    driver.table->print_units_sorted(ss);
+    driver.table->print_base_units(ss);
+    return ss.str();
+}
+
+SCENARIO("Unit parser definition of units validity") {
     GIVEN("A base unit") {
         WHEN("Base unit is *a*") {
             THEN("parser accepts without an error") {
-                REQUIRE(is_valid_construct("m\t\t\t*a*\n"));
+                REQUIRE(is_valid_construct("m   *a*\n"));
             }
         }
         WHEN("Base unit is *b*") {
@@ -128,6 +138,53 @@ SCENARIO("Unit parser can read definition of units") {
         WHEN("Fraction is writen like 1|8.988e9") {
             THEN("parser accepts without an error") {
                 REQUIRE(is_valid_construct("statcoul\t\t1|2.99792458+9 coul\n"));
+            }
+        }
+    }
+}
+
+SCENARIO("Unit parser definition of units correctness") {
+    GIVEN("A multiple units definitions") {
+        WHEN("Multiple units definitions come from nrnunits.lib file") {
+            THEN("parser accepts the units correctly") {
+                std::string units_definitions = R"(
+                dollar			*f*
+                milli-			1e-3
+                mercury			1.33322+5 kg/m2-sec2
+                %			1|100
+                ms			millisec
+                $			dollar
+                switzerlandfranc	.66 $
+                )";
+                std::string expected_output = R"(
+                $ 1.00000000: 0 0 0 0 0 1 0 0 0 0
+                % 0.01000000: 0 0 0 0 0 0 0 0 0 0
+                c 299792458.00000000: 1 0 -1 0 0 0 0 0 0 0
+                ccs 0.02777778: 0 0 0 0 0 0 0 0 1 0
+                ckan -32.19976000: 1 0 0 0 0 0 0 0 0 0
+                coul 1.00000000: 0 0 0 1 0 0 0 0 0 0
+                degree 0.00277778: 0 0 0 0 0 0 0 0 0 0
+                dipotre 1.00000000: -1 0 0 0 0 0 0 0 0 0
+                dollar 1.00000000: 0 0 0 0 0 1 0 0 0 0
+                erlang 1.00000000: 0 0 0 0 0 0 0 0 1 0
+                fuzz 1.00000000: 0 0 0 0 0 0 0 0 0 0
+                grade 0.00250000: 0 0 0 0 0 0 0 0 0 0
+                kg 1.00000000: 0 1 0 0 0 0 0 0 0 0
+                m 1.00000000: 1 0 0 0 0 0 0 0 0 0
+                mercury 133322.00000000: -2 1 -2 0 0 0 0 0 0 0
+                ms 0.00100000: 0 0 1 0 0 0 0 0 0 0
+                newton 1.00000000: 1 1 -2 0 0 0 0 0 0 0
+                pi 3.14159265: 0 0 0 0 0 0 0 0 0 0
+                radian 0.15915494: 0 0 0 0 0 0 0 0 0 0
+                sec 1.00000000: 0 0 1 0 0 0 0 0 0 0
+                statcoul 0.00000000: 0 0 0 1 0 0 0 0 0 0
+                steradian 0.02533030: 0 0 0 0 0 0 0 0 0 0
+                stere 1.00000000: 3 0 0 0 0 0 0 0 0 0
+                switzerlandfranc 0.66000000: 0 0 0 0 0 1 0 0 0 0
+                m kg sec coul dollar erlang
+                )";
+                REQUIRE(parse_string(reindent_text(units_definitions)) ==
+                        reindent_text(expected_output));
             }
         }
     }

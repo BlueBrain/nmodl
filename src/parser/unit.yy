@@ -4,7 +4,7 @@
  *
  * Parsing Unit definition file for use in NMODL.
  *
- * CREDIT: This is based on parsing nrnunits.lib like MOD2C
+ * CREDIT: The parser is designed to parse the nrnunits.lib file which is also used by MOD2C
  * https://github.com/BlueBrain/mod2c/blob/master/share/nrnunits.lib
  *****************************************************************************/
 
@@ -53,28 +53,28 @@
 /** keep track of the current position within the input */
 %locations
 
-%token               END    0     "end of file"
-%token               INVALID_TOKEN
+%token                  END    0     "end of file"
+%token                  INVALID_TOKEN
 
-%token <std::string> BASE_UNIT
-%token <std::string> INVALID_BASE_UNIT
-%token <std::string> UNIT
-%token <std::string> NEW_UNIT
-%token <std::string> UNIT_POWER
-%token <std::string> PREFIX
-%token <std::string> DOUBLE
-%token <std::string> FRACTION
-%token <std::string> COMMENT
-%token <std::string> NEWLINE
-%token <std::string> UNIT_PROD
-%token <std::string> DIVISION
+%token <std::string>    BASE_UNIT
+%token <std::string>    INVALID_BASE_UNIT
+%token <std::string>    UNIT
+%token <std::string>    NEW_UNIT
+%token <std::string>    UNIT_POWER
+%token <std::string>    PREFIX
+%token <std::string>    DOUBLE
+%token <std::string>    FRACTION
+%token <std::string>    COMMENT
+%token <std::string>    NEWLINE
+%token <std::string>    UNIT_PROD
+%token <std::string>    DIVISION
 
-%type <std::vector<std::string>*> units_nom
-%type <std::vector<std::string>*> units_denom
-%type <nmodl::units::unit*> nominator
-%type <nmodl::units::unit*> item
-%type <nmodl::units::prefix*> prefix
-%type <std::shared_ptr<nmodl::units::UnitTable>> list
+%type <std::shared_ptr<std::vector<std::string>>>    units_nom
+%type <std::shared_ptr<std::vector<std::string>>>    units_denom
+%type <std::shared_ptr<nmodl::units::Unit>>          nominator
+%type <std::shared_ptr<nmodl::units::Unit>>          item
+%type <std::shared_ptr<nmodl::units::Prefix>>        prefix
+%type <std::shared_ptr<nmodl::units::UnitTable>>     table_insertion
 
 %{
     #include "lexer/unit_lexer.hpp"
@@ -92,34 +92,34 @@
 %}
 
 
-%start list_option
+%start unit_table
 
 %%
 
-list_option
+unit_table
     : END
-    | list END
+    | table_insertion END
 
-list
+table_insertion
     : {
-        $$ = driver.Table;
+        $$ = driver.table;
       }
-    | list item  {
+    | table_insertion item  {
         $1->insert($2);
         $$ = $1;
       }
-    | list prefix  {
+    | table_insertion prefix  {
         $1->insert_prefix($2);
         $$ = $1;
       }
-    | list no_insert {
+    | table_insertion no_insert {
         $$ = $1;
       }
     ;
 
 units_nom
     : {
-        $$ = new std::vector<std::string>;
+        $$ = std::make_shared<std::vector<std::string>>();
       }
     | UNIT units_nom {
         $2->push_back($1);
@@ -136,7 +136,7 @@ units_nom
 
 units_denom
     : {
-        $$ = new std::vector<std::string>;
+        $$ = std::make_shared<std::vector<std::string>>();
       }
     | UNIT units_denom {
         $2->push_back($1);
@@ -153,18 +153,18 @@ units_denom
 
 nominator
     : units_nom {
-        nmodl::units::unit* newunit = new nmodl::units::unit();
+        auto newunit = std::make_shared<nmodl::units::Unit>();
         newunit->add_nominator_unit($1);
         $$ = newunit;
       }
     | DOUBLE units_nom {
-        nmodl::units::unit* newunit = new nmodl::units::unit();
+        auto newunit = std::make_shared<nmodl::units::Unit>();
         newunit->add_nominator_unit($2);
         newunit->add_nominator_double($1);
         $$ = newunit;
       }
     | FRACTION units_nom {
-        nmodl::units::unit* newunit = new nmodl::units::unit();
+        auto newunit = std::make_shared<nmodl::units::Unit>();
         newunit->add_nominator_unit($2);
         newunit->add_fraction($1);
         $$ = newunit;
@@ -173,10 +173,10 @@ nominator
 
 prefix
     : PREFIX DOUBLE {
-        $$ = new nmodl::units::prefix($1,$2);
+        $$ = std::make_shared<nmodl::units::Prefix>($1,$2);
       }
     | PREFIX UNIT {
-        $$ = new nmodl::units::prefix($1,$2);
+        $$ = std::make_shared<nmodl::units::Prefix>($1,$2);
       }
 
 no_insert
@@ -187,13 +187,10 @@ no_insert
       }
 item
     : NEW_UNIT BASE_UNIT {
-        nmodl::units::unit *newunit = new nmodl::units::unit($1);
+        auto newunit = std::make_shared<nmodl::units::Unit>($1);
         newunit->add_base_unit($2);
         $$ = newunit;
       }
-    | NEW_UNIT INVALID_BASE_UNIT {
-            error(scanner.loc, "Base units should be named by characters a-j");
-          }
     | NEW_UNIT nominator {
         $2->add_unit($1);
         $$ = $2;
@@ -203,6 +200,9 @@ item
         $2->add_denominator_unit($4);
         $$ = $2;
       }
+    | NEW_UNIT INVALID_BASE_UNIT {
+            error(scanner.loc, "Base units should be named by characters a-j");
+          }
     ;
 
 %%

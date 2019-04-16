@@ -22,7 +22,7 @@
 using namespace fmt::literals;
 using namespace nmodl;
 
-extern void parse_units(std::vector<std::string> files) {
+void parse_units(std::vector<std::string> files) {
     for (const auto& f: files) {
         logger->info("Processing {}", f);
         std::ifstream file(f);
@@ -33,16 +33,6 @@ extern void parse_units(std::vector<std::string> files) {
 
         /// just call parser method
         driver.parse_stream(file);
-
-        /// Print all tokens read
-        // driver.print_tokens();
-
-        /// Print Units and their factors
-        // std::cout << " -- PRINTING TABLE -- " << std::endl;
-        // driver.Table->print_units();
-
-        // std::cout << " -- PRINTING BASE UNITS -- " << std::endl;
-        // driver.Table->print_base_units();
     }
 }
 

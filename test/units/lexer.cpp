@@ -30,8 +30,7 @@ TokenType token_type(const std::string& name) {
     UnitDriver driver;
     UnitLexer scanner(driver, &in);
 
-    SymbolType sym = scanner.next_token();
-    TokenType token = sym.token();
+    TokenType token = scanner.next_token().token();
 
     return token;
 }

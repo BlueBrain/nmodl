@@ -52,11 +52,6 @@ void UnitDriver::error(const std::string& m) {
     std::cerr << m << std::endl;
 }
 
-void UnitDriver::add_token(const std::string& text) {
-    tokens.push_back(text);
-    // here we will query and look into symbol table or register callback
-}
-
 void UnitDriver::error(const std::string& m, const location& l) {
     std::cerr << l << " : " << m << std::endl;
 }

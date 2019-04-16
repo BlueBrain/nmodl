@@ -93,60 +93,49 @@ DBL  ([-+]?{D})|([-+]?{D}+"."{D}*({E})?)|([-+]?{D}*"."{D}+({E})?)|([-+]?{D}+{E})
 %%
 
 "*"[a-j]"*" {
-                driver.add_token(yytext);
                 return UnitParser::make_BASE_UNIT(yytext, loc);
 
             }
 
 "*"[k-zA-Z]"*" {
-                driver.add_token(yytext);
                 return UnitParser::make_INVALID_BASE_UNIT(yytext, loc);
 
             }
 
 ^[a-zA-Z$\%]+{D}*   {
-                driver.add_token(yytext);
                 return UnitParser::make_NEW_UNIT(yytext, loc);
             }
 
 [a-zA-Z$\%]+   {
-                driver.add_token(yytext);
                 return UnitParser::make_UNIT(yytext, loc);
             }
 
 ^[a-zA-Z]+"-"  {
-                driver.add_token(yytext);
                 return UnitParser::make_PREFIX(yytext, loc);
 
             }
 
 [a-zA-Z]+[2-9]+  {
-                driver.add_token(yytext);
                 return UnitParser::make_UNIT_POWER(yytext, loc);
             }
 
 {DBL}          {
-                driver.add_token(yytext);
                 return UnitParser::make_DOUBLE(yytext, loc);
             }
 
 {DBL}"|"{DBL}     {
-                driver.add_token(yytext);
                 return UnitParser::make_FRACTION(yytext, loc);
             }
 
 "-"         {
-                driver.add_token(yytext);
                 return UnitParser::make_UNIT_PROD(yytext, loc);
             }
 
 ^"/".*     {
-                driver.add_token(yytext);
                 return UnitParser::make_COMMENT(yytext, loc);
             }
 
 "/"|"1/"        {
-                driver.add_token(yytext);
                 return UnitParser::make_DIVISION(yytext, loc);
             }
 
@@ -155,7 +144,6 @@ DBL  ([-+]?{D})|([-+]?{D}+"."{D}*({E})?)|([-+]?{D}*"."{D}+({E})?)|([-+]?{D}+{E})
             }
 
 \n          {
-                driver.add_token(yytext);
                 return UnitParser::make_NEWLINE(yytext, loc);
             }
 
