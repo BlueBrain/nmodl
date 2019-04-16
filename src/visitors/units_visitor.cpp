@@ -35,7 +35,7 @@ void UnitsVisitor::visit_unit_def(ast::UnitDef* node) {
     unit_driver.parse_string(ss.str());
 
     if (verbose) {
-        auto unit = unit_driver.Table->get_unit(node->get_node_name());
+        auto unit = unit_driver.table->get_unit(node->get_node_name());
         *units_details << std::fixed << std::setprecision(8) << unit->get_name() << " "
                        << unit->get_factor() << ":";
         for (const auto& dims: unit->get_dims()) {
@@ -72,12 +72,12 @@ void UnitsVisitor::visit_factor_def(ast::FactorDef* node) {
     // mod file
     if (node->get_value() == NULL) {
         auto node_unit_name = node->get_node_name();
-        auto unit_factor = unit_driver.Table->get_unit(node_unit_name)->get_factor();
+        auto unit_factor = unit_driver.table->get_unit(node_unit_name)->get_factor();
         auto double_value_ptr = std::make_shared<ast::Double>(ast::Double(unit_factor));
         node->set_value(static_cast<std::shared_ptr<ast::Double>&&>(double_value_ptr));
     }
     if (verbose) {
-        auto unit = unit_driver.Table->get_unit(node->get_node_name());
+        auto unit = unit_driver.table->get_unit(node->get_node_name());
         // print value of unit that will be printed to the .cpp file and not the value that is
         // calculated based on the UnitTable units value
         *units_details << std::fixed << std::setprecision(8) << unit->get_name() << " "

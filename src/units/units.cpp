@@ -32,21 +32,12 @@ Prefix::Prefix(std::string name, std::string factor) {
     }
     prefix_name = name;
     prefix_factor = std::stod(factor);
-<<<<<<< HEAD
 }
 
 void Unit::add_unit(std::string name) {
     unit_name = name;
 }
 
-=======
-}
-
-void Unit::add_unit(std::string name) {
-    unit_name = name;
-}
-
->>>>>>> Adressed some of the review comments
 void Unit::add_base_unit(std::string name) {
     // name = "*[a-j]*" which is a base unit
     const auto dim_name = name[1];
@@ -374,7 +365,6 @@ void UnitTable::print_units_sorted(std::stringstream& units_details) {
 }
 
 void UnitTable::print_base_units(std::stringstream& base_units_details) {
-<<<<<<< HEAD
     int first_print = 1;
     for (const auto& it: base_units_names) {
         if (it != "") {
@@ -384,13 +374,6 @@ void UnitTable::print_base_units(std::stringstream& base_units_details) {
             } else {
                 base_units_details << " " << it;
             }
-=======
-    for (const auto& it: base_units_names) {
-        if (it == base_units_names.end()) {
-            base_units_details << it;
-        } else {
-            base_units_details << it << " ";
->>>>>>> Adressed some of the review comments
         }
     }
     base_units_details << "\n";
