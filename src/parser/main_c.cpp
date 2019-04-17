@@ -10,9 +10,9 @@
 #include "CLI/CLI.hpp"
 #include "fmt/format.h"
 
+#include "config/config.h"
 #include "parser/c11_driver.hpp"
 #include "utils/logger.hpp"
-#include "version/version.h"
 
 /**
  * Standalone parser program for C. This demonstrate basic

@@ -10,9 +10,9 @@
 #include "CLI/CLI.hpp"
 #include "fmt/format.h"
 
+#include "config/config.h"
 #include "parser/unit_driver.hpp"
 #include "utils/logger.hpp"
-#include "version/version.h"
 
 /**
  * Standalone parser program for Units. This demonstrate basic
@@ -40,9 +40,8 @@ int main(int argc, const char* argv[]) {
     CLI::App app{"Unit-Parser : Standalone Parser for Units({})"_format(version::to_string())};
 
     std::vector<std::string> files;
-    app.add_option("file", files, "One or more Units files to process")
-        ->required()
-        ->check(CLI::ExistingFile);
+    files.push_back(nrnunitslib::NRNUNITSLIB_PATH);
+    app.add_option("file", files, "One or more Units files to process");
 
     CLI11_PARSE(app, argc, argv);
 

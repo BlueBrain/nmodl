@@ -10,10 +10,10 @@
 #include "CLI/CLI.hpp"
 #include "fmt/format.h"
 
+#include "config/config.h"
 #include "lexer/unit_lexer.hpp"
 #include "parser/unit_driver.hpp"
 #include "utils/logger.hpp"
-#include "version/version.h"
 
 /**
  * Example of standalone lexer program for Units that

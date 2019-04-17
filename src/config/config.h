@@ -5,7 +5,19 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
-#include "version/version.h"
+#pragma once
 
-const std::string nmodl::version::GIT_REVISION = "@GIT_REVISION@";
-const std::string nmodl::version::NMODL_VERSION = "@PROJECT_VERSION@";
+#include <string>
+
+namespace nmodl {
+struct version {
+    static const std::string GIT_REVISION;
+    static const std::string NMODL_VERSION;
+    static std::string to_string() {
+        return NMODL_VERSION + " " + GIT_REVISION;
+    }
+};
+struct nrnunitslib {
+    static const std::string NRNUNITSLIB_PATH;
+};
+}  // namespace nmodl
