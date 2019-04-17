@@ -107,6 +107,18 @@ include_directories(${PROJECT_SOURCE_DIR}/ext/cli11/include)
 # =============================================================================
 set(PROJECT_VERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR})
 
+<<<<<<< HEAD
+=======
+# =============================================================================
+# Units definition file (nrnunits.lib) path
+# =============================================================================
+if(${CMAKE_INSTALL_PREFIX} STREQUAL "/usr/local")
+  set(NRNUNITSLIB_PATH ${PROJECT_SOURCE_DIR}/share/nrnunits.lib)
+else()
+  set(NRNUNITSLIB_PATH ${CMAKE_INSTALL_PREFIX}/share/nrnunits.lib)
+endif()
+
+>>>>>>> Install nrnunits.lib file and related fixes to the code
 # generate file with version number from git and nrnunits.lib file path
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/config/config.cpp.in
                ${CMAKE_CURRENT_BINARY_DIR}/config.cpp @ONLY)
