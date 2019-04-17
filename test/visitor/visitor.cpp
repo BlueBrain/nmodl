@@ -13,6 +13,7 @@
 #include "utils/logger.hpp"
 #include <experimental/filesystem>
 #include <pybind11/embed.h>
+#include <src/config/config.h>
 
 #include "parser/nmodl_driver.hpp"
 #include "test/utils/nmodl_constructs.hpp"
@@ -5159,10 +5160,7 @@ std::string run_units_visitor(const std::string& text) {
     auto ast = driver.ast();
 
     std::stringstream ss;
-    std::experimental::filesystem::path path = std::string(__FILE__);
-    std::string units_lib_path;
-    units_lib_path = path.parent_path().parent_path().parent_path();
-    units_lib_path.append("/share/nrnunits.lib");
+    std::string units_lib_path(nrnunitslib::NRNUNITSLIB_PATH);
     UnitsVisitor(units_lib_path, ss).visit_program(ast.get());
     return ss.str();
 }

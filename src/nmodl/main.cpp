@@ -124,11 +124,7 @@ int main(int argc, const char* argv[]) {
     std::string scratch_dir("tmp");
 
     /// directory where units lib file is located
-    std::experimental::filesystem::path path = std::string(__FILE__);
-    std::string units_lib_path;
-    units_lib_path = path.parent_path().parent_path().parent_path();
-    units_lib_path.append("/share/nrnunits.lib");
-    std::string units_dir(units_lib_path);
+    std::string units_dir(nrnunitslib::NRNUNITSLIB_PATH);
 
     /// true if ast should be converted to json
     bool json_ast(false);

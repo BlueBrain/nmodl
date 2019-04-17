@@ -112,6 +112,8 @@ set(PROJECT_VERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR})
 # =============================================================================
 # Units definition file (nrnunits.lib) path
 # =============================================================================
+# If there is an INSTALL_PREFIX given, use the nrnunits.lib which will be
+# installed to this path, else use the nrnunits.lib from the source code
 if(${CMAKE_INSTALL_PREFIX} STREQUAL "/usr/local")
   set(NRNUNITSLIB_PATH ${PROJECT_SOURCE_DIR}/share/nrnunits.lib)
 else()
