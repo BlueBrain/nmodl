@@ -5162,7 +5162,7 @@ std::string run_units_visitor(const std::string& text) {
     std::experimental::filesystem::path path = std::string(__FILE__);
     std::string units_lib_path;
     units_lib_path = path.parent_path().parent_path().parent_path();
-    units_lib_path.append("/share/nrnunit.lib");
+    units_lib_path.append("/share/nrnunits.lib");
     UnitsVisitor(units_lib_path, ss).visit_program(ast.get());
     return ss.str();
 }
@@ -5173,6 +5173,7 @@ SCENARIO("Units Visitor") {
         std::string nmodl_text = R"(
             UNITS {
                 (nA)    = (nanoamp)
+                (mA)    = (milliamp)
                 (mV)    = (millivolt)
                 (uS)    = (microsiemens)
                 (nS)    = (nanosiemens)
@@ -5185,16 +5186,17 @@ SCENARIO("Units Visitor") {
                 (fAm) = (femto amp meter)
                 (mol) = (1)
                 (M) = (1/liter)
-                (uM) = (micro M)
+                (uM1) = (micro M)
                 (mA/cm2) = (nanoamp/cm2)
                 (molar) = (1 / liter)
                 (S ) = (siemens)
                 (mse-1) = (1/millisec)
                 (um3) = (liter/1e15)
-                (molar) = (/liter)
+                (molar1) = (/liter)
+                (degK) = (degC)
                 FARADAY1 = (faraday) (coulomb)
                 FARADAY2 = (faraday) (kilocoulombs)
-                FARADAY3 = (faraday) (10000 coulomb2 / 10 coulomb)
+                FARADAY3 = (faraday) (10000 coulomb)
                 PI      = (pi)      (1)
                 R1       = (k-mole)  (joule/degC)
                 R2 = 8.314 (volt-coul/degC)
@@ -5212,6 +5214,7 @@ SCENARIO("Units Visitor") {
 
         std::string output_nmodl = R"(
         nA 0.00000000: 0 0 -1 1 0 0 0 0 0 0
+        mA 0.00100000: 0 0 -1 1 0 0 0 0 0 0
         mV 0.00100000: 2 1 -2 -1 0 0 0 0 0 0
         uS 0.00000100: -2 -1 1 2 0 0 0 0 0 0
         nS 0.00000000: -2 -1 1 2 0 0 0 0 0 0
@@ -5220,13 +5223,33 @@ SCENARIO("Units Visitor") {
         um 0.00000100: 1 0 0 0 0 0 0 0 0 0
         mM 1.00000000: -3 0 0 0 0 0 0 0 0 0
         uM 0.00100000: -3 0 0 0 0 0 0 0 0 0
-        FARADAY 96485.30900000: 0 0 0 1 0 0 0 0 0 0
+        msM 0.00100000: -3 0 1 0 0 0 0 0 0 0
+        fAm 0.00000000: 1 0 -1 1 0 0 0 0 0 0
+        mol 1.00000000: 0 0 0 0 0 0 0 0 0 0
+        M 1000.00000000: -3 0 0 0 0 0 0 0 0 0
+        uM1 0.00100000: -3 0 0 0 0 0 0 0 0 0
+        mA/cm2 0.00001000: -2 0 -1 1 0 0 0 0 0 0
+        molar 1000.00000000: -3 0 0 0 0 0 0 0 0 0
+        S 1.00000000: -2 -1 1 2 0 0 0 0 0 0
+        mse-1 1000.00000000: 0 0 -1 0 0 0 0 0 0 0
+        um3 0.00100000: 3 0 0 0 0 0 0 0 0 0
+        molar1 1000.00000000: -3 0 0 0 0 0 0 0 0 0
+        degK 1.00000000: 0 0 0 0 0 0 0 0 0 1
+        FARADAY1 96485.30900000: 0 0 0 1 0 0 0 0 0 0
+        FARADAY2 96.48530900: 0 0 0 1 0 0 0 0 0 0
+        FARADAY3 9.64853090: 0 0 0 1 0 0 0 0 0 0
         PI 3.14159265: 0 0 0 0 0 0 0 0 0 0
-        R 8.31449872: 2 1 -2 0 0 0 0 0 0 -1
+        R1 8.31449872: 2 1 -2 0 0 0 0 0 0 -1
+        R2 8.31400000: 2 1 -2 0 0 0 0 0 0 -1
+        R3 8314.49871704: 2 1 -2 0 0 0 0 0 0 -1
+        R4 8.31400000: 2 1 -2 0 0 0 0 0 0 -1
+        R5 8.31450000: 2 1 -2 0 0 0 0 0 0 -1
         dummy1 123.45000000: 1 0 -2 0 0 0 0 0 0 0
         dummy2 123450.00000000: 1 0 -2 0 0 0 0 0 0 0
         dummy3 123.45000000: 1 0 -2 0 0 0 0 0 0 0
-        FARADAY1 96.4853090: 0 0 0 1 0 0 0 0 0 0
+        KTOMV 0.08530000: 2 1 -2 -1 0 0 0 0 0 -1
+        B 0.26000000: -1 0 0 -1 0 0 0 0 0 0
+        TEMP 25.00000000: 0 0 0 0 0 0 0 0 0 1
         )";
 
         THEN("Print the units that were added") {

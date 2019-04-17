@@ -106,7 +106,10 @@ DBL ([-+]?{D})|([-+]?{D}+"."{D}*({E})?)|([-+]?{D}*"."{D}+({E})?)|([-+]?{D}+{E})
                     return UnitParser::make_INVALID_BASE_UNIT(yytext, loc);
                 }
 
-^[a-zA-Z$\%]+{D}* {
+^[a-zA-Z$\%]+{D}*                    |
+^[a-zA-Z$\%]+{D}*"_"[a-zA-Z$\%]+{D}* |
+^[a-zA-Z$\%]+{D}*"/"[a-zA-Z$\%]+{D}* |
+^[a-zA-Z$\%]+{D}*"-"[a-zA-Z$\%]*{D}+ {
                     return UnitParser::make_NEW_UNIT(yytext, loc);
                 }
 

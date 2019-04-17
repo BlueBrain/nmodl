@@ -127,7 +127,7 @@ int main(int argc, const char* argv[]) {
     std::experimental::filesystem::path path = std::string(__FILE__);
     std::string units_lib_path;
     units_lib_path = path.parent_path().parent_path().parent_path();
-    units_lib_path.append("/share/nrnunit.lib");
+    units_lib_path.append("/share/nrnunits.lib");
     std::string units_dir(units_lib_path);
 
     /// true if ast should be converted to json
