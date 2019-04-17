@@ -316,9 +316,9 @@ void UnitTable::insert(std::shared_ptr<Unit> unit) {
     if (find_unit_name == table.end()) {
         table.insert({unit->get_name(), unit});
     } else {
-        std::stringstream ss;
-        ss << "Redefinition of unit (" << unit->get_name() << ") is not allowed.";
-        throw std::runtime_error(ss.str());
+        std::cout << "Redefinition of unit (" << unit->get_name() << ") is not allowed.";
+        std::cout << "The old value of " << unit->get_name() << " = " << unit->get_factor()
+                  << " is used.";
     }
 }
 
