@@ -2939,8 +2939,8 @@ SCENARIO("SympySolver visitor: derivimplicit or sparse", "[sympy][derivimplicit]
             })";
         THEN("SympySolver correctly inserts ode to block") {
             CAPTURE(nmodl_text);
-            auto result = run_sympy_solver_visitor(nmodl_text, false, false,
-                                                   AstNodeType::DERIVATIVE_BLOCK);
+            auto result =
+                run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::DERIVATIVE_BLOCK);
             REQUIRE(result[0] == reindent_text(expected_result));
         }
     }
@@ -2988,10 +2988,10 @@ SCENARIO("SympySolver visitor: derivimplicit or sparse", "[sympy][derivimplicit]
             })";
 
         THEN("Construct & solve linear system for backwards Euler") {
-            auto result = run_sympy_solver_visitor(nmodl_text, false, false,
-                                                   AstNodeType::DERIVATIVE_BLOCK);
-            auto result_cse = run_sympy_solver_visitor(nmodl_text, true, true,
-                                                       AstNodeType::DERIVATIVE_BLOCK);
+            auto result =
+                run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::DERIVATIVE_BLOCK);
+            auto result_cse =
+                run_sympy_solver_visitor(nmodl_text, true, true, AstNodeType::DERIVATIVE_BLOCK);
             REQUIRE(result[0] == reindent_text(expected_result));
             REQUIRE(result_cse[0] == reindent_text(expected_cse_result));
         }
@@ -3019,8 +3019,8 @@ SCENARIO("SympySolver visitor: derivimplicit or sparse", "[sympy][derivimplicit]
             })";
         THEN("Construct & solver linear system") {
             CAPTURE(nmodl_text);
-            auto result = run_sympy_solver_visitor(nmodl_text, false, false,
-                                                   AstNodeType::DERIVATIVE_BLOCK);
+            auto result =
+                run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::DERIVATIVE_BLOCK);
             REQUIRE(result[0] == reindent_text(expected_result));
         }
     }
@@ -3048,8 +3048,8 @@ SCENARIO("SympySolver visitor: derivimplicit or sparse", "[sympy][derivimplicit]
             })";
         THEN("Construct & solver linear system") {
             CAPTURE(nmodl_text);
-            auto result = run_sympy_solver_visitor(nmodl_text, false, false,
-                                                   AstNodeType::DERIVATIVE_BLOCK);
+            auto result =
+                run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::DERIVATIVE_BLOCK);
             REQUIRE(result[0] == reindent_text(expected_result));
         }
     }
@@ -3080,8 +3080,8 @@ SCENARIO("SympySolver visitor: derivimplicit or sparse", "[sympy][derivimplicit]
             })";
         THEN("Construct & solver linear system") {
             CAPTURE(nmodl_text);
-            auto result = run_sympy_solver_visitor(nmodl_text, false, false,
-                                                   AstNodeType::DERIVATIVE_BLOCK);
+            auto result =
+                run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::DERIVATIVE_BLOCK);
             REQUIRE(result[0] == reindent_text(expected_result));
         }
     }
@@ -3119,8 +3119,8 @@ SCENARIO("SympySolver visitor: derivimplicit or sparse", "[sympy][derivimplicit]
             })";
         THEN("Construct newton solve block") {
             CAPTURE(nmodl_text);
-            auto result = run_sympy_solver_visitor(nmodl_text, false, false,
-                                                   AstNodeType::DERIVATIVE_BLOCK);
+            auto result =
+                run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::DERIVATIVE_BLOCK);
             REQUIRE(result[0] == reindent_text(expected_result));
         }
     }
@@ -3175,8 +3175,8 @@ SCENARIO("SympySolver visitor: derivimplicit or sparse", "[sympy][derivimplicit]
             })";
         THEN("Construct newton solve block") {
             CAPTURE(nmodl_text);
-            auto result = run_sympy_solver_visitor(nmodl_text, false, false,
-                                                   AstNodeType::DERIVATIVE_BLOCK);
+            auto result =
+                run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::DERIVATIVE_BLOCK);
             REQUIRE(result[0] == reindent_text(expected_result));
         }
     }
@@ -3248,8 +3248,8 @@ SCENARIO("SympySolver visitor: derivimplicit or sparse", "[sympy][derivimplicit]
                 }
             })";
         THEN("Construct newton solve block") {
-            auto result = run_sympy_solver_visitor(nmodl_text, false, false,
-                                                   AstNodeType::DERIVATIVE_BLOCK);
+            auto result =
+                run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::DERIVATIVE_BLOCK);
             CAPTURE(nmodl_text);
             REQUIRE(result[0] == reindent_text(expected_result_0));
             REQUIRE(result[1] == reindent_text(expected_result_1));
@@ -4366,8 +4366,8 @@ SCENARIO("LINEAR solve block (SympySolver Visitor)", "[sympy][linear]") {
                 x = 5
             })";
         THEN("solve analytically") {
-            auto result = run_sympy_solver_visitor(nmodl_text, false, false,
-                                                   AstNodeType::LINEAR_BLOCK);
+            auto result =
+                run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::LINEAR_BLOCK);
             REQUIRE(reindent_text(result[0]) == reindent_text(expected_text));
         }
     }
@@ -4384,8 +4384,8 @@ SCENARIO("LINEAR solve block (SympySolver Visitor)", "[sympy][linear]") {
                 x = 0.5/a
             })";
         THEN("solve analytically") {
-            auto result = run_sympy_solver_visitor(nmodl_text, false, false,
-                                                   AstNodeType::LINEAR_BLOCK);
+            auto result =
+                run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::LINEAR_BLOCK);
             REQUIRE(reindent_text(result[0]) == reindent_text(expected_text));
         }
     }
@@ -4404,8 +4404,8 @@ SCENARIO("LINEAR solve block (SympySolver Visitor)", "[sympy][linear]") {
                 y = a
             })";
         THEN("solve analytically") {
-            auto result = run_sympy_solver_visitor(nmodl_text, false, false,
-                                                   AstNodeType::LINEAR_BLOCK);
+            auto result =
+                run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::LINEAR_BLOCK);
             REQUIRE(reindent_text(result[0]) == reindent_text(expected_text));
         }
     }
@@ -4429,8 +4429,8 @@ SCENARIO("LINEAR solve block (SympySolver Visitor)", "[sympy][linear]") {
             })";
         THEN("solve analytically, insert in correct location") {
             CAPTURE(reindent_text(nmodl_text));
-            auto result = run_sympy_solver_visitor(nmodl_text, false, false,
-                                                   AstNodeType::LINEAR_BLOCK);
+            auto result =
+                run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::LINEAR_BLOCK);
             REQUIRE(reindent_text(result[0]) == reindent_text(expected_text));
         }
     }
@@ -4454,8 +4454,8 @@ SCENARIO("LINEAR solve block (SympySolver Visitor)", "[sympy][linear]") {
             })";
         THEN("solve analytically, insert in correct location") {
             CAPTURE(reindent_text(nmodl_text));
-            auto result = run_sympy_solver_visitor(nmodl_text, false, false,
-                                                   AstNodeType::LINEAR_BLOCK);
+            auto result =
+                run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::LINEAR_BLOCK);
             REQUIRE(reindent_text(result[0]) == reindent_text(expected_text));
         }
     }
@@ -4476,8 +4476,8 @@ SCENARIO("LINEAR solve block (SympySolver Visitor)", "[sympy][linear]") {
                 z = pow(a, 2)*b*(c*(5.343*a+b*(-1*a+0.842*pow(b, 2)))*(4*c-1.3)-(1*b+4*c)*(5.343*a*c+1.43543))/(c*(pow(a, 2)*pow(b, 2)*(4*c-1.3)+0.1*b+0.4*c))
             })";
         THEN("solve analytically") {
-            auto result = run_sympy_solver_visitor(nmodl_text, false, false,
-                                                   AstNodeType::LINEAR_BLOCK);
+            auto result =
+                run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::LINEAR_BLOCK);
             REQUIRE(reindent_text(result[0]) == reindent_text(expected_text));
         }
     }
@@ -4498,8 +4498,8 @@ SCENARIO("LINEAR solve block (SympySolver Visitor)", "[sympy][linear]") {
                 s[2] = -2
             })";
         THEN("solve analytically") {
-            auto result = run_sympy_solver_visitor(nmodl_text, false, false,
-                                                   AstNodeType::LINEAR_BLOCK);
+            auto result =
+                run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::LINEAR_BLOCK);
             REQUIRE(reindent_text(result[0]) == reindent_text(expected_text));
         }
     }
@@ -4552,8 +4552,8 @@ SCENARIO("LINEAR solve block (SympySolver Visitor)", "[sympy][linear]") {
                 }
             })";
         THEN("return matrix system to solve") {
-            auto result = run_sympy_solver_visitor(nmodl_text, false, false,
-                                                   AstNodeType::LINEAR_BLOCK);
+            auto result =
+                run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::LINEAR_BLOCK);
             REQUIRE(reindent_text(result[0]) == reindent_text(expected_text));
         }
     }
@@ -4766,8 +4766,8 @@ SCENARIO("LINEAR solve block (SympySolver Visitor)", "[sympy][linear]") {
                 }
             })";
         THEN("return matrix system to be solved") {
-            auto result = run_sympy_solver_visitor(nmodl_text, false, false,
-                                                   AstNodeType::LINEAR_BLOCK);
+            auto result =
+                run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::LINEAR_BLOCK);
             REQUIRE(reindent_text(result[0]) == reindent_text(expected_text));
         }
     }
@@ -4801,8 +4801,8 @@ SCENARIO("NONLINEAR solve block (SympySolver Visitor)", "[sympy][nonlinear]") {
                 }
             })";
         THEN("return F & J for newton solver") {
-            auto result = run_sympy_solver_visitor(nmodl_text, false, false,
-                                                   AstNodeType::NON_LINEAR_BLOCK);
+            auto result =
+                run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::NON_LINEAR_BLOCK);
             REQUIRE(reindent_text(result[0]) == reindent_text(expected_text));
         }
     }
@@ -4845,8 +4845,8 @@ SCENARIO("NONLINEAR solve block (SympySolver Visitor)", "[sympy][nonlinear]") {
                 }
             })";
         THEN("return F & J for newton solver") {
-            auto result = run_sympy_solver_visitor(nmodl_text, false, false,
-                                                   AstNodeType::NON_LINEAR_BLOCK);
+            auto result =
+                run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::NON_LINEAR_BLOCK);
             REQUIRE(reindent_text(result[0]) == reindent_text(expected_text));
         }
     }

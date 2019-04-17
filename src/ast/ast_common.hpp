@@ -18,7 +18,9 @@
 namespace nmodl {
 namespace ast {
 
-/* enumaration of all binary operators in the language */
+/**
+ * Enum for all binary operators in the language
+ */
 typedef enum {
     BOP_ADDITION,
     BOP_SUBTRACTION,
@@ -36,8 +38,8 @@ typedef enum {
     BOP_EXACT_EQUAL
 } BinaryOp;
 
-static const std::string BinaryOpNames[] = {"+", "-", "*",  "/",  "^", "&&", "||",
-                                            ">", "<", ">=", "<=", "=", "!=", "=="};
+static const std::string BinaryOpNames[] =
+    {"+", "-", "*", "/", "^", "&&", "||", ">", "<", ">=", "<=", "=", "!=", "=="};
 
 /* enumaration of all unary operators in the language */
 typedef enum { UOP_NOT, UOP_NEGATION } UnaryOp;

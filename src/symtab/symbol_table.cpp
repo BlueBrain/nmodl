@@ -454,10 +454,13 @@ void SymbolTable::Table::print(std::stringstream& stream, std::string title, int
     if (!symbols.empty()) {
         TableData table;
         table.title = std::move(title);
-        table.headers = {"NAME",  "PROPERTIES", "STATUS",  "LOCATION",
-                         "VALUE", "# READS",    "# WRITES"};
-        table.alignments = {text_alignment::left, text_alignment::left, text_alignment::right,
-                            text_alignment::right, text_alignment::right};
+        table.headers = {
+            "NAME", "PROPERTIES", "STATUS", "LOCATION", "VALUE", "# READS", "# WRITES"};
+        table.alignments = {text_alignment::left,
+                            text_alignment::left,
+                            text_alignment::right,
+                            text_alignment::right,
+                            text_alignment::right};
 
         for (const auto& symbol: symbols) {
             auto is_external = symbol->is_external_symbol_only();

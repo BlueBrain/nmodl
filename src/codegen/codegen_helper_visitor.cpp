@@ -49,13 +49,15 @@ using symtab::syminfo::Status;
  */
 void CodegenHelperVisitor::sort_with_mod2c_symbol_order(std::vector<SymbolType>& symbols) {
     /// first sort by global id to get in reverse order
-    std::sort(symbols.begin(), symbols.end(),
+    std::sort(symbols.begin(),
+              symbols.end(),
               [](const SymbolType& first, const SymbolType& second) -> bool {
                   return first->get_id() > second->get_id();
               });
 
     /// now order by name (to be same as neuron's bucket)
-    std::sort(symbols.begin(), symbols.end(),
+    std::sort(symbols.begin(),
+              symbols.end(),
               [](const SymbolType& first, const SymbolType& second) -> bool {
                   return first->get_name()[0] < second->get_name()[0];
               });

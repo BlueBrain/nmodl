@@ -129,9 +129,16 @@ PYBIND11_MODULE(_nmodl, m_nmodl) {
         .def("parse_stream", &PyDriver::parse_stream, "in"_a, docstring::driver_parse_stream)
         .def("ast", &PyDriver::ast, docstring::driver_ast);
 
-    m_nmodl.def("to_nmodl", nmodl::to_nmodl, "node"_a,
-                "exclude_types"_a = std::set<nmodl::ast::AstNodeType>(), docstring::to_nmodl);
-    m_nmodl.def("to_json", nmodl::to_json, "node"_a, "compact"_a = false, "expand"_a = false,
+    m_nmodl.def("to_nmodl",
+                nmodl::to_nmodl,
+                "node"_a,
+                "exclude_types"_a = std::set<nmodl::ast::AstNodeType>(),
+                docstring::to_nmodl);
+    m_nmodl.def("to_json",
+                nmodl::to_json,
+                "node"_a,
+                "compact"_a = false,
+                "expand"_a = false,
                 docstring::to_json);
 
     init_visitor_module(m_nmodl);

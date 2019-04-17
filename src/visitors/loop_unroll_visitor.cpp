@@ -120,7 +120,8 @@ static std::shared_ptr<ast::ExpressionStatement> unroll_for_loop(
         /// duplicate loop body and copy all statements to new vector
         auto new_block = node->get_statement_block()->clone();
         IndexRemover(index_var, i).visit_statement_block(new_block);
-        statements.insert(statements.end(), new_block->statements.begin(),
+        statements.insert(statements.end(),
+                          new_block->statements.begin(),
                           new_block->statements.end());
         delete new_block;
     }

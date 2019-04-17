@@ -1114,7 +1114,8 @@ void CodegenCVisitor::print_function_declaration(const T& node, const std::strin
 
     print_device_method_annotation();
     printer->add_indent();
-    printer->add_text("inline {} {}({})"_format(return_type, method_name(name),
+    printer->add_text("inline {} {}({})"_format(return_type,
+                                                method_name(name),
                                                 get_parameter_str(internal_params)));
 
     enable_variable_name_lookup = true;

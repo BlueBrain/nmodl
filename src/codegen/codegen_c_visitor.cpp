@@ -835,7 +835,8 @@ std::vector<SymbolType> CodegenCVisitor::get_float_variables() {
     std::sort(dependents.begin(), dependents.end(), comparator);
 
     auto variables = info.range_parameter_vars;
-    variables.insert(variables.end(), info.range_dependent_vars.begin(),
+    variables.insert(variables.end(),
+                     info.range_dependent_vars.begin(),
                      info.range_dependent_vars.end());
     variables.insert(variables.end(), info.state_vars.begin(), info.state_vars.end());
     variables.insert(variables.end(), dependents.begin(), dependents.end());
@@ -984,7 +985,9 @@ std::vector<SymbolType> CodegenCVisitor::get_shadow_variables() {
 std::string CodegenCVisitor::get_parameter_str(const ParamVector& params) {
     std::stringstream param_ss;
     for (auto iter = params.begin(); iter != params.end(); iter++) {
-        param_ss << "{}{} {}{}"_format(std::get<0>(*iter), std::get<1>(*iter), std::get<2>(*iter),
+        param_ss << "{}{} {}{}"_format(std::get<0>(*iter),
+                                       std::get<1>(*iter),
+                                       std::get<2>(*iter),
                                        std::get<3>(*iter));
         if (!is_last(iter, params)) {
             param_ss << ", ";
@@ -1755,8 +1758,10 @@ CodegenCVisitor::ParamVector CodegenCVisitor::internal_method_parameters() {
     auto params = ParamVector();
     params.emplace_back("", "int", "", "id");
     params.emplace_back(param_type_qualifier(), "int", "", "pnodecount");
-    params.emplace_back(param_type_qualifier(), "{}*"_format(instance_struct()),
-                        param_ptr_qualifier(), "inst");
+    params.emplace_back(param_type_qualifier(),
+                        "{}*"_format(instance_struct()),
+                        param_ptr_qualifier(),
+                        "inst");
     if (ion_variable_struct_required()) {
         params.emplace_back("", "IonCurVar&", "", "ionvar");
     }
@@ -2209,28 +2214,31 @@ std::string CodegenCVisitor::get_variable_name(const std::string& name, bool use
     // clang-format on
 
     /// float variable
-    auto f = std::find_if(codegen_float_variables.begin(), codegen_float_variables.end(),
+    auto f = std::find_if(codegen_float_variables.begin(),
+                          codegen_float_variables.end(),
                           symbol_comparator);
     if (f != codegen_float_variables.end()) {
         return float_variable_name(*f, use_instance);
     }
 
     /// integer variable
-    auto i = std::find_if(codegen_int_variables.begin(), codegen_int_variables.end(),
-                          index_comparator);
+    auto i =
+        std::find_if(codegen_int_variables.begin(), codegen_int_variables.end(), index_comparator);
     if (i != codegen_int_variables.end()) {
         return int_variable_name(*i, varname, use_instance);
     }
 
     /// global variable
-    auto g = std::find_if(codegen_global_variables.begin(), codegen_global_variables.end(),
+    auto g = std::find_if(codegen_global_variables.begin(),
+                          codegen_global_variables.end(),
                           symbol_comparator);
     if (g != codegen_global_variables.end()) {
         return global_variable_name(*g);
     }
 
     /// shadow variable
-    auto s = std::find_if(codegen_shadow_variables.begin(), codegen_shadow_variables.end(),
+    auto s = std::find_if(codegen_shadow_variables.begin(),
+                          codegen_shadow_variables.end(),
                           symbol_comparator);
     if (s != codegen_shadow_variables.end()) {
         return ion_shadow_variable_name(*s);
@@ -2497,21 +2505,21 @@ void CodegenCVisitor::print_mechanism_info() {
  * vector elements of type global and thread variables.
  */
 void CodegenCVisitor::print_global_variables_for_hoc() {
-    auto variable_printer = [this](const std::vector<SymbolType>& variables, bool if_array,
-                                   bool if_vector) {
-        for (const auto& variable: variables) {
-            if (variable->is_array() == if_array) {
-                auto name = get_variable_name(variable->get_name());
-                auto ename = add_escape_quote(variable->get_name() + "_" + info.mod_suffix);
-                auto length = variable->get_length();
-                if (if_vector) {
-                    printer->add_line("{}, {}, {},"_format(ename, name, length));
-                } else {
-                    printer->add_line("{}, &{},"_format(ename, name));
+    auto variable_printer =
+        [this](const std::vector<SymbolType>& variables, bool if_array, bool if_vector) {
+            for (const auto& variable: variables) {
+                if (variable->is_array() == if_array) {
+                    auto name = get_variable_name(variable->get_name());
+                    auto ename = add_escape_quote(variable->get_name() + "_" + info.mod_suffix);
+                    auto length = variable->get_length();
+                    if (if_vector) {
+                        printer->add_line("{}, {}, {},"_format(ename, name, length));
+                    } else {
+                        printer->add_line("{}, &{},"_format(ename, name));
+                    }
                 }
             }
-        }
-    };
+        };
 
     auto globals = info.global_variables;
     auto thread_vars = info.thread_variables;
@@ -3068,9 +3076,8 @@ void CodegenCVisitor::print_instance_variable_setup() {
         if (default_type == range_var_type) {
             printer->add_line("inst->{} = ml->data+{}{};"_format(name, id, stride));
         } else {
-            printer->add_line(
-                "inst->{} = setup_range_variable(ml->data+{}{}, pnodecount);"_format(name, id,
-                                                                                     stride));
+            printer->add_line("inst->{} = setup_range_variable(ml->data+{}{}, pnodecount);"_format(
+                name, id, stride));
             variables_to_free.push_back(name);
         }
         id += var->get_length();
@@ -3631,8 +3638,10 @@ void CodegenCVisitor::print_net_receive_kernel() {
         name = method_name("net_receive_kernel");
         params.emplace_back("", "double", "", "t");
         params.emplace_back("", "Point_process*", "", "pnt");
-        params.emplace_back(param_type_qualifier(), "{}*"_format(instance_struct()),
-                            param_ptr_qualifier(), "inst");
+        params.emplace_back(param_type_qualifier(),
+                            "{}*"_format(instance_struct()),
+                            param_ptr_qualifier(),
+                            "inst");
         params.emplace_back(param_type_qualifier(), "NrnThread*", param_ptr_qualifier(), "nt");
         params.emplace_back(param_type_qualifier(), "Memb_list*", param_ptr_qualifier(), "ml");
         params.emplace_back("", "int", "", "weight_index");

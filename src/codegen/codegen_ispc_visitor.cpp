@@ -126,8 +126,10 @@ std::string CodegenIspcVisitor::compute_method_name(BlockType type) {
 
 std::string CodegenIspcVisitor::net_receive_buffering_declaration() {
     auto params = ParamVector();
-    params.emplace_back(param_type_qualifier(), "{}*"_format(instance_struct()),
-                        param_ptr_qualifier(), "inst");
+    params.emplace_back(param_type_qualifier(),
+                        "{}*"_format(instance_struct()),
+                        param_ptr_qualifier(),
+                        "inst");
     params.emplace_back(param_type_qualifier(), "NrnThread*", param_ptr_qualifier(), "nt");
     params.emplace_back(param_type_qualifier(), "Memb_list*", param_ptr_qualifier(), "ml");
 
@@ -268,8 +270,10 @@ void CodegenIspcVisitor::print_backend_namespace_stop() {
 CodegenIspcVisitor::ParamVector CodegenIspcVisitor::get_global_function_parms(
     std::string arg_qualifier) {
     auto params = ParamVector();
-    params.emplace_back(param_type_qualifier(), "{}*"_format(instance_struct()),
-                        param_ptr_qualifier(), "inst");
+    params.emplace_back(param_type_qualifier(),
+                        "{}*"_format(instance_struct()),
+                        param_ptr_qualifier(),
+                        "inst");
     params.emplace_back(param_type_qualifier(), "NrnThread*", param_ptr_qualifier(), "nt");
     params.emplace_back(param_type_qualifier(), "Memb_list*", param_ptr_qualifier(), "ml");
     params.emplace_back(param_type_qualifier(), "int", "", "type");

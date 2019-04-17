@@ -22,8 +22,10 @@ class CodegenIspcVisitor: public CodegenCVisitor {
 
     /// ast nodes which are not compatible with ISPC target
     const std::vector<ast::AstNodeType> incompatible_node_types{
-        ast::AstNodeType::VERBATIM, ast::AstNodeType::EIGEN_NEWTON_SOLVER_BLOCK,
-        ast::AstNodeType::EIGEN_LINEAR_SOLVER_BLOCK, ast::AstNodeType::WATCH_STATEMENT,
+        ast::AstNodeType::VERBATIM,
+        ast::AstNodeType::EIGEN_NEWTON_SOLVER_BLOCK,
+        ast::AstNodeType::EIGEN_LINEAR_SOLVER_BLOCK,
+        ast::AstNodeType::WATCH_STATEMENT,
         ast::AstNodeType::TABLE_STATEMENT};
 
     /// flag to indicate if visitor should print the the wrapper code

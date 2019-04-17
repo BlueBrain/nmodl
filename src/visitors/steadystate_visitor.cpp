@@ -34,7 +34,8 @@ std::shared_ptr<ast::DerivativeBlock> SteadystateVisitor::create_steadystate_blo
     const auto steadystate_method = solve_block->get_steadystate()->get_value()->eval();
 
     logger->debug("SteadystateVisitor :: Found STEADYSTATE SOLVE statement: using {} for {}",
-                  steadystate_method, solve_block_name);
+                  steadystate_method,
+                  solve_block_name);
 
     ast::DerivativeBlock* deriv_block_ptr = nullptr;
     for (const auto& block_ptr: deriv_blocks) {

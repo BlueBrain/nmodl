@@ -137,7 +137,8 @@ void LocalizeVisitor::visit_program(ast::Program* node) {
                     auto symbol = program_symtab->lookup(varname);
 
                     if (symbol->is_array()) {
-                        variable = add_local_variable(statement_block.get(), varname,
+                        variable = add_local_variable(statement_block.get(),
+                                                      varname,
                                                       symbol->get_length());
                     } else {
                         variable = add_local_variable(statement_block.get(), varname);
