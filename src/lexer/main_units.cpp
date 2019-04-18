@@ -16,6 +16,7 @@
 #include "utils/logger.hpp"
 
 /**
+ * \file
  * Example of standalone lexer program for Units that
  * demonstrate use of UnitLexer and UnitDriver classes.
  */

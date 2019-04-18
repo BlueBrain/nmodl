@@ -56,7 +56,6 @@ static const int MAX_DIMS = 10;
  * to the dimensions of the units and the dimensions of the denominator are
  * subtracted from the unit's dimensions. The Unit representation is designed based
  * on the units representation of the MOD2C parser.
- *
  */
 class Unit {
   private:
@@ -76,6 +75,9 @@ class Unit {
     std::vector<std::string> denominator;
 
   public:
+    /// \name Ctor & dtor
+    /// \{
+
     /// Default constructor of Unit
     Unit() = default;
 
@@ -88,6 +90,8 @@ class Unit {
         : unit_factor(factor)
         , unit_dimensions(dimensions)
         , unit_name(std::move(name)) {}
+
+    /// \}
 
     /// Add unit name to the Unit
     void add_unit(std::string name);
@@ -152,7 +156,7 @@ class Unit {
         return unit_factor;
     }
 
-    /// Getter for the array of Unit's dimentions
+    /// Getter for the array of Unit's dimensions
     std::array<int, MAX_DIMS> get_dims() const {
         return unit_dimensions;
     }
@@ -176,11 +180,16 @@ class Prefix {
     std::string prefix_name;
 
   public:
+    /// \name Ctor & dtor
+    /// \{
+
     /// Default constructor for Prefix
     Prefix() = default;
 
     /// Constructor that instantiates a Prefix with its name and factor
     Prefix(std::string name, std::string factor);
+
+    /// \}
 
     /// Getter for the name of the Prefix
     std::string get_name() const {

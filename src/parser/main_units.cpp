@@ -17,6 +17,9 @@
 /**
  * Standalone parser program for Units. This demonstrate basic
  * usage of parser and driver class.
+ *
+ * \todo This is a placeholder and needs to be changed to parse
+ *       NMODL file and then show corresponding units.
  */
 
 using namespace fmt::literals;

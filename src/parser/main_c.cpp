@@ -15,6 +15,7 @@
 #include "utils/logger.hpp"
 
 /**
+ * \file
  * Standalone parser program for C. This demonstrate basic
  * usage of parser and driver class.
  */

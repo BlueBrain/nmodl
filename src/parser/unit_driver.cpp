@@ -31,10 +31,10 @@ bool UnitDriver::parse_stream(std::istream& in) {
     return (parser.parse() == 0);
 }
 
-//// parse Units file
+/// parse Units file
 bool UnitDriver::parse_file(const std::string& filename) {
     std::ifstream in(filename.c_str());
-    streamname = filename;
+    stream_name = filename;
 
     if (!in.good()) {
         return false;

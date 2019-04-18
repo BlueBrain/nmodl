@@ -29,10 +29,7 @@ TokenType token_type(const std::string& name) {
 
     UnitDriver driver;
     UnitLexer scanner(driver, &in);
-
-    TokenType token = scanner.next_token().token();
-
-    return token;
+    return scanner.next_token().token();
 }
 
 TEST_CASE("Lexer tests for valid tokens", "[Lexer]") {
