@@ -27,6 +27,11 @@ class UnitParser;
 class location;
 
 /**
+ * @addtogroup parser
+ * @{
+ */
+
+/**
  * \class UnitDriver
  * \brief Class that binds all pieces together for parsing C units
  */

@@ -18,6 +18,14 @@ namespace nmodl {
 namespace parser {
 
 /**
+ * @defgroup parser Parser Infrastructure
+ * @brief All parser and driver classes implementation
+ *
+ * @addtogroup parser
+ * @{
+ */
+
+/**
  * \class NmodlDriver
  * \brief Class that binds all pieces together for parsing nmodl file
  *
@@ -101,6 +109,8 @@ class NmodlDriver {
         return astRoot;
     }
 };
+
+/** @} */  // end of parser
 
 }  // namespace parser
 }  // namespace nmodl

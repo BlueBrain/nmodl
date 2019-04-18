@@ -368,12 +368,12 @@
 %{
     #include "lexer/nmodl_lexer.hpp"
     #include "parser/nmodl_driver.hpp"
-    #include "parser/verbatim_context.hpp"
+    #include "parser/verbatim_driver.hpp"
 
     using nmodl::parser::NmodlParser;
     using nmodl::parser::NmodlLexer;
     using nmodl::parser::NmodlDriver;
-    using nmodl::parser::VerbatimContext;
+    using nmodl::parser::VerbatimDriver;
 
     /// yylex takes scanner as well as driver reference
     /// \todo: check if driver argument is required
@@ -2250,7 +2250,7 @@ valence         :   { $$ = nullptr; }
 std::string parse_with_verbatim_parser(std::string str) {
     auto is = new std::istringstream(str.c_str());
 
-    VerbatimContext extcontext(is);
+    VerbatimDriver extcontext(is);
     Verbatim_parse(&extcontext);
 
     std::string ss(*(extcontext.result));

@@ -20,7 +20,7 @@
 namespace py = pybind11;
 using pybind11::literals::operator""_a;
 
-/** \brief docstring of Python symbols */
+namespace nmodl {
 namespace docstring {
 
 static const char* driver = R"(
@@ -96,6 +96,8 @@ static const char* to_json = R"(
 )";
 
 }  // namespace docstring
+}  // namespace nmodl
+
 
 class PyDriver: public nmodl::parser::NmodlDriver {
   public:
@@ -122,24 +124,27 @@ PYBIND11_MODULE(_nmodl, m_nmodl) {
     m_nmodl.doc() = "NMODL : Source-to-Source Code Generation Framework";
     m_nmodl.attr("__version__") = nmodl::version::NMODL_VERSION;
 
-    py::class_<PyDriver> nmodl_driver(m_nmodl, "NmodlDriver", docstring::driver);
+    py::class_<PyDriver> nmodl_driver(m_nmodl, "NmodlDriver", nmodl::docstring::driver);
     nmodl_driver.def(py::init<>())
-        .def("parse_string", &PyDriver::parse_string, "input"_a, docstring::driver_parse_string)
-        .def("parse_file", &PyDriver::parse_file, "filename"_a, docstring::driver_parse_file)
-        .def("parse_stream", &PyDriver::parse_stream, "in"_a, docstring::driver_parse_stream)
-        .def("ast", &PyDriver::ast, docstring::driver_ast);
+        .def("parse_string",
+             &PyDriver::parse_string,
+             "input"_a,
+             nmodl::docstring::driver_parse_string)
+        .def("parse_file", &PyDriver::parse_file, "filename"_a, nmodl::docstring::driver_parse_file)
+        .def("parse_stream", &PyDriver::parse_stream, "in"_a, nmodl::docstring::driver_parse_stream)
+        .def("ast", &PyDriver::ast, nmodl::docstring::driver_ast);
 
     m_nmodl.def("to_nmodl",
                 nmodl::to_nmodl,
                 "node"_a,
                 "exclude_types"_a = std::set<nmodl::ast::AstNodeType>(),
-                docstring::to_nmodl);
+                nmodl::docstring::to_nmodl);
     m_nmodl.def("to_json",
                 nmodl::to_json,
                 "node"_a,
                 "compact"_a = false,
                 "expand"_a = false,
-                docstring::to_json);
+                nmodl::docstring::to_json);
 
     init_visitor_module(m_nmodl);
     init_ast_module(m_nmodl);

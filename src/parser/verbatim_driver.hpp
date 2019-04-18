@@ -13,31 +13,39 @@
 namespace nmodl {
 namespace parser {
 
-class VerbatimContext {
+/**
+ * @addtogroup parser
+ * @{
+ */
+
+class VerbatimDriver {
+
+  protected:
+    void init_scanner();
+    void destroy_scanner();
+
   public:
     void* scanner = nullptr;
     std::istream* is = nullptr;
     std::string* result = nullptr;
 
-    VerbatimContext(std::istream* is = &std::cin) {
+    VerbatimDriver(std::istream* is = &std::cin) {
         init_scanner();
         this->is = is;
     }
 
-    virtual ~VerbatimContext() {
+    virtual ~VerbatimDriver() {
         destroy_scanner();
         if (result) {
             delete result;
         }
     }
-
-  protected:
-    void init_scanner();
-    void destroy_scanner();
 };
+
+/** @} */  // end of parser
 
 }  // namespace parser
 }  // namespace nmodl
 
 
-int Verbatim_parse(nmodl::parser::VerbatimContext*);
+int Verbatim_parse(nmodl::parser::VerbatimDriver*);
