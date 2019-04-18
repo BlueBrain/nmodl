@@ -40,7 +40,7 @@ int main(int argc, const char* argv[]) {
     CLI::App app{"Unit-Parser : Standalone Parser for Units({})"_format(version::to_string())};
 
     std::vector<std::string> files;
-    files.push_back(nrnunitslib::NRNUNITSLIB_PATH);
+    files.push_back(NrnUnitsLib::get_path());
     app.add_option("file", files, "One or more Units files to process");
 
     CLI11_PARSE(app, argc, argv);

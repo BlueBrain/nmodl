@@ -12,10 +12,10 @@
 #include <utility>
 
 #include "catch/catch.hpp"
+#include "config/config.h"
 #include "parser/diffeq_driver.hpp"
 #include "parser/unit_driver.hpp"
 #include "test/utils/test_utils.hpp"
-#include "config/config.h"
 
 //=============================================================================
 // Parser tests
@@ -31,7 +31,7 @@ bool is_valid_construct(const std::string& construct) {
 
 std::string parse_string(const std::string& unit_definition) {
     nmodl::parser::UnitDriver correctness_driver;
-    correctness_driver.parse_file(nmodl::nrnunitslib::NRNUNITSLIB_PATH);
+    correctness_driver.parse_file(nmodl::NrnUnitsLib::get_path());
     correctness_driver.parse_string(unit_definition);
     std::stringstream ss;
     correctness_driver.table->print_units_sorted(ss);
@@ -171,20 +171,20 @@ SCENARIO("Unit parser definition of units correctness") {
                 R2      8314 mV-coul/degC
                 )";
                 std::string parsed_units = parse_string(reindent_text(units_definitions));
-                REQUIRE(is_substring(parsed_units,"mV 0.00100000: 2 1 -2 -1 0 0 0 0 0 0"));
-                REQUIRE(is_substring(parsed_units,"mM 1.00000000: -3 0 0 0 0 0 0 0 0 0"));
-                REQUIRE(is_substring(parsed_units,"mA 0.00100000: 0 0 -1 1 0 0 0 0 0 0"));
-                REQUIRE(is_substring(parsed_units,"KTOMV 0.00008530: 2 1 -2 -1 0 0 0 0 0 -1"));
-                REQUIRE(is_substring(parsed_units,"B 26.00000000: -1 0 0 -1 0 0 0 0 0 0"));
-                REQUIRE(is_substring(parsed_units,"dummy1 0.02500000: -2 0 0 0 0 0 0 0 0 0"));
-                REQUIRE(is_substring(parsed_units,"dummy2 0.02500000: -2 0 0 0 0 0 0 0 0 0"));
-                REQUIRE(is_substring(parsed_units,"dummy3 0.02500000: -2 0 0 0 0 0 0 0 0 0"));
-                REQUIRE(is_substring(parsed_units,"dummy4 -0.02500000: -2 0 0 0 0 0 0 0 0 0"));
-                REQUIRE(is_substring(parsed_units,"dummy5 0.02500000: 0 0 0 0 0 0 0 0 0 0"));
-                REQUIRE(is_substring(parsed_units,"R 8.31449872: 2 1 -2 0 0 0 0 0 0 -1"));
-                REQUIRE(is_substring(parsed_units,"R1 8.31400000: 2 1 -2 0 0 0 0 0 0 -1"));
-                REQUIRE(is_substring(parsed_units,"R2 8.31400000: 2 1 -2 0 0 0 0 0 0 -1"));
-                REQUIRE(is_substring(parsed_units,"m kg sec coul candela dollar bit erlang K"));
+                REQUIRE(is_substring(parsed_units, "mV 0.00100000: 2 1 -2 -1 0 0 0 0 0 0"));
+                REQUIRE(is_substring(parsed_units, "mM 1.00000000: -3 0 0 0 0 0 0 0 0 0"));
+                REQUIRE(is_substring(parsed_units, "mA 0.00100000: 0 0 -1 1 0 0 0 0 0 0"));
+                REQUIRE(is_substring(parsed_units, "KTOMV 0.00008530: 2 1 -2 -1 0 0 0 0 0 -1"));
+                REQUIRE(is_substring(parsed_units, "B 26.00000000: -1 0 0 -1 0 0 0 0 0 0"));
+                REQUIRE(is_substring(parsed_units, "dummy1 0.02500000: -2 0 0 0 0 0 0 0 0 0"));
+                REQUIRE(is_substring(parsed_units, "dummy2 0.02500000: -2 0 0 0 0 0 0 0 0 0"));
+                REQUIRE(is_substring(parsed_units, "dummy3 0.02500000: -2 0 0 0 0 0 0 0 0 0"));
+                REQUIRE(is_substring(parsed_units, "dummy4 -0.02500000: -2 0 0 0 0 0 0 0 0 0"));
+                REQUIRE(is_substring(parsed_units, "dummy5 0.02500000: 0 0 0 0 0 0 0 0 0 0"));
+                REQUIRE(is_substring(parsed_units, "R 8.31449872: 2 1 -2 0 0 0 0 0 0 -1"));
+                REQUIRE(is_substring(parsed_units, "R1 8.31400000: 2 1 -2 0 0 0 0 0 0 -1"));
+                REQUIRE(is_substring(parsed_units, "R2 8.31400000: 2 1 -2 0 0 0 0 0 0 -1"));
+                REQUIRE(is_substring(parsed_units, "m kg sec coul candela dollar bit erlang K"));
             }
         }
     }

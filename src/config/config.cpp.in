@@ -7,6 +7,18 @@
 
 #include "config/config.h"
 
+/// Git version of the project
 const std::string nmodl::version::GIT_REVISION = "@GIT_REVISION@";
+
+/// NMODL version
 const std::string nmodl::version::NMODL_VERSION = "@PROJECT_VERSION@";
-const std::string nmodl::nrnunitslib::NRNUNITSLIB_PATH = "@NRNUNITSLIB_PATH@";
+
+/**
+ * \brief Path of nrnutils.lib file
+ *
+ * nrnunits.lib need to be loaded at runtime. Before project is
+ * installed it needs to be read from PROJECT_SOURCE_DIR and later
+ * from CMAKE_INSTALL_PREFIX.
+ */
+const std::vector<std::string> nmodl::NrnUnitsLib::NRNUNITSLIB_PATH =
+    {"@CMAKE_INSTALL_PREFIX@/share/nrnunits.lib", "@PROJECT_SOURCE_DIR@/share/nrnunits.lib"};
