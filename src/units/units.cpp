@@ -310,15 +310,14 @@ void UnitTable::insert(std::shared_ptr<Unit> unit) {
     for (const auto& it: unit->get_denominator_unit()) {
         calc_denominator_dims(unit, it);
     }
-    // if  unit is found in table then throw error, as redefinitions are not allowed similarly to
-    // MOD2C
+    // if unit is not in the table simply insert it, else replace with it with
+    // new definition
     auto find_unit_name = table.find(unit->get_name());
     if (find_unit_name == table.end()) {
         table.insert({unit->get_name(), unit});
     } else {
-        std::cout << "Redefinition of unit (" << unit->get_name() << ") is not allowed.";
-        std::cout << "The old value of " << unit->get_name() << " = " << unit->get_factor()
-                  << " is used.";
+        table.erase(unit->get_name());
+        table.insert({unit->get_name(), unit});
     }
 }
 
