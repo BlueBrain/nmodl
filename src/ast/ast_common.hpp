@@ -19,31 +19,56 @@ namespace nmodl {
 namespace ast {
 
 /**
- * Enum for all binary operators in the language
+ * \brief Enum type for binary operators in NMODL
+ *
+ * NMODL support different binary operators and ast::BinaryOp
+ * type is used to store their value in the AST.
  */
 typedef enum {
-    BOP_ADDITION,
-    BOP_SUBTRACTION,
-    BOP_MULTIPLICATION,
-    BOP_DIVISION,
-    BOP_POWER,
-    BOP_AND,
-    BOP_OR,
-    BOP_GREATER,
-    BOP_LESS,
-    BOP_GREATER_EQUAL,
-    BOP_LESS_EQUAL,
-    BOP_ASSIGN,
-    BOP_NOT_EQUAL,
-    BOP_EXACT_EQUAL
+    BOP_ADDITION,        ///< \+
+    BOP_SUBTRACTION,     ///< --
+    BOP_MULTIPLICATION,  ///< \c *
+    BOP_DIVISION,        ///< \/
+    BOP_POWER,           ///< ^
+    BOP_AND,             ///< &&
+    BOP_OR,              ///< ||
+    BOP_GREATER,         ///< >
+    BOP_LESS,            ///< <
+    BOP_GREATER_EQUAL,   ///< >=
+    BOP_LESS_EQUAL,      ///< <=
+    BOP_ASSIGN,          ///< =
+    BOP_NOT_EQUAL,       ///< !=
+    BOP_EXACT_EQUAL      ///< ==
 } BinaryOp;
 
+
+/**
+ * \brief string representation of ast::BinaryOp
+ *
+ * When AST is converted back to NMODL or C code, ast::BinaryOpNames
+ * is used to lookup the corresponding symbol for the operator.
+ */
 static const std::string BinaryOpNames[] =
     {"+", "-", "*", "/", "^", "&&", "||", ">", "<", ">=", "<=", "=", "!=", "=="};
 
-/* enumaration of all unary operators in the language */
+
+/**
+ * \brief Enum type for unary operators
+ *
+ * NMODL support two unary operators and ast::UnaryOp type is
+ * used to store their value in the AST.
+ */
 typedef enum { UOP_NOT, UOP_NEGATION } UnaryOp;
+
+
+/**
+ * \brief string representation of ast::UnaryOp
+ *
+ * When AST is converted back to NMODL or C code, ast::UnaryOpNames
+ * is used to lookup the corresponding symbol for the operator.
+ */
 static const std::string UnaryOpNames[] = {"!", "-"};
+
 
 /* enumaration of types used in partial equation */
 typedef enum { PEQ_FIRST, PEQ_LAST } FirstLastType;
