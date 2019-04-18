@@ -15,6 +15,7 @@
 #include "parser/diffeq_driver.hpp"
 #include "parser/unit_driver.hpp"
 #include "test/utils/test_utils.hpp"
+#include "config/config.h"
 
 //=============================================================================
 // Parser tests
@@ -29,12 +30,19 @@ bool is_valid_construct(const std::string& construct) {
 }
 
 std::string parse_string(const std::string& unit_definition) {
-    driver.parse_string(unit_definition);
+    nmodl::parser::UnitDriver correctness_driver;
+    correctness_driver.parse_file(nmodl::nrnunitslib::NRNUNITSLIB_PATH);
+    correctness_driver.parse_string(unit_definition);
     std::stringstream ss;
-    driver.table->print_units_sorted(ss);
-    driver.table->print_base_units(ss);
+    correctness_driver.table->print_units_sorted(ss);
+    correctness_driver.table->print_base_units(ss);
     return ss.str();
 }
+
+bool is_substring(const std::string& str1, const std::string& str2) {
+    return str1.find(str2) != std::string::npos;
+}
+
 
 SCENARIO("Unit parser definition of units validity") {
     GIVEN("A base unit") {
@@ -144,47 +152,39 @@ SCENARIO("Unit parser definition of units validity") {
 }
 
 SCENARIO("Unit parser definition of units correctness") {
-    GIVEN("A multiple units definitions") {
-        WHEN("Multiple units definitions come from nrnunits.lib file") {
+    GIVEN("Parsed the nrnunits.lib file") {
+        WHEN("Multiple units definitions based on the units defined in nrnunits.lib") {
             THEN("parser accepts the units correctly") {
                 std::string units_definitions = R"(
-                dollar			*f*
-                milli-			1e-3
-                mercury			1.33322+5 kg/m2-sec2
-                %			1|100
-                ms			millisec
-                $			dollar
-                switzerlandfranc	.66 $
+                mV      millivolt
+                mM      milli/liter
+                mA      milliamp
+                KTOMV   0.0853 mV/degC
+                B       0.26 mM-cm2/mA-ms
+                dummy1  .025 1/m2
+                dummy2  1|4e+1 m/m3
+                dummy3  25-3  / m2
+                dummy4  -0.025 /m2
+                dummy5  2.5 %
+                R       k-mole
+                R1      8.314 volt-coul/degC
+                R2      8314 mV-coul/degC
                 )";
-                std::string expected_output = R"(
-                $ 1.00000000: 0 0 0 0 0 1 0 0 0 0
-                % 0.01000000: 0 0 0 0 0 0 0 0 0 0
-                c 299792458.00000000: 1 0 -1 0 0 0 0 0 0 0
-                ccs 0.02777778: 0 0 0 0 0 0 0 0 1 0
-                ckan -32.19976000: 1 0 0 0 0 0 0 0 0 0
-                coul 1.00000000: 0 0 0 1 0 0 0 0 0 0
-                degree 0.00277778: 0 0 0 0 0 0 0 0 0 0
-                dipotre 1.00000000: -1 0 0 0 0 0 0 0 0 0
-                dollar 1.00000000: 0 0 0 0 0 1 0 0 0 0
-                erlang 1.00000000: 0 0 0 0 0 0 0 0 1 0
-                fuzz 1.00000000: 0 0 0 0 0 0 0 0 0 0
-                grade 0.00250000: 0 0 0 0 0 0 0 0 0 0
-                kg 1.00000000: 0 1 0 0 0 0 0 0 0 0
-                m 1.00000000: 1 0 0 0 0 0 0 0 0 0
-                mercury 133322.00000000: -2 1 -2 0 0 0 0 0 0 0
-                ms 0.00100000: 0 0 1 0 0 0 0 0 0 0
-                newton 1.00000000: 1 1 -2 0 0 0 0 0 0 0
-                pi 3.14159265: 0 0 0 0 0 0 0 0 0 0
-                radian 0.15915494: 0 0 0 0 0 0 0 0 0 0
-                sec 1.00000000: 0 0 1 0 0 0 0 0 0 0
-                statcoul 0.00000000: 0 0 0 1 0 0 0 0 0 0
-                steradian 0.02533030: 0 0 0 0 0 0 0 0 0 0
-                stere 1.00000000: 3 0 0 0 0 0 0 0 0 0
-                switzerlandfranc 0.66000000: 0 0 0 0 0 1 0 0 0 0
-                m kg sec coul dollar erlang
-                )";
-                REQUIRE(parse_string(reindent_text(units_definitions)) ==
-                        reindent_text(expected_output));
+                std::string parsed_units = parse_string(reindent_text(units_definitions));
+                REQUIRE(is_substring(parsed_units,"mV 0.00100000: 2 1 -2 -1 0 0 0 0 0 0"));
+                REQUIRE(is_substring(parsed_units,"mM 1.00000000: -3 0 0 0 0 0 0 0 0 0"));
+                REQUIRE(is_substring(parsed_units,"mA 0.00100000: 0 0 -1 1 0 0 0 0 0 0"));
+                REQUIRE(is_substring(parsed_units,"KTOMV 0.00008530: 2 1 -2 -1 0 0 0 0 0 -1"));
+                REQUIRE(is_substring(parsed_units,"B 26.00000000: -1 0 0 -1 0 0 0 0 0 0"));
+                REQUIRE(is_substring(parsed_units,"dummy1 0.02500000: -2 0 0 0 0 0 0 0 0 0"));
+                REQUIRE(is_substring(parsed_units,"dummy2 0.02500000: -2 0 0 0 0 0 0 0 0 0"));
+                REQUIRE(is_substring(parsed_units,"dummy3 0.02500000: -2 0 0 0 0 0 0 0 0 0"));
+                REQUIRE(is_substring(parsed_units,"dummy4 -0.02500000: -2 0 0 0 0 0 0 0 0 0"));
+                REQUIRE(is_substring(parsed_units,"dummy5 0.02500000: 0 0 0 0 0 0 0 0 0 0"));
+                REQUIRE(is_substring(parsed_units,"R 8.31449872: 2 1 -2 0 0 0 0 0 0 -1"));
+                REQUIRE(is_substring(parsed_units,"R1 8.31400000: 2 1 -2 0 0 0 0 0 0 -1"));
+                REQUIRE(is_substring(parsed_units,"R2 8.31400000: 2 1 -2 0 0 0 0 0 0 -1"));
+                REQUIRE(is_substring(parsed_units,"m kg sec coul candela dollar bit erlang K"));
             }
         }
     }

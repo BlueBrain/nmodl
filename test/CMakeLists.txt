@@ -14,6 +14,11 @@ add_library(test_util
             ${CMAKE_CURRENT_SOURCE_DIR}/utils/test_utils.cpp)
 
 # =============================================================================
+# Common input data library
+# =============================================================================
+add_library(config STATIC ${PROJECT_BINARY_DIR}/config.cpp)
+
+# =============================================================================
 # Test executables
 # =============================================================================
 add_executable(testmodtoken modtoken/modtoken.cpp)
@@ -33,7 +38,7 @@ target_link_libraries(testvisitor symtab visitor lexer util test_util printer)
 target_link_libraries(testprinter printer)
 target_link_libraries(testsymtab symtab lexer util)
 target_link_libraries(testunitlexer lexer util)
-target_link_libraries(testunitparser lexer test_util)
+target_link_libraries(testunitparser lexer test_util config)
 
 add_test(NAME ModToken COMMAND testmodtoken)
 add_test(NAME Lexer COMMAND testlexer)
