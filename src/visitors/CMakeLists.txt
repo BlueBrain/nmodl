@@ -66,7 +66,7 @@ set_property(TARGET visitor_obj PROPERTY POSITION_INDEPENDENT_CODE ON)
 add_dependencies(visitor_obj lexer_obj)
 
 add_library(visitor STATIC $<TARGET_OBJECTS:visitor_obj>)
-target_link_libraries(visitor PRIVATE pybind11::embed stdc++fs)
+target_link_libraries(visitor PRIVATE pybind11::embed)
 
 add_dependencies(visitor lexer util)
 

@@ -5,7 +5,6 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
-#include <experimental/filesystem>
 #include <sstream>
 #include <string>
 #include <vector>
