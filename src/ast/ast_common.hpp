@@ -16,10 +16,22 @@
 #include "visitors/visitor.hpp"
 
 namespace nmodl {
+
+/// Abstract Syntax Tree (AST) related implementations
 namespace ast {
 
 /**
- * \brief Enum type for binary operators in NMODL
+ * @defgroup ast AST Infrastructure
+ * @brief All AST related implementation details
+ *
+ * @defgroup ast_prop AST Properties
+ * @ingroup ast
+ * @brief Properties used with different members of AST classes
+ * @{
+ */
+
+/**
+ * \brief enum type for binary operators in NMODL
  *
  * NMODL support different binary operators and ast::BinaryOp
  * type is used to store their value in the AST.
@@ -41,76 +53,133 @@ typedef enum {
     BOP_EXACT_EQUAL      ///< ==
 } BinaryOp;
 
-
 /**
- * \brief string representation of ast::BinaryOp
+ * \brief string representation of \link ast::BinaryOp
  *
- * When AST is converted back to NMODL or C code, ast::BinaryOpNames
+ * When AST is converted back to NMODL or C code, \link ast::BinaryOpNames
  * is used to lookup the corresponding symbol for the operator.
  */
 static const std::string BinaryOpNames[] =
     {"+", "-", "*", "/", "^", "&&", "||", ">", "<", ">=", "<=", "=", "!=", "=="};
 
-
-/**
- * \brief Enum type for unary operators
- *
- * NMODL support two unary operators and ast::UnaryOp type is
- * used to store their value in the AST.
- */
+/// enum type for unary operators
 typedef enum { UOP_NOT, UOP_NEGATION } UnaryOp;
 
-
-/**
- * \brief string representation of ast::UnaryOp
- *
- * When AST is converted back to NMODL or C code, ast::UnaryOpNames
- * is used to lookup the corresponding symbol for the operator.
- */
+/// string representation of \link ast::UnaryOp
 static const std::string UnaryOpNames[] = {"!", "-"};
 
-
-/* enumaration of types used in partial equation */
+/// enum type for partial equation types
 typedef enum { PEQ_FIRST, PEQ_LAST } FirstLastType;
+
+/// string representation of \link ast::FirstLastType
 static const std::string FirstLastTypeNames[] = {"FIRST", "LAST"};
 
-/* enumaration of queue types */
+/// enum type for partial equation types
 typedef enum { PUT_QUEUE, GET_QUEUE } QueueType;
+
+/// string representation of \link ast::QueueType
 static const std::string QueueTypeNames[] = {"PUTQ", "GETQ"};
 
-/* enumaration of type used for BEFORE or AFTER block */
+/// enum type to distinguish BEFORE or AFTER blocks
 typedef enum { BATYPE_BREAKPOINT, BATYPE_SOLVE, BATYPE_INITIAL, BATYPE_STEP } BAType;
+
+/// string representation of \link ast::BAType
 static const std::string BATypeNames[] = {"BREAKPOINT", "SOLVE", "INITIAL", "STEP"};
 
-/* enumaration of type used for UNIT_ON or UNIT_OFF state*/
+/// enum type used for UNIT_ON or UNIT_OFF state
 typedef enum { UNIT_ON, UNIT_OFF } UnitStateType;
+
+/// string representation of \link ast::UnitStateType
 static const std::string UnitStateTypeNames[] = {"UNITSON", "UNITSOFF"};
 
-/* enumaration of type used for Reaction statement */
+/// enum type used for Reaction statement
 typedef enum { LTMINUSGT, LTLT, MINUSGT } ReactionOp;
+
+/// string representation of \link ast::ReactionOp
 static const std::string ReactionOpNames[] = {"<->", "<<", "->"};
 
-/* enum class for ast types */
-enum class Type;
+/** @} */  // end of ast_prop
 
-/* define abstract base class for all AST nodes
- * this also serves to define the visitable objects.
+
+/**
+ * @defgroup ast_class AST Classes
+ * @ingroup ast
+ * @brief Classes for implementing Abstract Syntax Tree (AST)
+ * @{
+ */
+/**
+ * \brief Base class for all Abstract Syntax Tree node types
+ *
+ * Every node in the Abstract Syntax Tree is inherited from base class
+ * ast::AST. This class provides base properties and pure virtual
+ * functions that must be implemented by base classes. We inherit from
+ * std::enable_shared_from_this to get a valid shared_ptr to this pointer.
  */
 struct AST: public std::enable_shared_from_this<AST> {
-    /* all AST nodes have a member which stores their
-     * basetype (int, bool, none, object). Further type
-     * information will come from the symbol table.
-     * BaseType basetype;
+    /// \name Pure Virtual Functions
+    /// \{
+
+    /**
+     * \brief Return type (ast::AstNodeType) of ast node
+     *
+     * Every node in the ast has a type defined in ast::AstNodeType.
+     * This type is can be used to check/compare node types.
      */
-
-    /* all AST nodes provide visit children and accept methods */
-    virtual void visit_children(Visitor* v) = 0;
-
-    virtual void accept(Visitor* v) = 0;
-
     virtual AstNodeType get_node_type() = 0;
 
+    /**
+     * \brief Return type (ast::AstNodeType) of ast node as std::string
+     *
+     * Every node in the ast has a type defined in ast::AstNodeType.
+     * This type name can be returned as a std::string for printing
+     * ast to text/json form.
+     *
+     * @return name of the node type as a string
+     */
     virtual std::string get_node_type_name() = 0;
+
+    /**
+     * \brief Accept (or visit) the current AST node using current visitor
+     *
+     * Instead of visiting children of AST node, like AST::visit_children,
+     * accept allows to visit the current node itself using the concrete
+     * visitor provided.
+     *
+     * @param v Concrete visitor that will be used to recursively visit children
+     *
+     * \note Below is an example of `accept` method implementation which shows how
+     *       visitor method corresponding to ast::IndexedName node is called allowing
+     *       to visit the node itself in the visitor.
+     *
+     * \code{.cpp}
+     *   void IndexedName::accept(Visitor* v) override {
+     *       v->visit_indexed_name(this);
+     *   }
+     * \endcode
+     */
+    virtual void accept(Visitor* v) = 0;
+
+    /**
+     * \brief Visit children i.e. member of current AST node using current visitor
+     *
+     * Different nodes in the AST have different members (i.e. children). This method
+     * recursively visits children using provided concrete visitor.
+     *
+     * @param v Concrete visitor that will be used to recursively visit children
+     *
+     * \note Below is an example of `visit_children` method implementation which shows
+     *       ast::IndexedName node children are visited instead of node itself.
+     *
+     * \code{.cpp}
+     * void IndexedName::visit_children(Visitor* v) {
+     *    name->accept(v);
+     *    length->accept(v);
+     * }
+     * \endcode
+     */
+    virtual void visit_children(Visitor* v) = 0;
+
+    /// \}
 
     virtual std::string get_node_name() {
         throw std::logic_error("get_node_name() not implemented");
@@ -715,6 +784,8 @@ struct AST: public std::enable_shared_from_this<AST> {
         return false;
     }
 };
+
+/** @} */  // end of ast_class
 
 }  // namespace ast
 }  // namespace nmodl
