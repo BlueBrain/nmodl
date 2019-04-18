@@ -30,12 +30,12 @@ namespace nmodl {
 
 class UnitsVisitor: public AstVisitor {
   private:
-    /// flag to enable/disable printing nodes and the produced strings that are passed to the unit
+    /// Flag to enable/disable printing nodes and the produced strings that are passed to the unit
     /// parser as we visit them
     bool verbose = false;
 
     /// Units Driver needed to parse the units file and the string produces by mod files' units
-    parser::UnitDriver unit_driver;
+    parser::UnitDriver units_driver;
 
     /// Stringstream to store the units details that are added by the mod files
     std::stringstream* units_details;

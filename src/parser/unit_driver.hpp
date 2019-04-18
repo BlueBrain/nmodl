@@ -34,11 +34,7 @@ class location;
 
 /**
  * \class UnitDriver
-<<<<<<< HEAD
  * \brief Class that binds all pieces together for parsing C units
-=======
- * \brief Class that binds all pieces together for parsing C unit blocks
->>>>>>> Added test for Unit Visitor and small fixes
  */
 class UnitDriver {
   private:

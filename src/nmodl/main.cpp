@@ -123,7 +123,7 @@ int main(int argc, const char* argv[]) {
     std::string scratch_dir("tmp");
 
     /// directory where units lib file is located
-    std::string units_dir(nrnunitslib::NRNUNITSLIB_PATH);
+    std::string units_dir(NrnUnitsLib::get_path());
 
     /// true if ast should be converted to json
     bool json_ast(false);

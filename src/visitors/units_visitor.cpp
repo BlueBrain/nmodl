@@ -16,17 +16,20 @@
 namespace nmodl {
 
 void UnitsVisitor::visit_program(ast::Program* node) {
-    unit_driver.parse_file(units_dir);
+    units_driver.parse_file(units_dir);
     node->visit_children(this);
 }
 
+/**
+ * Unit definition is based only on pre-defined units, parse only the new unit
+ * and the pre-defined units (ex. (nA)    = (nanoamp) => nA  nanoamp)
+ * The UnitDef is converted to a string that is able to be parsed by the
+ * unit parser which was used for parsing the nrnunits.lib file
+ * On nrnunits.lib constant "1" is defined as "fuzz", so it must be converted
+ */
 void UnitsVisitor::visit_unit_def(ast::UnitDef* node) {
     std::stringstream ss;
-    // Unit definition is based only on pre-defined units, parse only the new unit
-    // and the pre-defined units (ex. (nA)    = (nanoamp) => nA  nanoamp)
-    // The UnitDef is converted to a string that is able to be parsed by the
-    // unit parser which was used for parsing the nrnunits.lib file
-    // On nrnunits.lib constant "1" is defined as "fuzz", so it must be converted
+
     if (node->get_unit2()->get_node_name() == "1") {
         ss << node->get_unit1()->get_node_name() << "\t"
            << "fuzz";
@@ -34,42 +37,55 @@ void UnitsVisitor::visit_unit_def(ast::UnitDef* node) {
         ss << node->get_unit1()->get_node_name() << "\t" << node->get_unit2()->get_node_name();
     }
 
-    unit_driver.parse_string(ss.str());
+    units_driver.parse_string(ss.str());
 
     if (verbose) {
         auto unit_name = node->get_node_name();
+        /// The value of the unit printed in the verbose output is the one
+        /// that will be printed to the .cpp file and not the value that
+        /// is calculated based on the UnitTable units value
         unit_name.erase(remove_if(unit_name.begin(), unit_name.end(), isspace), unit_name.end());
-        auto unit = unit_driver.table->get_unit(unit_name);
+        auto unit = units_driver.table->get_unit(unit_name);
         *units_details << std::fixed << std::setprecision(8) << unit->get_name() << " "
                        << unit->get_factor() << ":";
+        int i = 0;
+        auto constant = true;
         for (const auto& dims: unit->get_dims()) {
-            *units_details << " " << dims;
+            if (dims != 0) {
+                constant = false;
+                *units_details << " " << units_driver.table->get_base_unit_name(i) << dims;
+            }
+            i++;
+        }
+        if (constant) {
+            *units_details << " constant";
         }
         *units_details << "\n";
     }
 }
 
+/** The new unit definition is based on a factor combined with units or
+ * other defined units.
+ * In the first case the factor saved to the AST node and printed to
+ * .cpp file is the one defined on the modfile. The factor and the
+ * dimensions saved to the UnitTable are based on the factor and the
+ * units defined in the modfile, so this factor will be calculated
+ * based on the base units of the UnitTable.
+ * In the second case, the factor and the dimensions that are inserted
+ * to the UnitTable are based on the unit1 of the FactorDef, like MOD2C.
+ * However, the factor that is saved in the AST node and printed in the
+ * .cpp file is the factor of the unit1 devided by the factor of unit2.
+ * To parse the units defined in modfiles there are stringstreams
+ * created that are passed to the string parser, to be parsed by the
+ * unit parser used for parsing the nrnunits.lib file, which takes care
+ * of all the units calculations.
+ */
 void UnitsVisitor::visit_factor_def(ast::FactorDef* node) {
     std::stringstream ss;
-    // The new unit definition is based on a factor combined with units or
-    // other defined units.
-    // In the first case the factor saved to the AST node and printed to
-    // .cpp file is the one defined on the modfile. The factor and the
-    // dimensions saved to the UnitTable are based on the factor and the
-    // units defined in the modfile, so this factor will be calculated
-    // based on the base units of the UnitTable.
-    // In the second case, the factor and the dimensions that are inserted
-    // to the UniTable are based on the unit1 of the FactorDef, like MOD2C.
-    // However, the factor that is saved in the AST node and printed in the
-    // .cpp file is the factor of the unit1 devided by the factor of unit2.
-    // To parse the units defined in modfiles there are stringstreams
-    // created that are passed to the string parser, to be parsed by the
-    // unit parser used for parsing the nrnunits.lib file, which takes care
-    // of all the units calculations.
     auto node_has_value_defined_in_modfile = node->get_value() != NULL;
     if (node_has_value_defined_in_modfile) {
-        // In nrnunits.lib file "1" is defined as "fuzz", so there must
-        // be a conversion to be able to to parse "1" as unit
+        /// In nrnunits.lib file "1" is defined as "fuzz", so there must
+        /// be a conversion to be able to to parse "1" as unit
         if (node->get_unit1()->get_node_name() == "1") {
             ss << node->get_node_name() << "\t" << node->get_value()->get_value() << " fuzz";
         } else {
@@ -90,35 +106,45 @@ void UnitsVisitor::visit_factor_def(ast::FactorDef* node) {
             unit2_name = node->get_unit2()->get_node_name();
         };
         ss_unit1 << node->get_node_name() << "_unit1\t" << unit1_name;
-        unit_driver.parse_string(ss_unit1.str());
+        units_driver.parse_string(ss_unit1.str());
         ss_unit2 << node->get_node_name() << "_unit2\t" << unit2_name;
-        unit_driver.parse_string(ss_unit2.str());
+        units_driver.parse_string(ss_unit2.str());
         ss << node->get_node_name() << "\t" << unit1_name;
     }
 
-    unit_driver.parse_string(ss.str());
+    units_driver.parse_string(ss.str());
 
-    // If the FactorDef was done by using 2 units, there must be calculated
-    // the factors of both of them based on the UnitTable and then they must
-    // be divided to produce the unit's factor that will be printed to the
-    // .cpp file.
+    /// If the FactorDef was done by using 2 units, the factors of both of
+    /// them must be calculated based on the UnitTable and then they must
+    /// be divided to produce the unit's factor that will be printed to the
+    /// .cpp file.
     if (!node_has_value_defined_in_modfile) {
         auto node_unit_name = node->get_node_name();
-        auto unit1_factor = unit_driver.table->get_unit(node_unit_name + "_unit1")->get_factor();
-        auto unit2_factor = unit_driver.table->get_unit(node_unit_name + "_unit2")->get_factor();
+        auto unit1_factor = units_driver.table->get_unit(node_unit_name + "_unit1")->get_factor();
+        auto unit2_factor = units_driver.table->get_unit(node_unit_name + "_unit2")->get_factor();
         auto unit_factor = unit1_factor / unit2_factor;
         auto double_value_ptr = std::make_shared<ast::Double>(ast::Double(unit_factor));
         node->set_value(static_cast<std::shared_ptr<ast::Double>&&>(double_value_ptr));
     }
 
     if (verbose) {
-        auto unit = unit_driver.table->get_unit(node->get_node_name());
-        // print value of unit that will be printed to the .cpp file and not the value that is
-        // calculated based on the UnitTable units value
+        auto unit = units_driver.table->get_unit(node->get_node_name());
+        /// The value of the unit printed in the verbose output is the one
+        /// that will be printed to the .cpp file and not the value that
+        /// is calculated based on the UnitTable units value
         *units_details << std::fixed << std::setprecision(8) << unit->get_name() << " "
                        << node->get_value()->get_value() << ":";
+        int i = 0;
+        auto constant = true;
         for (const auto& dims: unit->get_dims()) {
-            *units_details << " " << dims;
+            if (dims != 0) {
+                constant = false;
+                *units_details << " " << units_driver.table->get_base_unit_name(i) << dims;
+            }
+            i++;
+        }
+        if (constant) {
+            *units_details << " constant";
         }
         *units_details << "\n";
     }

@@ -5160,7 +5160,7 @@ std::string run_units_visitor(const std::string& text) {
     auto ast = driver.ast();
 
     std::stringstream ss;
-    std::string units_lib_path(nrnunitslib::NRNUNITSLIB_PATH);
+    std::string units_lib_path(NrnUnitsLib::get_path());
     UnitsVisitor(units_lib_path, ss).visit_program(ast.get());
     return ss.str();
 }
@@ -5211,43 +5211,43 @@ SCENARIO("Units Visitor") {
         )";
 
         std::string output_nmodl = R"(
-        nA 0.00000000: 0 0 -1 1 0 0 0 0 0 0
-        mA 0.00100000: 0 0 -1 1 0 0 0 0 0 0
-        mV 0.00100000: 2 1 -2 -1 0 0 0 0 0 0
-        uS 0.00000100: -2 -1 1 2 0 0 0 0 0 0
-        nS 0.00000000: -2 -1 1 2 0 0 0 0 0 0
-        pS 0.00000000: -2 -1 1 2 0 0 0 0 0 0
-        umho 0.00000100: -2 -1 1 2 0 0 0 0 0 0
-        um 0.00000100: 1 0 0 0 0 0 0 0 0 0
-        mM 1.00000000: -3 0 0 0 0 0 0 0 0 0
-        uM 0.00100000: -3 0 0 0 0 0 0 0 0 0
-        msM 0.00100000: -3 0 1 0 0 0 0 0 0 0
-        fAm 0.00000000: 1 0 -1 1 0 0 0 0 0 0
-        mol 1.00000000: 0 0 0 0 0 0 0 0 0 0
-        M 1000.00000000: -3 0 0 0 0 0 0 0 0 0
-        uM1 0.00100000: -3 0 0 0 0 0 0 0 0 0
-        mA/cm2 0.00001000: -2 0 -1 1 0 0 0 0 0 0
-        molar 1000.00000000: -3 0 0 0 0 0 0 0 0 0
-        S 1.00000000: -2 -1 1 2 0 0 0 0 0 0
-        mse-1 1000.00000000: 0 0 -1 0 0 0 0 0 0 0
-        um3 0.00100000: 3 0 0 0 0 0 0 0 0 0
-        molar1 1000.00000000: -3 0 0 0 0 0 0 0 0 0
-        degK 1.00000000: 0 0 0 0 0 0 0 0 0 1
-        FARADAY1 96485.30900000: 0 0 0 1 0 0 0 0 0 0
-        FARADAY2 96.48530900: 0 0 0 1 0 0 0 0 0 0
-        FARADAY3 9.64853090: 0 0 0 1 0 0 0 0 0 0
-        PI 3.14159265: 0 0 0 0 0 0 0 0 0 0
-        R1 8.31449872: 2 1 -2 0 0 0 0 0 0 -1
-        R2 8.31400000: 2 1 -2 0 0 0 0 0 0 -1
-        R3 8314.49871704: 2 1 -2 0 0 0 0 0 0 -1
-        R4 8.31400000: 2 1 -2 0 0 0 0 0 0 -1
-        R5 8.31450000: 2 1 -2 0 0 0 0 0 0 -1
-        dummy1 123.45000000: 1 0 -2 0 0 0 0 0 0 0
-        dummy2 123450.00000000: 1 0 -2 0 0 0 0 0 0 0
-        dummy3 123.45000000: 1 0 -2 0 0 0 0 0 0 0
-        KTOMV 0.08530000: 2 1 -2 -1 0 0 0 0 0 -1
-        B 0.26000000: -1 0 0 -1 0 0 0 0 0 0
-        TEMP 25.00000000: 0 0 0 0 0 0 0 0 0 1
+        nA 0.00000000: sec-1 coul1
+        mA 0.00100000: sec-1 coul1
+        mV 0.00100000: m2 kg1 sec-2 coul-1
+        uS 0.00000100: m-2 kg-1 sec1 coul2
+        nS 0.00000000: m-2 kg-1 sec1 coul2
+        pS 0.00000000: m-2 kg-1 sec1 coul2
+        umho 0.00000100: m-2 kg-1 sec1 coul2
+        um 0.00000100: m1
+        mM 1.00000000: m-3
+        uM 0.00100000: m-3
+        msM 0.00100000: m-3 sec1
+        fAm 0.00000000: m1 sec-1 coul1
+        mol 1.00000000: constant
+        M 1000.00000000: m-3
+        uM1 0.00100000: m-3
+        mA/cm2 0.00001000: m-2 sec-1 coul1
+        molar 1000.00000000: m-3
+        S 1.00000000: m-2 kg-1 sec1 coul2
+        mse-1 1000.00000000: sec-1
+        um3 0.00100000: m3
+        molar1 1000.00000000: m-3
+        degK 1.00000000: K1
+        FARADAY1 96485.30900000: coul1
+        FARADAY2 96.48530900: coul1
+        FARADAY3 9.64853090: coul1
+        PI 3.14159265: constant
+        R1 8.31449872: m2 kg1 sec-2 K-1
+        R2 8.31400000: m2 kg1 sec-2 K-1
+        R3 8314.49871704: m2 kg1 sec-2 K-1
+        R4 8.31400000: m2 kg1 sec-2 K-1
+        R5 8.31450000: m2 kg1 sec-2 K-1
+        dummy1 123.45000000: m1 sec-2
+        dummy2 123450.00000000: m1 sec-2
+        dummy3 123.45000000: m1 sec-2
+        KTOMV 0.08530000: m2 kg1 sec-2 coul-1 K-1
+        B 0.26000000: m-1 coul-1
+        TEMP 25.00000000: K1
         )";
 
         THEN("Print the units that were added") {
