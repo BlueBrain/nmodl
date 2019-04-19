@@ -190,12 +190,12 @@ struct AST: public std::enable_shared_from_this<AST> {
     virtual void accept(Visitor* v) = 0;
 
     /**
-     * \brief visit children i.e. member of current AST node using current visitor
+     * \brief visit children i.e. member of current AST node using provided visitor
      *
      * Different nodes in the AST have different members (i.e. children). This method
      * recursively visits children using provided concrete visitor.
      *
-     * @param v Concrete visitor that will be used to recursively visit children
+     * @param v Concrete visitor that will be used to recursively visit node
      *
      * \note Below is an example of `visit_children` method implementation which shows
      *       ast::IndexedName node children are visited instead of node itself.
@@ -219,7 +219,9 @@ struct AST: public std::enable_shared_from_this<AST> {
      *
      * @return pointer to the clone/copy of the current node
      */
-    virtual AST* clone() = 0;
+    virtual AST* clone() {
+        throw std::logic_error("clone not implemented");
+    }
 
     /// \}
 
@@ -323,11 +325,12 @@ struct AST: public std::enable_shared_from_this<AST> {
     }
 
     /**
-     * \brief multiple by `-1` to the value of current ast node
+     * \brief Negate the value of current ast node
      *
      * Parser parse `-x` in two parts : `x` and then `-`. Once second token
      * `-` is encountered, the corresponding value of ast node needs to be
-     * multiplied by `-1`.
+     * multiplied by `-1` for ast::Number node types or apply `!` operator
+     for the nodes of type ast::Boolean.
      */
     virtual void negate() {
         throw std::runtime_error("negate not implemented");
