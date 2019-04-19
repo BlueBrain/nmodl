@@ -7,9 +7,9 @@
 
 #pragma once
 
-
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+
 #include "ast/ast.hpp"
 #include "lexer/modtoken.hpp"
 #include "symtab/symbol_table.hpp"
@@ -19,8 +19,6 @@ using namespace nmodl;
 using namespace ast;
 
 struct PyAST: public AST {
-  public:
-    using AST::AST;
 
     void visit_children(Visitor* v) override {
         PYBIND11_OVERLOAD_PURE(void,            // Return type
@@ -30,7 +28,9 @@ struct PyAST: public AST {
         );
     }
 
-    void accept(Visitor* v) override { PYBIND11_OVERLOAD_PURE(void, AST, accept, v); }
+    void accept(Visitor* v) override {
+        PYBIND11_OVERLOAD_PURE(void, AST, accept, v);
+    }
 
     AstNodeType get_node_type() override {
         PYBIND11_OVERLOAD_PURE(AstNodeType,    // Return type
@@ -44,13 +44,21 @@ struct PyAST: public AST {
         PYBIND11_OVERLOAD_PURE(std::string, AST, get_node_type_name, );
     }
 
-    std::string get_node_name() override { PYBIND11_OVERLOAD(std::string, AST, get_node_name, ); }
+    std::string get_node_name() override {
+        PYBIND11_OVERLOAD(std::string, AST, get_node_name, );
+    }
 
-    AST* clone() override { PYBIND11_OVERLOAD(AST*, AST, clone, ); }
+    AST* clone() override {
+        PYBIND11_OVERLOAD(AST*, AST, clone, );
+    }
 
-    std::shared_ptr<AST> get_shared_ptr() override { PYBIND11_OVERLOAD(std::shared_ptr<AST>, AST, get_shared_ptr, ); }
+    std::shared_ptr<AST> get_shared_ptr() override {
+        PYBIND11_OVERLOAD(std::shared_ptr<AST>, AST, get_shared_ptr, );
+    }
 
-    ModToken* get_token() override { PYBIND11_OVERLOAD(ModToken*, AST, get_token, ); }
+    ModToken* get_token() override {
+        PYBIND11_OVERLOAD(ModToken*, AST, get_token, );
+    }
 
     void set_symbol_table(symtab::SymbolTable* newsymtab) override {
         PYBIND11_OVERLOAD(void, AST, set_symbol_table, newsymtab);
@@ -59,15 +67,22 @@ struct PyAST: public AST {
     symtab::SymbolTable* get_symbol_table() override {
         PYBIND11_OVERLOAD(symtab::SymbolTable*, AST, get_symbol_table, );
     }
+
     std::shared_ptr<StatementBlock> get_statement_block() override {
         PYBIND11_OVERLOAD(std::shared_ptr<StatementBlock>, AST, get_statement_block, );
     }
 
-    void negate() override { PYBIND11_OVERLOAD(void, AST, negate, ); }
+    void negate() override {
+        PYBIND11_OVERLOAD(void, AST, negate, );
+    }
 
-    void set_name(std::string name) override { PYBIND11_OVERLOAD(void, AST, set_name, name); }
+    void set_name(std::string name) override {
+        PYBIND11_OVERLOAD(void, AST, set_name, name);
+    }
 
-    bool is_ast() override { PYBIND11_OVERLOAD(bool, AST, is_ast, ); }
+    bool is_ast() override {
+        PYBIND11_OVERLOAD(bool, AST, is_ast, );
+    }
 
     {% for node in nodes %}
 

@@ -172,7 +172,9 @@ namespace ast {
          *
          * @return pointer to token if exist otherwise nullptr
          */
-        {{ virtual(node) }}ModToken* get_token(){{ override(node) }} { return token.get(); }
+        {{ virtual(node) }}ModToken* get_token(){{ override(node) }} {
+            return token.get();
+        }
         {% endif %}
 
         {% if node.is_symtab_needed %}
