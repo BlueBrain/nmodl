@@ -21,6 +21,8 @@ namespace py = pybind11;
 using pybind11::literals::operator""_a;
 
 namespace nmodl {
+
+/** \brief docstring of python symbols */
 namespace docstring {
 
 static const char* driver = R"(

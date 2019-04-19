@@ -5,13 +5,16 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
-#include "pybind/pyast.hpp"
-#include "visitors/json_visitor.hpp"
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
+#include "pybind/pyast.hpp"
+#include "visitors/json_visitor.hpp"
+
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "OCDFAInspection"
+
+
 {% macro var(node) -%}
 {{ node.class_name | snake_case }}_
 {%- endmacro -%}
@@ -20,14 +23,15 @@
 {% for c in children %} {{ c.get_typename() }} {%- if not loop.last %}, {% endif %} {% endfor %}
 {%- endmacro -%}
 
-namespace py = pybind11;
 
+namespace py = pybind11;
 
 using namespace nmodl::ast;
 using nmodl::JSONVisitor;
-
 using pybind11::literals::operator""_a;
 
+
+namespace nmodl {
 namespace docstring {
 
 static const char *binaryop_enum = R"(
@@ -60,13 +64,15 @@ static const char *accept_method = R"(
         v (Visitor): the visitor
 )";
 
-}
+} // namespace docstring
+} // namespace nmodl
+
 
 void init_ast_module(py::module& m) {
 
     py::module m_ast = m.def_submodule("ast");
 
-    py::enum_<BinaryOp>(m_ast, "BinaryOp", docstring::binaryop_enum)
+    py::enum_<BinaryOp>(m_ast, "BinaryOp", nmodl::docstring::binaryop_enum)
             .value("BOP_ADDITION", BinaryOp::BOP_ADDITION)
             .value("BOP_SUBTRACTION", BinaryOp::BOP_SUBTRACTION)
             .value("BOP_MULTIPLICATION", BinaryOp::BOP_MULTIPLICATION)
@@ -83,18 +89,17 @@ void init_ast_module(py::module& m) {
             .value("BOP_EXACT_EQUAL", BinaryOp::BOP_EXACT_EQUAL)
             .export_values();
 
-    py::enum_<AstNodeType>(m_ast, "AstNodeType", docstring::astnodetype_enum)
+    py::enum_<AstNodeType>(m_ast, "AstNodeType", nmodl::docstring::astnodetype_enum)
     {% for node in nodes %}
             .value("{{ node.class_name|snake_case|upper }}", AstNodeType::{{ node.class_name|snake_case|upper }})
     {% endfor %}
             .export_values();
 
 
-
-    py::class_<AST, PyAST, std::shared_ptr<AST>> ast_(m_ast, "AST", docstring::ast_class);
+    py::class_<AST, PyAST, std::shared_ptr<AST>> ast_(m_ast, "AST", nmodl::docstring::ast_class);
     ast_.def(py::init<>())
-            .def("visit_children", &AST::visit_children, "v"_a, docstring::visitchildren_method)
-            .def("accept", &AST::accept, "v"_a, docstring::accept_method)
+            .def("visit_children", &AST::visit_children, "v"_a, nmodl::docstring::visitchildren_method)
+            .def("accept", &AST::accept, "v"_a, nmodl::docstring::accept_method)
             .def("get_shared_ptr", &AST::get_shared_ptr)
             .def("get_node_type", &AST::get_node_type)
             .def("get_node_type_name", &AST::get_node_type_name)

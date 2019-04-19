@@ -124,13 +124,14 @@ static const std::string ReactionOpNames[] = {"<->", "<<", "->"};
  * @brief Classes for implementing Abstract Syntax Tree (AST)
  * @{
  */
+
 /**
  * \brief Base class for all Abstract Syntax Tree node types
  *
  * Every node in the Abstract Syntax Tree is inherited from base class
  * ast::AST. This class provides base properties and pure virtual
  * functions that must be implemented by base classes. We inherit from
- * std::enable_shared_from_this to get a valid shared_ptr to this pointer.
+ * std::enable_shared_from_this to get a `shared_ptr` from `this` pointer.
  */
 struct AST: public std::enable_shared_from_this<AST> {
     /// \name Ctor & dtor

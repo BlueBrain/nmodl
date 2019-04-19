@@ -18,18 +18,40 @@
 using namespace nmodl;
 using namespace ast;
 
+
+/**
+ *
+ * @defgroup ast_python AST Python Classes
+ * @ingroup ast
+ * @brief AST classes for Python bindings
+ * @{
+ */
+
+/**
+ * \brief Class mirroring nmodl::ast::AST for Python bindings
+ *
+ * \details \copydetails nmodl::ast::AST
+ *
+ * The goal of this class is to only interface nmodl::ast::AST with
+ * the Python world using `pybind11`.
+ */
 struct PyAST: public AST {
 
     void visit_children(Visitor* v) override {
-        PYBIND11_OVERLOAD_PURE(void,            // Return type
-                               AST,             // Parent class
-                               visit_children,  // Name of function in C++ (must match Python name)
-                               v                // Argument(s)
+        PYBIND11_OVERLOAD_PURE(void,            /// Return type
+                               AST,             /// Parent class
+                               visit_children,  /// Name of function in C++ (must match Python name)
+                               v                /// Argument(s)
         );
     }
 
     void accept(Visitor* v) override {
         PYBIND11_OVERLOAD_PURE(void, AST, accept, v);
+    }
+
+
+    AST* clone() override {
+        PYBIND11_OVERLOAD(AST*, AST, clone, );
     }
 
     AstNodeType get_node_type() override {
@@ -48,20 +70,12 @@ struct PyAST: public AST {
         PYBIND11_OVERLOAD(std::string, AST, get_node_name, );
     }
 
-    AST* clone() override {
-        PYBIND11_OVERLOAD(AST*, AST, clone, );
-    }
-
     std::shared_ptr<AST> get_shared_ptr() override {
         PYBIND11_OVERLOAD(std::shared_ptr<AST>, AST, get_shared_ptr, );
     }
 
     ModToken* get_token() override {
         PYBIND11_OVERLOAD(ModToken*, AST, get_token, );
-    }
-
-    void set_symbol_table(symtab::SymbolTable* newsymtab) override {
-        PYBIND11_OVERLOAD(void, AST, set_symbol_table, newsymtab);
     }
 
     symtab::SymbolTable* get_symbol_table() override {
@@ -72,12 +86,16 @@ struct PyAST: public AST {
         PYBIND11_OVERLOAD(std::shared_ptr<StatementBlock>, AST, get_statement_block, );
     }
 
-    void negate() override {
-        PYBIND11_OVERLOAD(void, AST, negate, );
+    void set_symbol_table(symtab::SymbolTable* newsymtab) override {
+        PYBIND11_OVERLOAD(void, AST, set_symbol_table, newsymtab);
     }
 
     void set_name(std::string name) override {
         PYBIND11_OVERLOAD(void, AST, set_name, name);
+    }
+
+    void negate() override {
+        PYBIND11_OVERLOAD(void, AST, negate, );
     }
 
     bool is_ast() override {
@@ -92,3 +110,5 @@ struct PyAST: public AST {
 
     {% endfor %}
 };
+
+/** @} */  // end of ast_python
