@@ -216,6 +216,21 @@ namespace ast {
         /// \name Setters
         /// \{
 
+        {% if node.is_name_node %}
+        /**
+         * \brief Set name for the current ast node
+         *
+         * Some ast nodes have a member marked designated as node name (e.g. nodes
+         * derived from ast::Identifier). This method is used to set new name for those
+         * nodes. This useful for passes like nmodl::RenameVisitor.
+         *
+         * \sa AST::get_node_type_name AST::get_node_name
+         */
+        {{ virtual(node) }}void set_name(std::string name){{ override(node) }} {
+            value->set(name);
+        }
+        {% endif %}
+
         {% if node.has_token %}
         /**
          * \brief Set token for the current ast node
