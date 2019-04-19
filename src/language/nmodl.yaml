@@ -77,6 +77,10 @@
 # TODO : Add detailed information about YAML specification by porting old text based rule
 # specification
 
+## @package nmodl_yaml
+#  Specification of NMODL in YAML format
+#
+
 - AST:
     brief: "Top level AST base class"
     description: |
