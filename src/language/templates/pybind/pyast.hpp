@@ -24,9 +24,14 @@ using namespace ast;
  */
 
 /**
+ * @defgroup nmodl_python Python Interface
+ * @brief Python Bindings Implementation
+ */
+
+/**
  *
- * @defgroup ast_python AST Python Classes
- * @ingroup ast
+ * @defgroup ast_python AST Python Interface
+ * @ingroup nmodl_python
  * @brief Ast classes for Python bindings
  * @{
  */
@@ -36,8 +41,8 @@ using namespace ast;
  *
  * \details \copydetails nmodl::ast::Ast
  *
- * The goal of this class is to only interface nmodl::ast::Ast with
- * the Python world using `pybind11`.
+ * This class is used to interface nmodl::Ast with the Python
+ * world using `pybind11`.
  */
 struct PyAst: public Ast {
 

@@ -13,7 +13,18 @@
 
 namespace nmodl {
 
-/* Basic visitor implementation */
+/**
+ * @ingroup visitor_classes
+ * @{
+ */
+
+/**
+ * \brief Concrete visitor for all AST classes
+ *
+ * This class defines interface for all concrete visitors implementation.
+ * Note that this class only provides interface that could be implemented
+ * by concrete visitors like ast::AstVisitor.
+ */
 class AstVisitor : public Visitor {
 
     public:
@@ -21,5 +32,7 @@ class AstVisitor : public Visitor {
         void visit_{{ node.class_name|snake_case }}(ast::{{ node.class_name }}* node) override;
         {% endfor %}
 };
+
+/** @} */  // end of visitor_classes
 
 }  // namespace nmodl

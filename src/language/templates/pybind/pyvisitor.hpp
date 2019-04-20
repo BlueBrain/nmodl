@@ -15,6 +15,14 @@
 
 using namespace nmodl;
 
+/**
+ * \brief Class mirroring nmodl::Visitor for Python bindings
+ *
+ * \details \copydetails nmodl::Visitor
+ *
+ * This class is used to interface nmodl::Visitor with the Python
+ * world using `pybind11`.
+ */
 class PyVisitor : public Visitor {
 public:
     using Visitor::Visitor;
@@ -24,7 +32,15 @@ public:
     {% endfor %}
 };
 
-/* Python interface of basic visitor implementation */
+
+/**
+ * \brief Class mirroring nmodl::AstVisitor for Python bindings
+ *
+ * \details \copydetails nmodl::AstVisitor
+ *
+ * This class is used to interface nmodl::AstVisitor with the Python
+ * world using `pybind11`.
+ */
 class PyAstVisitor : public AstVisitor {
 public:
     using AstVisitor::AstVisitor;
