@@ -193,7 +193,7 @@ void InlineVisitor::visit_function_call(FunctionCall* node) {
     auto symbol = program_symtab->lookup_in_scope(function_name);
 
     /// nothing to do if called function is not defined or it's external
-    if (symbol == nullptr || symbol->is_external_symbol_only()) {
+    if (symbol == nullptr || symbol->is_symbol_external_variable()) {
         return;
     }
 
@@ -216,7 +216,7 @@ void InlineVisitor::visit_function_call(FunctionCall* node) {
     }
 
     if (inlined) {
-        symbol->inlined();
+        symbol->mark_inlined();
     }
 }
 

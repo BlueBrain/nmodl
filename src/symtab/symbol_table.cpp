@@ -103,7 +103,7 @@ std::vector<std::shared_ptr<Symbol>> SymbolTable::get_variables_with_properties(
                 variables.push_back(symbol);
             }
         } else {
-            if (symbol->has_properties(properties)) {
+            if (symbol->has_any_property(properties)) {
                 variables.push_back(symbol);
             }
         }
@@ -116,7 +116,7 @@ std::vector<std::shared_ptr<Symbol>> SymbolTable::get_variables(NmodlType with, 
     auto variables = get_variables_with_properties(with, true);
     decltype(variables) result;
     for (auto& variable: variables) {
-        if (!variable->has_properties(without)) {
+        if (!variable->has_any_property(without)) {
             result.push_back(variable);
         }
     }
@@ -279,8 +279,8 @@ void ModelSymbolTable::update_order(const std::shared_ptr<Symbol>& present_symbo
                                     const std::shared_ptr<Symbol>& new_symbol) {
     auto symbol = (present_symbol != nullptr) ? present_symbol : new_symbol;
 
-    bool is_parameter = new_symbol->has_properties(NmodlType::param_assign);
-    bool is_dependent_def = new_symbol->has_properties(NmodlType::dependent_def);
+    bool is_parameter = new_symbol->has_any_property(NmodlType::param_assign);
+    bool is_dependent_def = new_symbol->has_any_property(NmodlType::dependent_def);
 
     if (symbol->get_definition_order() == -1) {
         if (is_parameter || is_dependent_def) {
@@ -319,7 +319,7 @@ std::shared_ptr<Symbol> ModelSymbolTable::insert(const std::shared_ptr<Symbol>& 
      *  that means symbol are duplicate.
      */
     if (current_symtab->global_scope()) {
-        if (search_symbol->has_properties(symbol->get_properties())) {
+        if (search_symbol->has_any_property(symbol->get_properties())) {
             emit_message(symbol, search_symbol, true);
         } else {
             search_symbol->add_properties(symbol->get_properties());
@@ -463,7 +463,7 @@ void SymbolTable::Table::print(std::stringstream& stream, std::string title, int
                             text_alignment::right};
 
         for (const auto& symbol: symbols) {
-            auto is_external = symbol->is_external_symbol_only();
+            auto is_external = symbol->is_symbol_external_variable();
             auto read_count = symbol->get_read_count();
             auto write_count = symbol->get_write_count();
 

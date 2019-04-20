@@ -492,7 +492,7 @@ bool CodegenCVisitor::need_semicolon(Statement* node) {
 bool CodegenCVisitor::defined_method(const std::string& name) {
     auto function = program_symtab->lookup(name);
     auto properties = NmodlType::function_block | NmodlType::procedure_block;
-    return function && function->has_properties(properties);
+    return function && function->has_any_property(properties);
 }
 
 
@@ -735,10 +735,10 @@ bool CodegenCVisitor::is_constant_variable(std::string name) {
     auto symbol = program_symtab->lookup_in_scope(name);
     bool is_constant = false;
     if (symbol != nullptr) {
-        if (symbol->has_properties(NmodlType::read_ion_var)) {
+        if (symbol->has_any_property(NmodlType::read_ion_var)) {
             is_constant = true;
         }
-        if (symbol->has_properties(NmodlType::param_assign) && symbol->get_write_count() == 0) {
+        if (symbol->has_any_property(NmodlType::param_assign) && symbol->get_write_count() == 0) {
             is_constant = true;
         }
     }
@@ -776,7 +776,7 @@ void CodegenCVisitor::update_index_semantics() {
             info.first_pointer_var_index = index;
         }
         int size = var->get_length();
-        if (var->has_properties(NmodlType::pointer_var)) {
+        if (var->has_any_property(NmodlType::pointer_var)) {
             info.semantics.emplace_back(index, naming::POINTER_SEMANTIC, size);
         } else {
             info.semantics.emplace_back(index, naming::CORE_POINTER_SEMANTIC, size);
@@ -908,7 +908,7 @@ std::vector<IndexVariableInfo> CodegenCVisitor::get_int_variables() {
 
     for (const auto& var: info.pointer_variables) {
         auto name = var->get_name();
-        if (var->has_properties(NmodlType::pointer_var)) {
+        if (var->has_any_property(NmodlType::pointer_var)) {
             variables.emplace_back(make_symbol(name));
         } else {
             variables.emplace_back(make_symbol(name), true);
@@ -3036,7 +3036,7 @@ std::string CodegenCVisitor::get_range_var_float_type(const SymbolType& symbol) 
                     | NmodlType::bbcore_pointer_var
                     | NmodlType::extern_neuron_variable;
     // clang-format on
-    bool need_default_type = symbol->has_properties(with);
+    bool need_default_type = symbol->has_any_property(with);
     if (need_default_type) {
         return default_float_data_type();
     }

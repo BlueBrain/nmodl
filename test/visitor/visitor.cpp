@@ -200,19 +200,19 @@ SCENARIO("Symbol table generation and Perf stat visitor pass") {
 
             THEN("Can lookup for defined variables") {
                 auto symbol = symtab->lookup("m");
-                REQUIRE(symbol->has_properties(NmodlType::dependent_def));
-                REQUIRE_FALSE(symbol->has_properties(NmodlType::local_var));
+                REQUIRE(symbol->has_any_property(NmodlType::dependent_def));
+                REQUIRE_FALSE(symbol->has_any_property(NmodlType::local_var));
 
                 symbol = symtab->lookup("gNaTs2_tbar");
-                REQUIRE(symbol->has_properties(NmodlType::param_assign));
-                REQUIRE(symbol->has_properties(NmodlType::range_var));
+                REQUIRE(symbol->has_any_property(NmodlType::param_assign));
+                REQUIRE(symbol->has_any_property(NmodlType::range_var));
 
                 symbol = symtab->lookup("ena");
-                REQUIRE(symbol->has_properties(NmodlType::read_ion_var));
+                REQUIRE(symbol->has_any_property(NmodlType::read_ion_var));
             }
             THEN("Can lookup for defined functions") {
                 auto symbol = symtab->lookup("hBetaf");
-                REQUIRE(symbol->has_properties(NmodlType::function_block));
+                REQUIRE(symbol->has_any_property(NmodlType::function_block));
             }
             THEN("Non existent variable lookup returns nullptr") {
                 REQUIRE(symtab->lookup("xyz") == nullptr);

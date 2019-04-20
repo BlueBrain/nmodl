@@ -310,7 +310,7 @@ static std::map<std::string, DefinitionType> extern_definitions = {
  * The passes like scope checker needs to know if certain variable is
  * undefined and hence these needs to be inserted into symbol table
  */
-static std::vector<std::string> neuron_vars = {"t", "dt", "celsius", "v", "diam", "area"};
+static std::vector<std::string> NEURON_VARIABLES = {"t", "dt", "celsius", "v", "diam", "area"};
 
 
 /// Return token type for the keyword
@@ -363,7 +363,7 @@ TokenType token_type(const std::string& name) {
  */
 std::vector<std::string> get_external_variables() {
     std::vector<std::string> result;
-    result.insert(result.end(), details::neuron_vars.begin(), details::neuron_vars.end());
+    result.insert(result.end(), details::NEURON_VARIABLES.begin(), details::NEURON_VARIABLES.end());
     return result;
 }
 

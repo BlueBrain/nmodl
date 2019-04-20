@@ -193,7 +193,7 @@ void DefUseAnalyzeVisitor::visit_unsupported_node(ast::Node* node) {
 void DefUseAnalyzeVisitor::visit_function_call(ast::FunctionCall* node) {
     std::string function_name = node->get_node_name();
     auto symbol = global_symtab->lookup_in_scope(function_name);
-    if (symbol == nullptr || symbol->is_external_symbol_only()) {
+    if (symbol == nullptr || symbol->is_symbol_external_variable()) {
         node->visit_children(this);
     } else {
         visit_unsupported_node(node);
@@ -285,7 +285,7 @@ void DefUseAnalyzeVisitor::update_defuse_chain(const std::string& name) {
     assert(symbol != nullptr);
     // variable properties that make variable local
     auto properties = NmodlType::local_var | NmodlType::argument;
-    auto is_local = symbol->has_properties(properties);
+    auto is_local = symbol->has_any_property(properties);
 
     if (unsupported_node) {
         current_chain->push_back(DUInstance(DUState::U));

@@ -177,7 +177,7 @@ void PerfVisitor::visit_function_call(ast::FunctionCall* node) {
 
         auto symbol = current_symtab->lookup_in_scope(name);
         auto method_property = NmodlType::procedure_block | NmodlType::function_block;
-        if (symbol != nullptr && symbol->has_properties(method_property)) {
+        if (symbol != nullptr && symbol->has_any_property(method_property)) {
             current_block_perf.n_int_func_call++;
         } else {
             current_block_perf.n_ext_func_call++;
@@ -223,9 +223,9 @@ void PerfVisitor::count_variables() {
     auto variables = current_symtab->get_variables_with_properties(property);
 
     for (auto& variable: variables) {
-        if (!variable->has_properties(NmodlType::global_var)) {
+        if (!variable->has_any_property(NmodlType::global_var)) {
             num_instance_variables++;
-            if (variable->has_properties(NmodlType::param_assign)) {
+            if (variable->has_any_property(NmodlType::param_assign)) {
                 num_constant_instance_variables++;
             }
             if (variable->has_any_status(Status::localized)) {
@@ -253,11 +253,11 @@ void PerfVisitor::count_variables() {
     variables = current_symtab->get_variables_with_properties(property);
     num_global_variables = 0;
     for (auto& variable: variables) {
-        auto is_global = variable->has_properties(NmodlType::global_var);
+        auto is_global = variable->has_any_property(NmodlType::global_var);
         property = NmodlType::range_var | NmodlType::dependent_def;
-        if (!variable->has_properties(property) || is_global) {
+        if (!variable->has_any_property(property) || is_global) {
             num_global_variables++;
-            if (variable->has_properties(NmodlType::param_assign)) {
+            if (variable->has_any_property(NmodlType::param_assign)) {
                 num_constant_global_variables++;
             }
             if (variable->has_any_status(Status::localized)) {
@@ -399,12 +399,12 @@ void PerfVisitor::visit_unary_expression(ast::UnaryExpression* node) {
 bool PerfVisitor::symbol_to_skip(const std::shared_ptr<Symbol>& symbol) {
     bool skip = false;
 
-    auto is_method = symbol->has_properties(NmodlType::extern_method | NmodlType::function_block);
+    auto is_method = symbol->has_any_property(NmodlType::extern_method | NmodlType::function_block);
     if (is_method && under_function_call) {
         skip = true;
     }
 
-    is_method = symbol->has_properties(NmodlType::derivative_block | NmodlType::extern_method);
+    is_method = symbol->has_any_property(NmodlType::derivative_block | NmodlType::extern_method);
     if (is_method && under_solve_block) {
         skip = true;
     }
@@ -416,7 +416,7 @@ bool PerfVisitor::is_local_variable(const std::shared_ptr<Symbol>& symbol) {
     bool is_local = false;
     /// in the function when we write to function variable then consider it as local variable
     auto properties = NmodlType::local_var | NmodlType::argument | NmodlType::function_block;
-    if (symbol->has_properties(properties)) {
+    if (symbol->has_any_property(properties)) {
         is_local = true;
     }
     return is_local;
@@ -425,7 +425,7 @@ bool PerfVisitor::is_local_variable(const std::shared_ptr<Symbol>& symbol) {
 bool PerfVisitor::is_constant_variable(const std::shared_ptr<Symbol>& symbol) {
     bool is_constant = false;
     auto properties = NmodlType::param_assign;
-    if (symbol->has_properties(properties)) {
+    if (symbol->has_any_property(properties)) {
         is_constant = true;
     }
     return is_constant;

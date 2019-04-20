@@ -16,14 +16,6 @@ namespace nmodl {
 namespace symtab {
 namespace syminfo {
 
-/// check if any property is set
-bool has_property(const NmodlType& obj, NmodlType property) {
-    return static_cast<bool>(obj & property);
-}
-
-bool has_status(const Status& obj, Status state) {
-    return static_cast<bool>(obj & state);
-}
 
 /// helper function to convert properties to string
 std::vector<std::string> to_string_vector(const NmodlType& obj) {

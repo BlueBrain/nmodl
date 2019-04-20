@@ -68,7 +68,7 @@ void SymtabVisitor::setup_symbol(ast::Node* node, NmodlType property) {
     /// if so we have to return to avoid duplicate definition error.
     if (property == NmodlType::range_var || property == NmodlType::nonspecific_cur_var) {
         auto s = modsymtab->lookup(name);
-        if (s && s->has_properties(NmodlType::nonspecific_cur_var | NmodlType::range_var)) {
+        if (s && s->has_any_property(NmodlType::nonspecific_cur_var | NmodlType::range_var)) {
             s->add_property(property);
             return;
         }
