@@ -56,14 +56,14 @@ std::set<std::string> get_global_vars(ast::Program* node);
 
 
 /** Checks whether block contains a call to a perticular function */
-bool calls_function(ast::AST* node, const std::string& name);
+bool calls_function(ast::Ast* node, const std::string& name);
 
 
 /** Given AST node, return the NMODL string representation */
-std::string to_nmodl(ast::AST* node, const std::set<ast::AstNodeType>& exclude_types = {});
+std::string to_nmodl(ast::Ast* node, const std::set<ast::AstNodeType>& exclude_types = {});
 
 
 /** Given AST node, return the JSON string representation */
-std::string to_json(ast::AST* node, bool compact = false, bool expand = false);
+std::string to_json(ast::Ast* node, bool compact = false, bool expand = false);
 
 }  // namespace nmodl

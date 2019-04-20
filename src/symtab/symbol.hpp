@@ -17,7 +17,7 @@
 namespace nmodl {
 
 namespace ast {
-class AST;
+class Ast;
 }
 
 namespace symtab {
@@ -52,7 +52,7 @@ class Symbol {
     /// ast node where symbol encountered first time
     /// node is passed from visitor and hence we have
     /// raw pointer instead of shared_ptr
-    ast::AST* node = nullptr;
+    ast::Ast* node = nullptr;
 
     /// token for position information
     ModToken token;
@@ -93,7 +93,7 @@ class Symbol {
   public:
     Symbol() = delete;
 
-    Symbol(std::string name, ast::AST* node)
+    Symbol(std::string name, ast::Ast* node)
         : name(name)
         , node(node) {}
 
@@ -101,7 +101,7 @@ class Symbol {
         : name(name)
         , token(token) {}
 
-    Symbol(std::string name, ast::AST* node, ModToken token)
+    Symbol(std::string name, ast::Ast* node, ModToken token)
         : name(name)
         , node(node)
         , token(token) {}
@@ -149,7 +149,7 @@ class Symbol {
         write_count++;
     }
 
-    ast::AST* get_node() {
+    ast::Ast* get_node() {
         return node;
     }
 

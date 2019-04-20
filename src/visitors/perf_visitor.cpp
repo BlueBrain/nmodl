@@ -118,7 +118,7 @@ void PerfVisitor::add_perf_to_printer(PerfStat& perf) {
  *  all children visited, we get total performance by summing
  *  perfstat of all children.
  */
-void PerfVisitor::measure_performance(ast::AST* node) {
+void PerfVisitor::measure_performance(ast::Ast* node) {
     start_measurement = true;
 
     node->visit_children(this);

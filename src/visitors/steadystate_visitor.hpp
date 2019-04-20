@@ -44,7 +44,7 @@ class SteadystateVisitor: public AstVisitor {
     /// create new steady state derivative block for given solve block
     std::shared_ptr<ast::DerivativeBlock> create_steadystate_block(
         std::shared_ptr<ast::SolveBlock> solve_block,
-        const std::vector<std::shared_ptr<ast::AST>>& deriv_blocks);
+        const std::vector<std::shared_ptr<ast::Ast>>& deriv_blocks);
     const double STEADYSTATE_SPARSE_DT = 1e9;
     const double STEADYSTATE_DERIVIMPLICIT_DT = 1e-9;
 

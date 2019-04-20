@@ -161,7 +161,7 @@ static void add_external_symbols(symtab::ModelSymbolTable* symtab) {
 }
 
 
-void SymtabVisitor::setup_symbol_table(ast::AST* node, const std::string& name, bool is_global) {
+void SymtabVisitor::setup_symbol_table(ast::Ast* node, const std::string& name, bool is_global) {
     /// entering into new nmodl block
     auto symtab = modsymtab->enter_scope(name, node, is_global, node->get_symbol_table());
 

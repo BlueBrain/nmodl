@@ -36,7 +36,7 @@ namespace ast {
      * Every node in the ast has associated type represented by this
      * enum class.
      *
-     * \sa ast::AST::get_node_type ast::AST::get_node_type_name
+     * \sa ast::Ast::get_node_type ast::Ast::get_node_type_name
      */
     enum class AstNodeType {
         {% for node in nodes %}

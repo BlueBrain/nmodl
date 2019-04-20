@@ -134,7 +134,7 @@ namespace ast {
          *
          * \return ast node type i.e. ast::AstNodeType::{{ node.ast_enum_name }}
          *
-         * \sa AST::get_node_type_name
+         * \sa Ast::get_node_type_name
          */
         {{ virtual(node) }} AstNodeType get_node_type() override {
             return AstNodeType::{{ node.ast_enum_name }};
@@ -149,7 +149,7 @@ namespace ast {
          *
          * @return name of the node type as a string i.e. "{{ node.class_name }}"
          *
-         * \sa AST::get_node_name
+         * \sa Ast::get_node_name
          */
         {{ virtual(node) }} std::string get_node_type_name() override {
             return "{{ node.class_name }}";
@@ -158,7 +158,7 @@ namespace ast {
         /**
          * \brief Get std::shared_ptr from `this` pointer of the current ast node
          */
-        {{ virtual(node) }} std::shared_ptr<AST> get_shared_ptr() override {
+        {{ virtual(node) }} std::shared_ptr<Ast> get_shared_ptr() override {
             return std::static_pointer_cast<{{ node.class_name }}>(shared_from_this());
         }
 
@@ -226,7 +226,7 @@ namespace ast {
          * derived from ast::Identifier). This method is used to set new name for those
          * nodes. This useful for passes like nmodl::RenameVisitor.
          *
-         * \sa AST::get_node_type_name AST::get_node_name
+         * \sa Ast::get_node_type_name Ast::get_node_name
          */
         {{ virtual(node) }}void set_name(std::string name){{ override(node) }} {
             value->set(name);
@@ -285,20 +285,20 @@ namespace ast {
          *
          * @param v Concrete visitor that will be used to recursively visit children
          *
-         * \sa AST::visit_children for example.
+         * \sa Ast::visit_children for example.
          */
         {{ virtual(node) }} void visit_children (Visitor* v) override;
 
         /**
          * \brief accept (or visit) the current AST node using provided visitor
          *
-         * Instead of visiting children of AST node, like AST::visit_children,
+         * Instead of visiting children of AST node, like Ast::visit_children,
          * accept allows to visit the current node itself using provided concrete
          * visitor.
          *
          * @param v Concrete visitor that will be used to recursively visit node
          *
-         * \sa AST::accept for example.
+         * \sa Ast::accept for example.
          */
         {{ virtual(node) }} void accept(Visitor* v) override {
             v->visit_{{ node.class_name | snake_case }}(this);

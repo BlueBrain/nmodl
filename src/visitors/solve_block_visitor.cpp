@@ -19,7 +19,7 @@ void SolveBlockVisitor::visit_breakpoint_block(ast::BreakpointBlock* node) {
 }
 
 /// check if given node contains sympy solution
-static bool has_sympy_solution(ast::AST* node) {
+static bool has_sympy_solution(ast::Ast* node) {
     return !AstLookupVisitor().lookup(node, ast::AstNodeType::EIGEN_NEWTON_SOLVER_BLOCK).empty();
 }
 

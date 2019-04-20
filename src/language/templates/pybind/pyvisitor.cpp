@@ -154,9 +154,9 @@ void init_visitor_module(py::module& m) {
         .def(py::init<ast::AstNodeType>())
         .def("get_nodes", &AstLookupVisitor::get_nodes)
         .def("clear", &AstLookupVisitor::clear)
-        .def("lookup", (std::vector<std::shared_ptr<ast::AST>> (AstLookupVisitor::*)(ast::AST*)) &AstLookupVisitor::lookup)
-        .def("lookup", (std::vector<std::shared_ptr<ast::AST>> (AstLookupVisitor::*)(ast::AST*, ast::AstNodeType)) &AstLookupVisitor::lookup)
-        .def("lookup", (std::vector<std::shared_ptr<ast::AST>> (AstLookupVisitor::*)(ast::AST*, std::vector<ast::AstNodeType>&)) &AstLookupVisitor::lookup)
+        .def("lookup", (std::vector<std::shared_ptr<ast::Ast>> (AstLookupVisitor::*)(ast::Ast*)) &AstLookupVisitor::lookup)
+        .def("lookup", (std::vector<std::shared_ptr<ast::Ast>> (AstLookupVisitor::*)(ast::Ast*, ast::AstNodeType)) &AstLookupVisitor::lookup)
+        .def("lookup", (std::vector<std::shared_ptr<ast::Ast>> (AstLookupVisitor::*)(ast::Ast*, std::vector<ast::AstNodeType>&)) &AstLookupVisitor::lookup)
     {% for node in nodes %}
         .def("visit_{{ node.class_name | snake_case }}", &AstLookupVisitor::visit_{{ node.class_name | snake_case }})
         {% if loop.last -%};{% endif %}

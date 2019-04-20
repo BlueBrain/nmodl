@@ -329,7 +329,7 @@ void DefUseAnalyzeVisitor::start_new_chain(DUState state) {
     current_chain = &current_chain->back().children;
 }
 
-DUChain DefUseAnalyzeVisitor::analyze(ast::AST* node, const std::string& name) {
+DUChain DefUseAnalyzeVisitor::analyze(ast::Ast* node, const std::string& name) {
     /// re-initialize state
     variable_name = name;
     visiting_lhs = false;

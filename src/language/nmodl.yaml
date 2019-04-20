@@ -81,7 +81,7 @@
 #  Specification of NMODL in YAML format
 #
 
-- AST:
+- Ast:
     brief: "Top level AST base class"
     description: |
                   Ast is a top level, abstract base class defining the interface

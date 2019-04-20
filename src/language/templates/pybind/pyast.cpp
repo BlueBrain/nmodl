@@ -96,23 +96,23 @@ void init_ast_module(py::module& m) {
             .export_values();
 
 
-    py::class_<AST, PyAST, std::shared_ptr<AST>> ast_(m_ast, "AST", nmodl::docstring::ast_class);
+    py::class_<Ast, PyAst, std::shared_ptr<Ast>> ast_(m_ast, "Ast", nmodl::docstring::ast_class);
     ast_.def(py::init<>())
-            .def("visit_children", &AST::visit_children, "v"_a, nmodl::docstring::visitchildren_method)
-            .def("accept", &AST::accept, "v"_a, nmodl::docstring::accept_method)
-            .def("get_shared_ptr", &AST::get_shared_ptr)
-            .def("get_node_type", &AST::get_node_type)
-            .def("get_node_type_name", &AST::get_node_type_name)
-            .def("get_node_name", &AST::get_node_name)
-            .def("clone", &AST::clone)
-            .def("get_token", &AST::get_token)
-            .def("get_symbol_table", &AST::get_symbol_table, py::return_value_policy::reference)
-            .def("get_statement_block", &AST::get_statement_block)
-            .def("negate", &AST::negate)
-            .def("set_name", &AST::set_name)
-            .def("is_ast", &AST::is_ast)
+            .def("visit_children", &Ast::visit_children, "v"_a, nmodl::docstring::visitchildren_method)
+            .def("accept", &Ast::accept, "v"_a, nmodl::docstring::accept_method)
+            .def("get_shared_ptr", &Ast::get_shared_ptr)
+            .def("get_node_type", &Ast::get_node_type)
+            .def("get_node_type_name", &Ast::get_node_type_name)
+            .def("get_node_name", &Ast::get_node_name)
+            .def("clone", &Ast::clone)
+            .def("get_token", &Ast::get_token)
+            .def("get_symbol_table", &Ast::get_symbol_table, py::return_value_policy::reference)
+            .def("get_statement_block", &Ast::get_statement_block)
+            .def("negate", &Ast::negate)
+            .def("set_name", &Ast::set_name)
+            .def("is_ast", &Ast::is_ast)
     {% for node in nodes %}
-    .def("is_{{ node.class_name | snake_case }}", &AST::is_{{ node.class_name | snake_case }})
+    .def("is_{{ node.class_name | snake_case }}", &Ast::is_{{ node.class_name | snake_case }})
     {% if loop.last -%};{% endif %}
     {% endfor %}
 

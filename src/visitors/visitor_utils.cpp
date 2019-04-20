@@ -150,7 +150,7 @@ std::set<std::string> get_global_vars(Program* node) {
 }
 
 
-bool calls_function(ast::AST* node, const std::string& name) {
+bool calls_function(ast::Ast* node, const std::string& name) {
     auto lv = AstLookupVisitor(ast::AstNodeType::FUNCTION_CALL);
     for (const auto& f: lv.lookup(node)) {
         if (std::dynamic_pointer_cast<ast::FunctionCall>(f)->get_node_name() == name) {
@@ -161,14 +161,14 @@ bool calls_function(ast::AST* node, const std::string& name) {
 }
 
 
-std::string to_nmodl(ast::AST* node, const std::set<ast::AstNodeType>& exclude_types) {
+std::string to_nmodl(ast::Ast* node, const std::set<ast::AstNodeType>& exclude_types) {
     std::stringstream stream;
     NmodlPrintVisitor v(stream, exclude_types);
     node->accept(&v);
     return stream.str();
 }
 
-std::string to_json(ast::AST* node, bool compact, bool expand) {
+std::string to_json(ast::Ast* node, bool compact, bool expand) {
     std::stringstream stream;
     JSONVisitor v(stream);
     v.compact_json(compact);

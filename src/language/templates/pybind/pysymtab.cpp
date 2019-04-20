@@ -161,7 +161,7 @@ void init_symtab_module(py::module& m) {
 
 
     py::class_<Symbol, std::shared_ptr<Symbol>> symbol(m_symtab, "Symbol", docstring::symbol_class);
-    symbol.def(py::init<std::string, ast::AST*>(), "name"_a, "node"_a);
+    symbol.def(py::init<std::string, ast::Ast*>(), "name"_a, "node"_a);
     symbol.def("get_token", &Symbol::get_token)
             .def("is_variable", &Symbol::is_variable)
             .def("is_external_symbol_only", &Symbol::is_external_symbol_only)
@@ -178,7 +178,7 @@ void init_symtab_module(py::module& m) {
             .def("__str__", &Symbol::to_string);
 
     py::class_<SymbolTable> symbol_table(m_symtab, "SymbolTable", docstring::symboltable_class);
-    symbol_table.def(py::init<std::string, ast::AST*, bool>(), "name"_a, "node"_a, "global"_a);
+    symbol_table.def(py::init<std::string, ast::Ast*, bool>(), "name"_a, "node"_a, "global"_a);
     symbol_table.def("name", &SymbolTable::name)
             .def("type", &SymbolTable::type)
             .def("title", &SymbolTable::title)

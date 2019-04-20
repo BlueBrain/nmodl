@@ -229,7 +229,7 @@ class ChildNode(BaseNode):
                           *
                           * @return name of the node as std::string
                           *
-                          * \\sa AST::get_node_type_name
+                          * \\sa Ast::get_node_type_name
                           */
                          virtual std::string get_node_name() override {{
                              return {self.varname}->{method_name}();

@@ -349,7 +349,7 @@ std::shared_ptr<Symbol> ModelSymbolTable::insert(const std::shared_ptr<Symbol>& 
  *  them we simply append counter.
  *  \todo We should add position information to make name unique
  */
-std::string ModelSymbolTable::get_unique_name(const std::string& name, AST* node, bool is_global) {
+std::string ModelSymbolTable::get_unique_name(const std::string& name, Ast* node, bool is_global) {
     static int block_counter = 0;
     std::string new_name(name);
     if (is_global) {
@@ -369,7 +369,7 @@ std::string ModelSymbolTable::get_unique_name(const std::string& name, AST* node
  *  symbol table within a node.
  */
 SymbolTable* ModelSymbolTable::enter_scope(const std::string& name,
-                                           AST* node,
+                                           Ast* node,
                                            bool global,
                                            SymbolTable* node_symtab) {
     if (node == nullptr) {

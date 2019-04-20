@@ -129,7 +129,7 @@ class PerfVisitor: public AstVisitor {
 
     void count_variables();
 
-    void measure_performance(ast::AST* node);
+    void measure_performance(ast::Ast* node);
 
     void print_memory_usage();
 

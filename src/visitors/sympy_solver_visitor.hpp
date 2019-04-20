@@ -83,7 +83,7 @@ class SympySolverVisitor: public AstVisitor {
     void solve_non_linear_system(const std::vector<std::string>& pre_solve_statements = {});
 
     /// return NMODL string version of node, excluding any units
-    static std::string to_nmodl_for_sympy(ast::AST* node) {
+    static std::string to_nmodl_for_sympy(ast::Ast* node) {
         return nmodl::to_nmodl(node, {ast::AstNodeType::UNIT, ast::AstNodeType::UNIT_DEF});
     }
 

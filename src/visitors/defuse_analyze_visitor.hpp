@@ -284,7 +284,7 @@ class DefUseAnalyzeVisitor: public AstVisitor {
     virtual void visit_argument(ast::Argument* /*node*/) override {}
 
     /// compute def-use chain for a variable within the node
-    DUChain analyze(ast::AST* node, const std::string& name);
+    DUChain analyze(ast::Ast* node, const std::string& name);
 };
 
 }  // namespace nmodl

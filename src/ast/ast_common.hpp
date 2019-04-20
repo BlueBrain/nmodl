@@ -129,17 +129,17 @@ static const std::string ReactionOpNames[] = {"<->", "<<", "->"};
  * \brief Base class for all Abstract Syntax Tree node types
  *
  * Every node in the Abstract Syntax Tree is inherited from base class
- * ast::AST. This class provides base properties and pure virtual
+ * ast::Ast. This class provides base properties and pure virtual
  * functions that must be implemented by base classes. We inherit from
  * std::enable_shared_from_this to get a `shared_ptr` from `this` pointer.
  */
-struct AST: public std::enable_shared_from_this<AST> {
+struct Ast: public std::enable_shared_from_this<Ast> {
     /// \name Ctor & dtor
     /// \{
 
-    AST() = default;
+    Ast() = default;
 
-    virtual ~AST() {}
+    virtual ~Ast() {}
 
     /// \}
 
@@ -164,14 +164,14 @@ struct AST: public std::enable_shared_from_this<AST> {
      *
      * @return name of the node type as a string
      *
-     * \sa AST::get_node_name
+     * \sa Ast::get_node_name
      */
     virtual std::string get_node_type_name() = 0;
 
     /**
      * \brief accept (or visit) the current AST node using current visitor
      *
-     * Instead of visiting children of AST node, like AST::visit_children,
+     * Instead of visiting children of AST node, like Ast::visit_children,
      * accept allows to visit the current node itself using the concrete
      * visitor provided.
      *
@@ -220,7 +220,7 @@ struct AST: public std::enable_shared_from_this<AST> {
      *
      * @return pointer to the clone/copy of the current node
      */
-    virtual AST* clone() {
+    virtual Ast* clone() {
         throw std::logic_error("clone not implemented");
     }
 
@@ -240,7 +240,7 @@ struct AST: public std::enable_shared_from_this<AST> {
      *
      * @return name of the node as std::string
      *
-     * \sa AST::get_node_type_name
+     * \sa Ast::get_node_type_name
      */
     virtual std::string get_node_name() {
         throw std::logic_error("get_node_name() not implemented");
@@ -319,7 +319,7 @@ struct AST: public std::enable_shared_from_this<AST> {
      * derived from ast::Identifier). This method is used to set new name for those
      * nodes. This useful for passes like nmodl::RenameVisitor.
      *
-     * \sa AST::get_node_type_name AST::get_node_name
+     * \sa Ast::get_node_type_name Ast::get_node_name
      */
     virtual void set_name(std::string /*name*/) {
         throw std::runtime_error("set_name not implemented");
@@ -339,13 +339,13 @@ struct AST: public std::enable_shared_from_this<AST> {
     /// \}
 
     /// get std::shared_ptr from `this` pointer of the current ast node
-    virtual std::shared_ptr<AST> get_shared_ptr() {
-        return std::static_pointer_cast<AST>(shared_from_this());
+    virtual std::shared_ptr<Ast> get_shared_ptr() {
+        return std::static_pointer_cast<Ast>(shared_from_this());
     }
 
     /**
-     *\brief Check if the ast node is an instance of ast::AST
-     * @return true if object of type ast::AST
+     *\brief Check if the ast node is an instance of ast::Ast
+     * @return true if object of type ast::Ast
      */
     virtual bool is_ast() {
         return true;
@@ -1184,8 +1184,8 @@ struct AST: public std::enable_shared_from_this<AST> {
     }
 
     /**
-     *\brief Check if the ast node is an instance of ast::AST
-     * @return true if object of type ast::AST
+     *\brief Check if the ast node is an instance of ast::Ast
+     * @return true if object of type ast::Ast
      */
     virtual bool is_partial_boundary() {
         return false;

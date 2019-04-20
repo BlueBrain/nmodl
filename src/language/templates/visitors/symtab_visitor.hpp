@@ -35,7 +35,7 @@ public:
 
     void setup_symbol(ast::Node* node, symtab::syminfo::NmodlType property);
 
-    void setup_symbol_table(ast::AST* node, const std::string& name, bool is_global);
+    void setup_symbol_table(ast::Ast* node, const std::string& name, bool is_global);
 
     void setup_symbol_table_for_program_block(ast::Program* node);
 

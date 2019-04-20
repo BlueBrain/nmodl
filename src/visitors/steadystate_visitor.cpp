@@ -25,7 +25,7 @@ using symtab::syminfo::NmodlType;
 
 std::shared_ptr<ast::DerivativeBlock> SteadystateVisitor::create_steadystate_block(
     std::shared_ptr<ast::SolveBlock> solve_block,
-    const std::vector<std::shared_ptr<ast::AST>>& deriv_blocks) {
+    const std::vector<std::shared_ptr<ast::Ast>>& deriv_blocks) {
     // new block to be returned
     std::shared_ptr<ast::DerivativeBlock> ss_block;
 

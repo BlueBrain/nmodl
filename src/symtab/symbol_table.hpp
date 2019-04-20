@@ -74,7 +74,7 @@ class SymbolTable {
     Table table;
 
     /// pointer to ast node for which current block symbol created
-    ast::AST* node = nullptr;
+    ast::Ast* node = nullptr;
 
     /// true if current symbol table is global. blocks like neuron,
     /// parameter defines global variables and hence they go into
@@ -91,7 +91,7 @@ class SymbolTable {
     std::map<std::string, std::shared_ptr<SymbolTable>> children;
 
   public:
-    SymbolTable(std::string name, ast::AST* node, bool global = false)
+    SymbolTable(std::string name, ast::Ast* node, bool global = false)
         : symtab_name(name)
         , node(node)
         , global(global) {}
@@ -195,7 +195,7 @@ class ModelSymbolTable {
     SymbolTable* current_symtab = nullptr;
 
     /// return unique name by appending some counter value
-    std::string get_unique_name(const std::string& name, ast::AST* node, bool is_global);
+    std::string get_unique_name(const std::string& name, ast::Ast* node, bool is_global);
 
     /// name of top level global symbol table
     const std::string GLOBAL_SYMTAB_NAME = "NMODL_GLOBAL";
@@ -225,7 +225,7 @@ class ModelSymbolTable {
   public:
     /// entering into new nmodl block
     SymbolTable* enter_scope(const std::string& name,
-                             ast::AST* node,
+                             ast::Ast* node,
                              bool global,
                              SymbolTable* node_symtab);
 

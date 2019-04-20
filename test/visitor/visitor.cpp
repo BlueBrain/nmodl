@@ -2052,7 +2052,7 @@ SCENARIO("Running visitor passes multiple time") {
 // Ast lookup visitor tests
 //=============================================================================
 
-std::vector<std::shared_ptr<ast::AST>> run_lookup_visitor(ast::Program* node,
+std::vector<std::shared_ptr<ast::Ast>> run_lookup_visitor(ast::Program* node,
                                                           std::vector<AstNodeType>& types) {
     AstLookupVisitor v;
     return v.lookup(node, types);
