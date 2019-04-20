@@ -250,7 +250,10 @@ inline bool has_status(const Status& obj, Status state) {
 std::ostream& operator<<(std::ostream& os, const syminfo::NmodlType& obj);
 std::ostream& operator<<(std::ostream& os, const syminfo::Status& obj);
 
+/// helper function to convert nmodl properties to string
 std::vector<std::string> to_string_vector(const syminfo::NmodlType& obj);
+
+/// helper function to convert symbol status to string
 std::vector<std::string> to_string_vector(const syminfo::Status& obj);
 
 template <typename T>

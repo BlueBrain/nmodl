@@ -205,7 +205,6 @@ void init_symtab_module(py::module& m) {
     py::class_<SymbolTable> symbol_table(m_symtab, "SymbolTable", docstring::symbol_table_class);
     symbol_table.def(py::init<std::string, ast::Ast*, bool>(), "name"_a, "node"_a, "global"_a);
     symbol_table.def("name", &SymbolTable::name)
-        .def("type", &SymbolTable::type)
         .def("title", &SymbolTable::title)
         .def("is_method_defined", &SymbolTable::is_method_defined)
         .def("get_variables", &SymbolTable::get_variables)

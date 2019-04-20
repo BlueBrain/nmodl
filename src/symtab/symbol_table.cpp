@@ -20,6 +20,7 @@ using namespace ast;
 using syminfo::NmodlType;
 using syminfo::Status;
 
+
 int SymbolTable::Table::counter = 0;
 
 /**
@@ -54,10 +55,6 @@ SymbolTable::SymbolTable(const SymbolTable& table) {
 }
 
 
-std::string SymbolTable::type() const {
-    return node->get_node_type_name();
-}
-
 bool SymbolTable::is_method_defined(const std::string& name) const {
     auto symbol = lookup_in_scope(name);
     if (symbol != nullptr) {
@@ -71,6 +68,7 @@ bool SymbolTable::is_method_defined(const std::string& name) const {
     return false;
 }
 
+
 std::string SymbolTable::position() const {
     auto token = node->get_token();
     std::string position;
@@ -83,7 +81,6 @@ std::string SymbolTable::position() const {
 }
 
 
-/// insert new symbol table of one of the children block
 void SymbolTable::insert_table(const std::string& name, std::shared_ptr<SymbolTable> table) {
     if (children.find(name) != children.end()) {
         throw std::runtime_error("Trying to re-insert SymbolTable " + name);
@@ -376,10 +373,6 @@ SymbolTable* ModelSymbolTable::enter_scope(const std::string& name,
         throw std::runtime_error("Can't enter with empty node");
     }
 
-    if (node->is_breakpoint_block()) {
-        breakpoint_exist = true;
-    }
-
     /**
      *  All global blocks in mod file have same global symbol table. If there
      *  is already symbol table setup in global scope, return the same.
@@ -494,8 +487,9 @@ void SymbolTable::Table::print(std::stringstream& stream, std::string title, int
 
 
 /// construct title for symbol table
-std::string SymbolTable::title() {
-    auto name = symtab_name + " [" + type() + " IN " + get_parent_table_name() + "] ";
+std::string SymbolTable::title() const {
+    auto node_type = node->get_node_type_name();
+    auto name = symtab_name + " [" + node_type + " IN " + get_parent_table_name() + "] ";
     auto location = "POSITION : " + position();
     auto scope = global ? "GLOBAL" : "LOCAL";
     return name + location + " SCOPE : " + scope;
@@ -520,11 +514,6 @@ void SymbolTable::print(std::stringstream& ss, int level) {
             next_level--;
         }
     }
-}
-
-
-void ModelSymbolTable::print(std::stringstream& ss) {
-    symtab->print(ss, 0);
 }
 
 }  // namespace symtab

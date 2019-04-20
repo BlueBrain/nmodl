@@ -25,9 +25,7 @@ class Ast;
 namespace symtab {
 
 /**
- * @defgroup sym_tab Symbol Table Infrastructure
- * @brief All Symbol Table implementation details
- *
+ * @ingroup sym_tab
  * @{
  */
 

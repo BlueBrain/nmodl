@@ -17,7 +17,6 @@ namespace symtab {
 namespace syminfo {
 
 
-/// helper function to convert properties to string
 std::vector<std::string> to_string_vector(const NmodlType& obj) {
     std::vector<std::string> properties;
 
@@ -206,7 +205,6 @@ std::ostream& operator<<(std::ostream& os, const NmodlType& obj) {
     os << to_string(obj);
     return os;
 }
-
 
 std::ostream& operator<<(std::ostream& os, const Status& obj) {
     os << to_string(obj);

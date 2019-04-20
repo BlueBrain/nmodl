@@ -54,6 +54,7 @@ span.keyword {
 body {
     max-width: 1440px;
     margin: auto;
+    background: #404040;
 }
 
 #side-nav {
@@ -64,6 +65,7 @@ body {
 }
 
 div#titlearea {
+    background: white;
     background-image: url(background.png);
 }
 */

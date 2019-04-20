@@ -154,7 +154,6 @@ SCENARIO("Symbol table operations") {
             THEN("all members are initialized") {
                 REQUIRE(table->under_global_scope());
                 REQUIRE_THAT(table->name(), Catch::Contains("Na"));
-                REQUIRE_THAT(table->type(), Catch::Contains("Program"));
                 REQUIRE_THAT(table->get_parent_table_name(), Catch::Contains("None"));
                 REQUIRE_THAT(table->position(), Catch::Contains("UNKNOWN"));
             }
