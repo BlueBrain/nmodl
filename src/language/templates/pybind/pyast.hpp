@@ -18,6 +18,10 @@
 using namespace nmodl;
 using namespace ast;
 
+/**
+ * \file
+ * \brief Base AST class for Python bindings
+ */
 
 /**
  *

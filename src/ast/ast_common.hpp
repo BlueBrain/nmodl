@@ -148,7 +148,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
     /// \{
 
     /**
-     * \brief return type (ast::AstNodeType) of ast node
+     * \brief Return type (ast::AstNodeType) of AST node
      *
      * Every node in the ast has a type defined in ast::AstNodeType.
      * This type is can be used to check/compare node types.
@@ -156,7 +156,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
     virtual AstNodeType get_node_type() = 0;
 
     /**
-     * \brief return type (ast::AstNodeType) of ast node as std::string
+     * \brief Return type (ast::AstNodeType) of ast node as std::string
      *
      * Every node in the ast has a type defined in ast::AstNodeType.
      * This type name can be returned as a std::string for printing
@@ -169,7 +169,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
     virtual std::string get_node_type_name() = 0;
 
     /**
-     * \brief accept (or visit) the current AST node using current visitor
+     * \brief Accept (or visit) the AST node using current visitor
      *
      * Instead of visiting children of AST node, like Ast::visit_children,
      * accept allows to visit the current node itself using the concrete
@@ -191,7 +191,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
     virtual void accept(Visitor* v) = 0;
 
     /**
-     * \brief visit children i.e. member of current AST node using provided visitor
+     * \brief Visit children i.e. member of AST node using provided visitor
      *
      * Different nodes in the AST have different members (i.e. children). This method
      * recursively visits children using provided concrete visitor.
@@ -211,7 +211,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
     virtual void visit_children(Visitor* v) = 0;
 
     /**
-     * \brief create a copy of the current node
+     * \brief Create a copy of the current node
      *
      * Recursively make a new copy/clone of the current node including
      * all members and return a pointer to the node. This is used for
@@ -231,7 +231,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
     /// \{
 
     /**
-     * \brief return name of of the node
+     * \brief Return name of of the node
      *
      * Some ast nodes have a member marked designated as node name. For example,
      * in case of ast::FunctionCall, name of the function is returned as a node
@@ -247,7 +247,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
     }
 
     /**
-     * \brief return associated token for the current ast node
+     * \brief Return associated token for the AST node
      *
      * Not all ast nodes have token information. For example, nmodl::CnexpSolveVisitor
      * can insert new nodes in the ast as a solution of ODEs. In this case, we return
@@ -260,9 +260,9 @@ struct Ast: public std::enable_shared_from_this<Ast> {
     }
 
     /**
-     * \brief return associated symbol table for the current ast node
+     * \brief Return associated symbol table for the AST node
      *
-     * Only certain ast nodes (e.g. inherited from ast::Block) have associated
+     * Certain ast nodes (e.g. inherited from ast::Block) have associated
      * symbol table. These nodes have nmodl::symtab::SymbolTable as member
      * and it can be accessed using this method.
      *
@@ -275,7 +275,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
     }
 
     /**
-     * \brief return associated statement block for the current ast node
+     * \brief Return associated statement block for the AST node
      *
      * Top level block nodes encloses all statements in the ast::StatementBlock.
      * For example, ast::BreakpointBlock has all statements in curly brace (`{ }`)
@@ -289,7 +289,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *     }
      * \endcode
      *
-     * These top level ast nodes implement this method to return enclosing statement block.
+     * This method return enclosing statement block.
      *
      * @return pointer to the statement block if exist
      *
@@ -300,7 +300,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
     }
 
     /**
-     * \brief set symbol table for the current ast node
+     * \brief Set symbol table for the AST node
      *
      * Top level, block scoped nodes store symbol table in the ast node.
      * nmodl::SymtabVisitor then used this method to setup symbol table
@@ -313,7 +313,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
     }
 
     /**
-     * \brief set name for the current ast node
+     * \brief Set name for the AST node
      *
      * Some ast nodes have a member marked designated as node name (e.g. nodes
      * derived from ast::Identifier). This method is used to set new name for those
@@ -326,7 +326,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
     }
 
     /**
-     * \brief Negate the value of current ast node
+     * \brief Negate the value of AST node
      *
      * Parser parse `-x` in two parts : `x` and then `-`. Once second token
      * `-` is encountered, the corresponding value of ast node needs to be
@@ -338,7 +338,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
     }
     /// \}
 
-    /// get std::shared_ptr from `this` pointer of the current ast node
+    /// get std::shared_ptr from `this` pointer of the AST node
     virtual std::shared_ptr<Ast> get_shared_ptr() {
         return std::static_pointer_cast<Ast>(shared_from_this());
     }

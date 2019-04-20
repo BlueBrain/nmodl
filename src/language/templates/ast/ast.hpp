@@ -33,6 +33,7 @@
  * \file
  * \brief Definition of all AST classes
  */
+
 namespace nmodl {
 namespace ast {
 
