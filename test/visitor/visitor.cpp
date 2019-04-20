@@ -59,8 +59,7 @@ int main(int argc, char* argv[]) {
 
 std::vector<std::string> run_verbatim_visitor(const std::string& text) {
     NmodlDriver driver;
-    driver.parse_string(text);
-    auto ast = driver.ast();
+    auto ast = driver.parse_string(text);
 
     VerbatimVisitor v;
     v.visit_program(ast.get());
@@ -92,8 +91,7 @@ TEST_CASE("Verbatim Visitor") {
 
 std::string run_json_visitor(const std::string& text, bool compact = false) {
     NmodlDriver driver;
-    driver.parse_string(text);
-    auto ast = driver.ast();
+    auto ast = driver.parse_string(text);
     return to_json(ast.get(), compact);
 }
 
@@ -193,8 +191,7 @@ SCENARIO("Symbol table generation and Perf stat visitor pass") {
         )";
 
         NmodlDriver driver;
-        driver.parse_string(nmodl_text);
-        auto ast = driver.ast();
+        auto ast = driver.parse_string(nmodl_text);
 
         WHEN("Symbol table generator pass runs") {
             SymtabVisitor v;
@@ -275,8 +272,7 @@ SCENARIO("Symbol table generation and Perf stat visitor pass") {
 
 std::string run_nmodl_visitor(const std::string& text) {
     NmodlDriver driver;
-    driver.parse_string(text);
-    auto ast = driver.ast();
+    auto ast = driver.parse_string(text);
 
     std::stringstream stream;
     NmodlPrintVisitor v(stream);
@@ -305,8 +301,7 @@ SCENARIO("Test for AST back to NMODL transformation") {
 std::string run_var_rename_visitor(const std::string& text,
                                    std::vector<std::pair<std::string, std::string>> variables) {
     NmodlDriver driver;
-    driver.parse_string(text);
-    auto ast = driver.ast();
+    auto ast = driver.parse_string(text);
     {
         for (const auto& variable: variables) {
             RenameVisitor v(variable.first, variable.second);
@@ -413,8 +408,7 @@ SCENARIO("Renaming any variable in mod file with RenameVisitor") {
 
 std::string run_local_var_rename_visitor(const std::string& text) {
     NmodlDriver driver;
-    driver.parse_string(text);
-    auto ast = driver.ast();
+    auto ast = driver.parse_string(text);
 
     {
         SymtabVisitor v;
@@ -666,8 +660,7 @@ SCENARIO("Presence of local variable in verbatim block") {
 
 std::string run_inline_visitor(const std::string& text) {
     NmodlDriver driver;
-    driver.parse_string(text);
-    auto ast = driver.ast();
+    auto ast = driver.parse_string(text);
 
     {
         SymtabVisitor v;
@@ -1263,8 +1256,7 @@ SCENARIO("Procedure inlining handles local-global name conflict") {
 
 std::vector<DUChain> run_defuse_visitor(const std::string& text, const std::string& variable) {
     NmodlDriver driver;
-    driver.parse_string(text);
-    auto ast = driver.ast();
+    auto ast = driver.parse_string(text);
 
     SymtabVisitor().visit_program(ast.get());
     InlineVisitor().visit_program(ast.get());
@@ -1564,8 +1556,7 @@ SCENARIO("Running defuse analyzer") {
 
 std::string run_localize_visitor(const std::string& text) {
     NmodlDriver driver;
-    driver.parse_string(text);
-    auto ast = driver.ast();
+    auto ast = driver.parse_string(text);
 
     {
         SymtabVisitor v1;
@@ -1777,8 +1768,7 @@ SCENARIO("Localizer test with multiple global blocks") {
 
 std::string run_cnexp_solve_visitor(const std::string& text) {
     NmodlDriver driver;
-    driver.parse_string(text);
-    auto ast = driver.ast();
+    auto ast = driver.parse_string(text);
 
     SymtabVisitor().visit_program(ast.get());
     CnexpSolveVisitor().visit_program(ast.get());
@@ -1912,8 +1902,7 @@ SCENARIO("CnexpSolver visitor solving ODEs") {
 
 std::string run_solve_block_visitor(const std::string& text) {
     NmodlDriver driver;
-    driver.parse_string(text);
-    auto ast = driver.ast();
+    auto ast = driver.parse_string(text);
     SymtabVisitor().visit_program(ast.get());
     CnexpSolveVisitor().visit_program(ast.get());
     SolveBlockVisitor().visit_program(ast.get());
@@ -2009,8 +1998,7 @@ TEST_CASE("SolveBlock visitor") {
 
 void run_visitor_passes(const std::string& text) {
     NmodlDriver driver;
-    driver.parse_string(text);
-    auto ast = driver.ast();
+    auto ast = driver.parse_string(text);
     {
         SymtabVisitor v1;
         InlineVisitor v2;
@@ -2061,8 +2049,7 @@ std::vector<std::shared_ptr<ast::Ast>> run_lookup_visitor(ast::Program* node,
 SCENARIO("Searching for ast nodes using AstLookupVisitor") {
     auto to_ast = [](const std::string& text) {
         NmodlDriver driver;
-        driver.parse_string(text);
-        return driver.ast();
+        return driver.parse_string(text);
     };
 
     GIVEN("A mod file with nodes of type NEURON, RANGE, BinaryExpression") {
@@ -2138,8 +2125,7 @@ std::vector<std::string> run_kinetic_block_visitor(
 
     // construct AST from text including KINETIC block(s)
     NmodlDriver driver;
-    driver.parse_string(text);
-    auto ast = driver.ast();
+    auto ast = driver.parse_string(text);
 
     // construct symbol table from AST
     SymtabVisitor().visit_program(ast.get());
@@ -2625,8 +2611,7 @@ std::vector<std::string> run_sympy_solver_visitor(
 
     // construct AST from text
     NmodlDriver driver;
-    driver.parse_string(text);
-    auto ast = driver.ast();
+    auto ast = driver.parse_string(text);
 
     // construct symbol table from AST
     SymtabVisitor().visit_program(ast.get());
@@ -2884,8 +2869,7 @@ SCENARIO("SympySolver visitor: cnexp or euler", "[sympy][cnexp][euler]") {
         )";
         // construct AST from text
         NmodlDriver driver;
-        driver.parse_string(nmodl_text);
-        auto ast = driver.ast();
+        auto ast = driver.parse_string(nmodl_text);
 
         // construct symbol table from AST
         SymtabVisitor().visit_program(ast.get());
@@ -3265,8 +3249,7 @@ SCENARIO("SympySolver visitor: derivimplicit or sparse", "[sympy][derivimplicit]
 std::string run_sympy_conductance_visitor(const std::string& text) {
     // construct AST from text
     NmodlDriver driver;
-    driver.parse_string(text);
-    auto ast = driver.ast();
+    auto ast = driver.parse_string(text);
 
     // construct symbol table from AST
     SymtabVisitor(false).visit_program(ast.get());
@@ -3290,8 +3273,7 @@ std::string run_sympy_conductance_visitor(const std::string& text) {
 std::string breakpoint_to_nmodl(const std::string& text) {
     // construct AST from text
     NmodlDriver driver;
-    driver.parse_string(text);
-    auto ast = driver.ast();
+    auto ast = driver.parse_string(text);
 
     // construct symbol table from AST
     SymtabVisitor v_symtab;
@@ -4194,8 +4176,7 @@ SCENARIO("Sympy specific AST to NMODL conversion") {
         THEN("to_nmodl can ignore all units") {
             auto input = reindent_text(nmodl);
             NmodlDriver driver;
-            driver.parse_string(input);
-            auto ast = driver.ast();
+            auto ast = driver.parse_string(input);
             auto result = to_nmodl(ast.get(), {AstNodeType::UNIT});
             REQUIRE(result == reindent_text(expected));
         }
@@ -4209,8 +4190,7 @@ SCENARIO("Sympy specific AST to NMODL conversion") {
 
 std::string run_constant_folding_visitor(const std::string& text) {
     NmodlDriver driver;
-    driver.parse_string(text);
-    auto ast = driver.ast();
+    auto ast = driver.parse_string(text);
 
     SymtabVisitor().visit_program(ast.get());
     ConstantFolderVisitor().visit_program(ast.get());
@@ -4858,8 +4838,7 @@ SCENARIO("NONLINEAR solve block (SympySolver Visitor)", "[sympy][nonlinear]") {
 
 std::string run_loop_unroll_visitor(const std::string& text) {
     NmodlDriver driver;
-    driver.parse_string(text);
-    auto ast = driver.ast();
+    auto ast = driver.parse_string(text);
 
     SymtabVisitor().visit_program(ast.get());
     ConstantFolderVisitor().visit_program(ast.get());
@@ -5000,8 +4979,7 @@ std::vector<std::string> run_steadystate_visitor(
     std::vector<std::string> results;
     // construct AST from text
     NmodlDriver driver;
-    driver.parse_string(text);
-    auto ast = driver.ast();
+    auto ast = driver.parse_string(text);
 
     // construct symbol table from AST
     SymtabVisitor().visit_program(ast.get());

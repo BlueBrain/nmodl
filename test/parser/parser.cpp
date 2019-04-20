@@ -21,7 +21,7 @@
 
 bool is_valid_construct(const std::string& construct) {
     nmodl::parser::NmodlDriver driver;
-    return driver.parse_string(construct);
+    return driver.parse_string(construct) != nullptr;
 }
 
 

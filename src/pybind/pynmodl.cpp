@@ -17,8 +17,10 @@
 #include "pybind/pybind_utils.hpp"
 #include "visitors/visitor_utils.hpp"
 
+
 namespace py = pybind11;
 using pybind11::literals::operator""_a;
+
 
 namespace nmodl {
 
@@ -37,50 +39,53 @@ static const char* driver_ast = R"(
 )";
 
 static const char* driver_parse_string = R"(
-    Parse C provided as a string (testing)
+    Parse NMODL provided as a string
 
     Args:
         input (str): C code as string
     Returns:
-        bool: true if success, false otherwise
+        AST: ast root node if success, throws an exception otherwise
 
-    >>> driver.parse_string("DEFINE NSTEP 6")
-    True
+    >>> ast = driver.parse_string("DEFINE NSTEP 6")
 )";
 
 static const char* driver_parse_file = R"(
-    Parse C file
+    Parse NMODL provided as a file
 
     Args:
         filename (str): name of the C file
 
     Returns:
-        bool: true if success, false otherwise
+        AST: ast root node if success, throws an exception otherwise
 )";
 
 static const char* driver_parse_stream = R"(
-    Parse C file provided as istream
+    Parse NMODL file provided as istream
 
     Args:
         in (file): ifstream object
 
     Returns:
-        bool: true if success, false otherwise
+        AST: ast root node if success, throws an exception otherwise
 )";
 
 static const char* to_nmodl = R"(
-    Given AST node, return the JSON string representation
+    Given AST node, return the NMODL string representation
 
     Args:
         node (AST): AST node
         excludeTypes (set of AstNodeType): Excluded node types
 
     Returns:
-        str: JSON string representation
+        str: NMODL string representation
+
+    >>> ast = driver.parse_string("NEURON{}")
+    >>> nmodl.to_nmodl(ast)
+    'NEURON {\n}\n'
 )";
 
 static const char* to_json = R"(
-    Given AST node, return the NMODL string representation
+    Given AST node, return the JSON string representation
 
     Args:
         node (AST): AST node
@@ -88,11 +93,9 @@ static const char* to_json = R"(
         expand (bool): Expand node
 
     Returns:
-        str: NMODL string representation
+        str: JSON string representation
 
-    >>> driver.parse_string("NEURON{}")
-    True
-    >>> ast = driver.ast()
+    >>> ast = driver.parse_string("NEURON{}")
     >>> nmodl.to_json(ast, True)
     '{"Program":[{"NeuronBlock":[{"StatementBlock":[]}]}]}'
 )";
@@ -103,7 +106,7 @@ static const char* to_json = R"(
 
 class PyDriver: public nmodl::parser::NmodlDriver {
   public:
-    bool parse_stream(py::object object) {
+    std::shared_ptr<nmodl::ast::Program> parse_stream(py::object object) {
         py::object tiob = py::module::import("io").attr("TextIOBase");
         if (py::isinstance(object, tiob)) {
             py::detail::pythonibuf<py::str> buf(object);

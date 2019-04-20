@@ -221,14 +221,13 @@ int main(int argc, const char* argv[]) {
 
         /// driver object creates lexer and parser, just call parser method
         NmodlDriver driver;
-        driver.parse_file(file);
+
+        /// parse mod file and construct ast
+        auto ast = driver.parse_file(file);
 
         /// whether to update existing symbol table or create new
         /// one whenever we run symtab visitor.
         bool update_symtab = false;
-
-        /// parse mod file and construct ast
-        auto ast = driver.ast();
 
         /// just visit the ast
         AstVisitor().visit_program(ast.get());

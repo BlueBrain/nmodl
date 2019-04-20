@@ -93,17 +93,16 @@ int main(int argc, const char* argv[]) {
 
         /// driver object that creates lexer and parser
         parser::NmodlDriver driver;
-        driver.parse_file(filename);
 
         /// shared_ptr to ast constructed from parsing nmodl file
-        auto ast = driver.ast().get();
+        auto ast = driver.parse_file(filename);
 
         /// run all visitors and generate mod file after each run
         for (const auto& visitor: visitors) {
             logger->info("Running {}", visitor.description);
-            visitor.v->visit_program(ast);
+            visitor.v->visit_program(ast.get());
             std::string file = mod_file + "." + visitor.id + ".mod";
-            NmodlPrintVisitor(file).visit_program(ast);
+            NmodlPrintVisitor(file).visit_program(ast.get());
             logger->info("NMODL visitor generated {}", file);
         }
     }
