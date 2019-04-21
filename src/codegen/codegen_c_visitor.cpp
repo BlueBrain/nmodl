@@ -292,9 +292,9 @@ void CodegenCVisitor::visit_verbatim(Verbatim* node) {
     auto text = node->get_statement()->eval();
     auto result = process_verbatim_text(text);
 
-    auto statements = stringutils::split_string(result, '\n');
+    auto statements = utils::split_string(result, '\n');
     for (auto& statement: statements) {
-        stringutils::trim_newline(statement);
+        utils::trim_newline(statement);
         if (statement.find_first_not_of(' ') != std::string::npos) {
             printer->add_line(statement);
         }
@@ -989,7 +989,7 @@ std::string CodegenCVisitor::get_parameter_str(const ParamVector& params) {
                                        std::get<1>(*iter),
                                        std::get<2>(*iter),
                                        std::get<3>(*iter));
-        if (!is_last(iter, params)) {
+        if (!utils::is_last(iter, params)) {
             param_ss << ", ";
         }
     }
@@ -1030,12 +1030,14 @@ void CodegenCVisitor::print_channel_iteration_tiling_block_end() {
  * to accelerator. In this case, at very top level, we print pragma
  * for data present. For example:
  *
+ * \code{.cpp}
  *  void nrn_state(...) {
  *      #pragma acc data present (nt, ml...)
  *      {
  *
  *      }
  *  }
+ *  \endcode
  */
 void CodegenCVisitor::print_kernel_data_present_annotation_block_begin() {
     // backend specific, do nothing
@@ -1375,9 +1377,9 @@ void CodegenCVisitor::print_top_verbatim_blocks() {
  * the text.
  */
 void CodegenCVisitor::rename_function_arguments() {
-    auto default_arguments = stringutils::split_string(nrn_thread_arguments(), ',');
+    auto default_arguments = utils::split_string(nrn_thread_arguments(), ',');
     for (auto& arg: default_arguments) {
-        stringutils::trim(arg);
+        utils::trim(arg);
         RenameVisitor v(arg, "arg_" + arg);
         for (const auto& function: info.functions) {
             if (has_parameter_of_name(function, arg)) {
@@ -2198,6 +2200,7 @@ std::string CodegenCVisitor::update_if_ion_variable_name(const std::string& name
  * Return variable name in the structure of mechanism properties
  *
  * @param name variable name that is being printed
+ * @param use_instance if variable name should be with the instance object qualifier
  * @return use_instance whether print name using Instance structure (or data array if false)
  */
 std::string CodegenCVisitor::get_variable_name(const std::string& name, bool use_instance) {
@@ -2276,7 +2279,7 @@ void CodegenCVisitor::print_backend_info() {
     printer->add_line("NMODL Version   : {}"_format(nmodl_version()));
     printer->add_line("Vectorized      : {}"_format(info.vectorize));
     printer->add_line("Threadsafe      : {}"_format(info.thread_safe));
-    printer->add_line("Created         : {}"_format(stringutils::trim(date)));
+    printer->add_line("Created         : {}"_format(utils::trim(date)));
     printer->add_line("Backend         : {}"_format(backend_name()));
     printer->add_line("NMODL Compiler  : {}"_format(version));
     printer->add_line("*********************************************************/");

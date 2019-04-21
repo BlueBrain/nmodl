@@ -13,6 +13,7 @@
 
 
 namespace nmodl {
+namespace utils {
 
 /**
  *   Print table data in below shown format: title as first row (centrally aligned),
@@ -79,7 +80,7 @@ void TableData::print(std::stringstream& stream, int indent) {
     std::stringstream header;
     header << "| ";
     for (size_t i = 0; i < headers.size(); i++) {
-        auto text = stringutils::align_text(headers[i], col_width[i], text_alignment::center);
+        auto text = utils::align_text(headers[i], col_width[i], text_alignment::center);
         header << text << " | ";
     }
 
@@ -88,7 +89,7 @@ void TableData::print(std::stringstream& stream, int indent) {
 
     /// title row
     if (!title.empty()) {
-        title = stringutils::align_text(title, row_width - 3, text_alignment::center);
+        title = utils::align_text(title, row_width - 3, text_alignment::center);
         stream << "\n" << gutter << separator_line;
         stream << "\n" << gutter << "|" << title << "|";
     }
@@ -102,7 +103,7 @@ void TableData::print(std::stringstream& stream, int indent) {
     for (const auto& row: rows) {
         stream << "\n" << gutter << "| ";
         for (unsigned i = 0; i < row.size(); i++) {
-            stream << stringutils::align_text(row[i], col_width[i], alignments[i]) << " | ";
+            stream << utils::align_text(row[i], col_width[i], alignments[i]) << " | ";
         }
     }
 
@@ -116,4 +117,5 @@ void TableData::print(int indent) {
     std::cout << ss.str();
 }
 
+}  // namespace utils
 }  // namespace nmodl

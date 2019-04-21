@@ -2264,8 +2264,8 @@ std::string parse_with_verbatim_parser(std::string str) {
  *  and report all errors. For now simply abort.
  */
 
-void NmodlParser::error(const location &loc , const std::string &message) {
+void NmodlParser::error(const location &loc , const std::string &msg) {
     std::stringstream ss;
-    ss << "NMODL Parser Error : " << message << " [Location : " << loc << "]";
+    ss << "NMODL Parser Error : " << msg << " [Location : " << loc << "]";
     throw std::runtime_error(ss.str());
 }

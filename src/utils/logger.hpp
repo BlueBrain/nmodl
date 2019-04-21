@@ -7,6 +7,11 @@
 
 #pragma once
 
+/**
+ * \file
+ * \brief Implement logger based on spdlog library
+ */
+
 // clang-format off
 // disable clang-format to keep order of inclusion
 #include "spdlog/spdlog.h"

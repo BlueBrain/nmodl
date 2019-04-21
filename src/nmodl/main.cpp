@@ -189,8 +189,8 @@ int main(int argc, const char* argv[]) {
         c_backend = false;
     }
 
-    make_path(output_dir);
-    make_path(scratch_dir);
+    utils::make_path(output_dir);
+    utils::make_path(scratch_dir);
 
     if (sympy_opt) {
         pybind11::initialize_interpreter();
@@ -211,7 +211,7 @@ int main(int argc, const char* argv[]) {
     for (const auto& file: mod_files) {
         logger->info("Processing {}", file);
 
-        auto modfile = remove_extension(base_name(file));
+        auto modfile = utils::remove_extension(utils::base_name(file));
 
         /// create file path for nmodl file
         auto filepath = [scratch_dir, modfile](std::string suffix) {

@@ -673,7 +673,7 @@ WS  [ \t\v\n\f]
 {WS}+                                   {
                                             driver.add_token(yytext);
                                             std::string str(yytext);
-                                            stringutils::remove_character(str, ' ');
+                                            utils::remove_character(str, ' ');
                                             if (str == "\n") {
                                                 loc.lines(1);
                                             } else {

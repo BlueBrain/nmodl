@@ -15,6 +15,7 @@ namespace nmodl {
 using symtab::Symbol;
 using symtab::syminfo::NmodlType;
 using symtab::syminfo::Status;
+using utils::PerfStat;
 
 PerfVisitor::PerfVisitor(const std::string& filename)
     : printer(new JSONPrinter(filename)) {}

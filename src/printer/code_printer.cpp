@@ -54,7 +54,7 @@ void CodePrinter::add_line(const std::string& text, int num_new_lines) {
 }
 
 void CodePrinter::add_multi_line(const std::string& text) {
-    auto lines = stringutils::split_string(text, '\n');
+    auto lines = utils::split_string(text, '\n');
     for (const auto& line: lines) {
         add_line(line);
     }

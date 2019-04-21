@@ -454,16 +454,16 @@ void SympySolverVisitor::visit_derivative_block(ast::DerivativeBlock* node) {
         // construct implicit Euler equations from ODEs
         std::vector<std::string> pre_solve_statements;
         for (auto& eq: eq_system) {
-            auto split_eq = stringutils::split_string(eq, '=');
-            auto x_prime_split = stringutils::split_string(split_eq[0], '\'');
-            auto x = stringutils::trim(x_prime_split[0]);
+            auto split_eq = utils::split_string(eq, '=');
+            auto x_prime_split = utils::split_string(split_eq[0], '\'');
+            auto x = utils::trim(x_prime_split[0]);
             std::string x_array_index = "";
             std::string x_array_index_i = "";
-            if (x_prime_split.size() > 1 && stringutils::trim(x_prime_split[1]).size() > 2) {
-                x_array_index = stringutils::trim(x_prime_split[1]);
+            if (x_prime_split.size() > 1 && utils::trim(x_prime_split[1]).size() > 2) {
+                x_array_index = utils::trim(x_prime_split[1]);
                 x_array_index_i = "_" + x_array_index.substr(1, x_array_index.size() - 2);
             }
-            auto dxdt = stringutils::trim(split_eq[1]);
+            auto dxdt = utils::trim(split_eq[1]);
             auto old_x = "old_" + x + x_array_index_i;  // TODO: do this properly,
                                                         // check name is unique
             // declare old_x

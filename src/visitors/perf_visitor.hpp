@@ -50,16 +50,16 @@ class PerfVisitor: public AstVisitor {
 
     /// performance stats of all blocks being visited
     /// in recursive chain
-    std::stack<PerfStat> blocks_perf;
+    std::stack<utils::PerfStat> blocks_perf;
 
     /// total performance of mod file
-    PerfStat total_perf;
+    utils::PerfStat total_perf;
 
     /// performance of current block
-    PerfStat current_block_perf;
+    utils::PerfStat current_block_perf;
 
     /// performance of current all childrens
-    std::stack<PerfStat> children_blocks_perf;
+    std::stack<utils::PerfStat> children_blocks_perf;
 
     /// whether to measure performance for current block
     bool start_measurement = false;
@@ -133,7 +133,7 @@ class PerfVisitor: public AstVisitor {
 
     void print_memory_usage();
 
-    void add_perf_to_printer(PerfStat& perf);
+    void add_perf_to_printer(utils::PerfStat& perf);
 
   public:
     PerfVisitor() = default;
@@ -144,7 +144,7 @@ class PerfVisitor: public AstVisitor {
         printer->compact_json(flag);
     }
 
-    PerfStat get_total_perfstat() {
+    utils::PerfStat get_total_perfstat() {
         return total_perf;
     }
 

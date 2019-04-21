@@ -443,6 +443,8 @@ void ModelSymbolTable::set_mode(bool update_mode) {
 
 
 void SymbolTable::Table::print(std::stringstream& stream, std::string title, int indent) {
+    using utils::TableData;
+    using utils::text_alignment;
     if (!symbols.empty()) {
         TableData table;
         table.title = std::move(title);

@@ -329,7 +329,7 @@ void KineticBlockVisitor::visit_kinetic_block(ast::KineticBlock* node) {
         }
         // if rhs of ODE is not empty, add to list of ODEs
         if (!ode_rhs.empty()) {
-            auto state_var_split = stringutils::split_string(state_var[j], '[');
+            auto state_var_split = utils::split_string(state_var[j], '[');
             std::string var_str = state_var_split[0];
             std::string index_str;
             if (state_var_split.size() > 1) {

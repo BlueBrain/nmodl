@@ -170,8 +170,8 @@ void CodegenIspcVisitor::print_nrn_cur_matrix_shadow_update() {
     auto rhs_op = operator_for_rhs();
     auto d_op = operator_for_d();
     if (info.point_process) {
-        stringutils::remove_character(rhs_op, '=');
-        stringutils::remove_character(d_op, '=');
+        utils::remove_character(rhs_op, '=');
+        utils::remove_character(d_op, '=');
         print_atomic_op("vec_rhs[node_id]", rhs_op, "rhs");
         print_atomic_op("vec_d[node_id]", d_op, "g");
     } else {

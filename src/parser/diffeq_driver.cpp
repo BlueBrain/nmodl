@@ -19,13 +19,13 @@ void DiffeqDriver::parse_equation(const std::string& equation,
                                   std::string& state,
                                   std::string& rhs,
                                   int& order) {
-    auto parts = stringutils::split_string(equation, '=');
-    state = stringutils::trim(parts[0]);
-    rhs = stringutils::trim(parts[1]);
+    auto parts = utils::split_string(equation, '=');
+    state = utils::trim(parts[0]);
+    rhs = utils::trim(parts[1]);
 
     /// expect prime on lhs, find order and remove quote
     order = std::count(state.begin(), state.end(), '\'');
-    stringutils::remove_character(state, '\'');
+    utils::remove_character(state, '\'');
 
     /// error if no prime in equation or not an assignment statement
     if (order == 0 || state.empty()) {

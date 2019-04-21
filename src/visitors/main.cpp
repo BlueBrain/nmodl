@@ -89,7 +89,7 @@ int main(int argc, const char* argv[]) {
     for (const auto& filename: files) {
         logger->info("Processing {}", filename);
 
-        std::string mod_file = remove_extension(base_name(filename));
+        std::string mod_file = utils::remove_extension(utils::base_name(filename));
 
         /// driver object that creates lexer and parser
         parser::NmodlDriver driver;
