@@ -33,7 +33,7 @@ namespace visitor {
 
 /**
  * \class InlineVisitor
- * \brief Visitor to inline local procedure and function calls
+ * \brief %Visitor to inline local procedure and function calls
  *
  * Motivation: Mod files often have function and procedure calls. Procedure
  * typically has use of range variables like:

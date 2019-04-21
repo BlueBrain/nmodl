@@ -15,6 +15,8 @@
 #include "parser/nmodl_driver.hpp"
 #include "test/utils/nmodl_constructs.hpp"
 
+using namespace nmodl::test_utils;
+
 //=============================================================================
 // Parser tests
 //=============================================================================

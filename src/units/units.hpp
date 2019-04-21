@@ -14,7 +14,7 @@
  * \brief Data structures for storing units
  *
  * \file
- * \brief Declaration of various classes for storing units
+ * \brief Classes for storing different units specification
  */
 
 #include <array>
@@ -31,6 +31,7 @@
 
 
 namespace nmodl {
+/// encapsulates unit database and tables implementation
 namespace units {
 
 /**

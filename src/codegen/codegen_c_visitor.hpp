@@ -7,6 +7,14 @@
 
 #pragma once
 
+/**
+ * \dir
+ * \brief Code generation backend implementations for CoreNEURON
+ *
+ * \file
+ * \brief \copybrief nmodl::codegen::CodegenCVisitor
+ */
+
 #include <algorithm>
 #include <cmath>
 #include <ctime>
@@ -25,7 +33,18 @@
 using namespace fmt::literals;
 
 namespace nmodl {
+/// encapsulates code generation backend implementations
 namespace codegen {
+
+/**
+ * @defgroup codegen Codegen Infrastructure
+ * @brief Implementations of code generation backends
+ *
+ * @defgroup codegen_details Codegen Helpers
+ * @ingroup codegen
+ * @brief Helper routines/types for code generation
+ * @{
+ */
 
 /**
  * \enum BlockType
@@ -137,16 +156,29 @@ struct ShadowUseStatement {
     std::string rhs;
 };
 
+/** @} */  // end of codegen_details
+
+
 using printer::CodePrinter;
+
+
+/**
+ * @defgroup codegen_backends Codegen Backends
+ * @ingroup codegen
+ * @brief Code generation backends for CoreNEURON
+ * @{
+ */
 
 /**
  * \class CodegenCVisitor
- * \brief Visitor for printing c code compatible with legacy api
+ * \brief %Visitor for printing C code compatible with legacy api of CoreNEURON
  *
- * \todo :
- *      - handle define statement (i.e. macro statement printing)
- *      - return statement in the verbatim block of inlined function not handled
- *        for example, see netstim.mod where we removed return from verbatim block
+ * \todo
+ *  - Handle define statement (i.e. macros)
+ *  - If there is a return statement in the verbatim block
+ *    of inlined function then it will be error. Need better
+ *    error checking. For example, see netstim.mod where we
+ *    have removed return from verbatim block.
  */
 class CodegenCVisitor: public visitor::AstVisitor {
   protected:
@@ -1119,6 +1151,8 @@ void CodegenCVisitor::print_function_declaration(const T& node, const std::strin
 
     enable_variable_name_lookup = true;
 }
+
+/** @} */  // end of codegen_backends
 
 }  // namespace codegen
 }  // namespace nmodl

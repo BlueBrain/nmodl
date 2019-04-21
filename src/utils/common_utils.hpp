@@ -17,6 +17,7 @@
  */
 
 namespace nmodl {
+/// file/string manipulation functions
 namespace utils {
 
 /**

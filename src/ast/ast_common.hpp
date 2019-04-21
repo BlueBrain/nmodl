@@ -82,7 +82,7 @@ typedef enum { PEQ_FIRST, PEQ_LAST } FirstLastType;
 /// string representation of ast::FirstLastType
 static const std::string FirstLastTypeNames[] = {"FIRST", "LAST"};
 
-/// enum type for partial equation types
+/// enum type for queue types
 typedef enum { PUT_QUEUE, GET_QUEUE } QueueType;
 
 /// string representation of ast::QueueType

@@ -27,7 +27,7 @@ namespace visitor {
 
 /**
  * \class VerbatimVisitor
- * \brief Visitor for verbatim blocks of AST
+ * \brief %Visitor for verbatim blocks of AST
  *
  * This is simple example of visitor that uses base AstVisitor
  * interface. We override visitVerbatim method and store all

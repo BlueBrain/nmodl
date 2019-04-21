@@ -36,7 +36,7 @@ namespace visitor {
 
 /**
  * \class SympyConductanceVisitor
- * \brief Visitor for generating CONDUCTANCE statements for ions
+ * \brief %Visitor for generating CONDUCTANCE statements for ions
  *
  * This class visits each ion expression `I = ...` in the `BREAKPOINT`
  * and symbolically differentiates it to get `dI/dV`, i.e. the conductance.

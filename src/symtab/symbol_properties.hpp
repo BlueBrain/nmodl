@@ -20,7 +20,7 @@
 namespace nmodl {
 namespace symtab {
 
-/// symbol information
+/// %Symbol information
 namespace syminfo {
 
 /// \todo Error with pybind if std::underlying_typ is used

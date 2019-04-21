@@ -12,9 +12,10 @@
 
 #include "ast/ast.hpp"
 
-/** The nmodl namespace encapsulates everything related to nmodl parsing
- * which includes lexer, parser, driver, keywords, token mapping etc. */
+
+/// encapsulates everything related to NMODL code generation framework
 namespace nmodl {
+/// encapsulate lexer and parsers implementations
 namespace parser {
 
 /**

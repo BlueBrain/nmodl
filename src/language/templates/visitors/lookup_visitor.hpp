@@ -25,7 +25,7 @@ namespace visitor {
 
 /**
  * \class AstLookupVisitor
- * \brief Visitor to find AST nodes based on their types
+ * \brief %Visitor to find AST nodes based on their types
  */
 class AstLookupVisitor: public Visitor {
   private:

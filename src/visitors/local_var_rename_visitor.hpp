@@ -29,7 +29,7 @@ namespace visitor {
 
 /**
  * \class LocalVarRenameVisitor
- * \brief Visitor to rename local variables conflicting with global scope
+ * \brief %Visitor to rename local variables conflicting with global scope
  *
  * Motivation: During inlining we have to do data-flow-analysis. Consider
  * below example:

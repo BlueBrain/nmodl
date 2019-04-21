@@ -18,6 +18,10 @@ namespace parser {
  * @{
  */
 
+/**
+ * \class VerbatimDriver
+ * \brief Class that binds lexer and parser together for parsing VERBATIM block
+ */
 class VerbatimDriver {
 
   protected:

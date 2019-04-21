@@ -31,7 +31,7 @@ namespace visitor {
 
 /**
  * \class KineticBlockVisitor
- * \brief Visitor for kinetic block statements
+ * \brief %Visitor for kinetic block statements
  *
  * Replaces each KINETIC block with a DERIVATIVE block
  * containing a system of ODEs that is equivalent to

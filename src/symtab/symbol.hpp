@@ -25,7 +25,7 @@ namespace ast {
 class Ast;
 }
 
-/// symbol table related implementations
+/// %Symbol table related implementations
 namespace symtab {
 
 /**

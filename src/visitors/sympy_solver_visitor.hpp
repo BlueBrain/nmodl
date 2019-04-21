@@ -33,7 +33,7 @@ namespace visitor {
 
 /**
  * \class SympySolverVisitor
- * \brief Visitor for systems of algebraic and differential equations
+ * \brief %Visitor for systems of algebraic and differential equations
  *
  * For DERIVATIVE block, solver method `cnexp`:
  *  - replace each ODE with its analytic solution

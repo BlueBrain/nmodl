@@ -31,7 +31,7 @@ namespace visitor {
 
 /**
  * \class PerfVisitor
- * \brief Visitor for measuring performance related information
+ * \brief %Visitor for measuring performance related information
  *
  * This visitor used to visit the ast and associated symbol tables
  * to measure the performance of every block in nmodl file. For

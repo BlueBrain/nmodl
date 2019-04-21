@@ -35,7 +35,7 @@ namespace visitor {
 
 /**
  * \class LocalizeVisitor
- * \brief Visitor to transform global variable usage to local
+ * \brief %Visitor to transform global variable usage to local
  *
  * Motivation: As NMODL doesn't support returning multiple values,
  * procedures are often written with use of range variables that

@@ -9,6 +9,7 @@
 
 
 namespace nmodl {
+/// Implementation of different AST visitors
 namespace visitor {
 
 /**

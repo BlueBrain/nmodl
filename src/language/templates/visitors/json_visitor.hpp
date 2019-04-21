@@ -25,7 +25,7 @@ namespace visitor {
 
 /**
  * \class JSONVisitor
- * \brief Visitor for printing AST in JSON format
+ * \brief %Visitor for printing AST in JSON format
  *
  * Convert AST into JSON form form using AST visitor. This is used
  * for debugging or visualization purpose.
