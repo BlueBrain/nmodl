@@ -171,7 +171,7 @@ namespace ast {
         /**
          * \brief Return associated token for the current ast node
          *
-         * Not all ast nodes have token information. For example, nmodl::visitor::CnexpSolveVisitor
+         * Not all ast nodes have token information. For example, nmodl::visitor::NeuronSolveVisitor
          * can insert new nodes in the ast as a solution of ODEs. In this case, we return
          * nullptr to store in the nmodl::symtab::SymbolTable.
          *

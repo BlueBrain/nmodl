@@ -33,7 +33,6 @@ std::vector<std::shared_ptr<ast::Ast>> AstLookupVisitor::lookup(Ast* node, std::
     return nodes;
 }
 
-
 std::vector<std::shared_ptr<ast::Ast>> AstLookupVisitor::lookup(Ast* node, AstNodeType type) {
     nodes.clear();
     types.clear();
@@ -41,7 +40,6 @@ std::vector<std::shared_ptr<ast::Ast>> AstLookupVisitor::lookup(Ast* node, AstNo
     node->accept(this);
     return nodes;
 }
-
 
 std::vector<std::shared_ptr<ast::Ast>> AstLookupVisitor::lookup(Ast* node) {
     nodes.clear();

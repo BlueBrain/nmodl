@@ -24,7 +24,6 @@
 #include "utils/common_utils.hpp"
 #include "utils/logger.hpp"
 #include "visitors/ast_visitor.hpp"
-#include "visitors/cnexp_solve_visitor.hpp"
 #include "visitors/constant_folder_visitor.hpp"
 #include "visitors/inline_visitor.hpp"
 #include "visitors/json_visitor.hpp"
@@ -32,6 +31,7 @@
 #include "visitors/local_var_rename_visitor.hpp"
 #include "visitors/localize_visitor.hpp"
 #include "visitors/loop_unroll_visitor.hpp"
+#include "visitors/neuron_solve_visitor.hpp"
 #include "visitors/nmodl_visitor.hpp"
 #include "visitors/perf_visitor.hpp"
 #include "visitors/solve_block_visitor.hpp"
@@ -335,7 +335,7 @@ int main(int argc, const char* argv[]) {
 
         {
             logger->info("Running cnexp visitor");
-            CnexpSolveVisitor().visit_program(ast.get());
+            NeuronSolveVisitor().visit_program(ast.get());
             ast_to_nmodl(ast.get(), filepath("cnexp"));
         }
 

@@ -7,6 +7,11 @@
 
 #pragma once
 
+/**
+ * \file
+ * \brief \copybrief nmodl::visitor::VerbatimVisitor
+ */
+
 #include <vector>
 
 #include "ast/ast.hpp"
@@ -14,6 +19,11 @@
 
 namespace nmodl {
 namespace visitor {
+
+/**
+ * @addtogroup visitor_classes
+ * @{
+ */
 
 /**
  * \class VerbatimVisitor
@@ -25,7 +35,6 @@ namespace visitor {
  * generating report of all verbatim blocks from all mod files
  * in ModelDB.
  */
-
 class VerbatimVisitor: public AstVisitor {
   private:
     /// flag to enable/disable printing blocks as we visit them
@@ -47,6 +56,8 @@ class VerbatimVisitor: public AstVisitor {
         return blocks;
     }
 };
+
+/** @} */  // end of visitor_classes
 
 }  // namespace visitor
 }  // namespace nmodl

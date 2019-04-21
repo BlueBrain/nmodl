@@ -15,13 +15,13 @@
 #include "parser/nmodl_driver.hpp"
 #include "utils/logger.hpp"
 #include "visitors/ast_visitor.hpp"
-#include "visitors/cnexp_solve_visitor.hpp"
 #include "visitors/constant_folder_visitor.hpp"
 #include "visitors/inline_visitor.hpp"
 #include "visitors/json_visitor.hpp"
 #include "visitors/kinetic_block_visitor.hpp"
 #include "visitors/local_var_rename_visitor.hpp"
 #include "visitors/localize_visitor.hpp"
+#include "visitors/neuron_solve_visitor.hpp"
 #include "visitors/nmodl_visitor.hpp"
 #include "visitors/perf_visitor.hpp"
 #include "visitors/sympy_conductance_visitor.hpp"
@@ -36,8 +36,8 @@ using namespace visitor;
 using namespace fmt::literals;
 
 /**
- * Standalone visitor program for NMODL. This demonstrate basic
- * usage of different visitor and driver classes.
+ * \file
+ * \brief Standalone program demonstrating usage of different visitors and driver classes.
  **/
 
 int main(int argc, const char* argv[]) {
@@ -74,13 +74,14 @@ int main(int argc, const char* argv[]) {
          "VerbatimVarRenameVisitor"},
         {std::make_shared<KineticBlockVisitor>(), "kinetic-rewrite", "KineticBlockVisitor"},
         {std::make_shared<ConstantFolderVisitor>(), "const-fold", "ConstantFolderVisitor"},
-        {std::make_shared<InlineVisitor>(), "cnexp", "InlineVisitor"},
+        {std::make_shared<InlineVisitor>(), "inline", "InlineVisitor"},
         {std::make_shared<LocalVarRenameVisitor>(), "local-rename", "LocalVarRenameVisitor"},
         {std::make_shared<SymtabVisitor>(), "symtab", "SymtabVisitor"},
-        {std::make_shared<SympyConductanceVisitor>(), "sympy-cond", "SympyConductanceVisitor"},
-        {std::make_shared<SymtabVisitor>(), "symtab", "SymtabVisitor"},
+        {std::make_shared<SympyConductanceVisitor>(),
+         "sympy-conductance",
+         "SympyConductanceVisitor"},
         {std::make_shared<SympySolverVisitor>(), "sympy-solve", "SympySolverVisitor"},
-        {std::make_shared<CnexpSolveVisitor>(), "cnexp", "CnexpSolveVisitor"},
+        {std::make_shared<NeuronSolveVisitor>(), "neuron-solve", "NeuronSolveVisitor"},
         {std::make_shared<LocalizeVisitor>(), "localize", "LocalizeVisitor"},
         {std::make_shared<PerfVisitor>(), "perf", "PerfVisitor"},
     };

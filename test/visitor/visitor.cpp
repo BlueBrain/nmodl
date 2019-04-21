@@ -16,7 +16,6 @@
 #include "parser/nmodl_driver.hpp"
 #include "test/utils/nmodl_constructs.hpp"
 #include "test/utils/test_utils.hpp"
-#include "visitors/cnexp_solve_visitor.hpp"
 #include "visitors/constant_folder_visitor.hpp"
 #include "visitors/defuse_analyze_visitor.hpp"
 #include "visitors/inline_visitor.hpp"
@@ -26,6 +25,7 @@
 #include "visitors/localize_visitor.hpp"
 #include "visitors/lookup_visitor.hpp"
 #include "visitors/loop_unroll_visitor.hpp"
+#include "visitors/neuron_solve_visitor.hpp"
 #include "visitors/nmodl_visitor.hpp"
 #include "visitors/perf_visitor.hpp"
 #include "visitors/rename_visitor.hpp"
@@ -1773,7 +1773,7 @@ std::string run_cnexp_solve_visitor(const std::string& text) {
     auto ast = driver.parse_string(text);
 
     SymtabVisitor().visit_program(ast.get());
-    CnexpSolveVisitor().visit_program(ast.get());
+    NeuronSolveVisitor().visit_program(ast.get());
     std::stringstream stream;
     NmodlPrintVisitor(stream).visit_program(ast.get());
     return stream.str();
@@ -1906,7 +1906,7 @@ std::string run_solve_block_visitor(const std::string& text) {
     NmodlDriver driver;
     auto ast = driver.parse_string(text);
     SymtabVisitor().visit_program(ast.get());
-    CnexpSolveVisitor().visit_program(ast.get());
+    NeuronSolveVisitor().visit_program(ast.get());
     SolveBlockVisitor().visit_program(ast.get());
     std::stringstream stream;
     NmodlPrintVisitor(stream).visit_program(ast.get());

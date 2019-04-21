@@ -7,6 +7,11 @@
 
 #pragma once
 
+/**
+ * \file
+ * \brief \copybrief nmodl::visitor::VarUsageVisitor
+ */
+
 #include <string>
 
 #include "ast/ast.hpp"
@@ -17,10 +22,15 @@ namespace nmodl {
 namespace visitor {
 
 /**
+ * @addtogroup visitor_classes
+ * @{
+ */
+
+/**
  * \class VarUsageVisitor
  * \brief Check if variable is used in given block
  *
- * \todo : check if macro is considered as variable
+ * \todo check if macro is considered as variable
  */
 
 class VarUsageVisitor: public AstVisitor {
@@ -36,6 +46,8 @@ class VarUsageVisitor: public AstVisitor {
 
     virtual void visit_name(ast::Name* node) override;
 };
+
+/** @} */  // end of visitor_classes
 
 }  // namespace visitor
 }  // namespace nmodl

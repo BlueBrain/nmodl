@@ -84,11 +84,11 @@ using namespace visitor;
  */
 
 /**
- * \brief Class mirroring nmodl::SymtabVisitor for Python bindings
+ * \brief Class mirroring nmodl::visitor::SymtabVisitor for Python bindings
  *
- * \details \copydetails nmodl::SymtabVisitor
+ * \details \copydetails nmodl::visitor::SymtabVisitor
  *
- * This class is used to interface nmodl::SymtabVisitor with the Python
+ * This class is used to interface nmodl::visitor::SymtabVisitor with the Python
  * world using `pybind11`.
  */
 class PySymtabVisitor: private VisitorOStreamResources, public SymtabVisitor {

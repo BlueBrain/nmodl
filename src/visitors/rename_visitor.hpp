@@ -7,6 +7,11 @@
 
 #pragma once
 
+/**
+ * \file
+ * \brief \copybrief nmodl::visitor::RenameVisitor
+ */
+
 #include <string>
 
 #include "ast/ast.hpp"
@@ -18,8 +23,13 @@ namespace nmodl {
 namespace visitor {
 
 /**
- * \class VarRenameVisitor
- * \brief "Blindly" rename given variable to new name
+ * @addtogroup visitor_classes
+ * @{
+ */
+
+/**
+ * \class RenameVisitor
+ * \brief `Blindly` rename given variable to new name
  *
  * During inlining related passes we have to rename variables
  * to avoid name conflicts. This pass "blindly" rename any given
@@ -28,9 +38,8 @@ namespace visitor {
  * local renaming pass should be done from inner-most block to top
  * level block;
  *
- * \todo : Add log/warning messages.
+ * \todo Add log/warning messages.
  */
-
 class RenameVisitor: public AstVisitor {
   private:
     /// variable to rename
@@ -62,6 +71,8 @@ class RenameVisitor: public AstVisitor {
     virtual void visit_prime_name(ast::PrimeName* node) override;
     virtual void visit_verbatim(ast::Verbatim* node) override;
 };
+
+/** @} */  // end of visitor_classes
 
 }  // namespace visitor
 }  // namespace nmodl

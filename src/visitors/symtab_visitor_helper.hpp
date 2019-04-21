@@ -222,7 +222,7 @@ void SymtabVisitor::setup_symbol_table_for_scoped_block(ast::Node* node, const s
 /**
  * Visit table statement and update symbol in symbol table
  *
- * @todo : we assume table statement follows variable declaration
+ * @todo we assume table statement follows variable declaration
  */
 void SymtabVisitor::visit_table_statement(ast::TableStatement* node) {
     auto update_symbol = [this](const ast::NameVector& variables, NmodlType property, int num_values) {

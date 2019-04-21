@@ -7,6 +7,11 @@
 
 #pragma once
 
+/**
+ * \file
+ * \brief \copybrief nmodl::visitor::PerfVisitor
+ */
+
 #include <set>
 #include <stack>
 
@@ -18,6 +23,11 @@
 
 namespace nmodl {
 namespace visitor {
+
+/**
+ * @addtogroup visitor_classes
+ * @{
+ */
 
 /**
  * \class PerfVisitor
@@ -32,16 +42,17 @@ namespace visitor {
  * be skipped (i.e. without visiting children). Note that this
  * pass must be run after symbol table generation pass.
  *
- * \todo : To measure the performance of statements like if, elseif
- * and else, we have to find maximum performance from if,elseif,else
- * and then use it to calculate total performance. In the current
- * implementation we are doing sum of all blocks. We need to override
- * IfStatement (which has all sub-blocks) and get maximum performance
- * of all statements recursively.
+ * \todo
+ *     - To measure the performance of statements like if, elseif
+ *       and else, we have to find maximum performance from if,elseif,else
+ *       and then use it to calculate total performance. In the current
+ *       implementation we are doing sum of all blocks. We need to override
+ *       IfStatement (which has all sub-blocks) and get maximum performance
+ *       of all statements recursively.
  *
- * \todo : In order to avoid empty implementations and checking
- * start_measurement, there should be "empty" ast visitor from
- * which PerfVisitor should be inherited.
+ *     - In order to avoid empty implementations and checking
+ *       start_measurement, there should be "empty" ast visitor from
+ *       which PerfVisitor should be inherited.
  */
 class PerfVisitor: public AstVisitor {
   private:
@@ -294,6 +305,8 @@ class PerfVisitor: public AstVisitor {
         ss << stream.str();
     }
 };
+
+/** @} */  // end of visitor_classes
 
 }  // namespace visitor
 }  // namespace nmodl
