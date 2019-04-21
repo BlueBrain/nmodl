@@ -118,7 +118,7 @@ namespace ast {
          *
          * Recursively make a new copy/clone of the current node including
          * all members and return a pointer to the node. This is used for
-         * passes like nmodl::InlineVisitor where nodes are cloned in the
+         * passes like nmodl::visitor::InlineVisitor where nodes are cloned in the
          * ast.
          *
          * @return pointer to the clone/copy of the current node
@@ -171,7 +171,7 @@ namespace ast {
         /**
          * \brief Return associated token for the current ast node
          *
-         * Not all ast nodes have token information. For example, nmodl::CnexpSolveVisitor
+         * Not all ast nodes have token information. For example, nmodl::visitor::CnexpSolveVisitor
          * can insert new nodes in the ast as a solution of ODEs. In this case, we return
          * nullptr to store in the nmodl::symtab::SymbolTable.
          *
@@ -192,7 +192,7 @@ namespace ast {
          *
          * @return pointer to the symbol table
          *
-         * \sa nmodl::symtab::SymbolTable nmodl::SymtabVisitor
+         * \sa nmodl::symtab::SymbolTable nmodl::visitor::SymtabVisitor
          */
         symtab::SymbolTable* get_symbol_table() override {
             return symtab;
@@ -229,7 +229,7 @@ namespace ast {
          *
          * Some ast nodes have a member marked designated as node name (e.g. nodes
          * derived from ast::Identifier). This method is used to set new name for those
-         * nodes. This useful for passes like nmodl::RenameVisitor.
+         * nodes. This useful for passes like nmodl::visitor::RenameVisitor.
          *
          * \sa Ast::get_node_type_name Ast::get_node_name
          */
@@ -250,10 +250,10 @@ namespace ast {
          * \brief Set symbol table for the current ast node
          *
          * Top level, block scoped nodes store symbol table in the ast node.
-         * nmodl::SymtabVisitor then used this method to setup symbol table
+         * nmodl::visitor::SymtabVisitor then used this method to setup symbol table
          * for every node in the ast.
          *
-         * \sa nmodl::SymtabVisitor
+         * \sa nmodl::visitor::SymtabVisitor
          */
         void set_symbol_table(symtab::SymbolTable* newsymtab) override {
             symtab = newsymtab;
@@ -292,7 +292,7 @@ namespace ast {
          *
          * \sa Ast::visit_children for example.
          */
-        {{ virtual(node) }} void visit_children (Visitor* v) override;
+        {{ virtual(node) }} void visit_children (visitor::Visitor* v) override;
 
         /**
          * \brief accept (or visit) the current AST node using provided visitor
@@ -305,7 +305,7 @@ namespace ast {
          *
          * \sa Ast::accept for example.
          */
-        {{ virtual(node) }} void accept(Visitor* v) override {
+        {{ virtual(node) }} void accept(visitor::Visitor* v) override {
             v->visit_{{ node.class_name | snake_case }}(this);
         }
 

@@ -14,6 +14,7 @@
 
 
 namespace nmodl {
+namespace visitor {
 
 /**
  * \class VarUsageVisitor
@@ -36,4 +37,5 @@ class VarUsageVisitor: public AstVisitor {
     virtual void visit_name(ast::Name* node) override;
 };
 
+}  // namespace visitor
 }  // namespace nmodl

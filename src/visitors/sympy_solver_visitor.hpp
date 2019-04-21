@@ -19,6 +19,7 @@
 #include "visitors/visitor_utils.hpp"
 
 namespace nmodl {
+namespace visitor {
 
 /**
  * \class SympySolverVisitor
@@ -162,4 +163,5 @@ class SympySolverVisitor: public AstVisitor {
     void visit_program(ast::Program* node) override;
 };
 
+}  // namespace visitor
 }  // namespace nmodl

@@ -11,6 +11,7 @@
 #include "printer/json_printer.hpp"
 
 namespace nmodl {
+namespace visitor {
 
 /* Concrete visitor for printing AST in JSON format */
 class JSONVisitor : public AstVisitor {
@@ -32,4 +33,5 @@ class JSONVisitor : public AstVisitor {
         {% endfor %}
 };
 
+}  // namespace visitor
 }  // namespace nmodl

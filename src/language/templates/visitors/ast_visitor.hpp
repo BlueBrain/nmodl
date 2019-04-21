@@ -12,6 +12,7 @@
 
 
 namespace nmodl {
+namespace visitor {
 
 /**
  * @ingroup visitor_classes
@@ -35,4 +36,5 @@ class AstVisitor : public Visitor {
 
 /** @} */  // end of visitor_classes
 
+}  // namespace visitor
 }  // namespace nmodl

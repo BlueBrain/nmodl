@@ -17,6 +17,7 @@
 
 
 namespace nmodl {
+namespace visitor {
 
 /**
  * \class PerfVisitor
@@ -42,7 +43,6 @@ namespace nmodl {
  * start_measurement, there should be "empty" ast visitor from
  * which PerfVisitor should be inherited.
  */
-
 class PerfVisitor: public AstVisitor {
   private:
     /// symbol table of current block being visited
@@ -295,4 +295,5 @@ class PerfVisitor: public AstVisitor {
     }
 };
 
+}  // namespace visitor
 }  // namespace nmodl

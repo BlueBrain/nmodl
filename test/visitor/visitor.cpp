@@ -40,6 +40,8 @@
 using json = nlohmann::json;
 
 using namespace nmodl;
+using namespace visitor;
+
 using ast::AstNodeType;
 using nmodl::parser::NmodlDriver;
 using symtab::syminfo::NmodlType;

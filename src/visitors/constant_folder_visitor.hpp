@@ -15,6 +15,7 @@
 #include "visitors/ast_visitor.hpp"
 
 namespace nmodl {
+namespace visitor {
 
 /**
  * \class ConstantFolderVisitor
@@ -42,4 +43,5 @@ class ConstantFolderVisitor: public AstVisitor {
     void visit_paren_expression(ast::ParenExpression* node) override;
 };
 
+}  // namespace visitor
 }  // namespace nmodl

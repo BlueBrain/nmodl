@@ -19,6 +19,7 @@
 
 
 namespace nmodl {
+namespace visitor {
 
 /**
  * \class InlineVisitor
@@ -180,4 +181,5 @@ class InlineVisitor: public AstVisitor {
     virtual void visit_program(ast::Program* node) override;
 };
 
+}  // namespace visitor
 }  // namespace nmodl

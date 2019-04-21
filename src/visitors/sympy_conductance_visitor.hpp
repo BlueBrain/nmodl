@@ -22,6 +22,7 @@
 
 
 namespace nmodl {
+namespace visitor {
 
 /**
  * \class SympyConductanceVisitor
@@ -95,4 +96,5 @@ class SympyConductanceVisitor: public AstVisitor {
     void visit_program(ast::Program* node) override;
 };
 
+}  // namespace visitor
 }  // namespace nmodl

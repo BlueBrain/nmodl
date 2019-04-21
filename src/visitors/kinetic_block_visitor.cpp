@@ -14,11 +14,12 @@
 #include "utils/string_utils.hpp"
 #include "visitor_utils.hpp"
 
-using namespace fmt::literals;
 
 namespace nmodl {
+namespace visitor {
 
 using symtab::syminfo::NmodlType;
+using namespace fmt::literals;
 
 void KineticBlockVisitor::process_reac_var(const std::string& varname, int count) {
     // lookup index of state var
@@ -409,4 +410,5 @@ void KineticBlockVisitor::visit_program(ast::Program* node) {
     node->set_blocks(std::move(blocks));
 }
 
+}  // namespace visitor
 }  // namespace nmodl

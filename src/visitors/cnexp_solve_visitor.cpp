@@ -17,6 +17,7 @@
 
 
 namespace nmodl {
+namespace visitor {
 
 void CnexpSolveVisitor::visit_solve_block(ast::SolveBlock* node) {
     auto name = node->get_block_name()->get_node_name();
@@ -102,4 +103,5 @@ void CnexpSolveVisitor::visit_program(ast::Program* node) {
     node->visit_children(this);
 }
 
+}  // namespace visitor
 }  // namespace nmodl

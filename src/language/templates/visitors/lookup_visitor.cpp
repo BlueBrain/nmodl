@@ -10,6 +10,7 @@
 
 
 namespace nmodl {
+namespace visitor {
 
 using namespace ast;
 
@@ -48,4 +49,5 @@ std::vector<std::shared_ptr<ast::Ast>> AstLookupVisitor::lookup(Ast* node) {
     return nodes;
 }
 
+}  // namespace visitor
 }  // namespace nmodl

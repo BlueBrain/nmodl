@@ -13,6 +13,7 @@
 #include "printer/nmodl_printer.hpp"
 
 namespace nmodl {
+namespace visitor {
 
 /* Visitor for printing AST back to NMODL */
 class NmodlPrintVisitor : public Visitor {
@@ -43,4 +44,5 @@ class NmodlPrintVisitor : public Visitor {
         void visit_element(const std::vector<T>& elements, std::string separator, bool program, bool statement);
 };
 
+}  // namespace visitor
 }  // namespace nmodl

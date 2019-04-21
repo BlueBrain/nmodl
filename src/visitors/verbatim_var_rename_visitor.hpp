@@ -14,6 +14,7 @@
 #include "visitors/ast_visitor.hpp"
 
 namespace nmodl {
+namespace visitor {
 
 /**
  * \class VerbatimVarRenameVisitor
@@ -58,4 +59,5 @@ class VerbatimVarRenameVisitor: public AstVisitor {
     virtual void visit_statement_block(ast::StatementBlock* node) override;
 };
 
+}  // namespace visitor
 }  // namespace nmodl

@@ -14,6 +14,7 @@
 
 
 namespace nmodl {
+namespace visitor {
 
 using symtab::Symbol;
 using symtab::syminfo::NmodlType;
@@ -239,5 +240,5 @@ void SymtabVisitor::visit_table_statement(ast::TableStatement* node) {
     update_symbol(node->get_depend_vars(), NmodlType::table_dependent_var, num_values);
 }
 
-
+}  // namespace visitor
 }  // namespace nmodl

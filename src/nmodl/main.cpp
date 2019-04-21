@@ -45,6 +45,7 @@
 using namespace fmt::literals;
 using namespace nmodl;
 using namespace codegen;
+using namespace visitor;
 using nmodl::parser::NmodlDriver;
 
 int main(int argc, const char* argv[]) {

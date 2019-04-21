@@ -11,6 +11,7 @@
 #include "visitors/localize_visitor.hpp"
 
 namespace nmodl {
+namespace visitor {
 
 using symtab::Symbol;
 using symtab::syminfo::NmodlType;
@@ -159,4 +160,5 @@ void LocalizeVisitor::visit_program(ast::Program* node) {
     }
 }
 
+}  // namespace visitor
 }  // namespace nmodl

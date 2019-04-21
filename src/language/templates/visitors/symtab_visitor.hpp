@@ -14,6 +14,7 @@
 #include "symtab/symbol_table.hpp"
 
 namespace nmodl {
+namespace visitor {
 
 /* Concrete visitor for constructing symbol table from AST */
 class SymtabVisitor : public AstVisitor {
@@ -50,4 +51,5 @@ public:
     {% endfor %}
 };
 
+}  // namespace visitor
 }  // namespace nmodl

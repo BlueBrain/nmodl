@@ -10,7 +10,7 @@
 
 
 namespace nmodl {
-
+namespace visitor {
 
 void VerbatimVarRenameVisitor::visit_statement_block(ast::StatementBlock* node) {
     if (node->get_statements().empty()) {
@@ -84,4 +84,5 @@ void VerbatimVarRenameVisitor::visit_verbatim(ast::Verbatim* node) {
     statement->set(result);
 }
 
+}  // namespace visitor
 }  // namespace nmodl

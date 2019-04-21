@@ -13,6 +13,7 @@
 
 
 namespace nmodl {
+namespace visitor {
 
 /**
  * \class IndexRemover
@@ -162,4 +163,5 @@ void LoopUnrollVisitor::visit_statement_block(ast::StatementBlock* node) {
     }
 }
 
+}  // namespace visitor
 }  // namespace nmodl

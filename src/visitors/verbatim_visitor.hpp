@@ -13,6 +13,7 @@
 #include "visitors/ast_visitor.hpp"
 
 namespace nmodl {
+namespace visitor {
 
 /**
  * \class VerbatimVisitor
@@ -47,4 +48,5 @@ class VerbatimVisitor: public AstVisitor {
     }
 };
 
+}  // namespace visitor
 }  // namespace nmodl

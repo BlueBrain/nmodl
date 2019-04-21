@@ -28,6 +28,10 @@ namespace codegen {
 
 using namespace ast;
 
+using visitor::AstLookupVisitor;
+using visitor::RenameVisitor;
+using visitor::VarUsageVisitor;
+
 using symtab::syminfo::NmodlType;
 using SymbolType = std::shared_ptr<symtab::Symbol>;
 

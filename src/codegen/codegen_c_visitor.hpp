@@ -148,7 +148,7 @@ struct ShadowUseStatement {
  *      - return statement in the verbatim block of inlined function not handled
  *        for example, see netstim.mod where we removed return from verbatim block
  */
-class CodegenCVisitor: public AstVisitor {
+class CodegenCVisitor: public visitor::AstVisitor {
   protected:
     using SymbolType = std::shared_ptr<symtab::Symbol>;
 

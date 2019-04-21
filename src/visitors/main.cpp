@@ -32,6 +32,7 @@
 
 
 using namespace nmodl;
+using namespace visitor;
 using namespace fmt::literals;
 
 /**

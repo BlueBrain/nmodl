@@ -17,10 +17,11 @@
 #include "visitors/steadystate_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
 
-using namespace fmt::literals;
 
 namespace nmodl {
+namespace visitor {
 
+using namespace fmt::literals;
 using symtab::syminfo::NmodlType;
 
 std::shared_ptr<ast::DerivativeBlock> SteadystateVisitor::create_steadystate_block(
@@ -126,4 +127,5 @@ void SteadystateVisitor::visit_program(ast::Program* node) {
     }
 }
 
+}  // namespace visitor
 }  // namespace nmodl

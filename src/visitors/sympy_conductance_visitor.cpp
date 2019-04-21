@@ -19,11 +19,11 @@ namespace py = pybind11;
 using namespace py::literals;
 
 namespace nmodl {
+namespace visitor {
 
 using ast::AstNodeType;
 using ast::BinaryOp;
 using symtab::syminfo::NmodlType;
-
 
 /**
  * Analyse breakpoint block to check if it is safe to insert CONDUCTANCE statements
@@ -252,4 +252,5 @@ void SympyConductanceVisitor::visit_program(ast::Program* node) {
     node->visit_children(this);
 }
 
+}  // namespace visitor
 }  // namespace nmodl

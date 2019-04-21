@@ -17,6 +17,7 @@
 #include <vector>
 
 namespace nmodl {
+namespace visitor {
 
 /**
  * \class KineticBlockVisitor
@@ -31,7 +32,6 @@ namespace nmodl {
  * matter. Also does not yet support array variables.
  *
  */
-
 class KineticBlockVisitor: public AstVisitor {
   private:
     /// update stochiometric matrices with reaction var term
@@ -112,4 +112,5 @@ class KineticBlockVisitor: public AstVisitor {
     void visit_program(ast::Program* node) override;
 };
 
+}  // namespace visitor
 }  // namespace nmodl

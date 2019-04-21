@@ -13,6 +13,7 @@
 #include "visitors/ast_visitor.hpp"
 
 namespace nmodl {
+namespace visitor {
 
 /**
  * \class CnexpSolveVisitor
@@ -24,7 +25,6 @@ namespace nmodl {
  * purpose where we want to measure performance metrics using perfvisitor
  * pass.
  */
-
 class CnexpSolveVisitor: public AstVisitor {
   private:
     /// true while visiting differential equation
@@ -55,4 +55,5 @@ class CnexpSolveVisitor: public AstVisitor {
     void visit_program(ast::Program* node) override;
 };
 
+}  // namespace visitor
 }  // namespace nmodl

@@ -11,6 +11,7 @@
 #include "visitors/lookup_visitor.hpp"
 
 namespace nmodl {
+namespace visitor {
 
 void SolveBlockVisitor::visit_breakpoint_block(ast::BreakpointBlock* node) {
     in_breakpoint_block = true;
@@ -75,7 +76,6 @@ void SolveBlockVisitor::visit_expression_statement(ast::ExpressionStatement* nod
     }
 }
 
-
 void SolveBlockVisitor::visit_program(ast::Program* node) {
     symtab = node->get_symbol_table();
     node->visit_children(this);
@@ -86,4 +86,5 @@ void SolveBlockVisitor::visit_program(ast::Program* node) {
     }
 }
 
+}  // namespace visitor
 }  // namespace nmodl

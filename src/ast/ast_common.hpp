@@ -190,13 +190,13 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *       to visit the node itself in the visitor.
      *
      * \code{.cpp}
-     *   void IndexedName::accept(Visitor* v) override {
+     *   void IndexedName::accept(visitor::Visitor* v) override {
      *       v->visit_indexed_name(this);
      *   }
      * \endcode
      *
      */
-    virtual void accept(Visitor* v) = 0;
+    virtual void accept(visitor::Visitor* v) = 0;
 
     /**
      * \brief Visit children i.e. member of AST node using provided visitor
@@ -210,20 +210,20 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *       ast::IndexedName node children are visited instead of node itself.
      *
      * \code{.cpp}
-     * void IndexedName::visit_children(Visitor* v) {
+     * void IndexedName::visit_children(visitor::Visitor* v) {
      *    name->accept(v);
      *    length->accept(v);
      * }
      * \endcode
      */
-    virtual void visit_children(Visitor* v) = 0;
+    virtual void visit_children(visitor::Visitor* v) = 0;
 
     /**
      * \brief Create a copy of the current node
      *
      * Recursively make a new copy/clone of the current node including
      * all members and return a pointer to the node. This is used for
-     * passes like nmodl::InlineVisitor where nodes are cloned in the
+     * passes like nmodl::visitor::InlineVisitor where nodes are cloned in the
      * ast.
      *
      * @return pointer to the clone/copy of the current node
@@ -257,7 +257,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
     /**
      * \brief Return associated token for the AST node
      *
-     * Not all ast nodes have token information. For example, nmodl::CnexpSolveVisitor
+     * Not all ast nodes have token information. For example, nmodl::visitor::CnexpSolveVisitor
      * can insert new nodes in the ast as a solution of ODEs. In this case, we return
      * nullptr to store in the nmodl::symtab::SymbolTable.
      *
@@ -276,7 +276,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *
      * @return pointer to the symbol table
      *
-     * \sa nmodl::symtab::SymbolTable nmodl::SymtabVisitor
+     * \sa nmodl::symtab::SymbolTable nmodl::visitor::SymtabVisitor
      */
     virtual symtab::SymbolTable* get_symbol_table() {
         throw std::runtime_error("get_symbol_table not implemented");
@@ -311,10 +311,10 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      * \brief Set symbol table for the AST node
      *
      * Top level, block scoped nodes store symbol table in the ast node.
-     * nmodl::SymtabVisitor then used this method to setup symbol table
+     * nmodl::visitor::SymtabVisitor then used this method to setup symbol table
      * for every node in the ast.
      *
-     * \sa nmodl::SymtabVisitor
+     * \sa nmodl::visitor::SymtabVisitor
      */
     virtual void set_symbol_table(symtab::SymbolTable* /*symtab*/) {
         throw std::runtime_error("set_symbol_table not implemented");
@@ -325,7 +325,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *
      * Some ast nodes have a member marked designated as node name (e.g. nodes
      * derived from ast::Identifier). This method is used to set new name for those
-     * nodes. This useful for passes like nmodl::RenameVisitor.
+     * nodes. This useful for passes like nmodl::visitor::RenameVisitor.
      *
      * \sa Ast::get_node_type_name Ast::get_node_name
      */

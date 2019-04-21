@@ -12,7 +12,7 @@
 #include "visitors/ast_visitor.hpp"
 
 namespace nmodl {
-
+namespace visitor {
 
 /**
  * \class SolveBlockVisitor
@@ -23,7 +23,6 @@ namespace nmodl {
  * statements appearing in breakpoint block get added to NrnState block as solution
  * expression.
  */
-
 class SolveBlockVisitor: public AstVisitor {
   private:
     symtab::SymbolTable* symtab = nullptr;
@@ -42,4 +41,5 @@ class SolveBlockVisitor: public AstVisitor {
     void visit_program(ast::Program* node) override;
 };
 
+}  // namespace visitor
 }  // namespace nmodl

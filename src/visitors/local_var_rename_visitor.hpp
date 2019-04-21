@@ -15,6 +15,7 @@
 #include "visitors/ast_visitor.hpp"
 
 namespace nmodl {
+namespace visitor {
 
 /**
  * \class LocalVarRenameVisitor
@@ -46,7 +47,6 @@ namespace nmodl {
  * \todo: currently we are renaming variables even if there is no inlining candidates.
  * In this case ideally we should not rename.
  */
-
 class LocalVarRenameVisitor: public AstVisitor {
   private:
     /// non-null symbol table in the scope hierarchy
@@ -63,4 +63,5 @@ class LocalVarRenameVisitor: public AstVisitor {
     virtual void visit_statement_block(ast::StatementBlock* node) override;
 };
 
+}  // namespace visitor
 }  // namespace nmodl

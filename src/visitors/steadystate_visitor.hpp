@@ -12,6 +12,7 @@
 #include "visitors/visitor_utils.hpp"
 
 namespace nmodl {
+namespace visitor {
 
 /**
  * \class SteadystateVisitor
@@ -36,9 +37,7 @@ namespace nmodl {
  * SOLVE X STEADYSTATE derivimplicit
  * becomes
  * SOLVE X_steadystate METHOD derivimplicit
- *
  */
-
 class SteadystateVisitor: public AstVisitor {
   private:
     /// create new steady state derivative block for given solve block
@@ -54,4 +53,5 @@ class SteadystateVisitor: public AstVisitor {
     void visit_program(ast::Program* node) override;
 };
 
+}  // namespace visitor
 }  // namespace nmodl

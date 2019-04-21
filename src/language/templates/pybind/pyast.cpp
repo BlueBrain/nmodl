@@ -150,7 +150,7 @@ static const char* eval_method = R"(
 
 namespace py = pybind11;
 using namespace nmodl::ast;
-using nmodl::JSONVisitor;
+using nmodl::visitor::JSONVisitor;
 using pybind11::literals::operator""_a;
 
 

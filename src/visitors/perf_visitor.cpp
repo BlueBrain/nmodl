@@ -11,6 +11,7 @@
 
 
 namespace nmodl {
+namespace visitor {
 
 using symtab::Symbol;
 using symtab::syminfo::NmodlType;
@@ -493,4 +494,5 @@ void PerfVisitor::update_memory_ops(const std::string& name) {
     }
 }
 
+}  // namespace visitor
 }  // namespace nmodl

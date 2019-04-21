@@ -59,8 +59,10 @@ static const char* symtabvisitor_class = R"(
 
 namespace py = pybind11;
 using pybind11::literals::operator""_a;
+
 using namespace nmodl;
 using namespace symtab;
+using namespace visitor;
 
 
 // clang-format off

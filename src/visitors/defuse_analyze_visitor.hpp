@@ -19,6 +19,7 @@
 
 
 namespace nmodl {
+namespace visitor {
 
 /// state in def-use chain
 enum class DUState {
@@ -287,4 +288,5 @@ class DefUseAnalyzeVisitor: public AstVisitor {
     DUChain analyze(ast::Ast* node, const std::string& name);
 };
 
+}  // namespace visitor
 }  // namespace nmodl

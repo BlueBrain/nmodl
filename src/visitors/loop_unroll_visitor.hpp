@@ -13,8 +13,8 @@
 #include "symtab/symbol_table.hpp"
 #include "visitors/ast_visitor.hpp"
 
-
 namespace nmodl {
+namespace visitor {
 
 /**
  * \class LoopUnrollVisitor
@@ -44,7 +44,6 @@ namespace nmodl {
  * Note that the index `0+1` is not expanded to `1` because we do not run
  * constant folder pass within this loop (but could be easily done).
  */
-
 class LoopUnrollVisitor: public AstVisitor {
   public:
     LoopUnrollVisitor() = default;
@@ -52,4 +51,5 @@ class LoopUnrollVisitor: public AstVisitor {
     virtual void visit_statement_block(ast::StatementBlock* node) override;
 };
 
+}  // namespace visitor
 }  // namespace nmodl

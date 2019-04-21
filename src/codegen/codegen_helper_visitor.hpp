@@ -34,7 +34,7 @@ namespace codegen {
  *  - POINTER rng and if it's also assigned rng[4] then it is printed as one value.
  *    Need to check what is correct value.
  */
-class CodegenHelperVisitor: public AstVisitor {
+class CodegenHelperVisitor: public visitor::AstVisitor {
     using SymbolType = std::shared_ptr<symtab::Symbol>;
 
     /// holds all codegen related information

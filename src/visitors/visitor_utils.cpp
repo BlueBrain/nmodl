@@ -18,6 +18,7 @@
 
 
 namespace nmodl {
+namespace visitor {
 
 using namespace ast;
 using symtab::syminfo::NmodlType;
@@ -158,17 +159,20 @@ bool calls_function(ast::Ast* node, const std::string& name) {
     return false;
 }
 
+}  // namespace visitor
+
 
 std::string to_nmodl(ast::Ast* node, const std::set<ast::AstNodeType>& exclude_types) {
     std::stringstream stream;
-    NmodlPrintVisitor v(stream, exclude_types);
+    visitor::NmodlPrintVisitor v(stream, exclude_types);
     node->accept(&v);
     return stream.str();
 }
 
+
 std::string to_json(ast::Ast* node, bool compact, bool expand) {
     std::stringstream stream;
-    JSONVisitor v(stream);
+    visitor::JSONVisitor v(stream);
     v.compact_json(compact);
     v.expand_keys(expand);
     node->accept(&v);

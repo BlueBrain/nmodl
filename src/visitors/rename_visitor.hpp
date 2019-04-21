@@ -15,6 +15,7 @@
 
 
 namespace nmodl {
+namespace visitor {
 
 /**
  * \class VarRenameVisitor
@@ -62,4 +63,5 @@ class RenameVisitor: public AstVisitor {
     virtual void visit_verbatim(ast::Verbatim* node) override;
 };
 
+}  // namespace visitor
 }  // namespace nmodl

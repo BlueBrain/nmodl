@@ -12,6 +12,7 @@
 
 
 namespace nmodl {
+namespace visitor {
 
 /**
  * \class AstLookupVisitor
@@ -54,4 +55,5 @@ class AstLookupVisitor : public Visitor {
         {% endfor %}
 };
 
+}  // namespace visitor
 }  // namespace nmodl

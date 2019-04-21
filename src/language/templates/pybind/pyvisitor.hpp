@@ -14,6 +14,7 @@
 #include <pybind11/stl.h>
 
 using namespace nmodl;
+using namespace visitor;
 
 /**
  * \brief Class mirroring nmodl::Visitor for Python bindings

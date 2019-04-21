@@ -19,6 +19,7 @@ namespace py = pybind11;
 using namespace py::literals;
 
 namespace nmodl {
+namespace visitor {
 
 using symtab::syminfo::NmodlType;
 
@@ -600,4 +601,5 @@ void SympySolverVisitor::visit_program(ast::Program* node) {
     node->visit_children(this);
 }
 
+}  // namespace visitor
 }  // namespace nmodl

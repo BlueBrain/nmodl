@@ -9,6 +9,7 @@
 
 
 namespace nmodl {
+namespace visitor {
 
 /**
  * @defgroup visitor Visitor Infrastructure
@@ -40,6 +41,7 @@ class Visitor {
         {% endfor %}
 };
 
+}  // namespace visitor
 }  // namespace nmodl
 
 /** @} */  // end of visitor_classes

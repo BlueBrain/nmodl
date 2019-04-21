@@ -14,6 +14,7 @@
 #include "ast/ast.hpp"
 
 namespace nmodl {
+namespace visitor {
 
 /** Return new name variable by appending "_suffix_COUNT" where COUNT is number
  * of times the given variable is already used.
@@ -58,6 +59,8 @@ std::set<std::string> get_global_vars(ast::Program* node);
 /** Checks whether block contains a call to a perticular function */
 bool calls_function(ast::Ast* node, const std::string& name);
 
+}  // namespace visitor
+
 
 /** Given AST node, return the NMODL string representation */
 std::string to_nmodl(ast::Ast* node, const std::set<ast::AstNodeType>& exclude_types = {});
@@ -65,5 +68,6 @@ std::string to_nmodl(ast::Ast* node, const std::set<ast::AstNodeType>& exclude_t
 
 /** Given AST node, return the JSON string representation */
 std::string to_json(ast::Ast* node, bool compact = false, bool expand = false);
+
 
 }  // namespace nmodl

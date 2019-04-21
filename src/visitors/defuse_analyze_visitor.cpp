@@ -11,6 +11,7 @@
 #include "visitors/defuse_analyze_visitor.hpp"
 
 namespace nmodl {
+namespace visitor {
 
 using symtab::syminfo::NmodlType;
 
@@ -348,4 +349,5 @@ DUChain DefUseAnalyzeVisitor::analyze(ast::Ast* node, const std::string& name) {
     return usage;
 }
 
+}  // namespace visitor
 }  // namespace nmodl

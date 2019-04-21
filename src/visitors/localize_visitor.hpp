@@ -21,6 +21,7 @@
 
 
 namespace nmodl {
+namespace visitor {
 
 /**
  * \class LocalizeVisitor
@@ -72,7 +73,6 @@ namespace nmodl {
  *     variables. We need to have dead-code removal pass to eliminate unused procedures/
  *     functions before localizer pass.
  */
-
 class LocalizeVisitor: public AstVisitor {
   private:
     /// ignore verbatim blocks while localizing
@@ -95,4 +95,5 @@ class LocalizeVisitor: public AstVisitor {
     virtual void visit_program(ast::Program* node) override;
 };
 
+}  // namespace visitor
 }  // namespace nmodl

@@ -24,6 +24,9 @@ namespace codegen {
 
 using symtab::syminfo::Status;
 
+using visitor::AstLookupVisitor;
+using visitor::RenameVisitor;
+
 /****************************************************************************************/
 /*                            Overloaded visitor methods                                */
 /****************************************************************************************/
@@ -632,9 +635,9 @@ void CodegenIspcVisitor::determine_target() {
     auto node_lv = AstLookupVisitor(incompatible_node_types);
 
     if (info.initial_node) {
-        emit_fallback[BlockType::Initial] = !node_lv.lookup(info.initial_node).empty() ||
-                                            calls_function(info.initial_node, "net_send") ||
-                                            info.require_wrote_conc;
+        emit_fallback[BlockType::Initial] =
+            !node_lv.lookup(info.initial_node).empty() ||
+            visitor::calls_function(info.initial_node, "net_send") || info.require_wrote_conc;
     } else {
         emit_fallback[BlockType::Initial] = info.net_receive_initial_node ||
                                             info.require_wrote_conc;
@@ -642,7 +645,8 @@ void CodegenIspcVisitor::determine_target() {
 
     if (info.net_receive_node) {
         emit_fallback[BlockType::NetReceive] = !node_lv.lookup(info.net_receive_node).empty() ||
-                                               calls_function(info.net_receive_node, "net_send");
+                                               visitor::calls_function(info.net_receive_node,
+                                                                       "net_send");
     }
 
     if (nrn_cur_required()) {

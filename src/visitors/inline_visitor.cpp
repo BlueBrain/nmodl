@@ -10,6 +10,8 @@
 
 
 namespace nmodl {
+namespace visitor {
+
 using namespace ast;
 
 bool InlineVisitor::can_inline_block(StatementBlock* block) {
@@ -310,4 +312,5 @@ void InlineVisitor::visit_program(Program* node) {
     node->visit_children(this);
 }
 
+}  // namespace visitor
 }  // namespace nmodl
