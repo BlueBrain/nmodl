@@ -28,6 +28,7 @@ class location;
 
 /**
  * @addtogroup parser
+ * @addtogroup units
  * @{
  */
 

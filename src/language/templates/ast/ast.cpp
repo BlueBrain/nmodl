@@ -8,14 +8,13 @@
 #include "ast/ast.hpp"
 #include "symtab/symbol_table.hpp"
 
+/**
+ * \file
+ * \brief Auto generated AST classes implementations
+ */
 
 namespace nmodl {
 namespace ast {
-
-/**
- * \file
- * \brief Member function implementation of all AST classes
- */
 
     {% for node in nodes %}
 

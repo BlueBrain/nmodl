@@ -17,7 +17,10 @@ namespace symtab {
 using syminfo::NmodlType;
 using syminfo::Status;
 
+
 bool Symbol::is_variable() {
+    // if symbol has one of the following property then it
+    // is considered as variable in the NMODL
     // clang-format off
         NmodlType var_properties = NmodlType::local_var
                                     | NmodlType::global_var

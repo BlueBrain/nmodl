@@ -7,6 +7,11 @@
 
 #pragma once
 
+/**
+ * \file
+ * \brief Implement various classes to represent various Symbol properties
+ */
+
 #include <sstream>
 
 #include "utils/string_utils.hpp"

@@ -7,6 +7,14 @@
 
 #pragma once
 
+/**
+ * \dir
+ * \brief AST Implementation
+ *
+ * \file
+ * \brief Implementation of AST base class and it's properties
+ */
+
 #include <memory>
 #include <string>
 

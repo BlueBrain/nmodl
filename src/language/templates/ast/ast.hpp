@@ -7,6 +7,14 @@
 
 #pragma once
 
+/**
+ * \dir
+ * \brief Auto generated AST Implementations
+ *
+ * \file
+ * \brief Auto generated AST classes declaration
+ */
+
 #include <iostream>
 #include <memory>
 #include <string>
@@ -29,10 +37,6 @@
     {% if not node.is_abstract %} override {% endif %}
 {% endmacro %}
 
-/**
- * \file
- * \brief Definition of all AST classes
- */
 
 namespace nmodl {
 namespace ast {

@@ -12,7 +12,7 @@
 #include <vector>
 
 /// \file
-/// \brief AST node types and aliases declaration
+/// \brief Auto generated  AST node types and aliases declaration
 
 namespace nmodl {
 namespace ast {

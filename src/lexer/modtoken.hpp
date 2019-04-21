@@ -79,7 +79,6 @@ class ModToken {
         , token(token)
         , pos(pos) {}
 
-
     /// \}
 
     /// Return a new instance of token

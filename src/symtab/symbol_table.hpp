@@ -7,12 +7,19 @@
 
 #pragma once
 
+/**
+ * \dir
+ * \brief Symbol table implementation
+ *
+ * \file
+ * \brief Implement classes for representing symbol table at block and file scope
+ */
+
 #include <map>
 #include <memory>
 #include <vector>
 
 #include "symtab/symbol.hpp"
-
 
 namespace nmodl {
 namespace symtab {

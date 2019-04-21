@@ -18,13 +18,22 @@
 #include "visitors/visitor_utils.hpp"
 
 
+/**
+ * \dir
+ * \brief NMODL Python Interface Implementation
+ *
+ * \file
+ * \brief Top level nmodl Python module implementation
+ */
+
+
 namespace py = pybind11;
 using pybind11::literals::operator""_a;
 
 
 namespace nmodl {
 
-/** \brief docstring of python symbols */
+/** \brief docstring of Python exposed API */
 namespace docstring {
 
 static const char* driver = R"(
@@ -101,10 +110,13 @@ static const char* to_json = R"(
 )";
 
 }  // namespace docstring
-}  // namespace nmodl
 
 
-class PyDriver: public nmodl::parser::NmodlDriver {
+/**
+ * \class PyNmodlDriver
+ * \brief Class to bridge C++ NmodlDriver with Python world using pybind11
+ */
+class PyNmodlDriver: public nmodl::parser::NmodlDriver {
   public:
     std::shared_ptr<nmodl::ast::Program> parse_stream(py::object object) {
         py::object tiob = py::module::import("io").attr("TextIOBase");
@@ -120,24 +132,33 @@ class PyDriver: public nmodl::parser::NmodlDriver {
     }
 };
 
+}  // namespace nmodl
+
 // forward declaration of submodule init functions
 void init_visitor_module(py::module& m);
 void init_ast_module(py::module& m);
 void init_symtab_module(py::module& m);
 
+
 PYBIND11_MODULE(_nmodl, m_nmodl) {
     m_nmodl.doc() = "NMODL : Source-to-Source Code Generation Framework";
     m_nmodl.attr("__version__") = nmodl::version::NMODL_VERSION;
 
-    py::class_<PyDriver> nmodl_driver(m_nmodl, "NmodlDriver", nmodl::docstring::driver);
+    py::class_<nmodl::PyNmodlDriver> nmodl_driver(m_nmodl, "NmodlDriver", nmodl::docstring::driver);
     nmodl_driver.def(py::init<>())
         .def("parse_string",
-             &PyDriver::parse_string,
+             &nmodl::PyNmodlDriver::parse_string,
              "input"_a,
              nmodl::docstring::driver_parse_string)
-        .def("parse_file", &PyDriver::parse_file, "filename"_a, nmodl::docstring::driver_parse_file)
-        .def("parse_stream", &PyDriver::parse_stream, "in"_a, nmodl::docstring::driver_parse_stream)
-        .def("ast", &PyDriver::ast, nmodl::docstring::driver_ast);
+        .def("parse_file",
+             &nmodl::PyNmodlDriver::parse_file,
+             "filename"_a,
+             nmodl::docstring::driver_parse_file)
+        .def("parse_stream",
+             &nmodl::PyNmodlDriver::parse_stream,
+             "in"_a,
+             nmodl::docstring::driver_parse_stream)
+        .def("ast", &nmodl::PyNmodlDriver::ast, nmodl::docstring::driver_ast);
 
     m_nmodl.def("to_nmodl",
                 nmodl::to_nmodl,

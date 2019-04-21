@@ -18,6 +18,11 @@
 
 #include "units.hpp"
 
+/**
+ * \file
+ * \brief Units processing while being processed from lexer and parser
+ */
+
 namespace nmodl {
 namespace units {
 

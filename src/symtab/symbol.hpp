@@ -7,6 +7,11 @@
 
 #pragma once
 
+/**
+ * \file
+ * \brief Implement class to represent a symbol in Symbol Table
+ */
+
 #include <map>
 #include <memory>
 
@@ -19,7 +24,6 @@ namespace nmodl {
 namespace ast {
 class Ast;
 }
-
 
 /// symbol table related implementations
 namespace symtab {

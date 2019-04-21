@@ -9,6 +9,14 @@
 
 #pragma once
 
+/**
+ * \dir
+ * \brief Data structures for storing units
+ *
+ * \file
+ * \brief Declaration of various classes for storing units
+ */
+
 #include <array>
 #include <cmath>
 #include <fstream>
@@ -24,6 +32,12 @@
 
 namespace nmodl {
 namespace units {
+
+/**
+ * @defgroup units Unit Infrastructure
+ * @brief Units handling implementation details
+ * @{
+ */
 
 /// Maximum number of dimensions of units (maximum number of base units)
 static const int MAX_DIMS = 10;
@@ -276,6 +290,8 @@ class UnitTable {
     /// stringstream base_units_details
     void print_base_units(std::stringstream& base_units_details);
 };
+
+/** @} */  // end of units
 
 }  // namespace units
 }  // namespace nmodl

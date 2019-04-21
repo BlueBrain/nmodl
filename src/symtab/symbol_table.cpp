@@ -12,7 +12,6 @@
 #include "utils/logger.hpp"
 #include "utils/table_data.hpp"
 
-
 namespace nmodl {
 namespace symtab {
 
