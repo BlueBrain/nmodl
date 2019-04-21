@@ -41,7 +41,7 @@ using namespace fmt::literals;
 
 int main(int argc, const char* argv[]) {
     CLI::App app{
-        "NMODL Visitor : Runs standalone visitor classes({})"_format(version::to_string())};
+        "NMODL Visitor : Runs standalone visitor classes({})"_format(Version::to_string())};
 
     bool verbose = false;
     std::vector<std::string> files;

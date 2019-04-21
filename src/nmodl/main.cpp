@@ -49,7 +49,7 @@ using nmodl::parser::NmodlDriver;
 
 int main(int argc, const char* argv[]) {
     CLI::App app{
-        "NMODL : Source-to-Source Code Generation Framework [{}]"_format(version::to_string())};
+        "NMODL : Source-to-Source Code Generation Framework [{}]"_format(Version::to_string())};
 
     /// list of mod files to process
     std::vector<std::string> mod_files;
