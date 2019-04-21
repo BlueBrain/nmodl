@@ -31,7 +31,7 @@ namespace visitor {
  */
 class NmodlPrintVisitor: public Visitor {
   private:
-    std::unique_ptr<NMODLPrinter> printer;
+    std::unique_ptr<printer::NMODLPrinter> printer;
 
     /// node types to exclude while printing
     std::set<ast::AstNodeType> exclude_types;
@@ -43,16 +43,16 @@ class NmodlPrintVisitor: public Visitor {
 
   public:
     NmodlPrintVisitor()
-        : printer(new NMODLPrinter()) {}
+        : printer(new printer::NMODLPrinter()) {}
 
     NmodlPrintVisitor(std::string filename)
-        : printer(new NMODLPrinter(filename)) {}
+        : printer(new printer::NMODLPrinter(filename)) {}
 
     NmodlPrintVisitor(std::ostream& stream)
-        : printer(new NMODLPrinter(stream)) {}
+        : printer(new printer::NMODLPrinter(stream)) {}
 
     NmodlPrintVisitor(std::ostream& stream, const std::set<ast::AstNodeType>& types)
-        : printer(new NMODLPrinter(stream))
+        : printer(new printer::NMODLPrinter(stream))
         , exclude_types(types){}
 
     // clang-format off

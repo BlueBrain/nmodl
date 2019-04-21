@@ -13,6 +13,7 @@
 namespace nmodl {
 namespace visitor {
 
+using printer::JSONPrinter;
 using symtab::Symbol;
 using symtab::syminfo::NmodlType;
 using symtab::syminfo::Status;

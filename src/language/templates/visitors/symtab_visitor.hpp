@@ -34,22 +34,22 @@ class SymtabVisitor: public AstVisitor {
   private:
     symtab::ModelSymbolTable* modsymtab;
 
-    std::unique_ptr<JSONPrinter> printer;
+    std::unique_ptr<printer::JSONPrinter> printer;
     std::set<std::string> block_to_solve;
     bool update = false;
     bool under_state_block = false;
 
   public:
     explicit SymtabVisitor(bool update = false)
-        : printer(new JSONPrinter())
+        : printer(new printer::JSONPrinter())
         , update(update) {}
 
     SymtabVisitor(std::ostream& os, bool update = false)
-        : printer(new JSONPrinter(os))
+        : printer(new printer::JSONPrinter(os))
         , update(update) {}
 
     SymtabVisitor(std::string filename, bool update = false)
-        : printer(new JSONPrinter(filename))
+        : printer(new printer::JSONPrinter(filename))
         , update(update) {}
 
     void add_model_symbol_with_property(ast::Node* node, symtab::syminfo::NmodlType property);
@@ -72,6 +72,8 @@ class SymtabVisitor: public AstVisitor {
     {% endfor %}
     // clang-format on
 };
+
+/** @} */  // end of visitor_classes
 
 }  // namespace visitor
 }  // namespace nmodl

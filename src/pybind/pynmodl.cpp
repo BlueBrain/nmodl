@@ -20,7 +20,7 @@
 
 /**
  * \dir
- * \brief NMODL Python Interface Implementation
+ * \brief Python Interface Implementation
  *
  * \file
  * \brief Top level nmodl Python module implementation

@@ -13,6 +13,7 @@
 namespace nmodl {
 namespace visitor {
 
+using printer::JSONPrinter;
 using symtab::syminfo::NmodlType;
 
 /// DUState to string conversion for pretty-printing

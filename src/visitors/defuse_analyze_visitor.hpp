@@ -96,7 +96,7 @@ class DUInstance {
     /// evaluate global usage i.e. with [D,U] states of children
     DUState conditional_block_eval();
 
-    void print(JSONPrinter& printer);
+    void print(printer::JSONPrinter& printer);
 };
 
 

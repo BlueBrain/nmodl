@@ -32,15 +32,17 @@ namespace visitor {
  */
 class JSONVisitor: public AstVisitor {
   private:
-    std::unique_ptr<JSONPrinter> printer;
+    std::unique_ptr<printer::JSONPrinter> printer;
 
   public:
     JSONVisitor()
-        : printer(new JSONPrinter()) {}
+        : printer(new printer::JSONPrinter()) {}
+
     JSONVisitor(std::string filename)
-        : printer(new JSONPrinter(filename)) {}
+        : printer(new printer::JSONPrinter(filename)) {}
+
     JSONVisitor(std::stringstream& ss)
-        : printer(new JSONPrinter(ss)) {}
+        : printer(new printer::JSONPrinter(ss)) {}
 
     void flush() {
         printer->flush();

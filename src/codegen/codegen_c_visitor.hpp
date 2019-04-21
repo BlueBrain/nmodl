@@ -24,7 +24,6 @@
 
 using namespace fmt::literals;
 
-
 namespace nmodl {
 namespace codegen {
 
@@ -138,6 +137,7 @@ struct ShadowUseStatement {
     std::string rhs;
 };
 
+using printer::CodePrinter;
 
 /**
  * \class CodegenCVisitor
@@ -151,7 +151,6 @@ struct ShadowUseStatement {
 class CodegenCVisitor: public visitor::AstVisitor {
   protected:
     using SymbolType = std::shared_ptr<symtab::Symbol>;
-
     using ParamVector = std::vector<std::tuple<std::string, std::string, std::string, std::string>>;
 
     /// name of mod file (without .mod suffix)

@@ -89,7 +89,7 @@ class PerfVisitor: public AstVisitor {
     bool under_net_receive_block = false;
 
     /// to print to json file
-    std::unique_ptr<JSONPrinter> printer;
+    std::unique_ptr<printer::JSONPrinter> printer;
 
     /// if not json, all goes to string
     std::stringstream stream;
