@@ -140,6 +140,9 @@ static const std::string ReactionOpNames[] = {"<->", "<<", "->"};
  * ast::Ast. This class provides base properties and pure virtual
  * functions that must be implemented by base classes. We inherit from
  * std::enable_shared_from_this to get a `shared_ptr` from `this` pointer.
+ *
+ * \todo With the ast::Node as another top level node, this can be removed
+ *       in the future.
  */
 struct Ast: public std::enable_shared_from_this<Ast> {
     /// \name Ctor & dtor
