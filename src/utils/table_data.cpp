@@ -45,7 +45,7 @@ void TableData::print(std::stringstream& stream, int indent) {
 
     /// alignment is optional, so fill remaining withh right alignment
     for (unsigned i = alignments.size(); i < ncolumns; i++) {
-        alignments.push_back(text_alignment::center);
+        alignments.push_back(stringutils::text_alignment::center);
     }
 
     /// calculate space required for each column
@@ -80,7 +80,8 @@ void TableData::print(std::stringstream& stream, int indent) {
     std::stringstream header;
     header << "| ";
     for (size_t i = 0; i < headers.size(); i++) {
-        auto text = utils::align_text(headers[i], col_width[i], text_alignment::center);
+        auto text =
+            stringutils::align_text(headers[i], col_width[i], stringutils::text_alignment::center);
         header << text << " | ";
     }
 
@@ -89,7 +90,7 @@ void TableData::print(std::stringstream& stream, int indent) {
 
     /// title row
     if (!title.empty()) {
-        title = utils::align_text(title, row_width - 3, text_alignment::center);
+        title = stringutils::align_text(title, row_width - 3, stringutils::text_alignment::center);
         stream << "\n" << gutter << separator_line;
         stream << "\n" << gutter << "|" << title << "|";
     }
@@ -103,7 +104,7 @@ void TableData::print(std::stringstream& stream, int indent) {
     for (const auto& row: rows) {
         stream << "\n" << gutter << "| ";
         for (unsigned i = 0; i < row.size(); i++) {
-            stream << utils::align_text(row[i], col_width[i], alignments[i]) << " | ";
+            stream << stringutils::align_text(row[i], col_width[i], alignments[i]) << " | ";
         }
     }
 

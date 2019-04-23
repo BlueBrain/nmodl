@@ -296,9 +296,9 @@ void CodegenCVisitor::visit_verbatim(Verbatim* node) {
     auto text = node->get_statement()->eval();
     auto result = process_verbatim_text(text);
 
-    auto statements = utils::split_string(result, '\n');
+    auto statements = stringutils::split_string(result, '\n');
     for (auto& statement: statements) {
-        utils::trim_newline(statement);
+        stringutils::trim_newline(statement);
         if (statement.find_first_not_of(' ') != std::string::npos) {
             printer->add_line(statement);
         }
@@ -1381,9 +1381,9 @@ void CodegenCVisitor::print_top_verbatim_blocks() {
  * the text.
  */
 void CodegenCVisitor::rename_function_arguments() {
-    auto default_arguments = utils::split_string(nrn_thread_arguments(), ',');
+    auto default_arguments = stringutils::split_string(nrn_thread_arguments(), ',');
     for (auto& arg: default_arguments) {
-        utils::trim(arg);
+        stringutils::trim(arg);
         RenameVisitor v(arg, "arg_" + arg);
         for (const auto& function: info.functions) {
             if (has_parameter_of_name(function, arg)) {
@@ -2283,7 +2283,7 @@ void CodegenCVisitor::print_backend_info() {
     printer->add_line("NMODL Version   : {}"_format(nmodl_version()));
     printer->add_line("Vectorized      : {}"_format(info.vectorize));
     printer->add_line("Threadsafe      : {}"_format(info.thread_safe));
-    printer->add_line("Created         : {}"_format(utils::trim(date)));
+    printer->add_line("Created         : {}"_format(stringutils::trim(date)));
     printer->add_line("Backend         : {}"_format(backend_name()));
     printer->add_line("NMODL Compiler  : {}"_format(version));
     printer->add_line("*********************************************************/");
@@ -2475,7 +2475,7 @@ void CodegenCVisitor::print_mechanism_global_var_structure(bool wrapper) {
 
 
 void CodegenCVisitor::print_mechanism_info() {
-    auto variable_printer = [this](std::vector<SymbolType>& variables) {
+    auto variable_printer = [&](std::vector<SymbolType>& variables) {
         for (const auto& v: variables) {
             auto name = v->get_name();
             if (!info.point_process) {
@@ -2513,7 +2513,7 @@ void CodegenCVisitor::print_mechanism_info() {
  */
 void CodegenCVisitor::print_global_variables_for_hoc() {
     auto variable_printer =
-        [this](const std::vector<SymbolType>& variables, bool if_array, bool if_vector) {
+        [&](const std::vector<SymbolType>& variables, bool if_array, bool if_vector) {
             for (const auto& variable: variables) {
                 if (variable->is_array() == if_array) {
                     auto name = get_variable_name(variable->get_name());

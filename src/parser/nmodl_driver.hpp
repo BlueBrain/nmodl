@@ -77,12 +77,12 @@ class NmodlDriver {
     /// print messages from lexer/parser
     bool verbose = false;
 
+    /// root of the ast
+    std::shared_ptr<ast::Program> astRoot = nullptr;
+
   public:
     /// file or input stream name (used by scanner for position), see todo
     std::string stream_name;
-
-    /// root of the ast
-    std::shared_ptr<ast::Program> astRoot = nullptr;
 
     NmodlDriver() = default;
     NmodlDriver(bool strace, bool ptrace);
@@ -107,8 +107,13 @@ class NmodlDriver {
     }
 
     /// return previously parsed AST otherwise nullptr
-    std::shared_ptr<ast::Program> ast() const {
+    std::shared_ptr<ast::Program> get_ast() const {
         return astRoot;
+    }
+
+    /// set new ast root
+    void set_ast(ast::Program* node) {
+        astRoot.reset(node);
     }
 };
 

@@ -414,7 +414,7 @@
 
 top             :   all
                     {
-                        driver.astRoot.reset($1);
+                        driver.set_ast($1);
                     }
                 |   error
                     {

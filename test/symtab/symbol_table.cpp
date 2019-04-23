@@ -100,7 +100,7 @@ SCENARIO("Symbol operations") {
         WHEN("added external property") {
             symbol.add_property(NmodlType::extern_neuron_variable);
             THEN("symbol becomes external") {
-                REQUIRE(symbol.is_symbol_external_variable() == true);
+                REQUIRE(symbol.is_external_variable() == true);
             }
         }
         WHEN("added multiple properties to symbol") {

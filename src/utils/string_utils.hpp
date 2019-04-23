@@ -20,7 +20,8 @@
 #include <vector>
 
 namespace nmodl {
-namespace utils {
+/// string utility functions
+namespace stringutils {
 
 /**
  * @addtogroup utils
@@ -125,5 +126,5 @@ static inline std::string tolower(std::string text) {
 
 /** @} */  // end of utils
 
-}  // namespace utils
+}  // namespace stringutils
 }  // namespace nmodl

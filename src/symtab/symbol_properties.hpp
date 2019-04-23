@@ -269,7 +269,7 @@ std::string to_string(const T& obj) {
         text += element + " ";
     }
     // remove extra whitespace at the end
-    utils::trim(text);
+    stringutils::trim(text);
     return text;
 }
 

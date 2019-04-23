@@ -269,7 +269,7 @@ class Symbol {
      *
      * \sa nmodl::details::NEURON_VARIABLES
      */
-    bool is_symbol_external_variable() {
+    bool is_external_variable() {
         return (properties == syminfo::NmodlType::extern_neuron_variable ||
                 properties == syminfo::NmodlType::extern_method);
     }

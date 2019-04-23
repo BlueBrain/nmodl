@@ -46,7 +46,7 @@ struct TableData {
     std::vector<TableRowType> rows;
 
     /// alignment for every column of data rows
-    std::vector<text_alignment> alignments;
+    std::vector<stringutils::text_alignment> alignments;
 
     void print(int indent = 0);
 

@@ -158,7 +158,7 @@ PYBIND11_MODULE(_nmodl, m_nmodl) {
              &nmodl::PyNmodlDriver::parse_stream,
              "in"_a,
              nmodl::docstring::driver_parse_stream)
-        .def("ast", &nmodl::PyNmodlDriver::ast, nmodl::docstring::driver_ast);
+        .def("get_ast", &nmodl::PyNmodlDriver::get_ast, nmodl::docstring::driver_ast);
 
     m_nmodl.def("to_nmodl",
                 nmodl::to_nmodl,

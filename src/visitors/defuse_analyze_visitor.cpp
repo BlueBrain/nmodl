@@ -195,7 +195,7 @@ void DefUseAnalyzeVisitor::visit_unsupported_node(ast::Node* node) {
 void DefUseAnalyzeVisitor::visit_function_call(ast::FunctionCall* node) {
     std::string function_name = node->get_node_name();
     auto symbol = global_symtab->lookup_in_scope(function_name);
-    if (symbol == nullptr || symbol->is_symbol_external_variable()) {
+    if (symbol == nullptr || symbol->is_external_variable()) {
         node->visit_children(this);
     } else {
         visit_unsupported_node(node);

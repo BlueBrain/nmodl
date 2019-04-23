@@ -191,7 +191,7 @@ void init_symtab_module(py::module& m) {
     symbol.def(py::init<std::string, ast::Ast*>(), "name"_a, "node"_a);
     symbol.def("get_token", &Symbol::get_token)
         .def("is_variable", &Symbol::is_variable)
-        .def("is_symbol_external_variable", &Symbol::is_symbol_external_variable)
+        .def("is_external_variable", &Symbol::is_external_variable)
         .def("get_id", &Symbol::get_id)
         .def("get_status", &Symbol::get_status)
         .def("get_properties", &Symbol::get_properties)
