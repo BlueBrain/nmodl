@@ -966,6 +966,24 @@ class CodegenCVisitor: public visitor::AstVisitor {
 
 
   public:
+    /**
+     * Constructs C code generator visitor
+     *
+     * @param mod_filename The name of the model for which code should be generated.
+     *                     It is used for constructing an output filename.
+     * @param output_dir   The directory where target C file should be generated.
+     * @param layout       The memory layout to be used for data structure generation.
+     * @param float_type   The float type to use in the generated code. The string will be used as-is
+     *                     in the target code. This defaults to \c double.
+     * @param extension    The file extension to use. This defaults to \c .cpp .
+     *
+     * This constructor instantiates an NMODL C code generator and allows writing generated code directly to a file in
+     * \c [output_dir]/[mod_filename].[extension].
+     *
+     * @note No code generation is performed at this stage. Since the code
+     * generator classes are all based on \c AstVisitor the AST must be visited using e.g. \c visit_program in order to
+     * generate the C code corresponding to the AST.
+     */
     CodegenCVisitor(std::string mod_filename,
                     std::string output_dir,
                     LayoutType layout,
