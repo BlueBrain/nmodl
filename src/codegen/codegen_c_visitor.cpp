@@ -501,9 +501,7 @@ bool CodegenCVisitor::defined_method(const std::string& name) {
 
 
 /**
- * Return "current" for variable name used in breakpoint block
- *
- * Current variable used in breakpoint block could be local variable.
+ * \details Current variable used in breakpoint block could be local variable.
  * In this case, neuron has already renamed the variable name by prepending
  * "_l". In our implementation, the variable could have been renamed by
  * one of the pass. And hence, we search all local variables and check if
@@ -573,8 +571,6 @@ int CodegenCVisitor::int_variables_size() {
 
 
 /**
- * For given block type, return statements for all read ion variables
- *
  * Depending upon the block type, we have to print read/write ion variables
  * during code generation. Depending on block/procedure being printed, this
  * method return statements as vector. As different code backends could have
@@ -983,9 +979,6 @@ std::vector<SymbolType> CodegenCVisitor::get_shadow_variables() {
 /*                      Routines must be overloaded in backend                          */
 /****************************************************************************************/
 
-/**
- * Print parameters
- */
 std::string CodegenCVisitor::get_parameter_str(const ParamVector& params) {
     std::stringstream param_ss;
     for (auto iter = params.begin(); iter != params.end(); iter++) {
@@ -1011,7 +1004,7 @@ void CodegenCVisitor::print_channel_iteration_task_end() {
 }
 
 
-/*
+/**
  * Depending on the backend, print loop for tiling channel iterations
  */
 void CodegenCVisitor::print_channel_iteration_tiling_block_begin(BlockType type) {
@@ -1030,7 +1023,7 @@ void CodegenCVisitor::print_channel_iteration_tiling_block_end() {
 
 
 /**
- * Each kernel like nrn_init, nrn_state and nrn_cur could be offloaded
+ * \detail Each kernel such as \c nrn\_init, \c nrn\_state and \c nrn\_cur could be offloaded
  * to accelerator. In this case, at very top level, we print pragma
  * for data present. For example:
  *
@@ -1819,7 +1812,7 @@ std::string CodegenCVisitor::nrn_thread_internal_arguments() {
 
 
 /**
- * Commonly used variables in the verbatim blocks and their corresponding
+ * Replace commonly used variables in the verbatim blocks into their corresponding
  * variable name in the new code generation backend.
  */
 std::string CodegenCVisitor::replace_if_verbatim_variable(std::string name) {
@@ -1952,12 +1945,9 @@ std::string CodegenCVisitor::process_shadow_update_statement(ShadowUseStatement&
 
 
 /**
- * NMODL constants from unit database
- *
- * todo : this should be replaced with constant handling from unit database
+ * \todo this should be replaced with constant handling from unit database
  */
-
-void CodegenCVisitor::print_nmodl_constant() {
+void CodegenCVisitor::print_nmodl_constants() {
     printer->add_newline(2);
     printer->add_line("/** constants used in nmodl */");
     printer->add_line("static const double FARADAY = 96485.3;");
@@ -2200,13 +2190,6 @@ std::string CodegenCVisitor::update_if_ion_variable_name(const std::string& name
 }
 
 
-/**
- * Return variable name in the structure of mechanism properties
- *
- * @param name variable name that is being printed
- * @param use_instance if variable name should be with the instance object qualifier
- * @return use_instance whether print name using Instance structure (or data array if false)
- */
 std::string CodegenCVisitor::get_variable_name(const std::string& name, bool use_instance) {
     std::string varname = update_if_ion_variable_name(name);
 
@@ -3712,7 +3695,7 @@ void CodegenCVisitor::print_net_receive() {
 
 
 /**
- * Todo: data is not derived. Need to add instance into instance struct?
+ * \todo Data is not derived. Need to add instance into instance struct?
  * data used here is wrong in AoS because as in original implementation,
  * data is not incremented every iteration for AoS. May be better to derive
  * actual variable names? [resolved now?]
@@ -4101,7 +4084,7 @@ void CodegenCVisitor::print_codegen_routines() {
     print_backend_info();
     print_headers_include();
     print_namespace_begin();
-    print_nmodl_constant();
+    print_nmodl_constants();
     print_mechanism_info();
     print_data_structures();
     print_global_variables_for_hoc();

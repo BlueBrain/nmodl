@@ -130,7 +130,7 @@ class CodegenIspcVisitor: public CodegenCVisitor {
 
     void print_wrapper_headers_include();
 
-    void print_nmodl_constant() override;
+    void print_nmodl_constants() override;
 
 
     /// all compute functions for every backend
