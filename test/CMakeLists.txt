@@ -24,7 +24,26 @@ add_library(config STATIC ${PROJECT_BINARY_DIR}/config.cpp)
 add_executable(testmodtoken modtoken/modtoken.cpp)
 add_executable(testlexer lexer/tokens.cpp)
 add_executable(testparser parser/parser.cpp)
-add_executable(testvisitor visitor/visitor.cpp)
+add_executable(testvisitor
+               visitor/main.cpp
+               visitor/constant_folder.cpp
+               visitor/defuse_analyze.cpp
+               visitor/inline.cpp
+               visitor/json.cpp
+               visitor/kinetic_block.cpp
+               visitor/localize.cpp
+               visitor/lookup.cpp
+               visitor/loop_unroll.cpp
+               visitor/misc.cpp
+               visitor/neuron_solve.cpp
+               visitor/nmodl.cpp
+               visitor/perf.cpp
+               visitor/rename.cpp
+               visitor/solve_block.cpp
+               visitor/steadystate.cpp
+               visitor/sympy_conductance.cpp
+               visitor/sympy_solver.cpp
+               visitor/verbatim.cpp)
 add_executable(testprinter printer/printer.cpp)
 add_executable(testsymtab symtab/symbol_table.cpp)
 add_executable(testnewton newton/newton.cpp ${SOLVER_SOURCE_FILES})
