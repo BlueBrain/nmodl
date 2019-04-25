@@ -50,6 +50,9 @@ span.keyword {
     color: #152292;
 }
 
+dl.reflist dt {
+    color: #481120;
+}
 /*
 body {
     max-width: 1440px;

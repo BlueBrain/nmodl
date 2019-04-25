@@ -26,7 +26,7 @@ namespace symtab {
 
 
 /**
- * @defgroup sym_tab Symbol Table Infrastructure
+ * @defgroup sym_tab Symbol Table Implementation
  * @brief All %Symbol Table implementation details
  *
  * @{

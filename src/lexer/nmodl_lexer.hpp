@@ -34,7 +34,7 @@ namespace nmodl {
 namespace parser {
 
 /**
- * @defgroup lexer Lexer Infrastructure
+ * @defgroup lexer Lexer Implementation
  * @brief All lexer classes implementation
  *
  * @addtogroup lexer

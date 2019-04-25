@@ -19,8 +19,10 @@ namespace nmodl {
 namespace parser {
 
 /**
- * @defgroup parser Parser Infrastructure
+ * @defgroup parser Parser Implementation
  * @brief All parser and driver classes implementation
+ *
+ *
  *
  * @addtogroup parser
  * @{

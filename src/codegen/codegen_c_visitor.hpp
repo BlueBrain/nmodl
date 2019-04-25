@@ -37,7 +37,7 @@ namespace nmodl {
 namespace codegen {
 
 /**
- * @defgroup codegen Codegen Infrastructure
+ * @defgroup codegen Code Generation Implementation
  * @brief Implementations of code generation backends
  *
  * @defgroup codegen_details Codegen Helpers
