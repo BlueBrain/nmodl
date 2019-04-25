@@ -888,6 +888,7 @@
                               - bablock:
                                   brief: "Block to be called before"
                                   type: BABlock
+                            brief: "Represents a `BEFORE` block in NMODL"
                         - AfterBlock:
                             nmodl: "AFTER "
                             members:
@@ -949,7 +950,7 @@
                                   node_name: true
                                   suffix: {value: " "}
                               - solvefor:
-                                  brief: "Solve for specification (todo)"
+                                  brief: "Solve for specification (TODO)"
                                   type: Name
                                   vector: true
                                   separator: ","
@@ -1772,10 +1773,10 @@
                       nmodl: "LAG "
                       members:
                         - name:
-                            brief: "Name of the variable (todo)"
+                            brief: "Name of the variable (TODO)"
                             type: Identifier
                         - byname:
-                            brief: "Name of the variable (todo)"
+                            brief: "Name of the variable (TODO)"
                             type: Name
                             prefix: {value: " BY "}
                       brief: "Represents a LAG statement in the mod file"
@@ -1807,7 +1808,7 @@
                       brief: "Represent statement in CONSTANT block of NMODL"
                       description: |
                               \todo As ConstantStatement wraps a single ConstantVar,
-                                    this or ConstantVar can be redundant in the future."
+                                    this or ast::ConstantVar can be redundant in the future.
                   - TableStatement:
                       nmodl: "TABLE "
                       members:
@@ -1866,7 +1867,7 @@
                             prefix: {value: " WRITE "}
                             separator: ", "
                         - valence:
-                            brief: "(todo)"
+                            brief: "(TODO)"
                             type: Valence
                             optional: true
                       brief: "Represents USEION statement in NMODL"

@@ -48,12 +48,12 @@ class NmodlParser;
  * Parsing actions generate ast and it's pointer is stored in driver
  * class.
  *
- * \todo lexer, parser and ast member variables are used inside lexer/
+ * \todo Lexer, parser and ast member variables are used inside lexer/
  * parser instances. The local instaces are created inside parse_stream
  * and hence the pointers are no longer valid except ast. Need better
  * way to handle this.
  *
- * \todo stream name is not used as it will need better support as
+ * \todo Stream name is not used as it will need better support as
  * location object used in scanner takes string pointer which could
  * be invalid when we copy location object.
  */

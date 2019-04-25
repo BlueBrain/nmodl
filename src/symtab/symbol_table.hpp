@@ -172,7 +172,7 @@ class SymbolTable {
 
     /**
      * Create a copy of symbol table
-     * \todo revisit the usage as tokens will be pointing to old nodes
+     * \todo Revisit the usage as tokens will be pointing to old nodes
      */
     SymbolTable* clone() {
         return new SymbolTable(*this);

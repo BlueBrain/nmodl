@@ -573,7 +573,7 @@ int CodegenCVisitor::int_variables_size() {
  * different variable names, we rely on backend-specific read_ion_variable_name
  * and write_ion_variable_name method which will be overloaded.
  *
- * \todo: After looking into mod2c and neuron implementation, it seems like
+ * \todo After looking into mod2c and neuron implementation, it seems like
  * Ode block type is not used (?). Need to look into implementation details.
  */
 std::vector<std::string> CodegenCVisitor::ion_read_statements(BlockType type) {
@@ -664,7 +664,7 @@ std::vector<ShadowUseStatement> CodegenCVisitor::ion_write_statements(BlockType 
             } else if (ion.is_extra_cell_conc(concentration)) {
                 index = 2;
             } else {
-                /// \todo: unhandled case in neuron implementation
+                /// \todo Unhandled case in neuron implementation
                 throw std::logic_error("codegen error for {} ion"_format(ion.name));
             }
             auto ion_type_name = "{}_type"_format(ion.name);
@@ -944,7 +944,7 @@ std::vector<IndexVariableInfo> CodegenCVisitor::get_int_variables() {
  * simd loop, we have to use shadow vectors for every ion variables. Here
  * we return list of all such variables.
  *
- * \todo: if conductances are specified, we don't need all below variables
+ * \todo If conductances are specified, we don't need all below variables
  */
 std::vector<SymbolType> CodegenCVisitor::get_shadow_variables() {
     std::vector<SymbolType> variables;
@@ -1341,7 +1341,7 @@ void CodegenCVisitor::print_top_verbatim_blocks() {
 
 
 /**
- * \todo: issue with verbatim renaming. e.g. pattern.mod has info struct with
+ * \todo Issue with verbatim renaming. e.g. pattern.mod has info struct with
  * index variable. If we use "index" instead of "indexes" as default argument
  * then during verbatim replacement we don't know the index is which one. This
  * is because verbatim renaming pass has already stripped out prefixes from

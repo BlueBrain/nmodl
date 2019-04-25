@@ -148,7 +148,7 @@ enum class LayoutType {
  * Ion update statement needs use of shadow vectors for certain backends
  * as atomics operations are not supported on cpu backend.
  *
- * \todo : if shadow_lhs is empty then we assume shadow statement not required
+ * \todo If shadow_lhs is empty then we assume shadow statement not required
  */
 struct ShadowUseStatement {
     std::string lhs;

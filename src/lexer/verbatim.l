@@ -69,15 +69,14 @@
 
 /**
  * need to unput in buffer for custom routines
- * \todo : due to unused function warning this
+ * \todo due to unused function warning this
  *         option is disabled
  */
 %option nounput
 
 /**
  * need to input in buffer for custom routines
- * \todo : due to unused function warning this
- *         option is disabled
+ * \todo Check unused function warning
  */
 %option noinput
 
