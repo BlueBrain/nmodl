@@ -72,6 +72,22 @@ add_test(NAME UnitParser COMMAND testunitparser)
 set_tests_properties(Visitor PROPERTIES ENVIRONMENT PYTHONPATH=${CMAKE_BINARY_DIR}:$ENV{PYTHONPATH})
 
 # =============================================================================
+# Use catch_discover for granular test report
+# =============================================================================
+foreach(test_name
+        testmodtoken
+        testlexer
+        testparser
+        testvisitor
+        testprinter
+        testsymtab
+        testnewton
+        testunitlexer
+        testunitparser)
+  catch_discover_tests(${test_name})
+endforeach()
+
+# =============================================================================
 # pybind11 tests
 # =============================================================================
 
