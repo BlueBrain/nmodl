@@ -111,7 +111,7 @@ void CodegenCVisitor::visit_prime_name(PrimeName* node) {
 
 
 /**
- * \todo : validate how @ is being handled in neuron implementation
+ * \todo : Validate how @ is being handled in neuron implementation
  */
 void CodegenCVisitor::visit_var_name(VarName* node) {
     if (!codegen) {
@@ -1564,8 +1564,8 @@ void CodegenCVisitor::print_check_table_thread_function() {
     }
 
     /**
-     * \todo check_table_thread is called multiple times from coreneuron including
-     * after finitialize. If we cleaup the instance then it will result in segfault
+     * \todo `check_table_thread` is called multiple times from coreneuron including
+     * after `finitialize`. If we cleaup the instance then it will result in segfault
      * but if we don't then there is memory leak
      */
     printer->add_line("    // cleanup_instance(ml);");
@@ -3448,7 +3448,7 @@ void CodegenCVisitor::print_net_init() {
 void CodegenCVisitor::print_send_event_move() {
     printer->add_newline();
     printer->add_line("NetSendBuffer_t* nsb = ml->_net_send_buffer;");
-    /// \todo update net send buffer on host
+    /// \todo Update net send buffer on host
     printer->add_line("for (int i=0; i < nsb->_cnt; i++) {");
     printer->add_line("    int type = nsb->_sendtype[i];");
     printer->add_line("    int tid = nt->id;");
@@ -3462,7 +3462,7 @@ void CodegenCVisitor::print_send_event_move() {
     // clang-format on
     printer->add_line("}");
     printer->add_line("nsb->_cnt = 0;");
-    /// \todo update net send buffer count on device
+    /// \todo Update net send buffer count on device
 }
 
 
@@ -3777,7 +3777,7 @@ void CodegenCVisitor::print_nrn_state() {
     printer->add_line("double v = voltage[node_id];");
 
     /**
-     * \todo eigen solver node also emits IonCurVar variable in the functor
+     * \todo Eigen solver node also emits IonCurVar variable in the functor
      * but that shouldn't update ions in derivative block
      */
     if (ion_variable_struct_required()) {
