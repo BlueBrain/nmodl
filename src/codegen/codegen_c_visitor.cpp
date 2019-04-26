@@ -1918,7 +1918,7 @@ std::string CodegenCVisitor::process_shadow_update_statement(ShadowUseStatement&
 
 
 /**
- * \todo this should be replaced with constant handling from unit database
+ * \todo This should be replaced with constant handling from unit database
  */
 void CodegenCVisitor::print_nmodl_constants() {
     printer->add_newline(2);
@@ -3194,7 +3194,7 @@ void CodegenCVisitor::print_nrn_alloc() {
 }
 
 /**
- * \todo number of watch could be more than number of statements
+ * \todo Number of watch could be more than number of statements
  * according to grammar. Check if this is correctly handled in neuron
  * and coreneuron.
  */
@@ -3217,8 +3217,10 @@ void CodegenCVisitor::print_watch_activate() {
     }
     printer->add_line("}");
 
-    /// \todo : similar to neuron/coreneuron we are using
-    // first watch and ignoring rest.
+    /**
+     * \todo Similar to neuron/coreneuron we are using
+     * first watch and ignoring rest.
+     */
     for (int i = 0; i < info.watch_statements.size(); i++) {
         auto statement = info.watch_statements[i];
         printer->start_block("if (watch_id == {})"_format(i));
@@ -3239,7 +3241,7 @@ void CodegenCVisitor::print_watch_activate() {
 
 
 /**
- * \todo similar to print_watch_activate, we are using only
+ * \todo Similar to print_watch_activate, we are using only
  * first watch. need to verify with neuron/coreneuron about rest.
  */
 void CodegenCVisitor::print_watch_check() {

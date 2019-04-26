@@ -338,7 +338,7 @@ void CodegenHelperVisitor::find_range_variables() {
      * and those are not considered as range+state variables while printing instance
      * variables. Such read/write ion variables are dependent variables and hence they
      * will be printed at laster stage.
-     * \todo need to validate with more models and mod2c details.
+     * \todo Need to validate with more models and mod2c details.
      */
     // clang-format off
     with = NmodlType::state_var;
