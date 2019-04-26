@@ -84,7 +84,10 @@ foreach(test_name
         testnewton
         testunitlexer
         testunitparser)
-  catch_discover_tests(${test_name})
+  catch_discover_tests(${test_name}
+                       PROPERTIES
+                       ENVIRONMENT
+                       PYTHONPATH=${CMAKE_BINARY_DIR}:$ENV{PYTHONPATH})
 endforeach()
 
 # =============================================================================
