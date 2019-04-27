@@ -55,7 +55,7 @@ std::vector<std::string> run_kinetic_block_visitor(const std::string& text) {
     return results;
 }
 
-SCENARIO("KineticBlock visitor", "[kinetic]") {
+SCENARIO("Convert KINETIC to DERIVATIVE using KineticBlock visitor", "[kinetic][visitor]") {
     GIVEN("KINETIC block with << reaction statement, 1 state var") {
         std::string input_nmodl_text = R"(
             STATE {

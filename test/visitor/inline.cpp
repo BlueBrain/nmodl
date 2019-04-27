@@ -34,7 +34,7 @@ std::string run_inline_visitor(const std::string& text) {
     return stream.str();
 }
 
-SCENARIO("External procedure calls") {
+SCENARIO("Inlining of external procedure calls", "[visitor][inline]") {
     GIVEN("Procedures with external procedure call") {
         std::string nmodl_text = R"(
             PROCEDURE rates_1() {
@@ -54,7 +54,7 @@ SCENARIO("External procedure calls") {
     }
 }
 
-SCENARIO("Simple procedure inlining") {
+SCENARIO("Inlining of simple, one level procedure call", "[visitor][inline]") {
     GIVEN("A procedure calling another procedure") {
         std::string input_nmodl = R"(
             PROCEDURE rates_1() {
@@ -92,7 +92,7 @@ SCENARIO("Simple procedure inlining") {
     }
 }
 
-SCENARIO("Nested procedure inlining") {
+SCENARIO("Inlining of nested procedure call", "[visitor][inline]") {
     GIVEN("A procedure with nested call chain and arguments") {
         std::string input_nmodl = R"(
             PROCEDURE rates_1() {
@@ -160,7 +160,7 @@ SCENARIO("Nested procedure inlining") {
     }
 }
 
-SCENARIO("Inline function call in procedure") {
+SCENARIO("Inline function call in procedure", "[visitor][inline]") {
     GIVEN("A procedure with function call") {
         std::string input_nmodl = R"(
             PROCEDURE rates_1() {
@@ -201,7 +201,7 @@ SCENARIO("Inline function call in procedure") {
     }
 }
 
-SCENARIO("Function call within conditional statement") {
+SCENARIO("Inling function call within conditional statement", "[visitor][inline]") {
     GIVEN("A procedure with function call in if statement") {
         std::string input_nmodl = R"(
             FUNCTION rates_1() {
@@ -244,7 +244,7 @@ SCENARIO("Function call within conditional statement") {
     }
 }
 
-SCENARIO("Multiple function calls in same statement") {
+SCENARIO("Inline multiple function calls in same statement", "[visitor][inline]") {
     GIVEN("A procedure with two function calls in binary expression") {
         std::string input_nmodl = R"(
             FUNCTION rates_1() {
@@ -326,7 +326,7 @@ SCENARIO("Multiple function calls in same statement") {
     }
 }
 
-SCENARIO("Nested function calls withing arguments") {
+SCENARIO("Inline nested function calls withing arguments", "[visitor][inline]") {
     GIVEN("A procedure with function call") {
         std::string input_nmodl = R"(
             FUNCTION rates_2() {
@@ -404,7 +404,7 @@ SCENARIO("Nested function calls withing arguments") {
     }
 }
 
-SCENARIO("Function call in non-binary expression") {
+SCENARIO("Inline function call in non-binary expression", "[visitor][inline]") {
     GIVEN("A function call in unary expression") {
         std::string input_nmodl = R"(
             PROCEDURE rates_1() {
@@ -481,7 +481,7 @@ SCENARIO("Function call in non-binary expression") {
 }
 
 
-SCENARIO("Function call as standalone expression") {
+SCENARIO("Inline function call as standalone expression", "[visitor][inline]") {
     GIVEN("Function call as a statement") {
         std::string input_nmodl = R"(
             PROCEDURE rates_1() {
@@ -517,7 +517,8 @@ SCENARIO("Function call as standalone expression") {
     }
 }
 
-SCENARIO("Procedure call as standalone statement as well as part of expression") {
+SCENARIO("Inline procedure call as standalone statement as well as part of expression",
+         "[visitor][inline]") {
     GIVEN("A procedure call in expression and statement") {
         std::string input_nmodl = R"(
             PROCEDURE rates_1() {
@@ -553,7 +554,7 @@ SCENARIO("Procedure call as standalone statement as well as part of expression")
     }
 }
 
-SCENARIO("Procedure inlining handles local-global name conflict") {
+SCENARIO("Inlining pass handles local-global name conflict", "[visitor][inline]") {
     GIVEN("A procedure with local variable that exist in global scope") {
         /// note that x in rates_2 should still update global x after inlining
         std::string input_nmodl = R"(

@@ -32,7 +32,7 @@ std::string run_nmodl_visitor(const std::string& text) {
     return stream.str();
 }
 
-SCENARIO("Test for AST back to NMODL transformation") {
+SCENARIO("Convert AST back to NMODL form", "[visitor][nmodl]") {
     for (const auto& construct: nmodl_valid_constructs) {
         auto test_case = construct.second;
         std::string input_nmodl_text = reindent_text(test_case.input);

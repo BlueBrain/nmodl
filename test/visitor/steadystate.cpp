@@ -64,7 +64,7 @@ std::vector<std::string> run_steadystate_visitor(
     return results;
 }
 
-SCENARIO("SteadystateSolver visitor", "[steadystate]") {
+SCENARIO("Solving ODEs with STEADYSTATE solve method", "[visitor][steadystate]") {
     GIVEN("STEADYSTATE sparse solve") {
         std::string nmodl_text = R"(
             BREAKPOINT  {

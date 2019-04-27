@@ -84,7 +84,8 @@ std::string ast_to_string(ast::Program* node) {
     return stream.str();
 }
 
-SCENARIO("SympySolver visitor: cnexp or euler", "[sympy][cnexp][euler]") {
+SCENARIO("Solve ODEs with cnexp or euler method using SympySolverVisitor",
+         "[visitor][sympy][cnexp][euler]") {
     GIVEN("Derivative block without ODE, solver method cnexp") {
         std::string nmodl_text = R"(
             BREAKPOINT  {
@@ -309,7 +310,8 @@ SCENARIO("SympySolver visitor: cnexp or euler", "[sympy][cnexp][euler]") {
     }
 }
 
-SCENARIO("SympySolver visitor: derivimplicit or sparse", "[sympy][derivimplicit][sparse]") {
+SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
+         "[visitor][sympy][derivimplicit]") {
     GIVEN("Derivative block with derivimplicit solver method and conditional block") {
         std::string nmodl_text = R"(
             STATE {
@@ -1235,7 +1237,7 @@ SCENARIO("LINEAR solve block (SympySolver Visitor)", "[sympy][linear]") {
 // NONLINEAR solve block tests
 //=============================================================================
 
-SCENARIO("NONLINEAR solve block (SympySolver Visitor)", "[sympy][nonlinear]") {
+SCENARIO("Solve NONLINEAR block using SympySolver Visitor", "[visitor][solver][sympy][nonlinear]") {
     GIVEN("1 state-var numeric NONLINEAR solve block") {
         std::string nmodl_text = R"(
             STATE {

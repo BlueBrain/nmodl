@@ -38,7 +38,7 @@ std::string run_var_rename_visitor(const std::string& text,
     return stream.str();
 }
 
-SCENARIO("Renaming any variable in mod file with RenameVisitor") {
+SCENARIO("Renaming any variable in mod file with RenameVisitor", "[visitor][rename]") {
     GIVEN("A mod file") {
         // sample nmodl text
         std::string input_nmodl_text = R"(
@@ -141,7 +141,8 @@ std::string run_local_var_rename_visitor(const std::string& text) {
     return stream.str();
 }
 
-SCENARIO("Presence of local and global variables in same block") {
+SCENARIO("Renaming with presence of local and global variables in same block",
+         "[visitor][rename]") {
     GIVEN("A neuron block and procedure with same variable name") {
         std::string nmodl_text = R"(
             NEURON {
@@ -178,7 +179,7 @@ SCENARIO("Presence of local and global variables in same block") {
     }
 }
 
-SCENARIO("Absence of global blocks") {
+SCENARIO("Renaming in the absence of global blocks", "[visitor][rename]") {
     GIVEN("Procedures containing same variables") {
         std::string nmodl_text = R"(
             PROCEDURE rates_1() {
@@ -200,7 +201,7 @@ SCENARIO("Absence of global blocks") {
     }
 }
 
-SCENARIO("Variable renaming in nested blocks") {
+SCENARIO("Variable renaming in nested blocks", "[visitor][rename]") {
     GIVEN("Mod file containing procedures with nested blocks") {
         std::string input_nmodl_text = R"(
             NEURON {
@@ -310,7 +311,7 @@ SCENARIO("Variable renaming in nested blocks") {
 }
 
 
-SCENARIO("Presence of local variable in verbatim block") {
+SCENARIO("Renaming in presence of local variable in verbatim block", "[visitor][rename]") {
     GIVEN("A neuron block and procedure with same variable name") {
         std::string nmodl_text = R"(
             NEURON {

@@ -36,7 +36,7 @@ std::string run_cnexp_solve_visitor(const std::string& text) {
 }
 
 
-SCENARIO("CnexpSolver visitor solving ODEs") {
+SCENARIO("NeuronSolveVisitor visitor solves different ODE types") {
     GIVEN("Derivative block with cnexp method in breakpoint block") {
         std::string nmodl_text = R"(
             BREAKPOINT {

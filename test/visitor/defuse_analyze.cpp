@@ -45,7 +45,7 @@ std::vector<DUChain> run_defuse_visitor(const std::string& text, const std::stri
     return chains;
 }
 
-SCENARIO("Running defuse analyzer") {
+SCENARIO("Perform DefUse analysis on NMODL constructs") {
     GIVEN("global variable usage in assignment statements") {
         std::string nmodl_text = R"(
             NEURON {

@@ -37,7 +37,7 @@ std::string run_localize_visitor(const std::string& text) {
 }
 
 
-SCENARIO("Localizer test with single global block") {
+SCENARIO("Localizer test with single global block", "[visitor][localizer]") {
     GIVEN("Single derivative block with variable definition") {
         std::string nmodl_text = R"(
             NEURON {
@@ -71,7 +71,7 @@ SCENARIO("Localizer test with single global block") {
     }
 }
 
-SCENARIO("Localizer test with use of verbatim block") {
+SCENARIO("Localizer test with use of verbatim block", "[visitor][localizer]") {
     GIVEN("Verbatim block usage in one of the global block") {
         std::string nmodl_text = R"(
             NEURON {
@@ -113,7 +113,7 @@ SCENARIO("Localizer test with use of verbatim block") {
 }
 
 
-SCENARIO("Localizer test with multiple global blocks") {
+SCENARIO("Localizer test with multiple global blocks", "[visitor][localizer]") {
     GIVEN("Multiple global blocks with definition of variable") {
         std::string nmodl_text = R"(
             NEURON {

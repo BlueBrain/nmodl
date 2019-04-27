@@ -36,7 +36,7 @@ std::string run_solve_block_visitor(const std::string& text) {
     return stream.str();
 }
 
-TEST_CASE("SolveBlock visitor") {
+TEST_CASE("Solve ODEs using legacy NeuronSolveVisitor", "[visitor][solver]") {
     SECTION("SolveBlock add NrnState block") {
         GIVEN("Breakpoint block with single solve block in breakpoint") {
             std::string nmodl_text = R"(

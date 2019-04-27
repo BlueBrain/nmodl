@@ -89,7 +89,7 @@ void run_sympy_conductance_passes(ast::Program* node) {
     v_symtab.visit_program(node);
 }
 
-SCENARIO("SympyConductance visitor", "[sympy]") {
+SCENARIO("Addition of CONDUCTANCE using SympyConductance visitor", "[visitor][solver][sympy]") {
     // First set of test mod files below all based on:
     // nmodldb/models/db/bluebrain/CortexSimplified/mod/Ca.mod
     GIVEN("breakpoint block containing VERBATIM statement") {

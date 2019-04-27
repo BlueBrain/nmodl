@@ -59,20 +59,8 @@ target_link_libraries(testsymtab symtab lexer util)
 target_link_libraries(testunitlexer lexer util)
 target_link_libraries(testunitparser lexer test_util config)
 
-add_test(NAME ModToken COMMAND testmodtoken)
-add_test(NAME Lexer COMMAND testlexer)
-add_test(NAME Parser COMMAND testparser)
-add_test(NAME Visitor COMMAND testvisitor)
-add_test(NAME Printer COMMAND testprinter)
-add_test(NAME Symtab COMMAND testsymtab)
-add_test(NAME Newton COMMAND testnewton)
-add_test(NAME UnitLexer COMMAND testunitlexer)
-add_test(NAME UnitParser COMMAND testunitparser)
-
-set_tests_properties(Visitor PROPERTIES ENVIRONMENT PYTHONPATH=${CMAKE_BINARY_DIR}:$ENV{PYTHONPATH})
-
 # =============================================================================
-# Use catch_discover for granular test report
+# Use catch_discover instead of add_test for granular test report
 # =============================================================================
 foreach(test_name
         testmodtoken
@@ -93,10 +81,11 @@ endforeach()
 # =============================================================================
 # pybind11 tests
 # =============================================================================
-
 add_test(NAME Ode
          COMMAND python3 -m pytest ${PROJECT_SOURCE_DIR}/test/ode)
-set_tests_properties(Ode PROPERTIES ENVIRONMENT PYTHONPATH=${CMAKE_BINARY_DIR}:$ENV{PYTHONPATH})
 add_test(NAME Pybind
          COMMAND python3 -m pytest ${PROJECT_SOURCE_DIR}/test/pybind)
-set_tests_properties(Pybind PROPERTIES ENVIRONMENT PYTHONPATH=${CMAKE_BINARY_DIR}:$ENV{PYTHONPATH})
+foreach(test_name Ode Pybind)
+  set_tests_properties(${test_name}
+                       PROPERTIES ENVIRONMENT PYTHONPATH=${CMAKE_BINARY_DIR}:$ENV{PYTHONPATH})
+endforeach()

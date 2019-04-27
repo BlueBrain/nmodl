@@ -37,10 +37,9 @@ std::string run_loop_unroll_visitor(const std::string& text) {
     return to_nmodl(ast.get(), {AstNodeType::DEFINE});
 }
 
-TEST_CASE("Loop Unroll visitor") {
-    SECTION("Successful unrolls with constant folding") {
-        GIVEN("A loop with known iteration space") {
-            std::string input_nmodl = R"(
+SCENARIO("Perform loop unrolling of FROM construct", "[visitor][unroll]") {
+    GIVEN("A loop with known iteration space") {
+        std::string input_nmodl = R"(
             DEFINE N 2
             PROCEDURE rates() {
                 LOCAL x[N]
@@ -57,7 +56,7 @@ TEST_CASE("Loop Unroll visitor") {
                 }
             }
         )";
-            std::string output_nmodl = R"(
+        std::string output_nmodl = R"(
             PROCEDURE rates() {
                 LOCAL x[N]
                 {
@@ -80,14 +79,14 @@ TEST_CASE("Loop Unroll visitor") {
                 }
             }
         )";
-            THEN("Loop body gets correctly unrolled") {
-                auto result = run_loop_unroll_visitor(input_nmodl);
-                REQUIRE(reindent_text(output_nmodl) == reindent_text(result));
-            }
+        THEN("Loop body gets correctly unrolled") {
+            auto result = run_loop_unroll_visitor(input_nmodl);
+            REQUIRE(reindent_text(output_nmodl) == reindent_text(result));
         }
+    }
 
-        GIVEN("A nested loop") {
-            std::string input_nmodl = R"(
+    GIVEN("A nested loop") {
+        std::string input_nmodl = R"(
             DEFINE N 1
             PROCEDURE rates() {
                 LOCAL x[N]
@@ -98,7 +97,7 @@ TEST_CASE("Loop Unroll visitor") {
                 }
             }
         )";
-            std::string output_nmodl = R"(
+        std::string output_nmodl = R"(
             PROCEDURE rates() {
                 LOCAL x[N]
                 {
@@ -113,15 +112,15 @@ TEST_CASE("Loop Unroll visitor") {
                 }
             }
         )";
-            THEN("Loop get unrolled recursively") {
-                auto result = run_loop_unroll_visitor(input_nmodl);
-                REQUIRE(reindent_text(output_nmodl) == reindent_text(result));
-            }
+        THEN("Loop get unrolled recursively") {
+            auto result = run_loop_unroll_visitor(input_nmodl);
+            REQUIRE(reindent_text(output_nmodl) == reindent_text(result));
         }
+    }
 
 
-        GIVEN("Loop with verbatim and unknown iteration space") {
-            std::string input_nmodl = R"(
+    GIVEN("Loop with verbatim and unknown iteration space") {
+        std::string input_nmodl = R"(
             DEFINE N 1
             PROCEDURE rates() {
                 LOCAL x[N]
@@ -135,7 +134,7 @@ TEST_CASE("Loop Unroll visitor") {
                 }
             }
         )";
-            std::string output_nmodl = R"(
+        std::string output_nmodl = R"(
             PROCEDURE rates() {
                 LOCAL x[N]
                 {
@@ -151,10 +150,9 @@ TEST_CASE("Loop Unroll visitor") {
                 }
             }
         )";
-            THEN("Only some loops get unrolled") {
-                auto result = run_loop_unroll_visitor(input_nmodl);
-                REQUIRE(reindent_text(output_nmodl) == reindent_text(result));
-            }
+        THEN("Only some loops get unrolled") {
+            auto result = run_loop_unroll_visitor(input_nmodl);
+            REQUIRE(reindent_text(output_nmodl) == reindent_text(result));
         }
     }
 }

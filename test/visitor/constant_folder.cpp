@@ -35,61 +35,60 @@ std::string run_constant_folding_visitor(const std::string& text) {
     return stream.str();
 }
 
-TEST_CASE("Constant Folding Visitor") {
-    SECTION("Perform Successful Constant Folding") {
-        GIVEN("Simple integer expression") {
-            std::string nmodl_text = R"(
+SCENARIO("Perform constant folder on NMODL constructs") {
+    GIVEN("Simple integer expression") {
+        std::string nmodl_text = R"(
                 PROCEDURE dummy() {
                     a = 1 + 2
                 }
             )";
-            std::string expected_text = R"(
+        std::string expected_text = R"(
                 PROCEDURE dummy() {
                     a = 3
                 }
             )";
-            THEN("successfully folds") {
-                auto result = run_constant_folding_visitor(nmodl_text);
-                REQUIRE(reindent_text(result) == reindent_text(expected_text));
-            }
+        THEN("successfully folds") {
+            auto result = run_constant_folding_visitor(nmodl_text);
+            REQUIRE(reindent_text(result) == reindent_text(expected_text));
         }
+    }
 
-        GIVEN("Simple double expression") {
-            std::string nmodl_text = R"(
+    GIVEN("Simple double expression") {
+        std::string nmodl_text = R"(
                 PROCEDURE dummy() {
                     a = 1.1 + 2e-10
                 }
             )";
-            std::string expected_text = R"(
+        std::string expected_text = R"(
                 PROCEDURE dummy() {
                     a = 1.1000000002
                 }
             )";
-            THEN("successfully folds") {
-                auto result = run_constant_folding_visitor(nmodl_text);
-                REQUIRE(reindent_text(result) == reindent_text(expected_text));
-            }
+        THEN("successfully folds") {
+            auto result = run_constant_folding_visitor(nmodl_text);
+            REQUIRE(reindent_text(result) == reindent_text(expected_text));
         }
+    }
 
-        GIVEN("Complex expression") {
-            std::string nmodl_text = R"(
+    GIVEN("Complex expression") {
+        std::string nmodl_text = R"(
                 PROCEDURE dummy() {
                     a = 1 + (2) + (2 / 2) + (((1+((2)))))
                 }
             )";
-            std::string expected_text = R"(
+        std::string expected_text = R"(
                 PROCEDURE dummy() {
                     a = 7
                 }
             )";
-            THEN("successfully folds") {
-                auto result = run_constant_folding_visitor(nmodl_text);
-                REQUIRE(reindent_text(result) == reindent_text(expected_text));
-            }
+        THEN("successfully folds") {
+            auto result = run_constant_folding_visitor(nmodl_text);
+            REQUIRE(reindent_text(result) == reindent_text(expected_text));
         }
+    }
 
-        GIVEN("Integer expression with define statement") {
-            std::string nmodl_text = R"(
+    GIVEN("Integer expression with define statement") {
+        std::string nmodl_text = R"(
                 DEFINE N 10
 
                 PROCEDURE dummy() {
@@ -98,7 +97,7 @@ TEST_CASE("Constant Folding Visitor") {
                     }
                 }
             )";
-            std::string expected_text = R"(
+        std::string expected_text = R"(
                 DEFINE N 10
 
                 PROCEDURE dummy() {
@@ -107,14 +106,14 @@ TEST_CASE("Constant Folding Visitor") {
                     }
                 }
             )";
-            THEN("successfully folds") {
-                auto result = run_constant_folding_visitor(nmodl_text);
-                REQUIRE(reindent_text(result) == reindent_text(expected_text));
-            }
+        THEN("successfully folds") {
+            auto result = run_constant_folding_visitor(nmodl_text);
+            REQUIRE(reindent_text(result) == reindent_text(expected_text));
         }
+    }
 
-        GIVEN("Only fold part of the statement") {
-            std::string nmodl_text = R"(
+    GIVEN("Only fold part of the statement") {
+        std::string nmodl_text = R"(
                 DEFINE N 10
 
                 PROCEDURE dummy() {
@@ -124,7 +123,7 @@ TEST_CASE("Constant Folding Visitor") {
                     e = 2 || 3
                 }
             )";
-            std::string expected_text = R"(
+        std::string expected_text = R"(
                 DEFINE N 10
 
                 PROCEDURE dummy() {
@@ -134,31 +133,30 @@ TEST_CASE("Constant Folding Visitor") {
                     e = 2 || 3
                 }
             )";
-            THEN("successfully folds and keep other statements untouched") {
-                auto result = run_constant_folding_visitor(nmodl_text);
-                REQUIRE(reindent_text(result) == reindent_text(expected_text));
-            }
+        THEN("successfully folds and keep other statements untouched") {
+            auto result = run_constant_folding_visitor(nmodl_text);
+            REQUIRE(reindent_text(result) == reindent_text(expected_text));
         }
+    }
 
-        GIVEN("Don't remove parentheses if not simplifying") {
-            std::string nmodl_text = R"(
+    GIVEN("Don't remove parentheses if not simplifying") {
+        std::string nmodl_text = R"(
                 DEFINE N 10
 
                 PROCEDURE dummy() {
                     a = ((N+1)+5)*(c+1+N)/(b - 2)
                 }
             )";
-            std::string expected_text = R"(
+        std::string expected_text = R"(
                 DEFINE N 10
 
                 PROCEDURE dummy() {
                     a = 16*(c+1+10)/(b-2)
                 }
             )";
-            THEN("successfully folds and keep other statements untouched") {
-                auto result = run_constant_folding_visitor(nmodl_text);
-                REQUIRE(reindent_text(result) == reindent_text(expected_text));
-            }
+        THEN("successfully folds and keep other statements untouched") {
+            auto result = run_constant_folding_visitor(nmodl_text);
+            REQUIRE(reindent_text(result) == reindent_text(expected_text));
         }
     }
 }

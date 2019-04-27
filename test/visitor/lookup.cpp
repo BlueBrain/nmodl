@@ -31,7 +31,7 @@ std::vector<std::shared_ptr<ast::Ast>> run_lookup_visitor(ast::Program* node,
     return AstLookupVisitor().lookup(node, types);
 }
 
-SCENARIO("Searching for ast nodes using AstLookupVisitor") {
+SCENARIO("Searching for ast nodes using AstLookupVisitor", "[visitor][lookup]") {
     auto to_ast = [](const std::string& text) {
         NmodlDriver driver;
         return driver.parse_string(text);

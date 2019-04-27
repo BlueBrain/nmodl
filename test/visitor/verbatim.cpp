@@ -29,7 +29,7 @@ std::vector<std::string> run_verbatim_visitor(const std::string& text) {
     return v.verbatim_blocks();
 }
 
-TEST_CASE("Verbatim Visitor") {
+TEST_CASE("Parse VERBATIM block using Verbatim Visitor") {
     SECTION("Single Block") {
         std::string text = "VERBATIM int a; ENDVERBATIM";
         auto blocks = run_verbatim_visitor(text);

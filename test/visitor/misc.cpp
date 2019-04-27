@@ -43,7 +43,7 @@ void run_visitor_passes(const std::string& text) {
 }
 
 
-SCENARIO("Running visitor passes multiple time") {
+SCENARIO("Running visitor passes multiple times", "[visitor]") {
     GIVEN("A mod file") {
         std::string nmodl_text = R"(
             NEURON {

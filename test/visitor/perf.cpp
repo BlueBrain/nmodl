@@ -22,7 +22,7 @@ using symtab::syminfo::NmodlType;
 // Symtab and Perf visitor tests
 //=============================================================================
 
-SCENARIO("Symbol table generation and Perf stat visitor pass") {
+SCENARIO("Symbol table generation with Perf stat visitor", "[visitor][performance]") {
     GIVEN("A mod file and associated ast") {
         std::string nmodl_text = R"(
             NEURON  {

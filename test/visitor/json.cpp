@@ -30,7 +30,7 @@ std::string run_json_visitor(const std::string& text, bool compact = false) {
     return to_json(ast.get(), compact);
 }
 
-TEST_CASE("JSON Visitor") {
+TEST_CASE("Convert NMODL to AST to JSON form using JSONVisitor", "[visitor][json]") {
     SECTION("JSON object test") {
         std::string nmodl_text = "NEURON {}";
         json expected = R"(
