@@ -9,7 +9,7 @@
 
 /**
  * \dir
- * \brief Solver implementations
+ * \brief Newton solver implementations
  *
  * \file
  * \brief Implementation of Newton method for solving system of non-linear equations
