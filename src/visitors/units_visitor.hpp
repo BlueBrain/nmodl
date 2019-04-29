@@ -7,6 +7,11 @@
 
 #pragma once
 
+/**
+ * \file
+ * \brief \copybrief nmodl::visitor::UnitsVisitor
+ */
+
 #include <sstream>
 #include <string>
 #include <vector>
@@ -18,6 +23,12 @@
 
 namespace nmodl {
 namespace visitor {
+
+/**
+ * @addtogroup visitor_classes
+ * @{
+ */
+
 /**
  * \class UnitsVisitor
  * \brief Visitor for Units blocks of AST
@@ -30,11 +41,12 @@ namespace visitor {
 
 class UnitsVisitor: public AstVisitor {
   private:
-    /// Flag to enable/disable printing nodes and the produced strings that are passed to the unit
-    /// parser as we visit them
+    /// Flag to enable/disable printing nodes and the produced strings that are
+    /// passed to the unit parser as we visit them
     bool verbose = false;
 
-    /// Units Driver needed to parse the units file and the string produces by mod files' units
+    /// Units Driver needed to parse the units file and the string produces by
+    /// mod files' units
     parser::UnitDriver units_driver;
 
     /// Stringstream to store the units details that are added by the mod files
@@ -44,32 +56,40 @@ class UnitsVisitor: public AstVisitor {
     std::string units_dir;
 
   public:
+    /// \name Ctor & dtor
+    /// \{
+
     /// Default UnitsVisitor constructor
     UnitsVisitor() = default;
 
-    /// UnitsVisitor constructor that instantiates a stringstream to store the tests output and
-    /// takes as argument the units file to parse the units from
+    /// UnitsVisitor constructor that instantiates a stringstream to store the
+    /// tests output and takes as argument the units file to parse the units from
     UnitsVisitor(std::string& t_units_dir, std::stringstream& t_units_details)
         : verbose(true)
         , units_dir(t_units_dir)
         , units_details(&t_units_details) {}
 
-    /// UnitsVisitor constructor that takes as argument the units file to parse the units from
+    /// UnitsVisitor constructor that takes as argument the units file to parse
+    /// the units from
     UnitsVisitor(std::string& t_units_dir)
         : units_dir(t_units_dir) {}
 
-    /// Function to visit all the UnitDef nodes and parse the units defined as UnitDef in the UNITS
-    /// block of mod files
+    /// \}
+
+    /// Function to visit all the UnitDef nodes and parse the units defined as
+    /// UnitDef in the UNITS block of mod files
     void visit_unit_def(ast::UnitDef* node) override;
 
-    /// Function to visit all the FactorDef nodes and parse the units defined as FactorDef in the
-    /// UNITS block of mod files
+    /// Function to visit all the FactorDef nodes and parse the units defined
+    /// as FactorDef in the UNITS block of mod files
     void visit_factor_def(ast::FactorDef* node) override;
 
-    /// Override visit_program function to parse the nrnunits.lib unit file before starting visiting
-    /// the AST to parse the units defined in mod files
+    /// Override visit_program function to parse the nrnunits.lib unit file
+    /// before starting visiting the AST to parse the units defined in mod files
     void visit_program(ast::Program* node) override;
 };
+
+/** @} */  // end of visitor_classes
 
 }  // namespace visitor
 }  // namespace nmodl

@@ -13,6 +13,12 @@
 #include "visitors/units_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
 
+/**
+ * \file
+ * \brief AST Visitor to parse the UnitDefs and FactorDefs from the mod file
+ * by the Units Parser used to parse the nrnunits.lib file
+ */
+
 namespace nmodl {
 namespace visitor {
 
@@ -22,8 +28,8 @@ void UnitsVisitor::visit_program(ast::Program* node) {
 }
 
 /**
- * Unit definition is based only on pre-defined units, parse only the new unit
- * and the pre-defined units (ex. (nA)    = (nanoamp) => nA  nanoamp)
+ * \details Unit definition is based only on pre-defined units, parse only the
+ * new unit and the pre-defined units (ex. (nA)    = (nanoamp) => nA  nanoamp)
  * The UnitDef is converted to a string that is able to be parsed by the
  * unit parser which was used for parsing the nrnunits.lib file
  * On nrnunits.lib constant "1" is defined as "fuzz", so it must be converted
@@ -42,9 +48,11 @@ void UnitsVisitor::visit_unit_def(ast::UnitDef* node) {
 
     if (verbose) {
         auto unit_name = node->get_node_name();
-        /// The value of the unit printed in the verbose output is the one
-        /// that will be printed to the .cpp file and not the value that
-        /// is calculated based on the UnitTable units value
+        /**
+         * \note The value of the unit printed in the verbose output is
+         * the one that will be printed to the .cpp file and not the
+         * value that is calculated based on the UnitTable units value
+         */
         unit_name.erase(remove_if(unit_name.begin(), unit_name.end(), isspace), unit_name.end());
         auto unit = units_driver.table->get_unit(unit_name);
         *units_details << std::fixed << std::setprecision(8) << unit->get_name() << " "
@@ -65,8 +73,9 @@ void UnitsVisitor::visit_unit_def(ast::UnitDef* node) {
     }
 }
 
-/** The new unit definition is based on a factor combined with units or
- * other defined units.
+/**
+ * \details The new unit definition is based on a factor combined with
+ * units or other defined units.
  * In the first case the factor saved to the AST node and printed to
  * .cpp file is the one defined on the modfile. The factor and the
  * dimensions saved to the UnitTable are based on the factor and the
@@ -85,8 +94,10 @@ void UnitsVisitor::visit_factor_def(ast::FactorDef* node) {
     std::stringstream ss;
     auto node_has_value_defined_in_modfile = node->get_value() != NULL;
     if (node_has_value_defined_in_modfile) {
-        /// In nrnunits.lib file "1" is defined as "fuzz", so there must
-        /// be a conversion to be able to to parse "1" as unit
+        /**
+         * \note In nrnunits.lib file "1" is defined as "fuzz", so
+         * there must be a conversion to be able to to parse "1" as unit
+         */
         if (node->get_unit1()->get_node_name() == "1") {
             ss << node->get_node_name() << "\t" << node->get_value()->get_value() << " fuzz";
         } else {
@@ -115,10 +126,12 @@ void UnitsVisitor::visit_factor_def(ast::FactorDef* node) {
 
     units_driver.parse_string(ss.str());
 
-    /// If the FactorDef was done by using 2 units, the factors of both of
-    /// them must be calculated based on the UnitTable and then they must
-    /// be divided to produce the unit's factor that will be printed to the
-    /// .cpp file.
+    /**
+     * \note If the FactorDef was done by using 2 units, the factors of both
+     * of them must be calculated based on the UnitTable and then they must
+     * be divided to produce the unit's factor that will be printed to the
+     * .cpp file.
+     */
     if (!node_has_value_defined_in_modfile) {
         auto node_unit_name = node->get_node_name();
         auto unit1_factor = units_driver.table->get_unit(node_unit_name + "_unit1")->get_factor();
@@ -130,9 +143,11 @@ void UnitsVisitor::visit_factor_def(ast::FactorDef* node) {
 
     if (verbose) {
         auto unit = units_driver.table->get_unit(node->get_node_name());
-        /// The value of the unit printed in the verbose output is the one
-        /// that will be printed to the .cpp file and not the value that
-        /// is calculated based on the UnitTable units value
+        /**
+         * \note The value of the unit printed in the verbose output is
+         * the one that will be printed to the .cpp file and not the
+         * value that is calculated based on the UnitTable units value
+         */
         *units_details << std::fixed << std::setprecision(8) << unit->get_name() << " "
                        << node->get_value()->get_value() << ":";
         int i = 0;
