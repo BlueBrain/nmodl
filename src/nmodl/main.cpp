@@ -157,7 +157,7 @@ int main(int argc, const char* argv[]) {
         ->ignore_case();
     app.add_option("--scratch", scratch_dir, "Directory for intermediate code output", true)
         ->ignore_case();
-    app.add_option("-u,--units", units_dir, "Directory of units lib file", true)->ignore_case();
+    app.add_option("--units", units_dir, "Directory of units lib file", true)->ignore_case();
 
     auto host_opt = app.add_subcommand("host", "HOST/CPU code backends")->ignore_case();
     host_opt->add_flag("--c", c_backend, "C/C++ backend")->ignore_case();

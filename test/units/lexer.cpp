@@ -58,6 +58,8 @@ TEST_CASE("Unit Lexer tests for valid tokens", "[lexer][unit]") {
         REQUIRE(token_type("mA/cm2") == Token::NEW_UNIT);
         REQUIRE(token_type(" m2") == Token::UNIT_POWER);
         REQUIRE(token_type(" m") == Token::UNIT);
+        REQUIRE(token_type(" m_2") == Token::UNIT);
+        REQUIRE(token_type(" m_unit2") == Token::UNIT);
         REQUIRE(token_type("yotta-") == Token::PREFIX);
     }
 

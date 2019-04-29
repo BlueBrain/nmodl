@@ -1927,8 +1927,8 @@ void CodegenCVisitor::print_nmodl_constants() {
         printer->add_line("/** constants used in nmodl */");
         for (const auto& it: info.factor_definitions) {
             std::stringstream ss;
-            ss << "static const double " << it->get_node_name() << " = "
-               << it->get_value()->get_value() << ";";
+            ss << "static const double " << it->get_node_name() << " = ";
+            ss << it->get_value()->get_value() << ";";
             printer->add_line(ss.str());
         }
     }

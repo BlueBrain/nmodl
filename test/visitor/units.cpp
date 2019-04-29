@@ -37,7 +37,7 @@ std::string run_units_visitor(const std::string& text) {
 }
 
 
-SCENARIO("Units Visitor") {
+SCENARIO("Parse UNITS block of mod files using Units Visitor", "[visitor][units]") {
     GIVEN("UNITS block with different cases of units definitions") {
         std::string nmodl_text = R"(
             UNITS {

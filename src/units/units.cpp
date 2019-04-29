@@ -142,7 +142,7 @@ void UnitTable::calc_nominator_dims(std::shared_ptr<Unit> unit, std::string nomi
     double nominator_prefix_factor = 1.0;
     int nominator_power = 1;
 
-    // if the nominator is INTEGER, divide it from the unit factor
+    // if the nominator is DOUBLE, divide it from the unit factor
     if (nominator_name.front() >= '1' && nominator_name.front() <= '9') {
         unit->mul_factor(1 / std::stod(nominator_name));
         return;
@@ -198,7 +198,7 @@ void UnitTable::calc_nominator_dims(std::shared_ptr<Unit> unit, std::string nomi
     }
 
     // if the nominator is still not found in the table then output error
-    // else multiply its factor to the unit factor and calculate unit's dimentions
+    // else multiply its factor to the unit factor and calculate unit's dimensions
     if (nominator == table.end()) {
         std::stringstream ss;
         ss << "Unit " << nominator_name << " not defined!" << std::endl;
@@ -215,7 +215,7 @@ void UnitTable::calc_denominator_dims(std::shared_ptr<Unit> unit, std::string de
     double denominator_prefix_factor = 1.0;
     int denominator_power = 1;
 
-    // if the denominator is INTEGER, divide it from the unit factor
+    // if the denominator is DOUBLE, divide it from the unit factor
     if (denominator_name.front() >= '1' && denominator_name.front() <= '9') {
         unit->mul_factor(std::stod(denominator_name));
         return;

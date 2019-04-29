@@ -42,7 +42,8 @@ namespace visitor {
 class UnitsVisitor: public AstVisitor {
   private:
     /// Flag to enable/disable printing nodes and the produced strings that are
-    /// passed to the unit parser as we visit them
+    /// passed to the unit parser as we visit them. Set to "true" only for
+    /// testing
     bool verbose = false;
 
     /// Units Driver needed to parse the units file and the string produces by

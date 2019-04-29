@@ -9,13 +9,11 @@
 #include <memory>
 
 #include "ast/ast.hpp"
-#include "visitors/lookup_visitor.hpp"
 #include "visitors/units_visitor.hpp"
-#include "visitors/visitor_utils.hpp"
 
 /**
  * \file
- * \brief AST Visitor to parse the UnitDefs and FactorDefs from the mod file
+ * \brief AST Visitor to parse the ast::UnitDefs and ast::FactorDefs from the mod file
  * by the Units Parser used to parse the nrnunits.lib file
  */
 
@@ -28,18 +26,21 @@ void UnitsVisitor::visit_program(ast::Program* node) {
 }
 
 /**
- * \details Unit definition is based only on pre-defined units, parse only the
- * new unit and the pre-defined units (ex. (nA)    = (nanoamp) => nA  nanoamp)
- * The UnitDef is converted to a string that is able to be parsed by the
+ * \details units::Unit definition is based only on pre-defined units, parse only the
+ * new unit and the pre-defined units <em> (ex. (nA)    = (nanoamp) => nA  nanoamp) </em>
+ * The ast::UnitDef is converted to a string that is able to be parsed by the
  * unit parser which was used for parsing the nrnunits.lib file
  * On nrnunits.lib constant "1" is defined as "fuzz", so it must be converted
  */
 void UnitsVisitor::visit_unit_def(ast::UnitDef* node) {
     std::stringstream ss;
-
+    /**
+     * \note In nrnunits.lib file "1" is defined as "fuzz", so
+     * there must be a conversion to be able to parse "1" as unit
+     */
     if (node->get_unit2()->get_node_name() == "1") {
-        ss << node->get_unit1()->get_node_name() << "\t"
-           << "fuzz";
+        ss << node->get_unit1()->get_node_name() << "\t";
+        ss << "fuzz";
     } else {
         ss << node->get_unit1()->get_node_name() << "\t" << node->get_unit2()->get_node_name();
     }
@@ -50,20 +51,19 @@ void UnitsVisitor::visit_unit_def(ast::UnitDef* node) {
         auto unit_name = node->get_node_name();
         /**
          * \note The value of the unit printed in the verbose output is
-         * the one that will be printed to the .cpp file and not the
-         * value that is calculated based on the UnitTable units value
+         * the one that is stored on the units::UnitTable
          */
         unit_name.erase(remove_if(unit_name.begin(), unit_name.end(), isspace), unit_name.end());
         auto unit = units_driver.table->get_unit(unit_name);
-        *units_details << std::fixed << std::setprecision(8) << unit->get_name() << " "
-                       << unit->get_factor() << ":";
+        *units_details << std::fixed << std::setprecision(8) << unit->get_name() << " ";
+        *units_details << unit->get_factor() << ":";
         int dimension_id = 0;
         auto constant = true;
         for (const auto& dimension: unit->get_dimensions()) {
             if (dimension != 0) {
                 constant = false;
-                *units_details << " " << units_driver.table->get_base_unit_name(dimension_id)
-                               << dimension;
+                *units_details << " " << units_driver.table->get_base_unit_name(dimension_id);
+                *units_details << dimension;
             }
             dimension_id++;
         }
@@ -77,15 +77,20 @@ void UnitsVisitor::visit_unit_def(ast::UnitDef* node) {
 /**
  * \details The new unit definition is based on a factor combined with
  * units or other defined units.
- * In the first case the factor saved to the AST node and printed to
- * .cpp file is the one defined on the modfile. The factor and the
- * dimensions saved to the UnitTable are based on the factor and the
- * units defined in the modfile, so this factor will be calculated
- * based on the base units of the UnitTable.
+ * In the first case the factor saved to the ast::FactorDef node and
+ * printed to \c .cpp file is the one defined on the modfile. The factor
+ * and the dimensions saved to the units::UnitTable are based on the
+ * factor and the units defined in the modfile, so this factor will be
+ * calculated based on the base units of the units::UnitTable.
+ * <em> (ex. R = 8.314 (volt-coul/degC)) </em>
  * In the second case, the factor and the dimensions that are inserted
- * to the UnitTable are based on the unit1 of the FactorDef, like MOD2C.
- * However, the factor that is saved in the AST node and printed in the
- * .cpp file is the factor of the unit1 devided by the factor of unit2.
+ * to the units::UnitTable are based on the unit1 of the ast::FactorDef,
+ * like MOD2C.
+ * \b However, the factor that is saved in the ast::FactorDef and printed
+ * in the \c .cpp file is the factor of the unit1 divided by the factor
+ * of unit2.
+ * <em> (ex. R = (mole k) (mV-coulomb/degC), unit1 is "mole k", unit2 is
+ * "mV-coulomb/degC") </em>
  * To parse the units defined in modfiles there are stringstreams
  * created that are passed to the string parser, to be parsed by the
  * unit parser used for parsing the nrnunits.lib file, which takes care
@@ -93,17 +98,17 @@ void UnitsVisitor::visit_unit_def(ast::UnitDef* node) {
  */
 void UnitsVisitor::visit_factor_def(ast::FactorDef* node) {
     std::stringstream ss;
-    auto node_has_value_defined_in_modfile = node->get_value() != NULL;
+    auto node_has_value_defined_in_modfile = node->get_value() != nullptr;
     if (node_has_value_defined_in_modfile) {
         /**
          * \note In nrnunits.lib file "1" is defined as "fuzz", so
-         * there must be a conversion to be able to to parse "1" as unit
+         * there must be a conversion to be able to parse "1" as unit
          */
         if (node->get_unit1()->get_node_name() == "1") {
-            ss << node->get_node_name() << "\t" << node->get_value()->get_value() << " fuzz";
+            ss << node->get_node_name() << "\t" << node->get_value()->eval() << " fuzz";
         } else {
-            ss << node->get_node_name() << "\t" << node->get_value()->get_value() << " "
-               << node->get_unit1()->get_node_name();
+            ss << node->get_node_name() << "\t" << node->get_value()->eval() << " ";
+            ss << node->get_unit1()->get_node_name();
         }
     } else {
         std::stringstream ss_unit1, ss_unit2;
@@ -128,10 +133,13 @@ void UnitsVisitor::visit_factor_def(ast::FactorDef* node) {
     units_driver.parse_string(ss.str());
 
     /**
-     * \note If the FactorDef was done by using 2 units, the factors of both
-     * of them must be calculated based on the UnitTable and then they must
-     * be divided to produce the unit's factor that will be printed to the
-     * .cpp file.
+     * \note If the ast::FactorDef was made by using two units, the factors of
+     * both of them must be calculated based on the units::UnitTable and then
+     * they must be divided to produce the unit's factor that will be printed
+     * to the \c .cpp file.
+     * <em> (ex. FARADAY = (faraday) (10000 coulomb), in the \c .cpp file
+     * the printed factor will be 9.64853090 but in the
+     * units::UnitTable the factor of FARADAY will be 96485.30900000) </em>
      */
     if (!node_has_value_defined_in_modfile) {
         auto node_unit_name = node->get_node_name();
@@ -139,25 +147,26 @@ void UnitsVisitor::visit_factor_def(ast::FactorDef* node) {
         auto unit2_factor = units_driver.table->get_unit(node_unit_name + "_unit2")->get_factor();
         auto unit_factor = unit1_factor / unit2_factor;
         auto double_value_ptr = std::make_shared<ast::Double>(ast::Double(unit_factor));
-        node->set_value(static_cast<std::shared_ptr<ast::Double>&&>(double_value_ptr));
+        node->set_value(std::move(double_value_ptr));
     }
 
     if (verbose) {
         auto unit = units_driver.table->get_unit(node->get_node_name());
         /**
-         * \note The value of the unit printed in the verbose output is
-         * the one that will be printed to the .cpp file and not the
-         * value that is calculated based on the UnitTable units value
+         * \note The factor of the unit printed in the verbose output is
+         * the one that will be printed to the \c .cpp file and not the
+         * factor that is stored in the units::UnitTable and is based on
+         * the base units of the units::UnitTable
          */
-        *units_details << std::fixed << std::setprecision(8) << unit->get_name() << " "
-                       << node->get_value()->get_value() << ":";
+        *units_details << std::fixed << std::setprecision(8) << unit->get_name() << " ";
+        *units_details << node->get_value()->get_value() << ":";
         int dimension_id = 0;
         auto constant = true;
         for (const auto& dimension: unit->get_dimensions()) {
             if (dimension != 0) {
                 constant = false;
-                *units_details << " " << units_driver.table->get_base_unit_name(dimension_id)
-                               << dimension;
+                *units_details << " " << units_driver.table->get_base_unit_name(dimension_id);
+                *units_details << dimension;
             }
             dimension_id++;
         }
