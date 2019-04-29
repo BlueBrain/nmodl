@@ -1921,7 +1921,7 @@ std::string CodegenCVisitor::process_shadow_update_statement(ShadowUseStatement&
  * NMODL constants from unit database
  *
  */
-void CodegenCVisitor::print_nmodl_constant() {
+void CodegenCVisitor::print_nmodl_constants() {
     if (!info.factor_definitions.empty()) {
         printer->add_newline(2);
         printer->add_line("/** constants used in nmodl */");

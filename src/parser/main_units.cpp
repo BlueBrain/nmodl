@@ -24,6 +24,7 @@
 
 using namespace fmt::literals;
 using namespace nmodl;
+using namespace visitor;
 
 void parse_units(const std::vector<std::string>& units_files,
                  const std::vector<std::string>& mod_files) {
@@ -38,7 +39,7 @@ void parse_units(const std::vector<std::string>& units_files,
         /// parse mod file to create AST
         driver.parse_file(mod_f);
 
-        auto ast = driver.ast();
+        auto ast = driver.get_ast();
 
         /// visit AST nodes to parse the defined Units in the UNITS blocks
         /// of the mod file
@@ -53,7 +54,7 @@ void parse_units(const std::vector<std::string>& units_files,
 
 int main(int argc, const char* argv[]) {
     CLI::App app{"UNITS-Parser : Standalone Parser for UNITS block of mod files({})"_format(
-        version::to_string())};
+        Version::to_string())};
 
     std::vector<std::string> unit_files, mod_files;
     unit_files.push_back(NrnUnitsLib::get_path());

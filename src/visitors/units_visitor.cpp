@@ -5,15 +5,16 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
-#include "visitors/units_visitor.hpp"
-#include "ast/ast.hpp"
-#include "visitors/lookup_visitor.hpp"
-#include "visitors/visitor_utils.hpp"
-
 #include <iostream>
 #include <memory>
 
+#include "ast/ast.hpp"
+#include "visitors/lookup_visitor.hpp"
+#include "visitors/units_visitor.hpp"
+#include "visitors/visitor_utils.hpp"
+
 namespace nmodl {
+namespace visitor {
 
 void UnitsVisitor::visit_program(ast::Program* node) {
     units_driver.parse_file(units_dir);
@@ -150,4 +151,5 @@ void UnitsVisitor::visit_factor_def(ast::FactorDef* node) {
     }
 }
 
+}  // namespace visitor
 }  // namespace nmodl

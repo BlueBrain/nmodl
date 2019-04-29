@@ -7,17 +7,17 @@
 
 #pragma once
 
-#include "ast/ast.hpp"
-#include "parser/unit_driver.hpp"
-#include "visitors/ast_visitor.hpp"
-#include "visitors/visitor_utils.hpp"
-#include <experimental/filesystem>
 #include <sstream>
 #include <string>
 #include <vector>
 
-namespace nmodl {
+#include "ast/ast.hpp"
+#include "parser/unit_driver.hpp"
+#include "visitors/ast_visitor.hpp"
+#include "visitors/visitor_utils.hpp"
 
+namespace nmodl {
+namespace visitor {
 /**
  * \class UnitsVisitor
  * \brief Visitor for Units blocks of AST
@@ -61,12 +61,15 @@ class UnitsVisitor: public AstVisitor {
     /// Function to visit all the UnitDef nodes and parse the units defined as UnitDef in the UNITS
     /// block of mod files
     void visit_unit_def(ast::UnitDef* node) override;
+
     /// Function to visit all the FactorDef nodes and parse the units defined as FactorDef in the
     /// UNITS block of mod files
     void visit_factor_def(ast::FactorDef* node) override;
+
     /// Override visit_program function to parse the nrnunits.lib unit file before starting visiting
     /// the AST to parse the units defined in mod files
     void visit_program(ast::Program* node) override;
 };
 
+}  // namespace visitor
 }  // namespace nmodl
