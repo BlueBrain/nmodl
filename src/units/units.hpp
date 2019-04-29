@@ -172,7 +172,7 @@ class Unit {
     }
 
     /// Getter for the array of Unit's dimensions
-    std::array<int, MAX_DIMS> get_dims() const {
+    std::array<int, MAX_DIMS> get_dimensions() const {
         return unit_dimensions;
     }
 };

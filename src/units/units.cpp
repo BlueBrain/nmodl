@@ -206,7 +206,7 @@ void UnitTable::calc_nominator_dims(std::shared_ptr<Unit> unit, std::string nomi
     } else {
         for (int i = 0; i < nominator_power; i++) {
             unit->mul_factor(nominator_prefix_factor * nominator->second->get_factor());
-            unit->add_nominator_dims(nominator->second->get_dims());
+            unit->add_nominator_dims(nominator->second->get_dimensions());
         }
     }
 }
@@ -278,7 +278,7 @@ void UnitTable::calc_denominator_dims(std::shared_ptr<Unit> unit, std::string de
     } else {
         for (int i = 0; i < denominator_power; i++) {
             unit->mul_factor(1.0 / (denominator_prefix_factor * denominator->second->get_factor()));
-            unit->add_denominator_dims(denominator->second->get_dims());
+            unit->add_denominator_dims(denominator->second->get_dimensions());
         }
     }
 }
@@ -329,7 +329,7 @@ void UnitTable::print_units() const {
     for (const auto& it: table) {
         std::cout << std::fixed << std::setprecision(8) << it.first << " "
                   << it.second->get_factor() << ":";
-        for (const auto& dims: it.second->get_dims()) {
+        for (const auto& dims: it.second->get_dimensions()) {
             std::cout << " " << dims;
         }
         std::cout << "\n";
@@ -358,7 +358,7 @@ void UnitTable::print_units_sorted(std::stringstream& units_details) {
     for (const auto& it: sorted_elements) {
         units_details << std::fixed << std::setprecision(8) << it.first << " "
                       << it.second->get_factor() << ":";
-        for (const auto& dims: it.second->get_dims()) {
+        for (const auto& dims: it.second->get_dimensions()) {
             units_details << " " << dims;
         }
         units_details << "\n";

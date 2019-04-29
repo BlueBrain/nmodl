@@ -57,14 +57,15 @@ void UnitsVisitor::visit_unit_def(ast::UnitDef* node) {
         auto unit = units_driver.table->get_unit(unit_name);
         *units_details << std::fixed << std::setprecision(8) << unit->get_name() << " "
                        << unit->get_factor() << ":";
-        int i = 0;
+        int dimension_id = 0;
         auto constant = true;
-        for (const auto& dims: unit->get_dims()) {
-            if (dims != 0) {
+        for (const auto& dimension: unit->get_dimensions()) {
+            if (dimension != 0) {
                 constant = false;
-                *units_details << " " << units_driver.table->get_base_unit_name(i) << dims;
+                *units_details << " " << units_driver.table->get_base_unit_name(dimension_id)
+                               << dimension;
             }
-            i++;
+            dimension_id++;
         }
         if (constant) {
             *units_details << " constant";
@@ -150,14 +151,15 @@ void UnitsVisitor::visit_factor_def(ast::FactorDef* node) {
          */
         *units_details << std::fixed << std::setprecision(8) << unit->get_name() << " "
                        << node->get_value()->get_value() << ":";
-        int i = 0;
+        int dimension_id = 0;
         auto constant = true;
-        for (const auto& dims: unit->get_dims()) {
-            if (dims != 0) {
+        for (const auto& dimension: unit->get_dimensions()) {
+            if (dimension != 0) {
                 constant = false;
-                *units_details << " " << units_driver.table->get_base_unit_name(i) << dims;
+                *units_details << " " << units_driver.table->get_base_unit_name(dimension_id)
+                               << dimension;
             }
-            i++;
+            dimension_id++;
         }
         if (constant) {
             *units_details << " constant";
