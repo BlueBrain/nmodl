@@ -232,6 +232,11 @@ void init_ast_module(py::module& m) {
     {{ var(node) }}.def_readwrite("{{ member[1] }}", &{{ node.class_name }}::{{ member[1] }});
     {% endfor %}
 
+    {% for member in node.properties() %}
+        {{ var(node) }}.def_property("{{ member[1] }}", &{{ node.class_name }}::get_{{ member[1] }},
+                &{{ node.class_name }}::get_{{ member[1] }});
+    {% endfor %}
+
     {{ var(node) }}.def("visit_children", &{{ node.class_name }}::visit_children, docstring::visit_children_method)
     .def("accept", &{{ node.class_name }}::accept, docstring::accept_method)
     .def("clone", &{{ node.class_name }}::clone, docstring::clone_method)

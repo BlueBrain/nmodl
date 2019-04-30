@@ -390,7 +390,7 @@ class Node(BaseNode):
         """
         Return public members of the node
         """
-        members = [[child.member_typename, child.varname, child.brief]
+        members = [[child.member_typename, child.varname, "", child.brief]
                    for child in self.children
                    if child.is_public]
 
@@ -400,18 +400,31 @@ class Node(BaseNode):
         """
         Return private members of the node
         """
-        members = [[child.member_typename, child.varname, child.brief]
+        members = [[child.member_typename, child.varname, "", child.brief]
                    for child in self.children
                    if not child.is_public]
 
         if self.has_token:
-            members.append(["std::shared_ptr<ModToken>", "token", "token with location information"])
+            members.append(["std::shared_ptr<ModToken>", "token", "", "token with location information"])
 
         if self.is_symtab_needed:
-            members.append(["symtab::SymbolTable*", "symtab = nullptr", "symbol table for a block"])
+            members.append(["symtab::SymbolTable*", "symtab",  "nullptr", "symbol table for a block"])
 
         if self.is_program_node:
-            members.append(["symtab::ModelSymbolTable", "model_symtab", "global symbol table for model"])
+            members.append(["symtab::ModelSymbolTable", "model_symtab", "", "global symbol table for model"])
+
+        return members
+
+    def properties(self):
+        """
+        Return private members of the node destined to be pybind properties
+        """
+        members = [[child.member_typename, child.varname, "", child.brief]
+                   for child in self.children
+                   if not child.is_public]
+
+        if self.has_token:
+            members.append(["std::shared_ptr<ModToken>", "token", "", "token with location information"])
 
         return members
 
