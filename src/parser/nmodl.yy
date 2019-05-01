@@ -91,7 +91,7 @@
 %token  <ModToken>              CONSTRUCTOR
 %token  <ModToken>              DEFINE1
 %token  <ModToken>              DEPEND
-%token  <ModToken>              DEPENDENT
+%token  <ModToken>              ASSIGNED
 %token  <ModToken>              DERFUNC
 %token  <ModToken>              DERIVATIVE
 %token  <ModToken>              DESTRUCTOR
@@ -266,7 +266,7 @@
 %type   <ast::WrappedExpression*>           function_call
 %type   <ast::StatementBlock*>              if_solution_error
 %type   <ast::Expression*>                  optional_increment
-%type   <ast::Number*>                      optional_statrt
+%type   <ast::Number*>                      optional_start
 %type   <ast::VarNameVector>                sens_list
 %type   <ast::Sens*>                        sens
 %type   <ast::LagStatement*>                lag_statement
@@ -364,8 +364,8 @@
 
 /*
  * Precedence and Associativity : specify operator precedency and
- *  associativity (from lower to higher. Note that '^' represent
- *  exponentiation.
+ * associativity (from lower to higher. Note that '^' represent
+ * exponentiation.
  */
 
 %left   OR
@@ -765,7 +765,7 @@ independent_block_body :
                 ;
 
 
-independent_definition :  NAME_PTR FROM number TO number withby integer optional_statrt units
+independent_definition :  NAME_PTR FROM number TO number withby integer optional_start units
                     {
                         $$ = new ast::IndependentDefinition(NULL, $1, $3, $5, $7, $8, $9);
                     }
@@ -780,7 +780,7 @@ withby          :   WITH
                 ;
 
 
-dependent_block :   DEPENDENT "{" dependent_block_body "}"
+dependent_block :   ASSIGNED "{" dependent_block_body "}"
                     {
                         $$ = new ast::AssignedBlock($3);
                     }
@@ -799,19 +799,19 @@ dependent_block_body :
                 ;
 
 
-dependent_definition : name optional_statrt units abs_tolerance
+dependent_definition : name optional_start units abs_tolerance
                     {
                         $$ = new ast::AssignedDefinition($1, NULL, NULL, NULL, $2, $3, $4);
                     }
-                |   name "[" integer "]" optional_statrt units abs_tolerance
+                |   name "[" integer "]" optional_start units abs_tolerance
                     {
                         $$ = new ast::AssignedDefinition($1, $3, NULL, NULL, $5, $6, $7);
                     }
-                |   name FROM number TO number optional_statrt units abs_tolerance
+                |   name FROM number TO number optional_start units abs_tolerance
                     {
                         $$ = new ast::AssignedDefinition($1, NULL, $3, $5, $6, $7, $8);
                     }
-                |   name "[" integer "]" FROM number TO number optional_statrt units abs_tolerance
+                |   name "[" integer "]" FROM number TO number optional_start units abs_tolerance
                     {
                         $$ = new ast::AssignedDefinition($1, $3, $6, $8, $9, $10, $11);
                     }
@@ -822,7 +822,7 @@ dependent_definition : name optional_statrt units abs_tolerance
                 ;
 
 
-optional_statrt :
+optional_start  :
                     {
                         $$ = nullptr;
                     }
@@ -1749,7 +1749,7 @@ optional_solvefor :
                 ;
 
 
-solvefor       :   SOLVEFOR NAME_PTR
+solvefor        :   SOLVEFOR NAME_PTR
                     {
                         $$ = ast::NameVector();
                         $$.emplace_back($2);
@@ -1819,7 +1819,7 @@ watch_statement :   WATCH watch
                 ;
 
 
-watch          :   "(" watch_expression watch_direction watch_expression ")" double
+watch           :   "(" watch_expression watch_direction watch_expression ")" double
                     {
                         $$ = new ast::Watch( new ast::BinaryExpression($2, $3, $4), $6);
                     }
