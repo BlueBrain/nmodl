@@ -46,10 +46,10 @@ DBL ([-+]?{D})|([-+]?{D}+"."{D}*({E})?)|([-+]?{D}*"."{D}+({E})?)|([-+]?{D}+{E})
   * regex for valid base units names and invalid base units names
   * (maximum number of base units should be 10 and named from a to j)
   */
-VBU     [a-j]
-IVBU    [k-zA-Z]
+VALIDBASEUNIT      [a-j]
+INVALIDBASEUNIT    [k-zA-Z]
 
-/** regex for unit valid characters of units */
+/** regex for valid characters of units */
 CHAR    [a-zA-Z$\%]
 
 /** regex for name of new defined unit */
@@ -112,11 +112,11 @@ NEWUNIT ({CHAR}+{D}*)|({CHAR}+{D}*"_"{CHAR}+{D}*)|({CHAR}+{D}*"/"{CHAR}+{D}*)|({
 
 %%
 
-"*"{VBU}"*"     {
+"*"{VALIDBASEUNIT}"*"     {
                     return UnitParser::make_BASE_UNIT(yytext, loc);
                 }
 
-"*"{IVBU}"*"    {
+"*"{INVALIDBASEUNIT}"*"    {
                     return UnitParser::make_INVALID_BASE_UNIT(yytext, loc);
                 }
 

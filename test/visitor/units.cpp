@@ -7,11 +7,13 @@
 
 #include "catch/catch.hpp"
 
+#include "ast/ast.hpp"
 #include "parser/nmodl_driver.hpp"
 #include "src/config/config.h"
 #include "test/utils/nmodl_constructs.hpp"
 #include "test/utils/test_utils.hpp"
 #include "utils/logger.hpp"
+#include "visitors/lookup_visitor.hpp"
 #include "visitors/nmodl_visitor.hpp"
 #include "visitors/units_visitor.hpp"
 
@@ -30,9 +32,75 @@ std::string run_units_visitor(const std::string& text) {
     driver.parse_string(text);
     auto ast = driver.get_ast();
 
-    std::stringstream ss;
+    // Parse nrnunits.lib file and the UNITS block of the mod file
     std::string units_lib_path(NrnUnitsLib::get_path());
-    UnitsVisitor(units_lib_path, ss).visit_program(ast.get());
+    UnitsVisitor units_visitor = UnitsVisitor(units_lib_path);
+
+    units_visitor.visit_program(ast.get());
+
+    // Keep the UnitTable created from parsing unit file and UNITS
+    // block of the mod file
+    parser::UnitDriver units_driver = units_visitor.get_unit_driver();
+    std::shared_ptr<units::UnitTable> unit_table = units_driver.table;
+
+    std::stringstream ss;
+
+    // Visit AST to find all the ast::UnitDef nodes to print their
+    // unit names, factors and dimensions as they are calculated in
+    // the units::UnitTable
+    auto unit_defs = AstLookupVisitor().lookup(ast.get(), ast::AstNodeType::UNIT_DEF);
+
+    for (const auto& unit_def: unit_defs) {
+        auto unit_name = unit_def->get_node_name();
+        unit_name.erase(remove_if(unit_name.begin(), unit_name.end(), isspace), unit_name.end());
+        auto unit = units_driver.table->get_unit(unit_name);
+        ss << std::fixed << std::setprecision(8) << unit->get_name() << " ";
+        ss << unit->get_factor() << ":";
+        // Dimensions of the unit are printed to check that the units are successfully
+        // parsed to the units::UnitTable
+        int dimension_id = 0;
+        auto constant = true;
+        for (const auto& dimension: unit->get_dimensions()) {
+            if (dimension != 0) {
+                constant = false;
+                ss << " " << units_driver.table->get_base_unit_name(dimension_id);
+                ss << dimension;
+            }
+            dimension_id++;
+        }
+        if (constant) {
+            ss << " constant";
+        }
+        ss << "\n";
+    }
+
+    // Visit AST to find all the ast::FactorDef nodes to print their
+    // unit names, factors and dimensions as they are calculated to
+    // be printed to the produced .cpp file
+    auto factor_defs = AstLookupVisitor().lookup(ast.get(), ast::AstNodeType::FACTOR_DEF);
+    for (const auto& factor_def: factor_defs) {
+        auto unit = units_driver.table->get_unit(factor_def->get_node_name());
+        ss << std::fixed << std::setprecision(8) << unit->get_name() << " ";
+        auto factor_def_class = dynamic_cast<nmodl::ast::FactorDef*>(factor_def.get());
+        ss << factor_def_class->get_value()->eval() << ":";
+        // Dimensions of the unit are printed to check that the units are successfully
+        // parsed to the units::UnitTable
+        int dimension_id = 0;
+        auto constant = true;
+        for (const auto& dimension: unit->get_dimensions()) {
+            if (dimension != 0) {
+                constant = false;
+                ss << " " << units_driver.table->get_base_unit_name(dimension_id);
+                ss << dimension;
+            }
+            dimension_id++;
+        }
+        if (constant) {
+            ss << " constant";
+        }
+        ss << "\n";
+    }
+
     return ss.str();
 }
 
