@@ -12,7 +12,7 @@ import sympy as sp
 # import known_functions through low-level mechanism because the ccode
 # module is overwritten in sympy and contents of that submodule cannot be
 # accessed through regular imports
-known_functions = import_module('sympy.printing.ccode').known_functions_C89
+known_functions = import_module('sympy.printing.ccode').known_functions_C99
 known_functions.pop('Abs')
 known_functions['abs'] = 'fabs'
 
