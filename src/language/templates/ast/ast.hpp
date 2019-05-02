@@ -57,8 +57,8 @@ namespace ast {
     {% if node.private_members() %}
       private:
         {% for member in node.private_members() %}
-        {{ '/// ' + member[2] }}
-        {% if member[2] == "" %}
+        {{ '/// ' + member[3] }}
+        {% if member[2] is none %}
         {{ member[0] }} {{ member[1] }};
         {% else %}
         {{ member[0] }} {{ member[1] }} = {{ member[2] }};
@@ -69,7 +69,7 @@ namespace ast {
       public:
         {% for member in node.public_members() %}
         {{ '/// ' + member[3] }}
-        {% if member[2] == "" %}
+        {% if member[2] is none %}
         {{ member[0] }} {{ member[1] }};
         {% else %}
         {{ member[0] }} {{ member[1] }} = {{ member[2] }};

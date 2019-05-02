@@ -233,8 +233,13 @@ void init_ast_module(py::module& m) {
     {% endfor %}
 
     {% for member in node.properties() %}
+    {% if member[2] == True %}
         {{ var(node) }}.def_property("{{ member[1] }}", &{{ node.class_name }}::get_{{ member[1] }},
-                &{{ node.class_name }}::get_{{ member[1] }});
+            &{{ node.class_name }}::set_{{ member[1] }});
+    {% else %}
+        {{ var(node) }}.def_property("{{ member[1] }}", &{{ node.class_name }}::get_{{ member[1] }},
+                static_cast<void ({{ node.class_name }}::*)(const {{ member[0] }}&)>(&{{ node.class_name }}::set_{{ member[1] }}));
+    {% endif %}
     {% endfor %}
 
     {{ var(node) }}.def("visit_children", &{{ node.class_name }}::visit_children, docstring::visit_children_method)
