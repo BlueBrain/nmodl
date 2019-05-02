@@ -63,7 +63,7 @@ driver = nmodl.NmodlDriver()
 mod_ast = driver.parse_file("expsyn.mod")
 ```
 
-[parse_file()]() returns Abstract Syntax Tree ([AST]()) representation of input NMODL file. One can look at the AST in JSON form as:
+`parse_file()]` returns Abstract Syntax Tree ([AST](https://en.wikipedia.org/wiki/Abstract_syntax_tree)) representation of input NMODL file. One can look at the AST in JSON form as:
 
 ```python
 >>> print (nmodl.to_json(mod_ast))
@@ -84,11 +84,11 @@ mod_ast = driver.parse_file("expsyn.mod")
                         }
                     ...
 ```
-You can also use AST [visualization API]() to look at the AST:
+You can also use AST visualization API to look at the AST:
 
 ![alt text](docs/images/nmodl.ast.png "AST representation of expsyn.mod")
 
-The central *Program* node represents the whole MOD file and each of it's children represent the block in the input NMODL file i.e. **expsyn.mod**. Once the AST is built, one can use exisiting visitors to perform various analysis/optimisations or one can write his own custom visitor using Python Visitor API. See [Python API tutorial]() for details.
+The central *Program* node represents the whole MOD file and each of it's children represent the block in the input NMODL file i.e. **expsyn.mod**. Once the AST is built, one can use exisiting visitors to perform various analysis/optimisations or one can write his own custom visitor using Python Visitor API. See [Python API tutorial](docs/notebooks/nmodl-python-tutorial.ipynb) for details.
 
 One can also transform AST back into NMODL form simply as :
 
@@ -115,19 +115,19 @@ PARAMETER {
 
 ### High Level Analysis and Code Generation
 
-The NMODL Framework provides rich model introspection and analysis capabilities using [various visitors](). Here is an example of theoretical performance characterisation of channels and synapses from rat neocortical column microcircuit [published in 2015]():
+The NMODL Framework provides rich model introspection and analysis capabilities using [various visitors TODO](). Here is an example of theoretical performance characterisation of channels and synapses from rat neocortical column microcircuit [published in 2015](https://www.cell.com/abstract/S0092-8674(15)01191-5):
 
 ![alt text](docs/images/nmodl-perf-stats.png "Example of performance characterisation")
 
-To understand how you can write your own introspection and analysis tool, see [this tutorial]().
+To understand how you can write your own introspection and analysis tool, see [this tutorial](docs/notebooks/nmodl-python-tutorial.ipynb).
 
-Once analysis and optimization passes are performed, the NMODL Framework can generate optimised code for modern compute architectures including CPUs (Intel, AMD, ARM) and GPUs (NVIDIA, AMD) platforms. For example, [C++](), [OpenACC](), [OpenMP](), [CUDA]() and [ISPC]() backends are implemented and one can choose backends on command line as:
+Once analysis and optimization passes are performed, the NMODL Framework can generate optimised code for modern compute architectures including CPUs (Intel, AMD, ARM) and GPUs (NVIDIA, AMD) platforms. For example, [C++ TODO](), [OpenACC TODO](), [OpenMP TODO](), [CUDA TODO]() and [ISPC TODO]() backends are implemented and one can choose backends on command line as:
 
 ```
 $ nmodl expsyn.mod host --ispc acc --cuda sympy --analytic
 ```
 
-Here is an example of generated ISPC kernel for [DERIVATIVE]() block :
+Here is an example of generated ISPC kernel for [DERIVATIVE](https://www.neuron.yale.edu/neuron/static/py_doc/modelspec/programmatic/mechanisms/nmodl.html#derivative) block :
 
 ```c++
 export void nrn_state_ExpSyn(uniform ExpSyn_Instance* uniform inst, uniform NrnThread* uniform nt ...) {
@@ -146,14 +146,14 @@ export void nrn_state_ExpSyn(uniform ExpSyn_Instance* uniform inst, uniform NrnT
 }
 ```
 
-To know more about code generation backends, [see here]().
+To know more about code generation backends, [see here TODO]().
 
 ### Documentation
 
 We are working on user documentation, you can find current drafts of :
 
-* User documentation on [Read the Docs]()
-* Developer / API documentation with [Doxygen]()
+* User documentation on [Read the Docs TODO]()
+* Developer / API documentation with [Doxygen TODO]()
 
 
 ### Support / Contribuition
@@ -164,12 +164,11 @@ If you see any issue or need help, feel free to raise a ticket. If you would lik
 
 If you are referencing NMODL Framework in a publication, please cite the following paper:
 
-
-* Pramod Kumbhar, Omar Awile, Liam Keegan, Jorge Alonso, James King, Michael Hines and Felix Schürmann. 2019. An optimizing multi-platform source-to-source compiler framework for the NEURON MODeling Language. In Eprint arXiv:xxxxxx.
+* Pramod Kumbhar, Omar Awile, Liam Keegan, Jorge Alonso, James King, Michael Hines and Felix Schürmann. 2019. An optimizing multi-platform source-to-source compiler framework for the NEURON MODeling Language. In Eprint arXiv: TODO.
 
 ### Authors
 
-See [contributors]().
+See [contributors](https://github.com/BlueBrain/nmodl/graphs/contributors).
 
 ### Funding
 
