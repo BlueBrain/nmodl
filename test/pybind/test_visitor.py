@@ -41,6 +41,12 @@ def test_json_visitor(ch_ast):
                    '"name":"Integer"}],"name":"PrimeName"}')
     assert result_json == expected_json
 
+    # test json with nmodl embedded
+    result_json = nmodl.dsl.to_json(primes[0], True, True, True)
+    expected_json = ('{"children":[{"children":[{"name":"m"}],"name":"String","nmodl":"m"},'
+                     '{"children":[{"name":"1"}],"name":"Integer","nmodl":"1"}],'
+                     '"name":"PrimeName","nmodl":"m\'"}')
+    assert result_json == expected_json
 
 def test_custom_visitor(ch_ast):
 
