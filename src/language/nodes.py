@@ -393,7 +393,7 @@ class Node(BaseNode):
 
     def ctor_declaration(self):
         args = [f'{c.get_typename()} {c.varname}' for c in self.children]
-        return f"{self.class_name}({', '.join(args)});"
+        return f"explicit {self.class_name}({', '.join(args)});"
 
     def ctor_definition(self):
         args = [f'{c.get_typename()} {c.varname}' for c in self.children]
@@ -406,7 +406,7 @@ class Node(BaseNode):
 
     def ctor_shrptr_declaration(self):
         args = [f'{c.member_typename} {c.varname}' for c in self.children]
-        return f"{self.class_name}({', '.join(args)});"
+        return f"explicit {self.class_name}({', '.join(args)});"
 
     def ctor_shrptr_definition(self):
         args = [f'{c.member_typename} {c.varname}' for c in self.children]
