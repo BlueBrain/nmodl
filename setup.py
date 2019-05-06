@@ -143,7 +143,7 @@ class NMODLTest(test):
         )
 
 
-install_requirements = ["jinja2>=2.9", "PyYAML>=3.13", "sympy>=1.2"]
+install_requirements = ["jinja2>=2.9", "PyYAML>=3.13", "sympy>=1.3"]
 
 setup(
     name="NMODL",
