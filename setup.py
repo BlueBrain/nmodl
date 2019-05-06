@@ -141,7 +141,6 @@ class NMODLTest(test):
                 "test",
             ]
         )
-        #subprocess.check_call([sys.executable, __file__, "doctest"])
 
 
 install_requirements = ["jinja2>=2.9", "PyYAML>=3.13", "sympy>=1.2"]
