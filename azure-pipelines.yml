@@ -14,7 +14,7 @@ jobs:
       sudo apt-add-repository -y ppa:deadsnakes/ppa
       sudo apt update
       sudo apt install -y g++-8 flex bison cmake
-      sudo apt-get install -y python3.7 python3.7-dev python3-setuptools
+      sudo apt-get install -y python3.7 python3.7-dev
       python3.7 -m pip install -U pip setuptools
       python3.7 -m pip install --user 'Jinja2>=2.9.3' 'PyYAML>=3.13' pytest 'sympy>=1.3'
     displayName: 'Install Depdendencies'

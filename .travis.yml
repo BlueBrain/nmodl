@@ -24,18 +24,6 @@ matrix:
       os: osx
       env:
         - MATRIX_EVAL="CXX=c++"
-    - language: cpp
-      os: linux
-      dist: xenial
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-8
-      env:
-        - MATRIX_EVAL="CXX=g++-8"
-        - PYTHON_VERSION=3.7.1
 
 #=============================================================================
 # Common Packages
@@ -67,7 +55,6 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
         export PATH=/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH;
     else
-        pyenv versions;
         pyenv global $PYTHON_VERSION;
         ls /usr/bin/;
     fi
