@@ -13,7 +13,7 @@ The NMODL Framework is a code generation engine for **N**EURON **MOD**eling **L*
 
 Simulators like [NEURON](https://www.neuron.yale.edu/neuron/) use NMODL as a domain specific language (DSL) to describe a wide range of membrane and  intracellular submodels. Here is an example of exponential synapse specified in NMODL:
 
-```
+```python
 NEURON {
     POINT_PROCESS ExpSyn
     RANGE tau, e, i
@@ -87,7 +87,8 @@ mod_ast = driver.parse_file("expsyn.mod")
 ```
 You can also use AST visualization API to look at the AST:
 
-![alt text](docs/images/nmodl.ast.png "AST representation of expsyn.mod")
+![ast_viz](https://user-images.githubusercontent.com/666852/57329449-12c9a400-7114-11e9-8da5-0042590044ec.gif "AST representation of expsyn.mod")
+
 
 The central *Program* node represents the whole MOD file and each of it's children represent the block in the input NMODL file i.e. **expsyn.mod**. Once the AST is built, one can use exisiting visitors to perform various analysis/optimisations or one can write his own custom visitor using Python Visitor API. See [Python API tutorial](docs/notebooks/nmodl-python-tutorial.ipynb) for details.
 
@@ -165,7 +166,7 @@ If you see any issue or need help, feel free to raise a ticket. If you would lik
 
 If you are referencing NMODL Framework in a publication, please cite the following paper:
 
-* Pramod Kumbhar, Omar Awile, Liam Keegan, Jorge Alonso, James King, Michael Hines and Felix Schürmann. 2019. An optimizing multi-platform source-to-source compiler framework for the NEURON MODeling Language. In Eprint arXiv: TODO.
+* Pramod Kumbhar, Omar Awile, Liam Keegan, Jorge Alonso, James King, Michael Hines and Felix Schürmann. 2019. An optimizing multi-platform source-to-source compiler framework for the NEURON MODeling Language. In Eprint : arXiv:submit/2678839.
 
 ### Authors
 
