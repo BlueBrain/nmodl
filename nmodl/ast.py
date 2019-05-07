@@ -30,3 +30,4 @@ def ast_view(nmodl_ast):
     # open browser with ast
     url = 'file://' + os.path.join(work_dir, "index.html")
     webbrowser.open(url, new=1, autoraise=True)
+
