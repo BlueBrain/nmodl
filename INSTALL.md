@@ -21,7 +21,7 @@ To build the project from source, a modern C++ compiler with c++11 support is ne
 
 - flex (>=2.6)
 - bison (>=3.0)
-- CMake (>=3.1)
+- CMake (>=3.3)
 - Python (>=3.6)
 - Python packages : jinja2 (>=2.10), pyyaml (>=3.13), pytest (>=4.0.0), sympy (>=1.3), textwrap
 
@@ -59,8 +59,6 @@ The Python dependencies are installed using:
 ```sh
 pip3 install Jinja2 PyYAML pytest sympy
 ```
-
-> Note: On Blue Brain BB5 Supercomputer, use : module load cmake/3.12.0 bison/3.0.5 flex/2.6.3 gcc/6.4.0 python3-dev
 
 ## Build Project
 
