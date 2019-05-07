@@ -16,6 +16,7 @@
 #include "ast/ast_decl.hpp"
 #include "codegen/codegen_acc_visitor.hpp"
 #include "codegen/codegen_c_visitor.hpp"
+#include "codegen/codegen_compatibility_visitor.hpp"
 #include "codegen/codegen_cuda_visitor.hpp"
 #include "codegen/codegen_ispc_visitor.hpp"
 #include "codegen/codegen_omp_visitor.hpp"
@@ -250,6 +251,21 @@ int main(int argc, const char* argv[]) {
             SymtabVisitor(update_symtab).visit_program(ast.get());
         }
 
+        {
+            // make sure to run perf visitor because code generator
+            // looks for read/write counts const/non-const declaration
+            PerfVisitor().visit_program(ast.get());
+        }
+
+        {
+            // Compatibility Checking
+            logger->info("Running code compatibility checker");
+            // If there is an incompatible construct exit NMODL
+            if (CodegenCompatibilityVisitor().find_incompatible_ast_nodes(ast.get())) {
+                return 1;
+            }
+        }
+
         if (show_symtab) {
             logger->info("Printing symbol table");
             std::stringstream stream;
@@ -366,12 +382,6 @@ int main(int argc, const char* argv[]) {
             auto file = scratch_dir + "/" + modfile + ".perf.json";
             logger->info("Writing performance statistics to {}", file);
             PerfVisitor(file).visit_program(ast.get());
-        }
-
-        {
-            // make sure to run perf visitor because code generator
-            // looks for read/write counts const/non-const declaration
-            PerfVisitor().visit_program(ast.get());
         }
 
         {
