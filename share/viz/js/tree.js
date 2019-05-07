@@ -1,5 +1,3 @@
-/// based on examples from https://bl.ocks.org
-
 // main container
 var astDiv = document.getElementById("ast");
 
