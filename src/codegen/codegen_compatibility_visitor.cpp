@@ -6,6 +6,7 @@
  *************************************************************************/
 
 #include <algorithm>
+#include <memory>
 #include <string>
 
 #include "codegen/codegen_compatibility_visitor.hpp"
@@ -47,7 +48,7 @@ bool CodegenCompatibilityVisitor::find_incompatible_ast_nodes(Ast* node) {
             if (method != nullptr && method->get_node_name() != "cnexp" &&
                 method->get_node_name() != "euler" && method->get_node_name() != "derivimplicit" &&
                 method->get_node_name() != "sparse") {
-                ss << method->get_node_name() << " solving method not supported\n";
+                ss << method->get_node_name() << " solving method not supported. ";
                 ss << "Supported methods are cnexp, euler, derivimplicit and sparse\n";
             }
         } else if (it->is_terminal_block() || it->is_match_block() || it->is_discrete_block()) {
@@ -88,8 +89,34 @@ bool CodegenCompatibilityVisitor::find_incompatible_ast_nodes(Ast* node) {
             if (node->get_symbol_table()->lookup(global_var->get_node_name())->get_write_count() >
                 0) {
                 ss << global_var->get_node_name();
-                ss << " should be defined as a RANGE variable instead of GLOBAL to enable backend "
-                      "transformations\n";
+                ss << " should be defined as a RANGE variable instead of GLOBAL to enable backend ";
+                ss << "transformations\n";
+            }
+        } else if (it->is_pointer_var()) {
+            ss << "POINTER " << it->get_node_name();
+            ss << " should be defined as BBCOREPOINTER to use it in CoreNeuron\n";
+        } else if (it->is_bbcore_pointer_var()) {
+            auto verbatim_nodes = AstLookupVisitor().lookup(node, AstNodeType::VERBATIM);
+            auto found_bbcore_read = false;
+            auto found_bbcore_write = false;
+            for (auto it: verbatim_nodes) {
+                auto verbatim = dynamic_cast<ast::Verbatim*>(it.get());
+                auto verbatim_statement = verbatim->get_statement();
+                auto verbatim_statement_string = verbatim_statement->get_value();
+                auto bbcore_read_string = verbatim_statement_string.find("bbcore_read");
+                auto bbcore_write_string = verbatim_statement_string.find("bbcore_write");
+                if (bbcore_read_string != std::string::npos) {
+                    found_bbcore_read = true;
+                }
+                if (bbcore_write_string == std::string::npos) {
+                    found_bbcore_write = true;
+                }
+            }
+            if (!found_bbcore_read) {
+                ss << "bbcore_read not defined\n";
+            }
+            if (!found_bbcore_write) {
+                ss << "bbcore_write not defined\n";
             }
         }
     }
@@ -98,9 +125,9 @@ bool CodegenCompatibilityVisitor::find_incompatible_ast_nodes(Ast* node) {
         logger->error("Cannot translate mod file to .cpp file");
         logger->error("Fix the following errors and try again");
         std::cerr << ss.str();
-        return 1;
+        return true;
     }
-    return 0;
+    return false;
 }
 
 }  // namespace codegen

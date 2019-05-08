@@ -117,6 +117,10 @@ int main(int argc, const char* argv[]) {
     /// true if verbatim blocks
     bool verbatim_rename(true);
 
+    /// true if code generation is forced to happed even if there
+    /// is any incompatibility
+    bool force_codegen(false);
+
     /// directory where code will be generated
     std::string output_dir(".");
 
@@ -159,6 +163,9 @@ int main(int argc, const char* argv[]) {
     app.add_option("--scratch", scratch_dir, "Directory for intermediate code output", true)
         ->ignore_case();
     app.add_option("--units", units_dir, "Directory of units lib file", true)->ignore_case();
+    app.add_flag("--force_codegen",
+                 force_codegen,
+                 "Force code generation even if there is any incompatibility");
 
     auto host_opt = app.add_subcommand("host", "HOST/CPU code backends")->ignore_case();
     host_opt->add_flag("--c", c_backend, "C/C++ backend")->ignore_case();
@@ -260,8 +267,9 @@ int main(int argc, const char* argv[]) {
         {
             // Compatibility Checking
             logger->info("Running code compatibility checker");
-            // If there is an incompatible construct exit NMODL
-            if (CodegenCompatibilityVisitor().find_incompatible_ast_nodes(ast.get())) {
+            // If there is an incompatible construct and code generation is not forced exit NMODL
+            if (CodegenCompatibilityVisitor().find_incompatible_ast_nodes(ast.get()) &&
+                !force_codegen) {
                 return 1;
             }
         }
