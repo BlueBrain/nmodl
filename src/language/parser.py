@@ -35,9 +35,10 @@ class LanguageParser:
         Lexims returned from Lexer have position and hence token object.
         Return True if this node is returned by lexer otherwise False
         """
-        return (name in node_info.LEXER_DATA_TYPES or
-                name in node_info.SYMBOL_BLOCK_TYPES or
-                name in node_info.ADDITIONAL_TOKEN_BLOCKS)
+        #return (name in node_info.LEXER_DATA_TYPES or
+        #        name in node_info.SYMBOL_BLOCK_TYPES or
+        #        name in node_info.ADDITIONAL_TOKEN_BLOCKS)
+        return True
 
     def parse_child_rule(self, child):
         """parse child specification and return argument as properties

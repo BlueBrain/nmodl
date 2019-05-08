@@ -48,10 +48,11 @@ bool CodegenCompatibilityVisitor::find_incompatible_ast_nodes(Ast* node) {
             if (method != nullptr && method->get_node_name() != "cnexp" &&
                 method->get_node_name() != "euler" && method->get_node_name() != "derivimplicit" &&
                 method->get_node_name() != "sparse") {
-                ss << method->get_node_name() << " solving method not supported. ";
+                ss << "\"" << method->get_node_name() << "\" solving method not supported. ";
                 ss << "Supported methods are cnexp, euler, derivimplicit and sparse\n";
             }
-        } else if (it->is_terminal_block() || it->is_match_block() || it->is_discrete_block()) {
+        } else if (it->is_terminal_block() || it->is_match_block() || it->is_discrete_block() ||
+                   it->is_partial_block()) {
             std::string node_type_name = it->get_node_type_name();
             // remove "Block" substring
             node_type_name.erase(node_type_name.end() - 5, node_type_name.end());
@@ -61,11 +62,13 @@ bool CodegenCompatibilityVisitor::find_incompatible_ast_nodes(Ast* node) {
                            node_type_name.begin(),
                            ::toupper);
 
-            ss << it->get_node_name() << " " << node_type_name << " construct is not supported\n";
+            ss << "\"" << it->get_node_name() << "\" " << node_type_name << " construct found at ";
+            ss << it->get_token()->position() << " is not supported\n";
         } else if (it->is_ba_block()) {
-            ss << "BEFORE AFTER construct is not supported\n";
+            ss << "BEFORE/AFTER construct found at " << it->get_token()->position();
+            ss << " is not supported\n";
         } else if (it->is_constant_block() || it->is_constructor_block() ||
-                   it->is_destructor_block()) {
+                   it->is_destructor_block() || it->is_independent_block()) {
             std::string node_type_name = it->get_node_type_name();
             // remove "Block" substring
             node_type_name.erase(node_type_name.end() - 5, node_type_name.end());
@@ -75,25 +78,23 @@ bool CodegenCompatibilityVisitor::find_incompatible_ast_nodes(Ast* node) {
                            node_type_name.begin(),
                            ::toupper);
 
-            ss << node_type_name << " construct is not supported\n";
-        } else if (it->is_independent_block()) {
-            ss << "INDEPENDENT construct is not supported\n";
-        } else if (it->is_partial_block()) {
-            ss << it->get_node_name() << " PARTIAL construct found at ";
+            ss << node_type_name << " construct found at ";
             ss << it->get_token()->position() << " is not supported\n";
         } else if (it->is_function_table_block()) {
-            ss << it->get_node_name() << " FUNCTION_TABLE construct found at ";
+            ss << "\"" << it->get_node_name() << "\" FUNCTION_TABLE construct found at ";
             ss << it->get_token()->position() << " is not supported\n";
         } else if (it->is_global_var()) {
             auto global_var = dynamic_cast<ast::GlobalVar*>(it.get());
             if (node->get_symbol_table()->lookup(global_var->get_node_name())->get_write_count() >
                 0) {
-                ss << global_var->get_node_name();
+                ss << "\"" << global_var->get_node_name() << "\" variable found at ";
+                ss << global_var->get_token()->position();
                 ss << " should be defined as a RANGE variable instead of GLOBAL to enable backend ";
                 ss << "transformations\n";
             }
         } else if (it->is_pointer_var()) {
-            ss << "POINTER " << it->get_node_name();
+            ss << "\"" << it->get_node_name() << "\" POINTER found at ";
+            ss << it->get_token()->position();
             ss << " should be defined as BBCOREPOINTER to use it in CoreNeuron\n";
         } else if (it->is_bbcore_pointer_var()) {
             auto verbatim_nodes = AstLookupVisitor().lookup(node, AstNodeType::VERBATIM);
@@ -113,10 +114,10 @@ bool CodegenCompatibilityVisitor::find_incompatible_ast_nodes(Ast* node) {
                 }
             }
             if (!found_bbcore_read) {
-                ss << "bbcore_read not defined\n";
+                ss << "\"bbcore_read\" function not defined in any VERBATIM block\n";
             }
             if (!found_bbcore_write) {
-                ss << "bbcore_write not defined\n";
+                ss << "\"bbcore_write\" function not defined in any VERBATIM block\n";
             }
         }
     }

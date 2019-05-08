@@ -969,6 +969,7 @@ initial_block   :   INITIAL1 statement_list "}"
 constructor_block : CONSTRUCTOR statement_list "}"
                     {
                         $$ = new ast::ConstructorBlock($2);
+                        $$->set_token($1);
                     }
                 ;
 
@@ -976,6 +977,7 @@ constructor_block : CONSTRUCTOR statement_list "}"
 destructor_block :  DESTRUCTOR statement_list "}"
                     {
                         $$ = new ast::DestructorBlock($2);
+                        $$->set_token($1);
                     }
                 ;
 
@@ -1783,18 +1785,22 @@ terminal_block  :   TERMINAL statement_list "}"
 before_after_block : BREAKPOINT statement_list "}"
                     {
                         $$ = new ast::BABlock(new ast::BABlockType(ast::BATYPE_BREAKPOINT), $2);
+                        $$->set_token($1);
                     }
                 |   SOLVE statement_list "}"
                     {
                         $$ = new ast::BABlock(new ast::BABlockType(ast::BATYPE_SOLVE), $2);
+                        $$->set_token($1);
                     }
                 |   INITIAL1 statement_list "}"
                     {
                         $$ = new ast::BABlock(new ast::BABlockType(ast::BATYPE_INITIAL), $2);
+                        $$->set_token($1);
                     }
                 |   STEP statement_list "}"
                     {
                         $$ = new ast::BABlock(new ast::BABlockType(ast::BATYPE_STEP), $2);
+                        $$->set_token($1);
                     }
                 |   error
                     {
@@ -2149,6 +2155,7 @@ factor_definition : NAME_PTR "=" double unit
 constant_block  :   CONSTANT "{" constant_statement "}"
                     {
                         $$ = new ast::ConstantBlock($3);
+                        $$->set_token($1);
                     }
                 ;
 
@@ -2407,11 +2414,15 @@ range_var_list  :   NAME_PTR
 global_var_list:   NAME_PTR
                     {
                         $$ = ast::GlobalVarVector();
-                        $$.emplace_back(new ast::GlobalVar($1));
+                        auto new_GlobalVar = new ast::GlobalVar($1);
+                        new_GlobalVar->set_token(*($1->get_token()));
+                        $$.emplace_back(new_GlobalVar);
                     }
                 |   global_var_list "," NAME_PTR
                     {
-                        $1.emplace_back(new ast::GlobalVar($3));
+                        auto new_GlobalVar = new ast::GlobalVar($3);
+                        new_GlobalVar->set_token(*($3->get_token()));
+                        $1.emplace_back(new_GlobalVar);
                         $$ = $1;
                     }
                 |   error
@@ -2424,11 +2435,15 @@ global_var_list:   NAME_PTR
 pointer_var_list :  NAME_PTR
                     {
                         $$ = ast::PointerVarVector();
-                        $$.emplace_back(new ast::PointerVar($1));
+                        auto new_PointerVar = new ast::PointerVar($1);
+                        new_PointerVar->set_token(*($1->get_token()));
+                        $$.emplace_back(new_PointerVar);
                     }
                 |   pointer_var_list "," NAME_PTR
                     {
-                        $1.emplace_back(new ast::PointerVar($3));
+                        auto new_PointerVar = new ast::PointerVar($3);
+                        new_PointerVar->set_token(*($3->get_token()));
+                        $1.emplace_back(new_PointerVar);
                         $$ = $1;
                     }
                 |   error
