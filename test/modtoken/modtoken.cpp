@@ -68,4 +68,28 @@ TEST_CASE("NMODL Lexer returning valid ModToken object", "[token][modtoken]") {
     }
 }
 
+TEST_CASE("Addition of two ModToken objects", "[token][modtoken]") {
+    SECTION("adding two random strings") {
+        ast::Name value;
+        {
+            std::stringstream ss;
+            symbol_type("text", value);
+            ast::Name value1 = value;
+            ss << *(value.get_token());
+            ss << " + ";
+            symbol_type("\ntext", value);
+            ast::Name value2 = value;
+            ss << *(value.get_token());
+            ModToken adder1 = *(value1.get_token());
+            ModToken adder2 = *(value2.get_token());
+            ModToken sum = adder1 + adder2;
+            ss << " = " << sum;
+            REQUIRE(ss.str() ==
+                    "           text at [1.1-4] type 357 +            text at [2.1-4] type 357 =   "
+                    "         text at [1.1-2.4] type 357");
+        }
+    }
+}
+
+
 /** @} */  // end of token_test

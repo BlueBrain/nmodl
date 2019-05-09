@@ -6,6 +6,7 @@
  *************************************************************************/
 
 #include <algorithm>
+#include <iostream>
 #include <memory>
 #include <string>
 
@@ -48,54 +49,55 @@ bool CodegenCompatibilityVisitor::find_incompatible_ast_nodes(Ast* node) {
             if (method != nullptr && method->get_node_name() != "cnexp" &&
                 method->get_node_name() != "euler" && method->get_node_name() != "derivimplicit" &&
                 method->get_node_name() != "sparse") {
-                ss << "\"" << method->get_node_name() << "\" solving method not supported. ";
+                ss << "\"" << method->get_node_name() << "\" solving method used at [";
+                ss << method->get_token()->position() << "] not supported. ";
                 ss << "Supported methods are cnexp, euler, derivimplicit and sparse\n";
             }
-        } else if (it->is_terminal_block() || it->is_match_block() || it->is_discrete_block() ||
-                   it->is_partial_block()) {
+        } else if (it->is_discrete_block() || it->is_partial_block()) {
             std::string node_type_name = it->get_node_type_name();
             // remove "Block" substring
             node_type_name.erase(node_type_name.end() - 5, node_type_name.end());
-            // turn name of node type to capital, as it is in mod files
+            // transform name of node type to capital letters, as it is in mod files
             std::transform(node_type_name.begin(),
                            node_type_name.end(),
                            node_type_name.begin(),
                            ::toupper);
 
-            ss << "\"" << it->get_node_name() << "\" " << node_type_name << " construct found at ";
-            ss << it->get_token()->position() << " is not supported\n";
+            ss << "\"" << it->get_node_name() << "\" " << node_type_name << " construct found at [";
+            ss << it->get_token()->position() << "] is not supported\n";
         } else if (it->is_ba_block()) {
-            ss << "BEFORE/AFTER construct found at " << it->get_token()->position();
-            ss << " is not supported\n";
-        } else if (it->is_constant_block() || it->is_constructor_block() ||
-                   it->is_destructor_block() || it->is_independent_block()) {
+            ss << "BEFORE/AFTER construct found at [" << it->get_token()->position();
+            ss << "] is not supported\n";
+        } else if (it->is_terminal_block() || it->is_match_block() || it->is_constant_block() ||
+                   it->is_constructor_block() || it->is_destructor_block() ||
+                   it->is_independent_block()) {
             std::string node_type_name = it->get_node_type_name();
             // remove "Block" substring
             node_type_name.erase(node_type_name.end() - 5, node_type_name.end());
-            // turn name of node type to capital, as it is in mod files
+            // transform name of node type to capital letters, as it is in mod files
             std::transform(node_type_name.begin(),
                            node_type_name.end(),
                            node_type_name.begin(),
                            ::toupper);
 
-            ss << node_type_name << " construct found at ";
-            ss << it->get_token()->position() << " is not supported\n";
+            ss << node_type_name << " construct found at [";
+            ss << it->get_token()->position() << "] is not supported\n";
         } else if (it->is_function_table_block()) {
-            ss << "\"" << it->get_node_name() << "\" FUNCTION_TABLE construct found at ";
-            ss << it->get_token()->position() << " is not supported\n";
+            ss << "\"" << it->get_node_name() << "\" FUNCTION_TABLE construct found at [";
+            ss << it->get_token()->position() << "] is not supported\n";
         } else if (it->is_global_var()) {
             auto global_var = dynamic_cast<ast::GlobalVar*>(it.get());
             if (node->get_symbol_table()->lookup(global_var->get_node_name())->get_write_count() >
                 0) {
-                ss << "\"" << global_var->get_node_name() << "\" variable found at ";
+                ss << "\"" << global_var->get_node_name() << "\" variable found at [";
                 ss << global_var->get_token()->position();
-                ss << " should be defined as a RANGE variable instead of GLOBAL to enable backend ";
-                ss << "transformations\n";
+                ss << "] should be defined as a RANGE variable instead of GLOBAL to enable ";
+                ss << "backend transformations\n";
             }
         } else if (it->is_pointer_var()) {
-            ss << "\"" << it->get_node_name() << "\" POINTER found at ";
+            ss << "\"" << it->get_node_name() << "\" POINTER found at [";
             ss << it->get_token()->position();
-            ss << " should be defined as BBCOREPOINTER to use it in CoreNeuron\n";
+            ss << "] should be defined as BBCOREPOINTER to use it in CoreNeuron\n";
         } else if (it->is_bbcore_pointer_var()) {
             auto verbatim_nodes = AstLookupVisitor().lookup(node, AstNodeType::VERBATIM);
             auto found_bbcore_read = false;
@@ -125,7 +127,12 @@ bool CodegenCompatibilityVisitor::find_incompatible_ast_nodes(Ast* node) {
         logger->error("Code incompatibility detected");
         logger->error("Cannot translate mod file to .cpp file");
         logger->error("Fix the following errors and try again");
-        std::cerr << ss.str();
+        std::string line;
+        std::istringstream ss_stringstream(ss.str());
+        while (std::getline(ss_stringstream, line)) {
+            if (!line.empty())
+                logger->error("Code Incompatibility :: " + line);
+        }
         return true;
     }
     return false;

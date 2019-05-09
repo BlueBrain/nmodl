@@ -30,14 +30,15 @@ class LanguageParser:
 
     @staticmethod
     def is_token(name):
-        """check if the name (i.e. class) is a token type in lexer
+        """all the classes have a token private member variable, which
+        comes either from the lexer or from the parser
 
-        Lexims returned from Lexer have position and hence token object.
-        Return True if this node is returned by lexer otherwise False
+        All classes have the private member of type ModToken token and
+        functions to set and get it, set_token() and get_token()
+        respectively.
+
+        \TODO check why BeforeBlock and AfterBlock do not have token
         """
-        #return (name in node_info.LEXER_DATA_TYPES or
-        #        name in node_info.SYMBOL_BLOCK_TYPES or
-        #        name in node_info.ADDITIONAL_TOKEN_BLOCKS)
         return True
 
     def parse_child_rule(self, child):

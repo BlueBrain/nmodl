@@ -743,6 +743,8 @@ double          :   REAL
 independent_block : INDEPENDENT "{" independent_block_body "}"
                     {
                         $$ = new ast::IndependentBlock($3);
+                        ModToken block_token = $1 + $4;
+                        $$->set_token(block_token);
                     }
                 ;
 
@@ -969,7 +971,8 @@ initial_block   :   INITIAL1 statement_list "}"
 constructor_block : CONSTRUCTOR statement_list "}"
                     {
                         $$ = new ast::ConstructorBlock($2);
-                        $$->set_token($1);
+                        ModToken block_token = $1 + $3;
+                        $$->set_token(block_token);
                     }
                 ;
 
@@ -977,7 +980,8 @@ constructor_block : CONSTRUCTOR statement_list "}"
 destructor_block :  DESTRUCTOR statement_list "}"
                     {
                         $$ = new ast::DestructorBlock($2);
-                        $$->set_token($1);
+                        ModToken block_token = $1 + $3;
+                        $$->set_token(block_token);
                     }
                 ;
 
@@ -1600,8 +1604,8 @@ non_linear_block :  NONLINEAR NAME_PTR optional_solvefor statement_list "}"
 discrete_block  :   DISCRETE NAME_PTR statement_list "}"
                     {
                         $$ = new ast::DiscreteBlock($2, $3);
-                        // todo Disabled symbol table, remove this
-                        //$$->set_token($1);
+                        ModToken block_token = $1 + $4;
+                        $$->set_token(block_token);
                     }
                 ;
 
@@ -1609,7 +1613,8 @@ discrete_block  :   DISCRETE NAME_PTR statement_list "}"
 partial_block   :   PARTIAL NAME_PTR statement_list "}"
                     {
                         $$ = new ast::PartialBlock($2, $3);
-                        $$->set_token($1);
+                        ModToken block_token = $1 + $4;
+                        $$->set_token(block_token);
                     }
                 |   PARTIAL error
                     {
@@ -1647,7 +1652,9 @@ first_last      :   FIRST
 function_table_block : FUNCTION_TABLE NAME_PTR "(" optional_argument_list ")" units
                 {
                         $$ = new ast::FunctionTableBlock($2, $4, $6);
-                        $$->set_token($1);
+                        // units don't have token, use ")" as end location
+                        ModToken block_token = $1 + $5;
+                        $$->set_token(block_token);
                 }
                 ;
 
@@ -1712,15 +1719,18 @@ initial_statement : INITIAL1 statement_list "}"
 solve_block     :   SOLVE NAME_PTR if_solution_error
                     {
                         $$ = new ast::SolveBlock($2, NULL, NULL, $3);
+                        $$->set_token(*($2->get_token()));
                     }
                 |   SOLVE NAME_PTR USING METHOD if_solution_error
                     {
                         $$ = new ast::SolveBlock($2, $4.clone(), NULL, $5);
+                        $$->set_token(*($2->get_token()));
                     }
                 |
                     SOLVE NAME_PTR STEADYSTATE METHOD if_solution_error
                     {
                         $$ = new ast::SolveBlock($2, NULL, $4.clone(), $5);
+                        $$->set_token(*($2->get_token()));
                     }
                 |   SOLVE error
                     {
@@ -1778,6 +1788,8 @@ breakpoint_block :  BREAKPOINT statement_list "}"
 terminal_block  :   TERMINAL statement_list "}"
                     {
                         $$ = new ast::TerminalBlock($2);
+                        ModToken block_token = $1 + $3;
+                        $$->set_token(block_token);
                     }
                 ;
 
@@ -1785,22 +1797,26 @@ terminal_block  :   TERMINAL statement_list "}"
 before_after_block : BREAKPOINT statement_list "}"
                     {
                         $$ = new ast::BABlock(new ast::BABlockType(ast::BATYPE_BREAKPOINT), $2);
-                        $$->set_token($1);
+                        ModToken block_token = $1 + $3;
+                        $$->set_token(block_token);
                     }
                 |   SOLVE statement_list "}"
                     {
                         $$ = new ast::BABlock(new ast::BABlockType(ast::BATYPE_SOLVE), $2);
-                        $$->set_token($1);
+                        ModToken block_token = $1 + $3;
+                        $$->set_token(block_token);
                     }
                 |   INITIAL1 statement_list "}"
                     {
                         $$ = new ast::BABlock(new ast::BABlockType(ast::BATYPE_INITIAL), $2);
-                        $$->set_token($1);
+                        ModToken block_token = $1 + $3;
+                        $$->set_token(block_token);
                     }
                 |   STEP statement_list "}"
                     {
                         $$ = new ast::BABlock(new ast::BABlockType(ast::BATYPE_STEP), $2);
-                        $$->set_token($1);
+                        ModToken block_token = $1 + $3;
+                        $$->set_token(block_token);
                     }
                 |   error
                     {
@@ -2049,6 +2065,8 @@ queue_statement :   PUTQ name
 match_block     :   MATCH "{" match_list "}"
                     {
                         $$ = new ast::MatchBlock($3);
+                        ModToken block_token = $1 + $4;
+                        $$->set_token(block_token);
                     }
                 ;
 
@@ -2155,7 +2173,8 @@ factor_definition : NAME_PTR "=" double unit
 constant_block  :   CONSTANT "{" constant_statement "}"
                     {
                         $$ = new ast::ConstantBlock($3);
-                        $$->set_token($1);
+                        ModToken block_token = $1 + $4;
+                        $$->set_token(block_token);
                     }
                 ;
 
