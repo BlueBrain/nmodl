@@ -14,113 +14,149 @@
 #include "utils/logger.hpp"
 #include "visitors/lookup_visitor.hpp"
 
+using namespace fmt::literals;
+
 namespace nmodl {
 namespace codegen {
 
 using visitor::AstLookupVisitor;
 
+std::string CodegenCompatibilityVisitor::return_error_if_solve_method_is_unhandled(
+    ast::SolveBlock* solve_block_ast_node) {
+    std::stringstream unhandled_method_error_message;
+    auto method = solve_block_ast_node->get_method();
+    if (method == nullptr)
+        return "";
+    auto unhandled_solver_method = handled_solvers.find(method->get_node_name()) ==
+                                   handled_solvers.end();
+    if (unhandled_solver_method) {
+        unhandled_method_error_message
+            << "\"{}\" solving method used at [{}] not handled. Supported methods are cnexp, euler, derivimplicit and sparse\n"_format(
+                   method->get_node_name(), method->get_token()->position());
+    }
+    return unhandled_method_error_message.str();
+}
+
+template <typename T>
+std::string CodegenCompatibilityVisitor::return_error_with_name(
+    const std::shared_ptr<ast::Ast>& ast_node) {
+    auto real_type_block = dynamic_cast<T*>(ast_node.get());
+    return "\"{}\" {}construct found at [{}] is not handled\n"_format(
+        ast_node->get_node_name(),
+        real_type_block->get_nmodl_name(),
+        real_type_block->get_token()->position());
+}
+
+template <typename T>
+std::string CodegenCompatibilityVisitor::return_error_without_name(
+    const std::shared_ptr<ast::Ast>& ast_node) {
+    auto real_type_block = dynamic_cast<T*>(ast_node.get());
+    return "{}construct found at [{}] is not handled\n"_format(
+        real_type_block->get_nmodl_name(), real_type_block->get_token()->position());
+}
+
+std::string CodegenCompatibilityVisitor::return_error_global_var(Ast* node,
+                                                                 ast::GlobalVar* global_var) {
+    std::stringstream error_message_global_var;
+    if (node->get_symbol_table()->lookup(global_var->get_node_name())->get_write_count() > 0) {
+        error_message_global_var
+            << "\"{}\" variable found at [{}] should be defined as a RANGE variable instead of GLOBAL to enable backend transformations\n"_format(
+                   global_var->get_node_name(), global_var->get_token()->position());
+    }
+    return error_message_global_var.str();
+}
+
+std::string CodegenCompatibilityVisitor::return_error_pointer(ast::PointerVar* pointer_var) {
+    return "\"{}\" POINTER found at [{}] should be defined as BBCOREPOINTER to use it in CoreNeuron\n"_format(
+        pointer_var->get_node_name(), pointer_var->get_token()->position());
+}
+
+std::string CodegenCompatibilityVisitor::return_error_if_no_bbcore_read_write(Ast* node) {
+    std::stringstream error_message_no_bbcore_read_write;
+    auto verbatim_nodes = AstLookupVisitor().lookup(node, AstNodeType::VERBATIM);
+    auto found_bbcore_read = false;
+    auto found_bbcore_write = false;
+    for (const auto& it: verbatim_nodes) {
+        auto verbatim = dynamic_cast<ast::Verbatim*>(it.get());
+        auto verbatim_statement = verbatim->get_statement();
+        auto verbatim_statement_string = verbatim_statement->get_value();
+        auto bbcore_read_string = verbatim_statement_string.find("bbcore_read");
+        auto bbcore_write_string = verbatim_statement_string.find("bbcore_write");
+        if (bbcore_read_string != std::string::npos) {
+            found_bbcore_read = true;
+        }
+        if (bbcore_write_string == std::string::npos) {
+            found_bbcore_write = true;
+        }
+    }
+    if (!found_bbcore_read) {
+        error_message_no_bbcore_read_write
+            << "\"bbcore_read\" function not defined in any VERBATIM block\n";
+    }
+    if (!found_bbcore_write) {
+        error_message_no_bbcore_read_write
+            << "\"bbcore_write\" function not defined in any VERBATIM block\n";
+    }
+    return error_message_no_bbcore_read_write.str();
+}
+
 /**
- * \details Checks all the ast::AstNodeTypes that are not compatible with NMODL code
- * generation and prints related messages. If there is some kind of incompatibility
- * stop NMODL code generation.
+ * \details Checks all the ast::AstNodeType that are not handled in NMODL code
+ * generation backend for CoreNEURON and prints related messages. If there is
+ * some kind of incompatibility return false.
  */
-bool CodegenCompatibilityVisitor::find_incompatible_ast_nodes(Ast* node) {
-    std::vector<AstNodeType> incompatible_ast_types = {AstNodeType::SOLVE_BLOCK,
-                                                       AstNodeType::TERMINAL_BLOCK,
-                                                       AstNodeType::PARTIAL_BLOCK,
-                                                       AstNodeType::MATCH_BLOCK,
-                                                       AstNodeType::BA_BLOCK,
-                                                       AstNodeType::CONSTANT_BLOCK,
-                                                       AstNodeType::CONSTRUCTOR_BLOCK,
-                                                       AstNodeType::DESTRUCTOR_BLOCK,
-                                                       AstNodeType::DISCRETE_BLOCK,
-                                                       AstNodeType::FUNCTION_TABLE_BLOCK,
-                                                       AstNodeType::INDEPENDENT_BLOCK,
-                                                       AstNodeType::GLOBAL_VAR,
-                                                       AstNodeType::POINTER_VAR,
-                                                       AstNodeType::BBCORE_POINTER_VAR};
-    incompatible_ast_nodes = AstLookupVisitor().lookup(node, incompatible_ast_types);
+bool CodegenCompatibilityVisitor::find_unhandled_ast_nodes(Ast* node) {
+    unhandled_ast_nodes = AstLookupVisitor().lookup(node, unhandled_ast_types);
 
     std::stringstream ss;
-    for (auto it: incompatible_ast_nodes) {
-        if (it->is_solve_block()) {
-            auto solve_block = dynamic_cast<ast::SolveBlock*>(it.get());
-            auto method = solve_block->get_method();
-            if (method != nullptr && method->get_node_name() != "cnexp" &&
-                method->get_node_name() != "euler" && method->get_node_name() != "derivimplicit" &&
-                method->get_node_name() != "sparse") {
-                ss << "\"" << method->get_node_name() << "\" solving method used at [";
-                ss << method->get_token()->position() << "] not supported. ";
-                ss << "Supported methods are cnexp, euler, derivimplicit and sparse\n";
-            }
-        } else if (it->is_discrete_block() || it->is_partial_block()) {
-            std::string node_type_name = it->get_node_type_name();
-            // remove "Block" substring
-            node_type_name.erase(node_type_name.end() - 5, node_type_name.end());
-            // transform name of node type to capital letters, as it is in mod files
-            std::transform(node_type_name.begin(),
-                           node_type_name.end(),
-                           node_type_name.begin(),
-                           ::toupper);
-
-            ss << "\"" << it->get_node_name() << "\" " << node_type_name << " construct found at [";
-            ss << it->get_token()->position() << "] is not supported\n";
-        } else if (it->is_ba_block()) {
-            ss << "BEFORE/AFTER construct found at [" << it->get_token()->position();
-            ss << "] is not supported\n";
-        } else if (it->is_terminal_block() || it->is_match_block() || it->is_constant_block() ||
-                   it->is_constructor_block() || it->is_destructor_block() ||
-                   it->is_independent_block()) {
-            std::string node_type_name = it->get_node_type_name();
-            // remove "Block" substring
-            node_type_name.erase(node_type_name.end() - 5, node_type_name.end());
-            // transform name of node type to capital letters, as it is in mod files
-            std::transform(node_type_name.begin(),
-                           node_type_name.end(),
-                           node_type_name.begin(),
-                           ::toupper);
-
-            ss << node_type_name << " construct found at [";
-            ss << it->get_token()->position() << "] is not supported\n";
-        } else if (it->is_function_table_block()) {
-            ss << "\"" << it->get_node_name() << "\" FUNCTION_TABLE construct found at [";
-            ss << it->get_token()->position() << "] is not supported\n";
-        } else if (it->is_global_var()) {
-            auto global_var = dynamic_cast<ast::GlobalVar*>(it.get());
-            if (node->get_symbol_table()->lookup(global_var->get_node_name())->get_write_count() >
-                0) {
-                ss << "\"" << global_var->get_node_name() << "\" variable found at [";
-                ss << global_var->get_token()->position();
-                ss << "] should be defined as a RANGE variable instead of GLOBAL to enable ";
-                ss << "backend transformations\n";
-            }
-        } else if (it->is_pointer_var()) {
-            ss << "\"" << it->get_node_name() << "\" POINTER found at [";
-            ss << it->get_token()->position();
-            ss << "] should be defined as BBCOREPOINTER to use it in CoreNeuron\n";
-        } else if (it->is_bbcore_pointer_var()) {
-            auto verbatim_nodes = AstLookupVisitor().lookup(node, AstNodeType::VERBATIM);
-            auto found_bbcore_read = false;
-            auto found_bbcore_write = false;
-            for (auto it: verbatim_nodes) {
-                auto verbatim = dynamic_cast<ast::Verbatim*>(it.get());
-                auto verbatim_statement = verbatim->get_statement();
-                auto verbatim_statement_string = verbatim_statement->get_value();
-                auto bbcore_read_string = verbatim_statement_string.find("bbcore_read");
-                auto bbcore_write_string = verbatim_statement_string.find("bbcore_write");
-                if (bbcore_read_string != std::string::npos) {
-                    found_bbcore_read = true;
-                }
-                if (bbcore_write_string == std::string::npos) {
-                    found_bbcore_write = true;
-                }
-            }
-            if (!found_bbcore_read) {
-                ss << "\"bbcore_read\" function not defined in any VERBATIM block\n";
-            }
-            if (!found_bbcore_write) {
-                ss << "\"bbcore_write\" function not defined in any VERBATIM block\n";
-            }
+    for (auto it: unhandled_ast_nodes) {
+        auto node_type = it->get_node_type();
+        switch (node_type) {
+        case ast::AstNodeType::SOLVE_BLOCK: {
+            auto it_solve_block = dynamic_cast<ast::SolveBlock*>(it.get());
+            ss << return_error_if_solve_method_is_unhandled(it_solve_block);
+        } break;
+        case ast::AstNodeType::DISCRETE_BLOCK:
+            ss << return_error_with_name<DiscreteBlock>(it);
+            break;
+        case ast::AstNodeType::PARTIAL_BLOCK:
+            ss << return_error_with_name<PartialBlock>(it);
+            break;
+        case AstNodeType::BEFORE_BLOCK:
+            ss << return_error_without_name<BeforeBlock>(it);
+            break;
+        case AstNodeType::AFTER_BLOCK:
+            ss << return_error_without_name<AfterBlock>(it);
+            break;
+        case AstNodeType::MATCH_BLOCK:
+            ss << return_error_without_name<MatchBlock>(it);
+            break;
+        case AstNodeType::CONSTANT_BLOCK:
+            ss << return_error_without_name<ConstantBlock>(it);
+            break;
+        case AstNodeType::CONSTRUCTOR_BLOCK:
+            ss << return_error_without_name<ConstructorBlock>(it);
+            break;
+        case AstNodeType::DESTRUCTOR_BLOCK:
+            ss << return_error_without_name<DestructorBlock>(it);
+            break;
+        case AstNodeType::INDEPENDENT_BLOCK:
+            ss << return_error_without_name<IndependentBlock>(it);
+            break;
+        case AstNodeType::FUNCTION_TABLE_BLOCK:
+            ss << return_error_without_name<FunctionTableBlock>(it);
+            break;
+        case AstNodeType::GLOBAL_VAR: {
+            auto it_global_var = dynamic_cast<ast::GlobalVar*>(it.get());
+            ss << return_error_global_var(node, it_global_var);
+        } break;
+        case AstNodeType::POINTER_VAR: {
+            auto it_pointer_var = dynamic_cast<ast::PointerVar*>(it.get());
+            ss << return_error_pointer(it_pointer_var);
+        } break;
+        case AstNodeType::BBCORE_POINTER_VAR:
+            ss << return_error_if_no_bbcore_read_write(node);
+            break;
         }
     }
     if (!ss.str().empty()) {
@@ -131,7 +167,7 @@ bool CodegenCompatibilityVisitor::find_incompatible_ast_nodes(Ast* node) {
         std::istringstream ss_stringstream(ss.str());
         while (std::getline(ss_stringstream, line)) {
             if (!line.empty())
-                logger->error("Code Incompatibility :: " + line);
+                logger->error("Code Incompatibility :: {}"_format(line));
         }
         return true;
     }

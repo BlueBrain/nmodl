@@ -268,7 +268,7 @@ int main(int argc, const char* argv[]) {
             // Compatibility Checking
             logger->info("Running code compatibility checker");
             // If there is an incompatible construct and code generation is not forced exit NMODL
-            if (CodegenCompatibilityVisitor().find_incompatible_ast_nodes(ast.get()) &&
+            if (CodegenCompatibilityVisitor().find_unhandled_ast_nodes(ast.get()) &&
                 !force_codegen) {
                 return 1;
             }

@@ -88,13 +88,24 @@ static const char* get_node_type_name_method = R"(
 )";
 
 static const char* get_node_name_method = R"(
-    Return name of of the node
+    Return name of the node
 
     Some ast nodes have a member designated as node name. For example,
     in case of ast.FunctionCall, name of the function is returned as a node
     name. Note that this is different from ast node type name and not every
     ast node has name.
 )";
+
+static const char* get_nmodl_name_method = R"(
+    Return nmodl statement of the node
+
+    Some ast nodes have a member designated as nmodl name. For example,
+    in case of "NEURON { }" the statement of NMODL which is stored as nmodl
+    name is "NEURON". Some ast nodes that are not binded with some special
+    statement have nmodl name "None". Abstact node types have an empty
+    nmodl name.
+)";
+
 
 static const char* clone_method = R"(
     Create a copy of the AST node
@@ -247,6 +258,9 @@ void init_ast_module(py::module& m) {
     .def("clone", &{{ node.class_name }}::clone, docstring::clone_method)
     .def("get_node_type", &{{ node.class_name }}::get_node_type, docstring::get_node_type_method)
     .def("get_node_type_name", &{{ node.class_name }}::get_node_type_name, docstring::get_node_type_name_method)
+    {% if node.nmodl_name %}
+    .def("get_nmodl_name", &{{ node.class_name }}::get_nmodl_name, docstring::get_nmodl_name_method)
+    {% endif %}
     {% if node.is_data_type_node %}
     .def("eval", &{{ node.class_name }}::eval, docstring::eval_method)
     {% endif %}

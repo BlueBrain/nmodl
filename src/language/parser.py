@@ -28,18 +28,6 @@ class LanguageParser:
         self.filename = filename
         self.debug = debug
 
-    @staticmethod
-    def is_token(name):
-        """all the classes have a token private member variable, which
-        comes either from the lexer or from the parser
-
-        All classes have the private member of type ModToken token and
-        functions to set and get it, set_token() and get_token()
-        respectively.
-
-        \TODO check why BeforeBlock and AfterBlock do not have token
-        """
-        return True
 
     def parse_child_rule(self, child):
         """parse child specification and return argument as properties
@@ -164,9 +152,8 @@ class LanguageParser:
             else:
                 args.base_class = base_class if base_class else 'Ast'
 
-                # check if we need token for the node
-                # todo : we will have token for every node
-                args.has_token = LanguageParser.is_token(class_name)
+                # store token in every node
+                args.has_token = True
 
                 # name of the node while printing back to NMODL
                 args.nmodl_name = properties['nmodl'] if 'nmodl' in properties else None

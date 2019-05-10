@@ -952,11 +952,17 @@ procedure       :   initial_block
                     }
                 |   BEFORE before_after_block
                     {
-                        $$ = new ast::BeforeBlock($2);
+                        auto new_before_block = new ast::BeforeBlock($2);
+                        ModToken block_token = $1+*($2->get_token());
+                        new_before_block->set_token(block_token);
+                        $$ = new_before_block;
                     }
                 |   AFTER before_after_block
                     {
-                        $$ = new ast::AfterBlock($2);
+                        auto new_after_block = new ast::AfterBlock($2);
+                        ModToken block_token = $1+*($2->get_token());
+                        new_after_block->set_token(block_token);
+                        $$ = new_after_block;
                     }
                 ;
 
@@ -2241,8 +2247,11 @@ optional_dependent_var_list :
 neuron_block    :   NEURON OPEN_BRACE neuron_statement CLOSE_BRACE
                     {
                         auto block = new ast::StatementBlock($3);
-                        block->set_token($2);
+                        ModToken statement_block = $2 + $4;
+                        block->set_token(statement_block);
                         $$ = new ast::NeuronBlock(block);
+                        ModToken neuron_block = $1 + statement_block;
+                        $$->set_token(neuron_block);
                     }
                 ;
 
@@ -2433,15 +2442,15 @@ range_var_list  :   NAME_PTR
 global_var_list:   NAME_PTR
                     {
                         $$ = ast::GlobalVarVector();
-                        auto new_GlobalVar = new ast::GlobalVar($1);
-                        new_GlobalVar->set_token(*($1->get_token()));
-                        $$.emplace_back(new_GlobalVar);
+                        auto new_global_var = new ast::GlobalVar($1);
+                        new_global_var->set_token(*($1->get_token()));
+                        $$.emplace_back(new_global_var);
                     }
                 |   global_var_list "," NAME_PTR
                     {
-                        auto new_GlobalVar = new ast::GlobalVar($3);
-                        new_GlobalVar->set_token(*($3->get_token()));
-                        $1.emplace_back(new_GlobalVar);
+                        auto new_global_var = new ast::GlobalVar($3);
+                        new_global_var->set_token(*($3->get_token()));
+                        $1.emplace_back(new_global_var);
                         $$ = $1;
                     }
                 |   error
@@ -2454,15 +2463,15 @@ global_var_list:   NAME_PTR
 pointer_var_list :  NAME_PTR
                     {
                         $$ = ast::PointerVarVector();
-                        auto new_PointerVar = new ast::PointerVar($1);
-                        new_PointerVar->set_token(*($1->get_token()));
-                        $$.emplace_back(new_PointerVar);
+                        auto new_pointer_var = new ast::PointerVar($1);
+                        new_pointer_var->set_token(*($1->get_token()));
+                        $$.emplace_back(new_pointer_var);
                     }
                 |   pointer_var_list "," NAME_PTR
                     {
-                        auto new_PointerVar = new ast::PointerVar($3);
-                        new_PointerVar->set_token(*($3->get_token()));
-                        $1.emplace_back(new_PointerVar);
+                        auto new_pointer_var = new ast::PointerVar($3);
+                        new_pointer_var->set_token(*($3->get_token()));
+                        $1.emplace_back(new_pointer_var);
                         $$ = $1;
                     }
                 |   error

@@ -7,12 +7,15 @@
 
 #define CATCH_CONFIG_MAIN
 
+#include <memory.h>
 #include <string>
 
 #include "catch/catch.hpp"
 #include "lexer/modtoken.hpp"
 #include "lexer/nmodl_lexer.hpp"
 #include "parser/nmodl_driver.hpp"
+#include "test/utils/test_utils.hpp"
+#include "visitors/lookup_visitor.hpp"
 
 
 /** @file
@@ -80,9 +83,7 @@ TEST_CASE("Addition of two ModToken objects", "[token][modtoken]") {
             symbol_type("\ntext", value);
             ast::Name value2 = value;
             ss << *(value.get_token());
-            ModToken adder1 = *(value1.get_token());
-            ModToken adder2 = *(value2.get_token());
-            ModToken sum = adder1 + adder2;
+            ModToken sum = *(value1.get_token()) + *(value2.get_token());
             ss << " = " << sum;
             REQUIRE(ss.str() ==
                     "           text at [1.1-4] type 357 +            text at [2.1-4] type 357 =   "
