@@ -3509,6 +3509,7 @@ void CodegenCVisitor::print_get_memb_list() {
 
 void CodegenCVisitor::print_net_receive_loop_begin() {
     printer->add_line("int count = nrb->_displ_cnt;");
+    print_channel_iteration_block_parallel_hint(BlockType::NetReceive);
     printer->start_block("for (int i = 0; i < count; i++)");
 }
 
@@ -3528,6 +3529,8 @@ void CodegenCVisitor::print_net_receive_buffering(bool need_mech_inst) {
     print_get_memb_list();
 
     auto net_receive = method_name("net_receive_kernel");
+
+    print_kernel_data_present_annotation_block_begin();
 
     printer->add_line(
         "NetReceiveBuffer_t* {}nrb = ml->_net_receive_buffer;"_format(ptr_type_qualifier()));
@@ -3557,6 +3560,7 @@ void CodegenCVisitor::print_net_receive_buffering(bool need_mech_inst) {
     printer->add_line("nrb->_displ_cnt = 0;");
     printer->add_line("nrb->_cnt = 0;");
 
+    print_kernel_data_present_annotation_block_end();
     printer->end_block(1);
 }
 

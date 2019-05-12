@@ -36,10 +36,15 @@ void CodegenAccVisitor::print_channel_iteration_block_parallel_hint(BlockType ty
         return;
     }
 
-    std::string present_clause = "present(node_index, data, voltage, indexes, thread";
+    std::string present_clause = "present(inst";
 
-    if (type == BlockType::Equation) {
-        present_clause += ", vec_rhs, vec_d";
+    if (type == BlockType::NetReceive) {
+        present_clause += ", nrb";
+    } else {
+        present_clause += ", node_index, data, voltage, indexes, thread";
+        if (type == BlockType::Equation) {
+            present_clause += ", vec_rhs, vec_d";
+        }
     }
     present_clause += ")";
     printer->add_line("#pragma acc parallel loop {}"_format(present_clause));
