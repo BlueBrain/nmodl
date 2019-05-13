@@ -32,7 +32,7 @@ namespace codegen {
  *
  */
 void CodegenAccVisitor::print_channel_iteration_block_parallel_hint(BlockType type) {
-    if (info.artificial_cell || info.eigen_newton_solver_exist || info.eigen_linear_solver_exist) {
+    if (info.artificial_cell) {
         return;
     }
 

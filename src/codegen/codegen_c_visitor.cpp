@@ -2540,9 +2540,6 @@ void CodegenCVisitor::print_mechanism_register() {
     printer->add_line("/** register channel with the simulator */");
     printer->start_block("void _{}_reg() "_format(info.mod_file));
 
-    // allocate global variables
-    printer->add_line("setup_global_variables();");
-
     // type related information
     auto mech_type = get_variable_name("mech_type");
     auto suffix = add_escape_quote(info.mod_suffix);
@@ -2572,6 +2569,9 @@ void CodegenCVisitor::print_mechanism_register() {
         printer->add_line(type + " = nrn_get_mechtype(" + name + ");");
     }
     printer->add_newline();
+
+    // allocate global variables as ion types are now set
+    printer->add_line("setup_global_variables();");
 
     /*
      *  If threads are used then memory is allocated in setup_global_variables.
