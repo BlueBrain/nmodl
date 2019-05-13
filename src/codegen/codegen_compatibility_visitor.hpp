@@ -78,7 +78,8 @@ class CodegenCompatibilityVisitor: public visitor::AstVisitor {
     /// Takes as parameter an ast::SolveBlock, searches if the
     /// method used for solving is supported and if it is not
     /// it returns a relative error message
-    std::string return_error_if_solve_method_is_unhandled(ast::SolveBlock* solve_block_ast_node);
+    std::string return_error_if_solve_method_is_unhandled(
+        std::shared_ptr<ast::SolveBlock>& solve_block_ast_node);
 
     /// Takes as parameter an ast::Ast node and returns a relative
     /// error with the name, the type and the location of the
@@ -100,13 +101,13 @@ class CodegenCompatibilityVisitor: public visitor::AstVisitor {
     /// and an ast::GlobarVar node and returns relative error if a
     /// variable that is writen in the mod file is defined as
     /// GLOBAL instead of RANGE
-    std::string return_error_global_var(Ast* node, ast::GlobalVar* global_var);
+    std::string return_error_global_var(Ast* node, std::shared_ptr<ast::GlobalVar>& global_var);
 
     /// Takes as parameter an ast::PointerVar and returns a
     /// relative error with the name and the location of the
     /// pointer, as well as a suggestion to define it as
     /// BBCOREPOINTER
-    std::string return_error_pointer(ast::PointerVar* pointer_var);
+    std::string return_error_pointer(std::shared_ptr<ast::PointerVar>& pointer_var);
 
     /// Takes as parameter the ast::Ast and checks if the
     /// functions "bbcore_read" and "bbcore_write" are defined
