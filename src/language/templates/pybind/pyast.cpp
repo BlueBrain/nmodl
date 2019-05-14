@@ -101,9 +101,8 @@ static const char* get_nmodl_name_method = R"(
 
     Some ast nodes have a member designated as nmodl name. For example,
     in case of "NEURON { }" the statement of NMODL which is stored as nmodl
-    name is "NEURON". Some ast nodes that are not binded with some special
-    statement have nmodl name "None". Abstact node types have an empty
-    nmodl name.
+    name is "NEURON". This function is only implemented by node types that
+    have a nmodl statement.
 )";
 
 
@@ -200,6 +199,7 @@ void init_ast_module(py::module& m) {
         .def("get_node_type", &Ast::get_node_type, docstring::get_node_type_method)
         .def("get_node_type_name", &Ast::get_node_type_name, docstring::get_node_type_name_method)
         .def("get_node_name", &Ast::get_node_name, docstring::get_node_name_method)
+        .def("get_nmodl_name", &Ast::get_nmodl_name, docstring::get_nmodl_name_method)
         .def("get_token", &Ast::get_token, docstring::get_token_method)
         .def("get_symbol_table",
              &Ast::get_symbol_table,

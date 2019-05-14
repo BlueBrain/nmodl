@@ -180,7 +180,7 @@ namespace ast {
         *
         * \sa Ast::get_nmodl_name
         */
-        std::string get_nmodl_name() {
+        {{ virtual(node) }} std::string get_nmodl_name() override {
             return "{{ node.nmodl_name }}";
         }
         {% endif %}

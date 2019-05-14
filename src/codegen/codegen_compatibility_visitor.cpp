@@ -125,14 +125,14 @@ bool CodegenCompatibilityVisitor::find_unhandled_ast_nodes(Ast* node) {
     for (auto it: unhandled_ast_nodes) {
         auto node_type = it->get_node_type();
         switch (node_type) {
-        case ast::AstNodeType::SOLVE_BLOCK: {
+        case AstNodeType::SOLVE_BLOCK: {
             auto it_solve_block = std::dynamic_pointer_cast<ast::SolveBlock>(it);
             ss << return_error_if_solve_method_is_unhandled(it_solve_block);
         } break;
-        case ast::AstNodeType::DISCRETE_BLOCK:
+        case AstNodeType::DISCRETE_BLOCK:
             ss << return_error_with_name<DiscreteBlock>(it);
             break;
-        case ast::AstNodeType::PARTIAL_BLOCK:
+        case AstNodeType::PARTIAL_BLOCK:
             ss << return_error_with_name<PartialBlock>(it);
             break;
         case AstNodeType::BEFORE_BLOCK:
