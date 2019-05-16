@@ -154,34 +154,6 @@ std::string CodegenIspcVisitor::backend_name() {
 }
 
 
-void CodegenIspcVisitor::print_atomic_op(const std::string& lhs,
-                                         const std::string& op,
-                                         const std::string& rhs) {
-    std::string function;
-    if (op == "+") {
-        function = "atomic_add_local";
-    } else if (op == "-") {
-        function = "atomic_subtract_local";
-    } else {
-        throw std::runtime_error("ISPC backend error : {} not supported"_format(op));
-    }
-    printer->add_line("{}(&{}, {});"_format(function, lhs, rhs));
-}
-
-
-void CodegenIspcVisitor::print_nrn_cur_matrix_shadow_update() {
-    auto rhs_op = operator_for_rhs();
-    auto d_op = operator_for_d();
-    if (info.point_process) {
-        printer->add_line("shadow_rhs[id] = rhs;");
-        printer->add_line("shadow_d[id] = g;");
-    } else {
-        printer->add_line("vec_rhs[node_id] {} rhs;"_format(rhs_op));
-        printer->add_line("vec_d[node_id] {} g;"_format(d_op));
-    }
-}
-
-
 void CodegenIspcVisitor::print_channel_iteration_tiling_block_begin(BlockType type) {
     // no tiling for ispc backend but make sure variables are declared as uniform
     printer->add_line("int uniform start = 0;");
@@ -220,11 +192,9 @@ void CodegenIspcVisitor::print_nrn_cur_matrix_shadow_reduction() {
     auto rhs_op = operator_for_rhs();
     auto d_op = operator_for_d();
     if (info.point_process) {
-        printer->start_block("programIndex == 0");
+        printer->start_block("if (programIndex == 0)");
         printer->add_line("uniform int node_id = node_index[id];");
-        print_atomic_reduction_pragma();
         printer->add_line("vec_rhs[node_id] {} shadow_rhs[id];"_format(rhs_op));
-        print_atomic_reduction_pragma();
         printer->add_line("vec_d[node_id] {} shadow_d[id];"_format(d_op));
         printer->end_block(1);
     }

@@ -28,7 +28,6 @@ namespace codegen {
  * \brief %Visitor for printing C code with ISPC backend
  */
 class CodegenIspcVisitor: public CodegenCVisitor {
-    void print_atomic_op(const std::string& lhs, const std::string& op, const std::string& rhs);
 
     /// ast nodes which are not compatible with ISPC target
     const std::vector<ast::AstNodeType> incompatible_node_types{
@@ -81,10 +80,6 @@ class CodegenIspcVisitor: public CodegenCVisitor {
 
     /// common includes : standard c/c++, coreneuron and backend specific
     void print_backend_includes() override;
-
-
-    /// update to matrix elements with/without shadow vectors
-    void print_nrn_cur_matrix_shadow_update() override;
 
 
     /// reduction to matrix elements from shadow vectors
