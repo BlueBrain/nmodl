@@ -91,6 +91,13 @@ class CodegenIspcVisitor: public CodegenCVisitor {
     void print_nrn_cur_matrix_shadow_reduction() override;
 
 
+    /**
+     * Print block / loop for statement requiring reduction
+     *
+     */
+    void print_shadow_reduction_block_begin() override;
+
+
     /// setup method for setting matrix shadow vectors
     void print_rhs_d_shadow_variables() override;
 

@@ -173,10 +173,8 @@ void CodegenIspcVisitor::print_nrn_cur_matrix_shadow_update() {
     auto rhs_op = operator_for_rhs();
     auto d_op = operator_for_d();
     if (info.point_process) {
-        stringutils::remove_character(rhs_op, '=');
-        stringutils::remove_character(d_op, '=');
-        print_atomic_op("vec_rhs[node_id]", rhs_op, "rhs");
-        print_atomic_op("vec_d[node_id]", d_op, "g");
+        printer->add_line("shadow_rhs[id] = rhs;");
+        printer->add_line("shadow_d[id] = g;");
     } else {
         printer->add_line("vec_rhs[node_id] {} rhs;"_format(rhs_op));
         printer->add_line("vec_d[node_id] {} g;"_format(d_op));
@@ -219,17 +217,35 @@ void CodegenIspcVisitor::print_get_memb_list() {
 
 
 void CodegenIspcVisitor::print_nrn_cur_matrix_shadow_reduction() {
-    // do nothing
+    auto rhs_op = operator_for_rhs();
+    auto d_op = operator_for_d();
+    if (info.point_process) {
+        printer->start_block("programIndex == 0");
+        printer->add_line("uniform int node_id = node_index[id];");
+        print_atomic_reduction_pragma();
+        printer->add_line("vec_rhs[node_id] {} shadow_rhs[id];"_format(rhs_op));
+        print_atomic_reduction_pragma();
+        printer->add_line("vec_d[node_id] {} shadow_d[id];"_format(d_op));
+        printer->end_block(1);
+    }
+}
+
+
+void CodegenIspcVisitor::print_shadow_reduction_block_begin() {
+    printer->start_block("for (uniform int id = start; id < end; id++) ");
 }
 
 
 void CodegenIspcVisitor::print_rhs_d_shadow_variables() {
-    // do nothing
+    if (info.point_process) {
+        printer->add_line("double* uniform shadow_rhs = nt->{};"_format(naming::NTHREAD_RHS_SHADOW));
+        printer->add_line("double* uniform shadow_d = nt->{};"_format(naming::NTHREAD_D_SHADOW));
+    }
 }
 
 
 bool CodegenIspcVisitor::nrn_cur_reduction_loop_required() {
-    return false;
+    return info.point_process;
 }
 
 
