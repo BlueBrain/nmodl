@@ -47,7 +47,7 @@ void CodegenAccVisitor::print_channel_iteration_block_parallel_hint(BlockType ty
         }
     }
     present_clause += ")";
-    printer->add_line("#pragma acc parallel loop {}"_format(present_clause));
+    printer->add_line("#pragma acc parallel loop {} async(nt->stream_id)"_format(present_clause));
 }
 
 
