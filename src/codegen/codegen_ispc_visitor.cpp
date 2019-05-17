@@ -188,6 +188,21 @@ void CodegenIspcVisitor::print_get_memb_list() {
 }
 
 
+void CodegenIspcVisitor::print_atomic_op(const std::string& lhs,
+                                         const std::string& op,
+                                         const std::string& rhs) {
+    std::string function;
+    if (op == "+") {
+        function = "atomic_add_local";
+    } else if (op == "-") {
+        function = "atomic_subtract_local";
+    } else {
+        throw std::runtime_error("ISPC backend error : {} not supported"_format(op));
+    }
+    printer->add_line("{}(&{}, {});"_format(function, lhs, rhs));
+}
+
+
 void CodegenIspcVisitor::print_nrn_cur_matrix_shadow_reduction() {
     auto rhs_op = operator_for_rhs();
     auto d_op = operator_for_d();

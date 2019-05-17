@@ -29,6 +29,19 @@ namespace codegen {
  */
 class CodegenIspcVisitor: public CodegenCVisitor {
 
+    /**
+     * Prints an ISPC atomic operation
+     *
+     * \note This is currently not used because of performance issues on KNL. Instead reduction
+     * operations are serialized.
+     *
+     * \param lhs Reduction left-hand-side operand
+     * \param op  Reducation operation. Currently only \c += and \c -= are supported
+     * \param rhs Reduction right-hand-side operand
+     */
+    void print_atomic_op(const std::string& lhs, const std::string& op, const std::string& rhs);
+
+
     /// ast nodes which are not compatible with ISPC target
     const std::vector<ast::AstNodeType> incompatible_node_types{
         ast::AstNodeType::VERBATIM,
