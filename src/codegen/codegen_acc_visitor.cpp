@@ -159,5 +159,12 @@ void CodegenAccVisitor::print_global_variable_device_update_annotation() {
     }
 }
 
+std::string CodegenAccVisitor::get_variable_device_pointer(std::string variable, std::string type) {
+    if (info.artificial_cell) {
+        return variable;
+    }
+    return "({}) acc_deviceptr({})"_format(type, variable);
+}
+
 }  // namespace codegen
 }  // namespace nmodl

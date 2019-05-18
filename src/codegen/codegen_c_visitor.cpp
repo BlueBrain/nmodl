@@ -2570,7 +2570,7 @@ void CodegenCVisitor::print_mechanism_register() {
     }
     printer->add_newline();
 
-    // allocate global variables as ion types are now set
+    // allocate global variables
     printer->add_line("setup_global_variables();");
 
     /*
@@ -3001,6 +3001,14 @@ std::string CodegenCVisitor::get_range_var_float_type(const SymbolType& symbol) 
     return float_data_type();
 }
 
+/**
+ * \details For CPU/Host target there is no device pointer. In this case
+ * just use the host variable name directly.
+ */
+std::string CodegenCVisitor::get_variable_device_pointer(std::string variable, std::string /*type*/) {
+    return variable;
+}
+
 
 void CodegenCVisitor::print_instance_variable_setup() {
     if (range_variable_setup_required()) {
@@ -3025,19 +3033,22 @@ void CodegenCVisitor::print_instance_variable_setup() {
     }
 
     printer->add_line("Datum* indexes = ml->pdata;");
+
+    std::string float_type = default_float_data_type();
+    std::string int_type = default_int_data_type();
+    std::string float_type_pointer = float_type + "*";
+    std::string int_type_pointer = int_type + "*";
+
     int id = 0;
     std::vector<std::string> variables_to_free;
+
     for (auto& var: codegen_float_variables) {
         auto name = var->get_name();
-        auto default_type = default_float_data_type();
         auto range_var_type = get_range_var_float_type(var);
-        if (default_type == range_var_type) {
-            if (info.artificial_cell) {
-                printer->add_line("inst->{} = ml->data+{}{};"_format(name, id, stride));
-            } else {
-                printer->add_line(
-                    "inst->{} = (double*) acc_deviceptr(ml->data+{}{});"_format(name, id, stride));
-            }
+        if (float_type == range_var_type) {
+            auto variable = "ml->data+{}{}"_format(id, stride);
+            auto device_variable = get_variable_device_pointer(variable, float_type_pointer);
+            printer->add_line("inst->{} = {};"_format(name, device_variable));
         } else {
             printer->add_line("inst->{} = setup_range_variable(ml->data+{}{}, pnodecount);"_format(
                 name, id, stride));
@@ -3048,26 +3059,20 @@ void CodegenCVisitor::print_instance_variable_setup() {
 
     for (auto& var: codegen_int_variables) {
         auto name = var.symbol->get_name();
-        if (info.artificial_cell) {
-            if (var.is_index || var.is_integer) {
-                printer->add_line("inst->{} = ml->pdata;"_format(name));
-            } else {
-                auto data = var.is_vdata ? "_vdata" : "_data";
-                printer->add_line("inst->{} = nt->{};"_format(name, data));
-            }
+        std::string variable = name;
+        std::string type = "";
+        if (var.is_index || var.is_integer) {
+            variable = "ml->pdata";
+            type = int_type_pointer;
+        } else if (var.is_vdata) {
+            variable = "nt->_vdata";
+            type = "void**";
         } else {
-            if (var.is_index || var.is_integer) {
-                printer->add_line("inst->{} = (int*) acc_deviceptr(ml->pdata);"_format(name));
-            } else {
-                if (var.is_vdata) {
-                    printer->add_line(
-                        "inst->{} = (void**)acc_deviceptr(nt->{});"_format(name, "_vdata"));
-                } else {
-                    printer->add_line(
-                        "inst->{} = (double*) acc_deviceptr(nt->{});"_format(name, "_data"));
-                }
-            }
+            variable = "nt->_data";
+            type = info.artificial_cell ? "void*" : float_type_pointer;
         }
+        auto device_variable = get_variable_device_pointer(variable, type);
+        printer->add_line("inst->{} = {};"_format(name, device_variable));
     }
 
     printer->add_line("ml->instance = (void*) inst;");
