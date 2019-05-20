@@ -170,6 +170,8 @@ bool CodegenCompatibilityVisitor::find_unhandled_ast_nodes(Ast* node) {
         case AstNodeType::BBCORE_POINTER_VAR:
             ss << return_error_if_no_bbcore_read_write(node);
             break;
+        default:
+            break;
         }
     }
     if (!ss.str().empty()) {

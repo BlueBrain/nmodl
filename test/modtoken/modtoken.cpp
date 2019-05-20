@@ -28,6 +28,7 @@
 using namespace nmodl;
 using nmodl::parser::NmodlDriver;
 using nmodl::parser::NmodlLexer;
+using LocationType = nmodl::parser::location;
 
 template <typename T>
 void symbol_type(const std::string& name, T& value) {
@@ -76,18 +77,26 @@ TEST_CASE("Addition of two ModToken objects", "[token][modtoken]") {
         ast::Name value;
         {
             std::stringstream ss;
-            symbol_type("text", value);
-            ast::Name value1 = value;
-            ss << *(value.get_token());
+
+            nmodl::parser::position adder1_begin(nullptr, 1, 1);
+            nmodl::parser::position adder1_end(nullptr, 1, 5);
+            LocationType adder1_location(adder1_begin, adder1_end);
+            ModToken adder1("text", 1, adder1_location);
+
+            nmodl::parser::position adder2_begin(nullptr, 2, 1);
+            nmodl::parser::position adder2_end(nullptr, 2, 5);
+            LocationType adder2_location(adder2_begin, adder2_end);
+            ModToken adder2("text", 2, adder2_location);
+
+            ss << adder1;
             ss << " + ";
-            symbol_type("\ntext", value);
-            ast::Name value2 = value;
-            ss << *(value.get_token());
-            ModToken sum = *(value1.get_token()) + *(value2.get_token());
+            ss << adder2;
+
+            ModToken sum = adder1 + adder2;
             ss << " = " << sum;
             REQUIRE(ss.str() ==
-                    "           text at [1.1-4] type 357 +            text at [2.1-4] type 357 =   "
-                    "         text at [1.1-2.4] type 357");
+                    "           text at [1.1-4] type 1 +            text at [2.1-4] type 2 =   "
+                    "         text at [1.1-2.4] type 1");
         }
     }
 }
