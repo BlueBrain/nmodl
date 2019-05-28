@@ -729,7 +729,7 @@ bool CodegenCVisitor::is_constant_variable(std::string name) {
     auto symbol = program_symtab->lookup_in_scope(name);
     bool is_constant = false;
     if (symbol != nullptr) {
-        if (symbol->has_any_property(NmodlType::read_ion_var)) {
+        if (symbol->has_any_property(NmodlType::read_ion_var) && optimize_ion_variable_copies()) {
             is_constant = true;
         }
         if (symbol->has_any_property(NmodlType::param_assign) && symbol->get_write_count() == 0) {
