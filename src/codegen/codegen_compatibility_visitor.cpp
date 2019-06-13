@@ -23,7 +23,9 @@ namespace codegen {
 using visitor::AstLookupVisitor;
 
 std::string CodegenCompatibilityVisitor::return_error_if_solve_method_is_unhandled(
-    std::shared_ptr<ast::SolveBlock>& solve_block_ast_node) {
+    ast::Ast* node,
+    std::shared_ptr<ast::Ast>& ast_node) {
+    auto solve_block_ast_node = std::dynamic_pointer_cast<ast::SolveBlock>(ast_node);
     std::stringstream unhandled_method_error_message;
     auto method = solve_block_ast_node->get_method();
     if (method == nullptr)
@@ -38,27 +40,10 @@ std::string CodegenCompatibilityVisitor::return_error_if_solve_method_is_unhandl
     return unhandled_method_error_message.str();
 }
 
-template <typename T>
-std::string CodegenCompatibilityVisitor::return_error_with_name(
-    const std::shared_ptr<ast::Ast>& ast_node) {
-    auto real_type_block = std::dynamic_pointer_cast<T>(ast_node);
-    return "\"{}\" {}construct found at [{}] is not handled\n"_format(
-        ast_node->get_node_name(),
-        real_type_block->get_nmodl_name(),
-        real_type_block->get_token()->position());
-}
-
-template <typename T>
-std::string CodegenCompatibilityVisitor::return_error_without_name(
-    const std::shared_ptr<ast::Ast>& ast_node) {
-    auto real_type_block = std::dynamic_pointer_cast<T>(ast_node);
-    return "{}construct found at [{}] is not handled\n"_format(
-        real_type_block->get_nmodl_name(), real_type_block->get_token()->position());
-}
-
 std::string CodegenCompatibilityVisitor::return_error_global_var(
-    Ast* node,
-    std::shared_ptr<ast::GlobalVar>& global_var) {
+    ast::Ast* node,
+    std::shared_ptr<ast::Ast>& ast_node) {
+    auto global_var = std::dynamic_pointer_cast<ast::GlobalVar>(ast_node);
     std::stringstream error_message_global_var;
     if (node->get_symbol_table()->lookup(global_var->get_node_name())->get_write_count() > 0) {
         error_message_global_var
@@ -68,13 +53,16 @@ std::string CodegenCompatibilityVisitor::return_error_global_var(
     return error_message_global_var.str();
 }
 
-std::string CodegenCompatibilityVisitor::return_error_pointer(
-    std::shared_ptr<ast::PointerVar>& pointer_var) {
+std::string CodegenCompatibilityVisitor::return_error_pointer(ast::Ast* node,
+                                                              std::shared_ptr<ast::Ast>& ast_node) {
+    auto pointer_var = std::dynamic_pointer_cast<ast::PointerVar>(ast_node);
     return "\"{}\" POINTER found at [{}] should be defined as BBCOREPOINTER to use it in CoreNeuron\n"_format(
         pointer_var->get_node_name(), pointer_var->get_token()->position());
 }
 
-std::string CodegenCompatibilityVisitor::return_error_if_no_bbcore_read_write(Ast* node) {
+std::string CodegenCompatibilityVisitor::return_error_if_no_bbcore_read_write(
+    ast::Ast* node,
+    std::shared_ptr<ast::Ast>& ast_node) {
     std::stringstream error_message_no_bbcore_read_write;
     auto verbatim_nodes = AstLookupVisitor().lookup(node, AstNodeType::VERBATIM);
     auto found_bbcore_read = false;
@@ -82,8 +70,7 @@ std::string CodegenCompatibilityVisitor::return_error_if_no_bbcore_read_write(As
     for (const auto& it: verbatim_nodes) {
         auto verbatim = std::dynamic_pointer_cast<ast::Verbatim>(it);
 
-        auto verbatim_statement = verbatim->get_statement();
-        auto verbatim_statement_string = verbatim_statement->get_value();
+        auto verbatim_statement_string = verbatim->get_statement()->get_value();
 
         // Parse verbatim block to find out if there is a token "bbcore_read" or
         // "bbcore_write". If there is not, then the function is not defined or
@@ -118,61 +105,18 @@ std::string CodegenCompatibilityVisitor::return_error_if_no_bbcore_read_write(As
  * generation backend for CoreNEURON and prints related messages. If there is
  * some kind of incompatibility return false.
  */
+
 bool CodegenCompatibilityVisitor::find_unhandled_ast_nodes(Ast* node) {
+    std::vector<ast::AstNodeType> unhandled_ast_types;
+    for (auto kv: unhandled_ast_types_func) {
+        unhandled_ast_types.push_back(kv.first);
+    }
     unhandled_ast_nodes = AstLookupVisitor().lookup(node, unhandled_ast_types);
 
     std::stringstream ss;
     for (auto it: unhandled_ast_nodes) {
         auto node_type = it->get_node_type();
-        switch (node_type) {
-        case AstNodeType::SOLVE_BLOCK: {
-            auto it_solve_block = std::dynamic_pointer_cast<ast::SolveBlock>(it);
-            ss << return_error_if_solve_method_is_unhandled(it_solve_block);
-        } break;
-        case AstNodeType::DISCRETE_BLOCK:
-            ss << return_error_with_name<DiscreteBlock>(it);
-            break;
-        case AstNodeType::PARTIAL_BLOCK:
-            ss << return_error_with_name<PartialBlock>(it);
-            break;
-        case AstNodeType::BEFORE_BLOCK:
-            ss << return_error_without_name<BeforeBlock>(it);
-            break;
-        case AstNodeType::AFTER_BLOCK:
-            ss << return_error_without_name<AfterBlock>(it);
-            break;
-        case AstNodeType::MATCH_BLOCK:
-            ss << return_error_without_name<MatchBlock>(it);
-            break;
-        case AstNodeType::CONSTANT_BLOCK:
-            ss << return_error_without_name<ConstantBlock>(it);
-            break;
-        case AstNodeType::CONSTRUCTOR_BLOCK:
-            ss << return_error_without_name<ConstructorBlock>(it);
-            break;
-        case AstNodeType::DESTRUCTOR_BLOCK:
-            ss << return_error_without_name<DestructorBlock>(it);
-            break;
-        case AstNodeType::INDEPENDENT_BLOCK:
-            ss << return_error_without_name<IndependentBlock>(it);
-            break;
-        case AstNodeType::FUNCTION_TABLE_BLOCK:
-            ss << return_error_without_name<FunctionTableBlock>(it);
-            break;
-        case AstNodeType::GLOBAL_VAR: {
-            auto it_global_var = std::dynamic_pointer_cast<ast::GlobalVar>(it);
-            ss << return_error_global_var(node, it_global_var);
-        } break;
-        case AstNodeType::POINTER_VAR: {
-            auto it_pointer_var = std::dynamic_pointer_cast<ast::PointerVar>(it);
-            ss << return_error_pointer(it_pointer_var);
-        } break;
-        case AstNodeType::BBCORE_POINTER_VAR:
-            ss << return_error_if_no_bbcore_read_write(node);
-            break;
-        default:
-            break;
-        }
+        ss << (this->*unhandled_ast_types_func[node_type])(node, it);
     }
     if (!ss.str().empty()) {
         logger->error("Code incompatibility detected");
