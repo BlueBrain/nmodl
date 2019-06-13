@@ -12,8 +12,8 @@
  * \brief \copybrief nmodl::codegen::CodegenCompatibilityVisitor
  */
 
+#include <map>
 #include <set>
-#include <unordered_map>
 
 #include "ast/ast.hpp"
 #include "codegen_naming.hpp"
@@ -45,7 +45,7 @@ class CodegenCompatibilityVisitor: public visitor::AstVisitor {
 
     /// Unordered_map to find the function needed to be called in
     /// for every ast::AstNodeType that is unsupported
-    std::unordered_map<ast::AstNodeType, FunctionPointer> unhandled_ast_types_func = {
+    std::map<ast::AstNodeType, FunctionPointer> unhandled_ast_types_func = {
         {AstNodeType::MATCH_BLOCK,
          &CodegenCompatibilityVisitor::return_error_without_name<MatchBlock>},
         {AstNodeType::BEFORE_BLOCK,
