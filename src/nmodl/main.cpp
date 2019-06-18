@@ -27,6 +27,7 @@
 #include "utils/logger.hpp"
 #include "visitors/ast_visitor.hpp"
 #include "visitors/constant_folder_visitor.hpp"
+#include "visitors/global_var_visitor.hpp"
 #include "visitors/inline_visitor.hpp"
 #include "visitors/json_visitor.hpp"
 #include "visitors/kinetic_block_visitor.hpp"
@@ -329,6 +330,7 @@ int main(int argc, const char* argv[]) {
             UnitsVisitor(units_dir).visit_program(ast.get());
         }
 
+
         /// once we start modifying (especially removing) older constructs
         /// from ast then we should run symtab visitor in update mode so
         /// that old symbols (e.g. prime variables) are not lost
@@ -382,16 +384,27 @@ int main(int argc, const char* argv[]) {
             ast_to_nmodl(ast.get(), filepath("solveblock"));
         }
 
+        /// GLOBAL to RANGE rename visitor
+        {
+            logger->info("Running GlobalToRange visitor");
+            GlobalToRangeVisitor(ast.get()).visit_program(ast.get());
+            auto with = nmodl::symtab::syminfo::NmodlType::range_var |
+                        nmodl::symtab::syminfo::NmodlType::assigned_definition;
+            auto without = nmodl::symtab::syminfo::NmodlType::global_var |
+                           nmodl::symtab::syminfo::NmodlType::pointer_var |
+                           nmodl::symtab::syminfo::NmodlType::bbcore_pointer_var |
+                           nmodl::symtab::syminfo::NmodlType::state_var |
+                           nmodl::symtab::syminfo::NmodlType::param_assign;
+            for (auto it: ast->get_symbol_table()->get_variables(with, without)) {
+                std::cout << it->get_node()->get_node_name() << ":" << it->get_properties()
+                          << std::endl;
+            }
+        }
+
         if (json_perfstat) {
             auto file = scratch_dir + "/" + modfile + ".perf.json";
             logger->info("Writing performance statistics to {}", file);
             PerfVisitor(file).visit_program(ast.get());
-        }
-
-        {
-            // make sure to run perf visitor because code generator
-            // looks for read/write counts const/non-const declaration
-            PerfVisitor().visit_program(ast.get());
         }
 
         {
