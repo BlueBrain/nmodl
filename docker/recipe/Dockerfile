@@ -19,7 +19,9 @@ RUN pip3 install .
 FROM alpine:latest
 
 
-RUN apk add --no-cache --update python3 libgfortran libstdc++ openblas && \
+RUN apk add --no-cache --update shadow python3 libgfortran libstdc++ openblas && \
+    apk add --no-cache --update \
+            --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing gosu && \
     apk add --no-cache --virtual build-dependencies \
             build-base linux-headers openblas-dev freetype-dev \
             pkgconfig gfortran python3-dev && \
@@ -28,13 +30,21 @@ RUN apk add --no-cache --update python3 libgfortran libstdc++ openblas && \
     apk del build-dependencies && \
     rm -rf /var/cache/apk/*
     
-WORKDIR /usr/lib/python3.6/site-packages
+WORKDIR /usr/lib/python3.6/site-packages/nmodl
 
 COPY --from=builder /usr/lib/python3.6/site-packages/nmodl .
 
-EXPOSE 8888
-WORKDIR /nmodl
+ENV LANG en_US.utf8
+ENV SHELL=/bin/bash
 
-CMD ["jupyter", "notebook", "--port=8888", "--no-browser", "--ip=0.0.0.0", "--allow-root"]
+ADD entrypoint /usr/bin/
+ENTRYPOINT ["/usr/bin/entrypoint"]
+
+EXPOSE 8888
+WORKDIR /nmodl/notebooks
+
+COPY --from=builder /nmodl/src/nmodl/docs/notebooks ./examples
+
+CMD ["jupyter", "notebook", "--port=8888", "--no-browser", "--ip=0.0.0.0", "--allow-root", "--debug", "--notebook-dir=/nmodl/notebooks"]
 
 
