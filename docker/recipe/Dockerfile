@@ -1,4 +1,4 @@
-FROM alpine:latest AS builder
+FROM alpine:3.9 AS builder
 
 WORKDIR /nmodl/src
 
@@ -13,10 +13,9 @@ RUN git clone --recursive https://github.com/BlueBrain/nmodl.git && \
 
 WORKDIR /nmodl/src/nmodl
 
-RUN pip3 install .
+RUN python3 setup.py build
 
-
-FROM alpine:latest
+FROM alpine:3.9
 
 
 RUN apk add --no-cache --update shadow python3 libgfortran libstdc++ openblas && \
@@ -32,7 +31,10 @@ RUN apk add --no-cache --update shadow python3 libgfortran libstdc++ openblas &&
     
 WORKDIR /usr/lib/python3.6/site-packages/nmodl
 
-COPY --from=builder /usr/lib/python3.6/site-packages/nmodl .
+COPY --from=builder /nmodl/src/nmodl/build/lib.linux-x86_64-3.6/nmodl .
+
+RUN echo "PROJECT_SOURCE_DIR=\"/nmodl/src\"" > config.py && \
+    echo "PROJECT_INSTALL_DIR=\"/usr/lib/python3.6/site-packages/nmodl\"" >> config.py
 
 ENV LANG en_US.utf8
 ENV SHELL=/bin/bash

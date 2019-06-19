@@ -63,8 +63,8 @@ fully functional Jupyter notebook environment.
 After installing docker you can pull and run the NMODL image from your terminal:
 
 ```sh
-docker run -it -p 8888:8888 -v ~/yourpath/to/nmodl/notebooks:/nmodl/notebooks ohm314/nmodl:test
-
+wget "https://raw.githubusercontent.com/BlueBrain/nmodl/master/docker/docker-compose.yml"
+DUID=$(id -u) DGID=$(id -g) HOSTNAME=$(hostname) docker-compose up
 ```
 
 If all goes well you should see at the end status messages similar to these:
@@ -85,6 +85,9 @@ If all goes well you should see at the end status messages similar to these:
 
 Based on the example above you should then open your browser and navigate to the URL http://127.0.0.1:8888/?token=a7902983bad430a1193542945f6a64ae303f559343fbb0dc
 
+You can open and run all example notebooks provided in the `examples` folder. You can also create
+new notebooks in `my_notebooks`, which will be stored in a subfolder `notebooks` at your current
+working directory.
 
 ### Using the Python API
 

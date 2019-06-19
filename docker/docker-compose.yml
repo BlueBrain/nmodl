@@ -1,7 +1,7 @@
 version: '3.7'
 services:
   notebook:
-    image: nmodl:latest
+    image: ohm314/nmodl:0.2
     build: recipe
     hostname: ${HOSTNAME}
     ports:
