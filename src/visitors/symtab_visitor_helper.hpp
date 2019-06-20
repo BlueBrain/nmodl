@@ -75,6 +75,18 @@ void SymtabVisitor::setup_symbol(ast::Node* node, NmodlType property) {
         }
     }
 
+    /// check if node is global_var and has its property in symtab changed
+    /// to NmodlType::range_var by the GlobalToRangeVisitor. If yes then
+    /// the property NmodlType::range_var should be preserved when updating
+    /// symtab
+    if (node->is_global_var() && modsymtab->lookup(name)) {
+        if ((modsymtab->lookup(name)->get_properties() & NmodlType::range_var) == NmodlType::range_var) {
+            if(property == NmodlType::global_var) {
+                property = NmodlType::range_var;
+            }
+        }
+    }
+
     symbol = create_symbol_for_node(node, property, under_state_block);
 
     /// insert might return different symbol if already exist in the same scope
