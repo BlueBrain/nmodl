@@ -96,6 +96,14 @@ class SympySolverVisitor: public AstVisitor {
         return nmodl::to_nmodl(node, {ast::AstNodeType::UNIT, ast::AstNodeType::UNIT_DEF});
     }
 
+    /// Function used by SympySolverVisitor::filter_X to replace the name X in a std::string
+    /// to X_operator
+    std::string& replaceAll(std::string& context, const std::string& from, const std::string& to);
+
+    /// Check original_vector for elements that contain a variable named X and rename it to
+    /// X_operator to match the X_operator name used in nmodl::codegen::CodegenCVisitor
+    std::vector<std::string> filter_X(const std::vector<std::string>& original_vector);
+
     /// global variables
     std::set<std::string> global_vars;
 

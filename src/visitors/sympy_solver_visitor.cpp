@@ -143,19 +143,19 @@ void SympySolverVisitor::construct_eigen_solver_block(
         ++it;
     }
     // make Eigen vector <-> state var assignments
-    std::vector<std::string> setup_x_eqs;
+    std::vector<std::string> setup_x_operator_eqs;
     std::vector<std::string> update_state_eqs;
     for (int i = 0; i < state_vars.size(); i++) {
-        auto statement = state_vars[i] + " = X[" + std::to_string(i) + "]";
-        auto rev_statement = "X[" + std::to_string(i) + "] = " + state_vars[i];
+        auto statement = state_vars[i] + " = X_operator[" + std::to_string(i) + "]";
+        auto rev_statement = "X_operator[" + std::to_string(i) + "] = " + state_vars[i];
         update_state_eqs.push_back(statement);
-        setup_x_eqs.push_back(rev_statement);
-        logger->debug("SympySolverVisitor :: setup_x: {}", rev_statement);
+        setup_x_operator_eqs.push_back(rev_statement);
+        logger->debug("SympySolverVisitor :: setup_X_operator: {}", rev_statement);
         logger->debug("SympySolverVisitor :: update_state: {}", statement);
     }
-    // TODO: make unique name for Eigen vector if clashes
-    if (vars.find("X") != vars.end()) {
-        logger->error("SympySolverVisitor :: -> X conflicts with NMODL variable");
+
+    if (vars.find("X_operator") != vars.end()) {
+        logger->error("SympySolverVisitor :: -> X_operator conflicts with NMODL variable");
     }
     for (const auto& sol: solutions) {
         logger->debug("SympySolverVisitor :: -> adding statement: {}", sol);
@@ -186,12 +186,12 @@ void SympySolverVisitor::construct_eigen_solver_block(
 
     if (linear) {
         /// create eigen linear solver block
-        setup_x_eqs.insert(setup_x_eqs.end(), solutions.begin(), solutions.end());
-        auto setup_x_block = create_statement_block(setup_x_eqs);
+        setup_x_operator_eqs.insert(setup_x_operator_eqs.end(), solutions.begin(), solutions.end());
+        auto setup_x_operator_block = create_statement_block(setup_x_operator_eqs);
         auto solver_block = std::make_shared<ast::EigenLinearSolverBlock>(n_state_vars,
                                                                           variable_block,
                                                                           initialize_block,
-                                                                          setup_x_block,
+                                                                          setup_x_operator_block,
                                                                           update_state_block,
                                                                           finalize_block);
         /// replace statement block with solver block as it contains all statements
@@ -200,12 +200,12 @@ void SympySolverVisitor::construct_eigen_solver_block(
         block_with_expression_statements->set_statements(std::move(solver_block_statements));
     } else {
         /// create eigen newton solver block
-        auto setup_x_block = create_statement_block(setup_x_eqs);
+        auto setup_x_operator_block = create_statement_block(setup_x_operator_eqs);
         auto functor_block = create_statement_block(solutions);
         auto solver_block = std::make_shared<ast::EigenNewtonSolverBlock>(n_state_vars,
                                                                           variable_block,
                                                                           initialize_block,
-                                                                          setup_x_block,
+                                                                          setup_x_operator_block,
                                                                           functor_block,
                                                                           update_state_block,
                                                                           finalize_block);
@@ -214,6 +214,28 @@ void SympySolverVisitor::construct_eigen_solver_block(
             std::make_shared<ast::ExpressionStatement>(solver_block)};
         block_with_expression_statements->set_statements(std::move(solver_block_statements));
     }
+}
+
+std::string& SympySolverVisitor::replaceAll(std::string& context,
+                                            const std::string& from,
+                                            const std::string& to) {
+    std::size_t lookHere = 0;
+    std::size_t foundHere;
+    while ((foundHere = context.find(from, lookHere)) != std::string::npos) {
+        context.replace(foundHere, from.size(), to);
+        lookHere = foundHere + to.size();
+    }
+    return context;
+}
+
+std::vector<std::string> SympySolverVisitor::filter_X(
+    const std::vector<std::string>& original_vector) {
+    std::vector<std::string> filtered_vector;
+    for (auto element: original_vector) {
+        std::string filtered_element = replaceAll(element, "X", "X_operator");
+        filtered_vector.push_back(filtered_element);
+    }
+    return filtered_vector;
 }
 
 void SympySolverVisitor::solve_linear_system(const std::vector<std::string>& pre_solve_statements) {
@@ -256,6 +278,9 @@ void SympySolverVisitor::solve_linear_system(const std::vector<std::string>& pre
                      exception_message);
         return;
     }
+    // Filter pre_solve_statements and solutions to check if there is any variable named X
+    std::vector<std::string> pre_solve_statements_filtered_for_X = filter_X(pre_solve_statements);
+    std::vector<std::string> solutions_filtered_for_X = filter_X(solutions);
     // find out where to insert solutions in statement block
     auto& statements = block_with_expression_statements->statements;
     auto it = get_solution_location_iterator(statements);
@@ -272,13 +297,13 @@ void SympySolverVisitor::solve_linear_system(const std::vector<std::string>& pre
             }
         }
         // insert pre-solve statements below last linear eq in block
-        for (const auto& statement: pre_solve_statements) {
+        for (const auto& statement: pre_solve_statements_filtered_for_X) {
             logger->debug("SympySolverVisitor :: -> adding statement: {}", statement);
             it = statements.insert(it, create_statement(statement));
             ++it;
         }
         // then insert new solution statements
-        for (const auto& sol: solutions) {
+        for (const auto& sol: solutions_filtered_for_X) {
             logger->debug("SympySolverVisitor :: -> adding statement: {}", sol);
             it = statements.insert(it, create_statement(sol));
             ++it;
@@ -288,7 +313,9 @@ void SympySolverVisitor::solve_linear_system(const std::vector<std::string>& pre
     } else {
         // otherwise it returns a linear matrix system to solve
         logger->debug("SympySolverVisitor :: Constructing linear newton solve block");
-        construct_eigen_solver_block(pre_solve_statements, solutions, true);
+        construct_eigen_solver_block(pre_solve_statements_filtered_for_X,
+                                     solutions_filtered_for_X,
+                                     true);
     }
 }
 
@@ -319,6 +346,9 @@ void SympySolverVisitor::solve_non_linear_system(
              locals);
     // returns a vector of solutions, i.e. new statements to add to block:
     auto solutions = locals["solutions"].cast<std::vector<std::string>>();
+    // Filter pre_solve_statements and solutions to check if there is any variable named X
+    std::vector<std::string> pre_solve_statements_filtered_for_X = filter_X(pre_solve_statements);
+    std::vector<std::string> solutions_filtered_for_X = filter_X(solutions);
     // may also return a python exception message:
     auto exception_message = locals["exception_message"].cast<std::string>();
     if (!exception_message.empty()) {
@@ -327,7 +357,10 @@ void SympySolverVisitor::solve_non_linear_system(
         return;
     }
     logger->debug("SympySolverVisitor :: Constructing eigen newton solve block");
-    construct_eigen_solver_block(pre_solve_statements, solutions, false);
+    // construct_eigen_solver_block(pre_solve_statements, solutions, false);
+    construct_eigen_solver_block(pre_solve_statements_filtered_for_X,
+                                 solutions_filtered_for_X,
+                                 false);
 }
 
 void SympySolverVisitor::visit_var_name(ast::VarName* node) {
