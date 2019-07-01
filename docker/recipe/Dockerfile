@@ -47,6 +47,6 @@ WORKDIR /nmodl/notebooks
 
 COPY --from=builder /nmodl/src/nmodl/docs/notebooks ./examples
 
-CMD ["jupyter", "notebook", "--port=8888", "--no-browser", "--ip=0.0.0.0", "--allow-root", "--debug", "--notebook-dir=/nmodl/notebooks"]
+CMD ["jupyter", "notebook", "--port=8888", "--no-browser", "--ip=0.0.0.0", "--allow-root", "--notebook-dir=/nmodl/notebooks"]
 
 
