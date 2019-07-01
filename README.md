@@ -60,7 +60,7 @@ To quickly test the NMODL Framework's analysis capabilities we provide a
 [docker](https://www.docker.com) image, which includes the NMODL Framework python library and a
 fully functional Jupyter notebook environment.
 
-After installing docker and docker-compose you can pull and run the NMODL image from your terminal:
+After installing [docker](https://docs.docker.com/compose/install/) and [docker-compose](https://docs.docker.com/compose/install/) you can pull and run the NMODL image from your terminal:
 
 ```sh
 wget "https://raw.githubusercontent.com/BlueBrain/nmodl/master/docker/docker-compose.yml"
