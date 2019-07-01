@@ -100,9 +100,11 @@ class SympySolverVisitor: public AstVisitor {
     /// to X_operator
     std::string& replaceAll(std::string& context, const std::string& from, const std::string& to);
 
-    /// Check original_vector for elements that contain a variable named X and rename it to
-    /// X_operator to match the X_operator name used in nmodl::codegen::CodegenCVisitor
-    std::vector<std::string> filter_X(const std::vector<std::string>& original_vector);
+    /// Check original_vector for elements that contain a variable named original_string and
+    /// rename it to substitution_string
+    std::vector<std::string> filter_var(const std::vector<std::string>& original_vector,
+                                        const std::string& original_string,
+                                        const std::string& substitution_string);
 
     /// global variables
     std::set<std::string> global_vars;

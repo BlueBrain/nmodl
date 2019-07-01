@@ -141,11 +141,13 @@ std::string& SympySolverVisitor::replaceAll(std::string& context,
     return context;
 }
 
-std::vector<std::string> SympySolverVisitor::filter_X(
-    const std::vector<std::string>& original_vector) {
+std::vector<std::string> SympySolverVisitor::filter_var(
+    const std::vector<std::string>& original_vector,
+    const std::string& original_string,
+    const std::string& substitution_string) {
     std::vector<std::string> filtered_vector;
     for (auto element: original_vector) {
-        std::string filtered_element = replaceAll(element, "X", "X_operator");
+        std::string filtered_element = replaceAll(element, original_string, substitution_string);
         filtered_vector.push_back(filtered_element);
     }
     return filtered_vector;
@@ -155,6 +157,35 @@ void SympySolverVisitor::construct_eigen_solver_block(
     const std::vector<std::string>& pre_solve_statements,
     const std::vector<std::string>& solutions,
     bool linear) {
+    // Provide random string to append to X, J, Jm and F matrices that
+    // are produced by sympy
+    auto singleton_random_string_class = nmodl::utils::SingletonRandomString::instance();
+    std::string random_string_X, random_string_J, random_string_Jm, random_string_F;
+    // Check if there is a variable defined in the mod file as X, J, Jm or F and if yes
+    // try to use a different string for the matrices created by sympy in the form
+    // X_<random_number>, J_<random_number>, Jm_<random_number> and F_<random_number>
+    std::string X_matrix_name = "X";
+    std::string J_matrix_name = "J";
+    std::string Jm_matrix_name = "Jm";
+    std::string F_matrix_name = "F";
+    while (vars.find(X_matrix_name) != vars.end()) {
+        random_string_X = singleton_random_string_class->reset_random_string_X();
+        X_matrix_name = "X_" + random_string_X;
+    }
+    while ((vars.find(J_matrix_name) != vars.end()) ||
+           (vars.find(J_matrix_name + "m") != vars.end())) {
+        random_string_J = singleton_random_string_class->reset_random_string_J();
+        J_matrix_name = "J_" + random_string_J;
+    }
+    while (vars.find(Jm_matrix_name) != vars.end()) {
+        random_string_Jm = singleton_random_string_class->reset_random_string_Jm();
+        Jm_matrix_name = "Jm_" + random_string_Jm;
+    }
+    while (vars.find(F_matrix_name) != vars.end()) {
+        random_string_F = singleton_random_string_class->reset_random_string_F();
+        F_matrix_name = "F_" + random_string_F;
+    }
+
     // find out where to insert solution in statement block
     auto& statements = block_with_expression_statements->statements;
     auto it = get_solution_location_iterator(statements);
@@ -168,17 +199,14 @@ void SympySolverVisitor::construct_eigen_solver_block(
     std::vector<std::string> setup_x_operator_eqs;
     std::vector<std::string> update_state_eqs;
     for (int i = 0; i < state_vars.size(); i++) {
-        auto statement = state_vars[i] + " = X_operator[" + std::to_string(i) + "]";
-        auto rev_statement = "X_operator[" + std::to_string(i) + "] = " + state_vars[i];
+        auto statement = state_vars[i] + " = " + X_matrix_name + "[" + std::to_string(i) + "]";
+        auto rev_statement = X_matrix_name + "[" + std::to_string(i) + "] = " + state_vars[i];
         update_state_eqs.push_back(statement);
         setup_x_operator_eqs.push_back(rev_statement);
-        logger->debug("SympySolverVisitor :: setup_X_operator: {}", rev_statement);
+        logger->debug("SympySolverVisitor :: setup_", X_matrix_name, ": {}", rev_statement);
         logger->debug("SympySolverVisitor :: update_state: {}", statement);
     }
 
-    if (vars.find("X_operator") != vars.end()) {
-        logger->error("SympySolverVisitor :: -> X_operator conflicts with NMODL variable");
-    }
     for (const auto& sol: solutions) {
         logger->debug("SympySolverVisitor :: -> adding statement: {}", sol);
     }
@@ -221,8 +249,12 @@ void SympySolverVisitor::construct_eigen_solver_block(
             std::make_shared<ast::ExpressionStatement>(solver_block)};
         block_with_expression_statements->set_statements(std::move(solver_block_statements));
     } else {
-        /// filter solutions for variable named "X" and change it to "X_operator"
-        auto solutions_filtered = filter_X(solutions);
+        /// filter solutions for variables named "X", "J", "Jm" and "F" and change them to
+        /// X_matrix_name, J_matrix_name, Jm_matrix_name and F_matrix_name respectively
+        auto solutions_filtered = filter_var(solutions, "X", X_matrix_name);
+        solutions_filtered = filter_var(solutions, "J", J_matrix_name);
+        solutions_filtered = filter_var(solutions, J_matrix_name + "m", Jm_matrix_name);
+        solutions_filtered = filter_var(solutions, "F", F_matrix_name);
         /// create eigen newton solver block
         auto setup_x_operator_block = create_statement_block(setup_x_operator_eqs);
         auto functor_block = create_statement_block(solutions_filtered);

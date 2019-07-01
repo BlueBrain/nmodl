@@ -1625,13 +1625,38 @@ void CodegenCVisitor::print_function(ast::FunctionBlock* node) {
 void CodegenCVisitor::visit_eigen_newton_solver_block(ast::EigenNewtonSolverBlock* node) {
     // solution vector to store copy of state vars for Newton solver
     printer->add_newline();
+
+    // Provide random string to append to X, J, Jm and F matrices that
+    // are produced by sympy
+    auto singleton_random_string_class = nmodl::utils::SingletonRandomString::instance();
+    // Check if there is a variable defined in the mod file as X, J, Jm or F and if yes
+    // try to use a different string for the matrices created by sympy in the form
+    // X_<random_number>, J_<random_number>, Jm_<random_number> and F_<random_number>
+    std::string X_matrix_name = "X";
+    std::string J_matrix_name = "J";
+    std::string Jm_matrix_name = "Jm";
+    std::string F_matrix_name = "F";
+    if (!singleton_random_string_class->get_random_string_X().empty()) {
+        X_matrix_name = "X_" + singleton_random_string_class->get_random_string_X();
+    };
+    if (!singleton_random_string_class->get_random_string_J().empty()) {
+        J_matrix_name = "J_" + singleton_random_string_class->get_random_string_J();
+    };
+    if (!singleton_random_string_class->get_random_string_Jm().empty()) {
+        Jm_matrix_name = "Jm_" + singleton_random_string_class->get_random_string_Jm();
+    };
+    if (!singleton_random_string_class->get_random_string_F().empty()) {
+        F_matrix_name = "F_" + singleton_random_string_class->get_random_string_F();
+    };
+
     auto float_type = default_float_data_type();
     int N = node->get_n_state_vars()->get_value();
-    printer->add_line("Eigen::Matrix<{}, {}, 1> X_operator;"_format(float_type, N));
+    printer->add_line("Eigen::Matrix<{}, {}, 1> {};"_format(float_type, N, X_matrix_name));
 
     print_statement_block(node->get_setup_x_block().get(), false, false);
 
-    // functor that evaluates F(X_operator) and J(X_operator) for Newton solver
+    // functor that evaluates F_matrix_name(X_matrix_name) and J_matrix_name(X_matrix_name) for
+    // Newton solver
     printer->start_block("struct functor");
     printer->add_line("NrnThread* nt;");
     printer->add_line("{0}* inst;"_format(instance_struct()));
@@ -1655,15 +1680,16 @@ void CodegenCVisitor::visit_eigen_newton_solver_block(ast::EigenNewtonSolverBloc
 
     printer->add_indent();
     printer->add_text(
-        "void operator()(const Eigen::Matrix<{0}, {1}, 1>& X_operator, Eigen::Matrix<{0}, {1}, "
-        "1>& F, "
-        "Eigen::Matrix<{0}, {1}, {1}>& Jm) const"_format(float_type, N));
+        "void operator()(const Eigen::Matrix<{0}, {1}, 1>& {2}, Eigen::Matrix<{0}, {1}, "
+        "1>& {3}, "
+        "Eigen::Matrix<{0}, {1}, {1}>& {4}) const"_format(
+            float_type, N, X_matrix_name, F_matrix_name, Jm_matrix_name));
     printer->start_block();
-    printer->add_line("{}* J = Jm.data();"_format(float_type));
+    printer->add_line("{}* {} = {}.data();"_format(float_type, J_matrix_name, Jm_matrix_name));
     print_statement_block(node->get_functor_block().get(), false, false);
     printer->end_block(2);
 
-    // assign newton solver results in matrix X_operator to state vars
+    // assign newton solver results in matrix X_matrix_name to state vars
     printer->start_block("void finalize()");
     print_statement_block(node->get_finalize_block().get(), false, false);
     printer->end_block(1);
@@ -1672,33 +1698,59 @@ void CodegenCVisitor::visit_eigen_newton_solver_block(ast::EigenNewtonSolverBloc
     printer->add_text(";");
     printer->add_newline();
 
-    // call newton solver with functor and X_operator matrix that contains state vars
+    // call newton solver with functor and X_matrix_name matrix that contains state vars
     printer->add_line("// call newton solver");
     printer->add_line("functor newton_functor(nt, inst, id, pnodecount, v, indexes);");
     printer->add_line("newton_functor.initialize();");
     printer->add_line(
-        "int newton_iterations = nmodl::newton::newton_solver(X_operator, newton_functor);");
+        "int newton_iterations = nmodl::newton::newton_solver({}, newton_functor);"_format(
+            X_matrix_name));
 
-    // assign newton solver results in matrix X_operator to state vars
+    // assign newton solver results in matrix X_matrix_name to state vars
     print_statement_block(node->get_update_states_block().get(), false, false);
     printer->add_line("newton_functor.finalize();");
 }
 
 void CodegenCVisitor::visit_eigen_linear_solver_block(ast::EigenLinearSolverBlock* node) {
     printer->add_newline();
+
+    // Provide random string to append to X, J, Jm and F matrices that
+    // are produced by sympy
+    auto singleton_random_string_class = nmodl::utils::SingletonRandomString::instance();
+    // Check if there is a variable defined in the mod file as X, J, Jm or F and if yes
+    // try to use a different string for the matrices created by sympy in the form
+    // X_<random_number>, J_<random_number>, Jm_<random_number> and F_<random_number>
+    std::string X_matrix_name = "X";
+    std::string J_matrix_name = "J";
+    std::string Jm_matrix_name = "Jm";
+    std::string F_matrix_name = "F";
+    if (!singleton_random_string_class->get_random_string_X().empty()) {
+        X_matrix_name = "X_" + singleton_random_string_class->get_random_string_X();
+    };
+    if (!singleton_random_string_class->get_random_string_J().empty()) {
+        J_matrix_name = "J_" + singleton_random_string_class->get_random_string_J();
+    };
+    if (!singleton_random_string_class->get_random_string_Jm().empty()) {
+        Jm_matrix_name = "Jm_" + singleton_random_string_class->get_random_string_Jm();
+    };
+    if (!singleton_random_string_class->get_random_string_F().empty()) {
+        F_matrix_name = "F_" + singleton_random_string_class->get_random_string_F();
+    };
+
     std::string float_type = default_float_data_type();
     int N = node->get_n_state_vars()->get_value();
-    printer->add_line("Eigen::Matrix<{0}, {1}, 1> X_operator, F;"_format(float_type, N));
-    printer->add_line("Eigen::Matrix<{0}, {1}, {1}> Jm;"_format(float_type, N));
-    printer->add_line("{}* J = Jm.data();"_format(float_type));
+    printer->add_line(
+        "Eigen::Matrix<{0}, {1}, 1> {2}, {3};"_format(float_type, N, X_matrix_name, F_matrix_name));
+    printer->add_line("Eigen::Matrix<{0}, {1}, {1}> {2};"_format(float_type, N, Jm_matrix_name));
+    printer->add_line("{}* {} = {}.data();"_format(float_type, J_matrix_name, Jm_matrix_name));
     print_statement_block(node->get_variable_block().get(), false, false);
     print_statement_block(node->get_initialize_block().get(), false, false);
     print_statement_block(node->get_setup_x_block().get(), false, false);
 
     printer->add_newline();
     printer->add_line(
-        "X_operator = Eigen::PartialPivLU<Eigen::Ref<Eigen::Matrix<{0}, {1}, {1}>>>(Jm).solve(F);"_format(
-            float_type, N));
+        "{0} = Eigen::PartialPivLU<Eigen::Ref<Eigen::Matrix<{1}, {2}, {2}>>>({3}).solve({4});"_format(
+            X_matrix_name, float_type, N, Jm_matrix_name, F_matrix_name));
     print_statement_block(node->get_update_states_block().get(), false, false);
     print_statement_block(node->get_finalize_block().get(), false, false);
 }

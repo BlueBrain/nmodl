@@ -359,12 +359,12 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
                     }
                     old_m = m
                 }{
-                    X_operator[0] = m
+                    X[0] = m
                 }{
-                    F[0] = (-X_operator[0]*dt+dt*mInf+mTau*(-X_operator[0]+old_m))/mTau
+                    F[0] = (-X[0]*dt+dt*mInf+mTau*(-X[0]+old_m))/mTau
                     J[0] = -(dt+mTau)/mTau
                 }{
-                    m = X_operator[0]
+                    m = X[0]
                 }{
                 }
             })";
@@ -543,11 +543,11 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
                     old_o1 = o1
                     old_p0 = p0
                 }{
-                    X_operator[0] = c1
-                    X_operator[1] = o1
-                    X_operator[2] = o2
-                    X_operator[3] = p0
-                    X_operator[4] = p1
+                    X[0] = c1
+                    X[1] = o1
+                    X[2] = o2
+                    X[3] = p0
+                    X[4] = p1
                     F[0] = -old_c1
                     F[1] = -old_o1
                     F[2] = -1
@@ -579,11 +579,11 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
                     J[19] = -1
                     J[24] = -1
                 }{
-                    c1 = X_operator[0]
-                    o1 = X_operator[1]
-                    o2 = X_operator[2]
-                    p0 = X_operator[3]
-                    p1 = X_operator[4]
+                    c1 = X[0]
+                    o1 = X[1]
+                    o2 = X[2]
+                    p0 = X[3]
+                    p1 = X[4]
                 }{
                 }
             })";
@@ -680,12 +680,12 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
                 }{
                     old_W_0 = W[0]
                 }{
-                    X_operator[0] = W[0]
+                    X[0] = W[0]
                 }{
-                    F[0] = -X_operator[0]*dt*A[0]+X_operator[0]*dt*B[0]-X_operator[0]+3*dt*A[1]+old_W_0
+                    F[0] = -X[0]*dt*A[0]+X[0]*dt*B[0]-X[0]+3*dt*A[1]+old_W_0
                     J[0] = -dt*A[0]+dt*B[0]-1
                 }{
-                    W[0] = X_operator[0]
+                    W[0] = X[0]
                 }{
                 }
             })";
@@ -722,26 +722,26 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
                     old_h = h
                     old_n = n
                 }{
-                    X_operator[0] = m
-                    X_operator[1] = h
-                    X_operator[2] = n
+                    X[0] = m
+                    X[1] = h
+                    X[2] = n
                 }{
-                    F[0] = (-X_operator[0]*dt+dt*minf+mtau*(-X_operator[0]-3*X_operator[1]*dt+old_m))/mtau
-                    F[1] = (-X_operator[1]*dt+dt*hinf+htau*(pow(X_operator[0], 2)*dt-X_operator[1]+old_h))/htau
-                    F[2] = (-X_operator[2]*dt+dt*ninf+ntau*(-X_operator[2]+old_n))/ntau
+                    F[0] = (-X[0]*dt+dt*minf+mtau*(-X[0]-3*X[1]*dt+old_m))/mtau
+                    F[1] = (-X[1]*dt+dt*hinf+htau*(pow(X[0], 2)*dt-X[1]+old_h))/htau
+                    F[2] = (-X[2]*dt+dt*ninf+ntau*(-X[2]+old_n))/ntau
                     J[0] = -(dt+mtau)/mtau
                     J[3] = -3*dt
                     J[6] = 0
-                    J[1] = 2*X_operator[0]*dt
+                    J[1] = 2*X[0]*dt
                     J[4] = -(dt+htau)/htau
                     J[7] = 0
                     J[2] = 0
                     J[5] = 0
                     J[8] = -(dt+ntau)/ntau
                 }{
-                    m = X_operator[0]
-                    h = X_operator[1]
-                    n = X_operator[2]
+                    m = X[0]
+                    h = X[1]
+                    n = X[2]
                 }{
                 }
             })";
@@ -781,18 +781,18 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
                     old_m = m
                     old_h = h
                 }{
-                    X_operator[0] = m
-                    X_operator[1] = h
+                    X[0] = m
+                    X[1] = h
                 }{
-                    F[0] = (-X_operator[0]*dt+dt*minf+mtau*(-X_operator[0]+old_m))/mtau
-                    F[1] = (-X_operator[1]*dt+dt*hinf+htau*(pow(X_operator[0], 2)*dt-X_operator[1]+old_h))/htau
+                    F[0] = (-X[0]*dt+dt*minf+mtau*(-X[0]+old_m))/mtau
+                    F[1] = (-X[1]*dt+dt*hinf+htau*(pow(X[0], 2)*dt-X[1]+old_h))/htau
                     J[0] = -(dt+mtau)/mtau
                     J[2] = 0
-                    J[1] = 2*X_operator[0]*dt
+                    J[1] = 2*X[0]*dt
                     J[3] = -(dt+htau)/htau
                 }{
-                    m = X_operator[0]
-                    h = X_operator[1]
+                    m = X[0]
+                    h = X[1]
                 }{
                 }
             })";
@@ -804,18 +804,18 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
                     old_h = h
                     old_m = m
                 }{
-                    X_operator[0] = m
-                    X_operator[1] = h
+                    X[0] = m
+                    X[1] = h
                 }{
-                    F[0] = (-X_operator[1]*dt+dt*hinf+htau*(pow(X_operator[0], 2)*dt-X_operator[1]+old_h))/htau
-                    F[1] = (-X_operator[0]*dt+dt*minf+mtau*(-X_operator[0]+X_operator[1]*dt+old_m))/mtau
-                    J[0] = 2*X_operator[0]*dt
+                    F[0] = (-X[1]*dt+dt*hinf+htau*(pow(X[0], 2)*dt-X[1]+old_h))/htau
+                    F[1] = (-X[0]*dt+dt*minf+mtau*(-X[0]+X[1]*dt+old_m))/mtau
+                    J[0] = 2*X[0]*dt
                     J[2] = -(dt+htau)/htau
                     J[1] = -(dt+mtau)/mtau
                     J[3] = dt
                 }{
-                    m = X_operator[0]
-                    h = X_operator[1]
+                    m = X[0]
+                    h = X[1]
                 }{
                 }
             })";
@@ -1011,10 +1011,10 @@ SCENARIO("LINEAR solve block (SympySolver Visitor)", "[sympy][linear]") {
                 EIGEN_LINEAR_SOLVE[4]{
                 }{
                 }{
-                    X_operator[0] = w
-                    X_operator[1] = x
-                    X_operator[2] = y
-                    X_operator[3] = z
+                    X[0] = w
+                    X[1] = x
+                    X[2] = y
+                    X[3] = z
                     F[0] = 0
                     F[1] = 5.343*a
                     F[2] = a-0.842*pow(b, 2)
@@ -1036,10 +1036,10 @@ SCENARIO("LINEAR solve block (SympySolver Visitor)", "[sympy][linear]") {
                     J[11] = -1.3
                     J[15] = 0.1/(pow(a, 2)*b)
                 }{
-                    w = X_operator[0]
-                    x = X_operator[1]
-                    y = X_operator[2]
-                    z = X_operator[3]
+                    w = X[0]
+                    x = X[1]
+                    y = X[2]
+                    z = X[3]
                 }{
                 }
             })";
@@ -1073,18 +1073,18 @@ SCENARIO("LINEAR solve block (SympySolver Visitor)", "[sympy][linear]") {
                 EIGEN_LINEAR_SOLVE[12]{
                 }{
                 }{
-                    X_operator[0] = C1
-                    X_operator[1] = C2
-                    X_operator[2] = C3
-                    X_operator[3] = C4
-                    X_operator[4] = C5
-                    X_operator[5] = I1
-                    X_operator[6] = I2
-                    X_operator[7] = I3
-                    X_operator[8] = I4
-                    X_operator[9] = I5
-                    X_operator[10] = I6
-                    X_operator[11] = O
+                    X[0] = C1
+                    X[1] = C2
+                    X[2] = C3
+                    X[3] = C4
+                    X[4] = C5
+                    X[5] = I1
+                    X[6] = I2
+                    X[7] = I3
+                    X[8] = I4
+                    X[9] = I5
+                    X[10] = I6
+                    X[11] = O
                     F[0] = 0
                     F[1] = 0
                     F[2] = 0
@@ -1242,18 +1242,18 @@ SCENARIO("LINEAR solve block (SympySolver Visitor)", "[sympy][linear]") {
                     J[131] = -1
                     J[143] = -1
                 }{
-                    C1 = X_operator[0]
-                    C2 = X_operator[1]
-                    C3 = X_operator[2]
-                    C4 = X_operator[3]
-                    C5 = X_operator[4]
-                    I1 = X_operator[5]
-                    I2 = X_operator[6]
-                    I3 = X_operator[7]
-                    I4 = X_operator[8]
-                    I5 = X_operator[9]
-                    I6 = X_operator[10]
-                    O = X_operator[11]
+                    C1 = X[0]
+                    C2 = X[1]
+                    C3 = X[2]
+                    C4 = X[3]
+                    C5 = X[4]
+                    I1 = X[5]
+                    I2 = X[6]
+                    I3 = X[7]
+                    I4 = X[8]
+                    I5 = X[9]
+                    I6 = X[10]
+                    O = X[11]
                 }{
                 }
             })";
@@ -1283,12 +1283,12 @@ SCENARIO("Solve NONLINEAR block using SympySolver Visitor", "[visitor][solver][s
                 EIGEN_NEWTON_SOLVE[1]{
                 }{
                 }{
-                    X_operator[0] = x
+                    X[0] = x
                 }{
-                    F[0] = -X_operator[0]+5
+                    F[0] = -X[0]+5
                     J[0] = -1
                 }{
-                    x = X_operator[0]
+                    x = X[0]
                 }{
                 }
             })";
@@ -1297,12 +1297,12 @@ SCENARIO("Solve NONLINEAR block using SympySolver Visitor", "[visitor][solver][s
                 EIGEN_NEWTON_SOLVE[1]{
                 }{
                 }{
-                    X_operator[0] = x
+                    X[0] = x
                 }{
-                    F[0] = 5-X_operator[0]
+                    F[0] = 5-X[0]
                     J[0] = -1
                 }{
-                    x = X_operator[0]
+                    x = X[0]
                 }{
                 }
             })";
@@ -1331,13 +1331,13 @@ SCENARIO("Solve NONLINEAR block using SympySolver Visitor", "[visitor][solver][s
                 EIGEN_NEWTON_SOLVE[3]{
                 }{
                 }{
-                    X_operator[0] = s[0]
-                    X_operator[1] = s[1]
-                    X_operator[2] = s[2]
+                    X[0] = s[0]
+                    X[1] = s[1]
+                    X[2] = s[2]
                 }{
-                    F[0] = -X_operator[0]+1
-                    F[1] = -X_operator[1]+3
-                    F[2] = X_operator[0]-X_operator[1]-X_operator[2]
+                    F[0] = -X[0]+1
+                    F[1] = -X[1]+3
+                    F[2] = X[0]-X[1]-X[2]
                     J[0] = -1
                     J[3] = 0
                     J[6] = 0
@@ -1348,9 +1348,9 @@ SCENARIO("Solve NONLINEAR block using SympySolver Visitor", "[visitor][solver][s
                     J[5] = -1
                     J[8] = -1
                 }{
-                    s[0] = X_operator[0]
-                    s[1] = X_operator[1]
-                    s[2] = X_operator[2]
+                    s[0] = X[0]
+                    s[1] = X[1]
+                    s[2] = X[2]
                 }{
                 }
             })";
@@ -1359,13 +1359,13 @@ SCENARIO("Solve NONLINEAR block using SympySolver Visitor", "[visitor][solver][s
                 EIGEN_NEWTON_SOLVE[3]{
                 }{
                 }{
-                    X_operator[0] = s[0]
-                    X_operator[1] = s[1]
-                    X_operator[2] = s[2]
+                    X[0] = s[0]
+                    X[1] = s[1]
+                    X[2] = s[2]
                 }{
-                    F[0] = 1-X_operator[0]
-                    F[1] = 3-X_operator[1]
-                    F[2] = X_operator[0]-X_operator[1]-X_operator[2]
+                    F[0] = 1-X[0]
+                    F[1] = 3-X[1]
+                    F[2] = X[0]-X[1]-X[2]
                     J[0] = -1
                     J[3] = 0
                     J[6] = 0
@@ -1376,9 +1376,9 @@ SCENARIO("Solve NONLINEAR block using SympySolver Visitor", "[visitor][solver][s
                     J[5] = -1
                     J[8] = -1
                 }{
-                    s[0] = X_operator[0]
-                    s[1] = X_operator[1]
-                    s[2] = X_operator[2]
+                    s[0] = X[0]
+                    s[1] = X[1]
+                    s[2] = X[2]
                 }{
                 }
             })";

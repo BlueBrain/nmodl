@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include <memory>
+
 /**
  *
  * \dir
@@ -50,6 +52,62 @@ bool make_path(const std::string& path);
 
 /// Check if directory with given path exist
 bool is_dir_exist(const std::string& path);
+
+std::string gen_random(const int len);
+
+class SingletonRandomString {
+  public:
+    SingletonRandomString(SingletonRandomString const&) = delete;
+    SingletonRandomString& operator=(SingletonRandomString const&) = delete;
+
+    static std::shared_ptr<SingletonRandomString> instance() {
+        static std::shared_ptr<SingletonRandomString> s{new SingletonRandomString};
+        return s;
+    }
+
+    std::string get_random_string_X() {
+        return random_string_X;
+    }
+
+    std::string reset_random_string_X() {
+        random_string_X = gen_random(4);
+        return random_string_X;
+    }
+
+    std::string get_random_string_J() {
+        return random_string_J;
+    }
+
+    std::string reset_random_string_J() {
+        random_string_J = gen_random(4);
+        return random_string_J;
+    }
+
+    std::string get_random_string_Jm() {
+        return random_string_Jm;
+    }
+
+    std::string reset_random_string_Jm() {
+        random_string_Jm = gen_random(4);
+        return random_string_Jm;
+    }
+
+    std::string get_random_string_F() {
+        return random_string_F;
+    }
+
+    std::string reset_random_string_F() {
+        random_string_F = gen_random(4);
+        return random_string_F;
+    }
+
+  private:
+    SingletonRandomString() {}
+    std::string random_string_X;
+    std::string random_string_J;
+    std::string random_string_Jm;
+    std::string random_string_F;
+};
 
 /** @} */  // end of utils
 
