@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <map>
 #include <memory>
 
 /**
@@ -53,8 +54,15 @@ bool make_path(const std::string& path);
 /// Check if directory with given path exist
 bool is_dir_exist(const std::string& path);
 
-std::string gen_random(const int len);
+/// Generate random std::string of length len based on a
+/// uniform distribution
+std::string generate_random_string(int len);
 
+/// Singleton class for random strings that are appended to the
+/// Eigen matrices names that are used in the solutions of
+/// nmodl::visitor::SympySolverVisitor and need to be the same to
+/// be printed by the nmodl::codegen::CodegenCVisitor
+template <unsigned int SIZE = 4>
 class SingletonRandomString {
   public:
     SingletonRandomString(SingletonRandomString const&) = delete;
@@ -65,48 +73,27 @@ class SingletonRandomString {
         return s;
     }
 
-    std::string get_random_string_X() {
-        return random_string_X;
+    bool random_string_exists(const std::string& var_name) {
+        return (random_strings.find(var_name) != random_strings.end());
     }
 
-    std::string reset_random_string_X() {
-        random_string_X = gen_random(4);
-        return random_string_X;
+    std::string get_random_string(const std::string& var_name) {
+        return random_strings[var_name];
     }
 
-    std::string get_random_string_J() {
-        return random_string_J;
-    }
-
-    std::string reset_random_string_J() {
-        random_string_J = gen_random(4);
-        return random_string_J;
-    }
-
-    std::string get_random_string_Jm() {
-        return random_string_Jm;
-    }
-
-    std::string reset_random_string_Jm() {
-        random_string_Jm = gen_random(4);
-        return random_string_Jm;
-    }
-
-    std::string get_random_string_F() {
-        return random_string_F;
-    }
-
-    std::string reset_random_string_F() {
-        random_string_F = gen_random(4);
-        return random_string_F;
+    std::string reset_random_string(const std::string& var_name) {
+        if (random_string_exists(var_name)) {
+            random_strings.erase(var_name);
+            random_strings.insert({var_name, generate_random_string(SIZE)});
+        } else {
+            random_strings.insert({var_name, generate_random_string(SIZE)});
+        }
+        return random_strings[var_name];
     }
 
   private:
     SingletonRandomString() {}
-    std::string random_string_X;
-    std::string random_string_J;
-    std::string random_string_Jm;
-    std::string random_string_F;
+    std::map<std::string, std::string> random_strings;
 };
 
 /** @} */  // end of utils

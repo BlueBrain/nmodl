@@ -141,7 +141,7 @@ std::string& SympySolverVisitor::replaceAll(std::string& context,
     return context;
 }
 
-std::vector<std::string> SympySolverVisitor::filter_var(
+std::vector<std::string> SympySolverVisitor::filter_string_vector(
     const std::vector<std::string>& original_vector,
     const std::string& original_string,
     const std::string& substitution_string) {
@@ -153,38 +153,38 @@ std::vector<std::string> SympySolverVisitor::filter_var(
     return filtered_vector;
 }
 
+std::string SympySolverVisitor::suffix_random_string(const std::string& original_string) {
+    std::string new_string = original_string;
+    std::string random_string;
+    auto singleton_random_string_class = nmodl::utils::SingletonRandomString<4>::instance();
+    // Check if there is a variable defined in the mod file as original_string and if yes
+    // try to use a different string for the matrices created by sympy in the form
+    // <original_string>_<random_string>
+    while (vars.find(new_string) != vars.end()) {
+        random_string = singleton_random_string_class->reset_random_string(original_string);
+        new_string = original_string;
+        new_string += "_" + random_string;
+    }
+    return new_string;
+}
+
 void SympySolverVisitor::construct_eigen_solver_block(
     const std::vector<std::string>& pre_solve_statements,
     const std::vector<std::string>& solutions,
     bool linear) {
     // Provide random string to append to X, J, Jm and F matrices that
     // are produced by sympy
-    auto singleton_random_string_class = nmodl::utils::SingletonRandomString::instance();
-    std::string random_string_X, random_string_J, random_string_Jm, random_string_F;
-    // Check if there is a variable defined in the mod file as X, J, Jm or F and if yes
-    // try to use a different string for the matrices created by sympy in the form
-    // X_<random_number>, J_<random_number>, Jm_<random_number> and F_<random_number>
-    std::string X_matrix_name = "X";
-    std::string J_matrix_name = "J";
-    std::string Jm_matrix_name = "Jm";
-    std::string F_matrix_name = "F";
-    while (vars.find(X_matrix_name) != vars.end()) {
-        random_string_X = singleton_random_string_class->reset_random_string_X();
-        X_matrix_name = "X_" + random_string_X;
-    }
-    while ((vars.find(J_matrix_name) != vars.end()) ||
-           (vars.find(J_matrix_name + "m") != vars.end())) {
-        random_string_J = singleton_random_string_class->reset_random_string_J();
-        J_matrix_name = "J_" + random_string_J;
-    }
-    while (vars.find(Jm_matrix_name) != vars.end()) {
-        random_string_Jm = singleton_random_string_class->reset_random_string_Jm();
-        Jm_matrix_name = "Jm_" + random_string_Jm;
-    }
-    while (vars.find(F_matrix_name) != vars.end()) {
-        random_string_F = singleton_random_string_class->reset_random_string_F();
-        F_matrix_name = "F_" + random_string_F;
-    }
+    std::string unique_X = suffix_random_string("X");
+    std::string unique_J = suffix_random_string("J");
+    std::string unique_Jm = suffix_random_string("Jm");
+    std::string unique_F = suffix_random_string("F");
+
+    // filter solutions for matrices named "X", "J", "Jm" and "F" and change them to
+    // unique_X, unique_J, unique_Jm and unique_F respectively
+    auto solutions_filtered = filter_string_vector(solutions, "X[", unique_X + "[");
+    solutions_filtered = filter_string_vector(solutions_filtered, "J[", unique_J + "[");
+    solutions_filtered = filter_string_vector(solutions_filtered, "Jm[", unique_Jm + "[");
+    solutions_filtered = filter_string_vector(solutions_filtered, "F[", unique_F + "[");
 
     // find out where to insert solution in statement block
     auto& statements = block_with_expression_statements->statements;
@@ -196,18 +196,18 @@ void SympySolverVisitor::construct_eigen_solver_block(
         ++it;
     }
     // make Eigen vector <-> state var assignments
-    std::vector<std::string> setup_x_operator_eqs;
+    std::vector<std::string> setup_x_eqs;
     std::vector<std::string> update_state_eqs;
     for (int i = 0; i < state_vars.size(); i++) {
-        auto statement = state_vars[i] + " = " + X_matrix_name + "[" + std::to_string(i) + "]";
-        auto rev_statement = X_matrix_name + "[" + std::to_string(i) + "] = " + state_vars[i];
+        auto statement = state_vars[i] + " = " + unique_X + "[" + std::to_string(i) + "]";
+        auto rev_statement = unique_X + "[" + std::to_string(i) + "] = " + state_vars[i];
         update_state_eqs.push_back(statement);
-        setup_x_operator_eqs.push_back(rev_statement);
-        logger->debug("SympySolverVisitor :: setup_", X_matrix_name, ": {}", rev_statement);
+        setup_x_eqs.push_back(rev_statement);
+        logger->debug("SympySolverVisitor :: setup_", unique_X, ": {}", rev_statement);
         logger->debug("SympySolverVisitor :: update_state: {}", statement);
     }
 
-    for (const auto& sol: solutions) {
+    for (const auto& sol: solutions_filtered) {
         logger->debug("SympySolverVisitor :: -> adding statement: {}", sol);
     }
     // statements after last diff/linear/non-linear eq statement go into finalize_block
@@ -236,12 +236,12 @@ void SympySolverVisitor::construct_eigen_solver_block(
 
     if (linear) {
         /// create eigen linear solver block
-        setup_x_operator_eqs.insert(setup_x_operator_eqs.end(), solutions.begin(), solutions.end());
-        auto setup_x_operator_block = create_statement_block(setup_x_operator_eqs);
+        setup_x_eqs.insert(setup_x_eqs.end(), solutions_filtered.begin(), solutions_filtered.end());
+        auto setup_x_block = create_statement_block(setup_x_eqs);
         auto solver_block = std::make_shared<ast::EigenLinearSolverBlock>(n_state_vars,
                                                                           variable_block,
                                                                           initialize_block,
-                                                                          setup_x_operator_block,
+                                                                          setup_x_block,
                                                                           update_state_block,
                                                                           finalize_block);
         /// replace statement block with solver block as it contains all statements
@@ -249,19 +249,13 @@ void SympySolverVisitor::construct_eigen_solver_block(
             std::make_shared<ast::ExpressionStatement>(solver_block)};
         block_with_expression_statements->set_statements(std::move(solver_block_statements));
     } else {
-        /// filter solutions for variables named "X", "J", "Jm" and "F" and change them to
-        /// X_matrix_name, J_matrix_name, Jm_matrix_name and F_matrix_name respectively
-        auto solutions_filtered = filter_var(solutions, "X", X_matrix_name);
-        solutions_filtered = filter_var(solutions, "J", J_matrix_name);
-        solutions_filtered = filter_var(solutions, J_matrix_name + "m", Jm_matrix_name);
-        solutions_filtered = filter_var(solutions, "F", F_matrix_name);
         /// create eigen newton solver block
-        auto setup_x_operator_block = create_statement_block(setup_x_operator_eqs);
+        auto setup_x_block = create_statement_block(setup_x_eqs);
         auto functor_block = create_statement_block(solutions_filtered);
         auto solver_block = std::make_shared<ast::EigenNewtonSolverBlock>(n_state_vars,
                                                                           variable_block,
                                                                           initialize_block,
-                                                                          setup_x_operator_block,
+                                                                          setup_x_block,
                                                                           functor_block,
                                                                           update_state_block,
                                                                           finalize_block);

@@ -102,9 +102,14 @@ class SympySolverVisitor: public AstVisitor {
 
     /// Check original_vector for elements that contain a variable named original_string and
     /// rename it to substitution_string
-    std::vector<std::string> filter_var(const std::vector<std::string>& original_vector,
-                                        const std::string& original_string,
-                                        const std::string& substitution_string);
+    std::vector<std::string> filter_string_vector(const std::vector<std::string>& original_vector,
+                                                  const std::string& original_string,
+                                                  const std::string& substitution_string);
+
+    /// Return a std::string in the form <original_string>_<random_string>, where
+    /// random_string is a string defined in the nmodl::utils::SingletonRandomString
+    /// for the original_string
+    std::string suffix_random_string(const std::string& original_string);
 
     /// global variables
     std::set<std::string> global_vars;
