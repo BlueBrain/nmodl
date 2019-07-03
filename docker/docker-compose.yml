@@ -2,7 +2,6 @@ version: '3.7'
 services:
   notebook:
     image: bluebrain/nmodl:0.2
-    build: recipe
     hostname: ${HOSTNAME}
     ports:
     - "8888:8888"
