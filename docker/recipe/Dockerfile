@@ -7,9 +7,11 @@ RUN apk add --update build-base gcc g++ make cmake flex flex-dev bison git pytho
 RUN pip3 install --trusted-host pypi.python.org jinja2 pyyaml pytest sympy
 
 
+ARG NMODL_VERSION=master
+
 RUN git clone --recursive https://github.com/BlueBrain/nmodl.git && \
     cd nmodl && \
-    git checkout 0.2
+    git checkout ${NMODL_VERSION}
 
 WORKDIR /nmodl/src/nmodl
 
@@ -49,5 +51,4 @@ WORKDIR /nmodl/notebooks
 COPY --from=builder /nmodl/src/nmodl/docs/notebooks ./examples
 
 CMD ["jupyter", "notebook", "--port=8888", "--no-browser", "--ip=0.0.0.0", "--allow-root", "--notebook-dir=/nmodl/notebooks"]
-
 

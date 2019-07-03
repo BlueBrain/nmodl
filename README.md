@@ -54,19 +54,19 @@ NET_RECEIVE(weight (uS)) {
 
 See [INSTALL.md](https://github.com/BlueBrain/nmodl/blob/master/INSTALL.md) for detailed instructions to build the NMODL from source.
 
-#### Taking NMODL for a spin
+### Try NMODL with Docker
 
 To quickly test the NMODL Framework's analysis capabilities we provide a
 [docker](https://www.docker.com) image, which includes the NMODL Framework python library and a
-fully functional Jupyter notebook environment.
+fully functional Jupyter notebook environment. After installing [docker](https://docs.docker.com/compose/install/) and [docker-compose](https://docs.docker.com/compose/install/) you can pull and run the NMODL image from your terminal.
 
-After installing [docker](https://docs.docker.com/compose/install/) and [docker-compose](https://docs.docker.com/compose/install/) you can pull and run the NMODL image from your terminal. To try Python interface directly from CLI, you can run docker image directly:
+To try Python interface directly from CLI, you can run docker image as:
 
 ```
 docker run -it --entrypoint=/bin/sh bluebrain/nmodl
 ```
 
-You can now start Python CLI and try NMODL Python API discussed later in this README as:
+And try NMODL Python API discussed later in this README as:
 
 ```
 $ python3
@@ -74,8 +74,7 @@ Python 3.6.8 (default, Apr  8 2019, 18:17:52)
 >>> from nmodl import dsl
 >>> import os
 >>> expsyn = os.path.join(dsl.example_dir(), "expsyn.mod")
->>> driver = dsl.NmodlDriver()
->>> modast = driver.parse_file(expsyn)
+...
 ```
 
 To try Jupyter notebooks you can download docker compose file and run it as:
@@ -89,15 +88,15 @@ If all goes well you should see at the end status messages similar to these:
 
 ```
 [I 09:49:53.923 NotebookApp] The Jupyter Notebook is running at:
-[I 09:49:53.923 NotebookApp] http://(4c8edabe52e1 or 127.0.0.1):8888/?token=a7902983bad430a1193542945f6a64ae303f559343fbb0dc
+[I 09:49:53.923 NotebookApp] http://(4c8edabe52e1 or 127.0.0.1):8888/?token=a7902983bad430a11935
 [I 09:49:53.923 NotebookApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
     To access the notebook, open this file in a browser:
         file:///root/.local/share/jupyter/runtime/nbserver-1-open.html
     Or copy and paste one of these URLs:
-        http://(4c8edabe52e1 or 127.0.0.1):8888/?token=a7902983bad430a1193542945f6a64ae303f559343fbb0dc
+        http://(4c8edabe52e1 or 127.0.0.1):8888/?token=a7902983bad430a11935
 ```
 
-Based on the example above you should then open your browser and navigate to the URL `http://127.0.0.1:8888/?token=a7902983bad430a1193542945f6a64ae303f559343fbb0dc`.
+Based on the example above you should then open your browser and navigate to the URL `http://127.0.0.1:8888/?token=a7902983bad430a11935`.
 
 You can open and run all example notebooks provided in the `examples` folder. You can also create
 new notebooks in `my_notebooks`, which will be stored in a subfolder `notebooks` at your current
@@ -148,7 +147,7 @@ which will open AST view in web browser:
 
 ![ast_viz](https://user-images.githubusercontent.com/666852/57329449-12c9a400-7114-11e9-8da5-0042590044ec.gif "AST representation of expsyn.mod")
 
-The central *Program* node represents the whole MOD file and each of it's children represent the block in the input NMODL file.
+The central *Program* node represents the whole MOD file and each of it's children represent the block in the input NMODL file. Note that this requires X-forwarding if you are using Docker image.
 
 Once the AST is created, one can use exisiting visitors to perform various analysis/optimisations. One can also easily write his own custom visitor using Python Visitor API. See [Python API tutorial](docs/notebooks/nmodl-python-tutorial.ipynb) for details.
 
