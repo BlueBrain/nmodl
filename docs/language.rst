@@ -1,11 +1,13 @@
 The NEURON MODeling language
 ============================
 
-the NMODL Framework is able to parse all language features and constructs of the NMODL DSL. The programmer is thus
- able to parse any mechanism file with the NMODL Framework and process the AST data structures with a few notable
-exceptions (mainly VERBATIM C blocks).
+The NMODL Framework is able to parse all language features and constructs of the NMODL DSL.
+The programmer is thus able to parse any mechanism file with the NMODL Framework and process
+the AST data structures with a few notable exceptions (mainly VERBATIM C blocks).
+
 The Framework however still lacks code generation support for a some of the language constructs.
-In the following table we summarize the various NMODL DSL constructs and their support in the framework:
+In the following table we summarize the various NMODL DSL constructs and their support in the
+framework. Code generation information is related to CoreNEURON backend.
 
 
 +------------------------+-------------------+-------------------+---------------------+
@@ -163,8 +165,25 @@ In the following table we summarize the various NMODL DSL constructs and their s
 +------------------------+-------------------+-------------------+---------------------+
 | after_cvode            | yes               | no                |                     |
 +------------------------+-------------------+-------------------+---------------------+
+| adams                  | yes               | no                |                     |
++------------------------+-------------------+-------------------+---------------------+
+| adeuler                | yes               | no                |                     |
++------------------------+-------------------+-------------------+---------------------+
+| heun                   | yes               | no                |                     |
++------------------------+-------------------+-------------------+---------------------+
+| adrunge                | yes               | no                |                     |
++------------------------+-------------------+-------------------+---------------------+
+| gear                   | yes               | no                |                     |
++------------------------+-------------------+-------------------+---------------------+
+| simplex                | yes               | no                |                     |
++------------------------+-------------------+-------------------+---------------------+
+| simeq                  | yes               | no                |                     |
++------------------------+-------------------+-------------------+---------------------+
+| seidel                 | yes               | no                |                     |
++------------------------+-------------------+-------------------+---------------------+
+| clsoda                 | yes               | no                |                     |
++------------------------+-------------------+-------------------+---------------------+
 | cvode_t                | yes               | no                |                     |
 +------------------------+-------------------+-------------------+---------------------+
 | cvode_v                | yes               | no                |                     |
 +------------------------+-------------------+-------------------+---------------------+
-
