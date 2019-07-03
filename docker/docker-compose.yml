@@ -1,7 +1,7 @@
 version: '3.7'
 services:
   notebook:
-    image: bluebrain/nmodl:0.2
+    image: bluebrain/nmodl:latest
     hostname: ${HOSTNAME}
     ports:
     - "8888:8888"

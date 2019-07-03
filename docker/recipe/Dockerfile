@@ -28,10 +28,11 @@ RUN apk add --no-cache --update shadow python3 libgfortran libstdc++ openblas &&
                  jinja2 pyyaml pytest sympy numpy matplotlib jupyter && \
     apk del build-dependencies && \
     rm -rf /var/cache/apk/*
-    
+
 WORKDIR /usr/lib/python3.6/site-packages/nmodl
 
 COPY --from=builder /nmodl/src/nmodl/build/lib.linux-x86_64-3.6/nmodl .
+COPY --from=builder /nmodl/src/nmodl/share /nmodl/src/share
 
 RUN echo "PROJECT_SOURCE_DIR=\"/nmodl/src\"" > config.py && \
     echo "PROJECT_INSTALL_DIR=\"/usr/lib/python3.6/site-packages/nmodl\"" >> config.py
