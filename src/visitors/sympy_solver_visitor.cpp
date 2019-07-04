@@ -131,7 +131,7 @@ static bool is_local_statement(std::shared_ptr<ast::Statement> statement) {
 
 std::string& SympySolverVisitor::replaceAll(std::string& context,
                                             const std::string& from,
-                                            const std::string& to) {
+                                            const std::string& to) const {
     std::size_t lookHere = 0;
     std::size_t foundHere;
     while ((foundHere = context.find(from, lookHere)) != std::string::npos) {
@@ -144,7 +144,7 @@ std::string& SympySolverVisitor::replaceAll(std::string& context,
 std::vector<std::string> SympySolverVisitor::filter_string_vector(
     const std::vector<std::string>& original_vector,
     const std::string& original_string,
-    const std::string& substitution_string) {
+    const std::string& substitution_string) const {
     std::vector<std::string> filtered_vector;
     for (auto element: original_vector) {
         std::string filtered_element = replaceAll(element, original_string, substitution_string);
@@ -153,7 +153,7 @@ std::vector<std::string> SympySolverVisitor::filter_string_vector(
     return filtered_vector;
 }
 
-std::string SympySolverVisitor::suffix_random_string(const std::string& original_string) {
+std::string SympySolverVisitor::suffix_random_string(const std::string& original_string) const {
     std::string new_string = original_string;
     std::string random_string;
     auto singleton_random_string_class = nmodl::utils::SingletonRandomString<4>::instance();

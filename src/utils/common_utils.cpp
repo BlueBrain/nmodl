@@ -57,7 +57,7 @@ bool make_path(const std::string& path) {
 }
 
 std::string generate_random_string(const int len) {
-    std::string s;
+    std::string s(len, 0);
     static const char alphanum[] =
         "0123456789"
         "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -66,7 +66,7 @@ std::string generate_random_string(const int len) {
     std::mt19937 rng(dev());
     std::uniform_int_distribution<std::mt19937::result_type> dist(0, (sizeof(alphanum) - 1));
     for (int i = 0; i < len; ++i) {
-        s.push_back(alphanum[dist(rng)]);
+        s[i] = alphanum[dist(rng)];
     }
     return s;
 }
