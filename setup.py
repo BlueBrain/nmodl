@@ -107,6 +107,9 @@ class CMakeBuild(build_ext):
         )
         if not osp.exists(self.build_temp):
             os.makedirs(self.build_temp)
+        print("prefix",sys.prefix) 
+        print(["cmake", ext.sourcedir] + cmake_args, self.build_temp, env)
+        print(["cmake", "--build", "."] + build_args, self.build_temp)
         subprocess.check_call(
             ["cmake", ext.sourcedir] + cmake_args, cwd=self.build_temp, env=env
         )
@@ -163,8 +166,8 @@ setup(
         buildhtml=get_sphinx_command,
     ),
     zip_safe=False,
-    setup_requires=["nbsphinx>=0.3.2", "m2r", "sphinx-rtd-theme", "sphinx>=2.0"]
-    + install_requirements,
+    #setup_requires=["nbsphinx>=0.3.2", "m2r", "sphinx-rtd-theme", "sphinx>=2.0"]
+    #+ install_requirements,
     install_requires=install_requirements,
     tests_require=["pytest>=3.7.2"],
 )
