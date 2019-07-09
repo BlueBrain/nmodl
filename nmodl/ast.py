@@ -1,5 +1,5 @@
 from ._nmodl.ast import *  # noqa
-from .config import *
+from pkg_resources import *
 
 def view(nmodl_ast):
     """Visualize given NMODL AST in web browser
@@ -22,11 +22,11 @@ def view(nmodl_ast):
     import tempfile
     import webbrowser
 
-    installed_viz_tool = os.path.join(PROJECT_INSTALL_DIR, "share", "viz")
-    if os.path.exists(installed_viz_tool):
-        viz_tool_dir = installed_viz_tool
+    resource = "share/viz"
+    if resource_exists(__name__, resource) and resource_isdir(__name__, resource):
+        installed_viz_tool = resource_string(__name__, resource)
     else:
-        viz_tool_dir = os.path.join(PROJECT_SOURCE_DIR, "share", "viz")
+        raise FileNotFoundError("Could nto find sample mod files")
 
     work_dir = os.path.join(tempfile.gettempdir(), getpass.getuser(), "nmodl")
 

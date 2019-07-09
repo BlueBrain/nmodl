@@ -1,6 +1,5 @@
 from ._nmodl import *
-from .config import *
-
+from pkg_resources import *
 
 def example_dir():
     """Returns directory containing NMODL examples
@@ -12,10 +11,8 @@ def example_dir():
     Returns:
         Full path of directory containing sample mod files
     """
-    import os
-    installed_example = os.path.join(PROJECT_INSTALL_DIR, "share", "example")
-    if os.path.exists(installed_example):
-        return installed_example
+    resource =  "share/example"
+    if resource_exists(__name__, resource) and resource_isdir(__name__, resource):
+        return resource_string(__name__, resource)
     else:
-        return os.path.join(PROJECT_SOURCE_DIR, "share", "example")
-
+        raise FileNotFoundError("Could nto find sample mod files")
