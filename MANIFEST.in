@@ -1,1 +1,1 @@
-recursive-include nmodl/share *
+recursive-include nmodl/ext *

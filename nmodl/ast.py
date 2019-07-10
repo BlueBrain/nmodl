@@ -22,7 +22,7 @@ def view(nmodl_ast):
     import tempfile
     import webbrowser
 
-    resource = "share/viz"
+    resource = "ext/viz"
     if resource_exists(__name__, resource) and resource_isdir(__name__, resource):
         installed_viz_tool = resource_filename(__name__, resource)
     else:

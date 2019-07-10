@@ -3,6 +3,8 @@ from pkg_resources import *
 
 from ._nmodl import *
 
+RESOURCE_DIR = "ext/example"
+
 def list_examples():
     """Returns a list of examples available
 
@@ -11,9 +13,8 @@ def list_examples():
     Returns:
         List of available examples
     """
-    resource_dir =  "share/example"
-    if resource_exists(__name__, resource_dir) and resource_isdir(__name__, resource_dir):
-        return resource_listdir(__name__, resource_dir)
+    if resource_exists(__name__, RESOURCE_DIR) and resource_isdir(__name__, RESOURCE_DIR):
+        return resource_listdir(__name__, RESOURCE_DIR)
     else:
         raise FileNotFoundError("Could nto find sample directory")
 
@@ -30,7 +31,7 @@ def load_example(example):
     Returns:
         List of available examples
     """
-    resource =  osp.join("share/example", example)
+    resource =  osp.join(RESOURCE_DIR, example)
     if resource_exists(__name__, resource):
         return resource_string(__name__, resource)
     else:
