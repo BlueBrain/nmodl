@@ -24,14 +24,14 @@ def view(nmodl_ast):
 
     resource = "share/viz"
     if resource_exists(__name__, resource) and resource_isdir(__name__, resource):
-        installed_viz_tool = resource_string(__name__, resource)
+        installed_viz_tool = resource_filename(__name__, resource)
     else:
         raise FileNotFoundError("Could nto find sample mod files")
 
     work_dir = os.path.join(tempfile.gettempdir(), getpass.getuser(), "nmodl")
 
     # first copy necessary files to temp work directory
-    copy_tree(viz_tool_dir, work_dir)
+    copy_tree(installed_viz_tool, work_dir)
 
     # prepare json data
     with open(os.path.join(work_dir, 'ast.js'), 'w') as outfile:

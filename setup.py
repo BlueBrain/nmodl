@@ -107,9 +107,6 @@ class CMakeBuild(build_ext):
         )
         if not osp.exists(self.build_temp):
             os.makedirs(self.build_temp)
-        print("prefix",sys.prefix) 
-        print(["cmake", ext.sourcedir] + cmake_args, self.build_temp, env)
-        print(["cmake", "--build", "."] + build_args, self.build_temp)
         subprocess.check_call(
             ["cmake", ext.sourcedir] + cmake_args, cwd=self.build_temp, env=env
         )
@@ -150,15 +147,13 @@ install_requirements = ["jinja2>=2.9", "PyYAML>=3.13", "sympy>=1.3"]
 
 setup(
     name="NMODL",
-    version="0.1",
+    version="0.2",
     author="Blue Brain Project",
     author_email="bbp-ou-hpc@groupes.epfl.ch",
     description="NEURON Modelling Language Source-to-Source Compiler Framework",
     long_description="",
     packages=["nmodl"],
-    package_data={
-        'nmodl':['nmodl/share'] 
-        },
+    include_package_data=True,
     ext_modules=[CMakeExtension("nmodl")],
     cmdclass=lazy_dict(
         build_ext=CMakeBuild,
@@ -168,8 +163,8 @@ setup(
         buildhtml=get_sphinx_command,
     ),
     zip_safe=False,
-    #setup_requires=["nbsphinx>=0.3.2", "m2r", "sphinx-rtd-theme", "sphinx>=2.0"]
-    #+ install_requirements,
+    setup_requires=["nbsphinx>=0.3.2", "m2r", "sphinx-rtd-theme", "sphinx>=2.0"]
+    + install_requirements,
     install_requires=install_requirements,
     tests_require=["pytest>=3.7.2"],
 )

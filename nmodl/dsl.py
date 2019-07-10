@@ -1,18 +1,37 @@
-from ._nmodl import *
+import os.path as osp
 from pkg_resources import *
 
-def example_dir():
-    """Returns directory containing NMODL examples
+from ._nmodl import *
 
-    NMODL Framework is installed with few sample example of
-    channels. This method can be used to get the directory
-    containing all mod files.
+def list_examples():
+    """Returns a list of examples available
+
+    The NMODL Framework provides a few examples for testing
 
     Returns:
-        Full path of directory containing sample mod files
+        List of available examples
     """
-    resource =  "share/example"
-    if resource_exists(__name__, resource) and resource_isdir(__name__, resource):
+    resource_dir =  "share/example"
+    if resource_exists(__name__, resource_dir) and resource_isdir(__name__, resource_dir):
+        return resource_listdir(__name__, resource_dir)
+    else:
+        raise FileNotFoundError("Could nto find sample directory")
+
+
+def load_example(example):
+    """Load an example from the NMODL examples
+
+    The NMODL Framework provides a few examples for testing. The list of examples can be requested
+    using `list_examples()`. This function then returns the NMODL code of the requested example
+    file.
+
+    Args:
+        example: Filename of an example as provided by `list_examples()`
+    Returns:
+        List of available examples
+    """
+    resource =  osp.join("share/example", example)
+    if resource_exists(__name__, resource):
         return resource_string(__name__, resource)
     else:
         raise FileNotFoundError("Could nto find sample mod files")
