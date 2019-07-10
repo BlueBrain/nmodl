@@ -70,7 +70,6 @@ class CodegenCompatibilityVisitor: public visitor::AstVisitor {
          &CodegenCompatibilityVisitor::return_error_without_name<IndependentBlock>},
         {AstNodeType::SOLVE_BLOCK,
          &CodegenCompatibilityVisitor::return_error_if_solve_method_is_unhandled},
-        {AstNodeType::GLOBAL_VAR, &CodegenCompatibilityVisitor::return_error_global_var},
         {AstNodeType::POINTER_VAR, &CodegenCompatibilityVisitor::return_error_pointer},
         {AstNodeType::BBCORE_POINTER_VAR,
          &CodegenCompatibilityVisitor::return_error_if_no_bbcore_read_write}};

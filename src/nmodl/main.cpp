@@ -335,7 +335,8 @@ int main(int argc, const char* argv[]) {
             // make sure to run perf visitor because code generator
             // looks for read/write counts const/non-const declaration
             PerfVisitor().visit_program(ast.get());
-
+            // make sure to run the GlobalToRange visitor after all the
+            // reinitializations of Symtab
             logger->info("Running GlobalToRange visitor");
             GlobalToRangeVisitor(ast.get()).visit_program(ast.get());
         }
@@ -393,11 +394,16 @@ int main(int argc, const char* argv[]) {
             ast_to_nmodl(ast.get(), filepath("solveblock"));
         }
 
-
         if (json_perfstat) {
             auto file = scratch_dir + "/" + modfile + ".perf.json";
             logger->info("Writing performance statistics to {}", file);
             PerfVisitor(file).visit_program(ast.get());
+        }
+
+        {
+            // make sure to run perf visitor because code generator
+            // looks for read/write counts const/non-const declaration
+            PerfVisitor().visit_program(ast.get());
         }
 
         {
