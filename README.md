@@ -110,7 +110,7 @@ Once the NMODL Framework is installed, you can use the Python parsing API to loa
 from nmodl import dsl
 
 examples = dsl.list_examples() 
-expsyn = dsl.load_example(examples[-1])
+nmodl_string = dsl.load_example(examples[-1])
 driver = dsl.NmodlDriver()
 modast = driver.parse_string(expsyn)
 ```
