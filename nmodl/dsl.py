@@ -16,7 +16,7 @@ def list_examples():
     if resource_exists(__name__, RESOURCE_DIR) and resource_isdir(__name__, RESOURCE_DIR):
         return resource_listdir(__name__, RESOURCE_DIR)
     else:
-        raise FileNotFoundError("Could nto find sample directory")
+        raise FileNotFoundError("Could not find sample directory")
 
 
 def load_example(example):
@@ -35,4 +35,4 @@ def load_example(example):
     if resource_exists(__name__, resource):
         return resource_string(__name__, resource)
     else:
-        raise FileNotFoundError("Could nto find sample mod files")
+        raise FileNotFoundError("Could not find sample mod files")

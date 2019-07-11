@@ -26,7 +26,7 @@ def view(nmodl_ast):
     if resource_exists(__name__, resource) and resource_isdir(__name__, resource):
         installed_viz_tool = resource_filename(__name__, resource)
     else:
-        raise FileNotFoundError("Could nto find sample mod files")
+        raise FileNotFoundError("Could not find sample mod files")
 
     work_dir = os.path.join(tempfile.gettempdir(), getpass.getuser(), "nmodl")
 
