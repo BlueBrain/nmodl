@@ -112,7 +112,7 @@ from nmodl import dsl
 examples = dsl.list_examples() 
 nmodl_string = dsl.load_example(examples[-1])
 driver = dsl.NmodlDriver()
-modast = driver.parse_string(expsyn)
+modast = driver.parse_string(nmodl_string)
 ```
 
 The `parse_file` API returns Abstract Syntax Tree ([AST](https://en.wikipedia.org/wiki/Abstract_syntax_tree)) representation of input NMODL file. One can look at the AST by converting to JSON form as:
