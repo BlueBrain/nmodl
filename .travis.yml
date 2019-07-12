@@ -86,6 +86,7 @@ script:
 # Build Documentation CoreNEURON and run tests
 #=============================================================================
 after_success:
+  - export PYTHONPATH=$HOME/nmodl/build:$PYTHONPATH
   - echo "------- Build Documentation -------"
   - cd $HOME/nmodl/docs
   - make html
