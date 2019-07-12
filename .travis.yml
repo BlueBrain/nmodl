@@ -83,9 +83,13 @@ script:
   - make install
 
 #=============================================================================
-# Build CoreNEURON and run tests
+# Build Documentation CoreNEURON and run tests
 #=============================================================================
 after_success:
+  - echo "------- Build Documentation -------"
+  - cd $HOME/nmodl/docs
+  - make html
+  - cd _build && rm -r doctrees
   - echo "------- Build and Test CoreNEURON -------"
   - cd $HOME
   - git clone --recursive https://github.com/BlueBrain/CoreNeuron.git
@@ -102,3 +106,16 @@ notifications:
     recipients: pramod.s.kumbhar@gmail.com
     on_success: change
     on_failure: always
+
+
+#=============================================================================
+# Documentation deployment
+#=============================================================================
+#deploy:
+#  provider: pages
+#  skip_cleanup: true
+#  github_token: $GITHUB_TOKEN
+#  keep_history: true
+#  local_dir: $HOME/nmodl/docs/_build/
+#  on:
+#    branch: master
