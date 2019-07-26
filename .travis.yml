@@ -91,9 +91,9 @@ script:
 after_success:
   - export PYTHONPATH=$HOME/nmodl/build:$PYTHONPATH
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-      echo "------- Build Documentation -------"
-      cd $TRAVIS_BUILD_DIR/docs
-      doxygen && make html && rm -r _build/doctrees
+      echo "------- Build Documentation -------";
+      cd $TRAVIS_BUILD_DIR/docs;
+      doxygen && make html && rm -r _build/doctrees;
     fi
   - echo "------- Build and Test CoreNEURON -------"
   - cd $HOME
