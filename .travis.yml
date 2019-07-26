@@ -98,7 +98,6 @@ after_success:
       doxygen && make html;
       rm -rf _build/doctrees && touch _build/.nojekyll;
       echo "<meta http-equiv=\"refresh\" content=\"0; url=./html/index.html\" />" > _build/index.html;
-      ls -la _build && cat _build/index.html;
     fi
   - echo "------- Build and Test CoreNEURON -------"
   - cd $HOME
@@ -121,13 +120,13 @@ notifications:
 #=============================================================================
 # Documentation deployment
 #=============================================================================
-#deploy:
-#  provider: pages
-#  skip_cleanup: true
-#  github_token: $GITHUB_TOKEN
-#  keep_history: false
-#  local_dir: $TRAVIS_BUILD_DIR/docs/_build/
-#  target_branch: gh-pages 
-#  on:
-#    branch: master
-#    os: linux
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN
+  keep_history: false
+  local_dir: $TRAVIS_BUILD_DIR/docs/_build/
+  target_branch: gh-pages 
+  on:
+    branch: master
+    os: linux
