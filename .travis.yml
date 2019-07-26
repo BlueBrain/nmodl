@@ -87,10 +87,12 @@ script:
 #=============================================================================
 after_success:
   - export PYTHONPATH=$HOME/nmodl/build:$PYTHONPATH
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; 
   - echo "------- Build Documentation -------"
   - cd $HOME/nmodl/docs
-  - make html
+  - doxygen && make html
   - cd _build && rm -r doctrees
+  - fi
   - echo "------- Build and Test CoreNEURON -------"
   - cd $HOME
   - git clone --recursive https://github.com/BlueBrain/CoreNeuron.git
