@@ -95,7 +95,10 @@ after_success:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
       echo "------- Build Documentation -------";
       cd $TRAVIS_BUILD_DIR/docs;
-      doxygen && make html && rm -r _build/doctrees;
+      doxygen && make html;
+      rm -rf _build/doctrees && touch _build/.nojekyll;
+      echo "<meta http-equiv=\"refresh\" content=\"0; url=./html/index.html\" />" > _build/index.html;
+      ls -la _build && cat _build/index.html;
     fi
   - echo "------- Build and Test CoreNEURON -------"
   - cd $HOME
@@ -122,8 +125,9 @@ notifications:
 #  provider: pages
 #  skip_cleanup: true
 #  github_token: $GITHUB_TOKEN
-#  keep_history: true
-#  local_dir: $HOME/nmodl/docs/_build/
+#  keep_history: false
+#  local_dir: $TRAVIS_BUILD_DIR/docs/_build/
+#  target_branch: gh-pages 
 #  on:
 #    branch: master
 #    os: linux
