@@ -43,7 +43,6 @@ addons:
       - python3-pip
       - doxygen
       - pandoc
-      - python3-sphinx
   # for Mac builds, we use Homebrew
   homebrew:
     packages:
@@ -73,6 +72,9 @@ install:
   - echo "------- Install Dependencies -------"
   - pip3 install -U pip setuptools
   - pip3 install Jinja2 PyYAML pytest sympy --user
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+      pip3 install -U --user sphinx;
+    fi
 
 #=============================================================================
 # Build, test and install
@@ -90,6 +92,7 @@ script:
 #=============================================================================
 after_success:
   - export PYTHONPATH=$HOME/nmodl/build:$PYTHONPATH
+  - ls $HOME/nmodl/build
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
       echo "------- Build Documentation -------";
       cd $TRAVIS_BUILD_DIR/docs;
