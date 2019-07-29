@@ -128,5 +128,5 @@ deploy:
   local_dir: $TRAVIS_BUILD_DIR/docs/_build/
   target_branch: gh-pages
   on:
-    branch: autodeploy_doc
+    branch: master
     os: linux
