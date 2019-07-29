@@ -126,7 +126,7 @@ deploy:
   github_token: $GITHUB_TOKEN
   keep_history: false
   local_dir: $TRAVIS_BUILD_DIR/docs/_build/
-  target_branch: gh-pages 
+  target_branch: gh-pages
   on:
-    branch: master
+    branch: autodeploy_doc
     os: linux
