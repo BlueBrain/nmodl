@@ -3372,7 +3372,7 @@ void CodegenCVisitor::print_net_receive_common_code(Block* node, bool need_mech_
     printer->add_line("int tid = pnt->_tid;");
     printer->add_line("int id = pnt->_i_instance;");
     printer->add_line("double v = 0;");
-    if (info.artificial_cell) {
+    if (info.artificial_cell || node->is_initial_block()) {
         printer->add_line("NrnThread* nt = nrn_threads + tid;");
         printer->add_line("Memb_list* ml = nt->_ml_list[pnt->_type];");
     }
@@ -3393,14 +3393,20 @@ void CodegenCVisitor::print_net_receive_common_code(Block* node, bool need_mech_
         printer->add_newline();
         for (auto& parameter: parameters) {
             auto name = parameter->get_node_name();
-            VarUsageVisitor vu;
-            auto var_used = vu.variable_used(node, "(*" + name + ")");
+            bool var_used = false;
+            // TODO: this can be made same as outer net_receive block
+            auto lookup_name = name;
+            if (!node->is_initial_block()) {
+                lookup_name = "(*" + name + ")";
+            }
+            var_used = VarUsageVisitor().variable_used(node, lookup_name);
             if (var_used) {
-                auto statement = "double* {} = weights + weight_index + {};"_format(name, i++);
+                auto statement = "double* {} = weights + weight_index + {};"_format(name, i);
                 printer->add_line(statement);
                 RenameVisitor vr(name, "*" + name);
                 node->visit_children(&vr);
             }
+            i++;
         }
     }
 }
