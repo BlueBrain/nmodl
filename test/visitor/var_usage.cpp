@@ -33,7 +33,9 @@ SCENARIO("Searching for variable name using VarUsageVisitor", "[visitor][var_usa
             DERIVATIVE states {
                 tau = 11.1
                 exp(tau)
+            {
                 h' = h + 2 + n
+            }
             }
         )";
 
