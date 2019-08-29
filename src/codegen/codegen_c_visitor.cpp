@@ -3393,13 +3393,7 @@ void CodegenCVisitor::print_net_receive_common_code(Block* node, bool need_mech_
         printer->add_newline();
         for (auto& parameter: parameters) {
             auto name = parameter->get_node_name();
-            bool var_used = false;
-            // TODO: this can be made same as outer net_receive block
-            auto lookup_name = name;
-            if (!node->is_initial_block()) {
-                lookup_name = "(*" + name + ")";
-            }
-            var_used = VarUsageVisitor().variable_used(node, lookup_name);
+            bool var_used = VarUsageVisitor().variable_used(node, "(*" + name + ")");
             if (var_used) {
                 auto statement = "double* {} = weights + weight_index + {};"_format(name, i);
                 printer->add_line(statement);
@@ -3487,12 +3481,52 @@ void CodegenCVisitor::print_net_event_call(FunctionCall* node) {
     printer->add_text(")");
 }
 
+/**
+ * Rename arguments to NET_RECEIVE block with corresponding pointer variable
+ *
+ * Arguments to NET_RECEIVE block are packed and passed via weight vector. These
+ * variables need to be replaced with corresponding pointer variable. For example,
+ * if mod file is like
+ *
+ * \code{.mod}
+ *      NET_RECEIVE (weight, R){
+ *          INITIAL {
+ *              R=1
+ *          }
+ *      }
+ * \endcode
+ *
+ * then generated code for initial block should be:
+ *
+ * \code{.cpp}
+ *      double* R = weights + weight_index + 0;
+ *      (*R) = 1.0;
+ * \endcode
+ *
+ * So, the `R` in AST needs to be renamed with `(*R)`.
+ */
+static void rename_net_receive_arguments(ast::NetReceiveBlock* net_receive_node, ast::Node* node) {
+    auto parameters = net_receive_node->get_parameters();
+    for (auto& parameter: parameters) {
+        auto name = parameter->get_node_name();
+        auto var_used = VarUsageVisitor().variable_used(node, name);
+        if (var_used) {
+            RenameVisitor vr(name, "(*" + name + ")");
+            node->get_statement_block()->visit_children(&vr);
+        }
+    }
+}
+
 
 void CodegenCVisitor::print_net_init() {
     auto node = info.net_receive_initial_node;
     if (node == nullptr) {
         return;
     }
+
+    // rename net_receive arguments used in the initial block of net_receive
+    rename_net_receive_arguments(info.net_receive_node, node);
+
     codegen = true;
     auto args = "Point_process* pnt, int weight_index, double flag";
     printer->add_newline(2);
@@ -3639,16 +3673,8 @@ void CodegenCVisitor::print_net_receive_kernel() {
     printing_net_receive = true;
     auto node = info.net_receive_node;
 
-    // rename arguments if same name is used
-    auto parameters = node->get_parameters();
-    for (auto& parameter: parameters) {
-        auto name = parameter->get_node_name();
-        auto var_used = VarUsageVisitor().variable_used(node, name);
-        if (var_used) {
-            RenameVisitor vr(name, "(*" + name + ")");
-            node->get_statement_block()->visit_children(&vr);
-        }
-    }
+    // rename net_receive arguments used in the block itself
+    rename_net_receive_arguments(info.net_receive_node, node);
 
     std::string name;
     auto params = ParamVector();
