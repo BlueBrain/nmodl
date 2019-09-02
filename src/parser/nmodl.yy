@@ -216,6 +216,9 @@
 %token  <ModToken>              TILDE               "~"
 %token  <ModToken>              PERIOD              "."
 
+%token  <ModToken>              REPRESENTS
+%token  <std::string>           ONTOLOGY_ID
+
 %token  END                     0                   "End of file"
 %token                          UNKNOWN
 %token                          INVALID_TOKEN
@@ -2313,6 +2316,11 @@ neuron_statement :
                 |   neuron_statement THREADSAFE optional_threadsafe_var_list
                     {
                         $1.emplace_back(new ast::ThreadSafe($3));
+                        $$ = $1;
+                    }
+                |   neuron_statement REPRESENTS ONTOLOGY_ID
+                    {
+                        $1.emplace_back(new ast::OntologyStatement(new ast::String($3)));
                         $$ = $1;
                     }
                 ;

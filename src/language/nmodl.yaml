@@ -2104,6 +2104,13 @@
                             type: String
                             suffix: {value: "ENDCOMMENT"}
 
+                  - OntologyStatement:
+                      members:
+                        - ontology:
+                            brief: "Ontology Id"
+                            type: String
+                      brief: "Represents ontology annotation in NMODL"
+
 - Program:
     brief: "Represents top level AST node for whole NMODL input"
     members:
