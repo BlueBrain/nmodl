@@ -1976,8 +1976,8 @@
                             brief: "(TODO)"
                             type: Valence
                             optional: true
-                        - ontology:
-                            brief: "Ontology information to indicate the chemical ion"
+                        - ontology_id:
+                            brief: "Ontology to indicate the chemical ion"
                             type: String
                             optional: true
                             prefix: {value: " REPRESENTS "}
@@ -2112,10 +2112,10 @@
                   - OntologyStatement:
                       nmodl: "REPRESENTS "
                       members:
-                        - ontology:
-                            brief: "Ontology Id"
+                        - ontology_id:
+                            brief: "Ontology name"
                             type: String
-                      brief: "Represents ontology annotation in NMODL"
+                      brief: "Represents CURIE information in NMODL"
 
 - Program:
     brief: "Represents top level AST node for whole NMODL input"

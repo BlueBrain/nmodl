@@ -173,7 +173,7 @@ std::map<std::string, NmodlTestCase> nmdol_invalid_constructs{
     {
         "neuron_block_1",
         {
-            "Invalid ontology statement",
+            "Invalid CURIE statement",
             R"(
                 NEURON {
                     REPRESENTS xx
@@ -491,7 +491,6 @@ std::map<std::string, NmodlTestCase> nmodl_valid_constructs{
                 NEURON {
                     SUFFIX ProbAMPANMDA
                     REPRESENTS NCIT:C17145
-                    REPRESENTS NCIT:C17147      : some comment
                     REPRESENTS [NCIT:C17145]
                     USEION na READ ena
                     USEION na READ ena, kna

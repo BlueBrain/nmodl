@@ -139,15 +139,15 @@ SCENARIO("NMODL parser running number of invalid NMODL constructs") {
     }
 }
 
-SCENARIO("NEURON block can add ontology information", "[parser][represents]") {
-    GIVEN("A valid ontology information statement") {
-            THEN("parser accepts without an error") {
-                REQUIRE(is_valid_construct("NEURON { REPRESENTS NCIT:C17008 }"));
-                REQUIRE(is_valid_construct("NEURON { REPRESENTS [NCIT:C17008] }"));
-            }
+SCENARIO("NEURON block can add CURIE information", "[parser][represents]") {
+    GIVEN("A valid CURIE information statement") {
+        THEN("parser accepts without an error") {
+            REQUIRE(is_valid_construct("NEURON { REPRESENTS NCIT:C17008 }"));
+            REQUIRE(is_valid_construct("NEURON { REPRESENTS [NCIT:C17008] }"));
+        }
     }
 
-    GIVEN("Incomplete ontology information statement") {
+    GIVEN("Incomplete CURIE information statement") {
         THEN("parser throws an error") {
             REQUIRE_THROWS_WITH(is_valid_construct("NEURON { REPRESENTS }"),
                                 Catch::Contains("Lexer Error"));
