@@ -495,6 +495,13 @@ ELSE                    {
                             return NmodlParser::make_INVALID_TOKEN(loc);
                         }
 
+<ONTOLOGY_MODE>.       |
+<ONTOLOGY_MODE>\n      {
+                            /** if ontology id is not matched before end of line */
+                            auto msg = "Lexer Error : while parsing ontology information with REPRESENTS";
+                            throw std::runtime_error(msg);
+                        }
+
 \"[^\"\n]*$             {
                             std::cout << "\n ERROR: Unterminated string (e.g. for printf) \n";
                         }
@@ -534,7 +541,7 @@ void nmodl::parser::NmodlLexer::scan_unit() {
     loc.step();
     std::string str;
 
-    /** Unit is a string until close parenthis */
+    /** Unit is a string until close parenthesis */
     while (1) {
         auto lastch =  yyinput();
         if(lastch == ')') {
@@ -542,7 +549,7 @@ void nmodl::parser::NmodlLexer::scan_unit() {
             break;
         }
         else if ( lastch == '\n' || lastch == 0) {
-            std::cout << "ERROR: While parsing unit, closing parenthis not found";
+            std::cout << "ERROR: While parsing unit, closing parenthesis not found";
             break;
         }
         str += lastch;

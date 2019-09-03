@@ -318,6 +318,7 @@
 %type   <ast::StatementVector>              neuron_statement
 %type   <ast::ReadIonVarVector>             read_ion_list
 %type   <ast::WriteIonVarVector>            write_ion_list
+%type   <ast::String*>                      ontology
 %type   <ast::NonspecificCurVarVector>      nonspecific_var_list
 %type   <ast::ElectrodeCurVarVector>        electrode_current_var_list
 %type   <ast::SectionVarVector>             section_var_list
@@ -2326,17 +2327,17 @@ neuron_statement :
                 ;
 
 
-use_ion_statement : USEION NAME_PTR READ read_ion_list valence
+use_ion_statement : USEION NAME_PTR READ read_ion_list valence ontology
                     {
-                        $$ = new ast::Useion($2, $4, ast::WriteIonVarVector(), $5);
+                        $$ = new ast::Useion($2, $4, ast::WriteIonVarVector(), $5, $6);
                     }
-                |   USEION NAME_PTR WRITE write_ion_list valence
+                |   USEION NAME_PTR WRITE write_ion_list valence ontology
                     {
-                        $$ = new ast::Useion($2, ast::ReadIonVarVector(), $4, $5);
+                        $$ = new ast::Useion($2, ast::ReadIonVarVector(), $4, $5, $6);
                     }
-                |   USEION NAME_PTR READ read_ion_list WRITE write_ion_list valence
+                |   USEION NAME_PTR READ read_ion_list WRITE write_ion_list valence ontology
                     {
-                        $$ = new ast::Useion($2, $4, $6, $7);
+                        $$ = new ast::Useion($2, $4, $6, $7, $8);
                     }
                 |   USEION error
                     {
@@ -2375,6 +2376,33 @@ write_ion_list  :   NAME_PTR
                 |   error
                     {
                         error(scanner.loc, "write_ion_list");
+                    }
+                ;
+
+
+valence         :
+                    {
+                        $$ = nullptr;
+                    }
+                |   VALENCE double
+                    {
+                        $$ = new ast::Valence($1.clone(), $2);
+                    }
+                |   VALENCE "-" double
+                    {
+                        $3->negate();
+                        $$ = new ast::Valence($1.clone(), $3);
+                    }
+                ;
+
+
+ontology        :
+                    {
+                        $$ = nullptr;
+                    }
+                |   REPRESENTS ONTOLOGY_ID
+                    {
+                        $$ = new ast::String($2);
                     }
                 ;
 
@@ -2545,23 +2573,6 @@ threadsafe_var_list : NAME_PTR
                         $$ = $1;
                     }
                 ;
-
-
-valence         :
-                    {
-                        $$ = nullptr;
-                    }
-                |   VALENCE double
-                    {
-                        $$ = new ast::Valence($1.clone(), $2);
-                    }
-                |   VALENCE "-" double
-                    {
-                        $3->negate();
-                        $$ = new ast::Valence($1.clone(), $3);
-                    }
-                ;
-
 
  INTEGER_PTR    :   INTEGER
                     {
