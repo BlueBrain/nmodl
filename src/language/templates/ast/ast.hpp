@@ -267,7 +267,7 @@ namespace ast {
         /**
          * \brief Set token for the current ast node
          */
-        void set_token(ModToken& tok) { token = std::shared_ptr<ModToken>(new ModToken(tok)); }
+        void set_token(ModToken& tok) { token = std::make_shared<ModToken>(tok); }
         {% endif %}
 
         {% if node.is_symtab_needed %}
