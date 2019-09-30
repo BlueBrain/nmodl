@@ -315,7 +315,7 @@ class CodegenCVisitor: public visitor::AstVisitor {
      * Operator for rhs vector update (matrix update)
      */
     std::string operator_for_rhs() {
-        return info.electorde_current ? "+=" : "-=";
+        return info.electrode_current ? "+=" : "-=";
     }
 
 
@@ -323,7 +323,7 @@ class CodegenCVisitor: public visitor::AstVisitor {
      * Operator for diagonal vector update (matrix update)
      */
     std::string operator_for_d() {
-        return info.electorde_current ? "-=" : "+=";
+        return info.electrode_current ? "-=" : "+=";
     }
 
 
@@ -1710,6 +1710,11 @@ class CodegenCVisitor: public visitor::AstVisitor {
      * Print nrn_cur / current update function definition
      */
     void print_nrn_cur();
+
+    /**
+     * Print fast membrane current calculation code
+     */
+    void print_fast_imem_calculation();
 
 
     /**
