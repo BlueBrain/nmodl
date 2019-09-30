@@ -4043,7 +4043,8 @@ void CodegenCVisitor::print_fast_imem_calculation() {
     printer->start_block("if (nt->nrn_fast_imem)");
     if (info.point_process) {
         print_atomic_reduction_pragma();
-        printer->add_line("nt->nrn_fast_imem->nrn_sav_rhs[node_id] {} shadow_rhs[id];"_format(rhs_op));
+        printer->add_line(
+            "nt->nrn_fast_imem->nrn_sav_rhs[node_id] {} shadow_rhs[id];"_format(rhs_op));
         print_atomic_reduction_pragma();
         printer->add_line("nt->nrn_fast_imem->nrn_sav_d[node_id] {} shadow_d[id];"_format(d_op));
     } else {
