@@ -1422,7 +1422,7 @@ class CodegenCVisitor: public visitor::AstVisitor {
      * Print end of block / loop for statement requiring reduction
      *
      */
-    void print_shadow_reduction_block_end();
+    virtual void print_shadow_reduction_block_end();
 
 
     /**
@@ -1714,7 +1714,7 @@ class CodegenCVisitor: public visitor::AstVisitor {
     /**
      * Print fast membrane current calculation code
      */
-    void print_fast_imem_calculation();
+    virtual void print_fast_imem_calculation();
 
 
     /**

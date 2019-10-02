@@ -4037,21 +4037,31 @@ void CodegenCVisitor::print_fast_imem_calculation() {
     if (!info.electrode_current) {
         return;
     }
-
+    std::string rhs, d;
     auto rhs_op = operator_for_rhs();
     auto d_op = operator_for_d();
-    printer->start_block("if (nt->nrn_fast_imem)");
-    if (info.point_process) {
-        print_atomic_reduction_pragma();
-        printer->add_line(
-            "nt->nrn_fast_imem->nrn_sav_rhs[node_id] {} shadow_rhs[id];"_format(rhs_op));
-        print_atomic_reduction_pragma();
-        printer->add_line("nt->nrn_fast_imem->nrn_sav_d[node_id] {} shadow_d[id];"_format(d_op));
+    if (channel_task_dependency_enabled()) {
+        rhs = get_variable_name("ml_rhs");
+        d = get_variable_name("ml_d");
+    } else if (info.point_process) {
+        rhs = "shadow_rhs[id]";
+        d = "shadow_d[id]";
     } else {
-        print_atomic_reduction_pragma();
-        printer->add_line("nt->nrn_fast_imem->nrn_sav_rhs[node_id] {} rhs;"_format(rhs_op));
-        print_atomic_reduction_pragma();
-        printer->add_line("nt->nrn_fast_imem->nrn_sav_d[node_id] {} g;"_format(d_op));
+        rhs = "rhs";
+        d = "g";
+    }
+
+    printer->start_block("if (nt->nrn_fast_imem)");
+    if (nrn_cur_reduction_loop_required()) {
+        print_shadow_reduction_block_begin();
+        printer->add_line("int node_id = node_index[id];");
+    }
+    print_atomic_reduction_pragma();
+    printer->add_line("nt->nrn_fast_imem->nrn_sav_rhs[node_id] {} {};"_format(rhs_op, rhs));
+    print_atomic_reduction_pragma();
+    printer->add_line("nt->nrn_fast_imem->nrn_sav_d[node_id] {} {};"_format(d_op, d));
+    if (nrn_cur_reduction_loop_required()) {
+        print_shadow_reduction_block_end();
     }
     printer->end_block(1);
 }
@@ -4083,8 +4093,8 @@ void CodegenCVisitor::print_nrn_cur() {
         print_shadow_reduction_block_begin();
         print_nrn_cur_matrix_shadow_reduction();
         print_shadow_reduction_statements();
-        print_fast_imem_calculation();
         print_shadow_reduction_block_end();
+        print_fast_imem_calculation();
     }
 
     print_channel_iteration_tiling_block_end();
