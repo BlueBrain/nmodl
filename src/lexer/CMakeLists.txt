@@ -2,18 +2,18 @@
 # Various project components and their source files
 # =============================================================================
 set(BISON_GENERATED_SOURCE_FILES
-    ${PROJECT_BINARY_DIR}/src/parser/nmodl/nmodl_parser.cpp
-    ${PROJECT_BINARY_DIR}/src/parser/nmodl/nmodl_parser.hpp
-    ${PROJECT_BINARY_DIR}/src/parser/verbatim_parser.cpp
-    ${PROJECT_BINARY_DIR}/src/parser/verbatim_parser.hpp
-    ${PROJECT_BINARY_DIR}/src/parser/diffeq/diffeq_parser.cpp
-    ${PROJECT_BINARY_DIR}/src/parser/diffeq/diffeq_parser.hpp
-    ${PROJECT_BINARY_DIR}/src/parser/c/c11_parser.cpp
-    ${PROJECT_BINARY_DIR}/src/parser/c/c11_parser.hpp
-    ${PROJECT_BINARY_DIR}/src/parser/unit/unit_parser.cpp
-    ${PROJECT_BINARY_DIR}/src/parser/unit/unit_parser.hpp)
+    ${CMAKE_BINARY_DIR}/src/parser/nmodl/nmodl_parser.cpp
+    ${CMAKE_BINARY_DIR}/src/parser/nmodl/nmodl_parser.hpp
+    ${CMAKE_BINARY_DIR}/src/parser/verbatim_parser.cpp
+    ${CMAKE_BINARY_DIR}/src/parser/verbatim_parser.hpp
+    ${CMAKE_BINARY_DIR}/src/parser/diffeq/diffeq_parser.cpp
+    ${CMAKE_BINARY_DIR}/src/parser/diffeq/diffeq_parser.hpp
+    ${CMAKE_BINARY_DIR}/src/parser/c/c11_parser.cpp
+    ${CMAKE_BINARY_DIR}/src/parser/c/c11_parser.hpp
+    ${CMAKE_BINARY_DIR}/src/parser/unit/unit_parser.cpp
+    ${CMAKE_BINARY_DIR}/src/parser/unit/unit_parser.hpp)
 
-set(AST_SOURCE_FILES ${PROJECT_BINARY_DIR}/src/ast/ast.hpp ${PROJECT_BINARY_DIR}/src/ast/ast.cpp)
+set(AST_SOURCE_FILES ${CMAKE_BINARY_DIR}/src/ast/ast.hpp ${CMAKE_BINARY_DIR}/src/ast/ast.cpp)
 
 set(UNIT_SOURCE_FILES ${NMODL_PROJECT_SOURCE_DIR}/src/units/units.hpp
     ${NMODL_PROJECT_SOURCE_DIR}/src/units/units.cpp)
@@ -62,49 +62,49 @@ set(LEXER_SOURCE_FILES
 # =============================================================================
 # Directories for parsers (as they need to be in separate directories)
 # =============================================================================
-file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/src/parser/nmodl
-                    ${PROJECT_BINARY_DIR}/src/parser/diffeq
-                    ${PROJECT_BINARY_DIR}/src/parser/c
-                    ${PROJECT_BINARY_DIR}/src/parser/unit)
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/src/parser/nmodl
+                    ${CMAKE_BINARY_DIR}/src/parser/diffeq
+                    ${CMAKE_BINARY_DIR}/src/parser/c
+                    ${CMAKE_BINARY_DIR}/src/parser/unit)
 
 # =============================================================================
 # Lexer & Parser commands
 # =============================================================================
 # command to generate nmodl parser
-add_custom_command(OUTPUT ${PROJECT_BINARY_DIR}/src/parser/nmodl/location.hh
-                          ${PROJECT_BINARY_DIR}/src/parser/nmodl/nmodl_parser.cpp
-                          ${PROJECT_BINARY_DIR}/src/parser/nmodl/nmodl_parser.hpp
-                          ${PROJECT_BINARY_DIR}/src/parser/nmodl/position.hh
-                          ${PROJECT_BINARY_DIR}/src/parser/nmodl/stack.hh
+add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/src/parser/nmodl/location.hh
+                          ${CMAKE_BINARY_DIR}/src/parser/nmodl/nmodl_parser.cpp
+                          ${CMAKE_BINARY_DIR}/src/parser/nmodl/nmodl_parser.hpp
+                          ${CMAKE_BINARY_DIR}/src/parser/nmodl/position.hh
+                          ${CMAKE_BINARY_DIR}/src/parser/nmodl/stack.hh
                    COMMAND ${BISON_EXECUTABLE}
                            ARGS -d
                                 -o
-                                ${PROJECT_BINARY_DIR}/src/parser/nmodl/nmodl_parser.cpp
+                                ${CMAKE_BINARY_DIR}/src/parser/nmodl/nmodl_parser.cpp
                                 ${NMODL_PROJECT_SOURCE_DIR}/src/parser/nmodl.yy
                    DEPENDS ${NMODL_PROJECT_SOURCE_DIR}/src/parser/nmodl.yy pyastgen
                    COMMENT "-- NMODL : GENERATING NMODL_CORE PARSER WITH BISON! --")
 
 # command to generate verbatim parser
-add_custom_command(OUTPUT ${PROJECT_BINARY_DIR}/src/parser/verbatim_parser.cpp
-                          ${PROJECT_BINARY_DIR}/src/parser/verbatim_parser.hpp
+add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/src/parser/verbatim_parser.cpp
+                          ${CMAKE_BINARY_DIR}/src/parser/verbatim_parser.hpp
                    COMMAND ${BISON_EXECUTABLE}
                            ARGS -d
                                 -o
-                                ${PROJECT_BINARY_DIR}/src/parser/verbatim_parser.cpp
+                                ${CMAKE_BINARY_DIR}/src/parser/verbatim_parser.cpp
                                 ${NMODL_PROJECT_SOURCE_DIR}/src/parser/verbatim.yy
                    DEPENDS ${NMODL_PROJECT_SOURCE_DIR}/src/parser/verbatim.yy
                    COMMENT "-- NMODL : GENERATING VERBATIM PARSER WITH BISON! --")
 
 # command to generate differential equation parser
-add_custom_command(OUTPUT ${PROJECT_BINARY_DIR}/src/parser/diffeq/diffeq_parser.cpp
-                          ${PROJECT_BINARY_DIR}/src/parser/diffeq/diffeq_parser.hpp
-                          ${PROJECT_BINARY_DIR}/src/parser/diffeq/location.hh
-                          ${PROJECT_BINARY_DIR}/src/parser/diffeq/position.hh
-                          ${PROJECT_BINARY_DIR}/src/parser/diffeq/stack.hh
+add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/src/parser/diffeq/diffeq_parser.cpp
+                          ${CMAKE_BINARY_DIR}/src/parser/diffeq/diffeq_parser.hpp
+                          ${CMAKE_BINARY_DIR}/src/parser/diffeq/location.hh
+                          ${CMAKE_BINARY_DIR}/src/parser/diffeq/position.hh
+                          ${CMAKE_BINARY_DIR}/src/parser/diffeq/stack.hh
                    COMMAND ${BISON_EXECUTABLE}
                            ARGS -d
                                 -o
-                                ${PROJECT_BINARY_DIR}/src/parser/diffeq/diffeq_parser.cpp
+                                ${CMAKE_BINARY_DIR}/src/parser/diffeq/diffeq_parser.cpp
                                 ${NMODL_PROJECT_SOURCE_DIR}/src/parser/diffeq.yy
                    DEPENDS ${NMODL_PROJECT_SOURCE_DIR}/src/parser/diffeq.yy
                            ${NMODL_PROJECT_SOURCE_DIR}/src/parser/diffeq_context.hpp
@@ -113,29 +113,29 @@ add_custom_command(OUTPUT ${PROJECT_BINARY_DIR}/src/parser/diffeq/diffeq_parser.
                    COMMENT "-- NMODL : GENERATING DIFFERENTIAL EQUATION PARSER WITH BISON! --")
 
 # command to generate C (11) parser
-add_custom_command(OUTPUT ${PROJECT_BINARY_DIR}/src/parser/c/c11_parser.cpp
-                          ${PROJECT_BINARY_DIR}/src/parser/c/c11_parser.hpp
-                          ${PROJECT_BINARY_DIR}/src/parser/c/location.hh
-                          ${PROJECT_BINARY_DIR}/src/parser/c/position.hh
-                          ${PROJECT_BINARY_DIR}/src/parser/c/stack.hh
+add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/src/parser/c/c11_parser.cpp
+                          ${CMAKE_BINARY_DIR}/src/parser/c/c11_parser.hpp
+                          ${CMAKE_BINARY_DIR}/src/parser/c/location.hh
+                          ${CMAKE_BINARY_DIR}/src/parser/c/position.hh
+                          ${CMAKE_BINARY_DIR}/src/parser/c/stack.hh
                    COMMAND ${BISON_EXECUTABLE}
                            ARGS -d
                                 -o
-                                ${PROJECT_BINARY_DIR}/src/parser/c/c11_parser.cpp
+                                ${CMAKE_BINARY_DIR}/src/parser/c/c11_parser.cpp
                                 ${NMODL_PROJECT_SOURCE_DIR}/src/parser/c11.yy
                    DEPENDS ${NMODL_PROJECT_SOURCE_DIR}/src/parser/c11.yy
                    COMMENT "-- NMODL : GENERATING C (11) PARSER WITH BISON! --")
 
 # command to generate Units parser
-add_custom_command(OUTPUT ${PROJECT_BINARY_DIR}/src/parser/unit/unit_parser.cpp
-                          ${PROJECT_BINARY_DIR}/src/parser/unit/unit_parser.hpp
-                          ${PROJECT_BINARY_DIR}/src/parser/unit/location.hh
-                          ${PROJECT_BINARY_DIR}/src/parser/unit/position.hh
-                          ${PROJECT_BINARY_DIR}/src/parser/unit/stack.hh
+add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/src/parser/unit/unit_parser.cpp
+                          ${CMAKE_BINARY_DIR}/src/parser/unit/unit_parser.hpp
+                          ${CMAKE_BINARY_DIR}/src/parser/unit/location.hh
+                          ${CMAKE_BINARY_DIR}/src/parser/unit/position.hh
+                          ${CMAKE_BINARY_DIR}/src/parser/unit/stack.hh
                    COMMAND ${BISON_EXECUTABLE}
                            ARGS -d
                                 -o
-                                ${PROJECT_BINARY_DIR}/src/parser/unit/unit_parser.cpp
+                                ${CMAKE_BINARY_DIR}/src/parser/unit/unit_parser.cpp
                                 ${NMODL_PROJECT_SOURCE_DIR}/src/parser/unit.yy
                    DEPENDS ${NMODL_PROJECT_SOURCE_DIR}/src/parser/unit.yy
                    COMMENT "-- NMODL : GENERATING UNIT PARSER WITH BISON! --")
