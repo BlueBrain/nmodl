@@ -1,9 +1,9 @@
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/test)
 
 include_directories(${PYBIND11_INCLUDE_DIR} ${PYTHON_INCLUDE_DIRS})
-include_directories(${PROJECT_SOURCE_DIR}/ext/catch ${PROJECT_SOURCE_DIR}/test)
-include_directories(${PROJECT_SOURCE_DIR}/src/solver)
-include_directories(${PROJECT_SOURCE_DIR}/ext/eigen)
+include_directories(${NMODL_PROJECT_SOURCE_DIR}/ext/catch ${NMODL_PROJECT_SOURCE_DIR}/test)
+include_directories(${NMODL_PROJECT_SOURCE_DIR}/src/solver)
+include_directories(${NMODL_PROJECT_SOURCE_DIR}/ext/eigen)
 
 # =============================================================================
 # Common input data library
@@ -96,9 +96,9 @@ endforeach()
 # pybind11 tests
 # =============================================================================
 add_test(NAME Ode
-         COMMAND ${PYTHON_EXECUTABLE} -m pytest ${PROJECT_SOURCE_DIR}/test/ode)
+         COMMAND ${PYTHON_EXECUTABLE} -m pytest ${NMODL_PROJECT_SOURCE_DIR}/test/ode)
 add_test(NAME Pybind
-         COMMAND ${PYTHON_EXECUTABLE} -m pytest ${PROJECT_SOURCE_DIR}/test/pybind)
+         COMMAND ${PYTHON_EXECUTABLE} -m pytest ${NMODL_PROJECT_SOURCE_DIR}/test/pybind)
 foreach(test_name Ode Pybind)
   set_tests_properties(${test_name}
                        PROPERTIES ENVIRONMENT PYTHONPATH=${CMAKE_BINARY_DIR}:$ENV{PYTHONPATH})
