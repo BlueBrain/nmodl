@@ -44,15 +44,15 @@ set(VISITOR_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/visitor_utils.hpp)
 
 set(VISITOR_GENERATED_SOURCES
-    ${CMAKE_BINARY_DIR}/src/visitors/ast_visitor.cpp
-    ${CMAKE_BINARY_DIR}/src/visitors/json_visitor.cpp
-    ${CMAKE_BINARY_DIR}/src/visitors/json_visitor.hpp
-    ${CMAKE_BINARY_DIR}/src/visitors/lookup_visitor.cpp
-    ${CMAKE_BINARY_DIR}/src/visitors/lookup_visitor.hpp
-    ${CMAKE_BINARY_DIR}/src/visitors/nmodl_visitor.cpp
-    ${CMAKE_BINARY_DIR}/src/visitors/nmodl_visitor.hpp
-    ${CMAKE_BINARY_DIR}/src/visitors/symtab_visitor.cpp
-    ${CMAKE_BINARY_DIR}/src/visitors/symtab_visitor.hpp)
+    ${PROJECT_BINARY_DIR}/src/visitors/ast_visitor.cpp
+    ${PROJECT_BINARY_DIR}/src/visitors/json_visitor.cpp
+    ${PROJECT_BINARY_DIR}/src/visitors/json_visitor.hpp
+    ${PROJECT_BINARY_DIR}/src/visitors/lookup_visitor.cpp
+    ${PROJECT_BINARY_DIR}/src/visitors/lookup_visitor.hpp
+    ${PROJECT_BINARY_DIR}/src/visitors/nmodl_visitor.cpp
+    ${PROJECT_BINARY_DIR}/src/visitors/nmodl_visitor.hpp
+    ${PROJECT_BINARY_DIR}/src/visitors/symtab_visitor.cpp
+    ${PROJECT_BINARY_DIR}/src/visitors/symtab_visitor.hpp)
 
 set_source_files_properties(${VISITOR_GENERATED_SOURCES} PROPERTIES GENERATED TRUE)
 

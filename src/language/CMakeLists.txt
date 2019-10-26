@@ -19,7 +19,7 @@ add_custom_command(OUTPUT ${AUTO_GENERATED_FILES}
                    COMMAND ${PYTHON_EXECUTABLE}
                            ARGS ${NMODL_PROJECT_SOURCE_DIR}/src/language/code_generator.py
                                 ${CODE_GENERATOR_OPTS}
-                           --base-dir ${CMAKE_BINARY_DIR}/src
+                           --base-dir ${PROJECT_BINARY_DIR}/src
                            --clang-format-opts="--style=file"
                    WORKING_DIRECTORY ${NMODL_PROJECT_SOURCE_DIR}/src/language
                    DEPENDS ${NMODL_PROJECT_SOURCE_DIR}/src/language/nmodl.yaml
@@ -32,4 +32,4 @@ unset(CODE_GENERATOR_OPTS)
 # =============================================================================
 # Target to propagate dependencies properly to lexer
 # =============================================================================
-add_custom_target(pyastgen DEPENDS ${CMAKE_BINARY_DIR}/src/ast/ast.cpp)
+add_custom_target(pyastgen DEPENDS ${PROJECT_BINARY_DIR}/src/ast/ast.cpp)

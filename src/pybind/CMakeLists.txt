@@ -5,22 +5,22 @@ set_source_files_properties(${AUTO_GENERATED_FILES} PROPERTIES GENERATED TRUE)
 
 foreach(file ast.py dsl.py ode.py symtab.py visitor.py __init__.py)
   list(APPEND NMODL_PYTHON_FILES_IN ${NMODL_PROJECT_SOURCE_DIR}/nmodl/${file})
-  list(APPEND NMODL_PYTHON_FILES_OUT ${CMAKE_BINARY_DIR}/nmodl/${file})
+  list(APPEND NMODL_PYTHON_FILES_OUT ${PROJECT_BINARY_DIR}/nmodl/${file})
 endforeach()
 
 set(PYNMODL_SOURCES
-    ${CMAKE_BINARY_DIR}/src/pybind/pyast.cpp
-    ${CMAKE_BINARY_DIR}/src/pybind/pyvisitor.cpp
-    ${CMAKE_BINARY_DIR}/src/pybind/pysymtab.cpp
+    ${PROJECT_BINARY_DIR}/src/pybind/pyast.cpp
+    ${PROJECT_BINARY_DIR}/src/pybind/pyvisitor.cpp
+    ${PROJECT_BINARY_DIR}/src/pybind/pysymtab.cpp
     ${NMODL_PROJECT_SOURCE_DIR}/src/pybind/pynmodl.cpp)
 
 set(PYNMODL_HEADERS
-    ${CMAKE_BINARY_DIR}/src/ast/ast_decl.hpp
+    ${PROJECT_BINARY_DIR}/src/ast/ast_decl.hpp
     ${NMODL_PROJECT_SOURCE_DIR}/src/ast/ast_common.hpp
-    ${CMAKE_BINARY_DIR}/src/visitors/visitor.hpp
+    ${PROJECT_BINARY_DIR}/src/visitors/visitor.hpp
     ${NMODL_PROJECT_SOURCE_DIR}/src/pybind/pybind_utils.hpp
-    ${CMAKE_BINARY_DIR}/src/pybind/pyast.hpp
-    ${CMAKE_BINARY_DIR}/src/pybind/pyvisitor.hpp)
+    ${PROJECT_BINARY_DIR}/src/pybind/pyast.hpp
+    ${PROJECT_BINARY_DIR}/src/pybind/pyvisitor.hpp)
 
 pybind11_add_module(_nmodl
                     ${PYNMODL_HEADERS}
@@ -38,9 +38,9 @@ add_dependencies(_nmodl util_obj)
 add_custom_target(copy_python_files ALL DEPENDS ${NMODL_PYTHON_FILES_OUT})
 add_custom_command(OUTPUT ${NMODL_PYTHON_FILES_OUT}
                    COMMAND ${CMAKE_COMMAND} -E copy_directory ${NMODL_PROJECT_SOURCE_DIR}/nmodl
-                           ${CMAKE_BINARY_DIR}/nmodl
+                           ${PROJECT_BINARY_DIR}/nmodl
                    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:_nmodl>
-                           ${CMAKE_BINARY_DIR}/nmodl
+                           ${PROJECT_BINARY_DIR}/nmodl
                    DEPENDS ${NMODL_PYTHON_FILES_IN} $<TARGET_FILE:_nmodl>
                    COMMENT "-- COPYING NMODL PYTHON FILES --")
 
@@ -48,4 +48,4 @@ add_custom_command(OUTPUT ${NMODL_PYTHON_FILES_OUT}
 # Install python binding components
 # =============================================================================
 install(TARGETS _nmodl DESTINATION lib/python/nmodl)
-install(DIRECTORY ${CMAKE_BINARY_DIR}/nmodl DESTINATION lib/python/ FILES_MATCHING PATTERN "*.py")
+install(DIRECTORY ${PROJECT_BINARY_DIR}/nmodl DESTINATION lib/python/ FILES_MATCHING PATTERN "*.py")
