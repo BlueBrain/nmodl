@@ -121,8 +121,8 @@ include_directories(${NMODL_PROJECT_SOURCE_DIR}/ext/cli11/include)
 set(PROJECT_VERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR})
 
 # generate file with version number from git and nrnunits.lib file path
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/config/config.cpp.in ${PROJECT_BINARY_DIR}/config.cpp
-               @ONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/config/config.cpp.in
+               ${PROJECT_BINARY_DIR}/src/config/config.cpp @ONLY)
 
 # generate Doxyfile with correct source paths
 configure_file(${NMODL_PROJECT_SOURCE_DIR}/docs/Doxyfile.in

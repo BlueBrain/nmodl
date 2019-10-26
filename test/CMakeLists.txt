@@ -16,7 +16,7 @@ add_library(test_util
 # =============================================================================
 # Common input data library
 # =============================================================================
-add_library(config STATIC ${PROJECT_BINARY_DIR}/config.cpp)
+add_library(config STATIC ${PROJECT_BINARY_DIR}/src/config/config.cpp)
 
 # =============================================================================
 # Test executables
