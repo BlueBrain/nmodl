@@ -2656,7 +2656,7 @@ void CodegenCVisitor::print_mechanism_register() {
             method_name("net_buf_receive")));
     }
     if (info.num_net_receive_parameters != 0) {
-        auto net_recv_init_arg = "NULL";
+        auto net_recv_init_arg = "nullptr";
         if (info.net_receive_initial_node != nullptr) {
             net_recv_init_arg = "net_init";
         }
