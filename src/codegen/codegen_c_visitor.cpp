@@ -2278,10 +2278,10 @@ void CodegenCVisitor::print_backend_info() {
 
 void CodegenCVisitor::print_standard_includes() {
     printer->add_newline();
-    printer->add_line("#include <math.h>");
-    printer->add_line("#include <stdio.h>");
-    printer->add_line("#include <stdlib.h>");
-    printer->add_line("#include <string.h>");
+    printer->add_line("#include <cmath>");
+    printer->add_line("#include <cstdio>");
+    printer->add_line("#include <cstdlib>");
+    printer->add_line("#include <cstring>");
 }
 
 
@@ -2289,14 +2289,14 @@ void CodegenCVisitor::print_coreneuron_includes() {
     printer->add_newline();
     printer->add_line("#include <coreneuron/mech/cfile/scoplib.h>");
     printer->add_line("#include <coreneuron/nrnconf.h>");
-    printer->add_line("#include <coreneuron/nrnoc/multicore.h>");
-    printer->add_line("#include <coreneuron/nrnoc/register_mech.hpp>");
-    printer->add_line("#include <coreneuron/nrniv/nrn_acc_manager.h>");
+    printer->add_line("#include <coreneuron/sim/multicore.h>");
+    printer->add_line("#include <coreneuron/mech/register_mech.hpp>");
+    printer->add_line("#include <coreneuron/gpu/nrn_acc_manager.h>");
     printer->add_line("#include <coreneuron/utils/randoms/nrnran123.h>");
     printer->add_line("#include <coreneuron/nrniv/nrniv_decl.h>");
-    printer->add_line("#include <coreneuron/nrniv/ivocvect.h>");
+    printer->add_line("#include <coreneuron/utils/ivocvect.h>");
     printer->add_line("#include <coreneuron/mech/mod2c_core_thread.h>");
-    printer->add_line("#include <coreneuron/scopmath_core/newton_struct.h>");
+    printer->add_line("#include <coreneuron/sim/scopmath/newton_struct.h>");
     printer->add_line("#include \"_kinderiv.h\"");
     if (info.eigen_newton_solver_exist) {
         printer->add_line("#include <newton/newton.hpp>");
