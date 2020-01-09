@@ -2287,15 +2287,15 @@ void CodegenCVisitor::print_standard_includes() {
 
 void CodegenCVisitor::print_coreneuron_includes() {
     printer->add_newline();
-    printer->add_line("#include <coreneuron/mech/cfile/scoplib.h>");
+    printer->add_line("#include <coreneuron/mechanism/mech/cfile/scoplib.h>");
     printer->add_line("#include <coreneuron/nrnconf.h>");
     printer->add_line("#include <coreneuron/sim/multicore.h>");
-    printer->add_line("#include <coreneuron/mech/register_mech.hpp>");
+    printer->add_line("#include <coreneuron/mechanism/register_mech.hpp>");
     printer->add_line("#include <coreneuron/gpu/nrn_acc_manager.h>");
     printer->add_line("#include <coreneuron/utils/randoms/nrnran123.h>");
     printer->add_line("#include <coreneuron/nrniv/nrniv_decl.h>");
     printer->add_line("#include <coreneuron/utils/ivocvect.h>");
-    printer->add_line("#include <coreneuron/mech/mod2c_core_thread.h>");
+    printer->add_line("#include <coreneuron/mechanism/mech/mod2c_core_thread.h>");
     printer->add_line("#include <coreneuron/sim/scopmath/newton_struct.h>");
     printer->add_line("#include \"_kinderiv.h\"");
     if (info.eigen_newton_solver_exist) {
