@@ -2278,10 +2278,10 @@ void CodegenCVisitor::print_backend_info() {
 
 void CodegenCVisitor::print_standard_includes() {
     printer->add_newline();
-    printer->add_line("#include <cmath>");
-    printer->add_line("#include <cstdio>");
-    printer->add_line("#include <cstdlib>");
-    printer->add_line("#include <cstring>");
+    printer->add_line("#include <math.h>");
+    printer->add_line("#include <stdio.h>");
+    printer->add_line("#include <stdlib.h>");
+    printer->add_line("#include <string.h>");
 }
 
 
