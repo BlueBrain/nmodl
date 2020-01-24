@@ -1873,12 +1873,11 @@ std::string CodegenCVisitor::process_verbatim_text(std::string text) {
 
 
 std::string CodegenCVisitor::register_mechanism_arguments() {
-    auto nrn_cur = nrn_cur_required() ? method_name(naming::NRN_CUR_METHOD) : "NULL";
-    auto nrn_state = nrn_state_required() ? method_name(naming::NRN_STATE_METHOD) : "NULL";
+    auto nrn_cur = nrn_cur_required() ? method_name(naming::NRN_CUR_METHOD) : "nullptr";
+    auto nrn_state = nrn_state_required() ? method_name(naming::NRN_STATE_METHOD) : "nullptr";
     auto nrn_alloc = method_name(naming::NRN_ALLOC_METHOD);
     auto nrn_init = method_name(naming::NRN_INIT_METHOD);
-    return "mechanism, {}, {}, NULL, {}, {}, first_pointer_var_index()"
-           ""_format(nrn_alloc, nrn_cur, nrn_state, nrn_init);
+    return "mechanism, {}, {}, nullptr, {}, {}"_format(nrn_alloc, nrn_cur, nrn_state, nrn_init);
 }
 
 
@@ -2584,7 +2583,7 @@ void CodegenCVisitor::print_mechanism_register() {
     auto args = register_mechanism_arguments();
     auto nobjects = num_thread_objects();
     if (info.point_process) {
-        printer->add_line("point_register_mech({}, NULL, NULL, {});"_format(args, nobjects));
+        printer->add_line("point_register_mech({}, {});"_format(args, nobjects));
     } else {
         printer->add_line("register_mech({}, {});"_format(args, nobjects));
     }
