@@ -400,7 +400,7 @@ class Node(BaseNode):
         initlist = [f'{c.varname}({c.varname})' for c in self.children]
 
         s = f"""{self.class_name}::{self.class_name}({', '.join(args)})
-                : {', '.join(initlist)} {{}}
+                : {', '.join(initlist)} {{ set_parent_in_children(); }}
         """
         return textwrap.dedent(s)
 
@@ -413,7 +413,7 @@ class Node(BaseNode):
         initlist = [f'{c.varname}({c.varname})' for c in self.children]
 
         s = f"""{self.class_name}::{self.class_name}({', '.join(args)})
-                : {', '.join(initlist)} {{}}
+                : {', '.join(initlist)} {{  set_parent_in_children(); }}
         """
         return textwrap.dedent(s)
 

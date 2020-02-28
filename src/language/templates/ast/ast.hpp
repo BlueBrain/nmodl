@@ -384,6 +384,15 @@ namespace ast {
                 }
             {% endif %}
         {% endif %}
+
+        {% if node.children %}
+            /**
+             * \brief Set parents in children
+             *
+             * Usually called in constructors
+             */
+            virtual void set_parent_in_children() override;
+        {% endif %}
     };
 
     {% endfor %}

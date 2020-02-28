@@ -145,6 +145,17 @@ static const std::string ReactionOpNames[] = {"<->", "<<", "->"};
  *       in the future.
  */
 struct Ast: public std::enable_shared_from_this<Ast> {
+  private:
+    /**
+     * \brief Generic pointer to the parent
+     *
+     * Children types can be known at compile time. Conversely, many parents
+     * can have the same children type. Thus, this is just a pointer to
+     * the base class.
+     */
+    std::shared_ptr<Ast> parent = nullptr;
+
+  public:
     /// \name Ctor & dtor
     /// \{
 
@@ -1496,6 +1507,33 @@ struct Ast: public std::enable_shared_from_this<Ast> {
     virtual bool is_ontology_statement() {
         return false;
     }
+
+    /**
+     *\brief Parent getter
+     */
+    inline virtual std::shared_ptr<Ast> get_parent() const {
+        return parent;
+    }
+
+    /**
+     *\brief Parent setter
+     *
+     * Usually, the parent parent pointer cannot be set in the constructor
+     * because children are generally build BEFORE the parent. Conversely,
+     * we set children parents directly in the parent constructor using
+     * set_parent_in_children()
+     */
+    inline virtual void set_parent(const std::shared_ptr<Ast>& p) {
+        parent = p;
+    }
+
+    /**
+     *\brief Set this object as parent for all the children
+     *
+     * This should be called in every object (with children) constructor
+     * to set the parents.
+     */
+    virtual void set_parent_in_children() {}
 };
 
 /** @} */  // end of ast_class
