@@ -71,15 +71,41 @@ namespace ast {
             this->{{ child.varname }} = obj.{{ child.varname }};
             {% endif %}
         {% endfor %}
+
         {% if node.has_token %}
         /// if there is a token, make copy
         if (obj.token) {
             this-> token = std::shared_ptr<ModToken>(obj.token->clone());
         }
         {% endif %}
+
+        /// set parents
+        set_parent_in_children();
+    }
+
+    /// set this parent in the children
+    void {{ node.class_name }}::set_parent_in_children() {
+
+        const auto parentShrPtr = get_shared_ptr();
+
+        {% for child in node.children %}
+            {% if child.is_vector %}
+            /// set parent for each element of the vector
+            for (auto& item : {{ child.varname }}) {
+                item->set_parent(parentShrPtr);
+            }
+            {% elif child.is_pointer_node or child.optional %}
+            /// pointer member must be reseted with the new copy
+            if ({{ child.varname }}) {
+                {{ child.varname }}->set_parent(parentShrPtr);
+            }
+            {% endif %}
+        {% endfor %}
+
     }
 
     {% endif %}
+
 
     {% endfor %}
 
