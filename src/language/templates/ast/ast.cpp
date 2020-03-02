@@ -92,10 +92,13 @@ namespace ast {
             {% if child.is_vector %}
             /// set parent for each element of the vector
             for (auto& item : {{ child.varname }}) {
-                item->set_parent(parentShrPtr);
+                // this check could be superfluous, may we add nullptr as children?
+                if (item) {
+                    item->set_parent(parentShrPtr);
+                }
             }
             {% elif child.is_pointer_node or child.optional %}
-            /// pointer member must be reseted with the new copy
+            // this check could be superfluous, may we add nullptr as children?
             if ({{ child.varname }}) {
                 {{ child.varname }}->set_parent(parentShrPtr);
             }
@@ -104,8 +107,14 @@ namespace ast {
 
     }
 
+
+
+
     {% endif %}
 
+    {% for child in node.children %}
+    {{ child.get_setter_method_definition(node.class_name) }}
+    {% endfor %}
 
     {% endfor %}
 
