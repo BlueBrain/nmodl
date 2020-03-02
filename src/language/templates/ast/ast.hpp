@@ -298,7 +298,7 @@ namespace ast {
 
         {# doxygen for these methods is handled by nodes.py #}
         {% for child in node.children %}
-        {{ child.get_setter_method(node.class_name) }}
+        {{ child.get_setter_method_declaration(node.class_name) }}
         {% endfor %}
 
         /// \}

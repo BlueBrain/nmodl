@@ -220,6 +220,11 @@ class ChildNode(BaseNode):
                           */
                          void add{self.class_name}({self.class_name} *n) {{
                              {self.varname}.emplace_back(n);
+                             // set parents
+                             // this check could be superfluous, may we add nullptr as children?
+                             if (n) {{
+                                n->set_parent(get_shared_ptr());                                
+                             }}
                          }}
 
                          /**
@@ -227,6 +232,11 @@ class ChildNode(BaseNode):
                           */
                          void add{self.class_name}(std::shared_ptr<{self.class_name}> n) {{
                              {self.varname}.push_back(n);
+                             // set parents
+                             // this check could be superfluous, may we add nullptr as children?
+                             if (n) {{
+                                n->set_parent(get_shared_ptr());                                
+                             }}
                          }}
                     """
             s = textwrap.dedent(method)
@@ -267,7 +277,7 @@ class ChildNode(BaseNode):
                        return {self.varname};
                    }}"""
 
-    def get_setter_method(self, class_name):
+    def get_setter_method_declaration(self, class_name):
         setter_method = "set_" + to_snake_case(self.varname)
         setter_type = self.member_typename
         reference = "" if self.is_base_type_node else "&&"
@@ -276,23 +286,88 @@ class ChildNode(BaseNode):
                        /**
                         * \\brief Setter for member variable \\ref {class_name}.{self.varname}
                         */
-                       void {setter_method}({setter_type} {self.varname}) {{
-                           this->{self.varname} = {self.varname};
-                       }}
+                       void {setter_method}({setter_type} {self.varname});
                     """
         else:
             return f"""
                        /**
                         * \\brief Setter for member variable \\ref {class_name}.{self.varname} (rvalue reference)
                         */
-                       void {setter_method}({setter_type}&& {self.varname}) {{
-                           this->{self.varname} = {self.varname};
-                       }}
-                       
+                       void {setter_method}({setter_type}&& {self.varname});
+
                        /**
                         * \\brief Setter for member variable \\ref {class_name}.{self.varname}
                         */
-                       void {setter_method}(const {setter_type}& {self.varname}) {{
+                       void {setter_method}(const {setter_type}& {self.varname});
+                    """
+
+
+
+    def get_setter_method_definition(self, class_name):
+        setter_method = "set_" + to_snake_case(self.varname)
+        setter_type = self.member_typename
+        reference = "" if self.is_base_type_node else "&&"
+
+
+        if self.is_base_type_node:
+            return f"""
+                       void {class_name}::{setter_method}({setter_type} {self.varname}) {{
+                           // why don't we use a coding convention instead of this workaround for
+                           // variable shadowing?
+                           this->{self.varname} = {self.varname};
+                       }}
+                    """
+        elif self.is_vector:
+            return f"""
+                       void {class_name}::{setter_method}({setter_type}&& {self.varname}) {{
+                           this->{self.varname} = {self.varname};
+                           // set parents
+                           // this check could be superfluous, may we add nullptr as children?
+                           for (auto& ii : {self.varname}) {{
+                               if (ii) {{
+                                   ii->set_parent(get_shared_ptr());
+                               }}
+                            }}
+                       }}
+
+                       void {class_name}::{setter_method}(const {setter_type}& {self.varname}) {{
+                           this->{self.varname} = {self.varname};
+                           // set parents
+                           // this check could be superfluous, may we add nullptr as children?
+                           for (auto& ii : {self.varname}) {{
+                               if (ii) {{
+                                   ii->set_parent(get_shared_ptr());
+                               }}
+                            }}
+                       }}
+                    """
+        elif self.is_pointer_node or self.optional:
+            return f"""
+                       void {class_name}::{setter_method}({setter_type}&& {self.varname}) {{
+                           this->{self.varname} = {self.varname};
+                           // set parents
+                           // this check could be superfluous, may we add nullptr as children?
+                           if ({self.varname}) {{
+                               {self.varname}->set_parent(get_shared_ptr());
+                           }}
+                       }}
+
+                       void {class_name}::{setter_method}(const {setter_type}& {self.varname}) {{
+                           this->{self.varname} = {self.varname};
+                           // set parents
+                           // this check could be superfluous, may we add nullptr as children?
+                           if ({self.varname}) {{
+                               {self.varname}->set_parent(get_shared_ptr());
+                           }}
+                       }}
+                    """
+        else:
+            return f"""
+                       void {class_name}::{setter_method}({setter_type}&& {self.varname}) {{
+                           this->{self.varname} = {self.varname};
+                       }}
+
+                       void {class_name}::{setter_method}(const {setter_type}& {self.varname}) {{
                            this->{self.varname} = {self.varname};
                        }}
                     """
