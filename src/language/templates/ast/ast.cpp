@@ -86,21 +86,19 @@ namespace ast {
     /// set this parent in the children
     void {{ node.class_name }}::set_parent_in_children() {
 
-        const auto parentShrPtr = get_shared_ptr();
-
         {% for child in node.children %}
             {% if child.is_vector %}
             /// set parent for each element of the vector
             for (auto& item : {{ child.varname }}) {
                 // this check could be superfluous, may we add nullptr as children?
                 if (item) {
-                    item->set_parent(parentShrPtr);
+                    item->set_parent(this);
                 }
             }
             {% elif child.is_pointer_node or child.optional %}
             // this check could be superfluous, may we add nullptr as children?
             if ({{ child.varname }}) {
-                {{ child.varname }}->set_parent(parentShrPtr);
+                {{ child.varname }}->set_parent(this);
             }
             {% endif %}
         {% endfor %}
