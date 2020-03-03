@@ -223,7 +223,7 @@ class ChildNode(BaseNode):
                              // set parents
                              // this check could be superfluous, may we add nullptr as children?
                              if (n) {{
-                                n->set_parent(get_shared_ptr());                                
+                                n->set_parent(this);                                
                              }}
                          }}
 
@@ -235,7 +235,7 @@ class ChildNode(BaseNode):
                              // set parents
                              // this check could be superfluous, may we add nullptr as children?
                              if (n) {{
-                                n->set_parent(get_shared_ptr());                                
+                                n->set_parent(this);                                
                              }}
                          }}
                     """
@@ -325,7 +325,7 @@ class ChildNode(BaseNode):
                            // this check could be superfluous, may we add nullptr as children?
                            for (auto& ii : {self.varname}) {{
                                if (ii) {{
-                                   ii->set_parent(get_shared_ptr());
+                                   ii->set_parent(this);
                                }}
                             }}
                        }}
@@ -336,7 +336,7 @@ class ChildNode(BaseNode):
                            // this check could be superfluous, may we add nullptr as children?
                            for (auto& ii : {self.varname}) {{
                                if (ii) {{
-                                   ii->set_parent(get_shared_ptr());
+                                   ii->set_parent(this);
                                }}
                             }}
                        }}
@@ -348,7 +348,7 @@ class ChildNode(BaseNode):
                            // set parents
                            // this check could be superfluous, may we add nullptr as children?
                            if ({self.varname}) {{
-                               {self.varname}->set_parent(get_shared_ptr());
+                               {self.varname}->set_parent(this);
                            }}
                        }}
 
@@ -357,7 +357,7 @@ class ChildNode(BaseNode):
                            // set parents
                            // this check could be superfluous, may we add nullptr as children?
                            if ({self.varname}) {{
-                               {self.varname}->set_parent(get_shared_ptr());
+                               {self.varname}->set_parent(this);
                            }}
                        }}
                     """
@@ -371,6 +371,9 @@ class ChildNode(BaseNode):
                            this->{self.varname} = {self.varname};
                        }}
                     """
+
+
+
 
     def __repr__(self):
         return "ChildNode(class_name='{}', nmodl_name='{}')".format(
@@ -488,7 +491,7 @@ class Node(BaseNode):
         initlist = [f'{c.varname}({c.varname})' for c in self.children]
 
         s = f"""{self.class_name}::{self.class_name}({', '.join(args)})
-                : {', '.join(initlist)} {{  set_parent_in_children(); }}
+                : {', '.join(initlist)} {{ set_parent_in_children(); }}
         """
         return textwrap.dedent(s)
 
