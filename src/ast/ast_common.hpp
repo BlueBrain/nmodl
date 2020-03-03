@@ -151,9 +151,23 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *
      * Children types can be known at compile time. Conversely, many parents
      * can have the same children type. Thus, this is just a pointer to
-     * the base class.
+     * the base class. The pointer to the parent cannot have ownership
+     * (circular ownership problem). weak_ptr you say? Yes, however weak_ptr
+     * can we instantiated from shared_ptr (not this). Whys is this a problem?
+     * In bison things must be passed around as raw pointers (because it uses
+     * unions etc.) and there are cases where the shared_ptr to the parent
+     * was not yet created while the child is added (throwing a bad_weak_ptr
+     * exception).
+     *
+     * i.e. in bison the lines:
+     *
+     * ast::WatchStatement* a = new ast::WatchStatement();
+     * yylhs.value.as< ast::WatchStatement* > ()->addWatch(a);
+     *
+     * would throw a bad_weak_ptr exception because when you call addWatch
+     * the shared_ptr_from_this to "a" is not yet created.
      */
-    std::shared_ptr<Ast> parent = nullptr;
+    Ast* parent = nullptr;
 
   public:
     /// \name Ctor & dtor
@@ -1510,8 +1524,13 @@ struct Ast: public std::enable_shared_from_this<Ast> {
 
     /**
      *\brief Parent getter
+     *
+     * returning a raw pointer may create less problems that the
+     * shared_from_this from the parent.
+     *
+     * Check Ast::parent for more information
      */
-    inline virtual std::shared_ptr<Ast> get_parent() const {
+    inline virtual Ast* get_parent() const {
         return parent;
     }
 
@@ -1522,8 +1541,10 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      * because children are generally build BEFORE the parent. Conversely,
      * we set children parents directly in the parent constructor using
      * set_parent_in_children()
+     *
+     * Check Ast::parent for more information
      */
-    inline virtual void set_parent(const std::shared_ptr<Ast>& p) {
+    inline virtual void set_parent(Ast* p) {
         parent = p;
     }
 
