@@ -65,13 +65,13 @@ set_property(TARGET visitor_obj PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 add_dependencies(visitor_obj lexer_obj)
 
-add_library(visitor SHARED $<TARGET_OBJECTS:visitor_obj>)
+add_library(visitor STATIC $<TARGET_OBJECTS:visitor_obj>)
 target_link_libraries(visitor PRIVATE pybind11::embed)
 
 add_dependencies(visitor lexer util)
 
 add_executable(nmodl_visitor main.cpp)
-target_link_libraries(nmodl_visitor printer visitor symtab util lexer ${PYTHON_LIBRARIES})
+target_link_libraries(nmodl_visitor printer visitor symtab util lexer)
 
 # =============================================================================
 # Install executable

@@ -23,7 +23,7 @@ set(CODEGEN_SOURCE_FILES
 # =============================================================================
 # Codegen library and executable
 # =============================================================================
-add_library(codegen SHARED ${CODEGEN_SOURCE_FILES})
+add_library(codegen STATIC ${CODEGEN_SOURCE_FILES})
 
 add_dependencies(codegen lexer util visitor)
 
