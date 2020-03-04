@@ -112,3 +112,4 @@ class SympyConductanceVisitor: public AstVisitor {
 
 }  // namespace visitor
 }  // namespace nmodl
+

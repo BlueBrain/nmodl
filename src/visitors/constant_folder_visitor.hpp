@@ -63,3 +63,4 @@ class ConstantFolderVisitor: public AstVisitor {
 
 }  // namespace visitor
 }  // namespace nmodl
+

@@ -36,3 +36,4 @@ ModToken operator+(ModToken adder1, ModToken adder2) {
 }
 
 }  // namespace nmodl
+

@@ -103,3 +103,4 @@ bool CodegenOmpVisitor::block_require_shadow_update(BlockType type) {
 
 }  // namespace codegen
 }  // namespace nmodl
+

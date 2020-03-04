@@ -182,3 +182,4 @@ std::string to_json(ast::Ast* node, bool compact, bool expand, bool add_nmodl) {
 }
 
 }  // namespace nmodl
+

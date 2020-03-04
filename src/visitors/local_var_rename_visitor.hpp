@@ -80,3 +80,4 @@ class LocalVarRenameVisitor: public AstVisitor {
 
 }  // namespace visitor
 }  // namespace nmodl
+

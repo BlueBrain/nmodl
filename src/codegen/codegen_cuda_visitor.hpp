@@ -119,3 +119,4 @@ class CodegenCudaVisitor: public CodegenCVisitor {
 
 }  // namespace codegen
 }  // namespace nmodl
+

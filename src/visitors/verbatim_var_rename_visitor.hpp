@@ -71,3 +71,4 @@ class VerbatimVarRenameVisitor: public AstVisitor {
 
 }  // namespace visitor
 }  // namespace nmodl
+

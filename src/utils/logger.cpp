@@ -33,3 +33,4 @@ Logger nmodl_logger("NMODL", "[%n] [%^%l%$] :: %v");
 logger_type logger = nmodl_logger.logger;
 
 }  // namespace nmodl
+

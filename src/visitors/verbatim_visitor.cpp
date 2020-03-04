@@ -29,3 +29,4 @@ void VerbatimVisitor::visit_verbatim(ast::Verbatim* node) {
 
 }  // namespace visitor
 }  // namespace nmodl
+
