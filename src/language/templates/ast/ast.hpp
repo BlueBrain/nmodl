@@ -258,7 +258,7 @@ namespace ast {
          *
          * \sa Ast::get_node_type_name Ast::get_node_name
          */
-        {{ virtual(node) }}void set_name(std::string name){{ override(node) }} {
+        {{ virtual(node) }}void set_name(std::string name) override {
             value->set(name);
         }
         {% endif %}
@@ -392,3 +392,4 @@ namespace ast {
 
 }  // namespace ast
 }  // namespace nmodl
+
