@@ -20,4 +20,4 @@ set(UTIL_SOURCE_FILES
 add_library(util_obj OBJECT ${UTIL_SOURCE_FILES})
 set_property(TARGET util_obj PROPERTY POSITION_INDEPENDENT_CODE ON)
 
-add_library(util STATIC $<TARGET_OBJECTS:util_obj>)
+add_library(util SHARED $<TARGET_OBJECTS:util_obj>)

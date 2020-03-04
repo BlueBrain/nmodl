@@ -19,6 +19,6 @@ set_property(TARGET symtab_obj PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 add_dependencies(symtab_obj lexer_obj)
 
-add_library(symtab STATIC $<TARGET_OBJECTS:symtab_obj>)
+add_library(symtab SHARED $<TARGET_OBJECTS:symtab_obj>)
 
 add_dependencies(symtab lexer)

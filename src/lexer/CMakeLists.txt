@@ -193,7 +193,7 @@ add_library(lexer_obj
 
 set_property(TARGET lexer_obj PROPERTY POSITION_INDEPENDENT_CODE ON)
 
-add_library(lexer STATIC $<TARGET_OBJECTS:lexer_obj>)
+add_library(lexer SHARED $<TARGET_OBJECTS:lexer_obj>)
 
 add_executable(nmodl_lexer main_nmodl.cpp)
 add_executable(c_lexer main_c.cpp)
