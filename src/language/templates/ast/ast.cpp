@@ -86,7 +86,7 @@ namespace ast {
     /// set this parent in the children
     void {{ node.class_name }}::set_parent_in_children() {
 
-        {% for child in node.children %}
+        {% for child in node.non_base_members %}
             {% if child.is_vector %}
             /// set parent for each element of the vector
             for (auto& item : {{ child.varname }}) {
@@ -96,16 +96,16 @@ namespace ast {
                 }
             }
             {% elif child.is_pointer_node or child.optional %}
-            // this check could be superfluous, may we add nullptr as children?
+            /// optional member could be nullptr
             if ({{ child.varname }}) {
                 {{ child.varname }}->set_parent(this);
             }
+            {% else %}
+                {{ child.varname }}.set_parent(this);
             {% endif %}
         {% endfor %}
 
     }
-
-
 
 
     {% endif %}
