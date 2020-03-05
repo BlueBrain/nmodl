@@ -16,6 +16,7 @@
 #include "parser/nmodl_driver.hpp"
 #include "test/utils/nmodl_constructs.hpp"
 #include "test/utils/test_utils.hpp"
+#include "visitors/ckparent_visitor.hpp"
 #include "visitors/lookup_visitor.hpp"
 
 using namespace nmodl::test_utils;
@@ -129,7 +130,7 @@ SCENARIO("NMODL parser running number of valid NMODL constructs") {
 }
 
 SCENARIO("NMODL parser running number of invalid NMODL constructs") {
-    for (const auto& construct: nmdol_invalid_constructs) {
+    for (const auto& construct: nmodl_invalid_constructs) {
         auto test_case = construct.second;
         GIVEN(test_case.name) {
             THEN("Parser throws an exception while parsing : " + test_case.input) {
@@ -153,6 +154,25 @@ SCENARIO("NEURON block can add CURIE information", "[parser][represents]") {
                                 Catch::Contains("Lexer Error"));
             REQUIRE_THROWS_WITH(is_valid_construct("NEURON { REPRESENTS NCIT}"),
                                 Catch::Contains("Lexer Error"));
+        }
+    }
+}
+
+
+SCENARIO("Check parents in valid NMODL constructs") {
+    nmodl::parser::NmodlDriver driver;
+    std::shared_ptr<nmodl::ast::Program> ast_program;
+    for (const auto& construct: nmodl_valid_constructs) {
+        // parse the string
+        driver.parse_string(construct.second.input);
+        // create the ast
+        ast_program = driver.get_ast();
+        GIVEN(construct.second.name) {
+            THEN("Check the parents in : " + construct.second.input) {
+                // check the parents
+                REQUIRE(!nmodl::visitor::CkParentVisitor(true).lookup(
+                    ast_program->get_shared_ptr().get()));
+            }
         }
     }
 }
