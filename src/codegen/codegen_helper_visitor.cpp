@@ -7,14 +7,14 @@
 
 #include <algorithm>
 #include <cmath>
+#include <set>
 
 #include "codegen/codegen_helper_visitor.hpp"
 #include "codegen/codegen_naming.hpp"
+#include "utils/logger.hpp"
 #include "visitors/lookup_visitor.hpp"
 #include "visitors/rename_visitor.hpp"
 
-#include <fmt/format.h>
-#include <set>
 
 using namespace fmt::literals;
 

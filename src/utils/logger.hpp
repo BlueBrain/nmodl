@@ -16,6 +16,8 @@
 // disable clang-format to keep order of inclusion
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
+// include newer fmt which is external package
+#include "fmt/format.h"
 // clang-format on
 
 namespace nmodl {

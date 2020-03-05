@@ -6,7 +6,7 @@
  *************************************************************************/
 
 #include "codegen/codegen_acc_visitor.hpp"
-#include <fmt/format.h>
+#include "utils/logger.hpp"
 
 
 using namespace fmt::literals;
