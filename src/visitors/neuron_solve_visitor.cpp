@@ -43,9 +43,9 @@ void NeuronSolveVisitor::visit_diff_eq_expression(ast::DiffEqExpression* node) {
 
 
 void NeuronSolveVisitor::visit_binary_expression(ast::BinaryExpression* node) {
-    auto& lhs = node->lhs;
-    auto& rhs = node->rhs;
-    auto& op = node->op;
+    const auto& lhs = node->get_lhs_cr();
+    const auto& rhs = node->get_rhs_cr();
+    const auto& op = node->get_op_cr();
 
     /// we have to only solve odes under derivative block where lhs is variable
     if (!derivative_block || !differential_equation || !lhs->is_var_name()) {
@@ -68,8 +68,8 @@ void NeuronSolveVisitor::visit_binary_expression(ast::BinaryExpression* node) {
                     statement);
                 auto bin_expr = std::dynamic_pointer_cast<ast::BinaryExpression>(
                     expr_statement->get_expression());
-                lhs.reset(bin_expr->lhs->clone());
-                rhs.reset(bin_expr->rhs->clone());
+                node->set_lhs(std::shared_ptr<ast::Expression>(bin_expr->get_lhs_cr()->clone()));
+                node->set_rhs(std::shared_ptr<ast::Expression>(bin_expr->get_rhs_cr()->clone()));
             } else {
                 logger->warn("NeuronSolveVisitor :: cnexp solver not possible for {}",
                              to_nmodl(node));
@@ -80,12 +80,11 @@ void NeuronSolveVisitor::visit_binary_expression(ast::BinaryExpression* node) {
             auto expr_statement = std::dynamic_pointer_cast<ast::ExpressionStatement>(statement);
             auto bin_expr = std::dynamic_pointer_cast<ast::BinaryExpression>(
                 expr_statement->get_expression());
-            lhs.reset(bin_expr->lhs->clone());
-            rhs.reset(bin_expr->rhs->clone());
+            node->set_lhs(std::shared_ptr<ast::Expression>(bin_expr->get_lhs_cr()->clone()));
+            node->set_rhs(std::shared_ptr<ast::Expression>(bin_expr->get_rhs_cr()->clone()));
         } else if (solve_method == codegen::naming::DERIVIMPLICIT_METHOD) {
             auto varname = "D" + name->get_node_name();
-            auto variable = new ast::Name(new ast::String(varname));
-            lhs.reset(variable);
+            node->set_lhs(std::make_shared<ast::Name>(new ast::String(varname)));
             if (program_symtab->lookup(varname) == nullptr) {
                 auto symbol = std::make_shared<symtab::Symbol>(varname, ModToken());
                 symbol->set_original_name(name->get_node_name());

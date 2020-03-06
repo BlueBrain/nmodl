@@ -10,6 +10,7 @@
 #include "parser/nmodl_driver.hpp"
 #include "test/utils/nmodl_constructs.hpp"
 #include "test/utils/test_utils.hpp"
+#include "visitors/ckparent_visitor.hpp"
 #include "visitors/nmodl_visitor.hpp"
 
 using namespace nmodl;
@@ -29,6 +30,10 @@ std::string run_nmodl_visitor(const std::string& text) {
 
     std::stringstream stream;
     NmodlPrintVisitor(stream).visit_program(ast.get());
+
+    // check that, after visitor rearrangement, parents are still up-to-date
+    CkParentVisitor(true).visit_program(ast.get());
+
     return stream.str();
 }
 
