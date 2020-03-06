@@ -23,8 +23,8 @@ jobs:
       export CXX='g++-8'
       mkdir -p $(Build.Repository.LocalPath)/build
       cd $(Build.Repository.LocalPath)/build
-      cmake .. -DPYTHON_EXECUTABLE=`which python3.7` -DCMAKE_INSTALL_PREFIX=$HOME/nmodl
-      make
+      cmake .. -DPYTHON_EXECUTABLE=`which python3.7` -DCMAKE_INSTALL_PREFIX=$HOME/nmodl -DCMAKE_EXE_LINKER_FLAGS="-fno-lto"
+      make -j 2
       make test
     displayName: 'Build and Run Tests'
 - job: 'osx1014'
