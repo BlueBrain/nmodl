@@ -101,7 +101,9 @@ find_python_module(yaml 3.12 REQUIRED)
 include_directories(${NMODL_PROJECT_SOURCE_DIR}
                     ${NMODL_PROJECT_SOURCE_DIR}/src
                     ${PROJECT_BINARY_DIR}/src
-                    ${NMODL_PROJECT_SOURCE_DIR}/ext)
+                    ${NMODL_PROJECT_SOURCE_DIR}/ext
+                    ${NMODL_PROJECT_SOURCE_DIR}/ext/fmt/include
+                    ${NMODL_PROJECT_SOURCE_DIR}/ext/spdlog/include)
 
 # =============================================================================
 # Include pybind11

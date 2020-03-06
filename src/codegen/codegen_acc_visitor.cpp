@@ -5,8 +5,9 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
+#include "fmt/format.h"
+
 #include "codegen/codegen_acc_visitor.hpp"
-#include "utils/logger.hpp"
 
 
 using namespace fmt::literals;
