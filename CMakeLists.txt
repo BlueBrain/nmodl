@@ -112,6 +112,12 @@ message(STATUS "INCLUDING PYBIND11")
 add_subdirectory(ext/pybind11)
 
 # =============================================================================
+# Include fmt library
+# =============================================================================
+message(STATUS "INCLUDING FMT")
+add_subdirectory(ext/fmt EXCLUDE_FROM_ALL)
+
+# =============================================================================
 # Include path from external libraries
 # =============================================================================
 include_directories(${NMODL_PROJECT_SOURCE_DIR}/ext/cli11/include)
