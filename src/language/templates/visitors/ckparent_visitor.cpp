@@ -54,6 +54,7 @@ void CkParentVisitor::visit_{{ node.class_name|snake_case }}({{ node.class_name 
         if (ckRootParentNull && node->get_parent()) {
             std::stringstream ss;
 
+            ss << "visit_{{ node.class_name|snake_case }}\n";
             ss << "root->parent ";
             modToken2error(ss, node->get_parent());
             ss << " is set when it should be nullptr";
@@ -65,6 +66,7 @@ void CkParentVisitor::visit_{{ node.class_name|snake_case }}({{ node.class_name 
         if (lineOfSuccession.top() != node->get_parent()) {
             std::stringstream ss;
 
+            ss << "visit_{{ node.class_name|snake_case }}\n";
             ss << "parent: ";
             modToken2error(ss, lineOfSuccession.top());
             ss << "and child->parent: ";

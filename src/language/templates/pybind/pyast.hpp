@@ -59,7 +59,7 @@ struct PyAst: public Ast {
     }
 
 
-    Ast* clone() override {
+    Ast* clone() const override {
         PYBIND11_OVERLOAD(Ast*, Ast, clone, );
     }
 

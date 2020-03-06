@@ -9,6 +9,7 @@
 
 #include "parser/nmodl_driver.hpp"
 #include "test/utils/test_utils.hpp"
+#include "visitors/ckparent_visitor.hpp"
 #include "visitors/json_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
 
@@ -27,6 +28,8 @@ using nmodl::parser::NmodlDriver;
 std::string run_json_visitor(const std::string& text, bool compact = false) {
     NmodlDriver driver;
     auto ast = driver.parse_string(text);
+
+
     return to_json(ast.get(), compact);
 }
 

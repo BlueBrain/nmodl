@@ -9,9 +9,11 @@
 
 #include "parser/nmodl_driver.hpp"
 #include "test/utils/test_utils.hpp"
+#include "visitors/ckparent_visitor.hpp"
 #include "visitors/inline_visitor.hpp"
 #include "visitors/nmodl_visitor.hpp"
 #include "visitors/symtab_visitor.hpp"
+
 
 using namespace nmodl;
 using namespace visitor;
@@ -31,6 +33,11 @@ std::string run_inline_visitor(const std::string& text) {
     InlineVisitor().visit_program(ast.get());
     std::stringstream stream;
     NmodlPrintVisitor(stream).visit_program(ast.get());
+
+
+    // check that, after visitor rearrangement, parents are still up-to-date
+    CkParentVisitor(true).visit_program(ast.get());
+
     return stream.str();
 }
 

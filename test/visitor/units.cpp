@@ -13,6 +13,7 @@
 #include "test/utils/nmodl_constructs.hpp"
 #include "test/utils/test_utils.hpp"
 #include "utils/logger.hpp"
+#include "visitors/ckparent_visitor.hpp"
 #include "visitors/lookup_visitor.hpp"
 #include "visitors/nmodl_visitor.hpp"
 #include "visitors/units_visitor.hpp"
@@ -100,6 +101,9 @@ std::string run_units_visitor(const std::string& text) {
         }
         ss << "\n";
     }
+
+    // check that, after visitor rearrangement, parents are still up-to-date
+    CkParentVisitor(true).visit_program(ast.get());
 
     return ss.str();
 }

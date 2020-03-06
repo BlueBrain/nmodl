@@ -271,7 +271,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *
      * @return pointer to the clone/copy of the current node
      */
-    virtual Ast* clone() {
+    virtual Ast* clone() const {
         throw std::logic_error("clone not implemented");
     }
 

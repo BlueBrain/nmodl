@@ -219,7 +219,8 @@ class ChildNode(BaseNode):
                           * \\brief Add member to {self.varname} by raw pointer
                           */
                          void add{self.class_name}({self.class_name} *n) {{
-                             {self.varname}.emplace_back(n);
+                            {self.varname}.emplace_back(n);
+
                              // set parents
                              // this check could be superfluous, may we add nullptr as children?
                              if (n) {{
@@ -231,12 +232,73 @@ class ChildNode(BaseNode):
                           * \\brief Add member to {self.varname} by shared_ptr
                           */
                          void add{self.class_name}(std::shared_ptr<{self.class_name}> n) {{
-                             {self.varname}.push_back(n);
+                            {self.varname}.emplace_back(n);
+                             
                              // set parents
                              // this check could be superfluous, may we add nullptr as children?
                              if (n) {{
                                 n->set_parent(this);                                
                              }}
+                         }}
+
+                         /**
+                          * \\brief Erase member to {self.varname}
+                          */
+                         {self.class_name}Vector::const_iterator erase{self.class_name}({self.class_name}Vector::const_iterator first) {{
+                            return {self.varname}.erase(first);
+                         }}
+                         /**
+                          * \\brief Erase members to {self.varname}
+                          */
+                         {self.class_name}Vector::const_iterator erase{self.class_name}({self.class_name}Vector::const_iterator first, {self.class_name}Vector::const_iterator last) {{
+                            return {self.varname}.erase(first, last);
+                         }}
+
+                         /**
+                          * \\brief Insert member to {self.varname}
+                          */
+                         {self.class_name}Vector::const_iterator insert{self.class_name}({self.class_name}Vector::const_iterator position, const std::shared_ptr<{self.class_name}>& n) {{
+                             if (n) {{
+                                n->set_parent(this);                                
+                             }}
+            
+                            return {self.varname}.insert(position, n);
+                         }}
+                         /**
+                          * \\brief Insert members to {self.varname}
+                          */
+                         template <class InputIterator>
+                         void insert{self.class_name}({self.class_name}Vector::const_iterator position, InputIterator first, InputIterator last) {{
+
+                             for (auto it = first; it != last; ++it) {{
+                                 if (*it) {{
+                                    (*it)->set_parent(this);                                
+                                 }}
+                              }}
+            
+                            {self.varname}.insert(position, first, last);
+                         }}
+
+                         /**
+                          * \\brief Reset member to {self.varname}
+                          */
+                         void reset{self.class_name}({self.class_name}Vector::const_iterator position, {self.class_name}* n) {{
+                             if (n) {{
+                                n->set_parent(this);                                
+                             }}
+                            
+                            {self.varname}[position - {self.varname}.begin()].reset(n);
+                         }}
+
+                         /**
+                          * \\brief Reset member to {self.varname}
+                          */
+                         void reset{self.class_name}({self.class_name}Vector::const_iterator position, std::shared_ptr<{self.class_name}> n) {{
+                             if (n) {{
+                                n->set_parent(this);                                
+                             }}
+                            
+                            {self.varname}[position - {self.varname}.begin()] = n;
                          }}
                     """
             s = textwrap.dedent(method)
@@ -269,13 +331,26 @@ class ChildNode(BaseNode):
         getter_method = self.getter_method if self.getter_method else "get_" + to_snake_case(self.varname)
         getter_override = " override" if self.getter_override else ""
         return_type = self.member_typename
+
+
         return f"""
                    /**
                     * \\brief Getter for member variable \\ref {class_name}.{self.varname}
                     */
-                   {return_type} {getter_method}(){getter_override}{{
+                   {return_type} {getter_method}() {getter_override}{{
                        return {self.varname};
-                   }}"""
+                   }}
+
+                   /**
+                    * \\brief Getter (const ref) for member variable \\ref {class_name}.{self.varname}
+                    */
+                   const {return_type}& {getter_method}_cr() const {{
+                       return {self.varname};
+                   }}
+                """
+
+
+
 
     def get_setter_method_declaration(self, class_name):
         setter_method = "set_" + to_snake_case(self.varname)

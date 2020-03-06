@@ -63,7 +63,7 @@ namespace ast {
         {% endfor %}
 
     {% endif %}
-      public:
+    public:
         {% for member in node.public_members() %}
         {{ '/// ' + member[3] }}
         {% if member[2] is none %}
@@ -72,7 +72,6 @@ namespace ast {
         {{ member[0] }} {{ member[1] }} = {{ member[2] }};
         {% endif %}
         {% endfor %}
-
 
         /// \name Ctor & dtor
         /// \{
@@ -128,7 +127,7 @@ namespace ast {
          *
          * @return pointer to the clone/copy of the current node
          */
-        {{ virtual(node) }} {{ node.class_name }}* clone() override {
+        {{ virtual(node) }} {{ node.class_name }}* clone() const override {
             return new {{ node.class_name }}(*this);
         }
 
@@ -237,6 +236,8 @@ namespace ast {
         {{ child.get_node_name_method() }}
 
         {{ child.get_getter_method(node.class_name) }}
+
+
         {% endfor %}
 
         /// \}
@@ -362,7 +363,7 @@ namespace ast {
                  * string representation when they are converted from AST back to
                  * NMODL. This method is used to return corresponding string representation.
                  */
-                std::string eval() { return {{
+                std::string eval() const { return {{
                     node.get_data_type_name() }}Names[value];
                 }
             {# but if basic data type then eval return their value #}
@@ -376,7 +377,7 @@ namespace ast {
                  *
                  * \sa {{ node.class_name }}::set
                  */
-                {{ node.get_data_type_name() }} eval() {
+                {{ node.get_data_type_name() }} eval() const {
                     return value;
                 }
             {% endif %}
