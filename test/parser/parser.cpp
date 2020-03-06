@@ -161,17 +161,14 @@ SCENARIO("NEURON block can add CURIE information", "[parser][represents]") {
 
 SCENARIO("Check parents in valid NMODL constructs") {
     nmodl::parser::NmodlDriver driver;
-    std::shared_ptr<nmodl::ast::Program> ast_program;
+    std::shared_ptr<nmodl::ast::Program> ast;
     for (const auto& construct: nmodl_valid_constructs) {
-        // parse the string
-        driver.parse_string(construct.second.input);
-        // create the ast
-        ast_program = driver.get_ast();
+        // parse the string and get the ast
+        ast = driver.parse_string(construct.second.input);
         GIVEN(construct.second.name) {
             THEN("Check the parents in : " + construct.second.input) {
                 // check the parents
-                REQUIRE(!nmodl::visitor::CkParentVisitor(true).lookup(
-                    ast_program->get_shared_ptr().get()));
+                REQUIRE(!nmodl::visitor::CkParentVisitor(true).lookup(ast.get()));
             }
         }
     }

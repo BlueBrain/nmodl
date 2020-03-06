@@ -9,6 +9,7 @@
 
 #include "parser/nmodl_driver.hpp"
 #include "test/utils/test_utils.hpp"
+#include "visitors/ckparent_visitor.hpp"
 #include "visitors/constant_folder_visitor.hpp"
 #include "visitors/loop_unroll_visitor.hpp"
 #include "visitors/nmodl_visitor.hpp"
@@ -34,6 +35,10 @@ std::string run_loop_unroll_visitor(const std::string& text) {
     ConstantFolderVisitor().visit_program(ast.get());
     LoopUnrollVisitor().visit_program(ast.get());
     ConstantFolderVisitor().visit_program(ast.get());
+
+    // check that, after visitor rearrangement, parents are still up-to-date
+    CkParentVisitor(true).visit_program(ast.get());
+
     return to_nmodl(ast.get(), {AstNodeType::DEFINE});
 }
 

@@ -16,6 +16,7 @@
 //#include "visitors/nmodl_visitor.hpp"
 #include "visitors/steadystate_visitor.hpp"
 //#include "visitors/sympy_solver_visitor.hpp"
+#include "visitors/ckparent_visitor.hpp"
 #include "visitors/symtab_visitor.hpp"
 
 using namespace nmodl;
@@ -61,6 +62,10 @@ std::vector<std::string> run_steadystate_visitor(
     for (const auto& r: res) {
         results.push_back(to_nmodl(r.get()));
     }
+
+    // check that, after visitor rearrangement, parents are still up-to-date
+    CkParentVisitor(true).visit_program(ast.get());
+
     return results;
 }
 

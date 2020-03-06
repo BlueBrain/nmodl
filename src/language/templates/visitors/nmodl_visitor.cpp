@@ -63,7 +63,7 @@ using namespace ast;
         auto symbol = std::string(order, '\'');
         printer->add_element(symbol);
     {% elif node.class_name == node_info.BINARY_EXPRESSION_NODE and child.varname == node_info.BINARY_OPERATOR_NAME %}
-        std::string op = node->op.eval();
+        std::string op = node->get_op_cr().eval();
         if(op == "=" || op == "&&" || op == "||" || op == "==")
             op = " " + op + " ";
         printer->add_element(op);
