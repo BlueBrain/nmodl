@@ -60,6 +60,8 @@ before_install:
   # brew installed flex and bison is not in $PATH
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
         export PATH=/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH;
+        brew unlink python@2;
+        brew link --overwrite python;
     else
         pyenv global $PYTHON_VERSION;
         ls /usr/bin/;

@@ -22,8 +22,8 @@ set(PYNMODL_HEADERS
     ${PROJECT_BINARY_DIR}/src/pybind/pyast.hpp
     ${PROJECT_BINARY_DIR}/src/pybind/pyvisitor.hpp)
 
-# Note that LTO causes link time errors with GCC 8. To avoid this,
-# we disable LTO for pybind using NO_EXTRAS. See #266.
+# Note that LTO causes link time errors with GCC 8. To avoid this, we disable LTO for pybind using
+# NO_EXTRAS. See #266.
 pybind11_add_module(_nmodl
                     NO_EXTRAS
                     ${PYNMODL_HEADERS}
