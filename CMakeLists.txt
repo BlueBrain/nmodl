@@ -116,6 +116,7 @@ add_subdirectory(ext/pybind11)
 # =============================================================================
 message(STATUS "INCLUDING FMT")
 add_subdirectory(ext/fmt EXCLUDE_FROM_ALL)
+set_property(TARGET fmt PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 # =============================================================================
 # Include path from external libraries
