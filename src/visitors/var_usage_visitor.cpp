@@ -30,4 +30,3 @@ bool VarUsageVisitor::variable_used(ast::Node* node, std::string name) {
 
 }  // namespace visitor
 }  // namespace nmodl
-

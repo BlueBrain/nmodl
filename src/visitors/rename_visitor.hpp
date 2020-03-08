@@ -76,4 +76,3 @@ class RenameVisitor: public AstVisitor {
 
 }  // namespace visitor
 }  // namespace nmodl
-

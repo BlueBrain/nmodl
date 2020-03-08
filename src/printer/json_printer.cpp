@@ -93,4 +93,3 @@ void JSONPrinter::flush() {
 
 }  // namespace printer
 }  // namespace nmodl
-

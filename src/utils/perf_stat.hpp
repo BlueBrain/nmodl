@@ -109,4 +109,3 @@ struct PerfStat {
 
 }  // namespace utils
 }  // namespace nmodl
-

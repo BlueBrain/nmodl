@@ -53,4 +53,3 @@ void NMODLPrinter::pop_level() {
 
 }  // namespace printer
 }  // namespace nmodl
-

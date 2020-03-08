@@ -69,4 +69,3 @@ class LoopUnrollVisitor: public AstVisitor {
 
 }  // namespace visitor
 }  // namespace nmodl
-

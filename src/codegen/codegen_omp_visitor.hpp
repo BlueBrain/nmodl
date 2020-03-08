@@ -87,4 +87,3 @@ class CodegenOmpVisitor: public CodegenCVisitor {
 
 }  // namespace codegen
 }  // namespace nmodl
-
