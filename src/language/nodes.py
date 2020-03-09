@@ -222,7 +222,7 @@ class ChildNode(BaseNode):
                             {self.varname}.emplace_back(n);
 
                              // set parents
-                             // this check could be superfluous, may we add nullptr as children?
+                             // this check could be superfluous, may be add nullptr as children?
                              if (n) {{
                                 n->set_parent(this);                                
                              }}
