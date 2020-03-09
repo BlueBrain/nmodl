@@ -153,7 +153,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      * can have the same children type. Thus, this is just a pointer to
      * the base class. The pointer to the parent cannot have ownership
      * (circular ownership problem). weak_ptr you say? Yes, however weak_ptr
-     * can we instantiated from shared_ptr (not this). Whys is this a problem?
+     * can be instantiated from shared_ptr (not this). Whys is this a problem?
      * In bison things must be passed around as raw pointers (because it uses
      * unions etc.) and there are cases where the shared_ptr to the parent
      * was not yet created while the child is added (throwing a bad_weak_ptr
