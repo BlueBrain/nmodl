@@ -90,10 +90,14 @@ namespace ast {
             {% if child.is_vector %}
             /// set parent for each element of the vector
             for (auto& item : {{ child.varname }}) {
-                // this check could be superfluous, may we add nullptr as children?
+                {% if child.optional %}
                 if (item) {
                     item->set_parent(this);
                 }
+                {% else %}
+                    item->set_parent(this);
+                {%  endif %}
+
             }
             {% elif child.is_pointer_node or child.optional %}
             /// optional member could be nullptr

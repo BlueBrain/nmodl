@@ -214,6 +214,13 @@ class ChildNode(BaseNode):
     def get_add_methods(self):
         s = ''
         if self.add_method:
+            setP = "n->set_parent(this); "
+            if self.optional:
+                setP = f"""
+                        if (n) {{
+                            n->set_parent(this);                                
+                        }}
+                        """
             method = f"""
                          /**
                           * \\brief Add member to {self.varname} by raw pointer
@@ -222,10 +229,7 @@ class ChildNode(BaseNode):
                             {self.varname}.emplace_back(n);
 
                              // set parents
-                             // this check could be superfluous, may be add nullptr as children?
-                             if (n) {{
-                                n->set_parent(this);                                
-                             }}
+                             {setP}
                          }}
 
                          /**
@@ -235,10 +239,7 @@ class ChildNode(BaseNode):
                             {self.varname}.emplace_back(n);
                              
                              // set parents
-                             // this check could be superfluous, may we add nullptr as children?
-                             if (n) {{
-                                n->set_parent(this);                                
-                             }}
+                             {setP}
                          }}
 
                          /**
@@ -258,9 +259,7 @@ class ChildNode(BaseNode):
                           * \\brief Insert member to {self.varname}
                           */
                          {self.class_name}Vector::const_iterator insert{self.class_name}({self.class_name}Vector::const_iterator position, const std::shared_ptr<{self.class_name}>& n) {{
-                             if (n) {{
-                                n->set_parent(this);                                
-                             }}
+                             {setP}
             
                             return {self.varname}.insert(position, n);
                          }}
@@ -271,9 +270,9 @@ class ChildNode(BaseNode):
                          void insert{self.class_name}({self.class_name}Vector::const_iterator position, InputIterator first, InputIterator last) {{
 
                              for (auto it = first; it != last; ++it) {{
-                                 if (*it) {{
-                                    (*it)->set_parent(this);                                
-                                 }}
+                                 auto& n = *it;
+                                 //set parents
+                                 {setP}
                               }}
             
                             {self.varname}.insert(position, first, last);
@@ -283,9 +282,8 @@ class ChildNode(BaseNode):
                           * \\brief Reset member to {self.varname}
                           */
                          void reset{self.class_name}({self.class_name}Vector::const_iterator position, {self.class_name}* n) {{
-                             if (n) {{
-                                n->set_parent(this);                                
-                             }}
+                             //set parents
+                             {setP}
                             
                             {self.varname}[position - {self.varname}.begin()].reset(n);
                          }}
@@ -294,9 +292,8 @@ class ChildNode(BaseNode):
                           * \\brief Reset member to {self.varname}
                           */
                          void reset{self.class_name}({self.class_name}Vector::const_iterator position, std::shared_ptr<{self.class_name}> n) {{
-                             if (n) {{
-                                n->set_parent(this);                                
-                             }}
+                             //set parents
+                             {setP}
                             
                             {self.varname}[position - {self.varname}.begin()] = n;
                          }}
