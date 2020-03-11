@@ -16,7 +16,7 @@ using namespace ast;
 
 bool InlineVisitor::can_inline_block(StatementBlock* block) {
     bool to_inline = true;
-    const auto& statements = block->get_statements_cr();
+    const auto& statements = block->get_statements();
     for (const auto& statement: statements) {
         /// inlining is disabled if function/procedure contains table or lag statement
         if (statement->is_table_statement() || statement->is_lag_statement()) {
@@ -27,7 +27,7 @@ bool InlineVisitor::can_inline_block(StatementBlock* block) {
         // especially for net_receive block
         if (statement->is_verbatim()) {
             const auto node = static_cast<const Verbatim*>(statement.get());
-            auto text = node->get_statement_cr()->eval();
+            auto text = node->get_statement()->eval();
             parser::CDriver driver;
             driver.scan_string(text);
             if (driver.has_token("return")) {
@@ -81,7 +81,7 @@ void InlineVisitor::inline_arguments(StatementBlock* inlined_block,
     }
 
     size_t counter = 0;
-    const auto& statements = inlined_block->get_statements_cr();
+    const auto& statements = inlined_block->get_statements();
 
     for (const auto& argument: callee_parameters) {
         auto name = argument->get_name()->clone();
@@ -151,7 +151,7 @@ bool InlineVisitor::inline_function_call(ast::Block* callee,
         //            throw std::logic_error("got local statement as nullptr");
         //        }
 
-        const ast::StatementVector& statements = caller->get_statements_cr();
+        const ast::StatementVector& statements = caller->get_statements();
         auto local_list_statement = get_local_list_statement(caller);
         /// each block should already have local statement
         if (local_list_statement == nullptr) {
@@ -246,7 +246,7 @@ void InlineVisitor::visit_statement_block(StatementBlock* node) {
      */
     add_local_statement(node);
 
-    const auto& statements = node->get_statements_cr();
+    const auto& statements = node->get_statements();
 
     for (const auto& statement: statements) {
         caller_statement = statement;
@@ -261,7 +261,7 @@ void InlineVisitor::visit_statement_block(StatementBlock* node) {
         throw std::logic_error("got local statement as nullptr");
     }
 
-    if (local_list_statement->get_variables_cr().empty()) {
+    if (local_list_statement->get_variables().empty()) {
         node->eraseStatement(statements.begin());
     }
 

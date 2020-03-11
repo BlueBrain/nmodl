@@ -35,7 +35,7 @@ std::string get_new_name(const std::string& name,
 }
 
 std::shared_ptr<ast::LocalListStatement> get_local_list_statement(const StatementBlock* node) {
-    const auto& statements = node->get_statements_cr();
+    const auto& statements = node->get_statements();
     for (const auto& statement: statements) {
         if (statement->is_local_list_statement()) {
             return std::static_pointer_cast<LocalListStatement>(statement);
@@ -46,7 +46,7 @@ std::shared_ptr<ast::LocalListStatement> get_local_list_statement(const Statemen
 
 void add_local_statement(StatementBlock* node) {
     auto variables = get_local_list_statement(node);
-    const auto& statements = node->get_statements_cr();
+    const auto& statements = node->get_statements();
     if (variables == nullptr) {
         auto statement = std::make_shared<LocalListStatement>(LocalVarVector());
         node->insertStatement(statements.begin(), statement);
@@ -56,7 +56,7 @@ void add_local_statement(StatementBlock* node) {
 LocalVar* add_local_variable(StatementBlock* node, Identifier* varname) {
     add_local_statement(node);
 
-    const ast::StatementVector& statements = node->get_statements_cr();
+    const ast::StatementVector& statements = node->get_statements();
 
     auto local_list_statement = get_local_list_statement(node);
     /// each block should already have local statement
@@ -93,7 +93,7 @@ std::shared_ptr<Statement> create_statement(const std::string& code_statement) {
     nmodl::parser::NmodlDriver driver;
     auto nmodl_text = "PROCEDURE dummy() { " + code_statement + " }";
     auto ast = driver.parse_string(nmodl_text);
-    auto procedure = std::dynamic_pointer_cast<ProcedureBlock>(ast->get_blocks_cr().front());
+    auto procedure = std::dynamic_pointer_cast<ProcedureBlock>(ast->get_blocks().front());
     auto statement = std::shared_ptr<Statement>(
         procedure->get_statement_block()->get_statements()[0]->clone());
     return statement;
@@ -115,7 +115,7 @@ std::shared_ptr<StatementBlock> create_statement_block(
     }
     nmodl_text += "}";
     auto ast = driver.parse_string(nmodl_text);
-    auto procedure = std::dynamic_pointer_cast<ProcedureBlock>(ast->get_blocks_cr().front());
+    auto procedure = std::dynamic_pointer_cast<ProcedureBlock>(ast->get_blocks().front());
     auto statement_block = std::shared_ptr<StatementBlock>(
         procedure->get_statement_block()->clone());
     return statement_block;
@@ -124,7 +124,7 @@ std::shared_ptr<StatementBlock> create_statement_block(
 
 void remove_statements_from_block(ast::StatementBlock* block,
                                   const std::set<ast::Node*> statements) {
-    const auto& statement_vec = block->get_statements_cr();
+    const auto& statement_vec = block->get_statements();
 
     // loosely following the cpp reference of remove_if
 

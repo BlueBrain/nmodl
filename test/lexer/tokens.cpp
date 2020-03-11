@@ -75,9 +75,7 @@ TokenType token_type(const std::string& name) {
         break;
     }
 
-    default: {
-        auto value = sym.value.as<ModToken>();
-    }
+    default: { auto value = sym.value.as<ModToken>(); }
     }
 
     return token;
@@ -133,3 +131,4 @@ TEST_CASE("NMODL Lexer returning valid token types", "[Lexer]") {
         REQUIRE(token_type(")") != Token::OPEN_PARENTHESIS);
     }
 }
+

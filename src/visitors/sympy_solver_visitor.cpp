@@ -187,7 +187,7 @@ void SympySolverVisitor::construct_eigen_solver_block(
     solutions_filtered = filter_string_vector(solutions_filtered, "F[", unique_F + "[");
 
     // find out where to insert solution in statement block
-    const auto& statements = block_with_expression_statements->get_statements_cr();
+    const auto& statements = block_with_expression_statements->get_statements();
     auto it = get_solution_location_iterator(statements);
     // insert pre-solve statements below last linear eq in block
     for (const auto& statement: pre_solve_statements) {
@@ -308,7 +308,7 @@ void SympySolverVisitor::solve_linear_system(const std::vector<std::string>& pre
         return;
     }
     // find out where to insert solutions in statement block
-    const auto& statements = block_with_expression_statements->get_statements_cr();
+    const auto& statements = block_with_expression_statements->get_statements();
     auto it = get_solution_location_iterator(statements);
     if (small_system) {
         // for small number of state vars, linear solver
@@ -402,8 +402,8 @@ void SympySolverVisitor::visit_var_name(ast::VarName* node) {
 }
 
 void SympySolverVisitor::visit_diff_eq_expression(ast::DiffEqExpression* node) {
-    const auto& lhs = node->get_expression_cr()->get_lhs_cr();
-    const auto& rhs = node->get_expression_cr()->get_rhs_cr();
+    const auto& lhs = node->get_expression()->get_lhs();
+    const auto& rhs = node->get_expression()->get_rhs();
 
     if (!lhs->is_var_name()) {
         logger->warn("SympySolverVisitor :: LHS of differential equation is not a VariableName");

@@ -332,16 +332,9 @@ class ChildNode(BaseNode):
 
         return f"""
                    /**
-                    * \\brief Getter for member variable \\ref {class_name}.{self.varname}
-                    */
-                   {return_type} {getter_method}() {getter_override}{{
-                       return {self.varname};
-                   }}
-
-                   /**
                     * \\brief Getter (const ref) for member variable \\ref {class_name}.{self.varname}
                     */
-                   const {return_type}& {getter_method}_cr() const {{
+                   const {return_type}& {getter_method}() const {{
                        return {self.varname};
                    }}
                 """
