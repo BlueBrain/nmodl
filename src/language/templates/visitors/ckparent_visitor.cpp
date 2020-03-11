@@ -18,9 +18,7 @@ using namespace ast;
 int CkParentVisitor::lookup(Ast* node) {
 
     // There is no clear() in std::stack...
-    while ( ! lineOfSuccession.empty() ){
-        lineOfSuccession.pop();
-    }
+    parent = nullptr;
 
     node->accept(*this);
 
@@ -50,7 +48,7 @@ void CkParentVisitor::visit_{{ node.class_name|snake_case }}({{ node.class_name 
         return;
     }
 
-    if (lineOfSuccession.empty()) {
+    if (!parent) {
         if (ckRootParentNull && node->get_parent()) {
             std::stringstream ss;
 
@@ -63,12 +61,12 @@ void CkParentVisitor::visit_{{ node.class_name|snake_case }}({{ node.class_name 
         }
     }
     else {
-        if (lineOfSuccession.top() != node->get_parent()) {
+        if (parent != node->get_parent()) {
             std::stringstream ss;
 
             ss << "visit_{{ node.class_name|snake_case }}\n";
             ss << "parent: ";
-            modToken2error(ss, lineOfSuccession.top());
+            modToken2error(ss, parent);
             ss << "and child->parent: ";
             modToken2error(ss, node->get_parent());
             ss << "missmatch";
@@ -77,14 +75,14 @@ void CkParentVisitor::visit_{{ node.class_name|snake_case }}({{ node.class_name 
         }
     }
 
-    // add this node to the stack, it is the parent to check when visiting children
-    lineOfSuccession.push(node);
+    // Now, this node is the parent. I go down the tree
+    parent = node;
 
     // visit its children
     node->visit_children(*this);
 
-    // remove this node from the stack: it is not the parent of its siblings
-    lineOfSuccession.pop();
+    // I am done with these children, I go up the tree. The parent of this node is the parent
+    parent = node->get_parent();
 }
 
 {% endfor %}

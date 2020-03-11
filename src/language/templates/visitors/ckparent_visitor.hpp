@@ -36,7 +36,7 @@ class CkParentVisitor : public AstVisitor {
         /**
         * \brief Keeps track of the parents while going down the tree
         */
-        std::stack<ast::Ast*> lineOfSuccession;
+        ast::Ast* parent = nullptr;
         bool ckRootParentNull = false;
     public:
 
