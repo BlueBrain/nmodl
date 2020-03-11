@@ -101,7 +101,7 @@ find_python_module(yaml 3.12 REQUIRED)
 # =============================================================================
 # Compiler specific flags for external submodules
 # =============================================================================
-if (NMODL_PGI_COMPILER)
+if(NMODL_PGI_COMPILER)
   # PGI with llvm code generation doesn't have necessary assembly intrinsic headers
   add_compile_definitions(EIGEN_DONT_VECTORIZE=1)
   # nlohmann/json doesn't check for PGI compiler
