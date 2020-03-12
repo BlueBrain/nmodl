@@ -346,7 +346,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *
      * \sa ast::StatementBlock
      */
-    virtual std::shared_ptr<StatementBlock> get_statement_block() {
+    virtual const std::shared_ptr<StatementBlock>& get_statement_block() const {
         throw std::runtime_error("get_statement_block not implemented");
     }
 

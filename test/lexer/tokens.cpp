@@ -131,4 +131,3 @@ TEST_CASE("NMODL Lexer returning valid token types", "[Lexer]") {
         REQUIRE(token_type(")") != Token::OPEN_PARENTHESIS);
     }
 }
-

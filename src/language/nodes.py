@@ -326,7 +326,7 @@ class ChildNode(BaseNode):
 
     def get_getter_method(self, class_name):
         getter_method = self.getter_method if self.getter_method else "get_" + to_snake_case(self.varname)
-        getter_override = " override" if self.getter_override else ""
+        getter_override = " override" if getter_method == "get_statement_block" else ""
         return_type = self.member_typename
 
 
@@ -334,7 +334,7 @@ class ChildNode(BaseNode):
                    /**
                     * \\brief Getter (const ref) for member variable \\ref {class_name}.{self.varname}
                     */
-                   const {return_type}& {getter_method}() const {{
+                   const {return_type}& {getter_method}() const {getter_override} {{
                        return {self.varname};
                    }}
                 """

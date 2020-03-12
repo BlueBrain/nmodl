@@ -70,9 +70,9 @@ using namespace ast;
     {% else %}
         {% call guard(child.prefix, child.suffix) %}
     {% if child.is_pointer_node %}
-        node->get_{{ child.varname }}(){{ "->" if child.is_pointer_node else "." }}accept(*this);
+        node->get_{{ child.varname }}()->accept(*this);
     {% else %}
-        {{ child.class_name }}(node->get_{{ child.varname }}()){{ "->" if child.is_pointer_node else "." }}accept(*this);
+        {{ child.class_name }}(node->get_{{ child.varname }}()).accept(*this);
     {%- endif %}
         {% endcall %}
     {%- endif %}
@@ -129,3 +129,4 @@ void NmodlPrintVisitor::visit_{{ node.class_name|snake_case}}({{ node.class_name
 
 }  // namespace visitor
 }  // namespace nmodl
+
