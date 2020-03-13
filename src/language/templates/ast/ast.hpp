@@ -96,7 +96,7 @@ namespace ast {
         /// \{
 
         {% if node.is_base_block_node %}
-        virtual ArgumentVector get_parameters() {
+        virtual const ArgumentVector& get_parameters() const {
             throw std::runtime_error("get_parameters not implemented");
         }
         {% endif %}
