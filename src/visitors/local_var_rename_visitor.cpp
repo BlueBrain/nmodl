@@ -56,7 +56,7 @@ void LocalVarRenameVisitor::visit_statement_block(ast::StatementBlock* node) {
 
     RenameVisitor rename_visitor;
 
-    for (const auto& var: variables->get_variables_cr()) {
+    for (const auto& var: variables->get_variables()) {
         std::string name = var->get_node_name();
         auto s = parent_symtab->lookup_in_scope(name);
         /// if symbol is a variable name (avoid renaming use of units like mV)

@@ -43,9 +43,7 @@ void NeuronSolveVisitor::visit_diff_eq_expression(ast::DiffEqExpression* node) {
 
 
 void NeuronSolveVisitor::visit_binary_expression(ast::BinaryExpression* node) {
-    const auto& lhs = node->get_lhs_cr();
-    const auto& rhs = node->get_rhs_cr();
-    const auto& op = node->get_op_cr();
+    const auto& lhs = node->get_lhs();
 
     /// we have to only solve odes under derivative block where lhs is variable
     if (!derivative_block || !differential_equation || !lhs->is_var_name()) {
@@ -66,10 +64,10 @@ void NeuronSolveVisitor::visit_binary_expression(ast::BinaryExpression* node) {
                 auto statement = create_statement(solution);
                 auto expr_statement = std::dynamic_pointer_cast<ast::ExpressionStatement>(
                     statement);
-                auto bin_expr = std::dynamic_pointer_cast<ast::BinaryExpression>(
+                const auto bin_expr = std::dynamic_pointer_cast<const ast::BinaryExpression>(
                     expr_statement->get_expression());
-                node->set_lhs(std::shared_ptr<ast::Expression>(bin_expr->get_lhs_cr()->clone()));
-                node->set_rhs(std::shared_ptr<ast::Expression>(bin_expr->get_rhs_cr()->clone()));
+                node->set_lhs(std::shared_ptr<ast::Expression>(bin_expr->get_lhs()->clone()));
+                node->set_rhs(std::shared_ptr<ast::Expression>(bin_expr->get_rhs()->clone()));
             } else {
                 logger->warn("NeuronSolveVisitor :: cnexp solver not possible for {}",
                              to_nmodl(node));
@@ -78,10 +76,10 @@ void NeuronSolveVisitor::visit_binary_expression(ast::BinaryExpression* node) {
             std::string solution = diffeq_driver.solve(equation, solve_method);
             auto statement = create_statement(solution);
             auto expr_statement = std::dynamic_pointer_cast<ast::ExpressionStatement>(statement);
-            auto bin_expr = std::dynamic_pointer_cast<ast::BinaryExpression>(
+            const auto bin_expr = std::dynamic_pointer_cast<const ast::BinaryExpression>(
                 expr_statement->get_expression());
-            node->set_lhs(std::shared_ptr<ast::Expression>(bin_expr->get_lhs_cr()->clone()));
-            node->set_rhs(std::shared_ptr<ast::Expression>(bin_expr->get_rhs_cr()->clone()));
+            node->set_lhs(std::shared_ptr<ast::Expression>(bin_expr->get_lhs()->clone()));
+            node->set_rhs(std::shared_ptr<ast::Expression>(bin_expr->get_rhs()->clone()));
         } else if (solve_method == codegen::naming::DERIVIMPLICIT_METHOD) {
             auto varname = "D" + name->get_node_name();
             node->set_lhs(std::make_shared<ast::Name>(new ast::String(varname)));

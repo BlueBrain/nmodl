@@ -122,8 +122,8 @@ static std::shared_ptr<ast::ExpressionStatement> unroll_for_loop(
         auto new_block = node->get_statement_block()->clone();
         IndexRemover(index_var, i).visit_statement_block(new_block);
         statements.insert(statements.end(),
-                          new_block->get_statements_cr().begin(),
-                          new_block->get_statements_cr().end());
+                          new_block->get_statements().begin(),
+                          new_block->get_statements().end());
         delete new_block;
     }
 
@@ -139,7 +139,7 @@ static std::shared_ptr<ast::ExpressionStatement> unroll_for_loop(
 void LoopUnrollVisitor::visit_statement_block(ast::StatementBlock* node) {
     node->visit_children(*this);
 
-    const auto& statements = node->get_statements_cr();
+    const auto& statements = node->get_statements();
 
     for (auto iter = statements.begin(); iter != statements.end(); ++iter) {
         if ((*iter)->is_from_statement()) {
