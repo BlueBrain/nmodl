@@ -9,7 +9,7 @@
 
 #include "parser/nmodl_driver.hpp"
 #include "test/utils/test_utils.hpp"
-#include "visitors/ckparent_visitor.hpp"
+#include "visitors/checkparent_visitor.hpp"
 #include "visitors/constant_folder_visitor.hpp"
 #include "visitors/lookup_visitor.hpp"
 #include "visitors/loop_unroll_visitor.hpp"
@@ -53,7 +53,7 @@ std::vector<std::string> run_sympy_solver_visitor(
     SympySolverVisitor(pade, cse).visit_program(ast.get());
 
     // check that, after visitor rearrangement, parents are still up-to-date
-    CkParentVisitor(true).visit_program(ast.get());
+    CheckParentVisitor().visit_program(ast.get());
 
     // run lookup visitor to extract results from AST
     AstLookupVisitor v_lookup;

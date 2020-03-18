@@ -192,7 +192,7 @@ void SympySolverVisitor::construct_eigen_solver_block(
     // insert pre-solve statements below last linear eq in block
     for (const auto& statement: pre_solve_statements) {
         logger->debug("SympySolverVisitor :: -> adding statement: {}", statement);
-        it = block_with_expression_statements->insertStatement(it, create_statement(statement));
+        it = block_with_expression_statements->insert_statement(it, create_statement(statement));
         ++it;
     }
     // make Eigen vector <-> state var assignments
@@ -214,7 +214,7 @@ void SympySolverVisitor::construct_eigen_solver_block(
     ast::StatementVector finalize_statements{it, statements.end()};
     // remove them from the statement block
 
-    block_with_expression_statements->eraseStatement(it, statements.end());
+    block_with_expression_statements->erase_statement(it, statements.end());
     // also remove diff/linear/non-linear eq statements from the statement block
     remove_statements_from_block(block_with_expression_statements, expression_statements);
     // move any local variable declarations into variable_block
@@ -325,13 +325,14 @@ void SympySolverVisitor::solve_linear_system(const std::vector<std::string>& pre
         // insert pre-solve statements below last linear eq in block
         for (const auto& statement: pre_solve_statements) {
             logger->debug("SympySolverVisitor :: -> adding statement: {}", statement);
-            it = block_with_expression_statements->insertStatement(it, create_statement(statement));
+            it = block_with_expression_statements->insert_statement(it,
+                                                                    create_statement(statement));
             ++it;
         }
         // then insert new solution statements
         for (const auto& sol: solutions) {
             logger->debug("SympySolverVisitor :: -> adding statement: {}", sol);
-            it = block_with_expression_statements->insertStatement(it, create_statement(sol));
+            it = block_with_expression_statements->insert_statement(it, create_statement(sol));
             ++it;
         }
         /// remove original lineq statements from the block

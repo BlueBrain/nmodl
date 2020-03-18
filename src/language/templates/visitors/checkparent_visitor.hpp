@@ -13,12 +13,10 @@
  * \brief Auto generated visitors
  *
  * \file
- * \brief \copybrief nmodl::visitor::CkParentVisitor
+ * \brief \copybrief nmodl::visitor::CheckParentVisitor
  */
 
 #include "visitors/ast_visitor.hpp"
-#include <stack>
-
 
 namespace nmodl {
 namespace visitor {
@@ -29,20 +27,36 @@ namespace visitor {
  */
 
 /**
- * \brief Visitor that checks the parents
+ * \class JSONVisitor
+ * \brief %Visitor for checking parents of ast nodes
  */
-class CkParentVisitor : public AstVisitor {
+class CheckParentVisitor : public AstVisitor {
     private:
         /**
         * \brief Keeps track of the parents while going down the tree
         */
         ast::Ast* parent = nullptr;
-        bool ckRootParentNull = false;
+        /**
+        * \brief Flag to activate the parent check on the root node
+        *
+        * This flag tells to the visitor to check (or not check) if the
+        * root node, from which we start the visit, is the root node and
+        * thus, it should have nullptr parent
+        */
+        bool is_root_with_null_parent = false;
     public:
 
-        CkParentVisitor(const bool ckRootParentNull = false) {}
+        CheckParentVisitor(const bool is_root_with_null_parent = true) {}
 
-        int lookup(ast::Ast* node);
+        /**
+        * \brief A small wrapper to have a nicer call in parser.cpp
+        */
+        int check_ast(ast::Ast* node);
+
+        /**
+        * \brief Check the parent, throw an error if not
+        */
+        void check_parent(ast::Ast* node) const;
 
         {% for node in nodes %}
         /**

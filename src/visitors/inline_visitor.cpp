@@ -44,7 +44,7 @@ void InlineVisitor::add_return_variable(StatementBlock* block, std::string& varn
     auto rhs = new Integer(0, nullptr);
     auto expression = new BinaryExpression(lhs, BinaryOperator(BOP_ASSIGN), rhs);
     auto statement = std::make_shared<ExpressionStatement>(expression);
-    block->addStatement(statement);
+    block->emplace_back_statement(statement);
 }
 
 /** We can replace statement if the entire statement itself is a function call.
@@ -102,7 +102,7 @@ void InlineVisitor::inline_arguments(StatementBlock* inlined_block,
         /// create assignment statement and insert after the local variables
         auto expression = new BinaryExpression(lhs, BinaryOperator(ast::BOP_ASSIGN), rhs);
         auto statement = std::make_shared<ExpressionStatement>(expression);
-        inlined_block->insertStatement(statements.begin() + counter + 1, statement);
+        inlined_block->insert_statement(statements.begin() + counter + 1, statement);
         counter++;
     }
 }
@@ -157,7 +157,7 @@ bool InlineVisitor::inline_function_call(ast::Block* callee,
         if (local_list_statement == nullptr) {
             throw std::logic_error("got local statement as nullptr");
         }
-        local_list_statement->addLocalVar(std::make_shared<ast::LocalVar>(name));
+        local_list_statement->emplace_back_local_var(std::make_shared<ast::LocalVar>(name));
     }
 
     /// get a copy of function/procedure body
@@ -262,7 +262,7 @@ void InlineVisitor::visit_statement_block(StatementBlock* node) {
     }
 
     if (local_list_statement->get_variables().empty()) {
-        node->eraseStatement(statements.begin());
+        node->erase_statement(statements.begin());
     }
 
     /// check if any statement is candidate for replacement due to inlining
@@ -270,7 +270,7 @@ void InlineVisitor::visit_statement_block(StatementBlock* node) {
     for (auto it = statements.begin(); it < statements.end(); ++it) {
         const auto& statement = *it;
         if (replaced_statements.find(statement) != replaced_statements.end()) {
-            node->resetStatement(it, replaced_statements[statement]);
+            node->reset_statement(it, replaced_statements[statement]);
         }
     }
 
@@ -278,7 +278,7 @@ void InlineVisitor::visit_statement_block(StatementBlock* node) {
     for (auto& element: inlined_statements) {
         auto it = std::find(statements.begin(), statements.end(), element.first);
         if (it != statements.end()) {
-            node->insertStatement(it, element.second.begin(), element.second.end());
+            node->insert_statement(it, element.second.begin(), element.second.end());
             element.second.clear();
         }
     }

@@ -9,7 +9,7 @@
 
 #include "parser/nmodl_driver.hpp"
 #include "test/utils/test_utils.hpp"
-#include "visitors/ckparent_visitor.hpp"
+#include "visitors/checkparent_visitor.hpp"
 #include "visitors/neuron_solve_visitor.hpp"
 #include "visitors/nmodl_visitor.hpp"
 #include "visitors/solve_block_visitor.hpp"
@@ -36,7 +36,7 @@ std::string run_solve_block_visitor(const std::string& text) {
     NmodlPrintVisitor(stream).visit_program(ast.get());
 
     // check that, after visitor rearrangement, parents are still up-to-date
-    CkParentVisitor(true).visit_program(ast.get());
+    CheckParentVisitor().visit_program(ast.get());
 
     return stream.str();
 }
