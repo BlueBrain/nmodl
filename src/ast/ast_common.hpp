@@ -162,9 +162,9 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      * i.e. in bison the lines:
      *
      * ast::WatchStatement* a = new ast::WatchStatement();
-     * yylhs.value.as< ast::WatchStatement* > ()->addWatch(a);
+     * yylhs.value.as< ast::WatchStatement* > ()->add_watch(a);
      *
-     * would throw a bad_weak_ptr exception because when you call addWatch
+     * would throw a bad_weak_ptr exception because when you call add_watch
      * the shared_ptr_from_this to "a" is not yet created.
      */
     Ast* parent = nullptr;
@@ -1528,7 +1528,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      * returning a raw pointer may create less problems that the
      * shared_from_this from the parent.
      *
-     * Check Ast::parent for more information
+     * \ref Check Ast::parent for more information
      */
     inline virtual Ast* get_parent() const {
         return parent;
@@ -1542,7 +1542,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      * we set children parents directly in the parent constructor using
      * set_parent_in_children()
      *
-     * Check Ast::parent for more information
+     * \ref Check Ast::parent for more information
      */
     inline virtual void set_parent(Ast* p) {
         parent = p;

@@ -9,7 +9,7 @@
 
 #include "parser/nmodl_driver.hpp"
 #include "test/utils/test_utils.hpp"
-#include "visitors/ckparent_visitor.hpp"
+#include "visitors/checkparent_visitor.hpp"
 #include "visitors/defuse_analyze_visitor.hpp"
 #include "visitors/inline_visitor.hpp"
 #include "visitors/lookup_visitor.hpp"
@@ -45,7 +45,7 @@ std::vector<DUChain> run_defuse_visitor(const std::string& text, const std::stri
     }
 
     // check that, after visitor rearrangement, parents are still up-to-date
-    CkParentVisitor(true).visit_program(ast.get());
+    CheckParentVisitor().visit_program(ast.get());
 
     return chains;
 }

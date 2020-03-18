@@ -156,7 +156,7 @@ void LoopUnrollVisitor::visit_statement_block(ast::StatementBlock* node) {
             /// unroll loop, replace current statement on successfull unroll
             auto new_statement = unroll_for_loop(statement);
             if (new_statement != nullptr) {
-                node->resetStatement(iter, new_statement);
+                node->reset_statement(iter, new_statement);
 
                 std::string before = to_nmodl(statement.get());
                 std::string after = to_nmodl(new_statement.get());

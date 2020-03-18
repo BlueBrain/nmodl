@@ -9,7 +9,7 @@
 
 #include "parser/nmodl_driver.hpp"
 #include "test/utils/test_utils.hpp"
-#include "visitors/ckparent_visitor.hpp"
+#include "visitors/checkparent_visitor.hpp"
 #include "visitors/constant_folder_visitor.hpp"
 #include "visitors/inline_visitor.hpp"
 #include "visitors/local_var_rename_visitor.hpp"
@@ -47,7 +47,7 @@ std::string run_sympy_conductance_visitor(const std::string& text) {
     SympyConductanceVisitor().visit_program(ast.get());
 
     // check that, after visitor rearrangement, parents are still up-to-date
-    CkParentVisitor(true).visit_program(ast.get());
+    CheckParentVisitor().visit_program(ast.get());
 
     // run lookup visitor to extract results from AST
     AstLookupVisitor v_lookup;

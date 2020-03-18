@@ -639,7 +639,6 @@
                                   brief: "Vector of statements"
                                   type: Statement
                                   vector: true
-                                  #public: true
                                   add: true
                             brief: "Represents block encapsulating list of statements"
                             description: |
@@ -1198,15 +1197,12 @@
                         - lhs:
                             brief: "LHS of the binary expression"
                             type: Expression
-                            #public: true
                         - op:
                             brief: "Opearator"
                             type: BinaryOperator
-                            #public: true
                         - rhs:
                             brief: "RHS of the binary expression"
                             type: Expression
-                            #public: true
                       brief: "Represents binary expression in the NMODL"
                       description: |
                               Any binary expression in the mod file is represented by this node type.
@@ -1229,7 +1225,6 @@
                         - expression:
                             brief: "Differential Expression"
                             type: BinaryExpression
-                            #public: true
 
                   - UnaryExpression:
                       brief: "TODO"
@@ -1397,7 +1392,6 @@
                             vector: true
                             separator: ", "
                             add: true
-                            #public: true
 
                   - Model:
                       brief: "TODO"

@@ -49,7 +49,7 @@ void add_local_statement(StatementBlock* node) {
     const auto& statements = node->get_statements();
     if (variables == nullptr) {
         auto statement = std::make_shared<LocalListStatement>(LocalVarVector());
-        node->insertStatement(statements.begin(), statement);
+        node->insert_statement(statements.begin(), statement);
     }
 }
 
@@ -64,7 +64,7 @@ LocalVar* add_local_variable(StatementBlock* node, Identifier* varname) {
         throw std::logic_error("no local statement");
     }
     auto var = std::make_shared<LocalVar>(varname);
-    local_list_statement->addLocalVar(var);
+    local_list_statement->emplace_back_local_var(var);
 
     return var.get();
 }
@@ -132,16 +132,15 @@ void remove_statements_from_block(ast::StatementBlock* block,
     auto last = statement_vec.end();
     auto result = first;
 
-
     while (first != last) {
         if (statements.find(first->get()) == statements.end()) {
-            block->resetStatement(result, *first);
+            block->reset_statement(result, *first);
             ++result;
         }
         ++first;
     }
 
-    block->eraseStatement(result, last);
+    block->erase_statement(result, last);
 }
 
 

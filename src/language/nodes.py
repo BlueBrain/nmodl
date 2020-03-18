@@ -214,9 +214,9 @@ class ChildNode(BaseNode):
     def get_add_methods(self):
         s = ''
         if self.add_method:
-            setP = "n->set_parent(this); "
+            set_parent = "n->set_parent(this); "
             if self.optional:
-                setP = f"""
+                set_parent = f"""
                         if (n) {{
                             n->set_parent(this);                                
                         }}
@@ -225,41 +225,41 @@ class ChildNode(BaseNode):
                          /**
                           * \\brief Add member to {self.varname} by raw pointer
                           */
-                         void add{self.class_name}({self.class_name} *n) {{
+                         void emplace_back_{to_snake_case(self.class_name)}({self.class_name} *n) {{
                             {self.varname}.emplace_back(n);
 
                              // set parents
-                             {setP}
+                             {set_parent}
                          }}
 
                          /**
                           * \\brief Add member to {self.varname} by shared_ptr
                           */
-                         void add{self.class_name}(std::shared_ptr<{self.class_name}> n) {{
+                         void emplace_back_{to_snake_case(self.class_name)}(std::shared_ptr<{self.class_name}> n) {{
                             {self.varname}.emplace_back(n);
                              
                              // set parents
-                             {setP}
+                             {set_parent}
                          }}
 
                          /**
                           * \\brief Erase member to {self.varname}
                           */
-                         {self.class_name}Vector::const_iterator erase{self.class_name}({self.class_name}Vector::const_iterator first) {{
+                         {self.class_name}Vector::const_iterator erase_{to_snake_case(self.class_name)}({self.class_name}Vector::const_iterator first) {{
                             return {self.varname}.erase(first);
                          }}
                          /**
                           * \\brief Erase members to {self.varname}
                           */
-                         {self.class_name}Vector::const_iterator erase{self.class_name}({self.class_name}Vector::const_iterator first, {self.class_name}Vector::const_iterator last) {{
+                         {self.class_name}Vector::const_iterator erase_{to_snake_case(self.class_name)}({self.class_name}Vector::const_iterator first, {self.class_name}Vector::const_iterator last) {{
                             return {self.varname}.erase(first, last);
                          }}
 
                          /**
                           * \\brief Insert member to {self.varname}
                           */
-                         {self.class_name}Vector::const_iterator insert{self.class_name}({self.class_name}Vector::const_iterator position, const std::shared_ptr<{self.class_name}>& n) {{
-                             {setP}
+                         {self.class_name}Vector::const_iterator insert_{to_snake_case(self.class_name)}({self.class_name}Vector::const_iterator position, const std::shared_ptr<{self.class_name}>& n) {{
+                             {set_parent}
             
                             return {self.varname}.insert(position, n);
                          }}
@@ -267,12 +267,12 @@ class ChildNode(BaseNode):
                           * \\brief Insert members to {self.varname}
                           */
                          template <class InputIterator>
-                         void insert{self.class_name}({self.class_name}Vector::const_iterator position, InputIterator first, InputIterator last) {{
+                         void insert_{to_snake_case(self.class_name)}({self.class_name}Vector::const_iterator position, InputIterator first, InputIterator last) {{
 
                              for (auto it = first; it != last; ++it) {{
                                  auto& n = *it;
                                  //set parents
-                                 {setP}
+                                 {set_parent}
                               }}
             
                             {self.varname}.insert(position, first, last);
@@ -281,9 +281,9 @@ class ChildNode(BaseNode):
                          /**
                           * \\brief Reset member to {self.varname}
                           */
-                         void reset{self.class_name}({self.class_name}Vector::const_iterator position, {self.class_name}* n) {{
+                         void reset_{to_snake_case(self.class_name)}({self.class_name}Vector::const_iterator position, {self.class_name}* n) {{
                              //set parents
-                             {setP}
+                             {set_parent}
                             
                             {self.varname}[position - {self.varname}.begin()].reset(n);
                          }}
@@ -291,9 +291,9 @@ class ChildNode(BaseNode):
                          /**
                           * \\brief Reset member to {self.varname}
                           */
-                         void reset{self.class_name}({self.class_name}Vector::const_iterator position, std::shared_ptr<{self.class_name}> n) {{
+                         void reset_{to_snake_case(self.class_name)}({self.class_name}Vector::const_iterator position, std::shared_ptr<{self.class_name}> n) {{
                              //set parents
-                             {setP}
+                             {set_parent}
                             
                             {self.varname}[position - {self.varname}.begin()] = n;
                          }}
@@ -326,10 +326,8 @@ class ChildNode(BaseNode):
 
     def get_getter_method(self, class_name):
         getter_method = self.getter_method if self.getter_method else "get_" + to_snake_case(self.varname)
-        getter_override = " override" if getter_method == "get_statement_block" else ""
+        getter_override = " override" if self.getter_override else ""
         return_type = self.member_typename
-
-
         return f"""
                    /**
                     * \\brief Getter (const ref) for member variable \\ref {class_name}.{self.varname}
@@ -387,22 +385,16 @@ class ChildNode(BaseNode):
                        void {class_name}::{setter_method}({setter_type}&& {self.varname}) {{
                            this->{self.varname} = {self.varname};
                            // set parents
-                           // this check could be superfluous, may we add nullptr as children?
                            for (auto& ii : {self.varname}) {{
-                               if (ii) {{
                                    ii->set_parent(this);
-                               }}
                             }}
                        }}
 
                        void {class_name}::{setter_method}(const {setter_type}& {self.varname}) {{
                            this->{self.varname} = {self.varname};
                            // set parents
-                           // this check could be superfluous, may we add nullptr as children?
                            for (auto& ii : {self.varname}) {{
-                               if (ii) {{
                                    ii->set_parent(this);
-                               }}
                             }}
                        }}
                     """
@@ -411,7 +403,6 @@ class ChildNode(BaseNode):
                        void {class_name}::{setter_method}({setter_type}&& {self.varname}) {{
                            this->{self.varname} = {self.varname};
                            // set parents
-                           // this check could be superfluous, may we add nullptr as children?
                            if ({self.varname}) {{
                                {self.varname}->set_parent(this);
                            }}
@@ -420,7 +411,6 @@ class ChildNode(BaseNode):
                        void {class_name}::{setter_method}(const {setter_type}& {self.varname}) {{
                            this->{self.varname} = {self.varname};
                            // set parents
-                           // this check could be superfluous, may we add nullptr as children?
                            if ({self.varname}) {{
                                {self.varname}->set_parent(this);
                            }}

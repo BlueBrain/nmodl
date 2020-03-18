@@ -16,7 +16,7 @@
 #include "parser/nmodl_driver.hpp"
 #include "test/utils/nmodl_constructs.hpp"
 #include "test/utils/test_utils.hpp"
-#include "visitors/ckparent_visitor.hpp"
+#include "visitors/checkparent_visitor.hpp"
 #include "visitors/lookup_visitor.hpp"
 
 using namespace nmodl::test_utils;
@@ -168,7 +168,7 @@ SCENARIO("Check parents in valid NMODL constructs") {
         GIVEN(construct.second.name) {
             THEN("Check the parents in : " + construct.second.input) {
                 // check the parents
-                REQUIRE(!nmodl::visitor::CkParentVisitor(true).lookup(ast.get()));
+                REQUIRE(!nmodl::visitor::CheckParentVisitor().check_ast(ast.get()));
             }
         }
     }

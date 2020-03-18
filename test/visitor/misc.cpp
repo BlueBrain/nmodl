@@ -9,7 +9,7 @@
 
 #include "parser/nmodl_driver.hpp"
 #include "test/utils/test_utils.hpp"
-#include "visitors/ckparent_visitor.hpp"
+#include "visitors/checkparent_visitor.hpp"
 #include "visitors/inline_visitor.hpp"
 #include "visitors/localize_visitor.hpp"
 #include "visitors/symtab_visitor.hpp"
@@ -32,7 +32,7 @@ void run_visitor_passes(const std::string& text) {
         SymtabVisitor v1;
         InlineVisitor v2;
         LocalizeVisitor v3;
-        CkParentVisitor v4(true);
+        CheckParentVisitor v4(true);
         v1.visit_program(ast.get());
         v2.visit_program(ast.get());
         v3.visit_program(ast.get());
