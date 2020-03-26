@@ -112,6 +112,7 @@ include_directories(${NMODL_PROJECT_SOURCE_DIR}
                     ${NMODL_PROJECT_SOURCE_DIR}/src
                     ${PROJECT_BINARY_DIR}/src
                     ${NMODL_PROJECT_SOURCE_DIR}/ext
+                    ${NMODL_PROJECT_SOURCE_DIR}/ext/fmt/include
                     ${NMODL_PROJECT_SOURCE_DIR}/ext/spdlog/include)
 
 # =============================================================================
@@ -124,7 +125,8 @@ add_subdirectory(ext/pybind11)
 # Include fmt library
 # =============================================================================
 message(STATUS "INCLUDING FMT")
-add_subdirectory(${NMODL_PROJECT_SOURCE_DIR}/ext/fmt)
+add_subdirectory(${NMODL_PROJECT_SOURCE_DIR}/ext/fmt EXCLUDE_FROM_ALL)
+set_property(TARGET fmt PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 # =============================================================================
 # Include path from external libraries
