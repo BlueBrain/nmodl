@@ -17,15 +17,22 @@ jobs:
       sudo apt-get install -y python3.7 python3.7-dev
       python3.7 -m pip install -U pip setuptools
       python3.7 -m pip install --user 'Jinja2>=2.9.3' 'PyYAML>=3.13' pytest 'sympy>=1.3'
+      wget "https://github.com/Kitware/CMake/releases/download/v3.10.2/$CMAKE_PKG.tar.gz" && tar xzpvf $CMAKE_PKG.tar.gz
+    env:
+      CMAKE_PKG: 'cmake-3.10.2-Linux-x86_64'
     displayName: 'Install Depdendencies'
   - script: |
-      export PATH=/home/vsts/.local/bin:$PATH
+      export PATH=$(pwd)/$CMAKE_PKG/bin:/home/vsts/.local/bin:$PATH
       export CXX='g++-8'
       mkdir -p $(Build.Repository.LocalPath)/build
       cd $(Build.Repository.LocalPath)/build
+      { set +e; IFS=:; for p in $PATH; do ls -d -1 $p/* 2>/dev/null | grep cmake | xargs -I % sh -c 'echo %; % --version' ; done;} 
+      cmake --version 
       cmake .. -DPYTHON_EXECUTABLE=`which python3.7` -DCMAKE_INSTALL_PREFIX=$HOME/nmodl -DCMAKE_BUILD_TYPE=Release
       make -j 2
       make test
+    env:
+      CMAKE_PKG: 'cmake-3.10.2-Linux-x86_64'
     displayName: 'Build and Run Tests'
 - job: 'osx1014'
   pool:
