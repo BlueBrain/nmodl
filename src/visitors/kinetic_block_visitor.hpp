@@ -109,6 +109,9 @@ class KineticBlockVisitor: public AstVisitor {
     /// true if we are visiting a CONSERVE statement
     bool in_conserve_statement = false;
 
+    /// true if we are visiting a KINETIC block
+    bool in_kinetic_block = false;
+
     /// conserve statement equation as string
     std::string conserve_equation_str;
 

@@ -101,251 +101,269 @@ std::shared_ptr<ast::Expression> create_expr(const std::string& str_expr) {
 }
 
 void KineticBlockVisitor::visit_conserve(ast::Conserve* node) {
-    // rewrite CONSERVE statement in form x = ...
-    // where x was the last state var on LHS, and whose ODE should later be replaced with this
-    // equation note: CONSERVE statement "implicitly takes into account COMPARTMENT factors on LHS"
-    // this means that each state var on LHS must be multiplied by its compartment factor
-    // the RHS is just an expression, no compartment factors are taken into account
-    // see p244 of NEURON book
-    logger->debug("KineticBlockVisitor :: CONSERVE statement: {}", to_nmodl(node));
-    conserve_equation_str = "";
-    conserve_equation_statevar = "";
-    conserve_equation_factor = "";
+    if (in_kinetic_block) {
+        // rewrite CONSERVE statement in form x = ...
+        // where x was the last state var on LHS, and whose ODE should later be replaced with this
+        // equation note: CONSERVE statement "implicitly takes into account COMPARTMENT factors on
+        // LHS" this means that each state var on LHS must be multiplied by its compartment factor
+        // the RHS is just an expression, no compartment factors are taken into account
+        // see p244 of NEURON book
+        logger->debug("KineticBlockVisitor :: CONSERVE statement: {}", to_nmodl(node));
+        conserve_equation_str = "";
+        conserve_equation_statevar = "";
+        conserve_equation_factor = "";
 
-    in_conserve_statement = true;
-    // construct equation to replace ODE in conserve_equation_str
-    node->visit_children(*this);
-    in_conserve_statement = false;
+        in_conserve_statement = true;
+        // construct equation to replace ODE in conserve_equation_str
+        node->visit_children(*this);
+        in_conserve_statement = false;
 
-    conserve_equation_str = to_nmodl(node->get_expr().get()) + conserve_equation_str;
-    if (!conserve_equation_factor.empty()) {
-        // divide by compartment factor of conserve_equation_statevar
-        conserve_equation_str = "(" + conserve_equation_str + ")/(" + conserve_equation_factor +
-                                ")";
+        conserve_equation_str = to_nmodl(node->get_expr().get()) + conserve_equation_str;
+        if (!conserve_equation_factor.empty()) {
+            // divide by compartment factor of conserve_equation_statevar
+            conserve_equation_str = "(" + conserve_equation_str + ")/(" + conserve_equation_factor +
+                                    ")";
+        }
+
+        auto lhs = create_expr(conserve_equation_statevar);
+        // set react (lhs) of CONSERVE to the state variable whose ODE should be replaced
+        node->set_react(std::move(lhs));
+        // set expr (rhs) of CONSERVE to the equation that should replace the ODE
+        auto rhs = create_expr(conserve_equation_str);
+        // note: this is still a valid (and equivalent) CONSERVE statement.
+        // later this block will become a DERIVATIVE block where it is no longer valid
+        // to have a CONSERVE statement, but it is parsed without issues, and
+        // the SympySolver will use to it replace the ODE (to replicate what neuron does)
+        node->set_expr(std::move(rhs));
+        logger->debug("KineticBlockVisitor :: --> {}", to_nmodl(node));
     }
-
-    auto lhs = create_expr(conserve_equation_statevar);
-    // set react (lhs) of CONSERVE to the state variable whose ODE should be replaced
-    node->set_react(std::move(lhs));
-    // set expr (rhs) of CONSERVE to the equation that should replace the ODE
-    auto rhs = create_expr(conserve_equation_str);
-    // note: this is still a valid (and equivalent) CONSERVE statement.
-    // later this block will become a DERIVATIVE block where it is no longer valid
-    // to have a CONSERVE statement, but it is parsed without issues, and
-    // the SympySolver will use to it replace the ODE (to replicate what neuron does)
-    node->set_expr(std::move(rhs));
-    logger->debug("KineticBlockVisitor :: --> {}", to_nmodl(node));
 }
 
 void KineticBlockVisitor::visit_compartment(ast::Compartment* node) {
-    // COMPARTMENT block has an expression, and a list of state vars it applies to.
-    // For each state var, the rhs of the differential eq should be divided by the expression.
-    // Here we store the expressions in the compartment_factors vector
-    auto expr = node->get_expression();
-    std::string expression = to_nmodl(expr.get());
-    logger->debug("KineticBlockVisitor :: COMPARTMENT expr: {}", expression);
-    for (const auto name_ptr: node->get_names()) {
-        std::string var_name = name_ptr->get_node_name();
-        const auto it = state_var_index.find(var_name);
-        if (it != state_var_index.cend()) {
-            int var_index = it->second;
-            compartment_factors[var_index] = expression;
-            logger->debug(
-                "KineticBlockVisitor :: COMPARTMENT factor {} for state var {} (index {})",
-                expression,
-                var_name,
-                var_index);
+    if (in_kinetic_block) {
+        // COMPARTMENT block has an expression, and a list of state vars it applies to.
+        // For each state var, the rhs of the differential eq should be divided by the expression.
+        // Here we store the expressions in the compartment_factors vector
+        auto expr = node->get_expression();
+        std::string expression = to_nmodl(expr.get());
+        logger->debug("KineticBlockVisitor :: COMPARTMENT expr: {}", expression);
+        for (const auto name_ptr: node->get_names()) {
+            std::string var_name = name_ptr->get_node_name();
+            const auto it = state_var_index.find(var_name);
+            if (it != state_var_index.cend()) {
+                int var_index = it->second;
+                compartment_factors[var_index] = expression;
+                logger->debug(
+                    "KineticBlockVisitor :: COMPARTMENT factor {} for state var {} (index {})",
+                    expression,
+                    var_name,
+                    var_index);
+            }
         }
+        // add COMPARTMENT state to list of statements to remove
+        // since we don't want this statement to be present in the final DERIVATIVE block
+        statements_to_remove.insert(node);
     }
-    // add COMPARTMENT state to list of statements to remove
-    // since we don't want this statement to be present in the final DERIVATIVE block
-    statements_to_remove.insert(node);
 }
 
 void KineticBlockVisitor::visit_reaction_operator(ast::ReactionOperator* node) {
-    auto reaction_op = node->get_value();
-    if (reaction_op == ast::ReactionOp::LTMINUSGT) {
-        // <->
-        // reversible reaction
-        // we go from visiting the lhs to visiting the rhs of the reaction statement
-        in_reaction_statement_lhs = false;
+    if (in_kinetic_block) {
+        auto reaction_op = node->get_value();
+        if (reaction_op == ast::ReactionOp::LTMINUSGT) {
+            // <->
+            // reversible reaction
+            // we go from visiting the lhs to visiting the rhs of the reaction statement
+            in_reaction_statement_lhs = false;
+        }
     }
 }
 
 void KineticBlockVisitor::visit_react_var_name(ast::ReactVarName* node) {
-    // ReactVarName node contains a VarName and an Integer
-    // the VarName is the state variable which we convert to an index
-    // the Integer is the value to be added to the stoichiometric matrix at this index
-    auto varname = to_nmodl(node->get_name().get());
-    int count = node->get_value() ? node->get_value()->eval() : 1;
-    if (in_reaction_statement) {
-        process_reac_var(varname, count);
-    } else if (in_conserve_statement) {
-        if (array_state_var_size.find(varname) != array_state_var_size.cend()) {
-            // state var is an array: need to sum over each element
-            for (int i = 0; i < array_state_var_size[varname]; ++i) {
-                process_conserve_reac_var(varname + "[" + std::to_string(i) + "]", count);
+    if (in_kinetic_block) {
+        // ReactVarName node contains a VarName and an Integer
+        // the VarName is the state variable which we convert to an index
+        // the Integer is the value to be added to the stoichiometric matrix at this index
+        auto varname = to_nmodl(node->get_name().get());
+        int count = node->get_value() ? node->get_value()->eval() : 1;
+        if (in_reaction_statement) {
+            process_reac_var(varname, count);
+        } else if (in_conserve_statement) {
+            if (array_state_var_size.find(varname) != array_state_var_size.cend()) {
+                // state var is an array: need to sum over each element
+                for (int i = 0; i < array_state_var_size[varname]; ++i) {
+                    process_conserve_reac_var(varname + "[" + std::to_string(i) + "]", count);
+                }
+            } else {
+                process_conserve_reac_var(varname, count);
             }
-        } else {
-            process_conserve_reac_var(varname, count);
         }
     }
 }
 
 void KineticBlockVisitor::visit_reaction_statement(ast::ReactionStatement* node) {
-    statements_to_remove.insert(node);
+    if (in_kinetic_block) {
+        statements_to_remove.insert(node);
 
-    auto reaction_op = node->get_op().get_value();
-    // special case for << statements
-    if (reaction_op == ast::ReactionOp::LTLT) {
-        logger->debug("KineticBlockVisitor :: '<<' reaction statement: {}", to_nmodl(node));
-        // statements involving the "<<" operator
-        // must have a single state var on lhs
-        // and a single expression on rhs that corresponds to d{state var}/dt
-        // So if x is a state var, then
-        // ~ x << (a*b)
-        // translates to the ODE contribution x' += a*b
-        auto lhs = node->get_reaction1();
+        auto reaction_op = node->get_op().get_value();
+        // special case for << statements
+        if (reaction_op == ast::ReactionOp::LTLT) {
+            logger->debug("KineticBlockVisitor :: '<<' reaction statement: {}", to_nmodl(node));
+            // statements involving the "<<" operator
+            // must have a single state var on lhs
+            // and a single expression on rhs that corresponds to d{state var}/dt
+            // So if x is a state var, then
+            // ~ x << (a*b)
+            // translates to the ODE contribution x' += a*b
+            auto lhs = node->get_reaction1();
 
-        /// check if reaction statement is a single state variable
-        bool single_state_var = true;
-        if (lhs->is_react_var_name()) {
-            auto value = std::dynamic_pointer_cast<ast::ReactVarName>(lhs)->get_value();
-            if (value && (value->eval() != 1)) {
-                single_state_var = false;
+            /// check if reaction statement is a single state variable
+            bool single_state_var = true;
+            if (lhs->is_react_var_name()) {
+                auto value = std::dynamic_pointer_cast<ast::ReactVarName>(lhs)->get_value();
+                if (value && (value->eval() != 1)) {
+                    single_state_var = false;
+                }
             }
-        }
-        if (!lhs->is_react_var_name() || !single_state_var) {
-            logger->warn(
-                "KineticBlockVisitor :: LHS of \"<<\" reaction statement must be a single state "
-                "var, but instead found {}: ignoring this statement",
-                to_nmodl(lhs.get()));
+            if (!lhs->is_react_var_name() || !single_state_var) {
+                logger->warn(
+                    "KineticBlockVisitor :: LHS of \"<<\" reaction statement must be a single "
+                    "state "
+                    "var, but instead found {}: ignoring this statement",
+                    to_nmodl(lhs.get()));
+                return;
+            }
+            auto rhs = node->get_expression1();
+            std::string varname = to_nmodl(lhs.get());
+            // get index of state var
+            const auto it = state_var_index.find(varname);
+            if (it != state_var_index.cend()) {
+                int var_index = it->second;
+                std::string expr = to_nmodl(rhs.get());
+                if (!additive_terms[var_index].empty()) {
+                    additive_terms[var_index] += " + ";
+                }
+                // add to additive terms for this state var
+                additive_terms[var_index] += "({})"_format(expr);
+                logger->debug("KineticBlockVisitor :: '<<' reaction statement: {}' += {}",
+                              varname,
+                              expr);
+            }
             return;
         }
-        auto rhs = node->get_expression1();
-        std::string varname = to_nmodl(lhs.get());
-        // get index of state var
-        const auto it = state_var_index.find(varname);
-        if (it != state_var_index.cend()) {
-            int var_index = it->second;
-            std::string expr = to_nmodl(rhs.get());
-            if (!additive_terms[var_index].empty()) {
-                additive_terms[var_index] += " + ";
+
+        // forwards reaction rate
+        auto kf = node->get_expression1();
+        // backwards reaction rate
+        auto kb = node->get_expression2();
+
+        // add reaction rates to vectors kf, kb
+        auto kf_str = to_nmodl(kf.get());
+        logger->debug("KineticBlockVisitor :: k_f[{}] = {}", i_statement, kf_str);
+        rate_eqs.k_f.emplace_back(kf_str);
+
+        if (kb) {
+            // kf is always defined, but for statements with operator "->" kb is not
+            auto kb_str = to_nmodl(kb.get());
+            logger->debug("KineticBlockVisitor :: k_b[{}] = {}", i_statement, kb_str);
+            rate_eqs.k_b.emplace_back(kb_str);
+        } else {
+            rate_eqs.k_b.emplace_back();
+        }
+
+        // add empty non state var fluxes for this statement
+        non_state_var_fflux.emplace_back();
+        non_state_var_bflux.emplace_back();
+
+        // add a row of zeros to the stoichiometric matrices
+        rate_eqs.nu_L.emplace_back(std::vector<int>(state_var_count, 0));
+        rate_eqs.nu_R.emplace_back(std::vector<int>(state_var_count, 0));
+
+        // visit each term in reaction statement and
+        // add the corresponding integer to the new row in the matrix
+        in_reaction_statement = true;
+        in_reaction_statement_lhs = true;
+        node->visit_children(*this);
+        in_reaction_statement = false;
+
+        // generate fluxes
+        modfile_fflux = rate_eqs.k_f.back();
+        modfile_bflux = rate_eqs.k_b.back();
+
+        // contribution from state vars
+        for (int j = 0; j < state_var_count; ++j) {
+            std::string multiply_var = std::string("*").append(state_var[j]);
+            int nu_L = rate_eqs.nu_L[i_statement][j];
+            while (nu_L-- > 0) {
+                modfile_fflux += multiply_var;
             }
-            // add to additive terms for this state var
-            additive_terms[var_index] += "({})"_format(expr);
-            logger->debug("KineticBlockVisitor :: '<<' reaction statement: {}' += {}",
-                          varname,
-                          expr);
+            int nu_R = rate_eqs.nu_R[i_statement][j];
+            while (nu_R-- > 0) {
+                modfile_bflux += multiply_var;
+            }
         }
-        return;
-    }
-
-    // forwards reaction rate
-    auto kf = node->get_expression1();
-    // backwards reaction rate
-    auto kb = node->get_expression2();
-
-    // add reaction rates to vectors kf, kb
-    auto kf_str = to_nmodl(kf.get());
-    logger->debug("KineticBlockVisitor :: k_f[{}] = {}", i_statement, kf_str);
-    rate_eqs.k_f.emplace_back(kf_str);
-
-    if (kb) {
-        // kf is always defined, but for statements with operator "->" kb is not
-        auto kb_str = to_nmodl(kb.get());
-        logger->debug("KineticBlockVisitor :: k_b[{}] = {}", i_statement, kb_str);
-        rate_eqs.k_b.emplace_back(kb_str);
-    } else {
-        rate_eqs.k_b.emplace_back();
-    }
-
-    // add empty non state var fluxes for this statement
-    non_state_var_fflux.emplace_back();
-    non_state_var_bflux.emplace_back();
-
-    // add a row of zeros to the stoichiometric matrices
-    rate_eqs.nu_L.emplace_back(std::vector<int>(state_var_count, 0));
-    rate_eqs.nu_R.emplace_back(std::vector<int>(state_var_count, 0));
-
-    // visit each term in reaction statement and
-    // add the corresponding integer to the new row in the matrix
-    in_reaction_statement = true;
-    in_reaction_statement_lhs = true;
-    node->visit_children(*this);
-    in_reaction_statement = false;
-
-    // generate fluxes
-    modfile_fflux = rate_eqs.k_f.back();
-    modfile_bflux = rate_eqs.k_b.back();
-
-    // contribution from state vars
-    for (int j = 0; j < state_var_count; ++j) {
-        std::string multiply_var = std::string("*").append(state_var[j]);
-        int nu_L = rate_eqs.nu_L[i_statement][j];
-        while (nu_L-- > 0) {
-            modfile_fflux += multiply_var;
+        // contribution from non-state vars
+        if (!non_state_var_fflux[i_statement].empty()) {
+            modfile_fflux += std::string("*").append(non_state_var_fflux[i_statement]);
         }
-        int nu_R = rate_eqs.nu_R[i_statement][j];
-        while (nu_R-- > 0) {
-            modfile_bflux += multiply_var;
+        if (!non_state_var_bflux[i_statement].empty()) {
+            modfile_bflux += std::string("*").append(non_state_var_bflux[i_statement]);
         }
-    }
-    // contribution from non-state vars
-    if (!non_state_var_fflux[i_statement].empty()) {
-        modfile_fflux += std::string("*").append(non_state_var_fflux[i_statement]);
-    }
-    if (!non_state_var_bflux[i_statement].empty()) {
-        modfile_bflux += std::string("*").append(non_state_var_bflux[i_statement]);
-    }
-    fflux.emplace_back(modfile_fflux);
-    bflux.emplace_back(modfile_bflux);
+        fflux.emplace_back(modfile_fflux);
+        bflux.emplace_back(modfile_bflux);
 
-    // for substituting into modfile, empty flux should be 0
-    if (modfile_fflux.empty()) {
-        modfile_fflux = "0";
-    }
-    if (modfile_bflux.empty()) {
-        modfile_bflux = "0";
-    }
+        // for substituting into modfile, empty flux should be 0
+        if (modfile_fflux.empty()) {
+            modfile_fflux = "0";
+        }
+        if (modfile_bflux.empty()) {
+            modfile_bflux = "0";
+        }
 
-    logger->debug("KineticBlockVisitor :: fflux[{}] = {}", i_statement, fflux[i_statement]);
-    logger->debug("KineticBlockVisitor :: bflux[{}] = {}", i_statement, bflux[i_statement]);
+        logger->debug("KineticBlockVisitor :: fflux[{}] = {}", i_statement, fflux[i_statement]);
+        logger->debug("KineticBlockVisitor :: bflux[{}] = {}", i_statement, bflux[i_statement]);
 
-    // increment statement counter
-    ++i_statement;
+        // increment statement counter
+        ++i_statement;
+    }
 }
 
 void KineticBlockVisitor::visit_wrapped_expression(ast::WrappedExpression* node) {
-    // If a wrapped expression contains a variable with name "f_flux" or "b_flux",
-    // this variable should be replaced by the expression for the corresponding flux
-    // which depends on the previous reaction statement. The current expressions are
-    // stored as strings in "modfile_fflux" and "modfile_bflux"
-    if (node->get_expression()->is_name()) {
-        auto var_name = std::dynamic_pointer_cast<ast::Name>(node->get_expression());
-        if (var_name->get_node_name() == "f_flux") {
-            auto expr = create_expr(modfile_fflux);
-            logger->debug("KineticBlockVisitor :: replacing f_flux with {}", to_nmodl(expr.get()));
-            node->set_expression(std::move(expr));
-        } else if (var_name->get_node_name() == "b_flux") {
-            auto expr = create_expr(modfile_bflux);
-            logger->debug("KineticBlockVisitor :: replacing b_flux with {}", to_nmodl(expr.get()));
-            node->set_expression(std::move(expr));
+    if (in_kinetic_block) {
+        // If a wrapped expression contains a variable with name "f_flux" or "b_flux",
+        // this variable should be replaced by the expression for the corresponding flux
+        // which depends on the previous reaction statement. The current expressions are
+        // stored as strings in "modfile_fflux" and "modfile_bflux"
+        if (node->get_expression()->is_name()) {
+            auto var_name = std::dynamic_pointer_cast<ast::Name>(node->get_expression());
+            if (var_name->get_node_name() == "f_flux") {
+                auto expr = create_expr(modfile_fflux);
+                logger->debug("KineticBlockVisitor :: replacing f_flux with {}",
+                              to_nmodl(expr.get()));
+                node->set_expression(std::move(expr));
+            } else if (var_name->get_node_name() == "b_flux") {
+                auto expr = create_expr(modfile_bflux);
+                logger->debug("KineticBlockVisitor :: replacing b_flux with {}",
+                              to_nmodl(expr.get()));
+                node->set_expression(std::move(expr));
+            }
         }
+        node->visit_children(*this);
     }
-    node->visit_children(*this);
 }
 
 void KineticBlockVisitor::visit_statement_block(ast::StatementBlock* node) {
-    auto prev_statement_block = current_statement_block;
-    current_statement_block = node;
-    node->visit_children(*this);
-    // remove processed statements from current statement block
-    remove_statements_from_block(current_statement_block, statements_to_remove);
-    current_statement_block = prev_statement_block;
+    if (in_kinetic_block) {
+        auto prev_statement_block = current_statement_block;
+        current_statement_block = node;
+        node->visit_children(*this);
+        // remove processed statements from current statement block
+        remove_statements_from_block(current_statement_block, statements_to_remove);
+        current_statement_block = prev_statement_block;
+    }
 }
 
 void KineticBlockVisitor::visit_kinetic_block(ast::KineticBlock* node) {
+    in_kinetic_block = true;
     rate_eqs.nu_L.clear();
     rate_eqs.nu_R.clear();
     rate_eqs.k_f.clear();
@@ -421,6 +439,7 @@ void KineticBlockVisitor::visit_kinetic_block(ast::KineticBlock* node) {
 
     // store pointer to kinetic block
     kinetic_blocks.push_back(node);
+    in_kinetic_block = false;
 }
 
 void KineticBlockVisitor::visit_program(ast::Program* node) {
