@@ -16,8 +16,6 @@ add_library(symtab_obj OBJECT ${SYMTAB_SOURCES} ${SYMTAB_HEADERS})
 set_property(TARGET symtab_obj PROPERTY POSITION_INDEPENDENT_CODE ON)
 add_dependencies(symtab_obj lexer_obj)
 
-# target_link_libraries(symtab_obj PRIVATE fmt::fmt-header-only)
 add_library(symtab STATIC $<TARGET_OBJECTS:symtab_obj>)
-# target_link_libraries(symtab fmt::fmt-header-only)
 
 add_dependencies(symtab lexer)
