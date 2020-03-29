@@ -18,6 +18,11 @@ target_link_libraries(
   lexer)
 
 # =============================================================================
+# Add dependency with nmodl pytnon module (for consumer projects)
+# =============================================================================
+add_dependencies(nmodl _nmodl)
+
+# =============================================================================
 # Install executable
 # =============================================================================
 install(TARGETS nmodl DESTINATION bin)

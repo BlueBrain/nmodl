@@ -3,6 +3,9 @@
 # =============================================================================
 set_source_files_properties(${AUTO_GENERATED_FILES} PROPERTIES GENERATED TRUE)
 
+# build nmodl python module under lib/python/nmodl
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/python/nmodl)
+
 foreach(
   file
   ast.py
@@ -45,7 +48,7 @@ add_dependencies(_nmodl pyastgen)
 add_dependencies(_nmodl lexer_obj)
 add_dependencies(_nmodl util_obj)
 
-target_link_libraries(_nmodl PRIVATE fmt::fmt-header-only)
+target_link_libraries(_nmodl PRIVATE fmt::fmt)
 
 add_custom_target(copy_python_files ALL DEPENDS ${NMODL_PYTHON_FILES_OUT})
 add_custom_command(
@@ -57,11 +60,12 @@ add_custom_command(
   COMMENT "-- COPYING NMODL PYTHON FILES --")
 
 # =============================================================================
+# Copy python binding components into build directory
+# =============================================================================
+file(GLOB NMODL_PYTHON_HELPER_FILES "${NMODL_PROJECT_SOURCE_DIR}/nmodl/*.py")
+file(COPY ${NMODL_PYTHON_HELPER_FILES} DESTINATION ${CMAKE_BINARY_DIR}/lib/python/nmodl/)
+
+# =============================================================================
 # Install python binding components
 # =============================================================================
-install(TARGETS _nmodl DESTINATION lib/python/nmodl)
-install(
-  DIRECTORY ${PROJECT_BINARY_DIR}/nmodl
-  DESTINATION lib/python/
-  FILES_MATCHING
-  PATTERN "*.py")
+install(DIRECTORY ${CMAKE_BINARY_DIR}/lib/ DESTINATION lib)
