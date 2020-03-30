@@ -27,8 +27,15 @@ namespace visitor {
  */
 
 /**
- * \class JSONVisitor
+ * \class CheckParentVisitor
  * \brief %Visitor for checking parents of ast nodes
+ *
+ * The visitor goes down the tree (parent -> children) marking down in
+ * parent who is the parent of the node he is visiting.
+ * Once check_parent(ast::Ast* node) verified that the current node has
+ * the correct parent, we set the current node as parent and go down
+ * the tree. Once all the children were checked we set the parent of the
+ * current node as parent (it was checked before) and return.
  */
 class CheckParentVisitor : public AstVisitor {
     private:
@@ -46,6 +53,12 @@ class CheckParentVisitor : public AstVisitor {
         bool is_root_with_null_parent = false;
     public:
 
+        /**
+        * \brief Standard constructor
+        *
+        * If is_root_with_null_parent is set to true, also the initial
+        * node is checked to be sure that is really the root (parent = nullptr)
+        */
         CheckParentVisitor(const bool is_root_with_null_parent = true) {}
 
         /**
