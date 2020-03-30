@@ -64,7 +64,6 @@ set_source_files_properties(${VISITOR_GENERATED_SOURCES} PROPERTIES GENERATED TR
 include_directories(${PYBIND11_INCLUDE_DIR} ${PYTHON_INCLUDE_DIRS})
 add_library(visitor_obj OBJECT ${VISITOR_SOURCES} ${VISITOR_GENERATED_SOURCES})
 set_property(TARGET visitor_obj PROPERTY POSITION_INDEPENDENT_CODE ON)
-target_link_libraries(visitor_obj PRIVATE fmt::fmt-header-only)
 
 add_dependencies(visitor_obj lexer_obj)
 

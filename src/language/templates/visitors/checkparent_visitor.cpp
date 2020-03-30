@@ -5,9 +5,9 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
-#include <sstream>
 #include <string>
 #include <fmt/format.h>
+
 #include "visitors/checkparent_visitor.hpp"
 
 namespace nmodl {
@@ -18,7 +18,6 @@ using namespace ast;
 
 int CheckParentVisitor::check_ast(Ast* node) {
 
-    // There is no clear() in std::stack...
     parent = nullptr;
 
     node->accept(*this);
@@ -46,9 +45,7 @@ void CheckParentVisitor::check_parent(ast::Ast* node) const {
 {% for node in nodes %}
 void CheckParentVisitor::visit_{{ node.class_name|snake_case }}({{ node.class_name }}* node) {
 
-
-
-    // Now, this node is the parent. I go down the tree
+    // Set this node as parent. and go down the tree
     parent = node;
 
     // visit its children
