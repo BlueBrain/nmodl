@@ -12,6 +12,7 @@
 
 namespace nmodl {
 namespace visitor {
+namespace test {
 
 using namespace fmt::literals;
 using namespace ast;
@@ -57,5 +58,6 @@ void CheckParentVisitor::visit_{{ node.class_name|snake_case }}({{ node.class_na
 
 {% endfor %}
 
+}  // namespace test
 }  // namespace visitor
 }  // namespace nmodl
