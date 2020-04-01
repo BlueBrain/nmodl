@@ -168,7 +168,7 @@ SCENARIO("Check parents in valid NMODL constructs") {
         GIVEN(construct.second.name) {
             THEN("Check the parents in : " + construct.second.input) {
                 // check the parents
-                REQUIRE(!nmodl::visitor::CheckParentVisitor().check_ast(ast.get()));
+                REQUIRE(!nmodl::visitor::test::CheckParentVisitor().check_ast(ast.get()));
             }
         }
     }

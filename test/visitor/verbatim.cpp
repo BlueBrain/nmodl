@@ -13,7 +13,7 @@
 
 using namespace nmodl;
 using namespace visitor;
-
+using namespace test;
 using nmodl::parser::NmodlDriver;
 
 

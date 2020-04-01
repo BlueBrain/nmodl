@@ -20,6 +20,7 @@
 
 namespace nmodl {
 namespace visitor {
+namespace test {
 
 /**
  * @ingroup visitor_classes
@@ -81,5 +82,6 @@ class CheckParentVisitor : public AstVisitor {
 
 /** @} */  // end of visitor_classes
 
+}  // namespace test
 }  // namespace visitor
 }  // namespace nmodl

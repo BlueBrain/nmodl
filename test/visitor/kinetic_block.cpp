@@ -18,6 +18,7 @@
 
 using namespace nmodl;
 using namespace visitor;
+using namespace test;
 using namespace test_utils;
 
 using ast::AstNodeType;
