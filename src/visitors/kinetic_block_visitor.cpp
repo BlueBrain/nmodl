@@ -12,6 +12,7 @@
 #include "utils/logger.hpp"
 #include "utils/string_utils.hpp"
 #include "visitor_utils.hpp"
+#include "visitors/lookup_visitor.hpp"
 
 
 namespace nmodl {
@@ -365,7 +366,7 @@ void KineticBlockVisitor::visit_kinetic_block(ast::KineticBlock* node) {
     additive_terms = std::vector<std::string>(state_var_count);
     i_statement = 0;
 
-    // construct stoichiometric matrices and fluxes
+    // construct stochiometric matrices and fluxes
     node->visit_children(*this);
 
     // number of reaction statements
@@ -463,8 +464,13 @@ void KineticBlockVisitor::visit_program(ast::Program* node) {
         }
     }
 
+    auto kineticBlockNodes = AstLookupVisitor().lookup(node, ast::AstNodeType::KINETIC_BLOCK);
     // replace reaction statements within each kinetic block with equivalent ODEs
-    node->visit_children(*this);
+    for (const auto& ii: kineticBlockNodes) {
+        ii->accept(*this);
+    }
+
+    //    node->visit_children(*this);
 
     // change KINETIC blocks -> DERIVATIVE blocks
     auto blocks = node->get_blocks();
