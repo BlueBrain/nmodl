@@ -470,8 +470,6 @@ void KineticBlockVisitor::visit_program(ast::Program* node) {
         ii->accept(*this);
     }
 
-    //    node->visit_children(*this);
-
     // change KINETIC blocks -> DERIVATIVE blocks
     auto blocks = node->get_blocks();
     for (auto* kinetic_block: kinetic_blocks) {
