@@ -102,6 +102,7 @@ std::shared_ptr<ast::Expression> create_expr(const std::string& str_expr) {
 }
 
 void KineticBlockVisitor::visit_conserve(ast::Conserve* node) {
+    ++conserve_statement_count;
     // rewrite CONSERVE statement in form x = ...
     // where x was the last state var on LHS, and whose ODE should later be replaced with this
     // equation note: CONSERVE statement "implicitly takes into account COMPARTMENT factors on LHS"
@@ -429,6 +430,7 @@ void KineticBlockVisitor::visit_kinetic_block(ast::KineticBlock* node) {
 }
 
 void KineticBlockVisitor::visit_program(ast::Program* node) {
+    conserve_statement_count = 0;
     statements_to_remove.clear();
     current_statement_block = nullptr;
 

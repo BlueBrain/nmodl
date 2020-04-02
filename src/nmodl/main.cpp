@@ -354,13 +354,14 @@ int main(int argc, const char* argv[]) {
         /// in global scope
         {
             logger->info("Running KINETIC block visitor");
-            KineticBlockVisitor().visit_program(ast.get());
+            auto kineticBlockVisitor = KineticBlockVisitor();
+            kineticBlockVisitor.visit_program(ast.get());
             SymtabVisitor(update_symtab).visit_program(ast.get());
             const auto filename = filepath("kinetic");
             ast_to_nmodl(ast.get(), filename);
-            if (nmodl_ast) {
+            if (nmodl_ast && kineticBlockVisitor.get_conserve_statement_count()) {
                 logger->warn(
-                    "{} may present non-standard CONSERVE statements in DERIVATIVE blocks. In this case, use it only for debugging/developing"_format(
+                    "{} presents non-standard CONSERVE statements in DERIVATIVE blocks. Use it only for debugging/developing"_format(
                         filename));
             }
         }
