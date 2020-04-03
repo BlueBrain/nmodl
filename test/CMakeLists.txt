@@ -54,13 +54,13 @@ add_executable(testunitparser units/parser.cpp)
 target_link_libraries(testmodtoken lexer util)
 target_link_libraries(testlexer lexer util)
 target_link_libraries(
-        testparser
-        visitor
-        symtab
-        lexer
-        util
-        test_util
-        printer)
+  testparser
+  visitor
+  symtab
+  lexer
+  util
+  test_util
+  printer)
 target_link_libraries(
   testvisitor
   visitor
