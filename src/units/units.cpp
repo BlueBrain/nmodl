@@ -352,7 +352,7 @@ void UnitTable::print_base_units() const {
     std::cout << '\n';
 }
 
-void UnitTable::print_units_sorted(std::pstream& units_details) const {
+void UnitTable::print_units_sorted(std::ostream& units_details) const {
     std::vector<std::pair<std::string, std::shared_ptr<Unit>>> sorted_elements(table.begin(),
                                                                                table.end());
     std::sort(sorted_elements.begin(), sorted_elements.end());
