@@ -11,8 +11,10 @@ import logging
 import os
 from pathlib import Path, PurePath
 import shutil
+import stat
 import subprocess
 import tempfile
+
 import jinja2
 
 from parser import LanguageParser
@@ -88,6 +90,11 @@ for path in templates_dir.iterdir():
                 updated_files.append(str(filepath.name))
             if clang_format:
                 subprocess.check_call(clang_format + ['-i', destination_file])
+        # remove write permissions
+        mode = os.stat(destination_file).st_mode
+        rm_write_mask = ~ (stat.S_IWUSR | stat.S_IWGRP | stat.S_IWRITE)
+        os.chmod(destination_file, mode & rm_write_mask)
+
 
 if updated_files:
     logging.info('       Updating out of date template files : %s', ' '.join(updated_files))

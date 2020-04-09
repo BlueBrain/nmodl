@@ -249,7 +249,7 @@ class ChildNode(BaseNode):
                           *
                           * \\sa Ast::get_node_type_name
                           */
-                         virtual std::string get_node_name() override {{
+                         virtual std::string get_node_name() const override {{
                              return {self.varname}->{method_name}();
                          }}"""
             s = textwrap.dedent(method)
@@ -263,7 +263,7 @@ class ChildNode(BaseNode):
                    /**
                     * \\brief Getter for member variable \\ref {class_name}.{self.varname}
                     */
-                   {return_type} {getter_method}(){getter_override}{{
+                   {return_type} {getter_method}() const {getter_override}{{
                        return {self.varname};
                    }}"""
 

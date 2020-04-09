@@ -97,7 +97,7 @@ namespace ast {
         /// \{
 
         {% if node.is_base_block_node %}
-        virtual ArgumentVector get_parameters() {
+        virtual ArgumentVector get_parameters() const {
             throw std::runtime_error("get_parameters not implemented");
         }
         {% endif %}
@@ -114,7 +114,7 @@ namespace ast {
          *\brief Check if the ast node is an instance of ast::{{ node.class_name }}
          * @return true as object is of type ast::{{ node.class_name }}
          */
-        bool is_{{ node.class_name | snake_case }} () override {
+        bool is_{{ node.class_name | snake_case }} () const noexcept override {
             return true;
         }
 
@@ -128,7 +128,7 @@ namespace ast {
          *
          * @return pointer to the clone/copy of the current node
          */
-        {{ virtual(node) }} {{ node.class_name }}* clone() override {
+        {{ virtual(node) }} {{ node.class_name }}* clone() const override {
             return new {{ node.class_name }}(*this);
         }
 
@@ -146,7 +146,7 @@ namespace ast {
          *
          * \sa Ast::get_node_type_name
          */
-        {{ virtual(node) }} AstNodeType get_node_type() override {
+        {{ virtual(node) }} AstNodeType get_node_type() const noexcept override {
             return AstNodeType::{{ node.ast_enum_name }};
         }
 
@@ -161,7 +161,7 @@ namespace ast {
          *
          * \sa Ast::get_node_name
          */
-        {{ virtual(node) }} std::string get_node_type_name() override {
+        {{ virtual(node) }} std::string get_node_type_name() const noexcept override {
             return "{{ node.class_name }}";
         }
 
@@ -177,7 +177,7 @@ namespace ast {
         *
         * \sa Ast::get_nmodl_name
         */
-        {{ virtual(node) }} std::string get_nmodl_name() override {
+        {{ virtual(node) }} std::string get_nmodl_name() const noexcept override {
             return "{{ node.nmodl_name }}";
         }
         {% endif %}
@@ -187,6 +187,13 @@ namespace ast {
          */
         {{ virtual(node) }} std::shared_ptr<Ast> get_shared_ptr() override {
             return std::static_pointer_cast<{{ node.class_name }}>(shared_from_this());
+        }
+
+        /**
+         * \brief Get std::shared_ptr from `this` pointer of the current ast node
+         */
+        {{ virtual(node) }} std::shared_ptr<const Ast> get_shared_ptr() const override {
+            return std::static_pointer_cast<const {{ node.class_name }}>(shared_from_this());
         }
 
         {% if node.has_token %}
@@ -199,7 +206,7 @@ namespace ast {
          *
          * @return pointer to token if exist otherwise nullptr
          */
-        {{ virtual(node) }}ModToken* get_token() override {
+        const {{ virtual(node) }}ModToken* get_token() const override {
             return token.get();
         }
         {% endif %}
@@ -219,6 +226,7 @@ namespace ast {
         symtab::SymbolTable* get_symbol_table() override {
             return symtab;
         }
+
         {% endif %}
 
         {% if node.is_program_node %}
@@ -255,7 +263,7 @@ namespace ast {
          *
          * \sa Ast::get_node_type_name Ast::get_node_name
          */
-        {{ virtual(node) }}void set_name(std::string name) override {
+        {{ virtual(node) }}void set_name(const std::string& name) override {
             value->set(name);
         }
         {% endif %}
@@ -264,7 +272,7 @@ namespace ast {
         /**
          * \brief Set token for the current ast node
          */
-        void set_token(ModToken& tok) { token = std::make_shared<ModToken>(tok); }
+        void set_token(const ModToken& tok) { token = std::make_shared<ModToken>(tok); }
         {% endif %}
 
         {% if node.is_symtab_needed %}

@@ -150,7 +150,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
 
     Ast() = default;
 
-    virtual ~Ast() {}
+    virtual ~Ast() = default;
 
     /// \}
 
@@ -164,7 +164,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      * Every node in the ast has a type defined in ast::AstNodeType.
      * This type is can be used to check/compare node types.
      */
-    virtual AstNodeType get_node_type() = 0;
+    virtual AstNodeType get_node_type() const = 0;
 
     /**
      * \brief Return type (ast::AstNodeType) of ast node as std::string
@@ -177,7 +177,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *
      * \sa Ast::get_node_name
      */
-    virtual std::string get_node_type_name() = 0;
+    virtual std::string get_node_type_name() const = 0;
 
     /**
      * \brief Return NMODL statement of ast node as std::string
@@ -190,7 +190,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *
      * \sa Ast::get_nmodl_name
      */
-    virtual std::string get_nmodl_name() {
+    virtual std::string get_nmodl_name() const {
         throw std::runtime_error("get_nmodl_name not implemented");
     }
 
@@ -246,7 +246,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *
      * @return pointer to the clone/copy of the current node
      */
-    virtual Ast* clone() {
+    virtual Ast* clone() const {
         throw std::logic_error("clone not implemented");
     }
 
@@ -268,7 +268,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *
      * \sa Ast::get_node_type_name
      */
-    virtual std::string get_node_name() {
+    virtual std::string get_node_name() const {
         throw std::logic_error("get_node_name() not implemented");
     }
 
@@ -281,7 +281,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *
      * @return pointer to token if exist otherwise nullptr
      */
-    virtual ModToken* get_token() {
+    virtual const ModToken* get_token() const {
         return nullptr;
     }
 
@@ -321,7 +321,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *
      * \sa ast::StatementBlock
      */
-    virtual std::shared_ptr<StatementBlock> get_statement_block() {
+    virtual std::shared_ptr<StatementBlock> get_statement_block() const {
         throw std::runtime_error("get_statement_block not implemented");
     }
 
@@ -347,7 +347,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *
      * \sa Ast::get_node_type_name Ast::get_node_name
      */
-    virtual void set_name(std::string /*name*/) {
+    virtual void set_name(const std::string& /*name*/) {
         throw std::runtime_error("set_name not implemented");
     }
 
@@ -369,11 +369,16 @@ struct Ast: public std::enable_shared_from_this<Ast> {
         return std::static_pointer_cast<Ast>(shared_from_this());
     }
 
-    /**
+    /// get std::shared_ptr from `this` pointer of the AST node
+    virtual std::shared_ptr<const Ast> get_shared_ptr() const {
+       return std::static_pointer_cast<const Ast>(shared_from_this());
+    }
+
+  /**
      *\brief Check if the ast node is an instance of ast::Ast
      * @return true if object of type ast::Ast
      */
-    virtual bool is_ast() {
+    virtual bool is_ast() const noexcept {
         return true;
     }
 
@@ -381,7 +386,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::Node
      * @return true if object of type ast::Node
      */
-    virtual bool is_node() {
+    virtual bool is_node() const noexcept {
         return false;
     }
 
@@ -389,7 +394,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::Statement
      * @return true if object of type ast::Statement
      */
-    virtual bool is_statement() {
+    virtual bool is_statement() const noexcept {
         return false;
     }
 
@@ -397,7 +402,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::Expression
      * @return true if object of type ast::Expression
      */
-    virtual bool is_expression() {
+    virtual bool is_expression() const noexcept {
         return false;
     }
 
@@ -405,7 +410,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::Block
      * @return true if object of type ast::Block
      */
-    virtual bool is_block() {
+    virtual bool is_block() const noexcept {
         return false;
     }
 
@@ -413,7 +418,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::Identifier
      * @return true if object of type ast::Identifier
      */
-    virtual bool is_identifier() {
+    virtual bool is_identifier() const noexcept {
         return false;
     }
 
@@ -421,7 +426,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::Number
      * @return true if object of type ast::Number
      */
-    virtual bool is_number() {
+    virtual bool is_number() const noexcept {
         return false;
     }
 
@@ -429,7 +434,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::String
      * @return true if object of type ast::String
      */
-    virtual bool is_string() {
+    virtual bool is_string() const noexcept {
         return false;
     }
 
@@ -437,7 +442,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::Integer
      * @return true if object of type ast::Integer
      */
-    virtual bool is_integer() {
+    virtual bool is_integer() const noexcept {
         return false;
     }
 
@@ -445,7 +450,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::Float
      * @return true if object of type ast::Float
      */
-    virtual bool is_float() {
+    virtual bool is_float() const noexcept {
         return false;
     }
 
@@ -453,7 +458,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::Double
      * @return true if object of type ast::Double
      */
-    virtual bool is_double() {
+    virtual bool is_double() const noexcept {
         return false;
     }
 
@@ -461,7 +466,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::Boolean
      * @return true if object of type ast::Boolean
      */
-    virtual bool is_boolean() {
+    virtual bool is_boolean() const noexcept {
         return false;
     }
 
@@ -469,7 +474,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::Name
      * @return true if object of type ast::Name
      */
-    virtual bool is_name() {
+    virtual bool is_name() const noexcept {
         return false;
     }
 
@@ -477,7 +482,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::PrimeName
      * @return true if object of type ast::PrimeName
      */
-    virtual bool is_prime_name() {
+    virtual bool is_prime_name() const noexcept {
         return false;
     }
 
@@ -485,7 +490,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::VarName
      * @return true if object of type ast::VarName
      */
-    virtual bool is_var_name() {
+    virtual bool is_var_name() const noexcept {
         return false;
     }
 
@@ -493,7 +498,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::IndexedName
      * @return true if object of type ast::IndexedName
      */
-    virtual bool is_indexed_name() {
+    virtual bool is_indexed_name() const noexcept {
         return false;
     }
 
@@ -501,7 +506,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::Argument
      * @return true if object of type ast::Argument
      */
-    virtual bool is_argument() {
+    virtual bool is_argument() const noexcept {
         return false;
     }
 
@@ -509,7 +514,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::ReactVarName
      * @return true if object of type ast::ReactVarName
      */
-    virtual bool is_react_var_name() {
+    virtual bool is_react_var_name() const noexcept {
         return false;
     }
 
@@ -517,7 +522,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::ReadIonVar
      * @return true if object of type ast::ReadIonVar
      */
-    virtual bool is_read_ion_var() {
+    virtual bool is_read_ion_var() const noexcept {
         return false;
     }
 
@@ -525,7 +530,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::WriteIonVar
      * @return true if object of type ast::WriteIonVar
      */
-    virtual bool is_write_ion_var() {
+    virtual bool is_write_ion_var() const noexcept {
         return false;
     }
 
@@ -533,7 +538,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::NonspecificCurVar
      * @return true if object of type ast::NonspecificCurVar
      */
-    virtual bool is_nonspecific_cur_var() {
+    virtual bool is_nonspecific_cur_var() const noexcept {
         return false;
     }
 
@@ -541,7 +546,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::ElectrodeCurVar
      * @return true if object of type ast::ElectrodeCurVar
      */
-    virtual bool is_electrode_cur_var() {
+    virtual bool is_electrode_cur_var() const noexcept {
         return false;
     }
 
@@ -549,7 +554,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::SectionVar
      * @return true if object of type ast::SectionVar
      */
-    virtual bool is_section_var() {
+    virtual bool is_section_var() const noexcept {
         return false;
     }
 
@@ -557,7 +562,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::RangeVar
      * @return true if object of type ast::RangeVar
      */
-    virtual bool is_range_var() {
+    virtual bool is_range_var() const noexcept {
         return false;
     }
 
@@ -565,7 +570,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::GlobalVar
      * @return true if object of type ast::GlobalVar
      */
-    virtual bool is_global_var() {
+    virtual bool is_global_var() const noexcept {
         return false;
     }
 
@@ -573,7 +578,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::PointerVar
      * @return true if object of type ast::PointerVar
      */
-    virtual bool is_pointer_var() {
+    virtual bool is_pointer_var() const noexcept {
         return false;
     }
 
@@ -581,7 +586,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::BbcorePointerVar
      * @return true if object of type ast::BbcorePointerVar
      */
-    virtual bool is_bbcore_pointer_var() {
+    virtual bool is_bbcore_pointer_var() const noexcept {
         return false;
     }
 
@@ -589,7 +594,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::ExternVar
      * @return true if object of type ast::ExternVar
      */
-    virtual bool is_extern_var() {
+    virtual bool is_extern_var() const noexcept {
         return false;
     }
 
@@ -597,7 +602,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::ThreadsafeVar
      * @return true if object of type ast::ThreadsafeVar
      */
-    virtual bool is_threadsafe_var() {
+    virtual bool is_threadsafe_var() const noexcept {
         return false;
     }
 
@@ -605,7 +610,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::ParamBlock
      * @return true if object of type ast::ParamBlock
      */
-    virtual bool is_param_block() {
+    virtual bool is_param_block() const noexcept {
         return false;
     }
 
@@ -613,7 +618,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::StepBlock
      * @return true if object of type ast::StepBlock
      */
-    virtual bool is_step_block() {
+    virtual bool is_step_block() const noexcept {
         return false;
     }
 
@@ -621,7 +626,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::IndependentBlock
      * @return true if object of type ast::IndependentBlock
      */
-    virtual bool is_independent_block() {
+    virtual bool is_independent_block() const noexcept {
         return false;
     }
 
@@ -629,7 +634,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::AssignedBlock
      * @return true if object of type ast::AssignedBlock
      */
-    virtual bool is_assigned_block() {
+    virtual bool is_assigned_block() const noexcept {
         return false;
     }
 
@@ -637,7 +642,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::StateBlock
      * @return true if object of type ast::StateBlock
      */
-    virtual bool is_state_block() {
+    virtual bool is_state_block() const noexcept {
         return false;
     }
 
@@ -645,7 +650,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::PlotBlock
      * @return true if object of type ast::PlotBlock
      */
-    virtual bool is_plot_block() {
+    virtual bool is_plot_block() const noexcept {
         return false;
     }
 
@@ -653,7 +658,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::InitialBlock
      * @return true if object of type ast::InitialBlock
      */
-    virtual bool is_initial_block() {
+    virtual bool is_initial_block() const noexcept {
         return false;
     }
 
@@ -661,7 +666,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::ConstructorBlock
      * @return true if object of type ast::ConstructorBlock
      */
-    virtual bool is_constructor_block() {
+    virtual bool is_constructor_block() const noexcept {
         return false;
     }
 
@@ -669,7 +674,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::DestructorBlock
      * @return true if object of type ast::DestructorBlock
      */
-    virtual bool is_destructor_block() {
+    virtual bool is_destructor_block() const noexcept {
         return false;
     }
 
@@ -677,7 +682,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::StatementBlock
      * @return true if object of type ast::StatementBlock
      */
-    virtual bool is_statement_block() {
+    virtual bool is_statement_block() const noexcept {
         return false;
     }
 
@@ -685,7 +690,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::DerivativeBlock
      * @return true if object of type ast::DerivativeBlock
      */
-    virtual bool is_derivative_block() {
+    virtual bool is_derivative_block() const noexcept {
         return false;
     }
 
@@ -693,7 +698,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::LinearBlock
      * @return true if object of type ast::LinearBlock
      */
-    virtual bool is_linear_block() {
+    virtual bool is_linear_block() const noexcept {
         return false;
     }
 
@@ -701,7 +706,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::NonLinearBlock
      * @return true if object of type ast::NonLinearBlock
      */
-    virtual bool is_non_linear_block() {
+    virtual bool is_non_linear_block() const noexcept {
         return false;
     }
 
@@ -709,7 +714,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::DiscreteBlock
      * @return true if object of type ast::DiscreteBlock
      */
-    virtual bool is_discrete_block() {
+    virtual bool is_discrete_block() const noexcept {
         return false;
     }
 
@@ -717,7 +722,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::PartialBlock
      * @return true if object of type ast::PartialBlock
      */
-    virtual bool is_partial_block() {
+    virtual bool is_partial_block() const noexcept {
         return false;
     }
 
@@ -725,7 +730,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::FunctionTableBlock
      * @return true if object of type ast::FunctionTableBlock
      */
-    virtual bool is_function_table_block() {
+    virtual bool is_function_table_block() const noexcept {
         return false;
     }
 
@@ -733,7 +738,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::FunctionBlock
      * @return true if object of type ast::FunctionBlock
      */
-    virtual bool is_function_block() {
+    virtual bool is_function_block() const noexcept {
         return false;
     }
 
@@ -741,7 +746,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::ProcedureBlock
      * @return true if object of type ast::ProcedureBlock
      */
-    virtual bool is_procedure_block() {
+    virtual bool is_procedure_block() const noexcept {
         return false;
     }
 
@@ -749,7 +754,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::NetReceiveBlock
      * @return true if object of type ast::NetReceiveBlock
      */
-    virtual bool is_net_receive_block() {
+    virtual bool is_net_receive_block() const noexcept {
         return false;
     }
 
@@ -757,7 +762,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::SolveBlock
      * @return true if object of type ast::SolveBlock
      */
-    virtual bool is_solve_block() {
+    virtual bool is_solve_block() const noexcept {
         return false;
     }
 
@@ -765,7 +770,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::BreakpointBlock
      * @return true if object of type ast::BreakpointBlock
      */
-    virtual bool is_breakpoint_block() {
+    virtual bool is_breakpoint_block() const noexcept {
         return false;
     }
 
@@ -773,7 +778,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::TerminalBlock
      * @return true if object of type ast::TerminalBlock
      */
-    virtual bool is_terminal_block() {
+    virtual bool is_terminal_block() const noexcept {
         return false;
     }
 
@@ -781,7 +786,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::BeforeBlock
      * @return true if object of type ast::BeforeBlock
      */
-    virtual bool is_before_block() {
+    virtual bool is_before_block() const noexcept {
         return false;
     }
 
@@ -789,7 +794,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::AfterBlock
      * @return true if object of type ast::AfterBlock
      */
-    virtual bool is_after_block() {
+    virtual bool is_after_block() const noexcept {
         return false;
     }
 
@@ -797,7 +802,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::BABlock
      * @return true if object of type ast::BABlock
      */
-    virtual bool is_ba_block() {
+    virtual bool is_ba_block() const noexcept {
         return false;
     }
 
@@ -805,7 +810,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::ForNetcon
      * @return true if object of type ast::ForNetcon
      */
-    virtual bool is_for_netcon() {
+    virtual bool is_for_netcon() const noexcept {
         return false;
     }
 
@@ -813,7 +818,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::KineticBlock
      * @return true if object of type ast::KineticBlock
      */
-    virtual bool is_kinetic_block() {
+    virtual bool is_kinetic_block() const noexcept {
         return false;
     }
 
@@ -821,7 +826,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::MatchBlock
      * @return true if object of type ast::MatchBlock
      */
-    virtual bool is_match_block() {
+    virtual bool is_match_block() const noexcept {
         return false;
     }
 
@@ -829,7 +834,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::UnitBlock
      * @return true if object of type ast::UnitBlock
      */
-    virtual bool is_unit_block() {
+    virtual bool is_unit_block() const noexcept {
         return false;
     }
 
@@ -837,7 +842,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::ConstantBlock
      * @return true if object of type ast::ConstantBlock
      */
-    virtual bool is_constant_block() {
+    virtual bool is_constant_block() const noexcept {
         return false;
     }
 
@@ -845,7 +850,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::NeuronBlock
      * @return true if object of type ast::NeuronBlock
      */
-    virtual bool is_neuron_block() {
+    virtual bool is_neuron_block() const noexcept {
         return false;
     }
 
@@ -853,7 +858,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::Unit
      * @return true if object of type ast::Unit
      */
-    virtual bool is_unit() {
+    virtual bool is_unit() const noexcept {
         return false;
     }
 
@@ -861,7 +866,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::DoubleUnit
      * @return true if object of type ast::DoubleUnit
      */
-    virtual bool is_double_unit() {
+    virtual bool is_double_unit() const noexcept {
         return false;
     }
 
@@ -869,7 +874,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::LocalVar
      * @return true if object of type ast::LocalVar
      */
-    virtual bool is_local_var() {
+    virtual bool is_local_var() const noexcept {
         return false;
     }
 
@@ -877,7 +882,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::Limits
      * @return true if object of type ast::Limits
      */
-    virtual bool is_limits() {
+    virtual bool is_limits() const noexcept {
         return false;
     }
 
@@ -885,7 +890,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::NumberRange
      * @return true if object of type ast::NumberRange
      */
-    virtual bool is_number_range() {
+    virtual bool is_number_range() const noexcept {
         return false;
     }
 
@@ -893,7 +898,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::PlotVar
      * @return true if object of type ast::PlotVar
      */
-    virtual bool is_plot_var() {
+    virtual bool is_plot_var() const noexcept {
         return false;
     }
 
@@ -901,7 +906,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::ConstantVar
      * @return true if object of type ast::ConstantVar
      */
-    virtual bool is_constant_var() {
+    virtual bool is_constant_var() const noexcept {
         return false;
     }
 
@@ -909,7 +914,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::BinaryOperator
      * @return true if object of type ast::BinaryOperator
      */
-    virtual bool is_binary_operator() {
+    virtual bool is_binary_operator() const noexcept {
         return false;
     }
 
@@ -917,7 +922,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::UnaryOperator
      * @return true if object of type ast::UnaryOperator
      */
-    virtual bool is_unary_operator() {
+    virtual bool is_unary_operator() const noexcept {
         return false;
     }
 
@@ -925,7 +930,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::ReactionOperator
      * @return true if object of type ast::ReactionOperator
      */
-    virtual bool is_reaction_operator() {
+    virtual bool is_reaction_operator() const noexcept {
         return false;
     }
 
@@ -933,7 +938,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::ParenExpression
      * @return true if object of type ast::ParenExpression
      */
-    virtual bool is_paren_expression() {
+    virtual bool is_paren_expression() const noexcept {
         return false;
     }
 
@@ -941,7 +946,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::BinaryExpression
      * @return true if object of type ast::BinaryExpression
      */
-    virtual bool is_binary_expression() {
+    virtual bool is_binary_expression() const noexcept {
         return false;
     }
 
@@ -949,7 +954,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::DiffEqExpression
      * @return true if object of type ast::DiffEqExpression
      */
-    virtual bool is_diff_eq_expression() {
+    virtual bool is_diff_eq_expression() const noexcept {
         return false;
     }
 
@@ -957,7 +962,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::UnaryExpression
      * @return true if object of type ast::UnaryExpression
      */
-    virtual bool is_unary_expression() {
+    virtual bool is_unary_expression() const noexcept {
         return false;
     }
 
@@ -965,7 +970,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::NonLinEquation
      * @return true if object of type ast::NonLinEquation
      */
-    virtual bool is_non_lin_equation() {
+    virtual bool is_non_lin_equation() const noexcept {
         return false;
     }
 
@@ -973,7 +978,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::LinEquation
      * @return true if object of type ast::LinEquation
      */
-    virtual bool is_lin_equation() {
+    virtual bool is_lin_equation() const noexcept {
         return false;
     }
 
@@ -981,7 +986,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::FunctionCall
      * @return true if object of type ast::FunctionCall
      */
-    virtual bool is_function_call() {
+    virtual bool is_function_call() const noexcept {
         return false;
     }
 
@@ -989,7 +994,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::FirstLastTypeIndex
      * @return true if object of type ast::FirstLastTypeIndex
      */
-    virtual bool is_first_last_type_index() {
+    virtual bool is_first_last_type_index() const noexcept {
         return false;
     }
 
@@ -997,7 +1002,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::Watch
      * @return true if object of type ast::Watch
      */
-    virtual bool is_watch() {
+    virtual bool is_watch() const noexcept {
         return false;
     }
 
@@ -1005,7 +1010,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::QueueExpressionType
      * @return true if object of type ast::QueueExpressionType
      */
-    virtual bool is_queue_expression_type() {
+    virtual bool is_queue_expression_type() const noexcept {
         return false;
     }
 
@@ -1013,7 +1018,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::Match
      * @return true if object of type ast::Match
      */
-    virtual bool is_match() {
+    virtual bool is_match() const noexcept {
         return false;
     }
 
@@ -1021,7 +1026,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::BABlockType
      * @return true if object of type ast::BABlockType
      */
-    virtual bool is_ba_block_type() {
+    virtual bool is_ba_block_type() const noexcept {
         return false;
     }
 
@@ -1029,7 +1034,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::UnitDef
      * @return true if object of type ast::UnitDef
      */
-    virtual bool is_unit_def() {
+    virtual bool is_unit_def() const noexcept {
         return false;
     }
 
@@ -1037,7 +1042,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::FactorDef
      * @return true if object of type ast::FactorDef
      */
-    virtual bool is_factor_def() {
+    virtual bool is_factor_def() const noexcept {
         return false;
     }
 
@@ -1045,7 +1050,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::Valence
      * @return true if object of type ast::Valence
      */
-    virtual bool is_valence() {
+    virtual bool is_valence() const noexcept {
         return false;
     }
 
@@ -1053,7 +1058,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::UnitState
      * @return true if object of type ast::UnitState
      */
-    virtual bool is_unit_state() {
+    virtual bool is_unit_state() const noexcept {
         return false;
     }
 
@@ -1061,7 +1066,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::LocalListStatement
      * @return true if object of type ast::LocalListStatement
      */
-    virtual bool is_local_list_statement() {
+    virtual bool is_local_list_statement() const noexcept {
         return false;
     }
 
@@ -1069,7 +1074,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::Model
      * @return true if object of type ast::Model
      */
-    virtual bool is_model() {
+    virtual bool is_model() const noexcept {
         return false;
     }
 
@@ -1077,7 +1082,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::Define
      * @return true if object of type ast::Define
      */
-    virtual bool is_define() {
+    virtual bool is_define() const noexcept {
         return false;
     }
 
@@ -1085,7 +1090,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::Include
      * @return true if object of type ast::Include
      */
-    virtual bool is_include() {
+    virtual bool is_include() const noexcept {
         return false;
     }
 
@@ -1093,7 +1098,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::ParamAssign
      * @return true if object of type ast::ParamAssign
      */
-    virtual bool is_param_assign() {
+    virtual bool is_param_assign() const noexcept {
         return false;
     }
 
@@ -1101,7 +1106,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::Stepped
      * @return true if object of type ast::Stepped
      */
-    virtual bool is_stepped() {
+    virtual bool is_stepped() const noexcept {
         return false;
     }
 
@@ -1109,7 +1114,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::IndependentDefinition
      * @return true if object of type ast::IndependentDefinition
      */
-    virtual bool is_independent_definition() {
+    virtual bool is_independent_definition() const noexcept {
         return false;
     }
 
@@ -1117,7 +1122,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::AssignedDefinition
      * @return true if object of type ast::AssignedDefinition
      */
-    virtual bool is_assigned_definition() {
+    virtual bool is_assigned_definition() const noexcept {
         return false;
     }
 
@@ -1125,7 +1130,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::PlotDeclaration
      * @return true if object of type ast::PlotDeclaration
      */
-    virtual bool is_plot_declaration() {
+    virtual bool is_plot_declaration() const noexcept {
         return false;
     }
 
@@ -1133,7 +1138,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::ConductanceHint
      * @return true if object of type ast::ConductanceHint
      */
-    virtual bool is_conductance_hint() {
+    virtual bool is_conductance_hint() const noexcept {
         return false;
     }
 
@@ -1141,7 +1146,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::ExpressionStatement
      * @return true if object of type ast::ExpressionStatement
      */
-    virtual bool is_expression_statement() {
+    virtual bool is_expression_statement() const noexcept {
         return false;
     }
 
@@ -1149,7 +1154,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::ProtectStatement
      * @return true if object of type ast::ProtectStatement
      */
-    virtual bool is_protect_statement() {
+    virtual bool is_protect_statement() const noexcept {
         return false;
     }
 
@@ -1157,7 +1162,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::FromStatement
      * @return true if object of type ast::FromStatement
      */
-    virtual bool is_from_statement() {
+    virtual bool is_from_statement() const noexcept {
         return false;
     }
 
@@ -1165,7 +1170,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::ForAllStatement
      * @return true if object of type ast::ForAllStatement
      */
-    virtual bool is_for_all_statement() {
+    virtual bool is_for_all_statement() const noexcept {
         return false;
     }
 
@@ -1173,7 +1178,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::WhileStatement
      * @return true if object of type ast::WhileStatement
      */
-    virtual bool is_while_statement() {
+    virtual bool is_while_statement() const noexcept {
         return false;
     }
 
@@ -1181,7 +1186,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::IfStatement
      * @return true if object of type ast::IfStatement
      */
-    virtual bool is_if_statement() {
+    virtual bool is_if_statement() const noexcept {
         return false;
     }
 
@@ -1189,7 +1194,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::ElseIfStatement
      * @return true if object of type ast::ElseIfStatement
      */
-    virtual bool is_else_if_statement() {
+    virtual bool is_else_if_statement() const noexcept {
         return false;
     }
 
@@ -1197,7 +1202,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::ElseStatement
      * @return true if object of type ast::ElseStatement
      */
-    virtual bool is_else_statement() {
+    virtual bool is_else_statement() const noexcept {
         return false;
     }
 
@@ -1205,7 +1210,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::PartialEquation
      * @return true if object of type ast::PartialEquation
      */
-    virtual bool is_partial_equation() {
+    virtual bool is_partial_equation() const noexcept {
         return false;
     }
 
@@ -1213,7 +1218,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::Ast
      * @return true if object of type ast::Ast
      */
-    virtual bool is_partial_boundary() {
+    virtual bool is_partial_boundary() const noexcept {
         return false;
     }
 
@@ -1221,7 +1226,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::PartialBoundary
      * @return true if object of type ast::PartialBoundary
      */
-    virtual bool is_watch_statement() {
+    virtual bool is_watch_statement() const noexcept {
         return false;
     }
 
@@ -1229,7 +1234,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::MutexLock
      * @return true if object of type ast::MutexLock
      */
-    virtual bool is_mutex_lock() {
+    virtual bool is_mutex_lock() const noexcept {
         return false;
     }
 
@@ -1237,7 +1242,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::MutexUnlock
      * @return true if object of type ast::MutexUnlock
      */
-    virtual bool is_mutex_unlock() {
+    virtual bool is_mutex_unlock() const noexcept {
         return false;
     }
 
@@ -1245,7 +1250,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::Reset
      * @return true if object of type ast::Reset
      */
-    virtual bool is_reset() {
+    virtual bool is_reset() const noexcept {
         return false;
     }
 
@@ -1253,7 +1258,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::Sens
      * @return true if object of type ast::Sens
      */
-    virtual bool is_sens() {
+    virtual bool is_sens() const noexcept {
         return false;
     }
 
@@ -1261,7 +1266,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::Conserve
      * @return true if object of type ast::Conserve
      */
-    virtual bool is_conserve() {
+    virtual bool is_conserve() const noexcept {
         return false;
     }
 
@@ -1269,7 +1274,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::Compartment
      * @return true if object of type ast::Compartment
      */
-    virtual bool is_compartment() {
+    virtual bool is_compartment() const noexcept {
         return false;
     }
 
@@ -1277,7 +1282,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::LonDifuse
      * @return true if object of type ast::LonDifuse
      */
-    virtual bool is_lon_difuse() {
+    virtual bool is_lon_difuse() const noexcept {
         return false;
     }
 
@@ -1285,7 +1290,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::ReactionStatement
      * @return true if object of type ast::ReactionStatement
      */
-    virtual bool is_reaction_statement() {
+    virtual bool is_reaction_statement() const noexcept {
         return false;
     }
 
@@ -1293,7 +1298,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::LagStatement
      * @return true if object of type ast::LagStatement
      */
-    virtual bool is_lag_statement() {
+    virtual bool is_lag_statement() const noexcept {
         return false;
     }
 
@@ -1301,7 +1306,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::QueueStatement
      * @return true if object of type ast::QueueStatement
      */
-    virtual bool is_queue_statement() {
+    virtual bool is_queue_statement() const noexcept {
         return false;
     }
 
@@ -1309,7 +1314,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::ConstantStatement
      * @return true if object of type ast::ConstantStatement
      */
-    virtual bool is_constant_statement() {
+    virtual bool is_constant_statement() const noexcept {
         return false;
     }
 
@@ -1317,7 +1322,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::TableStatement
      * @return true if object of type ast::TableStatement
      */
-    virtual bool is_table_statement() {
+    virtual bool is_table_statement() const noexcept {
         return false;
     }
 
@@ -1325,7 +1330,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::Suffix
      * @return true if object of type ast::Suffix
      */
-    virtual bool is_suffix() {
+    virtual bool is_suffix() const noexcept {
         return false;
     }
 
@@ -1333,7 +1338,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::Useion
      * @return true if object of type ast::Useion
      */
-    virtual bool is_useion() {
+    virtual bool is_useion() const noexcept {
         return false;
     }
 
@@ -1341,7 +1346,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::Nonspecific
      * @return true if object of type ast::Nonspecific
      */
-    virtual bool is_nonspecific() {
+    virtual bool is_nonspecific() const noexcept {
         return false;
     }
 
@@ -1349,7 +1354,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::ElctrodeCurrent
      * @return true if object of type ast::ElctrodeCurrent
      */
-    virtual bool is_elctrode_current() {
+    virtual bool is_elctrode_current() const noexcept {
         return false;
     }
 
@@ -1357,7 +1362,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::Section
      * @return true if object of type ast::Section
      */
-    virtual bool is_section() {
+    virtual bool is_section() const noexcept {
         return false;
     }
 
@@ -1365,7 +1370,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::Range
      * @return true if object of type ast::Range
      */
-    virtual bool is_range() {
+    virtual bool is_range() const noexcept {
         return false;
     }
 
@@ -1373,7 +1378,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::Global
      * @return true if object of type ast::Global
      */
-    virtual bool is_global() {
+    virtual bool is_global() const noexcept {
         return false;
     }
 
@@ -1381,7 +1386,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::Pointer
      * @return true if object of type ast::Pointer
      */
-    virtual bool is_pointer() {
+    virtual bool is_pointer() const noexcept {
         return false;
     }
 
@@ -1389,7 +1394,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::BbcorePointer
      * @return true if object of type ast::BbcorePointer
      */
-    virtual bool is_bbcore_pointer() {
+    virtual bool is_bbcore_pointer() const noexcept {
         return false;
     }
 
@@ -1397,7 +1402,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::External
      * @return true if object of type ast::External
      */
-    virtual bool is_external() {
+    virtual bool is_external() const noexcept {
         return false;
     }
 
@@ -1405,7 +1410,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::ThreadSafe
      * @return true if object of type ast::ThreadSafe
      */
-    virtual bool is_thread_safe() {
+    virtual bool is_thread_safe() const noexcept {
         return false;
     }
 
@@ -1413,7 +1418,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::Verbatim
      * @return true if object of type ast::Verbatim
      */
-    virtual bool is_verbatim() {
+    virtual bool is_verbatim() const noexcept {
         return false;
     }
 
@@ -1421,7 +1426,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::LineComment
      * @return true if object of type ast::LineComment
      */
-    virtual bool is_line_comment() {
+    virtual bool is_line_comment() const noexcept {
         return false;
     }
 
@@ -1429,7 +1434,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::BlockComment
      * @return true if object of type ast::BlockComment
      */
-    virtual bool is_block_comment() {
+    virtual bool is_block_comment() const noexcept {
         return false;
     }
 
@@ -1437,7 +1442,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::Program
      * @return true if object of type ast::Program
      */
-    virtual bool is_program() {
+    virtual bool is_program() const noexcept {
         return false;
     }
 
@@ -1445,7 +1450,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::NrnStateBlock
      * @return true if object of type ast::NrnStateBlock
      */
-    virtual bool is_nrn_state_block() {
+    virtual bool is_nrn_state_block() const noexcept {
         return false;
     }
 
@@ -1453,7 +1458,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::EigenNewtonSolverBlock
      * @return true if object of type ast::EigenNewtonSolverBlock
      */
-    virtual bool is_eigen_newton_solver_block() {
+    virtual bool is_eigen_newton_solver_block() const noexcept {
         return false;
     }
 
@@ -1461,7 +1466,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::EigenLinearSolverBlock
      * @return true if object of type ast::EigenLinearSolverBlock
      */
-    virtual bool is_eigen_linear_solver_block() {
+    virtual bool is_eigen_linear_solver_block() const noexcept {
         return false;
     }
 
@@ -1469,7 +1474,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::WrappedExpression
      * @return true if object of type ast::WrappedExpression
      */
-    virtual bool is_wrapped_expression() {
+    virtual bool is_wrapped_expression() const noexcept {
         return false;
     }
 
@@ -1477,7 +1482,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::DerivimplicitCallback
      * @return true if object of type ast::DerivimplicitCallback
      */
-    virtual bool is_derivimplicit_callback() {
+    virtual bool is_derivimplicit_callback() const noexcept {
         return false;
     }
 
@@ -1485,7 +1490,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::SolutionExpression
      * @return true if object of type ast::SolutionExpression
      */
-    virtual bool is_solution_expression() {
+    virtual bool is_solution_expression() const noexcept {
         return false;
     }
 
@@ -1493,7 +1498,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *\brief Check if the ast node is an instance of ast::OntologyStatement
      * @return true if object of type ast::OntologyStatement
      */
-    virtual bool is_ontology_statement() {
+    virtual bool is_ontology_statement() const noexcept {
         return false;
     }
 };
