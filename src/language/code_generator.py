@@ -58,8 +58,11 @@ if clang_format_file.exists():
 
 env = jinja2.Environment(loader=jinja2.FileSystemLoader(str(templates_dir)),
                          trim_blocks=True,
-                         lstrip_blocks=True)
+                         lstrip_blocks=True,
+                         extensions=['jinja2.ext.do'])
+
 env.filters['snake_case'] = utils.to_snake_case
+env.globals['inherit_signatures'] = utils.inherit_signatures
 
 updated_files = []
 

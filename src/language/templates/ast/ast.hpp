@@ -33,7 +33,7 @@
 {% endmacro %}
 
 
-
+{% set node_members_signatures = {} %}
 
 namespace nmodl {
 namespace ast {
@@ -51,6 +51,9 @@ namespace ast {
      * {{- node.get_description() -}}
      */
     class {{ node.class_name }} : public {{ node.base_class }} {
+
+    {% do inherit_signatures(node.class_name, node.base_class, node_members_signatures) %}
+
     {% if node.private_members() %}
       private:
         {% for member in node.private_members() %}
@@ -72,6 +75,8 @@ namespace ast {
         {{ member[0] }} {{ member[1] }} = {{ member[2] }};
         {% endif %}
         {% endfor %}
+
+
 
 
         /// \name Ctor & dtor
@@ -295,7 +300,7 @@ namespace ast {
 
         {# doxygen for these methods is handled by nodes.py #}
         {% for child in node.children %}
-        {{ child.get_setter_method(node.class_name) }}
+        {{ child.get_setter_method(node.class_name, node_members_signatures) }}
         {% endfor %}
 
         /// \}

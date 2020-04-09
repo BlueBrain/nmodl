@@ -18,3 +18,22 @@ def camel_case_to_underscore(name):
 def to_snake_case(name):
     """convert string from 'AaaBbbbCccDdd' -> 'aaa_bbbb_ccc_ddd'"""
     return camel_case_to_underscore(name).lower()
+
+
+def check_override(node_name, signature, node_members_signatures):
+    add = ""
+    if node_name in node_members_signatures :
+        # print(node_members_signatures[node_name])
+        if signature in node_members_signatures[node_name]:
+
+            add = " override "
+        else:
+            node_members_signatures[node_name].add(signature)
+    else :
+        node_members_signatures[node_name] = {signature}
+
+    return signature + add
+
+def inherit_signatures(child, parent, node_members_signatures):
+    if parent in node_members_signatures :
+        node_members_signatures[child] = node_members_signatures[parent]

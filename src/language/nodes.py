@@ -16,6 +16,8 @@ import textwrap
 
 import node_info
 from utils import to_snake_case
+from utils import check_override
+
 
 
 class BaseNode:
@@ -267,34 +269,36 @@ class ChildNode(BaseNode):
                        return {self.varname};
                    }}"""
 
-    def get_setter_method(self, class_name):
+    def get_setter_method(self, class_name, node_members_signatures):
         setter_method = "set_" + to_snake_case(self.varname)
         setter_type = self.member_typename
-        reference = "" if self.is_base_type_node else "&&"
+
+        body = f""" {{
+                       this->{self.varname} = {self.varname};
+                   }}
+                """
+
         if self.is_base_type_node:
+            signature = check_override(class_name, f"""void {setter_method}({setter_type} {self.varname})""", node_members_signatures)
             return f"""
                        /**
                         * \\brief Setter for member variable \\ref {class_name}.{self.varname}
                         */
-                       void {setter_method}({setter_type} {self.varname}) {{
-                           this->{self.varname} = {self.varname};
-                       }}
+                       {signature} {body}
                     """
         else:
+            signature_rvalue = check_override(class_name, f"""void {setter_method}({setter_type}&& {self.varname})""", node_members_signatures)
+            signature = check_override(class_name, f"""void {setter_method}({setter_type}& {self.varname})""", node_members_signatures)
             return f"""
                        /**
                         * \\brief Setter for member variable \\ref {class_name}.{self.varname} (rvalue reference)
                         */
-                       void {setter_method}({setter_type}&& {self.varname}) {{
-                           this->{self.varname} = {self.varname};
-                       }}
+                       {signature_rvalue} {body}
                        
                        /**
                         * \\brief Setter for member variable \\ref {class_name}.{self.varname}
                         */
-                       void {setter_method}(const {setter_type}& {self.varname}) {{
-                           this->{self.varname} = {self.varname};
-                       }}
+                        {signature} {body}
                     """
 
     def __repr__(self):
