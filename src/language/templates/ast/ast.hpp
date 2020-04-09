@@ -175,9 +175,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
    *
    * @return pointer to the clone/copy of the current node
    */
-  virtual Ast* clone() const {
-    throw std::logic_error("clone not implemented");
-  }
+  virtual Ast* clone() const;
 
   /// \}
 
@@ -196,9 +194,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
    *
    * \sa Ast::get_node_type_name
    */
-  virtual std::string get_node_name() const {
-    throw std::logic_error("get_node_name() not implemented");
-  }
+  virtual std::string get_node_name() const;
 
   /**
    * \brief Return associated token for the AST node
@@ -209,9 +205,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
    *
    * @return pointer to token if exist otherwise nullptr
    */
-  virtual const ModToken* get_token() const {
-    return nullptr;
-  }
+  virtual const ModToken* get_token() const;
 
   /**
    * \brief Return associated symbol table for the AST node
@@ -224,9 +218,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
    *
    * \sa nmodl::symtab::SymbolTable nmodl::visitor::SymtabVisitor
    */
-  virtual symtab::SymbolTable* get_symbol_table() {
-    throw std::runtime_error("get_symbol_table not implemented");
-  }
+  virtual symtab::SymbolTable* get_symbol_table();
 
   /**
    * \brief Return associated statement block for the AST node
@@ -249,9 +241,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
    *
    * \sa ast::StatementBlock
    */
-  virtual std::shared_ptr<StatementBlock> get_statement_block() const {
-    throw std::runtime_error("get_statement_block not implemented");
-  }
+  virtual std::shared_ptr<StatementBlock> get_statement_block() const;
 
   /**
    * \brief Set symbol table for the AST node
@@ -262,9 +252,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
    *
    * \sa nmodl::visitor::SymtabVisitor
    */
-  virtual void set_symbol_table(symtab::SymbolTable* /*symtab*/) {
-    throw std::runtime_error("set_symbol_table not implemented");
-  }
+  virtual void set_symbol_table(symtab::SymbolTable* symtab);
 
   /**
    * \brief Set name for the AST node
@@ -275,9 +263,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
    *
    * \sa Ast::get_node_type_name Ast::get_node_name
    */
-  virtual void set_name(const std::string& /*name*/) {
-    throw std::runtime_error("set_name not implemented");
-  }
+  virtual void set_name(const std::string& name);
 
   /**
    * \brief Negate the value of AST node
@@ -287,37 +273,27 @@ struct Ast: public std::enable_shared_from_this<Ast> {
    * multiplied by `-1` for ast::Number node types or apply `!` operator
    for the nodes of type ast::Boolean.
    */
-  virtual void negate() {
-    throw std::runtime_error("negate not implemented");
-  }
+  virtual void negate();
   /// \}
 
   /// get std::shared_ptr from `this` pointer of the AST node
-  virtual std::shared_ptr<Ast> get_shared_ptr() {
-    return std::static_pointer_cast<Ast>(shared_from_this());
-  }
+  virtual std::shared_ptr<Ast> get_shared_ptr();
 
   /// get std::shared_ptr from `this` pointer of the AST node
-  virtual std::shared_ptr<const Ast> get_shared_ptr() const {
-    return std::static_pointer_cast<const Ast>(shared_from_this());
-  }
+  virtual std::shared_ptr<const Ast> get_shared_ptr() const;
 
   /**
    *\brief Check if the ast node is an instance of ast::Ast
    * @return true if object of type ast::Ast
    */
-  virtual bool is_ast() const noexcept {
-    return true;
-  }
+  virtual bool is_ast() const noexcept;
 
   {% for node in nodes %}
   /**
    * \brief Check if the ast node is an instance of ast::{{ node.class_name }}
    * \return true if object of type ast::OntologyStatement
    */
-  virtual bool is_{{ node.class_name | snake_case }} () const noexcept {
-    return false;
-  }
+  virtual bool is_{{ node.class_name | snake_case }} () const noexcept;
 
   {% endfor %}
 };
