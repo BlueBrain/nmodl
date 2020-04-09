@@ -11,21 +11,22 @@
 #include "utils/string_utils.hpp"
 #include "utils/table_data.hpp"
 
-
 namespace nmodl {
 namespace utils {
 
 /**
- *   Print table data in below shown format: title as first row (centrally aligned),
- *   second row is header for individual column (centrally aligned) and then all data
- *   rows (with associated alignments).
+ *   Print table data in below shown format: title as first row (centrally
+ * aligned), second row is header for individual column (centrally aligned) and
+ * then all data rows (with associated alignments).
  *
  *   ----------------------------------------------------------------------------------------
- *   |       mBetaf [FunctionBlock IN NMODL_GLOBAL] POSITION : 109.1-8 SCOPE : LOCAL        |
+ *   |       mBetaf [FunctionBlock IN NMODL_GLOBAL] POSITION : 109.1-8 SCOPE :
+ * LOCAL        |
  *   ----------------------------------------------------------------------------------------
- *   |    NAME     |    PROPERTIES     |    LOCATION     |    # READS     |    # WRITES     |
+ *   |    NAME     |    PROPERTIES     |    LOCATION     |    # READS     |    #
+ * WRITES     |
  *   ----------------------------------------------------------------------------------------
- *   | v           | argument          |          109.17 |              0 |               0 |
+ *   | v           | argument          |          109.17 |              0 | 0 |
  *   ----------------------------------------------------------------------------------------
  */
 
@@ -47,7 +48,7 @@ void TableData::print(std::ostream& stream, int indent) const {
     auto all_alignments = alignments;
     all_alignments.reserve(ncolumns);
     for (unsigned i = alignments.size(); i < ncolumns; i++) {
-      all_alignments.push_back(stringutils::text_alignment::center);
+        all_alignments.push_back(stringutils::text_alignment::center);
     }
 
     /// calculate space required for each column
@@ -92,7 +93,8 @@ void TableData::print(std::ostream& stream, int indent) const {
 
     /// title row
     if (!title.empty()) {
-        auto fmt_title = stringutils::align_text(title, row_width - 3, stringutils::text_alignment::center);
+        auto fmt_title =
+            stringutils::align_text(title, row_width - 3, stringutils::text_alignment::center);
         stream << '\n' << gutter << separator_line;
         stream << '\n' << gutter << '|' << fmt_title << '|';
     }

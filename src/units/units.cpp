@@ -211,7 +211,8 @@ void UnitTable::calc_nominator_dims(const std::shared_ptr<Unit>& unit, std::stri
     }
 }
 
-void UnitTable::calc_denominator_dims(const std::shared_ptr<Unit>& unit, std::string denominator_name) {
+void UnitTable::calc_denominator_dims(const std::shared_ptr<Unit>& unit,
+                                      std::string denominator_name) {
     double denominator_prefix_factor = 1.0;
     int denominator_power = 1;
 

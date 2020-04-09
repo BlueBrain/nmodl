@@ -275,7 +275,7 @@ class UnitTable {
     /// \throw std::out_of_range if \a unit_name is not found
     const std::shared_ptr<Unit>& get_unit(const std::string& unit_name) const {
         return table.at(unit_name);
-   }
+    }
 
     /// Print the details of the units that are stored in the UnitTable
     void print_units() const;
