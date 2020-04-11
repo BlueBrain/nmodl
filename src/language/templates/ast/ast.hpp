@@ -74,6 +74,32 @@ namespace ast {
  *       in the future.
  */
 struct Ast: public std::enable_shared_from_this<Ast> {
+  private:
+  /**
+   * \brief Generic pointer to the parent
+   *
+   * Children types can be known at compile time. Conversely, many parents
+   * can have the same children type. Thus, this is just a pointer to
+   * the base class. The pointer to the parent cannot have ownership
+   * (circular ownership problem). weak_ptr you say? Yes, however weak_ptr
+   * can be instantiated from shared_ptr (not this). Whys is this a problem?
+   * In bison things must be passed around as raw pointers (because it uses
+   * unions etc.) and there are cases where the shared_ptr to the parent
+   * was not yet created while the child is added (throwing a bad_weak_ptr
+   * exception).
+   *
+   * i.e. in bison the lines:
+   *
+   * ast::WatchStatement* a = new ast::WatchStatement();
+   * yylhs.value.as< ast::WatchStatement* > ()->add_watch(a);
+   *
+   * would throw a bad_weak_ptr exception because when you call add_watch
+   * the shared_ptr_from_this to "a" is not yet created.
+   */
+  Ast* parent = nullptr;
+
+  public:
+
   /// \name Ctor & dtor
   /// \{
 
@@ -241,7 +267,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
    *
    * \sa ast::StatementBlock
    */
-  virtual std::shared_ptr<StatementBlock> get_statement_block() const;
+  virtual const std::shared_ptr<StatementBlock>& get_statement_block() const;
 
   /**
    * \brief Set symbol table for the AST node
@@ -296,6 +322,36 @@ struct Ast: public std::enable_shared_from_this<Ast> {
   virtual bool is_{{ node.class_name | snake_case }} () const noexcept;
 
   {% endfor %}
+
+  /**
+   *\brief Parent getter
+   *
+   * returning a raw pointer may create less problems that the
+   * shared_from_this from the parent.
+   *
+   * \ref Check Ast::parent for more information
+   */
+  virtual Ast* get_parent() const;
+
+  /**
+   *\brief Parent setter
+   *
+   * Usually, the parent parent pointer cannot be set in the constructor
+   * because children are generally build BEFORE the parent. Conversely,
+   * we set children parents directly in the parent constructor using
+   * set_parent_in_children()
+   *
+   * \ref Check Ast::parent for more information
+   */
+  virtual void set_parent(Ast* p);
+
+  /**
+   *\brief Set this object as parent for all the children
+   *
+   * This should be called in every object (with children) constructor
+   * to set the parents.
+   */
+  virtual void set_parent_in_children();
 };
 
 /** @} */  // end of ast_class

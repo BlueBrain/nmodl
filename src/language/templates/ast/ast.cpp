@@ -26,7 +26,7 @@ std::string Ast::get_node_name() const {
   throw std::logic_error("get_node_name() not implemented");
 }
 
-std::shared_ptr<StatementBlock> Ast::get_statement_block() const {
+const std::shared_ptr<StatementBlock>& Ast::get_statement_block() const {
   throw std::runtime_error("get_statement_block not implemented");
 }
 
@@ -60,6 +60,19 @@ bool Ast::is_ast() const noexcept { return true; }
 bool Ast::is_{{ node.class_name | snake_case }} () const noexcept { return false; }
 
 {% endfor %}
+
+Ast* Ast::get_parent() const {
+    return parent;
+}
+
+void Ast::set_parent(Ast* p) {
+    parent = p;
+}
+
+void Ast::set_parent_in_children() {
+    throw std::runtime_error("set_parent_in_children not implemented");
+}
+
 
     {% for node in nodes %}
 
