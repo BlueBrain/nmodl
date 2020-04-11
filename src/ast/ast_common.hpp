@@ -1530,7 +1530,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *
      * \ref Check Ast::parent for more information
      */
-    inline virtual Ast* get_parent() const {
+    virtual Ast* get_parent() const {
         return parent;
     }
 
@@ -1544,7 +1544,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
      *
      * \ref Check Ast::parent for more information
      */
-    inline virtual void set_parent(Ast* p) {
+    virtual void set_parent(Ast* p) {
         parent = p;
     }
 

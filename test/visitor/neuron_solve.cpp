@@ -36,7 +36,6 @@ std::string run_cnexp_solve_visitor(const std::string& text) {
     std::stringstream stream;
     NmodlPrintVisitor(stream).visit_program(ast.get());
 
-
     // check that, after visitor rearrangement, parents are still up-to-date
     CheckParentVisitor().visit_program(ast.get());
 

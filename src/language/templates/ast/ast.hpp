@@ -63,7 +63,7 @@ namespace ast {
         {% endfor %}
 
     {% endif %}
-    public:
+      public:
         {% for member in node.public_members() %}
         {{ '/// ' + member[3] }}
         {% if member[2] is none %}

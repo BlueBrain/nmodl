@@ -29,13 +29,12 @@ int CheckParentVisitor::check_ast(Ast* node) {
 void CheckParentVisitor::check_parent(ast::Ast* node) const {
     if (!parent) {
         if (is_root_with_null_parent && node->get_parent()) {
-            std::string node_type = (node == nullptr) ? std::string("nullptr") : node->get_node_type_name();
+            std::string node_type = (node == nullptr) ? "nullptr" : node->get_node_type_name();
             throw std::runtime_error("root->parent: {} is set when it should be nullptr"_format(node_type));
         }
-    }
-    else {
+    } else {
         if (parent != node->get_parent()) {
-            std::string parent_type = (parent  == nullptr) ? std::string("nullptr") : parent->get_node_type_name();
+            std::string parent_type = (parent  == nullptr) ? "nullptr" : parent->get_node_type_name();
             std::string node_parent_type = (node->get_parent() == nullptr) ? std::string("nullptr") : node->get_parent()->get_node_type_name();
             throw std::runtime_error("parent: {} and child->parent: {} missmatch"_format(parent_type, node_parent_type));
         }

@@ -145,12 +145,6 @@ bool InlineVisitor::inline_function_call(ast::Block* callee,
         ModToken tok;
         name->set_token(tok);
 
-        //        const auto local_list_statements = get_local_variables(caller);
-        //        /// each block should already have local statement
-        //        if (local_list_statements == nullptr) {
-        //            throw std::logic_error("got local statement as nullptr");
-        //        }
-
         const ast::StatementVector& statements = caller->get_statements();
         auto local_list_statement = get_local_list_statement(caller);
         /// each block should already have local statement
@@ -255,12 +249,8 @@ void InlineVisitor::visit_statement_block(StatementBlock* node) {
         statement_stack.pop();
     }
 
-    auto local_list_statement = get_local_list_statement(node);
     /// each block should already have local statement
-    if (local_list_statement == nullptr) {
-        throw std::logic_error("got local statement as nullptr");
-    }
-
+    auto local_list_statement = get_local_list_statement(node);
     if (local_list_statement->get_variables().empty()) {
         node->erase_statement(statements.begin());
     }
