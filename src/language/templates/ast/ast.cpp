@@ -26,7 +26,7 @@ std::string Ast::get_node_name() const {
   throw std::logic_error("get_node_name() not implemented");
 }
 
-std::shared_ptr<StatementBlock> Ast::get_statement_block() const {
+const std::shared_ptr<StatementBlock>& Ast::get_statement_block() const {
   throw std::runtime_error("get_statement_block not implemented");
 }
 
@@ -60,6 +60,19 @@ bool Ast::is_ast() const noexcept { return true; }
 bool Ast::is_{{ node.class_name | snake_case }} () const noexcept { return false; }
 
 {% endfor %}
+
+Ast* Ast::get_parent() const {
+    return parent;
+}
+
+void Ast::set_parent(Ast* p) {
+    parent = p;
+}
+
+void Ast::set_parent_in_children() {
+    throw std::runtime_error("set_parent_in_children not implemented");
+}
+
 
     {% for node in nodes %}
 
@@ -116,15 +129,52 @@ bool Ast::is_{{ node.class_name | snake_case }} () const noexcept { return false
             this->{{ child.varname }} = obj.{{ child.varname }};
             {% endif %}
         {% endfor %}
+
         {% if node.has_token %}
         /// if there is a token, make copy
         if (obj.token) {
             this-> token = std::shared_ptr<ModToken>(obj.token->clone());
         }
         {% endif %}
+
+        /// set parents
+        set_parent_in_children();
     }
 
+    /// set this parent in the children
+    void {{ node.class_name }}::set_parent_in_children() {
+
+        {% for child in node.non_base_members %}
+            {% if child.is_vector %}
+            /// set parent for each element of the vector
+            for (auto& item : {{ child.varname }}) {
+                {% if child.optional %}
+                if (item) {
+                    item->set_parent(this);
+                }
+                {% else %}
+                    item->set_parent(this);
+                {%  endif %}
+
+            }
+            {% elif child.is_pointer_node or child.optional %}
+            /// optional member could be nullptr
+            if ({{ child.varname }}) {
+                {{ child.varname }}->set_parent(this);
+            }
+            {% else %}
+                {{ child.varname }}.set_parent(this);
+            {% endif %}
+        {% endfor %}
+
+    }
+
+
     {% endif %}
+
+    {% for child in node.children %}
+    {{ child.get_setter_method_definition(node.class_name) }}
+    {% endfor %}
 
     {% endfor %}
 
