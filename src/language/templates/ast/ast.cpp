@@ -61,7 +61,7 @@ bool Ast::is_{{ node.class_name | snake_case }} () const noexcept { return false
 
 {% endfor %}
 
-{% for node in nodes %}
+    {% for node in nodes %}
 
     ///
     /// {{node.class_name}} member functions definition
