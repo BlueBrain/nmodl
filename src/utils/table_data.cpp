@@ -15,18 +15,16 @@ namespace nmodl {
 namespace utils {
 
 /**
- *   Print table data in below shown format: title as first row (centrally
- * aligned), second row is header for individual column (centrally aligned) and
- * then all data rows (with associated alignments).
+ *   Print table data in below shown format: title as first row (centrally aligned),
+ *   second row is header for individual column (centrally aligned) and then all data
+ *   rows (with associated alignments).
  *
  *   ----------------------------------------------------------------------------------------
- *   |       mBetaf [FunctionBlock IN NMODL_GLOBAL] POSITION : 109.1-8 SCOPE :
- * LOCAL        |
+ *   |       mBetaf [FunctionBlock IN NMODL_GLOBAL] POSITION : 109.1-8 SCOPE : LOCAL        |
  *   ----------------------------------------------------------------------------------------
- *   |    NAME     |    PROPERTIES     |    LOCATION     |    # READS     |    #
- * WRITES     |
+ *   |    NAME     |    PROPERTIES     |    LOCATION     |    # READS     |    # WRITES     |
  *   ----------------------------------------------------------------------------------------
- *   | v           | argument          |          109.17 |              0 | 0 |
+ *   | v           | argument          |          109.17 |              0 |               0 |
  *   ----------------------------------------------------------------------------------------
  */
 
