@@ -333,7 +333,7 @@ void UnitTable::print_units() const {
         for (const auto& dims: it.second->get_dimensions()) {
             std::cout << ' ' << dims;
         }
-        std::cout << ' ';
+        std::cout << '\n';
     }
 }
 
