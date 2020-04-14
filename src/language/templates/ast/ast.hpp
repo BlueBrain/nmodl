@@ -52,7 +52,7 @@ namespace ast {
      */
     class {{ node.class_name }} : public {{ node.base_class }} {
 
-    {% do inherit_signatures(node.class_name, node.base_class, node_members_signatures) %}
+    {% do inherit_member_signatures(node.class_name, node.base_class, node_members_signatures) %}
 
     {% if node.private_members() %}
       private:

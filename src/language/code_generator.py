@@ -62,7 +62,7 @@ env = jinja2.Environment(loader=jinja2.FileSystemLoader(str(templates_dir)),
                          extensions=['jinja2.ext.do'])
 
 env.filters['snake_case'] = utils.to_snake_case
-env.globals['inherit_signatures'] = utils.inherit_signatures
+env.globals['inherit_member_signatures'] = utils.inherit_member_signatures
 
 updated_files = []
 

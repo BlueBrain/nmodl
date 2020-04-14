@@ -20,10 +20,9 @@ def to_snake_case(name):
     return camel_case_to_underscore(name).lower()
 
 
-def check_override(node_name, signature, node_members_signatures):
+def check_override(signature, node_name, node_members_signatures):
     add = ""
     if node_name in node_members_signatures :
-        # print(node_members_signatures[node_name])
         if signature in node_members_signatures[node_name]:
 
             add = " override "
@@ -34,6 +33,6 @@ def check_override(node_name, signature, node_members_signatures):
 
     return signature + add
 
-def inherit_signatures(child, parent, node_members_signatures):
+def inherit_member_signatures(child, parent, node_members_signatures):
     if parent in node_members_signatures :
         node_members_signatures[child] = node_members_signatures[parent]

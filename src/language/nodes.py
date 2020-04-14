@@ -279,7 +279,7 @@ class ChildNode(BaseNode):
                 """
 
         if self.is_base_type_node:
-            signature = check_override(class_name, f"""void {setter_method}({setter_type} {self.varname})""", node_members_signatures)
+            signature = check_override(f"""void {setter_method}({setter_type} {self.varname})""", class_name, node_members_signatures)
             return f"""
                        /**
                         * \\brief Setter for member variable \\ref {class_name}.{self.varname}
@@ -287,14 +287,14 @@ class ChildNode(BaseNode):
                        {signature} {body}
                     """
         else:
-            signature_rvalue = check_override(class_name, f"""void {setter_method}({setter_type}&& {self.varname})""", node_members_signatures)
-            signature = check_override(class_name, f"""void {setter_method}({setter_type}& {self.varname})""", node_members_signatures)
+            signature_rvalue = check_override(f"""void {setter_method}({setter_type}&& {self.varname})""", class_name, node_members_signatures)
+            signature = check_override(f"""void {setter_method}(const {setter_type}& {self.varname})""", class_name, node_members_signatures)
             return f"""
                        /**
                         * \\brief Setter for member variable \\ref {class_name}.{self.varname} (rvalue reference)
                         */
                        {signature_rvalue} {body}
-                       
+
                        /**
                         * \\brief Setter for member variable \\ref {class_name}.{self.varname}
                         */
