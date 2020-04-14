@@ -1547,14 +1547,6 @@ struct Ast: public std::enable_shared_from_this<Ast> {
     virtual void set_parent(Ast* p) {
         parent = p;
     }
-
-    /**
-     *\brief Set this object as parent for all the children
-     *
-     * This should be called in every object (with children) constructor
-     * to set the parents.
-     */
-    virtual void set_parent_in_children() {}
 };
 
 /** @} */  // end of ast_class

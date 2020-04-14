@@ -385,11 +385,13 @@ namespace ast {
 
         {% if node.children %}
             /**
-             * \brief Set parents in children
+             *\brief Set this object as parent for all the children
              *
-             * Usually called in constructors
+             * This should be called in every object (with children) constructor
+             * to set parents. Since it is called only in the constructors it
+             * should not be virtual to avoid ambiguities (issue #295).
              */
-            virtual void set_parent_in_children() override;
+            void set_parent_in_children();
         {% endif %}
     };
 
