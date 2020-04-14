@@ -33,22 +33,22 @@ using nmodl::parser::NmodlDriver;
 std::string run_sympy_conductance_visitor(const std::string& text) {
     // construct AST from text
     NmodlDriver driver;
-    auto ast = driver.parse_string(text);
+    const auto& ast = driver.parse_string(text);
 
     // construct symbol table from AST
-    SymtabVisitor(false).visit_program(ast.get());
+    SymtabVisitor(false).visit_program(*ast);
 
     // run constant folding, inlining & local renaming first
-    ConstantFolderVisitor().visit_program(ast.get());
-    InlineVisitor().visit_program(ast.get());
-    LocalVarRenameVisitor().visit_program(ast.get());
-    SymtabVisitor(true).visit_program(ast.get());
+    ConstantFolderVisitor().visit_program(*ast);
+    InlineVisitor().visit_program(*ast);
+    LocalVarRenameVisitor().visit_program(*ast);
+    SymtabVisitor(true).visit_program(*ast);
 
     // run SympyConductance on AST
-    SympyConductanceVisitor().visit_program(ast.get());
+    SympyConductanceVisitor().visit_program(*ast);
 
     // check that, after visitor rearrangement, parents are still up-to-date
-    CheckParentVisitor().visit_program(ast.get());
+    CheckParentVisitor().visit_program(*ast);
 
     // run lookup visitor to extract results from AST
     AstLookupVisitor v_lookup;
@@ -60,10 +60,10 @@ std::string run_sympy_conductance_visitor(const std::string& text) {
 std::string breakpoint_to_nmodl(const std::string& text) {
     // construct AST from text
     NmodlDriver driver;
-    auto ast = driver.parse_string(text);
+    const auto& ast = driver.parse_string(text);
 
     // construct symbol table from AST
-    SymtabVisitor().visit_program(ast.get());
+    SymtabVisitor().visit_program(*ast);
 
     // run lookup visitor to extract results from AST
     AstLookupVisitor v_lookup;
@@ -72,7 +72,7 @@ std::string breakpoint_to_nmodl(const std::string& text) {
         to_nmodl(v_lookup.lookup(ast.get(), AstNodeType::BREAKPOINT_BLOCK)[0].get()));
 }
 
-void run_sympy_conductance_passes(ast::Program* node) {
+void run_sympy_conductance_passes(ast::Program& node) {
     // construct symbol table from AST
     SymtabVisitor v_symtab;
     v_symtab.visit_program(node);

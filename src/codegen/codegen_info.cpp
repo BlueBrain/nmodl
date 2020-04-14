@@ -15,7 +15,7 @@ namespace codegen {
 using visitor::AstLookupVisitor;
 
 /// if any ion has write variable
-bool CodegenInfo::ion_has_write_variable() {
+bool CodegenInfo::ion_has_write_variable() const {
     for (const auto& ion: ions) {
         if (!ion.writes.empty()) {
             return true;
@@ -26,7 +26,7 @@ bool CodegenInfo::ion_has_write_variable() {
 
 
 /// if given variable is ion write variable
-bool CodegenInfo::is_ion_write_variable(const std::string& name) {
+bool CodegenInfo::is_ion_write_variable(const std::string& name) const {
     for (const auto& ion: ions) {
         for (auto& var: ion.writes) {
             if (var == name) {
@@ -39,7 +39,7 @@ bool CodegenInfo::is_ion_write_variable(const std::string& name) {
 
 
 /// if given variable is ion read variable
-bool CodegenInfo::is_ion_read_variable(const std::string& name) {
+bool CodegenInfo::is_ion_read_variable(const std::string& name) const {
     for (const auto& ion: ions) {
         for (auto& var: ion.reads) {
             if (var == name) {
@@ -52,13 +52,13 @@ bool CodegenInfo::is_ion_read_variable(const std::string& name) {
 
 
 /// if either read or write variable
-bool CodegenInfo::is_ion_variable(const std::string& name) {
+bool CodegenInfo::is_ion_variable(const std::string& name) const {
     return is_ion_read_variable(name) || is_ion_write_variable(name);
 }
 
 
 /// if a current
-bool CodegenInfo::is_current(const std::string& name) {
+bool CodegenInfo::is_current(const std::string& name) const {
     for (auto& var: currents) {
         if (var == name) {
             return true;

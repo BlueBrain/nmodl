@@ -12,12 +12,12 @@
 namespace nmodl {
 namespace visitor {
 
-void VerbatimVarRenameVisitor::visit_statement_block(ast::StatementBlock* node) {
-    if (node->get_statements().empty()) {
+void VerbatimVarRenameVisitor::visit_statement_block(ast::StatementBlock& node) {
+    if (node.get_statements().empty()) {
         return;
     }
 
-    auto current_symtab = node->get_symbol_table();
+    auto current_symtab = node.get_symbol_table();
     if (current_symtab != nullptr) {
         symtab = current_symtab;
     }
@@ -28,7 +28,7 @@ void VerbatimVarRenameVisitor::visit_statement_block(ast::StatementBlock* node) 
     symtab_stack.push(symtab);
 
     // first need to process all children : perform recursively from innermost block
-    for (const auto& item: node->get_statements()) {
+    for (const auto& item: node.get_statements()) {
         item->accept(*this);
     }
 
@@ -44,7 +44,7 @@ void VerbatimVarRenameVisitor::visit_statement_block(ast::StatementBlock* node) 
  * defined in the nmodl blocks. If so, return "original" name of the
  * variable.
  */
-std::string VerbatimVarRenameVisitor::rename_variable(std::string name) {
+std::string VerbatimVarRenameVisitor::rename_variable(const std::string& name) {
     bool rename_plausible = false;
     auto new_name = name;
     if (name.find(LOCAL_PREFIX) == 0) {
@@ -60,7 +60,7 @@ std::string VerbatimVarRenameVisitor::rename_variable(std::string name) {
         if (symbol != nullptr) {
             return new_name;
         }
-        std::cerr << "Warning : could not find " << name << " definition in nmodl" << std::endl;
+        std::cerr << "Warning : could not find " << name << " definition in nmodl\n";
     }
     return name;
 }
@@ -69,8 +69,8 @@ std::string VerbatimVarRenameVisitor::rename_variable(std::string name) {
 /**
  * Parse verbatim blocks and rename variables used
  */
-void VerbatimVarRenameVisitor::visit_verbatim(ast::Verbatim* node) {
-    auto statement = node->get_statement();
+void VerbatimVarRenameVisitor::visit_verbatim(ast::Verbatim& node) {
+    const auto& statement = node.get_statement();
     auto text = statement->eval();
     parser::CDriver driver;
 

@@ -53,7 +53,7 @@ class AstLookupVisitor: public Visitor {
     std::vector<std::shared_ptr<ast::Ast>> lookup(ast::Ast* node, ast::AstNodeType type);
 
     std::vector<std::shared_ptr<ast::Ast>> lookup(ast::Ast* node,
-                                                  std::vector<ast::AstNodeType>& types);
+                                                  const std::vector<ast::AstNodeType>& types);
 
     const std::vector<std::shared_ptr<ast::Ast>>& get_nodes() const noexcept {
         return nodes;
@@ -66,7 +66,7 @@ class AstLookupVisitor: public Visitor {
 
     // clang-format off
     {% for node in nodes %}
-    void visit_{{ node.class_name|snake_case }}(ast::{{ node.class_name }}* node) override;
+    void visit_{{ node.class_name|snake_case }}(ast::{{ node.class_name }}& node) override;
     {% endfor %}
     // clang-format on
 };

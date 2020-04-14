@@ -14,8 +14,8 @@ namespace nmodl {
 namespace visitor {
 
 /// rename matching variable
-void VarUsageVisitor::visit_name(ast::Name* node) {
-    std::string name = node->get_node_name();
+void VarUsageVisitor::visit_name(ast::Name& node) {
+    const auto& name = node.get_node_name();
     if (name == var_name) {
         used = true;
     }

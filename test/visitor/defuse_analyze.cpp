@@ -30,10 +30,10 @@ using nmodl::parser::NmodlDriver;
 
 std::vector<DUChain> run_defuse_visitor(const std::string& text, const std::string& variable) {
     NmodlDriver driver;
-    auto ast = driver.parse_string(text);
+    const auto& ast = driver.parse_string(text);
 
-    SymtabVisitor().visit_program(ast.get());
-    InlineVisitor().visit_program(ast.get());
+    SymtabVisitor().visit_program(*ast);
+    InlineVisitor().visit_program(*ast);
 
     std::vector<DUChain> chains;
     DefUseAnalyzeVisitor v(ast->get_symbol_table());
@@ -46,7 +46,7 @@ std::vector<DUChain> run_defuse_visitor(const std::string& text, const std::stri
     }
 
     // check that, after visitor rearrangement, parents are still up-to-date
-    CheckParentVisitor().visit_program(ast.get());
+    CheckParentVisitor().visit_program(*ast);
 
     return chains;
 }

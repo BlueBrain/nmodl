@@ -29,17 +29,17 @@ std::string get_new_name(const std::string& name,
 
 
 /// Return pointer to local statement in the given block, otherwise nullptr
-std::shared_ptr<ast::LocalListStatement> get_local_list_statement(const ast::StatementBlock* node);
+std::shared_ptr<ast::LocalListStatement> get_local_list_statement(const ast::StatementBlock& node);
 
 
 /// Add empty local statement to given block if already doesn't exist
-void add_local_statement(ast::StatementBlock* node);
+void add_local_statement(ast::StatementBlock& node);
 
 
 /// Add new local variable to the block
-ast::LocalVar* add_local_variable(ast::StatementBlock* node, const std::string& varname);
-ast::LocalVar* add_local_variable(ast::StatementBlock* node, ast::Identifier* varname);
-ast::LocalVar* add_local_variable(ast::StatementBlock* node, const std::string& varname, int dim);
+ast::LocalVar* add_local_variable(ast::StatementBlock& node, const std::string& varname);
+ast::LocalVar* add_local_variable(ast::StatementBlock& node, ast::Identifier* varname);
+ast::LocalVar* add_local_variable(ast::StatementBlock& node, const std::string& varname, int dim);
 
 
 /// Create ast statement node from given code in string format
@@ -52,12 +52,12 @@ std::shared_ptr<ast::StatementBlock> create_statement_block(
 
 
 ///  Remove statements from given statement block if they exist
-void remove_statements_from_block(ast::StatementBlock* block,
-                                  const std::set<ast::Node*> statements);
+void remove_statements_from_block(ast::StatementBlock& block,
+                                  const std::set<ast::Node*>& statements);
 
 
 /// Return set of strings with the names of all global variables
-std::set<std::string> get_global_vars(ast::Program* node);
+std::set<std::string> get_global_vars(const ast::Program& node);
 
 
 /// Checks whether block contains a call to a perticular function

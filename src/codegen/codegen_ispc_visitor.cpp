@@ -33,15 +33,15 @@ using visitor::RenameVisitor;
 /*
  * Rename math functions for ISPC backend
  */
-void CodegenIspcVisitor::visit_function_call(ast::FunctionCall* node) {
+void CodegenIspcVisitor::visit_function_call(ast::FunctionCall& node) {
     if (!codegen) {
         return;
     }
-    if (node->get_node_name() == "printf") {
-        logger->warn("Not emitted in ispc: {}"_format(to_nmodl(node)));
+    if (node.get_node_name() == "printf") {
+        logger->warn("Not emitted in ispc: {}"_format(to_nmodl(&node)));
         return;
     }
-    auto fname = node->get_name().get();
+    auto& fname = *node.get_name();
     RenameVisitor("fabs", "abs").visit_name(fname);
     RenameVisitor("exp", "vexp").visit_name(fname);
     CodegenCVisitor::visit_function_call(node);
@@ -51,14 +51,14 @@ void CodegenIspcVisitor::visit_function_call(ast::FunctionCall* node) {
 /*
  * Rename special global variables
  */
-void CodegenIspcVisitor::visit_var_name(ast::VarName* node) {
+void CodegenIspcVisitor::visit_var_name(ast::VarName& node) {
     if (!codegen) {
         return;
     }
     RenameVisitor celsius_rename("celsius", "ispc_celsius");
-    node->accept(celsius_rename);
+    node.accept(celsius_rename);
     RenameVisitor pi_rename("PI", "ISPC_PI");
-    node->accept(pi_rename);
+    node.accept(pi_rename);
     CodegenCVisitor::visit_var_name(node);
 }
 
@@ -109,7 +109,7 @@ std::string CodegenIspcVisitor::float_to_string(float value) {
 }
 
 
-std::string CodegenIspcVisitor::compute_method_name(BlockType type) {
+std::string CodegenIspcVisitor::compute_method_name(BlockType type) const {
     if (type == BlockType::Initial) {
         return method_name(naming::NRN_INIT_METHOD);
     }
@@ -148,7 +148,7 @@ void CodegenIspcVisitor::print_backend_includes() {
 }
 
 
-std::string CodegenIspcVisitor::backend_name() {
+std::string CodegenIspcVisitor::backend_name() const {
     return "ispc (api-compatibility)";
 }
 
@@ -279,7 +279,7 @@ void CodegenIspcVisitor::print_backend_namespace_stop() {
 
 
 CodegenIspcVisitor::ParamVector CodegenIspcVisitor::get_global_function_parms(
-    std::string arg_qualifier) {
+    const std::string& arg_qualifier) {
     auto params = ParamVector();
     params.emplace_back(param_type_qualifier(),
                         "{}*"_format(instance_struct()),
@@ -292,10 +292,10 @@ CodegenIspcVisitor::ParamVector CodegenIspcVisitor::get_global_function_parms(
 }
 
 
-void CodegenIspcVisitor::print_procedure(ast::ProcedureBlock* node) {
+void CodegenIspcVisitor::print_procedure(ast::ProcedureBlock& node) {
     codegen = true;
-    auto name = node->get_node_name();
-    print_function_or_procedure(node, name);
+    const auto& name = node.get_node_name();
+    print_function_or_procedure(&node, name);
     codegen = false;
 }
 
@@ -332,14 +332,14 @@ void CodegenIspcVisitor::print_compute_functions() {
         if (!program_symtab->lookup(function->get_node_name())
                  .get()
                  ->has_all_status(Status::inlined)) {
-            print_function(function);
+            print_function(*function);
         }
     }
     for (const auto& procedure: info.procedures) {
         if (!program_symtab->lookup(procedure->get_node_name())
                  .get()
                  ->has_all_status(Status::inlined)) {
-            print_procedure(procedure);
+            print_procedure(*procedure);
         }
     }
     if (!emit_fallback[BlockType::NetReceive]) {
@@ -580,13 +580,14 @@ void CodegenIspcVisitor::print_wrapper_headers_include() {
 }
 
 
-void CodegenIspcVisitor::print_wrapper_routine(std::string wraper_function, BlockType type) {
-    auto args = "NrnThread* nt, Memb_list* ml, int type";
-    wraper_function = method_name(wraper_function);
+void CodegenIspcVisitor::print_wrapper_routine(const std::string& wrapper_function,
+                                               BlockType type) {
+    static const auto args = "NrnThread* nt, Memb_list* ml, int type";
+    const auto function_name = method_name(wrapper_function);
     auto compute_function = compute_method_name(type);
 
     printer->add_newline(2);
-    printer->start_block("void {}({})"_format(wraper_function, args));
+    printer->start_block("void {}({})"_format(function_name, args));
     printer->add_line("int nodecount = ml->nodecount;");
     // clang-format off
     printer->add_line("{0}* {1}inst = ({0}*) ml->instance;"_format(instance_struct(), ptr_type_qualifier()));
@@ -741,7 +742,7 @@ void CodegenIspcVisitor::codegen_wrapper_routines() {
 }
 
 
-void CodegenIspcVisitor::visit_program(ast::Program* node) {
+void CodegenIspcVisitor::visit_program(ast::Program& node) {
     fallback_codegen.setup(node);
     CodegenCVisitor::visit_program(node);
 }
@@ -794,14 +795,14 @@ void CodegenIspcVisitor::print_codegen_wrapper_routines() {
         if (!program_symtab->lookup(function->get_node_name())
                  .get()
                  ->has_all_status(Status::inlined)) {
-            fallback_codegen.print_function(function);
+            fallback_codegen.print_function(*function);
         }
     }
     for (const auto& procedure: wrapper_procedures) {
         if (!program_symtab->lookup(procedure->get_node_name())
                  .get()
                  ->has_all_status(Status::inlined)) {
-            fallback_codegen.print_procedure(procedure);
+            fallback_codegen.print_procedure(*procedure);
         }
     }
 
