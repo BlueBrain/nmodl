@@ -14,7 +14,7 @@
 #include <string>
 #include <fmt/format.h>
 
-#include "ast/ast.hpp"
+#include "ast/all.hpp"
 
 namespace nmodl {
 namespace visitor {

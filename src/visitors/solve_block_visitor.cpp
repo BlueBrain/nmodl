@@ -7,9 +7,19 @@
 
 #include "visitors/solve_block_visitor.hpp"
 
-#include "ast/ast.hpp"
+#include <cassert>
+
+#include "ast/breakpoint_block.hpp"
+#include "ast/derivative_block.hpp"
+#include "ast/derivimplicit_callback.hpp"
+#include "ast/expression_statement.hpp"
+#include "ast/name.hpp"
+#include "ast/nrn_state_block.hpp"
+#include "ast/program.hpp"
+#include "ast/solution_expression.hpp"
+#include "ast/solve_block.hpp"
+#include "ast/statement_block.hpp"
 #include "codegen/codegen_naming.hpp"
-#include "utils/logger.hpp"
 #include "visitors/lookup_visitor.hpp"
 
 namespace nmodl {

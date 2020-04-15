@@ -5,12 +5,25 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
-#include <algorithm>
-#include <iostream>
-#include <memory>
-#include <string>
-
 #include "codegen/codegen_compatibility_visitor.hpp"
+
+#include "ast/after_block.hpp"
+#include "ast/before_block.hpp"
+#include "ast/constant_block.hpp"
+#include "ast/constructor_block.hpp"
+#include "ast/destructor_block.hpp"
+#include "ast/discrete_block.hpp"
+#include "ast/function_table_block.hpp"
+#include "ast/global.hpp"
+#include "ast/independent_block.hpp"
+#include "ast/match_block.hpp"
+#include "ast/name.hpp"
+#include "ast/partial_block.hpp"
+#include "ast/pointer_var.hpp"
+#include "ast/solve_block.hpp"
+#include "ast/string.hpp"
+#include "ast/terminal_block.hpp"
+#include "ast/verbatim.hpp"
 #include "parser/c11_driver.hpp"
 #include "utils/logger.hpp"
 #include "visitors/lookup_visitor.hpp"
@@ -21,6 +34,38 @@ namespace nmodl {
 namespace codegen {
 
 using visitor::AstLookupVisitor;
+
+const std::map<ast::AstNodeType, CodegenCompatibilityVisitor::FunctionPointer>
+    CodegenCompatibilityVisitor::unhandled_ast_types_func(
+        {{AstNodeType::MATCH_BLOCK,
+          &CodegenCompatibilityVisitor::return_error_without_name<MatchBlock>},
+         {AstNodeType::BEFORE_BLOCK,
+          &CodegenCompatibilityVisitor::return_error_without_name<BeforeBlock>},
+         {AstNodeType::AFTER_BLOCK,
+          &CodegenCompatibilityVisitor::return_error_without_name<AfterBlock>},
+         {AstNodeType::TERMINAL_BLOCK,
+          &CodegenCompatibilityVisitor::return_error_without_name<TerminalBlock>},
+         {AstNodeType::DISCRETE_BLOCK,
+          &CodegenCompatibilityVisitor::return_error_with_name<DiscreteBlock>},
+         {AstNodeType::PARTIAL_BLOCK,
+          &CodegenCompatibilityVisitor::return_error_with_name<PartialBlock>},
+         {AstNodeType::FUNCTION_TABLE_BLOCK,
+          &CodegenCompatibilityVisitor::return_error_without_name<FunctionTableBlock>},
+         {AstNodeType::CONSTANT_BLOCK,
+          &CodegenCompatibilityVisitor::return_error_without_name<ConstantBlock>},
+         {AstNodeType::CONSTRUCTOR_BLOCK,
+          &CodegenCompatibilityVisitor::return_error_without_name<ConstructorBlock>},
+         {AstNodeType::DESTRUCTOR_BLOCK,
+          &CodegenCompatibilityVisitor::return_error_without_name<DestructorBlock>},
+         {AstNodeType::INDEPENDENT_BLOCK,
+          &CodegenCompatibilityVisitor::return_error_without_name<IndependentBlock>},
+         {AstNodeType::SOLVE_BLOCK,
+          &CodegenCompatibilityVisitor::return_error_if_solve_method_is_unhandled},
+         {AstNodeType::GLOBAL_VAR, &CodegenCompatibilityVisitor::return_error_global_var},
+         {AstNodeType::POINTER_VAR, &CodegenCompatibilityVisitor::return_error_pointer},
+         {AstNodeType::BBCORE_POINTER_VAR,
+          &CodegenCompatibilityVisitor::return_error_if_no_bbcore_read_write}});
+
 
 std::string CodegenCompatibilityVisitor::return_error_if_solve_method_is_unhandled(
     ast::Ast& node,
@@ -109,15 +154,16 @@ std::string CodegenCompatibilityVisitor::return_error_if_no_bbcore_read_write(
 
 bool CodegenCompatibilityVisitor::find_unhandled_ast_nodes(Ast& node) {
     std::vector<ast::AstNodeType> unhandled_ast_types;
+    unhandled_ast_types.reserve(unhandled_ast_types_func.size());
     for (auto kv: unhandled_ast_types_func) {
         unhandled_ast_types.push_back(kv.first);
     }
     unhandled_ast_nodes = AstLookupVisitor().lookup(node, unhandled_ast_types);
 
     std::stringstream ss;
-    for (auto it: unhandled_ast_nodes) {
+    for (const auto& it: unhandled_ast_nodes) {
         auto node_type = it->get_node_type();
-        ss << (this->*unhandled_ast_types_func[node_type])(node, it);
+        ss << (this->*unhandled_ast_types_func.find(node_type)->second)(node, it);
     }
     if (!ss.str().empty()) {
         logger->error("Code incompatibility detected");

@@ -5,17 +5,35 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
-#include <iostream>
+#include "visitors/sympy_solver_visitor.hpp"
 
 #include <pybind11/pytypes.h>
 
+#include "ast/binary_expression.hpp"
+#include "ast/conserve.hpp"
+#include "ast/derivative_block.hpp"
+#include "ast/diff_eq_expression.hpp"
+#include "ast/eigen_linear_solver_block.hpp"
+#include "ast/eigen_newton_solver_block.hpp"
+#include "ast/expression_statement.hpp"
+#include "ast/indexed_name.hpp"
+#include "ast/integer.hpp"
+#include "ast/lin_equation.hpp"
+#include "ast/linear_block.hpp"
+#include "ast/non_lin_equation.hpp"
+#include "ast/non_linear_block.hpp"
+#include "ast/program.hpp"
+#include "ast/solve_block.hpp"
+#include "ast/statement_block.hpp"
+#include "ast/string.hpp"
+#include "ast/var_name.hpp"
 #include "codegen/codegen_naming.hpp"
 #include "symtab/symbol.hpp"
 #include "utils/logger.hpp"
 #include "utils/string_utils.hpp"
 #include "visitors/lookup_visitor.hpp"
-#include "visitors/sympy_solver_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
+
 
 namespace py = pybind11;
 using namespace py::literals;

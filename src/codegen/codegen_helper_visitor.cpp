@@ -5,19 +5,14 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
+#include "codegen/codegen_helper_visitor.hpp"
+
 #include <algorithm>
 #include <cmath>
-#include <set>
 
-#include <fmt/format.h>
-
-#include "codegen/codegen_helper_visitor.hpp"
+#include "ast/all.hpp"
 #include "codegen/codegen_naming.hpp"
 #include "visitors/lookup_visitor.hpp"
-#include "visitors/rename_visitor.hpp"
-
-
-using namespace fmt::literals;
 
 
 namespace nmodl {

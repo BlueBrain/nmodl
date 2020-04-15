@@ -6,6 +6,13 @@
  *************************************************************************/
 
 #include "visitors/constant_folder_visitor.hpp"
+
+#include "ast/binary_expression.hpp"
+#include "ast/double.hpp"
+#include "ast/float.hpp"
+#include "ast/integer.hpp"
+#include "ast/paren_expression.hpp"
+#include "ast/wrapped_expression.hpp"
 #include "utils/logger.hpp"
 #include "visitors/visitor_utils.hpp"
 

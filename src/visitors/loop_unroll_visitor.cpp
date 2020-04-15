@@ -6,6 +6,15 @@
  *************************************************************************/
 
 #include "visitors/loop_unroll_visitor.hpp"
+#include "ast/binary_expression.hpp"
+#include "ast/expression.hpp"
+#include "ast/expression_statement.hpp"
+#include "ast/from_statement.hpp"
+#include "ast/indexed_name.hpp"
+#include "ast/integer.hpp"
+#include "ast/name.hpp"
+#include "ast/statement_block.hpp"
+#include "ast/wrapped_expression.hpp"
 #include "parser/c11_driver.hpp"
 #include "utils/logger.hpp"
 #include "visitors/lookup_visitor.hpp"
