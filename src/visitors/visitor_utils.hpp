@@ -71,8 +71,9 @@ std::string to_nmodl(ast::Ast& node, const std::set<ast::AstNodeType>& exclude_t
 
 /// Given a shared pointer to an AST node, return the NMODL string representation
 template <typename T>
-typename std::enable_if<std::is_base_of<ast::Ast, T>::value, std::string>::type
-to_nmodl(const std::shared_ptr<T>& node, const std::set<ast::AstNodeType>& exclude_types = {}) {
+typename std::enable_if<std::is_base_of<ast::Ast, T>::value, std::string>::type to_nmodl(
+    const std::shared_ptr<T>& node,
+    const std::set<ast::AstNodeType>& exclude_types = {}) {
     return to_nmodl(*node, exclude_types);
 }
 

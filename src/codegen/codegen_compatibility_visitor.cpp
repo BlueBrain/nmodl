@@ -53,8 +53,9 @@ std::string CodegenCompatibilityVisitor::return_error_global_var(
     return error_message_global_var.str();
 }
 
-std::string CodegenCompatibilityVisitor::return_error_pointer(ast::Ast& node,
-                                                              const std::shared_ptr<ast::Ast>& ast_node) {
+std::string CodegenCompatibilityVisitor::return_error_pointer(
+    ast::Ast& node,
+    const std::shared_ptr<ast::Ast>& ast_node) {
     auto pointer_var = std::dynamic_pointer_cast<ast::PointerVar>(ast_node);
     return "\"{}\" POINTER found at [{}] should be defined as BBCOREPOINTER to use it in CoreNeuron\n"_format(
         pointer_var->get_node_name(), pointer_var->get_token()->position());

@@ -41,8 +41,9 @@ using namespace ast;
 class CodegenCompatibilityVisitor: public visitor::AstVisitor {
     /// Typedef for defining FunctionPointer that points to the
     /// function needed to be called for every kind of error
-    typedef std::string (CodegenCompatibilityVisitor::*FunctionPointer)(ast::Ast& node,
-                                                                        const std::shared_ptr<ast::Ast>&);
+    typedef std::string (CodegenCompatibilityVisitor::*FunctionPointer)(
+        ast::Ast& node,
+        const std::shared_ptr<ast::Ast>&);
 
     /// Unordered_map to find the function needed to be called in
     /// for every ast::AstNodeType that is unsupported
@@ -109,8 +110,9 @@ class CodegenCompatibilityVisitor: public visitor::AstVisitor {
     /// \param node Not used by the function
     /// \param ast_node Ast node which is checked
     /// \return std::string error
-    std::string return_error_if_solve_method_is_unhandled(ast::Ast& node,
-                                                          const std::shared_ptr<ast::Ast>& ast_node);
+    std::string return_error_if_solve_method_is_unhandled(
+        ast::Ast& node,
+        const std::shared_ptr<ast::Ast>& ast_node);
 
     /// Takes as parameter an std::shared_ptr<ast::Ast> node
     /// and returns a relative error with the name, the type
@@ -138,7 +140,8 @@ class CodegenCompatibilityVisitor: public visitor::AstVisitor {
     /// \param ast_node Ast node which is checked
     /// \return std::string error
     template <typename T>
-    std::string return_error_without_name(ast::Ast& node, const std::shared_ptr<ast::Ast>& ast_node) {
+    std::string return_error_without_name(ast::Ast& node,
+                                          const std::shared_ptr<ast::Ast>& ast_node) {
         auto real_type_block = std::dynamic_pointer_cast<T>(ast_node);
         return "{}construct found at [{}] is not handled\n"_format(
             real_type_block->get_nmodl_name(), real_type_block->get_token()->position());
@@ -152,7 +155,7 @@ class CodegenCompatibilityVisitor: public visitor::AstVisitor {
     /// \param node Ast
     /// \param ast_node Ast node which is checked
     /// \return std::string error
-    std::string return_error_global_var(ast::Ast& node,const std::shared_ptr<ast::Ast>& ast_node);
+    std::string return_error_global_var(ast::Ast& node, const std::shared_ptr<ast::Ast>& ast_node);
 
     /// Takes as parameter an std::shared_ptr<ast::Ast> node
     /// and returns a relative error with the name and the
