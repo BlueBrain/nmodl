@@ -792,14 +792,12 @@ void CodegenIspcVisitor::print_codegen_wrapper_routines() {
 
 
     for (const auto& function: wrapper_functions) {
-        if (!program_symtab->lookup(function->get_node_name())
-                 ->has_all_status(Status::inlined)) {
+        if (!program_symtab->lookup(function->get_node_name())->has_all_status(Status::inlined)) {
             fallback_codegen.print_function(*function);
         }
     }
     for (const auto& procedure: wrapper_procedures) {
-        if (!program_symtab->lookup(procedure->get_node_name())
-                 ->has_all_status(Status::inlined)) {
+        if (!program_symtab->lookup(procedure->get_node_name())->has_all_status(Status::inlined)) {
             fallback_codegen.print_procedure(*procedure);
         }
     }
