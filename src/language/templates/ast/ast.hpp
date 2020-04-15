@@ -706,6 +706,7 @@ struct Ast: public std::enable_shared_from_this<Ast> {
         {% endif %}
 
         {% if node.children %}
+      private:
             /**
              *\brief Set this object as parent for all the children
              *
