@@ -3809,7 +3809,7 @@ void CodegenCVisitor::print_derivimplicit_kernel(Block* block) {
     printer->add_line(slist1);
     printer->add_line(dlist1);
     printer->add_line(dlist2);
-    print_statement_block(*block->get_statement_block().get(), false, false);
+    print_statement_block(*block->get_statement_block(), false, false);
     printer->add_line("int counter = -1;");
     printer->add_line("for (int i=0; i<{}; i++) {}"_format(info.num_primes, "{"));
     printer->add_line("    if (*deriv{}_advance(thread)) {}"_format(list_num, "{"));
@@ -3894,7 +3894,7 @@ void CodegenCVisitor::print_nrn_state() {
 
     if (info.currents.empty() && info.breakpoint_node != nullptr) {
         auto block = info.breakpoint_node->get_statement_block();
-        print_statement_block(*block.get(), false, false);
+        print_statement_block(*block, false, false);
     }
 
     auto write_statements = ion_write_statements(BlockType::State);
@@ -3923,7 +3923,7 @@ void CodegenCVisitor::print_nrn_state() {
 
 void CodegenCVisitor::print_nrn_current(BreakpointBlock& node) {
     auto args = internal_method_parameters();
-    auto block = node.get_statement_block().get();
+    const auto& block = node.get_statement_block();
     printer->add_newline(2);
     print_device_method_annotation();
     printer->start_block("static inline double nrn_current({})"_format(get_parameter_str(args)));
@@ -3940,7 +3940,7 @@ void CodegenCVisitor::print_nrn_current(BreakpointBlock& node) {
 
 void CodegenCVisitor::print_nrn_cur_conductance_kernel(BreakpointBlock& node) {
     const auto& block = node.get_statement_block();
-    print_statement_block(*block.get(), false, false);
+    print_statement_block(*block, false, false);
     if (!info.currents.empty()) {
         std::string sum;
         for (const auto& current: info.currents) {

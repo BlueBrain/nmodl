@@ -39,7 +39,7 @@ std::vector<DUChain> run_defuse_visitor(const std::string& text, const std::stri
     DefUseAnalyzeVisitor v(ast->get_symbol_table());
 
     /// analyse only derivative blocks in this test
-    auto blocks = AstLookupVisitor().lookup(ast.get(), AstNodeType::DERIVATIVE_BLOCK);
+    auto blocks = AstLookupVisitor().lookup(*ast, AstNodeType::DERIVATIVE_BLOCK);
     for (auto& block: blocks) {
         auto node = block.get();
         chains.push_back(v.analyze(node, variable));

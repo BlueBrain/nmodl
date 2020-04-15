@@ -147,7 +147,7 @@ void LoopUnrollVisitor::visit_statement_block(ast::StatementBlock& node) {
             auto statement = std::dynamic_pointer_cast<ast::FromStatement>((*iter));
 
             /// check if any verbatim block exists
-            auto verbatim_blocks = AstLookupVisitor().lookup(statement.get(),
+            auto verbatim_blocks = AstLookupVisitor().lookup(*statement,
                                                              ast::AstNodeType::VERBATIM);
             if (!verbatim_blocks.empty()) {
                 logger->debug("LoopUnrollVisitor : can not unroll because of verbatim block");
@@ -159,8 +159,8 @@ void LoopUnrollVisitor::visit_statement_block(ast::StatementBlock& node) {
             if (new_statement != nullptr) {
                 node.reset_statement(iter, new_statement);
 
-                const auto& before = to_nmodl(statement.get());
-                const auto& after = to_nmodl(new_statement.get());
+                const auto& before = to_nmodl(statement);
+                const auto& after = to_nmodl(new_statement);
                 logger->debug("LoopUnrollVisitor : \n {} \n unrolled to \n {}", before, after);
             }
         }

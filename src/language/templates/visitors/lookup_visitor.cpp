@@ -30,24 +30,24 @@ void AstLookupVisitor::visit_{{ node.class_name|snake_case }}({{ node.class_name
 {% endfor %}
 
 
-std::vector<std::shared_ptr<ast::Ast>> AstLookupVisitor::lookup(Ast* node, const std::vector<AstNodeType>& _types) {
+std::vector<std::shared_ptr<ast::Ast>> AstLookupVisitor::lookup(Ast& node, const std::vector<AstNodeType>& _types) {
     nodes.clear();
     types = _types;
-    node->accept(*this);
+    node.accept(*this);
     return nodes;
 }
 
-std::vector<std::shared_ptr<ast::Ast>> AstLookupVisitor::lookup(Ast* node, AstNodeType type) {
+std::vector<std::shared_ptr<ast::Ast>> AstLookupVisitor::lookup(Ast& node, AstNodeType type) {
     nodes.clear();
     types.clear();
     types.push_back(type);
-    node->accept(*this);
+    node.accept(*this);
     return nodes;
 }
 
-std::vector<std::shared_ptr<ast::Ast>> AstLookupVisitor::lookup(Ast* node) {
+std::vector<std::shared_ptr<ast::Ast>> AstLookupVisitor::lookup(Ast& node) {
     nodes.clear();
-    node->accept(*this);
+    node.accept(*this);
     return nodes;
 }
 

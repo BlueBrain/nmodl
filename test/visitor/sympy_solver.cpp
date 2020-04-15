@@ -58,9 +58,9 @@ std::vector<std::string> run_sympy_solver_visitor(
 
     // run lookup visitor to extract results from AST
     AstLookupVisitor v_lookup;
-    auto res = v_lookup.lookup(ast.get(), ret_nodetype);
+    auto res = v_lookup.lookup(*ast, ret_nodetype);
     for (const auto& r: res) {
-        results.push_back(to_nmodl(r.get()));
+        results.push_back(to_nmodl(r));
     }
 
     return results;

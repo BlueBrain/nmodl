@@ -307,7 +307,7 @@ int main(int argc, const char* argv[]) {
             // run perfvisitor to update read/wrie counts
             PerfVisitor().visit_program(*ast);
             // If there is an incompatible construct and code generation is not forced exit NMODL
-            if (CodegenCompatibilityVisitor().find_unhandled_ast_nodes(ast.get()) &&
+            if (CodegenCompatibilityVisitor().find_unhandled_ast_nodes(*ast) &&
                 !force_codegen) {
                 return 1;
             }
@@ -315,10 +315,8 @@ int main(int argc, const char* argv[]) {
 
         if (show_symtab) {
             logger->info("Printing symbol table");
-            std::stringstream stream;
             auto symtab = ast->get_model_symbol_table();
-            symtab->print(stream);
-            std::cout << stream.str();
+            symtab->print(std::cout);
         }
 
         ast_to_nmodl(*ast, filepath("ast"));

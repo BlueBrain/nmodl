@@ -262,12 +262,12 @@ class DefUseAnalyzeVisitor: public AstVisitor {
     }
 
     void visit_var_name(ast::VarName& node) override {
-        const std::string& variable = to_nmodl(&node);
+        const std::string& variable = to_nmodl(node);
         process_variable(variable);
     }
 
     void visit_name(ast::Name& node) override {
-        const std::string& variable = to_nmodl(&node);
+        const std::string& variable = to_nmodl(node);
         process_variable(variable);
     }
 
@@ -283,7 +283,7 @@ class DefUseAnalyzeVisitor: public AstVisitor {
             auto variable_name_prefix = variable_name.substr(0, variable_name.find('['));
             if (name == variable_name_prefix) {
                 update_defuse_chain(variable_name_prefix);
-                const std::string& text = to_nmodl(&node);
+                const std::string& text = to_nmodl(node);
                 nmodl::logger->info("index used to access variable is not known : {} ", text);
             }
             return;

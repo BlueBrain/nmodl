@@ -50,7 +50,7 @@ std::string run_units_visitor(const std::string& text) {
     // Visit AST to find all the ast::UnitDef nodes to print their
     // unit names, factors and dimensions as they are calculated in
     // the units::UnitTable
-    auto unit_defs = AstLookupVisitor().lookup(ast.get(), ast::AstNodeType::UNIT_DEF);
+    auto unit_defs = AstLookupVisitor().lookup(*ast, ast::AstNodeType::UNIT_DEF);
 
     for (const auto& unit_def: unit_defs) {
         auto unit_name = unit_def->get_node_name();
@@ -79,7 +79,7 @@ std::string run_units_visitor(const std::string& text) {
     // Visit AST to find all the ast::FactorDef nodes to print their
     // unit names, factors and dimensions as they are calculated to
     // be printed to the produced .cpp file
-    auto factor_defs = AstLookupVisitor().lookup(ast.get(), ast::AstNodeType::FACTOR_DEF);
+    auto factor_defs = AstLookupVisitor().lookup(*ast, ast::AstNodeType::FACTOR_DEF);
     for (const auto& factor_def: factor_defs) {
         auto unit = units_driver.table->get_unit(factor_def->get_node_name());
         ss << std::fixed << std::setprecision(8) << unit->get_name() << ' ';

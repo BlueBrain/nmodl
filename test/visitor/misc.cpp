@@ -96,7 +96,7 @@ SCENARIO("Sympy specific AST to NMODL conversion") {
             auto input = reindent_text(nmodl);
             NmodlDriver driver;
             const auto& ast = driver.parse_string(input);
-            const auto& result = to_nmodl(ast.get(), {AstNodeType::UNIT});
+            const auto& result = to_nmodl(ast, {AstNodeType::UNIT});
             REQUIRE(result == reindent_text(expected));
         }
     }

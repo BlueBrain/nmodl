@@ -378,7 +378,7 @@ struct CodegenInfo {
     }
 
     /// if legacy derivimplicit solver from coreneuron to be used
-    bool derivimplicit_coreneuron_solver();
+    bool derivimplicit_coreneuron_solver() const;
 
     bool function_uses_table(std::string& name) const;
 

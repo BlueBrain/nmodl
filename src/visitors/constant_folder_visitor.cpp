@@ -157,7 +157,7 @@ void ConstantFolderVisitor::visit_wrapped_expression(ast::WrappedExpression& nod
         return;
     }
 
-    std::string nmodl_before = to_nmodl(binary_expr.get());
+    std::string nmodl_before = to_nmodl(binary_expr);
 
     /// compute the value of expression
     auto value = compute(get_value(lhs), op, get_value(rhs));
@@ -171,7 +171,7 @@ void ConstantFolderVisitor::visit_wrapped_expression(ast::WrappedExpression& nod
         node.set_expression(std::make_shared<ast::Float>(value));
     }
 
-    std::string nmodl_after = to_nmodl(node.get_expression().get());
+    std::string nmodl_after = to_nmodl(node.get_expression());
     logger->debug("ConstantFolderVisitor : expression {} folded to {}", nmodl_before, nmodl_after);
 }
 

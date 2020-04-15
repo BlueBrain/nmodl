@@ -49,10 +49,10 @@ std::vector<std::string> run_kinetic_block_visitor(const std::string& text) {
 
     // run lookup visitor to extract DERIVATIVE block(s) from AST
     AstLookupVisitor v_lookup;
-    auto res = v_lookup.lookup(ast.get(), AstNodeType::DERIVATIVE_BLOCK);
+    auto res = v_lookup.lookup(*ast, AstNodeType::DERIVATIVE_BLOCK);
     results.reserve(res.size());
     for (const auto& r: res) {
-        results.push_back(to_nmodl(r.get()));
+        results.push_back(to_nmodl(r));
     }
 
 

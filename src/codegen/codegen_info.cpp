@@ -85,7 +85,7 @@ bool CodegenInfo::function_uses_table(std::string& name) const {
  * - if eigen solver block is used then coreneuron solver is not needed
  */
 
-bool CodegenInfo::derivimplicit_coreneuron_solver() {
+bool CodegenInfo::derivimplicit_coreneuron_solver() const {
     return !derivimplicit_callbacks.empty();
 }
 
@@ -99,7 +99,7 @@ bool CodegenInfo::nrn_state_has_eigen_solver_block() const {
         return false;
     }
     return !AstLookupVisitor()
-                .lookup(nrn_state_block, ast::AstNodeType::EIGEN_NEWTON_SOLVER_BLOCK)
+                .lookup(*nrn_state_block, ast::AstNodeType::EIGEN_NEWTON_SOLVER_BLOCK)
                 .empty();
 }
 

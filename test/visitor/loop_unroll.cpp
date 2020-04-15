@@ -40,7 +40,7 @@ std::string run_loop_unroll_visitor(const std::string& text) {
     // check that, after visitor rearrangement, parents are still up-to-date
     CheckParentVisitor().visit_program(*ast);
 
-    return to_nmodl(ast.get(), {AstNodeType::DEFINE});
+    return to_nmodl(ast, {AstNodeType::DEFINE});
 }
 
 SCENARIO("Perform loop unrolling of FROM construct", "[visitor][unroll]") {

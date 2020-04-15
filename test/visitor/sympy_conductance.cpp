@@ -54,7 +54,7 @@ std::string run_sympy_conductance_visitor(const std::string& text) {
     AstLookupVisitor v_lookup;
     // return BREAKPOINT block as JSON string
     return reindent_text(
-        to_nmodl(v_lookup.lookup(ast.get(), AstNodeType::BREAKPOINT_BLOCK)[0].get()));
+        to_nmodl(v_lookup.lookup(*ast, AstNodeType::BREAKPOINT_BLOCK)[0]));
 }
 
 std::string breakpoint_to_nmodl(const std::string& text) {
@@ -69,7 +69,7 @@ std::string breakpoint_to_nmodl(const std::string& text) {
     AstLookupVisitor v_lookup;
     // return BREAKPOINT block as JSON string
     return reindent_text(
-        to_nmodl(v_lookup.lookup(ast.get(), AstNodeType::BREAKPOINT_BLOCK)[0].get()));
+        to_nmodl(v_lookup.lookup(*ast, AstNodeType::BREAKPOINT_BLOCK)[0]));
 }
 
 void run_sympy_conductance_passes(ast::Program& node) {

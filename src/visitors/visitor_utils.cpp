@@ -168,7 +168,7 @@ std::set<std::string> get_global_vars(const Program& node) {
 }
 
 
-bool calls_function(ast::Ast* node, const std::string& name) {
+bool calls_function(ast::Ast& node, const std::string& name) {
     AstLookupVisitor lv(ast::AstNodeType::FUNCTION_CALL);
     for (const auto& f: lv.lookup(node)) {
         if (std::dynamic_pointer_cast<ast::FunctionCall>(f)->get_node_name() == name) {
@@ -181,21 +181,21 @@ bool calls_function(ast::Ast* node, const std::string& name) {
 }  // namespace visitor
 
 
-std::string to_nmodl(ast::Ast* node, const std::set<ast::AstNodeType>& exclude_types) {
+std::string to_nmodl(ast::Ast& node, const std::set<ast::AstNodeType>& exclude_types) {
     std::stringstream stream;
     visitor::NmodlPrintVisitor v(stream, exclude_types);
-    node->accept(v);
+    node.accept(v);
     return stream.str();
 }
 
 
-std::string to_json(ast::Ast* node, bool compact, bool expand, bool add_nmodl) {
+std::string to_json(ast::Ast& node, bool compact, bool expand, bool add_nmodl) {
     std::stringstream stream;
     visitor::JSONVisitor v(stream);
     v.compact_json(compact);
     v.add_nmodl(add_nmodl);
     v.expand_keys(expand);
-    node->accept(v);
+    node.accept(v);
     v.flush();
     return stream.str();
 }

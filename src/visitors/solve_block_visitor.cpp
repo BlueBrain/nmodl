@@ -20,7 +20,7 @@ void SolveBlockVisitor::visit_breakpoint_block(ast::BreakpointBlock& node) {
 }
 
 /// check if given node contains sympy solution
-static bool has_sympy_solution(ast::Ast* node) {
+static bool has_sympy_solution(ast::Ast& node) {
     return !AstLookupVisitor().lookup(node, ast::AstNodeType::EIGEN_NEWTON_SOLVER_BLOCK).empty();
 }
 
@@ -47,7 +47,7 @@ ast::SolutionExpression* SolveBlockVisitor::create_solution_expression(
     const auto& method = solve_block.get_method();
     std::string solve_method = method ? method->get_node_name() : "";
     if (solve_method == codegen::naming::DERIVIMPLICIT_METHOD &&
-        !has_sympy_solution(node_to_solve)) {
+        !has_sympy_solution(*node_to_solve)) {
         /// typically derivimplicit is used for derivative block only
         assert(node_to_solve->get_node_type() == ast::AstNodeType::DERIVATIVE_BLOCK);
         auto derivative_block = dynamic_cast<ast::DerivativeBlock*>(node_to_solve);

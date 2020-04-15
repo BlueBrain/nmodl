@@ -59,10 +59,10 @@ std::vector<std::string> run_steadystate_visitor(
     SteadystateVisitor().visit_program(*ast);
 
     // run lookup visitor to extract results from AST
-    auto res = AstLookupVisitor().lookup(ast.get(), ret_nodetypes);
+    auto res = AstLookupVisitor().lookup(*ast, ret_nodetypes);
     results.reserve(res.size());
     for (const auto& r: res) {
-        results.push_back(to_nmodl(r.get()));
+        results.push_back(to_nmodl(r));
     }
 
     // check that, after visitor rearrangement, parents are still up-to-date

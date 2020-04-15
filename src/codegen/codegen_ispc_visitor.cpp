@@ -38,7 +38,7 @@ void CodegenIspcVisitor::visit_function_call(ast::FunctionCall& node) {
         return;
     }
     if (node.get_node_name() == "printf") {
-        logger->warn("Not emitted in ispc: {}"_format(to_nmodl(&node)));
+        logger->warn("Not emitted in ispc: {}"_format(to_nmodl(node)));
         return;
     }
     auto& fname = *node.get_name();
@@ -645,22 +645,22 @@ void CodegenIspcVisitor::determine_target() {
 
     if (info.initial_node) {
         emit_fallback[BlockType::Initial] =
-            !node_lv.lookup(info.initial_node).empty() ||
-            visitor::calls_function(info.initial_node, "net_send") || info.require_wrote_conc;
+            !node_lv.lookup(*info.initial_node).empty() ||
+            visitor::calls_function(*info.initial_node, "net_send") || info.require_wrote_conc;
     } else {
         emit_fallback[BlockType::Initial] = info.net_receive_initial_node ||
                                             info.require_wrote_conc;
     }
 
     if (info.net_receive_node) {
-        emit_fallback[BlockType::NetReceive] = !node_lv.lookup(info.net_receive_node).empty() ||
-                                               visitor::calls_function(info.net_receive_node,
+        emit_fallback[BlockType::NetReceive] = !node_lv.lookup(*info.net_receive_node).empty() ||
+                                               visitor::calls_function(*info.net_receive_node,
                                                                        "net_send");
     }
 
     if (nrn_cur_required()) {
         if (info.breakpoint_node) {
-            emit_fallback[BlockType::Equation] = !node_lv.lookup(info.breakpoint_node).empty();
+            emit_fallback[BlockType::Equation] = !node_lv.lookup(*info.breakpoint_node).empty();
         } else {
             emit_fallback[BlockType::Equation] = false;
         }
@@ -668,7 +668,7 @@ void CodegenIspcVisitor::determine_target() {
 
     if (nrn_state_required()) {
         if (info.nrn_state_block) {
-            emit_fallback[BlockType::State] = !node_lv.lookup(info.nrn_state_block).empty();
+            emit_fallback[BlockType::State] = !node_lv.lookup(*info.nrn_state_block).empty();
         } else {
             emit_fallback[BlockType::State] = false;
         }
@@ -681,7 +681,7 @@ void CodegenIspcVisitor::move_procs_to_wrapper() {
     auto populate_nameset = [&nameset](ast::Block* block) {
         AstLookupVisitor name_lv(ast::AstNodeType::NAME);
         if (block) {
-            auto names = name_lv.lookup(block);
+            const auto& names = name_lv.lookup(*block);
             for (const auto& name: names) {
                 nameset.insert(name->get_node_name());
             }
@@ -695,7 +695,7 @@ void CodegenIspcVisitor::move_procs_to_wrapper() {
     auto target_procedures = std::vector<ast::ProcedureBlock*>();
     for (auto it = info.procedures.begin(); it != info.procedures.end(); it++) {
         auto procname = (*it)->get_name()->get_node_name();
-        if (nameset.find(procname) == nameset.end() || !node_lv.lookup(*it).empty()) {
+        if (nameset.find(procname) == nameset.end() || !node_lv.lookup(**it).empty()) {
             wrapper_procedures.push_back(*it);
         } else {
             target_procedures.push_back(*it);
@@ -705,7 +705,7 @@ void CodegenIspcVisitor::move_procs_to_wrapper() {
     auto target_functions = std::vector<ast::FunctionBlock*>();
     for (auto it = info.functions.begin(); it != info.functions.end(); it++) {
         auto procname = (*it)->get_name()->get_node_name();
-        if (nameset.find(procname) == nameset.end() || !node_lv.lookup(*it).empty()) {
+        if (nameset.find(procname) == nameset.end() || !node_lv.lookup(**it).empty()) {
             wrapper_functions.push_back(*it);
         } else {
             target_functions.push_back(*it);
@@ -793,14 +793,12 @@ void CodegenIspcVisitor::print_codegen_wrapper_routines() {
 
     for (const auto& function: wrapper_functions) {
         if (!program_symtab->lookup(function->get_node_name())
-                 .get()
                  ->has_all_status(Status::inlined)) {
             fallback_codegen.print_function(*function);
         }
     }
     for (const auto& procedure: wrapper_procedures) {
         if (!program_symtab->lookup(procedure->get_node_name())
-                 .get()
                  ->has_all_status(Status::inlined)) {
             fallback_codegen.print_procedure(*procedure);
         }
