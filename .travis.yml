@@ -76,7 +76,8 @@ install:
   - echo "------- Install Dependencies -------"
   - pip3 install -U pip setuptools
   - pip3 install Jinja2 PyYAML pytest sympy --user
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+  - echo "--- TRAVIS_OS_NAME ${TRAVIS_OS_NAME} ---"
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
       pip3 install -U --user sphinx nbsphinx>=0.3.2 m2r sphinx-rtd-theme jupyter;
     fi
 
@@ -96,12 +97,15 @@ script:
 #=============================================================================
 after_success:
   - export PYTHONPATH=$HOME/nmodl/lib/python:$PYTHONPATH
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+  - echo "TRAVIS_OS_NAME : $TRAVIS_OS_NAME"
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
       echo "------- Build Documentation -------";
       cd $TRAVIS_BUILD_DIR/docs;
       doxygen && make html;
       rm -rf _build/doctrees && touch _build/.nojekyll;
       echo "<meta http-equiv=\"refresh\" content=\"0; url=./html/index.html\" />" > _build/index.html;
+    else
+       echo "------- SKipping Build Documentation -------";
     fi
   - echo "------- Build and Test CoreNEURON -------"
   - cd $HOME
