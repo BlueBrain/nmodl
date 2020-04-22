@@ -7,6 +7,7 @@
 
 #include "visitors/verbatim_var_rename_visitor.hpp"
 #include "parser/c11_driver.hpp"
+#include "src/utils/logger.hpp"
 
 
 namespace nmodl {
@@ -60,7 +61,7 @@ std::string VerbatimVarRenameVisitor::rename_variable(const std::string& name) {
         if (symbol != nullptr) {
             return new_name;
         }
-        std::cerr << "Warning : could not find " << name << " definition in nmodl\n";
+        logger->warn("could not find {} definition in nmodl", name);
     }
     return name;
 }

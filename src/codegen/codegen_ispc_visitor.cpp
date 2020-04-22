@@ -693,7 +693,7 @@ void CodegenIspcVisitor::move_procs_to_wrapper() {
 
     AstLookupVisitor node_lv(incompatible_node_types);
     auto target_procedures = std::vector<ast::ProcedureBlock*>();
-    for (const auto& procedure : info.procedures) {
+    for (const auto& procedure: info.procedures) {
         const auto& name = procedure->get_name()->get_node_name();
         if (nameset.find(name) == nameset.end() || !node_lv.lookup(*procedure).empty()) {
             wrapper_procedures.push_back(procedure);
@@ -703,7 +703,7 @@ void CodegenIspcVisitor::move_procs_to_wrapper() {
     }
     info.procedures = target_procedures;
     auto target_functions = std::vector<ast::FunctionBlock*>();
-    for (const auto& function : info.functions) {
+    for (const auto& function: info.functions) {
         const auto& name = function->get_name()->get_node_name();
         if (nameset.find(name) == nameset.end() || !node_lv.lookup(*function).empty()) {
             wrapper_functions.push_back(function);
