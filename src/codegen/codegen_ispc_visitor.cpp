@@ -693,22 +693,22 @@ void CodegenIspcVisitor::move_procs_to_wrapper() {
 
     AstLookupVisitor node_lv(incompatible_node_types);
     auto target_procedures = std::vector<ast::ProcedureBlock*>();
-    for (auto it = info.procedures.begin(); it != info.procedures.end(); it++) {
-        auto procname = (*it)->get_name()->get_node_name();
-        if (nameset.find(procname) == nameset.end() || !node_lv.lookup(**it).empty()) {
-            wrapper_procedures.push_back(*it);
+    for (const auto& procedure : info.procedures) {
+        const auto& name = procedure->get_name()->get_node_name();
+        if (nameset.find(name) == nameset.end() || !node_lv.lookup(*procedure).empty()) {
+            wrapper_procedures.push_back(procedure);
         } else {
-            target_procedures.push_back(*it);
+            target_procedures.push_back(procedure);
         }
     }
     info.procedures = target_procedures;
     auto target_functions = std::vector<ast::FunctionBlock*>();
-    for (auto it = info.functions.begin(); it != info.functions.end(); it++) {
-        auto procname = (*it)->get_name()->get_node_name();
-        if (nameset.find(procname) == nameset.end() || !node_lv.lookup(**it).empty()) {
-            wrapper_functions.push_back(*it);
+    for (const auto& function : info.functions) {
+        const auto& name = function->get_name()->get_node_name();
+        if (nameset.find(name) == nameset.end() || !node_lv.lookup(*function).empty()) {
+            wrapper_functions.push_back(function);
         } else {
-            target_functions.push_back(*it);
+            target_functions.push_back(function);
         }
     }
     info.functions = target_functions;
