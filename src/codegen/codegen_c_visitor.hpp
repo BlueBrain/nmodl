@@ -117,7 +117,7 @@ struct IndexVariableInfo {
     /// if the variable is qualified as constant (this is property of IndexVariable)
     bool is_constant = false;
 
-    IndexVariableInfo(std::shared_ptr<symtab::Symbol> symbol,
+    IndexVariableInfo(const std::shared_ptr<symtab::Symbol>& symbol,
                       bool is_vdata = false,
                       bool is_index = false,
                       bool is_integer = false)
@@ -438,7 +438,7 @@ class CodegenCVisitor: public visitor::AstVisitor {
      * \param name The variable name
      * \return     \c true if the variable is a state variable
      */
-    bool state_variable(std::string name);
+    bool state_variable(const std::string& name) const;
 
 
     /**
@@ -495,7 +495,7 @@ class CodegenCVisitor: public visitor::AstVisitor {
      * \param name The name of the method to check
      * \return     \c true if the method is defined
      */
-    bool defined_method(const std::string& name);
+    bool defined_method(const std::string& name) const;
 
 
     /**
@@ -503,7 +503,7 @@ class CodegenCVisitor: public visitor::AstVisitor {
      * \param node The AST Statement node to check
      * \return     \c true if this Statement is to be skipped
      */
-    bool statement_to_skip(ast::Statement* node);
+    bool statement_to_skip(const ast::Statement& node) const;
 
 
     /**
@@ -780,7 +780,7 @@ class CodegenCVisitor: public visitor::AstVisitor {
      * \param name The ion variable name
      * \return     The ion read variable name
      */
-    std::pair<std::string, std::string> read_ion_variable_name(std::string name);
+    std::pair<std::string, std::string> read_ion_variable_name(const std::string& name) const;
 
 
     /**
@@ -788,7 +788,7 @@ class CodegenCVisitor: public visitor::AstVisitor {
      * \param name The ion variable name
      * \return     The ion write variable name
      */
-    std::pair<std::string, std::string> write_ion_variable_name(std::string name);
+    std::pair<std::string, std::string> write_ion_variable_name(const std::string& name) const;
 
 
     /**
@@ -1305,7 +1305,7 @@ class CodegenCVisitor: public visitor::AstVisitor {
      * \param node the AST node representing the function or procedure in NMODL
      * \param name the name of the function or procedure
      */
-    void print_function_or_procedure(ast::Block* node, const std::string& name);
+    void print_function_or_procedure(ast::Block& node, const std::string& name);
 
 
     /**
@@ -1353,7 +1353,7 @@ class CodegenCVisitor: public visitor::AstVisitor {
      * \param need_mech_inst \c true if a local \c inst variable needs to be defined in generated
      * code
      */
-    void print_net_receive_common_code(ast::Block* node, bool need_mech_inst = true);
+    void print_net_receive_common_code(ast::Block& node, bool need_mech_inst = true);
 
 
     /**
@@ -1743,14 +1743,14 @@ class CodegenCVisitor: public visitor::AstVisitor {
      * Print \c check\_function() for functions or procedure using table
      * \param node The AST node representing a function or procedure block
      */
-    void print_table_check_function(ast::Block* node);
+    void print_table_check_function(ast::Block& node);
 
 
     /**
      * Print replacement function for function or procedure using table
      * \param node The AST node representing a function or procedure block
      */
-    void print_table_replacement_function(ast::Block* node);
+    void print_table_replacement_function(ast::Block& node);
 
 
     /**
@@ -1868,14 +1868,14 @@ void CodegenCVisitor::print_function_declaration(const T& node, const std::strin
 
     // internal and user provided arguments
     auto internal_params = internal_method_parameters();
-    auto params = node->get_parameters();
+    const auto& params = node.get_parameters();
     for (const auto& param: params) {
         internal_params.emplace_back("", type, "", param.get()->get_node_name());
     }
 
     // procedures have "int" return type by default
     std::string return_type = "int";
-    if (node->is_function_block()) {
+    if (node.is_function_block()) {
         return_type = default_float_data_type();
     }
 

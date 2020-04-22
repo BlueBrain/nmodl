@@ -295,7 +295,7 @@ CodegenIspcVisitor::ParamVector CodegenIspcVisitor::get_global_function_parms(
 void CodegenIspcVisitor::print_procedure(ast::ProcedureBlock& node) {
     codegen = true;
     const auto& name = node.get_node_name();
-    print_function_or_procedure(&node, name);
+    print_function_or_procedure(node, name);
     codegen = false;
 }
 

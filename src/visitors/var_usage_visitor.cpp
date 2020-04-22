@@ -21,10 +21,10 @@ void VarUsageVisitor::visit_name(ast::Name& node) {
     }
 }
 
-bool VarUsageVisitor::variable_used(ast::Node* node, std::string name) {
+bool VarUsageVisitor::variable_used(ast::Node& node, std::string name) {
     used = false;
     var_name = std::move(name);
-    node->visit_children(*this);
+    node.visit_children(*this);
     return used;
 }
 
