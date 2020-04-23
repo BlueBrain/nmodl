@@ -75,16 +75,14 @@ before_install:
 # Install NMODL dependencies
 #=============================================================================
 install:
+  # there is a bug in m2r if sphinx>2.4.4. There is a pr in m2r to solve the
+  # issue here: https://github.com/miyakogi/m2r/pull/55 . When it is done
+  # I will remove the sphinx downgrade. Change setup.py requirements when it
+  # be the case, Katta
   - echo "------- Install Dependencies -------"
   - pip3 install -U pip setuptools
   - pip3 install Jinja2 PyYAML pytest sympy --user
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-      # there is a bug in m2r if sphinx>2.4.4. There is a pr in m2r to solve the
-      # issue here: https://github.com/miyakogi/m2r/pull/55 . When it is done
-      # I will remove the sphinx downgrade. Change setup.py requirements when it
-      # be the case
-      #
-      # Katta
       pip3 install -U --user sphinx==2.4.4 nbsphinx>=0.3.2 m2r sphinx-rtd-theme jupyter;
     fi
 
