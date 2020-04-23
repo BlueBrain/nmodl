@@ -132,7 +132,12 @@ _cmake-format_ and _pre-commit_ utilities can be installed with *pip*.
 
 ### Validate the Python package
 
-You may run the Python test-suites if your contribution has an impact on the Python API:
+You may run the Python test-suites if your contribution has an impact
+on the Python API:
+
+1. setup a sandbox environment with either _virtualenv_,
+  _pyenv_, or _pipenv_. For instance with _virtualenv_:
+  `python -m venv .venv && source .venv/bin/activate`
 1. build the Python package with the command: `python setup.py build`
 1. install _pytest_ Python package: `pip install pytest`
 1. execute the unit-tests: `pytest`
