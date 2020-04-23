@@ -107,7 +107,7 @@ repository:
 If you are developing NMODL, make sure to enable both `NMODL_FORMATTING` and `NMODL_PRECOMMIT`
 CMake variables to ensure that your contributions follow the coding conventions of this project:
 
-```
+```cmake
 cmake -DNMODL_FORMATTING:BOOL=ON -DNMODL_PRECOMMIT:BOOL=ON <path>
 ```
 
