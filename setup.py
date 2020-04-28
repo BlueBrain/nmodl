@@ -15,11 +15,9 @@ import sys
 import sysconfig
 from distutils.version import LooseVersion
 
-from distutils.cmd import Command
 from distutils.dir_util import copy_tree
-from setuptools import Extension, setup
+from setuptools import Command, Extension, setup
 from setuptools.command.build_ext import build_ext
-from setuptools.command.test import test
 
 
 class lazy_dict(dict):
@@ -41,19 +39,26 @@ def get_sphinx_command():
 
     return BuildDoc
 
+class Docs(Command):
+    description = "Generate & optionally upload documentation to docs server"
+    user_options = [("upload", None, "Upload to docs server")]
+    finalize_options = lambda self: None
 
-class InstallDoc(Command):
-    description = 'Install Sphinx documentation'
-    user_options = []
     def initialize_options(self):
-        pass
-    def finalize_options(self):
-        pass
+        self.upload = False
 
     def run(self):
-        self.run_command("test")
+        # The extensions must be created inplace to inspect docs
+        self.reinitialize_command('build_ext', inplace=1)
+        self.run_command('build_ext')
         self.run_command("doctest")
         self.run_command("buildhtml")
+        if self.upload:
+            self._upload()
+
+    def _upload(self):
+        pass
+
 
 class CMakeExtension(Extension):
     def __init__(self, name, sourcedir=""):
@@ -79,6 +84,11 @@ class CMakeBuild(build_ext):
 
         for ext in self.extensions:
             self.build_extension(ext)
+
+    def get_egg_paths(self):
+        eggs_basepath = osp.join(osp.dirname(osp.abspath(__file__)), '.eggs')
+        eggs = [osp.join(eggs_basepath, egg) for egg in os.listdir(eggs_basepath)]
+        return eggs
 
     def build_extension(self, ext):
         extdir = osp.abspath(osp.dirname(self.get_ext_fullpath(ext.name)))
@@ -106,48 +116,26 @@ class CMakeBuild(build_ext):
         env["CXXFLAGS"] = '{} -DVERSION_INFO=\\"{}\\"'.format(
             env.get("CXXFLAGS", ""), self.distribution.get_version()
         )
+        env["PYTHONPATH"] = '{}:{}'.format(
+                ':'.join(self.get_egg_paths()),
+                env.get("PYTHONPATH",""))
         if not osp.exists(self.build_temp):
             os.makedirs(self.build_temp)
         subprocess.check_call(
             ["cmake", ext.sourcedir] + cmake_args, cwd=self.build_temp, env=env
         )
         subprocess.check_call(
-            ["cmake", "--build", "."] + build_args, cwd=self.build_temp
+            ["cmake", "--build", "."] + build_args, cwd=self.build_temp, env=env
         )
 
         # copy nmodl module with shared library to extension directory
         copy_tree(os.path.join(self.build_temp, 'nmodl'), extdir)
 
-class NMODLTest(test):
-    """Custom disutils command that acts like as a replacement
-    for the "test" command.
 
-    It first executes the standard "test" command, then runs the
-    C++ tests and finally runs the "doctest" to also validate
-    code snippets in the sphinx documentation.
-    """
-
-    def distutils_dir_name(self, dname):
-        """Returns the name of a distutils build directory"""
-        dir_name = "{dirname}.{platform}-{version[0]}.{version[1]}"
-        return dir_name.format(
-            dirname=dname, platform=sysconfig.get_platform(), version=sys.version_info
-        )
-
-    def run(self):
-        super().run()
-        subprocess.check_call(
-            [
-                "cmake",
-                "--build",
-                os.path.join("build", self.distutils_dir_name("temp")),
-                "--target",
-                "test",
-            ]
-        )
-
-
-install_requirements = ["jinja2>=2.9.3", "PyYAML>=3.13", "sympy>=1.3"]
+install_requirements = [
+        "PyYAML>=3.13",
+        "sympy>=1.3",
+        ]
 
 setup(
     name="NMODL",
@@ -161,14 +149,22 @@ setup(
     ext_modules=[CMakeExtension("nmodl")],
     cmdclass=lazy_dict(
         build_ext=CMakeBuild,
-        test=NMODLTest,
-        install_doc=InstallDoc,
+        docs=Docs,
         doctest=get_sphinx_command,
         buildhtml=get_sphinx_command,
     ),
     zip_safe=False,
-    setup_requires=["nbsphinx>=0.3.2", "mistune<2.0", "m2r", "sphinx-rtd-theme", "sphinx>=2.0", "sphinx<3.0"]
-    + install_requirements,
+    setup_requires=[
+        "jinja2>=2.9.3",
+        "jupyter-client",
+        "m2r",
+        "mistune<2", # prevents a version conflict with nbconvert
+        "nbconvert<6.0", # prevents issues with nbsphinx
+        "nbsphinx>=0.3.2",
+        "pytest>=3.7.2",
+        "sphinx-rtd-theme",
+        "sphinx>=2.0",
+        "sphinx<3.0",
+        ] + install_requirements,
     install_requires=install_requirements,
-    tests_require=["pytest>=3.7.2"],
 )

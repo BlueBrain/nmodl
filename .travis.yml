@@ -16,13 +16,13 @@ matrix:
   include:
     - language: cpp
       os: linux
-      dist: xenial
+      dist: bionic
       env:
         - MATRIX_EVAL="CXX=g++"
-        - PYTHON_VERSION=3.6.7
+        - PYTHON_VERSION=3.8.2
     - language: cpp
       os: osx
-      osx_image: xcode10.2
+      osx_image: xcode11.3
       env:
         - MATRIX_EVAL="CXX=c++"
 
@@ -63,7 +63,7 @@ addons:
     update: true
 
 #=============================================================================
-# Install dependencies / setup Spack
+# Install dependencies
 #=============================================================================
 before_install:
   # brew installed flex and bison is not in $PATH
@@ -74,9 +74,6 @@ before_install:
         export PATH=/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH;
         brew unlink python@2;
         brew link --overwrite python;
-    else
-        pyenv global $PYTHON_VERSION;
-        ls /usr/bin/;
     fi
   - eval "${MATRIX_EVAL}"
 
@@ -89,11 +86,8 @@ install:
   # I will remove the sphinx downgrade. Change setup.py requirements when it
   # be the case, Katta
   - echo "------- Install Dependencies -------"
-  - pip3 install -U pip setuptools
-  - pip3 install Jinja2 PyYAML pytest sympy --user
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-      pip3 install -U --user sphinx==2.4.4 nbsphinx>=0.3.2 m2r sphinx-rtd-theme jupyter;
-    fi
+  - python3 -m venv .venv && source .venv/bin/activate
+  - pip install -U pip setuptools Jinja2 PyYAML pytest sympy
 
 #=============================================================================
 # Build, test and install
@@ -101,7 +95,7 @@ install:
 script:
   - echo "------- Build, Test and Install -------"
   - mkdir build && cd build
-  - cmake .. -DPYTHON_EXECUTABLE=$(which python3) -DCMAKE_INSTALL_PREFIX=$HOME/nmodl
+  - cmake .. -DPYTHON_EXECUTABLE=$(which python) -DCMAKE_INSTALL_PREFIX=$HOME/nmodl
   - make -j 2
   - make test
   - make install
@@ -110,11 +104,10 @@ script:
 # Build Documentation, CoreNEURON and run tests
 #=============================================================================
 after_success:
-  - export PYTHONPATH=$HOME/nmodl/lib/python:$PYTHONPATH
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
       echo "------- Build Documentation -------";
+      python setup.py docs
       cd $TRAVIS_BUILD_DIR/docs;
-      doxygen && make html;
       rm -rf _build/doctrees && touch _build/.nojekyll;
       echo "<meta http-equiv=\"refresh\" content=\"0; url=./html/index.html\" />" > _build/index.html;
     fi
