@@ -1607,7 +1607,7 @@ class CodegenCVisitor: public visitor::AstVisitor {
 
   public:
     /**
-     * Constructs the C code generator visitor
+     * \brief Constructs the C code generator visitor
      *
      * This constructor instantiates an NMODL C code generator and allows writing generated code
      * directly to a file in \c [output_dir]/[mod_filename].[extension].
@@ -1636,7 +1636,7 @@ class CodegenCVisitor: public visitor::AstVisitor {
         , float_type(float_type) {}
 
     /**
-     * \copybrief CodegenCVisitor(std::string, std::string, LayoutType, std::string, std::string)
+     * \copybrief nmodl::codegen::CodegenCVisitor
      *
      * This constructor instantiates an NMODL C code generator and allows writing generated code
      * into an output stream.
@@ -1664,7 +1664,7 @@ class CodegenCVisitor: public visitor::AstVisitor {
 
 
     /**
-     * \copybrief CodegenCVisitor(std::string, std::string, LayoutType, std::string, std::string)
+     * \copybrief nmodl::codegen::CodegenCVisitor
      *
      * This constructor instantiates an NMODL C code generator and allows writing generated code
      * using an nmodl::printer::CodePrinter defined elsewhere.
