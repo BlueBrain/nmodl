@@ -42,7 +42,8 @@ class Docs(Command):
 
     def run(self):
         # The extensions must be created inplace to inspect docs
-        self.reinitialize_command('build_ext', inplace=1)
+        cmd_obj = self.distribution.get_command_obj('build_ext')
+        cmd_obj.inplace = 1
         self.run_command('build_ext')
         self.run_command("doctest")
         self.run_command("buildhtml")
