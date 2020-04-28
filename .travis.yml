@@ -19,7 +19,7 @@ matrix:
       dist: bionic
       env:
         - MATRIX_EVAL="CXX=g++"
-        - PYTHON_VERSION=3.8.2
+        - PYTHON_VERSION=3.8
     - language: cpp
       os: osx
       osx_image: xcode11.3
@@ -77,7 +77,8 @@ before_install:
         brew link --overwrite python;
         python3 -m venv .venv && source .venv/bin/activate;
     else
-        python3.8 -m venv .venv && source .venv/bin/activate;
+        pyenv global $PYTHON_VERSION;
+        python3 -m venv .venv && source .venv/bin/activate;
     fi
   - eval "${MATRIX_EVAL}"
 
