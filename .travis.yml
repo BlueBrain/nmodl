@@ -75,9 +75,11 @@ before_install:
         export PATH=/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH;
         brew unlink python@2;
         brew link --overwrite python;
+        python3 -m venv .venv && source .venv/bin/activate
+    else
+        python3.8 -m venv .venv && source .venv/bin/activate
     fi
   - eval "${MATRIX_EVAL}"
-  - python3 --version && which python3
 
 #=============================================================================
 # Install NMODL dependencies
@@ -88,8 +90,7 @@ install:
   # I will remove the sphinx downgrade. Change setup.py requirements when it
   # be the case, Katta
   - echo "------- Install Dependencies -------"
-  - python3 -m venv .venv && source .venv/bin/activate
-  - pip install -U pip setuptools Jinja2 PyYAML pytest sympy
+  - pip install -U pip setuptools scikit-build Jinja2 PyYAML pytest sympy
 
 #=============================================================================
 # Build, test and install
