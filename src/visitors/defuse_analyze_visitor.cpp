@@ -55,7 +55,7 @@ std::ostream& operator<<(std::ostream& os, DUState state) {
 }
 
 /// DUInstance to JSON string
-void DUInstance::print(JSONPrinter& printer) {
+void DUInstance::print(JSONPrinter& printer) const {
     if (children.empty()) {
         printer.add_node(to_string(state));
     } else {
@@ -68,7 +68,7 @@ void DUInstance::print(JSONPrinter& printer) {
 }
 
 /// DUChain to JSON string
-std::string DUChain::to_string(bool compact) {
+std::string DUChain::to_string(bool compact) const {
     std::stringstream stream;
     JSONPrinter printer(stream);
     printer.compact_json(compact);

@@ -93,7 +93,7 @@ class DUInstance {
     /// evaluate global usage i.e. with [D,U] states of children
     DUState conditional_block_eval();
 
-    void print(printer::JSONPrinter& printer);
+    void print(printer::JSONPrinter& printer) const;
 };
 
 
@@ -117,7 +117,7 @@ class DUChain {
     DUState eval();
 
     /// return json representation
-    std::string to_string(bool compact = true);
+    std::string to_string(bool compact = true) const;
 };
 
 
