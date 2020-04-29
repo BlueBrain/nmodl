@@ -45,15 +45,16 @@ addons:
     packages:
       - flex
       - bison
-      - libboost-all-dev
       - cmake
+      - dvipng
+      - doxygen
+      - libboost-all-dev
+      - libfl-dev
+      - pandoc
       - python3-dev
       - python3-pip
       - python3-venv
-      - doxygen
-      - pandoc
       - texlive-base
-      - dvipng
   # for Mac builds, we use Homebrew
   homebrew:
     packages:
