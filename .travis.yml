@@ -91,7 +91,7 @@ install:
 #=============================================================================
 script:
   - echo "------- Build, Test and Install -------"
-  - mkdir build && cd build
+  - mkdir build && pushd build
   - cmake .. -DPYTHON_EXECUTABLE=$(which python) -DCMAKE_INSTALL_PREFIX=$HOME/nmodl
   - make -j 2;
     if [ $? -ne 0 ]; then
@@ -99,6 +99,7 @@ script:
     fi
   - env CTEST_OUTPUT_ON_FAILURE=1 make test
   - make install
+  - popd
 
 #=============================================================================
 # Build Documentation, CoreNEURON and run tests
@@ -106,7 +107,7 @@ script:
 after_success:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
       echo "------- Build Documentation -------";
-      python setup.py docs
+      python setup.py docs;
       cd $TRAVIS_BUILD_DIR/docs;
       rm -rf _build/doctrees && touch _build/.nojekyll;
       echo "<meta http-equiv=\"refresh\" content=\"0; url=./html/index.html\" />" > _build/index.html;
