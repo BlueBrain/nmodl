@@ -180,7 +180,7 @@ class DUChain {
  * in any of the if-elseif-else part then it is considered as "used". And
  * this is done recursively from innermost level to the top.
  */
-class DefUseAnalyzeVisitor: public AstVisitor {
+class DefUseAnalyzeVisitor: protected AstVisitor {
   private:
     /// symbol table containing global variables
     symtab::SymbolTable* global_symtab = nullptr;
@@ -231,8 +231,12 @@ class DefUseAnalyzeVisitor: public AstVisitor {
     void visit_statement_block(ast::StatementBlock& node) override;
     void visit_verbatim(ast::Verbatim& node) override;
 
-    /// unsupported statements : we aren't sure how to handle this "yet" and
-    /// hence variables used in any of the below statements are handled separately
+    /**
+     * /\name unsupported statements
+     * we aren't sure how to handle this "yet" and hence variables
+     * used in any of the below statements are handled separately
+     * \{
+     */
 
     void visit_reaction_statement(ast::ReactionStatement& node) override;
 
@@ -252,13 +256,21 @@ class DefUseAnalyzeVisitor: public AstVisitor {
 
     void visit_indexed_name(ast::IndexedName& node) override;
 
-    /// statements / nodes that should not be used for def-use chain analysis
+    /** \} */
+
+    /**
+     * /\name statements
+     * nodes that should not be used for def-use chain analysis
+     * \{
+     */
 
     void visit_conductance_hint(ast::ConductanceHint& node) override;
 
     void visit_local_list_statement(ast::LocalListStatement& node) override;
 
     void visit_argument(ast::Argument& node) override;
+
+    /** \} */
 
     /// compute def-use chain for a variable within the node
     DUChain analyze(ast::Ast& node, const std::string& name);
