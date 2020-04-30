@@ -8,7 +8,7 @@
 import inspect
 import sys
 
-from distutils.cmd import Command
+from setuptools import Command
 from skbuild import setup
 from skbuild.command.build_ext import build_ext
 
