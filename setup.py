@@ -11,7 +11,7 @@ import subprocess
 import sys
 import sysconfig
 
-from distutils.cmd import Command
+from setuptools import Command
 from skbuild import setup
 from setuptools.command.test import test
 
