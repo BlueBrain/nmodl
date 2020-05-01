@@ -68,4 +68,4 @@ file(COPY ${NMODL_PYTHON_HELPER_FILES} DESTINATION ${CMAKE_BINARY_DIR}/lib/pytho
 # =============================================================================
 # Install python binding components
 # =============================================================================
-install(DIRECTORY ${CMAKE_BINARY_DIR}/lib/ DESTINATION lib)
+install(DIRECTORY ${CMAKE_BINARY_DIR}/lib/python/nmodl/ DESTINATION nmodl)
