@@ -9,7 +9,9 @@
 # ~~~
 
 # use same variable name as NEURON as it won't be user option
-set(LINK_AGAINST_PYTHON TRUE CACHE BOOL "Disable linking to python library")
+set(LINK_AGAINST_PYTHON
+    TRUE
+    CACHE BOOL "Disable linking to python library")
 
 # Flags for ignoring undefined symbols for wheel
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
