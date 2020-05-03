@@ -70,7 +70,7 @@ add_library(visitor STATIC $<TARGET_OBJECTS:visitor_obj>)
 
 # ~~~
 # pybind11::embed adds PYTHON_LIBRARIES to target_link_libraries. To avoid link to
-# libpython, we can use `embed` module from pybind11.
+# libpython, we can use `module` interface library from pybind11.
 # ~~~
 if(NOT LINK_AGAINST_PYTHON)
   target_link_libraries(visitor PRIVATE module)
