@@ -13,6 +13,8 @@ set(LINK_AGAINST_PYTHON
     TRUE
     CACHE BOOL "Disable linking to python library")
 
+mark_as_advanced(LINK_AGAINST_PYTHON)
+
 # Flags for ignoring undefined symbols for wheel
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   set(UNDEFINED_SYMBOLS_IGNORE_FLAG "-Wl,-undefined,dynamic_lookup")

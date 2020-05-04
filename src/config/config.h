@@ -54,7 +54,7 @@ struct NrnUnitsLib {
         // first look for NMODLHOME env variable
         if (const char* nmodl_home = std::getenv("NMODLHOME")) {
             auto path = std::string(nmodl_home) + "/share/nrnunits.lib";
-            NRNUNITSLIB_PATH.insert(NRNUNITSLIB_PATH.begin(), path);
+            NRNUNITSLIB_PATH.emplace(NRNUNITSLIB_PATH.begin(), path);
         }
 
         // check paths in order and return if found
