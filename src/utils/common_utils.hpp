@@ -49,7 +49,7 @@ T remove_extension(T const& filename) {
 }
 
 /**
- * Retrun non-const iterator corresponding to the const_iterator in a vector
+ * Return non-const iterator corresponding to the const_iterator in a vector
  *
  * Some old compilers like GCC v4.8.2  has C++11 support but missing erase and insert
  * with const_iterator implementation. This is a workaround to handle build issues with
