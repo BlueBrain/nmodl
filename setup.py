@@ -9,11 +9,12 @@ import inspect
 import os
 import subprocess
 import sys
-import sysconfig
+
+import subprocess
+import os
 
 from setuptools import Command
 from skbuild import setup
-from setuptools.command.test import test
 
 
 class lazy_dict(dict):
@@ -43,11 +44,29 @@ class Docs(Command):
     def initialize_options(self):
         self.upload = False
 
-    def run(self):
-        # The extensions must be created inplace to inspect docs
-        cmd_obj = self.distribution.get_command_obj('build_ext')
-        cmd_obj.inplace = 1
-        self.run_command('build_ext')
+    def run(self, *args, **kwargs):
+        """ The scikit-architecture builds python-c++ projects in this way:
+
+        - skbuild.setup reads all the arguments and their options (i.e. build_ext --inplace)
+        - decides, based on the arguments (i.e build_ext) if calling cmake is appropriate
+        - copies files around if necessary (i.e. build_ext --inplace)
+        - calls the arguments as usual
+
+        The problem with calling commands inside a custom one (like here) is that this is
+        happens after setup(). In other words, setup reads the arguments (i.e. docs), does nothing (it is not
+        aware that there will be a build_ext at this point) and then calls the custom command that calls only
+        build_ext for example. In order to force cmake we can pass the --force-cmake option
+        to setup. However, the inplace is taken from the command build_ext in setup and things
+        are copied around still in setup. Thus, we either change build_ext before setup is called
+        or we recall setup inside the custom command.
+
+        There is an open issue here to find a solution with scikit-build developers:
+
+        https://github.com/scikit-build/scikit-build/issues/489
+
+        Katta
+        """
+        subprocess.run(["python3", "setup.py", "-G", "Unix Makefiles", "build_ext", "--inplace", "-j", str(max(1, os.cpu_count() - 4))]) # workaround
         self.run_command("doctest")
         self.run_command("buildhtml")
         if self.upload:
@@ -57,14 +76,6 @@ class Docs(Command):
         pass
 
 
-class NMODLTest(test):
-    """Custom disutils command that acts like as a replacement
-    for the "test" command.
-
-    It first executes the standard "test" command, then runs the
-    C++ tests and finally runs the "doctest" to also validate
-    code snippets in the sphinx documentation.
-    """
 
 install_requirements = [
         "PyYAML>=3.13",
