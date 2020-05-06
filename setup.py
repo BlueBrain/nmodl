@@ -62,7 +62,7 @@ class Docs(Command):
 
         Katta
         """
-        subprocess.run(["python3", "setup.py", "-G", "Unix Makefiles", "build_ext", "--inplace", "-j", str(max(1, os.cpu_count() - 4))]) # workaround
+        subprocess.run(["python3", "setup.py", "-G", "Unix Makefiles", "build_ext", "--inplace", "-j", str(max(1, os.cpu_count() - 3))]) # workaround
         self.run_command("doctest")
         self.run_command("buildhtml")
         if self.upload:
