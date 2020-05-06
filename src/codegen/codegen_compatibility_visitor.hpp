@@ -45,7 +45,7 @@ class CodegenCompatibilityVisitor: public visitor::AstVisitor {
         ast::Ast& node,
         const std::shared_ptr<ast::Ast>&);
 
-    /// Unordered_map to find the function needed to be called in
+    /// associated container to find the function needed to be called in
     /// for every ast::AstNodeType that is unsupported
     static const std::map<ast::AstNodeType, FunctionPointer> unhandled_ast_types_func;
 
