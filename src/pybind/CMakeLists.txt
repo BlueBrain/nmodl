@@ -48,6 +48,23 @@ add_custom_command(
   DEPENDS ${NMODL_PYTHON_FILES_IN} $<TARGET_FILE:_nmodl>
   COMMENT "-- COPYING NMODL PYTHON FILES --")
 
+add_library(pyembed ${CMAKE_CURRENT_SOURCE_DIR}/pyembed.cpp)
+
+add_library(pywrapper SHARED ${CMAKE_CURRENT_SOURCE_DIR}/wrapper.cpp)
+
+target_include_directories(pyembed PRIVATE ${PYBIND11_INCLUDE_DIR} ${PYTHON_INCLUDE_DIRS})
+target_include_directories(pywrapper PRIVATE ${pybind11_INCLUDE_DIRS} ${PYTHON_INCLUDE_DIRS})
+
+# ~~~
+# pybind11::embed adds PYTHON_LIBRARIES to target_link_libraries. To avoid link to
+# libpython, we can use `module` interface library from pybind11.
+# ~~~
+if(NOT LINK_AGAINST_PYTHON)
+  target_link_libraries(pywrapper PRIVATE pybind11::module)
+else()
+  target_link_libraries(pywrapper PRIVATE pybind11::embed)
+endif()
+
 # =============================================================================
 # Copy python binding components and examples into build directory
 # =============================================================================

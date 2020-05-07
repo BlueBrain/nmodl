@@ -60,7 +60,8 @@ target_link_libraries(
   lexer
   util
   test_util
-  printer)
+  printer
+  pyembed)
 target_link_libraries(
   testvisitor
   visitor
@@ -68,7 +69,8 @@ target_link_libraries(
   lexer
   util
   test_util
-  printer)
+  printer
+  pyembed)
 target_link_libraries(testprinter printer util)
 target_link_libraries(testsymtab symtab lexer util)
 target_link_libraries(testunitlexer lexer util)

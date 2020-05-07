@@ -65,10 +65,11 @@ else()
   target_link_libraries(visitor PRIVATE pybind11::embed)
 endif()
 
-add_dependencies(visitor lexer util)
+add_dependencies(visitor lexer util pywrapper)
 
 add_executable(nmodl_visitor main.cpp)
-target_link_libraries(nmodl_visitor printer visitor symtab util lexer)
+
+target_link_libraries(nmodl_visitor printer visitor symtab util lexer pyembed)
 
 # =============================================================================
 # Install executable
