@@ -19,8 +19,6 @@
 #include <stack>
 #include <string>
 
-#include "ast/ast.hpp"
-#include "utils/logger.hpp"
 #include "visitors/ast_visitor.hpp"
 
 
@@ -55,8 +53,8 @@ namespace visitor {
 class ConstantFolderVisitor: public AstVisitor {
   public:
     ConstantFolderVisitor() = default;
-    void visit_wrapped_expression(ast::WrappedExpression* node) override;
-    void visit_paren_expression(ast::ParenExpression* node) override;
+    void visit_wrapped_expression(ast::WrappedExpression& node) override;
+    void visit_paren_expression(ast::ParenExpression& node) override;
 };
 
 /** @} */  // end of visitor_classes

@@ -5,6 +5,10 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
+///
+/// THIS FILE IS GENERATED AT BUILD TIME AND SHALL NOT BE EDITED.
+///
+
 #pragma once
 
 /**
@@ -66,7 +70,7 @@ class JSONVisitor: public AstVisitor {
 
     // clang-format off
     {% for node in nodes %}
-    void visit_{{ node.class_name|snake_case }}(ast::{{ node.class_name }}* node) override;
+    void visit_{{ node.class_name|snake_case }}(ast::{{ node.class_name }}& node) override;
     {% endfor %}
     // clang-format on
 };
@@ -75,3 +79,4 @@ class JSONVisitor: public AstVisitor {
 
 }  // namespace visitor
 }  // namespace nmodl
+

@@ -9,6 +9,7 @@
 
 #include "parser/nmodl_driver.hpp"
 #include "test/utils/test_utils.hpp"
+#include "visitors/checkparent_visitor.hpp"
 #include "visitors/defuse_analyze_visitor.hpp"
 #include "visitors/inline_visitor.hpp"
 #include "visitors/lookup_visitor.hpp"
@@ -17,6 +18,7 @@
 
 using namespace nmodl;
 using namespace visitor;
+using namespace test;
 using namespace test_utils;
 
 using ast::AstNodeType;
@@ -28,20 +30,24 @@ using nmodl::parser::NmodlDriver;
 
 std::vector<DUChain> run_defuse_visitor(const std::string& text, const std::string& variable) {
     NmodlDriver driver;
-    auto ast = driver.parse_string(text);
+    const auto& ast = driver.parse_string(text);
 
-    SymtabVisitor().visit_program(ast.get());
-    InlineVisitor().visit_program(ast.get());
+    SymtabVisitor().visit_program(*ast);
+    InlineVisitor().visit_program(*ast);
 
     std::vector<DUChain> chains;
     DefUseAnalyzeVisitor v(ast->get_symbol_table());
 
     /// analyse only derivative blocks in this test
-    auto blocks = AstLookupVisitor().lookup(ast.get(), AstNodeType::DERIVATIVE_BLOCK);
+    auto blocks = AstLookupVisitor().lookup(*ast, AstNodeType::DERIVATIVE_BLOCK);
+    chains.reserve(blocks.size());
     for (auto& block: blocks) {
-        auto node = block.get();
-        chains.push_back(v.analyze(node, variable));
+        chains.push_back(v.analyze(*block, variable));
     }
+
+    // check that, after visitor rearrangement, parents are still up-to-date
+    CheckParentVisitor().visit_program(*ast);
+
     return chains;
 }
 

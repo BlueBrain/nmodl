@@ -5,6 +5,10 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
+///
+/// THIS FILE IS GENERATED AT BUILD TIME AND SHALL NOT BE EDITED.
+///
+
 #pragma once
 
 /**
@@ -48,7 +52,7 @@ class SymtabVisitor: public AstVisitor {
         : printer(new printer::JSONPrinter(os))
         , update(update) {}
 
-    SymtabVisitor(std::string filename, bool update = false)
+    SymtabVisitor(const std::string& filename, bool update = false)
         : printer(new printer::JSONPrinter(filename))
         , update(update) {}
 
@@ -67,7 +71,7 @@ class SymtabVisitor: public AstVisitor {
     // clang-format off
     {% for node in nodes %}
         {% if node.is_symtab_method_required %}
-    void visit_{{ node.class_name|snake_case }}(ast::{{ node.class_name }}* node) override;
+    void visit_{{ node.class_name|snake_case }}(ast::{{ node.class_name }}& node) override;
         {% endif %}
     {% endfor %}
     // clang-format on
@@ -77,3 +81,4 @@ class SymtabVisitor: public AstVisitor {
 
 }  // namespace visitor
 }  // namespace nmodl
+

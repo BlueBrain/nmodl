@@ -11,8 +11,10 @@ import logging
 import os
 from pathlib import Path, PurePath
 import shutil
+import stat
 import subprocess
 import tempfile
+
 import jinja2
 
 from parser import LanguageParser
@@ -48,10 +50,12 @@ templates_dir = Path(__file__).parent / 'templates'
 destination_dir = Path(args.base_dir) or Path(__file__).resolve().parent.parent
 
 # templates will be created and clang-formated in tempfile.
-# copy .clang-format file for correct formating
+# create temp directory and copy .clang-format file for correct formating
 clang_format_file = Path(Path(__file__).resolve().parent.parent.parent / ".clang-format")
+temp_dir = tempfile.mkdtemp()
+os.chdir(temp_dir)
+
 if clang_format_file.exists():
-    temp_dir = tempfile.gettempdir()
     shutil.copy2(clang_format_file, temp_dir)
 
 env = jinja2.Environment(loader=jinja2.FileSystemLoader(str(templates_dir)),
@@ -72,12 +76,16 @@ for path in templates_dir.iterdir():
         if destination_file.exists():
             # render template in temporary file and update target file
             # ONLY if different (to save a lot of build time)
-            fd, tmp_path = tempfile.mkstemp()
+            fd, tmp_path = tempfile.mkstemp(dir=temp_dir)
             os.write(fd, content.encode('utf-8'))
             os.close(fd)
             if clang_format:
                 subprocess.check_call(clang_format + ['-i', tmp_path])
             if not filecmp.cmp(str(destination_file), tmp_path):
+                # ensure destination file has write permissions
+                mode = os.stat(destination_file).st_mode
+                rm_write_mask = stat.S_IWUSR | stat.S_IWGRP | stat.S_IWOTH
+                os.chmod(destination_file, mode | rm_write_mask)
                 shutil.move(tmp_path, destination_file)
                 updated_files.append(str(filepath.name))
         else:
@@ -86,6 +94,14 @@ for path in templates_dir.iterdir():
                 updated_files.append(str(filepath.name))
             if clang_format:
                 subprocess.check_call(clang_format + ['-i', destination_file])
+        # remove write permissions on the generated file
+        mode = os.stat(destination_file).st_mode
+        rm_write_mask = ~ (stat.S_IWUSR | stat.S_IWGRP | stat.S_IWOTH)
+        os.chmod(destination_file, mode & rm_write_mask)
+
 
 if updated_files:
     logging.info('       Updating out of date template files : %s', ' '.join(updated_files))
+
+# remove temp directory
+shutil.rmtree(temp_dir)

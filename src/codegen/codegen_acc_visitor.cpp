@@ -5,8 +5,9 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
-#include "codegen/codegen_acc_visitor.hpp"
 #include <fmt/format.h>
+
+#include "codegen/codegen_acc_visitor.hpp"
 
 
 using namespace fmt::literals;
@@ -65,12 +66,12 @@ void CodegenAccVisitor::print_backend_includes() {
 }
 
 
-std::string CodegenAccVisitor::backend_name() {
+std::string CodegenAccVisitor::backend_name() const {
     return "C-OpenAcc (api-compatibility)";
 }
 
 
-void CodegenAccVisitor::print_memory_allocation_routine() {
+void CodegenAccVisitor::print_memory_allocation_routine() const {
     printer->add_newline(2);
     auto args = "size_t num, size_t size, size_t alignment = 16";
     printer->add_line("static inline void* mem_alloc({}) {}"_format(args, "{"));
@@ -120,6 +121,20 @@ void CodegenAccVisitor::print_nrn_cur_matrix_shadow_update() {
     printer->add_line("vec_d[node_id] {} g;"_format(d_op));
 }
 
+void CodegenAccVisitor::print_fast_imem_calculation() {
+    if (!info.electrode_current) {
+        return;
+    }
+
+    auto rhs_op = operator_for_rhs();
+    auto d_op = operator_for_d();
+    printer->start_block("if (nt->nrn_fast_imem)");
+    print_atomic_reduction_pragma();
+    printer->add_line("nt->nrn_fast_imem->nrn_sav_rhs[node_id] {} rhs;"_format(rhs_op));
+    print_atomic_reduction_pragma();
+    printer->add_line("nt->nrn_fast_imem->nrn_sav_d[node_id] {} g;"_format(d_op));
+    printer->end_block(1);
+}
 
 void CodegenAccVisitor::print_nrn_cur_matrix_shadow_reduction() {
     // do nothing
@@ -159,7 +174,8 @@ void CodegenAccVisitor::print_global_variable_device_update_annotation() {
     }
 }
 
-std::string CodegenAccVisitor::get_variable_device_pointer(std::string variable, std::string type) {
+std::string CodegenAccVisitor::get_variable_device_pointer(const std::string& variable,
+                                                           const std::string& type) const {
     if (info.artificial_cell) {
         return variable;
     }

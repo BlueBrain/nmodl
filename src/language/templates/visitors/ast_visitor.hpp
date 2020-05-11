@@ -5,6 +5,10 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
+///
+/// THIS FILE IS GENERATED AT BUILD TIME AND SHALL NOT BE EDITED.
+///
+
 #pragma once
 
 /**
@@ -16,7 +20,6 @@
  * \brief \copybrief nmodl::visitor::AstVisitor
  */
 
-#include "ast/ast.hpp"
 #include "visitors/visitor.hpp"
 
 
@@ -38,7 +41,7 @@ namespace visitor {
 class AstVisitor : public Visitor {
   public:
     {% for node in nodes %}
-    void visit_{{ node.class_name|snake_case }}(ast::{{ node.class_name }}* node) override;
+    void visit_{{ node.class_name|snake_case }}(ast::{{ node.class_name }}& node) override;
     {% endfor %}
 };
 
@@ -46,3 +49,4 @@ class AstVisitor : public Visitor {
 
 }  // namespace visitor
 }  // namespace nmodl
+

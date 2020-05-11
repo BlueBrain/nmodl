@@ -9,12 +9,15 @@
 
 #include "parser/nmodl_driver.hpp"
 #include "test/utils/test_utils.hpp"
+#include "visitors/checkparent_visitor.hpp"
 #include "visitors/inline_visitor.hpp"
 #include "visitors/nmodl_visitor.hpp"
 #include "visitors/symtab_visitor.hpp"
 
+
 using namespace nmodl;
 using namespace visitor;
+using namespace test;
 using namespace test_utils;
 
 using nmodl::parser::NmodlDriver;
@@ -25,12 +28,17 @@ using nmodl::parser::NmodlDriver;
 
 std::string run_inline_visitor(const std::string& text) {
     NmodlDriver driver;
-    auto ast = driver.parse_string(text);
+    const auto& ast = driver.parse_string(text);
 
-    SymtabVisitor().visit_program(ast.get());
-    InlineVisitor().visit_program(ast.get());
+    SymtabVisitor().visit_program(*ast);
+    InlineVisitor().visit_program(*ast);
     std::stringstream stream;
-    NmodlPrintVisitor(stream).visit_program(ast.get());
+    NmodlPrintVisitor(stream).visit_program(*ast);
+
+
+    // check that, after visitor rearrangement, parents are still up-to-date
+    CheckParentVisitor().visit_program(*ast);
+
     return stream.str();
 }
 

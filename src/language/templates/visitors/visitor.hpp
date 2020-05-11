@@ -5,8 +5,13 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
+///
+/// THIS FILE IS GENERATED AT BUILD TIME AND SHALL NOT BE EDITED.
+///
+
 #pragma once
 
+#include "ast/ast_decl.hpp"
 
 namespace nmodl {
 /// Implementation of different AST visitors
@@ -38,7 +43,7 @@ class Visitor {
 
         {% for node in nodes %}
         /// visit node of type ast::{{ node.class_name }}
-        virtual void visit_{{ node.class_name|snake_case }}(ast::{{ node.class_name }}* node) = 0;
+        virtual void visit_{{ node.class_name|snake_case }}(ast::{{ node.class_name }}& node) = 0;
         {% endfor %}
 };
 
@@ -46,3 +51,4 @@ class Visitor {
 }  // namespace nmodl
 
 /** @} */  // end of visitor_classes
+

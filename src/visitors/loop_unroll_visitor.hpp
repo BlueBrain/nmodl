@@ -14,8 +14,6 @@
 
 #include <string>
 
-#include "ast/ast.hpp"
-#include "symtab/symbol_table.hpp"
 #include "visitors/ast_visitor.hpp"
 
 namespace nmodl {
@@ -62,7 +60,7 @@ class LoopUnrollVisitor: public AstVisitor {
   public:
     LoopUnrollVisitor() = default;
 
-    virtual void visit_statement_block(ast::StatementBlock* node) override;
+    void visit_statement_block(ast::StatementBlock& node) override;
 };
 
 /** @} */  // end of visitor_classes

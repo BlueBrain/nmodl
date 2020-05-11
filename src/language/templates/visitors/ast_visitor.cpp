@@ -5,7 +5,13 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
+///
+/// THIS FILE IS GENERATED AT BUILD TIME AND SHALL NOT BE EDITED.
+///
+
 #include "visitors/ast_visitor.hpp"
+
+#include "ast/ast.hpp"
 
 
 namespace nmodl {
@@ -14,11 +20,12 @@ namespace visitor {
 using namespace ast;
 
 {% for node in nodes %}
-void AstVisitor::visit_{{ node.class_name|snake_case }}({{ node.class_name }}* node) {
-    node->visit_children(this);
+void AstVisitor::visit_{{ node.class_name|snake_case }}({{ node.class_name }}& node) {
+    node.visit_children(*this);
 }
 
 {% endfor %}
 
 }  // namespace visitor
 }  // namespace nmodl
+

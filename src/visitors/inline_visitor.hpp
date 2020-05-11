@@ -15,13 +15,8 @@
 #include <map>
 #include <stack>
 
-#include "ast/ast.hpp"
-#include "symtab/symbol_table.hpp"
+#include "symtab/decl.hpp"
 #include "visitors/ast_visitor.hpp"
-#include "visitors/local_var_rename_visitor.hpp"
-#include "visitors/rename_visitor.hpp"
-#include "visitors/visitor_utils.hpp"
-
 
 namespace nmodl {
 namespace visitor {
@@ -141,7 +136,7 @@ class InlineVisitor: public AstVisitor {
     std::shared_ptr<ast::Statement> caller_statement;
 
     /// symbol table for program node
-    symtab::SymbolTable* program_symtab = nullptr;
+    symtab::SymbolTable const* program_symtab = nullptr;
 
     /// statement blocks in call hierarchy
     std::stack<ast::StatementBlock*> statementblock_stack;
@@ -164,7 +159,7 @@ class InlineVisitor: public AstVisitor {
     std::map<std::string, int> inlined_variables;
 
     /// true if given statement block can be inlined
-    bool can_inline_block(ast::StatementBlock* block);
+    bool can_inline_block(ast::StatementBlock& block);
 
     /// true if statement can be replaced with inlined body
     /// this is possible for standalone function/procedure call as statement
@@ -176,24 +171,24 @@ class InlineVisitor: public AstVisitor {
                               ast::StatementBlock* caller);
 
     /// add assignement statements into given statement block to inline arguments
-    void inline_arguments(ast::StatementBlock* inlined_block,
+    void inline_arguments(ast::StatementBlock& inlined_block,
                           const ast::ArgumentVector& callee_parameters,
                           const ast::ExpressionVector& caller_expressions);
 
     /// add assignment statement at end of block (to use as a return statement
     /// in case of procedure blocks)
-    void add_return_variable(ast::StatementBlock* block, std::string& varname);
+    void add_return_variable(ast::StatementBlock& block, std::string& varname);
 
   public:
     InlineVisitor() = default;
 
-    virtual void visit_function_call(ast::FunctionCall* node) override;
+    void visit_function_call(ast::FunctionCall& node) override;
 
-    virtual void visit_statement_block(ast::StatementBlock* node) override;
+    void visit_statement_block(ast::StatementBlock& node) override;
 
-    virtual void visit_wrapped_expression(ast::WrappedExpression* node) override;
+    void visit_wrapped_expression(ast::WrappedExpression& node) override;
 
-    virtual void visit_program(ast::Program* node) override;
+    void visit_program(ast::Program& node) override;
 };
 
 /** @} */  // end of visitor_classes

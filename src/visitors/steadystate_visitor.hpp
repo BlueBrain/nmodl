@@ -12,9 +12,7 @@
  * \brief \copybrief nmodl::visitor::SteadystateVisitor
  */
 
-#include "ast/ast.hpp"
 #include "visitors/ast_visitor.hpp"
-#include "visitors/visitor_utils.hpp"
 
 namespace nmodl {
 namespace visitor {
@@ -56,7 +54,7 @@ class SteadystateVisitor: public AstVisitor {
   private:
     /// create new steady state derivative block for given solve block
     std::shared_ptr<ast::DerivativeBlock> create_steadystate_block(
-        std::shared_ptr<ast::SolveBlock> solve_block,
+        const std::shared_ptr<ast::SolveBlock>& solve_block,
         const std::vector<std::shared_ptr<ast::Ast>>& deriv_blocks);
 
     const double STEADYSTATE_SPARSE_DT = 1e9;
@@ -66,7 +64,7 @@ class SteadystateVisitor: public AstVisitor {
   public:
     SteadystateVisitor() = default;
 
-    void visit_program(ast::Program* node) override;
+    void visit_program(ast::Program& node) override;
 };
 
 /** @} */  // end of visitor_classes

@@ -28,7 +28,7 @@
 
 
 namespace py = pybind11;
-using pybind11::literals::operator""_a;
+using namespace pybind11::literals;
 
 
 namespace nmodl {
@@ -160,11 +160,13 @@ PYBIND11_MODULE(_nmodl, m_nmodl) {
              nmodl::docstring::driver_parse_stream)
         .def("get_ast", &nmodl::PyNmodlDriver::get_ast, nmodl::docstring::driver_ast);
 
-    m_nmodl.def("to_nmodl",
-                nmodl::to_nmodl,
-                "node"_a,
-                "exclude_types"_a = std::set<nmodl::ast::AstNodeType>(),
-                nmodl::docstring::to_nmodl);
+    m_nmodl.def(
+        "to_nmodl",
+        static_cast<std::string (*)(nmodl::ast::Ast&, const std::set<nmodl::ast::AstNodeType>&)>(
+            nmodl::to_nmodl),
+        "node"_a,
+        "exclude_types"_a = std::set<nmodl::ast::AstNodeType>(),
+        nmodl::docstring::to_nmodl);
     m_nmodl.def("to_json",
                 nmodl::to_json,
                 "node"_a,

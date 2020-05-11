@@ -9,6 +9,7 @@
 
 #include "parser/nmodl_driver.hpp"
 #include "test/utils/test_utils.hpp"
+#include "visitors/checkparent_visitor.hpp"
 #include "visitors/constant_folder_visitor.hpp"
 #include "visitors/loop_unroll_visitor.hpp"
 #include "visitors/nmodl_visitor.hpp"
@@ -17,6 +18,7 @@
 
 using namespace nmodl;
 using namespace visitor;
+using namespace test;
 using namespace test_utils;
 
 using ast::AstNodeType;
@@ -28,13 +30,17 @@ using nmodl::parser::NmodlDriver;
 
 std::string run_loop_unroll_visitor(const std::string& text) {
     NmodlDriver driver;
-    auto ast = driver.parse_string(text);
+    const auto& ast = driver.parse_string(text);
 
-    SymtabVisitor().visit_program(ast.get());
-    ConstantFolderVisitor().visit_program(ast.get());
-    LoopUnrollVisitor().visit_program(ast.get());
-    ConstantFolderVisitor().visit_program(ast.get());
-    return to_nmodl(ast.get(), {AstNodeType::DEFINE});
+    SymtabVisitor().visit_program(*ast);
+    ConstantFolderVisitor().visit_program(*ast);
+    LoopUnrollVisitor().visit_program(*ast);
+    ConstantFolderVisitor().visit_program(*ast);
+
+    // check that, after visitor rearrangement, parents are still up-to-date
+    CheckParentVisitor().visit_program(*ast);
+
+    return to_nmodl(ast, {AstNodeType::DEFINE});
 }
 
 SCENARIO("Perform loop unrolling of FROM construct", "[visitor][unroll]") {

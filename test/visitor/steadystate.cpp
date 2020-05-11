@@ -9,17 +9,18 @@
 
 #include "parser/nmodl_driver.hpp"
 #include "test/utils/test_utils.hpp"
+#include "visitors/checkparent_visitor.hpp"
 #include "visitors/constant_folder_visitor.hpp"
 #include "visitors/kinetic_block_visitor.hpp"
 #include "visitors/lookup_visitor.hpp"
 #include "visitors/loop_unroll_visitor.hpp"
-//#include "visitors/nmodl_visitor.hpp"
 #include "visitors/steadystate_visitor.hpp"
-//#include "visitors/sympy_solver_visitor.hpp"
 #include "visitors/symtab_visitor.hpp"
+#include "visitors/visitor_utils.hpp"
 
 using namespace nmodl;
 using namespace visitor;
+using namespace test;
 using namespace test_utils;
 
 using ast::AstNodeType;
@@ -32,35 +33,40 @@ using nmodl::parser::NmodlDriver;
 
 std::vector<std::string> run_steadystate_visitor(
     const std::string& text,
-    std::vector<AstNodeType> ret_nodetypes = {AstNodeType::SOLVE_BLOCK,
-                                              AstNodeType::DERIVATIVE_BLOCK}) {
+    const std::vector<AstNodeType>& ret_nodetypes = {AstNodeType::SOLVE_BLOCK,
+                                                     AstNodeType::DERIVATIVE_BLOCK}) {
     std::vector<std::string> results;
     // construct AST from text
     NmodlDriver driver;
-    auto ast = driver.parse_string(text);
+    const auto& ast = driver.parse_string(text);
 
     // construct symbol table from AST
-    SymtabVisitor().visit_program(ast.get());
+    SymtabVisitor().visit_program(*ast);
 
     // unroll loops and fold constants
-    ConstantFolderVisitor().visit_program(ast.get());
-    LoopUnrollVisitor().visit_program(ast.get());
-    ConstantFolderVisitor().visit_program(ast.get());
-    SymtabVisitor().visit_program(ast.get());
+    ConstantFolderVisitor().visit_program(*ast);
+    LoopUnrollVisitor().visit_program(*ast);
+    ConstantFolderVisitor().visit_program(*ast);
+    SymtabVisitor().visit_program(*ast);
 
     // Run kinetic block visitor first, so any kinetic blocks
     // are converted into derivative blocks
-    KineticBlockVisitor().visit_program(ast.get());
-    SymtabVisitor().visit_program(ast.get());
+    KineticBlockVisitor().visit_program(*ast);
+    SymtabVisitor().visit_program(*ast);
 
     // run SteadystateVisitor on AST
-    SteadystateVisitor().visit_program(ast.get());
+    SteadystateVisitor().visit_program(*ast);
 
     // run lookup visitor to extract results from AST
-    auto res = AstLookupVisitor().lookup(ast.get(), ret_nodetypes);
+    auto res = AstLookupVisitor().lookup(*ast, ret_nodetypes);
+    results.reserve(res.size());
     for (const auto& r: res) {
-        results.push_back(to_nmodl(r.get()));
+        results.push_back(to_nmodl(r));
     }
+
+    // check that, after visitor rearrangement, parents are still up-to-date
+    CheckParentVisitor().visit_program(*ast);
+
     return results;
 }
 

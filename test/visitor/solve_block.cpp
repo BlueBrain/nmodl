@@ -9,6 +9,7 @@
 
 #include "parser/nmodl_driver.hpp"
 #include "test/utils/test_utils.hpp"
+#include "visitors/checkparent_visitor.hpp"
 #include "visitors/neuron_solve_visitor.hpp"
 #include "visitors/nmodl_visitor.hpp"
 #include "visitors/solve_block_visitor.hpp"
@@ -16,6 +17,7 @@
 
 using namespace nmodl;
 using namespace visitor;
+using namespace test;
 using namespace test_utils;
 
 using nmodl::parser::NmodlDriver;
@@ -27,12 +29,16 @@ using nmodl::parser::NmodlDriver;
 
 std::string run_solve_block_visitor(const std::string& text) {
     NmodlDriver driver;
-    auto ast = driver.parse_string(text);
-    SymtabVisitor().visit_program(ast.get());
-    NeuronSolveVisitor().visit_program(ast.get());
-    SolveBlockVisitor().visit_program(ast.get());
+    const auto& ast = driver.parse_string(text);
+    SymtabVisitor().visit_program(*ast);
+    NeuronSolveVisitor().visit_program(*ast);
+    SolveBlockVisitor().visit_program(*ast);
     std::stringstream stream;
-    NmodlPrintVisitor(stream).visit_program(ast.get());
+    NmodlPrintVisitor(stream).visit_program(*ast);
+
+    // check that, after visitor rearrangement, parents are still up-to-date
+    CheckParentVisitor().visit_program(*ast);
+
     return stream.str();
 }
 

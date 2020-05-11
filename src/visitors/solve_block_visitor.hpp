@@ -12,8 +12,7 @@
  * \brief \copybrief nmodl::visitor::SolveBlockVisitor
  */
 
-#include "ast/ast.hpp"
-#include "symtab/symbol_table.hpp"
+#include "symtab/decl.hpp"
 #include "visitors/ast_visitor.hpp"
 
 namespace nmodl {
@@ -42,13 +41,13 @@ class SolveBlockVisitor: public AstVisitor {
     /// solve expression statements for NrnState block
     ast::StatementVector nrn_state_solve_statements;
 
-    ast::SolutionExpression* create_solution_expression(ast::SolveBlock* solve_block);
+    ast::SolutionExpression* create_solution_expression(ast::SolveBlock& solve_block);
 
   public:
     SolveBlockVisitor() = default;
-    void visit_breakpoint_block(ast::BreakpointBlock* node) override;
-    void visit_expression_statement(ast::ExpressionStatement* node) override;
-    void visit_program(ast::Program* node) override;
+    void visit_breakpoint_block(ast::BreakpointBlock& node) override;
+    void visit_expression_statement(ast::ExpressionStatement& node) override;
+    void visit_program(ast::Program& node) override;
 };
 
 /** @} */  // end of visitor_classes

@@ -5,6 +5,10 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
+///
+/// THIS FILE IS GENERATED AT BUILD TIME AND SHALL NOT BE EDITED.
+///
+
 #include <pybind11/iostream.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
@@ -58,7 +62,7 @@ static const char* symtabvisitor_class = R"(
 
 
 namespace py = pybind11;
-using pybind11::literals::operator""_a;
+using namespace pybind11::literals;
 
 using namespace nmodl;
 using namespace symtab;
@@ -254,3 +258,4 @@ void init_symtab_module(py::module& m) {
 }
 
 #pragma clang diagnostic pop
+

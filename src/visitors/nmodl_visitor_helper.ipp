@@ -9,6 +9,8 @@
 
 #include "visitors/nmodl_visitor.hpp"
 
+#include "visitors/visitor_utils.hpp"
+
 
 namespace nmodl {
 namespace visitor {
@@ -33,7 +35,7 @@ void NmodlPrintVisitor::visit_element(const std::vector<T>& elements,
             printer->add_indent();
         }
 
-        (*iter)->accept(this);
+        (*iter)->accept(*this);
 
         /// print separator (e.g. comma, space)
         if (!separator.empty() && !utils::is_last(iter, elements)) {
@@ -67,3 +69,4 @@ void NmodlPrintVisitor::visit_element(const std::vector<T>& elements,
 
 }  // namespace visitor
 }  // namespace nmodl
+

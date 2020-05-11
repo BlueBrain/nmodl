@@ -5,6 +5,10 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
+///
+/// THIS FILE IS GENERATED AT BUILD TIME AND SHALL NOT BE EDITED.
+///
+
 #pragma once
 
 #include <memory>
@@ -19,6 +23,7 @@ namespace ast {
 
 /// forward declaration of ast nodes
 
+class Ast;
 {% for node in nodes %}
 class {{ node.class_name }};
 {% endfor %}
@@ -60,3 +65,4 @@ using {{ node.class_name }}Vector = std::vector<std::shared_ptr<{{ node.class_na
 
 }  // namespace ast
 }  // namespace nmodl
+

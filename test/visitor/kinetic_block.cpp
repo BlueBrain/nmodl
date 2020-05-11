@@ -9,14 +9,17 @@
 
 #include "parser/nmodl_driver.hpp"
 #include "test/utils/test_utils.hpp"
+#include "visitors/checkparent_visitor.hpp"
 #include "visitors/constant_folder_visitor.hpp"
 #include "visitors/kinetic_block_visitor.hpp"
 #include "visitors/lookup_visitor.hpp"
 #include "visitors/loop_unroll_visitor.hpp"
 #include "visitors/symtab_visitor.hpp"
+#include "visitors/visitor_utils.hpp"
 
 using namespace nmodl;
 using namespace visitor;
+using namespace test;
 using namespace test_utils;
 
 using ast::AstNodeType;
@@ -31,40 +34,45 @@ std::vector<std::string> run_kinetic_block_visitor(const std::string& text) {
 
     // construct AST from text including KINETIC block(s)
     NmodlDriver driver;
-    auto ast = driver.parse_string(text);
+    const auto& ast = driver.parse_string(text);
 
     // construct symbol table from AST
-    SymtabVisitor().visit_program(ast.get());
+    SymtabVisitor().visit_program(*ast);
 
     // unroll loops and fold constants
-    ConstantFolderVisitor().visit_program(ast.get());
-    LoopUnrollVisitor().visit_program(ast.get());
-    ConstantFolderVisitor().visit_program(ast.get());
-    SymtabVisitor().visit_program(ast.get());
+    ConstantFolderVisitor().visit_program(*ast);
+    LoopUnrollVisitor().visit_program(*ast);
+    ConstantFolderVisitor().visit_program(*ast);
+    SymtabVisitor().visit_program(*ast);
 
     // run KineticBlock visitor on AST
-    KineticBlockVisitor().visit_program(ast.get());
+    KineticBlockVisitor().visit_program(*ast);
 
     // run lookup visitor to extract DERIVATIVE block(s) from AST
     AstLookupVisitor v_lookup;
-    auto res = v_lookup.lookup(ast.get(), AstNodeType::DERIVATIVE_BLOCK);
+    auto res = v_lookup.lookup(*ast, AstNodeType::DERIVATIVE_BLOCK);
+    results.reserve(res.size());
     for (const auto& r: res) {
-        results.push_back(to_nmodl(r.get()));
+        results.push_back(to_nmodl(r));
     }
+
+
+    // check that, after visitor rearrangement, parents are still up-to-date
+    CheckParentVisitor().visit_program(*ast);
 
     return results;
 }
 
 SCENARIO("Convert KINETIC to DERIVATIVE using KineticBlock visitor", "[kinetic][visitor]") {
     GIVEN("KINETIC block with << reaction statement, 1 state var") {
-        std::string input_nmodl_text = R"(
+        static const std::string input_nmodl_text = R"(
             STATE {
                 x
             }
             KINETIC states {
                 ~ x << (a*c/3.2)
             })";
-        std::string output_nmodl_text = R"(
+        static const std::string output_nmodl_text = R"(
             DERIVATIVE states {
                 x' = (a*c/3.2)
             })";

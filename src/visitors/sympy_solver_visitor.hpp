@@ -72,13 +72,14 @@ class SympySolverVisitor: public AstVisitor {
     void init_state_vars_vector();
 
     /// replace binary expression with new expression provided as string
-    static void replace_diffeq_expression(ast::DiffEqExpression* expr, const std::string& new_expr);
+    static void replace_diffeq_expression(ast::DiffEqExpression& expr, const std::string& new_expr);
 
     /// raise error if kinetic/ode/(non)linear statements are spread over multiple blocks
     void check_expr_statements_in_same_block();
 
     /// return iterator pointing to where solution should be inserted in statement block
-    ast::StatementVector::iterator get_solution_location_iterator(ast::StatementVector& statements);
+    ast::StatementVector::const_iterator get_solution_location_iterator(
+        const ast::StatementVector& statements);
 
     /// construct solver block
     void construct_eigen_solver_block(const std::vector<std::string>& pre_solve_statements,
@@ -92,7 +93,7 @@ class SympySolverVisitor: public AstVisitor {
     void solve_non_linear_system(const std::vector<std::string>& pre_solve_statements = {});
 
     /// return NMODL string version of node, excluding any units
-    static std::string to_nmodl_for_sympy(ast::Ast* node) {
+    static std::string to_nmodl_for_sympy(ast::Ast& node) {
         return nmodl::to_nmodl(node, {ast::AstNodeType::UNIT, ast::AstNodeType::UNIT_DEF});
     }
 
@@ -108,7 +109,7 @@ class SympySolverVisitor: public AstVisitor {
                                                   const std::string& original_string,
                                                   const std::string& substitution_string) const;
 
-    /// Return a std::string in the form <original_string>_<random_string>, where
+    /// Return a std::string in the form "original_string"_"random_string", where
     /// random_string is a string defined in the nmodl::utils::SingletonRandomString
     /// for the original_string
     std::string suffix_random_string(const std::string& original_string) const;
@@ -176,24 +177,24 @@ class SympySolverVisitor: public AstVisitor {
     int SMALL_LINEAR_SYSTEM_MAX_STATES;
 
   public:
-    SympySolverVisitor(bool use_pade_approx = false,
-                       bool elimination = true,
-                       int SMALL_LINEAR_SYSTEM_MAX_STATES = 3)
+    explicit SympySolverVisitor(bool use_pade_approx = false,
+                                bool elimination = true,
+                                int SMALL_LINEAR_SYSTEM_MAX_STATES = 3)
         : use_pade_approx(use_pade_approx)
         , elimination(elimination)
         , SMALL_LINEAR_SYSTEM_MAX_STATES(SMALL_LINEAR_SYSTEM_MAX_STATES){};
 
-    void visit_var_name(ast::VarName* node) override;
-    void visit_diff_eq_expression(ast::DiffEqExpression* node) override;
-    void visit_conserve(ast::Conserve* node) override;
-    void visit_derivative_block(ast::DerivativeBlock* node) override;
-    void visit_lin_equation(ast::LinEquation* node) override;
-    void visit_linear_block(ast::LinearBlock* node) override;
-    void visit_non_lin_equation(ast::NonLinEquation* node) override;
-    void visit_non_linear_block(ast::NonLinearBlock* node) override;
-    void visit_expression_statement(ast::ExpressionStatement* node) override;
-    void visit_statement_block(ast::StatementBlock* node) override;
-    void visit_program(ast::Program* node) override;
+    void visit_var_name(ast::VarName& node) override;
+    void visit_diff_eq_expression(ast::DiffEqExpression& node) override;
+    void visit_conserve(ast::Conserve& node) override;
+    void visit_derivative_block(ast::DerivativeBlock& node) override;
+    void visit_lin_equation(ast::LinEquation& node) override;
+    void visit_linear_block(ast::LinearBlock& node) override;
+    void visit_non_lin_equation(ast::NonLinEquation& node) override;
+    void visit_non_linear_block(ast::NonLinearBlock& node) override;
+    void visit_expression_statement(ast::ExpressionStatement& node) override;
+    void visit_statement_block(ast::StatementBlock& node) override;
+    void visit_program(ast::Program& node) override;
 };
 
 /** @} */  // end of visitor_classes

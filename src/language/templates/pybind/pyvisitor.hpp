@@ -5,6 +5,10 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
+///
+/// THIS FILE IS GENERATED AT BUILD TIME AND SHALL NOT BE EDITED.
+///
+
 #pragma once
 
 /**
@@ -35,7 +39,7 @@ public:
     using Visitor::Visitor;
 
     {% for node in nodes %}
-    void visit_{{ node.class_name|snake_case }}(ast::{{ node.class_name }}* node) override;
+    void visit_{{ node.class_name|snake_case }}(ast::{{ node.class_name }}& node) override;
     {% endfor %}
 };
 
@@ -53,6 +57,7 @@ public:
     using AstVisitor::AstVisitor;
 
     {% for node in nodes %}
-    void visit_{{ node.class_name|snake_case }}(ast::{{ node.class_name }}* node) override;
+    void visit_{{ node.class_name|snake_case }}(ast::{{ node.class_name }}& node) override;
     {% endfor %}
 };
+

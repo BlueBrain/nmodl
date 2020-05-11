@@ -9,12 +9,15 @@
 
 #include "parser/nmodl_driver.hpp"
 #include "test/utils/test_utils.hpp"
+#include "visitors/checkparent_visitor.hpp"
 #include "visitors/inline_visitor.hpp"
 #include "visitors/localize_visitor.hpp"
 #include "visitors/symtab_visitor.hpp"
+#include "visitors/visitor_utils.hpp"
 
 using namespace nmodl;
 using namespace visitor;
+using namespace test;
 using namespace test_utils;
 
 using ast::AstNodeType;
@@ -26,19 +29,24 @@ using nmodl::parser::NmodlDriver;
 
 void run_visitor_passes(const std::string& text) {
     NmodlDriver driver;
-    auto ast = driver.parse_string(text);
+    const auto& ast = driver.parse_string(text);
     {
         SymtabVisitor v1;
         InlineVisitor v2;
         LocalizeVisitor v3;
-        v1.visit_program(ast.get());
-        v2.visit_program(ast.get());
-        v3.visit_program(ast.get());
-        v1.visit_program(ast.get());
-        v1.visit_program(ast.get());
-        v2.visit_program(ast.get());
-        v3.visit_program(ast.get());
-        v2.visit_program(ast.get());
+        CheckParentVisitor v4(true);
+        v1.visit_program(*ast);
+        v2.visit_program(*ast);
+        v3.visit_program(*ast);
+        v4.visit_program(*ast);
+        v4.visit_program(*ast);
+        v1.visit_program(*ast);
+        v1.visit_program(*ast);
+        v4.visit_program(*ast);
+        v2.visit_program(*ast);
+        v3.visit_program(*ast);
+        v2.visit_program(*ast);
+        v4.visit_program(*ast);
     }
 }
 
@@ -69,7 +77,7 @@ SCENARIO("Running visitor passes multiple times", "[visitor]") {
 
 SCENARIO("Sympy specific AST to NMODL conversion") {
     GIVEN("NMODL block with unit usage") {
-        std::string nmodl = R"(
+        static const std::string nmodl = R"(
             BREAKPOINT {
                 Pf_NMDA  =  (1/1.38) * 120 (mM) * 0.6
                 VDCC = gca_bar_VDCC * 4(um2)*PI*3(1/um3)
@@ -77,7 +85,7 @@ SCENARIO("Sympy specific AST to NMODL conversion") {
             }
         )";
 
-        std::string expected = R"(
+        static const std::string expected = R"(
             BREAKPOINT {
                 Pf_NMDA = (1/1.38)*120*0.6
                 VDCC = gca_bar_VDCC*4*PI*3
@@ -88,8 +96,8 @@ SCENARIO("Sympy specific AST to NMODL conversion") {
         THEN("to_nmodl can ignore all units") {
             auto input = reindent_text(nmodl);
             NmodlDriver driver;
-            auto ast = driver.parse_string(input);
-            auto result = to_nmodl(ast.get(), {AstNodeType::UNIT});
+            const auto& ast = driver.parse_string(input);
+            const auto& result = to_nmodl(ast, {AstNodeType::UNIT});
             REQUIRE(result == reindent_text(expected));
         }
     }

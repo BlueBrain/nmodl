@@ -16,13 +16,13 @@ namespace visitor {
 using symtab::SymbolTable;
 
 /// rename name conflicting variables in the statement block and it's all children
-void LocalVarRenameVisitor::visit_statement_block(ast::StatementBlock* node) {
+void LocalVarRenameVisitor::visit_statement_block(ast::StatementBlock& node) {
     /// nothing to do
-    if (node->get_statements().empty()) {
+    if (node.get_statements().empty()) {
         return;
     }
 
-    auto current_symtab = node->get_symbol_table();
+    auto current_symtab = node.get_symbol_table();
     if (current_symtab != nullptr) {
         symtab = current_symtab;
     }
@@ -33,8 +33,8 @@ void LocalVarRenameVisitor::visit_statement_block(ast::StatementBlock* node) {
     symtab_stack.push(symtab);
 
     // first need to process all children : perform recursively from innermost block
-    for (const auto& item: node->get_statements()) {
-        item->visit_children(this);
+    for (const auto& item: node.get_statements()) {
+        item->visit_children(*this);
     }
 
     /// go back to previous block in hierarchy
@@ -46,7 +46,7 @@ void LocalVarRenameVisitor::visit_statement_block(ast::StatementBlock* node) {
         parent_symtab = symtab->get_parent_table();
     }
 
-    auto variables = get_local_variables(node);
+    auto variables = get_local_list_statement(node);
 
     /// global blocks do not change (do no have parent symbol table)
     /// if no variables in the block then there is nothing to do
@@ -56,7 +56,7 @@ void LocalVarRenameVisitor::visit_statement_block(ast::StatementBlock* node) {
 
     RenameVisitor rename_visitor;
 
-    for (const auto& var: *variables) {
+    for (const auto& var: variables->get_variables()) {
         std::string name = var->get_node_name();
         auto s = parent_symtab->lookup_in_scope(name);
         /// if symbol is a variable name (avoid renaming use of units like mV)

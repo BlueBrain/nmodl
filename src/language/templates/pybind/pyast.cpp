@@ -5,6 +5,10 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
+///
+/// THIS FILE IS GENERATED AT BUILD TIME AND SHALL NOT BE EDITED.
+///
+
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
@@ -161,7 +165,7 @@ static const char* eval_method = R"(
 namespace py = pybind11;
 using namespace nmodl::ast;
 using nmodl::visitor::JSONVisitor;
-using pybind11::literals::operator""_a;
+using namespace pybind11::literals;
 
 
 void init_ast_module(py::module& m) {
@@ -234,7 +238,7 @@ void init_ast_module(py::module& m) {
             std::stringstream ss;
             JSONVisitor v(ss);
             v.compact_json(true);
-            n.accept(&v);
+            n.accept(v);
             return ss.str();
         });
 
@@ -271,3 +275,4 @@ void init_ast_module(py::module& m) {
 }
 
 #pragma clang diagnostic pop
+

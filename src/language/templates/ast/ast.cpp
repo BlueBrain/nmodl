@@ -5,6 +5,10 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
+///
+/// THIS FILE IS GENERATED AT BUILD TIME AND SHALL NOT BE EDITED.
+///
+
 #include "ast/ast.hpp"
 #include "symtab/symbol_table.hpp"
 
@@ -16,13 +20,67 @@
 namespace nmodl {
 namespace ast {
 
+///
+///  Ast member function definition
+///
+
+Ast *Ast::clone() const { throw std::logic_error("clone not implemented"); }
+
+std::string Ast::get_node_name() const {
+  throw std::logic_error("get_node_name() not implemented");
+}
+
+const std::shared_ptr<StatementBlock>& Ast::get_statement_block() const {
+  throw std::runtime_error("get_statement_block not implemented");
+}
+
+const ModToken *Ast::get_token() const { return nullptr; }
+
+symtab::SymbolTable *Ast::get_symbol_table() const {
+  throw std::runtime_error("get_symbol_table not implemented");
+}
+
+void Ast::set_symbol_table(symtab::SymbolTable * /*symtab*/) {
+  throw std::runtime_error("set_symbol_table not implemented");
+}
+
+void Ast::set_name(const std::string & /*name*/) {
+  throw std::runtime_error("set_name not implemented");
+}
+
+void Ast::negate() { throw std::runtime_error("negate not implemented"); }
+
+std::shared_ptr<Ast> Ast::get_shared_ptr() {
+  return std::static_pointer_cast<Ast>(shared_from_this());
+}
+
+std::shared_ptr<const Ast> Ast::get_shared_ptr() const {
+  return std::static_pointer_cast<const Ast>(shared_from_this());
+}
+
+bool Ast::is_ast() const noexcept { return true; }
+
+{% for node in nodes %}
+bool Ast::is_{{ node.class_name | snake_case }} () const noexcept { return false; }
+
+{% endfor %}
+
+Ast* Ast::get_parent() const {
+    return parent;
+}
+
+void Ast::set_parent(Ast* p) {
+    parent = p;
+}
+
+
     {% for node in nodes %}
 
     ///
     /// {{node.class_name}} member functions definition
     ///
 
-    void {{ node.class_name }}::visit_children(visitor::Visitor* v) {
+    void {{ node.class_name }}::visit_children(visitor::Visitor& v) {
     {% for child in node.non_base_members %}
         {% if child.is_vector %}
         /// visit each element of vector
@@ -71,17 +129,55 @@ namespace ast {
             this->{{ child.varname }} = obj.{{ child.varname }};
             {% endif %}
         {% endfor %}
+
         {% if node.has_token %}
         /// if there is a token, make copy
         if (obj.token) {
             this-> token = std::shared_ptr<ModToken>(obj.token->clone());
         }
         {% endif %}
+
+        /// set parents
+        set_parent_in_children();
     }
 
+    /// set this parent in the children
+    void {{ node.class_name }}::set_parent_in_children() {
+
+        {% for child in node.non_base_members %}
+            {% if child.is_vector %}
+            /// set parent for each element of the vector
+            for (auto& item : {{ child.varname }}) {
+                {% if child.optional %}
+                if (item) {
+                    item->set_parent(this);
+                }
+                {% else %}
+                    item->set_parent(this);
+                {%  endif %}
+
+            }
+            {% elif child.is_pointer_node or child.optional %}
+            /// optional member could be nullptr
+            if ({{ child.varname }}) {
+                {{ child.varname }}->set_parent(this);
+            }
+            {% else %}
+                {{ child.varname }}.set_parent(this);
+            {% endif %}
+        {% endfor %}
+
+    }
+
+
     {% endif %}
+
+    {% for child in node.children %}
+    {{ child.get_setter_method_definition(node.class_name) }}
+    {% endfor %}
 
     {% endfor %}
 
 }  // namespace ast
 }  // namespace nmodl
+

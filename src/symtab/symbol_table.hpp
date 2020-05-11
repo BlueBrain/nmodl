@@ -80,7 +80,7 @@ class SymbolTable {
         std::shared_ptr<Symbol> lookup(const std::string& name) const;
 
         /// pretty print
-        void print(std::stringstream& stream, std::string title, int indent);
+        void print(std::ostream& stream, std::string title, int indent) const;
     };
 
     /// name of the block
@@ -136,10 +136,10 @@ class SymbolTable {
 
     std::vector<std::shared_ptr<Symbol>> get_variables_with_properties(
         syminfo::NmodlType properties,
-        bool all = false);
+        bool all = false) const;
 
     std::vector<std::shared_ptr<Symbol>> get_variables_with_status(syminfo::Status status,
-                                                                   bool all = false);
+                                                                   bool all = false) const;
 
     /// \}
 
@@ -179,7 +179,7 @@ class SymbolTable {
     }
 
     /// check if symbol with given name exist in the current table (but not in parents)
-    std::shared_ptr<Symbol> lookup(const std::string& name) {
+    std::shared_ptr<Symbol> lookup(const std::string& name) const {
         return table.lookup(name);
     }
 
@@ -192,7 +192,7 @@ class SymbolTable {
     /// insert new symbol table as one of the children block
     void insert_table(const std::string& name, std::shared_ptr<SymbolTable> table);
 
-    void print(std::stringstream& ss, int level);
+    void print(std::ostream& ss, int level) const;
 
     std::string title() const;
 
@@ -270,8 +270,8 @@ class ModelSymbolTable {
     void set_mode(bool update_mode);
 
     /// pretty print
-    void print(std::stringstream& ss) {
-        symtab->print(ss, 0);
+    void print(std::ostream& ostr) const {
+        symtab->print(ostr, 0);
     }
 };
 

@@ -5,6 +5,10 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
+///
+/// THIS FILE IS GENERATED AT BUILD TIME AND SHALL NOT BE EDITED.
+///
+
 #pragma once
 
 /**
@@ -14,7 +18,7 @@
 
 #include <set>
 
-#include "ast/ast.hpp"
+#include "visitors/visitor.hpp"
 #include "printer/nmodl_printer.hpp"
 
 namespace nmodl {
@@ -57,7 +61,7 @@ class NmodlPrintVisitor: public Visitor {
 
     // clang-format off
     {% for node in nodes %}
-    virtual void visit_{{ node.class_name|snake_case }}(ast::{{ node.class_name }}* node) override;
+    virtual void visit_{{ node.class_name|snake_case }}(ast::{{ node.class_name }}& node) override;
     {% endfor %}
     // clang-format on
 
@@ -72,3 +76,4 @@ class NmodlPrintVisitor: public Visitor {
 
 }  // namespace visitor
 }  // namespace nmodl
+

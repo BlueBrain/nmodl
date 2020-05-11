@@ -5,6 +5,10 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
+///
+/// THIS FILE IS GENERATED AT BUILD TIME AND SHALL NOT BE EDITED.
+///
+
 #include <memory>
 #include <pybind11/iostream.h>
 #include <pybind11/pybind11.h>
@@ -81,7 +85,7 @@ static const char* sympy_solver_visitor_class = R"(
 }  // namespace nmodl
 
 
-using pybind11::literals::operator""_a;
+using namespace pybind11::literals;
 namespace py = pybind11;
 
 
@@ -96,13 +100,13 @@ namespace py = pybind11;
 
 
 {% for node in nodes %}
-void PyVisitor::visit_{{ node.class_name|snake_case }}(ast::{{ node.class_name }}* node) {
+void PyVisitor::visit_{{ node.class_name|snake_case }}(ast::{{ node.class_name }}& node) {
     PYBIND11_OVERLOAD_PURE(void, Visitor, visit_{{ node.class_name|snake_case }}, node);
 }
 {% endfor %}
 
 {% for node in nodes %}
-void PyAstVisitor::visit_{{ node.class_name|snake_case }}(ast::{{ node.class_name }}* node) {
+void PyAstVisitor::visit_{{ node.class_name|snake_case }}(ast::{{ node.class_name }}& node) {
     PYBIND11_OVERLOAD(void, AstVisitor, visit_{{ node.class_name|snake_case }}, node);
 }
 {% endfor %}
@@ -133,7 +137,7 @@ class PyNmodlPrintVisitor: private VisitorOStreamResources, public NmodlPrintVis
 
     // clang-format off
     {% for node in nodes %}
-    void visit_{{ node.class_name|snake_case }}(ast::{{ node.class_name }}* node) override {
+    void visit_{{ node.class_name|snake_case }}(ast::{{ node.class_name }}& node) override {
         NmodlPrintVisitor::visit_{{ node.class_name|snake_case }}(node);
         flush();
     }
@@ -181,9 +185,9 @@ void init_visitor_module(py::module& m) {
         .def(py::init<ast::AstNodeType>())
         .def("get_nodes", &AstLookupVisitor::get_nodes)
         .def("clear", &AstLookupVisitor::clear)
-        .def("lookup", (std::vector<std::shared_ptr<ast::Ast>> (AstLookupVisitor::*)(ast::Ast*)) &AstLookupVisitor::lookup)
-        .def("lookup", (std::vector<std::shared_ptr<ast::Ast>> (AstLookupVisitor::*)(ast::Ast*, ast::AstNodeType)) &AstLookupVisitor::lookup)
-        .def("lookup", (std::vector<std::shared_ptr<ast::Ast>> (AstLookupVisitor::*)(ast::Ast*, std::vector<ast::AstNodeType>&)) &AstLookupVisitor::lookup)
+        .def("lookup", (std::vector<std::shared_ptr<ast::Ast>> (AstLookupVisitor::*)(ast::Ast&)) &AstLookupVisitor::lookup)
+        .def("lookup", (std::vector<std::shared_ptr<ast::Ast>> (AstLookupVisitor::*)(ast::Ast&, ast::AstNodeType)) &AstLookupVisitor::lookup)
+        .def("lookup", (std::vector<std::shared_ptr<ast::Ast>> (AstLookupVisitor::*)(ast::Ast&, const std::vector<ast::AstNodeType>&)) &AstLookupVisitor::lookup)
     {% for node in nodes %}
         .def("visit_{{ node.class_name | snake_case }}", &AstLookupVisitor::visit_{{ node.class_name | snake_case }})
         {% if loop.last -%};{% endif %}
@@ -216,3 +220,4 @@ void init_visitor_module(py::module& m) {
 }
 
 #pragma clang diagnostic pop
+

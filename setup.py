@@ -16,6 +16,7 @@ import sysconfig
 from distutils.version import LooseVersion
 
 from distutils.cmd import Command
+from distutils.dir_util import copy_tree
 from setuptools import Extension, setup
 from setuptools.command.build_ext import build_ext
 from setuptools.command.test import test
@@ -99,7 +100,7 @@ class CMakeBuild(build_ext):
             build_args += ["--", "/m"]
         else:
             cmake_args += ["-DCMAKE_BUILD_TYPE=" + cfg]
-            build_args += ["--", "-j{}".format(max(1, os.cpu_count() - 1))]
+            build_args += ["--", "-j{}".format(max(1, os.cpu_count() - 3))]
 
         env = os.environ.copy()
         env["CXXFLAGS"] = '{} -DVERSION_INFO=\\"{}\\"'.format(
@@ -113,6 +114,9 @@ class CMakeBuild(build_ext):
         subprocess.check_call(
             ["cmake", "--build", "."] + build_args, cwd=self.build_temp
         )
+
+        # copy nmodl module with shared library to extension directory
+        copy_tree(os.path.join(self.build_temp, 'nmodl'), extdir)
 
 class NMODLTest(test):
     """Custom disutils command that acts like as a replacement
@@ -143,7 +147,7 @@ class NMODLTest(test):
         )
 
 
-install_requirements = ["jinja2>=2.9", "PyYAML>=3.13", "sympy>=1.3"]
+install_requirements = ["jinja2>=2.9.3", "PyYAML>=3.13", "sympy>=1.3"]
 
 setup(
     name="NMODL",
@@ -153,6 +157,7 @@ setup(
     description="NEURON Modelling Language Source-to-Source Compiler Framework",
     long_description="",
     packages=["nmodl"],
+    include_package_data=True,
     ext_modules=[CMakeExtension("nmodl")],
     cmdclass=lazy_dict(
         build_ext=CMakeBuild,
@@ -162,7 +167,7 @@ setup(
         buildhtml=get_sphinx_command,
     ),
     zip_safe=False,
-    setup_requires=["nbsphinx>=0.3.2", "m2r", "sphinx-rtd-theme", "sphinx>=2.0"]
+    setup_requires=["nbsphinx>=0.3.2", "mistune<2.0", "m2r", "sphinx-rtd-theme", "sphinx>=2.0", "sphinx<3.0"]
     + install_requirements,
     install_requires=install_requirements,
     tests_require=["pytest>=3.7.2"],

@@ -16,6 +16,7 @@
 #include "parser/nmodl_driver.hpp"
 #include "test/utils/nmodl_constructs.hpp"
 #include "test/utils/test_utils.hpp"
+#include "visitors/checkparent_visitor.hpp"
 #include "visitors/lookup_visitor.hpp"
 
 using namespace nmodl::test_utils;
@@ -129,7 +130,7 @@ SCENARIO("NMODL parser running number of valid NMODL constructs") {
 }
 
 SCENARIO("NMODL parser running number of invalid NMODL constructs") {
-    for (const auto& construct: nmdol_invalid_constructs) {
+    for (const auto& construct: nmodl_invalid_constructs) {
         auto test_case = construct.second;
         GIVEN(test_case.name) {
             THEN("Parser throws an exception while parsing : " + test_case.input) {
@@ -139,6 +140,39 @@ SCENARIO("NMODL parser running number of invalid NMODL constructs") {
     }
 }
 
+SCENARIO("NEURON block can add CURIE information", "[parser][represents]") {
+    GIVEN("A valid CURIE information statement") {
+        THEN("parser accepts without an error") {
+            REQUIRE(is_valid_construct("NEURON { REPRESENTS NCIT:C17008 }"));
+            REQUIRE(is_valid_construct("NEURON { REPRESENTS [NCIT:C17008] }"));
+        }
+    }
+
+    GIVEN("Incomplete CURIE information statement") {
+        THEN("parser throws an error") {
+            REQUIRE_THROWS_WITH(is_valid_construct("NEURON { REPRESENTS }"),
+                                Catch::Contains("Lexer Error"));
+            REQUIRE_THROWS_WITH(is_valid_construct("NEURON { REPRESENTS NCIT}"),
+                                Catch::Contains("Lexer Error"));
+        }
+    }
+}
+
+
+SCENARIO("Check parents in valid NMODL constructs") {
+    nmodl::parser::NmodlDriver driver;
+    std::shared_ptr<nmodl::ast::Program> ast;
+    for (const auto& construct: nmodl_valid_constructs) {
+        // parse the string and get the ast
+        ast = driver.parse_string(construct.second.input);
+        GIVEN(construct.second.name) {
+            THEN("Check the parents in : " + construct.second.input) {
+                // check the parents
+                REQUIRE(!nmodl::visitor::test::CheckParentVisitor().check_ast(ast.get()));
+            }
+        }
+    }
+}
 
 //=============================================================================
 // Differential Equation Parser tests
@@ -176,10 +210,9 @@ void parse_neuron_block_string(const std::string& name, nmodl::ModToken& value) 
     nmodl::parser::NmodlDriver driver;
     driver.parse_string(name);
 
-    auto ast_program = driver.get_ast();
-    std::vector<std::shared_ptr<nmodl::ast::Ast>> neuron_blocks =
-        AstLookupVisitor().lookup(ast_program->get_shared_ptr().get(),
-                                  nmodl::ast::AstNodeType::NEURON_BLOCK);
+    const auto& ast_program = driver.get_ast();
+    const auto& neuron_blocks = AstLookupVisitor().lookup(*ast_program->get_shared_ptr(),
+                                                          nmodl::ast::AstNodeType::NEURON_BLOCK);
     value = *(neuron_blocks[0]->get_token());
 }
 

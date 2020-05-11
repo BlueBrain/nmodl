@@ -9,6 +9,7 @@
 
 #include "parser/nmodl_driver.hpp"
 #include "test/utils/test_utils.hpp"
+#include "visitors/checkparent_visitor.hpp"
 #include "visitors/inline_visitor.hpp"
 #include "visitors/localize_visitor.hpp"
 #include "visitors/nmodl_visitor.hpp"
@@ -16,6 +17,7 @@
 
 using namespace nmodl;
 using namespace visitor;
+using namespace test;
 using namespace test_utils;
 
 using nmodl::parser::NmodlDriver;
@@ -26,20 +28,24 @@ using nmodl::parser::NmodlDriver;
 
 std::string run_localize_visitor(const std::string& text) {
     NmodlDriver driver;
-    auto ast = driver.parse_string(text);
-    SymtabVisitor().visit_program(ast.get());
-    InlineVisitor().visit_program(ast.get());
-    LocalizeVisitor().visit_program(ast.get());
+    const auto& ast = driver.parse_string(text);
+    SymtabVisitor().visit_program(*ast);
+    InlineVisitor().visit_program(*ast);
+    LocalizeVisitor().visit_program(*ast);
 
     std::stringstream stream;
-    NmodlPrintVisitor(stream).visit_program(ast.get());
+    NmodlPrintVisitor(stream).visit_program(*ast);
+
+    // check that, after visitor rearrangement, parents are still up-to-date
+    CheckParentVisitor().visit_program(*ast);
+
     return stream.str();
 }
 
 
 SCENARIO("Localizer test with single global block", "[visitor][localizer]") {
     GIVEN("Single derivative block with variable definition") {
-        std::string nmodl_text = R"(
+        static const std::string nmodl_text = R"(
             NEURON {
                 RANGE tau
             }
@@ -50,7 +56,7 @@ SCENARIO("Localizer test with single global block", "[visitor][localizer]") {
             }
         )";
 
-        std::string output_nmodl = R"(
+        static const std::string output_nmodl = R"(
             NEURON {
                 RANGE tau
             }
@@ -63,7 +69,7 @@ SCENARIO("Localizer test with single global block", "[visitor][localizer]") {
         )";
 
         THEN("tau variable gets localized") {
-            std::string input = reindent_text(nmodl_text);
+            const std::string input = reindent_text(nmodl_text);
             auto expected_result = reindent_text(output_nmodl);
             auto result = run_localize_visitor(input);
             REQUIRE(result == expected_result);
@@ -73,7 +79,7 @@ SCENARIO("Localizer test with single global block", "[visitor][localizer]") {
 
 SCENARIO("Localizer test with use of verbatim block", "[visitor][localizer]") {
     GIVEN("Verbatim block usage in one of the global block") {
-        std::string nmodl_text = R"(
+        static const std::string nmodl_text = R"(
             NEURON {
                 RANGE tau
             }
@@ -88,7 +94,7 @@ SCENARIO("Localizer test with use of verbatim block", "[visitor][localizer]") {
             }
         )";
 
-        std::string output_nmodl = R"(
+        static const std::string output_nmodl = R"(
             NEURON {
                 RANGE tau
             }
@@ -104,7 +110,7 @@ SCENARIO("Localizer test with use of verbatim block", "[visitor][localizer]") {
         )";
 
         THEN("Localization is disabled") {
-            std::string input = reindent_text(nmodl_text);
+            static const std::string input = reindent_text(nmodl_text);
             auto expected_result = reindent_text(output_nmodl);
             auto result = run_localize_visitor(input);
             REQUIRE(result == expected_result);
@@ -115,7 +121,7 @@ SCENARIO("Localizer test with use of verbatim block", "[visitor][localizer]") {
 
 SCENARIO("Localizer test with multiple global blocks", "[visitor][localizer]") {
     GIVEN("Multiple global blocks with definition of variable") {
-        std::string nmodl_text = R"(
+        static const std::string nmodl_text = R"(
             NEURON {
                 RANGE tau, beta
             }
@@ -140,7 +146,7 @@ SCENARIO("Localizer test with multiple global blocks", "[visitor][localizer]") {
             }
         )";
 
-        std::string output_nmodl = R"(
+        static const std::string output_nmodl = R"(
             NEURON {
                 RANGE tau, beta
             }
@@ -167,7 +173,7 @@ SCENARIO("Localizer test with multiple global blocks", "[visitor][localizer]") {
         )";
 
         THEN("Localization across multiple blocks is done") {
-            std::string input = reindent_text(nmodl_text);
+            const std::string input = reindent_text(nmodl_text);
             auto expected_result = reindent_text(output_nmodl);
             auto result = run_localize_visitor(input);
             REQUIRE(result == expected_result);
@@ -176,7 +182,7 @@ SCENARIO("Localizer test with multiple global blocks", "[visitor][localizer]") {
 
 
     GIVEN("Two global blocks with definition and use of the variable") {
-        std::string nmodl_text = R"(
+        static const std::string nmodl_text = R"(
             NEURON {
                 RANGE tau
             }
@@ -195,7 +201,7 @@ SCENARIO("Localizer test with multiple global blocks", "[visitor][localizer]") {
             }
         )";
 
-        std::string output_nmodl = R"(
+        static const std::string output_nmodl = R"(
             NEURON {
                 RANGE tau
             }
@@ -214,7 +220,7 @@ SCENARIO("Localizer test with multiple global blocks", "[visitor][localizer]") {
         )";
 
         THEN("Localization is not done due to use of variable") {
-            std::string input = reindent_text(nmodl_text);
+            const std::string input = reindent_text(nmodl_text);
             auto expected_result = reindent_text(output_nmodl);
             auto result = run_localize_visitor(input);
             REQUIRE(result == expected_result);

@@ -27,6 +27,14 @@ matrix:
         - MATRIX_EVAL="CXX=c++"
 
 #=============================================================================
+# Cache directories
+#=============================================================================
+cache:
+  directories:
+    - $HOME/.cache/pip
+    - $HOME/Library/Caches/Homebrew
+
+#=============================================================================
 # Common Packages
 #=============================================================================
 addons:
@@ -41,22 +49,31 @@ addons:
       - cmake
       - python3-dev
       - python3-pip
+      - doxygen
+      - pandoc
+      - texlive-base
+      - dvipng
   # for Mac builds, we use Homebrew
   homebrew:
     packages:
-      - flex
-      - bison
       - boost
       - cmake
+      - flex
       - python@3
+    update: true
 
 #=============================================================================
 # Install dependencies / setup Spack
 #=============================================================================
 before_install:
   # brew installed flex and bison is not in $PATH
+  # unlink python2 and use python3 as it's required for nmodl
+  # install older bison because of #314
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+        brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/187c0d5/Formula/bison.rb;
         export PATH=/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH;
+        brew unlink python@2;
+        brew link --overwrite python;
     else
         pyenv global $PYTHON_VERSION;
         ls /usr/bin/;
@@ -67,9 +84,16 @@ before_install:
 # Install NMODL dependencies
 #=============================================================================
 install:
+  # there is a bug in m2r if sphinx>2.4.4. There is a pr in m2r to solve the
+  # issue here: https://github.com/miyakogi/m2r/pull/55 . When it is done
+  # I will remove the sphinx downgrade. Change setup.py requirements when it
+  # be the case, Katta
   - echo "------- Install Dependencies -------"
   - pip3 install -U pip setuptools
   - pip3 install Jinja2 PyYAML pytest sympy --user
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+      pip3 install -U --user sphinx==2.4.4 nbsphinx>=0.3.2 m2r sphinx-rtd-theme jupyter;
+    fi
 
 #=============================================================================
 # Build, test and install
@@ -77,15 +101,23 @@ install:
 script:
   - echo "------- Build, Test and Install -------"
   - mkdir build && cd build
-  - cmake .. -DPYTHON_EXECUTABLE=`which python3` -DCMAKE_INSTALL_PREFIX=$HOME/nmodl
+  - cmake .. -DPYTHON_EXECUTABLE=$(which python3) -DCMAKE_INSTALL_PREFIX=$HOME/nmodl
   - make -j 2
   - make test
   - make install
 
 #=============================================================================
-# Build CoreNEURON and run tests
+# Build Documentation, CoreNEURON and run tests
 #=============================================================================
 after_success:
+  - export PYTHONPATH=$HOME/nmodl/lib/python:$PYTHONPATH
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+      echo "------- Build Documentation -------";
+      cd $TRAVIS_BUILD_DIR/docs;
+      doxygen && make html;
+      rm -rf _build/doctrees && touch _build/.nojekyll;
+      echo "<meta http-equiv=\"refresh\" content=\"0; url=./html/index.html\" />" > _build/index.html;
+    fi
   - echo "------- Build and Test CoreNEURON -------"
   - cd $HOME
   - git clone --recursive https://github.com/BlueBrain/CoreNeuron.git
@@ -102,3 +134,18 @@ notifications:
     recipients: pramod.s.kumbhar@gmail.com
     on_success: change
     on_failure: always
+
+
+#=============================================================================
+# Documentation deployment
+#=============================================================================
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN
+  keep_history: false
+  local_dir: $TRAVIS_BUILD_DIR/docs/_build/
+  target_branch: gh-pages
+  on:
+    branch: master
+    condition: $TRAVIS_OS_NAME = linux
