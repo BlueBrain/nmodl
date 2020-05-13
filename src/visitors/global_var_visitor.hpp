@@ -39,7 +39,7 @@ namespace visitor {
 class GlobalToRangeVisitor: public AstVisitor {
   private:
     /// ast::Ast* node
-    ast::Ast* ast;
+    std::shared_ptr<ast::Program> ast;
 
   public:
     /// \name Ctor & dtor
@@ -49,7 +49,7 @@ class GlobalToRangeVisitor: public AstVisitor {
     GlobalToRangeVisitor() = default;
 
     /// Constructor that takes as parameter the AST
-    explicit GlobalToRangeVisitor(ast::Ast* node)
+    explicit GlobalToRangeVisitor(std::shared_ptr<ast::Program> node)
         : ast(node) {}
 
     /// \}
@@ -61,7 +61,9 @@ class GlobalToRangeVisitor: public AstVisitor {
     /// nmodl::symtab::syminfo::NmodlType::global_var is changed to
     /// nmodl::symtab::syminfo::NmodlType::range_var in order to become
     /// part of the Instance of the mechanism in the \c .cpp generated file
-    void visit_global_var(ast::GlobalVar* node) override;
+    void visit_global_var(ast::GlobalVar& node) override;
+
+    void visit_statement_block(ast::StatementBlock& node) override;
 };
 
 /** @} */  // end of visitor_classes

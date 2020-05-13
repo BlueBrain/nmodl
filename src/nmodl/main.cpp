@@ -377,21 +377,22 @@ int main(int argc, const char* argv[]) {
             UnitsVisitor(units_dir).visit_program(*ast);
         }
 
-        /// GLOBAL to RANGE rename visitor
-        {
-            // make sure to run perf visitor because code generator
-            // looks for read/write counts const/non-const declaration
-            PerfVisitor().visit_program(ast.get());
-            // make sure to run the GlobalToRange visitor after all the
-            // reinitializations of Symtab
-            logger->info("Running GlobalToRange visitor");
-            GlobalToRangeVisitor(ast.get()).visit_program(ast.get());
-        }
-
         /// once we start modifying (especially removing) older constructs
         /// from ast then we should run symtab visitor in update mode so
         /// that old symbols (e.g. prime variables) are not lost
         update_symtab = true;
+
+        /// GLOBAL to RANGE rename visitor
+        {
+            // make sure to run perf visitor because code generator
+            // looks for read/write counts const/non-const declaration
+            PerfVisitor().visit_program(*ast);
+            // make sure to run the GlobalToRange visitor after all the
+            // reinitializations of Symtab
+            logger->info("Running GlobalToRange visitor");
+            GlobalToRangeVisitor(ast).visit_program(*ast);
+            SymtabVisitor(update_symtab).visit_program(*ast);
+        }
 
         if (nmodl_inline) {
             logger->info("Running nmodl inline visitor");
