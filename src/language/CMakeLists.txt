@@ -4,7 +4,7 @@
 set_source_files_properties(${NMODL_GENERATED_SOURCES} PROPERTIES GENERATED TRUE)
 
 if(ClangFormat_FOUND AND (NOT ClangFormat_VERSION_MAJOR LESS 4))
-  set(CODE_GENERATOR_OPTS --clang-format=${ClangFormat_EXECUTABLE})
+  set(CODE_GENERATOR_OPTS -v --clang-format=${ClangFormat_EXECUTABLE})
   if(nmodl_ClangFormat_OPTIONS)
     set(CODE_GENERATOR_OPTS ${CODE_GENERATOR_OPTS} --clang-format-opts ${nmodl_ClangFormat_OPTIONS})
   endif(nmodl_ClangFormat_OPTIONS)

@@ -24,6 +24,9 @@ import node_info
 import utils
 
 
+LOGGING_FORMAT = '%(levelname)s:%(name)s: %(message)s'
+LOGGER = logging.getLogger("NMODLCodeGen")
+
 class CodeGenerator(
     collections.namedtuple(
         "Base",
@@ -220,6 +223,10 @@ class JinjaTask(
         return False
 
     @property
+    def logger(self):
+        return LOGGER.getChild(str(self.output))
+
+    @property
     def out_of_date(self):
         """Check if the output file have to be generated
 
@@ -230,9 +237,11 @@ class JinjaTask(
             - the YAML files describing the NMODL language
         """
         if not self.output.exists():
+            self.logger.debug("output does not exist")
             return True
         output_mdate = os.path.getmtime(self.output)
         if self.app.modification_date > output_mdate:
+            self.logger.debug("output is out-of-date")
             return True
 
         deps = self.extradeps or []
@@ -240,6 +249,7 @@ class JinjaTask(
         for dep in deps:
             if os.path.getmtime(dep) > output_mdate:
                 return True
+        self.logger.debug("output is up-to-date")
 
         return False
 
@@ -249,12 +259,24 @@ class JinjaTask(
         On applies to C++ files. Use ClangFormat if enabled
 
         Arguments:
-            file: path to the file to format
+            file: path to the file to format. filename might be temporary
+            language: c++ or cmake
 
         """
-        is_cpp = file.suffix in [".hpp", ".cpp"]
-        if is_cpp and self.app.clang_format:
+        if self.language == 'c++' and self.app.clang_format:
+            LOGGER.debug("Formatting C++ file %s", str(file))
             subprocess.check_call(self.app.clang_format + ["-i", str(file)])
+
+    @property
+    def language(self):
+        suffix = self.output.suffix
+        if self.output.name == 'CMakeLists.txt':
+            return 'cmake'
+        if suffix in [".hpp", ".cpp"]:
+            return "c++"
+        elif suffix == '.cmake':
+            return "cmake"
+        raise Exception("Unexpected output file extension: " + suffix)
 
     def render(self):
         """Call Jinja renderer to create the output file and mark it read-only
@@ -275,6 +297,7 @@ class JinjaTask(
             os.close(fd)
             self.format_output(Path(tmp_path))
             if not filecmp.cmp(str(self.output), tmp_path, shallow=False):
+                self.logger.debug("previous output differs, updating it")
                 # ensure destination file has write permissions
                 mode = self.output.stat().st_mode
                 rm_write_mask = stat.S_IWUSR | stat.S_IWGRP | stat.S_IWOTH
@@ -302,7 +325,8 @@ def parse_args(args=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("--clang-format", help="Path to clang-format executable")
     parser.add_argument("--clang-format-opts", help="clang-format options", nargs="+")
-    parser.add_argument("--base-dir")
+    parser.add_argument("--base-dir", help="output root directory")
+    parser.add_argument("-v", "--verbosity", action="count", help="increase output verbosity")
     args = parser.parse_args(args=args)
 
     # construct clang-format command line to use, if provided
@@ -320,22 +344,43 @@ def parse_args(args=None):
     return args
 
 
+def configure_logger(verbosity):
+    """Prepare root logger
+
+    Arguments:
+        verbosity: integer greater than 0 indicating the verbosity level
+    """
+    level = logging.WARNING
+    if verbosity == 1:
+        level = logging.INFO
+    elif verbosity > 1:
+        level = logging.DEBUG
+    logging.basicConfig(level=level, format=LOGGING_FORMAT)
+
+
 def main(args=None):
     args = parse_args(args)
-    logging.basicConfig(level=logging.INFO, format="%(message)s")
+    configure_logger(args.verbosity)
 
     codegen = CodeGenerator(clang_format=args.clang_format, base_dir=args.base_dir)
-    tasks_performed = [task for task in codegen.workload() if task.execute()]
+    num_tasks = 0
+    tasks_performed = []
+    for task in codegen.workload():
+        num_tasks += 1
+        if task.execute():
+            tasks_performed.append(task)
 
     if tasks_performed:
-        logging.info("Updated out of date template files:")
+        LOGGER.info("Updated out-of-date files %i/%i", len(tasks_performed), num_tasks)
         padding = max(
             len(str(task.input.relative_to(codegen.this_dir)))
             for task in tasks_performed
         )
         for task in tasks_performed:
             input = task.input.relative_to(codegen.this_dir)
-            logging.info(f"  %-{padding}s -> %s", input, task.output)
+            LOGGER.debug(f"  %-{padding}s -> %s", input, task.output)
+    else:
+        LOGGER.info("Nothing do to")
 
 
 if __name__ == "__main__":
