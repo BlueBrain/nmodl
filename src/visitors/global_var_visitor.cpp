@@ -34,30 +34,24 @@ void GlobalToRangeVisitor::visit_global_var(ast::GlobalVar& node) {
 void GlobalToRangeVisitor::visit_statement_block(ast::StatementBlock& node) {
     auto& statements = node.get_statements();
     ast::RangeVarVector range_variables;
+    std::vector<std::string> global_vars_to_remove;
     for(auto& statement : statements) {
         std::cout << statement->get_node_type_name() << std::endl;
         if(statement->is_global()) {
-            auto global_variables = std::static_pointer_cast<ast::Global>(statement)->get_variables();
-            for (auto global_variable = global_variables.begin();
-                 global_variable != global_variables.end(); global_variable++) {
-                auto variable_name = (*global_variable)->get_node_name();
+            auto& global_variables = std::static_pointer_cast<ast::Global>(statement)->get_variables();
+            global_vars_to_remove.clear();
+            for (auto& global_variable : global_variables) {
+                auto variable_name = global_variable->get_node_name();
+                std::cout << "Checking: " << variable_name << std::endl;
                 if (ast->get_symbol_table()->lookup(variable_name)->get_write_count() > 0) {
-                    /*ast->get_symbol_table()
-                            ->lookup(variable_name)
-                            ->remove_property(NmodlType::global_var);
-                    ast->get_symbol_table()->lookup(variable_name)->add_property(NmodlType::range_var);*/
-                    global_variables.erase(global_variable);
-                    /*auto range_declaration =
-                    R"(NEURON {
-                        RANGE )" + variable_name + R"(
-                    })";
-                    std::cout << range_declaration << std::endl;
-                    auto range_statement = create_statement(range_declaration);
-                    node.insert_statement(statements.begin(), range_statement);*/
-                    //auto range_statement = std::make_shared<ast::Statement>(ast::RangeVarVector());
-                    //node.emplace_back_statement(range_statement);
-                    range_variables.emplace_back(new ast::RangeVar((*global_variable)->get_name()));
+                    std::cout << variable_name << " need transformation" << std::endl;
+                    range_variables.emplace_back(new ast::RangeVar(global_variable->get_name()));
+                    global_vars_to_remove.emplace_back(variable_name);
                 }
+            }
+            for(auto& global_var_to_remove : global_vars_to_remove) {
+                std::cout << "Deleting: " << global_var_to_remove << std::endl;
+                std::static_pointer_cast<ast::Global>(statement)->erase_global_var(find_if(global_variables.begin(), global_variables.end(), [global_var_to_remove] (std::shared_ptr<nmodl::ast::GlobalVar> var) { return var->get_node_name() == global_var_to_remove; } ));
             }
         }
     }
