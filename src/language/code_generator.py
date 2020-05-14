@@ -239,7 +239,7 @@ class JinjaTask(
         if not self.output.exists():
             self.logger.debug("output does not exist")
             return True
-        output_mdate = os.path.getmtime(self.output)
+        output_mdate = max(os.path.getctime(self.output), os.path.getmtime(self.output))
         if self.app.modification_date > output_mdate:
             self.logger.debug("output is out-of-date")
             return True
