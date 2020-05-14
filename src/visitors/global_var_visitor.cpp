@@ -42,15 +42,12 @@ void GlobalToRangeVisitor::visit_statement_block(ast::StatementBlock& node) {
             global_vars_to_remove.clear();
             for (auto& global_variable : global_variables) {
                 auto variable_name = global_variable->get_node_name();
-                std::cout << "Checking: " << variable_name << std::endl;
                 if (ast->get_symbol_table()->lookup(variable_name)->get_write_count() > 0) {
-                    std::cout << variable_name << " need transformation" << std::endl;
                     range_variables.emplace_back(new ast::RangeVar(global_variable->get_name()));
                     global_vars_to_remove.emplace_back(variable_name);
                 }
             }
             for(auto& global_var_to_remove : global_vars_to_remove) {
-                std::cout << "Deleting: " << global_var_to_remove << std::endl;
                 std::static_pointer_cast<ast::Global>(statement)->erase_global_var(find_if(global_variables.begin(), global_variables.end(), [global_var_to_remove] (std::shared_ptr<nmodl::ast::GlobalVar> var) { return var->get_node_name() == global_var_to_remove; } ));
             }
         }
@@ -58,23 +55,6 @@ void GlobalToRangeVisitor::visit_statement_block(ast::StatementBlock& node) {
     if (!range_variables.empty()) {
         auto range_statement = new ast::Range(range_variables);
         node.emplace_back_statement(range_statement);
-    }
-    for(auto& statement : statements) {
-        std::cout << statement->get_node_type_name() << std::endl;
-        if(statement->is_global()) {
-            auto global_variables = std::dynamic_pointer_cast<ast::Global>(statement)->get_variables();
-            for (auto & global_variable : global_variables) {
-                auto variable_name = global_variable->get_node_name();
-                std::cout << variable_name << std::endl;
-            }
-        }
-        if(statement->is_range()) {
-            auto range_variables = std::dynamic_pointer_cast<ast::Range>(statement)->get_variables();
-            for (auto & range_variable : range_variables) {
-                auto variable_name = range_variable->get_node_name();
-                std::cout << variable_name << std::endl;
-            }
-        }
     }
 }
 
