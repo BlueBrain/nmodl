@@ -7,12 +7,7 @@
 
 #include "visitors/steadystate_visitor.hpp"
 
-#include "ast/derivative_block.hpp"
-#include "ast/name.hpp"
-#include "ast/program.hpp"
-#include "ast/solve_block.hpp"
-#include "ast/statement_block.hpp"
-#include "ast/string.hpp"
+#include "ast/all.hpp"
 #include "codegen/codegen_naming.hpp"
 #include "utils/logger.hpp"
 #include "visitors/lookup_visitor.hpp"

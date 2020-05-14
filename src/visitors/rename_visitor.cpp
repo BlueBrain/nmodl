@@ -7,10 +7,7 @@
 
 #include "visitors/rename_visitor.hpp"
 
-#include "ast/name.hpp"
-#include "ast/prime_name.hpp"
-#include "ast/string.hpp"
-#include "ast/verbatim.hpp"
+#include "ast/all.hpp"
 #include "parser/c11_driver.hpp"
 
 

@@ -11,15 +11,7 @@
 #include <memory>
 #include <string>
 
-#include "ast/function_call.hpp"
-#include "ast/indexed_name.hpp"
-#include "ast/integer.hpp"
-#include "ast/local_list_statement.hpp"
-#include "ast/name.hpp"
-#include "ast/procedure_block.hpp"
-#include "ast/program.hpp"
-#include "ast/statement_block.hpp"
-#include "ast/string.hpp"
+#include "ast/all.hpp"
 #include "parser/nmodl_driver.hpp"
 #include "visitors/json_visitor.hpp"
 #include "visitors/lookup_visitor.hpp"

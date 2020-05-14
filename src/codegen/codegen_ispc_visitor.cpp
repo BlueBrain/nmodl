@@ -9,16 +9,7 @@
 
 #include <cmath>
 
-#include "ast/breakpoint_block.hpp"
-#include "ast/function_block.hpp"
-#include "ast/function_call.hpp"
-#include "ast/initial_block.hpp"
-#include "ast/name.hpp"
-#include "ast/net_receive_block.hpp"
-#include "ast/nrn_state_block.hpp"
-#include "ast/procedure_block.hpp"
-#include "ast/program.hpp"
-#include "ast/var_name.hpp"
+#include "ast/all.hpp"
 #include "codegen/codegen_naming.hpp"
 #include "symtab/symbol_table.hpp"
 #include "utils/logger.hpp"
