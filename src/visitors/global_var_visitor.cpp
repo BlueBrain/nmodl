@@ -22,15 +22,6 @@ namespace visitor {
 
 using symtab::syminfo::NmodlType;
 
-void GlobalToRangeVisitor::visit_global_var(ast::GlobalVar& node) {
-    if (ast->get_symbol_table()->lookup(node.get_node_name())->get_write_count() > 0) {
-        ast->get_symbol_table()
-            ->lookup(node.get_node_name())
-            ->remove_property(NmodlType::global_var);
-        ast->get_symbol_table()->lookup(node.get_node_name())->add_property(NmodlType::range_var);
-    }
-}
-
 void GlobalToRangeVisitor::visit_statement_block(ast::StatementBlock& node) {
     auto& statements = node.get_statements();
     ast::RangeVarVector range_variables;

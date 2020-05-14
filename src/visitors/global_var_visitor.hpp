@@ -54,15 +54,12 @@ class GlobalToRangeVisitor: public AstVisitor {
 
     /// \}
 
-    /// Function to visit all the ast::GlobalVar nodes in order to check if
-    /// any of the GLOBAL vars are written in any part of the code. This is
-    /// checked by reading the write_count member of the variable in the
-    /// symtab::SymbolTable. If the variable is writted, then its property
-    /// nmodl::symtab::syminfo::NmodlType::global_var is changed to
-    /// nmodl::symtab::syminfo::NmodlType::range_var in order to become
-    /// part of the Instance of the mechanism in the \c .cpp generated file
-    void visit_global_var(ast::GlobalVar& node) override;
-
+    /// Visit ast::StatementBlock nodes to check if there is any GLOBAL
+    /// variables defined in them that are written in any part of the code.
+    /// This is checked by reading the write_count member of the variable in
+    /// the symtab::SymbolTable. If it's written it removes the variable from
+    /// the ast::Global node and adds it to the ast::Range node of the
+    /// ast::StatementBlock
     void visit_statement_block(ast::StatementBlock& node) override;
 };
 
