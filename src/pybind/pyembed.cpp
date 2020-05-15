@@ -14,38 +14,50 @@
 namespace nmodl {
 
     namespace pybind_wrappers {
-        pybind_wrap_api* wrappers;
 
 
-        void* load_libraries() {
+        void EmbeddedPythonLoader::load_libraries() {
             const auto pylib = std::getenv("NMODL_PYLIB");
             if (!pylib) {
-                logger->critical("Trying to load libpython dynamically but did not find it set in NMODL_PYLIB environment variable");
-                std::exit(EXIT_FAILURE);
+                logger->critical("NMODL_PYLIB environment variable must be set to load embedded python");
+                throw std::runtime_error("NMODL_PYLIB not set");
             }
             const auto dlopen_opts = RTLD_NOW|RTLD_GLOBAL;
-            const auto pylib_handle = dlopen(pylib, dlopen_opts);
+            pylib_handle = dlopen(pylib, dlopen_opts);
             if (!pylib_handle) {
-                logger->critical("Tried to but failed to load {}", pylib);
-                std::exit(EXIT_FAILURE);
+                const auto errstr = dlerror();
+                logger->critical("Tried but failed to load {}", pylib);
+                logger->critical(errstr);
+                throw std::runtime_error("Failed to dlopen");
             }
             const char* pybind_wrap_lib = "./lib/python/nmodl/libpywrapper.dylib";
-            const auto pybind_wrap_handle = dlopen(pybind_wrap_lib, dlopen_opts);
-            if (!pybind_wrap_handle) {
-                logger->critical("Tried to but failed to load {}", pybind_wrap_lib);
-                std::exit(EXIT_FAILURE);
+            pybind_wrapper_handle = dlopen(pybind_wrap_lib, dlopen_opts);
+            if (!pybind_wrapper_handle) {
+                const auto errstr = dlerror();
+                logger->critical("Tried but failed to load {}", pybind_wrap_lib);
+                logger->critical(errstr);
+                throw std::runtime_error("Failed to dlopen");
             }
 
-            return pybind_wrap_handle;
         }
 
-        void populate_symbols(void* pybind_wrap_handle) {
-            wrappers = static_cast<pybind_wrap_api *>(dlsym(pybind_wrap_handle, "wrapper_api"));
+        void EmbeddedPythonLoader::populate_symbols() {
+            wrappers = static_cast<pybind_wrap_api *>(dlsym(pybind_wrapper_handle, "wrapper_api"));
+            if (!wrappers) {
+                const auto errstr = dlerror();
+                logger->critical("Tried but failed to load pybind wrapper symbols");
+                logger->critical(errstr);
+                throw std::runtime_error("Failed to dlsym");
+            }
         }
 
-        void loader() {
-            auto pybind_wrap_handle = load_libraries();
-            populate_symbols(pybind_wrap_handle);
+        void EmbeddedPythonLoader::unload() {
+            dlclose(pybind_wrapper_handle);
+            dlclose(pylib_handle);
+        }
+
+        const pybind_wrap_api* EmbeddedPythonLoader::api() {
+            return wrappers;
         }
 
 

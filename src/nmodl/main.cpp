@@ -256,8 +256,7 @@ int main(int argc, const char* argv[]) {
     utils::make_path(scratch_dir);
 
     if (sympy_opt) {
-        nmodl::pybind_wrappers::loader();
-        nmodl::pybind_wrappers::wrappers->initialize_interpreter(true);
+        nmodl::pybind_wrappers::EmbeddedPythonLoader::get_instance().api()->initialize_interpreter(true);
     }
 
     if (verbose) {
@@ -479,6 +478,6 @@ int main(int argc, const char* argv[]) {
     }
 
     if (sympy_opt) {
-        nmodl::pybind_wrappers::wrappers->finalize_interpreter();
+        nmodl::pybind_wrappers::EmbeddedPythonLoader::get_instance().api()->finalize_interpreter();
     }
 }
