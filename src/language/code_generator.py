@@ -24,8 +24,9 @@ import node_info
 import utils
 
 
-LOGGING_FORMAT = '%(levelname)s:%(name)s: %(message)s'
+LOGGING_FORMAT = "%(levelname)s:%(name)s: %(message)s"
 LOGGER = logging.getLogger("NMODLCodeGen")
+
 
 class CodeGenerator(
     collections.namedtuple(
@@ -263,18 +264,18 @@ class JinjaTask(
             language: c++ or cmake
 
         """
-        if self.language == 'c++' and self.app.clang_format:
+        if self.language == "c++" and self.app.clang_format:
             LOGGER.debug("Formatting C++ file %s", str(file))
             subprocess.check_call(self.app.clang_format + ["-i", str(file)])
 
     @property
     def language(self):
         suffix = self.output.suffix
-        if self.output.name == 'CMakeLists.txt':
-            return 'cmake'
+        if self.output.name == "CMakeLists.txt":
+            return "cmake"
         if suffix in [".hpp", ".cpp"]:
             return "c++"
-        elif suffix == '.cmake':
+        elif suffix == ".cmake":
             return "cmake"
         raise Exception("Unexpected output file extension: " + suffix)
 
@@ -326,7 +327,9 @@ def parse_args(args=None):
     parser.add_argument("--clang-format", help="Path to clang-format executable")
     parser.add_argument("--clang-format-opts", help="clang-format options", nargs="+")
     parser.add_argument("--base-dir", help="output root directory")
-    parser.add_argument("-v", "--verbosity", action="count", help="increase output verbosity")
+    parser.add_argument(
+        "-v", "--verbosity", action="count", default=0, help="increase output verbosity"
+    )
     args = parser.parse_args(args=args)
 
     # construct clang-format command line to use, if provided
