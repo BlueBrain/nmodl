@@ -55,21 +55,22 @@ set_property(TARGET visitor_obj PROPERTY POSITION_INDEPENDENT_CODE ON)
 add_dependencies(visitor_obj lexer_obj)
 add_library(visitor STATIC $<TARGET_OBJECTS:visitor_obj>)
 
+add_dependencies(visitor lexer util pywrapper)
+
+add_executable(nmodl_visitor main.cpp)
+
 # ~~~
 # pybind11::embed adds PYTHON_LIBRARIES to target_link_libraries. To avoid link to
 # libpython, we can use `pybind11::module` interface library from pybind11.
 # ~~~
 if(NOT LINK_AGAINST_PYTHON)
   target_link_libraries(visitor PRIVATE pybind11::module)
+  target_link_libraries(nmodl_visitor printer visitor symtab util lexer pyembed)
 else()
   target_link_libraries(visitor PRIVATE pybind11::embed)
+  target_link_libraries(nmodl_visitor printer visitor symtab util lexer pywrapper pyembed)
 endif()
 
-add_dependencies(visitor lexer util pywrapper)
-
-add_executable(nmodl_visitor main.cpp)
-
-target_link_libraries(nmodl_visitor printer visitor symtab util lexer pyembed)
 
 # =============================================================================
 # Install executable

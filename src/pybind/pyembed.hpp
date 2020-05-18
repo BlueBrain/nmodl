@@ -165,13 +165,16 @@ namespace pybind_wrappers {
         void* pylib_handle = nullptr;
         void* pybind_wrapper_handle = nullptr;
 
+        bool have_wrappers();
         void load_libraries();
         void populate_symbols();
         void unload();
 
         EmbeddedPythonLoader() {
-            load_libraries();
-            populate_symbols();
+            if (!have_wrappers()) {
+                load_libraries();
+                populate_symbols();
+            }
         }
 
     };

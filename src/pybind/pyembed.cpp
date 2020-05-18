@@ -15,6 +15,10 @@ namespace nmodl {
 
     namespace pybind_wrappers {
 
+        bool EmbeddedPythonLoader::have_wrappers() {
+            wrappers = static_cast<pybind_wrap_api *>(dlsym(RTLD_SELF, "wrapper_api"));
+            return wrappers != nullptr;
+        }
 
         void EmbeddedPythonLoader::load_libraries() {
             const auto pylib = std::getenv("NMODL_PYLIB");
