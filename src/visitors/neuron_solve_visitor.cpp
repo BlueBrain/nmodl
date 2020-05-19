@@ -7,15 +7,7 @@
 
 #include "visitors/neuron_solve_visitor.hpp"
 
-#include "ast/binary_expression.hpp"
-#include "ast/derivative_block.hpp"
-#include "ast/diff_eq_expression.hpp"
-#include "ast/expression_statement.hpp"
-#include "ast/name.hpp"
-#include "ast/program.hpp"
-#include "ast/solve_block.hpp"
-#include "ast/string.hpp"
-#include "ast/var_name.hpp"
+#include "ast/all.hpp"
 #include "codegen/codegen_naming.hpp"
 #include "parser/diffeq_driver.hpp"
 #include "symtab/symbol.hpp"

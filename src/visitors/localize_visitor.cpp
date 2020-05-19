@@ -9,10 +9,7 @@
 
 #include <algorithm>
 
-#include "ast/block.hpp"
-#include "ast/local_var.hpp"
-#include "ast/program.hpp"
-#include "ast/statement_block.hpp"
+#include "ast/all.hpp"
 #include "symtab/symbol_properties.hpp"
 #include "utils/logger.hpp"
 #include "visitors/defuse_analyze_visitor.hpp"
