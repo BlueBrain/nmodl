@@ -122,7 +122,7 @@ after_success:
   - cd $HOME
   - git clone --recursive https://github.com/BlueBrain/CoreNeuron.git
   - mkdir CoreNeuron/build && cd CoreNeuron/build
-  - cmake .. -DENABLE_MPI=OFF -DENABLE_NMODL=ON -DNMODL_ROOT=$HOME/nmodl -DNMODL_EXTRA_FLAGS="passes --verbatim-rename --inline sympy --analytic"
+  - cmake .. -DCORENRN_ENABLE_MPI=OFF -DCORENRN_ENABLE_NMODL=ON -DCORENRN_NMODL_DIR=$HOME/nmodl -DNMODL_EXTRA_FLAGS="sympy --analytic"
   - make -j
   - make test
 
