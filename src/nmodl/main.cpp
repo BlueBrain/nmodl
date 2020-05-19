@@ -105,6 +105,9 @@ int main(int argc, const char* argv[]) {
     /// true if range variables to be converted to local
     bool nmodl_localize(false);
 
+    /// true if global variables to be converted to range
+    bool nmodl_global_to_range(false);
+
     /// true if localize variables even if verbatim block is used
     bool localize_verbatim(false);
 
@@ -206,6 +209,9 @@ int main(int argc, const char* argv[]) {
     passes_opt->add_flag("--localize",
         nmodl_localize,
         "Convert RANGE variables to LOCAL ({})"_format(nmodl_localize))->ignore_case();
+    passes_opt->add_flag("--global-to-range",
+         nmodl_global_to_range,
+         "Convert GLOBAL variables to RANGE ({})"_format(nmodl_global_to_range))->ignore_case();
     passes_opt->add_flag("--localize-verbatim",
         localize_verbatim,
         "Convert RANGE variables to LOCAL even if verbatim block exist ({})"_format(localize_verbatim))->ignore_case();
@@ -308,7 +314,7 @@ int main(int argc, const char* argv[]) {
             // run perfvisitor to update read/wrie counts
             PerfVisitor().visit_program(*ast);
             // If there is an incompatible construct and code generation is not forced exit NMODL
-            if (CodegenCompatibilityVisitor().find_unhandled_ast_nodes(*ast) && !force_codegen) {
+            if (CodegenCompatibilityVisitor(nmodl_global_to_range).find_unhandled_ast_nodes(*ast) && !force_codegen) {
                 return 1;
             }
         }
@@ -383,7 +389,7 @@ int main(int argc, const char* argv[]) {
         update_symtab = true;
 
         /// GLOBAL to RANGE rename visitor
-        {
+        if (nmodl_global_to_range) {
             // make sure to run perf visitor because code generator
             // looks for read/write counts const/non-const declaration
             PerfVisitor().visit_program(*ast);

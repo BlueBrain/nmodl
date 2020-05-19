@@ -45,8 +45,8 @@ class CodegenCompatibilityVisitor: public visitor::AstVisitor {
         ast::Ast& node,
         const std::shared_ptr<ast::Ast>&);
 
-    /// Unordered_map to find the function needed to be called in
-    /// for every ast::AstNodeType that is unsupported
+    /// map to find the function needed to be called in for every
+    /// ast::AstNodeType that is unsupported
     std::map<ast::AstNodeType, FunctionPointer> unhandled_ast_types_func = {
         {AstNodeType::MATCH_BLOCK,
          &CodegenCompatibilityVisitor::return_error_without_name<MatchBlock>},
@@ -72,6 +72,7 @@ class CodegenCompatibilityVisitor: public visitor::AstVisitor {
          &CodegenCompatibilityVisitor::return_error_without_name<IndependentBlock>},
         {AstNodeType::SOLVE_BLOCK,
          &CodegenCompatibilityVisitor::return_error_if_solve_method_is_unhandled},
+        {AstNodeType::GLOBAL_VAR, &CodegenCompatibilityVisitor::return_error_global_var},
         {AstNodeType::POINTER_VAR, &CodegenCompatibilityVisitor::return_error_pointer},
         {AstNodeType::BBCORE_POINTER_VAR,
          &CodegenCompatibilityVisitor::return_error_if_no_bbcore_read_write}};
@@ -92,6 +93,8 @@ class CodegenCompatibilityVisitor: public visitor::AstVisitor {
 
     /// Default CodegenCompatibilityVisitor constructor
     CodegenCompatibilityVisitor() = default;
+
+    explicit CodegenCompatibilityVisitor(bool enable_global_to_range) { if (enable_global_to_range) unhandled_ast_types_func.erase(AstNodeType::GLOBAL_VAR); }
 
     /// \}
 
