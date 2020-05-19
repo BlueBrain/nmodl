@@ -94,7 +94,11 @@ class CodegenCompatibilityVisitor: public visitor::AstVisitor {
     /// Default CodegenCompatibilityVisitor constructor
     CodegenCompatibilityVisitor() = default;
 
-    explicit CodegenCompatibilityVisitor(bool enable_global_to_range) { if (enable_global_to_range) unhandled_ast_types_func.erase(AstNodeType::GLOBAL_VAR); }
+    explicit CodegenCompatibilityVisitor(bool enable_global_to_range) {
+        if (enable_global_to_range) {
+            unhandled_ast_types_func.erase(AstNodeType::GLOBAL_VAR);
+        }
+    }
 
     /// \}
 
