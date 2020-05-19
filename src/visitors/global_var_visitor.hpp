@@ -14,6 +14,7 @@
 
 #include <sstream>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "ast/ast.hpp"
@@ -50,7 +51,7 @@ class GlobalToRangeVisitor: public AstVisitor {
 
     /// Constructor that takes as parameter the AST
     explicit GlobalToRangeVisitor(std::shared_ptr<ast::Program> node)
-        : ast(node) {}
+        : ast(std::move(node)) {}
 
     /// \}
 

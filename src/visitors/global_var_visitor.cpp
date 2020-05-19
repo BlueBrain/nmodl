@@ -20,8 +20,6 @@
 namespace nmodl {
 namespace visitor {
 
-using symtab::syminfo::NmodlType;
-
 void GlobalToRangeVisitor::visit_statement_block(ast::StatementBlock& node) {
     const auto& statements = node.get_statements();
     ast::RangeVarVector range_variables;
