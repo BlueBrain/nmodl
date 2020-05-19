@@ -37,14 +37,12 @@ std::string run_global_to_var_visitor(const std::string& text) {
     NmodlDriver driver;
     auto ast = driver.parse_string(text);
 
-    SymtabVisitor().visit_program(ast.get());
-    PerfVisitor().visit_program(ast.get());
-    GlobalToRangeVisitor(ast.get()).visit_program(ast.get());
-    auto variables = ast->get_symbol_table()->get_variables_with_properties(NmodlType::range_var);
+    SymtabVisitor().visit_program(*ast);
+    PerfVisitor().visit_program(*ast);
+    GlobalToRangeVisitor(ast).visit_program(*ast);
+    SymtabVisitor().visit_program(*ast);
     std::stringstream ss;
-    for (const auto& variable: variables) {
-        ss << variable->get_name() << std::endl;
-    }
+    NmodlPrintVisitor(ss).visit_program(*ast);
     return ss.str();
 }
 
@@ -57,7 +55,6 @@ SCENARIO("GLOBAL to RANGE variable transformer", "[visitor][globaltorange]") {
 
             NEURON {
                 GLOBAL minf, hinf, ninf, mtau, htau, ntau
-                :RANGE minf, hinf, ninf, mtau, htau, ntau
             }
 
             STATE {
@@ -93,16 +90,12 @@ SCENARIO("GLOBAL to RANGE variable transformer", "[visitor][globaltorange]") {
             }
             UNITSON
         )";
-        std::string output = R"(
-            minf
-            ninf
-            mtau
-            htau
-            ntau
-        )";
+        std::string output_range = "RANGE minf, ninf, mtau, htau, ntau";
+        std::string output_global = "GLOBAL hinf";
         THEN("GLOBAL variables that are written are turned to RANGE") {
             auto result = run_global_to_var_visitor(input_nmodl);
-            REQUIRE(reindent_text(output) == reindent_text(result));
+            REQUIRE(result.find(output_range) != std::string::npos);
+            REQUIRE(result.find(output_global) != std::string::npos);
         }
     }
 }
