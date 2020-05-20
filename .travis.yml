@@ -18,13 +18,11 @@ matrix:
       os: linux
       dist: xenial
       env:
-        - MATRIX_EVAL="CXX=g++"
+        - GCC_VERSION=9
         - PYTHON_VERSION=3.6.7
     - language: cpp
       os: osx
       osx_image: xcode10.2
-      env:
-        - MATRIX_EVAL="CXX=c++"
 
 #=============================================================================
 # Cache directories
@@ -53,6 +51,7 @@ addons:
       - pandoc
       - texlive-base
       - dvipng
+      - g++-9
   # for Mac builds, we use Homebrew
   homebrew:
     packages:
@@ -122,7 +121,7 @@ after_success:
   - cd $HOME
   - git clone --recursive https://github.com/BlueBrain/CoreNeuron.git
   - mkdir CoreNeuron/build && cd CoreNeuron/build
-  - cmake .. -DCORENRN_ENABLE_MPI=OFF -DCORENRN_ENABLE_NMODL=ON -DCORENRN_NMODL_DIR=$HOME/nmodl -DNMODL_EXTRA_FLAGS="sympy --analytic"
+  - cmake .. -DCORENRN_ENABLE_MPI=OFF -DCORENRN_ENABLE_NMODL=ON -DCORENRN_NMODL_DIR=$HOME/nmodl -CORENRN_NMODL_FLAGS="sympy --analytic"
   - make -j
   - make test
 
