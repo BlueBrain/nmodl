@@ -8,8 +8,11 @@
 #include <iostream>
 #include <memory>
 
-#include "ast/ast.hpp"
-#include "global_var_visitor.hpp"
+#include "ast/global.hpp"
+#include "ast/range.hpp"
+#include "ast/program.hpp"
+#include "ast/statement_block.hpp"
+#include "visitors/global_var_visitor.hpp"
 /**
  * \file
  * \brief AST Visitor to change ast::GlobalVar to ast::Range

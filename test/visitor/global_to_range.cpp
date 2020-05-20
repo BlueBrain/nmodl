@@ -7,19 +7,14 @@
 
 #include "catch/catch.hpp"
 
-#include "ast/ast.hpp"
+#include "ast/program.hpp"
 #include "parser/nmodl_driver.hpp"
-#include "src/config/config.h"
-#include "symtab/symbol_table.hpp"
 #include "test/utils/nmodl_constructs.hpp"
-#include "test/utils/test_utils.hpp"
-#include "utils/logger.hpp"
 #include "visitors/global_var_visitor.hpp"
 #include "visitors/lookup_visitor.hpp"
 #include "visitors/nmodl_visitor.hpp"
 #include "visitors/perf_visitor.hpp"
 #include "visitors/symtab_visitor.hpp"
-#include "visitors/visitor_utils.hpp"
 
 using namespace nmodl;
 using namespace visitor;
