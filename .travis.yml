@@ -91,7 +91,7 @@ install:
   # be the case, Katta
   - echo "------- Install Dependencies -------"
   - pip3 install -U pip setuptools
-  - pip3 install Jinja2>=2.9.3 PyYAML pytest sympy --user
+  - pip3 install "Jinja2>=2.9.3" PyYAML pytest sympy --user
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
       pip3 install -U --user sphinx==2.4.4 nbsphinx>=0.3.2 m2r sphinx-rtd-theme jupyter;
     fi
