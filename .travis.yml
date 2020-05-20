@@ -18,11 +18,13 @@ matrix:
       os: linux
       dist: xenial
       env:
-        - GCC_VERSION=5.5
+        - MATRIX_EVAL="CXX=g++"
         - PYTHON_VERSION=3.6.7
     - language: cpp
       os: osx
       osx_image: xcode10.2
+      env:
+        - MATRIX_EVAL="CXX=c++"
 
 #=============================================================================
 # Cache directories
@@ -51,7 +53,6 @@ addons:
       - pandoc
       - texlive-base
       - dvipng
-      - g++-9
   # for Mac builds, we use Homebrew
   homebrew:
     packages:
