@@ -18,7 +18,7 @@ matrix:
       os: linux
       dist: xenial
       env:
-        - GCC_VERSION=9
+        - GCC_VERSION=5.5
         - PYTHON_VERSION=3.6.7
     - language: cpp
       os: osx
@@ -122,7 +122,7 @@ after_success:
   - git clone --recursive https://github.com/BlueBrain/CoreNeuron.git
   - mkdir CoreNeuron/build && cd CoreNeuron/build
   - cmake .. -DCORENRN_ENABLE_MPI=OFF -DCORENRN_ENABLE_NMODL=ON -DCORENRN_NMODL_DIR=$HOME/nmodl -DCORENRN_NMODL_FLAGS="sympy --analytic"
-  - make -j
+  - make -j 2
   - make test
 
 #=============================================================================
