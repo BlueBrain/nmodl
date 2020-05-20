@@ -74,7 +74,7 @@ before_install:
         export PATH=/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH;
         brew unlink python@2;
         brew link --overwrite python;
-        export SDKROOT="$(xcrun --show-sdk-path)"
+        export SDKROOT="$(xcrun --show-sdk-path)";
     else
         pyenv global $PYTHON_VERSION;
         ls /usr/bin/;
@@ -91,7 +91,7 @@ install:
   # be the case, Katta
   - echo "------- Install Dependencies -------"
   - pip3 install -U pip setuptools
-  - pip3 install "Jinja2>=2.10" "PyYAML>=3.13" "pytest>=4.0.0" "sympy>=1.2" --user
+  - pip3 install Jinja2 PyYAML pytest sympy --user
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
       pip3 install -U --user sphinx==2.4.4 nbsphinx>=0.3.2 m2r sphinx-rtd-theme jupyter;
     fi
