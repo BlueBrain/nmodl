@@ -9,8 +9,8 @@
 #include <memory>
 
 #include "ast/global.hpp"
-#include "ast/range.hpp"
 #include "ast/program.hpp"
+#include "ast/range.hpp"
 #include "ast/statement_block.hpp"
 #include "visitors/global_var_visitor.hpp"
 /**
