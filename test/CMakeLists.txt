@@ -53,24 +53,47 @@ add_executable(testunitparser units/parser.cpp)
 
 target_link_libraries(testmodtoken lexer util)
 target_link_libraries(testlexer lexer util)
-target_link_libraries(
-  testparser
-  visitor
-  symtab
-  lexer
-  util
-  test_util
-  printer
-  pyembed)
-target_link_libraries(
-  testvisitor
-  visitor
-  symtab
-  lexer
-  util
-  test_util
-  printer
-  pyembed)
+if(NOT LINK_AGAINST_PYTHON)
+  target_link_libraries(
+    testparser
+    visitor
+    symtab
+    lexer
+    util
+    test_util
+    printer
+    pyembed)
+  target_link_libraries(
+    testvisitor
+    visitor
+    symtab
+    lexer
+    util
+    test_util
+    printer
+    pyembed)
+else()
+  target_link_libraries(
+          testparser
+          visitor
+          symtab
+          lexer
+          util
+          test_util
+          printer
+          pywrapper
+          pyembed)
+  target_link_libraries(
+          testvisitor
+          visitor
+          symtab
+          lexer
+          util
+          test_util
+          printer
+          pywrapper
+          pyembed)
+endif()
 target_link_libraries(testprinter printer util)
 target_link_libraries(testsymtab symtab lexer util)
 target_link_libraries(testunitlexer lexer util)
@@ -94,12 +117,12 @@ foreach(
 
   if(${CMAKE_VERSION} VERSION_GREATER "3.10")
     catch_discover_tests(${test_name} TEST_PREFIX "${test_name}/" PROPERTIES ENVIRONMENT
-                         PYTHONPATH=${PROJECT_BINARY_DIR}:$ENV{PYTHONPATH})
+                         PYTHONPATH=${PROJECT_BINARY_DIR}/lib/python:$ENV{PYTHONPATH})
   else()
     add_test(NAME ${test_name} COMMAND ${test_name})
     if(${test_name} STREQUAL "testvisitor")
       set_tests_properties(${test_name}
-                           PROPERTIES ENVIRONMENT PYTHONPATH=${PROJECT_BINARY_DIR}:$ENV{PYTHONPATH})
+                           PROPERTIES ENVIRONMENT PYTHONPATH=${PROJECT_BINARY_DIR}/lib/python:$ENV{PYTHONPATH})
     endif()
   endif()
 endforeach()
@@ -113,5 +136,5 @@ add_test(NAME "pytest/pybind" COMMAND ${PYTHON_EXECUTABLE} -m pytest
                                       ${NMODL_PROJECT_SOURCE_DIR}/test/pybind)
 foreach(test_name "pytest/ode" "pytest/pybind")
   set_tests_properties(${test_name} PROPERTIES ENVIRONMENT
-                                               PYTHONPATH=${PROJECT_BINARY_DIR}:$ENV{PYTHONPATH})
+                                               PYTHONPATH=${PROJECT_BINARY_DIR}/lib/python:$ENV{PYTHONPATH})
 endforeach()

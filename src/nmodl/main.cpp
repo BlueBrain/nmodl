@@ -256,7 +256,7 @@ int main(int argc, const char* argv[]) {
     utils::make_path(scratch_dir);
 
     if (sympy_opt) {
-        nmodl::pybind_wrappers::EmbeddedPythonLoader::get_instance().api()->initialize_interpreter(true);
+        nmodl::pybind_wrappers::EmbeddedPythonLoader::get_instance().api()->initialize_interpreter();
     }
 
     if (verbose) {

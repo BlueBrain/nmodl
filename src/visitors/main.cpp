@@ -88,7 +88,7 @@ int main(int argc, const char* argv[]) {
         {std::make_shared<UnitsVisitor>(NrnUnitsLib::get_path()), "units", "UnitsVisitor"},
     };
 
-    nmodl::pybind_wrappers::EmbeddedPythonLoader::get_instance().api()->initialize_interpreter(true);
+    nmodl::pybind_wrappers::EmbeddedPythonLoader::get_instance().api()->initialize_interpreter();
 
     for (const auto& filename: files) {
         logger->info("Processing {}", filename);

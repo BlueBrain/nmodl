@@ -8,10 +8,12 @@
 #pragma once
 
 #include <set>
+#include <string>
 #include <vector>
 
 #include "pybind11/embed.h"
 #include "pybind11/stl.h"
+#include <python/python.h>
 
 #include "codegen/codegen_naming.hpp"
 #include "pybind/pyembed.hpp"
@@ -125,9 +127,10 @@ namespace pybind_wrappers {
                      py::globals(),
                      locals);
         }
-        /*else {
-          // TODO error...
-        }*/
+        else {
+            // nothing to do, but the caller should know.
+            return;
+        }
         solution = locals["solution"].cast<std::string>();
         exception_message = locals["exception_message"].cast<std::string>();
     }
@@ -188,14 +191,28 @@ namespace pybind_wrappers {
         delete exec;
     }
 
+    void initialize_interpreter() {
+        pybind11::initialize_interpreter(true);
+        const auto python_path_cstr = std::getenv("PYTHONPATH");
+        if (python_path_cstr) {
+            const auto python_path_str = std::string(python_path_cstr);
+            std::cerr << python_path_str << std::endl;
+            Py_SetPath(std::wstring(python_path_str.begin(), python_path_str.end()).c_str());
+        }
+    }
+
+    void finalize_interpreter() {
+        pybind11::finalize_interpreter();
+    }
+
 }
 }
 
 
 
 __attribute__((visibility("default"))) nmodl::pybind_wrappers::pybind_wrap_api wrapper_api = {
-        &pybind11::initialize_interpreter,
-        &pybind11::finalize_interpreter,
+        &nmodl::pybind_wrappers::initialize_interpreter,
+        &nmodl::pybind_wrappers::finalize_interpreter,
         &nmodl::pybind_wrappers::create_sls_executor,
         &nmodl::pybind_wrappers::create_nsls_executor,
         &nmodl::pybind_wrappers::create_des_executor,

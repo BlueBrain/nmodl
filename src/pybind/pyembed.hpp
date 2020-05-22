@@ -109,10 +109,12 @@ namespace pybind_wrappers {
     void destroy_des_executor(diffeq_solver_executor* exec);
     void destroy_ads_executor(analytic_diff_executor* exec);
 
+    void initialize_interpreter();
+    void finalize_interpreter();
 
-    struct pybind_wrap_api {
-        decltype(&pybind11::initialize_interpreter) initialize_interpreter;
-        decltype(&pybind11::finalize_interpreter) finalize_interpreter;
+        struct pybind_wrap_api {
+        decltype(&initialize_interpreter) initialize_interpreter;
+        decltype(&finalize_interpreter) finalize_interpreter;
         decltype(&create_sls_executor) create_sls_executor;
         decltype(&create_nsls_executor) create_nsls_executor;
         decltype(&create_des_executor) create_des_executor;

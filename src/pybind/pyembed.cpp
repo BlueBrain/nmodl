@@ -34,7 +34,11 @@ namespace nmodl {
                 logger->critical(errstr);
                 throw std::runtime_error("Failed to dlopen");
             }
+#if defined(__APPLE__)
             const char* pybind_wrap_lib = "./lib/python/nmodl/libpywrapper.dylib";
+#else
+            const char* pybind_wrap_lib = "./lib/python/nmodl/libpywrapper.so";
+#endif
             pybind_wrapper_handle = dlopen(pybind_wrap_lib, dlopen_opts);
             if (!pybind_wrapper_handle) {
                 const auto errstr = dlerror();
