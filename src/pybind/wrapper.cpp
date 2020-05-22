@@ -8,12 +8,10 @@
 #pragma once
 
 #include <set>
-#include <string>
 #include <vector>
 
 #include "pybind11/embed.h"
 #include "pybind11/stl.h"
-#include <python/python.h>
 
 #include "codegen/codegen_naming.hpp"
 #include "pybind/pyembed.hpp"
@@ -195,9 +193,7 @@ namespace pybind_wrappers {
         pybind11::initialize_interpreter(true);
         const auto python_path_cstr = std::getenv("PYTHONPATH");
         if (python_path_cstr) {
-            const auto python_path_str = std::string(python_path_cstr);
-            std::cerr << python_path_str << std::endl;
-            Py_SetPath(std::wstring(python_path_str.begin(), python_path_str.end()).c_str());
+            pybind11::module::import("sys").attr("path").cast<pybind11::list>().insert(0, python_path_cstr);
         }
     }
 
