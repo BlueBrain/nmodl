@@ -92,7 +92,7 @@ install:
   # I will remove the sphinx downgrade. Change setup.py requirements when it
   # be the case, Katta
   - echo "------- Install Dependencies -------"
-  - pip install -U pip setuptools scikit-build Jinja2 PyYAML pytest sympy
+  - pip install -U pip setuptools scikit-build Jinja2 PyYAML pytest sympy<1.6
 
 #=============================================================================
 # Build, test and install
@@ -113,10 +113,10 @@ script:
 # Build Documentation, CoreNEURON and run tests
 #=============================================================================
 after_success:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-      echo "------- Build Documentation -------";
   # Scikit-build does not support build_ext --inplace in custom commands.
   # More info at: https://github.com/scikit-build/scikit-build/issues/489
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+      echo "------- Build Documentation -------";
       python setup.py build_ext --inplace docs -j 2 -G "Unix Makefiles";
       cd $TRAVIS_BUILD_DIR/docs;
       rm -rf _build/doctrees && touch _build/.nojekyll;
