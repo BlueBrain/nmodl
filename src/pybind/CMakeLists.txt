@@ -32,6 +32,7 @@ set(PYNMODL_HEADERS
     ${PROJECT_BINARY_DIR}/src/pybind/pyvisitor.hpp)
 
 add_library(pyembed ${CMAKE_CURRENT_SOURCE_DIR}/pyembed.cpp)
+set_property(TARGET pyembed PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 add_library(pywrapper SHARED ${CMAKE_CURRENT_SOURCE_DIR}/wrapper.cpp)
 
