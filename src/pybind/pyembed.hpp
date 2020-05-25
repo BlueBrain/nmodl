@@ -19,9 +19,6 @@ namespace pybind_wrappers {
 
 
     struct py_executor {
-        struct input { };
-        struct output { };
-
         virtual ~py_executor() { }
 
         virtual void operator()() = 0;
@@ -100,29 +97,29 @@ namespace pybind_wrappers {
     };
 
 
-    solve_linear_system_executor* create_sls_executor();
-    solve_non_linear_system_executor* create_nsls_executor();
-    diffeq_solver_executor* create_des_executor();
-    analytic_diff_executor* create_ads_executor();
-    void destroy_sls_executor(solve_linear_system_executor* exec);
-    void destroy_nsls_executor(solve_non_linear_system_executor* exec);
-    void destroy_des_executor(diffeq_solver_executor* exec);
-    void destroy_ads_executor(analytic_diff_executor* exec);
+    solve_linear_system_executor* create_sls_executor_func();
+    solve_non_linear_system_executor* create_nsls_executor_func();
+    diffeq_solver_executor* create_des_executor_func();
+    analytic_diff_executor* create_ads_executor_func();
+    void destroy_sls_executor_func(solve_linear_system_executor* exec);
+    void destroy_nsls_executor_func(solve_non_linear_system_executor* exec);
+    void destroy_des_executor_func(diffeq_solver_executor* exec);
+    void destroy_ads_executor_func(analytic_diff_executor* exec);
 
-    void initialize_interpreter();
-    void finalize_interpreter();
+    void initialize_interpreter_func();
+    void finalize_interpreter_func();
 
         struct pybind_wrap_api {
-        decltype(&initialize_interpreter) initialize_interpreter;
-        decltype(&finalize_interpreter) finalize_interpreter;
-        decltype(&create_sls_executor) create_sls_executor;
-        decltype(&create_nsls_executor) create_nsls_executor;
-        decltype(&create_des_executor) create_des_executor;
-        decltype(&create_ads_executor) create_ads_executor;
-        decltype(&destroy_sls_executor) destroy_sls_executor;
-        decltype(&destroy_nsls_executor) destroy_nsls_executor;
-        decltype(&destroy_des_executor) destroy_des_executor;
-        decltype(&destroy_ads_executor) destroy_ads_executor;
+        decltype(&initialize_interpreter_func) initialize_interpreter;
+        decltype(&finalize_interpreter_func) finalize_interpreter;
+        decltype(&create_sls_executor_func) create_sls_executor;
+        decltype(&create_nsls_executor_func) create_nsls_executor;
+        decltype(&create_des_executor_func) create_des_executor;
+        decltype(&create_ads_executor_func) create_ads_executor;
+        decltype(&destroy_sls_executor_func) destroy_sls_executor;
+        decltype(&destroy_nsls_executor_func) destroy_nsls_executor;
+        decltype(&destroy_des_executor_func) destroy_des_executor;
+        decltype(&destroy_ads_executor_func) destroy_ads_executor;
     };
 
     /**

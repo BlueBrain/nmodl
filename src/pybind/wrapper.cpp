@@ -5,7 +5,6 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
-#pragma once
 
 #include <set>
 #include <vector>
@@ -157,39 +156,39 @@ namespace pybind_wrappers {
         exception_message = locals["exception_message"].cast<std::string>();
     }
 
-    solve_linear_system_executor* create_sls_executor() {
+    solve_linear_system_executor* create_sls_executor_func() {
         return new solve_linear_system_executor();
     }
 
-    solve_non_linear_system_executor* create_nsls_executor() {
+    solve_non_linear_system_executor* create_nsls_executor_func() {
         return new solve_non_linear_system_executor();
     }
 
-    diffeq_solver_executor* create_des_executor() {
+    diffeq_solver_executor* create_des_executor_func() {
         return new diffeq_solver_executor();
     }
 
-    analytic_diff_executor* create_ads_executor() {
+    analytic_diff_executor* create_ads_executor_func() {
         return new analytic_diff_executor();
     }
 
-    void destroy_sls_executor(solve_linear_system_executor* exec) {
+    void destroy_sls_executor_func(solve_linear_system_executor* exec) {
         delete exec;
     }
 
-    void destroy_nsls_executor(solve_non_linear_system_executor* exec) {
+    void destroy_nsls_executor_func(solve_non_linear_system_executor* exec) {
         delete exec;
     }
 
-    void destroy_des_executor(diffeq_solver_executor* exec) {
+    void destroy_des_executor_func(diffeq_solver_executor* exec) {
         delete exec;
     }
 
-    void destroy_ads_executor(analytic_diff_executor* exec) {
+    void destroy_ads_executor_func(analytic_diff_executor* exec) {
         delete exec;
     }
 
-    void initialize_interpreter() {
+    void initialize_interpreter_func() {
         pybind11::initialize_interpreter(true);
         const auto python_path_cstr = std::getenv("PYTHONPATH");
         if (python_path_cstr) {
@@ -197,7 +196,7 @@ namespace pybind_wrappers {
         }
     }
 
-    void finalize_interpreter() {
+    void finalize_interpreter_func() {
         pybind11::finalize_interpreter();
     }
 
@@ -207,16 +206,16 @@ namespace pybind_wrappers {
 
 
 __attribute__((visibility("default"))) nmodl::pybind_wrappers::pybind_wrap_api wrapper_api = {
-        &nmodl::pybind_wrappers::initialize_interpreter,
-        &nmodl::pybind_wrappers::finalize_interpreter,
-        &nmodl::pybind_wrappers::create_sls_executor,
-        &nmodl::pybind_wrappers::create_nsls_executor,
-        &nmodl::pybind_wrappers::create_des_executor,
-        &nmodl::pybind_wrappers::create_ads_executor,
-        &nmodl::pybind_wrappers::destroy_sls_executor,
-        &nmodl::pybind_wrappers::destroy_nsls_executor,
-        &nmodl::pybind_wrappers::destroy_des_executor,
-        &nmodl::pybind_wrappers::destroy_ads_executor,
+        &nmodl::pybind_wrappers::initialize_interpreter_func,
+        &nmodl::pybind_wrappers::finalize_interpreter_func,
+        &nmodl::pybind_wrappers::create_sls_executor_func,
+        &nmodl::pybind_wrappers::create_nsls_executor_func,
+        &nmodl::pybind_wrappers::create_des_executor_func,
+        &nmodl::pybind_wrappers::create_ads_executor_func,
+        &nmodl::pybind_wrappers::destroy_sls_executor_func,
+        &nmodl::pybind_wrappers::destroy_nsls_executor_func,
+        &nmodl::pybind_wrappers::destroy_des_executor_func,
+        &nmodl::pybind_wrappers::destroy_ads_executor_func,
 };
 
 
