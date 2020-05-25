@@ -17,9 +17,7 @@
 #include <utility>
 #include <vector>
 
-#include "ast/ast.hpp"
 #include "visitors/ast_visitor.hpp"
-#include "visitors/visitor_utils.hpp"
 
 namespace nmodl {
 namespace visitor {
@@ -55,13 +53,13 @@ class GlobalToRangeVisitor: public AstVisitor {
 
     /// \}
 
-    /// Visit ast::StatementBlock nodes to check if there is any GLOBAL
+    /// Visit ast::NeuronBlock nodes to check if there is any GLOBAL
     /// variables defined in them that are written in any part of the code.
     /// This is checked by reading the write_count member of the variable in
     /// the symtab::SymbolTable. If it's written it removes the variable from
     /// the ast::Global node and adds it to the ast::Range node of the
-    /// ast::StatementBlock
-    void visit_statement_block(ast::StatementBlock& node) override;
+    /// ast::NeuronBlock
+    void visit_neuron_block(ast::NeuronBlock& node) override;
 };
 
 /** @} */  // end of visitor_classes

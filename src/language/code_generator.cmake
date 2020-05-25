@@ -43,22 +43,6 @@ set(CODE_GENERATOR_YAML_FILES
     ${PROJECT_SOURCE_DIR}/src/language/nmodl.yaml
 )
 
-set(VISITORS_GENERATED_SOURCES
-    ${PROJECT_BINARY_DIR}/src/visitors/ast_visitor.cpp
-    ${PROJECT_BINARY_DIR}/src/visitors/ast_visitor.hpp
-    ${PROJECT_BINARY_DIR}/src/visitors/checkparent_visitor.cpp
-    ${PROJECT_BINARY_DIR}/src/visitors/checkparent_visitor.hpp
-    ${PROJECT_BINARY_DIR}/src/visitors/json_visitor.cpp
-    ${PROJECT_BINARY_DIR}/src/visitors/json_visitor.hpp
-    ${PROJECT_BINARY_DIR}/src/visitors/lookup_visitor.cpp
-    ${PROJECT_BINARY_DIR}/src/visitors/lookup_visitor.hpp
-    ${PROJECT_BINARY_DIR}/src/visitors/nmodl_visitor.cpp
-    ${PROJECT_BINARY_DIR}/src/visitors/nmodl_visitor.hpp
-    ${PROJECT_BINARY_DIR}/src/visitors/symtab_visitor.cpp
-    ${PROJECT_BINARY_DIR}/src/visitors/symtab_visitor.hpp
-    ${PROJECT_BINARY_DIR}/src/visitors/visitor.hpp
-)
-
 set(AST_GENERATED_SOURCES
     ${PROJECT_BINARY_DIR}/src/ast/after_block.hpp
     ${PROJECT_BINARY_DIR}/src/ast/all.hpp
@@ -212,6 +196,22 @@ set(PYBIND_GENERATED_SOURCES
     ${PROJECT_BINARY_DIR}/src/pybind/pysymtab.cpp
     ${PROJECT_BINARY_DIR}/src/pybind/pyvisitor.cpp
     ${PROJECT_BINARY_DIR}/src/pybind/pyvisitor.hpp
+)
+
+set(VISITORS_GENERATED_SOURCES
+    ${PROJECT_BINARY_DIR}/src/visitors/ast_visitor.cpp
+    ${PROJECT_BINARY_DIR}/src/visitors/ast_visitor.hpp
+    ${PROJECT_BINARY_DIR}/src/visitors/checkparent_visitor.cpp
+    ${PROJECT_BINARY_DIR}/src/visitors/checkparent_visitor.hpp
+    ${PROJECT_BINARY_DIR}/src/visitors/json_visitor.cpp
+    ${PROJECT_BINARY_DIR}/src/visitors/json_visitor.hpp
+    ${PROJECT_BINARY_DIR}/src/visitors/lookup_visitor.cpp
+    ${PROJECT_BINARY_DIR}/src/visitors/lookup_visitor.hpp
+    ${PROJECT_BINARY_DIR}/src/visitors/nmodl_visitor.cpp
+    ${PROJECT_BINARY_DIR}/src/visitors/nmodl_visitor.hpp
+    ${PROJECT_BINARY_DIR}/src/visitors/symtab_visitor.cpp
+    ${PROJECT_BINARY_DIR}/src/visitors/symtab_visitor.hpp
+    ${PROJECT_BINARY_DIR}/src/visitors/visitor.hpp
 )
 
 set(NMODL_GENERATED_SOURCES

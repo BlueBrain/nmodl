@@ -9,6 +9,7 @@
 #include <memory>
 
 #include "ast/global.hpp"
+#include "ast/neuron_block.hpp"
 #include "ast/program.hpp"
 #include "ast/range.hpp"
 #include "ast/statement_block.hpp"
@@ -23,8 +24,9 @@
 namespace nmodl {
 namespace visitor {
 
-void GlobalToRangeVisitor::visit_statement_block(ast::StatementBlock& node) {
-    const auto& statements = node.get_statements();
+void GlobalToRangeVisitor::visit_neuron_block(ast::NeuronBlock& node) {
+    auto& statement_block = *node.get_statement_block();
+    const auto& statements = statement_block.get_statements();
     ast::RangeVarVector range_variables;
     std::vector<std::string> global_vars_to_remove;
     for (const auto& statement: statements) {
@@ -52,7 +54,7 @@ void GlobalToRangeVisitor::visit_statement_block(ast::StatementBlock& node) {
     }
     if (!range_variables.empty()) {
         auto range_statement = new ast::Range(range_variables);
-        node.emplace_back_statement(range_statement);
+        statement_block.emplace_back_statement(range_statement);
     }
 }
 
