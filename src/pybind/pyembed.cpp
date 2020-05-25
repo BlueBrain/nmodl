@@ -16,7 +16,7 @@ namespace nmodl {
     namespace pybind_wrappers {
 
         bool EmbeddedPythonLoader::have_wrappers() {
-            wrappers = static_cast<pybind_wrap_api *>(dlsym(RTLD_SELF, "wrapper_api"));
+            wrappers = static_cast<pybind_wrap_api *>(dlsym(RTLD_NEXT, "wrapper_api"));
             return wrappers != nullptr;
         }
 
