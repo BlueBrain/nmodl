@@ -8,15 +8,30 @@ set(NMODL_SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp)
 # Add executables
 # =============================================================================
 add_executable(nmodl ${NMODL_SOURCE_FILES})
-target_link_libraries(
-  nmodl
-  printer
-  codegen
-  visitor
-  symtab
-  util
-  lexer
-  pyembed)
+if(NOT LINK_AGAINST_PYTHON)
+    target_link_libraries(
+            nmodl
+            printer
+            codegen
+            visitor
+            symtab
+            util
+            lexer
+            pyembed
+            dl)
+else()
+    target_link_libraries(
+            nmodl
+            printer
+            codegen
+            visitor
+            symtab
+            util
+            lexer
+            pywrapper
+            pyembed
+            dl)
+endif()
 
 # =============================================================================
 # Add dependency with nmodl pytnon module (for consumer projects)

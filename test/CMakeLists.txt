@@ -62,7 +62,8 @@ if(NOT LINK_AGAINST_PYTHON)
     util
     test_util
     printer
-    pyembed)
+    pyembed
+    dl)
   target_link_libraries(
     testvisitor
     visitor
@@ -71,7 +72,8 @@ if(NOT LINK_AGAINST_PYTHON)
     util
     test_util
     printer
-    pyembed)
+    pyembed
+    dl)
 else()
   target_link_libraries(
           testparser
@@ -82,7 +84,8 @@ else()
           test_util
           printer
           pywrapper
-          pyembed)
+          pyembed
+          dl)
   target_link_libraries(
           testvisitor
           visitor
@@ -92,7 +95,8 @@ else()
           test_util
           printer
           pywrapper
-          pyembed)
+          pyembed
+          dl)
 endif()
 target_link_libraries(testprinter printer util)
 target_link_libraries(testsymtab symtab lexer util)
