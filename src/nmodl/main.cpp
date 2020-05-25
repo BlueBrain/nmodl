@@ -308,13 +308,26 @@ int main(int argc, const char* argv[]) {
             SymtabVisitor(update_symtab).visit_program(*ast);
         }
 
+        /// GLOBAL to RANGE rename visitor
+        if (nmodl_global_to_range) {
+            // make sure to run perf visitor because code generator
+            // looks for read/write counts const/non-const declaration
+            PerfVisitor().visit_program(*ast);
+            // make sure to run the GlobalToRange visitor after all the
+            // reinitializations of Symtab
+            logger->info("Running GlobalToRange visitor");
+            GlobalToRangeVisitor(ast).visit_program(*ast);
+            SymtabVisitor(update_symtab).visit_program(*ast);
+            ast_to_nmodl(*ast, filepath("globaltorange"));
+        }
+
         {
             // Compatibility Checking
             logger->info("Running code compatibility checker");
             // run perfvisitor to update read/wrie counts
             PerfVisitor().visit_program(*ast);
             // If there is an incompatible construct and code generation is not forced exit NMODL
-            if (CodegenCompatibilityVisitor(nmodl_global_to_range).find_unhandled_ast_nodes(*ast) &&
+            if (CodegenCompatibilityVisitor().find_unhandled_ast_nodes(*ast) &&
                 !force_codegen) {
                 return 1;
             }
@@ -388,19 +401,6 @@ int main(int argc, const char* argv[]) {
         /// from ast then we should run symtab visitor in update mode so
         /// that old symbols (e.g. prime variables) are not lost
         update_symtab = true;
-
-        /// GLOBAL to RANGE rename visitor
-        if (nmodl_global_to_range) {
-            // make sure to run perf visitor because code generator
-            // looks for read/write counts const/non-const declaration
-            PerfVisitor().visit_program(*ast);
-            // make sure to run the GlobalToRange visitor after all the
-            // reinitializations of Symtab
-            logger->info("Running GlobalToRange visitor");
-            GlobalToRangeVisitor(ast).visit_program(*ast);
-            SymtabVisitor(update_symtab).visit_program(*ast);
-            ast_to_nmodl(*ast, filepath("globaltorange"));
-        }
 
         if (nmodl_inline) {
             logger->info("Running nmodl inline visitor");

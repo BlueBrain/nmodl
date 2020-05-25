@@ -66,14 +66,6 @@ class CodegenCompatibilityVisitor: public visitor::AstVisitor {
     /// Default CodegenCompatibilityVisitor constructor
     CodegenCompatibilityVisitor() = default;
 
-    /// CodegenCompatibilityVisitor constructor that removes the error for
-    /// the global variables if the global-to-range pass is enabled
-    explicit CodegenCompatibilityVisitor(bool enable_global_to_range) {
-        if (enable_global_to_range) {
-            unhandled_ast_types_func.erase(AstNodeType::GLOBAL_VAR);
-        }
-    }
-
     /// \}
 
     /// Function that searches the ast::Ast for nodes that
