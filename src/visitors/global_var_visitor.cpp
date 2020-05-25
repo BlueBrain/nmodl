@@ -25,23 +25,26 @@ namespace nmodl {
 namespace visitor {
 
 void GlobalToRangeVisitor::visit_neuron_block(ast::NeuronBlock& node) {
-    auto& statement_block = *node.get_statement_block();
-    const auto& statements = statement_block.get_statements();
     ast::RangeVarVector range_variables;
-    std::vector<std::string> global_vars_to_remove;
-    for (const auto& statement: statements) {
+    std::vector<std::string> global_variables_to_remove;
+
+    auto& statement_block = node.get_statement_block();
+    auto& statements = (*statement_block).get_statements();
+    const auto& symbol_table = ast->get_symbol_table();
+
+    for (auto& statement: statements) {
         if (statement->is_global()) {
             const auto& global_variables =
                 std::static_pointer_cast<ast::Global>(statement)->get_variables();
-            global_vars_to_remove.clear();
-            for (const auto& global_variable: global_variables) {
+            global_variables_to_remove.clear();
+            for (auto& global_variable: global_variables) {
                 auto variable_name = global_variable->get_node_name();
-                if (ast->get_symbol_table()->lookup(variable_name)->get_write_count() > 0) {
+                if (symbol_table->lookup(variable_name)->get_write_count() > 0) {
                     range_variables.emplace_back(new ast::RangeVar(global_variable->get_name()));
-                    global_vars_to_remove.emplace_back(variable_name);
+                    global_variables_to_remove.emplace_back(variable_name);
                 }
             }
-            for (const auto& global_var_to_remove: global_vars_to_remove) {
+            for (auto& global_var_to_remove: global_variables_to_remove) {
                 const auto& global_var_iter =
                     find_if(global_variables.begin(),
                             global_variables.end(),
@@ -54,7 +57,7 @@ void GlobalToRangeVisitor::visit_neuron_block(ast::NeuronBlock& node) {
     }
     if (!range_variables.empty()) {
         auto range_statement = new ast::Range(range_variables);
-        statement_block.emplace_back_statement(range_statement);
+        (*statement_block).emplace_back_statement(range_statement);
     }
 }
 
