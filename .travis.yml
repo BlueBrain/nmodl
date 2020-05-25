@@ -107,7 +107,9 @@ script:
 after_success:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
       echo "------- Build Documentation -------";
-      python setup.py docs;
+  # Scikit-build does not support build_ext --inplace in custom commands.
+  # More info at: https://github.com/scikit-build/scikit-build/issues/489
+      python setup.py build_ext --inplace docs -j 2 -G "Unix Makefiles";
       cd $TRAVIS_BUILD_DIR/docs;
       rm -rf _build/doctrees && touch _build/.nojekyll;
       echo "<meta http-equiv=\"refresh\" content=\"0; url=./html/index.html\" />" > _build/index.html;
