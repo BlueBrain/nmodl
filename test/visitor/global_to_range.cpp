@@ -28,7 +28,8 @@ using symtab::syminfo::NmodlType;
 // GlobalToRange visitor tests
 //=============================================================================
 
-std::string run_global_to_var_visitor(const std::string& text) {
+std::map<std::string, std::string> run_global_to_var_visitor(const std::string& text) {
+    std::map<std::string, std::string> rval;
     NmodlDriver driver;
     auto ast = driver.parse_string(text);
 
@@ -38,59 +39,38 @@ std::string run_global_to_var_visitor(const std::string& text) {
     SymtabVisitor().visit_program(*ast);
     std::stringstream ss;
     NmodlPrintVisitor(ss).visit_program(*ast);
-    return ss.str();
+    rval["nmodl"] = ss.str();
+    ss.str("");
+    auto variables = ast->get_symbol_table()->get_variables_with_properties(NmodlType::range_var);
+    for (const auto& variable: variables) {
+        ss << variable->get_name() << std::endl;
+    }
+    rval["symtab_range"] = ss.str();
+    return rval;
 }
 
 SCENARIO("GLOBAL to RANGE variable transformer", "[visitor][globaltorange]") {
     GIVEN("mod file with GLOBAL variables that are written") {
         std::string input_nmodl = R"(
-            UNITS {
-                (mV) = (millivolt)
-            }
-
             NEURON {
-                GLOBAL minf, hinf, ninf, mtau, htau, ntau
+                SUFFIX test
+                GLOBAL x, y
             }
-
-            STATE {
-                m h n
-            }
-
             ASSIGNED {
-                minf ninf
-                mtau (ms) htau (ms) ntau (ms)
+                x
             }
-
-            INITIAL {
-                rates(v)
-                m = minf
-                h = hinf
-                n = ninf
+            BREAKPOINT {
+                x = y
             }
-
-            DERIVATIVE states {
-                rates(v)
-                m' =  (minf-m)/mtau
-                h' = (hinf-h)/htau
-                n' = (ninf-n)/ntau
-            }
-
-            PROCEDURE rates(v(mV)) {
-            UNITSOFF
-                mtau = mtau+1
-                minf = minf+1
-                htau = htau+1
-                ntau = ntau+1
-                ninf = ninf+1
-            }
-            UNITSON
         )";
-        std::string output_range = "RANGE minf, ninf, mtau, htau, ntau";
-        std::string output_global = "GLOBAL hinf";
+        std::string output_range = "RANGE x";
+        std::string output_global = "GLOBAL y";
+        std::string symtab_range_vars = "x\n";
         THEN("GLOBAL variables that are written are turned to RANGE") {
             auto result = run_global_to_var_visitor(input_nmodl);
-            REQUIRE(result.find(output_range) != std::string::npos);
-            REQUIRE(result.find(output_global) != std::string::npos);
+            REQUIRE(result["nmodl"].find(output_range) != std::string::npos);
+            REQUIRE(result["nmodl"].find(output_global) != std::string::npos);
+            REQUIRE(result["symtab_range"] == symtab_range_vars);
         }
     }
 }
