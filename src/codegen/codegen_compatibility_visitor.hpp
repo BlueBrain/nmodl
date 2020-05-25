@@ -47,7 +47,7 @@ class CodegenCompatibilityVisitor: public visitor::AstVisitor {
 
     /// associated container to find the function needed to be called in
     /// for every ast::AstNodeType that is unsupported
-    static std::map<ast::AstNodeType, FunctionPointer> unhandled_ast_types_func;
+    static const std::map<ast::AstNodeType, FunctionPointer> unhandled_ast_types_func;
 
     /// Set of handled solvers by the NMODL \c C++ code generator
     const std::set<std::string> handled_solvers{codegen::naming::CNEXP_METHOD,

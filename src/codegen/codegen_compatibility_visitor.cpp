@@ -19,7 +19,7 @@ namespace codegen {
 
 using visitor::AstLookupVisitor;
 
-std::map<ast::AstNodeType, CodegenCompatibilityVisitor::FunctionPointer>
+const std::map<ast::AstNodeType, CodegenCompatibilityVisitor::FunctionPointer>
     CodegenCompatibilityVisitor::unhandled_ast_types_func(
         {{AstNodeType::MATCH_BLOCK,
           &CodegenCompatibilityVisitor::return_error_without_name<MatchBlock>},
