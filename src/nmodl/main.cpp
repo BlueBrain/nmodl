@@ -327,8 +327,7 @@ int main(int argc, const char* argv[]) {
             // run perfvisitor to update read/wrie counts
             PerfVisitor().visit_program(*ast);
             // If there is an incompatible construct and code generation is not forced exit NMODL
-            if (CodegenCompatibilityVisitor().find_unhandled_ast_nodes(*ast) &&
-                !force_codegen) {
+            if (CodegenCompatibilityVisitor().find_unhandled_ast_nodes(*ast) && !force_codegen) {
                 return 1;
             }
         }
