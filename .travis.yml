@@ -118,7 +118,7 @@ after_success:
   # More info at: https://github.com/scikit-build/scikit-build/issues/489
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
       echo "------- Build Documentation -------";
-      python3 setup.py build_ext --inplace docs -j 2 -G "Unix Makefiles"; if [ $? -ne 0 ]; then travis_terminate $?; fi;
+      python3 setup.py build_ext --inplace docs -j 2 -G "Unix Makefiles" || travis_terminate 1;
       cd $TRAVIS_BUILD_DIR/docs;
       rm -rf _build/doctrees && touch _build/.nojekyll;
       echo "<meta http-equiv=\"refresh\" content=\"0; url=./html/index.html\" />" > _build/index.html;
