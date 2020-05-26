@@ -95,7 +95,7 @@ install:
   # I will remove the sphinx downgrade. Change setup.py requirements when it
   # be the case, Katta
   - echo "------- Install Dependencies -------"
-  - pip install -U pip setuptools scikit-build Jinja2 PyYAML pytest "sympy<1.6"
+  - pip3 install -U pip setuptools scikit-build Jinja2 PyYAML pytest "sympy<1.6"
 
 #=============================================================================
 # Build, test and install
@@ -103,7 +103,7 @@ install:
 script:
   - echo "------- Build, Test and Install -------"
   - mkdir build && pushd build
-  - PYTHONPATH=$(python -c "import sys; print(':'.join(sys.path))") cmake .. -DPYTHON_EXECUTABLE=$(which python) -DCMAKE_INSTALL_PREFIX=$HOME/nmodl
+  - cmake .. -DPYTHON_EXECUTABLE=$(which python3) -DCMAKE_INSTALL_PREFIX=$HOME/nmodl
   - make -j 2;
     if [ $? -ne 0 ]; then
         make VERBOSE=1;
@@ -120,7 +120,7 @@ after_success:
   # More info at: https://github.com/scikit-build/scikit-build/issues/489
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
       echo "------- Build Documentation -------";
-      python setup.py build_ext --inplace docs -j 2 -G "Unix Makefiles"; if [ $? -ne 0 ]; then exit $?; fi;
+      python3 setup.py build_ext --inplace docs -j 2 -G "Unix Makefiles"; if [ $? -ne 0 ]; then exit $?; fi;
       cd $TRAVIS_BUILD_DIR/docs;
       rm -rf _build/doctrees && touch _build/.nojekyll;
       echo "<meta http-equiv=\"refresh\" content=\"0; url=./html/index.html\" />" > _build/index.html;
