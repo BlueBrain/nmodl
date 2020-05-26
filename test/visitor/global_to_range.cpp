@@ -28,7 +28,7 @@ using symtab::syminfo::NmodlType;
 // GlobalToRange visitor tests
 //=============================================================================
 
-std::map<std::string, std::string> run_global_to_var_visitor(const std::string& text) {
+std::shared_ptr<ast::Program> run_global_to_var_visitor(const std::string& text) {
     std::map<std::string, std::string> rval;
     NmodlDriver driver;
     auto ast = driver.parse_string(text);
@@ -37,16 +37,7 @@ std::map<std::string, std::string> run_global_to_var_visitor(const std::string& 
     PerfVisitor().visit_program(*ast);
     GlobalToRangeVisitor(ast).visit_program(*ast);
     SymtabVisitor().visit_program(*ast);
-    std::stringstream ss;
-    NmodlPrintVisitor(ss).visit_program(*ast);
-    rval["nmodl"] = ss.str();
-    ss.str("");
-    auto variables = ast->get_symbol_table()->get_variables_with_properties(NmodlType::range_var);
-    for (const auto& variable: variables) {
-        ss << variable->get_name() << std::endl;
-    }
-    rval["symtab_range"] = ss.str();
-    return rval;
+    return ast;
 }
 
 SCENARIO("GLOBAL to RANGE variable transformer", "[visitor][globaltorange]") {
@@ -54,6 +45,7 @@ SCENARIO("GLOBAL to RANGE variable transformer", "[visitor][globaltorange]") {
         std::string input_nmodl = R"(
             NEURON {
                 SUFFIX test
+                RANGE a, b
                 GLOBAL x, y
             }
             ASSIGNED {
@@ -63,14 +55,23 @@ SCENARIO("GLOBAL to RANGE variable transformer", "[visitor][globaltorange]") {
                 x = y
             }
         )";
-        std::string output_range = "RANGE x";
-        std::string output_global = "GLOBAL y";
-        std::string symtab_range_vars = "x\n";
+        auto ast = run_global_to_var_visitor(input_nmodl);
+        auto symtab = ast->get_symbol_table();
         THEN("GLOBAL variables that are written are turned to RANGE") {
-            auto result = run_global_to_var_visitor(input_nmodl);
-            REQUIRE(result["nmodl"].find(output_range) != std::string::npos);
-            REQUIRE(result["nmodl"].find(output_global) != std::string::npos);
-            REQUIRE(result["symtab_range"] == symtab_range_vars);
+            /// check for all RANGE variables : old ones + newly converted ones
+            auto vars = symtab->get_variables_with_properties(NmodlType::range_var);
+            REQUIRE(vars.size() == 3);
+
+            /// x should be converted from GLOBAL to RANGE
+            auto x = symtab->lookup("x");
+            REQUIRE(x != nullptr);
+            REQUIRE(x->has_any_property(NmodlType::range_var) == true);
+            REQUIRE(x->has_any_property(NmodlType::global_var) == false);
+        }
+        THEN("GLOBAL variables that are read only remain GLOBAL") {
+            auto vars = symtab->get_variables_with_properties(NmodlType::global_var);
+            REQUIRE(vars.size() == 1);
+            REQUIRE(vars[0]->get_name() == "y");
         }
     }
 }

@@ -29,10 +29,33 @@ namespace visitor {
 
 /**
  * \class GlobalToRangeVisitor
- * \brief Visitor for Units blocks of AST
+ * \brief Visitor to convert GLOBAL variables to RANGE variables
  *
- * We override AstVisitor::visit_global_var to visit the
- * ast::GlobalVar nodes of the ast
+ * Some of the existing mod files have GLOBAL variables that are updated in BREAKPOINT
+ * or DERIVATIVE blocks. These variables have a single copy and works well when they
+ * are read only. If such variables that are written as well, they result into race condition.
+ * For example,
+ *
+ * \code{.mod}
+ *      NEURON {
+ *    	    SUFFIX test
+ *    	    GLOBAL x
+ *      }
+ *
+ *      ASSIGNED {
+ *          x
+ *      }
+ *
+ *      BREAKPOINT {
+ *          x = 1
+ *      }
+ * \endcode
+ *
+ * In above example, x will be simultaneously updated in case of vectorization. In NEURON,
+ * such race condition is avoided by promoting these variables to thread variable (i.e. separate
+ * copy per thread). In case of CoreNEURON, this is not sufficient because of vectorisation or
+ * GPU execution. To address this issue, this visitor converts GLOBAL variables to RANGE variables
+ * when they are assigned / updated in compute functions.
  */
 
 class GlobalToRangeVisitor: public AstVisitor {
@@ -44,8 +67,8 @@ class GlobalToRangeVisitor: public AstVisitor {
     /// \name Ctor & dtor
     /// \{
 
-    /// Default UnitsVisitor constructor
-    GlobalToRangeVisitor() = default;
+    /// Default constructor
+    GlobalToRangeVisitor() = delete;
 
     /// Constructor that takes as parameter the AST
     explicit GlobalToRangeVisitor(std::shared_ptr<ast::Program> node)
