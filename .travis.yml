@@ -120,16 +120,11 @@ after_success:
   # More info at: https://github.com/scikit-build/scikit-build/issues/489
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
       echo "------- Build Documentation -------";
-      python setup.py build_ext --inplace docs -j 2 -G "Unix Makefiles";
-      if [ $? -eq 0]; then echo "setup.py"; else exit 1; fi
+      python setup.py build_ext --inplace docs -j 2 -G "Unix Makefiles"; if [ $? -ne 0 ]; then exit $?; fi;
       cd $TRAVIS_BUILD_DIR/docs;
       rm -rf _build/doctrees && touch _build/.nojekyll;
       echo "<meta http-equiv=\"refresh\" content=\"0; url=./html/index.html\" />" > _build/index.html;
     fi
-
-  - echo "TESTTESTTEST"
-  - echo $?
-  - echo "TESTTESTTEST"
 
   - echo "------- Build and Test CoreNEURON -------"
   - cd $HOME
