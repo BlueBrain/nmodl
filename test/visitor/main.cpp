@@ -9,8 +9,8 @@
 
 #include <catch/catch.hpp>
 
-#include "utils/logger.hpp"
 #include "pybind/pyembed.hpp"
+#include "utils/logger.hpp"
 
 using namespace nmodl;
 

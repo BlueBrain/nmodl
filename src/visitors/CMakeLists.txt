@@ -65,12 +65,28 @@ add_executable(nmodl_visitor main.cpp)
 # ~~~
 if(NOT LINK_AGAINST_PYTHON)
   target_link_libraries(visitor PRIVATE pybind11::module)
-  target_link_libraries(nmodl_visitor printer visitor symtab util lexer pyembed dl)
+  target_link_libraries(
+    nmodl_visitor
+    printer
+    visitor
+    symtab
+    util
+    lexer
+    pyembed
+    dl)
 else()
   target_link_libraries(visitor PRIVATE pybind11::embed)
-  target_link_libraries(nmodl_visitor printer visitor symtab util lexer pywrapper pyembed dl)
+  target_link_libraries(
+    nmodl_visitor
+    printer
+    visitor
+    symtab
+    util
+    lexer
+    pywrapper
+    pyembed
+    dl)
 endif()
-
 
 # =============================================================================
 # Install executable

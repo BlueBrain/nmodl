@@ -55,48 +55,48 @@ target_link_libraries(testmodtoken lexer util)
 target_link_libraries(testlexer lexer util)
 if(NOT LINK_AGAINST_PYTHON)
   target_link_libraries(
-          testparser
-          visitor
-          symtab
-          lexer
-          util
-          test_util
-          printer
-          pyembed
-          dl)
+    testparser
+    visitor
+    symtab
+    lexer
+    util
+    test_util
+    printer
+    pyembed
+    dl)
   target_link_libraries(
-          testvisitor
-          visitor
-          symtab
-          lexer
-          util
-          test_util
-          printer
-          pyembed
-          dl)
+    testvisitor
+    visitor
+    symtab
+    lexer
+    util
+    test_util
+    printer
+    pyembed
+    dl)
 else()
   target_link_libraries(
-          testparser
-          visitor
-          symtab
-          lexer
-          util
-          test_util
-          printer
-          pywrapper
-          pyembed
-          dl)
+    testparser
+    visitor
+    symtab
+    lexer
+    util
+    test_util
+    printer
+    pywrapper
+    pyembed
+    dl)
   target_link_libraries(
-          testvisitor
-          visitor
-          symtab
-          lexer
-          util
-          test_util
-          printer
-          pywrapper
-          pyembed
-          dl)
+    testvisitor
+    visitor
+    symtab
+    lexer
+    util
+    test_util
+    printer
+    pywrapper
+    pyembed
+    dl)
 endif()
 target_link_libraries(testprinter printer util)
 target_link_libraries(testsymtab symtab lexer util)
@@ -127,8 +127,8 @@ foreach(
 
   if(${CMAKE_VERSION} VERSION_GREATER "3.10")
     if(${test_name} STREQUAL "testvisitor")
-      catch_discover_tests(${test_name} TEST_PREFIX "${test_name}/"
-              PROPERTIES ENVIRONMENT "${testvisitor_env}")
+      catch_discover_tests(${test_name} TEST_PREFIX "${test_name}/" PROPERTIES ENVIRONMENT
+                           "${testvisitor_env}")
     else()
       catch_discover_tests(${test_name} TEST_PREFIX "${test_name}/")
     endif()
@@ -143,11 +143,10 @@ endforeach()
 # =============================================================================
 # pybind11 tests
 # =============================================================================
-add_test(NAME "pytest/ode" COMMAND ${PYTHON_EXECUTABLE} -m pytest
-                                   ${NMODL_PROJECT_SOURCE_DIR}/test/ode)
-add_test(NAME "pytest/pybind" COMMAND ${PYTHON_EXECUTABLE} -m pytest
-                                      ${NMODL_PROJECT_SOURCE_DIR}/test/pybind)
-foreach(test_name "pytest/ode" "pytest/pybind")
-  set_tests_properties(${test_name} PROPERTIES ENVIRONMENT
-                                               PYTHONPATH=${PROJECT_BINARY_DIR}/lib/python:$ENV{PYTHONPATH})
+add_test(NAME Ode COMMAND ${PYTHON_EXECUTABLE} -m pytest ${NMODL_PROJECT_SOURCE_DIR}/test/ode)
+add_test(NAME Pybind COMMAND ${PYTHON_EXECUTABLE} -m pytest ${NMODL_PROJECT_SOURCE_DIR}/test/pybind)
+foreach(test_name Ode Pybind)
+  set_tests_properties(
+    ${test_name} PROPERTIES ENVIRONMENT
+                            PYTHONPATH=${PROJECT_BINARY_DIR}/lib/python:$ENV{PYTHONPATH})
 endforeach()
