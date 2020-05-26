@@ -39,23 +39,20 @@ def get_sphinx_command():
 
 class Docs(Command):
     description = "Generate & optionally upload documentation to docs server"
-    user_options = [("upload", None, "Upload to docs server")]
+    user_options = []
     finalize_options = lambda self: None
+    initialize_options = lambda self: None
 
-    def initialize_options(self):
-        pass
 
     def run(self, *args, **kwargs):
         self.run_command("doctest")
         self.run_command("buildhtml")
 
-        self.run_command("thisCommandShouldNotExist")
-
 
 
 install_requirements = [
     "PyYAML>=3.13",
-    "sympy>=1.3",
+    "sympy>=1.3,<1.6",
 ]
 
 setup(
