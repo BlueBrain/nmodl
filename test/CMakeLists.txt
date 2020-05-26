@@ -55,25 +55,25 @@ target_link_libraries(testmodtoken lexer util)
 target_link_libraries(testlexer lexer util)
 if(NOT LINK_AGAINST_PYTHON)
   target_link_libraries(
-    testparser
-    visitor
-    symtab
-    lexer
-    util
-    test_util
-    printer
-    pyembed
-    dl)
+          testparser
+          visitor
+          symtab
+          lexer
+          util
+          test_util
+          printer
+          pyembed
+          dl)
   target_link_libraries(
-    testvisitor
-    visitor
-    symtab
-    lexer
-    util
-    test_util
-    printer
-    pyembed
-    dl)
+          testvisitor
+          visitor
+          symtab
+          lexer
+          util
+          test_util
+          printer
+          pyembed
+          dl)
 else()
   target_link_libraries(
           testparser
@@ -107,6 +107,12 @@ target_link_libraries(testunitparser lexer test_util config)
 # Use catch_discover instead of add_test for granular test report if CMAKE ver is greater than 3.9,
 # else use the normal add_test method
 # =============================================================================
+set(testvisitor_env "PYTHONPATH=${PROJECT_BINARY_DIR}/lib/python:$ENV{PYTHONPATH}")
+if(NOT LINK_AGAINST_PYTHON)
+  list(APPEND testvisitor_env "NMODL_PYLIB=$ENV{NMODL_PYLIB}")
+  list(APPEND testvisitor_env "NMODL_WRAPLIB=$ENV{NMODL_WRAPLIB}")
+endif()
+
 foreach(
   test_name
   testmodtoken
@@ -120,13 +126,16 @@ foreach(
   testunitparser)
 
   if(${CMAKE_VERSION} VERSION_GREATER "3.10")
-    catch_discover_tests(${test_name} TEST_PREFIX "${test_name}/" PROPERTIES ENVIRONMENT
-                         PYTHONPATH=${PROJECT_BINARY_DIR}/lib/python:$ENV{PYTHONPATH})
+    if(${test_name} STREQUAL "testvisitor")
+      catch_discover_tests(${test_name} TEST_PREFIX "${test_name}/"
+              PROPERTIES ENVIRONMENT "${testvisitor_env}")
+    else()
+      catch_discover_tests(${test_name} TEST_PREFIX "${test_name}/")
+    endif()
   else()
     add_test(NAME ${test_name} COMMAND ${test_name})
     if(${test_name} STREQUAL "testvisitor")
-      set_tests_properties(${test_name}
-                           PROPERTIES ENVIRONMENT PYTHONPATH=${PROJECT_BINARY_DIR}/lib/python:$ENV{PYTHONPATH})
+      set_tests_properties(${test_name} PROPERTIES ENVIRONMENT "${testvisitor_env}")
     endif()
   endif()
 endforeach()

@@ -9,7 +9,7 @@ set(properties ${TEST_PROPERTIES})
 set(script)
 set(suite)
 set(tests)
-
+message(STATUS "properties: ${properties}")
 function(add_command NAME)
   set(_args "")
   foreach(_arg ${ARGN})
@@ -48,6 +48,7 @@ endmacro()
 if(NOT EXISTS "${TEST_EXECUTABLE}")
   message(FATAL_ERROR "Specified test executable '${TEST_EXECUTABLE}' does not exist")
 endif()
+message(STATUS "${TEST_EXECUTOR} ${TEST_EXECUTABLE} ${spec} --list-tests")
 execute_process(
   COMMAND ${TEST_EXECUTOR} "${TEST_EXECUTABLE}" ${spec} --list-tests
   OUTPUT_VARIABLE output
