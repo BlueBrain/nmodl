@@ -50,6 +50,8 @@ addons:
       - doxygen
       - libboost-all-dev
       - libfl-dev
+      - libopenmpi-dev
+      - openmpi-bin
       - pandoc
       - python3-dev
       - python3-pip
@@ -61,6 +63,7 @@ addons:
       - boost
       - cmake
       - flex
+      - openmpi
       - python@3
     update: true
 
