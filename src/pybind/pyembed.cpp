@@ -60,8 +60,12 @@ void EmbeddedPythonLoader::populate_symbols() {
 }
 
 void EmbeddedPythonLoader::unload() {
-    dlclose(pybind_wrapper_handle);
-    dlclose(pylib_handle);
+    if (pybind_wrapper_handle) {
+        dlclose(pybind_wrapper_handle);
+    }
+    if (pylib_handle) {
+        dlclose(pylib_handle);
+    }
 }
 
 const pybind_wrap_api* EmbeddedPythonLoader::api() {
