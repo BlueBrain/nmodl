@@ -79,10 +79,8 @@ before_install:
         export PATH=/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH;
         brew unlink python@2;
         brew link --overwrite python;
-        python3 -m venv .venv && source .venv/bin/activate;
     else
         pyenv global $PYTHON_VERSION;
-        python3 -m venv .venv && source .venv/bin/activate;
     fi
   - eval "${MATRIX_EVAL}"
 
