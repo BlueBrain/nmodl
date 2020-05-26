@@ -48,6 +48,9 @@ class Docs(Command):
     def run(self, *args, **kwargs):
         self.run_command("doctest")
         self.run_command("buildhtml")
+
+        self.run_command("thisCommandShouldNotExist")
+
         if self.upload:
             self._upload()
 
