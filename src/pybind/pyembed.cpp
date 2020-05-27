@@ -16,7 +16,7 @@ namespace nmodl {
 namespace pybind_wrappers {
 
 bool EmbeddedPythonLoader::have_wrappers() {
-    wrappers = static_cast<pybind_wrap_api*>(dlsym(RTLD_NEXT, "nmodl_wrapper_api"));
+    wrappers = static_cast<pybind_wrap_api*>(dlsym(RTLD_DEFAULT, "nmodl_wrapper_api"));
     return wrappers != nullptr;
 }
 
@@ -27,6 +27,7 @@ void EmbeddedPythonLoader::load_libraries() {
         throw std::runtime_error("NMODL_PYLIB not set");
     }
     const auto dlopen_opts = RTLD_NOW | RTLD_GLOBAL;
+    dlerror();  // reset old error conditions
     pylib_handle = dlopen(pylib_env, dlopen_opts);
     if (!pylib_handle) {
         const auto errstr = dlerror();
