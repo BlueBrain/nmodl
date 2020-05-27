@@ -18,14 +18,14 @@ namespace nmodl {
 namespace pybind_wrappers {
 
 
-struct py_executor {
-    virtual ~py_executor() {}
+struct PythonExecutor {
+    virtual ~PythonExecutor() {}
 
     virtual void operator()() = 0;
 };
 
 
-struct solve_linear_system_executor: public py_executor {
+struct SolveLinearSystemExecutor: public PythonExecutor {
     // input
     std::vector<std::string> eq_system;
     std::vector<std::string> state_vars;
@@ -45,7 +45,7 @@ struct solve_linear_system_executor: public py_executor {
     virtual void operator()() override;
 };
 
-struct solve_non_linear_system_executor: public py_executor {
+struct SolveNonLinearSystemExecutor: public PythonExecutor {
     // input
     std::vector<std::string> eq_system;
     std::vector<std::string> state_vars;
@@ -61,7 +61,7 @@ struct solve_non_linear_system_executor: public py_executor {
     virtual void operator()() override;
 };
 
-struct diffeq_solver_executor: public py_executor {
+struct DiffeqSolverExecutor: public PythonExecutor {
     // input
     std::string node_as_nmodl;
     std::string dt_var;
@@ -79,7 +79,7 @@ struct diffeq_solver_executor: public py_executor {
     virtual void operator()() override;
 };
 
-struct analytic_diff_executor: public py_executor {
+struct AnalyticDiffExecutor: public PythonExecutor {
     // input
 
     std::vector<std::string> expressions;
@@ -95,14 +95,14 @@ struct analytic_diff_executor: public py_executor {
 };
 
 
-solve_linear_system_executor* create_sls_executor_func();
-solve_non_linear_system_executor* create_nsls_executor_func();
-diffeq_solver_executor* create_des_executor_func();
-analytic_diff_executor* create_ads_executor_func();
-void destroy_sls_executor_func(solve_linear_system_executor* exec);
-void destroy_nsls_executor_func(solve_non_linear_system_executor* exec);
-void destroy_des_executor_func(diffeq_solver_executor* exec);
-void destroy_ads_executor_func(analytic_diff_executor* exec);
+SolveLinearSystemExecutor* create_sls_executor_func();
+SolveNonLinearSystemExecutor* create_nsls_executor_func();
+DiffeqSolverExecutor* create_des_executor_func();
+AnalyticDiffExecutor* create_ads_executor_func();
+void destroy_sls_executor_func(SolveLinearSystemExecutor* exec);
+void destroy_nsls_executor_func(SolveNonLinearSystemExecutor* exec);
+void destroy_des_executor_func(DiffeqSolverExecutor* exec);
+void destroy_ads_executor_func(AnalyticDiffExecutor* exec);
 
 void initialize_interpreter_func();
 void finalize_interpreter_func();

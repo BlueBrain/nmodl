@@ -9,9 +9,6 @@
 
 #include <algorithm>
 
-#include <pybind11/embed.h>
-#include <pybind11/stl.h>
-
 #include "ast/all.hpp"
 #include "pybind/pyembed.hpp"
 #include "symtab/symbol.hpp"
@@ -19,9 +16,7 @@
 #include "visitors/lookup_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
 
-
-namespace py = pybind11;
-using namespace py::literals;
+namespace pywrap = nmodl::pybind_wrappers;
 
 namespace nmodl {
 namespace visitor {
@@ -80,17 +75,14 @@ std::vector<std::string> SympyConductanceVisitor::generate_statement_strings(
                                                  ordered_binary_exprs.begin() +
                                                      binary_expr_index[lhs_str] + 1);
             // differentiate dI/dV
-            auto analytic_diff = nmodl::pybind_wrappers::EmbeddedPythonLoader::get_instance()
-                                     .api()
-                                     ->create_ads_executor();
+            auto analytic_diff =
+                pywrap::EmbeddedPythonLoader::get_instance().api()->create_ads_executor();
             analytic_diff->expressions = expressions;
             analytic_diff->used_names_in_block = used_names_in_block;
             (*analytic_diff)();
             auto dIdV = analytic_diff->solution;
             auto exception_message = analytic_diff->exception_message;
-            nmodl::pybind_wrappers::EmbeddedPythonLoader::get_instance()
-                .api()
-                ->destroy_ads_executor(analytic_diff);
+            pywrap::EmbeddedPythonLoader::get_instance().api()->destroy_ads_executor(analytic_diff);
             if (!exception_message.empty()) {
                 logger->warn("SympyConductance :: python exception: {}", exception_message);
             }

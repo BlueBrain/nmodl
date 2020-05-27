@@ -21,7 +21,7 @@ using namespace py::literals;
 namespace nmodl {
 namespace pybind_wrappers {
 
-void solve_linear_system_executor::operator()() {
+void SolveLinearSystemExecutor::operator()() {
     const auto locals = py::dict("eq_strings"_a = eq_system,
                                  "state_vars"_a = state_vars,
                                  "vars"_a = vars,
@@ -55,7 +55,7 @@ void solve_linear_system_executor::operator()() {
 }
 
 
-void solve_non_linear_system_executor::operator()() {
+void SolveNonLinearSystemExecutor::operator()() {
     const auto locals = py::dict("equation_strings"_a = eq_system,
                                  "state_vars"_a = state_vars,
                                  "vars"_a = vars,
@@ -82,7 +82,7 @@ void solve_non_linear_system_executor::operator()() {
     exception_message = locals["exception_message"].cast<std::string>();
 }
 
-void diffeq_solver_executor::operator()() {
+void DiffeqSolverExecutor::operator()() {
     const auto locals = py::dict("equation_string"_a = node_as_nmodl,
                                  "dt_var"_a = dt_var,
                                  "vars"_a = vars,
@@ -130,7 +130,7 @@ void diffeq_solver_executor::operator()() {
     exception_message = locals["exception_message"].cast<std::string>();
 }
 
-void analytic_diff_executor::operator()() {
+void AnalyticDiffExecutor::operator()() {
     auto locals = py::dict("expressions"_a = expressions, "vars"_a = used_names_in_block);
     py::exec(R"(
                             from nmodl.ode import differentiate2c
@@ -153,35 +153,35 @@ void analytic_diff_executor::operator()() {
     exception_message = locals["exception_message"].cast<std::string>();
 }
 
-solve_linear_system_executor* create_sls_executor_func() {
-    return new solve_linear_system_executor();
+SolveLinearSystemExecutor* create_sls_executor_func() {
+    return new SolveLinearSystemExecutor();
 }
 
-solve_non_linear_system_executor* create_nsls_executor_func() {
-    return new solve_non_linear_system_executor();
+SolveNonLinearSystemExecutor* create_nsls_executor_func() {
+    return new SolveNonLinearSystemExecutor();
 }
 
-diffeq_solver_executor* create_des_executor_func() {
-    return new diffeq_solver_executor();
+DiffeqSolverExecutor* create_des_executor_func() {
+    return new DiffeqSolverExecutor();
 }
 
-analytic_diff_executor* create_ads_executor_func() {
-    return new analytic_diff_executor();
+AnalyticDiffExecutor* create_ads_executor_func() {
+    return new AnalyticDiffExecutor();
 }
 
-void destroy_sls_executor_func(solve_linear_system_executor* exec) {
+void destroy_sls_executor_func(SolveLinearSystemExecutor* exec) {
     delete exec;
 }
 
-void destroy_nsls_executor_func(solve_non_linear_system_executor* exec) {
+void destroy_nsls_executor_func(SolveNonLinearSystemExecutor* exec) {
     delete exec;
 }
 
-void destroy_des_executor_func(diffeq_solver_executor* exec) {
+void destroy_des_executor_func(DiffeqSolverExecutor* exec) {
     delete exec;
 }
 
-void destroy_ads_executor_func(analytic_diff_executor* exec) {
+void destroy_ads_executor_func(AnalyticDiffExecutor* exec) {
     delete exec;
 }
 
@@ -202,7 +202,7 @@ void finalize_interpreter_func() {
 }  // namespace nmodl
 
 
-__attribute__((visibility("default"))) nmodl::pybind_wrappers::pybind_wrap_api wrapper_api = {
+__attribute__((visibility("default"))) nmodl::pybind_wrappers::pybind_wrap_api nmodl_wrapper_api = {
     &nmodl::pybind_wrappers::initialize_interpreter_func,
     &nmodl::pybind_wrappers::finalize_interpreter_func,
     &nmodl::pybind_wrappers::create_sls_executor_func,

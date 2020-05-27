@@ -53,51 +53,24 @@ add_executable(testunitparser units/parser.cpp)
 
 target_link_libraries(testmodtoken lexer util)
 target_link_libraries(testlexer lexer util)
-if(NOT LINK_AGAINST_PYTHON)
-  target_link_libraries(
-    testparser
-    visitor
-    symtab
-    lexer
-    util
-    test_util
-    printer
-    pyembed
-    dl)
-  target_link_libraries(
-    testvisitor
-    visitor
-    symtab
-    lexer
-    util
-    test_util
-    printer
-    pyembed
-    dl)
-else()
-  target_link_libraries(
-    testparser
-    visitor
-    symtab
-    lexer
-    util
-    test_util
-    printer
-    pywrapper
-    pyembed
-    dl)
-  target_link_libraries(
-    testvisitor
-    visitor
-    symtab
-    lexer
-    util
-    test_util
-    printer
-    pywrapper
-    pyembed
-    dl)
-endif()
+target_link_libraries(
+  testparser
+  visitor
+  symtab
+  lexer
+  util
+  test_util
+  printer
+  ${NMODL_WRAPPER_LIBS})
+target_link_libraries(
+  testvisitor
+  visitor
+  symtab
+  lexer
+  util
+  test_util
+  printer
+  ${NMODL_WRAPPER_LIBS})
 target_link_libraries(testprinter printer util)
 target_link_libraries(testsymtab symtab lexer util)
 target_link_libraries(testunitlexer lexer util)

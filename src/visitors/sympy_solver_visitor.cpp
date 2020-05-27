@@ -18,6 +18,8 @@
 #include "visitors/visitor_utils.hpp"
 
 
+namespace pywrap = nmodl::pybind_wrappers;
+
 namespace nmodl {
 namespace visitor {
 
@@ -272,8 +274,7 @@ void SympySolverVisitor::solve_linear_system(const std::vector<std::string>& pre
     init_state_vars_vector();
     // call sympy linear solver
     bool small_system = (eq_system.size() <= SMALL_LINEAR_SYSTEM_MAX_STATES);
-    auto solver =
-        nmodl::pybind_wrappers::EmbeddedPythonLoader::get_instance().api()->create_sls_executor();
+    auto solver = pywrap::EmbeddedPythonLoader::get_instance().api()->create_sls_executor();
     solver->eq_system = eq_system;
     solver->state_vars = state_vars;
     solver->vars = vars;
@@ -287,8 +288,7 @@ void SympySolverVisitor::solve_linear_system(const std::vector<std::string>& pre
     auto new_local_vars = solver->new_local_vars;
     // may also return a python exception message:
     auto exception_message = solver->exception_message;
-    nmodl::pybind_wrappers::EmbeddedPythonLoader::get_instance().api()->destroy_sls_executor(
-        solver);
+    pywrap::EmbeddedPythonLoader::get_instance().api()->destroy_sls_executor(solver);
     if (!exception_message.empty()) {
         logger->warn("SympySolverVisitor :: solve_lin_system python exception: " +
                      exception_message);
@@ -337,8 +337,7 @@ void SympySolverVisitor::solve_non_linear_system(
     init_state_vars_vector();
     // call sympy non-linear solver
 
-    auto solver =
-        nmodl::pybind_wrappers::EmbeddedPythonLoader::get_instance().api()->create_nsls_executor();
+    auto solver = pywrap::EmbeddedPythonLoader::get_instance().api()->create_nsls_executor();
     solver->eq_system = eq_system;
     solver->state_vars = state_vars;
     solver->vars = vars;
@@ -348,8 +347,7 @@ void SympySolverVisitor::solve_non_linear_system(
     auto solutions = solver->solutions;
     // may also return a python exception message:
     auto exception_message = solver->exception_message;
-    nmodl::pybind_wrappers::EmbeddedPythonLoader::get_instance().api()->destroy_nsls_executor(
-        solver);
+    pywrap::EmbeddedPythonLoader::get_instance().api()->destroy_nsls_executor(solver);
     if (!exception_message.empty()) {
         logger->warn("SympySolverVisitor :: solve_non_lin_system python exception: " +
                      exception_message);
@@ -398,8 +396,7 @@ void SympySolverVisitor::visit_diff_eq_expression(ast::DiffEqExpression& node) {
     check_expr_statements_in_same_block();
 
     const auto node_as_nmodl = to_nmodl_for_sympy(node);
-    auto diffeq_solver =
-        nmodl::pybind_wrappers::EmbeddedPythonLoader::get_instance().api()->create_des_executor();
+    auto diffeq_solver = pywrap::EmbeddedPythonLoader::get_instance().api()->create_des_executor();
     diffeq_solver->node_as_nmodl = node_as_nmodl;
     diffeq_solver->dt_var = codegen::naming::NTHREAD_DT_VARIABLE;
     diffeq_solver->vars = vars;
@@ -443,8 +440,7 @@ void SympySolverVisitor::visit_diff_eq_expression(ast::DiffEqExpression& node) {
     logger->debug("SympySolverVisitor :: -> solution: {}", solution);
 
     auto exception_message = diffeq_solver->exception_message;
-    nmodl::pybind_wrappers::EmbeddedPythonLoader::get_instance().api()->destroy_des_executor(
-        diffeq_solver);
+    pywrap::EmbeddedPythonLoader::get_instance().api()->destroy_des_executor(diffeq_solver);
     if (!exception_message.empty()) {
         logger->warn("SympySolverVisitor :: python exception: " + exception_message);
         return;

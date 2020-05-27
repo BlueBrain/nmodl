@@ -16,7 +16,7 @@ namespace nmodl {
 namespace pybind_wrappers {
 
 bool EmbeddedPythonLoader::have_wrappers() {
-    wrappers = static_cast<pybind_wrap_api*>(dlsym(RTLD_NEXT, "wrapper_api"));
+    wrappers = static_cast<pybind_wrap_api*>(dlsym(RTLD_NEXT, "nmodl_wrapper_api"));
     return wrappers != nullptr;
 }
 
@@ -50,7 +50,7 @@ void EmbeddedPythonLoader::load_libraries() {
 }
 
 void EmbeddedPythonLoader::populate_symbols() {
-    wrappers = static_cast<pybind_wrap_api*>(dlsym(pybind_wrapper_handle, "wrapper_api"));
+    wrappers = static_cast<pybind_wrap_api*>(dlsym(pybind_wrapper_handle, "nmodl_wrapper_api"));
     if (!wrappers) {
         const auto errstr = dlerror();
         logger->critical("Tried but failed to load pybind wrapper symbols");
