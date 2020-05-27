@@ -198,19 +198,22 @@ void finalize_interpreter_func() {
     pybind11::finalize_interpreter();
 }
 
+pybind_wrap_api init_pybind_wrap_api() {
+    return { &nmodl::pybind_wrappers::initialize_interpreter_func,
+                &nmodl::pybind_wrappers::finalize_interpreter_func,
+                &nmodl::pybind_wrappers::create_sls_executor_func,
+                &nmodl::pybind_wrappers::create_nsls_executor_func,
+                &nmodl::pybind_wrappers::create_des_executor_func,
+                &nmodl::pybind_wrappers::create_ads_executor_func,
+                &nmodl::pybind_wrappers::destroy_sls_executor_func,
+                &nmodl::pybind_wrappers::destroy_nsls_executor_func,
+                &nmodl::pybind_wrappers::destroy_des_executor_func,
+                &nmodl::pybind_wrappers::destroy_ads_executor_func,
+    };
+}
+
 }  // namespace pybind_wrappers
 }  // namespace nmodl
 
 
-__attribute__((visibility("default"))) nmodl::pybind_wrappers::pybind_wrap_api nmodl_wrapper_api = {
-    &nmodl::pybind_wrappers::initialize_interpreter_func,
-    &nmodl::pybind_wrappers::finalize_interpreter_func,
-    &nmodl::pybind_wrappers::create_sls_executor_func,
-    &nmodl::pybind_wrappers::create_nsls_executor_func,
-    &nmodl::pybind_wrappers::create_des_executor_func,
-    &nmodl::pybind_wrappers::create_ads_executor_func,
-    &nmodl::pybind_wrappers::destroy_sls_executor_func,
-    &nmodl::pybind_wrappers::destroy_nsls_executor_func,
-    &nmodl::pybind_wrappers::destroy_des_executor_func,
-    &nmodl::pybind_wrappers::destroy_ads_executor_func,
-};
+__attribute__((visibility("default"))) nmodl::pybind_wrappers::pybind_wrap_api nmodl_wrapper_api = nmodl::pybind_wrappers::init_pybind_wrap_api();
