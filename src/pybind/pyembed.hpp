@@ -176,3 +176,7 @@ class EmbeddedPythonLoader {
 };
 }  // namespace pybind_wrappers
 }  // namespace nmodl
+
+// used when linking statically
+
+extern nmodl::pybind_wrappers::pybind_wrap_api nmodl_wrapper_api;

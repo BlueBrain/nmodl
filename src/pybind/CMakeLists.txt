@@ -34,7 +34,13 @@ set(PYNMODL_HEADERS
 add_library(pyembed ${CMAKE_CURRENT_SOURCE_DIR}/pyembed.cpp)
 set_property(TARGET pyembed PROPERTY POSITION_INDEPENDENT_CODE ON)
 
-add_library(pywrapper SHARED ${CMAKE_CURRENT_SOURCE_DIR}/wrapper.cpp)
+if(NOT LINK_AGAINST_PYTHON)
+  add_library(pywrapper SHARED ${CMAKE_CURRENT_SOURCE_DIR}/wrapper.cpp)
+else()
+  add_library(pywrapper ${CMAKE_CURRENT_SOURCE_DIR}/wrapper.cpp)
+  set_property(TARGET pywrapper PROPERTY POSITION_INDEPENDENT_CODE ON)
+  target_compile_definitions(pyembed PRIVATE STATIC_PYWRAPPER=1)
+endif()
 
 target_include_directories(pyembed PRIVATE ${PYBIND11_INCLUDE_DIR} ${PYTHON_INCLUDE_DIRS})
 target_include_directories(pywrapper PRIVATE ${pybind11_INCLUDE_DIRS} ${PYTHON_INCLUDE_DIRS})

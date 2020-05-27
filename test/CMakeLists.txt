@@ -83,7 +83,13 @@ target_link_libraries(testunitparser lexer test_util config)
 set(testvisitor_env "PYTHONPATH=${PROJECT_BINARY_DIR}/lib/python:$ENV{PYTHONPATH}")
 if(NOT LINK_AGAINST_PYTHON)
   list(APPEND testvisitor_env "NMODL_PYLIB=$ENV{NMODL_PYLIB}")
-  list(APPEND testvisitor_env "NMODL_WRAPLIB=$ENV{NMODL_WRAPLIB}")
+  if(CMAKE_SYSTEM_NAME MATCHES "Linux")
+    list(APPEND testvisitor_env
+                "NMODL_WRAPLIB=${PROJECT_BINARY_DIR}/lib/python/nmodl/libpywrapper.so")
+  elseif(CMAKE_SYSTEM_NAME MATCHES "Darwin")
+    list(APPEND testvisitor_env
+                "NMODL_WRAPLIB=${PROJECT_BINARY_DIR}/lib/python/nmodl/libpywrapper.dylib")
+  endif()
 endif()
 
 foreach(
