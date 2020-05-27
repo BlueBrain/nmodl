@@ -304,7 +304,7 @@ class Symbol {
         properties |= property;
     }
 
-    /// add new property to symbol
+    /// remove property from symbol
     void remove_property(syminfo::NmodlType property) {
         properties &= ~property;
     }
