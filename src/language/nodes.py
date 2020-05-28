@@ -272,6 +272,27 @@ class ChildNode(BaseNode):
                             auto last_it = const_iter_cast({self.varname}, last);
                             return {self.varname}.erase(first_it, last_it);
                          }}
+                         /**
+                          * \\brief Erase non-consecutive members to {self.varname}
+                          */
+                         void erase_{to_snake_case(self.class_name)}(const std::unordered_set<{self.class_name}*>& to_be_erased) {{
+                            // loosely following the cpp reference of remove_if
+
+                            auto first = {self.varname}.begin();
+                            auto last = {self.varname}.end();
+                            auto result = first;
+                        
+                            while (first != last) {{
+                                if (to_be_erased.find(first->get()) == to_be_erased.end()) {{
+                                    reset_{to_snake_case(self.class_name)}(result, *first);
+                                    ++result;
+                                }}
+                                    ++first;
+                                }}
+
+                            erase_{to_snake_case(self.class_name)}(result, last);
+                         }}
+                        
 
                          /**
                           * \\brief Insert member to {self.varname}
