@@ -18,19 +18,6 @@ foreach(
   list(APPEND NMODL_PYTHON_FILES_OUT ${PROJECT_BINARY_DIR}/nmodl/${file})
 endforeach()
 
-set(PYNMODL_SOURCES
-    ${PROJECT_BINARY_DIR}/src/pybind/pyast.cpp ${PROJECT_BINARY_DIR}/src/pybind/pyvisitor.cpp
-    ${PROJECT_BINARY_DIR}/src/pybind/pysymtab.cpp
-    ${NMODL_PROJECT_SOURCE_DIR}/src/pybind/pynmodl.cpp)
-
-set(PYNMODL_HEADERS
-    ${PROJECT_BINARY_DIR}/src/ast/ast_decl.hpp
-    ${NMODL_PROJECT_SOURCE_DIR}/src/ast/ast_common.hpp
-    ${PROJECT_BINARY_DIR}/src/visitors/visitor.hpp
-    ${NMODL_PROJECT_SOURCE_DIR}/src/pybind/pybind_utils.hpp
-    ${PROJECT_BINARY_DIR}/src/pybind/pyast.hpp
-    ${PROJECT_BINARY_DIR}/src/pybind/pyvisitor.hpp)
-
 add_library(pyembed ${CMAKE_CURRENT_SOURCE_DIR}/pyembed.cpp)
 set_property(TARGET pyembed PROPERTY POSITION_INDEPENDENT_CODE ON)
 
