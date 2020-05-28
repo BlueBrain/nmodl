@@ -198,7 +198,7 @@ void finalize_interpreter_func() {
     pybind11::finalize_interpreter();
 }
 
-pybind_wrap_api init_pybind_wrap_api() {
+pybind_wrap_api init_pybind_wrap_api() noexcept {
     return { &nmodl::pybind_wrappers::initialize_interpreter_func,
                 &nmodl::pybind_wrappers::finalize_interpreter_func,
                 &nmodl::pybind_wrappers::create_sls_executor_func,

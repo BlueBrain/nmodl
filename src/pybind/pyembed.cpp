@@ -17,8 +17,8 @@ namespace pybind_wrappers {
 
 bool EmbeddedPythonLoader::have_wrappers() {
 #if defined(STATIC_PYWRAPPER)
-    nmodl_wrapper_api = nmodl::pybind_wrappers::init_pybind_wrap_api();
-    wrappers = &nmodl_wrapper_api;
+    static auto wrapper_api = nmodl::pybind_wrappers::init_pybind_wrap_api();
+    wrappers = &wrapper_api;
     return true;
 #else
     wrappers = static_cast<pybind_wrap_api*>(dlsym(RTLD_DEFAULT, "nmodl_wrapper_api"));

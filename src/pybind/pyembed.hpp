@@ -175,7 +175,7 @@ class EmbeddedPythonLoader {
     }
 };
 
-pybind_wrap_api init_pybind_wrap_api();
+pybind_wrap_api init_pybind_wrap_api() noexcept;
 
 }  // namespace pybind_wrappers
 }  // namespace nmodl
