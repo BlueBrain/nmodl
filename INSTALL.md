@@ -83,7 +83,7 @@ export PYTHONPATH=$HOME/nmodl/lib/python:$PYTHONPATH
 
 If flex / bison are not in your default $PATH, you can provide the path to cmake as:
 
-```
+```sh
 cmake .. -DFLEX_EXECUTABLE=/usr/local/opt/flex/bin/flex \
          -DBISON_EXECUTABLE=/usr/local/opt/bison/bin/bison \
          -DCMAKE_INSTALL_PREFIX=$HOME/nmodl
@@ -150,18 +150,8 @@ NMODL is now setup correctly!
 In order to build the documentation you must have additionally `pandoc` installed. Use your
 system's package manager to do this (e.g. `sudo apt-get install pandoc`).
 
-Once you have installed NMODL and setup the correct `$PYTHONPATH`, you can build the documentation locally from the 
-docs folder as:
-
-```
-cd docs
-doxygen   # for API documentation
-make html # for user documentation
-```
-
-Alternatively, you can install the documentation using the Python setuptools script:
+You can build the entire documentation simply by using sphinx from `setup.py`:
 
 ```sh
-python3 setup.py install_doc
+python3 setup.py build_ext --inplace docs -G "Unix Makefiles"
 ```
-
