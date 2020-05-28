@@ -21,12 +21,14 @@ namespace visitor {
 void GlobalToRangeVisitor::visit_neuron_block(ast::NeuronBlock& node) {
     ast::RangeVarVector range_variables;
     std::vector<std::string> global_variables_to_remove;
+    std::vector<ast::StatementVector::const_iterator> global_statements_to_remove;
 
     auto& statement_block = node.get_statement_block();
     auto& statements = (*statement_block).get_statements();
     const auto& symbol_table = ast->get_symbol_table();
 
-    for (auto& statement: statements) {
+    for (auto statements_it = statements.begin(); statements_it < statements.end(); statements_it++) {
+        auto& statement = *statements_it;
         /// only process global statements
         if (statement->is_global()) {
             const auto& global_variables =
@@ -51,7 +53,16 @@ void GlobalToRangeVisitor::visit_neuron_block(ast::NeuronBlock& node) {
                             });
                 std::static_pointer_cast<ast::Global>(statement)->erase_global_var(global_var_iter);
             }
+            /// add empty global statements to global_statements_to_remove
+            if (global_variables.empty()) {
+                global_statements_to_remove.emplace_back(statements_it);
+            }
         }
+    }
+
+    /// remove offending global statements if empty
+    for (auto& global_statement_to_remove: global_statements_to_remove) {
+        (*statement_block).erase_statement(global_statement_to_remove);
     }
 
     /// insert new range variables replacing global ones
