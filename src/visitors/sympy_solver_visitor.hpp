@@ -14,8 +14,8 @@
 
 #include <pybind11/embed.h>
 #include <pybind11/stl.h>
-#include <set>
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 #include "ast/ast.hpp"
