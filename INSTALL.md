@@ -101,6 +101,32 @@ pip3 install --user .
 This should build the NMODL framework and install it into your pip user `site-packages` folder such that it becomes
 available as a Python module.
 
+### When building without linking against libpython
+
+NMODL uses an embedded python to symbolically evaluate differential equations. For this to work we would usually link
+against libpython, which is automatically taken care of by pybind11. In some cases, for instance when building a
+python wheel, we cannot link against libpython, because we cannot know where it will be at runtime. Instead, we load
+the python library (along with a wrapper library that manages calls to embedded python) at runtime.
+To disable linking against python and enabling dynamic loading of libpython at runtime we need to configure the build 
+with the cmake option `-DLINK_AGAINST_PYTHON=False`.
+
+In order for NMODL binaries to know where to find libpython and our own libpywrapper two environment variables need to
+be present:
+
+* `NMODL_PYLIB`: This variable should point to the libpython shared-object (or dylib) file. On macos this could be
+for example:
+````sh
+export NMODL_PYLIB=/usr/local/Cellar/python/3.7.7/Frameworks/Python.framework/Versions/3.7/Python
+````
+* 'NMODL_WRAPLIB': This variable should point to the `libpywrapper.so` built as part of NMODL, for example:
+```sh
+export NMODL_WRAPLIB=/opt/nmodl/lib/python/nmodl/libpywrapper.dylib
+```
+
+**Note**: In order for all unit tests to function correctly when building without linking against libpython we must
+set `NMODL_PYLIB` before running cmake!
+
+
 ## Testing the Installed Module
 
 If you have installed the NMODL Framework using CMake, you can now run tests from the build directory as:

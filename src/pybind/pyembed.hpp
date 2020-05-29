@@ -45,6 +45,7 @@ struct SolveLinearSystemExecutor: public PythonExecutor {
     virtual void operator()() override;
 };
 
+
 struct SolveNonLinearSystemExecutor: public PythonExecutor {
     // input
     std::vector<std::string> eq_system;
@@ -60,6 +61,7 @@ struct SolveNonLinearSystemExecutor: public PythonExecutor {
     // executor function
     virtual void operator()() override;
 };
+
 
 struct DiffeqSolverExecutor: public PythonExecutor {
     // input
@@ -79,9 +81,9 @@ struct DiffeqSolverExecutor: public PythonExecutor {
     virtual void operator()() override;
 };
 
+
 struct AnalyticDiffExecutor: public PythonExecutor {
     // input
-
     std::vector<std::string> expressions;
     std::set<std::string> used_names_in_block;
     // output
@@ -119,6 +121,7 @@ struct pybind_wrap_api {
     decltype(&destroy_des_executor_func) destroy_des_executor;
     decltype(&destroy_ads_executor_func) destroy_ads_executor;
 };
+
 
 /**
  * A singleton class handling access to the pybind_wrap_api struct
@@ -174,6 +177,7 @@ class EmbeddedPythonLoader {
         }
     }
 };
+
 
 pybind_wrap_api init_pybind_wrap_api() noexcept;
 

@@ -26,7 +26,7 @@ if(NOT LINK_AGAINST_PYTHON)
 else()
   add_library(pywrapper ${CMAKE_CURRENT_SOURCE_DIR}/wrapper.cpp)
   set_property(TARGET pywrapper PROPERTY POSITION_INDEPENDENT_CODE ON)
-  target_compile_definitions(pyembed PRIVATE STATIC_PYWRAPPER=1)
+  target_compile_definitions(pyembed PRIVATE NMODL_STATIC_PYWRAPPER=1)
 endif()
 
 target_include_directories(pyembed PRIVATE ${PYBIND11_INCLUDE_DIR} ${PYTHON_INCLUDE_DIRS})
