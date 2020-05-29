@@ -274,23 +274,28 @@ class ChildNode(BaseNode):
                          }}
                          /**
                           * \\brief Erase non-consecutive members to {self.varname}
+                          * 
+                          * loosely following the cpp reference of remove_if
                           */
-                         void erase_{to_snake_case(self.class_name)}(const std::unordered_set<{self.class_name}*>& to_be_erased) {{
-                            // loosely following the cpp reference of remove_if
-
+                         size_t erase_{to_snake_case(self.class_name)}(std::unordered_set<{self.class_name}*>& to_be_erased) {{
                             auto first = {self.varname}.begin();
                             auto last = {self.varname}.end();
                             auto result = first;
                         
                             while (first != last) {{
-                                if (to_be_erased.find(first->get()) == to_be_erased.end()) {{
-                                    reset_{to_snake_case(self.class_name)}(result, *first);
-                                    ++result;
-                                }}
+                                    // automatically erase dangling pointers from the uset while
+                                    // looking for them to erase them in the vector
+                                    if (to_be_erased.erase(first->get()) == 0) {{
+                                        reset_{to_snake_case(self.class_name)}(result, *first);
+                                        ++result;
+                                    }}
                                     ++first;
                                 }}
-
+                            
+                            size_t out = last - result;
                             erase_{to_snake_case(self.class_name)}(result, last);
+                            
+                            return out;
                          }}
                         
 
