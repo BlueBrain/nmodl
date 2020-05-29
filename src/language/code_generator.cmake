@@ -190,6 +190,14 @@ set(AST_GENERATED_SOURCES
     ${PROJECT_BINARY_DIR}/src/ast/write_ion_var.hpp
 )
 
+set(PYBIND_GENERATED_SOURCES
+    ${PROJECT_BINARY_DIR}/src/pybind/pyast.cpp
+    ${PROJECT_BINARY_DIR}/src/pybind/pyast.hpp
+    ${PROJECT_BINARY_DIR}/src/pybind/pysymtab.cpp
+    ${PROJECT_BINARY_DIR}/src/pybind/pyvisitor.cpp
+    ${PROJECT_BINARY_DIR}/src/pybind/pyvisitor.hpp
+)
+
 set(VISITORS_GENERATED_SOURCES
     ${PROJECT_BINARY_DIR}/src/visitors/ast_visitor.cpp
     ${PROJECT_BINARY_DIR}/src/visitors/ast_visitor.hpp
@@ -204,14 +212,6 @@ set(VISITORS_GENERATED_SOURCES
     ${PROJECT_BINARY_DIR}/src/visitors/symtab_visitor.cpp
     ${PROJECT_BINARY_DIR}/src/visitors/symtab_visitor.hpp
     ${PROJECT_BINARY_DIR}/src/visitors/visitor.hpp
-)
-
-set(PYBIND_GENERATED_SOURCES
-    ${PROJECT_BINARY_DIR}/src/pybind/pyast.cpp
-    ${PROJECT_BINARY_DIR}/src/pybind/pyast.hpp
-    ${PROJECT_BINARY_DIR}/src/pybind/pysymtab.cpp
-    ${PROJECT_BINARY_DIR}/src/pybind/pyvisitor.cpp
-    ${PROJECT_BINARY_DIR}/src/pybind/pyvisitor.hpp
 )
 
 set(NMODL_GENERATED_SOURCES
