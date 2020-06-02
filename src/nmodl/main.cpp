@@ -32,6 +32,7 @@
 #include "visitors/kinetic_block_visitor.hpp"
 #include "visitors/local_var_rename_visitor.hpp"
 #include "visitors/localize_visitor.hpp"
+#include "visitors/local_var_visitor.hpp"
 #include "visitors/loop_unroll_visitor.hpp"
 #include "visitors/neuron_solve_visitor.hpp"
 #include "visitors/nmodl_visitor.hpp"
@@ -330,6 +331,13 @@ int main(int argc, const char* argv[]) {
             if (CodegenCompatibilityVisitor().find_unhandled_ast_nodes(*ast) && !force_codegen) {
                 return 1;
             }
+        }
+
+        /// LOCAL to RANGE visitor
+        {
+            logger->info("Running LOCAL to RANGE visitor");
+            LocalToRangeVisitor().visit_program(*ast);
+            ast_to_nmodl(*ast, filepath("localtorange"));
         }
 
         if (show_symtab) {
