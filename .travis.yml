@@ -119,7 +119,7 @@ after_success:
       echo "------- Build Documentation -------";
       python3 setup.py build_ext --inplace docs -j 2 -G "Unix Makefiles" || travis_terminate 1;
       cd $TRAVIS_BUILD_DIR/_skbuild/linux-x86_64-3.8/setuptools/sphinx;
-      rm -rf doctrees && touch .nojekyll;
+      rm -rf doctest doctrees && touch .nojekyll;
       echo "<meta http-equiv=\"refresh\" content=\"0; url=./html/index.html\" />" > index.html;
     fi
   - echo "------- Build and Test CoreNEURON -------"
@@ -151,5 +151,5 @@ deploy:
   local_dir: $TRAVIS_BUILD_DIR/_skbuild/linux-x86_64-3.8/setuptools/sphinx/
   target_branch: gh-pages
   on:
-    branch: fixup/docs-deploy
+    branch: master
     condition: $TRAVIS_OS_NAME = linux
