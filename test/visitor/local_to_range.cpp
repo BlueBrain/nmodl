@@ -47,7 +47,7 @@ SCENARIO("LOCAL to RANGE variable transformer", "[visitor][localtorange]") {
                 SUFFIX test
             }
             LOCAL x, y
-            BREAKPOINT {
+            INITIAL {
                 x = 1
             }
         )";

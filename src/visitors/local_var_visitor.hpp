@@ -30,6 +30,24 @@ namespace visitor {
 /**
  * \class LocalToRangeVisitor
  * \brief Visitor to convert top level LOCAL variables to RANGE variables
+ *
+ * Some of the existing mod file include declaration of LOCAL variables in
+ * the top level of the mod file. Those variables are normally written in
+ * the INITIAL block which is executed potentially by multiple threads.
+ * This commands them to become RANGE variables to be able to be written
+ * and read by multiple threads without race conditions.
+ * For example:
+ *
+ * \code{.mod}
+ *      NEURON {
+ *          SUFFIX test
+ *  	    GLOBAL x
+ *      }
+ *      LOCAL x, y
+ *      INITIAL {
+ *          x = 1
+ *      }
+ * \endcode
  */
 
 class LocalToRangeVisitor: public AstVisitor {
