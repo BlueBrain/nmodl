@@ -35,6 +35,11 @@ std::string get_new_name(const std::string& name,
     return (name + "_" + suffix + "_" + std::to_string(counter));
 }
 
+std::shared_ptr<ast::Name> get_name_from_string(const std::string& name) {
+    auto string_name = std::make_shared<ast::String>(name);
+    return std::make_shared<ast::Name>(string_name);
+}
+
 std::shared_ptr<ast::LocalListStatement> get_local_list_statement(const StatementBlock& node) {
     const auto& statements = node.get_statements();
     for (const auto& statement: statements) {

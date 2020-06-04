@@ -20,7 +20,7 @@
 #include "visitors/ast_visitor.hpp"
 
 namespace nmodl {
-    namespace visitor {
+namespace visitor {
 
 /**
  * @addtogroup visitor_classes
@@ -33,7 +33,7 @@ namespace nmodl {
  */
 
 class LocalToRangeVisitor: public AstVisitor {
-public:
+  public:
     /// \name Ctor & dtor
     /// \{
 
@@ -49,5 +49,5 @@ public:
 
 /** @} */  // end of visitor_classes
 
-    }  // namespace visitor
+}  // namespace visitor
 }  // namespace nmodl
