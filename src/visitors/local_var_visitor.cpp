@@ -18,6 +18,7 @@
 #include "ast/program.hpp"
 #include "ast/range.hpp"
 #include "ast/range_var.hpp"
+#include "ast/statement_block.hpp"
 #include "ast/string.hpp"
 #include "visitors/local_var_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
@@ -47,7 +48,8 @@ void LocalToRangeVisitor::visit_program(ast::Program& node) {
                 auto variable_name = local_variable->get_node_name();
                 /// check if local variable is being updated in the mod file
                 if (symbol_table->lookup(variable_name)->get_write_count() > 0) {
-                    range_variables.emplace_back(new ast::RangeVar(get_name_from_string(local_variable->get_node_name())));
+                    range_variables.emplace_back(
+                        new ast::RangeVar(get_name_from_string(local_variable->get_node_name())));
                     local_variables_to_remove.emplace(local_variable.get());
                 }
             }
