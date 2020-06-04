@@ -324,22 +324,24 @@ int main(int argc, const char* argv[]) {
             ast_to_nmodl(*ast, filepath("globaltorange"));
         }
 
+        /// LOCAL to RANGE visitor
+        {
+            logger->info("Running LOCAL to RANGE visitor");
+            PerfVisitor().visit_program(*ast);
+            LocalToRangeVisitor().visit_program(*ast);
+            SymtabVisitor(update_symtab).visit_program(*ast);
+            ast_to_nmodl(*ast, filepath("localtorange"));
+        }
+
         {
             // Compatibility Checking
             logger->info("Running code compatibility checker");
-            // run perfvisitor to update read/wrie counts
+            // run perfvisitor to update read/write counts
             PerfVisitor().visit_program(*ast);
             // If there is an incompatible construct and code generation is not forced exit NMODL
             if (CodegenCompatibilityVisitor().find_unhandled_ast_nodes(*ast) && !force_codegen) {
                 return 1;
             }
-        }
-
-        /// LOCAL to RANGE visitor
-        {
-            logger->info("Running LOCAL to RANGE visitor");
-            LocalToRangeVisitor().visit_program(*ast);
-            ast_to_nmodl(*ast, filepath("localtorange"));
         }
 
         if (show_symtab) {

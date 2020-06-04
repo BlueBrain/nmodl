@@ -29,13 +29,14 @@ namespace visitor {
 
 /**
  * \class LocalToRangeVisitor
- * \brief Visitor to convert top level LOCAL variables to RANGE variables
+ * \brief Visitor to convert top level LOCAL variables to ASSIGNED variables
  *
  * Some of the existing mod file include declaration of LOCAL variables in
  * the top level of the mod file. Those variables are normally written in
  * the INITIAL block which is executed potentially by multiple threads.
- * This commands them to become RANGE variables to be able to be written
- * and read by multiple threads without race conditions.
+ * This commands them to become ASSIGNED variables which by default are
+ * handled as RANGE variables to be able to be written and read by multiple
+ * threads without race conditions.
  * For example:
  *
  * \code{.mod}
@@ -61,7 +62,7 @@ class LocalToRangeVisitor: public AstVisitor {
     /// \}
 
     /// Visit ast::Program node to transform top level LOCAL variables
-    /// to RANGE if they are written in the mod file
+    /// to ASSIGNED if they are written in the mod file
     void visit_program(ast::Program& node) override;
 };
 

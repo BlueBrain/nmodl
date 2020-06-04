@@ -28,7 +28,7 @@ using symtab::syminfo::NmodlType;
 // GlobalToRange visitor tests
 //=============================================================================
 
-std::shared_ptr<ast::Program> run_local_to_var_visitor(const std::string& text) {
+std::shared_ptr<ast::Program> run_local_to_assigned_visitor(const std::string& text) {
     std::map<std::string, std::string> rval;
     NmodlDriver driver;
     auto ast = driver.parse_string(text);
@@ -40,29 +40,36 @@ std::shared_ptr<ast::Program> run_local_to_var_visitor(const std::string& text) 
     return ast;
 }
 
-SCENARIO("LOCAL to RANGE variable transformer", "[visitor][localtorange]") {
+SCENARIO("LOCAL to RANGE variable transformer", "[visitor][localtoassigned]") {
     GIVEN("mod file with LOCAL variables that are written") {
         std::string input_nmodl = R"(
             NEURON {
                 SUFFIX test
             }
-            LOCAL x, y
+            LOCAL x, y, z
             INITIAL {
                 x = 1
             }
+            BREAKPOINT {
+                z = 2
+            }
         )";
-        auto ast = run_local_to_var_visitor(input_nmodl);
+        auto ast = run_local_to_assigned_visitor(input_nmodl);
         auto symtab = ast->get_symbol_table();
-        THEN("LOCAL variables that are written are turned to RANGE") {
-            /// check for all RANGE variables : old ones + newly converted ones
-            auto vars = symtab->get_variables_with_properties(NmodlType::range_var);
-            REQUIRE(vars.size() == 1);
+        THEN("LOCAL variables that are written are turned to ASSIGNED") {
+            /// check for all ASSIGNED variables : old ones + newly converted ones
+            auto vars = symtab->get_variables_with_properties(NmodlType::assigned_definition);
+            REQUIRE(vars.size() == 2);
 
-            /// x should be converted from LOCAL to RANGE
+            /// x and z should be converted from LOCAL to ASSIGNED
             auto x = symtab->lookup("x");
             REQUIRE(x != nullptr);
-            REQUIRE(x->has_any_property(NmodlType::range_var) == true);
+            REQUIRE(x->has_any_property(NmodlType::assigned_definition) == true);
             REQUIRE(x->has_any_property(NmodlType::local_var) == false);
+            auto z = symtab->lookup("z");
+            REQUIRE(z != nullptr);
+            REQUIRE(z->has_any_property(NmodlType::assigned_definition) == true);
+            REQUIRE(z->has_any_property(NmodlType::local_var) == false);
         }
         THEN("LOCAL variables that are read only remain LOCAL") {
             auto vars = symtab->get_variables_with_properties(NmodlType::local_var);

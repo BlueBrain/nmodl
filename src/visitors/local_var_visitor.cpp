@@ -9,17 +9,12 @@
 #include <memory>
 #include <unordered_set>
 
-#include "ast/identifier.hpp"
+#include "ast/assigned_block.hpp"
+#include "ast/assigned_definition.hpp"
 #include "ast/local_list_statement.hpp"
 #include "ast/local_var.hpp"
-#include "ast/name.hpp"
-#include "ast/neuron_block.hpp"
 #include "ast/node.hpp"
 #include "ast/program.hpp"
-#include "ast/range.hpp"
-#include "ast/range_var.hpp"
-#include "ast/statement_block.hpp"
-#include "ast/string.hpp"
 #include "visitors/local_var_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
 
@@ -27,10 +22,10 @@ namespace nmodl {
 namespace visitor {
 
 void LocalToRangeVisitor::visit_program(ast::Program& node) {
-    ast::RangeVarVector range_variables;
+    ast::AssignedDefinitionVector assigned_variables;
     std::unordered_set<ast::LocalVar*> local_variables_to_remove;
     std::unordered_set<ast::Node*> local_nodes_to_remove;
-    std::shared_ptr<ast::NeuronBlock> neuron_block;
+    std::shared_ptr<ast::AssignedBlock> assigned_block;
 
     const auto& top_level_nodes = node.get_blocks();
     const auto& symbol_table = node.get_symbol_table();
@@ -44,8 +39,14 @@ void LocalToRangeVisitor::visit_program(ast::Program& node) {
                 auto variable_name = local_variable->get_node_name();
                 /// check if local variable is being updated in the mod file
                 if (symbol_table->lookup(variable_name)->get_write_count() > 0) {
-                    range_variables.emplace_back(
-                        new ast::RangeVar(get_name_from_string(local_variable->get_node_name())));
+                    assigned_variables.emplace_back(
+                        new ast::AssignedDefinition(local_variable->get_name(),
+                                                    nullptr,
+                                                    nullptr,
+                                                    nullptr,
+                                                    nullptr,
+                                                    nullptr,
+                                                    nullptr));
                     local_variables_to_remove.emplace(local_variable.get());
                 }
             }
@@ -59,19 +60,23 @@ void LocalToRangeVisitor::visit_program(ast::Program& node) {
                 local_nodes_to_remove.emplace(top_level_node.get());
             }
         }
-        /// save pointer to neuron block to add the range variables
-        if (top_level_node->is_neuron_block()) {
-            neuron_block = std::static_pointer_cast<ast::NeuronBlock>(top_level_node);
+        /// save pointer to assigned block to add the assigned variables
+        if (top_level_node->is_assigned_block()) {
+            assigned_block = std::static_pointer_cast<ast::AssignedBlock>(top_level_node);
         }
     }
 
     /// remove offending local statements if empty
     node.erase_node(local_nodes_to_remove);
 
-    /// insert new range variables to statement block of the neuron block
-    if (!range_variables.empty()) {
-        auto range_statement = new ast::Range(range_variables);
-        neuron_block->get_statement_block()->emplace_back_statement(range_statement);
+    /// if no assigned block found add one to the node otherwise emplace back new assigned variables
+    if (assigned_block == nullptr) {
+        assigned_block = std::make_shared<ast::AssignedBlock>(assigned_variables);
+        node.emplace_back_node(std::static_pointer_cast<ast::Node>(assigned_block));
+    } else {
+        for (auto& assigned_variable: assigned_variables) {
+            assigned_block->emplace_back_assigned_definition(assigned_variable);
+        }
     }
 }
 
