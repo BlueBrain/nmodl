@@ -875,17 +875,26 @@ std::vector<IndexVariableInfo> CodegenCVisitor::get_int_variables() {
 
     for (const auto& ion: info.ions) {
         bool need_style = false;
-        for (const auto& var: ion.reads) {
-            variables.emplace_back(make_symbol("ion_" + var));
-            variables.back().is_constant = true;
-        }
+        std::unordered_set<std::string> no_doubles;  // used to keep track of the variables to not
+                                                     // have doubles between read/write. Same name
+                                                     // variables are allowed as required in issue
+                                                     // #215
         for (const auto& var: ion.writes) {
-            variables.emplace_back(make_symbol("ion_" + var));
+            const std::string name = "ion_" + var;
+            no_doubles.emplace(name);
+            variables.emplace_back(make_symbol(name));
             if (ion.is_ionic_current(var)) {
                 variables.emplace_back(make_symbol("ion_di" + ion.name + "dv"));
             }
             if (ion.is_intra_cell_conc(var) || ion.is_extra_cell_conc(var)) {
                 need_style = true;
+            }
+        }
+        for (const auto& var: ion.reads) {
+            const std::string name = "ion_" + var;
+            if (no_doubles.find(name) == no_doubles.end()) {
+                variables.emplace_back(make_symbol(name));
+                variables.back().is_constant = true;
             }
         }
         if (need_style) {
