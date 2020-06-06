@@ -20,6 +20,9 @@
  */
 
 #include "ast/ast.hpp"
+{% for header in node_info.CIRCULAR_DEPENDECIES %}
+#include "ast/{{header}}.hpp"
+{% endfor %}
 
 {% for node in nodes %}
 #ifndef {{ node.cpp_fence }}

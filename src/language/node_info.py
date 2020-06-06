@@ -170,3 +170,10 @@ UNIT_BLOCK = "UnitBlock"
 ORDER_VAR_NAME = "order"
 BINARY_OPERATOR_NAME = "op"
 # yapf: enable
+
+# those are the header file names that have circular dependencies in the NMODL
+# language abstract class definition. This means that the header file that fully
+# defines a class should be included in the beginning of the all.hpp file
+# because another class is depending on it, while in the NMODL language abstract
+# class definition the first class is defined after the dependent one
+CIRCULAR_DEPENDECIES = {"assigned_definition"}
