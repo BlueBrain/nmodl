@@ -324,13 +324,13 @@ int main(int argc, const char* argv[]) {
             ast_to_nmodl(*ast, filepath("globaltorange"));
         }
 
-        /// LOCAL to RANGE visitor
+        /// LOCAL to ASSIGNED visitor
         {
-            logger->info("Running LOCAL to RANGE visitor");
+            logger->info("Running LOCAL to ASSIGNED visitor");
             PerfVisitor().visit_program(*ast);
-            LocalToRangeVisitor().visit_program(*ast);
+            LocalToAssignedVisitor().visit_program(*ast);
             SymtabVisitor(update_symtab).visit_program(*ast);
-            ast_to_nmodl(*ast, filepath("localtorange"));
+            ast_to_nmodl(*ast, filepath("localtoassigned"));
         }
 
         {

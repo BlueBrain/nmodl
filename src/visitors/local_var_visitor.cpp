@@ -21,7 +21,7 @@
 namespace nmodl {
 namespace visitor {
 
-void LocalToRangeVisitor::visit_program(ast::Program& node) {
+void LocalToAssignedVisitor::visit_program(ast::Program& node) {
     ast::AssignedDefinitionVector assigned_variables;
     std::unordered_set<ast::LocalVar*> local_variables_to_remove;
     std::unordered_set<ast::Node*> local_nodes_to_remove;

@@ -45,7 +45,7 @@ add_executable(
   visitor/sympy_solver.cpp
   visitor/units.cpp
   visitor/var_usage.cpp
-  visitor/verbatim.cpp visitor/local_to_range.cpp)
+  visitor/verbatim.cpp visitor/local_to_assigned.cpp)
 add_executable(testprinter printer/printer.cpp)
 add_executable(testsymtab symtab/symbol_table.cpp)
 add_executable(testnewton newton/newton.cpp ${SOLVER_SOURCE_FILES})

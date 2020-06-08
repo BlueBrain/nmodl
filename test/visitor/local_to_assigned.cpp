@@ -35,12 +35,12 @@ std::shared_ptr<ast::Program> run_local_to_assigned_visitor(const std::string& t
 
     SymtabVisitor().visit_program(*ast);
     PerfVisitor().visit_program(*ast);
-    LocalToRangeVisitor().visit_program(*ast);
+    LocalToAssignedVisitor().visit_program(*ast);
     SymtabVisitor().visit_program(*ast);
     return ast;
 }
 
-SCENARIO("LOCAL to RANGE variable transformer", "[visitor][localtoassigned]") {
+SCENARIO("LOCAL to ASSIGNED variable transformer", "[visitor][localtoassigned]") {
     GIVEN("mod file with LOCAL variables that are written") {
         std::string input_nmodl = R"(
             NEURON {

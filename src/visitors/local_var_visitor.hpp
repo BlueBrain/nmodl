@@ -9,7 +9,7 @@
 
 /**
  * \file
- * \brief \copybrief nmodl::visitor::LocalToRangeVisitor
+ * \brief \copybrief nmodl::visitor::LocalToAssignedVisitor
  */
 
 #include <sstream>
@@ -28,7 +28,7 @@ namespace visitor {
  */
 
 /**
- * \class LocalToRangeVisitor
+ * \class LocalToAssignedVisitor
  * \brief Visitor to convert top level LOCAL variables to ASSIGNED variables
  *
  * Some of the existing mod file include declaration of LOCAL variables in
@@ -51,13 +51,13 @@ namespace visitor {
  * \endcode
  */
 
-class LocalToRangeVisitor: public AstVisitor {
+class LocalToAssignedVisitor: public AstVisitor {
   public:
     /// \name Ctor & dtor
     /// \{
 
     /// Default constructor
-    LocalToRangeVisitor() = default;
+    LocalToAssignedVisitor() = default;
 
     /// \}
 
