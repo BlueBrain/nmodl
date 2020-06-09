@@ -27,26 +27,26 @@ void LocalToAssignedVisitor::visit_program(ast::Program& node) {
     std::unordered_set<ast::Node*> local_nodes_to_remove;
     std::shared_ptr<ast::AssignedBlock> assigned_block;
 
-    const auto& top_level_nodes = node.get_blocks();
+    auto& top_level_nodes = node.get_blocks();
     const auto& symbol_table = node.get_symbol_table();
 
     for (auto& top_level_node: top_level_nodes) {
         /// only process local_list statements
         if (top_level_node->is_local_list_statement()) {
-            const auto& local_variables =
+            auto& local_variables =
                 std::static_pointer_cast<ast::LocalListStatement>(top_level_node)->get_variables();
             for (auto& local_variable: local_variables) {
                 auto variable_name = local_variable->get_node_name();
                 /// check if local variable is being updated in the mod file
                 if (symbol_table->lookup(variable_name)->get_write_count() > 0) {
                     assigned_variables.emplace_back(
-                        new ast::AssignedDefinition(local_variable->get_name(),
-                                                    nullptr,
-                                                    nullptr,
-                                                    nullptr,
-                                                    nullptr,
-                                                    nullptr,
-                                                    nullptr));
+                        std::make_shared<ast::AssignedDefinition>(local_variable->get_name(),
+                                                                  nullptr,
+                                                                  nullptr,
+                                                                  nullptr,
+                                                                  nullptr,
+                                                                  nullptr,
+                                                                  nullptr));
                     local_variables_to_remove.emplace(local_variable.get());
                 }
             }
