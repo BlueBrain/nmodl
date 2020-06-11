@@ -53,14 +53,18 @@ SCENARIO("Rename variables that ISPC parses as double constants", "[visitor][isp
         THEN(
             "Variables that match the constant double presentation in ISPC are renamed to "
             "var_<original_name>") {
-            /// check if var_d1 and var_d2 exist
+            /// check if var_d1 and var_d2 exist and replaced d1 and d2
             auto var_d1 = symtab->lookup("var_d1");
             REQUIRE(var_d1 != nullptr);
+            auto d1 = symtab->lookup("d1");
+            REQUIRE(d1 == nullptr);
             auto var_d2 = symtab->lookup("var_d2");
             REQUIRE(var_d2 != nullptr);
+            auto d2 = symtab->lookup("d2");
+            REQUIRE(d2 == nullptr);
         }
         THEN("Variables that don't match the constant double presentation in ISPC stay the same") {
-            /// check if var_d3
+            /// check if var_d3 exists
             auto var_d1 = symtab->lookup("var_d3");
             REQUIRE(var_d1 != nullptr);
         }
