@@ -9,6 +9,7 @@
 
 #include "ast/all.hpp"
 #include "parser/c11_driver.hpp"
+#include "visitors/visitor_utils.hpp"
 
 
 namespace nmodl {
@@ -18,9 +19,9 @@ namespace visitor {
 void IspcRenameVisitor::visit_name(ast::Name& node) {
     const auto& name = node.get_node_name();
     if (std::regex_match(name, double_regex)) {
-        std::cout << "Renaming " << name << " to " << new_var_name_prefix + name << std::endl;
         auto& value = node.get_value();
-        value->set(new_var_name_prefix + name);
+        const auto& vars = get_global_vars(*ast);
+        value->set(suffix_random_string(vars, new_var_name_prefix + name));
     }
 }
 
@@ -51,7 +52,7 @@ void IspcRenameVisitor::visit_verbatim(ast::Verbatim& node) {
     std::string result;
     for (auto& token: tokens) {
         if (std::regex_match(token, double_regex)) {
-            result += new_var_name_prefix + token;
+            result += suffix_random_string(get_global_vars(*ast), new_var_name_prefix + token);
         } else {
             result += token;
         }

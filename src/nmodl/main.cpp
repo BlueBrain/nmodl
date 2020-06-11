@@ -313,7 +313,9 @@ int main(int argc, const char* argv[]) {
 
         /// Rename variables that match ISPC compiler double constants
         if (ispc_backend) {
-            IspcRenameVisitor().visit_program(*ast);
+            IspcRenameVisitor(ast).visit_program(*ast);
+            SymtabVisitor(update_symtab).visit_program(*ast);
+            ast_to_nmodl(*ast, filepath("ispcdoublerename"));
         }
 
         /// GLOBAL to RANGE rename visitor

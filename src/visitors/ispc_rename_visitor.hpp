@@ -38,6 +38,9 @@ namespace visitor {
  */
 class IspcRenameVisitor: public AstVisitor {
   private:
+    /// ast::Ast* node
+    std::shared_ptr<ast::Program> ast;
+
     /// regex that matches double constant expressions
     const std::regex double_regex = std::move(
         std::regex("([0-9\\.]*d[\\-0-9]+)|([0-9\\.]+d[\\-0-9]*)"));
@@ -49,7 +52,12 @@ class IspcRenameVisitor: public AstVisitor {
     bool rename_verbatim = true;
 
   public:
-    IspcRenameVisitor() = default;
+    /// Default constructor
+    IspcRenameVisitor() = delete;
+
+    /// Constructor that takes as parameter the AST
+    explicit IspcRenameVisitor(std::shared_ptr<ast::Program> node)
+        : ast(std::move(node)) {}
 
     void enable_verbatim(bool state) {
         rename_verbatim = state;
