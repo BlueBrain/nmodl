@@ -29,7 +29,7 @@ namespace visitor {
 
 /**
  * \class IspcRenameVisitor
- * \brief Rename variable names to match ISPC standards
+ * \brief Rename variable names to match with ISPC backend requirement
  *
  * Here are some examples of double constants that
  * ISPC compiler parses: 3.14d, 31.4d-1, 1.d, 1.0d,

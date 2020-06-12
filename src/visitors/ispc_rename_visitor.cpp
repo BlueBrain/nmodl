@@ -41,7 +41,7 @@ void IspcRenameVisitor::visit_name(ast::Name& node) {
 
 /** Prime name has member order which is an integer. In theory
  * integer could be "macro name" and hence could end-up renaming
- * macro. In practice this won't be an issue as we order is set
+ * macro. In practice this won't be an issue as the order is set
  * by parser. To be safe we are only renaming prime variable.
  */
 void IspcRenameVisitor::visit_prime_name(ast::PrimeName& node) {
