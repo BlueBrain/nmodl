@@ -19,10 +19,18 @@ namespace visitor {
 /// rename matching variable
 void IspcRenameVisitor::visit_name(ast::Name& node) {
     const auto& name = node.get_node_name();
+    std::string new_name;
     if (std::regex_match(name, double_regex)) {
         auto& value = node.get_value();
-        const auto& vars = get_global_vars(*ast);
-        const auto& new_name = suffix_random_string(vars, new_var_name_prefix + name);
+        /// Check if variable is already renamed and use the same naming otherwise add the new_name
+        /// to the renamed_variables map
+        if (renamed_variables.find(name) != renamed_variables.end()) {
+            new_name = renamed_variables[name];
+        } else {
+            const auto& vars = get_global_vars(*ast);
+            new_name = suffix_random_string(vars, new_var_name_prefix + name);
+            renamed_variables[name] = new_name;
+        }
         value->set(new_name);
         logger->warn("IspcRenameVisitor :: Renaming variable {} in {} to {}",
                      name,
@@ -58,8 +66,16 @@ void IspcRenameVisitor::visit_verbatim(ast::Verbatim& node) {
     std::string result;
     for (auto& token: tokens) {
         if (std::regex_match(token, double_regex)) {
-            const auto& new_name = suffix_random_string(get_global_vars(*ast),
-                                                        new_var_name_prefix + token);
+            /// Check if variable is already renamed and use the same naming otherwise add the
+            /// new_name to the renamed_variables map
+            std::string new_name;
+            if (renamed_variables.find(token) != renamed_variables.end()) {
+                new_name = renamed_variables[token];
+            } else {
+                const auto& vars = get_global_vars(*ast);
+                new_name = suffix_random_string(vars, new_var_name_prefix + token);
+                renamed_variables[token] = new_name;
+            }
             result += new_name;
             logger->warn("IspcRenameVisitor :: Renaming variable {} in VERBATIM block {} to {}",
                          token,

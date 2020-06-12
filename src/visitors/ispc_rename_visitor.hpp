@@ -14,6 +14,7 @@
 
 #include <regex>
 #include <string>
+#include <unordered_map>
 
 #include "visitors/ast_visitor.hpp"
 
@@ -48,7 +49,11 @@ class IspcRenameVisitor: public AstVisitor {
     /// new name
     const std::string new_var_name_prefix = "var_";
 
-    // rename verbatim blocks as well
+    /// Map that keeps the renamed variables to keep the same random suffix when a variable is
+    /// renamed accross the whole file
+    std::unordered_map<std::string, std::string> renamed_variables;
+
+    /// rename verbatim blocks as well
     bool rename_verbatim = true;
 
   public:
