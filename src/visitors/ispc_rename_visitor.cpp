@@ -9,6 +9,7 @@
 
 #include "ast/all.hpp"
 #include "parser/c11_driver.hpp"
+#include "utils/logger.hpp"
 #include "visitors/visitor_utils.hpp"
 
 
@@ -21,7 +22,12 @@ void IspcRenameVisitor::visit_name(ast::Name& node) {
     if (std::regex_match(name, double_regex)) {
         auto& value = node.get_value();
         const auto& vars = get_global_vars(*ast);
-        value->set(suffix_random_string(vars, new_var_name_prefix + name));
+        const auto& new_name = suffix_random_string(vars, new_var_name_prefix + name);
+        value->set(new_name);
+        logger->warn("IspcRenameVisitor :: Renaming variable {} in {} to {}",
+                     name,
+                     node.get_token()->position(),
+                     new_name);
     }
 }
 
@@ -52,7 +58,13 @@ void IspcRenameVisitor::visit_verbatim(ast::Verbatim& node) {
     std::string result;
     for (auto& token: tokens) {
         if (std::regex_match(token, double_regex)) {
-            result += suffix_random_string(get_global_vars(*ast), new_var_name_prefix + token);
+            const auto& new_name = suffix_random_string(get_global_vars(*ast),
+                                                        new_var_name_prefix + token);
+            result += new_name;
+            logger->warn("IspcRenameVisitor :: Renaming variable {} in VERBATIM block {} to {}",
+                         token,
+                         node.get_token()->position(),
+                         new_name);
         } else {
             result += token;
         }
