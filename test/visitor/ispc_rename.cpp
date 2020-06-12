@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (C) 2018-2019 Blue Brain Project
+ * Copyright (C) 2018-2020 Blue Brain Project
  *
  * This file is part of NMODL distributed under the terms of the GNU
  * Lesser General Public License. See top-level LICENSE file for details.
@@ -13,6 +13,7 @@
 #include "visitors/ispc_rename_visitor.hpp"
 #include "visitors/lookup_visitor.hpp"
 #include "visitors/symtab_visitor.hpp"
+#include "visitors/verbatim_visitor.hpp"
 
 using namespace nmodl;
 using namespace visitor;
@@ -23,7 +24,7 @@ using nmodl::parser::NmodlDriver;
 using symtab::syminfo::NmodlType;
 
 //=============================================================================
-// GlobalToRange visitor tests
+// IspcRename visitor tests
 //=============================================================================
 
 std::shared_ptr<ast::Program> run_ispc_rename_visitor(const std::string& text) {
@@ -33,6 +34,15 @@ std::shared_ptr<ast::Program> run_ispc_rename_visitor(const std::string& text) {
     IspcRenameVisitor(ast).visit_program(*ast);
     SymtabVisitor().visit_program(*ast);
     return ast;
+}
+
+std::vector<std::string> run_verbatim_visitor(const std::shared_ptr<ast::Program>& ast) {
+    NmodlDriver driver;
+
+    VerbatimVisitor v;
+    v.visit_program(*ast);
+
+    return v.verbatim_blocks();
 }
 
 SCENARIO("Rename variables that ISPC parses as double constants", "[visitor][ispcrename]") {
@@ -47,8 +57,12 @@ SCENARIO("Rename variables that ISPC parses as double constants", "[visitor][isp
                  d2 = 2
                  var_d3 = 3
             }
+            PROCEDURE func () {
+            VERBATIM d4 = 4 ENDVERBATIM
+            }
         )";
         auto ast = run_ispc_rename_visitor(input_nmodl);
+        auto verbatim_blocks = run_verbatim_visitor(ast);
         auto symtab = ast->get_symbol_table();
         THEN(
             "Variables that match the constant double presentation in ISPC are renamed to "
@@ -62,11 +76,14 @@ SCENARIO("Rename variables that ISPC parses as double constants", "[visitor][isp
             REQUIRE(var_d2 != nullptr);
             auto d2 = symtab->lookup("d2");
             REQUIRE(d2 == nullptr);
+            /// Check if VERBATIM block variable is renamed
+            REQUIRE(verbatim_blocks.size() == 1);
+            REQUIRE(verbatim_blocks.front() == " var_d4 = 4 ");
         }
         THEN("Variables that don't match the constant double presentation in ISPC stay the same") {
             /// check if var_d3 exists
-            auto var_d1 = symtab->lookup("var_d3");
-            REQUIRE(var_d1 != nullptr);
+            auto var_d3 = symtab->lookup("var_d3");
+            REQUIRE(var_d3 != nullptr);
         }
     }
 }

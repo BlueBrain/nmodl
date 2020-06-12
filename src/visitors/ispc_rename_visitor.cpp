@@ -77,9 +77,8 @@ void IspcRenameVisitor::visit_verbatim(ast::Verbatim& node) {
                 renamed_variables[token] = new_name;
             }
             result += new_name;
-            logger->warn("IspcRenameVisitor :: Renaming variable {} in VERBATIM block {} to {}",
+            logger->warn("IspcRenameVisitor :: Renaming variable {} in VERBATIM block to {}",
                          token,
-                         node.get_token()->position(),
                          new_name);
         } else {
             result += token;
