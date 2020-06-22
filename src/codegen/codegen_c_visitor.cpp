@@ -597,7 +597,7 @@ std::vector<std::string> CodegenCVisitor::ion_read_statements(BlockType type) {
             auto first = get_variable_name(variable_names.first);
             auto second = get_variable_name(variable_names.second);
             statements.push_back("{} = {};"_format(first, second));
-            ion_vars.emplace(var);
+            ion_vars.insert(var);
         }
         for (const auto& var: ion.writes) {
             if (type == BlockType::Ode && ion.is_ionic_conc(var) && state_variable(var) ||
@@ -609,7 +609,7 @@ std::vector<std::string> CodegenCVisitor::ion_read_statements(BlockType type) {
                 auto first = get_variable_name(variables.first);
                 auto second = get_variable_name(variables.second);
                 statements.push_back("{} = {};"_format(first, second));
-                ion_vars.emplace(var);
+                ion_vars.insert(var);
             }
         }
     }
