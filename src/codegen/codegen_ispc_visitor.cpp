@@ -72,25 +72,27 @@ void CodegenIspcVisitor::visit_local_list_statement(ast::LocalListStatement& nod
     auto local_variables = node.get_variables();
     std::string separator = ", ";
     std::set<std::string> uniform_variables;
-    for (auto iter = local_variables.begin(); iter != local_variables.end(); iter++) {
-        if ((*iter)->get_node_name().find("dt_") != std::string::npos) {
-            uniform_variables.insert((*iter)->get_node_name());
-            continue;
-        }
-        printer->add_text((*iter)->get_node_name());
-        if (!separator.empty() && !utils::is_last(iter, local_variables)) {
-            printer->add_text(separator);
+    auto dt_saved_value_exists = false;
+
+    /// Remove dt_saved_value from local_variables if it exists
+    for(auto it_local_variables = local_variables.begin(); it_local_variables < local_variables.end(); ++it_local_variables) {
+        if ((*it_local_variables)->get_node_name() == "dt_saved_value") {
+            local_variables.erase(it_local_variables);
+            dt_saved_value_exists = true;
+            break;
         }
     }
-    printer->add_text(";");
-    printer->add_newline();
-    type = CodegenCVisitor::local_var_type() + " uniform ";
-    printer->add_text(type);
-    for (auto iter = uniform_variables.begin(); iter != uniform_variables.end(); iter++) {
-        printer->add_text(*iter);
-        if (!separator.empty() && !utils::is_last(iter, uniform_variables)) {
-            printer->add_text(separator);
-        }
+
+    /// Print the local_variables like normally
+    CodegenCVisitor::print_vector_elements(local_variables, ", ");
+
+    /// Print dt_saved_value as uniform
+    if (dt_saved_value_exists) {
+        printer->add_text(";");
+        printer->add_newline();
+
+        type = CodegenCVisitor::local_var_type() + " uniform ";
+        printer->add_text(type + "dt_saved_value");
     }
 }
 
