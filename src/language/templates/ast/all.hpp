@@ -24,7 +24,9 @@
 {% for node in nodes %}
 #ifndef {{ node.cpp_fence }}
 #define {{ node.cpp_fence }}
+{% if node.has_template_methods %}
 #define {{ node.cpp_fence }}_INLINE_DEFINITION_REQUIRED
+{% endif %}
 {% include "ast/node_class.template" %}
 #endif // !{{ node.cpp_fence }}
 {% endfor %}
