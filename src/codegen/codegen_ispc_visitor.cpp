@@ -70,12 +70,13 @@ void CodegenIspcVisitor::visit_local_list_statement(ast::LocalListStatement& nod
     auto type = CodegenCVisitor::local_var_type() + " ";
     printer->add_text(type);
     auto local_variables = node.get_variables();
-    std::string separator = ", ";
     std::set<std::string> uniform_variables;
     auto dt_saved_value_exists = false;
 
     /// Remove dt_saved_value from local_variables if it exists
-    for(auto it_local_variables = local_variables.begin(); it_local_variables < local_variables.end(); ++it_local_variables) {
+    for (auto it_local_variables = local_variables.begin();
+         it_local_variables < local_variables.end();
+         ++it_local_variables) {
         if ((*it_local_variables)->get_node_name() == "dt_saved_value") {
             local_variables.erase(it_local_variables);
             dt_saved_value_exists = true;
