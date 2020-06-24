@@ -899,7 +899,7 @@ std::vector<IndexVariableInfo> CodegenCVisitor::get_int_variables() {
         for (const auto& var: ion.reads) {
             const std::string name = "ion_" + var;
             if (ion_vars.find(name) == ion_vars.end()) {
-                variables.push_back(make_symbol(name));
+                variables.emplace_back(make_symbol(name));
                 variables.back().is_constant = true;
             }
         }
