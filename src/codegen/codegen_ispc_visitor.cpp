@@ -67,6 +67,10 @@ void CodegenIspcVisitor::visit_local_list_statement(ast::LocalListStatement& nod
     if (!codegen) {
         return;
     }
+    /// Correct indentation
+    printer->add_newline();
+    printer->add_indent();
+
     /// Name of the variable _dt given by
     /// nmodl::visitor::SteadystateVisitor::create_steadystate_block()
     const std::string steadystate_dt_variable_name = "dt_saved_value";
@@ -95,7 +99,9 @@ void CodegenIspcVisitor::visit_local_list_statement(ast::LocalListStatement& nod
     /// Print dt_saved_value as uniform
     if (dt_saved_value_exists) {
         printer->add_text(";");
+        /// Correct indentation
         printer->add_newline();
+        printer->add_indent();
 
         type = CodegenCVisitor::local_var_type() + " uniform ";
         printer->add_text(type + steadystate_dt_variable_name);
