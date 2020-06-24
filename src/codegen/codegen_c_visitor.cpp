@@ -887,7 +887,7 @@ std::vector<IndexVariableInfo> CodegenCVisitor::get_int_variables() {
                                                    // variables are allowed
         for (const auto& var: ion.writes) {
             const std::string name = "ion_" + var;
-            ion_vars.emplace(name);
+            ion_vars.insert(name);
             variables.emplace_back(make_symbol(name));
             if (ion.is_ionic_current(var)) {
                 variables.emplace_back(make_symbol("ion_di" + ion.name + "dv"));
@@ -899,7 +899,7 @@ std::vector<IndexVariableInfo> CodegenCVisitor::get_int_variables() {
         for (const auto& var: ion.reads) {
             const std::string name = "ion_" + var;
             if (ion_vars.find(name) == ion_vars.end()) {
-                variables.emplace_back(make_symbol(name));
+                variables.push_back(make_symbol(name));
                 variables.back().is_constant = true;
             }
         }
