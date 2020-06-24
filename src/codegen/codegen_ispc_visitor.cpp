@@ -67,22 +67,27 @@ void CodegenIspcVisitor::visit_local_list_statement(ast::LocalListStatement& nod
     if (!codegen) {
         return;
     }
+    /// Name of the variable _dt given by
+    /// nmodl::visitor::SteadystateVisitor::create_steadystate_block()
+    const std::string steadystate_dt_variable_name = "dt_saved_value";
     auto type = CodegenCVisitor::local_var_type() + " ";
     printer->add_text(type);
     auto local_variables = node.get_variables();
-    std::set<std::string> uniform_variables;
-    auto dt_saved_value_exists = false;
+    bool dt_saved_value_exists = false;
 
     /// Remove dt_saved_value from local_variables if it exists
-    for (auto it_local_variables = local_variables.begin();
-         it_local_variables < local_variables.end();
-         ++it_local_variables) {
-        if ((*it_local_variables)->get_node_name() == "dt_saved_value") {
-            local_variables.erase(it_local_variables);
-            dt_saved_value_exists = true;
-            break;
-        }
-    }
+    local_variables.erase(std::remove_if(local_variables.begin(),
+                                         local_variables.end(),
+                                         [&](const std::shared_ptr<ast::LocalVar>& local_variable) {
+                                             if (local_variable->get_node_name() ==
+                                                 steadystate_dt_variable_name) {
+                                                 dt_saved_value_exists = true;
+                                                 return true;
+                                             } else {
+                                                 return false;
+                                             }
+                                         }),
+                          local_variables.end());
 
     /// Print the local_variables like normally
     CodegenCVisitor::print_vector_elements(local_variables, ", ");
@@ -93,7 +98,7 @@ void CodegenIspcVisitor::visit_local_list_statement(ast::LocalListStatement& nod
         printer->add_newline();
 
         type = CodegenCVisitor::local_var_type() + " uniform ";
-        printer->add_text(type + "dt_saved_value");
+        printer->add_text(type + steadystate_dt_variable_name);
     }
 }
 
