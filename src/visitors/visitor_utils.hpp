@@ -28,10 +28,6 @@ std::string get_new_name(const std::string& name,
                          std::map<std::string, int>& variables);
 
 
-/// Return shared pointer to ast::Name node from std::string
-std::shared_ptr<ast::Name> get_name_from_string(const std::string& name);
-
-
 /// Return pointer to local statement in the given block, otherwise nullptr
 std::shared_ptr<ast::LocalListStatement> get_local_list_statement(const ast::StatementBlock& node);
 

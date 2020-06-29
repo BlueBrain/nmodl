@@ -24,7 +24,7 @@ void LocalToAssignedVisitor::visit_program(ast::Program& node) {
     std::unordered_set<ast::Node*> local_nodes_to_remove;
     std::shared_ptr<ast::AssignedBlock> assigned_block;
 
-    auto& top_level_nodes = node.get_blocks();
+    const auto& top_level_nodes = node.get_blocks();
     const auto& symbol_table = node.get_symbol_table();
 
     for (auto& top_level_node: top_level_nodes) {
@@ -38,10 +38,10 @@ void LocalToAssignedVisitor::visit_program(ast::Program& node) {
             continue;
         }
 
-        auto& local_variables =
-            std::static_pointer_cast<ast::LocalListStatement>(top_level_node)->get_variables();
+        const auto& local_list_statement = std::static_pointer_cast<ast::LocalListStatement>(
+            top_level_node);
 
-        for (auto& local_variable: local_variables) {
+        for (const auto& local_variable: local_list_statement->get_variables()) {
             auto variable_name = local_variable->get_node_name();
             /// check if local variable is being updated in the mod file
             if (symbol_table->lookup(variable_name)->get_write_count() > 0) {
@@ -53,18 +53,17 @@ void LocalToAssignedVisitor::visit_program(ast::Program& node) {
                                                               nullptr,
                                                               nullptr,
                                                               nullptr));
-                local_variables_to_remove.emplace(local_variable.get());
+                local_variables_to_remove.insert(local_variable.get());
             }
         }
 
         /// remove local variables being converted to assigned
-        std::static_pointer_cast<ast::LocalListStatement>(top_level_node)
-            ->erase_local_var(local_variables_to_remove);
+        local_list_statement->erase_local_var(local_variables_to_remove);
 
         /// if all local variables are converted to assigned, keep track
         /// for removal
-        if (local_variables.empty()) {
-            local_nodes_to_remove.emplace(top_level_node.get());
+        if (local_list_statement->get_variables().empty()) {
+            local_nodes_to_remove.insert(top_level_node.get());
         }
     }
 
