@@ -580,6 +580,7 @@ int CodegenCVisitor::int_variables_size() const {
  */
 std::vector<std::string> CodegenCVisitor::ion_read_statements(BlockType type) {
     if (optimize_ion_variable_copies()) {
+        int a = 1;
         return ion_read_statements_optimized(type);
     }
     std::vector<std::string> statements;
