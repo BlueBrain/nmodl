@@ -30,8 +30,8 @@
 #include "visitors/inline_visitor.hpp"
 #include "visitors/json_visitor.hpp"
 #include "visitors/kinetic_block_visitor.hpp"
+#include "visitors/local_to_assigned_visitor.hpp"
 #include "visitors/local_var_rename_visitor.hpp"
-#include "visitors/local_var_visitor.hpp"
 #include "visitors/localize_visitor.hpp"
 #include "visitors/loop_unroll_visitor.hpp"
 #include "visitors/neuron_solve_visitor.hpp"
@@ -321,7 +321,7 @@ int main(int argc, const char* argv[]) {
             logger->info("Running GlobalToRange visitor");
             GlobalToRangeVisitor(ast).visit_program(*ast);
             SymtabVisitor(update_symtab).visit_program(*ast);
-            ast_to_nmodl(*ast, filepath("globaltorange"));
+            ast_to_nmodl(*ast, filepath("global_to_range"));
         }
 
         /// LOCAL to ASSIGNED visitor
@@ -330,7 +330,7 @@ int main(int argc, const char* argv[]) {
             PerfVisitor().visit_program(*ast);
             LocalToAssignedVisitor().visit_program(*ast);
             SymtabVisitor(update_symtab).visit_program(*ast);
-            ast_to_nmodl(*ast, filepath("localtoassigned"));
+            ast_to_nmodl(*ast, filepath("local_to_assigned"));
         }
 
         {

@@ -12,11 +12,6 @@
  * \brief \copybrief nmodl::visitor::LocalToAssignedVisitor
  */
 
-#include <sstream>
-#include <string>
-#include <utility>
-#include <vector>
-
 #include "visitors/ast_visitor.hpp"
 
 namespace nmodl {
@@ -34,21 +29,37 @@ namespace visitor {
  * Some of the existing mod file include declaration of LOCAL variables in
  * the top level of the mod file. Those variables are normally written in
  * the INITIAL block which is executed potentially by multiple threads.
- * This commands them to become ASSIGNED variables which by default are
- * handled as RANGE variables to be able to be written and read by multiple
- * threads without race conditions.
+ * This results into race condition in case of CoreNEURON. To avoid this,
+ * such variables are converted to ASSIGNED variables which by default are
+ * handled as RANGE.
+ *
  * For example:
  *
  * \code{.mod}
  *      NEURON {
  *          SUFFIX test
- *  	    GLOBAL x
+ *  	    RANGE x
  *      }
- *      LOCAL x, y
+ *
+ *      LOCAL qt
+ *
  *      INITIAL {
- *          x = 1
+ *          qt = 10.0
+ *      }
+ *
+ *      PROCEDURE rates(v (mV)) {
+ *          x = qt + 12.2
  *      }
  * \endcode
+ *
+ * In the above example, `qt` is used as temporary variable to pass value from
+ * INITIAL block to PROCEDURE. This works fine in case of serial execution but
+ * in parallel execution we end up in race condition. To avoid this, we convert
+ * qt to ASSIGNED variable.
+ *
+ * \todo
+ *   - Variables like qt are often constant. As long as INITIAL block is executed
+ *     serially or qt is updated in atomic way then we don't have a problem.
  */
 
 class LocalToAssignedVisitor: public AstVisitor {

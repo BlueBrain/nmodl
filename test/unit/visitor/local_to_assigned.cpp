@@ -10,7 +10,7 @@
 #include "ast/program.hpp"
 #include "parser/nmodl_driver.hpp"
 #include "test/unit/utils/nmodl_constructs.hpp"
-#include "visitors/local_var_visitor.hpp"
+#include "visitors/local_to_assigned_visitor.hpp"
 #include "visitors/lookup_visitor.hpp"
 #include "visitors/nmodl_visitor.hpp"
 #include "visitors/perf_visitor.hpp"
@@ -46,16 +46,21 @@ SCENARIO("LOCAL to ASSIGNED variable transformer", "[visitor][localtoassigned]")
             NEURON {
                 SUFFIX test
             }
+
             LOCAL x, y, z
+
             INITIAL {
                 x = 1
             }
+
             BREAKPOINT {
                 z = 2
             }
         )";
+
         auto ast = run_local_to_assigned_visitor(input_nmodl);
         auto symtab = ast->get_symbol_table();
+
         THEN("LOCAL variables that are written are turned to ASSIGNED") {
             /// check for all ASSIGNED variables : old ones + newly converted ones
             auto vars = symtab->get_variables_with_properties(NmodlType::assigned_definition);
@@ -66,11 +71,13 @@ SCENARIO("LOCAL to ASSIGNED variable transformer", "[visitor][localtoassigned]")
             REQUIRE(x != nullptr);
             REQUIRE(x->has_any_property(NmodlType::assigned_definition) == true);
             REQUIRE(x->has_any_property(NmodlType::local_var) == false);
+
             auto z = symtab->lookup("z");
             REQUIRE(z != nullptr);
             REQUIRE(z->has_any_property(NmodlType::assigned_definition) == true);
             REQUIRE(z->has_any_property(NmodlType::local_var) == false);
         }
+
         THEN("LOCAL variables that are read only remain LOCAL") {
             auto vars = symtab->get_variables_with_properties(NmodlType::local_var);
             REQUIRE(vars.size() == 1);

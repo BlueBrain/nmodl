@@ -14,6 +14,8 @@ set(VISITOR_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/inline_visitor.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kinetic_block_visitor.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kinetic_block_visitor.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/local_to_assigned_visitor.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/local_to_assigned_visitor.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/local_var_rename_visitor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/local_var_rename_visitor.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/localize_visitor.cpp
@@ -43,9 +45,7 @@ set(VISITOR_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/verbatim_visitor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/verbatim_visitor.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/visitor_utils.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/visitor_utils.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/local_var_visitor.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/local_var_visitor.hpp)
+    ${CMAKE_CURRENT_SOURCE_DIR}/visitor_utils.hpp)
 
 set_source_files_properties(${VISITORS_GENERATED_SOURCES} PROPERTIES GENERATED TRUE)
 
