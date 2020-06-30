@@ -34,8 +34,3 @@ if __name__ == '__main__':
     st = os.stat(exe)
     os.chmod(exe, st.st_mode | stat.S_IEXEC)
     os.execv(exe, sys.argv)
-
-
-
-
-

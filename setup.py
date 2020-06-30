@@ -88,13 +88,6 @@ def _config_exe(exe_name):
     return os.path.join(NMODL_PREFIX_DATA, exe_name)
 
 
-def _nmodl_shim():
-    exe = _config_exe(os.path.basename('nmodl'))
-    st = os.stat(exe)
-    os.chmod(exe, st.st_mode | stat.S_IEXEC)
-    os.execv(exe, sys.argv)
-
-
 install_requirements = [
     "PyYAML>=3.13",
     "sympy>=1.3,<1.6",

@@ -99,10 +99,9 @@ jobs:
     displayName: 'Build and Run Tests'
   - script: |
       export PATH=/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH;
-      python3 -m pip install -U pip setuptools
-      brew install python@3-venv
-      python3 -m pip install -U scikit-build
-      python3 setup.py sdist bdist_wheel -j 6
+      python3 -m pip install -U pip setuptools scikit-build auditwheel
+      python3 setup.py sdist bdist_wheel -j 2
+      auditwheel repair dist/*.whl
       rm -rf venv _skbuild
       python3 -m venv venv
       source ./venv/bin/activate
