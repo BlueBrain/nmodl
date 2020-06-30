@@ -17,6 +17,15 @@ from setuptools import Command
 from skbuild import setup
 
 
+# Main source of the version. Dont rename, used by Cmake
+try:
+    v = subprocess.run(['git', 'describe', '--tags'],
+                       stdout=subprocess.PIPE).stdout.strip().decode()
+    __version__ = v[:v.rfind("-")].replace('-', '.') if "-" in v else v
+except Exception as e:
+    raise RuntimeError("Could not get version from Git repo") from e
+
+
 class lazy_dict(dict):
     """When the value associated to a key is a function, then returns
     the function call instead of the function.
@@ -60,7 +69,6 @@ from pkg_resources import working_set
 from pywheel.shim.find_libpython import find_libpython
 
 
-
 def _config_exe(exe_name):
     """Sets the environment to run the real executable (returned)"""
 
@@ -79,6 +87,7 @@ def _config_exe(exe_name):
 
     return os.path.join(NMODL_PREFIX_DATA, exe_name)
 
+
 def _nmodl_shim():
     exe = _config_exe(os.path.basename('nmodl'))
     st = os.stat(exe)
@@ -91,6 +100,7 @@ install_requirements = [
     "sympy>=1.3,<1.6",
 ]
 
+
 cmake_args = ["-DPYTHON_EXECUTABLE=" + sys.executable]
 if "bdist_wheel" in sys.argv:
     cmake_args.append("-DLINK_AGAINST_PYTHON=FALSE")
@@ -99,9 +109,16 @@ if "bdist_wheel" in sys.argv:
 def exclude_nmodl(cmake_manifest):
     return list(filter(lambda name: not name.endswith('bin/nmodl'), cmake_manifest))
 
+
+# For CI, we want to build separate wheel
+package_name = 'NMODL'
+if "NMODL_NIGHTLY_TAG" in os.environ:
+    package_name += os.environ['NMODL_NIGHTLY_TAG']
+
+
 setup(
-    name="NMODL",
-    version="0.2",
+    name=package_name,
+    version=__version__,
     author="Blue Brain Project",
     author_email="bbp-ou-hpc@groupes.epfl.ch",
     description="NEURON Modelling Language Source-to-Source Compiler Framework",

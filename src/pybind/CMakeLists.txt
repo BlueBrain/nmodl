@@ -62,7 +62,12 @@ add_dependencies(_nmodl pyastgen)
 add_dependencies(_nmodl lexer_obj)
 add_dependencies(_nmodl util_obj)
 
-target_link_libraries(_nmodl PRIVATE fmt::fmt pyembed pywrapper)
+target_link_libraries(_nmodl PRIVATE fmt::fmt pyembed)
+
+# in case of wheel, python module shouldn't link to wrapper library
+if(LINK_AGAINST_PYTHON)
+  target_link_libraries(_nmodl PRIVATE pywrapper)
+endif()
 
 add_custom_target(copy_python_files ALL DEPENDS ${NMODL_PYTHON_FILES_OUT})
 add_custom_command(
