@@ -32,6 +32,7 @@ add_executable(
   visitor/json.cpp
   visitor/kinetic_block.cpp
   visitor/localize.cpp
+  visitor/local_to_assigned.cpp
   visitor/lookup.cpp
   visitor/loop_unroll.cpp
   visitor/misc.cpp
@@ -81,16 +82,14 @@ target_link_libraries(testunitparser lexer test_util config)
 # Use catch_discover instead of add_test for granular test report if CMAKE ver is greater than 3.9,
 # else use the normal add_test method
 # =============================================================================
-set(testvisitor_env "PYTHONPATH=${PROJECT_BINARY_DIR}/lib/python:$ENV{PYTHONPATH}")
+set(testvisitor_env "PYTHONPATH=${PROJECT_BINARY_DIR}/lib:$ENV{PYTHONPATH}")
 if(NOT LINK_AGAINST_PYTHON)
   list(APPEND testvisitor_env "NMODL_PYLIB=$ENV{NMODL_PYLIB}")
-  if(CMAKE_SYSTEM_NAME MATCHES "Linux")
-    list(APPEND testvisitor_env
-                "NMODL_WRAPLIB=${PROJECT_BINARY_DIR}/lib/python/nmodl/libpywrapper.so")
-  elseif(CMAKE_SYSTEM_NAME MATCHES "Darwin")
-    list(APPEND testvisitor_env
-                "NMODL_WRAPLIB=${PROJECT_BINARY_DIR}/lib/python/nmodl/libpywrapper.dylib")
-  endif()
+  list(
+    APPEND
+      testvisitor_env
+      "NMODL_WRAPLIB=${PROJECT_BINARY_DIR}/lib/nmodl/libpywrapper${CMAKE_SHARED_LIBRARY_SUFFIX}")
+
 endif()
 
 foreach(
@@ -127,7 +126,6 @@ add_test(NAME Ode COMMAND ${PYTHON_EXECUTABLE} -m pytest ${NMODL_PROJECT_SOURCE_
 add_test(NAME Pybind COMMAND ${PYTHON_EXECUTABLE} -m pytest
                              ${NMODL_PROJECT_SOURCE_DIR}/test/unit/pybind)
 foreach(test_name Ode Pybind)
-  set_tests_properties(
-    ${test_name} PROPERTIES ENVIRONMENT
-                            PYTHONPATH=${PROJECT_BINARY_DIR}/lib/python:$ENV{PYTHONPATH})
+  set_tests_properties(${test_name}
+                       PROPERTIES ENVIRONMENT PYTHONPATH=${PROJECT_BINARY_DIR}/lib:$ENV{PYTHONPATH})
 endforeach()
