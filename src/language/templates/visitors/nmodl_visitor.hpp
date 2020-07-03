@@ -25,15 +25,15 @@ namespace nmodl {
 namespace visitor {
 
 /**
- * @addtogroup visitor_classes
- * @{
+ * \addtogroup visitor_classes
+ * \{
  */
 
 /**
  * \class NmodlPrintVisitor
  * \brief %Visitor for printing AST back to NMODL
  */
-class NmodlPrintVisitor: public Visitor {
+class NmodlPrintVisitor: public ConstVisitor {
   private:
     std::unique_ptr<printer::NMODLPrinter> printer;
 
@@ -49,7 +49,7 @@ class NmodlPrintVisitor: public Visitor {
     NmodlPrintVisitor()
         : printer(new printer::NMODLPrinter()) {}
 
-    NmodlPrintVisitor(std::string filename)
+    NmodlPrintVisitor(const std::string& filename)
         : printer(new printer::NMODLPrinter(filename)) {}
 
     NmodlPrintVisitor(std::ostream& stream)
@@ -61,7 +61,7 @@ class NmodlPrintVisitor: public Visitor {
 
     // clang-format off
     {% for node in nodes %}
-    virtual void visit_{{ node.class_name|snake_case }}(ast::{{ node.class_name }}& node) override;
+    virtual void visit_{{ node.class_name|snake_case }}(const ast::{{ node.class_name }}& node) override;
     {% endfor %}
     // clang-format on
 
@@ -72,7 +72,7 @@ class NmodlPrintVisitor: public Visitor {
                        bool statement);
 };
 
-/** @} */  // end of visitor_classes
+/** \} */  // end of visitor_classes
 
 }  // namespace visitor
 }  // namespace nmodl
