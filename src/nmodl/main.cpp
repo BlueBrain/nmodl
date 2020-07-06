@@ -43,6 +43,7 @@
 #include "visitors/sympy_conductance_visitor.hpp"
 #include "visitors/sympy_solver_visitor.hpp"
 #include "visitors/symtab_visitor.hpp"
+#include "visitors/rename_visitor.hpp"
 #include "visitors/units_visitor.hpp"
 #include "visitors/verbatim_var_rename_visitor.hpp"
 #include "visitors/verbatim_visitor.hpp"
@@ -314,7 +315,8 @@ int main(int argc, const char* argv[]) {
 
         /// Rename variables that match ISPC compiler double constants
         if (ispc_backend) {
-            IspcRenameVisitor(ast).visit_program(*ast);
+            //IspcRenameVisitor(ast).visit_program(*ast);
+            RenameVisitor(ast, "([0-9\\.]*d[\\-0-9]+)|([0-9\\.]+d[\\-0-9]*)", "var_", true, true);
             SymtabVisitor(update_symtab).visit_program(*ast);
             ast_to_nmodl(*ast, filepath("ispc_double_rename"));
         }
