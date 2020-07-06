@@ -317,9 +317,6 @@ int main(int argc, const char* argv[]) {
         if (ispc_backend) {
             logger->info("Running ISPC variables rename visitor");
             IspcRenameVisitor(ast).visit_program(*ast);
-            const std::string double_regex = "([0-9\\.]*d[\\-0-9]+)|([0-9\\.]+d[\\-0-9]*)";
-            const std::string new_var_name_prefix = "var_";
-            RenameVisitor(ast, double_regex, new_var_name_prefix, true, true).visit_program(*ast);
             SymtabVisitor(update_symtab).visit_program(*ast);
             ast_to_nmodl(*ast, filepath("ispc_double_rename"));
         }
