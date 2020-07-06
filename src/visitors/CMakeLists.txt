@@ -12,8 +12,6 @@ set(VISITOR_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/global_var_visitor.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/inline_visitor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/inline_visitor.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/ispc_rename_visitor.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/ispc_rename_visitor.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kinetic_block_visitor.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kinetic_block_visitor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/local_to_assigned_visitor.cpp

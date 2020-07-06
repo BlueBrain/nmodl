@@ -38,12 +38,12 @@
 #include "visitors/neuron_solve_visitor.hpp"
 #include "visitors/nmodl_visitor.hpp"
 #include "visitors/perf_visitor.hpp"
+#include "visitors/rename_visitor.hpp"
 #include "visitors/solve_block_visitor.hpp"
 #include "visitors/steadystate_visitor.hpp"
 #include "visitors/sympy_conductance_visitor.hpp"
 #include "visitors/sympy_solver_visitor.hpp"
 #include "visitors/symtab_visitor.hpp"
-#include "visitors/rename_visitor.hpp"
 #include "visitors/units_visitor.hpp"
 #include "visitors/verbatim_var_rename_visitor.hpp"
 #include "visitors/verbatim_visitor.hpp"
@@ -315,8 +315,11 @@ int main(int argc, const char* argv[]) {
 
         /// Rename variables that match ISPC compiler double constants
         if (ispc_backend) {
-            //IspcRenameVisitor(ast).visit_program(*ast);
-            RenameVisitor(ast, "([0-9\\.]*d[\\-0-9]+)|([0-9\\.]+d[\\-0-9]*)", "var_", true, true);
+            logger->info("Running ISPC variables rename visitor");
+            IspcRenameVisitor(ast).visit_program(*ast);
+            const std::string double_regex = "([0-9\\.]*d[\\-0-9]+)|([0-9\\.]+d[\\-0-9]*)";
+            const std::string new_var_name_prefix = "var_";
+            RenameVisitor(ast, double_regex, new_var_name_prefix, true, true).visit_program(*ast);
             SymtabVisitor(update_symtab).visit_program(*ast);
             ast_to_nmodl(*ast, filepath("ispc_double_rename"));
         }

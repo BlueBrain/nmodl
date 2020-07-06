@@ -74,17 +74,21 @@ class RenameVisitor: public AstVisitor {
         : regex(std::move(old_name))
         , new_var_name(std::move(new_name)) {}
 
-    RenameVisitor(std::shared_ptr<ast::Program> ast, std::string old_name, std::string new_var_name_or_prefix, bool add_prefix, bool add_random_suffix)
-            : ast(std::move(ast))
-            , regex(std::move(old_name))
-            , add_prefix(std::move(add_prefix))
-            , add_random_suffix(std::move(add_random_suffix)) {
-                if (add_prefix) {
-                    new_var_name_prefix = std::move(new_var_name_or_prefix);
-                } else {
-                    new_var_name = std::move(new_var_name_or_prefix);
-                }
-            }
+    RenameVisitor(std::shared_ptr<ast::Program> ast,
+                  std::string old_name,
+                  std::string new_var_name_or_prefix,
+                  bool add_prefix,
+                  bool add_random_suffix)
+        : ast(std::move(ast))
+        , regex(std::move(old_name))
+        , add_prefix(std::move(add_prefix))
+        , add_random_suffix(std::move(add_random_suffix)) {
+        if (add_prefix) {
+            new_var_name_prefix = std::move(new_var_name_or_prefix);
+        } else {
+            new_var_name = std::move(new_var_name_or_prefix);
+        }
+    }
 
     void set(std::string old_name, std::string new_name) {
         regex = std::move(old_name);

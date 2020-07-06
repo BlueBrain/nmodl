@@ -28,7 +28,7 @@ void RenameVisitor::visit_name(ast::Name& node) {
             if (renamed_variables.find(name) != renamed_variables.end()) {
                 new_name = renamed_variables[name];
             } else {
-                const auto &vars = get_global_vars(*ast);
+                const auto& vars = get_global_vars(*ast);
                 if (add_prefix) {
                     new_name = suffix_random_string(vars, new_var_name_prefix + name);
                 } else {
@@ -78,14 +78,14 @@ void RenameVisitor::visit_verbatim(ast::Verbatim& node) {
     std::string result;
     for (auto& token: tokens) {
         if (std::regex_match(token, regex)) {
-            /// Check if variable is already renamed and use the same naming otherwise add the new_name
-            /// to the renamed_variables map
+            /// Check if variable is already renamed and use the same naming otherwise add the
+            /// new_name to the renamed_variables map
             std::string new_name;
             if (add_random_suffix) {
                 if (renamed_variables.find(token) != renamed_variables.end()) {
                     new_name = renamed_variables[token];
                 } else {
-                    const auto &vars = get_global_vars(*ast);
+                    const auto& vars = get_global_vars(*ast);
                     if (add_prefix) {
                         new_name = suffix_random_string(vars, new_var_name_prefix + token);
                     } else {
