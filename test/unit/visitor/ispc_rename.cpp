@@ -49,16 +49,22 @@ SCENARIO("Rename variables that ISPC parses as double constants", "[visitor][isp
     GIVEN("mod file with variables with names that resemble for ISPC double constants") {
         std::string input_nmodl = R"(
             NEURON {
-                SUFFIX test
+                SUFFIX test_ispc_rename
                 RANGE d1, d2, var_d3, d4
             }
+            ASSIGNED {
+                d1
+                d2
+                var_d3
+                d4
+            }
             INITIAL {
-                 d1 = 1
-                 d2 = 2
-                 var_d3 = 3
+                d1 = 1
+                d2 = 2
+                var_d3 = 3
             }
             PROCEDURE func () {
-            VERBATIM d4 = 4 ENDVERBATIM
+            VERBATIM d4 = 4; ENDVERBATIM
             }
         )";
         auto ast = run_ispc_rename_visitor(input_nmodl);
@@ -78,7 +84,7 @@ SCENARIO("Rename variables that ISPC parses as double constants", "[visitor][isp
             REQUIRE(d2 == nullptr);
             /// Check if VERBATIM block variable is renamed
             REQUIRE(verbatim_blocks.size() == 1);
-            REQUIRE(verbatim_blocks.front() == " var_d4 = 4 ");
+            REQUIRE(verbatim_blocks.front() == " var_d4 = 4; ");
         }
         THEN("Variables that don't match the constant double presentation in ISPC stay the same") {
             /// check if var_d3 exists

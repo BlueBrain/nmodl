@@ -15,6 +15,6 @@ INITIAL {
 }
 PROCEDURE func () {
 VERBATIM
-    d4 = 4
+    d4 = 4;
 ENDVERBATIM
 }
