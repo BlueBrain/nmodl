@@ -1,6 +1,6 @@
 NEURON {
     SUFFIX test_ispc_rename
-    RANGE d1, d2, var_d3
+    RANGE d1, d2, var_d3, d4
 }
 INITIAL {
     d1 = 1

@@ -50,7 +50,7 @@ SCENARIO("Rename variables that ISPC parses as double constants", "[visitor][isp
         std::string input_nmodl = R"(
             NEURON {
                 SUFFIX test
-                RANGE d1, d2, var_d3
+                RANGE d1, d2, var_d3, d4
             }
             INITIAL {
                  d1 = 1
