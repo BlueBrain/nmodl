@@ -61,7 +61,8 @@ jobs:
         -DCORENRN_NMODL_DIR=$HOME/nmodl \
         -Dnmodl_PYTHONPATH=$HOME/nmodl/lib \
         -DPYTHON_EXECUTABLE=$(which python3.7) \
-        -DCORENRN_NMODL_FLAGS="sympy --analytic"/
+        -DCORENRN_NMODL_FLAGS="sympy --analytic" \
+        /
       make -j 2
       if [ $? -ne 0 ]
       then
@@ -86,7 +87,8 @@ jobs:
         -DPYTHON_EXECUTABLE=$(which python3.7) \
         -DCORENRN_NMODL_FLAGS="sympy --analytic" \
         -DCORENRN_ENABLE_ISPC=ON \
-        -DCMAKE_ISPC_COMPILER=$(pwd)/$CMAKE_PKG/ispc/bin/ispc/
+        -DCMAKE_ISPC_COMPILER=$(pwd)/$CMAKE_PKG/ispc/bin/ispc \
+        /
       make -j 2
       if [ $? -ne 0 ]
       then
