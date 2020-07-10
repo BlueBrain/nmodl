@@ -60,6 +60,7 @@ jobs:
       then
         make VERBOSE=1
       fi
+      make test
       ./bin/nrnivmodl-core $(Build.Repository.LocalPath)/test/integration/mod
     env:
       CMAKE_PKG: 'cmake-3.10.2-Linux-x86_64'
@@ -77,6 +78,7 @@ jobs:
       then
         make VERBOSE=1
       fi
+      make test
       ./bin/nrnivmodl-core $(Build.Repository.LocalPath)/test/integration/mod
     env:
       CMAKE_PKG: 'cmake-3.10.2-Linux-x86_64'
