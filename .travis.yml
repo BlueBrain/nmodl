@@ -78,7 +78,6 @@ before_install:
         export PATH=/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH;
         brew unlink python@2;
         brew link --overwrite python@3.8;
-        export PATH=/usr/local/opt/python@3.8/bin/:$PATH
         export SDKROOT="$(xcrun --show-sdk-path)";
     else
         pyenv global $PYTHON_VERSION;
