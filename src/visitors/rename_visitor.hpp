@@ -45,8 +45,8 @@ class RenameVisitor: public AstVisitor {
     /// ast::Ast* node
     std::shared_ptr<ast::Program> ast;
 
-    /// regex that matches double constant expressions
-    std::regex regex;
+    /// regex for searching which variables to replace
+    std::regex var_name_regex;
 
     /// new name
     std::string new_var_name;
@@ -71,7 +71,7 @@ class RenameVisitor: public AstVisitor {
     RenameVisitor() = default;
 
     RenameVisitor(std::string old_name, std::string new_name)
-        : regex(std::move(old_name))
+        : var_name_regex(std::move(old_name))
         , new_var_name(std::move(new_name)) {}
 
     RenameVisitor(std::shared_ptr<ast::Program> ast,
@@ -80,7 +80,7 @@ class RenameVisitor: public AstVisitor {
                   bool add_prefix,
                   bool add_random_suffix)
         : ast(std::move(ast))
-        , regex(std::move(old_name))
+        , var_name_regex(std::move(old_name))
         , add_prefix(std::move(add_prefix))
         , add_random_suffix(std::move(add_random_suffix)) {
         if (add_prefix) {
@@ -90,8 +90,12 @@ class RenameVisitor: public AstVisitor {
         }
     }
 
+    /// Check if variable is already renamed and use the same naming otherwise add the new_name
+    /// to the renamed_variables map
+    std::string new_name_generator(const std::string old_name);
+
     void set(std::string old_name, std::string new_name) {
-        regex = std::move(old_name);
+        var_name_regex = std::move(old_name);
         new_var_name = std::move(new_name);
     }
 

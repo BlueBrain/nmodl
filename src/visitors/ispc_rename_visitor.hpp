@@ -52,7 +52,7 @@ namespace visitor {
  *               var_d3 = 3
  *          }
  *          PROCEDURE func () {
- *          VERBATIM d4 = 4 ENDVERBATIM
+ *          VERBATIM d4 = 4; ENDVERBATIM
  *          }
  * \endcode
  * Variables d1, d2 and d4 match the double constant
