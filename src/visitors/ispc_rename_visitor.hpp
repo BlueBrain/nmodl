@@ -43,16 +43,26 @@ namespace visitor {
  * Example mod file:
  * \code{.mod}
  *          NEURON {
- *              SUFFIX test
- *              RANGE d1, d2, var_d3
+ *              SUFFIX test_ispc_rename
+ *              RANGE d1, d2, d3, var_d3, d4
+ *          }
+ *          ASSIGNED {
+ *              d1
+ *              d2
+ *              d3
+ *              var_d3
+ *              d4
  *          }
  *          INITIAL {
- *               d1 = 1
- *               d2 = 2
- *               var_d3 = 3
+ *              d1 = 1
+ *              d2 = 2
+ *              d3 = 3
+ *              var_d3 = 3
  *          }
  *          PROCEDURE func () {
- *          VERBATIM d4 = 4; ENDVERBATIM
+ *          VERBATIM
+ *              d4 = 4;
+ *          ENDVERBATIM
  *          }
  * \endcode
  * Variables d1, d2 and d4 match the double constant
