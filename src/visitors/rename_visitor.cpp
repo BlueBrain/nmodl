@@ -46,9 +46,9 @@ void RenameVisitor::visit_name(ast::Name& node) {
     if (std::regex_match(name, var_name_regex)) {
         std::string new_name = new_name_generator(name);
         node.get_value()->set(new_name);
-        logger->warn("RenameVisitor :: Renaming variable {} in {} to {}",
+        logger->warn("RenameVisitor :: Renaming variable {}{} to {}",
                      name,
-                     node.get_token()->position(),
+                     node.get_token() != nullptr ? " at " + node.get_token()->position() : "",
                      new_name);
     }
 }
