@@ -66,6 +66,10 @@ class MetaAstLookupVisitor: public DefaultVisitor {
 
     const nodes_t& lookup(ast_t& node, const std::vector<ast::AstNodeType>& t_types);
 
+    const nodes_t& get_nodes() const noexcept {
+        return nodes;
+    }
+
     void clear() {
         types.clear();
         nodes.clear();

@@ -214,6 +214,7 @@ void init_visitor_module(py::module& m) {
     // clang-format off
     lookup_visitor.def(py::init<>())
         .def(py::init<ast::AstNodeType>())
+        .def("get_nodes", &AstLookupVisitor::get_nodes)
         .def("clear", &AstLookupVisitor::clear)
         .def("lookup", static_cast<const std::vector<std::shared_ptr<ast::Ast>>& (AstLookupVisitor::*)(ast::Ast&)>(&AstLookupVisitor::lookup))
         .def("lookup", static_cast<const std::vector<std::shared_ptr<ast::Ast>>& (AstLookupVisitor::*)(ast::Ast&, ast::AstNodeType)>(&AstLookupVisitor::lookup))
