@@ -49,7 +49,7 @@ class NmodlPrintVisitor: public ConstVisitor {
     NmodlPrintVisitor()
         : printer(new printer::NMODLPrinter()) {}
 
-    NmodlPrintVisitor(const std::string& filename)
+    NmodlPrintVisitor(std::string filename)
         : printer(new printer::NMODLPrinter(filename)) {}
 
     NmodlPrintVisitor(std::ostream& stream)
