@@ -83,11 +83,7 @@ bool is_dir_exist(const std::string& path);
 
 /// Enum to wrap bool variable to select if random string
 /// should have numbers or not
-enum UseRandomNumbers : bool
-{
-    WithNumbers = true,
-    WithoutNumbers = false
-};
+enum UseRandomNumbers : bool { WithNumbers = true, WithoutNumbers = false };
 
 /// Generate random std::string of length len based on a
 /// uniform distribution

@@ -65,7 +65,7 @@ std::string generate_random_string(const int len, UseRandomNumbers use_numbers) 
         "abcdefghijklmnopqrstuvwxyz";
     std::random_device dev;
     std::mt19937 rng(dev());
-    std::uniform_int_distribution <std::mt19937::result_type> dist;
+    std::uniform_int_distribution<std::mt19937::result_type> dist;
     if (use_numbers) {
         dist = std::uniform_int_distribution<std::mt19937::result_type>(0, (sizeof(alphanum) - 1));
     } else {
