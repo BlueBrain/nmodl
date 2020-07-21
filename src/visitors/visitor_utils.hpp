@@ -17,16 +17,20 @@
 #include <string>
 
 #include <ast/ast_decl.hpp>
+#include <utils/common_utils.hpp>
 
 namespace nmodl {
 namespace visitor {
+
+using nmodl::utils::UseRandomNumbers;
 
 /// Return a std::string in the form "original_string"_"random_string", where
 /// random_string is a string defined in the nmodl::utils::SingletonRandomString
 /// for the original_string. Vars is a const ref to std::set<std::string> which
 /// holds the names that need to be checked for uniqueness
 std::string suffix_random_string(const std::set<std::string>& vars,
-                                 const std::string& original_string);
+                                 const std::string& original_string,
+                                 const UseRandomNumbers use_num);
 
 /// Return new name variable by appending `_suffix_COUNT` where `COUNT` is
 /// number of times the given variable is already used.

@@ -24,6 +24,8 @@ namespace visitor {
 
 using symtab::syminfo::NmodlType;
 
+using nmodl::utils::UseRandomNumbers;
+
 void SympySolverVisitor::init_block_data(ast::Node* node) {
     // clear any previous data
     expression_statements.clear();
@@ -160,10 +162,10 @@ void SympySolverVisitor::construct_eigen_solver_block(
     bool linear) {
     // Provide random string to append to X, J, Jm and F matrices that
     // are produced by sympy
-    std::string unique_X = suffix_random_string(vars, "X");
-    std::string unique_J = suffix_random_string(vars, "J");
-    std::string unique_Jm = suffix_random_string(vars, "Jm");
-    std::string unique_F = suffix_random_string(vars, "F");
+    std::string unique_X = suffix_random_string(vars, "X", UseRandomNumbers::WithNumbers);
+    std::string unique_J = suffix_random_string(vars, "J", UseRandomNumbers::WithNumbers);
+    std::string unique_Jm = suffix_random_string(vars, "Jm", UseRandomNumbers::WithNumbers);
+    std::string unique_F = suffix_random_string(vars, "F", UseRandomNumbers::WithNumbers);
 
     // filter solutions for matrices named "X", "J", "Jm" and "F" and change them to
     // unique_X, unique_J, unique_Jm and unique_F respectively

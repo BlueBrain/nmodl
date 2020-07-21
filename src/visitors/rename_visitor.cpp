@@ -16,6 +16,8 @@
 namespace nmodl {
 namespace visitor {
 
+using nmodl::utils::UseRandomNumbers;
+
 std::string RenameVisitor::new_name_generator(const std::string old_name) {
     std::string new_name;
     if (add_random_suffix) {
@@ -24,9 +26,9 @@ std::string RenameVisitor::new_name_generator(const std::string old_name) {
         } else {
             const auto& vars = get_global_vars(*ast);
             if (add_prefix) {
-                new_name = suffix_random_string(vars, new_var_name_prefix + old_name);
+                new_name = suffix_random_string(vars, new_var_name_prefix + old_name, UseRandomNumbers::WithoutNumbers);
             } else {
-                new_name = suffix_random_string(vars, new_var_name);
+                new_name = suffix_random_string(vars, new_var_name, UseRandomNumbers::WithoutNumbers);
             }
             renamed_variables[old_name] = new_name;
         }
@@ -46,9 +48,10 @@ void RenameVisitor::visit_name(ast::Name& node) {
     if (std::regex_match(name, var_name_regex)) {
         std::string new_name = new_name_generator(name);
         node.get_value()->set(new_name);
+        std::string token_string = node.get_token() != nullptr ? " at " + node.get_token()->position() : "";
         logger->warn("RenameVisitor :: Renaming variable {}{} to {}",
                      name,
-                     node.get_token() != nullptr ? " at " + node.get_token()->position() : "",
+                     token_string,
                      new_name);
     }
 }
