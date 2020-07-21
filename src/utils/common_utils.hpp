@@ -83,11 +83,11 @@ bool is_dir_exist(const std::string& path);
 
 /// Enum to wrap bool variable to select if random string
 /// should have numbers or not
-enum UseRandomNumbers : bool { WithNumbers = true, WithoutNumbers = false };
+enum UseNumbersInString : bool { WithNumbers = true, WithoutNumbers = false };
 
 /// Generate random std::string of length len based on a
 /// uniform distribution
-std::string generate_random_string(int len, UseRandomNumbers use_numbers);
+std::string generate_random_string(int len, UseNumbersInString use_numbers);
 
 /**
  * \class SingletonRandomString
@@ -107,7 +107,7 @@ class SingletonRandomString {
     SingletonRandomString& operator=(SingletonRandomString const&) = delete;
 
     /// Function to instantiate the SingletonRandomString class
-    static std::shared_ptr<SingletonRandomString> instance(const UseRandomNumbers use_numbers_) {
+    static std::shared_ptr<SingletonRandomString> instance(const UseNumbersInString use_numbers_) {
         static std::shared_ptr<SingletonRandomString> s{new SingletonRandomString};
         s->use_numbers = use_numbers_;
         return s;
@@ -160,7 +160,7 @@ class SingletonRandomString {
     std::map<std::string, std::string> random_strings;
 
     /// bool to control if random string will include numbers or not
-    UseRandomNumbers use_numbers = WithNumbers;
+    UseNumbersInString use_numbers = WithNumbers;
 };
 
 /** @} */  // end of utils

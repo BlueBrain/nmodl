@@ -16,7 +16,7 @@
 namespace nmodl {
 namespace visitor {
 
-using nmodl::utils::UseRandomNumbers;
+using nmodl::utils::UseNumbersInString;
 
 std::string RenameVisitor::new_name_generator(const std::string old_name) {
     std::string new_name;
@@ -28,10 +28,10 @@ std::string RenameVisitor::new_name_generator(const std::string old_name) {
             if (add_prefix) {
                 new_name = suffix_random_string(vars,
                                                 new_var_name_prefix + old_name,
-                                                UseRandomNumbers::WithoutNumbers);
+                                                UseNumbersInString::WithoutNumbers);
             } else {
                 new_name =
-                    suffix_random_string(vars, new_var_name, UseRandomNumbers::WithoutNumbers);
+                    suffix_random_string(vars, new_var_name, UseNumbersInString::WithoutNumbers);
             }
             renamed_variables[old_name] = new_name;
         }

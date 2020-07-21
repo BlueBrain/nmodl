@@ -37,7 +37,7 @@ using visitor::VarUsageVisitor;
 using symtab::syminfo::NmodlType;
 using SymbolType = std::shared_ptr<symtab::Symbol>;
 
-using nmodl::utils::UseRandomNumbers;
+using nmodl::utils::UseNumbersInString;
 
 /****************************************************************************************/
 /*                            Overloaded visitor routines                               */
@@ -1639,7 +1639,7 @@ void CodegenCVisitor::print_function(ast::FunctionBlock& node) {
 
 std::string CodegenCVisitor::find_var_unique_name(const std::string& original_name) const {
     auto singleton_random_string_class = nmodl::utils::SingletonRandomString<4>::instance(
-        UseRandomNumbers::WithNumbers);
+        UseNumbersInString::WithNumbers);
     std::string unique_name = original_name;
     if (singleton_random_string_class->random_string_exists(original_name)) {
         unique_name = original_name;

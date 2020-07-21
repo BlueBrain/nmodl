@@ -25,11 +25,11 @@ namespace visitor {
 using namespace ast;
 using symtab::syminfo::NmodlType;
 
-using nmodl::utils::UseRandomNumbers;
+using nmodl::utils::UseNumbersInString;
 
 std::string suffix_random_string(const std::set<std::string>& vars,
                                  const std::string& original_string,
-                                 const UseRandomNumbers use_num) {
+                                 const UseNumbersInString use_num) {
     std::string new_string = original_string;
     std::string random_string;
     auto singleton_random_string_class = nmodl::utils::SingletonRandomString<4>::instance(use_num);

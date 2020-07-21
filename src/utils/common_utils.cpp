@@ -57,7 +57,7 @@ bool make_path(const std::string& path) {
     }
 }
 
-std::string generate_random_string(const int len, UseRandomNumbers use_numbers) {
+std::string generate_random_string(const int len, UseNumbersInString use_numbers) {
     std::string s(len, 0);
     static const char alphanum[] =
         "0123456789"
