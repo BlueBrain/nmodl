@@ -43,6 +43,11 @@ std::string suffix_random_string(const std::set<std::string>& vars,
     return new_string;
 }
 
+std::string suffix_random_string(const std::set<std::string>& vars,
+                                 const std::string& original_string) {
+    return suffix_random_string(vars, original_string, UseNumbersInString::WithNumbers);
+}
+
 std::string get_new_name(const std::string& name,
                          const std::string& suffix,
                          std::map<std::string, int>& variables) {
