@@ -24,59 +24,106 @@ std::shared_ptr<ast::Program> NmodlDriver::parse_stream(std::istream& in) {
     NmodlLexer scanner(*this, &in);
     NmodlParser parser(scanner, *this);
 
-    this->lexer = &scanner;
-    this->parser = &parser;
-
     scanner.set_debug(trace_scanner);
     parser.set_debug_level(trace_parser);
     parser.parse();
     return astRoot;
 }
 
-//// parse nmodl file
-std::shared_ptr<ast::Program> NmodlDriver::parse_file(const std::string& filename) {
+std::shared_ptr<ast::Program> NmodlDriver::parse_file(const std::string& filename,
+                                                      const location* loc) {
     std::ifstream in(filename.c_str());
     stream_name = filename;
 
     if (!in.good()) {
-        logger->error("Can not open file : {}", filename);
-        return nullptr;
+        std::ostringstream oss;
+        if (loc == nullptr) {
+            oss << "NMODL Parser Error : ";
+        }
+        oss << "can not open file : " << filename;
+        if (loc != nullptr) {
+            parse_error(*loc, oss.str());
+        } else {
+            throw std::runtime_error(oss.str());
+        }
     }
     parse_stream(in);
     return astRoot;
 }
 
-/// parser nmodl provided as string (used for testing)
 std::shared_ptr<ast::Program> NmodlDriver::parse_string(const std::string& input) {
     std::istringstream iss(input);
     parse_stream(iss);
     return astRoot;
 }
 
-void NmodlDriver::error(const std::string& m, const class location& l) {
-    std::cerr << l << " : " << m << '\n';
+std::shared_ptr<ast::Include> NmodlDriver::parse_include(const std::string& name,
+                                                         const location& loc) {
+    // Try to find directory containing the file to import
+    const auto directory_path = library.find_file(name);
+
+    // Complete path of file (directory + filename).
+    std::string absolute_path = name;
+
+    if (!directory_path.empty()) {
+        absolute_path = directory_path + std::string(1, utils::pathsep) + name;
+    }
+
+    // Detect recursive inclusion.
+    if (open_files.find(absolute_path) != open_files.end()) {
+        std::ostringstream oss;
+        oss << name << ": recursive inclusion.\n"
+            << open_files[absolute_path] << ": initial inclusion was here.";
+        parse_error(loc, oss.str());
+    }
+    library.push_current_directory(directory_path);
+    open_files.emplace(absolute_path, loc);
+
+    std::shared_ptr<ast::Program> program;
+    program.swap(astRoot);
+
+    parse_file(absolute_path, &loc);
+
+    program.swap(astRoot);
+    open_files.erase(absolute_path);
+    library.pop_current_directory();
+    auto filename_node = std::shared_ptr<ast::String>(
+        new ast::String(std::string(1, '"') + name + std::string(1, '"')));
+    return std::shared_ptr<ast::Include>(new ast::Include(filename_node, program));
 }
 
-void NmodlDriver::error(const std::string& m) {
-    std::cerr << m << '\n';
-}
-
-/// add macro definition and it's value (DEFINE keyword of nmodl)
 void NmodlDriver::add_defined_var(const std::string& name, int value) {
     defined_var[name] = value;
 }
 
-/// check if particular text is defined as macro
-bool NmodlDriver::is_defined_var(const std::string& name) {
+bool NmodlDriver::is_defined_var(const std::string& name) const {
     return !(defined_var.find(name) == defined_var.end());
 }
 
-/// return variable's value defined as macro (always an integer)
-int NmodlDriver::get_defined_var_value(const std::string& name) {
-    if (is_defined_var(name)) {
-        return defined_var[name];
+int NmodlDriver::get_defined_var_value(const std::string& name) const {
+    const auto var_it = defined_var.find(name);
+    if (var_it != defined_var.end()) {
+        return var_it->second;
     }
     throw std::runtime_error("Trying to get undefined macro / define :" + name);
+}
+
+void NmodlDriver::parse_error(const location& location, const std::string& message) {
+    std::ostringstream oss;
+    oss << "NMODL Parser Error : " << message << " [Location : " << location << ']';
+    throw std::runtime_error(oss.str());
+}
+
+std::string NmodlDriver::check_include_argument(const location& location,
+                                                const std::string& filename) {
+    if (filename.empty()) {
+        parse_error(location, "empty filename in INCLUDE directive");
+    } else if (filename.front() != '"' && filename.back() != '"') {
+        parse_error(location, "filename may start and end with \" character");
+    } else if (filename.size() == 3) {
+        parse_error(location, "filename is empty");
+    }
+    return filename.substr(1, filename.size() - 2);
 }
 
 }  // namespace parser
