@@ -15,7 +15,6 @@
 #include <stdexcept>
 #include <string>
 #include <sys/stat.h>
-#include <unistd.h>
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 #define IS_WINDOWS
@@ -45,6 +44,14 @@ bool file_is_abs(const std::string& path) {
 #endif
 }
 
+std::string cwd() {
+    char cwd[MAXPATHLEN + 1];
+
+    if (nullptr == getcwd(cwd, MAXPATHLEN + 1)) {
+        throw std::runtime_error("working directory name too long");
+    }
+    return {cwd};
+}
 bool make_path(const std::string& path) {
     mode_t mode = 0755;
     int ret = mkdir(path.c_str(), mode);

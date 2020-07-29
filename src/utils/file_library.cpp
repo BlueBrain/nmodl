@@ -8,7 +8,6 @@
 #include "file_library.hpp"
 
 #include <cassert>
-#include <cstdlib>
 #include <sys/param.h>
 #include <unistd.h>
 
@@ -17,11 +16,6 @@
 
 namespace nmodl {
 
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-static constexpr int max_path_len{_MAX_DIR};
-#else
-static constexpr int max_path_len{MAXPATHLEN};
-#endif
 
 FileLibrary FileLibrary::default_instance() {
     FileLibrary library;
@@ -50,12 +44,7 @@ void FileLibrary::push_current_directory(const std::string& path) {
 }
 
 void FileLibrary::push_cwd() {
-    char cwd[MAXPATHLEN + 1];
-
-    if (nullptr == getcwd(cwd, MAXPATHLEN + 1)) {
-        throw std::runtime_error("working directory name too long");
-    }
-    push_current_directory(std::string(cwd));
+    push_current_directory(utils::cwd());
 }
 
 void FileLibrary::pop_current_directory() {

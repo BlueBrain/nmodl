@@ -10,7 +10,10 @@
 #include <map>
 #include <memory>
 #include <string>
+#include <sys/param.h>
+#include <unistd.h>
 #include <vector>
+
 
 /**
  *
@@ -77,13 +80,20 @@ typename std::vector<T>::const_iterator const_iter_cast(
 #endif
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+/// The character used by the operating system to separate pathname components
 static constexpr char pathsep{'\\'};
+/// The character conventionally used by the operating system to separate search path components
 static constexpr char envpathsep{';'};
+/// Maximum size of a directory path
+static constexpr int max_path_len{_MAX_DIR};
 #else
+/// The character used by the operating system to separate pathname components
 static constexpr char pathsep{'/'};
+/// The character conventionally used by the operating system to separate search path components
 static constexpr char envpathsep{':'};
+/// Maximum size of a directory path
+static constexpr int max_path_len{MAXPATHLEN};
 #endif
-
 
 /// Given directory path, create sub-directories
 bool make_path(const std::string& path);
@@ -96,6 +106,9 @@ bool file_exists(const std::string& path);
 
 /// Check if specified file path is absolute
 bool file_is_abs(const std::string& path);
+
+/// get current working directory
+std::string cwd();
 
 /**
  * \brief Create an empty file which is then removed when the C++ object is destructed

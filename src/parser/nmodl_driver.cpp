@@ -35,6 +35,20 @@ std::shared_ptr<ast::Program> NmodlDriver::parse_file(const std::string& filenam
     std::ifstream in(filename.c_str());
     stream_name = filename;
 
+    {
+        const auto last_slash = filename.find_last_of(utils::pathsep);
+        if (utils::file_is_abs(filename)) {
+            const auto path_prefix = filename.substr(0, last_slash + 1);
+            library.push_current_directory(path_prefix);
+        } else if (last_slash == std::string::npos) {
+            library.push_current_directory(utils::cwd());
+        } else {
+            const auto path_prefix = filename.substr(0, last_slash + 1);
+            const auto path = utils::cwd() + utils::pathsep + path_prefix;
+            library.push_current_directory(path);
+        }
+    }
+
     if (!in.good()) {
         std::ostringstream oss;
         if (loc == nullptr) {
@@ -48,6 +62,7 @@ std::shared_ptr<ast::Program> NmodlDriver::parse_file(const std::string& filenam
         }
     }
     parse_stream(in);
+    library.pop_current_directory();
     return astRoot;
 }
 
