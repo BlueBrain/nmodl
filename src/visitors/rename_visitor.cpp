@@ -18,7 +18,6 @@ namespace visitor {
 
 
 std::string RenameVisitor::new_name_generator(const std::string& old_name) {
-
     std::string new_name;
     if (add_random_suffix) {
         if (renamed_variables.find(old_name) != renamed_variables.end()) {

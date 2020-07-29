@@ -33,16 +33,17 @@ namespace visitor {
 template <typename DefaultVisitor>
 class MetaAstLookupVisitor: public DefaultVisitor {
     static const bool is_const_visitor = std::is_same<ConstVisitor, DefaultVisitor>::value;
-  using ast_t = typename std::conditional<is_const_visitor, const ast::Ast, ast::Ast>::type;
-  using nodes_t = std::vector<std::shared_ptr<ast_t>>;
 
-  template <typename T>
-  struct identity {
-      using type = T;
-  };
+    template <typename T>
+    struct identity {
+        using type = T;
+    };
 
-  template <typename T>
-  using visit_arg_trait = typename std::conditional<is_const_visitor, std::add_const<T>, identity<T>>::type;
+    template <typename T>
+    using visit_arg_trait =
+        typename std::conditional<is_const_visitor, std::add_const<T>, identity<T>>::type;
+    using ast_t = typename visit_arg_trait<ast::Ast>::type;
+    using nodes_t = std::vector<std::shared_ptr<ast_t>>;
 
   private:
     /// node types to search in the ast

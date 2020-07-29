@@ -40,7 +40,7 @@ static bool has_sympy_solution(const ast::Ast& node) {
 ast::SolutionExpression* SolveBlockVisitor::create_solution_expression(
     ast::SolveBlock& solve_block) {
     /// find out the block that is going to solved
-    const std::string& block_name = solve_block.get_block_name()->get_node_name();
+    const auto& block_name = solve_block.get_block_name()->get_node_name();
     const auto& solve_node_symbol = symtab->lookup(block_name);
     assert(solve_node_symbol != nullptr);
     auto node_to_solve = solve_node_symbol->get_node();
