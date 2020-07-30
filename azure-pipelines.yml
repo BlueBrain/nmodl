@@ -139,8 +139,8 @@ jobs:
       # pip install --upgrade pip
       pip install dist/*.whl
 
-
-      tree -a venv/lib/*/*/nmodl
+      tree venv
+      export PYTHONPATH=$(pwd)/venv/lib/python3.8/site-packages:$PYTHONPATH
 
       cd $(Build.Repository.LocalPath)/test/integration/mod
       python --version
