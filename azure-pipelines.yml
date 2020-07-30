@@ -3,6 +3,7 @@
 #=============================================================================
 jobs:
 - job: 'ubuntu1604'
+  condition: false
   pool:
     vmImage: 'ubuntu-16.04'
   displayName: 'Ubuntu (16.04), GCC 8.3'
@@ -106,6 +107,9 @@ jobs:
   steps:
   - checkout: self
     submodules: true
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.7'
   - script: |
       brew install flex bison cmake python@3
       python3 -m pip install -U pip setuptools
@@ -122,6 +126,7 @@ jobs:
         make VERBOSE=1
       fi
       env CTEST_OUTPUT_ON_FAILURE=1 make test
+    condition: false
     displayName: 'Build and Run Tests'
   - script: |
       export PATH=/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH;
