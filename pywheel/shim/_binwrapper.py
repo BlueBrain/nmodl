@@ -34,11 +34,21 @@ def _config_exe(exe_name):
     # add libpython*.so path to environment
     os.environ["NMODL_PYLIB"] = find_libpython()
 
+<<<<<<< HEAD
     # add nmodl home to environment (i.e. necessary for nrnunits.lib)
     os.environ["NMODLHOME"] = NMODL_HOME
 
     return os.path.join(NMODL_BIN, exe_name)
 
+=======
+    # TODO remove
+    print("NMODL_WRAPLIB")
+    print(os.environ["NMODL_WRAPLIB"])
+    print("NMODL_PYLIB")
+    print(os.environ["NMODL_PYLIB"])
+
+    return os.path.join(NMODL_PREFIX_DATA, exe_name)
+>>>>>>> !squash check shim paths and venv nmodl tree
 
 if __name__ == "__main__":
     """Set the pointed file as executable"""

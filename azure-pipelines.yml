@@ -130,7 +130,6 @@ jobs:
       python3.8 setup.py sdist bdist_wheel -j 2
 
       brew install tree
-      tree _skbuild
 
       auditwheel repair dist/*.whl
       rm -rf venv _skbuild
@@ -141,7 +140,8 @@ jobs:
       pip install dist/*.whl
 
 
-      tree venv
+      tree -a venv/lib/*/*/nmodl
+
       cd $(Build.Repository.LocalPath)/test/integration/mod
       type -a nmodl
       which nmodl
