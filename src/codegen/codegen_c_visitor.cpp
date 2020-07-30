@@ -1259,7 +1259,7 @@ std::string CodegenCVisitor::k_const() {
 
 void CodegenCVisitor::visit_watch_statement(ast::WatchStatement& node) {
     printer->add_text(
-        "nrn_watch_activate(inst, id, pnodecount, {})"_format(current_watch_statement++));
+        "nrn_watch_activate(inst, id, pnodecount, {}, v)"_format(current_watch_statement++));
 }
 
 
@@ -3287,7 +3287,7 @@ void CodegenCVisitor::print_watch_activate() {
     auto inst = "{}* inst"_format(instance_struct());
 
     printer->start_block(
-        "static void nrn_watch_activate({}, int id, int pnodecount, int watch_id) "_format(inst));
+        "static void nrn_watch_activate({}, int id, int pnodecount, int watch_id, double v) "_format(inst));
 
     // initialize all variables only during first watch statement
     printer->add_line("if (watch_id == 0) {");
@@ -3335,6 +3335,11 @@ void CodegenCVisitor::print_watch_check() {
     print_channel_iteration_tiling_block_begin(BlockType::Watch);
     print_channel_iteration_block_begin(BlockType::Watch);
     print_post_channel_iteration_common_code();
+
+    if (info.is_voltage_used_by_watch_statements()) {
+        printer->add_line("int node_id = node_index[id];");
+        printer->add_line("double v = voltage[node_id];");
+    }
 
     for (int i = 0; i < info.watch_statements.size(); i++) {
         auto statement = info.watch_statements[i];
@@ -3726,7 +3731,16 @@ void CodegenCVisitor::print_net_receive_kernel() {
     if (info.artificial_cell) {
         printer->add_line("double t = nt->_t;");
     }
+
+    // set voltage variable if it is used in the block (e.g. for WATCH statement)
+    auto v_used = VarUsageVisitor().variable_used(*node->get_statement_block(), "v");
+    if (v_used) {
+        printer->add_line("int node_id = ml->nodeindices[id];");
+        printer->add_line("v = nt->_actual_v[node_id];");
+    }
+
     printer->add_line("{} = t;"_format(get_variable_name("tsave")));
+
     printer->add_indent();
     node->get_statement_block()->accept(*this);
     printer->add_newline();
