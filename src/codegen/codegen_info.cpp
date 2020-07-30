@@ -101,5 +101,24 @@ bool CodegenInfo::nrn_state_has_eigen_solver_block() const {
     return !collect_nodes(*nrn_state_block, {ast::AstNodeType::EIGEN_NEWTON_SOLVER_BLOCK}).empty();
 }
 
+/**
+ * Check if WatchStatement uses voltage variable v
+ *
+ * Watch statement has condition expression which could use voltage
+ * variable `v`. To avoid memory access into voltage array we check
+ * if `v` is used and then print necessary code.
+ *
+ * @return true if voltage variable b is used otherwise false
+ */
+bool CodegenInfo::is_voltage_used_by_watch_statements() const {
+    for (const auto& statement: watch_statements) {
+        auto v_used = VarUsageVisitor().variable_used(*statement, "v");
+        if (v_used) {
+            return true;
+        }
+    }
+    return false;
+}
+
 }  // namespace codegen
 }  // namespace nmodl
