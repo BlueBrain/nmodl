@@ -146,6 +146,7 @@ jobs:
       python --version
       which python
       which python3.8
+      python -c "import sys; paths = [ path for path in sys.path ]; print(paths);"
       ls
       pwd
       echo $PATH
