@@ -2,160 +2,139 @@
 # Azure Pipeline NMODL settings
 #=============================================================================
 jobs:
-- job: 'ubuntu1604'
-  pool:
-    vmImage: 'ubuntu-16.04'
-  displayName: 'Ubuntu (16.04), GCC 8.3'
-  steps:
-  - checkout: self
-    submodules: true
-  - script: |
-      sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-      sudo apt-add-repository -y ppa:deadsnakes/ppa
-      sudo apt update
-      sudo apt install -y g++-8 flex bison
-      sudo apt-get install -y python3.7 python3.7-dev
-      python3.7 -m pip install -U pip setuptools
-      python3.7 -m pip install --user 'Jinja2>=2.9.3' 'PyYAML>=3.13' pytest 'sympy>=1.3,<1.6'
-      # we manually get version 3.10.2 to make sure that changes in the cmake
-      # files do not require unsupported versions of cmake in our package. 
-      wget "https://github.com/Kitware/CMake/releases/download/v3.10.2/$CMAKE_PKG.tar.gz" && tar xzpvf $CMAKE_PKG.tar.gz
-      # install ISPC compiler for integration testing
-      ispc_version="v1.12.0";
-      url_os="linux";
-      ispc_version_suffix="b";
-      url="https://github.com/ispc/ispc/releases/download/${ispc_version}/ispc-${ispc_version}${ispc_version_suffix}-${url_os}.tar.gz";
-      wget -O ispc.tar.gz $url;
-      mkdir $(pwd)/$CMAKE_PKG/ispc && tar -xvzf ispc.tar.gz -C $(pwd)/$CMAKE_PKG/ispc --strip 1;
-    env:
-      CMAKE_PKG: 'cmake-3.10.2-Linux-x86_64'
-    displayName: 'Install Depdendencies'
-  - script: |
-      export PATH=$(pwd)/$CMAKE_PKG/bin:/home/vsts/.local/bin:$PATH
-      export CXX='g++-8'
-      mkdir -p $(Build.Repository.LocalPath)/build
-      cd $(Build.Repository.LocalPath)/build
-      cmake --version
-      cmake .. -DPYTHON_EXECUTABLE=$(which python3.7) -DCMAKE_INSTALL_PREFIX=$HOME/nmodl -DCMAKE_BUILD_TYPE=Release
-      make -j 2
-      if [ $? -ne 0 ]
-      then
-        make VERBOSE=1
-      fi
-      make install #this is needed for the integration tests
-      env CTEST_OUTPUT_ON_FAILURE=1 make test
-    env:
-      CMAKE_PKG: 'cmake-3.10.2-Linux-x86_64'
-    displayName: 'Build and Run Unit Tests'
-  - script: |
-      export PATH=$(pwd)/$CMAKE_PKG/bin:/home/vsts/.local/bin:$PATH
-      export CXX='g++-8'
-      git clone --recursive https://github.com/BlueBrain/CoreNeuron.git
-      mkdir CoreNeuron/build
-      cd CoreNeuron/build
-      cmake --version
-      cmake .. -DCORENRN_ENABLE_MPI=OFF -DCORENRN_ENABLE_NMODL=ON -DCORENRN_NMODL_DIR=$HOME/nmodl -Dnmodl_PYTHONPATH=$HOME/nmodl/lib -DPYTHON_EXECUTABLE=$(which python3.7) -DCORENRN_NMODL_FLAGS="sympy --analytic"
-      make -j 2
-      if [ $? -ne 0 ]
-      then
-        make VERBOSE=1
-      fi
-      make test
-      ./bin/nrnivmodl-core $(Build.Repository.LocalPath)/test/integration/mod
-    env:
-      CMAKE_PKG: 'cmake-3.10.2-Linux-x86_64'
-    displayName: 'Build and Run Integration Tests'
-  - script: |
-      export PATH=$(pwd)/$CMAKE_PKG/bin:/home/vsts/.local/bin:$PATH
-      export CXX='g++-8'
-      git clone --recursive https://github.com/BlueBrain/CoreNeuron.git
-      mkdir CoreNeuron/build_ispc
-      cd CoreNeuron/build_ispc
-      cmake --version
-      cmake .. -DCORENRN_ENABLE_MPI=OFF -DCORENRN_ENABLE_NMODL=ON -DCORENRN_NMODL_DIR=$HOME/nmodl -DPYTHON_EXECUTABLE=$(which python3.7) -DCORENRN_NMODL_FLAGS="sympy --analytic" -DCORENRN_ENABLE_ISPC=ON -DCMAKE_ISPC_COMPILER=$(Build.Repository.LocalPath)/$CMAKE_PKG/ispc/bin/ispc
-      make -j 2
-      if [ $? -ne 0 ]
-      then
-        make VERBOSE=1
-      fi
-      make test
-      ./bin/nrnivmodl-core $(Build.Repository.LocalPath)/test/integration/mod
-    env:
-      CMAKE_PKG: 'cmake-3.10.2-Linux-x86_64'
-    displayName: 'Build and Run Integration Tests with ISPC compiler'
-  - script: |
-      export PATH=$(pwd)/$CMAKE_PKG/bin:/home/vsts/.local/bin:$PATH
-      export CXX='g++-8'
-      sudo apt-get install -y python3.7-venv
-      python3.7 -m pip install -U scikit-build
-      python3.7 setup.py sdist bdist_wheel -j 6
-      rm -rf venv _skbuild
-      python3.7 -m venv venv
-      source ./venv/bin/activate
-      pip install --upgrade pip
-      pip install dist/*.whl
-      nmodl $(Build.Repository.LocalPath)/test/integration/mod/cabpump.mod sympy --analytic
-      rm cabpump.cpp
-    env:
-      CMAKE_PKG: 'cmake-3.10.2-Linux-x86_64'
-    displayName: 'Build and test pywheels'
-- job: 'osx1014'
-  pool:
-    vmImage: 'macOS-10.14'
-  displayName: 'MacOS (10.14), AppleClang 10.0'
-  steps:
-  - checkout: self
-    submodules: true
-  - script: |
-      brew install flex bison cmake python@3
-      python3 -m pip install -U pip setuptools
-      python3 -m pip install --user 'Jinja2>=2.9.3' 'PyYAML>=3.13' pytest 'sympy>=1.3,<1.6'
-    displayName: 'Install Depdendencies'
-# TODO remove comment
-#  - script: |
-#      export PATH=/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH;
-#      mkdir -p $(Build.Repository.LocalPath)/build
-#      cd $(Build.Repository.LocalPath)/build
-#      cmake .. -DPYTHON_EXECUTABLE=$(which python3) -DCMAKE_INSTALL_PREFIX=$HOME/nmodl -DCMAKE_BUILD_TYPE=RelWithDebInfo
-#      make -j 2
-#      if [ $? -ne 0 ]
-#      then
-#        make VERBOSE=1
-#      fi
-#      env CTEST_OUTPUT_ON_FAILURE=1 make test
-#    displayName: 'Build and Run Tests'
-  - script: |
-      export PATH=/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH;
-      python3.8 -m pip install -U pip setuptools scikit-build auditwheel
-      python3.8 setup.py sdist bdist_wheel -j 2
-
-      brew install tree
-
-      auditwheel repair dist/*.whl
-      rm -rf venv _skbuild
-      python3.8 -m venv venv
-      type -a nmodl
-      source ./venv/bin/activate
-      # pip install --upgrade pip
-      pip install dist/*.whl
-
-      tree venv
-      export PYTHONPATH=$(pwd)/venv/lib/python3.8/site-packages:$PYTHONPATH
-
-      cd $(Build.Repository.LocalPath)/test/integration/mod
-      python --version
-      which python
-      which python3.8
-      python -c "import sys; paths = [ path for path in sys.path ]; print(paths);"
-      ls
-      pwd
-      echo $PATH
-      echo $PYTHONPATH
-      type -a nmodl
-      which nmodl
-      nmodl cabpump.mod sympy --analytic
-      type -a nmodl
-      which nmodl
-
-      rm cabpump.cpp
-    displayName: 'Build and test pywheels'
+  - job: 'ubuntu1604'
+    pool:
+      vmImage: 'ubuntu-16.04'
+    displayName: 'Ubuntu (16.04), GCC 8.3'
+    steps:
+      - checkout: self
+        submodules: true
+      - script: |
+          sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+          sudo apt-add-repository -y ppa:deadsnakes/ppa
+          sudo apt update
+          sudo apt install -y g++-8 flex bison
+          sudo apt-get install -y python3.7 python3.7-dev
+          python3.7 -m pip install -U pip setuptools
+          python3.7 -m pip install --user 'Jinja2>=2.9.3' 'PyYAML>=3.13' pytest 'sympy>=1.3,<1.6'
+          # we manually get version 3.10.2 to make sure that changes in the cmake
+          # files do not require unsupported versions of cmake in our package.
+          wget "https://github.com/Kitware/CMake/releases/download/v3.10.2/$CMAKE_PKG.tar.gz" && tar xzpvf $CMAKE_PKG.tar.gz
+          # install ISPC compiler for integration testing
+          ispc_version="v1.12.0";
+          url_os="linux";
+          ispc_version_suffix="b";
+          url="https://github.com/ispc/ispc/releases/download/${ispc_version}/ispc-${ispc_version}${ispc_version_suffix}-${url_os}.tar.gz";
+          wget -O ispc.tar.gz $url;
+          mkdir $(pwd)/$CMAKE_PKG/ispc && tar -xvzf ispc.tar.gz -C $(pwd)/$CMAKE_PKG/ispc --strip 1;
+        env:
+          CMAKE_PKG: 'cmake-3.10.2-Linux-x86_64'
+        displayName: 'Install Depdendencies'
+      - script: |
+          export PATH=$(pwd)/$CMAKE_PKG/bin:/home/vsts/.local/bin:$PATH
+          export CXX='g++-8'
+          mkdir -p $(Build.Repository.LocalPath)/build
+          cd $(Build.Repository.LocalPath)/build
+          cmake --version
+          cmake .. -DPYTHON_EXECUTABLE=$(which python3.7) -DCMAKE_INSTALL_PREFIX=$HOME/nmodl -DCMAKE_BUILD_TYPE=Release
+          make -j 2
+          if [ $? -ne 0 ]
+          then
+            make VERBOSE=1
+          fi
+          make install #this is needed for the integration tests
+          env CTEST_OUTPUT_ON_FAILURE=1 make test
+        env:
+          CMAKE_PKG: 'cmake-3.10.2-Linux-x86_64'
+        displayName: 'Build and Run Unit Tests'
+      - script: |
+          export PATH=$(pwd)/$CMAKE_PKG/bin:/home/vsts/.local/bin:$PATH
+          export CXX='g++-8'
+          git clone --recursive https://github.com/BlueBrain/CoreNeuron.git
+          mkdir CoreNeuron/build
+          cd CoreNeuron/build
+          cmake --version
+          cmake .. -DCORENRN_ENABLE_MPI=OFF -DCORENRN_ENABLE_NMODL=ON -DCORENRN_NMODL_DIR=$HOME/nmodl -Dnmodl_PYTHONPATH=$HOME/nmodl/lib -DPYTHON_EXECUTABLE=$(which python3.7) -DCORENRN_NMODL_FLAGS="sympy --analytic"
+          make -j 2
+          if [ $? -ne 0 ]
+          then
+            make VERBOSE=1
+          fi
+          make test
+          ./bin/nrnivmodl-core $(Build.Repository.LocalPath)/test/integration/mod
+        env:
+          CMAKE_PKG: 'cmake-3.10.2-Linux-x86_64'
+        displayName: 'Build and Run Integration Tests'
+      - script: |
+          export PATH=$(pwd)/$CMAKE_PKG/bin:/home/vsts/.local/bin:$PATH
+          export CXX='g++-8'
+          git clone --recursive https://github.com/BlueBrain/CoreNeuron.git
+          mkdir CoreNeuron/build_ispc
+          cd CoreNeuron/build_ispc
+          cmake --version
+          cmake .. -DCORENRN_ENABLE_MPI=OFF -DCORENRN_ENABLE_NMODL=ON -DCORENRN_NMODL_DIR=$HOME/nmodl -DPYTHON_EXECUTABLE=$(which python3.7) -DCORENRN_NMODL_FLAGS="sympy --analytic" -DCORENRN_ENABLE_ISPC=ON -DCMAKE_ISPC_COMPILER=$(Build.Repository.LocalPath)/$CMAKE_PKG/ispc/bin/ispc
+          make -j 2
+          if [ $? -ne 0 ]
+          then
+            make VERBOSE=1
+          fi
+          make test
+          ./bin/nrnivmodl-core $(Build.Repository.LocalPath)/test/integration/mod
+        env:
+          CMAKE_PKG: 'cmake-3.10.2-Linux-x86_64'
+        displayName: 'Build and Run Integration Tests with ISPC compiler'
+      - script: |
+          export PATH=$(pwd)/$CMAKE_PKG/bin:/home/vsts/.local/bin:$PATH
+          export CXX='g++-8'
+          sudo apt-get install -y python3.7-venv
+          python3.7 -m pip install -U scikit-build
+          python3.7 setup.py sdist bdist_wheel -j 6
+          rm -rf venv _skbuild
+          python3.7 -m venv venv
+          source ./venv/bin/activate
+          pip install --upgrade pip
+          pip install dist/*.whl
+          nmodl $(Build.Repository.LocalPath)/test/integration/mod/cabpump.mod sympy --analytic
+          rm cabpump.cpp
+        env:
+          CMAKE_PKG: 'cmake-3.10.2-Linux-x86_64'
+        displayName: 'Build and test pywheels'
+  - job: 'osx1014'
+    pool:
+      vmImage: 'macOS-10.14'
+    displayName: 'MacOS (10.14), AppleClang 10.0'
+    steps:
+      - checkout: self
+        submodules: true
+      - script: |
+          brew install flex bison cmake python@3
+          python3 -m pip install -U pip setuptools
+          python3 -m pip install --user 'Jinja2>=2.9.3' 'PyYAML>=3.13' pytest 'sympy>=1.3,<1.6'
+        displayName: 'Install Depdendencies'
+      - script: |
+          export PATH=/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH;
+          mkdir -p $(Build.Repository.LocalPath)/build
+          cd $(Build.Repository.LocalPath)/build
+          cmake .. -DPYTHON_EXECUTABLE=$(which python3) -DCMAKE_INSTALL_PREFIX=$HOME/nmodl -DCMAKE_BUILD_TYPE=RelWithDebInfo
+          make -j 2
+          if [ $? -ne 0 ]
+          then
+            make VERBOSE=1
+          fi
+          env CTEST_OUTPUT_ON_FAILURE=1 make test
+        displayName: 'Build and Run Tests'
+      - script: |
+          export PATH=/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH;
+          python3 -m pip install -U pip setuptools scikit-build auditwheel
+          python3 setup.py sdist bdist_wheel -j 2
+          auditwheel repair dist/*.whl
+          rm -rf venv _skbuild
+          python3 -m venv venv
+          source ./venv/bin/activate
+          pip install --upgrade pip
+          pip install dist/*.whl
+          # TODO : change this when we fix the issue with nmodl module
+          export PYTHONPATH=$(pwd)/venv/lib/python3.8/site-packages:$PYTHONPATH
+          nmodl $(Build.Repository.LocalPath)/test/integration/mod/cabpump.mod sympy --analytic
+          rm cabpump.cpp
+        displayName: 'Build and test pywheels'
