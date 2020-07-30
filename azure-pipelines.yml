@@ -146,7 +146,7 @@ jobs:
       type -a nmodl
       which nmodl
       nmodl cabpump.mod sympy --analytic
-      typa -a nmodl
+      type -a nmodl
       which nmodl
 
       rm cabpump.cpp
