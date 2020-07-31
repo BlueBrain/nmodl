@@ -34,9 +34,5 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/fast_math.ispc
 # =============================================================================
 # Install include files
 # =============================================================================
-
-if(NOT LINK_AGAINST_PYTHON)
-  install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/fast_math.ispc DESTINATION nmodl/.data/include/nmodl)
-else()
-  install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/fast_math.ispc DESTINATION include/nmodl)
-endif()
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/fast_math.ispc
+        DESTINATION ${NMODL_INSTALL_DIR_SUFFIX}include/nmodl)

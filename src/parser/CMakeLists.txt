@@ -15,13 +15,6 @@ target_link_libraries(units_parser util visitor lexer)
 # =============================================================================
 # Install executable
 # =============================================================================
-
-if(LINK_AGAINST_PYTHON)
-  install(TARGETS nmodl_parser DESTINATION bin/parser)
-  install(TARGETS c_parser DESTINATION bin/parser)
-  install(TARGETS units_parser DESTINATION bin/parser)
-else()
-  install(TARGETS nmodl_parser DESTINATION nmodl/.data/bin/parser)
-  install(TARGETS c_parser DESTINATION nmodl/.data/bin/parser)
-  install(TARGETS units_parser DESTINATION nmodl/.data/bin/parser)
-endif()
+install(TARGETS nmodl_parser DESTINATION ${NMODL_INSTALL_DIR_SUFFIX}bin/parser)
+install(TARGETS c_parser DESTINATION ${NMODL_INSTALL_DIR_SUFFIX}bin/parser)
+install(TARGETS units_parser DESTINATION ${NMODL_INSTALL_DIR_SUFFIX}bin/parser)
