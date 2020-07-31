@@ -13,4 +13,8 @@ file(COPY ${NMODL_PROJECT_SOURCE_DIR}/ext/eigen/Eigen DESTINATION ${CMAKE_BINARY
 # =============================================================================
 # Install solver headers and eigen from include
 # =============================================================================
-install(DIRECTORY ${CMAKE_BINARY_DIR}/include/ DESTINATION include)
+if(LINK_AGAINST_PYTHON)
+  install(DIRECTORY ${CMAKE_BINARY_DIR}/include/ DESTINATION include)
+else()
+  install(DIRECTORY ${CMAKE_BINARY_DIR}/include/ DESTINATION nmodl/.data/include)
+endif()

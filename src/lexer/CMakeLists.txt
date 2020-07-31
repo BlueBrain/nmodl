@@ -192,7 +192,15 @@ target_link_libraries(units_lexer lexer util)
 # =============================================================================
 # Install executable
 # =============================================================================
-install(TARGETS nmodl_lexer DESTINATION bin/lexer)
-install(TARGETS c_lexer DESTINATION bin/lexer)
-install(TARGETS units_lexer DESTINATION bin/lexer)
+
+if(LINK_AGAINST_PYTHON)
+  install(TARGETS nmodl_lexer DESTINATION bin/lexer)
+  install(TARGETS c_lexer DESTINATION bin/lexer)
+  install(TARGETS units_lexer DESTINATION bin/lexer)
+else()
+  install(TARGETS nmodl_lexer DESTINATION nmodl/.data/bin/lexer)
+  install(TARGETS c_lexer DESTINATION nmodl/.data/bin/lexer)
+  install(TARGETS units_lexer DESTINATION nmodl/.data/bin/lexer)
+endif()
+
 add_custom_target(parser-gen DEPENDS ${BISON_GENERATED_SOURCE_FILES})

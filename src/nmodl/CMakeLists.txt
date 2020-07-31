@@ -26,5 +26,10 @@ add_dependencies(nmodl _nmodl pywrapper)
 # =============================================================================
 # Install executable
 # =============================================================================
-install(TARGETS nmodl DESTINATION bin)
-install(FILES nmodl.hpp DESTINATION include)
+if(LINK_AGAINST_PYTHON)
+  install(TARGETS nmodl DESTINATION bin)
+  install(FILES nmodl.hpp DESTINATION include)
+else()
+  install(TARGETS nmodl DESTINATION nmodl/.data/bin)
+  install(FILES nmodl.hpp DESTINATION nmodl/.data/include)
+endif()

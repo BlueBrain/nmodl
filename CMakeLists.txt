@@ -194,4 +194,9 @@ add_subdirectory(src/solver)
 # =============================================================================
 # Install unit database, examples and utility scripts from share
 # =============================================================================
-install(DIRECTORY share/ DESTINATION share)
+if(NOT LINK_AGAINST_PYTHON)
+  install(DIRECTORY share/ DESTINATION nmodl/.data/share)
+  install(DIRECTORY share/ DESTINATION share)
+else()
+  install(DIRECTORY share/ DESTINATION share)
+endif()

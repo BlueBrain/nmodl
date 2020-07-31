@@ -17,16 +17,17 @@ def _config_exe(exe_name):
 
     assert package_name in working_set.by_key, "NMODL package not found! Verify PYTHONPATH"
     NMODL_PREFIX = os.path.join(working_set.by_key[package_name].location, 'nmodl')
-    NMODL_PREFIX_DATA = os.path.join(NMODL_PREFIX, '.data')
-    if sys.platform == "darwin" :
-        os.environ["NMODL_WRAPLIB"] = os.path.join(NMODL_PREFIX_DATA, 'libpywrapper.dylib')
+    NMODL_BIN = os.path.join(NMODL_PREFIX, '.data/bin')
+    NMODL_LIB = os.path.join(NMODL_PREFIX, '.data/lib')
+    if sys.platform == "darwin":
+        os.environ["NMODL_WRAPLIB"] = os.path.join(NMODL_LIB, 'libpywrapper.dylib')
     else:
-        os.environ["NMODL_WRAPLIB"] = os.path.join(NMODL_PREFIX_DATA, 'libpywrapper.so')
+        os.environ["NMODL_WRAPLIB"] = os.path.join(NMODL_LIB, 'libpywrapper.so')
 
     # find libpython*.so in the system
     os.environ["NMODL_PYLIB"] = find_libpython()
 
-    return os.path.join(NMODL_PREFIX_DATA, exe_name)
+    return os.path.join(NMODL_BIN, exe_name)
 
 if __name__ == '__main__':
     """Set the pointed file as executable"""

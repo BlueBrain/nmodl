@@ -84,4 +84,9 @@ target_link_libraries(
 # =============================================================================
 # Install executable
 # =============================================================================
-install(TARGETS nmodl_visitor DESTINATION bin/visitor)
+
+if(LINK_AGAINST_PYTHON)
+  install(TARGETS nmodl_visitor DESTINATION bin/visitor)
+else()
+  install(TARGETS nmodl_visitor DESTINATION nmodl/.data/bin/visitor)
+endif()
