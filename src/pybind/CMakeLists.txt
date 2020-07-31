@@ -93,7 +93,6 @@ file(COPY ${NMODL_PROJECT_SOURCE_DIR}/nmodl/ext DESTINATION ${CMAKE_BINARY_DIR}/
 if(NOT LINK_AGAINST_PYTHON)
   install(TARGETS _nmodl DESTINATION nmodl)
   install(TARGETS pywrapper DESTINATION nmodl/.data/lib)
-  # install(FILES ${CMAKE_BINARY_DIR}/bin/nmodl DESTINATION nmodl/.data/)
 elseif(SKBUILD) # skbuild needs the installation dir to be in nmodl to do the correct inplace
   install(DIRECTORY ${CMAKE_BINARY_DIR}/lib/nmodl DESTINATION .)
 else()

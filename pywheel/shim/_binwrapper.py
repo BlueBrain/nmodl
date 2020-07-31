@@ -16,16 +16,24 @@ def _config_exe(exe_name):
     package_name = 'nmodl'
 
     assert package_name in working_set.by_key, "NMODL package not found! Verify PYTHONPATH"
+
     NMODL_PREFIX = os.path.join(working_set.by_key[package_name].location, 'nmodl')
-    NMODL_BIN = os.path.join(NMODL_PREFIX, '.data/bin')
-    NMODL_LIB = os.path.join(NMODL_PREFIX, '.data/lib')
+    NMODL_HOME = os.path.join(NMODL_PREFIX, '.data')
+    NMODL_BIN = os.path.join(NMODL_HOME, 'bin')
+    NMODL_LIB = os.path.join(NMODL_HOME, 'lib')
+
+    # add pywrapper path to environment
     if sys.platform == "darwin":
         os.environ["NMODL_WRAPLIB"] = os.path.join(NMODL_LIB, 'libpywrapper.dylib')
     else:
         os.environ["NMODL_WRAPLIB"] = os.path.join(NMODL_LIB, 'libpywrapper.so')
 
-    # find libpython*.so in the system
+    # add libpython*.so path to environment
     os.environ["NMODL_PYLIB"] = find_libpython()
+
+    # add nmodl home to environment (i.e. necessary for nrnunits.lib)
+    os.environ["NMODLHOME"] = NMODL_HOME
+
 
     return os.path.join(NMODL_BIN, exe_name)
 

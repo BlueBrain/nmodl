@@ -196,7 +196,6 @@ add_subdirectory(src/solver)
 # =============================================================================
 if(NOT LINK_AGAINST_PYTHON)
   install(DIRECTORY share/ DESTINATION nmodl/.data/share)
-  install(DIRECTORY share/ DESTINATION share)
 else()
   install(DIRECTORY share/ DESTINATION share)
 endif()
