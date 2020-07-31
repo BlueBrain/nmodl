@@ -12,8 +12,8 @@
  * \brief Parser implementations
  */
 
-#include <map>
 #include <string>
+#include <unordered_map>
 
 #include "ast/ast.hpp"
 #include "utils/file_library.hpp"
@@ -60,7 +60,7 @@ namespace parser {
 class NmodlDriver {
   private:
     /// all macro defined in the mod file
-    std::map<std::string, int> defined_var;
+    std::unordered_map<std::string, int> defined_var;
 
     /// enable debug output in the flex scanner
     bool trace_scanner = false;

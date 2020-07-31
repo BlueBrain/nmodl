@@ -10,8 +10,22 @@
 #include <string>
 #include <vector>
 
+/**
+ *
+ * \dir
+ * \brief Utility classes and function
+ *
+ * \file
+ * \brief Manage search path.
+ */
+
 namespace nmodl {
 
+/**
+ * \brief Manage search path.
+ *
+ * Store search path used for handling paths when processing include NMODL directive
+ */
 class FileLibrary {
   public:
     /// An empty library
