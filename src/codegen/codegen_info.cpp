@@ -114,7 +114,7 @@ bool CodegenInfo::nrn_state_has_eigen_solver_block() const {
  * variable `v`. To avoid memory access into voltage array we check
  * if `v` is used and then print necessary code.
  *
- * @return true if voltage variable b is used otherwise false
+ * \return true if voltage variable b is used otherwise false
  */
 bool CodegenInfo::is_voltage_used_by_watch_statements() const {
     for (const auto& statement: watch_statements) {
