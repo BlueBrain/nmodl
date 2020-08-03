@@ -75,13 +75,6 @@ add_custom_target(
   "${CMAKE_SOURCE_DIR}/docs/notebooks/*.ipynb")
 
 # =============================================================================
-# Adjust install prefix for wheel
-# =============================================================================
-if(NOT LINK_AGAINST_PYTHON)
-  set(NMODL_INSTALL_DIR_SUFFIX "nmodl/.data/")
-endif()
-
-# =============================================================================
 # Include cmake modules
 # =============================================================================
 list(APPEND CMAKE_MODULE_PATH ${NMODL_PROJECT_SOURCE_DIR}/cmake)
@@ -94,6 +87,13 @@ include(FlexHelper)
 include(GitRevision)
 include(PythonLinkHelper)
 include(RpathHelper)
+
+# =============================================================================
+# Adjust install prefix for wheel
+# =============================================================================
+if(NOT LINK_AGAINST_PYTHON)
+  set(NMODL_INSTALL_DIR_SUFFIX "nmodl/.data/")
+endif()
 
 # =============================================================================
 # Find required python packages
