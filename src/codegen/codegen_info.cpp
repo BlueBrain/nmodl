@@ -9,14 +9,12 @@
 
 #include "ast/all.hpp"
 #include "visitors/lookup_visitor.hpp"
-#include "visitors/var_usage_visitor.hpp"
 
 
 namespace nmodl {
 namespace codegen {
 
 using visitor::AstLookupVisitor;
-using visitor::VarUsageVisitor;
 
 /// if any ion has write variable
 bool CodegenInfo::ion_has_write_variable() const {
@@ -105,25 +103,6 @@ bool CodegenInfo::nrn_state_has_eigen_solver_block() const {
     return !AstLookupVisitor()
                 .lookup(*nrn_state_block, ast::AstNodeType::EIGEN_NEWTON_SOLVER_BLOCK)
                 .empty();
-}
-
-/**
- * Check if WatchStatement uses voltage variable v
- *
- * Watch statement has condition expression which could use voltage
- * variable `v`. To avoid memory access into voltage array we check
- * if `v` is used and then print necessary code.
- *
- * @return true if voltage variable b is used otherwise false
- */
-bool CodegenInfo::is_voltage_used_by_watch_statements() const {
-    for (const auto& statement: watch_statements) {
-        auto v_used = VarUsageVisitor().variable_used(*statement, "v");
-        if (v_used) {
-            return true;
-        }
-    }
-    return false;
 }
 
 }  // namespace codegen
