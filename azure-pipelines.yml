@@ -154,6 +154,8 @@ jobs:
       pip show nmodl
       echo `which nmodl`
       tree venv
+      cd $(Build.Repository.LocalPath)/test/integration
+      python test.py
       cd $(Build.Repository.LocalPath)/test/integration/mod
       nmodl cabpump.mod sympy --analytic
       rm cabpump.cpp
