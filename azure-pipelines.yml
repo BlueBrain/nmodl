@@ -115,6 +115,7 @@ jobs:
       python3 -m pip install -U pip setuptools
       python3 -m pip install --user 'Jinja2>=2.9.3' 'PyYAML>=3.13' pytest 'sympy>=1.3,<1.6'
     displayName: 'Install Depdendencies'
+    condition: false
   - script: |
       export PATH=/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH;
       mkdir -p $(Build.Repository.LocalPath)/build
@@ -135,17 +136,24 @@ jobs:
       delocate-wheel -w wheelhouse -v dist/*.whl
       rm -rf venv _skbuild
     displayName: 'Build wheel'
+    condition: false
   - task: PublishBuildArtifacts@1
     inputs:
       pathToPublish: '$(Build.SourcesDirectory)/wheelhouse'
     displayName: 'Publish wheel as build artifact'
+    condition: false
   - script: |
+      brew install tree
       python3 -m venv venv
       source ./venv/bin/activate
       pip install --upgrade pip
-      pip install wheelhouse/*.whl
+      #pip install wheelhouse/*.whl
       # TODO : change this when we fix the issue with nmodl module
       # export PYTHONPATH=$(pwd)/venv/lib/python3.8/site-packages:$PYTHONPATH
+      pip install NMODL-0.2.77-cp37-cp37m-macosx_10_14_x86_64.whl
+      pip show nmodl
+      echo `which nmodl`
+      tree venv
       cd $(Build.Repository.LocalPath)/test/integration/mod
       nmodl cabpump.mod sympy --analytic
       rm cabpump.cpp
