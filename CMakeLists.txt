@@ -75,13 +75,6 @@ add_custom_target(
   "${CMAKE_SOURCE_DIR}/docs/notebooks/*.ipynb")
 
 # =============================================================================
-# Adjust install prefix for wheel
-# =============================================================================
-if(NOT LINK_AGAINST_PYTHON)
-  set(NMODL_INSTALL_DIR_SUFFIX "nmodl/.data/")
-endif()
-
-# =============================================================================
 # Include cmake modules
 # =============================================================================
 list(APPEND CMAKE_MODULE_PATH ${NMODL_PROJECT_SOURCE_DIR}/cmake)
@@ -105,6 +98,13 @@ find_python_module(pytest 3.3.0 REQUIRED)
 find_python_module(sympy 1.2 REQUIRED)
 find_python_module(textwrap 0.9 REQUIRED)
 find_python_module(yaml 3.12 REQUIRED)
+
+# =============================================================================
+# Adjust install prefix for wheel
+# =============================================================================
+if(NOT LINK_AGAINST_PYTHON)
+  set(NMODL_INSTALL_DIR_SUFFIX "nmodl/.data/")
+endif()
 
 # =============================================================================
 # Compiler specific flags for external submodules
