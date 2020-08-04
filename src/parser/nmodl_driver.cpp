@@ -33,22 +33,6 @@ std::shared_ptr<ast::Program> NmodlDriver::parse_stream(std::istream& in) {
 std::shared_ptr<ast::Program> NmodlDriver::parse_file(const std::string& filename,
                                                       const location* loc) {
     std::ifstream in(filename.c_str());
-    stream_name = filename;
-
-    {
-        const auto last_slash = filename.find_last_of(utils::pathsep);
-        if (utils::file_is_abs(filename)) {
-            const auto path_prefix = filename.substr(0, last_slash + 1);
-            library.push_current_directory(path_prefix);
-        } else if (last_slash == std::string::npos) {
-            library.push_current_directory(utils::cwd());
-        } else {
-            const auto path_prefix = filename.substr(0, last_slash + 1);
-            const auto path = utils::cwd() + utils::pathsep + path_prefix;
-            library.push_current_directory(path);
-        }
-    }
-
     if (!in.good()) {
         std::ostringstream oss;
         if (loc == nullptr) {
@@ -61,8 +45,31 @@ std::shared_ptr<ast::Program> NmodlDriver::parse_file(const std::string& filenam
             throw std::runtime_error(oss.str());
         }
     }
+
+    auto current_stream_name = stream_name;
+    stream_name = filename;
+    auto absolute_path = utils::cwd() + utils::pathsep + filename;
+    {
+        const auto last_slash = filename.find_last_of(utils::pathsep);
+        if (utils::file_is_abs(filename)) {
+            const auto path_prefix = filename.substr(0, last_slash + 1);
+            library.push_current_directory(path_prefix);
+            absolute_path = filename;
+        } else if (last_slash == std::string::npos) {
+            library.push_current_directory(utils::cwd());
+        } else {
+            const auto path_prefix = filename.substr(0, last_slash + 1);
+            const auto path = utils::cwd() + utils::pathsep + path_prefix;
+            library.push_current_directory(path);
+        }
+    }
+
+    open_files.emplace(absolute_path, loc);
     parse_stream(in);
+    open_files.erase(absolute_path);
     library.pop_current_directory();
+    stream_name = current_stream_name;
+
     return astRoot;
 }
 
@@ -85,14 +92,15 @@ std::shared_ptr<ast::Include> NmodlDriver::parse_include(const std::string& name
     }
 
     // Detect recursive inclusion.
-    if (open_files.find(absolute_path) != open_files.end()) {
+    auto already_included = open_files.find(absolute_path);
+    if (already_included != open_files.end()) {
         std::ostringstream oss;
-        oss << name << ": recursive inclusion.\n"
-            << open_files[absolute_path] << ": initial inclusion was here.";
+        oss << name << ": recursive inclusion.\n";
+        if (already_included->second != nullptr) {
+            oss << *already_included->second << ": initial inclusion was here.";
+        }
         parse_error(loc, oss.str());
     }
-    library.push_current_directory(directory_path);
-    open_files.emplace(absolute_path, loc);
 
     std::shared_ptr<ast::Program> program;
     program.swap(astRoot);
@@ -100,8 +108,6 @@ std::shared_ptr<ast::Include> NmodlDriver::parse_include(const std::string& name
     parse_file(absolute_path, &loc);
 
     program.swap(astRoot);
-    open_files.erase(absolute_path);
-    library.pop_current_directory();
     auto filename_node = std::shared_ptr<ast::String>(
         new ast::String(std::string(1, '"') + name + std::string(1, '"')));
     return std::shared_ptr<ast::Include>(new ast::Include(filename_node, program));
