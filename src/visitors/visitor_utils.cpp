@@ -51,7 +51,7 @@ std::string suffix_random_string(const std::set<std::string>& vars,
 std::string get_new_name(const std::string& name,
                          const std::string& suffix,
                          std::map<std::string, int>& variables) {
-    auto it = variables.insert({name, 0});
+    auto it = variables.emplace(name, 0);
     auto counter = it.first->second;
     ++it.first->second;
 
