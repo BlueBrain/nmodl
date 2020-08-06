@@ -121,12 +121,12 @@ static std::shared_ptr<ast::ExpressionStatement> unroll_for_loop(
     std::string index_var = node->get_node_name();
     for (int i = start; i <= end; i += step) {
         /// duplicate loop body and copy all statements to new vector
-        const auto& new_block = node->get_statement_block()->clone();
+        const auto new_block = std::unique_ptr<ast::StatementBlock>(
+            node->get_statement_block()->clone());
         IndexRemover(index_var, i).visit_statement_block(*new_block);
         statements.insert(statements.end(),
                           new_block->get_statements().begin(),
                           new_block->get_statements().end());
-        delete new_block;
     }
 
     /// create new statement representing unrolled loop
