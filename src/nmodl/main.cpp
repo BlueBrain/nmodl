@@ -254,7 +254,7 @@ int main(int argc, const char* argv[]) {
     codegen_opt->add_flag("--force",
         force_codegen,
         "Force code generation even if there is any incompatibility");
-    codegen_opt->add_flag("--opt-ionvar-cp",
+    codegen_opt->add_flag("--opt-ionvar-copy",
         optimize_ionvar_copies_codegen,
         "Optimize copies of ion variables ({})"_format(optimize_ionvar_copies_codegen))->ignore_case();
 
