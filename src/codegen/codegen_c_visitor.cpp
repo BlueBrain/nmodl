@@ -1265,7 +1265,7 @@ std::string CodegenCVisitor::k_const() {
 
 void CodegenCVisitor::visit_watch_statement(ast::WatchStatement& node) {
     printer->add_text(
-        "nrn_watch_activate(inst, id, pnodecount, {}, v)"_format(current_watch_statement++));
+        "nrn_watch_activate(inst, id, pnodecount, {}, v, watch_remove)"_format(current_watch_statement++));
 }
 
 
@@ -2673,6 +2673,11 @@ void CodegenCVisitor::print_mechanism_register() {
         printer->add_line("hoc_register_dparam_semantics({});"_format(args));
     }
 
+    if (info.is_watch_used()) {
+        auto watch_fun =  compute_method_name(BlockType::Watch);
+        printer->add_line("hoc_register_watch_check({}, mech_type);"_format(watch_fun));
+    }
+
     if (info.write_concentration) {
         printer->add_line("nrn_writes_conc(mech_type, 0);");
     }
@@ -3198,6 +3203,10 @@ void CodegenCVisitor::print_global_function_common_code(BlockType type) {
     std::string method = compute_method_name(type);
     auto args = "NrnThread* nt, Memb_list* ml, int type";
 
+    if ( type == BlockType::Watch) {
+        args = "NrnThread* nt, Memb_list* ml";
+    }
+
     print_global_method_annotation();
     printer->start_block("void {}({})"_format(method, args));
     print_kernel_data_present_annotation_block_begin();
@@ -3305,14 +3314,15 @@ void CodegenCVisitor::print_watch_activate() {
     auto inst = "{}* inst"_format(instance_struct());
 
     printer->start_block(
-        "static void nrn_watch_activate({}, int id, int pnodecount, int watch_id, double v) "_format(inst));
+        "static void nrn_watch_activate({}, int id, int pnodecount, int watch_id, double v, bool &watch_remove) "_format(inst));
 
     // initialize all variables only during first watch statement
-    printer->add_line("if (watch_id == 0) {");
+    printer->add_line("if (watch_remove == false) {");
     for (int i = 0; i < info.watch_count; i++) {
         auto name = get_variable_name("watch{}"_format(i + 1));
         printer->add_line("    {} = 0;"_format(name));
     }
+    printer->add_line("    watch_remove = true;");
     printer->add_line("}");
 
     /**
@@ -3325,10 +3335,10 @@ void CodegenCVisitor::print_watch_activate() {
 
         auto varname = get_variable_name("watch{}"_format(i + 1));
         printer->add_indent();
-        printer->add_text("{} = 2 + "_format(varname));
+        printer->add_text("{} = 2 + ("_format(varname));
         auto watch = statement->get_statements().front();
         watch->get_expression()->visit_children(*this);
-        printer->add_text(";");
+        printer->add_text(");");
         printer->add_newline();
 
         printer->end_block(1);
@@ -3760,6 +3770,10 @@ void CodegenCVisitor::print_net_receive_kernel() {
     }
 
     printer->add_line("{} = t;"_format(get_variable_name("tsave")));
+
+    if (info.is_watch_used()) {
+        printer->add_line("bool watch_remove = false;");
+    }
 
     printer->add_indent();
     node->get_statement_block()->accept(*this);

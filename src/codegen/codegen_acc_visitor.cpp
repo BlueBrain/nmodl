@@ -79,6 +79,11 @@ std::string CodegenAccVisitor::backend_name() const {
 
 
 void CodegenAccVisitor::print_memory_allocation_routine() const {
+    // memory for artificial cells should be allocated on CPU
+    if (info.artificial_cell) {
+        CodegenCVisitor::print_memory_allocation_routine();
+        return;
+    }
     printer->add_newline(2);
     auto args = "size_t num, size_t size, size_t alignment = 16";
     printer->add_line("static inline void* mem_alloc({}) {}"_format(args, "{"));
