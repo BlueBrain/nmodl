@@ -3203,6 +3203,7 @@ void CodegenCVisitor::print_global_function_common_code(BlockType type) {
     std::string method = compute_method_name(type);
     auto args = "NrnThread* nt, Memb_list* ml, int type";
 
+    // watch statement function doesn't have type argument
     if (type == BlockType::Watch) {
         args = "NrnThread* nt, Memb_list* ml";
     }
