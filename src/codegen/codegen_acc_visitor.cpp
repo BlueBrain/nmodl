@@ -219,8 +219,12 @@ void CodegenAccVisitor::print_newtonspace_transfer_to_device() const {
     printer->add_line("    auto device_vec = (double*) acc_copyin(vec, vec_size);");
     printer->add_line("    auto device_ns = (NewtonSpace*) acc_deviceptr(ns);");
     printer->add_line("    auto device_thread = (ThreadDatum*) acc_deviceptr(thread);");
-    printer->add_line("    acc_memcpy_to_device(&(device_thread[{}]._pvoid), &device_ns, sizeof(void*));"_format(info.thread_data_index-1));
-    printer->add_line("    acc_memcpy_to_device(&(device_thread[dith{}()].pval), &device_vec, sizeof(double*));"_format(list_num));
+    printer->add_line(
+        "    acc_memcpy_to_device(&(device_thread[{}]._pvoid), &device_ns, sizeof(void*));"_format(
+            info.thread_data_index - 1));
+    printer->add_line(
+        "    acc_memcpy_to_device(&(device_thread[dith{}()].pval), &device_vec, sizeof(double*));"_format(
+            list_num));
     printer->add_line("}");
 }
 

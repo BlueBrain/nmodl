@@ -1264,8 +1264,8 @@ std::string CodegenCVisitor::k_const() {
 
 
 void CodegenCVisitor::visit_watch_statement(ast::WatchStatement& node) {
-    printer->add_text(
-        "nrn_watch_activate(inst, id, pnodecount, {}, v, watch_remove)"_format(current_watch_statement++));
+    printer->add_text("nrn_watch_activate(inst, id, pnodecount, {}, v, watch_remove)"_format(
+        current_watch_statement++));
 }
 
 
@@ -2674,7 +2674,7 @@ void CodegenCVisitor::print_mechanism_register() {
     }
 
     if (info.is_watch_used()) {
-        auto watch_fun =  compute_method_name(BlockType::Watch);
+        auto watch_fun = compute_method_name(BlockType::Watch);
         printer->add_line("hoc_register_watch_check({}, mech_type);"_format(watch_fun));
     }
 
@@ -3203,7 +3203,7 @@ void CodegenCVisitor::print_global_function_common_code(BlockType type) {
     std::string method = compute_method_name(type);
     auto args = "NrnThread* nt, Memb_list* ml, int type";
 
-    if ( type == BlockType::Watch) {
+    if (type == BlockType::Watch) {
         args = "NrnThread* nt, Memb_list* ml";
     }
 
@@ -3314,7 +3314,8 @@ void CodegenCVisitor::print_watch_activate() {
     auto inst = "{}* inst"_format(instance_struct());
 
     printer->start_block(
-        "static void nrn_watch_activate({}, int id, int pnodecount, int watch_id, double v, bool &watch_remove) "_format(inst));
+        "static void nrn_watch_activate({}, int id, int pnodecount, int watch_id, double v, bool &watch_remove) "_format(
+            inst));
 
     // initialize all variables only during first watch statement
     printer->add_line("if (watch_remove == false) {");
