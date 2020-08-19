@@ -217,9 +217,9 @@ std::string CodegenAccVisitor::get_variable_device_pointer(const std::string& va
 void CodegenAccVisitor::print_newtonspace_transfer_to_device() const {
     int list_num = info.derivimplicit_list_num;
     printer->add_line("if (nt->compute_gpu) {");
-    printer->add_line("    auto device_vec = (double*) acc_copyin(vec, vec_size);");
-    printer->add_line("    auto device_ns = (NewtonSpace*) acc_deviceptr(ns);");
-    printer->add_line("    auto device_thread = (ThreadDatum*) acc_deviceptr(thread);");
+    printer->add_line("    auto device_vec = static_cast<double*> acc_copyin(vec, vec_size);");
+    printer->add_line("    auto device_ns = static_cast<NewtonSpace*> acc_deviceptr(ns);");
+    printer->add_line("    auto device_thread = static_cast<ThreadDatum*> acc_deviceptr(thread);");
     printer->add_line(
         "    acc_memcpy_to_device(&(device_thread[{}]._pvoid), &device_ns, sizeof(void*));"_format(
             info.thread_data_index - 1));
