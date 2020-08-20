@@ -140,7 +140,8 @@ jobs:
       pip install --upgrade pip
       # TODO : change this when we fix the issue with nmodl module
       export PYTHONPATH=$(pwd)/venv/lib/python3.8/site-packages:$PYTHONPATH
-      pip install wheelhouse/*.whl
+      # TODO : install from dist as wheelhouse one not working properly
+      pip install dist/*.whl
       cd $(Build.Repository.LocalPath)/test/integration/mod
       nmodl cabpump.mod sympy --analytic
       rm cabpump.cpp
