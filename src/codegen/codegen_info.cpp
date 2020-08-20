@@ -8,11 +8,14 @@
 #include "codegen/codegen_info.hpp"
 
 #include "ast/all.hpp"
+#include "visitors/var_usage_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
 
 
 namespace nmodl {
 namespace codegen {
+
+using visitor::VarUsageVisitor;
 
 /// if any ion has write variable
 bool CodegenInfo::ion_has_write_variable() const {
