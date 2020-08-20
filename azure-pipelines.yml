@@ -138,10 +138,10 @@ jobs:
       python3 -m venv venv
       source ./venv/bin/activate
       pip install --upgrade pip
-      # TODO : change this when we fix the issue with nmodl module
-      export PYTHONPATH=$(pwd)/venv/lib/python3.8/site-packages:$PYTHONPATH
       # TODO : install from dist as wheelhouse one not working properly
       pip install dist/*.whl
+      # TODO : change this when we fix the issue with nmodl module
+      export PYTHONPATH=$(pwd)/venv/lib/python3.8/site-packages:$PYTHONPATH
       cd $(Build.Repository.LocalPath)/test/integration/mod
       nmodl cabpump.mod sympy --analytic
       rm cabpump.cpp
