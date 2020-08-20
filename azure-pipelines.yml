@@ -106,9 +106,6 @@ jobs:
   steps:
   - checkout: self
     submodules: true
-  - task: UsePythonVersion@0
-    inputs:
-      versionSpec: '3.7'
   - script: |
       brew install flex bison cmake python@3
       python3 -m pip install -U pip setuptools
