@@ -143,5 +143,6 @@ jobs:
       export PYTHONPATH=$(pwd)/venv/lib/python3.8/site-packages:$PYTHONPATH
       cd $(Build.Repository.LocalPath)/test/integration/mod
       nmodl cabpump.mod sympy --analytic
+      nmodl watch_test.mod sympy --analytic
       rm cabpump.cpp
     displayName: 'Test wheel'
