@@ -734,7 +734,8 @@ bool CodegenCVisitor::is_constant_variable(const std::string& name) const {
         // per mechanism ion variables needs to be updated from neuron/coreneuron values
         if (info.is_ion_variable(name)) {
             is_constant = false;
-        } else if (symbol->has_any_property(NmodlType::param_assign) && symbol->get_write_count() == 0) {
+        } else if (symbol->has_any_property(NmodlType::param_assign) &&
+                   symbol->get_write_count() == 0) {
             is_constant = true;
         }
     }
