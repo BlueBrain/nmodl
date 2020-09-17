@@ -54,7 +54,7 @@
 %define api.namespace {nmodl::parser}
 
 /** set the parser's class identifier */
-%define parser_class_name {DiffeqParser}
+%define api.parser.class {DiffeqParser}
 
 /** keep track of the current position within the input */
 %locations

@@ -62,7 +62,7 @@
 %define api.namespace {nmodl::parser}
 
 /** set the parser's class identifier */
-%define parser_class_name {NmodlParser}
+%define api.parser.class {NmodlParser}
 
 /** keep track of the current position within the input */
 %locations
