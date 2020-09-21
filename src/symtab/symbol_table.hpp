@@ -152,7 +152,7 @@ class SymbolTable {
      * \param all all/any
      */
     std::vector<std::shared_ptr<Symbol>> get_variables_with_properties(
-        syminfo::NmodlType properties = syminfo::NmodlType(-1),
+        syminfo::NmodlType properties,
         bool all = false) const;
 
     std::vector<std::shared_ptr<Symbol>> get_variables_with_status(syminfo::Status status,

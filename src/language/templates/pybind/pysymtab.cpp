@@ -220,7 +220,7 @@ void init_symtab_module(py::module& m) {
              py::arg("without") = syminfo::NmodlType::empty)
         .def("get_variables_with_properties",
              &SymbolTable::get_variables_with_properties,
-             py::arg("properties") = syminfo::NmodlType(-1),
+             py::arg("properties"),
              py::arg("all") = false)
         .def("get_variables_with_status",
              &SymbolTable::get_variables_with_status,
