@@ -178,7 +178,8 @@ class SingletonRandomString {
      * @param use_numbers control whether random string can include numeric characters or not
      * @return Random string assigned to var_name
      */
-    const std::string& reset_random_string(const std::string& var_name, UseNumbersInString use_numbers) {
+    const std::string& reset_random_string(const std::string& var_name,
+                                           UseNumbersInString use_numbers) {
         const auto new_string = generate_random_string(SIZE, use_numbers);
         auto status = random_strings.emplace(var_name, new_string);
         if (!status.second) {
