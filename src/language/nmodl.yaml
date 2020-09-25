@@ -1422,9 +1422,10 @@
                         - filename:
                             brief: "path to the file to include"
                             type: String
-                        - program:
+                        - blocks:
                             brief: "AST of the included file"
-                            type: Program
+                            type: Node
+                            vector: true
 
                   - ParamAssign:
                       brief: "TODO"

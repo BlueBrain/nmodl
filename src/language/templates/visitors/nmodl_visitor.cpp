@@ -52,9 +52,7 @@ using namespace ast;
 
 
 {%- macro add_child(node, child) -%}
-    {% if node.class_name == node_info.INCLUDE_NODE and child.varname == "program" %}
-        {# ignore the "program" field of Include node #}
-    {% elif child.nmodl_name %}
+    {% if child.nmodl_name %}
         if(node.get_{{ child.varname }}()->eval()) {
             printer->add_element("{{ child.nmodl_name }}");
         }

@@ -110,7 +110,7 @@ std::shared_ptr<ast::Include> NmodlDriver::parse_include(const std::string& name
     program.swap(astRoot);
     auto filename_node = std::shared_ptr<ast::String>(
         new ast::String(std::string(1, '"') + name + std::string(1, '"')));
-    return std::shared_ptr<ast::Include>(new ast::Include(filename_node, program));
+    return std::shared_ptr<ast::Include>(new ast::Include(filename_node, program->get_blocks()));
 }
 
 void NmodlDriver::add_defined_var(const std::string& name, int value) {
