@@ -1488,6 +1488,11 @@ term            :   variable_name
 function_call   :   NAME_PTR "(" expression_list ")"
                     {
                         auto expression = new ast::FunctionCall($1, $3);
+                        if ($1->get_node_name() == "at_time") {
+                            auto arguments = expression->get_arguments();
+                            arguments.insert(arguments.begin(), std::make_shared<ast::String>("nt"));
+                            expression->set_arguments(arguments);
+                        }
                         $$ = new ast::WrappedExpression(expression);
                     }
                 ;
