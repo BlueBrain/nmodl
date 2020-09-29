@@ -32,15 +32,25 @@ namespace details {
  *                                array and function name arguments
  * - DefinitionType::EXT_3      : function names that get two reset arguments
  * - DefinitionType::EXT_4      : functions that need a first arg of \c NrnThread*
+ * - DefinitionType::EXT_DOUBLE_4
+ *                              : functions that need a first arg of \c NrnThread* and can be
+ *                                used as doubles
  * - DefinitionType::EXT_5      : external definition names that are not \c threadsafe
  *
  */
 
-enum class DefinitionType {
-    EXT_DOUBLE, EXT_2, EXT_3, EXT_4, EXT_5
-};
+enum class DefinitionType { EXT_DOUBLE, EXT_2, EXT_3, EXT_4, EXT_DOUBLE_4, EXT_5 };
 
 extern const std::map<std::string, DefinitionType> extern_definitions;
+
+/**
+ * Checks if \c token is one of the functions coming from NEURON/CoreNEURON and needs
+ * passing NrnThread* as first argument (typical name of variable \c nt)
+ *
+ * @param token Name of function
+ * @return True or false depending if the function needs NrnThread* argument
+ */
+bool needs_neuron_thread_first_arg(const std::string& token);
 
 }  // namespace details
 

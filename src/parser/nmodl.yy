@@ -1489,9 +1489,7 @@ term            :   variable_name
 function_call   :   NAME_PTR "(" expression_list ")"
                     {
                         auto expression = new ast::FunctionCall($1, $3);
-                        auto extern_def = details::extern_definitions.find($1->get_node_name());
-                        if (extern_def != details::extern_definitions.end() && extern_def->second == details::DefinitionType::EXT_4) {
-                            std::cout << "extern_def->first = " << extern_def->first << std::endl;
+                        if (details::needs_neuron_thread_first_arg($1->get_node_name())) {
                             auto arguments = expression->get_arguments();
                             arguments.insert(arguments.begin(), std::make_shared<ast::String>("nt"));
                             expression->set_arguments(arguments);
