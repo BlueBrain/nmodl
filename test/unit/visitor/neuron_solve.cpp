@@ -160,4 +160,35 @@ SCENARIO("NeuronSolveVisitor visitor solves different ODE types") {
             REQUIRE(result == expected_result);
         }
     }
+
+    GIVEN("Derivative block with after_cvode method in breakpoint block") {
+        std::string nmodl_text = R"(
+            BREAKPOINT {
+                SOLVE states METHOD after_cvode
+            }
+
+            DERIVATIVE states {
+                m' = (mInf-m)/mTau
+                h' = (hInf-h)/hTau
+            }
+        )";
+
+        std::string output_nmodl = R"(
+            BREAKPOINT {
+                SOLVE states METHOD cnexp
+            }
+
+            DERIVATIVE states {
+                m = m+(1-exp(dt*((((-1)))/mTau)))*(-(((mInf))/mTau)/((((-1)))/mTau)-m)
+                h = h+(1-exp(dt*((((-1)))/hTau)))*(-(((hInf))/hTau)/((((-1)))/hTau)-h)
+            }
+        )";
+
+        THEN("Neuron solve visitor replaces after_cvode solver with cnexp") {
+            std::string input = reindent_text(nmodl_text);
+            auto expected_result = reindent_text(output_nmodl);
+            auto result = run_cnexp_solve_visitor(input);
+            REQUIRE(result == expected_result);
+        }
+    }
 }
