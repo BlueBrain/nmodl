@@ -29,7 +29,6 @@
  %code requires
  {
     #include "ast/all.hpp"
-    #include "lexer/token_definitions.hpp"
  }
 
 /** use C++ parser interface of bison */
@@ -1489,11 +1488,6 @@ term            :   variable_name
 function_call   :   NAME_PTR "(" expression_list ")"
                     {
                         auto expression = new ast::FunctionCall($1, $3);
-                        if (details::needs_neuron_thread_first_arg($1->get_node_name())) {
-                            auto arguments = expression->get_arguments();
-                            arguments.insert(arguments.begin(), std::make_shared<ast::String>("nt"));
-                            expression->set_arguments(arguments);
-                        }
                         $$ = new ast::WrappedExpression(expression);
                     }
                 ;

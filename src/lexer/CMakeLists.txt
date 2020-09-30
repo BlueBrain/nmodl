@@ -38,8 +38,6 @@ set(UNIT_DRIVER_FILES ${NMODL_PROJECT_SOURCE_DIR}/src/parser/unit_driver.hpp
 
 set(LEXER_SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/modl.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/token_definitions.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/token_definitions.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/token_mapping.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/token_mapping.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/nmodl_utils.hpp
