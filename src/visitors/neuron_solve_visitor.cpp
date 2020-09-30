@@ -21,7 +21,7 @@ namespace visitor {
 void NeuronSolveVisitor::visit_solve_block(ast::SolveBlock& node) {
     auto name = node.get_block_name()->get_node_name();
     auto method = node.get_method();
-    if (method->get_node_name() == codegen::naming::CVODE_METHOD) {
+    if (method != nullptr && method->get_node_name() == codegen::naming::CVODE_METHOD) {
         logger->warn("CVode solver of {} in {} replaced with cnexp solver",
                      node.get_block_name()->get_node_name(),
                      method->get_token()->position());
