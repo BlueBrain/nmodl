@@ -20,7 +20,15 @@ namespace visitor {
 
 void NeuronSolveVisitor::visit_solve_block(ast::SolveBlock& node) {
     auto name = node.get_block_name()->get_node_name();
-    const auto& method = node.get_method();
+    auto method = node.get_method();
+    if (method->get_node_name() == codegen::naming::CVODE_METHOD) {
+        logger->warn("CVode solver of {} in {} replaced with cnexp solver",
+                     node.get_block_name()->get_node_name(),
+                     method->get_token()->position());
+        method = std::make_shared<ast::Name>(
+            std::make_shared<ast::String>(codegen::naming::CNEXP_METHOD));
+        node.set_method(method);
+    }
     solve_method = method ? method->get_value()->eval() : "";
     solve_blocks[name] = solve_method;
 }
