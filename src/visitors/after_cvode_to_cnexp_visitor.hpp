@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (C) 2018-2019 Blue Brain Project
+ * Copyright (C) 2018-2020 Blue Brain Project
  *
  * This file is part of NMODL distributed under the terms of the GNU
  * Lesser General Public License. See top-level LICENSE file for details.
@@ -9,7 +9,7 @@
 
 /**
  * \file
- * \brief \copybrief nmodl::visitor::CVodeToCnexpVisitor
+ * \brief \copybrief nmodl::visitor::AfterCVodeToCnexpVisitor
  */
 
 #include <sstream>
@@ -28,30 +28,21 @@ namespace visitor {
  */
 
 /**
- * \class CVodeToCnexpVisitor
- * \brief Visitor to change usage of cvode solver to cnexp
+ * \class AfterCVodeToCnexpVisitor
+ * \brief Visitor to change usage of after_cvode solver to cnexp
  *
 
  */
 
-class CVodeToCnexpVisitor: public AstVisitor {
-  private:
-    /// ast::Ast* node
-    std::shared_ptr<ast::Program> ast;
-
+class AfterCVodeToCnexpVisitor: public AstVisitor {
   public:
     /// \name Ctor & dtor
     /// \{
 
     /// Default constructor
-    CVodeToCnexpVisitor() = delete;
-
-    /// Constructor that takes as parameter the AST
-    explicit CVodeToCnexpVisitor(std::shared_ptr<ast::Program> node)
-        : ast(std::move(node)) {}
+    AfterCVodeToCnexpVisitor() = default;
 
     /// \}
-
     void visit_solve_block(ast::SolveBlock& node) override;
 };
 

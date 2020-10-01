@@ -24,9 +24,9 @@
 #include "pybind/pyembed.hpp"
 #include "utils/common_utils.hpp"
 #include "utils/logger.hpp"
+#include "visitors/after_cvode_to_cnexp_visitor.hpp"
 #include "visitors/ast_visitor.hpp"
 #include "visitors/constant_folder_visitor.hpp"
-#include "visitors/cvode_to_cnexp_visitor.hpp"
 #include "visitors/global_var_visitor.hpp"
 #include "visitors/inline_visitor.hpp"
 #include "visitors/ispc_rename_visitor.hpp"
@@ -319,10 +319,11 @@ int main(int argc, const char* argv[]) {
             SymtabVisitor(update_symtab).visit_program(*ast);
         }
 
-        /// use cnexp instead of cvode solve method
+        /// use cnexp instead of after_cvode solve method
         {
             logger->info("Running CVode to cnexp visitor");
-            CVodeToCnexpVisitor(ast).visit_program(*ast);
+            AfterCVodeToCnexpVisitor().visit_program(*ast);
+            ast_to_nmodl(*ast, filepath("after_cvode_to_cnexp"));
         }
 
         /// Rename variables that match ISPC compiler double constants
