@@ -195,7 +195,7 @@ const static std::map<std::string, MethodInfo> methods = {{"adams", MethodInfo(D
  * - DefinitionType::EXT_5      : external definition names that are not \c threadsafe
  *
  */
-enum class DefinitionType { EXT_DOUBLE, EXT_2, EXT_3, EXT_4, EXT_DOUBLE_4, EXT_5 };
+enum class DefinitionType { EXT_DOUBLE, EXT_2, EXT_3, EXT_4, EXT_5 };
 
 
 const static std::map<std::string, DefinitionType> extern_definitions = {
