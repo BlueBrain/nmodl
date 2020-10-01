@@ -1333,10 +1333,9 @@ void CodegenCVisitor::print_function_call(FunctionCall& node) {
         if (!arguments.empty()) {
             printer->add_text(", ");
         }
-    } else if (nmodl::details::needs_neuron_thread_first_arg(function_name)) {
-        if (arguments.front()->get_node_name() != "nt") {
-            arguments.insert(arguments.begin(), std::make_shared<ast::String>("nt"));
-        }
+    } else if (nmodl::details::needs_neuron_thread_first_arg(function_name) &&
+               arguments.front()->get_node_name() != "nt") {
+        arguments.insert(arguments.begin(), std::make_shared<ast::String>("nt"));
     }
 
     print_vector_elements(arguments, ", ");
