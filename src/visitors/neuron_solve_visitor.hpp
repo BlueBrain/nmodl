@@ -36,7 +36,6 @@ namespace visitor {
  * `derivimplicit`method. This solved mimics original implementation in
  * nocmodl/mod2c. The original ODEs get replaced with the solution and
  * transformations are performed at AST level.
- * If there is a `after_cvode` method used it is changed to `cnexp`.
  *
  * \sa nmodl::visitor::SympySolverVisitor
  */
