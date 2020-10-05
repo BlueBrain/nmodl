@@ -33,7 +33,7 @@ namespace visitor {
  *
  *  `CVODE` is not supported in CoreNEURON. If MOD file has `after_cvode` solver then
  *   we can treat that as `cnexp`. In order to re-use existing passes, in this visitor we
- *  replace `after_cvode` with `cnexp`. 
+ *  replace `after_cvode` with `cnexp`.
  */
 
 class AfterCVodeToCnexpVisitor: public AstVisitor {
