@@ -12,8 +12,8 @@
 #include "test/unit/utils/test_utils.hpp"
 #include "visitors/after_cvode_to_cnexp_visitor.hpp"
 #include "visitors/checkparent_visitor.hpp"
-#include "visitors/nmodl_visitor.hpp"
 #include "visitors/symtab_visitor.hpp"
+#include "visitors/visitor_utils.hpp"
 
 
 using namespace nmodl;
@@ -34,13 +34,11 @@ std::string run_after_cvode_to_cnexp_visitor(const std::string& text) {
 
     SymtabVisitor().visit_program(*ast);
     AfterCVodeToCnexpVisitor().visit_program(*ast);
-    std::stringstream stream;
-    NmodlPrintVisitor(stream).visit_program(*ast);
 
     // check that, after visitor rearrangement, parents are still up-to-date
     CheckParentVisitor().check_ast(*ast);
 
-    return stream.str();
+    return to_nmodl(ast);
 }
 
 
