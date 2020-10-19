@@ -144,6 +144,28 @@ SCENARIO("NMODL parser running number of invalid NMODL constructs") {
     }
 }
 
+//=============================================================================
+// Ensure that the parser can handle invalid INCLUDE constructs
+//=============================================================================
+
+SCENARIO("Check that the parser doesn't crash when passing invalid INCLUDE constructs") {
+    GIVEN("An empty filename") {
+        REQUIRE_THROWS_WITH(is_valid_construct("INCLUDE \"\""), Catch::Contains("empty filename"));
+    }
+
+    GIVEN("An missing included file") {
+        REQUIRE_THROWS_WITH(is_valid_construct("INCLUDE \"unknown.file\""),
+                            Catch::Contains("can not open file : unknown.file"));
+    }
+
+    GIVEN("An invalid included file") {
+        nmodl::utils::TempFile included("included.file",
+                                        nmodl_invalid_constructs.at("title_1").input);
+        REQUIRE_THROWS_WITH(is_valid_construct("INCLUDE \"included.file\""),
+                            Catch::Contains("unexpected End of file"));
+    }
+}
+
 SCENARIO("NEURON block can add CURIE information", "[parser][represents]") {
     GIVEN("A valid CURIE information statement") {
         THEN("parser accepts without an error") {

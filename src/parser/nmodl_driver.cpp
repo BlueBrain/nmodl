@@ -81,6 +81,10 @@ std::shared_ptr<ast::Program> NmodlDriver::parse_string(const std::string& input
 
 std::shared_ptr<ast::Include> NmodlDriver::parse_include(const std::string& name,
                                                          const location& loc) {
+    if (name.empty()) {
+        parse_error(loc, "empty filename");
+    }
+
     // Try to find directory containing the file to import
     const auto directory_path = library.find_file(name);
 
