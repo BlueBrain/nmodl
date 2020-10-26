@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <cmath>
 #include <ctime>
+#include <regex>
 
 #include "ast/all.hpp"
 #include "codegen/codegen_helper_visitor.hpp"
@@ -42,6 +43,7 @@ using nmodl::utils::UseNumbersInString;
 /*                            Overloaded visitor routines                               */
 /****************************************************************************************/
 
+const std::regex regex_special_chars{R"([-[\]{}()*+?.,\^$|#\s])"};
 
 void CodegenCVisitor::visit_string(String& node) {
     if (!codegen) {
@@ -2710,6 +2712,14 @@ void CodegenCVisitor::print_mechanism_register() {
             method_name("net_receive"), net_recv_init_arg);
         printer->add_line(pnt_recline);
     }
+    if (info.for_netcon_used) {
+        const auto index =
+            std::find_if(info.semantics.begin(), info.semantics.end(), [](const IndexSemantics& a) {
+                return a.name == naming::FOR_NETCON_SEMANTIC;
+            })->index;
+        printer->add_line("add_nrn_fornetcons(mech_type, {});"_format(index));
+    }
+
     if (info.net_event_used || info.net_send_used) {
         printer->add_line("hoc_register_net_send_buffering(mech_type);");
     }
@@ -3733,6 +3743,46 @@ void CodegenCVisitor::print_net_send_buffering() {
     printer->add_line("nsb->_nsb_t[i] = t;");
     printer->add_line("nsb->_nsb_flag[i] = flag;");
     printer->end_block(1);
+}
+
+
+void CodegenCVisitor::visit_for_netcon(ast::ForNetcon& node) {
+    // For_netcon should take the same arguments as net_receive and apply the operations
+    // in the block to the weights of the netcons. Since all the weights are on the same vector,
+    // weights, we have a mask of operations that we apply iteratively, advancing the offset
+    // to the next netcon.
+    const auto& args = node.get_parameters();
+    RenameVisitor v;
+    auto& statement_block = node.get_statement_block();
+    for (size_t i_arg = 0; i_arg < args.size(); ++i_arg) {
+        // sanitize node_name since we want to substitute names like (*w) as they are
+        auto old_name =
+            std::regex_replace(args[i_arg]->get_node_name(), regex_special_chars, R"(\$&)");
+        auto new_name = "weights[{} + nt->_fornetcon_weight_perm[i]]"_format(i_arg);
+        v.set(old_name, new_name);
+        statement_block->accept(v);
+    }
+
+    const auto index =
+        std::find_if(info.semantics.begin(), info.semantics.end(), [](const IndexSemantics& a) {
+            return a.name == naming::FOR_NETCON_SEMANTIC;
+        })->index;
+    const auto num_int = int_variables_size();
+
+
+    printer->add_line("");  // the first line gets indented in a strange way.
+    std::string offset = (layout == LayoutType::soa)
+                             ? "{}*pnodecount + id"_format(index)
+                             : "{}*pnodecount + id + id*{}"_format(index, num_int);
+    printer->add_line("const size_t offset = {};"_format(offset));
+    printer->add_line(
+        "for (auto i = nt->_fornetcon_perm_indices[indexes[offset]]; "
+        "i < nt->_fornetcon_perm_indices[indexes[offset]+1]; ++i) {");
+    printer->increase_indent();
+    print_statement_block(*statement_block, false, false);
+    printer->decrease_indent();
+
+    printer->add_line("}");
 }
 
 
