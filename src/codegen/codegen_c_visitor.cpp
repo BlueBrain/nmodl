@@ -3771,9 +3771,12 @@ void CodegenCVisitor::visit_for_netcon(ast::ForNetcon& node) {
 
 
     printer->add_line("");  // the first line gets indented in a strange way.
-    std::string offset = (layout == LayoutType::soa)
-                             ? "{}*pnodecount + id"_format(index)
-                             : "{}*pnodecount + id + id*{}"_format(index, num_int);
+    if (layout == LayoutType::soa)
+        printer->add_line("//I think it is soa");
+
+
+    std::string offset = (layout == LayoutType::soa) ? "{}*pnodecount + id"_format(index)
+                                                     : "{} + id*{}"_format(index, num_int);
     printer->add_line("const size_t offset = {};"_format(offset));
     printer->add_line(
         "for (auto i = nt->_fornetcon_perm_indices[indexes[offset]]; "
