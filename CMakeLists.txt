@@ -202,3 +202,5 @@ add_subdirectory(src/solver)
 # Install unit database, examples and utility scripts from share
 # =============================================================================
 install(DIRECTORY share/ DESTINATION ${NMODL_INSTALL_DIR_SUFFIX}share)
+
+message(STATUS "Just a dummy message!")
