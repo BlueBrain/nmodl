@@ -212,4 +212,8 @@ else()
   set(LegacyN "")
 endif()
 configure_file(share/nrnunits.lib.in ${CMAKE_CURRENT_BINARY_DIR}/share/nrnunits.lib @ONLY)
+
+# =============================================================================
+ # Install unit database to share
+ # =============================================================================
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/share/nrnunits.lib DESTINATION ${NMODL_INSTALL_DIR_SUFFIX}share/nrnunits.lib)
