@@ -2713,6 +2713,7 @@ void CodegenCVisitor::print_mechanism_register() {
         printer->add_line(pnt_recline);
     }
     if (info.for_netcon_used) {
+        // index where information about FOR_NETCON is stored in the integer array
         const auto index =
             std::find_if(info.semantics.begin(), info.semantics.end(), [](const IndexSemantics& a) {
                 return a.name == naming::FOR_NETCON_SEMANTIC;
