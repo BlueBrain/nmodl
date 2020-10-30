@@ -3777,15 +3777,17 @@ void CodegenCVisitor::visit_for_netcon(ast::ForNetcon& node) {
                                                      : "{} + id*{}"_format(index, num_int);
     printer->add_line("const size_t offset = {};"_format(offset));
     printer->add_line(
-        "for (auto i = nt->_fornetcon_perm_indices[indexes[offset]]; "
-        "i < nt->_fornetcon_perm_indices[indexes[offset]+1]; ++i) {");
+        "const size_t for_netcon_start = nt->_fornetcon_perm_indices[indexes[offset]]; ");
+    printer->add_line(
+        "const size_t for_netcon_end = nt->_fornetcon_perm_indices[indexes[offset] + 1]; ");
+
+    printer->add_line("for (auto i = for_netcon_start; i < for_netcon_end; ++i) {");
     printer->increase_indent();
     print_statement_block(*statement_block, false, false);
     printer->decrease_indent();
 
     printer->add_line("}");
 }
-
 
 void CodegenCVisitor::print_net_receive_kernel() {
     if (!net_receive_required()) {
