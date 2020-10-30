@@ -202,7 +202,7 @@ add_subdirectory(src/pybind)
 add_subdirectory(src/solver)
 
 # =============================================================================
-# Install unit database from share
+# Prepare units database file from nrnunits.lib.in
 # =============================================================================
 if (NMODL_ENABLE_LEGACY_UNITS)
   set(LegacyY "")
