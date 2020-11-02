@@ -484,7 +484,8 @@ bool CodegenCVisitor::need_semicolon(Statement* node) const {
         if (expression->is_statement_block()
             || expression->is_eigen_newton_solver_block()
             || expression->is_eigen_linear_solver_block()
-            || expression->is_solution_expression()) {
+            || expression->is_solution_expression()
+            || expression->is_for_netcon()) {
             return false;
         }
     }
@@ -3770,16 +3771,14 @@ void CodegenCVisitor::visit_for_netcon(ast::ForNetcon& node) {
         })->index;
     const auto num_int = int_variables_size();
 
-
-    printer->add_line("");  // the first line gets indented in a strange way.
-
     std::string offset = (layout == LayoutType::soa) ? "{}*pnodecount + id"_format(index)
                                                      : "{} + id*{}"_format(index, num_int);
-    printer->add_line("const size_t offset = {};"_format(offset));
+    printer->add_text("const size_t offset = {};"_format(offset));
+    printer->add_newline();
     printer->add_line(
-        "const size_t for_netcon_start = nt->_fornetcon_perm_indices[indexes[offset]]; ");
+        "const size_t for_netcon_start = nt->_fornetcon_perm_indices[indexes[offset]];");
     printer->add_line(
-        "const size_t for_netcon_end = nt->_fornetcon_perm_indices[indexes[offset] + 1]; ");
+        "const size_t for_netcon_end = nt->_fornetcon_perm_indices[indexes[offset] + 1];");
 
     printer->add_line("for (auto i = for_netcon_start; i < for_netcon_end; ++i) {");
     printer->increase_indent();
