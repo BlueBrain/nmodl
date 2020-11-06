@@ -204,7 +204,7 @@ add_subdirectory(src/solver)
 # =============================================================================
 # Prepare units database file from nrnunits.lib.in
 # =============================================================================
-if (NMODL_ENABLE_LEGACY_UNITS)
+if(NMODL_ENABLE_LEGACY_UNITS)
   set(LegacyY "")
   set(LegacyN "/")
 else()
@@ -214,6 +214,7 @@ endif()
 configure_file(share/nrnunits.lib.in ${CMAKE_CURRENT_BINARY_DIR}/share/nrnunits.lib @ONLY)
 
 # =============================================================================
- # Install unit database to share
- # =============================================================================
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/share/nrnunits.lib DESTINATION ${NMODL_INSTALL_DIR_SUFFIX}share)
+# Install unit database to share
+# =============================================================================
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/share/nrnunits.lib
+        DESTINATION ${NMODL_INSTALL_DIR_SUFFIX}share)
