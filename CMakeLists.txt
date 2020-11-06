@@ -216,4 +216,4 @@ configure_file(share/nrnunits.lib.in ${CMAKE_CURRENT_BINARY_DIR}/share/nrnunits.
 # =============================================================================
  # Install unit database to share
  # =============================================================================
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/share/nrnunits.lib DESTINATION ${NMODL_INSTALL_DIR_SUFFIX}share/nrnunits.lib)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/share/nrnunits.lib DESTINATION ${NMODL_INSTALL_DIR_SUFFIX}share)
