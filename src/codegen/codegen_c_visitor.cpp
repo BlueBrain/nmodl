@@ -2004,7 +2004,9 @@ void CodegenCVisitor::print_nmodl_constants() {
 #warning "NOT Legacy UNITS"
             std::string format_string = "static const double {} = {:.18g};";
 #endif
-            printer->add_line(fmt::format(format_string.c_str(), it->get_node_name(), it->get_value()->get_value()));
+            printer->add_line(fmt::format(format_string.c_str(),
+                                          it->get_node_name(),
+                                          it->get_value()->get_value()));
         }
     }
 }
