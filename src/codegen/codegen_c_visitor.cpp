@@ -1998,10 +1998,8 @@ void CodegenCVisitor::print_nmodl_constants() {
 #define USE_LEGACY_UNITS 0
 #endif
 #if USE_LEGACY_UNITS
-#warning "Legacy UNITS"
             std::string format_string = "static const double {} = {:g};";
 #else
-#warning "NOT Legacy UNITS"
             std::string format_string = "static const double {} = {:.18g};";
 #endif
             printer->add_line(fmt::format(format_string.c_str(),
