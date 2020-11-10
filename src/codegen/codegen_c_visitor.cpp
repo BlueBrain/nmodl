@@ -1994,10 +1994,7 @@ void CodegenCVisitor::print_nmodl_constants() {
         printer->add_newline(2);
         printer->add_line("/** constants used in nmodl */");
         for (const auto& it: info.factor_definitions) {
-#ifndef USE_LEGACY_UNITS
-#define USE_LEGACY_UNITS 0
-#endif
-#if USE_LEGACY_UNITS
+#ifdef USE_LEGACY_UNITS
             std::string format_string = "static const double {} = {:g};";
 #else
             std::string format_string = "static const double {} = {:.18g};";
