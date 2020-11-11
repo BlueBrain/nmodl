@@ -6,7 +6,10 @@
 # =============================================================================
 
 cmake_minimum_required(VERSION 3.3.0 FATAL_ERROR)
-project(NMODL VERSION 0.2 LANGUAGES CXX)
+project(
+  NMODL
+  VERSION 0.2
+  LANGUAGES CXX)
 
 # =============================================================================
 # CMake common project settings
