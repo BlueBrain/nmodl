@@ -32,7 +32,11 @@ const std::vector<ast::AstNodeType> CodegenIspcVisitor::incompatible_node_types 
     ast::AstNodeType::WATCH_STATEMENT,
     ast::AstNodeType::TABLE_STATEMENT};
 
-const std::unordered_set<std::string> CodegenIspcVisitor::incompatible_var_names = {"in"};
+const std::unordered_set<std::string> CodegenIspcVisitor::incompatible_var_names = {
+    "cdo",           "cfor",           "cif",    "cwhile",   "foreach",      "foreach_active",
+    "foreach_tiled", "foreach_unique", "in",     "noinline", "__vectorcall", "int8",
+    "int16",         "int32",          "int64",  "launch",   "print",        "soa",
+    "sync",          "task",           "varying"};
 
 /****************************************************************************************/
 /*                            Overloaded visitor methods                                */
