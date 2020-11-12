@@ -887,6 +887,21 @@ class CodegenCVisitor: public visitor::AstVisitor {
      */
     virtual std::string ptr_type_qualifier();
 
+    /**
+     * The used global type decorator
+     *
+     * For C code generation this is empty
+     * \return ""
+     */
+    virtual std::string global_var_structure_type_decorator();
+
+    /**
+     * Final block in global var structure
+     *
+     * For C code generation this is empty
+     * \return ""
+     */
+    virtual std::string global_var_structure_final_block();
 
     /**
      * The used parameter type qualifier
@@ -1040,9 +1055,8 @@ class CodegenCVisitor: public visitor::AstVisitor {
 
     /**
      * Print the structure that wraps all global variables used in the NMODL
-     * \param wrapper
      */
-    void print_mechanism_global_var_structure(const bool wrapper);
+    void print_mechanism_global_var_structure();
 
 
     /**
@@ -1595,7 +1609,7 @@ class CodegenCVisitor: public visitor::AstVisitor {
      * Print all classes
      *
      */
-    virtual void print_data_structures(const bool wrapper);
+    virtual void print_data_structures();
 
 
     /**

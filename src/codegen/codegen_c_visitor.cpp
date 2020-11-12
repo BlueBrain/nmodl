@@ -1260,6 +1260,14 @@ std::string CodegenCVisitor::ptr_type_qualifier() {
     return "__restrict__ ";
 }
 
+std::string CodegenCVisitor::global_var_structure_type_decorator() {
+    return "";
+}
+
+std::string CodegenCVisitor::global_var_structure_final_block() {
+    return "";
+}
+
 
 std::string CodegenCVisitor::k_const() {
     return "const ";
@@ -2370,8 +2378,8 @@ void CodegenCVisitor::print_coreneuron_includes() {
  * Note that static variables are already initialized to 0. We do the
  * same for some variables to keep same code as neuron.
  */
-void CodegenCVisitor::print_mechanism_global_var_structure(const bool wrapper) {
-    const std::string decorator = (wrapper) ? "" : "uniform ";
+void CodegenCVisitor::print_mechanism_global_var_structure() {
+    const auto decorator = global_var_structure_type_decorator();
 
     auto float_type = default_float_data_type();
     printer->add_newline(2);
@@ -2502,11 +2510,13 @@ void CodegenCVisitor::print_mechanism_global_var_structure(const bool wrapper) {
 
     printer->add_newline(1);
     printer->add_line("/** holds object of global variable */");
-    if (wrapper) {
-        printer->start_block("extern \"C\"");
+
+    if (!global_var_structure_final_block().empty()) {
+        printer->start_block(global_var_structure_final_block());
     }
     printer->add_line("{} {}_global;"_format(global_struct(), info.mod_suffix));
-    if (wrapper) {
+
+    if (!global_var_structure_final_block().empty()) {
         printer->end_block(2);
     }
 
@@ -4295,8 +4305,8 @@ void CodegenCVisitor::print_common_getters() {
 }
 
 
-void CodegenCVisitor::print_data_structures(const bool wrapper) {
-    print_mechanism_global_var_structure(wrapper);
+void CodegenCVisitor::print_data_structures() {
+    print_mechanism_global_var_structure();
     print_mechanism_range_var_structure();
     print_ion_var_structure();
 }
@@ -4335,7 +4345,7 @@ void CodegenCVisitor::print_codegen_routines() {
     print_namespace_begin();
     print_nmodl_constants();
     print_mechanism_info();
-    print_data_structures(false);
+    print_data_structures();
     print_global_variables_for_hoc();
     print_common_getters();
     print_memory_allocation_routine();

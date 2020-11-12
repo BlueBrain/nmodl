@@ -84,6 +84,9 @@ class CodegenIspcVisitor: public CodegenCVisitor {
 
     std::string ptr_type_qualifier() override;
 
+    std::string global_var_structure_type_decorator() override;
+
+    std::string global_var_structure_final_block() override;
 
     std::string param_type_qualifier() override;
 
@@ -173,7 +176,7 @@ class CodegenIspcVisitor: public CodegenCVisitor {
     void print_block_wrappers_initial_equation_state();
 
 
-    void print_data_structures(const bool wrapper) override;
+    void print_data_structures() override;
 
 
     void print_ispc_globals();

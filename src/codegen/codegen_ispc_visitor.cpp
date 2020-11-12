@@ -292,6 +292,21 @@ std::string CodegenIspcVisitor::ptr_type_qualifier() {
     }
 }
 
+std::string CodegenIspcVisitor::global_var_structure_type_decorator() {
+    if (wrapper_codegen) {
+        return CodegenCVisitor::global_var_structure_type_decorator();
+    } else {
+        return "uniform ";  // @note: extra space needed to separate qualifier from var name.
+    }
+}
+
+std::string CodegenIspcVisitor::global_var_structure_final_block() {
+    if (wrapper_codegen) {
+        return "extern \"C\"";
+    } else {
+        return CodegenCVisitor::global_var_structure_final_block();
+    }
+}
 
 std::string CodegenIspcVisitor::param_type_qualifier() {
     if (wrapper_codegen) {
@@ -638,15 +653,15 @@ void CodegenIspcVisitor::print_codegen_routines() {
     print_headers_include();
     print_nmodl_constants();
 
-    print_data_structures(false);
+    print_data_structures();
 
     print_compute_functions();
 }
 
-void CodegenIspcVisitor::print_data_structures(const bool wrapper) {
-    if (wrapper ||
+void CodegenIspcVisitor::print_data_structures() {
+    if (wrapper_codegen ||
         !std::all_of(emit_fallback.begin(), emit_fallback.end(), [](bool i) { return i; })) {
-        CodegenCVisitor::print_data_structures(wrapper);
+        CodegenCVisitor::print_data_structures();
     }
 }
 
@@ -661,7 +676,7 @@ void CodegenIspcVisitor::print_wrapper_routines() {
 
     CodegenCVisitor::print_nmodl_constants();
     print_mechanism_info();
-    print_data_structures(true);
+    print_data_structures();
     print_global_variables_for_hoc();
     print_common_getters();
 
