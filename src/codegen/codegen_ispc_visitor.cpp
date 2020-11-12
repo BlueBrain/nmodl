@@ -385,17 +385,17 @@ void CodegenIspcVisitor::print_compute_functions() {
             print_procedure(*procedure);
         }
     }
-    if (!emit_fallback[BlockType::NetReceive]) {
+    if (!emit_fallback[static_cast<size_t>(BlockType::NetReceive)]) {
         print_net_receive_kernel();
         print_net_receive_buffering(false);
     }
-    if (!emit_fallback[BlockType::Initial]) {
+    if (!emit_fallback[static_cast<size_t>(BlockType::Initial)]) {
         print_nrn_init(false);
     }
-    if (!emit_fallback[BlockType::Equation]) {
+    if (!emit_fallback[static_cast<size_t>(BlockType::Equation)]) {
         print_nrn_cur();
     }
-    if (!emit_fallback[BlockType::State]) {
+    if (!emit_fallback[static_cast<size_t>(BlockType::State)]) {
         print_nrn_state();
     }
 }
@@ -656,18 +656,18 @@ void CodegenIspcVisitor::print_wrapper_routine(const std::string& wrapper_functi
 void CodegenIspcVisitor::print_backend_compute_routine_decl() {
     auto params = get_global_function_parms("");
     auto compute_function = compute_method_name(BlockType::Initial);
-    if (!emit_fallback[BlockType::Initial]) {
+    if (!emit_fallback[static_cast<size_t>(BlockType::Initial)]) {
         printer->add_line(
             "extern \"C\" void {}({});"_format(compute_function, get_parameter_str(params)));
     }
 
-    if (nrn_cur_required() && !emit_fallback[BlockType::Equation]) {
+    if (nrn_cur_required() && !emit_fallback[static_cast<size_t>(BlockType::Equation)]) {
         compute_function = compute_method_name(BlockType::Equation);
         printer->add_line(
             "extern \"C\" void {}({});"_format(compute_function, get_parameter_str(params)));
     }
 
-    if (nrn_state_required() && !emit_fallback[BlockType::State]) {
+    if (nrn_state_required() && !emit_fallback[static_cast<size_t>(BlockType::State)]) {
         compute_function = compute_method_name(BlockType::State);
         printer->add_line(
             "extern \"C\" void {}({});"_format(compute_function, get_parameter_str(params)));
@@ -689,33 +689,35 @@ void CodegenIspcVisitor::determine_target() {
     };
 
     if (info.initial_node) {
-        emit_fallback[BlockType::Initial] =
+        emit_fallback[static_cast<size_t>(BlockType::Initial)] =
             has_incompatible_nodes(*info.initial_node) ||
             visitor::calls_function(*info.initial_node, "net_send") || info.require_wrote_conc;
     } else {
-        emit_fallback[BlockType::Initial] = info.net_receive_initial_node ||
-                                            info.require_wrote_conc;
+        emit_fallback[static_cast<size_t>(BlockType::Initial)] = info.net_receive_initial_node ||
+                                                                 info.require_wrote_conc;
     }
 
     if (info.net_receive_node) {
-        emit_fallback[BlockType::NetReceive] = has_incompatible_nodes(*info.net_receive_node) ||
-                                               visitor::calls_function(*info.net_receive_node,
-                                                                       "net_send");
+        emit_fallback[static_cast<size_t>(BlockType::NetReceive)] =
+            has_incompatible_nodes(*info.net_receive_node) ||
+            visitor::calls_function(*info.net_receive_node, "net_send");
     }
 
     if (nrn_cur_required()) {
         if (info.breakpoint_node) {
-            emit_fallback[BlockType::Equation] = has_incompatible_nodes(*info.breakpoint_node);
+            emit_fallback[static_cast<size_t>(BlockType::Equation)] = has_incompatible_nodes(
+                *info.breakpoint_node);
         } else {
-            emit_fallback[BlockType::Equation] = false;
+            emit_fallback[static_cast<size_t>(BlockType::Equation)] = false;
         }
     }
 
     if (nrn_state_required()) {
         if (info.nrn_state_block) {
-            emit_fallback[BlockType::State] = has_incompatible_nodes(*info.nrn_state_block);
+            emit_fallback[static_cast<size_t>(BlockType::State)] = has_incompatible_nodes(
+                *info.nrn_state_block);
         } else {
-            emit_fallback[BlockType::State] = false;
+            emit_fallback[static_cast<size_t>(BlockType::State)] = false;
         }
     }
 }
@@ -762,7 +764,7 @@ void CodegenIspcVisitor::move_procs_to_wrapper() {
 }
 
 void CodegenIspcVisitor::codegen_wrapper_routines() {
-    if (emit_fallback[BlockType::Initial]) {
+    if (emit_fallback[static_cast<size_t>(BlockType::Initial)]) {
         logger->warn("Falling back to C backend for emitting Initial block");
         fallback_codegen.print_nrn_init();
     } else {
@@ -770,7 +772,7 @@ void CodegenIspcVisitor::codegen_wrapper_routines() {
     }
 
     if (nrn_cur_required()) {
-        if (emit_fallback[BlockType::Equation]) {
+        if (emit_fallback[static_cast<size_t>(BlockType::Equation)]) {
             logger->warn("Falling back to C backend for emitting breakpoint block");
             fallback_codegen.print_nrn_cur();
         } else {
@@ -779,7 +781,7 @@ void CodegenIspcVisitor::codegen_wrapper_routines() {
     }
 
     if (nrn_state_required()) {
-        if (emit_fallback[BlockType::State]) {
+        if (emit_fallback[static_cast<size_t>(BlockType::State)]) {
             logger->warn("Falling back to C backend for emitting state block");
             fallback_codegen.print_nrn_state();
         } else {
@@ -857,7 +859,7 @@ void CodegenIspcVisitor::print_codegen_wrapper_routines() {
     print_watch_activate();
     fallback_codegen.print_watch_check();  // requires C style variable declarations and loops
 
-    if (emit_fallback[BlockType::NetReceive]) {
+    if (emit_fallback[static_cast<size_t>(BlockType::NetReceive)]) {
         logger->warn("Found VERBATIM code in net_receive block, falling back to C backend");
         fallback_codegen.print_net_receive_kernel();
         fallback_codegen.print_net_receive_buffering();
@@ -867,7 +869,7 @@ void CodegenIspcVisitor::print_codegen_wrapper_routines() {
 
     print_backend_compute_routine_decl();
 
-    if (!emit_fallback[BlockType::NetReceive]) {
+    if (!emit_fallback[static_cast<size_t>(BlockType::NetReceive)]) {
         print_net_receive_buffering_wrapper();
     }
     codegen_wrapper_routines();

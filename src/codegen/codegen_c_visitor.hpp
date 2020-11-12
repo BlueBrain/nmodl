@@ -50,6 +50,8 @@ namespace codegen {
  * \enum BlockType
  * \brief Helper to represent various block types
  *
+ * Note: do not assign integers to these enums
+ *
  */
 enum class BlockType {
     /// initial block
@@ -68,7 +70,10 @@ enum class BlockType {
     Watch,
 
     /// net_receive block
-    NetReceive
+    NetReceive,
+
+    /// fake ending block type for loops on the enums. Keep it at the end
+    BlockTypeEnd
 };
 
 

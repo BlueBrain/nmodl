@@ -56,7 +56,8 @@ class CodegenIspcVisitor: public CodegenCVisitor {
     /// supported
     CodegenCVisitor fallback_codegen;
 
-    std::map<BlockType, bool> emit_fallback;
+    std::vector<bool> emit_fallback =
+        std::vector<bool>(static_cast<size_t>(BlockType::BlockTypeEnd), false);
 
     std::vector<ast::ProcedureBlock*> wrapper_procedures;
     std::vector<ast::FunctionBlock*> wrapper_functions;
