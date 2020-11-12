@@ -2371,7 +2371,7 @@ void CodegenCVisitor::print_coreneuron_includes() {
  * same for some variables to keep same code as neuron.
  */
 void CodegenCVisitor::print_mechanism_global_var_structure(const bool wrapper) {
-    const std::string decorator = (wrapper) ? "uniform " : "";
+    const std::string decorator = (wrapper) ? "" : "uniform ";
 
     auto float_type = default_float_data_type();
     printer->add_newline(2);
