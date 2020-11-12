@@ -169,8 +169,8 @@ class CodegenIspcVisitor: public CodegenCVisitor {
     void print_wrapper_routine(const std::string& wrapper_function, BlockType type);
 
 
-    /// wrapper/caller routines for nrn_state and nrn_cur
-    void codegen_wrapper_routines();
+    /// print initial equation and state wrapper
+    void print_block_wrappers_initial_equation_state();
 
 
     void print_data_structures() override;
@@ -208,8 +208,7 @@ class CodegenIspcVisitor: public CodegenCVisitor {
     /// entry point to code generation
     void print_codegen_routines() override;
 
-
-    void print_codegen_wrapper_routines();
+    void print_wrapper_routines() override;
 
   public:
     CodegenIspcVisitor(const std::string& mod_file,

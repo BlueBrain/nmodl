@@ -615,7 +615,7 @@ void CodegenIspcVisitor::move_procs_to_wrapper() {
     info.functions = target_functions;
 }
 
-void CodegenIspcVisitor::codegen_wrapper_routines() {
+void CodegenIspcVisitor::print_block_wrappers_initial_equation_state() {
     if (emit_fallback[static_cast<size_t>(BlockType::Initial)]) {
         logger->warn("Falling back to C backend for emitting Initial block");
         fallback_codegen.print_nrn_init();
@@ -660,13 +660,10 @@ void CodegenIspcVisitor::print_codegen_routines() {
     print_data_structures();
 
     print_compute_functions();
-
-    // now print the ispc wrapper code
-    print_codegen_wrapper_routines();
 }
 
 
-void CodegenIspcVisitor::print_codegen_wrapper_routines() {
+void CodegenIspcVisitor::print_wrapper_routines() {
     printer = wrapper_printer;
     wrapper_codegen = true;
     print_backend_info();
@@ -724,7 +721,8 @@ void CodegenIspcVisitor::print_codegen_wrapper_routines() {
     if (!emit_fallback[static_cast<size_t>(BlockType::NetReceive)]) {
         print_net_receive_buffering_wrapper();
     }
-    codegen_wrapper_routines();
+
+    print_block_wrappers_initial_equation_state();
 
     print_mechanism_register();
 
