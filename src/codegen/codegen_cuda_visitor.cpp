@@ -209,7 +209,7 @@ void CodegenCudaVisitor::print_codegen_routines() {
     print_headers_include();
     print_namespace_begin();
 
-    print_data_structures();
+    print_data_structures(false);
     print_common_getters();
 
     print_compute_functions();

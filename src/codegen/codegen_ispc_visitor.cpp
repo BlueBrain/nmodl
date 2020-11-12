@@ -401,20 +401,6 @@ void CodegenIspcVisitor::print_compute_functions() {
 }
 
 
-void CodegenIspcVisitor::print_data_structures() {
-    print_mechanism_global_var_structure(false);
-    print_mechanism_range_var_structure();
-    print_ion_var_structure();
-}
-
-
-void CodegenIspcVisitor::print_wrapper_data_structures() {
-    print_mechanism_global_var_structure(true);
-    print_mechanism_range_var_structure();
-    print_ion_var_structure();
-}
-
-
 void CodegenIspcVisitor::print_ispc_globals() {
     printer->start_block("extern \"C\"");
     printer->add_line("extern double ispc_celsius;");
@@ -535,43 +521,38 @@ void CodegenIspcVisitor::print_backend_compute_routine_decl() {
     }
 }
 
-void CodegenIspcVisitor::determine_target() {
+void CodegenIspcVisitor::set_emit_fallback() {
     const auto& has_incompatible_nodes = [this](const ast::Ast& node) {
         return !collect_nodes(node, incompatible_node_types).empty();
     };
 
+    emit_fallback = std::vector<bool>(static_cast<size_t>(BlockType::BlockTypeEnd), false);
+
     if (info.initial_node) {
         emit_fallback[static_cast<size_t>(BlockType::Initial)] =
+            emit_fallback[static_cast<size_t>(BlockType::Initial)] ||
             has_incompatible_nodes(*info.initial_node) ||
             visitor::calls_function(*info.initial_node, "net_send") || info.require_wrote_conc;
     } else {
-        emit_fallback[static_cast<size_t>(BlockType::Initial)] = info.net_receive_initial_node ||
-                                                                 info.require_wrote_conc;
+        emit_fallback[static_cast<size_t>(BlockType::Initial)] =
+            emit_fallback[static_cast<size_t>(BlockType::Initial)] ||
+            info.net_receive_initial_node || info.require_wrote_conc;
     }
 
-    if (info.net_receive_node) {
-        emit_fallback[static_cast<size_t>(BlockType::NetReceive)] =
-            has_incompatible_nodes(*info.net_receive_node) ||
-            visitor::calls_function(*info.net_receive_node, "net_send");
-    }
+    emit_fallback[static_cast<size_t>(BlockType::NetReceive)] =
+        emit_fallback[static_cast<size_t>(BlockType::NetReceive)] ||
+        (info.net_receive_node && (has_incompatible_nodes(*info.net_receive_node) ||
+                                   visitor::calls_function(*info.net_receive_node, "net_send")));
 
-    if (nrn_cur_required()) {
-        if (info.breakpoint_node) {
-            emit_fallback[static_cast<size_t>(BlockType::Equation)] = has_incompatible_nodes(
-                *info.breakpoint_node);
-        } else {
-            emit_fallback[static_cast<size_t>(BlockType::Equation)] = false;
-        }
-    }
+    emit_fallback[static_cast<size_t>(BlockType::Equation)] =
+        emit_fallback[static_cast<size_t>(BlockType::Equation)] ||
+        (nrn_cur_required() && info.breakpoint_node &&
+         has_incompatible_nodes(*info.breakpoint_node));
 
-    if (nrn_state_required()) {
-        if (info.nrn_state_block) {
-            emit_fallback[static_cast<size_t>(BlockType::State)] = has_incompatible_nodes(
-                *info.nrn_state_block);
-        } else {
-            emit_fallback[static_cast<size_t>(BlockType::State)] = false;
-        }
-    }
+    emit_fallback[static_cast<size_t>(BlockType::State)] =
+        emit_fallback[static_cast<size_t>(BlockType::State)] ||
+        (nrn_state_required() && info.nrn_state_block &&
+         has_incompatible_nodes(*info.nrn_state_block));
 }
 
 void CodegenIspcVisitor::move_procs_to_wrapper() {
@@ -651,15 +632,22 @@ void CodegenIspcVisitor::visit_program(ast::Program& node) {
 
 void CodegenIspcVisitor::print_codegen_routines() {
     codegen = true;
-    determine_target();
+    set_emit_fallback();
     move_procs_to_wrapper();
     print_backend_info();
     print_headers_include();
     print_nmodl_constants();
 
-    print_data_structures();
+    print_data_structures(false);
 
     print_compute_functions();
+}
+
+void CodegenIspcVisitor::print_data_structures(const bool wrapper) {
+    if (wrapper ||
+        !std::all_of(emit_fallback.begin(), emit_fallback.end(), [](bool i) { return i; })) {
+        CodegenCVisitor::print_data_structures(wrapper);
+    }
 }
 
 
@@ -673,7 +661,7 @@ void CodegenIspcVisitor::print_wrapper_routines() {
 
     CodegenCVisitor::print_nmodl_constants();
     print_mechanism_info();
-    print_wrapper_data_structures();
+    print_data_structures(true);
     print_global_variables_for_hoc();
     print_common_getters();
 

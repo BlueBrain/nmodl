@@ -173,10 +173,7 @@ class CodegenIspcVisitor: public CodegenCVisitor {
     void print_block_wrappers_initial_equation_state();
 
 
-    void print_data_structures() override;
-
-
-    void print_wrapper_data_structures();
+    void print_data_structures(const bool wrapper) override;
 
 
     void print_ispc_globals();
@@ -198,7 +195,7 @@ class CodegenIspcVisitor: public CodegenCVisitor {
 
 
     /// find out for main compute routines whether they are suitable to be emitted in ISPC backend
-    void determine_target();
+    void set_emit_fallback();
 
 
     /// move procedures and functions unused by compute kernels into the wrapper

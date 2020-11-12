@@ -4295,8 +4295,8 @@ void CodegenCVisitor::print_common_getters() {
 }
 
 
-void CodegenCVisitor::print_data_structures() {
-    print_mechanism_global_var_structure(false);
+void CodegenCVisitor::print_data_structures(const bool wrapper) {
+    print_mechanism_global_var_structure(wrapper);
     print_mechanism_range_var_structure();
     print_ion_var_structure();
 }
@@ -4335,7 +4335,7 @@ void CodegenCVisitor::print_codegen_routines() {
     print_namespace_begin();
     print_nmodl_constants();
     print_mechanism_info();
-    print_data_structures();
+    print_data_structures(false);
     print_global_variables_for_hoc();
     print_common_getters();
     print_memory_allocation_routine();

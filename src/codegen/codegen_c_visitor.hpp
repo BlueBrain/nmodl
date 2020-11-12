@@ -1595,7 +1595,7 @@ class CodegenCVisitor: public visitor::AstVisitor {
      * Print all classes
      *
      */
-    virtual void print_data_structures();
+    virtual void print_data_structures(const bool wrapper);
 
 
     /**
