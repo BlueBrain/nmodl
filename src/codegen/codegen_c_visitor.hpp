@@ -896,12 +896,12 @@ class CodegenCVisitor: public visitor::AstVisitor {
     virtual std::string global_var_structure_type_decorator();
 
     /**
-     * Final block in global var structure
+     * Instantiate global var instance
      *
      * For C code generation this is empty
      * \return ""
      */
-    virtual std::string global_var_structure_final_block();
+    virtual void print_global_var_struct_decl();
 
     /**
      * The used parameter type qualifier

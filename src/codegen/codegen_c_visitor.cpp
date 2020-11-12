@@ -1264,10 +1264,10 @@ std::string CodegenCVisitor::global_var_structure_type_decorator() {
     return "";
 }
 
-std::string CodegenCVisitor::global_var_structure_final_block() {
-    return "";
+void CodegenCVisitor::print_global_var_struct_decl() {
+    printer->add_line("/** holds object of global variable */");
+    printer->add_line("{} {}_global;"_format(global_struct(), info.mod_suffix));
 }
-
 
 std::string CodegenCVisitor::k_const() {
     return "const ";
@@ -2511,14 +2511,7 @@ void CodegenCVisitor::print_mechanism_global_var_structure() {
     printer->add_newline(1);
     printer->add_line("/** holds object of global variable */");
 
-    if (!global_var_structure_final_block().empty()) {
-        printer->start_block(global_var_structure_final_block());
-    }
-    printer->add_line("{} {}_global;"_format(global_struct(), info.mod_suffix));
-
-    if (!global_var_structure_final_block().empty()) {
-        printer->end_block(2);
-    }
+    print_global_var_struct_decl();
 
     // create copy on the device
     print_global_variable_device_create_annotation();

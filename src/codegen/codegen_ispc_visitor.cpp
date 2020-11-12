@@ -300,11 +300,15 @@ std::string CodegenIspcVisitor::global_var_structure_type_decorator() {
     }
 }
 
-std::string CodegenIspcVisitor::global_var_structure_final_block() {
+void CodegenIspcVisitor::print_global_var_struct_decl() {
     if (wrapper_codegen) {
-        return "extern \"C\"";
+        printer->add_line("/** holds object of global variable */");
+        printer->start_block("extern \"C\"");
+        printer->add_line("{} {}_global;"_format(global_struct(), info.mod_suffix));
+        printer->end_block(2);
     } else {
-        return CodegenCVisitor::global_var_structure_final_block();
+        printer->add_line("/** holds object of global variable */");
+        printer->add_line("extern {} {}_global;"_format(global_struct(), info.mod_suffix));
     }
 }
 
