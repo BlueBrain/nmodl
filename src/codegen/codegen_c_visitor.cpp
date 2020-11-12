@@ -1265,7 +1265,6 @@ std::string CodegenCVisitor::global_var_structure_type_decorator() {
 }
 
 void CodegenCVisitor::print_global_var_struct_decl() {
-    printer->add_line("/** holds object of global variable */");
     printer->add_line("{} {}_global;"_format(global_struct(), info.mod_suffix));
 }
 
@@ -2510,7 +2509,6 @@ void CodegenCVisitor::print_mechanism_global_var_structure() {
 
     printer->add_newline(1);
     printer->add_line("/** holds object of global variable */");
-
     print_global_var_struct_decl();
 
     // create copy on the device

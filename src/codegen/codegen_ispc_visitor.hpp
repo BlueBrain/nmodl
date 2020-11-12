@@ -42,12 +42,9 @@ class CodegenIspcVisitor: public CodegenCVisitor {
 
 
     /// ast nodes which are not compatible with ISPC target
-    const std::vector<ast::AstNodeType> incompatible_node_types{
-        ast::AstNodeType::VERBATIM,
-        ast::AstNodeType::EIGEN_NEWTON_SOLVER_BLOCK,
-        ast::AstNodeType::EIGEN_LINEAR_SOLVER_BLOCK,
-        ast::AstNodeType::WATCH_STATEMENT,
-        ast::AstNodeType::TABLE_STATEMENT};
+    static const std::vector<ast::AstNodeType> incompatible_node_types;
+
+    static const std::unordered_set<std::string> incompatible_var_names;
 
     /// flag to indicate if visitor should print the the wrapper code
     bool wrapper_codegen = false;
@@ -200,6 +197,23 @@ class CodegenIspcVisitor: public CodegenCVisitor {
     /// find out for main compute routines whether they are suitable to be emitted in ISPC backend
     void set_emit_fallback();
 
+    /// check incompatible name var
+    template <class T>
+    void check_incompatible_var_name(bool& skip,
+                                     const std::vector<T>& vec,
+                                     const std::string& get_name(const T&)) {
+        if (skip) {
+            return;
+        }
+
+        for (const auto& var: vec) {
+            if (incompatible_var_names.count(get_name(var))) {
+                emit_fallback = std::vector<bool>(emit_fallback.size(), true);
+                skip = true;
+                return;
+            }
+        }
+    }
 
     /// move procedures and functions unused by compute kernels into the wrapper
     void move_procs_to_wrapper();
