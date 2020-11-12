@@ -1,52 +1,56 @@
-INDEPENDENT {t FROM 0 TO 1 WITH 1 (ms)}
+: simple first-order model of calcium dynamics
 
-NEURON {
-	SUFFIX ican
-	USEION n READ en WRITE in VALENCE 1
-	USEION ca READ cai
-        RANGE gbar, m_inf, tau_m, in
-	GLOBAL beta, cac, taumin
+        NEURON {
+        SUFFIX ican
+        USEION n READ ni, in WRITE ni
+        RANGE n
+        GLOBAL depth,ninf,taur
+        RANGE var
+
+        }
+
+        UNITS {
+        (molar) = (1/liter)
+        (mM) = (milli/liter)
+        (um)	= (micron)
+        (mA) = (milliamp)
+        (msM)	= (ms mM)
+        FARADAY    = (faraday) (coul)
+        }
+
+        PARAMETER {
+        depth	= .1	(um)
+        taur =  200 (ms)	: rate of calcium removal for stress conditions
+        ninf	= 50e-6(mM)	:changed oct2
+        ni		(mM)
+        }
+
+        ASSIGNED {
+        in		(mA/cm2)
+        drive_channel	(mM/ms)
+        var     (mV)
+        }
+
+        STATE {
+        n		(mM)
+        }
+
+
+        BREAKPOINT {
+        SOLVE state METHOD euler
+        }
+
+        INCLUDE "var_init.inc"
+
+        DERIVATIVE state {
+
+        drive_channel =  - (10000) * in / (2 * FARADAY * depth)
+        if (drive_channel <= 0.) { drive_channel = 0.  }   : cannot pump inward
+        n' = drive_channel/18 + (ninf -n)/taur*11
+	ni = n
 }
 
-
-UNITS {
-	(mA) = (milliamp)
-	(mV) = (millivolt)
-	(molar) = (1/liter)
-	(mM) = (millimolar)
+INITIAL {
+    var_init(var)
+    n = ninf
 }
-
-
-PARAMETER {
-	v		(mV)
-	celsius	= 36	(degC)
-	en	= -30	(mV)		: reversal potential
-	cai 	= 2.4e-5 (mM)		: initial [Ca]i
-	gbar	= 0.0004 (mho/cm2)
-	beta	= 0.001	(1/ms)		: backward rate constant
-	cac	= 0.013	(mM)		: middle point of activation fct
-	taumin	= 0.11	(ms)		: minimal value of time constant
-}
-
-
-STATE {
-	m
-}
-
-ASSIGNED {
-	in	(mA/cm2)
-	m_inf
-	tau_m	(ms)
-	tadj
-}
-
-BREAKPOINT { 
-	SOLVE states METHOD cnexp
-	in = gbar * m*m * (v - en)
-}
-
-
-
-
-
-
