@@ -1042,7 +1042,7 @@ class CodegenCVisitor: public visitor::AstVisitor {
      * Print the structure that wraps all global variables used in the NMODL
      * \param wrapper
      */
-    virtual void print_mechanism_global_var_structure(bool wrapper);
+    void print_mechanism_global_var_structure(const bool wrapper);
 
 
     /**

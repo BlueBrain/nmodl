@@ -173,10 +173,6 @@ class CodegenIspcVisitor: public CodegenCVisitor {
     void codegen_wrapper_routines();
 
 
-    /// structure that wraps all global variables in the mod file
-    void print_mechanism_global_var_structure(bool wrapper) override;
-
-
     void print_data_structures() override;
 
 
