@@ -315,18 +315,10 @@ std::string CodegenIspcVisitor::global_var_structure_type_decorator() {
 
 void CodegenIspcVisitor::print_global_var_struct_decl() {
     if (wrapper_codegen) {
-        if (std::all_of(emit_fallback.begin(), emit_fallback.end(), [](const bool i) {
-                return i;
-            })) {
-            CodegenCVisitor::print_global_var_struct_decl();
-        } else {
-            printer->add_line("/** holds object of global variable */");
-            printer->start_block("extern \"C\"");
-            printer->add_line("{} {}_global;"_format(global_struct(), info.mod_suffix));
-            printer->end_block(2);
-        }
+        printer->start_block("extern \"C\"");
+        printer->add_line("{} {}_global;"_format(global_struct(), info.mod_suffix));
+        printer->end_block(2);
     } else {
-        printer->add_line("/** holds object of global variable */");
         printer->add_line("extern {} {}_global;"_format(global_struct(), info.mod_suffix));
     }
 }
@@ -559,10 +551,57 @@ void CodegenIspcVisitor::print_backend_compute_routine_decl() {
     }
 }
 
-void CodegenIspcVisitor::set_emit_fallback() {
+bool CodegenIspcVisitor::check_incompatibilities() {
     const auto& has_incompatible_nodes = [this](const ast::Ast& node) {
         return !collect_nodes(node, incompatible_node_types).empty();
     };
+
+    // instance vars
+    if (check_incompatible_var_name<SymbolType>(codegen_float_variables,
+                                                [](const SymbolType& var) -> const std::string& {
+                                                    return var->get_name();
+                                                }) ||
+        check_incompatible_var_name<SymbolType>(codegen_shadow_variables,
+                                                [](const SymbolType& var) -> const std::string& {
+                                                    return var->get_name();
+                                                }) ||
+        check_incompatible_var_name<IndexVariableInfo>(codegen_int_variables,
+                                                       [](const IndexVariableInfo& var)
+                                                           -> const std::string& {
+                                                           return var.symbol->get_name();
+                                                       }) ||
+
+
+        check_incompatible_var_name<std::string>(info.currents,
+                                                 [](const std::string& var) -> const std::string& {
+                                                     return var;
+                                                 }) ||
+
+
+        // global vars
+        // info.top_local_variables is not checked because it should be addressed by the
+        // renameIspcVisitor
+        check_incompatible_var_name<SymbolType>(info.global_variables,
+                                                [](const SymbolType& var) -> const std::string& {
+                                                    return var->get_name();
+                                                }) ||
+
+
+        check_incompatible_var_name<SymbolType>(info.constant_variables,
+                                                [](const SymbolType& var) -> const std::string& {
+                                                    return var->get_name();
+                                                })) {
+        return true;
+    }
+
+    // ion vars
+    for (const auto& ion: info.ions) {
+        if (check_incompatible_var_name<std::string>(
+                ion.writes, [](const std::string& var) -> const std::string& { return var; })) {
+            return true;
+        }
+    }
+
 
     emit_fallback = std::vector<bool>(static_cast<size_t>(BlockType::BlockTypeEnd), false);
 
@@ -592,46 +631,8 @@ void CodegenIspcVisitor::set_emit_fallback() {
         (nrn_state_required() && info.nrn_state_block &&
          has_incompatible_nodes(*info.nrn_state_block));
 
-    // check if there are ispc-reserved keywords in the variable structs
-    bool skip = false;
 
-    // instance vars
-    check_incompatible_var_name<SymbolType>(skip,
-                                            codegen_float_variables,
-                                            [](const SymbolType& var) -> const std::string& {
-                                                return var->get_name();
-                                            });
-    check_incompatible_var_name<SymbolType>(skip,
-                                            codegen_shadow_variables,
-                                            [](const SymbolType& var) -> const std::string& {
-                                                return var->get_name();
-                                            });
-    check_incompatible_var_name<IndexVariableInfo>(
-        skip, codegen_int_variables, [](const IndexVariableInfo& var) -> const std::string& {
-            return var.symbol->get_name();
-        });
-
-    // ion vars
-    for (const auto& ion: info.ions) {
-        check_incompatible_var_name<std::string>(
-            skip, ion.writes, [](const std::string& var) -> const std::string& { return var; });
-    }
-    check_incompatible_var_name<std::string>(
-        skip, info.currents, [](const std::string& var) -> const std::string& { return var; });
-
-    // global vars
-    // info.top_local_variables is not checked because it should be addressed by the
-    // renameIspcVisitor
-    check_incompatible_var_name<SymbolType>(skip,
-                                            info.global_variables,
-                                            [](const SymbolType& var) -> const std::string& {
-                                                return var->get_name();
-                                            });
-    check_incompatible_var_name<SymbolType>(skip,
-                                            info.constant_variables,
-                                            [](const SymbolType& var) -> const std::string& {
-                                                return var->get_name();
-                                            });
+    return false;
 }
 
 
@@ -705,32 +706,31 @@ void CodegenIspcVisitor::print_block_wrappers_initial_equation_state() {
 
 
 void CodegenIspcVisitor::visit_program(ast::Program& node) {
-    fallback_codegen.setup(node);
-    CodegenCVisitor::visit_program(node);
+    setup(node);
+    // we need setup to check incompatibilities
+    if (check_incompatibilities()) {
+        logger->warn(
+            "Ispc reserved keyword used as name var in mod file. Complete C backend fallback");
+        print_backend_info();
+        print_headers_include();
+        fallback_codegen.visit_program(node);
+    } else {
+        fallback_codegen.setup(node);
+        // we do not want to call setup twice
+        print_codegen_routines();
+        print_wrapper_routines();
+    }
 }
 
 
 void CodegenIspcVisitor::print_codegen_routines() {
     codegen = true;
-    set_emit_fallback();
     move_procs_to_wrapper();
     print_backend_info();
     print_headers_include();
     print_nmodl_constants();
-
     print_data_structures();
-
     print_compute_functions();
-}
-
-void CodegenIspcVisitor::print_data_structures() {
-    if (wrapper_codegen ||
-        !std::all_of(emit_fallback.begin(), emit_fallback.end(), [](const bool i) { return i; })) {
-        CodegenCVisitor::print_data_structures();
-    } else {
-        logger->warn(
-            "Ispc reserved keyword used as name var in mod file. Complete C backend fallback");
-    }
 }
 
 

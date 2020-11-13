@@ -173,9 +173,6 @@ class CodegenIspcVisitor: public CodegenCVisitor {
     void print_block_wrappers_initial_equation_state();
 
 
-    void print_data_structures() override;
-
-
     void print_ispc_globals();
 
 
@@ -195,24 +192,18 @@ class CodegenIspcVisitor: public CodegenCVisitor {
 
 
     /// find out for main compute routines whether they are suitable to be emitted in ISPC backend
-    void set_emit_fallback();
+    bool check_incompatibilities();
 
     /// check incompatible name var
     template <class T>
-    void check_incompatible_var_name(bool& skip,
-                                     const std::vector<T>& vec,
+    bool check_incompatible_var_name(const std::vector<T>& vec,
                                      const std::string& get_name(const T&)) {
-        if (skip) {
-            return;
-        }
-
         for (const auto& var: vec) {
             if (incompatible_var_names.count(get_name(var))) {
-                emit_fallback = std::vector<bool>(emit_fallback.size(), true);
-                skip = true;
-                return;
+                return true;
             }
         }
+        return false;
     }
 
     /// move procedures and functions unused by compute kernels into the wrapper
