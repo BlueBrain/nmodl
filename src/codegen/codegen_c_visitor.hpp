@@ -892,8 +892,11 @@ class CodegenCVisitor: public visitor::AstVisitor {
      *
      * For C code generation this is empty
      * \return ""
+     *
+     * For ispc
+     * \return "uniform "
      */
-    virtual std::string global_var_structure_type_decorator();
+    virtual std::string global_var_struct_type_decorator();
 
     /**
      * Instantiate global var instance

@@ -1260,7 +1260,8 @@ std::string CodegenCVisitor::ptr_type_qualifier() {
     return "__restrict__ ";
 }
 
-std::string CodegenCVisitor::global_var_structure_type_decorator() {
+/// Useful in ispc so that variables in the global struct get "uniform "
+std::string CodegenCVisitor::global_var_struct_type_decorator() {
     return "";
 }
 
@@ -2378,7 +2379,7 @@ void CodegenCVisitor::print_coreneuron_includes() {
  * same for some variables to keep same code as neuron.
  */
 void CodegenCVisitor::print_mechanism_global_var_structure() {
-    const auto decorator = global_var_structure_type_decorator();
+    const auto decorator = global_var_struct_type_decorator();
 
     auto float_type = default_float_data_type();
     printer->add_newline(2);
