@@ -53,7 +53,7 @@ namespace codegen {
  * Note: do not assign integers to these enums
  *
  */
-enum class BlockType {
+enum BlockType {
     /// initial block
     Initial,
 

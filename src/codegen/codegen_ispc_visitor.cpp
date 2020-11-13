@@ -415,17 +415,17 @@ void CodegenIspcVisitor::print_compute_functions() {
             print_procedure(*procedure);
         }
     }
-    if (!emit_fallback[static_cast<size_t>(BlockType::NetReceive)]) {
+    if (!emit_fallback[BlockType::NetReceive]) {
         print_net_receive_kernel();
         print_net_receive_buffering(false);
     }
-    if (!emit_fallback[static_cast<size_t>(BlockType::Initial)]) {
+    if (!emit_fallback[BlockType::Initial]) {
         print_nrn_init(false);
     }
-    if (!emit_fallback[static_cast<size_t>(BlockType::Equation)]) {
+    if (!emit_fallback[BlockType::Equation]) {
         print_nrn_cur();
     }
-    if (!emit_fallback[static_cast<size_t>(BlockType::State)]) {
+    if (!emit_fallback[BlockType::State]) {
         print_nrn_state();
     }
 }
@@ -524,18 +524,18 @@ void CodegenIspcVisitor::print_wrapper_routine(const std::string& wrapper_functi
 void CodegenIspcVisitor::print_backend_compute_routine_decl() {
     auto params = get_global_function_parms("");
     auto compute_function = compute_method_name(BlockType::Initial);
-    if (!emit_fallback[static_cast<size_t>(BlockType::Initial)]) {
+    if (!emit_fallback[BlockType::Initial]) {
         printer->add_line(
             "extern \"C\" void {}({});"_format(compute_function, get_parameter_str(params)));
     }
 
-    if (nrn_cur_required() && !emit_fallback[static_cast<size_t>(BlockType::Equation)]) {
+    if (nrn_cur_required() && !emit_fallback[BlockType::Equation]) {
         compute_function = compute_method_name(BlockType::Equation);
         printer->add_line(
             "extern \"C\" void {}({});"_format(compute_function, get_parameter_str(params)));
     }
 
-    if (nrn_state_required() && !emit_fallback[static_cast<size_t>(BlockType::State)]) {
+    if (nrn_state_required() && !emit_fallback[BlockType::State]) {
         compute_function = compute_method_name(BlockType::State);
         printer->add_line(
             "extern \"C\" void {}({});"_format(compute_function, get_parameter_str(params)));
@@ -556,15 +556,15 @@ bool CodegenIspcVisitor::check_incompatibilities() {
         return !collect_nodes(node, incompatible_node_types).empty();
     };
 
+    const auto get_name_from_symbolTypeVector = [](const SymbolType& var) -> const std::string& {
+        return var->get_name();
+    };
+
     // instance vars
     if (check_incompatible_var_name<SymbolType>(codegen_float_variables,
-                                                [](const SymbolType& var) -> const std::string& {
-                                                    return var->get_name();
-                                                }) ||
+                                                get_name_from_symbolTypeVector) ||
         check_incompatible_var_name<SymbolType>(codegen_shadow_variables,
-                                                [](const SymbolType& var) -> const std::string& {
-                                                    return var->get_name();
-                                                }) ||
+                                                get_name_from_symbolTypeVector) ||
         check_incompatible_var_name<IndexVariableInfo>(codegen_int_variables,
                                                        [](const IndexVariableInfo& var)
                                                            -> const std::string& {
@@ -582,15 +582,11 @@ bool CodegenIspcVisitor::check_incompatibilities() {
         // info.top_local_variables is not checked because it should be addressed by the
         // renameIspcVisitor
         check_incompatible_var_name<SymbolType>(info.global_variables,
-                                                [](const SymbolType& var) -> const std::string& {
-                                                    return var->get_name();
-                                                }) ||
+                                                get_name_from_symbolTypeVector) ||
 
 
         check_incompatible_var_name<SymbolType>(info.constant_variables,
-                                                [](const SymbolType& var) -> const std::string& {
-                                                    return var->get_name();
-                                                })) {
+                                                get_name_from_symbolTypeVector)) {
         return true;
     }
 
@@ -603,33 +599,30 @@ bool CodegenIspcVisitor::check_incompatibilities() {
     }
 
 
-    emit_fallback = std::vector<bool>(static_cast<size_t>(BlockType::BlockTypeEnd), false);
+    emit_fallback = std::vector<bool>(BlockType::BlockTypeEnd, false);
 
     if (info.initial_node) {
-        emit_fallback[static_cast<size_t>(BlockType::Initial)] =
-            emit_fallback[static_cast<size_t>(BlockType::Initial)] ||
-            has_incompatible_nodes(*info.initial_node) ||
+        emit_fallback[BlockType::Initial] =
+            emit_fallback[BlockType::Initial] || has_incompatible_nodes(*info.initial_node) ||
             visitor::calls_function(*info.initial_node, "net_send") || info.require_wrote_conc;
     } else {
-        emit_fallback[static_cast<size_t>(BlockType::Initial)] =
-            emit_fallback[static_cast<size_t>(BlockType::Initial)] ||
-            info.net_receive_initial_node || info.require_wrote_conc;
+        emit_fallback[BlockType::Initial] = emit_fallback[BlockType::Initial] ||
+                                            info.net_receive_initial_node ||
+                                            info.require_wrote_conc;
     }
 
-    emit_fallback[static_cast<size_t>(BlockType::NetReceive)] =
-        emit_fallback[static_cast<size_t>(BlockType::NetReceive)] ||
+    emit_fallback[BlockType::NetReceive] =
+        emit_fallback[BlockType::NetReceive] ||
         (info.net_receive_node && (has_incompatible_nodes(*info.net_receive_node) ||
                                    visitor::calls_function(*info.net_receive_node, "net_send")));
 
-    emit_fallback[static_cast<size_t>(BlockType::Equation)] =
-        emit_fallback[static_cast<size_t>(BlockType::Equation)] ||
-        (nrn_cur_required() && info.breakpoint_node &&
-         has_incompatible_nodes(*info.breakpoint_node));
+    emit_fallback[BlockType::Equation] = emit_fallback[BlockType::Equation] ||
+                                         (nrn_cur_required() && info.breakpoint_node &&
+                                          has_incompatible_nodes(*info.breakpoint_node));
 
-    emit_fallback[static_cast<size_t>(BlockType::State)] =
-        emit_fallback[static_cast<size_t>(BlockType::State)] ||
-        (nrn_state_required() && info.nrn_state_block &&
-         has_incompatible_nodes(*info.nrn_state_block));
+    emit_fallback[BlockType::State] = emit_fallback[BlockType::State] ||
+                                      (nrn_state_required() && info.nrn_state_block &&
+                                       has_incompatible_nodes(*info.nrn_state_block));
 
 
     return false;
@@ -678,7 +671,7 @@ void CodegenIspcVisitor::move_procs_to_wrapper() {
 }
 
 void CodegenIspcVisitor::print_block_wrappers_initial_equation_state() {
-    if (emit_fallback[static_cast<size_t>(BlockType::Initial)]) {
+    if (emit_fallback[BlockType::Initial]) {
         logger->warn("Falling back to C backend for emitting Initial block");
         fallback_codegen.print_nrn_init();
     } else {
@@ -686,7 +679,7 @@ void CodegenIspcVisitor::print_block_wrappers_initial_equation_state() {
     }
 
     if (nrn_cur_required()) {
-        if (emit_fallback[static_cast<size_t>(BlockType::Equation)]) {
+        if (emit_fallback[BlockType::Equation]) {
             logger->warn("Falling back to C backend for emitting breakpoint block");
             fallback_codegen.print_nrn_cur();
         } else {
@@ -695,7 +688,7 @@ void CodegenIspcVisitor::print_block_wrappers_initial_equation_state() {
     }
 
     if (nrn_state_required()) {
-        if (emit_fallback[static_cast<size_t>(BlockType::State)]) {
+        if (emit_fallback[BlockType::State]) {
             logger->warn("Falling back to C backend for emitting state block");
             fallback_codegen.print_nrn_state();
         } else {
@@ -707,6 +700,7 @@ void CodegenIspcVisitor::print_block_wrappers_initial_equation_state() {
 
 void CodegenIspcVisitor::visit_program(ast::Program& node) {
     setup(node);
+
     // we need setup to check incompatibilities
     if (check_incompatibilities()) {
         logger->warn(
@@ -779,7 +773,7 @@ void CodegenIspcVisitor::print_wrapper_routines() {
     print_watch_activate();
     fallback_codegen.print_watch_check();  // requires C style variable declarations and loops
 
-    if (emit_fallback[static_cast<size_t>(BlockType::NetReceive)]) {
+    if (emit_fallback[BlockType::NetReceive]) {
         logger->warn(
             "Found VERBATIM code in net_receive block or incompatible var name, falling back to C "
             "backend");
@@ -791,7 +785,7 @@ void CodegenIspcVisitor::print_wrapper_routines() {
 
     print_backend_compute_routine_decl();
 
-    if (!emit_fallback[static_cast<size_t>(BlockType::NetReceive)]) {
+    if (!emit_fallback[BlockType::NetReceive]) {
         print_net_receive_buffering_wrapper();
     }
 
