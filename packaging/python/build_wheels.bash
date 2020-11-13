@@ -9,7 +9,7 @@ set -xe
 #  - cmake (>=3.3)
 #  - flex
 #  - bison
-#  - python >= 3.5
+#  - python >= 3.6
 #  - C/C++ compiler
 
 if [ ! -f setup.py ]; then
@@ -22,8 +22,8 @@ setup_venv() {
     local py_ver=$("$py_bin" -c "import sys; print('%d%d' % tuple(sys.version_info)[:2])")
     local venv_dir="nmodl_build_venv$py_ver"
 
-    if [ "$py_ver" -lt 35 ]; then
-        echo "[SKIP] Python $py_ver no longer supported"
+    if [ "$py_ver" -lt 36 ]; then
+        echo "[SKIP] Python $py_ver not supported"
         skip=1
         return 0
     fi

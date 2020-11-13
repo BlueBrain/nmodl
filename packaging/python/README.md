@@ -7,9 +7,7 @@ NMODL wheels are built in a manylinux2010 image. Since the generic docker image 
 
 #### Setting up Docker
 
-[Docker](https://en.wikipedia.org/wiki/Docker_(software)) is required for building Linux wheels. You can instructions to
-setup Docker on Linux [here](https://docs.docker.com/engine/install/ubuntu/) and on OS X
-[here](https://docs.docker.com/docker-for-mac/install/). On Ubuntu system we typically do:
+[Docker](https://en.wikipedia.org/wiki/Docker_(software)) is required for building Linux wheels. You can find instructions to setup Docker on Linux [here](https://docs.docker.com/engine/install/ubuntu/) and on OS X [here](https://docs.docker.com/docker-for-mac/install/). On Ubuntu system we typically do:
 
 ```
 sudo apt install docker.io
