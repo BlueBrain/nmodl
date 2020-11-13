@@ -62,10 +62,7 @@ if(NMODL_ENABLE_PYTHON_BINDINGS)
     $<TARGET_OBJECTS:util_obj>
     $<TARGET_OBJECTS:printer_obj>)
 
-  add_dependencies(_nmodl pyastgen)
-  add_dependencies(_nmodl lexer_obj)
-  add_dependencies(_nmodl util_obj)
-
+  add_dependencies(_nmodl pyastgen lexer_obj util_obj)
   target_link_libraries(_nmodl PRIVATE fmt::fmt pyembed)
 
   # in case of wheel, python module shouldn't link to wrapper library
@@ -74,9 +71,9 @@ if(NMODL_ENABLE_PYTHON_BINDINGS)
   endif()
 
   add_custom_command(
-    OUTPUT $<TARGET_FILE:_nmodl>
+    OUTPUT ${PROJECT_BINARY_DIR}/lib/nmodl
     COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:_nmodl> ${PROJECT_BINARY_DIR}/nmodl
-    DEPENDS ${NMODL_PYTHON_FILES_IN} $<TARGET_FILE:_nmodl>
+    DEPENDS ${NMODL_PYTHON_FILES_IN} _nmodl
     COMMENT "-- COPYING NMODL PYTHON MODULE --")
 endif()
 
