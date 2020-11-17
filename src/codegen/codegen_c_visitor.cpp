@@ -1261,7 +1261,7 @@ std::string CodegenCVisitor::ptr_type_qualifier() {
 }
 
 /// Useful in ispc so that variables in the global struct get "uniform "
-std::string CodegenCVisitor::global_var_struct_type_decorator() {
+std::string CodegenCVisitor::global_var_struct_type_qualifier() {
     return "";
 }
 
