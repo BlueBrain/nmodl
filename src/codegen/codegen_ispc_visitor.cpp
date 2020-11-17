@@ -704,7 +704,7 @@ void CodegenIspcVisitor::visit_program(ast::Program& node) {
     // we need setup to check incompatibilities
     if (check_incompatibilities()) {
         logger->warn(
-            "Ispc reserved keyword used as name var in mod file. Complete C backend fallback");
+            "ISPC reserved keyword used as variable name in mod file. Using C++ backend as fallback");
         print_backend_info();
         print_headers_include();
         fallback_codegen.visit_program(node);
