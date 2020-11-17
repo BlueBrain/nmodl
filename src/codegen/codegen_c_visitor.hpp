@@ -896,7 +896,7 @@ class CodegenCVisitor: public visitor::AstVisitor {
      * For ispc
      * \return "uniform "
      */
-    virtual std::string global_var_struct_type_decorator();
+    virtual std::string global_var_struct_type_qualifier();
 
     /**
      * Instantiate global var instance
