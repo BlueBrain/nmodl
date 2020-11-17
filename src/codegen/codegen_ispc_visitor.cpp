@@ -775,7 +775,7 @@ void CodegenIspcVisitor::print_wrapper_routines() {
 
     if (emit_fallback[BlockType::NetReceive]) {
         logger->warn(
-            "Found VERBATIM code in net_receive block or incompatible var name, falling back to C "
+            "Found VERBATIM code or ISPC keyword in NET_RECEIVE block, using C++ backend as fallback"
             "backend");
         fallback_codegen.print_net_receive_kernel();
         fallback_codegen.print_net_receive_buffering();
