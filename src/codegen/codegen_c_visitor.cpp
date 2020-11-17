@@ -2390,13 +2390,13 @@ void CodegenCVisitor::print_mechanism_global_var_structure() {
     if (!info.ions.empty()) {
         for (const auto& ion: info.ions) {
             auto name = "{}_type"_format(ion.name);
-            printer->add_line("{}int {};"_format(decorator, name));
+            printer->add_line("{}int {};"_format(qualifier, name));
             codegen_global_variables.push_back(make_symbol(name));
         }
     }
 
     if (info.point_process) {
-        printer->add_line("{}int point_type;"_format(decorator));
+        printer->add_line("{}int point_type;"_format(qualifier));
         codegen_global_variables.push_back(make_symbol("point_type"));
     }
 
@@ -2405,7 +2405,7 @@ void CodegenCVisitor::print_mechanism_global_var_structure() {
             auto name = var->get_name() + "0";
             auto symbol = program_symtab->lookup(name);
             if (symbol == nullptr) {
-                printer->add_line("{}{} {};"_format(decorator, float_type, name));
+                printer->add_line("{}{} {};"_format(qualifier, float_type, name));
                 codegen_global_variables.push_back(make_symbol(name));
             }
         }
@@ -2421,28 +2421,28 @@ void CodegenCVisitor::print_mechanism_global_var_structure() {
             auto name = var->get_name();
             auto length = var->get_length();
             if (var->is_array()) {
-                printer->add_line("{}{} {}[{}];"_format(decorator, float_type, name, length));
+                printer->add_line("{}{} {}[{}];"_format(qualifier, float_type, name, length));
             } else {
-                printer->add_line("{}{} {};"_format(decorator, float_type, name));
+                printer->add_line("{}{} {};"_format(qualifier, float_type, name));
             }
             codegen_global_variables.push_back(var);
         }
     }
 
     if (!info.thread_variables.empty()) {
-        printer->add_line("{}int thread_data_in_use;"_format(decorator));
+        printer->add_line("{}int thread_data_in_use;"_format(qualifier));
         printer->add_line(
-            "{}{} thread_data[{}];"_format(decorator, float_type, info.thread_var_data_size));
+            "{}{} thread_data[{}];"_format(qualifier, float_type, info.thread_var_data_size));
         codegen_global_variables.push_back(make_symbol("thread_data_in_use"));
         auto symbol = make_symbol("thread_data");
         symbol->set_as_array(info.thread_var_data_size);
         codegen_global_variables.push_back(symbol);
     }
 
-    printer->add_line("{}int reset;"_format(decorator));
+    printer->add_line("{}int reset;"_format(qualifier));
     codegen_global_variables.push_back(make_symbol("reset"));
 
-    printer->add_line("{}int mech_type;"_format(decorator));
+    printer->add_line("{}int mech_type;"_format(qualifier));
     codegen_global_variables.push_back(make_symbol("mech_type"));
 
     auto& globals = info.global_variables;
@@ -2453,9 +2453,9 @@ void CodegenCVisitor::print_mechanism_global_var_structure() {
             auto name = var->get_name();
             auto length = var->get_length();
             if (var->is_array()) {
-                printer->add_line("{}{} {}[{}];"_format(decorator, float_type, name, length));
+                printer->add_line("{}{} {}[{}];"_format(qualifier, float_type, name, length));
             } else {
-                printer->add_line("{}{} {};"_format(decorator, float_type, name));
+                printer->add_line("{}{} {};"_format(qualifier, float_type, name));
             }
             codegen_global_variables.push_back(var);
         }
@@ -2465,43 +2465,43 @@ void CodegenCVisitor::print_mechanism_global_var_structure() {
         for (const auto& var: constants) {
             auto name = var->get_name();
             auto value_ptr = var->get_value();
-            printer->add_line("{}{} {};"_format(decorator, float_type, name));
+            printer->add_line("{}{} {};"_format(qualifier, float_type, name));
             codegen_global_variables.push_back(var);
         }
     }
 
     if (info.primes_size != 0) {
-        printer->add_line("int* {}slist1;"_format(decorator));
-        printer->add_line("int* {}dlist1;"_format(decorator));
+        printer->add_line("int* {}slist1;"_format(qualifier));
+        printer->add_line("int* {}dlist1;"_format(qualifier));
         codegen_global_variables.push_back(make_symbol("slist1"));
         codegen_global_variables.push_back(make_symbol("dlist1"));
         if (info.derivimplicit_used()) {
-            printer->add_line("int* {}slist2;"_format(decorator));
+            printer->add_line("int* {}slist2;"_format(qualifier));
             codegen_global_variables.push_back(make_symbol("slist2"));
         }
     }
 
     if (info.table_count > 0) {
-        printer->add_line("{}double usetable;"_format(decorator));
+        printer->add_line("{}double usetable;"_format(qualifier));
         codegen_global_variables.push_back(make_symbol(naming::USE_TABLE_VARIABLE));
 
         for (const auto& block: info.functions_with_table) {
             auto name = block->get_node_name();
-            printer->add_line("{}{} tmin_{};"_format(decorator, float_type, name));
-            printer->add_line("{}{} mfac_{};"_format(decorator, float_type, name));
+            printer->add_line("{}{} tmin_{};"_format(qualifier, float_type, name));
+            printer->add_line("{}{} mfac_{};"_format(qualifier, float_type, name));
             codegen_global_variables.push_back(make_symbol("tmin_" + name));
             codegen_global_variables.push_back(make_symbol("mfac_" + name));
         }
 
         for (const auto& variable: info.table_statement_variables) {
             auto name = "t_" + variable->get_name();
-            printer->add_line("{}* {}{};"_format(float_type, decorator, name));
+            printer->add_line("{}* {}{};"_format(float_type, qualifier, name));
             codegen_global_variables.push_back(make_symbol(name));
         }
     }
 
     if (info.vectorize) {
-        printer->add_line("ThreadDatum* {}ext_call_thread;"_format(decorator));
+        printer->add_line("ThreadDatum* {}ext_call_thread;"_format(qualifier));
         codegen_global_variables.push_back(make_symbol("ext_call_thread"));
     }
 

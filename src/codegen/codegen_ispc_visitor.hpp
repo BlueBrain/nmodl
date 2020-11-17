@@ -81,7 +81,7 @@ class CodegenIspcVisitor: public CodegenCVisitor {
 
     std::string ptr_type_qualifier() override;
 
-    std::string global_var_struct_type_decorator() override;
+    std::string global_var_struct_type_qualifier() override;
 
     void print_global_var_struct_decl() override;
 

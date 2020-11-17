@@ -305,9 +305,9 @@ std::string CodegenIspcVisitor::ptr_type_qualifier() {
     }
 }
 
-std::string CodegenIspcVisitor::global_var_struct_type_decorator() {
+std::string CodegenIspcVisitor::global_var_struct_type_qualifier() {
     if (wrapper_codegen) {
-        return CodegenCVisitor::global_var_struct_type_decorator();
+        return CodegenCVisitor::global_var_struct_type_qualifier();
     } else {
         return "uniform ";  // @note: extra space needed to separate qualifier from var name.
     }
