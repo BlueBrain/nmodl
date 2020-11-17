@@ -888,7 +888,7 @@ class CodegenCVisitor: public visitor::AstVisitor {
     virtual std::string ptr_type_qualifier();
 
     /**
-     * The used global type decorator
+     * The used global type qualifier
      *
      * For C code generation this is empty
      * \return ""
