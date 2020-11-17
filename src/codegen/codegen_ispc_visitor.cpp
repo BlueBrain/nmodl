@@ -556,37 +556,47 @@ bool CodegenIspcVisitor::check_incompatibilities() {
         return !collect_nodes(node, incompatible_node_types).empty();
     };
 
-    const auto get_name_from_symbolTypeVector = [](const SymbolType& var) -> const std::string& {
+    const auto get_name_from_symbol_type_vector = [](const SymbolType& var) -> const std::string& {
         return var->get_name();
     };
 
     // instance vars
     if (check_incompatible_var_name<SymbolType>(codegen_float_variables,
-                                                get_name_from_symbolTypeVector) ||
-        check_incompatible_var_name<SymbolType>(codegen_shadow_variables,
-                                                get_name_from_symbolTypeVector) ||
-        check_incompatible_var_name<IndexVariableInfo>(codegen_int_variables,
-                                                       [](const IndexVariableInfo& var)
-                                                           -> const std::string& {
-                                                           return var.symbol->get_name();
-                                                       }) ||
+                                                get_name_from_symbol_type_vector)) {
+        return true;
+    }
+
+    if (check_incompatible_var_name<SymbolType>(codegen_shadow_variables,
+                                                get_name_from_symbol_type_vector)) {
+        return true;
+    }
+    if (check_incompatible_var_name<IndexVariableInfo>(
+            codegen_int_variables, [](const IndexVariableInfo& var) -> const std::string& {
+                return var.symbol->get_name();
+            })) {
+        return true;
+    }
 
 
-        check_incompatible_var_name<std::string>(info.currents,
+    if (check_incompatible_var_name<std::string>(info.currents,
                                                  [](const std::string& var) -> const std::string& {
                                                      return var;
-                                                 }) ||
+                                                 })) {
+        return true;
+    }
 
 
-        // global vars
-        // info.top_local_variables is not checked because it should be addressed by the
-        // renameIspcVisitor
-        check_incompatible_var_name<SymbolType>(info.global_variables,
-                                                get_name_from_symbolTypeVector) ||
+    // global vars
+    // info.top_local_variables is not checked because it should be addressed by the
+    // renameIspcVisitor
+    if (check_incompatible_var_name<SymbolType>(info.global_variables,
+                                                get_name_from_symbol_type_vector)) {
+        return true;
+    }
 
 
-        check_incompatible_var_name<SymbolType>(info.constant_variables,
-                                                get_name_from_symbolTypeVector)) {
+    if (check_incompatible_var_name<SymbolType>(info.constant_variables,
+                                                get_name_from_symbol_type_vector)) {
         return true;
     }
 
@@ -704,7 +714,8 @@ void CodegenIspcVisitor::visit_program(ast::Program& node) {
     // we need setup to check incompatibilities
     if (check_incompatibilities()) {
         logger->warn(
-            "ISPC reserved keyword used as variable name in mod file. Using C++ backend as fallback");
+            "ISPC reserved keyword used as variable name in mod file. Using C++ backend as "
+            "fallback");
         print_backend_info();
         print_headers_include();
         fallback_codegen.visit_program(node);
@@ -775,7 +786,8 @@ void CodegenIspcVisitor::print_wrapper_routines() {
 
     if (emit_fallback[BlockType::NetReceive]) {
         logger->warn(
-            "Found VERBATIM code or ISPC keyword in NET_RECEIVE block, using C++ backend as fallback"
+            "Found VERBATIM code or ISPC keyword in NET_RECEIVE block, using C++ backend as "
+            "fallback"
             "backend");
         fallback_codegen.print_net_receive_kernel();
         fallback_codegen.print_net_receive_buffering();
