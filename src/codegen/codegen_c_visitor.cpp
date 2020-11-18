@@ -76,7 +76,7 @@ void CodegenCVisitor::visit_float(Float& node) {
         return;
     }
     auto value = node.eval();
-    printer->add_text(float_to_string(value));
+    printer->add_text(value);
 }
 
 
@@ -85,7 +85,7 @@ void CodegenCVisitor::visit_double(Double& node) {
         return;
     }
     auto value = node.eval();
-    printer->add_text(double_to_string(value));
+    printer->add_text(value);
 }
 
 
