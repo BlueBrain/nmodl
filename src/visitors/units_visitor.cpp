@@ -5,6 +5,7 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
+#include "utils/string_utils.hpp"
 #include "visitors/units_visitor.hpp"
 
 #include "ast/all.hpp"
@@ -146,8 +147,8 @@ void UnitsVisitor::visit_factor_def(ast::FactorDef& node) {
         auto node_unit_name = node.get_node_name();
         auto unit1_factor = units_driver.table->get_unit(node_unit_name + "_unit1")->get_factor();
         auto unit2_factor = units_driver.table->get_unit(node_unit_name + "_unit2")->get_factor();
-        auto unit_factor = unit1_factor / unit2_factor;
-        auto double_value_ptr = std::make_shared<ast::Double>(ast::Double(std::to_string(unit_factor)));
+        auto unit_factor = stringutils::to_string(unit1_factor / unit2_factor);
+        auto double_value_ptr = std::make_shared<ast::Double>(ast::Double(unit_factor));
         node.set_value(std::move(double_value_ptr));
     }
 }

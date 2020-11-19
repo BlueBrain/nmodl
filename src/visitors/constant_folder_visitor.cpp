@@ -168,9 +168,9 @@ void ConstantFolderVisitor::visit_wrapped_expression(ast::WrappedExpression& nod
     if (lhs->is_integer() && rhs->is_integer()) {
         node.set_expression(std::make_shared<ast::Integer>(int(value), nullptr));
     } else if (lhs->is_double() || rhs->is_double()) {
-        node.set_expression(std::make_shared<ast::Double>(std::to_string(value)));
+        node.set_expression(std::make_shared<ast::Double>(stringutils::to_string(value)));
     } else {
-        node.set_expression(std::make_shared<ast::Float>(std::to_string(value)));
+        node.set_expression(std::make_shared<ast::Float>(stringutils::to_string(value)));
     }
 
     std::string nmodl_after = to_nmodl(node.get_expression());
