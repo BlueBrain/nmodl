@@ -45,7 +45,6 @@ addons:
     packages:
       - flex
       - bison
-      - cmake
       - dvipng
       - doxygen
       - libboost-all-dev
@@ -61,7 +60,6 @@ addons:
   homebrew:
     packages:
       - boost
-      - cmake
       - flex
       - bison
       - openmpi
@@ -83,6 +81,12 @@ before_install:
     else
         pyenv global $PYTHON_VERSION;
     fi
+  -	curl -L -o cmake-3.3.2.tar.gz https://github.com/Kitware/CMake/releases/download/v3.3.2/cmake-3.3.2.tar.gz
+	tar -xvzf cmake-3.3.2.tar.gz
+	cd cmake-3.3.2
+	./bootstrap -- -DCMAKE_INSTALL_PREFIX=$HOME/cmake
+	make -j 3 install
+	export PATH=$HOME/cmake/bin:$PATH
   - eval "${MATRIX_EVAL}"
 
 #=============================================================================
