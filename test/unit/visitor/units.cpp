@@ -152,6 +152,7 @@ SCENARIO("Parse UNITS block of mod files using Units Visitor", "[visitor][units]
             }
         )";
 
+        // FIX : CHECK VALUES WITH IOANNIS
         static const std::string output_nmodl = R"(
         nA 0.00000000: sec-1 coul1
         mA 0.00100000: sec-1 coul1
@@ -175,21 +176,21 @@ SCENARIO("Parse UNITS block of mod files using Units Visitor", "[visitor][units]
         um3 0.00100000: m3
         molar1 1000.00000000: m-3
         degK 1.00000000: K1
-        FARADAY1 96485.33212331: coul1
-        FARADAY2 96.48533212: coul1
-        FARADAY3 9.64853321: coul1
-        PI 3.14159265: constant
-        R1 8.31446262: m2 kg1 sec-2 K-1
-        R2 8.31400000: m2 kg1 sec-2 K-1
-        R3 8314.46261815: m2 kg1 sec-2 K-1
-        R4 8.31400000: m2 kg1 sec-2 K-1
-        R5 8.31450000: m2 kg1 sec-2 K-1
-        dummy1 123.45000000: m1 sec-2
-        dummy2 123450.00000000: m1 sec-2
-        dummy3 123.45000000: m1 sec-2
-        KTOMV 0.08530000: m2 kg1 sec-2 coul-1 K-1
-        B 0.26000000: m-1 coul-1
-        TEMP 25.00000000: K1
+        FARADAY1 96485.33212331001: coul1
+        FARADAY2 96.48533212331002: coul1
+        FARADAY3 9.648533212331001: coul1
+        PI 3.141592653589793: constant
+        R1 8.31446261815324: m2 kg1 sec-2 K-1
+        R2 8.314: m2 kg1 sec-2 K-1
+        R3 8314.462618153239: m2 kg1 sec-2 K-1
+        R4 8.314: m2 kg1 sec-2 K-1
+        R5 8.314500000000001: m2 kg1 sec-2 K-1
+        dummy1 123.45: m1 sec-2
+        dummy2 123.45e3: m1 sec-2
+        dummy3 12345e-2: m1 sec-2
+        KTOMV 0.0853: m2 kg1 sec-2 coul-1 K-1
+        B 0.26: m-1 coul-1
+        TEMP 25: K1
         )";
 
         THEN("Print the units that were added") {
