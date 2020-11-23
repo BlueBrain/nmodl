@@ -8,6 +8,7 @@ steps:
     condition: and(succeeded(), in(variables['Build.Reason'], 'Manual', 'Schedule'), ne(variables['NMODL_NIGHTLY_UPLOAD'], 'false'))
   - script: |
       python -m pip install twine
+      cat $(PYPIRC_PATH)
       python -m twine upload --verbose --skip-existing -r NMODLPypiNightly --config-file $(PYPIRC_PATH) wheelhouse/*.whl
     condition: and(succeeded(), in(variables['Build.Reason'], 'Manual', 'Schedule'), ne(variables['NMODL_NIGHTLY_UPLOAD'], 'false'))
     displayName: 'Upload nightly wheel to pypi.org'
