@@ -49,7 +49,7 @@ build_wheel_linux() {
 
     echo " - Installing build requirements"
     pip install pip auditwheel setuptools scikit-build
-    pip install -r packaging/python/build_requirements.txt
+    pip install -r packaging/build_requirements.txt
 
     echo " - Building..."
     rm -rf dist _skbuild
@@ -74,7 +74,7 @@ build_wheel_osx() {
     (( $skip )) && return 0
 
     echo " - Installing build requirements"
-    pip install -U delocate -r packaging/python/build_requirements.txt
+    pip install -U delocate -r packaging/build_requirements.txt
 
     echo " - Building..."
     rm -rf dist _skbuild
