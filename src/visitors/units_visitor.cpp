@@ -5,8 +5,8 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
-#include "utils/string_utils.hpp"
 #include "visitors/units_visitor.hpp"
+#include "utils/string_utils.hpp"
 
 #include "ast/all.hpp"
 
