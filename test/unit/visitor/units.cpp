@@ -176,13 +176,13 @@ SCENARIO("Parse UNITS block of mod files using Units Visitor", "[visitor][units]
         um3 0.00100000: m3
         molar1 1000.00000000: m-3
         degK 1.00000000: K1
-        FARADAY1 96485.33212331001: coul1
-        FARADAY2 96.48533212331002: coul1
-        FARADAY3 9.648533212331001: coul1
-        PI 3.141592653589793: constant
-        R1 8.31446261815324: m2 kg1 sec-2 K-1
+        FARADAY1 96485.3321233100141: coul1
+        FARADAY2 96.4853321233100161: coul1
+        FARADAY3 9.64853321233100125: coul1
+        PI 3.14159265358979312: constant
+        R1 8.3144626181532395: m2 kg1 sec-2 K-1
         R2 8.314: m2 kg1 sec-2 K-1
-        R3 8314.462618153239: m2 kg1 sec-2 K-1
+        R3 8314.46261815323851: m2 kg1 sec-2 K-1
         R4 8.314: m2 kg1 sec-2 K-1
         R5 8.314500000000001: m2 kg1 sec-2 K-1
         dummy1 123.45: m1 sec-2
