@@ -135,14 +135,14 @@ static inline std::string tolower(std::string text) {
  * and testing/validation. To avoid this issue, we use to_string
  * for integer values and stringstream for the rest.
  */
-static inline std::string to_string(double value) {
+static inline std::string to_string(double value, const std::string& format_spec = "{:.16g}") {
     // double containing integer value
     if (std::ceil(value) == value) {
         return std::to_string(static_cast<int>(value));
     }
 
     // actual float value
-    return fmt::format("{:.16g}", value);
+    return fmt::format(format_spec, value);
 }
 
 /** @} */  // end of utils
