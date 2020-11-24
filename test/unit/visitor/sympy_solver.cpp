@@ -303,7 +303,7 @@ SCENARIO("Solve ODEs with cnexp or euler method using SympySolverVisitor",
             REQUIRE(result[2] == "x = a*dt+x");
             /// sympy 1.4 able to solve ode but not older versions
             bool last_result = (result[3] == "y' = c3*y*y*y" ||
-                                result[3] == "y = sqrt(-pow(y, 2)/(2*c3*dt*pow(y, 2)-1))");
+                                result[3] == "y = sqrt(-pow(y, 2)/(2.0*c3*dt*pow(y, 2)-1.0))");
             REQUIRE(last_result);
         }
     }
@@ -963,9 +963,9 @@ SCENARIO("LINEAR solve block (SympySolver Visitor)", "[sympy][linear]") {
             })";
         std::string expected_text_sympy_14 = R"(
             LINEAR lin {
-                x = (4*pow(a, 2)*pow(b, 2)*(-c*(5.343*a+b*(-a+0.842*pow(b, 2)))*(4*c-1.3)+(b+4*c)*(5.343*a*c+1.43543))-(5.343*a*(b+4*c)-4*c*(5.343*a+b*(-a+0.842*pow(b, 2))))*(pow(a, 2)*pow(b, 2)*(4*c-1.3)+0.1*b+0.4*c))/((b+4*c)*(pow(a, 2)*pow(b, 2)*(4*c-1.3)+0.1*b+0.4*c))
-                y = (pow(a, 2)*pow(b, 2)*c*(5.343*a+b*(-a+0.842*pow(b, 2)))*(4*c-1.3)-pow(a, 2)*pow(b, 2)*(b+4*c)*(5.343*a*c+1.43543)-c*(5.343*a+b*(-a+0.842*pow(b, 2)))*(pow(a, 2)*pow(b, 2)*(4*c-1.3)+0.1*b+0.4*c))/(c*(b+4*c)*(pow(a, 2)*pow(b, 2)*(4*c-1.3)+0.1*b+0.4*c))
-                z = pow(a, 2)*b*(c*(5.343*a+b*(-a+0.842*pow(b, 2)))*(4*c-1.3)-(b+4*c)*(5.343*a*c+1.43543))/(c*(pow(a, 2)*pow(b, 2)*(4*c-1.3)+0.1*b+0.4*c))
+                x = (4.0*pow(a, 2)*pow(b, 2)*(-c*(5.343*a+b*(-a+0.84199999999999997*pow(b, 2)))*(4.0*c-1.3)+(b+4.0*c)*(5.343*a*c+1.43543))-(5.343*a*(b+4.0*c)-4.0*c*(5.343*a+b*(-a+0.84199999999999997*pow(b, 2))))*(pow(a, 2)*pow(b, 2)*(4.0*c-1.3)+0.10000000000000001*b+0.40000000000000002*c))/((b+4.0*c)*(pow(a, 2)*pow(b, 2)*(4.0*c-1.3)+0.10000000000000001*b+0.40000000000000002*c))
+                y = (pow(a, 2)*pow(b, 2)*c*(5.343*a+b*(-a+0.84199999999999997*pow(b, 2)))*(4.0*c-1.3)-pow(a, 2)*pow(b, 2)*(b+4.0*c)*(5.343*a*c+1.43543)-c*(5.343*a+b*(-a+0.84199999999999997*pow(b, 2)))*(pow(a, 2)*pow(b, 2)*(4.0*c-1.3)+0.10000000000000001*b+0.40000000000000002*c))/(c*(b+4.0*c)*(pow(a, 2)*pow(b, 2)*(4.0*c-1.3)+0.10000000000000001*b+0.40000000000000002*c))
+                z = pow(a, 2)*b*(c*(5.343*a+b*(-a+0.84199999999999997*pow(b, 2)))*(4.0*c-1.3)-(b+4.0*c)*(5.343*a*c+1.43543))/(c*(pow(a, 2)*pow(b, 2)*(4.0*c-1.3)+0.10000000000000001*b+0.40000000000000002*c))
             })";
 
         THEN("solve analytically") {
