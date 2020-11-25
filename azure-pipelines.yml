@@ -181,7 +181,7 @@ jobs:
   steps:
   - checkout: self
     submodules: true
-    condition: or(eq(variables.buildWheel, true), eq(variables['python.version'], '3.9'))
+    condition: and(succeeded(), or(eq(variables.buildWheel, true), eq(variables['python.version'], '3.9')))
   - script: |
       docker run --rm \
         -w /root/nmodl \
@@ -189,14 +189,14 @@ jobs:
         -e NMODL_NIGHTLY_TAG="-nightly" \
         'bluebrain/nmodl:wheel' \
         packaging/build_wheels.bash linux $(python.version)
-    condition: or(eq(variables.buildWheel, true), eq(variables['python.version'], '3.9'))
+    condition: and(succeeded(), or(eq(variables.buildWheel, true), eq(variables['python.version'], '3.9')))
     displayName: 'Building ManyLinux Wheel'
   - script: |
       sudo apt-add-repository -y ppa:deadsnakes/ppa
       sudo apt update
       sudo apt-get install -y python$(python.version) python$(python.version)-dev
       packaging/test_wheel.bash python$(python.version) wheelhouse/*.whl
-    condition: or(eq(variables.buildWheel, true), eq(variables['python.version'], '3.9'))
+    condition: and(succeeded(), or(eq(variables.buildWheel, true), eq(variables['python.version'], '3.9')))
     displayName: 'Test ManyLinux Wheel with Python $(python.version)'
   - template: ci/upload-wheels.yml
 - job: 'macos_wheels'
@@ -220,18 +220,18 @@ jobs:
   steps:
   - checkout: self
     submodules: true
-    condition: or(eq(variables.buildWheel, true), eq(variables['python.version'], '3.9'))
+    condition: and(succeeded(), or(eq(variables.buildWheel, true), eq(variables['python.version'], '3.9')))
   - script: |
       brew install flex bison cmake
       export PATH=/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH;
-    condition: or(eq(variables.buildWheel, true), eq(variables['python.version'], '3.9'))
+    condition: and(succeeded(), or(eq(variables.buildWheel, true), eq(variables['python.version'], '3.9')))
     displayName: 'Install Depdendencies'
   - script: |
       installer=python-$(python.org.version)-macosx10.9.pkg
       url=https://www.python.org/ftp/python/$(python.org.version)/$installer
       curl $url -o $installer
       sudo installer -pkg $installer -target /
-    condition: or(eq(variables.buildWheel, true), eq(variables['python.version'], '3.9'))
+    condition: and(succeeded(), or(eq(variables.buildWheel, true), eq(variables['python.version'], '3.9')))
     displayName: 'Install Python from python.org'
   - script: |
       export MACOSX_DEPLOYMENT_TARGET=10.9
@@ -239,10 +239,10 @@ jobs:
       export SDKROOT=$(xcrun --sdk macosx --show-sdk-path)
       export NMODL_NIGHTLY_TAG="-nightly"
       packaging/build_wheels.bash osx $(python.version)
-    condition: or(eq(variables.buildWheel, true), eq(variables['python.version'], '3.9'))
+    condition: and(succeeded(), or(eq(variables.buildWheel, true), eq(variables['python.version'], '3.9')))
     displayName: 'Build macos Wheel'
   - script: |
       packaging/test_wheel.bash python$(python.version) wheelhouse/*.whl
-    condition: or(eq(variables.buildWheel, true), eq(variables['python.version'], '3.9'))
+    condition: and(succeeded(), or(eq(variables.buildWheel, true), eq(variables['python.version'], '3.9')))
     displayName: 'Test macos Wheel with Python $(python.version)'
   - template: ci/upload-wheels.yml
