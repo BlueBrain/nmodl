@@ -120,7 +120,7 @@ If predefined visitors are limited, we can implement new visitor using :class:`n
     0.05
     0.1
     1e-4
-    10000.0
+    10000
     2
     1.0
 
