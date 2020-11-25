@@ -74,7 +74,7 @@ build_wheel_osx() {
     (( $skip )) && return 0
 
     echo " - Installing build requirements"
-    pip install -U delocate -r packaging/build_requirements.txt
+    pip install -U delocate scikit-build -r packaging/build_requirements.txt
 
     echo " - Building..."
     rm -rf dist _skbuild
