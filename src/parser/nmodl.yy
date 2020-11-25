@@ -739,7 +739,6 @@ double          :   REAL
                     {
                         std::stringstream ss;
                         ss << $1->eval();
-                        ss << ".0";
                         $$ = new ast::Double(ss.str());
                         delete($1);
                     }
