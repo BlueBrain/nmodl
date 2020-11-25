@@ -216,6 +216,10 @@ jobs:
   - checkout: self
     submodules: true
   - script: |
+      brew install flex bison cmake
+      export PATH=/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH;
+    displayName: 'Install Depdendencies'
+  - script: |
       installer=python-$(python.org.version)-macosx10.9.pkg
       url=https://www.python.org/ftp/python/$(python.org.version)/$installer
       curl $url -o $installer
