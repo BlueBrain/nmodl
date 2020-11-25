@@ -177,6 +177,8 @@ jobs:
       Python39:
         python.version: '3.9'
   steps:
+  - checkout: self
+    submodules: true
   - script: |
       docker run --rm \
         -w /root/nmodl \
@@ -211,6 +213,8 @@ jobs:
         python.version: '3.9'
         python.org.version: '3.9.0'
   steps:
+  - checkout: self
+    submodules: true
   - script: |
       installer=python-$(python.org.version)-macosx10.9.pkg
       url=https://www.python.org/ftp/python/$(python.org.version)/$installer
