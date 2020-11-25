@@ -191,7 +191,7 @@ jobs:
       sudo apt-add-repository -y ppa:deadsnakes/ppa
       sudo apt update
       sudo apt-get install -y python$(python.version) python$(python.version)-dev
-      packaging/test_wheels.sh python$(python.version) wheelhouse/*.whl
+      packaging/test_wheels.bash python$(python.version) wheelhouse/*.whl
     displayName: 'Test ManyLinux Wheel with Python $(python.version)'
   - template: ci/upload-wheels.yml
 - job: 'macos_wheels'
@@ -231,8 +231,8 @@ jobs:
       export SDKROOT=$(xcrun --sdk macosx --show-sdk-path)
       export NMODL_NIGHTLY_TAG="-nightly"
       packaging/build_wheels.bash osx $(python.version)
-    displayName: 'Build MacOS Wheel'
+    displayName: 'Build macos Wheel'
   - script: |
-      packaging/test_wheels.sh python$(python.version) wheelhouse/*.whl
-    displayName: 'Test ManyLinux Wheel with Python $(python.version)'
+      packaging/test_wheels.bash python$(python.version) wheelhouse/*.whl
+    displayName: 'Test macos Wheel with Python $(python.version)'
   - template: ci/upload-wheels.yml
