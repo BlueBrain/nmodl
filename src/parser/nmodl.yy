@@ -737,9 +737,7 @@ double          :   REAL
                     }
                 |   integer
                     {
-                        std::stringstream ss;
-                        ss << $1->eval();
-                        $$ = new ast::Double(ss.str());
+                        $$ = new ast::Double(std::to_string(($1->eval())));
                         delete($1);
                     }
                 ;

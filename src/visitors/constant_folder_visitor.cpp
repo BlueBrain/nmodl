@@ -27,9 +27,9 @@ static double get_value(const std::shared_ptr<ast::Expression>& node) {
     if (node->is_integer()) {
         return std::dynamic_pointer_cast<ast::Integer>(node)->eval();
     } else if (node->is_float()) {
-        return std::stod(std::dynamic_pointer_cast<ast::Float>(node)->eval());
+        return std::dynamic_pointer_cast<ast::Float>(node)->to_double();
     } else if (node->is_double()) {
-        return std::stod(std::dynamic_pointer_cast<ast::Double>(node)->eval());
+        return std::dynamic_pointer_cast<ast::Double>(node)->to_double();
     }
     throw std::runtime_error("Invalid type passed to is_number()");
 }

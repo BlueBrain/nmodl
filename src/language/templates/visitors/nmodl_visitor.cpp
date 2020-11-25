@@ -100,7 +100,7 @@ void NmodlPrintVisitor::visit_{{ node.class_name|snake_case}}(const {{ node.clas
     {% if node.is_data_type_node %}
         {% if node.is_integer_node %}
             if(node.get_macro() == nullptr) {
-                printer->add_element(stringutils::to_string(node.eval()));
+                printer->add_element(std::to_string(node.eval()));
             }
         {% elif node.is_float_node or node.is_double_node %}
             std::stringstream ss;

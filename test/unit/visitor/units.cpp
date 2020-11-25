@@ -152,7 +152,6 @@ SCENARIO("Parse UNITS block of mod files using Units Visitor", "[visitor][units]
             }
         )";
 
-        // FIX : CHECK VALUES WITH IOANNIS
         static const std::string output_nmodl = R"(
         nA 0.00000000: sec-1 coul1
         mA 0.00100000: sec-1 coul1

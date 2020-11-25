@@ -954,7 +954,6 @@ SCENARIO("LINEAR solve block (SympySolver Visitor)", "[sympy][linear]") {
                 ~ a + x/b + z - y = 0.842*b*b
                 ~ x + 1.3*y - 0.1*z/(a*a*b) = 1.43543/c
             })";
-        // FIX ME
         std::string expected_text_sympy_13 = R"(
             LINEAR lin {
                 x = (4.0*pow(a, 2)*pow(b, 2)*(-c*(5.343*a+b*(-1.0*a+0.84199999999999997*pow(b, 2)))*(4.0*c-1.3)+(1.0*b+4.0*c)*(5.343*a*c+1.43543))-(5.343*a*(1.0*b+4.0*c)-4.0*c*(5.343*a+b*(-1.0*a+0.84199999999999997*pow(b, 2))))*(pow(a, 2)*pow(b, 2)*(4.0*c-1.3)+0.10000000000000001*b+0.40000000000000002*c))/((1.0*b+4.0*c)*(pow(a, 2)*pow(b, 2)*(4.0*c-1.3)+0.10000000000000001*b+0.40000000000000002*c))
@@ -1010,7 +1009,6 @@ SCENARIO("LINEAR solve block (SympySolver Visitor)", "[sympy][linear]") {
                 ~ a + x/b + z - y = 0.842*b*b
                 ~ x + 1.3*y - 0.1*z/(a*a*b) = 1.43543/c
             })";
-        // FIX ME F[2] and J[15]
         std::string expected_text = R"(
             LINEAR lin {
                 EIGEN_LINEAR_SOLVE[4]{
