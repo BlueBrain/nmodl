@@ -8,7 +8,7 @@ variables:
   value: false
 - name: buildWheel
   value: $[or(in(variables['Build.Reason'], 'Schedule'),
-					and(in(variables['Build.Reason'], 'Manual'), eq(variables.NightlyWheelBuild), true))]
+            and(in(variables['Build.Reason'], 'Manual'), eq(variables.NightlyWheelBuild), true))]
 
 # Nightly build master for pypi upload
 schedules:
@@ -222,8 +222,8 @@ jobs:
       brew install flex bison cmake
       export PATH=/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH;
     displayName: 'Install Depdendencies'
-	# Build wheels either if it's scheduled
-	# for testing purposes always build with python 3.9
+  # Build wheels either if it's scheduled
+  # for testing purposes always build with python 3.9
     condition: or($(buildWheel), eq(variables['python.version'], '3.9'))
   - script: |
       installer=python-$(python.org.version)-macosx10.9.pkg
