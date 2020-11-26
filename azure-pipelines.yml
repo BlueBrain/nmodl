@@ -32,7 +32,7 @@ jobs:
       sudo apt-add-repository -y ppa:deadsnakes/ppa
       sudo apt update
       sudo apt install -y g++-8 flex bison
-      sudo apt-get install -y python3.7 python3.7-dev
+      sudo apt-get install -y python3.7 python3.7-dev python3.7-venv
       python3.7 -m pip install -U pip setuptools
       python3.7 -m pip install --user 'Jinja2>=2.9.3' 'PyYAML>=3.13' pytest 'sympy>=1.3,<1.6'
       # we manually get version 3.10.2 to make sure that changes in the cmake
@@ -194,7 +194,7 @@ jobs:
   - script: |
       sudo apt-add-repository -y ppa:deadsnakes/ppa
       sudo apt update
-      sudo apt-get install -y python$(python.version) python$(python.version)-dev
+      sudo apt-get install -y python$(python.version) python$(python.version)-dev python$(python.version)-venv
       packaging/test_wheel.bash python$(python.version) wheelhouse/*.whl
     condition: and(succeeded(), or(eq(variables.buildWheel, true), eq(variables['python.version'], '3.9')))
     displayName: 'Test ManyLinux Wheel with Python $(python.version)'

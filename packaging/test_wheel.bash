@@ -25,13 +25,13 @@ test_wheel () {
     local TEST_DIR="test_dir" 
     mkdir -p $TEST_DIR
     cp nmodl/ext/example/*.mod $TEST_DIR/
-    push $TEST_DIR
+    cd $TEST_DIR
     for mod in *.mod
     do
         nmodl $mod host --ispc sympy --analytic
     done
     $python_exe -c "import nmodl; nmodl.to_json(hh.mod)"
-    pop
+    cd ..
     #clean-up
     rm -rf $TEST_DIR
 }
