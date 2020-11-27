@@ -70,8 +70,6 @@ struct NrnUnitsLib {
         for (const auto& path: NRNUNITSLIB_PATH) {
             err_msg << path << "\n";
         }
-
-
         throw std::runtime_error(err_msg.str());
     }
 };
