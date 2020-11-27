@@ -1,6 +1,8 @@
 find_package(Git QUIET)
 
-set(THIRD_PARTY_DIRECTORY "${PROJECT_SOURCE_DIR}/3rdparty" CACHE PATH "The path were all the 3rd party projects can be found")
+set(THIRD_PARTY_DIRECTORY
+    "${PROJECT_SOURCE_DIR}/3rdparty"
+    CACHE PATH "The path were all the 3rd party projects can be found")
 
 # initialize submodule with given path
 function(initialize_submodule path)
