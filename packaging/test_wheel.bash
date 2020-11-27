@@ -25,7 +25,7 @@ test_wheel () {
     local TEST_DIR="test_dir" 
     mkdir -p $TEST_DIR
     cp nmodl/ext/example/*.mod $TEST_DIR/
-    cp test/integration/mod/cabpump.mod $TEST_DIR/
+    cp test/integration/mod/cabpump.mod test/integration/mod/*.inc $TEST_DIR/
     cd $TEST_DIR
     for mod in *.mod
     do
