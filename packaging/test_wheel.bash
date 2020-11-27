@@ -31,7 +31,7 @@ test_wheel () {
     do
         nmodl $mod host --ispc sympy --analytic
     done
-    $python_exe -c "import nmodl; nmodl.to_json('hh.mod')"
+    $python_exe -c "import nmodl; driver = nmodl.NmodlDriver(); driver.parse_file('hh.mod')"
     cd ..
     #clean-up
     rm -rf $TEST_DIR
