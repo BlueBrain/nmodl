@@ -98,6 +98,10 @@ include(FlexHelper)
 include(GitRevision)
 include(PythonLinkHelper)
 include(RpathHelper)
+include(AddSpdlogModule)
+include(AddPybind11Module)
+include(AddFmtSubmodule)
+include(AddCLI11Submodule)
 
 # =============================================================================
 # Adjust install prefix for wheel
@@ -132,19 +136,6 @@ include_directories(${NMODL_PROJECT_SOURCE_DIR} ${NMODL_PROJECT_SOURCE_DIR}/src
 include_directories(
   SYSTEM ${NMODL_PROJECT_SOURCE_DIR}/ext ${NMODL_PROJECT_SOURCE_DIR}/ext/fmt/include
   ${NMODL_PROJECT_SOURCE_DIR}/ext/spdlog/include)
-
-# =============================================================================
-# Include pybind11
-# =============================================================================
-message(STATUS "INCLUDING PYBIND11")
-add_subdirectory(ext/pybind11)
-
-# =============================================================================
-# Include fmt library
-# =============================================================================
-message(STATUS "INCLUDING FMT")
-add_subdirectory(${NMODL_PROJECT_SOURCE_DIR}/ext/fmt EXCLUDE_FROM_ALL)
-set_property(TARGET fmt PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 # =============================================================================
 # Include path from external libraries
