@@ -16,6 +16,10 @@ def _config_exe(exe_name):
 
     package_name = "nmodl"
 
+    if package_name not in working_set.by_key:
+        print ("INFO : Using nmodl-nightly Package (Developer Version)")
+        package_name = 'nmodl-nightly'
+
     assert (
         package_name in working_set.by_key
     ), "NMODL package not found! Verify PYTHONPATH"

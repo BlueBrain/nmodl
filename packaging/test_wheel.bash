@@ -25,6 +25,7 @@ test_wheel () {
     local TEST_DIR="test_dir" 
     mkdir -p $TEST_DIR
     cp nmodl/ext/example/*.mod $TEST_DIR/
+    cp test/integration/mod/cabpump.mod $TEST_DIR/
     cd $TEST_DIR
     for mod in *.mod
     do
@@ -48,12 +49,6 @@ if [[ "$use_venv" != "false" ]]; then
   python_exe=`which python`
 else
   echo " == Using global install == "
-fi
-
-# on osx we need to install pip from source
-if [[ "$OSTYPE" == "darwin"* ]] && [[ "$python_ver" == "35" ]]; then
-  echo "Updating pip for OSX with Python 3.5"
-  curl https://bootstrap.pypa.io/get-pip.py | python
 fi
 
 # install nmodl
