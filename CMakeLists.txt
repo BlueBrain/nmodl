@@ -104,9 +104,8 @@ set(THIRD_PARTY_DIRECTORY "${PROJECT_SOURCE_DIR}/ext")
 add_external_project(fmt)
 add_external_project(spdlog)
 add_external_project(pybind11)
-add_external_project(CLI11)
-add_external_project(eigen)
-initialize_submodule(${THIRD_PARTY_DIRECTORY}/Random123)
+add_external_project(cli11)
+add_external_project(eigen OFF)
 
 # =============================================================================
 # Adjust install prefix for wheel
