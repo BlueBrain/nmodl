@@ -12,19 +12,19 @@ find_path(
   NAMES CMakeLists.txt
   PATHS "${PROJECT_SOURCE_DIR}/ext/cli11")
 
-FIND_PACKAGE_HANDLE_STANDARD_ARGS(CLI11 REQUIRED_VARS CLI11_PROJ)
+find_package_handle_standard_args(CLI11 REQUIRED_VARS CLI11_PROJ)
 
-IF(NOT CLI11_FOUND)
-  FIND_PACKAGE(GIT 1.8.3 QUIET)
-  IF(NOT ${GIT_FOUND})
-    MESSAGE(FATAL_ERROR "GIT NOT FOUND, CLONE REPOSITORY WITH --RECURSIVE")
-  ENDIF()
-  MESSAGE(STATUS "SUB-MODULE CLI11 MISSING: RUNNING GIT SUBMODULE UPDATE --INIT --RECURSIVE")
-  EXECUTE_PROCESS(
+if(NOT CLI11_FOUND)
+  find_package(Git 1.8.3 QUIET)
+  if(NOT ${GIT_FOUND})
+    message(FATAL_ERROR "git not found, clone repository with --recursive")
+  endif()
+  message(STATUS "Sub-module CLI11 missing: running git submodule update --init --recursive")
+  execute_process(
     COMMAND
-      ${GIT_EXECUTABLE} SUBMODULE UPDATE --INIT --RECURSIVE --
-      ${PROJECT_SOURCE_DIR}/EXT/cli11
+      ${GIT_EXECUTABLE} submodule update --init --recursive --
+      ${PROJECT_SOURCE_DIR}/ext/cli11
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
-ENDIF()
+endif()
 
-Add_subdirectory(${PROJECT_SOURCE_DIR}/ext/cli11)
+add_subdirectory(${PROJECT_SOURCE_DIR}/ext/cli11)
