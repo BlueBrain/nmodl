@@ -181,6 +181,7 @@ cpp_cc_find_python_module(yaml 3.12 REQUIRED)
 # =============================================================================
 if(NMODL_ENABLE_LLVM)
   include(LLVMHelper)
+  add_definitions(-DNMODL_LLVM_BACKEND)
 endif()
 
 # =============================================================================

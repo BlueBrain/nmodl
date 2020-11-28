@@ -36,6 +36,12 @@ target_link_libraries(
   ${NMODL_WRAPPER_LIBS})
 cpp_cc_configure_sanitizers(TARGET nmodl)
 
+if(NMODL_ENABLE_LLVM)
+  # LLVM core libraries to link
+  llvm_map_components_to_libnames(LLVM_CORE_LIBS core)
+  target_link_libraries(nmodl llvm_codegen ${LLVM_CORE_LIBS})
+endif()
+
 # =============================================================================
 # Add dependency with nmodl pytnon module (for consumer projects)
 # =============================================================================
