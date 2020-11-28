@@ -24,6 +24,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
 # =============================================================================
 option(NMODL_ENABLE_PYTHON_BINDINGS "Enable pybind11 based python bindings" OFF)
 option(NMODL_ENABLE_LEGACY_UNITS "Use original faraday, R, etc. instead of 2019 nist constants" OFF)
+option(NMODL_ENABLE_LLVM "Enable LLVM based code generation" ON)
+
 if(NMODL_ENABLE_LEGACY_UNITS)
   add_definitions(-DUSE_LEGACY_UNITS)
 endif()
@@ -139,6 +141,13 @@ find_python_module(pytest 3.3.0 REQUIRED)
 find_python_module(sympy 1.2 REQUIRED)
 find_python_module(textwrap 0.9 REQUIRED)
 find_python_module(yaml 3.12 REQUIRED)
+
+# =============================================================================
+# Find LLVM dependencies
+# =============================================================================
+if(NMODL_ENABLE_LLVM)
+  include(LLVMHelper)
+endif()
 
 # =============================================================================
 # Compiler specific flags for external submodules
