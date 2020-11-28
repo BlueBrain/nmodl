@@ -17,6 +17,9 @@
 #include "codegen/codegen_cuda_visitor.hpp"
 #include "codegen/codegen_ispc_visitor.hpp"
 #include "codegen/codegen_omp_visitor.hpp"
+#ifdef NMODL_LLVM_BACKEND
+#include "codegen/llvm/codegen_llvm_visitor.hpp"
+#endif
 #include "config/config.h"
 #include "parser/nmodl_driver.hpp"
 #include "pybind/pyembed.hpp"
@@ -81,6 +84,9 @@ int main(int argc, const char* argv[]) {
 
     /// true if cuda code to be generated
     bool cuda_backend(false);
+
+    /// true if llvm code to be generated
+    bool llvm_backend(false);
 
     /// true if sympy should be used for solving ODEs analytically
     bool sympy_analytic(false);
@@ -161,6 +167,10 @@ int main(int argc, const char* argv[]) {
     app.add_option("--verbose", verbose, "Verbosity of logger output", true)
         ->ignore_case()
         ->check(CLI::IsMember({"trace", "debug", "info", "warning", "error", "critical", "off"}));
+
+#ifdef NMODL_LLVM_BACKEND
+    app.add_flag("--llvm", llvm_backend, "Enable LLVM based code generation")->ignore_case();
+#endif
 
     app.add_option("file", mod_files, "One or more MOD files to process")
         ->ignore_case()
@@ -548,6 +558,14 @@ int main(int argc, const char* argv[]) {
                                            optimize_ionvar_copies_codegen);
                 visitor.visit_program(*ast);
             }
+
+#ifdef NMODL_LLVM_BACKEND
+            if (llvm_backend) {
+                logger->info("Running LLVM backend code generator");
+                CodegenLLVMVisitor visitor(modfile, output_dir);
+                visitor.visit_program(*ast);
+            }
+#endif
         }
     }
 
