@@ -31,7 +31,7 @@ Typically the versions of bison and flex provided by the system are outdated and
 To get recent version of all dependencies we recommend using [homebrew](https://brew.sh/):
 
 ```sh
-brew install flex bison cmake python3
+brew install flex bison cmake python3 llvm
 ```
 
 The necessary Python packages can then easily be added using the pip3 command.
@@ -51,7 +51,7 @@ export PATH=/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:/usr/local/bin/:$PA
 On Ubuntu (>=16.04) flex/bison versions are recent enough and are installed along with the system toolchain:
 
 ```sh
-apt-get install flex bison gcc python3 python3-pip
+apt-get install flex bison gcc python3 python3-pip llvm-dev llvm-runtime llvm clang-format clang
 ```
 
 The Python dependencies are installed using:
@@ -71,6 +71,15 @@ mkdir -p nmodl/build
 cd nmodl/build
 cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/nmodl
 make -j && make install
+```
+
+If `llvm-config` is not in PATH then set LLVM_DIR as:
+
+```sh
+cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/nmodl -DLLVM_DIR=/path/to/llvm/install/lib/cmake/llvm
+
+# on OSX
+cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/nmodl -DLLVM_DIR=`brew --prefix llvm`/lib/cmake/llvm
 ```
 
 And set PYTHONPATH as:
