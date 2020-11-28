@@ -113,8 +113,7 @@ jobs:
   - checkout: self
     submodules: True
   - script: |
-      brew install flex cmake python@3
-      brew install bison llvm
+      brew install flex bison cmake python@3 llvm
       python3 -m pip install -U pip setuptools
       python3 -m pip install --user 'Jinja2>=2.9.3' 'PyYAML>=3.13' pytest 'sympy>=1.3,<1.6'
     displayName: 'Install Dependencies'
