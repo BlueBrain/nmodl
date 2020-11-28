@@ -35,6 +35,11 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/fast_math.ispc
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/fast_math.hpp
                ${CMAKE_BINARY_DIR}/include/nmodl/fast_math.hpp COPYONLY)
 
+# build llvm visitor if enabled
+if(NMODL_ENABLE_LLVM)
+  add_subdirectory(llvm)
+endif()
+
 # =============================================================================
 # Install include files
 # =============================================================================
