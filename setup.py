@@ -104,7 +104,7 @@ install_requirements = [
 ]
 
 
-cmake_args = ["-DPYTHON_EXECUTABLE=" + sys.executable]
+cmake_args = ["-DPYTHON_EXECUTABLE=" + sys.executable, "-DNMODL_ENABLE_LLVM=OFF"]
 if "bdist_wheel" in sys.argv:
     cmake_args.append("-DLINK_AGAINST_PYTHON=FALSE")
 
