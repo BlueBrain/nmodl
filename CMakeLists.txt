@@ -147,6 +147,7 @@ find_python_module(yaml 3.12 REQUIRED)
 # =============================================================================
 if(NMODL_ENABLE_LLVM)
   include(LLVMHelper)
+  add_definitions(-DNMODL_LLVM_BACKEND)
 endif()
 
 # =============================================================================
@@ -204,6 +205,9 @@ endif()
 include(${PROJECT_SOURCE_DIR}/src/language/code_generator.cmake)
 
 add_subdirectory(src/codegen)
+if(NMODL_ENABLE_LLVM)
+  add_subdirectory(src/codegen/llvm)
+endif()
 add_subdirectory(src/language)
 add_subdirectory(src/lexer)
 add_subdirectory(src/nmodl)
