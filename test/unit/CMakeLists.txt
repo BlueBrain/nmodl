@@ -69,6 +69,11 @@ add_executable(testcodegen codegen/main.cpp codegen/codegen_ispc.cpp codegen/cod
 
 target_link_libraries(testmodtoken lexer util)
 target_link_libraries(testlexer lexer util)
+target_link_libraries(testprinter printer util)
+target_link_libraries(testsymtab symtab lexer util)
+target_link_libraries(testunitlexer lexer util)
+target_link_libraries(testunitparser lexer test_util config)
+
 target_link_libraries(
   testparser
   visitor
@@ -78,6 +83,7 @@ target_link_libraries(
   test_util
   printer
   ${NMODL_WRAPPER_LIBS})
+
 target_link_libraries(
   testvisitor
   visitor
@@ -97,10 +103,22 @@ target_link_libraries(
   test_util
   printer
   ${NMODL_WRAPPER_LIBS})
-target_link_libraries(testprinter printer util)
-target_link_libraries(testsymtab symtab lexer util)
-target_link_libraries(testunitlexer lexer util)
-target_link_libraries(testunitparser lexer test_util config)
+
+if(NMODL_ENABLE_LLVM)
+  add_executable(testcodegen visitor/main.cpp codegen/llvm.cpp)
+  target_link_libraries(
+    testcodegen
+    visitor
+    symtab
+    lexer
+    util
+    test_util
+    printer
+    llvm_codegen
+    ${NMODL_WRAPPER_LIBS}
+    ${LLVM_LIBS_TO_LINK})
+  set(CODEGEN_TEST testcodegen)
+endif()
 
 # =============================================================================
 # Use catch_discover instead of add_test for granular test report if CMAKE ver is greater than 3.9,
@@ -109,9 +127,10 @@ target_link_libraries(testunitparser lexer test_util config)
 set(testvisitor_env "PYTHONPATH=${PROJECT_BINARY_DIR}/lib:$ENV{PYTHONPATH}")
 if(NOT LINK_AGAINST_PYTHON)
   list(APPEND testvisitor_env "NMODL_PYLIB=$ENV{NMODL_PYLIB}")
-  list(APPEND testvisitor_env
-       "NMODL_WRAPLIB=${PROJECT_BINARY_DIR}/lib/nmodl/libpywrapper${CMAKE_SHARED_LIBRARY_SUFFIX}")
-
+  list(
+    APPEND
+      testvisitor_env
+      "NMODL_WRAPLIB=${PROJECT_BINARY_DIR}/lib/nmodl/libpywrapper${CMAKE_SHARED_LIBRARY_SUFFIX}")
 endif()
 
 foreach(
@@ -126,8 +145,8 @@ foreach(
   testnewton
   testfast_math
   testunitlexer
-  testunitparser)
-
+  testunitparser
+  ${CODEGEN_TEST})
   if(${test_name} STREQUAL "testvisitor")
     catch_discover_tests(${test_name} TEST_PREFIX "${test_name}/" PROPERTIES ENVIRONMENT
                          "${testvisitor_env}")
