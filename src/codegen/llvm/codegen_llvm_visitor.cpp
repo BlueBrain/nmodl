@@ -7,6 +7,7 @@
 
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
 #include "ast/all.hpp"
+#include "visitors/visitor_utils.hpp"
 
 #include "llvm/IR/BasicBlock.h"
 #include "llvm/IR/Function.h"
@@ -34,12 +35,21 @@ void CodegenLLVMVisitor::visit_statement_block(const ast::StatementBlock& node) 
 
 void CodegenLLVMVisitor::visit_procedure_block(const ast::ProcedureBlock& node) {
     logger->info("CodegenLLVMVisitor : visiting {} procedure", node.get_node_name());
+
+    // print position, nmodl and json form as
+    /*
+    logger->info("Location {} \n NMODL {} \n JSON : {} \n",
+                 node.get_token()->position(),
+                 to_nmodl(node),
+                 to_json(node));
+    */
     node.visit_children(*this);
     // TODO : code generation for procedure block
 }
 
 void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
     node.visit_children(*this);
+    result_code = "Hello World";
 }
 
 }  // namespace codegen

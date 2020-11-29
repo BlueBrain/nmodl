@@ -45,6 +45,9 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     // Output directory for code generation
     std::string output_dir;
 
+    // result string for demo
+    std::string result_code;
+
   public:
     /**
      * \brief Constructs the LLVM code generator visitor
@@ -59,6 +62,11 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     void visit_statement_block(const ast::StatementBlock& node) override;
     void visit_procedure_block(const ast::ProcedureBlock& node) override;
     void visit_program(const ast::Program& node) override;
+
+    // demo method
+    std::string get_code() const {
+        return result_code;
+    }
 };
 
 /** \} */  // end of llvm_backends
