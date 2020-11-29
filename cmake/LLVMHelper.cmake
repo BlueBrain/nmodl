@@ -6,9 +6,9 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "Clang" AND NMODL_ENABLE_LLVM)
   include(CheckCXXSourceCompiles)
 
   # test by including LLVM header and core library
-  llvm_map_components_to_libnames(LLVM_CORE_LIBS core)
+  llvm_map_components_to_libnames(LLVM_LIBS_TO_LINK core)
   set(CMAKE_REQUIRED_INCLUDES ${LLVM_INCLUDE_DIRS})
-  set(CMAKE_REQUIRED_LIBRARIES ${LLVM_CORE_LIBS})
+  set(CMAKE_REQUIRED_LIBRARIES ${LLVM_LIBS_TO_LINK})
 
   # simple code to test LLVM library linking
   set(CODE_TO_TEST
@@ -39,7 +39,9 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "Clang" AND NMODL_ENABLE_LLVM)
         STATUS
           "Adding ${CMAKE_REQUIRED_FLAGS} to CMAKE_CXX_FLAGS, required to link with LLVM libraries")
     else()
-      message(STATUS "WARNING : -stdlib=libstdcx++ or -stdlib=libc++ didn't work to link with LLVM library")
+      message(
+        STATUS
+          "WARNING : -stdlib=libstdcx++ or -stdlib=libc++ didn't work to link with LLVM library")
     endif()
   endif()
 endif()

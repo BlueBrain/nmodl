@@ -1,15 +1,26 @@
-PROCEDURE state(x, y) {
+PROCEDURE hello_world() {
+    print("Hello World")
+}
+
+PROCEDURE simple_sum(x, y) {
     LOCAL z
     z = x + y
 }
 
-PROCEDURE rates(v) {
+PROCEDURE complex_sum(v) {
     LOCAL  alpha, beta, sum
     {
         alpha = .1 * exp(-(v+40))
         beta =  4 * exp(-(v+65)/18)
-    }
-    {
         sum = alpha + beta
+    }
+}
+
+PROCEDURE loop_function(v) {
+    LOCAL i
+    i = 0
+    WHILE(i < 10) {
+        print("Hello World")
+        i = i + 1
     }
 }
