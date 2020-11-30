@@ -106,7 +106,7 @@ add_subdirectory(${THIRD_PARTY_DIRECTORY}/fmt EXCLUDE_FROM_ALL)
 set_property(TARGET fmt PROPERTY POSITION_INDEPENDENT_CODE ON)
 add_external_project(spdlog OFF)
 add_external_project(pybind11)
-add_external_project(cli11)
+add_external_project(cli11 OFF)
 add_external_project(eigen OFF)
 
 # =============================================================================
