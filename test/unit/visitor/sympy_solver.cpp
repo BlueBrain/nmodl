@@ -64,6 +64,92 @@ std::vector<std::string> run_sympy_solver_visitor(
     return results;
 }
 
+void compare_blocks(const std::string& result, const std::string& expected) {
+    using namespace pybind11::literals;
+
+    auto locals = pybind11::dict("s1"_a = result, "s2"_a = expected, "is_equal"_a = false);
+    pybind11::exec(R"(
+                    def compare_blocks(s1, s2):
+                        def sanitize(s):
+                            import re
+                            d = {'\[(\d+)\]':'_\\1',  'pow\((\w+), ?(\d+)\)':'\\1**\\2'}
+                            out = s
+                            for key, val in d.items():
+                                out = re.sub(key, val, out)
+                            return out
+
+                        def compare_systems_of_eq(d1, d2):
+                            from sympy.parsing.sympy_parser import parse_expr
+                            try:
+                                for k, v in d1.items():
+                                    if parse_expr(f'simplify(({v})-({d2[k]}))'):
+                                        return False
+                            except KeyError:
+                                return False
+
+                            d1.clear()
+                            d2.clear()
+                            return True
+
+                        def reduce(s):
+                            i = 0
+                            d = {}
+
+                            sout = ""
+                            for line in s.split('\n'):
+                                line_split = line.lstrip().split('=')
+                                if len(line_split) == 2 and line_split[0] == f'tmp{i} ':
+                                    for k, v in d.items():
+                                        line_split[1] = line_split[1].replace(k, f'({v})')
+                                    d[f'tmp{i}'] = line_split[1]
+                                    i += 1
+                                elif 'LOCAL' in line:
+                                    sout += line.split('tmp0')[0] + '\n'
+                                else:
+                                    sout += line + '\n'
+
+                            # so that we do not replace tmp11 with (tmp1)1
+                            for j in range(i-1, -1, -1):
+                                k = f'tmp{j}'
+                                sout = sout.replace(k, f'({d[k]})')
+
+                            return sout
+
+                        s1 = reduce(sanitize(s1)).split('\n')
+                        s2 = reduce(sanitize(s2)).split('\n')
+
+                        if len(s1) != len(s2):
+                            return False
+
+                        d1 = {}
+                        d2 = {}
+                        for token1, token2 in zip(s1, s2):
+                            if token1 == token2:
+                                if not compare_systems_of_eq(d1, d2):
+                                    return False
+                                continue
+
+                            eq1 = token1.split('=')
+                            eq2 = token2.split('=')
+                            if len(eq1) == 2 and len(eq2) == 2:
+                                d1[eq1[0]] = eq1[1]
+                                d2[eq2[0]] = eq2[1]
+                                continue
+
+                            return False
+                        return True
+
+                    is_equal = compare_blocks(s1, s2))",
+                   pybind11::globals(),
+                   locals);
+
+    // Error log
+    if (!locals["is_equal"].cast<bool>()) {
+        REQUIRE(result == expected);
+    }
+}
+
+
 void run_sympy_visitor_passes(ast::Program& node) {
     // construct symbol table from AST
     SymtabVisitor v_symtab;
@@ -80,6 +166,7 @@ void run_sympy_visitor_passes(ast::Program& node) {
     v_sympy1.visit_program(node);
     v_sympy2.visit_program(node);
 }
+
 
 std::string ast_to_string(ast::Program& node) {
     std::stringstream stream;
@@ -375,7 +462,7 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
             CAPTURE(nmodl_text);
             auto result =
                 run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::DERIVATIVE_BLOCK);
-            REQUIRE(result[0] == reindent_text(expected_result));
+            compare_blocks(result[0], reindent_text(expected_result));
         }
     }
 
@@ -426,8 +513,9 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
                 run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::DERIVATIVE_BLOCK);
             auto result_cse =
                 run_sympy_solver_visitor(nmodl_text, true, true, AstNodeType::DERIVATIVE_BLOCK);
-            REQUIRE(result[0] == reindent_text(expected_result));
-            REQUIRE(result_cse[0] == reindent_text(expected_cse_result));
+
+            compare_blocks(result[0], reindent_text(expected_result));
+            compare_blocks(result_cse[0], reindent_text(expected_cse_result));
         }
     }
     GIVEN("Derivative block including ODES with sparse method (from nmodl paper)") {
@@ -455,7 +543,7 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
             CAPTURE(nmodl_text);
             auto result =
                 run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::DERIVATIVE_BLOCK);
-            REQUIRE(result[0] == reindent_text(expected_result));
+            compare_blocks(result[0], reindent_text(expected_result));
         }
     }
     GIVEN("Derivative block with ODES with sparse method, CONSERVE statement of form m = ...") {
@@ -483,7 +571,7 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
             CAPTURE(nmodl_text);
             auto result =
                 run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::DERIVATIVE_BLOCK);
-            REQUIRE(result[0] == reindent_text(expected_result));
+            compare_blocks(result[0], reindent_text(expected_result));
         }
     }
     GIVEN(
@@ -514,7 +602,7 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
             CAPTURE(nmodl_text);
             auto result =
                 run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::DERIVATIVE_BLOCK);
-            REQUIRE(result[0] == reindent_text(expected_result));
+            compare_blocks(result[0], reindent_text(expected_result));
         }
     }
     GIVEN("Derivative block with ODES with sparse method, two CONSERVE statements") {
@@ -596,7 +684,7 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
             CAPTURE(nmodl_text);
             auto result =
                 run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::DERIVATIVE_BLOCK);
-            REQUIRE(result[0] == reindent_text(expected_result));
+            compare_blocks(result[0], reindent_text(expected_result));
         }
     }
     GIVEN("Derivative block including ODES with sparse method - single var in array") {
@@ -625,7 +713,7 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
             CAPTURE(nmodl_text);
             auto result =
                 run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::DERIVATIVE_BLOCK);
-            REQUIRE(result[0] == reindent_text(expected_result));
+            compare_blocks(result[0], reindent_text(expected_result));
         }
     }
     GIVEN("Derivative block including ODES with sparse method - array vars") {
@@ -657,7 +745,7 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
             CAPTURE(nmodl_text);
             auto result =
                 run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::DERIVATIVE_BLOCK);
-            REQUIRE(result[0] == reindent_text(expected_result));
+            compare_blocks(result[0], reindent_text(expected_result));
         }
     }
     GIVEN("Derivative block including ODES with derivimplicit method - single var in array") {
@@ -696,7 +784,7 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
             CAPTURE(nmodl_text);
             auto result =
                 run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::DERIVATIVE_BLOCK);
-            REQUIRE(result[0] == reindent_text(expected_result));
+            compare_blocks(result[0], reindent_text(expected_result));
         }
     }
     GIVEN("Derivative block including ODES with derivimplicit method") {
@@ -752,7 +840,7 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
             CAPTURE(nmodl_text);
             auto result =
                 run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::DERIVATIVE_BLOCK);
-            REQUIRE(result[0] == reindent_text(expected_result));
+            compare_blocks(result[0], reindent_text(expected_result));
         }
     }
     GIVEN("Multiple derivative blocks each with derivimplicit method") {
@@ -950,30 +1038,22 @@ SCENARIO("LINEAR solve block (SympySolver Visitor)", "[sympy][linear]") {
                 x y z
             }
             LINEAR lin {
-                ~ x + 4*c*y = -5.343*a
-                ~ a + x/b + z - y = 0.842*b*b
-                ~ x + 1.3*y - 0.1*z/(a*a*b) = 1.43543/c
+                ~ x + 4*c*y = -6*a
+                ~ a + x/b + z - y = 1*b*b
+                ~ 10*x + 13*y - z/(a*a*b) = 14/c
             })";
-        std::string expected_text_sympy_13 = R"(
-            LINEAR lin {
-                x = (4*pow(a, 2)*pow(b, 2)*(-c*(5.343*a+b*(-1*a+0.842*pow(b, 2)))*(4*c-1.3)+(1*b+4*c)*(5.343*a*c+1.43543))-(5.343*a*(1*b+4*c)-4*c*(5.343*a+b*(-1*a+0.842*pow(b, 2))))*(pow(a, 2)*pow(b, 2)*(4*c-1.3)+0.1*b+0.4*c))/((1*b+4*c)*(pow(a, 2)*pow(b, 2)*(4*c-1.3)+0.1*b+0.4*c))
-                y = (1*pow(a, 2)*pow(b, 2)*c*(5.343*a+b*(-1*a+0.842*pow(b, 2)))*(4*c-1.3)-1*pow(a, 2)*pow(b, 2)*(1*b+4*c)*(5.343*a*c+1.43543)-c*(5.343*a+b*(-1*a+0.842*pow(b, 2)))*(pow(a, 2)*pow(b, 2)*(4*c-1.3)+0.1*b+0.4*c))/(c*(1*b+4*c)*(pow(a, 2)*pow(b, 2)*(4*c-1.3)+0.1*b+0.4*c))
-                z = pow(a, 2)*b*(c*(5.343*a+b*(-1*a+0.842*pow(b, 2)))*(4*c-1.3)-(1*b+4*c)*(5.343*a*c+1.43543))/(c*(pow(a, 2)*pow(b, 2)*(4*c-1.3)+0.1*b+0.4*c))
-            })";
-        std::string expected_text_sympy_14 = R"(
-            LINEAR lin {
-                x = (4*pow(a, 2)*pow(b, 2)*(-c*(5.343*a+b*(-a+0.842*pow(b, 2)))*(4*c-1.3)+(b+4*c)*(5.343*a*c+1.43543))-(5.343*a*(b+4*c)-4*c*(5.343*a+b*(-a+0.842*pow(b, 2))))*(pow(a, 2)*pow(b, 2)*(4*c-1.3)+0.1*b+0.4*c))/((b+4*c)*(pow(a, 2)*pow(b, 2)*(4*c-1.3)+0.1*b+0.4*c))
-                y = (pow(a, 2)*pow(b, 2)*c*(5.343*a+b*(-a+0.842*pow(b, 2)))*(4*c-1.3)-pow(a, 2)*pow(b, 2)*(b+4*c)*(5.343*a*c+1.43543)-c*(5.343*a+b*(-a+0.842*pow(b, 2)))*(pow(a, 2)*pow(b, 2)*(4*c-1.3)+0.1*b+0.4*c))/(c*(b+4*c)*(pow(a, 2)*pow(b, 2)*(4*c-1.3)+0.1*b+0.4*c))
-                z = pow(a, 2)*b*(c*(5.343*a+b*(-a+0.842*pow(b, 2)))*(4*c-1.3)-(b+4*c)*(5.343*a*c+1.43543))/(c*(pow(a, 2)*pow(b, 2)*(4*c-1.3)+0.1*b+0.4*c))
-            })";
+        std::string expected_text = R"(
+        LINEAR lin {
+            x = 2*b*(39*pow(a, 3)*b+28*pow(a, 2)*b-2*a*c-3*a+2*pow(b, 2)*c)/(40*pow(a, 2)*pow(b, 2)*c-13*pow(a, 2)*pow(b, 2)+b+4*c)
+            y = (-60*pow(a, 3)*pow(b, 2)*c-14*pow(a, 2)*pow(b, 2)+a*b*c-6*a*c-pow(b, 3)*c)/(c*(40*pow(a, 2)*pow(b, 2)*c-13*pow(a, 2)*pow(b, 2)+b+4*c))
+            z = pow(a, 2)*b*(-40*a*b*pow(c, 2)-47*a*b*c-78*a*c+40*pow(b, 3)*pow(c, 2)-13*pow(b, 3)*c-14*b-56*c)/(c*(40*pow(a, 2)*pow(b, 2)*c-13*pow(a, 2)*pow(b,2)+b+4*c))
+        })";
 
         THEN("solve analytically") {
             auto result =
                 run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::LINEAR_BLOCK);
-            bool result_match = (reindent_text(result[0]) ==
-                                     reindent_text(expected_text_sympy_13) ||
-                                 reindent_text(result[0]) == reindent_text(expected_text_sympy_14));
-            REQUIRE(result_match);
+
+            compare_blocks(reindent_text(result[0]), reindent_text(expected_text));
         }
     }
     GIVEN("array state-var numeric LINEAR solve block") {
@@ -995,7 +1075,7 @@ SCENARIO("LINEAR solve block (SympySolver Visitor)", "[sympy][linear]") {
         THEN("solve analytically") {
             auto result =
                 run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::LINEAR_BLOCK);
-            REQUIRE(reindent_text(result[0]) == reindent_text(expected_text));
+            compare_blocks(reindent_text(result[0]), reindent_text(expected_text));
         }
     }
     GIVEN("4 state-var LINEAR solve block") {
@@ -1049,7 +1129,7 @@ SCENARIO("LINEAR solve block (SympySolver Visitor)", "[sympy][linear]") {
         THEN("return matrix system to solve") {
             auto result =
                 run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::LINEAR_BLOCK);
-            REQUIRE(reindent_text(result[0]) == reindent_text(expected_text));
+            compare_blocks(reindent_text(result[0]), reindent_text(expected_text));
         }
     }
     GIVEN("12 state-var LINEAR solve block") {
@@ -1263,7 +1343,7 @@ SCENARIO("LINEAR solve block (SympySolver Visitor)", "[sympy][linear]") {
         THEN("return matrix system to be solved") {
             auto result =
                 run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::LINEAR_BLOCK);
-            REQUIRE(reindent_text(result[0]) == reindent_text(expected_text));
+            compare_blocks(reindent_text(result[0]), reindent_text(expected_text));
         }
     }
 }
@@ -1281,21 +1361,7 @@ SCENARIO("Solve NONLINEAR block using SympySolver Visitor", "[visitor][solver][s
             NONLINEAR nonlin {
                 ~ x = 5
             })";
-        std::string expected_text_sympy_13 = R"(
-            NONLINEAR nonlin {
-                EIGEN_NEWTON_SOLVE[1]{
-                }{
-                }{
-                    X[0] = x
-                }{
-                    F[0] = -X[0]+5
-                    J[0] = -1
-                }{
-                    x = X[0]
-                }{
-                }
-            })";
-        std::string expected_text_sympy_14 = R"(
+        std::string expected_text = R"(
             NONLINEAR nonlin {
                 EIGEN_NEWTON_SOLVE[1]{
                 }{
@@ -1313,10 +1379,7 @@ SCENARIO("Solve NONLINEAR block using SympySolver Visitor", "[visitor][solver][s
         THEN("return F & J for newton solver") {
             auto result =
                 run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::NON_LINEAR_BLOCK);
-            bool result_match = (reindent_text(result[0]) ==
-                                     reindent_text(expected_text_sympy_13) ||
-                                 reindent_text(result[0]) == reindent_text(expected_text_sympy_14));
-            REQUIRE(result_match);
+            compare_blocks(reindent_text(result[0]), reindent_text(expected_text));
         }
     }
     GIVEN("array state-var numeric NONLINEAR solve block") {
@@ -1329,35 +1392,7 @@ SCENARIO("Solve NONLINEAR block using SympySolver Visitor", "[visitor][solver][s
                 ~ s[1] = 3
                 ~ s[2] + s[1] = s[0]
             })";
-        std::string expected_text_sympy_13 = R"(
-            NONLINEAR nonlin {
-                EIGEN_NEWTON_SOLVE[3]{
-                }{
-                }{
-                    X[0] = s[0]
-                    X[1] = s[1]
-                    X[2] = s[2]
-                }{
-                    F[0] = -X[0]+1
-                    F[1] = -X[1]+3
-                    F[2] = X[0]-X[1]-X[2]
-                    J[0] = -1
-                    J[3] = 0
-                    J[6] = 0
-                    J[1] = 0
-                    J[4] = -1
-                    J[7] = 0
-                    J[2] = 1
-                    J[5] = -1
-                    J[8] = -1
-                }{
-                    s[0] = X[0]
-                    s[1] = X[1]
-                    s[2] = X[2]
-                }{
-                }
-            })";
-        std::string expected_text_sympy_14 = R"(
+        std::string expected_text = R"(
             NONLINEAR nonlin {
                 EIGEN_NEWTON_SOLVE[3]{
                 }{
@@ -1388,10 +1423,7 @@ SCENARIO("Solve NONLINEAR block using SympySolver Visitor", "[visitor][solver][s
         THEN("return F & J for newton solver") {
             auto result =
                 run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::NON_LINEAR_BLOCK);
-            bool result_match = (reindent_text(result[0]) ==
-                                     reindent_text(expected_text_sympy_13) ||
-                                 reindent_text(result[0]) == reindent_text(expected_text_sympy_14));
-            REQUIRE(result_match);
+            compare_blocks(reindent_text(result[0]), reindent_text(expected_text));
         }
     }
 }
