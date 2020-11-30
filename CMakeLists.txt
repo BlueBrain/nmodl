@@ -104,7 +104,7 @@ set(THIRD_PARTY_DIRECTORY "${PROJECT_SOURCE_DIR}/ext")
 add_external_project(fmt OFF)
 add_subdirectory(${THIRD_PARTY_DIRECTORY}/fmt EXCLUDE_FROM_ALL)
 set_property(TARGET fmt PROPERTY POSITION_INDEPENDENT_CODE ON)
-add_external_project(spdlog)
+add_external_project(spdlog OFF)
 add_external_project(pybind11)
 add_external_project(cli11)
 add_external_project(eigen OFF)
@@ -140,13 +140,13 @@ endif()
 include_directories(${NMODL_PROJECT_SOURCE_DIR} ${NMODL_PROJECT_SOURCE_DIR}/src
                     ${PROJECT_BINARY_DIR}/src)
 include_directories(
-  SYSTEM ${NMODL_PROJECT_SOURCE_DIR}/ext ${NMODL_PROJECT_SOURCE_DIR}/ext/fmt/include
-  ${NMODL_PROJECT_SOURCE_DIR}/ext/spdlog/include)
+  SYSTEM ${THIRD_PARTY_DIRECTORY} ${THIRD_PARTY_DIRECTORY}/fmt/include
+  ${THIRD_PARTY_DIRECTORY}/spdlog/include)
 
 # =============================================================================
 # Include path from external libraries
 # =============================================================================
-include_directories(${NMODL_PROJECT_SOURCE_DIR}/ext/cli11/include)
+include_directories(${THIRD_PARTY_DIRECTORY}/cli11/include)
 
 # generate file with version number from git and nrnunits.lib file path
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/config/config.cpp.in
