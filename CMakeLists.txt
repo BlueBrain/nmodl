@@ -139,9 +139,8 @@ endif()
 
 include_directories(${NMODL_PROJECT_SOURCE_DIR} ${NMODL_PROJECT_SOURCE_DIR}/src
                     ${PROJECT_BINARY_DIR}/src)
-include_directories(
-  SYSTEM ${THIRD_PARTY_DIRECTORY} ${THIRD_PARTY_DIRECTORY}/fmt/include
-  ${THIRD_PARTY_DIRECTORY}/spdlog/include)
+include_directories(SYSTEM ${THIRD_PARTY_DIRECTORY} ${THIRD_PARTY_DIRECTORY}/fmt/include
+                    ${THIRD_PARTY_DIRECTORY}/spdlog/include)
 
 # =============================================================================
 # Include path from external libraries
