@@ -64,12 +64,41 @@ std::vector<std::string> run_sympy_solver_visitor(
     return results;
 }
 
-void compare_blocks(const std::string& result, const std::string& expected) {
+
+/**
+ * \brief Compare nmodl blocks that contain systems of equations (i.e. derivative, linear, etc.)
+ *
+ * This is basically and advanced string == string comparison where we detect the (various) systems
+ * of equations and check if they are equivalent. Implemented mostly in python since we need a call
+ * to sympy to simplify the equations.
+ *
+ * - compare_systems_of_eq The core of the code. \p result_dict and \p expected_dict are
+ * dictionaries that represent the systems of equations in this way:
+ *
+ *   a = b*x + c -> result_dict['a'] = 'b*x + c'
+ *
+ *   where the variable \p a become a key \p k of the dictionary.
+ *
+ *   In there we go over all the equations in \p result_dict and \p expected_dict and check that
+ * result_dict[k] - expected_dict[k] simplifies to 0.
+ *
+ * - sanitize is to transform the equations in something treatable by sympy (i.e. pow(dt, 3) ->
+ * dt**3
+ * - reduce back-substitution of the temporary variables
+ *
+ * \p require_fail requires that the equations are different. Used only for unit-test this function
+ */
+void compare_blocks(const std::string& result,
+                    const std::string& expected,
+                    const bool require_fail = false) {
     using namespace pybind11::literals;
 
-    auto locals = pybind11::dict("s1"_a = result, "s2"_a = expected, "is_equal"_a = false);
+    auto locals =
+        pybind11::dict("result"_a = result, "expected"_a = expected, "is_equal"_a = false);
     pybind11::exec(R"(
-                    def compare_blocks(s1, s2):
+                    # Comments are in the doxygen for better highlighting
+                    def compare_blocks(result, expected):
+    
                         def sanitize(s):
                             import re
                             d = {'\[(\d+)\]':'_\\1',  'pow\((\w+), ?(\d+)\)':'\\1**\\2'}
@@ -77,18 +106,18 @@ void compare_blocks(const std::string& result, const std::string& expected) {
                             for key, val in d.items():
                                 out = re.sub(key, val, out)
                             return out
-
-                        def compare_systems_of_eq(d1, d2):
+    
+                        def compare_systems_of_eq(result_dict, expected_dict):
                             from sympy.parsing.sympy_parser import parse_expr
                             try:
-                                for k, v in d1.items():
-                                    if parse_expr(f'simplify(({v})-({d2[k]}))'):
+                                for k, v in result_dict.items():
+                                    if parse_expr(f'simplify(({v})-({expected_dict[k]}))'):
                                         return False
                             except KeyError:
                                 return False
 
-                            d1.clear()
-                            d2.clear()
+                            result_dict.clear()
+                            expected_dict.clear()
                             return True
 
                         def reduce(s):
@@ -96,9 +125,11 @@ void compare_blocks(const std::string& result, const std::string& expected) {
                             d = {}
 
                             sout = ""
+                            # split of sout and a dict with the tmp variables
                             for line in s.split('\n'):
                                 line_split = line.lstrip().split('=')
                                 if len(line_split) == 2 and line_split[0] == f'tmp{i} ':
+                                    # back-substitution of tmp variables in tmp variables
                                     for k, v in d.items():
                                         line_split[1] = line_split[1].replace(k, f'({v})')
                                     d[f'tmp{i}'] = line_split[1]
@@ -108,6 +139,7 @@ void compare_blocks(const std::string& result, const std::string& expected) {
                                 else:
                                     sout += line + '\n'
 
+                            # Back-substitution of the tmps
                             # so that we do not replace tmp11 with (tmp1)1
                             for j in range(i-1, -1, -1):
                                 k = f'tmp{j}'
@@ -115,37 +147,43 @@ void compare_blocks(const std::string& result, const std::string& expected) {
 
                             return sout
 
-                        s1 = reduce(sanitize(s1)).split('\n')
-                        s2 = reduce(sanitize(s2)).split('\n')
+                        result = reduce(sanitize(result)).split('\n')
+                        expected = reduce(sanitize(expected)).split('\n')
 
-                        if len(s1) != len(s2):
+                        if len(result) != len(expected):
                             return False
 
-                        d1 = {}
-                        d2 = {}
-                        for token1, token2 in zip(s1, s2):
+                        result_dict = {}
+                        expected_dict = {}
+                        for token1, token2 in zip(result, expected):
                             if token1 == token2:
-                                if not compare_systems_of_eq(d1, d2):
+                                if not compare_systems_of_eq(result_dict, expected_dict):
                                     return False
                                 continue
 
                             eq1 = token1.split('=')
                             eq2 = token2.split('=')
                             if len(eq1) == 2 and len(eq2) == 2:
-                                d1[eq1[0]] = eq1[1]
-                                d2[eq2[0]] = eq2[1]
+                                result_dict[eq1[0]] = eq1[1]
+                                expected_dict[eq2[0]] = eq2[1]
                                 continue
 
                             return False
-                        return True
+                        return compare_systems_of_eq(result_dict, expected_dict)
 
-                    is_equal = compare_blocks(s1, s2))",
+                    is_equal = compare_blocks(result, expected))",
                    pybind11::globals(),
                    locals);
 
     // Error log
-    if (!locals["is_equal"].cast<bool>()) {
-        REQUIRE(result == expected);
+    if (require_fail == locals["is_equal"].cast<bool>()) {
+        if (require_fail) {
+            REQUIRE(result != expected);
+        } else {
+            REQUIRE(result == expected);
+        }
+    } else {  // so that we signal to ctest that an assert was performed
+        REQUIRE(true);
     }
 }
 
@@ -172,6 +210,79 @@ std::string ast_to_string(ast::Program& node) {
     std::stringstream stream;
     NmodlPrintVisitor(stream).visit_program(node);
     return stream.str();
+}
+
+SCENARIO("Check compare_blocks in sympy unit tests", "[visitor][sympy]") {
+    GIVEN("Empty strings") {
+        THEN("Strings are equal") {
+            compare_blocks("", "");
+        }
+    }
+    GIVEN("Equivalent equation") {
+        THEN("Strings are equal") {
+            compare_blocks("a = 3*b + c", "a = 2*b + b + c");
+        }
+    }
+    GIVEN("Equivalent systems of equations") {
+        std::string result = R"(
+        x = 3*b + c
+        y = 2*a + b)";
+        std::string expected = R"(
+        x = b+2*b + c
+        y = 2*a + 2*b-b)";
+        THEN("Systems of equations are equal") {
+            compare_blocks(result, expected);
+        }
+    }
+    GIVEN("Equivalent systems of equations with brackets") {
+        std::string result = R"(
+        DERIVATIVE {
+        A[0] = 3*b + c
+        y = pow(a, 3) + b
+        })";
+        std::string expected = R"(
+        DERIVATIVE {
+        tmp0 = a + c
+        tmp1 = tmp0 - a
+        A[0] = b+2*b + tmp1
+        y = pow(a, 2)*a + 2*b-b
+        })";
+        THEN("Blocks are equal") {
+            compare_blocks(result, expected);
+        }
+    }
+    GIVEN("Different systems of equations (additional space)") {
+        std::string result = R"(
+        DERIVATIVE {
+        x = 3*b + c
+        y = 2*a + b
+        })";
+        std::string expected = R"(
+        DERIVATIVE  {
+        x = b+2*b + c
+        y = 2*a + 2*b-b
+        })";
+        THEN("Blocks are different") {
+            compare_blocks(result, expected, true);
+        }
+    }
+    GIVEN("Different systems of equations") {
+        std::string result = R"(
+        DERIVATIVE {
+        tmp0 = a - c
+        tmp1 = tmp0 - a
+        x = 3*b + tmp1
+        y = 2*a + b
+        })";
+        std::string expected = R"(
+        DERIVATIVE {
+        x = b+2*b + c
+        y = 2*a + 2*b-b
+        })";
+        THEN("Blocks are different") {
+            compare_blocks(result, expected, true);
+        }
+    }
 }
 
 SCENARIO("Solve ODEs with cnexp or euler method using SympySolverVisitor",
