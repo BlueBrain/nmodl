@@ -139,13 +139,10 @@ endif()
 
 include_directories(${NMODL_PROJECT_SOURCE_DIR} ${NMODL_PROJECT_SOURCE_DIR}/src
                     ${PROJECT_BINARY_DIR}/src)
-include_directories(SYSTEM ${THIRD_PARTY_DIRECTORY} ${THIRD_PARTY_DIRECTORY}/fmt/include
-                    ${THIRD_PARTY_DIRECTORY}/spdlog/include)
-
-# =============================================================================
-# Include path from external libraries
-# =============================================================================
-include_directories(${THIRD_PARTY_DIRECTORY}/cli11/include)
+include_directories(
+  SYSTEM ${THIRD_PARTY_DIRECTORY} ${THIRD_PARTY_DIRECTORY}/catch/include
+  ${THIRD_PARTY_DIRECTORY}/fmt/include ${THIRD_PARTY_DIRECTORY}/spdlog/include
+  ${THIRD_PARTY_DIRECTORY}/cli11/include)
 
 # generate file with version number from git and nrnunits.lib file path
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/config/config.cpp.in
