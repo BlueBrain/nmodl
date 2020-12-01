@@ -41,6 +41,9 @@ def _config_exe(exe_name):
     # add nmodl home to environment (i.e. necessary for nrnunits.lib)
     os.environ["NMODLHOME"] = NMODL_HOME
 
+    # set PYTHONPATH for embedded python to properly find the nmodl module
+    os.environ["PYTHONPATH"] = working_set.by_key[package_name].location + ':' + os.environ.get("PYTHONPATH", "")
+
     return os.path.join(NMODL_BIN, exe_name)
 
 
