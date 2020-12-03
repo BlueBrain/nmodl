@@ -44,8 +44,6 @@ cd nrn
 bash packaging/python/build_wheels.bash osx
 ```
 
-
-
 #### Updating neuron_wheel docker image
 
 If you have changed Dockerfile, you can build the new image as:
