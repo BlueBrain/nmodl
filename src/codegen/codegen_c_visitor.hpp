@@ -1677,7 +1677,7 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      *                     as-is in the target code. This defaults to \c double.
      * \param extension    The file extension to use. This defaults to \c .cpp .
      */
-    CodegenCVisitor(std::string mod_filename,
+    CodegenCVisitor(const std::string& mod_filename,
                     const std::string& output_dir,
                     LayoutType layout,
                     std::string float_type,
@@ -1685,7 +1685,7 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
                     const std::string& extension = ".cpp")
         : target_printer(new CodePrinter(output_dir + "/" + mod_filename + extension))
         , printer(target_printer)
-        , mod_filename(std::move(mod_filename))
+        , mod_filename(mod_filename)
         , layout(layout)
         , float_type(std::move(float_type))
         , optimize_ionvar_copies(optimize_ionvar_copies) {}
