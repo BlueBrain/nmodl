@@ -1,7 +1,7 @@
 find_package(Git QUIET)
 
 set(THIRD_PARTY_DIRECTORY
-    "${PROJECT_SOURCE_DIR}/3rdparty"
+    "${NMODL_PROJECT_SOURCE_DIR}/3rdparty"
     CACHE PATH "The path were all the 3rd party projects can be found")
 
 # initialize submodule with given path
@@ -14,7 +14,7 @@ function(initialize_submodule path)
   execute_process(
     COMMAND
       git submodule update --init --recursive -- ${path}
-    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
+    WORKING_DIRECTORY ${NMODL_PROJECT_SOURCE_DIR})
 endfunction()
 
 # check for external project and initialize submodule if it is missing
