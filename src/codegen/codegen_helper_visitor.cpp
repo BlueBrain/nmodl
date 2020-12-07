@@ -307,7 +307,7 @@ void CodegenHelperVisitor::find_non_range_variables() {
  * - List 1 i.e. range + parameter variables are printed first
  * - List 3 i.e. range + assigned variables are printed next
  * - List 2 i.e. range + state variables are printed next
- * - List 4 i.e. assigned variables not present in previous 3 lists
+ * - List 4 i.e. assigned and ion variables not present in the previous 3 lists
  *
  * NOTE:
  * - State variables also have the property `assigned_definition` but these variables
@@ -413,23 +413,32 @@ void CodegenHelperVisitor::find_range_variables() {
     info.range_state_vars = info.state_vars;
     remove_non_ioncur_vars(info.range_state_vars, info);
 
-    /// Remaining variables are assigned variables which are not in previous 3 lists
+    /// Remaining variables are assigned and ion variables which are not in the previous 3 lists
 
     // clang-format off
-    with = NmodlType::assigned_definition;
+    with = NmodlType::assigned_definition
+           | NmodlType::read_ion_var
+           | NmodlType::write_ion_var;
     without = NmodlType::global_var
               | NmodlType::pointer_var
               | NmodlType::bbcore_pointer_var
               | NmodlType::extern_neuron_variable;
-
     // clang-format on
-    info.assigned_vars = psymtab->get_variables(with, without);
+    const auto& variables = psymtab->get_variables_with_properties(with, false);
+    for (const auto& variable: variables) {
+        if (!variable->has_any_property(without)) {
+            info.assigned_vars.push_back(variable);
+        }
+    }
 
     /// make sure that variables already present in previous lists
     /// are removed to avoid any duplication
     remove_var_exist(info.range_parameter_vars, info.assigned_vars);
     remove_var_exist(info.range_assigned_vars, info.assigned_vars);
     remove_var_exist(info.range_state_vars, info.assigned_vars);
+
+    /// sort variables with their definition order
+    std::sort(info.assigned_vars.begin(), info.assigned_vars.end(), comparator);
 }
 
 
