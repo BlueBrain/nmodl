@@ -278,7 +278,7 @@ void CodegenHelperVisitor::find_non_range_variables() {
  *
  * In order to be compatible with NEURON, we need to print all variables in
  * exact order as NEURON/MOD2C implementation. This is important because memory
- * for all vatiables is allocated in single 1-D array with certain offset
+ * for all variables is allocated in single 1-D array with certain offset
  * for each variable. The order of variables determine the offset and hence
  * they must be in same order as NEURON.
  *
@@ -310,7 +310,7 @@ void CodegenHelperVisitor::find_non_range_variables() {
  * - List 4 i.e. assigned variables not present in previous 3 lists
  *
  * NOTE:
- * - State variables are also has property `assigned_definition` but these variables
+ * - State variables also have the property `assigned_definition` but these variables
  *   are not from ASSIGNED block.
  * - Variable can not be range as well as state, it's redeclaration error
  * - Variable can be parameter as well as range. Without range, parameter
