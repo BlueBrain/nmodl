@@ -478,7 +478,7 @@ void CodegenIspcVisitor::print_nmodl_constants() {
         printer->add_line("/** constants used in nmodl */");
         for (auto& it: info.factor_definitions) {
             const std::string name = it->get_node_name() == "PI" ? "ISPC_PI" : it->get_node_name();
-            const std::string value = it->get_value()->get_value();
+            const std::string value = double_to_string(it->get_value()->get_value());
             printer->add_line("static const uniform double {} = {};"_format(name, value));
         }
     }
