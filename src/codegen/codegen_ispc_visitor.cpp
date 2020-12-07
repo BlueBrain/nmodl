@@ -139,8 +139,8 @@ std::string CodegenIspcVisitor::double_to_string(const std::string& s_value) {
         std::replace(return_string.begin(), return_string.end(), 'e', 'd');
     } else if (s_value.find('.') == std::string::npos) {
         return_string += ".0d";
-    } else {
-        return_string += "d";
+    } else if (s_value.front() == '.') {
+        return_string = '0' + return_string + 'd';
     }
     std::cout << "[double_to_string] original: " << s_value << " return: " << return_string << std::endl;
     return return_string;
@@ -149,10 +149,12 @@ std::string CodegenIspcVisitor::double_to_string(const std::string& s_value) {
 
 std::string CodegenIspcVisitor::float_to_string(const std::string& s_value) {
     std::string return_string = s_value;
-    if (s_value.find("E") == std::string::npos && s_value.find("e") == std::string::npos && s_value.find('.') == std::string::npos) {
+    if (s_value.find('E') == std::string::npos && s_value.find('e') == std::string::npos && s_value.find('.') == std::string::npos) {
         return_string += ".0f";
+    } else if (s_value.front() == '.') {
+        return_string = '0' + return_string + 'f';
     } else {
-        return_string += "f";
+        return_string += 'f';
     }
     std::cout << "[float_to_string] original: " << s_value << " return: " << return_string << std::endl;
     return return_string;
