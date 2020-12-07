@@ -134,9 +134,9 @@ void CodegenIspcVisitor::visit_local_list_statement(const ast::LocalListStatemen
 std::string CodegenIspcVisitor::double_to_string(const std::string& s_value) {
     std::string return_string = s_value;
     if (s_value.find("E") != std::string::npos) {
-        return_string.replace(return_string.begin(), return_string.end(), 'E', 'd');
+        std::replace(return_string.begin(), return_string.end(), 'E', 'd');
     } else if (s_value.find("e") != std::string::npos) {
-        return_string.replace(return_string.begin(), return_string.end(), 'e', 'd');
+        std::replace(return_string.begin(), return_string.end(), 'e', 'd');
     } else {
         return_string += 'd';
     }
