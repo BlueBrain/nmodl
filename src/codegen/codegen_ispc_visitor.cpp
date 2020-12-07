@@ -132,46 +132,20 @@ void CodegenIspcVisitor::visit_local_list_statement(const ast::LocalListStatemen
  *         backend when floating point number is not exactly represented with .16f.
  */
 std::string CodegenIspcVisitor::double_to_string(const std::string& s_value) {
-    double value = std::stod(s_value);
-    if (std::ceil(value) == value) {
-        return "{:.1f}d"_format(value);
-    }
-    if ((value <= 1.0) && (value >= -1.0)) {
-        return "{:.16f}d"_format(value);
+    std::string return_string = s_value;
+    if (s_value.find("E")) {
+        return_string.replace(return_string.begin(), return_string.end(), 'E', 'd');
+    } else if (s_value.find("e")) {
+        return_string.replace(return_string.begin(), return_string.end(), 'e', 'd');
     } else {
-        auto e = std::log10(std::abs(value));
-        if (e < 0.0) {
-            e = std::ceil(-e);
-            auto m = std::pow(10, e);
-            return "{:f}d-{:d}"_format(value * m, static_cast<int>(e));
-        } else {
-            e = std::floor(e);
-            auto m = std::pow(10, e);
-            return "{:f}d{:d}"_format(value / m, static_cast<int>(e));
-        }
+        return_string += 'd';
     }
+    return return_string;
 }
 
 
 std::string CodegenIspcVisitor::float_to_string(const std::string& s_value) {
-    float value = std::stof(s_value);
-    if (std::ceil(value) == value) {
-        return "{:.1f}"_format(value);
-    }
-    if ((value <= 1.0f) && (value >= -1.0f)) {
-        return "{:.6f}"_format(value);
-    } else {
-        auto e = std::log10(std::abs(value));
-        if (e < 0.0f) {
-            e = std::ceil(-e);
-            auto m = std::pow(10, e);
-            return "{:f}e-{:d}"_format(value * m, static_cast<int>(e));
-        } else {
-            e = std::floor(e);
-            auto m = std::pow(10, e);
-            return "{:f}e{:d}"_format(value / m, static_cast<int>(e));
-        }
-    }
+    return double_to_string(s_value);
 }
 
 
