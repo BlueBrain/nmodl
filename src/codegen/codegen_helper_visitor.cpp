@@ -342,7 +342,7 @@ void CodegenHelperVisitor::find_range_variables() {
                    vars.end());
     };
 
-    /// if `seconday` vector contains any symbol that exist in the `primary` then remove ut
+    /// if `seconday` vector contains any symbol that exist in the `primary` then remove it
     auto remove_var_exist = [](SymbolVectorType& primary, SymbolVectorType& secondary) -> void {
         secondary.erase(std::remove_if(secondary.begin(),
                                        secondary.end(),
