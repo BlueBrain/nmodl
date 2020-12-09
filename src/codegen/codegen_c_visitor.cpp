@@ -763,7 +763,7 @@ void CodegenCVisitor::update_index_semantics() {
         }
         for (auto& var: ion.writes) {
             /// add if variable is not present in the read list
-            if(std::find(ion.reads.begin(), ion.reads.end(), var) == ion.reads.end()) {
+            if (std::find(ion.reads.begin(), ion.reads.end(), var) == ion.reads.end()) {
                 info.semantics.emplace_back(index++, ion.name + "_ion", 1);
             }
             if (ion.is_ionic_current(var)) {
@@ -828,7 +828,7 @@ std::vector<SymbolType> CodegenCVisitor::get_float_variables() {
     for (auto& variable: states) {
         auto name = "D" + variable->get_name();
         auto symbol = make_symbol(name);
-        if(variable->is_array()) {
+        if (variable->is_array()) {
             symbol->set_as_array(variable->get_length());
         }
         symbol->set_definition_order(variable->get_definition_order());
@@ -918,7 +918,7 @@ std::vector<IndexVariableInfo> CodegenCVisitor::get_int_variables() {
         }
 
         /// insert after read/write variables but before style ion variable
-        if(ion_di_dv_var != nullptr) {
+        if (ion_di_dv_var != nullptr) {
             variables.emplace_back(ion_di_dv_var);
         }
 
