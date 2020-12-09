@@ -654,7 +654,7 @@ void CodegenHelperVisitor::visit_program(const ast::Program& node) {
         }
     }
     node.visit_children(*this);
-    find_ion_variables(); // Keep this before find_*_range_variables()
+    find_ion_variables();  // Keep this before find_*_range_variables()
     find_range_variables();
     find_non_range_variables();
     find_table_variables();
