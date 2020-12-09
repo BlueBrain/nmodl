@@ -289,11 +289,10 @@ void CodegenHelperVisitor::find_non_range_variables() {
  * - variables with state and range property (List 2)
  * - variables with assigned and range property (List 3)
  *
- * Once above three lists are created, we remove following variable from above
- * three lists:
+ * Once created, we remove some variables due to the following criteria:
  * - In NEURON/MOD2C implementation, we remove variables with NRNPRANGEIN
  *   or NRNPRANGEOUT type
- * - So who has NRNPRANGEIN and NRNPRANGEOUT type? these are such USEION read
+ * - So who has NRNPRANGEIN and NRNPRANGEOUT type? these are USEION read
  *   or write variables that are not ionic currents.
  * - This is the reason for mod files CaDynamics_E2.mod or cal_mig.mod, ica variable
  *   is printed earlier in the list but other variables like cai, cao don't appear
@@ -315,11 +314,12 @@ void CodegenHelperVisitor::find_non_range_variables() {
  * - Variable can not be range as well as state, it's redeclaration error
  * - Variable can be parameter as well as range. Without range, parameter
  *   is considered as global variable i.e. one value for all instances.
- * - If a variable is only defined as RANGE and not in assgined or parameter
+ * - If a variable is only defined as RANGE and not in assigned or parameter
  *   or state block then it's not printed.
- * - Note that if variable property is different than the variable type. For example,
+ * - Note that a variable property is different than the variable type. For example,
  *   if variable has range property, it doesn't mean the variable is declared as RANGE.
- *   Other variables like STATE and ASSIGNED block variables also get range property.
+ *   Other variables like STATE and ASSIGNED block variables also get range property
+ *   without being explicitly declared as RANGE in the mod file.
  * - Also, there is difference between declaration order vs. definition order. For
  *   example, POINTER variable in NEURON block is just declaration and doesn't
  *   determine the order in which they will get printed. Below we query symbol table
@@ -332,7 +332,7 @@ void CodegenHelperVisitor::find_range_variables() {
     };
 
     /// from symbols vector `vars`, remove all ion variables which are not ionic currents
-    auto remove_non_ioncur_vars = [](SymbolVectorType& vars, CodegenInfo& info) -> void {
+    auto remove_non_ioncur_vars = [](SymbolVectorType& vars, const CodegenInfo& info) -> void {
         vars.erase(std::remove_if(vars.begin(),
                                   vars.end(),
                                   [&](SymbolType& s) {
@@ -342,7 +342,7 @@ void CodegenHelperVisitor::find_range_variables() {
                    vars.end());
     };
 
-    /// if `seconday` vector contains any symbol that exist in the `primary` then remove it
+    /// if `secondary` vector contains any symbol that exist in the `primary` then remove it
     auto remove_var_exist = [](SymbolVectorType& primary, SymbolVectorType& secondary) -> void {
         secondary.erase(std::remove_if(secondary.begin(),
                                        secondary.end(),
@@ -654,7 +654,7 @@ void CodegenHelperVisitor::visit_program(const ast::Program& node) {
         }
     }
     node.visit_children(*this);
-    find_ion_variables();
+    find_ion_variables(); // Keep this before find_*_range_variables()
     find_range_variables();
     find_non_range_variables();
     find_table_variables();
