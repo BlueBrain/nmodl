@@ -762,7 +762,10 @@ void CodegenCVisitor::update_index_semantics() {
             info.semantics.emplace_back(index++, ion.name + "_ion", 1);
         }
         for (auto& var: ion.writes) {
-            info.semantics.emplace_back(index++, ion.name + "_ion", 1);
+            /// add if variable is not present in the read list
+            if(std::find(ion.reads.begin(), ion.reads.end(), var) == ion.reads.end()) {
+                info.semantics.emplace_back(index++, ion.name + "_ion", 1);
+            }
             if (ion.is_ionic_current(var)) {
                 info.semantics.emplace_back(index++, ion.name + "_ion", 1);
             }
@@ -893,6 +896,10 @@ std::vector<IndexVariableInfo> CodegenCVisitor::get_int_variables() {
             variables.back().is_constant = true;
             ion_vars[name] = variables.size() - 1;
         }
+
+        /// symbol for di_ion_dv var
+        std::shared_ptr<symtab::Symbol> ion_di_dv_var = nullptr;
+
         for (const auto& var: ion.writes) {
             const std::string name = "ion_" + var;
 
@@ -903,12 +910,18 @@ std::vector<IndexVariableInfo> CodegenCVisitor::get_int_variables() {
                 variables.emplace_back(make_symbol("ion_" + var));
             }
             if (ion.is_ionic_current(var)) {
-                variables.emplace_back(make_symbol("ion_di" + ion.name + "dv"));
+                ion_di_dv_var = make_symbol("ion_di" + ion.name + "dv");
             }
             if (ion.is_intra_cell_conc(var) || ion.is_extra_cell_conc(var)) {
                 need_style = true;
             }
         }
+
+        /// insert after read/write variables but before style ion variable
+        if(ion_di_dv_var != nullptr) {
+            variables.emplace_back(ion_di_dv_var);
+        }
+
         if (need_style) {
             variables.emplace_back(make_symbol("style_" + ion.name), false, true);
             variables.back().is_constant = true;
