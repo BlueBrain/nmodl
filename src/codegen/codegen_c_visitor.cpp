@@ -544,7 +544,7 @@ int CodegenCVisitor::float_variables_size() const {
     float_size += count_length(info.assigned_vars);
 
     /// all state variables for which we add Dstate variables
-    float_size += info.state_vars.size();
+    float_size += count_length(info.state_vars);
 
     /// for v_unused variable
     if (info.vectorize) {
@@ -825,6 +825,9 @@ std::vector<SymbolType> CodegenCVisitor::get_float_variables() {
     for (auto& variable: states) {
         auto name = "D" + variable->get_name();
         auto symbol = make_symbol(name);
+        if(variable->is_array()) {
+            symbol->set_as_array(variable->get_length());
+        }
         symbol->set_definition_order(variable->get_definition_order());
         assigned.push_back(symbol);
     }
