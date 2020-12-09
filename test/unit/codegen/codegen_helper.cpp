@@ -127,4 +127,46 @@ SCENARIO("unusual / failing mod files", "[codegen][var_order]") {
             REQUIRE(result == expected);
         }
     }
+
+    GIVEN("cadyn.mod : same USEION variables used for read as well as write") {
+        std::string nmodl_text = R"(
+            NEURON {
+              SUFFIX cadyn
+              USEION ca READ cai,ica WRITE cai
+              RANGE ca
+              GLOBAL depth,cainf,taur
+            }
+
+            PARAMETER {
+              depth    = .1    (um)
+              taur =  200 (ms)    : rate of calcium removal
+              cainf   = 50e-6(mM) :changed oct2
+              cai     (mM)
+            }
+
+            ASSIGNED {
+              ica     (mA/cm2)
+              drive_channel   (mM/ms)
+            }
+
+            STATE {
+              ca      (mM)
+            }
+
+            BREAKPOINT {
+              SOLVE state METHOD euler
+            }
+
+            DERIVATIVE state {
+              ca' = drive_channel/18 + (cainf -ca)/taur*11
+              cai = ca
+            }
+        )";
+
+        THEN("ion variables are ordered correctly") {
+            std::string expected = "ca;cai;ica;drive_channel;";
+            auto result = run_inline_visitor(nmodl_text);
+            REQUIRE(result == expected);
+        }
+    }
 }
