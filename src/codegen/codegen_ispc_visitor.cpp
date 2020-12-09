@@ -141,6 +141,8 @@ std::string CodegenIspcVisitor::double_to_string(const std::string& s_value) {
         return_string += ".0d";
     } else if (s_value.front() == '.') {
         return_string = '0' + return_string + 'd';
+    } else {
+        return_string += 'd';
     }
     std::cout << "[double_to_string] original: " << s_value << " return: " << return_string << std::endl;
     return return_string;
