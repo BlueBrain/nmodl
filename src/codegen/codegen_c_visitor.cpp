@@ -444,7 +444,7 @@ int CodegenCVisitor::position_of_int_var(const std::string& name) const {
  */
 std::string CodegenCVisitor::double_to_string(const std::string& s_value) {
     double value = std::stod(s_value);
-    if (std::ceil(value) == value) {
+    if (std::ceil(value) == value && s_value.find('E') == std::string::npos && s_value.find('E') == std::string::npos) {
         return "{:.1f}"_format(value);
     }
     return s_value;
@@ -453,7 +453,7 @@ std::string CodegenCVisitor::double_to_string(const std::string& s_value) {
 
 std::string CodegenCVisitor::float_to_string(const std::string& s_value) {
     float value = std::stof(s_value);
-    if (std::ceil(value) == value) {
+    if (std::ceil(value) == value && s_value.find('E') == std::string::npos && s_value.find('E') == std::string::npos) {
         return "{:.1f}"_format(value);
     }
     return s_value;

@@ -144,8 +144,6 @@ std::string CodegenIspcVisitor::double_to_string(const std::string& s_value) {
     } else {
         return_string += 'd';
     }
-    // std::cout << "[double_to_string] original: " << s_value << " return: " << return_string <<
-    // std::endl;
     return return_string;
 }
 
@@ -160,8 +158,6 @@ std::string CodegenIspcVisitor::float_to_string(const std::string& s_value) {
     } else {
         return_string += 'f';
     }
-    // std::cout << "[float_to_string] original: " << s_value << " return: " << return_string <<
-    // std::endl;
     return return_string;
 }
 
