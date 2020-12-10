@@ -761,7 +761,7 @@ void CodegenCVisitor::update_index_semantics() {
         for (const auto& var: ion.reads) {
             info.semantics.emplace_back(index++, ion.name + "_ion", 1);
         }
-        for (auto& var: ion.writes) {
+        for (const auto& var: ion.writes) {
             /// add if variable is not present in the read list
             if (std::find(ion.reads.begin(), ion.reads.end(), var) == ion.reads.end()) {
                 info.semantics.emplace_back(index++, ion.name + "_ion", 1);
