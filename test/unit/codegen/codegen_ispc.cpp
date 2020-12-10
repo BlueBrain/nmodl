@@ -154,7 +154,7 @@ SCENARIO("ISPC codegen", "[codegen][ispc]") {
                 }
             }
         )";
-        THEN("Check that the nmodl constants are set correctly") {
+        THEN("Check that the nmodl constants and computer functions are printed correctly") {
             auto nmodl_constants_result = reindent_text(print_ispc_nmodl_constants(nmodl_text));
             REQUIRE(nmodl_constants_result == reindent_text(nmodl_constants_declaration));
             auto nmodl_init_cur_state = reindent_text(print_ispc_compute_functions(nmodl_text));
