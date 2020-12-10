@@ -1657,6 +1657,21 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
         , float_type(float_type)
         , optimize_ionvar_copies(optimize_ionvar_copies) {}
 
+    CodegenCVisitor(const std::string& mod_filename,
+                    std::ostream& stream,
+                    LayoutType layout,
+                    const std::string& float_type,
+                    const bool optimize_ionvar_copies,
+                    const std::string& extension,
+                    const std::string& wrapper_ext)
+        : target_printer(new CodePrinter(stream))
+        , wrapper_printer(new CodePrinter(stream))
+        , printer(target_printer)
+        , mod_filename(mod_filename)
+        , layout(layout)
+        , float_type(float_type)
+        , optimize_ionvar_copies(optimize_ionvar_copies) {}
+
 
   public:
     /**

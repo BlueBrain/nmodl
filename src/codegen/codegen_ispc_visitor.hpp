@@ -236,7 +236,7 @@ class CodegenIspcVisitor: public CodegenCVisitor {
                        LayoutType layout,
                        const std::string& float_type,
                        const bool optimize_ionvar_copies)
-        : CodegenCVisitor(mod_file, stream, layout, float_type, optimize_ionvar_copies)
+        : CodegenCVisitor(mod_file, stream, layout, float_type, optimize_ionvar_copies, ".ispc", ".cpp")
         , fallback_codegen(mod_file, layout, float_type, optimize_ionvar_copies, wrapper_printer) {}
 
     void visit_function_call(const ast::FunctionCall& node) override;
