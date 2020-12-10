@@ -152,9 +152,6 @@ class CodegenIspcVisitor: public CodegenCVisitor {
     void print_wrapper_headers_include();
 
 
-
-
-
     /// nmodl procedure definition
     void print_procedure(const ast::ProcedureBlock& node) override;
 
@@ -168,7 +165,7 @@ class CodegenIspcVisitor: public CodegenCVisitor {
 
     /// print initial equation and state wrapper
     void print_block_wrappers_initial_equation_state();
-    
+
 
     void print_ispc_globals();
 
@@ -233,7 +230,13 @@ class CodegenIspcVisitor: public CodegenCVisitor {
                        LayoutType layout,
                        const std::string& float_type,
                        const bool optimize_ionvar_copies)
-        : CodegenCVisitor(mod_file, stream, layout, float_type, optimize_ionvar_copies, ".ispc", ".cpp")
+        : CodegenCVisitor(mod_file,
+                          stream,
+                          layout,
+                          float_type,
+                          optimize_ionvar_copies,
+                          ".ispc",
+                          ".cpp")
         , fallback_codegen(mod_file, layout, float_type, optimize_ionvar_copies, wrapper_printer) {}
 
     void visit_function_call(const ast::FunctionCall& node) override;

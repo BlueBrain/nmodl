@@ -11,19 +11,19 @@
 
 #include "ast/program.hpp"
 #include "codegen/codegen_ispc_visitor.hpp"
-#include "parser/nmodl_driver.hpp"
 #include "config/config.h"
+#include "parser/nmodl_driver.hpp"
+#include "test/unit/utils/test_utils.hpp"
 #include "visitors/symtab_visitor.hpp"
 #include "visitors/units_visitor.hpp"
-#include "test/unit/utils/test_utils.hpp"
 
 using namespace nmodl;
 using namespace visitor;
 using namespace codegen;
 using namespace test_utils;
 
-using nmodl::parser::NmodlDriver;
 using nmodl::NrnUnitsLib;
+using nmodl::parser::NmodlDriver;
 
 //=============================================================================
 // Helper for codegen related visitor
@@ -43,8 +43,7 @@ std::string print_ispc_nmodl_constants(const std::string& text) {
     /// initialize CodegenIspcVisitor
     std::stringbuf strbuf;
     std::ostream oss(&strbuf);
-    CodegenIspcVisitor visitor(
-        "unit_test", oss, codegen::LayoutType::soa, "double", false);
+    CodegenIspcVisitor visitor("unit_test", oss, codegen::LayoutType::soa, "double", false);
     visitor.setup(*ast);
 
     /// print nmodl constants
@@ -68,8 +67,7 @@ std::string print_ispc_compute_functions(const std::string& text) {
     /// initialize CodegenIspcVisitor
     std::stringbuf strbuf;
     std::ostream oss(&strbuf);
-    CodegenIspcVisitor visitor(
-        "unit_test", oss, codegen::LayoutType::soa, "double", false);
+    CodegenIspcVisitor visitor("unit_test", oss, codegen::LayoutType::soa, "double", false);
     visitor.setup(*ast);
 
     /// print compute functions
