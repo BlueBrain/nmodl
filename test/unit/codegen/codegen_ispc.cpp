@@ -145,7 +145,7 @@ SCENARIO("ISPC codegen", "[codegen][ispc]") {
                 foreach (id = start ... end) {
                     int node_id = node_index[id];
                     double v = voltage[node_id];
-
+                    
                     double x, y;
                     x = 1d-18 + FARADAY * 1.2345d;
                     y = 1d+18 + FARADAY * 0.1234d;
