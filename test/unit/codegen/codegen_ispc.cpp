@@ -37,7 +37,7 @@ std::string print_ispc_nmodl_constants(const std::string& text) {
     /// parse units of text
     UnitsVisitor(units_dir).visit_program(*ast);
 
-    /// construct symbol table and run codegen ispc visitor
+    /// construct symbol table
     SymtabVisitor().visit_program(*ast);
 
     /// initialize CodegenIspcVisitor
@@ -62,7 +62,7 @@ std::string print_ispc_compute_functions(const std::string& text) {
     /// parse units of text
     UnitsVisitor(units_dir).visit_program(*ast);
 
-    /// construct symbol table and run codegen ispc visitor
+    /// construct symbol table
     SymtabVisitor().visit_program(*ast);
 
     /// initialize CodegenIspcVisitor
@@ -72,7 +72,7 @@ std::string print_ispc_compute_functions(const std::string& text) {
         "unit_test", oss, codegen::LayoutType::soa, "double", false);
     visitor.setup(*ast);
 
-    /// print nmodl constants
+    /// print compute functions
     visitor.print_compute_functions();
 
     return strbuf.str();
@@ -145,7 +145,7 @@ SCENARIO("ISPC codegen", "[codegen][ispc]") {
                 foreach (id = start ... end) {
                     int node_id = node_index[id];
                     double v = voltage[node_id];
-                    
+
                     double x, y;
                     x = 1d-18 + FARADAY * 1.2345d;
                     y = 1d+18 + FARADAY * 0.1234d;
