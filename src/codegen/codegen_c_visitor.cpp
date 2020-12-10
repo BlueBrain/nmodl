@@ -758,7 +758,7 @@ void CodegenCVisitor::update_index_semantics() {
         info.semantics.emplace_back(index++, naming::POINT_PROCESS_SEMANTIC, 1);
     }
     for (const auto& ion: info.ions) {
-        for (auto& var: ion.reads) {
+        for (const auto& var: ion.reads) {
             info.semantics.emplace_back(index++, ion.name + "_ion", 1);
         }
         for (auto& var: ion.writes) {
@@ -825,13 +825,13 @@ std::vector<SymbolType> CodegenCVisitor::get_float_variables() {
     auto states = info.state_vars;
 
     // each state variable has corresponding Dstate variable
-    for (auto& variable: states) {
-        auto name = "D" + variable->get_name();
+    for (auto& state: states) {
+        auto name = "D" + state->get_name();
         auto symbol = make_symbol(name);
-        if (variable->is_array()) {
-            symbol->set_as_array(variable->get_length());
+        if (state->is_array()) {
+            symbol->set_as_array(state->get_length());
         }
-        symbol->set_definition_order(variable->get_definition_order());
+        symbol->set_definition_order(state->get_definition_order());
         assigned.push_back(symbol);
     }
     std::sort(assigned.begin(), assigned.end(), comparator);
