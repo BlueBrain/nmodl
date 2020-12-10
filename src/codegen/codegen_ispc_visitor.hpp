@@ -152,8 +152,7 @@ class CodegenIspcVisitor: public CodegenCVisitor {
     void print_wrapper_headers_include();
 
 
-    /// all compute functions for every backend
-    void print_compute_functions() override;
+
 
 
     /// nmodl procedure definition
@@ -166,6 +165,10 @@ class CodegenIspcVisitor: public CodegenCVisitor {
     /// print wrapper function that calls ispc kernel
     void print_wrapper_routine(const std::string& wrapper_function, BlockType type);
 
+
+    /// print initial equation and state wrapper
+    void print_block_wrappers_initial_equation_state();
+    
 
     void print_ispc_globals();
 
@@ -238,8 +241,8 @@ class CodegenIspcVisitor: public CodegenCVisitor {
     void visit_program(const ast::Program& node) override;
     void visit_local_list_statement(const ast::LocalListStatement& node) override;
 
-    /// print initial equation and state wrapper
-    void print_block_wrappers_initial_equation_state();
+    /// all compute functions for every backend
+    void print_compute_functions() override;
 
     void print_nmodl_constants() override;
 };

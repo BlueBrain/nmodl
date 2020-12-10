@@ -26,9 +26,9 @@ using nmodl::parser::NmodlDriver;
 using nmodl::NrnUnitsLib;
 
 //=============================================================================
-// Helper for codege related visitor
+// Helper for codegen related visitor
 //=============================================================================
-std::string create_codegen_ispc_visitor(const std::string& text) {
+std::string print_ispc_nmodl_constants(const std::string& text) {
     NmodlDriver driver;
     const auto& ast = driver.parse_string(text);
 
@@ -39,16 +39,42 @@ std::string create_codegen_ispc_visitor(const std::string& text) {
 
     /// construct symbol table and run codegen ispc visitor
     SymtabVisitor().visit_program(*ast);
+
+    /// initialize CodegenIspcVisitor
     std::stringbuf strbuf;
     std::ostream oss(&strbuf);
     CodegenIspcVisitor visitor(
         "unit_test", oss, codegen::LayoutType::soa, "double", false);
     visitor.setup(*ast);
-    // return visitor;
-    // visitor.visit_program(*ast);
-    // std::cout << "Finished visiting program" << std::endl;
+
+    /// print nmodl constants
     visitor.print_nmodl_constants();
-    std::cout << strbuf.str() << std::endl;
+
+    return strbuf.str();
+}
+
+std::string print_ispc_compute_functions(const std::string& text) {
+    NmodlDriver driver;
+    const auto& ast = driver.parse_string(text);
+
+    /// directory where units lib file is located
+    std::string units_dir(NrnUnitsLib::get_path());
+    /// parse units of text
+    UnitsVisitor(units_dir).visit_program(*ast);
+
+    /// construct symbol table and run codegen ispc visitor
+    SymtabVisitor().visit_program(*ast);
+
+    /// initialize CodegenIspcVisitor
+    std::stringbuf strbuf;
+    std::ostream oss(&strbuf);
+    CodegenIspcVisitor visitor(
+        "unit_test", oss, codegen::LayoutType::soa, "double", false);
+    visitor.setup(*ast);
+
+    /// print nmodl constants
+    visitor.print_compute_functions();
+
     return strbuf.str();
 }
 
@@ -82,54 +108,57 @@ SCENARIO("ISPC codegen", "[codegen][ispc]") {
             static const uniform double FARADAY = 96485.3321233100141d;
         )";
 
-        std::string nrn_init_block = R"(
-                export void nrn_init_unit_test(uniform unit_test_Instance* uniform inst, uniform NrnThread* uniform nt, uniform Memb_list* uniform ml, uniform int type) {
-                    uniform int nodecount = ml->nodecount;
-                    uniform int pnodecount = ml->_nodecount_padded;
-                    const int* uniform node_index = ml->nodeindices;
-                    double* uniform data = ml->data;
-                    const double* uniform voltage = nt->_actual_v;
-                    Datum* uniform indexes = ml->pdata;
-                    ThreadDatum* uniform thread = ml->_thread;
+        std::string nrn_init_state_block = R"(
+            /** initialize channel */
+            export void nrn_init_unit_test(uniform unit_test_Instance* uniform inst, uniform NrnThread* uniform nt, uniform Memb_list* uniform ml, uniform int type) {
+                uniform int nodecount = ml->nodecount;
+                uniform int pnodecount = ml->_nodecount_padded;
+                const int* uniform node_index = ml->nodeindices;
+                double* uniform data = ml->data;
+                const double* uniform voltage = nt->_actual_v;
+                Datum* uniform indexes = ml->pdata;
+                ThreadDatum* uniform thread = ml->_thread;
 
-                    int uniform start = 0;
-                    int uniform end = nodecount;
-                    foreach (id = start ... end) {
-                        int node_id = node_index[id];
-                        double v = voltage[node_id];
-                        a = 0.d;
-                        b = 0.0d;
-                    }
+                int uniform start = 0;
+                int uniform end = nodecount;
+                foreach (id = start ... end) {
+                    int node_id = node_index[id];
+                    double v = voltage[node_id];
+                    a = 0.d;
+                    b = 0.0d;
                 }
-            )";
+            }
 
-        std::string nrn_state_block = R"(
-                export void nrn_state_unit_test(uniform unit_test_Instance* uniform inst, uniform NrnThread* uniform nt, uniform Memb_list* uniform ml, uniform int type) {
-                    uniform int nodecount = ml->nodecount;
-                    uniform int pnodecount = ml->_nodecount_padded;
-                    const int* uniform node_index = ml->nodeindices;
-                    double* uniform data = ml->data;
-                    const double* uniform voltage = nt->_actual_v;
-                    Datum* uniform indexes = ml->pdata;
-                    ThreadDatum* uniform thread = ml->_thread;
 
-                    int uniform start = 0;
-                    int uniform end = nodecount;
-                    foreach (id = start ... end) {
-                        int node_id = node_index[id];
-                        double v = voltage[node_id];
+            /** update state */
+            export void nrn_state_unit_test(uniform unit_test_Instance* uniform inst, uniform NrnThread* uniform nt, uniform Memb_list* uniform ml, uniform int type) {
+                uniform int nodecount = ml->nodecount;
+                uniform int pnodecount = ml->_nodecount_padded;
+                const int* uniform node_index = ml->nodeindices;
+                double* uniform data = ml->data;
+                const double* uniform voltage = nt->_actual_v;
+                Datum* uniform indexes = ml->pdata;
+                ThreadDatum* uniform thread = ml->_thread;
 
-                        double x, y;
-                        x = 1d-18 + FARADAY * 1.2345d;
-                        y = 1d+18 + FARADAY * 0.1234d;
-                        a = x * 1.012345678901234567d + y;
-                        b = a + 1.0d + 2.0d;
-                    }
+                int uniform start = 0;
+                int uniform end = nodecount;
+                foreach (id = start ... end) {
+                    int node_id = node_index[id];
+                    double v = voltage[node_id];
+                    
+                    double x, y;
+                    x = 1d-18 + FARADAY * 1.2345d;
+                    y = 1d+18 + FARADAY * 0.1234d;
+                    a = x * 1.012345678901234567d + y;
+                    b = a + 1.0d + 2.0d;
                 }
-            )";
+            }
+        )";
         THEN("Check that the nmodl constants are set correctly") {
-            auto result = reindent_text(create_codegen_ispc_visitor(nmodl_text));
-            REQUIRE(result == reindent_text(nmodl_constants_declaration));
+            auto nmodl_constants_result = reindent_text(print_ispc_nmodl_constants(nmodl_text));
+            REQUIRE(nmodl_constants_result == reindent_text(nmodl_constants_declaration));
+            auto nmodl_init_cur_state = reindent_text(print_ispc_compute_functions(nmodl_text));
+            REQUIRE(nmodl_init_cur_state == reindent_text(nrn_init_state_block));
         }
     }
 }
