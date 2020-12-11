@@ -133,9 +133,8 @@ void CodegenIspcVisitor::visit_local_list_statement(const ast::LocalListStatemen
  */
 std::string CodegenIspcVisitor::double_to_string(const std::string& s_value) {
     std::string return_string = s_value;
-    if (s_value.find('E') != std::string::npos) {
+    if (s_value.find_first_of("eE") != std::string::npos) {
         std::replace(return_string.begin(), return_string.end(), 'E', 'd');
-    } else if (s_value.find('e') != std::string::npos) {
         std::replace(return_string.begin(), return_string.end(), 'e', 'd');
     } else if (s_value.find('.') == std::string::npos) {
         return_string += ".0d";
@@ -155,8 +154,7 @@ std::string CodegenIspcVisitor::double_to_string(const std::string& s_value) {
  */
 std::string CodegenIspcVisitor::float_to_string(const std::string& s_value) {
     std::string return_string = s_value;
-    if (s_value.find('E') == std::string::npos && s_value.find('e') == std::string::npos &&
-        s_value.find('.') == std::string::npos) {
+    if (s_value.find_first_of("Ee.") == std::string::npos) {
         return_string += ".0f";
     } else if (s_value.front() == '.') {
         return_string = '0' + return_string + 'f';
