@@ -124,12 +124,12 @@ void CodegenIspcVisitor::visit_local_list_statement(const ast::LocalListStatemen
 /****************************************************************************************/
 
 /**
- * \todo : In ISPC we have to explicitly append `d` to a floating point number
- *         otherwise it is treated as float. A value stored in the AST can be in
- *         scientific notation and hence we can't just append `d` to the string.
- *         Hence, we have to print number with .16f and then append `d`. But note
- *         that this will result into discrepancy between C++ backend and ISPC
- *         backend when floating point number is not exactly represented with .16f.
+ * In ISPC we have to explicitly append `d` to a floating point number
+ * otherwise it is treated as float. A value stored in the AST can be in
+ * scientific notation and hence we can't just append `d` to the string.
+ * Hence, we have to transform the value into the ISPC compliant format by
+ * replacing `e` and `E` with `d` to keep the same representation of the
+ * number as in the cpp backend.
  */
 std::string CodegenIspcVisitor::double_to_string(const std::string& s_value) {
     std::string return_string = s_value;
@@ -147,7 +147,12 @@ std::string CodegenIspcVisitor::double_to_string(const std::string& s_value) {
     return return_string;
 }
 
-
+/**
+ * For float variables we don't have to do the conversion with changing `e` and
+ * `E` with `f`, since the scientific notation numbers are already parsed as
+ * floats by ISPC. Instead we need to take care of only appending `f` to the
+ * end of floating point numbers, which is optional on ISPC.
+ */
 std::string CodegenIspcVisitor::float_to_string(const std::string& s_value) {
     std::string return_string = s_value;
     if (s_value.find('E') == std::string::npos && s_value.find('e') == std::string::npos &&

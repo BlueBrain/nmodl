@@ -440,7 +440,8 @@ int CodegenCVisitor::position_of_int_var(const std::string& name) const {
  * then it gets printed as an integer. To avoid this, we use below wrapper.
  * If user has provided integer then it gets printed as 1.0 (similar to mod2c
  * and neuron where ".0" is appended). Otherwise we print double variables as
- * they are represented in the mod file by user.
+ * they are represented in the mod file by user. If the value is in scientific
+ * representation (1e+20, 1E-15) then keep it as it is.
  */
 std::string CodegenCVisitor::double_to_string(const std::string& s_value) {
     double value = std::stod(s_value);

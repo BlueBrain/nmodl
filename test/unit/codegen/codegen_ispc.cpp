@@ -83,6 +83,10 @@ SCENARIO("ISPC codegen", "[codegen][ispc]") {
                 SUFFIX unit_test
                 RANGE a, b
             }
+            ASSIGNED {
+                a
+                b
+            }
             UNITS {
                 FARADAY = (faraday) (coulomb)
             }
@@ -120,8 +124,8 @@ SCENARIO("ISPC codegen", "[codegen][ispc]") {
                 foreach (id = start ... end) {
                     int node_id = node_index[id];
                     double v = voltage[node_id];
-                    a = 0.d;
-                    b = 0.0d;
+                    inst->a[id] = 0.d;
+                    inst->b[id] = 0.0d;
                 }
             }
 
@@ -145,8 +149,8 @@ SCENARIO("ISPC codegen", "[codegen][ispc]") {
                     double x, y;
                     x = 1d-18 + FARADAY * 1.2345d;
                     y = 1d+18 + FARADAY * 0.1234d;
-                    a = x * 1.012345678901234567d + y;
-                    b = a + 1.0d + 2.0d;
+                    inst->a[id] = x * 1.012345678901234567d + y;
+                    inst->b[id] = inst->a[id] + 1.0d + 2.0d;
                 }
             }
         )";
