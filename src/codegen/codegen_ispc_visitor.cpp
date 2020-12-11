@@ -752,6 +752,7 @@ void CodegenIspcVisitor::print_wrapper_routines() {
     print_ispc_globals();
     print_namespace_begin();
 
+    CodegenCVisitor::print_nmodl_constants();
     print_mechanism_info();
     print_data_structures();
     print_global_variables_for_hoc();
