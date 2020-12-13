@@ -27,22 +27,53 @@ namespace codegen {
 
 void CodegenLLVMVisitor::visit_binary_expression(const ast::BinaryExpression& node) {
     ast::BinaryOp op = node.get_op().get_value();
+
+    // Process rhs first, since lhs is handled differently for assignment and binary
+    // operators
+    node.get_rhs()->accept(*this);
+    llvm::Value* rhs = values.back();
+    values.pop_back();
     if (op == ast::BinaryOp::BOP_ASSIGN) {
-        auto var = dynamic_cast<ast::VarName*>(node.get_lhs().get());
-        node.get_rhs()->accept(*this);
-        llvm::Value* rhs = values.back();
-        values.pop_back();
-        llvm::Value* alloca = namedValues[var->get_node_name()];
+        auto var = dynamic_cast<ast::VarName *>(node.get_lhs().get());
+        llvm::Value *alloca = namedValues[var->get_node_name()];
         builder.CreateStore(rhs, alloca);
-    } else {
-        // TODO: scale binary operators
-        std::cout << "Error: not supported binary operator";
-        abort();
+        return;
     }
+
+    node.get_lhs()->accept(*this);
+    llvm::Value* lhs = values.back();
+    values.pop_back();
+    llvm::Value* result;
+
+    // TODO: support more binary operators
+    switch(op) {
+#define DISPATCH(binary_op, llvm_op)                \
+    case binary_op:                                 \
+        result = llvm_op(lhs, rhs);                 \
+        values.push_back(result);                   \
+        break;
+
+        DISPATCH(ast::BinaryOp::BOP_ADDITION, builder.CreateFAdd);
+        DISPATCH(ast::BinaryOp::BOP_DIVISION, builder.CreateFDiv);
+        DISPATCH(ast::BinaryOp::BOP_MULTIPLICATION, builder.CreateFMul);
+        DISPATCH(ast::BinaryOp::BOP_SUBTRACTION, builder.CreateFSub);
+
+#undef DISPATCH
+    }
+}
+
+void CodegenLLVMVisitor::visit_boolean(const ast::Boolean &node) {
+    llvm::Value* constant = llvm::ConstantInt::get(llvm::Type::getInt1Ty(*context), node.get_value());
+    values.push_back(constant);
 }
 
 void CodegenLLVMVisitor::visit_double(const ast::Double &node) {
     llvm::Value* constant = llvm::ConstantFP::get(llvm::Type::getDoubleTy(*context), node.get_value());
+    values.push_back(constant);
+}
+
+void CodegenLLVMVisitor::visit_integer(const ast::Integer &node) {
+    llvm::Value* constant = llvm::ConstantInt::get(llvm::Type::getInt32Ty(*context), node.get_value());
     values.push_back(constant);
 }
 

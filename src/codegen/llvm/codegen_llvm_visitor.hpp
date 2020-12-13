@@ -76,7 +76,9 @@ public:
 
     // Visitors
     void visit_binary_expression(const ast::BinaryExpression &node) override;
+    void visit_boolean(const ast::Boolean &node) override;
     void visit_double(const ast::Double &node) override;
+    void visit_integer(const ast::Integer &node) override;
     void visit_local_list_statement(const ast::LocalListStatement &node) override;
     void visit_procedure_block(const ast::ProcedureBlock& node) override;
     void visit_program(const ast::Program& node) override;
