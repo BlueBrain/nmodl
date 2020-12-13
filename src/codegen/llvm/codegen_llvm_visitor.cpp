@@ -30,7 +30,7 @@ void CodegenLLVMVisitor::visit_binary_expression(const ast::BinaryExpression& no
     if (op == ast::BinaryOp::BOP_ASSIGN) {
         auto var = dynamic_cast<ast::VarName*>(node.get_lhs().get());
         node.get_rhs()->accept(*this);
-        llvm::Value* rhs = values.at(0);
+        llvm::Value* rhs = values.back();
         values.pop_back();
         llvm::Value* alloca = namedValues[var->get_node_name()];
         builder.CreateStore(rhs, alloca);
@@ -57,6 +57,8 @@ void CodegenLLVMVisitor::visit_local_list_statement(const ast::LocalListStatemen
 
 void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
     node.visit_children(*this);
+    // Keep this for easier development (maybe move to debug mode later)
+    std::cout << print_module();
 }
 
 void CodegenLLVMVisitor::visit_procedure_block(const ast::ProcedureBlock& node) {
