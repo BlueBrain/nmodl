@@ -94,6 +94,7 @@ target_link_libraries(
   ${NMODL_WRAPPER_LIBS})
 
 if(NMODL_ENABLE_LLVM)
+  include_directories(${LLVM_INCLUDE_DIRS})
   add_executable(testcodegen visitor/main.cpp codegen/llvm.cpp)
   target_link_libraries(
     testcodegen

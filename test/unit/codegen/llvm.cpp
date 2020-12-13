@@ -31,19 +31,30 @@ std::string run_llvm_visitor(const std::string& text) {
 
     codegen::CodegenLLVMVisitor llvm_visitor("unknown", ".");
     llvm_visitor.visit_program(*ast);
-    return llvm_visitor.get_code();
+    return llvm_visitor.print_module();
 }
 
 SCENARIO("Running LLVM Codegen", "[visitor][llvm]") {
-    GIVEN("Simple procedure with hello world message") {
+    GIVEN("Simple procedure with local assignment") {
         std::string nmodl_text = R"(
-            PROCEDURE say_hello() {
-                print("Hello World")
+            PROCEDURE one_arg(x) {
+                LOCAL w
+                w = x
             }
         )";
 
-        THEN("Hello world message is printed") {
-            std::string expected = "Hello World";
+        THEN("Generated LLVM code") {
+            std::string expected = "; ModuleID = 'unknown'\n"
+                                   "source_filename = \"unknown\"\n"
+                                   "\n"
+                                   "define void @one_arg(double %x1) {\n"
+                                   "  %x = alloca double, align 8\n"
+                                   "  store double %x1, double* %x, align 8\n"
+                                   "  %w = alloca double, align 8\n"
+                                   "  %1 = load double, double* %x, align 8\n"
+                                   "  store double %1, double* %w, align 8\n"
+                                   "}\n"
+                                   "";
             auto result = run_llvm_visitor(nmodl_text);
             REQUIRE(result == expected);
         }
