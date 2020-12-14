@@ -32,7 +32,7 @@ std::string double_to_string<CodegenCVisitor>(const std::string& s_value) {
 
 
 /**
- * In ISPC we have to explicitly append `d` to a floating point number
+ * \details In ISPC we have to explicitly append `d` to a floating point number
  * otherwise it is treated as float. A value stored in the AST can be in
  * scientific notation and hence we can't just append `d` to the string.
  * Hence, we have to transform the value into the ISPC compliant format by
@@ -67,7 +67,7 @@ std::string float_to_string<CodegenCVisitor>(const std::string& s_value) {
 
 
 /**
- * For float variables we don't have to do the conversion with changing `e` and
+ * \details For float variables we don't have to do the conversion with changing `e` and
  * `E` with `f`, since the scientific notation numbers are already parsed as
  * floats by ISPC. Instead we need to take care of only appending `f` to the
  * end of floating point numbers, which is optional on ISPC.

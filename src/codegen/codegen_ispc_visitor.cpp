@@ -136,6 +136,7 @@ std::string CodegenIspcVisitor::double_to_string(const std::string& s_value) {
     return utils::double_to_string<CodegenIspcVisitor>(s_value);
 }
 
+
 /**
  * For float variables we don't have to do the conversion with changing `e` and
  * `E` with `f`, since the scientific notation numbers are already parsed as

@@ -60,11 +60,19 @@ class CodegenIspcVisitor: public CodegenCVisitor {
     std::vector<const ast::FunctionBlock*> wrapper_functions;
 
   protected:
-    /// doubles are differently represented in ispc than in C
+    /**
+     * Convert a given \c double value to its string representation
+     * \param value The number to convert given as string as it parsed by the modfile
+     * \return      Its string representation in ISPC compliant format
+     */
     std::string double_to_string(const std::string& value) override;
 
 
-    /// floats are differently represented in ispc than in C
+    /**
+     * Convert a given \c float value to its string representation
+     * \param value The number to convert given as string as it parsed by the modfile
+     * \return      Its string representation in ISPC compliant format
+     */
     std::string float_to_string(const std::string& value) override;
 
 

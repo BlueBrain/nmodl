@@ -575,7 +575,7 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
     /**
      * Convert a given \c double value to its string representation
-     * \param value The number to convert
+     * \param value The number to convert given as string as it parsed by the modfile
      * \return      Its string representation
      */
     virtual std::string double_to_string(const std::string& value);
@@ -583,7 +583,7 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
     /**
      * Convert a given \c float value to its string representation
-     * \param value The number to convert
+     * \param value The number to convert given as string as it parsed by the modfile
      * \return      Its string representation
      */
     virtual std::string float_to_string(const std::string& value);
