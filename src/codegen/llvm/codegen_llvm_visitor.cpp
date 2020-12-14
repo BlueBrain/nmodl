@@ -128,6 +128,9 @@ void CodegenLLVMVisitor::visit_procedure_block(const ast::ProcedureBlock& node) 
     }
 
     values.clear();
+    // Clear named values for now, since there is no support of global variables yet.
+    // It will be better to keep a separate global map (or use module?).
+    namedValues.clear();
 }
 
 void CodegenLLVMVisitor::visit_unary_expression(const ast::UnaryExpression &node) {
