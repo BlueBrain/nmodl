@@ -15,6 +15,7 @@
 #include "ast/all.hpp"
 #include "codegen/codegen_helper_visitor.hpp"
 #include "codegen/codegen_naming.hpp"
+#include "codegen/codegen_utils.hpp"
 #include "config/config.h"
 #include "lexer/token_mapping.hpp"
 #include "parser/c11_driver.hpp"
@@ -444,22 +445,12 @@ int CodegenCVisitor::position_of_int_var(const std::string& name) const {
  * representation (1e+20, 1E-15) then keep it as it is.
  */
 std::string CodegenCVisitor::double_to_string(const std::string& s_value) {
-    double value = std::stod(s_value);
-    if (std::ceil(value) == value && s_value.find('E') == std::string::npos &&
-        s_value.find('e') == std::string::npos) {
-        return "{:.1f}"_format(value);
-    }
-    return s_value;
+    return utils::double_to_string<CodegenCVisitor>(s_value);
 }
 
 
 std::string CodegenCVisitor::float_to_string(const std::string& s_value) {
-    float value = std::stof(s_value);
-    if (std::ceil(value) == value && s_value.find('E') == std::string::npos &&
-        s_value.find('e') == std::string::npos) {
-        return "{:.1f}"_format(value);
-    }
-    return s_value;
+    return utils::float_to_string<CodegenCVisitor>(s_value);
 }
 
 
@@ -993,7 +984,7 @@ std::string CodegenCVisitor::get_parameter_str(const ParamVector& params) {
                                     std::get<1>(*iter),
                                     std::get<2>(*iter),
                                     std::get<3>(*iter));
-        if (!utils::is_last(iter, params)) {
+        if (!nmodl::utils::is_last(iter, params)) {
             param += ", ";
         }
     }
@@ -1671,7 +1662,7 @@ void CodegenCVisitor::print_function(const ast::FunctionBlock& node) {
 
 
 std::string CodegenCVisitor::find_var_unique_name(const std::string& original_name) const {
-    auto& singleton_random_string_class = utils::SingletonRandomString<4>::instance();
+    auto& singleton_random_string_class = nmodl::utils::SingletonRandomString<4>::instance();
     std::string unique_name = original_name;
     if (singleton_random_string_class.random_string_exists(original_name)) {
         unique_name = original_name;

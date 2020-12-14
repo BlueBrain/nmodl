@@ -1903,7 +1903,7 @@ void CodegenCVisitor::print_vector_elements(const std::vector<T>& elements,
     for (auto iter = elements.begin(); iter != elements.end(); iter++) {
         printer->add_text(prefix);
         (*iter)->accept(*this);
-        if (!separator.empty() && !utils::is_last(iter, elements)) {
+        if (!separator.empty() && !nmodl::utils::is_last(iter, elements)) {
             printer->add_text(separator);
         }
     }

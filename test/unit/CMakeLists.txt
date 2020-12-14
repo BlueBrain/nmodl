@@ -111,7 +111,6 @@ foreach(
   testlexer
   testparser
   testvisitor
-  testcodegen
   testprinter
   testsymtab
   testnewton

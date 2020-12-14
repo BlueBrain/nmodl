@@ -11,6 +11,7 @@
 
 #include "ast/all.hpp"
 #include "codegen/codegen_naming.hpp"
+#include "codegen/codegen_utils.hpp"
 #include "symtab/symbol_table.hpp"
 #include "utils/logger.hpp"
 #include "visitors/rename_visitor.hpp"
@@ -132,18 +133,7 @@ void CodegenIspcVisitor::visit_local_list_statement(const ast::LocalListStatemen
  * number as in the cpp backend.
  */
 std::string CodegenIspcVisitor::double_to_string(const std::string& s_value) {
-    std::string return_string = s_value;
-    if (s_value.find_first_of("eE") != std::string::npos) {
-        std::replace(return_string.begin(), return_string.end(), 'E', 'd');
-        std::replace(return_string.begin(), return_string.end(), 'e', 'd');
-    } else if (s_value.find('.') == std::string::npos) {
-        return_string += ".0d";
-    } else if (s_value.front() == '.') {
-        return_string = '0' + return_string + 'd';
-    } else {
-        return_string += 'd';
-    }
-    return return_string;
+    return utils::double_to_string<CodegenIspcVisitor>(s_value);
 }
 
 /**
@@ -153,15 +143,7 @@ std::string CodegenIspcVisitor::double_to_string(const std::string& s_value) {
  * end of floating point numbers, which is optional on ISPC.
  */
 std::string CodegenIspcVisitor::float_to_string(const std::string& s_value) {
-    std::string return_string = s_value;
-    if (s_value.find_first_of("Ee.") == std::string::npos) {
-        return_string += ".0f";
-    } else if (s_value.front() == '.') {
-        return_string = '0' + return_string + 'f';
-    } else {
-        return_string += 'f';
-    }
-    return return_string;
+    return utils::float_to_string<CodegenIspcVisitor>(s_value);
 }
 
 
