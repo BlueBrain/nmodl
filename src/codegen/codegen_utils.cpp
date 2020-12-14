@@ -21,7 +21,7 @@ namespace utils {
  * they are represented in the mod file by user. If the value is in scientific
  * representation (1e+20, 1E-15) then keep it as it is.
  */
-template<>
+template <>
 std::string double_to_string<CodegenCVisitor>(const std::string& s_value) {
     double value = std::stod(s_value);
     if (std::ceil(value) == value && s_value.find_first_of("eE") == std::string::npos) {
@@ -39,7 +39,7 @@ std::string double_to_string<CodegenCVisitor>(const std::string& s_value) {
  * replacing `e` and `E` with `d` to keep the same representation of the
  * number as in the cpp backend.
  */
-template<>
+template <>
 std::string double_to_string<CodegenIspcVisitor>(const std::string& s_value) {
     std::string return_string = s_value;
     if (s_value.find_first_of("eE") != std::string::npos) {
@@ -56,13 +56,7 @@ std::string double_to_string<CodegenIspcVisitor>(const std::string& s_value) {
 }
 
 
-// template<typename T>
-// std::string double_to_string<T>(const std::string& s_value) {
-//     std::cerr << "double_to_string"
-//     return s_value;
-// }
-
-template<>
+template <>
 std::string float_to_string<CodegenCVisitor>(const std::string& s_value) {
     float value = std::stof(s_value);
     if (std::ceil(value) == value && s_value.find_first_of("eE") == std::string::npos) {
@@ -78,24 +72,19 @@ std::string float_to_string<CodegenCVisitor>(const std::string& s_value) {
  * floats by ISPC. Instead we need to take care of only appending `f` to the
  * end of floating point numbers, which is optional on ISPC.
  */
-template<>
+template <>
 std::string float_to_string<CodegenIspcVisitor>(const std::string& s_value) {
     std::string return_string = s_value;
     if (s_value.find_first_of("Ee.") == std::string::npos) {
         return_string += ".0f";
-    } else if (s_value.front() == '.') {
+    } else if (s_value.front() == '.' && s_value.find_first_of("Ee") == std::string::npos) {
         return_string = '0' + return_string + 'f';
-    } else {
+    } else if (s_value.find_first_of("Ee") == std::string::npos) {
         return_string += 'f';
     }
     return return_string;
 }
 
-
-// template<typename T>
-// std::string float_to_string<T>(const std::string& s_value) {
-//     return s_value;
-// }
 
 }  // namespace utils
 }  // namespace codegen
