@@ -82,6 +82,7 @@ public:
     void visit_local_list_statement(const ast::LocalListStatement &node) override;
     void visit_procedure_block(const ast::ProcedureBlock& node) override;
     void visit_program(const ast::Program& node) override;
+    void visit_unary_expression(const ast::UnaryExpression &node) override;
     void visit_var_name(const ast::VarName &node) override;
 
     // TODO: use custom printer here

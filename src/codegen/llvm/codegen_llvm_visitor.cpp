@@ -130,6 +130,21 @@ void CodegenLLVMVisitor::visit_procedure_block(const ast::ProcedureBlock& node) 
     values.clear();
 }
 
+void CodegenLLVMVisitor::visit_unary_expression(const ast::UnaryExpression &node) {
+    ast::UnaryOp op = node.get_op().get_value();
+    node.get_expression()->accept(*this);
+    llvm::Value* value = values.back();
+    values.pop_back();
+    if (op == ast::UOP_NEGATION) {
+        llvm::Value* result = builder.CreateFNeg(value);
+        values.push_back(result);
+    } else {
+        // Support only `double` operators for now
+        std::cout << "Error: unsupported unary operator\n";
+        abort();
+    }
+}
+
 void CodegenLLVMVisitor::visit_var_name(const ast::VarName &node) {
     llvm::Value* var = builder.CreateLoad(namedValues[node.get_node_name()]);
     values.push_back(var);
