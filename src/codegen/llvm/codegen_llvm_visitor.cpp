@@ -93,7 +93,7 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
 }
 
 void CodegenLLVMVisitor::visit_procedure_block(const ast::ProcedureBlock& node) {
-    auto name = node.get_name()->get_value()->get_value();
+    auto name = node.get_node_name();
     const auto& parameters = node.get_parameters();
 
     // The procedure parameters are doubles by default

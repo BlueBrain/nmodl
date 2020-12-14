@@ -62,13 +62,12 @@ SCENARIO("Procedure", "[visitor][llvm]") {
 
         THEN("empty void function is produced") {
             std::smatch m;
-            std::regex expected("define void @with_argument\\(double %x1 \\) \\{\n"
+            std::regex expected("define void @with_argument\\(double %x1\\) \\{\n"
                                 "  %x = alloca double, align 8\n"
                                 "  store double %x1, double\\* %x, align 8\n"
                                 "\\}"
             );
             std::string actual = run_llvm_visitor(nmodl_text);
-            std::regex_search(actual, m, expected);
             REQUIRE(std::regex_search(actual, m, expected));
         }
     }
