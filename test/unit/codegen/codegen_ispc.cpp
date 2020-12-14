@@ -107,7 +107,7 @@ std::string print_ispc_compute_functions(IspcCodegenTestHelper& ispc_codegen_tes
 
 
 SCENARIO("ISPC codegen", "[codegen][ispc]") {
-    GIVEN("Mod file that has multiple double, float and in constants") {
+    GIVEN("Simple mod file") {
         std::string nmodl_text = R"(
             TITLE UnitTest
             NEURON {
@@ -122,15 +122,11 @@ SCENARIO("ISPC codegen", "[codegen][ispc]") {
                 FARADAY = (faraday) (coulomb)
             }
             INITIAL {
-                a = 0.
-                b = .0
+                a = 0.0
+                b = 0.0
             }
             BREAKPOINT {
-                LOCAL x, y
-                x = 1E-18 + FARADAY * 1.2345
-                y = 1e+18 + FARADAY * .1234
-                a = x * 1.012345678901234567 + y
-                b = a + 1 + 2.0
+                a = b + FARADAY
             }
         )";
 
@@ -155,7 +151,7 @@ SCENARIO("ISPC codegen", "[codegen][ispc]") {
                 foreach (id = start ... end) {
                     int node_id = node_index[id];
                     double v = voltage[node_id];
-                    inst->a[id] = 0.d;
+                    inst->a[id] = 0.0d;
                     inst->b[id] = 0.0d;
                 }
             }
@@ -176,12 +172,7 @@ SCENARIO("ISPC codegen", "[codegen][ispc]") {
                 foreach (id = start ... end) {
                     int node_id = node_index[id];
                     double v = voltage[node_id];
-                    
-                    double x, y;
-                    x = 1d-18 + FARADAY * 1.2345d;
-                    y = 1d+18 + FARADAY * 0.1234d;
-                    inst->a[id] = x * 1.012345678901234567d + y;
-                    inst->b[id] = inst->a[id] + 1.0d + 2.0d;
+                    inst->a[id] = inst->b[id] + FARADAY;
                 }
             }
         )";
