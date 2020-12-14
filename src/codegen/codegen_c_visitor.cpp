@@ -76,7 +76,7 @@ void CodegenCVisitor::visit_float(const Float& node) {
     if (!codegen) {
         return;
     }
-    printer->add_text(float_to_string(node.get_value()));
+    printer->add_text(format_float_string(node.get_value()));
 }
 
 
@@ -84,7 +84,7 @@ void CodegenCVisitor::visit_double(const Double& node) {
     if (!codegen) {
         return;
     }
-    printer->add_text(double_to_string(node.get_value()));
+    printer->add_text(format_double_string(node.get_value()));
 }
 
 
@@ -444,13 +444,13 @@ int CodegenCVisitor::position_of_int_var(const std::string& name) const {
  * they are represented in the mod file by user. If the value is in scientific
  * representation (1e+20, 1E-15) then keep it as it is.
  */
-std::string CodegenCVisitor::double_to_string(const std::string& s_value) {
-    return utils::double_to_string<CodegenCVisitor>(s_value);
+std::string CodegenCVisitor::format_double_string(const std::string& s_value) {
+    return utils::format_double_string<CodegenCVisitor>(s_value);
 }
 
 
-std::string CodegenCVisitor::float_to_string(const std::string& s_value) {
-    return utils::float_to_string<CodegenCVisitor>(s_value);
+std::string CodegenCVisitor::format_float_string(const std::string& s_value) {
+    return utils::format_float_string<CodegenCVisitor>(s_value);
 }
 
 

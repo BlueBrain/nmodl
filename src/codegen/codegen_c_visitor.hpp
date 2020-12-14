@@ -575,18 +575,18 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
     /**
      * Convert a given \c double value to its string representation
-     * \param value The number to convert given as string as it parsed by the modfile
+     * \param value The number to convert given as string as it is parsed by the modfile
      * \return      Its string representation
      */
-    virtual std::string double_to_string(const std::string& value);
+    virtual std::string format_double_string(const std::string& value);
 
 
     /**
      * Convert a given \c float value to its string representation
-     * \param value The number to convert given as string as it parsed by the modfile
+     * \param value The number to convert given as string as it is parsed by the modfile
      * \return      Its string representation
      */
-    virtual std::string float_to_string(const std::string& value);
+    virtual std::string format_float_string(const std::string& value);
 
 
     /**

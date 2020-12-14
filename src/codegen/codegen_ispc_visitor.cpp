@@ -132,8 +132,8 @@ void CodegenIspcVisitor::visit_local_list_statement(const ast::LocalListStatemen
  * replacing `e` and `E` with `d` to keep the same representation of the
  * number as in the cpp backend.
  */
-std::string CodegenIspcVisitor::double_to_string(const std::string& s_value) {
-    return utils::double_to_string<CodegenIspcVisitor>(s_value);
+std::string CodegenIspcVisitor::format_double_string(const std::string& s_value) {
+    return utils::format_double_string<CodegenIspcVisitor>(s_value);
 }
 
 
@@ -143,8 +143,8 @@ std::string CodegenIspcVisitor::double_to_string(const std::string& s_value) {
  * floats by ISPC. Instead we need to take care of only appending `f` to the
  * end of floating point numbers, which is optional on ISPC.
  */
-std::string CodegenIspcVisitor::float_to_string(const std::string& s_value) {
-    return utils::float_to_string<CodegenIspcVisitor>(s_value);
+std::string CodegenIspcVisitor::format_float_string(const std::string& s_value) {
+    return utils::format_float_string<CodegenIspcVisitor>(s_value);
 }
 
 
@@ -465,7 +465,7 @@ void CodegenIspcVisitor::print_nmodl_constants() {
         printer->add_line("/** constants used in nmodl */");
         for (auto& it: info.factor_definitions) {
             const std::string name = it->get_node_name() == "PI" ? "ISPC_PI" : it->get_node_name();
-            const std::string value = double_to_string(it->get_value()->get_value());
+            const std::string value = format_double_string(it->get_value()->get_value());
             printer->add_line("static const uniform double {} = {};"_format(name, value));
         }
     }

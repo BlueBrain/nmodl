@@ -65,7 +65,7 @@ class CodegenIspcVisitor: public CodegenCVisitor {
      * \param value The number to convert given as string as it parsed by the modfile
      * \return      Its string representation in ISPC compliant format
      */
-    std::string double_to_string(const std::string& value) override;
+    std::string format_double_string(const std::string& value) override;
 
 
     /**
@@ -73,7 +73,7 @@ class CodegenIspcVisitor: public CodegenCVisitor {
      * \param value The number to convert given as string as it parsed by the modfile
      * \return      Its string representation in ISPC compliant format
      */
-    std::string float_to_string(const std::string& value) override;
+    std::string format_float_string(const std::string& value) override;
 
 
     /// name of the code generation backend

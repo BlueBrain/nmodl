@@ -22,7 +22,7 @@ namespace utils {
  * representation (1e+20, 1E-15) then keep it as it is.
  */
 template <>
-std::string double_to_string<CodegenCVisitor>(const std::string& s_value) {
+std::string format_double_string<CodegenCVisitor>(const std::string& s_value) {
     double value = std::stod(s_value);
     if (std::ceil(value) == value && s_value.find_first_of("eE") == std::string::npos) {
         return "{:.1f}"_format(value);
@@ -40,7 +40,7 @@ std::string double_to_string<CodegenCVisitor>(const std::string& s_value) {
  * number as in the cpp backend.
  */
 template <>
-std::string double_to_string<CodegenIspcVisitor>(const std::string& s_value) {
+std::string format_double_string<CodegenIspcVisitor>(const std::string& s_value) {
     std::string return_string = s_value;
     if (s_value.find_first_of("eE") != std::string::npos) {
         std::replace(return_string.begin(), return_string.end(), 'E', 'd');
@@ -57,7 +57,7 @@ std::string double_to_string<CodegenIspcVisitor>(const std::string& s_value) {
 
 
 template <>
-std::string float_to_string<CodegenCVisitor>(const std::string& s_value) {
+std::string format_float_string<CodegenCVisitor>(const std::string& s_value) {
     float value = std::stof(s_value);
     if (std::ceil(value) == value && s_value.find_first_of("eE") == std::string::npos) {
         return "{:.1f}"_format(value);
@@ -73,7 +73,7 @@ std::string float_to_string<CodegenCVisitor>(const std::string& s_value) {
  * end of floating point numbers, which is optional on ISPC.
  */
 template <>
-std::string float_to_string<CodegenIspcVisitor>(const std::string& s_value) {
+std::string format_float_string<CodegenIspcVisitor>(const std::string& s_value) {
     std::string return_string = s_value;
     if (s_value.find_first_of("Ee.") == std::string::npos) {
         return_string += ".0f";

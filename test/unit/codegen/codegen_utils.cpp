@@ -21,7 +21,7 @@ SCENARIO("C codegen utility functions", "[codegen][util][c]") {
         std::string double_constant = "0.012345678901234567";
 
         THEN("Codegen C Visitor prints double with same precision") {
-            auto nmodl_constant_result = codegen::utils::double_to_string<CodegenCVisitor>(
+            auto nmodl_constant_result = codegen::utils::format_double_string<CodegenCVisitor>(
                 double_constant);
             REQUIRE(nmodl_constant_result == double_constant);
         }
@@ -33,7 +33,7 @@ SCENARIO("C codegen utility functions", "[codegen][util][c]") {
         std::string codegen_output = "1.0";
 
         THEN("Codegen C Visitor prints integer as double number") {
-            auto nmodl_constant_result = codegen::utils::double_to_string<CodegenCVisitor>(
+            auto nmodl_constant_result = codegen::utils::format_double_string<CodegenCVisitor>(
                 double_constant);
             REQUIRE(nmodl_constant_result == codegen_output);
         }
@@ -43,7 +43,7 @@ SCENARIO("C codegen utility functions", "[codegen][util][c]") {
         std::string float_constant = "0.01234567";
 
         THEN("Codegen C Visitor prints float with same precision") {
-            auto nmodl_constant_result = codegen::utils::float_to_string<CodegenCVisitor>(
+            auto nmodl_constant_result = codegen::utils::format_float_string<CodegenCVisitor>(
                 float_constant);
             REQUIRE(nmodl_constant_result == float_constant);
         }
@@ -55,7 +55,7 @@ SCENARIO("C codegen utility functions", "[codegen][util][c]") {
         std::string codegen_output = "1.0";
 
         THEN("Codegen C Visitor prints integer as double number") {
-            auto nmodl_constant_result = codegen::utils::float_to_string<CodegenCVisitor>(
+            auto nmodl_constant_result = codegen::utils::format_float_string<CodegenCVisitor>(
                 float_constant);
             REQUIRE(nmodl_constant_result == codegen_output);
         }
@@ -67,13 +67,13 @@ SCENARIO("C codegen utility functions", "[codegen][util][c]") {
         std::string double_constant_with_E = "1E18";
 
         THEN("Codegen C Visitor prints doubles with scientific notation") {
-            auto nmodl_constant_result = codegen::utils::double_to_string<CodegenCVisitor>(
+            auto nmodl_constant_result = codegen::utils::format_double_string<CodegenCVisitor>(
                 double_constant_with_e);
             REQUIRE(nmodl_constant_result == double_constant_with_e);
-            nmodl_constant_result = codegen::utils::double_to_string<CodegenCVisitor>(
+            nmodl_constant_result = codegen::utils::format_double_string<CodegenCVisitor>(
                 double_constant_with_e_minus);
             REQUIRE(nmodl_constant_result == double_constant_with_e_minus);
-            nmodl_constant_result = codegen::utils::double_to_string<CodegenCVisitor>(
+            nmodl_constant_result = codegen::utils::format_double_string<CodegenCVisitor>(
                 double_constant_with_E);
             REQUIRE(nmodl_constant_result == double_constant_with_E);
         }
@@ -85,13 +85,13 @@ SCENARIO("C codegen utility functions", "[codegen][util][c]") {
         std::string float_constant_with_E = "1E18";
 
         THEN("Codegen C Visitor prints doubles with scientific notation") {
-            auto nmodl_constant_result = codegen::utils::float_to_string<CodegenCVisitor>(
+            auto nmodl_constant_result = codegen::utils::format_float_string<CodegenCVisitor>(
                 float_constant_with_e);
             REQUIRE(nmodl_constant_result == float_constant_with_e);
-            nmodl_constant_result = codegen::utils::float_to_string<CodegenCVisitor>(
+            nmodl_constant_result = codegen::utils::format_float_string<CodegenCVisitor>(
                 float_constant_with_e_minus);
             REQUIRE(nmodl_constant_result == float_constant_with_e_minus);
-            nmodl_constant_result = codegen::utils::float_to_string<CodegenCVisitor>(
+            nmodl_constant_result = codegen::utils::format_float_string<CodegenCVisitor>(
                 float_constant_with_E);
             REQUIRE(nmodl_constant_result == float_constant_with_E);
         }
@@ -109,13 +109,13 @@ SCENARIO("ISPC codegen utility functions", "[codegen][util][ispc]") {
 
 
         THEN("Codegen ISPC Visitor prints double with same precision") {
-            auto nmodl_constant_result = codegen::utils::double_to_string<CodegenIspcVisitor>(
+            auto nmodl_constant_result = codegen::utils::format_double_string<CodegenIspcVisitor>(
                 double_constant);
             REQUIRE(nmodl_constant_result == codegen_output_long);
-            nmodl_constant_result = codegen::utils::double_to_string<CodegenIspcVisitor>(
+            nmodl_constant_result = codegen::utils::format_double_string<CodegenIspcVisitor>(
                 double_constant_with_front_decimal_point);
             REQUIRE(nmodl_constant_result == codegen_output_long);
-            nmodl_constant_result = codegen::utils::double_to_string<CodegenIspcVisitor>(
+            nmodl_constant_result = codegen::utils::format_double_string<CodegenIspcVisitor>(
                 double_constant_with_only_decimal_point);
             REQUIRE(nmodl_constant_result == codegen_output_only_decimal_point);
         }
@@ -127,7 +127,7 @@ SCENARIO("ISPC codegen utility functions", "[codegen][util][ispc]") {
         std::string codegen_output = "1.0d";
 
         THEN("Codegen ISPC Visitor prints integer as double number") {
-            auto nmodl_constant_result = codegen::utils::double_to_string<CodegenIspcVisitor>(
+            auto nmodl_constant_result = codegen::utils::format_double_string<CodegenIspcVisitor>(
                 double_constant);
             REQUIRE(nmodl_constant_result == codegen_output);
         }
@@ -142,13 +142,13 @@ SCENARIO("ISPC codegen utility functions", "[codegen][util][ispc]") {
         std::string codegen_output_only_decimal_point = "123.f";
 
         THEN("Codegen ISPC Visitor prints float with same precision") {
-            auto nmodl_constant_result = codegen::utils::float_to_string<CodegenIspcVisitor>(
+            auto nmodl_constant_result = codegen::utils::format_float_string<CodegenIspcVisitor>(
                 float_constant);
             REQUIRE(nmodl_constant_result == codegen_output);
-            nmodl_constant_result = codegen::utils::float_to_string<CodegenIspcVisitor>(
+            nmodl_constant_result = codegen::utils::format_float_string<CodegenIspcVisitor>(
                 float_constant_with_front_decimal_point);
             REQUIRE(nmodl_constant_result == codegen_output);
-            nmodl_constant_result = codegen::utils::float_to_string<CodegenIspcVisitor>(
+            nmodl_constant_result = codegen::utils::format_float_string<CodegenIspcVisitor>(
                 double_constant_with_only_decimal_point);
             REQUIRE(nmodl_constant_result == codegen_output_only_decimal_point);
         }
@@ -160,7 +160,7 @@ SCENARIO("ISPC codegen utility functions", "[codegen][util][ispc]") {
         std::string codegen_output = "1.0f";
 
         THEN("Codegen ISPC Visitor prints integer as double number") {
-            auto nmodl_constant_result = codegen::utils::float_to_string<CodegenIspcVisitor>(
+            auto nmodl_constant_result = codegen::utils::format_float_string<CodegenIspcVisitor>(
                 float_constant);
             REQUIRE(nmodl_constant_result == codegen_output);
         }
@@ -179,16 +179,16 @@ SCENARIO("ISPC codegen utility functions", "[codegen][util][ispc]") {
         std::string result_double_constant_with_E = "1d18";
 
         THEN("Codegen ISPC Visitor prints doubles with scientific notation") {
-            auto nmodl_constant_result = codegen::utils::double_to_string<CodegenIspcVisitor>(
+            auto nmodl_constant_result = codegen::utils::format_double_string<CodegenIspcVisitor>(
                 double_constant_with_e);
             REQUIRE(nmodl_constant_result == result_double_constant_with_e);
-            nmodl_constant_result = codegen::utils::double_to_string<CodegenIspcVisitor>(
+            nmodl_constant_result = codegen::utils::format_double_string<CodegenIspcVisitor>(
                 double_constant_with_e_minus);
             REQUIRE(nmodl_constant_result == result_double_constant_with_e_minus);
-            nmodl_constant_result = codegen::utils::double_to_string<CodegenIspcVisitor>(
+            nmodl_constant_result = codegen::utils::format_double_string<CodegenIspcVisitor>(
                 double_constant_with_decimal_point_e);
             REQUIRE(nmodl_constant_result == result_double_constant_with_decimal_point_e);
-            nmodl_constant_result = codegen::utils::double_to_string<CodegenIspcVisitor>(
+            nmodl_constant_result = codegen::utils::format_double_string<CodegenIspcVisitor>(
                 double_constant_with_E);
             REQUIRE(nmodl_constant_result == result_double_constant_with_E);
         }
@@ -201,16 +201,16 @@ SCENARIO("ISPC codegen utility functions", "[codegen][util][ispc]") {
         std::string float_constant_with_E = "1E18";
 
         THEN("Codegen ISPC Visitor prints doubles with scientific notation") {
-            auto nmodl_constant_result = codegen::utils::float_to_string<CodegenIspcVisitor>(
+            auto nmodl_constant_result = codegen::utils::format_float_string<CodegenIspcVisitor>(
                 float_constant_with_e);
             REQUIRE(nmodl_constant_result == float_constant_with_e);
-            nmodl_constant_result = codegen::utils::float_to_string<CodegenIspcVisitor>(
+            nmodl_constant_result = codegen::utils::format_float_string<CodegenIspcVisitor>(
                 float_constant_with_e_minus);
             REQUIRE(nmodl_constant_result == float_constant_with_e_minus);
-            nmodl_constant_result = codegen::utils::float_to_string<CodegenIspcVisitor>(
+            nmodl_constant_result = codegen::utils::format_float_string<CodegenIspcVisitor>(
                 float_constant_with_decimal_point_e);
             REQUIRE(nmodl_constant_result == float_constant_with_decimal_point_e);
-            nmodl_constant_result = codegen::utils::float_to_string<CodegenIspcVisitor>(
+            nmodl_constant_result = codegen::utils::format_float_string<CodegenIspcVisitor>(
                 float_constant_with_E);
             REQUIRE(nmodl_constant_result == float_constant_with_E);
         }

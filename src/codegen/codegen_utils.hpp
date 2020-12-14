@@ -31,7 +31,7 @@ namespace utils {
  * \return        The proper string to be printed in the generated file.
  */
 template <typename T>
-std::string double_to_string(const std::string& s_value);
+std::string format_double_string(const std::string& s_value);
 
 
 /**
@@ -46,7 +46,7 @@ std::string double_to_string(const std::string& s_value);
  * \return        The proper string to be printed in the generated file.
  */
 template <typename T>
-std::string float_to_string(const std::string& s_value);
+std::string format_float_string(const std::string& s_value);
 
 }  // namespace utils
 }  // namespace codegen
