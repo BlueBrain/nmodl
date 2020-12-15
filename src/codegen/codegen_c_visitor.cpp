@@ -39,6 +39,7 @@ using symtab::syminfo::NmodlType;
 using SymbolType = std::shared_ptr<symtab::Symbol>;
 
 using nmodl::utils::UseNumbersInString;
+namespace codegen_utils = nmodl::codegen::utils;
 
 /****************************************************************************************/
 /*                            Overloaded visitor routines                               */
@@ -445,12 +446,12 @@ int CodegenCVisitor::position_of_int_var(const std::string& name) const {
  * representation (1e+20, 1E-15) then keep it as it is.
  */
 std::string CodegenCVisitor::format_double_string(const std::string& s_value) {
-    return utils::format_double_string<CodegenCVisitor>(s_value);
+    return codegen_utils::format_double_string<CodegenCVisitor>(s_value);
 }
 
 
 std::string CodegenCVisitor::format_float_string(const std::string& s_value) {
-    return utils::format_float_string<CodegenCVisitor>(s_value);
+    return codegen_utils::format_float_string<CodegenCVisitor>(s_value);
 }
 
 
