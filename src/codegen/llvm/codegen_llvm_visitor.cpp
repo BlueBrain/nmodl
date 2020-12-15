@@ -79,6 +79,7 @@ void CodegenLLVMVisitor::visit_integer(const ast::Integer &node) {
 
 void CodegenLLVMVisitor::visit_local_list_statement(const ast::LocalListStatement &node) {
     for (const auto& variable : node.get_variables()) {
+        // LocalVar always stores a Name
         auto name = variable->get_node_name();
         llvm::Type* var_type = llvm::Type::getDoubleTy(*context);
         llvm::Value* alloca = builder.CreateAlloca(var_type, /*ArraySize=*/nullptr, name);

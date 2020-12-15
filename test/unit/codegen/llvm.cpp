@@ -36,7 +36,32 @@ std::string run_llvm_visitor(const std::string& text) {
 }
 
 //=============================================================================
-// Procedure test
+// LocalList and LocalVar
+//=============================================================================
+
+SCENARIO("Local variable", "[visitor][llvm]") {
+    GIVEN("Procedure with some local variables") {
+        std::string nmodl_text = R"(
+            PROCEDURE local() {
+                LOCAL i, j
+            }
+        )";
+
+        THEN("local variables are allocated on the stack") {
+            std::string module_string = run_llvm_visitor(nmodl_text);
+            std::smatch m;
+
+            // Check stack allocations for i and j
+            std::regex i(R"(%i = alloca double)");
+            std::regex j(R"(%j = alloca double)");
+            REQUIRE(std::regex_search(module_string, m, i));
+            REQUIRE(std::regex_search(module_string, m, j));
+        }
+    }
+}
+
+//=============================================================================
+// ProcedureBlock
 //=============================================================================
 
 SCENARIO("Procedure", "[visitor][llvm]") {
@@ -46,12 +71,12 @@ SCENARIO("Procedure", "[visitor][llvm]") {
         )";
 
         THEN("empty void function is produced") {
+            std::string module_string = run_llvm_visitor(nmodl_text);
             std::smatch m;
-            std::regex expected("define void @empty\\(\\) \\{\n"
-                                "\\}"
-            );
-            std::string actual = run_llvm_visitor(nmodl_text);
-            REQUIRE(std::regex_search(actual, m, expected));
+
+            // Check procedure has empty body
+            std::regex procedure(R"(define void @empty\(\) \{\n\})");
+            REQUIRE(std::regex_search(module_string, m, procedure));
         }
     }
 
@@ -60,15 +85,19 @@ SCENARIO("Procedure", "[visitor][llvm]") {
             PROCEDURE with_argument(x) {}
         )";
 
-        THEN("empty void function is produced") {
+        THEN("void function is produced with arguments allocated on stack") {
+            std::string module_string = run_llvm_visitor(nmodl_text);
             std::smatch m;
-            std::regex expected("define void @with_argument\\(double %x1\\) \\{\n"
-                                "  %x = alloca double, align 8\n"
-                                "  store double %x1, double\\* %x, align 8\n"
-                                "\\}"
-            );
-            std::string actual = run_llvm_visitor(nmodl_text);
-            REQUIRE(std::regex_search(actual, m, expected));
+
+            // Check procedure signature
+            std::regex function_signature(R"(define void @with_argument\(double %x1\) \{)");
+            REQUIRE(std::regex_search(module_string, m, function_signature));
+
+            // Check that procedure arguments are allocated on the local stack
+            std::regex alloca_instr(R"(%x = alloca double)");
+            std::regex store_instr(R"(store double %x1, double\* %x)");
+            REQUIRE(std::regex_search(module_string, m, alloca_instr));
+            REQUIRE(std::regex_search(module_string, m, store_instr));
         }
     }
 }
