@@ -224,7 +224,7 @@ Options:
   -v,--verbose                          Verbose logger output
   -o,--output TEXT=.                    Directory for backend code output
   --scratch TEXT=tmp                    Directory for intermediate code output
-  --units TEXT=/home/magkanar/repos/nmodl/build/share/nmodl/nrnunits.lib
+  --units TEXT=/path/<>/nrnunits.lib
                                         Directory of units lib file
 
 Subcommands:
