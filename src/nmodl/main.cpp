@@ -67,6 +67,9 @@ int main(int argc, const char* argv[]) {
     /// true if debug logger statements should be shown
     bool verbose(false);
 
+    /// true if debug logger statements should be hidden
+    bool quiet(false);
+
     /// true if serial c code to be generated
     bool c_backend(true);
 
@@ -158,7 +161,10 @@ int main(int argc, const char* argv[]) {
     app.get_formatter()->column_width(40);
     app.set_help_all_flag("-H,--help-all", "Print this help message including all sub-commands");
 
-    app.add_flag("-v,--verbose", verbose, "Verbose logger output")->ignore_case();
+    auto v_flag = app.add_flag("-v,--verbose", verbose, "Verbose logger output")->ignore_case();
+    auto q_flag = app.add_flag("-q,--quiet", quiet, "Remove logger output")->ignore_case();
+    v_flag->excludes(q_flag);
+
 
     app.add_option("file", mod_files, "One or more MOD files to process")
         ->ignore_case()
@@ -277,6 +283,8 @@ int main(int argc, const char* argv[]) {
 
     if (verbose) {
         logger->set_level(spdlog::level::debug);
+    } else if (quiet) {
+        logger->set_level(spdlog::level::off);
     }
 
     /// write ast to nmodl
