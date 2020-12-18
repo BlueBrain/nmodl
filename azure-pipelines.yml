@@ -157,10 +157,10 @@ jobs:
         packaging/build_wheels.bash linux $(python.version)
     condition: and(succeeded(), or(eq(variables.buildWheel, True), eq(variables['python.version'], '3.9')))
     displayName: 'Building ManyLinux Wheel'
-  - task: PublishBuildArtifacts@1
-    inputs:
-      pathToPublish: '$(Build.SourcesDirectory)/wheelhouse'
-    displayName: 'Publish wheel as build artifact'
+  #- task: PublishBuildArtifacts@1
+  #  inputs:
+  #    pathToPublish: '$(Build.SourcesDirectory)/wheelhouse'
+  #  displayName: 'Publish wheel as build artifact'
   - script: |
       sudo apt-add-repository -y ppa:deadsnakes/ppa
       sudo apt update
