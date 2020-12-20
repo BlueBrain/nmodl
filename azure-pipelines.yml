@@ -17,6 +17,11 @@ schedules:
     - master
   always: True
 
+# Trigger build for certain branches only
+trigger:
+- master
+- llvm
+- releases/*
 
 jobs:
 - job: 'ubuntu1604'
