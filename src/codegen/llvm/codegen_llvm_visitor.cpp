@@ -10,11 +10,11 @@
 #include "visitors/visitor_utils.hpp"
 
 #include "llvm/IR/BasicBlock.h"
-#include <llvm/IR/Constants.h>
 #include "llvm/IR/Function.h"
 #include "llvm/IR/LLVMContext.h"
 #include "llvm/IR/Type.h"
 #include "llvm/IR/ValueSymbolTable.h"
+#include <llvm/IR/Constants.h>
 
 namespace nmodl {
 namespace codegen {
@@ -49,11 +49,11 @@ void CodegenLLVMVisitor::visit_binary_expression(const ast::BinaryExpression& no
     llvm::Value* result;
 
     // \todo: Support other binary operators
-    switch(op) {
-#define DISPATCH(binary_op, llvm_op)                \
-    case binary_op:                                 \
-        result = llvm_op(lhs, rhs);                 \
-        values.push_back(result);                   \
+    switch (op) {
+#define DISPATCH(binary_op, llvm_op) \
+    case binary_op:                  \
+        result = llvm_op(lhs, rhs);  \
+        values.push_back(result);    \
         break;
 
         DISPATCH(ast::BinaryOp::BOP_ADDITION, builder.CreateFAdd);
@@ -66,22 +66,25 @@ void CodegenLLVMVisitor::visit_binary_expression(const ast::BinaryExpression& no
 }
 
 void CodegenLLVMVisitor::visit_boolean(const ast::Boolean& node) {
-    const auto& constant = llvm::ConstantInt::get(llvm::Type::getInt1Ty(*context), node.get_value());
+    const auto& constant = llvm::ConstantInt::get(llvm::Type::getInt1Ty(*context),
+                                                  node.get_value());
     values.push_back(constant);
 }
 
 void CodegenLLVMVisitor::visit_double(const ast::Double& node) {
-    const auto& constant = llvm::ConstantFP::get(llvm::Type::getDoubleTy(*context), node.get_value());
+    const auto& constant = llvm::ConstantFP::get(llvm::Type::getDoubleTy(*context),
+                                                 node.get_value());
     values.push_back(constant);
 }
 
 void CodegenLLVMVisitor::visit_integer(const ast::Integer& node) {
-    const auto& constant = llvm::ConstantInt::get(llvm::Type::getInt32Ty(*context), node.get_value());
+    const auto& constant = llvm::ConstantInt::get(llvm::Type::getInt32Ty(*context),
+                                                  node.get_value());
     values.push_back(constant);
 }
 
 void CodegenLLVMVisitor::visit_local_list_statement(const ast::LocalListStatement& node) {
-    for (const auto& variable : node.get_variables()) {
+    for (const auto& variable: node.get_variables()) {
         // LocalVar always stores a Name.
         auto name = variable->get_node_name();
         llvm::Type* var_type = llvm::Type::getDoubleTy(*context);
@@ -106,17 +109,19 @@ void CodegenLLVMVisitor::visit_procedure_block(const ast::ProcedureBlock& node) 
         arg_types.push_back(llvm::Type::getDoubleTy(*context));
     llvm::Type* return_type = llvm::Type::getVoidTy(*context);
 
-    llvm::Function* proc = llvm::Function::Create(
-            llvm::FunctionType::get(return_type, arg_types, /*isVarArg=*/false),
-            llvm::Function::ExternalLinkage,
-            name, *module);
+    llvm::Function* proc =
+        llvm::Function::Create(llvm::FunctionType::get(return_type, arg_types, /*isVarArg=*/false),
+                               llvm::Function::ExternalLinkage,
+                               name,
+                               *module);
 
-    llvm::BasicBlock* body = llvm::BasicBlock::Create(*context, /*Name=*/"", proc);;
+    llvm::BasicBlock* body = llvm::BasicBlock::Create(*context, /*Name=*/"", proc);
+    ;
     builder.SetInsertPoint(body);
 
     // First, allocate parameters on the stack and add them to the symbol table.
     unsigned i = 0;
-    for (auto& arg : proc->args()) {
+    for (auto& arg: proc->args()) {
         std::string arg_name = parameters[i++].get()->get_node_name();
         llvm::Value* alloca = builder.CreateAlloca(arg.getType(), /*ArraySize=*/nullptr, arg_name);
         arg.setName(arg_name);
@@ -127,7 +132,7 @@ void CodegenLLVMVisitor::visit_procedure_block(const ast::ProcedureBlock& node) 
     const auto& statements = node.get_statement_block()->get_statements();
     for (const auto& statement: statements) {
         // \todo: Support other statement types.
-        if (statement->is_local_list_statement() || statement->is_expression_statement() )
+        if (statement->is_local_list_statement() || statement->is_expression_statement())
             statement->accept(*this);
     }
 

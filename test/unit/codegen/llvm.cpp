@@ -9,11 +9,11 @@
 #include <regex>
 
 #include "ast/program.hpp"
+#include "codegen/llvm/codegen_llvm_visitor.hpp"
 #include "parser/nmodl_driver.hpp"
 #include "visitors/checkparent_visitor.hpp"
 #include "visitors/inline_visitor.hpp"
 #include "visitors/symtab_visitor.hpp"
-#include "codegen/llvm/codegen_llvm_visitor.hpp"
 
 using namespace nmodl;
 using namespace visitor;

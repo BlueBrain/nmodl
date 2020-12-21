@@ -49,7 +49,7 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     // Output directory for code generation
     std::string output_dir;
 
-private:
+  private:
     std::unique_ptr<llvm::LLVMContext> context = std::make_unique<llvm::LLVMContext>();
 
     std::unique_ptr<llvm::Module> module = std::make_unique<llvm::Module>(mod_filename, *context);
@@ -62,7 +62,7 @@ private:
     // Mappings for named values for lookups
     std::map<std::string, llvm::Value*> named_values;
 
-public:
+  public:
     /**
      * \brief Constructs the LLVM code generator visitor
      *
