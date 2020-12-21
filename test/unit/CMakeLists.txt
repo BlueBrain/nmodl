@@ -95,9 +95,9 @@ target_link_libraries(
 
 if(NMODL_ENABLE_LLVM)
   include_directories(${LLVM_INCLUDE_DIRS})
-  add_executable(testcodegen visitor/main.cpp codegen/llvm.cpp)
+  add_executable(testllvm visitor/main.cpp codegen/llvm.cpp)
   target_link_libraries(
-    testcodegen
+    testllvm
     visitor
     symtab
     lexer
@@ -107,7 +107,7 @@ if(NMODL_ENABLE_LLVM)
     llvm_codegen
     ${NMODL_WRAPPER_LIBS}
     ${LLVM_LIBS_TO_LINK})
-  set(CODEGEN_TEST testcodegen)
+  set(CODEGEN_TEST testllvm)
 endif()
 
 # =============================================================================
