@@ -202,9 +202,14 @@ SCENARIO("Unary expression", "[visitor][llvm]") {
             std::smatch m;
 
             std::regex allocation(R"(%1 = load double, double\* %a)");
-            std::regex negation(R"(fneg double %1)");
             REQUIRE(std::regex_search(module_string, m, allocation));
-            REQUIRE(std::regex_search(module_string, m, negation));
+
+            // llvm v9 and llvm v11 implementation for negation
+            std::regex negation_v9(R"(%2 = fsub double -0.000000e\+00, %1)");
+            std::regex negation_v11(R"(fneg double %1)");
+            bool result = std::regex_search(module_string, m, negation_v9) ||
+                          std::regex_search(module_string, m, negation_v11);
+            REQUIRE(result == true);
         }
     }
 }

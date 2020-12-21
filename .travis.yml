@@ -20,13 +20,11 @@ matrix:
       env:
         - MATRIX_EVAL="CXX=g++"
         - PYTHON_VERSION=3.8
-        - ENABLE_LLVM=OFF
     - language: cpp
       os: osx
       osx_image: xcode11.3
       env:
         - MATRIX_EVAL="CXX=c++"
-        - ENABLE_LLVM=ON
 
 #=============================================================================
 # Cache directories
@@ -108,7 +106,11 @@ install:
 script:
   - echo "------- Build, Test and Install -------"
   - mkdir build && pushd build
-  - cmake .. -DPYTHON_EXECUTABLE=$(which python3) -DCMAKE_INSTALL_PREFIX=$HOME/nmodl -DNMODL_ENABLE_LLVM=$ENABLE_LLVM -DNMODL_ENABLE_PYTHON_BINDINGS=ON
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+        cmake .. -DPYTHON_EXECUTABLE=$(which python3) -DCMAKE_INSTALL_PREFIX=$HOME/nmodl -DNMODL_ENABLE_LLVM=ON -DNMODL_ENABLE_PYTHON_BINDINGS=ON -DLLVM_DIR=`brew --prefix llvm`/lib/cmake/llvm;
+    else
+        cmake .. -DPYTHON_EXECUTABLE=$(which python3) -DCMAKE_INSTALL_PREFIX=$HOME/nmodl -DNMODL_ENABLE_LLVM=OFF -DNMODL_ENABLE_PYTHON_BINDINGS=ON;
+    fi
   - make -j 2;
     if [ $? -ne 0 ]; then
       make VERBOSE=1;
