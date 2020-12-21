@@ -20,11 +20,13 @@ matrix:
       env:
         - MATRIX_EVAL="CXX=g++"
         - PYTHON_VERSION=3.8
+        - ENABLE_LLVM=OFF
     - language: cpp
       os: osx
       osx_image: xcode11.3
       env:
         - MATRIX_EVAL="CXX=c++"
+        - ENABLE_LLVM=ON
 
 #=============================================================================
 # Cache directories
@@ -62,6 +64,7 @@ addons:
       - boost
       - flex
       - bison
+      - llvm
       - openmpi
       - python@3
     update: true
@@ -105,7 +108,7 @@ install:
 script:
   - echo "------- Build, Test and Install -------"
   - mkdir build && pushd build
-  - cmake .. -DPYTHON_EXECUTABLE=$(which python3) -DCMAKE_INSTALL_PREFIX=$HOME/nmodl
+  - cmake .. -DPYTHON_EXECUTABLE=$(which python3) -DCMAKE_INSTALL_PREFIX=$HOME/nmodl -DNMODL_ENABLE_LLVM=$ENABLE_LLVM -DNMODL_ENABLE_PYTHON_BINDINGS=ON
   - make -j 2;
     if [ $? -ne 0 ]; then
       make VERBOSE=1;
