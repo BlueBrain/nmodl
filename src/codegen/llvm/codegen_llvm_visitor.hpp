@@ -60,7 +60,7 @@ private:
     std::vector<llvm::Value*> values;
 
     // Mappings for named values for lookups
-    std::map<std::string, llvm::Value*> namedValues;
+    std::map<std::string, llvm::Value*> named_values;
 
 public:
     /**
@@ -75,15 +75,15 @@ public:
         , builder(*context) {}
 
     // Visitors
-    void visit_binary_expression(const ast::BinaryExpression &node) override;
-    void visit_boolean(const ast::Boolean &node) override;
-    void visit_double(const ast::Double &node) override;
-    void visit_integer(const ast::Integer &node) override;
-    void visit_local_list_statement(const ast::LocalListStatement &node) override;
+    void visit_binary_expression(const ast::BinaryExpression& node) override;
+    void visit_boolean(const ast::Boolean& node) override;
+    void visit_double(const ast::Double& node) override;
+    void visit_integer(const ast::Integer& node) override;
+    void visit_local_list_statement(const ast::LocalListStatement& node) override;
     void visit_procedure_block(const ast::ProcedureBlock& node) override;
     void visit_program(const ast::Program& node) override;
-    void visit_unary_expression(const ast::UnaryExpression &node) override;
-    void visit_var_name(const ast::VarName &node) override;
+    void visit_unary_expression(const ast::UnaryExpression& node) override;
+    void visit_var_name(const ast::VarName& node) override;
 
     // TODO: use custom printer here
     std::string print_module() const {
