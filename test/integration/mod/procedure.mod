@@ -1,5 +1,10 @@
+NEURON {
+    SUFFIX procedure_test
+    THREADSAFE
+}
+
 PROCEDURE hello_world() {
-    print("Hello World")
+    printf("Hello World")
 }
 
 PROCEDURE simple_sum(x, y) {
@@ -20,7 +25,7 @@ PROCEDURE loop_function(v) {
     LOCAL i
     i = 0
     WHILE(i < 10) {
-        print("Hello World")
+        printf("Hello World")
         i = i + 1
     }
 }

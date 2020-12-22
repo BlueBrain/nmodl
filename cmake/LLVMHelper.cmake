@@ -1,14 +1,16 @@
 # =============================================================================
 # LLVM/Clang needs to be linked with either libc++ or libstdc++
 # =============================================================================
-if(CMAKE_CXX_COMPILER_ID MATCHES "Clang" AND NMODL_ENABLE_LLVM)
-  find_package(LLVM REQUIRED CONFIG)
-  include(CheckCXXSourceCompiles)
 
-  # test by including LLVM header and core library
-  llvm_map_components_to_libnames(LLVM_LIBS_TO_LINK core)
-  set(CMAKE_REQUIRED_INCLUDES ${LLVM_INCLUDE_DIRS})
-  set(CMAKE_REQUIRED_LIBRARIES ${LLVM_LIBS_TO_LINK})
+find_package(LLVM REQUIRED CONFIG)
+
+# include LLVM header and core library
+llvm_map_components_to_libnames(LLVM_LIBS_TO_LINK core)
+set(CMAKE_REQUIRED_INCLUDES ${LLVM_INCLUDE_DIRS})
+set(CMAKE_REQUIRED_LIBRARIES ${LLVM_LIBS_TO_LINK})
+
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang" AND NMODL_ENABLE_LLVM)
+  include(CheckCXXSourceCompiles)
 
   # simple code to test LLVM library linking
   set(CODE_TO_TEST
