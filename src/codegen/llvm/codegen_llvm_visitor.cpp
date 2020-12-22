@@ -10,11 +10,11 @@
 #include "visitors/visitor_utils.hpp"
 
 #include "llvm/IR/BasicBlock.h"
+#include "llvm/IR/Constants.h"
 #include "llvm/IR/Function.h"
 #include "llvm/IR/LLVMContext.h"
 #include "llvm/IR/Type.h"
 #include "llvm/IR/ValueSymbolTable.h"
-#include <llvm/IR/Constants.h>
 
 namespace nmodl {
 namespace codegen {
@@ -116,7 +116,6 @@ void CodegenLLVMVisitor::visit_procedure_block(const ast::ProcedureBlock& node) 
                                *module);
 
     llvm::BasicBlock* body = llvm::BasicBlock::Create(*context, /*Name=*/"", proc);
-    ;
     builder.SetInsertPoint(body);
 
     // First, allocate parameters on the stack and add them to the symbol table.
@@ -137,8 +136,7 @@ void CodegenLLVMVisitor::visit_procedure_block(const ast::ProcedureBlock& node) 
     }
 
     values.clear();
-    // Clear named values for now, since there is no support of global variables yet.
-    // It will be better to keep a separate global map (or use module?).
+    // \todo: Add proper support for the symbol table.
     named_values.clear();
 }
 
