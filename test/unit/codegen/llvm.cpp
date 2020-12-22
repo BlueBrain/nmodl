@@ -156,8 +156,8 @@ SCENARIO("Procedure", "[visitor][llvm]") {
             std::string module_string = run_llvm_visitor(nmodl_text);
             std::smatch m;
 
-            // Check procedure has empty body
-            std::regex procedure(R"(define void @empty\(\) \{\n\})");
+            // Check procedure has empty body with a void return.
+            std::regex procedure(R"(define void @empty\(\) \{\n(\s)*ret void\n\})");
             REQUIRE(std::regex_search(module_string, m, procedure));
         }
     }
@@ -171,15 +171,19 @@ SCENARIO("Procedure", "[visitor][llvm]") {
             std::string module_string = run_llvm_visitor(nmodl_text);
             std::smatch m;
 
-            // Check procedure signature
+            // Check procedure signature.
             std::regex function_signature(R"(define void @with_argument\(double %x1\) \{)");
             REQUIRE(std::regex_search(module_string, m, function_signature));
 
-            // Check that procedure arguments are allocated on the local stack
+            // Check that procedure arguments are allocated on the local stack.
             std::regex alloca_instr(R"(%x = alloca double)");
             std::regex store_instr(R"(store double %x1, double\* %x)");
             REQUIRE(std::regex_search(module_string, m, alloca_instr));
             REQUIRE(std::regex_search(module_string, m, store_instr));
+
+            // Check terminator.
+            std::regex terminator(R"(ret void)");
+            REQUIRE(std::regex_search(module_string, m, terminator));
         }
     }
 }
