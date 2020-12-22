@@ -74,10 +74,17 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
         , output_dir(output_dir)
         , builder(*context) {}
 
+    /**
+     * Visit nmodl function or procedure
+     * \param node the AST node representing the function or procedure in NMODL
+     */
+    void visit_procedure_or_function(const ast::Block& node);
+
     // Visitors
     void visit_binary_expression(const ast::BinaryExpression& node) override;
     void visit_boolean(const ast::Boolean& node) override;
     void visit_double(const ast::Double& node) override;
+    void visit_function_block(const ast::FunctionBlock& node) override;
     void visit_integer(const ast::Integer& node) override;
     void visit_local_list_statement(const ast::LocalListStatement& node) override;
     void visit_procedure_block(const ast::ProcedureBlock& node) override;
