@@ -147,6 +147,7 @@ find_python_module(yaml 3.12 REQUIRED)
 # =============================================================================
 if(NMODL_ENABLE_LLVM)
   include(LLVMHelper)
+  include_directories(${LLVM_INCLUDE_DIRS})
   add_definitions(-DNMODL_LLVM_BACKEND)
 endif()
 

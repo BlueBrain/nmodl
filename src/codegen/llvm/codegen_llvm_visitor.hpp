@@ -21,6 +21,10 @@
 #include "utils/logger.hpp"
 #include "visitors/ast_visitor.hpp"
 
+#include "llvm/IR/IRBuilder.h"
+#include "llvm/IR/LLVMContext.h"
+#include "llvm/IR/Module.h"
+
 namespace nmodl {
 namespace codegen {
 
@@ -45,8 +49,18 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     // Output directory for code generation
     std::string output_dir;
 
-    // result string for demo
-    std::string result_code;
+  private:
+    std::unique_ptr<llvm::LLVMContext> context = std::make_unique<llvm::LLVMContext>();
+
+    std::unique_ptr<llvm::Module> module = std::make_unique<llvm::Module>(mod_filename, *context);
+
+    llvm::IRBuilder<> builder;
+
+    // Stack to hold visited values
+    std::vector<llvm::Value*> values;
+
+    // Mappings for named values for lookups
+    std::map<std::string, llvm::Value*> named_values;
 
   public:
     /**
@@ -57,15 +71,27 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
      */
     CodegenLLVMVisitor(const std::string& mod_filename, const std::string& output_dir)
         : mod_filename(mod_filename)
-        , output_dir(output_dir) {}
+        , output_dir(output_dir)
+        , builder(*context) {}
 
-    void visit_statement_block(const ast::StatementBlock& node) override;
+    // Visitors
+    void visit_binary_expression(const ast::BinaryExpression& node) override;
+    void visit_boolean(const ast::Boolean& node) override;
+    void visit_double(const ast::Double& node) override;
+    void visit_integer(const ast::Integer& node) override;
+    void visit_local_list_statement(const ast::LocalListStatement& node) override;
     void visit_procedure_block(const ast::ProcedureBlock& node) override;
     void visit_program(const ast::Program& node) override;
+    void visit_unary_expression(const ast::UnaryExpression& node) override;
+    void visit_var_name(const ast::VarName& node) override;
 
-    // demo method
-    std::string get_code() const {
-        return result_code;
+    // TODO: use custom printer here
+    std::string print_module() const {
+        std::string str;
+        llvm::raw_string_ostream os(str);
+        os << *module;
+        os.flush();
+        return str;
     }
 };
 
