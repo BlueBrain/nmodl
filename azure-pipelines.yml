@@ -124,8 +124,7 @@ jobs:
   - checkout: self
     submodules: True
   - script: |
-      brew install flex bison cmake python@3 gcc@8
-      brew install bison llvm
+      brew install flex bison cmake python@3 gcc@8 llvm
       python3 -m pip install --upgrade pip 'setuptools<59.7.0'
       python3 -m pip install --user 'Jinja2>=2.9.3' 'PyYAML>=3.13' pytest pytest-cov numpy 'sympy>=1.3,<1.9'
     displayName: 'Install Dependencies'
@@ -172,6 +171,7 @@ jobs:
     displayName: 'Build Neuron and Run Integration Tests'
 - job: 'manylinux_wheels'
   timeoutInMinutes: 45
+  condition: eq(1,2)
   pool:
     vmImage: 'ubuntu-18.04'
   strategy:
@@ -221,6 +221,7 @@ jobs:
   - template: ci/upload-wheels.yml
 - job: 'macos_wheels'
   timeoutInMinutes: 45
+  condition: eq(1,2)
   pool:
     vmImage: 'macOS-10.15'
   strategy:
