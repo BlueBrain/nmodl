@@ -7,6 +7,7 @@
 
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
 #include "ast/all.hpp"
+#include "visitors/rename_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
 
 #include "llvm/IR/BasicBlock.h"
@@ -50,11 +51,14 @@ void CodegenLLVMVisitor::visit_procedure_or_function(const ast::Block& node) {
     builder.SetInsertPoint(body);
     local_named_values = func->getValueSymbolTable();
 
-    // When processing a function, it returns a value named ret_<function_name>. Therefore, we
-    // allocate it on stack. Note that the renaming has been done by RenameVisitor pass and is a
-    // necessary precondition. Otherwise, the behaviour is undefined.
+    // When processing a function, it returns a value named <function_name> in NMODL. Therefore, we
+    // first run RenameVisitor to rename it into ret_<function_name>. This will aid in avoiding
+    // symbolic conflicts. Then, allocate the return variable on the local stack.
     std::string return_var_name = "ret_" + name;
+    const auto& block = node.get_statement_block();
     if (node.is_function_block()) {
+        visitor::RenameVisitor v(name, return_var_name);
+        block->accept(v);
         builder.CreateAlloca(llvm::Type::getDoubleTy(*context),
                              /*ArraySize=*/nullptr,
                              return_var_name);
@@ -70,7 +74,7 @@ void CodegenLLVMVisitor::visit_procedure_or_function(const ast::Block& node) {
     }
 
     // Process function or procedure body.
-    const auto& statements = node.get_statement_block()->get_statements();
+    const auto& statements = block->get_statements();
     for (const auto& statement: statements) {
         // \todo: Support other statement types.
         if (statement->is_local_list_statement() || statement->is_expression_statement())
