@@ -50,9 +50,9 @@ void CodegenLLVMVisitor::visit_procedure_or_function(const ast::Block& node) {
     builder.SetInsertPoint(body);
     local_named_values = func->getValueSymbolTable();
 
-    // When processing a function, it returns a value named ret_<function_name>. Note that the
-    // renaming has been done by RenameVisitor pass and is a necessary precondition. Otherwise, the
-    // behaviour is undefined.
+    // When processing a function, it returns a value named ret_<function_name>. Therefore, we
+    // allocate it on stack. Note that the renaming has been done by RenameVisitor pass and is a
+    // necessary precondition. Otherwise, the behaviour is undefined.
     std::string return_var_name = "ret_" + name;
     if (node.is_function_block()) {
         builder.CreateAlloca(llvm::Type::getDoubleTy(*context),
@@ -77,8 +77,8 @@ void CodegenLLVMVisitor::visit_procedure_or_function(const ast::Block& node) {
             statement->accept(*this);
     }
 
-    // Add the terminator. If visiting function, the convention is that it returns a dummy 0.0
-    // value.
+    // Add the terminator. If visiting function, we need to return the value specified by
+    // ret_<function_name>.
     if (node.is_function_block()) {
         llvm::Value* return_var = builder.CreateLoad(local_named_values->lookup(return_var_name));
         builder.CreateRet(return_var);
