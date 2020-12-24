@@ -44,18 +44,20 @@ void CodegenLLVMVisitor::visit_procedure_or_function(const ast::Block& node) {
                                name,
                                *module);
 
+    // Create the entry basic block of the function/procedure and point the local named values table
+    // to the symbol table.
     llvm::BasicBlock* body = llvm::BasicBlock::Create(*context, /*Name=*/"", func);
     builder.SetInsertPoint(body);
+    local_named_values = func->getValueSymbolTable();
 
     // When processing a function, it returns a value named ret_<function_name>. Note that the
     // renaming has been done by RenameVisitor pass and is a necessary precondition. Otherwise, the
     // behaviour is undefined.
     std::string return_var_name = "ret_" + name;
     if (node.is_function_block()) {
-        llvm::Value* return_var = builder.CreateAlloca(llvm::Type::getDoubleTy(*context),
-                                                       /*ArraySize=*/nullptr,
-                                                       return_var_name);
-        named_values[return_var_name] = return_var;
+        builder.CreateAlloca(llvm::Type::getDoubleTy(*context),
+                             /*ArraySize=*/nullptr,
+                             return_var_name);
     }
 
     // Allocate parameters on the stack and add them to the symbol table.
@@ -65,7 +67,6 @@ void CodegenLLVMVisitor::visit_procedure_or_function(const ast::Block& node) {
         llvm::Value* alloca = builder.CreateAlloca(arg.getType(), /*ArraySize=*/nullptr, arg_name);
         arg.setName(arg_name);
         builder.CreateStore(&arg, alloca);
-        named_values[arg_name] = alloca;
     }
 
     // Process function or procedure body.
@@ -79,15 +80,15 @@ void CodegenLLVMVisitor::visit_procedure_or_function(const ast::Block& node) {
     // Add the terminator. If visiting function, the convention is that it returns a dummy 0.0
     // value.
     if (node.is_function_block()) {
-        llvm::Value* return_var = builder.CreateLoad(named_values[return_var_name]);
+        llvm::Value* return_var = builder.CreateLoad(local_named_values->lookup(return_var_name));
         builder.CreateRet(return_var);
     } else {
         builder.CreateRetVoid();
     }
 
+    // Clear local values stack and remove the pointer to the local symbol table.
     values.clear();
-    // \todo: Add proper support for the symbol table.
-    named_values.clear();
+    local_named_values = nullptr;
 }
 
 /****************************************************************************************/
@@ -108,7 +109,7 @@ void CodegenLLVMVisitor::visit_binary_expression(const ast::BinaryExpression& no
         if (!var) {
             throw std::runtime_error("Error: only VarName assignment is currently supported.\n");
         }
-        llvm::Value* alloca = named_values[var->get_node_name()];
+        llvm::Value* alloca = local_named_values->lookup(var->get_node_name());
         builder.CreateStore(rhs, alloca);
         return;
     }
@@ -163,7 +164,6 @@ void CodegenLLVMVisitor::visit_local_list_statement(const ast::LocalListStatemen
         auto name = variable->get_node_name();
         llvm::Type* var_type = llvm::Type::getDoubleTy(*context);
         llvm::Value* alloca = builder.CreateAlloca(var_type, /*ArraySize=*/nullptr, name);
-        named_values[name] = alloca;
     }
 }
 
@@ -192,7 +192,7 @@ void CodegenLLVMVisitor::visit_unary_expression(const ast::UnaryExpression& node
 }
 
 void CodegenLLVMVisitor::visit_var_name(const ast::VarName& node) {
-    llvm::Value* var = builder.CreateLoad(named_values[node.get_node_name()]);
+    llvm::Value* var = builder.CreateLoad(local_named_values->lookup(node.get_node_name()));
     values.push_back(var);
 }
 

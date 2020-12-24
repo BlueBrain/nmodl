@@ -59,8 +59,8 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     // Stack to hold visited values
     std::vector<llvm::Value*> values;
 
-    // Mappings for named values for lookups
-    std::map<std::string, llvm::Value*> named_values;
+    // Pointer to the local symbol table.
+    llvm::ValueSymbolTable* local_named_values = nullptr;
 
   public:
     /**
