@@ -122,14 +122,14 @@ SCENARIO("Binary expression", "[visitor][llvm]") {
 //=============================================================================
 
 SCENARIO("Function", "[visitor][llvm]") {
-    GIVEN("Empty function with arguments") {
+    GIVEN("Simple function with arguments") {
         std::string nmodl_text = R"(
-            FUNCTION foo(x) {}
+            FUNCTION foo(x) {
+               foo = x
+            }
         )";
 
-        THEN(
-            "function is produced with arguments allocated on stack and a dummy return "
-            "instruction") {
+        THEN("function is produced with arguments allocated on stack and a return instruction") {
             std::string module_string = run_llvm_visitor(nmodl_text);
             std::smatch m;
 
@@ -143,8 +143,13 @@ SCENARIO("Function", "[visitor][llvm]") {
             REQUIRE(std::regex_search(module_string, m, alloca_instr));
             REQUIRE(std::regex_search(module_string, m, store_instr));
 
-            // Check terminator.
-            std::regex terminator(R"(ret double 0.000000e\+00)");
+            // Check the return variable has also been allocated.
+            std::regex ret_instr(R"(%ret_foo = alloca double)");
+
+            // Check that the return value has been loaded and passed to terminator.
+            std::regex loaded(R"(%2 = load double, double\* %ret_foo)");
+            std::regex terminator(R"(ret double %2)");
+            REQUIRE(std::regex_search(module_string, m, loaded));
             REQUIRE(std::regex_search(module_string, m, terminator));
         }
     }

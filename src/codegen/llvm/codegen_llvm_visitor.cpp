@@ -47,7 +47,18 @@ void CodegenLLVMVisitor::visit_procedure_or_function(const ast::Block& node) {
     llvm::BasicBlock* body = llvm::BasicBlock::Create(*context, /*Name=*/"", func);
     builder.SetInsertPoint(body);
 
-    // First, allocate parameters on the stack and add them to the symbol table.
+    // When processing a function, it returns a value named ret_<function_name>. Note that the
+    // renaming has been done by RenameVisitor pass and is a necessary precondition. Otherwise, the
+    // behaviour is undefined.
+    std::string return_var_name = "ret_" + name;
+    if (node.is_function_block()) {
+        llvm::Value* return_var = builder.CreateAlloca(llvm::Type::getDoubleTy(*context),
+                                                       /*ArraySize=*/nullptr,
+                                                       return_var_name);
+        named_values[return_var_name] = return_var;
+    }
+
+    // Allocate parameters on the stack and add them to the symbol table.
     unsigned i = 0;
     for (auto& arg: func->args()) {
         std::string arg_name = parameters[i++].get()->get_node_name();
@@ -67,10 +78,12 @@ void CodegenLLVMVisitor::visit_procedure_or_function(const ast::Block& node) {
 
     // Add the terminator. If visiting function, the convention is that it returns a dummy 0.0
     // value.
-    if (node.is_function_block())
-        builder.CreateRet(llvm::ConstantFP::get(llvm::Type::getDoubleTy(*context), 0.0));
-    else
+    if (node.is_function_block()) {
+        llvm::Value* return_var = builder.CreateLoad(named_values[return_var_name]);
+        builder.CreateRet(return_var);
+    } else {
         builder.CreateRetVoid();
+    }
 
     values.clear();
     // \todo: Add proper support for the symbol table.
