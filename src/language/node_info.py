@@ -29,6 +29,7 @@ INTEGRAL_TYPES = {"short",
                   "QueueType",
                   "BAType",
                   "UnitStateType",
+                  "AstNodeType",
                   }
 
 BASE_TYPES = {"std::string" } | INTEGRAL_TYPES
@@ -167,6 +168,7 @@ PROGRAM_BLOCK = "Program"
 STATEMENT_BLOCK_NODE = "StatementBlock"
 STRING_NODE = "String"
 UNIT_BLOCK = "UnitBlock"
+AST_NODETYPE_NODE= "AstNodeType"
 
 # name of variable in prime node which represent order of derivative
 ORDER_VAR_NAME = "order"
