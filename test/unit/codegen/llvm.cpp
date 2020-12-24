@@ -118,6 +118,39 @@ SCENARIO("Binary expression", "[visitor][llvm]") {
 }
 
 //=============================================================================
+// FunctionBlock
+//=============================================================================
+
+SCENARIO("Function", "[visitor][llvm]") {
+    GIVEN("Empty function with arguments") {
+        std::string nmodl_text = R"(
+            FUNCTION foo(x) {}
+        )";
+
+        THEN(
+            "function is produced with arguments allocated on stack and a dummy return "
+            "instruction") {
+            std::string module_string = run_llvm_visitor(nmodl_text);
+            std::smatch m;
+
+            // Check function signature. The return type should be the default double type.
+            std::regex function_signature(R"(define double @foo\(double %x1\) \{)");
+            REQUIRE(std::regex_search(module_string, m, function_signature));
+
+            // Check that function arguments are allocated on the local stack.
+            std::regex alloca_instr(R"(%x = alloca double)");
+            std::regex store_instr(R"(store double %x1, double\* %x)");
+            REQUIRE(std::regex_search(module_string, m, alloca_instr));
+            REQUIRE(std::regex_search(module_string, m, store_instr));
+
+            // Check terminator.
+            std::regex terminator(R"(ret double 0.000000e\+00)");
+            REQUIRE(std::regex_search(module_string, m, terminator));
+        }
+    }
+}
+
+//=============================================================================
 // LocalList and LocalVar
 //=============================================================================
 
