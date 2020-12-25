@@ -32,7 +32,7 @@ void CodegenLLVMVisitor::visit_procedure_or_function(const ast::Block& node) {
 
     // Procedure or function parameters are doubles by default.
     std::vector<llvm::Type*> arg_types;
-    for (size_t i = 0, e = parameters.size(); i < e; ++i)
+    for (size_t i = 0; i < parameters.size(); ++i)
         arg_types.push_back(llvm::Type::getDoubleTy(*context));
 
     // If visiting a function, the return type is a double by default.
