@@ -193,6 +193,7 @@ set(AST_GENERATED_SOURCES
     ${PROJECT_BINARY_DIR}/src/ast/valence.hpp
     ${PROJECT_BINARY_DIR}/src/ast/var_name.hpp
     ${PROJECT_BINARY_DIR}/src/ast/verbatim.hpp
+    ${PROJECT_BINARY_DIR}/src/ast/void.hpp
     ${PROJECT_BINARY_DIR}/src/ast/watch.hpp
     ${PROJECT_BINARY_DIR}/src/ast/watch_statement.hpp
     ${PROJECT_BINARY_DIR}/src/ast/while_statement.hpp

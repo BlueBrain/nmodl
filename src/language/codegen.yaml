@@ -28,6 +28,9 @@
             - Expression:
                 children:
                   - Number:
+                  - Void:
+                      nmodl: "VOID"
+                      brief: "Represent void type in code generation"
                   - Identifier:
                       children:
                         - CodegenVarType:
@@ -185,7 +188,7 @@
                             brief: "condition expression for the loop"
                             type: Expression
                             optional: true
-                            prefix: {value: ";"}
+                            prefix: {value: "; "}
                             suffix: {value: "; "}
                         - increment:
                             brief: "increment or decrement expression for the loop"
