@@ -23,14 +23,14 @@ using nmodl::parser::NmodlDriver;
 // Utility to get LLVM module as a string
 //=============================================================================
 
-std::string run_llvm_visitor(const std::string& text) {
+std::string run_llvm_visitor(const std::string& text, bool opt = false) {
     NmodlDriver driver;
     const auto& ast = driver.parse_string(text);
 
     SymtabVisitor().visit_program(*ast);
     InlineVisitor().visit_program(*ast);
 
-    codegen::CodegenLLVMVisitor llvm_visitor("unknown", ".");
+    codegen::CodegenLLVMVisitor llvm_visitor("unknown", ".", opt);
     llvm_visitor.visit_program(*ast);
     return llvm_visitor.print_module();
 }
@@ -52,10 +52,11 @@ SCENARIO("Binary expression", "[visitor][llvm]") {
             std::string module_string = run_llvm_visitor(nmodl_text);
             std::smatch m;
 
-            // Check the values are loaded correctly and added
             std::regex rhs(R"(%1 = load double, double\* %b)");
             std::regex lhs(R"(%2 = load double, double\* %a)");
             std::regex res(R"(%3 = fadd double %2, %1)");
+
+            // Check the values are loaded correctly and added
             REQUIRE(std::regex_search(module_string, m, rhs));
             REQUIRE(std::regex_search(module_string, m, lhs));
             REQUIRE(std::regex_search(module_string, m, res));
@@ -252,6 +253,31 @@ SCENARIO("Unary expression", "[visitor][llvm]") {
             bool result = std::regex_search(module_string, m, negation_v9) ||
                           std::regex_search(module_string, m, negation_v11);
             REQUIRE(result == true);
+        }
+    }
+}
+
+//=============================================================================
+// Optimization : dead code removal
+//=============================================================================
+
+SCENARIO("Dead code removal", "[visitor][llvm][opt]") {
+    GIVEN("Procedure using local variables, without any side effects") {
+        std::string nmodl_text = R"(
+            PROCEDURE add(a, b) {
+                LOCAL i
+                i = a + b
+            }
+        )";
+
+        THEN("with optimisation enabled, all ops are eliminated") {
+            std::string module_string = run_llvm_visitor(nmodl_text, true);
+            std::smatch m;
+
+            // Check if the values are optimised out
+            std::regex empty_proc(
+                R"(define void @add\(double %a1, double %b2\) \{\n(\s)*ret void\n\})");
+            REQUIRE(std::regex_search(module_string, m, empty_proc));
         }
     }
 }
