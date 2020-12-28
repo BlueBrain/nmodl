@@ -9,7 +9,6 @@
 #include "ast/all.hpp"
 #include "codegen/codegen_helper_visitor.hpp"
 #include "visitors/rename_visitor.hpp"
-#include "visitors/visitor_utils.hpp"
 
 #include "llvm/IR/BasicBlock.h"
 #include "llvm/IR/Constants.h"
@@ -44,6 +43,54 @@ void CodegenLLVMVisitor::run_llvm_opt_passes() {
     }
 }
 
+
+void CodegenLLVMVisitor::create_external_method_call(const std::string& name,
+                                                     const ast::ExpressionVector& arguments) {
+    std::vector<llvm::Value*> argument_values;
+    std::vector<llvm::Type*> argument_types;
+    for (const auto& arg: arguments) {
+        arg->accept(*this);
+        llvm::Value* value = values.back();
+        llvm::Type* type = value->getType();
+        values.pop_back();
+        argument_types.push_back(type);
+        argument_values.push_back(value);
+    }
+
+#define DISPATCH(method_name, intrinsic)                                                           \
+    if (name == method_name) {                                                                     \
+        llvm::Value* result = builder.CreateIntrinsic(intrinsic, argument_types, argument_values); \
+        values.push_back(result);                                                                  \
+        return;                                                                                    \
+    }
+
+    DISPATCH("exp", llvm::Intrinsic::exp);
+    DISPATCH("pow", llvm::Intrinsic::pow);
+#undef DISPATCH
+}
+
+void CodegenLLVMVisitor::create_function_call(llvm::Function* func,
+                                              const std::string& name,
+                                              const ast::ExpressionVector& arguments) {
+    // Check that function is called with the expected number of arguments.
+    if (arguments.size() != func->arg_size()) {
+        throw std::runtime_error("Error: Incorrect number of arguments passed");
+    }
+
+    // Process each argument and add it to a vector to pass to the function call instruction. Note
+    // that type checks are not needed here as NMODL operates on doubles by default. If that was not
+    // the case, cast instructions had to be created.
+    std::vector<llvm::Value*> argument_values;
+    for (const auto& arg: arguments) {
+        arg->accept(*this);
+        llvm::Value* value = values.back();
+        values.pop_back();
+        argument_values.push_back(value);
+    }
+
+    llvm::Value* call = builder.CreateCall(func, argument_values);
+    values.push_back(call);
+}
 
 void CodegenLLVMVisitor::emit_procedure_or_function_declaration(const ast::Block& node) {
     const auto& name = node.get_node_name();
@@ -184,34 +231,18 @@ void CodegenLLVMVisitor::visit_function_block(const ast::FunctionBlock& node) {
 
 void CodegenLLVMVisitor::visit_function_call(const ast::FunctionCall& node) {
     const auto& name = node.get_node_name();
-    const auto& arguments = node.get_arguments();
-
-    // Assuming all functions are defined within this mod file, a call is made to the user-defined
-    // FUNCTION/PROCEDURE. Otherwise, an error is returned. \todo: support built-in lib calls.
     auto func = module->getFunction(name);
-    if (!func) {
-        throw std::runtime_error("Error: Unknown function name: " + name +
-                                 ". (External functions references are not supported)\n");
+    if (func) {
+        create_function_call(func, name, node.get_arguments());
+    } else {
+        auto symbol = sym_tab->lookup(name);
+        if (symbol && symbol->has_any_property(symtab::syminfo::NmodlType::extern_method)) {
+            create_external_method_call(name, node.get_arguments());
+        } else {
+            throw std::runtime_error("Error: Unknown function name: " + name +
+                                     ". (External functions references are not supported)\n");
+        }
     }
-
-    // Check that function is called with the expected number of arguments.
-    if (arguments.size() != func->arg_size()) {
-        throw std::runtime_error("Error: Incorrect number of arguments passed");
-    }
-
-    // Process each argument and add it to a vector to pass to the function call instruction. Note
-    // that type checks are not needed here as NMODL operates on doubles by default. If that was not
-    // the case, cast instructions had to be created.
-    std::vector<llvm::Value*> argument_values;
-    for (const auto& arg: arguments) {
-        arg->accept(*this);
-        llvm::Value* value = values.back();
-        values.pop_back();
-        argument_values.push_back(value);
-    }
-
-    llvm::Value* call = builder.CreateCall(func, argument_values);
-    values.push_back(call);
 }
 
 void CodegenLLVMVisitor::visit_integer(const ast::Integer& node) {
@@ -243,6 +274,9 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
     for (const auto& proc: info.procedures) {
         emit_procedure_or_function_declaration(*proc);
     }
+
+    // Set the AST symbol table.
+    sym_tab = node.get_symbol_table();
 
     // Proceed with code generation.
     node.visit_children(*this);
