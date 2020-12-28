@@ -21,11 +21,17 @@ PROCEDURE complex_sum(v) {
     }
 }
 
-PROCEDURE loop_function(v) {
+PROCEDURE loop_proc(v) {
     LOCAL i
     i = 0
     WHILE(i < 10) {
         printf("Hello World")
         i = i + 1
     }
+}
+
+FUNCTION square(x) {
+    LOCAL res
+    res = x * x
+    square = res
 }
