@@ -98,6 +98,7 @@ if(NMODL_ENABLE_LLVM)
   add_executable(testllvm visitor/main.cpp codegen/llvm.cpp)
   target_link_libraries(
     testllvm
+    codegen
     visitor
     symtab
     lexer

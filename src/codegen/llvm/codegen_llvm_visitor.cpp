@@ -5,8 +5,9 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
-#include "codegen/llvm/codegen_llvm_visitor.hpp"
 #include "ast/all.hpp"
+#include "codegen/llvm/codegen_llvm_visitor.hpp"
+#include "codegen/codegen_helper_visitor.hpp"
 #include "visitors/rename_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
 
@@ -44,7 +45,7 @@ void CodegenLLVMVisitor::run_llvm_opt_passes() {
 }
 
 
-void CodegenLLVMVisitor::visit_procedure_or_function(const ast::Block& node) {
+void CodegenLLVMVisitor::emit_procedure_or_function_declaration(const ast::Block& node) {
     const auto& name = node.get_node_name();
     const auto& parameters = node.get_parameters();
 
@@ -57,11 +58,17 @@ void CodegenLLVMVisitor::visit_procedure_or_function(const ast::Block& node) {
     llvm::Type* return_type = node.is_function_block() ? llvm::Type::getDoubleTy(*context)
                                                        : llvm::Type::getVoidTy(*context);
 
-    llvm::Function* func =
-        llvm::Function::Create(llvm::FunctionType::get(return_type, arg_types, /*isVarArg=*/false),
-                               llvm::Function::ExternalLinkage,
-                               name,
-                               *module);
+    // Create a function that is automatically inserted into module's symbol table.
+    llvm::Function::Create(llvm::FunctionType::get(return_type, arg_types, /*isVarArg=*/false),
+                           llvm::Function::ExternalLinkage,
+                           name,
+                           *module);
+}
+
+void CodegenLLVMVisitor::visit_procedure_or_function(const ast::Block& node) {
+    const auto& name = node.get_node_name();
+    const auto& parameters = node.get_parameters();
+    llvm::Function* func = module->getFunction(name);
 
     // Create the entry basic block of the function/procedure and point the local named values table
     // to the symbol table.
@@ -191,6 +198,21 @@ void CodegenLLVMVisitor::visit_local_list_statement(const ast::LocalListStatemen
 }
 
 void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
+    // Before generating LLVM, gather information about AST. For now, information about functions
+    // and procedures is used only.
+    CodegenHelperVisitor v;
+    CodegenInfo info = v.analyze(node);
+
+    // For every function and procedure, generate its declaration. Thus, we can look up
+    // `llvm::Function` in the symbol table in the module.
+    for (const auto& func: info.functions) {
+        emit_procedure_or_function_declaration(*func);
+    }
+    for (const auto& proc: info.procedures) {
+        emit_procedure_or_function_declaration(*proc);
+    }
+
+    // Proceed with code generation.
     node.visit_children(*this);
 
     if (opt_passes) {

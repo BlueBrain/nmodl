@@ -97,6 +97,12 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
         , fpm(module.get()) {}
 
     /**
+     * Emit function or procedure declaration in LLVM given the node
+     * \param node the AST node representing the function or procedure in NMODL
+     */
+    void emit_procedure_or_function_declaration(const ast::Block& node);
+
+    /**
      * Visit nmodl function or procedure
      * \param node the AST node representing the function or procedure in NMODL
      */
