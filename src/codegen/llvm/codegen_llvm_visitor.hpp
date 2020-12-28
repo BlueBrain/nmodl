@@ -23,7 +23,12 @@
 
 #include "llvm/IR/IRBuilder.h"
 #include "llvm/IR/LLVMContext.h"
+#include "llvm/IR/LegacyPassManager.h"
 #include "llvm/IR/Module.h"
+#include "llvm/IR/Verifier.h"
+#include "llvm/Transforms/InstCombine/InstCombine.h"
+#include "llvm/Transforms/Scalar.h"
+#include "llvm/Transforms/Scalar/GVN.h"
 
 namespace nmodl {
 namespace codegen {
@@ -56,11 +61,24 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
 
     llvm::IRBuilder<> builder;
 
+    llvm::legacy::FunctionPassManager fpm;
+
     // Stack to hold visited values
     std::vector<llvm::Value*> values;
 
     // Pointer to the local symbol table.
     llvm::ValueSymbolTable* local_named_values = nullptr;
+
+    // Run optimisation passes if true
+    bool opt_passes;
+
+    /**
+     *\brief Run LLVM optimisation passes on generated IR
+     *
+     * LLVM provides number of optimisation passes that can be run on the generated IR.
+     * Here we run common optimisation LLVM passes that benefits code optimisation.
+     */
+    void run_llvm_opt_passes();
 
   public:
     /**
@@ -69,10 +87,14 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
      * This constructor instantiates an NMODL LLVM code generator. This is
      * just template to work with initial implementation.
      */
-    CodegenLLVMVisitor(const std::string& mod_filename, const std::string& output_dir)
+    CodegenLLVMVisitor(const std::string& mod_filename,
+                       const std::string& output_dir,
+                       bool opt_passes)
         : mod_filename(mod_filename)
         , output_dir(output_dir)
-        , builder(*context) {}
+        , opt_passes(opt_passes)
+        , builder(*context)
+        , fpm(module.get()) {}
 
     /**
      * Visit nmodl function or procedure

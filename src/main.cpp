@@ -166,16 +166,20 @@ int main(int argc, const char* argv[]) {
     /// floating point data type
     std::string data_type("double");
 
+#ifdef NMODL_LLVM_BACKEND
+    /// generate llvm IR
+    bool llvm_ir(false);
+
+    /// run llvm optimisation passes
+    bool llvm_opt_passes(false);
+#endif
+
     app.get_formatter()->column_width(40);
     app.set_help_all_flag("-H,--help-all", "Print this help message including all sub-commands");
 
     app.add_option("--verbose", verbose, "Verbosity of logger output", true)
         ->ignore_case()
         ->check(CLI::IsMember({"trace", "debug", "info", "warning", "error", "critical", "off"}));
-
-#ifdef NMODL_LLVM_BACKEND
-    app.add_flag("--llvm", llvm_backend, "Enable LLVM based code generation")->ignore_case();
-#endif
 
     app.add_option("file", mod_files, "One or more MOD files to process")
         ->ignore_case()
@@ -276,6 +280,15 @@ int main(int argc, const char* argv[]) {
         optimize_ionvar_copies_codegen,
         "Optimize copies of ion variables ({})"_format(optimize_ionvar_copies_codegen))->ignore_case();
 
+#ifdef NMODL_LLVM_BACKEND
+    auto llvm_opt = app.add_subcommand("llvm", "LLVM code generation option")->ignore_case();
+    llvm_opt->add_flag("--ir",
+        llvm_ir,
+        "Generate LLVM IR ({})"_format(llvm_ir))->ignore_case();
+    llvm_opt->add_flag("--opt",
+        llvm_opt_passes,
+        "Run LLVM optimisation passes ({})"_format(llvm_opt_passes))->ignore_case();
+#endif
     // clang-format on
 
     CLI11_PARSE(app, argc, argv);
@@ -576,9 +589,9 @@ int main(int argc, const char* argv[]) {
             }
 
 #ifdef NMODL_LLVM_BACKEND
-            if (llvm_backend) {
+            if (llvm_ir) {
                 logger->info("Running LLVM backend code generator");
-                CodegenLLVMVisitor visitor(modfile, output_dir);
+                CodegenLLVMVisitor visitor(modfile, output_dir, llvm_opt_passes);
                 visitor.visit_program(*ast);
             }
 #endif
