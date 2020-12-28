@@ -5,8 +5,8 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
-#include "ast/all.hpp"
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
+#include "ast/all.hpp"
 #include "codegen/codegen_helper_visitor.hpp"
 #include "visitors/rename_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
@@ -180,6 +180,38 @@ void CodegenLLVMVisitor::visit_double(const ast::Double& node) {
 
 void CodegenLLVMVisitor::visit_function_block(const ast::FunctionBlock& node) {
     visit_procedure_or_function(node);
+}
+
+void CodegenLLVMVisitor::visit_function_call(const ast::FunctionCall& node) {
+    const auto& name = node.get_node_name();
+    const auto& arguments = node.get_arguments();
+
+    // Assuming all functions are defined within this mod file, a call is made to the user-defined
+    // FUNCTION/PROCEDURE. Otherwise, an error is returned. \todo: support built-in lib calls.
+    auto func = module->getFunction(name);
+    if (!func) {
+        throw std::runtime_error("Error: Unknown function name: " + name +
+                                 ". (External functions references are not supported)\n");
+    }
+
+    // Check that function is called with the expected number of arguments.
+    if (arguments.size() != func->arg_size()) {
+        throw std::runtime_error("Error: Incorrect number of arguments passed");
+    }
+
+    // Process each argument and add it to a vector to pass to the function call instruction. Note
+    // that type checks are not needed here as NMODL operates on doubles by default. If that was not
+    // the case, cast instructions had to be created.
+    std::vector<llvm::Value*> argument_values;
+    for (const auto& arg: arguments) {
+        arg->accept(*this);
+        llvm::Value* value = values.back();
+        values.pop_back();
+        argument_values.push_back(value);
+    }
+
+    llvm::Value* call = builder.CreateCall(func, argument_values);
+    values.push_back(call);
 }
 
 void CodegenLLVMVisitor::visit_integer(const ast::Integer& node) {

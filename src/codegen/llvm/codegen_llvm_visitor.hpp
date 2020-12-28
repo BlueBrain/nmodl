@@ -113,6 +113,7 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     void visit_boolean(const ast::Boolean& node) override;
     void visit_double(const ast::Double& node) override;
     void visit_function_block(const ast::FunctionBlock& node) override;
+    void visit_function_call(const ast::FunctionCall& node) override;
     void visit_integer(const ast::Integer& node) override;
     void visit_local_list_statement(const ast::LocalListStatement& node) override;
     void visit_procedure_block(const ast::ProcedureBlock& node) override;
