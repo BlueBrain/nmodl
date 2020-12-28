@@ -61,16 +61,6 @@ SCENARIO("Binary expression", "[visitor][llvm]") {
             REQUIRE(std::regex_search(module_string, m, lhs));
             REQUIRE(std::regex_search(module_string, m, res));
         }
-
-        THEN("with optimisation enabled, all ops are eliminated") {
-            std::string module_string = run_llvm_visitor(nmodl_text, true);
-            std::smatch m;
-
-            // Check if the values are optimised out
-            std::regex empty_proc(
-                R"(define void @add\(double %a1, double %b2\) \{\n(\s)*ret void\n\})");
-            REQUIRE(std::regex_search(module_string, m, empty_proc));
-        }
     }
 
     GIVEN("Procedure with multiple binary operators") {
@@ -263,6 +253,31 @@ SCENARIO("Unary expression", "[visitor][llvm]") {
             bool result = std::regex_search(module_string, m, negation_v9) ||
                           std::regex_search(module_string, m, negation_v11);
             REQUIRE(result == true);
+        }
+    }
+}
+
+//=============================================================================
+// Optimization : dead code removal
+//=============================================================================
+
+SCENARIO("Dead code removal", "[visitor][llvm][opt]") {
+    GIVEN("Procedure using local variables, without any side effects") {
+        std::string nmodl_text = R"(
+            PROCEDURE add(a, b) {
+                LOCAL i
+                i = a + b
+            }
+        )";
+
+        THEN("with optimisation enabled, all ops are eliminated") {
+            std::string module_string = run_llvm_visitor(nmodl_text, true);
+            std::smatch m;
+
+            // Check if the values are optimised out
+            std::regex empty_proc(
+                R"(define void @add\(double %a1, double %b2\) \{\n(\s)*ret void\n\})");
+            REQUIRE(std::regex_search(module_string, m, empty_proc));
         }
     }
 }
