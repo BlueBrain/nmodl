@@ -25,6 +25,24 @@ namespace codegen {
 /*                            Helper routines                                           */
 /****************************************************************************************/
 
+void CodegenLLVMVisitor::run_llvm_opt_passes() {
+    /// run some common optimisation passes that are commonly suggested
+    fpm.add(llvm::createInstructionCombiningPass());
+    fpm.add(llvm::createReassociatePass());
+    fpm.add(llvm::createGVNPass());
+    fpm.add(llvm::createCFGSimplificationPass());
+
+    /// initialize pass manager
+    fpm.doInitialization();
+
+    /// iterate over all functions and run the optimisation passes
+    auto& functions = module->getFunctionList();
+    for (auto& function: functions) {
+        llvm::verifyFunction(function);
+        fpm.run(function);
+    }
+}
+
 
 void CodegenLLVMVisitor::visit_procedure_or_function(const ast::Block& node) {
     const auto& name = node.get_node_name();
@@ -94,6 +112,7 @@ void CodegenLLVMVisitor::visit_procedure_or_function(const ast::Block& node) {
     values.clear();
     local_named_values = nullptr;
 }
+
 
 /****************************************************************************************/
 /*                            Overloaded visitor routines                               */
@@ -173,6 +192,12 @@ void CodegenLLVMVisitor::visit_local_list_statement(const ast::LocalListStatemen
 
 void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
     node.visit_children(*this);
+
+    if (opt_passes) {
+        logger->info("Running LLVM optimisation passes");
+        run_llvm_opt_passes();
+    }
+
     // Keep this for easier development (maybe move to debug mode later).
     std::cout << print_module();
 }
