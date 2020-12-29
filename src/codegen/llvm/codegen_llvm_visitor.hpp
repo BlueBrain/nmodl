@@ -74,6 +74,11 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     symtab::SymbolTable* sym_tab;
 
     // Run optimisation passes if true.
+
+    // Map to store DEFINE values.
+    std::map<std::string, int> macros;
+
+    // Run optimisation passes if true
     bool opt_passes;
 
     /**
@@ -134,10 +139,12 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     // Visitors
     void visit_binary_expression(const ast::BinaryExpression& node) override;
     void visit_boolean(const ast::Boolean& node) override;
+    void visit_define(const ast::Define& node) override;
     void visit_double(const ast::Double& node) override;
     void visit_function_block(const ast::FunctionBlock& node) override;
     void visit_function_call(const ast::FunctionCall& node) override;
     void visit_integer(const ast::Integer& node) override;
+    void visit_indexed_name(const ast::IndexedName& node) override;
     void visit_local_list_statement(const ast::LocalListStatement& node) override;
     void visit_procedure_block(const ast::ProcedureBlock& node) override;
     void visit_program(const ast::Program& node) override;

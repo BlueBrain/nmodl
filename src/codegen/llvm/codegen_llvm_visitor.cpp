@@ -183,6 +183,7 @@ void CodegenLLVMVisitor::visit_binary_expression(const ast::BinaryExpression& no
     llvm::Value* rhs = values.back();
     values.pop_back();
     if (op == ast::BinaryOp::BOP_ASSIGN) {
+        // \todo: handle indexed name.
         auto var = dynamic_cast<ast::VarName*>(node.get_lhs().get());
         if (!var) {
             throw std::runtime_error("Error: only VarName assignment is currently supported.\n");
@@ -220,6 +221,10 @@ void CodegenLLVMVisitor::visit_boolean(const ast::Boolean& node) {
     values.push_back(constant);
 }
 
+void CodegenLLVMVisitor::visit_define(const ast::Define& node) {
+    macros[node.get_node_name()] = node.get_value()->get_value();
+}
+
 void CodegenLLVMVisitor::visit_double(const ast::Double& node) {
     const auto& constant = llvm::ConstantFP::get(llvm::Type::getDoubleTy(*context),
                                                  node.get_value());
@@ -231,7 +236,7 @@ void CodegenLLVMVisitor::visit_function_block(const ast::FunctionBlock& node) {
 }
 
 void CodegenLLVMVisitor::visit_function_call(const ast::FunctionCall& node) {
-    const auto& name = node.get_node_name();
+    const auto &name = node.get_node_name();
     auto func = module->getFunction(name);
     if (func) {
         create_function_call(func, name, node.get_arguments());
@@ -246,6 +251,10 @@ void CodegenLLVMVisitor::visit_function_call(const ast::FunctionCall& node) {
     }
 }
 
+void CodegenLLVMVisitor::visit_indexed_name(const ast::IndexedName& node) {
+    // \todo: implement array element extraction.
+}
+
 void CodegenLLVMVisitor::visit_integer(const ast::Integer& node) {
     const auto& constant = llvm::ConstantInt::get(llvm::Type::getInt32Ty(*context),
                                                   node.get_value());
@@ -254,10 +263,28 @@ void CodegenLLVMVisitor::visit_integer(const ast::Integer& node) {
 
 void CodegenLLVMVisitor::visit_local_list_statement(const ast::LocalListStatement& node) {
     for (const auto& variable: node.get_variables()) {
-        // LocalVar always stores a Name.
-        auto name = variable->get_node_name();
-        llvm::Type* var_type = llvm::Type::getDoubleTy(*context);
-        llvm::Value* alloca = builder.CreateAlloca(var_type, /*ArraySize=*/nullptr, name);
+        std::string name = variable->get_node_name();
+        const auto& identifier = variable->get_name();
+        // Local variable can be a scalar (Node AST class) or an array (IndexedName AST class). For
+        // each case, create memory allocations with the corresponding LLVM type.
+        llvm::Type* var_type;
+        if (identifier->is_indexed_name()) {
+            auto indexed_name = dynamic_cast<ast::IndexedName*>(identifier.get());
+            auto integer = dynamic_cast<ast::Integer*>(indexed_name->get_length().get());
+            if (!integer)
+                throw std::runtime_error("Error: expecting integer length");
+
+            // Check if integer should be looked up in the macros map.
+            if (integer->get_macro())
+            var_type = llvm::ArrayType::get(llvm::Type::getDoubleTy(*context),
+                                            integer->get_value());
+        } else if (identifier->is_name()) {
+            // This case corresponds to a scalar local variable. Its type is double by default.
+            var_type = llvm::Type::getDoubleTy(*context);
+        } else {
+            throw std::runtime_error("Error: Unsupported local variable type");
+        }
+        builder.CreateAlloca(var_type, /*ArraySize=*/nullptr, name);
     }
 }
 
@@ -310,6 +337,8 @@ void CodegenLLVMVisitor::visit_unary_expression(const ast::UnaryExpression& node
 }
 
 void CodegenLLVMVisitor::visit_var_name(const ast::VarName& node) {
+    // \todo: handle if var name is an indexed name (go one level deeper and move this code to
+    // visit_name?)
     llvm::Value* var = builder.CreateLoad(local_named_values->lookup(node.get_node_name()));
     values.push_back(var);
 }
