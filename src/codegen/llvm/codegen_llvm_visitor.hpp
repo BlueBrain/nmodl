@@ -18,8 +18,8 @@
 #include <ostream>
 #include <string>
 
-#include "utils/logger.hpp"
 #include "symtab/symbol_table.hpp"
+#include "utils/logger.hpp"
 #include "visitors/ast_visitor.hpp"
 
 #include "llvm/IR/IRBuilder.h"
@@ -105,7 +105,8 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
      * \param name external method name
      * \param arguments expressions passed as arguments to the given external method
      */
-    void create_external_method_call(const std::string& name, const ast::ExpressionVector& arguments);
+    void create_external_method_call(const std::string& name,
+                                     const ast::ExpressionVector& arguments);
 
     /**
      * Create a function call to NMODL function or procedure in the same mod file
@@ -113,10 +114,13 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
      * \param name function name
      * \param arguments expressions passed as arguments to the function call
      */
-    void create_function_call(llvm::Function* func, const std::string& name, const ast::ExpressionVector& arguments);
+    void create_function_call(llvm::Function* func,
+                              const std::string& name,
+                              const ast::ExpressionVector& arguments);
 
     /**
      * Emit function or procedure declaration in LLVM given the node
+     *
      * \param node the AST node representing the function or procedure in NMODL
      */
     void emit_procedure_or_function_declaration(const ast::Block& node);
