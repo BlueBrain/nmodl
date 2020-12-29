@@ -275,9 +275,12 @@ void CodegenLLVMVisitor::visit_local_list_statement(const ast::LocalListStatemen
                 throw std::runtime_error("Error: expecting integer length");
 
             // Check if integer should be looked up in the macros map.
-            if (integer->get_macro())
-            var_type = llvm::ArrayType::get(llvm::Type::getDoubleTy(*context),
-                                            integer->get_value());
+            unsigned length;
+            if (!integer->get_macro())
+                length = integer->get_value();
+            else
+                length = macros[integer->get_macro()->get_node_name()];
+            var_type = llvm::ArrayType::get(llvm::Type::getDoubleTy(*context), length);
         } else if (identifier->is_name()) {
             // This case corresponds to a scalar local variable. Its type is double by default.
             var_type = llvm::Type::getDoubleTy(*context);
