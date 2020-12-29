@@ -80,8 +80,7 @@ void CodegenLLVMVisitor::create_function_call(llvm::Function* func,
     }
 
     // Process each argument and add it to a vector to pass to the function call instruction. Note
-    // that type checks are not needed here as NMODL operates on doubles by default. If that was not
-    // the case, cast instructions had to be created.
+    // that type checks are not needed here as NMODL operates on doubles by default.
     std::vector<llvm::Value*> argument_values;
     for (const auto& arg: arguments) {
         arg->accept(*this);
