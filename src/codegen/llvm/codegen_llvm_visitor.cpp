@@ -67,6 +67,8 @@ void CodegenLLVMVisitor::create_external_method_call(const std::string& name,
     DISPATCH("exp", llvm::Intrinsic::exp);
     DISPATCH("pow", llvm::Intrinsic::pow);
 #undef DISPATCH
+
+    throw std::runtime_error("Error: External method" + name + " is not currently supported");
 }
 
 void CodegenLLVMVisitor::create_function_call(llvm::Function* func,
@@ -240,7 +242,7 @@ void CodegenLLVMVisitor::visit_function_call(const ast::FunctionCall& node) {
             create_external_method_call(name, node.get_arguments());
         } else {
             throw std::runtime_error("Error: Unknown function name: " + name +
-                                     ". (External functions references are not supported)\n");
+                                     ". (External functions references are not supported)");
         }
     }
 }
