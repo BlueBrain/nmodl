@@ -32,7 +32,7 @@ bool CodegenLLVMVisitor::check_array_bounds(const ast::IndexedName& node, unsign
     return 0 <= index && index < length;
 }
 
-llvm::Value* CodegenLLVMVisitor::create_GEP(const std::string& name, unsigned index) {
+llvm::Value* CodegenLLVMVisitor::create_gep(const std::string& name, unsigned index) {
     llvm::Type* index_type = llvm::Type::getInt32Ty(*context);
     std::vector<llvm::Value*> indices;
     indices.push_back(llvm::ConstantInt::get(index_type, 0));
@@ -48,11 +48,11 @@ llvm::Value* CodegenLLVMVisitor::codegen_indexed_name(const ast::IndexedName& no
     if (!check_array_bounds(node, index))
         throw std::runtime_error("Error: Index is out of bounds");
 
-    return create_GEP(node.get_node_name(), index);
+    return create_gep(node.get_node_name(), index);
 }
 
 unsigned CodegenLLVMVisitor::get_array_index_or_length(const ast::IndexedName& indexed_name) {
-    auto integer = dynamic_cast<ast::Integer*>(indexed_name.get_length().get());
+    auto integer = std::dynamic_pointer_cast<ast::Integer>(indexed_name.get_length());
     if (!integer)
         throw std::runtime_error("Error: expecting integer index or length");
 
@@ -229,7 +229,7 @@ void CodegenLLVMVisitor::visit_binary_expression(const ast::BinaryExpression& no
             llvm::Value* alloca = local_named_values->lookup(var->get_node_name());
             builder.CreateStore(rhs, alloca);
         } else if (identifier->is_indexed_name()) {
-            auto indexed_name = dynamic_cast<ast::IndexedName*>(identifier.get());
+            auto indexed_name = std::dynamic_pointer_cast<ast::IndexedName>(identifier);
             builder.CreateStore(rhs, codegen_indexed_name(*indexed_name));
         } else {
             throw std::runtime_error("Error: Unsupported variable type");
@@ -280,7 +280,7 @@ void CodegenLLVMVisitor::visit_function_block(const ast::FunctionBlock& node) {
 }
 
 void CodegenLLVMVisitor::visit_function_call(const ast::FunctionCall& node) {
-    const auto &name = node.get_node_name();
+    const auto& name = node.get_node_name();
     auto func = module->getFunction(name);
     if (func) {
         create_function_call(func, name, node.get_arguments());
@@ -309,7 +309,7 @@ void CodegenLLVMVisitor::visit_local_list_statement(const ast::LocalListStatemen
         // each case, create memory allocations with the corresponding LLVM type.
         llvm::Type* var_type;
         if (identifier->is_indexed_name()) {
-            auto indexed_name = dynamic_cast<ast::IndexedName*>(identifier.get());
+            auto indexed_name = std::dynamic_pointer_cast<ast::IndexedName>(identifier);
             unsigned length = get_array_index_or_length(*indexed_name);
             var_type = llvm::ArrayType::get(llvm::Type::getDoubleTy(*context), length);
         } else if (identifier->is_name()) {
@@ -380,7 +380,7 @@ void CodegenLLVMVisitor::visit_var_name(const ast::VarName& node) {
         ptr = local_named_values->lookup(node.get_node_name());
 
     if (identifier->is_indexed_name()) {
-        auto indexed_name = dynamic_cast<ast::IndexedName*>(identifier.get());
+        auto indexed_name = std::dynamic_pointer_cast<ast::IndexedName>(identifier);
         ptr = codegen_indexed_name(*indexed_name);
     }
 

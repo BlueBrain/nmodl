@@ -125,7 +125,7 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
      * \param index element index
      * \return GEP instruction value
      */
-    llvm::Value* create_GEP(const std::string& name, unsigned index);
+    llvm::Value* create_gep(const std::string& name, unsigned index);
 
     /**
      * Returns array index or length from given IndexedName
