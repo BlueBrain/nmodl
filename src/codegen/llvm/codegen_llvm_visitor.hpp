@@ -18,6 +18,7 @@
 #include <ostream>
 #include <string>
 
+#include "symtab/symbol_table.hpp"
 #include "utils/logger.hpp"
 #include "visitors/ast_visitor.hpp"
 
@@ -69,7 +70,10 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     // Pointer to the local symbol table.
     llvm::ValueSymbolTable* local_named_values = nullptr;
 
-    // Run optimisation passes if true
+    // Pointer to AST symbol table.
+    symtab::SymbolTable* sym_tab;
+
+    // Run optimisation passes if true.
     bool opt_passes;
 
     /**
@@ -97,6 +101,31 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
         , fpm(module.get()) {}
 
     /**
+     * Create a function call to an external method
+     * \param name external method name
+     * \param arguments expressions passed as arguments to the given external method
+     */
+    void create_external_method_call(const std::string& name,
+                                     const ast::ExpressionVector& arguments);
+
+    /**
+     * Create a function call to NMODL function or procedure in the same mod file
+     * \param func LLVM function corresponding ti this call
+     * \param name function name
+     * \param arguments expressions passed as arguments to the function call
+     */
+    void create_function_call(llvm::Function* func,
+                              const std::string& name,
+                              const ast::ExpressionVector& arguments);
+
+    /**
+     * Emit function or procedure declaration in LLVM given the node
+     *
+     * \param node the AST node representing the function or procedure in NMODL
+     */
+    void emit_procedure_or_function_declaration(const ast::Block& node);
+
+    /**
      * Visit nmodl function or procedure
      * \param node the AST node representing the function or procedure in NMODL
      */
@@ -107,6 +136,7 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     void visit_boolean(const ast::Boolean& node) override;
     void visit_double(const ast::Double& node) override;
     void visit_function_block(const ast::FunctionBlock& node) override;
+    void visit_function_call(const ast::FunctionCall& node) override;
     void visit_integer(const ast::Integer& node) override;
     void visit_local_list_statement(const ast::LocalListStatement& node) override;
     void visit_procedure_block(const ast::ProcedureBlock& node) override;
