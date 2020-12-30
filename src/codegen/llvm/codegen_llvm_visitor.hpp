@@ -105,6 +105,15 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
         , builder(*context)
         , fpm(module.get()) {}
 
+
+    bool check_array_bounds(const ast::IndexedName& node, unsigned index);
+
+    unsigned get_array_index_or_length(const ast::IndexedName& node);
+
+    llvm::Value* create_GEP(const std::string& name, unsigned index);
+
+    llvm::Value* codegen_indexed_name(const ast::IndexedName& node);
+
     /**
      * Create a function call to an external method
      * \param name external method name
@@ -144,7 +153,6 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     void visit_function_block(const ast::FunctionBlock& node) override;
     void visit_function_call(const ast::FunctionCall& node) override;
     void visit_integer(const ast::Integer& node) override;
-    void visit_indexed_name(const ast::IndexedName& node) override;
     void visit_local_list_statement(const ast::LocalListStatement& node) override;
     void visit_procedure_block(const ast::ProcedureBlock& node) override;
     void visit_program(const ast::Program& node) override;
