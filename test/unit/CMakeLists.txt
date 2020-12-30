@@ -99,13 +99,14 @@ if(NMODL_ENABLE_LLVM)
   add_executable(testllvm visitor/main.cpp codegen/llvm.cpp)
   target_link_libraries(
     testllvm
+    llvm_codegen
+    codegen
     visitor
     symtab
     lexer
     util
     test_util
     printer
-    llvm_codegen
     ${NMODL_WRAPPER_LIBS}
     ${LLVM_LIBS_TO_LINK})
   set(CODEGEN_TEST testllvm)

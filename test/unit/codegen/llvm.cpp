@@ -12,7 +12,6 @@
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
 #include "parser/nmodl_driver.hpp"
 #include "visitors/checkparent_visitor.hpp"
-#include "visitors/inline_visitor.hpp"
 #include "visitors/symtab_visitor.hpp"
 
 using namespace nmodl;
@@ -28,7 +27,6 @@ std::string run_llvm_visitor(const std::string& text, bool opt = false) {
     const auto& ast = driver.parse_string(text);
 
     SymtabVisitor().visit_program(*ast);
-    InlineVisitor().visit_program(*ast);
 
     codegen::CodegenLLVMVisitor llvm_visitor("unknown", ".", opt);
     llvm_visitor.visit_program(*ast);
@@ -152,6 +150,108 @@ SCENARIO("Function", "[visitor][llvm]") {
             std::regex terminator(R"(ret double %2)");
             REQUIRE(std::regex_search(module_string, m, loaded));
             REQUIRE(std::regex_search(module_string, m, terminator));
+        }
+    }
+}
+
+//=============================================================================
+// FunctionCall
+//=============================================================================
+
+SCENARIO("Function call", "[visitor][llvm]") {
+    GIVEN("A call to procedure") {
+        std::string nmodl_text = R"(
+            PROCEDURE bar() {}
+            FUNCTION foo() {
+                bar()
+            }
+        )";
+
+        THEN("a void call instruction is created") {
+            std::string module_string = run_llvm_visitor(nmodl_text);
+            std::smatch m;
+
+            // Check for call instruction.
+            std::regex call(R"(call void @bar\(\))");
+            REQUIRE(std::regex_search(module_string, m, call));
+        }
+    }
+
+    GIVEN("A call to function declared below the caller") {
+        std::string nmodl_text = R"(
+            FUNCTION foo(x) {
+                foo = 4 * bar()
+            }
+            FUNCTION bar() {
+                bar = 5
+            }
+        )";
+
+        THEN("a correct call instruction is created") {
+            std::string module_string = run_llvm_visitor(nmodl_text);
+            std::smatch m;
+
+            // Check for call instruction.
+            std::regex call(R"(%[0-9]+ = call double @bar\(\))");
+            REQUIRE(std::regex_search(module_string, m, call));
+        }
+    }
+
+    GIVEN("A call to function with arguments") {
+        std::string nmodl_text = R"(
+            FUNCTION foo(x, y) {
+                foo = 4 * x - y
+            }
+            FUNCTION bar(i) {
+                bar = foo(i, 4)
+            }
+        )";
+
+        THEN("arguments are processed before the call and passed to call instruction") {
+            std::string module_string = run_llvm_visitor(nmodl_text);
+            std::smatch m;
+
+            // Check correct arguments.
+            std::regex i(R"(%1 = load double, double\* %i)");
+            std::regex call(R"(call double @foo\(double %1, double 4.000000e\+00\))");
+            REQUIRE(std::regex_search(module_string, m, i));
+            REQUIRE(std::regex_search(module_string, m, call));
+        }
+    }
+
+    GIVEN("A call to external method") {
+        std::string nmodl_text = R"(
+            FUNCTION bar(i) {
+                bar = exp(i)
+            }
+        )";
+
+        THEN("LLVM intrinsic corresponding to this method is created") {
+            std::string module_string = run_llvm_visitor(nmodl_text);
+            std::smatch m;
+
+            // Check for intrinsic declaration.
+            std::regex exp(R"(declare double @llvm\.exp\.f64\(double\))");
+            REQUIRE(std::regex_search(module_string, m, exp));
+
+            // Check the correct call is made.
+            std::regex call(R"(call double @llvm\.exp\.f64\(double %[0-9]+\))");
+            REQUIRE(std::regex_search(module_string, m, call));
+        }
+    }
+
+    GIVEN("A call to function with the wrong number of arguments") {
+        std::string nmodl_text = R"(
+            FUNCTION foo(x, y) {
+                foo = 4 * x - y
+            }
+            FUNCTION bar(i) {
+                bar = foo(i)
+            }
+        )";
+
+        THEN("a runtime error is thrown") {
+            REQUIRE_THROWS_AS(run_llvm_visitor(nmodl_text), std::runtime_error);
         }
     }
 }
