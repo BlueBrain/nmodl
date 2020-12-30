@@ -7,8 +7,8 @@
 
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
 #include "ast/all.hpp"
+#include "codegen/codegen_helper_visitor.hpp"
 #include "visitors/rename_visitor.hpp"
-#include "visitors/visitor_utils.hpp"
 
 #include "llvm/IR/BasicBlock.h"
 #include "llvm/IR/Constants.h"
@@ -44,7 +44,56 @@ void CodegenLLVMVisitor::run_llvm_opt_passes() {
 }
 
 
-void CodegenLLVMVisitor::visit_procedure_or_function(const ast::Block& node) {
+void CodegenLLVMVisitor::create_external_method_call(const std::string& name,
+                                                     const ast::ExpressionVector& arguments) {
+    std::vector<llvm::Value*> argument_values;
+    std::vector<llvm::Type*> argument_types;
+    for (const auto& arg: arguments) {
+        arg->accept(*this);
+        llvm::Value* value = values.back();
+        llvm::Type* type = value->getType();
+        values.pop_back();
+        argument_types.push_back(type);
+        argument_values.push_back(value);
+    }
+
+#define DISPATCH(method_name, intrinsic)                                                           \
+    if (name == method_name) {                                                                     \
+        llvm::Value* result = builder.CreateIntrinsic(intrinsic, argument_types, argument_values); \
+        values.push_back(result);                                                                  \
+        return;                                                                                    \
+    }
+
+    DISPATCH("exp", llvm::Intrinsic::exp);
+    DISPATCH("pow", llvm::Intrinsic::pow);
+#undef DISPATCH
+
+    throw std::runtime_error("Error: External method" + name + " is not currently supported");
+}
+
+void CodegenLLVMVisitor::create_function_call(llvm::Function* func,
+                                              const std::string& name,
+                                              const ast::ExpressionVector& arguments) {
+    // Check that function is called with the expected number of arguments.
+    if (arguments.size() != func->arg_size()) {
+        throw std::runtime_error("Error: Incorrect number of arguments passed");
+    }
+
+    // Process each argument and add it to a vector to pass to the function call instruction. Note
+    // that type checks are not needed here as NMODL operates on doubles by default.
+    std::vector<llvm::Value*> argument_values;
+    for (const auto& arg: arguments) {
+        arg->accept(*this);
+        llvm::Value* value = values.back();
+        values.pop_back();
+        argument_values.push_back(value);
+    }
+
+    llvm::Value* call = builder.CreateCall(func, argument_values);
+    values.push_back(call);
+}
+
+void CodegenLLVMVisitor::emit_procedure_or_function_declaration(const ast::Block& node) {
     const auto& name = node.get_node_name();
     const auto& parameters = node.get_parameters();
 
@@ -57,11 +106,17 @@ void CodegenLLVMVisitor::visit_procedure_or_function(const ast::Block& node) {
     llvm::Type* return_type = node.is_function_block() ? llvm::Type::getDoubleTy(*context)
                                                        : llvm::Type::getVoidTy(*context);
 
-    llvm::Function* func =
-        llvm::Function::Create(llvm::FunctionType::get(return_type, arg_types, /*isVarArg=*/false),
-                               llvm::Function::ExternalLinkage,
-                               name,
-                               *module);
+    // Create a function that is automatically inserted into module's symbol table.
+    llvm::Function::Create(llvm::FunctionType::get(return_type, arg_types, /*isVarArg=*/false),
+                           llvm::Function::ExternalLinkage,
+                           name,
+                           *module);
+}
+
+void CodegenLLVMVisitor::visit_procedure_or_function(const ast::Block& node) {
+    const auto& name = node.get_node_name();
+    const auto& parameters = node.get_parameters();
+    llvm::Function* func = module->getFunction(name);
 
     // Create the entry basic block of the function/procedure and point the local named values table
     // to the symbol table.
@@ -175,6 +230,22 @@ void CodegenLLVMVisitor::visit_function_block(const ast::FunctionBlock& node) {
     visit_procedure_or_function(node);
 }
 
+void CodegenLLVMVisitor::visit_function_call(const ast::FunctionCall& node) {
+    const auto& name = node.get_node_name();
+    auto func = module->getFunction(name);
+    if (func) {
+        create_function_call(func, name, node.get_arguments());
+    } else {
+        auto symbol = sym_tab->lookup(name);
+        if (symbol && symbol->has_any_property(symtab::syminfo::NmodlType::extern_method)) {
+            create_external_method_call(name, node.get_arguments());
+        } else {
+            throw std::runtime_error("Error: Unknown function name: " + name +
+                                     ". (External functions references are not supported)");
+        }
+    }
+}
+
 void CodegenLLVMVisitor::visit_integer(const ast::Integer& node) {
     const auto& constant = llvm::ConstantInt::get(llvm::Type::getInt32Ty(*context),
                                                   node.get_value());
@@ -191,6 +262,24 @@ void CodegenLLVMVisitor::visit_local_list_statement(const ast::LocalListStatemen
 }
 
 void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
+    // Before generating LLVM, gather information about AST. For now, information about functions
+    // and procedures is used only.
+    CodegenHelperVisitor v;
+    CodegenInfo info = v.analyze(node);
+
+    // For every function and procedure, generate its declaration. Thus, we can look up
+    // `llvm::Function` in the symbol table in the module.
+    for (const auto& func: info.functions) {
+        emit_procedure_or_function_declaration(*func);
+    }
+    for (const auto& proc: info.procedures) {
+        emit_procedure_or_function_declaration(*proc);
+    }
+
+    // Set the AST symbol table.
+    sym_tab = node.get_symbol_table();
+
+    // Proceed with code generation.
     node.visit_children(*this);
 
     if (opt_passes) {
