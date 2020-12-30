@@ -32,6 +32,25 @@ bool CodegenLLVMVisitor::check_array_bounds(const ast::IndexedName& node, unsign
     return 0 <= index && index < length;
 }
 
+llvm::Value* CodegenLLVMVisitor::create_GEP(const std::string& name, unsigned index) {
+    llvm::Type* index_type = llvm::Type::getInt32Ty(*context);
+    std::vector<llvm::Value*> indices;
+    indices.push_back(llvm::ConstantInt::get(index_type, 0));
+    indices.push_back(llvm::ConstantInt::get(index_type, index));
+
+    return builder.CreateInBoundsGEP(local_named_values->lookup(name), indices);
+}
+
+llvm::Value* CodegenLLVMVisitor::codegen_indexed_name(const ast::IndexedName& node) {
+    unsigned index = get_array_index_or_length(node);
+
+    // Check if index is within array bounds.
+    if (!check_array_bounds(node, index))
+        throw std::runtime_error("Error: Index is out of bounds");
+
+    return create_GEP(node.get_node_name(), index);
+}
+
 unsigned CodegenLLVMVisitor::get_array_index_or_length(const ast::IndexedName& indexed_name) {
     auto integer = dynamic_cast<ast::Integer*>(indexed_name.get_length().get());
     if (!integer)
@@ -41,15 +60,6 @@ unsigned CodegenLLVMVisitor::get_array_index_or_length(const ast::IndexedName& i
     if (!integer->get_macro())
         return integer->get_value();
     return macros[integer->get_macro()->get_node_name()];
-}
-
-llvm::Value* CodegenLLVMVisitor::create_GEP(const std::string& name, unsigned index) {
-    llvm::Type* index_type = llvm::Type::getInt32Ty(*context);
-    std::vector<llvm::Value*> indices;
-    indices.push_back(llvm::ConstantInt::get(index_type, 0));
-    indices.push_back(llvm::ConstantInt::get(index_type, index));
-
-    return builder.CreateInBoundsGEP(local_named_values->lookup(name), indices);
 }
 
 void CodegenLLVMVisitor::run_llvm_opt_passes() {
@@ -68,16 +78,6 @@ void CodegenLLVMVisitor::run_llvm_opt_passes() {
         llvm::verifyFunction(function);
         fpm.run(function);
     }
-}
-
-llvm::Value* CodegenLLVMVisitor::codegen_indexed_name(const ast::IndexedName& node) {
-    unsigned index = get_array_index_or_length(node);
-
-    // Check if index is within array bounds.
-    if (!check_array_bounds(node, index))
-        throw std::runtime_error("Error: Index is out of bounds");
-
-    return create_GEP(node.get_node_name(), index);
 }
 
 void CodegenLLVMVisitor::create_external_method_call(const std::string& name,
