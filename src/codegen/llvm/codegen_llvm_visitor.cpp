@@ -56,10 +56,11 @@ unsigned CodegenLLVMVisitor::get_array_index_or_length(const ast::IndexedName& i
     if (!integer)
         throw std::runtime_error("Error: expecting integer index or length");
 
-    // Check if integer should be looked up in the macros map.
+    // Check if integer value is taken from a macro.
     if (!integer->get_macro())
         return integer->get_value();
-    return macros[integer->get_macro()->get_node_name()];
+    const auto& macro = sym_tab->lookup(integer->get_macro()->get_node_name());
+    return static_cast<unsigned>(*macro->get_value());
 }
 
 void CodegenLLVMVisitor::run_llvm_opt_passes() {
@@ -263,10 +264,6 @@ void CodegenLLVMVisitor::visit_boolean(const ast::Boolean& node) {
     const auto& constant = llvm::ConstantInt::get(llvm::Type::getInt1Ty(*context),
                                                   node.get_value());
     values.push_back(constant);
-}
-
-void CodegenLLVMVisitor::visit_define(const ast::Define& node) {
-    macros[node.get_node_name()] = node.get_value()->get_value();
 }
 
 void CodegenLLVMVisitor::visit_double(const ast::Double& node) {
