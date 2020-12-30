@@ -117,6 +117,31 @@ SCENARIO("Binary expression", "[visitor][llvm]") {
 }
 
 //=============================================================================
+// Define
+//=============================================================================
+
+SCENARIO("Define", "[visitor][llvm]") {
+    GIVEN("Procedure with array variable of length specified by DEFINE") {
+        std::string nmodl_text = R"(
+            DEFINE N 100
+
+            PROCEDURE foo() {
+                LOCAL x[N]
+            }
+        )";
+
+        THEN("macro is expanded and array is allocated") {
+            std::string module_string = run_llvm_visitor(nmodl_text);
+            std::smatch m;
+
+            // Check stack allocations for i and j
+            std::regex array(R"(%x = alloca \[100 x double\])");
+            REQUIRE(std::regex_search(module_string, m, array));
+        }
+    }
+}
+
+//=============================================================================
 // FunctionBlock
 //=============================================================================
 
@@ -251,6 +276,92 @@ SCENARIO("Function call", "[visitor][llvm]") {
         )";
 
         THEN("a runtime error is thrown") {
+            REQUIRE_THROWS_AS(run_llvm_visitor(nmodl_text), std::runtime_error);
+        }
+    }
+}
+
+//=============================================================================
+// IndexedName
+//=============================================================================
+
+SCENARIO("Indexed name", "[visitor][llvm]") {
+    GIVEN("Procedure with a local array variable") {
+        std::string nmodl_text = R"(
+            PROCEDURE foo() {
+                LOCAL x[2]
+            }
+        )";
+
+        THEN("array is allocated") {
+            std::string module_string = run_llvm_visitor(nmodl_text);
+            std::smatch m;
+
+            std::regex array(R"(%x = alloca \[2 x double\])");
+            REQUIRE(std::regex_search(module_string, m, array));
+        }
+    }
+
+    GIVEN("Procedure with a local array assignment") {
+        std::string nmodl_text = R"(
+            PROCEDURE foo() {
+                LOCAL x[2]
+                x[1] = 3
+            }
+        )";
+
+        THEN("element is stored to the array") {
+            std::string module_string = run_llvm_visitor(nmodl_text);
+            std::smatch m;
+
+            // Check GEP is created correctly to pint at array element.
+            std::regex GEP(
+                R"(%1 = getelementptr inbounds \[2 x double\], \[2 x double\]\* %x, i32 0, i32 1)");
+            REQUIRE(std::regex_search(module_string, m, GEP));
+
+            // Check the value is stored to the pointer.
+            std::regex store(R"(store double 3.000000e\+00, double\* %1)");
+            REQUIRE(std::regex_search(module_string, m, store));
+        }
+    }
+
+    GIVEN("Procedure with a assignment of array element") {
+        std::string nmodl_text = R"(
+            PROCEDURE foo() {
+                LOCAL x[2], y
+                x[1] = 3
+                y = x[1]
+            }
+        )";
+
+        THEN("array element is stored to the variable") {
+            std::string module_string = run_llvm_visitor(nmodl_text);
+            std::smatch m;
+
+            // Check GEP is created correctly to pint at array element.
+            std::regex GEP(
+                R"(%2 = getelementptr inbounds \[2 x double\], \[2 x double\]\* %x, i32 0, i32 1)");
+            REQUIRE(std::regex_search(module_string, m, GEP));
+
+            // Check the value is loaded from the pointer.
+            std::regex load(R"(%3 = load double, double\* %2)");
+            REQUIRE(std::regex_search(module_string, m, load));
+
+            // Check the value is stored to the the variable.
+            std::regex store(R"(store double %3, double\* %y)");
+            REQUIRE(std::regex_search(module_string, m, store));
+        }
+    }
+
+    GIVEN("Array with out of bounds access") {
+        std::string nmodl_text = R"(
+            PROCEDURE foo() {
+                LOCAL x[2]
+                x[5] = 3
+            }
+        )";
+
+        THEN("error is thrown") {
             REQUIRE_THROWS_AS(run_llvm_visitor(nmodl_text), std::runtime_error);
         }
     }
