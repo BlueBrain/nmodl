@@ -179,6 +179,11 @@ void CodegenLLVMHelperVisitor::create_function_for_node(ast::Block& node) {
     codegen_functions.push_back(function);
 }
 
+static void append_statements_from_block(ast::StatementVector& statements, const std::shared_ptr<ast::StatementBlock>& block) {
+    const auto & block_statements = block->get_statements();
+    statements.insert(statements.end(), block_statements.begin(), block_statements.end());
+}
+
 void CodegenLLVMHelperVisitor::visit_procedure_block(ast::ProcedureBlock& node) {
     node.visit_children(*this);
     create_function_for_node(node);
@@ -223,21 +228,43 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
     ast::StatementVector loop_body;
 
     /// access node index and corresponding voltage
+    // \todo ADD codegen node type for gather loads
     loop_body.push_back(visitor::create_statement("node_id = node_index[id]"));
     loop_body.push_back(visitor::create_statement("v = voltage[node_id]"));
 
-    /// read ion variables
-    const auto& read_statements = info.ion_read_statements(BlockType::State);
-    for (auto& statement: read_statements) {
-        loop_body.push_back(visitor::create_statement(statement));
+    {
+        /// read ion variables
+        const auto& read_statements = info.ion_read_statements(BlockType::State);
+        for (auto& statement: read_statements) {
+            loop_body.push_back(visitor::create_statement(statement));
+        }
     }
 
-    /// extract solution expressions that are derivative blocks
-    const auto& solutions = collect_nodes(node, {ast::AstNodeType::SOLUTION_EXPRESSION});
-    for (const auto& statement: solutions) {
-        const auto& solution = std::dynamic_pointer_cast<ast::SolutionExpression>(statement);
-        auto solution_expr = solution->get_node_to_solve()->clone();
-        loop_body.emplace_back(std::make_shared<ast::ExpressionStatement>(solution_expr));
+    {
+        /// extract solution expressions that are derivative blocks
+        const auto& solutions = collect_nodes(node, {ast::AstNodeType::SOLUTION_EXPRESSION});
+        for (const auto& statement: solutions) {
+            const auto& solution = std::dynamic_pointer_cast<ast::SolutionExpression>(statement);
+            const auto& block = std::dynamic_pointer_cast<ast::StatementBlock>(solution->get_node_to_solve());
+            append_statements_from_block(loop_body, block);
+        }
+    }
+
+    {
+        if (info.currents.empty() && info.breakpoint_node != nullptr) {
+            auto block = info.breakpoint_node->get_statement_block();
+            append_statements_from_block(loop_body, block);
+        }
+    }
+
+    {
+        // \todo we are not handling process_shadow_update_statement and wrote_conc_call yet
+        // \todo ADD codegen node type for atomic writes
+        auto write_statements = info.ion_write_statements(BlockType::Equation);
+        for (auto& statement: write_statements) {
+            auto text = "{} {} {}"_format(statement.lhs, statement.op, statement.rhs);
+            loop_body.push_back(visitor::create_statement(text));
+        }
     }
 
     /// now construct a new code block which will become the bidy of the loop
