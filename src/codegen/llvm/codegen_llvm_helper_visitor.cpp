@@ -226,6 +226,12 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
     loop_body.push_back(visitor::create_statement("node_id = node_index[id]"));
     loop_body.push_back(visitor::create_statement("v = voltage[node_id]"));
 
+    /// read ion variables
+    const auto& read_statements = info.ion_read_statements(BlockType::State);
+    for (auto& statement: read_statements) {
+        loop_body.push_back(visitor::create_statement(statement));
+    }
+
     /// extract solution expressions that are derivative blocks
     const auto& solutions = collect_nodes(node, {ast::AstNodeType::SOLUTION_EXPRESSION});
     for (const auto& statement: solutions) {

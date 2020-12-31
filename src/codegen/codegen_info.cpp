@@ -15,7 +15,9 @@
 namespace nmodl {
 namespace codegen {
 
+using namespace fmt::literals;
 using visitor::VarUsageVisitor;
+using symtab::syminfo::NmodlType;
 
 /// if any ion has write variable
 bool CodegenInfo::ion_has_write_variable() const {
@@ -129,6 +131,150 @@ bool CodegenInfo::is_voltage_used_by_watch_statements() const {
         }
     }
     return false;
+}
+
+bool CodegenInfo::state_variable(const std::string& name) const {
+    // clang-format off
+    auto result = std::find_if(state_vars.begin(),
+                               state_vars.end(),
+                               [&name](const SymbolType& sym) {
+                                   return name == sym->get_name();
+                               }
+    );
+    // clang-format on
+    return result != state_vars.end();
+}
+
+std::pair<std::string, std::string> CodegenInfo::read_ion_variable_name(
+    const std::string& name) const {
+    return {name, "ion_" + name};
+}
+
+
+std::pair<std::string, std::string> CodegenInfo::write_ion_variable_name(
+    const std::string& name) const {
+    return {"ion_" + name, name};
+}
+
+/**
+ * \details Depending upon the block type, we have to print read/write ion variables
+ * during code generation. Depending on block/procedure being printed, this
+ * method return statements as vector. As different code backends could have
+ * different variable names, we rely on backend-specific read_ion_variable_name
+ * and write_ion_variable_name method which will be overloaded.
+ *
+ * \todo After looking into mod2c and neuron implementation, it seems like
+ * Ode block type is not used (?). Need to look into implementation details.
+ */
+std::vector<std::string> CodegenInfo::ion_read_statements(BlockType type) {
+    //if (optimize_ion_variable_copies()) {
+    //    return ion_read_statements_optimized(type);
+    //}
+    std::vector<std::string> statements;
+    for (const auto& ion: ions) {
+        auto name = ion.name;
+        for (const auto& var: ion.reads) {
+            if (type == BlockType::Ode && ion.is_ionic_conc(var) && state_variable(var)) {
+                continue;
+            }
+            auto variable_names = read_ion_variable_name(var);
+            auto first = variable_names.first;
+            auto second = variable_names.second;
+            statements.push_back("{} = {}"_format(first, second));
+        }
+        for (const auto& var: ion.writes) {
+            if (type == BlockType::Ode && ion.is_ionic_conc(var) && state_variable(var)) {
+                continue;
+            }
+            if (ion.is_ionic_conc(var)) {
+                auto variables = read_ion_variable_name(var);
+                auto first = variables.first;
+                auto second = variables.second;
+                statements.push_back("{} = {}"_format(first, second));
+            }
+        }
+    }
+    return statements;
+}
+
+
+/**
+ * \details Current variable used in breakpoint block could be local variable.
+ * In this case, neuron has already renamed the variable name by prepending
+ * "_l". In our implementation, the variable could have been renamed by
+ * one of the pass. And hence, we search all local variables and check if
+ * the variable is renamed. Note that we have to look into the symbol table
+ * of statement block and not breakpoint.
+ */
+std::string CodegenInfo::breakpoint_current(std::string current) const {
+    auto breakpoint = breakpoint_node;
+    if (breakpoint == nullptr) {
+        return current;
+    }
+    auto symtab = breakpoint->get_statement_block()->get_symbol_table();
+    auto variables = symtab->get_variables_with_properties(NmodlType::local_var);
+    for (const auto& var: variables) {
+        auto renamed_name = var->get_name();
+        auto original_name = var->get_original_name();
+        if (current == original_name) {
+            current = renamed_name;
+            break;
+        }
+    }
+    return current;
+}
+
+std::vector<ShadowUseStatement> CodegenInfo::ion_write_statements(BlockType type) {
+    std::vector<ShadowUseStatement> statements;
+    for (const auto& ion: ions) {
+        std::string concentration;
+        auto name = ion.name;
+        for (const auto& var: ion.writes) {
+            auto variable_names = write_ion_variable_name(var);
+            if (ion.is_ionic_current(var)) {
+                if (type == BlockType::Equation) {
+                    auto current = breakpoint_current(var);
+                    auto lhs = variable_names.first;
+                    auto op = "+=";
+                    auto rhs = current;
+                    if (point_process) {
+                        auto area = codegen::naming::NODE_AREA_VARIABLE;
+                        rhs += "*(1.e2/{})"_format(area);
+                    }
+                    statements.push_back(ShadowUseStatement{lhs, op, rhs});
+                }
+            } else {
+                if (!ion.is_rev_potential(var)) {
+                    concentration = var;
+                }
+                auto lhs = variable_names.first;
+                auto op = "=";
+                auto rhs = variable_names.second;
+                statements.push_back(ShadowUseStatement{lhs, op, rhs});
+            }
+        }
+
+        if (type == BlockType::Initial && !concentration.empty()) {
+            int index = 0;
+            if (ion.is_intra_cell_conc(concentration)) {
+                index = 1;
+            } else if (ion.is_extra_cell_conc(concentration)) {
+                index = 2;
+            } else {
+                /// \todo Unhandled case in neuron implementation
+                throw std::logic_error("codegen error for {} ion"_format(ion.name));
+            }
+            auto ion_type_name = "{}_type"_format(ion.name);
+            auto lhs = "int {}"_format(ion_type_name);
+            auto op = "=";
+            auto rhs = ion_type_name;
+            statements.push_back(ShadowUseStatement{lhs, op, rhs});
+            // TODO
+            //auto statement = conc_write_statement(ion.name, concentration, index);
+            //statements.push_back(ShadowUseStatement{statement, "", ""});
+        }
+    }
+    return statements;
 }
 
 }  // namespace codegen

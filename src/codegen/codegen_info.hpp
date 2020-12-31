@@ -15,6 +15,7 @@
 #include <string>
 
 #include "ast/ast.hpp"
+#include "codegen/codegen_naming.hpp"
 #include "symtab/symbol_table.hpp"
 
 namespace nmodl {
@@ -126,6 +127,50 @@ struct IndexSemantics {
         , size(size) {}
 };
 
+/**
+ * \enum BlockType
+ * \brief Helper to represent various block types
+ *
+ * Note: do not assign integers to these enums
+ *
+ */
+enum BlockType {
+    /// initial block
+    Initial,
+
+    /// breakpoint block
+    Equation,
+
+    /// ode_* routines block (not used)
+    Ode,
+
+    /// derivative block
+    State,
+
+    /// watch block
+    Watch,
+
+    /// net_receive block
+    NetReceive,
+
+    /// fake ending block type for loops on the enums. Keep it at the end
+    BlockTypeEnd
+};
+
+/**
+ * \class ShadowUseStatement
+ * \brief Represents ion write statement during code generation
+ *
+ * Ion update statement needs use of shadow vectors for certain backends
+ * as atomics operations are not supported on cpu backend.
+ *
+ * \todo If shadow_lhs is empty then we assume shadow statement not required
+ */
+struct ShadowUseStatement {
+    std::string lhs;
+    std::string op;
+    std::string rhs;
+};
 
 /**
  * \class CodegenInfo
@@ -394,6 +439,53 @@ struct CodegenInfo {
 
     /// true if WatchStatement uses voltage v variable
     bool is_voltage_used_by_watch_statements() const;
+
+    /**
+     * Checks if the given variable name belongs to a state variable
+     * \param name The variable name
+     * \return     \c true if the variable is a state variable
+     */
+    bool state_variable(const std::string& name) const;
+
+    /**
+     * Return ion variable name and corresponding ion read variable name
+     * \param name The ion variable name
+     * \return     The ion read variable name
+     */
+    std::pair<std::string, std::string> read_ion_variable_name(const std::string& name) const;
+
+    /**
+     * Return ion variable name and corresponding ion write variable name
+     * \param name The ion variable name
+     * \return     The ion write variable name
+     */
+    std::pair<std::string, std::string> write_ion_variable_name(const std::string& name) const;
+
+    /**
+     * For a given output block type, return statements for all read ion variables
+     *
+     * \param type The type of code block being generated
+     * \return     A \c vector of strings representing the reading of ion variables
+     */
+    std::vector<std::string> ion_read_statements(BlockType type);
+
+    /**
+     * For a given output block type, return statements for writing back ion variables
+     *
+     * \param type The type of code block being generated
+     * \return     A \c vector of strings representing the write-back of ion variables
+     */
+    std::vector<ShadowUseStatement> ion_write_statements(BlockType type);
+
+
+    /**
+     * Determine the variable name for the "current" used in breakpoint block taking into account
+     * intermediate code transformations.
+     * \param current The variable name for the current used in the model
+     * \return        The name for the current to be printed in C
+     */
+    std::string breakpoint_current(std::string current) const;
+
 
     /// if we need a call back to wrote_conc in neuron/coreneuron
     bool require_wrote_conc = false;

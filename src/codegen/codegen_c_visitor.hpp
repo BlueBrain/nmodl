@@ -46,36 +46,6 @@ namespace codegen {
  * @{
  */
 
-/**
- * \enum BlockType
- * \brief Helper to represent various block types
- *
- * Note: do not assign integers to these enums
- *
- */
-enum BlockType {
-    /// initial block
-    Initial,
-
-    /// breakpoint block
-    Equation,
-
-    /// ode_* routines block (not used)
-    Ode,
-
-    /// derivative block
-    State,
-
-    /// watch block
-    Watch,
-
-    /// net_receive block
-    NetReceive,
-
-    /// fake ending block type for loops on the enums. Keep it at the end
-    BlockTypeEnd
-};
-
 
 /**
  * \enum MemberType
@@ -155,7 +125,7 @@ enum class LayoutType {
  *
  * \todo If shadow_lhs is empty then we assume shadow statement not required
  */
-struct ShadowUseStatement {
+struct ShadowUseStatement_del {
     std::string lhs;
     std::string op;
     std::string rhs;
