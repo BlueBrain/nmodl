@@ -220,3 +220,34 @@
                             vector: true
                             separator: ", "
                             add: true
+                  - CodegenAtomicStatement:
+                      brief: "Represent atomic operation"
+                      description: |
+                        During code generation certain operations like ion updaates, vec_rhs or
+                        vec_d updates (for synapse) needs to be atomic operations. For example,
+                        here are some examples:
+
+                        \code{.cpp}
+                            vec_d[node_id] += g
+                            vec_rhs[node_id] -= rhs
+                            ion_ina[indexes[some_index] += ina[id]
+                            ion_cai[indexes[some_index] = cai[id]  // cai here is state variable
+                        \endcode
+
+                        These operations will be represented by atomic statement node type:
+                        * `vec_d[node_id]` will be lhs
+                        * `+=` will be atomic_op
+                        * `g` will be rhs
+
+                      members:
+                        - lhs:
+                            brief: "Variable to be updated atomically"
+                            type: Identifier
+                        - atomic_op:
+                            brief: "Operator"
+                            type: BinaryOperator
+                            prefix: {value: " "}
+                            suffix: {value: " "}
+                        - rhs:
+                            brief: "Expression for atomic operation"
+                            type: Expression

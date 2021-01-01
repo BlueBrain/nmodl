@@ -184,6 +184,24 @@ static void append_statements_from_block(ast::StatementVector& statements, const
     statements.insert(statements.end(), block_statements.begin(), block_statements.end());
 }
 
+static std::shared_ptr<ast::CodegenAtomicStatement> create_atomic_statement(ShadowUseStatement& statement) {
+    auto lhs = std::make_shared<ast::Name>(new ast::String(statement.lhs));
+    ast::BinaryOp op;
+    if (statement.op.compare("-=")) {
+        op = ast::BinaryOp::BOP_SUB_ASSIGN;
+    } else if (statement.op.compare("+=")) {
+        op = ast::BinaryOp::BOP_ADD_ASSIGN;
+    } else if (statement.op.compare("=")) {
+        op = ast::BinaryOp::BOP_ASSIGN;
+    } else {
+        throw std::runtime_error("Unsupported operator in create_atomic_statement");
+    }
+    auto rhs = get_expression(statement.rhs);
+    auto atomic_op = ast::BinaryOperator(op);
+    return std::make_shared<ast::CodegenAtomicStatement>(lhs, atomic_op, rhs);
+}
+
+
 void CodegenLLVMHelperVisitor::visit_procedure_block(ast::ProcedureBlock& node) {
     node.visit_children(*this);
     create_function_for_node(node);
@@ -259,11 +277,10 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
 
     {
         // \todo we are not handling process_shadow_update_statement and wrote_conc_call yet
-        // \todo ADD codegen node type for atomic writes
+        // \todo ADD codegen node type for atomic writes : WIP
         auto write_statements = info.ion_write_statements(BlockType::Equation);
         for (auto& statement: write_statements) {
-            auto text = "{} {} {}"_format(statement.lhs, statement.op, statement.rhs);
-            loop_body.push_back(visitor::create_statement(text));
+            loop_body.push_back(create_atomic_statement(statement));
         }
     }
 

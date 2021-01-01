@@ -43,6 +43,9 @@ namespace ast {
  *
  * NMODL support different binary operators and this
  * type is used to store their value in the AST.
+ *
+ * \note `+=` and `-=` are not supported by NMODL. They
+ * are added for code generation purpose.
  */
 typedef enum {
     BOP_ADDITION,        ///< \+
@@ -58,7 +61,9 @@ typedef enum {
     BOP_LESS_EQUAL,      ///< <=
     BOP_ASSIGN,          ///< =
     BOP_NOT_EQUAL,       ///< !=
-    BOP_EXACT_EQUAL      ///< ==
+    BOP_EXACT_EQUAL,     ///< ==
+    BOP_ADD_ASSIGN,      ///< \+=
+    BOP_SUB_ASSIGN       ///< \-=
 } BinaryOp;
 
 /**
@@ -68,7 +73,7 @@ typedef enum {
  * is used to lookup the corresponding symbol for the operator.
  */
 static const std::string BinaryOpNames[] =
-    {"+", "-", "*", "/", "^", "&&", "||", ">", "<", ">=", "<=", "=", "!=", "=="};
+    {"+", "-", "*", "/", "^", "&&", "||", ">", "<", ">=", "<=", "=", "!=", "==", "+=", "-="};
 
 /// enum type for unary operators
 typedef enum { UOP_NOT, UOP_NEGATION } UnaryOp;

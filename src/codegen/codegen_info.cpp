@@ -235,9 +235,8 @@ std::vector<ShadowUseStatement> CodegenInfo::ion_write_statements(BlockType type
                 if (type == BlockType::Equation) {
                     auto current = breakpoint_current(var);
                     auto lhs = variable_names.first;
-                    // \todo "+=" is not supported by NMODL
-                    auto op = "=";
-                    auto rhs = lhs + " + " + current;
+                    auto op = "+=";
+                    auto rhs = current;
                     if (point_process) {
                         auto area = codegen::naming::NODE_AREA_VARIABLE;
                         rhs += "*(1.e2/{})"_format(area);
