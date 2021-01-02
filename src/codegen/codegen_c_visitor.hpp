@@ -115,22 +115,6 @@ enum class LayoutType {
     soa
 };
 
-
-/**
- * \class ShadowUseStatement
- * \brief Represents ion write statement during code generation
- *
- * Ion update statement needs use of shadow vectors for certain backends
- * as atomics operations are not supported on cpu backend.
- *
- * \todo If shadow_lhs is empty then we assume shadow statement not required
- */
-struct ShadowUseStatement_del {
-    std::string lhs;
-    std::string op;
-    std::string rhs;
-};
-
 /** @} */  // end of codegen_details
 
 

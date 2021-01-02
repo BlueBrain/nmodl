@@ -224,8 +224,9 @@
                       brief: "Represent atomic operation"
                       description: |
                         During code generation certain operations like ion updaates, vec_rhs or
-                        vec_d updates (for synapse) needs to be atomic operations. For example,
-                        here are some examples:
+                        vec_d updates (for synapse) needs to be atomic operations if executed by
+                        multiple threads. In case of SIMD, there are conflicts for `vec_d` and
+                        `vec_rhs` for synapse types. Here are some statements from C++ backend:
 
                         \code{.cpp}
                             vec_d[node_id] += g
@@ -235,9 +236,9 @@
                         \endcode
 
                         These operations will be represented by atomic statement node type:
-                        * `vec_d[node_id]` will be lhs
-                        * `+=` will be atomic_op
-                        * `g` will be rhs
+                        * `vec_d[node_id]` : lhs
+                        * `+=` : atomic_op
+                        * `g` : rhs
 
                       members:
                         - lhs:

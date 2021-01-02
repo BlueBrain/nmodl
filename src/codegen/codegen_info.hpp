@@ -164,7 +164,13 @@ enum BlockType {
  * Ion update statement needs use of shadow vectors for certain backends
  * as atomics operations are not supported on cpu backend.
  *
- * \todo If shadow_lhs is empty then we assume shadow statement not required
+ * \todo Currently `nrn_wrote_conc` is also added to shadow update statements
+ * list as it's corresponding to ion update statement in INITIAL block. This
+ * needs to be factored out.
+ * \todo This can be represented as AST node (like ast::CodegenAtomicStatement)
+ * but currently C backend use this same implementation. So we are using this
+ * same structure and then converting to ast::CodegenAtomicStatement for LLVM
+ * visitor.
  */
 struct ShadowUseStatement {
     std::string lhs;

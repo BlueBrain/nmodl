@@ -8,6 +8,7 @@
 #include "codegen/codegen_info.hpp"
 
 #include "ast/all.hpp"
+#include "utils/logger.hpp"
 #include "visitors/var_usage_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
 
@@ -164,22 +165,21 @@ std::pair<std::string, std::string> CodegenInfo::write_ion_variable_name(
  * and write_ion_variable_name method which will be overloaded.
  *
  * \todo After looking into mod2c and neuron implementation, it seems like
- * Ode block type is not used (?). Need to look into implementation details.
+ * Ode block type is not used. Need to look into implementation details.
+ * \todo Ion copy optimization is not implemented yet. This is currently
+ * implemented in C backend using `ion_read_statements_optimized()`.
  */
 std::vector<std::string> CodegenInfo::ion_read_statements(BlockType type) {
-    //if (optimize_ion_variable_copies()) {
-    //    return ion_read_statements_optimized(type);
-    //}
     std::vector<std::string> statements;
     for (const auto& ion: ions) {
-        auto name = ion.name;
+        std::string& name = ion.name;
         for (const auto& var: ion.reads) {
             if (type == BlockType::Ode && ion.is_ionic_conc(var) && state_variable(var)) {
                 continue;
             }
             auto variable_names = read_ion_variable_name(var);
-            auto first = variable_names.first;
-            auto second = variable_names.second;
+            std::string& first = variable_names.first;
+            std::string& second = variable_names.second;
             statements.push_back("{} = {}"_format(first, second));
         }
         for (const auto& var: ion.writes) {
@@ -188,10 +188,69 @@ std::vector<std::string> CodegenInfo::ion_read_statements(BlockType type) {
             }
             if (ion.is_ionic_conc(var)) {
                 auto variables = read_ion_variable_name(var);
-                auto first = variables.first;
-                auto second = variables.second;
+                std::string& first = variables.first;
+                std::string& second = variables.second;
                 statements.push_back("{} = {}"_format(first, second));
             }
+        }
+    }
+    return statements;
+}
+
+
+/**
+ * \todo If intra or extra cellular ionic concentration is written
+ * then it requires call to `nrn_wrote_conc`. In C backend this is
+ * implemented in `ion_write_statements()` itself but this is not
+ * handled yet.
+ */
+std::vector<ShadowUseStatement> CodegenInfo::ion_write_statements(BlockType type) {
+    std::vector<ShadowUseStatement> statements;
+    for (const auto& ion: ions) {
+        std::string concentration;
+        std::string name = ion.name;
+        for (const auto& var: ion.writes) {
+            auto variable_names = write_ion_variable_name(var);
+            if (ion.is_ionic_current(var)) {
+                if (type == BlockType::Equation) {
+                    std::string current = breakpoint_current(var);
+                    std::string lhs = variable_names.first;
+                    std::string op = "+=";
+                    std::string rhs = current;
+                    if (point_process) {
+                        auto area = codegen::naming::NODE_AREA_VARIABLE;
+                        rhs += "*(1.e2/{})"_format(area);
+                    }
+                    statements.push_back(ShadowUseStatement{lhs, op, rhs});
+                }
+            } else {
+                if (!ion.is_rev_potential(var)) {
+                    concentration = var;
+                }
+                std::string lhs = variable_names.first;
+                std::string op = "=";
+                std::string rhs = variable_names.second;
+                statements.push_back(ShadowUseStatement{lhs, op, rhs});
+            }
+        }
+
+        if (type == BlockType::Initial && !concentration.empty()) {
+            int index = 0;
+            if (ion.is_intra_cell_conc(concentration)) {
+                index = 1;
+            } else if (ion.is_extra_cell_conc(concentration)) {
+                index = 2;
+            } else {
+                /// \todo Unhandled case in neuron implementation
+                throw std::logic_error("codegen error for {} ion"_format(ion.name));
+            }
+            std::string ion_type_name = "{}_type"_format(ion.name);
+            std::string lhs = "int {}"_format(ion_type_name);
+            std::string op = "=";
+            std::string rhs = ion_type_name;
+            statements.push_back(ShadowUseStatement{lhs, op, rhs});
+            logger->warn("conc_write_statement() call is required but it's not supported");
+            // \todo : call to nrn_wrote_conc where index is used.
         }
     }
     return statements;
@@ -207,74 +266,21 @@ std::vector<std::string> CodegenInfo::ion_read_statements(BlockType type) {
  * of statement block and not breakpoint.
  */
 std::string CodegenInfo::breakpoint_current(std::string current) const {
-    auto breakpoint = breakpoint_node;
+    auto& breakpoint = breakpoint_node;
     if (breakpoint == nullptr) {
         return current;
     }
-    auto symtab = breakpoint->get_statement_block()->get_symbol_table();
-    auto variables = symtab->get_variables_with_properties(NmodlType::local_var);
+    const auto& symtab = breakpoint->get_statement_block()->get_symbol_table();
+    const auto& variables = symtab->get_variables_with_properties(NmodlType::local_var);
     for (const auto& var: variables) {
-        auto renamed_name = var->get_name();
-        auto original_name = var->get_original_name();
+        std::string renamed_name = var->get_name();
+        std::string original_name = var->get_original_name();
         if (current == original_name) {
             current = renamed_name;
             break;
         }
     }
     return current;
-}
-
-std::vector<ShadowUseStatement> CodegenInfo::ion_write_statements(BlockType type) {
-    std::vector<ShadowUseStatement> statements;
-    for (const auto& ion: ions) {
-        std::string concentration;
-        auto name = ion.name;
-        for (const auto& var: ion.writes) {
-            auto variable_names = write_ion_variable_name(var);
-            if (ion.is_ionic_current(var)) {
-                if (type == BlockType::Equation) {
-                    auto current = breakpoint_current(var);
-                    auto lhs = variable_names.first;
-                    auto op = "+=";
-                    auto rhs = current;
-                    if (point_process) {
-                        auto area = codegen::naming::NODE_AREA_VARIABLE;
-                        rhs += "*(1.e2/{})"_format(area);
-                    }
-                    statements.push_back(ShadowUseStatement{lhs, op, rhs});
-                }
-            } else {
-                if (!ion.is_rev_potential(var)) {
-                    concentration = var;
-                }
-                auto lhs = variable_names.first;
-                auto op = "=";
-                auto rhs = variable_names.second;
-                statements.push_back(ShadowUseStatement{lhs, op, rhs});
-            }
-        }
-
-        if (type == BlockType::Initial && !concentration.empty()) {
-            int index = 0;
-            if (ion.is_intra_cell_conc(concentration)) {
-                index = 1;
-            } else if (ion.is_extra_cell_conc(concentration)) {
-                index = 2;
-            } else {
-                /// \todo Unhandled case in neuron implementation
-                throw std::logic_error("codegen error for {} ion"_format(ion.name));
-            }
-            auto ion_type_name = "{}_type"_format(ion.name);
-            auto lhs = "int {}"_format(ion_type_name);
-            auto op = "=";
-            auto rhs = ion_type_name;
-            statements.push_back(ShadowUseStatement{lhs, op, rhs});
-            // TODO
-            //auto statement = conc_write_statement(ion.name, concentration, index);
-            //statements.push_back(ShadowUseStatement{statement, "", ""});
-        }
-    }
-    return statements;
 }
 
 }  // namespace codegen
