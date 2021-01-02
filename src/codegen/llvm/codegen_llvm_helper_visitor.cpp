@@ -186,19 +186,9 @@ static void append_statements_from_block(ast::StatementVector& statements, const
 
 static std::shared_ptr<ast::CodegenAtomicStatement> create_atomic_statement(ShadowUseStatement& statement) {
     auto lhs = std::make_shared<ast::Name>(new ast::String(statement.lhs));
-    ast::BinaryOp op;
-    if (statement.op.compare("-=")) {
-        op = ast::BinaryOp::BOP_SUB_ASSIGN;
-    } else if (statement.op.compare("+=")) {
-        op = ast::BinaryOp::BOP_ADD_ASSIGN;
-    } else if (statement.op.compare("=")) {
-        op = ast::BinaryOp::BOP_ASSIGN;
-    } else {
-        throw std::runtime_error("Unsupported operator in create_atomic_statement");
-    }
+    auto op = ast::BinaryOperator(ast::string_to_binaryop(statement.op));
     auto rhs = get_expression(statement.rhs);
-    auto atomic_op = ast::BinaryOperator(op);
-    return std::make_shared<ast::CodegenAtomicStatement>(lhs, atomic_op, rhs);
+    return std::make_shared<ast::CodegenAtomicStatement>(lhs, op, rhs);
 }
 
 

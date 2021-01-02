@@ -48,7 +48,7 @@ namespace ast {
  * are added for code generation purpose.
  */
 typedef enum {
-    BOP_ADDITION,        ///< \+
+    BOP_ADDITION = 0,    ///< \+
     BOP_SUBTRACTION,     ///< --
     BOP_MULTIPLICATION,  ///< \c *
     BOP_DIVISION,        ///< \/
@@ -111,6 +111,15 @@ typedef enum { LTMINUSGT, LTLT, MINUSGT } ReactionOp;
 /// string representation of ast::ReactionOp
 static const std::string ReactionOpNames[] = {"<->", "<<", "->"};
 
+/// convert operator in std::string form to ast::BinaryOp
+static inline BinaryOp string_to_binaryop(const std::string& op) {
+    auto it = std::find(std::begin(BinaryOpNames), std::end(BinaryOpNames), op);
+    if (it == std::end(BinaryOpNames)) {
+        throw std::runtime_error("Error in string_to_binaryop, can not find " + op);
+    }
+    int pos = std::distance(std::begin(BinaryOpNames), it);
+    return static_cast<BinaryOp>(pos);
+}
 /** @} */  // end of ast_prop
 
 }  // namespace ast
