@@ -20,11 +20,17 @@ using namespace fmt::literals;
 
 /**
  * \brief Create variable definition statement
+ *
+ * `LOCAL` variables in NMODL don't have type. These variables need
+ * to be defined with float type. Same for index, loop iteration and
+ * local variables. This helper function function is used to create
+ * type specific local variable.
+ *
  * @param names Name of the variables to be defined
  * @param type Type of the variables
  * @return Statement defining variables
  */
-static std::shared_ptr<ast::CodegenVarListStatement> create_variable_statement(
+static std::shared_ptr<ast::CodegenVarListStatement> create_local_variable_statement(
     const std::vector<std::string>& names,
     ast::AstNodeType type) {
     /// create variables for the given name
@@ -81,6 +87,7 @@ void CodegenLLVMHelperVisitor::visit_statement_block(ast::StatementBlock& node) 
     const auto& local_statement = visitor::get_local_list_statement(node);
     if (local_statement) {
         /// create codegen variables from local variables
+        /// clone variable to make new independent statement
         ast::CodegenVarVector variables;
         for (const auto& var: local_statement->get_variables()) {
             variables.emplace_back(new ast::CodegenVar(0, var->get_name()->clone()));
@@ -91,7 +98,7 @@ void CodegenLLVMHelperVisitor::visit_statement_block(ast::StatementBlock& node) 
         node.erase_statement(statements.begin());
 
         /// create new codegen variable statement and insert at the beginning of the block
-        auto type = new ast::CodegenVarType(ast::AstNodeType::DOUBLE);
+        auto type = new ast::CodegenVarType(FLOAT_TYPE);
         auto statement = std::make_shared<ast::CodegenVarListStatement>(type, variables);
         node.insert_statement(statements.begin(), statement);
     }
@@ -140,12 +147,12 @@ void CodegenLLVMHelperVisitor::create_function_for_node(ast::Block& node) {
     /// return type based on node type
     ast::CodegenVarType* ret_var_type = nullptr;
     if (node.get_node_type() == ast::AstNodeType::FUNCTION_BLOCK) {
-        ret_var_type = new ast::CodegenVarType(ast::AstNodeType::DOUBLE);
+        ret_var_type = new ast::CodegenVarType(FLOAT_TYPE);
     } else {
-        ret_var_type = new ast::CodegenVarType(ast::AstNodeType::INTEGER);
+        ret_var_type = new ast::CodegenVarType(INTEGER_TYPE);
     }
 
-    /// function body and it's statement
+    /// function body and it's statement, copy original block
     auto block = node.get_statement_block()->clone();
     const auto& statements = block->get_statements();
 
@@ -160,13 +167,12 @@ void CodegenLLVMHelperVisitor::create_function_for_node(ast::Block& node) {
     block->emplace_back_statement(return_statement);
 
     /// prepare function arguments based original node arguments
-    ast::CodegenArgumentVector fun_arguments;
-    const auto& arguments = node.get_parameters();
-    for (const auto& arg: arguments) {
+    ast::CodegenArgumentVector arguments;
+    for (const auto& param: node.get_parameters()) {
         /// create new type and name for creating new ast node
-        auto type = new ast::CodegenVarType(ast::AstNodeType::DOUBLE);
-        auto var = arg->get_name()->clone();
-        fun_arguments.emplace_back(new ast::CodegenArgument(type, var));
+        auto type = new ast::CodegenVarType(FLOAT_TYPE);
+        auto var = param->get_name()->clone();
+        arguments.emplace_back(new ast::CodegenArgument(type, var));
     }
 
     /// return type of the function is same as return variable type
@@ -174,17 +180,18 @@ void CodegenLLVMHelperVisitor::create_function_for_node(ast::Block& node) {
 
     /// we have all information for code generation function, create a new node
     /// which will be inserted later into AST
-    auto function =
-        std::make_shared<ast::CodegenFunction>(fun_ret_type, name, fun_arguments, block);
+    auto function = std::make_shared<ast::CodegenFunction>(fun_ret_type, name, arguments, block);
     codegen_functions.push_back(function);
 }
 
-static void append_statements_from_block(ast::StatementVector& statements, const std::shared_ptr<ast::StatementBlock>& block) {
-    const auto & block_statements = block->get_statements();
+static void append_statements_from_block(ast::StatementVector& statements,
+                                         const std::shared_ptr<ast::StatementBlock>& block) {
+    const auto& block_statements = block->get_statements();
     statements.insert(statements.end(), block_statements.begin(), block_statements.end());
 }
 
-static std::shared_ptr<ast::CodegenAtomicStatement> create_atomic_statement(ShadowUseStatement& statement) {
+static std::shared_ptr<ast::CodegenAtomicStatement> create_atomic_statement(
+    ShadowUseStatement& statement) {
     auto lhs = std::make_shared<ast::Name>(new ast::String(statement.lhs));
     auto op = ast::BinaryOperator(ast::string_to_binaryop(statement.op));
     auto rhs = get_expression(statement.rhs);
@@ -220,66 +227,62 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
     ast::StatementVector function_statements;
 
     /// create variable definition statements and insert at the beginning
-    function_statements.push_back(
-        create_variable_statement(double_variables, ast::AstNodeType::DOUBLE));
-    function_statements.push_back(
-        create_variable_statement(int_variables, ast::AstNodeType::INTEGER));
+    function_statements.push_back(create_local_variable_statement(double_variables, FLOAT_TYPE));
+    function_statements.push_back(create_local_variable_statement(int_variables, INTEGER_TYPE));
 
-    /// create now main compute part : for loop over channels
+    /// create now main compute part : for loop over channel instances
 
-    /// for loop constructs : initialization, condition and increment
+    /// loop constructs : initialization, condition and increment
     const auto& initialization = create_statement_as_expression("id=0");
     const auto& condition = get_expression("id < node_count");
     const auto& increment = create_statement_as_expression("id = id + 1");
 
     /// loop body : initialization + solve blocks
-    ast::StatementVector loop_body;
-
-    /// access node index and corresponding voltage
-    // \todo ADD codegen node type for gather loads
-    loop_body.push_back(visitor::create_statement("node_id = node_index[id]"));
-    loop_body.push_back(visitor::create_statement("v = voltage[node_id]"));
-
+    ast::StatementVector loop_statements;
     {
+        /// access node index and corresponding voltage
+        // \todo ADD codegen node type for gather loads
+        loop_statements.push_back(visitor::create_statement("node_id = node_index[id]"));
+        loop_statements.push_back(visitor::create_statement("v = voltage[node_id]"));
+
         /// read ion variables
         const auto& read_statements = info.ion_read_statements(BlockType::State);
         for (auto& statement: read_statements) {
-            loop_body.push_back(visitor::create_statement(statement));
+            loop_statements.push_back(visitor::create_statement(statement));
         }
-    }
 
-    {
-        /// extract solution expressions that are derivative blocks
+        /// main compute node : extract solution expressions from the derivative block
         const auto& solutions = collect_nodes(node, {ast::AstNodeType::SOLUTION_EXPRESSION});
         for (const auto& statement: solutions) {
             const auto& solution = std::dynamic_pointer_cast<ast::SolutionExpression>(statement);
-            const auto& block = std::dynamic_pointer_cast<ast::StatementBlock>(solution->get_node_to_solve());
-            append_statements_from_block(loop_body, block);
+            const auto& block = std::dynamic_pointer_cast<ast::StatementBlock>(
+                solution->get_node_to_solve());
+            append_statements_from_block(loop_statements, block);
         }
-    }
 
-    {
+        /// add breakpoint block if no current
         if (info.currents.empty() && info.breakpoint_node != nullptr) {
             auto block = info.breakpoint_node->get_statement_block();
-            append_statements_from_block(loop_body, block);
+            append_statements_from_block(loop_statements, block);
         }
-    }
 
-    {
-        // \todo we are not handling process_shadow_update_statement and wrote_conc_call yet
-        // \todo ADD codegen node type for atomic writes : WIP
+        /// write ion statements
         auto write_statements = info.ion_write_statements(BlockType::Equation);
         for (auto& statement: write_statements) {
-            loop_body.push_back(create_atomic_statement(statement));
+            loop_statements.push_back(create_atomic_statement(statement));
         }
+
+        // \todo handle process_shadow_update_statement and wrote_conc_call yet
     }
 
     /// now construct a new code block which will become the bidy of the loop
-    auto block = std::make_shared<ast::StatementBlock>(loop_body);
+    auto loop_block = std::make_shared<ast::StatementBlock>(loop_statements);
 
     /// create for loop node
-    auto for_loop_statement =
-        std::make_shared<ast::CodegenForStatement>(initialization, condition, increment, block);
+    auto for_loop_statement = std::make_shared<ast::CodegenForStatement>(initialization,
+                                                                         condition,
+                                                                         increment,
+                                                                         loop_block);
 
     /// loop itself becomes one of the statement in the function
     function_statements.push_back(for_loop_statement);

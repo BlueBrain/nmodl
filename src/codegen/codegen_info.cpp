@@ -17,8 +17,8 @@ namespace nmodl {
 namespace codegen {
 
 using namespace fmt::literals;
-using visitor::VarUsageVisitor;
 using symtab::syminfo::NmodlType;
+using visitor::VarUsageVisitor;
 
 /// if any ion has write variable
 bool CodegenInfo::ion_has_write_variable() const {
@@ -172,7 +172,7 @@ std::pair<std::string, std::string> CodegenInfo::write_ion_variable_name(
 std::vector<std::string> CodegenInfo::ion_read_statements(BlockType type) {
     std::vector<std::string> statements;
     for (const auto& ion: ions) {
-        std::string& name = ion.name;
+        const std::string& name = ion.name;
         for (const auto& var: ion.reads) {
             if (type == BlockType::Ode && ion.is_ionic_conc(var) && state_variable(var)) {
                 continue;
