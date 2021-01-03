@@ -157,46 +157,6 @@ std::pair<std::string, std::string> CodegenInfo::write_ion_variable_name(
     return {"ion_" + name, name};
 }
 
-/**
- * \details Depending upon the block type, we have to print read/write ion variables
- * during code generation. Depending on block/procedure being printed, this
- * method return statements as vector. As different code backends could have
- * different variable names, we rely on backend-specific read_ion_variable_name
- * and write_ion_variable_name method which will be overloaded.
- *
- * \todo After looking into mod2c and neuron implementation, it seems like
- * Ode block type is not used. Need to look into implementation details.
- * \todo Ion copy optimization is not implemented yet. This is currently
- * implemented in C backend using `ion_read_statements_optimized()`.
- */
-std::vector<std::string> CodegenInfo::ion_read_statements(BlockType type) {
-    std::vector<std::string> statements;
-    for (const auto& ion: ions) {
-        const std::string& name = ion.name;
-        for (const auto& var: ion.reads) {
-            if (type == BlockType::Ode && ion.is_ionic_conc(var) && state_variable(var)) {
-                continue;
-            }
-            auto variable_names = read_ion_variable_name(var);
-            std::string& first = variable_names.first;
-            std::string& second = variable_names.second;
-            statements.push_back("{} = {}"_format(first, second));
-        }
-        for (const auto& var: ion.writes) {
-            if (type == BlockType::Ode && ion.is_ionic_conc(var) && state_variable(var)) {
-                continue;
-            }
-            if (ion.is_ionic_conc(var)) {
-                auto variables = read_ion_variable_name(var);
-                std::string& first = variables.first;
-                std::string& second = variables.second;
-                statements.push_back("{} = {}"_format(first, second));
-            }
-        }
-    }
-    return statements;
-}
-
 
 /**
  * \todo If intra or extra cellular ionic concentration is written
