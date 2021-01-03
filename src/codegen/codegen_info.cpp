@@ -243,5 +243,26 @@ std::string CodegenInfo::breakpoint_current(std::string current) const {
     return current;
 }
 
+
+bool CodegenInfo::is_an_instance_variable(const std::string& varname) const {
+    /// check if symbol of given name exist
+    auto check_symbol = [](const std::string& name, const std::vector<SymbolType>& symbols) {
+        for (auto& symbol: symbols) {
+            if (symbol->get_name() == name) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    /// check if variable exist into all possible types
+    if (check_symbol(varname, assigned_vars) || check_symbol(varname, state_vars) ||
+        check_symbol(varname, range_parameter_vars) || check_symbol(varname, range_assigned_vars) ||
+        check_symbol(varname, range_state_vars)) {
+        return true;
+    }
+    return false;
+}
+
 }  // namespace codegen
 }  // namespace nmodl

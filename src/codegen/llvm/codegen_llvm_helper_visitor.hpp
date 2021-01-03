@@ -68,10 +68,12 @@ class CodegenLLVMHelperVisitor: public visitor::AstVisitor {
                              ast::StatementVector& body_statements);
 
     void ion_write_statements(BlockType type,
-                             std::vector<std::string>& int_variables,
-                             std::vector<std::string>& double_variables,
-                             ast::StatementVector& index_statements,
-                             ast::StatementVector& body_statements);
+                              std::vector<std::string>& int_variables,
+                              std::vector<std::string>& double_variables,
+                              ast::StatementVector& index_statements,
+                              ast::StatementVector& body_statements);
+
+    void convert_to_instance_variable(ast::Node& node, std::string& index_var);
 
     void visit_statement_block(ast::StatementBlock& node) override;
     void visit_procedure_block(ast::ProcedureBlock& node) override;

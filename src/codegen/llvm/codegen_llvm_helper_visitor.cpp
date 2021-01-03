@@ -157,8 +157,9 @@ static void append_statements_from_block(ast::StatementVector& statements,
     statements.insert(statements.end(), block_statements.begin(), block_statements.end());
 }
 
-static std::shared_ptr<ast::CodegenAtomicStatement> create_atomic_statement(
-    std::string& lhs_str, std::string& op_str, std::string& rhs_str) {
+static std::shared_ptr<ast::CodegenAtomicStatement> create_atomic_statement(std::string& lhs_str,
+                                                                            std::string& op_str,
+                                                                            std::string& rhs_str) {
     auto lhs = std::make_shared<ast::Name>(new ast::String(lhs_str));
     auto op = ast::BinaryOperator(ast::string_to_binaryop(op_str));
     auto rhs = create_expression(rhs_str);
@@ -252,11 +253,10 @@ void CodegenLLVMHelperVisitor::ion_read_statements(BlockType type,
  * handled yet.
  */
 void CodegenLLVMHelperVisitor::ion_write_statements(BlockType type,
-                                                   std::vector<std::string>& int_variables,
-                                                   std::vector<std::string>& double_variables,
-                                                   ast::StatementVector& index_statements,
-                                                   ast::StatementVector& body_statements) {
-
+                                                    std::vector<std::string>& int_variables,
+                                                    std::vector<std::string>& double_variables,
+                                                    ast::StatementVector& index_statements,
+                                                    ast::StatementVector& body_statements) {
     /// create write ion and corresponding index statements
     auto create_write_statements = [&](std::string ion_varname, std::string op, std::string rhs) {
         // index for writing ion variable
@@ -310,7 +310,7 @@ void CodegenLLVMHelperVisitor::ion_write_statements(BlockType type,
             } else if (ion.is_extra_cell_conc(concentration)) {
                 index = 2;
             } else {
-                /// \todo Unhandled case in neuron implementation
+                /// \todo Unhandled case also in neuron implementation
                 throw std::logic_error("codegen error for {} ion"_format(ion.name));
             }
             std::string ion_type_name = "{}_type"_format(ion.name);
@@ -319,6 +319,31 @@ void CodegenLLVMHelperVisitor::ion_write_statements(BlockType type,
             std::string rhs = ion_type_name;
             create_write_statements(lhs, op, rhs);
             logger->error("conc_write_statement() call is required but it's not supported");
+        }
+    }
+}
+
+/**
+ * Convert variables in given node to instance variables
+ *
+ * For code generation, variables of type range, assigned, state or parameter+range
+ * needs to be converted to instance variable i.e. they need to be accessed with
+ * loop index variable. For example, `h` variables needs to be converted to `h[id]`.
+ *
+ * @param node Ast node under which variables to be converted to instance type
+ */
+void CodegenLLVMHelperVisitor::convert_to_instance_variable(ast::Node& node,
+                                                            std::string& index_var) {
+    /// collect all variables in the node of type ast::VarName
+    auto variables = collect_nodes(node, {ast::AstNodeType::VAR_NAME});
+    for (auto& v: variables) {
+        auto variable = std::dynamic_pointer_cast<ast::VarName>(v);
+        /// if variable is of type instance then convert it to index
+        if (info.is_an_instance_variable(variable->get_node_name())) {
+            auto name = variable->get_name()->clone();
+            auto index = new ast::Name(new ast::String(index_var));
+            auto indexed_name = std::make_shared<ast::IndexedName>(name, index);
+            variable->set_name(indexed_name);
         }
     }
 }
@@ -380,6 +405,7 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
     ast::StatementVector function_statements;
 
     /// create variable definition for loop index and insert at the beginning
+    std::string loop_index_var = "id";
     std::vector<std::string> int_variables{"id"};
     function_statements.push_back(create_local_variable_statement(int_variables, INTEGER_TYPE));
 
@@ -426,10 +452,10 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
 
         /// write ion statements
         ion_write_statements(BlockType::State,
-                            int_variables,
-                            double_variables,
-                            loop_index_statements,
-                            loop_body_statements);
+                             int_variables,
+                             double_variables,
+                             loop_index_statements,
+                             loop_body_statements);
 
         loop_def_statements.push_back(create_local_variable_statement(int_variables, INTEGER_TYPE));
         loop_def_statements.push_back(
@@ -445,6 +471,9 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
 
     /// now construct a new code block which will become the bidy of the loop
     auto loop_block = std::make_shared<ast::StatementBlock>(loop_body);
+
+    /// convert all variables inside loop body to instance variables
+    convert_to_instance_variable(*loop_block, loop_index_var);
 
     /// create for loop node
     auto for_loop_statement = std::make_shared<ast::CodegenForStatement>(initialization,

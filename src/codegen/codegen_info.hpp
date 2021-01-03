@@ -485,6 +485,16 @@ struct CodegenInfo {
      */
     std::string breakpoint_current(std::string current) const;
 
+    /**
+     * Check if variable with given name is an instance variable
+     *
+     * Instance varaibles are local to each mechanism instance and
+     * needs to be accessed with an array index. Such variables are
+     * assigned, range, parameter+range etc.
+     * @param varname Name of the variable
+     * @return True if variable is per mechanism instance
+     */
+    bool is_an_instance_variable(const std::string& varname) const;
 
     /// if we need a call back to wrote_conc in neuron/coreneuron
     bool require_wrote_conc = false;
