@@ -412,7 +412,7 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
     /// create now main compute part : for loop over channel instances
 
     /// loop constructs : initialization, condition and increment
-    const auto& initialization = create_statement_as_expression("id=0");
+    const auto& initialization = create_statement_as_expression("id = 0");
     const auto& condition = create_expression("id < node_count");
     const auto& increment = create_statement_as_expression("id = id + 1");
 
@@ -469,7 +469,7 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
     loop_body.insert(loop_body.end(), loop_index_statements.begin(), loop_index_statements.end());
     loop_body.insert(loop_body.end(), loop_body_statements.begin(), loop_body_statements.end());
 
-    /// now construct a new code block which will become the bidy of the loop
+    /// now construct a new code block which will become the body of the loop
     auto loop_block = std::make_shared<ast::StatementBlock>(loop_body);
 
     /// convert all variables inside loop body to instance variables
