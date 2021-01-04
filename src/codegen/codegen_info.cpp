@@ -159,65 +159,6 @@ std::pair<std::string, std::string> CodegenInfo::write_ion_variable_name(
 
 
 /**
- * \todo If intra or extra cellular ionic concentration is written
- * then it requires call to `nrn_wrote_conc`. In C backend this is
- * implemented in `ion_write_statements()` itself but this is not
- * handled yet.
- */
-std::vector<ShadowUseStatement> CodegenInfo::ion_write_statements(BlockType type) {
-    std::vector<ShadowUseStatement> statements;
-    for (const auto& ion: ions) {
-        std::string concentration;
-        std::string name = ion.name;
-        for (const auto& var: ion.writes) {
-            auto variable_names = write_ion_variable_name(var);
-            if (ion.is_ionic_current(var)) {
-                if (type == BlockType::Equation) {
-                    std::string current = breakpoint_current(var);
-                    std::string lhs = variable_names.first;
-                    std::string op = "+=";
-                    std::string rhs = current;
-                    if (point_process) {
-                        auto area = codegen::naming::NODE_AREA_VARIABLE;
-                        rhs += "*(1.e2/{})"_format(area);
-                    }
-                    statements.push_back(ShadowUseStatement{lhs, op, rhs});
-                }
-            } else {
-                if (!ion.is_rev_potential(var)) {
-                    concentration = var;
-                }
-                std::string lhs = variable_names.first;
-                std::string op = "=";
-                std::string rhs = variable_names.second;
-                statements.push_back(ShadowUseStatement{lhs, op, rhs});
-            }
-        }
-
-        if (type == BlockType::Initial && !concentration.empty()) {
-            int index = 0;
-            if (ion.is_intra_cell_conc(concentration)) {
-                index = 1;
-            } else if (ion.is_extra_cell_conc(concentration)) {
-                index = 2;
-            } else {
-                /// \todo Unhandled case in neuron implementation
-                throw std::logic_error("codegen error for {} ion"_format(ion.name));
-            }
-            std::string ion_type_name = "{}_type"_format(ion.name);
-            std::string lhs = "int {}"_format(ion_type_name);
-            std::string op = "=";
-            std::string rhs = ion_type_name;
-            statements.push_back(ShadowUseStatement{lhs, op, rhs});
-            logger->warn("conc_write_statement() call is required but it's not supported");
-            // \todo : call to nrn_wrote_conc where index is used.
-        }
-    }
-    return statements;
-}
-
-
-/**
  * \details Current variable used in breakpoint block could be local variable.
  * In this case, neuron has already renamed the variable name by prepending
  * "_l". In our implementation, the variable could have been renamed by

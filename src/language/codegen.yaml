@@ -223,7 +223,7 @@
                   - CodegenAtomicStatement:
                       brief: "Represent atomic operation"
                       description: |
-                        During code generation certain operations like ion updaates, vec_rhs or
+                        During code generation certain operations like ion updates, vec_rhs or
                         vec_d updates (for synapse) needs to be atomic operations if executed by
                         multiple threads. In case of SIMD, there are conflicts for `vec_d` and
                         `vec_rhs` for synapse types. Here are some statements from C++ backend:

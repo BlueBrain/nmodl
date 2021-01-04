@@ -467,16 +467,6 @@ struct CodegenInfo {
      */
     std::pair<std::string, std::string> write_ion_variable_name(const std::string& name) const;
 
-
-    /**
-     * For a given output block type, return statements for writing back ion variables
-     *
-     * \param type The type of code block being generated
-     * \return     A \c vector of strings representing the write-back of ion variables
-     */
-    std::vector<ShadowUseStatement> ion_write_statements(BlockType type);
-
-
     /**
      * Determine the variable name for the "current" used in breakpoint block taking into account
      * intermediate code transformations.
