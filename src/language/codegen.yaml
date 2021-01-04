@@ -231,8 +231,8 @@
                         \code{.cpp}
                             vec_d[node_id] += g
                             vec_rhs[node_id] -= rhs
-                            ion_ina[indexes[some_index] += ina[id]
-                            ion_cai[indexes[some_index] = cai[id]  // cai here is state variable
+                            ion_ina[indexes[some_index]] += ina[id]
+                            ion_cai[indexes[some_index]] = cai[id]  // cai here is state variable
                         \endcode
 
                         These operations will be represented by atomic statement node type:
