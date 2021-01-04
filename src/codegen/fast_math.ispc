@@ -122,6 +122,27 @@ static inline double vexp(double initial_x) {
     return x;
 }
 
+/// double precision expm1 function
+static inline double vexpm1(double initial_x) {
+    double x = initial_x;
+    double px = dpfloor(LOG2E * x + 0.5d);
+
+    const int32 n = px * ((px > 0.5) || (px >= -0.5));
+
+    x = expgm1(x, px);
+    const double pow2nm1 = uint642dp((((unsigned int64) n-1) + 1023) << 52);
+    x *= pow2nm1;
+    x += pow2nm1-1;
+    x *= 2;
+
+    if (initial_x > EXP_LIMIT)
+        x = inf();
+    if (initial_x < -EXP_LIMIT)
+        x = -1.d;
+
+    return x;
+}
+
 static inline float expgm1(float x) {
 
     float z = x * PX1expf;
@@ -160,3 +181,28 @@ static inline float vexp(float initial_x) {
 
     return z;
 }
+
+/// single precision expm1 function
+static inline float vexpm1(float initial_x) {
+    float x = initial_x;
+    float z = spfloor(LOG2EF * x + 0.5f);
+
+    x -= z * C1F;
+    x -= z * C2F;
+    const int32 n = z;
+
+    z = expgm1(x);
+    const double pow2nm1 = uint322sp((n-1 + 0x7f) << 23);
+    z *= pow2nm1;
+    z += pow2nm1-1;
+    z *= 2;
+
+    if (initial_x > MAXLOGF)
+        z = f_inf();
+    if (initial_x < MINLOGF)
+        z = -1.f;
+
+    return z;
+}
+
+
