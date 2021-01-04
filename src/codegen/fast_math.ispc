@@ -81,7 +81,7 @@ static const uniform float PX6expf = 5.0000001201E-1f;
 
 static const uniform float LOG2EF = 1.44269504088896341f; // 1/ln(2)
 
-static inline double expgm1(double x, double px) {
+static inline double vexpgm1(double x, double px) {
 
     x -= px * 6.93145751953125d-1;
     x -= px * 1.42860682030941723212d-6;
@@ -112,7 +112,7 @@ static inline double vexp(double initial_x) {
     double px = dpfloor(LOG2E * x + 0.5d);
     const int32 n = px;
 
-    x = 1.0d + expgm1(x, px);
+    x = 1.0d + vexpgm1(x, px);
     x *= uint642dp((((unsigned int64) n) + 1023) << 52);
 
     if (initial_x > EXP_LIMIT)
@@ -128,9 +128,9 @@ static inline double vexpm1(double initial_x) {
     double x = initial_x;
     double px = dpfloor(LOG2E * x + 0.5d);
 
-    const int32 n = px * ((px > 0.5) || (px >= -0.5));
+    const int32 n = ((px > 0.5) || (px >= -0.5)) ? px : 0;
 
-    x = expgm1(x, px);
+    x = vexpgm1(x, px);
     const double pow2nm1 = uint642dp((((unsigned int64) n-1) + 1023) << 52);
     x *= pow2nm1;
     x += pow2nm1-1;
@@ -150,10 +150,10 @@ static inline double vexprelr(double initial_x) {
         return 1.0;
     }
 
-    return initial_x/expm1(initial_x);
+    return initial_x/vexpm1(initial_x);
 }
 
-static inline float expgm1(float x) {
+static inline float vexpgm1(float x) {
 
     float z = x * PX1expf;
     z += PX2expf;
@@ -180,7 +180,7 @@ static inline float vexp(float initial_x) {
     x -= z * C2F;
     const int32 n = z;
 
-    z = 1.0f + expgm1(x);
+    z = 1.0f + vexpgm1(x);
 
     z *= uint322sp((n + 0x7f) << 23);
 
@@ -201,7 +201,7 @@ static inline float vexpm1(float initial_x) {
     x -= z * C2F;
     const int32 n = z;
 
-    z = expgm1(x);
+    z = vexpgm1(x);
     const double pow2nm1 = uint322sp((n-1 + 0x7f) << 23);
     z *= pow2nm1;
     z += pow2nm1-1;
@@ -221,7 +221,7 @@ static inline float vexprelr(float initial_x) {
         return 1.0;
     }
 
-    return initial_x/expm1(initial_x);
+    return initial_x/vexpm1(initial_x);
 }
 
 
