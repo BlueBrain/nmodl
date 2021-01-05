@@ -9,13 +9,13 @@
 
 #include "ast/program.hpp"
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
-#include "llvm/Support/TargetRegistry.h"
-#include "llvm/Support/TargetSelect.h"
-
 #include "jit_driver.hpp"
 #include "parser/nmodl_driver.hpp"
 #include "utils/logger.hpp"
 #include "visitors/symtab_visitor.hpp"
+
+#include "llvm/Support/TargetRegistry.h"
+#include "llvm/Support/TargetSelect.h"
 
 using namespace nmodl;
 using namespace runner;
