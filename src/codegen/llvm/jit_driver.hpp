@@ -34,7 +34,7 @@ class JITDriver {
 
   public:
     JITDriver(std::unique_ptr<llvm::Module> m)
-        : module(std::move(m)) { }
+        : module(std::move(m)) {}
 
     /// Initialize the JIT.
     void init();
