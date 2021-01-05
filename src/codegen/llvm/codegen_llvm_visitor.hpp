@@ -158,7 +158,9 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
      * Return module pointer
      * \return LLVM IR module pointer
      */
-    std::unique_ptr<llvm::Module> get_module() { return std::move(module); }
+    std::unique_ptr<llvm::Module> get_module() {
+        return std::move(module);
+    }
 
     /**
      * Visit nmodl function or procedure

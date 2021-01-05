@@ -25,25 +25,25 @@ namespace runner {
  * \brief Driver to execute MOD file function via LLVM IR backend
  */
 class JITDriver {
-private:
-
+  private:
     std::unique_ptr<llvm::LLVMContext> context = std::make_unique<llvm::LLVMContext>();
 
     std::unique_ptr<llvm::orc::LLJIT> jit;
 
     std::unique_ptr<llvm::Module> module;
 
-public:
-    JITDriver(std::unique_ptr<llvm::Module> m): module(std::move(m)) {}
+  public:
+    JITDriver(std::unique_ptr<llvm::Module> m)
+        : module(std::move(m)) { }
 
     void init();
 
-    //template<typename T>
+    // template<typename T>
     void execute(std::string& entry_point);
 
     /// Set the target triple on the module.
     static void set_target_triple(llvm::Module* module);
 };
 
-}   // namespace runner
-}   // namespace nmodl
+}  // namespace runner
+}  // namespace nmodl

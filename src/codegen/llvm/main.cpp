@@ -55,7 +55,8 @@ int main(int argc, const char* argv[]) {
     llvm::InitializeNativeTargetAsmPrinter();
 
     logger->info("Setting up JIT");
-    std::unique_ptr<JITDriver> jit_runner = std::make_unique<JITDriver>(std::move(llvm_visitor.get_module()));
+    std::unique_ptr<JITDriver> jit_runner = std::make_unique<JITDriver>(
+        std::move(llvm_visitor.get_module()));
     jit_runner->init();
     jit_runner->execute(entry_point_name);
 
