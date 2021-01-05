@@ -36,9 +36,10 @@ class JITDriver {
     JITDriver(std::unique_ptr<llvm::Module> m)
         : module(std::move(m)) { }
 
+    /// Initialize the JIT.
     void init();
 
-    // template<typename T>
+    /// Lookup the entry-point in the JIT and execute it, printing the result to console.
     void execute(std::string& entry_point);
 
     /// Set the target triple on the module.

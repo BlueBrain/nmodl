@@ -24,9 +24,9 @@ int main(int argc, const char* argv[]) {
     CLI::App app{
         "NMODL LLVM Runner : Executes functions from a MOD file via LLVM IR code generation"};
 
-    // Currently, only a sinle MOD file is supported, as well as an entry point with a double return
-    // type. While returning a double value is a general case in NMODL,it will be nice to have a
-    // more generic functionality. \todo: Add support for different return types (int, void).
+    // Currently, only a single MOD file is supported, as well as an entry point with a double
+    // return type. While returning a double value is a general case in NMODL,it will be nice to
+    // have a more generic functionality. \todo: Add support for different return types (int, void).
 
     std::string filename;
     std::string entry_point_name = "main";
@@ -50,13 +50,21 @@ int main(int argc, const char* argv[]) {
     logger->info("Running LLVM Visitor");
     codegen::CodegenLLVMVisitor llvm_visitor(filename, /*output_dir=*/".", /*opt_passes=*/false);
     llvm_visitor.visit_program(*ast);
+    std::unique_ptr<llvm::Module> module = llvm_visitor.get_module();
+
+    // Check if the entry-point is valid for JIT driver to execute.
+    auto func = module->getFunction(entry_point_name);
+    if (!func)
+        throw std::runtime_error("Error: entry-point is not found\n");
+
+    if (func->getNumOperands() != 0)
+        throw std::runtime_error("Error: entry-point functions with arguments are not supported\n");
 
     llvm::InitializeNativeTarget();
     llvm::InitializeNativeTargetAsmPrinter();
 
     logger->info("Setting up JIT");
-    std::unique_ptr<JITDriver> jit_runner = std::make_unique<JITDriver>(
-        std::move(llvm_visitor.get_module()));
+    std::unique_ptr<JITDriver> jit_runner = std::make_unique<JITDriver>(std::move(module));
     jit_runner->init();
     jit_runner->execute(entry_point_name);
 

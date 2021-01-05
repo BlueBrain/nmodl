@@ -25,33 +25,41 @@ void JITDriver::init() {
     set_target_triple(module.get());
     auto data_layout = module->getDataLayout();
 
-    auto compileFunctionCreator = [&](llvm::orc::JITTargetMachineBuilder JTMB)
+    // Create IR compile function callback.
+    auto compile_function_creator = [&](llvm::orc::JITTargetMachineBuilder tm_builder)
         -> llvm::Expected<std::unique_ptr<llvm::orc::IRCompileLayer::IRCompiler>> {
-        auto TM = JTMB.createTargetMachine();
-        if (!TM)
-            return TM.takeError();
-        return std::make_unique<llvm::orc::TMOwningSimpleCompiler>(std::move(*TM));
+        auto tm = tm_builder.createTargetMachine();
+        if (!tm)
+            return tm.takeError();
+        return std::make_unique<llvm::orc::TMOwningSimpleCompiler>(std::move(*tm));
     };
 
-    auto JIT = cantFail(
-        llvm::orc::LLJITBuilder().setCompileFunctionCreator(compileFunctionCreator).create());
-    llvm::orc::ThreadSafeModule tsm(std::move(module), std::make_unique<llvm::LLVMContext>());
-    cantFail(JIT->addIRModule(std::move(tsm)));
-    jit = std::move(JIT);
+    auto jit_instance = cantFail(
+        llvm::orc::LLJITBuilder().setCompileFunctionCreator(compile_function_creator).create());
 
-    llvm::orc::JITDylib& mainJD = jit->getMainJITDylib();
-    mainJD.addGenerator(cantFail(llvm::orc::DynamicLibrarySearchGenerator::GetForCurrentProcess(
+    // Add a ThreadSafeModule to the driver.
+    llvm::orc::ThreadSafeModule tsm(std::move(module), std::make_unique<llvm::LLVMContext>());
+    cantFail(jit_instance->addIRModule(std::move(tsm)));
+    jit = std::move(jit_instance);
+
+    // Resolve symbols.
+    llvm::orc::JITDylib& sym_tab = jit->getMainJITDylib();
+    sym_tab.addGenerator(cantFail(llvm::orc::DynamicLibrarySearchGenerator::GetForCurrentProcess(
         data_layout.getGlobalPrefix())));
 }
 
-// template<typename T>
 void JITDriver::execute(std::string& entry_point) {
+    // First, check if the entry-point in the module is valid.
+    // check_entry_point(entry_point);
+
+    // Lookup the entry-point in JIT and execute it. This currently assumes double return type.
+    // \todo: Use templates to vary return types.
     auto expected_symbol = jit->lookup(entry_point);
     if (!expected_symbol)
         throw std::runtime_error("Error: entry-point symbol not found in JIT\n");
 
     auto (*res)() = (double (*)())(intptr_t) expected_symbol->getAddress();
-    fprintf(stderr, "Evaluated to %f\n", res());
+    fprintf(stderr, "Result: %f\n", res());
 }
 
 void JITDriver::set_target_triple(llvm::Module* module) {
