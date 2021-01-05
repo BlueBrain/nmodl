@@ -155,6 +155,12 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     void emit_procedure_or_function_declaration(const ast::Block& node);
 
     /**
+     * Return module pointer
+     * \return LLVM IR module pointer
+     */
+    std::unique_ptr<llvm::Module> get_module() { return std::move(module); }
+
+    /**
      * Visit nmodl function or procedure
      * \param node the AST node representing the function or procedure in NMODL
      */
@@ -173,7 +179,7 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     void visit_unary_expression(const ast::UnaryExpression& node) override;
     void visit_var_name(const ast::VarName& node) override;
 
-    // TODO: use custom printer here
+    // \todo: move this to debug mode (e.g. -v option or --dump-ir)
     std::string print_module() const {
         std::string str;
         llvm::raw_string_ostream os(str);

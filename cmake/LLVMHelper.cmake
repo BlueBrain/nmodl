@@ -5,7 +5,7 @@
 find_package(LLVM REQUIRED CONFIG)
 
 # include LLVM header and core library
-llvm_map_components_to_libnames(LLVM_LIBS_TO_LINK core native)
+llvm_map_components_to_libnames(LLVM_LIBS_TO_LINK core orcjit native)
 set(CMAKE_REQUIRED_INCLUDES ${LLVM_INCLUDE_DIRS})
 set(CMAKE_REQUIRED_LIBRARIES ${LLVM_LIBS_TO_LINK})
 
