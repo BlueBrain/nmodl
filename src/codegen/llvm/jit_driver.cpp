@@ -5,8 +5,8 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
-#include "codegen/llvm/codegen_llvm_visitor.hpp"
 #include "jit_driver.hpp"
+#include "codegen/llvm/codegen_llvm_visitor.hpp"
 
 #include "llvm/ExecutionEngine/JITEventListener.h"
 #include "llvm/ExecutionEngine/ObjectCache.h"
