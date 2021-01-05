@@ -49,9 +49,6 @@ void JITDriver::init() {
 }
 
 void JITDriver::execute(std::string& entry_point) {
-    // First, check if the entry-point in the module is valid.
-    // check_entry_point(entry_point);
-
     // Lookup the entry-point in JIT and execute it. This currently assumes double return type.
     // \todo: Use templates to vary return types.
     auto expected_symbol = jit->lookup(entry_point);
