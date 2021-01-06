@@ -8,6 +8,7 @@
 #include "codegen/codegen_info.hpp"
 
 #include "ast/all.hpp"
+#include "utils/logger.hpp"
 #include "visitors/var_usage_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
 
@@ -15,6 +16,8 @@
 namespace nmodl {
 namespace codegen {
 
+using namespace fmt::literals;
+using symtab::syminfo::NmodlType;
 using visitor::VarUsageVisitor;
 
 /// if any ion has write variable
@@ -127,6 +130,77 @@ bool CodegenInfo::is_voltage_used_by_watch_statements() const {
         if (v_used) {
             return true;
         }
+    }
+    return false;
+}
+
+bool CodegenInfo::state_variable(const std::string& name) const {
+    // clang-format off
+    auto result = std::find_if(state_vars.begin(),
+                               state_vars.end(),
+                               [&name](const SymbolType& sym) {
+                                   return name == sym->get_name();
+                               }
+    );
+    // clang-format on
+    return result != state_vars.end();
+}
+
+std::pair<std::string, std::string> CodegenInfo::read_ion_variable_name(
+    const std::string& name) const {
+    return {name, "ion_" + name};
+}
+
+
+std::pair<std::string, std::string> CodegenInfo::write_ion_variable_name(
+    const std::string& name) const {
+    return {"ion_" + name, name};
+}
+
+
+/**
+ * \details Current variable used in breakpoint block could be local variable.
+ * In this case, neuron has already renamed the variable name by prepending
+ * "_l". In our implementation, the variable could have been renamed by
+ * one of the pass. And hence, we search all local variables and check if
+ * the variable is renamed. Note that we have to look into the symbol table
+ * of statement block and not breakpoint.
+ */
+std::string CodegenInfo::breakpoint_current(std::string current) const {
+    auto& breakpoint = breakpoint_node;
+    if (breakpoint == nullptr) {
+        return current;
+    }
+    const auto& symtab = breakpoint->get_statement_block()->get_symbol_table();
+    const auto& variables = symtab->get_variables_with_properties(NmodlType::local_var);
+    for (const auto& var: variables) {
+        std::string renamed_name = var->get_name();
+        std::string original_name = var->get_original_name();
+        if (current == original_name) {
+            current = renamed_name;
+            break;
+        }
+    }
+    return current;
+}
+
+
+bool CodegenInfo::is_an_instance_variable(const std::string& varname) const {
+    /// check if symbol of given name exist
+    auto check_symbol = [](const std::string& name, const std::vector<SymbolType>& symbols) {
+        for (auto& symbol: symbols) {
+            if (symbol->get_name() == name) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    /// check if variable exist into all possible types
+    if (check_symbol(varname, assigned_vars) || check_symbol(varname, state_vars) ||
+        check_symbol(varname, range_parameter_vars) || check_symbol(varname, range_assigned_vars) ||
+        check_symbol(varname, range_state_vars)) {
+        return true;
     }
     return false;
 }
