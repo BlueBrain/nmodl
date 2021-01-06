@@ -1368,7 +1368,7 @@
                             type: Double
 
             - Statement:
-                brief: "TODO"
+                brief: "Base class to represent a statement in the NMODL"
                 children:
                   - UnitState:
                       brief: "TODO"

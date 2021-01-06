@@ -65,6 +65,14 @@ set(AST_GENERATED_SOURCES
     ${PROJECT_BINARY_DIR}/src/ast/block_comment.hpp
     ${PROJECT_BINARY_DIR}/src/ast/boolean.hpp
     ${PROJECT_BINARY_DIR}/src/ast/breakpoint_block.hpp
+    ${PROJECT_BINARY_DIR}/src/ast/codegen_argument.hpp
+    ${PROJECT_BINARY_DIR}/src/ast/codegen_for_statement.hpp
+    ${PROJECT_BINARY_DIR}/src/ast/codegen_function.hpp
+    ${PROJECT_BINARY_DIR}/src/ast/codegen_return_statement.hpp
+    ${PROJECT_BINARY_DIR}/src/ast/codegen_struct.hpp
+    ${PROJECT_BINARY_DIR}/src/ast/codegen_var.hpp
+    ${PROJECT_BINARY_DIR}/src/ast/codegen_var_list_statement.hpp
+    ${PROJECT_BINARY_DIR}/src/ast/codegen_var_type.hpp
     ${PROJECT_BINARY_DIR}/src/ast/compartment.hpp
     ${PROJECT_BINARY_DIR}/src/ast/conductance_hint.hpp
     ${PROJECT_BINARY_DIR}/src/ast/conserve.hpp

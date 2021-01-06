@@ -6,6 +6,8 @@
  *************************************************************************/
 
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
+#include "codegen/llvm/codegen_llvm_helper_visitor.hpp"
+
 #include "ast/all.hpp"
 #include "codegen/codegen_helper_visitor.hpp"
 #include "visitors/rename_visitor.hpp"
@@ -347,6 +349,12 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
 
     // Keep this for easier development (maybe move to debug mode later).
     std::cout << print_module();
+
+    // not used yet
+    {
+        CodegenLLVMHelperVisitor v;
+        v.visit_program(const_cast<ast::Program&>(node));
+    }
 }
 
 void CodegenLLVMVisitor::visit_procedure_block(const ast::ProcedureBlock& node) {
