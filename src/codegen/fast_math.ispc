@@ -123,35 +123,34 @@ static inline double vexp(double initial_x) {
     return x;
 }
 
-/// double precision expm1 function
+
+/// double precision exp function
 static inline double vexpm1(double initial_x) {
     double x = initial_x;
     double px = dpfloor(LOG2E * x + 0.5d);
+    const int32 n = px;
 
-    const int32 n = ((px > 0.5) || (px >= -0.5)) ? px : 0;
-
-    x = egm1(x, px);
-    const double pow2nm1 = uint642dp((((unsigned int64) n-1) + 1023) << 52);
-    x *= pow2nm1;
-    x += pow2nm1-1;
-    x *= 2;
+    const unsigned int64 twopnm1 = (((unsigned int64) (n-1) ) + 1023) << 52;
+    x = 2*(uint642dp(twopnm1)*egm1(x, px) + uint642dp(twopnm1)) - 1.0d;
 
     if (initial_x > EXP_LIMIT)
         x = inf();
     if (initial_x < -EXP_LIMIT)
-        x = -1.d;
+        x = -1.0d;
 
     return x;
 }
 
+
 /// double precision exprelr function ()
 static inline double exprelr(double initial_x) {
-    if (1.0+initial_x == 1.0) {
-        return 1.0;
+    if (1.0d+initial_x == 1.0d) {
+        return 1.0d;
     }
 
     return initial_x/vexpm1(initial_x);
 }
+
 
 static inline float egm1(float x) {
 
@@ -192,7 +191,7 @@ static inline float vexp(float initial_x) {
     return z;
 }
 
-/// single precision expm1 function
+/// single precision exp function
 static inline float vexpm1(float initial_x) {
     float x = initial_x;
     float z = spfloor(LOG2EF * x + 0.5f);
@@ -201,24 +200,21 @@ static inline float vexpm1(float initial_x) {
     x -= z * C2F;
     const int32 n = z;
 
-    z = egm1(x);
-    const double pow2nm1 = uint322sp((n-1 + 0x7f) << 23);
-    z *= pow2nm1;
-    z += pow2nm1-1;
-    z *= 2;
+    const int32 twopnm1 = ((n-1) + 0x7f) << 23;
+    x = 2*(uint322sp(twopnm1)*egm1(x) + uint322sp(twopnm1)) - 1.0f;
 
     if (initial_x > MAXLOGF)
-        z = f_inf();
+        x = f_inf();
     if (initial_x < MINLOGF)
-        z = -1.f;
+        x = -1.0f;
 
-    return z;
+    return x;
 }
 
 /// single precision exprelr function
 static inline float exprelr(float initial_x) {
-    if (1.0+initial_x == 1.0) {
-        return 1.0;
+    if (1.0f+initial_x == 1.0f) {
+        return 1.0f;
     }
 
     return initial_x/vexpm1(initial_x);
