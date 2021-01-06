@@ -28,7 +28,7 @@ static inline uint64_t dp2uint64(double x) {
     return *((uint64_t*) (&x));
 }
 
-static inline float uint322sp(int32_t x) {
+static inline float int322sp(int32_t x) {
     return *((float*) (&x));
 }
 
@@ -182,7 +182,7 @@ static inline float vexp(float initial_x) {
 
     z = 1.0f + egm1(x);
 
-    z *= uint322sp((n + 0x7f) << 23);
+    z *= int322sp((n + 0x7f) << 23);
 
     if (initial_x > MAXLOGF)
         z = f_inf();
@@ -202,7 +202,7 @@ static inline float vexpm1(float initial_x) {
     const int32_t n = z;
 
     const int32_t twopnm1 = ((n - 1) + 0x7f) << 23;
-    x = 2 * (uint322sp(twopnm1) * egm1(x) + uint322sp(twopnm1)) - 1;
+    x = 2 * (int322sp(twopnm1) * egm1(x) + int322sp(twopnm1)) - 1;
 
     if (initial_x > MAXLOGF)
         x = f_inf();
