@@ -15,6 +15,7 @@
 #include <string>
 
 #include "ast/ast.hpp"
+#include "codegen/codegen_naming.hpp"
 #include "symtab/symbol_table.hpp"
 
 namespace nmodl {
@@ -126,6 +127,56 @@ struct IndexSemantics {
         , size(size) {}
 };
 
+/**
+ * \enum BlockType
+ * \brief Helper to represent various block types
+ *
+ * Note: do not assign integers to these enums
+ *
+ */
+enum BlockType {
+    /// initial block
+    Initial,
+
+    /// breakpoint block
+    Equation,
+
+    /// ode_* routines block (not used)
+    Ode,
+
+    /// derivative block
+    State,
+
+    /// watch block
+    Watch,
+
+    /// net_receive block
+    NetReceive,
+
+    /// fake ending block type for loops on the enums. Keep it at the end
+    BlockTypeEnd
+};
+
+/**
+ * \class ShadowUseStatement
+ * \brief Represents ion write statement during code generation
+ *
+ * Ion update statement needs use of shadow vectors for certain backends
+ * as atomics operations are not supported on cpu backend.
+ *
+ * \todo Currently `nrn_wrote_conc` is also added to shadow update statements
+ * list as it's corresponding to ion update statement in INITIAL block. This
+ * needs to be factored out.
+ * \todo This can be represented as AST node (like ast::CodegenAtomicStatement)
+ * but currently C backend use this same implementation. So we are using this
+ * same structure and then converting to ast::CodegenAtomicStatement for LLVM
+ * visitor.
+ */
+struct ShadowUseStatement {
+    std::string lhs;
+    std::string op;
+    std::string rhs;
+};
 
 /**
  * \class CodegenInfo
@@ -394,6 +445,46 @@ struct CodegenInfo {
 
     /// true if WatchStatement uses voltage v variable
     bool is_voltage_used_by_watch_statements() const;
+
+    /**
+     * Checks if the given variable name belongs to a state variable
+     * \param name The variable name
+     * \return     \c true if the variable is a state variable
+     */
+    bool state_variable(const std::string& name) const;
+
+    /**
+     * Return ion variable name and corresponding ion read variable name
+     * \param name The ion variable name
+     * \return     The ion read variable name
+     */
+    std::pair<std::string, std::string> read_ion_variable_name(const std::string& name) const;
+
+    /**
+     * Return ion variable name and corresponding ion write variable name
+     * \param name The ion variable name
+     * \return     The ion write variable name
+     */
+    std::pair<std::string, std::string> write_ion_variable_name(const std::string& name) const;
+
+    /**
+     * Determine the variable name for the "current" used in breakpoint block taking into account
+     * intermediate code transformations.
+     * \param current The variable name for the current used in the model
+     * \return        The name for the current to be printed in C
+     */
+    std::string breakpoint_current(std::string current) const;
+
+    /**
+     * Check if variable with given name is an instance variable
+     *
+     * Instance varaibles are local to each mechanism instance and
+     * needs to be accessed with an array index. Such variables are
+     * assigned, range, parameter+range etc.
+     * @param varname Name of the variable
+     * @return True if variable is per mechanism instance
+     */
+    bool is_an_instance_variable(const std::string& varname) const;
 
     /// if we need a call back to wrote_conc in neuron/coreneuron
     bool require_wrote_conc = false;
