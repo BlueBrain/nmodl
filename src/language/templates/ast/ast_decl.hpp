@@ -12,6 +12,7 @@
 #pragma once
 
 #include <memory>
+#include <string>
 #include <vector>
 
 /// \file
@@ -49,6 +50,15 @@ enum class AstNodeType {
 };
 
 /** @} */  // end of ast_type
+
+static inline std::string to_string(AstNodeType type) {
+    {% for node in nodes %}
+      if(type == AstNodeType::{{ node.class_name|snake_case|upper }}) {
+          return "{{ node.class_name|snake_case|upper }}";
+      }
+    {% endfor %}
+    throw std::runtime_error("Unhandled type in to_string(AstNodeType type)!");
+}
 
 /**
  * @defgroup ast_vec_type AST Vector Type Aliases

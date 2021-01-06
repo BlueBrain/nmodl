@@ -148,6 +148,10 @@ class BaseNode:
         return self.class_name == node_info.NAME_NODE
 
     @property
+    def is_ast_nodetype_node(self):
+        return self.class_name == node_info.AST_NODETYPE_NODE
+
+    @property
     def is_enum_node(self):
         data_type = node_info.DATA_TYPES[self.class_name]
         return data_type in node_info.ENUM_BASE_TYPES
