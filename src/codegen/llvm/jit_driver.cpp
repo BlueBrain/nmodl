@@ -17,11 +17,15 @@
 #include "llvm/ExecutionEngine/SectionMemoryManager.h"
 #include "llvm/Support/Host.h"
 #include "llvm/Support/TargetRegistry.h"
+#include "llvm/Support/TargetSelect.h"
 
 namespace nmodl {
 namespace runner {
 
 void JITDriver::init() {
+    llvm::InitializeNativeTarget();
+    llvm::InitializeNativeTargetAsmPrinter();
+
     set_target_triple(module.get());
     auto data_layout = module->getDataLayout();
 
@@ -82,6 +86,10 @@ void JITDriver::set_target_triple(llvm::Module* module) {
 
     module->setDataLayout(machine->createDataLayout());
     module->setTargetTriple(target_triple);
+}
+
+void Runner::run(std::string& entry_point) {
+    driver->execute(entry_point);
 }
 
 }  // namespace runner

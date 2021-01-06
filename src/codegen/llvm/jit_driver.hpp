@@ -34,7 +34,7 @@ class JITDriver {
 
   public:
     JITDriver(std::unique_ptr<llvm::Module> m)
-        : module(std::move(m)) {}
+            : module(std::move(m)) {}
 
     /// Initialize the JIT.
     void init();
@@ -44,6 +44,27 @@ class JITDriver {
 
     /// Set the target triple on the module.
     static void set_target_triple(llvm::Module* module);
+};
+
+/**
+ * \class Runner
+ * \brief A wrapper around JITDriver to execute an entry point in the LLVM IR module.
+ */
+class Runner {
+  private:
+
+    std::unique_ptr<llvm::Module> module;
+
+    std::unique_ptr<JITDriver> driver = std::make_unique<JITDriver>(std::move(module));
+
+  public:
+    Runner(std::unique_ptr<llvm::Module> m)
+            : module(std::move(m)) {
+        driver->init();
+    }
+
+    /// Run the entry-point function.
+    void run(std::string& entry_point_name);
 };
 
 }  // namespace runner

@@ -60,13 +60,9 @@ int main(int argc, const char* argv[]) {
     if (func->getNumOperands() != 0)
         throw std::runtime_error("Error: entry-point functions with arguments are not supported\n");
 
-    llvm::InitializeNativeTarget();
-    llvm::InitializeNativeTargetAsmPrinter();
-
-    logger->info("Setting up JIT");
-    std::unique_ptr<JITDriver> jit_runner = std::make_unique<JITDriver>(std::move(module));
-    jit_runner->init();
-    jit_runner->execute(entry_point_name);
+    // Execute the entry-point.
+    Runner runner(std::move(module));
+    runner.run(entry_point_name);
 
     return 0;
 }
