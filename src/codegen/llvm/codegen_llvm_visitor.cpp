@@ -350,7 +350,7 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
     // Keep this for easier development (maybe move to debug mode later).
     std::cout << print_module();
 
-    // not used yet
+    // not used yet : this will be used at the beginning of this function
     {
         CodegenLLVMHelperVisitor v;
         v.visit_program(const_cast<ast::Program&>(node));

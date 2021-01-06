@@ -28,6 +28,9 @@
             - Expression:
                 children:
                   - Number:
+                  - Void:
+                      nmodl: "VOID"
+                      brief: "Represent void type in code generation"
                   - Identifier:
                       children:
                         - CodegenVarType:
@@ -194,7 +197,7 @@
                             brief: "condition expression for the loop"
                             type: Expression
                             optional: true
-                            prefix: {value: ";"}
+                            prefix: {value: "; "}
                             suffix: {value: "; "}
                         - increment:
                             brief: "increment or decrement expression for the loop"
@@ -226,3 +229,35 @@
                             vector: true
                             separator: ", "
                             add: true
+                  - CodegenAtomicStatement:
+                      brief: "Represent atomic operation"
+                      description: |
+                        During code generation certain operations like ion updates, vec_rhs or
+                        vec_d updates (for synapse) needs to be atomic operations if executed by
+                        multiple threads. In case of SIMD, there are conflicts for `vec_d` and
+                        `vec_rhs` for synapse types. Here are some statements from C++ backend:
+
+                        \code{.cpp}
+                            vec_d[node_id] += g
+                            vec_rhs[node_id] -= rhs
+                            ion_ina[indexes[some_index]] += ina[id]
+                            ion_cai[indexes[some_index]] = cai[id]  // cai here is state variable
+                        \endcode
+
+                        These operations will be represented by atomic statement node type:
+                        * `vec_d[node_id]` : lhs
+                        * `+=` : atomic_op
+                        * `g` : rhs
+
+                      members:
+                        - lhs:
+                            brief: "Variable to be updated atomically"
+                            type: Identifier
+                        - atomic_op:
+                            brief: "Operator"
+                            type: BinaryOperator
+                            prefix: {value: " "}
+                            suffix: {value: " "}
+                        - rhs:
+                            brief: "Expression for atomic operation"
+                            type: Expression
