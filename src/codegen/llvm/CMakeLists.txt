@@ -14,6 +14,7 @@ set(LLVM_CODEGEN_SOURCE_FILES
 
 include_directories(${LLVM_INCLUDE_DIRS})
 add_library(runner_obj OBJECT ${LLVM_CODEGEN_SOURCE_FILES})
+add_dependencies(runner_obj lexer_obj)
 set_property(TARGET runner_obj PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 add_library(llvm_codegen STATIC $<TARGET_OBJECTS:runner_obj>)
