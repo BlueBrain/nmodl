@@ -46,46 +46,6 @@ namespace codegen {
  */
 
 /**
- * \enum BlockType
- * \brief Helper to represent various block types
- *
- * Note: do not assign integers to these enums
- *
- */
-enum BlockType {
-    /// initial block
-    Initial,
-
-    /// constructor block
-    Constructor,
-
-    /// destructor block
-    Destructor,
-
-    /// breakpoint block
-    Equation,
-
-    /// ode_* routines block (not used)
-    Ode,
-
-    /// derivative block
-    State,
-
-    /// watch block
-    Watch,
-
-    /// net_receive block
-    NetReceive,
-
-    /// before / after block
-    BeforeAfter,
-
-    /// fake ending block type for loops on the enums. Keep it at the end
-    BlockTypeEnd
-};
-
-
-/**
  * \enum MemberType
  * \brief Helper to represent various variables types
  *
@@ -137,22 +97,6 @@ struct IndexVariableInfo {
         , is_vdata(is_vdata)
         , is_index(is_index)
         , is_integer(is_integer) {}
-};
-
-
-/**
- * \class ShadowUseStatement
- * \brief Represents ion write statement during code generation
- *
- * Ion update statement needs use of shadow vectors for certain backends
- * as atomics operations are not supported on cpu backend.
- *
- * \todo If shadow_lhs is empty then we assume shadow statement not required
- */
-struct ShadowUseStatement {
-    std::string lhs;
-    std::string op;
-    std::string rhs;
 };
 
 /** @} */  // end of codegen_details
