@@ -21,7 +21,7 @@ PROCEDURE complex_sum(v) {
     }
 }
 
-PROCEDURE loop_proc(v) {
+PROCEDURE loop_proc(v, t) {
     LOCAL i
     i = 0
     WHILE(i < 10) {

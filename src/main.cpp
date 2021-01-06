@@ -17,9 +17,11 @@
 #include "codegen/codegen_cuda_visitor.hpp"
 #include "codegen/codegen_ispc_visitor.hpp"
 #include "codegen/codegen_omp_visitor.hpp"
+
 #ifdef NMODL_LLVM_BACKEND
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
 #endif
+
 #include "config/config.h"
 #include "parser/nmodl_driver.hpp"
 #include "pybind/pyembed.hpp"
@@ -577,6 +579,7 @@ int main(int argc, const char* argv[]) {
                 logger->info("Running LLVM backend code generator");
                 CodegenLLVMVisitor visitor(modfile, output_dir, llvm_opt_passes);
                 visitor.visit_program(*ast);
+                ast_to_nmodl(*ast, filepath("llvm"));
             }
 #endif
         }
