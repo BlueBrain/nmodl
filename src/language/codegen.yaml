@@ -29,6 +29,34 @@
                 children:
                   - Number:
                   - Identifier:
+                      children:
+                        - CodegenVarType:
+                            brief: "Represent type of the variable"
+                            members:
+                              - type:
+                                  brief: "Type of the ast node"
+                                  type: AstNodeType
+                        - CodegenVar:
+                            brief: "Represent variable used for code generation"
+                            members:
+                              - pointer:
+                                  brief: "If variable is pointer type"
+                                  type: int
+                              - name:
+                                  brief: "Name of the variable"
+                                  type: Identifier
+                                  node_name: true
+                        - CodegenArgument:
+                            brief: "Represent argument to a function"
+                            members:
+                              - type:
+                                  brief: "Type of the argument"
+                                  type: CodegenVarType
+                                  suffix: {value: " "}
+                              - name:
+                                  brief: "Name of the argument"
+                                  type: Identifier
+                                  node_name: true
                   - Block:
                       children:
                         - NrnStateBlock:
@@ -89,7 +117,29 @@
                                   type: StatementBlock
                               - finalize_block:
                                   brief: "Statement block to be executed after calling linear solver"
-                                  type: StatementBlock                                  
+                                  type: StatementBlock
+                        - CodegenFunction:
+                            brief: "Function generated from FUNCTION or PROCEDURE block"
+                            members:
+                              - return_type:
+                                  brief: "Return type of the function"
+                                  type: CodegenVarType
+                                  suffix: {value: " "}
+                              - name:
+                                  brief: "Name of the function"
+                                  type: Name
+                                  node_name: true
+                              - arguments:
+                                  brief: "Vector of the parameters to the function"
+                                  type: CodegenArgument
+                                  vector: true
+                                  prefix: {value: "(", force: true}
+                                  suffix: {value: ")", force: true}
+                                  separator: ", "
+                              - statement_block:
+                                  brief: "Body of the function"
+                                  type: StatementBlock
+                                  getter: {override: true}
                   - WrappedExpression:
                       brief: "Wrap any other expression type"
                       members:
@@ -110,6 +160,17 @@
                         - node_to_solve:
                             brief: "Block to be solved (callback node or solution node itself)"
                             type: Expression
+                  - CodegenStruct:
+                      brief: "Represent a struct or class for code generation"
+                      members:
+                        - variable_statements:
+                            brief: "member variables of the class/struct"
+                            type: CodegenVarListStatement
+                            vector: true
+                        - functions:
+                            brief: "member functions of the class/struct"
+                            type: CodegenFunction
+                            vector: true
             - Statement:
                 brief: "Statement base class"
                 children:
@@ -121,3 +182,47 @@
                             type: Double
                             prefix: {value: " = "}
                       brief: "Statement to indicate a change in timestep in a given block"
+                  - CodegenForStatement:
+                      brief: "Represent for loop used for code generation"
+                      nmodl: "for("
+                      members:
+                        - initialization:
+                            brief: "initialization expression for the loop"
+                            type: Expression
+                            optional: true
+                        - condition:
+                            brief: "condition expression for the loop"
+                            type: Expression
+                            optional: true
+                            prefix: {value: ";"}
+                            suffix: {value: "; "}
+                        - increment:
+                            brief: "increment or decrement expression for the loop"
+                            type: Expression
+                            optional: true
+                            suffix: {value: ") "}
+                        - statement_block:
+                            brief: "body of the loop"
+                            type: StatementBlock
+                            getter: {override: true}
+                  - CodegenReturnStatement:
+                      brief: "Represent return statement for code generation"
+                      nmodl: "return "
+                      members:
+                        - statement:
+                            brief: "return statement"
+                            type: Expression
+                            optional: true
+                  - CodegenVarListStatement:
+                      brief: "Represent list of variables used for code generation"
+                      members:
+                        - var_type:
+                            brief: "Type of the variables"
+                            type: CodegenVarType
+                            suffix: {value: " "}
+                        - variables:
+                            brief: "List of the variables to define"
+                            type: CodegenVar
+                            vector: true
+                            separator: ", "
+                            add: true
