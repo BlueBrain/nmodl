@@ -6,8 +6,7 @@ set(LLVM_CODEGEN_SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/codegen_llvm_visitor.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/codegen_llvm_helper_visitor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/codegen_llvm_helper_visitor.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/jit_driver.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/jit_driver.hpp)
+    ${CMAKE_CURRENT_SOURCE_DIR}/jit_driver.cpp ${CMAKE_CURRENT_SOURCE_DIR}/jit_driver.hpp)
 
 # =============================================================================
 # LLVM codegen library and executable
@@ -43,6 +42,5 @@ endif()
 # =============================================================================
 
 if(NOT NMODL_AS_SUBPROJECT)
-  install(TARGETS nmodl_llvm_runner
-          DESTINATION ${NMODL_INSTALL_DIR_SUFFIX}bin/llvm)
+  install(TARGETS nmodl_llvm_runner DESTINATION ${NMODL_INSTALL_DIR_SUFFIX}bin)
 endif()
