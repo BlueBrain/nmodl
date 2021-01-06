@@ -66,6 +66,7 @@ set(AST_GENERATED_SOURCES
     ${PROJECT_BINARY_DIR}/src/ast/boolean.hpp
     ${PROJECT_BINARY_DIR}/src/ast/breakpoint_block.hpp
     ${PROJECT_BINARY_DIR}/src/ast/codegen_argument.hpp
+    ${PROJECT_BINARY_DIR}/src/ast/codegen_atomic_statement.hpp
     ${PROJECT_BINARY_DIR}/src/ast/codegen_for_statement.hpp
     ${PROJECT_BINARY_DIR}/src/ast/codegen_function.hpp
     ${PROJECT_BINARY_DIR}/src/ast/codegen_return_statement.hpp
@@ -192,6 +193,7 @@ set(AST_GENERATED_SOURCES
     ${PROJECT_BINARY_DIR}/src/ast/valence.hpp
     ${PROJECT_BINARY_DIR}/src/ast/var_name.hpp
     ${PROJECT_BINARY_DIR}/src/ast/verbatim.hpp
+    ${PROJECT_BINARY_DIR}/src/ast/void.hpp
     ${PROJECT_BINARY_DIR}/src/ast/watch.hpp
     ${PROJECT_BINARY_DIR}/src/ast/watch_statement.hpp
     ${PROJECT_BINARY_DIR}/src/ast/while_statement.hpp
