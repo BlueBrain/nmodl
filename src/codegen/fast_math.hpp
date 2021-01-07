@@ -4,11 +4,8 @@
  * This file is part of NMODL distributed under the terms of the GNU
  * Lesser General Public License. See top-level LICENSE file for details.
  *
- * Note that the fast ISPC exponentials Based on VDT implementation of
- * D. Piparo et al. See https://github.com/dpiparo/vdt for additional
- * license information.
- * exprelr and expm1 are based on
- * https://arbor.readthedocs.io/en/latest/internals/simd_api.html#implementation-of-vector-transcendental-functions
+ * Note: fast_math.ispc translated into .hpp syntax. More information in
+ * fast_math.ispc
  *************************************************************************/
 
 #pragma once
@@ -17,7 +14,7 @@
 
 /**
  * \file
- * \brief Implementation of different math functions with ISPC
+ * \brief Implementation of different math functions
  */
 
 static inline double uint642dp(uint64_t ll) {
@@ -61,6 +58,9 @@ static inline double inf() {
 
 static const double EXP_LIMIT = 708.0;
 
+static const double C1 = 6.93145751953125E-1;
+static const double C2 = 1.42860682030941723212E-6;
+
 static const double PX1exp = 1.26177193074810590878E-4;
 static const double PX2exp = 3.02994407707441961300E-2;
 static const double PX3exp = 9.99999999999999999910E-1;
@@ -87,8 +87,8 @@ static const float PX6expf = 5.0000001201E-1f;
 static const float LOG2EF = 1.44269504088896341f;  // 1/ln(2)
 
 static inline double egm1(double x, double px) {
-    x -= px * 6.93145751953125E-1;
-    x -= px * 1.42860682030941723212E-6;
+    x -= px * C1;
+    x -= px * C2;
 
     const double xx = x * x;
 
