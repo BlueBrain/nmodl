@@ -6,7 +6,8 @@ set(LLVM_CODEGEN_SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/codegen_llvm_visitor.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/codegen_llvm_helper_visitor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/codegen_llvm_helper_visitor.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/jit_driver.cpp ${CMAKE_CURRENT_SOURCE_DIR}/jit_driver.hpp)
+    ${CMAKE_CURRENT_SOURCE_DIR}/jit_driver.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/jit_driver.hpp)
 
 # =============================================================================
 # LLVM codegen library and executable
