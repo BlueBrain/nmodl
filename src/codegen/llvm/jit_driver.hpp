@@ -34,7 +34,7 @@ class JITDriver {
 
   public:
     JITDriver(std::unique_ptr<llvm::Module> m)
-            : module(std::move(m)) {}
+        : module(std::move(m)) {}
 
     /// Initialize the JIT.
     void init();
@@ -46,7 +46,7 @@ class JITDriver {
         if (!expected_symbol)
             throw std::runtime_error("Error: entry-point symbol not found in JIT\n");
 
-        auto (*res)() = (T (*)())(intptr_t) expected_symbol->getAddress();
+        auto (*res)() = (T(*)())(intptr_t) expected_symbol->getAddress();
         T result = res();
         return result;
     }
@@ -61,14 +61,13 @@ class JITDriver {
  */
 class Runner {
   private:
-
     std::unique_ptr<llvm::Module> module;
 
     std::unique_ptr<JITDriver> driver = std::make_unique<JITDriver>(std::move(module));
 
   public:
     Runner(std::unique_ptr<llvm::Module> m)
-            : module(std::move(m)) {
+        : module(std::move(m)) {
         driver->init();
     }
 
