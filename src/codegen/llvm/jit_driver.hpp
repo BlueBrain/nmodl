@@ -40,7 +40,7 @@ class JITDriver {
     void init();
 
     /// Lookup the entry-point in the JIT and execute it, returning the result.
-    template<typename T>
+    template <typename T>
     T execute(const std::string& entry_point) {
         auto expected_symbol = jit->lookup(entry_point);
         if (!expected_symbol)
@@ -73,7 +73,7 @@ class Runner {
     }
 
     /// Run the entry-point function.
-    template<typename T>
+    template <typename T>
     double run(const std::string& entry_point) {
         return driver->execute<T>(entry_point);
     }
