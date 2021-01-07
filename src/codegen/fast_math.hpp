@@ -8,7 +8,7 @@
  * D. Piparo et al. See https://github.com/dpiparo/vdt for additional
  * license information.
  * exprelr and expm1 are based on
- *https://arbor.readthedocs.io/en/latest/internals/simd_api.html?highlight=exprelr#operatorname-expm1-x
+ * https://arbor.readthedocs.io/en/latest/internals/simd_api.html#implementation-of-vector-transcendental-functions
  *************************************************************************/
 
 #pragma once
