@@ -39,8 +39,17 @@ class JITDriver {
     /// Initialize the JIT.
     void init();
 
-    /// Lookup the entry-point in the JIT and execute it, printing the result to console.
-    void execute(std::string& entry_point);
+    /// Lookup the entry-point in the JIT and execute it, returning the result.
+    template<typename T>
+    T execute(std::string& entry_point) {
+        auto expected_symbol = jit->lookup(entry_point);
+        if (!expected_symbol)
+            throw std::runtime_error("Error: entry-point symbol not found in JIT\n");
+
+        auto (*res)() = (T (*)())(intptr_t) expected_symbol->getAddress();
+        T result = res();
+        return result;
+    }
 
     /// Set the target triple on the module.
     static void set_target_triple(llvm::Module* module);
@@ -64,7 +73,10 @@ class Runner {
     }
 
     /// Run the entry-point function.
-    void run(std::string& entry_point_name);
+    template<typename T>
+    double run(std::string& entry_point) {
+        return driver->execute<T>(entry_point);
+    }
 };
 
 }  // namespace runner

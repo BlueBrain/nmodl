@@ -52,17 +52,6 @@ void JITDriver::init() {
         data_layout.getGlobalPrefix())));
 }
 
-void JITDriver::execute(std::string& entry_point) {
-    // Lookup the entry-point in JIT and execute it. This currently assumes double return type.
-    // \todo: Use templates to vary return types.
-    auto expected_symbol = jit->lookup(entry_point);
-    if (!expected_symbol)
-        throw std::runtime_error("Error: entry-point symbol not found in JIT\n");
-
-    auto (*res)() = (double (*)())(intptr_t) expected_symbol->getAddress();
-    fprintf(stderr, "Result: %f\n", res());
-}
-
 void JITDriver::set_target_triple(llvm::Module* module) {
     auto target_triple = llvm::sys::getDefaultTargetTriple();
     std::string error;
@@ -86,10 +75,6 @@ void JITDriver::set_target_triple(llvm::Module* module) {
 
     module->setDataLayout(machine->createDataLayout());
     module->setTargetTriple(target_triple);
-}
-
-void Runner::run(std::string& entry_point) {
-    driver->execute(entry_point);
 }
 
 }  // namespace runner

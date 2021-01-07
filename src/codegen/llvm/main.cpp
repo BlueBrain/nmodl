@@ -60,9 +60,11 @@ int main(int argc, const char* argv[]) {
     if (func->getNumOperands() != 0)
         throw std::runtime_error("Error: entry-point functions with arguments are not supported\n");
 
-    // Execute the entry-point.
     Runner runner(std::move(module));
-    runner.run(entry_point_name);
+
+    // Since only double type is supported, provide explicit double type to the running function.
+    auto r = runner.run<double>(entry_point_name);
+    fprintf(stderr, "Result: %f\n", r);
 
     return 0;
 }
