@@ -306,6 +306,11 @@ class ChildNode(BaseNode):
                           * \\brief Reset member to {self.varname}
                           */
                          void reset_{to_snake_case(self.class_name)}({self.class_name}Vector::const_iterator position, std::shared_ptr<{self.class_name}> n);
+
+                         /**
+                          * \\brief Reset non-consecutive members to {self.varname}
+                          */
+                         size_t reset_{to_snake_case(self.class_name)}(const std::unordered_map<{self.class_name}*, std::shared_ptr<{self.class_name}>>& to_be_reset);
                     """
             s = textwrap.dedent(method)
         return s
@@ -408,6 +413,22 @@ class ChildNode(BaseNode):
                              {set_parent}
 
                             {self.varname}[position - {self.varname}.begin()] = n;
+                         }}
+
+                         /**
+                          * \\brief Reset non-consecutive members to {self.varname}
+                          */
+                         size_t {parent.class_name}::reset_{to_snake_case(self.class_name)}(const std::unordered_map<{self.class_name}*, std::shared_ptr<{self.class_name}>>& to_be_reset) {{
+                            size_t n_resets = 0;
+                            for (auto it = {self.varname}.begin(); it != {self.varname}.end(); ++it) {{
+                                    auto reset_this_pair = to_be_reset.find(&(*(*it)));
+                                    if (reset_this_pair != to_be_reset.end()) {{
+                                        reset_{to_snake_case(self.class_name)}(it, reset_this_pair->second);
+                                        ++n_resets;
+                                    }}
+                                }}
+
+                            return n_resets;
                          }}
                     """
             s = textwrap.dedent(method)
