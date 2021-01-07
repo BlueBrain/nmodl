@@ -60,6 +60,10 @@ int main(int argc, const char* argv[]) {
     if (func->getNumOperands() != 0)
         throw std::runtime_error("Error: entry-point functions with arguments are not supported\n");
 
+    if (!func->getReturnType()->isDoubleTy())
+        throw std::runtime_error(
+            "Error: entry-point functions with non-double return type are not supported\n");
+
     Runner runner(std::move(module));
 
     // Since only double type is supported, provide explicit double type to the running function.
