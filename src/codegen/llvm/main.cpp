@@ -25,7 +25,7 @@ int main(int argc, const char* argv[]) {
         "NMODL LLVM Runner : Executes functions from a MOD file via LLVM IR code generation"};
 
     // Currently, only a single MOD file is supported, as well as an entry point with a double
-    // return type. While returning a double value is a general case in NMODL,it will be nice to
+    // return type. While returning a double value is a general case in NMODL, it will be nice to
     // have a more generic functionality. \todo: Add support for different return types (int, void).
 
     std::string filename;

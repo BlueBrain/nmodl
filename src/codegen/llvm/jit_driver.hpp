@@ -41,7 +41,7 @@ class JITDriver {
 
     /// Lookup the entry-point in the JIT and execute it, returning the result.
     template<typename T>
-    T execute(std::string& entry_point) {
+    T execute(const std::string& entry_point) {
         auto expected_symbol = jit->lookup(entry_point);
         if (!expected_symbol)
             throw std::runtime_error("Error: entry-point symbol not found in JIT\n");
@@ -74,7 +74,7 @@ class Runner {
 
     /// Run the entry-point function.
     template<typename T>
-    double run(std::string& entry_point) {
+    double run(const std::string& entry_point) {
         return driver->execute<T>(entry_point);
     }
 };
