@@ -127,7 +127,7 @@ static inline double vexp(double initial_x) {
     return x;
 }
 
-/// double precision exp function
+/// double precision exp(x) - 1 function, used for small x.
 static inline double vexpm1(double initial_x) {
     double x = initial_x;
     double px = dpfloor(LOG2E * x + 0.5);
