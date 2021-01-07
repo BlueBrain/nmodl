@@ -7,7 +7,7 @@
  * Note that the fast ISPC exponentials Based on VDT implementation of
  * D. Piparo et al. See https://github.com/dpiparo/vdt for additional
  * license information.
- * exprelr and expm1 are based on https://arbor.readthedocs.io/en/latest/internals/simd_api.html?highlight=exprelr#operatorname-expm1-x
+ * exprelr and expm1 are based on https://arbor.readthedocs.io/en/latest/internals/simd_api.html#implementation-of-vector-transcendental-functions
  *************************************************************************/
 
 /**
@@ -219,6 +219,5 @@ static inline float exprelr(float initial_x) {
 
     return initial_x/vexpm1(initial_x);
 }
-
 
 
