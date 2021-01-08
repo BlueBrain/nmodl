@@ -163,6 +163,40 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     }
 
     /**
+     * Visit nmodl arithmetic binary operator
+     * \param lhs LLVM value of evaluated lhs expression
+     * \param rhs LLVM value of evaluated rhs expression
+     * \param op the AST binary operator (ADD, DIV, MUL, SUB)
+     * \return LLVM IR value result
+     */
+    llvm::Value* visit_arithmetic_bin_op(llvm::Value* lhs, llvm::Value* rhs, unsigned op);
+
+    /**
+     * Visit nmodl assignment operator (ASSIGN)
+     * \param node the AST node representing the binary expression in NMODL
+     * \param rhs LLVM value of evaluated rhs expression
+     */
+    void visit_assign_op(const ast::BinaryExpression& node, llvm::Value* rhs);
+
+    /**
+     * Visit nmodl logical binary operator
+     * \param lhs LLVM value of evaluated lhs expression
+     * \param rhs LLVM value of evaluated rhs expression
+     * \param op the AST binary operator (AND, OR)
+     * \return LLVM IR value result
+     */
+    llvm::Value* visit_logical_bin_op(llvm::Value* lhs, llvm::Value* rhs, unsigned op);
+
+    /**
+     * Visit nmodl comparison binary operator
+     * \param lhs LLVM value of evaluated lhs expression
+     * \param rhs LLVM value of evaluated rhs expression
+     * \param op the AST binary operator (EXACT_EQUAL, GREATER, GREATER_EQUAL, LESS, LESS_EQUAL, NOT_EQUAL)
+     * \return LLVM IR value result
+     */
+    llvm::Value* visit_comparison_bin_op(llvm::Value* lhs, llvm::Value* rhs, unsigned op);
+
+    /**
      * Visit nmodl function or procedure
      * \param node the AST node representing the function or procedure in NMODL
      */

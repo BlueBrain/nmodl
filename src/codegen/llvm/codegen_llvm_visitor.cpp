@@ -152,6 +152,88 @@ void CodegenLLVMVisitor::emit_procedure_or_function_declaration(const ast::Block
                            *module);
 }
 
+llvm::Value* CodegenLLVMVisitor::visit_arithmetic_bin_op(llvm::Value* lhs,
+                                                         llvm::Value* rhs,
+                                                         unsigned op) {
+    const auto& bin_op = static_cast<ast::BinaryOp>(op);
+    llvm::Value* result;
+
+    switch (bin_op) {
+#define DISPATCH(binary_op, llvm_fp_op, llvm_int_op) \
+    case binary_op:                                  \
+        if (lhs->getType()->isDoubleTy())            \
+            result = llvm_fp_op(lhs, rhs);           \
+        else                                         \
+            result = llvm_int_op(lhs, rhs);          \
+        return result;
+
+        DISPATCH(ast::BinaryOp::BOP_ADDITION, builder.CreateFAdd, builder.CreateAdd);
+        DISPATCH(ast::BinaryOp::BOP_DIVISION, builder.CreateFDiv, builder.CreateSDiv);
+        DISPATCH(ast::BinaryOp::BOP_MULTIPLICATION, builder.CreateFMul, builder.CreateMul);
+        DISPATCH(ast::BinaryOp::BOP_SUBTRACTION, builder.CreateFSub, builder.CreateSub);
+
+#undef DISPATCH
+
+    default:
+        return nullptr;
+    }
+}
+
+void CodegenLLVMVisitor::visit_assign_op(const ast::BinaryExpression& node, llvm::Value* rhs) {
+    auto var = dynamic_cast<ast::VarName*>(node.get_lhs().get());
+    if (!var) {
+        throw std::runtime_error("Error: only VarName assignment is currently supported.\n");
+    }
+
+    const auto& identifier = var->get_name();
+    if (identifier->is_name()) {
+        llvm::Value* alloca = local_named_values->lookup(var->get_node_name());
+        builder.CreateStore(rhs, alloca);
+    } else if (identifier->is_indexed_name()) {
+        auto indexed_name = std::dynamic_pointer_cast<ast::IndexedName>(identifier);
+        builder.CreateStore(rhs, codegen_indexed_name(*indexed_name));
+    } else {
+        throw std::runtime_error("Error: Unsupported variable type");
+    }
+}
+
+llvm::Value* CodegenLLVMVisitor::visit_logical_bin_op(llvm::Value* lhs,
+                                                      llvm::Value* rhs,
+                                                      unsigned op) {
+    const auto& bin_op = static_cast<ast::BinaryOp>(op);
+    return bin_op == ast::BinaryOp::BOP_AND ? builder.CreateAnd(lhs, rhs)
+                                            : builder.CreateOr(lhs, rhs);
+}
+
+llvm::Value* CodegenLLVMVisitor::visit_comparison_bin_op(llvm::Value* lhs,
+                                                         llvm::Value* rhs,
+                                                         unsigned op) {
+    const auto& bin_op = static_cast<ast::BinaryOp>(op);
+    llvm::Value* result;
+
+    switch (bin_op) {
+#define DISPATCH(binary_op, f_llvm_op, i_llvm_op) \
+    case binary_op:                               \
+        if (lhs->getType()->isDoubleTy())         \
+            result = f_llvm_op(lhs, rhs);         \
+        else                                      \
+            result = i_llvm_op(lhs, rhs);         \
+        return result;
+
+        DISPATCH(ast::BinaryOp::BOP_EXACT_EQUAL, builder.CreateICmpEQ, builder.CreateFCmpOEQ);
+        DISPATCH(ast::BinaryOp::BOP_GREATER, builder.CreateICmpSGT, builder.CreateFCmpOGT);
+        DISPATCH(ast::BinaryOp::BOP_GREATER_EQUAL, builder.CreateICmpSGE, builder.CreateFCmpOGE);
+        DISPATCH(ast::BinaryOp::BOP_LESS, builder.CreateICmpSLT, builder.CreateFCmpOLT);
+        DISPATCH(ast::BinaryOp::BOP_LESS_EQUAL, builder.CreateICmpSLE, builder.CreateFCmpOLE);
+        DISPATCH(ast::BinaryOp::BOP_NOT_EQUAL, builder.CreateICmpNE, builder.CreateFCmpONE);
+
+#undef DISPATCH
+
+    default:
+        return nullptr;
+    }
+}
+
 void CodegenLLVMVisitor::visit_procedure_or_function(const ast::Block& node) {
     const auto& name = node.get_node_name();
     const auto& parameters = node.get_parameters();
@@ -222,44 +304,39 @@ void CodegenLLVMVisitor::visit_binary_expression(const ast::BinaryExpression& no
     llvm::Value* rhs = values.back();
     values.pop_back();
     if (op == ast::BinaryOp::BOP_ASSIGN) {
-        auto var = dynamic_cast<ast::VarName*>(node.get_lhs().get());
-        if (!var) {
-            throw std::runtime_error("Error: only VarName assignment is currently supported.\n");
-        }
-
-        const auto& identifier = var->get_name();
-        if (identifier->is_name()) {
-            llvm::Value* alloca = local_named_values->lookup(var->get_node_name());
-            builder.CreateStore(rhs, alloca);
-        } else if (identifier->is_indexed_name()) {
-            auto indexed_name = std::dynamic_pointer_cast<ast::IndexedName>(identifier);
-            builder.CreateStore(rhs, codegen_indexed_name(*indexed_name));
-        } else {
-            throw std::runtime_error("Error: Unsupported variable type");
-        }
+        visit_assign_op(node, rhs);
         return;
     }
 
     node.get_lhs()->accept(*this);
     llvm::Value* lhs = values.back();
     values.pop_back();
+
     llvm::Value* result;
-
-    // \todo: Support other binary operators
     switch (op) {
-#define DISPATCH(binary_op, llvm_op) \
-    case binary_op:                  \
-        result = llvm_op(lhs, rhs);  \
-        values.push_back(result);    \
+    case ast::BOP_ADDITION:
+    case ast::BOP_DIVISION:
+    case ast::BOP_MULTIPLICATION:
+    case ast::BOP_SUBTRACTION:
+        result = visit_arithmetic_bin_op(lhs, rhs, op);
         break;
-
-        DISPATCH(ast::BinaryOp::BOP_ADDITION, builder.CreateFAdd);
-        DISPATCH(ast::BinaryOp::BOP_DIVISION, builder.CreateFDiv);
-        DISPATCH(ast::BinaryOp::BOP_MULTIPLICATION, builder.CreateFMul);
-        DISPATCH(ast::BinaryOp::BOP_SUBTRACTION, builder.CreateFSub);
-
-#undef DISPATCH
+    case ast::BOP_AND:
+    case ast::BOP_OR:
+        result = visit_logical_bin_op(lhs, rhs, op);
+        break;
+    case ast::BOP_EXACT_EQUAL:
+    case ast::BOP_GREATER:
+    case ast::BOP_GREATER_EQUAL:
+    case ast::BOP_LESS:
+    case ast::BOP_LESS_EQUAL:
+    case ast::BOP_NOT_EQUAL:
+        result = visit_comparison_bin_op(lhs, rhs, op);
+        break;
+    default:
+        throw std::runtime_error("Error: binary operator is not supported\n");
     }
+
+    values.push_back(result);
 }
 
 void CodegenLLVMVisitor::visit_boolean(const ast::Boolean& node) {
