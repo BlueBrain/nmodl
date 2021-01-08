@@ -20,7 +20,7 @@ using namespace runner;
 using namespace visitor;
 using nmodl::parser::NmodlDriver;
 
-static double EPSILON = 1e-6;
+static double EPSILON = 1e-15;
 
 //=============================================================================
 // No optimisations
@@ -76,7 +76,7 @@ SCENARIO("Arithmetic expression", "[llvm][runner]") {
 
         THEN("functions are evaluated correctly") {
             auto exp_result = runner.run<double>("exponential");
-            REQUIRE(fabs(exp_result - 2.718281828) < EPSILON);
+            REQUIRE(fabs(exp_result - 2.718281828459045) < EPSILON);
 
             auto constant_result = runner.run<double>("constant");
             REQUIRE(fabs(constant_result - 10.0) < EPSILON);
@@ -138,7 +138,6 @@ SCENARIO("Optimised arithmetic expression", "[llvm][runner]") {
                                                  /*output_dir=*/".",
                                                  /*opt_passes=*/true);
         llvm_visitor.visit_program(*ast);
-        std::cout << llvm_visitor.print_module();
 
         std::unique_ptr<llvm::Module> m = llvm_visitor.get_module();
         Runner runner(std::move(m));
@@ -146,7 +145,7 @@ SCENARIO("Optimised arithmetic expression", "[llvm][runner]") {
         THEN("optimizations preserve function results") {
             // Check exponential is turned into a constant.
             auto exp_result = runner.run<double>("exponential");
-            REQUIRE(fabs(exp_result - 2.718281828) < EPSILON);
+            REQUIRE(fabs(exp_result - 2.718281828459045) < EPSILON);
 
             // Check constant folding.
             auto constant_result = runner.run<double>("constant");
