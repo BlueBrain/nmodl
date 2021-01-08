@@ -98,8 +98,21 @@ target_link_libraries(
 if(NMODL_ENABLE_LLVM)
   include_directories(${LLVM_INCLUDE_DIRS})
   add_executable(testllvm visitor/main.cpp codegen/llvm.cpp)
+  add_executable(test_llvm_runner visitor/main.cpp codegen/codegen_llvm_execution.cpp)
   target_link_libraries(
     testllvm
+    llvm_codegen
+    codegen
+    visitor
+    symtab
+    lexer
+    util
+    test_util
+    printer
+    ${NMODL_WRAPPER_LIBS}
+    ${LLVM_LIBS_TO_LINK})
+  target_link_libraries(
+    test_llvm_runner
     llvm_codegen
     codegen
     visitor
