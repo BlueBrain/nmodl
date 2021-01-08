@@ -81,6 +81,11 @@ class SympySolverVisitor: public AstVisitor {
     ast::StatementVector::const_iterator get_solution_location_iterator(
         const ast::StatementVector& statements);
 
+    /// return iterator pointing to where the pre solution statements should be inserted in
+    /// statement block
+    ast::StatementVector::const_iterator get_pre_solve_statements_location_iterator(
+        const ast::StatementVector& statements);
+
     /// construct solver block
     void construct_eigen_solver_block(const std::vector<std::string>& pre_solve_statements,
                                       const std::vector<std::string>& solutions,

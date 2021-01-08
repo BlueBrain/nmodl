@@ -26,6 +26,30 @@ using symtab::syminfo::NmodlType;
 
 using nmodl::utils::UseNumbersInString;
 
+
+/**
+ * Check if provided statement is local variable declaration statement
+ * @param statement AST node representing statement in the MOD file
+ * @return True if statement is local variable declaration else False
+ *
+ * Statement declaration could be wrapped into another statement type like
+ * expression statement and hence we try to look inside if it's really a
+ * variable declaration.
+ */
+static bool is_local_statement(const std::shared_ptr<ast::Statement>& statement) {
+    if (statement->is_local_list_statement()) {
+        return true;
+    }
+    if (statement->is_expression_statement()) {
+        auto e_statement = std::dynamic_pointer_cast<ast::ExpressionStatement>(statement);
+        auto expression = e_statement->get_expression();
+        if (expression->is_local_list_statement()) {
+            return true;
+        }
+    }
+    return false;
+}
+
 void SympySolverVisitor::init_block_data(ast::Node* node) {
     // clear any previous data
     expression_statements.clear();
@@ -110,27 +134,15 @@ ast::StatementVector::const_iterator SympySolverVisitor::get_solution_location_i
     return it;
 }
 
-/**
- * Check if provided statemenet is local variable declaration statement
- * @param statement AST node representing statement in the MOD file
- * @return True if statement is local variable declaration else False
- *
- * Statement declaration could be wrapped into another statement type like
- * expression statement and hence we try to look inside if it's really a
- * variable declaration.
- */
-static bool is_local_statement(const std::shared_ptr<ast::Statement>& statement) {
-    if (statement->is_local_list_statement()) {
-        return true;
-    }
-    if (statement->is_expression_statement()) {
-        auto e_statement = std::dynamic_pointer_cast<ast::ExpressionStatement>(statement);
-        auto expression = e_statement->get_expression();
-        if (expression->is_local_list_statement()) {
-            return true;
-        }
-    }
-    return false;
+ast::StatementVector::const_iterator SympySolverVisitor::get_pre_solve_statements_location_iterator(
+    const ast::StatementVector& statements) {
+    // insert the pre solve statements just after LOCAL or at the beginning if LOCAL is missing
+    auto local_it = std::find_if(statements.begin(),
+                                 statements.end(),
+                                 [](const std::shared_ptr<ast::Statement>& a) {
+                                     return is_local_statement(a);
+                                 });
+    return local_it == statements.end() ? statements.begin() : ++local_it;
 }
 
 std::string& SympySolverVisitor::replaceAll(std::string& context,
@@ -283,7 +295,7 @@ void SympySolverVisitor::solve_linear_system(const std::vector<std::string>& pre
     }
     // find out where to insert solutions in statement block
     const auto& statements = block_with_expression_statements->get_statements();
-    auto it = get_solution_location_iterator(statements);
+
     if (small_system) {
         // for small number of state vars, linear solver
         // directly returns solution by solving symbolically at compile time
@@ -296,18 +308,27 @@ void SympySolverVisitor::solve_linear_system(const std::vector<std::string>& pre
                 add_local_variable(*block_with_expression_statements, new_local_var);
             }
         }
-        // insert pre-solve statements below last linear eq in block
-        for (const auto& statement: pre_solve_statements) {
-            logger->debug("SympySolverVisitor :: -> adding statement: {}", statement);
-            it = block_with_expression_statements->insert_statement(it,
-                                                                    create_statement(statement));
-            ++it;
-        }
-        // then insert new solution statements
+
+        // insert new solution statements
+        auto it_solution_statements = get_solution_location_iterator(statements);
         for (const auto& sol: solutions) {
             logger->debug("SympySolverVisitor :: -> adding statement: {}", sol);
-            it = block_with_expression_statements->insert_statement(it, create_statement(sol));
-            ++it;
+            it_solution_statements =
+                block_with_expression_statements->insert_statement(it_solution_statements,
+                                                                   create_statement(sol));
+            ++it_solution_statements;
+        }
+
+        // then insert pre-solve statements after LOCAL or at the beginning
+        // inserted after solutions because the solution location iterator could be invalidated by
+        // this operation
+        auto it_pre_solve_statements = get_pre_solve_statements_location_iterator(statements);
+        for (const auto& statement: pre_solve_statements) {
+            logger->debug("SympySolverVisitor :: -> adding statement: {}", statement);
+            it_pre_solve_statements =
+                block_with_expression_statements->insert_statement(it_pre_solve_statements,
+                                                                   create_statement(statement));
+            ++it_pre_solve_statements;
         }
         /// remove original lineq statements from the block
         block_with_expression_statements->erase_statement(expression_statements);
