@@ -444,8 +444,9 @@ void CodegenLLVMVisitor::visit_unary_expression(const ast::UnaryExpression& node
     llvm::Value* value = values.back();
     values.pop_back();
     if (op == ast::UOP_NEGATION) {
-        llvm::Value* result = builder.CreateFNeg(value);
-        values.push_back(result);
+        values.push_back(builder.CreateFNeg(value));
+    } else if (op == ast::UOP_NOT) {
+        values.push_back(builder.CreateNot(value));
     } else {
         // Support only `double` operators for now.
         throw std::runtime_error("Error: unsupported unary operator\n");
