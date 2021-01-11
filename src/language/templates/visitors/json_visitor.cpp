@@ -41,6 +41,10 @@ void JSONVisitor::visit_{{ node.class_name|snake_case }}(const {{ node.class_nam
             {% endif %}
         {% endif %}
 
+        {% if node.is_codegen_var_type_node %}
+            printer->add_node(ast::to_string(node.get_type()));
+        {% endif %}
+
         printer->pop_block();
 
         {% if node.is_program_node %}
