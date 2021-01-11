@@ -191,8 +191,8 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
      * Visit nmodl comparison binary operator
      * \param lhs LLVM value of evaluated lhs expression
      * \param rhs LLVM value of evaluated rhs expression
-     * \param op the AST binary operator (EXACT_EQUAL, GREATER, GREATER_EQUAL, LESS, LESS_EQUAL, NOT_EQUAL)
-     * \return LLVM IR value result
+     * \param op the AST binary operator (EXACT_EQUAL, GREATER, GREATER_EQUAL, LESS, LESS_EQUAL,
+     * NOT_EQUAL) \return LLVM IR value result
      */
     llvm::Value* visit_comparison_bin_op(llvm::Value* lhs, llvm::Value* rhs, unsigned op);
 
