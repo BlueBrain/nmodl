@@ -46,7 +46,7 @@ jobs:
       - name: Install apt packages
         if: startsWith(matrix.os, 'ubuntu')
         run: |
-          sudo apt-get install flex bison dvipng doxygen libboost-all-dev libfl-dev libopenmpi-dev openmpi-bin pandoc python3-dev python3-pip texlive-latex-recommended texlive-latex-extra
+          sudo apt-get install flex bison dvipng doxygen libfl-dev pandoc python3-dev python3-pip texlive-latex-recommended texlive-latex-extra
         shell: bash
 
       - name: Set up Python3
@@ -58,7 +58,7 @@ jobs:
        
       - name: Install Python3 dependencies
         run: |
-          pip3 install -U pip setuptools scikit-build Jinja2 PyYAML pytest sympy
+          pip3 install -U pip setuptools scikit-build Jinja2 PyYAML pytest 'sympy>=1.3,<1.6'
           
       - uses: actions/checkout@v2
         
