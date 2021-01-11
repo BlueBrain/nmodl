@@ -96,23 +96,23 @@ jobs:
         if: failure() && startsWith(github.ref, 'refs/heads/live-debug')
         uses: mxschmitt/action-tmate@v3
 
-#       - name: Documentation 
-#         if: ${{ startsWith(matrix.os, 'ubuntu') }}
-#         id: documentation
-#         working-directory: ${{runner.workspace}}/nmodl
-#         run: |
-#           echo "------- Build Documentation -------";
-#           python3 setup.py build_ext --inplace docs -j 2 -G "Unix Makefiles";
-#           cd build/_skbuild/linux-x86_64-3.8/setuptools/sphinx;
-#           rm -rf doctest doctrees && touch .nojekyll;
-#           echo "<meta http-equiv=\"refresh\" content=\"0; url=./html/index.html\" />" > index.html;
-#           echo ::set-output name=status::done
+      - name: Documentation 
+        if: ${{ startsWith(matrix.os, 'ubuntu') }}
+        id: documentation
+        working-directory: ${{runner.workspace}}/nmodl
+        run: |
+          echo "------- Build Documentation -------";
+          python3 setup.py build_ext --inplace docs -j 2 -G "Unix Makefiles";
+          cd _skbuild/linux-x86_64-3.8/setuptools/sphinx;
+          rm -rf doctest doctrees && touch .nojekyll;
+          echo "<meta http-equiv=\"refresh\" content=\"0; url=./html/index.html\" />" > index.html;
+          echo ::set-output name=status::done
           
-#       - name: Deploy 🚀
-#         uses: JamesIves/github-pages-deploy-action@3.7.1
-#         if: steps.documentation.outputs.status == 'done' && startsWith(github.ref, 'refs/heads/master')
-#         with:
-#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#           BRANCH: gh-pages # The branch the action should deploy to.
-#           FOLDER: ${{runner.workspace}}/nmodl/build/_skbuild/linux-x86_64-3.8/setuptools/sphinx # The folder the action should deploy.
-#           CLEAN: false # Automatically remove deleted files from the deploy branch
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@3.7.1
+        if: steps.documentation.outputs.status == 'done' && startsWith(github.ref, 'refs/heads/master')
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages # The branch the action should deploy to.
+          FOLDER: ${{runner.workspace}}/nmodl/_skbuild/linux-x86_64-3.8/setuptools/sphinx # The folder the action should deploy.
+          CLEAN: false # Automatically remove deleted files from the deploy branch
