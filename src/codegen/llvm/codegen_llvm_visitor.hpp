@@ -136,7 +136,7 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
 
     /**
      * Returns 64-bit or 32-bit LLVM floating type
-     * \return     \c LLVM floating point type according to `use_double_precision` flag
+     * \return     \c LLVM floating point type according to `use_single_precision` flag
      */
     llvm::Type* get_default_fp_type();
 
