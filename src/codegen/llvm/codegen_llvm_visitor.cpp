@@ -162,15 +162,16 @@ llvm::Value* CodegenLLVMVisitor::visit_arithmetic_bin_op(llvm::Value* lhs,
                                                          llvm::Value* rhs,
                                                          unsigned op) {
     const auto& bin_op = static_cast<ast::BinaryOp>(op);
+    llvm::Type* lhs_type = lhs->getType();
     llvm::Value* result;
 
     switch (bin_op) {
-#define DISPATCH(binary_op, llvm_fp_op, llvm_int_op) \
-    case binary_op:                                  \
-        if (lhs->getType()->isDoubleTy())            \
-            result = llvm_fp_op(lhs, rhs);           \
-        else                                         \
-            result = llvm_int_op(lhs, rhs);          \
+#define DISPATCH(binary_op, llvm_fp_op, llvm_int_op)         \
+    case binary_op:                                          \
+        if (lhs_type->isDoubleTy() || lhs_type->isFloatTy()) \
+            result = llvm_fp_op(lhs, rhs);                   \
+        else                                                 \
+            result = llvm_int_op(lhs, rhs);                  \
         return result;
 
         DISPATCH(ast::BinaryOp::BOP_ADDITION, builder.CreateFAdd, builder.CreateAdd);
@@ -215,15 +216,16 @@ llvm::Value* CodegenLLVMVisitor::visit_comparison_bin_op(llvm::Value* lhs,
                                                          llvm::Value* rhs,
                                                          unsigned op) {
     const auto& bin_op = static_cast<ast::BinaryOp>(op);
+    llvm::Type* lhs_type = lhs->getType();
     llvm::Value* result;
 
     switch (bin_op) {
-#define DISPATCH(binary_op, f_llvm_op, i_llvm_op) \
-    case binary_op:                               \
-        if (lhs->getType()->isDoubleTy())         \
-            result = f_llvm_op(lhs, rhs);         \
-        else                                      \
-            result = i_llvm_op(lhs, rhs);         \
+#define DISPATCH(binary_op, f_llvm_op, i_llvm_op)            \
+    case binary_op:                                          \
+        if (lhs_type->isDoubleTy() || lhs_type->isFloatTy()) \
+            result = f_llvm_op(lhs, rhs);                    \
+        else                                                 \
+            result = i_llvm_op(lhs, rhs);                    \
         return result;
 
         DISPATCH(ast::BinaryOp::BOP_EXACT_EQUAL, builder.CreateICmpEQ, builder.CreateFCmpOEQ);
@@ -352,8 +354,7 @@ void CodegenLLVMVisitor::visit_boolean(const ast::Boolean& node) {
 }
 
 void CodegenLLVMVisitor::visit_double(const ast::Double& node) {
-    const auto& constant = llvm::ConstantFP::get(get_default_fp_type(),
-                                                 node.get_value());
+    const auto& constant = llvm::ConstantFP::get(get_default_fp_type(), node.get_value());
     values.push_back(constant);
 }
 

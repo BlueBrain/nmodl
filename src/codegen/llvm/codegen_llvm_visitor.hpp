@@ -76,7 +76,6 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     // Run optimisation passes if true.
     bool opt_passes;
 
-
     // Use 32-bit floating-point type if true. Otherwise, use deafult 64-bit.
     bool use_single_precision;
 
