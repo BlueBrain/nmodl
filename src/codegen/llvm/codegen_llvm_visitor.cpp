@@ -65,6 +65,12 @@ unsigned CodegenLLVMVisitor::get_array_index_or_length(const ast::IndexedName& i
     return static_cast<unsigned>(*macro->get_value());
 }
 
+llvm::Type* CodegenLLVMVisitor::get_default_fp_type() {
+    if (use_single_precision)
+        return llvm::Type::getFloatTy(*context);
+    return llvm::Type::getDoubleTy(*context);
+}
+
 void CodegenLLVMVisitor::run_llvm_opt_passes() {
     /// run some common optimisation passes that are commonly suggested
     fpm.add(llvm::createInstructionCombiningPass());
@@ -139,10 +145,10 @@ void CodegenLLVMVisitor::emit_procedure_or_function_declaration(const ast::Block
     // Procedure or function parameters are doubles by default.
     std::vector<llvm::Type*> arg_types;
     for (size_t i = 0; i < parameters.size(); ++i)
-        arg_types.push_back(llvm::Type::getDoubleTy(*context));
+        arg_types.push_back(get_default_fp_type());
 
     // If visiting a function, the return type is a double by default.
-    llvm::Type* return_type = node.is_function_block() ? llvm::Type::getDoubleTy(*context)
+    llvm::Type* return_type = node.is_function_block() ? get_default_fp_type()
                                                        : llvm::Type::getVoidTy(*context);
 
     // Create a function that is automatically inserted into module's symbol table.
@@ -346,7 +352,7 @@ void CodegenLLVMVisitor::visit_boolean(const ast::Boolean& node) {
 }
 
 void CodegenLLVMVisitor::visit_double(const ast::Double& node) {
-    const auto& constant = llvm::ConstantFP::get(llvm::Type::getDoubleTy(*context),
+    const auto& constant = llvm::ConstantFP::get(get_default_fp_type(),
                                                  node.get_value());
     values.push_back(constant);
 }
@@ -387,10 +393,10 @@ void CodegenLLVMVisitor::visit_local_list_statement(const ast::LocalListStatemen
         if (identifier->is_indexed_name()) {
             auto indexed_name = std::dynamic_pointer_cast<ast::IndexedName>(identifier);
             unsigned length = get_array_index_or_length(*indexed_name);
-            var_type = llvm::ArrayType::get(llvm::Type::getDoubleTy(*context), length);
+            var_type = llvm::ArrayType::get(get_default_fp_type(), length);
         } else if (identifier->is_name()) {
             // This case corresponds to a scalar local variable. Its type is double by default.
-            var_type = llvm::Type::getDoubleTy(*context);
+            var_type = get_default_fp_type();
         } else {
             throw std::runtime_error("Error: Unsupported local variable type");
         }
@@ -448,7 +454,6 @@ void CodegenLLVMVisitor::visit_unary_expression(const ast::UnaryExpression& node
     } else if (op == ast::UOP_NOT) {
         values.push_back(builder.CreateNot(value));
     } else {
-        // Support only `double` operators for now.
         throw std::runtime_error("Error: unsupported unary operator\n");
     }
 }

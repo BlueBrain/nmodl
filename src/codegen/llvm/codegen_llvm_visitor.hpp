@@ -76,6 +76,10 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     // Run optimisation passes if true.
     bool opt_passes;
 
+
+    // Use 32-bit floating-point type if true. Otherwise, use deafult 64-bit.
+    bool use_single_precision;
+
     /**
      *\brief Run LLVM optimisation passes on generated IR
      *
@@ -93,10 +97,12 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
      */
     CodegenLLVMVisitor(const std::string& mod_filename,
                        const std::string& output_dir,
-                       bool opt_passes)
+                       bool opt_passes,
+                       bool use_single_precision = false)
         : mod_filename(mod_filename)
         , output_dir(output_dir)
         , opt_passes(opt_passes)
+        , use_single_precision(use_single_precision)
         , builder(*context)
         , fpm(module.get()) {}
 
@@ -128,6 +134,12 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
      * \return array index or length
      */
     unsigned get_array_index_or_length(const ast::IndexedName& node);
+
+    /**
+     * Returns 64-bit or 32-bit LLVM floating type
+     * \return     \c LLVM floating point type according to `use_double_precision` flag
+     */
+    llvm::Type* get_default_fp_type();
 
     /**
      * Create a function call to an external method
