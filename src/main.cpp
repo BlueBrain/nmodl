@@ -172,6 +172,9 @@ int main(int argc, const char* argv[]) {
     /// generate llvm IR
     bool llvm_ir(false);
 
+    /// use single precision floating-point types
+    bool llvm_float_type(false);
+
     /// run llvm optimisation passes
     bool llvm_opt_passes(false);
 #endif
@@ -290,6 +293,9 @@ int main(int argc, const char* argv[]) {
     llvm_opt->add_flag("--opt",
         llvm_opt_passes,
         "Run LLVM optimisation passes ({})"_format(llvm_opt_passes))->ignore_case();
+    llvm_opt->add_flag("--single-precision",
+                       llvm_float_type,
+                       "Use single precision floating-point types ({})"_format(llvm_float_type))->ignore_case();
 #endif
     // clang-format on
 
@@ -593,7 +599,7 @@ int main(int argc, const char* argv[]) {
 #ifdef NMODL_LLVM_BACKEND
             if (llvm_ir) {
                 logger->info("Running LLVM backend code generator");
-                CodegenLLVMVisitor visitor(modfile, output_dir, llvm_opt_passes);
+                CodegenLLVMVisitor visitor(modfile, output_dir, llvm_opt_passes, llvm_float_type);
                 visitor.visit_program(*ast);
                 ast_to_nmodl(*ast, filepath("llvm"));
             }

@@ -76,6 +76,9 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     // Run optimisation passes if true.
     bool opt_passes;
 
+    // Use 32-bit floating-point type if true. Otherwise, use deafult 64-bit.
+    bool use_single_precision;
+
     /**
      *\brief Run LLVM optimisation passes on generated IR
      *
@@ -93,10 +96,12 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
      */
     CodegenLLVMVisitor(const std::string& mod_filename,
                        const std::string& output_dir,
-                       bool opt_passes)
+                       bool opt_passes,
+                       bool use_single_precision = false)
         : mod_filename(mod_filename)
         , output_dir(output_dir)
         , opt_passes(opt_passes)
+        , use_single_precision(use_single_precision)
         , builder(*context)
         , fpm(module.get()) {}
 
@@ -130,6 +135,12 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     unsigned get_array_index_or_length(const ast::IndexedName& node);
 
     /**
+     * Returns 64-bit or 32-bit LLVM floating type
+     * \return     \c LLVM floating point type according to `use_single_precision` flag
+     */
+    llvm::Type* get_default_fp_type();
+
+    /**
      * Create a function call to an external method
      * \param name external method name
      * \param arguments expressions passed as arguments to the given external method
@@ -161,6 +172,40 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     std::unique_ptr<llvm::Module> get_module() {
         return std::move(module);
     }
+
+    /**
+     * Visit nmodl arithmetic binary operator
+     * \param lhs LLVM value of evaluated lhs expression
+     * \param rhs LLVM value of evaluated rhs expression
+     * \param op the AST binary operator (ADD, DIV, MUL, SUB)
+     * \return LLVM IR value result
+     */
+    llvm::Value* visit_arithmetic_bin_op(llvm::Value* lhs, llvm::Value* rhs, unsigned op);
+
+    /**
+     * Visit nmodl assignment operator (ASSIGN)
+     * \param node the AST node representing the binary expression in NMODL
+     * \param rhs LLVM value of evaluated rhs expression
+     */
+    void visit_assign_op(const ast::BinaryExpression& node, llvm::Value* rhs);
+
+    /**
+     * Visit nmodl logical binary operator
+     * \param lhs LLVM value of evaluated lhs expression
+     * \param rhs LLVM value of evaluated rhs expression
+     * \param op the AST binary operator (AND, OR)
+     * \return LLVM IR value result
+     */
+    llvm::Value* visit_logical_bin_op(llvm::Value* lhs, llvm::Value* rhs, unsigned op);
+
+    /**
+     * Visit nmodl comparison binary operator
+     * \param lhs LLVM value of evaluated lhs expression
+     * \param rhs LLVM value of evaluated rhs expression
+     * \param op the AST binary operator (EXACT_EQUAL, GREATER, GREATER_EQUAL, LESS, LESS_EQUAL,
+     * NOT_EQUAL) \return LLVM IR value result
+     */
+    llvm::Value* visit_comparison_bin_op(llvm::Value* lhs, llvm::Value* rhs, unsigned op);
 
     /**
      * Visit nmodl function or procedure
