@@ -22,13 +22,18 @@ using nmodl::parser::NmodlDriver;
 // Utility to get LLVM module as a string
 //=============================================================================
 
-std::string run_llvm_visitor(const std::string& text, bool opt = false) {
+std::string run_llvm_visitor(const std::string& text,
+                             bool opt = false,
+                             bool use_single_precision = false) {
     NmodlDriver driver;
     const auto& ast = driver.parse_string(text);
 
     SymtabVisitor().visit_program(*ast);
 
-    codegen::CodegenLLVMVisitor llvm_visitor("unknown", ".", opt);
+    codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"unknown",
+                                             /*output_dir=*/".",
+                                             opt,
+                                             use_single_precision);
     llvm_visitor.visit_program(*ast);
     return llvm_visitor.print_module();
 }
@@ -47,14 +52,15 @@ SCENARIO("Binary expression", "[visitor][llvm]") {
         )";
 
         THEN("variables are loaded and add instruction is created") {
-            std::string module_string = run_llvm_visitor(nmodl_text);
+            std::string module_string =
+                run_llvm_visitor(nmodl_text, /*opt=*/false, /*use_single_precision=*/true);
             std::smatch m;
 
-            std::regex rhs(R"(%1 = load double, double\* %b)");
-            std::regex lhs(R"(%2 = load double, double\* %a)");
-            std::regex res(R"(%3 = fadd double %2, %1)");
+            std::regex rhs(R"(%1 = load float, float\* %b)");
+            std::regex lhs(R"(%2 = load float, float\* %a)");
+            std::regex res(R"(%3 = fadd float %2, %1)");
 
-            // Check the values are loaded correctly and added
+            // Check the float values are loaded correctly and added
             REQUIRE(std::regex_search(module_string, m, rhs));
             REQUIRE(std::regex_search(module_string, m, lhs));
             REQUIRE(std::regex_search(module_string, m, res));
