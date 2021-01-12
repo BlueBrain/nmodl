@@ -123,6 +123,9 @@ void CodegenLLVMHelperVisitor::create_function_for_node(ast::Block& node) {
     auto block = node.get_statement_block()->clone();
     const auto& statements = block->get_statements();
 
+    /// convert local statement to codegenvar statement
+    convert_local_statement(*block);
+
     /// insert return variable at the start of the block
     ast::CodegenVarVector codegen_vars;
     codegen_vars.emplace_back(new ast::CodegenVar(0, return_var->clone()));
@@ -356,7 +359,7 @@ void CodegenLLVMHelperVisitor::convert_to_instance_variable(ast::Node& node,
  * first statement in the vector. We have to remove LOCAL statement and convert
  * it to CodegenVarListStatement that will represent all variables as double.
  */
-void CodegenLLVMHelperVisitor::visit_statement_block(ast::StatementBlock& node) {
+void CodegenLLVMHelperVisitor::convert_local_statement(ast::StatementBlock& node) {
     /// first process all children blocks if any
     node.visit_children(*this);
 
@@ -474,6 +477,9 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
 
     /// convert all variables inside loop body to instance variables
     convert_to_instance_variable(*loop_block, loop_index_var);
+
+    /// convert local statement to codegenvar statement
+    convert_local_statement(*loop_block);
 
     /// create for loop node
     auto for_loop_statement = std::make_shared<ast::CodegenForStatement>(initialization,
