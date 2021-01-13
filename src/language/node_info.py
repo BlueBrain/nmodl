@@ -166,6 +166,7 @@ STATEMENT_BLOCK_NODE = "StatementBlock"
 STRING_NODE = "String"
 UNIT_BLOCK = "UnitBlock"
 AST_NODETYPE_NODE= "AstNodeType"
+CODEGEN_VAR_TYPE_NODE = "CodegenVarType"
 
 # name of variable in prime node which represent order of derivative
 ORDER_VAR_NAME = "order"
