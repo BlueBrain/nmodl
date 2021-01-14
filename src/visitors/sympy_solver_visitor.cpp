@@ -6,7 +6,7 @@
  *************************************************************************/
 
 #include "visitors/sympy_solver_visitor.hpp"
-
+#include "visitors/sympy_replace_solutions_visitor.hpp"
 
 #include "ast/all.hpp"
 #include "codegen/codegen_naming.hpp"
@@ -111,7 +111,7 @@ ast::StatementVector::const_iterator SympySolverVisitor::get_solution_location_i
 }
 
 /**
- * Check if provided statemenet is local variable declaration statement
+ * Check if provided statement is local variable declaration statement
  * @param statement AST node representing statement in the MOD file
  * @return True if statement is local variable declaration else False
  *
@@ -256,6 +256,7 @@ void SympySolverVisitor::construct_eigen_solver_block(
     }
 }
 
+
 void SympySolverVisitor::solve_linear_system(const std::vector<std::string>& pre_solve_statements) {
     // construct ordered vector of state vars used in linear system
     init_state_vars_vector();
@@ -296,21 +297,12 @@ void SympySolverVisitor::solve_linear_system(const std::vector<std::string>& pre
                 add_local_variable(*block_with_expression_statements, new_local_var);
             }
         }
-        // insert pre-solve statements below last linear eq in block
-        for (const auto& statement: pre_solve_statements) {
-            logger->debug("SympySolverVisitor :: -> adding statement: {}", statement);
-            it = block_with_expression_statements->insert_statement(it,
-                                                                    create_statement(statement));
-            ++it;
-        }
-        // then insert new solution statements
-        for (const auto& sol: solutions) {
-            logger->debug("SympySolverVisitor :: -> adding statement: {}", sol);
-            it = block_with_expression_statements->insert_statement(it, create_statement(sol));
-            ++it;
-        }
-        /// remove original lineq statements from the block
-        block_with_expression_statements->erase_statement(expression_statements);
+
+        visitor::SympyReplaceSolutionsVisitor solution_replacer(pre_solve_statements,
+                                                                solutions,
+                                                                expression_statements);
+        solution_replacer.visit_statement_block(*block_with_expression_statements);
+
     } else {
         // otherwise it returns a linear matrix system to solve
         logger->debug("SympySolverVisitor :: Constructing linear newton solve block");

@@ -1131,8 +1131,8 @@ SCENARIO("LINEAR solve block (SympySolver Visitor)", "[sympy][linear]") {
             })";
         std::string expected_text = R"(
             LINEAR lin {
-                a2 = 3*b
                 x = a
+                a2 = 3*b
                 y = a
                 y = y-a
             })";

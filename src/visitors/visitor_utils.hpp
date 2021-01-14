@@ -65,6 +65,11 @@ ast::LocalVar* add_local_variable(ast::StatementBlock& node, const std::string& 
 /// Create ast statement node from given code in string format
 std::shared_ptr<ast::Statement> create_statement(const std::string& code_statement);
 
+/// Same as for create_statement but for vectors of strings
+std::vector<std::shared_ptr<ast::Statement>> create_statements(
+    const std::vector<std::string>::const_iterator& code_statements_beg,
+    const std::vector<std::string>::const_iterator& code_statements_end);
+
 
 /// Create ast statement block node from given code in string format
 std::shared_ptr<ast::StatementBlock> create_statement_block(
