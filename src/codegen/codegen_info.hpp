@@ -368,6 +368,9 @@ struct CodegenInfo {
     /// new one used in print_ion_types
     std::vector<SymbolType> use_ion_variables;
 
+    /// all float variables for the model
+    std::vector<SymbolType> codegen_float_variables;
+
     /// this is the order in which they appear in derivative block
     /// this is required while printing them in initlist function
     std::vector<SymbolType> prime_variables_by_order;

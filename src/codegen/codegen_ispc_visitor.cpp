@@ -547,7 +547,7 @@ bool CodegenIspcVisitor::check_incompatibilities() {
     };
 
     // instance vars
-    if (check_incompatible_var_name<SymbolType>(codegen_float_variables,
+    if (check_incompatible_var_name<SymbolType>(info.codegen_float_variables,
                                                 get_name_from_symbol_type_vector)) {
         return true;
     }

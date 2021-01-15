@@ -22,6 +22,16 @@ using namespace ast;
 using symtab::syminfo::NmodlType;
 using symtab::syminfo::Status;
 
+bool CodegenHelperVisitor::breakpoint_exist() const noexcept {
+    return info.breakpoint_node != nullptr;
+}
+
+
+bool CodegenHelperVisitor::net_receive_exist() const noexcept {
+    return info.net_receive_node != nullptr;
+}
+
+
 /**
  * How symbols are stored in NEURON? See notes written in markdown file.
  *
@@ -271,6 +281,48 @@ void CodegenHelperVisitor::find_non_range_variables() {
         }
     }
     // clang-format on
+}
+
+void CodegenHelperVisitor::get_float_variables() {
+    // sort with definition order
+    auto comparator = [](const SymbolType& first, const SymbolType& second) -> bool {
+        return first->get_definition_order() < second->get_definition_order();
+    };
+
+    auto assigned = info.assigned_vars;
+    auto states = info.state_vars;
+
+    // each state variable has corresponding Dstate variable
+    for (auto& state: states) {
+        auto name = "D" + state->get_name();
+        auto symbol = make_symbol(name);
+        if (state->is_array()) {
+            symbol->set_as_array(state->get_length());
+        }
+        symbol->set_definition_order(state->get_definition_order());
+        assigned.push_back(symbol);
+    }
+    std::sort(assigned.begin(), assigned.end(), comparator);
+
+    auto codegen_float_variables = info.range_parameter_vars;
+    codegen_float_variables.insert(codegen_float_variables.end(),
+                     info.range_assigned_vars.begin(),
+                     info.range_assigned_vars.end());
+    codegen_float_variables.insert(codegen_float_variables.end(), info.range_state_vars.begin(), info.range_state_vars.end());
+    codegen_float_variables.insert(codegen_float_variables.end(), assigned.begin(), assigned.end());
+
+    if (info.vectorize) {
+        codegen_float_variables.push_back(make_symbol(naming::VOLTAGE_UNUSED_VARIABLE));
+    }
+    if (breakpoint_exist()) {
+        std::string name = info.vectorize ? naming::CONDUCTANCE_UNUSED_VARIABLE
+                                          : naming::CONDUCTANCE_VARIABLE;
+        codegen_float_variables.push_back(make_symbol(name));
+    }
+    if (net_receive_exist()) {
+        codegen_float_variables.push_back(make_symbol(naming::T_SAVE_VARIABLE));
+    }
+    info.codegen_float_variables = codegen_float_variables;
 }
 
 /**
@@ -658,6 +710,7 @@ void CodegenHelperVisitor::visit_program(const ast::Program& node) {
     find_range_variables();
     find_non_range_variables();
     find_table_variables();
+    get_float_variables();
 }
 
 

@@ -415,7 +415,7 @@ bool CodegenCVisitor::state_variable(const std::string& name) const {
 
 int CodegenCVisitor::position_of_float_var(const std::string& name) const {
     int index = 0;
-    for (const auto& var: codegen_float_variables) {
+    for (const auto& var: info.codegen_float_variables) {
         if (var->get_name() == name) {
             return index;
         }
@@ -807,49 +807,6 @@ void CodegenCVisitor::update_index_semantics() {
     if (info.for_netcon_used) {
         info.semantics.emplace_back(index++, naming::FOR_NETCON_SEMANTIC, 1);
     }
-}
-
-
-std::vector<SymbolType> CodegenCVisitor::get_float_variables() {
-    // sort with definition order
-    auto comparator = [](const SymbolType& first, const SymbolType& second) -> bool {
-        return first->get_definition_order() < second->get_definition_order();
-    };
-
-    auto assigned = info.assigned_vars;
-    auto states = info.state_vars;
-
-    // each state variable has corresponding Dstate variable
-    for (auto& state: states) {
-        auto name = "D" + state->get_name();
-        auto symbol = make_symbol(name);
-        if (state->is_array()) {
-            symbol->set_as_array(state->get_length());
-        }
-        symbol->set_definition_order(state->get_definition_order());
-        assigned.push_back(symbol);
-    }
-    std::sort(assigned.begin(), assigned.end(), comparator);
-
-    auto variables = info.range_parameter_vars;
-    variables.insert(variables.end(),
-                     info.range_assigned_vars.begin(),
-                     info.range_assigned_vars.end());
-    variables.insert(variables.end(), info.range_state_vars.begin(), info.range_state_vars.end());
-    variables.insert(variables.end(), assigned.begin(), assigned.end());
-
-    if (info.vectorize) {
-        variables.push_back(make_symbol(naming::VOLTAGE_UNUSED_VARIABLE));
-    }
-    if (breakpoint_exist()) {
-        std::string name = info.vectorize ? naming::CONDUCTANCE_UNUSED_VARIABLE
-                                          : naming::CONDUCTANCE_VARIABLE;
-        variables.push_back(make_symbol(name));
-    }
-    if (net_receive_exist()) {
-        variables.push_back(make_symbol(naming::T_SAVE_VARIABLE));
-    }
-    return variables;
 }
 
 
@@ -2265,10 +2222,10 @@ std::string CodegenCVisitor::get_variable_name(const std::string& name, bool use
     // clang-format on
 
     // float variable
-    auto f = std::find_if(codegen_float_variables.begin(),
-                          codegen_float_variables.end(),
+    auto f = std::find_if(info.codegen_float_variables.begin(),
+                          info.codegen_float_variables.end(),
                           symbol_comparator);
-    if (f != codegen_float_variables.end()) {
+    if (f != info.codegen_float_variables.end()) {
         return float_variable_name(*f, use_instance);
     }
 
@@ -2819,7 +2776,7 @@ void CodegenCVisitor::print_mechanism_range_var_structure() {
     printer->add_newline(2);
     printer->add_line("/** all mechanism instance variables */");
     printer->start_block("struct {} "_format(instance_struct()));
-    for (auto& var: codegen_float_variables) {
+    for (auto& var: info.codegen_float_variables) {
         auto name = var->get_name();
         auto type = get_range_var_float_type(var);
         auto qualifier = is_constant_variable(name) ? k_const() : "";
@@ -3147,7 +3104,7 @@ void CodegenCVisitor::print_instance_variable_setup() {
     int id = 0;
     std::vector<std::string> variables_to_free;
 
-    for (auto& var: codegen_float_variables) {
+    for (auto& var: info.codegen_float_variables) {
         auto name = var->get_name();
         auto range_var_type = get_range_var_float_type(var);
         if (float_type == range_var_type) {
@@ -4380,7 +4337,6 @@ void CodegenCVisitor::setup(const Program& node) {
         logger->warn("CodegenCVisitor : MOD file uses non-thread safe constructs of NMODL");
     }
 
-    codegen_float_variables = get_float_variables();
     codegen_int_variables = get_int_variables();
     codegen_shadow_variables = get_shadow_variables();
 

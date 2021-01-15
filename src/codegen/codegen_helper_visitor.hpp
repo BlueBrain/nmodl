@@ -75,6 +75,31 @@ class CodegenHelperVisitor: public visitor::ConstAstVisitor {
     void find_non_range_variables();
     void sort_with_mod2c_symbol_order(std::vector<SymbolType>& symbols) const;
 
+    /**
+     * Check if breakpoint node exist
+     */
+    bool breakpoint_exist() const noexcept;
+
+    /**
+     * Check if net_receive node exist
+     */
+    bool net_receive_exist() const noexcept;
+
+    /**
+     * Creates a temporary symbol
+     * \param name The name of the symbol
+     * \return     A symbol based on the given name
+     */
+    SymbolType make_symbol(const std::string& name) const {
+        return std::make_shared<symtab::Symbol>(name, ModToken());
+    }
+
+    /**
+     * Determine all \c float variables required during code generation
+     * \return A \c vector of \c float variables
+     */
+    void get_float_variables();
+
   public:
     CodegenHelperVisitor() = default;
 

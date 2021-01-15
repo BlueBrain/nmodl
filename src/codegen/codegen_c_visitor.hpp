@@ -179,11 +179,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
     symtab::SymbolTable* program_symtab = nullptr;
 
     /**
-     * All float variables for the model
-     */
-    std::vector<SymbolType> codegen_float_variables;
-
-    /**
      * All int variables for the model
      */
     std::vector<IndexVariableInfo> codegen_int_variables;
@@ -616,13 +611,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * populate all index semantics needed for registration with coreneuron
      */
     void update_index_semantics();
-
-
-    /**
-     * Determine all \c float variables required during code generation
-     * \return A \c vector of \c float variables
-     */
-    std::vector<SymbolType> get_float_variables();
 
 
     /**
