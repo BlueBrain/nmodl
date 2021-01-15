@@ -15,6 +15,7 @@
 #include <map>
 #include <set>
 #include <string>
+#include <unordered_set>
 
 #include <ast/ast_decl.hpp>
 #include <utils/common_utils.hpp>
@@ -116,6 +117,14 @@ std::string to_json(const ast::Ast& node,
                     bool compact = false,
                     bool expand = false,
                     bool add_nmodl = false);
+
+/// If \p lhs and \p rhs combined represent an assignment (we assume to have an "=" in between them)
+/// we extract the variables on which the assigned variable depends on. We provide the input with
+/// lhs and rhs because there are a few nodes that have this similar structure but slightly
+/// different naming (binaryExpression, diff_eq_expression, linExpression
+std::pair<std::string, std::unordered_set<std::string>> statement_dependencies(
+    const std::shared_ptr<ast::Expression>& lhs,
+    const std::shared_ptr<ast::Expression>& rhs);
 
 
 }  // namespace nmodl

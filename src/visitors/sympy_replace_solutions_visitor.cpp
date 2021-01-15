@@ -31,6 +31,7 @@ SympyReplaceSolutionsVisitor::SympyReplaceSolutionsVisitor(
     replacements_.clear();
 }
 
+
 void SympyReplaceSolutionsVisitor::visit_statement_block(ast::StatementBlock& node) {
     const bool dump_at_the_end = is_statement_block_root_;
     is_statement_block_root_ = false;
@@ -163,35 +164,12 @@ void SympyReplaceSolutionsVisitor::visit_binary_expression(ast::BinaryExpression
         if (lhs->is_var_name()) {
             const auto& var =
                 std::static_pointer_cast<ast::VarName>(lhs)->get_name()->get_node_name();
-            pre_solve_statements_.tag_statement(var);
-            tmp_statements_.tag_statement(var);
+            pre_solve_statements_.tag_dependant_statements(var);
+            tmp_statements_.tag_dependant_statements(var);
         }
     }
 }
 
-
-//// TODO add warnings!
-std::pair<std::string, std::unordered_set<std::string>>
-SympyReplaceSolutionsVisitor::statement_dependencies(const std::shared_ptr<ast::Expression>& lhs,
-                                                     const std::shared_ptr<ast::Expression>& rhs) {
-    std::string key;
-    std::unordered_set<std::string> out;
-
-    if (!lhs->is_var_name()) {
-        return {key, out};
-    }
-
-    key = to_nmodl(lhs);
-    visitor::AstLookupVisitor lookup_visitor;
-    lookup_visitor.lookup(*rhs, ast::AstNodeType::VAR_NAME);
-    auto rhs_nodes = lookup_visitor.get_nodes();
-    std::for_each(rhs_nodes.begin(),
-                  rhs_nodes.end(),
-                  [&out](const std::shared_ptr<ast::Ast>& node) { out.emplace(to_nmodl(node)); });
-
-
-    return {key, out};
-}
 
 SympyReplaceSolutionsVisitor::SolutionSorter::SolutionSorter(
     const std::vector<std::string>::const_iterator& statements_str_beg,
@@ -211,9 +189,8 @@ void SympyReplaceSolutionsVisitor::SolutionSorter::build_maps() {
                 std::static_pointer_cast<ast::ExpressionStatement>(statement)->get_expression();
             if (e_statement->is_binary_expression()) {
                 const auto& bin_exp = std::static_pointer_cast<ast::BinaryExpression>(e_statement);
-                const auto& dependencies =
-                    SympyReplaceSolutionsVisitor::statement_dependencies(bin_exp->get_lhs(),
-                                                                         bin_exp->get_rhs());
+                const auto& dependencies = statement_dependencies(bin_exp->get_lhs(),
+                                                                  bin_exp->get_rhs());
 
                 const auto& key = dependencies.first;
                 const auto& vars = dependencies.second;
@@ -277,7 +254,8 @@ size_t SympyReplaceSolutionsVisitor::SolutionSorter::emplace_back_all_statements
     return n;
 }
 
-size_t SympyReplaceSolutionsVisitor::SolutionSorter::tag_statement(const std::string& var) {
+size_t SympyReplaceSolutionsVisitor::SolutionSorter::tag_dependant_statements(
+    const std::string& var) {
     auto ptr = var2dependants_.find(var);
     size_t n = 0;
     if (ptr != var2dependants_.end()) {

@@ -227,4 +227,26 @@ std::string to_json(const ast::Ast& node, bool compact, bool expand, bool add_nm
     return stream.str();
 }
 
+std::pair<std::string, std::unordered_set<std::string>> statement_dependencies(
+    const std::shared_ptr<ast::Expression>& lhs,
+    const std::shared_ptr<ast::Expression>& rhs) {
+    std::string key;
+    std::unordered_set<std::string> out;
+
+    if (!lhs->is_var_name()) {
+        return {key, out};
+    }
+
+    key = to_nmodl(lhs);
+    visitor::AstLookupVisitor lookup_visitor;
+    lookup_visitor.lookup(*rhs, ast::AstNodeType::VAR_NAME);
+    auto rhs_nodes = lookup_visitor.get_nodes();
+    std::for_each(rhs_nodes.begin(),
+                  rhs_nodes.end(),
+                  [&out](const std::shared_ptr<ast::Ast>& node) { out.emplace(to_nmodl(node)); });
+
+
+    return {key, out};
+}
+
 }  // namespace nmodl
