@@ -525,5 +525,15 @@ void CodegenLLVMHelperVisitor::visit_program(ast::Program& node) {
     }
 }
 
+
+void CodegenLLVMHelperVisitor::visit_llvm_struct_block(ast::LLVMStructBlock& node) {
+    for(auto& float_var : info.codegen_float_variables) {
+        auto name = new ast::Name(new ast::String(float_var->get_name()));
+        auto codegen_var = new ast::CodegenVar(0, name);
+        node.emplace_back_codegen_var(codegen_var);
+    }
+}
+
+
 }  // namespace codegen
 }  // namespace nmodl

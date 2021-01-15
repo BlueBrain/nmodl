@@ -445,6 +445,7 @@
                                   brief: "Vector of CodegenVars"
                                   type: CodegenVar
                                   vector: true
+                                  add: true
 
                         - ParamBlock:
                             nmodl: "PARAMETER "
