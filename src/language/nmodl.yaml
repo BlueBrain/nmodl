@@ -438,6 +438,13 @@
                               is base class and defines common interface for these nodes.
 
                       children:
+                        - LLVMStructBlock:
+                            nmodl: "LLVMStructBlock "
+                            members:
+                              - codegen_vars:
+                                  brief: "Vector of CodegenVars"
+                                  type: CodegenVar
+                                  vector: true
 
                         - ParamBlock:
                             nmodl: "PARAMETER "
