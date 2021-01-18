@@ -10,10 +10,17 @@
 
 
 #include "ast/all.hpp"
+#include "utils/logger.hpp"
 #include "visitors/visitor_utils.hpp"
 
 namespace nmodl {
 namespace visitor {
+
+
+void SympyReplaceSolutionsVisitor::InterleavesCounter::new_equation(const bool is_in_system) {
+    n_ += (!in_system_ && is_in_system);
+    in_system_ = is_in_system;
+}
 
 SympyReplaceSolutionsVisitor::SympyReplaceSolutionsVisitor(
     const std::vector<std::string>& pre_solve_statements,
@@ -29,20 +36,39 @@ SympyReplaceSolutionsVisitor::SympyReplaceSolutionsVisitor(
     solutions_ = SolutionSorter(ss_tmp_delimeter, solutions.end());
 
     replacements_.clear();
+    is_statement_block_root_ = true;
 }
 
 
 void SympyReplaceSolutionsVisitor::visit_statement_block(ast::StatementBlock& node) {
-    const bool dump_at_the_end = is_statement_block_root_;
+    const bool is_root = is_statement_block_root_;
     is_statement_block_root_ = false;
 
-    policy_ = ReplacePolicy::VALUE;
-    node.visit_children(*this);
+    if (is_root) {
+        interleaves_counter_ = InterleavesCounter();
+        policy_ = ReplacePolicy::VALUE;
+        node.visit_children(*this);
 
-    if (!solutions_.is_all_untagged()) {
-        policy_ = ReplacePolicy::GREEDY;
+        if (!solutions_.is_all_untagged()) {
+            interleaves_counter_ = InterleavesCounter();
+            policy_ = ReplacePolicy::GREEDY;
+            node.visit_children(*this);
+            if (interleaves_counter_.n() > 0) {
+                logger->warn(
+                    "SympyReplaceSolutionsVisitor :: Found ambiguous system of equations "
+                    "interleaved with {} "
+                    "assignment statements. I do not know what equations go before and what "
+                    "equations go "
+                    "after the assignment statements. Either put all the equations of the system "
+                    "of equations in "
+                    "the form: x = f(...) or do not interleave the system with assignments.",
+                    interleaves_counter_.n());
+            }
+        }
+    } else {
         node.visit_children(*this);
     }
+
 
     const auto& old_statements = node.get_statements();
 
@@ -61,8 +87,7 @@ void SympyReplaceSolutionsVisitor::visit_statement_block(ast::StatementBlock& no
         }
     }
 
-
-    if (dump_at_the_end) {
+    if (is_root) {
         pre_solve_statements_.emplace_back_all_statements(new_statements);
         tmp_statements_.emplace_back_all_statements(new_statements);
         solutions_.emplace_back_all_statements(new_statements);
@@ -72,6 +97,8 @@ void SympyReplaceSolutionsVisitor::visit_statement_block(ast::StatementBlock& no
 }
 
 void SympyReplaceSolutionsVisitor::visit_diff_eq_expression(ast::DiffEqExpression& node) {
+    interleaves_counter_.new_equation(true);
+
     const auto& statement = std::static_pointer_cast<ast::Statement>(
         node.get_parent()->get_shared_ptr());
 
@@ -114,6 +141,8 @@ void SympyReplaceSolutionsVisitor::visit_diff_eq_expression(ast::DiffEqExpressio
 }
 
 void SympyReplaceSolutionsVisitor::visit_lin_equation(ast::LinEquation& node) {
+    interleaves_counter_.new_equation(true);
+
     const auto& statement = std::static_pointer_cast<ast::Statement>(
         node.get_parent()->get_shared_ptr());
 
@@ -159,14 +188,13 @@ void SympyReplaceSolutionsVisitor::visit_lin_equation(ast::LinEquation& node) {
 }
 
 void SympyReplaceSolutionsVisitor::visit_binary_expression(ast::BinaryExpression& node) {
-    if (node.get_op().get_value() == ast::BinaryOp::BOP_ASSIGN) {
-        const auto& lhs = node.get_lhs();
-        if (lhs->is_var_name()) {
-            const auto& var =
-                std::static_pointer_cast<ast::VarName>(lhs)->get_name()->get_node_name();
-            pre_solve_statements_.tag_dependant_statements(var);
-            tmp_statements_.tag_dependant_statements(var);
-        }
+    if (node.get_op().get_value() == ast::BinaryOp::BOP_ASSIGN && node.get_lhs()->is_var_name()) {
+        interleaves_counter_.new_equation(false);
+
+        const auto& var =
+            std::static_pointer_cast<ast::VarName>(node.get_lhs())->get_name()->get_node_name();
+        pre_solve_statements_.tag_dependant_statements(var);
+        tmp_statements_.tag_dependant_statements(var);
     }
 }
 

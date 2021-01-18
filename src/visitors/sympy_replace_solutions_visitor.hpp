@@ -71,6 +71,35 @@ class SympyReplaceSolutionsVisitor: public AstVisitor {
 
   private:
     /**
+     * \struct InterleavesCounter
+     * \brief Count interleaves of assignment statement inside the system of equations
+     */
+    struct InterleavesCounter {
+        /// Count an interleave if \ref in_system_ switches false -> true
+        void new_equation(const bool is_in_system);
+
+        /// Number of interleaves. We need to remove the first activation of the switch
+        inline size_t n() const {
+            return n_ == 0 ? 0 : n_ - 1;
+        }
+
+      private:
+        /**
+         * \brief Number of interleaves of assignment statements in between equations of the system
+         * of equations
+         *
+         * This is equivalent to the number of switches false -> true of \ref in_system_ minus the
+         * very first one (if the system exists).
+         */
+        size_t n_ = 0;
+
+        /// Bool that keeps track if just wrote an equation of the system of equations (true) or not
+        /// (false)
+        bool in_system_ = false;
+    };
+
+
+    /**
      * \struct SolutionSorter
      * \brief Sorts and maps statements to variables keeping track of what needs updating
      *
@@ -91,6 +120,8 @@ class SympyReplaceSolutionsVisitor: public AstVisitor {
                        const std::vector<std::string>::const_iterator& statements_str_end);
 
         /**
+         * /brief Construct the maps for easy access and classification of the statements
+         *
          * Here we construct a map variable -> affected equations. In other words this map tells me
          * what equations need to be updated when I change a particular variable. To do that we
          * build a a graph of dependencies var -> vars and in the mean time we reduce it to the root
@@ -227,6 +258,8 @@ class SympyReplaceSolutionsVisitor: public AstVisitor {
 
     /// group of old statements that need replacing
     const std::unordered_set<ast::Statement*>* to_be_removed_;
+
+    InterleavesCounter interleaves_counter_;
 };
 
 /** @} */  // end of visitor_classes
