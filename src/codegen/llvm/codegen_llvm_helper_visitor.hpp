@@ -61,6 +61,9 @@ class CodegenLLVMHelperVisitor: public visitor::AstVisitor {
     /// create new function for FUNCTION or PROCEDURE block
     void create_function_for_node(ast::Block& node);
 
+    /// create new LLVMStructBlock
+    std::shared_ptr<ast::LLVMStructBlock> create_llvm_struct_block();
+
   public:
     CodegenLLVMHelperVisitor() = default;
 
@@ -87,7 +90,6 @@ class CodegenLLVMHelperVisitor: public visitor::AstVisitor {
     void visit_function_block(ast::FunctionBlock& node) override;
     void visit_nrn_state_block(ast::NrnStateBlock& node) override;
     void visit_program(ast::Program& node) override;
-    void visit_llvm_struct_block(ast::LLVMStructBlock& node) override;
 };
 
 /** @} */  // end of llvm_codegen_details

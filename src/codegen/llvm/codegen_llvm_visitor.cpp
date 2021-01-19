@@ -526,7 +526,7 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
     sym_tab = node.get_symbol_table();
 
     // Proceed with code generation.
-    node.visit_children(*this);
+    //node.visit_children(*this);
 
     if (opt_passes) {
         logger->info("Running LLVM optimisation passes");
@@ -572,6 +572,10 @@ void CodegenLLVMVisitor::visit_var_name(const ast::VarName& node) {
     // Finally, load the variable from the pointer value.
     llvm::Value* var = builder.CreateLoad(ptr);
     values.push_back(var);
+}
+
+void CodegenLLVMVisitor::visit_llvm_struct_block(const ast::LLVMStructBlock& node) {
+
 }
 
 }  // namespace codegen
