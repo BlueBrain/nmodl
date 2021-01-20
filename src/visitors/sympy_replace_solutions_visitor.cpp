@@ -45,23 +45,27 @@ void SympyReplaceSolutionsVisitor::visit_statement_block(ast::StatementBlock& no
     is_statement_block_root_ = false;
 
     if (is_root) {
+        logger->debug("SympyReplaceSolutionsVisitor :: visit matching statements by value");
         interleaves_counter_ = InterleavesCounter();
         policy_ = ReplacePolicy::VALUE;
         node.visit_children(*this);
 
         if (!solutions_.is_all_untagged()) {
+            logger->debug(
+                "SympyReplaceSolutionsVisitor :: not all solutions were replaced. Visit replacing "
+                "greedly");
             interleaves_counter_ = InterleavesCounter();
             policy_ = ReplacePolicy::GREEDY;
             node.visit_children(*this);
             if (interleaves_counter_.n() > 0) {
                 logger->warn(
                     "SympyReplaceSolutionsVisitor :: Found ambiguous system of equations "
-                    "interleaved with {} "
-                    "assignment statements. I do not know what equations go before and what "
-                    "equations go "
-                    "after the assignment statements. Either put all the equations of the system "
-                    "of equations in "
-                    "the form: x = f(...) or do not interleave the system with assignments.",
+                    "interleaved with {} assignment statements. I do not know what equations go "
+                    "before and what "
+                    "equations go after the assignment statements. Either put all the equations "
+                    "that need to be solved "
+                    "in the form: x = f(...) and with distinct variable assignments or do not "
+                    "interleave the system with assignments.",
                     interleaves_counter_.n());
             }
         }
@@ -80,17 +84,29 @@ void SympyReplaceSolutionsVisitor::visit_statement_block(ast::StatementBlock& no
             new_statements.insert(new_statements.end(),
                                   replacement_ptr->second.begin(),
                                   replacement_ptr->second.end());
-
+            logger->debug("SympyReplaceSolutionsVisitor :: erasing {}", to_nmodl(old_statement));
+            for (const auto& replacement: replacement_ptr->second) {
+                logger->debug("SympyReplaceSolutionsVisitor :: adding {}", to_nmodl(replacement));
+            }
         } else if (to_be_removed_ == nullptr ||
                    to_be_removed_->find(&(*old_statement)) == to_be_removed_->end()) {
             new_statements.emplace_back(std::move(old_statement));
+        } else {
+            logger->debug("SympyReplaceSolutionsVisitor :: erasing {}", to_nmodl(old_statement));
         }
     }
 
     if (is_root) {
-        pre_solve_statements_.emplace_back_all_statements(new_statements);
-        tmp_statements_.emplace_back_all_statements(new_statements);
-        solutions_.emplace_back_all_statements(new_statements);
+        if (!pre_solve_statements_.is_all_untagged() || !tmp_statements_.is_all_untagged() ||
+            !solutions_.is_all_untagged()) {
+            logger->warn(
+                "SympyReplaceSolutionsVisitor :: not all solutions were replaced. Adding remaining "
+                "statements at the end. Probably something went wrong.");
+        }
+
+        pre_solve_statements_.emplace_back_all_statements(new_statements, true);
+        tmp_statements_.emplace_back_all_statements(new_statements, true);
+        solutions_.emplace_back_all_statements(new_statements, true);
     }
 
     node.set_statements(std::move(new_statements));
@@ -248,7 +264,7 @@ bool SympyReplaceSolutionsVisitor::SolutionSorter::try_emplace_back_statement(
     const std::string& var) {
     auto ptr = var2statement_.find(var);
     bool emplaced = false;
-    if (ptr != var2statement_.end()) {
+    if (ptr != var2statement_.end() && tags_[ptr->second]) {
         const auto ii = ptr->second;
         new_statements.emplace_back(statements_[ii]->clone());
         tags_[ii] = false;
@@ -270,13 +286,18 @@ bool SympyReplaceSolutionsVisitor::SolutionSorter::emplace_back_next_statement(
 }
 
 size_t SympyReplaceSolutionsVisitor::SolutionSorter::emplace_back_all_statements(
-    ast::StatementVector& new_statements) {
+    ast::StatementVector& new_statements,
+    bool is_logger) {
     size_t n = 0;
     for (size_t ii = 0; ii < statements_.size(); ++ii) {
         if (tags_[ii]) {
             new_statements.emplace_back(statements_[ii]->clone());
             tags_[ii] = false;
             ++n;
+            if (is_logger) {
+                logger->debug("SympyReplaceSolutionsVisitor :: adding {}",
+                              to_nmodl(statements_[ii]));
+            }
         }
     }
     return n;

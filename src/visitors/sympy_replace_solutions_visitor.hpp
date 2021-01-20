@@ -165,9 +165,11 @@ class SympyReplaceSolutionsVisitor: public AstVisitor {
          */
         void build_maps();
 
-        /// Check if one of the statements assigns this variable (i.e. \f x' = f(x, y, x) \f)
+        /// Check if one of the statements assigns this variable (i.e. \f x' = f(x, y, x) \f) and is
+        /// still tagged
         inline bool is_var_assigned_here(const std::string& var) const {
-            return var2statement_.find(var) != var2statement_.end();
+            const auto it = var2statement_.find(var);
+            return it != var2statement_.end() && tags_[it->second];
         }
 
         /// Check if all the statements found their position
@@ -189,7 +191,8 @@ class SympyReplaceSolutionsVisitor: public AstVisitor {
         bool emplace_back_next_statement(ast::StatementVector& new_statements);
 
         /// Emplace back all the statements that are marked for updating in \ref tags_
-        size_t emplace_back_all_statements(ast::StatementVector& new_statements);
+        size_t emplace_back_all_statements(ast::StatementVector& new_statements,
+                                           const bool is_logger = false);
 
         /**
          * \brief Tag all the statements that depend on \p var for updating
