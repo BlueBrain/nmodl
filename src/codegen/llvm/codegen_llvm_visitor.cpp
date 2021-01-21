@@ -320,6 +320,15 @@ void CodegenLLVMVisitor::visit_codegen_function(const ast::CodegenFunction& node
     builder.SetInsertPoint(body);
     local_named_values = func->getValueSymbolTable();
 
+    // When processing a function, it returns a value named <function_name> in NMODL. Therefore, we
+    // first run RenameVisitor to rename it into ret_<function_name>. This will aid in avoiding
+    // symbolic conflicts.
+    std::string return_var_name = "ret_" + name;
+    const auto& block = node.get_statement_block();
+    visitor::RenameVisitor v(name, return_var_name);
+    block->accept(v);
+
+
     // Allocate parameters on the stack and add them to the symbol table.
     unsigned i = 0;
     for (auto& arg: func->args()) {
@@ -330,7 +339,7 @@ void CodegenLLVMVisitor::visit_codegen_function(const ast::CodegenFunction& node
     }
 
     // Process function or procedure body. The return statement is handled in a separate visitor.
-    const auto& statements = node.get_statement_block()->get_statements();
+    const auto& statements = block->get_statements();
     for (const auto& statement: statements) {
         // \todo: Support other statement types.
         if (statement->is_codegen_var_list_statement() || statement->is_expression_statement() ||
