@@ -451,7 +451,8 @@ void CodegenLLVMVisitor::visit_if_statement(const ast::IfStatement& node) {
     llvm::BasicBlock* exit = merge_block;
     for (const auto& else_if: node.get_elseifs()) {
         // Link the current block to the true and else blocks.
-        llvm::BasicBlock* else_block = llvm::BasicBlock::Create(*context, /*Name=*/"", func, merge_block);
+        llvm::BasicBlock* else_block =
+            llvm::BasicBlock::Create(*context, /*Name=*/"", func, merge_block);
         builder.SetInsertPoint(curr_block);
         builder.CreateCondBr(cond, true_block, else_block);
 
