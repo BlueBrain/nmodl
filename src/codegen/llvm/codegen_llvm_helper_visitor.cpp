@@ -158,14 +158,14 @@ void CodegenLLVMHelperVisitor::create_function_for_node(ast::Block& node) {
     codegen_functions.push_back(function);
 }
 
-std::shared_ptr<ast::LLVMStructBlock> CodegenLLVMHelperVisitor::create_llvm_struct_block() {
+std::shared_ptr<ast::InstanceStruct> CodegenLLVMHelperVisitor::create_instance_struct() {
     ast::CodegenVarVector codegen_vars;
     for(auto& float_var : info.codegen_float_variables) {
         auto name = new ast::Name(new ast::String(float_var->get_name()));
         auto codegen_var = new ast::CodegenVar(1, name);
         codegen_vars.emplace_back(codegen_var);
     }
-    return std::make_shared<ast::LLVMStructBlock>(codegen_vars);
+    return std::make_shared<ast::InstanceStruct>(codegen_vars);
 }
 
 static void append_statements_from_block(ast::StatementVector& statements,
@@ -534,8 +534,8 @@ void CodegenLLVMHelperVisitor::visit_program(ast::Program& node) {
         node.emplace_back_node(fun);
     }
 
-    auto llvm_struct_block = create_llvm_struct_block();
-    node.emplace_back_node(llvm_struct_block);
+    auto llvm_instance_struct = create_instance_struct();
+    node.emplace_back_node(llvm_instance_struct);
 }
 
 

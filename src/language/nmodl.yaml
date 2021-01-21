@@ -438,14 +438,18 @@
                               is base class and defines common interface for these nodes.
 
                       children:
-                        - LLVMStructBlock:
-                            nmodl: "LLVMStructBlock "
+                        - InstanceStruct:
+                            nmodl: "INSTANCE_STRUCT "
                             members:
                               - codegen_vars:
                                   brief: "Vector of CodegenVars"
                                   type: CodegenVar
                                   vector: true
                                   add: true
+                                  separator: "\\n    "
+                                  prefix: {value: "{\\n    ", force: true}
+                                  suffix: {value: "\\n}", force: true}
+                            brief: "LLVM IR Struct that holds the mechanism instance's variables"
 
                         - ParamBlock:
                             nmodl: "PARAMETER "

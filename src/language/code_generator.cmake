@@ -117,6 +117,7 @@ set(AST_GENERATED_SOURCES
     ${PROJECT_BINARY_DIR}/src/ast/independent_definition.hpp
     ${PROJECT_BINARY_DIR}/src/ast/indexed_name.hpp
     ${PROJECT_BINARY_DIR}/src/ast/initial_block.hpp
+    ${PROJECT_BINARY_DIR}/src/ast/instance_struct.hpp
     ${PROJECT_BINARY_DIR}/src/ast/integer.hpp
     ${PROJECT_BINARY_DIR}/src/ast/kinetic_block.hpp
     ${PROJECT_BINARY_DIR}/src/ast/lag_statement.hpp
@@ -124,7 +125,6 @@ set(AST_GENERATED_SOURCES
     ${PROJECT_BINARY_DIR}/src/ast/lin_equation.hpp
     ${PROJECT_BINARY_DIR}/src/ast/line_comment.hpp
     ${PROJECT_BINARY_DIR}/src/ast/linear_block.hpp
-    ${PROJECT_BINARY_DIR}/src/ast/llvm_struct_block.hpp
     ${PROJECT_BINARY_DIR}/src/ast/local_list_statement.hpp
     ${PROJECT_BINARY_DIR}/src/ast/local_var.hpp
     ${PROJECT_BINARY_DIR}/src/ast/lon_difuse.hpp

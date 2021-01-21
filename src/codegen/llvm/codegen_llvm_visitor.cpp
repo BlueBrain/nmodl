@@ -574,7 +574,7 @@ void CodegenLLVMVisitor::visit_var_name(const ast::VarName& node) {
     values.push_back(var);
 }
 
-void CodegenLLVMVisitor::visit_llvm_struct_block(const ast::LLVMStructBlock& node) {
+void CodegenLLVMVisitor::visit_instance_struct(const ast::InstanceStruct& node) {
 
 }
 

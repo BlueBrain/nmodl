@@ -61,8 +61,8 @@ class CodegenLLVMHelperVisitor: public visitor::AstVisitor {
     /// create new function for FUNCTION or PROCEDURE block
     void create_function_for_node(ast::Block& node);
 
-    /// create new LLVMStructBlock
-    std::shared_ptr<ast::LLVMStructBlock> create_llvm_struct_block();
+    /// create new InstanceStruct
+    std::shared_ptr<ast::InstanceStruct> create_instance_struct();
 
   public:
     CodegenLLVMHelperVisitor() = default;
