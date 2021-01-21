@@ -577,7 +577,7 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
         }
     }
 
-    GIVEN("Derivative block of coupled & linear ODES, solver method sparse, y' before x'") {
+    GIVEN("Derivative block, sparse, print in order") {
         std::string nmodl_text = R"(
             STATE {
                 x y
@@ -586,45 +586,56 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
                 SOLVE states METHOD sparse
             }
             DERIVATIVE states {
-                LOCAL a, b, c
-                y' = c + 2*x
-                x' = a*y + b*h
+                LOCAL a, b
+                y' = a
+                x' = b
             })";
         std::string expected_result = R"(
             DERIVATIVE states {
-                LOCAL a, b, c, old_y, old_x
+                LOCAL a, b, old_y, old_x
                 old_y = y
                 old_x = x
-                y = (-2.0*b*pow(dt, 2)*h-c*dt-2.0*dt*old_x-old_y)/(2.0*a*pow(dt, 2)-1.0)
-                x = (-a*c*pow(dt, 2)-a*dt*old_y-b*dt*h-old_x)/(2.0*a*pow(dt, 2)-1.0)
-            })";
-        std::string expected_cse_result = R"(
-            DERIVATIVE states {
-                LOCAL a, b, c, old_y, old_x, tmp0, tmp1, tmp2, tmp3
-                old_y = y
-                old_x = x
-                tmp0 = pow(dt, 2)
-                tmp1 = a*tmp0
-                tmp2 = 1.0/(2.0*tmp1-1.0)
-                tmp3 = b*h
-                y = -tmp2*(c*dt+2.0*dt*old_x+old_y+2.0*tmp0*tmp3)
-                x = -tmp2*(a*dt*old_y+c*tmp1+dt*tmp3+old_x)
+                y = a*dt+old_y
+                x = b*dt+old_x
             })";
 
         THEN("Construct & solve linear system for backwards Euler") {
             auto result =
                 run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::DERIVATIVE_BLOCK);
-            auto result_cse =
-                run_sympy_solver_visitor(nmodl_text, true, true, AstNodeType::DERIVATIVE_BLOCK);
 
-            compare_blocks(result[0], reindent_text(expected_result));
-            compare_blocks(result_cse[0], reindent_text(expected_cse_result));
+            REQUIRE(reindent_text(result[0]) == reindent_text(expected_result));
         }
     }
-    GIVEN(
-        "Derivative block of coupled & linear ODES, solver method sparse, mixed statements "
-        "enclosed in control "
-        "flow block") {
+    GIVEN("Derivative block, sparse, print in order, vectors") {
+        std::string nmodl_text = R"(
+            STATE {
+                M[2]
+            }
+            BREAKPOINT  {
+                SOLVE states METHOD sparse
+            }
+            DERIVATIVE states {
+                LOCAL a, b
+                M'[1] = a
+                M'[0] = b
+            })";
+        std::string expected_result = R"(
+            DERIVATIVE states {
+                LOCAL a, b, old_M_1, old_M_0
+                old_M_1 = M[1]
+                old_M_0 = M[0]
+                M[1] = a*dt+old_M_1
+                M[0] = b*dt+old_M_0
+            })";
+
+        THEN("Construct & solve linear system for backwards Euler") {
+            auto result =
+                run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::DERIVATIVE_BLOCK);
+
+            REQUIRE(reindent_text(result[0]) == reindent_text(expected_result));
+        }
+    }
+    GIVEN("Derivative block, sparse, derivatives mixed with local variable reassignment") {
         std::string nmodl_text = R"(
             STATE {
                 x y
@@ -633,65 +644,97 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
                 SOLVE states METHOD sparse
             }
             DERIVATIVE states {
-                LOCAL a, b, c
-                a = a+1
-                if (a == 1) {
-                    x' = a*y + b*h
-                    c = a + 1
+                LOCAL a, b
+                    x' = a
                     b = b + 1
-                    y' = c + 2*x
-                }
-                a = a + 1
+                    y' = b
             })";
         std::string expected_result = R"(
             DERIVATIVE states {
-                LOCAL a, b, c
-                a = a+1
+                LOCAL a, b, old_x, old_y
+                old_x = x
+                old_y = y
+                x = a*dt+old_x
+                b = b+1
+                y = b*dt+old_y
+            })";
+
+        THEN("Construct & solve linear system for backwards Euler") {
+            auto result =
+                run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::DERIVATIVE_BLOCK);
+
+            REQUIRE(reindent_text(result[0]) == reindent_text(expected_result));
+        }
+    }
+    GIVEN("Derivative block, sparse, derivatives mixed with derivative variable reassignment") {
+        std::string nmodl_text = R"(
+            STATE {
+                x y
+            }
+            BREAKPOINT  {
+                SOLVE states METHOD sparse
+            }
+            DERIVATIVE states {
+                LOCAL a, b
+                    x' = a
+                    x = x + 1
+                    y' = b + x
+            })";
+        std::string expected_result = R"(
+            DERIVATIVE states {
+                LOCAL a, b, old_x, old_y
+                old_x = x
+                old_y = y
+                x = a*dt+old_x
+                x = x+1
+                old_x = x
+                y = a*pow(dt, 2)+b*dt+dt*old_x+old_y
+            })";
+
+        THEN("Construct & solve linear system for backwards Euler") {
+            auto result =
+                run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::DERIVATIVE_BLOCK);
+
+            REQUIRE(reindent_text(result[0]) == reindent_text(expected_result));
+        }
+    }
+    GIVEN("Derivative block in control flow block") {
+        std::string nmodl_text = R"(
+            STATE {
+                x y
+            }
+            BREAKPOINT  {
+                SOLVE states METHOD sparse
+            }
+            DERIVATIVE states {
+                LOCAL a, b
+                if (a == 1) {
+                    x' = a
+                    y' = b
+                }
+            })";
+        std::string expected_result = R"(
+            DERIVATIVE states {
+                LOCAL a, b
                 IF (a == 1) {
                     LOCAL old_x, old_y
                     old_x = x
                     old_y = y
-                    x = (-a*c*pow(dt, 2)-a*dt*old_y-b*dt*h-old_x)/(2.0*a*pow(dt, 2)-1.0)
-                    c = a+1
-                    b = b+1
-                    y = (-2.0*b*pow(dt, 2)*h-c*dt-2.0*dt*old_x-old_y)/(2.0*a*pow(dt, 2)-1.0)
+                    x = a*dt+old_x
+                    y = b*dt+old_y
                 }
-                a = a+1
-            })";
-        std::string expected_cse_result = R"(
-            DERIVATIVE states {
-                LOCAL a, b, c
-                a = a+1
-                IF (a == 1) {
-                    LOCAL old_x, old_y, tmp0, tmp1, tmp2, tmp3
-                    old_x = x
-                    old_y = y
-                    tmp0 = pow(dt, 2)
-                    tmp1 = a*tmp0
-                    tmp2 = 1.0/(2.0*tmp1-1.0)
-                    tmp3 = b*h
-                    x = -tmp2*(a*dt*old_y+c*tmp1+dt*tmp3+old_x)
-                    c = a+1
-                    b = b+1
-                    tmp3 = b*h
-                    y = -tmp2*(c*dt+2.0*dt*old_x+old_y+2.0*tmp0*tmp3)
-                }
-                a = a+1
             })";
 
         THEN("Construct & solve linear system for backwards Euler") {
             auto result =
                 run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::DERIVATIVE_BLOCK);
-            auto result_cse =
-                run_sympy_solver_visitor(nmodl_text, true, true, AstNodeType::DERIVATIVE_BLOCK);
 
-            compare_blocks(result[0], reindent_text(expected_result));
-            compare_blocks(result_cse[0], reindent_text(expected_cse_result));
+            REQUIRE(reindent_text(result[0]) == reindent_text(expected_result));
         }
     }
     GIVEN(
-        "Derivative block of coupled & linear ODES, solver method sparse, mixed statements, "
-        "control flows") {
+        "Derivative block, sparse, derivatives mixed with derivative variable reassignment in "
+        "control flow block") {
         std::string nmodl_text = R"(
             STATE {
                 x y
@@ -700,45 +743,77 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
                 SOLVE states METHOD sparse
             }
             DERIVATIVE states {
-                LOCAL a, b, c
-                x' = a*y + b*h
-                if (a == 1) {
-                    a = a+1
-                    x = x+a
-                }
-                y' = c + 2*x
+                LOCAL a, b
+                    x' = a
+                    if (a == 1) {
+                        x = x + 1
+                    }
+                    y' = b + x
             })";
         std::string expected_result = R"(
             DERIVATIVE states {
-                LOCAL a, b, c, old_x, old_y
+                LOCAL a, b, old_x, old_y
                 old_x = x
                 old_y = y
-                x = (-a*c*pow(dt, 2)-a*dt*old_y-b*dt*h-old_x)/(2.0*a*pow(dt, 2)-1.0)
+                x = a*dt+old_x
                 IF (a == 1) {
-                    a = a+1
-                    x = x+a
+                    x = x+1
                 }
                 old_x = x
-                y = (-2.0*b*pow(dt, 2)*h-c*dt-2.0*dt*old_x-old_y)/(2.0*a*pow(dt, 2)-1.0)
+                y = a*pow(dt, 2)+b*dt+dt*old_x+old_y
             })";
-        std::string expected_cse_result = R"(
+
+        THEN("Construct & solve linear system for backwards Euler") {
+            auto result =
+                run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::DERIVATIVE_BLOCK);
+
+            REQUIRE(reindent_text(result[0]) == reindent_text(expected_result));
+        }
+    }
+    GIVEN(
+        "Derivative block, sparse, coupled derivatives mixed with reassignment and control flow "
+        "block") {
+        std::string nmodl_text = R"(
+            STATE {
+                x y
+            }
+            BREAKPOINT  {
+                SOLVE states METHOD sparse
+            }
             DERIVATIVE states {
-                LOCAL a, b, c, old_x, old_y, tmp0, tmp1, tmp2, tmp3
+                LOCAL a, b
+                    x' = y + a
+                    if (b == 1) {
+                        a = a + 1
+                    }
+                    y' = x + y + b
+            })";
+        std::string expected_result = R"(
+            DERIVATIVE states {
+                LOCAL a, b, old_x, old_y
+                old_x = x
+                old_y = y
+                x = (a*pow(dt, 2)-a*dt-b*pow(dt, 2)+dt*old_x-dt*old_y-old_x)/(pow(dt, 2)+dt-1.0)
+                IF (b == 1) {
+                    a = a+1
+                }
+                y = (-a*pow(dt, 2)-b*dt-dt*old_x-old_y)/(pow(dt, 2)+dt-1.0)
+            })";
+        std::string expected_result_cse = R"(
+            DERIVATIVE states {
+                LOCAL a, b, old_x, old_y, tmp0, tmp1, tmp2, tmp3
                 old_x = x
                 old_y = y
                 tmp0 = pow(dt, 2)
-                tmp1 = a*tmp0
-                tmp2 = 1.0/(2.0*tmp1-1.0)
-                tmp3 = b*h
-                x = -tmp2*(a*dt*old_y+c*tmp1+dt*tmp3+old_x)
-                IF (a == 1) {
+                tmp1 = 1.0/(dt+tmp0-1.0)
+                tmp2 = dt*old_x
+                tmp3 = a*tmp0
+                x = -tmp1*(a*dt+b*tmp0+dt*old_y+old_x-tmp2-tmp3)
+                IF (b == 1) {
                     a = a+1
-                    x = x+a
                 }
-                old_x = x
-                tmp1 = a*tmp0
-                tmp2 = 1.0/(2.0*tmp1-1.0)
-                y = -tmp2*(c*dt+2.0*dt*old_x+old_y+2.0*tmp0*tmp3)
+                tmp3 = a*tmp0
+                y = -tmp1*(b*dt+old_y+tmp2+tmp3)
             })";
 
         THEN("Construct & solve linear system for backwards Euler") {
@@ -747,8 +822,8 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
             auto result_cse =
                 run_sympy_solver_visitor(nmodl_text, true, true, AstNodeType::DERIVATIVE_BLOCK);
 
-            compare_blocks(result[0], reindent_text(expected_result));
-            compare_blocks(result_cse[0], reindent_text(expected_cse_result));
+            REQUIRE(reindent_text(result[0]) == reindent_text(expected_result));
+            REQUIRE(reindent_text(result_cse[0]) == reindent_text(expected_result_cse));
         }
     }
 
@@ -1268,83 +1343,160 @@ SCENARIO("LINEAR solve block (SympySolver Visitor)", "[sympy][linear]") {
             REQUIRE(reindent_text(result[0]) == reindent_text(expected_text));
         }
     }
-    GIVEN("2 state-var LINEAR solve block, post-solve statements") {
+    GIVEN("Linear block, print in order") {
         std::string nmodl_text = R"(
             STATE {
                 x y
             }
             LINEAR lin {
-                ~ x + 4*y = 5*a
-                ~ x - y = 0
-                x = x + 2
-                y = y - a
+                ~ y = x + 1
+                ~ x = 2
             })";
-        std::string expected_text = R"(
+        std::string expected_result = R"(
             LINEAR lin {
-                x = a
-                y = a
-                x = x+2
-                y = y-a
+                y = 3.0
+                x = 2.0
             })";
-        THEN("solve analytically, insert in correct location") {
-            CAPTURE(reindent_text(nmodl_text));
+
+        THEN("Construct & solve linear system") {
             auto result =
                 run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::LINEAR_BLOCK);
-            REQUIRE(reindent_text(result[0]) == reindent_text(expected_text));
+
+            REQUIRE(reindent_text(result[0]) == reindent_text(expected_result));
         }
     }
-    GIVEN("2 state-var LINEAR solve block, mixed & post-solve statements") {
+    GIVEN("Linear block, print in order, vectors") {
         std::string nmodl_text = R"(
             STATE {
-                x y
+                M[2]
             }
             LINEAR lin {
-                ~ x + 4*y = 5*a
-                a2 = 3*b
-                ~ x - y = 0
-                y = y - a
+                ~ M[1] = M[0] + 1
+                ~ M[0] = 2
             })";
-        std::string expected_text = R"(
+        std::string expected_result = R"(
             LINEAR lin {
-                x = a
-                a2 = 3*b
-                y = a
-                y = y-a
+                M[1] = 3.0
+                M[0] = 2.0
             })";
-        THEN("solve analytically, insert in correct location") {
-            CAPTURE(reindent_text(nmodl_text));
+
+        THEN("Construct & solve linear system") {
             auto result =
                 run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::LINEAR_BLOCK);
-            REQUIRE(reindent_text(result[0]) == reindent_text(expected_text));
+
+            REQUIRE(reindent_text(result[0]) == reindent_text(expected_result));
         }
     }
-    GIVEN(
-        "2 state-var LINEAR solve block, control flow, mixed statements, replace matching by "
-        "value") {
+    GIVEN("Linear block, greedy replacement") {
         std::string nmodl_text = R"(
             STATE {
                 x y
             }
             LINEAR lin {
+                LOCAL a
+                ~ x + y = 1
+                ~ y - x = 3
+                a = x + y
+            })";
+        std::string expected_result = R"(
+            LINEAR lin {
+                LOCAL a
+                x = -1.0
+                y = 2.0
+                a = x+y
+            })";
+
+        THEN("Construct & solve linear system") {
+            auto result =
+                run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::LINEAR_BLOCK);
+
+            REQUIRE(reindent_text(result[0]) == reindent_text(expected_result));
+        }
+    }
+    GIVEN("Linear block, linear equations mixed with local variable reassignment") {
+        std::string nmodl_text = R"(
+            STATE {
+                x y
+            }
+            LINEAR lin {
+                LOCAL a
+                ~ x = y + a
+                a = a + 1
+                ~ y = a
+            })";
+        std::string expected_result = R"(
+            LINEAR lin {
+                LOCAL a
+                x = 2.0*a
+                a = a+1
+                y = a
+            })";
+
+        THEN("Construct & solve linear system") {
+            auto result =
+                run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::LINEAR_BLOCK);
+
+            REQUIRE(reindent_text(result[0]) == reindent_text(expected_result));
+        }
+    }
+    GIVEN("Linear block in control flow block") {
+        std::string nmodl_text = R"(
+            STATE {
+                x y
+            }
+            LINEAR lin {
+                LOCAL a
                 if (a == 1) {
-                    ~ y = 5*x - 3*a
-                    a = a + 1
-                    ~ x = y - a
+                    ~ x = y + a
+                    ~ y = a
                 }
             })";
-        std::string expected_text = R"(
+        std::string expected_result = R"(
             LINEAR lin {
+                LOCAL a
                 IF (a == 1) {
-                    y = 2.0*a
-                    a = a+1
-                    x = a
+                    x = 2.0*a
+                    y = a
                 }
             })";
-        THEN("solve analytically, insert in correct location") {
-            CAPTURE(reindent_text(nmodl_text));
+
+        THEN("Construct & solve linear system") {
             auto result =
                 run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::LINEAR_BLOCK);
-            REQUIRE(reindent_text(result[0]) == reindent_text(expected_text));
+
+            REQUIRE(reindent_text(result[0]) == reindent_text(expected_result));
+        }
+    }
+    GIVEN("Linear block, linear equations mixed with control flow blocks and reassignments") {
+        std::string nmodl_text = R"(
+            STATE {
+                x y
+            }
+            LINEAR lin {
+                LOCAL a
+                ~ x = y + a
+                if (a == 1) {
+                	a = a + 1
+                	x = a + 1
+                }
+                ~ y = a
+            })";
+        std::string expected_result = R"(
+            LINEAR lin {
+                LOCAL a
+                x = 2.0*a
+                IF (a == 1) {
+                    a = a+1
+                    x = a+1
+                }
+                y = a
+            })";
+
+        THEN("Construct & solve linear system") {
+            auto result =
+                run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::LINEAR_BLOCK);
+
+            REQUIRE(reindent_text(result[0]) == reindent_text(expected_result));
         }
     }
     GIVEN("3 state-var LINEAR solve block") {

@@ -238,7 +238,8 @@ std::pair<std::string, std::unordered_set<std::string>> statement_dependencies(
     }
 
     key = to_nmodl(lhs);
-    key = key.substr(0, key.find_first_of("'"));  // we want to match derivatives and variables
+    key.erase(std::remove(key.begin(), key.end(), '\''),
+              key.end());  // we want to match derivatives and variables
     visitor::AstLookupVisitor lookup_visitor;
     lookup_visitor.lookup(*rhs, ast::AstNodeType::VAR_NAME);
     auto rhs_nodes = lookup_visitor.get_nodes();
