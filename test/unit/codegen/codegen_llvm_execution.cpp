@@ -110,7 +110,11 @@ SCENARIO("Optimised arithmetic expression", "[llvm][runner]") {
             FUNCTION arithmetic() {
                 LOCAL x, y
                 x = 3
-                y = 7
+                if (x < 7) {
+                    y = 7
+                } else {
+                    y = 3
+                }
                 arithmetic = x * y / (x + y)
             }
 

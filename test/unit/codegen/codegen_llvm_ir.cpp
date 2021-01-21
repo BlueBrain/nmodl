@@ -148,6 +148,51 @@ SCENARIO("Define", "[visitor][llvm]") {
 }
 
 //=============================================================================
+// If/Else statements and comparison operators
+//=============================================================================
+
+SCENARIO("Comparison", "[visitor][llvm]") {
+    GIVEN("Procedure with comparison operators") {
+        std::string nmodl_text = R"(
+            PROCEDURE foo(x) {
+                if (x < 10) {
+
+                } else if (x >= 10 && x <= 100) {
+
+                } else if (x == 120) {
+
+                } else if (!(x != 200)) {
+
+                }
+            }
+        )";
+
+        THEN("correct LLVM instructions are produced") {
+            std::string module_string = run_llvm_visitor(nmodl_text);
+            std::smatch m;
+
+            // Check less than.
+            std::regex lt(R"(fcmp olt double %(.+), 1\.000000e\+01)");
+            REQUIRE(std::regex_search(module_string, m, lt));
+
+            // Check greater or equal than and logical and.
+            std::regex ge(R"(fcmp ole double %(.+), 1\.000000e\+02)");
+            std::regex logical_and(R"(and i1 %(.+), %(.+))");
+            REQUIRE(std::regex_search(module_string, m, ge));
+            REQUIRE(std::regex_search(module_string, m, logical_and));
+
+            // Check equals.
+            std::regex eq(R"(fcmp oeq double %(.+), 1\.200000e\+02)");
+            REQUIRE(std::regex_search(module_string, m, eq));
+
+            // Check not equals.
+            std::regex ne(R"(fcmp one double %(.+), 2\.000000e\+02)");
+            REQUIRE(std::regex_search(module_string, m, ne));
+        }
+    }
+}
+
+//=============================================================================
 // FunctionBlock
 //=============================================================================
 
