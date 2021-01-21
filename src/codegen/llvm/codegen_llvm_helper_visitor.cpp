@@ -105,23 +105,16 @@ CodegenFunctionVector CodegenLLVMHelperVisitor::get_codegen_functions(const ast:
  * will have minimum logic:
  *  - Add type for the function arguments
  *  - Define variables and return variable
- *  - Add return type (int for PROCEDURE and double for FUNCTION)
+ *  - Add return type (void for PROCEDURE and double for FUNCTION)
  */
 void CodegenLLVMHelperVisitor::create_function_for_node(ast::Block& node) {
     /// name of the function from the node
     std::string function_name = node.get_node_name();
     auto name = new ast::Name(new ast::String(function_name));
 
-    /// return variable name has "ret_" prefix
+    /// return variable name has "ret_" prefix and has type double
     auto return_var = new ast::Name(new ast::String("ret_" + function_name));
-
-    /// return type based on node type
-    ast::CodegenVarType* ret_var_type = nullptr;
-    if (node.get_node_type() == ast::AstNodeType::FUNCTION_BLOCK) {
-        ret_var_type = new ast::CodegenVarType(FLOAT_TYPE);
-    } else {
-        ret_var_type = new ast::CodegenVarType(INTEGER_TYPE);
-    }
+    auto ret_var_type = new ast::CodegenVarType(FLOAT_TYPE);
 
     /// function body and it's statement, copy original block
     auto block = node.get_statement_block()->clone();
@@ -130,15 +123,20 @@ void CodegenLLVMHelperVisitor::create_function_for_node(ast::Block& node) {
     /// convert local statement to codegenvar statement
     convert_local_statement(*block);
 
-    /// insert return variable at the start of the block
-    ast::CodegenVarVector codegen_vars;
-    codegen_vars.emplace_back(new ast::CodegenVar(0, return_var->clone()));
-    auto statement = std::make_shared<ast::CodegenVarListStatement>(ret_var_type, codegen_vars);
-    block->insert_statement(statements.begin(), statement);
+    if (node.is_function_block()) {
+        /// insert return variable at the start of the block
+        ast::CodegenVarVector codegen_vars;
+        codegen_vars.emplace_back(new ast::CodegenVar(0, return_var->clone()));
+        auto statement = std::make_shared<ast::CodegenVarListStatement>(ret_var_type, codegen_vars);
+        block->insert_statement(statements.begin(), statement);
 
-    /// add return statement
-    auto return_statement = new ast::CodegenReturnStatement(return_var);
-    block->emplace_back_statement(return_statement);
+        /// add return statement
+        auto return_statement = new ast::CodegenReturnStatement(
+            new ast::VarName(return_var,
+                             /*at=*/nullptr, /*index=*/
+                             nullptr));
+        block->emplace_back_statement(return_statement);
+    }
 
     /// prepare function arguments based original node arguments
     ast::CodegenArgumentVector arguments;
@@ -150,7 +148,9 @@ void CodegenLLVMHelperVisitor::create_function_for_node(ast::Block& node) {
     }
 
     /// return type of the function is same as return variable type
-    ast::CodegenVarType* fun_ret_type = ret_var_type->clone();
+    ast::CodegenVarType* fun_ret_type = node.is_function_block()
+                                            ? ret_var_type->clone()
+                                            : new ast::CodegenVarType(VOID_TYPE);
 
     /// we have all information for code generation function, create a new node
     /// which will be inserted later into AST
