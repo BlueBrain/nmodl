@@ -26,6 +26,11 @@ namespace codegen {
 /*                            Helper routines                                           */
 /****************************************************************************************/
 
+static bool is_supported_statement(const ast::Statement& statement) {
+    return statement.is_codegen_var_list_statement() || statement.is_expression_statement() ||
+           statement.is_codegen_return_statement() || statement.is_if_statement();
+}
+
 bool CodegenLLVMVisitor::check_array_bounds(const ast::IndexedName& node, unsigned index) {
     llvm::Type* array_type = current_func->getValueSymbolTable()
                                  ->lookup(node.get_node_name())
@@ -234,7 +239,7 @@ llvm::Value* CodegenLLVMVisitor::visit_comparison_bin_op(llvm::Value* lhs,
     llvm::Value* result;
 
     switch (bin_op) {
-#define DISPATCH(binary_op, f_llvm_op, i_llvm_op)            \
+#define DISPATCH(binary_op, i_llvm_op, f_llvm_op)            \
     case binary_op:                                          \
         if (lhs_type->isDoubleTy() || lhs_type->isFloatTy()) \
             result = f_llvm_op(lhs, rhs);                    \
@@ -343,9 +348,7 @@ void CodegenLLVMVisitor::visit_codegen_function(const ast::CodegenFunction& node
     // Process function or procedure body. The return statement is handled in a separate visitor.
     const auto& statements = block->get_statements();
     for (const auto& statement: statements) {
-        // \todo: Support other statement types.
-        if (statement->is_codegen_var_list_statement() || statement->is_expression_statement() ||
-            statement->is_codegen_return_statement())
+        if (is_supported_statement(*statement))
             statement->accept(*this);
     }
 
@@ -422,6 +425,76 @@ void CodegenLLVMVisitor::visit_function_call(const ast::FunctionCall& node) {
                                      ". (External functions references are not supported)");
         }
     }
+}
+
+void CodegenLLVMVisitor::visit_if_statement(const ast::IfStatement& node) {
+    llvm::BasicBlock* curr_block = builder.GetInsertBlock();
+    llvm::Function* func = curr_block->getParent();
+
+    // Added a true block and a merge block where the control flow merges.
+    llvm::BasicBlock* true_block = llvm::BasicBlock::Create(*context, /*Name=*/"", func);
+    llvm::BasicBlock* merge_block = llvm::BasicBlock::Create(*context, /*Name=*/"", func);
+
+    // Add condition to the current block.
+    node.get_condition()->accept(*this);
+    llvm::Value* cond = values.back();
+    values.pop_back();
+
+    // Process the true block;
+    builder.SetInsertPoint(true_block);
+    for (const auto& statement: node.get_statement_block()->get_statements()) {
+        if (is_supported_statement(*statement))
+            statement->accept(*this);
+    }
+    builder.CreateBr(merge_block);
+
+    llvm::BasicBlock* exit = merge_block;
+    for (const auto& else_if: node.get_elseifs()) {
+        // Link the current block to the true and else blocks.
+        llvm::BasicBlock* else_block = llvm::BasicBlock::Create(*context, /*Name=*/"", func, merge_block);
+        builder.SetInsertPoint(curr_block);
+        builder.CreateCondBr(cond, true_block, else_block);
+
+        // Process else block.
+        builder.SetInsertPoint(else_block);
+        else_if->get_condition()->accept(*this);
+        cond = values.back();
+        values.pop_back();
+
+        // Reassign true and merge blocks respectively. Note that the new merge block has to be
+        // connected to the old merge block (tmp).
+        true_block = llvm::BasicBlock::Create(*context, /*Name=*/"", func, merge_block);
+        llvm::BasicBlock* tmp = merge_block;
+        merge_block = llvm::BasicBlock::Create(*context, /*Name=*/"", func, merge_block);
+        builder.SetInsertPoint(merge_block);
+        builder.CreateBr(tmp);
+
+        // Process true block;
+        builder.SetInsertPoint(true_block);
+        for (const auto& statement: else_if->get_statement_block()->get_statements()) {
+            if (is_supported_statement(*statement))
+                statement->accept(*this);
+        }
+        builder.CreateBr(merge_block);
+        curr_block = else_block;
+    }
+
+    const auto& elses = node.get_elses();
+    llvm::BasicBlock* else_block;
+    if (elses) {
+        else_block = llvm::BasicBlock::Create(*context, /*Name=*/"", func, merge_block);
+        builder.SetInsertPoint(else_block);
+        for (const auto& statement: elses->get_statement_block()->get_statements()) {
+            if (is_supported_statement(*statement))
+                statement->accept(*this);
+        }
+        builder.CreateBr(merge_block);
+    } else {
+        else_block = merge_block;
+    }
+    builder.SetInsertPoint(curr_block);
+    builder.CreateCondBr(cond, true_block, else_block);
+    builder.SetInsertPoint(exit);
 }
 
 void CodegenLLVMVisitor::visit_integer(const ast::Integer& node) {
