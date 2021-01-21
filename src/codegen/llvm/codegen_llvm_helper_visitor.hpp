@@ -54,9 +54,10 @@ class CodegenLLVMHelperVisitor: public visitor::AstVisitor {
     /// ast information for code generation
     codegen::CodegenInfo info;
 
-    /// default integer and float node type
+    /// default integer, float and void node type
     const ast::AstNodeType INTEGER_TYPE = ast::AstNodeType::INTEGER;
     const ast::AstNodeType FLOAT_TYPE = ast::AstNodeType::DOUBLE;
+    const ast::AstNodeType VOID_TYPE = ast::AstNodeType::VOID;
 
     /// create new function for FUNCTION or PROCEDURE block
     void create_function_for_node(ast::Block& node);

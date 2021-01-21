@@ -9,7 +9,6 @@
 #include "codegen/llvm/codegen_llvm_helper_visitor.hpp"
 
 #include "ast/all.hpp"
-#include "codegen/codegen_helper_visitor.hpp"
 #include "visitors/rename_visitor.hpp"
 
 #include "llvm/IR/BasicBlock.h"
@@ -63,6 +62,21 @@ unsigned CodegenLLVMVisitor::get_array_index_or_length(const ast::IndexedName& i
         return integer->get_value();
     const auto& macro = sym_tab->lookup(integer->get_macro()->get_node_name());
     return static_cast<unsigned>(*macro->get_value());
+}
+
+llvm::Type* CodegenLLVMVisitor::get_codegen_var_type(const ast::CodegenVarType& node) {
+    switch (node.get_type()) {
+    case ast::AstNodeType::BOOLEAN:
+        return llvm::Type::getInt1Ty(*context);
+    case ast::AstNodeType::DOUBLE:
+        return get_default_fp_type();
+    case ast::AstNodeType::INTEGER:
+        return llvm::Type::getInt32Ty(*context);
+    case ast::AstNodeType::VOID:
+        return llvm::Type::getVoidTy(*context);
+    default:
+        throw std::runtime_error("Error: expecting a type in CodegenVarType node\n");
+    }
 }
 
 llvm::Type* CodegenLLVMVisitor::get_default_fp_type() {
@@ -138,18 +152,16 @@ void CodegenLLVMVisitor::create_function_call(llvm::Function* func,
     values.push_back(call);
 }
 
-void CodegenLLVMVisitor::emit_procedure_or_function_declaration(const ast::Block& node) {
+void CodegenLLVMVisitor::emit_procedure_or_function_declaration(const ast::CodegenFunction& node) {
     const auto& name = node.get_node_name();
-    const auto& parameters = node.get_parameters();
+    const auto& arguments = node.get_arguments();
 
     // Procedure or function parameters are doubles by default.
     std::vector<llvm::Type*> arg_types;
-    for (size_t i = 0; i < parameters.size(); ++i)
-        arg_types.push_back(get_default_fp_type());
+    for (size_t i = 0; i < arguments.size(); ++i)
+        arg_types.push_back(get_codegen_var_type(*arguments[i]->get_type()));
 
-    // If visiting a function, the return type is a double by default.
-    llvm::Type* return_type = node.is_function_block() ? get_default_fp_type()
-                                                       : llvm::Type::getVoidTy(*context);
+    llvm::Type* return_type = get_codegen_var_type(*node.get_return_type());
 
     // Create a function that is automatically inserted into module's symbol table.
     llvm::Function::Create(llvm::FunctionType::get(return_type, arg_types, /*isVarArg=*/false),
@@ -242,62 +254,6 @@ llvm::Value* CodegenLLVMVisitor::visit_comparison_bin_op(llvm::Value* lhs,
     }
 }
 
-void CodegenLLVMVisitor::visit_procedure_or_function(const ast::Block& node) {
-    const auto& name = node.get_node_name();
-    const auto& parameters = node.get_parameters();
-    llvm::Function* func = module->getFunction(name);
-
-    // Create the entry basic block of the function/procedure and point the local named values table
-    // to the symbol table.
-    llvm::BasicBlock* body = llvm::BasicBlock::Create(*context, /*Name=*/"", func);
-    builder.SetInsertPoint(body);
-    local_named_values = func->getValueSymbolTable();
-
-    // When processing a function, it returns a value named <function_name> in NMODL. Therefore, we
-    // first run RenameVisitor to rename it into ret_<function_name>. This will aid in avoiding
-    // symbolic conflicts. Then, allocate the return variable on the local stack.
-    std::string return_var_name = "ret_" + name;
-    const auto& block = node.get_statement_block();
-    if (node.is_function_block()) {
-        visitor::RenameVisitor v(name, return_var_name);
-        block->accept(v);
-        builder.CreateAlloca(llvm::Type::getDoubleTy(*context),
-                             /*ArraySize=*/nullptr,
-                             return_var_name);
-    }
-
-    // Allocate parameters on the stack and add them to the symbol table.
-    unsigned i = 0;
-    for (auto& arg: func->args()) {
-        std::string arg_name = parameters[i++].get()->get_node_name();
-        llvm::Value* alloca = builder.CreateAlloca(arg.getType(), /*ArraySize=*/nullptr, arg_name);
-        arg.setName(arg_name);
-        builder.CreateStore(&arg, alloca);
-    }
-
-    // Process function or procedure body.
-    const auto& statements = block->get_statements();
-    for (const auto& statement: statements) {
-        // \todo: Support other statement types.
-        if (statement->is_local_list_statement() || statement->is_expression_statement())
-            statement->accept(*this);
-    }
-
-    // Add the terminator. If visiting function, we need to return the value specified by
-    // ret_<function_name>.
-    if (node.is_function_block()) {
-        llvm::Value* return_var = builder.CreateLoad(local_named_values->lookup(return_var_name));
-        builder.CreateRet(return_var);
-    } else {
-        builder.CreateRetVoid();
-    }
-
-    // Clear local values stack and remove the pointer to the local symbol table.
-    values.clear();
-    local_named_values = nullptr;
-}
-
-
 /****************************************************************************************/
 /*                            Overloaded visitor routines                               */
 /****************************************************************************************/
@@ -353,13 +309,81 @@ void CodegenLLVMVisitor::visit_boolean(const ast::Boolean& node) {
     values.push_back(constant);
 }
 
+void CodegenLLVMVisitor::visit_codegen_function(const ast::CodegenFunction& node) {
+    const auto& name = node.get_node_name();
+    const auto& arguments = node.get_arguments();
+    llvm::Function* func = module->getFunction(name);
+
+    // Create the entry basic block of the function/procedure and point the local named values table
+    // to the symbol table.
+    llvm::BasicBlock* body = llvm::BasicBlock::Create(*context, /*Name=*/"", func);
+    builder.SetInsertPoint(body);
+    local_named_values = func->getValueSymbolTable();
+
+    // Allocate parameters on the stack and add them to the symbol table.
+    unsigned i = 0;
+    for (auto& arg: func->args()) {
+        std::string arg_name = arguments[i++].get()->get_node_name();
+        llvm::Value* alloca = builder.CreateAlloca(arg.getType(), /*ArraySize=*/nullptr, arg_name);
+        arg.setName(arg_name);
+        builder.CreateStore(&arg, alloca);
+    }
+
+    // Process function or procedure body. The return statement is handled in a separate visitor.
+    const auto& statements = node.get_statement_block()->get_statements();
+    for (const auto& statement: statements) {
+        // \todo: Support other statement types.
+        if (statement->is_codegen_var_list_statement() || statement->is_expression_statement() ||
+            statement->is_codegen_return_statement())
+            statement->accept(*this);
+    }
+
+    // If function has a void return type, add a terminator not handled by CodegenReturnVar.
+    if (node.get_return_type()->get_type() == ast::AstNodeType::VOID)
+        builder.CreateRetVoid();
+
+    // Clear local values stack and remove the pointer to the local symbol table.
+    values.clear();
+    local_named_values = nullptr;
+}
+
+void CodegenLLVMVisitor::visit_codegen_return_statement(const ast::CodegenReturnStatement& node) {
+    node.get_statement()->accept(*this);
+    llvm::Value* return_value = values.back();
+    values.pop_back();
+    builder.CreateRet(return_value);
+}
+
+void CodegenLLVMVisitor::visit_codegen_var_list_statement(
+    const ast::CodegenVarListStatement& node) {
+    llvm::Type* scalar_var_type = get_codegen_var_type(*node.get_var_type());
+    for (const auto& variable: node.get_variables()) {
+        std::string name = variable->get_node_name();
+        const auto& identifier = variable->get_name();
+        // Local variable can be a scalar (Node AST class) or an array (IndexedName AST class). For
+        // each case, create memory allocations with the corresponding LLVM type.
+        llvm::Type* var_type;
+        if (identifier->is_indexed_name()) {
+            auto indexed_name = std::dynamic_pointer_cast<ast::IndexedName>(identifier);
+            unsigned length = get_array_index_or_length(*indexed_name);
+            var_type = llvm::ArrayType::get(scalar_var_type, length);
+        } else if (identifier->is_name()) {
+            // This case corresponds to a scalar local variable. Its type is double by default.
+            var_type = scalar_var_type;
+        } else {
+            throw std::runtime_error("Error: Unsupported local variable type");
+        }
+        builder.CreateAlloca(var_type, /*ArraySize=*/nullptr, name);
+    }
+}
+
 void CodegenLLVMVisitor::visit_double(const ast::Double& node) {
     const auto& constant = llvm::ConstantFP::get(get_default_fp_type(), node.get_value());
     values.push_back(constant);
 }
 
 void CodegenLLVMVisitor::visit_function_block(const ast::FunctionBlock& node) {
-    visit_procedure_or_function(node);
+    // do nothing. @todo: remove old function blocks from ast.
 }
 
 void CodegenLLVMVisitor::visit_function_call(const ast::FunctionCall& node) {
@@ -384,40 +408,18 @@ void CodegenLLVMVisitor::visit_integer(const ast::Integer& node) {
     values.push_back(constant);
 }
 
-void CodegenLLVMVisitor::visit_local_list_statement(const ast::LocalListStatement& node) {
-    for (const auto& variable: node.get_variables()) {
-        std::string name = variable->get_node_name();
-        const auto& identifier = variable->get_name();
-        // Local variable can be a scalar (Node AST class) or an array (IndexedName AST class). For
-        // each case, create memory allocations with the corresponding LLVM type.
-        llvm::Type* var_type;
-        if (identifier->is_indexed_name()) {
-            auto indexed_name = std::dynamic_pointer_cast<ast::IndexedName>(identifier);
-            unsigned length = get_array_index_or_length(*indexed_name);
-            var_type = llvm::ArrayType::get(get_default_fp_type(), length);
-        } else if (identifier->is_name()) {
-            // This case corresponds to a scalar local variable. Its type is double by default.
-            var_type = get_default_fp_type();
-        } else {
-            throw std::runtime_error("Error: Unsupported local variable type");
-        }
-        builder.CreateAlloca(var_type, /*ArraySize=*/nullptr, name);
-    }
-}
-
 void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
-    // Before generating LLVM, gather information about AST. For now, information about functions
-    // and procedures is used only.
-    CodegenHelperVisitor v;
-    CodegenInfo info = v.analyze(node);
+    // Before generating LLVM:
+    //   - convert function and procedure blocks into CodegenFunctions
+    //   - gather information about AST. For now, information about functions
+    //     and procedures is used only.
+    CodegenLLVMHelperVisitor v;
+    const auto& functions = v.get_codegen_functions(node);
 
-    // For every function and procedure, generate its declaration. Thus, we can look up
+    // For every function, generate its declaration. Thus, we can look up
     // `llvm::Function` in the symbol table in the module.
-    for (const auto& func: info.functions) {
+    for (const auto& func: functions) {
         emit_procedure_or_function_declaration(*func);
-    }
-    for (const auto& proc: info.procedures) {
-        emit_procedure_or_function_declaration(*proc);
     }
 
     // Set the AST symbol table.
@@ -433,16 +435,10 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
 
     // Keep this for easier development (maybe move to debug mode later).
     std::cout << print_module();
-
-    // not used yet : this will be used at the beginning of this function
-    {
-        CodegenLLVMHelperVisitor v;
-        v.visit_program(const_cast<ast::Program&>(node));
-    }
 }
 
 void CodegenLLVMVisitor::visit_procedure_block(const ast::ProcedureBlock& node) {
-    visit_procedure_or_function(node);
+    // do nothing. @todo: remove old procedures from ast.
 }
 
 void CodegenLLVMVisitor::visit_unary_expression(const ast::UnaryExpression& node) {
