@@ -331,15 +331,6 @@ void CodegenLLVMVisitor::visit_codegen_function(const ast::CodegenFunction& node
     block->accept(v);
 
 
-    // When processing a function, it returns a value named <function_name> in NMODL. Therefore, we
-    // first run RenameVisitor to rename it into ret_<function_name>. This will aid in avoiding
-    // symbolic conflicts.
-    std::string return_var_name = "ret_" + name;
-    const auto& block = node.get_statement_block();
-    visitor::RenameVisitor v(name, return_var_name);
-    block->accept(v);
-
-
     // Allocate parameters on the stack and add them to the symbol table.
     unsigned i = 0;
     for (auto& arg: func->args()) {
