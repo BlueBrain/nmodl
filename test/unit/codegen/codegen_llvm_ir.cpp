@@ -192,6 +192,164 @@ SCENARIO("Comparison", "[visitor][llvm]") {
     }
 }
 
+SCENARIO("If/Else", "[visitor][llvm]") {
+    GIVEN("Function with only if statement") {
+        std::string nmodl_text = R"(
+            FUNCTION foo(y) {
+                LOCAL x
+                x = 100
+                if (y == 20) {
+                    x = 20
+                }
+                foo = x + y
+            }
+        )";
+
+        THEN("correct LLVM instructions are produced") {
+            std::string module_string = run_llvm_visitor(nmodl_text);
+            std::smatch m;
+
+            std::regex cond_br(
+                "br i1 %2, label %3, label %4\n"
+                "\n"
+                "3:.*\n"
+                "  store double 2\\.000000e\\+01, double\\* %x.*\n"
+                "  br label %4\n"
+                "\n"
+                "4:");
+            REQUIRE(std::regex_search(module_string, m, cond_br));
+        }
+    }
+
+    GIVEN("Function with both if and else statements") {
+        std::string nmodl_text = R"(
+            FUNCTION sign(x) {
+                LOCAL s
+                if (x < 0) {
+                    s = -1
+                } else {
+                    s = 1
+                }
+                sign = s
+            }
+        )";
+
+        THEN("correct LLVM instructions are produced") {
+            std::string module_string = run_llvm_visitor(nmodl_text);
+            std::smatch m;
+
+            std::regex if_else_br(
+                "br i1 %2, label %3, label %4\n"
+                "\n"
+                "3:.*\n"
+                "  store double -1\\.000000e\\+00, double\\* %s.*\n"
+                "  br label %5\n"
+                "\n"
+                "4:.*\n"
+                "  store double 1\\.000000e\\+00, double\\* %s.*\n"
+                "  br label %5\n"
+                "\n"
+                "5:");
+            REQUIRE(std::regex_search(module_string, m, if_else_br));
+        }
+    }
+
+    GIVEN("Function with both if and else if statements") {
+        std::string nmodl_text = R"(
+            FUNCTION bar(x) {
+                LOCAL s
+                s = -1
+                if (x <= 0) {
+                    s = 0
+                } else if (0 < x && x <= 1) {
+                    s = 1
+                }
+                bar = s
+            }
+        )";
+
+        THEN("correct LLVM instructions are produced") {
+            std::string module_string = run_llvm_visitor(nmodl_text);
+            std::smatch m;
+
+            std::regex if_else_if(
+                "br i1 %2, label %3, label %4\n"
+                "\n"
+                "3:.*\n"
+                "  .*\n"
+                "  br label %12\n"
+                "\n"
+                "4:.*\n"
+                "  .*\n"
+                "  .*\n"
+                "  .*\n"
+                "  .*\n"
+                "  %.+ = and i1 %.+, %.+\n"
+                "  br i1 %.+, label %10, label %11\n"
+                "\n"
+                "10:.*\n"
+                "  .*\n"
+                "  br label %11\n"
+                "\n"
+                "11:.*\n"
+                "  br label %12\n"
+                "\n"
+                "12:");
+            REQUIRE(std::regex_search(module_string, m, if_else_if));
+        }
+    }
+
+    GIVEN("Function with if, else if anf else statements") {
+        std::string nmodl_text = R"(
+            FUNCTION bar(x) {
+                LOCAL s
+                if (x <= 0) {
+                    s = 0
+                } else if (0 < x && x <= 1) {
+                    s = 1
+                } else {
+                    s = 100
+                }
+                bar = s
+            }
+        )";
+
+        THEN("correct LLVM instructions are produced") {
+            std::string module_string = run_llvm_visitor(nmodl_text);
+            std::smatch m;
+
+            std::regex if_else_if_else(
+                "br i1 %2, label %3, label %4\n"
+                "\n"
+                "3:.*\n"
+                "  .*\n"
+                "  br label %13\n"
+                "\n"
+                "4:.*\n"
+                "  .*\n"
+                "  .*\n"
+                "  .*\n"
+                "  .*\n"
+                "  %9 = and i1 %.+, %.+\n"
+                "  br i1 %9, label %10, label %11\n"
+                "\n"
+                "10:.*\n"
+                "  .*\n"
+                "  br label %12\n"
+                "\n"
+                "11:.*\n"
+                "  .*\n"
+                "  br label %12\n"
+                "\n"
+                "12:.*\n"
+                "  br label %13\n"
+                "\n"
+                "13:");
+            REQUIRE(std::regex_search(module_string, m, if_else_if_else));
+        }
+    }
+}
+
 //=============================================================================
 // FunctionBlock
 //=============================================================================
