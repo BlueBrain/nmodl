@@ -67,8 +67,8 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     // Stack to hold visited values
     std::vector<llvm::Value*> values;
 
-    // Pointer to the local symbol table.
-    llvm::ValueSymbolTable* local_named_values = nullptr;
+    // Pointer to the current function.
+    llvm::Function* current_func = nullptr;
 
     // Pointer to AST symbol table.
     symtab::SymbolTable* sym_tab;

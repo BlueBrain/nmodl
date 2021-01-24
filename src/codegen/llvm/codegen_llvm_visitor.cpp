@@ -27,8 +27,10 @@ namespace codegen {
 /****************************************************************************************/
 
 bool CodegenLLVMVisitor::check_array_bounds(const ast::IndexedName& node, unsigned index) {
-    llvm::Type* array_type =
-        local_named_values->lookup(node.get_node_name())->getType()->getPointerElementType();
+    llvm::Type* array_type = current_func->getValueSymbolTable()
+                                 ->lookup(node.get_node_name())
+                                 ->getType()
+                                 ->getPointerElementType();
     unsigned length = array_type->getArrayNumElements();
     return 0 <= index && index < length;
 }
@@ -39,7 +41,7 @@ llvm::Value* CodegenLLVMVisitor::create_gep(const std::string& name, unsigned in
     indices.push_back(llvm::ConstantInt::get(index_type, 0));
     indices.push_back(llvm::ConstantInt::get(index_type, index));
 
-    return builder.CreateInBoundsGEP(local_named_values->lookup(name), indices);
+    return builder.CreateInBoundsGEP(current_func->getValueSymbolTable()->lookup(name), indices);
 }
 
 llvm::Value* CodegenLLVMVisitor::codegen_indexed_name(const ast::IndexedName& node) {
@@ -206,7 +208,7 @@ void CodegenLLVMVisitor::visit_assign_op(const ast::BinaryExpression& node, llvm
 
     const auto& identifier = var->get_name();
     if (identifier->is_name()) {
-        llvm::Value* alloca = local_named_values->lookup(var->get_node_name());
+        llvm::Value* alloca = current_func->getValueSymbolTable()->lookup(var->get_node_name());
         builder.CreateStore(rhs, alloca);
     } else if (identifier->is_indexed_name()) {
         auto indexed_name = std::dynamic_pointer_cast<ast::IndexedName>(identifier);
@@ -313,12 +315,12 @@ void CodegenLLVMVisitor::visit_codegen_function(const ast::CodegenFunction& node
     const auto& name = node.get_node_name();
     const auto& arguments = node.get_arguments();
     llvm::Function* func = module->getFunction(name);
+    current_func = func;
 
     // Create the entry basic block of the function/procedure and point the local named values table
     // to the symbol table.
     llvm::BasicBlock* body = llvm::BasicBlock::Create(*context, /*Name=*/"", func);
     builder.SetInsertPoint(body);
-    local_named_values = func->getValueSymbolTable();
 
     // When processing a function, it returns a value named <function_name> in NMODL. Therefore, we
     // first run RenameVisitor to rename it into ret_<function_name>. This will aid in avoiding
@@ -348,19 +350,21 @@ void CodegenLLVMVisitor::visit_codegen_function(const ast::CodegenFunction& node
     }
 
     // If function has a void return type, add a terminator not handled by CodegenReturnVar.
-    if (node.get_return_type()->get_type() == ast::AstNodeType::VOID)
+    if (node.is_void())
         builder.CreateRetVoid();
 
     // Clear local values stack and remove the pointer to the local symbol table.
     values.clear();
-    local_named_values = nullptr;
+    current_func = nullptr;
 }
 
 void CodegenLLVMVisitor::visit_codegen_return_statement(const ast::CodegenReturnStatement& node) {
-    node.get_statement()->accept(*this);
-    llvm::Value* return_value = values.back();
-    values.pop_back();
-    builder.CreateRet(return_value);
+    if (!node.get_statement()->is_name())
+        throw std::runtime_error("Error: CodegenReturnStatement must contain a name node\n");
+
+    std::string ret = "ret_" + current_func->getName().str();
+    llvm::Value* ret_value = builder.CreateLoad(current_func->getValueSymbolTable()->lookup(ret));
+    builder.CreateRet(ret_value);
 }
 
 void CodegenLLVMVisitor::visit_codegen_var_list_statement(
@@ -382,7 +386,16 @@ void CodegenLLVMVisitor::visit_codegen_var_list_statement(
         } else {
             throw std::runtime_error("Error: Unsupported local variable type");
         }
-        builder.CreateAlloca(var_type, /*ArraySize=*/nullptr, name);
+        llvm::Value* alloca = builder.CreateAlloca(var_type, /*ArraySize=*/nullptr, name);
+
+        // Check if the variable we process is a procedure return variable (i.e. it has a name
+        // "ret_<current_function_name>" and the function return type is integer). If so, initialise
+        // it to 0.
+        std::string ret_val_name = "ret_" + current_func->getName().str();
+        if (name == ret_val_name && current_func->getReturnType()->isIntegerTy()) {
+            llvm::Value* zero = llvm::ConstantInt::get(llvm::Type::getInt32Ty(*context), 0);
+            builder.CreateStore(zero, alloca);
+        }
     }
 }
 
@@ -392,7 +405,7 @@ void CodegenLLVMVisitor::visit_double(const ast::Double& node) {
 }
 
 void CodegenLLVMVisitor::visit_function_block(const ast::FunctionBlock& node) {
-    // do nothing. @todo: remove old function blocks from ast.
+    // do nothing. \todo: remove old function blocks from ast.
 }
 
 void CodegenLLVMVisitor::visit_function_call(const ast::FunctionCall& node) {
@@ -447,7 +460,7 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
 }
 
 void CodegenLLVMVisitor::visit_procedure_block(const ast::ProcedureBlock& node) {
-    // do nothing. @todo: remove old procedures from ast.
+    // do nothing. \todo: remove old procedures from ast.
 }
 
 void CodegenLLVMVisitor::visit_unary_expression(const ast::UnaryExpression& node) {
@@ -471,7 +484,7 @@ void CodegenLLVMVisitor::visit_var_name(const ast::VarName& node) {
 
     llvm::Value* ptr;
     if (identifier->is_name())
-        ptr = local_named_values->lookup(node.get_node_name());
+        ptr = current_func->getValueSymbolTable()->lookup(node.get_node_name());
 
     if (identifier->is_indexed_name()) {
         auto indexed_name = std::dynamic_pointer_cast<ast::IndexedName>(identifier);
