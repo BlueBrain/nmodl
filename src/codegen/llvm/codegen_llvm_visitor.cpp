@@ -428,19 +428,21 @@ void CodegenLLVMVisitor::visit_function_call(const ast::FunctionCall& node) {
 }
 
 void CodegenLLVMVisitor::visit_if_statement(const ast::IfStatement& node) {
+    // Get the current and the next blocks within the function.
     llvm::BasicBlock* curr_block = builder.GetInsertBlock();
+    llvm::BasicBlock* next = curr_block->getNextNode();
     llvm::Function* func = curr_block->getParent();
 
-    // Added a true block and a merge block where the control flow merges.
-    llvm::BasicBlock* true_block = llvm::BasicBlock::Create(*context, /*Name=*/"", func);
-    llvm::BasicBlock* merge_block = llvm::BasicBlock::Create(*context, /*Name=*/"", func);
+    // Add a true block and a merge block where the control flow merges.
+    llvm::BasicBlock* true_block = llvm::BasicBlock::Create(*context, /*Name=*/"", func, next);
+    llvm::BasicBlock* merge_block = llvm::BasicBlock::Create(*context, /*Name=*/"", func, next);
 
     // Add condition to the current block.
     node.get_condition()->accept(*this);
     llvm::Value* cond = values.back();
     values.pop_back();
 
-    // Process the true block;
+    // Process the true block.
     builder.SetInsertPoint(true_block);
     for (const auto& statement: node.get_statement_block()->get_statements()) {
         if (is_supported_statement(*statement))
@@ -448,6 +450,7 @@ void CodegenLLVMVisitor::visit_if_statement(const ast::IfStatement& node) {
     }
     builder.CreateBr(merge_block);
 
+    // Save the merge block and proceed with codegen for `else if` statements.
     llvm::BasicBlock* exit = merge_block;
     for (const auto& else_if: node.get_elseifs()) {
         // Link the current block to the true and else blocks.
@@ -470,7 +473,7 @@ void CodegenLLVMVisitor::visit_if_statement(const ast::IfStatement& node) {
         builder.SetInsertPoint(merge_block);
         builder.CreateBr(tmp);
 
-        // Process true block;
+        // Process true block.
         builder.SetInsertPoint(true_block);
         for (const auto& statement: else_if->get_statement_block()->get_statements()) {
             if (is_supported_statement(*statement))
@@ -480,6 +483,7 @@ void CodegenLLVMVisitor::visit_if_statement(const ast::IfStatement& node) {
         curr_block = else_block;
     }
 
+    // Finally, generate code for `else` statement if it exists.
     const auto& elses = node.get_elses();
     llvm::BasicBlock* else_block;
     if (elses) {
