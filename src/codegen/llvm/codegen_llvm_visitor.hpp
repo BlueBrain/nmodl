@@ -67,8 +67,8 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     // Stack to hold visited values
     std::vector<llvm::Value*> values;
 
-    // Pointer to the local symbol table.
-    llvm::ValueSymbolTable* local_named_values = nullptr;
+    // Pointer to the current function.
+    llvm::Function* current_func = nullptr;
 
     // Pointer to AST symbol table.
     symtab::SymbolTable* sym_tab;
@@ -135,6 +135,13 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     unsigned get_array_index_or_length(const ast::IndexedName& node);
 
     /**
+     * Returns LLVM type for the given CodegenVarType node
+     * \param node CodegenVarType
+     * \return LLVM type
+     */
+    llvm::Type* get_codegen_var_type(const ast::CodegenVarType& node);
+
+    /**
      * Returns 64-bit or 32-bit LLVM floating type
      * \return     \c LLVM floating point type according to `use_single_precision` flag
      */
@@ -163,7 +170,7 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
      *
      * \param node the AST node representing the function or procedure in NMODL
      */
-    void emit_procedure_or_function_declaration(const ast::Block& node);
+    void emit_procedure_or_function_declaration(const ast::CodegenFunction& node);
 
     /**
      * Return module pointer
@@ -216,11 +223,13 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     // Visitors
     void visit_binary_expression(const ast::BinaryExpression& node) override;
     void visit_boolean(const ast::Boolean& node) override;
+    void visit_codegen_function(const ast::CodegenFunction& node) override;
+    void visit_codegen_return_statement(const ast::CodegenReturnStatement& node) override;
+    void visit_codegen_var_list_statement(const ast::CodegenVarListStatement& node) override;
     void visit_double(const ast::Double& node) override;
     void visit_function_block(const ast::FunctionBlock& node) override;
     void visit_function_call(const ast::FunctionCall& node) override;
     void visit_integer(const ast::Integer& node) override;
-    void visit_local_list_statement(const ast::LocalListStatement& node) override;
     void visit_procedure_block(const ast::ProcedureBlock& node) override;
     void visit_program(const ast::Program& node) override;
     void visit_unary_expression(const ast::UnaryExpression& node) override;

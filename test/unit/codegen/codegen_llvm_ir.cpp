@@ -198,12 +198,12 @@ SCENARIO("Function call", "[visitor][llvm]") {
             }
         )";
 
-        THEN("a void call instruction is created") {
+        THEN("an int call instruction is created") {
             std::string module_string = run_llvm_visitor(nmodl_text);
             std::smatch m;
 
             // Check for call instruction.
-            std::regex call(R"(call void @bar\(\))");
+            std::regex call(R"(call i32 @bar\(\))");
             REQUIRE(std::regex_search(module_string, m, call));
         }
     }
@@ -408,13 +408,20 @@ SCENARIO("Procedure", "[visitor][llvm]") {
             PROCEDURE empty() {}
         )";
 
-        THEN("empty void function is produced") {
+        THEN("a function returning 0 integer is produced") {
             std::string module_string = run_llvm_visitor(nmodl_text);
             std::smatch m;
 
-            // Check procedure has empty body with a void return.
-            std::regex procedure(R"(define void @empty\(\) \{\n(\s)*ret void\n\})");
-            REQUIRE(std::regex_search(module_string, m, procedure));
+            // Check procedure has empty body with a dummy 0 allocation.
+            std::regex signature(R"(define i32 @empty)");
+            std::regex alloc(R"(%ret_empty = alloca i32)");
+            std::regex store(R"(store i32 0, i32\* %ret_empty)");
+            std::regex load(R"(%1 = load i32, i32\* %ret_empty)");
+            std::regex ret(R"(ret i32 %1)");
+            REQUIRE(std::regex_search(module_string, m, signature));
+            REQUIRE(std::regex_search(module_string, m, alloc));
+            REQUIRE(std::regex_search(module_string, m, store));
+            REQUIRE(std::regex_search(module_string, m, ret));
         }
     }
 
@@ -423,23 +430,29 @@ SCENARIO("Procedure", "[visitor][llvm]") {
             PROCEDURE with_argument(x) {}
         )";
 
-        THEN("void function is produced with arguments allocated on stack") {
+        THEN("int function is produced with arguments allocated on stack") {
             std::string module_string = run_llvm_visitor(nmodl_text);
             std::smatch m;
 
             // Check procedure signature.
-            std::regex function_signature(R"(define void @with_argument\(double %x1\) \{)");
+            std::regex function_signature(R"(define i32 @with_argument\(double %x1\) \{)");
             REQUIRE(std::regex_search(module_string, m, function_signature));
+
+            // Check dummy return.
+            std::regex dummy_alloca(R"(%ret_with_argument = alloca i32)");
+            std::regex dummy_store(R"(store i32 0, i32\* %ret_with_argument)");
+            std::regex dummy_load(R"(%1 = load i32, i32\* %ret_with_argument)");
+            std::regex ret(R"(ret i32 %1)");
+            REQUIRE(std::regex_search(module_string, m, dummy_alloca));
+            REQUIRE(std::regex_search(module_string, m, dummy_store));
+            REQUIRE(std::regex_search(module_string, m, dummy_load));
+            REQUIRE(std::regex_search(module_string, m, ret));
 
             // Check that procedure arguments are allocated on the local stack.
             std::regex alloca_instr(R"(%x = alloca double)");
             std::regex store_instr(R"(store double %x1, double\* %x)");
             REQUIRE(std::regex_search(module_string, m, alloca_instr));
             REQUIRE(std::regex_search(module_string, m, store_instr));
-
-            // Check terminator.
-            std::regex terminator(R"(ret void)");
-            REQUIRE(std::regex_search(module_string, m, terminator));
         }
     }
 }
@@ -493,7 +506,7 @@ SCENARIO("Dead code removal", "[visitor][llvm][opt]") {
 
             // Check if the values are optimised out
             std::regex empty_proc(
-                R"(define void @add\(double %a1, double %b2\) \{\n(\s)*ret void\n\})");
+                R"(define i32 @add\(double %a1, double %b2\) \{\n(\s)*ret i32 0\n\})");
             REQUIRE(std::regex_search(module_string, m, empty_proc));
         }
     }
