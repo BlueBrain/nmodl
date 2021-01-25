@@ -21,6 +21,9 @@
 namespace nmodl {
 namespace codegen {
 
+
+typedef std::vector<std::shared_ptr<ast::CodegenFunction>> CodegenFunctionVector;
+
 /**
  * @addtogroup llvm_codegen_details
  * @{
@@ -46,7 +49,7 @@ namespace codegen {
  */
 class CodegenLLVMHelperVisitor: public visitor::AstVisitor {
     /// newly generated code generation specific functions
-    std::vector<std::shared_ptr<ast::CodegenFunction>> codegen_functions;
+    CodegenFunctionVector codegen_functions;
 
     /// ast information for code generation
     codegen::CodegenInfo info;
@@ -60,6 +63,9 @@ class CodegenLLVMHelperVisitor: public visitor::AstVisitor {
 
   public:
     CodegenLLVMHelperVisitor() = default;
+
+    /// run visitor and return code generation functions
+    CodegenFunctionVector get_codegen_functions(const ast::Program& node);
 
     void ion_read_statements(BlockType type,
                              std::vector<std::string>& int_variables,
