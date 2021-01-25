@@ -204,9 +204,6 @@ class SympyReplaceSolutionsVisitor: public AstVisitor {
         /// Mark that all the statements need updating (probably unused)
         void tag_all_statements();
 
-        // TODO remove
-        void print();
-
         /**
          * \brief var -> (depends on) vars
          *
@@ -274,6 +271,7 @@ class SympyReplaceSolutionsVisitor: public AstVisitor {
     /// group of old statements that need replacing
     const std::unordered_set<ast::Statement*>* to_be_removed_;
 
+    /// counts how many times the solution statements are interleaved with assignment expressions
     InterleavesCounter interleaves_counter_;
 };
 

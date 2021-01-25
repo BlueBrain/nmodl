@@ -320,35 +320,6 @@ void SympyReplaceSolutionsVisitor::SolutionSorter::tag_all_statements() {
     tags_ = std::vector<bool>(tags_.size(), true);
 }
 
-// TODO remove
-void SympyReplaceSolutionsVisitor::SolutionSorter::print() {
-    std::cout << "---" << std::endl;
-    for (const auto& eq: var2statement_) {
-        const auto ii = eq.second;
-        std::cout << eq.first << " | " << to_nmodl(statements_[ii]) << " | " << tags_[ii]
-                  << std::endl;
-    }
-    std::cout << "---" << std::endl;
-    for (const auto& p: var2dependants_) {
-        auto var = p.first;
-        std::cout << var << " | ";
-        for (auto ii: p.second) {
-            std::cout << ii << ' ';
-        }
-        std::cout << std::endl;
-    }
-    std::cout << "-- dep map ---" << std::endl;
-    for (const auto& p: dependency_map_) {
-        auto var = p.first;
-        std::cout << var << " | ";
-        for (auto ii: p.second) {
-            std::cout << ii << ' ';
-        }
-        std::cout << std::endl;
-    }
-    std::cout << "---" << std::endl;
-}
-
 
 }  // namespace visitor
 }  // namespace nmodl
