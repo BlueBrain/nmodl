@@ -71,6 +71,11 @@ std::shared_ptr<ast::Expression> create_expression(const std::string& code) {
     return std::make_shared<ast::WrappedExpression>(rhs->clone());
 }
 
+CodegenFunctionVector CodegenLLVMHelperVisitor::get_codegen_functions(const ast::Program& node) {
+    const_cast<ast::Program&>(node).accept(*this);
+    return codegen_functions;
+}
+
 /**
  * \brief Add code generation function for FUNCTION or PROCEDURE block
  * @param node AST node representing FUNCTION or PROCEDURE
@@ -98,7 +103,6 @@ std::shared_ptr<ast::Expression> create_expression(const std::string& code) {
  *
  * We perform following transformations so that code generation backends
  * will have minimum logic:
- *  - Add return type
  *  - Add type for the function arguments
  *  - Define variables and return variable
  *  - Add return type (int for PROCEDURE and double for FUNCTION)
