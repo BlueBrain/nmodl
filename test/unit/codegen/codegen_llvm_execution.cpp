@@ -151,6 +151,22 @@ SCENARIO("Optimised arithmetic expression", "[llvm][runner]") {
             }
 
             PROCEDURE foo() {}
+
+            FUNCTION loop() {
+                LOCAL i, j, sum, result
+                    result = 0
+                    WHILE (j < 2) {
+                        i = 0
+                        sum = 0
+                        WHILE (i < 10) {
+                            sum = sum + i
+                            i = i + 1
+                        }
+                        j = j + 1
+                        result = result + sum
+                    }
+                loop = result
+            }
         )";
 
 
@@ -185,6 +201,10 @@ SCENARIO("Optimised arithmetic expression", "[llvm][runner]") {
 
             auto function_call_result = runner.run<double>("function_call");
             REQUIRE(fabs(function_call_result - 1.0) < EPSILON);
+
+            // Check nested while statement produces correct result.
+            auto loop_result = runner.run<double>("loop");
+            REQUIRE(fabs(loop_result - 90.0) < EPSILON);
         }
     }
 }

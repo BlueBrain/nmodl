@@ -578,5 +578,36 @@ void CodegenLLVMVisitor::visit_var_name(const ast::VarName& node) {
     values.push_back(var);
 }
 
+void CodegenLLVMVisitor::visit_while_statement(const ast::WhileStatement& node) {
+    // Get the current and the next blocks within the function.
+    llvm::BasicBlock* curr_block = builder.GetInsertBlock();
+    llvm::BasicBlock* next = curr_block->getNextNode();
+    llvm::Function* func = curr_block->getParent();
+
+    // Add a header and the body blocks.
+    llvm::BasicBlock* header = llvm::BasicBlock::Create(*context, /*Name=*/"", func, next);
+    llvm::BasicBlock* body = llvm::BasicBlock::Create(*context, /*Name=*/"", func, next);
+    llvm::BasicBlock* exit = llvm::BasicBlock::Create(*context, /*Name=*/"", func, next);
+
+    builder.CreateBr(header);
+    builder.SetInsertPoint(header);
+
+    // Generate code for condition and create brunch to the body block.
+    node.get_condition()->accept(*this);
+    llvm::Value* condition = values.back();
+    values.pop_back();
+    builder.CreateCondBr(condition, body, exit);
+
+    builder.SetInsertPoint(body);
+    for (const auto& statement: node.get_statement_block()->get_statements()) {
+        if (statement->is_local_list_statement() || statement->is_expression_statement() ||
+            statement->is_while_statement())
+            statement->accept(*this);
+    }
+    builder.CreateBr(header);
+
+    builder.SetInsertPoint(exit);
+}
+
 }  // namespace codegen
 }  // namespace nmodl

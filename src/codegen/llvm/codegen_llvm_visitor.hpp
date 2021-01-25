@@ -241,6 +241,7 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     void visit_program(const ast::Program& node) override;
     void visit_unary_expression(const ast::UnaryExpression& node) override;
     void visit_var_name(const ast::VarName& node) override;
+    void visit_while_statement(const ast::WhileStatement& node) override;
 
     // \todo: move this to debug mode (e.g. -v option or --dump-ir)
     std::string print_module() const {
