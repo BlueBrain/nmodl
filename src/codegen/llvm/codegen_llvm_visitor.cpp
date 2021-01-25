@@ -592,7 +592,7 @@ void CodegenLLVMVisitor::visit_while_statement(const ast::WhileStatement& node) 
     builder.CreateBr(header);
     builder.SetInsertPoint(header);
 
-    // Generate code for condition and create brunch to the body block.
+    // Generate code for condition and create branch to the body block.
     node.get_condition()->accept(*this);
     llvm::Value* condition = values.back();
     values.pop_back();
