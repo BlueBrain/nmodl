@@ -114,6 +114,30 @@ SCENARIO("Optimised arithmetic expression", "[llvm][runner]") {
                 arithmetic = x * y / (x + y)
             }
 
+            FUNCTION conditionals() {
+                LOCAL x, y, z
+                x = 100
+                y = -100
+                z = 0
+                if (x == 200) {
+                    conditionals = 1
+                } else if (x == 400) {
+                    conditionals = 2
+                } else if (x == 100) {
+                    if (y == -100 && z != 0) {
+                        conditionals = 3
+                    } else {
+                        if (y < -99 && z == 0) {
+                          conditionals = 4
+                        } else {
+                            conditionals = 5
+                        }
+                    }
+                } else {
+                    conditionals = 6
+                }
+            }
+
             FUNCTION bar() {
                 LOCAL i, j
                 i = 2
@@ -150,6 +174,10 @@ SCENARIO("Optimised arithmetic expression", "[llvm][runner]") {
             // Check constant folding.
             auto constant_result = runner.run<double>("constant");
             REQUIRE(fabs(constant_result - 10.0) < EPSILON);
+
+            // Check nested conditionals
+            auto conditionals_result = runner.run<double>("conditionals");
+            REQUIRE(fabs(conditionals_result - 4.0) < EPSILON);
 
             // Check constant folding.
             auto arithmetic_result = runner.run<double>("arithmetic");
