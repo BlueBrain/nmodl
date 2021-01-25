@@ -701,7 +701,7 @@ SCENARIO("While", "[visitor][llvm]") {
                 LOCAL i
                 i = 0
                 WHILE (i < 10) {
-                    i = i + 1;
+                    i = i + 1
                 }
             }
         )";
