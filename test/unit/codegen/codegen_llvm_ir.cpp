@@ -367,12 +367,12 @@ SCENARIO("Function", "[visitor][llvm]") {
             std::smatch m;
 
             // Check function signature. The return type should be the default double type.
-            std::regex function_signature(R"(define double @foo\(double %x1\) \{)");
+            std::regex function_signature(R"(define double @foo\(double %x[0-9].*\) \{)");
             REQUIRE(std::regex_search(module_string, m, function_signature));
 
             // Check that function arguments are allocated on the local stack.
             std::regex alloca_instr(R"(%x = alloca double)");
-            std::regex store_instr(R"(store double %x1, double\* %x)");
+            std::regex store_instr(R"(store double %x[0-9].*, double\* %x)");
             REQUIRE(std::regex_search(module_string, m, alloca_instr));
             REQUIRE(std::regex_search(module_string, m, store_instr));
 
@@ -638,7 +638,7 @@ SCENARIO("Procedure", "[visitor][llvm]") {
             std::smatch m;
 
             // Check procedure signature.
-            std::regex function_signature(R"(define i32 @with_argument\(double %x1\) \{)");
+            std::regex function_signature(R"(define i32 @with_argument\(double %x[0-9].*\) \{)");
             REQUIRE(std::regex_search(module_string, m, function_signature));
 
             // Check dummy return.
@@ -653,7 +653,7 @@ SCENARIO("Procedure", "[visitor][llvm]") {
 
             // Check that procedure arguments are allocated on the local stack.
             std::regex alloca_instr(R"(%x = alloca double)");
-            std::regex store_instr(R"(store double %x1, double\* %x)");
+            std::regex store_instr(R"(store double %x[0-9].*, double\* %x)");
             REQUIRE(std::regex_search(module_string, m, alloca_instr));
             REQUIRE(std::regex_search(module_string, m, store_instr));
         }
@@ -709,7 +709,7 @@ SCENARIO("Dead code removal", "[visitor][llvm][opt]") {
 
             // Check if the values are optimised out
             std::regex empty_proc(
-                R"(define i32 @add\(double %a1, double %b2\) \{\n(\s)*ret i32 0\n\})");
+                R"(define i32 @add\(double %a[0-9].*, double %b[0-9].*\) \{\n(\s)*ret i32 0\n\})");
             REQUIRE(std::regex_search(module_string, m, empty_proc));
         }
     }
@@ -725,11 +725,18 @@ SCENARIO("Creation of Instance Struct", "[visitor][llvm][instance_struct]") {
             NEURON {
                 RANGE a, b, c
             }
+            ASSIGNED {
+                a
+                b
+                c
+            }
+            FUNCTION foo(x, y) {
+                foo = 4 * x - y
+            }
         )";
 
         THEN("create struct with the declared variables") {
             std::string module_testing = run_llvm_visitor(nmodl_text, true);
-
             REQUIRE("" == module_testing);
         }
     }
