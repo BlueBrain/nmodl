@@ -28,7 +28,8 @@ namespace codegen {
 
 static bool is_supported_statement(const ast::Statement& statement) {
     return statement.is_codegen_var_list_statement() || statement.is_expression_statement() ||
-           statement.is_codegen_return_statement() || statement.is_if_statement();
+           statement.is_codegen_return_statement() || statement.is_if_statement() ||
+           statement.is_while_statement();
 }
 
 bool CodegenLLVMVisitor::check_array_bounds(const ast::IndexedName& node, unsigned index) {
@@ -314,6 +315,14 @@ void CodegenLLVMVisitor::visit_binary_expression(const ast::BinaryExpression& no
     values.push_back(result);
 }
 
+void CodegenLLVMVisitor::visit_statement_block(const ast::StatementBlock& node) {
+    const auto& statements = node.get_statements();
+    for (const auto& statement: statements) {
+        if (is_supported_statement(*statement))
+            statement->accept(*this);
+    }
+}
+
 void CodegenLLVMVisitor::visit_boolean(const ast::Boolean& node) {
     const auto& constant = llvm::ConstantInt::get(llvm::Type::getInt1Ty(*context),
                                                   node.get_value());
@@ -350,11 +359,7 @@ void CodegenLLVMVisitor::visit_codegen_function(const ast::CodegenFunction& node
     }
 
     // Process function or procedure body. The return statement is handled in a separate visitor.
-    const auto& statements = block->get_statements();
-    for (const auto& statement: statements) {
-        if (is_supported_statement(*statement))
-            statement->accept(*this);
-    }
+    block->accept(*this);
 
     // If function has a void return type, add a terminator not handled by CodegenReturnVar.
     if (node.is_void())
@@ -448,10 +453,7 @@ void CodegenLLVMVisitor::visit_if_statement(const ast::IfStatement& node) {
 
     // Process the true block.
     builder.SetInsertPoint(true_block);
-    for (const auto& statement: node.get_statement_block()->get_statements()) {
-        if (is_supported_statement(*statement))
-            statement->accept(*this);
-    }
+    node.get_statement_block()->accept(*this);
     builder.CreateBr(merge_block);
 
     // Save the merge block and proceed with codegen for `else if` statements.
@@ -479,10 +481,7 @@ void CodegenLLVMVisitor::visit_if_statement(const ast::IfStatement& node) {
 
         // Process true block.
         builder.SetInsertPoint(true_block);
-        for (const auto& statement: else_if->get_statement_block()->get_statements()) {
-            if (is_supported_statement(*statement))
-                statement->accept(*this);
-        }
+        else_if->get_statement_block()->accept(*this);
         builder.CreateBr(merge_block);
         curr_block = else_block;
     }
@@ -493,10 +492,7 @@ void CodegenLLVMVisitor::visit_if_statement(const ast::IfStatement& node) {
     if (elses) {
         else_block = llvm::BasicBlock::Create(*context, /*Name=*/"", func, merge_block);
         builder.SetInsertPoint(else_block);
-        for (const auto& statement: elses->get_statement_block()->get_statements()) {
-            if (is_supported_statement(*statement))
-                statement->accept(*this);
-        }
+        elses->get_statement_block()->accept(*this);
         builder.CreateBr(merge_block);
     } else {
         else_block = merge_block;
@@ -576,6 +572,33 @@ void CodegenLLVMVisitor::visit_var_name(const ast::VarName& node) {
     // Finally, load the variable from the pointer value.
     llvm::Value* var = builder.CreateLoad(ptr);
     values.push_back(var);
+}
+
+void CodegenLLVMVisitor::visit_while_statement(const ast::WhileStatement& node) {
+    // Get the current and the next blocks within the function.
+    llvm::BasicBlock* curr_block = builder.GetInsertBlock();
+    llvm::BasicBlock* next = curr_block->getNextNode();
+    llvm::Function* func = curr_block->getParent();
+
+    // Add a header and the body blocks.
+    llvm::BasicBlock* header = llvm::BasicBlock::Create(*context, /*Name=*/"", func, next);
+    llvm::BasicBlock* body = llvm::BasicBlock::Create(*context, /*Name=*/"", func, next);
+    llvm::BasicBlock* exit = llvm::BasicBlock::Create(*context, /*Name=*/"", func, next);
+
+    builder.CreateBr(header);
+    builder.SetInsertPoint(header);
+
+    // Generate code for condition and create branch to the body block.
+    node.get_condition()->accept(*this);
+    llvm::Value* condition = values.back();
+    values.pop_back();
+    builder.CreateCondBr(condition, body, exit);
+
+    builder.SetInsertPoint(body);
+    node.get_statement_block()->accept(*this);
+    builder.CreateBr(header);
+
+    builder.SetInsertPoint(exit);
 }
 
 }  // namespace codegen
