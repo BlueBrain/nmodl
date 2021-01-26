@@ -181,6 +181,12 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     }
 
     /**
+     * Lookup the given name in the current function's symbol table
+     * \return LLVM value
+     */
+    llvm::Value* lookup(const std::string& name);
+
+    /**
      * Visit nmodl arithmetic binary operator
      * \param lhs LLVM value of evaluated lhs expression
      * \param rhs LLVM value of evaluated rhs expression
