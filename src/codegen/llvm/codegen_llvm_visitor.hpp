@@ -229,6 +229,7 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     // Visitors
     void visit_binary_expression(const ast::BinaryExpression& node) override;
     void visit_boolean(const ast::Boolean& node) override;
+    void visit_statement_block(const ast::StatementBlock& node) override;
     void visit_codegen_function(const ast::CodegenFunction& node) override;
     void visit_codegen_return_statement(const ast::CodegenReturnStatement& node) override;
     void visit_codegen_var_list_statement(const ast::CodegenVarListStatement& node) override;
@@ -241,6 +242,7 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     void visit_program(const ast::Program& node) override;
     void visit_unary_expression(const ast::UnaryExpression& node) override;
     void visit_var_name(const ast::VarName& node) override;
+    void visit_while_statement(const ast::WhileStatement& node) override;
 
     // \todo: move this to debug mode (e.g. -v option or --dump-ir)
     std::string print_module() const {
