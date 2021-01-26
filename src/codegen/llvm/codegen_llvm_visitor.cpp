@@ -32,10 +32,7 @@ static bool is_supported_statement(const ast::Statement& statement) {
 }
 
 bool CodegenLLVMVisitor::check_array_bounds(const ast::IndexedName& node, unsigned index) {
-    llvm::Type* array_type = current_func->getValueSymbolTable()
-                                 ->lookup(node.get_node_name())
-                                 ->getType()
-                                 ->getPointerElementType();
+    llvm::Type* array_type = lookup(node.get_node_name())->getType()->getPointerElementType();
     unsigned length = array_type->getArrayNumElements();
     return 0 <= index && index < length;
 }
@@ -46,7 +43,7 @@ llvm::Value* CodegenLLVMVisitor::create_gep(const std::string& name, unsigned in
     indices.push_back(llvm::ConstantInt::get(index_type, 0));
     indices.push_back(llvm::ConstantInt::get(index_type, index));
 
-    return builder.CreateInBoundsGEP(current_func->getValueSymbolTable()->lookup(name), indices);
+    return builder.CreateInBoundsGEP(lookup(name), indices);
 }
 
 llvm::Value* CodegenLLVMVisitor::codegen_indexed_name(const ast::IndexedName& node) {
@@ -177,6 +174,13 @@ void CodegenLLVMVisitor::emit_procedure_or_function_declaration(const ast::Codeg
                            *module);
 }
 
+llvm::Value* CodegenLLVMVisitor::lookup(const std::string& name) {
+    auto val = current_func->getValueSymbolTable()->lookup(name);
+    if (!val)
+        throw std::runtime_error("Error: variable " + name + " is not in scope\n");
+    return val;
+}
+
 llvm::Value* CodegenLLVMVisitor::visit_arithmetic_bin_op(llvm::Value* lhs,
                                                          llvm::Value* rhs,
                                                          unsigned op) {
@@ -213,7 +217,7 @@ void CodegenLLVMVisitor::visit_assign_op(const ast::BinaryExpression& node, llvm
 
     const auto& identifier = var->get_name();
     if (identifier->is_name()) {
-        llvm::Value* alloca = current_func->getValueSymbolTable()->lookup(var->get_node_name());
+        llvm::Value* alloca = lookup(var->get_node_name());
         builder.CreateStore(rhs, alloca);
     } else if (identifier->is_indexed_name()) {
         auto indexed_name = std::dynamic_pointer_cast<ast::IndexedName>(identifier);
@@ -562,7 +566,7 @@ void CodegenLLVMVisitor::visit_var_name(const ast::VarName& node) {
 
     llvm::Value* ptr;
     if (identifier->is_name())
-        ptr = current_func->getValueSymbolTable()->lookup(node.get_node_name());
+        ptr = lookup(node.get_node_name());
 
     if (identifier->is_indexed_name()) {
         auto indexed_name = std::dynamic_pointer_cast<ast::IndexedName>(identifier);
