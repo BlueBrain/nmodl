@@ -714,3 +714,23 @@ SCENARIO("Dead code removal", "[visitor][llvm][opt]") {
         }
     }
 }
+
+//=============================================================================
+// Create Instance Struct
+//=============================================================================
+
+SCENARIO("Creation of Instance Struct", "[visitor][llvm][instance_struct]") {
+    GIVEN("NEURON block with some variables") {
+        std::string nmodl_text = R"(
+            NEURON {
+                RANGE a, b, c
+            }
+        )";
+
+        THEN("create struct with the declared variables") {
+            std::string module_testing = run_llvm_visitor(nmodl_text, true);
+
+            REQUIRE("" == module_testing);
+        }
+    }
+}

@@ -575,7 +575,13 @@ void CodegenLLVMVisitor::visit_var_name(const ast::VarName& node) {
 }
 
 void CodegenLLVMVisitor::visit_instance_struct(const ast::InstanceStruct& node) {
-
+    std::vector<llvm::Type*> members;
+    for(const auto& variable : node.get_codegen_vars()) {
+        members.push_back(get_default_fp_type());
+    }
+    // Name to be changed to <mech_name>_Instance
+    llvm::StructType* llvm_struct = llvm::StructType::create(*context, "InstanceStruct");
+    llvm_struct->setBody(members);
 }
 
 }  // namespace codegen
