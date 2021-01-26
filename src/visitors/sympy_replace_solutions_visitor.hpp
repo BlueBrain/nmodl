@@ -59,20 +59,20 @@ namespace visitor {
  * - add all the remaining solutions at the end
  */
 class SympyReplaceSolutionsVisitor: public AstVisitor {
-  private:
+  public:
     enum class ReplacePolicy {
         VALUE = 0,   //!< Replace statements matching by lhs varName
         GREEDY = 1,  //!< Replace statements greedily
     };
-
-  public:
     /// Empty ctor
     SympyReplaceSolutionsVisitor() = delete;
 
     /// Default constructor
     SympyReplaceSolutionsVisitor(const std::vector<std::string>& pre_solve_statements,
                                  const std::vector<std::string>& solutions,
-                                 const std::unordered_set<ast::Statement*>& to_be_removed);
+                                 const std::unordered_set<ast::Statement*>& to_be_removed,
+                                 const ReplacePolicy policy,
+                                 size_t n_next_equations);
 
 
     void visit_statement_block(ast::StatementBlock& node) override;
@@ -186,9 +186,10 @@ class SympyReplaceSolutionsVisitor: public AstVisitor {
                                         const std::string& var);
 
 
-        /// Emplace back the first statement in \ref statements that is marked for updating in \ref
-        /// tags_
-        bool emplace_back_next_statement(ast::StatementVector& new_statements);
+        /// Emplace back the next \p n_next_statements solutions in \ref statements that is marked
+        /// for updating in \ref tags_
+        size_t emplace_back_next_statements(ast::StatementVector& new_statements,
+                                            const size_t n_next_statements);
 
         /// Emplace back all the statements that are marked for updating in \ref tags_
         size_t emplace_back_all_statements(ast::StatementVector& new_statements,
@@ -267,6 +268,9 @@ class SympyReplaceSolutionsVisitor: public AstVisitor {
 
     /// Replacement policy used by the various visitors
     ReplacePolicy policy_;
+
+    /// Number of solutions that match each old_statement with the greedy policy
+    size_t n_next_equations_;
 
     /// group of old statements that need replacing
     const std::unordered_set<ast::Statement*>* to_be_removed_;

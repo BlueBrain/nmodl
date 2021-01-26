@@ -111,7 +111,7 @@ ast::StatementVector::const_iterator SympySolverVisitor::get_solution_location_i
 }
 
 /**
- * Check if provided statement is local variable declaration statement
+ * Check if provided statemenet is local variable declaration statement
  * @param statement AST node representing statement in the MOD file
  * @return True if statement is local variable declaration else False
  *
@@ -202,60 +202,73 @@ void SympySolverVisitor::construct_eigen_solver_block(
     // statements after last diff/linear/non-linear eq statement go into finalize_block
     ast::StatementVector finalize_statements{it, statements.end()};
     // remove them from the statement block
-
     block_with_expression_statements->erase_statement(it, statements.end());
-    // also remove diff/linear/non-linear eq statements from the statement block
-    block_with_expression_statements->erase_statement(expression_statements);
-    // move any local variable declarations into variable_block
-    ast::StatementVector variable_statements;
-    // remaining statements in block should go into initialize_block
-    ast::StatementVector initialize_statements;
-    for (auto s: statements) {
-        if (is_local_statement(s)) {
-            variable_statements.push_back(s);
-        } else {
-            initialize_statements.push_back(s);
-        }
-    }
+
+    // TODO remove this rubber band
+    std::vector<std::string> pre_solve_statements_SRI(pre_solve_statements);
+    pre_solve_statements_SRI.insert(pre_solve_statements_SRI.end(),
+                                    setup_x_eqs.begin(),
+                                    setup_x_eqs.end());
+    auto block_with_expression_statements_SRI = std::shared_ptr<ast::StatementBlock>(
+        block_with_expression_statements->clone());
+
+    std::cout << to_nmodl(*block_with_expression_statements_SRI) << std::endl;
+
+    visitor::SympyReplaceSolutionsVisitor solution_replacer(
+        pre_solve_statements_SRI,
+        solutions,
+        /* TODO */ {},
+        visitor::SympyReplaceSolutionsVisitor::ReplacePolicy::GREEDY,
+        state_vars.size() + 1);
+    solution_replacer.visit_statement_block(*block_with_expression_statements_SRI);
+
+    std::cout << "---" << std::endl;
+    std::cout << to_nmodl(*block_with_expression_statements_SRI) << std::endl;
+
+    // end TODO
+
+
     // make statement blocks
     auto n_state_vars = std::make_shared<ast::Integer>(state_vars.size(), nullptr);
-    auto variable_block = std::make_shared<ast::StatementBlock>(std::move(variable_statements));
-    auto initialize_block = std::make_shared<ast::StatementBlock>(std::move(initialize_statements));
+    auto variable_block = std::make_shared<ast::StatementBlock>(ast::StatementVector());
+    auto initialize_block = std::make_shared<ast::StatementBlock>(ast::StatementVector());
     auto update_state_block = create_statement_block(update_state_eqs);
     auto finalize_block = std::make_shared<ast::StatementBlock>(std::move(finalize_statements));
 
     if (linear) {
         /// create eigen linear solver block
-        setup_x_eqs.insert(setup_x_eqs.end(), solutions_filtered.begin(), solutions_filtered.end());
-        auto setup_x_block = create_statement_block(setup_x_eqs);
-        auto solver_block = std::make_shared<ast::EigenLinearSolverBlock>(n_state_vars,
-                                                                          variable_block,
-                                                                          initialize_block,
-                                                                          setup_x_block,
-                                                                          update_state_block,
-                                                                          finalize_block);
+        //        setup_x_eqs.insert(setup_x_eqs.end(), solutions_filtered.begin(),
+        //        solutions_filtered.end()); auto setup_x_block =
+        //        create_statement_block(setup_x_eqs);
+        auto solver_block =
+            std::make_shared<ast::EigenLinearSolverBlock>(n_state_vars,
+                                                          variable_block,
+                                                          initialize_block,
+                                                          block_with_expression_statements_SRI,
+                                                          update_state_block,
+                                                          finalize_block);
         /// replace statement block with solver block as it contains all statements
         ast::StatementVector solver_block_statements{
             std::make_shared<ast::ExpressionStatement>(solver_block)};
         block_with_expression_statements->set_statements(std::move(solver_block_statements));
     } else {
-        /// create eigen newton solver block
-        auto setup_x_block = create_statement_block(setup_x_eqs);
-        auto functor_block = create_statement_block(solutions_filtered);
-        auto solver_block = std::make_shared<ast::EigenNewtonSolverBlock>(n_state_vars,
-                                                                          variable_block,
-                                                                          initialize_block,
-                                                                          setup_x_block,
-                                                                          functor_block,
-                                                                          update_state_block,
-                                                                          finalize_block);
-        /// replace statement block with solver block as it contains all statements
-        ast::StatementVector solver_block_statements{
-            std::make_shared<ast::ExpressionStatement>(solver_block)};
-        block_with_expression_statements->set_statements(std::move(solver_block_statements));
+        // TODO reactivate this
+        //        /// create eigen newton solver block
+        //        auto setup_x_block = create_statement_block(setup_x_eqs);
+        //        auto functor_block = create_statement_block(solutions_filtered);
+        //        auto solver_block = std::make_shared<ast::EigenNewtonSolverBlock>(n_state_vars,
+        //                                                                          variable_block,
+        //                                                                          initialize_block,
+        //                                                                          setup_x_block,
+        //                                                                          functor_block,
+        //                                                                          update_state_block,
+        //                                                                          finalize_block);
+        //        /// replace statement block with solver block as it contains all statements
+        //        ast::StatementVector solver_block_statements{
+        //            std::make_shared<ast::ExpressionStatement>(solver_block)};
+        //        block_with_expression_statements->set_statements(std::move(solver_block_statements));
     }
 }
-
 
 void SympySolverVisitor::solve_linear_system(const std::vector<std::string>& pre_solve_statements) {
     // construct ordered vector of state vars used in linear system
@@ -297,12 +310,13 @@ void SympySolverVisitor::solve_linear_system(const std::vector<std::string>& pre
                 add_local_variable(*block_with_expression_statements, new_local_var);
             }
         }
-
-        visitor::SympyReplaceSolutionsVisitor solution_replacer(pre_solve_statements,
-                                                                solutions,
-                                                                expression_statements);
+        visitor::SympyReplaceSolutionsVisitor solution_replacer(
+            pre_solve_statements,
+            solutions,
+            expression_statements,
+            visitor::SympyReplaceSolutionsVisitor::ReplacePolicy::VALUE,
+            1);
         solution_replacer.visit_statement_block(*block_with_expression_statements);
-
     } else {
         // otherwise it returns a linear matrix system to solve
         logger->debug("SympySolverVisitor :: Constructing linear newton solve block");
@@ -497,7 +511,7 @@ void SympySolverVisitor::visit_derivative_block(ast::DerivativeBlock& node) {
                 // no CONSERVE equation, construct Euler equation
                 auto dxdt = stringutils::trim(split_eq[1]);
                 auto old_x = "old_" + x + x_array_index_i;  // TODO: do this properly,
-                                                            // check name is unique
+                // check name is unique
                 // declare old_x
                 logger->debug("SympySolverVisitor :: -> declaring new local variable: {}", old_x);
                 add_local_variable(*block_with_expression_statements, old_x);

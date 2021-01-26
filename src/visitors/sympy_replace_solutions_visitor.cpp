@@ -25,9 +25,13 @@ void SympyReplaceSolutionsVisitor::InterleavesCounter::new_equation(const bool i
 SympyReplaceSolutionsVisitor::SympyReplaceSolutionsVisitor(
     const std::vector<std::string>& pre_solve_statements,
     const std::vector<std::string>& solutions,
-    const std::unordered_set<ast::Statement*>& to_be_removed)
+    const std::unordered_set<ast::Statement*>& to_be_removed,
+    const ReplacePolicy policy,
+    const size_t n_next_equations)
     : pre_solve_statements_(pre_solve_statements.begin(), pre_solve_statements.end())
-    , to_be_removed_(&to_be_removed) {
+    , to_be_removed_(&to_be_removed)
+    , policy_(policy)
+    , n_next_equations_(n_next_equations) {
     const auto ss_tmp_delimeter =
         std::find_if(solutions.begin(), solutions.end(), [](const std::string& statement) {
             return statement.substr(0, 3) != "tmp";
@@ -45,18 +49,18 @@ void SympyReplaceSolutionsVisitor::visit_statement_block(ast::StatementBlock& no
     is_statement_block_root_ = false;
 
     if (is_root) {
-        logger->debug("SympyReplaceSolutionsVisitor :: visit matching statements by value");
+        logger->debug("SympyReplaceSolutionsVisitor :: visit matching statements. Policy: {}",
+                      (policy_ == ReplacePolicy::VALUE ? "VALUE" : "GREEDY"));
         interleaves_counter_ = InterleavesCounter();
-        policy_ = ReplacePolicy::VALUE;
         node.visit_children(*this);
 
-        if (!solutions_.is_all_untagged()) {
+        if (!solutions_.is_all_untagged() && policy_ == ReplacePolicy::VALUE) {
             logger->debug(
-                "SympyReplaceSolutionsVisitor :: not all solutions were replaced. Visit replacing "
-                "greedly");
+                "SympyReplaceSolutionsVisitor :: not all solutions were replaced. Policy: GREEDY");
             interleaves_counter_ = InterleavesCounter();
             policy_ = ReplacePolicy::GREEDY;
             node.visit_children(*this);
+
             if (interleaves_counter_.n() > 0) {
                 logger->warn(
                     "SympyReplaceSolutionsVisitor :: Found ambiguous system of equations "
@@ -72,7 +76,6 @@ void SympyReplaceSolutionsVisitor::visit_statement_block(ast::StatementBlock& no
     } else {
         node.visit_children(*this);
     }
-
 
     const auto& old_statements = node.get_statements();
 
@@ -142,15 +145,14 @@ void SympyReplaceSolutionsVisitor::visit_diff_eq_expression(ast::DiffEqExpressio
         break;
     }
     case ReplacePolicy::GREEDY: {
-        if (!solutions_.is_all_untagged()) {
-            ast::StatementVector new_statements;
+        ast::StatementVector new_statements;
 
-            pre_solve_statements_.emplace_back_all_statements(new_statements);
-            tmp_statements_.emplace_back_all_statements(new_statements);
-            solutions_.emplace_back_next_statement(new_statements);
+        pre_solve_statements_.emplace_back_all_statements(new_statements);
+        tmp_statements_.emplace_back_all_statements(new_statements);
+        solutions_.emplace_back_next_statements(new_statements, n_next_equations_);
 
-            replacements_.emplace(statement, new_statements);
-        }
+        replacements_.emplace(statement, new_statements);
+
         break;
     }
     }
@@ -189,15 +191,13 @@ void SympyReplaceSolutionsVisitor::visit_lin_equation(ast::LinEquation& node) {
         break;
     }
     case ReplacePolicy::GREEDY: {
-        if (!solutions_.is_all_untagged()) {
-            ast::StatementVector new_statements;
+        ast::StatementVector new_statements;
 
-            pre_solve_statements_.emplace_back_all_statements(new_statements);
-            tmp_statements_.emplace_back_all_statements(new_statements);
-            solutions_.emplace_back_next_statement(new_statements);
+        pre_solve_statements_.emplace_back_all_statements(new_statements);
+        tmp_statements_.emplace_back_all_statements(new_statements);
+        solutions_.emplace_back_next_statements(new_statements, n_next_equations_);
 
-            replacements_.emplace(statement, new_statements);
-        }
+        replacements_.emplace(statement, new_statements);
         break;
     }
     }
@@ -273,16 +273,20 @@ bool SympyReplaceSolutionsVisitor::SolutionSorter::try_emplace_back_statement(
     return emplaced;
 }
 
-bool SympyReplaceSolutionsVisitor::SolutionSorter::emplace_back_next_statement(
-    ast::StatementVector& new_statements) {
-    const size_t next_statement_ii = std::find(tags_.begin(), tags_.end(), true) - tags_.begin();
-    bool emplaced = false;
-    if (next_statement_ii < statements_.size()) {
-        new_statements.emplace_back(statements_[next_statement_ii]->clone());
-        tags_[next_statement_ii] = false;
-        emplaced = true;
+size_t SympyReplaceSolutionsVisitor::SolutionSorter::emplace_back_next_statements(
+    ast::StatementVector& new_statements,
+    const size_t n_next_statements) {
+    size_t counter = 0;
+    for (size_t next_statement_ii = 0;
+         next_statement_ii < statements_.size() && counter < n_next_statements;
+         ++next_statement_ii) {
+        if (tags_[next_statement_ii]) {
+            new_statements.emplace_back(statements_[next_statement_ii]->clone());
+            tags_[next_statement_ii] = false;
+            ++counter;
+        }
     }
-    return emplaced;
+    return counter;
 }
 
 size_t SympyReplaceSolutionsVisitor::SolutionSorter::emplace_back_all_statements(

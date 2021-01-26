@@ -216,13 +216,22 @@ def solve_lin_system(eq_strings, vars, constants, function_calls, small_system=F
         matJ, vecF = sp.linear_eq_to_matrix(eqs, state_vars)
 
         # construct vector F
+        vecFcode = []
         for i, expr in enumerate(vecF):
-            code.append(f"F[{i}] = {sp.ccode(expr.simplify().evalf())}")
+            vecFcode.append(f"F[{i}] = {sp.ccode(expr.simplify().evalf())}")
         # construct matrix J
+        vecJcode = []
         for i, expr in enumerate(matJ):
             # todo: fix indexing to be ascending order
             flat_index = matJ.rows * (i % matJ.rows) + (i // matJ.rows)
-            code.append(f"J[{flat_index}] = {sp.ccode(expr.simplify().evalf(), user_functions=custom_fcts)}")
+            vecJcode.append(f"J[{flat_index}] = {sp.ccode(expr.simplify().evalf(), user_functions=custom_fcts)}")
+        # interweave
+        n = len(vecFcode)
+        for i, expr in enumerate(vecFcode):
+            code.append(expr)
+            for j in range(i * n, (i+1) * n):
+                code.append(vecJcode[j])
+
 
     return code, new_local_vars
 
