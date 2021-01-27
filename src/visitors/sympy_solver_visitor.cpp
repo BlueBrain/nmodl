@@ -157,6 +157,7 @@ std::vector<std::string> SympySolverVisitor::filter_string_vector(
     return filtered_vector;
 }
 
+
 void SympySolverVisitor::construct_eigen_solver_block(
     const std::vector<std::string>& pre_solve_statements,
     const std::vector<std::string>& solutions,
