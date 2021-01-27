@@ -74,14 +74,36 @@ class SympyReplaceSolutionsVisitor: public AstVisitor {
                                  const ReplacePolicy policy,
                                  size_t n_next_equations);
 
+    /// idx (in the new statementVector) of the first statement that was added. -1 if nothing was
+    /// added
+    inline int replaced_statements_begin() const {
+        return replaced_statements_begin_;
+    }
+    /// idx (in the new statementVector) of the last statement that was added. -1 if nothing was
+    /// added
+    inline int replaced_statements_end() const {
+        return replaced_statements_end_;
+    }
 
     void visit_statement_block(ast::StatementBlock& node) override;
     void visit_diff_eq_expression(ast::DiffEqExpression& node) override;
     void visit_lin_equation(ast::LinEquation& node) override;
+    void visit_non_lin_equation(ast::NonLinEquation& node) override;
     void visit_binary_expression(ast::BinaryExpression& node) override;
 
 
   private:
+    /** \brief Try to replace a statement
+     *
+     * @param node it can be Diff_Eq_Expression/LinEquation/NonLinEquation
+     * @param get_lhs method with witch we may get the lhs (in case we need it)
+     * @param get_rhs method with witch we may get the rhs (in case we need it)
+     */
+    void try_replace_statement(
+        const ast::Node& node,
+        const std::shared_ptr<ast::Expression>& get_lhs(const ast::Node& node),
+        const std::shared_ptr<ast::Expression>& get_rhs(const ast::Node& node));
+
     /**
      * \struct InterleavesCounter
      * \brief Count interleaves of assignment statement inside the system of equations
@@ -129,7 +151,8 @@ class SympyReplaceSolutionsVisitor: public AstVisitor {
 
         /// Standard ctor
         SolutionSorter(const std::vector<std::string>::const_iterator& statements_str_beg,
-                       const std::vector<std::string>::const_iterator& statements_str_end);
+                       const std::vector<std::string>::const_iterator& statements_str_end,
+                       const int error_on_n_flushes);
 
         /**
          * /brief Construct the maps for easy access and classification of the statements
@@ -192,8 +215,7 @@ class SympyReplaceSolutionsVisitor: public AstVisitor {
                                             const size_t n_next_statements);
 
         /// Emplace back all the statements that are marked for updating in \ref tags_
-        size_t emplace_back_all_statements(ast::StatementVector& new_statements,
-                                           const bool is_logger = false);
+        size_t emplace_back_all_statements(ast::StatementVector& new_statements);
 
         /**
          * \brief Tag all the statements that depend on \p var for updating
@@ -242,6 +264,27 @@ class SympyReplaceSolutionsVisitor: public AstVisitor {
          * statements_[ii] needs updating
          */
         std::vector<bool> tags_;
+
+        /**
+         * \brief Max number of times a statement was printed using an \ref
+         * emplace_all_back_statement command
+         *
+         * This is useful to check if, during updates, a variable was assigned.
+         *
+         * For example:
+         *
+         * \f x' = a \f
+         * \f x = a + 1 \f
+         * \f y' = b \f
+         *
+         * In this sequence of statements \f x \f was assigned within variable updates. This
+         * sequence of statements could lead to instability/wrong results for derivimplicit methods.
+         * Better to prevent this entirely. It can still be assigned at the end/beginning
+         */
+        size_t n_flushes_ = 0;
+
+        /// Emit error when \ref n_flushes_ reaches this number. -1 disables the error entirely
+        int error_on_n_flushes_;
     };
 
     /// Update state variable statements (i.e. \f old_x = x \f)
@@ -277,6 +320,12 @@ class SympyReplaceSolutionsVisitor: public AstVisitor {
 
     /// counts how many times the solution statements are interleaved with assignment expressions
     InterleavesCounter interleaves_counter_;
+
+    /// first added statement index
+    int replaced_statements_begin_ = -1;
+
+    /// idx of the element after the last added statement (for cpp ranges)
+    int replaced_statements_end_ = -1;
 };
 
 /** @} */  // end of visitor_classes

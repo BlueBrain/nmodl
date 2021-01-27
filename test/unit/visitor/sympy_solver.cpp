@@ -17,6 +17,7 @@
 #include "visitors/sympy_solver_visitor.hpp"
 #include "visitors/symtab_visitor.hpp"
 
+
 using namespace nmodl;
 using namespace visitor;
 using namespace test;
@@ -101,7 +102,7 @@ void compare_blocks(const std::string& result,
     
                         def sanitize(s):
                             import re
-                            d = {'\[(\d+)\]':'_\\1',  'pow\((\w+), ?(\d+)\)':'\\1**\\2'}
+                            d = {'\[(\d+)\]':'_\\1',  'pow\((\w+), ?(\d+)\)':'\\1**\\2', 'beta': 'beta_var', 'gamma': 'gamma_var'}
                             out = s
                             for key, val in d.items():
                                 out = re.sub(key, val, out)
@@ -603,7 +604,7 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
             auto result =
                 run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::DERIVATIVE_BLOCK);
 
-            REQUIRE(reindent_text(result[0]) == reindent_text(expected_result));
+            compare_blocks(reindent_text(result[0]), reindent_text(expected_result));
         }
     }
     GIVEN("Derivative block, sparse, print in order, vectors") {
@@ -632,7 +633,7 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
             auto result =
                 run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::DERIVATIVE_BLOCK);
 
-            REQUIRE(reindent_text(result[0]) == reindent_text(expected_result));
+            compare_blocks(reindent_text(result[0]), reindent_text(expected_result));
         }
     }
     GIVEN("Derivative block, sparse, derivatives mixed with local variable reassignment") {
@@ -663,10 +664,12 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
             auto result =
                 run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::DERIVATIVE_BLOCK);
 
-            REQUIRE(reindent_text(result[0]) == reindent_text(expected_result));
+            compare_blocks(reindent_text(result[0]), reindent_text(expected_result));
         }
     }
-    GIVEN("Derivative block, sparse, derivatives mixed with derivative variable reassignment") {
+    GIVEN(
+        "Throw exception during derivative variable reassignment interleaved in the differential "
+        "equation set") {
         std::string nmodl_text = R"(
             STATE {
                 x y
@@ -680,22 +683,16 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
                     x = x + 1
                     y' = b + x
             })";
-        std::string expected_result = R"(
-            DERIVATIVE states {
-                LOCAL a, b, old_x, old_y
-                old_x = x
-                old_y = y
-                x = a*dt+old_x
-                x = x+1
-                old_x = x
-                y = a*pow(dt, 2)+b*dt+dt*old_x+old_y
-            })";
 
-        THEN("Construct & solve linear system for backwards Euler") {
-            auto result =
-                run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::DERIVATIVE_BLOCK);
-
-            REQUIRE(reindent_text(result[0]) == reindent_text(expected_result));
+        THEN(
+            "Throw an error because state variable assignments are not allowed inside the system "
+            "of differential "
+            "equations") {
+            REQUIRE_THROWS_WITH(
+                run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::DERIVATIVE_BLOCK),
+                Catch::Matchers::Contains("State variable assignment(s) interleaved in system of "
+                                          "equations/differential equations") &&
+                    Catch::Matchers::StartsWith("SympyReplaceSolutionsVisitor"));
         }
     }
     GIVEN("Derivative block in control flow block") {
@@ -729,45 +726,7 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
             auto result =
                 run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::DERIVATIVE_BLOCK);
 
-            REQUIRE(reindent_text(result[0]) == reindent_text(expected_result));
-        }
-    }
-    GIVEN(
-        "Derivative block, sparse, derivatives mixed with derivative variable reassignment in "
-        "control flow block") {
-        std::string nmodl_text = R"(
-            STATE {
-                x y
-            }
-            BREAKPOINT  {
-                SOLVE states METHOD sparse
-            }
-            DERIVATIVE states {
-                LOCAL a, b
-                    x' = a
-                    if (a == 1) {
-                        x = x + 1
-                    }
-                    y' = b + x
-            })";
-        std::string expected_result = R"(
-            DERIVATIVE states {
-                LOCAL a, b, old_x, old_y
-                old_x = x
-                old_y = y
-                x = a*dt+old_x
-                IF (a == 1) {
-                    x = x+1
-                }
-                old_x = x
-                y = a*pow(dt, 2)+b*dt+dt*old_x+old_y
-            })";
-
-        THEN("Construct & solve linear system for backwards Euler") {
-            auto result =
-                run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::DERIVATIVE_BLOCK);
-
-            REQUIRE(reindent_text(result[0]) == reindent_text(expected_result));
+            compare_blocks(reindent_text(result[0]), reindent_text(expected_result));
         }
     }
     GIVEN(
@@ -822,8 +781,8 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
             auto result_cse =
                 run_sympy_solver_visitor(nmodl_text, true, true, AstNodeType::DERIVATIVE_BLOCK);
 
-            REQUIRE(reindent_text(result[0]) == reindent_text(expected_result));
-            REQUIRE(reindent_text(result_cse[0]) == reindent_text(expected_result_cse));
+            compare_blocks(reindent_text(result[0]), reindent_text(expected_result));
+            compare_blocks(reindent_text(result_cse[0]), reindent_text(expected_result_cse));
         }
     }
 
@@ -1275,8 +1234,8 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
             auto result =
                 run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::DERIVATIVE_BLOCK);
             CAPTURE(nmodl_text);
-            REQUIRE(result[0] == reindent_text(expected_result_0));
-            REQUIRE(result[1] == reindent_text(expected_result_1));
+            compare_blocks(result[0], reindent_text(expected_result_0));
+            compare_blocks(result[1], reindent_text(expected_result_1));
         }
     }
 }
@@ -1362,7 +1321,7 @@ SCENARIO("LINEAR solve block (SympySolver Visitor)", "[sympy][linear]") {
             auto result =
                 run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::LINEAR_BLOCK);
 
-            REQUIRE(reindent_text(result[0]) == reindent_text(expected_result));
+            compare_blocks(reindent_text(result[0]), reindent_text(expected_result));
         }
     }
     GIVEN("Linear block, print in order, vectors") {
@@ -1384,7 +1343,7 @@ SCENARIO("LINEAR solve block (SympySolver Visitor)", "[sympy][linear]") {
             auto result =
                 run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::LINEAR_BLOCK);
 
-            REQUIRE(reindent_text(result[0]) == reindent_text(expected_result));
+            compare_blocks(reindent_text(result[0]), reindent_text(expected_result));
         }
     }
     GIVEN("Linear block, greedy replacement") {
@@ -1410,7 +1369,7 @@ SCENARIO("LINEAR solve block (SympySolver Visitor)", "[sympy][linear]") {
             auto result =
                 run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::LINEAR_BLOCK);
 
-            REQUIRE(reindent_text(result[0]) == reindent_text(expected_result));
+            compare_blocks(reindent_text(result[0]), reindent_text(expected_result));
         }
     }
     GIVEN("Linear block, linear equations mixed with local variable reassignment") {
@@ -1436,7 +1395,7 @@ SCENARIO("LINEAR solve block (SympySolver Visitor)", "[sympy][linear]") {
             auto result =
                 run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::LINEAR_BLOCK);
 
-            REQUIRE(reindent_text(result[0]) == reindent_text(expected_result));
+            compare_blocks(reindent_text(result[0]), reindent_text(expected_result));
         }
     }
     GIVEN("Linear block in control flow block") {
@@ -1464,7 +1423,7 @@ SCENARIO("LINEAR solve block (SympySolver Visitor)", "[sympy][linear]") {
             auto result =
                 run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::LINEAR_BLOCK);
 
-            REQUIRE(reindent_text(result[0]) == reindent_text(expected_result));
+            compare_blocks(reindent_text(result[0]), reindent_text(expected_result));
         }
     }
     GIVEN("Linear block, linear equations mixed with control flow blocks and reassignments") {
@@ -1496,7 +1455,7 @@ SCENARIO("LINEAR solve block (SympySolver Visitor)", "[sympy][linear]") {
             auto result =
                 run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::LINEAR_BLOCK);
 
-            REQUIRE(reindent_text(result[0]) == reindent_text(expected_result));
+            compare_blocks(reindent_text(result[0]), reindent_text(expected_result));
         }
     }
     GIVEN("3 state-var LINEAR solve block") {
