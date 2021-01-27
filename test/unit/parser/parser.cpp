@@ -270,3 +270,14 @@ SCENARIO("Check if a NEURON block is parsed with correct location info in its to
         REQUIRE(ss.str() == "         NEURON at [1.1-5.1] type 296");
     }
 }
+
+//=============================================================================
+// Check if new RANDOM type declaration is correctly parsed
+//=============================================================================
+SCENARIO("NEURON block can add RANDOM variable", "[parser][random]") {
+    GIVEN("A valid RANDOM variable declaration") {
+        THEN("parser accepts without an error") {
+            REQUIRE(is_valid_construct("NEURON { RANDOM UNIFORM(0.0, 1.0) ur1, ur2 }"));
+        }
+    }
+}

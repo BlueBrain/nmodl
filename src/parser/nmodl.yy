@@ -127,6 +127,7 @@
 %token  <ModToken>              PROCEDURE
 %token  <ModToken>              PROTECT
 %token  <ModToken>              RANGE
+%token  <ModToken>              RANDOM
 %token  <ModToken>              REACT1
 %token  <ModToken>              REACTION
 %token  <ModToken>              READ
@@ -293,6 +294,7 @@
 %type   <ast::GlobalVarVector>              global_var_list
 %type   <ast::PointerVarVector>             pointer_var_list
 %type   <ast::BbcorePointerVarVector>       bbcore_pointer_var_list
+%type   <ast::RandomVarVector>              random_var_list
 %type   <ast::ExternVarVector>              external_var_list
 %type   <ast::Valence*>                     valence
 %type   <ast::ExpressionStatement*>         initial_statement
@@ -2002,6 +2004,14 @@ neuron_statement :
                         $1.emplace_back(new ast::OntologyStatement(new ast::String($3)));
                         $$ = $1;
                     }
+                |   neuron_statement RANDOM function_call random_var_list
+                    {
+                        for (auto& r : $4) {
+                            r->set_distribution(std::shared_ptr<ast::WrappedExpression>(new ast::WrappedExpression(*($3))));
+                        }
+                        $1.emplace_back(new ast::Random($4));
+                        $$ = $1;
+                    }
                 ;
 
 
@@ -2191,6 +2201,26 @@ bbcore_pointer_var_list : NAME_PTR
                 |   error
                     {
                         error(scanner.loc, "bbcore_pointer_var_list");
+                    }
+                ;
+
+random_var_list:   NAME_PTR
+                    {
+                        $$ = ast::RandomVarVector();
+                        auto new_random_var = new ast::RandomVar($1, nullptr);
+                        new_random_var->set_token(*($1->get_token()));
+                        $$.emplace_back(new_random_var);
+                    }
+                |   random_var_list "," NAME_PTR
+                    {
+                        auto new_random_var = new ast::RandomVar($3, nullptr);
+                        new_random_var->set_token(*($3->get_token()));
+                        $1.emplace_back(new_random_var);
+                        $$ = $1;
+                    }
+                |   error
+                    {
+                        error(scanner.loc, "random_var_list");
                     }
                 ;
 

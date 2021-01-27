@@ -386,6 +386,17 @@
                                   type: Name
                                   node_name: true
 
+                        - RandomVar:
+                            brief: "A random variable that can sample from a probability density function"
+                            members:
+                              - name:
+                                  brief: "Variable name"
+                                  type: Name
+                                  node_name: true
+                              - distribution:
+                                  brief: "The probability density function from which the variable samples"
+                                  type: WrappedExpression
+
                         - PointerVar:
                             brief: "TODO"
                             members:
@@ -1710,6 +1721,7 @@
                       brief: "Represents ELECTRODE_CURRENT variables statement in NMODL"
 
                   - Range:
+                      brief: "Represents RANGE variables statement in NMODL"
                       nmodl: "RANGE "
                       members:
                         - variables:
@@ -1717,10 +1729,9 @@
                             type: RangeVar
                             vector: true
                             separator: ", "
-                      brief: "Represents RANGE variables statement in NMODL"
 
                   - Global:
-                      brief: "TODO"
+                      brief: "Represents GLOBAL statement in NMODL"
                       nmodl: "GLOBAL "
                       members:
                         - variables:
@@ -1729,7 +1740,17 @@
                             vector: true
                             add: true
                             separator: ", "
-                      brief: "Represents GLOBAL statement in NMODL"
+
+                  - Random:
+                      brief: "Represents RANDOM statement in NMODL"
+                      nmodl: "RANDOM "
+                      members:
+                        - variables:
+                            brief: "Vector of random variables"
+                            type: RandomVar
+                            vector: true
+                            add: true
+                            separator: ", "
 
                   - Pointer:
                       nmodl: "POINTER "
