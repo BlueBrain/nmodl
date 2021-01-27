@@ -730,8 +730,9 @@ SCENARIO("Creation of Instance Struct", "[visitor][llvm][instance_struct]") {
                 b
                 c
             }
-            FUNCTION foo(x, y) {
-                foo = 4 * x - y
+            FUNCTION foo() {
+                LOCAL x
+                x = a
             }
         )";
 

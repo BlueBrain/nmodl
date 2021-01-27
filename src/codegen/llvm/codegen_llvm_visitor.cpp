@@ -168,6 +168,14 @@ void CodegenLLVMVisitor::emit_procedure_or_function_declaration(const ast::Codeg
     for (size_t i = 0; i < arguments.size(); ++i)
         arg_types.push_back(get_codegen_var_type(*arguments[i]->get_type()));
 
+    std::vector<llvm::Type*> members;
+    members.push_back(get_default_fp_type());
+    members.push_back(get_default_fp_type());
+
+    auto tmp_llvm_struct = llvm::StructType::create(*context, mod_filename + "_Instance");
+    tmp_llvm_struct->setBody(members);
+    arg_types.push_back(tmp_llvm_struct);
+
     llvm::Type* return_type = get_codegen_var_type(*node.get_return_type());
 
     // Create a function that is automatically inserted into module's symbol table.
@@ -265,6 +273,16 @@ llvm::Value* CodegenLLVMVisitor::visit_comparison_bin_op(llvm::Value* lhs,
 /*                            Overloaded visitor routines                               */
 /****************************************************************************************/
 
+void CodegenLLVMVisitor::visit_instance_struct(const ast::InstanceStruct& node) {
+    std::vector<llvm::Type*> members;
+    for(const auto& variable : node.get_codegen_vars()) {
+        members.push_back(get_default_fp_type());
+    }
+
+    llvm_struct = llvm::StructType::create(*context, mod_filename + "_Instance");
+    llvm_struct->setBody(members);
+    llvm::Value* alloca = builder.CreateAlloca(llvm_struct, nullptr, "nrn_init_" + mod_filename);
+}
 
 void CodegenLLVMVisitor::visit_binary_expression(const ast::BinaryExpression& node) {
     const auto& op = node.get_op().get_value();
@@ -574,15 +592,6 @@ void CodegenLLVMVisitor::visit_var_name(const ast::VarName& node) {
     values.push_back(var);
 }
 
-void CodegenLLVMVisitor::visit_instance_struct(const ast::InstanceStruct& node) {
-    std::vector<llvm::Type*> members;
-    for(const auto& variable : node.get_codegen_vars()) {
-        members.push_back(get_default_fp_type());
-    }
-
-    llvm_struct = llvm::StructType::create(*context, mod_filename + "_Instance");
-    llvm_struct->setBody(members);
-}
 
 void CodegenLLVMVisitor::visit_initial_block(ast::InitialBlock& node) {
     /*ast::CodegenVarType* ret_var_type = new ast::CodegenVarType(ast::AstNodeType::INTEGER);
