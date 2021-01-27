@@ -720,7 +720,7 @@ SCENARIO("Dead code removal", "[visitor][llvm][opt]") {
 //=============================================================================
 
 SCENARIO("Creation of Instance Struct", "[visitor][llvm][instance_struct]") {
-    GIVEN("NEURON block with some variables") {
+    GIVEN("NEURON block with some RANGE variables") {
         std::string nmodl_text = R"(
             NEURON {
                 RANGE a, b, c
@@ -730,14 +730,15 @@ SCENARIO("Creation of Instance Struct", "[visitor][llvm][instance_struct]") {
                 b
                 c
             }
-            FUNCTION foo(x, y) {
-                foo = 4 * x - y
-            }
         )";
 
         THEN("create struct with the declared variables") {
-            std::string module_testing = run_llvm_visitor(nmodl_text, true);
-            REQUIRE("" == module_testing);
+            std::string module_string = run_llvm_visitor(nmodl_text, true);
+            std::smatch m;
+
+            std::regex instance_struct_declaration(
+                R"(%unknown_Instance = type \{ double, double, double, double \})");
+            REQUIRE(std::regex_search(module_string, m, instance_struct_declaration));
         }
     }
 }

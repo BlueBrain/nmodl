@@ -1,10 +1,12 @@
 NEURON {
     SUFFIX procedure_test
     THREADSAFE
+    RANGE a, b
 }
 
-PROCEDURE hello_world() {
-    printf("Hello World")
+ASSIGNED {
+    a
+    b
 }
 
 PROCEDURE simple_sum(x, y) {
@@ -25,7 +27,6 @@ PROCEDURE loop_proc(v, t) {
     LOCAL i
     i = 0
     WHILE(i < 10) {
-        printf("Hello World")
         i = i + 1
     }
 }
