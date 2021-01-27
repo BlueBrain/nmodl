@@ -584,25 +584,5 @@ void CodegenLLVMVisitor::visit_instance_struct(const ast::InstanceStruct& node) 
     llvm_struct->setBody(members);
 }
 
-void CodegenLLVMVisitor::visit_initial_block(ast::InitialBlock& node) {
-    /*ast::CodegenVarType* ret_var_type = new ast::CodegenVarType(ast::AstNodeType::INTEGER);
-    ast::Name* nrn_init_name = new ast::Name(new ast::String("nrn_init_" + mod_filename));
-    ast::CodegenArgumentVector nrn_init_arguments;
-    auto nrn_init_statement = new ast::StatementBlock(*node.get_statement_block());
-    nrn_init_arguments.emplace_back();
-    //auto initial_codegen_func = ast::CodegenFunction(ret_var_type, nrn_init_name, nrn_init_arguments, nrn_init_statement);
-    auto initial_codegen_func = ast::CodegenFunction(ret_var_type, nrn_init_name, nrn_init_arguments, nullptr);
-    //auto initial_function = module->getOrInsertFunction("nrn_init_" + mod_filename, void, llvm_struct);
-    emit_procedure_or_function_declaration(initial_codegen_func);*/
-    std::cout << "=== VISITING INITIAL BLOCK ===" << std::endl;
-    std::vector<llvm::Type*> arg_types;
-    arg_types.push_back(llvm_struct);
-    llvm::Type* return_type = llvm::Type::getVoidTy(*context);
-    llvm::Function::Create(llvm::FunctionType::get(return_type, arg_types, /*isVarArg=*/false),
-                           llvm::Function::ExternalLinkage,
-                           "nrn_init_" + mod_filename,
-                           *module);
-}
-
 }  // namespace codegen
 }  // namespace nmodl

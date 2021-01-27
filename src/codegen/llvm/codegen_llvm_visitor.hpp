@@ -239,7 +239,6 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     void visit_unary_expression(const ast::UnaryExpression& node) override;
     void visit_var_name(const ast::VarName& node) override;
     void visit_instance_struct(const ast::InstanceStruct& node) override;
-    void visit_initial_block(ast::InitialBlock& node);
 
 
     // \todo: move this to debug mode (e.g. -v option or --dump-ir)
