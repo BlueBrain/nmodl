@@ -224,7 +224,6 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     void visit_procedure_or_function(const ast::Block& node);
 
     // Visitors
-    void visit_instance_struct(const ast::InstanceStruct& node) override;
     void visit_binary_expression(const ast::BinaryExpression& node) override;
     void visit_boolean(const ast::Boolean& node) override;
     void visit_codegen_function(const ast::CodegenFunction& node) override;
@@ -239,6 +238,7 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     void visit_program(const ast::Program& node) override;
     void visit_unary_expression(const ast::UnaryExpression& node) override;
     void visit_var_name(const ast::VarName& node) override;
+    void visit_instance_struct(const ast::InstanceStruct& node) override;
     void visit_initial_block(ast::InitialBlock& node);
 
 
