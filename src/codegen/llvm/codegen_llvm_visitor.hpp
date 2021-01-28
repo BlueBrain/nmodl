@@ -151,6 +151,12 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     llvm::Type* get_default_fp_type();
 
     /**
+     * Returns pointer to 64-bit or 32-bit LLVM floating type
+     * \return     \c LLVM pointer to floating point type according to `use_single_precision` flag
+     */
+    llvm::Type* get_default_fp_ptr_type();
+
+    /**
      * Create a function call to an external method
      * \param name external method name
      * \param arguments expressions passed as arguments to the given external method

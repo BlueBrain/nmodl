@@ -796,7 +796,7 @@ SCENARIO("Creation of Instance Struct", "[visitor][llvm][instance_struct]") {
             std::smatch m;
 
             std::regex instance_struct_declaration(
-                R"(%unknown_Instance = type \{ double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double \})");
+                R"(%unknown_Instance = type \{ double\*, double\*, double\*, double\*, double\*, double\*, double\*, double\*, double\*, double\*, double\*, double\*, double\*, double\*, double\*, double\*, double\*, double\*, double\*, double\*, double\*, double\*, double\*, double\* \})");
             REQUIRE(std::regex_search(module_string, m, instance_struct_declaration));
         }
     }

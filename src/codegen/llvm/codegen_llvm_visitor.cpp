@@ -90,6 +90,12 @@ llvm::Type* CodegenLLVMVisitor::get_default_fp_type() {
     return llvm::Type::getDoubleTy(*context);
 }
 
+llvm::Type* CodegenLLVMVisitor::get_default_fp_ptr_type() {
+    if (use_single_precision)
+        return llvm::Type::getFloatPtrTy(*context);
+    return llvm::Type::getDoublePtrTy(*context);
+}
+
 void CodegenLLVMVisitor::run_llvm_opt_passes() {
     /// run some common optimisation passes that are commonly suggested
     fpm.add(llvm::createInstructionCombiningPass());
@@ -577,7 +583,7 @@ void CodegenLLVMVisitor::visit_var_name(const ast::VarName& node) {
 void CodegenLLVMVisitor::visit_instance_struct(const ast::InstanceStruct& node) {
     std::vector<llvm::Type*> members;
     for (const auto& variable: node.get_codegen_vars()) {
-        members.push_back(get_default_fp_type());
+        members.push_back(get_default_fp_ptr_type());
     }
 
     llvm_struct = llvm::StructType::create(*context, mod_filename + "_Instance");
