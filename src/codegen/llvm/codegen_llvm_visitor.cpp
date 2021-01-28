@@ -28,14 +28,12 @@ namespace codegen {
 
 static bool is_supported_statement(const ast::Statement& statement) {
     return statement.is_codegen_var_list_statement() || statement.is_expression_statement() ||
-           statement.is_codegen_return_statement() || statement.is_if_statement();
+           statement.is_codegen_return_statement() || statement.is_if_statement() ||
+           statement.is_while_statement();
 }
 
 bool CodegenLLVMVisitor::check_array_bounds(const ast::IndexedName& node, unsigned index) {
-    llvm::Type* array_type = current_func->getValueSymbolTable()
-                                 ->lookup(node.get_node_name())
-                                 ->getType()
-                                 ->getPointerElementType();
+    llvm::Type* array_type = lookup(node.get_node_name())->getType()->getPointerElementType();
     unsigned length = array_type->getArrayNumElements();
     return 0 <= index && index < length;
 }
@@ -46,7 +44,7 @@ llvm::Value* CodegenLLVMVisitor::create_gep(const std::string& name, unsigned in
     indices.push_back(llvm::ConstantInt::get(index_type, 0));
     indices.push_back(llvm::ConstantInt::get(index_type, index));
 
-    return builder.CreateInBoundsGEP(current_func->getValueSymbolTable()->lookup(name), indices);
+    return builder.CreateInBoundsGEP(lookup(name), indices);
 }
 
 llvm::Value* CodegenLLVMVisitor::codegen_indexed_name(const ast::IndexedName& node) {
@@ -177,6 +175,13 @@ void CodegenLLVMVisitor::emit_procedure_or_function_declaration(const ast::Codeg
                            *module);
 }
 
+llvm::Value* CodegenLLVMVisitor::lookup(const std::string& name) {
+    auto val = current_func->getValueSymbolTable()->lookup(name);
+    if (!val)
+        throw std::runtime_error("Error: variable " + name + " is not in scope\n");
+    return val;
+}
+
 llvm::Value* CodegenLLVMVisitor::visit_arithmetic_bin_op(llvm::Value* lhs,
                                                          llvm::Value* rhs,
                                                          unsigned op) {
@@ -213,7 +218,7 @@ void CodegenLLVMVisitor::visit_assign_op(const ast::BinaryExpression& node, llvm
 
     const auto& identifier = var->get_name();
     if (identifier->is_name()) {
-        llvm::Value* alloca = current_func->getValueSymbolTable()->lookup(var->get_node_name());
+        llvm::Value* alloca = lookup(var->get_node_name());
         builder.CreateStore(rhs, alloca);
     } else if (identifier->is_indexed_name()) {
         auto indexed_name = std::dynamic_pointer_cast<ast::IndexedName>(identifier);
@@ -310,6 +315,14 @@ void CodegenLLVMVisitor::visit_binary_expression(const ast::BinaryExpression& no
     values.push_back(result);
 }
 
+void CodegenLLVMVisitor::visit_statement_block(const ast::StatementBlock& node) {
+    const auto& statements = node.get_statements();
+    for (const auto& statement: statements) {
+        if (is_supported_statement(*statement))
+            statement->accept(*this);
+    }
+}
+
 void CodegenLLVMVisitor::visit_boolean(const ast::Boolean& node) {
     const auto& constant = llvm::ConstantInt::get(llvm::Type::getInt1Ty(*context),
                                                   node.get_value());
@@ -346,11 +359,7 @@ void CodegenLLVMVisitor::visit_codegen_function(const ast::CodegenFunction& node
     }
 
     // Process function or procedure body. The return statement is handled in a separate visitor.
-    const auto& statements = block->get_statements();
-    for (const auto& statement: statements) {
-        if (is_supported_statement(*statement))
-            statement->accept(*this);
-    }
+    block->accept(*this);
 
     // If function has a void return type, add a terminator not handled by CodegenReturnVar.
     if (node.is_void())
@@ -444,10 +453,7 @@ void CodegenLLVMVisitor::visit_if_statement(const ast::IfStatement& node) {
 
     // Process the true block.
     builder.SetInsertPoint(true_block);
-    for (const auto& statement: node.get_statement_block()->get_statements()) {
-        if (is_supported_statement(*statement))
-            statement->accept(*this);
-    }
+    node.get_statement_block()->accept(*this);
     builder.CreateBr(merge_block);
 
     // Save the merge block and proceed with codegen for `else if` statements.
@@ -475,10 +481,7 @@ void CodegenLLVMVisitor::visit_if_statement(const ast::IfStatement& node) {
 
         // Process true block.
         builder.SetInsertPoint(true_block);
-        for (const auto& statement: else_if->get_statement_block()->get_statements()) {
-            if (is_supported_statement(*statement))
-                statement->accept(*this);
-        }
+        else_if->get_statement_block()->accept(*this);
         builder.CreateBr(merge_block);
         curr_block = else_block;
     }
@@ -489,10 +492,7 @@ void CodegenLLVMVisitor::visit_if_statement(const ast::IfStatement& node) {
     if (elses) {
         else_block = llvm::BasicBlock::Create(*context, /*Name=*/"", func, merge_block);
         builder.SetInsertPoint(else_block);
-        for (const auto& statement: elses->get_statement_block()->get_statements()) {
-            if (is_supported_statement(*statement))
-                statement->accept(*this);
-        }
+        elses->get_statement_block()->accept(*this);
         builder.CreateBr(merge_block);
     } else {
         else_block = merge_block;
@@ -562,7 +562,7 @@ void CodegenLLVMVisitor::visit_var_name(const ast::VarName& node) {
 
     llvm::Value* ptr;
     if (identifier->is_name())
-        ptr = current_func->getValueSymbolTable()->lookup(node.get_node_name());
+        ptr = lookup(node.get_node_name());
 
     if (identifier->is_indexed_name()) {
         auto indexed_name = std::dynamic_pointer_cast<ast::IndexedName>(identifier);
@@ -583,6 +583,31 @@ void CodegenLLVMVisitor::visit_instance_struct(const ast::InstanceStruct& node) 
     llvm_struct = llvm::StructType::create(*context, mod_filename + "_Instance");
     llvm_struct->setBody(members);
     module->getOrInsertGlobal("inst", llvm_struct);
+void CodegenLLVMVisitor::visit_while_statement(const ast::WhileStatement& node) {
+    // Get the current and the next blocks within the function.
+    llvm::BasicBlock* curr_block = builder.GetInsertBlock();
+    llvm::BasicBlock* next = curr_block->getNextNode();
+    llvm::Function* func = curr_block->getParent();
+
+    // Add a header and the body blocks.
+    llvm::BasicBlock* header = llvm::BasicBlock::Create(*context, /*Name=*/"", func, next);
+    llvm::BasicBlock* body = llvm::BasicBlock::Create(*context, /*Name=*/"", func, next);
+    llvm::BasicBlock* exit = llvm::BasicBlock::Create(*context, /*Name=*/"", func, next);
+
+    builder.CreateBr(header);
+    builder.SetInsertPoint(header);
+
+    // Generate code for condition and create branch to the body block.
+    node.get_condition()->accept(*this);
+    llvm::Value* condition = values.back();
+    values.pop_back();
+    builder.CreateCondBr(condition, body, exit);
+
+    builder.SetInsertPoint(body);
+    node.get_statement_block()->accept(*this);
+    builder.CreateBr(header);
+
+    builder.SetInsertPoint(exit);
 }
 
 }  // namespace codegen

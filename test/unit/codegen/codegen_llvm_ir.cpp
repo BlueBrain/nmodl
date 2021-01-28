@@ -691,6 +691,50 @@ SCENARIO("Unary expression", "[visitor][llvm]") {
 }
 
 //=============================================================================
+// WhileStatement
+//=============================================================================
+
+SCENARIO("While", "[visitor][llvm]") {
+    GIVEN("Procedure with a simple while loop") {
+        std::string nmodl_text = R"(
+            FUNCTION loop() {
+                LOCAL i
+                i = 0
+                WHILE (i < 10) {
+                    i = i + 1
+                }
+                loop = 0
+            }
+        )";
+
+        THEN("correct loop is created") {
+            std::string module_string = run_llvm_visitor(nmodl_text);
+            std::smatch m;
+
+            std::regex loop(
+                "  br label %1\n"
+                "\n"
+                "1:.*\n"
+                "  %2 = load double, double\\* %i.*\n"
+                "  %3 = fcmp olt double %2, 1\\.000000e\\+01\n"
+                "  br i1 %3, label %4, label %7\n"
+                "\n"
+                "4:.*\n"
+                "  %5 = load double, double\\* %i.*\n"
+                "  %6 = fadd double %5, 1\\.000000e\\+00\n"
+                "  store double %6, double\\* %i.*\n"
+                "  br label %1\n"
+                "\n"
+                "7:.*\n"
+                "  store double 0\\.000000e\\+00, double\\* %ret_loop.*\n");
+            // Check that 3 blocks are created: header, body and exit blocks. Also, there must be
+            // a backedge from the body to the header.
+            REQUIRE(std::regex_search(module_string, m, loop));
+        }
+    }
+}
+
+//=============================================================================
 // Optimization : dead code removal
 //=============================================================================
 
