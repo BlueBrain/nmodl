@@ -21,6 +21,56 @@
 namespace nmodl {
 namespace codegen {
 
+using SymbolType = std::shared_ptr<symtab::Symbol>;
+
+/**
+ * Creates a temporary symbol
+ * \param name The name of the symbol
+ * \return     A symbol based on the given name
+ */
+SymbolType make_symbol(const std::string& name);
+
+/**
+ * Constructs a shadow variable name
+ * \param name The name of the variable
+ * \return     The name of the variable prefixed with \c shadow_
+ */
+std::string shadow_varname(const std::string& name);
+
+/**
+ * \class IndexVariableInfo
+ * \brief Helper to represent information about index/int variables
+ *
+ */
+struct IndexVariableInfo {
+    /// symbol for the variable
+    const std::shared_ptr<symtab::Symbol> symbol;
+
+    /// if variable reside in vdata field of NrnThread
+    /// typically true for bbcore pointer
+    bool is_vdata = false;
+
+    /// if this is pure index (e.g. style_ion) variables is directly
+    /// index and shouldn't be printed with data/vdata
+    bool is_index = false;
+
+    /// if this is an integer (e.g. tqitem, point_process) variable which
+    /// is printed as array accesses
+    bool is_integer = false;
+
+    /// if the variable is qualified as constant (this is property of IndexVariable)
+    bool is_constant = false;
+
+    IndexVariableInfo(std::shared_ptr<symtab::Symbol> symbol,
+                      bool is_vdata = false,
+                      bool is_index = false,
+                      bool is_integer = false)
+        : symbol(std::move(symbol))
+        , is_vdata(is_vdata)
+        , is_index(is_index)
+        , is_integer(is_integer) {}
+};
+
 /**
  * @addtogroup codegen_details
  * @{
@@ -368,6 +418,12 @@ struct CodegenInfo {
     /// new one used in print_ion_types
     std::vector<SymbolType> use_ion_variables;
 
+    /// all int variables for the model
+    std::vector<IndexVariableInfo> codegen_int_variables;
+
+    /// all ion variables that could be possibly written
+    std::vector<SymbolType> codegen_shadow_variables;
+
     /// all float variables for the model
     std::vector<SymbolType> codegen_float_variables;
 
@@ -449,6 +505,16 @@ struct CodegenInfo {
     /// true if WatchStatement uses voltage v variable
     bool is_voltage_used_by_watch_statements() const;
 
+    /// true if breakpoint node exists
+    bool breakpoint_exist() const noexcept {
+        return breakpoint_node != nullptr;
+    }
+
+    /// true if net_receive node exists
+    bool net_receive_exist() const noexcept {
+        return net_receive_node != nullptr;
+    }
+
     /**
      * Checks if the given variable name belongs to a state variable
      * \param name The variable name
@@ -491,6 +557,24 @@ struct CodegenInfo {
 
     /// if we need a call back to wrote_conc in neuron/coreneuron
     bool require_wrote_conc = false;
+
+    /**
+     * Determine all \c int variables required during code generation
+     * \return A \c vector of \c int variables
+     */
+    void get_int_variables();
+
+    /**
+     * Determine all ion write variables that require shadow vectors during code generation
+     * \return A \c vector of ion variables
+     */
+    void get_shadow_variables();
+
+    /**
+     * Determine all \c float variables required during code generation
+     * \return A \c vector of \c float variables
+     */
+    void get_float_variables();
 };
 
 /** @} */  // end of codegen_backends

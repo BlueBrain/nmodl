@@ -85,21 +85,6 @@ class CodegenHelperVisitor: public visitor::ConstAstVisitor {
      */
     bool net_receive_exist() const noexcept;
 
-    /**
-     * Creates a temporary symbol
-     * \param name The name of the symbol
-     * \return     A symbol based on the given name
-     */
-    SymbolType make_symbol(const std::string& name) const {
-        return std::make_shared<symtab::Symbol>(name, ModToken());
-    }
-
-    /**
-     * Determine all \c float variables required during code generation
-     * \return A \c vector of \c float variables
-     */
-    void get_float_variables();
-
   public:
     CodegenHelperVisitor() = default;
 

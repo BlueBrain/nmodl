@@ -165,6 +165,11 @@ std::shared_ptr<ast::InstanceStruct> CodegenLLVMHelperVisitor::create_instance_s
         auto codegen_var = new ast::CodegenVar(1, name);
         codegen_vars.emplace_back(codegen_var);
     }
+    for(auto& int_var : info.codegen_int_variables) {
+        auto name = new ast::Name(new ast::String(int_var.symbol->get_name()));
+        auto codegen_var = new ast::CodegenVar(1, name);
+        codegen_vars.emplace_back(codegen_var);
+    }
     return std::make_shared<ast::InstanceStruct>(codegen_vars);
 }
 
