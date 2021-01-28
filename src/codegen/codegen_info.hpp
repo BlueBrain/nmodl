@@ -505,14 +505,62 @@ struct CodegenInfo {
     /// true if WatchStatement uses voltage v variable
     bool is_voltage_used_by_watch_statements() const;
 
-    /// true if breakpoint node exists
+     /**
+     * Check if net_send_buffer is required
+     */
+    bool net_send_buffer_required() const noexcept {
+        if (net_receive_required() && !artificial_cell) {
+            if (net_event_used || net_send_used || is_watch_used()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Check if net receive/send buffering kernels required
+     */
+    bool net_receive_buffering_required() const noexcept {
+        return point_process && !artificial_cell && net_receive_node != nullptr;
+    }
+
+    /**
+     * Check if nrn_state function is required
+     */
+    bool nrn_state_required() const noexcept {
+        if (artificial_cell) {
+            return false;
+        }
+        return nrn_state_block != nullptr || currents.empty();
+    }
+
+    /**
+     * Check if nrn_cur function is required
+     */
+    bool nrn_cur_required() const noexcept {
+        return breakpoint_node != nullptr && !currents.empty();
+    }
+
+    /**
+     * Check if net_receive node exist
+     */
+    bool net_receive_exist() const noexcept {
+        return net_receive_node != nullptr;
+    }
+
+    /**
+     * Check if breakpoint node exist
+     */
     bool breakpoint_exist() const noexcept {
         return breakpoint_node != nullptr;
     }
 
-    /// true if net_receive node exists
-    bool net_receive_exist() const noexcept {
-        return net_receive_node != nullptr;
+
+    /**
+     * Check if net_receive function is required
+     */
+    bool net_receive_required() const noexcept {
+        return net_receive_exist();
     }
 
     /**

@@ -348,49 +348,6 @@ bool CodegenCVisitor::statement_to_skip(const Statement& node) const {
 }
 
 
-bool CodegenCVisitor::net_send_buffer_required() const noexcept {
-    if (net_receive_required() && !info.artificial_cell) {
-        if (info.net_event_used || info.net_send_used || info.is_watch_used()) {
-            return true;
-        }
-    }
-    return false;
-}
-
-
-bool CodegenCVisitor::net_receive_buffering_required() const noexcept {
-    return info.point_process && !info.artificial_cell && info.net_receive_node != nullptr;
-}
-
-
-bool CodegenCVisitor::nrn_state_required() const noexcept {
-    if (info.artificial_cell) {
-        return false;
-    }
-    return info.nrn_state_block != nullptr || info.currents.empty();
-}
-
-
-bool CodegenCVisitor::nrn_cur_required() const noexcept {
-    return info.breakpoint_node != nullptr && !info.currents.empty();
-}
-
-
-bool CodegenCVisitor::net_receive_exist() const noexcept {
-    return info.net_receive_node != nullptr;
-}
-
-
-bool CodegenCVisitor::breakpoint_exist() const noexcept {
-    return info.breakpoint_node != nullptr;
-}
-
-
-bool CodegenCVisitor::net_receive_required() const noexcept {
-    return net_receive_exist();
-}
-
-
 /**
  * \details When floating point data type is not default (i.e. double) then we
  * have to copy old array to new type (for range variables).
@@ -546,11 +503,11 @@ int CodegenCVisitor::float_variables_size() const {
         float_size++;
     }
     /// for g_unused variable
-    if (breakpoint_exist()) {
+    if (info.breakpoint_exist()) {
         float_size++;
     }
     /// for tsave variable
-    if (net_receive_exist()) {
+    if (info.net_receive_exist()) {
         float_size++;
     }
     return float_size;
@@ -1750,8 +1707,8 @@ std::string CodegenCVisitor::process_verbatim_text(std::string text) {
 
 
 std::string CodegenCVisitor::register_mechanism_arguments() const {
-    auto nrn_cur = nrn_cur_required() ? method_name(naming::NRN_CUR_METHOD) : "NULL";
-    auto nrn_state = nrn_state_required() ? method_name(naming::NRN_STATE_METHOD) : "NULL";
+    auto nrn_cur = info.nrn_cur_required() ? method_name(naming::NRN_CUR_METHOD) : "NULL";
+    auto nrn_state = info.nrn_state_required() ? method_name(naming::NRN_STATE_METHOD) : "NULL";
     auto nrn_alloc = method_name(naming::NRN_ALLOC_METHOD);
     auto nrn_init = method_name(naming::NRN_INIT_METHOD);
     return "mechanism, {}, {}, NULL, {}, {}, first_pointer_var_index()"
@@ -1875,7 +1832,7 @@ void CodegenCVisitor::print_num_variable_getter() {
 
 
 void CodegenCVisitor::print_net_receive_arg_size_getter() {
-    if (!net_receive_exist()) {
+    if (!info.net_receive_exist()) {
         return;
     }
     printer->add_newline(2);
@@ -2538,7 +2495,7 @@ void CodegenCVisitor::print_mechanism_register() {
     if (info.artificial_cell) {
         printer->add_line("add_nrn_artcell(mech_type, {});"_format(info.tqitem_index));
     }
-    if (net_receive_buffering_required()) {
+    if (info.net_receive_buffering_required()) {
         printer->add_line("hoc_register_net_receive_buffering({}, mech_type);"_format(
             method_name("net_buf_receive")));
     }
@@ -3512,7 +3469,7 @@ void CodegenCVisitor::print_net_receive_loop_end() {
 
 
 void CodegenCVisitor::print_net_receive_buffering(bool need_mech_inst) {
-    if (!net_receive_required() || info.artificial_cell) {
+    if (!info.net_receive_required() || info.artificial_cell) {
         return;
     }
     printer->add_newline(2);
@@ -3561,7 +3518,7 @@ void CodegenCVisitor::print_net_send_buffering_grow() {
 }
 
 void CodegenCVisitor::print_net_send_buffering() {
-    if (!net_send_buffer_required()) {
+    if (!info.net_send_buffer_required()) {
         return;
     }
 
@@ -3629,7 +3586,7 @@ void CodegenCVisitor::visit_for_netcon(const ast::ForNetcon& node) {
 }
 
 void CodegenCVisitor::print_net_receive_kernel() {
-    if (!net_receive_required()) {
+    if (!info.net_receive_required()) {
         return;
     }
     codegen = true;
@@ -3692,7 +3649,7 @@ void CodegenCVisitor::print_net_receive_kernel() {
 
 
 void CodegenCVisitor::print_net_receive() {
-    if (!net_receive_required()) {
+    if (!info.net_receive_required()) {
         return;
     }
     codegen = true;
@@ -3840,7 +3797,7 @@ void CodegenCVisitor::visit_solution_expression(const SolutionExpression& node) 
 
 
 void CodegenCVisitor::print_nrn_state() {
-    if (!nrn_state_required()) {
+    if (!info.nrn_state_required()) {
         return;
     }
     codegen = true;
@@ -4051,7 +4008,7 @@ void CodegenCVisitor::print_fast_imem_calculation() {
 }
 
 void CodegenCVisitor::print_nrn_cur() {
-    if (!nrn_cur_required()) {
+    if (!info.nrn_cur_required()) {
         return;
     }
 

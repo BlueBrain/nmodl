@@ -345,52 +345,10 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
-     * Check if net receive/send buffering kernels required
-     */
-    bool net_receive_buffering_required() const noexcept;
-
-
-    /**
-     * Check if nrn_state function is required
-     */
-    bool nrn_state_required() const noexcept;
-
-
-    /**
-     * Check if nrn_cur function is required
-     */
-    bool nrn_cur_required() const noexcept;
-
-
-    /**
-     * Check if net_receive function is required
-     */
-    bool net_receive_required() const noexcept;
-
-
-    /**
-     * Check if net_send_buffer is required
-     */
-    bool net_send_buffer_required() const noexcept;
-
-
-    /**
      * Check if setup_range_variable function is required
      * \return
      */
     bool range_variable_setup_required() const noexcept;
-
-
-    /**
-     * Check if net_receive node exist
-     */
-    bool net_receive_exist() const noexcept;
-
-
-    /**
-     * Check if breakpoint node exist
-     */
-    bool breakpoint_exist() const noexcept;
 
 
     /**
