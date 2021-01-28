@@ -583,6 +583,8 @@ void CodegenLLVMVisitor::visit_instance_struct(const ast::InstanceStruct& node) 
     llvm_struct = llvm::StructType::create(*context, mod_filename + "_Instance");
     llvm_struct->setBody(members);
     module->getOrInsertGlobal("inst", llvm_struct);
+}
+
 void CodegenLLVMVisitor::visit_while_statement(const ast::WhileStatement& node) {
     // Get the current and the next blocks within the function.
     llvm::BasicBlock* curr_block = builder.GetInsertBlock();
