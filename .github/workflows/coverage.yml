@@ -49,7 +49,6 @@ jobs:
           lcov --remove coverage-base.info --output-file coverage-base-filtered.info "*/ext/*"
           make test
           (cd ..; lcov --capture  --directory . --no-external --output-file build/coverage-run.info)
-          lcov --add-tracefile coverage-base-filtered.info --add-tracefile coverage-run.info --output-file coverage-combined.info
-          genhtml coverage-combined.info --output-directory coverage --demangle-cpp --ignore-errors source
+          lcov --add-tracefile coverage-base-filtered.info --add-tracefile coverage-run.info --output-file lcov.info
           bash <(curl -s https://codecov.io/bash)
 
