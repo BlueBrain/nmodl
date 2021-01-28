@@ -720,15 +720,30 @@ SCENARIO("Dead code removal", "[visitor][llvm][opt]") {
 //=============================================================================
 
 SCENARIO("Creation of Instance Struct", "[visitor][llvm][instance_struct]") {
-    GIVEN("NEURON block with some RANGE variables") {
+    GIVEN("NEURON block with RANGE variables and IONS") {
         std::string nmodl_text = R"(
             NEURON {
-                RANGE a, b, c
+                USEION na READ ena WRITE ina
+                USEION k READ ek WRITE ik
+                NONSPECIFIC_CURRENT il
+                RANGE gnabar
+                RANGE minf, hinf, ninf, mtau, htau, ntau
             }
+
+            STATE {
+                m h n
+            }
+
+            PARAMETER {
+                gnabar = .12 (S/cm2)	<0,1e9>
+            }
+
             ASSIGNED {
-                a
-                b
-                c
+                v (mV)
+                celsius (degC)
+
+                minf hinf ninf
+                mtau (ms) htau (ms) ntau (ms)
             }
         )";
 
@@ -737,7 +752,7 @@ SCENARIO("Creation of Instance Struct", "[visitor][llvm][instance_struct]") {
             std::smatch m;
 
             std::regex instance_struct_declaration(
-                R"(%unknown_Instance = type \{ double, double, double, double \})");
+                R"(%unknown_Instance = type \{ double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double \})");
             REQUIRE(std::regex_search(module_string, m, instance_struct_declaration));
         }
     }

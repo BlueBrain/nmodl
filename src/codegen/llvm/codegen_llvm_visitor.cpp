@@ -577,8 +577,6 @@ void CodegenLLVMVisitor::visit_var_name(const ast::VarName& node) {
 void CodegenLLVMVisitor::visit_instance_struct(const ast::InstanceStruct& node) {
     std::vector<llvm::Type*> members;
     for (const auto& variable: node.get_codegen_vars()) {
-        std::cout << " * Variable added to instance struct: " << variable->get_node_name()
-                  << std::endl;
         members.push_back(get_default_fp_type());
     }
 
