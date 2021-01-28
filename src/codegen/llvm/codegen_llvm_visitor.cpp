@@ -583,7 +583,7 @@ void CodegenLLVMVisitor::visit_instance_struct(const ast::InstanceStruct& node) 
 
     llvm_struct = llvm::StructType::create(*context, mod_filename + "_Instance");
     llvm_struct->setBody(members);
-    module->getOrInsertGlobal(mod_filename + "_Instance", llvm_struct);
+    module->getOrInsertGlobal("inst", llvm_struct);
 }
 
 }  // namespace codegen
