@@ -23,8 +23,6 @@ using symtab::syminfo::NmodlType;
 using symtab::syminfo::Status;
 
 
-
-
 /**
  * How symbols are stored in NEURON? See notes written in markdown file.
  *

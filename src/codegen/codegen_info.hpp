@@ -505,7 +505,7 @@ struct CodegenInfo {
     /// true if WatchStatement uses voltage v variable
     bool is_voltage_used_by_watch_statements() const;
 
-     /**
+    /**
      * Check if net_send_buffer is required
      */
     bool net_send_buffer_required() const noexcept {

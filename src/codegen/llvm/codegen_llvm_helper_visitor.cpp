@@ -160,12 +160,12 @@ void CodegenLLVMHelperVisitor::create_function_for_node(ast::Block& node) {
 
 std::shared_ptr<ast::InstanceStruct> CodegenLLVMHelperVisitor::create_instance_struct() {
     ast::CodegenVarVector codegen_vars;
-    for(auto& float_var : info.codegen_float_variables) {
+    for (auto& float_var: info.codegen_float_variables) {
         auto name = new ast::Name(new ast::String(float_var->get_name()));
         auto codegen_var = new ast::CodegenVar(1, name);
         codegen_vars.emplace_back(codegen_var);
     }
-    for(auto& int_var : info.codegen_int_variables) {
+    for (auto& int_var: info.codegen_int_variables) {
         auto name = new ast::Name(new ast::String(int_var.symbol->get_name()));
         auto codegen_var = new ast::CodegenVar(1, name);
         codegen_vars.emplace_back(codegen_var);

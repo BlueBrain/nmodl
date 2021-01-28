@@ -2050,8 +2050,9 @@ std::string CodegenCVisitor::get_variable_name(const std::string& name, bool use
     }
 
     // integer variable
-    auto i =
-        std::find_if(info.codegen_int_variables.begin(), info.codegen_int_variables.end(), index_comparator);
+    auto i = std::find_if(info.codegen_int_variables.begin(),
+                          info.codegen_int_variables.end(),
+                          index_comparator);
     if (i != info.codegen_int_variables.end()) {
         return int_variable_name(*i, varname, use_instance);
     }

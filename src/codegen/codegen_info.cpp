@@ -237,7 +237,10 @@ void CodegenInfo::get_int_variables() {
         if (artificial_cell) {
             codegen_int_variables.emplace_back(make_symbol(naming::POINT_PROCESS_VARIABLE), true);
         } else {
-            codegen_int_variables.emplace_back(make_symbol(naming::POINT_PROCESS_VARIABLE), false, false, true);
+            codegen_int_variables.emplace_back(make_symbol(naming::POINT_PROCESS_VARIABLE),
+                                               false,
+                                               false,
+                                               true);
             codegen_int_variables.back().is_constant = true;
         }
     }
@@ -308,7 +311,10 @@ void CodegenInfo::get_int_variables() {
         if (artificial_cell) {
             codegen_int_variables.emplace_back(make_symbol(naming::TQITEM_VARIABLE), true);
         } else {
-            codegen_int_variables.emplace_back(make_symbol(naming::TQITEM_VARIABLE), false, false, true);
+            codegen_int_variables.emplace_back(make_symbol(naming::TQITEM_VARIABLE),
+                                               false,
+                                               false,
+                                               true);
             codegen_int_variables.back().is_constant = true;
         }
         tqitem_index = codegen_int_variables.size() - 1;
@@ -321,7 +327,10 @@ void CodegenInfo::get_int_variables() {
      */
     if (!watch_statements.empty()) {
         for (int i = 0; i < watch_statements.size() + 1; i++) {
-            codegen_int_variables.emplace_back(make_symbol("watch{}"_format(i)), false, false, true);
+            codegen_int_variables.emplace_back(make_symbol("watch{}"_format(i)),
+                                               false,
+                                               false,
+                                               true);
         }
     }
 }
@@ -340,7 +349,8 @@ void CodegenInfo::get_shadow_variables() {
         for (const auto& var: ion.writes) {
             codegen_shadow_variables.push_back({make_symbol(shadow_varname("ion_" + var))});
             if (ion.is_ionic_current(var)) {
-                codegen_shadow_variables.push_back({make_symbol(shadow_varname("ion_di" + ion.name + "dv"))});
+                codegen_shadow_variables.push_back(
+                    {make_symbol(shadow_varname("ion_di" + ion.name + "dv"))});
             }
         }
     }
@@ -372,9 +382,11 @@ void CodegenInfo::get_float_variables() {
 
     codegen_float_variables = range_parameter_vars;
     codegen_float_variables.insert(codegen_float_variables.end(),
-                     range_assigned_vars.begin(),
-                     range_assigned_vars.end());
-    codegen_float_variables.insert(codegen_float_variables.end(), range_state_vars.begin(), range_state_vars.end());
+                                   range_assigned_vars.begin(),
+                                   range_assigned_vars.end());
+    codegen_float_variables.insert(codegen_float_variables.end(),
+                                   range_state_vars.begin(),
+                                   range_state_vars.end());
     codegen_float_variables.insert(codegen_float_variables.end(), assigned.begin(), assigned.end());
 
     if (vectorize) {
@@ -382,7 +394,7 @@ void CodegenInfo::get_float_variables() {
     }
     if (breakpoint_exist()) {
         std::string name = vectorize ? naming::CONDUCTANCE_UNUSED_VARIABLE
-                                          : naming::CONDUCTANCE_VARIABLE;
+                                     : naming::CONDUCTANCE_VARIABLE;
         codegen_float_variables.push_back(make_symbol(name));
     }
     if (net_receive_exist()) {
