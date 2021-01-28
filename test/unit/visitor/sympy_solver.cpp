@@ -122,19 +122,24 @@ void compare_blocks(const std::string& result,
                             return True
 
                         def reduce(s):
-                            i = 0
+                            max_tmp = -1
                             d = {}
 
                             sout = ""
                             # split of sout and a dict with the tmp variables
                             for line in s.split('\n'):
                                 line_split = line.lstrip().split('=')
-                                if len(line_split) == 2 and line_split[0] == f'tmp{i} ':
+
+                                if len(line_split) == 2 and line_split[0].startswith('tmp'):
                                     # back-substitution of tmp variables in tmp variables
+                                    tmp_var = line_split[0].strip()
+                                    if tmp_var in d:
+                                        continue
+
+                                    max_tmp = max(max_tmp, int(tmp_var[3:]))
                                     for k, v in d.items():
                                         line_split[1] = line_split[1].replace(k, f'({v})')
-                                    d[f'tmp{i}'] = line_split[1]
-                                    i += 1
+                                    d[tmp_var] = line_split[1]
                                 elif 'LOCAL' in line:
                                     sout += line.split('tmp0')[0] + '\n'
                                 else:
@@ -142,7 +147,7 @@ void compare_blocks(const std::string& result,
 
                             # Back-substitution of the tmps
                             # so that we do not replace tmp11 with (tmp1)1
-                            for j in range(i-1, -1, -1):
+                            for j in range(max_tmp, -1, -1):
                                 k = f'tmp{j}'
                                 sout = sout.replace(k, f'({d[k]})')
 
