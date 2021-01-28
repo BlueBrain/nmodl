@@ -50,5 +50,5 @@ jobs:
           make test
           (cd ..; lcov --capture  --directory . --no-external --output-file build/coverage-run.info)
           lcov --add-tracefile coverage-base-filtered.info --add-tracefile coverage-run.info --output-file lcov.info
-          bash <(curl -s https://codecov.io/bash)
+          bash <(curl -s https://codecov.io/bash) -X gcov
 
