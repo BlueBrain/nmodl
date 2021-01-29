@@ -44,7 +44,7 @@ jobs:
         run:  |
           mkdir build && cd build
           cmake .. -DPYTHON_EXECUTABLE=$(which python3) -DCMAKE_C_FLAGS="-coverage -O0" -DCMAKE_CXX_FLAGS="-coverage -O0";
-          make
+          make -j2
           (cd ..;  lcov --capture  --initial --directory . --no-external --output-file build/coverage-base.info)
           lcov --remove coverage-base.info --output-file coverage-base-filtered.info "*/ext/*"
           make test
