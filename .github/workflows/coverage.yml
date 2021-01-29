@@ -46,10 +46,10 @@ jobs:
           cmake .. -DPYTHON_EXECUTABLE=$(which python3) -DCMAKE_C_FLAGS="-coverage -O0" -DCMAKE_CXX_FLAGS="-coverage -O0";
           make -j2
           (cd ..;  lcov --capture  --initial --directory . --no-external --output-file build/coverage-base.info)
-          lcov --remove coverage-base.info --output-file coverage-base-filtered.info "*/ext/*"
           make test
           (cd ..; lcov --capture  --directory . --no-external --output-file build/coverage-run.info)
-          lcov --add-tracefile coverage-base-filtered.info --add-tracefile coverage-run.info --output-file coverage.info
+          lcov --add-tracefile coverage-base.info --add-tracefile coverage-run.info --output-file coverage-full.info
+          lcov --remove coverage-full.info --output-file coverage.info "*/ext/*"
           lcov --list coverage.info
           bash <(curl -s https://codecov.io/bash) -f coverage.info
 
