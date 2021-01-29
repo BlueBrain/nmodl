@@ -99,7 +99,7 @@ class SympyReplaceSolutionsVisitor: public AstVisitor {
      * @param get_lhs method with witch we may get the lhs (in case we need it)
      * @param get_rhs method with witch we may get the rhs (in case we need it)
      */
-    void try_replace_statement(
+    void try_replace_tagged_statement(
         const ast::Node& node,
         const std::shared_ptr<ast::Expression>& get_lhs(const ast::Node& node),
         const std::shared_ptr<ast::Expression>& get_rhs(const ast::Node& node));
@@ -192,30 +192,26 @@ class SympyReplaceSolutionsVisitor: public AstVisitor {
         /// still tagged
         inline bool is_var_assigned_here(const std::string& var) const {
             const auto it = var2statement_.find(var);
-            return it != var2statement_.end() && tags_[it->second];
+            return it != var2statement_.end() && tags_.find(it->second) != tags_.end();
         }
 
-        /// Check if all the statements found their position
-        inline bool is_all_untagged() const {
-            return std::find(tags_.begin(), tags_.end(), true) == tags_.end();
-        }
         /**
          * \brief Look for \p var in \ref var2statement_ and emplace back that statement in \p
          * new_statements
          *
-         * If there is no \p var key in \ref var2statement_, return
+         * If there is no \p var key in \ref var2statement_, return false
          */
-        bool try_emplace_back_statement(ast::StatementVector& new_statements,
-                                        const std::string& var);
+        bool try_emplace_back_tagged_statement(ast::StatementVector& new_statements,
+                                               const std::string& var);
 
 
         /// Emplace back the next \p n_next_statements solutions in \ref statements that is marked
         /// for updating in \ref tags_
-        size_t emplace_back_next_statements(ast::StatementVector& new_statements,
-                                            const size_t n_next_statements);
+        size_t emplace_back_next_tagged_statements(ast::StatementVector& new_statements,
+                                                   const size_t n_next_statements);
 
         /// Emplace back all the statements that are marked for updating in \ref tags_
-        size_t emplace_back_all_statements(ast::StatementVector& new_statements);
+        size_t emplace_back_all_tagged_statements(ast::StatementVector& new_statements);
 
         /**
          * \brief Tag all the statements that depend on \p var for updating
@@ -260,10 +256,11 @@ class SympyReplaceSolutionsVisitor: public AstVisitor {
         /**
          * \brief Keeps track of what statements need updating
          *
-         * This vector is always as long as \ref statements_. \ref tags_[ii] == true means that \ref
-         * statements_[ii] needs updating
+         * The elements of this set are the indexes of the \ref statements_ vector that need
+         * updating. It is a set because we need to be able to easily find them by value and we need
+         * them ordered to pick "the next one"
          */
-        std::vector<bool> tags_;
+        std::set<size_t> tags_;
 
         /**
          * \brief Max number of times a statement was printed using an \ref

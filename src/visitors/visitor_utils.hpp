@@ -121,7 +121,7 @@ std::string to_json(const ast::Ast& node,
 /// If \p lhs and \p rhs combined represent an assignment (we assume to have an "=" in between them)
 /// we extract the variables on which the assigned variable depends on. We provide the input with
 /// lhs and rhs because there are a few nodes that have this similar structure but slightly
-/// different naming (binaryExpression, diff_eq_expression, linExpression
+/// different naming (binaryExpression, diff_eq_expression, linExpression)
 std::pair<std::string, std::unordered_set<std::string>> statement_dependencies(
     const std::shared_ptr<ast::Expression>& lhs,
     const std::shared_ptr<ast::Expression>& rhs);

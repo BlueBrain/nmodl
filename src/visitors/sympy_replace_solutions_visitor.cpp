@@ -56,7 +56,7 @@ void SympyReplaceSolutionsVisitor::visit_statement_block(ast::StatementBlock& no
         interleaves_counter_ = InterleavesCounter();
         node.visit_children(*this);
 
-        if (!solutions_.is_all_untagged() && policy_ == ReplacePolicy::VALUE) {
+        if (!solutions_.tags_.empty() && policy_ == ReplacePolicy::VALUE) {
             logger->debug(
                 "SympyReplaceSolutionsVisitor :: not all solutions were replaced. Policy: GREEDY");
             interleaves_counter_ = InterleavesCounter();
@@ -109,7 +109,7 @@ void SympyReplaceSolutionsVisitor::visit_statement_block(ast::StatementBlock& no
     }
 
     if (is_root) {
-        if (!solutions_.is_all_untagged()) {
+        if (!solutions_.tags_.empty()) {
             throw std::runtime_error(
                 "Not all solutions were replaced! Probably something went wrong.");
         }
@@ -125,7 +125,7 @@ void SympyReplaceSolutionsVisitor::visit_statement_block(ast::StatementBlock& no
     node.set_statements(std::move(new_statements));
 }
 
-void SympyReplaceSolutionsVisitor::try_replace_statement(
+void SympyReplaceSolutionsVisitor::try_replace_tagged_statement(
     const ast::Node& node,
     const std::shared_ptr<ast::Expression>& get_lhs(const ast::Node& node),
     const std::shared_ptr<ast::Expression>& get_rhs(const ast::Node& node)) {
@@ -148,9 +148,9 @@ void SympyReplaceSolutionsVisitor::try_replace_statement(
         if (solutions_.is_var_assigned_here(key)) {
             ast::StatementVector new_statements;
 
-            pre_solve_statements_.emplace_back_all_statements(new_statements);
-            tmp_statements_.emplace_back_all_statements(new_statements);
-            solutions_.try_emplace_back_statement(new_statements, key);
+            pre_solve_statements_.emplace_back_all_tagged_statements(new_statements);
+            tmp_statements_.emplace_back_all_tagged_statements(new_statements);
+            solutions_.try_emplace_back_tagged_statement(new_statements, key);
 
             replacements_.emplace(statement, new_statements);
         }
@@ -159,9 +159,9 @@ void SympyReplaceSolutionsVisitor::try_replace_statement(
     case ReplacePolicy::GREEDY: {
         ast::StatementVector new_statements;
 
-        pre_solve_statements_.emplace_back_all_statements(new_statements);
-        tmp_statements_.emplace_back_all_statements(new_statements);
-        solutions_.emplace_back_next_statements(new_statements, n_next_equations_);
+        pre_solve_statements_.emplace_back_all_tagged_statements(new_statements);
+        tmp_statements_.emplace_back_all_tagged_statements(new_statements);
+        solutions_.emplace_back_next_tagged_statements(new_statements, n_next_equations_);
 
         replacements_.emplace(statement, new_statements);
 
@@ -180,48 +180,7 @@ void SympyReplaceSolutionsVisitor::visit_diff_eq_expression(ast::DiffEqExpressio
         return static_cast<const ast::DiffEqExpression&>(node).get_expression()->get_rhs();
     };
 
-    try_replace_statement(node, get_lhs, get_rhs);
-    //
-    //    interleaves_counter_.new_equation(true);
-    //
-    //    const auto& statement = std::static_pointer_cast<ast::Statement>(
-    //        node.get_parent()->get_shared_ptr());
-    //
-    //    // do not visit if already marked
-    //    if (replacements_.find(statement) != replacements_.end()) {
-    //        return;
-    //    }
-    //
-    //    switch (policy_) {
-    //    case ReplacePolicy::VALUE: {
-    //        const auto dependencies = statement_dependencies(node.get_expression()->get_lhs(),
-    //                                                         node.get_expression()->get_rhs());
-    //        const auto& key = dependencies.first;
-    //        const auto& vars = dependencies.second;
-    //
-    //        if (solutions_.is_var_assigned_here(key)) {
-    //            ast::StatementVector new_statements;
-    //
-    //            pre_solve_statements_.emplace_back_all_statements(new_statements);
-    //            tmp_statements_.emplace_back_all_statements(new_statements);
-    //            solutions_.try_emplace_back_statement(new_statements, key);
-    //
-    //            replacements_.emplace(statement, new_statements);
-    //        }
-    //        break;
-    //    }
-    //    case ReplacePolicy::GREEDY: {
-    //        ast::StatementVector new_statements;
-    //
-    //        pre_solve_statements_.emplace_back_all_statements(new_statements);
-    //        tmp_statements_.emplace_back_all_statements(new_statements);
-    //        solutions_.emplace_back_next_statements(new_statements, n_next_equations_);
-    //
-    //        replacements_.emplace(statement, new_statements);
-    //
-    //        break;
-    //    }
-    //    }
+    try_replace_tagged_statement(node, get_lhs, get_rhs);
 }
 
 void SympyReplaceSolutionsVisitor::visit_lin_equation(ast::LinEquation& node) {
@@ -233,47 +192,7 @@ void SympyReplaceSolutionsVisitor::visit_lin_equation(ast::LinEquation& node) {
         return static_cast<const ast::LinEquation&>(node).get_left_linxpression();
     };
 
-    try_replace_statement(node, get_lhs, get_rhs);
-
-    //    interleaves_counter_.new_equation(true);
-    //
-    //    const auto& statement = std::static_pointer_cast<ast::Statement>(
-    //        node.get_parent()->get_shared_ptr());
-    //
-    //    // do not visit if already marked
-    //    if (replacements_.find(statement) != replacements_.end()) {
-    //        return;
-    //    }
-    //
-    //    switch (policy_) {
-    //    case ReplacePolicy::VALUE: {
-    //        const auto dependencies = statement_dependencies(node.get_left_linxpression(),
-    //                                                         node.get_linxpression());
-    //        const auto& key = dependencies.first;
-    //        const auto& vars = dependencies.second;
-    //
-    //        if (solutions_.is_var_assigned_here(key)) {
-    //            ast::StatementVector new_statements;
-    //
-    //            pre_solve_statements_.emplace_back_all_statements(new_statements);
-    //            tmp_statements_.emplace_back_all_statements(new_statements);
-    //            solutions_.try_emplace_back_statement(new_statements, key);
-    //
-    //            replacements_.emplace(statement, new_statements);
-    //        }
-    //        break;
-    //    }
-    //    case ReplacePolicy::GREEDY: {
-    //        ast::StatementVector new_statements;
-    //
-    //        pre_solve_statements_.emplace_back_all_statements(new_statements);
-    //        tmp_statements_.emplace_back_all_statements(new_statements);
-    //        solutions_.emplace_back_next_statements(new_statements, n_next_equations_);
-    //
-    //        replacements_.emplace(statement, new_statements);
-    //        break;
-    //    }
-    //    }
+    try_replace_tagged_statement(node, get_lhs, get_rhs);
 }
 
 
@@ -286,47 +205,7 @@ void SympyReplaceSolutionsVisitor::visit_non_lin_equation(ast::NonLinEquation& n
         return static_cast<const ast::NonLinEquation&>(node).get_rhs();
     };
 
-    try_replace_statement(node, get_lhs, get_rhs);
-
-    //    interleaves_counter_.new_equation(true);
-    //
-    //    const auto& statement = std::static_pointer_cast<ast::Statement>(
-    //            node.get_parent()->get_shared_ptr());
-    //
-    //    // do not visit if already marked
-    //    if (replacements_.find(statement) != replacements_.end()) {
-    //        return;
-    //    }
-    //
-    //    switch (policy_) {
-    //        case ReplacePolicy::VALUE: {
-    //            const auto dependencies = statement_dependencies(node.get_lhs(),
-    //                                                             node.get_rhs());
-    //            const auto& key = dependencies.first;
-    //            const auto& vars = dependencies.second;
-    //
-    //            if (solutions_.is_var_assigned_here(key)) {
-    //                ast::StatementVector new_statements;
-    //
-    //                pre_solve_statements_.emplace_back_all_statements(new_statements);
-    //                tmp_statements_.emplace_back_all_statements(new_statements);
-    //                solutions_.try_emplace_back_statement(new_statements, key);
-    //
-    //                replacements_.emplace(statement, new_statements);
-    //            }
-    //            break;
-    //        }
-    //        case ReplacePolicy::GREEDY: {
-    //            ast::StatementVector new_statements;
-    //
-    //            pre_solve_statements_.emplace_back_all_statements(new_statements);
-    //            tmp_statements_.emplace_back_all_statements(new_statements);
-    //            solutions_.emplace_back_next_statements(new_statements, n_next_equations_);
-    //
-    //            replacements_.emplace(statement, new_statements);
-    //            break;
-    //        }
-    //    }
+    try_replace_tagged_statement(node, get_lhs, get_rhs);
 }
 
 
@@ -347,8 +226,8 @@ SympyReplaceSolutionsVisitor::SolutionSorter::SolutionSorter(
     const std::vector<std::string>::const_iterator& statements_str_end,
     const int error_on_n_flushes)
     : statements_(create_statements(statements_str_beg, statements_str_end))
-    , tags_(statements_.size(), true)
     , error_on_n_flushes_(error_on_n_flushes) {
+    tag_all_statements();
     build_maps();
 }
 
@@ -388,49 +267,48 @@ void SympyReplaceSolutionsVisitor::SolutionSorter::build_maps() {
     }
 }
 
-bool SympyReplaceSolutionsVisitor::SolutionSorter::try_emplace_back_statement(
+bool SympyReplaceSolutionsVisitor::SolutionSorter::try_emplace_back_tagged_statement(
     ast::StatementVector& new_statements,
     const std::string& var) {
     auto ptr = var2statement_.find(var);
     bool emplaced = false;
-    if (ptr != var2statement_.end() && tags_[ptr->second]) {
+    if (ptr != var2statement_.end()) {
         const auto ii = ptr->second;
-        new_statements.emplace_back(statements_[ii]->clone());
-        tags_[ii] = false;
-        emplaced = true;
+        const auto tag_ptr = tags_.find(ii);
+        if (tag_ptr != tags_.end()) {
+            new_statements.emplace_back(statements_[ii]->clone());
+            tags_.erase(tag_ptr);
+            emplaced = true;
+        }
     }
     return emplaced;
 }
 
-size_t SympyReplaceSolutionsVisitor::SolutionSorter::emplace_back_next_statements(
+size_t SympyReplaceSolutionsVisitor::SolutionSorter::emplace_back_next_tagged_statements(
     ast::StatementVector& new_statements,
     const size_t n_next_statements) {
     size_t counter = 0;
     for (size_t next_statement_ii = 0;
          next_statement_ii < statements_.size() && counter < n_next_statements;
          ++next_statement_ii) {
-        if (tags_[next_statement_ii]) {
+        const auto tag_ptr = tags_.find(next_statement_ii);
+        if (tag_ptr != tags_.end()) {
             new_statements.emplace_back(statements_[next_statement_ii]->clone());
-            tags_[next_statement_ii] = false;
+            tags_.erase(tag_ptr);
             ++counter;
         }
     }
     return counter;
 }
 
-size_t SympyReplaceSolutionsVisitor::SolutionSorter::emplace_back_all_statements(
+size_t SympyReplaceSolutionsVisitor::SolutionSorter::emplace_back_all_tagged_statements(
     ast::StatementVector& new_statements) {
-    size_t n = 0;
-    for (size_t ii = 0; ii < statements_.size(); ++ii) {
-        if (tags_[ii]) {
-            new_statements.emplace_back(statements_[ii]->clone());
-            tags_[ii] = false;
-            ++n;
-            logger->debug("SympyReplaceSolutionsVisitor :: adding {}", to_nmodl(statements_[ii]));
-        }
+    for (const auto ii: tags_) {
+        new_statements.emplace_back(statements_[ii]->clone());
+        logger->debug("SympyReplaceSolutionsVisitor :: adding {}", to_nmodl(statements_[ii]));
     }
 
-    n_flushes_ += (n > 0);
+    n_flushes_ += (!tags_.empty());
     if (error_on_n_flushes_ > 0 && n_flushes_ >= error_on_n_flushes_) {
         throw std::runtime_error(
             "SympyReplaceSolutionsVisitor :: State variable assignment(s) interleaved in system "
@@ -440,7 +318,12 @@ size_t SympyReplaceSolutionsVisitor::SolutionSorter::emplace_back_all_statements
             "behavior. Erase the assignment statement(s) or move them before/after the"
             " set of equations/differential equations.");
     }
-    return n;
+
+    const auto n_replacements = tags_.size();
+
+    tags_.clear();
+
+    return n_replacements;
 }
 
 size_t SympyReplaceSolutionsVisitor::SolutionSorter::tag_dependant_statements(
@@ -449,7 +332,7 @@ size_t SympyReplaceSolutionsVisitor::SolutionSorter::tag_dependant_statements(
     size_t n = 0;
     if (ptr != var2dependants_.end()) {
         for (const auto ii: ptr->second) {
-            tags_[ii] = true;
+            tags_.insert(ii);
             ++n;
         }
     }
@@ -457,7 +340,9 @@ size_t SympyReplaceSolutionsVisitor::SolutionSorter::tag_dependant_statements(
 }
 
 void SympyReplaceSolutionsVisitor::SolutionSorter::tag_all_statements() {
-    tags_ = std::vector<bool>(tags_.size(), true);
+    for (size_t i = 0; i < statements_.size(); ++i) {
+        tags_.insert(i);
+    }
 }
 
 
