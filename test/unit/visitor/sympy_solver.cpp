@@ -541,6 +541,37 @@ SCENARIO("Solve ODEs with cnexp or euler method using SympySolverVisitor",
 
 SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
          "[visitor][sympy][derivimplicit]") {
+    GIVEN("Derivative block with derivimplicit solver method. Check avoided name-clash") {
+        std::string nmodl_text = R"(
+            UNITS {
+                F = (faraday) (coulombs)
+            }
+            STATE {
+                x
+            }
+            BREAKPOINT {
+                SOLVE integrate METHOD derivimplicit
+            }
+            DERIVATIVE integrate {
+                x' = x + 1
+            }
+        )";
+        THEN("SympySolver correctly renames F vector") {
+            const std::string probable_explaination =
+                "Sympy_visitor left the standard F name for the F_vector. Name "
+                "clash with F faraday.";
+            CAPTURE(nmodl_text);
+            CAPTURE(probable_explaination);
+
+            auto result =
+                run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::DERIVATIVE_BLOCK);
+
+            REQUIRE(result.size() == 1);
+            REQUIRE(result[0].find("F[") == std::string::npos);
+        }
+    }
+
+
     GIVEN("Derivative block with derivimplicit solver method and conditional block") {
         std::string nmodl_text = R"(
             STATE {

@@ -193,7 +193,7 @@ void SympySolverVisitor::construct_eigen_solver_block(
 
     visitor::SympyReplaceSolutionsVisitor solution_replacer(
         pre_solve_statements_and_setup_x_eqs,
-        solutions,
+        solutions_filtered,
         expression_statements,
         visitor::SympyReplaceSolutionsVisitor::ReplacePolicy::GREEDY,
         state_vars.size() + 1);
