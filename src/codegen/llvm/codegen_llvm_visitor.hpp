@@ -173,6 +173,11 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     void create_function_call(llvm::Function* func,
                               const std::string& name,
                               const ast::ExpressionVector& arguments);
+    /**
+     * Create a function call to printf function
+     * \param arguments expressions passed as arguments to the printf call
+     */
+    void create_printf_call(const ast::ExpressionVector& arguments);
 
     /**
      * Emit function or procedure declaration in LLVM given the node
@@ -229,11 +234,6 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
      */
     llvm::Value* visit_comparison_bin_op(llvm::Value* lhs, llvm::Value* rhs, unsigned op);
 
-    /**
-     * Visit nmodl function or procedure
-     * \param node the AST node representing the function or procedure in NMODL
-     */
-    void visit_procedure_or_function(const ast::Block& node);
 
     // Visitors
     void visit_binary_expression(const ast::BinaryExpression& node) override;
@@ -249,6 +249,7 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     void visit_integer(const ast::Integer& node) override;
     void visit_procedure_block(const ast::ProcedureBlock& node) override;
     void visit_program(const ast::Program& node) override;
+    void visit_string(const ast::String& node) override;
     void visit_unary_expression(const ast::UnaryExpression& node) override;
     void visit_var_name(const ast::VarName& node) override;
     void visit_instance_struct(const ast::InstanceStruct& node) override;

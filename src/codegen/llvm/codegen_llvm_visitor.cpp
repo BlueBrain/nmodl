@@ -116,6 +116,11 @@ void CodegenLLVMVisitor::run_llvm_opt_passes() {
 
 void CodegenLLVMVisitor::create_external_method_call(const std::string& name,
                                                      const ast::ExpressionVector& arguments) {
+    if (name == "printf") {
+        create_printf_call(arguments);
+        return;
+    }
+
     std::vector<llvm::Value*> argument_values;
     std::vector<llvm::Type*> argument_types;
     for (const auto& arg: arguments) {
@@ -161,6 +166,32 @@ void CodegenLLVMVisitor::create_function_call(llvm::Function* func,
 
     llvm::Value* call = builder.CreateCall(func, argument_values);
     values.push_back(call);
+}
+
+void CodegenLLVMVisitor::create_printf_call(const ast::ExpressionVector& arguments) {
+    // First, create printf declaration or insert it if it does not exit.
+    std::string name = "printf";
+    llvm::Function* printf = module->getFunction(name);
+    if (!printf) {
+        llvm::Type* ptr_type = llvm::Type::getInt8PtrTy(*context);
+        llvm::Type* i32_type = llvm::Type::getInt32Ty(*context);
+        llvm::FunctionType* printf_type =
+            llvm::FunctionType::get(i32_type, ptr_type, /*isVarArg=*/true);
+
+        printf =
+            llvm::Function::Create(printf_type, llvm::Function::ExternalLinkage, name, *module);
+    }
+
+    // Create a call instruction.
+    std::vector<llvm::Value*> argument_values;
+    for (const auto& arg: arguments) {
+        arg->accept(*this);
+        llvm::Value* value = values.back();
+        values.pop_back();
+        argument_values.push_back(value);
+    }
+
+    builder.CreateCall(printf, argument_values);
 }
 
 void CodegenLLVMVisitor::emit_procedure_or_function_declaration(const ast::CodegenFunction& node) {
@@ -545,6 +576,11 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
 
 void CodegenLLVMVisitor::visit_procedure_block(const ast::ProcedureBlock& node) {
     // do nothing. \todo: remove old procedures from ast.
+}
+
+void CodegenLLVMVisitor::visit_string(const ast::String& node) {
+    llvm::Value* str = builder.CreateGlobalStringPtr(node.get_value());
+    values.push_back(str);
 }
 
 void CodegenLLVMVisitor::visit_unary_expression(const ast::UnaryExpression& node) {
