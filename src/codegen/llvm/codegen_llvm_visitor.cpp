@@ -150,20 +150,14 @@ void CodegenLLVMVisitor::create_function_call(llvm::Function* func,
                                               const std::string& name,
                                               const ast::ExpressionVector& arguments) {
     // Check that function is called with the expected number of arguments.
-    if (arguments.size() != func->arg_size()) {
+    if (!func->isVarArg() && arguments.size() != func->arg_size()) {
         throw std::runtime_error("Error: Incorrect number of arguments passed");
     }
 
-    // Process each argument and add it to a vector to pass to the function call instruction. Note
-    // that type checks are not needed here as NMODL operates on doubles by default.
+    // Pack function call arguments to vector and create a call instruction.
     std::vector<llvm::Value*> argument_values;
-    for (const auto& arg: arguments) {
-        arg->accept(*this);
-        llvm::Value* value = values.back();
-        values.pop_back();
-        argument_values.push_back(value);
-    }
-
+    argument_values.reserve(arguments.size());
+    pack_function_call_arguments(arguments, argument_values);
     llvm::Value* call = builder.CreateCall(func, argument_values);
     values.push_back(call);
 }
@@ -184,20 +178,8 @@ void CodegenLLVMVisitor::create_printf_call(const ast::ExpressionVector& argumen
 
     // Create a call instruction.
     std::vector<llvm::Value*> argument_values;
-    for (const auto& arg: arguments) {
-        if (arg->is_string()) {
-            // If the argument is a string, create a global i8* variable with it.
-            auto string_arg = std::dynamic_pointer_cast<ast::String>(arg);
-            llvm::Value* str = builder.CreateGlobalStringPtr(string_arg->get_value());
-            argument_values.push_back(str);
-        } else {
-            arg->accept(*this);
-            llvm::Value* value = values.back();
-            values.pop_back();
-            argument_values.push_back(value);
-        }
-    }
-
+    argument_values.reserve(arguments.size());
+    pack_function_call_arguments(arguments, argument_values);
     builder.CreateCall(printf, argument_values);
 }
 
@@ -224,6 +206,23 @@ llvm::Value* CodegenLLVMVisitor::lookup(const std::string& name) {
     if (!val)
         throw std::runtime_error("Error: variable " + name + " is not in scope\n");
     return val;
+}
+
+void CodegenLLVMVisitor::pack_function_call_arguments(const ast::ExpressionVector& arguments,
+                                                      std::vector<llvm::Value*>& arg_values) {
+    for (const auto& arg: arguments) {
+        if (arg->is_string()) {
+            // If the argument is a string, create a global i8* variable with it.
+            auto string_arg = std::dynamic_pointer_cast<ast::String>(arg);
+            llvm::Value* str = builder.CreateGlobalStringPtr(string_arg->get_value());
+            arg_values.push_back(str);
+        } else {
+            arg->accept(*this);
+            llvm::Value* value = values.back();
+            values.pop_back();
+            arg_values.push_back(value);
+        }
+    }
 }
 
 llvm::Value* CodegenLLVMVisitor::visit_arithmetic_bin_op(llvm::Value* lhs,

@@ -474,6 +474,42 @@ SCENARIO("Function call", "[visitor][llvm]") {
         }
     }
 
+    GIVEN("A call to printf") {
+        std::string nmodl_text = R"(
+            PROCEDURE bar() {
+                LOCAL i
+                i = 0
+                printf("foo")
+                printf("bar %d", i)
+            }
+        )";
+
+        THEN("printf is declared and global string values are created") {
+            std::string module_string = run_llvm_visitor(nmodl_text);
+            std::smatch m;
+
+            // Check for global string values.
+            std::regex str1(
+                R"(@[0-9]+ = private unnamed_addr constant \[6 x i8\] c\"\\22foo\\22\\00\")");
+            std::regex str2(
+                R"(@[0-9]+ = private unnamed_addr constant \[9 x i8\] c\"\\22bar %d\\22\\00\")");
+            REQUIRE(std::regex_search(module_string, m, str1));
+            REQUIRE(std::regex_search(module_string, m, str2));
+
+            // Check for printf declaration.
+            std::regex declaration(R"(declare i32 @printf\(i8\*, \.\.\.\))");
+            REQUIRE(std::regex_search(module_string, m, declaration));
+
+            // Check the correct calls are made.
+            std::regex call1(
+                R"(call i32 \(i8\*, \.\.\.\) @printf\(i8\* getelementptr inbounds \(\[6 x i8\], \[6 x i8\]\* @[0-9]+, i32 0, i32 0\)\))");
+            std::regex call2(
+                R"(call i32 \(i8\*, \.\.\.) @printf(i8\* getelementptr inbounds \(\[9 x i8\], \[9 x i8\]\* @[0-9]+, i32 0, i32 0\), double %[0-9]+\))");
+            REQUIRE(std::regex_search(module_string, m, call1));
+            REQUIRE(std::regex_search(module_string, m, call2));
+        }
+    }
+
     GIVEN("A call to function with the wrong number of arguments") {
         std::string nmodl_text = R"(
             FUNCTION foo(x, y) {
