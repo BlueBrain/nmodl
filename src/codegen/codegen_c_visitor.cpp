@@ -348,49 +348,6 @@ bool CodegenCVisitor::statement_to_skip(const Statement& node) const {
 }
 
 
-bool CodegenCVisitor::net_send_buffer_required() const noexcept {
-    if (net_receive_required() && !info.artificial_cell) {
-        if (info.net_event_used || info.net_send_used || info.is_watch_used()) {
-            return true;
-        }
-    }
-    return false;
-}
-
-
-bool CodegenCVisitor::net_receive_buffering_required() const noexcept {
-    return info.point_process && !info.artificial_cell && info.net_receive_node != nullptr;
-}
-
-
-bool CodegenCVisitor::nrn_state_required() const noexcept {
-    if (info.artificial_cell) {
-        return false;
-    }
-    return info.nrn_state_block != nullptr || info.currents.empty();
-}
-
-
-bool CodegenCVisitor::nrn_cur_required() const noexcept {
-    return info.breakpoint_node != nullptr && !info.currents.empty();
-}
-
-
-bool CodegenCVisitor::net_receive_exist() const noexcept {
-    return info.net_receive_node != nullptr;
-}
-
-
-bool CodegenCVisitor::breakpoint_exist() const noexcept {
-    return info.breakpoint_node != nullptr;
-}
-
-
-bool CodegenCVisitor::net_receive_required() const noexcept {
-    return net_receive_exist();
-}
-
-
 /**
  * \details When floating point data type is not default (i.e. double) then we
  * have to copy old array to new type (for range variables).
@@ -415,7 +372,7 @@ bool CodegenCVisitor::state_variable(const std::string& name) const {
 
 int CodegenCVisitor::position_of_float_var(const std::string& name) const {
     int index = 0;
-    for (const auto& var: codegen_float_variables) {
+    for (const auto& var: info.codegen_float_variables) {
         if (var->get_name() == name) {
             return index;
         }
@@ -427,7 +384,7 @@ int CodegenCVisitor::position_of_float_var(const std::string& name) const {
 
 int CodegenCVisitor::position_of_int_var(const std::string& name) const {
     int index = 0;
-    for (const auto& var: codegen_int_variables) {
+    for (const auto& var: info.codegen_int_variables) {
         if (var.symbol->get_name() == name) {
             return index;
         }
@@ -546,11 +503,11 @@ int CodegenCVisitor::float_variables_size() const {
         float_size++;
     }
     /// for g_unused variable
-    if (breakpoint_exist()) {
+    if (info.breakpoint_exist()) {
         float_size++;
     }
     /// for tsave variable
-    if (net_receive_exist()) {
+    if (info.net_receive_exist()) {
         float_size++;
     }
     return float_size;
@@ -810,186 +767,6 @@ void CodegenCVisitor::update_index_semantics() {
 }
 
 
-std::vector<SymbolType> CodegenCVisitor::get_float_variables() {
-    // sort with definition order
-    auto comparator = [](const SymbolType& first, const SymbolType& second) -> bool {
-        return first->get_definition_order() < second->get_definition_order();
-    };
-
-    auto assigned = info.assigned_vars;
-    auto states = info.state_vars;
-
-    // each state variable has corresponding Dstate variable
-    for (auto& state: states) {
-        auto name = "D" + state->get_name();
-        auto symbol = make_symbol(name);
-        if (state->is_array()) {
-            symbol->set_as_array(state->get_length());
-        }
-        symbol->set_definition_order(state->get_definition_order());
-        assigned.push_back(symbol);
-    }
-    std::sort(assigned.begin(), assigned.end(), comparator);
-
-    auto variables = info.range_parameter_vars;
-    variables.insert(variables.end(),
-                     info.range_assigned_vars.begin(),
-                     info.range_assigned_vars.end());
-    variables.insert(variables.end(), info.range_state_vars.begin(), info.range_state_vars.end());
-    variables.insert(variables.end(), assigned.begin(), assigned.end());
-
-    if (info.vectorize) {
-        variables.push_back(make_symbol(naming::VOLTAGE_UNUSED_VARIABLE));
-    }
-    if (breakpoint_exist()) {
-        std::string name = info.vectorize ? naming::CONDUCTANCE_UNUSED_VARIABLE
-                                          : naming::CONDUCTANCE_VARIABLE;
-        variables.push_back(make_symbol(name));
-    }
-    if (net_receive_exist()) {
-        variables.push_back(make_symbol(naming::T_SAVE_VARIABLE));
-    }
-    return variables;
-}
-
-
-/**
- * IndexVariableInfo has following constructor arguments:
- *      - symbol
- *      - is_vdata   (false)
- *      - is_index   (false
- *      - is_integer (false)
- *
- * Which variables are constant qualified?
- *
- *  - node area is read only
- *  - read ion variables are read only
- *  - style_ionname is index / offset
- */
-std::vector<IndexVariableInfo> CodegenCVisitor::get_int_variables() {
-    std::vector<IndexVariableInfo> variables;
-    if (info.point_process) {
-        variables.emplace_back(make_symbol(naming::NODE_AREA_VARIABLE));
-        variables.back().is_constant = true;
-        /// note that this variable is not printed in neuron implementation
-        if (info.artificial_cell) {
-            variables.emplace_back(make_symbol(naming::POINT_PROCESS_VARIABLE), true);
-        } else {
-            variables.emplace_back(make_symbol(naming::POINT_PROCESS_VARIABLE), false, false, true);
-            variables.back().is_constant = true;
-        }
-    }
-
-    for (const auto& ion: info.ions) {
-        bool need_style = false;
-        std::unordered_map<std::string, int> ion_vars;  // used to keep track of the variables to
-                                                        // not have doubles between read/write. Same
-                                                        // name variables are allowed
-        for (const auto& var: ion.reads) {
-            const std::string name = "ion_" + var;
-            variables.emplace_back(make_symbol(name));
-            variables.back().is_constant = true;
-            ion_vars[name] = variables.size() - 1;
-        }
-
-        /// symbol for di_ion_dv var
-        std::shared_ptr<symtab::Symbol> ion_di_dv_var = nullptr;
-
-        for (const auto& var: ion.writes) {
-            const std::string name = "ion_" + var;
-
-            const auto ion_vars_it = ion_vars.find(name);
-            if (ion_vars_it != ion_vars.end()) {
-                variables[ion_vars_it->second].is_constant = false;
-            } else {
-                variables.emplace_back(make_symbol("ion_" + var));
-            }
-            if (ion.is_ionic_current(var)) {
-                ion_di_dv_var = make_symbol("ion_di" + ion.name + "dv");
-            }
-            if (ion.is_intra_cell_conc(var) || ion.is_extra_cell_conc(var)) {
-                need_style = true;
-            }
-        }
-
-        /// insert after read/write variables but before style ion variable
-        if (ion_di_dv_var != nullptr) {
-            variables.emplace_back(ion_di_dv_var);
-        }
-
-        if (need_style) {
-            variables.emplace_back(make_symbol("style_" + ion.name), false, true);
-            variables.back().is_constant = true;
-        }
-    }
-
-    for (const auto& var: info.pointer_variables) {
-        auto name = var->get_name();
-        if (var->has_any_property(NmodlType::pointer_var)) {
-            variables.emplace_back(make_symbol(name));
-        } else {
-            variables.emplace_back(make_symbol(name), true);
-        }
-    }
-
-    if (info.diam_used) {
-        variables.emplace_back(make_symbol(naming::DIAM_VARIABLE));
-    }
-
-    if (info.area_used) {
-        variables.emplace_back(make_symbol(naming::AREA_VARIABLE));
-    }
-
-    // for non-artificial cell, when net_receive buffering is enabled
-    // then tqitem is an offset
-    if (info.net_send_used) {
-        if (info.artificial_cell) {
-            variables.emplace_back(make_symbol(naming::TQITEM_VARIABLE), true);
-        } else {
-            variables.emplace_back(make_symbol(naming::TQITEM_VARIABLE), false, false, true);
-            variables.back().is_constant = true;
-        }
-        info.tqitem_index = variables.size() - 1;
-    }
-
-    /**
-     * \note Variables for watch statements : there is one extra variable
-     * used in coreneuron compared to actual watch statements for compatibility
-     * with neuron (which uses one extra Datum variable)
-     */
-    if (!info.watch_statements.empty()) {
-        for (int i = 0; i < info.watch_statements.size() + 1; i++) {
-            variables.emplace_back(make_symbol("watch{}"_format(i)), false, false, true);
-        }
-    }
-    return variables;
-}
-
-
-/**
- * \details When we enable fine level parallelism at channel level, we have do updates
- * to ion variables in atomic way. As cpus don't have atomic instructions in
- * simd loop, we have to use shadow vectors for every ion variables. Here
- * we return list of all such variables.
- *
- * \todo If conductances are specified, we don't need all below variables
- */
-std::vector<SymbolType> CodegenCVisitor::get_shadow_variables() {
-    std::vector<SymbolType> variables;
-    for (const auto& ion: info.ions) {
-        for (const auto& var: ion.writes) {
-            variables.push_back({make_symbol(shadow_varname("ion_" + var))});
-            if (ion.is_ionic_current(var)) {
-                variables.push_back({make_symbol(shadow_varname("ion_di" + ion.name + "dv"))});
-            }
-        }
-    }
-    variables.push_back({make_symbol("ml_rhs")});
-    variables.push_back({make_symbol("ml_d")});
-    return variables;
-}
-
-
 /****************************************************************************************/
 /*                      Routines must be overloaded in backend                          */
 /****************************************************************************************/
@@ -1078,7 +855,7 @@ bool CodegenCVisitor::nrn_cur_reduction_loop_required() {
 
 
 bool CodegenCVisitor::shadow_vector_setup_required() {
-    return (channel_task_dependency_enabled() && !codegen_shadow_variables.empty());
+    return (channel_task_dependency_enabled() && !info.codegen_shadow_variables.empty());
 }
 
 
@@ -1930,8 +1707,8 @@ std::string CodegenCVisitor::process_verbatim_text(std::string text) {
 
 
 std::string CodegenCVisitor::register_mechanism_arguments() const {
-    auto nrn_cur = nrn_cur_required() ? method_name(naming::NRN_CUR_METHOD) : "NULL";
-    auto nrn_state = nrn_state_required() ? method_name(naming::NRN_STATE_METHOD) : "NULL";
+    auto nrn_cur = info.nrn_cur_required() ? method_name(naming::NRN_CUR_METHOD) : "NULL";
+    auto nrn_state = info.nrn_state_required() ? method_name(naming::NRN_STATE_METHOD) : "NULL";
     auto nrn_alloc = method_name(naming::NRN_ALLOC_METHOD);
     auto nrn_init = method_name(naming::NRN_INIT_METHOD);
     return "mechanism, {}, {}, NULL, {}, {}, first_pointer_var_index()"
@@ -2055,7 +1832,7 @@ void CodegenCVisitor::print_num_variable_getter() {
 
 
 void CodegenCVisitor::print_net_receive_arg_size_getter() {
-    if (!net_receive_exist()) {
+    if (!info.net_receive_exist()) {
         return;
     }
     printer->add_newline(2);
@@ -2265,17 +2042,18 @@ std::string CodegenCVisitor::get_variable_name(const std::string& name, bool use
     // clang-format on
 
     // float variable
-    auto f = std::find_if(codegen_float_variables.begin(),
-                          codegen_float_variables.end(),
+    auto f = std::find_if(info.codegen_float_variables.begin(),
+                          info.codegen_float_variables.end(),
                           symbol_comparator);
-    if (f != codegen_float_variables.end()) {
+    if (f != info.codegen_float_variables.end()) {
         return float_variable_name(*f, use_instance);
     }
 
     // integer variable
-    auto i =
-        std::find_if(codegen_int_variables.begin(), codegen_int_variables.end(), index_comparator);
-    if (i != codegen_int_variables.end()) {
+    auto i = std::find_if(info.codegen_int_variables.begin(),
+                          info.codegen_int_variables.end(),
+                          index_comparator);
+    if (i != info.codegen_int_variables.end()) {
         return int_variable_name(*i, varname, use_instance);
     }
 
@@ -2288,10 +2066,10 @@ std::string CodegenCVisitor::get_variable_name(const std::string& name, bool use
     }
 
     // shadow variable
-    auto s = std::find_if(codegen_shadow_variables.begin(),
-                          codegen_shadow_variables.end(),
+    auto s = std::find_if(info.codegen_shadow_variables.begin(),
+                          info.codegen_shadow_variables.end(),
                           symbol_comparator);
-    if (s != codegen_shadow_variables.end()) {
+    if (s != info.codegen_shadow_variables.end()) {
         return ion_shadow_variable_name(*s);
     }
 
@@ -2719,7 +2497,7 @@ void CodegenCVisitor::print_mechanism_register() {
     if (info.artificial_cell) {
         printer->add_line("add_nrn_artcell(mech_type, {});"_format(info.tqitem_index));
     }
-    if (net_receive_buffering_required()) {
+    if (info.net_receive_buffering_required()) {
         printer->add_line("hoc_register_net_receive_buffering({}, mech_type);"_format(
             method_name("net_buf_receive")));
     }
@@ -2820,13 +2598,13 @@ void CodegenCVisitor::print_mechanism_range_var_structure() {
     printer->add_newline(2);
     printer->add_line("/** all mechanism instance variables */");
     printer->start_block("struct {} "_format(instance_struct()));
-    for (auto& var: codegen_float_variables) {
+    for (auto& var: info.codegen_float_variables) {
         auto name = var->get_name();
         auto type = get_range_var_float_type(var);
         auto qualifier = is_constant_variable(name) ? k_const() : "";
         printer->add_line("{}{}* {}{};"_format(qualifier, type, ptr_type_qualifier(), name));
     }
-    for (auto& var: codegen_int_variables) {
+    for (auto& var: info.codegen_int_variables) {
         auto name = var.symbol->get_name();
         if (var.is_index || var.is_integer) {
             auto qualifier = var.is_constant ? k_const() : "";
@@ -2839,7 +2617,7 @@ void CodegenCVisitor::print_mechanism_range_var_structure() {
         }
     }
     if (channel_task_dependency_enabled()) {
-        for (auto& var: codegen_shadow_variables) {
+        for (auto& var: info.codegen_shadow_variables) {
             auto name = var->get_name();
             printer->add_line("{}* {}{};"_format(float_type, ptr_type_qualifier(), name));
         }
@@ -3048,7 +2826,7 @@ void CodegenCVisitor::print_shadow_vector_setup() {
     printer->start_block("static inline void setup_shadow_vectors({}) "_format(args));
     if (channel_task_dependency_enabled()) {
         printer->add_line("int nodecount = ml->nodecount;");
-        for (auto& var: codegen_shadow_variables) {
+        for (auto& var: info.codegen_shadow_variables) {
             auto name = var->get_name();
             auto type = default_float_data_type();
             auto allocation = "({0}*) mem_alloc(nodecount, sizeof({0}))"_format(type);
@@ -3061,7 +2839,7 @@ void CodegenCVisitor::print_shadow_vector_setup() {
     args = "{}* inst"_format(instance_struct());
     printer->start_block("static inline void free_shadow_vectors({}) "_format(args));
     if (channel_task_dependency_enabled()) {
-        for (auto& var: codegen_shadow_variables) {
+        for (auto& var: info.codegen_shadow_variables) {
             auto name = var->get_name();
             printer->add_line("mem_free(inst->{});"_format(name));
         }
@@ -3128,7 +2906,7 @@ void CodegenCVisitor::print_instance_variable_setup() {
     printer->add_line("/** initialize mechanism instance variables */");
     printer->start_block("static inline void setup_instance(NrnThread* nt, Memb_list* ml) ");
     printer->add_line("{0}* inst = ({0}*) mem_alloc(1, sizeof({0}));"_format(instance_struct()));
-    if (channel_task_dependency_enabled() && !codegen_shadow_variables.empty()) {
+    if (channel_task_dependency_enabled() && !info.codegen_shadow_variables.empty()) {
         printer->add_line("setup_shadow_vectors(inst, ml);");
     }
 
@@ -3148,7 +2926,7 @@ void CodegenCVisitor::print_instance_variable_setup() {
     int id = 0;
     std::vector<std::string> variables_to_free;
 
-    for (auto& var: codegen_float_variables) {
+    for (auto& var: info.codegen_float_variables) {
         auto name = var->get_name();
         auto range_var_type = get_range_var_float_type(var);
         if (float_type == range_var_type) {
@@ -3163,7 +2941,7 @@ void CodegenCVisitor::print_instance_variable_setup() {
         id += var->get_length();
     }
 
-    for (auto& var: codegen_int_variables) {
+    for (auto& var: info.codegen_int_variables) {
         auto name = var.symbol->get_name();
         std::string variable = name;
         std::string type = "";
@@ -3693,7 +3471,7 @@ void CodegenCVisitor::print_net_receive_loop_end() {
 
 
 void CodegenCVisitor::print_net_receive_buffering(bool need_mech_inst) {
-    if (!net_receive_required() || info.artificial_cell) {
+    if (!info.net_receive_required() || info.artificial_cell) {
         return;
     }
     printer->add_newline(2);
@@ -3742,7 +3520,7 @@ void CodegenCVisitor::print_net_send_buffering_grow() {
 }
 
 void CodegenCVisitor::print_net_send_buffering() {
-    if (!net_send_buffer_required()) {
+    if (!info.net_send_buffer_required()) {
         return;
     }
 
@@ -3810,7 +3588,7 @@ void CodegenCVisitor::visit_for_netcon(const ast::ForNetcon& node) {
 }
 
 void CodegenCVisitor::print_net_receive_kernel() {
-    if (!net_receive_required()) {
+    if (!info.net_receive_required()) {
         return;
     }
     codegen = true;
@@ -3873,7 +3651,7 @@ void CodegenCVisitor::print_net_receive_kernel() {
 
 
 void CodegenCVisitor::print_net_receive() {
-    if (!net_receive_required()) {
+    if (!info.net_receive_required()) {
         return;
     }
     codegen = true;
@@ -4021,7 +3799,7 @@ void CodegenCVisitor::visit_solution_expression(const SolutionExpression& node) 
 
 
 void CodegenCVisitor::print_nrn_state() {
-    if (!nrn_state_required()) {
+    if (!info.nrn_state_required()) {
         return;
     }
     codegen = true;
@@ -4232,7 +4010,7 @@ void CodegenCVisitor::print_fast_imem_calculation() {
 }
 
 void CodegenCVisitor::print_nrn_cur() {
-    if (!nrn_cur_required()) {
+    if (!info.nrn_cur_required()) {
         return;
     }
 
@@ -4380,10 +4158,6 @@ void CodegenCVisitor::setup(const Program& node) {
     if (!info.vectorize) {
         logger->warn("CodegenCVisitor : MOD file uses non-thread safe constructs of NMODL");
     }
-
-    codegen_float_variables = get_float_variables();
-    codegen_int_variables = get_int_variables();
-    codegen_shadow_variables = get_shadow_variables();
 
     update_index_semantics();
     rename_function_arguments();
