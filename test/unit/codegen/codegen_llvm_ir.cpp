@@ -779,8 +779,8 @@ SCENARIO("Creation of Instance Struct", "[visitor][llvm][instance_struct]") {
             ASSIGNED {
                 v (mV)
                 celsius (degC)
-
-                minf hinf
+                minf
+                hinf
             }
         )";
 
