@@ -14,19 +14,18 @@ set(LLVM_CODEGEN_SOURCE_FILES
 # =============================================================================
 
 include_directories(${LLVM_INCLUDE_DIRS})
-add_library(runner_obj OBJECT ${LLVM_CODEGEN_SOURCE_FILES})
-add_dependencies(runner_obj lexer_obj)
-set_property(TARGET runner_obj PROPERTY POSITION_INDEPENDENT_CODE ON)
-
-add_library(llvm_codegen STATIC $<TARGET_OBJECTS:runner_obj>)
+add_library(llvm_codegen OBJECT ${LLVM_CODEGEN_SOURCE_FILES})
+set_property(TARGET llvm_codegen PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 add_dependencies(llvm_codegen lexer util visitor)
+target_link_libraries(llvm_codegen PRIVATE util)
 
 if(NOT NMODL_AS_SUBPROJECT)
   add_executable(nmodl_llvm_runner main.cpp)
 
   target_link_libraries(
     nmodl_llvm_runner
+    CLI11::CLI11
     llvm_codegen
     codegen
     visitor

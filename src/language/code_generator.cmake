@@ -117,6 +117,7 @@ set(AST_GENERATED_SOURCES
     ${PROJECT_BINARY_DIR}/src/ast/independent_definition.hpp
     ${PROJECT_BINARY_DIR}/src/ast/indexed_name.hpp
     ${PROJECT_BINARY_DIR}/src/ast/initial_block.hpp
+    ${PROJECT_BINARY_DIR}/src/ast/instance_struct.hpp
     ${PROJECT_BINARY_DIR}/src/ast/integer.hpp
     ${PROJECT_BINARY_DIR}/src/ast/kinetic_block.hpp
     ${PROJECT_BINARY_DIR}/src/ast/lag_statement.hpp

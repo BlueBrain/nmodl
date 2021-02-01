@@ -158,6 +158,23 @@ void CodegenLLVMHelperVisitor::create_function_for_node(ast::Block& node) {
     codegen_functions.push_back(function);
 }
 
+std::shared_ptr<ast::InstanceStruct> CodegenLLVMHelperVisitor::create_instance_struct() {
+    ast::CodegenVarVector codegen_vars;
+    /// float variables are standard pointers to float vectors
+    for (auto& float_var: info.codegen_float_variables) {
+        auto name = new ast::Name(new ast::String(float_var->get_name()));
+        auto codegen_var = new ast::CodegenVar(1, name);
+        codegen_vars.emplace_back(codegen_var);
+    }
+    /// int variables are pointers to indexes for other vectors
+    for (auto& int_var: info.codegen_int_variables) {
+        auto name = new ast::Name(new ast::String(int_var.symbol->get_name()));
+        auto codegen_var = new ast::CodegenVar(1, name);
+        codegen_vars.emplace_back(codegen_var);
+    }
+    return std::make_shared<ast::InstanceStruct>(codegen_vars);
+}
+
 static void append_statements_from_block(ast::StatementVector& statements,
                                          const std::shared_ptr<ast::StatementBlock>& block) {
     const auto& block_statements = block->get_statements();
@@ -206,11 +223,11 @@ void CodegenLLVMHelperVisitor::ion_read_statements(BlockType type,
         // ion variable to be read
         std::string& ion_varname = variable_names.second;
         // index for reading ion variable
-        std::string index_varname = "{}_id"_format(varname);
+        std::string index_varname = fmt::format("{}_id", varname);
         // first load the index
-        std::string index_statement = "{} = {}_index[id]"_format(index_varname, ion_varname);
+        std::string index_statement = fmt::format("{} = {}_index[id]", index_varname, ion_varname);
         // now assign the value
-        std::string read_statement = "{} = {}[{}]"_format(varname, ion_varname, index_varname);
+        std::string read_statement = fmt::format("{} = {}[{}]", varname, ion_varname, index_varname);
         // push index definition, index statement and actual read statement
         int_variables.push_back(index_varname);
         index_statements.push_back(visitor::create_statement(index_statement));
@@ -267,11 +284,11 @@ void CodegenLLVMHelperVisitor::ion_write_statements(BlockType type,
     /// create write ion and corresponding index statements
     auto create_write_statements = [&](std::string ion_varname, std::string op, std::string rhs) {
         // index for writing ion variable
-        std::string index_varname = "{}_id"_format(ion_varname);
+        std::string index_varname = fmt::format("{}_id", ion_varname);
         // load index
-        std::string index_statement = "{} = {}_index[id]"_format(index_varname, ion_varname);
+        std::string index_statement = fmt::format("{} = {}_index[id]", index_varname, ion_varname);
         // ion variable to write (with index)
-        std::string ion_to_write = "{}[{}]"_format(ion_varname, index_varname);
+        std::string ion_to_write = fmt::format("{}[{}]", ion_varname, index_varname);
         // push index definition, index statement and actual write statement
         int_variables.push_back(index_varname);
         index_statements.push_back(visitor::create_statement(index_statement));
@@ -294,7 +311,7 @@ void CodegenLLVMHelperVisitor::ion_write_statements(BlockType type,
                     // for synapse type
                     if (info.point_process) {
                         auto area = codegen::naming::NODE_AREA_VARIABLE;
-                        rhs += "*(1.e2/{})"_format(area);
+                        rhs += fmt::format("*(1.e2/{})", area);
                     }
                     create_write_statements(lhs, op, rhs);
                 }
@@ -318,10 +335,10 @@ void CodegenLLVMHelperVisitor::ion_write_statements(BlockType type,
                 index = 2;
             } else {
                 /// \todo Unhandled case also in neuron implementation
-                throw std::logic_error("codegen error for {} ion"_format(ion.name));
+                throw std::logic_error(fmt::format("codegen error for {} ion", ion.name));
             }
-            std::string ion_type_name = "{}_type"_format(ion.name);
-            std::string lhs = "int {}"_format(ion_type_name);
+            std::string ion_type_name = fmt::format("{}_type", ion.name);
+            std::string lhs = fmt::format("int {}", ion_type_name);
             std::string op = "=";
             std::string rhs = ion_type_name;
             create_write_statements(lhs, op, rhs);
@@ -523,7 +540,11 @@ void CodegenLLVMHelperVisitor::visit_program(ast::Program& node) {
     for (auto& fun: codegen_functions) {
         node.emplace_back_node(fun);
     }
+
+    auto llvm_instance_struct = create_instance_struct();
+    node.emplace_back_node(llvm_instance_struct);
 }
+
 
 }  // namespace codegen
 }  // namespace nmodl

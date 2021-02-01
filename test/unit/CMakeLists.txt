@@ -112,6 +112,7 @@ if(NMODL_ENABLE_LLVM)
   add_executable(test_llvm_runner visitor/main.cpp codegen/codegen_llvm_execution.cpp)
   target_link_libraries(
     testllvm
+    Catch2::Catch2
     llvm_codegen
     codegen
     visitor
@@ -124,6 +125,7 @@ if(NMODL_ENABLE_LLVM)
     ${LLVM_LIBS_TO_LINK})
   target_link_libraries(
     test_llvm_runner
+    Catch2::Catch2
     llvm_codegen
     codegen
     visitor

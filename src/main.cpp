@@ -298,13 +298,13 @@ int main(int argc, const char* argv[]) {
     auto llvm_opt = app.add_subcommand("llvm", "LLVM code generation option")->ignore_case();
     llvm_opt->add_flag("--ir",
         llvm_ir,
-        "Generate LLVM IR ({})"_format(llvm_ir))->ignore_case();
+        fmt::format("Generate LLVM IR ({})", llvm_ir))->ignore_case();
     llvm_opt->add_flag("--opt",
         llvm_opt_passes,
-        "Run LLVM optimisation passes ({})"_format(llvm_opt_passes))->ignore_case();
+        fmt::format("Run LLVM optimisation passes ({})", llvm_opt_passes))->ignore_case();
     llvm_opt->add_flag("--single-precision",
                        llvm_float_type,
-                       "Use single precision floating-point types ({})"_format(llvm_float_type))->ignore_case();
+                       fmt::format("Use single precision floating-point types ({})", llvm_float_type))->ignore_case();
 #endif
     // clang-format on
 
