@@ -79,6 +79,9 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     // Use 32-bit floating-point type if true. Otherwise, use deafult 64-bit.
     bool use_single_precision;
 
+    // LLVM mechanism struct
+    llvm::StructType* llvm_struct;
+
     /**
      *\brief Run LLVM optimisation passes on generated IR
      *
@@ -146,6 +149,12 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
      * \return     \c LLVM floating point type according to `use_single_precision` flag
      */
     llvm::Type* get_default_fp_type();
+
+    /**
+     * Returns pointer to 64-bit or 32-bit LLVM floating type
+     * \return     \c LLVM pointer to floating point type according to `use_single_precision` flag
+     */
+    llvm::Type* get_default_fp_ptr_type();
 
     /**
      * Create a function call to an external method
@@ -242,6 +251,7 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     void visit_program(const ast::Program& node) override;
     void visit_unary_expression(const ast::UnaryExpression& node) override;
     void visit_var_name(const ast::VarName& node) override;
+    void visit_instance_struct(const ast::InstanceStruct& node) override;
     void visit_while_statement(const ast::WhileStatement& node) override;
 
     // \todo: move this to debug mode (e.g. -v option or --dump-ir)

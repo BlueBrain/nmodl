@@ -158,6 +158,23 @@ void CodegenLLVMHelperVisitor::create_function_for_node(ast::Block& node) {
     codegen_functions.push_back(function);
 }
 
+std::shared_ptr<ast::InstanceStruct> CodegenLLVMHelperVisitor::create_instance_struct() {
+    ast::CodegenVarVector codegen_vars;
+    /// float variables are standard pointers to float vectors
+    for (auto& float_var: info.codegen_float_variables) {
+        auto name = new ast::Name(new ast::String(float_var->get_name()));
+        auto codegen_var = new ast::CodegenVar(1, name);
+        codegen_vars.emplace_back(codegen_var);
+    }
+    /// int variables are pointers to indexes for other vectors
+    for (auto& int_var: info.codegen_int_variables) {
+        auto name = new ast::Name(new ast::String(int_var.symbol->get_name()));
+        auto codegen_var = new ast::CodegenVar(1, name);
+        codegen_vars.emplace_back(codegen_var);
+    }
+    return std::make_shared<ast::InstanceStruct>(codegen_vars);
+}
+
 static void append_statements_from_block(ast::StatementVector& statements,
                                          const std::shared_ptr<ast::StatementBlock>& block) {
     const auto& block_statements = block->get_statements();
@@ -523,7 +540,11 @@ void CodegenLLVMHelperVisitor::visit_program(ast::Program& node) {
     for (auto& fun: codegen_functions) {
         node.emplace_back_node(fun);
     }
+
+    auto llvm_instance_struct = create_instance_struct();
+    node.emplace_back_node(llvm_instance_struct);
 }
+
 
 }  // namespace codegen
 }  // namespace nmodl
