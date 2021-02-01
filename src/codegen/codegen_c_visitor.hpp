@@ -64,41 +64,6 @@ enum class MemberType {
     thread
 };
 
-
-/**
- * \class IndexVariableInfo
- * \brief Helper to represent information about index/int variables
- *
- */
-struct IndexVariableInfo {
-    /// symbol for the variable
-    const std::shared_ptr<symtab::Symbol> symbol;
-
-    /// if variable reside in vdata field of NrnThread
-    /// typically true for bbcore pointer
-    bool is_vdata = false;
-
-    /// if this is pure index (e.g. style_ion) variables is directly
-    /// index and shouldn't be printed with data/vdata
-    bool is_index = false;
-
-    /// if this is an integer (e.g. tqitem, point_process) variable which
-    /// is printed as array accesses
-    bool is_integer = false;
-
-    /// if the variable is qualified as constant (this is property of IndexVariable)
-    bool is_constant = false;
-
-    IndexVariableInfo(std::shared_ptr<symtab::Symbol> symbol,
-                      bool is_vdata = false,
-                      bool is_index = false,
-                      bool is_integer = false)
-        : symbol(std::move(symbol))
-        , is_vdata(is_vdata)
-        , is_index(is_index)
-        , is_integer(is_integer) {}
-};
-
 /** @} */  // end of codegen_details
 
 
@@ -161,11 +126,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * Symbol table for the program
      */
     symtab::SymbolTable* program_symtab = nullptr;
-
-    /**
-     * All float variables for the model
-     */
-    std::vector<SymbolType> codegen_float_variables;
 
     /**
      * All int variables for the model
@@ -356,26 +316,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
-     * Constructs a shadow variable name
-     * \param name The name of the variable
-     * \return     The name of the variable prefixed with \c shadow_
-     */
-    std::string shadow_varname(const std::string& name) const {
-        return "shadow_" + name;
-    }
-
-
-    /**
-     * Creates a temporary symbol
-     * \param name The name of the symbol
-     * \return     A symbol based on the given name
-     */
-    SymbolType make_symbol(const std::string& name) const {
-        return std::make_shared<symtab::Symbol>(name, ModToken());
-    }
-
-
-    /**
      * Checks if the given variable name belongs to a state variable
      * \param name The variable name
      * \return     \c true if the variable is a state variable
@@ -384,52 +324,10 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
-     * Check if net receive/send buffering kernels required
-     */
-    bool net_receive_buffering_required() const noexcept;
-
-
-    /**
-     * Check if nrn_state function is required
-     */
-    bool nrn_state_required() const noexcept;
-
-
-    /**
-     * Check if nrn_cur function is required
-     */
-    bool nrn_cur_required() const noexcept;
-
-
-    /**
-     * Check if net_receive function is required
-     */
-    bool net_receive_required() const noexcept;
-
-
-    /**
-     * Check if net_send_buffer is required
-     */
-    bool net_send_buffer_required() const noexcept;
-
-
-    /**
      * Check if setup_range_variable function is required
      * \return
      */
     bool range_variable_setup_required() const noexcept;
-
-
-    /**
-     * Check if net_receive node exist
-     */
-    bool net_receive_exist() const noexcept;
-
-
-    /**
-     * Check if breakpoint node exist
-     */
-    bool breakpoint_exist() const noexcept;
 
 
     /**
@@ -595,27 +493,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * populate all index semantics needed for registration with coreneuron
      */
     void update_index_semantics();
-
-
-    /**
-     * Determine all \c float variables required during code generation
-     * \return A \c vector of \c float variables
-     */
-    std::vector<SymbolType> get_float_variables();
-
-
-    /**
-     * Determine all \c int variables required during code generation
-     * \return A \c vector of \c int variables
-     */
-    std::vector<IndexVariableInfo> get_int_variables();
-
-
-    /**
-     * Determine all ion write variables that require shadow vectors during code generation
-     * \return A \c vector of ion variables
-     */
-    std::vector<SymbolType> get_shadow_variables();
 
 
     /**

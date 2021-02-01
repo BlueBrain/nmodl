@@ -450,7 +450,7 @@ void CodegenIspcVisitor::print_ion_variable() {
 /****************************************************************************************/
 
 void CodegenIspcVisitor::print_net_receive_buffering_wrapper() {
-    if (!net_receive_required() || info.artificial_cell) {
+    if (!info.net_receive_required() || info.artificial_cell) {
         return;
     }
     printer->add_newline(2);
@@ -529,19 +529,19 @@ void CodegenIspcVisitor::print_backend_compute_routine_decl() {
             fmt::format("extern \"C\" void {}({});", compute_function, get_parameter_str(params)));
     }
 
-    if (nrn_cur_required() && !emit_fallback[BlockType::Equation]) {
+    if (info.nrn_cur_required() && !emit_fallback[BlockType::Equation]) {
         compute_function = compute_method_name(BlockType::Equation);
         printer->add_line(
             fmt::format("extern \"C\" void {}({});", compute_function, get_parameter_str(params)));
     }
 
-    if (nrn_state_required() && !emit_fallback[BlockType::State]) {
+    if (info.nrn_state_required() && !emit_fallback[BlockType::State]) {
         compute_function = compute_method_name(BlockType::State);
         printer->add_line(
             fmt::format("extern \"C\" void {}({});", compute_function, get_parameter_str(params)));
     }
 
-    if (net_receive_required()) {
+    if (info.net_receive_required()) {
         auto net_recv_params = ParamVector();
         net_recv_params.emplace_back("", fmt::format("{}*", instance_struct()), "", "inst");
         net_recv_params.emplace_back("", "NrnThread*", "", "nt");
@@ -562,7 +562,7 @@ bool CodegenIspcVisitor::check_incompatibilities() {
     };
 
     // instance vars
-    if (check_incompatible_var_name<SymbolType>(codegen_float_variables,
+    if (check_incompatible_var_name<SymbolType>(info.codegen_float_variables,
                                                 get_name_from_symbol_type_vector)) {
         return true;
     }
@@ -629,11 +629,11 @@ bool CodegenIspcVisitor::check_incompatibilities() {
                                    visitor::calls_function(*info.net_receive_node, "net_send")));
 
     emit_fallback[BlockType::Equation] = emit_fallback[BlockType::Equation] ||
-                                         (nrn_cur_required() && info.breakpoint_node &&
+                                         (info.nrn_cur_required() && info.breakpoint_node &&
                                           has_incompatible_nodes(*info.breakpoint_node));
 
     emit_fallback[BlockType::State] = emit_fallback[BlockType::State] ||
-                                      (nrn_state_required() && info.nrn_state_block &&
+                                      (info.nrn_state_required() && info.nrn_state_block &&
                                        has_incompatible_nodes(*info.nrn_state_block));
 
 
@@ -690,7 +690,7 @@ void CodegenIspcVisitor::print_block_wrappers_initial_equation_state() {
         print_wrapper_routine(naming::NRN_INIT_METHOD, BlockType::Initial);
     }
 
-    if (nrn_cur_required()) {
+    if (info.nrn_cur_required()) {
         if (emit_fallback[BlockType::Equation]) {
             logger->warn("Falling back to C backend for emitting breakpoint block");
             fallback_codegen.print_nrn_cur();
@@ -699,7 +699,7 @@ void CodegenIspcVisitor::print_block_wrappers_initial_equation_state() {
         }
     }
 
-    if (nrn_state_required()) {
+    if (info.nrn_state_required()) {
         if (emit_fallback[BlockType::State]) {
             logger->warn("Falling back to C backend for emitting state block");
             fallback_codegen.print_nrn_state();

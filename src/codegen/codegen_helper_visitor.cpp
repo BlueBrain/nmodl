@@ -24,6 +24,7 @@ using namespace ast;
 using symtab::syminfo::NmodlType;
 using symtab::syminfo::Status;
 
+
 /**
  * How symbols are stored in NEURON? See notes written in markdown file.
  *
@@ -283,6 +284,7 @@ void CodegenHelperVisitor::find_non_range_variables() {
     }
     // clang-format on
 }
+
 
 /**
  * Find range variables i.e. ones that are belong to per instance allocation
@@ -696,6 +698,9 @@ void CodegenHelperVisitor::visit_program(const ast::Program& node) {
     find_range_variables();
     find_non_range_variables();
     find_table_variables();
+    info.get_int_variables();
+    info.get_shadow_variables();
+    info.get_float_variables();
 }
 
 
