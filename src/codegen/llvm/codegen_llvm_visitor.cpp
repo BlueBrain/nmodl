@@ -185,10 +185,17 @@ void CodegenLLVMVisitor::create_printf_call(const ast::ExpressionVector& argumen
     // Create a call instruction.
     std::vector<llvm::Value*> argument_values;
     for (const auto& arg: arguments) {
-        arg->accept(*this);
-        llvm::Value* value = values.back();
-        values.pop_back();
-        argument_values.push_back(value);
+        if (arg->is_string()) {
+            // If the argument is a string, create a global i8* variable with it.
+            auto string_arg = std::dynamic_pointer_cast<ast::String>(arg);
+            llvm::Value* str = builder.CreateGlobalStringPtr(string_arg->get_value());
+            argument_values.push_back(str);
+        } else {
+            arg->accept(*this);
+            llvm::Value* value = values.back();
+            values.pop_back();
+            argument_values.push_back(value);
+        }
     }
 
     builder.CreateCall(printf, argument_values);
@@ -576,11 +583,6 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
 
 void CodegenLLVMVisitor::visit_procedure_block(const ast::ProcedureBlock& node) {
     // do nothing. \todo: remove old procedures from ast.
-}
-
-void CodegenLLVMVisitor::visit_string(const ast::String& node) {
-    llvm::Value* str = builder.CreateGlobalStringPtr(node.get_value());
-    values.push_back(str);
 }
 
 void CodegenLLVMVisitor::visit_unary_expression(const ast::UnaryExpression& node) {
