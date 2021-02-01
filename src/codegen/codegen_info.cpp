@@ -20,6 +20,16 @@ using namespace fmt::literals;
 using symtab::syminfo::NmodlType;
 using visitor::VarUsageVisitor;
 
+SymbolType make_symbol(const std::string& name) {
+    return std::make_shared<symtab::Symbol>(name, ModToken());
+}
+
+
+std::string shadow_varname(const std::string& name) {
+    return "shadow_" + name;
+}
+
+
 /// if any ion has write variable
 bool CodegenInfo::ion_has_write_variable() const {
     for (const auto& ion: ions) {
@@ -203,6 +213,193 @@ bool CodegenInfo::is_an_instance_variable(const std::string& varname) const {
         return true;
     }
     return false;
+}
+
+
+/**
+ * IndexVariableInfo has following constructor arguments:
+ *      - symbol
+ *      - is_vdata   (false)
+ *      - is_index   (false
+ *      - is_integer (false)
+ *
+ * Which variables are constant qualified?
+ *
+ *  - node area is read only
+ *  - read ion variables are read only
+ *  - style_ionname is index / offset
+ */
+void CodegenInfo::get_int_variables() {
+    if (point_process) {
+        codegen_int_variables.emplace_back(make_symbol(naming::NODE_AREA_VARIABLE));
+        codegen_int_variables.back().is_constant = true;
+        /// note that this variable is not printed in neuron implementation
+        if (artificial_cell) {
+            codegen_int_variables.emplace_back(make_symbol(naming::POINT_PROCESS_VARIABLE), true);
+        } else {
+            codegen_int_variables.emplace_back(make_symbol(naming::POINT_PROCESS_VARIABLE),
+                                               false,
+                                               false,
+                                               true);
+            codegen_int_variables.back().is_constant = true;
+        }
+    }
+
+    for (const auto& ion: ions) {
+        bool need_style = false;
+        std::unordered_map<std::string, int> ion_vars;  // used to keep track of the variables to
+                                                        // not have doubles between read/write. Same
+                                                        // name variables are allowed
+        for (const auto& var: ion.reads) {
+            const std::string name = "ion_" + var;
+            codegen_int_variables.emplace_back(make_symbol(name));
+            codegen_int_variables.back().is_constant = true;
+            ion_vars[name] = codegen_int_variables.size() - 1;
+        }
+
+        /// symbol for di_ion_dv var
+        std::shared_ptr<symtab::Symbol> ion_di_dv_var = nullptr;
+
+        for (const auto& var: ion.writes) {
+            const std::string name = "ion_" + var;
+
+            const auto ion_vars_it = ion_vars.find(name);
+            if (ion_vars_it != ion_vars.end()) {
+                codegen_int_variables[ion_vars_it->second].is_constant = false;
+            } else {
+                codegen_int_variables.emplace_back(make_symbol("ion_" + var));
+            }
+            if (ion.is_ionic_current(var)) {
+                ion_di_dv_var = make_symbol("ion_di" + ion.name + "dv");
+            }
+            if (ion.is_intra_cell_conc(var) || ion.is_extra_cell_conc(var)) {
+                need_style = true;
+            }
+        }
+
+        /// insert after read/write variables but before style ion variable
+        if (ion_di_dv_var != nullptr) {
+            codegen_int_variables.emplace_back(ion_di_dv_var);
+        }
+
+        if (need_style) {
+            codegen_int_variables.emplace_back(make_symbol("style_" + ion.name), false, true);
+            codegen_int_variables.back().is_constant = true;
+        }
+    }
+
+    for (const auto& var: pointer_variables) {
+        auto name = var->get_name();
+        if (var->has_any_property(NmodlType::pointer_var)) {
+            codegen_int_variables.emplace_back(make_symbol(name));
+        } else {
+            codegen_int_variables.emplace_back(make_symbol(name), true);
+        }
+    }
+
+    if (diam_used) {
+        codegen_int_variables.emplace_back(make_symbol(naming::DIAM_VARIABLE));
+    }
+
+    if (area_used) {
+        codegen_int_variables.emplace_back(make_symbol(naming::AREA_VARIABLE));
+    }
+
+    // for non-artificial cell, when net_receive buffering is enabled
+    // then tqitem is an offset
+    if (net_send_used) {
+        if (artificial_cell) {
+            codegen_int_variables.emplace_back(make_symbol(naming::TQITEM_VARIABLE), true);
+        } else {
+            codegen_int_variables.emplace_back(make_symbol(naming::TQITEM_VARIABLE),
+                                               false,
+                                               false,
+                                               true);
+            codegen_int_variables.back().is_constant = true;
+        }
+        tqitem_index = codegen_int_variables.size() - 1;
+    }
+
+    /**
+     * \note Variables for watch statements : there is one extra variable
+     * used in coreneuron compared to actual watch statements for compatibility
+     * with neuron (which uses one extra Datum variable)
+     */
+    if (!watch_statements.empty()) {
+        for (int i = 0; i < watch_statements.size() + 1; i++) {
+            codegen_int_variables.emplace_back(make_symbol("watch{}"_format(i)),
+                                               false,
+                                               false,
+                                               true);
+        }
+    }
+}
+
+
+/**
+ * \details When we enable fine level parallelism at channel level, we have do updates
+ * to ion variables in atomic way. As cpus don't have atomic instructions in
+ * simd loop, we have to use shadow vectors for every ion variables. Here
+ * we return list of all such variables.
+ *
+ * \todo If conductances are specified, we don't need all below variables
+ */
+void CodegenInfo::get_shadow_variables() {
+    for (const auto& ion: ions) {
+        for (const auto& var: ion.writes) {
+            codegen_shadow_variables.push_back({make_symbol(shadow_varname("ion_" + var))});
+            if (ion.is_ionic_current(var)) {
+                codegen_shadow_variables.push_back(
+                    {make_symbol(shadow_varname("ion_di" + ion.name + "dv"))});
+            }
+        }
+    }
+    codegen_shadow_variables.push_back({make_symbol("ml_rhs")});
+    codegen_shadow_variables.push_back({make_symbol("ml_d")});
+}
+
+
+void CodegenInfo::get_float_variables() {
+    // sort with definition order
+    auto comparator = [](const SymbolType& first, const SymbolType& second) -> bool {
+        return first->get_definition_order() < second->get_definition_order();
+    };
+
+    auto assigned = assigned_vars;
+    auto states = state_vars;
+
+    // each state variable has corresponding Dstate variable
+    for (auto& state: states) {
+        auto name = "D" + state->get_name();
+        auto symbol = make_symbol(name);
+        if (state->is_array()) {
+            symbol->set_as_array(state->get_length());
+        }
+        symbol->set_definition_order(state->get_definition_order());
+        assigned.push_back(symbol);
+    }
+    std::sort(assigned.begin(), assigned.end(), comparator);
+
+    codegen_float_variables = range_parameter_vars;
+    codegen_float_variables.insert(codegen_float_variables.end(),
+                                   range_assigned_vars.begin(),
+                                   range_assigned_vars.end());
+    codegen_float_variables.insert(codegen_float_variables.end(),
+                                   range_state_vars.begin(),
+                                   range_state_vars.end());
+    codegen_float_variables.insert(codegen_float_variables.end(), assigned.begin(), assigned.end());
+
+    if (vectorize) {
+        codegen_float_variables.push_back(make_symbol(naming::VOLTAGE_UNUSED_VARIABLE));
+    }
+    if (breakpoint_exist()) {
+        std::string name = vectorize ? naming::CONDUCTANCE_UNUSED_VARIABLE
+                                     : naming::CONDUCTANCE_VARIABLE;
+        codegen_float_variables.push_back(make_symbol(name));
+    }
+    if (net_receive_exist()) {
+        codegen_float_variables.push_back(make_symbol(naming::T_SAVE_VARIABLE));
+    }
 }
 
 }  // namespace codegen
