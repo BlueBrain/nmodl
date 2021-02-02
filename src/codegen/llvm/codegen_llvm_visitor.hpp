@@ -205,7 +205,8 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
      * \param arguments expression vector
      * \param arg_values vector of LLVM IR values to fill
      */
-    void pack_function_call_arguments(const ast::ExpressionVector& arguments, std::vector<llvm::Value*>& arg_values);
+    void pack_function_call_arguments(const ast::ExpressionVector& arguments,
+                                      std::vector<llvm::Value*>& arg_values);
 
     /**
      * Visit nmodl arithmetic binary operator
