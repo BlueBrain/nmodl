@@ -504,7 +504,7 @@ SCENARIO("Function call", "[visitor][llvm]") {
             std::regex call1(
                 R"(call i32 \(i8\*, \.\.\.\) @printf\(i8\* getelementptr inbounds \(\[6 x i8\], \[6 x i8\]\* @[0-9]+, i32 0, i32 0\)\))");
             std::regex call2(
-                R"(call i32 \(i8\*, \.\.\.) @printf(i8\* getelementptr inbounds \(\[9 x i8\], \[9 x i8\]\* @[0-9]+, i32 0, i32 0\), double %[0-9]+\))");
+                R"(call i32 \(i8\*, \.\.\.\) @printf\(i8\* getelementptr inbounds \(\[9 x i8\], \[9 x i8\]\* @[0-9]+, i32 0, i32 0\), double %[0-9]+\))");
             REQUIRE(std::regex_search(module_string, m, call1));
             REQUIRE(std::regex_search(module_string, m, call2));
         }
