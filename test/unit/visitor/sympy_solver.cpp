@@ -1382,23 +1382,27 @@ SCENARIO("LINEAR solve block (SympySolver Visitor)", "[sympy][linear]") {
             compare_blocks(reindent_text(result[0]), reindent_text(expected_result));
         }
     }
-    GIVEN("Linear block, greedy replacement") {
+    GIVEN("Linear block, greedy replacement, interleaved") {
         std::string nmodl_text = R"(
             STATE {
                 x y
             }
             LINEAR lin {
                 LOCAL a
+                a = 0
                 ~ x + y = 1
+                a = 1
                 ~ y - x = 3
-                a = x + y
+                a = 2
             })";
         std::string expected_result = R"(
             LINEAR lin {
                 LOCAL a
+                a = 0
                 x = -1.0
+                a = 1
                 y = 2.0
-                a = x+y
+                a = 2
             })";
 
         THEN("Construct & solve linear system") {
@@ -1408,23 +1412,27 @@ SCENARIO("LINEAR solve block (SympySolver Visitor)", "[sympy][linear]") {
             compare_blocks(reindent_text(result[0]), reindent_text(expected_result));
         }
     }
-    GIVEN("Linear block, linear equations mixed with local variable reassignment") {
+    GIVEN("Linear block, by value replacement, interleaved") {
         std::string nmodl_text = R"(
             STATE {
                 x y
             }
             LINEAR lin {
                 LOCAL a
+                a = 0
                 ~ x = y + a
-                a = a + 1
+                a = 1
                 ~ y = a
+                a = 2
             })";
         std::string expected_result = R"(
             LINEAR lin {
                 LOCAL a
+                a = 0
                 x = 2.0*a
-                a = a+1
+                a = 1
                 y = a
+                a = 2
             })";
 
         THEN("Construct & solve linear system") {
