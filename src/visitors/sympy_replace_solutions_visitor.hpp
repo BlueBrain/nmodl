@@ -57,6 +57,140 @@ namespace visitor {
  * diff_eq_expression/linEquation that needs replacing we take the next solution that was not yet
  * used
  * - add all the remaining solutions at the end
+ *
+ * Let's finish with an example (that are usually better than blabbling around).
+ *
+ * Imagine we have this derivative block in the ast (before SympyReplaceSolutionsVisitor passes):
+ *
+ * DERIVATIVE d {
+ *     LOCAL a, old_x, old_y, old_z, tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7
+ *     b = 1
+ *     x' = x + y + a + b
+ *     if ( x == 0) {
+ *         a = a + 1
+ *         # x = x + 1 // this would be an error. Explained later
+ *     }
+ *     y' = x + y + a
+ *     z' = y + a
+ *     x = x + 1
+ * }
+ *
+ * where SympySolverVisitor already added variables in the LOCAL declaration.
+ *
+ * Sympy solver visitor also provides:
+ *
+ * - pre-solve statements:
+ *
+ * old_x = x
+ * old_y = y
+ * old_z = z
+ *
+ * - tmp statements:
+ *
+ * tmp0 = 2.0*dt
+ * tmp1 = 1.0/(tmp0-1.0)
+ * tmp2 = pow(dt, 2)
+ * tmp3 = b*tmp2
+ * tmp4 = dt*old_x
+ * tmp5 = a*dt
+ * tmp6 = dt*old_y
+ * tmp7 = tmp5+tmp6
+ *
+ * - solutions:
+ *
+ * x = -tmp1*(b*dt+old_x-tmp3-tmp4+tmp7)
+ * y = -tmp1*(old_y+tmp3+tmp4+tmp5-tmp6)
+ * z = -tmp1*(-a*tmp2+b*pow(dt, 3)+old_x*tmp2-old_y*tmp2-old_z*tmp0+old_z+tmp7)
+ *
+ * SympySolveVisitor works in this way:
+ *
+ * DERIVATIVE d {                                                                   // nothing to do
+ *
+ *     LOCAL a, old_x, old_y, old_z, tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7 // nothing to do
+ *
+ *     b = 1                                                     // initial statement, nothing to do
+ *
+ *     x' = x + y + a + b   ->   old_x = x                    // before printing this solution let's
+ *                               old_y = y                         // flush the pre solve statements
+ *                               old_z = z                             // mark down that we did this
+ *
+ *                               tmp0 = 2.0*dt                   // we also flush the tmp statements
+ *                               tmp1 = 1.0/(tmp0-1.0)
+ *                               tmp2 = pow(dt, 2)
+ *                               tmp3 = b*tmp2
+ *                               tmp4 = dt*old_x
+ *                               tmp5 = a*dt
+ *                               tmp6 = dt*old_y
+ *                               tmp7 = tmp5+tmp6
+ *
+ *                               x = -tmp1*(b*dt+old_x-tmp3-tmp4+tmp7)      // finally, the solution
+ *
+ *     if ( x == 0) {                                                               // nothing to do
+ *         a = a + 1                        // mark down the tmp statements and pre solve statements
+ *                                           // that contain 'a' in the rhs as in need for an update
+ *
+ *         // x = x + 1                       // the same as before but for 'x'. In particular a pre
+ *                                              // solve statement is marked for updating. This will
+ *                                                             // produce an error later in the code
+       }                                                                            // nothing to do
+
+ *     y' = x + y + a       ->       // old_x = x    // here, if 'x = x + 1' were not commented, the
+ *                                                  // code would try to print this line an throw an
+ *                                              // error since the pre solve statements were already
+ *                                                                                   // printed once
+ *                                   tmp5 = a*dt  // flush the tmp statements that need updating. In
+ *                                   tmp7 = tmp5+tmp6    // our example, all the tmp statements that
+ *                                                             // directly or indirectly depend on a
+ *                                     // for performance, we print only the ones that need updating
+ *
+ *     z' = y + a   ->  z = -tmp1*(-a*tmp2+b*pow(dt, 3)+old_x*tmp2-old_y*tmp2-old_z*tmp0+old_z+tmp7)
+ *                             // nothing is marked for updating (among pre solve statements and tmp
+ *                                                           // statements): just print the solution
+ *
+ *     x = x + 1                                                                    // nothing to do
+ * }                                                                                // nothing to do
+ *
+ * Last notes:
+ *
+ * For linEquations or NonLinEquations association of the solution with a particular statement could
+ * be impossible. For example \f ~ x + y = 0 \f does not have a simple variable in the lhs. Thus, an
+ * association with a particular solution statement is not possible. Thus we do 2 runs where we
+ * first match everything we can by value and then we associate everything we can in a greedy way.
+ *
+ * For large system of equations the code sets up the J matrix and F vector to be sent to eigen for
+ * the Newton method which will solve a bunch of J x = F for each time step). In this case it is
+ always safe to
+ * replace greedy because sympy does not sort the equations in the matrix/vector. In addition, cse
+ is disabled by
+ * default. Thus, there is a 1:1 correspondence of an equation of the original mod file and a row of
+ the matrix and
+ * an element of F. So if we have:
+ *
+ * LINEAR lin {
+ *     ~ x = ...
+ *     a = a + 1
+ *     ~ y = ...
+ *     ~ z = ...
+ *     ~ w = ...
+ * }
+ *
+ * We get the vector F and matrix J
+ *
+ * F = [0,     J = [0, 4, 8,  12,
+ *      1,          1, 5, 9,  13,
+ *      2,          2, 6, 10, 14,
+ *      3]          3, 7, 11, 15]
+ *
+ * Where the numbers indicate their column-wise index. The solution replacement becomes:
+ *
+ * ~ x = ...  -> F[0] = ...
+ *               J[0] = ...
+ *               J[4] = ...
+ *               J[8] = ...
+ *               J[12] = ...
+ * a = a + 1
+ * ~ y = ...  -> ...
+ *
  */
 class SympyReplaceSolutionsVisitor: public AstVisitor {
   public:
