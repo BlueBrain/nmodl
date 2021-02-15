@@ -14,6 +14,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <stdexcept>
 
 /// \file
 /// \brief Auto generated  AST node types and aliases declaration
