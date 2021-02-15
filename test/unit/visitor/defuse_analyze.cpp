@@ -73,10 +73,9 @@ SCENARIO("Perform DefUse analysis on NMODL constructs") {
             REQUIRE(chains[0].to_string(true) == expected_text);
             REQUIRE(chains[0].eval() == DUState::D);
 
-            REQUIRE(to_nmodl(*chains[0].chain[0].expression_statement) == "tau = 1");
-            REQUIRE(to_nmodl(*chains[0].chain[1].expression_statement) == "tau = 1+tau");
-            REQUIRE(to_nmodl(*chains[0].chain[2].expression_statement) == "tau = 1+tau");
-
+            REQUIRE(to_nmodl(*chains[0].chain[0].binary_expression) == "tau = 1");
+            REQUIRE(to_nmodl(*chains[0].chain[1].binary_expression) == "tau = 1+tau");
+            REQUIRE(to_nmodl(*chains[0].chain[2].binary_expression) == "tau = 1+tau");
         }
     }
 
@@ -102,9 +101,9 @@ SCENARIO("Perform DefUse analysis on NMODL constructs") {
             REQUIRE(chains[0].to_string(true) == expected_text);
             REQUIRE(chains[0].eval() == DUState::U);
 
-            REQUIRE(chains[0].chain[0].expression_statement == nullptr); // verbatim begin
-            REQUIRE(to_nmodl(*chains[0].chain[1].expression_statement) == "tau = 1");
-            REQUIRE(chains[0].chain[2].expression_statement == nullptr); // verbatim end
+            REQUIRE(chains[0].chain[0].binary_expression == nullptr);  // verbatim begin
+            REQUIRE(to_nmodl(*chains[0].chain[1].binary_expression) == "tau = 1");
+            REQUIRE(chains[0].chain[2].binary_expression == nullptr);  // verbatim end
         }
     }
 
@@ -142,29 +141,86 @@ SCENARIO("Perform DefUse analysis on NMODL constructs") {
                 auto o0 = run_defuse_visitor(input, "o[0]");
 
                 REQUIRE(m0[0].to_string() == R"({"DerivativeBlock":[{"name":"D"},{"name":"U"}]})");
-                REQUIRE(to_nmodl(*m0[0].chain[0].expression_statement) == "m[0] = m[1]");
-                REQUIRE(to_nmodl(*m0[0].chain[1].expression_statement) == "h[1] = m[0]+h[0]");
+                REQUIRE(to_nmodl(*m0[0].chain[0].binary_expression) == "m[0] = m[1]");
+                REQUIRE(to_nmodl(*m0[0].chain[1].binary_expression) == "h[1] = m[0]+h[0]");
                 REQUIRE(m1[0].to_string() == R"({"DerivativeBlock":[{"name":"U"}]})");
-                REQUIRE(to_nmodl(*m1[0].chain[0].expression_statement) == "m[0] = m[1]");
+                REQUIRE(to_nmodl(*m1[0].chain[0].binary_expression) == "m[0] = m[1]");
                 REQUIRE(h1[0].to_string() == R"({"DerivativeBlock":[{"name":"D"}]})");
-                REQUIRE(to_nmodl(*h1[0].chain[0].expression_statement) == "h[1] = m[0]+h[0]");
+                REQUIRE(to_nmodl(*h1[0].chain[0].binary_expression) == "h[1] = m[0]+h[0]");
                 REQUIRE(tau0[0].to_string() == R"({"DerivativeBlock":[{"name":"LD"}]})");
-                REQUIRE(to_nmodl(*tau0[0].chain[0].expression_statement) == "tau[0] = 1");
+                REQUIRE(to_nmodl(*tau0[0].chain[0].binary_expression) == "tau[0] = 1");
                 REQUIRE(tau1[0].to_string() == R"({"DerivativeBlock":[{"name":"LU"}]})");
-                REQUIRE(to_nmodl(*tau1[0].chain[0].expression_statement) == "tau[2] = 1+tau[1]+tau[2]");
+                REQUIRE(to_nmodl(*tau1[0].chain[0].binary_expression) ==
+                        "tau[2] = 1+tau[1]+tau[2]");
                 REQUIRE(tau2[0].to_string() ==
                         R"({"DerivativeBlock":[{"name":"LU"},{"name":"LD"}]})");
-                REQUIRE(to_nmodl(*tau2[0].chain[0].expression_statement) == "tau[2] = 1+tau[1]+tau[2]");
-                REQUIRE(to_nmodl(*tau2[0].chain[1].expression_statement) == "tau[2] = 1+tau[1]+tau[2]");
+                REQUIRE(to_nmodl(*tau2[0].chain[0].binary_expression) ==
+                        "tau[2] = 1+tau[1]+tau[2]");
+                REQUIRE(to_nmodl(*tau2[0].chain[1].binary_expression) ==
+                        "tau[2] = 1+tau[1]+tau[2]");
                 REQUIRE(n0[0].to_string() == R"({"DerivativeBlock":[{"name":"U"},{"name":"D"}]})");
-                REQUIRE(to_nmodl(*n0[0].chain[0].expression_statement) == "n[i+1] = 1+n[i]");
-                REQUIRE(to_nmodl(*n0[0].chain[1].expression_statement) == "n[i+1] = 1+n[i]");
+                REQUIRE(to_nmodl(*n0[0].chain[0].binary_expression) == "n[i+1] = 1+n[i]");
+                REQUIRE(to_nmodl(*n0[0].chain[1].binary_expression) == "n[i+1] = 1+n[i]");
                 REQUIRE(n1[0].to_string() == R"({"DerivativeBlock":[{"name":"U"},{"name":"D"}]})");
-                REQUIRE(to_nmodl(*n1[0].chain[0].expression_statement) == "n[i+1] = 1+n[i]");
-                REQUIRE(to_nmodl(*n1[0].chain[1].expression_statement) == "n[i+1] = 1+n[i]");
+                REQUIRE(to_nmodl(*n1[0].chain[0].binary_expression) == "n[i+1] = 1+n[i]");
+                REQUIRE(to_nmodl(*n1[0].chain[1].binary_expression) == "n[i+1] = 1+n[i]");
                 REQUIRE(o0[0].to_string() == R"({"DerivativeBlock":[{"name":"D"}]})");
-                REQUIRE(to_nmodl(*o0[0].chain[0].expression_statement) == "o[i] = 1");
+                REQUIRE(to_nmodl(*o0[0].chain[0].binary_expression) == "o[i] = 1");
             }
+        }
+    }
+
+    GIVEN("global variable used in if statement (lhs)") {
+        std::string nmodl_text = R"(
+            NEURON {
+                RANGE tau
+            }
+
+            DERIVATIVE states {
+                IF (tau == 0) {
+                }
+            }
+        )";
+
+        std::string expected_text =
+            R"({"DerivativeBlock":[{"CONDITIONAL_BLOCK":[{"IF":[{"name":"U"}]}]}]})";
+
+        THEN("tau is used") {
+            std::string input = reindent_text(nmodl_text);
+            auto chains = run_defuse_visitor(input, "tau");
+            REQUIRE(chains[0].to_string() == expected_text);
+            REQUIRE(chains[0].eval() == DUState::U);
+            REQUIRE(chains[0].chain[0].binary_expression == nullptr);
+            REQUIRE(chains[0].chain[0].children[0].binary_expression == nullptr);
+            REQUIRE(to_nmodl(*chains[0].chain[0].children[0].children[0].binary_expression) ==
+                    "tau == 0");
+        }
+    }
+
+    GIVEN("global variable used in if statement (rhs)") {
+        std::string nmodl_text = R"(
+            NEURON {
+                RANGE tau
+            }
+
+            DERIVATIVE states {
+                IF (0 == tau) {
+                }
+            }
+        )";
+
+        std::string expected_text =
+            R"({"DerivativeBlock":[{"CONDITIONAL_BLOCK":[{"IF":[{"name":"U"}]}]}]})";
+
+        THEN("tau is used") {
+            std::string input = reindent_text(nmodl_text);
+            auto chains = run_defuse_visitor(input, "tau");
+            REQUIRE(chains[0].to_string() == expected_text);
+            REQUIRE(chains[0].eval() == DUState::U);
+            REQUIRE(chains[0].chain[0].binary_expression == nullptr);
+            REQUIRE(chains[0].chain[0].children[0].binary_expression == nullptr);
+            REQUIRE(to_nmodl(*chains[0].chain[0].children[0].children[0].binary_expression) ==
+                    "0 == tau");
         }
     }
 
@@ -192,6 +248,44 @@ SCENARIO("Perform DefUse analysis on NMODL constructs") {
             auto chains = run_defuse_visitor(input, "tau");
             REQUIRE(chains[0].to_string() == expected_text);
             REQUIRE(chains[0].eval() == DUState::CD);
+        }
+    }
+
+    GIVEN("global variable use in if statement + definition and use in if and else blocks") {
+        std::string nmodl_text = R"(
+            NEURON {
+                RANGE tau
+            }
+
+            DERIVATIVE states {
+                IF (tau == 0) {
+                    tau = 1 + tau
+                } ELSE {
+                    tau = 2 + tau
+                }
+            }
+        )";
+
+        std::string expected_text =
+            R"({"DerivativeBlock":[{"CONDITIONAL_BLOCK":[{"IF":[{"name":"U"},{"name":"U"},{"name":"D"}]},{"ELSE":[{"name":"U"},{"name":"D"}]}]}]})";
+
+        THEN("tau is used and then used in its definitions") {
+            std::string input = reindent_text(nmodl_text);
+            auto chains = run_defuse_visitor(input, "tau");
+            REQUIRE(chains[0].to_string() == expected_text);
+            REQUIRE(chains[0].chain[0].binary_expression == nullptr);  // CONDITIONAL_BLOCK
+            REQUIRE(chains[0].chain[0].children[0].binary_expression == nullptr);  // IF
+            REQUIRE(to_nmodl(*chains[0].chain[0].children[0].children[0].binary_expression) ==
+                    "tau == 0");
+            REQUIRE(to_nmodl(*chains[0].chain[0].children[0].children[1].binary_expression) ==
+                    "tau = 1+tau");
+            REQUIRE(to_nmodl(*chains[0].chain[0].children[0].children[2].binary_expression) ==
+                    "tau = 1+tau");
+            REQUIRE(chains[0].chain[0].children[1].binary_expression == nullptr);  // ELSE
+            REQUIRE(to_nmodl(*chains[0].chain[0].children[1].children[0].binary_expression) ==
+                    "tau = 2+tau");
+            REQUIRE(to_nmodl(*chains[0].chain[0].children[1].children[1].binary_expression) ==
+                    "tau = 2+tau");
         }
     }
 

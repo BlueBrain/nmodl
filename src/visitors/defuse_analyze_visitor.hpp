@@ -82,8 +82,10 @@ class DUInstance {
     /// usage of variable in case of if like statements
     std::vector<DUInstance> children;
 
-    explicit DUInstance(DUState state, const std::shared_ptr<const ast::ExpressionStatement> expression_statement)
-        : state(state), expression_statement(expression_statement) {}
+    explicit DUInstance(DUState state,
+                        const std::shared_ptr<const ast::BinaryExpression> binary_expression)
+        : state(state)
+        , binary_expression(binary_expression) {}
 
     /// analyze all children and return "effective" usage
     DUState eval() const;
@@ -96,8 +98,21 @@ class DUInstance {
 
     void print(printer::JSONPrinter& printer) const;
 
-    /// statement in which the variable is used
-    std::shared_ptr<const ast::ExpressionStatement> expression_statement;
+    /** \brief binary expression in which the variable is used/defined
+     *
+     * We use the binary expression because it is used in both:
+     *
+     * - x = ... // expression statement, binary expression
+     * - IF (x == 0) // not an expression statement, binary expression
+     *
+     * We also want the outermost binary expression. Thus, we do not keep track
+     * of the interior ones. For example:
+     *
+     * \f tau = tau + 1 \f
+     *
+     * we want to return the full statement, not only \f tau + 1 \f
+     */
+    std::shared_ptr<const ast::BinaryExpression> binary_expression;
 };
 
 
@@ -211,7 +226,7 @@ class DefUseAnalyzeVisitor: protected ConstAstVisitor {
     /// starting visiting lhs of assignment statement
     bool visiting_lhs = false;
 
-    std::shared_ptr<const ast::ExpressionStatement> current_expression_statement = nullptr;
+    std::shared_ptr<const ast::BinaryExpression> current_binary_expression = nullptr;
 
     void process_variable(const std::string& name);
     void process_variable(const std::string& name, int index);
@@ -243,8 +258,6 @@ class DefUseAnalyzeVisitor: protected ConstAstVisitor {
      * used in any of the below statements are handled separately
      * \{
      */
-
-    void visit_expression_statement(const ast::ExpressionStatement& node) override;
 
     void visit_reaction_statement(const ast::ReactionStatement& node) override;
 
