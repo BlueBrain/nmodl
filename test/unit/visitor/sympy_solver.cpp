@@ -777,38 +777,40 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
             }
             DERIVATIVE states {
                 LOCAL a, b
-                    x' = y + a
+                    x' = a * y+b
                     if (b == 1) {
                         a = a + 1
                     }
-                    y' = x + y + b
+                    y' = x + a*y
             })";
         std::string expected_result = R"(
             DERIVATIVE states {
                 LOCAL a, b, old_x, old_y
                 old_x = x
                 old_y = y
-                x = (a*pow(dt, 2)-a*dt-b*pow(dt, 2)+dt*old_x-dt*old_y-old_x)/(pow(dt, 2)+dt-1.0)
+                x = (a*b*pow(dt, 2)+a*dt*old_x-a*dt*old_y-b*dt-old_x)/(a*pow(dt, 2)+a*dt-1.0)
                 IF (b == 1) {
                     a = a+1
                 }
-                y = (-a*pow(dt, 2)-b*dt-dt*old_x-old_y)/(pow(dt, 2)+dt-1.0)
+                y = (-b*pow(dt, 2)-dt*old_x-old_y)/(a*pow(dt, 2)+a*dt-1.0)
             })";
         std::string expected_result_cse = R"(
             DERIVATIVE states {
                 LOCAL a, b, old_x, old_y, tmp0, tmp1, tmp2, tmp3
                 old_x = x
                 old_y = y
-                tmp0 = pow(dt, 2)
-                tmp1 = 1.0/(dt+tmp0-1.0)
-                tmp2 = dt*old_x
-                tmp3 = a*tmp0
-                x = -tmp1*(a*dt+b*tmp0+dt*old_y+old_x-tmp2-tmp3)
+                tmp0 = a*dt
+                tmp1 = pow(dt, 2)
+                tmp2 = a*tmp1
+                tmp3 = 1.0/(tmp0+tmp2-1.0)
+                x = -tmp3*(b*dt-b*tmp2-old_x*tmp0+old_x+old_y*tmp0)
                 IF (b == 1) {
                     a = a+1
                 }
-                tmp3 = a*tmp0
-                y = -tmp1*(b*dt+old_y+tmp2+tmp3)
+                tmp0 = a*dt
+                tmp2 = a*tmp1
+                tmp3 = 1.0/(tmp0+tmp2-1.0)
+                y = -tmp3*(b*tmp1+dt*old_x+old_y)
             })";
 
         THEN("Construct & solve linear system for backwards Euler") {
