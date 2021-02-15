@@ -82,8 +82,8 @@ class DUInstance {
     /// usage of variable in case of if like statements
     std::vector<DUInstance> children;
 
-    explicit DUInstance(DUState state)
-        : state(state) {}
+    explicit DUInstance(DUState state, const std::shared_ptr<const ast::ExpressionStatement> expression_statement)
+        : state(state), expression_statement(expression_statement) {}
 
     /// analyze all children and return "effective" usage
     DUState eval() const;
@@ -95,6 +95,9 @@ class DUInstance {
     DUState conditional_block_eval() const;
 
     void print(printer::JSONPrinter& printer) const;
+
+    /// statement in which the variable is used
+    std::shared_ptr<const ast::ExpressionStatement> expression_statement;
 };
 
 
@@ -208,6 +211,8 @@ class DefUseAnalyzeVisitor: protected ConstAstVisitor {
     /// starting visiting lhs of assignment statement
     bool visiting_lhs = false;
 
+    std::shared_ptr<const ast::ExpressionStatement> current_expression_statement = nullptr;
+
     void process_variable(const std::string& name);
     void process_variable(const std::string& name, int index);
 
@@ -238,6 +243,8 @@ class DefUseAnalyzeVisitor: protected ConstAstVisitor {
      * used in any of the below statements are handled separately
      * \{
      */
+
+    void visit_expression_statement(const ast::ExpressionStatement& node) override;
 
     void visit_reaction_statement(const ast::ReactionStatement& node) override;
 

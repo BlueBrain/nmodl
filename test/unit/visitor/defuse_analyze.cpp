@@ -7,7 +7,7 @@
 
 #include <catch/catch.hpp>
 
-#include "ast/program.hpp"
+#include "ast/all.hpp"
 #include "parser/nmodl_driver.hpp"
 #include "test/unit/utils/test_utils.hpp"
 #include "visitors/checkparent_visitor.hpp"
@@ -69,8 +69,14 @@ SCENARIO("Perform DefUse analysis on NMODL constructs") {
         THEN("Def-Use chains for individual usage is printed") {
             std::string input = reindent_text(nmodl_text);
             auto chains = run_defuse_visitor(input, "tau");
+
             REQUIRE(chains[0].to_string(true) == expected_text);
             REQUIRE(chains[0].eval() == DUState::D);
+
+            REQUIRE(to_nmodl(*chains[0].chain[0].expression_statement) == "tau = 1");
+            REQUIRE(to_nmodl(*chains[0].chain[1].expression_statement) == "tau = 1+tau");
+            REQUIRE(to_nmodl(*chains[0].chain[2].expression_statement) == "tau = 1+tau");
+
         }
     }
 
@@ -95,6 +101,10 @@ SCENARIO("Perform DefUse analysis on NMODL constructs") {
             auto chains = run_defuse_visitor(input, "tau");
             REQUIRE(chains[0].to_string(true) == expected_text);
             REQUIRE(chains[0].eval() == DUState::U);
+
+            REQUIRE(chains[0].chain[0].expression_statement == nullptr); // verbatim begin
+            REQUIRE(to_nmodl(*chains[0].chain[1].expression_statement) == "tau = 1");
+            REQUIRE(chains[0].chain[2].expression_statement == nullptr); // verbatim end
         }
     }
 
@@ -132,15 +142,28 @@ SCENARIO("Perform DefUse analysis on NMODL constructs") {
                 auto o0 = run_defuse_visitor(input, "o[0]");
 
                 REQUIRE(m0[0].to_string() == R"({"DerivativeBlock":[{"name":"D"},{"name":"U"}]})");
+                REQUIRE(to_nmodl(*m0[0].chain[0].expression_statement) == "m[0] = m[1]");
+                REQUIRE(to_nmodl(*m0[0].chain[1].expression_statement) == "h[1] = m[0]+h[0]");
                 REQUIRE(m1[0].to_string() == R"({"DerivativeBlock":[{"name":"U"}]})");
+                REQUIRE(to_nmodl(*m1[0].chain[0].expression_statement) == "m[0] = m[1]");
                 REQUIRE(h1[0].to_string() == R"({"DerivativeBlock":[{"name":"D"}]})");
+                REQUIRE(to_nmodl(*h1[0].chain[0].expression_statement) == "h[1] = m[0]+h[0]");
                 REQUIRE(tau0[0].to_string() == R"({"DerivativeBlock":[{"name":"LD"}]})");
+                REQUIRE(to_nmodl(*tau0[0].chain[0].expression_statement) == "tau[0] = 1");
                 REQUIRE(tau1[0].to_string() == R"({"DerivativeBlock":[{"name":"LU"}]})");
+                REQUIRE(to_nmodl(*tau1[0].chain[0].expression_statement) == "tau[2] = 1+tau[1]+tau[2]");
                 REQUIRE(tau2[0].to_string() ==
                         R"({"DerivativeBlock":[{"name":"LU"},{"name":"LD"}]})");
+                REQUIRE(to_nmodl(*tau2[0].chain[0].expression_statement) == "tau[2] = 1+tau[1]+tau[2]");
+                REQUIRE(to_nmodl(*tau2[0].chain[1].expression_statement) == "tau[2] = 1+tau[1]+tau[2]");
                 REQUIRE(n0[0].to_string() == R"({"DerivativeBlock":[{"name":"U"},{"name":"D"}]})");
+                REQUIRE(to_nmodl(*n0[0].chain[0].expression_statement) == "n[i+1] = 1+n[i]");
+                REQUIRE(to_nmodl(*n0[0].chain[1].expression_statement) == "n[i+1] = 1+n[i]");
                 REQUIRE(n1[0].to_string() == R"({"DerivativeBlock":[{"name":"U"},{"name":"D"}]})");
+                REQUIRE(to_nmodl(*n1[0].chain[0].expression_statement) == "n[i+1] = 1+n[i]");
+                REQUIRE(to_nmodl(*n1[0].chain[1].expression_statement) == "n[i+1] = 1+n[i]");
                 REQUIRE(o0[0].to_string() == R"({"DerivativeBlock":[{"name":"D"}]})");
+                REQUIRE(to_nmodl(*o0[0].chain[0].expression_statement) == "o[i] = 1");
             }
         }
     }

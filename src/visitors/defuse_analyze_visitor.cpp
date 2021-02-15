@@ -232,7 +232,7 @@ void DefUseAnalyzeVisitor::visit_if_statement(const ast::IfStatement& node) {
     auto previous_chain = current_chain;
 
     /// starting new if block
-    previous_chain->push_back(DUInstance(DUState::CONDITIONAL_BLOCK));
+    previous_chain->push_back(DUInstance(DUState::CONDITIONAL_BLOCK, current_expression_statement));
     current_chain = &(previous_chain->back().children);
 
     /// visiting if sub-block
@@ -267,9 +267,17 @@ void DefUseAnalyzeVisitor::visit_if_statement(const ast::IfStatement& node) {
  */
 void DefUseAnalyzeVisitor::visit_verbatim(const ast::Verbatim& node) {
     if (!ignore_verbatim) {
-        current_chain->push_back(DUInstance(DUState::U));
+        current_chain->push_back(DUInstance(DUState::U, current_expression_statement));
     }
 }
+
+void DefUseAnalyzeVisitor::visit_expression_statement(const ast::ExpressionStatement& node) {
+
+    current_expression_statement = std::static_pointer_cast<const ast::ExpressionStatement>(node.get_shared_ptr());
+    ConstAstVisitor::visit_expression_statement(node);
+    current_expression_statement = nullptr;
+}
+
 
 /// unsupported statements : we aren't sure how to handle this "yet" and
 /// hence variables used in any of the below statements are handled separately
@@ -358,18 +366,18 @@ void DefUseAnalyzeVisitor::update_defuse_chain(const std::string& name) {
     const auto is_local = symbol->has_any_property(properties);
 
     if (unsupported_node) {
-        current_chain->push_back(DUInstance(DUState::U));
+        current_chain->push_back(DUInstance(DUState::U, current_expression_statement));
     } else if (visiting_lhs) {
         if (is_local) {
-            current_chain->push_back(DUInstance(DUState::LD));
+            current_chain->push_back(DUInstance(DUState::LD, current_expression_statement));
         } else {
-            current_chain->push_back(DUInstance(DUState::D));
+            current_chain->push_back(DUInstance(DUState::D, current_expression_statement));
         }
     } else {
         if (is_local) {
-            current_chain->push_back(DUInstance(DUState::LU));
+            current_chain->push_back(DUInstance(DUState::LU, current_expression_statement));
         } else {
-            current_chain->push_back(DUInstance(DUState::U));
+            current_chain->push_back(DUInstance(DUState::U, current_expression_statement));
         }
     }
 }
@@ -396,7 +404,7 @@ void DefUseAnalyzeVisitor::visit_with_new_chain(const ast::Node& node, DUState s
 }
 
 void DefUseAnalyzeVisitor::start_new_chain(DUState state) {
-    current_chain->push_back(DUInstance(state));
+    current_chain->push_back(DUInstance(state, current_expression_statement));
     current_chain = &current_chain->back().children;
 }
 
