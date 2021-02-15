@@ -38,8 +38,8 @@ SympyReplaceSolutionsVisitor::SympyReplaceSolutionsVisitor(
         std::find_if(solutions.begin(), solutions.end(), [](const std::string& statement) {
             return statement.substr(0, 3) != "tmp";
         });
-    tmp_statements_ = SolutionSorter(solutions.begin(), ss_tmp_delimeter, -1);
-    solutions_ = SolutionSorter(ss_tmp_delimeter, solutions.end(), -1);
+    tmp_statements_ = StatementDispenser(solutions.begin(), ss_tmp_delimeter, -1);
+    solutions_ = StatementDispenser(ss_tmp_delimeter, solutions.end(), -1);
 
     replacements_.clear();
     is_statement_block_root_ = true;
@@ -102,6 +102,7 @@ void SympyReplaceSolutionsVisitor::visit_statement_block(ast::StatementBlock& no
             }
         } else if (to_be_removed_ == nullptr ||
                    to_be_removed_->find(&(*old_statement)) == to_be_removed_->end()) {
+            logger->debug("SympyReplaceSolutionsVisitor :: found {}, nothing to do", to_nmodl(old_statement));
             new_statements.emplace_back(std::move(old_statement));
         } else {
             logger->debug("SympyReplaceSolutionsVisitor :: erasing {}", to_nmodl(old_statement));
@@ -139,6 +140,8 @@ void SympyReplaceSolutionsVisitor::try_replace_tagged_statement(
         return;
     }
 
+
+
     switch (policy_) {
     case ReplacePolicy::VALUE: {
         const auto dependencies = statement_dependencies(get_lhs(node), get_rhs(node));
@@ -146,6 +149,8 @@ void SympyReplaceSolutionsVisitor::try_replace_tagged_statement(
         const auto& vars = dependencies.second;
 
         if (solutions_.is_var_assigned_here(key)) {
+            logger->debug("SympyReplaceSolutionsVisitor :: marking for replacement {}", to_nmodl(statement));
+
             ast::StatementVector new_statements;
 
             pre_solve_statements_.emplace_back_all_tagged_statements(new_statements);
@@ -157,6 +162,8 @@ void SympyReplaceSolutionsVisitor::try_replace_tagged_statement(
         break;
     }
     case ReplacePolicy::GREEDY: {
+        logger->debug("SympyReplaceSolutionsVisitor :: marking for replacement {}", to_nmodl(statement));
+
         ast::StatementVector new_statements;
 
         pre_solve_statements_.emplace_back_all_tagged_statements(new_statements);
@@ -164,7 +171,6 @@ void SympyReplaceSolutionsVisitor::try_replace_tagged_statement(
         solutions_.emplace_back_next_tagged_statements(new_statements, n_next_equations_);
 
         replacements_.emplace(statement, new_statements);
-
         break;
     }
     }
@@ -172,6 +178,7 @@ void SympyReplaceSolutionsVisitor::try_replace_tagged_statement(
 
 
 void SympyReplaceSolutionsVisitor::visit_diff_eq_expression(ast::DiffEqExpression& node) {
+    logger->debug("SympyReplaceSolutionsVisitor :: visit {}", to_nmodl(node));
     auto get_lhs = [](const ast::Node& node) -> const std::shared_ptr<ast::Expression>& {
         return static_cast<const ast::DiffEqExpression&>(node).get_expression()->get_lhs();
     };
@@ -184,6 +191,7 @@ void SympyReplaceSolutionsVisitor::visit_diff_eq_expression(ast::DiffEqExpressio
 }
 
 void SympyReplaceSolutionsVisitor::visit_lin_equation(ast::LinEquation& node) {
+    logger->debug("SympyReplaceSolutionsVisitor :: visit {}", to_nmodl(node));
     auto get_lhs = [](const ast::Node& node) -> const std::shared_ptr<ast::Expression>& {
         return static_cast<const ast::LinEquation&>(node).get_left_linxpression();
     };
@@ -197,6 +205,7 @@ void SympyReplaceSolutionsVisitor::visit_lin_equation(ast::LinEquation& node) {
 
 
 void SympyReplaceSolutionsVisitor::visit_non_lin_equation(ast::NonLinEquation& node) {
+    logger->debug("SympyReplaceSolutionsVisitor :: visit {}", to_nmodl(node));
     auto get_lhs = [](const ast::Node& node) -> const std::shared_ptr<ast::Expression>& {
         return static_cast<const ast::NonLinEquation&>(node).get_lhs();
     };
@@ -210,6 +219,7 @@ void SympyReplaceSolutionsVisitor::visit_non_lin_equation(ast::NonLinEquation& n
 
 
 void SympyReplaceSolutionsVisitor::visit_binary_expression(ast::BinaryExpression& node) {
+    logger->debug("SympyReplaceSolutionsVisitor :: visit {}", to_nmodl(node));
     if (node.get_op().get_value() == ast::BinaryOp::BOP_ASSIGN && node.get_lhs()->is_var_name()) {
         interleaves_counter_.new_equation(false);
 
@@ -221,7 +231,7 @@ void SympyReplaceSolutionsVisitor::visit_binary_expression(ast::BinaryExpression
 }
 
 
-SympyReplaceSolutionsVisitor::SolutionSorter::SolutionSorter(
+SympyReplaceSolutionsVisitor::StatementDispenser::StatementDispenser(
     const std::vector<std::string>::const_iterator& statements_str_beg,
     const std::vector<std::string>::const_iterator& statements_str_end,
     const int error_on_n_flushes)
@@ -232,7 +242,7 @@ SympyReplaceSolutionsVisitor::SolutionSorter::SolutionSorter(
 }
 
 
-void SympyReplaceSolutionsVisitor::SolutionSorter::build_maps() {
+void SympyReplaceSolutionsVisitor::StatementDispenser::build_maps() {
     for (size_t ii = 0; ii < statements_.size(); ++ii) {
         const auto& statement = statements_[ii];
 
@@ -265,9 +275,25 @@ void SympyReplaceSolutionsVisitor::SolutionSorter::build_maps() {
             }
         }
     }
+
+    logger->debug("SympyReplaceSolutionsVisitor::StatementDispenser :: var2dependants_ map");
+    for (const auto& entry : var2dependants_) {
+        logger->debug("SympyReplaceSolutionsVisitor::StatementDispenser :: var `{}` used in:", entry.first);
+        for (const auto ii : entry.second) {
+            logger->debug("SympyReplaceSolutionsVisitor::StatementDispenser ::    -> {}", to_nmodl
+            (statements_[ii]));
+        }
+    }
+    logger->debug("SympyReplaceSolutionsVisitor::StatementDispenser :: var2statement_ map");
+    for (const auto& entry : var2statement_) {
+        logger->debug("SympyReplaceSolutionsVisitor::StatementDispenser :: var `{}` defined in:", entry.first);
+        logger->debug("SympyReplaceSolutionsVisitor::StatementDispenser ::    -> {}",
+                      to_nmodl(statements_[entry
+                              .second]));
+    }
 }
 
-bool SympyReplaceSolutionsVisitor::SolutionSorter::try_emplace_back_tagged_statement(
+bool SympyReplaceSolutionsVisitor::StatementDispenser::try_emplace_back_tagged_statement(
     ast::StatementVector& new_statements,
     const std::string& var) {
     auto ptr = var2statement_.find(var);
@@ -276,15 +302,24 @@ bool SympyReplaceSolutionsVisitor::SolutionSorter::try_emplace_back_tagged_state
         const auto ii = ptr->second;
         const auto tag_ptr = tags_.find(ii);
         if (tag_ptr != tags_.end()) {
+
             new_statements.emplace_back(statements_[ii]->clone());
             tags_.erase(tag_ptr);
             emplaced = true;
+
+            logger->debug("SympyReplaceSolutionsVisitor::StatementDispenser :: adding to replacement rule {}", to_nmodl
+            (statements_[ii]));
+        } else {
+            logger->error("SympyReplaceSolutionsVisitor::StatementDispenser :: tried adding to replacement rule {} but statement is not "
+                          "tagged", to_nmodl
+            (statements_[ii]));
         }
+
     }
     return emplaced;
 }
 
-size_t SympyReplaceSolutionsVisitor::SolutionSorter::emplace_back_next_tagged_statements(
+size_t SympyReplaceSolutionsVisitor::StatementDispenser::emplace_back_next_tagged_statements(
     ast::StatementVector& new_statements,
     const size_t n_next_statements) {
     size_t counter = 0;
@@ -293,6 +328,7 @@ size_t SympyReplaceSolutionsVisitor::SolutionSorter::emplace_back_next_tagged_st
          ++next_statement_ii) {
         const auto tag_ptr = tags_.find(next_statement_ii);
         if (tag_ptr != tags_.end()) {
+            logger->debug("SympyReplaceSolutionsVisitor::StatementDispenser :: adding to replacement rule {}", to_nmodl(statements_[next_statement_ii]));
             new_statements.emplace_back(statements_[next_statement_ii]->clone());
             tags_.erase(tag_ptr);
             ++counter;
@@ -301,17 +337,17 @@ size_t SympyReplaceSolutionsVisitor::SolutionSorter::emplace_back_next_tagged_st
     return counter;
 }
 
-size_t SympyReplaceSolutionsVisitor::SolutionSorter::emplace_back_all_tagged_statements(
+size_t SympyReplaceSolutionsVisitor::StatementDispenser::emplace_back_all_tagged_statements(
     ast::StatementVector& new_statements) {
     for (const auto ii: tags_) {
         new_statements.emplace_back(statements_[ii]->clone());
-        logger->debug("SympyReplaceSolutionsVisitor :: adding {}", to_nmodl(statements_[ii]));
+        logger->debug("SympyReplaceSolutionsVisitor::StatementDispenser :: adding to replacement rule {}", to_nmodl(statements_[ii]));
     }
 
     n_flushes_ += (!tags_.empty());
     if (error_on_n_flushes_ > 0 && n_flushes_ >= error_on_n_flushes_) {
         throw std::runtime_error(
-            "SympyReplaceSolutionsVisitor :: State variable assignment(s) interleaved in system "
+            "SympyReplaceSolutionsVisitor::StatementDispenser :: State variable assignment(s) interleaved in system "
             "of "
             "equations/differential equations. It is not allowed due to possible numerical "
             "instability and undefined "
@@ -326,22 +362,29 @@ size_t SympyReplaceSolutionsVisitor::SolutionSorter::emplace_back_all_tagged_sta
     return n_replacements;
 }
 
-size_t SympyReplaceSolutionsVisitor::SolutionSorter::tag_dependant_statements(
+size_t SympyReplaceSolutionsVisitor::StatementDispenser::tag_dependant_statements(
     const std::string& var) {
     auto ptr = var2dependants_.find(var);
     size_t n = 0;
     if (ptr != var2dependants_.end()) {
         for (const auto ii: ptr->second) {
-            tags_.insert(ii);
+            const auto pos = tags_.insert(ii);
+            if (pos.second) {
+                logger->debug("SympyReplaceSolutionsVisitor::StatementDispenser :: tagging {}", to_nmodl
+                (statements_[ii]));
+            }
             ++n;
         }
     }
     return n;
 }
 
-void SympyReplaceSolutionsVisitor::SolutionSorter::tag_all_statements() {
+void SympyReplaceSolutionsVisitor::StatementDispenser::tag_all_statements() {
+    logger->debug("SympyReplaceSolutionsVisitor::StatementDispenser :: tagging all statements");
     for (size_t i = 0; i < statements_.size(); ++i) {
         tags_.insert(i);
+        logger->debug("SympyReplaceSolutionsVisitor::StatementDispenser :: tagging {}", to_nmodl
+                (statements_[i]));
     }
 }
 

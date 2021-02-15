@@ -36,7 +36,7 @@ namespace visitor {
  *
  * The goal is to replace statements with \ref solutions_ in place. In this way we can allow (to
  * some extent) the use of control flow blocks and assignments. \ref pre_solve_statements are added
- * in front of the replaced statements in case their variable needs updating. \ref SolutionSorter
+ * in front of the replaced statements in case their variable needs updating. \ref StatementDispenser
  * keeps track of what needs updating. Let's start with some nomenclature:
  *
  * - statement: a line in the .mod file. It can be a diff_eq_expression, binary_expression, or
@@ -268,7 +268,7 @@ class SympyReplaceSolutionsVisitor: public AstVisitor {
 
 
     /**
-     * \struct SolutionSorter
+     * \struct StatementDispenser
      * \brief Sorts and maps statements to variables keeping track of what needs updating
      *
      * This is a multi-purpose object that:
@@ -279,12 +279,12 @@ class SympyReplaceSolutionsVisitor: public AstVisitor {
      * - builds the statements from a vector of strings
      *
      */
-    struct SolutionSorter {
+    struct StatementDispenser {
         /// Empty ctor
-        SolutionSorter() = default;
+        StatementDispenser() = default;
 
         /// Standard ctor
-        SolutionSorter(const std::vector<std::string>::const_iterator& statements_str_beg,
+        StatementDispenser(const std::vector<std::string>::const_iterator& statements_str_beg,
                        const std::vector<std::string>::const_iterator& statements_str_end,
                        const int error_on_n_flushes);
 
@@ -419,13 +419,13 @@ class SympyReplaceSolutionsVisitor: public AstVisitor {
     };
 
     /// Update state variable statements (i.e. \f old_x = x \f)
-    SolutionSorter pre_solve_statements_;
+    StatementDispenser pre_solve_statements_;
 
     /// tmp statements that appear with --cse (i.e. \f tmp0 = a \f)
-    SolutionSorter tmp_statements_;
+    StatementDispenser tmp_statements_;
 
     /// solutions that we want to replace
-    SolutionSorter solutions_;
+    StatementDispenser solutions_;
 
     /**
      * \brief Replacements found by the visitor
