@@ -8,7 +8,6 @@
 #include "visitors/sympy_replace_solutions_visitor.hpp"
 #include "visitors/lookup_visitor.hpp"
 
-
 #include "ast/all.hpp"
 #include "utils/logger.hpp"
 #include "visitors/visitor_utils.hpp"
