@@ -15,10 +15,22 @@
 namespace nmodl {
 namespace visitor {
 
+using namespace fmt::literals;
 
+/**
+ * \details SympyReplaceSolutionsVisitor tells us that a new equation appear and, depending where
+ * it is located, it can determine if it is part of the main system of equations or is something
+ * else. Every time we are out of the system and we print a new equation that is in the system
+ * we update the counter. \ref in_system_ follows, with lag, \ref is_in_system_ and every time
+ * they are false and true respectively we detect a switch.
+ *
+ * \param is_in_system is a bool provided from outside that tells us if a new equation is indeed
+ * part of the main system of equations
+ */
 void SympyReplaceSolutionsVisitor::InterleavesCounter::new_equation(const bool is_in_system) {
-    n_ += (!in_system_ && is_in_system);
-    in_system_ = is_in_system;
+    n_ += (!in_system_ && is_in_system);  // count an interleave only if in_system_ == false and
+                                          // is_in_system == true
+    in_system_ = is_in_system;            // update in_system_
 }
 
 SympyReplaceSolutionsVisitor::SympyReplaceSolutionsVisitor(
@@ -41,15 +53,17 @@ SympyReplaceSolutionsVisitor::SympyReplaceSolutionsVisitor(
     solutions_ = StatementDispenser(ss_tmp_delimeter, solutions.end(), -1);
 
     replacements_.clear();
-    is_statement_block_root_ = true;
+    is_top_level_statement_block_ = true;
 }
 
 
 void SympyReplaceSolutionsVisitor::visit_statement_block(ast::StatementBlock& node) {
-    const bool is_root = is_statement_block_root_;
-    is_statement_block_root_ = false;
+    const bool is_top_level_statement_block =
+        is_top_level_statement_block_;  // we mark it down since we are going to change it for
+    // visiting the children
+    is_top_level_statement_block_ = false;
 
-    if (is_root) {
+    if (is_top_level_statement_block) {
         logger->debug("SympyReplaceSolutionsVisitor :: visit statements. Matching policy: {}",
                       (policy_ == ReplacePolicy::VALUE ? "VALUE" : "GREEDY"));
         interleaves_counter_ = InterleavesCounter();
@@ -101,17 +115,32 @@ void SympyReplaceSolutionsVisitor::visit_statement_block(ast::StatementBlock& no
             }
         } else if (to_be_removed_ == nullptr ||
                    to_be_removed_->find(&(*old_statement)) == to_be_removed_->end()) {
-            logger->debug("SympyReplaceSolutionsVisitor :: found {}, nothing to do", to_nmodl(old_statement));
+            logger->debug("SympyReplaceSolutionsVisitor :: found {}, nothing to do",
+                          to_nmodl(old_statement));
             new_statements.emplace_back(std::move(old_statement));
         } else {
             logger->debug("SympyReplaceSolutionsVisitor :: erasing {}", to_nmodl(old_statement));
         }
     }
 
-    if (is_root) {
+    if (is_top_level_statement_block) {
         if (!solutions_.tags_.empty()) {
+            std::ostringstream ss;
+            for (const auto ii: solutions_.tags_) {
+                ss << to_nmodl(solutions_.statements_[ii]) << '\n';
+            }
             throw std::runtime_error(
-                "Not all solutions were replaced! Probably something went wrong.");
+                "Not all solutions were replaced! Sympy returned {} equations but I could not find "
+                "a place "
+                "for all of them. In particular, the following equations remain to be replaced "
+                "somewhere:\n{}This is "
+                "probably a bug and I invite you to report it to a developer. Possible causes:\n"
+                " - I did not do a GREEDY pass and some solutions could not be replaced by VALUE\n "
+                "sympy "
+                "returned more equations than what we expected\n - There is a bug in the GREEDY "
+                "pass\n - some "
+                "solutions were replaced but not untagged"_format(solutions_.statements_.size(),
+                                                                  ss.str()));
         }
 
         if (replaced_statements_begin_ == -1) {
@@ -140,7 +169,6 @@ void SympyReplaceSolutionsVisitor::try_replace_tagged_statement(
     }
 
 
-
     switch (policy_) {
     case ReplacePolicy::VALUE: {
         const auto dependencies = statement_dependencies(get_lhs(node), get_rhs(node));
@@ -148,7 +176,8 @@ void SympyReplaceSolutionsVisitor::try_replace_tagged_statement(
         const auto& vars = dependencies.second;
 
         if (solutions_.is_var_assigned_here(key)) {
-            logger->debug("SympyReplaceSolutionsVisitor :: marking for replacement {}", to_nmodl(statement));
+            logger->debug("SympyReplaceSolutionsVisitor :: marking for replacement {}",
+                          to_nmodl(statement));
 
             ast::StatementVector new_statements;
 
@@ -161,7 +190,8 @@ void SympyReplaceSolutionsVisitor::try_replace_tagged_statement(
         break;
     }
     case ReplacePolicy::GREEDY: {
-        logger->debug("SympyReplaceSolutionsVisitor :: marking for replacement {}", to_nmodl(statement));
+        logger->debug("SympyReplaceSolutionsVisitor :: marking for replacement {}",
+                      to_nmodl(statement));
 
         ast::StatementVector new_statements;
 
@@ -241,6 +271,38 @@ SympyReplaceSolutionsVisitor::StatementDispenser::StatementDispenser(
 }
 
 
+/**
+ * \details CHere we construct a map variable -> affected equations. In other words this map tells
+ * me what equations need to be updated when I change a particular variable. To do that we build a a
+ * graph of dependencies var -> vars and in the mean time we reduce it to the root variables. This
+ * is ensured by the fact that the tmp variables are sorted so that the next tmp variable may depend
+ * on the previous one. Since it is a relation of equivalence (if an equation depends on a variable,
+ * it needs to be updated if the variable changes), we build the two maps at the same time.
+ *
+ * An example:
+ *
+ *  \code
+ *  tmp0 = x + a
+ *  tmp1 = tmp0 + b
+ *  tmp2 = y
+ *  \endcode
+ *
+ * dependency_map_ should be (the order of the equation is unimportant since we are building
+ * a map):
+ *
+ * - tmp0 : x, a
+ * - tmp1 : x, a, b
+ * - tmp2 : y
+ *
+ * and the var2statement_ map should be (the order of the following equations is unimportant
+ * since we are building a map. The number represents the index of the original equations):
+ *
+ * - x : 0, 1
+ * - y : 2
+ * - a : 0, 1
+ * - b : 1
+ *
+ */
 void SympyReplaceSolutionsVisitor::StatementDispenser::build_maps() {
     for (size_t ii = 0; ii < statements_.size(); ++ii) {
         const auto& statement = statements_[ii];
@@ -276,19 +338,20 @@ void SympyReplaceSolutionsVisitor::StatementDispenser::build_maps() {
     }
 
     logger->debug("SympyReplaceSolutionsVisitor::StatementDispenser :: var2dependants_ map");
-    for (const auto& entry : var2dependants_) {
-        logger->debug("SympyReplaceSolutionsVisitor::StatementDispenser :: var `{}` used in:", entry.first);
-        for (const auto ii : entry.second) {
-            logger->debug("SympyReplaceSolutionsVisitor::StatementDispenser ::    -> {}", to_nmodl
-            (statements_[ii]));
+    for (const auto& entry: var2dependants_) {
+        logger->debug("SympyReplaceSolutionsVisitor::StatementDispenser :: var `{}` used in:",
+                      entry.first);
+        for (const auto ii: entry.second) {
+            logger->debug("SympyReplaceSolutionsVisitor::StatementDispenser ::    -> {}",
+                          to_nmodl(statements_[ii]));
         }
     }
     logger->debug("SympyReplaceSolutionsVisitor::StatementDispenser :: var2statement_ map");
-    for (const auto& entry : var2statement_) {
-        logger->debug("SympyReplaceSolutionsVisitor::StatementDispenser :: var `{}` defined in:", entry.first);
+    for (const auto& entry: var2statement_) {
+        logger->debug("SympyReplaceSolutionsVisitor::StatementDispenser :: var `{}` defined in:",
+                      entry.first);
         logger->debug("SympyReplaceSolutionsVisitor::StatementDispenser ::    -> {}",
-                      to_nmodl(statements_[entry
-                              .second]));
+                      to_nmodl(statements_[entry.second]));
     }
 }
 
@@ -301,19 +364,20 @@ bool SympyReplaceSolutionsVisitor::StatementDispenser::try_emplace_back_tagged_s
         const auto ii = ptr->second;
         const auto tag_ptr = tags_.find(ii);
         if (tag_ptr != tags_.end()) {
-
             new_statements.emplace_back(statements_[ii]->clone());
             tags_.erase(tag_ptr);
             emplaced = true;
 
-            logger->debug("SympyReplaceSolutionsVisitor::StatementDispenser :: adding to replacement rule {}", to_nmodl
-            (statements_[ii]));
+            logger->debug(
+                "SympyReplaceSolutionsVisitor::StatementDispenser :: adding to replacement rule {}",
+                to_nmodl(statements_[ii]));
         } else {
-            logger->error("SympyReplaceSolutionsVisitor::StatementDispenser :: tried adding to replacement rule {} but statement is not "
-                          "tagged", to_nmodl
-            (statements_[ii]));
+            logger->error(
+                "SympyReplaceSolutionsVisitor::StatementDispenser :: tried adding to replacement "
+                "rule {} but statement is not "
+                "tagged",
+                to_nmodl(statements_[ii]));
         }
-
     }
     return emplaced;
 }
@@ -327,7 +391,9 @@ size_t SympyReplaceSolutionsVisitor::StatementDispenser::emplace_back_next_tagge
          ++next_statement_ii) {
         const auto tag_ptr = tags_.find(next_statement_ii);
         if (tag_ptr != tags_.end()) {
-            logger->debug("SympyReplaceSolutionsVisitor::StatementDispenser :: adding to replacement rule {}", to_nmodl(statements_[next_statement_ii]));
+            logger->debug(
+                "SympyReplaceSolutionsVisitor::StatementDispenser :: adding to replacement rule {}",
+                to_nmodl(statements_[next_statement_ii]));
             new_statements.emplace_back(statements_[next_statement_ii]->clone());
             tags_.erase(tag_ptr);
             ++counter;
@@ -340,13 +406,16 @@ size_t SympyReplaceSolutionsVisitor::StatementDispenser::emplace_back_all_tagged
     ast::StatementVector& new_statements) {
     for (const auto ii: tags_) {
         new_statements.emplace_back(statements_[ii]->clone());
-        logger->debug("SympyReplaceSolutionsVisitor::StatementDispenser :: adding to replacement rule {}", to_nmodl(statements_[ii]));
+        logger->debug(
+            "SympyReplaceSolutionsVisitor::StatementDispenser :: adding to replacement rule {}",
+            to_nmodl(statements_[ii]));
     }
 
     n_flushes_ += (!tags_.empty());
     if (error_on_n_flushes_ > 0 && n_flushes_ >= error_on_n_flushes_) {
         throw std::runtime_error(
-            "SympyReplaceSolutionsVisitor::StatementDispenser :: State variable assignment(s) interleaved in system "
+            "SympyReplaceSolutionsVisitor::StatementDispenser :: State variable assignment(s) "
+            "interleaved in system "
             "of "
             "equations/differential equations. It is not allowed due to possible numerical "
             "instability and undefined "
@@ -369,8 +438,8 @@ size_t SympyReplaceSolutionsVisitor::StatementDispenser::tag_dependant_statement
         for (const auto ii: ptr->second) {
             const auto pos = tags_.insert(ii);
             if (pos.second) {
-                logger->debug("SympyReplaceSolutionsVisitor::StatementDispenser :: tagging {}", to_nmodl
-                (statements_[ii]));
+                logger->debug("SympyReplaceSolutionsVisitor::StatementDispenser :: tagging {}",
+                              to_nmodl(statements_[ii]));
             }
             ++n;
         }
@@ -382,8 +451,8 @@ void SympyReplaceSolutionsVisitor::StatementDispenser::tag_all_statements() {
     logger->debug("SympyReplaceSolutionsVisitor::StatementDispenser :: tagging all statements");
     for (size_t i = 0; i < statements_.size(); ++i) {
         tags_.insert(i);
-        logger->debug("SympyReplaceSolutionsVisitor::StatementDispenser :: tagging {}", to_nmodl
-                (statements_[i]));
+        logger->debug("SympyReplaceSolutionsVisitor::StatementDispenser :: tagging {}",
+                      to_nmodl(statements_[i]));
     }
 }
 

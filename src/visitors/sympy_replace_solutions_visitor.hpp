@@ -36,7 +36,8 @@ namespace visitor {
  *
  * The goal is to replace statements with \ref solutions_ in place. In this way we can allow (to
  * some extent) the use of control flow blocks and assignments. \ref pre_solve_statements are added
- * in front of the replaced statements in case their variable needs updating. \ref StatementDispenser
+ * in front of the replaced statements in case their variable needs updating. \ref
+ StatementDispenser
  * keeps track of what needs updating. Let's start with some nomenclature:
  *
  * - statement: a line in the .mod file. It can be a diff_eq_expression, binary_expression, or
@@ -62,6 +63,7 @@ namespace visitor {
  *
  * Imagine we have this derivative block in the ast (before SympyReplaceSolutionsVisitor passes):
  *
+ * \code
  * DERIVATIVE d {
  *     LOCAL a, old_x, old_y, old_z, tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7
  *     b = 1
@@ -74,6 +76,7 @@ namespace visitor {
  *     z' = y + a
  *     x = x + 1
  * }
+ * \endcode
  *
  * where SympySolverVisitor already added variables in the LOCAL declaration.
  *
@@ -81,12 +84,15 @@ namespace visitor {
  *
  * - pre-solve statements:
  *
+ * \code
  * old_x = x
  * old_y = y
  * old_z = z
+ * \endcode
  *
  * - tmp statements:
  *
+ * \code
  * tmp0 = 2.0*dt
  * tmp1 = 1.0/(tmp0-1.0)
  * tmp2 = pow(dt, 2)
@@ -95,15 +101,19 @@ namespace visitor {
  * tmp5 = a*dt
  * tmp6 = dt*old_y
  * tmp7 = tmp5+tmp6
+ * \endcode
  *
  * - solutions:
  *
+ * \code
  * x = -tmp1*(b*dt+old_x-tmp3-tmp4+tmp7)
  * y = -tmp1*(old_y+tmp3+tmp4+tmp5-tmp6)
  * z = -tmp1*(-a*tmp2+b*pow(dt, 3)+old_x*tmp2-old_y*tmp2-old_z*tmp0+old_z+tmp7)
+ * \endcode
  *
  * SympySolveVisitor works in this way:
  *
+ * \code
  * DERIVATIVE d {                                                                   // nothing to do
  *
  *     LOCAL a, old_x, old_y, old_z, tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7 // nothing to do
@@ -132,8 +142,8 @@ namespace visitor {
  *         // x = x + 1                       // the same as before but for 'x'. In particular a pre
  *                                              // solve statement is marked for updating. This will
  *                                                             // produce an error later in the code
-       }                                                                            // nothing to do
-
+ *     }                                                                            // nothing to do
+ *
  *     y' = x + y + a       ->       // old_x = x    // here, if 'x = x + 1' were not commented, the
  *                                                  // code would try to print this line an throw an
  *                                              // error since the pre solve statements were already
@@ -149,6 +159,7 @@ namespace visitor {
  *
  *     x = x + 1                                                                    // nothing to do
  * }                                                                                // nothing to do
+ * \endcode
  *
  * Last notes:
  *
@@ -166,6 +177,7 @@ namespace visitor {
  the matrix and
  * an element of F. So if we have:
  *
+ * \code
  * LINEAR lin {
  *     ~ x = ...
  *     a = a + 1
@@ -173,16 +185,20 @@ namespace visitor {
  *     ~ z = ...
  *     ~ w = ...
  * }
+ * \endcode
  *
  * We get the vector F and matrix J
  *
+ * \code
  * F = [0,     J = [0, 4, 8,  12,
  *      1,          1, 5, 9,  13,
  *      2,          2, 6, 10, 14,
  *      3]          3, 7, 11, 15]
+ * \endcode
  *
  * Where the numbers indicate their column-wise index. The solution replacement becomes:
  *
+ * \code
  * ~ x = ...  -> F[0] = ...
  *               J[0] = ...
  *               J[4] = ...
@@ -190,6 +206,7 @@ namespace visitor {
  *               J[12] = ...
  * a = a + 1
  * ~ y = ...  -> ...
+ * \endcode
  *
  */
 class SympyReplaceSolutionsVisitor: public AstVisitor {
@@ -229,9 +246,9 @@ class SympyReplaceSolutionsVisitor: public AstVisitor {
   private:
     /** \brief Try to replace a statement
      *
-     * @param node it can be Diff_Eq_Expression/LinEquation/NonLinEquation
-     * @param get_lhs method with witch we may get the lhs (in case we need it)
-     * @param get_rhs method with witch we may get the rhs (in case we need it)
+     * \param node it can be Diff_Eq_Expression/LinEquation/NonLinEquation
+     * \param get_lhs method with witch we may get the lhs (in case we need it)
+     * \param get_rhs method with witch we may get the rhs (in case we need it)
      */
     void try_replace_tagged_statement(
         const ast::Node& node,
@@ -241,12 +258,25 @@ class SympyReplaceSolutionsVisitor: public AstVisitor {
     /**
      * \struct InterleavesCounter
      * \brief Count interleaves of assignment statement inside the system of equations
+     *
+     * Example:
+     *
+     * \code
+     * \\ not in the system, n = 0, is_in_system_ = false
+     * ~ x + y = 0 \\ system, in_system_ switch false -> true, n = 1
+     * ~ y = a + 1 \\ system, no switch, nothing to do
+     * a = ... \\ no system, in_system_ switch true -> false, nothing to do
+     * ~ z = x + y + z \\ system, in_system_ switch false -> true, n = 2
+     * \endcode
+     *
+     * Number of interleaves: n-1 = 1
      */
     struct InterleavesCounter {
-        /// Count an interleave if \ref in_system_ switches false -> true
+        /// Count interleaves defined as a switch false -> true for \ref in_system_
         void new_equation(const bool is_in_system);
 
-        /// Number of interleaves. We need to remove the first activation of the switch
+        /// Number of interleaves. We need to remove the first activation of the switch except if
+        /// there were no switches
         inline size_t n() const {
             return n_ == 0 ? 0 : n_ - 1;
         }
@@ -285,41 +315,11 @@ class SympyReplaceSolutionsVisitor: public AstVisitor {
 
         /// Standard ctor
         StatementDispenser(const std::vector<std::string>::const_iterator& statements_str_beg,
-                       const std::vector<std::string>::const_iterator& statements_str_end,
-                       const int error_on_n_flushes);
+                           const std::vector<std::string>::const_iterator& statements_str_end,
+                           const int error_on_n_flushes);
 
-        /**
-         * /brief Construct the maps for easy access and classification of the statements
-         *
-         * Here we construct a map variable -> affected equations. In other words this map tells me
-         * what equations need to be updated when I change a particular variable. To do that we
-         * build a a graph of dependencies var -> vars and in the mean time we reduce it to the root
-         * variables. This is ensured by the fact that the tmp variables are sorted so that the next
-         * tmp variable may depend on the previous one. Since it is a relation of equivalence (if an
-         * equation depends on a variable, it needs to be updated if the variable changes), we build
-         * the two maps at the same time.
-         *
-         * An example:
-         *
-         *  - \f tmp0 = x + a \f
-         *  - \f tmp1 = tmp0 + b \f
-         *  - \f tmp2 = y \f
-         *
-         * dependency_map_ should be (the order of the equation is unimportant since we are building
-         * a map):
-         *
-         * - tmp0 : x, a
-         * - tmp1 : x, a, b
-         * - tmp2 : y
-         *
-         * and the var2statement_ map should be (the order of the following equations is unimportant
-         * since we are building a map. The number represents the index of the original equations):
-         *
-         * - x : 0, 1
-         * - y : 2
-         * - a : 0, 1
-         * - b : 1
-         */
+        /// Construct the maps \ref var2dependants_, \ref var2statement_ and \ref dependency_map_
+        /// for easy access and classification of the statements
         void build_maps();
 
         /// Check if one of the statements assigns this variable (i.e. \f x' = f(x, y, x) \f) and is
@@ -358,29 +358,66 @@ class SympyReplaceSolutionsVisitor: public AstVisitor {
         void tag_all_statements();
 
         /**
-         * \brief var -> (depends on) vars
+         * \brief x (key) : f(a, b, c, ...) (values)
          *
-         * The statements are assignments. Thus, in general, an assigned variable depends on
-         * the variables in the rhs of the assignment operator. This map keeps track of this
-         * dependency
+         * Given a certain variable (map key) we get all the (root) variables on which this variable
+         * depends on (values)
+         *
+         * For example, imagine we have these assignments:
+         *
+         * \code
+         * tmp = b
+         * x = a + tmp + exp(a)
+         * \endcode
+         *
+         * \ref dependency_map_ is:
+         *
+         * - tmp : b
+         * - x : a, b
+         *
          */
         std::unordered_map<std::string, std::unordered_set<std::string>> dependency_map_;
 
         /**
-         * \brief var -> (statements that depend on) statements
+         * \brief a (key) : f(..., a, ...), g(..., a, ...), h(..., a, ...), ... (values)
          *
          * This the "reverse" of \ref dependency_map_. Given a certain variable it provides
          * the statements that depend on it. It is a set because we want to print them in
          * order and we do not want duplicates. The value is the index in \ref statements_ or \ref
          * tags_
+         *
+         * For example:
+         *
+         * \code
+         * tmp = b // statement 0
+         * x = a + tmp + exp(a) // statement 1
+         * \endcode
+         *
+         * \ref var2dependants_ is:
+         *
+         * - a : 1
+         * - b : 0, 1
+         *
          */
         std::unordered_map<std::string, std::set<size_t>> var2dependants_;
 
         /**
-         * \brief var -> statement that sets that var
+         * \brief a (key) : a = f(...) (value)
          *
-         * Given a certain variable we get the statement that sets that variable as index in \ref
-         * statements_ or \ref tags_
+         * Given a certain variable we get the statement where that variable is defined
+         *
+         * For example:
+         *
+         * \code
+         * tmp = b // statement 0
+         * x = a + tmp + exp(a) // statement 1
+         * \endcode
+         *
+         * \ref var2dependants_ is:
+         *
+         * - tmp : 0
+         * - x : 1
+         *
          */
         std::unordered_map<std::string, size_t> var2statement_;
 
@@ -404,9 +441,11 @@ class SympyReplaceSolutionsVisitor: public AstVisitor {
          *
          * For example:
          *
-         * \f x' = a \f
-         * \f x = a + 1 \f
-         * \f y' = b \f
+         * \code
+         * x' = a
+         * x = a + 1
+         * y' = b
+         * \endcode
          *
          * In this sequence of statements \f x \f was assigned within variable updates. This
          * sequence of statements could lead to instability/wrong results for derivimplicit methods.
@@ -438,7 +477,7 @@ class SympyReplaceSolutionsVisitor: public AstVisitor {
 
     /// Used to notify to visit_statement_block was called by the user (or another visitor) or
     /// re-called in a nested block
-    bool is_statement_block_root_ = true;
+    bool is_top_level_statement_block_ = true;
 
     /// Replacement policy used by the various visitors
     ReplacePolicy policy_;
