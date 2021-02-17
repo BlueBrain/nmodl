@@ -92,7 +92,7 @@ namespace visitor {
  *
  * - tmp statements:
  *
- * \code
+ * \code{.mod}
  * tmp0 = 2.0*dt
  * tmp1 = 1.0/(tmp0-1.0)
  * tmp2 = pow(dt, 2)
