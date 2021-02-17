@@ -63,7 +63,7 @@ namespace visitor {
  *
  * Imagine we have this derivative block in the ast (before SympyReplaceSolutionsVisitor passes):
  *
- * \code
+ * \code{.mod}
  * DERIVATIVE d {
  *     LOCAL a, old_x, old_y, old_z, tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7
  *     b = 1
