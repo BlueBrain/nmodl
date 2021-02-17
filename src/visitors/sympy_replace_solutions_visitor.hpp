@@ -84,7 +84,7 @@ namespace visitor {
  *
  * - pre-solve statements:
  *
- * \code
+ * \code{.mod}
  * old_x = x
  * old_y = y
  * old_z = z
