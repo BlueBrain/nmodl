@@ -105,7 +105,7 @@ namespace visitor {
  *
  * - solutions:
  *
- * \code
+ * \code{.mod}
  * x = -tmp1*(b*dt+old_x-tmp3-tmp4+tmp7)
  * y = -tmp1*(old_y+tmp3+tmp4+tmp5-tmp6)
  * z = -tmp1*(-a*tmp2+b*pow(dt, 3)+old_x*tmp2-old_y*tmp2-old_z*tmp0+old_z+tmp7)
