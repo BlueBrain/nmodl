@@ -281,7 +281,7 @@ SympyReplaceSolutionsVisitor::StatementDispenser::StatementDispenser(
  *
  * An example:
  *
- *  \code
+ *  \code{.mod}
  *  tmp0 = x + a
  *  tmp1 = tmp0 + b
  *  tmp2 = y
