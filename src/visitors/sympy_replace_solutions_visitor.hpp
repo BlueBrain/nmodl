@@ -113,7 +113,7 @@ namespace visitor {
  *
  * SympySolveVisitor works in this way:
  *
- * \code
+ * \code{.mod}
  * DERIVATIVE d {                                                                   // nothing to do
  *
  *     LOCAL a, old_x, old_y, old_z, tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7 // nothing to do
