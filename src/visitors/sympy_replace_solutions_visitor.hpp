@@ -177,7 +177,7 @@ namespace visitor {
  the matrix and
  * an element of F. So if we have:
  *
- * \code
+ * \code{.mod}
  * LINEAR lin {
  *     ~ x = ...
  *     a = a + 1
