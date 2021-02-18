@@ -42,7 +42,7 @@ function build_with() {
              -DNMODL_FORMATTING:BOOL=ON \
              -DClangFormat_EXECUTABLE=$clang_format_exe \
              -DLLVM_DIR=/gpfs/bbp.cscs.ch/apps/hpc/jenkins/merge/deploy/externals/latest/linux-rhel7-x86_64/gcc-9.3.0/llvm-11.0.0-kzl4o5/lib/cmake/llvm
-    make -j
+    make -j2
     popd
 }
 
@@ -74,8 +74,16 @@ function build_gcc() {
     build_with gcc
 }
 
+function build_intel() {
+    build_with intel
+}
+
 function test_gcc() {
     test_with gcc
+}
+
+function test_intel() {
+    test_with intel
 }
 
 function build_llvm() {
