@@ -44,8 +44,7 @@ macro(find_python_module module)
       execute_process(
         COMMAND "${PYTHON_EXECUTABLE}" "-c" "import ${module}; print(${module}.__version__)"
         RESULT_VARIABLE _${module}_status
-        OUTPUT_VARIABLE _${module}_version
-        ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
+        OUTPUT_VARIABLE _${module}_version ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
 
       set(_${module_upper}_VERSION_MATCH TRUE)
       if(NOT _${module}_status)

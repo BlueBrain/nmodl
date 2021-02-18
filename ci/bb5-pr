@@ -16,7 +16,7 @@ function setup_virtualenv() {
     virtualenv venv
     . venv/bin/activate
     pip3 install "breathe<=4.12.0"
-    pip3 install "cmake-format==0.6.0"
+    pip3 install "cmake-format==0.6.10"
 }
 
 function find_clang_format() {

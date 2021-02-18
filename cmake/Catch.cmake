@@ -116,7 +116,8 @@ function(catch_discover_tests TARGET)
     TARGET ${TARGET}
     PROPERTY CROSSCOMPILING_EMULATOR)
   add_custom_command(
-    TARGET ${TARGET} POST_BUILD
+    TARGET ${TARGET}
+    POST_BUILD
     BYPRODUCTS "${ctest_tests_file}"
     COMMAND
       "${CMAKE_COMMAND}" -D "TEST_TARGET=${TARGET}" -D "TEST_EXECUTABLE=$<TARGET_FILE:${TARGET}>" -D
@@ -143,8 +144,7 @@ function(catch_discover_tests TARGET)
     get_property(
       test_include_file_set
       DIRECTORY
-      PROPERTY TEST_INCLUDE_FILE
-      SET)
+      PROPERTY TEST_INCLUDE_FILE SET)
     if(NOT ${test_include_file_set})
       set_property(DIRECTORY PROPERTY TEST_INCLUDE_FILE "${ctest_include_file}")
     else()
