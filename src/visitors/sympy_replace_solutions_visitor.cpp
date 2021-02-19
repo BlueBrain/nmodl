@@ -30,7 +30,7 @@ using namespace fmt::literals;
 void SympyReplaceSolutionsVisitor::InterleavesCounter::new_equation(const bool is_in_system) {
     n_interleaves += (!in_system && is_in_system);  // count an interleave only if in_system ==
                                                     // false and is_in_system == true
-    in_system = is_in_system;  // update in_system
+    in_system = is_in_system;                       // update in_system
 }
 
 SympyReplaceSolutionsVisitor::SympyReplaceSolutionsVisitor(
