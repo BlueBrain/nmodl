@@ -86,5 +86,5 @@ function test_llvm() {
     test_with llvm
 }
 
-action=`echo "$CI_BUILD_NAME" | tr ' ' _`
+action=$(echo "$CI_BUILD_NAME" | tr ' ' _)
 $action
