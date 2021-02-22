@@ -533,8 +533,9 @@ void SympySolverVisitor::visit_derivative_block(ast::DerivativeBlock& node) {
             } else {
                 // no CONSERVE equation, construct Euler equation
                 auto dxdt = stringutils::trim(split_eq[1]);
-                auto old_x = "old_" + x + x_array_index_i;  // TODO: do this properly,
-                // check name is unique
+
+
+                const auto old_x = suffix_random_string(vars, "old_" + x + x_array_index_i);
                 // declare old_x
                 logger->debug("SympySolverVisitor :: -> declaring new local variable: {}", old_x);
                 add_local_variable(*block_with_expression_statements, old_x);
