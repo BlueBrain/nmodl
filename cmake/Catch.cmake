@@ -144,7 +144,8 @@ function(catch_discover_tests TARGET)
     get_property(
       test_include_file_set
       DIRECTORY
-      PROPERTY TEST_INCLUDE_FILE SET)
+      PROPERTY TEST_INCLUDE_FILE
+      SET)
     if(NOT ${test_include_file_set})
       set_property(DIRECTORY PROPERTY TEST_INCLUDE_FILE "${ctest_include_file}")
     else()
