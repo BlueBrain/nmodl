@@ -88,7 +88,7 @@ SCENARIO("Check fast_math") {
             REQUIRE(test);
         }
     }
-    GIVEN("exprelr (double)") {
+    GIVEN("exprelr (float)") {
         auto test = check_over_span(exprelr_ref, exprelr, low_limit_f, high_limit_f, npoints);
 
         THEN("error inside threshold") {
