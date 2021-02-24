@@ -62,37 +62,43 @@ function make_target() {
     make $target
 }
 
-function cmake_format() {
-    make_target gcc check-cmake-format
+function bb5_pr_cmake_format() {
+    make_target intel check-cmake-format
 }
 
-function clang_format() {
-    make_target gcc check-clang-format
+function bb5_pr_clang_format() {
+    make_target intel check-clang-format
 }
 
-function build_gcc() {
+function bb5_pr_build_gcc() {
     build_with gcc
 }
 
-function build_intel() {
+function bb5_pr_build_intel() {
     build_with intel
 }
 
-function test_gcc() {
+function bb5_pr_test_gcc() {
     test_with gcc
 }
 
-function test_intel() {
+function bb5_pr_test_intel() {
     test_with intel
 }
 
-function build_llvm() {
+function bb5_pr_build_llvm() {
     build_with llvm
 }
 
-function test_llvm() {
+function bb5_pr_test_llvm() {
     test_with llvm
 }
 
 action=$(echo "$CI_BUILD_NAME" | tr ' ' _)
-$action
+if [ -z "$action" ] ; then
+    for action in "$@" ; do
+        "bb5_pr_$action"
+    done
+else
+    "bb5_pr_$action"
+fi
