@@ -2,9 +2,7 @@ cache: &global_cache
   key: ${CI_COMMIT_REF_SLUG}
   paths:
   - venv/
-  - build_gcc/
   - build_intel/
-  - build_llvm/
 
 setup virtualenv:
   stage: .pre
