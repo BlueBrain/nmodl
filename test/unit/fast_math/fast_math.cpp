@@ -13,12 +13,12 @@
 #include <catch/catch.hpp>
 
 
-template <class T, class = typename std::enable_if<
-    std::is_floating_point<T>::value>::type>
-bool check_over_span(T f_ref(T), T f_test(T),
-    const T low_limit, const T high_limit,
-    const size_t npoints) {
-
+template <class T, class = typename std::enable_if<std::is_floating_point<T>::value>::type>
+bool check_over_span(T f_ref(T),
+                     T f_test(T),
+                     const T low_limit,
+                     const T high_limit,
+                     const size_t npoints) {
     constexpr uint nULP = 4;
     constexpr T eps = std::numeric_limits<T>::epsilon();
 
@@ -39,19 +39,19 @@ bool check_over_span(T f_ref(T), T f_test(T),
     return ret;
 }
 
-template <class T, class = typename std::enable_if<
-    std::is_floating_point<T>::value>::type>
-T exprelr_ref(const T x) { return (1.0 + x == 1.0) ? 1.0 : x / (std::exp(x) - 1.0); };
+template <class T, class = typename std::enable_if<std::is_floating_point<T>::value>::type>
+T exprelr_ref(const T x) {
+    return (1.0 + x == 1.0) ? 1.0 : x / (std::exp(x) - 1.0);
+};
 
 SCENARIO("Check fast_math") {
-    constexpr double low_limit = -700.0; // limit is 708
+    constexpr double low_limit = -700.0;  // limit is 708
     constexpr double high_limit = 700.0;
-    constexpr float low_limit_f = -70.0; // limit is 88
+    constexpr float low_limit_f = -70.0;  // limit is 88
     constexpr float high_limit_f = 70.0;
     constexpr size_t npoints = 2000;
 
     GIVEN("vexp (double)") {
-
         auto test = check_over_span(std::exp, vexp, low_limit, high_limit, npoints);
 
         THEN("error inside threshold") {
@@ -66,16 +66,14 @@ SCENARIO("Check fast_math") {
         }
     }
     GIVEN("expm1 (double)") {
-        auto test =
-            check_over_span(std::expm1, vexpm1, low_limit, high_limit, npoints);
+        auto test = check_over_span(std::expm1, vexpm1, low_limit, high_limit, npoints);
 
         THEN("error inside threshold") {
             REQUIRE(test);
         }
     }
     GIVEN("expm1 (float)") {
-        auto test =
-            check_over_span(std::expm1, vexpm1, low_limit_f, high_limit_f, npoints);
+        auto test = check_over_span(std::expm1, vexpm1, low_limit_f, high_limit_f, npoints);
 
         THEN("error inside threshold") {
             REQUIRE(test);
