@@ -9,6 +9,8 @@ module use /gpfs/bbp.cscs.ch/apps/tools/modules/tcl/linux-rhel7-x86_64/
 
 module load archive/2020-10 cmake bison flex python-dev doxygen
 module list
+pwd
+ls -R
 
 function bb5_pr_setup_virtualenv() {
     # latest version of breathe from 21st April has issue with 4.13.0, see https://github.com/michaeljones/breathe/issues/431
