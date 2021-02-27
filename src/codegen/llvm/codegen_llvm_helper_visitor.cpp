@@ -543,6 +543,8 @@ void CodegenLLVMHelperVisitor::visit_program(ast::Program& node) {
 
     auto llvm_instance_struct = create_instance_struct();
     node.emplace_back_node(llvm_instance_struct);
+
+    std::cout << nmodl::to_nmodl(node);
 }
 
 
