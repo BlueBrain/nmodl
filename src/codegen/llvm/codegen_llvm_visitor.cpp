@@ -6,7 +6,6 @@
  *************************************************************************/
 
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
-#include "codegen/llvm/codegen_llvm_helper_visitor.hpp"
 
 #include "ast/all.hpp"
 #include "visitors/rename_visitor.hpp"
@@ -79,6 +78,8 @@ llvm::Type* CodegenLLVMVisitor::get_codegen_var_type(const ast::CodegenVarType& 
         return llvm::Type::getInt32Ty(*context);
     case ast::AstNodeType::VOID:
         return llvm::Type::getVoidTy(*context);
+    // TODO :: George/Ioannis : Here we have to also return INSTANCE_STRUCT type
+    //         as it is used as an argument to nrn_state function
     default:
         throw std::runtime_error("Error: expecting a type in CodegenVarType node\n");
     }
@@ -556,8 +557,13 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
     //   - convert function and procedure blocks into CodegenFunctions
     //   - gather information about AST. For now, information about functions
     //     and procedures is used only.
-    CodegenLLVMHelperVisitor v;
+    CodegenLLVMHelperVisitor v{vector_width};
     const auto& functions = v.get_codegen_functions(node);
+    instance_var_helper = v.get_instance_var_helper();
+
+    // TODO :: George / Ioannis :: before emitting procedures, we have
+    //         to emmit INSTANCE_STRUCT type as it's used as an argument.
+    //         Currently it's done in node.visit_children which is late.
 
     // For every function, generate its declaration. Thus, we can look up
     // `llvm::Function` in the symbol table in the module.
@@ -603,6 +609,16 @@ void CodegenLLVMVisitor::visit_var_name(const ast::VarName& node) {
     if (!identifier->is_name() && !identifier->is_indexed_name())
         throw std::runtime_error("Error: Unsupported variable type");
 
+    // TODO :: George :: here instance_var_helper can be used to query
+    // variable type and it's index into structure
+    auto name = node.get_node_name();
+
+    auto codegen_var_with_type = instance_var_helper.get_variable(name);
+    auto codegen_var_index = instance_var_helper.get_variable_index(name);
+    // this will be INTEGER or DOUBLE
+    auto var_type = codegen_var_with_type->get_type()->get_type();
+    auto is_pointer = codegen_var_with_type->get_is_pointer();
+
     llvm::Value* ptr;
     if (identifier->is_name())
         ptr = lookup(node.get_node_name());
@@ -620,7 +636,24 @@ void CodegenLLVMVisitor::visit_var_name(const ast::VarName& node) {
 void CodegenLLVMVisitor::visit_instance_struct(const ast::InstanceStruct& node) {
     std::vector<llvm::Type*> members;
     for (const auto& variable: node.get_codegen_vars()) {
-        members.push_back(get_default_fp_ptr_type());
+        // TODO :: Ioannis / George :: we have now double*, int*, double and int
+        //         variables in the instance structure. Each variable is of type
+        //         ast::CodegenVarWithType. So we can query variable type and if
+        //         it's pointer.
+        auto is_pointer = variable->get_is_pointer();
+        auto type = variable->get_type()->get_type();
+
+        // todo : clean up ?
+        if (type == ast::AstNodeType::DOUBLE) {
+            auto llvm_type = is_pointer ? get_default_fp_ptr_type() : get_default_fp_type();
+            members.push_back(llvm_type);
+        } else {
+            if (is_pointer) {
+                members.push_back(llvm::Type::getInt32PtrTy(*context));
+            } else {
+                members.push_back(llvm::Type::getInt32Ty(*context));
+            }
+        }
     }
 
     llvm_struct = llvm::StructType::create(*context, mod_filename + "_Instance");

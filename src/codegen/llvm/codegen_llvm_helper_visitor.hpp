@@ -14,6 +14,7 @@
 
 #include <string>
 
+#include "ast/instance_struct.hpp"
 #include "codegen/codegen_info.hpp"
 #include "symtab/symbol_table.hpp"
 #include "visitors/ast_visitor.hpp"
@@ -21,13 +22,64 @@
 namespace nmodl {
 namespace codegen {
 
-
+using namespace fmt::literals;
 typedef std::vector<std::shared_ptr<ast::CodegenFunction>> CodegenFunctionVector;
 
 /**
  * @addtogroup llvm_codegen_details
  * @{
  */
+
+/**
+ * \class InstanceVarHelper
+ * \brief Helper to query instance variables information
+ *
+ * For LLVM IR generation we need to know the variable, it's type and
+ * location in the instance structure. This helper provides convenient
+ * functions to query this information.
+ */
+struct InstanceVarHelper {
+    /// pointer to instance node in the AST
+    std::shared_ptr<ast::InstanceStruct> instance;
+
+    /// find variable with given name and return the iterator
+    ast::CodegenVarWithTypeVector::const_iterator find_variable(
+        const ast::CodegenVarWithTypeVector& vars,
+        const std::string& name) {
+        return find_if(vars.begin(),
+                       vars.end(),
+                       [&](const std::shared_ptr<ast::CodegenVarWithType>& v) {
+                           return v->get_node_name() == name;
+                       });
+    }
+
+    /// check if given variable is instance variable
+    bool is_an_instance_variable(const std::string& name) {
+        const auto& vars = instance->get_codegen_vars();
+        return find_variable(vars, name) != vars.end();
+    }
+
+    /// return codegen variable with a given name
+    const std::shared_ptr<ast::CodegenVarWithType>& get_variable(const std::string& name) {
+        const auto& vars = instance->get_codegen_vars();
+        auto it = find_variable(vars, name);
+        if (it == vars.end()) {
+            throw std::runtime_error("Can not find variable with name {}"_format(name));
+        }
+        return *it;
+    }
+
+    /// return position of the variable in the instance structure
+    int get_variable_index(const std::string& name) {
+        const auto& vars = instance->get_codegen_vars();
+        auto it = find_variable(vars, name);
+        if (it == vars.end()) {
+            throw std::runtime_error("Can not find codegen variable with name {}"_format(name));
+        }
+        return (it - vars.begin());
+    }
+};
+
 
 /**
  * \class CodegenLLVMHelperVisitor
@@ -48,15 +100,25 @@ typedef std::vector<std::shared_ptr<ast::CodegenFunction>> CodegenFunctionVector
  * these will be common across all backends.
  */
 class CodegenLLVMHelperVisitor: public visitor::AstVisitor {
+    // explicit vectorisation width
+    int vector_width;
+
     /// newly generated code generation specific functions
     CodegenFunctionVector codegen_functions;
 
     /// ast information for code generation
     codegen::CodegenInfo info;
 
+    /// mechanism data helper
+    InstanceVarHelper instance_var_helper;
+
     /// default integer and float node type
     const ast::AstNodeType INTEGER_TYPE = ast::AstNodeType::INTEGER;
     const ast::AstNodeType FLOAT_TYPE = ast::AstNodeType::DOUBLE;
+
+    /// name of the mechanism instance parameter
+    const std::string MECH_INSTANCE_VAR = "mech";
+    const std::string MECH_NODECOUNT_VAR = "node_count";
 
     /// create new function for FUNCTION or PROCEDURE block
     void create_function_for_node(ast::Block& node);
@@ -65,7 +127,12 @@ class CodegenLLVMHelperVisitor: public visitor::AstVisitor {
     std::shared_ptr<ast::InstanceStruct> create_instance_struct();
 
   public:
-    CodegenLLVMHelperVisitor() = default;
+    CodegenLLVMHelperVisitor(int vector_width)
+        : vector_width(vector_width){};
+
+    const InstanceVarHelper& get_instance_var_helper() {
+        return instance_var_helper;
+    }
 
     /// run visitor and return code generation functions
     CodegenFunctionVector get_codegen_functions(const ast::Program& node);
