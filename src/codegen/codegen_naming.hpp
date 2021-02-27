@@ -80,6 +80,9 @@ static constexpr char VOLTAGE_UNUSED_VARIABLE[] = "v_unused";
 /// variable t indicating last execution time of net receive block
 static constexpr char T_SAVE_VARIABLE[] = "tsave";
 
+/// global variable second_order
+static constexpr char SECOND_ORDER_VARIABLE[] = "secondorder";
+
 /// shadow rhs variable in neuron thread structure
 static constexpr char NTHREAD_RHS_SHADOW[] = "_shadow_rhs";
 

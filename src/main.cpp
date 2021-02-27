@@ -174,6 +174,9 @@ int main(int argc, const char* argv[]) {
 
     /// run llvm optimisation passes
     bool llvm_opt_passes(false);
+
+    /// llvm vector width;
+    int llvm_vec_width = 1;
 #endif
 
     // NOLINTNEXTLINE(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)
@@ -305,6 +308,9 @@ int main(int argc, const char* argv[]) {
     llvm_opt->add_flag("--single-precision",
                        llvm_float_type,
                        fmt::format("Use single precision floating-point types ({})", llvm_float_type))->ignore_case();
+    llvm_opt->add_option("--vector-width",
+        llvm_vec_width,
+        fmt::format("LLVM explicit vectorisation width ({})", llvm_vec_width))->ignore_case();
 #endif
     // clang-format on
 
@@ -334,16 +340,24 @@ int main(int argc, const char* argv[]) {
         }
     };
 
+    /// write ast to nmodl
+    const auto ast_to_json = [json_ast](ast::Program& ast, const std::string& filepath) {
+        if (json_ast) {
+            JSONVisitor(filepath).write(ast);
+            logger->info("AST to JSON transformation written to {}", filepath);
+        }
+    };
+
     for (const auto& file: mod_files) {
         logger->info("Processing {}", file);
 
         const auto modfile = utils::remove_extension(utils::base_name(file));
 
         /// create file path for nmodl file
-        auto filepath = [scratch_dir, modfile](const std::string& suffix) {
+        auto filepath = [scratch_dir, modfile](const std::string& suffix, const std::string& ext) {
             static int count = 0;
             return fmt::format(
-                "{}/{}.{}.{}.mod", scratch_dir, modfile, std::to_string(count++), suffix);
+                "{}/{}.{}.{}.{}", scratch_dir, modfile, std::to_string(count++), suffix, ext);
         };
 
         /// driver object creates lexer and parser, just call parser method
@@ -377,7 +391,7 @@ int main(int argc, const char* argv[]) {
         {
             logger->info("Running CVode to cnexp visitor");
             AfterCVodeToCnexpVisitor().visit_program(*ast);
-            ast_to_nmodl(*ast, filepath("after_cvode_to_cnexp"));
+            ast_to_nmodl(*ast, filepath("after_cvode_to_cnexp", "mod"));
         }
 
         /// Rename variables that match ISPC compiler double constants
@@ -385,7 +399,7 @@ int main(int argc, const char* argv[]) {
             logger->info("Running ISPC variables rename visitor");
             IspcRenameVisitor(ast).visit_program(*ast);
             SymtabVisitor(update_symtab).visit_program(*ast);
-            ast_to_nmodl(*ast, filepath("ispc_double_rename"));
+            ast_to_nmodl(*ast, filepath("ispc_double_rename", "mod"));
         }
 
         /// GLOBAL to RANGE rename visitor
@@ -398,7 +412,7 @@ int main(int argc, const char* argv[]) {
             logger->info("Running GlobalToRange visitor");
             GlobalToRangeVisitor(*ast).visit_program(*ast);
             SymtabVisitor(update_symtab).visit_program(*ast);
-            ast_to_nmodl(*ast, filepath("global_to_range"));
+            ast_to_nmodl(*ast, filepath("global_to_range", "mod"));
         }
 
         /// LOCAL to ASSIGNED visitor
@@ -407,7 +421,7 @@ int main(int argc, const char* argv[]) {
             PerfVisitor().visit_program(*ast);
             LocalToAssignedVisitor().visit_program(*ast);
             SymtabVisitor(update_symtab).visit_program(*ast);
-            ast_to_nmodl(*ast, filepath("local_to_assigned"));
+            ast_to_nmodl(*ast, filepath("local_to_assigned", "mod"));
         }
 
         {
@@ -433,34 +447,26 @@ int main(int argc, const char* argv[]) {
             symtab->print(std::cout);
         }
 
-        ast_to_nmodl(*ast, filepath("ast"));
-
-        if (json_ast) {
-            std::string file{scratch_dir};
-            file += "/";
-            file += modfile;
-            file += ".ast.json";
-            logger->info("Writing AST into {}", file);
-            JSONVisitor(file).write(*ast);
-        }
+        ast_to_nmodl(*ast, filepath("ast", "mod"));
+        ast_to_json(*ast, filepath("ast", "json"));
 
         if (verbatim_rename) {
             logger->info("Running verbatim rename visitor");
             VerbatimVarRenameVisitor().visit_program(*ast);
-            ast_to_nmodl(*ast, filepath("verbatim_rename"));
+            ast_to_nmodl(*ast, filepath("verbatim_rename", "mod"));
         }
 
         if (nmodl_const_folding) {
             logger->info("Running nmodl constant folding visitor");
             ConstantFolderVisitor().visit_program(*ast);
-            ast_to_nmodl(*ast, filepath("constfold"));
+            ast_to_nmodl(*ast, filepath("constfold", "mod"));
         }
 
         if (nmodl_unroll) {
             logger->info("Running nmodl loop unroll visitor");
             LoopUnrollVisitor().visit_program(*ast);
             ConstantFolderVisitor().visit_program(*ast);
-            ast_to_nmodl(*ast, filepath("unroll"));
+            ast_to_nmodl(*ast, filepath("unroll", "mod"));
             SymtabVisitor(update_symtab).visit_program(*ast);
         }
 
@@ -472,7 +478,7 @@ int main(int argc, const char* argv[]) {
             auto kineticBlockVisitor = KineticBlockVisitor();
             kineticBlockVisitor.visit_program(*ast);
             SymtabVisitor(update_symtab).visit_program(*ast);
-            const auto filename = filepath("kinetic");
+            const auto filename = filepath("kinetic", "mod");
             ast_to_nmodl(*ast, filename);
             if (nmodl_ast && kineticBlockVisitor.get_conserve_statement_count()) {
                 logger->warn(
@@ -486,7 +492,7 @@ int main(int argc, const char* argv[]) {
             logger->info("Running STEADYSTATE visitor");
             SteadystateVisitor().visit_program(*ast);
             SymtabVisitor(update_symtab).visit_program(*ast);
-            ast_to_nmodl(*ast, filepath("steadystate"));
+            ast_to_nmodl(*ast, filepath("steadystate", "mod"));
         }
 
         /// Parsing units fron "nrnunits.lib" and mod files
@@ -503,14 +509,14 @@ int main(int argc, const char* argv[]) {
         if (nmodl_inline) {
             logger->info("Running nmodl inline visitor");
             InlineVisitor().visit_program(*ast);
-            ast_to_nmodl(*ast, filepath("inline"));
+            ast_to_nmodl(*ast, filepath("inline", "mod"));
         }
 
         if (local_rename) {
             logger->info("Running local variable rename visitor");
             LocalVarRenameVisitor().visit_program(*ast);
             SymtabVisitor(update_symtab).visit_program(*ast);
-            ast_to_nmodl(*ast, filepath("local_rename"));
+            ast_to_nmodl(*ast, filepath("local_rename", "mod"));
         }
 
         if (nmodl_localize) {
@@ -519,14 +525,14 @@ int main(int argc, const char* argv[]) {
             LocalizeVisitor(localize_verbatim).visit_program(*ast);
             LocalVarRenameVisitor().visit_program(*ast);
             SymtabVisitor(update_symtab).visit_program(*ast);
-            ast_to_nmodl(*ast, filepath("localize"));
+            ast_to_nmodl(*ast, filepath("localize", "mod"));
         }
 
         if (sympy_conductance) {
             logger->info("Running sympy conductance visitor");
             SympyConductanceVisitor().visit_program(*ast);
             SymtabVisitor(update_symtab).visit_program(*ast);
-            ast_to_nmodl(*ast, filepath("sympy_conductance"));
+            ast_to_nmodl(*ast, filepath("sympy_conductance", "mod"));
         }
 
         if (sympy_analytic || sparse_solver_exists(*ast)) {
@@ -537,19 +543,19 @@ int main(int argc, const char* argv[]) {
             logger->info("Running sympy solve visitor");
             SympySolverVisitor(sympy_pade, sympy_cse).visit_program(*ast);
             SymtabVisitor(update_symtab).visit_program(*ast);
-            ast_to_nmodl(*ast, filepath("sympy_solve"));
+            ast_to_nmodl(*ast, filepath("sympy_solve", "mod"));
         }
 
         {
             logger->info("Running cnexp visitor");
             NeuronSolveVisitor().visit_program(*ast);
-            ast_to_nmodl(*ast, filepath("cnexp"));
+            ast_to_nmodl(*ast, filepath("cnexp", "mod"));
         }
 
         {
             SolveBlockVisitor().visit_program(*ast);
             SymtabVisitor(update_symtab).visit_program(*ast);
-            ast_to_nmodl(*ast, filepath("solveblock"));
+            ast_to_nmodl(*ast, filepath("solveblock", "mod"));
         }
 
         if (json_perfstat) {
@@ -618,9 +624,11 @@ int main(int argc, const char* argv[]) {
 #ifdef NMODL_LLVM_BACKEND
             if (llvm_ir) {
                 logger->info("Running LLVM backend code generator");
-                CodegenLLVMVisitor visitor(modfile, output_dir, llvm_opt_passes, llvm_float_type);
+                CodegenLLVMVisitor visitor(
+                    modfile, output_dir, llvm_opt_passes, llvm_vec_width, llvm_float_type);
                 visitor.visit_program(*ast);
-                ast_to_nmodl(*ast, filepath("llvm"));
+                ast_to_nmodl(*ast, filepath("llvm", "mod"));
+                ast_to_json(*ast, filepath("llvm", "json"));
             }
 #endif
         }
