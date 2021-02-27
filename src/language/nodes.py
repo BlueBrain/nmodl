@@ -156,6 +156,10 @@ class BaseNode:
         return self.class_name == node_info.CODEGEN_VAR_TYPE_NODE
 
     @property
+    def is_codegen_var_with_type_node(self):
+        return self.class_name == node_info.CODEGEN_VAR_WITH_TYPE_NODE
+
+    @property
     def is_enum_node(self):
         data_type = node_info.DATA_TYPES[self.class_name]
         return data_type in node_info.ENUM_BASE_TYPES
