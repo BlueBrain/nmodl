@@ -49,17 +49,30 @@
                                   brief: "Name of the variable"
                                   type: Identifier
                                   node_name: true
-                        - CodegenArgument:
-                            brief: "Represent argument to a function"
+                        - CodegenVarWithType:
+                            brief: "Represent variable used for code generation"
                             members:
                               - type:
-                                  brief: "Type of the argument"
+                                  brief: "Type of the variable"
                                   type: CodegenVarType
                                   suffix: {value: " "}
+                              - is_pointer:
+                                  brief: "If variable is pointer type"
+                                  type: int
                               - name:
-                                  brief: "Name of the argument"
+                                  brief: "Name of the variable"
                                   type: Identifier
                                   node_name: true
+                        - CodegenInstanceVar:
+                            brief: "Represent instance variable"
+                            members:
+                              - instance_var:
+                                  brief: "Instance variable"
+                                  type: Name
+                                  suffix: {value: "->"}
+                              - member_var:
+                                  brief: "Member variable within instance"
+                                  type: Identifier
                   - Block:
                       children:
                         - NrnStateBlock:
@@ -134,7 +147,7 @@
                                   node_name: true
                               - arguments:
                                   brief: "Vector of the parameters to the function"
-                                  type: CodegenArgument
+                                  type: CodegenVarWithType
                                   vector: true
                                   prefix: {value: "(", force: true}
                                   suffix: {value: ")", force: true}
@@ -148,7 +161,7 @@
                             members:
                               - codegen_vars:
                                   brief: "Vector of CodegenVars"
-                                  type: CodegenVar
+                                  type: CodegenVarWithType
                                   vector: true
                                   add: true
                                   separator: "\\n    "

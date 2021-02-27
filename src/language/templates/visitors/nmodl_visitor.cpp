@@ -115,7 +115,12 @@ void NmodlPrintVisitor::visit_{{ node.class_name|snake_case}}(const {{ node.clas
     {% endif %}
     {% for child in node.children %}
         {% call guard(child.force_prefix, child.force_suffix) -%}
-        {% if child.is_base_type_node %}
+
+        {% if node.is_codegen_var_with_type_node and child.varname == "is_pointer" %}
+             if(node.get_{{ child.varname }}()) {
+                printer->add_element("*");
+             }
+        {% elif child.is_base_type_node %}
             {% if child.is_ast_nodetype_node %}
                printer->add_element(ast::to_string(node.get_{{child.varname}}()));
             {% endif %}
