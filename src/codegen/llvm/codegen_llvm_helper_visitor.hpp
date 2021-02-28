@@ -130,6 +130,10 @@ class CodegenLLVMHelperVisitor: public visitor::AstVisitor {
     CodegenLLVMHelperVisitor(int vector_width)
         : vector_width(vector_width){};
 
+    const InstanceVarHelper& get_instance_var_helper() {
+        return instance_var_helper;
+    }
+
     /// run visitor and return code generation functions
     CodegenFunctionVector get_codegen_functions(const ast::Program& node);
 
