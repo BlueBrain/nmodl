@@ -557,6 +557,11 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
     /// \todo : currently there are no arguments
     ast::CodegenVarWithTypeVector code_arguments;
 
+    auto instance_var_type = new ast::CodegenVarType(ast::AstNodeType::INSTANCE_STRUCT);
+    auto instance_var_name = new ast::Name(new ast::String("mech"));
+    auto instance_var = new ast::CodegenVarWithType(instance_var_type, 1, instance_var_name);
+    code_arguments.emplace_back(instance_var);
+
     /// finally, create new function
     auto function =
         std::make_shared<ast::CodegenFunction>(return_type, name, code_arguments, function_block);
