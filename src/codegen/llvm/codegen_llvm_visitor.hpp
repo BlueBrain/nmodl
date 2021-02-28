@@ -18,6 +18,7 @@
 #include <ostream>
 #include <string>
 
+#include "codegen/llvm/codegen_llvm_helper_visitor.hpp"
 #include "symtab/symbol_table.hpp"
 #include "utils/logger.hpp"
 #include "visitors/ast_visitor.hpp"
@@ -56,6 +57,9 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     std::string output_dir;
 
   private:
+
+    InstanceVarHelper instance_var_helper;
+
     std::unique_ptr<llvm::LLVMContext> context = std::make_unique<llvm::LLVMContext>();
 
     std::unique_ptr<llvm::Module> module = std::make_unique<llvm::Module>(mod_filename, *context);
@@ -264,6 +268,7 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     void visit_program(const ast::Program& node) override;
     void visit_unary_expression(const ast::UnaryExpression& node) override;
     void visit_var_name(const ast::VarName& node) override;
+    void visit_codegen_instance_var(const ast::CodegenInstanceVar& node) override;
     void visit_instance_struct(const ast::InstanceStruct& node) override;
     void visit_while_statement(const ast::WhileStatement& node) override;
 
