@@ -569,7 +569,7 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
     sym_tab = node.get_symbol_table();
 
     // Proceed with code generation.
-    //  node.visit_children(*this);
+    node.visit_children(*this);
 
     if (opt_passes) {
         logger->info("Running LLVM optimisation passes");

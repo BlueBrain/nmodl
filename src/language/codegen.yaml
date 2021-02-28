@@ -157,7 +157,7 @@
                                   type: StatementBlock
                                   getter: {override: true}
                         - InstanceStruct:
-                            nmodl: "MechInstance "
+                            nmodl: "INSTANCE_STRUCT "
                             members:
                               - codegen_vars:
                                   brief: "Vector of CodegenVars"
