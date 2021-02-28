@@ -74,6 +74,7 @@ set(AST_GENERATED_SOURCES
     ${PROJECT_BINARY_DIR}/src/ast/codegen_var.hpp
     ${PROJECT_BINARY_DIR}/src/ast/codegen_var_list_statement.hpp
     ${PROJECT_BINARY_DIR}/src/ast/codegen_var_type.hpp
+    ${PROJECT_BINARY_DIR}/src/ast/codegen_var_with_type.hpp
     ${PROJECT_BINARY_DIR}/src/ast/compartment.hpp
     ${PROJECT_BINARY_DIR}/src/ast/conductance_hint.hpp
     ${PROJECT_BINARY_DIR}/src/ast/conserve.hpp
