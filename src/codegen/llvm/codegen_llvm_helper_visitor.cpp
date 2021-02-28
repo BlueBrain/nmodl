@@ -141,12 +141,12 @@ void CodegenLLVMHelperVisitor::create_function_for_node(ast::Block& node) {
     block->emplace_back_statement(return_statement);
 
     /// prepare function arguments based original node arguments
-    ast::CodegenArgumentVector arguments;
+    ast::CodegenVarWithTypeVector arguments;
     for (const auto& param: node.get_parameters()) {
         /// create new type and name for creating new ast node
         auto type = new ast::CodegenVarType(FLOAT_TYPE);
         auto var = param->get_name()->clone();
-        arguments.emplace_back(new ast::CodegenArgument(type, var));
+        arguments.emplace_back(new ast::CodegenVarWithType(type, 0, var));
     }
 
     /// return type of the function is same as return variable type
@@ -161,41 +161,40 @@ void CodegenLLVMHelperVisitor::create_function_for_node(ast::Block& node) {
 std::shared_ptr<ast::InstanceStruct> CodegenLLVMHelperVisitor::create_instance_struct() {
     ast::CodegenVarWithTypeVector codegen_vars;
 
-    auto add_var_with_type = [&](const std::string& name, const ast::AstNodeType type, int is_pointer, size_t index) {
-        auto var_name = new ast::Name(new ast::String(name));
-        auto var_type = new ast::CodegenVarType(type);
-        auto var_index = new ast::Integer(index, nullptr);
-        auto codegen_var = new ast::CodegenVarWithType(var_type, is_pointer, var_name, var_index);
-        codegen_vars.emplace_back(codegen_var);
-    };
-
-    // the order or index in the structure
-    size_t index = 0;
+    auto add_var_with_type =
+        [&](const std::string& name, const ast::AstNodeType type, int is_pointer) {
+            auto var_name = new ast::Name(new ast::String(name));
+            auto var_type = new ast::CodegenVarType(type);
+            auto codegen_var = new ast::CodegenVarWithType(var_type, is_pointer, var_name);
+            codegen_vars.emplace_back(codegen_var);
+        };
 
     /// float variables are standard pointers to float vectors
     for (auto& float_var: info.codegen_float_variables) {
-        add_var_with_type( float_var->get_name(), FLOAT_TYPE, 1, index++);
+        add_var_with_type(float_var->get_name(), FLOAT_TYPE, 1);
     }
 
     /// int variables are pointers to indexes for other vectors
     for (auto& int_var: info.codegen_int_variables) {
-        add_var_with_type(int_var.symbol->get_name(), FLOAT_TYPE, 1, index++);
+        add_var_with_type(int_var.symbol->get_name(), FLOAT_TYPE, 1);
     }
 
     // for integer variables, there should be index
     for (auto& int_var: info.codegen_int_variables) {
         std::string var_name = int_var.symbol->get_name() + "_index";
-        add_var_with_type(var_name, INTEGER_TYPE, 1, index++);
+        add_var_with_type(var_name, INTEGER_TYPE, 1);
     }
 
-    // add voltage
-    add_var_with_type("voltage", FLOAT_TYPE, 1, index++);
+    // add voltage and node index
+    add_var_with_type("voltage", FLOAT_TYPE, 1);
+    add_var_with_type("node_index", INTEGER_TYPE, 1);
 
     // add dt, t, celsius
-    add_var_with_type(naming::NTHREAD_T_VARIABLE, FLOAT_TYPE, 0, index++);
-    add_var_with_type(naming::NTHREAD_DT_VARIABLE, FLOAT_TYPE, 0, index++);
-    add_var_with_type(naming::CELSIUS_VARIABLE, FLOAT_TYPE, 0, index++);
-    add_var_with_type(naming::SECOND_ORDER_VARIABLE, INTEGER_TYPE, 0, index++);
+    add_var_with_type(naming::NTHREAD_T_VARIABLE, FLOAT_TYPE, 0);
+    add_var_with_type(naming::NTHREAD_DT_VARIABLE, FLOAT_TYPE, 0);
+    add_var_with_type(naming::CELSIUS_VARIABLE, FLOAT_TYPE, 0);
+    add_var_with_type(naming::SECOND_ORDER_VARIABLE, INTEGER_TYPE, 0);
+    add_var_with_type(MECH_NODECOUNT_VAR, INTEGER_TYPE, 0);
 
     return std::make_shared<ast::InstanceStruct>(codegen_vars);
 }
@@ -387,12 +386,23 @@ void CodegenLLVMHelperVisitor::convert_to_instance_variable(ast::Node& node,
     auto variables = collect_nodes(node, {ast::AstNodeType::VAR_NAME});
     for (auto& v: variables) {
         auto variable = std::dynamic_pointer_cast<ast::VarName>(v);
-        /// if variable is of type instance then convert it to index
-        if (info.is_an_instance_variable(variable->get_node_name())) {
+        auto variable_name = variable->get_node_name();
+
+        /// all instance variables defined in the mod file should be converted to
+        /// indexed variables based on the loop iteration variable
+        if (info.is_an_instance_variable(variable_name)) {
             auto name = variable->get_name()->clone();
             auto index = new ast::Name(new ast::String(index_var));
             auto indexed_name = std::make_shared<ast::IndexedName>(name, index);
             variable->set_name(indexed_name);
+        }
+
+        /// instance_var_helper check of instance variables from mod file as well
+        /// as extra variables like ion index variables added for code generation
+        if (instance_var_helper.is_an_instance_variable(variable_name)) {
+            auto name = new ast::Name(new ast::String(MECH_INSTANCE_VAR));
+            auto var = std::make_shared<ast::CodegenInstanceVar>(name, variable->clone());
+            variable->set_name(var);
         }
     }
 }
@@ -463,7 +473,7 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
     /// loop constructs : initialization, condition and increment
     const auto& initialization = create_statement_as_expression("id = 0");
     const auto& condition = create_expression("id < node_count");
-    const auto& increment = create_statement_as_expression("id = id + 1");
+    const auto& increment = create_statement_as_expression("id = id + {}"_format(vector_width));
 
     /// loop body : initialization + solve blocks
     ast::StatementVector loop_def_statements;
@@ -521,9 +531,6 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
     /// now construct a new code block which will become the body of the loop
     auto loop_block = std::make_shared<ast::StatementBlock>(loop_body);
 
-    /// convert all variables inside loop body to instance variables
-    convert_to_instance_variable(*loop_block, loop_index_var);
-
     /// convert local statement to codegenvar statement
     convert_local_statement(*loop_block);
 
@@ -532,6 +539,9 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
                                                                          condition,
                                                                          increment,
                                                                          loop_block);
+
+    /// convert all variables inside loop body to instance variables
+    convert_to_instance_variable(*for_loop_statement, loop_index_var);
 
     /// loop itself becomes one of the statement in the function
     function_statements.push_back(for_loop_statement);
@@ -545,7 +555,7 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
     auto return_type = new ast::CodegenVarType(ast::AstNodeType::VOID);
 
     /// \todo : currently there are no arguments
-    ast::CodegenArgumentVector code_arguments;
+    ast::CodegenVarWithTypeVector code_arguments;
 
     /// finally, create new function
     auto function =
@@ -560,14 +570,14 @@ void CodegenLLVMHelperVisitor::visit_program(ast::Program& node) {
     CodegenHelperVisitor v;
     info = v.analyze(node);
 
+    instance_var_helper.instance = create_instance_struct();
+    node.emplace_back_node(instance_var_helper.instance);
+
     logger->info("Running CodegenLLVMHelperVisitor");
     node.visit_children(*this);
     for (auto& fun: codegen_functions) {
         node.emplace_back_node(fun);
     }
-
-    auto llvm_instance_struct = create_instance_struct();
-    node.emplace_back_node(llvm_instance_struct);
 
     std::cout << nmodl::to_nmodl(node);
 }
