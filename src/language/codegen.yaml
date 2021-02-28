@@ -49,6 +49,25 @@
                                   brief: "Name of the variable"
                                   type: Identifier
                                   node_name: true
+                        - CodegenVarWithType:
+                            brief: "Represent variable used for code generation"
+                            members:
+                              - type:
+                                  brief: "Type of the argument"
+                                  type: CodegenVarType
+                                  suffix: {value: " "}
+                              - is_pointer:
+                                  brief: "If variable is pointer type"
+                                  type: int
+                              - name:
+                                  brief: "Name of the variable"
+                                  type: Identifier
+                                  node_name: true
+                              - index:
+                                  brief: "Location in the mechanism structure"
+                                  type: Integer
+                                  prefix: {value: " <"}
+                                  suffix: {value: ">"}
                         - CodegenArgument:
                             brief: "Represent argument to a function"
                             members:
@@ -148,7 +167,7 @@
                             members:
                               - codegen_vars:
                                   brief: "Vector of CodegenVars"
-                                  type: CodegenVar
+                                  type: CodegenVarWithType
                                   vector: true
                                   add: true
                                   separator: "\\n    "

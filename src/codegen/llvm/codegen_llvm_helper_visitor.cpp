@@ -159,19 +159,44 @@ void CodegenLLVMHelperVisitor::create_function_for_node(ast::Block& node) {
 }
 
 std::shared_ptr<ast::InstanceStruct> CodegenLLVMHelperVisitor::create_instance_struct() {
-    ast::CodegenVarVector codegen_vars;
+    ast::CodegenVarWithTypeVector codegen_vars;
+
+    auto add_var_with_type = [&](const std::string& name, const ast::AstNodeType type, int is_pointer, size_t index) {
+        auto var_name = new ast::Name(new ast::String(name));
+        auto var_type = new ast::CodegenVarType(type);
+        auto var_index = new ast::Integer(index, nullptr);
+        auto codegen_var = new ast::CodegenVarWithType(var_type, is_pointer, var_name, var_index);
+        codegen_vars.emplace_back(codegen_var);
+    };
+
+    // the order or index in the structure
+    size_t index = 0;
+
     /// float variables are standard pointers to float vectors
     for (auto& float_var: info.codegen_float_variables) {
-        auto name = new ast::Name(new ast::String(float_var->get_name()));
-        auto codegen_var = new ast::CodegenVar(1, name);
-        codegen_vars.emplace_back(codegen_var);
+        add_var_with_type( float_var->get_name(), FLOAT_TYPE, 1, index++);
     }
+
     /// int variables are pointers to indexes for other vectors
     for (auto& int_var: info.codegen_int_variables) {
-        auto name = new ast::Name(new ast::String(int_var.symbol->get_name()));
-        auto codegen_var = new ast::CodegenVar(1, name);
-        codegen_vars.emplace_back(codegen_var);
+        add_var_with_type(int_var.symbol->get_name(), FLOAT_TYPE, 1, index++);
     }
+
+    // for integer variables, there should be index
+    for (auto& int_var: info.codegen_int_variables) {
+        std::string var_name = int_var.symbol->get_name() + "_index";
+        add_var_with_type(var_name, INTEGER_TYPE, 1, index++);
+    }
+
+    // add voltage
+    add_var_with_type("voltage", FLOAT_TYPE, 1, index++);
+
+    // add dt, t, celsius
+    add_var_with_type(naming::NTHREAD_T_VARIABLE, FLOAT_TYPE, 0, index++);
+    add_var_with_type(naming::NTHREAD_DT_VARIABLE, FLOAT_TYPE, 0, index++);
+    add_var_with_type(naming::CELSIUS_VARIABLE, FLOAT_TYPE, 0, index++);
+    add_var_with_type(naming::SECOND_ORDER_VARIABLE, INTEGER_TYPE, 0, index++);
+
     return std::make_shared<ast::InstanceStruct>(codegen_vars);
 }
 
