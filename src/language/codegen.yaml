@@ -53,7 +53,7 @@
                             brief: "Represent variable used for code generation"
                             members:
                               - type:
-                                  brief: "Type of the argument"
+                                  brief: "Type of the variable"
                                   type: CodegenVarType
                                   suffix: {value: " "}
                               - is_pointer:
@@ -63,22 +63,16 @@
                                   brief: "Name of the variable"
                                   type: Identifier
                                   node_name: true
-                              - index:
-                                  brief: "Location in the mechanism structure"
-                                  type: Integer
-                                  prefix: {value: " <"}
-                                  suffix: {value: ">"}
-                        - CodegenArgument:
-                            brief: "Represent argument to a function"
+                        - CodegenInstanceVar:
+                            brief: "Represent instance variable"
                             members:
-                              - type:
-                                  brief: "Type of the argument"
-                                  type: CodegenVarType
-                                  suffix: {value: " "}
-                              - name:
-                                  brief: "Name of the argument"
+                              - instance_var:
+                                  brief: "Instance variable"
+                                  type: Name
+                                  suffix: {value: "->"}
+                              - member_var:
+                                  brief: "Member variable within instance"
                                   type: Identifier
-                                  node_name: true
                   - Block:
                       children:
                         - NrnStateBlock:
@@ -153,7 +147,7 @@
                                   node_name: true
                               - arguments:
                                   brief: "Vector of the parameters to the function"
-                                  type: CodegenArgument
+                                  type: CodegenVarWithType
                                   vector: true
                                   prefix: {value: "(", force: true}
                                   suffix: {value: ")", force: true}
@@ -163,7 +157,7 @@
                                   type: StatementBlock
                                   getter: {override: true}
                         - InstanceStruct:
-                            nmodl: "INSTANCE_STRUCT "
+                            nmodl: "MechInstance "
                             members:
                               - codegen_vars:
                                   brief: "Vector of CodegenVars"

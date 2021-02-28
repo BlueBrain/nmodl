@@ -556,7 +556,7 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
     //   - convert function and procedure blocks into CodegenFunctions
     //   - gather information about AST. For now, information about functions
     //     and procedures is used only.
-    CodegenLLVMHelperVisitor v;
+    CodegenLLVMHelperVisitor v{vector_width};
     const auto& functions = v.get_codegen_functions(node);
 
     // For every function, generate its declaration. Thus, we can look up
@@ -569,7 +569,7 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
     sym_tab = node.get_symbol_table();
 
     // Proceed with code generation.
-  //  node.visit_children(*this);
+    //  node.visit_children(*this);
 
     if (opt_passes) {
         logger->info("Running LLVM optimisation passes");

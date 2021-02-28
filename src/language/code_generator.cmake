@@ -65,10 +65,10 @@ set(AST_GENERATED_SOURCES
     ${PROJECT_BINARY_DIR}/src/ast/block_comment.hpp
     ${PROJECT_BINARY_DIR}/src/ast/boolean.hpp
     ${PROJECT_BINARY_DIR}/src/ast/breakpoint_block.hpp
-    ${PROJECT_BINARY_DIR}/src/ast/codegen_argument.hpp
     ${PROJECT_BINARY_DIR}/src/ast/codegen_atomic_statement.hpp
     ${PROJECT_BINARY_DIR}/src/ast/codegen_for_statement.hpp
     ${PROJECT_BINARY_DIR}/src/ast/codegen_function.hpp
+    ${PROJECT_BINARY_DIR}/src/ast/codegen_instance_var.hpp
     ${PROJECT_BINARY_DIR}/src/ast/codegen_return_statement.hpp
     ${PROJECT_BINARY_DIR}/src/ast/codegen_struct.hpp
     ${PROJECT_BINARY_DIR}/src/ast/codegen_var.hpp

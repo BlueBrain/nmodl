@@ -79,6 +79,9 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     // Use 32-bit floating-point type if true. Otherwise, use deafult 64-bit.
     bool use_single_precision;
 
+    // explicit vectorisation width
+    int vector_width;
+
     // LLVM mechanism struct
     llvm::StructType* llvm_struct;
 
@@ -100,11 +103,13 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     CodegenLLVMVisitor(const std::string& mod_filename,
                        const std::string& output_dir,
                        bool opt_passes,
+                       int vector_width = 1,
                        bool use_single_precision = false)
         : mod_filename(mod_filename)
         , output_dir(output_dir)
         , opt_passes(opt_passes)
         , use_single_precision(use_single_precision)
+        , vector_width(vector_width)
         , builder(*context)
         , fpm(module.get()) {}
 
