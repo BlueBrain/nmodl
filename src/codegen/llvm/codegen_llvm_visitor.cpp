@@ -21,6 +21,10 @@ namespace nmodl {
 namespace codegen {
 
 
+static constexpr const char instance_struct_name[] = "__instance_var_struct";
+static constexpr const char instance_struct_type_name[] = "__instance_var__type";
+
+
 /****************************************************************************************/
 /*                            Helper routines                                           */
 /****************************************************************************************/
@@ -74,12 +78,12 @@ llvm::Type* CodegenLLVMVisitor::get_codegen_var_type(const ast::CodegenVarType& 
         return llvm::Type::getInt1Ty(*context);
     case ast::AstNodeType::DOUBLE:
         return get_default_fp_type();
+    case ast::AstNodeType::INSTANCE_STRUCT:
+        return get_instance_struct_type(instance_var_helper.instance);
     case ast::AstNodeType::INTEGER:
         return llvm::Type::getInt32Ty(*context);
     case ast::AstNodeType::VOID:
         return llvm::Type::getVoidTy(*context);
-    // TODO :: George/Ioannis : Here we have to also return INSTANCE_STRUCT type
-    //         as it is used as an argument to nrn_state function
     default:
         throw std::runtime_error("Error: expecting a type in CodegenVarType node\n");
     }
@@ -95,6 +99,35 @@ llvm::Type* CodegenLLVMVisitor::get_default_fp_ptr_type() {
     if (use_single_precision)
         return llvm::Type::getFloatPtrTy(*context);
     return llvm::Type::getDoublePtrTy(*context);
+}
+
+llvm::Type* CodegenLLVMVisitor::get_instance_struct_type(std::shared_ptr<ast::InstanceStruct> node) {
+    std::vector<llvm::Type*> members;
+    for (const auto& variable: node->get_codegen_vars()) {
+        auto is_pointer = variable->get_is_pointer();
+        auto nmodl_type = variable->get_type()->get_type();
+
+        llvm::Type* i32_type = llvm::Type::getInt32Ty(*context);
+        llvm::Type* i32ptr_type = llvm::Type::getInt32PtrTy(*context);
+
+        switch (nmodl_type) {
+#define DISPATCH(type, llvm_ptr_type, llvm_type)                       \
+    case type:                                                         \
+        members.push_back(is_pointer ? (llvm_ptr_type) : (llvm_type)); \
+        break;
+
+            DISPATCH(ast::AstNodeType::DOUBLE, get_default_fp_ptr_type(), get_default_fp_type());
+            DISPATCH(ast::AstNodeType::INTEGER, i32ptr_type, i32_type);
+
+#undef DISPATCH
+            default:
+                throw std::runtime_error("Error: unsupported type found in instance struct");
+        }
+    }
+
+    llvm::StructType* llvm_struct_type = llvm::StructType::create(*context, instance_struct_type_name);
+    llvm_struct_type->setBody(members);
+    return llvm::PointerType::get(llvm_struct_type, /*AddressSpace=*/0);
 }
 
 void CodegenLLVMVisitor::run_llvm_opt_passes() {
@@ -631,35 +664,6 @@ void CodegenLLVMVisitor::visit_var_name(const ast::VarName& node) {
     // Finally, load the variable from the pointer value.
     llvm::Value* var = builder.CreateLoad(ptr);
     values.push_back(var);
-}
-
-void CodegenLLVMVisitor::visit_instance_struct(const ast::InstanceStruct& node) {
-    std::vector<llvm::Type*> members;
-    for (const auto& variable: node.get_codegen_vars()) {
-        auto is_pointer = variable->get_is_pointer();
-        auto nmodl_type = variable->get_type()->get_type();
-
-        llvm::Type* i32_type = llvm::Type::getInt32Ty(*context);
-        llvm::Type* i32ptr_type = llvm::Type::getInt32PtrTy(*context);
-
-        switch (nmodl_type) {
-#define DISPATCH(type, llvm_ptr_type, llvm_type)                     \
-    case type:                                                       \
-        members.push_back(is_pointer ? (llvm_ptr_type) : llvm_type); \
-        break;
-
-            DISPATCH(ast::AstNodeType::DOUBLE, get_default_fp_ptr_type(), get_default_fp_type());
-            DISPATCH(ast::AstNodeType::INTEGER, i32ptr_type, i32_type);
-
-#undef DISPATCH
-        default:
-            throw std::runtime_error("Error: unsupported type found in instance struct");
-        }
-    }
-
-    llvm_struct = llvm::StructType::create(*context, mod_filename + "_Instance");
-    llvm_struct->setBody(members);
-    module->getOrInsertGlobal("inst", llvm_struct);
 }
 
 void CodegenLLVMVisitor::visit_while_statement(const ast::WhileStatement& node) {
