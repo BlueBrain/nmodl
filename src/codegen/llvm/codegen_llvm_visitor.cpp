@@ -101,7 +101,8 @@ llvm::Type* CodegenLLVMVisitor::get_default_fp_ptr_type() {
     return llvm::Type::getDoublePtrTy(*context);
 }
 
-llvm::Type* CodegenLLVMVisitor::get_instance_struct_type(std::shared_ptr<ast::InstanceStruct> node) {
+llvm::Type* CodegenLLVMVisitor::get_instance_struct_type(
+    std::shared_ptr<ast::InstanceStruct> node) {
     std::vector<llvm::Type*> members;
     for (const auto& variable: node->get_codegen_vars()) {
         auto is_pointer = variable->get_is_pointer();
@@ -120,12 +121,13 @@ llvm::Type* CodegenLLVMVisitor::get_instance_struct_type(std::shared_ptr<ast::In
             DISPATCH(ast::AstNodeType::INTEGER, i32ptr_type, i32_type);
 
 #undef DISPATCH
-            default:
-                throw std::runtime_error("Error: unsupported type found in instance struct");
+        default:
+            throw std::runtime_error("Error: unsupported type found in instance struct");
         }
     }
 
-    llvm::StructType* llvm_struct_type = llvm::StructType::create(*context, instance_struct_type_name);
+    llvm::StructType* llvm_struct_type = llvm::StructType::create(*context,
+                                                                  instance_struct_type_name);
     llvm_struct_type->setBody(members);
     return llvm::PointerType::get(llvm_struct_type, /*AddressSpace=*/0);
 }
@@ -405,6 +407,80 @@ void CodegenLLVMVisitor::visit_boolean(const ast::Boolean& node) {
                                                   node.get_value());
     values.push_back(constant);
 }
+
+// Generating FOR loop in LLVM IR creates the following structure:
+//
+//  +---------------------------+
+//  | <code before for loop>    |
+//  | <for loop initialisation> |
+//  | br %cond                  |
+//  +---------------------------+
+//                |
+//                V
+//  +-----------------------------+
+//  | <condition code>            |
+//  | %cond = ...                 |<------+
+//  | cond_br %cond, %body, %exit |       |
+//  +-----------------------------+       |
+//      |                 |               |
+//      |                 V               |
+//      |     +------------------------+  |
+//      |     | <body code>            |  |
+//      |     | br %inc                |  |
+//      |     +------------------------+  |
+//      |                 |               |
+//      |                 V               |
+//      |     +------------------------+  |
+//      |     | <increment code>       |  |
+//      |      | br %cond              |  |
+//      |     +------------------------+  |
+//      |                 |               |
+//      |                 +---------------+
+//      V
+//  +---------------------------+
+//  | <code after for loop>     |
+//  +---------------------------+
+void CodegenLLVMVisitor::visit_codegen_for_statement(const ast::CodegenForStatement& node) {
+    // Get the current and the next blocks within the function.
+    llvm::BasicBlock* curr_block = builder.GetInsertBlock();
+    llvm::BasicBlock* next = curr_block->getNextNode();
+    llvm::Function* func = curr_block->getParent();
+
+    // Create the basic blocks for FOR loop.
+    llvm::BasicBlock* for_cond =
+        llvm::BasicBlock::Create(*context, /*Name=*/"for.cond", func, next);
+    llvm::BasicBlock* for_body =
+        llvm::BasicBlock::Create(*context, /*Name=*/"for.body", func, next);
+    llvm::BasicBlock* for_inc = llvm::BasicBlock::Create(*context, /*Name=*/"for.inc", func, next);
+    llvm::BasicBlock* exit = llvm::BasicBlock::Create(*context, /*Name=*/"for.exit", func, next);
+
+    // First, initialise the loop in the same basic block. Branch to condition basic block and
+    // insert condition code there.
+    node.get_initialization()->accept(*this);
+    builder.CreateBr(for_cond);
+    builder.SetInsertPoint(for_cond);
+    node.get_condition()->accept(*this);
+
+    // Extract the condition to decide whether to branch to the loop body or loop exit.
+    llvm::Value* cond = values.back();
+    values.pop_back();
+    builder.CreateCondBr(cond, for_body, exit);
+
+    // Generate code for the loop body and create the basic block for the increment.
+    builder.SetInsertPoint(for_body);
+    const auto& statement_block = node.get_statement_block();
+    statement_block->accept(*this);
+    builder.CreateBr(for_inc);
+
+    // Process increment.
+    builder.SetInsertPoint(for_inc);
+    node.get_increment()->accept(*this);
+    builder.CreateBr(for_cond);
+
+    // Generate exit code out of the loop.
+    builder.SetInsertPoint(exit);
+}
+
 
 void CodegenLLVMVisitor::visit_codegen_function(const ast::CodegenFunction& node) {
     const auto& name = node.get_node_name();

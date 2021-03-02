@@ -259,6 +259,7 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     void visit_binary_expression(const ast::BinaryExpression& node) override;
     void visit_boolean(const ast::Boolean& node) override;
     void visit_statement_block(const ast::StatementBlock& node) override;
+    void visit_codegen_for_statement(const ast::CodegenForStatement& node) override;
     void visit_codegen_function(const ast::CodegenFunction& node) override;
     void visit_codegen_return_statement(const ast::CodegenReturnStatement& node) override;
     void visit_codegen_var_list_statement(const ast::CodegenVarListStatement& node) override;
