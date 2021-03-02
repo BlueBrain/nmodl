@@ -31,6 +31,7 @@ static constexpr const char instance_struct_type_name[] = "__instance_var__type"
 
 static bool is_supported_statement(const ast::Statement& statement) {
     return statement.is_codegen_var_list_statement() || statement.is_expression_statement() ||
+           // statement.is_codegen_for_statement() ||
            statement.is_codegen_return_statement() || statement.is_if_statement() ||
            statement.is_while_statement();
 }
@@ -79,7 +80,7 @@ llvm::Type* CodegenLLVMVisitor::get_codegen_var_type(const ast::CodegenVarType& 
     case ast::AstNodeType::DOUBLE:
         return get_default_fp_type();
     case ast::AstNodeType::INSTANCE_STRUCT:
-        return get_instance_struct_type(instance_var_helper.instance);
+        return get_instance_struct_type();
     case ast::AstNodeType::INTEGER:
         return llvm::Type::getInt32Ty(*context);
     case ast::AstNodeType::VOID:
@@ -101,10 +102,9 @@ llvm::Type* CodegenLLVMVisitor::get_default_fp_ptr_type() {
     return llvm::Type::getDoublePtrTy(*context);
 }
 
-llvm::Type* CodegenLLVMVisitor::get_instance_struct_type(
-    std::shared_ptr<ast::InstanceStruct> node) {
+llvm::Type* CodegenLLVMVisitor::get_instance_struct_type() {
     std::vector<llvm::Type*> members;
-    for (const auto& variable: node->get_codegen_vars()) {
+    for (const auto& variable: instance_var_helper.instance->get_codegen_vars()) {
         auto is_pointer = variable->get_is_pointer();
         auto nmodl_type = variable->get_type()->get_type();
 
@@ -528,7 +528,7 @@ void CodegenLLVMVisitor::visit_codegen_return_statement(const ast::CodegenReturn
         throw std::runtime_error("Error: CodegenReturnStatement must contain a name node\n");
 
     std::string ret = "ret_" + current_func->getName().str();
-    llvm::Value* ret_value = builder.CreateLoad(current_func->getValueSymbolTable()->lookup(ret));
+    llvm::Value* ret_value = builder.CreateLoad(lookup(ret));
     builder.CreateRet(ret_value);
 }
 
@@ -684,7 +684,12 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
     sym_tab = node.get_symbol_table();
 
     // Proceed with code generation.
-    node.visit_children(*this);
+    // node.visit_children(*this);
+    // \todo: Default visiting routines visit unused nodes, and generate code! use only functions
+    // for now.
+    for (const auto& func: functions) {
+        visit_codegen_function(*func);
+    }
 
     if (opt_passes) {
         logger->info("Running LLVM optimisation passes");
@@ -720,13 +725,13 @@ void CodegenLLVMVisitor::visit_var_name(const ast::VarName& node) {
 
     // TODO :: George :: here instance_var_helper can be used to query
     // variable type and it's index into structure
-    auto name = node.get_node_name();
-
-    auto codegen_var_with_type = instance_var_helper.get_variable(name);
-    auto codegen_var_index = instance_var_helper.get_variable_index(name);
-    // this will be INTEGER or DOUBLE
-    auto var_type = codegen_var_with_type->get_type()->get_type();
-    auto is_pointer = codegen_var_with_type->get_is_pointer();
+    //    auto name = node.get_node_name();
+    //
+    //    auto codegen_var_with_type = instance_var_helper.get_variable(name);
+    //    auto codegen_var_index = instance_var_helper.get_variable_index(name);
+    //    // this will be INTEGER or DOUBLE
+    //    auto var_type = codegen_var_with_type->get_type()->get_type();
+    //    auto is_pointer = codegen_var_with_type->get_is_pointer();
 
     llvm::Value* ptr;
     if (identifier->is_name())

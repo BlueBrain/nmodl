@@ -166,7 +166,7 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
      * Returns a pointer to LLVM struct type
      * \return LLVM pointer type
      */
-    llvm::Type* get_instance_struct_type(std::shared_ptr<ast::InstanceStruct> node);
+    llvm::Type* get_instance_struct_type();
 
     /**
      * Create a function call to an external method
