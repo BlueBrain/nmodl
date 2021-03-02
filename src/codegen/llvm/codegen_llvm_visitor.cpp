@@ -134,7 +134,7 @@ void CodegenLLVMVisitor::create_external_method_call(const std::string& name,
     }
 
 #define DISPATCH(method_name, intrinsic)                                                           \
-    if (name == method_name) {                                                                     \
+    if (name == (method_name)) {                                                                   \
         llvm::Value* result = builder.CreateIntrinsic(intrinsic, argument_types, argument_values); \
         values.push_back(result);                                                                  \
         return;                                                                                    \
@@ -636,23 +636,24 @@ void CodegenLLVMVisitor::visit_var_name(const ast::VarName& node) {
 void CodegenLLVMVisitor::visit_instance_struct(const ast::InstanceStruct& node) {
     std::vector<llvm::Type*> members;
     for (const auto& variable: node.get_codegen_vars()) {
-        // TODO :: Ioannis / George :: we have now double*, int*, double and int
-        //         variables in the instance structure. Each variable is of type
-        //         ast::CodegenVarWithType. So we can query variable type and if
-        //         it's pointer.
         auto is_pointer = variable->get_is_pointer();
-        auto type = variable->get_type()->get_type();
+        auto nmodl_type = variable->get_type()->get_type();
 
-        // todo : clean up ?
-        if (type == ast::AstNodeType::DOUBLE) {
-            auto llvm_type = is_pointer ? get_default_fp_ptr_type() : get_default_fp_type();
-            members.push_back(llvm_type);
-        } else {
-            if (is_pointer) {
-                members.push_back(llvm::Type::getInt32PtrTy(*context));
-            } else {
-                members.push_back(llvm::Type::getInt32Ty(*context));
-            }
+        llvm::Type* i32_type = llvm::Type::getInt32Ty(*context);
+        llvm::Type* i32ptr_type = llvm::Type::getInt32PtrTy(*context);
+
+        switch (nmodl_type) {
+#define DISPATCH(type, llvm_ptr_type, llvm_type)                     \
+    case type:                                                       \
+        members.push_back(is_pointer ? (llvm_ptr_type) : llvm_type); \
+        break;
+
+            DISPATCH(ast::AstNodeType::DOUBLE, get_default_fp_ptr_type(), get_default_fp_type());
+            DISPATCH(ast::AstNodeType::INTEGER, i32ptr_type, i32_type);
+
+#undef DISPATCH
+        default:
+            throw std::runtime_error("Error: unsupported type found in instance struct");
         }
     }
 
