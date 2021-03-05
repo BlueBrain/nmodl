@@ -575,7 +575,6 @@ void CodegenLLVMVisitor::visit_codegen_for_statement(const ast::CodegenForStatem
     if (vector_width > 1) {
         // First, create an increment vector.
         llvm::Type* i32_type = llvm::Type::getInt32Ty(*context);
-        llvm::Type* vec_type = llvm::FixedVectorType::get(i32_type, vector_width);
         std::vector<llvm::Constant*> constants;
         for (unsigned i = 0; i < vector_width; ++i) {
             const auto& element = llvm::ConstantInt::get(i32_type, vector_width);
@@ -590,9 +589,8 @@ void CodegenLLVMVisitor::visit_codegen_for_statement(const ast::CodegenForStatem
         builder.CreateStore(incremented, vector_id_ptr);
     }
 
+   // Create a branch to condition block, then generate exit code out of the loop.
     builder.CreateBr(for_cond);
-
-    // Generate exit code out of the loop.
     builder.SetInsertPoint(exit);
 }
 
