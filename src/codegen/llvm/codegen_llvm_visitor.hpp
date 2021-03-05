@@ -129,6 +129,13 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     llvm::Value* codegen_indexed_name(const ast::IndexedName& node);
 
     /**
+     * Generates LLVM code for the given Instance variable
+     * \param node CodegenInstanceVar NMODL AST node
+     * \return LLVM code generated for this AST node
+     */
+    llvm::Value* codegen_instance_var(const ast::CodegenInstanceVar& node);
+
+    /**
      * Returns GEP instruction to 1D array
      * \param name 1D array name
      * \param index element index
@@ -167,6 +174,12 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
      * \return LLVM pointer type
      */
     llvm::Type* get_instance_struct_type();
+
+    /**
+     * Returns a LLVM value corresponding to the VarName node
+     * \return LLVM value
+     */
+    llvm::Value* get_variable_ptr(const ast::VarName& node);
 
     /**
      * Create a function call to an external method

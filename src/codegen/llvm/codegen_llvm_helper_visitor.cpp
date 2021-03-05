@@ -475,6 +475,26 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
     const auto& condition = create_expression("id < node_count");
     const auto& increment = create_statement_as_expression("id = id + {}"_format(vector_width));
 
+    // Now, change the vector width and 0 types in initialization and increment blocks to Integer,
+    // since NMODL considers numbers to be Double by default. \todo: This is NOT a proper way to do
+    // this, but works for now.
+    const auto& init_expression =
+        std::dynamic_pointer_cast<ast::WrappedExpression>(initialization)->get_expression();
+    const auto& init_bin_expression = std::dynamic_pointer_cast<ast::BinaryExpression>(
+        init_expression);
+    const auto& zero = std::make_shared<ast::Integer>(/*value=*/0, /*macro=*/nullptr);
+    init_bin_expression->set_rhs(zero);
+
+    // \todo: Change this as well.
+    const auto& inc_expression =
+        std::dynamic_pointer_cast<ast::BinaryExpression>(
+            std::dynamic_pointer_cast<ast::WrappedExpression>(increment)->get_expression())
+            ->get_rhs();
+    const auto& inc_bin_expression = std::dynamic_pointer_cast<ast::BinaryExpression>(
+        std::dynamic_pointer_cast<ast::WrappedExpression>(inc_expression)->get_expression());
+    const auto& width = std::make_shared<ast::Integer>(/*value=*/vector_width, /*macro=*/nullptr);
+    inc_bin_expression->set_rhs(width);
+
     /// loop body : initialization + solve blocks
     ast::StatementVector loop_def_statements;
     ast::StatementVector loop_index_statements;

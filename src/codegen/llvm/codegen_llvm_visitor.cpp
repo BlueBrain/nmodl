@@ -31,9 +31,8 @@ static constexpr const char instance_struct_type_name[] = "__instance_var__type"
 
 static bool is_supported_statement(const ast::Statement& statement) {
     return statement.is_codegen_var_list_statement() || statement.is_expression_statement() ||
-           // statement.is_codegen_for_statement() ||
-           statement.is_codegen_return_statement() || statement.is_if_statement() ||
-           statement.is_while_statement();
+           statement.is_codegen_for_statement() || statement.is_codegen_return_statement() ||
+           statement.is_if_statement() || statement.is_while_statement();
 }
 
 bool CodegenLLVMVisitor::check_array_bounds(const ast::IndexedName& node, unsigned index) {
@@ -61,10 +60,70 @@ llvm::Value* CodegenLLVMVisitor::codegen_indexed_name(const ast::IndexedName& no
     return create_gep(node.get_node_name(), index);
 }
 
+llvm::Value* CodegenLLVMVisitor::codegen_instance_var(const ast::CodegenInstanceVar& node) {
+    const auto& member_node = node.get_member_var();
+    const auto& instance_name = node.get_instance_var()->get_node_name();
+    const auto& member_name = member_node->get_node_name();
+
+    if (!instance_var_helper.is_an_instance_variable(member_name))
+        throw std::runtime_error("Error: " + member_name + " is not a member of the instance!");
+
+    // Load the instance struct given its name from the ValueSymbolTable.
+    llvm::Value* instance_ptr = builder.CreateLoad(lookup(instance_name));
+
+    // Create a GEP instruction to get a pointer to the member.
+    int member_index = instance_var_helper.get_variable_index(member_name);
+    llvm::Type* index_type = llvm::Type::getInt32Ty(*context);
+
+    std::vector<llvm::Value*> indices;
+    indices.push_back(llvm::ConstantInt::get(index_type, 0));
+    indices.push_back(llvm::ConstantInt::get(index_type, member_index));
+    llvm::Value* member_ptr = builder.CreateInBoundsGEP(instance_ptr, indices);
+
+    // Get the member AST node from the instance AST node, for which we proceed with the code
+    // generation. If the member is scalar, return the pointer to it straight away.
+    auto codegen_var_with_type = instance_var_helper.get_variable(member_name);
+    if (!codegen_var_with_type->get_is_pointer())
+        return member_ptr;
+
+    // Otherwise, the codegen variable is a pointer, and the member AST node must be an IndexedName.
+    auto member_var_name = std::dynamic_pointer_cast<ast::VarName>(member_node);
+    if (!member_var_name->get_name()->is_indexed_name())
+        throw std::runtime_error("Error: " + member_name + " is not an IndexedName!");
+
+
+    // The codegen variable type is always a scalar, so we need to transform to a pointer. Then load
+    // the member which would be indexed later.
+    llvm::Type* type = get_codegen_var_type(*codegen_var_with_type->get_type());
+    llvm::Value* instance_member =
+        builder.CreateLoad(llvm::PointerType::get(type, /*AddressSpace=*/0), member_ptr);
+
+    // Create a GEP instruction to get the pointer to the member's element. While LLVM Helper set
+    // the indices to be Name nodes, a sanity check is added here. Note that this step can be
+    // avoided if using `get_array_index_or_length()`. However, it does not support indexing with
+    // Name/Expression at the moment. \todo: Reuse `get_array_index_or_length()` here.
+    auto member_indexed_name = std::dynamic_pointer_cast<ast::IndexedName>(
+        member_var_name->get_name());
+    if (!member_indexed_name->get_length()->is_name())
+        throw std::runtime_error("Error: " + member_name + " has a non-Name index!");
+
+    // Load the index variable that will be used to access the member's element. Since we index a
+    // pointer variable, we need to extend the 32-bit integer index variable to 64-bit.
+    llvm::Value* i32_index = builder.CreateLoad(
+        lookup(member_indexed_name->get_length()->get_node_name()));
+    llvm::Value* i64_index = builder.CreateSExt(i32_index, llvm::Type::getInt64Ty(*context));
+
+    // Create a GEP to return the pointer to the element at the specified index.
+    std::vector<llvm::Value*> member_indices;
+    member_indices.push_back(i64_index);
+    return builder.CreateInBoundsGEP(instance_member, member_indices);
+}
+
 unsigned CodegenLLVMVisitor::get_array_index_or_length(const ast::IndexedName& indexed_name) {
+    // \todo: Support indices with expressions and names: k[i + j] = ...
     auto integer = std::dynamic_pointer_cast<ast::Integer>(indexed_name.get_length());
     if (!integer)
-        throw std::runtime_error("Error: expecting integer index or length");
+        throw std::runtime_error("Error: only integer indices/length are supported!");
 
     // Check if integer value is taken from a macro.
     if (!integer->get_macro())
@@ -130,6 +189,29 @@ llvm::Type* CodegenLLVMVisitor::get_instance_struct_type() {
                                                                   instance_struct_type_name);
     llvm_struct_type->setBody(members);
     return llvm::PointerType::get(llvm_struct_type, /*AddressSpace=*/0);
+}
+
+llvm::Value* CodegenLLVMVisitor::get_variable_ptr(const ast::VarName& node) {
+    const auto& identifier = node.get_name();
+    if (!identifier->is_name() && !identifier->is_indexed_name() &&
+        !identifier->is_codegen_instance_var()) {
+        throw std::runtime_error("Error: Unsupported variable type - " + node.get_node_name());
+    }
+
+    llvm::Value* ptr;
+    if (identifier->is_name())
+        ptr = lookup(node.get_node_name());
+
+    if (identifier->is_indexed_name()) {
+        auto indexed_name = std::dynamic_pointer_cast<ast::IndexedName>(identifier);
+        ptr = codegen_indexed_name(*indexed_name);
+    }
+
+    if (identifier->is_codegen_instance_var()) {
+        auto instance_var = std::dynamic_pointer_cast<ast::CodegenInstanceVar>(identifier);
+        ptr = codegen_instance_var(*instance_var);
+    }
+    return ptr;
 }
 
 void CodegenLLVMVisitor::run_llvm_opt_passes() {
@@ -291,20 +373,11 @@ llvm::Value* CodegenLLVMVisitor::visit_arithmetic_bin_op(llvm::Value* lhs,
 
 void CodegenLLVMVisitor::visit_assign_op(const ast::BinaryExpression& node, llvm::Value* rhs) {
     auto var = dynamic_cast<ast::VarName*>(node.get_lhs().get());
-    if (!var) {
-        throw std::runtime_error("Error: only VarName assignment is currently supported.\n");
-    }
+    if (!var)
+        throw std::runtime_error("Error: only VarName assignment is supported!");
 
-    const auto& identifier = var->get_name();
-    if (identifier->is_name()) {
-        llvm::Value* alloca = lookup(var->get_node_name());
-        builder.CreateStore(rhs, alloca);
-    } else if (identifier->is_indexed_name()) {
-        auto indexed_name = std::dynamic_pointer_cast<ast::IndexedName>(identifier);
-        builder.CreateStore(rhs, codegen_indexed_name(*indexed_name));
-    } else {
-        throw std::runtime_error("Error: Unsupported variable type");
-    }
+    llvm::Value* ptr = get_variable_ptr(*var);
+    builder.CreateStore(rhs, ptr);
 }
 
 llvm::Value* CodegenLLVMVisitor::visit_logical_bin_op(llvm::Value* lhs,
@@ -515,7 +588,7 @@ void CodegenLLVMVisitor::visit_codegen_function(const ast::CodegenFunction& node
     block->accept(*this);
 
     // If function has a void return type, add a terminator not handled by CodegenReturnVar.
-    if (node.is_void())
+    if (node.get_return_type()->get_type() == ast::AstNodeType::VOID)
         builder.CreateRetVoid();
 
     // Clear local values stack and remove the pointer to the local symbol table.
@@ -670,10 +743,6 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
     const auto& functions = v.get_codegen_functions(node);
     instance_var_helper = v.get_instance_var_helper();
 
-    // TODO :: George / Ioannis :: before emitting procedures, we have
-    //         to emmit INSTANCE_STRUCT type as it's used as an argument.
-    //         Currently it's done in node.visit_children which is late.
-
     // For every function, generate its declaration. Thus, we can look up
     // `llvm::Function` in the symbol table in the module.
     for (const auto& func: functions) {
@@ -683,10 +752,12 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
     // Set the AST symbol table.
     sym_tab = node.get_symbol_table();
 
-    // Proceed with code generation.
-    // node.visit_children(*this);
-    // \todo: Default visiting routines visit unused nodes, and generate code! use only functions
-    // for now.
+    // Proceed with code generation. Right now, we do not do
+    //     node.visit_children(*this);
+    // The reason is that the node may contain AST nodes for which the visitor functions have been
+    // defined. In our implementation we assume that the code generation is happening within the
+    // function scope. To avoid generating code outside of functions, visit only them for now.
+    // \todo: Handle what is mentioned here.
     for (const auto& func: functions) {
         visit_codegen_function(*func);
     }
@@ -719,28 +790,7 @@ void CodegenLLVMVisitor::visit_unary_expression(const ast::UnaryExpression& node
 }
 
 void CodegenLLVMVisitor::visit_var_name(const ast::VarName& node) {
-    const auto& identifier = node.get_name();
-    if (!identifier->is_name() && !identifier->is_indexed_name())
-        throw std::runtime_error("Error: Unsupported variable type");
-
-    // TODO :: George :: here instance_var_helper can be used to query
-    // variable type and it's index into structure
-    //    auto name = node.get_node_name();
-    //
-    //    auto codegen_var_with_type = instance_var_helper.get_variable(name);
-    //    auto codegen_var_index = instance_var_helper.get_variable_index(name);
-    //    // this will be INTEGER or DOUBLE
-    //    auto var_type = codegen_var_with_type->get_type()->get_type();
-    //    auto is_pointer = codegen_var_with_type->get_is_pointer();
-
-    llvm::Value* ptr;
-    if (identifier->is_name())
-        ptr = lookup(node.get_node_name());
-
-    if (identifier->is_indexed_name()) {
-        auto indexed_name = std::dynamic_pointer_cast<ast::IndexedName>(identifier);
-        ptr = codegen_indexed_name(*indexed_name);
-    }
+    llvm::Value* ptr = get_variable_ptr(node);
 
     // Finally, load the variable from the pointer value.
     llvm::Value* var = builder.CreateLoad(ptr);
