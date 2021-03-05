@@ -23,6 +23,7 @@ namespace codegen {
 
 static constexpr const char instance_struct_name[] = "__instance_var_struct";
 static constexpr const char instance_struct_type_name[] = "__instance_var__type";
+static constexpr const char kernel_id_prefix[] = "__vec_";
 
 
 /****************************************************************************************/
@@ -527,9 +528,29 @@ void CodegenLLVMVisitor::visit_codegen_for_statement(const ast::CodegenForStatem
     llvm::BasicBlock* for_inc = llvm::BasicBlock::Create(*context, /*Name=*/"for.inc", func, next);
     llvm::BasicBlock* exit = llvm::BasicBlock::Create(*context, /*Name=*/"for.exit", func, next);
 
-    // First, initialise the loop in the same basic block. Branch to condition basic block and
-    // insert condition code there.
+    // First, initialise the loop in the same basic block.
     node.get_initialization()->accept(*this);
+
+    // If the loop is to be vectorised, create a separate vector induction variable.
+    if (vector_width > 1) {
+        // First, create a vector type and alloca for it.
+        llvm::Type* i32_type = llvm::Type::getInt32Ty(*context);
+        llvm::Type* vec_type = llvm::FixedVectorType::get(i32_type, vector_width);
+        llvm::Value* vec_alloca = builder.CreateAlloca(vec_type,
+                                                       /*ArraySize=*/nullptr,
+                                                       /*Name=*/kernel_id_prefix + kernel_id);
+
+        // Then, store the initial value of <0, 1, ..., [W-1]> o the alloca pointer, where W is the
+        // vector width.
+        std::vector<llvm::Constant*> constants;
+        for (unsigned i = 0; i < vector_width; ++i) {
+            const auto& element = llvm::ConstantInt::get(i32_type, i);
+            constants.push_back(element);
+        }
+        llvm::Value* vector_id = llvm::ConstantVector::get(constants);
+        builder.CreateStore(vector_id, vec_alloca);
+    }
+    // Branch to condition basic block and insert condition code there.
     builder.CreateBr(for_cond);
     builder.SetInsertPoint(for_cond);
     node.get_condition()->accept(*this);
@@ -548,6 +569,27 @@ void CodegenLLVMVisitor::visit_codegen_for_statement(const ast::CodegenForStatem
     // Process increment.
     builder.SetInsertPoint(for_inc);
     node.get_increment()->accept(*this);
+
+    // If the code is vectorised, then increment the vector id by <W, W, ..., W> where W is the
+    // vector width.
+    if (vector_width > 1) {
+        // First, create an increment vector.
+        llvm::Type* i32_type = llvm::Type::getInt32Ty(*context);
+        llvm::Type* vec_type = llvm::FixedVectorType::get(i32_type, vector_width);
+        std::vector<llvm::Constant*> constants;
+        for (unsigned i = 0; i < vector_width; ++i) {
+            const auto& element = llvm::ConstantInt::get(i32_type, vector_width);
+            constants.push_back(element);
+        }
+        llvm::Value* vector_inc = llvm::ConstantVector::get(constants);
+
+        // Increment the kernel id elements by a constant vector width.
+        llvm::Value* vector_id_ptr = lookup(kernel_id_prefix + kernel_id);
+        llvm::Value* vector_id = builder.CreateLoad(vector_id_ptr);
+        llvm::Value* incremented = builder.CreateAdd(vector_id, vector_inc);
+        builder.CreateStore(incremented, vector_id_ptr);
+    }
+
     builder.CreateBr(for_cond);
 
     // Generate exit code out of the loop.
@@ -742,6 +784,7 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
     CodegenLLVMHelperVisitor v{vector_width};
     const auto& functions = v.get_codegen_functions(node);
     instance_var_helper = v.get_instance_var_helper();
+    kernel_id = v.get_kernel_id();
 
     // For every function, generate its declaration. Thus, we can look up
     // `llvm::Function` in the symbol table in the module.

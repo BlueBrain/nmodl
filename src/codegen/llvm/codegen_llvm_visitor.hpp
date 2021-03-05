@@ -83,8 +83,11 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     // Use 32-bit floating-point type if true. Otherwise, use deafult 64-bit.
     bool use_single_precision;
 
-    // explicit vectorisation width
+    // Explicit vectorisation width.
     int vector_width;
+
+    // The name of induction variable used in the kernel functions.
+    std::string kernel_id;
 
     /**
      *\brief Run LLVM optimisation passes on generated IR

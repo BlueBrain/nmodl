@@ -471,9 +471,10 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
     /// create now main compute part : for loop over channel instances
 
     /// loop constructs : initialization, condition and increment
-    const auto& initialization = create_statement_as_expression("id = 0");
-    const auto& condition = create_expression("id < node_count");
-    const auto& increment = create_statement_as_expression("id = id + {}"_format(vector_width));
+    const auto& initialization = create_statement_as_expression("{} = 0"_format(INDUCTION_VAR));
+    const auto& condition = create_expression("{} < node_count"_format(INDUCTION_VAR));
+    const auto& increment = create_statement_as_expression(
+        "{} = {} + {}"_format(INDUCTION_VAR, INDUCTION_VAR, vector_width));
 
     // Now, change the vector width and 0 types in initialization and increment blocks to Integer,
     // since NMODL considers numbers to be Double by default. \todo: This is NOT a proper way to do
@@ -504,7 +505,8 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
         std::vector<std::string> double_variables{"v"};
 
         /// access node index and corresponding voltage
-        loop_index_statements.push_back(visitor::create_statement("node_id = node_index[id]"));
+        loop_index_statements.push_back(
+            visitor::create_statement("node_id = node_index[{}]"_format(INDUCTION_VAR)));
         loop_body_statements.push_back(visitor::create_statement("v = voltage[node_id]"));
 
         /// read ion variables
