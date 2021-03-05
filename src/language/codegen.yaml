@@ -143,6 +143,18 @@
                                   brief: "Body of the function"
                                   type: StatementBlock
                                   getter: {override: true}
+                        - InstanceStruct:
+                            nmodl: "INSTANCE_STRUCT "
+                            members:
+                              - codegen_vars:
+                                  brief: "Vector of CodegenVars"
+                                  type: CodegenVar
+                                  vector: true
+                                  add: true
+                                  separator: "\\n    "
+                                  prefix: {value: "{\\n    ", force: true}
+                                  suffix: {value: "\\n}", force: true}
+                            brief: "LLVM IR Struct that holds the mechanism instance's variables"
                   - WrappedExpression:
                       brief: "Wrap any other expression type"
                       members:
