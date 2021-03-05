@@ -104,8 +104,8 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     CodegenLLVMVisitor(const std::string& mod_filename,
                        const std::string& output_dir,
                        bool opt_passes,
-                       int vector_width = 1,
-                       bool use_single_precision = false)
+                       bool use_single_precision = false,
+                       int vector_width = 1)
         : mod_filename(mod_filename)
         , output_dir(output_dir)
         , opt_passes(opt_passes)
