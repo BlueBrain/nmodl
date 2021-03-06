@@ -594,7 +594,7 @@ int main(int argc, const char* argv[]) {
             if (llvm_ir) {
                 logger->info("Running LLVM backend code generator");
                 CodegenLLVMVisitor visitor(
-                    modfile, output_dir, llvm_opt_passes, llvm_vec_width, llvm_float_type);
+                    modfile, output_dir, llvm_opt_passes, llvm_float_type, llvm_vec_width);
                 visitor.visit_program(*ast);
                 ast_to_nmodl(*ast, filepath("llvm", "mod"));
                 ast_to_json(*ast, filepath("llvm", "json"));
