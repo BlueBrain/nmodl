@@ -146,7 +146,7 @@ void CodegenLLVMHelperVisitor::create_function_for_node(ast::Block& node) {
         /// create new type and name for creating new ast node
         auto type = new ast::CodegenVarType(FLOAT_TYPE);
         auto var = param->get_name()->clone();
-        arguments.emplace_back(new ast::CodegenVarWithType(type, 0, var));
+        arguments.emplace_back(new ast::CodegenVarWithType(type, /*is_pointer=*/0, var));
     }
 
     /// return type of the function is same as return variable type
@@ -170,31 +170,31 @@ std::shared_ptr<ast::InstanceStruct> CodegenLLVMHelperVisitor::create_instance_s
         };
 
     /// float variables are standard pointers to float vectors
-    for (auto& float_var: info.codegen_float_variables) {
-        add_var_with_type(float_var->get_name(), FLOAT_TYPE, 1);
+    for (const auto& float_var: info.codegen_float_variables) {
+        add_var_with_type(float_var->get_name(), FLOAT_TYPE, /*is_pointer=*/1);
     }
 
     /// int variables are pointers to indexes for other vectors
-    for (auto& int_var: info.codegen_int_variables) {
-        add_var_with_type(int_var.symbol->get_name(), FLOAT_TYPE, 1);
+    for (const auto& int_var: info.codegen_int_variables) {
+        add_var_with_type(int_var.symbol->get_name(), FLOAT_TYPE, /*is_pointer=*/1);
     }
 
     // for integer variables, there should be index
-    for (auto& int_var: info.codegen_int_variables) {
+    for (const auto& int_var: info.codegen_int_variables) {
         std::string var_name = int_var.symbol->get_name() + "_index";
-        add_var_with_type(var_name, INTEGER_TYPE, 1);
+        add_var_with_type(var_name, INTEGER_TYPE, /*is_pointer=*/1);
     }
 
     // add voltage and node index
-    add_var_with_type("voltage", FLOAT_TYPE, 1);
-    add_var_with_type("node_index", INTEGER_TYPE, 1);
+    add_var_with_type("voltage", FLOAT_TYPE, /*is_pointer=*/1);
+    add_var_with_type("node_index", INTEGER_TYPE, /*is_pointer=*/1);
 
     // add dt, t, celsius
-    add_var_with_type(naming::NTHREAD_T_VARIABLE, FLOAT_TYPE, 0);
-    add_var_with_type(naming::NTHREAD_DT_VARIABLE, FLOAT_TYPE, 0);
-    add_var_with_type(naming::CELSIUS_VARIABLE, FLOAT_TYPE, 0);
-    add_var_with_type(naming::SECOND_ORDER_VARIABLE, INTEGER_TYPE, 0);
-    add_var_with_type(MECH_NODECOUNT_VAR, INTEGER_TYPE, 0);
+    add_var_with_type(naming::NTHREAD_T_VARIABLE, FLOAT_TYPE, /*is_pointer=*/0);
+    add_var_with_type(naming::NTHREAD_DT_VARIABLE, FLOAT_TYPE, /*is_pointer=*/0);
+    add_var_with_type(naming::CELSIUS_VARIABLE, FLOAT_TYPE, /*is_pointer=*/0);
+    add_var_with_type(naming::SECOND_ORDER_VARIABLE, INTEGER_TYPE, /*is_pointer=*/0);
+    add_var_with_type(MECH_NODECOUNT_VAR, INTEGER_TYPE, /*is_pointer=*/0);
 
     return std::make_shared<ast::InstanceStruct>(codegen_vars);
 }
@@ -384,7 +384,7 @@ void CodegenLLVMHelperVisitor::convert_to_instance_variable(ast::Node& node,
                                                             std::string& index_var) {
     /// collect all variables in the node of type ast::VarName
     auto variables = collect_nodes(node, {ast::AstNodeType::VAR_NAME});
-    for (auto& v: variables) {
+    for (const auto& v: variables) {
         auto variable = std::dynamic_pointer_cast<ast::VarName>(v);
         auto variable_name = variable->get_node_name();
 
@@ -450,6 +450,44 @@ void CodegenLLVMHelperVisitor::visit_function_block(ast::FunctionBlock& node) {
     create_function_for_node(node);
 }
 
+/// Create asr::Varname node with given a given variable name
+static ast::VarName* create_varname(const std::string& varname) {
+    return new ast::VarName(new ast::Name(new ast::String(varname)), nullptr, nullptr);
+}
+
+/**
+ * Create for loop initialization expression
+ * @param code Usually "id = 0" as a string
+ * @return Expression representing code
+ * \todo : we can not use `create_statement_as_expression` function because
+ *         NMODL parser is using `ast::Double` type to represent all variables
+ *         including Integer. See #542.
+ */
+static std::shared_ptr<ast::Expression> loop_initialization_expression(
+    const std::string& induction_var) {
+    // create id = 0
+    const auto& id = create_varname(induction_var);
+    const auto& zero = new ast::Integer(0, nullptr);
+    return std::make_shared<ast::BinaryExpression>(id, ast::BinaryOperator(ast::BOP_ASSIGN), zero);
+}
+
+/**
+ * Create loop increment expression `id = id + width`
+ * \todo : same as loop_initialization_expression()
+ */
+static std::shared_ptr<ast::Expression> loop_increment_expression(const std::string& induction_var,
+                                                                  int vector_width) {
+    // first create id + x
+    const auto& id = create_varname(induction_var);
+    const auto& inc = new ast::Integer(vector_width, nullptr);
+    const auto& inc_expr =
+        new ast::BinaryExpression(id, ast::BinaryOperator(ast::BOP_ADDITION), inc);
+    // now create id = id + x
+    return std::make_shared<ast::BinaryExpression>(id->clone(),
+                                                   ast::BinaryOperator(ast::BOP_ASSIGN),
+                                                   inc_expr);
+}
+
 /**
  * \brief Convert ast::NrnStateBlock to corresponding code generation function nrn_state
  * @param node AST node representing ast::NrnStateBlock
@@ -471,9 +509,9 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
     /// create now main compute part : for loop over channel instances
 
     /// loop constructs : initialization, condition and increment
-    const auto& initialization = create_statement_as_expression("id = 0");
-    const auto& condition = create_expression("id < node_count");
-    const auto& increment = create_statement_as_expression("id = id + {}"_format(vector_width));
+    const auto& initialization = loop_initialization_expression(INDUCTION_VAR);
+    const auto& condition = create_expression("{} < {}"_format(INDUCTION_VAR, MECH_NODECOUNT_VAR));
+    const auto& increment = loop_increment_expression(INDUCTION_VAR, vector_width);
 
     /// loop body : initialization + solve blocks
     ast::StatementVector loop_def_statements;
@@ -484,7 +522,8 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
         std::vector<std::string> double_variables{"v"};
 
         /// access node index and corresponding voltage
-        loop_index_statements.push_back(visitor::create_statement("node_id = node_index[id]"));
+        loop_index_statements.push_back(
+            visitor::create_statement("node_id = node_index[{}]"_format(INDUCTION_VAR)));
         loop_body_statements.push_back(visitor::create_statement("v = voltage[node_id]"));
 
         /// read ion variables
@@ -558,7 +597,7 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
     ast::CodegenVarWithTypeVector code_arguments;
 
     auto instance_var_type = new ast::CodegenVarType(ast::AstNodeType::INSTANCE_STRUCT);
-    auto instance_var_name = new ast::Name(new ast::String("mech"));
+    auto instance_var_name = new ast::Name(new ast::String(MECH_INSTANCE_VAR));
     auto instance_var = new ast::CodegenVarWithType(instance_var_type, 1, instance_var_name);
     code_arguments.emplace_back(instance_var);
 
@@ -567,7 +606,7 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
         std::make_shared<ast::CodegenFunction>(return_type, name, code_arguments, function_block);
     codegen_functions.push_back(function);
 
-    std::cout << nmodl::to_nmodl(function);
+    std::cout << nmodl::to_nmodl(function) << std::endl;
 }
 
 void CodegenLLVMHelperVisitor::visit_program(ast::Program& node) {
@@ -583,8 +622,6 @@ void CodegenLLVMHelperVisitor::visit_program(ast::Program& node) {
     for (auto& fun: codegen_functions) {
         node.emplace_back_node(fun);
     }
-
-    std::cout << nmodl::to_nmodl(node);
 }
 
 
