@@ -57,7 +57,6 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     std::string output_dir;
 
   private:
-
     InstanceVarHelper instance_var_helper;
 
     std::unique_ptr<llvm::LLVMContext> context = std::make_unique<llvm::LLVMContext>();
