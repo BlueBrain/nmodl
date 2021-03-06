@@ -89,6 +89,9 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     // The name of induction variable used in the kernel functions.
     std::string kernel_id;
 
+    // A flag to indicate that the code is generated for the kernel.
+    bool is_kernel_code = false;
+
     /**
      *\brief Run LLVM optimisation passes on generated IR
      *
@@ -159,6 +162,20 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
      * \return LLVM type
      */
     llvm::Type* get_codegen_var_type(const ast::CodegenVarType& node);
+
+    /**
+     * Returns LLVM vector with `vector_width` int values.
+     * \param int value to replicate
+     * \return LLVM value
+     */
+    llvm::Value* get_constant_int_vector(int value);
+
+    /**
+     * Returns LLVM vector with `vector_width` double values.
+     * \param string a double value to replicate
+     * \return LLVM value
+     */
+    llvm::Value* get_constant_fp_vector(const std::string& value);
 
     /**
      * Returns 64-bit or 32-bit LLVM floating type

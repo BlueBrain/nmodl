@@ -23,6 +23,10 @@ namespace codegen {
 
 static constexpr const char instance_struct_name[] = "__instance_var_struct";
 static constexpr const char instance_struct_type_name[] = "__instance_var__type";
+
+// The prefix is used to create a vectorised id that can be used as index to GEPs. However, for
+// simple aligned vector loads and stores vector id is not needed. This is because we can bitcast
+// the pointer to the vector pointer! \todo: Consider removing this.
 static constexpr const char kernel_id_prefix[] = "__vec_";
 
 
@@ -92,17 +96,10 @@ llvm::Value* CodegenLLVMVisitor::codegen_instance_var(const ast::CodegenInstance
     if (!member_var_name->get_name()->is_indexed_name())
         throw std::runtime_error("Error: " + member_name + " is not an IndexedName!");
 
-
-    // The codegen variable type is always a scalar, so we need to transform to a pointer. Then load
-    // the member which would be indexed later.
-    llvm::Type* type = get_codegen_var_type(*codegen_var_with_type->get_type());
-    llvm::Value* instance_member =
-        builder.CreateLoad(llvm::PointerType::get(type, /*AddressSpace=*/0), member_ptr);
-
-    // Create a GEP instruction to get the pointer to the member's element. While LLVM Helper set
-    // the indices to be Name nodes, a sanity check is added here. Note that this step can be
-    // avoided if using `get_array_index_or_length()`. However, it does not support indexing with
-    // Name/Expression at the moment. \todo: Reuse `get_array_index_or_length()` here.
+    // Proceed to creating a GEP instruction to get the pointer to the member's element. While LLVM
+    // Helper set the indices to be Name nodes, a sanity check is added here. Note that this step
+    // can be avoided if using `get_array_index_or_length()`. However, it does not support indexing
+    // with Name/Expression at the moment. \todo: Reuse `get_array_index_or_length()` here.
     auto member_indexed_name = std::dynamic_pointer_cast<ast::IndexedName>(
         member_var_name->get_name());
     if (!member_indexed_name->get_length()->is_name())
@@ -114,9 +111,27 @@ llvm::Value* CodegenLLVMVisitor::codegen_instance_var(const ast::CodegenInstance
         lookup(member_indexed_name->get_length()->get_node_name()));
     llvm::Value* i64_index = builder.CreateSExt(i32_index, llvm::Type::getInt64Ty(*context));
 
-    // Create a GEP to return the pointer to the element at the specified index.
+    // Create a indices vector for GEP to return the pointer to the element at the specified index.
     std::vector<llvm::Value*> member_indices;
     member_indices.push_back(i64_index);
+
+    // The codegen variable type is always a scalar, so we need to transform it to a pointer. Then
+    // load the member which would be indexed later.
+    llvm::Type* type = get_codegen_var_type(*codegen_var_with_type->get_type());
+    llvm::Value* instance_member =
+        builder.CreateLoad(llvm::PointerType::get(type, /*AddressSpace=*/0), member_ptr);
+
+
+    // If the code is vectorised, then bitcast to a vector pointer.
+    if (is_kernel_code && vector_width > 1) {
+        llvm::Type* vector_type =
+            llvm::PointerType::get(llvm::FixedVectorType::get(type, vector_width),
+                                   /*AddressSpace=*/0);
+        llvm::Value* instance_member_bitcasted = builder.CreateBitCast(instance_member,
+                                                                       vector_type);
+        return builder.CreateInBoundsGEP(instance_member_bitcasted, member_indices);
+    }
+
     return builder.CreateInBoundsGEP(instance_member, member_indices);
 }
 
@@ -148,6 +163,26 @@ llvm::Type* CodegenLLVMVisitor::get_codegen_var_type(const ast::CodegenVarType& 
     default:
         throw std::runtime_error("Error: expecting a type in CodegenVarType node\n");
     }
+}
+
+llvm::Value* CodegenLLVMVisitor::get_constant_int_vector(int value) {
+    llvm::Type* i32_type = llvm::Type::getInt32Ty(*context);
+    std::vector<llvm::Constant*> constants;
+    for (unsigned i = 0; i < vector_width; ++i) {
+        const auto& element = llvm::ConstantInt::get(i32_type, value);
+        constants.push_back(element);
+    }
+    return llvm::ConstantVector::get(constants);
+}
+
+llvm::Value* CodegenLLVMVisitor::get_constant_fp_vector(const std::string& value) {
+    llvm::Type* fp_type = get_default_fp_type();
+    std::vector<llvm::Constant*> constants;
+    for (unsigned i = 0; i < vector_width; ++i) {
+        const auto& element = llvm::ConstantFP::get(fp_type, value);
+        constants.push_back(element);
+    }
+    return llvm::ConstantVector::get(constants);
 }
 
 llvm::Type* CodegenLLVMVisitor::get_default_fp_type() {
@@ -532,6 +567,7 @@ void CodegenLLVMVisitor::visit_codegen_for_statement(const ast::CodegenForStatem
     node.get_initialization()->accept(*this);
 
     // If the loop is to be vectorised, create a separate vector induction variable.
+    // \todo: See the comment for `kernel_id_prefix`.
     if (vector_width > 1) {
         // First, create a vector type and alloca for it.
         llvm::Type* i32_type = llvm::Type::getInt32Ty(*context);
@@ -562,8 +598,10 @@ void CodegenLLVMVisitor::visit_codegen_for_statement(const ast::CodegenForStatem
 
     // Generate code for the loop body and create the basic block for the increment.
     builder.SetInsertPoint(for_body);
+    is_kernel_code = true;
     const auto& statement_block = node.get_statement_block();
     statement_block->accept(*this);
+    is_kernel_code = false;
     builder.CreateBr(for_inc);
 
     // Process increment.
@@ -572,15 +610,10 @@ void CodegenLLVMVisitor::visit_codegen_for_statement(const ast::CodegenForStatem
 
     // If the code is vectorised, then increment the vector id by <W, W, ..., W> where W is the
     // vector width.
+    // \todo: See the comment for `kernel_id_prefix`.
     if (vector_width > 1) {
         // First, create an increment vector.
-        llvm::Type* i32_type = llvm::Type::getInt32Ty(*context);
-        std::vector<llvm::Constant*> constants;
-        for (unsigned i = 0; i < vector_width; ++i) {
-            const auto& element = llvm::ConstantInt::get(i32_type, vector_width);
-            constants.push_back(element);
-        }
-        llvm::Value* vector_inc = llvm::ConstantVector::get(constants);
+        llvm::Value* vector_inc = get_constant_int_vector(vector_width);
 
         // Increment the kernel id elements by a constant vector width.
         llvm::Value* vector_id_ptr = lookup(kernel_id_prefix + kernel_id);
@@ -589,7 +622,7 @@ void CodegenLLVMVisitor::visit_codegen_for_statement(const ast::CodegenForStatem
         builder.CreateStore(incremented, vector_id_ptr);
     }
 
-   // Create a branch to condition block, then generate exit code out of the loop.
+    // Create a branch to condition block, then generate exit code out of the loop.
     builder.CreateBr(for_cond);
     builder.SetInsertPoint(exit);
 }
@@ -678,6 +711,10 @@ void CodegenLLVMVisitor::visit_codegen_var_list_statement(
 }
 
 void CodegenLLVMVisitor::visit_double(const ast::Double& node) {
+    if (is_kernel_code && vector_width > 1) {
+        values.push_back(get_constant_fp_vector(node.get_value()));
+        return;
+    }
     const auto& constant = llvm::ConstantFP::get(get_default_fp_type(), node.get_value());
     values.push_back(constant);
 }
@@ -769,6 +806,10 @@ void CodegenLLVMVisitor::visit_if_statement(const ast::IfStatement& node) {
 }
 
 void CodegenLLVMVisitor::visit_integer(const ast::Integer& node) {
+    if (is_kernel_code && vector_width > 1) {
+        values.push_back(get_constant_int_vector(node.get_value()));
+        return;
+    }
     const auto& constant = llvm::ConstantInt::get(llvm::Type::getInt32Ty(*context),
                                                   node.get_value());
     values.push_back(constant);
