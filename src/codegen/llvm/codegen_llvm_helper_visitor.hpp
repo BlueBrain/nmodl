@@ -120,6 +120,9 @@ class CodegenLLVMHelperVisitor: public visitor::AstVisitor {
     const std::string MECH_INSTANCE_VAR = "mech";
     const std::string MECH_NODECOUNT_VAR = "node_count";
 
+    /// name of induction variable used in the kernel.
+    const std::string INDUCTION_VAR = "id";
+
     /// create new function for FUNCTION or PROCEDURE block
     void create_function_for_node(ast::Block& node);
 
@@ -132,6 +135,10 @@ class CodegenLLVMHelperVisitor: public visitor::AstVisitor {
 
     const InstanceVarHelper& get_instance_var_helper() {
         return instance_var_helper;
+    }
+
+    std::string get_kernel_id() {
+        return INDUCTION_VAR;
     }
 
     /// run visitor and return code generation functions

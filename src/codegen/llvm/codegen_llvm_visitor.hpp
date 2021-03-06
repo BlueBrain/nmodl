@@ -82,11 +82,14 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     // Use 32-bit floating-point type if true. Otherwise, use deafult 64-bit.
     bool use_single_precision;
 
-    // explicit vectorisation width
+    // Explicit vectorisation width.
     int vector_width;
 
-    // LLVM mechanism struct
-    llvm::StructType* llvm_struct;
+    // The name of induction variable used in the kernel functions.
+    std::string kernel_id;
+
+    // A flag to indicate that the code is generated for the kernel.
+    bool is_kernel_code = false;
 
     /**
      *\brief Run LLVM optimisation passes on generated IR
@@ -106,8 +109,8 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     CodegenLLVMVisitor(const std::string& mod_filename,
                        const std::string& output_dir,
                        bool opt_passes,
-                       int vector_width = 1,
-                       bool use_single_precision = false)
+                       bool use_single_precision = false,
+                       int vector_width = 1)
         : mod_filename(mod_filename)
         , output_dir(output_dir)
         , opt_passes(opt_passes)
@@ -129,6 +132,13 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
      * \return LLVM code generated for this AST node
      */
     llvm::Value* codegen_indexed_name(const ast::IndexedName& node);
+
+    /**
+     * Generates LLVM code for the given Instance variable
+     * \param node CodegenInstanceVar NMODL AST node
+     * \return LLVM code generated for this AST node
+     */
+    llvm::Value* codegen_instance_var(const ast::CodegenInstanceVar& node);
 
     /**
      * Returns GEP instruction to 1D array
@@ -153,6 +163,20 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     llvm::Type* get_codegen_var_type(const ast::CodegenVarType& node);
 
     /**
+     * Returns LLVM vector with `vector_width` int values.
+     * \param int value to replicate
+     * \return LLVM value
+     */
+    llvm::Value* get_constant_int_vector(int value);
+
+    /**
+     * Returns LLVM vector with `vector_width` double values.
+     * \param string a double value to replicate
+     * \return LLVM value
+     */
+    llvm::Value* get_constant_fp_vector(const std::string& value);
+
+    /**
      * Returns 64-bit or 32-bit LLVM floating type
      * \return     \c LLVM floating point type according to `use_single_precision` flag
      */
@@ -163,6 +187,18 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
      * \return     \c LLVM pointer to floating point type according to `use_single_precision` flag
      */
     llvm::Type* get_default_fp_ptr_type();
+
+    /**
+     * Returns a pointer to LLVM struct type
+     * \return LLVM pointer type
+     */
+    llvm::Type* get_instance_struct_type();
+
+    /**
+     * Returns a LLVM value corresponding to the VarName node
+     * \return LLVM value
+     */
+    llvm::Value* get_variable_ptr(const ast::VarName& node);
 
     /**
      * Create a function call to an external method
@@ -255,6 +291,7 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     void visit_binary_expression(const ast::BinaryExpression& node) override;
     void visit_boolean(const ast::Boolean& node) override;
     void visit_statement_block(const ast::StatementBlock& node) override;
+    void visit_codegen_for_statement(const ast::CodegenForStatement& node) override;
     void visit_codegen_function(const ast::CodegenFunction& node) override;
     void visit_codegen_return_statement(const ast::CodegenReturnStatement& node) override;
     void visit_codegen_var_list_statement(const ast::CodegenVarListStatement& node) override;
@@ -267,7 +304,6 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     void visit_program(const ast::Program& node) override;
     void visit_unary_expression(const ast::UnaryExpression& node) override;
     void visit_var_name(const ast::VarName& node) override;
-    void visit_instance_struct(const ast::InstanceStruct& node) override;
     void visit_while_statement(const ast::WhileStatement& node) override;
 
     // \todo: move this to debug mode (e.g. -v option or --dump-ir)

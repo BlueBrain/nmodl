@@ -794,39 +794,3 @@ SCENARIO("Dead code removal", "[visitor][llvm][opt]") {
         }
     }
 }
-
-//=============================================================================
-// Create Instance Struct
-//=============================================================================
-
-SCENARIO("Creation of Instance Struct", "[visitor][llvm][instance_struct]") {
-    GIVEN("NEURON block with RANGE variables and IONS") {
-        std::string nmodl_text = R"(
-            NEURON {
-                USEION na READ ena WRITE ina
-                NONSPECIFIC_CURRENT il
-                RANGE minf, hinf
-            }
-
-            STATE {
-                m
-            }
-
-            ASSIGNED {
-                v (mV)
-                celsius (degC)
-                minf
-                hinf
-            }
-        )";
-
-        THEN("create struct with the declared variables") {
-            std::string module_string = run_llvm_visitor(nmodl_text, true);
-            std::smatch m;
-
-            std::regex instance_struct_declaration(
-                R"(%unknown_Instance = type \{ double\*, double\*, double\*, double\*, double\*, double\*, double\*, double\*, double\*, double\* \})");
-            REQUIRE(std::regex_search(module_string, m, instance_struct_declaration));
-        }
-    }
-}
