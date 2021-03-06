@@ -160,6 +160,8 @@ llvm::Type* CodegenLLVMVisitor::get_codegen_var_type(const ast::CodegenVarType& 
         return llvm::Type::getInt32Ty(*context);
     case ast::AstNodeType::VOID:
         return llvm::Type::getVoidTy(*context);
+    // TODO :: George/Ioannis : Here we have to also return INSTANCE_STRUCT type
+    //         as it is used as an argument to nrn_state function
     default:
         throw std::runtime_error("Error: expecting a type in CodegenVarType node\n");
     }
@@ -823,6 +825,7 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
     CodegenLLVMHelperVisitor v{vector_width};
     const auto& functions = v.get_codegen_functions(node);
     instance_var_helper = v.get_instance_var_helper();
+
     kernel_id = v.get_kernel_id();
 
     // For every function, generate its declaration. Thus, we can look up
