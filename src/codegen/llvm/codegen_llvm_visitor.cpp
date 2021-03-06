@@ -21,7 +21,6 @@ namespace nmodl {
 namespace codegen {
 
 
-static constexpr const char instance_struct_name[] = "__instance_var_struct";
 static constexpr const char instance_struct_type_name[] = "__instance_var__type";
 
 // The prefix is used to create a vectorised id that can be used as index to GEPs. However, for
@@ -223,8 +222,8 @@ llvm::Type* CodegenLLVMVisitor::get_instance_struct_type() {
         }
     }
 
-    llvm::StructType* llvm_struct_type = llvm::StructType::create(*context,
-                                                                  instance_struct_type_name);
+    llvm::StructType* llvm_struct_type =
+        llvm::StructType::create(*context, mod_filename + instance_struct_type_name);
     llvm_struct_type->setBody(members);
     return llvm::PointerType::get(llvm_struct_type, /*AddressSpace=*/0);
 }
