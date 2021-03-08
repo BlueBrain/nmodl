@@ -18,6 +18,13 @@ namespace codegen {
 
 using namespace fmt::literals;
 
+
+const ast::AstNodeType CodegenLLVMHelperVisitor::INTEGER_TYPE = ast::AstNodeType::INTEGER;
+const ast::AstNodeType CodegenLLVMHelperVisitor::FLOAT_TYPE = ast::AstNodeType::DOUBLE;
+const std::string CodegenLLVMHelperVisitor::NODECOUNT_VAR = "node_count";
+const std::string CodegenLLVMHelperVisitor::VOLTAGE_VAR = "voltage";
+const std::string CodegenLLVMHelperVisitor::NODE_INDEX_VAR = "node_index";
+
 /**
  * \brief Create variable definition statement
  *
@@ -169,6 +176,11 @@ std::shared_ptr<ast::InstanceStruct> CodegenLLVMHelperVisitor::create_instance_s
             codegen_vars.emplace_back(codegen_var);
         };
 
+    // NOTE : Order of variables is not important but we assume all pointers
+    // are added first and then scalar variables like t, dt, second_order etc.
+    // This order is assumed when we allocate data for integration testing
+    // and benchmarking purpose. See CodegenDataHelper::create_data().
+
     /// float variables are standard pointers to float vectors
     for (const auto& float_var: info.codegen_float_variables) {
         add_var_with_type(float_var->get_name(), FLOAT_TYPE, /*is_pointer=*/1);
@@ -186,15 +198,15 @@ std::shared_ptr<ast::InstanceStruct> CodegenLLVMHelperVisitor::create_instance_s
     }
 
     // add voltage and node index
-    add_var_with_type("voltage", FLOAT_TYPE, /*is_pointer=*/1);
-    add_var_with_type("node_index", INTEGER_TYPE, /*is_pointer=*/1);
+    add_var_with_type(VOLTAGE_VAR, FLOAT_TYPE, /*is_pointer=*/1);
+    add_var_with_type(NODE_INDEX_VAR, INTEGER_TYPE, /*is_pointer=*/1);
 
     // add dt, t, celsius
     add_var_with_type(naming::NTHREAD_T_VARIABLE, FLOAT_TYPE, /*is_pointer=*/0);
     add_var_with_type(naming::NTHREAD_DT_VARIABLE, FLOAT_TYPE, /*is_pointer=*/0);
     add_var_with_type(naming::CELSIUS_VARIABLE, FLOAT_TYPE, /*is_pointer=*/0);
     add_var_with_type(naming::SECOND_ORDER_VARIABLE, INTEGER_TYPE, /*is_pointer=*/0);
-    add_var_with_type(MECH_NODECOUNT_VAR, INTEGER_TYPE, /*is_pointer=*/0);
+    add_var_with_type(NODECOUNT_VAR, INTEGER_TYPE, /*is_pointer=*/0);
 
     return std::make_shared<ast::InstanceStruct>(codegen_vars);
 }
@@ -510,7 +522,7 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
 
     /// loop constructs : initialization, condition and increment
     const auto& initialization = loop_initialization_expression(INDUCTION_VAR);
-    const auto& condition = create_expression("{} < {}"_format(INDUCTION_VAR, MECH_NODECOUNT_VAR));
+    const auto& condition = create_expression("{} < {}"_format(INDUCTION_VAR, NODECOUNT_VAR));
     const auto& increment = loop_increment_expression(INDUCTION_VAR, vector_width);
 
     /// loop body : initialization + solve blocks
@@ -522,9 +534,9 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
         std::vector<std::string> double_variables{"v"};
 
         /// access node index and corresponding voltage
-        loop_index_statements.push_back(
-            visitor::create_statement("node_id = node_index[{}]"_format(INDUCTION_VAR)));
-        loop_body_statements.push_back(visitor::create_statement("v = voltage[node_id]"));
+        // loop_index_statements.push_back(
+        //    visitor::create_statement("node_id = node_index[{}]"_format(INDUCTION_VAR)));
+        // loop_body_statements.push_back(visitor::create_statement("v = {}[node_id]"_format(VOLTAGE_VAR));
 
         /// read ion variables
         ion_read_statements(BlockType::State,
