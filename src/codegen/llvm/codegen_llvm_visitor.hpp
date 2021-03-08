@@ -35,6 +35,14 @@
 namespace nmodl {
 namespace codegen {
 
+extern const double default_nthread_dt_value;
+
+extern const double default_nthread_t_value;
+
+extern const double default_celsius_value;
+
+extern const int default_second_order_value;
+
 /**
  * @defgroup llvm LLVM Based Code Generation Implementation
  * @brief Implementations of LLVM based code generation

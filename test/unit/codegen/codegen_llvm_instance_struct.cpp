@@ -124,7 +124,8 @@ SCENARIO("Instance Struct creation", "[visitor][llvm][instance_struct]") {
             size_t node_count_index = 15;
 
             // Check the float values are loaded correctly and added
-            REQUIRE(*static_cast<double*>(instance_data.members[celsius_index]) == 34.0);
+            REQUIRE(*static_cast<double*>(instance_data.members[celsius_index]) ==
+                    default_celsius_value);
             REQUIRE(compare_vectors(instance_data.members[minf_index],
                                     generate_double_data(minf_index, num_elements)));
         }

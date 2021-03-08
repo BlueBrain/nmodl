@@ -8,6 +8,14 @@
 namespace nmodl {
 namespace codegen {
 
+const double default_nthread_dt_value = 0.025;
+
+const double default_nthread_t_value = 100.0;
+
+const double default_celsius_value = 34.0;
+
+const int default_second_order_value = 0;
+
 /**
  * \class PaddingHelper
  * \brief Helper to calculate padding/alignment at runtime
@@ -66,7 +74,7 @@ std::vector<double> generate_double_data(const size_t& initial_value, const size
     std::vector<double> data(num_elements);
 
     for (size_t i = 0; i < num_elements; i++) {
-        data[i] = initial_value + i*1e-15;
+        data[i] = initial_value + i * 1e-15;
     }
 
     return data;
@@ -76,7 +84,7 @@ std::vector<float> generate_float_data(const size_t& initial_value, const size_t
     std::vector<float> data(num_elements);
 
     for (size_t i = 0; i < num_elements; i++) {
-        data[i] = initial_value + i*1e-6;
+        data[i] = initial_value + i * 1e-6;
     }
 
     return data;
@@ -194,15 +202,15 @@ CodegenInstanceData CodegenDataHelper::create_data(size_t num_elements, size_t s
         // some default values for standard parameters
         double value = 0;
         if (name == naming::NTHREAD_DT_VARIABLE) {
-            value = 0.025;
+            value = default_nthread_dt_value;
         } else if (name == naming::NTHREAD_T_VARIABLE) {
-            value = 100.0;
+            value = default_nthread_t_value;
         } else if (name == naming::CELSIUS_VARIABLE) {
-            value = 34.0;
+            value = default_celsius_value;
         } else if (name == CodegenLLVMHelperVisitor::NODECOUNT_VAR) {
             value = num_elements;
         } else if (name == naming::SECOND_ORDER_VARIABLE) {
-            value = 0;
+            value = default_second_order_value;
         }
 
         if (type == ast::AstNodeType::DOUBLE) {

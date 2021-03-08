@@ -17,6 +17,14 @@
 namespace nmodl {
 namespace codegen {
 
+extern const double default_nthread_dt_value;
+
+extern const double default_nthread_t_value;
+
+extern const double default_celsius_value;
+
+extern const int default_second_order_value;
+
 /**
  * \class CodegenInstanceData
  * \brief Wrapper class to pack data allocate for instance
