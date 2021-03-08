@@ -8,95 +8,33 @@
 namespace nmodl {
 namespace codegen {
 
+// scalar variables with default values
 const double default_nthread_dt_value = 0.025;
-
 const double default_nthread_t_value = 100.0;
-
 const double default_celsius_value = 34.0;
-
 const int default_second_order_value = 0;
 
-/**
- * \class PaddingHelper
- * \brief Helper to calculate padding/alignment at runtime
- *
- * C/C++ has different padding/alignment requirements based
- * on target platform. This simple struct help to calculate
- * alignment requirements at runtime.
- * See https://en.wikipedia.org/wiki/Data_structure_alignment.
- *
- * TODO : We are not using this as we rely on inserting variabels in
- * order into instance struct : pointer, double, float, int
- */
-struct PaddingHelper {
-    // to calculate alignment/padding requirement we
-    // make pair of different variables with respective
-    // types to find alignment requirement
-
-    // pointer alignment requirement
-    char a;
-    double* b;
-
-    // double alignment requirement
-    char c;
-    double d;
-
-    // float alignment requirement
-    char e;
-    float f;
-
-    // integer alignment requirement
-    char g;
-    int h;
-
-    // char is always 1 byte. We subtract base address of char
-    // from "next member" because padding inserted will be equal
-    // to alignment requirement of the "next member".
-
-    size_t pointer_alignment() {
-        return (char*) (&b) - &a;
-    }
-
-    size_t double_alignment() {
-        return (char*) (&d) - &c;
-    }
-
-    size_t float_alignment() {
-        return (char*) (&f) - &e;
-    }
-
-    size_t int_alignment() {
-        return (char*) (&h) - &g;
-    }
-};
-
-std::vector<double> generate_double_data(const size_t& initial_value, const size_t& num_elements) {
+std::vector<double> generate_double_data(size_t initial_value, size_t num_elements) {
     std::vector<double> data(num_elements);
-
     for (size_t i = 0; i < num_elements; i++) {
         data[i] = initial_value + (i + 1) * 1e-15;
     }
-
     return data;
 }
 
-std::vector<float> generate_float_data(const size_t& initial_value, const size_t& num_elements) {
+std::vector<float> generate_float_data(size_t initial_value, size_t num_elements) {
     std::vector<float> data(num_elements);
-
     for (size_t i = 0; i < num_elements; i++) {
         data[i] = initial_value + i * 1e-6;
     }
-
     return data;
 }
 
-std::vector<int> generate_int_data(const size_t& initial_value, const size_t& num_elements) {
+std::vector<int> generate_int_data(size_t initial_value, size_t num_elements) {
     std::vector<int> data(num_elements);
-
     for (size_t i = 0; i < num_elements; i++) {
         data[i] = initial_value + i;
     }
-
     return data;
 }
 
@@ -146,10 +84,10 @@ void initialize_variable(const std::shared_ptr<ast::CodegenVarWithType>& var,
 CodegenInstanceData CodegenDataHelper::create_data(size_t num_elements, size_t seed) {
     const unsigned NBYTE_ALIGNMENT = 64;
 
+    const auto& variables = instance->get_codegen_vars();
+
     CodegenInstanceData data;
     data.num_elements = num_elements;
-
-    const auto& variables = instance->get_codegen_vars();
 
     // base pointer to instance object
     void* base = nullptr;
@@ -157,18 +95,19 @@ CodegenInstanceData CodegenDataHelper::create_data(size_t num_elements, size_t s
     size_t member_size = std::max(sizeof(double), sizeof(double*));
     // allocate instance object with memory alignment
     posix_memalign(&base, NBYTE_ALIGNMENT, member_size * variables.size());
-
     data.base_ptr = base;
+
     size_t offset = 0;
     void* ptr = base;
     size_t variable_index = 0;
+
     for (auto& var: variables) {
         // only process until first non-pointer variable
         if (!var->get_is_pointer()) {
             break;
         }
 
-        unsigned member_size = 0;
+        size_t member_size = 0;
         ast::AstNodeType type = var->get_type()->get_type();
         if (type == ast::AstNodeType::DOUBLE) {
             member_size = sizeof(double);
@@ -178,13 +117,15 @@ CodegenInstanceData CodegenDataHelper::create_data(size_t num_elements, size_t s
             member_size = sizeof(int);
         }
 
-        void* p;
-        posix_memalign(&p, NBYTE_ALIGNMENT, member_size * num_elements);
-        initialize_variable(var, p, variable_index, num_elements);
-        data.offsets.push_back(offset);
-        data.members.push_back(p);
+        void* member;
+        posix_memalign(&member, NBYTE_ALIGNMENT, member_size * num_elements);
+        initialize_variable(var, member, variable_index, num_elements);
 
-        memcpy(ptr, &p, sizeof(double*));
+        // copy address at specific location in the struct
+        memcpy(ptr, &member, sizeof(double*));
+
+        data.offsets.push_back(offset);
+        data.members.push_back(member);
 
         // all pointer types are of same size, so just use double*
         offset += sizeof(double*);

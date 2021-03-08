@@ -18,7 +18,7 @@ namespace codegen {
 
 using namespace fmt::literals;
 
-
+/// initialize static member variables
 const ast::AstNodeType CodegenLLVMHelperVisitor::INTEGER_TYPE = ast::AstNodeType::INTEGER;
 const ast::AstNodeType CodegenLLVMHelperVisitor::FLOAT_TYPE = ast::AstNodeType::DOUBLE;
 const std::string CodegenLLVMHelperVisitor::NODECOUNT_VAR = "node_count";
@@ -164,7 +164,12 @@ void CodegenLLVMHelperVisitor::create_function_for_node(ast::Block& node) {
     auto function = std::make_shared<ast::CodegenFunction>(fun_ret_type, name, arguments, block);
     codegen_functions.push_back(function);
 }
-
+/**
+ * \note : Order of variables is not important but we assume all pointers
+ * are added first and then scalar variables like t, dt, second_order etc.
+ * This order is assumed when we allocate data for integration testing
+ * and benchmarking purpose. See CodegenDataHelper::create_data().
+ */
 std::shared_ptr<ast::InstanceStruct> CodegenLLVMHelperVisitor::create_instance_struct() {
     ast::CodegenVarWithTypeVector codegen_vars;
 
@@ -175,11 +180,6 @@ std::shared_ptr<ast::InstanceStruct> CodegenLLVMHelperVisitor::create_instance_s
             auto codegen_var = new ast::CodegenVarWithType(var_type, is_pointer, var_name);
             codegen_vars.emplace_back(codegen_var);
         };
-
-    // NOTE : Order of variables is not important but we assume all pointers
-    // are added first and then scalar variables like t, dt, second_order etc.
-    // This order is assumed when we allocate data for integration testing
-    // and benchmarking purpose. See CodegenDataHelper::create_data().
 
     /// float variables are standard pointers to float vectors
     for (const auto& float_var: info.codegen_float_variables) {
@@ -534,10 +534,10 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
         std::vector<std::string> double_variables{"v"};
 
         /// access node index and corresponding voltage
-        // loop_index_statements.push_back(
-        //    visitor::create_statement("node_id = node_index[{}]"_format(INDUCTION_VAR)));
-        // loop_body_statements.push_back(visitor::create_statement("v =
-        // {}[node_id]"_format(VOLTAGE_VAR));
+        loop_index_statements.push_back(
+            visitor::create_statement("node_id = node_index[{}]"_format(INDUCTION_VAR)));
+        loop_body_statements.push_back(
+            visitor::create_statement("v = {}[node_id]"_format(VOLTAGE_VAR)));
 
         /// read ion variables
         ion_read_statements(BlockType::State,
