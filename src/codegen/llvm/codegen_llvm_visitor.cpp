@@ -252,6 +252,10 @@ llvm::Value* CodegenLLVMVisitor::get_variable_ptr(const ast::VarName& node) {
     return ptr;
 }
 
+std::shared_ptr<ast::InstanceStruct> CodegenLLVMVisitor::get_instance_struct_ptr() {
+    return instance_var_helper.instance;
+}
+
 void CodegenLLVMVisitor::run_llvm_opt_passes() {
     /// run some common optimisation passes that are commonly suggested
     fpm.add(llvm::createInstructionCombiningPass());

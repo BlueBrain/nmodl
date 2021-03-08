@@ -56,8 +56,8 @@ class CodegenDataHelper {
 
   public:
     CodegenDataHelper() = delete;
-    CodegenDataHelper(std::shared_ptr<ast::Program>& program,
-                      std::shared_ptr<ast::InstanceStruct>& instance)
+    CodegenDataHelper(const std::shared_ptr<ast::Program>& program,
+                      const std::shared_ptr<ast::InstanceStruct>& instance)
         : program(program)
         , instance(instance) {}
 
