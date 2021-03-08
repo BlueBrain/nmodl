@@ -46,24 +46,56 @@ struct PaddingHelper {
     // to alignment requirement of the "next member".
 
     size_t pointer_alignment() {
-        return (char*)(&b) - &a;
+        return (char*) (&b) - &a;
     }
 
     size_t double_alignment() {
-        return (char*)(&d) - &c;
+        return (char*) (&d) - &c;
     }
 
     size_t float_alignment() {
-        return (char*)(&f) - &e;
+        return (char*) (&f) - &e;
     }
 
     size_t int_alignment() {
-        return (char*)(&h) - &g;
+        return (char*) (&h) - &g;
     }
 };
 
-void initialize_variable(const std::shared_ptr<ast::CodegenVarWithType>& var, void* ptr, size_t num_elements) {
-    ast::AstNodeType type = var->get_type()->get_node_type();
+std::vector<double> generate_double_data(size_t& initial_value, const size_t& num_elements) {
+    std::vector<double> data(num_elements);
+
+    for (size_t i = 0; i < num_elements; i++) {
+        data[i] = initial_value++ + i + 1e-15;
+    }
+
+    return data;
+}
+
+std::vector<float> generate_float_data(size_t& initial_value, const size_t& num_elements) {
+    std::vector<float> data(num_elements);
+
+    for (size_t i = 0; i < num_elements; i++) {
+        data[i] = initial_value++ + i + 1e-6;
+    }
+
+    return data;
+}
+
+std::vector<int> generate_int_data(size_t& initial_value, const size_t& num_elements) {
+    std::vector<int> data(num_elements);
+
+    for (size_t i = 0; i < num_elements; i++) {
+        data[i] = initial_value++ + i;
+    }
+
+    return data;
+}
+
+void initialize_variable(const std::shared_ptr<ast::CodegenVarWithType>& var,
+                         void* ptr,
+                         size_t num_elements) {
+    ast::AstNodeType type = var->get_type()->get_type();
     const std::string& name = var->get_name()->get_node_name();
 
     // todos : various things one need to take care of here
@@ -80,20 +112,23 @@ void initialize_variable(const std::shared_ptr<ast::CodegenVarWithType>& var, vo
 
     static size_t initial_value = 0;
 
-    if(type == ast::AstNodeType::DOUBLE) {
+    if (type == ast::AstNodeType::DOUBLE) {
+        std::vector<double> generated_double_data = generate_double_data(initial_value, num_elements);
         double* data = (double*) ptr;
         for (size_t i = 0; i < num_elements; i++) {
-            data[i] = initial_value++ + i + 1e-15;
+            data[i] = generated_double_data[i];
         }
-    } else if(type == ast::AstNodeType::FLOAT) {
-            float *data = (float *) ptr;
-            for(size_t i = 0; i < num_elements; i++) {
-                data[i] = initial_value++ + i + 1e-6;
-            }
-    } else if(type == ast::AstNodeType::INTEGER) {
-        int *data = (int *) ptr;
-        for(size_t i = 0; i < num_elements; i++) {
-            data[i] = i;
+    } else if (type == ast::AstNodeType::FLOAT) {
+        std::vector<float> generated_float_data = generate_float_data(initial_value, num_elements);
+        float* data = (float*) ptr;
+        for (size_t i = 0; i < num_elements; i++) {
+            data[i] = generated_float_data[i];
+        }
+    } else if (type == ast::AstNodeType::INTEGER) {
+        std::vector<int> generated_int_data = generate_int_data(initial_value, num_elements);
+        int* data = (int*) ptr;
+        for (size_t i = 0; i < num_elements; i++) {
+            data[i] = generated_int_data[i];
         }
     } else {
         throw std::runtime_error("Unhandled data type during initialize_variable");
@@ -109,15 +144,15 @@ CodegenInstanceData CodegenDataHelper::create_data(size_t num_elements, size_t s
     const auto& variables = instance->get_codegen_vars();
 
     // base pointer to instance object
-    void *base = nullptr;
+    void* base = nullptr;
     // max size of each member : pointer / double has maximum size
     size_t member_size = std::max(sizeof(double), sizeof(double*));
     // allocate instance object with memory alignment
     posix_memalign(&base, NBYTE_ALIGNMENT, member_size * variables.size());
 
     size_t offset = 0;
-    void *ptr = base;
-    for(auto &var : variables) {
+    void* ptr = base;
+    for (auto& var: variables) {
         // only process until first non-pointer variable
         if (!var->get_is_pointer()) {
             break;
@@ -126,9 +161,9 @@ CodegenInstanceData CodegenDataHelper::create_data(size_t num_elements, size_t s
         unsigned member_size = 0;
         ast::AstNodeType type = var->get_type()->get_type();
         if (type == ast::AstNodeType::DOUBLE) {
-            member_size = sizeof(double );
+            member_size = sizeof(double);
         } else if (type == ast::AstNodeType::FLOAT) {
-            member_size = sizeof(float );
+            member_size = sizeof(float);
         } else if (type == ast::AstNodeType::INTEGER) {
             member_size = sizeof(int);
         }
@@ -139,14 +174,14 @@ CodegenInstanceData CodegenDataHelper::create_data(size_t num_elements, size_t s
         data.members.push_back(ptr);
 
         // all pointer types are of same size, so just use double*
-        offset += sizeof(double *);
-        ptr = (char*)base + offset;
+        offset += sizeof(double*);
+        ptr = (char*) base + offset;
     }
 
     // we are now switching from pointer type to next member type (e.g. double)
     // ideally we should use padding but switching from double* to double should
     // already meet alignment requirements
-    for(auto &var : variables) {
+    for (auto& var: variables) {
         // process only scalar elements
         if (var->get_is_pointer()) {
             continue;
@@ -158,7 +193,7 @@ CodegenInstanceData CodegenDataHelper::create_data(size_t num_elements, size_t s
         double value = 0;
         if (name == naming::NTHREAD_DT_VARIABLE) {
             value = 0.025;
-        } else if(name == naming::NTHREAD_T_VARIABLE) {
+        } else if (name == naming::NTHREAD_T_VARIABLE) {
             value = 100.0;
         } else if (name == naming::CELSIUS_VARIABLE) {
             value = 34.0;
@@ -169,25 +204,26 @@ CodegenInstanceData CodegenDataHelper::create_data(size_t num_elements, size_t s
         }
 
         if (type == ast::AstNodeType::DOUBLE) {
-            *((double*)ptr) = value;
+            *((double*) ptr) = value;
             data.offsets.push_back(offset);
             data.members.push_back(ptr);
-            offset += sizeof(double );
-            ptr = (char*)base + offset;
+            offset += sizeof(double);
+            ptr = (char*) base + offset;
         } else if (type == ast::AstNodeType::FLOAT) {
-            *((float *)ptr) = float(value);
+            *((float*) ptr) = float(value);
             data.offsets.push_back(offset);
             data.members.push_back(ptr);
-            offset += sizeof(float );
-            ptr = (char*)base + offset;
+            offset += sizeof(float);
+            ptr = (char*) base + offset;
         } else if (type == ast::AstNodeType::INTEGER) {
-            *((int *)ptr) = int(value);
+            *((int*) ptr) = int(value);
             data.offsets.push_back(offset);
             data.members.push_back(ptr);
             offset += sizeof(int);
-            ptr = (char*)base + offset;
+            ptr = (char*) base + offset;
         } else {
-            throw std::runtime_error("Unhandled type while allocating data in CodegenDataHelper::create_data()");
+            throw std::runtime_error(
+                "Unhandled type while allocating data in CodegenDataHelper::create_data()");
         }
     }
 

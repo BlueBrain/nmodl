@@ -536,7 +536,8 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
         /// access node index and corresponding voltage
         // loop_index_statements.push_back(
         //    visitor::create_statement("node_id = node_index[{}]"_format(INDUCTION_VAR)));
-        // loop_body_statements.push_back(visitor::create_statement("v = {}[node_id]"_format(VOLTAGE_VAR));
+        // loop_body_statements.push_back(visitor::create_statement("v =
+        // {}[node_id]"_format(VOLTAGE_VAR));
 
         /// read ion variables
         ion_read_statements(BlockType::State,
