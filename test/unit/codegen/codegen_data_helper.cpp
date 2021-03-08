@@ -113,7 +113,8 @@ void initialize_variable(const std::shared_ptr<ast::CodegenVarWithType>& var,
     static size_t initial_value = 0;
 
     if (type == ast::AstNodeType::DOUBLE) {
-        std::vector<double> generated_double_data = generate_double_data(initial_value, num_elements);
+        std::vector<double> generated_double_data = generate_double_data(initial_value,
+                                                                         num_elements);
         double* data = (double*) ptr;
         for (size_t i = 0; i < num_elements; i++) {
             data[i] = generated_double_data[i];

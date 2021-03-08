@@ -35,6 +35,7 @@ codegen::CodegenInstanceData generate_instance_data(const std::string& text,
     NmodlDriver driver;
     const auto& ast = driver.parse_string(text);
 
+    // Generate full AST and solve the BREAKPOINT block to be able to generate the Instance Struct
     AstVisitor().visit_program(*ast);
     SymtabVisitor(true).visit_program(*ast);
     PerfVisitor().visit_program(*ast);
@@ -54,10 +55,12 @@ codegen::CodegenInstanceData generate_instance_data(const std::string& text,
     return instance_data;
 }
 
-template<typename T>
+template <typename T>
 bool compare_vectors(void* instance_struct_data_ptr, const std::vector<T>& generated_data) {
     std::vector<T> instance_struct_vector;
-    instance_struct_vector.assign(static_cast<T*>(instance_struct_data_ptr), static_cast<T*>(instance_struct_data_ptr) + generated_data.size());
+    instance_struct_vector.assign(static_cast<T*>(instance_struct_data_ptr),
+                                  static_cast<T*>(instance_struct_data_ptr) +
+                                      generated_data.size());
     return instance_struct_vector == generated_data;
 }
 
@@ -99,8 +102,10 @@ SCENARIO("Instance Struct creation", "[visitor][llvm][instance_struct]") {
         THEN("instance struct elements are properly initialized") {
             const size_t num_elements = 100;
             size_t initial_value = 0;
-            auto instance_data =
-                generate_instance_data(nmodl_text, /*opt=*/false, /*use_single_precision=*/true, num_elements);
+            auto instance_data = generate_instance_data(nmodl_text,
+                                                        /*opt=*/false,
+                                                        /*use_single_precision=*/true,
+                                                        num_elements);
 
             const auto minf_index = 0;
             const auto mtau_index = 1;
@@ -121,7 +126,8 @@ SCENARIO("Instance Struct creation", "[visitor][llvm][instance_struct]") {
 
             // Check the float values are loaded correctly and added
             REQUIRE(*static_cast<double*>(instance_data.members[celsius_index]) == 34.0);
-            REQUIRE(compare_vectors(instance_data.members[minf_index], generate_double_data(initial_value, num_elements)));
+            REQUIRE(compare_vectors(instance_data.members[minf_index],
+                                    generate_double_data(initial_value, num_elements)));
         }
     }
 }
