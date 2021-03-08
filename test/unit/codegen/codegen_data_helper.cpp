@@ -74,7 +74,7 @@ std::vector<double> generate_double_data(const size_t& initial_value, const size
     std::vector<double> data(num_elements);
 
     for (size_t i = 0; i < num_elements; i++) {
-        data[i] = initial_value + i * 1e-15;
+        data[i] = initial_value + (i + 1) * 1e-15;
     }
 
     return data;
@@ -158,6 +158,7 @@ CodegenInstanceData CodegenDataHelper::create_data(size_t num_elements, size_t s
     // allocate instance object with memory alignment
     posix_memalign(&base, NBYTE_ALIGNMENT, member_size * variables.size());
 
+    data.base_ptr = base;
     size_t offset = 0;
     void* ptr = base;
     size_t variable_index = 0;
@@ -177,14 +178,18 @@ CodegenInstanceData CodegenDataHelper::create_data(size_t num_elements, size_t s
             member_size = sizeof(int);
         }
 
-        posix_memalign(&ptr, NBYTE_ALIGNMENT, member_size * num_elements);
-        initialize_variable(var, ptr, variable_index, num_elements);
+        void* p;
+        posix_memalign(&p, NBYTE_ALIGNMENT, member_size * num_elements);
+        initialize_variable(var, p, variable_index, num_elements);
         data.offsets.push_back(offset);
-        data.members.push_back(ptr);
+        data.members.push_back(p);
+
+        memcpy(ptr, &p, sizeof(double*));
 
         // all pointer types are of same size, so just use double*
         offset += sizeof(double*);
         ptr = (char*) base + offset;
+
         variable_index++;
     }
 
