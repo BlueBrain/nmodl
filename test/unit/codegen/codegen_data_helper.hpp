@@ -38,9 +38,9 @@ struct CodegenInstanceData {
     std::vector<void*> members;
 };
 
-std::vector<double> generate_double_data(size_t& initial_value, const size_t& num_elements);
-std::vector<float> generate_float_data(size_t& initial_value, const size_t& num_elements);
-std::vector<int> generate_int_data(size_t& initial_value, const size_t& num_elements);
+std::vector<double> generate_double_data(const size_t& initial_value, const size_t& num_elements);
+std::vector<float> generate_float_data(const size_t& initial_value, const size_t& num_elements);
+std::vector<int> generate_int_data(const size_t& initial_value, const size_t& num_elements);
 
 /**
  * \class CodegenDataHelper

@@ -62,31 +62,31 @@ struct PaddingHelper {
     }
 };
 
-std::vector<double> generate_double_data(size_t& initial_value, const size_t& num_elements) {
+std::vector<double> generate_double_data(const size_t& initial_value, const size_t& num_elements) {
     std::vector<double> data(num_elements);
 
     for (size_t i = 0; i < num_elements; i++) {
-        data[i] = initial_value++ + i + 1e-15;
+        data[i] = initial_value + i*1e-15;
     }
 
     return data;
 }
 
-std::vector<float> generate_float_data(size_t& initial_value, const size_t& num_elements) {
+std::vector<float> generate_float_data(const size_t& initial_value, const size_t& num_elements) {
     std::vector<float> data(num_elements);
 
     for (size_t i = 0; i < num_elements; i++) {
-        data[i] = initial_value++ + i + 1e-6;
+        data[i] = initial_value + i*1e-6;
     }
 
     return data;
 }
 
-std::vector<int> generate_int_data(size_t& initial_value, const size_t& num_elements) {
+std::vector<int> generate_int_data(const size_t& initial_value, const size_t& num_elements) {
     std::vector<int> data(num_elements);
 
     for (size_t i = 0; i < num_elements; i++) {
-        data[i] = initial_value++ + i;
+        data[i] = initial_value + i;
     }
 
     return data;
@@ -94,6 +94,7 @@ std::vector<int> generate_int_data(size_t& initial_value, const size_t& num_elem
 
 void initialize_variable(const std::shared_ptr<ast::CodegenVarWithType>& var,
                          void* ptr,
+                         size_t initial_value,
                          size_t num_elements) {
     ast::AstNodeType type = var->get_type()->get_type();
     const std::string& name = var->get_name()->get_node_name();
@@ -109,8 +110,6 @@ void initialize_variable(const std::shared_ptr<ast::CodegenVarWithType>& var,
     //     of a particular mechanism. This would be <= number of compartments
     //     in the cell. For now, just initialize integer variables from 0 to
     //     num_elements - 1.
-
-    static size_t initial_value = 0;
 
     if (type == ast::AstNodeType::DOUBLE) {
         std::vector<double> generated_double_data = generate_double_data(initial_value,
@@ -153,6 +152,7 @@ CodegenInstanceData CodegenDataHelper::create_data(size_t num_elements, size_t s
 
     size_t offset = 0;
     void* ptr = base;
+    size_t variable_index = 0;
     for (auto& var: variables) {
         // only process until first non-pointer variable
         if (!var->get_is_pointer()) {
@@ -170,13 +170,14 @@ CodegenInstanceData CodegenDataHelper::create_data(size_t num_elements, size_t s
         }
 
         posix_memalign(&ptr, NBYTE_ALIGNMENT, member_size * num_elements);
-        initialize_variable(var, ptr, num_elements);
+        initialize_variable(var, ptr, variable_index, num_elements);
         data.offsets.push_back(offset);
         data.members.push_back(ptr);
 
         // all pointer types are of same size, so just use double*
         offset += sizeof(double*);
         ptr = (char*) base + offset;
+        variable_index++;
     }
 
     // we are now switching from pointer type to next member type (e.g. double)

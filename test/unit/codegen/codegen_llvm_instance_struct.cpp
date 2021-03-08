@@ -38,7 +38,6 @@ codegen::CodegenInstanceData generate_instance_data(const std::string& text,
     // Generate full AST and solve the BREAKPOINT block to be able to generate the Instance Struct
     AstVisitor().visit_program(*ast);
     SymtabVisitor(true).visit_program(*ast);
-    PerfVisitor().visit_program(*ast);
     NeuronSolveVisitor().visit_program(*ast);
     SolveBlockVisitor().visit_program(*ast);
     SymtabVisitor(true).visit_program(*ast);
@@ -107,27 +106,27 @@ SCENARIO("Instance Struct creation", "[visitor][llvm][instance_struct]") {
                                                         /*use_single_precision=*/true,
                                                         num_elements);
 
-            const auto minf_index = 0;
-            const auto mtau_index = 1;
-            const auto m_index = 2;
-            const auto Dm_index = 3;
-            const auto ena_index = 4;
-            const auto v_unused_index = 5;
-            const auto g_unused_index = 6;
-            const auto ion_ena_index = 7;
-            const auto ion_ena_index_index = 8;
-            const auto voltage_index = 9;
-            const auto node_index_index = 10;
-            const auto t_index = 11;
-            const auto dt_index = 12;
-            const auto celsius_index = 13;
-            const auto secondorder_index = 14;
-            const auto node_count_index = 15;
+            size_t minf_index = 0;
+            size_t mtau_index = 1;
+            size_t m_index = 2;
+            size_t Dm_index = 3;
+            size_t ena_index = 4;
+            size_t v_unused_index = 5;
+            size_t g_unused_index = 6;
+            size_t ion_ena_index = 7;
+            size_t ion_ena_index_index = 8;
+            size_t voltage_index = 9;
+            size_t node_index_index = 10;
+            size_t t_index = 11;
+            size_t dt_index = 12;
+            size_t celsius_index = 13;
+            size_t secondorder_index = 14;
+            size_t node_count_index = 15;
 
             // Check the float values are loaded correctly and added
             REQUIRE(*static_cast<double*>(instance_data.members[celsius_index]) == 34.0);
             REQUIRE(compare_vectors(instance_data.members[minf_index],
-                                    generate_double_data(initial_value, num_elements)));
+                                    generate_double_data(minf_index, num_elements)));
         }
     }
 }
