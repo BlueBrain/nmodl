@@ -249,9 +249,7 @@ SCENARIO("Simple scalar kernel", "[llvm][runner]") {
             }
 
             DERIVATIVE states {
-                printf("%.2f", m)
                 m = (minf - m) / mtau
-                printf("%.2f", m)
             }
         )";
 
@@ -320,7 +318,12 @@ SCENARIO("Simple scalar kernel", "[llvm][runner]") {
         ptr = &s;
 
         THEN("Values in struct have changed!") {
+            // 10 and 10
+            printf("Before: %.1f and %.1f\n", s.m[0], s.m[1]);
             runner.run_with_argument<int, void*>("__nrn_state_hh_wrapper", ptr);
+            // (10 - 5) / 1 and (10 - 2) / 1
+            // 5            and 8
+            printf("After: %.1f and %.1f\n", s.m[0], s.m[1]);
         }
     }
 }
