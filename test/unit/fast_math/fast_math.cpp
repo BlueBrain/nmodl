@@ -36,8 +36,7 @@ bool check_over_span(T f_ref(T),
         // normalize based on range
         if (tol > low) {
             tol *= eps;
-        }
-        else {
+        } else {
             diff *= one_o_eps;
         }
         if (diff > tol && diff != 0.0) {

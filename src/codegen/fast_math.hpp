@@ -10,8 +10,8 @@
 
 #pragma once
 
-#include <cstdint>
 #include <cmath>
+#include <cstdint>
 
 /**
  * \file
@@ -189,7 +189,7 @@ static inline float vexpm1(float x) {
     // this cannot be reordered for the cancellation trick to work
     volatile float g = x - z * C1F;
     g -= z * C2F;
-    
+
     const int32_t n = z;
 
     const int32_t twopnm1 = ((n - 1) + 0x7f) << 23;
