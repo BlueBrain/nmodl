@@ -6,13 +6,14 @@
  *************************************************************************/
 
 #include <catch/catch.hpp>
-#include <regex>
 
 #include "ast/program.hpp"
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
 #include "codegen/llvm/jit_driver.hpp"
 #include "parser/nmodl_driver.hpp"
 #include "visitors/checkparent_visitor.hpp"
+#include "visitors/neuron_solve_visitor.hpp"
+#include "visitors/solve_block_visitor.hpp"
 #include "visitors/symtab_visitor.hpp"
 
 using namespace nmodl;
@@ -23,7 +24,7 @@ using nmodl::parser::NmodlDriver;
 static double EPSILON = 1e-15;
 
 //=============================================================================
-// No optimisations
+// Simple functions: no optimisations
 //=============================================================================
 
 SCENARIO("Arithmetic expression", "[llvm][runner]") {
@@ -60,6 +61,10 @@ SCENARIO("Arithmetic expression", "[llvm][runner]") {
 
             PROCEDURE foo() {}
 
+            FUNCTION with_argument(x) {
+                with_argument = x
+            }
+
             FUNCTION loop() {
                 LOCAL i, j, sum, result
                 result = 0
@@ -92,26 +97,31 @@ SCENARIO("Arithmetic expression", "[llvm][runner]") {
         Runner runner(std::move(m));
 
         THEN("functions are evaluated correctly") {
-            auto exp_result = runner.run<double>("exponential");
+            auto exp_result = runner.run_without_arguments<double>("exponential");
             REQUIRE(fabs(exp_result - 2.718281828459045) < EPSILON);
 
-            auto constant_result = runner.run<double>("constant");
+            auto constant_result = runner.run_without_arguments<double>("constant");
             REQUIRE(fabs(constant_result - 10.0) < EPSILON);
 
-            auto arithmetic_result = runner.run<double>("arithmetic");
+            auto arithmetic_result = runner.run_without_arguments<double>("arithmetic");
             REQUIRE(fabs(arithmetic_result - 2.1) < EPSILON);
 
-            auto function_call_result = runner.run<double>("function_call");
+            auto function_call_result = runner.run_without_arguments<double>("function_call");
             REQUIRE(fabs(function_call_result - 1.0) < EPSILON);
 
-            auto loop_result = runner.run<double>("loop");
+            double data = 10.0;
+            auto with_argument_result = runner.run_with_argument<double, double>("with_argument",
+                                                                                 data);
+            REQUIRE(fabs(with_argument_result - 10.0) < EPSILON);
+
+            auto loop_result = runner.run_without_arguments<double>("loop");
             REQUIRE(fabs(loop_result - 90.0) < EPSILON);
         }
     }
 }
 
 //=============================================================================
-// With optimisations
+// Simple functions: with optimisations
 //=============================================================================
 
 SCENARIO("Optimised arithmetic expression", "[llvm][runner]") {
@@ -189,23 +199,128 @@ SCENARIO("Optimised arithmetic expression", "[llvm][runner]") {
 
         THEN("optimizations preserve function results") {
             // Check exponential is turned into a constant.
-            auto exp_result = runner.run<double>("exponential");
+            auto exp_result = runner.run_without_arguments<double>("exponential");
             REQUIRE(fabs(exp_result - 2.718281828459045) < EPSILON);
 
             // Check constant folding.
-            auto constant_result = runner.run<double>("constant");
+            auto constant_result = runner.run_without_arguments<double>("constant");
             REQUIRE(fabs(constant_result - 10.0) < EPSILON);
 
             // Check nested conditionals
-            auto conditionals_result = runner.run<double>("conditionals");
+            auto conditionals_result = runner.run_without_arguments<double>("conditionals");
             REQUIRE(fabs(conditionals_result - 4.0) < EPSILON);
 
             // Check constant folding.
-            auto arithmetic_result = runner.run<double>("arithmetic");
+            auto arithmetic_result = runner.run_without_arguments<double>("arithmetic");
             REQUIRE(fabs(arithmetic_result - 2.1) < EPSILON);
 
-            auto function_call_result = runner.run<double>("function_call");
+            auto function_call_result = runner.run_without_arguments<double>("function_call");
             REQUIRE(fabs(function_call_result - 1.0) < EPSILON);
+        }
+    }
+}
+
+//=============================================================================
+// State kernel.
+//=============================================================================
+
+SCENARIO("Simple scalar kernel", "[llvm][runner]") {
+    GIVEN("Simple MOD file with a state update") {
+        std::string nmodl_text = R"(
+            NEURON {
+                SUFFIX hh
+                NONSPECIFIC_CURRENT il
+                RANGE minf, mtau, gl, el
+            }
+
+            STATE {
+                m
+            }
+
+            ASSIGNED {
+                v (mV)
+                minf
+                mtau (ms)
+            }
+
+            BREAKPOINT {
+                SOLVE states METHOD cnexp
+                il = gl * (v - el)
+            }
+
+            DERIVATIVE states {
+                printf("%.2f", m)
+                m = (minf - m) / mtau
+                printf("%.2f", m)
+            }
+        )";
+
+
+        NmodlDriver driver;
+        const auto& ast = driver.parse_string(nmodl_text);
+
+        // Run passes on the AST to generate LLVM.
+        SymtabVisitor().visit_program(*ast);
+        NeuronSolveVisitor().visit_program(*ast);
+        SolveBlockVisitor().visit_program(*ast);
+        codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"unknown",
+                                                 /*output_dir=*/".",
+                                                 /*opt_passes=*/false,
+                                                 /*use_single_precision=*/false,
+                                                 /*vector_width=*/1);
+        llvm_visitor.visit_program(*ast);
+        llvm_visitor.wrap_kernel_function("nrn_state_hh");
+
+        std::unique_ptr<llvm::Module> module = llvm_visitor.get_module();
+        Runner runner(std::move(module));
+
+        // Create a struct that represents the instance data;
+        // \todo: This is a placeholder and will substituted by CodegenInstanceData!
+        struct InstanceType {
+            double* minf;
+            double* mtau;
+            double* m;
+            double* Dm;
+            double* v_unused;
+            double* g_unused;
+            double* voltage;
+            int* node_index;
+            double t;
+            double dt;
+            double celsious;
+            int secondorder;
+            int node_count;
+        };
+
+        double minf[] = {10.0, 10.0};
+        double mtau[] = {1.0, 1.0};
+        double m[] = {5.0, 2.0};
+        double Dm[] = {0.0, 0.0};
+        double v_unused[] = {0.0, 0.0};
+        double g_unused[] = {0.0, 0.0};
+        double volatge[] = {0.0, 0.0};
+        int node_index[] = {0, 1};
+
+        InstanceType s;
+        s.minf = minf;
+        s.mtau = mtau;
+        s.m = m;
+        s.Dm = Dm;
+        s.v_unused = v_unused;
+        s.g_unused = g_unused;
+        s.voltage = volatge;
+        s.node_index = node_index;
+        s.t = 0.0;
+        s.dt = 1.0;
+        s.celsious = 0.0;
+        s.secondorder = 0;
+        s.node_count = 2;
+
+        void* ptr;
+        ptr = &s;
+
+        THEN("Values in struct have changed!") {
+            runner.run_with_argument<int, void*>("__nrn_state_hh_wrapper", ptr);
         }
     }
 }
