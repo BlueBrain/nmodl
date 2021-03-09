@@ -12,6 +12,8 @@
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
 #include "parser/nmodl_driver.hpp"
 #include "visitors/checkparent_visitor.hpp"
+#include "visitors/neuron_solve_visitor.hpp"
+#include "visitors/solve_block_visitor.hpp"
 #include "visitors/symtab_visitor.hpp"
 
 using namespace nmodl;
@@ -24,16 +26,20 @@ using nmodl::parser::NmodlDriver;
 
 std::string run_llvm_visitor(const std::string& text,
                              bool opt = false,
-                             bool use_single_precision = false) {
+                             bool use_single_precision = false,
+                             int vector_width = 1) {
     NmodlDriver driver;
     const auto& ast = driver.parse_string(text);
 
     SymtabVisitor().visit_program(*ast);
+    NeuronSolveVisitor().visit_program(*ast);
+    SolveBlockVisitor().visit_program(*ast);
 
     codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"unknown",
                                              /*output_dir=*/".",
                                              opt,
-                                             use_single_precision);
+                                             use_single_precision,
+                                             vector_width);
     llvm_visitor.visit_program(*ast);
     return llvm_visitor.print_module();
 }
@@ -766,6 +772,108 @@ SCENARIO("While", "[visitor][llvm]") {
             // Check that 3 blocks are created: header, body and exit blocks. Also, there must be
             // a backedge from the body to the header.
             REQUIRE(std::regex_search(module_string, m, loop));
+        }
+    }
+}
+
+//=============================================================================
+// State scalar kernel
+//=============================================================================
+
+SCENARIO("Scalar state kernel", "[visitor][llvm]") {
+    GIVEN("A neuron state update") {
+        std::string nmodl_text = R"(
+            NEURON {
+                SUFFIX hh
+                NONSPECIFIC_CURRENT il
+                RANGE minf, mtau, gl, el
+            }
+
+            STATE {
+                m
+            }
+
+            ASSIGNED {
+                v (mV)
+                minf
+                mtau (ms)
+            }
+
+            BREAKPOINT {
+                SOLVE states METHOD cnexp
+                il = gl * (v - el)
+            }
+
+            DERIVATIVE states {
+                    m = (minf-m) / mtau
+            }
+        )";
+
+        THEN("a kernel with instance struct as an argument and a FOR loop is created") {
+            std::string module_string = run_llvm_visitor(nmodl_text);
+            std::smatch m;
+
+            // Check the struct type and the kernel declaration.
+            std::regex struct_type(
+                "%.*__instance_var__type = type \\{ double\\*, double\\*, double\\*, double\\*, "
+                "double\\*, double\\*, double\\*, i32\\*, double, double, double, i32, i32 \\}");
+            std::regex kernel_declaration(
+                R"(define void @nrn_state_hh\(%.*__instance_var__type\* .*\))");
+            REQUIRE(std::regex_search(module_string, m, struct_type));
+            REQUIRE(std::regex_search(module_string, m, kernel_declaration));
+
+            // Check for correct induction variable initialisation and a branch to condition block.
+            std::regex alloca_instr(R"(%id = alloca i32)");
+            std::regex br(R"(br label %for\.cond)");
+            REQUIRE(std::regex_search(module_string, m, alloca_instr));
+            REQUIRE(std::regex_search(module_string, m, br));
+
+            // Check condition block: id < mech->node_count, and a conditional branch to loop body
+            // or exit.
+            std::regex condition(
+                "  %.* = load %.*__instance_var__type\\*, %.*__instance_var__type\\*\\* %.*,.*\n"
+                "  %.* = getelementptr inbounds %.*__instance_var__type, "
+                "%.*__instance_var__type\\* "
+                "%.*, i32 0, i32 [0-9]+\n"
+                "  %.* = load i32, i32\\* %.*,.*\n"
+                "  %.* = load i32, i32\\* %id,.*\n"
+                "  %.* = icmp slt i32 %.*, %.*");
+            std::regex cond_br(R"(br i1 %.*, label %for\.body, label %for\.exit)");
+            REQUIRE(std::regex_search(module_string, m, condition));
+            REQUIRE(std::regex_search(module_string, m, cond_br));
+
+            // In the body block, `node_id` and voltage `v` are initialised with the data from the
+            // struct. Check for variable allocations and correct loads from the struct with GEPs.
+            std::regex initialisation(
+                "for\\.body:.*\n"
+                "  %node_id = alloca i32,.*\n"
+                "  %v = alloca double,.*");
+            std::regex load_from_struct(
+                "  %.* = load %.*__instance_var__type\\*, %.*__instance_var__type\\*\\* %.*\n"
+                "  %.* = getelementptr inbounds %.*__instance_var__type, "
+                "%.*__instance_var__type\\* %.*, i32 0, i32 [0-9]+\n"
+                "  %.* = load i32, i32\\* %id,.*\n"
+                "  %.* = sext i32 %.* to i64\n"
+                "  %.* = load (i32|double)\\*, (i32|double)\\*\\* %.*\n"
+                "  %.* = getelementptr inbounds (i32|double), (i32|double)\\* %.*, i64 %.*\n"
+                "  %.* = load (i32|double), (i32|double)\\* %.*");
+            REQUIRE(std::regex_search(module_string, m, initialisation));
+            REQUIRE(std::regex_search(module_string, m, load_from_struct));
+
+            // Check induction variable is incremented in increment block.
+            std::regex increment(
+                "for.inc:.*\n"
+                "  %.* = load i32, i32\\* %id,.*\n"
+                "  %.* = add i32 %.*, 1\n"
+                "  store i32 %.*, i32\\* %id,.*\n"
+                "  br label %for\\.cond");
+            REQUIRE(std::regex_search(module_string, m, increment));
+
+            // Check exit block.
+            std::regex exit(
+                "for\\.exit:.*\n"
+                "  ret void");
+            REQUIRE(std::regex_search(module_string, m, exit));
         }
     }
 }
