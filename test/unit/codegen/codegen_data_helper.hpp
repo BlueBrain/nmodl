@@ -18,6 +18,7 @@ namespace nmodl {
 namespace codegen {
 
 /// common scalar variables
+extern const double default_nthread_dt_value;
 extern const double default_nthread_t_value;
 extern const double default_celsius_value;
 extern const int default_second_order_value;
@@ -43,9 +44,8 @@ struct CodegenInstanceData {
     std::vector<void*> members;
 };
 
-std::vector<double> generate_double_data(size_t initial_value, size_t num_elements);
-std::vector<float> generate_float_data(size_t initial_value, size_t num_elements);
-std::vector<int> generate_int_data(size_t initial_value, size_t num_elements);
+template <typename T>
+std::vector<T> generate_data(size_t initial_value, size_t num_elements);
 
 /**
  * \class CodegenDataHelper

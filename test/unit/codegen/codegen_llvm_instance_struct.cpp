@@ -12,10 +12,8 @@
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
 #include "codegen_data_helper.hpp"
 #include "parser/nmodl_driver.hpp"
-#include "visitors/ast_visitor.hpp"
 #include "visitors/checkparent_visitor.hpp"
 #include "visitors/neuron_solve_visitor.hpp"
-#include "visitors/perf_visitor.hpp"
 #include "visitors/solve_block_visitor.hpp"
 #include "visitors/symtab_visitor.hpp"
 
@@ -31,26 +29,27 @@ using nmodl::parser::NmodlDriver;
 codegen::CodegenInstanceData generate_instance_data(const std::string& text,
                                                     bool opt = false,
                                                     bool use_single_precision = false,
-                                                    const size_t num_elements = 100) {
+                                                    int vector_width = 1,
+                                                    size_t num_elements = 100,
+                                                    size_t seed = 1) {
     NmodlDriver driver;
     const auto& ast = driver.parse_string(text);
 
     // Generate full AST and solve the BREAKPOINT block to be able to generate the Instance Struct
-    AstVisitor().visit_program(*ast);
-    SymtabVisitor(true).visit_program(*ast);
+    SymtabVisitor().visit_program(*ast);
     NeuronSolveVisitor().visit_program(*ast);
     SolveBlockVisitor().visit_program(*ast);
-    SymtabVisitor(true).visit_program(*ast);
 
     codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"test",
                                              /*output_dir=*/".",
                                              opt,
-                                             use_single_precision);
+                                             use_single_precision,
+                                             vector_width);
     llvm_visitor.visit_program(*ast);
     llvm_visitor.print_module();
     const auto& generated_instance_struct = llvm_visitor.get_instance_struct_ptr();
     auto codegen_data = codegen::CodegenDataHelper(ast, generated_instance_struct);
-    auto instance_data = codegen_data.create_data(num_elements, 42);
+    auto instance_data = codegen_data.create_data(num_elements, seed);
     return instance_data;
 }
 
@@ -105,10 +104,13 @@ SCENARIO("Instance Struct creation", "[visitor][llvm][instance_struct]") {
 
         THEN("instance struct elements are properly initialized") {
             const size_t num_elements = 10;
+            constexpr static double seed = 42;
             auto instance_data = generate_instance_data(nmodl_text,
                                                         /*opt=*/false,
                                                         /*use_single_precision=*/true,
-                                                        num_elements);
+                                                        /*vector_width*/ 1,
+                                                        num_elements,
+                                                        seed);
             size_t minf_index = 0;
             size_t mtau_index = 1;
             size_t m_index = 2;
@@ -127,13 +129,13 @@ SCENARIO("Instance Struct creation", "[visitor][llvm][instance_struct]") {
             size_t node_count_index = 15;
             // Check if the various instance struct fields are properly initialized
             REQUIRE(compare((double*) instance_data.members[minf_index],
-                            generate_double_data(minf_index, num_elements)));
+                            generate_data<double>(minf_index, num_elements)));
             REQUIRE(compare((double*) instance_data.members[ena_index],
-                            generate_double_data(ena_index, num_elements)));
+                            generate_data<double>(ena_index, num_elements)));
             REQUIRE(compare((double*) instance_data.members[ion_ena_index],
-                            generate_double_data(ion_ena_index, num_elements)));
+                            generate_data<double>(ion_ena_index, num_elements)));
             REQUIRE(compare((int*) instance_data.members[node_index_index],
-                            generate_int_data(node_index_index, num_elements)));
+                            generate_data<int>(node_index_index, num_elements)));
             REQUIRE(*static_cast<double*>(instance_data.members[t_index]) ==
                     default_nthread_t_value);
             REQUIRE(*static_cast<int*>(instance_data.members[node_count_index]) == num_elements);
@@ -159,11 +161,11 @@ SCENARIO("Instance Struct creation", "[visitor][llvm][instance_struct]") {
             };
             // Test if TestInstanceType struct is properly initialized
             TestInstanceType* instance = (TestInstanceType*) instance_data.base_ptr;
-            REQUIRE(compare(instance->minf, generate_double_data(minf_index, num_elements)));
-            REQUIRE(compare(instance->ena, generate_double_data(ena_index, num_elements)));
-            REQUIRE(compare(instance->ion_ena, generate_double_data(ion_ena_index, num_elements)));
+            REQUIRE(compare(instance->minf, generate_data<double>(minf_index, num_elements)));
+            REQUIRE(compare(instance->ena, generate_data<double>(ena_index, num_elements)));
+            REQUIRE(compare(instance->ion_ena, generate_data<double>(ion_ena_index, num_elements)));
             REQUIRE(
-                compare(instance->node_index, generate_int_data(node_index_index, num_elements)));
+                compare(instance->node_index, generate_data<int>(node_index_index, num_elements)));
             REQUIRE(instance->t == default_nthread_t_value);
             REQUIRE(instance->celsius == default_celsius_value);
             REQUIRE(instance->secondorder == default_second_order_value);

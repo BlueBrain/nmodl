@@ -14,26 +14,19 @@ const double default_nthread_t_value = 100.0;
 const double default_celsius_value = 34.0;
 const int default_second_order_value = 0;
 
-std::vector<double> generate_double_data(size_t initial_value, size_t num_elements) {
-    std::vector<double> data(num_elements);
-    for (size_t i = 0; i < num_elements; i++) {
-        data[i] = initial_value + (i + 1) * 1e-15;
+template <typename T>
+std::vector<T> generate_data(size_t initial_value, size_t num_elements) {
+    std::vector<T> data(num_elements);
+    T precision;
+    if (std::is_same<T, double>::value) {
+        precision = 1e-15;
+    } else if (std::is_same<T, float>::value) {
+        precision = 1e-6;
+    } else {
+        precision = 1;
     }
-    return data;
-}
-
-std::vector<float> generate_float_data(size_t initial_value, size_t num_elements) {
-    std::vector<float> data(num_elements);
     for (size_t i = 0; i < num_elements; i++) {
-        data[i] = initial_value + i * 1e-6;
-    }
-    return data;
-}
-
-std::vector<int> generate_int_data(size_t initial_value, size_t num_elements) {
-    std::vector<int> data(num_elements);
-    for (size_t i = 0; i < num_elements; i++) {
-        data[i] = initial_value + i;
+        data[i] = initial_value + precision * (i + 1);
     }
     return data;
 }
@@ -58,20 +51,20 @@ void initialize_variable(const std::shared_ptr<ast::CodegenVarWithType>& var,
     //     num_elements - 1.
 
     if (type == ast::AstNodeType::DOUBLE) {
-        std::vector<double> generated_double_data = generate_double_data(initial_value,
-                                                                         num_elements);
+        std::vector<double> generated_double_data = generate_data<double>(initial_value,
+                                                                          num_elements);
         double* data = (double*) ptr;
         for (size_t i = 0; i < num_elements; i++) {
             data[i] = generated_double_data[i];
         }
     } else if (type == ast::AstNodeType::FLOAT) {
-        std::vector<float> generated_float_data = generate_float_data(initial_value, num_elements);
+        std::vector<float> generated_float_data = generate_data<float>(initial_value, num_elements);
         float* data = (float*) ptr;
         for (size_t i = 0; i < num_elements; i++) {
             data[i] = generated_float_data[i];
         }
     } else if (type == ast::AstNodeType::INTEGER) {
-        std::vector<int> generated_int_data = generate_int_data(initial_value, num_elements);
+        std::vector<int> generated_int_data = generate_data<int>(initial_value, num_elements);
         int* data = (int*) ptr;
         for (size_t i = 0; i < num_elements; i++) {
             data[i] = generated_int_data[i];
