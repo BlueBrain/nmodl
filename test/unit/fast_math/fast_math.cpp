@@ -8,7 +8,6 @@
 #define CATCH_CONFIG_MAIN
 
 #include "codegen/fast_math.hpp"
-#include <cmath>
 
 #include <catch/catch.hpp>
 
@@ -21,6 +20,8 @@ bool check_over_span(T f_ref(T),
                      const size_t npoints) {
     constexpr uint nULP = 4;
     constexpr T eps = std::numeric_limits<T>::epsilon();
+    constexpr T one_o_eps = 1.0 / std::numeric_limits<T>::epsilon();
+    T low = std::numeric_limits<T>::min() * one_o_eps * 1e2;
 
     T range = high_limit - low_limit;
 
@@ -31,7 +32,14 @@ bool check_over_span(T f_ref(T),
         T test = f_test(x);
         T diff = std::abs(ref - test);
         T max = std::max(std::abs(ref), std::abs(test));
-        T tol = max * nULP * eps;
+        T tol = max * nULP;
+        // normalize based on range
+        if (tol > low) {
+            tol *= eps;
+        }
+        else {
+            diff *= one_o_eps;
+        }
         if (diff > tol && diff != 0.0) {
             ret = false;
         }
@@ -45,10 +53,10 @@ T exprelr_ref(const T x) {
 };
 
 SCENARIO("Check fast_math") {
-    constexpr double low_limit = -700.0;  // limit is 708
-    constexpr double high_limit = 700.0;
-    constexpr float low_limit_f = -70.0;  // limit is 88
-    constexpr float high_limit_f = 70.0;
+    constexpr double low_limit = -708.0;
+    constexpr double high_limit = 708.0;
+    constexpr float low_limit_f = -87.0f;
+    constexpr float high_limit_f = 88.0f;
     constexpr size_t npoints = 2000;
 
     GIVEN("vexp (double)") {
