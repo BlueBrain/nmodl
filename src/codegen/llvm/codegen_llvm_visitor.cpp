@@ -85,20 +85,11 @@ llvm::Value* CodegenLLVMVisitor::codegen_instance_var(const ast::CodegenInstance
     if (!member_var_name->get_name()->is_indexed_name())
         throw std::runtime_error("Error: " + member_name + " is not an IndexedName!");
 
-    // Proceed to creating a GEP instruction to get the pointer to the member's element. While LLVM
-    // Helper set the indices to be Name nodes, a sanity check is added here. Note that this step
-    // can be avoided if using `get_array_index_or_length()`. However, it does not support indexing
-    // with Name/Expression at the moment. \todo: Reuse `get_array_index_or_length()` here.
+    // Proceed to creating a GEP instruction to get the pointer to the member's element.
     auto member_indexed_name = std::dynamic_pointer_cast<ast::IndexedName>(
         member_var_name->get_name());
-    if (!member_indexed_name->get_length()->is_name())
-        throw std::runtime_error("Error: " + member_name + " has a non-Name index!");
+    llvm::Value* i64_index = get_array_index(*member_indexed_name);
 
-    // Load the index variable that will be used to access the member's element. Since we index a
-    // pointer variable, we need to extend the 32-bit integer index variable to 64-bit.
-    llvm::Value* i32_index = builder.CreateLoad(
-        lookup(member_indexed_name->get_length()->get_node_name()));
-    llvm::Value* i64_index = builder.CreateSExt(i32_index, llvm::Type::getInt64Ty(*context));
 
     // Create a indices vector for GEP to return the pointer to the element at the specified index.
     std::vector<llvm::Value*> member_indices;
@@ -125,13 +116,18 @@ llvm::Value* CodegenLLVMVisitor::codegen_instance_var(const ast::CodegenInstance
 }
 
 llvm::Value* CodegenLLVMVisitor::get_array_index(const ast::IndexedName& node) {
-    // Process the index expression.
-    logger->info(node.get_length()->get_node_type_name());
-    node.get_length()->accept(*this);
-    llvm::Value* index_value = values.back();
-    values.pop_back();
-
-    logger->info("All good");
+    // Process the index expression. It can either be a Name node:
+    //    k[id]     // id is an integer
+    // or an integer expression.
+    llvm::Value* index_value;
+    if (node.get_length()->is_name()) {
+        llvm::Value* ptr = lookup(node.get_length()->get_node_name());
+        index_value = builder.CreateLoad(ptr);
+    } else {
+        node.get_length()->accept(*this);
+        index_value = values.back();
+        values.pop_back();
+    }
 
     // Check if index is a double. While it is possible to use casting from double to integer
     // values, we choose not to support these cases.
