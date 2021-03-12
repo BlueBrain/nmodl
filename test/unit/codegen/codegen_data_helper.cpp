@@ -14,23 +14,6 @@ const double default_nthread_t_value = 100.0;
 const double default_celsius_value = 34.0;
 const int default_second_order_value = 0;
 
-template <typename T>
-std::vector<T> generate_dummy_data(size_t initial_value, size_t num_elements) {
-    std::vector<T> data(num_elements);
-    T precision;
-    if (std::is_same<T, double>::value) {
-        precision = 1e-15;
-    } else if (std::is_same<T, float>::value) {
-        precision = 1e-6;
-    } else {
-        precision = 1;
-    }
-    for (size_t i = 0; i < num_elements; i++) {
-        data[i] = initial_value + precision * (i + 1);
-    }
-    return data;
-}
-
 void initialize_variable(const std::shared_ptr<ast::CodegenVarWithType>& var,
                          void* ptr,
                          size_t initial_value,
