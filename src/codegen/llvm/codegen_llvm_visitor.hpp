@@ -119,12 +119,6 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
         , builder(*context)
         , fpm(module.get()) {}
 
-    /**
-     * Checks if array index specified by the given IndexedName is within bounds
-     * \param node IndexedName representing array
-     * \return     \c true if the index is within bounds
-     */
-    bool check_array_bounds(const ast::IndexedName& node, unsigned index);
 
     /**
      * Generates LLVM code for the given IndexedName
@@ -146,14 +140,21 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
      * \param index element index
      * \return GEP instruction value
      */
-    llvm::Value* create_gep(const std::string& name, unsigned index);
+    llvm::Value* create_gep(const std::string& name, llvm::Value* index);
 
     /**
-     * Returns array index or length from given IndexedName
+     * Returns array index from given IndexedName
      * \param node IndexedName representing array
-     * \return array index or length
+     * \return array index
      */
-    unsigned get_array_index_or_length(const ast::IndexedName& node);
+    llvm::Value* get_array_index(const ast::IndexedName& node);
+
+    /**
+     * Returns array length from given IndexedName
+     * \param node IndexedName representing array
+     * \return array length
+     */
+    int get_array_length(const ast::IndexedName& node);
 
     /**
      * Returns LLVM type for the given CodegenVarType node
