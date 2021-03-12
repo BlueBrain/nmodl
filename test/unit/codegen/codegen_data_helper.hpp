@@ -44,8 +44,17 @@ struct CodegenInstanceData {
     std::vector<void*> members;
 };
 
+/**
+ * Generate vector of dummy data according to the template type specified
+ * For double type: generate vector starting from (initial_value + 1e-15) with increments of 1e-15
+ * For float type: generate vector starting from (initial_value + 1e-6) with increments of 1e-6
+ * For int type: generate vector starting from (initial_value + 1) with increments of 1
+ * \param inital_value Base value for initializing the data
+ * \param num_elements Number of element of the generated vector
+ * \return std::vector<T> of dummy data for testing purposes
+ */
 template <typename T>
-std::vector<T> generate_data(size_t initial_value, size_t num_elements);
+std::vector<T> generate_dummy_data(size_t initial_value, size_t num_elements);
 
 /**
  * \class CodegenDataHelper

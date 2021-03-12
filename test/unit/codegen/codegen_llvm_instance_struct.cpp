@@ -54,7 +54,7 @@ codegen::CodegenInstanceData generate_instance_data(const std::string& text,
 }
 
 template <typename T>
-bool compare(T* instance_struct_data_ptr, const std::vector<T>& generated_data) {
+bool compare(void* instance_struct_data_ptr, const std::vector<T>& generated_data) {
     std::vector<T> instance_struct_vector;
     std::cout << "Generated data size: " << generated_data.size() << std::endl;
     instance_struct_vector.assign(static_cast<T*>(instance_struct_data_ptr),
@@ -128,14 +128,14 @@ SCENARIO("Instance Struct creation", "[visitor][llvm][instance_struct]") {
             size_t secondorder_index = 14;
             size_t node_count_index = 15;
             // Check if the various instance struct fields are properly initialized
-            REQUIRE(compare((double*) instance_data.members[minf_index],
-                            generate_data<double>(minf_index, num_elements)));
-            REQUIRE(compare((double*) instance_data.members[ena_index],
-                            generate_data<double>(ena_index, num_elements)));
-            REQUIRE(compare((double*) instance_data.members[ion_ena_index],
-                            generate_data<double>(ion_ena_index, num_elements)));
-            REQUIRE(compare((int*) instance_data.members[node_index_index],
-                            generate_data<int>(node_index_index, num_elements)));
+            REQUIRE(compare(instance_data.members[minf_index],
+                            generate_dummy_data<double>(minf_index, num_elements)));
+            REQUIRE(compare(instance_data.members[ena_index],
+                            generate_dummy_data<double>(ena_index, num_elements)));
+            REQUIRE(compare(instance_data.members[ion_ena_index],
+                            generate_dummy_data<double>(ion_ena_index, num_elements)));
+            REQUIRE(compare(instance_data.members[node_index_index],
+                            generate_dummy_data<int>(node_index_index, num_elements)));
             REQUIRE(*static_cast<double*>(instance_data.members[t_index]) ==
                     default_nthread_t_value);
             REQUIRE(*static_cast<int*>(instance_data.members[node_count_index]) == num_elements);
@@ -160,12 +160,14 @@ SCENARIO("Instance Struct creation", "[visitor][llvm][instance_struct]") {
                 int node_count;
             };
             // Test if TestInstanceType struct is properly initialized
+            // Cast void ptr instance_data.base_ptr to TestInstanceType*
             TestInstanceType* instance = (TestInstanceType*) instance_data.base_ptr;
-            REQUIRE(compare(instance->minf, generate_data<double>(minf_index, num_elements)));
-            REQUIRE(compare(instance->ena, generate_data<double>(ena_index, num_elements)));
-            REQUIRE(compare(instance->ion_ena, generate_data<double>(ion_ena_index, num_elements)));
-            REQUIRE(
-                compare(instance->node_index, generate_data<int>(node_index_index, num_elements)));
+            REQUIRE(compare(instance->minf, generate_dummy_data<double>(minf_index, num_elements)));
+            REQUIRE(compare(instance->ena, generate_dummy_data<double>(ena_index, num_elements)));
+            REQUIRE(compare(instance->ion_ena,
+                            generate_dummy_data<double>(ion_ena_index, num_elements)));
+            REQUIRE(compare(instance->node_index,
+                            generate_dummy_data<int>(node_index_index, num_elements)));
             REQUIRE(instance->t == default_nthread_t_value);
             REQUIRE(instance->celsius == default_celsius_value);
             REQUIRE(instance->secondorder == default_second_order_value);
