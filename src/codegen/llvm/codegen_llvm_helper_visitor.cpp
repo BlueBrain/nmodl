@@ -508,11 +508,6 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
 
     /// create now main compute part : for loop over channel instances
 
-    /// loop constructs : initialization, condition and increment
-    const auto& initialization = loop_initialization_expression(INDUCTION_VAR);
-    const auto& condition = create_expression("{} < {}"_format(INDUCTION_VAR, MECH_NODECOUNT_VAR));
-    const auto& increment = loop_increment_expression(INDUCTION_VAR, vector_width);
-
     /// loop body : initialization + solve blocks
     ast::StatementVector loop_def_statements;
     ast::StatementVector loop_index_statements;
@@ -570,20 +565,51 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
     /// now construct a new code block which will become the body of the loop
     auto loop_block = std::make_shared<ast::StatementBlock>(loop_body);
 
-    /// convert local statement to codegenvar statement
-    convert_local_statement(*loop_block);
+    /// main loop possibly vectorized on vector_width
+    {
+        /// loop constructs : initialization, condition and increment
+        const auto& initialization = loop_initialization_expression(INDUCTION_VAR);
+        const auto& condition = create_expression("{} < {}"_format(INDUCTION_VAR, MECH_NODECOUNT_VAR));
+        const auto& increment = loop_increment_expression(INDUCTION_VAR, vector_width);
 
-    /// create for loop node
-    auto for_loop_statement = std::make_shared<ast::CodegenForStatement>(initialization,
-                                                                         condition,
-                                                                         increment,
-                                                                         loop_block);
+        /// clone it
+        auto local_loop_block = std::shared_ptr<ast::StatementBlock>(loop_block->clone());
 
-    /// convert all variables inside loop body to instance variables
-    convert_to_instance_variable(*for_loop_statement, loop_index_var);
+        /// convert local statement to codegenvar statement
+        convert_local_statement(*local_loop_block);
 
-    /// loop itself becomes one of the statement in the function
-    function_statements.push_back(for_loop_statement);
+        auto for_loop_statement_main = std::make_shared<ast::CodegenForStatement>(initialization,
+                                                                                  condition,
+                                                                                  increment,
+                                                                                  local_loop_block);
+
+        /// convert all variables inside loop body to instance variables
+        convert_to_instance_variable(*for_loop_statement_main, loop_index_var);
+
+        /// loop itself becomes one of the statement in the function
+        function_statements.push_back(for_loop_statement_main);
+    }
+
+    /// remainder loop possibly vectorized on vector_width
+    {
+        /// loop constructs : initialization, condition and increment
+        const auto& condition = create_expression("{} < {}"_format(INDUCTION_VAR, MECH_NODECOUNT_VAR));
+        const auto& increment = loop_increment_expression(INDUCTION_VAR, 1);
+
+        /// convert local statement to codegenvar statement
+        convert_local_statement(*loop_block);
+
+        auto for_loop_statement_remainder = std::make_shared<ast::CodegenForStatement>(nullptr,
+                                                                                  condition,
+                                                                                  increment,
+                                                                                  loop_block);
+
+        /// convert all variables inside loop body to instance variables
+        convert_to_instance_variable(*for_loop_statement_remainder, loop_index_var);
+
+        /// loop itself becomes one of the statement in the function
+        function_statements.push_back(for_loop_statement_remainder);
+    }
 
     /// new block for the function
     auto function_block = new ast::StatementBlock(function_statements);
