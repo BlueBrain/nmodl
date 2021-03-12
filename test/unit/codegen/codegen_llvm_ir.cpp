@@ -557,6 +557,7 @@ SCENARIO("Indexed name", "[visitor][llvm]") {
         std::string nmodl_text = R"(
             PROCEDURE foo() {
                 LOCAL x[2]
+                x[10 - 10] = 1
                 x[1] = 3
             }
         )";
@@ -565,14 +566,19 @@ SCENARIO("Indexed name", "[visitor][llvm]") {
             std::string module_string = run_llvm_visitor(nmodl_text);
             std::smatch m;
 
-            // Check GEP is created correctly to pint at array element.
-            std::regex GEP(
-                R"(%1 = getelementptr inbounds \[2 x double\], \[2 x double\]\* %x, i32 0, i32 1)");
-            REQUIRE(std::regex_search(module_string, m, GEP));
+            // Check GEPs are created correctly to get the addresses of array elements.
+            std::regex GEP1(
+                R"(%1 = getelementptr inbounds \[2 x double\], \[2 x double\]\* %x, i64 0, i64 0)");
+            std::regex GEP2(
+                R"(%2 = getelementptr inbounds \[2 x double\], \[2 x double\]\* %x, i64 0, i64 1)");
+            REQUIRE(std::regex_search(module_string, m, GEP1));
+            REQUIRE(std::regex_search(module_string, m, GEP2));
 
-            // Check the value is stored to the pointer.
-            std::regex store(R"(store double 3.000000e\+00, double\* %1)");
-            REQUIRE(std::regex_search(module_string, m, store));
+            // Check the value is stored to the correct addresses.
+            std::regex store1(R"(store double 1.000000e\+00, double\* %1)");
+            std::regex store2(R"(store double 3.000000e\+00, double\* %2)");
+            REQUIRE(std::regex_search(module_string, m, store1));
+            REQUIRE(std::regex_search(module_string, m, store2));
         }
     }
 
@@ -591,7 +597,7 @@ SCENARIO("Indexed name", "[visitor][llvm]") {
 
             // Check GEP is created correctly to pint at array element.
             std::regex GEP(
-                R"(%2 = getelementptr inbounds \[2 x double\], \[2 x double\]\* %x, i32 0, i32 1)");
+                R"(%2 = getelementptr inbounds \[2 x double\], \[2 x double\]\* %x, i64 0, i64 1)");
             REQUIRE(std::regex_search(module_string, m, GEP));
 
             // Check the value is loaded from the pointer.
@@ -601,19 +607,6 @@ SCENARIO("Indexed name", "[visitor][llvm]") {
             // Check the value is stored to the the variable.
             std::regex store(R"(store double %3, double\* %y)");
             REQUIRE(std::regex_search(module_string, m, store));
-        }
-    }
-
-    GIVEN("Array with out of bounds access") {
-        std::string nmodl_text = R"(
-            PROCEDURE foo() {
-                LOCAL x[2]
-                x[5] = 3
-            }
-        )";
-
-        THEN("error is thrown") {
-            REQUIRE_THROWS_AS(run_llvm_visitor(nmodl_text), std::runtime_error);
         }
     }
 }
