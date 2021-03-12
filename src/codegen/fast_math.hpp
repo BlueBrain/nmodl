@@ -76,7 +76,11 @@ static constexpr float PX6expf = 5.0000001201E-1f;
 static constexpr float LOG2EF = 1.44269504088896341f;  // 1/ln(2)
 
 static inline double egm1(double x, double n) {
-    // this cannot be reordered for the cancellation trick to work
+    // this cannot be reordered for the double-double trick to work
+    // i.e., it cannot be re-written as g = x - n * (C1+C2)
+    // the loss of accuracy comes from the different magnitudes of ln(2) and n
+    // max(|n|) ~ 2^9
+    // ln(2) ~ 2^-1
     volatile double g = x - n * C1;
     g -= n * C2;
 
@@ -165,7 +169,7 @@ static inline float egm1(float x) {
 static inline float vexp(float x) {
     float z = std::floor(LOG2EF * x + 0.5f);
 
-    // this cannot be reordered for the cancellation trick to work
+    // this cannot be reordered for the double-double trick to work
     float volatile g = x - z * C1F;
     g -= z * C2F;
     const int32_t n = z;
@@ -186,7 +190,7 @@ static inline float vexp(float x) {
 static inline float vexpm1(float x) {
     float z = std::floor(LOG2EF * x + 0.5f);
 
-    // this cannot be reordered for the cancellation trick to work
+    // this cannot be reordered for the double-double trick to work
     volatile float g = x - z * C1F;
     g -= z * C2F;
 
