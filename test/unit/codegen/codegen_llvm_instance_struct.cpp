@@ -38,7 +38,6 @@ codegen::CodegenInstanceData generate_instance_data(const std::string& text,
     // Generate full AST and solve the BREAKPOINT block to be able to generate the Instance Struct
     SymtabVisitor().visit_program(*ast);
     NeuronSolveVisitor().visit_program(*ast);
-    SolveBlockVisitor().visit_program(*ast);
 
     codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"test",
                                              /*output_dir=*/".",
@@ -77,7 +76,6 @@ SCENARIO("Instance Struct creation", "[visitor][llvm][instance_struct]") {
                 SUFFIX test
                 USEION na READ ena
                 RANGE minf, mtau
-                THREADSAFE : assigned GLOBALs will be per thread
             }
 
             STATE {

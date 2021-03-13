@@ -14,6 +14,29 @@ const double default_nthread_t_value = 100.0;
 const double default_celsius_value = 34.0;
 const int default_second_order_value = 0;
 
+// cleanup all members and struct base pointer
+CodegenInstanceData::~CodegenInstanceData() {
+    // first free num_ptr_members members which are pointers
+    for(size_t i = 0; i < num_ptr_members; i++) {
+        free(members[i]);
+    }
+    // and then pointer to container struct
+    free(base_ptr);
+}
+
+/**
+ * \todo : various things can be improved here
+ * - if variable is voltage then initialization range could be -65 to +65
+ * - if variable is double or float then those could be initialize with
+ *   "some" floating point value between range like 1.0 to 100.0. Note
+ *   it would be nice to have unique values to avoid errors like division
+ *   by zero. We have simple implementation that is taking care of this.
+ * - if variable is integer then initialization range must be between
+ *   0 and num_elements. In practice, num_elements is number of instances
+ *   of a particular mechanism. This would be <= number of compartments
+ *   in the cell. For now, just initialize integer variables from 0 to
+ *   num_elements - 1.
+ */
 void initialize_variable(const std::shared_ptr<ast::CodegenVarWithType>& var,
                          void* ptr,
                          size_t initial_value,
@@ -21,34 +44,21 @@ void initialize_variable(const std::shared_ptr<ast::CodegenVarWithType>& var,
     ast::AstNodeType type = var->get_type()->get_type();
     const std::string& name = var->get_name()->get_node_name();
 
-    // todos : various things one need to take care of here
-    //   - if variable is voltage then initialization range could be -65 to +65
-    //   - if variable is double or float then those could be initialize with
-    //     "some" floating point value between range like 1.0 to 100.0. Note
-    //     it would be nice to have unique values to avoid errors like division
-    //     by zero
-    //   - if variable is integer then initialization range must be between
-    //     0 and num_elements. In practice, num_elements is number of instances
-    //     of a particular mechanism. This would be <= number of compartments
-    //     in the cell. For now, just initialize integer variables from 0 to
-    //     num_elements - 1.
-
-    if (type == ast::AstNodeType::DOUBLE) {
-        std::vector<double> generated_double_data = generate_dummy_data<double>(initial_value,
-                                                                                num_elements);
+      if (type == ast::AstNodeType::DOUBLE) {
+        const auto& generated_double_data = generate_dummy_data<double>(initial_value,
+                                                                        num_elements);
         double* data = (double*) ptr;
         for (size_t i = 0; i < num_elements; i++) {
             data[i] = generated_double_data[i];
         }
     } else if (type == ast::AstNodeType::FLOAT) {
-        std::vector<float> generated_float_data = generate_dummy_data<float>(initial_value,
-                                                                             num_elements);
+        const auto& generated_float_data = generate_dummy_data<float>(initial_value, num_elements);
         float* data = (float*) ptr;
         for (size_t i = 0; i < num_elements; i++) {
             data[i] = generated_float_data[i];
         }
     } else if (type == ast::AstNodeType::INTEGER) {
-        std::vector<int> generated_int_data = generate_dummy_data<int>(initial_value, num_elements);
+        const auto& generated_int_data = generate_dummy_data<int>(initial_value, num_elements);
         int* data = (int*) ptr;
         for (size_t i = 0; i < num_elements; i++) {
             data[i] = generated_int_data[i];
@@ -59,17 +69,22 @@ void initialize_variable(const std::shared_ptr<ast::CodegenVarWithType>& var,
 }
 
 CodegenInstanceData CodegenDataHelper::create_data(size_t num_elements, size_t seed) {
+    // alignment with 64-byte to generate aligned loads/stores
     const unsigned NBYTE_ALIGNMENT = 64;
 
+    // get variable information
     const auto& variables = instance->get_codegen_vars();
 
+    // start building data
     CodegenInstanceData data;
     data.num_elements = num_elements;
 
     // base pointer to instance object
     void* base = nullptr;
+
     // max size of each member : pointer / double has maximum size
     size_t member_size = std::max(sizeof(double), sizeof(double*));
+
     // allocate instance object with memory alignment
     posix_memalign(&base, NBYTE_ALIGNMENT, member_size * variables.size());
     data.base_ptr = base;
@@ -78,12 +93,14 @@ CodegenInstanceData CodegenDataHelper::create_data(size_t num_elements, size_t s
     void* ptr = base;
     size_t variable_index = 0;
 
+    // allocate each variable and allocate memory at particular offset in base pointer
     for (auto& var: variables) {
         // only process until first non-pointer variable
         if (!var->get_is_pointer()) {
             break;
         }
 
+        // check type of variable and it's size
         size_t member_size = 0;
         ast::AstNodeType type = var->get_type()->get_type();
         if (type == ast::AstNodeType::DOUBLE) {
@@ -94,6 +111,7 @@ CodegenInstanceData CodegenDataHelper::create_data(size_t num_elements, size_t s
             member_size = sizeof(int);
         }
 
+        // allocate memory and setup a pointer
         void* member;
         posix_memalign(&member, NBYTE_ALIGNMENT, member_size * num_elements);
         initialize_variable(var, member, variable_index, num_elements);
@@ -103,6 +121,7 @@ CodegenInstanceData CodegenDataHelper::create_data(size_t num_elements, size_t s
 
         data.offsets.push_back(offset);
         data.members.push_back(member);
+        data.num_ptr_members++;
 
         // all pointer types are of same size, so just use double*
         offset += sizeof(double*);
