@@ -202,6 +202,12 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     llvm::Value* get_variable_ptr(const ast::VarName& node);
 
     /**
+     * Returns shared_ptr to generated ast::InstanceStruct
+     * \return std::shared_ptr<ast::InstanceStruct>
+     */
+    std::shared_ptr<ast::InstanceStruct> get_instance_struct_ptr();
+
+    /**
      * Create a function call to an external method
      * \param name external method name
      * \param arguments expressions passed as arguments to the given external method
