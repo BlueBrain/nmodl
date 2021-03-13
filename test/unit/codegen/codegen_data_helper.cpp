@@ -17,7 +17,7 @@ const int default_second_order_value = 0;
 // cleanup all members and struct base pointer
 CodegenInstanceData::~CodegenInstanceData() {
     // first free num_ptr_members members which are pointers
-    for(size_t i = 0; i < num_ptr_members; i++) {
+    for (size_t i = 0; i < num_ptr_members; i++) {
         free(members[i]);
     }
     // and then pointer to container struct
@@ -44,7 +44,7 @@ void initialize_variable(const std::shared_ptr<ast::CodegenVarWithType>& var,
     ast::AstNodeType type = var->get_type()->get_type();
     const std::string& name = var->get_name()->get_node_name();
 
-      if (type == ast::AstNodeType::DOUBLE) {
+    if (type == ast::AstNodeType::DOUBLE) {
         const auto& generated_double_data = generate_dummy_data<double>(initial_value,
                                                                         num_elements);
         double* data = (double*) ptr;
