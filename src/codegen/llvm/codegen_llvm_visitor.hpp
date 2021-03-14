@@ -238,6 +238,14 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     void emit_procedure_or_function_declaration(const ast::CodegenFunction& node);
 
     /**
+     * Return InstanceVarHelper
+     * \return InstanceVarHelper
+     */
+    InstanceVarHelper get_instance_var_helper() {
+        return instance_var_helper;
+    }
+
+    /**
      * Return module pointer
      * \return LLVM IR module pointer
      */

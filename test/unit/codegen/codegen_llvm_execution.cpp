@@ -10,6 +10,7 @@
 #include "ast/program.hpp"
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
 #include "codegen/llvm/jit_driver.hpp"
+#include "codegen_data_helper.hpp"
 #include "parser/nmodl_driver.hpp"
 #include "visitors/checkparent_visitor.hpp"
 #include "visitors/neuron_solve_visitor.hpp"
@@ -269,61 +270,50 @@ SCENARIO("Simple scalar kernel", "[llvm][runner]") {
         llvm_visitor.visit_program(*ast);
         llvm_visitor.wrap_kernel_function("nrn_state_hh");
 
+        // Set up the JIT runner.
         std::unique_ptr<llvm::Module> module = llvm_visitor.get_module();
         Runner runner(std::move(module));
 
-        // Create a struct that represents the instance data;
-        // \todo: This is a placeholder and will substituted by CodegenInstanceData!
-        struct InstanceType {
-            double* minf;
-            double* mtau;
-            double* m;
-            double* Dm;
-            double* v_unused;
-            double* g_unused;
-            double* voltage;
-            int* node_index;
-            double t;
-            double dt;
-            double celsious;
-            int secondorder;
-            int node_count;
-        };
+        // \todo: change code below
+        // 1. Create a helper function to initialise the data based on the vector.
+        //    (Possibly variable name (like "m") as well)
+        // 2. Create comparison helper for comparing doubles.
 
-        double minf[] = {10.0, 10.0};
-        double mtau[] = {1.0, 1.0};
-        double m[] = {5.0, 2.0};
-        double Dm[] = {0.0, 0.0};
-        double v_unused[] = {0.0, 0.0};
-        double g_unused[] = {0.0, 0.0};
-        double volatge[] = {0.0, 0.0};
-        int node_index[] = {0, 1};
+        // Create the instance struct data.
+        int num_elements = 4;
+        const auto& generated_instance_struct = llvm_visitor.get_instance_struct_ptr();
+        auto codegen_data = codegen::CodegenDataHelper(ast, generated_instance_struct);
+        auto instance_data = codegen_data.create_data(num_elements, /*seed=*/1);
 
-        InstanceType s;
-        s.minf = minf;
-        s.mtau = mtau;
-        s.m = m;
-        s.Dm = Dm;
-        s.v_unused = v_unused;
-        s.g_unused = g_unused;
-        s.voltage = volatge;
-        s.node_index = node_index;
-        s.t = 0.0;
-        s.dt = 1.0;
-        s.celsious = 0.0;
-        s.secondorder = 0;
-        s.node_count = 2;
+        // Initialise the kernel variables to some predefined data.
+        int m_index = llvm_visitor.get_instance_var_helper().get_variable_index("m");
+        int minf_index = llvm_visitor.get_instance_var_helper().get_variable_index("minf");
+        int mtau_index = llvm_visitor.get_instance_var_helper().get_variable_index("mtau");
 
-        void* ptr;
-        ptr = &s;
+        std::cout << m_index << " " << minf_index << " " << mtau_index << "\n";
+
+        std::vector<double> m = {1.0, 2.0, 3.0, 4.0};
+        std::vector<double> minf = {5.0, 5.0, 5.0, 5.0};
+        std::vector<double> mtau = {1.0, 1.0, 1.0, 1.0};
+
+        std::vector<double> m_expected = {4.0, 3.0, 2.0, 1.0};
+
+        double* m_start = static_cast<double*>(instance_data.members[m_index]);
+        double* minf_start = static_cast<double*>(instance_data.members[minf_index]);
+        double* mtau_start = static_cast<double*>(instance_data.members[mtau_index]);
+        for (int i = 0; i < num_elements; ++i) {
+            *(m_start + i) = m[i];
+            *(minf_start + i) = minf[i];
+            *(mtau_start + i) = mtau[i];
+        }
 
         THEN("Values in struct have changed!") {
-            // 10 and 10
-            printf("Before: %.1f and %.1f\n", s.m[0], s.m[1]);
-            runner.run_with_argument<int, void*>("__nrn_state_hh_wrapper", ptr);
-            // (10 - 5) / 1 and (10 - 2) / 1
-            // 5            and 8
-            printf("After: %.1f and %.1f\n", s.m[0], s.m[1]);
+            runner.run_with_argument<int, void*>("__nrn_state_hh_wrapper", instance_data.base_ptr);
+            std::vector<double> m_actual;
+            m_actual.assign(static_cast<double*>(instance_data.members[m_index]),
+                            static_cast<double*>(instance_data.members[m_index]) + num_elements);
+            for (auto res: m_actual)
+                std::cout << res << " ";
         }
     }
 }
