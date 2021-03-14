@@ -929,8 +929,8 @@ void CodegenLLVMVisitor::wrap_kernel_function(const std::string& kernel_name) {
     if (!kernel)
         throw std::runtime_error("Kernel " + kernel_name + " is not found!");
 
-    if (kernel->getNumOperands() != 0)
-        throw std::runtime_error("Kernel " + kernel_name + " has too many arguments!");
+    if (std::distance(kernel->args().begin(), kernel->args().end()) != 1)
+        throw std::runtime_error("Kernel " + kernel_name + " must have a single argument!");
 
     auto instance_struct_ptr_type = llvm::dyn_cast<llvm::PointerType>(kernel->getArg(0)->getType());
     if (!instance_struct_ptr_type)
