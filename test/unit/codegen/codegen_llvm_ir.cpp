@@ -8,7 +8,10 @@
 #include <catch/catch.hpp>
 #include <regex>
 
+#include "test/unit/utils/test_utils.hpp"
+
 #include "ast/program.hpp"
+#include "ast/statement_block.hpp"
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
 #include "codegen/llvm/codegen_llvm_helper_visitor.hpp"
 #include "parser/nmodl_driver.hpp"
@@ -20,6 +23,9 @@
 using namespace nmodl;
 using namespace codegen;
 using namespace visitor;
+
+using namespace test_utils;
+
 using nmodl::parser::NmodlDriver;
 
 //=============================================================================
@@ -46,7 +52,7 @@ std::string run_llvm_visitor(const std::string& text,
 // Utility to get specific LLVM nodes
 //=============================================================================
 
-std::vector<std::shared_ptr<ast::Ast>> run_inline_visitor_helper(const std::string& text) {
+std::vector<std::shared_ptr<ast::Ast>> run_codegen_visitor_helper(const std::string& text) {
     NmodlDriver driver;
     const auto& ast = driver.parse_string(text);
 
@@ -818,10 +824,10 @@ SCENARIO("Dead code removal", "[visitor][llvm][opt]") {
 }
 
 //=============================================================================
-// Derivative block : 
+// Derivative block : test optimization
 //=============================================================================
 
-SCENARIO("Dead code removal", "[visitor][llvm][derivative]") {
+SCENARIO("Derivative block", "[visitor][llvm][derivative]") {
     GIVEN("After helper visitor") {
         std::string nmodl_text = R"(
             NEURON {
@@ -844,9 +850,26 @@ SCENARIO("Dead code removal", "[visitor][llvm][derivative]") {
             }
         )";
 
+        std::string expected_inner_statement = R"(
+            {
+                INTEGER node_id
+                DOUBLE v
+                node_id = mech->node_index[id]
+                v = mech->voltage[node_id]
+                mech->m[id] = (mech->minf[id]-mech->m[id])/mech->mtau[id]
+                SOLVE states METHOD cnexp
+            })";
+
         THEN("should contains 2 for loops") {
-            auto result = run_inline_visitor_helper(nmodl_text);
+            auto result = run_codegen_visitor_helper(nmodl_text);
             REQUIRE(result.size() == 2);
+
+            auto expected = reindent_text(expected_inner_statement);
+            auto main_loop = to_nmodl(result[0]->get_statement_block());
+            REQUIRE(main_loop == expected);
+
+            auto reminder_loop = to_nmodl(result[0]->get_statement_block());
+            REQUIRE(reminder_loop == expected);
         }
     }
 }
