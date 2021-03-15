@@ -10,11 +10,15 @@
 
 #include "ast/program.hpp"
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
+#include "codegen/llvm/codegen_llvm_helper_visitor.hpp"
 #include "parser/nmodl_driver.hpp"
 #include "visitors/checkparent_visitor.hpp"
+#include "visitors/solve_block_visitor.hpp"
 #include "visitors/symtab_visitor.hpp"
+#include "visitors/visitor_utils.hpp"
 
 using namespace nmodl;
+using namespace codegen;
 using namespace visitor;
 using nmodl::parser::NmodlDriver;
 
@@ -36,6 +40,24 @@ std::string run_llvm_visitor(const std::string& text,
                                              use_single_precision);
     llvm_visitor.visit_program(*ast);
     return llvm_visitor.print_module();
+}
+
+//=============================================================================
+// Utility to get specific LLVM nodes
+//=============================================================================
+
+std::vector<std::shared_ptr<ast::Ast>> run_inline_visitor_helper(const std::string& text) {
+    NmodlDriver driver;
+    const auto& ast = driver.parse_string(text);
+
+    /// construct symbol table and run codegen helper visitor
+    SymtabVisitor().visit_program(*ast);
+    SolveBlockVisitor().visit_program(*ast);
+    CodegenLLVMHelperVisitor(8).visit_program(*ast);
+
+    const auto& nodes = collect_nodes(*ast, {ast::AstNodeType::CODEGEN_FOR_STATEMENT});
+
+    return nodes;
 }
 
 //=============================================================================
@@ -791,6 +813,40 @@ SCENARIO("Dead code removal", "[visitor][llvm][opt]") {
             std::regex empty_proc(
                 R"(define i32 @add\(double %a[0-9].*, double %b[0-9].*\) \{\n(\s)*ret i32 0\n\})");
             REQUIRE(std::regex_search(module_string, m, empty_proc));
+        }
+    }
+}
+
+//=============================================================================
+// Derivative block : 
+//=============================================================================
+
+SCENARIO("Dead code removal", "[visitor][llvm][derivative]") {
+    GIVEN("After helper visitor") {
+        std::string nmodl_text = R"(
+            NEURON {
+                SUFFIX hh
+                RANGE minf, mtau
+            }
+            STATE {
+                m
+            }
+            ASSIGNED {
+                v (mV)
+                minf
+                mtau (ms)
+            }
+            BREAKPOINT {
+                SOLVE states METHOD cnexp
+            }
+            DERIVATIVE states {
+                m = (minf-m)/mtau
+            }
+        )";
+
+        THEN("should contains 2 for loops") {
+            auto result = run_inline_visitor_helper(nmodl_text);
+            REQUIRE(result.size() == 2);
         }
     }
 }

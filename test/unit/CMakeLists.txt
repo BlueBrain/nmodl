@@ -85,7 +85,6 @@ target_link_libraries(
   ${NMODL_WRAPPER_LIBS})
 target_link_libraries(
   testcodegen
-  llvm_codegen
   codegen
   visitor
   symtab

@@ -9,11 +9,8 @@
 
 #include "ast/program.hpp"
 #include "codegen/codegen_helper_visitor.hpp"
-#include "codegen/llvm/codegen_llvm_helper_visitor.hpp"
 #include "parser/nmodl_driver.hpp"
 #include "visitors/symtab_visitor.hpp"
-#include "visitors/visitor_utils.hpp"
-#include "visitors/solve_block_visitor.hpp"
 
 using namespace nmodl;
 using namespace visitor;
@@ -53,20 +50,6 @@ std::string run_inline_visitor(const std::string& text) {
     }
 
     return variables;
-}
-
-std::vector<std::shared_ptr<ast::Ast>> run_inline_visitor_helper(const std::string& text) {
-    NmodlDriver driver;
-    const auto& ast = driver.parse_string(text);
-
-    /// construct symbol table and run codegen helper visitor
-    SymtabVisitor().visit_program(*ast);
-    SolveBlockVisitor().visit_program(*ast);
-    CodegenLLVMHelperVisitor(8).visit_program(*ast);
-
-    const auto& nodes = collect_nodes(*ast, {ast::AstNodeType::CODEGEN_FOR_STATEMENT});
-
-    return nodes;
 }
 
 SCENARIO("unusual / failing mod files", "[codegen][var_order]") {
@@ -182,36 +165,6 @@ SCENARIO("unusual / failing mod files", "[codegen][var_order]") {
             std::string expected = "ca;cai;ica;drive_channel;";
             auto result = run_inline_visitor(nmodl_text);
             REQUIRE(result == expected);
-        }
-    }
-}
-
-SCENARIO("Testing that passes are correct") {
-    GIVEN("DERIVATIVE should generate two for loop") {
-        std::string nmodl_text = R"(
-            NEURON {
-                SUFFIX hh
-                RANGE minf, mtau
-            }
-            STATE {
-                m
-            }
-            ASSIGNED {
-                v (mV)
-                minf
-                mtau (ms)
-            }
-            BREAKPOINT {
-                SOLVE states METHOD cnexp
-            }
-            DERIVATIVE states {
-                m = (minf-m)/mtau
-            }
-        )";
-
-        THEN("CHECK IT") {
-            auto result = run_inline_visitor_helper(nmodl_text);
-            REQUIRE(result.size() == 2);
         }
     }
 }
