@@ -217,11 +217,11 @@ static inline float exprelr(float x) {
 }
 
 /// double precision log10 function
-inline double log10(double f) {
+inline double log10(double f) noexcept {
     return log(f) / log(10.0);
 }
 
 /// single precision log10 function
-inline float log10(float f) {
+inline float log10(float f) noexcept {
     return log(f) / log(10.0f);
 }
