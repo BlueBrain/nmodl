@@ -220,12 +220,12 @@ static inline float exprelr(float initial_x) {
     return initial_x/vexpm1(initial_x);
 }
 
-/// single precision log10 function
-static inline float log10(float f) {
-    return log(f)/log(10.0f);
-}
-
 /// double precision log10 function
 static inline double log10(double f) {
     return log(f)/log(10.0d);
+}
+
+/// single precision log10 function
+static inline float log10(float f) {
+    return log(f)/log(10.0f);
 }

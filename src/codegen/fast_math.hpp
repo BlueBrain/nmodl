@@ -215,3 +215,13 @@ static inline float exprelr(float x) {
 
     return x / vexpm1(x);
 }
+
+/// double precision log10 function
+inline double log10(double f) {
+    return log(f) / log(10.0);
+}
+
+/// single precision log10 function
+inline float log10(float f) {
+    return log(f) / log(10.0f);
+}

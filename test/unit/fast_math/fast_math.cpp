@@ -100,4 +100,18 @@ SCENARIO("Check fast_math") {
             REQUIRE(test);
         }
     }
+    GIVEN("log10 (double)") {
+        auto test = check_over_span(std::log10, log10, low_limit, high_limit, npoints);
+
+        THEN("error inside threshold") {
+            REQUIRE(test);
+        }
+    }
+    GIVEN("log10 (float)") {
+        auto test = check_over_span(std::log10, log10, low_limit_f, high_limit_f, npoints);
+
+        THEN("error inside threshold") {
+            REQUIRE(test);
+        }
+    }
 }
