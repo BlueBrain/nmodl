@@ -850,8 +850,17 @@ SCENARIO("Derivative block", "[visitor][llvm][derivative]") {
             }
         )";
 
-        std::string expected_inner_statement = R"(
-            {
+        std::string expected_main_loop = R"(
+            for(id = 0; id<mech->node_count; id = id+8) {
+                INTEGER node_id
+                DOUBLE v
+                node_id = mech->node_index[id]
+                v = mech->voltage[node_id]
+                mech->m[id] = (mech->minf[id]-mech->m[id])/mech->mtau[id]
+                SOLVE states METHOD cnexp
+            })";
+        std::string expected_reminder_loop = R"(
+            for(; id<mech->node_count; id = id+1) {
                 INTEGER node_id
                 DOUBLE v
                 node_id = mech->node_index[id]
@@ -860,16 +869,16 @@ SCENARIO("Derivative block", "[visitor][llvm][derivative]") {
                 SOLVE states METHOD cnexp
             })";
 
+
         THEN("should contains 2 for loops") {
             auto result = run_codegen_visitor_helper(nmodl_text);
             REQUIRE(result.size() == 2);
 
-            auto expected = reindent_text(expected_inner_statement);
-            auto main_loop = to_nmodl(result[0]->get_statement_block());
-            REQUIRE(main_loop == expected);
+            auto main_loop = reindent_text(to_nmodl(result[0]));
+            REQUIRE(main_loop == reindent_text(expected_main_loop));
 
-            auto reminder_loop = to_nmodl(result[0]->get_statement_block());
-            REQUIRE(reminder_loop == expected);
+            auto reminder_loop = reindent_text(to_nmodl(result[1]));
+            REQUIRE(reminder_loop == reindent_text(expected_reminder_loop));
         }
     }
 }
