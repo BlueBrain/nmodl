@@ -39,7 +39,8 @@ static ast::VarName* create_varname(const std::string& varname) {
  *         including Integer. See #542.
  */
 static std::shared_ptr<ast::Expression> int_initialization_expression(
-    const std::string& induction_var, int value = 0) {
+    const std::string& induction_var,
+    int value = 0) {
     // create id = 0
     const auto& id = create_varname(induction_var);
     const auto& zero = new ast::Integer(value, nullptr);
@@ -161,7 +162,8 @@ void CodegenLLVMHelperVisitor::create_function_for_node(ast::Block& node) {
 
     if (node.get_node_type() == ast::AstNodeType::PROCEDURE_BLOCK) {
         block->insert_statement(statements.begin(),
-            std::make_shared<ast::ExpressionStatement>(int_initialization_expression(return_var_name)));
+                                std::make_shared<ast::ExpressionStatement>(
+                                    int_initialization_expression(return_var_name)));
     }
     /// insert return variable at the start of the block
     ast::CodegenVarVector codegen_vars;
