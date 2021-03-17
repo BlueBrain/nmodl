@@ -12,8 +12,8 @@
 
 #include "ast/program.hpp"
 #include "ast/statement_block.hpp"
-#include "codegen/llvm/codegen_llvm_visitor.hpp"
 #include "codegen/llvm/codegen_llvm_helper_visitor.hpp"
+#include "codegen/llvm/codegen_llvm_visitor.hpp"
 #include "parser/nmodl_driver.hpp"
 #include "visitors/checkparent_visitor.hpp"
 #include "visitors/neuron_solve_visitor.hpp"

@@ -612,10 +612,8 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
         /// convert local statement to codegenvar statement
         convert_local_statement(*loop_block);
 
-        auto for_loop_statement_remainder = std::make_shared<ast::CodegenForStatement>(nullptr,
-                                                                                  condition,
-                                                                                  increment,
-                                                                                  loop_block);
+        auto for_loop_statement_remainder =
+            std::make_shared<ast::CodegenForStatement>(nullptr, condition, increment, loop_block);
 
         /// convert all variables inside loop body to instance variables
         convert_to_instance_variable(*for_loop_statement_remainder, loop_index_var);
