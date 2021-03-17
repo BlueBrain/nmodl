@@ -39,28 +39,17 @@ static bool is_supported_statement(const ast::Statement& statement) {
            statement.is_if_statement() || statement.is_while_statement();
 }
 
-bool CodegenLLVMVisitor::check_array_bounds(const ast::IndexedName& node, unsigned index) {
-    llvm::Type* array_type = lookup(node.get_node_name())->getType()->getPointerElementType();
-    unsigned length = array_type->getArrayNumElements();
-    return 0 <= index && index < length;
-}
-
-llvm::Value* CodegenLLVMVisitor::create_gep(const std::string& name, unsigned index) {
-    llvm::Type* index_type = llvm::Type::getInt32Ty(*context);
+llvm::Value* CodegenLLVMVisitor::create_gep(const std::string& name, llvm::Value* index) {
+    llvm::Type* index_type = llvm::Type::getInt64Ty(*context);
     std::vector<llvm::Value*> indices;
     indices.push_back(llvm::ConstantInt::get(index_type, 0));
-    indices.push_back(llvm::ConstantInt::get(index_type, index));
+    indices.push_back(index);
 
     return builder.CreateInBoundsGEP(lookup(name), indices);
 }
 
 llvm::Value* CodegenLLVMVisitor::codegen_indexed_name(const ast::IndexedName& node) {
-    unsigned index = get_array_index_or_length(node);
-
-    // Check if index is within array bounds.
-    if (!check_array_bounds(node, index))
-        throw std::runtime_error("Error: Index is out of bounds");
-
+    llvm::Value* index = get_array_index(node);
     return create_gep(node.get_node_name(), index);
 }
 
@@ -96,20 +85,11 @@ llvm::Value* CodegenLLVMVisitor::codegen_instance_var(const ast::CodegenInstance
     if (!member_var_name->get_name()->is_indexed_name())
         throw std::runtime_error("Error: " + member_name + " is not an IndexedName!");
 
-    // Proceed to creating a GEP instruction to get the pointer to the member's element. While LLVM
-    // Helper set the indices to be Name nodes, a sanity check is added here. Note that this step
-    // can be avoided if using `get_array_index_or_length()`. However, it does not support indexing
-    // with Name/Expression at the moment. \todo: Reuse `get_array_index_or_length()` here.
+    // Proceed to creating a GEP instruction to get the pointer to the member's element.
     auto member_indexed_name = std::dynamic_pointer_cast<ast::IndexedName>(
         member_var_name->get_name());
-    if (!member_indexed_name->get_length()->is_name())
-        throw std::runtime_error("Error: " + member_name + " has a non-Name index!");
+    llvm::Value* i64_index = get_array_index(*member_indexed_name);
 
-    // Load the index variable that will be used to access the member's element. Since we index a
-    // pointer variable, we need to extend the 32-bit integer index variable to 64-bit.
-    llvm::Value* i32_index = builder.CreateLoad(
-        lookup(member_indexed_name->get_length()->get_node_name()));
-    llvm::Value* i64_index = builder.CreateSExt(i32_index, llvm::Type::getInt64Ty(*context));
 
     // Create a indices vector for GEP to return the pointer to the element at the specified index.
     std::vector<llvm::Value*> member_indices;
@@ -135,17 +115,44 @@ llvm::Value* CodegenLLVMVisitor::codegen_instance_var(const ast::CodegenInstance
     return builder.CreateInBoundsGEP(instance_member, member_indices);
 }
 
-unsigned CodegenLLVMVisitor::get_array_index_or_length(const ast::IndexedName& indexed_name) {
-    // \todo: Support indices with expressions and names: k[i + j] = ...
-    auto integer = std::dynamic_pointer_cast<ast::Integer>(indexed_name.get_length());
+llvm::Value* CodegenLLVMVisitor::get_array_index(const ast::IndexedName& node) {
+    // Process the index expression. It can either be a Name node:
+    //    k[id]     // id is an integer
+    // or an integer expression.
+    llvm::Value* index_value;
+    if (node.get_length()->is_name()) {
+        llvm::Value* ptr = lookup(node.get_length()->get_node_name());
+        index_value = builder.CreateLoad(ptr);
+    } else {
+        node.get_length()->accept(*this);
+        index_value = values.back();
+        values.pop_back();
+    }
+
+    // Check if index is a double. While it is possible to use casting from double to integer
+    // values, we choose not to support these cases.
+    if (!index_value->getType()->isIntOrIntVectorTy())
+        throw std::runtime_error("Error: only integer indexing is supported!");
+
+    // Conventionally, in LLVM array indices are 64 bit.
+    auto index_type = llvm::cast<llvm::IntegerType>(index_value->getType());
+    llvm::Type* i64_type = llvm::Type::getInt64Ty(*context);
+    if (index_type->getBitWidth() == i64_type->getIntegerBitWidth())
+        return index_value;
+
+    return builder.CreateSExtOrTrunc(index_value, i64_type);
+}
+
+int CodegenLLVMVisitor::get_array_length(const ast::IndexedName& node) {
+    auto integer = std::dynamic_pointer_cast<ast::Integer>(node.get_length());
     if (!integer)
-        throw std::runtime_error("Error: only integer indices/length are supported!");
+        throw std::runtime_error("Error: only integer length is supported!");
 
     // Check if integer value is taken from a macro.
     if (!integer->get_macro())
         return integer->get_value();
     const auto& macro = sym_tab->lookup(integer->get_macro()->get_node_name());
-    return static_cast<unsigned>(*macro->get_value());
+    return static_cast<int>(*macro->get_value());
 }
 
 llvm::Type* CodegenLLVMVisitor::get_codegen_var_type(const ast::CodegenVarType& node) {
@@ -250,6 +257,10 @@ llvm::Value* CodegenLLVMVisitor::get_variable_ptr(const ast::VarName& node) {
         ptr = codegen_instance_var(*instance_var);
     }
     return ptr;
+}
+
+std::shared_ptr<ast::InstanceStruct> CodegenLLVMVisitor::get_instance_struct_ptr() {
+    return instance_var_helper.instance;
 }
 
 void CodegenLLVMVisitor::run_llvm_opt_passes() {
@@ -566,9 +577,7 @@ void CodegenLLVMVisitor::visit_codegen_for_statement(const ast::CodegenForStatem
     llvm::BasicBlock* exit = llvm::BasicBlock::Create(*context, /*Name=*/"for.exit", func, next);
 
     // First, initialise the loop in the same basic block.
-    if (node.get_initialization()) {
-        node.get_initialization()->accept(*this);
-    }
+    node.get_initialization()->accept(*this);
 
     // If the loop is to be vectorised, create a separate vector induction variable.
     // \todo: See the comment for `kernel_id_prefix`.
@@ -693,7 +702,7 @@ void CodegenLLVMVisitor::visit_codegen_var_list_statement(
         llvm::Type* var_type;
         if (identifier->is_indexed_name()) {
             auto indexed_name = std::dynamic_pointer_cast<ast::IndexedName>(identifier);
-            unsigned length = get_array_index_or_length(*indexed_name);
+            int length = get_array_length(*indexed_name);
             var_type = llvm::ArrayType::get(scalar_var_type, length);
         } else if (identifier->is_name()) {
             // This case corresponds to a scalar local variable. Its type is double by default.
