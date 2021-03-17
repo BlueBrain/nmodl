@@ -576,8 +576,10 @@ void CodegenLLVMVisitor::visit_codegen_for_statement(const ast::CodegenForStatem
     llvm::BasicBlock* for_inc = llvm::BasicBlock::Create(*context, /*Name=*/"for.inc", func, next);
     llvm::BasicBlock* exit = llvm::BasicBlock::Create(*context, /*Name=*/"for.exit", func, next);
 
-    // First, initialise the loop in the same basic block.
-    node.get_initialization()->accept(*this);
+    // First, initialise the loop in the same basic block. This block is optional.
+    if (node.get_initialization()) {
+        node.get_initialization()->accept(*this);
+    }
 
     // If the loop is to be vectorised, create a separate vector induction variable.
     // \todo: See the comment for `kernel_id_prefix`.
