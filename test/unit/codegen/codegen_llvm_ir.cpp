@@ -954,6 +954,9 @@ SCENARIO("Derivative block", "[visitor][llvm][derivative]") {
 
             auto reminder_loop = reindent_text(to_nmodl(result[1]));
             REQUIRE(reminder_loop == reindent_text(expected_reminder_loop));
+        }
+    }
+}
 
 //=============================================================================
 // Optimization : dead code removal
