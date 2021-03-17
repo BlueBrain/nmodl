@@ -891,7 +891,7 @@ SCENARIO("Scalar state kernel", "[visitor][llvm]") {
 
             // Check exit block.
             std::regex exit(
-                "for\\.exit:.*\n"
+                "for\\.exit[0-9]*:.*\n"
                 "  ret void");
             REQUIRE(std::regex_search(module_string, m, exit));
         }
