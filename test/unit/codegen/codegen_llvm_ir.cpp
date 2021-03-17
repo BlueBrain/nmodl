@@ -8,16 +8,25 @@
 #include <catch2/catch.hpp>
 #include <regex>
 
+#include "test/unit/utils/test_utils.hpp"
+
 #include "ast/program.hpp"
+#include "ast/statement_block.hpp"
+#include "codegen/llvm/codegen_llvm_helper_visitor.hpp"
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
 #include "parser/nmodl_driver.hpp"
 #include "visitors/checkparent_visitor.hpp"
 #include "visitors/neuron_solve_visitor.hpp"
 #include "visitors/solve_block_visitor.hpp"
 #include "visitors/symtab_visitor.hpp"
+#include "visitors/visitor_utils.hpp"
 
 using namespace nmodl;
+using namespace codegen;
 using namespace visitor;
+
+using namespace test_utils;
+
 using nmodl::parser::NmodlDriver;
 
 //=============================================================================
@@ -42,6 +51,24 @@ std::string run_llvm_visitor(const std::string& text,
                                              vector_width);
     llvm_visitor.visit_program(*ast);
     return llvm_visitor.print_module();
+}
+
+//=============================================================================
+// Utility to get specific LLVM nodes
+//=============================================================================
+
+std::vector<std::shared_ptr<ast::Ast>> run_codegen_visitor_helper(const std::string& text) {
+    NmodlDriver driver;
+    const auto& ast = driver.parse_string(text);
+
+    /// construct symbol table and run codegen helper visitor
+    SymtabVisitor().visit_program(*ast);
+    SolveBlockVisitor().visit_program(*ast);
+    CodegenLLVMHelperVisitor(8).visit_program(*ast);
+
+    const auto& nodes = collect_nodes(*ast, {ast::AstNodeType::CODEGEN_FOR_STATEMENT});
+
+    return nodes;
 }
 
 //=============================================================================
@@ -864,9 +891,69 @@ SCENARIO("Scalar state kernel", "[visitor][llvm]") {
 
             // Check exit block.
             std::regex exit(
-                "for\\.exit:.*\n"
+                "for\\.exit[0-9]*:.*\n"
                 "  ret void");
             REQUIRE(std::regex_search(module_string, m, exit));
+        }
+    }
+}
+
+//=============================================================================
+// Derivative block : test optimization
+//=============================================================================
+
+SCENARIO("Derivative block", "[visitor][llvm][derivative]") {
+    GIVEN("After helper visitor") {
+        std::string nmodl_text = R"(
+            NEURON {
+                SUFFIX hh
+                RANGE minf, mtau
+            }
+            STATE {
+                m
+            }
+            ASSIGNED {
+                v (mV)
+                minf
+                mtau (ms)
+            }
+            BREAKPOINT {
+                SOLVE states METHOD cnexp
+            }
+            DERIVATIVE states {
+                m = (minf-m)/mtau
+            }
+        )";
+
+        std::string expected_main_loop = R"(
+            for(id = 0; id<mech->node_count; id = id+8) {
+                INTEGER node_id
+                DOUBLE v
+                node_id = mech->node_index[id]
+                v = mech->voltage[node_id]
+                mech->m[id] = (mech->minf[id]-mech->m[id])/mech->mtau[id]
+                SOLVE states METHOD cnexp
+            })";
+        std::string expected_reminder_loop = R"(
+            for(; id<mech->node_count; id = id+1) {
+                INTEGER node_id
+                DOUBLE v
+                node_id = mech->node_index[id]
+                v = mech->voltage[node_id]
+                mech->m[id] = (mech->minf[id]-mech->m[id])/mech->mtau[id]
+                SOLVE states METHOD cnexp
+            })";
+
+
+        THEN("should contains 2 for loops") {
+            auto result = run_codegen_visitor_helper(nmodl_text);
+            REQUIRE(result.size() == 2);
+
+            auto main_loop = reindent_text(to_nmodl(result[0]));
+            REQUIRE(main_loop == reindent_text(expected_main_loop));
+
+            auto reminder_loop = reindent_text(to_nmodl(result[1]));
+            REQUIRE(reminder_loop == reindent_text(expected_reminder_loop));
         }
     }
 }
