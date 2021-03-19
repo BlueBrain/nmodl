@@ -686,6 +686,7 @@ SCENARIO("Procedure", "[visitor][llvm]") {
             REQUIRE(std::regex_search(module_string, m, signature));
             REQUIRE(std::regex_search(module_string, m, alloc));
             REQUIRE(std::regex_search(module_string, m, store));
+            REQUIRE(std::regex_search(module_string, m, load));
             REQUIRE(std::regex_search(module_string, m, ret));
         }
     }
