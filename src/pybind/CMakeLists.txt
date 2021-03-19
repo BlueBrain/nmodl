@@ -7,7 +7,7 @@ set_source_files_properties(${PYBIND_GENERATED_SOURCES} PROPERTIES GENERATED TRU
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/nmodl)
 
 foreach(file ast.py dsl.py ode.py symtab.py visitor.py __init__.py)
-  list(APPEND NMODL_PYTHON_FILES_IN ${NMODL_PROJECT_SOURCE_DIR}/nmodl/${file})
+  list(APPEND NMODL_PYTHON_FILES_IN ${NMODL_PROJECT_SOURCE_DIR}/python/${file})
   list(APPEND NMODL_PYTHON_FILES_OUT ${PROJECT_BINARY_DIR}/lib/nmodl/${file})
 endforeach()
 
@@ -65,7 +65,7 @@ if(NMODL_ENABLE_PYTHON_BINDINGS)
 
   add_custom_command(
     OUTPUT ${PROJECT_BINARY_DIR}/lib/nmodl
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:_nmodl> ${PROJECT_BINARY_DIR}/nmodl
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:_nmodl> ${PROJECT_BINARY_DIR}/python
     DEPENDS ${NMODL_PYTHON_FILES_IN} _nmodl
     COMMENT "-- COPYING NMODL PYTHON MODULE --")
 endif()
@@ -73,7 +73,7 @@ endif()
 add_custom_target(copy_python_files ALL DEPENDS ${NMODL_PYTHON_FILES_OUT})
 add_custom_command(
   OUTPUT ${NMODL_PYTHON_FILES_OUT}
-  COMMAND ${CMAKE_COMMAND} -E copy_directory ${NMODL_PROJECT_SOURCE_DIR}/nmodl
+  COMMAND ${CMAKE_COMMAND} -E copy_directory ${NMODL_PROJECT_SOURCE_DIR}/python
           ${PROJECT_BINARY_DIR}/lib/nmodl
   DEPENDS ${NMODL_PYTHON_FILES_IN}
   COMMENT "-- COPYING NMODL PYTHON FILES --")
@@ -83,7 +83,7 @@ add_custom_command(
 # =============================================================================
 file(GLOB NMODL_PYTHON_HELPER_FILES "${NMODL_PROJECT_SOURCE_DIR}/nmodl/*.py")
 file(COPY ${NMODL_PYTHON_HELPER_FILES} DESTINATION ${CMAKE_BINARY_DIR}/lib/nmodl/)
-file(COPY ${NMODL_PROJECT_SOURCE_DIR}/nmodl/ext DESTINATION ${CMAKE_BINARY_DIR}/lib/nmodl/)
+file(COPY ${NMODL_PROJECT_SOURCE_DIR}/python/ext DESTINATION ${CMAKE_BINARY_DIR}/lib/nmodl/)
 
 # =============================================================================
 # Install python binding components
