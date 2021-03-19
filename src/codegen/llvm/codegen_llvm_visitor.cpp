@@ -713,15 +713,6 @@ void CodegenLLVMVisitor::visit_codegen_var_list_statement(
             throw std::runtime_error("Error: Unsupported local variable type");
         }
         llvm::Value* alloca = builder.CreateAlloca(var_type, /*ArraySize=*/nullptr, name);
-
-        // Check if the variable we process is a procedure return variable (i.e. it has a name
-        // "ret_<current_function_name>" and the function return type is integer). If so, initialise
-        // it to 0.
-        std::string ret_val_name = "ret_" + current_func->getName().str();
-        if (name == ret_val_name && current_func->getReturnType()->isIntegerTy()) {
-            llvm::Value* zero = llvm::ConstantInt::get(llvm::Type::getInt32Ty(*context), 0);
-            builder.CreateStore(zero, alloca);
-        }
     }
 }
 
