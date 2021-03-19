@@ -105,13 +105,13 @@ install:
 script:
   - echo "------- Build, Test and Install -------"
   - mkdir build && pushd build
-  - cmake .. -DPYTHON_EXECUTABLE=$(which python3) -DCMAKE_INSTALL_PREFIX=$HOME/nmodl
+  - cmake .. -DPYTHON_EXECUTABLE=$(which python3) -DCMAKE_INSTALL_PREFIX=/
   - make -j 2;
     if [ $? -ne 0 ]; then
       make VERBOSE=1;
     fi
   - env CTEST_OUTPUT_ON_FAILURE=1 make test
-  - make install
+  - env DESTDIR=$HOME/nmodl cmake --install .
   - popd
 
 #=============================================================================
