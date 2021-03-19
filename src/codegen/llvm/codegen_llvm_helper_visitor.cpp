@@ -25,6 +25,28 @@ const std::string CodegenLLVMHelperVisitor::NODECOUNT_VAR = "node_count";
 const std::string CodegenLLVMHelperVisitor::VOLTAGE_VAR = "voltage";
 const std::string CodegenLLVMHelperVisitor::NODE_INDEX_VAR = "node_index";
 
+/// Create asr::Varname node with given a given variable name
+static ast::VarName* create_varname(const std::string& varname) {
+    return new ast::VarName(new ast::Name(new ast::String(varname)), nullptr, nullptr);
+}
+
+/**
+ * Create initialization expression
+ * @param code Usually "id = 0" as a string
+ * @return Expression representing code
+ * \todo : we can not use `create_statement_as_expression` function because
+ *         NMODL parser is using `ast::Double` type to represent all variables
+ *         including Integer. See #542.
+ */
+static std::shared_ptr<ast::Expression> int_initialization_expression(
+    const std::string& induction_var,
+    int value = 0) {
+    // create id = 0
+    const auto& id = create_varname(induction_var);
+    const auto& zero = new ast::Integer(value, nullptr);
+    return std::make_shared<ast::BinaryExpression>(id, ast::BinaryOperator(ast::BOP_ASSIGN), zero);
+}
+
 /**
  * \brief Create variable definition statement
  *
@@ -120,7 +142,8 @@ void CodegenLLVMHelperVisitor::create_function_for_node(ast::Block& node) {
     auto name = new ast::Name(new ast::String(function_name));
 
     /// return variable name has "ret_" prefix
-    auto return_var = new ast::Name(new ast::String("ret_" + function_name));
+    std::string return_var_name = "ret_{}"_format(function_name);
+    auto return_var = new ast::Name(new ast::String(return_var_name));
 
     /// return type based on node type
     ast::CodegenVarType* ret_var_type = nullptr;
@@ -137,6 +160,11 @@ void CodegenLLVMHelperVisitor::create_function_for_node(ast::Block& node) {
     /// convert local statement to codegenvar statement
     convert_local_statement(*block);
 
+    if (node.get_node_type() == ast::AstNodeType::PROCEDURE_BLOCK) {
+        block->insert_statement(statements.begin(),
+                                std::make_shared<ast::ExpressionStatement>(
+                                    int_initialization_expression(return_var_name)));
+    }
     /// insert return variable at the start of the block
     ast::CodegenVarVector codegen_vars;
     codegen_vars.emplace_back(new ast::CodegenVar(0, return_var->clone()));
@@ -462,30 +490,9 @@ void CodegenLLVMHelperVisitor::visit_function_block(ast::FunctionBlock& node) {
     create_function_for_node(node);
 }
 
-/// Create asr::Varname node with given a given variable name
-static ast::VarName* create_varname(const std::string& varname) {
-    return new ast::VarName(new ast::Name(new ast::String(varname)), nullptr, nullptr);
-}
-
-/**
- * Create for loop initialization expression
- * @param code Usually "id = 0" as a string
- * @return Expression representing code
- * \todo : we can not use `create_statement_as_expression` function because
- *         NMODL parser is using `ast::Double` type to represent all variables
- *         including Integer. See #542.
- */
-static std::shared_ptr<ast::Expression> loop_initialization_expression(
-    const std::string& induction_var) {
-    // create id = 0
-    const auto& id = create_varname(induction_var);
-    const auto& zero = new ast::Integer(0, nullptr);
-    return std::make_shared<ast::BinaryExpression>(id, ast::BinaryOperator(ast::BOP_ASSIGN), zero);
-}
-
 /**
  * Create loop increment expression `id = id + width`
- * \todo : same as loop_initialization_expression()
+ * \todo : same as int_initialization_expression()
  */
 static std::shared_ptr<ast::Expression> loop_increment_expression(const std::string& induction_var,
                                                                   int vector_width) {
@@ -581,7 +588,7 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
     /// main loop possibly vectorized on vector_width
     {
         /// loop constructs : initialization, condition and increment
-        const auto& initialization = loop_initialization_expression(INDUCTION_VAR);
+        const auto& initialization = int_initialization_expression(INDUCTION_VAR);
         const auto& condition = create_expression("{} < {}"_format(INDUCTION_VAR, NODECOUNT_VAR));
         const auto& increment = loop_increment_expression(INDUCTION_VAR, vector_width);
 
