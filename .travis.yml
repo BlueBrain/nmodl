@@ -122,7 +122,7 @@ after_success:
   # More info at: https://github.com/scikit-build/scikit-build/issues/489
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
       echo "------- Build Documentation -------";
-      python3 setup.py install
+      python3 setup.py install;
       python3 setup.py build_ext --inplace docs -j 2 -G "Unix Makefiles" || travis_terminate 1;
       cd $TRAVIS_BUILD_DIR/_skbuild/linux-x86_64-3.8/setuptools/sphinx;
       rm -rf doctest doctrees && touch .nojekyll;
