@@ -65,7 +65,8 @@ if(NMODL_ENABLE_PYTHON_BINDINGS)
 
   add_custom_command(
     OUTPUT ${PROJECT_BINARY_DIR}/lib/nmodl
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:_nmodl> ${PROJECT_BINARY_DIR}/python/nmodl
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:_nmodl>
+            ${PROJECT_BINARY_DIR}/python/nmodl
     DEPENDS ${NMODL_PYTHON_FILES_IN} _nmodl
     COMMENT "-- COPYING NMODL PYTHON MODULE --")
 endif()
