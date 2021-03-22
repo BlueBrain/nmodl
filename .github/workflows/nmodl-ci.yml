@@ -104,6 +104,7 @@ jobs:
         working-directory: ${{runner.workspace}}/nmodl
         run: |
           echo "------- Build Documentation -------";
+          python3 setup.py install;
           python3 setup.py build_ext --inplace docs -j 2 -G "Unix Makefiles";
           cd _skbuild/linux-x86_64-3.8/setuptools/sphinx;
           rm -rf doctest doctrees && touch .nojekyll;
