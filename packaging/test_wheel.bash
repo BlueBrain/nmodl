@@ -24,7 +24,7 @@ test_wheel () {
     # sample mod file for nrnivmodl check
     local TEST_DIR="test_dir" 
     mkdir -p $TEST_DIR
-    cp ../python/ext/example/*.mod $TEST_DIR/
+    cp ../python/nmodl/ext/example/*.mod $TEST_DIR/
     cp ../test/integration/mod/cabpump.mod ../test/integration/mod/var_init.inc $TEST_DIR/
     cd $TEST_DIR
     for mod in *.mod

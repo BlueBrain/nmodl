@@ -110,7 +110,7 @@ setup(
     author_email="bbp-ou-hpc@groupes.epfl.ch",
     description="NEURON Modeling Language Source-to-Source Compiler Framework",
     long_description="",
-    packages=["python"],
+    packages=["nmodl"],
     scripts=["pywheel/shim/nmodl", "pywheel/shim/find_libpython.py"],
     include_package_data=True,
     cmake_minimum_required_version="3.3.0",
