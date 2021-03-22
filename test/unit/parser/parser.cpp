@@ -19,6 +19,7 @@
 #include "test/unit/utils/test_utils.hpp"
 #include "utils/common_utils.hpp"
 #include "visitors/checkparent_visitor.hpp"
+#include "visitors/check_random_var_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
 
 
@@ -277,7 +278,22 @@ SCENARIO("Check if a NEURON block is parsed with correct location info in its to
 SCENARIO("NEURON block can add RANDOM variable", "[parser][random]") {
     GIVEN("A valid RANDOM variable declaration") {
         THEN("parser accepts without an error") {
-            REQUIRE(is_valid_construct("NEURON { RANDOM UNIFORM(0.0, 1.0) ur1, ur2 }"));
+            std::string construct = R"(
+            NEURON {
+                RANDOM UNIFORM(0.0, 1.0) ur1, ur2
+            }
+            )";
+            nmodl::parser::NmodlDriver driver;
+            auto ast = driver.parse_string(construct);
+            nmodl::visitor::CheckRandomVarVisitor().visit_program(
+                static_cast<const nmodl::ast::Program&>(*ast));
+            REQUIRE(is_valid_construct(""));
+        }
+    }
+    GIVEN("Incomplete RANDOM variable declaration") {
+        THEN("parser throws an error") {
+            REQUIRE_THROWS_WITH(is_valid_construct("NEURON { RANDOM UNIFORM ur1, ur2 }"),
+                                Catch::Contains("Parser Error"));
         }
     }
 }
