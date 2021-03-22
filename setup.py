@@ -111,6 +111,7 @@ setup(
     description="NEURON Modeling Language Source-to-Source Compiler Framework",
     long_description="",
     packages=["nmodl"],
+    package_dir={'': 'python'},
     scripts=["pywheel/shim/nmodl", "pywheel/shim/find_libpython.py"],
     include_package_data=True,
     cmake_minimum_required_version="3.3.0",
