@@ -1,0 +1,769 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>nmodl.ode &mdash; NMODL 0.2 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> NMODL
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Introduction:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installing the NMODL Framework</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">The NEURON MODeling language</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contents/visitors.html">Visitors</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Jupyter Notebooks:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks.html">The NMODL Jupyter notebooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/nmodl-python-tutorial.html">NMODL Python Interface Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/nmodl-odes-overview.html">NMODL integration of ODEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/nmodl-kinetic-schemes.html">NMODL Kinetic Scheme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/nmodl-sympy-solver-cnexp.html">NMODL SympySolver - cnexp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/nmodl-sympy-solver-sparse.html">NMODL SympySolver - sparse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/nmodl-sympy-solver-derivimplicit.html">NMODL SympySolver - derivimplicit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/nmodl-linear-solver.html">NMODL LINEAR solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/nmodl-nonlinear-solver.html">NMODL NONLINEAR solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/nmodl-sympy-conductance.html">NMODL CONDUCTANCE</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing to the NMODL Framework</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">Python package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../doxygen.html">C++ API</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NMODL</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>nmodl.ode</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for nmodl.ode</h1><div class="highlight"><pre>
+<span></span><span class="c1"># ***********************************************************************</span>
+<span class="c1"># Copyright (C) 2018-2019 Blue Brain Project</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of NMODL distributed under the terms of the GNU</span>
+<span class="c1"># Lesser General Public License. See top-level LICENSE file for details.</span>
+<span class="c1"># ***********************************************************************</span>
+
+<span class="kn">from</span> <span class="nn">importlib</span> <span class="kn">import</span> <span class="n">import_module</span>
+
+<span class="kn">import</span> <span class="nn">sympy</span> <span class="k">as</span> <span class="nn">sp</span>
+
+<span class="c1"># import known_functions through low-level mechanism because the ccode</span>
+<span class="c1"># module is overwritten in sympy and contents of that submodule cannot be</span>
+<span class="c1"># accessed through regular imports</span>
+<span class="n">major</span><span class="p">,</span> <span class="n">minor</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">sp</span><span class="o">.</span><span class="n">__version__</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[:</span><span class="mi">2</span><span class="p">])</span>
+<span class="k">if</span> <span class="n">major</span> <span class="o">&gt;=</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">minor</span> <span class="o">&gt;=</span> <span class="mi">7</span><span class="p">:</span>
+    <span class="n">known_functions</span> <span class="o">=</span> <span class="n">import_module</span><span class="p">(</span><span class="s1">&#39;sympy.printing.c&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">known_functions_C99</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">known_functions</span> <span class="o">=</span> <span class="n">import_module</span><span class="p">(</span><span class="s1">&#39;sympy.printing.ccode&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">known_functions_C99</span>
+<span class="n">known_functions</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;Abs&#39;</span><span class="p">)</span>
+<span class="n">known_functions</span><span class="p">[</span><span class="s1">&#39;abs&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;fabs&#39;</span>
+
+
+<span class="k">if</span> <span class="ow">not</span> <span class="p">((</span><span class="n">major</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">minor</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">)):</span>
+    <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Requires SympPy version &gt;= 1.2, found </span><span class="si">{</span><span class="n">major</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">minor</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_get_custom_functions</span><span class="p">(</span><span class="n">fcts</span><span class="p">):</span>
+    <span class="n">custom_functions</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fcts</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">known_functions</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">custom_functions</span><span class="p">[</span><span class="n">f</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span>
+    <span class="k">return</span> <span class="n">custom_functions</span>
+
+
+<span class="k">def</span> <span class="nf">_var_to_sympy</span><span class="p">(</span><span class="n">var_str</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return sympy variable from string representing variable</span>
+
+<span class="sd">    If string contains &quot;[&quot; it is assumed to be an array variable</span>
+<span class="sd">    of the form &quot;variable_name[N]&quot;, where N is the size of the array</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        var_str: variable as string</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        (variable_name_as_string, variable_as_sympy_object)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="s2">&quot;[&quot;</span> <span class="ow">in</span> <span class="n">var_str</span><span class="p">:</span>
+        <span class="c1"># var is an array variable with defined size, e.g. X[5]</span>
+        <span class="n">var_name</span> <span class="o">=</span> <span class="n">var_str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;[&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">var_len</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">var_str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;[&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;]&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+        <span class="c1"># SymPy equivalent of an array is IndexedBase:</span>
+        <span class="k">return</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">sp</span><span class="o">.</span><span class="n">IndexedBase</span><span class="p">(</span><span class="n">var_name</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">var_len</span><span class="p">,),</span> <span class="n">real</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># otherwise can use a standard SymPy symbol:</span>
+        <span class="k">return</span> <span class="n">var_str</span><span class="p">,</span> <span class="n">sp</span><span class="o">.</span><span class="n">symbols</span><span class="p">(</span><span class="n">var_str</span><span class="p">,</span> <span class="n">real</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_sympify_diff_eq</span><span class="p">(</span><span class="n">diff_string</span><span class="p">,</span> <span class="nb">vars</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Parse differential equation into sympy expression</span>
+
+<span class="sd">    Given eq_string of the form &quot;x&#39; = df/dx&quot;, return sympy</span>
+<span class="sd">    objects representing x and df/dx</span>
+
+<span class="sd">    If x is an array, then it should be declared in vars</span>
+<span class="sd">    as &quot;x[N]&quot;, where N is the size of the array, and an</span>
+<span class="sd">    IndexedBase sympy object will be returned</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        eq_string: string containing differential equation</span>
+<span class="sd">        vars: list of strings containing vars used in equation</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        x: sympy object representing x</span>
+<span class="sd">        dxdt: sympy expression representing df/dx</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">sympy_vars</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="nb">vars</span><span class="p">:</span>
+        <span class="n">var_name</span><span class="p">,</span> <span class="n">sympy_object</span> <span class="o">=</span> <span class="n">_var_to_sympy</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
+        <span class="n">sympy_vars</span><span class="p">[</span><span class="n">var_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">sympy_object</span>
+
+    <span class="n">diff_string_lhs</span><span class="p">,</span> <span class="n">diff_string_rhs</span> <span class="o">=</span> <span class="n">diff_string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># parse dependent variable from LHS of equation:</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">sympify</span><span class="p">(</span><span class="n">diff_string_lhs</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span> <span class="nb">locals</span><span class="o">=</span><span class="n">sympy_vars</span><span class="p">)</span>
+
+    <span class="c1"># parse RHS of equation into SymPy expression</span>
+    <span class="n">dxdt</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">sympify</span><span class="p">(</span><span class="n">diff_string_rhs</span><span class="p">,</span> <span class="nb">locals</span><span class="o">=</span><span class="n">sympy_vars</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">dxdt</span>
+
+
+<span class="k">def</span> <span class="nf">_sympify_eqs</span><span class="p">(</span><span class="n">eq_strings</span><span class="p">,</span> <span class="n">state_vars</span><span class="p">,</span> <span class="nb">vars</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Parse equations into sympy expressions</span>
+
+<span class="sd">    Given lists of strings containing equations, state variables,</span>
+<span class="sd">    and constants, it parses the equations into sympy expressions.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        eq_strings: list of strings containing equations</span>
+<span class="sd">        state_vars: list of strings containing state vars,</span>
+<span class="sd">                    if array then index must be specifiec</span>
+<span class="sd">        vars: list of strings containing constant vars</span>
+<span class="sd">              if array then size of array should be specified, e.g. X[10]</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        eqs: list of sympy expressions</span>
+<span class="sd">        state_vars: list of sympy objects for vars</span>
+<span class="sd">        sympy_vars: dict of name:sympy_object for all vars &amp; constants</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># convert all vars into sympy objects</span>
+    <span class="n">sympy_vars</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="nb">vars</span><span class="p">:</span>
+        <span class="n">var_name</span><span class="p">,</span> <span class="n">sympy_object</span> <span class="o">=</span> <span class="n">_var_to_sympy</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
+        <span class="n">sympy_vars</span><span class="p">[</span><span class="n">var_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">sympy_object</span>
+
+    <span class="c1"># parse state vars &amp; eqs using above sympy objects</span>
+    <span class="n">sympy_state_vars</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">state_var</span> <span class="ow">in</span> <span class="n">state_vars</span><span class="p">:</span>
+        <span class="n">sympy_state_vars</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">sympify</span><span class="p">(</span><span class="n">state_var</span><span class="p">,</span> <span class="nb">locals</span><span class="o">=</span><span class="n">sympy_vars</span><span class="p">))</span>
+    <span class="n">eqs</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">sympify</span><span class="p">(</span><span class="n">eq</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">locals</span><span class="o">=</span><span class="n">sympy_vars</span><span class="p">)</span>
+        <span class="o">-</span> <span class="n">sp</span><span class="o">.</span><span class="n">sympify</span><span class="p">(</span><span class="n">eq</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">locals</span><span class="o">=</span><span class="n">sympy_vars</span><span class="p">))</span><span class="o">.</span><span class="n">expand</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">eq</span> <span class="ow">in</span> <span class="n">eq_strings</span>
+    <span class="p">]</span>
+    <span class="k">return</span> <span class="n">eqs</span><span class="p">,</span> <span class="n">sympy_state_vars</span><span class="p">,</span> <span class="n">sympy_vars</span>
+
+<span class="k">def</span> <span class="nf">_interweave_eqs</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">J</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Interweave F and J equations so that they are printed in code</span>
+<span class="sd">    rowwise from the equation J x = F. For example:</span>
+
+<span class="sd">    F = [F_0,</span>
+<span class="sd">         F_1,</span>
+<span class="sd">         F_2]</span>
+
+<span class="sd">    (Jmat is not the actual J in the argument, it is here to the sake of</span>
+<span class="sd">    clarity)</span>
+<span class="sd">    Jmat = [J_0, J_3, J_6</span>
+<span class="sd">            J_1, J_4, J_7</span>
+<span class="sd">            J_2, J_5, J_8]</span>
+<span class="sd">    (J is the actual input with the following ordering)</span>
+<span class="sd">    J = [J_0,</span>
+<span class="sd">         J_3,</span>
+<span class="sd">         J_6,</span>
+<span class="sd">         J_1,</span>
+<span class="sd">         J_4,</span>
+<span class="sd">         J_7,</span>
+<span class="sd">         J_2,</span>
+<span class="sd">         J_5,</span>
+<span class="sd">         J_8]</span>
+
+<span class="sd">    What we want is:</span>
+<span class="sd">    code = [F_0,</span>
+<span class="sd">            J_0,</span>
+<span class="sd">            J_3,</span>
+<span class="sd">            J_6,</span>
+<span class="sd">            F_1,</span>
+<span class="sd">            J_1,</span>
+<span class="sd">            J_4,</span>
+<span class="sd">            J_7,</span>
+<span class="sd">            F_2,</span>
+<span class="sd">            J_2,</span>
+<span class="sd">            J_5,</span>
+<span class="sd">            J_8]</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        F: F vector</span>
+<span class="sd">        J: J matrix represented as a vector (rowwise)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        code: F and J interweaved in one vector</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">code</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">F</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">expr</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">F</span><span class="p">):</span>
+        <span class="n">code</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="n">n</span><span class="p">,</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">n</span><span class="p">):</span>
+            <span class="n">code</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">J</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">code</span>
+
+
+<div class="viewcode-block" id="solve_lin_system"><a class="viewcode-back" href="../../nmodl.html#nmodl.ode.solve_lin_system">[docs]</a><span class="k">def</span> <span class="nf">solve_lin_system</span><span class="p">(</span><span class="n">eq_strings</span><span class="p">,</span> <span class="nb">vars</span><span class="p">,</span> <span class="n">constants</span><span class="p">,</span> <span class="n">function_calls</span><span class="p">,</span> <span class="n">tmp_unique_prefix</span><span class="p">,</span> <span class="n">small_system</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">do_cse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Solve linear system of equations, return solution as C code.</span>
+
+<span class="sd">    If system is small (small_system=True, typically N&lt;=3):</span>
+<span class="sd">      - solve analytically by gaussian elimination</span>
+<span class="sd">      - optionally do Common Subexpression Elimination if do_cse is true</span>
+
+<span class="sd">    If system is large (default):</span>
+<span class="sd">      - gaussian elimination may not be numerically stable at runtime</span>
+<span class="sd">      - instead return a matrix J and vector F, where J X = F</span>
+<span class="sd">      - this linear system can then be solved for X by e.g. LU factorization</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        eqs: list of equations e.g. [&quot;x + y = a&quot;, &quot;y = 3 + b&quot;]</span>
+<span class="sd">        vars: list of variables to solve for, e.g. [&quot;x&quot;, &quot;y&quot;]</span>
+<span class="sd">        constants: set of any other symbolic expressions used, e.g. {&quot;a&quot;, &quot;b&quot;}</span>
+<span class="sd">        function_calls: set of function calls used in the ODE</span>
+<span class="sd">        tmp_unique_prefix: is a unique prefix on which new variables can be easily created</span>
+<span class="sd">                       by appending strings. It is usually of the form &quot;tmp&quot;</span>
+<span class="sd">        small_system: if True, solve analytically by gaussian elimination</span>
+<span class="sd">                      otherwise return matrix system to be solved</span>
+<span class="sd">        do_cse: if True, do Common Subexpression Elimination</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        code: list of strings containing assignment statements</span>
+<span class="sd">        vars: list of strings containing new local variables</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">eqs</span><span class="p">,</span> <span class="n">state_vars</span><span class="p">,</span> <span class="n">sympy_vars</span> <span class="o">=</span> <span class="n">_sympify_eqs</span><span class="p">(</span><span class="n">eq_strings</span><span class="p">,</span> <span class="nb">vars</span><span class="p">,</span> <span class="n">constants</span><span class="p">)</span>
+    <span class="n">custom_fcts</span> <span class="o">=</span> <span class="n">_get_custom_functions</span><span class="p">(</span><span class="n">function_calls</span><span class="p">)</span>
+
+    <span class="n">code</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">new_local_vars</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">if</span> <span class="n">small_system</span><span class="p">:</span>
+        <span class="c1"># small linear system: solve by gaussian elimination</span>
+        <span class="n">solution_vector</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">linsolve</span><span class="p">(</span><span class="n">eqs</span><span class="p">,</span> <span class="n">state_vars</span><span class="p">)</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">do_cse</span><span class="p">:</span>
+            <span class="c1"># generate prefix for new local vars that avoids clashes</span>
+            <span class="n">my_symbols</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">utilities</span><span class="o">.</span><span class="n">iterables</span><span class="o">.</span><span class="n">numbered_symbols</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="n">tmp_unique_prefix</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span><span class="p">)</span>
+            <span class="n">sub_exprs</span><span class="p">,</span> <span class="n">simplified_solution_vector</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">cse</span><span class="p">(</span>
+                <span class="n">solution_vector</span><span class="p">,</span>
+                <span class="n">symbols</span><span class="o">=</span><span class="n">my_symbols</span><span class="p">,</span>
+                <span class="n">optimizations</span><span class="o">=</span><span class="s2">&quot;basic&quot;</span><span class="p">,</span>
+                <span class="n">order</span><span class="o">=</span><span class="s2">&quot;canonical&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">var</span><span class="p">,</span> <span class="n">expr</span> <span class="ow">in</span> <span class="n">sub_exprs</span><span class="p">:</span>
+                <span class="n">new_local_vars</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">var</span><span class="p">))</span>
+                <span class="n">code</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="n">evalf</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">solution_vector</span> <span class="o">=</span> <span class="n">simplified_solution_vector</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">var</span><span class="p">,</span> <span class="n">expr</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">state_vars</span><span class="p">,</span> <span class="n">solution_vector</span><span class="p">):</span>
+            <span class="n">code</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">var</span><span class="p">)</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="n">evalf</span><span class="p">(),</span> <span class="n">contract</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">user_functions</span><span class="o">=</span><span class="n">custom_fcts</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># large linear system: construct and return matrix J, vector F such that</span>
+        <span class="c1"># J X = F is the linear system to be solved for X by e.g. LU factorization</span>
+        <span class="n">matJ</span><span class="p">,</span> <span class="n">vecF</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">linear_eq_to_matrix</span><span class="p">(</span><span class="n">eqs</span><span class="p">,</span> <span class="n">state_vars</span><span class="p">)</span>
+
+        <span class="c1"># construct vector F</span>
+        <span class="n">vecFcode</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">expr</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">vecF</span><span class="p">):</span>
+            <span class="n">vecFcode</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;F[</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">] = </span><span class="si">{</span><span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="n">simplify</span><span class="p">()</span><span class="o">.</span><span class="n">evalf</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="c1"># construct matrix J</span>
+        <span class="n">vecJcode</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">expr</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">matJ</span><span class="p">):</span>
+            <span class="c1"># todo: fix indexing to be ascending order</span>
+            <span class="n">flat_index</span> <span class="o">=</span> <span class="n">matJ</span><span class="o">.</span><span class="n">rows</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span> <span class="o">%</span> <span class="n">matJ</span><span class="o">.</span><span class="n">rows</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">i</span> <span class="o">//</span> <span class="n">matJ</span><span class="o">.</span><span class="n">rows</span><span class="p">)</span>
+            <span class="n">vecJcode</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;J[</span><span class="si">{</span><span class="n">flat_index</span><span class="si">}</span><span class="s2">] = </span><span class="si">{</span><span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="n">simplify</span><span class="p">()</span><span class="o">.</span><span class="n">evalf</span><span class="p">(),</span> <span class="n">user_functions</span><span class="o">=</span><span class="n">custom_fcts</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="c1"># interweave</span>
+        <span class="n">code</span> <span class="o">=</span> <span class="n">_interweave_eqs</span><span class="p">(</span><span class="n">vecFcode</span><span class="p">,</span> <span class="n">vecJcode</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">code</span><span class="p">,</span> <span class="n">new_local_vars</span></div>
+
+
+<div class="viewcode-block" id="solve_non_lin_system"><a class="viewcode-back" href="../../nmodl.html#nmodl.ode.solve_non_lin_system">[docs]</a><span class="k">def</span> <span class="nf">solve_non_lin_system</span><span class="p">(</span><span class="n">eq_strings</span><span class="p">,</span> <span class="nb">vars</span><span class="p">,</span> <span class="n">constants</span><span class="p">,</span> <span class="n">function_calls</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Solve non-linear system of equations, return solution as C code.</span>
+
+<span class="sd">      - returns a vector F, and its Jacobian J, both in terms of X</span>
+<span class="sd">      - where F(X) = 0 is the implicit equation to solve for X</span>
+<span class="sd">      - this non-linear system can then be solved with the newton solver</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        eqs: list of equations e.g. [&quot;x + y = a&quot;, &quot;y = 3 + b&quot;]</span>
+<span class="sd">        vars: list of variables to solve for, e.g. [&quot;x&quot;, &quot;y&quot;]</span>
+<span class="sd">        constants: set of any other symbolic expressions used, e.g. {&quot;a&quot;, &quot;b&quot;}</span>
+<span class="sd">        function_calls: set of function calls used in the ODE</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List of strings containing assignment statements</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">eqs</span><span class="p">,</span> <span class="n">state_vars</span><span class="p">,</span> <span class="n">sympy_vars</span> <span class="o">=</span> <span class="n">_sympify_eqs</span><span class="p">(</span><span class="n">eq_strings</span><span class="p">,</span> <span class="nb">vars</span><span class="p">,</span> <span class="n">constants</span><span class="p">)</span>
+
+    <span class="n">custom_fcts</span> <span class="o">=</span> <span class="n">_get_custom_functions</span><span class="p">(</span><span class="n">function_calls</span><span class="p">)</span>
+
+    <span class="n">jacobian</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">Matrix</span><span class="p">(</span><span class="n">eqs</span><span class="p">)</span><span class="o">.</span><span class="n">jacobian</span><span class="p">(</span><span class="n">state_vars</span><span class="p">)</span>
+
+    <span class="n">X_vec_map</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span> <span class="n">sp</span><span class="o">.</span><span class="n">symbols</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;X[</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">state_vars</span><span class="p">)}</span>
+
+    <span class="n">vecFcode</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">eq</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">eqs</span><span class="p">):</span>
+        <span class="n">vecFcode</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;F[</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">] = </span><span class="si">{</span><span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">eq</span><span class="o">.</span><span class="n">simplify</span><span class="p">()</span><span class="o">.</span><span class="n">subs</span><span class="p">(</span><span class="n">X_vec_map</span><span class="p">)</span><span class="o">.</span><span class="n">evalf</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">vecJcode</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">jac</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">jacobian</span><span class="p">):</span>
+        <span class="c1"># todo: fix indexing to be ascending order</span>
+        <span class="n">flat_index</span> <span class="o">=</span> <span class="n">jacobian</span><span class="o">.</span><span class="n">rows</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span> <span class="o">%</span> <span class="n">jacobian</span><span class="o">.</span><span class="n">rows</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">i</span> <span class="o">//</span> <span class="n">jacobian</span><span class="o">.</span><span class="n">rows</span><span class="p">)</span>
+        <span class="n">vecJcode</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;J[</span><span class="si">{</span><span class="n">flat_index</span><span class="si">}</span><span class="s2">] = </span><span class="si">{</span><span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">jac</span><span class="o">.</span><span class="n">simplify</span><span class="p">()</span><span class="o">.</span><span class="n">subs</span><span class="p">(</span><span class="n">X_vec_map</span><span class="p">)</span><span class="o">.</span><span class="n">evalf</span><span class="p">(),</span> <span class="n">user_functions</span><span class="o">=</span><span class="n">custom_fcts</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+    <span class="c1"># interweave</span>
+    <span class="n">code</span> <span class="o">=</span> <span class="n">_interweave_eqs</span><span class="p">(</span><span class="n">vecFcode</span><span class="p">,</span> <span class="n">vecJcode</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">code</span></div>
+
+
+<div class="viewcode-block" id="integrate2c"><a class="viewcode-back" href="../../nmodl.html#nmodl.ode.integrate2c">[docs]</a><span class="k">def</span> <span class="nf">integrate2c</span><span class="p">(</span><span class="n">diff_string</span><span class="p">,</span> <span class="n">dt_var</span><span class="p">,</span> <span class="nb">vars</span><span class="p">,</span> <span class="n">use_pade_approx</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Analytically integrate supplied derivative, return solution as C code.</span>
+
+<span class="sd">    Given a differential equation of the form x&#39; = f(x), the value of</span>
+<span class="sd">    x at time t+dt is found in terms of the value of x at time t:</span>
+<span class="sd">    x(t + dt) = g( x(t), dt )</span>
+<span class="sd">    and this equation is returned in the format NEURON expects:</span>
+<span class="sd">    x = g( x, dt ),</span>
+<span class="sd">    where the x on the right is the current value of x at time t,</span>
+<span class="sd">    and the x on the left is the new value of x at time t+dt</span>
+
+<span class="sd">    The derivative should be of the form &quot;x&#39; = f(x)&quot;,</span>
+<span class="sd">    and vars should contain the set of all the variables</span>
+<span class="sd">    referenced by f(x), for example:</span>
+
+<span class="sd">    -``integrate2c(&quot;x&#39; = a*x&quot;, &quot;dt&quot;, {&quot;a&quot;})``</span>
+<span class="sd">    -``integrate2c(&quot;x&#39; = a + b*x - sin(3.2)&quot;, &quot;dt&quot;, {&quot;a&quot;,&quot;b&quot;})``</span>
+
+<span class="sd">    Optionally, the analytic result can be expanded in powers of dt,</span>
+<span class="sd">    and the (1,1) Pade approximant to the solution returned.</span>
+<span class="sd">    This approximate solution is correct to second order in dt.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        diff_string: Derivative to be integrated e.g. &quot;x&#39; = a*x + b&quot;</span>
+<span class="sd">        t_var: name of time variable t in NEURON</span>
+<span class="sd">        dt_var: name of timestep variable dt in NEURON</span>
+<span class="sd">        vars: set of variables used in expression, e.g. {&quot;a&quot;, &quot;b&quot;}</span>
+<span class="sd">        use_pade_approx: if False, return exact solution</span>
+<span class="sd">                         if True, return (1,1) Pade approx to solution</span>
+<span class="sd">                         correct to second order in dt_var</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        string containing analytic integral of derivative as C code</span>
+<span class="sd">    Raises:</span>
+<span class="sd">        NotImplementedError: if the ODE is too hard, or if it fails to solve it.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># only try to solve ODEs that are not too hard</span>
+    <span class="n">ode_properties_require_all</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;separable&quot;</span><span class="p">}</span>
+    <span class="n">ode_properties_require_one_of</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;1st_exact&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;1st_linear&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;almost_linear&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;nth_linear_constant_coeff_homogeneous&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;1st_exact_Integral&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;1st_linear_Integral&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="n">x</span><span class="p">,</span> <span class="n">dxdt</span> <span class="o">=</span> <span class="n">_sympify_diff_eq</span><span class="p">(</span><span class="n">diff_string</span><span class="p">,</span> <span class="nb">vars</span><span class="p">)</span>
+    <span class="c1"># set up differential equation d(x(t))/dt = ...</span>
+    <span class="c1"># where the function x_t = x(t) is substituted for the symbol x</span>
+    <span class="c1"># the dependent variable is a function of t</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">Dummy</span><span class="p">(</span><span class="s2">&quot;t&quot;</span><span class="p">,</span> <span class="n">real</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">positive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">x_t</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">Function</span><span class="p">(</span><span class="s2">&quot;x(t)&quot;</span><span class="p">,</span> <span class="n">real</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="n">t</span><span class="p">)</span>
+    <span class="n">diffeq</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">Eq</span><span class="p">(</span><span class="n">x_t</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="n">dxdt</span><span class="o">.</span><span class="n">subs</span><span class="p">({</span><span class="n">x</span><span class="p">:</span> <span class="n">x_t</span><span class="p">}))</span>
+
+    <span class="c1"># for simple linear case write down solution in preferred form:</span>
+    <span class="n">dt</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">symbols</span><span class="p">(</span><span class="n">dt_var</span><span class="p">,</span> <span class="n">real</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">positive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">solution</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">c1</span> <span class="o">=</span> <span class="n">dxdt</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">simplify</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">c1</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># constant equation:</span>
+        <span class="c1"># x&#39; = c0</span>
+        <span class="c1"># x(t+dt) = x(t) + c0 * dt</span>
+        <span class="n">solution</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">dxdt</span><span class="p">)</span><span class="o">.</span><span class="n">simplify</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">c1</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># linear equation:</span>
+        <span class="c1"># x&#39; = c0 + c1*x</span>
+        <span class="c1"># x(t+dt) = (-c0 + (c0 + c1*x(t))*exp(c1*dt))/c1</span>
+        <span class="n">c0</span> <span class="o">=</span> <span class="p">(</span><span class="n">dxdt</span> <span class="o">-</span> <span class="n">c1</span> <span class="o">*</span> <span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">simplify</span><span class="p">()</span>
+        <span class="n">solution</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">c0</span> <span class="o">/</span> <span class="n">c1</span><span class="p">)</span><span class="o">.</span><span class="n">simplify</span><span class="p">()</span> <span class="o">+</span> <span class="p">(</span><span class="n">c0</span> <span class="o">+</span> <span class="n">c1</span> <span class="o">*</span> <span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">simplify</span><span class="p">()</span> <span class="o">*</span> <span class="n">sp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span>
+            <span class="n">c1</span> <span class="o">*</span> <span class="n">dt</span>
+        <span class="p">)</span> <span class="o">/</span> <span class="n">c1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># otherwise try to solve ODE with sympy:</span>
+        <span class="c1"># first classify ODE, if it is too hard then exit</span>
+        <span class="n">ode_properties</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">classify_ode</span><span class="p">(</span><span class="n">diffeq</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ode_properties_require_all</span> <span class="o">&lt;=</span> <span class="n">ode_properties</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;ODE too hard&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ode_properties_require_one_of</span> <span class="o">&amp;</span> <span class="n">ode_properties</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;ODE too hard&quot;</span><span class="p">)</span>
+        <span class="c1"># try to find analytic solution, with initial condition x_t(t=0) = x</span>
+        <span class="c1"># (note dsolve can return a list of solutions, in which case this currently fails)</span>
+        <span class="n">solution</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">dsolve</span><span class="p">(</span><span class="n">diffeq</span><span class="p">,</span> <span class="n">x_t</span><span class="p">,</span> <span class="n">ics</span><span class="o">=</span><span class="p">{</span><span class="n">x_t</span><span class="o">.</span><span class="n">subs</span><span class="p">({</span><span class="n">t</span><span class="p">:</span> <span class="mi">0</span><span class="p">}):</span> <span class="n">x</span><span class="p">})</span>
+        <span class="c1"># evaluate solution at x(dt), extract rhs of expression</span>
+        <span class="n">solution</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">subs</span><span class="p">({</span><span class="n">t</span><span class="p">:</span> <span class="n">dt</span><span class="p">})</span><span class="o">.</span><span class="n">rhs</span><span class="o">.</span><span class="n">simplify</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">use_pade_approx</span><span class="p">:</span>
+        <span class="c1"># (1,1) order Pade approximant, correct to 2nd order in dt,</span>
+        <span class="c1"># constructed from the coefficients of 2nd order Taylor expansion</span>
+        <span class="n">taylor_series</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">Poly</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">series</span><span class="p">(</span><span class="n">solution</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">removeO</span><span class="p">(),</span> <span class="n">dt</span><span class="p">)</span>
+        <span class="n">_a0</span> <span class="o">=</span> <span class="n">taylor_series</span><span class="o">.</span><span class="n">nth</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">_a1</span> <span class="o">=</span> <span class="n">taylor_series</span><span class="o">.</span><span class="n">nth</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">_a2</span> <span class="o">=</span> <span class="n">taylor_series</span><span class="o">.</span><span class="n">nth</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">solution</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">(</span><span class="n">_a0</span> <span class="o">*</span> <span class="n">_a1</span> <span class="o">+</span> <span class="p">(</span><span class="n">_a1</span> <span class="o">*</span> <span class="n">_a1</span> <span class="o">-</span> <span class="n">_a0</span> <span class="o">*</span> <span class="n">_a2</span><span class="p">)</span> <span class="o">*</span> <span class="n">dt</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">_a1</span> <span class="o">-</span> <span class="n">_a2</span> <span class="o">*</span> <span class="n">dt</span><span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">simplify</span><span class="p">()</span>
+        <span class="c1"># special case where above form gives 0/0 = NaN</span>
+        <span class="k">if</span> <span class="n">_a1</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">_a2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">solution</span> <span class="o">=</span> <span class="n">_a0</span>
+
+    <span class="c1"># return result as C code in NEURON format:</span>
+    <span class="c1">#   - in the lhs x_0 refers to the state var at time (t+dt)</span>
+    <span class="c1">#   - in the rhs x_0 refers to the state var at time t</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">evalf</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span></div>
+
+
+<div class="viewcode-block" id="forwards_euler2c"><a class="viewcode-back" href="../../nmodl.html#nmodl.ode.forwards_euler2c">[docs]</a><span class="k">def</span> <span class="nf">forwards_euler2c</span><span class="p">(</span><span class="n">diff_string</span><span class="p">,</span> <span class="n">dt_var</span><span class="p">,</span> <span class="nb">vars</span><span class="p">,</span> <span class="n">function_calls</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return forwards euler solution of diff_string as C code.</span>
+
+<span class="sd">    Derivative should be of the form &quot;x&#39; = f(x)&quot;,</span>
+<span class="sd">    and vars should contain the set of all the variables</span>
+<span class="sd">    referenced by f(x), for example:</span>
+<span class="sd">    -forwards_euler2c(&quot;x&#39; = a*x&quot;, [&quot;a&quot;,&quot;x&quot;])</span>
+<span class="sd">    -forwards_euler2c(&quot;x&#39; = a + b*x - sin(3.2)&quot;, {&quot;x&quot;,&quot;a&quot;,&quot;b&quot;})</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        diff_string: Derivative to be integrated e.g. &quot;x&#39; = a*x&quot;</span>
+<span class="sd">        dt_var: name of timestep dt variable in NEURON</span>
+<span class="sd">        vars: set of variables used in expression, e.g. {&quot;x&quot;, &quot;a&quot;}</span>
+<span class="sd">        function_calls: set of function calls used in the ODE</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        String containing forwards Euler timestep as C code</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">dxdt</span> <span class="o">=</span> <span class="n">_sympify_diff_eq</span><span class="p">(</span><span class="n">diff_string</span><span class="p">,</span> <span class="nb">vars</span><span class="p">)</span>
+    <span class="c1"># forwards Euler solution is x + dx/dt * dt</span>
+    <span class="n">dt</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">symbols</span><span class="p">(</span><span class="n">dt_var</span><span class="p">,</span> <span class="n">real</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">positive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">solution</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">dxdt</span> <span class="o">*</span> <span class="n">dt</span><span class="p">)</span><span class="o">.</span><span class="n">simplify</span><span class="p">()</span><span class="o">.</span><span class="n">evalf</span><span class="p">()</span>
+
+    <span class="n">custom_fcts</span> <span class="o">=</span> <span class="n">_get_custom_functions</span><span class="p">(</span><span class="n">function_calls</span><span class="p">)</span>
+    <span class="c1"># return result as C code in NEURON format</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">solution</span><span class="p">,</span> <span class="n">user_functions</span><span class="o">=</span><span class="n">custom_fcts</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span></div>
+
+
+<div class="viewcode-block" id="differentiate2c"><a class="viewcode-back" href="../../nmodl.html#nmodl.ode.differentiate2c">[docs]</a><span class="k">def</span> <span class="nf">differentiate2c</span><span class="p">(</span><span class="n">expression</span><span class="p">,</span> <span class="n">dependent_var</span><span class="p">,</span> <span class="nb">vars</span><span class="p">,</span> <span class="n">prev_expressions</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Analytically differentiate supplied expression, return solution as C code.</span>
+
+<span class="sd">    Expression should be of the form &quot;f(x)&quot;, where &quot;x&quot; is</span>
+<span class="sd">    the dependent variable, and the function returns df(x)/dx</span>
+
+<span class="sd">    The set vars must contain all variables used in the expression.</span>
+
+<span class="sd">    Furthermore, if any of these variables are themselves functions that should</span>
+<span class="sd">    be substituted before differentiating, they can be supplied in the prev_expressions list.</span>
+<span class="sd">    Before differentiating each of these expressions will be substituted into expressions,</span>
+<span class="sd">    where possible, in reverse order - i.e. starting from the end of the list.</span>
+
+<span class="sd">    If the result coincides with one of the vars, or the LHS of one of</span>
+<span class="sd">    the prev_expressions, then it is simplified to this expression.</span>
+
+<span class="sd">    Some simple examples of use:</span>
+
+<span class="sd">    - ``nmodl.ode.differentiate2c (&quot;a*x&quot;, &quot;x&quot;, {&quot;a&quot;}) == &quot;a&quot;``</span>
+<span class="sd">    - ``differentiate2c (&quot;cos(y) + b*y**2&quot;, &quot;y&quot;, {&quot;a&quot;,&quot;b&quot;}) == &quot;Dy = 2*b*y - sin(y)&quot;``</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        expression: expression to be differentiated e.g. &quot;a*x + b&quot;</span>
+<span class="sd">        dependent_var: dependent variable, e.g. &quot;x&quot;</span>
+<span class="sd">        vars: set of all other variables used in expression, e.g. {&quot;a&quot;, &quot;b&quot;, &quot;c&quot;}</span>
+<span class="sd">        prev_expressions: time-ordered list of preceeding expressions</span>
+<span class="sd">                          to evaluate &amp; substitute, e.g. [&quot;b = x + c&quot;, &quot;a = 12*b&quot;]</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        string containing analytic derivative of expression (including any substitutions</span>
+<span class="sd">        of variables from supplied prev_expressions) w.r.t. dependent_var as C code.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">prev_expressions</span> <span class="o">=</span> <span class="n">prev_expressions</span> <span class="ow">or</span> <span class="p">[]</span>
+    <span class="c1"># every symbol (a.k.a variable) that SymPy</span>
+    <span class="c1"># is going to manipulate needs to be declared</span>
+    <span class="c1"># explicitly</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">symbols</span><span class="p">(</span><span class="n">dependent_var</span><span class="p">,</span> <span class="n">real</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="nb">vars</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">vars</span><span class="p">)</span>
+    <span class="nb">vars</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="n">dependent_var</span><span class="p">)</span>
+    <span class="c1"># declare all other supplied variables</span>
+    <span class="n">sympy_vars</span> <span class="o">=</span> <span class="p">{</span><span class="n">var</span><span class="p">:</span> <span class="n">sp</span><span class="o">.</span><span class="n">symbols</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="n">real</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="nb">vars</span><span class="p">}</span>
+    <span class="n">sympy_vars</span><span class="p">[</span><span class="n">dependent_var</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>
+
+    <span class="c1"># parse string into SymPy equation</span>
+    <span class="n">expr</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">sympify</span><span class="p">(</span><span class="n">expression</span><span class="p">,</span> <span class="nb">locals</span><span class="o">=</span><span class="n">sympy_vars</span><span class="p">)</span>
+
+    <span class="c1"># parse previous expressions in the order that they came in</span>
+    <span class="c1"># substitute any x-dependent vars in rhs with their rhs expressions,</span>
+    <span class="c1"># so that the x-dependence (if any) is explicit in each equation</span>
+    <span class="c1"># and add boolean x_dependent flag for each equation</span>
+    <span class="n">prev_eqs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">prev_expressions</span><span class="p">:</span>
+        <span class="c1"># parse into pairs of (lhs, rhs) SymPy expressions</span>
+        <span class="n">e_lhs</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">sympify</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">locals</span><span class="o">=</span><span class="n">sympy_vars</span><span class="p">)</span>
+        <span class="n">e_rhs</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">sympify</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">locals</span><span class="o">=</span><span class="n">sympy_vars</span><span class="p">)</span>
+        <span class="c1"># substitute in reverse order any x-dependent prior rhs</span>
+        <span class="k">for</span> <span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">,</span> <span class="n">x_dependent</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">prev_eqs</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">x_dependent</span><span class="p">:</span>
+                <span class="n">e_rhs</span> <span class="o">=</span> <span class="n">e_rhs</span><span class="o">.</span><span class="n">subs</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span>
+        <span class="c1"># differentiate result w.r.t x to check if rhs depends on x</span>
+        <span class="n">x_dependent</span> <span class="o">=</span> <span class="n">e_rhs</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">simplify</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span>
+        <span class="c1"># include boolean x_dependent flag with equation</span>
+        <span class="n">prev_eqs</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">e_lhs</span><span class="p">,</span> <span class="n">e_rhs</span><span class="p">,</span> <span class="n">x_dependent</span><span class="p">))</span>
+
+    <span class="c1"># want to substitute equations in reverse order</span>
+    <span class="n">prev_eqs</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+
+    <span class="c1"># substitute each x-dependent prev equation in reverse order</span>
+    <span class="k">for</span> <span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">,</span> <span class="n">x_dependent</span> <span class="ow">in</span> <span class="n">prev_eqs</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">x_dependent</span><span class="p">:</span>
+            <span class="n">expr</span> <span class="o">=</span> <span class="n">expr</span><span class="o">.</span><span class="n">subs</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span>
+
+    <span class="c1"># differentiate w.r.t. x</span>
+    <span class="n">diff</span> <span class="o">=</span> <span class="n">expr</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">simplify</span><span class="p">()</span>
+
+    <span class="c1"># try to simplify expression in terms of existing variables</span>
+    <span class="c1"># ignore any exceptions here, since we already have a valid solution</span>
+    <span class="c1"># so if this further simplification step fails the error is not fatal</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># if expression is equal to one of the supplied vars, replace with this var</span>
+        <span class="c1"># can do a simple string comparison here since a var cannot be further simplified</span>
+        <span class="n">diff_as_string</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">sympy_vars</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">diff_as_string</span> <span class="o">==</span> <span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">sympy_vars</span><span class="p">[</span><span class="n">v</span><span class="p">]):</span>
+                <span class="n">diff</span> <span class="o">=</span> <span class="n">sympy_vars</span><span class="p">[</span><span class="n">v</span><span class="p">]</span>
+
+        <span class="c1"># or if equal to rhs of one of the supplied equations, replace with lhs</span>
+        <span class="c1"># we need to substitute the constant prev expressions on both sides before comparing</span>
+        <span class="k">for</span> <span class="n">i_eq</span><span class="p">,</span> <span class="n">prev_eq</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">prev_eqs</span><span class="p">):</span>
+            <span class="c1"># each supplied eq, as well as our solution diff, need</span>
+            <span class="c1"># recursive substitution of any preceeding non-x-dependent statements</span>
+            <span class="c1"># before comparison</span>
+            <span class="n">eq_rhs_sub</span> <span class="o">=</span> <span class="n">prev_eq</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">diff_sub</span> <span class="o">=</span> <span class="n">diff</span>
+            <span class="k">for</span> <span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">,</span> <span class="n">x_dependent</span> <span class="ow">in</span> <span class="n">prev_eqs</span><span class="p">[</span><span class="n">i_eq</span><span class="p">:]:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">x_dependent</span><span class="p">:</span>
+                    <span class="n">eq_rhs_sub</span> <span class="o">=</span> <span class="n">eq_rhs_sub</span><span class="o">.</span><span class="n">subs</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span>
+                    <span class="n">diff_sub</span> <span class="o">=</span> <span class="n">diff_sub</span><span class="o">.</span><span class="n">subs</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">diff_sub</span> <span class="o">-</span> <span class="n">eq_rhs_sub</span><span class="p">)</span><span class="o">.</span><span class="n">simplify</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">diff</span> <span class="o">=</span> <span class="n">prev_eq</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="c1"># return result as C code in NEURON format</span>
+    <span class="k">return</span> <span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">diff</span><span class="o">.</span><span class="n">evalf</span><span class="p">())</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2019, BlueBrain HPC team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

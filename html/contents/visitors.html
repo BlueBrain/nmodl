@@ -1,0 +1,393 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Visitors &mdash; NMODL 0.2 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="The NMODL Jupyter notebooks" href="../notebooks.html" />
+    <link rel="prev" title="The NEURON MODeling language" href="../language.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> NMODL
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Introduction:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installing the NMODL Framework</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../language.html">The NEURON MODeling language</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Visitors</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#parsing-model-and-constructing-ast">Parsing Model and constructing AST</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#querying-ast-objects-with-visitors">Querying AST objects with Visitors</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#lookup-visitor">Lookup Visitor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#symbol-table-visitor">Symbol Table Visitor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#custom-ast-visitor">Custom AST Visitor</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Jupyter Notebooks:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks.html">The NMODL Jupyter notebooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/nmodl-python-tutorial.html">NMODL Python Interface Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/nmodl-odes-overview.html">NMODL integration of ODEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/nmodl-kinetic-schemes.html">NMODL Kinetic Scheme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/nmodl-sympy-solver-cnexp.html">NMODL SympySolver - cnexp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/nmodl-sympy-solver-sparse.html">NMODL SympySolver - sparse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/nmodl-sympy-solver-derivimplicit.html">NMODL SympySolver - derivimplicit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/nmodl-linear-solver.html">NMODL LINEAR solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/nmodl-nonlinear-solver.html">NMODL NONLINEAR solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/nmodl-sympy-conductance.html">NMODL CONDUCTANCE</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to the NMODL Framework</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">Python package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C++ API</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NMODL</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Visitors</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/contents/visitors.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="visitors">
+<h1>Visitors<a class="headerlink" href="#visitors" title="Permalink to this headline">¶</a></h1>
+<p>One of the strengths of the NMODL python interface is access to inbuilt Visitors.
+One can perform different queries and analysis on AST using different visitors. Let us start with examples of inbuilt visitors.</p>
+<div class="section" id="parsing-model-and-constructing-ast">
+<h2>Parsing Model and constructing AST<a class="headerlink" href="#parsing-model-and-constructing-ast" title="Permalink to this headline">¶</a></h2>
+<p>Once the NMODL is setup properly we should be able to import nmodl module and create the channel:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">nmodl.dsl</span> <span class="k">as</span> <span class="nn">nmodl</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">channel</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="gp">... </span><span class="s2">NEURON  {</span>
+<span class="gp">... </span><span class="s2">    SUFFIX CaDynamics</span>
+<span class="gp">... </span><span class="s2">    USEION ca READ ica WRITE cai</span>
+<span class="gp">... </span><span class="s2">    RANGE decay, gamma, minCai, depth</span>
+<span class="gp">... </span><span class="s2">}</span>
+<span class="gp">... </span><span class="s2">UNITS   {</span>
+<span class="gp">... </span><span class="s2">   (mV) = (millivolt)</span>
+<span class="gp">... </span><span class="s2">    (mA) = (milliamp)</span>
+<span class="gp">... </span><span class="s2">    FARADAY = (faraday) (coulombs)</span>
+<span class="gp">... </span><span class="s2">    (molar) = (1/liter)</span>
+<span class="gp">... </span><span class="s2">    (mM) = (millimolar)</span>
+<span class="gp">... </span><span class="s2">    (um)    = (micron)</span>
+<span class="gp">... </span><span class="s2">}</span>
+<span class="gp">... </span><span class="s2">PARAMETER   {</span>
+<span class="gp">... </span><span class="s2">    gamma = 0.05 : percent of free calcium (not buffered)</span>
+<span class="gp">... </span><span class="s2">    decay = 80 (ms) : rate of removal of calcium</span>
+<span class="gp">... </span><span class="s2">    depth = 0.1 (um) : depth of shell</span>
+<span class="gp">... </span><span class="s2">    minCai = 1e-4 (mM)</span>
+<span class="gp">... </span><span class="s2">}</span>
+<span class="gp">... </span><span class="s2">ASSIGNED    {ica (mA/cm2)}</span>
+<span class="gp">... </span><span class="s2">INITIAL {</span>
+<span class="gp">... </span><span class="s2">    cai = minCai</span>
+<span class="gp">... </span><span class="s2">}</span>
+<span class="gp">... </span><span class="s2">STATE   {</span>
+<span class="gp">... </span><span class="s2">    cai (mM)</span>
+<span class="gp">... </span><span class="s2">}</span>
+<span class="gp">... </span><span class="s2">BREAKPOINT  { SOLVE states METHOD cnexp }</span>
+<span class="gp">... </span><span class="s2">DERIVATIVE states   {</span>
+<span class="gp">... </span><span class="s2">    cai&#39; = -(10000)*(ica*gamma/(2*FARADAY*depth)) - (cai - minCai)/decay</span>
+<span class="gp">... </span><span class="s2">}</span>
+<span class="gp">... </span><span class="s2">FUNCTION foo() {</span>
+<span class="gp">... </span><span class="s2">    LOCAL temp</span>
+<span class="gp">... </span><span class="s2">    foo = 1.0 + gamma</span>
+<span class="gp">... </span><span class="s2">}</span>
+<span class="gp">... </span><span class="s2">&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p>Now we can parse any valid NMODL constructs using parsing interface.
+First, we have to create nmodl parser object using <a class="reference internal" href="../nmodl.html#nmodl.NmodlDriver" title="nmodl.NmodlDriver"><code class="xref py py-class docutils literal notranslate"><span class="pre">nmodl.NmodlDriver</span></code></a> and then we can use <a class="reference internal" href="../nmodl.html#nmodl.NmodlDriver.parse_string" title="nmodl.NmodlDriver.parse_string"><code class="xref py py-func docutils literal notranslate"><span class="pre">nmodl.NmodlDriver.parse_string()</span></code></a> method:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">driver</span> <span class="o">=</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">NmodlDriver</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">modast</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">parse_string</span><span class="p">(</span><span class="n">channel</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="../nmodl.html#nmodl.NmodlDriver.parse_string" title="nmodl.NmodlDriver.parse_string"><code class="xref py py-func docutils literal notranslate"><span class="pre">nmodl.NmodlDriver.parse_string()</span></code></a> method will throw an exception with parsing error if the input is invalid.
+Otherwise it return <code class="xref py py-class docutils literal notranslate"><span class="pre">nmodl.ast.AST</span></code> object.</p>
+<p>If we simply print AST object, we can see JSON representation:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;</span><span class="si">%.100s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">modast</span><span class="p">)</span>  <span class="c1"># only first 100 characters</span>
+<span class="go">{&quot;Program&quot;:[{&quot;NeuronBlock&quot;:[{&quot;StatementBlock&quot;:[{&quot;Suffix&quot;:[{&quot;Name&quot;:[{&quot;String&quot;:[{&quot;name&quot;:&quot;SUFFIX&quot;}]}]},</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="querying-ast-objects-with-visitors">
+<h2>Querying AST objects with Visitors<a class="headerlink" href="#querying-ast-objects-with-visitors" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="lookup-visitor">
+<h3>Lookup Visitor<a class="headerlink" href="#lookup-visitor" title="Permalink to this headline">¶</a></h3>
+<p>As name suggest, lookup visitor allows to search different NMODL constructs in the AST. The <cite>visitor</cite> module provides access to inbuilt visitors. In order to use this visitor, we create an object of <a class="reference internal" href="../nmodl.html#nmodl.visitor.AstLookupVisitor" title="nmodl.visitor.AstLookupVisitor"><code class="xref py py-class docutils literal notranslate"><span class="pre">nmodl.visitor.AstLookupVisitor</span></code></a>:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nmodl.dsl</span> <span class="kn">import</span> <span class="n">visitor</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nmodl.dsl</span> <span class="kn">import</span> <span class="n">ast</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lookup_visitor</span> <span class="o">=</span> <span class="n">visitor</span><span class="o">.</span><span class="n">AstLookupVisitor</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Assuming we have created <a class="reference internal" href="../nmodl.html#module-nmodl.ast" title="nmodl.ast"><code class="xref py py-class docutils literal notranslate"><span class="pre">nmodl.ast</span></code></a> object (as shown here), we can search for any NMODL construct in the AST using <a class="reference internal" href="../nmodl.html#nmodl.visitor.AstLookupVisitor" title="nmodl.visitor.AstLookupVisitor"><code class="xref py py-class docutils literal notranslate"><span class="pre">nmodl.visitor.AstLookupVisitor</span></code></a>. For example, to find out <cite>STATE</cite> block in the mod file, we can simply do:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">states</span> <span class="o">=</span> <span class="n">lookup_visitor</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="n">modast</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AstNodeType</span><span class="o">.</span><span class="n">STATE_BLOCK</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">states</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="nb">print</span> <span class="p">(</span><span class="n">nmodl</span><span class="o">.</span><span class="n">to_nmodl</span><span class="p">(</span><span class="n">state</span><span class="p">))</span>
+<span class="go">STATE {</span>
+<span class="go">    cai (mM)</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="symbol-table-visitor">
+<h3>Symbol Table Visitor<a class="headerlink" href="#symbol-table-visitor" title="Permalink to this headline">¶</a></h3>
+<p>Symbol table visitor is used to find out all variables and their usage in mod file. To use this, just create a visitor object as:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nmodl.dsl</span> <span class="kn">import</span> <span class="n">symtab</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">symv</span> <span class="o">=</span> <span class="n">symtab</span><span class="o">.</span><span class="n">SymtabVisitor</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Once the visitor object is created, we can run visitor on AST object to populate symbol table. Symbol table provides print method that can be used to print whole symbol table:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">symv</span><span class="o">.</span><span class="n">visit_program</span><span class="p">(</span><span class="n">modast</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">table</span> <span class="o">=</span> <span class="n">modast</span><span class="o">.</span><span class="n">get_symbol_table</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">table_s</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now we can query for variables in the symbol table based on name of variable:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cai</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="s1">&#39;cai&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="p">(</span><span class="n">cai</span><span class="p">)</span>
+<span class="go">cai [Properties : prime_name assigned_definition write_ion state_var]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="custom-ast-visitor">
+<h3>Custom AST Visitor<a class="headerlink" href="#custom-ast-visitor" title="Permalink to this headline">¶</a></h3>
+<p>If predefined visitors are limited, we can implement new visitor using <a class="reference internal" href="../nmodl.html#nmodl.visitor.AstVisitor" title="nmodl.visitor.AstVisitor"><code class="xref py py-class docutils literal notranslate"><span class="pre">nmodl.visitor.AstVisitor</span></code></a> interface. Let us say we want to implement a visitor that prints every floating point numbers in MOD file. Here is how it can be done:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nmodl.dsl</span> <span class="kn">import</span> <span class="n">ast</span><span class="p">,</span> <span class="n">visitor</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">DoubleVisitor</span><span class="p">(</span><span class="n">visitor</span><span class="o">.</span><span class="n">AstVisitor</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">visit_double</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="nb">print</span> <span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">eval</span><span class="p">())</span>  <span class="c1"># or, can use nmodl.to_nmodl(node)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d_visitor</span> <span class="o">=</span> <span class="n">DoubleVisitor</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">modast</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="n">d_visitor</span><span class="p">)</span>
+<span class="go">0.05</span>
+<span class="go">0.1</span>
+<span class="go">1e-4</span>
+<span class="go">10000</span>
+<span class="go">2</span>
+<span class="go">1.0</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="../notebooks.html" class="btn btn-neutral float-right" title="The NMODL Jupyter notebooks" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../language.html" class="btn btn-neutral float-left" title="The NEURON MODeling language" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2019, BlueBrain HPC team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,1180 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>NMODL Python Interface Tutorial &mdash; NMODL 0.2 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="NMODL integration of ODEs" href="nmodl-odes-overview.html" />
+    <link rel="prev" title="The NMODL Jupyter notebooks" href="../notebooks.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> NMODL
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Introduction:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installing the NMODL Framework</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../language.html">The NEURON MODeling language</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contents/visitors.html">Visitors</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Jupyter Notebooks:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../notebooks.html">The NMODL Jupyter notebooks</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">NMODL Python Interface Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#Introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Parsing-Model-And-Constructing-AST">Parsing Model And Constructing AST</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Querying-AST-object-with-Visitors">Querying AST object with Visitors</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Lookup-visitor">Lookup visitor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Symbol-Table-Visitor">Symbol Table Visitor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Custom-AST-visitor">Custom AST visitor</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Easy-code-generation-using-AST-visitors">Easy code generation using AST visitors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Example-of-CURIE-information-parsing">Example of CURIE information parsing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="nmodl-odes-overview.html">NMODL integration of ODEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nmodl-kinetic-schemes.html">NMODL Kinetic Scheme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nmodl-sympy-solver-cnexp.html">NMODL SympySolver - cnexp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nmodl-sympy-solver-sparse.html">NMODL SympySolver - sparse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nmodl-sympy-solver-derivimplicit.html">NMODL SympySolver - derivimplicit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nmodl-linear-solver.html">NMODL LINEAR solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nmodl-nonlinear-solver.html">NMODL NONLINEAR solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nmodl-sympy-conductance.html">NMODL CONDUCTANCE</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to the NMODL Framework</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">Python package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C++ API</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NMODL</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>NMODL Python Interface Tutorial</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/notebooks/nmodl-python-tutorial.ipynb.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="NMODL-Python-Interface-Tutorial">
+<h1>NMODL Python Interface Tutorial<a class="headerlink" href="#NMODL-Python-Interface-Tutorial" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="Introduction">
+<h2>Introduction<a class="headerlink" href="#Introduction" title="Permalink to this headline">¶</a></h2>
+<p>NMODL is a code generation framework for NEURON Modeling Language. It is primarily designed to support optimised code generation backends for modern architectures including CPUs and GPUs. It provides high level Python interface that can be used for model introspection as well as performing various analysis on underlying model.</p>
+<p>This tutorial provides introduction to Python API with examples.</p>
+<p>To get started, let’s install nmodl via Python wheel as:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>%%capture
+! pip install nmodl
+</pre></div>
+</div>
+</div>
+<blockquote>
+<div><p>Note : Python wheel is only available for Linux and Mac OS. Windows version will be available in the future. Today you can use Windows Subsystem for Linux.</p>
+</div></blockquote>
+</div>
+<div class="section" id="Parsing-Model-And-Constructing-AST">
+<h2>Parsing Model And Constructing AST<a class="headerlink" href="#Parsing-Model-And-Constructing-AST" title="Permalink to this headline">¶</a></h2>
+<p>Once the NMODL is setup properly we should be able to import <code class="docutils literal notranslate"><span class="pre">nmodl</span></code> module :</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">nmodl.dsl</span> <span class="k">as</span> <span class="nn">nmodl</span>
+</pre></div>
+</div>
+</div>
+<p>If you see any issues, check the <a class="reference external" href="#installation">installation section</a>. Lets take an example of a channel <code class="docutils literal notranslate"><span class="pre">CaDynamics</span></code> :</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">channel</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">NEURON  {</span>
+<span class="s2">    SUFFIX CaDynamics</span>
+<span class="s2">    USEION ca READ ica WRITE cai</span>
+<span class="s2">    RANGE decay, gamma, minCai, depth</span>
+<span class="s2">}</span>
+
+<span class="s2">UNITS   {</span>
+<span class="s2">    (mV) = (millivolt)</span>
+<span class="s2">    (mA) = (milliamp)</span>
+<span class="s2">    FARADAY = (faraday) (coulombs)</span>
+<span class="s2">    (molar) = (1/liter)</span>
+<span class="s2">    (mM) = (millimolar)</span>
+<span class="s2">    (um)    = (micron)</span>
+<span class="s2">}</span>
+
+<span class="s2">PARAMETER   {</span>
+<span class="s2">    gamma = 0.05 : percent of free calcium (not buffered)</span>
+<span class="s2">    decay = 80 (ms) : rate of removal of calcium</span>
+<span class="s2">    depth = 0.1 (um) : depth of shell</span>
+<span class="s2">    minCai = 1e-4 (mM)</span>
+<span class="s2">}</span>
+
+<span class="s2">ASSIGNED    {ica (mA/cm2)}</span>
+
+<span class="s2">INITIAL {</span>
+<span class="s2">    cai = minCai</span>
+<span class="s2">}</span>
+
+<span class="s2">STATE   {</span>
+<span class="s2">    cai (mM)</span>
+<span class="s2">}</span>
+
+<span class="s2">BREAKPOINT  { SOLVE states METHOD cnexp }</span>
+
+<span class="s2">DERIVATIVE states   {</span>
+<span class="s2">    cai&#39; = -(10000)*(ica*gamma/(2*FARADAY*depth)) - (cai - minCai)/decay</span>
+<span class="s2">}</span>
+
+<span class="s2">FUNCTION foo() {</span>
+<span class="s2">    LOCAL temp</span>
+<span class="s2">    foo = 1.0 + gamma</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+</div>
+<p>Now we can parse any valid NMODL constructs using NMODL’s parsing interface. First, we have to create nmodl parser object using <code class="docutils literal notranslate"><span class="pre">nmodl::NmodlDriver</span></code> and then we can use <code class="docutils literal notranslate"><span class="pre">parse_string</span></code> method :</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">driver</span> <span class="o">=</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">NmodlDriver</span><span class="p">()</span>
+<span class="n">modast</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">parse_string</span><span class="p">(</span><span class="n">channel</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">parse_string</span></code> method will throw an exception if input is invalid. Otherwise it returns <a class="reference external" href="https://en.wikipedia.org/wiki/Abstract_syntax_tree">AST</a> object.</p>
+<p>If we simply print AST object, we can see JSON representation :</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%.200s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">modast</span><span class="p">)</span>  <span class="c1"># only first 200 characters</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#34;Program&#34;:[{&#34;NeuronBlock&#34;:[{&#34;StatementBlock&#34;:[{&#34;Suffix&#34;:[{&#34;Name&#34;:[{&#34;String&#34;:[{&#34;name&#34;:&#34;SUFFIX&#34;}]}]},{&#34;Name&#34;:[{&#34;String&#34;:[{&#34;name&#34;:&#34;CaDynamics&#34;}]}]}]},{&#34;Useion&#34;:[{&#34;Name&#34;:[{&#34;String&#34;:[{&#34;name&#34;:&#34;ca&#34;}]}]},{&#34;R
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="Querying-AST-object-with-Visitors">
+<h2>Querying AST object with Visitors<a class="headerlink" href="#Querying-AST-object-with-Visitors" title="Permalink to this headline">¶</a></h2>
+<p>One of the strength of NMODL python interface is access to inbuilt <a class="reference external" href="https://en.wikipedia.org/wiki/Visitor_pattern">Visitors</a>. One can perform different queries and analysis on AST using different visitors. Lets start with the examples of inbuilt visitors.</p>
+<div class="section" id="Lookup-visitor">
+<h3>Lookup visitor<a class="headerlink" href="#Lookup-visitor" title="Permalink to this headline">¶</a></h3>
+<p>As name suggest, lookup visitor allows to search different NMODL constructs in the AST. The <code class="docutils literal notranslate"><span class="pre">visitor</span></code> module provides access to inbuilt visitors. In order to use this visitor, we create an object of AstLookupVisitor :</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">nmodl</span> <span class="kn">import</span> <span class="n">ast</span><span class="p">,</span> <span class="n">visitor</span>
+
+<span class="n">lookup_visitor</span> <span class="o">=</span> <span class="n">visitor</span><span class="o">.</span><span class="n">AstLookupVisitor</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<p>Assuming we have created AST object (as shown <a class="reference external" href="#create-ast">here</a>), we can search for any NMODL construct in the AST using AstLookupVisitor. For example, to find out <code class="docutils literal notranslate"><span class="pre">STATE</span></code> block in the mod file, we can simply do:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">states</span> <span class="o">=</span> <span class="n">lookup_visitor</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="n">modast</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AstNodeType</span><span class="o">.</span><span class="n">STATE_BLOCK</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">states</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">nmodl</span><span class="o">.</span><span class="n">to_nmodl</span><span class="p">(</span><span class="n">state</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+STATE {
+    cai (mM)
+}
+</pre></div></div>
+</div>
+<p>We have used <code class="docutils literal notranslate"><span class="pre">to_nmodl</span></code> helper function to convert AST object back to NMODL language. Note that the output of <code class="docutils literal notranslate"><span class="pre">to_nmodl</span></code> should be same as input except for comments (?, :, COMMENT). There are very few edge cases where the NMODL output could slightly differ and this is considered as bug. This is being addressed by testing entire <a class="reference external" href="https://senselab.med.yale.edu/modeldb/">ModelDB</a> database.</p>
+<p>Using AstLookupVisitor we can introspect NMODL constructs at any level of details. Below are some examples to find out different constructs in the example mod file. All different kind of NMODL constructs are <a class="reference external" href="https://bluebrain.github.io/nmodl/html/doxygen/group__ast__type.html">listeed here</a>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">odes</span> <span class="o">=</span> <span class="n">lookup_visitor</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="n">modast</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AstNodeType</span><span class="o">.</span><span class="n">DIFF_EQ_EXPRESSION</span><span class="p">)</span>
+<span class="n">primes</span> <span class="o">=</span> <span class="n">lookup_visitor</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="n">modast</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AstNodeType</span><span class="o">.</span><span class="n">PRIME_NAME</span><span class="p">)</span>
+<span class="n">range_vars</span> <span class="o">=</span> <span class="n">lookup_visitor</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="n">modast</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AstNodeType</span><span class="o">.</span><span class="n">RANGE_VAR</span><span class="p">)</span>
+<span class="n">parameters</span> <span class="o">=</span> <span class="n">lookup_visitor</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="n">modast</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AstNodeType</span><span class="o">.</span><span class="n">PARAM_ASSIGN</span><span class="p">)</span>
+<span class="n">units</span> <span class="o">=</span> <span class="n">lookup_visitor</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="n">modast</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AstNodeType</span><span class="o">.</span><span class="n">UNIT</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">odes</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2"> differential equation(s) exist : &quot;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">odes</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">ode</span> <span class="ow">in</span> <span class="n">odes</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">to_nmodl</span><span class="p">(</span><span class="n">ode</span><span class="p">))</span>
+
+<span class="k">if</span> <span class="n">primes</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2"> prime variables exist :&quot;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">primes</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">prime</span> <span class="ow">in</span> <span class="n">primes</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">to_nmodl</span><span class="p">(</span><span class="n">prime</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="n">range_vars</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2"> range variables exist :&quot;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">range_vars</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">range_var</span> <span class="ow">in</span> <span class="n">range_vars</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">to_nmodl</span><span class="p">(</span><span class="n">range_var</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="n">parameters</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2"> parameter variables exist :&quot;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">parameters</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">range_var</span> <span class="ow">in</span> <span class="n">range_vars</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">to_nmodl</span><span class="p">(</span><span class="n">range_var</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="n">units</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2"> units uses :&quot;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">units</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="n">units</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">to_nmodl</span><span class="p">(</span><span class="n">unit</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+1 differential equation(s) exist :
+         cai&#39; = -(10000)*(ica*gamma/(2*FARADAY*depth))-(cai-minCai)/decay
+1 prime variables exist : cai&#39;
+4 range variables exist : decay gamma minCai depth
+4 parameter variables exist : decay gamma minCai depth
+17 units uses : (mV) (millivolt) (mA) (milliamp) (faraday) (coulombs) (molar) (1/liter) (mM) (millimolar) (um) (micron) (ms) (um) (mM) (mA/cm2) (mM)
+</pre></div></div>
+</div>
+<p>Apart from performing lookup on whole AST object (i.e. entire NMODL file), we can perform analysis on the specific construct. Lets take a synthetic example : say we want to find out all assignment statements in function <code class="docutils literal notranslate"><span class="pre">foo</span></code>. If we use lookup visitor on AST, it will returnn all statements in the mod file (e.g. including DERIVATIVE block). To avoid this, we can first find FUNCTION blocks and then search for statements within that block :</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">functions</span> <span class="o">=</span> <span class="n">lookup_visitor</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="n">modast</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AstNodeType</span><span class="o">.</span><span class="n">FUNCTION_BLOCK</span><span class="p">)</span>
+<span class="n">function</span> <span class="o">=</span> <span class="n">functions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># first function</span>
+
+<span class="c1"># expression statements include assignments</span>
+<span class="n">new_lookup_visitor</span> <span class="o">=</span> <span class="n">visitor</span><span class="o">.</span><span class="n">AstLookupVisitor</span><span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">AstNodeType</span><span class="o">.</span><span class="n">EXPRESSION_STATEMENT</span><span class="p">)</span>
+
+<span class="c1"># using accept method of node we can visit it</span>
+<span class="n">function</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="n">new_lookup_visitor</span><span class="p">)</span>
+<span class="n">statements</span> <span class="o">=</span> <span class="n">new_lookup_visitor</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">statement</span> <span class="ow">in</span> <span class="n">statements</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">nmodl</span><span class="o">.</span><span class="n">to_nmodl</span><span class="p">(</span><span class="n">statement</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+foo = 1.0+gamma
+</pre></div></div>
+</div>
+<p>Every AST node provides <code class="docutils literal notranslate"><span class="pre">accept</span></code> method that takes visitor object as parameter. In above example, we used <code class="docutils literal notranslate"><span class="pre">accept</span></code> method of <code class="docutils literal notranslate"><span class="pre">FunctionBock</span></code> node. This allows to run a given visitor on a specific node. <code class="docutils literal notranslate"><span class="pre">AstLookupVisitor</span></code> provides <code class="docutils literal notranslate"><span class="pre">get_nodes()</span></code> method that can be used to retrive the result of visitor. List of all <code class="docutils literal notranslate"><span class="pre">AstNodeType</span></code> can be found <a class="reference external" href="####">here (todo)</a>.</p>
+</div>
+<div class="section" id="Symbol-Table-Visitor">
+<h3>Symbol Table Visitor<a class="headerlink" href="#Symbol-Table-Visitor" title="Permalink to this headline">¶</a></h3>
+<p>Symbol table visitor is used to find out all variables and their usage in mod file. To use this, first create a visitor object as:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">nmodl</span> <span class="kn">import</span> <span class="n">symtab</span>
+
+<span class="n">symv</span> <span class="o">=</span> <span class="n">symtab</span><span class="o">.</span><span class="n">SymtabVisitor</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<p>Once the visitor object is created, we can run visitor on AST object to populate symbol table. Symbol table provides print method that can be used to print whole symbol table :</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">symv</span><span class="o">.</span><span class="n">visit_program</span><span class="p">(</span><span class="n">modast</span><span class="p">)</span>
+<span class="n">table</span> <span class="o">=</span> <span class="n">modast</span><span class="o">.</span><span class="n">get_symbol_table</span><span class="p">()</span>
+<span class="n">table_s</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">table_s</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+------------------------------------------------------------------------------------------------------------------------------------
+|                                 NMODL_GLOBAL [Program IN None] POSITION : UNKNOWN SCOPE : GLOBAL                                 |
+------------------------------------------------------------------------------------------------------------------------------------
+|   NAME   |                     PROPERTIES                      |  STATUS   |  LOCATION   |   VALUE    |  # READS   |  # WRITES   |
+------------------------------------------------------------------------------------------------------------------------------------
+| ca       | ion                                                 |           |     UNKNOWN |            |     0      |      0      |
+| ica      | assigned_definition read_ion                        |           |     UNKNOWN |            |     0      |      0      |
+| cai      | prime_name assigned_definition write_ion state_var  |           |     UNKNOWN |            |     0      |      0      |
+| decay    | range parameter                                     |           |     UNKNOWN |  80.000000 |     0      |      0      |
+| gamma    | range parameter                                     |           |     UNKNOWN |   0.050000 |     0      |      0      |
+| minCai   | range parameter                                     |           |     UNKNOWN |   0.000100 |     0      |      0      |
+| depth    | range parameter                                     |           |     UNKNOWN |   0.100000 |     0      |      0      |
+| mV       | unit_def                                            |           |     UNKNOWN |            |     0      |      0      |
+| mA       | unit_def                                            |           |     UNKNOWN |            |     0      |      0      |
+| FARADAY  | factor_def                                          |           |     11.5-11 |            |     0      |      0      |
+| molar    | unit_def                                            |           |     UNKNOWN |            |     0      |      0      |
+| mM       | unit_def                                            |           |     UNKNOWN |            |     0      |      0      |
+| um       | unit_def                                            |           |     UNKNOWN |            |     0      |      0      |
+| states   | derivative_block to_solve                           |           |     36.1-10 |            |     0      |      0      |
+| foo      | function_block                                      |           |      40.1-8 |            |     0      |      0      |
+------------------------------------------------------------------------------------------------------------------------------------
+
+    --------------------------------------------------------------------------------------------------
+    |             StatementBlock4 [StatementBlock IN foo] POSITION : 40.16 SCOPE : LOCAL             |
+    --------------------------------------------------------------------------------------------------
+    |   NAME   |   PROPERTIES   |   STATUS   |   LOCATION   |   VALUE   |   # READS   |   # WRITES   |
+    --------------------------------------------------------------------------------------------------
+    | temp     | local          |            |      UNKNOWN |           |      0      |      0       |
+    --------------------------------------------------------------------------------------------------
+
+</pre></div></div>
+</div>
+<p>Now we can query for variables in the symbol table based on name of variable:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cai</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="s2">&quot;cai&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cai</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+cai [Properties : prime_name assigned_definition write_ion state_var]
+</pre></div></div>
+</div>
+<p>When we print the symbol, all it’s properties get printed. For example, in above case the <code class="docutils literal notranslate"><span class="pre">cai</span></code> variable is used in : * differential equation (prime) * state block * assigned block * use ion statement</p>
+<p>We can also query based on the kind of variables. For example, to find out all range variables we can use <code class="docutils literal notranslate"><span class="pre">get_variables_with_properties</span></code> method with symbol property as an argument:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">range_vars</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">get_variables_with_properties</span><span class="p">(</span><span class="n">symtab</span><span class="o">.</span><span class="n">NmodlType</span><span class="o">.</span><span class="n">range_var</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">range_vars</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+decay [Properties : range parameter]
+gamma [Properties : range parameter]
+minCai [Properties : range parameter]
+depth [Properties : range parameter]
+</pre></div></div>
+</div>
+<p>We can also query with multiple properties. For example, to find out read or write ion variables we can use (second argument <code class="docutils literal notranslate"><span class="pre">False</span></code> indicates any one property):</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">ions_var</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">get_variables_with_properties</span><span class="p">(</span>
+    <span class="n">symtab</span><span class="o">.</span><span class="n">NmodlType</span><span class="o">.</span><span class="n">read_ion_var</span> <span class="o">|</span> <span class="n">symtab</span><span class="o">.</span><span class="n">NmodlType</span><span class="o">.</span><span class="n">write_ion_var</span><span class="p">,</span> <span class="kc">False</span>
+<span class="p">)</span>
+<span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">ions_var</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ica [Properties : assigned_definition read_ion]
+cai [Properties : prime_name assigned_definition write_ion state_var]
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="Custom-AST-visitor">
+<h3>Custom AST visitor<a class="headerlink" href="#Custom-AST-visitor" title="Permalink to this headline">¶</a></h3>
+<p>If predefined visitors are limited, we can implement new visitor using AstVisitor interface. Lets say we want to implement a visitor that will print every floating point number in MOD file. Here is how we can do this:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">nmodl</span> <span class="kn">import</span> <span class="n">ast</span><span class="p">,</span> <span class="n">visitor</span>
+
+
+<span class="k">class</span> <span class="nc">DoubleVisitor</span><span class="p">(</span><span class="n">visitor</span><span class="o">.</span><span class="n">AstVisitor</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">visit_double</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">eval</span><span class="p">())</span>  <span class="c1"># or, can use nmodl.to_nmodl(node)</span>
+
+
+<span class="n">d_visitor</span> <span class="o">=</span> <span class="n">DoubleVisitor</span><span class="p">()</span>
+<span class="n">modast</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="n">d_visitor</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0.05
+0.1
+1e-4
+10000
+2
+1.0
+</pre></div></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">AstVisitor</span></code> base class provides all necessary methods to traverse different ast nodes. New visitors will inherit from <code class="docutils literal notranslate"><span class="pre">AstVisitor</span></code> and implement only those method where we want different behaviour. For example, in the above case we want to visit ast nodes of type <code class="docutils literal notranslate"><span class="pre">Double</span></code> and print their value. To achieve this we implemented associated method of <code class="docutils literal notranslate"><span class="pre">Double</span></code> node i.e. <code class="docutils literal notranslate"><span class="pre">visit_double</span></code>. When we call <code class="docutils literal notranslate"><span class="pre">accept</span></code> method on the ast object, the entire AST tree will be visited (by
+<code class="docutils literal notranslate"><span class="pre">AstVisitor</span></code>). But whenever double node type will encounter in AST, the control will be handed back to <code class="docutils literal notranslate"><span class="pre">DoubleVisitor.visit_double</span></code> method.</p>
+<p>Lets implement the example of lookup visitor to print parameters with values :</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">class</span> <span class="nc">ParameterVisitor</span><span class="p">(</span><span class="n">visitor</span><span class="o">.</span><span class="n">AstVisitor</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">visitor</span><span class="o">.</span><span class="n">AstVisitor</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_parameter</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">visit_param_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_parameter</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">node</span><span class="o">.</span><span class="n">visit_children</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_parameter</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">visit_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_parameter</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">nmodl</span><span class="o">.</span><span class="n">to_nmodl</span><span class="p">(</span><span class="n">node</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">visit_double</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_parameter</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">eval</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">visit_integer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_parameter</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">eval</span><span class="p">())</span>
+
+
+<span class="n">param_visitor</span> <span class="o">=</span> <span class="n">ParameterVisitor</span><span class="p">()</span>
+<span class="n">modast</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="n">param_visitor</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+gamma
+0.05
+decay
+80
+depth
+0.1
+minCai
+1e-4
+</pre></div></div>
+</div>
+</div>
+</div>
+<div class="section" id="Easy-code-generation-using-AST-visitors">
+<h2>Easy code generation using AST visitors<a class="headerlink" href="#Easy-code-generation-using-AST-visitors" title="Permalink to this headline">¶</a></h2>
+<p>With a little more code we can even create a code generator for python using a the visitor pattern.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">mfunc_src</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;FUNCTION myfunc(x, y) {</span>
+<span class="s2">     if (x &lt; y) {</span>
+<span class="s2">          myfunc = x + y</span>
+<span class="s2">     } else {</span>
+<span class="s2">          myfunc = y</span>
+<span class="s2">     }</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">nmodl.dsl</span> <span class="k">as</span> <span class="nn">nmodl</span>
+<span class="kn">from</span> <span class="nn">nmodl.dsl</span> <span class="kn">import</span> <span class="n">ast</span>
+
+<span class="n">driver</span> <span class="o">=</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">NmodlDriver</span><span class="p">()</span>
+<span class="n">mfunc_ast</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">parse_string</span><span class="p">(</span><span class="n">mfunc_src</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">nmodl.dsl</span> <span class="kn">import</span> <span class="n">ast</span><span class="p">,</span> <span class="n">visitor</span>
+
+
+<span class="k">class</span> <span class="nc">PyGenerator</span><span class="p">(</span><span class="n">visitor</span><span class="o">.</span><span class="n">AstVisitor</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">visitor</span><span class="o">.</span><span class="n">AstVisitor</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pycode</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">indent</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">func_name</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">visit_function_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">func_name</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">get_node_name</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">parameters</span><span class="p">:</span>
+            <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">get_node_name</span><span class="p">())</span>
+        <span class="n">params_str</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pycode</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;def </span><span class="si">{</span><span class="n">node</span><span class="o">.</span><span class="n">get_node_name</span><span class="p">()</span><span class="si">}</span><span class="s2">(</span><span class="si">{</span><span class="n">params_str</span><span class="si">}</span><span class="s2">):</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">node</span><span class="o">.</span><span class="n">visit_children</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">visit_statement_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">indent</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">node</span><span class="o">.</span><span class="n">visit_children</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">indent</span> <span class="o">-=</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">visit_expression_statement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pycode</span> <span class="o">+=</span> <span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">indent</span>
+        <span class="n">expr</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">expression</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span> <span class="ow">is</span> <span class="n">ast</span><span class="o">.</span><span class="n">BinaryExpression</span> <span class="ow">and</span> <span class="n">expr</span><span class="o">.</span><span class="n">op</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;=&quot;</span><span class="p">:</span>
+            <span class="n">rhs</span> <span class="o">=</span> <span class="n">expr</span><span class="o">.</span><span class="n">rhs</span>
+            <span class="n">lhsn</span> <span class="o">=</span> <span class="n">expr</span><span class="o">.</span><span class="n">lhs</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">get_node_name</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">lhsn</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">func_name</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">pycode</span> <span class="o">+=</span> <span class="s2">&quot;return &quot;</span>
+                <span class="n">rhs</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">node</span><span class="o">.</span><span class="n">visit_children</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">node</span><span class="o">.</span><span class="n">visit_children</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pycode</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+    <span class="k">def</span> <span class="nf">visit_if_statement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pycode</span> <span class="o">+=</span> <span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">indent</span> <span class="o">+</span> <span class="s2">&quot;if &quot;</span>
+        <span class="n">node</span><span class="o">.</span><span class="n">condition</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pycode</span> <span class="o">+=</span> <span class="s2">&quot;:</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">node</span><span class="o">.</span><span class="n">get_statement_block</span><span class="p">()</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">elseifs</span><span class="p">:</span>
+            <span class="n">n</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">elses</span><span class="p">:</span>
+            <span class="n">node</span><span class="o">.</span><span class="n">elses</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">visit_else_statement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pycode</span> <span class="o">+=</span> <span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">indent</span> <span class="o">+</span> <span class="s2">&quot;else:</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">node</span><span class="o">.</span><span class="n">get_statement_block</span><span class="p">()</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">visit_binary_expression</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="n">lhs</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">lhs</span>
+        <span class="n">rhs</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">rhs</span>
+        <span class="n">op</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">op</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">op</span> <span class="o">==</span> <span class="s2">&quot;^&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pycode</span> <span class="o">+=</span> <span class="s2">&quot;pow(&quot;</span>
+            <span class="n">lhs</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pycode</span> <span class="o">+=</span> <span class="s2">&quot;, &quot;</span>
+            <span class="n">rhs</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pycode</span> <span class="o">+=</span> <span class="s2">&quot;)&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">lhs</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pycode</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">op</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="n">rhs</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">visit_var_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pycode</span> <span class="o">+=</span> <span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">get_node_name</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">visit_integer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pycode</span> <span class="o">+=</span> <span class="n">nmod</span><span class="o">.</span><span class="n">to_nmodl</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">visit_double</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pycode</span> <span class="o">+=</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">to_nmodl</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">pygen</span> <span class="o">=</span> <span class="n">PyGenerator</span><span class="p">()</span>
+<span class="n">pygen</span><span class="o">.</span><span class="n">visit_program</span><span class="p">(</span><span class="n">mfunc_ast</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">pygen</span><span class="o">.</span><span class="n">pycode</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+def myfunc(x, y):
+    if x &lt; y:
+        return x + y
+    else:
+        return y
+
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="Example-of-CURIE-information-parsing">
+<h2>Example of CURIE information parsing<a class="headerlink" href="#Example-of-CURIE-information-parsing" title="Permalink to this headline">¶</a></h2>
+<p>In this example we show how ontology information from NEURON block can be parsed.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">nmodl.dsl</span> <span class="k">as</span> <span class="nn">nmodl</span>
+<span class="kn">from</span> <span class="nn">nmodl.dsl</span> <span class="kn">import</span> <span class="n">ast</span><span class="p">,</span> <span class="n">visitor</span>
+
+<span class="n">driver</span> <span class="o">=</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">NmodlDriver</span><span class="p">()</span>
+<span class="n">mod_string</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">NEURON {</span>
+<span class="s2">        SUFFIX hx</span>
+<span class="s2">        REPRESENTS NCIT:C17145   : sodium channel</span>
+<span class="s2">        REPRESENTS NCIT:C17008   : potassium channel</span>
+<span class="s2">        USEION na READ ena WRITE ina REPRESENTS CHEBI:29101</span>
+<span class="s2">        USEION ca READ eca WRITE ina</span>
+<span class="s2">        RANGE gnabar, gkbar, gl, el, gna, gk</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="n">modast</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">parse_string</span><span class="p">(</span><span class="n">mod_string</span><span class="p">)</span>
+
+<span class="n">lookup_visitor</span> <span class="o">=</span> <span class="n">visitor</span><span class="o">.</span><span class="n">AstLookupVisitor</span><span class="p">()</span>
+
+<span class="n">ont_statements</span> <span class="o">=</span> <span class="n">lookup_visitor</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="n">modast</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AstNodeType</span><span class="o">.</span><span class="n">ONTOLOGY_STATEMENT</span><span class="p">)</span>
+<span class="n">ions</span> <span class="o">=</span> <span class="n">lookup_visitor</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="n">modast</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AstNodeType</span><span class="o">.</span><span class="n">USEION</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">statement</span> <span class="ow">in</span> <span class="n">ont_statements</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="s2">&quot; </span><span class="si">%s</span><span class="s2"> (</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">nmodl</span><span class="o">.</span><span class="n">to_nmodl</span><span class="p">(</span><span class="n">statement</span><span class="p">),</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">to_nmodl</span><span class="p">(</span><span class="n">statement</span><span class="o">.</span><span class="n">ontology_id</span><span class="p">))</span>
+    <span class="p">)</span>
+
+<span class="k">for</span> <span class="n">ion</span> <span class="ow">in</span> <span class="n">ions</span><span class="p">:</span>
+    <span class="n">o_id</span> <span class="o">=</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">to_nmodl</span><span class="p">(</span><span class="n">ion</span><span class="o">.</span><span class="n">ontology_id</span><span class="p">)</span> <span class="k">if</span> <span class="n">ion</span><span class="o">.</span><span class="n">ontology_id</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; </span><span class="si">%s</span><span class="s2"> (</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">nmodl</span><span class="o">.</span><span class="n">to_nmodl</span><span class="p">(</span><span class="n">ion</span><span class="p">),</span> <span class="n">o_id</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ REPRESENTS NCIT:C17145 (NCIT:C17145)
+ REPRESENTS NCIT:C17008 (NCIT:C17008)
+ USEION na READ ena WRITE ina REPRESENTS CHEBI:29101 (CHEBI:29101)
+ USEION ca READ eca WRITE ina ()
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="nmodl-odes-overview.html" class="btn btn-neutral float-right" title="NMODL integration of ODEs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../notebooks.html" class="btn btn-neutral float-left" title="The NMODL Jupyter notebooks" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2019, BlueBrain HPC team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

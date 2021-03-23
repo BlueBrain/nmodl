@@ -1,0 +1,442 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Contributing to the NMODL Framework &mdash; NMODL 0.2 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Python package" href="modules.html" />
+    <link rel="prev" title="NMODL CONDUCTANCE" href="notebooks/nmodl-sympy-conductance.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> NMODL
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Introduction:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="readme.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing the NMODL Framework</a></li>
+<li class="toctree-l1"><a class="reference internal" href="language.html">The NEURON MODeling language</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contents/visitors.html">Visitors</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Jupyter Notebooks:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="notebooks.html">The NMODL Jupyter notebooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/nmodl-python-tutorial.html">NMODL Python Interface Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/nmodl-odes-overview.html">NMODL integration of ODEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/nmodl-kinetic-schemes.html">NMODL Kinetic Scheme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/nmodl-sympy-solver-cnexp.html">NMODL SympySolver - cnexp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/nmodl-sympy-solver-sparse.html">NMODL SympySolver - sparse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/nmodl-sympy-solver-derivimplicit.html">NMODL SympySolver - derivimplicit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/nmodl-linear-solver.html">NMODL LINEAR solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/nmodl-nonlinear-solver.html">NMODL NONLINEAR solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/nmodl-sympy-conductance.html">NMODL CONDUCTANCE</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Contributing to the NMODL Framework</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#a-name-question-a-got-a-question"><span class="raw-html-m2r"><a name="question"></a></span> Got a Question?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#a-name-issue-a-found-a-bug"><span class="raw-html-m2r"><a name="issue"></a></span> Found a Bug?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#a-name-feature-a-missing-a-feature"><span class="raw-html-m2r"><a name="feature"></a></span> Missing a Feature?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#a-name-submit-a-submission-guidelines"><span class="raw-html-m2r"><a name="submit"></a></span> Submission Guidelines</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#a-name-submit-issue-a-submitting-an-issue"><span class="raw-html-m2r"><a name="submit-issue"></a></span> Submitting an Issue</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#a-name-submit-pr-a-submitting-a-pull-request-pr"><span class="raw-html-m2r"><a name="submit-pr"></a></span> Submitting a Pull Request (PR)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#after-your-pull-request-is-merged">After your pull request is merged</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#a-name-devconv-a-development-conventions"><span class="raw-html-m2r"><a name="devconv"></a></span> Development Conventions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#validate-the-python-package">Validate the Python package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#memory-leaks-and-clang-tidy">Memory Leaks and clang-tidy</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Python package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="doxygen.html">C++ API</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">NMODL</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Contributing to the NMODL Framework</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/contributing.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="contributing-to-the-nmodl-framework">
+<h1>Contributing to the NMODL Framework<a class="headerlink" href="#contributing-to-the-nmodl-framework" title="Permalink to this headline">¶</a></h1>
+<p>We would love for you to contribute to the NMODL Framework and help make it better than it is today. As a
+contributor, here are the guidelines we would like you to follow:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="#question">Question or Problem?</a></p></li>
+<li><p><a class="reference external" href="#issue">Issues and Bugs</a></p></li>
+<li><p><a class="reference external" href="#feature">Feature Requests</a></p></li>
+<li><p><a class="reference external" href="#submit">Submission Guidelines</a></p></li>
+<li><p><a class="reference external" href="#devconv">Development Conventions</a></p></li>
+</ul>
+<div class="section" id="a-name-question-a-got-a-question">
+<h2><span class="raw-html-m2r"><a name="question"></a></span> Got a Question?<a class="headerlink" href="#a-name-question-a-got-a-question" title="Permalink to this headline">¶</a></h2>
+<p>Please do not hesitate to raise an issue on <a class="reference external" href="https://github.com/BlueBrain/nmodl">github project page</a>.</p>
+</div>
+<div class="section" id="a-name-issue-a-found-a-bug">
+<h2><span class="raw-html-m2r"><a name="issue"></a></span> Found a Bug?<a class="headerlink" href="#a-name-issue-a-found-a-bug" title="Permalink to this headline">¶</a></h2>
+<p>If you find a bug in the source code, you can help us by <a class="reference external" href="#submit-issue">submitting an issue</a> to our <a class="reference external" href="https://github.com/BlueBrain/nmodl">GitHub Repository</a>. Even better, you can <a class="reference external" href="#submit-pr">submit a Pull Request</a> with a fix.</p>
+</div>
+<div class="section" id="a-name-feature-a-missing-a-feature">
+<h2><span class="raw-html-m2r"><a name="feature"></a></span> Missing a Feature?<a class="headerlink" href="#a-name-feature-a-missing-a-feature" title="Permalink to this headline">¶</a></h2>
+<p>You can <em>request</em> a new feature by <a class="reference external" href="#submit-issue">submitting an issue</a> to our GitHub Repository. If you would like to <em>implement</em> a new feature, please submit an issue with a proposal for your work first, to be sure that we can use it.</p>
+<p>Please consider what kind of change it is:</p>
+<ul class="simple">
+<li><p>For a <strong>Major Feature</strong>, first open an issue and outline your proposal so that it can be
+discussed. This will also allow us to better coordinate our efforts, prevent duplication of work,
+and help you to craft the change so that it is successfully accepted into the project.</p></li>
+<li><p><strong>Small Features</strong> can be crafted and directly <a class="reference external" href="#submit-pr">submitted as a Pull Request</a>.</p></li>
+</ul>
+</div>
+<div class="section" id="a-name-submit-a-submission-guidelines">
+<h2><span class="raw-html-m2r"><a name="submit"></a></span> Submission Guidelines<a class="headerlink" href="#a-name-submit-a-submission-guidelines" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="a-name-submit-issue-a-submitting-an-issue">
+<h3><span class="raw-html-m2r"><a name="submit-issue"></a></span> Submitting an Issue<a class="headerlink" href="#a-name-submit-issue-a-submitting-an-issue" title="Permalink to this headline">¶</a></h3>
+<p>Before you submit an issue, please search the issue tracker, maybe an issue for your problem already exists and the
+discussion might inform you of workarounds readily available.</p>
+<p>We want to fix all the issues as soon as possible, but before fixing a bug we need to reproduce and confirm it. In order to reproduce bugs we will need as much information as possible, and preferably a sample MOD file or Python example.</p>
+</div>
+<div class="section" id="a-name-submit-pr-a-submitting-a-pull-request-pr">
+<h3><span class="raw-html-m2r"><a name="submit-pr"></a></span> Submitting a Pull Request (PR)<a class="headerlink" href="#a-name-submit-pr-a-submitting-a-pull-request-pr" title="Permalink to this headline">¶</a></h3>
+<p>When you wish to contribute to the code base, please consider the following guidelines:</p>
+<ul>
+<li><p>Make a <a class="reference external" href="https://guides.github.com/activities/forking/">fork</a> of this repository.</p></li>
+<li><p>Make your changes in your fork, in a new git branch:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git checkout -b my-fix-branch master
+</pre></div>
+</div>
+</li>
+<li><p>Create your patch, <strong>including appropriate test cases</strong>.</p></li>
+<li><p>Enable <code class="docutils literal notranslate"><span class="pre">NMODL_FORMATTING</span></code> and <code class="docutils literal notranslate"><span class="pre">NMODL_PRECOMMIT</span></code> CMake variables
+to ensure that your change follows coding conventions of this project.
+Please see <a class="reference external" href="./README.md">README.md</a> for more information.</p></li>
+<li><p>Run the full test suite, and ensure that all tests pass.</p></li>
+<li><p>Commit your changes using a descriptive commit message.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git commit -a
+</pre></div>
+</div>
+</li>
+<li><p>Push your branch to GitHub:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git push origin my-fix-branch
+</pre></div>
+</div>
+</li>
+<li><p>In GitHub, send a Pull Request to the <code class="docutils literal notranslate"><span class="pre">master</span></code> branch of the upstream repository of the relevant component.</p></li>
+<li><p>If we suggest changes then:</p>
+<ul>
+<li><p>Make the required updates.</p></li>
+<li><p>Re-run the test suites to ensure tests are still passing.</p></li>
+<li><p>Rebase your branch and force push to your GitHub repository (this will update your Pull Request):</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git rebase master -i
+git push -f
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+<p>That’s it! Thank you for your contribution!</p>
+<div class="section" id="after-your-pull-request-is-merged">
+<h4>After your pull request is merged<a class="headerlink" href="#after-your-pull-request-is-merged" title="Permalink to this headline">¶</a></h4>
+<p>After your pull request is merged, you can safely delete your branch and pull the changes from the main (upstream)
+repository:</p>
+<ul>
+<li><p>Delete the remote branch on GitHub either through the GitHub web UI or your local shell as follows:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git push origin --delete my-fix-branch
+</pre></div>
+</div>
+</li>
+<li><p>Check out the master branch:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git checkout master -f
+</pre></div>
+</div>
+</li>
+<li><p>Delete the local branch:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git branch -D my-fix-branch
+</pre></div>
+</div>
+</li>
+<li><p>Update your master with the latest upstream version:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git pull --ff upstream master
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="a-name-devconv-a-development-conventions">
+<h2><span class="raw-html-m2r"><a name="devconv"></a></span> Development Conventions<a class="headerlink" href="#a-name-devconv-a-development-conventions" title="Permalink to this headline">¶</a></h2>
+<p>If you are developing NMODL, make sure to enable both <code class="docutils literal notranslate"><span class="pre">NMODL_FORMATTING</span></code> and <code class="docutils literal notranslate"><span class="pre">NMODL_PRECOMMIT</span></code>
+CMake variables to ensure that your contributions follow the coding conventions of this project:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span>cmake -DNMODL_FORMATTING:BOOL=ON -DNMODL_PRECOMMIT:BOOL=ON &lt;path&gt;
+</pre></div>
+</div>
+<p>The first variable provides the following additional targets to format
+C, C++, and CMake files:</p>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>make clang-format cmake-format
+</pre></div>
+</div>
+<p>The second option activates Git hooks that will discard commits that
+do not comply with coding conventions of this project. These 2 CMake variables require additional utilities:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://releases.llvm.org/7.0.0/tools/clang/docs/ClangFormat.html">ClangFormat 7</a></p></li>
+<li><p><a class="reference external" href="https://github.com/cheshirekow/cmake_format">cmake-format</a></p></li>
+<li><p><a class="reference external" href="https://pre-commit.com/">pre-commit</a></p></li>
+</ul>
+<p>clang-format can be installed on Linux thanks
+to <a class="reference external" href="http://apt.llvm.org/">LLVM apt page</a>. On MacOS, you can simply install llvm with brew:
+<code class="docutils literal notranslate"><span class="pre">brew</span> <span class="pre">install</span> <span class="pre">llvm</span></code>.
+<em>cmake-format</em> and <em>pre-commit</em> utilities can be installed with <em>pip</em>.</p>
+<div class="section" id="validate-the-python-package">
+<h3>Validate the Python package<a class="headerlink" href="#validate-the-python-package" title="Permalink to this headline">¶</a></h3>
+<p>You may run the Python test-suites if your contribution has an impact
+on the Python API:</p>
+<ol class="arabic simple">
+<li><p>setup a sandbox environment with either <em>virtualenv</em>,
+<em>pyenv</em>, or <em>pipenv</em>. For instance with <em>virtualenv</em>:
+<code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">venv</span> <span class="pre">.venv</span> <span class="pre">&amp;&amp;</span> <span class="pre">source</span> <span class="pre">.venv/bin/activate</span></code></p></li>
+<li><p>build the Python package with the command: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">build</span></code></p></li>
+<li><p>install <em>pytest</em> Python package: <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">pytest</span></code></p></li>
+<li><p>execute the unit-tests: <code class="docutils literal notranslate"><span class="pre">pytest</span></code></p></li>
+</ol>
+</div>
+<div class="section" id="memory-leaks-and-clang-tidy">
+<h3>Memory Leaks and clang-tidy<a class="headerlink" href="#memory-leaks-and-clang-tidy" title="Permalink to this headline">¶</a></h3>
+<p>If you want to test for memory leaks, do :</p>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>valgrind --leak-check=full --track-origins=yes  ./bin/nmodl_lexer
+</pre></div>
+</div>
+<p>Or using CTest as:</p>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>ctest -T memcheck
+</pre></div>
+</div>
+<p>If you want to enable <code class="docutils literal notranslate"><span class="pre">clang-tidy</span></code> checks with CMake, make sure to have <code class="docutils literal notranslate"><span class="pre">CMake</span> <span class="pre">&gt;=</span> <span class="pre">3.5</span></code> and use following cmake option:</p>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>cmake .. -DENABLE_CLANG_TIDY=ON
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="modules.html" class="btn btn-neutral float-right" title="Python package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="notebooks/nmodl-sympy-conductance.html" class="btn btn-neutral float-left" title="NMODL CONDUCTANCE" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2019, BlueBrain HPC team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

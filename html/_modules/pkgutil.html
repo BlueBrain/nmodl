@@ -1,0 +1,870 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>pkgutil &mdash; NMODL 0.2 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> NMODL
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Introduction:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installing the NMODL Framework</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../language.html">The NEURON MODeling language</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contents/visitors.html">Visitors</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Jupyter Notebooks:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks.html">The NMODL Jupyter notebooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/nmodl-python-tutorial.html">NMODL Python Interface Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/nmodl-odes-overview.html">NMODL integration of ODEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/nmodl-kinetic-schemes.html">NMODL Kinetic Scheme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/nmodl-sympy-solver-cnexp.html">NMODL SympySolver - cnexp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/nmodl-sympy-solver-sparse.html">NMODL SympySolver - sparse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/nmodl-sympy-solver-derivimplicit.html">NMODL SympySolver - derivimplicit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/nmodl-linear-solver.html">NMODL LINEAR solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/nmodl-nonlinear-solver.html">NMODL NONLINEAR solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/nmodl-sympy-conductance.html">NMODL CONDUCTANCE</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to the NMODL Framework</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">Python package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C++ API</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NMODL</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>pkgutil</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pkgutil</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Utilities to support packages.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">singledispatch</span> <span class="k">as</span> <span class="n">simplegeneric</span>
+<span class="kn">import</span> <span class="nn">importlib</span>
+<span class="kn">import</span> <span class="nn">importlib.util</span>
+<span class="kn">import</span> <span class="nn">importlib.machinery</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">ModuleType</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;get_importer&#39;</span><span class="p">,</span> <span class="s1">&#39;iter_importers&#39;</span><span class="p">,</span> <span class="s1">&#39;get_loader&#39;</span><span class="p">,</span> <span class="s1">&#39;find_loader&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;walk_packages&#39;</span><span class="p">,</span> <span class="s1">&#39;iter_modules&#39;</span><span class="p">,</span> <span class="s1">&#39;get_data&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;ImpImporter&#39;</span><span class="p">,</span> <span class="s1">&#39;ImpLoader&#39;</span><span class="p">,</span> <span class="s1">&#39;read_code&#39;</span><span class="p">,</span> <span class="s1">&#39;extend_path&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;ModuleInfo&#39;</span><span class="p">,</span>
+<span class="p">]</span>
+
+
+<span class="n">ModuleInfo</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;ModuleInfo&#39;</span><span class="p">,</span> <span class="s1">&#39;module_finder name ispkg&#39;</span><span class="p">)</span>
+<span class="n">ModuleInfo</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="s1">&#39;A namedtuple with minimal info about a module.&#39;</span>
+
+
+<span class="k">def</span> <span class="nf">_get_spec</span><span class="p">(</span><span class="n">finder</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return the finder-specific module spec.&quot;&quot;&quot;</span>
+    <span class="c1"># Works with legacy finders.</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">find_spec</span> <span class="o">=</span> <span class="n">finder</span><span class="o">.</span><span class="n">find_spec</span>
+    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+        <span class="n">loader</span> <span class="o">=</span> <span class="n">finder</span><span class="o">.</span><span class="n">find_module</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">loader</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">spec_from_loader</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">loader</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">find_spec</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">read_code</span><span class="p">(</span><span class="n">stream</span><span class="p">):</span>
+    <span class="c1"># This helper is needed in order for the PEP 302 emulation to</span>
+    <span class="c1"># correctly handle compiled files</span>
+    <span class="kn">import</span> <span class="nn">marshal</span>
+
+    <span class="n">magic</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">magic</span> <span class="o">!=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">MAGIC_NUMBER</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="n">stream</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span> <span class="c1"># Skip rest of the header</span>
+    <span class="k">return</span> <span class="n">marshal</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">walk_packages</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">onerror</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Yields ModuleInfo for all modules recursively</span>
+<span class="sd">    on path, or, if path is None, all accessible modules.</span>
+
+<span class="sd">    &#39;path&#39; should be either None or a list of paths to look for</span>
+<span class="sd">    modules in.</span>
+
+<span class="sd">    &#39;prefix&#39; is a string to output on the front of every module name</span>
+<span class="sd">    on output.</span>
+
+<span class="sd">    Note that this function must import all *packages* (NOT all</span>
+<span class="sd">    modules!) on the given path, in order to access the __path__</span>
+<span class="sd">    attribute to find submodules.</span>
+
+<span class="sd">    &#39;onerror&#39; is a function which gets called with one argument (the</span>
+<span class="sd">    name of the package which was being imported) if any exception</span>
+<span class="sd">    occurs while trying to import a package.  If no onerror function is</span>
+<span class="sd">    supplied, ImportErrors are caught and ignored, while all other</span>
+<span class="sd">    exceptions are propagated, terminating the search.</span>
+
+<span class="sd">    Examples:</span>
+
+<span class="sd">    # list all modules python can access</span>
+<span class="sd">    walk_packages()</span>
+
+<span class="sd">    # list all submodules of ctypes</span>
+<span class="sd">    walk_packages(ctypes.__path__, ctypes.__name__+&#39;.&#39;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">seen</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="p">{}):</span>
+        <span class="k">if</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">m</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="n">m</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">for</span> <span class="n">info</span> <span class="ow">in</span> <span class="n">iter_modules</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">prefix</span><span class="p">):</span>
+        <span class="k">yield</span> <span class="n">info</span>
+
+        <span class="k">if</span> <span class="n">info</span><span class="o">.</span><span class="n">ispkg</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="nb">__import__</span><span class="p">(</span><span class="n">info</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">onerror</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">onerror</span><span class="p">(</span><span class="n">info</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">onerror</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">onerror</span><span class="p">(</span><span class="n">info</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">path</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">info</span><span class="o">.</span><span class="n">name</span><span class="p">],</span> <span class="s1">&#39;__path__&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+
+                <span class="c1"># don&#39;t traverse path items we&#39;ve seen before</span>
+                <span class="n">path</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">path</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">seen</span><span class="p">(</span><span class="n">p</span><span class="p">)]</span>
+
+                <span class="k">yield from</span> <span class="n">walk_packages</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">info</span><span class="o">.</span><span class="n">name</span><span class="o">+</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">onerror</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">iter_modules</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Yields ModuleInfo for all submodules on path,</span>
+<span class="sd">    or, if path is None, all top-level modules on sys.path.</span>
+
+<span class="sd">    &#39;path&#39; should be either None or a list of paths to look for</span>
+<span class="sd">    modules in.</span>
+
+<span class="sd">    &#39;prefix&#39; is a string to output on the front of every module name</span>
+<span class="sd">    on output.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">importers</span> <span class="o">=</span> <span class="n">iter_importers</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;path must be None or list of paths to look for &quot;</span>
+                        <span class="s2">&quot;modules in&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">importers</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">get_importer</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+
+    <span class="n">yielded</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">importers</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">ispkg</span> <span class="ow">in</span> <span class="n">iter_importer_modules</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">prefix</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">yielded</span><span class="p">:</span>
+                <span class="n">yielded</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="k">yield</span> <span class="n">ModuleInfo</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">ispkg</span><span class="p">)</span>
+
+
+<span class="nd">@simplegeneric</span>
+<span class="k">def</span> <span class="nf">iter_importer_modules</span><span class="p">(</span><span class="n">importer</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">importer</span><span class="p">,</span> <span class="s1">&#39;iter_modules&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[]</span>
+    <span class="k">return</span> <span class="n">importer</span><span class="o">.</span><span class="n">iter_modules</span><span class="p">(</span><span class="n">prefix</span><span class="p">)</span>
+
+
+<span class="c1"># Implement a file walker for the normal importlib path hook</span>
+<span class="k">def</span> <span class="nf">_iter_file_finder_modules</span><span class="p">(</span><span class="n">importer</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">importer</span><span class="o">.</span><span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">importer</span><span class="o">.</span><span class="n">path</span><span class="p">):</span>
+        <span class="k">return</span>
+
+    <span class="n">yielded</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="kn">import</span> <span class="nn">inspect</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">filenames</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">importer</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+        <span class="c1"># ignore unreadable directories like import does</span>
+        <span class="n">filenames</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">filenames</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>  <span class="c1"># handle packages before same-named modules</span>
+
+    <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">filenames</span><span class="p">:</span>
+        <span class="n">modname</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getmodulename</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">modname</span><span class="o">==</span><span class="s1">&#39;__init__&#39;</span> <span class="ow">or</span> <span class="n">modname</span> <span class="ow">in</span> <span class="n">yielded</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">importer</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">fn</span><span class="p">)</span>
+        <span class="n">ispkg</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">modname</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="ow">and</span> <span class="s1">&#39;.&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">fn</span><span class="p">:</span>
+            <span class="n">modname</span> <span class="o">=</span> <span class="n">fn</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">dircontents</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+                <span class="c1"># ignore unreadable directories like import does</span>
+                <span class="n">dircontents</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">dircontents</span><span class="p">:</span>
+                <span class="n">subname</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getmodulename</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">subname</span><span class="o">==</span><span class="s1">&#39;__init__&#39;</span><span class="p">:</span>
+                    <span class="n">ispkg</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">continue</span>    <span class="c1"># not a package</span>
+
+        <span class="k">if</span> <span class="n">modname</span> <span class="ow">and</span> <span class="s1">&#39;.&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">modname</span><span class="p">:</span>
+            <span class="n">yielded</span><span class="p">[</span><span class="n">modname</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">yield</span> <span class="n">prefix</span> <span class="o">+</span> <span class="n">modname</span><span class="p">,</span> <span class="n">ispkg</span>
+
+<span class="n">iter_importer_modules</span><span class="o">.</span><span class="n">register</span><span class="p">(</span>
+    <span class="n">importlib</span><span class="o">.</span><span class="n">machinery</span><span class="o">.</span><span class="n">FileFinder</span><span class="p">,</span> <span class="n">_iter_file_finder_modules</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_import_imp</span><span class="p">():</span>
+    <span class="k">global</span> <span class="n">imp</span>
+    <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">)</span>
+        <span class="n">imp</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s1">&#39;imp&#39;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">ImpImporter</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;PEP 302 Finder that wraps Python&#39;s &quot;classic&quot; import algorithm</span>
+
+<span class="sd">    ImpImporter(dirname) produces a PEP 302 finder that searches that</span>
+<span class="sd">    directory.  ImpImporter(None) produces a PEP 302 finder that searches</span>
+<span class="sd">    the current sys.path, plus any modules that are frozen or built-in.</span>
+
+<span class="sd">    Note that ImpImporter does not currently support being used by placement</span>
+<span class="sd">    on sys.meta_path.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">global</span> <span class="n">imp</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;This emulation is deprecated, use &#39;importlib&#39; instead&quot;</span><span class="p">,</span>
+             <span class="ne">DeprecationWarning</span><span class="p">)</span>
+        <span class="n">_import_imp</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">path</span>
+
+    <span class="k">def</span> <span class="nf">find_module</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fullname</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># Note: we ignore &#39;path&#39; argument since it is only used via meta_path</span>
+        <span class="n">subname</span> <span class="o">=</span> <span class="n">fullname</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">subname</span> <span class="o">!=</span> <span class="n">fullname</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">file</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">etc</span> <span class="o">=</span> <span class="n">imp</span><span class="o">.</span><span class="n">find_module</span><span class="p">(</span><span class="n">subname</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">ImpLoader</span><span class="p">(</span><span class="n">fullname</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">etc</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">iter_modules</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">):</span>
+            <span class="k">return</span>
+
+        <span class="n">yielded</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="kn">import</span> <span class="nn">inspect</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">filenames</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+            <span class="c1"># ignore unreadable directories like import does</span>
+            <span class="n">filenames</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">filenames</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>  <span class="c1"># handle packages before same-named modules</span>
+
+        <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">filenames</span><span class="p">:</span>
+            <span class="n">modname</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getmodulename</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">modname</span><span class="o">==</span><span class="s1">&#39;__init__&#39;</span> <span class="ow">or</span> <span class="n">modname</span> <span class="ow">in</span> <span class="n">yielded</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">fn</span><span class="p">)</span>
+            <span class="n">ispkg</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">modname</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="ow">and</span> <span class="s1">&#39;.&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">fn</span><span class="p">:</span>
+                <span class="n">modname</span> <span class="o">=</span> <span class="n">fn</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">dircontents</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+                    <span class="c1"># ignore unreadable directories like import does</span>
+                    <span class="n">dircontents</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">dircontents</span><span class="p">:</span>
+                    <span class="n">subname</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getmodulename</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">subname</span><span class="o">==</span><span class="s1">&#39;__init__&#39;</span><span class="p">:</span>
+                        <span class="n">ispkg</span> <span class="o">=</span> <span class="kc">True</span>
+                        <span class="k">break</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">continue</span>    <span class="c1"># not a package</span>
+
+            <span class="k">if</span> <span class="n">modname</span> <span class="ow">and</span> <span class="s1">&#39;.&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">modname</span><span class="p">:</span>
+                <span class="n">yielded</span><span class="p">[</span><span class="n">modname</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="k">yield</span> <span class="n">prefix</span> <span class="o">+</span> <span class="n">modname</span><span class="p">,</span> <span class="n">ispkg</span>
+
+
+<span class="k">class</span> <span class="nc">ImpLoader</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;PEP 302 Loader that wraps Python&#39;s &quot;classic&quot; import algorithm</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">code</span> <span class="o">=</span> <span class="n">source</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fullname</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">etc</span><span class="p">):</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;This emulation is deprecated, use &#39;importlib&#39; instead&quot;</span><span class="p">,</span>
+                      <span class="ne">DeprecationWarning</span><span class="p">)</span>
+        <span class="n">_import_imp</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file</span> <span class="o">=</span> <span class="n">file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fullname</span> <span class="o">=</span> <span class="n">fullname</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">etc</span> <span class="o">=</span> <span class="n">etc</span>
+
+    <span class="k">def</span> <span class="nf">load_module</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fullname</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reopen</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">mod</span> <span class="o">=</span> <span class="n">imp</span><span class="o">.</span><span class="n">load_module</span><span class="p">(</span><span class="n">fullname</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">etc</span><span class="p">)</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="c1"># Note: we don&#39;t set __loader__ because we want the module to look</span>
+        <span class="c1"># normal; i.e. this is just a wrapper for standard import machinery</span>
+        <span class="k">return</span> <span class="n">mod</span>
+
+    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pathname</span><span class="p">):</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">pathname</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_reopen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">file</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">closed</span><span class="p">:</span>
+            <span class="n">mod_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">etc</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">mod_type</span><span class="o">==</span><span class="n">imp</span><span class="o">.</span><span class="n">PY_SOURCE</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">mod_type</span> <span class="ow">in</span> <span class="p">(</span><span class="n">imp</span><span class="o">.</span><span class="n">PY_COMPILED</span><span class="p">,</span> <span class="n">imp</span><span class="o">.</span><span class="n">C_EXTENSION</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_fix_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fullname</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">fullname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">fullname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fullname</span>
+        <span class="k">elif</span> <span class="n">fullname</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fullname</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;Loader for module </span><span class="si">%s</span><span class="s2"> cannot handle &quot;</span>
+                              <span class="s2">&quot;module </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fullname</span><span class="p">,</span> <span class="n">fullname</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">fullname</span>
+
+    <span class="k">def</span> <span class="nf">is_package</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fullname</span><span class="p">):</span>
+        <span class="n">fullname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fix_name</span><span class="p">(</span><span class="n">fullname</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">etc</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">==</span><span class="n">imp</span><span class="o">.</span><span class="n">PKG_DIRECTORY</span>
+
+    <span class="k">def</span> <span class="nf">get_code</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fullname</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">fullname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fix_name</span><span class="p">(</span><span class="n">fullname</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">code</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">mod_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">etc</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">mod_type</span><span class="o">==</span><span class="n">imp</span><span class="o">.</span><span class="n">PY_SOURCE</span><span class="p">:</span>
+                <span class="n">source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">fullname</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">code</span> <span class="o">=</span> <span class="nb">compile</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;exec&#39;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">mod_type</span><span class="o">==</span><span class="n">imp</span><span class="o">.</span><span class="n">PY_COMPILED</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_reopen</span><span class="p">()</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">code</span> <span class="o">=</span> <span class="n">read_code</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="p">)</span>
+                <span class="k">finally</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="n">mod_type</span><span class="o">==</span><span class="n">imp</span><span class="o">.</span><span class="n">PKG_DIRECTORY</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">code</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_delegate</span><span class="p">()</span><span class="o">.</span><span class="n">get_code</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">code</span>
+
+    <span class="k">def</span> <span class="nf">get_source</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fullname</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">fullname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fix_name</span><span class="p">(</span><span class="n">fullname</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">mod_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">etc</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">mod_type</span><span class="o">==</span><span class="n">imp</span><span class="o">.</span><span class="n">PY_SOURCE</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_reopen</span><span class="p">()</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                <span class="k">finally</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="n">mod_type</span><span class="o">==</span><span class="n">imp</span><span class="o">.</span><span class="n">PY_COMPILED</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
+                    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="n">mod_type</span><span class="o">==</span><span class="n">imp</span><span class="o">.</span><span class="n">PKG_DIRECTORY</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_delegate</span><span class="p">()</span><span class="o">.</span><span class="n">get_source</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span>
+
+    <span class="k">def</span> <span class="nf">_get_delegate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">finder</span> <span class="o">=</span> <span class="n">ImpImporter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+        <span class="n">spec</span> <span class="o">=</span> <span class="n">_get_spec</span><span class="p">(</span><span class="n">finder</span><span class="p">,</span> <span class="s1">&#39;__init__&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">spec</span><span class="o">.</span><span class="n">loader</span>
+
+    <span class="k">def</span> <span class="nf">get_filename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fullname</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">fullname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fix_name</span><span class="p">(</span><span class="n">fullname</span><span class="p">)</span>
+        <span class="n">mod_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">etc</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">mod_type</span><span class="o">==</span><span class="n">imp</span><span class="o">.</span><span class="n">PKG_DIRECTORY</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_delegate</span><span class="p">()</span><span class="o">.</span><span class="n">get_filename</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">mod_type</span> <span class="ow">in</span> <span class="p">(</span><span class="n">imp</span><span class="o">.</span><span class="n">PY_SOURCE</span><span class="p">,</span> <span class="n">imp</span><span class="o">.</span><span class="n">PY_COMPILED</span><span class="p">,</span> <span class="n">imp</span><span class="o">.</span><span class="n">C_EXTENSION</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">zipimport</span>
+    <span class="kn">from</span> <span class="nn">zipimport</span> <span class="kn">import</span> <span class="n">zipimporter</span>
+
+    <span class="k">def</span> <span class="nf">iter_zipimport_modules</span><span class="p">(</span><span class="n">importer</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="n">dirlist</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">zipimport</span><span class="o">.</span><span class="n">_zip_directory_cache</span><span class="p">[</span><span class="n">importer</span><span class="o">.</span><span class="n">archive</span><span class="p">])</span>
+        <span class="n">_prefix</span> <span class="o">=</span> <span class="n">importer</span><span class="o">.</span><span class="n">prefix</span>
+        <span class="n">plen</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">_prefix</span><span class="p">)</span>
+        <span class="n">yielded</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="kn">import</span> <span class="nn">inspect</span>
+        <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">dirlist</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">fn</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">_prefix</span><span class="p">):</span>
+                <span class="k">continue</span>
+
+            <span class="n">fn</span> <span class="o">=</span> <span class="n">fn</span><span class="p">[</span><span class="n">plen</span><span class="p">:]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span><span class="o">==</span><span class="mi">2</span> <span class="ow">and</span> <span class="n">fn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;__init__.py&#39;</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">fn</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">yielded</span><span class="p">:</span>
+                    <span class="n">yielded</span><span class="p">[</span><span class="n">fn</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span>
+                    <span class="k">yield</span> <span class="n">prefix</span> <span class="o">+</span> <span class="n">fn</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="kc">True</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span><span class="o">!=</span><span class="mi">1</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="n">modname</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getmodulename</span><span class="p">(</span><span class="n">fn</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">modname</span><span class="o">==</span><span class="s1">&#39;__init__&#39;</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="k">if</span> <span class="n">modname</span> <span class="ow">and</span> <span class="s1">&#39;.&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">modname</span> <span class="ow">and</span> <span class="n">modname</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">yielded</span><span class="p">:</span>
+                <span class="n">yielded</span><span class="p">[</span><span class="n">modname</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="k">yield</span> <span class="n">prefix</span> <span class="o">+</span> <span class="n">modname</span><span class="p">,</span> <span class="kc">False</span>
+
+    <span class="n">iter_importer_modules</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">zipimporter</span><span class="p">,</span> <span class="n">iter_zipimport_modules</span><span class="p">)</span>
+
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="k">pass</span>
+
+
+<div class="viewcode-block" id="get_importer"><a class="viewcode-back" href="../nmodl.html#nmodl.ast.get_importer">[docs]</a><span class="k">def</span> <span class="nf">get_importer</span><span class="p">(</span><span class="n">path_item</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Retrieve a finder for the given path item</span>
+
+<span class="sd">    The returned finder is cached in sys.path_importer_cache</span>
+<span class="sd">    if it was newly created by a path hook.</span>
+
+<span class="sd">    The cache (or part of it) can be cleared manually if a</span>
+<span class="sd">    rescan of sys.path_hooks is necessary.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">importer</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">path_importer_cache</span><span class="p">[</span><span class="n">path_item</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">path_hook</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path_hooks</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">importer</span> <span class="o">=</span> <span class="n">path_hook</span><span class="p">(</span><span class="n">path_item</span><span class="p">)</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">path_importer_cache</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">path_item</span><span class="p">,</span> <span class="n">importer</span><span class="p">)</span>
+                <span class="k">break</span>
+            <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+                <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">importer</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="n">importer</span></div>
+
+
+<span class="k">def</span> <span class="nf">iter_importers</span><span class="p">(</span><span class="n">fullname</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Yield finders for the given module name</span>
+
+<span class="sd">    If fullname contains a &#39;.&#39;, the finders will be for the package</span>
+<span class="sd">    containing fullname, otherwise they will be all registered top level</span>
+<span class="sd">    finders (i.e. those on both sys.meta_path and sys.path_hooks).</span>
+
+<span class="sd">    If the named module is in a package, that package is imported as a side</span>
+<span class="sd">    effect of invoking this function.</span>
+
+<span class="sd">    If no module name is specified, all top level finders are produced.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">fullname</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Relative module name </span><span class="si">{!r}</span><span class="s2"> not supported&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fullname</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s1">&#39;.&#39;</span> <span class="ow">in</span> <span class="n">fullname</span><span class="p">:</span>
+        <span class="c1"># Get the containing package&#39;s __path__</span>
+        <span class="n">pkg_name</span> <span class="o">=</span> <span class="n">fullname</span><span class="o">.</span><span class="n">rpartition</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">pkg</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">pkg_name</span><span class="p">)</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="s1">&#39;__path__&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">yield from</span> <span class="n">sys</span><span class="o">.</span><span class="n">meta_path</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">path</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">get_importer</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">get_loader</span><span class="p">(</span><span class="n">module_or_name</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get a &quot;loader&quot; object for module_or_name</span>
+
+<span class="sd">    Returns None if the module cannot be found or imported.</span>
+<span class="sd">    If the named module is not already imported, its containing package</span>
+<span class="sd">    (if any) is imported, in order to establish the package __path__.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">module_or_name</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
+        <span class="n">module_or_name</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">module_or_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">module_or_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">module_or_name</span><span class="p">,</span> <span class="n">ModuleType</span><span class="p">):</span>
+        <span class="n">module</span> <span class="o">=</span> <span class="n">module_or_name</span>
+        <span class="n">loader</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="s1">&#39;__loader__&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">loader</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">loader</span>
+        <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="s1">&#39;__spec__&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">fullname</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="vm">__name__</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">fullname</span> <span class="o">=</span> <span class="n">module_or_name</span>
+    <span class="k">return</span> <span class="n">find_loader</span><span class="p">(</span><span class="n">fullname</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">find_loader</span><span class="p">(</span><span class="n">fullname</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Find a &quot;loader&quot; object for fullname</span>
+
+<span class="sd">    This is a backwards compatibility wrapper around</span>
+<span class="sd">    importlib.util.find_spec that converts most failures to ImportError</span>
+<span class="sd">    and only returns the loader rather than the full spec</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">fullname</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Relative module name </span><span class="si">{!r}</span><span class="s2"> not supported&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fullname</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">spec</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">find_spec</span><span class="p">(</span><span class="n">fullname</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">)</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+        <span class="c1"># This hack fixes an impedance mismatch between pkgutil and</span>
+        <span class="c1"># importlib, where the latter raises other errors for cases where</span>
+        <span class="c1"># pkgutil previously raised ImportError</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Error while finding loader for </span><span class="si">{!r}</span><span class="s2"> (</span><span class="si">{}</span><span class="s2">: </span><span class="si">{}</span><span class="s2">)&quot;</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fullname</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">ex</span><span class="p">),</span> <span class="n">ex</span><span class="p">))</span> <span class="kn">from</span> <span class="nn">ex</span>
+    <span class="k">return</span> <span class="n">spec</span><span class="o">.</span><span class="n">loader</span> <span class="k">if</span> <span class="n">spec</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+
+
+<span class="k">def</span> <span class="nf">extend_path</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Extend a package&#39;s path.</span>
+
+<span class="sd">    Intended use is to place the following code in a package&#39;s __init__.py:</span>
+
+<span class="sd">        from pkgutil import extend_path</span>
+<span class="sd">        __path__ = extend_path(__path__, __name__)</span>
+
+<span class="sd">    This will add to the package&#39;s __path__ all subdirectories of</span>
+<span class="sd">    directories on sys.path named after the package.  This is useful</span>
+<span class="sd">    if one wants to distribute different parts of a single logical</span>
+<span class="sd">    package as multiple directories.</span>
+
+<span class="sd">    It also looks for *.pkg files beginning where * matches the name</span>
+<span class="sd">    argument.  This feature is similar to *.pth files (see site.py),</span>
+<span class="sd">    except that it doesn&#39;t special-case lines starting with &#39;import&#39;.</span>
+<span class="sd">    A *.pkg file is trusted at face value: apart from checking for</span>
+<span class="sd">    duplicates, all entries found in a *.pkg file are added to the</span>
+<span class="sd">    path, regardless of whether they are exist the filesystem.  (This</span>
+<span class="sd">    is a feature.)</span>
+
+<span class="sd">    If the input path is not a list (as is the case for frozen</span>
+<span class="sd">    packages) it is returned unchanged.  The input path is not</span>
+<span class="sd">    modified; an extended copy is returned.  Items are only appended</span>
+<span class="sd">    to the copy at the end.</span>
+
+<span class="sd">    It is assumed that sys.path is a sequence.  Items of sys.path that</span>
+<span class="sd">    are not (unicode or 8-bit) strings referring to existing</span>
+<span class="sd">    directories are ignored.  Unicode items of sys.path that cause</span>
+<span class="sd">    errors when used as filenames may cause this function to raise an</span>
+<span class="sd">    exception (in line with os.path.isdir() behavior).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="c1"># This could happen e.g. when this is called from inside a</span>
+        <span class="c1"># frozen package.  Return the path unchanged in that case.</span>
+        <span class="k">return</span> <span class="n">path</span>
+
+    <span class="n">sname_pkg</span> <span class="o">=</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;.pkg&quot;</span>
+
+    <span class="n">path</span> <span class="o">=</span> <span class="n">path</span><span class="p">[:]</span> <span class="c1"># Start with a copy of the existing path</span>
+
+    <span class="n">parent_package</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">final_name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">rpartition</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">parent_package</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">search_path</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">parent_package</span><span class="p">]</span><span class="o">.</span><span class="n">__path__</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">KeyError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
+            <span class="c1"># We can&#39;t do anything: find_loader() returns None when</span>
+            <span class="c1"># passed a dotted name.</span>
+            <span class="k">return</span> <span class="n">path</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">search_path</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span>
+
+    <span class="k">for</span> <span class="nb">dir</span> <span class="ow">in</span> <span class="n">search_path</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">dir</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">continue</span>
+
+        <span class="n">finder</span> <span class="o">=</span> <span class="n">get_importer</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">finder</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">portions</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">finder</span><span class="p">,</span> <span class="s1">&#39;find_spec&#39;</span><span class="p">):</span>
+                <span class="n">spec</span> <span class="o">=</span> <span class="n">finder</span><span class="o">.</span><span class="n">find_spec</span><span class="p">(</span><span class="n">final_name</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">spec</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">portions</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">submodule_search_locations</span> <span class="ow">or</span> <span class="p">[]</span>
+            <span class="c1"># Is this finder PEP 420 compliant?</span>
+            <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">finder</span><span class="p">,</span> <span class="s1">&#39;find_loader&#39;</span><span class="p">):</span>
+                <span class="n">_</span><span class="p">,</span> <span class="n">portions</span> <span class="o">=</span> <span class="n">finder</span><span class="o">.</span><span class="n">find_loader</span><span class="p">(</span><span class="n">final_name</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">portion</span> <span class="ow">in</span> <span class="n">portions</span><span class="p">:</span>
+                <span class="c1"># XXX This may still add duplicate entries to path on</span>
+                <span class="c1"># case-insensitive filesystems</span>
+                <span class="k">if</span> <span class="n">portion</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">path</span><span class="p">:</span>
+                    <span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">portion</span><span class="p">)</span>
+
+        <span class="c1"># XXX Is this the right thing for subpackages like zope.app?</span>
+        <span class="c1"># It looks for a file named &quot;zope.app.pkg&quot;</span>
+        <span class="n">pkgfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">dir</span><span class="p">,</span> <span class="n">sname_pkg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">pkgfile</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">pkgfile</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">msg</span><span class="p">:</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Can&#39;t open </span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span>
+                                 <span class="p">(</span><span class="n">pkgfile</span><span class="p">,</span> <span class="n">msg</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">with</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+                        <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span> <span class="ow">or</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="p">):</span>
+                            <span class="k">continue</span>
+                        <span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="c1"># Don&#39;t check for existence!</span>
+
+    <span class="k">return</span> <span class="n">path</span>
+
+
+<span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="n">package</span><span class="p">,</span> <span class="n">resource</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get a resource from a package.</span>
+
+<span class="sd">    This is a wrapper round the PEP 302 loader get_data API. The package</span>
+<span class="sd">    argument should be the name of a package, in standard module format</span>
+<span class="sd">    (foo.bar). The resource argument should be in the form of a relative</span>
+<span class="sd">    filename, using &#39;/&#39; as the path separator. The parent directory name &#39;..&#39;</span>
+<span class="sd">    is not allowed, and nor is a rooted name (starting with a &#39;/&#39;).</span>
+
+<span class="sd">    The function returns a binary string, which is the contents of the</span>
+<span class="sd">    specified resource.</span>
+
+<span class="sd">    For packages located in the filesystem, which have already been imported,</span>
+<span class="sd">    this is the rough equivalent of</span>
+
+<span class="sd">        d = os.path.dirname(sys.modules[package].__file__)</span>
+<span class="sd">        data = open(os.path.join(d, resource), &#39;rb&#39;).read()</span>
+
+<span class="sd">    If the package cannot be located or loaded, or it uses a PEP 302 loader</span>
+<span class="sd">    which does not support get_data(), then None is returned.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">spec</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">find_spec</span><span class="p">(</span><span class="n">package</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">spec</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">loader</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">loader</span>
+    <span class="k">if</span> <span class="n">loader</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">loader</span><span class="p">,</span> <span class="s1">&#39;get_data&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="c1"># XXX needs test</span>
+    <span class="n">mod</span> <span class="o">=</span> <span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">package</span><span class="p">)</span> <span class="ow">or</span>
+           <span class="n">importlib</span><span class="o">.</span><span class="n">_bootstrap</span><span class="o">.</span><span class="n">_load</span><span class="p">(</span><span class="n">spec</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">mod</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="s1">&#39;__file__&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="c1"># Modify the resource name to be compatible with the loader.get_data</span>
+    <span class="c1"># signature - an os.path format &quot;filename&quot; starting with the dirname of</span>
+    <span class="c1"># the package&#39;s __file__</span>
+    <span class="n">parts</span> <span class="o">=</span> <span class="n">resource</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+    <span class="n">parts</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">mod</span><span class="o">.</span><span class="vm">__file__</span><span class="p">))</span>
+    <span class="n">resource_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="o">*</span><span class="n">parts</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">loader</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="n">resource_name</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2019, BlueBrain HPC team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

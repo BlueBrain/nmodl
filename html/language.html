@@ -1,0 +1,713 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>The NEURON MODeling language &mdash; NMODL 0.2 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Visitors" href="contents/visitors.html" />
+    <link rel="prev" title="Installing the NMODL Framework" href="install.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> NMODL
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Introduction:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing the NMODL Framework</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">The NEURON MODeling language</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contents/visitors.html">Visitors</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Jupyter Notebooks:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="notebooks.html">The NMODL Jupyter notebooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/nmodl-python-tutorial.html">NMODL Python Interface Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/nmodl-odes-overview.html">NMODL integration of ODEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/nmodl-kinetic-schemes.html">NMODL Kinetic Scheme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/nmodl-sympy-solver-cnexp.html">NMODL SympySolver - cnexp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/nmodl-sympy-solver-sparse.html">NMODL SympySolver - sparse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/nmodl-sympy-solver-derivimplicit.html">NMODL SympySolver - derivimplicit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/nmodl-linear-solver.html">NMODL LINEAR solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/nmodl-nonlinear-solver.html">NMODL NONLINEAR solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/nmodl-sympy-conductance.html">NMODL CONDUCTANCE</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing to the NMODL Framework</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Python package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="doxygen.html">C++ API</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">NMODL</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>The NEURON MODeling language</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/language.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="the-neuron-modeling-language">
+<h1>The NEURON MODeling language<a class="headerlink" href="#the-neuron-modeling-language" title="Permalink to this headline">¶</a></h1>
+<p>The NMODL Framework is able to parse all language features and constructs of the NMODL DSL.
+The programmer is thus able to parse any mechanism file with the NMODL Framework and process
+the AST data structures with a few notable exceptions (mainly VERBATIM C blocks).</p>
+<p>The Framework however still lacks code generation support for a some of the language constructs.
+In the following table we summarize the various NMODL DSL constructs and their support in the
+framework. Code generation information is related to CoreNEURON backend.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 29%" />
+<col style="width: 23%" />
+<col style="width: 23%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>NMODL DSL construct</p></th>
+<th class="head"><p>parsing supported</p></th>
+<th class="head"><p>codegen supported</p></th>
+<th class="head"><p>AST docs available</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td colspan="4"><p>Blocks</p></td>
+</tr>
+<tr class="row-odd"><td><p>PARAMETER</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-even"><td><p>STEPPED</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-odd"><td><p>ASSIGNED</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-even"><td><p>STATE</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-odd"><td><p>INITIAL</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-even"><td><p>DERIVATIVE</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-odd"><td><p>LINEAR</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-even"><td><p>FUNCTION</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p>PROCEDURE</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p>NET_RECEIVE</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p>SOLVE</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p>BREAKPOINT</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-odd"><td><p>KINETIC</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p>UNITS</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p>NEURON</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-even"><td><p>VERBATIM</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p>CONSTANT</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p>MATCH</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p>BEFORE</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p>AFTER</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p>STEP</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p>TERMINAL</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p>DISCRETE</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p>PARTIAL</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p>FUNCTION_TABLE</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p>CONSTRUCTOR</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-odd"><td><p>DESTRUCTOR</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-even"><td><p>INDEPENDENT</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-odd"><td colspan="4"><p>Control Flow</p></td>
+</tr>
+<tr class="row-even"><td><p>FORALL</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p>WHILE</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p>IF</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p>ELSE IF</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p>ELSE</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td colspan="4"><p>Other</p></td>
+</tr>
+<tr class="row-even"><td><p>~</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p>-&gt;</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p>FOR_NETCONS</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p>LOCAL</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p>TITLE</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p>DEFINE</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p>INCLUDE</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p>SWEEP</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p>PLOT</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p>CONDUCTANCE</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p>PROTECT</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p>FROM</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p>WATCH</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p>MUTEXLOCK</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p>MUTEXUNLOCK</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p>RESET</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p>SENS</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p>CONSERVE</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p>COMPARTMENT</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p>LONGITUDINAL_DIFFUSION</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p>LAG</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p>TABLE</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p>USEION</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p>NONSPECIFIC_CURRENT</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p>ELECTRODE_CURRENT</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p>SECTION</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p>RANGE</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p>GLOBAL</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p>POINTER</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p>BBCOREPOINTER</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p>EXTERNAL</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p>THREADSAFE</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p>COMMENT</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td colspan="4"><p>SOLVE METHODs</p></td>
+</tr>
+<tr class="row-even"><td><p>cnexp</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>euler</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>derivimplicit</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>sparse</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>runge</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>after_cvode</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>adams</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>adeuler</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>heun</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>adrunge</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>gear</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>simplex</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>simeq</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>seidel</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>clsoda</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>cvode_t</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>cvode_v</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="contents/visitors.html" class="btn btn-neutral float-right" title="Visitors" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="install.html" class="btn btn-neutral float-left" title="Installing the NMODL Framework" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2019, BlueBrain HPC team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

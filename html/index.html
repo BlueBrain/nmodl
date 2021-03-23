@@ -1,0 +1,429 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>About NMODL &mdash; NMODL 0.2 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Introduction" href="readme.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="#" class="icon icon-home"> NMODL
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Introduction:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="readme.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing the NMODL Framework</a></li>
+<li class="toctree-l1"><a class="reference internal" href="language.html">The NEURON MODeling language</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contents/visitors.html">Visitors</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Jupyter Notebooks:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="notebooks.html">The NMODL Jupyter notebooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/nmodl-python-tutorial.html">NMODL Python Interface Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/nmodl-odes-overview.html">NMODL integration of ODEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/nmodl-kinetic-schemes.html">NMODL Kinetic Scheme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/nmodl-sympy-solver-cnexp.html">NMODL SympySolver - cnexp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/nmodl-sympy-solver-sparse.html">NMODL SympySolver - sparse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/nmodl-sympy-solver-derivimplicit.html">NMODL SympySolver - derivimplicit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/nmodl-linear-solver.html">NMODL LINEAR solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/nmodl-nonlinear-solver.html">NMODL NONLINEAR solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/nmodl-sympy-conductance.html">NMODL CONDUCTANCE</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing to the NMODL Framework</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Python package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="doxygen.html">C++ API</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">NMODL</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>About NMODL</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="about-nmodl">
+<h1>About NMODL<a class="headerlink" href="#about-nmodl" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Introduction:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="readme.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="readme.html#the-nmodl-framework">The NMODL Framework</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing the NMODL Framework</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="install.html#getting-started">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#cloning-source">Cloning Source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#build-project">Build Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#testing-the-installed-module">Testing the Installed Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#generating-documentation">Generating Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="language.html">The NEURON MODeling language</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contents/visitors.html">Visitors</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contents/visitors.html#parsing-model-and-constructing-ast">Parsing Model and constructing AST</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contents/visitors.html#querying-ast-objects-with-visitors">Querying AST objects with Visitors</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Jupyter Notebooks:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="notebooks.html">The NMODL Jupyter notebooks</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebooks.html#about-the-notebooks">About the notebooks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/nmodl-python-tutorial.html">NMODL Python Interface Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-python-tutorial.html#Introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-python-tutorial.html#Parsing-Model-And-Constructing-AST">Parsing Model And Constructing AST</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-python-tutorial.html#Querying-AST-object-with-Visitors">Querying AST object with Visitors</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/nmodl-python-tutorial.html#Lookup-visitor">Lookup visitor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/nmodl-python-tutorial.html#Symbol-Table-Visitor">Symbol Table Visitor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/nmodl-python-tutorial.html#Custom-AST-visitor">Custom AST visitor</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-python-tutorial.html#Easy-code-generation-using-AST-visitors">Easy code generation using AST visitors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-python-tutorial.html#Example-of-CURIE-information-parsing">Example of CURIE information parsing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/nmodl-odes-overview.html">NMODL integration of ODEs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-odes-overview.html#KINETIC-block"><code class="docutils literal notranslate"><span class="pre">KINETIC</span></code> block</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-odes-overview.html#DERIVATIVE-block"><code class="docutils literal notranslate"><span class="pre">DERIVATIVE</span></code> block</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-odes-overview.html#LINEAR-block"><code class="docutils literal notranslate"><span class="pre">LINEAR</span></code> block</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-odes-overview.html#NONLINEAR-block"><code class="docutils literal notranslate"><span class="pre">NONLINEAR</span></code> block</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/nmodl-kinetic-schemes.html">NMODL Kinetic Scheme</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-kinetic-schemes.html#Reaction-Kinetics">Reaction Kinetics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-kinetic-schemes.html#Law-of-Mass-Action">Law of Mass Action</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-kinetic-schemes.html#KINETIC-block-format">KINETIC block format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-kinetic-schemes.html#Other-types-of-reaction-statement">Other types of reaction statement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-kinetic-schemes.html#f_flux-/-b_flux-variables">f_flux / b_flux variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-kinetic-schemes.html#[TODO]-CONSERVE">[TODO] CONSERVE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-kinetic-schemes.html#Examples">Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/nmodl-kinetic-schemes.html#Ex.-1">Ex. 1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/nmodl-kinetic-schemes.html#Ex.-2">Ex. 2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/nmodl-kinetic-schemes.html#Ex.-3">Ex. 3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/nmodl-kinetic-schemes.html#Ex.-4">Ex. 4</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/nmodl-kinetic-schemes.html#Ex.-5">Ex. 5</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/nmodl-sympy-solver-cnexp.html">NMODL SympySolver - cnexp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-sympy-solver-cnexp.html#Implementation">Implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-sympy-solver-cnexp.html#Pade-approximant">Pade approximant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-sympy-solver-cnexp.html#Implementation-Tests">Implementation Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-sympy-solver-cnexp.html#Examples">Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/nmodl-sympy-solver-cnexp.html#Ex.-1">Ex. 1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/nmodl-sympy-solver-cnexp.html#Ex.-2">Ex. 2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/nmodl-sympy-solver-cnexp.html#Ex.-3">Ex. 3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/nmodl-sympy-solver-cnexp.html#Ex.-4">Ex. 4</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/nmodl-sympy-solver-cnexp.html#Ex.-5">Ex. 5</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/nmodl-sympy-solver-cnexp.html#Ex.-6">Ex. 6</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/nmodl-sympy-solver-sparse.html">NMODL SympySolver - sparse</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-sympy-solver-sparse.html#Implementation">Implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-sympy-solver-sparse.html#Implementation-Tests">Implementation Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-sympy-solver-sparse.html#Examples">Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/nmodl-sympy-solver-sparse.html#Ex.-1">Ex. 1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/nmodl-sympy-solver-sparse.html#Ex.-2">Ex. 2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/nmodl-sympy-solver-derivimplicit.html">NMODL SympySolver - derivimplicit</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-sympy-solver-derivimplicit.html#Implementation">Implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-sympy-solver-derivimplicit.html#Implementation-Tests">Implementation Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-sympy-solver-derivimplicit.html#Examples">Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/nmodl-sympy-solver-derivimplicit.html#Ex.-1">Ex. 1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/nmodl-sympy-solver-derivimplicit.html#Ex.-2">Ex. 2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/nmodl-linear-solver.html">NMODL LINEAR solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/nmodl-nonlinear-solver.html">NMODL NONLINEAR solver</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-nonlinear-solver.html#Newton-solver">Newton solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-nonlinear-solver.html#Fall-back-solver">Fall-back solver</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/nmodl-sympy-conductance.html">NMODL CONDUCTANCE</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-sympy-conductance.html#Introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-sympy-conductance.html#Implementation">Implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-sympy-conductance.html#Implementation-Tests">Implementation Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nmodl-sympy-conductance.html#Examples">Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/nmodl-sympy-conductance.html#Ex.-1">Ex. 1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/nmodl-sympy-conductance.html#Ex.-2">Ex. 2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/nmodl-sympy-conductance.html#Ex.-3">Ex. 3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/nmodl-sympy-conductance.html#Ex.-4">Ex. 4</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/nmodl-sympy-conductance.html#Ex.-5">Ex. 5</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/nmodl-sympy-conductance.html#Ex.-6">Ex. 6</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/nmodl-sympy-conductance.html#Ex.-7">Ex. 7</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Contributing:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing to the NMODL Framework</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#a-name-question-a-got-a-question"><span class="raw-html-m2r"><a name="question"></a></span> Got a Question?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#a-name-issue-a-found-a-bug"><span class="raw-html-m2r"><a name="issue"></a></span> Found a Bug?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#a-name-feature-a-missing-a-feature"><span class="raw-html-m2r"><a name="feature"></a></span> Missing a Feature?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#a-name-submit-a-submission-guidelines"><span class="raw-html-m2r"><a name="submit"></a></span> Submission Guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#a-name-devconv-a-development-conventions"><span class="raw-html-m2r"><a name="devconv"></a></span> Development Conventions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Python package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="nmodl.html">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nmodl.html#submodules">Submodules</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="doxygen.html">C++ API</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="readme.html" class="btn btn-neutral float-right" title="Introduction" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2019, BlueBrain HPC team.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
