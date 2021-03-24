@@ -4,11 +4,11 @@
 set_source_files_properties(${PYBIND_GENERATED_SOURCES} PROPERTIES GENERATED TRUE)
 
 # build nmodl python module under lib/nmodl
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/nmodl)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/python/nmodl)
 
 foreach(file ast.py dsl.py ode.py symtab.py visitor.py __init__.py)
   list(APPEND NMODL_PYTHON_FILES_IN ${NMODL_PROJECT_SOURCE_DIR}/python/nmodl/${file})
-  list(APPEND NMODL_PYTHON_FILES_OUT ${PROJECT_BINARY_DIR}/lib/nmodl/${file})
+  list(APPEND NMODL_PYTHON_FILES_OUT ${PROJECT_BINARY_DIR}/lib/python/nmodl/${file})
 endforeach()
 
 add_library(pyembed ${CMAKE_CURRENT_SOURCE_DIR}/pyembed.cpp)
