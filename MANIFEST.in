@@ -1,1 +1,1 @@
-recursive-include nmodl/ext *
+recursive-include python/nmodl/ext *
