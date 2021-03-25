@@ -1,6 +1,7 @@
 stages:
   - .pre
   - build
+  - linters
   - test
 
 .common:
@@ -51,13 +52,8 @@ test pgi:
     # We cloned in .pre
     GIT_STRATEGY: none
 
-# test pgi: &test_config
-#   extends: .common
-#   stage: test
-#   resource_group: test
-#   variables:
-#     # We cloned in .pre
-#     GIT_STRATEGY: none
-
 cmake format: *test_config
+  stage: linters
+
 clang format: *test_config
+  stage: linters
