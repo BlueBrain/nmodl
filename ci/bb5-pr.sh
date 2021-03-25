@@ -75,7 +75,7 @@ function bb5_pr_build_gcc() {
 }
 
 function bb5_pr_build_intel() {
-    build_with intel
+    build_with pgi
 }
 
 function bb5_pr_build_pgi() {
