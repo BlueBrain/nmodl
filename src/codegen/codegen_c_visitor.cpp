@@ -2016,8 +2016,9 @@ void CodegenCVisitor::print_nmodl_constants() {
 #else
             const std::string format_string = "static const double {} = {:.18g};";
 #endif
-            printer->add_line(fmt::format(format_string, it->get_node_name(),
-                                                         stod(it->get_value()->get_value())));
+            printer->add_line(fmt::format(format_string,
+                                          it->get_node_name(),
+                                          stod(it->get_value()->get_value())));
         }
     }
 }
