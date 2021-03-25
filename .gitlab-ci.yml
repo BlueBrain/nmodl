@@ -36,6 +36,7 @@ build pgi:
   variables:
     # We cloned in .pre
     GIT_STRATEGY: none
+    bb5_constraint: volta
 
 # test pgi: &test_config
 #   extends: .common
