@@ -78,6 +78,10 @@ function bb5_pr_build_intel() {
     build_with intel
 }
 
+function bb5_pr_build_pgi() {
+    build_with nvhpc
+}
+
 function bb5_pr_test_gcc() {
     test_with gcc
 }
