@@ -1,3 +1,8 @@
+stages:
+  - .pre
+  - build
+  - test
+
 .common:
   tags: [bb5]
   script: ci/bb5-pr.sh
@@ -30,10 +35,7 @@ test intel: &test_config
     GIT_STRATEGY: none
 
 build pgi:
-  tags: [bb5]
-  script: ci/bb5-pr.sh
-  only:
-    - external_pull_requests
+  extends: .common
   stage: build
   resource_group: build
   variables:

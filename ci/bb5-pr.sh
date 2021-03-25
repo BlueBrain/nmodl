@@ -32,7 +32,6 @@ function build_with() {
     find_clang_format
 
     echo "Building NMODL with $compiler"
-    module load $compiler
     rm -rf build_$compiler
     mkdir build_$compiler
     pushd build_$compiler
