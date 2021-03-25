@@ -27,7 +27,7 @@ build intel:
     # We cloned in .pre
     GIT_STRATEGY: none
 
-test intel: &test_config
+test intel:
   extends: .common
   stage: test
   resource_group: test
@@ -52,8 +52,18 @@ test pgi:
     # We cloned in .pre
     GIT_STRATEGY: none
 
-cmake format: *test_config
+cmake format:
+  extends: .common
   stage: linters
+  resource_group: linters
+  variables:
+    # We cloned in .pre
+    GIT_STRATEGY: none
 
-clang format: *test_config
+clang format:
+  extends: .common
   stage: linters
+  resource_group: linters
+  variables:
+    # We cloned in .pre
+    GIT_STRATEGY: none
