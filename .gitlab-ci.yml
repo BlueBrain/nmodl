@@ -43,6 +43,14 @@ build pgi:
     GIT_STRATEGY: none
     bb5_constraint: volta
 
+test pgi:
+  extends: .common
+  stage: test
+  resource_group: test
+  variables:
+    # We cloned in .pre
+    GIT_STRATEGY: none
+
 # test pgi: &test_config
 #   extends: .common
 #   stage: test
