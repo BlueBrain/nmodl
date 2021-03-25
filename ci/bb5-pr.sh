@@ -74,11 +74,11 @@ function bb5_pr_build_gcc() {
 }
 
 function bb5_pr_build_intel() {
-    build_with pgi
+    build_with intel
 }
 
 function bb5_pr_build_pgi() {
-    build_with nvhpc
+    build_with pgi
 }
 
 function bb5_pr_test_gcc() {
