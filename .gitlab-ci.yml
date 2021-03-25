@@ -28,7 +28,7 @@ build intel:
     GIT_STRATEGY: none
 
 test intel:
-  needs: build intel
+  needs: ["build intel"]
   extends: .common
   stage: test
   resource_group: test
@@ -46,7 +46,7 @@ build pgi:
     bb5_constraint: volta
 
 test pgi:
-  needs: build pgi
+  needs: ["build pgi"]
   extends: .common
   stage: test
   resource_group: test
