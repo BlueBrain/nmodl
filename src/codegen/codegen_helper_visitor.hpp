@@ -108,6 +108,7 @@ class CodegenHelperVisitor: public visitor::ConstAstVisitor {
     void visit_non_linear_block(const ast::NonLinearBlock& node) override;
     void visit_discrete_block(const ast::DiscreteBlock& node) override;
     void visit_partial_block(const ast::PartialBlock& node) override;
+    void visit_constant_var(const ast::ConstantVar& node) override;
 };
 
 /** @} */  // end of codegen_details

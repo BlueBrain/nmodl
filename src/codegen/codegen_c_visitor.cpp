@@ -723,7 +723,7 @@ bool CodegenCVisitor::ion_variable_struct_required() const {
 /**
  * \details This can be override in the backend. For example, parameters can be constant
  * except in INITIAL block where they are set to 0. As initial block is/can be
- * executed on c/cpu backend, gpu/cuda backend can mark the parameter as constnat.
+ * executed on c/cpu backend, gpu/cuda backend can mark the parameter as constant.
  */
 bool CodegenCVisitor::is_constant_variable(const std::string& name) const {
     auto symbol = program_symtab->lookup_in_scope(name);
@@ -2009,7 +2009,7 @@ std::string CodegenCVisitor::process_shadow_update_statement(ShadowUseStatement&
 void CodegenCVisitor::print_nmodl_constants() {
     if (!info.factor_definitions.empty()) {
         printer->add_newline(2);
-        printer->add_line("/** constants used in nmodl */");
+        printer->add_line("/** constants used in nmodl from UNITS */");
         for (const auto& it: info.factor_definitions) {
 #ifdef USE_LEGACY_UNITS
             const std::string format_string = "static const double {} = {:g};";
@@ -2019,6 +2019,19 @@ void CodegenCVisitor::print_nmodl_constants() {
             printer->add_line(fmt::format(format_string,
                                           it->get_node_name(),
                                           stod(it->get_value()->get_value())));
+        }
+    }
+    if (!info.constants_definitions.empty()) {
+        printer->add_newline(2);
+        printer->add_line("/** constants used in nmodl from CONSTANTS */");
+        for (const auto& it: info.constants_definitions) {
+            const std::string format_string = "static const {} {{}} = "_format(
+                it->get_value()->get_node_type() == AstNodeType::DOUBLE ? "double" : "int");
+            printer->add_indent();
+            printer->add_text(fmt::format(format_string, it->get_name()->get_value()->get_value()));
+            it->get_value()->accept(*this);
+            printer->add_text(";");
+            printer->add_newline();
         }
     }
 }
