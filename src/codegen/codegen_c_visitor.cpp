@@ -2021,19 +2021,6 @@ void CodegenCVisitor::print_nmodl_constants() {
                                           stod(it->get_value()->get_value())));
         }
     }
-    if (!info.constants_definitions.empty()) {
-        printer->add_newline(2);
-        printer->add_line("/** constants used in nmodl from CONSTANTS */");
-        for (const auto& it: info.constants_definitions) {
-            const std::string format_string = "static const {} {{}} = "_format(
-                it->get_value()->get_node_type() == AstNodeType::DOUBLE ? "double" : "int");
-            printer->add_indent();
-            printer->add_text(fmt::format(format_string, it->get_name()->get_value()->get_value()));
-            it->get_value()->accept(*this);
-            printer->add_text(";");
-            printer->add_newline();
-        }
-    }
 }
 
 

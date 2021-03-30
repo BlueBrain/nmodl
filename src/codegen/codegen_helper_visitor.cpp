@@ -682,9 +682,5 @@ void CodegenHelperVisitor::visit_partial_block(const ast::PartialBlock& node) {
     info.vectorize = false;
 }
 
-void CodegenHelperVisitor::visit_constant_var(const ast::ConstantVar& node) {
-    info.constants_definitions.push_back(&node);
-}
-
 }  // namespace codegen
 }  // namespace nmodl
