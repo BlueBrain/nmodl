@@ -244,6 +244,10 @@ int main(int argc, const char* argv[]) {
         "Write symbol table to stdout ({})"_format(show_symtab))->ignore_case();
 
     auto codegen_opt = app.add_subcommand("codegen", "Code generation options")->ignore_case();
+    codegen_opt->add_option("--datatype",
+        data_type,
+        "Data type for floating point variables",
+        true)->ignore_case()->check(CLI::IsMember({"float", "double"}));
     codegen_opt->add_flag("--force",
         force_codegen,
         "Force code generation even if there is any incompatibility");
