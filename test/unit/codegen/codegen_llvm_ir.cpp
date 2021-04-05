@@ -937,10 +937,10 @@ SCENARIO("Derivative block", "[visitor][llvm][derivative]") {
             })";
         std::string expected_reminder_loop = R"(
             for(; id<mech->node_count; id = id+1) {
-                INTEGER node_id
-                DOUBLE v
-                node_id = mech->node_index[id]
-                v = mech->voltage[node_id]
+                INTEGER __epilogue__node_id
+                DOUBLE __epilogue__v
+                __epilogue__node_id = mech->node_index[id]
+                __epilogue__v = mech->voltage[__epilogue__node_id]
                 mech->m[id] = (mech->minf[id]-mech->m[id])/mech->mtau[id]
                 SOLVE states METHOD cnexp
             })";
