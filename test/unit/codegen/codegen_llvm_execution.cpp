@@ -25,6 +25,42 @@ using nmodl::parser::NmodlDriver;
 static double EPSILON = 1e-15;
 
 //=============================================================================
+// Utilities for testing.
+//=============================================================================
+
+struct InstanceTestInfo {
+    codegen::CodegenInstanceData& instance;
+    codegen::CodegenLLVMVisitor& visitor;
+    int num_elements;
+};
+
+template <typename T>
+bool check_instance_variable(InstanceTestInfo& instance_info,
+                             std::vector<T>& expected,
+                             const std::string& variable_name) {
+    std::vector<T> actual;
+    int variable_index = instance_info.visitor.get_instance_var_helper().get_variable_index(
+        variable_name);
+    actual.assign(static_cast<T*>(instance_info.instance.members[variable_index]),
+                  static_cast<T*>(instance_info.instance.members[variable_index]) +
+                      instance_info.num_elements);
+    // While we are comparing double types as well, for simplicity the test cases are hand-crafted
+    // so that no floating-point arithmetic is really involved.
+    return actual == expected;
+}
+
+template <typename T>
+void initialise_instance_variable(InstanceTestInfo& instance_info,
+                                  std::vector<T>& data,
+                                  const std::string& variable_name) {
+    int variable_index = instance_info.visitor.get_instance_var_helper().get_variable_index(
+        variable_name);
+    T* data_start = static_cast<T*>(instance_info.instance.members[variable_index]);
+    for (int i = 0; i < instance_info.num_elements; ++i)
+        *(data_start + i) = data[i];
+}
+
+//=============================================================================
 // Simple functions: no optimisations
 //=============================================================================
 
@@ -222,35 +258,35 @@ SCENARIO("Optimised arithmetic expression", "[llvm][runner]") {
 }
 
 //=============================================================================
-// State kernel.
+// State scalar kernel.
 //=============================================================================
 
 SCENARIO("Simple scalar kernel", "[llvm][runner]") {
     GIVEN("Simple MOD file with a state update") {
         std::string nmodl_text = R"(
             NEURON {
-                SUFFIX hh
-                NONSPECIFIC_CURRENT il
-                RANGE minf, mtau, gl, el
+                SUFFIX test
+                NONSPECIFIC_CURRENT i
+                RANGE x0, x1
             }
 
             STATE {
-                m
+                x
             }
 
             ASSIGNED {
-                v (mV)
-                minf
-                mtau (ms)
+                v
+                x0
+                x1
             }
 
             BREAKPOINT {
                 SOLVE states METHOD cnexp
-                il = gl * (v - el)
+                i = 0
             }
 
             DERIVATIVE states {
-                m = (minf - m) / mtau
+                x = (x0 - x) / x1
             }
         )";
 
@@ -268,16 +304,11 @@ SCENARIO("Simple scalar kernel", "[llvm][runner]") {
                                                  /*use_single_precision=*/false,
                                                  /*vector_width=*/1);
         llvm_visitor.visit_program(*ast);
-        llvm_visitor.wrap_kernel_function("nrn_state_hh");
+        llvm_visitor.wrap_kernel_function("nrn_state_test");
 
         // Set up the JIT runner.
         std::unique_ptr<llvm::Module> module = llvm_visitor.get_module();
         Runner runner(std::move(module));
-
-        // \todo: change code below
-        // 1. Create a helper function to initialise the data based on the vector.
-        //    (Possibly variable name (like "m") as well)
-        // 2. Create comparison helper for comparing doubles.
 
         // Create the instance struct data.
         int num_elements = 4;
@@ -285,35 +316,21 @@ SCENARIO("Simple scalar kernel", "[llvm][runner]") {
         auto codegen_data = codegen::CodegenDataHelper(ast, generated_instance_struct);
         auto instance_data = codegen_data.create_data(num_elements, /*seed=*/1);
 
-        // Initialise the kernel variables to some predefined data.
-        int m_index = llvm_visitor.get_instance_var_helper().get_variable_index("m");
-        int minf_index = llvm_visitor.get_instance_var_helper().get_variable_index("minf");
-        int mtau_index = llvm_visitor.get_instance_var_helper().get_variable_index("mtau");
+        // Fill the instance struct data with some values.
+        std::vector<double> x = {1.0, 2.0, 3.0, 4.0};
+        std::vector<double> x0 = {5.0, 5.0, 5.0, 5.0};
+        std::vector<double> x1 = {1.0, 1.0, 1.0, 1.0};
 
-        std::cout << m_index << " " << minf_index << " " << mtau_index << "\n";
+        InstanceTestInfo instance_info{instance_data, llvm_visitor, num_elements};
+        initialise_instance_variable(instance_info, x, "x");
+        initialise_instance_variable(instance_info, x0, "x0");
+        initialise_instance_variable(instance_info, x1, "x1");
 
-        std::vector<double> m = {1.0, 2.0, 3.0, 4.0};
-        std::vector<double> minf = {5.0, 5.0, 5.0, 5.0};
-        std::vector<double> mtau = {1.0, 1.0, 1.0, 1.0};
-
-        std::vector<double> m_expected = {4.0, 3.0, 2.0, 1.0};
-
-        double* m_start = static_cast<double*>(instance_data.members[m_index]);
-        double* minf_start = static_cast<double*>(instance_data.members[minf_index]);
-        double* mtau_start = static_cast<double*>(instance_data.members[mtau_index]);
-        for (int i = 0; i < num_elements; ++i) {
-            *(m_start + i) = m[i];
-            *(minf_start + i) = minf[i];
-            *(mtau_start + i) = mtau[i];
-        }
-
-        THEN("Values in struct have changed!") {
-            runner.run_with_argument<int, void*>("__nrn_state_hh_wrapper", instance_data.base_ptr);
-            std::vector<double> m_actual;
-            m_actual.assign(static_cast<double*>(instance_data.members[m_index]),
-                            static_cast<double*>(instance_data.members[m_index]) + num_elements);
-            for (auto res: m_actual)
-                std::cout << res << " ";
+        THEN("Values in struct have changed according to the formula") {
+            runner.run_with_argument<int, void*>("__nrn_state_test_wrapper",
+                                                 instance_data.base_ptr);
+            std::vector<double> x_expected = {4.0, 3.0, 2.0, 1.0};
+            REQUIRE(check_instance_variable(instance_info, x_expected, "x"));
         }
     }
 }
