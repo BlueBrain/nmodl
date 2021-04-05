@@ -306,10 +306,6 @@ SCENARIO("Simple scalar kernel", "[llvm][runner]") {
         llvm_visitor.visit_program(*ast);
         llvm_visitor.wrap_kernel_function("nrn_state_test");
 
-        // Set up the JIT runner.
-        std::unique_ptr<llvm::Module> module = llvm_visitor.get_module();
-        Runner runner(std::move(module));
-
         // Create the instance struct data.
         int num_elements = 4;
         const auto& generated_instance_struct = llvm_visitor.get_instance_struct_ptr();
@@ -325,6 +321,10 @@ SCENARIO("Simple scalar kernel", "[llvm][runner]") {
         initialise_instance_variable(instance_info, x, "x");
         initialise_instance_variable(instance_info, x0, "x0");
         initialise_instance_variable(instance_info, x1, "x1");
+        
+        // Set up the JIT runner.
+        std::unique_ptr<llvm::Module> module = llvm_visitor.get_module();
+        Runner runner(std::move(module));
 
         THEN("Values in struct have changed according to the formula") {
             runner.run_with_argument<int, void*>("__nrn_state_test_wrapper",
