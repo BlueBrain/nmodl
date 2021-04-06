@@ -8,12 +8,13 @@
 #pragma once
 
 #include <map>
+#include <string>
 
 #include "visitors/ast_visitor.hpp"
 
 /**
  * \file
- * \brief \copybrief nmodl::visitor::CheckRandomVarVisitor
+ * \brief \copybrief nmodl::visitor::CheckRandomStatementVisitor
  */
 
 namespace nmodl {
@@ -24,18 +25,18 @@ namespace visitor {
  * \{
  */
 
-class CheckRandomVarVisitor: protected ConstAstVisitor  {
+class CheckRandomStatementVisitor: protected ConstAstVisitor  {
   private:
-    void visit_random_var(const ast::RandomVar& node) override;
+    void visit_random(const ast::Random& node) override;
 
     const std::map<std::string, int> distributions = {
         {"UNIFORM", 2},
-        {"EXP", 1},
+        {"NEGEXP", 1},
         {"NORMAL", 2},
     };
 
   public:
-    CheckRandomVarVisitor() = default;
+    CheckRandomStatementVisitor() = default;
 
     void visit_program(const ast::Program& node) override;
 };

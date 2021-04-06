@@ -2004,12 +2004,9 @@ neuron_statement :
                         $1.emplace_back(new ast::OntologyStatement(new ast::String($3)));
                         $$ = $1;
                     }
-                |   neuron_statement RANDOM function_call random_var_list
+                |   neuron_statement RANDOM NAME_PTR "(" expression_list ")" random_var_list
                     {
-                        for (auto& r : $4) {
-                            r->set_distribution(std::shared_ptr<ast::WrappedExpression>(new ast::WrappedExpression(*($3))));
-                        }
-                        $1.emplace_back(new ast::Random($4));
+                        $1.emplace_back(new ast::Random($3, $5, $7));
                         $$ = $1;
                     }
                 ;
@@ -2207,13 +2204,13 @@ bbcore_pointer_var_list : NAME_PTR
 random_var_list:   NAME_PTR
                     {
                         $$ = ast::RandomVarVector();
-                        auto new_random_var = new ast::RandomVar($1, nullptr);
+                        auto new_random_var = new ast::RandomVar($1);
                         new_random_var->set_token(*($1->get_token()));
                         $$.emplace_back(new_random_var);
                     }
                 |   random_var_list "," NAME_PTR
                     {
-                        auto new_random_var = new ast::RandomVar($3, nullptr);
+                        auto new_random_var = new ast::RandomVar($3);
                         new_random_var->set_token(*($3->get_token()));
                         $1.emplace_back(new_random_var);
                         $$ = $1;

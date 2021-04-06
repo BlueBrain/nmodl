@@ -393,9 +393,6 @@
                                   brief: "Variable name"
                                   type: Name
                                   node_name: true
-                              - distribution:
-                                  brief: "The probability density function from which the variable samples"
-                                  type: WrappedExpression
 
                         - PointerVar:
                             brief: "TODO"
@@ -1745,6 +1742,14 @@
                       brief: "Represents RANDOM statement in NMODL"
                       nmodl: "RANDOM "
                       members:
+                        - distribution:
+                            brief: "Name of the distribution from which random vars are drawn"
+                            type: Name
+                        - distribution_params:
+                            brief: "The parameters describing the probaility density function"
+                            type: Expression
+                            vector: true
+                            separator: ", "
                         - variables:
                             brief: "Vector of random variables"
                             type: RandomVar

@@ -11,15 +11,18 @@
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_string.hpp>
 
+#include "ast/name.hpp"
 #include "ast/program.hpp"
+#include "ast/random.hpp"
+#include "ast/random_var.hpp"
 #include "lexer/modtoken.hpp"
 #include "parser/diffeq_driver.hpp"
 #include "parser/nmodl_driver.hpp"
 #include "test/unit/utils/nmodl_constructs.hpp"
 #include "test/unit/utils/test_utils.hpp"
 #include "utils/common_utils.hpp"
+#include "visitors/check_random_statement_visitor.hpp"
 #include "visitors/checkparent_visitor.hpp"
-#include "visitors/check_random_var_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
 
 
@@ -285,15 +288,33 @@ SCENARIO("NEURON block can add RANDOM variable", "[parser][random]") {
             )";
             nmodl::parser::NmodlDriver driver;
             auto ast = driver.parse_string(construct);
-            nmodl::visitor::CheckRandomVarVisitor().visit_program(
+            nmodl::visitor::CheckRandomStatementVisitor().visit_program(
                 static_cast<const nmodl::ast::Program&>(*ast));
-            REQUIRE(is_valid_construct(""));
+            const auto& random_statements = nmodl::collect_nodes(*ast, {nmodl::ast::AstNodeType::RANDOM});
+
+            REQUIRE(random_statements.size() == 1);
+            REQUIRE(static_cast<nmodl::ast::Random*>(random_statements[0].get())->get_distribution()->get_node_name() == "UNIFORM");
+            REQUIRE(static_cast<nmodl::ast::Random*>(random_statements[0].get())->get_distribution_params().size() == 2);
         }
     }
     GIVEN("Incomplete RANDOM variable declaration") {
         THEN("parser throws an error") {
             REQUIRE_THROWS_WITH(is_valid_construct("NEURON { RANDOM UNIFORM ur1, ur2 }"),
                                 Catch::Contains("Parser Error"));
+        }
+    }
+    GIVEN("Wrong number of parameters to the RANDOM distribution type") {
+        THEN("parser throws an error") {
+            std::string construct = R"(
+            NEURON {
+                RANDOM NORMAL(1.0) nr1, nr2
+            }
+            )";
+            nmodl::parser::NmodlDriver driver;
+            auto ast = driver.parse_string(construct);
+            REQUIRE_THROWS_WITH(nmodl::visitor::CheckRandomStatementVisitor().visit_program(
+                static_cast<const nmodl::ast::Program&>(*ast)),
+                                Catch::Contains("Validation Error"));
         }
     }
 }
