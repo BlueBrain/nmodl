@@ -104,17 +104,16 @@ llvm::Value* CodegenLLVMVisitor::codegen_instance_var(const ast::CodegenInstance
         return builder.CreateMaskedGather(addresses, llvm::Align());
     }
 
+    llvm::Value* member_addr = builder.CreateInBoundsGEP(instance_member, {i64_index});
+
     // If the code is vectorised, then bitcast to a vector pointer.
     if (is_kernel_code && vector_width > 1) {
         llvm::Type* vector_type =
             llvm::PointerType::get(llvm::FixedVectorType::get(type, vector_width),
                                    /*AddressSpace=*/0);
-        llvm::Value* instance_member_bitcasted = builder.CreateBitCast(instance_member,
-                                                                       vector_type);
-        return builder.CreateInBoundsGEP(instance_member_bitcasted, {i64_index});
+        return builder.CreateBitCast(member_addr, vector_type);
     }
-
-    return builder.CreateInBoundsGEP(instance_member, {i64_index});
+    return member_addr;
 }
 
 llvm::Value* CodegenLLVMVisitor::get_array_index(const ast::IndexedName& node) {
@@ -583,9 +582,13 @@ void CodegenLLVMVisitor::visit_codegen_for_statement(const ast::CodegenForStatem
     llvm::BasicBlock* for_inc = llvm::BasicBlock::Create(*context, /*Name=*/"for.inc", func, next);
     llvm::BasicBlock* exit = llvm::BasicBlock::Create(*context, /*Name=*/"for.exit", func, next);
 
-    // First, initialise the loop in the same basic block. This block is optional.
+    // First, initialise the loop in the same basic block. This block is optional. Also, reset
+    // vector width to 1 if processing the remainder of the loop.
+    int tmp_vector_width = vector_width;
     if (node.get_initialization()) {
         node.get_initialization()->accept(*this);
+    } else {
+        vector_width = 1;
     }
 
     // Branch to condition basic block and insert condition code there.
@@ -610,9 +613,11 @@ void CodegenLLVMVisitor::visit_codegen_for_statement(const ast::CodegenForStatem
     builder.SetInsertPoint(for_inc);
     node.get_increment()->accept(*this);
 
-    // Create a branch to condition block, then generate exit code out of the loop.
+    // Create a branch to condition block, then generate exit code out of the loop. Restore the
+    // vector width.
     builder.CreateBr(for_cond);
     builder.SetInsertPoint(exit);
+    vector_width = tmp_vector_width;
 }
 
 
