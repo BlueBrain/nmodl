@@ -511,6 +511,33 @@ static std::shared_ptr<ast::Expression> loop_increment_expression(const std::str
 }
 
 /**
+ * Create loop increment expression
+ * \todo : same as int_initialization_expression()
+ */
+static std::shared_ptr<ast::Expression> loop_count_expression(const std::string& induction_var,
+                                                              const std::string& node_count,
+                                                              int vector_width) {
+    const auto& id = create_varname(induction_var);
+    const auto& mech_node_count = create_varname(node_count);
+
+    // For non-vectorised loop, the condition is id < mech->node_count
+    if (vector_width == 1) {
+        return std::make_shared<ast::BinaryExpression>(id->clone(),
+                                                       ast::BinaryOperator(ast::BOP_LESS),
+                                                       mech_node_count);
+    }
+
+    // For vectorised loop, the condition is id < mech->node_count - vector_width + 1
+    const auto& remainder = new ast::Integer(vector_width - 1, /*macro=*/nullptr);
+    const auto& count = new ast::BinaryExpression(mech_node_count,
+                                                  ast::BinaryOperator(ast::BOP_SUBTRACTION),
+                                                  remainder);
+    return std::make_shared<ast::BinaryExpression>(id->clone(),
+                                                   ast::BinaryOperator(ast::BOP_LESS),
+                                                   count);
+}
+
+/**
  * \brief Convert ast::NrnStateBlock to corresponding code generation function nrn_state
  * @param node AST node representing ast::NrnStateBlock
  *
@@ -593,7 +620,7 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
     {
         /// loop constructs : initialization, condition and increment
         const auto& initialization = int_initialization_expression(INDUCTION_VAR);
-        const auto& condition = create_expression("{} < {}"_format(INDUCTION_VAR, NODECOUNT_VAR));
+        const auto& condition = loop_count_expression(INDUCTION_VAR, NODECOUNT_VAR, vector_width);
         const auto& increment = loop_increment_expression(INDUCTION_VAR, vector_width);
 
         /// clone it
@@ -615,9 +642,10 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
     }
 
     /// remainder loop possibly vectorized on vector_width
-    {
+    if (vector_width > 1) {
         /// loop constructs : initialization, condition and increment
-        const auto& condition = create_expression("{} < {}"_format(INDUCTION_VAR, NODECOUNT_VAR));
+        const auto& condition =
+            loop_count_expression(INDUCTION_VAR, NODECOUNT_VAR, /*vector_width=*/1);
         const auto& increment = loop_increment_expression(INDUCTION_VAR, /*vector_width=*/1);
 
         /// convert local statement to codegenvar statement
