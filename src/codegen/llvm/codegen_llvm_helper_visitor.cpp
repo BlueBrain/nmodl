@@ -511,7 +511,7 @@ static std::shared_ptr<ast::Expression> loop_increment_expression(const std::str
 }
 
 /**
- * Create loop increment expression
+ * Create loop count comparison expression
  * \todo : same as int_initialization_expression()
  */
 static std::shared_ptr<ast::Expression> loop_count_expression(const std::string& induction_var,
