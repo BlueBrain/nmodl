@@ -1,4 +1,4 @@
-name: NMODL CI
+name: NMODL Documentation
 
 on:
   push:
