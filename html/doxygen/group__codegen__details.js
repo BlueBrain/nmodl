@@ -172,10 +172,6 @@ var group__codegen__details =
       [ "NetReceive", "group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbbaaf126b23c756faf77bb3ffbd9a34fc57", null ],
       [ "BlockTypeEnd", "group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba4618ace4464da4c213ec5e0df5e03fe8", null ]
     ] ],
-    [ "LayoutType", "group__codegen__details.html#gaa6dd37aa434617a61baf1d03a2689de3", [
-      [ "aos", "group__codegen__details.html#ggaa6dd37aa434617a61baf1d03a2689de3acf037072a1491f0ffa23a37296b93df5", null ],
-      [ "soa", "group__codegen__details.html#ggaa6dd37aa434617a61baf1d03a2689de3aa39d8591483b67fb637bb445f9f4f059", null ]
-    ] ],
     [ "MemberType", "group__codegen__details.html#gab185b9278fbfff591fbe3da84ba22d0b", [
       [ "index", "group__codegen__details.html#ggab185b9278fbfff591fbe3da84ba22d0ba6a992d5529f459a44fee58c733255e86", null ],
       [ "range", "group__codegen__details.html#ggab185b9278fbfff591fbe3da84ba22d0ba37b19816109a32106d109e83bbb3c97d", null ],

@@ -1,8 +1,8 @@
 var group__codegen__backends =
 [
     [ "CodegenAccVisitor", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html", [
-      [ "CodegenAccVisitor", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a6439209f617fc2eda833c15e2fdedcf1", null ],
-      [ "CodegenAccVisitor", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a04ab80c6285d712c7c50a0fb1f09d62e", null ],
+      [ "CodegenAccVisitor", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#acee41f87d388e4da56dfa7610276db72", null ],
+      [ "CodegenAccVisitor", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a8016be1abc8cfcdc4bbffe234aa4a274", null ],
       [ "backend_name", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a9792284d98f398b86f3bffbb3dfd68e4", null ],
       [ "get_variable_device_pointer", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a5391c250f0204d0276f7a8272eee7db6", null ],
       [ "nrn_cur_reduction_loop_required", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a31d7b0c263809e51473f6769c402fb53", null ],
@@ -25,11 +25,11 @@ var group__codegen__backends =
     [ "CodegenCVisitor", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html", [
       [ "ParamVector", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a983129af96f5841838db04817dc08dd9", null ],
       [ "SymbolType", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a84bb623825207181bd987df2a2863ac7", null ],
-      [ "CodegenCVisitor", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a6601deff7a8e3903770b74538be64140", null ],
-      [ "CodegenCVisitor", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a4c0362027cd6147017908e3385b93a58", null ],
-      [ "CodegenCVisitor", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a42a54e7e1e169841ba625dfe030b50dd", null ],
-      [ "CodegenCVisitor", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a7356f7ee20ee491b93f9a3d755723b1c", null ],
-      [ "CodegenCVisitor", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ad63ff47275ec869171028c221ce7619b", null ],
+      [ "CodegenCVisitor", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a591d2d244b5007508f38c34c1f0002ae", null ],
+      [ "CodegenCVisitor", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a64fc883e8b074802adb7fc57e5ced5a6", null ],
+      [ "CodegenCVisitor", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#aaca28eb94a9806e98561fc3042e48144", null ],
+      [ "CodegenCVisitor", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a0327b9137a4eeb8818b7ffb2c536fcd7", null ],
+      [ "CodegenCVisitor", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a58b432dee96e3abdc1c5becee28c32f0", null ],
       [ "add_escape_quote", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#abc0ea67b5c324c83fafb0ab3678d6d21", null ],
       [ "backend_name", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a5c4d821fb0e77328f582fc2b5026c65a", null ],
       [ "block_require_shadow_update", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a3a13fdcfb12d5c04879fff5c4c4abed7", null ],
@@ -149,7 +149,6 @@ var group__codegen__backends =
       [ "print_mechanism_register", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a2634439eb0e7d5244195683295a5478a", null ],
       [ "print_memb_list_getter", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a4afd1a80d9ffffa9596e1808ef354c45", null ],
       [ "print_memory_allocation_routine", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#af0ee2415c65c2cf5e11141c4e831b725", null ],
-      [ "print_memory_layout_getter", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a5d8eedd9d23731c5c533e920221dcc53", null ],
       [ "print_namespace_begin", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ac8f2136d2fd1dfb0da30600ee7efde0d", null ],
       [ "print_namespace_end", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a5315242e81a380406865e29e7d58238e", null ],
       [ "print_namespace_start", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a95c5361ce3ae6902ea4185566db6edb3", null ],
@@ -180,7 +179,6 @@ var group__codegen__backends =
       [ "print_nrn_init", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a948cbc14c90144acd14cb9b465abda40", null ],
       [ "print_nrn_state", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a70f1e7264b4d6c34f360bf1090f02762", null ],
       [ "print_num_variable_getter", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ab7423562e5aea90292d3b457b927e615", null ],
-      [ "print_post_channel_iteration_common_code", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a5d0de22d63858f143cb428f0eb99b32d", null ],
       [ "print_procedure", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a873d640ea0558d067e4a490af3c4a39e", null ],
       [ "print_rhs_d_shadow_variables", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a9cc6bb467819f8b8a7c639179e743c6f", null ],
       [ "print_send_event_move", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a5bb041536219c2d5f95007ed8c37c9ed", null ],
@@ -258,7 +256,6 @@ var group__codegen__backends =
       [ "float_type", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a09805affa22a793df5d4cfba0dae3985", null ],
       [ "info", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ad9a064e8ab924b9b2517ed1fc9787980", null ],
       [ "internal_method_call_encountered", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a77272a3dbeaf183552eb37b7b1cac0f3", null ],
-      [ "layout", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a3ef7257073cbebd5e8ebe02197f9db7d", null ],
       [ "mod_filename", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ac43358c931aff1bf690c24ed82ae7d2c", null ],
       [ "optimize_ionvar_copies", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a4f326e90973fc971f85169fd5e79ece1", null ],
       [ "printer", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ab5d898ed4b2da92075a0624c03b010c3", null ],
@@ -284,8 +281,8 @@ var group__codegen__backends =
       [ "unhandled_ast_types_func", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a320efdb261998e4ce6e10003010a39a4", null ]
     ] ],
     [ "CodegenCudaVisitor", "classnmodl_1_1codegen_1_1_codegen_cuda_visitor.html", [
-      [ "CodegenCudaVisitor", "classnmodl_1_1codegen_1_1_codegen_cuda_visitor.html#a60e215959648ad8f6b98e2c7b4d627fa", null ],
-      [ "CodegenCudaVisitor", "classnmodl_1_1codegen_1_1_codegen_cuda_visitor.html#a4c274787d3082c13107141543b62097e", null ],
+      [ "CodegenCudaVisitor", "classnmodl_1_1codegen_1_1_codegen_cuda_visitor.html#a3bd9f9ab35806d637a1fcc1bfcbe9310", null ],
+      [ "CodegenCudaVisitor", "classnmodl_1_1codegen_1_1_codegen_cuda_visitor.html#af2fb15d6f2eb78443d7668593debc21c", null ],
       [ "backend_name", "classnmodl_1_1codegen_1_1_codegen_cuda_visitor.html#aa8eb0b57a7ab10ec65553969bb0b7cc9", null ],
       [ "codegen_wrapper_routines", "classnmodl_1_1codegen_1_1_codegen_cuda_visitor.html#af3cf1eb224ee9dd7b232da727654ef12", null ],
       [ "compute_method_name", "classnmodl_1_1codegen_1_1_codegen_cuda_visitor.html#a14fa25a973b127330b06829593884125", null ],
@@ -308,8 +305,8 @@ var group__codegen__backends =
       [ "print_wrapper_routine", "classnmodl_1_1codegen_1_1_codegen_cuda_visitor.html#abf717b923d90c5bec052d8a805d9e640", null ]
     ] ],
     [ "CodegenIspcVisitor", "classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html", [
-      [ "CodegenIspcVisitor", "classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#a52e4362079aafb86d8547092cff8d640", null ],
-      [ "CodegenIspcVisitor", "classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#a3a0eb0b25a03017e2510e6b21a07e447", null ],
+      [ "CodegenIspcVisitor", "classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#af029ef4d593be1e2790d32854c673778", null ],
+      [ "CodegenIspcVisitor", "classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#a55681195da8a50e0fe9085d9e39e38ec", null ],
       [ "backend_name", "classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#a7b70703995654e1cae5d7848d4fa33f2", null ],
       [ "check_incompatibilities", "classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#a7f40e8382c1cb27595c95e1661a2af89", null ],
       [ "check_incompatible_var_name", "classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#ac912834be44fe656052b71a1fa019a2e", null ],
@@ -366,8 +363,8 @@ var group__codegen__backends =
       [ "wrapper_procedures", "classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#aba93d9c344ffafc1aea7eaca5d6123c5", null ]
     ] ],
     [ "CodegenOmpVisitor", "classnmodl_1_1codegen_1_1_codegen_omp_visitor.html", [
-      [ "CodegenOmpVisitor", "classnmodl_1_1codegen_1_1_codegen_omp_visitor.html#a1a0e5681173f52719a3bb7b53cc785f9", null ],
-      [ "CodegenOmpVisitor", "classnmodl_1_1codegen_1_1_codegen_omp_visitor.html#a8feb05d338426b45e619b8b345cd6db7", null ],
+      [ "CodegenOmpVisitor", "classnmodl_1_1codegen_1_1_codegen_omp_visitor.html#a5cee923b983717078350266c18cf083c", null ],
+      [ "CodegenOmpVisitor", "classnmodl_1_1codegen_1_1_codegen_omp_visitor.html#a19f71dfa1b7f70598325dc9cc9f54520", null ],
       [ "backend_name", "classnmodl_1_1codegen_1_1_codegen_omp_visitor.html#a93328fcc3045b93a6007de8aa8f4f396", null ],
       [ "block_require_shadow_update", "classnmodl_1_1codegen_1_1_codegen_omp_visitor.html#adb112641bd456c8cf8078ac60af3281e", null ],
       [ "channel_task_dependency_enabled", "classnmodl_1_1codegen_1_1_codegen_omp_visitor.html#ac4038224f7c08ffbbaae7de6688a6f79", null ],

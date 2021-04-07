@@ -2,7 +2,6 @@ var searchData=
 [
   ['last_5fexpression_5fstatement',['last_expression_statement',['../classnmodl_1_1visitor_1_1_sympy_solver_visitor.html#ae9d097aca98ec3d4ce91ba54b04a4264',1,'nmodl::visitor::SympySolverVisitor']]],
   ['last_5funit',['last_unit',['../classnmodl_1_1parser_1_1_nmodl_lexer.html#ac34148015ec33d1b2f9f81a5f5a11579',1,'nmodl::parser::NmodlLexer']]],
-  ['layout',['layout',['../classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a3ef7257073cbebd5e8ebe02197f9db7d',1,'nmodl::codegen::CodegenCVisitor']]],
   ['left_5flinxpression',['left_linxpression',['../classnmodl_1_1ast_1_1_lin_equation.html#a3b70d46ad92033378d62bb8134eca795',1,'nmodl::ast::LinEquation']]],
   ['length',['length',['../classnmodl_1_1symtab_1_1_symbol.html#a1a4d6ac2699f71001c3b92ead4253181',1,'nmodl::symtab::Symbol::length()'],['../classnmodl_1_1ast_1_1_indexed_name.html#a9bc4361276ade67bd2a68215b6251a5b',1,'nmodl::ast::IndexedName::length()'],['../classnmodl_1_1ast_1_1_assigned_definition.html#acc5fdfdd4855985927e1047710caf19f',1,'nmodl::ast::AssignedDefinition::length()']]],
   ['lexer',['lexer',['../classnmodl_1_1parser_1_1_c_driver.html#aeb95f7379cd037b975dc6cc432e32c99',1,'nmodl::parser::CDriver::lexer()'],['../group__units.html#ga20d9e1e26895ee030dff6ddb27124548',1,'nmodl::parser::UnitDriver::lexer()']]],

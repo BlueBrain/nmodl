@@ -559,8 +559,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a8847cc350748db420c468e4414083d2e inherit pub_methods_classnmodl_1_1visitor_1_1_ast_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_solution_expression.html" title="Represent solution of a block in the AST. ">ast::SolutionExpression</a>  <a href="classnmodl_1_1visitor_1_1_ast_visitor.html#a8847cc350748db420c468e4414083d2e">More...</a><br /></td></tr>
 <tr class="separator:a8847cc350748db420c468e4414083d2e inherit pub_methods_classnmodl_1_1visitor_1_1_ast_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classnmodl_1_1visitor_1_1_visitor"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classnmodl_1_1visitor_1_1_visitor')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classnmodl_1_1visitor_1_1_visitor.html">nmodl::visitor::Visitor</a></td></tr>
-<tr class="memitem:ga38802415a9e8577ea0d66dff9c21afc8 inherit pub_methods_classnmodl_1_1visitor_1_1_visitor"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__visitor__classes.html#ga38802415a9e8577ea0d66dff9c21afc8">~Visitor</a> ()=default</td></tr>
-<tr class="separator:ga38802415a9e8577ea0d66dff9c21afc8 inherit pub_methods_classnmodl_1_1visitor_1_1_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38802415a9e8577ea0d66dff9c21afc8 inherit pub_methods_classnmodl_1_1visitor_1_1_visitor"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_visitor.html#a38802415a9e8577ea0d66dff9c21afc8">~Visitor</a> ()=default</td></tr>
+<tr class="separator:a38802415a9e8577ea0d66dff9c21afc8 inherit pub_methods_classnmodl_1_1visitor_1_1_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -694,7 +694,7 @@ Private Attributes</h2></td></tr>
 <dl class="section note"><dt>Note</dt><dd>If the <a class="el" href="classnmodl_1_1ast_1_1_factor_def.html" title="TODO. ">ast::FactorDef</a> was made by using two units (second case), the factors of both of them must be calculated based on the <a class="el" href="classnmodl_1_1units_1_1_unit_table.html" title="Class that stores all the units, prefixes and names of base units used. ">units::UnitTable</a> and then they must be divided to produce the unit's factor that will be printed to the <code></code>.cpp file. <br />
  Example: <div class="fragment"><div class="line">FARADAY = (faraday) (10000 coulomb)</div></div><!-- fragment --> In the <code></code>.cpp file the printed factor will be <code>9.64853090</code> but in the <a class="el" href="classnmodl_1_1units_1_1_unit_table.html" title="Class that stores all the units, prefixes and names of base units used. ">units::UnitTable</a> the factor of <code>FARADAY</code> will be <code>96485.30900000</code></dd></dl>
 
-<p>Implements <a class="el" href="group__visitor__classes.html#gaf80f0ed0c3f251a58dcb86c822297bd8">nmodl::visitor::Visitor</a>.</p>
+<p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_visitor.html#af80f0ed0c3f251a58dcb86c822297bd8">nmodl::visitor::Visitor</a>.</p>
 
 <p class="definition">Definition at line <a class="el" href="units__visitor_8cpp_source.html#l00083">83</a> of file <a class="el" href="units__visitor_8cpp_source.html">units_visitor.cpp</a>.</p>
 
@@ -726,7 +726,7 @@ Private Attributes</h2></td></tr>
 
 <p>Override visit_program function to parse the <code>nrnunits.lib</code> unit file before starting visiting the AST to parse the units defined in mod files. </p>
 
-<p>Implements <a class="el" href="group__visitor__classes.html#ga51eb42b5990b2d5afaa2ab5130ae8203">nmodl::visitor::Visitor</a>.</p>
+<p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_visitor.html#a51eb42b5990b2d5afaa2ab5130ae8203">nmodl::visitor::Visitor</a>.</p>
 
 <p class="definition">Definition at line <a class="el" href="units__visitor_8cpp_source.html#l00022">22</a> of file <a class="el" href="units__visitor_8cpp_source.html">units_visitor.cpp</a>.</p>
 
@@ -760,7 +760,7 @@ Private Attributes</h2></td></tr>
 <p><a class="el" href="classnmodl_1_1units_1_1_unit.html" title="Class that stores all the data of a Unit. ">units::Unit</a> definition is based only on pre-defined units, parse only the new unit and the pre-defined units. <br />
  Example: </p><div class="fragment"><div class="line">(nA)    = (nanoamp) =&gt; nA  nanoamp)</div></div><!-- fragment --><p> The <a class="el" href="classnmodl_1_1ast_1_1_unit_def.html" title="TODO. ">ast::UnitDef</a> is converted to a string that is able to be parsed by the unit parser which was used for parsing the <code>nrnunits.lib</code> file. On <code>nrnunits.lib</code> constant "1" is defined as "fuzz", so it must be converted. </p>
 
-<p>Implements <a class="el" href="group__visitor__classes.html#gadb86f744e5624860ec718554d480653d">nmodl::visitor::Visitor</a>.</p>
+<p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_visitor.html#adb86f744e5624860ec718554d480653d">nmodl::visitor::Visitor</a>.</p>
 
 <p class="definition">Definition at line <a class="el" href="units__visitor_8cpp_source.html#l00038">38</a> of file <a class="el" href="units__visitor_8cpp_source.html">units_visitor.cpp</a>.</p>
 

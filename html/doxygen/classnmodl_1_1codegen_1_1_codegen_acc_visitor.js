@@ -1,7 +1,7 @@
 var classnmodl_1_1codegen_1_1_codegen_acc_visitor =
 [
-    [ "CodegenAccVisitor", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a6439209f617fc2eda833c15e2fdedcf1", null ],
-    [ "CodegenAccVisitor", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a04ab80c6285d712c7c50a0fb1f09d62e", null ],
+    [ "CodegenAccVisitor", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#acee41f87d388e4da56dfa7610276db72", null ],
+    [ "CodegenAccVisitor", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a8016be1abc8cfcdc4bbffe234aa4a274", null ],
     [ "backend_name", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a9792284d98f398b86f3bffbb3dfd68e4", null ],
     [ "get_variable_device_pointer", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a5391c250f0204d0276f7a8272eee7db6", null ],
     [ "nrn_cur_reduction_loop_required", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a31d7b0c263809e51473f6769c402fb53", null ],

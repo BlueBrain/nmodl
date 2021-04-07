@@ -6,8 +6,6 @@ var searchData=
   ['lagstatementvector',['LagStatementVector',['../group__ast__vec__type.html#ga85d37bdfc07d440826155765fa9af3d3',1,'nmodl::ast']]],
   ['last_5fexpression_5fstatement',['last_expression_statement',['../classnmodl_1_1visitor_1_1_sympy_solver_visitor.html#ae9d097aca98ec3d4ce91ba54b04a4264',1,'nmodl::visitor::SympySolverVisitor']]],
   ['last_5funit',['last_unit',['../classnmodl_1_1parser_1_1_nmodl_lexer.html#ac34148015ec33d1b2f9f81a5f5a11579',1,'nmodl::parser::NmodlLexer']]],
-  ['layout',['layout',['../classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a3ef7257073cbebd5e8ebe02197f9db7d',1,'nmodl::codegen::CodegenCVisitor']]],
-  ['layouttype',['LayoutType',['../group__codegen__details.html#gaa6dd37aa434617a61baf1d03a2689de3',1,'nmodl::codegen']]],
   ['ld',['LD',['../namespacenmodl_1_1visitor.html#a68c860c43f4bea4e1af16c016d2959f9ab2e68ec1fa49da52ca5b0f436e032dd6',1,'nmodl::visitor']]],
   ['leave_5fscope',['leave_scope',['../classnmodl_1_1symtab_1_1_model_symbol_table.html#a372d361b51ea1874dfc6c1960fa37cba',1,'nmodl::symtab::ModelSymbolTable']]],
   ['left',['left',['../group__utils.html#gga45f97a3d578ade6b9b49b1a92ec688a6a811882fecd5c7618d7099ebbd39ea254',1,'nmodl::stringutils']]],

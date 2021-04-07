@@ -1,7 +1,7 @@
 var classnmodl_1_1codegen_1_1_codegen_cuda_visitor =
 [
-    [ "CodegenCudaVisitor", "classnmodl_1_1codegen_1_1_codegen_cuda_visitor.html#a60e215959648ad8f6b98e2c7b4d627fa", null ],
-    [ "CodegenCudaVisitor", "classnmodl_1_1codegen_1_1_codegen_cuda_visitor.html#a4c274787d3082c13107141543b62097e", null ],
+    [ "CodegenCudaVisitor", "classnmodl_1_1codegen_1_1_codegen_cuda_visitor.html#a3bd9f9ab35806d637a1fcc1bfcbe9310", null ],
+    [ "CodegenCudaVisitor", "classnmodl_1_1codegen_1_1_codegen_cuda_visitor.html#af2fb15d6f2eb78443d7668593debc21c", null ],
     [ "backend_name", "classnmodl_1_1codegen_1_1_codegen_cuda_visitor.html#aa8eb0b57a7ab10ec65553969bb0b7cc9", null ],
     [ "codegen_wrapper_routines", "classnmodl_1_1codegen_1_1_codegen_cuda_visitor.html#af3cf1eb224ee9dd7b232da727654ef12", null ],
     [ "compute_method_name", "classnmodl_1_1codegen_1_1_codegen_cuda_visitor.html#a14fa25a973b127330b06829593884125", null ],

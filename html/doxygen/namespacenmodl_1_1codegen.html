@@ -181,11 +181,6 @@ Enumerations</h2></td></tr>
  }<tr class="memdesc:gab185b9278fbfff591fbe3da84ba22d0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper to represent various variables types.  <a href="group__codegen__details.html#gab185b9278fbfff591fbe3da84ba22d0b">More...</a><br /></td></tr>
 </td></tr>
 <tr class="separator:gab185b9278fbfff591fbe3da84ba22d0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaa6dd37aa434617a61baf1d03a2689de3"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__codegen__details.html#gaa6dd37aa434617a61baf1d03a2689de3">LayoutType</a> { <a class="el" href="group__codegen__details.html#ggaa6dd37aa434617a61baf1d03a2689de3acf037072a1491f0ffa23a37296b93df5">LayoutType::aos</a>, 
-<a class="el" href="group__codegen__details.html#ggaa6dd37aa434617a61baf1d03a2689de3aa39d8591483b67fb637bb445f9f4f059">LayoutType::soa</a>
- }<tr class="memdesc:gaa6dd37aa434617a61baf1d03a2689de3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents memory layout to use for code generation.  <a href="group__codegen__details.html#gaa6dd37aa434617a61baf1d03a2689de3">More...</a><br /></td></tr>
-</td></tr>
-<tr class="separator:gaa6dd37aa434617a61baf1d03a2689de3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -289,7 +284,7 @@ Variables</h2></td></tr>
 <div class="fragment"><div class="line">NET_RECEIVE (weight, R){</div><div class="line">    INITIAL {</div><div class="line">        R=1</div><div class="line">    }</div><div class="line">}</div></div><!-- fragment --><p>then generated code for initial block should be:</p>
 <div class="fragment"><div class="line"><span class="keywordtype">double</span>* R = weights + weight_index + 0;</div><div class="line">(*R) = 1.0;</div></div><!-- fragment --><p>So, the <code>R</code> in AST needs to be renamed with <code>(*R)</code>. </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8cpp_source.html#l03615">3615</a> of file <a class="el" href="codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8cpp_source.html#l03579">3579</a> of file <a class="el" href="codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
