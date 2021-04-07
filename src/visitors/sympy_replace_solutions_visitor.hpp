@@ -164,8 +164,8 @@ namespace visitor {
  * Last notes:
  *
  * For linEquations or NonLinEquations association of the solution with a particular statement could
- * be impossible. For example \f$ ~ x + y = 0 \f$ does not have a simple variable in the lhs. Thus, an
- * association with a particular solution statement is not possible. Thus we do 2 runs where we
+ * be impossible. For example \f$ ~ x + y = 0 \f$ does not have a simple variable in the lhs. Thus,
+ * an association with a particular solution statement is not possible. Thus we do 2 runs where we
  * first match everything we can by value and then we associate everything we can in a greedy way.
  *
  * For large system of equations the code sets up the J matrix and F vector to be sent to eigen for
@@ -323,8 +323,8 @@ class SympyReplaceSolutionsVisitor: public AstVisitor {
         /// for easy access and classification of the statements
         void build_maps();
 
-        /// Check if one of the statements assigns this variable (i.e. \f$ x' = f(x, y, x) \f$) and is
-        /// still tagged
+        /// Check if one of the statements assigns this variable (i.e. \f$ x' = f(x, y, x) \f$) and
+        /// is still tagged
         inline bool is_var_assigned_here(const std::string& var) const {
             const auto it = var2statement.find(var);
             return it != var2statement.end() && tags.find(it->second) != tags.end();
