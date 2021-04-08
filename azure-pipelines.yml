@@ -23,10 +23,10 @@ trigger:
 - releases/*
 
 jobs:
-- job: 'ubuntu1604'
+- job: 'ubuntu1804'
   pool:
-    vmImage: 'ubuntu-16.04'
-  displayName: 'Ubuntu (16.04), GCC 8.3'
+    vmImage: 'ubuntu-18.04'
+  displayName: 'Ubuntu (18.04), GCC 8.4'
   steps:
   - checkout: self
     submodules: False
