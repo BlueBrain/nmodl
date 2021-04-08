@@ -139,7 +139,7 @@ jobs:
   pool:
     vmImage: 'ubuntu-18.04'
   strategy:
-    matrix: $(matrix_build)
+    matrix: variables.matrix_build
   steps:
   - checkout: self
     submodules: True
@@ -176,7 +176,7 @@ jobs:
   pool:
     vmImage: 'macOS-10.15'
   strategy:
-    matrix: $(matrix_build)
+    matrix: variables.matrix_build
   steps:
   - checkout: self
     submodules: True
