@@ -144,7 +144,7 @@ jobs:
           python.version: '3.8'
         Python39:
           python.version: '3.9'
-      ${{ if ne(variables.buildWheel, True) }}:
+      ${{ if eq(variables.buildWheel, False) }}:
         Python39:
           python.version: '3.9'
   steps:
@@ -197,7 +197,7 @@ jobs:
         Python39:
           python.version: '3.9'
           python.org.version: '3.9.0'
-      ${{ if ne(variables.buildWheel, True) }}:
+      ${{ if eq(variables.buildWheel, False) }}:
         Python39:
           python.version: '3.9'
           python.org.version: '3.9.0'
