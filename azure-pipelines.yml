@@ -7,9 +7,9 @@ variables:
   #- NightlyWheelBuild: False
   buildWheel: $[or(in(variables['Build.Reason'], 'Schedule'),
               and(in(variables['Build.Reason'], 'Manual'), eq(variables.NightlyWheelBuild, True)))]
-  ${{ if eq(variables['buildWheel']), 'True') }}:
+  ${{ if eq(variables['buildWheel'], 'True') }}:
     matrix_build: { Python36: { python.version: '3.6' }, Python37: { python.version: '3.7' }, Python38: { python.version: '3.8' }, Python39: { python.version: '3.9' }}
-  ${{ if eq(variables['buildWheel']), 'False') }}:
+  ${{ if eq(variables['buildWheel'], 'False') }}:
     matrix_build: { Python39: { python.version: '3.9' }}
 
 
@@ -176,19 +176,7 @@ jobs:
   pool:
     vmImage: 'macOS-10.15'
   strategy:
-    matrix:
-      Python36:
-        python.version: '3.6'
-        python.org.version: '3.6.8'
-      Python37:
-        python.version: '3.7'
-        python.org.version: '3.7.7'
-      Python38:
-        python.version: '3.8'
-        python.org.version: '3.8.2'
-      Python39:
-        python.version: '3.9'
-        python.org.version: '3.9.0'
+    matrix: $(matrix_build)
   steps:
   - checkout: self
     submodules: True
