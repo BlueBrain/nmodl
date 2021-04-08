@@ -5,8 +5,8 @@ variables:
   # defined in UI
   #- ReleaseWheelBuild: False
   #- NightlyWheelBuild: False
-  buildWheel: $[or(in(variables['Build.Reason'], 'Schedule'),
-              and(in(variables['Build.Reason'], 'Manual'), eq(variables.NightlyWheelBuild, True)))]
+  buildWheel: ${{ or(in(variables['Build.Reason'], 'Schedule'),
+              and(in(variables['Build.Reason'], 'Manual'), eq(variables.NightlyWheelBuild, True))) }}
 
 # Nightly build master for pypi upload
 schedules:
@@ -175,7 +175,7 @@ jobs:
       sudo apt update
       sudo apt-get install -y python$(python.version) python$(python.version)-dev python$(python.version)-venv
       packaging/test_wheel.bash python$(python.version) wheelhouse/*.whl
-    condition: and(succeeded(), or(eq(variables.buildWheel, True), eq(variables['python.version'], '3.9')))
+    condition: succeeded()
     displayName: 'Test ManyLinux Wheel with Python $(python.version)'
   - template: ci/upload-wheels.yml
 - job: 'macos_wheels'
@@ -208,7 +208,7 @@ jobs:
   - script: |
       brew install flex bison cmake
       export PATH=/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH;
-    condition: and(succeeded(), or(eq(variables.buildWheel, True), eq(variables['python.version'], '3.9')))
+    condition: succeeded()
     displayName: 'Install Dependencies'
   - script: |
       installer=python-$(python.org.version)-macosx10.9.pkg
