@@ -177,9 +177,9 @@ jobs:
   strategy:
     matrix: 
       ${{ if eq(variables.buildWheel, True) }}:
-        matrix_build: { Python36: { python.version: '3.6' }, Python37: { python.version: '3.7' }, Python38: { python.version: '3.8' }, Python39: { python.version: '3.9' }}
+        { Python36: { python.version: '3.6' }, Python37: { python.version: '3.7' }, Python38: { python.version: '3.8' }, Python39: { python.version: '3.9' }}
       ${{ if ne(variables.buildWheel, True) }}:
-       matrix_build: { Python39: { python.version: '3.9' }}
+        { Python39: { python.version: '3.9' }}
       
   steps:
   - checkout: self
