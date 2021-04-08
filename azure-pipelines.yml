@@ -8,9 +8,9 @@ variables:
   buildWheel: $[or(in(variables['Build.Reason'], 'Schedule'),
               and(in(variables['Build.Reason'], 'Manual'), eq(variables.NightlyWheelBuild, True)))]
   ${{ if eq(variables['buildWheel']), 'True') }}:
-    matrix_build = { Python36: { python.version: '3.6' }, Python37: { python.version: '3.7' }, Python38: { python.version: '3.8' }, Python39: { python.version: '3.9' }}
+    matrix_build: { Python36: { python.version: '3.6' }, Python37: { python.version: '3.7' }, Python38: { python.version: '3.8' }, Python39: { python.version: '3.9' }}
   ${{ if eq(variables['buildWheel']), 'False') }}:
-    matrix_build = { Python39: { python.version: '3.9' }}
+    matrix_build: { Python39: { python.version: '3.9' }}
 
 
 # Nightly build master for pypi upload
