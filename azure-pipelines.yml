@@ -135,10 +135,10 @@ jobs:
     vmImage: 'ubuntu-18.04'
   strategy:
     matrix:
-    ${{ if and(succeeded(), eq(variables.buildWheel, True)) }}:
-        matrix_build: { Python36: { python.version: '3.6' }, Python37: { python.version: '3.7' }, Python38: { python.version: '3.8' }, Python39: { python.version: '3.9' }}
-    ${{ if and(succeeded(), ne(variables.buildWheel, True)) }}:
-       matrix_build: { Python39: { python.version: '3.9' }}
+      ${{ if and(succeeded(), eq(variables.buildWheel, True)) }}:
+        { Python36: { python.version: '3.6' }, Python37: { python.version: '3.7' }, Python38: { python.version: '3.8' }, Python39: { python.version: '3.9' }}
+      ${{ if and(succeeded(), ne(variables.buildWheel, True)) }}:
+        { Python39: { python.version: '3.9' }}
   steps:
   - checkout: self
     submodules: True
@@ -176,9 +176,9 @@ jobs:
     vmImage: 'macOS-10.15'
   strategy:
     matrix: 
-    ${{ if and(succeeded(), eq(variables.buildWheel, True)) }}:
+      ${{ if and(succeeded(), eq(variables.buildWheel, True)) }}:
         matrix_build: { Python36: { python.version: '3.6' }, Python37: { python.version: '3.7' }, Python38: { python.version: '3.8' }, Python39: { python.version: '3.9' }}
-    ${{ if and(succeeded(), ne(variables.buildWheel, True)) }}:
+      ${{ if and(succeeded(), ne(variables.buildWheel, True)) }}:
        matrix_build: { Python39: { python.version: '3.9' }}
       
   steps:
