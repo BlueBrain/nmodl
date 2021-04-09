@@ -984,7 +984,7 @@ SCENARIO("Vectorised derivative block", "[visitor][llvm][derivative]") {
                 v = mech->voltage[node_id]
                 mech->m[id] = (mech->minf[id]-mech->m[id])/mech->mtau[id]
             })";
-        std::string expected_reminder_loop = R"(
+        std::string expected_epilogue_loop = R"(
             for(; id<mech->node_count; id = id+1) {
                 INTEGER epilogue_node_id
                 DOUBLE epilogue_v
@@ -1003,8 +1003,8 @@ SCENARIO("Vectorised derivative block", "[visitor][llvm][derivative]") {
             auto main_loop = reindent_text(to_nmodl(result[0]));
             REQUIRE(main_loop == reindent_text(expected_main_loop));
 
-            auto reminder_loop = reindent_text(to_nmodl(result[1]));
-            REQUIRE(reminder_loop == reindent_text(expected_reminder_loop));
+            auto epilogue_loop = reindent_text(to_nmodl(result[1]));
+            REQUIRE(epilogue_loop == reindent_text(expected_epilogue_loop));
         }
     }
 }

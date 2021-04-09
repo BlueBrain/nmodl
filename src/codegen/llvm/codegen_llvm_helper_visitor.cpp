@@ -512,6 +512,12 @@ static std::shared_ptr<ast::Expression> loop_increment_expression(const std::str
 
 /**
  * Create loop count comparison expression
+ *
+ * Based on if loop is vectorised or not, the condition for loop
+ * is different. For example:
+ *  - serial loop : `id < node_count`
+ *  - vector loop : `id < (node_count - vector_width + 1)`
+ *
  * \todo : same as int_initialization_expression()
  */
 static std::shared_ptr<ast::Expression> loop_count_expression(const std::string& induction_var,
