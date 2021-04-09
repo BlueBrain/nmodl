@@ -54,19 +54,21 @@ std::string run_llvm_visitor(const std::string& text,
 }
 
 //=============================================================================
-// Utility to get specific LLVM nodes
+// Utility to get specific NMODL AST nodes
 //=============================================================================
 
-std::vector<std::shared_ptr<ast::Ast>> run_codegen_visitor_helper(const std::string& text) {
+std::vector<std::shared_ptr<ast::Ast>> run_llvm_visitor_helper(
+    const std::string& text,
+    int vector_width,
+    const std::vector<ast::AstNodeType>& nodes_to_collect) {
     NmodlDriver driver;
     const auto& ast = driver.parse_string(text);
 
-    /// construct symbol table and run codegen helper visitor
     SymtabVisitor().visit_program(*ast);
     SolveBlockVisitor().visit_program(*ast);
-    CodegenLLVMHelperVisitor(8).visit_program(*ast);
+    CodegenLLVMHelperVisitor(vector_width).visit_program(*ast);
 
-    const auto& nodes = collect_nodes(*ast, {ast::AstNodeType::CODEGEN_FOR_STATEMENT});
+    const auto& nodes = collect_nodes(*ast, nodes_to_collect);
 
     return nodes;
 }
@@ -903,11 +905,12 @@ SCENARIO("Scalar state kernel", "[visitor][llvm]") {
 // Derivative block : test optimization
 //=============================================================================
 
-SCENARIO("Derivative block", "[visitor][llvm][derivative]") {
-    GIVEN("After helper visitor") {
+SCENARIO("Scalar derivative block", "[visitor][llvm][derivative]") {
+    GIVEN("After LLVM helper visitor transformations") {
         std::string nmodl_text = R"(
             NEURON {
                 SUFFIX hh
+                NONSPECIFIC_CURRENT il
                 RANGE minf, mtau
             }
             STATE {
@@ -920,6 +923,53 @@ SCENARIO("Derivative block", "[visitor][llvm][derivative]") {
             }
             BREAKPOINT {
                 SOLVE states METHOD cnexp
+                il = 2
+            }
+            DERIVATIVE states {
+                m = (minf-m)/mtau
+            }
+        )";
+
+        std::string expected_loop = R"(
+            for(id = 0; id<mech->node_count; id = id+1) {
+                INTEGER node_id
+                DOUBLE v
+                node_id = mech->node_index[id]
+                v = mech->voltage[node_id]
+                mech->m[id] = (mech->minf[id]-mech->m[id])/mech->mtau[id]
+            })";
+
+        THEN("a single scalar loops is constructed") {
+            auto result = run_llvm_visitor_helper(nmodl_text,
+                                                  /*vector_width=*/1,
+                                                  {ast::AstNodeType::CODEGEN_FOR_STATEMENT});
+            REQUIRE(result.size() == 1);
+
+            auto main_loop = reindent_text(to_nmodl(result[0]));
+            REQUIRE(main_loop == reindent_text(expected_loop));
+        }
+    }
+}
+
+SCENARIO("Vectorised derivative block", "[visitor][llvm][derivative]") {
+    GIVEN("After LLVM helper visitor transformations") {
+        std::string nmodl_text = R"(
+            NEURON {
+                SUFFIX hh
+                NONSPECIFIC_CURRENT il
+                RANGE minf, mtau
+            }
+            STATE {
+                m
+            }
+            ASSIGNED {
+                v (mV)
+                minf
+                mtau (ms)
+            }
+            BREAKPOINT {
+                SOLVE states METHOD cnexp
+                il = 2
             }
             DERIVATIVE states {
                 m = (minf-m)/mtau
@@ -927,34 +977,34 @@ SCENARIO("Derivative block", "[visitor][llvm][derivative]") {
         )";
 
         std::string expected_main_loop = R"(
-            for(id = 0; id<mech->node_count; id = id+8) {
+            for(id = 0; id<mech->node_count-7; id = id+8) {
                 INTEGER node_id
                 DOUBLE v
                 node_id = mech->node_index[id]
                 v = mech->voltage[node_id]
                 mech->m[id] = (mech->minf[id]-mech->m[id])/mech->mtau[id]
-                SOLVE states METHOD cnexp
             })";
-        std::string expected_reminder_loop = R"(
+        std::string expected_epilogue_loop = R"(
             for(; id<mech->node_count; id = id+1) {
-                INTEGER node_id
-                DOUBLE v
-                node_id = mech->node_index[id]
-                v = mech->voltage[node_id]
+                INTEGER epilogue_node_id
+                DOUBLE epilogue_v
+                epilogue_node_id = mech->node_index[id]
+                epilogue_v = mech->voltage[epilogue_node_id]
                 mech->m[id] = (mech->minf[id]-mech->m[id])/mech->mtau[id]
-                SOLVE states METHOD cnexp
             })";
 
 
-        THEN("should contains 2 for loops") {
-            auto result = run_codegen_visitor_helper(nmodl_text);
+        THEN("vector and epilogue scalar loops are constructed") {
+            auto result = run_llvm_visitor_helper(nmodl_text,
+                                                  /*vector_width=*/8,
+                                                  {ast::AstNodeType::CODEGEN_FOR_STATEMENT});
             REQUIRE(result.size() == 2);
 
             auto main_loop = reindent_text(to_nmodl(result[0]));
             REQUIRE(main_loop == reindent_text(expected_main_loop));
 
-            auto reminder_loop = reindent_text(to_nmodl(result[1]));
-            REQUIRE(reminder_loop == reindent_text(expected_reminder_loop));
+            auto epilogue_loop = reindent_text(to_nmodl(result[1]));
+            REQUIRE(epilogue_loop == reindent_text(expected_epilogue_loop));
         }
     }
 }
