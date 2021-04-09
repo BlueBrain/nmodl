@@ -11,6 +11,7 @@
 #include "ast/all.hpp"
 #include "codegen/codegen_helper_visitor.hpp"
 #include "utils/logger.hpp"
+#include "visitors/rename_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
 
 namespace nmodl {
@@ -24,6 +25,8 @@ const ast::AstNodeType CodegenLLVMHelperVisitor::FLOAT_TYPE = ast::AstNodeType::
 const std::string CodegenLLVMHelperVisitor::NODECOUNT_VAR = "node_count";
 const std::string CodegenLLVMHelperVisitor::VOLTAGE_VAR = "voltage";
 const std::string CodegenLLVMHelperVisitor::NODE_INDEX_VAR = "node_index";
+
+static constexpr const char epilogue_variable_prefix[] = "epilogue_";
 
 /// Create asr::Varname node with given a given variable name
 static ast::VarName* create_varname(const std::string& varname) {
@@ -508,6 +511,39 @@ static std::shared_ptr<ast::Expression> loop_increment_expression(const std::str
 }
 
 /**
+ * Create loop count comparison expression
+ *
+ * Based on if loop is vectorised or not, the condition for loop
+ * is different. For example:
+ *  - serial loop : `id < node_count`
+ *  - vector loop : `id < (node_count - vector_width + 1)`
+ *
+ * \todo : same as int_initialization_expression()
+ */
+static std::shared_ptr<ast::Expression> loop_count_expression(const std::string& induction_var,
+                                                              const std::string& node_count,
+                                                              int vector_width) {
+    const auto& id = create_varname(induction_var);
+    const auto& mech_node_count = create_varname(node_count);
+
+    // For non-vectorised loop, the condition is id < mech->node_count
+    if (vector_width == 1) {
+        return std::make_shared<ast::BinaryExpression>(id->clone(),
+                                                       ast::BinaryOperator(ast::BOP_LESS),
+                                                       mech_node_count);
+    }
+
+    // For vectorised loop, the condition is id < mech->node_count - vector_width + 1
+    const auto& remainder = new ast::Integer(vector_width - 1, /*macro=*/nullptr);
+    const auto& count = new ast::BinaryExpression(mech_node_count,
+                                                  ast::BinaryOperator(ast::BOP_SUBTRACTION),
+                                                  remainder);
+    return std::make_shared<ast::BinaryExpression>(id->clone(),
+                                                   ast::BinaryOperator(ast::BOP_LESS),
+                                                   count);
+}
+
+/**
  * \brief Convert ast::NrnStateBlock to corresponding code generation function nrn_state
  * @param node AST node representing ast::NrnStateBlock
  *
@@ -522,8 +558,9 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
 
     /// create variable definition for loop index and insert at the beginning
     std::string loop_index_var = "id";
-    std::vector<std::string> int_variables{"id"};
-    function_statements.push_back(create_local_variable_statement(int_variables, INTEGER_TYPE));
+    std::vector<std::string> induction_variables{"id"};
+    function_statements.push_back(
+        create_local_variable_statement(induction_variables, INTEGER_TYPE));
 
     /// create now main compute part : for loop over channel instances
 
@@ -531,10 +568,10 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
     ast::StatementVector loop_def_statements;
     ast::StatementVector loop_index_statements;
     ast::StatementVector loop_body_statements;
-    {
-        std::vector<std::string> int_variables{"node_id"};
-        std::vector<std::string> double_variables{"v"};
 
+    std::vector<std::string> int_variables{"node_id"};
+    std::vector<std::string> double_variables{"v"};
+    {
         /// access node index and corresponding voltage
         loop_index_statements.push_back(
             visitor::create_statement("node_id = node_index[{}]"_format(INDUCTION_VAR)));
@@ -589,7 +626,7 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
     {
         /// loop constructs : initialization, condition and increment
         const auto& initialization = int_initialization_expression(INDUCTION_VAR);
-        const auto& condition = create_expression("{} < {}"_format(INDUCTION_VAR, NODECOUNT_VAR));
+        const auto& condition = loop_count_expression(INDUCTION_VAR, NODECOUNT_VAR, vector_width);
         const auto& increment = loop_increment_expression(INDUCTION_VAR, vector_width);
 
         /// clone it
@@ -611,16 +648,29 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
     }
 
     /// remainder loop possibly vectorized on vector_width
-    {
+    if (vector_width > 1) {
         /// loop constructs : initialization, condition and increment
-        const auto& condition = create_expression("{} < {}"_format(INDUCTION_VAR, NODECOUNT_VAR));
-        const auto& increment = loop_increment_expression(INDUCTION_VAR, 1);
+        const auto& condition =
+            loop_count_expression(INDUCTION_VAR, NODECOUNT_VAR, /*vector_width=*/1);
+        const auto& increment = loop_increment_expression(INDUCTION_VAR, /*vector_width=*/1);
 
         /// convert local statement to codegenvar statement
         convert_local_statement(*loop_block);
 
         auto for_loop_statement_remainder =
             std::make_shared<ast::CodegenForStatement>(nullptr, condition, increment, loop_block);
+
+        const auto& loop_statements = for_loop_statement_remainder->get_statement_block();
+        // \todo: Change RenameVisitor to take a vector of names to which it would append a single
+        // prefix.
+        for (const auto& name: int_variables) {
+            visitor::RenameVisitor v(name, epilogue_variable_prefix + name);
+            loop_statements->accept(v);
+        }
+        for (const auto& name: double_variables) {
+            visitor::RenameVisitor v(name, epilogue_variable_prefix + name);
+            loop_statements->accept(v);
+        }
 
         /// convert all variables inside loop body to instance variables
         convert_to_instance_variable(*for_loop_statement_remainder, loop_index_var);
