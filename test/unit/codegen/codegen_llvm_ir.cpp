@@ -986,10 +986,10 @@ SCENARIO("Vectorised derivative block", "[visitor][llvm][derivative]") {
             })";
         std::string expected_reminder_loop = R"(
             for(; id<mech->node_count; id = id+1) {
-                INTEGER __epilogue__node_id
-                DOUBLE __epilogue__v
-                __epilogue__node_id = mech->node_index[id]
-                __epilogue__v = mech->voltage[__epilogue__node_id]
+                INTEGER epilogue_node_id
+                DOUBLE epilogue_v
+                epilogue_node_id = mech->node_index[id]
+                epilogue_v = mech->voltage[epilogue_node_id]
                 mech->m[id] = (mech->minf[id]-mech->m[id])/mech->mtau[id]
             })";
 

@@ -26,7 +26,7 @@ const std::string CodegenLLVMHelperVisitor::NODECOUNT_VAR = "node_count";
 const std::string CodegenLLVMHelperVisitor::VOLTAGE_VAR = "voltage";
 const std::string CodegenLLVMHelperVisitor::NODE_INDEX_VAR = "node_index";
 
-static constexpr const char epilogue_variable_prefix[] = "__epilogue__";
+static constexpr const char epilogue_variable_prefix[] = "epilogue_";
 
 /// Create asr::Varname node with given a given variable name
 static ast::VarName* create_varname(const std::string& varname) {
