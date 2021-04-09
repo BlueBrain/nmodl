@@ -129,6 +129,7 @@ var searchData=
   ['solveblockvisitor',['SolveBlockVisitor',['../classnmodl_1_1visitor_1_1_solve_block_visitor.html#a04cbc7d148a0e6a768d06c9c23d91223',1,'nmodl::visitor::SolveBlockVisitor']]],
   ['sort_5fwith_5fmod2c_5fsymbol_5forder',['sort_with_mod2c_symbol_order',['../classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a111b9a0b6fbbb0b4496f7d1c3897035a',1,'nmodl::codegen::CodegenHelperVisitor']]],
   ['sp2uint32',['sp2uint32',['../namespacenmodl_1_1fast__math.html#ae828e426613260ea759a99fa82cc557c',1,'nmodl::fast_math::sp2uint32()'],['../fast__math_8ispc.html#a66d1d271d2e023a812bf8417d69a5c5c',1,'sp2uint32():&#160;fast_math.ispc']]],
+  ['sparse_5fsolver_5fexists',['sparse_solver_exists',['../namespacenmodl.html#a21160c42746b7846b552e45572d8e083',1,'nmodl']]],
   ['spfloor',['spfloor',['../fast__math_8ispc.html#a764e7d6293a6b079335e147c126dab3e',1,'fast_math.ispc']]],
   ['split_5fstring',['split_string',['../group__utils.html#gab27701783c8231e8a759a2ce717dfc8b',1,'nmodl::stringutils']]],
   ['start_5fblock',['start_block',['../classnmodl_1_1printer_1_1_code_printer.html#a1113dc8a5738c4c284cd996fbe5904ca',1,'nmodl::printer::CodePrinter::start_block()'],['../classnmodl_1_1printer_1_1_code_printer.html#a639b3334a258eb9f98694104017086b3',1,'nmodl::printer::CodePrinter::start_block(std::string &amp;&amp;)']]],

@@ -233,6 +233,8 @@ Functions</h2></td></tr>
 <tr class="memitem:a46adf69ad60da4329e7fa16b4c6df26b"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::shared_ptr&lt; <a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl.html#a46adf69ad60da4329e7fa16b4c6df26b">collect_nodes</a> (<a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &amp;node, const std::vector&lt; <a class="el" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033">ast::AstNodeType</a> &gt; &amp;types={})</td></tr>
 <tr class="memdesc:a46adf69ad60da4329e7fa16b4c6df26b"><td class="mdescLeft">&#160;</td><td class="mdescRight">traverse <em>node</em> recursively and collect nodes of given <em>types</em>  <a href="#a46adf69ad60da4329e7fa16b4c6df26b">More...</a><br /></td></tr>
 <tr class="separator:a46adf69ad60da4329e7fa16b4c6df26b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21160c42746b7846b552e45572d8e083"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl.html#a21160c42746b7846b552e45572d8e083">sparse_solver_exists</a> (const <a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &amp;node)</td></tr>
+<tr class="separator:a21160c42746b7846b552e45572d8e083"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a60f3383905bcc82c616483bc5c9f8c21"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl.html#a60f3383905bcc82c616483bc5c9f8c21">to_nmodl</a> (const <a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &amp;node, const std::set&lt; <a class="el" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033">ast::AstNodeType</a> &gt; &amp;exclude_types={})</td></tr>
 <tr class="memdesc:a60f3383905bcc82c616483bc5c9f8c21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given AST node, return the NMODL string representation.  <a href="#a60f3383905bcc82c616483bc5c9f8c21">More...</a><br /></td></tr>
 <tr class="separator:a60f3383905bcc82c616483bc5c9f8c21"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -775,6 +777,26 @@ Variables</h2></td></tr>
 
 </div>
 </div>
+<a id="a21160c42746b7846b552e45572d8e083"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a21160c42746b7846b552e45572d8e083">&#9670;&nbsp;</a></span>sparse_solver_exists()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool nmodl::sparse_solver_exists </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &amp;&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00209">209</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+
+</div>
+</div>
 <a id="a1cf829797d75f00f7307a89776d9d735"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1cf829797d75f00f7307a89776d9d735">&#9670;&nbsp;</a></span>statement_dependencies()</h2>
 
@@ -804,7 +826,7 @@ Variables</h2></td></tr>
 <p>If <code>lhs</code> and <code>rhs</code> combined represent an assignment (we assume to have an "=" in between them) we extract the variables on which the assigned variable depends on. </p>
 <p>We provide the input with lhs and rhs because there are a few nodes that have this similar structure but slightly different naming (binaryExpression, diff_eq_expression, linExpression) </p>
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00228">228</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00239">239</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -888,7 +910,7 @@ Variables</h2></td></tr>
 
 <p>Given AST node, return the JSON string representation. </p>
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00217">217</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00228">228</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -922,7 +944,7 @@ template&lt;typename T &gt; </div>
 
 <p>Given a shared pointer to an AST node, return the NMODL string representation. </p>
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8hpp_source.html#l00105">105</a> of file <a class="el" href="visitor__utils_8hpp_source.html">visitor_utils.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8hpp_source.html#l00107">107</a> of file <a class="el" href="visitor__utils_8hpp_source.html">visitor_utils.hpp</a>.</p>
 
 </div>
 </div>
@@ -954,7 +976,7 @@ template&lt;typename T &gt; </div>
 
 <p>Given AST node, return the NMODL string representation. </p>
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00209">209</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00220">220</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
