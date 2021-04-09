@@ -321,7 +321,7 @@ SCENARIO("Simple scalar kernel", "[llvm][runner]") {
         initialise_instance_variable(instance_info, x, "x");
         initialise_instance_variable(instance_info, x0, "x0");
         initialise_instance_variable(instance_info, x1, "x1");
-        
+
         // Set up the JIT runner.
         std::unique_ptr<llvm::Module> module = llvm_visitor.get_module();
         Runner runner(std::move(module));

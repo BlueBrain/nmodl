@@ -331,8 +331,8 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     }
 
     /**
-     * For the given kernel function, wraps it into another function that uses void* to pass the data to the kernel
-     * \param kernel_name kernel name to be wrapped
+     * For the given kernel function, wraps it into another function that uses void* to pass the
+     * data to the kernel \param kernel_name kernel name to be wrapped
      */
     void wrap_kernel_function(const std::string& kernel_name);
 };
