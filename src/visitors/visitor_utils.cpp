@@ -209,10 +209,10 @@ std::vector<std::shared_ptr<ast::Ast>> collect_nodes(ast::Ast& node,
 bool sparse_solver_exists(const ast::Ast& node) {
     const auto solve_blocks = collect_nodes(node, {ast::AstNodeType::SOLVE_BLOCK});
     for (const auto& solve_block: solve_blocks) {
-        if (dynamic_cast<const ast::SolveBlock*>(solve_block.get())
-                ->get_method()
-                ->get_node_name() == "sparse")
+        const auto& method = dynamic_cast<const ast::SolveBlock*>(solve_block.get())->get_method();
+        if (method && method->get_node_name() == "sparse") {
             return true;
+        }
     }
     return false;
 }
