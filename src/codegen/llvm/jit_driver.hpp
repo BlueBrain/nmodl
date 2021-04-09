@@ -39,15 +39,27 @@ class JITDriver {
     /// Initialize the JIT.
     void init();
 
-    /// Lookup the entry-point in the JIT and execute it, returning the result.
-    template <typename T>
-    T execute(const std::string& entry_point) {
+    /// Lookup the entry-point without arguments in the JIT and execute it, returning the result.
+    template <typename ReturnType>
+    ReturnType execute_without_arguments(const std::string& entry_point) {
         auto expected_symbol = jit->lookup(entry_point);
         if (!expected_symbol)
             throw std::runtime_error("Error: entry-point symbol not found in JIT\n");
 
-        auto (*res)() = (T(*)())(intptr_t) expected_symbol->getAddress();
-        T result = res();
+        auto (*res)() = (ReturnType(*)())(intptr_t) expected_symbol->getAddress();
+        ReturnType result = res();
+        return result;
+    }
+
+    /// Lookup the entry-point with an argument in the JIT and execute it, returning the result.
+    template <typename ReturnType, typename ArgType>
+    ReturnType execute_with_arguments(const std::string& entry_point, ArgType arg) {
+        auto expected_symbol = jit->lookup(entry_point);
+        if (!expected_symbol)
+            throw std::runtime_error("Error: entry-point symbol not found in JIT\n");
+
+        auto (*res)(ArgType) = (ReturnType(*)(ArgType))(intptr_t) expected_symbol->getAddress();
+        ReturnType result = res(arg);
         return result;
     }
 
@@ -71,10 +83,16 @@ class Runner {
         driver->init();
     }
 
-    /// Run the entry-point function.
-    template <typename T>
-    double run(const std::string& entry_point) {
-        return driver->execute<T>(entry_point);
+    /// Run the entry-point function without arguments.
+    template <typename ReturnType>
+    ReturnType run_without_arguments(const std::string& entry_point) {
+        return driver->template execute_without_arguments<ReturnType>(entry_point);
+    }
+
+    /// Run the entry-point function with a pointer to the data as an argument.
+    template <typename ReturnType, typename ArgType>
+    ReturnType run_with_argument(const std::string& entry_point, ArgType arg) {
+        return driver->template execute_with_arguments<ReturnType, ArgType>(entry_point, arg);
     }
 };
 

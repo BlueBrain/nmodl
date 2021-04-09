@@ -6,13 +6,15 @@
  *************************************************************************/
 
 #include <catch/catch.hpp>
-#include <regex>
 
 #include "ast/program.hpp"
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
 #include "codegen/llvm/jit_driver.hpp"
+#include "codegen_data_helper.hpp"
 #include "parser/nmodl_driver.hpp"
 #include "visitors/checkparent_visitor.hpp"
+#include "visitors/neuron_solve_visitor.hpp"
+#include "visitors/solve_block_visitor.hpp"
 #include "visitors/symtab_visitor.hpp"
 
 using namespace nmodl;
@@ -23,7 +25,43 @@ using nmodl::parser::NmodlDriver;
 static double EPSILON = 1e-15;
 
 //=============================================================================
-// No optimisations
+// Utilities for testing.
+//=============================================================================
+
+struct InstanceTestInfo {
+    codegen::CodegenInstanceData& instance;
+    codegen::CodegenLLVMVisitor& visitor;
+    int num_elements;
+};
+
+template <typename T>
+bool check_instance_variable(InstanceTestInfo& instance_info,
+                             std::vector<T>& expected,
+                             const std::string& variable_name) {
+    std::vector<T> actual;
+    int variable_index = instance_info.visitor.get_instance_var_helper().get_variable_index(
+        variable_name);
+    actual.assign(static_cast<T*>(instance_info.instance.members[variable_index]),
+                  static_cast<T*>(instance_info.instance.members[variable_index]) +
+                      instance_info.num_elements);
+    // While we are comparing double types as well, for simplicity the test cases are hand-crafted
+    // so that no floating-point arithmetic is really involved.
+    return actual == expected;
+}
+
+template <typename T>
+void initialise_instance_variable(InstanceTestInfo& instance_info,
+                                  std::vector<T>& data,
+                                  const std::string& variable_name) {
+    int variable_index = instance_info.visitor.get_instance_var_helper().get_variable_index(
+        variable_name);
+    T* data_start = static_cast<T*>(instance_info.instance.members[variable_index]);
+    for (int i = 0; i < instance_info.num_elements; ++i)
+        *(data_start + i) = data[i];
+}
+
+//=============================================================================
+// Simple functions: no optimisations
 //=============================================================================
 
 SCENARIO("Arithmetic expression", "[llvm][runner]") {
@@ -60,6 +98,10 @@ SCENARIO("Arithmetic expression", "[llvm][runner]") {
 
             PROCEDURE foo() {}
 
+            FUNCTION with_argument(x) {
+                with_argument = x
+            }
+
             FUNCTION loop() {
                 LOCAL i, j, sum, result
                 result = 0
@@ -92,26 +134,31 @@ SCENARIO("Arithmetic expression", "[llvm][runner]") {
         Runner runner(std::move(m));
 
         THEN("functions are evaluated correctly") {
-            auto exp_result = runner.run<double>("exponential");
+            auto exp_result = runner.run_without_arguments<double>("exponential");
             REQUIRE(fabs(exp_result - 2.718281828459045) < EPSILON);
 
-            auto constant_result = runner.run<double>("constant");
+            auto constant_result = runner.run_without_arguments<double>("constant");
             REQUIRE(fabs(constant_result - 10.0) < EPSILON);
 
-            auto arithmetic_result = runner.run<double>("arithmetic");
+            auto arithmetic_result = runner.run_without_arguments<double>("arithmetic");
             REQUIRE(fabs(arithmetic_result - 2.1) < EPSILON);
 
-            auto function_call_result = runner.run<double>("function_call");
+            auto function_call_result = runner.run_without_arguments<double>("function_call");
             REQUIRE(fabs(function_call_result - 1.0) < EPSILON);
 
-            auto loop_result = runner.run<double>("loop");
+            double data = 10.0;
+            auto with_argument_result = runner.run_with_argument<double, double>("with_argument",
+                                                                                 data);
+            REQUIRE(fabs(with_argument_result - 10.0) < EPSILON);
+
+            auto loop_result = runner.run_without_arguments<double>("loop");
             REQUIRE(fabs(loop_result - 90.0) < EPSILON);
         }
     }
 }
 
 //=============================================================================
-// With optimisations
+// Simple functions: with optimisations
 //=============================================================================
 
 SCENARIO("Optimised arithmetic expression", "[llvm][runner]") {
@@ -189,23 +236,101 @@ SCENARIO("Optimised arithmetic expression", "[llvm][runner]") {
 
         THEN("optimizations preserve function results") {
             // Check exponential is turned into a constant.
-            auto exp_result = runner.run<double>("exponential");
+            auto exp_result = runner.run_without_arguments<double>("exponential");
             REQUIRE(fabs(exp_result - 2.718281828459045) < EPSILON);
 
             // Check constant folding.
-            auto constant_result = runner.run<double>("constant");
+            auto constant_result = runner.run_without_arguments<double>("constant");
             REQUIRE(fabs(constant_result - 10.0) < EPSILON);
 
             // Check nested conditionals
-            auto conditionals_result = runner.run<double>("conditionals");
+            auto conditionals_result = runner.run_without_arguments<double>("conditionals");
             REQUIRE(fabs(conditionals_result - 4.0) < EPSILON);
 
             // Check constant folding.
-            auto arithmetic_result = runner.run<double>("arithmetic");
+            auto arithmetic_result = runner.run_without_arguments<double>("arithmetic");
             REQUIRE(fabs(arithmetic_result - 2.1) < EPSILON);
 
-            auto function_call_result = runner.run<double>("function_call");
+            auto function_call_result = runner.run_without_arguments<double>("function_call");
             REQUIRE(fabs(function_call_result - 1.0) < EPSILON);
+        }
+    }
+}
+
+//=============================================================================
+// State scalar kernel.
+//=============================================================================
+
+SCENARIO("Simple scalar kernel", "[llvm][runner]") {
+    GIVEN("Simple MOD file with a state update") {
+        std::string nmodl_text = R"(
+            NEURON {
+                SUFFIX test
+                NONSPECIFIC_CURRENT i
+                RANGE x0, x1
+            }
+
+            STATE {
+                x
+            }
+
+            ASSIGNED {
+                v
+                x0
+                x1
+            }
+
+            BREAKPOINT {
+                SOLVE states METHOD cnexp
+                i = 0
+            }
+
+            DERIVATIVE states {
+                x = (x0 - x) / x1
+            }
+        )";
+
+
+        NmodlDriver driver;
+        const auto& ast = driver.parse_string(nmodl_text);
+
+        // Run passes on the AST to generate LLVM.
+        SymtabVisitor().visit_program(*ast);
+        NeuronSolveVisitor().visit_program(*ast);
+        SolveBlockVisitor().visit_program(*ast);
+        codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"unknown",
+                                                 /*output_dir=*/".",
+                                                 /*opt_passes=*/false,
+                                                 /*use_single_precision=*/false,
+                                                 /*vector_width=*/1);
+        llvm_visitor.visit_program(*ast);
+        llvm_visitor.wrap_kernel_function("nrn_state_test");
+
+        // Create the instance struct data.
+        int num_elements = 4;
+        const auto& generated_instance_struct = llvm_visitor.get_instance_struct_ptr();
+        auto codegen_data = codegen::CodegenDataHelper(ast, generated_instance_struct);
+        auto instance_data = codegen_data.create_data(num_elements, /*seed=*/1);
+
+        // Fill the instance struct data with some values.
+        std::vector<double> x = {1.0, 2.0, 3.0, 4.0};
+        std::vector<double> x0 = {5.0, 5.0, 5.0, 5.0};
+        std::vector<double> x1 = {1.0, 1.0, 1.0, 1.0};
+
+        InstanceTestInfo instance_info{instance_data, llvm_visitor, num_elements};
+        initialise_instance_variable(instance_info, x, "x");
+        initialise_instance_variable(instance_info, x0, "x0");
+        initialise_instance_variable(instance_info, x1, "x1");
+
+        // Set up the JIT runner.
+        std::unique_ptr<llvm::Module> module = llvm_visitor.get_module();
+        Runner runner(std::move(module));
+
+        THEN("Values in struct have changed according to the formula") {
+            runner.run_with_argument<int, void*>("__nrn_state_test_wrapper",
+                                                 instance_data.base_ptr);
+            std::vector<double> x_expected = {4.0, 3.0, 2.0, 1.0};
+            REQUIRE(check_instance_variable(instance_info, x_expected, "x"));
         }
     }
 }
