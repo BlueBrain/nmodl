@@ -67,7 +67,7 @@ int main(int argc, const char* argv[]) {
     Runner runner(std::move(module));
 
     // Since only double type is supported, provide explicit double type to the running function.
-    auto r = runner.run<double>(entry_point_name);
+    auto r = runner.run_without_arguments<double>(entry_point_name);
     fprintf(stderr, "Result: %f\n", r);
 
     return 0;

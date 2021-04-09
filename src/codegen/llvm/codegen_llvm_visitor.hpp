@@ -238,6 +238,14 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     void emit_procedure_or_function_declaration(const ast::CodegenFunction& node);
 
     /**
+     * Return InstanceVarHelper
+     * \return InstanceVarHelper
+     */
+    InstanceVarHelper get_instance_var_helper() {
+        return instance_var_helper;
+    }
+
+    /**
      * Return module pointer
      * \return LLVM IR module pointer
      */
@@ -321,6 +329,12 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
         os.flush();
         return str;
     }
+
+    /**
+     * For the given kernel function, wraps it into another function that uses void* to pass the
+     * data to the kernel \param kernel_name kernel name to be wrapped
+     */
+    void wrap_kernel_function(const std::string& kernel_name);
 };
 
 /** \} */  // end of llvm_backends
