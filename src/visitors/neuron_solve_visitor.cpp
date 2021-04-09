@@ -88,8 +88,6 @@ void NeuronSolveVisitor::visit_binary_expression(ast::BinaryExpression& node) {
                 symbol->created_from_state();
                 program_symtab->insert(symbol);
             }
-        } else if (solve_method == codegen::naming::SPARSE_METHOD) {
-            logger->info("NeuronSolveVisitor :: solver method 'sparse' is handled by sympy");
         } else {
             logger->error("NeuronSolveVisitor :: solver method '{}' not supported", solve_method);
         }
