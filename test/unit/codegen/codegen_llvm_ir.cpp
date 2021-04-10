@@ -902,6 +902,61 @@ SCENARIO("Scalar state kernel", "[visitor][llvm]") {
 }
 
 //=============================================================================
+// Gather for vectorised kernel
+//=============================================================================
+
+SCENARIO("Vectorised simple kernel", "[visitor][llvm]") {
+    GIVEN("An indirect indexing of voltage") {
+        std::string nmodl_text = R"(
+            NEURON {
+                SUFFIX hh
+                NONSPECIFIC_CURRENT i
+            }
+
+            STATE {}
+
+            ASSIGNED {
+                v (mV)
+            }
+
+            BREAKPOINT {
+                SOLVE states METHOD cnexp
+                i = 2
+            }
+
+            DERIVATIVE states {}
+        )";
+
+        THEN("a gather instructions is created") {
+            std::string module_string = run_llvm_visitor(nmodl_text,
+                                                         /*opt=*/false,
+                                                         /*use_single_precision=*/false,
+                                                         /*vector_width=*/4);
+            std::smatch m;
+
+            // Check gather intrinsic is correctly declared.
+            std::regex declaration(
+                R"(declare <4 x double> @llvm\.masked\.gather\.v4f64\.v4p0f64\(<4 x double\*>, i32 immarg, <4 x i1>, <4 x double>\) )");
+            REQUIRE(std::regex_search(module_string, m, declaration));
+
+            // Check that the indices vector is created correctly and extended to i64.
+            std::regex index_load(R"(load <4 x i32>, <4 x i32>\* %node_id)");
+            std::regex sext(R"(sext <4 x i32> %.* to <4 x i64>)");
+            REQUIRE(std::regex_search(module_string, m, index_load));
+            REQUIRE(std::regex_search(module_string, m, sext));
+
+            // Check that the access to `voltage` is performed via gather instruction.
+            //      v = mech->voltage[node_id]
+            std::regex gather(
+                "call <4 x double> @llvm\\.masked\\.gather\\.v4f64\\.v4p0f64\\("
+                "<4 x double\\*> %.*, i32 1, <4 x i1> <i1 true, i1 true, i1 true, i1 true>, <4 x "
+                "double> undef\\)");
+            REQUIRE(std::regex_search(module_string, m, gather));
+        }
+    }
+}
+
+//=============================================================================
 // Derivative block : test optimization
 //=============================================================================
 

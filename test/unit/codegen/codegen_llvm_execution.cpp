@@ -30,8 +30,8 @@ static double EPSILON = 1e-15;
 //=============================================================================
 
 struct InstanceTestInfo {
-    codegen::CodegenInstanceData& instance;
-    codegen::CodegenLLVMVisitor& visitor;
+    codegen::CodegenInstanceData* instance;
+    codegen::InstanceVarHelper helper;
     int num_elements;
 };
 
@@ -40,11 +40,11 @@ bool check_instance_variable(InstanceTestInfo& instance_info,
                              std::vector<T>& expected,
                              const std::string& variable_name) {
     std::vector<T> actual;
-    int variable_index = instance_info.visitor.get_instance_var_helper().get_variable_index(
-        variable_name);
-    actual.assign(static_cast<T*>(instance_info.instance.members[variable_index]),
-                  static_cast<T*>(instance_info.instance.members[variable_index]) +
+    int variable_index = instance_info.helper.get_variable_index(variable_name);
+    actual.assign(static_cast<T*>(instance_info.instance->members[variable_index]),
+                  static_cast<T*>(instance_info.instance->members[variable_index]) +
                       instance_info.num_elements);
+
     // While we are comparing double types as well, for simplicity the test cases are hand-crafted
     // so that no floating-point arithmetic is really involved.
     return actual == expected;
@@ -54,9 +54,8 @@ template <typename T>
 void initialise_instance_variable(InstanceTestInfo& instance_info,
                                   std::vector<T>& data,
                                   const std::string& variable_name) {
-    int variable_index = instance_info.visitor.get_instance_var_helper().get_variable_index(
-        variable_name);
-    T* data_start = static_cast<T*>(instance_info.instance.members[variable_index]);
+    int variable_index = instance_info.helper.get_variable_index(variable_name);
+    T* data_start = static_cast<T*>(instance_info.instance->members[variable_index]);
     for (int i = 0; i < instance_info.num_elements; ++i)
         *(data_start + i) = data[i];
 }
@@ -318,7 +317,9 @@ SCENARIO("Simple scalar kernel", "[llvm][runner]") {
         std::vector<double> x0 = {5.0, 5.0, 5.0, 5.0};
         std::vector<double> x1 = {1.0, 1.0, 1.0, 1.0};
 
-        InstanceTestInfo instance_info{instance_data, llvm_visitor, num_elements};
+        InstanceTestInfo instance_info{&instance_data,
+                                       llvm_visitor.get_instance_var_helper(),
+                                       num_elements};
         initialise_instance_variable(instance_info, x, "x");
         initialise_instance_variable(instance_info, x0, "x0");
         initialise_instance_variable(instance_info, x1, "x1");
@@ -332,6 +333,88 @@ SCENARIO("Simple scalar kernel", "[llvm][runner]") {
                                                  instance_data.base_ptr);
             std::vector<double> x_expected = {4.0, 3.0, 2.0, 1.0};
             REQUIRE(check_instance_variable(instance_info, x_expected, "x"));
+        }
+    }
+}
+
+//=============================================================================
+// State vectorised kernel with optimisations on.
+//=============================================================================
+
+SCENARIO("Simple vectorised kernel", "[llvm][runner]") {
+    GIVEN("Simple MOD file with a state update") {
+        std::string nmodl_text = R"(
+            NEURON {
+                SUFFIX test
+                NONSPECIFIC_CURRENT i
+                RANGE x0, x1
+            }
+
+            STATE {
+                x
+            }
+
+            ASSIGNED {
+                v
+                x0
+                x1
+            }
+
+            BREAKPOINT {
+                SOLVE states METHOD cnexp
+                i = 0
+            }
+
+            DERIVATIVE states {
+                x = (x0 - x) / x1
+            }
+        )";
+
+
+        NmodlDriver driver;
+        const auto& ast = driver.parse_string(nmodl_text);
+
+        // Run passes on the AST to generate LLVM.
+        SymtabVisitor().visit_program(*ast);
+        NeuronSolveVisitor().visit_program(*ast);
+        SolveBlockVisitor().visit_program(*ast);
+        codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"unknown",
+                                                 /*output_dir=*/".",
+                                                 /*opt_passes=*/true,
+                                                 /*use_single_precision=*/false,
+                                                 /*vector_width=*/4);
+        llvm_visitor.visit_program(*ast);
+        llvm_visitor.wrap_kernel_function("nrn_state_test");
+
+        // Create the instance struct data.
+        int num_elements = 10;
+        const auto& generated_instance_struct = llvm_visitor.get_instance_struct_ptr();
+        auto codegen_data = codegen::CodegenDataHelper(ast, generated_instance_struct);
+        auto instance_data = codegen_data.create_data(num_elements, /*seed=*/1);
+
+        // Fill the instance struct data with some values for unit testing.
+        std::vector<double> x = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0};
+        std::vector<double> x0 = {11.0, 11.0, 11.0, 11.0, 11.0, 11.0, 11.0, 11.0, 11.0, 11.0};
+        std::vector<double> x1 = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
+
+        InstanceTestInfo instance_info{&instance_data,
+                                       llvm_visitor.get_instance_var_helper(),
+                                       num_elements};
+        initialise_instance_variable<double>(instance_info, x, "x");
+        initialise_instance_variable<double>(instance_info, x0, "x0");
+        initialise_instance_variable<double>(instance_info, x1, "x1");
+
+        // Set up the JIT runner.
+        std::unique_ptr<llvm::Module> module = llvm_visitor.get_module();
+        Runner runner(std::move(module));
+
+        THEN("Values in struct have changed according to the formula") {
+            runner.run_with_argument<int, void*>("__nrn_state_test_wrapper",
+                                                 instance_data.base_ptr);
+            std::vector<double> x_expected = {10.0, 9.0, 8.0, 7.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0};
+
+            // Check that the main and remainder loops correctly change the data stored in x.
+            REQUIRE(check_instance_variable<double>(instance_info, x_expected, "x"));
         }
     }
 }
