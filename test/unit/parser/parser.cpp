@@ -288,8 +288,7 @@ SCENARIO("NEURON block can add RANDOM variable", "[parser][random]") {
             )";
             nmodl::parser::NmodlDriver driver;
             auto ast = driver.parse_string(construct);
-            nmodl::visitor::CheckRandomStatementVisitor().visit_program(
-                static_cast<const nmodl::ast::Program&>(*ast));
+            nmodl::visitor::CheckRandomStatementVisitor().visit_program(*ast);
             const auto& random_statements = nmodl::collect_nodes(*ast, {nmodl::ast::AstNodeType::RANDOM});
 
             REQUIRE(random_statements.size() == 1);

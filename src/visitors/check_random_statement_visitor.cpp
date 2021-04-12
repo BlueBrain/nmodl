@@ -27,13 +27,14 @@ void CheckRandomStatementVisitor::visit_program(const ast::Program& node) {
 
 
 void CheckRandomStatementVisitor::visit_random(const ast::Random& node) {
-    //logger->info(to_nmodl(node));
+    logger->info(to_nmodl(node));
     auto& distribution = node.get_distribution();
     auto distribution_name = distribution->get_node_name();
     auto& params = node.get_distribution_params();
     if (distributions.find(distribution_name) != distributions.end()) {
         if (distributions.at(distribution_name) != params.size()) {
-            throw std::logic_error("Validation Error: {} declared with {} instead of {} parameters"_format(params.size(), distributions[distribution_name]));
+            throw std::logic_error("Validation Error: {} declared with {} instead of {} parameters"_format(distribution_name, params.size()
+                                                                                                               , distributions.at(distribution_name)));
         }
     } else {
         throw std::logic_error("Validation Error: distribution {} unknown"_format(distribution_name));

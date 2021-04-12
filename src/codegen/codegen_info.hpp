@@ -9,7 +9,7 @@
 
 /**
  * \file
- * \brief Variour types to store code generation specific information
+ * \brief Various types to store code generation specific information
  */
 
 #include <string>
@@ -136,6 +136,20 @@ struct IndexSemantics {
         : index(index)
         , name(name)
         , size(size) {}
+};
+
+/**
+ * \class Distribution
+ * \brief Represents a probability distribution function from which a random variable samples
+ */
+struct Distribution {
+    std::string name;
+    ast::ExpressionVector parameters;
+
+    Distribution() = delete;
+    Distribution(std::string name, const ast::ExpressionVector& params)
+        : name(name)
+        , parameters(params) {}
 };
 
 
@@ -382,6 +396,8 @@ struct CodegenInfo {
 
     /// unique functor names for all the \c EigenNewtonSolverBlock s
     std::unordered_map<const ast::EigenNewtonSolverBlock*, std::string> functor_names;
+    /// random variables and their probability distribution functions
+    std::map<SymbolType, Distribution> random_vars;
 
     /// true if eigen newton solver is used
     bool eigen_newton_solver_exist = false;
