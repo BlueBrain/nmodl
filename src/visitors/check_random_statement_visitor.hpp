@@ -25,7 +25,7 @@ namespace visitor {
  * \{
  */
 
-class CheckRandomStatementVisitor: protected ConstAstVisitor  {
+class CheckRandomStatementVisitor: protected ConstAstVisitor {
   private:
     void visit_random(const ast::Random& node) override;
 
@@ -45,5 +45,5 @@ class CheckRandomStatementVisitor: protected ConstAstVisitor  {
  * \}
  */
 
-} // namespace visitor
-} // namespace nmodl
+}  // namespace visitor
+}  // namespace nmodl

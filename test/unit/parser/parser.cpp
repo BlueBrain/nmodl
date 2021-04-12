@@ -289,11 +289,16 @@ SCENARIO("NEURON block can add RANDOM variable", "[parser][random]") {
             nmodl::parser::NmodlDriver driver;
             auto ast = driver.parse_string(construct);
             nmodl::visitor::CheckRandomStatementVisitor().visit_program(*ast);
-            const auto& random_statements = nmodl::collect_nodes(*ast, {nmodl::ast::AstNodeType::RANDOM});
+            const auto& random_statements = nmodl::collect_nodes(*ast,
+                                                                 {nmodl::ast::AstNodeType::RANDOM});
 
             REQUIRE(random_statements.size() == 1);
-            REQUIRE(static_cast<nmodl::ast::Random*>(random_statements[0].get())->get_distribution()->get_node_name() == "UNIFORM");
-            REQUIRE(static_cast<nmodl::ast::Random*>(random_statements[0].get())->get_distribution_params().size() == 2);
+            REQUIRE(static_cast<nmodl::ast::Random*>(random_statements[0].get())
+                        ->get_distribution()
+                        ->get_node_name() == "UNIFORM");
+            REQUIRE(static_cast<nmodl::ast::Random*>(random_statements[0].get())
+                        ->get_distribution_params()
+                        .size() == 2);
         }
     }
     GIVEN("Incomplete RANDOM variable declaration") {
@@ -312,7 +317,7 @@ SCENARIO("NEURON block can add RANDOM variable", "[parser][random]") {
             nmodl::parser::NmodlDriver driver;
             auto ast = driver.parse_string(construct);
             REQUIRE_THROWS_WITH(nmodl::visitor::CheckRandomStatementVisitor().visit_program(
-                static_cast<const nmodl::ast::Program&>(*ast)),
+                                    static_cast<const nmodl::ast::Program&>(*ast)),
                                 Catch::Contains("Validation Error"));
         }
     }

@@ -774,12 +774,13 @@ void CodegenHelperVisitor::visit_after_block(const ast::AfterBlock& node) {
     info.before_after_blocks.push_back(&node);
 }
 
-void CodegenHelperVisitor::visit_random(const ast::Random& node)  {
-   auto pdf = Distribution(node.get_distribution()->get_node_name(), node.get_distribution_params());
-   for (const auto& r : node.get_variables()) {
-       auto sym = psymtab->lookup(r->get_node_name());
-       info.random_vars.emplace(sym, pdf);
-   }
+void CodegenHelperVisitor::visit_random(const ast::Random& node) {
+    auto pdf = Distribution(node.get_distribution()->get_node_name(),
+                            node.get_distribution_params());
+    for (const auto& r: node.get_variables()) {
+        auto sym = psymtab->lookup(r->get_node_name());
+        info.random_vars.emplace(sym, pdf);
+    }
 }
 
 }  // namespace codegen

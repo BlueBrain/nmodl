@@ -33,11 +33,13 @@ void CheckRandomStatementVisitor::visit_random(const ast::Random& node) {
     auto& params = node.get_distribution_params();
     if (distributions.find(distribution_name) != distributions.end()) {
         if (distributions.at(distribution_name) != params.size()) {
-            throw std::logic_error("Validation Error: {} declared with {} instead of {} parameters"_format(distribution_name, params.size()
-                                                                                                               , distributions.at(distribution_name)));
+            throw std::logic_error(
+                "Validation Error: {} declared with {} instead of {} parameters"_format(
+                    distribution_name, params.size(), distributions.at(distribution_name)));
         }
     } else {
-        throw std::logic_error("Validation Error: distribution {} unknown"_format(distribution_name));
+        throw std::logic_error(
+            "Validation Error: distribution {} unknown"_format(distribution_name));
     }
 }
 
