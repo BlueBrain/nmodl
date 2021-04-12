@@ -45,7 +45,7 @@ codegen::CodegenInstanceData generate_instance_data(const std::string& text,
                                              use_single_precision,
                                              vector_width);
     llvm_visitor.visit_program(*ast);
-    llvm_visitor.print_module();
+    llvm_visitor.dump_module();
     const auto& generated_instance_struct = llvm_visitor.get_instance_struct_ptr();
     auto codegen_data = codegen::CodegenDataHelper(ast, generated_instance_struct);
     auto instance_data = codegen_data.create_data(num_elements, seed);
