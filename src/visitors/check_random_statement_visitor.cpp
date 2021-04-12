@@ -28,7 +28,7 @@ void CheckRandomStatementVisitor::visit_program(const ast::Program& node) {
 
 void CheckRandomStatementVisitor::visit_random(const ast::Random& node) {
     logger->info(to_nmodl(node));
-    auto distribution = node.get_distribution();
+    auto& distribution = node.get_distribution();
     auto distribution_name = distribution->get_node_name();
     auto& params = node.get_distribution_params();
     if (distributions.find(distribution_name) != distributions.end()) {
