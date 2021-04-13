@@ -96,6 +96,9 @@ target_link_libraries(
 
 if(NMODL_ENABLE_LLVM)
   include_directories(${LLVM_INCLUDE_DIRS} codegen)
+
+  add_library(llvm_benchmark STATIC codegen/codegen_data_helper.cpp)
+
   add_executable(testllvm visitor/main.cpp codegen/codegen_llvm_ir.cpp
                           codegen/codegen_data_helper.cpp codegen/codegen_llvm_instance_struct.cpp)
   add_executable(test_llvm_runner visitor/main.cpp codegen/codegen_data_helper.cpp

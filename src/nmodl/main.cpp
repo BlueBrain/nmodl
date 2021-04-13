@@ -623,7 +623,7 @@ int main(int argc, const char* argv[]) {
                 benchmark::LLVMInfo info{llvm_vec_width, llvm_opt_passes, llvm_float_type};
                 benchmark::LLVMBenchmark bench(
                     modfile, output_dir, info, repeat, instance_size, backend);
-                bench.benchmark(*ast);
+                bench.benchmark(ast);
             }
 
             else if (llvm_ir) {

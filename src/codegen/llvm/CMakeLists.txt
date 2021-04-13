@@ -31,6 +31,7 @@ if(NOT NMODL_AS_SUBPROJECT)
     nmodl_llvm_runner
     llvm_codegen
     codegen
+    llvm_benchmark
     visitor
     symtab
     lexer

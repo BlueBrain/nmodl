@@ -57,7 +57,7 @@ class LLVMBenchmark {
         , llvm_info(info) {}
 
     /// Runs the benchmark.
-    void benchmark(const ast::Program& node);
+    void benchmark(const std::shared_ptr<ast::Program>& node);
 };
 
 
