@@ -20,6 +20,7 @@
 
 #ifdef NMODL_LLVM_BACKEND
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
+#include "codegen/llvm/llvm_benchmark.hpp"
 #endif
 
 #include "config/config.h"
@@ -176,8 +177,20 @@ int main(int argc, const char* argv[]) {
     /// run llvm optimisation passes
     bool llvm_opt_passes(false);
 
-    /// llvm vector width;
+    /// llvm vector width
     int llvm_vec_width = 1;
+
+    /// run llvm benchmark
+    bool run_benchmark(false);
+
+    /// the size of the instance struct for the benchmark
+    int instance_size = 10000;
+
+    /// the number of experiments to run for the benchmarking
+    int repeat = 100;
+
+    /// specify the backend for LLVM IR to target
+    std::string backend = "default";
 #endif
 
     app.get_formatter()->column_width(40);
@@ -288,6 +301,8 @@ int main(int argc, const char* argv[]) {
         "Optimize copies of ion variables ({})"_format(optimize_ionvar_copies_codegen))->ignore_case();
 
 #ifdef NMODL_LLVM_BACKEND
+
+    // LLVM IR code generation options.
     auto llvm_opt = app.add_subcommand("llvm", "LLVM code generation option")->ignore_case();
     llvm_opt->add_flag("--ir",
         llvm_ir,
@@ -301,6 +316,21 @@ int main(int argc, const char* argv[]) {
     llvm_opt->add_option("--vector-width",
         llvm_vec_width,
         "LLVM explicit vectorisation width ({})"_format(llvm_vec_width))->ignore_case();
+
+    // LLVM IR benchmark options.
+    auto benchmark_opt = app.add_subcommand("benchmark", "LLVM benchmark option")->ignore_case();
+    benchmark_opt->add_flag("--run",
+                       run_benchmark,
+                       "Run LLVM benchmark ({})"_format(run_benchmark))->ignore_case();
+    benchmark_opt->add_option("--instance-size",
+                       instance_size,
+                       "Instance struct size ({})"_format(instance_size))->ignore_case();
+    benchmark_opt->add_option("--repeat",
+                       repeat,
+                       "Number of experiments for benchmarking ({})"_format(repeat))->ignore_case();
+    benchmark_opt->add_option("--backend",
+                       backend,
+                       "Target's backend ({})"_format(backend))->ignore_case()->check(CLI::IsMember({"default", "avx2"}));;
 #endif
     // clang-format on
 
@@ -587,7 +617,16 @@ int main(int argc, const char* argv[]) {
             }
 
 #ifdef NMODL_LLVM_BACKEND
-            if (llvm_ir) {
+
+            if (run_benchmark) {
+                logger->info("Running LLVM benchmark");
+                benchmark::LLVMInfo info{llvm_vec_width, llvm_opt_passes, llvm_float_type};
+                benchmark::LLVMBenchmark bench(
+                    modfile, output_dir, info, repeat, instance_size, backend);
+                bench.benchmark(*ast);
+            }
+
+            else if (llvm_ir) {
                 logger->info("Running LLVM backend code generator");
                 CodegenLLVMVisitor visitor(
                     modfile, output_dir, llvm_opt_passes, llvm_float_type, llvm_vec_width);
