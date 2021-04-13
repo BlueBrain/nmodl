@@ -50,7 +50,7 @@ std::string run_llvm_visitor(const std::string& text,
                                              use_single_precision,
                                              vector_width);
     llvm_visitor.visit_program(*ast);
-    return llvm_visitor.print_module();
+    return llvm_visitor.dump_module();
 }
 
 //=============================================================================

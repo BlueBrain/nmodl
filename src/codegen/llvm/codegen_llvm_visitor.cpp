@@ -9,13 +9,17 @@
 
 #include "ast/all.hpp"
 #include "visitors/rename_visitor.hpp"
+#include "visitors/visitor_utils.hpp"
 
+#include "llvm/IR/AssemblyAnnotationWriter.h"
 #include "llvm/IR/BasicBlock.h"
 #include "llvm/IR/Constants.h"
 #include "llvm/IR/Function.h"
 #include "llvm/IR/LLVMContext.h"
 #include "llvm/IR/Type.h"
 #include "llvm/IR/ValueSymbolTable.h"
+#include "llvm/Support/FileSystem.h"
+#include "llvm/Support/ToolOutputFile.h"
 
 namespace nmodl {
 namespace codegen {
@@ -28,10 +32,29 @@ static constexpr const char instance_struct_type_name[] = "__instance_var__type"
 /*                            Helper routines                                           */
 /****************************************************************************************/
 
+/// A utility to check for supported Statement AST nodes.
 static bool is_supported_statement(const ast::Statement& statement) {
     return statement.is_codegen_var_list_statement() || statement.is_expression_statement() ||
            statement.is_codegen_for_statement() || statement.is_codegen_return_statement() ||
            statement.is_if_statement() || statement.is_while_statement();
+}
+
+/// A utility to check of the kernel body can be vectorised.
+static bool can_vectorise(const ast::CodegenForStatement& statement, symtab::SymbolTable* sym_tab) {
+    // Check that function calls are made to external methods only.
+    const auto& function_calls = collect_nodes(statement, {ast::AstNodeType::FUNCTION_CALL});
+    for (const auto& call: function_calls) {
+        const auto& name = call->get_node_name();
+        auto symbol = sym_tab->lookup(name);
+        if (symbol && !symbol->has_any_property(symtab::syminfo::NmodlType::extern_method))
+            return false;
+    }
+
+    // Check there is no control flow in the kernel.
+    const std::vector<ast::AstNodeType> unsupported_nodes = {ast::AstNodeType::IF_STATEMENT};
+    const auto& collected = collect_nodes(statement, unsupported_nodes);
+
+    return collected.empty();
 }
 
 llvm::Value* CodegenLLVMVisitor::create_gep(const std::string& name, llvm::Value* index) {
@@ -582,9 +605,18 @@ void CodegenLLVMVisitor::visit_codegen_for_statement(const ast::CodegenForStatem
     llvm::BasicBlock* for_inc = llvm::BasicBlock::Create(*context, /*Name=*/"for.inc", func, next);
     llvm::BasicBlock* exit = llvm::BasicBlock::Create(*context, /*Name=*/"for.exit", func, next);
 
+    // Save the vector width.
+    int tmp_vector_width = vector_width;
+
+    // Check if the kernel can be vectorised. If not, generate scalar code.
+    if (!can_vectorise(node, sym_tab)) {
+        logger->info("Cannot vectorise the for loop in '" + current_func->getName().str() + "'");
+        logger->info("Generating scalar code...");
+        vector_width = 1;
+    }
+
     // First, initialise the loop in the same basic block. This block is optional. Also, reset
     // vector width to 1 if processing the remainder of the loop.
-    int tmp_vector_width = vector_width;
     if (node.get_initialization()) {
         node.get_initialization()->accept(*this);
     } else {
@@ -833,13 +865,33 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
         visit_codegen_function(*func);
     }
 
+    // Verify the generated LLVM IR module.
+    std::string error;
+    llvm::raw_string_ostream ostream(error);
+    if (verifyModule(*module, &ostream)) {
+        throw std::runtime_error("Error: incorrect IR has been generated!\n" + ostream.str());
+    }
+
     if (opt_passes) {
         logger->info("Running LLVM optimisation passes");
         run_llvm_opt_passes();
     }
 
-    // Keep this for easier development (maybe move to debug mode later).
-    std::cout << print_module();
+    // If the output directory is specified, save the IR to .ll file.
+    // \todo: Consider saving the generated LLVM IR to bytecode (.bc) file instead.
+    if (output_dir != ".") {
+        std::error_code error_code;
+        std::unique_ptr<llvm::ToolOutputFile> out = std::make_unique<llvm::ToolOutputFile>(
+            output_dir + "/" + mod_filename + ".ll", error_code, llvm::sys::fs::OF_Text);
+        if (error_code)
+            throw std::runtime_error("Error: " + error_code.message());
+
+        std::unique_ptr<llvm::AssemblyAnnotationWriter> annotator;
+        module->print(out->os(), annotator.get());
+        out->keep();
+    }
+
+    logger->debug("Dumping generated IR...\n" + dump_module());
 }
 
 void CodegenLLVMVisitor::visit_procedure_block(const ast::ProcedureBlock& node) {
