@@ -303,7 +303,7 @@ SCENARIO("Simple scalar kernel", "[llvm][runner]") {
                                                  /*use_single_precision=*/false,
                                                  /*vector_width=*/1);
         llvm_visitor.visit_program(*ast);
-        llvm_visitor.wrap_kernel_function("nrn_state_test");
+        llvm_visitor.wrap_kernel_functions();
 
         // Create the instance struct data.
         int num_elements = 4;
@@ -383,7 +383,7 @@ SCENARIO("Simple vectorised kernel", "[llvm][runner]") {
                                                  /*use_single_precision=*/false,
                                                  /*vector_width=*/4);
         llvm_visitor.visit_program(*ast);
-        llvm_visitor.wrap_kernel_function("nrn_state_test");
+        llvm_visitor.wrap_kernel_functions();
 
         // Create the instance struct data.
         int num_elements = 10;

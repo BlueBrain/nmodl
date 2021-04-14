@@ -958,40 +958,57 @@ void CodegenLLVMVisitor::visit_while_statement(const ast::WhileStatement& node) 
     builder.SetInsertPoint(exit);
 }
 
-void CodegenLLVMVisitor::wrap_kernel_function(const std::string& kernel_name) {
-    // Get the kernel function and the instance struct type.
-    auto kernel = module->getFunction(kernel_name);
-    if (!kernel)
-        throw std::runtime_error("Kernel " + kernel_name + " is not found!");
+void CodegenLLVMVisitor::find_kernel_names(std::vector<std::string>& container) {
+    // By convention, only the kernel functions return void type.
+    const auto& functions = module->getFunctionList();
+    for (const auto& func: functions) {
+        if (func.getReturnType()->isVoidTy()) {
+            container.push_back(func.getName().str());
+        }
+    }
+}
 
-    if (std::distance(kernel->args().begin(), kernel->args().end()) != 1)
-        throw std::runtime_error("Kernel " + kernel_name + " must have a single argument!");
+void CodegenLLVMVisitor::wrap_kernel_functions() {
+    // First, identify all kernels.
+    std::vector<std::string> kernel_names;
+    find_kernel_names(kernel_names);
 
-    auto instance_struct_ptr_type = llvm::dyn_cast<llvm::PointerType>(kernel->getArg(0)->getType());
-    if (!instance_struct_ptr_type)
-        throw std::runtime_error("Kernel " + kernel_name +
-                                 " does not have an instance struct pointer argument!");
+    for (const auto& kernel_name: kernel_names) {
+        // Get the kernel function and the instance struct type.
+        auto kernel = module->getFunction(kernel_name);
+        if (!kernel)
+            throw std::runtime_error("Kernel " + kernel_name + " is not found!");
 
-    // Create a wrapper void function that takes a void pointer as a single argument.
-    llvm::Type* void_type = llvm::Type::getVoidTy(*context);
-    llvm::Type* i32_type = llvm::Type::getInt32Ty(*context);
-    llvm::Type* void_ptr_type = llvm::PointerType::get(void_type, /*AddressSpace=*/0);
-    llvm::Function* wrapper_func = llvm::Function::Create(
-        llvm::FunctionType::get(i32_type, {void_ptr_type}, /*isVarArg=*/false),
-        llvm::Function::ExternalLinkage,
-        "__" + kernel_name + "_wrapper",
-        *module);
-    llvm::BasicBlock* body = llvm::BasicBlock::Create(*context, /*Name=*/"", wrapper_func);
-    builder.SetInsertPoint(body);
+        if (std::distance(kernel->args().begin(), kernel->args().end()) != 1)
+            throw std::runtime_error("Kernel " + kernel_name + " must have a single argument!");
 
-    // Proceed with bitcasting the void pointer to the struct pointer type, calling the kernel and
-    // adding a terminator.
-    llvm::Value* bitcasted = builder.CreateBitCast(wrapper_func->getArg(0),
-                                                   instance_struct_ptr_type);
-    std::vector<llvm::Value*> args;
-    args.push_back(bitcasted);
-    builder.CreateCall(kernel, args);
-    builder.CreateRet(llvm::ConstantInt::get(i32_type, 0));
+        auto instance_struct_ptr_type = llvm::dyn_cast<llvm::PointerType>(
+            kernel->getArg(0)->getType());
+        if (!instance_struct_ptr_type)
+            throw std::runtime_error("Kernel " + kernel_name +
+                                     " does not have an instance struct pointer argument!");
+
+        // Create a wrapper void function that takes a void pointer as a single argument.
+        llvm::Type* void_type = llvm::Type::getVoidTy(*context);
+        llvm::Type* i32_type = llvm::Type::getInt32Ty(*context);
+        llvm::Type* void_ptr_type = llvm::PointerType::get(void_type, /*AddressSpace=*/0);
+        llvm::Function* wrapper_func = llvm::Function::Create(
+            llvm::FunctionType::get(i32_type, {void_ptr_type}, /*isVarArg=*/false),
+            llvm::Function::ExternalLinkage,
+            "__" + kernel_name + "_wrapper",
+            *module);
+        llvm::BasicBlock* body = llvm::BasicBlock::Create(*context, /*Name=*/"", wrapper_func);
+        builder.SetInsertPoint(body);
+
+        // Proceed with bitcasting the void pointer to the struct pointer type, calling the kernel
+        // and adding a terminator.
+        llvm::Value* bitcasted = builder.CreateBitCast(wrapper_func->getArg(0),
+                                                       instance_struct_ptr_type);
+        std::vector<llvm::Value*> args;
+        args.push_back(bitcasted);
+        builder.CreateCall(kernel, args);
+        builder.CreateRet(llvm::ConstantInt::get(i32_type, 0));
+    }
 }
 
 }  // namespace codegen
