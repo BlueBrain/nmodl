@@ -16,7 +16,7 @@ namespace nmodl {
 namespace benchmark {
 
 /// A struct to hold LLVM visitor information.
-struct LLVMInfo {
+struct LLVMBuildInfo {
     int vector_width;
     bool opt_passes;
     bool use_single_precision;
@@ -40,12 +40,20 @@ class LLVMBenchmark {
 
     std::string backend;
 
-    LLVMInfo llvm_info;
+    LLVMBuildInfo llvm_build_info;
+
+    std::shared_ptr<std::ostream> log_stream;
+
+    /// Visits the AST to construct the LLVM IR module.
+    void generate_llvm(codegen::CodegenLLVMVisitor& visitor, const std::shared_ptr<ast::Program>& node);
+
+    /// Sets the log output stream (file or console).
+    void set_log_output();
 
   public:
     LLVMBenchmark(const std::string& mod_filename,
                   const std::string& output_dir,
-                  LLVMInfo info,
+                  LLVMBuildInfo info,
                   int num_experiments,
                   int instance_size,
                   const std::string& backend)
@@ -54,7 +62,7 @@ class LLVMBenchmark {
         , num_experiments(num_experiments)
         , instance_size(instance_size)
         , backend(backend)
-        , llvm_info(info) {}
+        , llvm_build_info(info) {}
 
     /// Runs the benchmark.
     void benchmark(const std::shared_ptr<ast::Program>& node);

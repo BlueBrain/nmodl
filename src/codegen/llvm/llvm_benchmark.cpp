@@ -12,36 +12,31 @@
 #include "../test/unit/codegen/codegen_data_helper.hpp"
 
 #include <chrono>
+#include <fstream>
 
 
 namespace nmodl {
 namespace benchmark {
 
+
+/// Precision for the timing measurements.
+static constexpr int PRECISION = 9;
+
+
 void LLVMBenchmark::benchmark(const std::shared_ptr<ast::Program>& node) {
-    // Run the LLVM visitor first.
-    auto llvm_visitor_start = std::chrono::high_resolution_clock::now();
+    // First, set the output stream for the logs.
+    set_log_output();
+
+    // Then, record the time taken for building the LLVM IR module.
     codegen::CodegenLLVMVisitor visitor(mod_filename,
                                         output_dir,
-                                        llvm_info.opt_passes,
-                                        llvm_info.use_single_precision,
-                                        llvm_info.vector_width);
-    visitor.visit_program(*node);
-    visitor.wrap_kernel_function("nrn_state_" + mod_filename);
-    auto llvm_visitor_end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> llvm_visitor_diff = llvm_visitor_end - llvm_visitor_start;
+                                        llvm_build_info.opt_passes,
+                                        llvm_build_info.use_single_precision,
+                                        llvm_build_info.vector_width);
+    generate_llvm(visitor, node);
 
-    if (output_dir != ".") {
-        // If the output directory is specified, dump logs to the file.
-        std::string filename = output_dir + "/" + mod_filename + ".log";
-        std::freopen(filename.c_str(), "w", stdout);
-    }
-
-    std::cout << "Created LLVM IR module from NMODL AST in " << std::setprecision(9)
-              << llvm_visitor_diff.count() << "\n";
-
-    const auto& generated_instance_struct = visitor.get_instance_struct_ptr();
-    auto codegen_data = codegen::CodegenDataHelper(node, generated_instance_struct);
-
+    // Set the codegen data helper and the runner instances.
+    auto codegen_data = codegen::CodegenDataHelper(node, visitor.get_instance_struct_ptr());
     std::unique_ptr<llvm::Module> m = visitor.get_module();
     runner::Runner runner(std::move(m));
 
@@ -66,6 +61,39 @@ void LLVMBenchmark::benchmark(const std::shared_ptr<ast::Program>& node) {
     }
     std::cout << "The average runtime is " << std::setprecision(9) << runtime_sum / num_experiments
               << "\n";
+}
+
+void LLVMBenchmark::generate_llvm(codegen::CodegenLLVMVisitor& visitor,
+                                  const std::shared_ptr<ast::Program>& node) {
+    // First, visit the AST to build the LLVM IR module and wrap the kernel function calls.
+    auto start = std::chrono::high_resolution_clock::now();
+    visitor.visit_program(*node);
+    visitor.wrap_kernel_functions();
+    auto end = std::chrono::high_resolution_clock::now();
+
+    // Log the time taken to visit the AST and build LLVM IR.
+    std::chrono::duration<double> diff = end - start;
+    *log_stream << "Created LLVM IR module from NMODL AST in " << std::setprecision(PRECISION)
+                << diff.count() << "\n";
+}
+
+void LLVMBenchmark::set_log_output() {
+    // If the output directory is not specified, dump logs to the console.
+    if (output_dir == ".") {
+        log_stream = std::make_shared<std::ostream>(std::cout.rdbuf());
+        return;
+    }
+
+    // Otherwise, dump logs to the specified file.
+    std::string filename = output_dir + "/" + mod_filename + ".log";
+    std::ofstream ofs;
+
+    ofs.open(filename.c_str());
+
+    if (ofs.fail())
+        throw std::runtime_error("Error while opening a file '" + filename + "'");
+
+    log_stream = std::make_shared<std::ostream>(ofs.rdbuf());
 }
 
 }  // namespace benchmark
