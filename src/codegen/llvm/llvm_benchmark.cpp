@@ -35,32 +35,8 @@ void LLVMBenchmark::benchmark(const std::shared_ptr<ast::Program>& node) {
                                         llvm_build_info.vector_width);
     generate_llvm(visitor, node);
 
-    // Set the codegen data helper and the runner instances.
-    auto codegen_data = codegen::CodegenDataHelper(node, visitor.get_instance_struct_ptr());
-    std::unique_ptr<llvm::Module> m = visitor.get_module();
-    runner::Runner runner(std::move(m));
-
-    // Todo: create a switch for the backend arch.
-
-    // Todo: add information about target triple
-
-    double runtime_sum = 0.0;
-    for (int i = 0; i < num_experiments; ++i) {
-        auto instance_data = codegen_data.create_data(instance_size, /*seed=*/1);
-
-        auto runner_start = std::chrono::high_resolution_clock::now();
-        runner.run_with_argument<int, void*>("__nrn_state_" + mod_filename + "_wrapper",
-                                             instance_data.base_ptr);
-        auto runner_end = std::chrono::high_resolution_clock::now();
-        std::chrono::duration<double> runner_diff = runner_end - runner_start;
-
-        std::cout << "Experiment " << i << ": runtime is " << std::setprecision(9)
-                  << runner_diff.count() << "\n";
-
-        runtime_sum += runner_diff.count();
-    }
-    std::cout << "The average runtime is " << std::setprecision(9) << runtime_sum / num_experiments
-              << "\n";
+    // Finally, run the benchmark and log the measurements.
+    run_benchmark(visitor, node);
 }
 
 void LLVMBenchmark::generate_llvm(codegen::CodegenLLVMVisitor& visitor,
@@ -74,7 +50,51 @@ void LLVMBenchmark::generate_llvm(codegen::CodegenLLVMVisitor& visitor,
     // Log the time taken to visit the AST and build LLVM IR.
     std::chrono::duration<double> diff = end - start;
     *log_stream << "Created LLVM IR module from NMODL AST in " << std::setprecision(PRECISION)
-                << diff.count() << "\n";
+                << diff.count() << "\n\n";
+}
+
+void LLVMBenchmark::run_benchmark(codegen::CodegenLLVMVisitor& visitor,
+                                  const std::shared_ptr<ast::Program>& node) {
+    // Set the codegen data helper and find the kernels.
+    auto codegen_data = codegen::CodegenDataHelper(node, visitor.get_instance_struct_ptr());
+    std::vector<std::string> kernel_names;
+    visitor.find_kernel_names(kernel_names);
+
+    // \todo: Here should be a switch statement on different backends.
+    // Ideally, we want to pick the target triple (from command line?) and set the JIT accordingly.
+    // For that, Runner must also take the target triple information? However, this is not strictly
+    // necessary as we can just benchmark on different platforms and LLVM will pick up the
+    // triple/data layout information automatically.
+    std::unique_ptr<llvm::Module> m = visitor.get_module();
+    runner::Runner runner(std::move(m));
+
+    // Benchmark every kernel.
+    for (const auto& kernel_name: kernel_names) {
+        *log_stream << "Benchmarking kernel '" << kernel_name << "'\n";
+
+        // For every kernel run the benchmark `num_experiments` times.
+        double time_sum = 0.0;
+        for (int i = 0; i < num_experiments; ++i) {
+            // Initialise the data.
+            auto instance_data = codegen_data.create_data(instance_size, /*seed=*/1);
+
+            // Record the execution time of the kernel.
+            std::string wrapper_name = "__" + kernel_name + "_wrapper";
+            auto start = std::chrono::high_resolution_clock::now();
+            runner.run_with_argument<int, void*>(kernel_name, instance_data.base_ptr);
+            auto end = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<double> diff = end - start;
+
+            // Log the time taken for each run.
+            *log_stream << "Experiment " << i << ": compute time = " << std::setprecision(9)
+                        << diff.count() << "\n";
+
+            time_sum += diff.count();
+        }
+        // Log the average time taken for the kernel.
+        *log_stream << "Average compute time = " << std::setprecision(PRECISION)
+                    << time_sum / num_experiments << "\n\n";
+    }
 }
 
 void LLVMBenchmark::set_log_output() {

@@ -45,7 +45,12 @@ class LLVMBenchmark {
     std::shared_ptr<std::ostream> log_stream;
 
     /// Visits the AST to construct the LLVM IR module.
-    void generate_llvm(codegen::CodegenLLVMVisitor& visitor, const std::shared_ptr<ast::Program>& node);
+    void generate_llvm(codegen::CodegenLLVMVisitor& visitor,
+                       const std::shared_ptr<ast::Program>& node);
+
+    /// Runs the main body of the benchmark, executing the compute kernels.
+    void run_benchmark(codegen::CodegenLLVMVisitor& visitor,
+                       const std::shared_ptr<ast::Program>& node);
 
     /// Sets the log output stream (file or console).
     void set_log_output();
