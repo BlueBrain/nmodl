@@ -26,20 +26,23 @@ void JITDriver::init() {
     llvm::InitializeNativeTarget();
     llvm::InitializeNativeTargetAsmPrinter();
 
-    set_target_triple(module.get());
-    auto data_layout = module->getDataLayout();
-
     // Create IR compile function callback.
     auto compile_function_creator = [&](llvm::orc::JITTargetMachineBuilder tm_builder)
         -> llvm::Expected<std::unique_ptr<llvm::orc::IRCompileLayer::IRCompiler>> {
-        auto tm = tm_builder.createTargetMachine();
-        if (!tm)
-            return tm.takeError();
-        return std::make_unique<llvm::orc::TMOwningSimpleCompiler>(std::move(*tm));
+        // Create target machine with some features possibly turned off.
+        auto tm = create_target(&tm_builder, /*features=*/"");
+
+        // Set the target triple and the data layout for the module.
+        module->setDataLayout(tm->createDataLayout());
+        module->setTargetTriple(tm->getTargetTriple().getTriple());
+
+        return std::make_unique<llvm::orc::TMOwningSimpleCompiler>(std::move(tm));
     };
 
+    // Set JIT instance and extract the data layout from the module.
     auto jit_instance = cantFail(
         llvm::orc::LLJITBuilder().setCompileFunctionCreator(compile_function_creator).create());
+    auto data_layout = module->getDataLayout();
 
     // Add a ThreadSafeModule to the driver.
     llvm::orc::ThreadSafeModule tsm(std::move(module), std::make_unique<llvm::LLVMContext>());
@@ -52,29 +55,29 @@ void JITDriver::init() {
         data_layout.getGlobalPrefix())));
 }
 
-void JITDriver::set_target_triple(llvm::Module* module) {
-    auto target_triple = llvm::sys::getDefaultTargetTriple();
-    std::string error;
-    auto target = llvm::TargetRegistry::lookupTarget(target_triple, error);
+std::unique_ptr<llvm::TargetMachine> JITDriver::create_target(
+    llvm::orc::JITTargetMachineBuilder* builder,
+    const std::string& features) {
+    // First, look up the target.
+    std::string error_msg;
+    auto target_triple = builder->getTargetTriple().getTriple();
+    auto* target = llvm::TargetRegistry::lookupTarget(target_triple, error_msg);
     if (!target)
-        throw std::runtime_error("Error: " + error + "\n");
+        throw std::runtime_error("Error " + error_msg + "\n");
 
-    std::string cpu(llvm::sys::getHostCPUName());
-    llvm::SubtargetFeatures features;
-    llvm::StringMap<bool> host_features;
+    // Create default target machine with provided features.
+    auto tm = target->createTargetMachine(target_triple,
+                                          llvm::sys::getHostCPUName().str(),
+                                          features,
+                                          builder->getOptions(),
+                                          builder->getRelocationModel(),
+                                          builder->getCodeModel(),
+                                          /*OL=*/llvm::CodeGenOpt::Default,
+                                          /*JIT=*/true);
+    if (!tm)
+        throw std::runtime_error("Error: could not create the target machine\n");
 
-    if (llvm::sys::getHostCPUFeatures(host_features)) {
-        for (auto& f: host_features)
-            features.AddFeature(f.first(), f.second);
-    }
-
-    std::unique_ptr<llvm::TargetMachine> machine(
-        target->createTargetMachine(target_triple, cpu, features.getString(), {}, {}));
-    if (!machine)
-        throw std::runtime_error("Error: failed to create a target machine\n");
-
-    module->setDataLayout(machine->createDataLayout());
-    module->setTargetTriple(target_triple);
+    return std::unique_ptr<llvm::TargetMachine>(tm);
 }
 
 }  // namespace runner

@@ -63,8 +63,9 @@ class JITDriver {
         return result;
     }
 
-    /// Set the target triple on the module.
-    static void set_target_triple(llvm::Module* module);
+    /// A wrapper around llvm::createTargetMachine to turn on/off certain CPU features.
+    std::unique_ptr<llvm::TargetMachine> create_target(llvm::orc::JITTargetMachineBuilder* builder,
+                                                       const std::string& features);
 };
 
 /**
