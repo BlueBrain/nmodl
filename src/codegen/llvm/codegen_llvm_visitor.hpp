@@ -338,7 +338,8 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     void find_kernel_names(std::vector<std::string>& container);
 
     /**
-     * Wraps all kernel function calls into wrapper functions that use void* to pass the data to the kernel.
+     * Wraps all kernel function calls into wrapper functions that use void* to pass the data to the
+     * kernel.
      */
     void wrap_kernel_functions();
 };

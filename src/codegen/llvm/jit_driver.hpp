@@ -85,7 +85,7 @@ class Runner {
     }
 
     Runner(std::unique_ptr<llvm::Module> m, std::string features)
-            : module(std::move(m)) {
+        : module(std::move(m)) {
         driver->init(features);
     }
 

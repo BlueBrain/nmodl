@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include<string>
+#include <string>
 
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
 
@@ -29,7 +29,6 @@ struct LLVMBuildInfo {
  */
 class LLVMBenchmark {
   private:
-
     std::string mod_filename;
 
     std::string output_dir;
@@ -82,5 +81,5 @@ class LLVMBenchmark {
 };
 
 
-}  // namespace runner
+}  // namespace benchmark
 }  // namespace nmodl
