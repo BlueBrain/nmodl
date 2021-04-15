@@ -83,6 +83,7 @@ target_link_libraries(
   test_util
   printer
   ${NMODL_WRAPPER_LIBS})
+
 target_link_libraries(
   testcodegen
   codegen
@@ -98,6 +99,7 @@ if(NMODL_ENABLE_LLVM)
   include_directories(${LLVM_INCLUDE_DIRS} codegen)
 
   add_library(llvm_benchmark STATIC codegen/codegen_data_helper.cpp)
+  add_dependencies(llvm_benchmark lexer)
 
   add_executable(testllvm visitor/main.cpp codegen/codegen_llvm_ir.cpp
                           codegen/codegen_data_helper.cpp codegen/codegen_llvm_instance_struct.cpp)
