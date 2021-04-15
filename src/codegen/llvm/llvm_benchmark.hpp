@@ -7,9 +7,9 @@
 
 #pragma once
 
-#include "codegen/llvm/codegen_llvm_visitor.hpp"
-
 #include<string>
+
+#include "codegen/llvm/codegen_llvm_visitor.hpp"
 
 
 namespace nmodl {
@@ -44,9 +44,17 @@ class LLVMBenchmark {
 
     std::shared_ptr<std::ostream> log_stream;
 
+    /// Disable the specified feature.
+    void disable(const std::string& feature, std::vector<std::string>& host_features);
+
     /// Visits the AST to construct the LLVM IR module.
     void generate_llvm(codegen::CodegenLLVMVisitor& visitor,
                        const std::shared_ptr<ast::Program>& node);
+
+    /// Get the host CPU features in the format:
+    ///   +feature,+feature,-feature,+feature,...
+    /// where `+` indicates that the feature is enabled.
+    std::vector<std::string> get_cpu_features();
 
     /// Runs the main body of the benchmark, executing the compute kernels.
     void run_benchmark(codegen::CodegenLLVMVisitor& visitor,

@@ -22,7 +22,7 @@
 namespace nmodl {
 namespace runner {
 
-void JITDriver::init() {
+void JITDriver::init(std::string features) {
     llvm::InitializeNativeTarget();
     llvm::InitializeNativeTargetAsmPrinter();
 
@@ -30,7 +30,7 @@ void JITDriver::init() {
     auto compile_function_creator = [&](llvm::orc::JITTargetMachineBuilder tm_builder)
         -> llvm::Expected<std::unique_ptr<llvm::orc::IRCompileLayer::IRCompiler>> {
         // Create target machine with some features possibly turned off.
-        auto tm = create_target(&tm_builder, /*features=*/"");
+        auto tm = create_target(&tm_builder, features);
 
         // Set the target triple and the data layout for the module.
         module->setDataLayout(tm->createDataLayout());

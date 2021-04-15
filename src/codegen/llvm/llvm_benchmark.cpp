@@ -5,14 +5,15 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
-#include "llvm_benchmark.hpp"
-#include "codegen/llvm/codegen_llvm_visitor.hpp"
-#include "codegen/llvm/jit_driver.hpp"
-
-#include "test/unit/codegen/codegen_data_helper.hpp"
-
 #include <chrono>
 #include <fstream>
+
+#include "codegen/llvm/codegen_llvm_visitor.hpp"
+#include "codegen/llvm/jit_driver.hpp"
+#include "llvm_benchmark.hpp"
+#include "llvm/Support/Host.h"
+
+#include "test/unit/codegen/codegen_data_helper.hpp"
 
 
 namespace nmodl {
@@ -22,6 +23,16 @@ namespace benchmark {
 /// Precision for the timing measurements.
 static constexpr int PRECISION = 9;
 
+
+void LLVMBenchmark::disable(const std::string& feature, std::vector<std::string>& host_features) {
+    for (auto& host_feature: host_features) {
+        if (feature == host_feature.substr(1)) {
+            host_feature[0] = '-';
+            *log_stream << host_feature << "\n";
+            return;
+        }
+    }
+}
 
 void LLVMBenchmark::benchmark(const std::shared_ptr<ast::Program>& node) {
     // First, set the output stream for the logs.
@@ -53,6 +64,18 @@ void LLVMBenchmark::generate_llvm(codegen::CodegenLLVMVisitor& visitor,
                 << diff.count() << "\n\n";
 }
 
+std::vector<std::string> LLVMBenchmark::get_cpu_features() {
+    std::string cpu(llvm::sys::getHostCPUName());
+
+    llvm::SubtargetFeatures features;
+    llvm::StringMap<bool> host_features;
+    if (llvm::sys::getHostCPUFeatures(host_features)) {
+        for (auto& f: host_features)
+            features.AddFeature(f.first(), f.second);
+    }
+    return features.getFeatures();
+}
+
 void LLVMBenchmark::run_benchmark(codegen::CodegenLLVMVisitor& visitor,
                                   const std::shared_ptr<ast::Program>& node) {
     // Set the codegen data helper and find the kernels.
@@ -60,13 +83,27 @@ void LLVMBenchmark::run_benchmark(codegen::CodegenLLVMVisitor& visitor,
     std::vector<std::string> kernel_names;
     visitor.find_kernel_names(kernel_names);
 
-    // \todo: Here should be a switch statement on different backends.
-    // Ideally, we want to pick the target triple (from command line?) and set the JIT accordingly.
-    // For that, Runner must also take the target triple information? However, this is not strictly
-    // necessary as we can just benchmark on different platforms and LLVM will pick up the
-    // triple/data layout information automatically.
+    // Get feature's string and turn them off depending on the backend.
+    std::vector<std::string> features = get_cpu_features();
+    *log_stream << "Backend: " << backend << "\n";
+    if (backend == "avx2") {
+        // Disable SSE.
+        *log_stream << "Disabling features:\n";
+        disable("sse", features);
+        disable("sse2", features);
+        disable("sse3", features);
+        disable("sse4.1", features);
+        disable("sse4.2", features);
+    } else if (backend == "sse2") {
+        // Disable AVX.
+        *log_stream << "Disabling features:\n";
+        disable("avx", features);
+        disable("avx2", features);
+    }
+
+    std::string features_str = llvm::join(features.begin(), features.end(), ",");
     std::unique_ptr<llvm::Module> m = visitor.get_module();
-    runner::Runner runner(std::move(m));
+    runner::Runner runner(std::move(m), features_str);
 
     // Benchmark every kernel.
     for (const auto& kernel_name: kernel_names) {

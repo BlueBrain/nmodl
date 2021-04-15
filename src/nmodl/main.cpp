@@ -330,7 +330,7 @@ int main(int argc, const char* argv[]) {
                        "Number of experiments for benchmarking ({})"_format(repeat))->ignore_case();
     benchmark_opt->add_option("--backend",
                        backend,
-                       "Target's backend ({})"_format(backend))->ignore_case()->check(CLI::IsMember({"default"}));;
+                       "Target's backend ({})"_format(backend))->ignore_case()->check(CLI::IsMember({"avx2", "default", "sse2"}));;
 #endif
     // clang-format on
 

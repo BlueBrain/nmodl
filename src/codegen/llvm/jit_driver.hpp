@@ -37,7 +37,7 @@ class JITDriver {
         : module(std::move(m)) {}
 
     /// Initialize the JIT.
-    void init();
+    void init(std::string features);
 
     /// Lookup the entry-point without arguments in the JIT and execute it, returning the result.
     template <typename ReturnType>
@@ -81,7 +81,12 @@ class Runner {
   public:
     Runner(std::unique_ptr<llvm::Module> m)
         : module(std::move(m)) {
-        driver->init();
+        driver->init(/*features=*/"");
+    }
+
+    Runner(std::unique_ptr<llvm::Module> m, std::string features)
+            : module(std::move(m)) {
+        driver->init(features);
     }
 
     /// Run the entry-point function without arguments.
