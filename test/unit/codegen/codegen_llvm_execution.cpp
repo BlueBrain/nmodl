@@ -351,7 +351,7 @@ SCENARIO("Simple vectorised kernel", "[llvm][runner]") {
             }
 
             STATE {
-                x
+                x y
             }
 
             ASSIGNED {
@@ -367,6 +367,7 @@ SCENARIO("Simple vectorised kernel", "[llvm][runner]") {
 
             DERIVATIVE states {
                 x = (x0 - x) / x1
+                y = v
             }
         )";
 
@@ -397,12 +398,18 @@ SCENARIO("Simple vectorised kernel", "[llvm][runner]") {
         std::vector<double> x0 = {11.0, 11.0, 11.0, 11.0, 11.0, 11.0, 11.0, 11.0, 11.0, 11.0};
         std::vector<double> x1 = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
 
+        std::vector<double> voltage = {3.0, 4.0, 7.0, 1.0, 2.0, 5.0, 8.0, 6.0, 10.0, 9.0};
+        std::vector<int> node_index = {3, 4, 0, 1, 5, 7, 2, 6, 9, 8};
+
         InstanceTestInfo instance_info{&instance_data,
                                        llvm_visitor.get_instance_var_helper(),
                                        num_elements};
         initialise_instance_variable<double>(instance_info, x, "x");
         initialise_instance_variable<double>(instance_info, x0, "x0");
         initialise_instance_variable<double>(instance_info, x1, "x1");
+
+        initialise_instance_variable<double>(instance_info, voltage, "voltage");
+        initialise_instance_variable<int>(instance_info, node_index, "node_index");
 
         // Set up the JIT runner.
         std::unique_ptr<llvm::Module> module = llvm_visitor.get_module();
@@ -411,10 +418,14 @@ SCENARIO("Simple vectorised kernel", "[llvm][runner]") {
         THEN("Values in struct have changed according to the formula") {
             runner.run_with_argument<int, void*>("__nrn_state_test_wrapper",
                                                  instance_data.base_ptr);
-            std::vector<double> x_expected = {10.0, 9.0, 8.0, 7.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0};
-
             // Check that the main and remainder loops correctly change the data stored in x.
+            std::vector<double> x_expected = {10.0, 9.0, 8.0, 7.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0};
             REQUIRE(check_instance_variable<double>(instance_info, x_expected, "x"));
+
+            // Check that the gather load produces correct results in y:
+            //   y[id] = voltage[node_index[id]]
+            std::vector<double> y_expected = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0};
+            REQUIRE(check_instance_variable<double>(instance_info, y_expected, "y"));
         }
     }
 }
