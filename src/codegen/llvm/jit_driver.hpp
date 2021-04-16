@@ -79,12 +79,7 @@ class Runner {
     std::unique_ptr<JITDriver> driver = std::make_unique<JITDriver>(std::move(module));
 
   public:
-    Runner(std::unique_ptr<llvm::Module> m)
-        : module(std::move(m)) {
-        driver->init(/*features=*/"");
-    }
-
-    Runner(std::unique_ptr<llvm::Module> m, std::string features)
+    Runner(std::unique_ptr<llvm::Module> m, std::string features = "")
         : module(std::move(m)) {
         driver->init(features);
     }
