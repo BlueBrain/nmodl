@@ -845,10 +845,14 @@ SCENARIO("Scalar state kernel", "[visitor][llvm]") {
             REQUIRE(std::regex_search(module_string, m, struct_type));
             REQUIRE(std::regex_search(module_string, m, kernel_declaration));
 
-            // Check for correct induction variable initialisation and a branch to condition block.
-            std::regex alloca_instr(R"(%id = alloca i32)");
+            // Check for correct variables initialisation and a branch to condition block.
+            std::regex id_initialisation(R"(%id = alloca i32)");
+            std::regex node_id_initialisation(R"(%node_id = alloca i32)");
+            std::regex v_initialisation(R"(%v = alloca double)");
             std::regex br(R"(br label %for\.cond)");
-            REQUIRE(std::regex_search(module_string, m, alloca_instr));
+            REQUIRE(std::regex_search(module_string, m, id_initialisation));
+            REQUIRE(std::regex_search(module_string, m, node_id_initialisation));
+            REQUIRE(std::regex_search(module_string, m, v_initialisation));
             REQUIRE(std::regex_search(module_string, m, br));
 
             // Check condition block: id < mech->node_count, and a conditional branch to loop body
@@ -865,12 +869,7 @@ SCENARIO("Scalar state kernel", "[visitor][llvm]") {
             REQUIRE(std::regex_search(module_string, m, condition));
             REQUIRE(std::regex_search(module_string, m, cond_br));
 
-            // In the body block, `node_id` and voltage `v` are initialised with the data from the
-            // struct. Check for variable allocations and correct loads from the struct with GEPs.
-            std::regex initialisation(
-                "for\\.body:.*\n"
-                "  %node_id = alloca i32,.*\n"
-                "  %v = alloca double,.*");
+            // Check for correct loads from the struct with GEPs.
             std::regex load_from_struct(
                 "  %.* = load %.*__instance_var__type\\*, %.*__instance_var__type\\*\\* %.*\n"
                 "  %.* = getelementptr inbounds %.*__instance_var__type, "
@@ -880,7 +879,6 @@ SCENARIO("Scalar state kernel", "[visitor][llvm]") {
                 "  %.* = load (i32|double)\\*, (i32|double)\\*\\* %.*\n"
                 "  %.* = getelementptr inbounds (i32|double), (i32|double)\\* %.*, i64 %.*\n"
                 "  %.* = load (i32|double), (i32|double)\\* %.*");
-            REQUIRE(std::regex_search(module_string, m, initialisation));
             REQUIRE(std::regex_search(module_string, m, load_from_struct));
 
             // Check induction variable is incremented in increment block.
@@ -987,8 +985,6 @@ SCENARIO("Scalar derivative block", "[visitor][llvm][derivative]") {
 
         std::string expected_loop = R"(
             for(id = 0; id<mech->node_count; id = id+1) {
-                INTEGER node_id
-                DOUBLE v
                 node_id = mech->node_index[id]
                 v = mech->voltage[node_id]
                 mech->m[id] = (mech->minf[id]-mech->m[id])/mech->mtau[id]
@@ -1033,16 +1029,12 @@ SCENARIO("Vectorised derivative block", "[visitor][llvm][derivative]") {
 
         std::string expected_main_loop = R"(
             for(id = 0; id<mech->node_count-7; id = id+8) {
-                INTEGER node_id
-                DOUBLE v
                 node_id = mech->node_index[id]
                 v = mech->voltage[node_id]
                 mech->m[id] = (mech->minf[id]-mech->m[id])/mech->mtau[id]
             })";
         std::string expected_epilogue_loop = R"(
             for(; id<mech->node_count; id = id+1) {
-                INTEGER epilogue_node_id
-                DOUBLE epilogue_v
                 epilogue_node_id = mech->node_index[id]
                 epilogue_v = mech->voltage[epilogue_node_id]
                 mech->m[id] = (mech->minf[id]-mech->m[id])/mech->mtau[id]
