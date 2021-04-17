@@ -562,15 +562,16 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
     function_statements.push_back(
         create_local_variable_statement(induction_variables, INTEGER_TYPE));
 
+    /// create vectors of local variables that would be used in compute part
+    std::vector<std::string> int_variables{"node_id"};
+    std::vector<std::string> double_variables{"v"};
+
     /// create now main compute part : for loop over channel instances
 
     /// loop body : initialization + solve blocks
     ast::StatementVector loop_def_statements;
     ast::StatementVector loop_index_statements;
     ast::StatementVector loop_body_statements;
-
-    std::vector<std::string> int_variables{"node_id"};
-    std::vector<std::string> double_variables{"v"};
     {
         /// access node index and corresponding voltage
         loop_index_statements.push_back(
@@ -597,6 +598,7 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
         /// add breakpoint block if no current
         if (info.currents.empty() && info.breakpoint_node != nullptr) {
             auto block = info.breakpoint_node->get_statement_block();
+            // \todo this automatically adds `SOLVE states METHOD ...`
             append_statements_from_block(loop_body_statements, block);
         }
 
@@ -606,10 +608,6 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
                              double_variables,
                              loop_index_statements,
                              loop_body_statements);
-
-        loop_def_statements.push_back(create_local_variable_statement(int_variables, INTEGER_TYPE));
-        loop_def_statements.push_back(
-            create_local_variable_statement(double_variables, FLOAT_TYPE));
 
         // \todo handle process_shadow_update_statement and wrote_conc_call yet
     }
@@ -621,6 +619,10 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
 
     /// now construct a new code block which will become the body of the loop
     auto loop_block = std::make_shared<ast::StatementBlock>(loop_body);
+
+    /// declare main FOR loop local variables
+    function_statements.push_back(create_local_variable_statement(int_variables, INTEGER_TYPE));
+    function_statements.push_back(create_local_variable_statement(double_variables, FLOAT_TYPE));
 
     /// main loop possibly vectorized on vector_width
     {
@@ -647,6 +649,10 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
         function_statements.push_back(for_loop_statement_main);
     }
 
+    /// vectors containing renamed FOR loop local variables
+    std::vector<std::string> renamed_int_variables;
+    std::vector<std::string> renamed_double_variables;
+
     /// remainder loop possibly vectorized on vector_width
     if (vector_width > 1) {
         /// loop constructs : initialization, condition and increment
@@ -664,13 +670,23 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
         // \todo: Change RenameVisitor to take a vector of names to which it would append a single
         // prefix.
         for (const auto& name: int_variables) {
-            visitor::RenameVisitor v(name, epilogue_variable_prefix + name);
+            std::string new_name = epilogue_variable_prefix + name;
+            renamed_int_variables.push_back(new_name);
+            visitor::RenameVisitor v(name, new_name);
             loop_statements->accept(v);
         }
         for (const auto& name: double_variables) {
+            std::string new_name = epilogue_variable_prefix + name;
+            renamed_double_variables.push_back(new_name);
             visitor::RenameVisitor v(name, epilogue_variable_prefix + name);
             loop_statements->accept(v);
         }
+
+        /// declare remainder FOR loop local variables
+        function_statements.push_back(
+            create_local_variable_statement(renamed_int_variables, INTEGER_TYPE));
+        function_statements.push_back(
+            create_local_variable_statement(renamed_double_variables, FLOAT_TYPE));
 
         /// convert all variables inside loop body to instance variables
         convert_to_instance_variable(*for_loop_statement_remainder, loop_index_var);
