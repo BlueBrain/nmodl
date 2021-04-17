@@ -37,7 +37,7 @@ target_link_libraries(
 cpp_cc_configure_sanitizers(TARGET nmodl)
 
 if(NMODL_ENABLE_LLVM)
-  target_link_libraries(nmodl llvm_codegen ${LLVM_LIBS_TO_LINK})
+  target_link_libraries(nmodl llvm_codegen llvm_benchmark ${LLVM_LIBS_TO_LINK})
 endif()
 
 # =============================================================================

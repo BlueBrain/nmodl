@@ -37,7 +37,7 @@ class JITDriver {
         : module(std::move(m)) {}
 
     /// Initialize the JIT.
-    void init();
+    void init(std::string features);
 
     /// Lookup the entry-point without arguments in the JIT and execute it, returning the result.
     template <typename ReturnType>
@@ -63,8 +63,9 @@ class JITDriver {
         return result;
     }
 
-    /// Set the target triple on the module.
-    static void set_target_triple(llvm::Module* module);
+    /// A wrapper around llvm::createTargetMachine to turn on/off certain CPU features.
+    std::unique_ptr<llvm::TargetMachine> create_target(llvm::orc::JITTargetMachineBuilder* builder,
+                                                       const std::string& features);
 };
 
 /**
@@ -78,9 +79,9 @@ class Runner {
     std::unique_ptr<JITDriver> driver = std::make_unique<JITDriver>(std::move(module));
 
   public:
-    Runner(std::unique_ptr<llvm::Module> m)
+    Runner(std::unique_ptr<llvm::Module> m, std::string features = "")
         : module(std::move(m)) {
-        driver->init();
+        driver->init(features);
     }
 
     /// Run the entry-point function without arguments.
