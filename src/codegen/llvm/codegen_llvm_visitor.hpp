@@ -333,10 +333,15 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     }
 
     /**
-     * For the given kernel function, wraps it into another function that uses void* to pass the
-     * data to the kernel \param kernel_name kernel name to be wrapped
+     * Fills the container with the names of kernel functions from the MOD file.
      */
-    void wrap_kernel_function(const std::string& kernel_name);
+    void find_kernel_names(std::vector<std::string>& container);
+
+    /**
+     * Wraps all kernel function calls into wrapper functions that use void* to pass the data to the
+     * kernel.
+     */
+    void wrap_kernel_functions();
 };
 
 /** \} */  // end of llvm_backends
