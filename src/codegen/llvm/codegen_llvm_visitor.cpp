@@ -592,6 +592,9 @@ void CodegenLLVMVisitor::visit_boolean(const ast::Boolean& node) {
 //  | <code after for loop>     |
 //  +---------------------------+
 void CodegenLLVMVisitor::visit_codegen_for_statement(const ast::CodegenForStatement& node) {
+    // Disable vector code generation for condition and increment blocks.
+    is_kernel_code = false;
+
     // Get the current and the next blocks within the function.
     llvm::BasicBlock* curr_block = builder.GetInsertBlock();
     llvm::BasicBlock* next = curr_block->getNextNode();
@@ -650,6 +653,7 @@ void CodegenLLVMVisitor::visit_codegen_for_statement(const ast::CodegenForStatem
     builder.CreateBr(for_cond);
     builder.SetInsertPoint(exit);
     vector_width = tmp_vector_width;
+    is_kernel_code = true;
 }
 
 
@@ -682,11 +686,19 @@ void CodegenLLVMVisitor::visit_codegen_function(const ast::CodegenFunction& node
         builder.CreateStore(&arg, alloca);
     }
 
-    // Process function or procedure body. The return statement is handled in a separate visitor.
-    block->accept(*this);
+    // Process function or procedure body. If the function is a compute kernel, then set the
+    // corresponding flags. The return statement is handled in a separate visitor.
+    bool has_void_ret_type = node.get_return_type()->get_type() == ast::AstNodeType::VOID;
+    if (has_void_ret_type) {
+        is_kernel_code = true;
+        block->accept(*this);
+        is_kernel_code = false;
+    } else {
+        block->accept(*this);
+    }
 
     // If function has a void return type, add a terminator not handled by CodegenReturnVar.
-    if (node.get_return_type()->get_type() == ast::AstNodeType::VOID)
+    if (has_void_ret_type)
         builder.CreateRetVoid();
 
     // Clear local values stack and remove the pointer to the local symbol table.
@@ -718,7 +730,13 @@ void CodegenLLVMVisitor::visit_codegen_var_list_statement(
             var_type = llvm::ArrayType::get(scalar_var_type, length);
         } else if (identifier->is_name()) {
             // This case corresponds to a scalar or vector local variable.
-            if (is_kernel_code && vector_width > 1) {
+            const auto& identifier_name = identifier->get_node_name();
+
+            // Even if generating vectorised code, some variables still need to be scalar.
+            // Particularly, the induction variable "id" and remainder loop variables (that start
+            // with "epilogue").
+            if (is_kernel_code && vector_width > 1 && identifier_name != kernel_id &&
+                identifier_name.rfind("epilogue", 0)) {
                 var_type = llvm::FixedVectorType::get(scalar_var_type, vector_width);
             } else {
                 var_type = scalar_var_type;
@@ -726,7 +744,7 @@ void CodegenLLVMVisitor::visit_codegen_var_list_statement(
         } else {
             throw std::runtime_error("Error: Unsupported local variable type");
         }
-        llvm::Value* alloca = builder.CreateAlloca(var_type, /*ArraySize=*/nullptr, name);
+        builder.CreateAlloca(var_type, /*ArraySize=*/nullptr, name);
     }
 }
 
