@@ -107,14 +107,15 @@ void LLVMBenchmark::run_benchmark(codegen::CodegenLLVMVisitor& visitor,
 
     // Benchmark every kernel.
     for (const auto& kernel_name: kernel_names) {
-        *log_stream << "Benchmarking kernel '" << kernel_name << "'\n";
+        // Initialise the data.
+        auto instance_data = codegen_data.create_data(instance_size, /*seed=*/1);
+
+        double size_mbs = instance_data.num_bytes / (1024.0 * 1024.0);
+        *log_stream << "Benchmarking kernel '" << kernel_name << ", with " << size_mbs << " MBs\n";
 
         // For every kernel run the benchmark `num_experiments` times.
         double time_sum = 0.0;
         for (int i = 0; i < num_experiments; ++i) {
-            // Initialise the data.
-            auto instance_data = codegen_data.create_data(instance_size, /*seed=*/1);
-
             // Record the execution time of the kernel.
             std::string wrapper_name = "__" + kernel_name + "_wrapper";
             auto start = std::chrono::high_resolution_clock::now();
