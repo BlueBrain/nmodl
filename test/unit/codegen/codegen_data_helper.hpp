@@ -46,6 +46,9 @@ struct CodegenInstanceData {
     /// i.e. *(base_ptr + offsets[0]) will be members[0]
     std::vector<void*> members;
 
+    /// size in bytes
+    size_t num_bytes = 0;
+
     // cleanup all memory allocated for type and member variables
     ~CodegenInstanceData();
 };
