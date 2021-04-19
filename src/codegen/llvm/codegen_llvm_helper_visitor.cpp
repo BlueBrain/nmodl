@@ -473,12 +473,13 @@ void CodegenLLVMHelperVisitor::convert_local_statement(ast::StatementBlock& node
         }
 
         /// remove local list statement now
-        const auto& statements = node.get_statements();
-        node.erase_statement(statements.begin());
+        std::unordered_set<nmodl::ast::Statement*> to_delete({local_statement.get()});
+        node.erase_statement(to_delete);
 
         /// create new codegen variable statement and insert at the beginning of the block
         auto type = new ast::CodegenVarType(FLOAT_TYPE);
         auto statement = std::make_shared<ast::CodegenVarListStatement>(type, variables);
+        const auto& statements = node.get_statements();
         node.insert_statement(statements.begin(), statement);
     }
 }
