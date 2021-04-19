@@ -4,7 +4,6 @@
  * This file is part of NMODL distributed under the terms of the GNU
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
-#include <memory>
 
 #include "visitors/inline_visitor.hpp"
 
@@ -201,7 +200,7 @@ void InlineVisitor::visit_function_call(FunctionCall& node) {
     const auto& function_name = node.get_name()->get_node_name();
     auto symbol = program_symtab->lookup_in_scope(function_name);
 
-    /// nothing to do if called function is not defined
+    /// nothing to do if called function is not defined or it's external
     if (symbol == nullptr || symbol->is_external_variable()) {
         return;
     }
