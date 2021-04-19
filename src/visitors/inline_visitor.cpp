@@ -4,6 +4,7 @@
  * This file is part of NMODL distributed under the terms of the GNU
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
+#include <memory>
 
 #include "visitors/inline_visitor.hpp"
 
@@ -72,7 +73,11 @@ bool InlineVisitor::can_replace_statement(const std::shared_ptr<Statement>& stat
     if (e->is_wrapped_expression()) {
         auto wrapped_expression = static_cast<WrappedExpression*>(e.get());
         if (wrapped_expression->get_expression()->is_function_call()) {
-            to_replace = true;
+            // if caller is external function (i.e. neuron function) don't replace it
+            const auto& function_call = std::static_pointer_cast<FunctionCall>(wrapped_expression->get_expression());
+            const auto& function_name = function_call->get_node_name();
+            const auto& symbol = program_symtab->lookup_in_scope(function_name);
+            to_replace = !symbol->is_external_variable();
         }
     }
     return to_replace;
@@ -195,7 +200,7 @@ void InlineVisitor::visit_function_call(FunctionCall& node) {
     const auto& function_name = node.get_name()->get_node_name();
     auto symbol = program_symtab->lookup_in_scope(function_name);
 
-    /// nothing to do if called function is not defined or it's external
+    /// nothing to do if called function is not defined
     if (symbol == nullptr || symbol->is_external_variable()) {
         return;
     }
