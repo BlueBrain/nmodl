@@ -74,7 +74,8 @@ bool InlineVisitor::can_replace_statement(const std::shared_ptr<Statement>& stat
         auto wrapped_expression = static_cast<WrappedExpression*>(e.get());
         if (wrapped_expression->get_expression()->is_function_call()) {
             // if caller is external function (i.e. neuron function) don't replace it
-            const auto& function_call = std::static_pointer_cast<FunctionCall>(wrapped_expression->get_expression());
+            const auto& function_call = std::static_pointer_cast<FunctionCall>(
+                wrapped_expression->get_expression());
             const auto& function_name = function_call->get_node_name();
             const auto& symbol = program_symtab->lookup_in_scope(function_name);
             to_replace = !symbol->is_external_variable();
