@@ -106,6 +106,9 @@ class Symbol {
     /// number of times symbol is written
     int write_count = 0;
 
+    /// number of times symbol is called (functions, procedures, ...)
+    int call_count = 0;
+
   public:
     /// \name Ctor & dtor
     /// \{
@@ -135,6 +138,11 @@ class Symbol {
     /// increment write count
     void write() noexcept {
         write_count++;
+    }
+
+    /// increment call count
+    void call() noexcept {
+        call_count++;
     }
 
     /// \name Setter
@@ -250,6 +258,10 @@ class Symbol {
 
     int get_write_count() const noexcept {
         return write_count;
+    }
+
+    int get_call_count() const noexcept {
+        return call_count;
     }
 
     int get_definition_order() const noexcept {

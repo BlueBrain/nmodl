@@ -491,28 +491,6 @@ void PerfVisitor::visit_unary_expression(const ast::UnaryExpression& node) {
     node.visit_children(*this);
 }
 
-/** Certain statements / symbols needs extra check while measuring
- * read/write operations. For example, for expression "exp(a+b)",
- * "exp" is an external math function and we should not increment read
- * count for "exp" symbol. Same for solve statement where name will
- * be derivative block name and neuron solver method.
- */
-bool PerfVisitor::symbol_to_skip(const std::shared_ptr<Symbol>& symbol) {
-    bool skip = false;
-
-    auto is_method = symbol->has_any_property(NmodlType::extern_method | NmodlType::function_block);
-    if (is_method && under_function_call) {
-        skip = true;
-    }
-
-    is_method = symbol->has_any_property(NmodlType::derivative_block | NmodlType::extern_method);
-    if (is_method && under_solve_block) {
-        skip = true;
-    }
-
-    return skip;
-}
-
 bool PerfVisitor::is_local_variable(const std::shared_ptr<Symbol>& symbol) const {
     bool is_local = false;
     /// in the function when we write to function variable then consider it as local variable
@@ -542,23 +520,31 @@ void PerfVisitor::update_memory_ops(const std::string& name) {
     }
 
     auto symbol = current_symtab->lookup_in_scope(name);
-    if (symbol == nullptr || symbol_to_skip(symbol)) {
+    if (symbol == nullptr) {
         return;
     }
 
+    auto is_function = symbol->has_any_property(
+        NmodlType::function_block | NmodlType::derivative_block | NmodlType::procedure_block |
+        NmodlType::extern_method);
+
     if (is_local_variable(symbol)) {
-        if (visiting_lhs_expression) {
+        if (visiting_lhs_expression && !is_function) {
             symbol->write();
             current_block_perf.n_local_write++;
         } else {
-            symbol->read();
-            current_block_perf.n_local_read++;
+            if (is_function) {
+                symbol->call();
+            } else {
+                symbol->read();
+                current_block_perf.n_local_read++;
+            }
         }
         return;
     }
 
     /// lhs symbols get written
-    if (visiting_lhs_expression) {
+    if (visiting_lhs_expression && !is_function) {
         symbol->write();
         if (is_constant_variable(symbol)) {
             current_block_perf.n_constant_write++;
@@ -577,18 +563,22 @@ void PerfVisitor::update_memory_ops(const std::string& name) {
     }
 
     /// rhs symbols get read
-    symbol->read();
-    if (is_constant_variable(symbol)) {
-        current_block_perf.n_constant_read++;
-        if (var_usage[const_memr_key].find(name) == var_usage[const_memr_key].end()) {
-            current_block_perf.n_unique_constant_read++;
-            var_usage[const_memr_key].insert(name);
-        }
+    if (is_function) {
+        symbol->call();
     } else {
-        current_block_perf.n_global_read++;
-        if (var_usage[global_memr_key].find(name) == var_usage[global_memr_key].end()) {
-            current_block_perf.n_unique_global_read++;
-            var_usage[global_memr_key].insert(name);
+        symbol->read();
+        if (is_constant_variable(symbol)) {
+            current_block_perf.n_constant_read++;
+            if (var_usage[const_memr_key].find(name) == var_usage[const_memr_key].end()) {
+                current_block_perf.n_unique_constant_read++;
+                var_usage[const_memr_key].insert(name);
+            }
+        } else {
+            current_block_perf.n_global_read++;
+            if (var_usage[global_memr_key].find(name) == var_usage[global_memr_key].end()) {
+                current_block_perf.n_unique_global_read++;
+                var_usage[global_memr_key].insert(name);
+            }
         }
     }
 }

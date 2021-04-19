@@ -458,7 +458,7 @@ void SymbolTable::Table::print(std::ostream& stream, std::string title, int inde
         TableData table;
         table.title = std::move(title);
         table.headers = {
-            "NAME", "PROPERTIES", "STATUS", "LOCATION", "VALUE", "# READS", "# WRITES"};
+            "NAME", "PROPERTIES", "STATUS", "LOCATION", "VALUE", "# READS", "# WRITES", "# CALLS"};
         table.alignments = {text_alignment::left,
                             text_alignment::left,
                             text_alignment::right,
@@ -469,9 +469,10 @@ void SymbolTable::Table::print(std::ostream& stream, std::string title, int inde
             auto is_external = symbol->is_external_variable();
             auto read_count = symbol->get_read_count();
             auto write_count = symbol->get_write_count();
+            auto call_count = symbol->get_call_count();
 
             // do not print external symbols which are not used in the current model
-            if (is_external && read_count == 0 && write_count == 0) {
+            if (is_external && read_count == 0 && write_count == 0 && call_count == 0) {
                 continue;
             }
 
@@ -479,17 +480,18 @@ void SymbolTable::Table::print(std::ostream& stream, std::string title, int inde
             if (symbol->is_array()) {
                 name += "[" + std::to_string(symbol->get_length()) + "]";
             }
-            auto position = symbol->get_token().position();
             auto properties = syminfo::to_string(symbol->get_properties());
             auto status = syminfo::to_string(symbol->get_status());
-            auto reads = std::to_string(symbol->get_read_count());
+            auto position = symbol->get_token().position();
             std::string value;
             auto sym_value = symbol->get_value();
             if (sym_value) {
                 value = std::to_string(*sym_value);
             }
+            auto reads = std::to_string(symbol->get_read_count());
             auto writes = std::to_string(symbol->get_write_count());
-            table.rows.push_back({name, properties, status, position, value, reads, writes});
+            auto calls = std::to_string(symbol->get_call_count());
+            table.rows.push_back({name, properties, status, position, value, reads, writes, calls});
         }
         table.print(stream, indent);
     }
