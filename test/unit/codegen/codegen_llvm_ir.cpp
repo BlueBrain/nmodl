@@ -36,7 +36,8 @@ using nmodl::parser::NmodlDriver;
 std::string run_llvm_visitor(const std::string& text,
                              bool opt = false,
                              bool use_single_precision = false,
-                             int vector_width = 1) {
+                             int vector_width = 1,
+                             std::string vec_lib = "none") {
     NmodlDriver driver;
     const auto& ast = driver.parse_string(text);
 
@@ -48,7 +49,8 @@ std::string run_llvm_visitor(const std::string& text,
                                              /*output_dir=*/".",
                                              opt,
                                              use_single_precision,
-                                             vector_width);
+                                             vector_width,
+                                             vec_lib);
     llvm_visitor.visit_program(*ast);
     return llvm_visitor.dump_module();
 }
@@ -1052,6 +1054,99 @@ SCENARIO("Vectorised derivative block", "[visitor][llvm][derivative]") {
 
             auto epilogue_loop = reindent_text(to_nmodl(result[1]));
             REQUIRE(epilogue_loop == reindent_text(expected_epilogue_loop));
+        }
+    }
+}
+
+//=============================================================================
+// Vector library calls.
+//=============================================================================
+
+SCENARIO("Vector library calls", "[visitor][llvm][vector_lib]") {
+    GIVEN("A vector LLVM intrinsic") {
+        std::string nmodl_text = R"(
+            NEURON {
+                SUFFIX hh
+                NONSPECIFIC_CURRENT il
+                RANGE minf, mtau
+            }
+            STATE {
+                m
+            }
+            ASSIGNED {
+                v (mV)
+                minf
+                mtau (ms)
+            }
+            BREAKPOINT {
+                SOLVE states METHOD cnexp
+                il = 2
+            }
+            DERIVATIVE states {
+                m' = (minf-m) / mtau
+            }
+        )";
+
+        THEN("it is replaced with an appropriate vector library call") {
+            std::smatch m;
+
+            // Check exponential intrinsic is created.
+            std::string no_library_module_str = run_llvm_visitor(nmodl_text,
+                                                                 /*opt=*/false,
+                                                                 /*use_single_precision=*/false,
+                                                                 /*vector_width=*/2);
+            std::regex exp_decl(R"(declare <2 x double> @llvm\.exp\.v2f64\(<2 x double>\))");
+            std::regex exp_call(R"(call <2 x double> @llvm\.exp\.v2f64\(<2 x double> .*\))");
+            REQUIRE(std::regex_search(no_library_module_str, m, exp_decl));
+            REQUIRE(std::regex_search(no_library_module_str, m, exp_call));
+
+            // Check exponential calls are replaced with calls to SVML library.
+            std::string svml_library_module_str = run_llvm_visitor(nmodl_text,
+                                                                   /*opt=*/false,
+                                                                   /*use_single_precision=*/false,
+                                                                   /*vector_width=*/2,
+                                                                   /*vec_lib=*/"SVML");
+            std::regex svml_exp_decl(R"(declare <2 x double> @__svml_exp2\(<2 x double>\))");
+            std::regex svml_exp_call(R"(call <2 x double> @__svml_exp2\(<2 x double> .*\))");
+            REQUIRE(std::regex_search(svml_library_module_str, m, svml_exp_decl));
+            REQUIRE(std::regex_search(svml_library_module_str, m, svml_exp_call));
+            REQUIRE(!std::regex_search(svml_library_module_str, m, exp_call));
+
+            // Check that supported exponential calls are replaced with calls to MASSV library (i.e.
+            // operating on vector of width 2).
+            std::string massv2_library_module_str = run_llvm_visitor(nmodl_text,
+                                                                     /*opt=*/false,
+                                                                     /*use_single_precision=*/false,
+                                                                     /*vector_width=*/2,
+                                                                     /*vec_lib=*/"MASSV");
+            std::regex massv2_exp_decl(R"(declare <2 x double> @__expd2_P8\(<2 x double>\))");
+            std::regex massv2_exp_call(R"(call <2 x double> @__expd2_P8\(<2 x double> .*\))");
+            REQUIRE(std::regex_search(massv2_library_module_str, m, massv2_exp_decl));
+            REQUIRE(std::regex_search(massv2_library_module_str, m, massv2_exp_call));
+            REQUIRE(!std::regex_search(massv2_library_module_str, m, exp_call));
+
+            // Check no replacement for MASSV happens for non-supported vector widths.
+            std::string massv4_library_module_str = run_llvm_visitor(nmodl_text,
+                                                                     /*opt=*/false,
+                                                                     /*use_single_precision=*/false,
+                                                                     /*vector_width=*/4,
+                                                                     /*vec_lib=*/"MASSV");
+            std::regex exp4_call(R"(call <4 x double> @llvm\.exp\.v4f64\(<4 x double> .*\))");
+            REQUIRE(std::regex_search(massv4_library_module_str, m, exp4_call));
+
+            // Check correct replacement of @llvm.exp.v4f32 into @vexpf when using Accelerate.
+            std::string accelerate_library_module_str =
+                run_llvm_visitor(nmodl_text,
+                                 /*opt=*/false,
+                                 /*use_single_precision=*/true,
+                                 /*vector_width=*/4,
+                                 /*vec_lib=*/"Accelerate");
+            std::regex accelerate_exp_decl(R"(declare <4 x float> @vexpf\(<4 x float>\))");
+            std::regex accelerate_exp_call(R"(call <4 x float> @vexpf\(<4 x float> .*\))");
+            std::regex fexp_call(R"(call <4 x float> @llvm\.exp\.v4f32\(<4 x float> .*\))");
+            REQUIRE(std::regex_search(accelerate_library_module_str, m, accelerate_exp_decl));
+            REQUIRE(std::regex_search(accelerate_library_module_str, m, accelerate_exp_call));
+            REQUIRE(!std::regex_search(accelerate_library_module_str, m, fexp_call));
         }
     }
 }
