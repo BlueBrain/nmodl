@@ -500,12 +500,12 @@ void PerfVisitor::visit_unary_expression(const ast::UnaryExpression& node) {
 bool PerfVisitor::symbol_to_skip(const std::shared_ptr<Symbol>& symbol) {
     bool skip = false;
 
-    auto is_method = symbol->has_any_property(NmodlType::extern_method | NmodlType::function_block);
+    auto is_method = symbol->has_all_properties(NmodlType::extern_method | NmodlType::function_block);
     if (is_method && under_function_call) {
         skip = true;
     }
 
-    is_method = symbol->has_any_property(NmodlType::derivative_block | NmodlType::extern_method);
+    is_method = symbol->has_all_properties(NmodlType::derivative_block | NmodlType::extern_method);
     if (is_method && under_solve_block) {
         skip = true;
     }
