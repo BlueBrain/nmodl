@@ -50,9 +50,9 @@ jobs:
       wget -O ispc.tar.gz $url;
       mkdir $(pwd)/$CMAKE_PKG/ispc && tar -xvzf ispc.tar.gz -C $(pwd)/$CMAKE_PKG/ispc --strip 1;
       # install llvm nightly (future v13)
-      wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add -
+      curl https://apt.llvm.org/llvm-snapshot.gpg.key | APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1 sudo apt-key add -
       sudo apt-get update
-      sudo apt-get install libllvm13 llvm-13 llvm-13-dev
+      sudo apt-get -y  install libllvm13 llvm-13 llvm-13-dev
     env:
       CMAKE_PKG: 'cmake-3.10.2-Linux-x86_64'
     displayName: 'Install Dependencies'
@@ -62,7 +62,7 @@ jobs:
       mkdir -p $(Build.Repository.LocalPath)/build
       cd $(Build.Repository.LocalPath)/build
       cmake --version
-      cmake .. -DPYTHON_EXECUTABLE=$(which python3.7) -DCMAKE_INSTALL_PREFIX=$HOME/nmodl -DCMAKE_BUILD_TYPE=Release -DNMODL_ENABLE_LLVM=ON
+      cmake .. -DPYTHON_EXECUTABLE=$(which python3.7) -DCMAKE_INSTALL_PREFIX=$HOME/nmodl -DCMAKE_BUILD_TYPE=Release -DNMODL_ENABLE_LLVM=ON -DLLVM_DIR=/usr/lib/llvm-13/share/llvm/cmake/
       make -j 2
       if [ $? -ne 0 ]
       then
