@@ -11,6 +11,8 @@
 #include "visitors/rename_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
 
+#include "llvm/Analysis/TargetLibraryInfo.h"
+#include "llvm/CodeGen/ReplaceWithVeclib.h"
 #include "llvm/IR/AssemblyAnnotationWriter.h"
 #include "llvm/IR/BasicBlock.h"
 #include "llvm/IR/Constants.h"
@@ -19,6 +21,7 @@
 #include "llvm/IR/Type.h"
 #include "llvm/IR/ValueSymbolTable.h"
 #include "llvm/Support/FileSystem.h"
+#include "llvm/Support/Host.h"
 #include "llvm/Support/ToolOutputFile.h"
 
 namespace nmodl {
@@ -292,21 +295,21 @@ std::shared_ptr<ast::InstanceStruct> CodegenLLVMVisitor::get_instance_struct_ptr
     return instance_var_helper.instance;
 }
 
-void CodegenLLVMVisitor::run_llvm_opt_passes() {
+void CodegenLLVMVisitor::run_ir_opt_passes() {
     /// run some common optimisation passes that are commonly suggested
-    fpm.add(llvm::createInstructionCombiningPass());
-    fpm.add(llvm::createReassociatePass());
-    fpm.add(llvm::createGVNPass());
-    fpm.add(llvm::createCFGSimplificationPass());
+    opt_pm.add(llvm::createInstructionCombiningPass());
+    opt_pm.add(llvm::createReassociatePass());
+    opt_pm.add(llvm::createGVNPass());
+    opt_pm.add(llvm::createCFGSimplificationPass());
 
     /// initialize pass manager
-    fpm.doInitialization();
+    opt_pm.doInitialization();
 
     /// iterate over all functions and run the optimisation passes
     auto& functions = module->getFunctionList();
     for (auto& function: functions) {
         llvm::verifyFunction(function);
-        fpm.run(function);
+        opt_pm.run(function);
     }
 }
 
@@ -892,7 +895,28 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
 
     if (opt_passes) {
         logger->info("Running LLVM optimisation passes");
-        run_llvm_opt_passes();
+        run_ir_opt_passes();
+    }
+
+    // Optionally, replace LLVM's maths intrinsics with vector library calls.
+    if (vector_library != llvm::TargetLibraryInfoImpl::NoLibrary) {
+        // First, get the target library information.
+        llvm::Triple triple(llvm::sys::getDefaultTargetTriple());
+        llvm::TargetLibraryInfoImpl target_lib_info = llvm::TargetLibraryInfoImpl(triple);
+
+        if (vector_library != llvm::TargetLibraryInfoImpl::LIBMVEC_X86 ||
+            (triple.isX86() && triple.isArch64Bit())) {
+            target_lib_info.addVectorizableFunctionsFromVecLib(vector_library);
+        }
+
+        // Run the codegen optimisation passes.
+        codegen_pm.add(new llvm::TargetLibraryInfoWrapperPass(target_lib_info));
+        codegen_pm.add(new llvm::ReplaceWithVeclibLegacy);
+        codegen_pm.doInitialization();
+        for (auto& function: module->getFunctionList()) {
+            if (!function.isDeclaration())
+                codegen_pm.run(function);
+        }
     }
 
     // If the output directory is specified, save the IR to .ll file.

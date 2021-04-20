@@ -23,6 +23,7 @@
 #include "utils/logger.hpp"
 #include "visitors/ast_visitor.hpp"
 
+#include "llvm/Analysis/TargetLibraryInfo.h"
 #include "llvm/IR/IRBuilder.h"
 #include "llvm/IR/LLVMContext.h"
 #include "llvm/IR/LegacyPassManager.h"
@@ -45,6 +46,15 @@ namespace codegen {
  * @{
  */
 
+/// A map to query vector library by its string value.
+static const std::map<std::string, llvm::TargetLibraryInfoImpl::VectorLibrary> veclib_map = {
+            {"Accelerate", llvm::TargetLibraryInfoImpl::Accelerate},
+            {"libmvec", llvm::TargetLibraryInfoImpl::LIBMVEC_X86},
+            {"MASSV", llvm::TargetLibraryInfoImpl::MASSV},
+            {"SVML", llvm::TargetLibraryInfoImpl::SVML},
+            {"none", llvm::TargetLibraryInfoImpl::NoLibrary}
+};
+
 /**
  * \class CodegenLLVMVisitor
  * \brief %Visitor for transforming NMODL AST to LLVM IR
@@ -65,7 +75,14 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
 
     llvm::IRBuilder<> builder;
 
-    llvm::legacy::FunctionPassManager fpm;
+    // Pass manager for optimisation passes that are used for target code generation.
+    llvm::legacy::FunctionPassManager codegen_pm;
+
+    // Vector library used for maths functions.
+    llvm::TargetLibraryInfoImpl::VectorLibrary vector_library;
+
+    // Pass manager for optimisation passes that are run on IR and are not related to target.
+    llvm::legacy::FunctionPassManager opt_pm;
 
     // Stack to hold visited values
     std::vector<llvm::Value*> values;
@@ -97,7 +114,7 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
      * LLVM provides number of optimisation passes that can be run on the generated IR.
      * Here we run common optimisation LLVM passes that benefits code optimisation.
      */
-    void run_llvm_opt_passes();
+    void run_ir_opt_passes();
 
   public:
     /**
@@ -110,14 +127,17 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
                        const std::string& output_dir,
                        bool opt_passes,
                        bool use_single_precision = false,
-                       int vector_width = 1)
+                       int vector_width = 1,
+                       std::string vec_lib = "none")
         : mod_filename(mod_filename)
         , output_dir(output_dir)
         , opt_passes(opt_passes)
         , use_single_precision(use_single_precision)
         , vector_width(vector_width)
+        , vector_library(veclib_map.at(vec_lib))
         , builder(*context)
-        , fpm(module.get()) {}
+        , codegen_pm(module.get())
+        , opt_pm(module.get()) {}
 
 
     /**
