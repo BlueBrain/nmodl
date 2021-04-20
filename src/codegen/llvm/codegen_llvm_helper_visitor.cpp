@@ -463,7 +463,7 @@ void CodegenLLVMHelperVisitor::convert_local_statement(ast::StatementBlock& node
     const auto& statements = collect_nodes(node, {ast::AstNodeType::LOCAL_LIST_STATEMENT});
 
     /// iterate over all statements and replace each with codegen variable
-    for(const auto& statement : statements) {
+    for (const auto& statement: statements) {
         const auto& local_statement = std::dynamic_pointer_cast<ast::LocalListStatement>(statement);
 
         /// create codegen variables from local variables
@@ -476,7 +476,7 @@ void CodegenLLVMHelperVisitor::convert_local_statement(ast::StatementBlock& node
         /// remove local list statement now
         std::unordered_set<nmodl::ast::Statement*> to_delete({local_statement.get()});
         /// local list statement is enclosed in statement block
-	const auto& parent_node = dynamic_cast<ast::StatementBlock*>(local_statement->get_parent());
+        const auto& parent_node = dynamic_cast<ast::StatementBlock*>(local_statement->get_parent());
         parent_node->erase_statement(to_delete);
 
         /// create new codegen variable statement and insert at the beginning of the block
@@ -509,10 +509,10 @@ void CodegenLLVMHelperVisitor::rename_local_variables(ast::StatementBlock& node)
     const auto& statements = collect_nodes(node, {ast::AstNodeType::LOCAL_LIST_STATEMENT});
 
     /// iterate over each statement and rename all variabbles
-    for(const auto& statement : statements) {
+    for (const auto& statement: statements) {
         const auto& local_statement = std::dynamic_pointer_cast<ast::LocalListStatement>(statement);
 
-	/// rename local variable in entire statement block
+        /// rename local variable in entire statement block
         for (auto& var: local_statement->get_variables()) {
             std::string old_name = var->get_node_name();
             std::string new_name = "{}_{}"_format(old_name, local_block_counter);
@@ -702,8 +702,8 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
             loop_count_expression(INDUCTION_VAR, NODECOUNT_VAR, /*vector_width=*/1);
         const auto& increment = loop_increment_expression(INDUCTION_VAR, /*vector_width=*/1);
 
-	/// rename local variables to avoid conflict with main loop
-	rename_local_variables(*loop_block);
+        /// rename local variables to avoid conflict with main loop
+        rename_local_variables(*loop_block);
 
         /// convert local statement to codegenvar statement
         convert_local_statement(*loop_block);
