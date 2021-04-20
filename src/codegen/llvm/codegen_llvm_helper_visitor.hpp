@@ -163,6 +163,7 @@ class CodegenLLVMHelperVisitor: public visitor::AstVisitor {
     void convert_to_instance_variable(ast::Node& node, std::string& index_var);
 
     void convert_local_statement(ast::StatementBlock& node);
+    void rename_local_variables(ast::StatementBlock& node);
 
     void visit_procedure_block(ast::ProcedureBlock& node) override;
     void visit_function_block(ast::FunctionBlock& node) override;
