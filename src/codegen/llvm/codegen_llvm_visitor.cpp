@@ -917,6 +917,7 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
             if (!function.isDeclaration())
                 codegen_pm.run(function);
         }
+        codegen_pm.doFinalization();
     }
 
     // If the output directory is specified, save the IR to .ll file.
