@@ -1007,9 +1007,8 @@ void CodegenLLVMVisitor::wrap_kernel_functions() {
                                      " does not have an instance struct pointer argument!");
 
         // Create a wrapper void function that takes a void pointer as a single argument.
-        llvm::Type* void_type = llvm::Type::getVoidTy(*context);
         llvm::Type* i32_type = llvm::Type::getInt32Ty(*context);
-        llvm::Type* void_ptr_type = llvm::PointerType::get(void_type, /*AddressSpace=*/0);
+        llvm::Type* void_ptr_type = llvm::Type::getInt8PtrTy(*context);
         llvm::Function* wrapper_func = llvm::Function::Create(
             llvm::FunctionType::get(i32_type, {void_ptr_type}, /*isVarArg=*/false),
             llvm::Function::ExternalLinkage,
