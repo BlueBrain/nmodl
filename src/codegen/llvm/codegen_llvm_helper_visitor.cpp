@@ -495,11 +495,6 @@ void CodegenLLVMHelperVisitor::convert_local_statement(ast::StatementBlock& node
  * main loop. In order to avoid conflict during lookup, rename each local
  * variable by appending unique number. The number used as suffix is just
  * a counter used for Statement block.
- *
- * \todo : Check in LLVM if it is really necessary to rename all local
- *         variables across basic blocks. There should be a concept
- *         of local symbol table so that we don't need to have unique
- *         variable names?
  */
 void CodegenLLVMHelperVisitor::rename_local_variables(ast::StatementBlock& node) {
     /// local block counter just to append unique number
@@ -508,7 +503,7 @@ void CodegenLLVMHelperVisitor::rename_local_variables(ast::StatementBlock& node)
     /// collect all local statement block
     const auto& statements = collect_nodes(node, {ast::AstNodeType::LOCAL_LIST_STATEMENT});
 
-    /// iterate over each statement and rename all variabbles
+    /// iterate over each statement and rename all variables
     for (const auto& statement: statements) {
         const auto& local_statement = std::dynamic_pointer_cast<ast::LocalListStatement>(statement);
 
