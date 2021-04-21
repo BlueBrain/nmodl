@@ -1068,22 +1068,19 @@ SCENARIO("Vector library calls", "[visitor][llvm][vector_lib]") {
             NEURON {
                 SUFFIX hh
                 NONSPECIFIC_CURRENT il
-                RANGE minf, mtau
             }
             STATE {
                 m
             }
             ASSIGNED {
                 v (mV)
-                minf
-                mtau (ms)
             }
             BREAKPOINT {
                 SOLVE states METHOD cnexp
                 il = 2
             }
             DERIVATIVE states {
-                m' = (minf-m) / mtau
+                m = exp(m)
             }
         )";
 

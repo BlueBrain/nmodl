@@ -904,12 +904,14 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
         llvm::Triple triple(llvm::sys::getDefaultTargetTriple());
         llvm::TargetLibraryInfoImpl target_lib_info = llvm::TargetLibraryInfoImpl(triple);
 
+        // Populate target library information with vectorisable functions. Since libmvec is
+        // supported for x86_64 only, have a check to catch other architectures.
         if (vector_library != llvm::TargetLibraryInfoImpl::LIBMVEC_X86 ||
             (triple.isX86() && triple.isArch64Bit())) {
             target_lib_info.addVectorizableFunctionsFromVecLib(vector_library);
         }
 
-        // Run the codegen optimisation passes.
+        // Run the codegen optimisation passes that replace maths intrinsics.
         codegen_pm.add(new llvm::TargetLibraryInfoWrapperPass(target_lib_info));
         codegen_pm.add(new llvm::ReplaceWithVeclibLegacy);
         codegen_pm.doInitialization();
