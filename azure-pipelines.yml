@@ -50,9 +50,10 @@ jobs:
       wget -O ispc.tar.gz $url;
       mkdir $(pwd)/$CMAKE_PKG/ispc && tar -xvzf ispc.tar.gz -C $(pwd)/$CMAKE_PKG/ispc --strip 1;
       # install llvm nightly (future v13)
-      curl https://apt.llvm.org/llvm-snapshot.gpg.key | APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1 sudo apt-key add -
-      sudo apt-get update
-      sudo apt-get -y  install libllvm13 llvm-13 llvm-13-dev
+      wget https://apt.llvm.org/llvm.sh
+      chmod +x llvm.sh
+      sudo ./llvm.sh 13
+
     env:
       CMAKE_PKG: 'cmake-3.10.2-Linux-x86_64'
     displayName: 'Install Dependencies'
