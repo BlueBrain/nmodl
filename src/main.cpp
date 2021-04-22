@@ -179,8 +179,11 @@ int main(int argc, const char* argv[]) {
     /// llvm vector width
     int llvm_vec_width = 1;
 
-    /// vector library
+    /// vector library name
     std::string vec_lib("none");
+
+    /// list of shared libraries to link
+    std::vector<std::string> libs;
 
     /// run llvm benchmark
     bool run_benchmark(false);
@@ -338,6 +341,9 @@ int main(int argc, const char* argv[]) {
     benchmark_opt->add_flag("--run",
                        run_benchmark,
                        fmt::format("Run LLVM benchmark ({})", run_benchmark))->ignore_case();
+    benchmark_opt->add_option("--libs", libs, "Shared libraries to link IR against")
+            ->ignore_case()
+            ->check(CLI::ExistingFile);
     benchmark_opt->add_option("--instance-size",
                        instance_size,
                        fmt::format("Instance struct size ({})", instance_size))->ignore_case();
@@ -346,11 +352,7 @@ int main(int argc, const char* argv[]) {
                        fmt::format("Number of experiments for benchmarking ({})", repeat))->ignore_case();
     benchmark_opt->add_option("--backend",
                        backend,
-<<<<<<< HEAD
-                       fmt::format("Target's backend ({})", backend))->ignore_case()->check(CLI::IsMember({"avx2", "default", "sse2"}));;
-=======
-                       "Target's backend ({})"_format(backend))->ignore_case()->check(CLI::IsMember({"avx2", "default", "sse2"}));
->>>>>>> 88db707d (Integrating vector maths library into LLVM codegen (#604))
+                       fmt::format("Target's backend ({})", backend))->ignore_case()->check(CLI::IsMember({"avx2", "default", "sse2"}));
 #endif
     // clang-format on
 
@@ -665,9 +667,12 @@ int main(int argc, const char* argv[]) {
 
             if (run_benchmark) {
                 logger->info("Running LLVM benchmark");
-                benchmark::LLVMBuildInfo info{llvm_vec_width, llvm_ir_opt_passes, llvm_float_type};
+                benchmark::LLVMBuildInfo info{llvm_vec_width,
+                                              llvm_ir_opt_passes,
+                                              llvm_float_type,
+                                              vec_lib};
                 benchmark::LLVMBenchmark bench(
-                    modfile, output_dir, info, repeat, instance_size, backend);
+                    modfile, output_dir, libs, info, repeat, instance_size, backend);
                 bench.benchmark(ast);
             }
 
