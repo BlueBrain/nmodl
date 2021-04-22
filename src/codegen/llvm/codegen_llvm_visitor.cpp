@@ -12,7 +12,6 @@
 #include "visitors/visitor_utils.hpp"
 
 #include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/CodeGen/ReplaceWithVeclib.h"
 #include "llvm/IR/AssemblyAnnotationWriter.h"
 #include "llvm/IR/BasicBlock.h"
 #include "llvm/IR/Constants.h"
@@ -23,6 +22,10 @@
 #include "llvm/Support/FileSystem.h"
 #include "llvm/Support/Host.h"
 #include "llvm/Support/ToolOutputFile.h"
+
+#ifndef LLVM_VERSION_LESS_THAN_13
+#include "llvm/CodeGen/ReplaceWithVeclib.h"
+#endif
 
 namespace nmodl {
 namespace codegen {
@@ -899,7 +902,12 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
     }
 
     // Optionally, replace LLVM's maths intrinsics with vector library calls.
-    if (vector_library != llvm::TargetLibraryInfoImpl::NoLibrary) {
+    if (vector_width > 1 && vector_library != llvm::TargetLibraryInfoImpl::NoLibrary) {
+#ifdef LLVM_VERSION_LESS_THAN_13
+        logger->warn(
+            "This version of LLVM does not support replacement of LLVM intrinsics with vector "
+            "library calls");
+#else
         // First, get the target library information.
         llvm::Triple triple(llvm::sys::getDefaultTargetTriple());
         llvm::TargetLibraryInfoImpl target_lib_info = llvm::TargetLibraryInfoImpl(triple);
@@ -920,6 +928,7 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
                 codegen_pm.run(function);
         }
         codegen_pm.doFinalization();
+#endif
     }
 
     // If the output directory is specified, save the IR to .ll file.

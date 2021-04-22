@@ -1097,6 +1097,7 @@ SCENARIO("Vector library calls", "[visitor][llvm][vector_lib]") {
             REQUIRE(std::regex_search(no_library_module_str, m, exp_decl));
             REQUIRE(std::regex_search(no_library_module_str, m, exp_call));
 
+#ifndef LLVM_VERSION_LESS_THAN_13
             // Check exponential calls are replaced with calls to SVML library.
             std::string svml_library_module_str = run_llvm_visitor(nmodl_text,
                                                                    /*opt=*/false,
@@ -1144,6 +1145,7 @@ SCENARIO("Vector library calls", "[visitor][llvm][vector_lib]") {
             REQUIRE(std::regex_search(accelerate_library_module_str, m, accelerate_exp_decl));
             REQUIRE(std::regex_search(accelerate_library_module_str, m, accelerate_exp_call));
             REQUIRE(!std::regex_search(accelerate_library_module_str, m, fexp_call));
+#endif
         }
     }
 }
