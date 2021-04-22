@@ -48,14 +48,13 @@ namespace codegen {
 
 /// A map to query vector library by its string value.
 static const std::map<std::string, llvm::TargetLibraryInfoImpl::VectorLibrary> veclib_map = {
-            {"Accelerate", llvm::TargetLibraryInfoImpl::Accelerate},
+    {"Accelerate", llvm::TargetLibraryInfoImpl::Accelerate},
 #ifndef LLVM_VERSION_LESS_THAN_13
-            {"libmvec", llvm::TargetLibraryInfoImpl::LIBMVEC_X86},
+    {"libmvec", llvm::TargetLibraryInfoImpl::LIBMVEC_X86},
 #endif
-            {"MASSV", llvm::TargetLibraryInfoImpl::MASSV},
-            {"SVML", llvm::TargetLibraryInfoImpl::SVML},
-            {"none", llvm::TargetLibraryInfoImpl::NoLibrary}
-};
+    {"MASSV", llvm::TargetLibraryInfoImpl::MASSV},
+    {"SVML", llvm::TargetLibraryInfoImpl::SVML},
+    {"none", llvm::TargetLibraryInfoImpl::NoLibrary}};
 
 /**
  * \class CodegenLLVMVisitor
