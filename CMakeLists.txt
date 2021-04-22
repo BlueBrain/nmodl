@@ -157,6 +157,9 @@ if(NMODL_ENABLE_LLVM)
   include(LLVMHelper)
   include_directories(${LLVM_INCLUDE_DIRS})
   add_definitions(-DNMODL_LLVM_BACKEND)
+  if(LLVM_VERSION VERSION_LESS_EQUAL 12)
+    add_definitions(-DLLVM_VERSION_LESS_THAN_13)
+  endif()
 endif()
 
 # =============================================================================

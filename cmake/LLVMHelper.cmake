@@ -7,8 +7,11 @@ find_package(LLVM REQUIRED CONFIG)
 # include LLVM header and core library
 llvm_map_components_to_libnames(
   LLVM_LIBS_TO_LINK
+  analysis
+  codegen
   core
   instcombine
+  mc
   native
   orcjit
   scalaropts
