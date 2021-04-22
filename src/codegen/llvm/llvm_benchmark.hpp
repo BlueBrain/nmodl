@@ -20,6 +20,7 @@ struct LLVMBuildInfo {
     int vector_width;
     bool opt_passes;
     bool use_single_precision;
+    std::string vec_lib;
 };
 
 /**
@@ -32,6 +33,8 @@ class LLVMBenchmark {
     std::string mod_filename;
 
     std::string output_dir;
+
+    std::vector<std::string> shared_libs;
 
     int num_experiments;
 
@@ -65,12 +68,14 @@ class LLVMBenchmark {
   public:
     LLVMBenchmark(const std::string& mod_filename,
                   const std::string& output_dir,
+                  std::vector<std::string> shared_libs,
                   LLVMBuildInfo info,
                   int num_experiments,
                   int instance_size,
                   const std::string& backend)
         : mod_filename(mod_filename)
         , output_dir(output_dir)
+        , shared_libs(shared_libs)
         , num_experiments(num_experiments)
         , instance_size(instance_size)
         , backend(backend)
