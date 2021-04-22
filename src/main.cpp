@@ -177,10 +177,13 @@ int main(int argc, const char* argv[]) {
     bool llvm_float_type(false);
 
     /// run llvm optimisation passes
-    bool llvm_opt_passes(false);
+    bool llvm_ir_opt_passes(false);
 
     /// llvm vector width
     int llvm_vec_width = 1;
+
+    /// vector library
+    std::string vec_lib("none");
 
     /// run llvm benchmark
     bool run_benchmark(false);
@@ -309,14 +312,17 @@ int main(int argc, const char* argv[]) {
         llvm_ir,
         "Generate LLVM IR ({})"_format(llvm_ir))->ignore_case();
     llvm_opt->add_flag("--opt",
-        llvm_opt_passes,
-        "Run LLVM optimisation passes ({})"_format(llvm_opt_passes))->ignore_case();
+                       llvm_ir_opt_passes,
+                       "Run LLVM optimisation passes ({})"_format(llvm_ir_opt_passes))->ignore_case();
     llvm_opt->add_flag("--single-precision",
                        llvm_float_type,
                        "Use single precision floating-point types ({})"_format(llvm_float_type))->ignore_case();
     llvm_opt->add_option("--vector-width",
         llvm_vec_width,
         "LLVM explicit vectorisation width ({})"_format(llvm_vec_width))->ignore_case();
+    llvm_opt->add_option("--veclib",
+                         vec_lib,
+                         "Vector library for maths functions ({})"_format(vec_lib))->check(CLI::IsMember({"Accelerate", "libmvec", "MASSV", "SVML", "none"}));
 
     // LLVM IR benchmark options.
     auto benchmark_opt = app.add_subcommand("benchmark", "LLVM benchmark option")->ignore_case();
@@ -331,7 +337,7 @@ int main(int argc, const char* argv[]) {
                        "Number of experiments for benchmarking ({})"_format(repeat))->ignore_case();
     benchmark_opt->add_option("--backend",
                        backend,
-                       "Target's backend ({})"_format(backend))->ignore_case()->check(CLI::IsMember({"avx2", "default", "sse2"}));;
+                       "Target's backend ({})"_format(backend))->ignore_case()->check(CLI::IsMember({"avx2", "default", "sse2"}));
 #endif
     // clang-format on
 
@@ -640,7 +646,7 @@ int main(int argc, const char* argv[]) {
 
             if (run_benchmark) {
                 logger->info("Running LLVM benchmark");
-                benchmark::LLVMBuildInfo info{llvm_vec_width, llvm_opt_passes, llvm_float_type};
+                benchmark::LLVMBuildInfo info{llvm_vec_width, llvm_ir_opt_passes, llvm_float_type};
                 benchmark::LLVMBenchmark bench(
                     modfile, output_dir, info, repeat, instance_size, backend);
                 bench.benchmark(ast);
@@ -648,8 +654,12 @@ int main(int argc, const char* argv[]) {
 
             else if (llvm_ir) {
                 logger->info("Running LLVM backend code generator");
-                CodegenLLVMVisitor visitor(
-                    modfile, output_dir, llvm_opt_passes, llvm_float_type, llvm_vec_width);
+                CodegenLLVMVisitor visitor(modfile,
+                                           output_dir,
+                                           llvm_ir_opt_passes,
+                                           llvm_float_type,
+                                           llvm_vec_width,
+                                           vec_lib);
                 visitor.visit_program(*ast);
                 ast_to_nmodl(*ast, filepath("llvm", "mod"));
                 ast_to_json(*ast, filepath("llvm", "json"));
