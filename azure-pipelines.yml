@@ -71,21 +71,21 @@ jobs:
   - script: |
       export PATH=$(pwd)/$CMAKE_PKG/bin:/home/vsts/.local/bin:$PATH
       export CXX='g++-8'
-      git clone --recursive https://github.com/BlueBrain/CoreNeuron.git
-      mkdir CoreNeuron/build
-      cd CoreNeuron/build
+      git clone --recursive https://github.com/neuronsimulator/nrn.git
+      mkdir nrn/build
+      cd nrn/build
       cmake --version
-      cmake .. -DCORENRN_ENABLE_MPI=OFF -DCORENRN_ENABLE_NMODL=ON -DCORENRN_NMODL_DIR=$HOME/nmodl -Dnmodl_PYTHONPATH=$HOME/nmodl/lib -DPYTHON_EXECUTABLE=$(which python3.7) -DCORENRN_NMODL_FLAGS="sympy --analytic"
+      cmake .. -DNRN_ENABLE_CORENEURON=ON -DNRN_ENABLE_INTERVIEW=OFF -DNRN_ENABLE_RX3D=ON -DNRN_ENABLE_BINARY_SPECIAL=ON -DNRN_ENABLE_MPI=ON -DNRN_ENABLE_TESTS=ON -DCORENRN_ENABLE_MPI=OFF -DCORENRN_ENABLE_NMODL=ON -DCORENRN_NMODL_DIR=$HOME/nmodl -Dnmodl_PYTHONPATH=$HOME/nmodl/lib -DPYTHON_EXECUTABLE=$(which python3.7) -DCORENRN_NMODL_FLAGS="sympy --analytic"
       make -j 2
       if [ $? -ne 0 ]
       then
         make VERBOSE=1
       fi
-      make test
+      make test -j2
       ./bin/nrnivmodl-core $(Build.Repository.LocalPath)/test/integration/mod
     env:
       CMAKE_PKG: 'cmake-3.10.2-Linux-x86_64'
-    displayName: 'Build CoreNEURON and Run Integration Tests'
+    displayName: 'Build Neuron and Run Integration Tests'
   - script: |
       export PATH=$(pwd)/$CMAKE_PKG/bin:/home/vsts/.local/bin:$PATH
       export CXX='g++-8'
