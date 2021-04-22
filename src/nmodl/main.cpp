@@ -180,8 +180,11 @@ int main(int argc, const char* argv[]) {
     /// llvm vector width
     int llvm_vec_width = 1;
 
-    /// vector library
+    /// vector library name
     std::string vec_lib("none");
+
+    /// list of shared libraries to link
+    std::vector<std::string> libs;
 
     /// run llvm benchmark
     bool run_benchmark(false);
@@ -328,6 +331,9 @@ int main(int argc, const char* argv[]) {
     benchmark_opt->add_flag("--run",
                        run_benchmark,
                        "Run LLVM benchmark ({})"_format(run_benchmark))->ignore_case();
+    benchmark_opt->add_option("--libs", libs, "Shared libraries to link IR against")
+            ->ignore_case()
+            ->check(CLI::ExistingFile);
     benchmark_opt->add_option("--instance-size",
                        instance_size,
                        "Instance struct size ({})"_format(instance_size))->ignore_case();
@@ -626,9 +632,12 @@ int main(int argc, const char* argv[]) {
 
             if (run_benchmark) {
                 logger->info("Running LLVM benchmark");
-                benchmark::LLVMBuildInfo info{llvm_vec_width, llvm_ir_opt_passes, llvm_float_type};
+                benchmark::LLVMBuildInfo info{llvm_vec_width,
+                                              llvm_ir_opt_passes,
+                                              llvm_float_type,
+                                              vec_lib};
                 benchmark::LLVMBenchmark bench(
-                    modfile, output_dir, info, repeat, instance_size, backend);
+                    modfile, output_dir, libs, info, repeat, instance_size, backend);
                 bench.benchmark(ast);
             }
 

@@ -43,7 +43,8 @@ void LLVMBenchmark::benchmark(const std::shared_ptr<ast::Program>& node) {
                                         output_dir,
                                         llvm_build_info.opt_passes,
                                         llvm_build_info.use_single_precision,
-                                        llvm_build_info.vector_width);
+                                        llvm_build_info.vector_width,
+                                        llvm_build_info.vec_lib);
     generate_llvm(visitor, node);
 
     // Finally, run the benchmark and log the measurements.
@@ -103,7 +104,7 @@ void LLVMBenchmark::run_benchmark(codegen::CodegenLLVMVisitor& visitor,
 
     std::string features_str = llvm::join(features.begin(), features.end(), ",");
     std::unique_ptr<llvm::Module> m = visitor.get_module();
-    runner::Runner runner(std::move(m), features_str);
+    runner::Runner runner(std::move(m), features_str, shared_libs);
 
     // Benchmark every kernel.
     for (const auto& kernel_name: kernel_names) {
