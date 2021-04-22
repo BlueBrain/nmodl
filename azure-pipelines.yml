@@ -99,6 +99,10 @@ stages:
         url="https://github.com/ispc/ispc/releases/download/${ispc_version}/ispc-${ispc_version}${ispc_version_suffix}-${url_os}.tar.gz";
         mkdir $(pwd)/$CMAKE_PKG/ispc
         wget --quiet --output-document=- $url | tar -xvzf - -C $(pwd)/$CMAKE_PKG/ispc --strip 1;
+        # install llvm nightly (future v13) TODO: this will fail now, FIX this!
+        wget https://apt.llvm.org/llvm.sh
+        chmod +x llvm.sh
+        sudo ./llvm.sh 13
       env:
         CMAKE_VER: 'v3.15.0'
         CMAKE_PKG: 'cmake-3.15.0-Linux-x86_64'
@@ -109,7 +113,7 @@ stages:
         mkdir -p $(Build.Repository.LocalPath)/build
         cd $(Build.Repository.LocalPath)/build
         cmake --version
-        cmake .. -DPYTHON_EXECUTABLE=$(which python3.7) -DCMAKE_INSTALL_PREFIX=$HOME/nmodl -DCMAKE_BUILD_TYPE=Release -DNMODL_ENABLE_LLVM=OFF
+        cmake .. -DPYTHON_EXECUTABLE=$(which python3.7) -DCMAKE_INSTALL_PREFIX=$HOME/nmodl -DCMAKE_BUILD_TYPE=Release -DNMODL_ENABLE_LLVM=ON -DLLVM_DIR=/usr/lib/llvm-13/share/llvm/cmake/
         make -j 2
         if [ $? -ne 0 ]
         then
@@ -178,8 +182,8 @@ stages:
       displayName: 'Build CoreNEURON and Run Integration Tests with ISPC compiler'
   - job: 'osx11'
     pool:
-      vmImage: 'macOS-11'
-    displayName: 'MacOS (11), AppleClang 12.0'
+      vmImage: 'macOS-10.15'
+    displayName: 'MacOS (10.15), AppleClang 13.0 (trunk, May 2021)'
     steps:
     - checkout: self
       submodules: True
@@ -189,10 +193,14 @@ stages:
         python3 -m pip install --user 'Jinja2>=2.9.3' 'PyYAML>=3.13' pytest pytest-cov numpy 'sympy>=1.3'
       displayName: 'Install Dependencies'
     - script: |
+        cd $HOME
+        git clone https://github.com/pramodk/llvm-nightly.git
+      displayName: 'Setup LLVM v13'
+    - script: |
         export PATH=/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH;
         mkdir -p $(Build.Repository.LocalPath)/build
         cd $(Build.Repository.LocalPath)/build
-        cmake .. -DPYTHON_EXECUTABLE=$(which python3) -DCMAKE_INSTALL_PREFIX=$HOME/nmodl -DCMAKE_BUILD_TYPE=RelWithDebInfo -DNMODL_ENABLE_PYTHON_BINDINGS=OFF -DLLVM_DIR=`brew --prefix llvm`/lib/cmake/llvm -DNMODL_ENABLE_LLVM=ON
+        cmake .. -DPYTHON_EXECUTABLE=$(which python3) -DCMAKE_INSTALL_PREFIX=$HOME/nmodl -DCMAKE_BUILD_TYPE=RelWithDebInfo -DNMODL_ENABLE_PYTHON_BINDINGS=OFF -DLLVM_DIR=$HOME/llvm-nightly/0421/osx/lib/cmake/llvm -DNMODL_ENABLE_LLVM=ON
         make -j 2
         if [ $? -ne 0 ]
         then
@@ -289,6 +297,7 @@ stages:
     - template: ci/upload-wheels.yml
   - job: 'macos_wheels'
     timeoutInMinutes: 45
+    condition: eq(1,2)
     pool:
       vmImage: 'macOS-11'
     strategy:
