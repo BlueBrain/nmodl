@@ -41,7 +41,7 @@ function build_with() {
              -DPYTHON_EXECUTABLE=$(which python3) \
              -DNMODL_FORMATTING:BOOL=ON \
              -DClangFormat_EXECUTABLE=$clang_format_exe \
-             -DLLVM_DIR=/gpfs/bbp.cscs.ch/apps/hpc/jenkins/merge/deploy/externals/latest/linux-rhel7-x86_64/gcc-9.3.0/llvm-11.0.0-kzl4o5/lib/cmake/llvm
+             -DLLVM_DIR=/gpfs/bbp.cscs.ch/data/project/proj16/software/llvm/install/0421/lib/cmake/llvm
     make -j6
     popd
 }
