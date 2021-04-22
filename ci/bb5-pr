@@ -7,7 +7,7 @@ git show HEAD
 source /gpfs/bbp.cscs.ch/apps/hpc/jenkins/config/modules.sh
 module use /gpfs/bbp.cscs.ch/apps/tools/modules/tcl/linux-rhel7-x86_64/
 
-module load archive/2020-10 cmake bison flex python-dev doxygen
+module load unstable cmake bison flex python-dev doxygen
 module list
 
 function bb5_pr_setup_virtualenv() {
