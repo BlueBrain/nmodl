@@ -10,6 +10,7 @@ llvm_map_components_to_libnames(
   analysis
   codegen
   core
+  executionengine
   instcombine
   mc
   native
