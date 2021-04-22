@@ -34,20 +34,20 @@ jobs:
       sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
       sudo apt-add-repository -y ppa:deadsnakes/ppa
       sudo apt update
-      sudo apt install -y g++-8 flex bison libfl-dev cython
+      sudo apt install -y g++-8 flex bison libfl-dev cython libx11-dev libxcomposite-dev libncurses-dev
       sudo apt-get install -y python3.7 python3.7-dev python3.7-venv
       python3.7 -m pip install -U pip setuptools
       python3.7 -m pip install --user 'Jinja2>=2.9.3' 'PyYAML>=3.13' pytest 'sympy>=1.3,<1.6'
       # we manually get version 3.10.2 to make sure that changes in the cmake
       # files do not require unsupported versions of cmake in our package.
-      wget "https://github.com/Kitware/CMake/releases/download/v3.10.2/$CMAKE_PKG.tar.gz" && tar xzpvf $CMAKE_PKG.tar.gz
+      wget --quiet --output-document=- "https://github.com/Kitware/CMake/releases/download/v3.10.2/$CMAKE_PKG.tar.gz" | tar xzpf -
       # install ISPC compiler for integration testing
       ispc_version="v1.12.0";
       url_os="linux";
       ispc_version_suffix="b";
       url="https://github.com/ispc/ispc/releases/download/${ispc_version}/ispc-${ispc_version}${ispc_version_suffix}-${url_os}.tar.gz";
-      wget -O ispc.tar.gz $url;
-      mkdir $(pwd)/$CMAKE_PKG/ispc && tar -xvzf ispc.tar.gz -C $(pwd)/$CMAKE_PKG/ispc --strip 1;
+      mkdir $(pwd)/$CMAKE_PKG/ispc
+      wget --output-document=- $url | tar -xvzf - -C $(pwd)/$CMAKE_PKG/ispc --strip 1;
     env:
       CMAKE_PKG: 'cmake-3.10.2-Linux-x86_64'
     displayName: 'Install Dependencies'
