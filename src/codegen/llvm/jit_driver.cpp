@@ -34,7 +34,7 @@ void JITDriver::init(std::string features, std::vector<std::string>& lib_paths) 
 
     // Create object linking function callback.
     auto object_linking_layer_creator = [&](llvm::orc::ExecutionSession& session,
-                                            const llvm::Triple& TT) {
+                                            const llvm::Triple& triple) {
         // Create linking layer.
         auto layer = std::make_unique<llvm::orc::RTDyldObjectLinkingLayer>(session, []() {
             return std::make_unique<llvm::SectionMemoryManager>();
@@ -42,19 +42,17 @@ void JITDriver::init(std::string features, std::vector<std::string>& lib_paths) 
         for (const auto& lib_path: lib_paths) {
             // For every library path, create a corresponding memory buffer.
             auto memory_buffer = llvm::MemoryBuffer::getFile(lib_path);
-            if (!memory_buffer) {
-                logger->warn("Unable to create memory buffer for " + lib_path);
-                continue;
-            }
+            if (!memory_buffer)
+                throw std::runtime_error("Unable to create memory buffer for " + lib_path);
+
             // Create a new JIT library instance for this session and resolve symbols.
             auto& jd = session.createBareJITDylib(std::string(lib_path));
             auto loaded =
                 llvm::orc::DynamicLibrarySearchGenerator::Load(lib_path.data(),
                                                                data_layout.getGlobalPrefix());
-            if (!loaded) {
-                logger->warn("Unable to load " + lib_path);
-                continue;
-            }
+
+            if (!loaded)
+                throw std::runtime_error("Unable to load " + lib_path);
             jd.addGenerator(std::move(*loaded));
             cantFail(layer->add(jd, std::move(*memory_buffer)));
         }
@@ -112,7 +110,7 @@ std::unique_ptr<llvm::TargetMachine> JITDriver::create_target(
     return std::unique_ptr<llvm::TargetMachine>(tm);
 }
 
-bool JITDriver::set_triple_and_data_layout(const std::string& features) {
+void JITDriver::set_triple_and_data_layout(const std::string& features) {
     // Get the deafult target triple for the host.
     auto target_triple = llvm::sys::getDefaultTargetTriple();
     std::string error_msg;
@@ -131,7 +129,6 @@ bool JITDriver::set_triple_and_data_layout(const std::string& features) {
     // Set data layout and the target triple to the module.
     module->setDataLayout(tm->createDataLayout());
     module->setTargetTriple(target_triple);
-    return false;
 }
 }  // namespace runner
 }  // namespace nmodl

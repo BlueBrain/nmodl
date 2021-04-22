@@ -68,7 +68,7 @@ class JITDriver {
                                                        const std::string& features);
 
     /// Sets the triple and the data layout for the module.
-    bool set_triple_and_data_layout(const std::string& features);
+    void set_triple_and_data_layout(const std::string& features);
 };
 
 /**
