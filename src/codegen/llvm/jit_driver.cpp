@@ -111,7 +111,7 @@ std::unique_ptr<llvm::TargetMachine> JITDriver::create_target(
 }
 
 void JITDriver::set_triple_and_data_layout(const std::string& features) {
-    // Get the deafult target triple for the host.
+    // Get the default target triple for the host.
     auto target_triple = llvm::sys::getDefaultTargetTriple();
     std::string error_msg;
     auto* target = llvm::TargetRegistry::lookupTarget(target_triple, error_msg);
