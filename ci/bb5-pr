@@ -7,7 +7,7 @@ git show HEAD
 source /gpfs/bbp.cscs.ch/apps/hpc/jenkins/config/modules.sh
 module use /gpfs/bbp.cscs.ch/apps/tools/modules/tcl/linux-rhel7-x86_64/
 
-module load archive/2020-10 cmake bison flex python-dev doxygen
+module load unstable cmake bison flex python-dev doxygen
 module list
 
 function bb5_pr_setup_virtualenv() {
@@ -41,7 +41,7 @@ function build_with() {
              -DPYTHON_EXECUTABLE=$(which python3) \
              -DNMODL_FORMATTING:BOOL=ON \
              -DClangFormat_EXECUTABLE=$clang_format_exe \
-             -DLLVM_DIR=/gpfs/bbp.cscs.ch/apps/hpc/jenkins/merge/deploy/externals/latest/linux-rhel7-x86_64/gcc-9.3.0/llvm-11.0.0-kzl4o5/lib/cmake/llvm
+             -DLLVM_DIR=/gpfs/bbp.cscs.ch/data/project/proj16/software/llvm/install/0421/lib/cmake/llvm
     make -j6
     popd
 }
