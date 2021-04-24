@@ -145,8 +145,6 @@ void LLVMBenchmark::set_log_output() {
 
     // Otherwise, dump logs to the specified file.
     std::string filename = output_dir + "/" + mod_filename + ".log";
-    std::ofstream ofs;
-
     ofs.open(filename.c_str());
 
     if (ofs.fail())
