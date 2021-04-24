@@ -46,6 +46,8 @@ class LLVMBenchmark {
 
     std::shared_ptr<std::ostream> log_stream;
 
+    std::ofstream ofs;
+
     /// Disable the specified feature.
     void disable(const std::string& feature, std::vector<std::string>& host_features);
 
