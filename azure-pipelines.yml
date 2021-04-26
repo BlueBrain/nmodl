@@ -37,7 +37,7 @@ jobs:
       sudo apt install -y g++-8 flex bison libfl-dev cython libx11-dev libxcomposite-dev libncurses-dev
       sudo apt-get install -y python3.7 python3.7-dev python3.7-venv
       python3.7 -m pip install -U pip setuptools
-      python3.7 -m pip install --user 'Jinja2>=2.9.3' 'PyYAML>=3.13' pytest pytest-cov 'sympy>=1.3,<1.6'
+      python3.7 -m pip install --user 'Jinja2>=2.9.3' 'PyYAML>=3.13' pytest pytest-cov 'sympy>=1.3,<1.6' numpy
       # we manually get version 3.10.2 to make sure that changes in the cmake
       # files do not require unsupported versions of cmake in our package.
       wget --quiet --output-document=- "https://github.com/Kitware/CMake/releases/download/v3.10.2/$CMAKE_PKG.tar.gz" | tar xzpf -
