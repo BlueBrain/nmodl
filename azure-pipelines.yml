@@ -83,10 +83,9 @@ jobs:
         make VERBOSE=1
         exit 1
       fi
-      ctest -j2
+      ctest --output-on-failure
       if [ $? -ne 0 ]
       then
-        ctest --output-on-failure --rerun-failed
         exit 1
       fi
       ./bin/nrnivmodl-core $(Build.Repository.LocalPath)/test/integration/mod
@@ -108,10 +107,9 @@ jobs:
         make VERBOSE=1
         exit 1
       fi
-      ctest -j2
+      ctest --output-on-failure
       if [ $? -ne 0 ]
       then
-        ctest --output-on-failure --rerun-failed
         exit 1
       fi
       ./bin/nrnivmodl-core $(Build.Repository.LocalPath)/test/integration/mod
@@ -142,10 +140,9 @@ jobs:
         make VERBOSE=1
         exit 1
       fi
-      ctest -j2
+      ctest --output-on-failure
       if [ $? -ne 0 ]
       then
-        ctest --output-on-failure --rerun-failed
         exit 1
       fi
     displayName: 'Build and Run Tests'
@@ -163,10 +160,9 @@ jobs:
         make VERBOSE=1
         exit 1
       fi
-      ctest -j2
+      ctest --output-on-failure
       if [ $? -ne 0 ]
       then
-        ctest --output-on-failure --rerun-failed
         exit 1
       fi
       ./bin/nrnivmodl-core $(Build.Repository.LocalPath)/test/integration/mod
