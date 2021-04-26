@@ -82,7 +82,12 @@ jobs:
         make VERBOSE=1
         exit 1
       fi
-      make test -j2
+      ctest -j2
+      if [ $? -ne 0 ]
+      then
+        ctest --output-on-failure --rerun-failed
+        exit 1
+      fi
       ./bin/nrnivmodl-core $(Build.Repository.LocalPath)/test/integration/mod
     env:
       CMAKE_PKG: 'cmake-3.10.2-Linux-x86_64'
