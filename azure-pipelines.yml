@@ -5,8 +5,7 @@ variables:
   # defined in UI
   #- ReleaseWheelBuild: False
   #- NightlyWheelBuild: False
-  buildWheel: ${{ or(in(variables['Build.Reason'], 'Schedule'),
-              eq(variables['NightlyWheelBuild'], True)) }}
+  buildWheel: ${{ eq(variables['NightlyWheelBuild'], True) }}
 
 # Nightly build master for pypi upload
 schedules:
