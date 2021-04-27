@@ -6,7 +6,7 @@ variables:
   #- ReleaseWheelBuild: False
   #- NightlyWheelBuild: False
   buildWheel: ${{ or(in(variables['Build.Reason'], 'Schedule'),
-              and(in(variables['Build.Reason'], 'Manual'), eq(variables['NightlyWheelBuild'], 'true'))) }}
+              and(in(variables['Build.Reason'], 'Manual'), eq(variables['NIGHTLYWHEELBUILD'], 'true'))) }}
 
 # Nightly build master for pypi upload
 schedules:
@@ -30,6 +30,14 @@ jobs:
   steps:
   - checkout: self
     submodules: False
+  - script: |
+      echo "eq(variables['NightlyWheelBuild'], 'true')"
+    displayName: "eq(variables['NightlyWheelBuild'], 'true')"
+    condition: eq(variables['NightlyWheelBuild'], 'true')
+  - script: |
+      echo "eq(variables['NightlyWheelBuild'], True)"
+    displayName: "eq(variables['NightlyWheelBuild'], True)"
+    condition: eq(variables['NightlyWheelBuild'], True)
   - script: |
       echo "==> Variable is : $(buildWheel) :: $(Build.Reason)"
       env | sort
