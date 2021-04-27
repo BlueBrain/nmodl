@@ -5,8 +5,7 @@ variables:
   # defined in UI
   #- ReleaseWheelBuild: False
   #- NightlyWheelBuild: False
-  buildWheel: ${{ or(in(variables['Build.Reason'], 'Schedule'),
-              and(in(variables['Build.Reason'], 'Manual'), eq(variables.NightlyWheelBuild, True))) }}
+  buildWheel: ${{ or(in(variables['Build.Reason'], 'Schedule'), in(variables['Build.Reason'], 'Manual')) }}
 
 # Nightly build master for pypi upload
 schedules:
@@ -30,6 +29,10 @@ jobs:
   steps:
   - checkout: self
     submodules: False
+  - script: |
+      echo "==> Variable is : $(buildWheel) :: $(Build.Reason)"
+      env | sort
+    displayName: 'Check variables'
   - script: |
       sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
       sudo apt-add-repository -y ppa:deadsnakes/ppa
