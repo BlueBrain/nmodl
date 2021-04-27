@@ -5,7 +5,7 @@ variables:
   # defined in UI
   #- ReleaseWheelBuild: False
   #- NightlyWheelBuild: False
-  buildWheel: ${{ eq(variables['NightlyWheelBuild'], True) }}
+  buildWheel: ${{ eq(variables.NightlyWheelBuild, True) }}
 
 # Nightly build master for pypi upload
 schedules:
@@ -32,11 +32,11 @@ jobs:
   - script: |
       echo "eq(variables['NightlyWheelBuild'], 'true')"
     displayName: "eq(variables['NightlyWheelBuild'], 'true')"
-    condition: eq(variables['NightlyWheelBuild'], 'true')
+    condition: eq(variables.NightlyWheelBuild, 'true')
   - script: |
       echo "eq(variables['NightlyWheelBuild'], True)"
     displayName: "eq(variables['NightlyWheelBuild'], True)"
-    condition: eq(variables['NightlyWheelBuild'], True)
+    condition: eq(variables.NightlyWheelBuild, True)
   - script: |
       echo "==> Variable is : $(buildWheel) :: $(Build.Reason)"
       env | sort
