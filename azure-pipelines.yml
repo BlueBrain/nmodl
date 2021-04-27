@@ -6,7 +6,7 @@ variables:
   #- ReleaseWheelBuild: False
   #- NightlyWheelBuild: False
   buildWheel: ${{ or(in(variables['Build.Reason'], 'Schedule'),
-              and(in(variables['Build.Reason'], 'Manual'), eq(variables['NIGHTLYWHEELBUILD'], 'true'))) }}
+              eq(variables['NightlyWheelBuild'], True)) }}
 
 # Nightly build master for pypi upload
 schedules:
