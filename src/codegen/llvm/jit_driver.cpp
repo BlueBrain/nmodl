@@ -15,6 +15,7 @@
 #include "llvm/ExecutionEngine/Orc/IRCompileLayer.h"
 #include "llvm/ExecutionEngine/Orc/JITTargetMachineBuilder.h"
 #include "llvm/ExecutionEngine/Orc/LLJIT.h"
+#include "llvm/ExecutionEngine/Orc/ObjectTransformLayer.h"
 #include "llvm/ExecutionEngine/Orc/RTDyldObjectLinkingLayer.h"
 #include "llvm/ExecutionEngine/SectionMemoryManager.h"
 #include "llvm/Support/Host.h"
@@ -24,7 +25,9 @@
 namespace nmodl {
 namespace runner {
 
-void JITDriver::init(std::string features, std::vector<std::string>& lib_paths) {
+void JITDriver::init(std::string features,
+                     std::vector<std::string> lib_paths,
+                     ObjDumpInfo* dump_info) {
     llvm::InitializeNativeTarget();
     llvm::InitializeNativeTargetAsmPrinter();
 
@@ -83,6 +86,12 @@ void JITDriver::init(std::string features, std::vector<std::string>& lib_paths) 
     llvm::orc::JITDylib& sym_tab = jit->getMainJITDylib();
     sym_tab.addGenerator(cantFail(llvm::orc::DynamicLibrarySearchGenerator::GetForCurrentProcess(
         data_layout.getGlobalPrefix())));
+
+    // Optionally, dump the binary to the object file.
+    if (dump_info) {
+        jit->getObjTransformLayer().setTransform(
+            llvm::orc::DumpObjects(dump_info->output_dir, dump_info->filename));
+    }
 }
 
 std::unique_ptr<llvm::TargetMachine> JITDriver::create_target(
