@@ -93,7 +93,7 @@ class BaseRunner {
     std::unique_ptr<JITDriver> driver;
 
     explicit BaseRunner(std::unique_ptr<llvm::Module> m)
-        : driver(std::make_unique<JITDriver>(std::move(m))) { }
+        : driver(std::make_unique<JITDriver>(std::move(m))) {}
 
   public:
     /// Sets up the JIT driver.
@@ -151,7 +151,7 @@ class BenchmarkRunner: public BaseRunner {
         : BaseRunner(std::move(m))
         , dump_info{filename, output_dir}
         , features(features)
-        , shared_lib_paths(lib_paths) { }
+        , shared_lib_paths(lib_paths) {}
 
     virtual void initialize_driver() {
         driver->init(features, shared_lib_paths, &dump_info);
