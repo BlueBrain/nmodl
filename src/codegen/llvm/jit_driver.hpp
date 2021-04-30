@@ -46,7 +46,9 @@ class JITDriver {
         : module(std::move(m)) {}
 
     /// Initializes the JIT.
-    void init(std::string features = "", std::vector<std::string> lib_paths = {}, ObjDumpInfo* dump_info = nullptr);
+    void init(std::string features = "",
+              std::vector<std::string> lib_paths = {},
+              ObjDumpInfo* dump_info = nullptr);
 
     /// Lookups the entry-point without arguments in the JIT and executes it, returning the result.
     template <typename ReturnType>
@@ -91,7 +93,7 @@ class BaseRunner {
     std::unique_ptr<JITDriver> driver;
 
     explicit BaseRunner(std::unique_ptr<llvm::Module> m)
-        : driver(std::make_unique<JITDriver>(std::move(m))) {}
+        : driver(std::make_unique<JITDriver>(std::move(m))) { }
 
   public:
     /// Sets up the JIT driver.
@@ -114,8 +116,7 @@ class BaseRunner {
  * \class TestRunner
  * \brief A simple runner for testing purposes.
  */
-class TestRunner : public BaseRunner {
-
+class TestRunner: public BaseRunner {
   public:
     explicit TestRunner(std::unique_ptr<llvm::Module> m)
         : BaseRunner(std::move(m)) {}
@@ -130,7 +131,7 @@ class TestRunner : public BaseRunner {
  * \brief A runner with benchmarking functionality. It takes user-specified CPU
  * features into account, as well as it can link against shared libraries.
  */
-class BenchmarkRunner : public BaseRunner {
+class BenchmarkRunner: public BaseRunner {
   private:
     /// Information on dumping object file generated from LLVM IR.
     ObjDumpInfo dump_info;
@@ -147,10 +148,10 @@ class BenchmarkRunner : public BaseRunner {
                     std::string output_dir,
                     std::string features = "",
                     std::vector<std::string> lib_paths = {})
-    : BaseRunner(std::move(m))
-    , dump_info{filename, output_dir}
-    , features(features)
-    , shared_lib_paths(lib_paths) {}
+        : BaseRunner(std::move(m))
+        , dump_info{filename, output_dir}
+        , features(features)
+        , shared_lib_paths(lib_paths) { }
 
     virtual void initialize_driver() {
         driver->init(features, shared_lib_paths, &dump_info);
