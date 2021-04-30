@@ -64,7 +64,8 @@ int main(int argc, const char* argv[]) {
         throw std::runtime_error(
             "Error: entry-point functions with non-double return type are not supported\n");
 
-    Runner runner(std::move(module));
+    TestRunner runner(std::move(module));
+    runner.initialize_driver();
 
     // Since only double type is supported, provide explicit double type to the running function.
     auto r = runner.run_without_arguments<double>(entry_point_name);
