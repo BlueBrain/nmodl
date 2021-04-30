@@ -131,7 +131,8 @@ SCENARIO("Arithmetic expression", "[llvm][runner]") {
         llvm_visitor.visit_program(*ast);
 
         std::unique_ptr<llvm::Module> m = llvm_visitor.get_module();
-        Runner runner(std::move(m));
+        TestRunner runner(std::move(m));
+        runner.initialize_driver();
 
         THEN("functions are evaluated correctly") {
             auto exp_result = runner.run_without_arguments<double>("exponential");
@@ -232,7 +233,8 @@ SCENARIO("Optimised arithmetic expression", "[llvm][runner]") {
         llvm_visitor.visit_program(*ast);
 
         std::unique_ptr<llvm::Module> m = llvm_visitor.get_module();
-        Runner runner(std::move(m));
+        TestRunner runner(std::move(m));
+        runner.initialize_driver();
 
         THEN("optimizations preserve function results") {
             // Check exponential is turned into a constant.
@@ -326,7 +328,8 @@ SCENARIO("Simple scalar kernel", "[llvm][runner]") {
 
         // Set up the JIT runner.
         std::unique_ptr<llvm::Module> module = llvm_visitor.get_module();
-        Runner runner(std::move(module));
+        TestRunner runner(std::move(module));
+        runner.initialize_driver();
 
         THEN("Values in struct have changed according to the formula") {
             runner.run_with_argument<int, void*>("__nrn_state_test_wrapper",
@@ -413,7 +416,8 @@ SCENARIO("Simple vectorised kernel", "[llvm][runner]") {
 
         // Set up the JIT runner.
         std::unique_ptr<llvm::Module> module = llvm_visitor.get_module();
-        Runner runner(std::move(module));
+        TestRunner runner(std::move(module));
+        runner.initialize_driver();
 
         THEN("Values in struct have changed according to the formula") {
             runner.run_with_argument<int, void*>("__nrn_state_test_wrapper",
