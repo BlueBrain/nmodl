@@ -111,7 +111,7 @@ class BaseRunner {
 };
 
 /**
- * \class Runner
+ * \class TestRunner
  * \brief A simple runner for testing purposes.
  */
 class TestRunner : public BaseRunner {
