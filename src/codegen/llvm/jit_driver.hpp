@@ -20,9 +20,18 @@
 namespace nmodl {
 namespace runner {
 
+/// A struct to hold the information for dumping object file.
+struct ObjDumpInfo {
+    /// Object file name.
+    std::string filename;
+
+    /// Object file output directory.
+    std::string output_dir;
+};
+
 /**
  * \class JITDriver
- * \brief Driver to execute MOD file function via LLVM IR backend
+ * \brief Driver to execute a MOD file function via LLVM IR backend.
  */
 class JITDriver {
   private:
@@ -33,13 +42,15 @@ class JITDriver {
     std::unique_ptr<llvm::Module> module;
 
   public:
-    JITDriver(std::unique_ptr<llvm::Module> m)
+    explicit JITDriver(std::unique_ptr<llvm::Module> m)
         : module(std::move(m)) {}
 
-    /// Initialize the JIT.
-    void init(std::string features, std::vector<std::string>& lib_paths);
+    /// Initializes the JIT.
+    void init(std::string features = "",
+              std::vector<std::string> lib_paths = {},
+              ObjDumpInfo* dump_info = nullptr);
 
-    /// Lookup the entry-point without arguments in the JIT and execute it, returning the result.
+    /// Lookups the entry-point without arguments in the JIT and executes it, returning the result.
     template <typename ReturnType>
     ReturnType execute_without_arguments(const std::string& entry_point) {
         auto expected_symbol = jit->lookup(entry_point);
@@ -51,7 +62,7 @@ class JITDriver {
         return result;
     }
 
-    /// Lookup the entry-point with an argument in the JIT and execute it, returning the result.
+    /// Lookups the entry-point with an argument in the JIT and executes it, returning the result.
     template <typename ReturnType, typename ArgType>
     ReturnType execute_with_arguments(const std::string& entry_point, ArgType arg) {
         auto expected_symbol = jit->lookup(entry_point);
@@ -63,7 +74,8 @@ class JITDriver {
         return result;
     }
 
-    /// A wrapper around llvm::createTargetMachine to turn on/off certain CPU features.
+  private:
+    /// Creates llvm::TargetMachine with certain CPU features turned on/off.
     std::unique_ptr<llvm::TargetMachine> create_target(llvm::orc::JITTargetMachineBuilder* builder,
                                                        const std::string& features);
 
@@ -72,33 +84,77 @@ class JITDriver {
 };
 
 /**
- * \class Runner
- * \brief A wrapper around JITDriver to execute an entry point in the LLVM IR module.
+ * \class BaseRunner
+ * \brief A base runner class that provides functionality to execute an
+ * entry point in the LLVM IR module.
  */
-class Runner {
-  private:
-    std::unique_ptr<llvm::Module> module;
+class BaseRunner {
+  protected:
+    std::unique_ptr<JITDriver> driver;
 
-    std::unique_ptr<JITDriver> driver = std::make_unique<JITDriver>(std::move(module));
+    explicit BaseRunner(std::unique_ptr<llvm::Module> m)
+        : driver(std::make_unique<JITDriver>(std::move(m))) {}
 
   public:
-    Runner(std::unique_ptr<llvm::Module> m,
-           std::string features = "",
-           std::vector<std::string> lib_paths = {})
-        : module(std::move(m)) {
-        driver->init(features, lib_paths);
-    }
+    /// Sets up the JIT driver.
+    virtual void initialize_driver() = 0;
 
-    /// Run the entry-point function without arguments.
+    /// Runs the entry-point function without arguments.
     template <typename ReturnType>
     ReturnType run_without_arguments(const std::string& entry_point) {
         return driver->template execute_without_arguments<ReturnType>(entry_point);
     }
 
-    /// Run the entry-point function with a pointer to the data as an argument.
+    /// Runs the entry-point function with a pointer to the data as an argument.
     template <typename ReturnType, typename ArgType>
     ReturnType run_with_argument(const std::string& entry_point, ArgType arg) {
         return driver->template execute_with_arguments<ReturnType, ArgType>(entry_point, arg);
+    }
+};
+
+/**
+ * \class TestRunner
+ * \brief A simple runner for testing purposes.
+ */
+class TestRunner: public BaseRunner {
+  public:
+    explicit TestRunner(std::unique_ptr<llvm::Module> m)
+        : BaseRunner(std::move(m)) {}
+
+    virtual void initialize_driver() {
+        driver->init();
+    }
+};
+
+/**
+ * \class BenchmarkRunner
+ * \brief A runner with benchmarking functionality. It takes user-specified CPU
+ * features into account, as well as it can link against shared libraries.
+ */
+class BenchmarkRunner: public BaseRunner {
+  private:
+    /// Information on dumping object file generated from LLVM IR.
+    ObjDumpInfo dump_info;
+
+    /// CPU features specified by the user.
+    std::string features;
+
+    /// Shared libraries' paths to link against.
+    std::vector<std::string> shared_lib_paths;
+
+  public:
+    BenchmarkRunner(std::unique_ptr<llvm::Module> m,
+                    std::string filename,
+                    std::string output_dir,
+                    std::string features = "",
+                    std::vector<std::string> lib_paths = {})
+        : BaseRunner(std::move(m))
+        , dump_info{filename, output_dir}
+        , features(features)
+        , shared_lib_paths(lib_paths) {}
+
+    virtual void initialize_driver() {
+        driver->init(features, shared_lib_paths, &dump_info);
     }
 };
 
