@@ -27,6 +27,12 @@ trigger cvf:
     # Tell the CVF pipeline to use the current ref of NMODL, this works because
     # the CVF CI uses the `gitlab-pipelines` helper components.
     SPACK_PACKAGE_REF_nmodl: "commit='${CI_COMMIT_SHA}'"
+  rules:
+    # Don't run on PRs targeting the LLVM development branch
+    - if: '$CI_EXTERNAL_PULL_REQUEST_TARGET_BRANCH_NAME == "llvm"'
+      when: never
+    # Otherwise always run this
+    - when: always
   trigger:
     project: hpc/cvf
     # Make the NMODL CI status depend on the CVF CI status
