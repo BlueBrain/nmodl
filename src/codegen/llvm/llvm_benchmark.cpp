@@ -105,9 +105,15 @@ void LLVMBenchmark::run_benchmark(codegen::CodegenLLVMVisitor& visitor,
     std::string features_str = llvm::join(features.begin(), features.end(), ",");
     std::unique_ptr<llvm::Module> m = visitor.get_module();
 
-    // Create the benchmark runner and intialize it.
+    // Create the benchmark runner and initialize it.
     std::string filename = "v" + std::to_string(llvm_build_info.vector_width) + "_" + mod_filename;
-    runner::BenchmarkRunner runner(std::move(m), filename, output_dir, features_str, shared_libs);
+    runner::BenchmarkRunner runner(std::move(m),
+                                   filename,
+                                   output_dir,
+                                   features_str,
+                                   shared_libs,
+                                   opt_level_ir,
+                                   opt_level_codegen);
     runner.initialize_driver();
 
     // Benchmark every kernel.

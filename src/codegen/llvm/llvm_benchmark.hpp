@@ -42,6 +42,10 @@ class LLVMBenchmark {
 
     std::string backend;
 
+    int opt_level_ir;
+
+    int opt_level_codegen;
+
     LLVMBuildInfo llvm_build_info;
 
     std::shared_ptr<std::ostream> log_stream;
@@ -74,14 +78,18 @@ class LLVMBenchmark {
                   LLVMBuildInfo info,
                   int num_experiments,
                   int instance_size,
-                  const std::string& backend)
+                  const std::string& backend,
+                  int opt_level_ir,
+                  int opt_level_codegen)
         : mod_filename(mod_filename)
         , output_dir(output_dir)
         , shared_libs(shared_libs)
         , num_experiments(num_experiments)
         , instance_size(instance_size)
         , backend(backend)
-        , llvm_build_info(info) {}
+        , llvm_build_info(info)
+        , opt_level_ir(opt_level_ir)
+        , opt_level_codegen(opt_level_codegen) {}
 
     /// Runs the benchmark.
     void benchmark(const std::shared_ptr<ast::Program>& node);
