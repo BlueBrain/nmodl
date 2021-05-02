@@ -45,8 +45,8 @@ static void initialise_optimisation_passes() {
 /// Populates pass managers with passes for the given optimisation levels.
 static void populate_pms(llvm::legacy::FunctionPassManager& func_pm,
                          llvm::legacy::PassManager& module_pm,
-                         unsigned opt_level,
-                         unsigned size_level,
+                         int opt_level,
+                         int size_level,
                          llvm::TargetMachine* tm) {
     // First, set the pass manager builder with some basic optimisation information.
     llvm::PassManagerBuilder pm_builder;
@@ -81,7 +81,7 @@ static void run_optimisation_passes(llvm::Module& module,
 
 /// Optimises the given LLVM IR module.
 static void optimise_module(llvm::Module& module,
-                            unsigned opt_level,
+                            int opt_level,
                             llvm::TargetMachine* tm = nullptr) {
     llvm::legacy::FunctionPassManager func_pm(&module);
     llvm::legacy::PassManager module_pm;
