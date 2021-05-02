@@ -19,9 +19,23 @@
 namespace nmodl {
 namespace benchmark {
 
-
 /// Precision for the timing measurements.
 static constexpr int PRECISION = 9;
+
+/// Get the host CPU features in the format:
+///   +feature,+feature,-feature,+feature,...
+/// where `+` indicates that the feature is enabled.
+static std::vector<std::string> get_cpu_features() {
+    std::string cpu(llvm::sys::getHostCPUName());
+
+    llvm::SubtargetFeatures features;
+    llvm::StringMap<bool> host_features;
+    if (llvm::sys::getHostCPUFeatures(host_features)) {
+        for (auto& f: host_features)
+            features.AddFeature(f.first(), f.second);
+    }
+    return features.getFeatures();
+}
 
 
 void LLVMBenchmark::disable(const std::string& feature, std::vector<std::string>& host_features) {
@@ -34,7 +48,7 @@ void LLVMBenchmark::disable(const std::string& feature, std::vector<std::string>
     }
 }
 
-void LLVMBenchmark::benchmark(const std::shared_ptr<ast::Program>& node) {
+void LLVMBenchmark::run(const std::shared_ptr<ast::Program>& node) {
     // First, set the output stream for the logs.
     set_log_output();
 
@@ -63,18 +77,6 @@ void LLVMBenchmark::generate_llvm(codegen::CodegenLLVMVisitor& visitor,
     std::chrono::duration<double> diff = end - start;
     *log_stream << "Created LLVM IR module from NMODL AST in " << std::setprecision(PRECISION)
                 << diff.count() << "\n\n";
-}
-
-std::vector<std::string> LLVMBenchmark::get_cpu_features() {
-    std::string cpu(llvm::sys::getHostCPUName());
-
-    llvm::SubtargetFeatures features;
-    llvm::StringMap<bool> host_features;
-    if (llvm::sys::getHostCPUFeatures(host_features)) {
-        for (auto& f: host_features)
-            features.AddFeature(f.first(), f.second);
-    }
-    return features.getFeatures();
 }
 
 void LLVMBenchmark::run_benchmark(codegen::CodegenLLVMVisitor& visitor,

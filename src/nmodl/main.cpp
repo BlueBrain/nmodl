@@ -648,16 +648,16 @@ int main(int argc, const char* argv[]) {
                                               llvm_ir_opt_passes,
                                               llvm_float_type,
                                               vector_library};
-                benchmark::LLVMBenchmark bench(modfile,
-                                               output_dir,
-                                               shared_lib_paths,
-                                               info,
-                                               num_experiments,
-                                               instance_size,
-                                               backend,
-                                               llvm_opt_level_ir,
-                                               llvm_opt_level_codegen);
-                bench.benchmark(ast);
+                benchmark::LLVMBenchmark benchmark(modfile,
+                                                   output_dir,
+                                                   shared_lib_paths,
+                                                   info,
+                                                   num_experiments,
+                                                   instance_size,
+                                                   backend,
+                                                   llvm_opt_level_ir,
+                                                   llvm_opt_level_codegen);
+                benchmark.run(ast);
             }
 
             else if (llvm_ir) {

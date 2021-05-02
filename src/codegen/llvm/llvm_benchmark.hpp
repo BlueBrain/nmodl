@@ -30,46 +30,38 @@ struct LLVMBuildInfo {
  */
 class LLVMBenchmark {
   private:
+    /// Source MOD file name.
     std::string mod_filename;
 
+    /// The output directory for logs and other files.
     std::string output_dir;
 
+    /// Paths to shared libraries.
     std::vector<std::string> shared_libs;
 
+    /// The number of experiments to repeat.
     int num_experiments;
 
+    /// The size of the instance struct for benchmarking.
     int instance_size;
 
+    /// Benchmarking backend
     std::string backend;
 
+    /// Optimisation level for LLVM IR transformations.
     int opt_level_ir;
 
+    /// Optimisation level for machine code generation.
     int opt_level_codegen;
 
+    /// LLVM visitor information.
     LLVMBuildInfo llvm_build_info;
 
+    /// The log output stream (file or stdout).
     std::shared_ptr<std::ostream> log_stream;
 
+    /// Filestream for dumping logs to the file.
     std::ofstream ofs;
-
-    /// Disable the specified feature.
-    void disable(const std::string& feature, std::vector<std::string>& host_features);
-
-    /// Visits the AST to construct the LLVM IR module.
-    void generate_llvm(codegen::CodegenLLVMVisitor& visitor,
-                       const std::shared_ptr<ast::Program>& node);
-
-    /// Get the host CPU features in the format:
-    ///   +feature,+feature,-feature,+feature,...
-    /// where `+` indicates that the feature is enabled.
-    std::vector<std::string> get_cpu_features();
-
-    /// Runs the main body of the benchmark, executing the compute kernels.
-    void run_benchmark(codegen::CodegenLLVMVisitor& visitor,
-                       const std::shared_ptr<ast::Program>& node);
-
-    /// Sets the log output stream (file or console).
-    void set_log_output();
 
   public:
     LLVMBenchmark(const std::string& mod_filename,
@@ -92,7 +84,22 @@ class LLVMBenchmark {
         , opt_level_codegen(opt_level_codegen) {}
 
     /// Runs the benchmark.
-    void benchmark(const std::shared_ptr<ast::Program>& node);
+    void run(const std::shared_ptr<ast::Program>& node);
+
+  private:
+    /// Disables the specified feature in the target.
+    void disable(const std::string& feature, std::vector<std::string>& host_features);
+
+    /// Visits the AST to construct the LLVM IR module.
+    void generate_llvm(codegen::CodegenLLVMVisitor& visitor,
+                       const std::shared_ptr<ast::Program>& node);
+
+    /// Runs the main body of the benchmark, executing the compute kernels.
+    void run_benchmark(codegen::CodegenLLVMVisitor& visitor,
+                       const std::shared_ptr<ast::Program>& node);
+
+    /// Sets the log output stream (file or console).
+    void set_log_output();
 };
 
 
