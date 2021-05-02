@@ -12,10 +12,12 @@ llvm_map_components_to_libnames(
   core
   executionengine
   instcombine
+  inteljitevents
   ipo
   mc
   native
   orcjit
+  perfjitevents
   target
   transformutils
   scalaropts
