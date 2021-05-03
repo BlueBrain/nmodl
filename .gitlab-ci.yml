@@ -20,6 +20,12 @@ setup virtualenv:
   stage: .pre
   before_script:
     - export
+  variables:
+    # This might pull in more than needed, but it should be enough to allow the
+    # two build jobs to run in parallel safely. Otherwise they will race each
+    # other to lazily update the submodules during the CMake phase, which can
+    # cause errors.
+    GIT_SUBMODULE_STRATEGY: recursive
 
 trigger cvf:
   stage: .pre
