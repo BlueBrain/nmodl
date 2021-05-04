@@ -2624,11 +2624,13 @@ void CodegenCVisitor::print_mechanism_register() {
     auto args = register_mechanism_arguments();
     auto nobjects = num_thread_objects();
     if (info.point_process) {
-        printer->add_line("point_register_mech({}, NULL, {}, {});"_format(args, info.destructor_node ? method_name(naming::NRN_DEST_METHOD) : "NULL", nobjects));
+        printer->add_line("point_register_mech({}, NULL, {}, {});"_format(
+            args, info.destructor_node ? method_name(naming::NRN_DEST_METHOD) : "NULL", nobjects));
     } else {
         printer->add_line("register_mech({}, {});"_format(args, nobjects));
         if (info.destructor_node) {
-            printer->add_line("register_destructor({});"_format(method_name(naming::NRN_DEST_METHOD)));
+            printer->add_line(
+                "register_destructor({});"_format(method_name(naming::NRN_DEST_METHOD)));
         }
     }
 
