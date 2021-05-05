@@ -2628,10 +2628,6 @@ void CodegenCVisitor::print_mechanism_register() {
             args, info.destructor_node ? method_name(naming::NRN_DEST_METHOD) : "NULL", nobjects));
     } else {
         printer->add_line("register_mech({}, {});"_format(args, nobjects));
-        if (info.destructor_node) {
-            printer->add_line(
-                "register_destructor({});"_format(method_name(naming::NRN_DEST_METHOD)));
-        }
     }
 
     // types for ion
