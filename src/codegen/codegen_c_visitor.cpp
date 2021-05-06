@@ -1252,7 +1252,7 @@ std::string CodegenCVisitor::compute_method_name(BlockType type) const {
         return method_name(naming::NRN_INIT_METHOD);
     }
     if (type == BlockType::Destructor) {
-        return method_name(naming::NRN_DEST_METHOD);
+        return method_name(naming::NRN_DESTRUCTOR_METHOD);
     }
     if (type == BlockType::State) {
         return method_name(naming::NRN_STATE_METHOD);
@@ -2625,7 +2625,7 @@ void CodegenCVisitor::print_mechanism_register() {
     auto nobjects = num_thread_objects();
     if (info.point_process) {
         printer->add_line("point_register_mech({}, NULL, {}, {});"_format(
-            args, info.destructor_node ? method_name(naming::NRN_DEST_METHOD) : "NULL", nobjects));
+            args, info.destructor_node ? method_name(naming::NRN_DESTRUCTOR_METHOD) : "NULL", nobjects));
     } else {
         printer->add_line("register_mech({}, {});"_format(args, nobjects));
     }
@@ -3309,7 +3309,7 @@ void CodegenCVisitor::print_nrn_init(bool skip_init_check) {
 }
 
 
-void CodegenCVisitor::print_nrn_dest() {
+void CodegenCVisitor::print_nrn_destructor() {
     printer->add_newline(2);
     print_global_function_common_code(BlockType::Destructor);
     if (info.destructor_node != nullptr) {
@@ -4333,7 +4333,7 @@ void CodegenCVisitor::print_codegen_routines() {
     print_global_variable_setup();
     print_instance_variable_setup();
     print_nrn_alloc();
-    print_nrn_dest();
+    print_nrn_destructor();
     print_compute_functions();
     print_check_table_thread_function();
     print_mechanism_register();

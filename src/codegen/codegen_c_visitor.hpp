@@ -1524,10 +1524,10 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
-     * Print nrn_dest function definition
+     * Print nrn_destructor function definition
      *
      */
-    void print_nrn_dest();
+    void print_nrn_destructor();
 
 
     /**
