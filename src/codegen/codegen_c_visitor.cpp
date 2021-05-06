@@ -2625,7 +2625,9 @@ void CodegenCVisitor::print_mechanism_register() {
     auto nobjects = num_thread_objects();
     if (info.point_process) {
         printer->add_line("point_register_mech({}, NULL, {}, {});"_format(
-            args, info.destructor_node ? method_name(naming::NRN_DESTRUCTOR_METHOD) : "NULL", nobjects));
+            args,
+            info.destructor_node ? method_name(naming::NRN_DESTRUCTOR_METHOD) : "NULL",
+            nobjects));
     } else {
         printer->add_line("register_mech({}, {});"_format(args, nobjects));
     }
