@@ -15,6 +15,7 @@ var classnmodl_1_1codegen_1_1_codegen_helper_visitor =
     [ "visit_conductance_hint", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a470d01cf57d6ec92c7e61a38dbedf004", null ],
     [ "visit_derivative_block", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a05704afa2478215198fc0dfc6cc8f28d", null ],
     [ "visit_derivimplicit_callback", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a054569f05b02caaba93e107812c4e539", null ],
+    [ "visit_destructor_block", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#af27eb43d5a4f76227692de56333b6c08", null ],
     [ "visit_discrete_block", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a2629c8f12a758fec848e6b573f7c6220", null ],
     [ "visit_eigen_linear_solver_block", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a46df48a484065e78dd36182d1b3a3804", null ],
     [ "visit_eigen_newton_solver_block", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a9ba9f6befc5c155b63d1df61a02bbaa8", null ],

@@ -23,6 +23,7 @@ var codegen__naming_8hpp =
     [ "NODE_AREA_VARIABLE", "codegen__naming_8hpp.html#af7e5438adb504b48d8bf80ad6b4b030e", null ],
     [ "NRN_ALLOC_METHOD", "codegen__naming_8hpp.html#a1023f8eb2c4118688ea418c3948363cc", null ],
     [ "NRN_CUR_METHOD", "codegen__naming_8hpp.html#a7ce13f3e1c0fa0a6c79d11edc14ab6aa", null ],
+    [ "NRN_DESTRUCTOR_METHOD", "codegen__naming_8hpp.html#aa8e13564c94423c5e0bbb8ff593da54f", null ],
     [ "NRN_INIT_METHOD", "codegen__naming_8hpp.html#a1db378304b1b4c6ce0e1410895c179dd", null ],
     [ "NRN_STATE_METHOD", "codegen__naming_8hpp.html#a343317dffc3ceb9e924174d642ca07fe", null ],
     [ "NRN_WATCH_CHECK_METHOD", "codegen__naming_8hpp.html#acae3ec2897cb1922d8ea995952b762cc", null ],

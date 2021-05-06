@@ -43,7 +43,7 @@ var searchData=
   ['local_5fto_5fassigned_2ecpp',['local_to_assigned.cpp',['../local__to__assigned_8cpp.html',1,'']]],
   ['local_5fto_5fassigned_5fvisitor_2ecpp',['local_to_assigned_visitor.cpp',['../local__to__assigned__visitor_8cpp.html',1,'']]],
   ['local_5fto_5fassigned_5fvisitor_2ehpp',['local_to_assigned_visitor.hpp',['../local__to__assigned__visitor_8hpp.html',1,'']]],
-  ['local_5fvar',['LOCAL_VAR',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033af53e8790c3c25006702880ee581f9b00',1,'nmodl::ast::LOCAL_VAR()'],['../namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbaff8e22f8b3dbe1f8b52602184e4a637a',1,'nmodl::symtab::syminfo::local_var()']]],
+  ['local_5fvar',['local_var',['../namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbaff8e22f8b3dbe1f8b52602184e4a637a',1,'nmodl::symtab::syminfo::local_var()'],['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033af53e8790c3c25006702880ee581f9b00',1,'nmodl::ast::LOCAL_VAR()']]],
   ['local_5fvar_2ehpp',['local_var.hpp',['../local__var_8hpp.html',1,'']]],
   ['local_5fvar_5frename_5fvisitor_2ecpp',['local_var_rename_visitor.cpp',['../local__var__rename__visitor_8cpp.html',1,'']]],
   ['local_5fvar_5frename_5fvisitor_2ehpp',['local_var_rename_visitor.hpp',['../local__var__rename__visitor_8hpp.html',1,'']]],

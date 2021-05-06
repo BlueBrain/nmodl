@@ -70,6 +70,7 @@ var searchData=
   ['nonspecific_5fnodes',['nonspecific_nodes',['../classnmodl_1_1visitor_1_1_sympy_conductance_visitor.html#a940f00cf653680c1b2b7c4579b13c58f',1,'nmodl::visitor::SympyConductanceVisitor']]],
   ['nrn_5falloc_5fmethod',['NRN_ALLOC_METHOD',['../namespacenmodl_1_1codegen_1_1naming.html#a1023f8eb2c4118688ea418c3948363cc',1,'nmodl::codegen::naming']]],
   ['nrn_5fcur_5fmethod',['NRN_CUR_METHOD',['../namespacenmodl_1_1codegen_1_1naming.html#a7ce13f3e1c0fa0a6c79d11edc14ab6aa',1,'nmodl::codegen::naming']]],
+  ['nrn_5fdestructor_5fmethod',['NRN_DESTRUCTOR_METHOD',['../namespacenmodl_1_1codegen_1_1naming.html#aa8e13564c94423c5e0bbb8ff593da54f',1,'nmodl::codegen::naming']]],
   ['nrn_5finit_5fmethod',['NRN_INIT_METHOD',['../namespacenmodl_1_1codegen_1_1naming.html#a1db378304b1b4c6ce0e1410895c179dd',1,'nmodl::codegen::naming']]],
   ['nrn_5fstate_5fblock',['nrn_state_block',['../structnmodl_1_1codegen_1_1_codegen_info.html#a611d35acab66592571befe3589b276cf',1,'nmodl::codegen::CodegenInfo']]],
   ['nrn_5fstate_5fmethod',['NRN_STATE_METHOD',['../namespacenmodl_1_1codegen_1_1naming.html#a343317dffc3ceb9e924174d642ca07fe',1,'nmodl::codegen::naming']]],

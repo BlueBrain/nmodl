@@ -29,6 +29,7 @@ var group__codegen__details =
       [ "visit_conductance_hint", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a470d01cf57d6ec92c7e61a38dbedf004", null ],
       [ "visit_derivative_block", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a05704afa2478215198fc0dfc6cc8f28d", null ],
       [ "visit_derivimplicit_callback", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a054569f05b02caaba93e107812c4e539", null ],
+      [ "visit_destructor_block", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#af27eb43d5a4f76227692de56333b6c08", null ],
       [ "visit_discrete_block", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a2629c8f12a758fec848e6b573f7c6220", null ],
       [ "visit_eigen_linear_solver_block", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a46df48a484065e78dd36182d1b3a3804", null ],
       [ "visit_eigen_newton_solver_block", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a9ba9f6befc5c155b63d1df61a02bbaa8", null ],
@@ -108,6 +109,7 @@ var group__codegen__details =
       [ "derivimplicit_callbacks", "structnmodl_1_1codegen_1_1_codegen_info.html#a81fd9bff894b9a1f2234f86a1494408f", null ],
       [ "derivimplicit_list_num", "structnmodl_1_1codegen_1_1_codegen_info.html#ad7f2152ae0d0997d34a6335cddea5db1", null ],
       [ "derivimplicit_var_thread_id", "structnmodl_1_1codegen_1_1_codegen_info.html#ab19aab302a66b76f119a2b6312174543", null ],
+      [ "destructor_node", "structnmodl_1_1codegen_1_1_codegen_info.html#a5d1b352f185f78beb36604d60870645a", null ],
       [ "diam_used", "structnmodl_1_1codegen_1_1_codegen_info.html#a356665162e1a17fc044499e8c130d343", null ],
       [ "eigen_linear_solver_exist", "structnmodl_1_1codegen_1_1_codegen_info.html#ab4926329370f2ec809911757bf21597c", null ],
       [ "eigen_newton_solver_exist", "structnmodl_1_1codegen_1_1_codegen_info.html#a6e443dc75c590f05e91ed556091be5ec", null ],
@@ -165,6 +167,7 @@ var group__codegen__details =
     ] ],
     [ "BlockType", "group__codegen__details.html#ga2d0a1f473f039b495e9cc349c3b57dbb", [
       [ "Initial", "group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba560a4dff90c58651347affffd44f7419", null ],
+      [ "Destructor", "group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba34adbfda9463c1ef5da22364fbde7f4e", null ],
       [ "Equation", "group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba2aa5276df68f4ed49798a132d36cc3d3", null ],
       [ "Ode", "group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba5a91e867e7802e6c6c6f627024768d21", null ],
       [ "State", "group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba1f27f7d1e85f8d0915e4ab7e9f6e8e11", null ],

@@ -25,6 +25,7 @@ var structnmodl_1_1codegen_1_1_codegen_info =
     [ "derivimplicit_callbacks", "structnmodl_1_1codegen_1_1_codegen_info.html#a81fd9bff894b9a1f2234f86a1494408f", null ],
     [ "derivimplicit_list_num", "structnmodl_1_1codegen_1_1_codegen_info.html#ad7f2152ae0d0997d34a6335cddea5db1", null ],
     [ "derivimplicit_var_thread_id", "structnmodl_1_1codegen_1_1_codegen_info.html#ab19aab302a66b76f119a2b6312174543", null ],
+    [ "destructor_node", "structnmodl_1_1codegen_1_1_codegen_info.html#a5d1b352f185f78beb36604d60870645a", null ],
     [ "diam_used", "structnmodl_1_1codegen_1_1_codegen_info.html#a356665162e1a17fc044499e8c130d343", null ],
     [ "eigen_linear_solver_exist", "structnmodl_1_1codegen_1_1_codegen_info.html#ab4926329370f2ec809911757bf21597c", null ],
     [ "eigen_newton_solver_exist", "structnmodl_1_1codegen_1_1_codegen_info.html#a6e443dc75c590f05e91ed556091be5ec", null ],

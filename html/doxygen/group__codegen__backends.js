@@ -176,6 +176,7 @@ var group__codegen__backends =
       [ "print_nrn_cur_matrix_shadow_update", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a19449f68f8e8dd9073451db8adcb9917", null ],
       [ "print_nrn_cur_non_conductance_kernel", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a2817d93c94f97f044d0ef016f9fc6215", null ],
       [ "print_nrn_current", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a68e8118cf73341854cf705bb4cfc206b", null ],
+      [ "print_nrn_destructor", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a4e4aab3299e85e0951c25eec0aeddeca", null ],
       [ "print_nrn_init", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a948cbc14c90144acd14cb9b465abda40", null ],
       [ "print_nrn_state", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a70f1e7264b4d6c34f360bf1090f02762", null ],
       [ "print_num_variable_getter", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ab7423562e5aea90292d3b457b927e615", null ],

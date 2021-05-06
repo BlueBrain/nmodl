@@ -1,5 +1,11 @@
 var NAVTREEINDEX51 =
 {
+"verbatim__var__rename__visitor_8hpp_source.html":[4,0,1,11,45],
+"verbatim__visitor_8cpp.html":[4,0,1,11,46],
+"verbatim__visitor_8cpp_source.html":[4,0,1,11,46],
+"verbatim__visitor_8hpp.html":[4,0,1,11,47],
+"verbatim__visitor_8hpp_source.html":[4,0,1,11,47],
+"visitor_8hpp.html":[4,0,0,0,0,0,1,12],
 "visitor_8hpp_source.html":[4,0,0,0,0,0,1,12],
 "visitor__utils_8cpp.html":[4,0,1,11,48],
 "visitor__utils_8cpp.html#a0d49270a6c751e2e1a0e2c2db0012e4d":[4,0,1,11,48,5],

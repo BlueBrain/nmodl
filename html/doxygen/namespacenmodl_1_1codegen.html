@@ -163,11 +163,12 @@ Typedefs</h2></td></tr>
 Enumerations</h2></td></tr>
 <tr class="memitem:ga2d0a1f473f039b495e9cc349c3b57dbb"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__codegen__details.html#ga2d0a1f473f039b495e9cc349c3b57dbb">BlockType</a> { <br />
 &#160;&#160;<a class="el" href="group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba560a4dff90c58651347affffd44f7419">Initial</a>, 
+<a class="el" href="group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba34adbfda9463c1ef5da22364fbde7f4e">Destructor</a>, 
 <a class="el" href="group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba2aa5276df68f4ed49798a132d36cc3d3">Equation</a>, 
 <a class="el" href="group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba5a91e867e7802e6c6c6f627024768d21">Ode</a>, 
-<a class="el" href="group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba1f27f7d1e85f8d0915e4ab7e9f6e8e11">State</a>, 
 <br />
-&#160;&#160;<a class="el" href="group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbbaac20fc604795fbf01428e955d6d0f492">Watch</a>, 
+&#160;&#160;<a class="el" href="group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba1f27f7d1e85f8d0915e4ab7e9f6e8e11">State</a>, 
+<a class="el" href="group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbbaac20fc604795fbf01428e955d6d0f492">Watch</a>, 
 <a class="el" href="group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbbaaf126b23c756faf77bb3ffbd9a34fc57">NetReceive</a>, 
 <a class="el" href="group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba4618ace4464da4c213ec5e0df5e03fe8">BlockTypeEnd</a>
 <br />
@@ -241,7 +242,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8cpp_source.html#l01436">1436</a> of file <a class="el" href="codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8cpp_source.html#l01439">1439</a> of file <a class="el" href="codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -284,7 +285,7 @@ Variables</h2></td></tr>
 <div class="fragment"><div class="line">NET_RECEIVE (weight, R){</div><div class="line">    INITIAL {</div><div class="line">        R=1</div><div class="line">    }</div><div class="line">}</div></div><!-- fragment --><p>then generated code for initial block should be:</p>
 <div class="fragment"><div class="line"><span class="keywordtype">double</span>* R = weights + weight_index + 0;</div><div class="line">(*R) = 1.0;</div></div><!-- fragment --><p>So, the <code>R</code> in AST needs to be renamed with <code>(*R)</code>. </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8cpp_source.html#l03580">3580</a> of file <a class="el" href="codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8cpp_source.html#l03597">3597</a> of file <a class="el" href="codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>

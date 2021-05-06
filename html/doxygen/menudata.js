@@ -94,6 +94,7 @@ var menudata={children:[
 {text:"Enumerations",url:"namespacemembers_enum.html"},
 {text:"Enumerator",url:"namespacemembers_eval.html",children:[
 {text:"b",url:"namespacemembers_eval.html#index_b"},
+{text:"d",url:"namespacemembers_eval.html#index_d"},
 {text:"e",url:"namespacemembers_eval.html#index_e"},
 {text:"g",url:"namespacemembers_eval.html#index_g"},
 {text:"i",url:"namespacemembers_eval.html#index_i"},

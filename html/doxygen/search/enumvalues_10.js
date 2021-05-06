@@ -2,7 +2,7 @@ var searchData=
 [
   ['scalar',['scalar',['../namespacenmodl_1_1symtab_1_1syminfo.html#afde535fb45789f24916fd1cbafbb2aa2aa27a6549ade38cc036f7b8c58a840510',1,'nmodl::symtab::syminfo']]],
   ['section',['SECTION',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a3d0d6f3b89d94934de83ca41b85e6ce4',1,'nmodl::ast']]],
-  ['section_5fvar',['section_var',['../namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dba16c7cce7fd0fca13ee4b45e0fc9b722d',1,'nmodl::symtab::syminfo::section_var()'],['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a93cde68e31853f2688a1456efb14edff',1,'nmodl::ast::SECTION_VAR()']]],
+  ['section_5fvar',['SECTION_VAR',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a93cde68e31853f2688a1456efb14edff',1,'nmodl::ast::SECTION_VAR()'],['../namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dba16c7cce7fd0fca13ee4b45e0fc9b722d',1,'nmodl::symtab::syminfo::section_var()']]],
   ['sens',['SENS',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a014548dd5d7672fe913d6cf389e16872',1,'nmodl::ast']]],
   ['solution_5fexpression',['SOLUTION_EXPRESSION',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a03d2d4d474a5e228e6708a598e75d72d',1,'nmodl::ast']]],
   ['solve_5fblock',['SOLVE_BLOCK',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a32a810039d579f24248142d68ff11021',1,'nmodl::ast']]],
