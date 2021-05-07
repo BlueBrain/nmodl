@@ -20,9 +20,11 @@
 #include "llvm/ExecutionEngine/Orc/RTDyldObjectLinkingLayer.h"
 #include "llvm/ExecutionEngine/SectionMemoryManager.h"
 #include "llvm/InitializePasses.h"
+#include "llvm/IR/AssemblyAnnotationWriter.h"
 #include "llvm/Support/Host.h"
 #include "llvm/Support/TargetRegistry.h"
 #include "llvm/Support/TargetSelect.h"
+#include "llvm/Support/ToolOutputFile.h"
 #include "llvm/Transforms/IPO/PassManagerBuilder.h"
 
 namespace nmodl {
@@ -188,6 +190,22 @@ void JITDriver::init(std::string features,
 
         // Optimise the LLVM IR module.
         optimise_module(*module, benchmark_info->opt_level_ir, tm.get());
+
+        // Save optimised module to .ll file if benchmarking.
+        if (benchmark_info) {
+            std::error_code error_code;
+            std::unique_ptr<llvm::ToolOutputFile> out =
+                std::make_unique<llvm::ToolOutputFile>(benchmark_info->output_dir + "/" +
+                                                           benchmark_info->filename + "_opt.ll",
+                                                       error_code,
+                                                       llvm::sys::fs::OF_Text);
+            if (error_code)
+                throw std::runtime_error("Error: " + error_code.message());
+
+            std::unique_ptr<llvm::AssemblyAnnotationWriter> annotator;
+            module->print(out->os(), annotator.get());
+            out->keep();
+        }
 
         return std::make_unique<llvm::orc::TMOwningSimpleCompiler>(std::move(tm));
     };
