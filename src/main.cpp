@@ -180,19 +180,25 @@ int main(int argc, const char* argv[]) {
     int llvm_vec_width = 1;
 
     /// vector library name
-    std::string vec_lib("none");
-
-    /// list of shared libraries to link
-    std::vector<std::string> libs;
+    std::string vector_library("none");
 
     /// run llvm benchmark
-    bool run_benchmark(false);
+    bool run_llvm_benchmark(false);
+
+    /// optimisation level for IR generation
+    int llvm_opt_level_ir = 0;
+
+    /// optimisation level for machine code generation
+    int llvm_opt_level_codegen = 0;
+
+    /// list of shared libraries to link against in JIT
+    std::vector<std::string> shared_lib_paths;
 
     /// the size of the instance struct for the benchmark
     int instance_size = 10000;
 
-    /// the number of experiments to run for the benchmarking
-    int repeat = 100;
+    /// the number of repeated experiments for the benchmarking
+    int num_experiments = 100;
 
     /// specify the backend for LLVM IR to target
     std::string backend = "default";
@@ -333,23 +339,29 @@ int main(int argc, const char* argv[]) {
         llvm_vec_width,
         fmt::format("LLVM explicit vectorisation width ({})", llvm_vec_width))->ignore_case();
     llvm_opt->add_option("--veclib",
-                         vec_lib,
-                         fmt::format("Vector library for maths functions ({})", vec_lib))->check(CLI::IsMember({"Accelerate", "libmvec", "MASSV", "SVML", "none"}));
+                         vector_library,
+                         fmt::format("Vector library for maths functions ({})", vector_library))->check(CLI::IsMember({"Accelerate", "libmvec", "MASSV", "SVML", "none"}));
 
     // LLVM IR benchmark options.
     auto benchmark_opt = app.add_subcommand("benchmark", "LLVM benchmark option")->ignore_case();
     benchmark_opt->add_flag("--run",
-                       run_benchmark,
-                       fmt::format("Run LLVM benchmark ({})", run_benchmark))->ignore_case();
-    benchmark_opt->add_option("--libs", libs, "Shared libraries to link IR against")
+                            run_llvm_benchmark,
+                            fmt::format("Run LLVM benchmark ({})", run_llvm_benchmark))->ignore_case();
+    benchmark_opt->add_option("--opt-level-ir",
+                              llvm_opt_level_ir,
+                              fmt::format("LLVM IR optimisation level (O{})", llvm_opt_level_ir))->ignore_case()->check(CLI::IsMember({"0", "1", "2", "3"}));
+    benchmark_opt->add_option("--opt-level-codegen",
+                              llvm_opt_level_codegen,
+                              fmt::format("Machine code optimisation level (O{})", llvm_opt_level_codegen))->ignore_case()->check(CLI::IsMember({"0", "1", "2", "3"}));
+    benchmark_opt->add_option("--libs", shared_lib_paths, "Shared libraries to link IR against")
             ->ignore_case()
             ->check(CLI::ExistingFile);
     benchmark_opt->add_option("--instance-size",
                        instance_size,
                        fmt::format("Instance struct size ({})", instance_size))->ignore_case();
     benchmark_opt->add_option("--repeat",
-                       repeat,
-                       fmt::format("Number of experiments for benchmarking ({})", repeat))->ignore_case();
+                              num_experiments,
+                              fmt::format("Number of experiments for benchmarking ({})", num_experiments))->ignore_case();
     benchmark_opt->add_option("--backend",
                        backend,
                        fmt::format("Target's backend ({})", backend))->ignore_case()->check(CLI::IsMember({"avx2", "default", "sse2"}));
@@ -665,15 +677,22 @@ int main(int argc, const char* argv[]) {
 
 #ifdef NMODL_LLVM_BACKEND
 
-            if (run_benchmark) {
+            if (run_llvm_benchmark) {
                 logger->info("Running LLVM benchmark");
                 benchmark::LLVMBuildInfo info{llvm_vec_width,
                                               llvm_ir_opt_passes,
                                               llvm_float_type,
-                                              vec_lib};
-                benchmark::LLVMBenchmark bench(
-                    modfile, output_dir, libs, info, repeat, instance_size, backend);
-                bench.benchmark(ast);
+                                              vector_library};
+                benchmark::LLVMBenchmark benchmark(modfile,
+                                                   output_dir,
+                                                   shared_lib_paths,
+                                                   info,
+                                                   num_experiments,
+                                                   instance_size,
+                                                   backend,
+                                                   llvm_opt_level_ir,
+                                                   llvm_opt_level_codegen);
+                benchmark.run(ast);
             }
 
             else if (llvm_ir) {
@@ -683,7 +702,7 @@ int main(int argc, const char* argv[]) {
                                            llvm_ir_opt_passes,
                                            llvm_float_type,
                                            llvm_vec_width,
-                                           vec_lib);
+                                           vector_library);
                 visitor.visit_program(*ast);
                 ast_to_nmodl(*ast, filepath("llvm", "mod"));
                 ast_to_json(*ast, filepath("llvm", "json"));
