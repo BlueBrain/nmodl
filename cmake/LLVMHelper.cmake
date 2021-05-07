@@ -4,7 +4,7 @@
 
 find_package(LLVM REQUIRED CONFIG)
 
-# include LLVM header and core library
+# include LLVM libraries
 llvm_map_components_to_libnames(
   LLVM_LIBS_TO_LINK
   analysis
@@ -12,16 +12,23 @@ llvm_map_components_to_libnames(
   core
   executionengine
   instcombine
-  inteljitevents
   ipo
   mc
   native
   orcjit
-  perfjitevents
   target
   transformutils
   scalaropts
   support)
+
+if (LLVM_USE_INTEL_JITEVENTS)
+  llvm_map_components_to_libnames(LLVM_LIBS_TO_LINK inteljitevents)
+endif()
+
+if (LLVM_USE_PERF)
+  llvm_map_components_to_libnames(LLVM_LIBS_TO_LINK perfjitevents)
+endif()
+
 set(CMAKE_REQUIRED_INCLUDES ${LLVM_INCLUDE_DIRS})
 set(CMAKE_REQUIRED_LIBRARIES ${LLVM_LIBS_TO_LINK})
 
