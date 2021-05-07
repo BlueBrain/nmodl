@@ -12,9 +12,12 @@ llvm_map_components_to_libnames(
   core
   executionengine
   instcombine
+  ipo
   mc
   native
   orcjit
+  target
+  transformutils
   scalaropts
   support)
 set(CMAKE_REQUIRED_INCLUDES ${LLVM_INCLUDE_DIRS})

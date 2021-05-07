@@ -20,13 +20,19 @@
 namespace nmodl {
 namespace runner {
 
-/// A struct to hold the information for dumping object file.
-struct ObjDumpInfo {
-    /// Object file name.
+/// A struct to hold the information for benchmarking.
+struct BenchmarkInfo {
+    /// Object filename to dump.
     std::string filename;
 
     /// Object file output directory.
     std::string output_dir;
+
+    /// Optimisation level for generated IR.
+    int opt_level_ir;
+
+    /// Optimisation level for machine code generation.
+    int opt_level_codegen;
 };
 
 /**
@@ -45,10 +51,10 @@ class JITDriver {
     explicit JITDriver(std::unique_ptr<llvm::Module> m)
         : module(std::move(m)) {}
 
-    /// Initializes the JIT.
+    /// Initializes the JIT driver.
     void init(std::string features = "",
               std::vector<std::string> lib_paths = {},
-              ObjDumpInfo* dump_info = nullptr);
+              BenchmarkInfo* benchmark_info = nullptr);
 
     /// Lookups the entry-point without arguments in the JIT and executes it, returning the result.
     template <typename ReturnType>
@@ -73,14 +79,6 @@ class JITDriver {
         ReturnType result = res(arg);
         return result;
     }
-
-  private:
-    /// Creates llvm::TargetMachine with certain CPU features turned on/off.
-    std::unique_ptr<llvm::TargetMachine> create_target(llvm::orc::JITTargetMachineBuilder* builder,
-                                                       const std::string& features);
-
-    /// Sets the triple and the data layout for the module.
-    void set_triple_and_data_layout(const std::string& features);
 };
 
 /**
@@ -133,8 +131,8 @@ class TestRunner: public BaseRunner {
  */
 class BenchmarkRunner: public BaseRunner {
   private:
-    /// Information on dumping object file generated from LLVM IR.
-    ObjDumpInfo dump_info;
+    /// Benchmarking information passed to JIT driver.
+    BenchmarkInfo benchmark_info;
 
     /// CPU features specified by the user.
     std::string features;
@@ -147,14 +145,16 @@ class BenchmarkRunner: public BaseRunner {
                     std::string filename,
                     std::string output_dir,
                     std::string features = "",
-                    std::vector<std::string> lib_paths = {})
+                    std::vector<std::string> lib_paths = {},
+                    int opt_level_ir = 0,
+                    int opt_level_codegen = 0)
         : BaseRunner(std::move(m))
-        , dump_info{filename, output_dir}
+        , benchmark_info{filename, output_dir, opt_level_ir, opt_level_codegen}
         , features(features)
         , shared_lib_paths(lib_paths) {}
 
     virtual void initialize_driver() {
-        driver->init(features, shared_lib_paths, &dump_info);
+        driver->init(features, shared_lib_paths, &benchmark_info);
     }
 };
 
