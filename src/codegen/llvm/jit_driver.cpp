@@ -158,8 +158,10 @@ void JITDriver::init(std::string features,
     // with listeners on (e.g. -DLLVM_USE_PERF=ON).
     if (benchmark_info) {
         gdb_event_listener = llvm::JITEventListener::createGDBRegistrationListener();
+#if defined(NMODL_HAVE_JIT_EVENT_LISTENERS)
         perf_event_listener = llvm::JITEventListener::createPerfJITEventListener();
         intel_event_listener = llvm::JITEventListener::createIntelJITEventListener();
+#endif
     }
 
     // Create object linking function callback.

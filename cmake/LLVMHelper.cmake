@@ -5,29 +5,26 @@
 find_package(LLVM REQUIRED CONFIG)
 
 # include LLVM libraries
-llvm_map_components_to_libnames(
-  LLVM_LIBS_TO_LINK
-  analysis
-  codegen
-  core
-  executionengine
-  instcombine
-  ipo
-  mc
-  native
-  orcjit
-  target
-  transformutils
-  scalaropts
-  support)
+set(NMODL_LLVM_COMPONENTS
+    analysis
+    codegen
+    core
+    executionengine
+    instcombine
+    ipo
+    mc
+    native
+    orcjit
+    target
+    transformutils
+    scalaropts
+    support)
 
-if(LLVM_USE_INTEL_JITEVENTS)
-  llvm_map_components_to_libnames(LLVM_LIBS_TO_LINK inteljitevents)
+if(NMODL_ENABLE_JIT_EVENT_LISTENERS)
+  list(APPEND NMODL_LLVM_COMPONENTS inteljitevents perfjitevents)
 endif()
 
-if(LLVM_USE_PERF)
-  llvm_map_components_to_libnames(LLVM_LIBS_TO_LINK perfjitevents)
-endif()
+llvm_map_components_to_libnames(LLVM_LIBS_TO_LINK ${NMODL_LLVM_COMPONENTS})
 
 set(CMAKE_REQUIRED_INCLUDES ${LLVM_INCLUDE_DIRS})
 set(CMAKE_REQUIRED_LIBRARIES ${LLVM_LIBS_TO_LINK})
