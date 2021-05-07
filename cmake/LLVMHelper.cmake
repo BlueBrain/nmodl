@@ -21,11 +21,11 @@ llvm_map_components_to_libnames(
   scalaropts
   support)
 
-if (LLVM_USE_INTEL_JITEVENTS)
+if(LLVM_USE_INTEL_JITEVENTS)
   llvm_map_components_to_libnames(LLVM_LIBS_TO_LINK inteljitevents)
 endif()
 
-if (LLVM_USE_PERF)
+if(LLVM_USE_PERF)
   llvm_map_components_to_libnames(LLVM_LIBS_TO_LINK perfjitevents)
 endif()
 

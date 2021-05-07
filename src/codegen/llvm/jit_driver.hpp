@@ -50,13 +50,13 @@ class JITDriver {
     std::unique_ptr<llvm::Module> module;
 
     /// GDB event listener.
-    llvm::JITEventListener *gdb_event_listener = nullptr;
+    llvm::JITEventListener* gdb_event_listener = nullptr;
 
     /// perf event listener.
-    llvm::JITEventListener *perf_event_listener = nullptr;
+    llvm::JITEventListener* perf_event_listener = nullptr;
 
     /// Intel event listener.
-    llvm::JITEventListener *intel_event_listener = nullptr;
+    llvm::JITEventListener* intel_event_listener = nullptr;
 
   public:
     explicit JITDriver(std::unique_ptr<llvm::Module> m)
