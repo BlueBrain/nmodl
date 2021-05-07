@@ -46,7 +46,7 @@ class JITDriver {
 
     std::unique_ptr<llvm::orc::LLJIT> jit;
 
-    /// The LLVM IR module to execute.
+    /// LLVM IR module to execute.
     std::unique_ptr<llvm::Module> module;
 
     /// GDB event listener.

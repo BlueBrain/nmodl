@@ -83,7 +83,7 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     DebugBuilder debug_builder;
 
     // Add debug information to the module.
-    bool add_debug_information = true;
+    bool add_debug_information;
 
     // Pass manager for optimisation passes that are used for target code generation.
     llvm::legacy::FunctionPassManager codegen_pm;
@@ -138,13 +138,15 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
                        bool opt_passes,
                        bool use_single_precision = false,
                        int vector_width = 1,
-                       std::string vec_lib = "none")
+                       std::string vec_lib = "none",
+                       bool add_debug_information = false)
         : mod_filename(mod_filename)
         , output_dir(output_dir)
         , opt_passes(opt_passes)
         , use_single_precision(use_single_precision)
         , vector_width(vector_width)
         , vector_library(veclib_map.at(vec_lib))
+        , add_debug_information(add_debug_information)
         , ir_builder(*context)
         , debug_builder(*module)
         , codegen_pm(module.get())

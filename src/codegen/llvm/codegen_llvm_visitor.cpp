@@ -32,6 +32,7 @@ namespace codegen {
 
 static constexpr const char instance_struct_type_name[] = "__instance_var__type";
 
+
 /****************************************************************************************/
 /*                            Helper routines                                           */
 /****************************************************************************************/
@@ -1073,6 +1074,7 @@ void CodegenLLVMVisitor::wrap_kernel_functions() {
             "__" + kernel_name + "_wrapper",
             *module);
 
+        // Optionally, add debug information for the wrapper function.
         if (add_debug_information) {
             debug_builder.add_function_debug_info(wrapper_func);
         }
