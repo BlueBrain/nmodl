@@ -170,7 +170,7 @@ void JITDriver::init(std::string features,
             return std::make_unique<llvm::SectionMemoryManager>();
         });
 
-        // Register event listeners if the exist.
+        // Register event listeners if they exist.
         if (gdb_event_listener)
             layer->registerJITEventListener(*gdb_event_listener);
         if (perf_event_listener)

@@ -13,9 +13,6 @@ namespace codegen {
 
 static constexpr const char debug_version_key[] = "Debug Version";
 
-/****************************************************************************************/
-/*                            Debug helpers                                             */
-/****************************************************************************************/
 
 void DebugBuilder::add_function_debug_info(llvm::Function* function, Location* loc) {
     // Create the function debug type (subroutine type). We are not interested in parameters and
