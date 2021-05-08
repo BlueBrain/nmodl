@@ -58,7 +58,8 @@ void LLVMBenchmark::run(const std::shared_ptr<ast::Program>& node) {
                                         llvm_build_info.opt_passes,
                                         llvm_build_info.use_single_precision,
                                         llvm_build_info.vector_width,
-                                        llvm_build_info.vec_lib);
+                                        llvm_build_info.vec_lib,
+                                        /*add_debug_information=*/true);
     generate_llvm(visitor, node);
 
     // Finally, run the benchmark and log the measurements.

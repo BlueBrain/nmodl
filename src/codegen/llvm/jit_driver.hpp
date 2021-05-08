@@ -15,6 +15,7 @@
  * \brief \copybrief nmodl::runner::JITDriver
  */
 
+#include "llvm/ExecutionEngine/JITEventListener.h"
 #include "llvm/ExecutionEngine/Orc/LLJIT.h"
 
 namespace nmodl {
@@ -45,7 +46,17 @@ class JITDriver {
 
     std::unique_ptr<llvm::orc::LLJIT> jit;
 
+    /// LLVM IR module to execute.
     std::unique_ptr<llvm::Module> module;
+
+    /// GDB event listener.
+    llvm::JITEventListener* gdb_event_listener = nullptr;
+
+    /// perf event listener.
+    llvm::JITEventListener* perf_event_listener = nullptr;
+
+    /// Intel event listener.
+    llvm::JITEventListener* intel_event_listener = nullptr;
 
   public:
     explicit JITDriver(std::unique_ptr<llvm::Module> m)
