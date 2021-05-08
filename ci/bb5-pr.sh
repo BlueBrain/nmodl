@@ -80,7 +80,7 @@ function bb5_pr_build_intel() {
 }
 
 function bb5_pr_build_pgi() {
-    build_with pgi
+    build_with nvhpc
 }
 
 function bb5_pr_test_gcc() {
