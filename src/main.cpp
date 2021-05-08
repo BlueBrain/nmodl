@@ -182,6 +182,9 @@ int main(int argc, const char* argv[]) {
     /// vector library name
     std::string vector_library("none");
 
+    /// disable debug information generation for the IR
+    bool disable_debug_information(false);
+
     /// run llvm benchmark
     bool run_llvm_benchmark(false);
 
@@ -329,6 +332,9 @@ int main(int argc, const char* argv[]) {
     llvm_opt->add_flag("--ir",
         llvm_ir,
         fmt::format("Generate LLVM IR ({})", llvm_ir))->ignore_case();
+    llvm_opt->add_flag("--disable-debug-info",
+                       disable_debug_information,
+                       fmt::format("Disable debug information ({})", disable_debug_information))->ignore_case();
     llvm_opt->add_flag("--opt",
                        llvm_ir_opt_passes,
                        fmt::format("Run LLVM optimisation passes ({})", llvm_ir_opt_passes))->ignore_case();
@@ -702,7 +708,8 @@ int main(int argc, const char* argv[]) {
                                            llvm_ir_opt_passes,
                                            llvm_float_type,
                                            llvm_vec_width,
-                                           vector_library);
+                                           vector_library,
+                                           !disable_debug_information);
                 visitor.visit_program(*ast);
                 ast_to_nmodl(*ast, filepath("llvm", "mod"));
                 ast_to_json(*ast, filepath("llvm", "json"));

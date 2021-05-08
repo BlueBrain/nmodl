@@ -193,6 +193,9 @@ void CodegenLLVMHelperVisitor::create_function_for_node(ast::Block& node) {
     /// we have all information for code generation function, create a new node
     /// which will be inserted later into AST
     auto function = std::make_shared<ast::CodegenFunction>(fun_ret_type, name, arguments, block);
+    if (node.get_token()) {
+        function->set_token(*node.get_token()->clone());
+    }
     codegen_functions.push_back(function);
 }
 /**
