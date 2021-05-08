@@ -92,7 +92,7 @@ function bb5_pr_test_intel() {
 }
 
 function bb5_pr_test_pgi() {
-    test_with pgi
+    test_with nvhpc
 }
 
 function bb5_pr_build_llvm() {
