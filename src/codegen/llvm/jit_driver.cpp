@@ -154,6 +154,16 @@ void JITDriver::init(std::string features,
     set_triple_and_data_layout(*module, features);
     auto data_layout = module->getDataLayout();
 
+    // If benchmarking, enable listeners to use GDB, perf or VTune. Note that LLVM should be built
+    // with listeners on (e.g. -DLLVM_USE_PERF=ON).
+    if (benchmark_info) {
+        gdb_event_listener = llvm::JITEventListener::createGDBRegistrationListener();
+#if defined(NMODL_HAVE_JIT_EVENT_LISTENERS)
+        perf_event_listener = llvm::JITEventListener::createPerfJITEventListener();
+        intel_event_listener = llvm::JITEventListener::createIntelJITEventListener();
+#endif
+    }
+
     // Create object linking function callback.
     auto object_linking_layer_creator = [&](llvm::orc::ExecutionSession& session,
                                             const llvm::Triple& triple) {
@@ -161,6 +171,15 @@ void JITDriver::init(std::string features,
         auto layer = std::make_unique<llvm::orc::RTDyldObjectLinkingLayer>(session, []() {
             return std::make_unique<llvm::SectionMemoryManager>();
         });
+
+        // Register event listeners if they exist.
+        if (gdb_event_listener)
+            layer->registerJITEventListener(*gdb_event_listener);
+        if (perf_event_listener)
+            layer->registerJITEventListener(*perf_event_listener);
+        if (intel_event_listener)
+            layer->registerJITEventListener(*intel_event_listener);
+
         for (const auto& lib_path: lib_paths) {
             // For every library path, create a corresponding memory buffer.
             auto memory_buffer = llvm::MemoryBuffer::getFile(lib_path);

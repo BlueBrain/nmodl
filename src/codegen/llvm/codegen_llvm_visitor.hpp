@@ -19,11 +19,13 @@
 #include <string>
 
 #include "codegen/llvm/codegen_llvm_helper_visitor.hpp"
+#include "codegen/llvm/llvm_debug_builder.hpp"
 #include "symtab/symbol_table.hpp"
 #include "utils/logger.hpp"
 #include "visitors/ast_visitor.hpp"
 
 #include "llvm/Analysis/TargetLibraryInfo.h"
+#include "llvm/IR/DIBuilder.h"
 #include "llvm/IR/IRBuilder.h"
 #include "llvm/IR/LLVMContext.h"
 #include "llvm/IR/LegacyPassManager.h"
@@ -74,7 +76,14 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
 
     std::unique_ptr<llvm::Module> module = std::make_unique<llvm::Module>(mod_filename, *context);
 
-    llvm::IRBuilder<> builder;
+    // LLVM IR builder.
+    llvm::IRBuilder<> ir_builder;
+
+    // Debug information builder.
+    DebugBuilder debug_builder;
+
+    // Add debug information to the module.
+    bool add_debug_information;
 
     // Pass manager for optimisation passes that are used for target code generation.
     llvm::legacy::FunctionPassManager codegen_pm;
@@ -129,14 +138,17 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
                        bool opt_passes,
                        bool use_single_precision = false,
                        int vector_width = 1,
-                       std::string vec_lib = "none")
+                       std::string vec_lib = "none",
+                       bool add_debug_information = false)
         : mod_filename(mod_filename)
         , output_dir(output_dir)
         , opt_passes(opt_passes)
         , use_single_precision(use_single_precision)
         , vector_width(vector_width)
         , vector_library(veclib_map.at(vec_lib))
-        , builder(*context)
+        , add_debug_information(add_debug_information)
+        , ir_builder(*context)
+        , debug_builder(*module)
         , codegen_pm(module.get())
         , opt_pm(module.get()) {}
 
