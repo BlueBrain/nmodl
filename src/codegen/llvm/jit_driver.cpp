@@ -205,13 +205,13 @@ void JITDriver::init(std::string features,
     auto compile_function_creator = [&](llvm::orc::JITTargetMachineBuilder tm_builder)
         -> llvm::Expected<std::unique_ptr<llvm::orc::IRCompileLayer::IRCompiler>> {
         // Create target machine with some features possibly turned off.
-        auto tm = create_target(&tm_builder, features, benchmark_info->opt_level_codegen);
+        int opt_level_codegen = benchmark_info ? benchmark_info->opt_level_codegen : 0;
+        auto tm = create_target(&tm_builder, features, opt_level_codegen);
 
-        // Optimise the LLVM IR module.
-        optimise_module(*module, benchmark_info->opt_level_ir, tm.get());
-
-        // Save optimised module to .ll file if benchmarking.
+        // Optimise the LLVM IR module and save it to .ll file if benchmarking.
         if (benchmark_info) {
+            optimise_module(*module, benchmark_info->opt_level_ir, tm.get());
+
             std::error_code error_code;
             std::unique_ptr<llvm::ToolOutputFile> out =
                 std::make_unique<llvm::ToolOutputFile>(benchmark_info->output_dir + "/" +
