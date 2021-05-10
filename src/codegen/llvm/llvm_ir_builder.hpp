@@ -75,34 +75,44 @@ class IRBuilder {
         , kernel_id("") {}
 
     /// Initializes the builder with the symbol table, kernel id and instance variable info.
-    void initialize(symtab::SymbolTable& symbol_table, std::string& kernel_id, InstanceVarHelper& instance_var_helper);
+    void initialize(symtab::SymbolTable& symbol_table,
+                    std::string& kernel_id,
+                    InstanceVarHelper& instance_var_helper) {
+        this->symbol_table = &symbol_table;
+        this->kernel_id = kernel_id;
+        this->instance_var_helper = &instance_var_helper;
+    }
+
+    /// Turns on vectorization mode.
+    void start_vectorization() {
+        vectorize = true;
+    }
+
+    /// Turns off vectorization mode.
+    void stop_vectorization() {
+        vectorize = false;
+    }
 
     /// Generates LLVM IR for the given binary operator.
     void create_binary_op(llvm::Value* lhs, llvm::Value* rhs, ast::BinaryOp op);
 
-    /// Returns an inbounds GEP instruction to one-dimensional array `var_name`.
-    llvm::Value* create_inbounds_gep(const std::string& var_name, llvm::Value* index);
-
     /// Generates LLVM IR for the given unary operator.
     void create_unary_op(llvm::Value* value, ast::UnaryOp op);
 
+    /// Generates LLVM IR for the boolean constant.
+    void create_boolean_constant(int value);
+
+    /// Generates LLVM IR for the floating-point constant.
+    void create_fp_constant(const std::string& value);
+
+    /// Generates LLVM IR for the integer constant.
+    void create_i32_constant(int value);
+
+    /// Returns an inbounds GEP instruction to one-dimensional array `var_name`.
+    llvm::Value* create_inbounds_gep(const std::string& var_name, llvm::Value* index);
+
     /// Returns array length from given IndexedName.
     int get_array_length(const ast::IndexedName& node);
-
-    /// Returns LLVM boolean (1-bit integer) constant.
-    llvm::Value* get_bool_constant(int value);
-
-    /// Returns LLVM floating-point constant.
-    llvm::Value* get_fp_constant(const std::string& value);
-
-    /// Returns LLVM vector with `vector_width` floating-point values.
-    llvm::Value* get_fp_vector_constant(const std::string& value);
-
-    /// Returns LLVM 32-bit integer constant.
-    llvm::Value* get_i32_constant(int value);
-
-    /// Returns LLVM vector with `vector_width` 32-bit integer values.
-    llvm::Value* get_i32_vector_constant(int value);
 
     /// Lookups the value by  its name in the current function's symbol table.
     llvm::Value* lookup_value(const std::string& value_name);
@@ -135,6 +145,14 @@ class IRBuilder {
 
     /// Creates an instance struct type.
     llvm::Type* get_instance_struct_type();
+
+    /// Returns a scalar constant of the provided type.
+    template <typename C, typename V>
+    llvm::Value* get_scalar_constant(llvm::Type* type, V value);
+
+    /// Returns a vector constant of the provided type.
+    template <typename C, typename V>
+    llvm::Value* get_vector_constant(llvm::Type* type, V value);
 };
 }  // namespace codegen
 }  // namespace nmodl

@@ -17,13 +17,6 @@ namespace codegen {
 static constexpr const char instance_struct_type_name[] = "__instance_var__type";
 static constexpr const char printf_name[] = "printf";
 
-void IRBuilder::initialize(symtab::SymbolTable& symbol_table,
-                           std::string& kernel_id,
-                           InstanceVarHelper& instance_var_helper) {
-    this->symbol_table = &symbol_table;
-    this->kernel_id = kernel_id;
-    this->instance_var_helper = &instance_var_helper;
-}
 
 /****************************************************************************************/
 /*                            LLVM type utilities                                       */
@@ -115,31 +108,36 @@ llvm::Value* IRBuilder::pop_last_value() {
 /*                            LLVM Constants utilities                                  */
 /****************************************************************************************/
 
-llvm::Value* IRBuilder::get_bool_constant(int value) {
-    return llvm::ConstantInt::get(get_boolean_type(), value);
+void IRBuilder::create_boolean_constant(int value) {
+    value_stack.push_back(get_vector_constant<llvm::ConstantInt>(get_boolean_type(), value));
 }
 
-llvm::Value* IRBuilder::get_fp_constant(const std::string& value) {
-    return llvm::ConstantFP::get(get_fp_type(), value);
-}
-
-llvm::Value* IRBuilder::get_fp_vector_constant(const std::string& value) {
-    ConstantVector constants;
-    for (unsigned i = 0; i < vector_width; ++i) {
-        const auto& element = llvm::ConstantFP::get(get_fp_type(), value);
-        constants.push_back(element);
+void IRBuilder::create_fp_constant(const std::string& value) {
+    if (vector_width > 1 && vectorize) {
+        value_stack.push_back(get_vector_constant<llvm::ConstantFP>(get_fp_type(), value));
+    } else {
+        value_stack.push_back(get_scalar_constant<llvm::ConstantFP>(get_fp_type(), value));
     }
-    return llvm::ConstantVector::get(constants);
 }
 
-llvm::Value* IRBuilder::get_i32_constant(int value) {
-    return llvm::ConstantInt::get(get_i32_type(), value);
+void IRBuilder::create_i32_constant(int value) {
+    if (vector_width > 1 && vectorize) {
+        value_stack.push_back(get_vector_constant<llvm::ConstantInt>(get_i32_type(), value));
+    } else {
+        value_stack.push_back(get_scalar_constant<llvm::ConstantInt>(get_i32_type(), value));
+    }
 }
 
-llvm::Value* IRBuilder::get_i32_vector_constant(int value) {
+template <typename C, typename V>
+llvm::Value* IRBuilder::get_scalar_constant(llvm::Type* type, V value) {
+    return C::get(type, value);
+}
+
+template <typename C, typename V>
+llvm::Value* IRBuilder::get_vector_constant(llvm::Type* type, V value) {
     ConstantVector constants;
     for (unsigned i = 0; i < vector_width; ++i) {
-        const auto& element = llvm::ConstantInt::get(get_i32_type(), value);
+        const auto& element = C::get(type, value);
         constants.push_back(element);
     }
     return llvm::ConstantVector::get(constants);

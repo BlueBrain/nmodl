@@ -544,32 +544,7 @@ void CodegenLLVMVisitor::visit_binary_expression(const ast::BinaryExpression& no
     }
 
     llvm::Value* lhs = accept_and_get(node.get_lhs());
-
-    llvm::Value* result;
-    switch (op) {
-    case ast::BOP_ADDITION:
-    case ast::BOP_DIVISION:
-    case ast::BOP_MULTIPLICATION:
-    case ast::BOP_SUBTRACTION:
-        result = visit_arithmetic_bin_op(lhs, rhs, op);
-        break;
-    case ast::BOP_AND:
-    case ast::BOP_OR:
-        result = visit_logical_bin_op(lhs, rhs, op);
-        break;
-    case ast::BOP_EXACT_EQUAL:
-    case ast::BOP_GREATER:
-    case ast::BOP_GREATER_EQUAL:
-    case ast::BOP_LESS:
-    case ast::BOP_LESS_EQUAL:
-    case ast::BOP_NOT_EQUAL:
-        result = visit_comparison_bin_op(lhs, rhs, op);
-        break;
-    default:
-        throw std::runtime_error("Error: binary operator is not supported\n");
-    }
-
-    ir_builder.value_stack.push_back(result);
+    ir_builder.create_binary_op(lhs, rhs, op);
 }
 
 void CodegenLLVMVisitor::visit_statement_block(const ast::StatementBlock& node) {
@@ -581,7 +556,7 @@ void CodegenLLVMVisitor::visit_statement_block(const ast::StatementBlock& node) 
 }
 
 void CodegenLLVMVisitor::visit_boolean(const ast::Boolean& node) {
-    ir_builder.get_bool_constant(node.get_value());
+    ir_builder.create_boolean_constant(node.get_value());
 }
 
 // Generating FOR loop in LLVM IR creates the following structure:
@@ -619,6 +594,7 @@ void CodegenLLVMVisitor::visit_boolean(const ast::Boolean& node) {
 void CodegenLLVMVisitor::visit_codegen_for_statement(const ast::CodegenForStatement& node) {
     // Disable vector code generation for condition and increment blocks.
     is_kernel_code = false;
+    ir_builder.stop_vectorization();
 
     // Get the current and the next blocks within the function.
     llvm::BasicBlock* curr_block = ir_builder.builder.GetInsertBlock();
@@ -663,9 +639,11 @@ void CodegenLLVMVisitor::visit_codegen_for_statement(const ast::CodegenForStatem
     // Generate code for the loop body and create the basic block for the increment.
     ir_builder.builder.SetInsertPoint(for_body);
     is_kernel_code = true;
+    ir_builder.start_vectorization();
     const auto& statement_block = node.get_statement_block();
     statement_block->accept(*this);
     is_kernel_code = false;
+    ir_builder.stop_vectorization();
     ir_builder.builder.CreateBr(for_inc);
 
     // Process increment.
@@ -678,6 +656,7 @@ void CodegenLLVMVisitor::visit_codegen_for_statement(const ast::CodegenForStatem
     ir_builder.builder.SetInsertPoint(exit);
     vector_width = tmp_vector_width;
     is_kernel_code = true;
+    ir_builder.start_vectorization();
 }
 
 
@@ -717,8 +696,10 @@ void CodegenLLVMVisitor::visit_codegen_function(const ast::CodegenFunction& node
     bool has_void_ret_type = node.get_return_type()->get_type() == ast::AstNodeType::VOID;
     if (has_void_ret_type) {
         is_kernel_code = true;
+        ir_builder.start_vectorization();
         block->accept(*this);
         is_kernel_code = false;
+        ir_builder.stop_vectorization();
     } else {
         block->accept(*this);
     }
@@ -775,12 +756,7 @@ void CodegenLLVMVisitor::visit_codegen_var_list_statement(
 }
 
 void CodegenLLVMVisitor::visit_double(const ast::Double& node) {
-    if (is_kernel_code && vector_width > 1) {
-        ir_builder.value_stack.push_back(get_constant_fp_vector(node.get_value()));
-        return;
-    }
-    const auto& constant = llvm::ConstantFP::get(get_default_fp_type(), node.get_value());
-    ir_builder.value_stack.push_back(constant);
+    ir_builder.create_fp_constant(node.get_value());
 }
 
 void CodegenLLVMVisitor::visit_function_block(const ast::FunctionBlock& node) {
@@ -866,13 +842,7 @@ void CodegenLLVMVisitor::visit_if_statement(const ast::IfStatement& node) {
 }
 
 void CodegenLLVMVisitor::visit_integer(const ast::Integer& node) {
-    if (is_kernel_code && vector_width > 1) {
-        ir_builder.value_stack.push_back(get_constant_int_vector(node.get_value()));
-        return;
-    }
-    const auto& constant = llvm::ConstantInt::get(llvm::Type::getInt32Ty(*context),
-                                                  node.get_value());
-    ir_builder.value_stack.push_back(constant);
+    ir_builder.create_i32_constant(node.get_value());
 }
 
 void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
@@ -982,13 +952,7 @@ void CodegenLLVMVisitor::visit_procedure_block(const ast::ProcedureBlock& node) 
 void CodegenLLVMVisitor::visit_unary_expression(const ast::UnaryExpression& node) {
     ast::UnaryOp op = node.get_op().get_value();
     llvm::Value* value = accept_and_get(node.get_expression());
-    if (op == ast::UOP_NEGATION) {
-        ir_builder.value_stack.push_back(ir_builder.builder.CreateFNeg(value));
-    } else if (op == ast::UOP_NOT) {
-        ir_builder.value_stack.push_back(ir_builder.builder.CreateNot(value));
-    } else {
-        throw std::runtime_error("Error: unsupported unary operator\n");
-    }
+    ir_builder.create_unary_op(value, op);
 }
 
 void CodegenLLVMVisitor::visit_var_name(const ast::VarName& node) {
