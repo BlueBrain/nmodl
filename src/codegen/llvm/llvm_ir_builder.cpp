@@ -17,6 +17,14 @@ namespace codegen {
 static constexpr const char instance_struct_type_name[] = "__instance_var__type";
 static constexpr const char printf_name[] = "printf";
 
+void IRBuilder::initialize(symtab::SymbolTable& symbol_table,
+                           std::string& kernel_id,
+                           InstanceVarHelper& instance_var_helper) {
+    this->symbol_table = &symbol_table;
+    this->kernel_id = kernel_id;
+    this->instance_var_helper = &instance_var_helper;
+}
+
 /****************************************************************************************/
 /*                            LLVM type utilities                                       */
 /****************************************************************************************/
@@ -107,7 +115,15 @@ llvm::Value* IRBuilder::pop_last_value() {
 /*                            LLVM Constants utilities                                  */
 /****************************************************************************************/
 
-llvm::Value* IRBuilder::get_constant_fp_vector(const std::string& value) {
+llvm::Value* IRBuilder::get_bool_constant(int value) {
+    return llvm::ConstantInt::get(get_boolean_type(), value);
+}
+
+llvm::Value* IRBuilder::get_fp_constant(const std::string& value) {
+    return llvm::ConstantFP::get(get_fp_type(), value);
+}
+
+llvm::Value* IRBuilder::get_fp_vector_constant(const std::string& value) {
     ConstantVector constants;
     for (unsigned i = 0; i < vector_width; ++i) {
         const auto& element = llvm::ConstantFP::get(get_fp_type(), value);
@@ -116,7 +132,11 @@ llvm::Value* IRBuilder::get_constant_fp_vector(const std::string& value) {
     return llvm::ConstantVector::get(constants);
 }
 
-llvm::Value* IRBuilder::get_constant_i32_vector(int value) {
+llvm::Value* IRBuilder::get_i32_constant(int value) {
+    return llvm::ConstantInt::get(get_i32_type(), value);
+}
+
+llvm::Value* IRBuilder::get_i32_vector_constant(int value) {
     ConstantVector constants;
     for (unsigned i = 0; i < vector_width; ++i) {
         const auto& element = llvm::ConstantInt::get(get_i32_type(), value);
@@ -129,85 +149,18 @@ llvm::Value* IRBuilder::get_constant_i32_vector(int value) {
 /*                              LLVM function utilities                                 */
 /****************************************************************************************/
 
-//void IRBuilder::create_printf_call(const ast::ExpressionVector& arguments) {
-    // First, create printf declaration or insert it if it does not exit.
-//    llvm::Function* printf = module->getFunction(printf_name);
-//    if (!printf) {
-//        llvm::Type* ptr_type = llvm::Type::getInt8PtrTy(*context);
-//        llvm::Type* i32_type = llvm::Type::getInt32Ty(*context);
-//        llvm::FunctionType* printf_type =
-//                llvm::FunctionType::get(i32_type, ptr_type, /*isVarArg=*/true);
-//
-//        printf =
-//                llvm::Function::Create(printf_type, llvm::Function::ExternalLinkage, name, *module);
-//    }
-//
-//    // Create a call instruction.
-//    std::vector<llvm::Value*> argument_values;
-//    argument_values.reserve(arguments.size());
-//    pack_function_call_arguments(arguments, argument_values);
-//    ir_builder.CreateCall(printf, argument_values);
-//}
-
-//void IRBuilder::create_external_function_call(const std::string& name, const ast::ExpressionVector& arguments) {
-//    // Process `printf` calls separately.
-//    if (name == printf_name) {
-//        create_printf_call(arguments);
-//        return;
-//    }
-//
-//    // Create argument value and type vectors.
-//    ValueVector argument_values;
-//    TypeVector argument_types;
-//    for (const auto& arg: arguments) {
-//        arg->accept(visitor);
-//        llvm::Value* value = pop_last_value();
-//        argument_types.push_back(value->getType());
-//        argument_values.push_back(value);
-//    }
-//
-//#define DISPATCH(function_name, intrinsic)                                       \
-//    if (name == (function_name)) {                                               \
-//        llvm::Value* result =                                                    \
-//            builder.CreateIntrinsic(intrinsic, argument_types, argument_values); \
-//        value_stack.push_back(result);                                           \
-//        return;                                                                  \
-//    }
-//
-//    DISPATCH("exp", llvm::Intrinsic::exp);
-//    DISPATCH("pow", llvm::Intrinsic::pow);
-//#undef DISPATCH
-//
-//    throw std::runtime_error("Error: function call to" + name + " is not currently supported\n");
-//}
-//
-//void IRBuilder::create_function_call_arguments(const ast::ExpressionVector &arguments, ValueVector &values) {
-//    for (const auto& arg: arguments) {
-//        if (arg->is_string()) {
-//            // If the argument is a string, create a global i8* variable with it.
-//            const auto& string_arg = std::dynamic_pointer_cast<ast::String>(arg);
-//            llvm::Value* str = builder.CreateGlobalStringPtr(string_arg->get_value());
-//            values.push_back(str);
-//        } else {
-//            // Otherwise, visit the expression and add the processed value.
-//            arg->accept(visitor);
-//            values.push_back(pop_last_value());
-//        }
-//    }
-//}
-
 /****************************************************************************************/
 /*                             LLVM instruction utilities                               */
 /****************************************************************************************/
 
-void IRBuilder::create_bin_op(llvm::Value* lhs, llvm::Value* rhs, ast::BinaryOp op) {
+void IRBuilder::create_binary_op(llvm::Value* lhs, llvm::Value* rhs, ast::BinaryOp op) {
     // Check that both lhs and rhs have the same types.
     if (lhs->getType() != rhs->getType())
-        throw std::runtime_error("Error: lhs and rhs of the binary operator have different types\n");
+        throw std::runtime_error(
+            "Error: lhs and rhs of the binary operator have different types\n");
 
     llvm::Value* result;
     switch (op) {
-
 #define DISPATCH(binary_op, fp_instruction, integer_instruction) \
     case binary_op:                                              \
         if (lhs->getType()->isIntOrIntVectorTy())                \
@@ -232,16 +185,16 @@ void IRBuilder::create_bin_op(llvm::Value* lhs, llvm::Value* rhs, ast::BinaryOp 
 
 #undef DISPATCH
 
-        // Logical instructions.
-        case ast::BinaryOp::BOP_AND:
-            result = builder.CreateAnd(lhs, rhs);
-            break;
-        case  ast::BinaryOp::BOP_OR:
-            result = builder.CreateOr(lhs, rhs);
-            break;
+    // Logical instructions.
+    case ast::BinaryOp::BOP_AND:
+        result = builder.CreateAnd(lhs, rhs);
+        break;
+    case ast::BinaryOp::BOP_OR:
+        result = builder.CreateOr(lhs, rhs);
+        break;
 
-        default:
-            throw std::runtime_error("Error: unsupported binary operator\n");
+    default:
+        throw std::runtime_error("Error: unsupported binary operator\n");
     }
     value_stack.push_back(result);
 }
@@ -249,6 +202,16 @@ void IRBuilder::create_bin_op(llvm::Value* lhs, llvm::Value* rhs, ast::BinaryOp 
 llvm::Value* IRBuilder::create_inbounds_gep(const std::string& var_name, llvm::Value* index) {
     ValueVector indices{llvm::ConstantInt::get(get_i64_type(), 0), index};
     return builder.CreateInBoundsGEP(lookup_value(var_name), indices);
+}
+
+void IRBuilder::create_unary_op(llvm::Value* value, ast::UnaryOp op) {
+    if (op == ast::UOP_NEGATION) {
+        value_stack.push_back(builder.CreateFNeg(value));
+    } else if (op == ast::UOP_NOT) {
+        value_stack.push_back(builder.CreateNot(value));
+    } else {
+        throw std::runtime_error("Error: unsupported unary operator\n");
+    }
 }
 
 int IRBuilder::get_array_length(const ast::IndexedName& node) {

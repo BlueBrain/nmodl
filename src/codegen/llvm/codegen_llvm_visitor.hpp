@@ -20,6 +20,7 @@
 
 #include "codegen/llvm/codegen_llvm_helper_visitor.hpp"
 #include "codegen/llvm/llvm_debug_builder.hpp"
+#include "codegen/llvm/llvm_ir_builder.hpp"
 #include "symtab/symbol_table.hpp"
 #include "utils/logger.hpp"
 #include "visitors/ast_visitor.hpp"
@@ -77,7 +78,7 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     std::unique_ptr<llvm::Module> module = std::make_unique<llvm::Module>(mod_filename, *context);
 
     // LLVM IR builder.
-    llvm::IRBuilder<> ir_builder;
+    IRBuilder ir_builder;
 
     // Debug information builder.
     DebugBuilder debug_builder;
@@ -147,7 +148,7 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
         , vector_width(vector_width)
         , vector_library(veclib_map.at(vec_lib))
         , add_debug_information(add_debug_information)
-        , ir_builder(*context)
+        , ir_builder(*context, use_single_precision, vector_width)
         , debug_builder(*module)
         , codegen_pm(module.get())
         , opt_pm(module.get()) {}
@@ -375,6 +376,10 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
      * kernel.
      */
     void wrap_kernel_functions();
+
+  private:
+    /// Accepts the given AST node and returns the processed value.
+    llvm::Value* accept_and_get(const std::shared_ptr<ast::Node>& node);
 };
 
 /** \} */  // end of llvm_backends

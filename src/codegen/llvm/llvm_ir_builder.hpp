@@ -32,18 +32,19 @@ using ValueVector = std::vector<llvm::Value*>;
  * \brief A helper class to generate LLVM IR for NMODL AST.
  */
 class IRBuilder {
-  private:
+  public:
     /// Underlying LLVM IR builder.
     llvm::IRBuilder<> builder;
 
-    /// Symbol table of the NMODL AST.
-    symtab::SymbolTable* symbol_table;
+    /// Stack to hold visited and processed values.
+    ValueVector value_stack;
 
     /// Pointer to the current function for which the code is generated.
     llvm::Function* current_function;
 
-    /// Stack to hold visited and processed values.
-    ValueVector value_stack;
+  private:
+    /// Symbol table of the NMODL AST.
+    symtab::SymbolTable* symbol_table;
 
     /// Flag to indicate that the generated IR should be vectorized.
     bool vectorize;
@@ -73,60 +74,67 @@ class IRBuilder {
         , vector_width(vector_width)
         , kernel_id("") {}
 
-    /// Generates LLVM IR for the given binary operator.
-    void create_bin_op(llvm::Value* lhs, llvm::Value* rhs, ast::BinaryOp op);
+    /// Initializes the builder with the symbol table, kernel id and instance variable info.
+    void initialize(symtab::SymbolTable& symbol_table, std::string& kernel_id, InstanceVarHelper& instance_var_helper);
 
-//    /// Generates LLVM IR for the given external function call (e.g. pow, etc.).
-//    void create_external_function_call(const std::string& name, const ast::ExpressionVector& arguments);
-//
-//    /// Fills values vector with processed NMODL function call arguments.
-//    void create_function_call_arguments(const ast::ExpressionVector& arguments, ValueVector & values);
+    /// Generates LLVM IR for the given binary operator.
+    void create_binary_op(llvm::Value* lhs, llvm::Value* rhs, ast::BinaryOp op);
 
     /// Returns an inbounds GEP instruction to one-dimensional array `var_name`.
     llvm::Value* create_inbounds_gep(const std::string& var_name, llvm::Value* index);
 
+    /// Generates LLVM IR for the given unary operator.
+    void create_unary_op(llvm::Value* value, ast::UnaryOp op);
+
     /// Returns array length from given IndexedName.
     int get_array_length(const ast::IndexedName& node);
 
+    /// Returns LLVM boolean (1-bit integer) constant.
+    llvm::Value* get_bool_constant(int value);
+
+    /// Returns LLVM floating-point constant.
+    llvm::Value* get_fp_constant(const std::string& value);
+
     /// Returns LLVM vector with `vector_width` floating-point values.
-    llvm::Value* get_constant_fp_vector(const std::string& value);
+    llvm::Value* get_fp_vector_constant(const std::string& value);
+
+    /// Returns LLVM 32-bit integer constant.
+    llvm::Value* get_i32_constant(int value);
 
     /// Returns LLVM vector with `vector_width` 32-bit integer values.
-    llvm::Value* get_constant_i32_vector(int value);
+    llvm::Value* get_i32_vector_constant(int value);
+
+    /// Lookups the value by  its name in the current function's symbol table.
+    llvm::Value* lookup_value(const std::string& value_name);
 
     /// Pops the last visited value from the value stack.
     llvm::Value* pop_last_value();
 
   private:
-//    /// Generates LLVM IR for the `printf` call.
-//    void create_printf_call(const ast::ExpressionVector& arguments);
 
-    /// Create a boolean (1-bit integer) type.
+    /// Creates a boolean (1-bit integer) type.
     llvm::Type* get_boolean_type();
 
-    /// Create a 32-bit integer type.
+    /// Creates a 32-bit integer type.
     llvm::Type* get_i32_type();
 
-    /// Create a pointer to 32-bit integer type.
+    /// Creates a pointer to 32-bit integer type.
     llvm::Type* get_i32_ptr_type();
 
-    /// Create a 64-bit integer type.
+    /// Creates a 64-bit integer type.
     llvm::Type* get_i64_type();
 
-    /// Create a floating-point type.
+    /// Creates a floating-point type.
     llvm::Type* get_fp_type();
 
-    /// Create a pointer to floating-point type.
+    /// Creates a pointer to floating-point type.
     llvm::Type* get_fp_ptr_type();
 
-    /// Create a void type.
+    /// Creates a void type.
     llvm::Type* get_void_type();
 
-    /// Create an instance struct type.
+    /// Creates an instance struct type.
     llvm::Type* get_instance_struct_type();
-
-    /// Lookups the value by  its name in the current function's symbol table.
-    llvm::Value* lookup_value(const std::string& value_name);
 };
 }  // namespace codegen
 }  // namespace nmodl
