@@ -708,11 +708,10 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
     CodegenLLVMHelperVisitor v{vector_width};
     const auto& functions = v.get_codegen_functions(node);
     instance_var_helper = v.get_instance_var_helper();
+    sym_tab = node.get_symbol_table();
     std::string kernel_id = v.get_kernel_id();
 
-    // Set the AST symbol table.
-    sym_tab = node.get_symbol_table();
-
+    // Initialize the builder for this NMODL program.
     ir_builder.initialize(*sym_tab, kernel_id);
 
     // Create compile unit if adding debug information to the module.
