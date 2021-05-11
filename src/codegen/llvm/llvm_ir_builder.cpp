@@ -7,8 +7,8 @@
 
 #include "codegen/llvm/llvm_ir_builder.hpp"
 #include "ast/all.hpp"
-#include "ast/instance_struct.hpp"
 
+#include "llvm/ADT/StringSwitch.h"
 #include "llvm/IR/Function.h"
 #include "llvm/IR/ValueSymbolTable.h"
 
@@ -52,8 +52,10 @@ llvm::Type* IRBuilder::get_void_type() {
     return llvm::Type::getVoidTy(builder.getContext());
 }
 
-llvm::Type* IRBuilder::get_struct_type(const std::string& struct_type_name, TypeVector member_types) {
-    llvm::StructType* llvm_struct_type = llvm::StructType::create(builder.getContext(), struct_type_name);
+llvm::Type* IRBuilder::get_struct_type(const std::string& struct_type_name,
+                                       TypeVector member_types) {
+    llvm::StructType* llvm_struct_type = llvm::StructType::create(builder.getContext(),
+                                                                  struct_type_name);
     llvm_struct_type->setBody(member_types);
     return llvm::PointerType::get(llvm_struct_type, /*AddressSpace=*/0);
 }
@@ -81,7 +83,7 @@ llvm::Value* IRBuilder::pop_last_value() {
 }
 
 /****************************************************************************************/
-/*                            LLVM Constants utilities                                  */
+/*                            LLVM constants utilities                                  */
 /****************************************************************************************/
 
 void IRBuilder::create_boolean_constant(int value) {
@@ -122,6 +124,42 @@ llvm::Value* IRBuilder::get_vector_constant(llvm::Type* type, V value) {
 /****************************************************************************************/
 /*                              LLVM function utilities                                 */
 /****************************************************************************************/
+
+void IRBuilder::allocate_function_arguments(llvm::Function* function,
+                                            const ast::CodegenVarWithTypeVector& nmodl_arguments) {
+    unsigned i = 0;
+    for (auto& arg: function->args()) {
+        std::string arg_name = nmodl_arguments[i++].get()->get_node_name();
+        llvm::Type* arg_type = arg.getType();
+        llvm::Value* alloca = builder.CreateAlloca(arg_type, /*ArraySize=*/nullptr, arg_name);
+        arg.setName(arg_name);
+        builder.CreateStore(&arg, alloca);
+    }
+}
+
+void IRBuilder::create_function_call(llvm::Function* callee,
+                                     ValueVector& arguments,
+                                     bool use_result) {
+    llvm::Value* call_instruction = builder.CreateCall(callee, arguments);
+    if (use_result)
+        value_stack.push_back(call_instruction);
+}
+
+void IRBuilder::create_intrinsic(const std::string& name,
+                                 ValueVector& argument_values,
+                                 TypeVector& argument_types) {
+    unsigned intrinsic_id = llvm::StringSwitch<llvm::Intrinsic::ID>(name)
+                                .Case("exp", llvm::Intrinsic::exp)
+                                .Case("pow", llvm::Intrinsic::pow)
+                                .Default(llvm::Intrinsic::not_intrinsic);
+    if (intrinsic_id) {
+        llvm::Value* intrinsic =
+            builder.CreateIntrinsic(intrinsic_id, argument_types, argument_values);
+        value_stack.push_back(intrinsic);
+    } else {
+        throw std::runtime_error("Error: calls to " + name + " are not valid or not supported\n");
+    }
+}
 
 /****************************************************************************************/
 /*                             LLVM instruction utilities                               */
@@ -202,5 +240,14 @@ int IRBuilder::get_array_length(const ast::IndexedName& node) {
     const auto& macro = symbol_table->lookup(integer->get_macro()->get_node_name());
     return static_cast<int>(*macro->get_value());
 }
+
+/****************************************************************************************/
+/*                                 LLVM block utilities                                 */
+/****************************************************************************************/
+
+llvm::BasicBlock* IRBuilder::get_current_bb() {
+    return builder.GetInsertBlock();
+}
+
 }  // namespace codegen
 }  // namespace nmodl

@@ -288,28 +288,15 @@ void CodegenLLVMVisitor::create_external_method_call(const std::string& name,
         return;
     }
 
-    std::vector<llvm::Value*> argument_values;
-    std::vector<llvm::Type*> argument_types;
+    ValueVector argument_values;
+    TypeVector argument_types;
     for (const auto& arg: arguments) {
         llvm::Value* value = accept_and_get(arg);
         llvm::Type* type = value->getType();
         argument_types.push_back(type);
         argument_values.push_back(value);
     }
-
-#define DISPATCH(method_name, intrinsic)                                                    \
-    if (name == (method_name)) {                                                            \
-        llvm::Value* result =                                                               \
-            ir_builder.builder.CreateIntrinsic(intrinsic, argument_types, argument_values); \
-        ir_builder.value_stack.push_back(result);                                           \
-        return;                                                                             \
-    }
-
-    DISPATCH("exp", llvm::Intrinsic::exp);
-    DISPATCH("pow", llvm::Intrinsic::pow);
-#undef DISPATCH
-
-    throw std::runtime_error("Error: External method" + name + " is not currently supported");
+    ir_builder.create_intrinsic(name, argument_values, argument_types);
 }
 
 void CodegenLLVMVisitor::create_function_call(llvm::Function* func,
@@ -321,11 +308,10 @@ void CodegenLLVMVisitor::create_function_call(llvm::Function* func,
     }
 
     // Pack function call arguments to vector and create a call instruction.
-    std::vector<llvm::Value*> argument_values;
+    ValueVector argument_values;
     argument_values.reserve(arguments.size());
     pack_function_call_arguments(arguments, argument_values);
-    llvm::Value* call = ir_builder.builder.CreateCall(func, argument_values);
-    ir_builder.value_stack.push_back(call);
+    ir_builder.create_function_call(func, argument_values);
 }
 
 void CodegenLLVMVisitor::create_printf_call(const ast::ExpressionVector& arguments) {
@@ -343,10 +329,10 @@ void CodegenLLVMVisitor::create_printf_call(const ast::ExpressionVector& argumen
     }
 
     // Create a call instruction.
-    std::vector<llvm::Value*> argument_values;
+    ValueVector argument_values;
     argument_values.reserve(arguments.size());
     pack_function_call_arguments(arguments, argument_values);
-    ir_builder.builder.CreateCall(printf, argument_values);
+    ir_builder.create_function_call(printf, argument_values, /*use_result=*/false);
 }
 
 void CodegenLLVMVisitor::emit_procedure_or_function_declaration(const ast::CodegenFunction& node) {
@@ -354,7 +340,7 @@ void CodegenLLVMVisitor::emit_procedure_or_function_declaration(const ast::Codeg
     const auto& arguments = node.get_arguments();
 
     // Procedure or function parameters are doubles by default.
-    std::vector<llvm::Type*> arg_types;
+    TypeVector arg_types;
     for (size_t i = 0; i < arguments.size(); ++i)
         arg_types.push_back(get_codegen_var_type(*arguments[i]->get_type()));
 
@@ -563,15 +549,7 @@ void CodegenLLVMVisitor::visit_codegen_function(const ast::CodegenFunction& node
 
 
     // Allocate parameters on the stack and add them to the symbol table.
-    unsigned i = 0;
-    for (auto& arg: func->args()) {
-        std::string arg_name = arguments[i++].get()->get_node_name();
-        llvm::Type* arg_type = arg.getType();
-        llvm::Value* alloca =
-            ir_builder.builder.CreateAlloca(arg_type, /*ArraySize=*/nullptr, arg_name);
-        arg.setName(arg_name);
-        ir_builder.builder.CreateStore(&arg, alloca);
-    }
+    ir_builder.allocate_function_arguments(func, arguments);
 
     // Process function or procedure body. If the function is a compute kernel, then set the
     // corresponding flags. The return statement is handled in a separate visitor.
@@ -932,9 +910,9 @@ void CodegenLLVMVisitor::wrap_kernel_functions() {
         // and adding a terminator.
         llvm::Value* bitcasted = ir_builder.builder.CreateBitCast(wrapper_func->getArg(0),
                                                                   instance_struct_ptr_type);
-        std::vector<llvm::Value*> args;
+        ValueVector args;
         args.push_back(bitcasted);
-        ir_builder.builder.CreateCall(kernel, args);
+        ir_builder.create_function_call(kernel, args, /*use_result=*/false);
         ir_builder.builder.CreateRet(llvm::ConstantInt::get(i32_type, 0));
     }
 }

@@ -87,6 +87,9 @@ class IRBuilder {
         vectorize = false;
     }
 
+    /// Generates LLVM IR to allocate the arguments of the function on the stack.
+    void allocate_function_arguments(llvm::Function* function, const ast::CodegenVarWithTypeVector& nmodl_arguments);
+
     /// Generates LLVM IR for the given binary operator.
     void create_binary_op(llvm::Value* lhs, llvm::Value* rhs, ast::BinaryOp op);
 
@@ -99,11 +102,19 @@ class IRBuilder {
     /// Generates LLVM IR for the floating-point constant.
     void create_fp_constant(const std::string& value);
 
+    /// Generates LLVM IR for a call to the function.
+    void create_function_call(llvm::Function* callee, ValueVector& arguments, bool use_result = true);
+
     /// Generates LLVM IR for the integer constant.
     void create_i32_constant(int value);
 
     /// Generates an inbounds GEP instruction to one-dimensional array `var_name`.
     llvm::Value* create_inbounds_gep(const std::string& var_name, llvm::Value* index);
+
+    /// Generates an intrinsic that corresponds to the given name.
+    void create_intrinsic(const std::string& name, ValueVector& argument_values, TypeVector& argument_types);
+
+    llvm::BasicBlock* get_current_bb();
 
     /// Returns array length from given IndexedName.
     int get_array_length(const ast::IndexedName& node);
