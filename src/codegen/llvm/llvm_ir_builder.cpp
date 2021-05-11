@@ -56,13 +56,14 @@ llvm::Type* IRBuilder::get_void_type() {
     return llvm::Type::getVoidTy(builder.getContext());
 }
 
-llvm::Type* IRBuilder::get_struct_type(const std::string& struct_type_name,
-                                       TypeVector member_types) {
+llvm::Type* IRBuilder::get_struct_ptr_type(const std::string& struct_type_name,
+                                           TypeVector& member_types) {
     llvm::StructType* llvm_struct_type = llvm::StructType::create(builder.getContext(),
                                                                   struct_type_name);
     llvm_struct_type->setBody(member_types);
     return llvm::PointerType::get(llvm_struct_type, /*AddressSpace=*/0);
 }
+
 
 /****************************************************************************************/
 /*                            LLVM value utilities                                      */
@@ -100,6 +101,10 @@ void IRBuilder::create_fp_constant(const std::string& value) {
     } else {
         value_stack.push_back(get_scalar_constant<llvm::ConstantFP>(get_fp_type(), value));
     }
+}
+
+llvm::Value* IRBuilder::create_global_string(const ast::String& node) {
+    return builder.CreateGlobalStringPtr(node.get_value());
 }
 
 void IRBuilder::create_i32_constant(int value) {
@@ -141,6 +146,10 @@ void IRBuilder::allocate_function_arguments(llvm::Function* function,
     }
 }
 
+std::string IRBuilder::get_current_function_name() {
+    return current_function->getName().str();
+}
+
 void IRBuilder::create_function_call(llvm::Function* callee,
                                      ValueVector& arguments,
                                      bool use_result) {
@@ -168,6 +177,13 @@ void IRBuilder::create_intrinsic(const std::string& name,
 /****************************************************************************************/
 /*                             LLVM instruction utilities                               */
 /****************************************************************************************/
+
+void IRBuilder::create_array_alloca(const std::string& name,
+                                    llvm::Type* element_type,
+                                    int num_elements) {
+    llvm::Type* array_type = llvm::ArrayType::get(element_type, num_elements);
+    builder.CreateAlloca(array_type, /*ArraySize=*/nullptr, name);
+}
 
 void IRBuilder::create_binary_op(llvm::Value* lhs, llvm::Value* rhs, ast::BinaryOp op) {
     // Check that both lhs and rhs have the same types.
@@ -215,25 +231,20 @@ void IRBuilder::create_binary_op(llvm::Value* lhs, llvm::Value* rhs, ast::Binary
     value_stack.push_back(result);
 }
 
-void IRBuilder::create_array_alloca(const std::string& name,
-                                    llvm::Type* element_type,
-                                    int num_elements) {
-    llvm::Type* array_type = llvm::ArrayType::get(element_type, num_elements);
-    builder.CreateAlloca(array_type, /*ArraySize=*/nullptr, name);
+llvm::Value* IRBuilder::create_bitcast(llvm::Value* value, llvm::Type* dst_type) {
+    return builder.CreateBitCast(value, dst_type);
 }
 
+llvm::Value* IRBuilder::create_inbounds_gep(const std::string& var_name, llvm::Value* index) {
+    llvm::Value* variable_ptr = lookup_value(var_name);
 
-void IRBuilder::create_scalar_or_vector_alloca(const std::string& name,
-                                               llvm::Type* element_or_scalar_type) {
-    // Even if generating vectorised code, some variables still need to be scalar. Particularly, the
-    // induction variable "id" and remainder loop variables (that start with "epilogue" prefix).
-    llvm::Type* type;
-    if (instruction_width > 1 && vectorize && name != kernel_id && name.rfind("epilogue", 0)) {
-        type = llvm::FixedVectorType::get(element_or_scalar_type, instruction_width);
-    } else {
-        type = element_or_scalar_type;
-    }
-    builder.CreateAlloca(type, /*ArraySize=*/nullptr, name);
+    // Since we index through the pointer, we need an extra 0 index in the indices list for GEP.
+    ValueVector indices{llvm::ConstantInt::get(get_i64_type(), 0), index};
+    return builder.CreateInBoundsGEP(variable_ptr, indices);
+}
+
+llvm::Value* IRBuilder::create_inbounds_gep(llvm::Value* variable, llvm::Value* index) {
+    return builder.CreateInBoundsGEP(variable, {index});
 }
 
 llvm::Value* IRBuilder::create_index(llvm::Value* value) {
@@ -259,44 +270,6 @@ llvm::Value* IRBuilder::create_index(llvm::Value* value) {
                                      llvm::FixedVectorType::get(i64_type, instruction_width));
 }
 
-llvm::Value* IRBuilder::create_inbounds_gep(const std::string& var_name, llvm::Value* index) {
-    llvm::Value* variable_ptr = lookup_value(var_name);
-
-    // Since we index through the pointer, we need an extra 0 index in the indices list for GEP.
-    ValueVector indices{llvm::ConstantInt::get(get_i64_type(), 0), index};
-    return builder.CreateInBoundsGEP(variable_ptr, indices);
-}
-
-llvm::Value* IRBuilder::create_inbounds_gep(llvm::Value* variable, llvm::Value* index) {
-    return builder.CreateInBoundsGEP(variable, {index});
-}
-
-void IRBuilder::create_return(llvm::Value* return_value) {
-    if (return_value)
-        builder.CreateRet(return_value);
-    else
-        builder.CreateRetVoid();
-}
-
-void IRBuilder::maybe_replicate_value(llvm::Value* value) {
-    // If the value should not be vectorised, or it is already a vector, add it to the stack.
-    if (!vectorize || instruction_width == 1 || value->getType()->isVectorTy()) {
-        value_stack.push_back(value);
-    } else {
-        // Otherwise, we generate vectorized code inside the loop, so replicate the value to form a
-        // vector.
-        llvm::Value* vector_value = builder.CreateVectorSplat(instruction_width, value);
-        value_stack.push_back(vector_value);
-    }
-}
-
-llvm::Value* IRBuilder::get_struct_member_ptr(llvm::Value* struct_variable, int member_index) {
-    ValueVector indices;
-    indices.push_back(llvm::ConstantInt::get(get_i32_type(), 0));
-    indices.push_back(llvm::ConstantInt::get(get_i32_type(), member_index));
-    return builder.CreateInBoundsGEP(struct_variable, indices);
-}
-
 llvm::Value* IRBuilder::create_load(const std::string& name) {
     llvm::Value* ptr = lookup_value(name);
     llvm::Type* loaded_type = ptr->getType()->getPointerElementType();
@@ -308,12 +281,17 @@ llvm::Value* IRBuilder::create_load(llvm::Value* ptr) {
     return builder.CreateLoad(loaded_type, ptr);
 }
 
-void IRBuilder::create_store(llvm::Value* ptr, llvm::Value* value) {
-    builder.CreateStore(value, ptr);
+llvm::Value* IRBuilder::create_load_from_array(const std::string& name, llvm::Value* index) {
+    llvm::Value* element_ptr = create_inbounds_gep(name, index);
+    return create_load(element_ptr);
 }
 
 void IRBuilder::create_store(const std::string& name, llvm::Value* value) {
     llvm::Value* ptr = lookup_value(name);
+    builder.CreateStore(value, ptr);
+}
+
+void IRBuilder::create_store(llvm::Value* ptr, llvm::Value* value) {
     builder.CreateStore(value, ptr);
 }
 
@@ -324,9 +302,24 @@ void IRBuilder::create_store_to_array(const std::string& name,
     create_store(element_ptr, value);
 }
 
-llvm::Value* IRBuilder::create_load_from_array(const std::string& name, llvm::Value* index) {
-    llvm::Value* element_ptr = create_inbounds_gep(name, index);
-    return create_load(element_ptr);
+void IRBuilder::create_return(llvm::Value* return_value) {
+    if (return_value)
+        builder.CreateRet(return_value);
+    else
+        builder.CreateRetVoid();
+}
+
+void IRBuilder::create_scalar_or_vector_alloca(const std::string& name,
+                                               llvm::Type* element_or_scalar_type) {
+    // Even if generating vectorised code, some variables still need to be scalar. Particularly, the
+    // induction variable "id" and remainder loop variables (that start with "epilogue" prefix).
+    llvm::Type* type;
+    if (instruction_width > 1 && vectorize && name != kernel_id && name.rfind("epilogue", 0)) {
+        type = llvm::FixedVectorType::get(element_or_scalar_type, instruction_width);
+    } else {
+        type = element_or_scalar_type;
+    }
+    builder.CreateAlloca(type, /*ArraySize=*/nullptr, name);
 }
 
 void IRBuilder::create_unary_op(llvm::Value* value, ast::UnaryOp op) {
@@ -337,6 +330,13 @@ void IRBuilder::create_unary_op(llvm::Value* value, ast::UnaryOp op) {
     } else {
         throw std::runtime_error("Error: unsupported unary operator\n");
     }
+}
+
+llvm::Value* IRBuilder::get_struct_member_ptr(llvm::Value* struct_variable, int member_index) {
+    ValueVector indices;
+    indices.push_back(llvm::ConstantInt::get(get_i32_type(), 0));
+    indices.push_back(llvm::ConstantInt::get(get_i32_type(), member_index));
+    return builder.CreateInBoundsGEP(struct_variable, indices);
 }
 
 llvm::Value* IRBuilder::load_to_or_store_from_array(const std::string& id_name,
@@ -374,12 +374,53 @@ llvm::Value* IRBuilder::load_to_or_store_from_array(const std::string& id_name,
     }
 }
 
+void IRBuilder::maybe_replicate_value(llvm::Value* value) {
+    // If the value should not be vectorised, or it is already a vector, add it to the stack.
+    if (!vectorize || instruction_width == 1 || value->getType()->isVectorTy()) {
+        value_stack.push_back(value);
+    } else {
+        // Otherwise, we generate vectorized code inside the loop, so replicate the value to form a
+        // vector.
+        llvm::Value* vector_value = builder.CreateVectorSplat(instruction_width, value);
+        value_stack.push_back(vector_value);
+    }
+}
+
+
 /****************************************************************************************/
 /*                                 LLVM block utilities                                 */
 /****************************************************************************************/
 
-llvm::BasicBlock* IRBuilder::get_current_bb() {
+llvm::BasicBlock* IRBuilder::create_block_and_set_insertion_point(llvm::Function* function,
+                                                                  llvm::BasicBlock* insert_before,
+                                                                  std::string name) {
+    llvm::BasicBlock* block =
+        llvm::BasicBlock::Create(builder.getContext(), name, function, insert_before);
+    builder.SetInsertPoint(block);
+    return block;
+}
+
+void IRBuilder::create_br(llvm::BasicBlock* block) {
+    builder.CreateBr(block);
+}
+
+void IRBuilder::create_br_and_set_insertion_point(llvm::BasicBlock* block) {
+    builder.CreateBr(block);
+    builder.SetInsertPoint(block);
+}
+
+void IRBuilder::create_cond_br(llvm::Value* condition,
+                               llvm::BasicBlock* true_block,
+                               llvm::BasicBlock* false_block) {
+    builder.CreateCondBr(condition, true_block, false_block);
+}
+
+llvm::BasicBlock* IRBuilder::get_current_block() {
     return builder.GetInsertBlock();
+}
+
+void IRBuilder::set_insertion_point(llvm::BasicBlock* block) {
+    builder.SetInsertPoint(block);
 }
 
 }  // namespace codegen

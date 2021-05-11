@@ -220,7 +220,7 @@ llvm::Type* CodegenLLVMVisitor::get_instance_struct_type() {
         }
     }
 
-    return ir_builder.get_struct_type(mod_filename + instance_struct_type_name, member_types);
+    return ir_builder.get_struct_ptr_type(mod_filename + instance_struct_type_name, member_types);
 }
 
 int CodegenLLVMVisitor::get_num_elements(const ast::IndexedName& node) {
