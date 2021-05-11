@@ -62,18 +62,9 @@ static bool can_vectorise(const ast::CodegenForStatement& statement, symtab::Sym
     return collected.empty();
 }
 
-llvm::Value* CodegenLLVMVisitor::create_gep(const std::string& name, llvm::Value* index) {
-    llvm::Type* index_type = llvm::Type::getInt64Ty(*context);
-    std::vector<llvm::Value*> indices;
-    indices.push_back(llvm::ConstantInt::get(index_type, 0));
-    indices.push_back(index);
-
-    return ir_builder.builder.CreateInBoundsGEP(lookup(name), indices);
-}
-
 llvm::Value* CodegenLLVMVisitor::codegen_indexed_name(const ast::IndexedName& node) {
     llvm::Value* index = get_array_index(node);
-    return create_gep(node.get_node_name(), index);
+    return ir_builder.create_inbounds_gep(node.get_node_name(), index);
 }
 
 llvm::Value* CodegenLLVMVisitor::codegen_instance_var(const ast::CodegenInstanceVar& node) {
@@ -192,38 +183,18 @@ int CodegenLLVMVisitor::get_array_length(const ast::IndexedName& node) {
 llvm::Type* CodegenLLVMVisitor::get_codegen_var_type(const ast::CodegenVarType& node) {
     switch (node.get_type()) {
     case ast::AstNodeType::BOOLEAN:
-        return llvm::Type::getInt1Ty(*context);
+        return ir_builder.get_boolean_type();
     case ast::AstNodeType::DOUBLE:
-        return get_default_fp_type();
+        return ir_builder.get_fp_type();
     case ast::AstNodeType::INSTANCE_STRUCT:
         return get_instance_struct_type();
     case ast::AstNodeType::INTEGER:
-        return llvm::Type::getInt32Ty(*context);
+        return ir_builder.get_i32_type();
     case ast::AstNodeType::VOID:
-        return llvm::Type::getVoidTy(*context);
+        return ir_builder.get_void_type();
     default:
         throw std::runtime_error("Error: expecting a type in CodegenVarType node\n");
     }
-}
-
-llvm::Value* CodegenLLVMVisitor::get_constant_int_vector(int value) {
-    llvm::Type* i32_type = llvm::Type::getInt32Ty(*context);
-    std::vector<llvm::Constant*> constants;
-    for (unsigned i = 0; i < vector_width; ++i) {
-        const auto& element = llvm::ConstantInt::get(i32_type, value);
-        constants.push_back(element);
-    }
-    return llvm::ConstantVector::get(constants);
-}
-
-llvm::Value* CodegenLLVMVisitor::get_constant_fp_vector(const std::string& value) {
-    llvm::Type* fp_type = get_default_fp_type();
-    std::vector<llvm::Constant*> constants;
-    for (unsigned i = 0; i < vector_width; ++i) {
-        const auto& element = llvm::ConstantFP::get(fp_type, value);
-        constants.push_back(element);
-    }
-    return llvm::ConstantVector::get(constants);
 }
 
 llvm::Type* CodegenLLVMVisitor::get_default_fp_type() {
@@ -239,7 +210,7 @@ llvm::Type* CodegenLLVMVisitor::get_default_fp_ptr_type() {
 }
 
 llvm::Type* CodegenLLVMVisitor::get_instance_struct_type() {
-    std::vector<llvm::Type*> members;
+    TypeVector member_types;
     for (const auto& variable: instance_var_helper.instance->get_codegen_vars()) {
         auto is_pointer = variable->get_is_pointer();
         auto nmodl_type = variable->get_type()->get_type();
@@ -248,9 +219,9 @@ llvm::Type* CodegenLLVMVisitor::get_instance_struct_type() {
         llvm::Type* i32ptr_type = llvm::Type::getInt32PtrTy(*context);
 
         switch (nmodl_type) {
-#define DISPATCH(type, llvm_ptr_type, llvm_type)                       \
-    case type:                                                         \
-        members.push_back(is_pointer ? (llvm_ptr_type) : (llvm_type)); \
+#define DISPATCH(type, llvm_ptr_type, llvm_type)                            \
+    case type:                                                              \
+        member_types.push_back(is_pointer ? (llvm_ptr_type) : (llvm_type)); \
         break;
 
             DISPATCH(ast::AstNodeType::DOUBLE, get_default_fp_ptr_type(), get_default_fp_type());
@@ -262,10 +233,7 @@ llvm::Type* CodegenLLVMVisitor::get_instance_struct_type() {
         }
     }
 
-    llvm::StructType* llvm_struct_type =
-        llvm::StructType::create(*context, mod_filename + instance_struct_type_name);
-    llvm_struct_type->setBody(members);
-    return llvm::PointerType::get(llvm_struct_type, /*AddressSpace=*/0);
+    return ir_builder.get_struct_type(mod_filename + instance_struct_type_name, member_types);
 }
 
 llvm::Value* CodegenLLVMVisitor::get_variable_ptr(const ast::VarName& node) {
@@ -858,7 +826,7 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
     // Set the AST symbol table.
     sym_tab = node.get_symbol_table();
 
-    ir_builder.initialize(*sym_tab, kernel_id, instance_var_helper);
+    ir_builder.initialize(*sym_tab, kernel_id);
 
     // Create compile unit if adding debug information to the module.
     if (add_debug_information) {

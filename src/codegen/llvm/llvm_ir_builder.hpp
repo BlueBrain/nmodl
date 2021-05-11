@@ -49,9 +49,6 @@ class IRBuilder {
     /// Flag to indicate that the generated IR should be vectorized.
     bool vectorize;
 
-    /// A helper to query the instance variable information.
-    InstanceVarHelper* instance_var_helper;
-
     /// Precision of the floating-point numbers (32 or 64 bit).
     unsigned fp_precision;
 
@@ -69,18 +66,15 @@ class IRBuilder {
         , symbol_table(nullptr)
         , current_function(nullptr)
         , vectorize(false)
-        , instance_var_helper(nullptr)
         , fp_precision(use_single_precision ? single_precision : double_precision)
         , vector_width(vector_width)
         , kernel_id("") {}
 
     /// Initializes the builder with the symbol table, kernel id and instance variable info.
     void initialize(symtab::SymbolTable& symbol_table,
-                    std::string& kernel_id,
-                    InstanceVarHelper& instance_var_helper) {
+                    std::string& kernel_id) {
         this->symbol_table = &symbol_table;
         this->kernel_id = kernel_id;
-        this->instance_var_helper = &instance_var_helper;
     }
 
     /// Turns on vectorization mode.
@@ -108,7 +102,7 @@ class IRBuilder {
     /// Generates LLVM IR for the integer constant.
     void create_i32_constant(int value);
 
-    /// Returns an inbounds GEP instruction to one-dimensional array `var_name`.
+    /// Generates an inbounds GEP instruction to one-dimensional array `var_name`.
     llvm::Value* create_inbounds_gep(const std::string& var_name, llvm::Value* index);
 
     /// Returns array length from given IndexedName.
@@ -120,7 +114,6 @@ class IRBuilder {
     /// Pops the last visited value from the value stack.
     llvm::Value* pop_last_value();
 
-  private:
 
     /// Creates a boolean (1-bit integer) type.
     llvm::Type* get_boolean_type();
@@ -143,8 +136,10 @@ class IRBuilder {
     /// Creates a void type.
     llvm::Type* get_void_type();
 
-    /// Creates an instance struct type.
-    llvm::Type* get_instance_struct_type();
+    /// Creates a struct type with the given name and given members.
+    llvm::Type* get_struct_type(const std::string& struct_type_name, TypeVector member_types);
+
+  private:
 
     /// Returns a scalar constant of the provided type.
     template <typename C, typename V>

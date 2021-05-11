@@ -7,15 +7,13 @@
 
 #include "codegen/llvm/llvm_ir_builder.hpp"
 #include "ast/all.hpp"
+#include "ast/instance_struct.hpp"
 
 #include "llvm/IR/Function.h"
 #include "llvm/IR/ValueSymbolTable.h"
 
 namespace nmodl {
 namespace codegen {
-
-static constexpr const char instance_struct_type_name[] = "__instance_var__type";
-static constexpr const char printf_name[] = "printf";
 
 
 /****************************************************************************************/
@@ -54,30 +52,8 @@ llvm::Type* IRBuilder::get_void_type() {
     return llvm::Type::getVoidTy(builder.getContext());
 }
 
-llvm::Type* IRBuilder::get_instance_struct_type() {
-    TypeVector member_types;
-    for (const auto& variable: instance_var_helper->instance->get_codegen_vars()) {
-        // First, get information about member's type and whether it is a pointer.
-        auto nmodl_type = variable->get_type()->get_type();
-        auto is_pointer = variable->get_is_pointer();
-
-        // Create the corresponding LLVM type.
-        switch (nmodl_type) {
-        case ast::AstNodeType::INTEGER:
-            member_types.push_back(is_pointer ? get_i32_ptr_type() : get_i32_type());
-            break;
-        case ast::AstNodeType::DOUBLE:
-            member_types.push_back(is_pointer ? get_fp_type() : get_fp_ptr_type());
-            break;
-        default:
-            throw std::runtime_error("Error: unsupported type encountered in instance struct\n");
-        }
-    }
-
-    // Create the struct type with the given members.
-    llvm::StructType* llvm_struct_type =
-        llvm::StructType::create(builder.getContext(),
-                                 /*mod_filename + */ instance_struct_type_name);
+llvm::Type* IRBuilder::get_struct_type(const std::string& struct_type_name, TypeVector member_types) {
+    llvm::StructType* llvm_struct_type = llvm::StructType::create(builder.getContext(), struct_type_name);
     llvm_struct_type->setBody(member_types);
     return llvm::PointerType::get(llvm_struct_type, /*AddressSpace=*/0);
 }

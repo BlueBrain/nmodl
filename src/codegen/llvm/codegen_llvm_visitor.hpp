@@ -169,14 +169,6 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     llvm::Value* codegen_instance_var(const ast::CodegenInstanceVar& node);
 
     /**
-     * Returns GEP instruction to 1D array
-     * \param name 1D array name
-     * \param index element index
-     * \return GEP instruction value
-     */
-    llvm::Value* create_gep(const std::string& name, llvm::Value* index);
-
-    /**
      * Returns array index from given IndexedName
      * \param node IndexedName representing array
      * \return array index
@@ -196,20 +188,6 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
      * \return LLVM type
      */
     llvm::Type* get_codegen_var_type(const ast::CodegenVarType& node);
-
-    /**
-     * Returns LLVM vector with `vector_width` int values.
-     * \param int value to replicate
-     * \return LLVM value
-     */
-    llvm::Value* get_constant_int_vector(int value);
-
-    /**
-     * Returns LLVM vector with `vector_width` double values.
-     * \param string a double value to replicate
-     * \return LLVM value
-     */
-    llvm::Value* get_constant_fp_vector(const std::string& value);
 
     /**
      * Returns 64-bit or 32-bit LLVM floating type
