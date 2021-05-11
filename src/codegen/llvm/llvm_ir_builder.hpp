@@ -52,7 +52,10 @@ class IRBuilder {
     /// Precision of the floating-point numbers (32 or 64 bit).
     unsigned fp_precision;
 
-    /// The vector width if generating vectorized code.
+    /// If 1, indicates that the scalar code is generated. Otherwise, the current vectorization width.
+    unsigned instruction_width;
+
+    /// The vector width used for the vectorized code.
     unsigned vector_width;
 
     /// The name of induction variable used in kernel loops.
@@ -68,6 +71,7 @@ class IRBuilder {
         , vectorize(false)
         , fp_precision(use_single_precision ? single_precision : double_precision)
         , vector_width(vector_width)
+        , instruction_width(vector_width)
         , kernel_id("") {}
 
     /// Initializes the builder with the symbol table, kernel id and instance variable info.
@@ -87,11 +91,29 @@ class IRBuilder {
         vectorize = false;
     }
 
+    /// Explicitly sets the builder to produce scalar code (even during vectorization).
+    void generate_scalar_code() {
+        instruction_width = 1;
+    }
+
+    /// Explicitly sets the builder to produce vectorized code.
+    void generate_vectorized_code() {
+        instruction_width = vector_width;
+    }
+
     /// Generates LLVM IR to allocate the arguments of the function on the stack.
     void allocate_function_arguments(llvm::Function* function, const ast::CodegenVarWithTypeVector& nmodl_arguments);
 
     /// Generates LLVM IR for the given binary operator.
     void create_binary_op(llvm::Value* lhs, llvm::Value* rhs, ast::BinaryOp op);
+
+    /// Generates LLVM IR to load the value specified by its name and returns it.
+    llvm::Value* create_load(const std::string& name);
+
+    /// Generates LLVM IR to load the value from the pointer and returns it.
+    llvm::Value* create_load(llvm::Value* ptr);
+
+    llvm::Value* create_ptr_to_array(const std::string& id_name, llvm::Value* id_value, llvm::Value* array);
 
     /// Generates LLVM IR for the given unary operator.
     void create_unary_op(llvm::Value* value, ast::UnaryOp op);
@@ -111,8 +133,12 @@ class IRBuilder {
     /// Generates LLVM IR for the integer constant.
     void create_i32_constant(int value);
 
-    /// Generates an inbounds GEP instruction to one-dimensional array `var_name`.
-    llvm::Value* create_inbounds_gep(const std::string& var_name, llvm::Value* index);
+    /// Generates an inbounds GEP instruction and returns calculated address.
+    llvm::Value* create_inbounds_gep(const std::string& variable_name, llvm::Value* index);
+    llvm::Value* create_inbounds_gep(llvm::Value* variable, llvm::Value* index);
+
+    /// Generates LLVM IR to get the address of the struct's member at given index. Returns the calculated value.
+    llvm::Value* get_struct_member_ptr(llvm::Value* struct_variable, int member_index);
 
     /// Generates an intrinsic that corresponds to the given name.
     void create_intrinsic(const std::string& name, ValueVector& argument_values, TypeVector& argument_types);

@@ -95,7 +95,7 @@ void IRBuilder::create_boolean_constant(int value) {
 }
 
 void IRBuilder::create_fp_constant(const std::string& value) {
-    if (vector_width > 1 && vectorize) {
+    if (instruction_width > 1 && vectorize) {
         value_stack.push_back(get_vector_constant<llvm::ConstantFP>(get_fp_type(), value));
     } else {
         value_stack.push_back(get_scalar_constant<llvm::ConstantFP>(get_fp_type(), value));
@@ -103,7 +103,7 @@ void IRBuilder::create_fp_constant(const std::string& value) {
 }
 
 void IRBuilder::create_i32_constant(int value) {
-    if (vector_width > 1 && vectorize) {
+    if (instruction_width > 1 && vectorize) {
         value_stack.push_back(get_vector_constant<llvm::ConstantInt>(get_i32_type(), value));
     } else {
         value_stack.push_back(get_scalar_constant<llvm::ConstantInt>(get_i32_type(), value));
@@ -118,7 +118,7 @@ llvm::Value* IRBuilder::get_scalar_constant(llvm::Type* type, V value) {
 template <typename C, typename V>
 llvm::Value* IRBuilder::get_vector_constant(llvm::Type* type, V value) {
     ConstantVector constants;
-    for (unsigned i = 0; i < vector_width; ++i) {
+    for (unsigned i = 0; i < instruction_width; ++i) {
         const auto& element = C::get(type, value);
         constants.push_back(element);
     }
@@ -234,12 +234,38 @@ llvm::Value* IRBuilder::create_index(llvm::Value* value) {
     const auto& element_type = llvm::cast<llvm::IntegerType>(vector_type->getElementType());
     if (element_type->getBitWidth() == i64_type->getIntegerBitWidth())
         return value;
-    return builder.CreateSExtOrTrunc(value, llvm::FixedVectorType::get(i64_type, vector_width));
+    return builder.CreateSExtOrTrunc(value,
+                                     llvm::FixedVectorType::get(i64_type, instruction_width));
 }
 
 llvm::Value* IRBuilder::create_inbounds_gep(const std::string& var_name, llvm::Value* index) {
+    llvm::Value* variable_ptr = lookup_value(var_name);
+
+    // Since we index through the pointer, we need an extra 0 index in the indices list for GEP.
     ValueVector indices{llvm::ConstantInt::get(get_i64_type(), 0), index};
-    return builder.CreateInBoundsGEP(lookup_value(var_name), indices);
+    return builder.CreateInBoundsGEP(variable_ptr, indices);
+}
+
+llvm::Value* IRBuilder::create_inbounds_gep(llvm::Value* variable, llvm::Value* index) {
+    return builder.CreateInBoundsGEP(variable, {index});
+}
+
+llvm::Value* IRBuilder::get_struct_member_ptr(llvm::Value* struct_variable, int member_index) {
+    ValueVector indices;
+    indices.push_back(llvm::ConstantInt::get(get_i32_type(), 0));
+    indices.push_back(llvm::ConstantInt::get(get_i32_type(), member_index));
+    return builder.CreateInBoundsGEP(struct_variable, indices);
+}
+
+llvm::Value* IRBuilder::create_load(const std::string& name) {
+    llvm::Value* ptr = lookup_value(name);
+    llvm::Type* loaded_type = ptr->getType()->getPointerElementType();
+    return builder.CreateLoad(loaded_type, ptr);
+}
+
+llvm::Value* IRBuilder::create_load(llvm::Value* ptr) {
+    llvm::Type* loaded_type = ptr->getType()->getPointerElementType();
+    return builder.CreateLoad(loaded_type, ptr);
 }
 
 void IRBuilder::create_unary_op(llvm::Value* value, ast::UnaryOp op) {
@@ -250,6 +276,32 @@ void IRBuilder::create_unary_op(llvm::Value* value, ast::UnaryOp op) {
     } else {
         throw std::runtime_error("Error: unsupported unary operator\n");
     }
+}
+
+llvm::Value* IRBuilder::create_ptr_to_array(const std::string& id_name,
+                                            llvm::Value* id_value,
+                                            llvm::Value* array) {
+    // First, calculate the address of the element in the array.
+    llvm::Value* element_ptr = create_inbounds_gep(array, id_value);
+
+    // If the vector code is generated, we need to distinguish between two cases. If the array is
+    // indexed indirectly (i.e. not by an induction variable `kernel_id`), create a gather
+    // instruction.
+    if (id_name != kernel_id && vectorize && instruction_width > 1)
+        return builder.CreateMaskedGather(element_ptr, llvm::Align());
+
+    // If direct indexing is used during the vectorization, we simply bitcast the scalar pointer to
+    // a vector pointer
+    if (vectorize && instruction_width > 1) {
+        llvm::Type* vector_type = llvm::PointerType::get(
+            llvm::FixedVectorType::get(element_ptr->getType()->getPointerElementType(),
+                                       instruction_width),
+            /*AddressSpace=*/0);
+        return builder.CreateBitCast(element_ptr, vector_type);
+    }
+
+    // Otherwise, scalar code is generated and hence return the element pointer.
+    return element_ptr;
 }
 
 int IRBuilder::get_array_length(const ast::IndexedName& node) {

@@ -45,7 +45,7 @@ static bool is_supported_statement(const ast::Statement& statement) {
 }
 
 /// A utility to check of the kernel body can be vectorised.
-static bool can_vectorise(const ast::CodegenForStatement& statement, symtab::SymbolTable* sym_tab) {
+static bool can_vectorize(const ast::CodegenForStatement& statement, symtab::SymbolTable* sym_tab) {
     // Check that function calls are made to external methods only.
     const auto& function_calls = collect_nodes(statement, {ast::AstNodeType::FUNCTION_CALL});
     for (const auto& call: function_calls) {
@@ -63,84 +63,54 @@ static bool can_vectorise(const ast::CodegenForStatement& statement, symtab::Sym
 }
 
 llvm::Value* CodegenLLVMVisitor::codegen_instance_var(const ast::CodegenInstanceVar& node) {
-    const auto& member_node = node.get_member_var();
     const auto& instance_name = node.get_instance_var()->get_node_name();
+    const auto& member_node = node.get_member_var();
     const auto& member_name = member_node->get_node_name();
 
     if (!instance_var_helper.is_an_instance_variable(member_name))
-        throw std::runtime_error("Error: " + member_name + " is not a member of the instance!");
+        throw std::runtime_error("Error: " + member_name +
+                                 " is not a member of the instance variable\n");
 
-    // Load the instance struct given its name from the ValueSymbolTable.
-    llvm::Value* instance_ptr = ir_builder.builder.CreateLoad(lookup(instance_name));
+    // Load the instance struct by its name.
+    llvm::Value* instance_ptr = ir_builder.create_load(instance_name);
 
-    // Create a GEP instruction to get a pointer to the member.
+    // Get the pointer to the specified member.
     int member_index = instance_var_helper.get_variable_index(member_name);
-    llvm::Type* index_type = llvm::Type::getInt32Ty(*context);
+    llvm::Value* member_ptr = ir_builder.get_struct_member_ptr(instance_ptr, member_index);
 
-    std::vector<llvm::Value*> indices;
-    indices.push_back(llvm::ConstantInt::get(index_type, 0));
-    indices.push_back(llvm::ConstantInt::get(index_type, member_index));
-    llvm::Value* member_ptr = ir_builder.builder.CreateInBoundsGEP(instance_ptr, indices);
-
-    // Get the member AST node from the instance AST node, for which we proceed with the code
-    // generation. If the member is scalar, return the pointer to it straight away.
+    // Check if the member is scalar. If it is, return the pointer to it straight away. Otherwise,
+    // we need some extra handling.
     auto codegen_var_with_type = instance_var_helper.get_variable(member_name);
-    if (!codegen_var_with_type->get_is_pointer()) {
+    if (!codegen_var_with_type->get_is_pointer())
         return member_ptr;
-    }
 
-    // Otherwise, the codegen variable is a pointer, and the member AST node must be an IndexedName.
+    // Check that the member is an indexed name indeed, and that it is indexed by a named constant
+    // (e.g. "id").
     auto member_var_name = std::dynamic_pointer_cast<ast::VarName>(member_node);
     if (!member_var_name->get_name()->is_indexed_name())
-        throw std::runtime_error("Error: " + member_name + " is not an IndexedName!");
+        throw std::runtime_error("Error: " + member_name + " is not an IndexedName\n");
 
-    // Proceed to creating a GEP instruction to get the pointer to the member's element.
     auto member_indexed_name = std::dynamic_pointer_cast<ast::IndexedName>(
         member_var_name->get_name());
-
     if (!member_indexed_name->get_length()->is_name())
         throw std::runtime_error("Error: " + member_name + " must be indexed with a variable!");
 
+    // Get the index to the member and the id used to index it.
     llvm::Value* i64_index = get_array_index(*member_indexed_name);
+    const std::string id = member_indexed_name->get_length()->get_node_name();
 
-    // The codegen variable type is always a scalar, so we need to transform it to a pointer. Then
-    // load the member which would be indexed later.
-    llvm::Type* type = get_codegen_var_type(*codegen_var_with_type->get_type());
-    llvm::Value* instance_member =
-        ir_builder.builder.CreateLoad(llvm::PointerType::get(type, /*AddressSpace=*/0), member_ptr);
+    // Load the member of the instance struct.
+    llvm::Value* instance_member = ir_builder.create_load(member_ptr);
 
-    // Check if the code is vectorised and the index is indirect.
-    std::string id = member_indexed_name->get_length()->get_node_name();
-    if (id != kernel_id && is_kernel_code && vector_width > 1) {
-        // Calculate a vector of addresses via GEP instruction, and then created a gather to load
-        // indirectly.
-        llvm::Value* addresses = ir_builder.builder.CreateInBoundsGEP(instance_member, {i64_index});
-        return ir_builder.builder.CreateMaskedGather(addresses, llvm::Align());
-    }
-
-    llvm::Value* member_addr = ir_builder.builder.CreateInBoundsGEP(instance_member, {i64_index});
-
-    // If the code is vectorised, then bitcast to a vector pointer.
-    if (is_kernel_code && vector_width > 1) {
-        llvm::Type* vector_type =
-            llvm::PointerType::get(llvm::FixedVectorType::get(type, vector_width),
-                                   /*AddressSpace=*/0);
-        return ir_builder.builder.CreateBitCast(member_addr, vector_type);
-    }
-    return member_addr;
+    // Create a pointer to the specified element of the struct member.
+    return ir_builder.create_ptr_to_array(id, i64_index, instance_member);
 }
 
 llvm::Value* CodegenLLVMVisitor::get_array_index(const ast::IndexedName& node) {
-    // Process the index expression. It can either be a Name node:
-    //    k[id]     // id is an integer
-    // or an integer expression.
-    llvm::Value* index_value;
-    if (node.get_length()->is_name()) {
-        llvm::Value* ptr = lookup(node.get_length()->get_node_name());
-        index_value = ir_builder.builder.CreateLoad(ptr);
-    } else {
-        index_value = accept_and_get(node.get_length());
-    }
+    // In NMODL, the index is either an integer expression or a named constant, such as "id".
+    llvm::Value* index_value = node.get_length()->is_name()
+                                   ? ir_builder.create_load(node.get_length()->get_node_name())
+                                   : accept_and_get(node.get_length());
     return ir_builder.create_index(index_value);
 }
 
@@ -444,11 +414,12 @@ void CodegenLLVMVisitor::visit_codegen_for_statement(const ast::CodegenForStatem
     int tmp_vector_width = vector_width;
 
     // Check if the kernel can be vectorised. If not, generate scalar code.
-    if (!can_vectorise(node, sym_tab)) {
+    if (!can_vectorize(node, sym_tab)) {
         logger->info("Cannot vectorise the for loop in '" +
                      ir_builder.current_function->getName().str() + "'");
         logger->info("Generating scalar code...");
         vector_width = 1;
+        ir_builder.generate_scalar_code();
     }
 
     // First, initialise the loop in the same basic block. This block is optional. Also, reset
@@ -457,6 +428,7 @@ void CodegenLLVMVisitor::visit_codegen_for_statement(const ast::CodegenForStatem
         node.get_initialization()->accept(*this);
     } else {
         vector_width = 1;
+        ir_builder.generate_scalar_code();
     }
 
     // Branch to condition basic block and insert condition code there.
@@ -486,6 +458,7 @@ void CodegenLLVMVisitor::visit_codegen_for_statement(const ast::CodegenForStatem
     ir_builder.builder.CreateBr(for_cond);
     ir_builder.builder.SetInsertPoint(exit);
     vector_width = tmp_vector_width;
+    ir_builder.generate_vectorized_code();
     is_kernel_code = true;
     ir_builder.start_vectorization();
 }
@@ -541,7 +514,7 @@ void CodegenLLVMVisitor::visit_codegen_return_statement(const ast::CodegenReturn
         throw std::runtime_error("Error: CodegenReturnStatement must contain a name node\n");
 
     std::string ret = "ret_" + ir_builder.current_function->getName().str();
-    llvm::Value* ret_value = ir_builder.builder.CreateLoad(lookup(ret));
+    llvm::Value* ret_value = ir_builder.create_load(ret);
     ir_builder.builder.CreateRet(ret_value);
 }
 
@@ -783,7 +756,7 @@ void CodegenLLVMVisitor::visit_var_name(const ast::VarName& node) {
 
     // Finally, load the variable from the pointer value unless it has already been loaded (e.g. via
     // gather instruction).
-    llvm::Value* var = ptr->getType()->isPointerTy() ? ir_builder.builder.CreateLoad(ptr) : ptr;
+    llvm::Value* var = ptr->getType()->isPointerTy() ? ir_builder.create_load(ptr) : ptr;
 
     // If the value should not be vectorised, or it is already a vector, add it to the stack.
     if (!is_kernel_code || vector_width <= 1 || var->getType()->isVectorTy()) {
