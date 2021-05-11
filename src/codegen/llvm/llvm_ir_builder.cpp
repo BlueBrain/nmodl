@@ -24,6 +24,10 @@ llvm::Type* IRBuilder::get_boolean_type() {
     return llvm::Type::getInt1Ty(builder.getContext());
 }
 
+llvm::Type* IRBuilder::get_i8_ptr_type() {
+    return llvm::Type::getInt8PtrTy(builder.getContext());
+}
+
 llvm::Type* IRBuilder::get_i32_type() {
     return llvm::Type::getInt32Ty(builder.getContext());
 }
@@ -209,6 +213,28 @@ void IRBuilder::create_binary_op(llvm::Value* lhs, llvm::Value* rhs, ast::Binary
         throw std::runtime_error("Error: unsupported binary operator\n");
     }
     value_stack.push_back(result);
+}
+
+llvm::Value* IRBuilder::create_index(llvm::Value* value) {
+    // Check if index is a double. While it is possible to use casting from double to integer
+    // values, we choose not to support these cases.
+    llvm::Type* value_type = value->getType();
+    if (!value_type->isIntOrIntVectorTy())
+        throw std::runtime_error("Error: only integer indexing is supported\n");
+
+    // Conventionally, in LLVM array indices are 64 bit.
+    llvm::Type* i64_type = get_i64_type();
+    if (auto index_type = llvm::dyn_cast<llvm::IntegerType>(value_type)) {
+        if (index_type->getBitWidth() == i64_type->getIntegerBitWidth())
+            return value;
+        return builder.CreateSExtOrTrunc(value, i64_type);
+    }
+
+    const auto& vector_type = llvm::cast<llvm::FixedVectorType>(value_type);
+    const auto& element_type = llvm::cast<llvm::IntegerType>(vector_type->getElementType());
+    if (element_type->getBitWidth() == i64_type->getIntegerBitWidth())
+        return value;
+    return builder.CreateSExtOrTrunc(value, llvm::FixedVectorType::get(i64_type, vector_width));
 }
 
 llvm::Value* IRBuilder::create_inbounds_gep(const std::string& var_name, llvm::Value* index) {

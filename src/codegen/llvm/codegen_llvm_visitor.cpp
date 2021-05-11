@@ -62,11 +62,6 @@ static bool can_vectorise(const ast::CodegenForStatement& statement, symtab::Sym
     return collected.empty();
 }
 
-llvm::Value* CodegenLLVMVisitor::codegen_indexed_name(const ast::IndexedName& node) {
-    llvm::Value* index = get_array_index(node);
-    return ir_builder.create_inbounds_gep(node.get_node_name(), index);
-}
-
 llvm::Value* CodegenLLVMVisitor::codegen_instance_var(const ast::CodegenInstanceVar& node) {
     const auto& member_node = node.get_member_var();
     const auto& instance_name = node.get_instance_var()->get_node_name();
@@ -146,26 +141,7 @@ llvm::Value* CodegenLLVMVisitor::get_array_index(const ast::IndexedName& node) {
     } else {
         index_value = accept_and_get(node.get_length());
     }
-
-    // Check if index is a double. While it is possible to use casting from double to integer
-    // values, we choose not to support these cases.
-    if (!index_value->getType()->isIntOrIntVectorTy())
-        throw std::runtime_error("Error: only integer indexing is supported!");
-
-    // Conventionally, in LLVM array indices are 64 bit.
-    llvm::Type* i64_type = llvm::Type::getInt64Ty(*context);
-    if (auto index_type = llvm::dyn_cast<llvm::IntegerType>(index_value->getType())) {
-        if (index_type->getBitWidth() == i64_type->getIntegerBitWidth())
-            return index_value;
-        return ir_builder.builder.CreateSExtOrTrunc(index_value, i64_type);
-    }
-
-    auto vector_type = llvm::cast<llvm::FixedVectorType>(index_value->getType());
-    auto element_type = llvm::cast<llvm::IntegerType>(vector_type->getElementType());
-    if (element_type->getBitWidth() == i64_type->getIntegerBitWidth())
-        return index_value;
-    return ir_builder.builder.CreateSExtOrTrunc(index_value,
-                                                llvm::FixedVectorType::get(i64_type, vector_width));
+    return ir_builder.create_index(index_value);
 }
 
 int CodegenLLVMVisitor::get_array_length(const ast::IndexedName& node) {
@@ -197,37 +173,23 @@ llvm::Type* CodegenLLVMVisitor::get_codegen_var_type(const ast::CodegenVarType& 
     }
 }
 
-llvm::Type* CodegenLLVMVisitor::get_default_fp_type() {
-    if (use_single_precision)
-        return llvm::Type::getFloatTy(*context);
-    return llvm::Type::getDoubleTy(*context);
-}
-
-llvm::Type* CodegenLLVMVisitor::get_default_fp_ptr_type() {
-    if (use_single_precision)
-        return llvm::Type::getFloatPtrTy(*context);
-    return llvm::Type::getDoublePtrTy(*context);
-}
-
 llvm::Type* CodegenLLVMVisitor::get_instance_struct_type() {
     TypeVector member_types;
     for (const auto& variable: instance_var_helper.instance->get_codegen_vars()) {
+        // Get the type information of the codegen variable.
         auto is_pointer = variable->get_is_pointer();
         auto nmodl_type = variable->get_type()->get_type();
 
-        llvm::Type* i32_type = llvm::Type::getInt32Ty(*context);
-        llvm::Type* i32ptr_type = llvm::Type::getInt32PtrTy(*context);
-
+        // Create the corresponding LLVM type.
         switch (nmodl_type) {
-#define DISPATCH(type, llvm_ptr_type, llvm_type)                            \
-    case type:                                                              \
-        member_types.push_back(is_pointer ? (llvm_ptr_type) : (llvm_type)); \
-        break;
-
-            DISPATCH(ast::AstNodeType::DOUBLE, get_default_fp_ptr_type(), get_default_fp_type());
-            DISPATCH(ast::AstNodeType::INTEGER, i32ptr_type, i32_type);
-
-#undef DISPATCH
+        case ast::AstNodeType::DOUBLE:
+            member_types.push_back(is_pointer ? ir_builder.get_fp_ptr_type()
+                                              : ir_builder.get_fp_type());
+            break;
+        case ast::AstNodeType::INTEGER:
+            member_types.push_back(is_pointer ? ir_builder.get_i32_ptr_type()
+                                              : ir_builder.get_i32_type());
+            break;
         default:
             throw std::runtime_error("Error: unsupported type found in instance struct");
         }
@@ -249,7 +211,8 @@ llvm::Value* CodegenLLVMVisitor::get_variable_ptr(const ast::VarName& node) {
 
     if (identifier->is_indexed_name()) {
         auto indexed_name = std::dynamic_pointer_cast<ast::IndexedName>(identifier);
-        ptr = codegen_indexed_name(*indexed_name);
+        llvm::Value* index = get_array_index(*indexed_name);
+        ptr = ir_builder.create_inbounds_gep(node.get_node_name(), index);
     }
 
     if (identifier->is_codegen_instance_var()) {
@@ -878,20 +841,21 @@ void CodegenLLVMVisitor::wrap_kernel_functions() {
         // Get the kernel function and the instance struct type.
         auto kernel = module->getFunction(kernel_name);
         if (!kernel)
-            throw std::runtime_error("Kernel " + kernel_name + " is not found!");
+            throw std::runtime_error("Error: kernel " + kernel_name + " is not found\n");
 
         if (std::distance(kernel->args().begin(), kernel->args().end()) != 1)
-            throw std::runtime_error("Kernel " + kernel_name + " must have a single argument!");
+            throw std::runtime_error("Error: kernel " + kernel_name +
+                                     " must have a single argument\n");
 
         auto instance_struct_ptr_type = llvm::dyn_cast<llvm::PointerType>(
             kernel->getArg(0)->getType());
         if (!instance_struct_ptr_type)
-            throw std::runtime_error("Kernel " + kernel_name +
-                                     " does not have an instance struct pointer argument!");
+            throw std::runtime_error("Error: kernel " + kernel_name +
+                                     " does not have an instance struct pointer as an argument\n");
 
         // Create a wrapper void function that takes a void pointer as a single argument.
-        llvm::Type* i32_type = llvm::Type::getInt32Ty(*context);
-        llvm::Type* void_ptr_type = llvm::Type::getInt8PtrTy(*context);
+        llvm::Type* i32_type = ir_builder.get_i32_type();
+        llvm::Type* void_ptr_type = ir_builder.get_i8_ptr_type();
         llvm::Function* wrapper_func = llvm::Function::Create(
             llvm::FunctionType::get(i32_type, {void_ptr_type}, /*isVarArg=*/false),
             llvm::Function::ExternalLinkage,

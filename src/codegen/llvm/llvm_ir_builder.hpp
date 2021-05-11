@@ -105,6 +105,9 @@ class IRBuilder {
     /// Generates LLVM IR for a call to the function.
     void create_function_call(llvm::Function* callee, ValueVector& arguments, bool use_result = true);
 
+    /// Generates LLVM IR to transform the value into an index by possibly sign-extending it.
+    llvm::Value* create_index(llvm::Value* value);
+
     /// Generates LLVM IR for the integer constant.
     void create_i32_constant(int value);
 
@@ -128,6 +131,9 @@ class IRBuilder {
 
     /// Creates a boolean (1-bit integer) type.
     llvm::Type* get_boolean_type();
+
+    /// Creates a pointer to 8-bit integer type.
+    llvm::Type* get_i8_ptr_type();
 
     /// Creates a 32-bit integer type.
     llvm::Type* get_i32_type();

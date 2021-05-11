@@ -95,9 +95,6 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     // Pass manager for optimisation passes that are run on IR and are not related to target.
     llvm::legacy::FunctionPassManager opt_pm;
 
-    // Stack to hold visited values
-    std::vector<llvm::Value*> values;
-
     // Pointer to the current function.
     llvm::Function* current_func = nullptr;
 
@@ -106,9 +103,6 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
 
     // Run optimisation passes if true.
     bool opt_passes;
-
-    // Use 32-bit floating-point type if true. Otherwise, use deafult 64-bit.
-    bool use_single_precision;
 
     // Explicit vectorisation width.
     int vector_width;
@@ -144,7 +138,6 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
         : mod_filename(mod_filename)
         , output_dir(output_dir)
         , opt_passes(opt_passes)
-        , use_single_precision(use_single_precision)
         , vector_width(vector_width)
         , vector_library(veclib_map.at(vec_lib))
         , add_debug_information(add_debug_information)
@@ -152,14 +145,6 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
         , debug_builder(*module)
         , codegen_pm(module.get())
         , opt_pm(module.get()) {}
-
-
-    /**
-     * Generates LLVM code for the given IndexedName
-     * \param node IndexedName NMODL AST node
-     * \return LLVM code generated for this AST node
-     */
-    llvm::Value* codegen_indexed_name(const ast::IndexedName& node);
 
     /**
      * Generates LLVM code for the given Instance variable
@@ -188,18 +173,6 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
      * \return LLVM type
      */
     llvm::Type* get_codegen_var_type(const ast::CodegenVarType& node);
-
-    /**
-     * Returns 64-bit or 32-bit LLVM floating type
-     * \return     \c LLVM floating point type according to `use_single_precision` flag
-     */
-    llvm::Type* get_default_fp_type();
-
-    /**
-     * Returns pointer to 64-bit or 32-bit LLVM floating type
-     * \return     \c LLVM pointer to floating point type according to `use_single_precision` flag
-     */
-    llvm::Type* get_default_fp_ptr_type();
 
     /**
      * Returns a pointer to LLVM struct type
