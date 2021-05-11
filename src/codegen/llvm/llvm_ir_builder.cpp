@@ -250,6 +250,13 @@ llvm::Value* IRBuilder::create_inbounds_gep(llvm::Value* variable, llvm::Value* 
     return builder.CreateInBoundsGEP(variable, {index});
 }
 
+void IRBuilder::create_return(llvm::Value* return_value) {
+    if (return_value)
+        builder.CreateRet(return_value);
+    else
+        builder.CreateRetVoid();
+}
+
 llvm::Value* IRBuilder::get_struct_member_ptr(llvm::Value* struct_variable, int member_index) {
     ValueVector indices;
     indices.push_back(llvm::ConstantInt::get(get_i32_type(), 0));

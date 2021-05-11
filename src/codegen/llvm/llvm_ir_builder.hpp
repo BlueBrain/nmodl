@@ -118,6 +118,8 @@ class IRBuilder {
     /// Generates LLVM IR for the given unary operator.
     void create_unary_op(llvm::Value* value, ast::UnaryOp op);
 
+    void create_return(llvm::Value* return_value = nullptr);
+
     /// Generates LLVM IR for the boolean constant.
     void create_boolean_constant(int value);
 
@@ -153,7 +155,6 @@ class IRBuilder {
 
     /// Pops the last visited value from the value stack.
     llvm::Value* pop_last_value();
-
 
     /// Creates a boolean (1-bit integer) type.
     llvm::Type* get_boolean_type();

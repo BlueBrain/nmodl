@@ -502,7 +502,7 @@ void CodegenLLVMVisitor::visit_codegen_function(const ast::CodegenFunction& node
 
     // If function has a void return type, add a terminator not handled by CodegenReturnVar.
     if (has_void_ret_type)
-        ir_builder.builder.CreateRetVoid();
+        ir_builder.create_return();
 
     // Clear local values stack and remove the pointer to the local symbol table.
     ir_builder.value_stack.clear();
@@ -515,7 +515,7 @@ void CodegenLLVMVisitor::visit_codegen_return_statement(const ast::CodegenReturn
 
     std::string ret = "ret_" + ir_builder.current_function->getName().str();
     llvm::Value* ret_value = ir_builder.create_load(ret);
-    ir_builder.builder.CreateRet(ret_value);
+    ir_builder.create_return(ret_value);
 }
 
 void CodegenLLVMVisitor::visit_codegen_var_list_statement(
@@ -850,7 +850,10 @@ void CodegenLLVMVisitor::wrap_kernel_functions() {
         ValueVector args;
         args.push_back(bitcasted);
         ir_builder.create_function_call(kernel, args, /*use_result=*/false);
-        ir_builder.builder.CreateRet(llvm::ConstantInt::get(i32_type, 0));
+
+        // Create a 0 return value and a return instruction.
+        ir_builder.create_i32_constant(0);
+        ir_builder.create_return(ir_builder.pop_last_value());
     }
 }
 
