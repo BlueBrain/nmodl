@@ -171,7 +171,8 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     void visit_var_name(const ast::VarName& node) override;
     void visit_while_statement(const ast::WhileStatement& node) override;
 
-    /// Wraps all kernel function calls into wrapper functions that use `void*` to pass the data to the kernel.
+    /// Wraps all kernel function calls into wrapper functions that use `void*` to pass the data to
+    /// the kernel.
     void wrap_kernel_functions();
 
   private:
@@ -188,7 +189,8 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
                               const ast::ExpressionVector& arguments);
 
     /// Fills values vector with processed NMODL function call arguments.
-    void create_function_call_arguments(const ast::ExpressionVector& arguments, ValueVector& arg_values);
+    void create_function_call_arguments(const ast::ExpressionVector& arguments,
+                                        ValueVector& arg_values);
 
     /// Creates the function declaration for the given AST node.
     void create_function_declaration(const ast::CodegenFunction& node);
@@ -208,8 +210,10 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     /// Returns the number of elements in the array specified by the IndexedName AST node.
     int get_num_elements(const ast::IndexedName& node);
 
-    /// If the value to store is specified, writes it to the instance. Otherwise, returns the instance variable.
-    llvm::Value* read_from_or_write_to_instance(const ast::CodegenInstanceVar& node, llvm::Value* maybe_value_to_store = nullptr);
+    /// If the value to store is specified, writes it to the instance. Otherwise, returns the
+    /// instance variable.
+    llvm::Value* read_from_or_write_to_instance(const ast::CodegenInstanceVar& node,
+                                                llvm::Value* maybe_value_to_store = nullptr);
 
     /// Reads the given variable and returns the processed value.
     llvm::Value* read_variable(const ast::VarName& node);

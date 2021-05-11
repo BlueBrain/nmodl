@@ -19,8 +19,8 @@ namespace nmodl {
 namespace codegen {
 
 /// Floating point bit widths.
-static constexpr const unsigned single_precision= 32;
-static constexpr const unsigned double_precision= 64;
+static constexpr const unsigned single_precision = 32;
+static constexpr const unsigned double_precision = 64;
 
 /// Some typedefs.
 using ConstantVector = std::vector<llvm::Constant*>;
@@ -51,7 +51,8 @@ class IRBuilder {
     /// Precision of the floating-point numbers (32 or 64 bit).
     unsigned fp_precision;
 
-    /// If 1, indicates that the scalar code is generated. Otherwise, the current vectorization width.
+    /// If 1, indicates that the scalar code is generated. Otherwise, the current vectorization
+    /// width.
     unsigned instruction_width;
 
     /// The vector width used for the vectorized code.
@@ -74,8 +75,7 @@ class IRBuilder {
         , kernel_id("") {}
 
     /// Initializes the builder with the symbol table and the kernel induction variable id.
-    void initialize(symtab::SymbolTable& symbol_table,
-                    std::string& kernel_id) {
+    void initialize(symtab::SymbolTable& symbol_table, std::string& kernel_id) {
         this->symbol_table = &symbol_table;
         this->kernel_id = kernel_id;
     }
@@ -112,7 +112,8 @@ class IRBuilder {
     }
 
     /// Generates LLVM IR to allocate the arguments of the function on the stack.
-    void allocate_function_arguments(llvm::Function* function, const ast::CodegenVarWithTypeVector& nmodl_arguments);
+    void allocate_function_arguments(llvm::Function* function,
+                                     const ast::CodegenVarWithTypeVector& nmodl_arguments);
 
     /// Generates IR for allocating an array.
     void create_array_alloca(const std::string& name, llvm::Type* element_type, int num_elements);
@@ -124,7 +125,10 @@ class IRBuilder {
     llvm::Value* create_bitcast(llvm::Value* value, llvm::Type* dst_type);
 
     /// Create a basic block and set the builder's insertion point to it.
-    llvm::BasicBlock* create_block_and_set_insertion_point(llvm::Function* function, llvm::BasicBlock* insert_before = nullptr, std::string name = "");
+    llvm::BasicBlock* create_block_and_set_insertion_point(
+        llvm::Function* function,
+        llvm::BasicBlock* insert_before = nullptr,
+        std::string name = "");
 
     /// Generates LLVM IR for unconditional branch.
     void create_br(llvm::BasicBlock* block);
@@ -133,7 +137,9 @@ class IRBuilder {
     void create_br_and_set_insertion_point(llvm::BasicBlock* block);
 
     /// Generates LLVM IR for conditional branch.
-    void create_cond_br(llvm::Value* condition, llvm::BasicBlock* true_block, llvm::BasicBlock* false_block);
+    void create_cond_br(llvm::Value* condition,
+                        llvm::BasicBlock* true_block,
+                        llvm::BasicBlock* false_block);
 
     /// Generates LLVM IR for the boolean constant.
     void create_boolean_constant(int value);
@@ -142,7 +148,9 @@ class IRBuilder {
     void create_fp_constant(const std::string& value);
 
     /// Generates LLVM IR for a call to the function.
-    void create_function_call(llvm::Function* callee, ValueVector& arguments, bool use_result = true);
+    void create_function_call(llvm::Function* callee,
+                              ValueVector& arguments,
+                              bool use_result = true);
 
     /// Generates LLVM IR for the string value.
     llvm::Value* create_global_string(const ast::String& node);
@@ -151,7 +159,9 @@ class IRBuilder {
     llvm::Value* create_index(llvm::Value* value);
 
     /// Generates an intrinsic that corresponds to the given name.
-    void create_intrinsic(const std::string& name, ValueVector& argument_values, TypeVector& argument_types);
+    void create_intrinsic(const std::string& name,
+                          ValueVector& argument_values,
+                          TypeVector& argument_types);
 
     /// Generates LLVM IR for the integer constant.
     void create_i32_constant(int value);
@@ -162,7 +172,8 @@ class IRBuilder {
     /// Generates LLVM IR to load the value from the pointer and returns it.
     llvm::Value* create_load(llvm::Value* ptr);
 
-    /// Generates LLVM IR to load the element at the specified index from the given array name and returns it.
+    /// Generates LLVM IR to load the element at the specified index from the given array name and
+    /// returns it.
     llvm::Value* create_load_from_array(const std::string& name, llvm::Value* index);
 
     /// Generates LLVM IR to store the value to the location specified by the name.
@@ -171,14 +182,16 @@ class IRBuilder {
     /// Generates LLVM IR to store the value to the location specified by the pointer.
     void create_store(llvm::Value* ptr, llvm::Value* value);
 
-    /// Generates LLVM IR to store the value to the array element, where array is specified by the name.
+    /// Generates LLVM IR to store the value to the array element, where array is specified by the
+    /// name.
     void create_store_to_array(const std::string& name, llvm::Value* index, llvm::Value* value);
 
     /// Generates LLVM IR return instructions.
     void create_return(llvm::Value* return_value = nullptr);
 
     /// Generates IR for allocating a scalar or vector variable.
-    void create_scalar_or_vector_alloca(const std::string& name, llvm::Type* element_or_scalar_type);
+    void create_scalar_or_vector_alloca(const std::string& name,
+                                        llvm::Type* element_or_scalar_type);
 
     /// Generates LLVM IR for the given unary operator.
     void create_unary_op(llvm::Value* value, ast::UnaryOp op);
@@ -213,14 +226,19 @@ class IRBuilder {
     /// Creates a void type.
     llvm::Type* get_void_type();
 
-    /// Generates LLVM IR to get the address of the struct's member at given index. Returns the calculated value.
+    /// Generates LLVM IR to get the address of the struct's member at given index. Returns the
+    /// calculated value.
     llvm::Value* get_struct_member_ptr(llvm::Value* struct_variable, int member_index);
 
     /// Creates a pointer to struct type with the given name and given members.
     llvm::Type* get_struct_ptr_type(const std::string& struct_type_name, TypeVector& member_types);
 
-    /// Generates IR that loads the elements of the array even during vectorization. If the value is specified, then it is stored to the array at the given index.
-    llvm::Value* load_to_or_store_from_array(const std::string& id_name, llvm::Value* id_value, llvm::Value* array, llvm::Value* maybe_value_to_store = nullptr);
+    /// Generates IR that loads the elements of the array even during vectorization. If the value is
+    /// specified, then it is stored to the array at the given index.
+    llvm::Value* load_to_or_store_from_array(const std::string& id_name,
+                                             llvm::Value* id_value,
+                                             llvm::Value* array,
+                                             llvm::Value* maybe_value_to_store = nullptr);
 
     /// Lookups the value by  its name in the current function's symbol table.
     llvm::Value* lookup_value(const std::string& value_name);
