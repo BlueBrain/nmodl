@@ -107,13 +107,29 @@ class IRBuilder {
     /// Generates LLVM IR for the given binary operator.
     void create_binary_op(llvm::Value* lhs, llvm::Value* rhs, ast::BinaryOp op);
 
+    /// Generates IR for allocating an array.
+    void create_array_alloca(const std::string& name, llvm::Type* element_type, int num_elements);
+
+    /// Generates IR for allocating a scalar or vector variable.
+    void create_scalar_or_vector_alloca(const std::string& name, llvm::Type* element_or_scalar_type);
+
     /// Generates LLVM IR to load the value specified by its name and returns it.
     llvm::Value* create_load(const std::string& name);
+
+    /// Generates LLVM IR to load the element at the specified index from the given array name and returns it.
+    llvm::Value* create_load_from_array(const std::string& name, llvm::Value* index);
 
     /// Generates LLVM IR to load the value from the pointer and returns it.
     llvm::Value* create_load(llvm::Value* ptr);
 
-    llvm::Value* create_ptr_to_array(const std::string& id_name, llvm::Value* id_value, llvm::Value* array);
+    void create_store(const std::string& name, llvm::Value* value);
+    void create_store(llvm::Value* ptr, llvm::Value* value);
+    void create_store_to_array(const std::string& name, llvm::Value* index, llvm::Value* value);
+
+    /// Generates IR to replicate the value if vectorizing the code.
+    void maybe_replicate_value(llvm::Value* value);
+
+    llvm::Value* load_to_or_store_from_array(const std::string& id_name, llvm::Value* id_value, llvm::Value* array, llvm::Value* maybe_value_to_store = nullptr);
 
     /// Generates LLVM IR for the given unary operator.
     void create_unary_op(llvm::Value* value, ast::UnaryOp op);
@@ -146,9 +162,6 @@ class IRBuilder {
     void create_intrinsic(const std::string& name, ValueVector& argument_values, TypeVector& argument_types);
 
     llvm::BasicBlock* get_current_bb();
-
-    /// Returns array length from given IndexedName.
-    int get_array_length(const ast::IndexedName& node);
 
     /// Lookups the value by  its name in the current function's symbol table.
     llvm::Value* lookup_value(const std::string& value_name);

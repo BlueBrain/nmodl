@@ -215,6 +215,27 @@ void IRBuilder::create_binary_op(llvm::Value* lhs, llvm::Value* rhs, ast::Binary
     value_stack.push_back(result);
 }
 
+void IRBuilder::create_array_alloca(const std::string& name,
+                                    llvm::Type* element_type,
+                                    int num_elements) {
+    llvm::Type* array_type = llvm::ArrayType::get(element_type, num_elements);
+    builder.CreateAlloca(array_type, /*ArraySize=*/nullptr, name);
+}
+
+
+void IRBuilder::create_scalar_or_vector_alloca(const std::string& name,
+                                               llvm::Type* element_or_scalar_type) {
+    // Even if generating vectorised code, some variables still need to be scalar. Particularly, the
+    // induction variable "id" and remainder loop variables (that start with "epilogue" prefix).
+    llvm::Type* type;
+    if (instruction_width > 1 && vectorize && name != kernel_id && name.rfind("epilogue", 0)) {
+        type = llvm::FixedVectorType::get(element_or_scalar_type, instruction_width);
+    } else {
+        type = element_or_scalar_type;
+    }
+    builder.CreateAlloca(type, /*ArraySize=*/nullptr, name);
+}
+
 llvm::Value* IRBuilder::create_index(llvm::Value* value) {
     // Check if index is a double. While it is possible to use casting from double to integer
     // values, we choose not to support these cases.
@@ -257,6 +278,18 @@ void IRBuilder::create_return(llvm::Value* return_value) {
         builder.CreateRetVoid();
 }
 
+void IRBuilder::maybe_replicate_value(llvm::Value* value) {
+    // If the value should not be vectorised, or it is already a vector, add it to the stack.
+    if (!vectorize || instruction_width == 1 || value->getType()->isVectorTy()) {
+        value_stack.push_back(value);
+    } else {
+        // Otherwise, we generate vectorized code inside the loop, so replicate the value to form a
+        // vector.
+        llvm::Value* vector_value = builder.CreateVectorSplat(instruction_width, value);
+        value_stack.push_back(vector_value);
+    }
+}
+
 llvm::Value* IRBuilder::get_struct_member_ptr(llvm::Value* struct_variable, int member_index) {
     ValueVector indices;
     indices.push_back(llvm::ConstantInt::get(get_i32_type(), 0));
@@ -275,6 +308,27 @@ llvm::Value* IRBuilder::create_load(llvm::Value* ptr) {
     return builder.CreateLoad(loaded_type, ptr);
 }
 
+void IRBuilder::create_store(llvm::Value* ptr, llvm::Value* value) {
+    builder.CreateStore(value, ptr);
+}
+
+void IRBuilder::create_store(const std::string& name, llvm::Value* value) {
+    llvm::Value* ptr = lookup_value(name);
+    builder.CreateStore(value, ptr);
+}
+
+void IRBuilder::create_store_to_array(const std::string& name,
+                                      llvm::Value* index,
+                                      llvm::Value* value) {
+    llvm::Value* element_ptr = create_inbounds_gep(name, index);
+    create_store(element_ptr, value);
+}
+
+llvm::Value* IRBuilder::create_load_from_array(const std::string& name, llvm::Value* index) {
+    llvm::Value* element_ptr = create_inbounds_gep(name, index);
+    return create_load(element_ptr);
+}
+
 void IRBuilder::create_unary_op(llvm::Value* value, ast::UnaryOp op) {
     if (op == ast::UOP_NEGATION) {
         value_stack.push_back(builder.CreateFNeg(value));
@@ -285,9 +339,10 @@ void IRBuilder::create_unary_op(llvm::Value* value, ast::UnaryOp op) {
     }
 }
 
-llvm::Value* IRBuilder::create_ptr_to_array(const std::string& id_name,
-                                            llvm::Value* id_value,
-                                            llvm::Value* array) {
+llvm::Value* IRBuilder::load_to_or_store_from_array(const std::string& id_name,
+                                                    llvm::Value* id_value,
+                                                    llvm::Value* array,
+                                                    llvm::Value* maybe_value_to_store) {
     // First, calculate the address of the element in the array.
     llvm::Value* element_ptr = create_inbounds_gep(array, id_value);
 
@@ -297,33 +352,26 @@ llvm::Value* IRBuilder::create_ptr_to_array(const std::string& id_name,
     if (id_name != kernel_id && vectorize && instruction_width > 1)
         return builder.CreateMaskedGather(element_ptr, llvm::Align());
 
-    // If direct indexing is used during the vectorization, we simply bitcast the scalar pointer to
-    // a vector pointer
+    llvm::Value* ptr;
     if (vectorize && instruction_width > 1) {
+        // If direct indexing is used during the vectorization, we simply bitcast the scalar pointer
+        // to a vector pointer
         llvm::Type* vector_type = llvm::PointerType::get(
             llvm::FixedVectorType::get(element_ptr->getType()->getPointerElementType(),
                                        instruction_width),
             /*AddressSpace=*/0);
-        return builder.CreateBitCast(element_ptr, vector_type);
+        ptr = builder.CreateBitCast(element_ptr, vector_type);
+    } else {
+        // Otherwise, scalar code is generated and hence return the element pointer.
+        ptr = element_ptr;
     }
 
-    // Otherwise, scalar code is generated and hence return the element pointer.
-    return element_ptr;
-}
-
-int IRBuilder::get_array_length(const ast::IndexedName& node) {
-    // First, verify if the length is an integer value.
-    const auto& integer = std::dynamic_pointer_cast<ast::Integer>(node.get_length());
-    if (!integer)
-        throw std::runtime_error("Error: only integer length is supported\n");
-
-    // Check if the length value is a constant.
-    if (!integer->get_macro())
-        return integer->get_value();
-
-    // Otherwise, the length is taken from the macro.
-    const auto& macro = symbol_table->lookup(integer->get_macro()->get_node_name());
-    return static_cast<int>(*macro->get_value());
+    if (maybe_value_to_store) {
+        create_store(ptr, maybe_value_to_store);
+        return nullptr;
+    } else {
+        return create_load(ptr);
+    }
 }
 
 /****************************************************************************************/

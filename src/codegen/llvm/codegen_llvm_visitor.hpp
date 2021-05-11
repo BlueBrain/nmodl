@@ -27,7 +27,6 @@
 
 #include "llvm/Analysis/TargetLibraryInfo.h"
 #include "llvm/IR/DIBuilder.h"
-#include "llvm/IR/IRBuilder.h"
 #include "llvm/IR/LLVMContext.h"
 #include "llvm/IR/LegacyPassManager.h"
 #include "llvm/IR/Module.h"
@@ -151,7 +150,7 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
      * \param node CodegenInstanceVar NMODL AST node
      * \return LLVM code generated for this AST node
      */
-    llvm::Value* codegen_instance_var(const ast::CodegenInstanceVar& node);
+    llvm::Value* load_from_or_store_to_instance(const ast::CodegenInstanceVar& node, llvm::Value* maybe_value_to_store = nullptr);
 
     /**
      * Returns array index from given IndexedName
@@ -179,12 +178,6 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
      * \return LLVM pointer type
      */
     llvm::Type* get_instance_struct_type();
-
-    /**
-     * Returns a LLVM value corresponding to the VarName node
-     * \return LLVM value
-     */
-    llvm::Value* get_variable_ptr(const ast::VarName& node);
 
     /**
      * Returns shared_ptr to generated ast::InstanceStruct
@@ -237,12 +230,6 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     std::unique_ptr<llvm::Module> get_module() {
         return std::move(module);
     }
-
-    /**
-     * Lookup the given name in the current function's symbol table
-     * \return LLVM value
-     */
-    llvm::Value* lookup(const std::string& name);
 
     /**
      * Fills values vector with processed NMODL function call arguments
@@ -301,6 +288,12 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     void wrap_kernel_functions();
 
   private:
+    /// Loads the variable
+    llvm::Value* read_variable(const ast::VarName& node);
+
+    /// Loads the variable
+    llvm::Value* write_to_variable(const ast::VarName& node, llvm::Value* value);
+
     /// Accepts the given AST node and returns the processed value.
     llvm::Value* accept_and_get(const std::shared_ptr<ast::Node>& node);
 };
