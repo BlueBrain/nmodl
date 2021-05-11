@@ -248,7 +248,12 @@ std::shared_ptr<ast::InstanceStruct> CodegenLLVMHelperVisitor::create_instance_s
 static void append_statements_from_block(ast::StatementVector& statements,
                                          const std::shared_ptr<ast::StatementBlock>& block) {
     const auto& block_statements = block->get_statements();
-    statements.insert(statements.end(), block_statements.begin(), block_statements.end());
+    for (const auto& statement: block_statements) {
+        const auto& expression_statement = std::dynamic_pointer_cast<ast::ExpressionStatement>(
+            statement);
+        if (!expression_statement->get_expression()->is_solve_block())
+            statements.push_back(statement);
+    }
 }
 
 static std::shared_ptr<ast::CodegenAtomicStatement> create_atomic_statement(std::string& lhs_str,
@@ -638,7 +643,6 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
         /// add breakpoint block if no current
         if (info.currents.empty() && info.breakpoint_node != nullptr) {
             auto block = info.breakpoint_node->get_statement_block();
-            // \todo this automatically adds `SOLVE states METHOD ...`
             append_statements_from_block(loop_body_statements, block);
         }
 
