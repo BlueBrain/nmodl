@@ -165,7 +165,7 @@ void CodegenLLVMVisitor::find_kernel_names(std::vector<std::string>& container) 
     // By convention, only kernel functions have a return type of void.
     const auto& functions = module->getFunctionList();
     for (const auto& func: functions) {
-        if (func.getReturnType()->isVoidTy()) {
+        if (func.getReturnType()->isVoidTy() && llvm::hasSingleElement(func.args())) {
             container.push_back(func.getName().str());
         }
     }
@@ -366,7 +366,7 @@ void CodegenLLVMVisitor::wrap_kernel_functions() {
         if (!kernel)
             throw std::runtime_error("Error: kernel " + kernel_name + " is not found\n");
 
-        if (std::distance(kernel->args().begin(), kernel->args().end()) != 1)
+        if (!llvm::hasSingleElement(kernel->args()))
             throw std::runtime_error("Error: kernel " + kernel_name +
                                      " must have a single argument\n");
 

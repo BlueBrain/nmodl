@@ -349,8 +349,11 @@ llvm::Value* IRBuilder::load_to_or_store_from_array(const std::string& id_name,
     // If the vector code is generated, we need to distinguish between two cases. If the array is
     // indexed indirectly (i.e. not by an induction variable `kernel_id`), create a gather
     // instruction.
-    if (id_name != kernel_id && vectorize && instruction_width > 1)
-        return builder.CreateMaskedGather(element_ptr, llvm::Align());
+    if (id_name != kernel_id && vectorize && instruction_width > 1) {
+        return maybe_value_to_store
+                   ? builder.CreateMaskedScatter(maybe_value_to_store, element_ptr, llvm::Align())
+                   : builder.CreateMaskedGather(element_ptr, llvm::Align());
+    }
 
     llvm::Value* ptr;
     if (vectorize && instruction_width > 1) {
