@@ -400,42 +400,6 @@ void CodegenLLVMVisitor::pack_function_call_arguments(const ast::ExpressionVecto
     }
 }
 
-llvm::Value* CodegenLLVMVisitor::visit_arithmetic_bin_op(llvm::Value* lhs,
-                                                         llvm::Value* rhs,
-                                                         unsigned op) {
-    const auto& bin_op = static_cast<ast::BinaryOp>(op);
-    llvm::Type* lhs_type = lhs->getType();
-    llvm::Value* result;
-
-    switch (bin_op) {
-#define DISPATCH(binary_op, llvm_fp_op, llvm_int_op) \
-    case binary_op:                                  \
-        if (lhs_type->isIntOrIntVectorTy())          \
-            result = llvm_int_op(lhs, rhs);          \
-        else                                         \
-            result = llvm_fp_op(lhs, rhs);           \
-        return result;
-
-        DISPATCH(ast::BinaryOp::BOP_ADDITION,
-                 ir_builder.builder.CreateFAdd,
-                 ir_builder.builder.CreateAdd);
-        DISPATCH(ast::BinaryOp::BOP_DIVISION,
-                 ir_builder.builder.CreateFDiv,
-                 ir_builder.builder.CreateSDiv);
-        DISPATCH(ast::BinaryOp::BOP_MULTIPLICATION,
-                 ir_builder.builder.CreateFMul,
-                 ir_builder.builder.CreateMul);
-        DISPATCH(ast::BinaryOp::BOP_SUBTRACTION,
-                 ir_builder.builder.CreateFSub,
-                 ir_builder.builder.CreateSub);
-
-#undef DISPATCH
-
-    default:
-        return nullptr;
-    }
-}
-
 void CodegenLLVMVisitor::visit_assign_op(const ast::BinaryExpression& node, llvm::Value* rhs) {
     auto var = dynamic_cast<ast::VarName*>(node.get_lhs().get());
     if (!var)
@@ -443,56 +407,6 @@ void CodegenLLVMVisitor::visit_assign_op(const ast::BinaryExpression& node, llvm
 
     llvm::Value* ptr = get_variable_ptr(*var);
     ir_builder.builder.CreateStore(rhs, ptr);
-}
-
-llvm::Value* CodegenLLVMVisitor::visit_logical_bin_op(llvm::Value* lhs,
-                                                      llvm::Value* rhs,
-                                                      unsigned op) {
-    const auto& bin_op = static_cast<ast::BinaryOp>(op);
-    return bin_op == ast::BinaryOp::BOP_AND ? ir_builder.builder.CreateAnd(lhs, rhs)
-                                            : ir_builder.builder.CreateOr(lhs, rhs);
-}
-
-llvm::Value* CodegenLLVMVisitor::visit_comparison_bin_op(llvm::Value* lhs,
-                                                         llvm::Value* rhs,
-                                                         unsigned op) {
-    const auto& bin_op = static_cast<ast::BinaryOp>(op);
-    llvm::Type* lhs_type = lhs->getType();
-    llvm::Value* result;
-
-    switch (bin_op) {
-#define DISPATCH(binary_op, i_llvm_op, f_llvm_op)            \
-    case binary_op:                                          \
-        if (lhs_type->isDoubleTy() || lhs_type->isFloatTy()) \
-            result = f_llvm_op(lhs, rhs);                    \
-        else                                                 \
-            result = i_llvm_op(lhs, rhs);                    \
-        return result;
-
-        DISPATCH(ast::BinaryOp::BOP_EXACT_EQUAL,
-                 ir_builder.builder.CreateICmpEQ,
-                 ir_builder.builder.CreateFCmpOEQ);
-        DISPATCH(ast::BinaryOp::BOP_GREATER,
-                 ir_builder.builder.CreateICmpSGT,
-                 ir_builder.builder.CreateFCmpOGT);
-        DISPATCH(ast::BinaryOp::BOP_GREATER_EQUAL,
-                 ir_builder.builder.CreateICmpSGE,
-                 ir_builder.builder.CreateFCmpOGE);
-        DISPATCH(ast::BinaryOp::BOP_LESS,
-                 ir_builder.builder.CreateICmpSLT,
-                 ir_builder.builder.CreateFCmpOLT);
-        DISPATCH(ast::BinaryOp::BOP_LESS_EQUAL,
-                 ir_builder.builder.CreateICmpSLE,
-                 ir_builder.builder.CreateFCmpOLE);
-        DISPATCH(ast::BinaryOp::BOP_NOT_EQUAL,
-                 ir_builder.builder.CreateICmpNE,
-                 ir_builder.builder.CreateFCmpONE);
-
-#undef DISPATCH
-
-    default:
-        return nullptr;
-    }
 }
 
 /****************************************************************************************/
