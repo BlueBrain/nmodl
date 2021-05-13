@@ -968,12 +968,6 @@ SCENARIO("Vectorised simple kernel with ion writes", "[visitor][llvm]") {
                 USEION ca WRITE cai
             }
 
-            STATE {}
-
-            ASSIGNED {
-                v
-            }
-
             BREAKPOINT {
                 SOLVE states METHOD cnexp
             }
@@ -999,8 +993,8 @@ SCENARIO("Vectorised simple kernel with ion writes", "[visitor][llvm]") {
             REQUIRE(std::regex_search(module_string, m, index_load));
             REQUIRE(std::regex_search(module_string, m, sext));
 
-            // Check that store to `ion_cai` is performed via gather instruction.
-            //      mech->ion_cai[ion_cai_id] = mech->cai[id]
+            // Check that store to `ion_cai` is performed via scatter instruction.
+            //      ion_cai[ion_cai_id] = cai[id]
             std::regex scatter(
                 "call void @llvm\\.masked\\.scatter\\.v4f64\\.v4p0f64\\(<4 x double> %.*, <4 x "
                 "double\\*> %.*, i32 1, <4 x i1> <i1 true, i1 true, i1 true, i1 true>\\)");

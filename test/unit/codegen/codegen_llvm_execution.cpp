@@ -445,15 +445,9 @@ SCENARIO("Vectorised kernel with scatter instruction", "[llvm][runner]") {
                 USEION ca WRITE cai
             }
 
-            ASSIGNED {
-                v
-            }
-
             BREAKPOINT {
                 SOLVE states METHOD cnexp
             }
-
-            STATE {}
 
             DERIVATIVE states {
                 : increment cai to test scatter

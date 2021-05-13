@@ -163,7 +163,9 @@ void CodegenLLVMVisitor::create_printf_call(const ast::ExpressionVector& argumen
 }
 
 void CodegenLLVMVisitor::find_kernel_names(std::vector<std::string>& container) {
-    // By convention, only kernel functions have a return type of void.
+    // By convention, only kernel functions have a return type of void and single argument. The
+    // number of arguments check is needed to avoid LLVM void intrinsics to be considered as
+    // kernels.
     const auto& functions = module->getFunctionList();
     for (const auto& func: functions) {
         if (func.getReturnType()->isVoidTy() && llvm::hasSingleElement(func.args())) {
@@ -444,12 +446,15 @@ void CodegenLLVMVisitor::visit_boolean(const ast::Boolean& node) {
     ir_builder.create_boolean_constant(node.get_value());
 }
 
+/**
+ * Currently, this functions is very similar to visiting the binary operator. However, the
+ * difference here is that the writes to the LHS variable must be atomic. These has a particular
+ * use case in synapse kernels. For simplicity, we choose not to support atomic writes at this
+ * stage and emit a warning.
+ *
+ * \todo support this properly.
+ */
 void CodegenLLVMVisitor::visit_codegen_atomic_statement(const ast::CodegenAtomicStatement& node) {
-    // Currently, this functions is very similar to visiting the binary operator. However, the
-    // difference here is that the writes to the LHS variable must be atomic. These has a particular
-    // use case in synapse kernels. For simplicity, we choose not to support atomic writes at this
-    // stage and emit a warning.
-    // TODO: support this properly.
     if (vector_width > 1)
         logger->warn("Atomic operations are not supported");
 
