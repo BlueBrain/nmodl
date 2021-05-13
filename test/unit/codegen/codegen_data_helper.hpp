@@ -57,11 +57,12 @@ struct CodegenInstanceData {
 /**
  * Generate vector of dummy data according to the template type specified
  *
- * For double type: generate vector starting from (initial_value + 1e-15)
- *                  with increments of 1e-15
- * For float type:  generate vector starting from (initial_value + 1e-6)
- *                  with increments of 1e-6
- * For int type:    generate vector starting from (initial_value + 1) with
+ * For double or float type: generate vector starting from `initial_value`
+ *                  with an increment of 1e-5. The increment can be any other
+ *                  value but 1e-5 is chosen because when we benchmark with
+ *                  a million elements then the values are in the range of
+ *                  <initial_value, initial_value + 10).
+ * For int type:    generate vector starting from initial_value with an
  *                  increments of 1
  *
  * \param inital_value Base value for initializing the data
@@ -71,16 +72,14 @@ struct CodegenInstanceData {
 template <typename T>
 std::vector<T> generate_dummy_data(size_t initial_value, size_t num_elements) {
     std::vector<T> data(num_elements);
-    T precision;
-    if (std::is_same<T, double>::value) {
-        precision = 1e-15;
-    } else if (std::is_same<T, float>::value) {
-        precision = 1e-6;
+    T increment;
+    if (std::is_same<T, int>::value) {
+        increment = 1;
     } else {
-        precision = 1;
+        increment = 1e-5;
     }
     for (size_t i = 0; i < num_elements; i++) {
-        data[i] = initial_value + precision * (i + 1);
+        data[i] = initial_value + increment * i;
     }
     return data;
 }

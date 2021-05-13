@@ -132,8 +132,12 @@ SCENARIO("Instance Struct creation", "[visitor][llvm][instance_struct]") {
                             generate_dummy_data<double>(ena_index, num_elements)));
             REQUIRE(compare(instance_data.members[ion_ena_index],
                             generate_dummy_data<double>(ion_ena_index, num_elements)));
+            // index variables are offsets, they start from 0
+            REQUIRE(compare(instance_data.members[ion_ena_index_index],
+                            generate_dummy_data<int>(0, num_elements)));
             REQUIRE(compare(instance_data.members[node_index_index],
-                            generate_dummy_data<int>(node_index_index, num_elements)));
+                            generate_dummy_data<int>(0, num_elements)));
+
             REQUIRE(*static_cast<double*>(instance_data.members[t_index]) ==
                     default_nthread_t_value);
             REQUIRE(*static_cast<int*>(instance_data.members[node_count_index]) == num_elements);
@@ -165,7 +169,7 @@ SCENARIO("Instance Struct creation", "[visitor][llvm][instance_struct]") {
             REQUIRE(compare(instance->ion_ena,
                             generate_dummy_data<double>(ion_ena_index, num_elements)));
             REQUIRE(compare(instance->node_index,
-                            generate_dummy_data<int>(node_index_index, num_elements)));
+                            generate_dummy_data<int>(0, num_elements)));
             REQUIRE(instance->t == default_nthread_t_value);
             REQUIRE(instance->celsius == default_celsius_value);
             REQUIRE(instance->secondorder == default_second_order_value);
