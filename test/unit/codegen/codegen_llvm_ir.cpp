@@ -957,6 +957,53 @@ SCENARIO("Vectorised simple kernel", "[visitor][llvm]") {
 }
 
 //=============================================================================
+// Scatter for vectorised kernel
+//=============================================================================
+
+SCENARIO("Vectorised simple kernel with ion writes", "[visitor][llvm]") {
+    GIVEN("An indirect indexing of ca ion") {
+        std::string nmodl_text = R"(
+            NEURON {
+                SUFFIX hh
+                USEION ca WRITE cai
+            }
+
+            BREAKPOINT {
+                SOLVE states METHOD cnexp
+            }
+
+            DERIVATIVE states {}
+        )";
+
+        THEN("a scatter instructions is created") {
+            std::string module_string = run_llvm_visitor(nmodl_text,
+                                                         /*opt=*/false,
+                                                         /*use_single_precision=*/false,
+                                                         /*vector_width=*/4);
+            std::smatch m;
+
+            // Check scatter intrinsic is correctly declared.
+            std::regex declaration(
+                R"(declare void @llvm\.masked\.scatter\.v4f64\.v4p0f64\(<4 x double>, <4 x double\*>, i32 immarg, <4 x i1>\))");
+            REQUIRE(std::regex_search(module_string, m, declaration));
+
+            // Check that the indices vector is created correctly and extended to i64.
+            std::regex index_load(R"(load <4 x i32>, <4 x i32>\* %ion_cai_id)");
+            std::regex sext(R"(sext <4 x i32> %.* to <4 x i64>)");
+            REQUIRE(std::regex_search(module_string, m, index_load));
+            REQUIRE(std::regex_search(module_string, m, sext));
+
+            // Check that store to `ion_cai` is performed via scatter instruction.
+            //      ion_cai[ion_cai_id] = cai[id]
+            std::regex scatter(
+                "call void @llvm\\.masked\\.scatter\\.v4f64\\.v4p0f64\\(<4 x double> %.*, <4 x "
+                "double\\*> %.*, i32 1, <4 x i1> <i1 true, i1 true, i1 true, i1 true>\\)");
+            REQUIRE(std::regex_search(module_string, m, scatter));
+        }
+    }
+}
+
+//=============================================================================
 // Derivative block : test optimization
 //=============================================================================
 
