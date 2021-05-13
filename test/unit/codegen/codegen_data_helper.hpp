@@ -61,7 +61,7 @@ struct CodegenInstanceData {
  *                  with an increment of 1e-5. The increment can be any other
  *                  value but 1e-5 is chosen because when we benchmark with
  *                  a million elements then the values are in the range of
- *                  <initial_value, initial_value + 10).
+ *                  <initial_value, initial_value + 10>.
  * For int type:    generate vector starting from initial_value with an
  *                  increments of 1
  *
