@@ -37,9 +37,9 @@ static constexpr const char instance_struct_type_name[] = "__instance_var__type"
 
 /// A utility to check for supported Statement AST nodes.
 static bool is_supported_statement(const ast::Statement& statement) {
-    return statement.is_codegen_atomic_statement() || statement.is_codegen_var_list_statement() ||
-           statement.is_expression_statement() || statement.is_codegen_for_statement() ||
-           statement.is_codegen_return_statement() || statement.is_if_statement() ||
+    return statement.is_codegen_atomic_statement() || statement.is_codegen_for_statement() ||
+           statement.is_if_statement() || statement.is_codegen_return_statement() ||
+           statement.is_codegen_var_list_statement() || statement.is_expression_statement() ||
            statement.is_while_statement();
 }
 
@@ -449,6 +449,7 @@ void CodegenLLVMVisitor::visit_codegen_atomic_statement(const ast::CodegenAtomic
     // difference here is that the writes to the LHS variable must be atomic. These has a particular
     // use case in synapse kernels. For simplicity, we choose not to support atomic writes at this
     // stage and emit a warning.
+    // TODO: support this properly.
     if (vector_width > 1)
         logger->warn("Atomic operations are not supported");
 
