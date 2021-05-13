@@ -256,10 +256,18 @@ static void append_statements_from_block(ast::StatementVector& statements,
     }
 }
 
-static std::shared_ptr<ast::CodegenAtomicStatement> create_atomic_statement(std::string& lhs_str,
-                                                                            std::string& op_str,
-                                                                            std::string& rhs_str) {
-    auto lhs = std::make_shared<ast::Name>(new ast::String(lhs_str));
+static std::shared_ptr<ast::CodegenAtomicStatement> create_atomic_statement(
+    std::string& ion_varname,
+    std::string& index_varname,
+    std::string& op_str,
+    std::string& rhs_str) {
+    // create lhs expression
+    auto varname = new ast::Name(new ast::String(ion_varname));
+    auto index = new ast::Name(new ast::String(index_varname));
+    auto lhs = std::make_shared<ast::VarName>(new ast::IndexedName(varname, index),
+                                              /*at=*/nullptr,
+                                              /*index=*/nullptr);
+
     auto op = ast::BinaryOperator(ast::string_to_binaryop(op_str));
     auto rhs = create_expression(rhs_str);
     return std::make_shared<ast::CodegenAtomicStatement>(lhs, op, rhs);
@@ -362,12 +370,11 @@ void CodegenLLVMHelperVisitor::ion_write_statements(BlockType type,
         std::string index_varname = "{}_id"_format(ion_varname);
         // load index
         std::string index_statement = "{} = {}_index[id]"_format(index_varname, ion_varname);
-        // ion variable to write (with index)
-        std::string ion_to_write = "{}[{}]"_format(ion_varname, index_varname);
         // push index definition, index statement and actual write statement
         int_variables.push_back(index_varname);
         index_statements.push_back(visitor::create_statement(index_statement));
-        body_statements.push_back(create_atomic_statement(ion_to_write, op, rhs));
+        // pass ion variable to write and its index
+        body_statements.push_back(create_atomic_statement(ion_varname, index_varname, op, rhs));
     };
 
     /// iterate over all ions and create write ion statements for given block type
