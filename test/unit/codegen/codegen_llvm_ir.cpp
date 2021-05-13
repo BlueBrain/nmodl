@@ -818,10 +818,16 @@ SCENARIO("Scalar state kernel", "[visitor][llvm]") {
                 m
             }
 
+            PARAMETER {
+                gl = .0003 (S/cm2)  <0,1e9>
+                el = -54.3 (mV)
+            }
+
             ASSIGNED {
                 v (mV)
                 minf
                 mtau (ms)
+                il (mA/cm2)
             }
 
             BREAKPOINT {
@@ -841,9 +847,11 @@ SCENARIO("Scalar state kernel", "[visitor][llvm]") {
             // Check the struct type and the kernel declaration.
             std::regex struct_type(
                 "%.*__instance_var__type = type \\{ double\\*, double\\*, double\\*, double\\*, "
-                "double\\*, double\\*, double\\*, i32\\*, double, double, double, i32, i32 \\}");
+                "double\\*, double\\*, double\\*, double\\*, double\\*, double\\*, "
+                "i32\\*, double, double, double, i32, i32 \\}");
+
             std::regex kernel_declaration(
-                R"(define void @nrn_state_hh\(%.*__instance_var__type\* .*\))");
+                R"(define void @nrn_state_hh\(%.*__instance_var__type\.0\* .*\))");
             REQUIRE(std::regex_search(module_string, m, struct_type));
             REQUIRE(std::regex_search(module_string, m, kernel_declaration));
 
@@ -921,7 +929,6 @@ SCENARIO("Vectorised simple kernel", "[visitor][llvm]") {
 
             BREAKPOINT {
                 SOLVE states METHOD cnexp
-                i = 2
             }
 
             DERIVATIVE states {}
@@ -1025,7 +1032,6 @@ SCENARIO("Scalar derivative block", "[visitor][llvm][derivative]") {
             }
             BREAKPOINT {
                 SOLVE states METHOD cnexp
-                il = 2
             }
             DERIVATIVE states {
                 m = (minf-m)/mtau
@@ -1043,9 +1049,9 @@ SCENARIO("Scalar derivative block", "[visitor][llvm][derivative]") {
             auto result = run_llvm_visitor_helper(nmodl_text,
                                                   /*vector_width=*/1,
                                                   {ast::AstNodeType::CODEGEN_FOR_STATEMENT});
-            REQUIRE(result.size() == 1);
-
-            auto main_loop = reindent_text(to_nmodl(result[0]));
+            // first loop is for nrn_cur and 2nd loop for nrn_state
+            REQUIRE(result.size() == 2);
+            auto main_loop = reindent_text(to_nmodl(result[1]));
             REQUIRE(main_loop == reindent_text(expected_loop));
         }
     }
@@ -1076,6 +1082,7 @@ SCENARIO("Vectorised derivative block", "[visitor][llvm][derivative]") {
             }
         )";
 
+        // loops from nrn_state function for DERIVATIVE
         std::string expected_main_loop = R"(
             for(id = 0; id<mech->node_count-7; id = id+8) {
                 node_id = mech->node_index[id]
@@ -1094,12 +1101,13 @@ SCENARIO("Vectorised derivative block", "[visitor][llvm][derivative]") {
             auto result = run_llvm_visitor_helper(nmodl_text,
                                                   /*vector_width=*/8,
                                                   {ast::AstNodeType::CODEGEN_FOR_STATEMENT});
-            REQUIRE(result.size() == 2);
+            REQUIRE(result.size() == 4);
 
-            auto main_loop = reindent_text(to_nmodl(result[0]));
+            // 0th and 1st loops are for nrn_cur; 3rd and 4th for nrn_state
+            auto main_loop = reindent_text(to_nmodl(result[2]));
             REQUIRE(main_loop == reindent_text(expected_main_loop));
 
-            auto epilogue_loop = reindent_text(to_nmodl(result[1]));
+            auto epilogue_loop = reindent_text(to_nmodl(result[3]));
             REQUIRE(epilogue_loop == reindent_text(expected_epilogue_loop));
         }
     }
@@ -1124,7 +1132,6 @@ SCENARIO("Vector library calls", "[visitor][llvm][vector_lib]") {
             }
             BREAKPOINT {
                 SOLVE states METHOD cnexp
-                il = 2
             }
             DERIVATIVE states {
                 m = exp(m)
