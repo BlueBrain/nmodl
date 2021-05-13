@@ -168,8 +168,7 @@ SCENARIO("Instance Struct creation", "[visitor][llvm][instance_struct]") {
             REQUIRE(compare(instance->ena, generate_dummy_data<double>(ena_index, num_elements)));
             REQUIRE(compare(instance->ion_ena,
                             generate_dummy_data<double>(ion_ena_index, num_elements)));
-            REQUIRE(compare(instance->node_index,
-                            generate_dummy_data<int>(0, num_elements)));
+            REQUIRE(compare(instance->node_index, generate_dummy_data<int>(0, num_elements)));
             REQUIRE(instance->t == default_nthread_t_value);
             REQUIRE(instance->celsius == default_celsius_value);
             REQUIRE(instance->secondorder == default_second_order_value);
