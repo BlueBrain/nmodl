@@ -432,3 +432,79 @@ SCENARIO("Simple vectorised kernel", "[llvm][runner]") {
         }
     }
 }
+
+//=============================================================================
+// Vectorised kernel with ion writes.
+//=============================================================================
+
+SCENARIO("Vectorised kernel with scatter instruction", "[llvm][runner]") {
+    GIVEN("Simple MOD file with ion writes") {
+        std::string nmodl_text = R"(
+            NEURON {
+                SUFFIX test
+                USEION ca WRITE cai
+            }
+
+            BREAKPOINT {
+                SOLVE states METHOD cnexp
+            }
+
+            DERIVATIVE states {
+                : increment cai to test scatter
+                cai = cai + 1
+            }
+        )";
+
+
+        NmodlDriver driver;
+        const auto& ast = driver.parse_string(nmodl_text);
+
+        // Run passes on the AST to generate LLVM.
+        SymtabVisitor().visit_program(*ast);
+        NeuronSolveVisitor().visit_program(*ast);
+        SolveBlockVisitor().visit_program(*ast);
+        codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"unknown",
+                                                 /*output_dir=*/".",
+                                                 /*opt_passes=*/false,
+                                                 /*use_single_precision=*/false,
+                                                 /*vector_width=*/2);
+        llvm_visitor.visit_program(*ast);
+        llvm_visitor.wrap_kernel_functions();
+
+        // Create the instance struct data.
+        int num_elements = 5;
+        const auto& generated_instance_struct = llvm_visitor.get_instance_struct_ptr();
+        auto codegen_data = codegen::CodegenDataHelper(ast, generated_instance_struct);
+        auto instance_data = codegen_data.create_data(num_elements, /*seed=*/1);
+
+        // Fill the instance struct data with some values.
+        std::vector<double> cai = {1.0, 2.0, 3.0, 4.0, 5.0};
+        std::vector<double> ion_cai = {1.0, 2.0, 3.0, 4.0, 5.0};
+        std::vector<int> ion_cai_index = {4, 2, 3, 0, 1};
+
+        InstanceTestInfo instance_info{&instance_data,
+                                       llvm_visitor.get_instance_var_helper(),
+                                       num_elements};
+        initialise_instance_variable(instance_info, cai, "cai");
+        initialise_instance_variable(instance_info, ion_cai, "ion_cai");
+        initialise_instance_variable(instance_info, ion_cai_index, "ion_cai_index");
+
+        // Set up the JIT runner.
+        std::unique_ptr<llvm::Module> module = llvm_visitor.get_module();
+        TestRunner runner(std::move(module));
+        runner.initialize_driver();
+
+        THEN("Ion values in struct have been updated correctly") {
+            runner.run_with_argument<int, void*>("__nrn_state_test_wrapper",
+                                                 instance_data.base_ptr);
+            // cai[id] = ion_cai[ion_cai_index[id]]
+            // cai[id] += 1
+            std::vector<double> cai_expected = {6.0, 4.0, 5.0, 2.0, 3.0};
+            REQUIRE(check_instance_variable(instance_info, cai_expected, "cai"));
+
+            // ion_cai[ion_cai_index[id]] = cai[id]
+            std::vector<double> ion_cai_expected = {2.0, 3.0, 4.0, 5.0, 6.0};
+            REQUIRE(check_instance_variable(instance_info, ion_cai_expected, "ion_cai"));
+        }
+    }
+}

@@ -37,9 +37,10 @@ static constexpr const char instance_struct_type_name[] = "__instance_var__type"
 
 /// A utility to check for supported Statement AST nodes.
 static bool is_supported_statement(const ast::Statement& statement) {
-    return statement.is_codegen_var_list_statement() || statement.is_expression_statement() ||
-           statement.is_codegen_for_statement() || statement.is_codegen_return_statement() ||
-           statement.is_if_statement() || statement.is_while_statement();
+    return statement.is_codegen_atomic_statement() || statement.is_codegen_for_statement() ||
+           statement.is_if_statement() || statement.is_codegen_return_statement() ||
+           statement.is_codegen_var_list_statement() || statement.is_expression_statement() ||
+           statement.is_while_statement();
 }
 
 /// A utility to check that the kernel body can be vectorised.
@@ -162,10 +163,12 @@ void CodegenLLVMVisitor::create_printf_call(const ast::ExpressionVector& argumen
 }
 
 void CodegenLLVMVisitor::find_kernel_names(std::vector<std::string>& container) {
-    // By convention, only kernel functions have a return type of void.
+    // By convention, only kernel functions have a return type of void and single argument. The
+    // number of arguments check is needed to avoid LLVM void intrinsics to be considered as
+    // kernels.
     const auto& functions = module->getFunctionList();
     for (const auto& func: functions) {
-        if (func.getReturnType()->isVoidTy()) {
+        if (func.getReturnType()->isVoidTy() && llvm::hasSingleElement(func.args())) {
             container.push_back(func.getName().str());
         }
     }
@@ -366,7 +369,7 @@ void CodegenLLVMVisitor::wrap_kernel_functions() {
         if (!kernel)
             throw std::runtime_error("Error: kernel " + kernel_name + " is not found\n");
 
-        if (std::distance(kernel->args().begin(), kernel->args().end()) != 1)
+        if (!llvm::hasSingleElement(kernel->args()))
             throw std::runtime_error("Error: kernel " + kernel_name +
                                      " must have a single argument\n");
 
@@ -441,6 +444,33 @@ void CodegenLLVMVisitor::visit_statement_block(const ast::StatementBlock& node) 
 
 void CodegenLLVMVisitor::visit_boolean(const ast::Boolean& node) {
     ir_builder.create_boolean_constant(node.get_value());
+}
+
+/**
+ * Currently, this functions is very similar to visiting the binary operator. However, the
+ * difference here is that the writes to the LHS variable must be atomic. These has a particular
+ * use case in synapse kernels. For simplicity, we choose not to support atomic writes at this
+ * stage and emit a warning.
+ *
+ * \todo support this properly.
+ */
+void CodegenLLVMVisitor::visit_codegen_atomic_statement(const ast::CodegenAtomicStatement& node) {
+    if (vector_width > 1)
+        logger->warn("Atomic operations are not supported");
+
+    // Support only assignment for now.
+    llvm::Value* rhs = accept_and_get(node.get_rhs());
+    if (node.get_atomic_op().get_value() != ast::BinaryOp::BOP_ASSIGN)
+        throw std::runtime_error(
+            "Error: only assignment is supported for CodegenAtomicStatement\n");
+    const auto& var = dynamic_cast<ast::VarName*>(node.get_lhs().get());
+    if (!var)
+        throw std::runtime_error("Error: only 'VarName' assignment is supported\n");
+
+    // Process the assignment as if it was non-atomic.
+    if (vector_width > 1)
+        logger->warn("Treating write as non-atomic");
+    write_to_variable(*var, rhs);
 }
 
 // Generating FOR loop in LLVM IR creates the following structure:
