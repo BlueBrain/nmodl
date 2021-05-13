@@ -370,11 +370,10 @@ void CodegenLLVMHelperVisitor::ion_write_statements(BlockType type,
         std::string index_varname = "{}_id"_format(ion_varname);
         // load index
         std::string index_statement = "{} = {}_index[id]"_format(index_varname, ion_varname);
-        // ion variable to write (with index)
-        std::string ion_to_write = "{}[{}]"_format(ion_varname, index_varname);
         // push index definition, index statement and actual write statement
         int_variables.push_back(index_varname);
         index_statements.push_back(visitor::create_statement(index_statement));
+        // pass ion variable to write and its index
         body_statements.push_back(create_atomic_statement(ion_varname, index_varname, op, rhs));
     };
 
