@@ -167,6 +167,7 @@ class CodegenLLVMHelperVisitor: public visitor::AstVisitor {
     void visit_procedure_block(ast::ProcedureBlock& node) override;
     void visit_function_block(ast::FunctionBlock& node) override;
     void visit_nrn_state_block(ast::NrnStateBlock& node) override;
+    void visit_breakpoint_block(ast::BreakpointBlock& node) override;
     void visit_program(ast::Program& node) override;
 
   private:
