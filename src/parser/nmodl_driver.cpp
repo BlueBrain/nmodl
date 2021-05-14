@@ -28,8 +28,10 @@ std::shared_ptr<ast::Program> NmodlDriver::parse_stream(std::istream& in) {
     parser->set_debug_level(trace_parser);
     parser->parse();
 
-    delete scanner;
     delete parser;
+    delete scanner;
+    parser = nullptr;
+    scanner = nullptr;
 
     return astRoot;
 }
