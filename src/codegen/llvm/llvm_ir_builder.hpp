@@ -249,6 +249,9 @@ class IRBuilder {
     /// Sets builder's insertion point to the given block.
     void set_insertion_point(llvm::BasicBlock* block);
 
+    /// Sets the necessary attributes for the kernel and its arguments.
+    void set_kernel_attributes();
+
     /// Pops the last visited value from the value stack.
     llvm::Value* pop_last_value();
 

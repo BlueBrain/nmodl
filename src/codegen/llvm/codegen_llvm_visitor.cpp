@@ -163,13 +163,11 @@ void CodegenLLVMVisitor::create_printf_call(const ast::ExpressionVector& argumen
 }
 
 void CodegenLLVMVisitor::find_kernel_names(std::vector<std::string>& container) {
-    // By convention, only kernel functions have a return type of void and single argument. The
-    // number of arguments check is needed to avoid LLVM void intrinsics to be considered as
-    // kernels.
-    const auto& functions = module->getFunctionList();
-    for (const auto& func: functions) {
-        if (func.getReturnType()->isVoidTy() && llvm::hasSingleElement(func.args())) {
-            container.push_back(func.getName().str());
+    auto& functions = module->getFunctionList();
+    for (auto& func: functions) {
+        const std::string name = func.getName().str();
+        if (is_kernel_function(name)) {
+            container.push_back(name);
         }
     }
 }
@@ -237,6 +235,26 @@ int CodegenLLVMVisitor::get_num_elements(const ast::IndexedName& node) {
     // Otherwise, the length is taken from the macro.
     const auto& macro = sym_tab->lookup(integer->get_macro()->get_node_name());
     return static_cast<int>(*macro->get_value());
+}
+
+bool CodegenLLVMVisitor::is_kernel_function(const std::string& function_name) {
+    llvm::Function* function = module->getFunction(function_name);
+    if (!function)
+        throw std::runtime_error("Error: function " + function_name + " does not exist\n");
+
+    // By convention, only kernel functions have a return type of void and single argument. The
+    // number of arguments check is needed to avoid LLVM void intrinsics to be considered as
+    // kernels.
+    if (!function->getReturnType()->isVoidTy() || !llvm::hasSingleElement(function->args()))
+        return false;
+
+    // Kernel's argument is a pointer to the instance struct type.
+    llvm::Type* arg_type = function->getArg(0)->getType();
+    if (auto pointer_type = llvm::dyn_cast<llvm::PointerType>(arg_type)) {
+        if (pointer_type->getElementType()->isStructTy())
+            return true;
+    }
+    return false;
 }
 
 llvm::Value* CodegenLLVMVisitor::read_from_or_write_to_instance(const ast::CodegenInstanceVar& node,
@@ -364,20 +382,8 @@ void CodegenLLVMVisitor::wrap_kernel_functions() {
     find_kernel_names(kernel_names);
 
     for (const auto& kernel_name: kernel_names) {
-        // Get the kernel function and the instance struct type.
+        // Get the kernel function.
         auto kernel = module->getFunction(kernel_name);
-        if (!kernel)
-            throw std::runtime_error("Error: kernel " + kernel_name + " is not found\n");
-
-        if (!llvm::hasSingleElement(kernel->args()))
-            throw std::runtime_error("Error: kernel " + kernel_name +
-                                     " must have a single argument\n");
-
-        auto instance_struct_ptr_type = llvm::dyn_cast<llvm::PointerType>(
-            kernel->getArg(0)->getType());
-        if (!instance_struct_ptr_type)
-            throw std::runtime_error("Error: kernel " + kernel_name +
-                                     " does not have an instance struct pointer as an argument\n");
 
         // Create a wrapper void function that takes a void pointer as a single argument.
         llvm::Type* i32_type = ir_builder.get_i32_type();
@@ -398,7 +404,7 @@ void CodegenLLVMVisitor::wrap_kernel_functions() {
         // Proceed with bitcasting the void pointer to the struct pointer type, calling the kernel
         // and adding a terminator.
         llvm::Value* bitcasted = ir_builder.create_bitcast(wrapper_func->getArg(0),
-                                                           instance_struct_ptr_type);
+                                                           kernel->getArg(0)->getType());
         ValueVector args;
         args.push_back(bitcasted);
         ir_builder.create_function_call(kernel, args, /*use_result=*/false);
@@ -578,7 +584,7 @@ void CodegenLLVMVisitor::visit_codegen_function(const ast::CodegenFunction& node
 
     // Create the entry basic block of the function/procedure and point the local named values table
     // to the symbol table.
-    llvm::BasicBlock* body = ir_builder.create_block_and_set_insertion_point(func);
+    ir_builder.create_block_and_set_insertion_point(func);
 
     // When processing a function, it returns a value named <function_name> in NMODL. Therefore, we
     // first run RenameVisitor to rename it into ret_<function_name>. This will aid in avoiding
@@ -588,14 +594,12 @@ void CodegenLLVMVisitor::visit_codegen_function(const ast::CodegenFunction& node
     visitor::RenameVisitor v(name, return_var_name);
     block->accept(v);
 
-
     // Allocate parameters on the stack and add them to the symbol table.
     ir_builder.allocate_function_arguments(func, arguments);
 
     // Process function or procedure body. If the function is a compute kernel, then set the
-    // corresponding flags. The return statement is handled in a separate visitor.
-    bool has_void_ret_type = node.get_return_type()->get_type() == ast::AstNodeType::VOID;
-    if (has_void_ret_type) {
+    // corresponding flags. If so, the return statement is handled in a separate visitor.
+    if (is_kernel_function(name)) {
         ir_builder.start_vectorization();
         block->accept(*this);
         ir_builder.stop_vectorization();
@@ -603,9 +607,12 @@ void CodegenLLVMVisitor::visit_codegen_function(const ast::CodegenFunction& node
         block->accept(*this);
     }
 
-    // If function has a void return type, add a terminator not handled by CodegenReturnVar.
-    if (has_void_ret_type)
+    // If function is a compute kernel, add a void terminator explicitly, since there is no
+    // `CodegenReturnVar` node. Also, set the necessary attributes.
+    if (is_kernel_function(name)) {
+        ir_builder.set_kernel_attributes();
         ir_builder.create_return();
+    }
 
     // Clear local values stack and remove the pointer to the local symbol table.
     ir_builder.clear_function();
