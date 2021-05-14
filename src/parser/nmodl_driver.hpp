@@ -16,6 +16,8 @@
 #include <unordered_map>
 
 #include "ast/ast.hpp"
+#include "lexer/nmodl_lexer.hpp"
+#include "parser/nmodl_driver.hpp"
 #include "utils/file_library.hpp"
 
 
@@ -59,6 +61,13 @@ namespace parser {
  */
 class NmodlDriver {
   private:
+
+    /// a pointer to the NMODL lexer instance
+    NmodlLexer* scanner;
+
+    /// a pointer to the NMODL parser instance
+    NmodlParser* parser;
+
     /// all macro defined in the mod file
     std::unordered_map<std::string, int> defined_var;
 

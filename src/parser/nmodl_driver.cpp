@@ -21,12 +21,16 @@ NmodlDriver::NmodlDriver(bool strace, bool ptrace)
 
 /// parse nmodl file provided as istream
 std::shared_ptr<ast::Program> NmodlDriver::parse_stream(std::istream& in) {
-    NmodlLexer scanner(*this, &in);
-    NmodlParser parser(scanner, *this);
+    scanner = new NmodlLexer(*this, &in);
+    parser = new NmodlParser(*scanner, *this);
 
-    scanner.set_debug(trace_scanner);
-    parser.set_debug_level(trace_parser);
-    parser.parse();
+    scanner->set_debug(trace_scanner);
+    parser->set_debug_level(trace_parser);
+    parser->parse();
+
+    delete scanner;
+    delete parser;
+
     return astRoot;
 }
 
@@ -135,7 +139,10 @@ int NmodlDriver::get_defined_var_value(const std::string& name) const {
 
 void NmodlDriver::parse_error(const location& location, const std::string& message) {
     std::ostringstream oss;
-    oss << "NMODL Parser Error : " << message << " [Location : " << location << ']';
+    oss << "NMODL Parser Error : " << message << " [Location : " << location << "]";
+    oss << scanner->get_curr_line() << '\n';
+    oss << std::string(location.begin.column-1, '-');
+    oss << "^\n";
     throw std::runtime_error(oss.str());
 }
 
