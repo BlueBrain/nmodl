@@ -528,9 +528,6 @@ void CodegenLLVMVisitor::visit_codegen_for_statement(const ast::CodegenForStatem
     llvm::BasicBlock* for_inc = llvm::BasicBlock::Create(*context, /*Name=*/"for.inc", func, next);
     llvm::BasicBlock* exit = llvm::BasicBlock::Create(*context, /*Name=*/"for.exit", func, next);
 
-    // Save the vector width.
-    int tmp_vector_width = vector_width;
-
     // Check if the kernel can be vectorised. If not, generate scalar code.
     if (!can_vectorize(node, sym_tab)) {
         logger->info("Cannot vectorise the for loop in '" + ir_builder.get_current_function_name() +
@@ -540,14 +537,12 @@ void CodegenLLVMVisitor::visit_codegen_for_statement(const ast::CodegenForStatem
         ir_builder.generate_scalar_code();
     }
 
-    // First, initialise the loop in the same basic block. This block is optional. Also, reset
-    // vector width to 1 if processing the remainder of the loop.
-    if (node.get_initialization()) {
+    // First, initialise the loop in the same basic block. This block is optional. Also, generate
+    // scalar code if processing the remainder of the loop.
+    if (node.get_initialization())
         node.get_initialization()->accept(*this);
-    } else {
-        vector_width = 1;
+    else
         ir_builder.generate_scalar_code();
-    }
 
     // Branch to condition basic block and insert condition code there.
     ir_builder.create_br_and_set_insertion_point(for_cond);
@@ -566,11 +561,9 @@ void CodegenLLVMVisitor::visit_codegen_for_statement(const ast::CodegenForStatem
     // Process increment.
     node.get_increment()->accept(*this);
 
-    // Create a branch to condition block, then generate exit code out of the loop. Restore the
-    // vector width.
+    // Create a branch to condition block, then generate exit code out of the loop.
     ir_builder.create_br(for_cond);
     ir_builder.set_insertion_point(exit);
-    vector_width = tmp_vector_width;
     ir_builder.generate_vectorized_code();
     ir_builder.start_vectorization();
 }
