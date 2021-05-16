@@ -22,7 +22,7 @@ namespace benchmark {
  */
 class LLVMBenchmark {
   private:
-    /// llvm visitor
+    /// LLVM visitor.
     codegen::CodegenLLVMVisitor& llvm_visitor;
 
     /// Source MOD file name.
