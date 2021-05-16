@@ -108,8 +108,8 @@ target_link_libraries(
 if(NMODL_ENABLE_LLVM)
   include_directories(${LLVM_INCLUDE_DIRS} codegen)
 
-  add_library(llvm_benchmark STATIC codegen/codegen_data_helper.cpp)
-  add_dependencies(llvm_benchmark lexer)
+  add_library(benchmark_data STATIC codegen/codegen_data_helper.cpp)
+  add_dependencies(benchmark_data lexer)
 
   add_executable(testllvm visitor/main.cpp codegen/codegen_llvm_ir.cpp
                           codegen/codegen_data_helper.cpp codegen/codegen_llvm_instance_struct.cpp)
@@ -130,6 +130,7 @@ if(NMODL_ENABLE_LLVM)
   target_link_libraries(
     test_llvm_runner
     llvm_codegen
+    llvm_benchmark
     codegen
     visitor
     symtab

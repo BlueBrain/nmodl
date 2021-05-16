@@ -9,8 +9,8 @@
 
 #include "ast/program.hpp"
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
-#include "jit_driver.hpp"
 #include "parser/nmodl_driver.hpp"
+#include "test/benchmark/jit_driver.hpp"
 #include "utils/logger.hpp"
 #include "visitors/symtab_visitor.hpp"
 
