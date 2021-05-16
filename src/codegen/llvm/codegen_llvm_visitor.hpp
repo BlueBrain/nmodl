@@ -152,6 +152,11 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
         return instance_var_helper;
     }
 
+    /// Returns vector width
+    int get_vector_width() const {
+        return vector_width;
+    }
+
     // Visitors.
     void visit_binary_expression(const ast::BinaryExpression& node) override;
     void visit_boolean(const ast::Boolean& node) override;

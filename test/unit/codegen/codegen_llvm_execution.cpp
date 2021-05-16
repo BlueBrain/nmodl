@@ -10,9 +10,9 @@
 
 #include "ast/program.hpp"
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
-#include "codegen/llvm/jit_driver.hpp"
 #include "codegen_data_helper.hpp"
 #include "parser/nmodl_driver.hpp"
+#include "test/benchmark/jit_driver.hpp"
 #include "visitors/checkparent_visitor.hpp"
 #include "visitors/neuron_solve_visitor.hpp"
 #include "visitors/solve_block_visitor.hpp"

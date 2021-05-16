@@ -6,10 +6,6 @@ set(LLVM_CODEGEN_SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/codegen_llvm_visitor.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/codegen_llvm_helper_visitor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/codegen_llvm_helper_visitor.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/jit_driver.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/jit_driver.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/llvm_benchmark.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/llvm_benchmark.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/llvm_debug_builder.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/llvm_debug_builder.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/llvm_ir_builder.cpp
@@ -32,9 +28,9 @@ if(NOT NMODL_AS_SUBPROJECT)
   target_link_libraries(
     nmodl_llvm_runner
     CLI11::CLI11
+    llvm_benchmark
     llvm_codegen
     codegen
-    llvm_benchmark
     visitor
     symtab
     lexer

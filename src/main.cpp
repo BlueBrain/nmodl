@@ -19,7 +19,7 @@
 #include "codegen/codegen_transform_visitor.hpp"
 #ifdef NMODL_LLVM_BACKEND
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
-#include "codegen/llvm/llvm_benchmark.hpp"
+#include "test/benchmark/llvm_benchmark.hpp"
 #endif
 
 #include "config/config.h"
@@ -337,7 +337,7 @@ int main(int argc, const char* argv[]) {
                        fmt::format("Disable debug information ({})", disable_debug_information))->ignore_case();
     llvm_opt->add_flag("--opt",
                        llvm_ir_opt_passes,
-                       fmt::format("Run LLVM optimisation passes ({})", llvm_ir_opt_passes))->ignore_case();
+                       fmt::format("Run few common LLVM IR optimisation passes ({})", llvm_ir_opt_passes))->ignore_case();
     llvm_opt->add_flag("--single-precision",
                        llvm_float_type,
                        fmt::format("Use single precision floating-point types ({})", llvm_float_type))->ignore_case();
@@ -682,26 +682,7 @@ int main(int argc, const char* argv[]) {
             }
 
 #ifdef NMODL_LLVM_BACKEND
-
-            if (run_llvm_benchmark) {
-                logger->info("Running LLVM benchmark");
-                benchmark::LLVMBuildInfo info{llvm_vec_width,
-                                              llvm_ir_opt_passes,
-                                              llvm_float_type,
-                                              vector_library};
-                benchmark::LLVMBenchmark benchmark(modfile,
-                                                   output_dir,
-                                                   shared_lib_paths,
-                                                   info,
-                                                   num_experiments,
-                                                   instance_size,
-                                                   backend,
-                                                   llvm_opt_level_ir,
-                                                   llvm_opt_level_codegen);
-                benchmark.run(ast);
-            }
-
-            else if (llvm_ir) {
+            if (llvm_ir || run_llvm_benchmark) {
                 logger->info("Running LLVM backend code generator");
                 CodegenLLVMVisitor visitor(modfile,
                                            output_dir,
@@ -713,6 +694,20 @@ int main(int argc, const char* argv[]) {
                 visitor.visit_program(*ast);
                 ast_to_nmodl(*ast, filepath("llvm", "mod"));
                 ast_to_json(*ast, filepath("llvm", "json"));
+
+                if (run_llvm_benchmark) {
+                    logger->info("Running LLVM benchmark");
+                    benchmark::LLVMBenchmark benchmark(visitor,
+                                                       modfile,
+                                                       output_dir,
+                                                       shared_lib_paths,
+                                                       num_experiments,
+                                                       instance_size,
+                                                       backend,
+                                                       llvm_opt_level_ir,
+                                                       llvm_opt_level_codegen);
+                    benchmark.run(ast);
+                }
             }
 #endif
         }
