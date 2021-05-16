@@ -6,10 +6,6 @@ set(LLVM_CODEGEN_SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/codegen_llvm_visitor.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/codegen_llvm_helper_visitor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/codegen_llvm_helper_visitor.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/jit_driver.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/jit_driver.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/llvm_benchmark.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/llvm_benchmark.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/llvm_debug_builder.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/llvm_debug_builder.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/llvm_ir_builder.cpp
@@ -24,10 +20,6 @@ add_library(runner_obj OBJECT ${LLVM_CODEGEN_SOURCE_FILES})
 add_dependencies(runner_obj lexer_obj)
 set_property(TARGET runner_obj PROPERTY POSITION_INDEPENDENT_CODE ON)
 
-if(NMODL_ENABLE_JIT_EVENT_LISTENERS)
-  target_compile_definitions(runner_obj PUBLIC NMODL_HAVE_JIT_EVENT_LISTENERS)
-endif()
-
 add_library(llvm_codegen STATIC $<TARGET_OBJECTS:runner_obj>)
 add_dependencies(llvm_codegen lexer util visitor)
 
@@ -36,9 +28,9 @@ if(NOT NMODL_AS_SUBPROJECT)
 
   target_link_libraries(
     nmodl_llvm_runner
+    llvm_benchmark
     llvm_codegen
     codegen
-    llvm_benchmark
     visitor
     symtab
     lexer

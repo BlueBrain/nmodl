@@ -199,6 +199,7 @@ set(MEMORYCHECK_COMMAND_OPTIONS
 # do not enable tests if nmodl is used as submodule
 if(NOT NMODL_AS_SUBPROJECT)
   include(CTest)
+  add_subdirectory(test/benchmark)
   add_subdirectory(test/unit)
   add_subdirectory(test/integration)
 endif()

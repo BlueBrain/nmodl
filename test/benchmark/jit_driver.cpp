@@ -7,6 +7,7 @@
 
 #include "jit_driver.hpp"
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
+#include "utils/common_utils.hpp"
 
 #include "llvm/Analysis/TargetTransformInfo.h"
 #include "llvm/ExecutionEngine/JITEventListener.h"
@@ -247,6 +248,13 @@ void JITDriver::init(std::string features,
 
     // Optionally, dump the binary to the object file.
     if (benchmark_info) {
+        std::string object_file = benchmark_info->filename + ".o";
+        if (utils::file_exists(object_file)) {
+            int status = remove(object_file.c_str());
+            if (status) {
+                throw std::runtime_error("Can not remove object file " + object_file);
+            }
+        }
         jit->getObjTransformLayer().setTransform(
             llvm::orc::DumpObjects(benchmark_info->output_dir, benchmark_info->filename));
     }
