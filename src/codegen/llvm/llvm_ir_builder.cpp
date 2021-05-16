@@ -92,7 +92,11 @@ llvm::Value* IRBuilder::pop_last_value() {
 /****************************************************************************************/
 
 void IRBuilder::create_boolean_constant(int value) {
-    value_stack.push_back(get_vector_constant<llvm::ConstantInt>(get_boolean_type(), value));
+    if (instruction_width > 1 && vectorize) {
+        value_stack.push_back(get_vector_constant<llvm::ConstantInt>(get_boolean_type(), value));
+    } else {
+        value_stack.push_back(get_scalar_constant<llvm::ConstantInt>(get_boolean_type(), value));
+    }
 }
 
 void IRBuilder::create_fp_constant(const std::string& value) {
@@ -316,13 +320,22 @@ llvm::Value* IRBuilder::create_index(llvm::Value* value) {
                                      llvm::FixedVectorType::get(i64_type, instruction_width));
 }
 
-llvm::Value* IRBuilder::create_load(const std::string& name) {
+llvm::Value* IRBuilder::create_load(const std::string& name, bool masked) {
     llvm::Value* ptr = lookup_value(name);
+
+    // Check if the generated IR is vectorized and masked.
+    if (masked) {
+        return builder.CreateMaskedLoad(ptr, llvm::Align(), mask);
+    }
     llvm::Type* loaded_type = ptr->getType()->getPointerElementType();
     return builder.CreateLoad(loaded_type, ptr);
 }
 
-llvm::Value* IRBuilder::create_load(llvm::Value* ptr) {
+llvm::Value* IRBuilder::create_load(llvm::Value* ptr, bool masked) {
+    // Check if the generated IR is vectorized and masked.
+    if (masked) {
+        return builder.CreateMaskedLoad(ptr, llvm::Align(), mask);
+    }
     llvm::Type* loaded_type = ptr->getType()->getPointerElementType();
     return builder.CreateLoad(loaded_type, ptr);
 }
@@ -332,12 +345,23 @@ llvm::Value* IRBuilder::create_load_from_array(const std::string& name, llvm::Va
     return create_load(element_ptr);
 }
 
-void IRBuilder::create_store(const std::string& name, llvm::Value* value) {
+void IRBuilder::create_store(const std::string& name, llvm::Value* value, bool masked) {
     llvm::Value* ptr = lookup_value(name);
+
+    // Check if the generated IR is vectorized and masked.
+    if (masked) {
+        builder.CreateMaskedStore(value, ptr, llvm::Align(), mask);
+        return;
+    }
     builder.CreateStore(value, ptr);
 }
 
-void IRBuilder::create_store(llvm::Value* ptr, llvm::Value* value) {
+void IRBuilder::create_store(llvm::Value* ptr, llvm::Value* value, bool masked) {
+    // Check if the generated IR is vectorized and masked.
+    if (masked) {
+        builder.CreateMaskedStore(value, ptr, llvm::Align(), mask);
+        return;
+    }
     builder.CreateStore(value, ptr);
 }
 
@@ -385,6 +409,17 @@ llvm::Value* IRBuilder::get_struct_member_ptr(llvm::Value* struct_variable, int 
     return builder.CreateInBoundsGEP(struct_variable, indices);
 }
 
+void IRBuilder::invert_mask() {
+    if (!mask)
+        throw std::runtime_error("Error: mask is not set\n");
+
+    // Create the vector with all `true` values.
+    create_boolean_constant(1);
+    llvm::Value* one = pop_last_value();
+
+    mask = builder.CreateXor(mask, one);
+}
+
 llvm::Value* IRBuilder::load_to_or_store_from_array(const std::string& id_name,
                                                     llvm::Value* id_value,
                                                     llvm::Value* array,
@@ -396,13 +431,16 @@ llvm::Value* IRBuilder::load_to_or_store_from_array(const std::string& id_name,
     // indexed indirectly (i.e. not by an induction variable `kernel_id`), create a gather
     // instruction.
     if (id_name != kernel_id && vectorize && instruction_width > 1) {
-        return maybe_value_to_store
-                   ? builder.CreateMaskedScatter(maybe_value_to_store, element_ptr, llvm::Align())
-                   : builder.CreateMaskedGather(element_ptr, llvm::Align());
+        return maybe_value_to_store ? builder.CreateMaskedScatter(maybe_value_to_store,
+                                                                  element_ptr,
+                                                                  llvm::Align(),
+                                                                  mask)
+                                    : builder.CreateMaskedGather(element_ptr, llvm::Align(), mask);
     }
 
     llvm::Value* ptr;
-    if (vectorize && instruction_width > 1) {
+    bool vectorizing = vectorize && instruction_width > 1;
+    if (vectorizing) {
         // If direct indexing is used during the vectorization, we simply bitcast the scalar pointer
         // to a vector pointer
         llvm::Type* vector_type = llvm::PointerType::get(
@@ -416,10 +454,10 @@ llvm::Value* IRBuilder::load_to_or_store_from_array(const std::string& id_name,
     }
 
     if (maybe_value_to_store) {
-        create_store(ptr, maybe_value_to_store);
+        create_store(ptr, maybe_value_to_store, /*masked=*/mask && vectorizing);
         return nullptr;
     } else {
-        return create_load(ptr);
+        return create_load(ptr, /*masked=*/mask && vectorizing);
     }
 }
 

@@ -59,6 +59,9 @@ class IRBuilder {
     /// The vector width used for the vectorized code.
     unsigned vector_width;
 
+    /// Masked value used to predicate vector instructions.
+    llvm::Value* mask;
+
     /// The name of induction variable used in kernel loops.
     std::string kernel_id;
 
@@ -73,6 +76,7 @@ class IRBuilder {
         , fp_precision(use_single_precision ? single_precision : double_precision)
         , vector_width(vector_width)
         , instruction_width(vector_width)
+        , mask(nullptr)
         , kernel_id("") {}
 
     /// Initializes the builder with the symbol table and the kernel induction variable id.
@@ -110,6 +114,16 @@ class IRBuilder {
     void clear_function() {
         value_stack.clear();
         current_function = nullptr;
+    }
+
+    /// Sets the value to be the mask for vector code generation.
+    void set_mask(llvm::Value* value) {
+        mask = value;
+    }
+
+    /// Clears the mask for vector code generation.
+    void clear_mask() {
+        mask = nullptr;
     }
 
     /// Generates LLVM IR to allocate the arguments of the function on the stack.
@@ -168,20 +182,20 @@ class IRBuilder {
     void create_i32_constant(int value);
 
     /// Generates LLVM IR to load the value specified by its name and returns it.
-    llvm::Value* create_load(const std::string& name);
+    llvm::Value* create_load(const std::string& name, bool masked = false);
 
     /// Generates LLVM IR to load the value from the pointer and returns it.
-    llvm::Value* create_load(llvm::Value* ptr);
+    llvm::Value* create_load(llvm::Value* ptr, bool masked = false);
 
     /// Generates LLVM IR to load the element at the specified index from the given array name and
     /// returns it.
     llvm::Value* create_load_from_array(const std::string& name, llvm::Value* index);
 
     /// Generates LLVM IR to store the value to the location specified by the name.
-    void create_store(const std::string& name, llvm::Value* value);
+    void create_store(const std::string& name, llvm::Value* value, bool masked = false);
 
     /// Generates LLVM IR to store the value to the location specified by the pointer.
-    void create_store(llvm::Value* ptr, llvm::Value* value);
+    void create_store(llvm::Value* ptr, llvm::Value* value, bool masked = false);
 
     /// Generates LLVM IR to store the value to the array element, where array is specified by the
     /// name.
@@ -233,6 +247,9 @@ class IRBuilder {
 
     /// Creates a pointer to struct type with the given name and given members.
     llvm::Type* get_struct_ptr_type(const std::string& struct_type_name, TypeVector& member_types);
+
+    /// Inverts the mask for vector code generation by xoring it.
+    void invert_mask();
 
     /// Generates IR that loads the elements of the array even during vectorization. If the value is
     /// specified, then it is stored to the array at the given index.
