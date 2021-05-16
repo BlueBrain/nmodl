@@ -237,6 +237,16 @@ int CodegenLLVMVisitor::get_num_elements(const ast::IndexedName& node) {
     return static_cast<int>(*macro->get_value());
 }
 
+/**
+ * Currently, functions are identified as compute kernels if they satisfy the following:
+ *   1. They have a void return type
+ *   2. They have a single argument
+ *   3. The argument is a struct type pointer
+ * This is not robust, and hence it would be better to find what functions are kernels on the NMODL
+ * AST side (e.g. via a flag, or via names list).
+ *
+ * \todo identify kernels on NMODL AST side.
+ */
 bool CodegenLLVMVisitor::is_kernel_function(const std::string& function_name) {
     llvm::Function* function = module->getFunction(function_name);
     if (!function)

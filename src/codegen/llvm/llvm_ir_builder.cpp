@@ -199,7 +199,7 @@ void IRBuilder::set_loop_metadata(llvm::BranchInst* branch) {
     llvm::LLVMContext& context = builder.getContext();
     MetadataVector loop_metadata;
 
-    // Add nullptr for loop's metadata self-reference.
+    // Add nullptr to reserve the first place for loop's metadata self-reference.
     loop_metadata.push_back(nullptr);
 
     // If `vector_width` is 1, explicitly disable vectorization for benchmarking purposes.
@@ -214,7 +214,7 @@ void IRBuilder::set_loop_metadata(llvm::BranchInst* branch) {
     if (loop_metadata.size() <= 1)
         return;
 
-    // Add metadata to the branch.
+    // Add loop's metadata self-reference and attach it to the branch.
     llvm::MDNode* metadata = llvm::MDNode::get(context, loop_metadata);
     metadata->replaceOperandWith(0, metadata);
     branch->setMetadata(llvm::LLVMContext::MD_loop, metadata);
