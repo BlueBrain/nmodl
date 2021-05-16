@@ -192,6 +192,35 @@ void IRBuilder::set_kernel_attributes() {
 }
 
 /****************************************************************************************/
+/*                                LLVM metadata utilities                               */
+/****************************************************************************************/
+
+void IRBuilder::set_loop_metadata(llvm::BranchInst* branch) {
+    llvm::LLVMContext& context = builder.getContext();
+    MetadataVector loop_metadata;
+
+    // Add nullptr for loop's metadata self-reference.
+    loop_metadata.push_back(nullptr);
+
+    // If `vector_width` is 1, explicitly disable vectorization for benchmarking purposes.
+    if (vector_width == 1) {
+        llvm::MDString* name = llvm::MDString::get(context, "llvm.loop.vectorize.enable");
+        llvm::Value* false_value = llvm::ConstantInt::get(get_boolean_type(), 0);
+        llvm::ValueAsMetadata* value = llvm::ValueAsMetadata::get(false_value);
+        loop_metadata.push_back(llvm::MDNode::get(context, {name, value}));
+    }
+
+    // No metadata to add.
+    if (loop_metadata.size() <= 1)
+        return;
+
+    // Add metadata to the branch.
+    llvm::MDNode* metadata = llvm::MDNode::get(context, loop_metadata);
+    metadata->replaceOperandWith(0, metadata);
+    branch->setMetadata(llvm::LLVMContext::MD_loop, metadata);
+}
+
+/****************************************************************************************/
 /*                             LLVM instruction utilities                               */
 /****************************************************************************************/
 
@@ -429,10 +458,10 @@ void IRBuilder::create_br_and_set_insertion_point(llvm::BasicBlock* block) {
     builder.SetInsertPoint(block);
 }
 
-void IRBuilder::create_cond_br(llvm::Value* condition,
-                               llvm::BasicBlock* true_block,
-                               llvm::BasicBlock* false_block) {
-    builder.CreateCondBr(condition, true_block, false_block);
+llvm::BranchInst* IRBuilder::create_cond_br(llvm::Value* condition,
+                                            llvm::BasicBlock* true_block,
+                                            llvm::BasicBlock* false_block) {
+    return builder.CreateCondBr(condition, true_block, false_block);
 }
 
 llvm::BasicBlock* IRBuilder::get_current_block() {

@@ -549,7 +549,8 @@ void CodegenLLVMVisitor::visit_codegen_for_statement(const ast::CodegenForStatem
 
     // Extract the condition to decide whether to branch to the loop body or loop exit.
     llvm::Value* cond = accept_and_get(node.get_condition());
-    ir_builder.create_cond_br(cond, for_body, exit);
+    llvm::BranchInst* loop_br = ir_builder.create_cond_br(cond, for_body, exit);
+    ir_builder.set_loop_metadata(loop_br);
 
     // Generate code for the loop body and create the basic block for the increment.
     ir_builder.set_insertion_point(for_body);

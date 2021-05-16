@@ -24,6 +24,7 @@ static constexpr const unsigned double_precision = 64;
 
 /// Some typedefs.
 using ConstantVector = std::vector<llvm::Constant*>;
+using MetadataVector = std::vector<llvm::Metadata*>;
 using TypeVector = std::vector<llvm::Type*>;
 using ValueVector = std::vector<llvm::Value*>;
 
@@ -137,9 +138,9 @@ class IRBuilder {
     void create_br_and_set_insertion_point(llvm::BasicBlock* block);
 
     /// Generates LLVM IR for conditional branch.
-    void create_cond_br(llvm::Value* condition,
-                        llvm::BasicBlock* true_block,
-                        llvm::BasicBlock* false_block);
+    llvm::BranchInst* create_cond_br(llvm::Value* condition,
+                                     llvm::BasicBlock* true_block,
+                                     llvm::BasicBlock* false_block);
 
     /// Generates LLVM IR for the boolean constant.
     void create_boolean_constant(int value);
@@ -251,6 +252,9 @@ class IRBuilder {
 
     /// Sets the necessary attributes for the kernel and its arguments.
     void set_kernel_attributes();
+
+    /// Sets the loop metadata for the given branch from the loop.
+    void set_loop_metadata(llvm::BranchInst* branch);
 
     /// Pops the last visited value from the value stack.
     llvm::Value* pop_last_value();
