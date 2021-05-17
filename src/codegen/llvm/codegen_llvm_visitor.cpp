@@ -350,7 +350,8 @@ llvm::Value* CodegenLLVMVisitor::read_variable(const ast::VarName& node) {
     const auto& identifier = node.get_name();
 
     if (identifier->is_name()) {
-        return ir_builder.create_load(node.get_node_name());
+        return ir_builder.create_load(node.get_node_name(),
+                                      /*masked=*/ir_builder.generates_predicated_ir());
     }
 
     if (identifier->is_indexed_name()) {
@@ -579,7 +580,7 @@ void CodegenLLVMVisitor::visit_codegen_for_statement(const ast::CodegenForStatem
     ir_builder.set_insertion_point(for_body);
 
     // If not processing remainder of the loop, start vectorization.
-    if (main_loop_initialization)
+    if (vector_width > 1 && main_loop_initialization)
         ir_builder.generate_vector_ir();
 
     // Generate code for the loop body and create the basic block for the increment.
@@ -620,7 +621,7 @@ void CodegenLLVMVisitor::visit_codegen_function(const ast::CodegenFunction& node
 
     // Process function or procedure body. If the function is a compute kernel, enable
     // vectorization. If so, the return statement is handled in a separate visitor.
-    if (is_kernel_function(name)) {
+    if (vector_width > 1 && is_kernel_function(name)) {
         ir_builder.generate_vector_ir();
         block->accept(*this);
         ir_builder.generate_scalar_ir();
@@ -694,7 +695,7 @@ void CodegenLLVMVisitor::visit_function_call(const ast::FunctionCall& node) {
 
 void CodegenLLVMVisitor::visit_if_statement(const ast::IfStatement& node) {
     // If vectorizing the compute kernel with control flow, process it separately.
-    if (vector_width > 1) {
+    if (vector_width > 1 && ir_builder.vectorizing()) {
         create_vectorized_control_flow_block(node);
         return;
     }

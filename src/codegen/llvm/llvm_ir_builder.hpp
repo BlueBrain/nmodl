@@ -85,6 +85,11 @@ class IRBuilder {
         vectorize = false;
     }
 
+    /// Indicates whether the builder generates vectorized IR.
+    bool vectorizing() {
+        return vectorize;
+    }
+
     /// Explicitly sets the builder to produce vectorized IR.
     void generate_vector_ir() {
         vectorize = true;
@@ -109,6 +114,11 @@ class IRBuilder {
     /// Clears the mask for vector code generation.
     void clear_mask() {
         mask = nullptr;
+    }
+
+    /// Indicates whether the vectorized IR is predicated.
+    bool generates_predicated_ir() {
+        return vectorize && mask;
     }
 
     /// Generates LLVM IR to allocate the arguments of the function on the stack.
