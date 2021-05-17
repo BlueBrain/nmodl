@@ -547,8 +547,8 @@ void CodegenLLVMVisitor::visit_codegen_atomic_statement(const ast::CodegenAtomic
 //  | <code after for loop>     |
 //  +---------------------------+
 void CodegenLLVMVisitor::visit_codegen_for_statement(const ast::CodegenForStatement& node) {
-    // Disable vector code generation for condition and increment blocks.
-    ir_builder.stop_vectorization();
+    // Condition and increment blocks must be scalar.
+    ir_builder.generate_scalar_ir();
 
     // Get the current and the next blocks within the function.
     llvm::BasicBlock* curr_block = ir_builder.get_current_block();
@@ -563,21 +563,11 @@ void CodegenLLVMVisitor::visit_codegen_for_statement(const ast::CodegenForStatem
     llvm::BasicBlock* for_inc = llvm::BasicBlock::Create(*context, /*Name=*/"for.inc", func, next);
     llvm::BasicBlock* exit = llvm::BasicBlock::Create(*context, /*Name=*/"for.exit", func, next);
 
-    // Check if the kernel can be vectorised. If not, generate scalar code.
-    if (!can_vectorize(node, sym_tab)) {
-        logger->info("Cannot vectorise the for loop in '" + ir_builder.get_current_function_name() +
-                     "'");
-        logger->info("Generating scalar code...");
-        vector_width = 1;
-        ir_builder.generate_scalar_code();
-    }
-
-    // First, initialise the loop in the same basic block. This block is optional. Also, generate
-    // scalar code if processing the remainder of the loop.
-    if (node.get_initialization())
-        node.get_initialization()->accept(*this);
-    else
-        ir_builder.generate_scalar_code();
+    // First, initialize the loop in the same basic block. If processing the remainder of the loop,
+    // no initialization happens.
+    const auto& main_loop_initialization = node.get_initialization();
+    if (main_loop_initialization)
+        main_loop_initialization->accept(*this);
 
     // Branch to condition basic block and insert condition code there.
     ir_builder.create_br_and_set_insertion_point(for_cond);
@@ -586,22 +576,24 @@ void CodegenLLVMVisitor::visit_codegen_for_statement(const ast::CodegenForStatem
     llvm::Value* cond = accept_and_get(node.get_condition());
     llvm::BranchInst* loop_br = ir_builder.create_cond_br(cond, for_body, exit);
     ir_builder.set_loop_metadata(loop_br);
+    ir_builder.set_insertion_point(for_body);
+
+    // If not processing remainder of the loop, start vectorization.
+    if (main_loop_initialization)
+        ir_builder.generate_vector_ir();
 
     // Generate code for the loop body and create the basic block for the increment.
-    ir_builder.set_insertion_point(for_body);
-    ir_builder.start_vectorization();
     const auto& statement_block = node.get_statement_block();
     statement_block->accept(*this);
-    ir_builder.stop_vectorization();
+    ir_builder.generate_scalar_ir();
     ir_builder.create_br_and_set_insertion_point(for_inc);
-    // Process increment.
+
+    // Process the increment.
     node.get_increment()->accept(*this);
 
     // Create a branch to condition block, then generate exit code out of the loop.
     ir_builder.create_br(for_cond);
     ir_builder.set_insertion_point(exit);
-    ir_builder.generate_vectorized_code();
-    ir_builder.start_vectorization();
 }
 
 
@@ -626,12 +618,12 @@ void CodegenLLVMVisitor::visit_codegen_function(const ast::CodegenFunction& node
     // Allocate parameters on the stack and add them to the symbol table.
     ir_builder.allocate_function_arguments(func, arguments);
 
-    // Process function or procedure body. If the function is a compute kernel, then set the
-    // corresponding flags. If so, the return statement is handled in a separate visitor.
+    // Process function or procedure body. If the function is a compute kernel, enable
+    // vectorization. If so, the return statement is handled in a separate visitor.
     if (is_kernel_function(name)) {
-        ir_builder.start_vectorization();
+        ir_builder.generate_vector_ir();
         block->accept(*this);
-        ir_builder.stop_vectorization();
+        ir_builder.generate_scalar_ir();
     } else {
         block->accept(*this);
     }

@@ -52,10 +52,6 @@ class IRBuilder {
     /// Precision of the floating-point numbers (32 or 64 bit).
     unsigned fp_precision;
 
-    /// If 1, indicates that the scalar code is generated. Otherwise, the current vectorization
-    /// width.
-    unsigned instruction_width;
-
     /// The vector width used for the vectorized code.
     unsigned vector_width;
 
@@ -75,7 +71,6 @@ class IRBuilder {
         , vectorize(false)
         , fp_precision(use_single_precision ? single_precision : double_precision)
         , vector_width(vector_width)
-        , instruction_width(vector_width)
         , mask(nullptr)
         , kernel_id("") {}
 
@@ -85,24 +80,14 @@ class IRBuilder {
         this->kernel_id = kernel_id;
     }
 
-    /// Explicitly sets the builder to produce scalar code (even during vectorization).
-    void generate_scalar_code() {
-        instruction_width = 1;
-    }
-
-    /// Explicitly sets the builder to produce vectorized code.
-    void generate_vectorized_code() {
-        instruction_width = vector_width;
-    }
-
-    /// Turns on vectorization mode.
-    void start_vectorization() {
-        vectorize = true;
-    }
-
-    /// Turns off vectorization mode.
-    void stop_vectorization() {
+    /// Explicitly sets the builder to produce scalar IR.
+    void generate_scalar_ir() {
         vectorize = false;
+    }
+
+    /// Explicitly sets the builder to produce vectorized IR.
+    void generate_vector_ir() {
+        vectorize = true;
     }
 
     /// Sets the current function for which LLVM IR is generated.

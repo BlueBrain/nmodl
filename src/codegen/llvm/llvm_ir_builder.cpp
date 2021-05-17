@@ -92,7 +92,7 @@ llvm::Value* IRBuilder::pop_last_value() {
 /****************************************************************************************/
 
 void IRBuilder::create_boolean_constant(int value) {
-    if (instruction_width > 1 && vectorize) {
+    if (vector_width > 1 && vectorize) {
         value_stack.push_back(get_vector_constant<llvm::ConstantInt>(get_boolean_type(), value));
     } else {
         value_stack.push_back(get_scalar_constant<llvm::ConstantInt>(get_boolean_type(), value));
@@ -100,7 +100,7 @@ void IRBuilder::create_boolean_constant(int value) {
 }
 
 void IRBuilder::create_fp_constant(const std::string& value) {
-    if (instruction_width > 1 && vectorize) {
+    if (vector_width > 1 && vectorize) {
         value_stack.push_back(get_vector_constant<llvm::ConstantFP>(get_fp_type(), value));
     } else {
         value_stack.push_back(get_scalar_constant<llvm::ConstantFP>(get_fp_type(), value));
@@ -112,7 +112,7 @@ llvm::Value* IRBuilder::create_global_string(const ast::String& node) {
 }
 
 void IRBuilder::create_i32_constant(int value) {
-    if (instruction_width > 1 && vectorize) {
+    if (vector_width > 1 && vectorize) {
         value_stack.push_back(get_vector_constant<llvm::ConstantInt>(get_i32_type(), value));
     } else {
         value_stack.push_back(get_scalar_constant<llvm::ConstantInt>(get_i32_type(), value));
@@ -127,7 +127,7 @@ llvm::Value* IRBuilder::get_scalar_constant(llvm::Type* type, V value) {
 template <typename C, typename V>
 llvm::Value* IRBuilder::get_vector_constant(llvm::Type* type, V value) {
     ConstantVector constants;
-    for (unsigned i = 0; i < instruction_width; ++i) {
+    for (unsigned i = 0; i < vector_width; ++i) {
         const auto& element = C::get(type, value);
         constants.push_back(element);
     }
@@ -316,8 +316,7 @@ llvm::Value* IRBuilder::create_index(llvm::Value* value) {
     const auto& element_type = llvm::cast<llvm::IntegerType>(vector_type->getElementType());
     if (element_type->getBitWidth() == i64_type->getIntegerBitWidth())
         return value;
-    return builder.CreateSExtOrTrunc(value,
-                                     llvm::FixedVectorType::get(i64_type, instruction_width));
+    return builder.CreateSExtOrTrunc(value, llvm::FixedVectorType::get(i64_type, vector_width));
 }
 
 llvm::Value* IRBuilder::create_load(const std::string& name, bool masked) {
@@ -384,8 +383,8 @@ void IRBuilder::create_scalar_or_vector_alloca(const std::string& name,
     // Even if generating vectorised code, some variables still need to be scalar. Particularly, the
     // induction variable "id" and remainder loop variables (that start with "epilogue" prefix).
     llvm::Type* type;
-    if (instruction_width > 1 && vectorize && name != kernel_id && name.rfind("epilogue", 0)) {
-        type = llvm::FixedVectorType::get(element_or_scalar_type, instruction_width);
+    if (vector_width > 1 && vectorize && name != kernel_id && name.rfind("epilogue", 0)) {
+        type = llvm::FixedVectorType::get(element_or_scalar_type, vector_width);
     } else {
         type = element_or_scalar_type;
     }
@@ -427,10 +426,13 @@ llvm::Value* IRBuilder::load_to_or_store_from_array(const std::string& id_name,
     // First, calculate the address of the element in the array.
     llvm::Value* element_ptr = create_inbounds_gep(array, id_value);
 
+    // Find out if the vector code is generated.
+    bool generating_vector_ir = vector_width > 1 && vectorize;
+
     // If the vector code is generated, we need to distinguish between two cases. If the array is
     // indexed indirectly (i.e. not by an induction variable `kernel_id`), create a gather
     // instruction.
-    if (id_name != kernel_id && vectorize && instruction_width > 1) {
+    if (id_name != kernel_id && generating_vector_ir) {
         return maybe_value_to_store ? builder.CreateMaskedScatter(maybe_value_to_store,
                                                                   element_ptr,
                                                                   llvm::Align(),
@@ -439,13 +441,12 @@ llvm::Value* IRBuilder::load_to_or_store_from_array(const std::string& id_name,
     }
 
     llvm::Value* ptr;
-    bool vectorizing = vectorize && instruction_width > 1;
-    if (vectorizing) {
+    if (generating_vector_ir) {
         // If direct indexing is used during the vectorization, we simply bitcast the scalar pointer
         // to a vector pointer
         llvm::Type* vector_type = llvm::PointerType::get(
             llvm::FixedVectorType::get(element_ptr->getType()->getPointerElementType(),
-                                       instruction_width),
+                                       vector_width),
             /*AddressSpace=*/0);
         ptr = builder.CreateBitCast(element_ptr, vector_type);
     } else {
@@ -454,21 +455,21 @@ llvm::Value* IRBuilder::load_to_or_store_from_array(const std::string& id_name,
     }
 
     if (maybe_value_to_store) {
-        create_store(ptr, maybe_value_to_store, /*masked=*/mask && vectorizing);
+        create_store(ptr, maybe_value_to_store, /*masked=*/mask && generating_vector_ir);
         return nullptr;
     } else {
-        return create_load(ptr, /*masked=*/mask && vectorizing);
+        return create_load(ptr, /*masked=*/mask && generating_vector_ir);
     }
 }
 
 void IRBuilder::maybe_replicate_value(llvm::Value* value) {
     // If the value should not be vectorised, or it is already a vector, add it to the stack.
-    if (!vectorize || instruction_width == 1 || value->getType()->isVectorTy()) {
+    if (!vectorize || vector_width == 1 || value->getType()->isVectorTy()) {
         value_stack.push_back(value);
     } else {
         // Otherwise, we generate vectorized code inside the loop, so replicate the value to form a
         // vector.
-        llvm::Value* vector_value = builder.CreateVectorSplat(instruction_width, value);
+        llvm::Value* vector_value = builder.CreateVectorSplat(vector_width, value);
         value_stack.push_back(vector_value);
     }
 }
