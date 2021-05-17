@@ -61,13 +61,6 @@ namespace parser {
  */
 class NmodlDriver {
   private:
-
-    /// a pointer to the NMODL lexer instance
-    NmodlLexer* scanner;
-
-    /// a pointer to the NMODL parser instance
-    NmodlParser* parser;
-
     /// all macro defined in the mod file
     std::unordered_map<std::string, int> defined_var;
 
@@ -145,6 +138,14 @@ class NmodlDriver {
      * \throw std::runtime_error
      */
     void parse_error(const location& location, const std::string& message);
+
+    /**
+     * Emit a parsing error. Takes additionally a Lexer instance to print code context
+     * \throw std::runtime_error
+     */
+    void parse_error(const NmodlLexer& scanner,
+                     const location& location,
+                     const std::string& message);
 
     /**
      * Ensure \a file argument given to the INCLUDE directive is valid:
