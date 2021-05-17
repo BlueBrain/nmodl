@@ -174,6 +174,52 @@ void IRBuilder::create_intrinsic(const std::string& name,
     }
 }
 
+void IRBuilder::set_kernel_attributes() {
+    // By convention, the compute kernel does not free memory and does not throw exceptions.
+    current_function->setDoesNotFreeMemory();
+    current_function->setDoesNotThrow();
+
+    // We also want to specify that the pointers that instance struct holds, do not alias. In order
+    // to do that, we add a `noalias` attribute to the argument. As per Clang's specification:
+    //  > The `noalias` attribute indicates that the only memory accesses inside function are loads
+    //  > and stores from objects pointed to by its pointer-typed arguments, with arbitrary
+    //  > offsets.
+    current_function->addParamAttr(0, llvm::Attribute::NoAlias);
+
+    // Finally, specify that the struct pointer does not capture and is read-only.
+    current_function->addParamAttr(0, llvm::Attribute::NoCapture);
+    current_function->addParamAttr(0, llvm::Attribute::ReadOnly);
+}
+
+/****************************************************************************************/
+/*                                LLVM metadata utilities                               */
+/****************************************************************************************/
+
+void IRBuilder::set_loop_metadata(llvm::BranchInst* branch) {
+    llvm::LLVMContext& context = builder.getContext();
+    MetadataVector loop_metadata;
+
+    // Add nullptr to reserve the first place for loop's metadata self-reference.
+    loop_metadata.push_back(nullptr);
+
+    // If `vector_width` is 1, explicitly disable vectorization for benchmarking purposes.
+    if (vector_width == 1) {
+        llvm::MDString* name = llvm::MDString::get(context, "llvm.loop.vectorize.enable");
+        llvm::Value* false_value = llvm::ConstantInt::get(get_boolean_type(), 0);
+        llvm::ValueAsMetadata* value = llvm::ValueAsMetadata::get(false_value);
+        loop_metadata.push_back(llvm::MDNode::get(context, {name, value}));
+    }
+
+    // No metadata to add.
+    if (loop_metadata.size() <= 1)
+        return;
+
+    // Add loop's metadata self-reference and attach it to the branch.
+    llvm::MDNode* metadata = llvm::MDNode::get(context, loop_metadata);
+    metadata->replaceOperandWith(0, metadata);
+    branch->setMetadata(llvm::LLVMContext::MD_loop, metadata);
+}
+
 /****************************************************************************************/
 /*                             LLVM instruction utilities                               */
 /****************************************************************************************/
@@ -412,10 +458,10 @@ void IRBuilder::create_br_and_set_insertion_point(llvm::BasicBlock* block) {
     builder.SetInsertPoint(block);
 }
 
-void IRBuilder::create_cond_br(llvm::Value* condition,
-                               llvm::BasicBlock* true_block,
-                               llvm::BasicBlock* false_block) {
-    builder.CreateCondBr(condition, true_block, false_block);
+llvm::BranchInst* IRBuilder::create_cond_br(llvm::Value* condition,
+                                            llvm::BasicBlock* true_block,
+                                            llvm::BasicBlock* false_block) {
+    return builder.CreateCondBr(condition, true_block, false_block);
 }
 
 llvm::BasicBlock* IRBuilder::get_current_block() {
