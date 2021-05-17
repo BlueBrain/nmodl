@@ -838,14 +838,18 @@ SCENARIO("Scalar state kernel", "[visitor][llvm]") {
             std::string module_string = run_llvm_visitor(nmodl_text);
             std::smatch m;
 
-            // Check the struct type and the kernel declaration.
+            // Check the struct type with correct attributes and the kernel declaration.
             std::regex struct_type(
                 "%.*__instance_var__type = type \\{ double\\*, double\\*, double\\*, double\\*, "
                 "double\\*, double\\*, double\\*, i32\\*, double, double, double, i32, i32 \\}");
             std::regex kernel_declaration(
-                R"(define void @nrn_state_hh\(%.*__instance_var__type\* .*\))");
+                R"(define void @nrn_state_hh\(%.*__instance_var__type\* noalias nocapture readonly .*\) #0)");
             REQUIRE(std::regex_search(module_string, m, struct_type));
             REQUIRE(std::regex_search(module_string, m, kernel_declaration));
+
+            // Check kernel attributes.
+            std::regex kernel_attributes(R"(attributes #0 = \{ nofree nounwind \})");
+            REQUIRE(std::regex_search(module_string, m, kernel_attributes));
 
             // Check for correct variables initialisation and a branch to condition block.
             std::regex id_initialisation(R"(%id = alloca i32)");
@@ -870,6 +874,15 @@ SCENARIO("Scalar state kernel", "[visitor][llvm]") {
             std::regex cond_br(R"(br i1 %.*, label %for\.body, label %for\.exit)");
             REQUIRE(std::regex_search(module_string, m, condition));
             REQUIRE(std::regex_search(module_string, m, cond_br));
+
+            // Check that loop metadata is attached to the scalar kernel.
+            std::regex loop_metadata(R"(!llvm\.loop !0)");
+            std::regex loop_metadata_self_reference(R"(!0 = distinct !\{!0, !1\})");
+            std::regex loop_metadata_disable_vectorization(
+                R"(!1 = !\{!\"llvm\.loop\.vectorize\.enable\", i1 false\})");
+            REQUIRE(std::regex_search(module_string, m, loop_metadata));
+            REQUIRE(std::regex_search(module_string, m, loop_metadata_self_reference));
+            REQUIRE(std::regex_search(module_string, m, loop_metadata_disable_vectorization));
 
             // Check for correct loads from the struct with GEPs.
             std::regex load_from_struct(
@@ -933,6 +946,10 @@ SCENARIO("Vectorised simple kernel", "[visitor][llvm]") {
                                                          /*use_single_precision=*/false,
                                                          /*vector_width=*/4);
             std::smatch m;
+
+            // Check that no loop metadata is attached.
+            std::regex loop_metadata(R"(!llvm\.loop !.*)");
+            REQUIRE(!std::regex_search(module_string, m, loop_metadata));
 
             // Check gather intrinsic is correctly declared.
             std::regex declaration(
