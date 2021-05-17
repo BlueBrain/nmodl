@@ -27,8 +27,6 @@ std::shared_ptr<ast::Program> NmodlDriver::parse_stream(std::istream& in) {
     scanner.set_debug(trace_scanner);
     parser.set_debug_level(trace_parser);
     parser.parse();
-
-
     return astRoot;
 }
 
