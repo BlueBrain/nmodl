@@ -44,6 +44,7 @@ var group__parser =
       [ "is_defined_var", "classnmodl_1_1parser_1_1_nmodl_driver.html#aae198b64c447de7512f09328af2c9553", null ],
       [ "is_verbose", "classnmodl_1_1parser_1_1_nmodl_driver.html#af25df9d99b453d873ed6586a7ae97842", null ],
       [ "parse_error", "classnmodl_1_1parser_1_1_nmodl_driver.html#a054af38fb8cc89aace91c111673566c4", null ],
+      [ "parse_error", "classnmodl_1_1parser_1_1_nmodl_driver.html#a9171b24030fc917356188f8aa129ebb8", null ],
       [ "parse_file", "classnmodl_1_1parser_1_1_nmodl_driver.html#ad131aeb77f9ec86e5105baaf53f5b5fc", null ],
       [ "parse_include", "classnmodl_1_1parser_1_1_nmodl_driver.html#a7c8c9524102909021c3f0d31f1cc61d8", null ],
       [ "parse_stream", "classnmodl_1_1parser_1_1_nmodl_driver.html#ad7acf0a51e7ab1ddbc2f5ac2a9872950", null ],

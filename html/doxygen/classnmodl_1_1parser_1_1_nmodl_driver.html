@@ -105,7 +105,7 @@ $(document).ready(function(){initNavTree('classnmodl_1_1parser_1_1_nmodl_driver.
 <dl class="todo"><dt><b><a class="el" href="todo.html#_todo000035">Todo:</a></b></dt><dd>Lexer, parser and ast member variables are used inside lexer/ parser instances. The local instaces are created inside parse_stream and hence the pointers are no longer valid except ast. Need better way to handle this.</dd></dl>
 <dl class="todo"><dt><b><a class="el" href="todo.html#_todo000036">Todo:</a></b></dt><dd>Stream name is not used as it will need better support as location object used in scanner takes string pointer which could be invalid when we copy location object. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__driver_8hpp_source.html#l00060">60</a> of file <a class="el" href="nmodl__driver_8hpp_source.html">nmodl_driver.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__driver_8hpp_source.html#l00062">62</a> of file <a class="el" href="nmodl__driver_8hpp_source.html">nmodl_driver.hpp</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="nmodl__driver_8hpp_source.html">nmodl_driver.hpp</a>&gt;</code></p>
 <div class="dynheader">
@@ -157,6 +157,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a054af38fb8cc89aace91c111673566c4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1parser_1_1_nmodl_driver.html#a054af38fb8cc89aace91c111673566c4">parse_error</a> (const location &amp;location, const std::string &amp;message)</td></tr>
 <tr class="memdesc:a054af38fb8cc89aace91c111673566c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emit a parsing error.  <a href="#a054af38fb8cc89aace91c111673566c4">More...</a><br /></td></tr>
 <tr class="separator:a054af38fb8cc89aace91c111673566c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9171b24030fc917356188f8aa129ebb8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1parser_1_1_nmodl_driver.html#a9171b24030fc917356188f8aa129ebb8">parse_error</a> (const <a class="el" href="classnmodl_1_1parser_1_1_nmodl_lexer.html">NmodlLexer</a> &amp;scanner, const location &amp;location, const std::string &amp;message)</td></tr>
+<tr class="memdesc:a9171b24030fc917356188f8aa129ebb8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emit a parsing error.  <a href="#a9171b24030fc917356188f8aa129ebb8">More...</a><br /></td></tr>
+<tr class="separator:a9171b24030fc917356188f8aa129ebb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aae8c132458d65ad91e0f8861b08957e0"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1parser_1_1_nmodl_driver.html#aae8c132458d65ad91e0f8861b08957e0">check_include_argument</a> (const location &amp;location, const std::string &amp;filename)</td></tr>
 <tr class="memdesc:aae8c132458d65ad91e0f8861b08957e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ensure <em>file</em> argument given to the INCLUDE directive is valid:  <a href="#aae8c132458d65ad91e0f8861b08957e0">More...</a><br /></td></tr>
 <tr class="separator:aae8c132458d65ad91e0f8861b08957e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -313,7 +316,7 @@ Private Attributes</h2></td></tr>
 </ul>
 <dl class="section return"><dt>Returns</dt><dd>unquoted string </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__driver_8cpp_source.html#l00142">142</a> of file <a class="el" href="nmodl__driver_8cpp_source.html">nmodl_driver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__driver_8cpp_source.html#l00153">153</a> of file <a class="el" href="nmodl__driver_8cpp_source.html">nmodl_driver.cpp</a>.</p>
 
 </div>
 </div>
@@ -342,7 +345,7 @@ Private Attributes</h2></td></tr>
 
 <p>return previously parsed AST otherwise nullptr </p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__driver_8hpp_source.html#l00125">125</a> of file <a class="el" href="nmodl__driver_8hpp_source.html">nmodl_driver.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__driver_8hpp_source.html#l00127">127</a> of file <a class="el" href="nmodl__driver_8hpp_source.html">nmodl_driver.hpp</a>.</p>
 
 </div>
 </div>
@@ -413,12 +416,12 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="nmodl__driver_8hpp_source.html#l00120">120</a> of file <a class="el" href="nmodl__driver_8hpp_source.html">nmodl_driver.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__driver_8hpp_source.html#l00122">122</a> of file <a class="el" href="nmodl__driver_8hpp_source.html">nmodl_driver.hpp</a>.</p>
 
 </div>
 </div>
 <a id="a054af38fb8cc89aace91c111673566c4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a054af38fb8cc89aace91c111673566c4">&#9670;&nbsp;</a></span>parse_error()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a054af38fb8cc89aace91c111673566c4">&#9670;&nbsp;</a></span>parse_error() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -452,6 +455,50 @@ Private Attributes</h2></td></tr>
 </dl>
 
 <p class="definition">Definition at line <a class="el" href="nmodl__driver_8cpp_source.html#l00136">136</a> of file <a class="el" href="nmodl__driver_8cpp_source.html">nmodl_driver.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a9171b24030fc917356188f8aa129ebb8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9171b24030fc917356188f8aa129ebb8">&#9670;&nbsp;</a></span>parse_error() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void nmodl::parser::NmodlDriver::parse_error </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classnmodl_1_1parser_1_1_nmodl_lexer.html">NmodlLexer</a> &amp;&#160;</td>
+          <td class="paramname"><em>scanner</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const location &amp;&#160;</td>
+          <td class="paramname"><em>location</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>message</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Emit a parsing error. </p>
+<p>Takes additionally a Lexer instance to print code context </p><dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::runtime_error</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="nmodl__driver_8cpp_source.html#l00142">142</a> of file <a class="el" href="nmodl__driver_8cpp_source.html">nmodl_driver.cpp</a>.</p>
 
 </div>
 </div>
@@ -594,7 +641,7 @@ Private Attributes</h2></td></tr>
 
 <p>set new ast root </p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__driver_8hpp_source.html#l00130">130</a> of file <a class="el" href="nmodl__driver_8hpp_source.html">nmodl_driver.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__driver_8hpp_source.html#l00132">132</a> of file <a class="el" href="nmodl__driver_8hpp_source.html">nmodl_driver.hpp</a>.</p>
 
 </div>
 </div>
@@ -622,7 +669,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="nmodl__driver_8hpp_source.html#l00116">116</a> of file <a class="el" href="nmodl__driver_8hpp_source.html">nmodl_driver.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__driver_8hpp_source.html#l00118">118</a> of file <a class="el" href="nmodl__driver_8hpp_source.html">nmodl_driver.hpp</a>.</p>
 
 </div>
 </div>
@@ -649,7 +696,7 @@ Private Attributes</h2></td></tr>
 
 <p>root of the ast </p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__driver_8hpp_source.html#l00075">75</a> of file <a class="el" href="nmodl__driver_8hpp_source.html">nmodl_driver.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__driver_8hpp_source.html#l00077">77</a> of file <a class="el" href="nmodl__driver_8hpp_source.html">nmodl_driver.hpp</a>.</p>
 
 </div>
 </div>
@@ -675,7 +722,7 @@ Private Attributes</h2></td></tr>
 
 <p>all macro defined in the mod file </p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__driver_8hpp_source.html#l00063">63</a> of file <a class="el" href="nmodl__driver_8hpp_source.html">nmodl_driver.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__driver_8hpp_source.html#l00065">65</a> of file <a class="el" href="nmodl__driver_8hpp_source.html">nmodl_driver.hpp</a>.</p>
 
 </div>
 </div>
@@ -701,7 +748,7 @@ Private Attributes</h2></td></tr>
 
 <p>The file library for IMPORT directives. </p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__driver_8hpp_source.html#l00078">78</a> of file <a class="el" href="nmodl__driver_8hpp_source.html">nmodl_driver.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__driver_8hpp_source.html#l00080">80</a> of file <a class="el" href="nmodl__driver_8hpp_source.html">nmodl_driver.hpp</a>.</p>
 
 </div>
 </div>
@@ -728,7 +775,7 @@ Private Attributes</h2></td></tr>
 <p>The list of open files, and the location of the request. </p>
 <p><em>nullptr</em> is pushed as location for the top NMODL file </p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__driver_8hpp_source.html#l00082">82</a> of file <a class="el" href="nmodl__driver_8hpp_source.html">nmodl_driver.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__driver_8hpp_source.html#l00084">84</a> of file <a class="el" href="nmodl__driver_8hpp_source.html">nmodl_driver.hpp</a>.</p>
 
 </div>
 </div>
@@ -746,7 +793,7 @@ Private Attributes</h2></td></tr>
 
 <p>file or input stream name (used by scanner for position), see todo </p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__driver_8hpp_source.html#l00086">86</a> of file <a class="el" href="nmodl__driver_8hpp_source.html">nmodl_driver.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__driver_8hpp_source.html#l00088">88</a> of file <a class="el" href="nmodl__driver_8hpp_source.html">nmodl_driver.hpp</a>.</p>
 
 </div>
 </div>
@@ -772,7 +819,7 @@ Private Attributes</h2></td></tr>
 
 <p>enable debug output in the bison parser </p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__driver_8hpp_source.html#l00069">69</a> of file <a class="el" href="nmodl__driver_8hpp_source.html">nmodl_driver.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__driver_8hpp_source.html#l00071">71</a> of file <a class="el" href="nmodl__driver_8hpp_source.html">nmodl_driver.hpp</a>.</p>
 
 </div>
 </div>
@@ -798,7 +845,7 @@ Private Attributes</h2></td></tr>
 
 <p>enable debug output in the flex scanner </p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__driver_8hpp_source.html#l00066">66</a> of file <a class="el" href="nmodl__driver_8hpp_source.html">nmodl_driver.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__driver_8hpp_source.html#l00068">68</a> of file <a class="el" href="nmodl__driver_8hpp_source.html">nmodl_driver.hpp</a>.</p>
 
 </div>
 </div>
@@ -824,7 +871,7 @@ Private Attributes</h2></td></tr>
 
 <p>print messages from lexer/parser </p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__driver_8hpp_source.html#l00072">72</a> of file <a class="el" href="nmodl__driver_8hpp_source.html">nmodl_driver.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__driver_8hpp_source.html#l00074">74</a> of file <a class="el" href="nmodl__driver_8hpp_source.html">nmodl_driver.hpp</a>.</p>
 
 </div>
 </div>

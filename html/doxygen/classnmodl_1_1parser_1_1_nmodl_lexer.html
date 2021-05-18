@@ -132,6 +132,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4e4206794594a59fa84a6a7cac916099"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classnmodl_1_1ast_1_1_string.html">ast::String</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1parser_1_1_nmodl_lexer.html#a4e4206794594a59fa84a6a7cac916099">get_unit</a> ()</td></tr>
 <tr class="memdesc:a4e4206794594a59fa84a6a7cac916099"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return last scanned unit as <a class="el" href="classnmodl_1_1ast_1_1_string.html" title="Represents a string. ">ast::String</a>.  <a href="#a4e4206794594a59fa84a6a7cac916099">More...</a><br /></td></tr>
 <tr class="separator:a4e4206794594a59fa84a6a7cac916099"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adaa888bea58658b3a8a65f1173e8107a"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1parser_1_1_nmodl_lexer.html#adaa888bea58658b3a8a65f1173e8107a">get_curr_line</a> () const</td></tr>
+<tr class="memdesc:adaa888bea58658b3a8a65f1173e8107a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return current line as string.  <a href="#adaa888bea58658b3a8a65f1173e8107a">More...</a><br /></td></tr>
+<tr class="separator:adaa888bea58658b3a8a65f1173e8107a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a33ddb8ff773e0cf24ff81074b8c43a94"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1parser_1_1_nmodl_lexer.html#a33ddb8ff773e0cf24ff81074b8c43a94">set_debug</a> (bool b)</td></tr>
 <tr class="memdesc:a33ddb8ff773e0cf24ff81074b8c43a94"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable debug output (via yyout) if compiled into the scanner.  <a href="#a33ddb8ff773e0cf24ff81074b8c43a94">More...</a><br /></td></tr>
 <tr class="separator:a33ddb8ff773e0cf24ff81074b8c43a94"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -159,6 +162,8 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:ab3b36d866d05d1ec206f410a7ea867e7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1parser_1_1_nmodl_lexer.html#ab3b36d866d05d1ec206f410a7ea867e7">lexical_context</a> = 0</td></tr>
 <tr class="memdesc:ab3b36d866d05d1ec206f410a7ea867e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Context of the reaction (<code>~</code>) token.  <a href="#ab3b36d866d05d1ec206f410a7ea867e7">More...</a><br /></td></tr>
 <tr class="separator:ab3b36d866d05d1ec206f410a7ea867e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc79edab896efcd7b2ef1535b6e0c68c"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1parser_1_1_nmodl_lexer.html#adc79edab896efcd7b2ef1535b6e0c68c">cur_line</a></td></tr>
+<tr class="separator:adc79edab896efcd7b2ef1535b6e0c68c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aa4942b591afe90c03776a7ccf372a304"></a>
@@ -211,7 +216,7 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__lexer_8hpp_source.html#l00097">97</a> of file <a class="el" href="nmodl__lexer_8hpp_source.html">nmodl_lexer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__lexer_8hpp_source.html#l00099">99</a> of file <a class="el" href="nmodl__lexer_8hpp_source.html">nmodl_lexer.hpp</a>.</p>
 
 </div>
 </div>
@@ -241,6 +246,25 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="adaa888bea58658b3a8a65f1173e8107a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adaa888bea58658b3a8a65f1173e8107a">&#9670;&nbsp;</a></span>get_curr_line()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string nmodl::parser::NmodlLexer::get_curr_line </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return current line as string. </p>
+
+</div>
+</div>
 <a id="a4e4206794594a59fa84a6a7cac916099"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4e4206794594a59fa84a6a7cac916099">&#9670;&nbsp;</a></span>get_unit()</h2>
 
@@ -335,7 +359,7 @@ Private Attributes</h2></td></tr>
 <p>Reset the column position of lexer to 0. </p>
 <p>Due to COPY mode the end position is not accurate. Set column to 0 to avoid confusion (see JIRA issue NOCMODL-25) </p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__lexer_8hpp_source.html#l00113">113</a> of file <a class="el" href="nmodl__lexer_8hpp_source.html">nmodl_lexer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__lexer_8hpp_source.html#l00115">115</a> of file <a class="el" href="nmodl__lexer_8hpp_source.html">nmodl_lexer.hpp</a>.</p>
 
 </div>
 </div>
@@ -380,6 +404,30 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="adc79edab896efcd7b2ef1535b6e0c68c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc79edab896efcd7b2ef1535b6e0c68c">&#9670;&nbsp;</a></span>cur_line</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string nmodl::parser::NmodlLexer::cur_line</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="nmodl__lexer_8hpp_source.html#l00083">83</a> of file <a class="el" href="nmodl__lexer_8hpp_source.html">nmodl_lexer.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a1910e25d34edffb39c637474cc1b0d00"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1910e25d34edffb39c637474cc1b0d00">&#9670;&nbsp;</a></span>driver</h2>
 
@@ -479,7 +527,7 @@ Private Attributes</h2></td></tr>
 
 <p>location of the parsed token </p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__lexer_8hpp_source.html#l00085">85</a> of file <a class="el" href="nmodl__lexer_8hpp_source.html">nmodl_lexer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__lexer_8hpp_source.html#l00087">87</a> of file <a class="el" href="nmodl__lexer_8hpp_source.html">nmodl_lexer.hpp</a>.</p>
 
 </div>
 </div>

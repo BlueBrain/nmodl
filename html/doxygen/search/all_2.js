@@ -169,6 +169,7 @@ var searchData=
   ['created',['created',['../namespacenmodl_1_1symtab_1_1syminfo.html#a7d0b8aa765db0de7491021b4d403b6e2ae2fa538867c3830a859a5b17ab24644b',1,'nmodl::symtab::syminfo']]],
   ['created_5ffrom_5fstate',['created_from_state',['../classnmodl_1_1symtab_1_1_symbol.html#a5a1302bdfdad4d741e4d65753bd926a7',1,'nmodl::symtab::Symbol']]],
   ['cubic_5froot_5fulp',['CUBIC_ROOT_ULP',['../group__solver.html#ga2a36c7e8409472bead4d159274842d41',1,'nmodl::newton']]],
+  ['cur_5fline',['cur_line',['../classnmodl_1_1parser_1_1_nmodl_lexer.html#adc79edab896efcd7b2ef1535b6e0c68c',1,'nmodl::parser::NmodlLexer']]],
   ['current_5fbinary_5fexpression',['current_binary_expression',['../classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html#af41d9d4cbc0cb2867609d4f93b468222',1,'nmodl::visitor::DefUseAnalyzeVisitor']]],
   ['current_5fblock_5fperf',['current_block_perf',['../classnmodl_1_1visitor_1_1_perf_visitor.html#a7f3b849e28b64af3552cf1b3ee1cc107',1,'nmodl::visitor::PerfVisitor']]],
   ['current_5fchain',['current_chain',['../classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html#a9799e901703b031549fa3d98b89e37c8',1,'nmodl::visitor::DefUseAnalyzeVisitor']]],
