@@ -319,12 +319,16 @@ llvm::Value* IRBuilder::create_index(llvm::Value* value) {
 llvm::Value* IRBuilder::create_load(const std::string& name) {
     llvm::Value* ptr = lookup_value(name);
     llvm::Type* loaded_type = ptr->getType()->getPointerElementType();
-    return builder.CreateLoad(loaded_type, ptr);
+    llvm::Value* loaded = builder.CreateLoad(loaded_type, ptr);
+    value_stack.push_back(loaded);
+    return loaded;
 }
 
 llvm::Value* IRBuilder::create_load(llvm::Value* ptr) {
     llvm::Type* loaded_type = ptr->getType()->getPointerElementType();
-    return builder.CreateLoad(loaded_type, ptr);
+    llvm::Value* loaded = builder.CreateLoad(loaded_type, ptr);
+    value_stack.push_back(loaded);
+    return loaded;
 }
 
 llvm::Value* IRBuilder::create_load_from_array(const std::string& name, llvm::Value* index) {
