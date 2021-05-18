@@ -16,6 +16,9 @@
 #include "test/unit/codegen/codegen_data_helper.hpp"
 
 
+void nrn_state_hh_intel(void*);
+
+
 namespace nmodl {
 namespace benchmark {
 
@@ -146,6 +149,27 @@ void LLVMBenchmark::run_benchmark(const std::shared_ptr<ast::Program>& node) {
         logger->info("Minimum compute time = {:.6f}", time_min);
         logger->info("Maximum compute time = {:.6f}\n", time_max);
     }
+    // benchmark intel kernel
+    logger->info("Benchmarking external intel kernel");
+    // Initialise the data.
+    auto instance_data = codegen_data.create_data(instance_size, /*seed=*/1);
+    double time_sum = 0.0;
+    for (int i = 0; i < num_experiments; ++i) {
+        // Record the execution time of the kernel.
+        auto start = std::chrono::high_resolution_clock::now();
+        nrn_state_hh_intel(instance_data.base_ptr);
+        auto end = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> diff = end - start;
+
+        // Log the time taken for each run.
+        logger->info("Experiment {} compute time = {:.6f} sec", i, diff.count());
+
+        time_sum += diff.count();
+    }
+    // Log the average time taken for the kernel.
+    logger->info("Average compute time = {:.6f} \n", time_sum / num_experiments);
+
+    // For every kernel run the benchmark `num_experiments` times.
 }
 
 }  // namespace benchmark
