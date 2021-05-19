@@ -150,7 +150,7 @@ void LLVMBenchmark::run_benchmark(const std::shared_ptr<ast::Program>& node) {
         logger->info("Maximum compute time = {:.6f}\n", time_max);
     }
     // benchmark intel kernel
-    logger->info("Benchmarking external intel kernel");
+    logger->info("Benchmarking external kernel");
     // Initialise the data.
     auto instance_data = codegen_data.create_data(instance_size, /*seed=*/1);
     double time_sum = 0.0;
