@@ -82,13 +82,13 @@ class IRBuilder {
     /// Transforms the  fast math flags provided to the builder into LLVM's representation.
     llvm::FastMathFlags transform_to_fmf(std::vector<std::string>& flags) {
         static const std::map<std::string, void (llvm::FastMathFlags::*)(bool)> set_flag = {
-                {"nnan", &llvm::FastMathFlags::setNoNaNs},
-                {"ninf", &llvm::FastMathFlags::setNoInfs},
-                {"nsz", &llvm::FastMathFlags::setNoSignedZeros},
-                {"contract", &llvm::FastMathFlags::setAllowContract},
-                {"afn", &llvm::FastMathFlags::setApproxFunc},
-                {"reassoc", &llvm::FastMathFlags::setAllowReassoc},
-                {"fast", &llvm::FastMathFlags::setFast}};
+            {"nnan", &llvm::FastMathFlags::setNoNaNs},
+            {"ninf", &llvm::FastMathFlags::setNoInfs},
+            {"nsz", &llvm::FastMathFlags::setNoSignedZeros},
+            {"contract", &llvm::FastMathFlags::setAllowContract},
+            {"afn", &llvm::FastMathFlags::setApproxFunc},
+            {"reassoc", &llvm::FastMathFlags::setAllowReassoc},
+            {"fast", &llvm::FastMathFlags::setFast}};
         llvm::FastMathFlags fmf;
         for (const auto& flag: flags) {
             (fmf.*(set_flag.at(flag)))(true);
