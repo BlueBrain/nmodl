@@ -71,7 +71,7 @@ std::vector<std::shared_ptr<ast::Ast>> run_llvm_visitor_helper(
 
     SymtabVisitor().visit_program(*ast);
     SolveBlockVisitor().visit_program(*ast);
-    CodegenLLVMHelperVisitor(vector_width).visit_program(*ast);
+    CodegenLLVMHelperVisitor(vector_width, /*nmodl_inline*/false).visit_program(*ast);
 
     const auto& nodes = collect_nodes(*ast, nodes_to_collect);
 
