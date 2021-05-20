@@ -204,6 +204,9 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     /// Creates a call to `printf` function.
     void create_printf_call(const ast::ExpressionVector& arguments);
 
+    /// Creates a vectorized version of the LLVM IR for the simple control flow statement.
+    void create_vectorized_control_flow_block(const ast::IfStatement& node);
+
     /// Returns LLVM type for the given CodegenVarType AST node.
     llvm::Type* get_codegen_var_type(const ast::CodegenVarType& node);
 
