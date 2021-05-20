@@ -601,12 +601,12 @@ void CodegenLLVMVisitor::visit_codegen_for_statement(const ast::CodegenForStatem
 void CodegenLLVMVisitor::visit_codegen_function(const ast::CodegenFunction& node) {
     const auto& name = node.get_node_name();
     const auto& arguments = node.get_arguments();
-    llvm::Function* func = module->getFunction(name);
-    ir_builder.set_function(func);
 
     // Create the entry basic block of the function/procedure and point the local named values table
     // to the symbol table.
+    llvm::Function* func = module->getFunction(name);
     ir_builder.create_block_and_set_insertion_point(func);
+    ir_builder.set_function(func);
 
     // When processing a function, it returns a value named <function_name> in NMODL. Therefore, we
     // first run RenameVisitor to rename it into ret_<function_name>. This will aid in avoiding
