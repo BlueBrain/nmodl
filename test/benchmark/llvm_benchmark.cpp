@@ -178,7 +178,7 @@ void LLVMBenchmark::run_benchmark(const std::shared_ptr<ast::Program>& node) {
     logger->info("Compute time variance = {:g}",
                     time_squared_sum / num_experiments - time_mean * time_mean);
     logger->info("Minimum compute time = {:.6f}", time_min);
-    logger->info("Minimum compute time = {:.6f}\n", time_max);
+    logger->info("Maximum compute time = {:.6f}\n", time_max);
 
 }
 

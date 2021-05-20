@@ -10,6 +10,4 @@
 #include <iostream>
 
 // external kernel stub
-void nrn_state_hh_ext(void* ){
-    std::cout << "stub kernel" << '\n';
-}
+void nrn_state_hh_ext(void* ){}
