@@ -113,14 +113,15 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
                        bool use_single_precision = false,
                        int vector_width = 1,
                        std::string vec_lib = "none",
-                       bool add_debug_information = false)
+                       bool add_debug_information = false,
+                       std::vector<std::string> fast_math_flags = {})
         : mod_filename(mod_filename)
         , output_dir(output_dir)
         , opt_passes(opt_passes)
         , vector_width(vector_width)
         , vector_library(veclib_map.at(vec_lib))
         , add_debug_information(add_debug_information)
-        , ir_builder(*context, use_single_precision, vector_width)
+        , ir_builder(*context, use_single_precision, vector_width, fast_math_flags)
         , debug_builder(*module)
         , codegen_pm(module.get())
         , opt_pm(module.get()) {}
