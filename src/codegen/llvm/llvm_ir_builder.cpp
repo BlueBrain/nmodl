@@ -165,9 +165,26 @@ void IRBuilder::create_function_call(llvm::Function* callee,
 void IRBuilder::create_intrinsic(const std::string& name,
                                  ValueVector& argument_values,
                                  TypeVector& argument_types) {
+    // Process 'pow' call separately.
+    if (name == "pow") {
+        llvm::Value* pow_intrinsic = builder.CreateIntrinsic(llvm::Intrinsic::pow,
+                                                             {argument_types.front()},
+                                                             argument_values);
+        value_stack.push_back(pow_intrinsic);
+        return;
+    }
+
+    // Create other intrinsics.
     unsigned intrinsic_id = llvm::StringSwitch<llvm::Intrinsic::ID>(name)
+                                .Case("ceil", llvm::Intrinsic::ceil)
+                                .Case("cos", llvm::Intrinsic::cos)
                                 .Case("exp", llvm::Intrinsic::exp)
-                                .Case("pow", llvm::Intrinsic::pow)
+                                .Case("fabs", llvm::Intrinsic::fabs)
+                                .Case("floor", llvm::Intrinsic::floor)
+                                .Case("log", llvm::Intrinsic::log)
+                                .Case("log10", llvm::Intrinsic::log10)
+                                .Case("sin", llvm::Intrinsic::sin)
+                                .Case("sqrt", llvm::Intrinsic::sqrt)
                                 .Default(llvm::Intrinsic::not_intrinsic);
     if (intrinsic_id) {
         llvm::Value* intrinsic =
@@ -266,6 +283,11 @@ void IRBuilder::create_binary_op(llvm::Value* lhs, llvm::Value* rhs, ast::Binary
         DISPATCH(ast::BinaryOp::BOP_NOT_EQUAL, builder.CreateFCmpONE, builder.CreateICmpNE);
 
 #undef DISPATCH
+
+    // Separately replace ^ with the `pow` intrinsic.
+    case ast::BinaryOp::BOP_POWER:
+        result = builder.CreateIntrinsic(llvm::Intrinsic::pow, {lhs->getType()}, {lhs, rhs});
+        break;
 
     // Logical instructions.
     case ast::BinaryOp::BOP_AND:
