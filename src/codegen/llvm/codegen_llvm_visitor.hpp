@@ -51,7 +51,7 @@ namespace codegen {
 /// A map to query vector library by its string value.
 static const std::map<std::string, llvm::TargetLibraryInfoImpl::VectorLibrary> veclib_map = {
     {"Accelerate", llvm::TargetLibraryInfoImpl::Accelerate},
-#ifndef LLVM_VERSION_LESS_THAN_13
+#if LLVM_VERSION_MAJOR >= 13
     {"libmvec", llvm::TargetLibraryInfoImpl::LIBMVEC_X86},
 #endif
     {"MASSV", llvm::TargetLibraryInfoImpl::MASSV},
