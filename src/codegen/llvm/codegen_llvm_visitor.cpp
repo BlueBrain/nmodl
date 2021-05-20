@@ -20,7 +20,7 @@
 #include "llvm/Support/Host.h"
 #include "llvm/Support/ToolOutputFile.h"
 
-#ifndef LLVM_VERSION_LESS_THAN_13
+#if LLVM_VERSION_MAJOR >= 13
 #include "llvm/CodeGen/ReplaceWithVeclib.h"
 #endif
 
@@ -819,7 +819,7 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
 
     // Optionally, replace LLVM's maths intrinsics with vector library calls.
     if (vector_width > 1 && vector_library != llvm::TargetLibraryInfoImpl::NoLibrary) {
-#ifdef LLVM_VERSION_LESS_THAN_13
+#if LLVM_VERSION_MAJOR < 13
         logger->warn(
             "This version of LLVM does not support replacement of LLVM intrinsics with vector "
             "library calls");

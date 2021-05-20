@@ -107,15 +107,21 @@ void LLVMBenchmark::run_benchmark(const std::shared_ptr<ast::Program>& node) {
 
     // Benchmark every kernel.
     for (const auto& kernel_name: kernel_names) {
-        // Initialise the data.
-        auto instance_data = codegen_data.create_data(instance_size, /*seed=*/1);
-
-        double size_mbs = instance_data.num_bytes / (1024.0 * 1024.0);
-        logger->info("Benchmarking kernel '{}' with {} MBs dataset", kernel_name, size_mbs);
-
         // For every kernel run the benchmark `num_experiments` times.
+        double time_min = std::numeric_limits<double>::max();
+        double time_max = 0.0;
         double time_sum = 0.0;
+        double time_squared_sum = 0.0;
         for (int i = 0; i < num_experiments; ++i) {
+            // Initialise the data.
+            auto instance_data = codegen_data.create_data(instance_size, /*seed=*/1);
+
+            // Log instance size once.
+            if (i == 0) {
+                double size_mbs = instance_data.num_bytes / (1024.0 * 1024.0);
+                logger->info("Benchmarking kernel '{}' with {} MBs dataset", kernel_name, size_mbs);
+            }
+
             // Record the execution time of the kernel.
             std::string wrapper_name = "__" + kernel_name + "_wrapper";
             auto start = std::chrono::high_resolution_clock::now();
@@ -126,10 +132,19 @@ void LLVMBenchmark::run_benchmark(const std::shared_ptr<ast::Program>& node) {
             // Log the time taken for each run.
             logger->info("Experiment {} compute time = {:.6f} sec", i, diff.count());
 
+            // Update statistics.
             time_sum += diff.count();
+            time_squared_sum += diff.count() * diff.count();
+            time_min = std::min(time_min, diff.count());
+            time_max = std::max(time_max, diff.count());
         }
         // Log the average time taken for the kernel.
-        logger->info("Average compute time = {:.6f} \n", time_sum / num_experiments);
+        double time_mean = time_sum / num_experiments;
+        logger->info("Average compute time = {:.6f}", time_mean);
+        logger->info("Compute time variance = {:g}",
+                     time_squared_sum / num_experiments - time_mean * time_mean);
+        logger->info("Minimum compute time = {:.6f}", time_min);
+        logger->info("Minimum compute time = {:.6f}\n", time_max);
     }
 }
 
