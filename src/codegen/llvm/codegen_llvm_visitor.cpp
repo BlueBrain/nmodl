@@ -54,11 +54,15 @@ static bool can_vectorize(const ast::CodegenForStatement& statement, symtab::Sym
             return false;
     }
 
-    // Check there is no control flow in the kernel.
-    const std::vector<ast::AstNodeType> unsupported_nodes = {ast::AstNodeType::IF_STATEMENT};
-    const auto& collected = collect_nodes(statement, unsupported_nodes);
+    // Check for simple supported control flow in the kernel (single if/else statement).
+    const std::vector<ast::AstNodeType> supported_control_flow = {ast::AstNodeType::IF_STATEMENT};
+    const auto& supported = collect_nodes(statement, supported_control_flow);
 
-    return collected.empty();
+    // Check for unsupported control flow statements.
+    const std::vector<ast::AstNodeType> unsupported_nodes = {ast::AstNodeType::ELSE_IF_STATEMENT};
+    const auto& unsupported = collect_nodes(statement, unsupported_nodes);
+
+    return unsupported.empty() && supported.size() <= 1;
 }
 
 llvm::Value* CodegenLLVMVisitor::accept_and_get(const std::shared_ptr<ast::Node>& node) {
@@ -160,6 +164,27 @@ void CodegenLLVMVisitor::create_printf_call(const ast::ExpressionVector& argumen
     argument_values.reserve(arguments.size());
     create_function_call_arguments(arguments, argument_values);
     ir_builder.create_function_call(printf, argument_values, /*use_result=*/false);
+}
+
+void CodegenLLVMVisitor::create_vectorized_control_flow_block(const ast::IfStatement& node) {
+    // Get the true mask from the condition statement.
+    llvm::Value* true_mask = accept_and_get(node.get_condition());
+
+    // Process the true block.
+    ir_builder.set_mask(true_mask);
+    node.get_statement_block()->accept(*this);
+
+    // Note: by default, we do not support kernels with complicated control flow. This is checked
+    // prior to visiting 'CodegenForStatement`.
+    const auto& elses = node.get_elses();
+    if (elses) {
+        // If `else` statement exists, invert the mask and proceed with code generation.
+        ir_builder.invert_mask();
+        elses->get_statement_block()->accept(*this);
+    }
+
+    // Clear the mask value.
+    ir_builder.clear_mask();
 }
 
 void CodegenLLVMVisitor::find_kernel_names(std::vector<std::string>& container) {
@@ -325,7 +350,8 @@ llvm::Value* CodegenLLVMVisitor::read_variable(const ast::VarName& node) {
     const auto& identifier = node.get_name();
 
     if (identifier->is_name()) {
-        return ir_builder.create_load(node.get_node_name());
+        return ir_builder.create_load(node.get_node_name(),
+                                      /*masked=*/ir_builder.generates_predicated_ir());
     }
 
     if (identifier->is_indexed_name()) {
@@ -522,8 +548,8 @@ void CodegenLLVMVisitor::visit_codegen_atomic_statement(const ast::CodegenAtomic
 //  | <code after for loop>     |
 //  +---------------------------+
 void CodegenLLVMVisitor::visit_codegen_for_statement(const ast::CodegenForStatement& node) {
-    // Disable vector code generation for condition and increment blocks.
-    ir_builder.stop_vectorization();
+    // Condition and increment blocks must be scalar.
+    ir_builder.generate_scalar_ir();
 
     // Get the current and the next blocks within the function.
     llvm::BasicBlock* curr_block = ir_builder.get_current_block();
@@ -538,21 +564,11 @@ void CodegenLLVMVisitor::visit_codegen_for_statement(const ast::CodegenForStatem
     llvm::BasicBlock* for_inc = llvm::BasicBlock::Create(*context, /*Name=*/"for.inc", func, next);
     llvm::BasicBlock* exit = llvm::BasicBlock::Create(*context, /*Name=*/"for.exit", func, next);
 
-    // Check if the kernel can be vectorised. If not, generate scalar code.
-    if (!can_vectorize(node, sym_tab)) {
-        logger->info("Cannot vectorise the for loop in '" + ir_builder.get_current_function_name() +
-                     "'");
-        logger->info("Generating scalar code...");
-        vector_width = 1;
-        ir_builder.generate_scalar_code();
-    }
-
-    // First, initialise the loop in the same basic block. This block is optional. Also, generate
-    // scalar code if processing the remainder of the loop.
-    if (node.get_initialization())
-        node.get_initialization()->accept(*this);
-    else
-        ir_builder.generate_scalar_code();
+    // First, initialize the loop in the same basic block. If processing the remainder of the loop,
+    // no initialization happens.
+    const auto& main_loop_initialization = node.get_initialization();
+    if (main_loop_initialization)
+        main_loop_initialization->accept(*this);
 
     // Branch to condition basic block and insert condition code there.
     ir_builder.create_br_and_set_insertion_point(for_cond);
@@ -561,22 +577,24 @@ void CodegenLLVMVisitor::visit_codegen_for_statement(const ast::CodegenForStatem
     llvm::Value* cond = accept_and_get(node.get_condition());
     llvm::BranchInst* loop_br = ir_builder.create_cond_br(cond, for_body, exit);
     ir_builder.set_loop_metadata(loop_br);
+    ir_builder.set_insertion_point(for_body);
+
+    // If not processing remainder of the loop, start vectorization.
+    if (vector_width > 1 && main_loop_initialization)
+        ir_builder.generate_vector_ir();
 
     // Generate code for the loop body and create the basic block for the increment.
-    ir_builder.set_insertion_point(for_body);
-    ir_builder.start_vectorization();
     const auto& statement_block = node.get_statement_block();
     statement_block->accept(*this);
-    ir_builder.stop_vectorization();
+    ir_builder.generate_scalar_ir();
     ir_builder.create_br_and_set_insertion_point(for_inc);
-    // Process increment.
+
+    // Process the increment.
     node.get_increment()->accept(*this);
 
     // Create a branch to condition block, then generate exit code out of the loop.
     ir_builder.create_br(for_cond);
     ir_builder.set_insertion_point(exit);
-    ir_builder.generate_vectorized_code();
-    ir_builder.start_vectorization();
 }
 
 
@@ -601,12 +619,12 @@ void CodegenLLVMVisitor::visit_codegen_function(const ast::CodegenFunction& node
     // Allocate parameters on the stack and add them to the symbol table.
     ir_builder.allocate_function_arguments(func, arguments);
 
-    // Process function or procedure body. If the function is a compute kernel, then set the
-    // corresponding flags. If so, the return statement is handled in a separate visitor.
-    if (is_kernel_function(name)) {
-        ir_builder.start_vectorization();
+    // Process function or procedure body. If the function is a compute kernel, enable
+    // vectorization. If so, the return statement is handled in a separate visitor.
+    if (vector_width > 1 && is_kernel_function(name)) {
+        ir_builder.generate_vector_ir();
         block->accept(*this);
-        ir_builder.stop_vectorization();
+        ir_builder.generate_scalar_ir();
     } else {
         block->accept(*this);
     }
@@ -676,6 +694,12 @@ void CodegenLLVMVisitor::visit_function_call(const ast::FunctionCall& node) {
 }
 
 void CodegenLLVMVisitor::visit_if_statement(const ast::IfStatement& node) {
+    // If vectorizing the compute kernel with control flow, process it separately.
+    if (vector_width > 1 && ir_builder.vectorizing()) {
+        create_vectorized_control_flow_block(node);
+        return;
+    }
+
     // Get the current and the next blocks within the function.
     llvm::BasicBlock* curr_block = ir_builder.get_current_block();
     llvm::BasicBlock* next = curr_block->getNextNode();
