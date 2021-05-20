@@ -141,7 +141,7 @@ void LLVMBenchmark::run_benchmark(const std::shared_ptr<ast::Program>& node) {
         // Log the average time taken for the kernel.
         double time_mean = time_sum / num_experiments;
         logger->info("Average compute time = {:.6f}", time_mean);
-        logger->info("Compute time variance = {:.6f}",
+        logger->info("Compute time variance = {:g}",
                      time_squared_sum / num_experiments - time_mean * time_mean);
         logger->info("Minimum compute time = {:.6f}", time_min);
         logger->info("Minimum compute time = {:.6f}\n", time_max);
