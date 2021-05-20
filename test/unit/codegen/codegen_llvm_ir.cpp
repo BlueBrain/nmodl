@@ -515,8 +515,44 @@ SCENARIO("Function call", "[visitor][llvm]") {
 
     GIVEN("A call to external method") {
         std::string nmodl_text = R"(
-            FUNCTION bar(i) {
-                bar = exp(i)
+            FUNCTION nmodl_ceil(x) {
+                nmodl_ceil = ceil(x)
+            }
+
+            FUNCTION nmodl_cos(x) {
+                nmodl_cos = cos(x)
+            }
+
+            FUNCTION nmodl_exp(x) {
+                nmodl_exp = exp(x)
+            }
+
+            FUNCTION nmodl_fabs(x) {
+                nmodl_fabs = fabs(x)
+            }
+
+            FUNCTION nmodl_floor(x) {
+                nmodl_floor = floor(x)
+            }
+
+            FUNCTION nmodl_log(x) {
+                nmodl_log = log(x)
+            }
+
+            FUNCTION nmodl_log10(x) {
+                nmodl_log10 = log10(x)
+            }
+
+            FUNCTION nmodl_pow(x, y) {
+                nmodl_pow = pow(x, y)
+            }
+
+            FUNCTION nmodl_sin(x) {
+                nmodl_sin = sin(x)
+            }
+
+            FUNCTION nmodl_sqrt(x) {
+                nmodl_sqrt = sqrt(x)
             }
         )";
 
@@ -524,13 +560,49 @@ SCENARIO("Function call", "[visitor][llvm]") {
             std::string module_string = run_llvm_visitor(nmodl_text);
             std::smatch m;
 
-            // Check for intrinsic declaration.
+            // Check for intrinsic declarations.
+            std::regex ceil(R"(declare double @llvm\.ceil\.f64\(double\))");
+            std::regex cos(R"(declare double @llvm\.cos\.f64\(double\))");
             std::regex exp(R"(declare double @llvm\.exp\.f64\(double\))");
+            std::regex fabs(R"(declare double @llvm\.fabs\.f64\(double\))");
+            std::regex floor(R"(declare double @llvm\.floor\.f64\(double\))");
+            std::regex log(R"(declare double @llvm\.log\.f64\(double\))");
+            std::regex log10(R"(declare double @llvm\.log10\.f64\(double\))");
+            std::regex pow(R"(declare double @llvm\.pow\.f64\(double, double\))");
+            std::regex sin(R"(declare double @llvm\.sin\.f64\(double\))");
+            std::regex sqrt(R"(declare double @llvm\.sqrt\.f64\(double\))");
+            REQUIRE(std::regex_search(module_string, m, ceil));
+            REQUIRE(std::regex_search(module_string, m, cos));
             REQUIRE(std::regex_search(module_string, m, exp));
+            REQUIRE(std::regex_search(module_string, m, fabs));
+            REQUIRE(std::regex_search(module_string, m, floor));
+            REQUIRE(std::regex_search(module_string, m, log));
+            REQUIRE(std::regex_search(module_string, m, log10));
+            REQUIRE(std::regex_search(module_string, m, pow));
+            REQUIRE(std::regex_search(module_string, m, sin));
+            REQUIRE(std::regex_search(module_string, m, sqrt));
 
             // Check the correct call is made.
-            std::regex call(R"(call double @llvm\.exp\.f64\(double %[0-9]+\))");
-            REQUIRE(std::regex_search(module_string, m, call));
+            std::regex ceil_call(R"(call double @llvm\.ceil\.f64\(double %[0-9]+\))");
+            std::regex cos_call(R"(call double @llvm\.cos\.f64\(double %[0-9]+\))");
+            std::regex exp_call(R"(call double @llvm\.exp\.f64\(double %[0-9]+\))");
+            std::regex fabs_call(R"(call double @llvm\.fabs\.f64\(double %[0-9]+\))");
+            std::regex floor_call(R"(call double @llvm\.floor\.f64\(double %[0-9]+\))");
+            std::regex log_call(R"(call double @llvm\.log\.f64\(double %[0-9]+\))");
+            std::regex log10_call(R"(call double @llvm\.log10\.f64\(double %[0-9]+\))");
+            std::regex pow_call(R"(call double @llvm\.pow\.f64\(double %[0-9]+, double %[0-9]+\))");
+            std::regex sin_call(R"(call double @llvm\.sin\.f64\(double %[0-9]+\))");
+            std::regex sqrt_call(R"(call double @llvm\.sqrt\.f64\(double %[0-9]+\))");
+            REQUIRE(std::regex_search(module_string, m, ceil_call));
+            REQUIRE(std::regex_search(module_string, m, cos_call));
+            REQUIRE(std::regex_search(module_string, m, exp_call));
+            REQUIRE(std::regex_search(module_string, m, fabs_call));
+            REQUIRE(std::regex_search(module_string, m, floor_call));
+            REQUIRE(std::regex_search(module_string, m, log_call));
+            REQUIRE(std::regex_search(module_string, m, log10_call));
+            REQUIRE(std::regex_search(module_string, m, pow_call));
+            REQUIRE(std::regex_search(module_string, m, sin_call));
+            REQUIRE(std::regex_search(module_string, m, sqrt_call));
         }
     }
 
