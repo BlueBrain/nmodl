@@ -229,11 +229,19 @@ void IRBuilder::set_loop_metadata(llvm::BranchInst* branch) {
 /****************************************************************************************/
 
 llvm::Value* IRBuilder::create_alloca(const std::string& name, llvm::Type* type) {
-    // If insertion point for `alloca` instructions is not set, then set the first processed
-    // instruction to be the insertion point.
+    // If insertion point for `alloca` instructions is not set, then create the instruction in the
+    // entry block and set it to be the insertion point.
     if (!alloca_ip) {
+        // Get the entry block and insert the `alloca` instruction there.
+        llvm::BasicBlock* current_block = builder.GetInsertBlock();
+        llvm::BasicBlock& entry_block = current_block->getParent()->getEntryBlock();
+        builder.SetInsertPoint(&entry_block);
         llvm::Value* alloca = builder.CreateAlloca(type, /*ArraySize=*/nullptr, name);
+
+        // Set the `alloca` instruction insertion point and restore the insertion point for the next
+        // set of instructions.
         alloca_ip = llvm::cast<llvm::AllocaInst>(alloca);
+        builder.SetInsertPoint(current_block);
         return alloca;
     }
 
