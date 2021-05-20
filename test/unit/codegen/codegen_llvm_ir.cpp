@@ -1021,6 +1021,75 @@ SCENARIO("Vectorised simple kernel with ion writes", "[visitor][llvm]") {
 }
 
 //=============================================================================
+// Vectorised kernel with simple control flow
+//=============================================================================
+
+SCENARIO("Vectorised simple kernel with control flow", "[visitor][llvm]") {
+    GIVEN("A single if/else statement") {
+        std::string nmodl_text = R"(
+            NEURON {
+                SUFFIX test
+            }
+
+            STATE {
+                y
+            }
+
+            BREAKPOINT {
+                SOLVE states METHOD cnexp
+            }
+
+            DERIVATIVE states {
+                IF (y < 0) {
+                    y = y + 7
+                } ELSE {
+                    y = v
+                }
+            }
+        )";
+
+        THEN("masked load and stores are created") {
+            std::string module_string = run_llvm_visitor(nmodl_text,
+                                                         /*opt=*/false,
+                                                         /*use_single_precision=*/true,
+                                                         /*vector_width=*/8);
+            std::smatch m;
+
+            // Check masked load/store intrinsics are correctly declared.
+            std::regex masked_load(
+                R"(declare <8 x float> @llvm\.masked\.load\.v8f32\.p0v8f32\(<8 x float>\*, i32 immarg, <8 x i1>, <8 x float>\))");
+            std::regex masked_store(
+                R"(declare void @llvm.masked\.store\.v8f32\.p0v8f32\(<8 x float>, <8 x float>\*, i32 immarg, <8 x i1>\))");
+            REQUIRE(std::regex_search(module_string, m, masked_load));
+            REQUIRE(std::regex_search(module_string, m, masked_store));
+
+            // Check true direction instructions are predicated with mask.
+            // IF (mech->y[id] < 0) {
+            //     mech->y[id] = mech->y[id] + 7
+            std::regex mask(R"(%30 = fcmp olt <8 x float> %.*, zeroinitializer)");
+            std::regex true_load(
+                R"(call <8 x float> @llvm\.masked\.load\.v8f32\.p0v8f32\(<8 x float>\* %.*, i32 1, <8 x i1> %30, <8 x float> undef\))");
+            std::regex true_store(
+                R"(call void @llvm\.masked\.store\.v8f32\.p0v8f32\(<8 x float> %.*, <8 x float>\* %.*, i32 1, <8 x i1> %30\))");
+            REQUIRE(std::regex_search(module_string, m, mask));
+            REQUIRE(std::regex_search(module_string, m, true_load));
+            REQUIRE(std::regex_search(module_string, m, true_store));
+
+            // Check false direction instructions are predicated with inverted mask.
+            // } ELSE {
+            //     mech->y[id] = v
+            // }
+            std::regex inverted_mask(
+                R"(%47 = xor <8 x i1> %30, <i1 true, i1 true, i1 true, i1 true, i1 true, i1 true, i1 true, i1 true>)");
+            std::regex false_load(
+                R"(call <8 x float> @llvm\.masked\.load\.v8f32\.p0v8f32\(<8 x float>\* %v, i32 1, <8 x i1> %47, <8 x float> undef\))");
+            std::regex false_store(
+                R"(call void @llvm\.masked\.store\.v8f32\.p0v8f32\(<8 x float> %.*, <8 x float>\* %.*, i32 1, <8 x i1> %47\))");
+        }
+    }
+}
+
+//=============================================================================
 // Derivative block : test optimization
 //=============================================================================
 

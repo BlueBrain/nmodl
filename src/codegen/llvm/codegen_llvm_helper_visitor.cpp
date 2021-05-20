@@ -251,7 +251,7 @@ static void append_statements_from_block(ast::StatementVector& statements,
     for (const auto& statement: block_statements) {
         const auto& expression_statement = std::dynamic_pointer_cast<ast::ExpressionStatement>(
             statement);
-        if (!expression_statement->get_expression()->is_solve_block())
+        if (!expression_statement || !expression_statement->get_expression()->is_solve_block())
             statements.push_back(statement);
     }
 }
