@@ -15,3 +15,10 @@ add_dependencies(llvm_benchmark lexer util visitor)
 if(NMODL_ENABLE_JIT_EVENT_LISTENERS)
   target_compile_definitions(llvm_benchmark PUBLIC NMODL_HAVE_JIT_EVENT_LISTENERS)
 endif()
+
+# =============================================================================
+# external kernel stub
+# =============================================================================
+add_library(extkernel SHARED ext_kernel.cpp)
+set_target_properties(extkernel PROPERTIES CXX_VISIBILITY_PRESET default)
+target_link_libraries(llvm_benchmark PUBLIC extkernel)

@@ -10,13 +10,11 @@
 
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
 #include "llvm_benchmark.hpp"
+#include "ext_kernel.hpp"
 #include "test/benchmark/jit_driver.hpp"
+#include "test/unit/codegen/codegen_data_helper.hpp"
 #include "llvm/Support/Host.h"
 
-#include "test/unit/codegen/codegen_data_helper.hpp"
-
-
-void nrn_state_hh_intel(void*);
 
 
 namespace nmodl {
@@ -110,6 +108,14 @@ void LLVMBenchmark::run_benchmark(const std::shared_ptr<ast::Program>& node) {
 
     // Benchmark every kernel.
     for (const auto& kernel_name: kernel_names) {
+<<<<<<< HEAD
+=======
+
+        // double size_mbs = instance_data.num_bytes / (1024.0 * 1024.0);
+        // logger->info("Benchmarking kernel '{}' with {} MBs dataset", kernel_name, size_mbs);
+
+        logger->info("Benchmarking kernel '{}'", kernel_name);
+>>>>>>> slightly better stub for ext kernel, init data at every iteration
         // For every kernel run the benchmark `num_experiments` times.
         double time_min = std::numeric_limits<double>::max();
         double time_max = 0.0;
@@ -118,6 +124,7 @@ void LLVMBenchmark::run_benchmark(const std::shared_ptr<ast::Program>& node) {
         for (int i = 0; i < num_experiments; ++i) {
             // Initialise the data.
             auto instance_data = codegen_data.create_data(instance_size, /*seed=*/1);
+<<<<<<< HEAD
 
             // Log instance size once.
             if (i == 0) {
@@ -125,6 +132,8 @@ void LLVMBenchmark::run_benchmark(const std::shared_ptr<ast::Program>& node) {
                 logger->info("Benchmarking kernel '{}' with {} MBs dataset", kernel_name, size_mbs);
             }
 
+=======
+>>>>>>> slightly better stub for ext kernel, init data at every iteration
             // Record the execution time of the kernel.
             std::string wrapper_name = "__" + kernel_name + "_wrapper";
             auto start = std::chrono::high_resolution_clock::now();
@@ -149,15 +158,15 @@ void LLVMBenchmark::run_benchmark(const std::shared_ptr<ast::Program>& node) {
         logger->info("Minimum compute time = {:.6f}", time_min);
         logger->info("Maximum compute time = {:.6f}\n", time_max);
     }
-    // benchmark intel kernel
+    // benchmark external kernel
     logger->info("Benchmarking external kernel");
     // Initialise the data.
-    auto instance_data = codegen_data.create_data(instance_size, /*seed=*/1);
     double time_sum = 0.0;
     for (int i = 0; i < num_experiments; ++i) {
+        auto instance_data = codegen_data.create_data(instance_size, /*seed=*/1);
         // Record the execution time of the kernel.
         auto start = std::chrono::high_resolution_clock::now();
-        nrn_state_hh_intel(instance_data.base_ptr);
+        nrn_state_hh_ext(instance_data.base_ptr);
         auto end = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> diff = end - start;
 
