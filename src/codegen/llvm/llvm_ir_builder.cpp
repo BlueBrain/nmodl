@@ -144,7 +144,7 @@ void IRBuilder::allocate_function_arguments(llvm::Function* function,
     for (auto& arg: function->args()) {
         std::string arg_name = nmodl_arguments[i++].get()->get_node_name();
         llvm::Type* arg_type = arg.getType();
-        llvm::Value* alloca = builder.CreateAlloca(arg_type, /*ArraySize=*/nullptr, arg_name);
+        llvm::Value* alloca = create_alloca(arg_name, arg_type);
         arg.setName(arg_name);
         builder.CreateStore(&arg, alloca);
     }
@@ -228,11 +228,35 @@ void IRBuilder::set_loop_metadata(llvm::BranchInst* branch) {
 /*                             LLVM instruction utilities                               */
 /****************************************************************************************/
 
+llvm::Value* IRBuilder::create_alloca(const std::string& name, llvm::Type* type) {
+    // If insertion point for `alloca` instructions is not set, then set the first processed
+    // instruction to be the insertion point.
+    if (!alloca_ip) {
+        llvm::Value* alloca = builder.CreateAlloca(type, /*ArraySize=*/nullptr, name);
+        alloca_ip = llvm::cast<llvm::AllocaInst>(alloca);
+        return alloca;
+    }
+
+    // Create `alloca` instruction.
+    llvm::BasicBlock* alloca_block = alloca_ip->getParent();
+    const auto& data_layout = alloca_block->getModule()->getDataLayout();
+    auto* alloca = new llvm::AllocaInst(type,
+                                        data_layout.getAllocaAddrSpace(),
+                                        /*ArraySize=*/nullptr,
+                                        data_layout.getPrefTypeAlign(type),
+                                        name);
+
+    // Insert `alloca` at the specified insertion point and reset it for the next instructions.
+    alloca_block->getInstList().insertAfter(alloca_ip->getIterator(), alloca);
+    alloca_ip = alloca;
+    return alloca;
+}
+
 void IRBuilder::create_array_alloca(const std::string& name,
                                     llvm::Type* element_type,
                                     int num_elements) {
     llvm::Type* array_type = llvm::ArrayType::get(element_type, num_elements);
-    builder.CreateAlloca(array_type, /*ArraySize=*/nullptr, name);
+    create_alloca(name, array_type);
 }
 
 void IRBuilder::create_binary_op(llvm::Value* lhs, llvm::Value* rhs, ast::BinaryOp op) {
@@ -392,7 +416,7 @@ void IRBuilder::create_scalar_or_vector_alloca(const std::string& name,
     } else {
         type = element_or_scalar_type;
     }
-    builder.CreateAlloca(type, /*ArraySize=*/nullptr, name);
+    create_alloca(name, type);
 }
 
 void IRBuilder::create_unary_op(llvm::Value* value, ast::UnaryOp op) {
