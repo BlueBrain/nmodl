@@ -97,7 +97,7 @@ SCENARIO("Binary expression", "[visitor][llvm]") {
             std::regex lhs(R"(%2 = load float, float\* %a)");
             std::regex res(R"(%3 = fadd float %2, %1)");
 
-            // Check the float values are loaded correctly and added
+            // Check the float values are loaded correctly and added.
             REQUIRE(std::regex_search(module_string, m, rhs));
             REQUIRE(std::regex_search(module_string, m, lhs));
             REQUIRE(std::regex_search(module_string, m, res));
@@ -116,7 +116,7 @@ SCENARIO("Binary expression", "[visitor][llvm]") {
             std::string module_string = run_llvm_visitor(nmodl_text);
             std::smatch m;
 
-            // Check rhs
+            // Check rhs.
             std::regex rr(R"(%1 = load double, double\* %b)");
             std::regex rl(R"(%2 = load double, double\* %a)");
             std::regex x(R"(%3 = fadd double %2, %1)");
@@ -124,7 +124,7 @@ SCENARIO("Binary expression", "[visitor][llvm]") {
             REQUIRE(std::regex_search(module_string, m, rl));
             REQUIRE(std::regex_search(module_string, m, x));
 
-            // Check lhs
+            // Check lhs.
             std::regex lr(R"(%4 = load double, double\* %b)");
             std::regex ll(R"(%5 = load double, double\* %a)");
             std::regex y(R"(%6 = fsub double %5, %4)");
@@ -132,7 +132,7 @@ SCENARIO("Binary expression", "[visitor][llvm]") {
             REQUIRE(std::regex_search(module_string, m, ll));
             REQUIRE(std::regex_search(module_string, m, y));
 
-            // Check result
+            // Check result.
             std::regex res(R"(%7 = fdiv double %6, %3)");
             REQUIRE(std::regex_search(module_string, m, res));
         }
@@ -150,11 +150,34 @@ SCENARIO("Binary expression", "[visitor][llvm]") {
             std::string module_string = run_llvm_visitor(nmodl_text);
             std::smatch m;
 
-            // Check store immediate is created
+            // Check store immediate is created.
             std::regex allocation(R"(%i = alloca double)");
             std::regex assignment(R"(store double 2.0*e\+00, double\* %i)");
             REQUIRE(std::regex_search(module_string, m, allocation));
             REQUIRE(std::regex_search(module_string, m, assignment));
+        }
+    }
+
+    GIVEN("Function with power operator") {
+        std::string nmodl_text = R"(
+            FUNCTION power() {
+                LOCAL i, j
+                i = 2
+                j = 4
+                power = i ^ j
+            }
+        )";
+
+        THEN("'pow' intrinsic is created") {
+            std::string module_string =
+                run_llvm_visitor(nmodl_text, /*opt=*/false, /*use_single_precision=*/true);
+            std::smatch m;
+
+            // Check 'pow' intrinsic.
+            std::regex declaration(R"(declare float @llvm\.pow\.f32\(float, float\))");
+            std::regex pow(R"(call float @llvm\.pow\.f32\(float %.*, float %.*\))");
+            REQUIRE(std::regex_search(module_string, m, declaration));
+            REQUIRE(std::regex_search(module_string, m, pow));
         }
     }
 }

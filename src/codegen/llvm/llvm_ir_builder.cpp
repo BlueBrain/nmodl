@@ -267,6 +267,11 @@ void IRBuilder::create_binary_op(llvm::Value* lhs, llvm::Value* rhs, ast::Binary
 
 #undef DISPATCH
 
+    // Separately replace ^ with the `pow` intrinsic.
+    case ast::BinaryOp::BOP_POWER:
+        result = builder.CreateIntrinsic(llvm::Intrinsic::pow, {lhs->getType()}, {lhs, rhs});
+        break;
+
     // Logical instructions.
     case ast::BinaryOp::BOP_AND:
         result = builder.CreateAnd(lhs, rhs);
