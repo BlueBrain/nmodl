@@ -46,6 +46,9 @@ class IRBuilder {
     /// Symbol table of the NMODL AST.
     symtab::SymbolTable* symbol_table;
 
+    /// Insertion point for `alloca` instructions.
+    llvm::Instruction* alloca_ip;
+
     /// Flag to indicate that the generated IR should be vectorized.
     bool vectorize;
 
@@ -69,6 +72,7 @@ class IRBuilder {
         , symbol_table(nullptr)
         , current_function(nullptr)
         , vectorize(false)
+        , alloca_ip(nullptr)
         , fp_precision(use_single_precision ? single_precision : double_precision)
         , vector_width(vector_width)
         , mask(nullptr)
@@ -104,6 +108,7 @@ class IRBuilder {
     void clear_function() {
         value_stack.clear();
         current_function = nullptr;
+        alloca_ip = nullptr;
     }
 
     /// Sets the value to be the mask for vector code generation.
@@ -124,6 +129,8 @@ class IRBuilder {
     /// Generates LLVM IR to allocate the arguments of the function on the stack.
     void allocate_function_arguments(llvm::Function* function,
                                      const ast::CodegenVarWithTypeVector& nmodl_arguments);
+
+    llvm::Value* create_alloca(const std::string& name, llvm::Type* type);
 
     /// Generates IR for allocating an array.
     void create_array_alloca(const std::string& name, llvm::Type* element_type, int num_elements);
