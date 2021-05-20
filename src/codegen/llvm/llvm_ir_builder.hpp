@@ -79,7 +79,7 @@ class IRBuilder {
         , kernel_id("")
         , fast_math_flags(fast_math_flags) {}
 
-    /// Transforms the  fast math flags provided to the builder into LLVM's representation.
+    /// Transforms the fast math flags provided to the builder into LLVM's representation.
     llvm::FastMathFlags transform_to_fmf(std::vector<std::string>& flags) {
         static const std::map<std::string, void (llvm::FastMathFlags::*)(bool)> set_flag = {
             {"nnan", &llvm::FastMathFlags::setNoNaNs},
