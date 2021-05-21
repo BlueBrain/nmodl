@@ -69,6 +69,9 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     /// Output directory for code generation.
     std::string output_dir;
 
+    /// Variable to check if Functions and Procedures are inlined by NMODL passes
+    bool nmodl_inline;
+
   private:
     /// Underlying LLVM context.
     std::unique_ptr<llvm::LLVMContext> context = std::make_unique<llvm::LLVMContext>();
@@ -114,9 +117,11 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
                        int vector_width = 1,
                        std::string vec_lib = "none",
                        bool add_debug_information = false,
-                       std::vector<std::string> fast_math_flags = {})
+                       std::vector<std::string> fast_math_flags = {},
+                       bool nmodl_inline = false)
         : mod_filename(mod_filename)
         , output_dir(output_dir)
+        , nmodl_inline(nmodl_inline)
         , opt_passes(opt_passes)
         , vector_width(vector_width)
         , vector_library(veclib_map.at(vec_lib))

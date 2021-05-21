@@ -770,7 +770,7 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
     //   - convert function and procedure blocks into CodegenFunctions
     //   - gather information about AST. For now, information about functions
     //     and procedures is used only.
-    CodegenLLVMHelperVisitor v{vector_width};
+    CodegenLLVMHelperVisitor v{vector_width, nmodl_inline};
     const auto& functions = v.get_codegen_functions(node);
     instance_var_helper = v.get_instance_var_helper();
     sym_tab = node.get_symbol_table();
