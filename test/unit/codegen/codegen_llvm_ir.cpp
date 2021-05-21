@@ -16,6 +16,7 @@
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
 #include "parser/nmodl_driver.hpp"
 #include "visitors/checkparent_visitor.hpp"
+#include "visitors/inline_visitor.hpp"
 #include "visitors/neuron_solve_visitor.hpp"
 #include "visitors/solve_block_visitor.hpp"
 #include "visitors/symtab_visitor.hpp"
@@ -38,11 +39,15 @@ std::string run_llvm_visitor(const std::string& text,
                              bool use_single_precision = false,
                              int vector_width = 1,
                              std::string vec_lib = "none",
-                             std::vector<std::string> fast_math_flags = {}) {
+                             std::vector<std::string> fast_math_flags = {},
+                             bool nmodl_inline = false) {
     NmodlDriver driver;
     const auto& ast = driver.parse_string(text);
 
     SymtabVisitor().visit_program(*ast);
+    if (nmodl_inline) {
+        InlineVisitor().visit_program(*ast);
+    }
     NeuronSolveVisitor().visit_program(*ast);
     SolveBlockVisitor().visit_program(*ast);
 
@@ -53,7 +58,9 @@ std::string run_llvm_visitor(const std::string& text,
                                              vector_width,
                                              vec_lib,
                                              /*add_debug_information=*/false,
-                                             fast_math_flags);
+                                             fast_math_flags,
+                                             nmodl_inline);
+
     llvm_visitor.visit_program(*ast);
     return llvm_visitor.dump_module();
 }
@@ -1433,6 +1440,53 @@ SCENARIO("Dead code removal", "[visitor][llvm][opt]") {
             std::regex empty_proc(
                 R"(define i32 @add\(double %a[0-9].*, double %b[0-9].*\) \{\n(\s)*ret i32 0\n\})");
             REQUIRE(std::regex_search(module_string, m, empty_proc));
+        }
+    }
+}
+
+//=============================================================================
+// Inlining: remove inline code blocks
+//=============================================================================
+
+SCENARIO("Removal of inlined functions and procedures", "[visitor][llvm][inline]") {
+    GIVEN("Simple breakpoint block calling a function and a procedure") {
+        std::string nmodl_text = R"(
+            NEURON {
+                SUFFIX test_inline
+                RANGE a, b, s
+            }
+            ASSIGNED {
+                a
+                b
+                s
+            }
+            PROCEDURE test_add(a, b) {
+                LOCAL i
+                i = a + b
+            }
+            FUNCTION test_sub(a, b) {
+                test_sub = a - b
+            }
+            BREAKPOINT {
+                SOLVE states METHOD cnexp
+            }
+            DERIVATIVE states {
+                a = 1
+                b = 2
+                test_add(a, b)
+                s = test_sub(a, b)
+            }
+        )";
+
+        THEN("when the code is inlined the procedure and function blocks are removed") {
+            std::string module_string = run_llvm_visitor(nmodl_text, false, false, 1, "none", true);
+            std::smatch m;
+
+            // Check if the procedure and function declarations are removed
+            std::regex add_proc(R"(define i32 @test_add\(double %a[0-9].*, double %b[0-9].*\))");
+            REQUIRE(!std::regex_search(module_string, m, add_proc));
+            std::regex sub_func(R"(define double @test_sub\(double %a[0-9].*, double %b[0-9].*\))");
+            REQUIRE(!std::regex_search(module_string, m, sub_func));
         }
     }
 }

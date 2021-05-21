@@ -798,11 +798,11 @@ void CodegenLLVMHelperVisitor::visit_program(ast::Program& node) {
         const auto& func_proc_nodes =
             collect_nodes(node,
                           {ast::AstNodeType::FUNCTION_BLOCK, ast::AstNodeType::PROCEDURE_BLOCK});
-        std::unordered_set<ast::Node*> nodes;
+        std::unordered_set<ast::Node*> nodes_to_erase;
         for (const auto& ast_node: func_proc_nodes) {
-            nodes.insert(static_cast<ast::Node*>(ast_node.get()));
+            nodes_to_erase.insert(static_cast<ast::Node*>(ast_node.get()));
         }
-        node.erase_node(nodes);
+        node.erase_node(nodes_to_erase);
     }
 }
 
