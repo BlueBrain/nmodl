@@ -100,8 +100,11 @@ struct InstanceVarHelper {
  * these will be common across all backends.
  */
 class CodegenLLVMHelperVisitor: public visitor::AstVisitor {
-    // explicit vectorisation width
+    /// explicit vectorisation width
     int vector_width;
+
+    /// variable to check whether Function and Procedures blocks are inline by NMODL passes
+    bool nmodl_inline;
 
     /// newly generated code generation specific functions
     CodegenFunctionVector codegen_functions;
@@ -134,8 +137,9 @@ class CodegenLLVMHelperVisitor: public visitor::AstVisitor {
     static const std::string VOLTAGE_VAR;
     static const std::string NODE_INDEX_VAR;
 
-    CodegenLLVMHelperVisitor(int vector_width)
-        : vector_width(vector_width){};
+    CodegenLLVMHelperVisitor(int vector_width, bool nmodl_inline)
+        : vector_width(vector_width)
+        , nmodl_inline(nmodl_inline) {}
 
     const InstanceVarHelper& get_instance_var_helper() {
         return instance_var_helper;
