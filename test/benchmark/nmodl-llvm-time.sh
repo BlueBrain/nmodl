@@ -100,7 +100,7 @@ declare -a clang_flags=(
     )
 
 # loop over options
-for kernel_target in compute-bound memory-bound; do # add here hh
+for kernel_target in compute-bound memory-bound hh; do
     echo "kernel: "${kernel_target}
     
     for compiler in icpc clang; do
