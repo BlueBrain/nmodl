@@ -78,7 +78,7 @@ std::vector<std::shared_ptr<ast::Ast>> run_llvm_visitor_helper(
 
     SymtabVisitor().visit_program(*ast);
     SolveBlockVisitor().visit_program(*ast);
-    CodegenLLVMHelperVisitor(vector_width, /*nmodl_inline*/false).visit_program(*ast);
+    CodegenLLVMHelperVisitor(vector_width, /*nmodl_inline*/ false).visit_program(*ast);
 
     const auto& nodes = collect_nodes(*ast, nodes_to_collect);
 
@@ -1479,7 +1479,8 @@ SCENARIO("Removal of inlined functions and procedures", "[visitor][llvm][inline]
         )";
 
         THEN("when the code is inlined the procedure and function blocks are removed") {
-            std::string module_string = run_llvm_visitor(nmodl_text, false, false, 1, "none", true);
+            std::string module_string =
+                run_llvm_visitor(nmodl_text, false, false, 1, "none", {}, true);
             std::smatch m;
 
             // Check if the procedure and function declarations are removed
