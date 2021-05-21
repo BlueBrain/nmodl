@@ -696,8 +696,7 @@ int main(int argc, const char* argv[]) {
                                            llvm_vec_width,
                                            vector_library,
                                            !disable_debug_information,
-                                           llvm_fast_math_flags,
-                                           nmodl_inline);
+                                           llvm_fast_math_flags);
                 visitor.visit_program(*ast);
                 ast_to_nmodl(*ast, filepath("llvm", "mod"));
                 ast_to_json(*ast, filepath("llvm", "json"));
