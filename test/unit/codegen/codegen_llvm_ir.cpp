@@ -37,7 +37,8 @@ std::string run_llvm_visitor(const std::string& text,
                              bool opt = false,
                              bool use_single_precision = false,
                              int vector_width = 1,
-                             std::string vec_lib = "none") {
+                             std::string vec_lib = "none",
+                             std::vector<std::string> fast_math_flags = {}) {
     NmodlDriver driver;
     const auto& ast = driver.parse_string(text);
 
@@ -50,7 +51,9 @@ std::string run_llvm_visitor(const std::string& text,
                                              opt,
                                              use_single_precision,
                                              vector_width,
-                                             vec_lib);
+                                             vec_lib,
+                                             /*add_debug_information=*/false,
+                                             fast_math_flags);
     llvm_visitor.visit_program(*ast);
     return llvm_visitor.dump_module();
 }
@@ -1374,6 +1377,37 @@ SCENARIO("Vector library calls", "[visitor][llvm][vector_lib]") {
             REQUIRE(std::regex_search(accelerate_library_module_str, m, accelerate_exp_call));
             REQUIRE(!std::regex_search(accelerate_library_module_str, m, fexp_call));
 #endif
+        }
+    }
+}
+
+//=============================================================================
+// Fast math flags
+//=============================================================================
+
+SCENARIO("Fast math flags", "[visitor][llvm]") {
+    GIVEN("A function to produce fma and specified math flags") {
+        std::string nmodl_text = R"(
+            FUNCTION foo(a, b, c) {
+                foo = (a * b) + c
+            }
+        )";
+
+        THEN("instructions are generated with the flags set") {
+            std::string module_string =
+                run_llvm_visitor(nmodl_text,
+                                 /*opt=*/true,
+                                 /*use_single_precision=*/false,
+                                 /*vector_width=*/1,
+                                 /*vec_lib=*/"none",
+                                 /*fast_math_flags=*/{"nnan", "contract", "afn"});
+            std::smatch m;
+
+            // Check flags for produced 'fmul' and 'fadd' instructions.
+            std::regex fmul(R"(fmul nnan contract afn double %.*, %.*)");
+            std::regex fadd(R"(fadd nnan contract afn double %.*, %.*)");
+            REQUIRE(std::regex_search(module_string, m, fmul));
+            REQUIRE(std::regex_search(module_string, m, fadd));
         }
     }
 }
