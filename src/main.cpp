@@ -187,6 +187,9 @@ int main(int argc, const char* argv[]) {
     /// disable debug information generation for the IR
     bool disable_debug_information(false);
 
+    /// fast math flags for LLVM backend
+    std::vector<std::string> llvm_fast_math_flags;
+
     /// run llvm benchmark
     bool run_llvm_benchmark(false);
 
@@ -351,6 +354,9 @@ int main(int argc, const char* argv[]) {
     llvm_opt->add_option("--veclib",
                          vector_library,
                          "Vector library for maths functions ({})"_format(vector_library))->check(CLI::IsMember({"Accelerate", "libmvec", "MASSV", "SVML", "none"}));
+    llvm_opt->add_option("--fmf",
+                         llvm_fast_math_flags,
+                         "Fast math flags for floating-point optimizations (none)")->check(CLI::IsMember({"afn", "arcp", "contract", "ninf", "nnan", "nsz", "reassoc", "fast"}));
 
     // LLVM IR benchmark options.
     auto benchmark_opt = app.add_subcommand("benchmark", "LLVM benchmark option")->ignore_case();
@@ -689,7 +695,8 @@ int main(int argc, const char* argv[]) {
                                            llvm_float_type,
                                            llvm_vec_width,
                                            vector_library,
-                                           !disable_debug_information);
+                                           !disable_debug_information,
+                                           llvm_fast_math_flags);
                 visitor.visit_program(*ast);
                 ast_to_nmodl(*ast, filepath("llvm", "mod"));
                 ast_to_json(*ast, filepath("llvm", "json"));
