@@ -123,7 +123,7 @@ for kernel_target in compute-bound memory-bound hh; do
             ${debug} eval "llvm-objdump ${ext_lib} -d > ${ext_lib::-1}"
             ${debug} cd ..
 
-            nmodl_args="${kernels_path}/${kernel_target}.mod llvm --ir --vector-width ${vec_width} --veclib SVML benchmark \
+            nmodl_args="${kernels_path}/${kernel_target}.mod llvm --ir --fmf nnan contract afn --vector-width ${vec_width} --veclib SVML benchmark \
             --opt-level-ir 3 --opt-level-codegen 3 --run --instance-size ${inst_size} \
             --repeat ${num_exp} \
             --libs  ${vec_lib_path}/${vec_lib} \
