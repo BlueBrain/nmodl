@@ -198,6 +198,7 @@ void CodegenLLVMHelperVisitor::create_function_for_node(ast::Block& node) {
     }
     codegen_functions.push_back(function);
 }
+
 /**
  * \note : Order of variables is not important but we assume all pointers
  * are added first and then scalar variables like t, dt, second_order etc.
@@ -538,11 +539,17 @@ void CodegenLLVMHelperVisitor::rename_local_variables(ast::StatementBlock& node)
 
 
 void CodegenLLVMHelperVisitor::visit_procedure_block(ast::ProcedureBlock& node) {
+    // if the Procedure block is already inlined, there is no reason to generate the LLVM IR code
+    if (nmodl_inline)
+        return;
     node.visit_children(*this);
     create_function_for_node(node);
 }
 
 void CodegenLLVMHelperVisitor::visit_function_block(ast::FunctionBlock& node) {
+    // if the Function block is already inlined, there is no reason to generate the LLVM IR code
+    if (nmodl_inline)
+        return;
     node.visit_children(*this);
     create_function_for_node(node);
 }
@@ -787,6 +794,17 @@ void CodegenLLVMHelperVisitor::visit_program(ast::Program& node) {
     node.visit_children(*this);
     for (auto& fun: codegen_functions) {
         node.emplace_back_node(fun);
+    }
+    // Remove Function and Procedure blocks from the Program since they are already inlined
+    if (nmodl_inline) {
+        const auto& func_proc_nodes =
+            collect_nodes(node,
+                          {ast::AstNodeType::FUNCTION_BLOCK, ast::AstNodeType::PROCEDURE_BLOCK});
+        std::unordered_set<ast::Node*> nodes_to_erase;
+        for (const auto& ast_node: func_proc_nodes) {
+            nodes_to_erase.insert(static_cast<ast::Node*>(ast_node.get()));
+        }
+        node.erase_node(nodes_to_erase);
     }
 }
 
