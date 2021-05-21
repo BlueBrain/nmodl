@@ -64,10 +64,14 @@ class IRBuilder {
     /// The name of induction variable used in kernel loops.
     std::string kernel_id;
 
+    /// Fast math flags for floating-point IR instructions.
+    std::vector<std::string> fast_math_flags;
+
   public:
     IRBuilder(llvm::LLVMContext& context,
               bool use_single_precision = false,
-              unsigned vector_width = 1)
+              unsigned vector_width = 1,
+              std::vector<std::string> fast_math_flags = {})
         : builder(context)
         , symbol_table(nullptr)
         , current_function(nullptr)
@@ -76,10 +80,30 @@ class IRBuilder {
         , fp_precision(use_single_precision ? single_precision : double_precision)
         , vector_width(vector_width)
         , mask(nullptr)
-        , kernel_id("") {}
+        , kernel_id("")
+        , fast_math_flags(fast_math_flags) {}
+
+    /// Transforms the fast math flags provided to the builder into LLVM's representation.
+    llvm::FastMathFlags transform_to_fmf(std::vector<std::string>& flags) {
+        static const std::map<std::string, void (llvm::FastMathFlags::*)(bool)> set_flag = {
+            {"nnan", &llvm::FastMathFlags::setNoNaNs},
+            {"ninf", &llvm::FastMathFlags::setNoInfs},
+            {"nsz", &llvm::FastMathFlags::setNoSignedZeros},
+            {"contract", &llvm::FastMathFlags::setAllowContract},
+            {"afn", &llvm::FastMathFlags::setApproxFunc},
+            {"reassoc", &llvm::FastMathFlags::setAllowReassoc},
+            {"fast", &llvm::FastMathFlags::setFast}};
+        llvm::FastMathFlags fmf;
+        for (const auto& flag: flags) {
+            (fmf.*(set_flag.at(flag)))(true);
+        }
+        return fmf;
+    }
 
     /// Initializes the builder with the symbol table and the kernel induction variable id.
     void initialize(symtab::SymbolTable& symbol_table, std::string& kernel_id) {
+        if (!fast_math_flags.empty())
+            builder.setFastMathFlags(transform_to_fmf(fast_math_flags));
         this->symbol_table = &symbol_table;
         this->kernel_id = kernel_id;
     }
