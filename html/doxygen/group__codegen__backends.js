@@ -169,6 +169,7 @@ var group__codegen__backends =
       [ "print_newtonspace_transfer_to_device", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a6b77c570750599f4ab0850859cd94e04", null ],
       [ "print_nmodl_constants", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a99e75c2eecf494b0ab64ad89692cc8f2", null ],
       [ "print_nrn_alloc", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a8b64dc12cb901466dc02c91ac22871e3", null ],
+      [ "print_nrn_constructor", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#aa301315b79176d843b962cf8de05b70e", null ],
       [ "print_nrn_cur", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a60e9ad48431e2ac50b085794105ded9b", null ],
       [ "print_nrn_cur_conductance_kernel", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ac27bc1a3395091a5617bf5fdedda243d", null ],
       [ "print_nrn_cur_kernel", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a45a4f9dd6ec0e07d6d9231bd356ab3be", null ],

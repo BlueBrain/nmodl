@@ -9,6 +9,7 @@ var searchData=
   ['constant_5fblock',['CONSTANT_BLOCK',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a6b5ca3ea413a7dd705e89467539d2b59',1,'nmodl::ast']]],
   ['constant_5fstatement',['CONSTANT_STATEMENT',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a37a5407574515075eb374eb90514c8f3',1,'nmodl::ast']]],
   ['constant_5fvar',['constant_var',['../namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbaf6eef5cd575969d1e89a947bbe44773b',1,'nmodl::symtab::syminfo::constant_var()'],['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a7582b8e3e9f397c03f451ea85263fddc',1,'nmodl::ast::CONSTANT_VAR()']]],
+  ['constructor',['Constructor',['../group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba2720cc542e6d281f618eb1f62a064ce7',1,'nmodl::codegen']]],
   ['constructor_5fblock',['CONSTRUCTOR_BLOCK',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a004105ad423328feec36670b140c2f8f',1,'nmodl::ast']]],
   ['created',['created',['../namespacenmodl_1_1symtab_1_1syminfo.html#a7d0b8aa765db0de7491021b4d403b6e2ae2fa538867c3830a859a5b17ab24644b',1,'nmodl::symtab::syminfo']]]
 ];

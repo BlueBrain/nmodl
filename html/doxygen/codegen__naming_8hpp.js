@@ -22,6 +22,7 @@ var codegen__naming_8hpp =
     [ "NMODL_VERSION", "codegen__naming_8hpp.html#a86a9d3a0e50e4b2647e45c1ea5fd2e07", null ],
     [ "NODE_AREA_VARIABLE", "codegen__naming_8hpp.html#af7e5438adb504b48d8bf80ad6b4b030e", null ],
     [ "NRN_ALLOC_METHOD", "codegen__naming_8hpp.html#a1023f8eb2c4118688ea418c3948363cc", null ],
+    [ "NRN_CONSTRUCTOR_METHOD", "codegen__naming_8hpp.html#a19fc3dd0e36be8186ea6e0a4bd6c6660", null ],
     [ "NRN_CUR_METHOD", "codegen__naming_8hpp.html#a7ce13f3e1c0fa0a6c79d11edc14ab6aa", null ],
     [ "NRN_DESTRUCTOR_METHOD", "codegen__naming_8hpp.html#aa8e13564c94423c5e0bbb8ff593da54f", null ],
     [ "NRN_INIT_METHOD", "codegen__naming_8hpp.html#a1db378304b1b4c6ce0e1410895c179dd", null ],

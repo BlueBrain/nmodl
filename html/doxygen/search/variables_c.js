@@ -69,6 +69,7 @@ var searchData=
   ['nonspecific_5fconductance_5falready_5fexists',['NONSPECIFIC_CONDUCTANCE_ALREADY_EXISTS',['../classnmodl_1_1visitor_1_1_sympy_conductance_visitor.html#a9fa5e0545dc669559fcf1bbf6cee2a1e',1,'nmodl::visitor::SympyConductanceVisitor']]],
   ['nonspecific_5fnodes',['nonspecific_nodes',['../classnmodl_1_1visitor_1_1_sympy_conductance_visitor.html#a940f00cf653680c1b2b7c4579b13c58f',1,'nmodl::visitor::SympyConductanceVisitor']]],
   ['nrn_5falloc_5fmethod',['NRN_ALLOC_METHOD',['../namespacenmodl_1_1codegen_1_1naming.html#a1023f8eb2c4118688ea418c3948363cc',1,'nmodl::codegen::naming']]],
+  ['nrn_5fconstructor_5fmethod',['NRN_CONSTRUCTOR_METHOD',['../namespacenmodl_1_1codegen_1_1naming.html#a19fc3dd0e36be8186ea6e0a4bd6c6660',1,'nmodl::codegen::naming']]],
   ['nrn_5fcur_5fmethod',['NRN_CUR_METHOD',['../namespacenmodl_1_1codegen_1_1naming.html#a7ce13f3e1c0fa0a6c79d11edc14ab6aa',1,'nmodl::codegen::naming']]],
   ['nrn_5fdestructor_5fmethod',['NRN_DESTRUCTOR_METHOD',['../namespacenmodl_1_1codegen_1_1naming.html#aa8e13564c94423c5e0bbb8ff593da54f',1,'nmodl::codegen::naming']]],
   ['nrn_5finit_5fmethod',['NRN_INIT_METHOD',['../namespacenmodl_1_1codegen_1_1naming.html#a1db378304b1b4c6ce0e1410895c179dd',1,'nmodl::codegen::naming']]],

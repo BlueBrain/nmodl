@@ -21,6 +21,7 @@ var structnmodl_1_1codegen_1_1_codegen_info =
     [ "breakpoint_node", "structnmodl_1_1codegen_1_1_codegen_info.html#a4a46dea1ec9ad861822987e3c53e949a", null ],
     [ "conductances", "structnmodl_1_1codegen_1_1_codegen_info.html#ac618beb29e918cc9a2fd66885f4c04e1", null ],
     [ "constant_variables", "structnmodl_1_1codegen_1_1_codegen_info.html#a77a0c8f8fff0887d9afde6cae64ccab8", null ],
+    [ "constructor_node", "structnmodl_1_1codegen_1_1_codegen_info.html#ae0ae57c15bffa577993551d4345276e3", null ],
     [ "currents", "structnmodl_1_1codegen_1_1_codegen_info.html#a8fa0f0fde4a3b95bc3ec05405f1c1528", null ],
     [ "derivimplicit_callbacks", "structnmodl_1_1codegen_1_1_codegen_info.html#a81fd9bff894b9a1f2234f86a1494408f", null ],
     [ "derivimplicit_list_num", "structnmodl_1_1codegen_1_1_codegen_info.html#ad7f2152ae0d0997d34a6335cddea5db1", null ],

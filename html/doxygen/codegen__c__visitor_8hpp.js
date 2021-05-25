@@ -2,6 +2,7 @@ var codegen__c__visitor_8hpp =
 [
     [ "BlockType", "codegen__c__visitor_8hpp.html#ga2d0a1f473f039b495e9cc349c3b57dbb", [
       [ "Initial", "codegen__c__visitor_8hpp.html#gga2d0a1f473f039b495e9cc349c3b57dbba560a4dff90c58651347affffd44f7419", null ],
+      [ "Constructor", "codegen__c__visitor_8hpp.html#gga2d0a1f473f039b495e9cc349c3b57dbba2720cc542e6d281f618eb1f62a064ce7", null ],
       [ "Destructor", "codegen__c__visitor_8hpp.html#gga2d0a1f473f039b495e9cc349c3b57dbba34adbfda9463c1ef5da22364fbde7f4e", null ],
       [ "Equation", "codegen__c__visitor_8hpp.html#gga2d0a1f473f039b495e9cc349c3b57dbba2aa5276df68f4ed49798a132d36cc3d3", null ],
       [ "Ode", "codegen__c__visitor_8hpp.html#gga2d0a1f473f039b495e9cc349c3b57dbba5a91e867e7802e6c6c6f627024768d21", null ],

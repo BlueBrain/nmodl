@@ -13,6 +13,7 @@ var classnmodl_1_1codegen_1_1_codegen_helper_visitor =
     [ "visit_binary_expression", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#adaed2d021c8c78df7337974f62474815", null ],
     [ "visit_breakpoint_block", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a17cfc480503668fa751bac2cdc2277ef", null ],
     [ "visit_conductance_hint", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a470d01cf57d6ec92c7e61a38dbedf004", null ],
+    [ "visit_constructor_block", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a947fa9e5e2a9a8c30af9f64825dd3116", null ],
     [ "visit_derivative_block", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a05704afa2478215198fc0dfc6cc8f28d", null ],
     [ "visit_derivimplicit_callback", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a054569f05b02caaba93e107812c4e539", null ],
     [ "visit_destructor_block", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#af27eb43d5a4f76227692de56333b6c08", null ],

@@ -27,6 +27,7 @@ var group__codegen__details =
       [ "visit_binary_expression", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#adaed2d021c8c78df7337974f62474815", null ],
       [ "visit_breakpoint_block", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a17cfc480503668fa751bac2cdc2277ef", null ],
       [ "visit_conductance_hint", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a470d01cf57d6ec92c7e61a38dbedf004", null ],
+      [ "visit_constructor_block", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a947fa9e5e2a9a8c30af9f64825dd3116", null ],
       [ "visit_derivative_block", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a05704afa2478215198fc0dfc6cc8f28d", null ],
       [ "visit_derivimplicit_callback", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a054569f05b02caaba93e107812c4e539", null ],
       [ "visit_destructor_block", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#af27eb43d5a4f76227692de56333b6c08", null ],
@@ -105,6 +106,7 @@ var group__codegen__details =
       [ "breakpoint_node", "structnmodl_1_1codegen_1_1_codegen_info.html#a4a46dea1ec9ad861822987e3c53e949a", null ],
       [ "conductances", "structnmodl_1_1codegen_1_1_codegen_info.html#ac618beb29e918cc9a2fd66885f4c04e1", null ],
       [ "constant_variables", "structnmodl_1_1codegen_1_1_codegen_info.html#a77a0c8f8fff0887d9afde6cae64ccab8", null ],
+      [ "constructor_node", "structnmodl_1_1codegen_1_1_codegen_info.html#ae0ae57c15bffa577993551d4345276e3", null ],
       [ "currents", "structnmodl_1_1codegen_1_1_codegen_info.html#a8fa0f0fde4a3b95bc3ec05405f1c1528", null ],
       [ "derivimplicit_callbacks", "structnmodl_1_1codegen_1_1_codegen_info.html#a81fd9bff894b9a1f2234f86a1494408f", null ],
       [ "derivimplicit_list_num", "structnmodl_1_1codegen_1_1_codegen_info.html#ad7f2152ae0d0997d34a6335cddea5db1", null ],
@@ -167,6 +169,7 @@ var group__codegen__details =
     ] ],
     [ "BlockType", "group__codegen__details.html#ga2d0a1f473f039b495e9cc349c3b57dbb", [
       [ "Initial", "group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba560a4dff90c58651347affffd44f7419", null ],
+      [ "Constructor", "group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba2720cc542e6d281f618eb1f62a064ce7", null ],
       [ "Destructor", "group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba34adbfda9463c1ef5da22364fbde7f4e", null ],
       [ "Equation", "group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba2aa5276df68f4ed49798a132d36cc3d3", null ],
       [ "Ode", "group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba5a91e867e7802e6c6c6f627024768d21", null ],
