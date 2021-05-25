@@ -3325,7 +3325,7 @@ void CodegenCVisitor::print_nrn_init(bool skip_init_check) {
 
 void CodegenCVisitor::print_nrn_constructor() {
     printer->add_newline(2);
-    CodegenCVisitor::print_global_function_common_code(BlockType::Constructor);
+    print_global_function_common_code(BlockType::Constructor);
     if (info.constructor_node != nullptr) {
         const auto& block = info.constructor_node->get_statement_block();
         print_statement_block(*block.get(), false, false);
@@ -3336,7 +3336,7 @@ void CodegenCVisitor::print_nrn_constructor() {
 
 void CodegenCVisitor::print_nrn_destructor() {
     printer->add_newline(2);
-    CodegenCVisitor::print_global_function_common_code(BlockType::Destructor);
+    print_global_function_common_code(BlockType::Destructor);
     if (info.destructor_node != nullptr) {
         const auto& block = info.destructor_node->get_statement_block();
         print_statement_block(*block.get(), false, false);
