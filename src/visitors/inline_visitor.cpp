@@ -308,7 +308,8 @@ void InlineVisitor::visit_wrapped_expression(WrappedExpression& node) {
         auto expression = dynamic_cast<FunctionCall*>(e.get());
         if (replaced_fun_calls.find(expression) != replaced_fun_calls.end()) {
             auto var = replaced_fun_calls[expression];
-            node.set_expression(std::make_shared<VarName>(new Name(new String(var)), nullptr, nullptr));
+            node.set_expression(
+                std::make_shared<VarName>(new Name(new String(var)), nullptr, nullptr));
         }
     }
 }
