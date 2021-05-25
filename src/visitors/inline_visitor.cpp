@@ -298,6 +298,8 @@ void InlineVisitor::visit_statement_block(StatementBlock& node) {
 /** Visit all wrapped expressions which can contain function calls.
  *  If a function call is replaced then the wrapped expression is
  *  also replaced with new variable node from the inlining result.
+ *  Note that we use `VarName` so that LHS of assignment expression
+ *  is `VarName`, similar to parser.
  */
 void InlineVisitor::visit_wrapped_expression(WrappedExpression& node) {
     node.visit_children(*this);
@@ -306,7 +308,9 @@ void InlineVisitor::visit_wrapped_expression(WrappedExpression& node) {
         auto expression = dynamic_cast<FunctionCall*>(e.get());
         if (replaced_fun_calls.find(expression) != replaced_fun_calls.end()) {
             auto var = replaced_fun_calls[expression];
-            node.set_expression(std::make_shared<Name>(new String(var)));
+            node.set_expression(std::make_shared<VarName>(new Name(new String(var)),
+                                                          /*at=*/nullptr,
+                                                          /*index=*/nullptr));
         }
     }
 }
