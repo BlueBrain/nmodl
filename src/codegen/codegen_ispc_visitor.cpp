@@ -152,6 +152,12 @@ std::string CodegenIspcVisitor::compute_method_name(BlockType type) const {
     if (type == BlockType::Initial) {
         return method_name(naming::NRN_INIT_METHOD);
     }
+    if (type == BlockType::Constructor) {
+        return method_name(naming::NRN_CONSTRUCTOR_METHOD);
+    }
+    if (type == BlockType::Destructor) {
+        return method_name(naming::NRN_DESTRUCTOR_METHOD);
+    }
     if (type == BlockType::State) {
         return method_name(naming::NRN_STATE_METHOD);
     }
@@ -788,6 +794,9 @@ void CodegenIspcVisitor::print_wrapper_routines() {
     }
 
     print_block_wrappers_initial_equation_state();
+
+    print_nrn_constructor();
+    print_nrn_destructor();
 
     print_mechanism_register();
 
