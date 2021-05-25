@@ -86,8 +86,8 @@ ext_lib="libextkernel.so"
 icpc_exe=icpc
 declare -a icpc_flags=(
     # "-O2"
-    "-O2 -march=skylake-avx512 -mtune=skylake-avx512 -fimf-use-svml"
-    "-O2 -qopt-zmm-usage=high -xCORE-AVX512 -fimf-use-svml"
+    "-O2 -march=skylake-avx512 -mtune=skylake-avx512 -prec-div -fimf-use-svml"
+    "-O2 -qopt-zmm-usage=high -xCORE-AVX512 -prec-div -fimf-use-svml"
     )
 
 clang_bin_path="/gpfs/bbp.cscs.ch/data/project/proj16/software/llvm/install/0521/bin"
