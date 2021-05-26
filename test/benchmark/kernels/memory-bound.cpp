@@ -26,6 +26,7 @@ void nrn_state_hh_ext(void* __restrict__ mech){
     int id;
     int node_id, nai_id, ion_nai_id;
     double v;
+    #pragma ivdep
     for(int id = 0; id<inst->node_count; ++id) {
         node_id = inst->node_index[id];
         nai_id = inst->ion_nai_index[id];

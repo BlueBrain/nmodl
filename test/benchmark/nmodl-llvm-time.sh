@@ -88,6 +88,9 @@ declare -a icpc_flags=(
     # "-O2"
     "-O2 -march=skylake-avx512 -mtune=skylake-avx512 -prec-div -fimf-use-svml"
     "-O2 -qopt-zmm-usage=high -xCORE-AVX512 -prec-div -fimf-use-svml"
+    "-O2 -mavx512f -prec-div -fimf-use-svml"
+    "-O2 -mavx2 -prec-div -fimf-use-svml"
+    "-O2 -msse2 -prec-div -fimf-use-svml"
     )
 
 clang_bin_path="/gpfs/bbp.cscs.ch/data/project/proj16/software/llvm/install/0521/bin"
@@ -97,12 +100,15 @@ declare -a clang_flags=(
     "-O3 -march=skylake-avx512 -fveclib=SVML"
     "-O3 -march=skylake-avx512 -ffast-math -fveclib=SVML"
     "-O3 -mavx512f -ffast-math -fveclib=SVML"
+    "-O3 -mavx2 -ffast-math -fveclib=SVML"
+    "-O3 -msse2 -ffast-math -fveclib=SVML"
     )
 
 # loop over options
 for kernel_target in compute-bound memory-bound hh; do
     echo "kernel: "${kernel_target}
     
+    # loop over other compilers
     for compiler in icpc clang; do
         echo "|  compiler: "${compiler}
 
@@ -133,4 +139,5 @@ for kernel_target in compute-bound memory-bound hh; do
             ${debug} eval "LD_LIBRARY_PATH=${ext_path}:${vec_lib_path} ${nmodl_exe} ${nmodl_args} &> ${kernel_target}_${spec}.log"
         done
     done
+
 done
