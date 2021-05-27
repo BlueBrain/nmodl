@@ -85,7 +85,6 @@ ext_lib="libextkernel.so"
 # compilers
 icpc_exe=icpc
 declare -a icpc_flags=(
-    # "-O2"
     "-O2 -march=skylake-avx512 -mtune=skylake-avx512 -prec-div -fimf-use-svml"
     "-O2 -qopt-zmm-usage=high -xCORE-AVX512 -prec-div -fimf-use-svml"
     "-O2 -mavx512f -prec-div -fimf-use-svml"
@@ -96,12 +95,20 @@ declare -a icpc_flags=(
 clang_bin_path="/gpfs/bbp.cscs.ch/data/project/proj16/software/llvm/install/0521/bin"
 clang_exe=${clang_bin_path}/clang++
 declare -a clang_flags=(
-    # "-O3"
-    "-O3 -march=skylake-avx512 -fveclib=SVML"
     "-O3 -march=skylake-avx512 -ffast-math -fveclib=SVML"
+    "-O3 -mavx512f -ffast-math -fopemp -fveclib=SVML"
     "-O3 -mavx512f -ffast-math -fveclib=SVML"
-    "-O3 -mavx2 -ffast-math -fveclib=SVML"
-    "-O3 -msse2 -ffast-math -fveclib=SVML"
+    "-O3 -mavx512f -fveclib=SVML"
+    "-O3 -mavx2 -ffast-math -fopemp -fveclib=SVML"
+    "-O3 -msse2 -ffast-math -fopemp -fveclib=SVML"
+    )
+
+gcc_bin_path="/gpfs/bbp.cscs.ch/ssd/apps/hpc/jenkins/deploy/compilers/2021-01-06/linux-rhel7-x86_64/gcc-4.8.5/gcc-9.3.0-45gzrp/bin"
+gcc_exe=${gcc_bin_path}/g++
+declare -a gcc_flags=(
+    "-O3 -mavx512f -ffast-math -ftree-vectorize -mveclibabi=svml"
+    "-O3 -mavx2 -ffast-math -ftree-vectorize -mveclibabi=svml"
+    "-O3 -msse2 -ffast-math -ftree-vectorize -mveclibabi=svml"
     )
 
 # loop over options
@@ -109,7 +116,7 @@ for kernel_target in compute-bound memory-bound hh; do
     echo "kernel: "${kernel_target}
     
     # loop over other compilers
-    for compiler in icpc clang; do
+    for compiler in icpc clang gcc; do
         echo "|  compiler: "${compiler}
 
         compiler_exe=${compiler}_exe
