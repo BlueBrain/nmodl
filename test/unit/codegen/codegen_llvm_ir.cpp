@@ -1382,6 +1382,31 @@ SCENARIO("Vector library calls", "[visitor][llvm][vector_lib]") {
             REQUIRE(std::regex_search(accelerate_library_module_str, m, accelerate_exp_decl));
             REQUIRE(std::regex_search(accelerate_library_module_str, m, accelerate_exp_call));
             REQUIRE(!std::regex_search(accelerate_library_module_str, m, fexp_call));
+
+            // Check correct replacement of @llvm.exp.v4f32 into @_ZGVnN4v_expf when using SLEEF.
+            std::string sleef_library_module_str = run_llvm_visitor(nmodl_text,
+                                                                    /*opt=*/false,
+                                                                    /*use_single_precision=*/true,
+                                                                    /*vector_width=*/4,
+                                                                    /*vec_lib=*/"SLEEF");
+            std::regex sleef_exp_decl(R"(declare <4 x float> @_ZGVnN4v_expf\(<4 x float>\))");
+            std::regex sleef_exp_call(R"(call <4 x float> @_ZGVnN4v_expf\(<4 x float> .*\))");
+            REQUIRE(std::regex_search(sleef_library_module_str, m, sleef_exp_decl));
+            REQUIRE(std::regex_search(sleef_library_module_str, m, sleef_exp_call));
+            REQUIRE(!std::regex_search(sleef_library_module_str, m, fexp_call));
+
+            // Check the replacements when using Darwin's libsystem_m.
+            std::string libsystem_m_library_module_str =
+                run_llvm_visitor(nmodl_text,
+                                 /*opt=*/false,
+                                 /*use_single_precision=*/true,
+                                 /*vector_width=*/4,
+                                 /*vec_lib=*/"libsystem_m");
+            std::regex libsystem_m_exp_decl(R"(declare <4 x float> @_simd_exp_f4\(<4 x float>\))");
+            std::regex libsystem_m_exp_call(R"(call <4 x float> @_simd_exp_f4\(<4 x float> .*\))");
+            REQUIRE(std::regex_search(libsystem_m_library_module_str, m, libsystem_m_exp_decl));
+            REQUIRE(std::regex_search(libsystem_m_library_module_str, m, libsystem_m_exp_call));
+            REQUIRE(!std::regex_search(libsystem_m_library_module_str, m, fexp_call));
 #endif
         }
     }
