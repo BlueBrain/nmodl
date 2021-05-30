@@ -48,15 +48,6 @@ namespace codegen {
  * @{
  */
 
-/// A map to query vector library by its string value.
-static const std::map<std::string, llvm::TargetLibraryInfoImpl::VectorLibrary> veclib_map = {
-    {"Accelerate", llvm::TargetLibraryInfoImpl::Accelerate},
-#if LLVM_VERSION_MAJOR >= 13
-    {"libmvec", llvm::TargetLibraryInfoImpl::LIBMVEC_X86},
-#endif
-    {"MASSV", llvm::TargetLibraryInfoImpl::MASSV},
-    {"SVML", llvm::TargetLibraryInfoImpl::SVML},
-    {"none", llvm::TargetLibraryInfoImpl::NoLibrary}};
 
 /**
  * \class CodegenLLVMVisitor
@@ -100,8 +91,8 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     /// Pass manager for optimisation passes that are used for target code generation.
     llvm::legacy::FunctionPassManager codegen_pm;
 
-    /// Vector library used for maths functions.
-    llvm::TargetLibraryInfoImpl::VectorLibrary vector_library;
+    /// Vector library used for math functions.
+    std::string vector_library;
 
     /// Explicit vectorisation width.
     int vector_width;
@@ -119,7 +110,7 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
         , output_dir(output_dir)
         , opt_passes(opt_passes)
         , vector_width(vector_width)
-        , vector_library(veclib_map.at(vec_lib))
+        , vector_library(vec_lib)
         , add_debug_information(add_debug_information)
         , ir_builder(*context, use_single_precision, vector_width, fast_math_flags)
         , debug_builder(*module)
@@ -183,6 +174,12 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     void wrap_kernel_functions();
 
   private:
+#if LLVM_VERSION_MAJOR >= 13
+    /// Populates target library info with the vector library definitions.
+    void add_vectorizable_functions_from_vec_lib(llvm::TargetLibraryInfoImpl& tli,
+                                                 llvm::Triple& triple);
+#endif
+
     /// Accepts the given AST node and returns the processed value.
     llvm::Value* accept_and_get(const std::shared_ptr<ast::Node>& node);
 

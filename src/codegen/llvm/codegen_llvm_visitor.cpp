@@ -65,6 +65,68 @@ static bool can_vectorize(const ast::CodegenForStatement& statement, symtab::Sym
     return unsupported.empty() && supported.size() <= 1;
 }
 
+#if LLVM_VERSION_MAJOR >= 13
+void CodegenLLVMVisitor::add_vectorizable_functions_from_vec_lib(llvm::TargetLibraryInfoImpl& tli,
+                                                                 llvm::Triple& triple) {
+    // Since LLVM does not support SLEEF as a vector library yet, process it separately.
+    if (vector_library == "SLEEF") {
+        // Populate function definitions of only exp and pow (for now)
+#define FIXED(w)                        llvm::ElementCount::getFixed(w)
+#define DISPATCH(func, vec_func, width) {func, vec_func, width},
+        const llvm::VecDesc aarch64_functions[] = {
+            // clang-format off
+            DISPATCH("llvm.exp.f32", "_ZGVnN4v_expf", FIXED(4))
+            DISPATCH("llvm.exp.f64", "_ZGVnN2v_exp", FIXED(2))
+            DISPATCH("llvm.pow.f32", "_ZGVnN4vv_powf", FIXED(4))
+            DISPATCH("llvm.pow.f64", "_ZGVnN2vv_pow", FIXED(2))
+            // clang-format on
+        };
+        const llvm::VecDesc x86_functions[] = {
+            // clang-format off
+            DISPATCH("llvm.exp.f64", "_ZGVbN2v_exp", FIXED(2))
+            DISPATCH("llvm.exp.f64", "_ZGVdN4v_exp", FIXED(4))
+            DISPATCH("llvm.exp.f64", "_ZGVeN8v_exp", FIXED(8))
+            DISPATCH("llvm.pow.f64", "_ZGVbN2vv_pow", FIXED(2))
+            DISPATCH("llvm.pow.f64", "_ZGVdN4vv_pow", FIXED(4))
+            DISPATCH("llvm.pow.f64", "_ZGVeN8vv_pow", FIXED(8))
+            // clang-format on
+        };
+#undef DISPATCH
+
+        if (triple.isAArch64()) {
+            tli.addVectorizableFunctions(aarch64_functions);
+        }
+        if (triple.isX86() && triple.isArch64Bit()) {
+            tli.addVectorizableFunctions(x86_functions);
+        }
+
+    } else {
+        // A map to query vector library by its string value.
+        using VecLib = llvm::TargetLibraryInfoImpl::VectorLibrary;
+        static const std::map<std::string, VecLib> llvm_supported_vector_libraries = {
+            {"Accelerate", VecLib::Accelerate},
+            {"libmvec", VecLib::LIBMVEC_X86},
+            {"libsystem_m", VecLib ::DarwinLibSystemM},
+            {"MASSV", VecLib::MASSV},
+            {"none", VecLib::NoLibrary},
+            {"SVML", VecLib::SVML}};
+        const auto& library = llvm_supported_vector_libraries.find(vector_library);
+        if (library == llvm_supported_vector_libraries.end())
+            throw std::runtime_error("Error: unknown vector library - " + vector_library + "\n");
+
+        // Add vectorizable functions to the target library info.
+        switch (library->second) {
+        case VecLib::LIBMVEC_X86:
+            if (!triple.isX86() || !triple.isArch64Bit())
+                break;
+        default:
+            tli.addVectorizableFunctionsFromVecLib(library->second);
+            break;
+        }
+    }
+}
+#endif
+
 llvm::Value* CodegenLLVMVisitor::accept_and_get(const std::shared_ptr<ast::Node>& node) {
     node->accept(*this);
     return ir_builder.pop_last_value();
@@ -817,25 +879,20 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
         run_ir_opt_passes();
     }
 
-    // Optionally, replace LLVM's maths intrinsics with vector library calls.
-    if (vector_width > 1 && vector_library != llvm::TargetLibraryInfoImpl::NoLibrary) {
+    // Optionally, replace LLVM math intrinsics with vector library calls.
+    if (vector_width > 1) {
 #if LLVM_VERSION_MAJOR < 13
         logger->warn(
             "This version of LLVM does not support replacement of LLVM intrinsics with vector "
             "library calls");
 #else
-        // First, get the target library information.
+        // First, get the target library information and add vectorizable functions for the
+        // specified vector library.
         llvm::Triple triple(llvm::sys::getDefaultTargetTriple());
         llvm::TargetLibraryInfoImpl target_lib_info = llvm::TargetLibraryInfoImpl(triple);
+        add_vectorizable_functions_from_vec_lib(target_lib_info, triple);
 
-        // Populate target library information with vectorisable functions. Since libmvec is
-        // supported for x86_64 only, have a check to catch other architectures.
-        if (vector_library != llvm::TargetLibraryInfoImpl::LIBMVEC_X86 ||
-            (triple.isX86() && triple.isArch64Bit())) {
-            target_lib_info.addVectorizableFunctionsFromVecLib(vector_library);
-        }
-
-        // Run the codegen optimisation passes that replace maths intrinsics.
+        // Run passes that replace math intrinsics.
         codegen_pm.add(new llvm::TargetLibraryInfoWrapperPass(target_lib_info));
         codegen_pm.add(new llvm::ReplaceWithVeclibLegacy);
         codegen_pm.doInitialization();
