@@ -349,7 +349,7 @@ int main(int argc, const char* argv[]) {
         fmt::format("LLVM explicit vectorisation width ({})", llvm_vec_width))->ignore_case();
     llvm_opt->add_option("--veclib",
                          vector_library,
-                         fmt::format("Vector library for maths functions ({})", vector_library))->check(CLI::IsMember({"Accelerate", "libmvec", "MASSV", "SVML", "none"}));
+                         fmt::format("Vector library for maths functions ({})", vector_library))->check(CLI::IsMember({"Accelerate", "libsystem_m", "libmvec", "MASSV", "SLEEF", "SVML", "none"}));
     llvm_opt->add_option("--fmf",
                          llvm_fast_math_flags,
                          "Fast math flags for floating-point optimizations (none)")->check(CLI::IsMember({"afn", "arcp", "contract", "ninf", "nnan", "nsz", "reassoc", "fast"}));
