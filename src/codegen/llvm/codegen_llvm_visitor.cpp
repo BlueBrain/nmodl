@@ -70,10 +70,10 @@ void CodegenLLVMVisitor::add_vectorizable_functions_from_vec_lib(llvm::TargetLib
                                                                  llvm::Triple& triple) {
     // Since LLVM does not support SLEEF as a vector library yet, process it separately.
     if (vector_library == "SLEEF") {
-        // Populate function definitions for AArch64 architecture.
+        // Populate function definitions of only exp and pow (for now)
 #define FIXED(w)                        llvm::ElementCount::getFixed(w)
 #define DISPATCH(func, vec_func, width) {func, vec_func, width},
-        const llvm::VecDesc functions[] = {
+        const llvm::VecDesc aarch64_functions[] = {
             // clang-format off
             DISPATCH("llvm.exp.f32", "_ZGVnN4v_expf", FIXED(4))
             DISPATCH("llvm.exp.f64", "_ZGVnN2v_exp", FIXED(2))
@@ -81,8 +81,24 @@ void CodegenLLVMVisitor::add_vectorizable_functions_from_vec_lib(llvm::TargetLib
             DISPATCH("llvm.pow.f64", "_ZGVnN2vv_pow", FIXED(2))
             // clang-format on
         };
+        const llvm::VecDesc x86_functions[] = {
+            // clang-format off
+            DISPATCH("llvm.exp.f64", "_ZGVbN2v_exp", FIXED(2))
+            DISPATCH("llvm.exp.f64", "_ZGVdN4v_exp", FIXED(4))
+            DISPATCH("llvm.exp.f64", "_ZGVeN8v_exp", FIXED(8))
+            DISPATCH("llvm.pow.f64", "_ZGVbN2vv_pow", FIXED(2))
+            DISPATCH("llvm.pow.f64", "_ZGVdN4vv_pow", FIXED(4))
+            DISPATCH("llvm.pow.f64", "_ZGVeN8vv_pow", FIXED(8))
+            // clang-format on
+        };
 #undef DISPATCH
-        tli.addVectorizableFunctions(functions);
+
+        if (triple.isAArch64()) {
+            tli.addVectorizableFunctions(aarch64_functions);
+        }
+        if (triple.isX86() && triple.isArch64Bit()) {
+            tli.addVectorizableFunctions(x86_functions);
+        }
 
     } else {
         // A map to query vector library by its string value.
