@@ -42,7 +42,7 @@ function build_with() {
              -DNMODL_FORMATTING:BOOL=ON \
              -DClangFormat_EXECUTABLE=$clang_format_exe \
              -DNMODL_ENABLE_JIT_EVENT_LISTENERS=ON \
-             -DLLVM_DIR=/gpfs/bbp.cscs.ch/data/project/proj16/software/llvm/install/0521/lib/cmake/llvm
+             -DLLVM_DIR=/gpfs/bbp.cscs.ch/apps/hpc/llvm-install/0621/lib/cmake/llvm
     make -j6
     popd
 }
