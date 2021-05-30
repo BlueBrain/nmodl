@@ -176,7 +176,8 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
   private:
 #if LLVM_VERSION_MAJOR >= 13
     /// Populates target library info with the vector library definitions.
-    void add_vectorizable_functions_from_vec_lib(llvm::TargetLibraryInfoImpl& tli, llvm::Triple& triple);
+    void add_vectorizable_functions_from_vec_lib(llvm::TargetLibraryInfoImpl& tli,
+                                                 llvm::Triple& triple);
 #endif
 
     /// Accepts the given AST node and returns the processed value.

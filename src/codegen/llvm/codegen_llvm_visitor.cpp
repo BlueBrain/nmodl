@@ -71,13 +71,15 @@ void CodegenLLVMVisitor::add_vectorizable_functions_from_vec_lib(llvm::TargetLib
     // Since LLVM does not support SLEEF as a vector library yet, process it separately.
     if (vector_library == "SLEEF") {
         // Populate function definitions for AArch64 architecture.
-#define FIXED(w) llvm::ElementCount::getFixed(w)
+#define FIXED(w)                        llvm::ElementCount::getFixed(w)
 #define DISPATCH(func, vec_func, width) {func, vec_func, width},
         const llvm::VecDesc functions[] = {
+            // clang-format off
             DISPATCH("llvm.exp.f32", "_ZGVnN4v_expf", FIXED(4))
             DISPATCH("llvm.exp.f64", "_ZGVnN2v_exp", FIXED(2))
             DISPATCH("llvm.pow.f32", "_ZGVnN4vv_powf", FIXED(4))
             DISPATCH("llvm.pow.f64", "_ZGVnN2vv_pow", FIXED(2))
+            // clang-format on
         };
 #undef DISPATCH
         tli.addVectorizableFunctions(functions);
