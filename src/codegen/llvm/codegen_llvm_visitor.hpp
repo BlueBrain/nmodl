@@ -97,6 +97,9 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     /// Explicit vectorisation width.
     int vector_width;
 
+    /// Generate scalable vectorized IR.
+    bool scalable;
+
   public:
     CodegenLLVMVisitor(const std::string& mod_filename,
                        const std::string& output_dir,
@@ -105,14 +108,16 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
                        int vector_width = 1,
                        std::string vec_lib = "none",
                        bool add_debug_information = false,
-                       std::vector<std::string> fast_math_flags = {})
+                       std::vector<std::string> fast_math_flags = {},
+                       bool scalable = false)
         : mod_filename(mod_filename)
         , output_dir(output_dir)
         , opt_passes(opt_passes)
         , vector_width(vector_width)
         , vector_library(vec_lib)
+        , scalable(scalable)
         , add_debug_information(add_debug_information)
-        , ir_builder(*context, use_single_precision, vector_width, fast_math_flags)
+        , ir_builder(*context, use_single_precision, vector_width, fast_math_flags, scalable)
         , debug_builder(*module)
         , codegen_pm(module.get())
         , opt_pm(module.get()) {}

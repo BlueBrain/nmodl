@@ -550,17 +550,33 @@ void CodegenLLVMHelperVisitor::visit_function_block(ast::FunctionBlock& node) {
 }
 
 /**
- * Create loop increment expression `id = id + width`
- * \todo : same as int_initialization_expression()
+ * Create loop increment expression
+ * \todo : llvm.vscale.i32 is currently hardcoded. This can be done in a more elegant way.
  */
 static std::shared_ptr<ast::Expression> loop_increment_expression(const std::string& induction_var,
-                                                                  int vector_width) {
-    // first create id + x
+                                                                  int vector_width,
+                                                                  bool scalable) {
     const auto& id = create_varname(induction_var);
-    const auto& inc = new ast::Integer(vector_width, nullptr);
+    if (scalable) {
+        // For scalable vectorized code generation, the increment is
+        //     id = id + vscale * vector_width
+        const auto& call_for_factor =
+            new ast::FunctionCall(new ast::Name(new ast::String("llvm.vscale.i32")), {});
+        const auto& min_vector_width = new ast::Integer(vector_width, /*macro=*/nullptr);
+        const auto& actual_width = new ast::BinaryExpression(
+            call_for_factor, ast::BinaryOperator(ast::BOP_MULTIPLICATION), min_vector_width);
+        const auto& inc_expr =
+            new ast::BinaryExpression(id, ast::BinaryOperator(ast::BOP_ADDITION), actual_width);
+        return std::make_shared<ast::BinaryExpression>(id->clone(),
+                                                       ast::BinaryOperator(ast::BOP_ASSIGN),
+                                                       inc_expr);
+    }
+
+    // Otherwise, the increment is
+    //     id = id + vector_width
+    const auto& increment = new ast::Integer(vector_width, /*macro=*/nullptr);
     const auto& inc_expr =
-        new ast::BinaryExpression(id, ast::BinaryOperator(ast::BOP_ADDITION), inc);
-    // now create id = id + x
+        new ast::BinaryExpression(id, ast::BinaryOperator(ast::BOP_ADDITION), increment);
     return std::make_shared<ast::BinaryExpression>(id->clone(),
                                                    ast::BinaryOperator(ast::BOP_ASSIGN),
                                                    inc_expr);
@@ -569,16 +585,16 @@ static std::shared_ptr<ast::Expression> loop_increment_expression(const std::str
 /**
  * Create loop count comparison expression
  *
- * Based on if loop is vectorised or not, the condition for loop
- * is different. For example:
- *  - serial loop : `id < node_count`
- *  - vector loop : `id < (node_count - vector_width + 1)`
+ *  Serial loop: `id < node_count`
+ *  Fixed vector width loop : `id < node_count - (vector_width - 1)`
+ *  Scalable vector width loop : `id < node_count - (vscale * vector_width - 1)`
  *
- * \todo : same as int_initialization_expression()
+ * \todo : llvm.vscale.i32 is currently hardcoded. This can be done in a more elegant way.
  */
 static std::shared_ptr<ast::Expression> loop_count_expression(const std::string& induction_var,
                                                               const std::string& node_count,
-                                                              int vector_width) {
+                                                              int vector_width,
+                                                              bool scalable) {
     const auto& id = create_varname(induction_var);
     const auto& mech_node_count = create_varname(node_count);
 
@@ -589,8 +605,26 @@ static std::shared_ptr<ast::Expression> loop_count_expression(const std::string&
                                                        mech_node_count);
     }
 
-    // For vectorised loop, the condition is id < mech->node_count - vector_width + 1
-    const auto& remainder = new ast::Integer(vector_width - 1, /*macro=*/nullptr);
+    // For fixed vector width, the condition is id < mech->node_count - vector_width + 1
+    if (!scalable) {
+        const auto& remainder = new ast::Integer(vector_width - 1, /*macro=*/nullptr);
+        const auto& count = new ast::BinaryExpression(mech_node_count,
+                                                      ast::BinaryOperator(ast::BOP_SUBTRACTION),
+                                                      remainder);
+        return std::make_shared<ast::BinaryExpression>(id->clone(),
+                                                       ast::BinaryOperator(ast::BOP_LESS),
+                                                       count);
+    }
+
+    // For scalable vector width, the condition is id < mech->node_count - vscale * vector_width + 1
+    const auto& call_for_factor =
+        new ast::FunctionCall(new ast::Name(new ast::String("llvm.vscale.i32")), {});
+    const auto& min_vector_width = new ast::Integer(vector_width, /*macro=*/nullptr);
+    const auto& actual_width = new ast::BinaryExpression(
+        call_for_factor, ast::BinaryOperator(ast::BOP_MULTIPLICATION), min_vector_width);
+    const auto& one = new ast::Integer(1, /*macro=*/nullptr);
+    const auto& remainder =
+        new ast::BinaryExpression(actual_width, ast::BinaryOperator(ast::BOP_SUBTRACTION), one);
     const auto& count = new ast::BinaryExpression(mech_node_count,
                                                   ast::BinaryOperator(ast::BOP_SUBTRACTION),
                                                   remainder);
@@ -683,8 +717,9 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
     {
         /// loop constructs : initialization, condition and increment
         const auto& initialization = int_initialization_expression(INDUCTION_VAR);
-        const auto& condition = loop_count_expression(INDUCTION_VAR, NODECOUNT_VAR, vector_width);
-        const auto& increment = loop_increment_expression(INDUCTION_VAR, vector_width);
+        const auto& condition =
+            loop_count_expression(INDUCTION_VAR, NODECOUNT_VAR, vector_width, scalable);
+        const auto& increment = loop_increment_expression(INDUCTION_VAR, vector_width, scalable);
 
         /// clone it
         auto local_loop_block = std::shared_ptr<ast::StatementBlock>(loop_block->clone());
@@ -711,9 +746,12 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
     /// remainder loop possibly vectorized on vector_width
     if (vector_width > 1) {
         /// loop constructs : initialization, condition and increment
-        const auto& condition =
-            loop_count_expression(INDUCTION_VAR, NODECOUNT_VAR, /*vector_width=*/1);
-        const auto& increment = loop_increment_expression(INDUCTION_VAR, /*vector_width=*/1);
+        const auto& condition = loop_count_expression(INDUCTION_VAR,
+                                                      NODECOUNT_VAR,
+                                                      /*vector_width=*/1,
+                                                      /*scalable=*/false);
+        const auto& increment =
+            loop_increment_expression(INDUCTION_VAR, /*vector_width=*/1, /*scalable=*/false);
 
         /// rename local variables to avoid conflict with main loop
         rename_local_variables(*loop_block);

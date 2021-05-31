@@ -71,7 +71,7 @@ void CodegenLLVMVisitor::add_vectorizable_functions_from_vec_lib(llvm::TargetLib
     // Since LLVM does not support SLEEF as a vector library yet, process it separately.
     if (vector_library == "SLEEF") {
         // Populate function definitions of only exp and pow (for now)
-#define FIXED(w)                        llvm::ElementCount::getFixed(w)
+#define FIXED(w) llvm::ElementCount::getFixed(w)
 #define DISPATCH(func, vec_func, width) {func, vec_func, width},
         const llvm::VecDesc aarch64_functions[] = {
             // clang-format off
@@ -746,6 +746,12 @@ void CodegenLLVMVisitor::visit_function_call(const ast::FunctionCall& node) {
     if (func) {
         create_function_call(func, name, node.get_arguments());
     } else {
+        // If generating scalable vectorized IR, process the call to `vscale` separately.
+        if (name == "llvm.vscale.i32" && scalable) {
+            ir_builder.create_vscale_call(*module);
+            return;
+        }
+
         auto symbol = sym_tab->lookup(name);
         if (symbol && symbol->has_any_property(symtab::syminfo::NmodlType::extern_method)) {
             create_external_function_call(name, node.get_arguments());
@@ -832,7 +838,7 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
     //   - convert function and procedure blocks into CodegenFunctions
     //   - gather information about AST. For now, information about functions
     //     and procedures is used only.
-    CodegenLLVMHelperVisitor v{vector_width};
+    CodegenLLVMHelperVisitor v{vector_width, scalable};
     const auto& functions = v.get_codegen_functions(node);
     instance_var_helper = v.get_instance_var_helper();
     sym_tab = node.get_symbol_table();

@@ -58,6 +58,9 @@ class IRBuilder {
     /// The vector width used for the vectorized code.
     unsigned vector_width;
 
+    /// Use scalable vector types.
+    bool scalable;
+
     /// Masked value used to predicate vector instructions.
     llvm::Value* mask;
 
@@ -71,12 +74,14 @@ class IRBuilder {
     IRBuilder(llvm::LLVMContext& context,
               bool use_single_precision = false,
               unsigned vector_width = 1,
-              std::vector<std::string> fast_math_flags = {})
+              std::vector<std::string> fast_math_flags = {},
+              bool scalable = false)
         : builder(context)
         , symbol_table(nullptr)
         , current_function(nullptr)
         , vectorize(false)
         , alloca_ip(nullptr)
+        , scalable(scalable)
         , fp_precision(use_single_precision ? single_precision : double_precision)
         , vector_width(vector_width)
         , mask(nullptr)
@@ -234,6 +239,9 @@ class IRBuilder {
     void create_scalar_or_vector_alloca(const std::string& name,
                                         llvm::Type* element_or_scalar_type);
 
+    /// Creates a call to llvm.vscale.i32().
+    void create_vscale_call(llvm::Module& module);
+
     /// Generates LLVM IR for the given unary operator.
     void create_unary_op(llvm::Value* value, ast::UnaryOp op);
 
@@ -316,6 +324,9 @@ class IRBuilder {
     /// Returns a vector constant of the provided type.
     template <typename C, typename V>
     llvm::Value* get_vector_constant(llvm::Type* type, V value);
+
+    /// Creates a Fixed or Scalable vector type.
+    llvm::Type* get_vector_type(llvm::Type* element_type, unsigned min_num_elements);
 };
 
 }  // namespace codegen
