@@ -3330,6 +3330,7 @@ void CodegenCVisitor::print_nrn_constructor() {
         const auto& block = info.constructor_node->get_statement_block();
         print_statement_block(*block.get(), false, false);
     }
+    print_kernel_data_present_annotation_block_end();
     printer->end_block(1);
 }
 
@@ -3341,6 +3342,7 @@ void CodegenCVisitor::print_nrn_destructor() {
         const auto& block = info.destructor_node->get_statement_block();
         print_statement_block(*block.get(), false, false);
     }
+    print_kernel_data_present_annotation_block_end();
     printer->end_block(1);
 }
 
