@@ -103,6 +103,9 @@ class CodegenLLVMHelperVisitor: public visitor::AstVisitor {
     /// explicit vectorisation width
     int vector_width;
 
+    /// target scalable ISAs
+    bool scalable;
+
     /// newly generated code generation specific functions
     CodegenFunctionVector codegen_functions;
 
@@ -134,8 +137,10 @@ class CodegenLLVMHelperVisitor: public visitor::AstVisitor {
     static const std::string VOLTAGE_VAR;
     static const std::string NODE_INDEX_VAR;
 
-    CodegenLLVMHelperVisitor(int vector_width)
-        : vector_width(vector_width) {}
+    CodegenLLVMHelperVisitor(int vector_width,
+                             bool scalable = false)
+        : vector_width(vector_width)
+        , scalable(scalable) {}
 
     const InstanceVarHelper& get_instance_var_helper() {
         return instance_var_helper;

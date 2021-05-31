@@ -239,6 +239,9 @@ class IRBuilder {
     void create_scalar_or_vector_alloca(const std::string& name,
                                         llvm::Type* element_or_scalar_type);
 
+    /// Creates a call to llvm.vscale.i32().
+    void create_vscale_call(llvm::Module& module);
+
     /// Generates LLVM IR for the given unary operator.
     void create_unary_op(llvm::Value* value, ast::UnaryOp op);
 

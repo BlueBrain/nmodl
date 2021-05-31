@@ -200,6 +200,13 @@ void IRBuilder::create_intrinsic(const std::string& name,
     }
 }
 
+void IRBuilder::create_vscale_call(llvm::Module& module) {
+    llvm::Function* vscale_function =
+        llvm::Intrinsic::getDeclaration(&module, llvm::Intrinsic::vscale, get_i32_type());
+    llvm::Value* vscale = builder.CreateCall(vscale_function);
+    value_stack.push_back(vscale);
+}
+
 void IRBuilder::set_kernel_attributes() {
     // By convention, the compute kernel does not free memory and does not throw exceptions.
     current_function->setDoesNotFreeMemory();
