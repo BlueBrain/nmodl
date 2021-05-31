@@ -131,6 +131,22 @@ llvm::Value* IRBuilder::get_scalar_constant(llvm::Type* type, V value) {
 
 template <typename C, typename V>
 llvm::Value* IRBuilder::get_vector_constant(llvm::Type* type, V value) {
+    // Handle scalable vector constant differently.
+    if (scalable) {
+        llvm::Type* vector_type = llvm::ScalableVectorType::get(type, vector_width);
+
+        // First, create a scalable vector with 0th element set to the value.
+        llvm::Value* to_insert = get_scalar_constant<C>(type, value);
+        llvm::Value* zero = get_scalar_constant<llvm::ConstantInt>(get_i32_type(), 0);
+        llvm::Value* lhs =
+            builder.CreateInsertElement(llvm::UndefValue::get(vector_type), to_insert, zero);
+
+        // Then, use `shufflevector` with zeroinitializer to select only 0th element.
+        llvm::Value* select = llvm::Constant::getNullValue(vector_type);
+        return builder.CreateShuffleVector(lhs, llvm::UndefValue::get(vector_type), select);
+    }
+
+    // Otherwise, create a fixed vector constant.
     ConstantVector constants;
     for (unsigned i = 0; i < vector_width; ++i) {
         const auto& element = C::get(type, value);
