@@ -174,6 +174,9 @@ int main(int argc, const char* argv[]) {
     /// run llvm optimisation passes
     bool llvm_ir_opt_passes(false);
 
+    /// generate IR for scalable vector ISAs
+    bool llvm_scalable_vectors(false);
+
     /// llvm vector width
     int llvm_vec_width = 1;
 
@@ -327,6 +330,9 @@ int main(int argc, const char* argv[]) {
     llvm_opt->add_flag("--single-precision",
                        llvm_float_type,
                        "Use single precision floating-point types ({})"_format(llvm_float_type))->ignore_case();
+    llvm_opt->add_flag("--scalable",
+                       llvm_scalable_vectors,
+                       "Generate scalable vector IR ({})"_format(llvm_scalable_vectors))->ignore_case();
     llvm_opt->add_option("--vector-width",
         llvm_vec_width,
         "LLVM explicit vectorisation width ({})"_format(llvm_vec_width))->ignore_case();
@@ -666,7 +672,8 @@ int main(int argc, const char* argv[]) {
                                            llvm_vec_width,
                                            vector_library,
                                            !disable_debug_information,
-                                           llvm_fast_math_flags);
+                                           llvm_fast_math_flags,
+                                           llvm_scalable_vectors);
                 visitor.visit_program(*ast);
                 ast_to_nmodl(*ast, filepath("llvm", "mod"));
                 ast_to_json(*ast, filepath("llvm", "json"));

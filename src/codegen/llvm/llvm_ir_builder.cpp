@@ -64,6 +64,11 @@ llvm::Type* IRBuilder::get_struct_ptr_type(const std::string& struct_type_name,
     return llvm::PointerType::get(llvm_struct_type, /*AddressSpace=*/0);
 }
 
+llvm::Type* IRBuilder::get_vector_type(llvm::Type* element_type, unsigned min_num_elements) {
+    if (scalable)
+        return llvm::ScalableVectorType::get(element_type, min_num_elements);
+    return llvm::FixedVectorType::get(element_type, min_num_elements);
+}
 
 /****************************************************************************************/
 /*                            LLVM value utilities                                      */
@@ -366,11 +371,11 @@ llvm::Value* IRBuilder::create_index(llvm::Value* value) {
         return builder.CreateSExtOrTrunc(value, i64_type);
     }
 
-    const auto& vector_type = llvm::cast<llvm::FixedVectorType>(value_type);
+    const auto& vector_type = llvm::cast<llvm::VectorType>(value_type);
     const auto& element_type = llvm::cast<llvm::IntegerType>(vector_type->getElementType());
     if (element_type->getBitWidth() == i64_type->getIntegerBitWidth())
         return value;
-    return builder.CreateSExtOrTrunc(value, llvm::FixedVectorType::get(i64_type, vector_width));
+    return builder.CreateSExtOrTrunc(value, get_vector_type(i64_type, vector_width));
 }
 
 llvm::Value* IRBuilder::create_load(const std::string& name, bool masked) {
@@ -442,7 +447,7 @@ void IRBuilder::create_scalar_or_vector_alloca(const std::string& name,
     // induction variable "id" and remainder loop variables (that start with "epilogue" prefix).
     llvm::Type* type;
     if (vector_width > 1 && vectorize && name != kernel_id && name.rfind("epilogue", 0)) {
-        type = llvm::FixedVectorType::get(element_or_scalar_type, vector_width);
+        type = get_vector_type(element_or_scalar_type, vector_width);
     } else {
         type = element_or_scalar_type;
     }
@@ -502,10 +507,10 @@ llvm::Value* IRBuilder::load_to_or_store_from_array(const std::string& id_name,
     if (generating_vector_ir) {
         // If direct indexing is used during the vectorization, we simply bitcast the scalar pointer
         // to a vector pointer
-        llvm::Type* vector_type = llvm::PointerType::get(
-            llvm::FixedVectorType::get(element_ptr->getType()->getPointerElementType(),
-                                       vector_width),
-            /*AddressSpace=*/0);
+        llvm::Type* vector_type =
+            llvm::PointerType::get(get_vector_type(element_ptr->getType()->getPointerElementType(),
+                                                   vector_width),
+                                   /*AddressSpace=*/0);
         ptr = builder.CreateBitCast(element_ptr, vector_type);
     } else {
         // Otherwise, scalar code is generated and hence return the element pointer.
