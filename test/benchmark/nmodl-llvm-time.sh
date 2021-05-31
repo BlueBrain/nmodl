@@ -92,7 +92,7 @@ declare -a icpc_flags=(
     "-O2 -msse2 -prec-div -fimf-use-svml"
     )
 
-clang_bin_path="/gpfs/bbp.cscs.ch/data/project/proj16/software/llvm/install/0521/bin"
+clang_bin_path="/gpfs/bbp.cscs.ch/data/project/proj16/software/llvm/install/0621/bin"
 clang_exe=${clang_bin_path}/clang++
 declare -a clang_flags=(
     "-O3 -march=skylake-avx512 -ffast-math -fveclib=SVML"
@@ -112,11 +112,13 @@ declare -a gcc_flags=(
     )
 
 # loop over options
-for kernel_target in compute-bound memory-bound hh; do
+# for kernel_target in compute-bound memory-bound hh; do
+for kernel_target in hh; do
     echo "kernel: "${kernel_target}
     
     # loop over other compilers
-    for compiler in icpc clang gcc; do
+    # for compiler in icpc clang gcc; do
+    for compiler in clang; do
         echo "|  compiler: "${compiler}
 
         compiler_exe=${compiler}_exe
