@@ -694,5 +694,14 @@ void CodegenHelperVisitor::visit_partial_block(const ast::PartialBlock& node) {
     info.vectorize = false;
 }
 
+void CodegenHelperVisitor::visit_random(const ast::Random& node) {
+    auto pdf = Distribution(node.get_distribution()->get_node_name(),
+                            node.get_distribution_params());
+    for (const auto& r: node.get_variables()) {
+        auto sym = psymtab->lookup(r->get_node_name());
+        info.random_vars.emplace(sym, pdf);
+    }
+}
+
 }  // namespace codegen
 }  // namespace nmodl

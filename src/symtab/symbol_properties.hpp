@@ -135,92 +135,95 @@ enum class NmodlType : enum_type {
     /// Bbcorepointer Type
     bbcore_pointer_var = 1L << 5,
 
+    /// Randomvar Type
+    random_var = 1L << 6,
+
     /// Extern Type
-    extern_var = 1L << 6,
+    extern_var = 1L << 7,
 
     /// Prime Type
-    prime_name = 1L << 7,
+    prime_name = 1L << 8,
 
     /// Assigned Definition
-    assigned_definition = 1L << 8,
+    assigned_definition = 1L << 9,
 
     /// Unit Def
-    unit_def = 1L << 9,
+    unit_def = 1L << 10,
 
     /// Read Ion
-    read_ion_var = 1L << 10,
+    read_ion_var = 1L << 11,
 
     /// Write Ion
-    write_ion_var = 1L << 11,
+    write_ion_var = 1L << 12,
 
     /// Non Specific Current
-    nonspecific_cur_var = 1L << 12,
+    nonspecific_cur_var = 1L << 13,
 
     /// Electrode Current
-    electrode_cur_var = 1L << 13,
+    electrode_cur_var = 1L << 14,
 
     /// Section Type
-    section_var = 1L << 14,
+    section_var = 1L << 15,
 
     /// Argument Type
-    argument = 1L << 15,
+    argument = 1L << 16,
 
     /// Function Type
-    function_block = 1L << 16,
+    function_block = 1L << 17,
 
     /// Procedure Type
-    procedure_block = 1L << 17,
+    procedure_block = 1L << 18,
 
     /// Derivative Block
-    derivative_block = 1L << 18,
+    derivative_block = 1L << 19,
 
     /// Linear Block
-    linear_block = 1L << 19,
+    linear_block = 1L << 20,
 
     /// NonLinear Block
-    non_linear_block = 1L << 20,
+    non_linear_block = 1L << 21,
 
     /// constant variable
-    constant_var = 1L << 21,
+    constant_var = 1L << 22,
 
     /// Partial Block
-    partial_block = 1L << 22,
+    partial_block = 1L << 23,
 
     /// Kinetic Block
-    kinetic_block = 1L << 23,
+    kinetic_block = 1L << 24,
 
     /// FunctionTable Block
-    function_table_block = 1L << 24,
+    function_table_block = 1L << 25,
 
     /// factor in unit block
-    factor_def = 1L << 25,
+    factor_def = 1L << 26,
 
     /// neuron variable accessible in mod file
-    extern_neuron_variable = 1L << 26,
+    extern_neuron_variable = 1L << 27,
 
     /// neuron solver methods and math functions
-    extern_method = 1L << 27,
+    extern_method = 1L << 28,
 
     /// state variable
-    state_var = 1L << 28,
+    state_var = 1L << 29,
 
     /// need to solve : used in solve statement
-    to_solve = 1L << 29,
+    to_solve = 1L << 30,
 
     /// ion type
-    useion = 1L << 30,
+    useion = 1L << 31,
 
     /// variable is used in table statement
-    table_statement_var = 1L << 31,
+    table_statement_var = 1L << 32,
 
     /// variable is used in table as assigned
-    table_assigned_var = 1L << 32,
+    table_assigned_var = 1L << 33,
 
     /// Discrete Block
-    discrete_block = 1L << 33,
+    discrete_block = 1L << 34,
 
     /// Define variable / macro
-    define = 1L << 34
+    define = 1L << 35
 };
 
 template <typename T>

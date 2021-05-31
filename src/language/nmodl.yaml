@@ -396,6 +396,14 @@
                                   type: Name
                                   node_name: true
 
+                        - RandomVar:
+                            brief: "A random variable that can sample from a probability density function"
+                            members:
+                              - name:
+                                  brief: "Variable name"
+                                  type: Name
+                                  node_name: true
+
                         - PointerVar:
                             brief: "TODO"
                             members:
@@ -2014,6 +2022,7 @@
                       brief: "Represents SECTION variables statement in NMODL"
 
                   - Range:
+                      brief: "Represents RANGE variables statement in NMODL"
                       nmodl: "RANGE "
                       members:
                         - variables:
@@ -2021,10 +2030,9 @@
                             type: RangeVar
                             vector: true
                             separator: ", "
-                      brief: "Represents RANGE variables statement in NMODL"
 
                   - Global:
-                      brief: "TODO"
+                      brief: "Represents GLOBAL statement in NMODL"
                       nmodl: "GLOBAL "
                       members:
                         - variables:
@@ -2033,7 +2041,27 @@
                             vector: true
                             add: true
                             separator: ", "
-                      brief: "Represents GLOBAL statement in NMODL"
+
+                  - Random:
+                      brief: "Represents RANDOM statement in NMODL"
+                      nmodl: "RANDOM "
+                      members:
+                        - distribution:
+                            brief: "Name of the distribution from which random vars are drawn"
+                            type: Name
+                        - distribution_params:
+                            brief: "The parameters describing the probaility density function"
+                            type: Expression
+                            vector: true
+                            separator: ", "
+                            prefix: {value: "(", force: true}
+                            suffix: {value: ")", force: true}
+                        - variables:
+                            brief: "Vector of random variables"
+                            type: RandomVar
+                            vector: true
+                            add: true
+                            separator: ", "
 
                   - Pointer:
                       nmodl: "POINTER "

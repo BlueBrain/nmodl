@@ -138,6 +138,7 @@
 %token  <ModToken>              PROTECT
 %token  <ModToken>              PUTQ
 %token  <ModToken>              RANGE
+%token  <ModToken>              RANDOM
 %token  <ModToken>              REACT1
 %token  <ModToken>              REACTION
 %token  <ModToken>              READ
@@ -326,6 +327,7 @@
 %type   <ast::GlobalVarVector>              global_var_list
 %type   <ast::PointerVarVector>             pointer_var_list
 %type   <ast::BbcorePointerVarVector>       bbcore_pointer_var_list
+%type   <ast::RandomVarVector>              random_var_list
 %type   <ast::ExternVarVector>              external_var_list
 %type   <ast::ThreadsafeVarVector>          optional_threadsafe_var_list
 %type   <ast::ThreadsafeVarVector>          threadsafe_var_list
@@ -2327,6 +2329,11 @@ neuron_statement :
                         $1.emplace_back(new ast::OntologyStatement(new ast::String($3)));
                         $$ = $1;
                     }
+                |   neuron_statement RANDOM NAME_PTR "(" expression_list ")" random_var_list
+                    {
+                        $1.emplace_back(new ast::Random($3, $5, $7));
+                        $$ = $1;
+                    }
                 ;
 
 
@@ -2533,6 +2540,26 @@ bbcore_pointer_var_list : NAME_PTR
                 |   error
                     {
                         error(scanner.loc, "bbcore_pointer_var_list");
+                    }
+                ;
+
+random_var_list:   NAME_PTR
+                    {
+                        $$ = ast::RandomVarVector();
+                        auto new_random_var = new ast::RandomVar($1);
+                        new_random_var->set_token(*($1->get_token()));
+                        $$.emplace_back(new_random_var);
+                    }
+                |   random_var_list "," NAME_PTR
+                    {
+                        auto new_random_var = new ast::RandomVar($3);
+                        new_random_var->set_token(*($3->get_token()));
+                        $1.emplace_back(new_random_var);
+                        $$ = $1;
+                    }
+                |   error
+                    {
+                        error(scanner.loc, "random_var_list");
                     }
                 ;
 
