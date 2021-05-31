@@ -1787,9 +1787,7 @@ void CodegenCVisitor::visit_eigen_linear_solver_block(const ast::EigenLinearSolv
     print_statement_block(*node.get_setup_x_block(), false, false);
 
     printer->add_newline();
-    printer->add_line(
-        "{0} = Eigen::PartialPivLU<Eigen::Ref<Eigen::Matrix<{1}, {2}, {2}>>>({3}).solve({4});"_format(
-            X, float_type, N, Jm, F));
+    printer->add_line("{0} = {1}.inverse()*{2};"_format(X, Jm, F));
     print_statement_block(*node.get_update_states_block(), false, false);
     print_statement_block(*node.get_finalize_block(), false, false);
 }
