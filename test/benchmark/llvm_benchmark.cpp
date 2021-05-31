@@ -10,10 +10,11 @@
 
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
 #include "llvm_benchmark.hpp"
+#include "ext_kernel.hpp"
 #include "test/benchmark/jit_driver.hpp"
+#include "test/unit/codegen/codegen_data_helper.hpp"
 #include "llvm/Support/Host.h"
 
-#include "test/unit/codegen/codegen_data_helper.hpp"
 
 
 namespace nmodl {
@@ -146,6 +147,39 @@ void LLVMBenchmark::run_benchmark(const std::shared_ptr<ast::Program>& node) {
         logger->info("Minimum compute time = {:.6f}", time_min);
         logger->info("Maximum compute time = {:.6f}\n", time_max);
     }
+    // benchmark external kernel
+    logger->info("Benchmarking external kernel");
+    double time_min = std::numeric_limits<double>::max();
+    double time_max = 0.0;
+    double time_sum = 0.0;
+    double time_squared_sum = 0.0;
+    for (int i = 0; i < num_experiments; ++i) {
+        // Initialise the data.
+        auto instance_data = codegen_data.create_data(instance_size, /*seed=*/1);
+        
+        // Record the execution time of the kernel.
+        auto start = std::chrono::high_resolution_clock::now();
+        nrn_state_hh_ext(instance_data.base_ptr);
+        auto end = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> diff = end - start;
+
+        // Log the time taken for each run.
+        logger->info("Experiment {} compute time = {:.6f} sec", i, diff.count());
+
+        // Update statistics.
+        time_sum += diff.count();
+        time_squared_sum += diff.count() * diff.count();
+        time_min = std::min(time_min, diff.count());
+        time_max = std::max(time_max, diff.count());
+    }
+    // Log the average time taken for the kernel.
+    double time_mean = time_sum / num_experiments;
+    logger->info("Average compute time = {:.6f}", time_mean);
+    logger->info("Compute time variance = {:g}",
+                    time_squared_sum / num_experiments - time_mean * time_mean);
+    logger->info("Minimum compute time = {:.6f}", time_min);
+    logger->info("Maximum compute time = {:.6f}\n", time_max);
+
 }
 
 }  // namespace benchmark

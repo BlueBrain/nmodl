@@ -96,6 +96,7 @@ CodegenInstanceData CodegenDataHelper::create_data(size_t num_elements, size_t s
 
     // allocate each variable and allocate memory at particular offset in base pointer
     for (auto& var: variables) {
+        
         // only process until first non-pointer variable
         if (!var->get_is_pointer()) {
             break;
@@ -138,6 +139,18 @@ CodegenInstanceData CodegenDataHelper::create_data(size_t num_elements, size_t s
 
         variable_index++;
     }
+
+
+    int cnt{};
+    for (auto& var: variables) {
+        // printout vars 
+        std::cout << cnt++ 
+            << ":\t" << to_string(var->get_type()->get_type())  
+            << '\t' << var->get_is_pointer()
+            << '\t' << var->get_name()->get_node_name()  << '\n';
+    }
+
+
 
     // we are now switching from pointer type to next member type (e.g. double)
     // ideally we should use padding but switching from double* to double should
