@@ -92,15 +92,16 @@ declare -a icpc_flags=(
     "-O2 -msse2 -prec-div -fimf-use-svml"
     )
 
-clang_bin_path="/gpfs/bbp.cscs.ch/data/project/proj16/software/llvm/install/0621/bin"
-clang_exe=${clang_bin_path}/clang++
+llvm_path="/gpfs/bbp.cscs.ch/apps/hpc/llvm-install/0621"
+llvm_lib=${llvm_path}/lib
+clang_exe=${llvm_path}/bin/clang++
 declare -a clang_flags=(
-    "-O3 -march=skylake-avx512 -ffast-math -fveclib=SVML"
     "-O3 -mavx512f -ffast-math -fopenmp -fveclib=SVML"
-    "-O3 -mavx512f -ffast-math -fveclib=SVML"
-    "-O3 -mavx512f -fveclib=SVML"
     "-O3 -mavx2 -ffast-math -fopenmp -fveclib=SVML"
     "-O3 -msse2 -ffast-math -fopenmp -fveclib=SVML"
+    "-O3 -mavx512f -ffast-math -fveclib=SVML"
+    "-O3 -mavx512f -fveclib=SVML"
+    "-O3 -march=skylake-avx512 -ffast-math -fopenmp -fveclib=SVML"
     )
 
 gcc_bin_path="/gpfs/bbp.cscs.ch/ssd/apps/hpc/jenkins/deploy/compilers/2021-01-06/linux-rhel7-x86_64/gcc-4.8.5/gcc-9.3.0-45gzrp/bin"
@@ -113,7 +114,8 @@ declare -a gcc_flags=(
 
 # loop over options
 # for kernel_target in compute-bound memory-bound hh; do
-for kernel_target in hh; do
+for kernel_target in compute-bound memory-bound; do
+# for kernel_target in hh; do
     echo "kernel: "${kernel_target}
     
     # loop over other compilers
@@ -145,7 +147,7 @@ for kernel_target in hh; do
             --backend default"
 
             # run experiment
-            ${debug} eval "LD_LIBRARY_PATH=${ext_path}:${vec_lib_path} ${nmodl_exe} ${nmodl_args} &> ${kernel_target}_${spec}.log"
+            ${debug} eval "LD_LIBRARY_PATH=${ext_path}:${vec_lib_path}:${llvm_lib} ${nmodl_exe} ${nmodl_args} &> ${kernel_target}_${spec}.log"
         done
     done
 
