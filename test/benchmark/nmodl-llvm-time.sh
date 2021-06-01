@@ -4,11 +4,15 @@
 # Driver for nmodl-llvm benchmarking
 #
 
-
+# sh nmodl-llvm-time.sh -vec-sweep -mod-dir /gpfs/bbp.cscs.ch/data/scratch/proj16/magkanar/nmodl/bbp_mod -n 100000000
 # default params
 inst_size=100000000
 num_exp=10
 vec_width=8
+external_kernel_exec=false
+modfile_directory=$(pwd)
+vec_width_sweep=false
+output_dir=$(pwd)
 
 # version
 version="0.0.1"
@@ -49,6 +53,24 @@ while [[ "$1" != "" ]]; do
             shift
             shift
             ;;
+        -ext|--external-kernel)
+            external_kernel_exec=true
+            shift
+            ;;
+        -vec-sweep|--vec-width-sweep)
+            vec_width_sweep=true
+            shift
+            ;;
+        -mod-dir|--modfile-directory)
+            modfile_directory=$2
+            shift
+            shift
+            ;;
+        -o|--output-directory)
+            output_dir=$2
+            shift
+            shift
+            ;;
         -d|--dry-run)
             echo "debug mode"
             debug=echo
@@ -75,12 +97,17 @@ vec_lib_path="/gpfs/bbp.cscs.ch/ssd/apps/hpc/jenkins/deploy/compilers/2021-01-06
 vec_lib="libsvml.so"
 
 # nmodl
-nmodl_exe="/gpfs/bbp.cscs.ch/home/gcastigl/project16/nmodl-llvm/build/install/bin/nmodl"
+nmodl_exe="/gpfs/bbp.cscs.ch/data/scratch/proj16/magkanar/nmodl/build_llvm/install/bin/nmodl"
 
 # external kernel
 nmodl_src_path="/gpfs/bbp.cscs.ch/home/gcastigl/project16/nmodl-llvm"
 kernels_path=${nmodl_src_path}/"test/benchmark/kernels"
 ext_lib="libextkernel.so"
+if ${external_kernel_exec}; then
+    modfile_directory=${kernels_path}
+fi
+
+mkdir -p ${output_dir}
 
 # compilers
 icpc_exe=icpc
@@ -114,7 +141,9 @@ declare -a gcc_flags=(
 
 # loop over options
 # for kernel_target in compute-bound memory-bound hh; do
-for kernel_target in compute-bound memory-bound; do
+#for kernel_target in compute-bound memory-bound; do
+#for kernel_target in Ca_HVA2 can2 cat DetAMPANMDA DetGABAAB SKv3_1; do
+for kernel_target in ; do
 # for kernel_target in hh; do
     echo "kernel: "${kernel_target}
     
@@ -126,29 +155,58 @@ for kernel_target in compute-bound memory-bound; do
         compiler_exe=${compiler}_exe
         compiler_flags=${compiler}_flags[@]
         
-        for flags in "${!compiler_flags}"; do
-            echo "|  |  flags: "${flags}
+         if $external_kernel_exec; then
+            for flags in "${!compiler_flags}"; do
+                echo "|  |  flags: "${flags}
 
-            spec=${compiler}_${flags//[[:blank:]]/}
-            rel_ext_path=${kernel_target}_${spec}
+           
+                spec=${compiler}_${flags//[[:blank:]]/}
+                rel_ext_path=${kernel_target}_${spec}
 
-            ${debug} mkdir ${rel_ext_path}
-            ${debug} cd ${rel_ext_path}
-            ext_path=$(pwd)
-            ${debug} ${!compiler_exe} ${flags} ${kernels_path}/${kernel_target}.cpp \
-            -shared -fpic -o ${ext_lib}
-            ${debug} eval "llvm-objdump ${ext_lib} -d > ${ext_lib::-1}"
-            ${debug} cd ..
+                ${debug} mkdir ${rel_ext_path}
+                ${debug} cd ${rel_ext_path}
+                ext_path=$(pwd)
+                ${debug} ${!compiler_exe} ${flags} ${kernels_path}/${kernel_target}.cpp \
+                -shared -fpic -o ${ext_lib}
+                ${debug} eval "llvm-objdump ${ext_lib} -d > ${ext_lib::-1}"
+                ${debug} cd ..
+            done
+        fi
 
-            nmodl_args="${kernels_path}/${kernel_target}.mod llvm --ir --fmf nnan contract afn --vector-width ${vec_width} --veclib SVML benchmark \
+        if $vec_width_sweep; then
+            for power_of_two in $(seq 1 3); do
+                vec_width=$((2**${power_of_two}))
+                echo "|  | Running JIT for vec width ${vec_width}"
+                nmodl_args="${modfile_directory}/${kernel_target}.mod passes --inline \
+                llvm --ir --fmf nnan contract afn --vector-width ${vec_width} --veclib SVML \
+                benchmark \
+                --opt-level-ir 3 --opt-level-codegen 3 --run --instance-size ${inst_size} \
+                --repeat ${num_exp} \
+                --libs  ${vec_lib_path}/${vec_lib} \
+                --backend default"
+
+                # run experiment
+                if $external_kernel_exec; then
+                    ${debug} eval "LD_LIBRARY_PATH=${ext_path}:${vec_lib_path}:${llvm_lib} ${nmodl_exe} ${nmodl_args} &> ${output_dir}/${kernel_target}_${spec}_v${vec_width}.log"
+                else
+                    ${debug} eval "LD_LIBRARY_PATH=${vec_lib_path}:${llvm_lib} ${nmodl_exe} ${nmodl_args} &> ${output_dir}/${kernel_target}_${spec}_v${vec_width}.log"
+                fi
+            done
+        else
+            nmodl_args="${modfile_directory}/${kernel_target}.mod passes --inline \
+            llvm --ir --fmf nnan contract afn --vector-width ${vec_width} --veclib SVML benchmark \
             --opt-level-ir 3 --opt-level-codegen 3 --run --instance-size ${inst_size} \
             --repeat ${num_exp} \
             --libs  ${vec_lib_path}/${vec_lib} \
             --backend default"
 
             # run experiment
-            ${debug} eval "LD_LIBRARY_PATH=${ext_path}:${vec_lib_path}:${llvm_lib} ${nmodl_exe} ${nmodl_args} &> ${kernel_target}_${spec}.log"
-        done
+            if $external_kernel_exec; then
+                ${debug} eval "LD_LIBRARY_PATH=${ext_path}:${vec_lib_path}:${llvm_lib} ${nmodl_exe} ${nmodl_args} &> ${output_dir}/${kernel_target}_${spec}_v${vec_width}.log"
+            else
+                ${debug} eval "LD_LIBRARY_PATH=${vec_lib_path}:${llvm_lib} ${nmodl_exe} ${nmodl_args} &> ${output_dir}/${kernel_target}_${spec}_v${vec_width}.log"
+            fi
+        fi
     done
 
 done
