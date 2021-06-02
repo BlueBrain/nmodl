@@ -6,6 +6,7 @@ find_package(LLVM REQUIRED CONFIG)
 
 # include LLVM libraries
 set(NMODL_LLVM_COMPONENTS
+    aggressiveinstcombine
     analysis
     codegen
     core
@@ -18,7 +19,8 @@ set(NMODL_LLVM_COMPONENTS
     target
     transformutils
     scalaropts
-    support)
+    support
+    vectorize)
 
 if(NMODL_ENABLE_JIT_EVENT_LISTENERS)
   list(APPEND NMODL_LLVM_COMPONENTS inteljitevents perfjitevents)

@@ -63,8 +63,11 @@ void initialise_optimisation_passes() {
     llvm::initializeCore(registry);
     llvm::initializeTransformUtils(registry);
     llvm::initializeScalarOpts(registry);
+    llvm::initializeIPO(registry);
     llvm::initializeInstCombine(registry);
+    llvm::initializeAggressiveInstCombine(registry);
     llvm::initializeAnalysis(registry);
+    llvm::initializeVectorization(registry);
 }
 
 void optimise_module(llvm::Module& module, int opt_level, llvm::TargetMachine* tm) {
