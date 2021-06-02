@@ -8,9 +8,12 @@
 #include "codegen/llvm/llvm_utils.hpp"
 
 #include "llvm/Analysis/TargetTransformInfo.h"
+#include "llvm/IR/AssemblyAnnotationWriter.h"
 #include "llvm/IR/LegacyPassManager.h"
 #include "llvm/IR/Verifier.h"
 #include "llvm/InitializePasses.h"
+#include "llvm/Support/FileSystem.h"
+#include "llvm/Support/ToolOutputFile.h"
 #include "llvm/Target/TargetMachine.h"
 #include "llvm/Transforms/IPO/PassManagerBuilder.h"
 
@@ -74,6 +77,22 @@ void optimise_module(llvm::Module& module, int opt_level, llvm::TargetMachine* t
     llvm::legacy::PassManager module_pm;
     populate_pms(func_pm, module_pm, opt_level, /*size_level=*/0, tm);
     run_optimisation_passes(module, func_pm, module_pm);
+}
+
+/****************************************************************************************/
+/*                                    File utils                                        */
+/****************************************************************************************/
+
+void save_ir_to_ll_file(llvm::Module& module, const std::string& filename) {
+    std::error_code error_code;
+    std::unique_ptr<llvm::ToolOutputFile> out = std::make_unique<llvm::ToolOutputFile>(
+        filename + ".ll", error_code, llvm::sys::fs::OF_Text);
+    if (error_code)
+        throw std::runtime_error("Error: " + error_code.message());
+
+    std::unique_ptr<llvm::AssemblyAnnotationWriter> annotator;
+    module.print(out->os(), annotator.get());
+    out->keep();
 }
 }  // namespace utils
 }  // namespace nmodl
