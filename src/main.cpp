@@ -652,10 +652,14 @@ int main(int argc, const char* argv[]) {
 
 #ifdef NMODL_LLVM_BACKEND
             if (llvm_ir || run_llvm_benchmark) {
+                // If benchmarking, we want to optimize the IR with target information and not in
+                // LLVM visitor.
+                int llvm_opt_level = run_llvm_benchmark ? 0 : llvm_opt_level_ir;
+
                 logger->info("Running LLVM backend code generator");
                 CodegenLLVMVisitor visitor(modfile,
                                            output_dir,
-                                           llvm_opt_level_ir,
+                                           llvm_opt_level,
                                            llvm_float_type,
                                            llvm_vec_width,
                                            vector_library,
@@ -674,6 +678,7 @@ int main(int argc, const char* argv[]) {
                                                        num_experiments,
                                                        instance_size,
                                                        backend,
+                                                       llvm_opt_level_ir,
                                                        llvm_opt_level_codegen);
                     benchmark.run(ast);
                 }
