@@ -150,10 +150,8 @@ void JITDriver::init(std::string features,
         int opt_level_codegen = benchmark_info ? benchmark_info->opt_level_codegen : 0;
         auto tm = create_target(&tm_builder, features, opt_level_codegen);
 
-        // Optimise the LLVM IR module and save it to .ll file if benchmarking.
+        // Save LLVM IR module dump to .ll file if benchmarking.
         if (benchmark_info) {
-            utils::optimise_module(*module, benchmark_info->opt_level_ir, tm.get());
-
             std::error_code error_code;
             std::unique_ptr<llvm::ToolOutputFile> out =
                 std::make_unique<llvm::ToolOutputFile>(benchmark_info->output_dir + "/" +

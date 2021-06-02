@@ -43,9 +43,6 @@ class LLVMBenchmark {
     /// Benchmarking backend
     std::string backend;
 
-    /// Optimisation level for LLVM IR transformations.
-    int opt_level_ir;
-
     /// Optimisation level for machine code generation.
     int opt_level_codegen;
 
@@ -60,7 +57,6 @@ class LLVMBenchmark {
                   int num_experiments,
                   int instance_size,
                   const std::string& backend,
-                  int opt_level_ir,
                   int opt_level_codegen)
         : llvm_visitor(llvm_visitor)
         , mod_filename(mod_filename)
@@ -69,7 +65,6 @@ class LLVMBenchmark {
         , num_experiments(num_experiments)
         , instance_size(instance_size)
         , backend(backend)
-        , opt_level_ir(opt_level_ir)
         , opt_level_codegen(opt_level_codegen) {}
 
     /// Runs the benchmark.

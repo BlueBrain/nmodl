@@ -96,13 +96,8 @@ void LLVMBenchmark::run_benchmark(const std::shared_ptr<ast::Program>& node) {
     // Create the benchmark runner and initialize it.
     std::string filename = "v" + std::to_string(llvm_visitor.get_vector_width()) + "_" +
                            mod_filename;
-    runner::BenchmarkRunner runner(std::move(m),
-                                   filename,
-                                   output_dir,
-                                   features_str,
-                                   shared_libs,
-                                   opt_level_ir,
-                                   opt_level_codegen);
+    runner::BenchmarkRunner runner(
+        std::move(m), filename, output_dir, features_str, shared_libs, opt_level_codegen);
     runner.initialize_driver();
 
     // Benchmark every kernel.

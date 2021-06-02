@@ -29,9 +29,6 @@ struct BenchmarkInfo {
     /// Object file output directory.
     std::string output_dir;
 
-    /// Optimisation level for generated IR.
-    int opt_level_ir;
-
     /// Optimisation level for machine code generation.
     int opt_level_codegen;
 };
@@ -157,10 +154,9 @@ class BenchmarkRunner: public BaseRunner {
                     std::string output_dir,
                     std::string features = "",
                     std::vector<std::string> lib_paths = {},
-                    int opt_level_ir = 0,
                     int opt_level_codegen = 0)
         : BaseRunner(std::move(m))
-        , benchmark_info{filename, output_dir, opt_level_ir, opt_level_codegen}
+        , benchmark_info{filename, output_dir, opt_level_codegen}
         , features(features)
         , shared_lib_paths(lib_paths) {}
 
