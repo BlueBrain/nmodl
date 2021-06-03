@@ -58,6 +58,9 @@ class IRBuilder {
     /// The vector width used for the vectorized code.
     unsigned vector_width;
 
+    /// Instance struct fields do not alias.
+    bool assume_noalias;
+
     /// Masked value used to predicate vector instructions.
     llvm::Value* mask;
 
@@ -71,7 +74,8 @@ class IRBuilder {
     IRBuilder(llvm::LLVMContext& context,
               bool use_single_precision = false,
               unsigned vector_width = 1,
-              std::vector<std::string> fast_math_flags = {})
+              std::vector<std::string> fast_math_flags = {},
+              bool assume_noalias = true)
         : builder(context)
         , symbol_table(nullptr)
         , current_function(nullptr)
@@ -81,7 +85,8 @@ class IRBuilder {
         , vector_width(vector_width)
         , mask(nullptr)
         , kernel_id("")
-        , fast_math_flags(fast_math_flags) {}
+        , fast_math_flags(fast_math_flags)
+        , assume_noalias(assume_noalias) {}
 
     /// Transforms the fast math flags provided to the builder into LLVM's representation.
     llvm::FastMathFlags transform_to_fmf(std::vector<std::string>& flags) {

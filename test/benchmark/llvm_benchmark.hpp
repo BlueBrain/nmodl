@@ -8,6 +8,7 @@
 #pragma once
 
 #include <string>
+#include <fstream>
 
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
 #include "utils/logger.hpp"
@@ -40,8 +41,8 @@ class LLVMBenchmark {
     /// The size of the instance struct for benchmarking.
     int instance_size;
 
-    /// Benchmarking backend
-    std::string backend;
+    /// CPU to target.
+    std::string cpu;
 
     /// Optimisation level for IR generation.
     int opt_level_ir;
@@ -59,7 +60,7 @@ class LLVMBenchmark {
                   std::vector<std::string> shared_libs,
                   int num_experiments,
                   int instance_size,
-                  const std::string& backend,
+                  const std::string& cpu,
                   int opt_level_ir,
                   int opt_level_codegen)
         : llvm_visitor(llvm_visitor)
@@ -68,7 +69,7 @@ class LLVMBenchmark {
         , shared_libs(shared_libs)
         , num_experiments(num_experiments)
         , instance_size(instance_size)
-        , backend(backend)
+        , cpu(cpu)
         , opt_level_ir(opt_level_ir)
         , opt_level_codegen(opt_level_codegen) {}
 
@@ -76,9 +77,6 @@ class LLVMBenchmark {
     void run(const std::shared_ptr<ast::Program>& node);
 
   private:
-    /// Disables the specified feature in the target.
-    void disable(const std::string& feature, std::vector<std::string>& host_features);
-
     /// Visits the AST to construct the LLVM IR module.
     void generate_llvm(const std::shared_ptr<ast::Program>& node);
 
