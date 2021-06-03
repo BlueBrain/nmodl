@@ -125,11 +125,17 @@ void JITDriver::init(const std::string& cpu, BenchmarkInfo* benchmark_info) {
             return std::make_unique<llvm::SectionMemoryManager>();
         });
 
-        // If benchmarking, register event listeners and resolve shared libraries.
-        if (benchmark_info) {
+        // Register event listeners if they exist.
+        if (gdb_event_listener)
             layer->registerJITEventListener(*gdb_event_listener);
+        if (perf_event_listener)
             layer->registerJITEventListener(*perf_event_listener);
+        if (intel_event_listener)
             layer->registerJITEventListener(*intel_event_listener);
+
+        // If benchmarking, resolve shared libraries.
+        if (benchmark_info) {
+
 
             for (const auto& lib_path: benchmark_info->shared_lib_paths) {
                 // For every library path, create a corresponding memory buffer.
