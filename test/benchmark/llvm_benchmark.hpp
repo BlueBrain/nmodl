@@ -50,6 +50,9 @@ class LLVMBenchmark {
     /// Optimisation level for machine code generation.
     int opt_level_codegen;
 
+    /// Benchmark external kernel
+    bool external_kernel;
+
     /// Filestream for dumping logs to the file.
     std::ofstream ofs;
 
@@ -62,7 +65,8 @@ class LLVMBenchmark {
                   int instance_size,
                   const std::string& cpu,
                   int opt_level_ir,
-                  int opt_level_codegen)
+                  int opt_level_codegen,
+                  bool external_kernel)
         : llvm_visitor(llvm_visitor)
         , mod_filename(mod_filename)
         , output_dir(output_dir)
@@ -71,7 +75,8 @@ class LLVMBenchmark {
         , instance_size(instance_size)
         , cpu(cpu)
         , opt_level_ir(opt_level_ir)
-        , opt_level_codegen(opt_level_codegen) {}
+        , opt_level_codegen(opt_level_codegen)
+        , external_kernel(external_kernel) {}
 
     /// Runs the benchmark.
     void run(const std::shared_ptr<ast::Program>& node);

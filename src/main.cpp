@@ -206,6 +206,9 @@ int main(int argc, const char* argv[]) {
 
     /// specify the cpu for LLVM IR to target
     std::string cpu = "default";
+
+    /// benchmark external kernel with JIT
+    bool external_kernel;
 #endif
 
     app.get_formatter()->column_width(40);
@@ -360,6 +363,9 @@ int main(int argc, const char* argv[]) {
     benchmark_opt->add_option("--cpu",
                        cpu,
                        "Target's backend ({})"_format(cpu))->ignore_case();
+    benchmark_opt->add_option("--external",
+                              external_kernel,
+                              "Benchmark external kernel ({})"_format(external_kernel))->ignore_case();
 #endif
     // clang-format on
 
@@ -686,7 +692,8 @@ int main(int argc, const char* argv[]) {
                                                        instance_size,
                                                        cpu,
                                                        llvm_opt_level_ir,
-                                                       llvm_opt_level_codegen);
+                                                       llvm_opt_level_codegen,
+                                                       external_kernel);
                     benchmark.run(ast);
                 }
             }
