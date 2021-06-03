@@ -103,7 +103,11 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
         , vector_width(vector_width)
         , vector_library(vec_lib)
         , add_debug_information(add_debug_information)
-        , ir_builder(*context, use_single_precision, vector_width, fast_math_flags, !llvm_assume_alias)
+        , ir_builder(*context,
+                     use_single_precision,
+                     vector_width,
+                     fast_math_flags,
+                     !llvm_assume_alias)
         , debug_builder(*module) {}
 
     /// Dumps the generated LLVM IR module to string.

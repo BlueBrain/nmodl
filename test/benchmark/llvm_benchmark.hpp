@@ -7,8 +7,8 @@
 
 #pragma once
 
-#include <string>
 #include <fstream>
+#include <string>
 
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
 #include "utils/logger.hpp"

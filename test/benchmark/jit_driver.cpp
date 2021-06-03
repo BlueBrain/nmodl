@@ -135,8 +135,6 @@ void JITDriver::init(const std::string& cpu, BenchmarkInfo* benchmark_info) {
 
         // If benchmarking, resolve shared libraries.
         if (benchmark_info) {
-
-
             for (const auto& lib_path: benchmark_info->shared_lib_paths) {
                 // For every library path, create a corresponding memory buffer.
                 auto memory_buffer = llvm::MemoryBuffer::getFile(lib_path);
