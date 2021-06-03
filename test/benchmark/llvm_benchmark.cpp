@@ -27,9 +27,9 @@ void LLVMBenchmark::run(const std::shared_ptr<ast::Program>& node) {
 
 void LLVMBenchmark::generate_llvm(const std::shared_ptr<ast::Program>& node) {
     // First, visit the AST to build the LLVM IR module and wrap the kernel function calls.
-    auto start = std::chrono::high_resolution_clock::now();
+    auto start = std::chrono::steady_clock::now();
     llvm_visitor.wrap_kernel_functions();
-    auto end = std::chrono::high_resolution_clock::now();
+    auto end = std::chrono::steady_clock::now();
 
     // Log the time taken to visit the AST and build LLVM IR.
     std::chrono::duration<double> diff = end - start;
@@ -74,9 +74,9 @@ void LLVMBenchmark::run_benchmark(const std::shared_ptr<ast::Program>& node) {
 
             // Record the execution time of the kernel.
             std::string wrapper_name = "__" + kernel_name + "_wrapper";
-            auto start = std::chrono::high_resolution_clock::now();
+            auto start = std::chrono::steady_clock::now();
             runner.run_with_argument<int, void*>(kernel_name, instance_data.base_ptr);
-            auto end = std::chrono::high_resolution_clock::now();
+            auto end = std::chrono::steady_clock::now();
             std::chrono::duration<double> diff = end - start;
 
             // Log the time taken for each run.
