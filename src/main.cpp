@@ -363,7 +363,7 @@ int main(int argc, const char* argv[]) {
     benchmark_opt->add_option("--cpu",
                        cpu,
                        "Target's backend ({})"_format(cpu))->ignore_case();
-    benchmark_opt->add_option("--external",
+    benchmark_opt->add_flag("--external",
                               external_kernel,
                               "Benchmark external kernel ({})"_format(external_kernel))->ignore_case();
 #endif

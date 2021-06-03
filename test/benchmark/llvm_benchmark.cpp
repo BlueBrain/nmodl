@@ -67,6 +67,12 @@ void LLVMBenchmark::run_benchmark(const std::shared_ptr<ast::Program>& node) {
             // Initialise the data.
             auto instance_data = codegen_data.create_data(instance_size, /*seed=*/1);
 
+            // Log instance size once.
+            if (i == 0) {
+                double size_mbs = instance_data.num_bytes / (1024.0 * 1024.0);
+                logger->info("Benchmarking kernel nrn_state_hh_ext with {} MBs dataset", size_mbs);
+            }
+
             // Record the execution time of the kernel.
             auto start = std::chrono::steady_clock::now();
             nrn_state_hh_ext(instance_data.base_ptr);
