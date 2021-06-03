@@ -19,8 +19,7 @@ set(NMODL_LLVM_COMPONENTS
     target
     transformutils
     scalaropts
-    support
-    vectorize)
+    support)
 
 if(NMODL_ENABLE_JIT_EVENT_LISTENERS)
   list(APPEND NMODL_LLVM_COMPONENTS inteljitevents perfjitevents)
