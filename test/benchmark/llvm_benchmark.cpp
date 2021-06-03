@@ -108,9 +108,9 @@ void LLVMBenchmark::run_benchmark(const std::shared_ptr<ast::Program>& node) {
         auto instance_data = codegen_data.create_data(instance_size, /*seed=*/1);
         
         // Record the execution time of the kernel.
-        auto start = std::chrono::high_resolution_clock::now();
+        auto start = std::chrono::steady_clock::now();
         nrn_state_hh_ext(instance_data.base_ptr);
-        auto end = std::chrono::high_resolution_clock::now();
+        auto end = std::chrono::steady_clock::now();
         std::chrono::duration<double> diff = end - start;
 
         // Log the time taken for each run.
