@@ -17,6 +17,7 @@
 
 #include "llvm/ExecutionEngine/JITEventListener.h"
 #include "llvm/ExecutionEngine/Orc/LLJIT.h"
+#include "llvm/Support/Host.h"
 
 namespace nmodl {
 namespace runner {
@@ -28,6 +29,9 @@ struct BenchmarkInfo {
 
     /// Object file output directory.
     std::string output_dir;
+
+    /// Shared libraries' paths to link against.
+    std::vector<std::string> shared_lib_paths;
 
     /// Optimisation level for IT.
     int opt_level_ir;
@@ -63,9 +67,7 @@ class JITDriver {
         : module(std::move(m)) {}
 
     /// Initializes the JIT driver.
-    void init(std::string features = "",
-              std::vector<std::string> lib_paths = {},
-              BenchmarkInfo* benchmark_info = nullptr);
+    void init(const std::string& cpu, BenchmarkInfo* benchmark_info = nullptr);
 
     /// Lookups the entry-point without arguments in the JIT and executes it, returning the result.
     template <typename ReturnType>
@@ -131,7 +133,7 @@ class TestRunner: public BaseRunner {
         : BaseRunner(std::move(m)) {}
 
     virtual void initialize_driver() {
-        driver->init();
+        driver->init(llvm::sys::getHostCPUName().str());
     }
 };
 
@@ -145,27 +147,23 @@ class BenchmarkRunner: public BaseRunner {
     /// Benchmarking information passed to JIT driver.
     BenchmarkInfo benchmark_info;
 
-    /// CPU features specified by the user.
-    std::string features;
-
-    /// Shared libraries' paths to link against.
-    std::vector<std::string> shared_lib_paths;
+    /// CPU to target.
+    std::string cpu;
 
   public:
     BenchmarkRunner(std::unique_ptr<llvm::Module> m,
                     std::string filename,
                     std::string output_dir,
-                    std::string features = "",
+                    std::string cpu,
                     std::vector<std::string> lib_paths = {},
                     int opt_level_ir = 0,
                     int opt_level_codegen = 0)
         : BaseRunner(std::move(m))
-        , benchmark_info{filename, output_dir, opt_level_ir, opt_level_codegen}
-        , features(features)
-        , shared_lib_paths(lib_paths) {}
+        , cpu(cpu)
+        , benchmark_info{filename, output_dir, lib_paths, opt_level_ir, opt_level_codegen} {}
 
     virtual void initialize_driver() {
-        driver->init(features, shared_lib_paths, &benchmark_info);
+        driver->init(cpu, &benchmark_info);
     }
 };
 
