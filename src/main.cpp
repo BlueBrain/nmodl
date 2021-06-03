@@ -359,7 +359,7 @@ int main(int argc, const char* argv[]) {
                               "Number of experiments for benchmarking ({})"_format(num_experiments))->ignore_case();
     benchmark_opt->add_option("--cpu",
                        cpu,
-                       "Target's backend ({})"_format(cpu))->ignore_case()->check(CLI::IsMember({"nehalem", "haswell", "broadwell", "skylake-avx512", "default"}));
+                       "Target's backend ({})"_format(cpu))->ignore_case();
 #endif
     // clang-format on
 
