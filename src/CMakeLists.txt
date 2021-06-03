@@ -29,7 +29,7 @@ target_link_libraries(
   lexer
   ${NMODL_WRAPPER_LIBS})
 if(NMODL_ENABLE_LLVM)
-  target_link_libraries(nmodl llvm_codegen llvm_benchmark benchmark_data ${LLVM_LIBS_TO_LINK})
+  target_link_libraries(nmodl llvm_codegen llvm_benchmark benchmark_data ${LLVM_LIBS_TO_LINK}) 
 endif()
 
 # =============================================================================
