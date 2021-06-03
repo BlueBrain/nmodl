@@ -174,7 +174,6 @@ jobs:
         exit 1
       fi
       ./bin/nrnivmodl-core $(Build.Repository.LocalPath)/test/integration/mod
-    condition: false
     env:
       SHELL: 'bash'
     condition: false
