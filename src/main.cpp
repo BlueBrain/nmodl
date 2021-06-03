@@ -329,7 +329,7 @@ int main(int argc, const char* argv[]) {
                        "Use single precision floating-point types ({})"_format(llvm_float_type))->ignore_case();
     llvm_opt->add_flag("--assume-may-alias",
                        llvm_assume_alias,
-                       "Assume instance struct fields do not alias ({})"_format(llvm_assume_alias))->ignore_case();
+                       "Assume instance struct fields may alias ({})"_format(llvm_assume_alias))->ignore_case();
     llvm_opt->add_option("--vector-width",
         llvm_vec_width,
         "LLVM explicit vectorisation width ({})"_format(llvm_vec_width))->ignore_case();
