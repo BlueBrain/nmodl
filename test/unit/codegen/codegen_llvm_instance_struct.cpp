@@ -27,7 +27,7 @@ using nmodl::parser::NmodlDriver;
 //=============================================================================
 
 codegen::CodegenInstanceData generate_instance_data(const std::string& text,
-                                                    bool opt = false,
+                                                    int opt_level = 0,
                                                     bool use_single_precision = false,
                                                     int vector_width = 1,
                                                     size_t num_elements = 100,
@@ -41,7 +41,7 @@ codegen::CodegenInstanceData generate_instance_data(const std::string& text,
 
     codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"test",
                                              /*output_dir=*/".",
-                                             opt,
+                                             opt_level,
                                              use_single_precision,
                                              vector_width);
     llvm_visitor.visit_program(*ast);
@@ -104,7 +104,7 @@ SCENARIO("Instance Struct creation", "[visitor][llvm][instance_struct]") {
             const size_t num_elements = 10;
             constexpr static double seed = 42;
             auto instance_data = generate_instance_data(nmodl_text,
-                                                        /*opt=*/false,
+                                                        /*opt_level=*/0,
                                                         /*use_single_precision=*/true,
                                                         /*vector_width*/ 1,
                                                         num_elements,
