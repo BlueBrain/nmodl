@@ -19,5 +19,8 @@ void initialise_optimisation_passes();
 /// Optimises the given LLVM IR module.
 void optimise_module(llvm::Module& module, int opt_level, llvm::TargetMachine* tm = nullptr);
 
+///
+void save_ir_to_ll_file(llvm::Module& module, const std::string& filename);
+
 }  // namespace utils
 }  // namespace nmodl

@@ -13,14 +13,11 @@
 #include "visitors/visitor_utils.hpp"
 
 #include "llvm/Analysis/TargetLibraryInfo.h"
-#include "llvm/IR/AssemblyAnnotationWriter.h"
 #include "llvm/IR/BasicBlock.h"
 #include "llvm/IR/Function.h"
 #include "llvm/IR/LegacyPassManager.h"
 #include "llvm/IR/Type.h"
-#include "llvm/Support/FileSystem.h"
 #include "llvm/Support/Host.h"
-#include "llvm/Support/ToolOutputFile.h"
 
 #if LLVM_VERSION_MAJOR >= 13
 #include "llvm/CodeGen/ReplaceWithVeclib.h"
@@ -72,9 +69,12 @@ void CodegenLLVMVisitor::add_vectorizable_functions_from_vec_lib(llvm::TargetLib
                                                                  llvm::Triple& triple) {
     // Since LLVM does not support SLEEF as a vector library yet, process it separately.
     if (vector_library == "SLEEF") {
-        // Populate function definitions of only exp and pow (for now)
-#define FIXED(w)                        llvm::ElementCount::getFixed(w)
+// clang-format off
+#define FIXED(w) llvm::ElementCount::getFixed(w)
+// clang-format on
 #define DISPATCH(func, vec_func, width) {func, vec_func, width},
+
+        // Populate function definitions of only exp and pow (for now)
         const llvm::VecDesc aarch64_functions[] = {
             // clang-format off
             DISPATCH("llvm.exp.f32", "_ZGVnN4v_expf", FIXED(4))
@@ -890,17 +890,8 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
     }
 
     // If the output directory is specified, save the IR to .ll file.
-    // \todo: Consider saving the generated LLVM IR to bytecode (.bc) file instead.
     if (output_dir != ".") {
-        std::error_code error_code;
-        std::unique_ptr<llvm::ToolOutputFile> out = std::make_unique<llvm::ToolOutputFile>(
-            output_dir + "/" + mod_filename + ".ll", error_code, llvm::sys::fs::OF_Text);
-        if (error_code)
-            throw std::runtime_error("Error: " + error_code.message());
-
-        std::unique_ptr<llvm::AssemblyAnnotationWriter> annotator;
-        module->print(out->os(), annotator.get());
-        out->keep();
+        utils::save_ir_to_ll_file(*module, output_dir + "/" + mod_filename);
     }
 
     logger->debug("Dumping generated IR...\n" + dump_module());

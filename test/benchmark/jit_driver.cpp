@@ -20,11 +20,9 @@
 #include "llvm/ExecutionEngine/Orc/ObjectTransformLayer.h"
 #include "llvm/ExecutionEngine/Orc/RTDyldObjectLinkingLayer.h"
 #include "llvm/ExecutionEngine/SectionMemoryManager.h"
-#include "llvm/IR/AssemblyAnnotationWriter.h"
 #include "llvm/Support/Host.h"
 #include "llvm/Support/TargetRegistry.h"
 #include "llvm/Support/TargetSelect.h"
-#include "llvm/Support/ToolOutputFile.h"
 
 namespace nmodl {
 namespace runner {
@@ -153,19 +151,9 @@ void JITDriver::init(std::string features,
         // Optimise the LLVM IR module and save it to .ll file if benchmarking.
         if (benchmark_info) {
             utils::optimise_module(*module, benchmark_info->opt_level_ir, tm.get());
-
-            std::error_code error_code;
-            std::unique_ptr<llvm::ToolOutputFile> out =
-                std::make_unique<llvm::ToolOutputFile>(benchmark_info->output_dir + "/" +
-                                                           benchmark_info->filename + "_opt.ll",
-                                                       error_code,
-                                                       llvm::sys::fs::OF_Text);
-            if (error_code)
-                throw std::runtime_error("Error: " + error_code.message());
-
-            std::unique_ptr<llvm::AssemblyAnnotationWriter> annotator;
-            module->print(out->os(), annotator.get());
-            out->keep();
+            const std::string filename = benchmark_info->output_dir + "/" +
+                                         benchmark_info->filename + "_opt";
+            utils::save_ir_to_ll_file(*module, filename);
         }
 
         return std::make_unique<llvm::orc::TMOwningSimpleCompiler>(std::move(tm));
