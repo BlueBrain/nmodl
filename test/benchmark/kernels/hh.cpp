@@ -52,7 +52,6 @@ void nrn_state_hh_ext(void* __restrict__ mech){
     int id;
     int node_id, ena_id, ek_id;
     double v;
-    #pragma ivdep     // icpc vec helper
     #pragma omp simd  // clang vec helper
     for(id = 0; id<inst->node_count; ++id) {
         node_id = inst->node_index[id];

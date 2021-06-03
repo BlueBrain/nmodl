@@ -112,33 +112,33 @@ mkdir -p ${output_dir}
 # compilers
 icpc_exe=icpc
 declare -a icpc_flags_avx512=(
-    "-O2 -march=skylake-avx512 -mtune=skylake-avx512 -prec-div -fimf-use-svml"
-    "-O2 -qopt-zmm-usage=high -xCORE-AVX512 -prec-div -fimf-use-svml"
-    "-O2 -mavx512f -prec-div -fimf-use-svml"
+    "-O2 -march=skylake-avx512 -mtune=skylake-avx512 -prec-div -fimf-use-svml" # avx2
+    "-O2 -mavx512f -prec-div -fimf-use-svml" #generates avx512 code
+    "-O2 -march=skylake-avx512 -mtune=skylake-avx512 -prec-div -fimf-use-svml -fopenmp" # avx2
+    "-O2 -mavx512f -prec-div -fimf-use-svml -fopenmp"
     )
 
+    #delete ivdep in handwrtten kernels
+# check for haswell architecture option
+# replace -mavx2 with the procesor family
+# for one run keep both family and -mavx2
 declare -a icpc_flags_avx2=(
     "-O2 -mavx2 -prec-div -fimf-use-svml"
     )
 
 declare -a icpc_flags_sse2=(
-    "-O2 -march=skylake-avx512 -mtune=skylake-avx512 -prec-div -fimf-use-svml"
-    "-O2 -qopt-zmm-usage=high -xCORE-AVX512 -prec-div -fimf-use-svml"
-    "-O2 -mavx512f -prec-div -fimf-use-svml"
-    "-O2 -mavx2 -prec-div -fimf-use-svml"
     "-O2 -msse2 -prec-div -fimf-use-svml"
     )
 
 llvm_path="/gpfs/bbp.cscs.ch/apps/hpc/llvm-install/0621"
 llvm_lib=${llvm_path}/lib
 clang_exe=${llvm_path}/bin/clang++
+# -march=skylake-avx512 doesn't generate avx512 commands with clang
 declare -a clang_flags_avx512=(
-    "-O3 -mavx512f -ffast-math -fopenmp -fveclib=SVML"
     "-O3 -mavx512f -ffast-math -fveclib=SVML"
-    "-O3 -mavx512f -fveclib=SVML"
-    "-O3 -march=skylake-avx512 -ffast-math -fopenmp -fveclib=SVML"
+    "-O3 -mavx512f -ffast-math -fopenmp -fveclib=SVML"
     )
-
+# check -mcpu=
 declare -a clang_flags_avx2=(
     "-O3 -mavx2 -ffast-math -fopenmp -fveclib=SVML"
     )
@@ -151,21 +151,25 @@ gcc_bin_path="/gpfs/bbp.cscs.ch/ssd/apps/hpc/jenkins/deploy/compilers/2021-01-06
 gcc_exe=${gcc_bin_path}/g++
 declare -a gcc_flags_avx512=(
     "-O3 -mavx512f -ffast-math -ftree-vectorize -mveclibabi=svml"
+    "-O3 -mavx512f -ffast-math -ftree-vectorize -mveclibabi=svml -fopenmp"
     )
 
 declare -a gcc_flags_avx2=(
-    "-O3 -mavx2 -ffast-math -ftree-vectorize -mveclibabi=svml"
+    "-O3 -mavx2 -ffast-math -ftree-vectorize -mveclibabi=svml -fopenmp"
     )
 
 declare -a gcc_flags_sse2=(
-    "-O3 -msse2 -ffast-math -ftree-vectorize -mveclibabi=svml"
+    "-O3 -msse2 -ffast-math -ftree-vectorize -mveclibabi=svml -fopenmp"
     )
 
 declare -a benchmark_description
 declare -a benchmark_time
-
-KERNEL_TARGETS="compute-bound memory-bound hh"
-ARCHITECTURES="avx512 avx2 sse2"
+# also get variance
+#KERNEL_TARGETS="compute-bound memory-bound hh"
+KERNEL_TARGETS="compute-bound"
+#ARCHITECTURES="avx512 avx2 sse2"
+ARCHITECTURES="avx2"
+# set cpu option in jit according to the architecture
 
 # loop over options
 for kernel_target in ${KERNEL_TARGETS}; do
@@ -195,6 +199,7 @@ for kernel_target in ${KERNEL_TARGETS}; do
 	                spec=${compiler}_${flags//[[:blank:]]/}
 	                rel_ext_path=${kernel_target}_${spec}
 
+                    # for avx512 compile and run without pragma omp simd and pragma ivdep
 	                ${debug} mkdir ${rel_ext_path}
 	                ${debug} cd ${rel_ext_path}
 	                ext_path=$(pwd)
@@ -203,7 +208,6 @@ for kernel_target in ${KERNEL_TARGETS}; do
 	                ${debug} eval "llvm-objdump ${ext_lib} -d > ${ext_lib::-1}"
 	                ${debug} cd ..
 
-                    
                     nmodl_args="llvm --ir --vector-width ${vec_width} --veclib SVML --opt-level-ir 3 benchmark -run --instance-size ${inst_size} --repeat ${num_exp} --opt-level-codegen 3 --cpu default --libs {vec_lib_path}/${vec_lib}"
 
                     nmodl_args="${nmodl_args} --external"
