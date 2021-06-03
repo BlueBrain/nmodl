@@ -31,8 +31,21 @@ namespace runner {
 /*                            Utilities for JIT driver                                  */
 /****************************************************************************************/
 
+/// Get the host CPU features in the format:
+///   +feature,+feature,-feature,+feature,...
+/// where `+` indicates that the feature is enabled.
+std::string get_cpu_features(const std::string& cpu) {
+    llvm::SubtargetFeatures features;
+    llvm::StringMap<bool> host_features;
+    if (llvm::sys::getHostCPUFeatures(host_features)) {
+        for (auto& f: host_features)
+            features.AddFeature(f.first(), f.second);
+    }
+    return llvm::join(features.getFeatures().begin(), features.getFeatures().end(), ",");
+}
+
 /// Sets the target triple and the data layout of the module.
-static void set_triple_and_data_layout(llvm::Module& module, const std::string& features) {
+static void set_triple_and_data_layout(llvm::Module& module, const std::string& cpu) {
     // Get the default target triple for the host.
     auto target_triple = llvm::sys::getDefaultTargetTriple();
     std::string error_msg;
@@ -40,8 +53,8 @@ static void set_triple_and_data_layout(llvm::Module& module, const std::string& 
     if (!target)
         throw std::runtime_error("Error " + error_msg + "\n");
 
-    // Get the CPU information and set a target machine to create the data layout.
-    std::string cpu(llvm::sys::getHostCPUName());
+    // Set a target machine to create the data layout.
+    std::string features = get_cpu_features(cpu);
     std::unique_ptr<llvm::TargetMachine> tm(
         target->createTargetMachine(target_triple, cpu, features, {}, {}));
     if (!tm)
@@ -52,10 +65,10 @@ static void set_triple_and_data_layout(llvm::Module& module, const std::string& 
     module.setTargetTriple(target_triple);
 }
 
-/// Creates llvm::TargetMachine with certain CPU features turned on/off.
+/// Creates llvm::TargetMachine with for a specified CPU.
 static std::unique_ptr<llvm::TargetMachine> create_target(
     llvm::orc::JITTargetMachineBuilder* tm_builder,
-    const std::string& features,
+    const std::string& cpu,
     int opt_level) {
     // First, look up the target.
     std::string error_msg;
@@ -66,8 +79,8 @@ static std::unique_ptr<llvm::TargetMachine> create_target(
 
     // Create default target machine with provided features.
     auto tm = target->createTargetMachine(target_triple,
-                                          llvm::sys::getHostCPUName().str(),
-                                          features,
+                                          cpu,
+                                          get_cpu_features(cpu),
                                           tm_builder->getOptions(),
                                           tm_builder->getRelocationModel(),
                                           tm_builder->getCodeModel(),
@@ -83,15 +96,13 @@ static std::unique_ptr<llvm::TargetMachine> create_target(
 /*                                      JIT driver                                      */
 /****************************************************************************************/
 
-void JITDriver::init(std::string features,
-                     std::vector<std::string> lib_paths,
-                     BenchmarkInfo* benchmark_info) {
+void JITDriver::init(const std::string& cpu, BenchmarkInfo* benchmark_info) {
     llvm::InitializeNativeTarget();
     llvm::InitializeNativeTargetAsmPrinter();
     utils::initialise_optimisation_passes();
 
     // Set the target triple and the data layout for the module.
-    set_triple_and_data_layout(*module, features);
+    set_triple_and_data_layout(*module, cpu);
     auto data_layout = module->getDataLayout();
 
     // If benchmarking, enable listeners to use GDB, perf or VTune. Note that LLVM should be built
@@ -120,24 +131,26 @@ void JITDriver::init(std::string features,
         if (intel_event_listener)
             layer->registerJITEventListener(*intel_event_listener);
 
-        for (const auto& lib_path: lib_paths) {
-            // For every library path, create a corresponding memory buffer.
-            auto memory_buffer = llvm::MemoryBuffer::getFile(lib_path);
-            if (!memory_buffer)
-                throw std::runtime_error("Unable to create memory buffer for " + lib_path);
+        // If benchmarking, resolve shared libraries.
+        if (benchmark_info) {
+            for (const auto& lib_path: benchmark_info->shared_lib_paths) {
+                // For every library path, create a corresponding memory buffer.
+                auto memory_buffer = llvm::MemoryBuffer::getFile(lib_path);
+                if (!memory_buffer)
+                    throw std::runtime_error("Unable to create memory buffer for " + lib_path);
 
-            // Create a new JIT library instance for this session and resolve symbols.
-            auto& jd = session.createBareJITDylib(std::string(lib_path));
-            auto loaded =
-                llvm::orc::DynamicLibrarySearchGenerator::Load(lib_path.data(),
-                                                               data_layout.getGlobalPrefix());
+                // Create a new JIT library instance for this session and resolve symbols.
+                auto& jd = session.createBareJITDylib(std::string(lib_path));
+                auto loaded =
+                    llvm::orc::DynamicLibrarySearchGenerator::Load(lib_path.data(),
+                                                                   data_layout.getGlobalPrefix());
 
-            if (!loaded)
-                throw std::runtime_error("Unable to load " + lib_path);
-            jd.addGenerator(std::move(*loaded));
-            cantFail(layer->add(jd, std::move(*memory_buffer)));
+                if (!loaded)
+                    throw std::runtime_error("Unable to load " + lib_path);
+                jd.addGenerator(std::move(*loaded));
+                cantFail(layer->add(jd, std::move(*memory_buffer)));
+            }
         }
-
         return layer;
     };
 
@@ -146,7 +159,7 @@ void JITDriver::init(std::string features,
         -> llvm::Expected<std::unique_ptr<llvm::orc::IRCompileLayer::IRCompiler>> {
         // Create target machine with some features possibly turned off.
         int opt_level_codegen = benchmark_info ? benchmark_info->opt_level_codegen : 0;
-        auto tm = create_target(&tm_builder, features, opt_level_codegen);
+        auto tm = create_target(&tm_builder, cpu, opt_level_codegen);
 
         // Optimise the LLVM IR module and save it to .ll file if benchmarking.
         if (benchmark_info) {

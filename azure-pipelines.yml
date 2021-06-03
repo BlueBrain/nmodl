@@ -177,6 +177,7 @@ jobs:
     condition: false
     env:
       SHELL: 'bash'
+    condition: false
     displayName: 'Build Neuron and Run Integration Tests'
 - job: 'manylinux_wheels'
   timeoutInMinutes: 45

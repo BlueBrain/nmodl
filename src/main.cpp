@@ -191,6 +191,9 @@ int main(int argc, const char* argv[]) {
     /// run llvm benchmark
     bool run_llvm_benchmark(false);
 
+    /// do not assume that instance struct fields do not alias
+    bool llvm_assume_alias(false);
+
     /// optimisation level for IR generation
     int llvm_opt_level_ir = 0;
 
@@ -206,8 +209,8 @@ int main(int argc, const char* argv[]) {
     /// the number of repeated experiments for the benchmarking
     int num_experiments = 100;
 
-    /// specify the backend for LLVM IR to target
-    std::string backend = "default";
+    /// specify the cpu for LLVM IR to target
+    std::string cpu = "default";
 #endif
 
     app.get_formatter()->column_width(40);
@@ -332,6 +335,9 @@ int main(int argc, const char* argv[]) {
     llvm_opt->add_flag("--single-precision",
                        llvm_float_type,
                        "Use single precision floating-point types ({})"_format(llvm_float_type))->ignore_case();
+    llvm_opt->add_flag("--assume-may-alias",
+                       llvm_assume_alias,
+                       "Assume instance struct fields may alias ({})"_format(llvm_assume_alias))->ignore_case();
     llvm_opt->add_option("--vector-width",
         llvm_vec_width,
         "LLVM explicit vectorisation width ({})"_format(llvm_vec_width))->ignore_case();
@@ -359,9 +365,9 @@ int main(int argc, const char* argv[]) {
     benchmark_opt->add_option("--repeat",
                               num_experiments,
                               "Number of experiments for benchmarking ({})"_format(num_experiments))->ignore_case();
-    benchmark_opt->add_option("--backend",
-                       backend,
-                       "Target's backend ({})"_format(backend))->ignore_case()->check(CLI::IsMember({"avx2", "default", "sse2"}));
+    benchmark_opt->add_option("--cpu",
+                       cpu,
+                       "Target's backend ({})"_format(cpu))->ignore_case();
 #endif
     // clang-format on
 
@@ -680,7 +686,8 @@ int main(int argc, const char* argv[]) {
                                            llvm_vec_width,
                                            vector_library,
                                            !disable_debug_information,
-                                           llvm_fast_math_flags);
+                                           llvm_fast_math_flags,
+                                           llvm_assume_alias);
                 visitor.visit_program(*ast);
                 ast_to_nmodl(*ast, filepath("llvm", "mod"));
                 ast_to_json(*ast, filepath("llvm", "json"));
@@ -693,7 +700,7 @@ int main(int argc, const char* argv[]) {
                                                        shared_lib_paths,
                                                        num_experiments,
                                                        instance_size,
-                                                       backend,
+                                                       cpu,
                                                        llvm_opt_level_ir,
                                                        llvm_opt_level_codegen);
                     benchmark.run(ast);
