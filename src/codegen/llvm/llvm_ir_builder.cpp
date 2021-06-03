@@ -200,12 +200,15 @@ void IRBuilder::set_kernel_attributes() {
     current_function->setDoesNotFreeMemory();
     current_function->setDoesNotThrow();
 
-    // We also want to specify that the pointers that instance struct holds, do not alias. In order
-    // to do that, we add a `noalias` attribute to the argument. As per Clang's specification:
+    // We also want to specify that the pointers that instance struct holds do not alias, unless
+    // specified otherwise. In order to do that, we add a `noalias` attribute to the argument. As
+    // per Clang's specification:
     //  > The `noalias` attribute indicates that the only memory accesses inside function are loads
     //  > and stores from objects pointed to by its pointer-typed arguments, with arbitrary
     //  > offsets.
-    current_function->addParamAttr(0, llvm::Attribute::NoAlias);
+    if (assume_noalias) {
+        current_function->addParamAttr(0, llvm::Attribute::NoAlias);
+    }
 
     // Finally, specify that the struct pointer does not capture and is read-only.
     current_function->addParamAttr(0, llvm::Attribute::NoCapture);
