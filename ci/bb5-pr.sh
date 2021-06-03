@@ -20,9 +20,8 @@ function bb5_pr_setup_virtualenv() {
 }
 
 function find_clang_format() {
-    module load llvm
-    clang_format_exe=$(which clang-format)
-    module unload llvm
+    # bb5 has only llvm-12 which is not compatible with hpc-coding-convention
+    clang_format_exe=/gpfs/bbp.cscs.ch/ssd/apps/hpc/jenkins/deploy/externals/2021-01-06/linux-rhel7-x86_64/gcc-9.3.0/llvm-11.0.0-kzl4o5/bin/clang-format
 }
 
 function build_with() {

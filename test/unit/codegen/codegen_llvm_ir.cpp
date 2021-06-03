@@ -35,7 +35,7 @@ using nmodl::parser::NmodlDriver;
 //=============================================================================
 
 std::string run_llvm_visitor(const std::string& text,
-                             bool opt = false,
+                             int opt_level = 0,
                              bool use_single_precision = false,
                              int vector_width = 1,
                              std::string vec_lib = "none",
@@ -53,7 +53,7 @@ std::string run_llvm_visitor(const std::string& text,
 
     codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"unknown",
                                              /*output_dir=*/".",
-                                             opt,
+                                             opt_level,
                                              use_single_precision,
                                              vector_width,
                                              vec_lib,
@@ -99,7 +99,7 @@ SCENARIO("Binary expression", "[visitor][llvm]") {
 
         THEN("variables are loaded and add instruction is created") {
             std::string module_string =
-                run_llvm_visitor(nmodl_text, /*opt=*/false, /*use_single_precision=*/true);
+                run_llvm_visitor(nmodl_text, /*opt_level=*/0, /*use_single_precision=*/true);
             std::smatch m;
 
             std::regex rhs(R"(%1 = load float, float\* %b)");
@@ -179,7 +179,7 @@ SCENARIO("Binary expression", "[visitor][llvm]") {
 
         THEN("'pow' intrinsic is created") {
             std::string module_string =
-                run_llvm_visitor(nmodl_text, /*opt=*/false, /*use_single_precision=*/true);
+                run_llvm_visitor(nmodl_text, /*opt_level=*/0, /*use_single_precision=*/true);
             std::smatch m;
 
             // Check 'pow' intrinsic.
@@ -1046,7 +1046,7 @@ SCENARIO("Vectorised simple kernel", "[visitor][llvm]") {
 
         THEN("a gather instructions is created") {
             std::string module_string = run_llvm_visitor(nmodl_text,
-                                                         /*opt=*/false,
+                                                         /*opt_level=*/0,
                                                          /*use_single_precision=*/false,
                                                          /*vector_width=*/4);
             std::smatch m;
@@ -1098,7 +1098,7 @@ SCENARIO("Vectorised simple kernel with ion writes", "[visitor][llvm]") {
 
         THEN("a scatter instructions is created") {
             std::string module_string = run_llvm_visitor(nmodl_text,
-                                                         /*opt=*/false,
+                                                         /*opt_level=*/0,
                                                          /*use_single_precision=*/false,
                                                          /*vector_width=*/4);
             std::smatch m;
@@ -1154,7 +1154,7 @@ SCENARIO("Vectorised simple kernel with control flow", "[visitor][llvm]") {
 
         THEN("masked load and stores are created") {
             std::string module_string = run_llvm_visitor(nmodl_text,
-                                                         /*opt=*/false,
+                                                         /*opt_level=*/0,
                                                          /*use_single_precision=*/true,
                                                          /*vector_width=*/8);
             std::smatch m;
@@ -1326,7 +1326,7 @@ SCENARIO("Vector library calls", "[visitor][llvm][vector_lib]") {
 
             // Check exponential intrinsic is created.
             std::string no_library_module_str = run_llvm_visitor(nmodl_text,
-                                                                 /*opt=*/false,
+                                                                 /*opt_level=*/0,
                                                                  /*use_single_precision=*/false,
                                                                  /*vector_width=*/2);
             std::regex exp_decl(R"(declare <2 x double> @llvm\.exp\.v2f64\(<2 x double>\))");
@@ -1337,7 +1337,7 @@ SCENARIO("Vector library calls", "[visitor][llvm][vector_lib]") {
 #if LLVM_VERSION_MAJOR >= 13
             // Check exponential calls are replaced with calls to SVML library.
             std::string svml_library_module_str = run_llvm_visitor(nmodl_text,
-                                                                   /*opt=*/false,
+                                                                   /*opt_level=*/0,
                                                                    /*use_single_precision=*/false,
                                                                    /*vector_width=*/2,
                                                                    /*vec_lib=*/"SVML");
@@ -1350,7 +1350,7 @@ SCENARIO("Vector library calls", "[visitor][llvm][vector_lib]") {
             // Check that supported exponential calls are replaced with calls to MASSV library (i.e.
             // operating on vector of width 2).
             std::string massv2_library_module_str = run_llvm_visitor(nmodl_text,
-                                                                     /*opt=*/false,
+                                                                     /*opt_level=*/0,
                                                                      /*use_single_precision=*/false,
                                                                      /*vector_width=*/2,
                                                                      /*vec_lib=*/"MASSV");
@@ -1362,7 +1362,7 @@ SCENARIO("Vector library calls", "[visitor][llvm][vector_lib]") {
 
             // Check no replacement for MASSV happens for non-supported vector widths.
             std::string massv4_library_module_str = run_llvm_visitor(nmodl_text,
-                                                                     /*opt=*/false,
+                                                                     /*opt_level=*/0,
                                                                      /*use_single_precision=*/false,
                                                                      /*vector_width=*/4,
                                                                      /*vec_lib=*/"MASSV");
@@ -1372,7 +1372,7 @@ SCENARIO("Vector library calls", "[visitor][llvm][vector_lib]") {
             // Check correct replacement of @llvm.exp.v4f32 into @vexpf when using Accelerate.
             std::string accelerate_library_module_str =
                 run_llvm_visitor(nmodl_text,
-                                 /*opt=*/false,
+                                 /*opt_level=*/0,
                                  /*use_single_precision=*/true,
                                  /*vector_width=*/4,
                                  /*vec_lib=*/"Accelerate");
@@ -1385,7 +1385,7 @@ SCENARIO("Vector library calls", "[visitor][llvm][vector_lib]") {
 
             // Check correct replacement of @llvm.exp.v2f64 into @_ZGV?N?v_exp when using SLEEF.
             std::string sleef_library_module_str = run_llvm_visitor(nmodl_text,
-                                                                    /*opt=*/false,
+                                                                    /*opt_level=*/0,
                                                                     /*use_single_precision=*/false,
                                                                     /*vector_width=*/2,
                                                                     /*vec_lib=*/"SLEEF");
@@ -1403,7 +1403,7 @@ SCENARIO("Vector library calls", "[visitor][llvm][vector_lib]") {
             // Check the replacements when using Darwin's libsystem_m.
             std::string libsystem_m_library_module_str =
                 run_llvm_visitor(nmodl_text,
-                                 /*opt=*/false,
+                                 /*opt_level=*/0,
                                  /*use_single_precision=*/true,
                                  /*vector_width=*/4,
                                  /*vec_lib=*/"libsystem_m");
@@ -1432,7 +1432,7 @@ SCENARIO("Fast math flags", "[visitor][llvm]") {
         THEN("instructions are generated with the flags set") {
             std::string module_string =
                 run_llvm_visitor(nmodl_text,
-                                 /*opt=*/true,
+                                 /*opt_level=*/3,
                                  /*use_single_precision=*/false,
                                  /*vector_width=*/1,
                                  /*vec_lib=*/"none",
@@ -1462,12 +1462,12 @@ SCENARIO("Dead code removal", "[visitor][llvm][opt]") {
         )";
 
         THEN("with optimisation enabled, all ops are eliminated") {
-            std::string module_string = run_llvm_visitor(nmodl_text, true);
+            std::string module_string = run_llvm_visitor(nmodl_text, /*opt_level=*/3);
             std::smatch m;
 
-            // Check if the values are optimised out
+            // Check if the values are optimised out.
             std::regex empty_proc(
-                R"(define i32 @add\(double %a[0-9].*, double %b[0-9].*\) \{\n(\s)*ret i32 0\n\})");
+                R"(define i32 @add\(double %a[0-9].*, double %b[0-9].*\).*\{\n(\s)*ret i32 0\n\})");
             REQUIRE(std::regex_search(module_string, m, empty_proc));
         }
     }
@@ -1509,7 +1509,7 @@ SCENARIO("Removal of inlined functions and procedures", "[visitor][llvm][inline]
 
         THEN("when the code is inlined the procedure and function blocks are removed") {
             std::string module_string = run_llvm_visitor(nmodl_text,
-                                                         /*opt=*/false,
+                                                         /*opt_level=*/0,
                                                          /*use_single_precision=*/false,
                                                          /*vector_width=*/1,
                                                          /*vec_lib=*/"none",

@@ -28,12 +28,8 @@
 #include "llvm/Analysis/TargetLibraryInfo.h"
 #include "llvm/IR/DIBuilder.h"
 #include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/LegacyPassManager.h"
 #include "llvm/IR/Module.h"
 #include "llvm/IR/Verifier.h"
-#include "llvm/Transforms/InstCombine/InstCombine.h"
-#include "llvm/Transforms/Scalar.h"
-#include "llvm/Transforms/Scalar/GVN.h"
 
 namespace nmodl {
 namespace codegen {
@@ -82,14 +78,8 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     /// Instance variable helper.
     InstanceVarHelper instance_var_helper;
 
-    /// Run optimisation passes if true.
-    bool opt_passes;
-
-    /// Pass manager for optimisation passes that are run on IR and are not related to target.
-    llvm::legacy::FunctionPassManager opt_pm;
-
-    /// Pass manager for optimisation passes that are used for target code generation.
-    llvm::legacy::FunctionPassManager codegen_pm;
+    /// Optimisation level for LLVM IR transformations.
+    int opt_level_ir;
 
     /// Vector library used for math functions.
     std::string vector_library;
@@ -100,7 +90,7 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
   public:
     CodegenLLVMVisitor(const std::string& mod_filename,
                        const std::string& output_dir,
-                       bool opt_passes,
+                       int opt_level_ir,
                        bool use_single_precision = false,
                        int vector_width = 1,
                        std::string vec_lib = "none",
@@ -108,14 +98,12 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
                        std::vector<std::string> fast_math_flags = {})
         : mod_filename(mod_filename)
         , output_dir(output_dir)
-        , opt_passes(opt_passes)
+        , opt_level_ir(opt_level_ir)
         , vector_width(vector_width)
         , vector_library(vec_lib)
         , add_debug_information(add_debug_information)
         , ir_builder(*context, use_single_precision, vector_width, fast_math_flags)
-        , debug_builder(*module)
-        , codegen_pm(module.get())
-        , opt_pm(module.get()) {}
+        , debug_builder(*module) {}
 
     /// Dumps the generated LLVM IR module to string.
     std::string dump_module() const {
@@ -227,11 +215,6 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
 
     /// Reads the given variable and returns the processed value.
     llvm::Value* read_variable(const ast::VarName& node);
-
-
-    /// Run multiple LLVM optimisation passes on generated IR.
-    /// TODO: this can be moved to a dedicated file or deprecated.
-    void run_ir_opt_passes();
 
     //// Writes the value to the given variable.
     void write_to_variable(const ast::VarName& node, llvm::Value* value);
