@@ -43,7 +43,7 @@ class LLVMBenchmark {
     /// Benchmarking backend
     std::string backend;
 
-    /// Optimisation level for LLVM IR transformations.
+    /// Optimisation level for IR generation.
     int opt_level_ir;
 
     /// Optimisation level for machine code generation.

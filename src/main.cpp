@@ -173,9 +173,6 @@ int main(int argc, const char* argv[]) {
     /// use single precision floating-point types
     bool llvm_float_type(false);
 
-    /// run llvm optimisation passes
-    bool llvm_ir_opt_passes(false);
-
     /// llvm vector width
     int llvm_vec_width = 1;
 
@@ -338,9 +335,9 @@ int main(int argc, const char* argv[]) {
     llvm_opt->add_flag("--disable-debug-info",
                        disable_debug_information,
                        fmt::format("Disable debug information ({})", disable_debug_information))->ignore_case();
-    llvm_opt->add_flag("--opt",
-                       llvm_ir_opt_passes,
-                       fmt::format("Run few common LLVM IR optimisation passes ({})", llvm_ir_opt_passes))->ignore_case();
+    llvm_opt->add_option("--opt-level-ir",
+                              llvm_opt_level_ir,
+                              fmt::format("LLVM IR optimisation level (O{})", llvm_opt_level_ir))->ignore_case()->check(CLI::IsMember({"0", "1", "2", "3"}));
     llvm_opt->add_flag("--single-precision",
                        llvm_float_type,
                        fmt::format("Use single precision floating-point types ({})", llvm_float_type))->ignore_case();
@@ -359,9 +356,6 @@ int main(int argc, const char* argv[]) {
     benchmark_opt->add_flag("--run",
                             run_llvm_benchmark,
                             fmt::format("Run LLVM benchmark ({})", run_llvm_benchmark))->ignore_case();
-    benchmark_opt->add_option("--opt-level-ir",
-                              llvm_opt_level_ir,
-                              fmt::format("LLVM IR optimisation level (O{})", llvm_opt_level_ir))->ignore_case()->check(CLI::IsMember({"0", "1", "2", "3"}));
     benchmark_opt->add_option("--opt-level-codegen",
                               llvm_opt_level_codegen,
                               fmt::format("Machine code optimisation level (O{})", llvm_opt_level_codegen))->ignore_case()->check(CLI::IsMember({"0", "1", "2", "3"}));
@@ -689,10 +683,14 @@ int main(int argc, const char* argv[]) {
 
 #ifdef NMODL_LLVM_BACKEND
             if (llvm_ir || run_llvm_benchmark) {
+                // If benchmarking, we want to optimize the IR with target information and not in
+                // LLVM visitor.
+                int llvm_opt_level = run_llvm_benchmark ? 0 : llvm_opt_level_ir;
+
                 logger->info("Running LLVM backend code generator");
                 CodegenLLVMVisitor visitor(modfile,
                                            output_dir,
-                                           llvm_ir_opt_passes,
+                                           llvm_opt_level,
                                            llvm_float_type,
                                            llvm_vec_width,
                                            vector_library,

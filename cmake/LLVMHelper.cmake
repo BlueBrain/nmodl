@@ -6,6 +6,7 @@ find_package(LLVM REQUIRED CONFIG)
 
 # include LLVM libraries
 set(NMODL_LLVM_COMPONENTS
+    aggressiveinstcombine
     analysis
     codegen
     core

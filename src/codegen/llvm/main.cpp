@@ -48,7 +48,7 @@ int main(int argc, const char* argv[]) {
     visitor::SymtabVisitor().visit_program(*ast);
 
     logger->info("Running LLVM Visitor");
-    codegen::CodegenLLVMVisitor llvm_visitor(filename, /*output_dir=*/".", /*opt_passes=*/false);
+    codegen::CodegenLLVMVisitor llvm_visitor(filename, /*output_dir=*/".", /*opt_level_ir=*/0);
     llvm_visitor.visit_program(*ast);
     std::unique_ptr<llvm::Module> module = llvm_visitor.get_module();
 

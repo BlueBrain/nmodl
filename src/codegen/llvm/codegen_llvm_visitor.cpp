@@ -6,6 +6,7 @@
  *************************************************************************/
 
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
+#include "codegen/llvm/llvm_utils.hpp"
 
 #include "ast/all.hpp"
 #include "visitors/rename_visitor.hpp"
@@ -15,6 +16,7 @@
 #include "llvm/IR/AssemblyAnnotationWriter.h"
 #include "llvm/IR/BasicBlock.h"
 #include "llvm/IR/Function.h"
+#include "llvm/IR/LegacyPassManager.h"
 #include "llvm/IR/Type.h"
 #include "llvm/Support/FileSystem.h"
 #include "llvm/Support/Host.h"
@@ -429,25 +431,6 @@ llvm::Value* CodegenLLVMVisitor::read_variable(const ast::VarName& node) {
 
     throw std::runtime_error("Error: the type of '" + node.get_node_name() +
                              "' is not supported\n");
-}
-
-void CodegenLLVMVisitor::run_ir_opt_passes() {
-    // Run some common optimisation passes that are commonly suggested.
-    opt_pm.add(llvm::createInstructionCombiningPass());
-    opt_pm.add(llvm::createReassociatePass());
-    opt_pm.add(llvm::createGVNPass());
-    opt_pm.add(llvm::createCFGSimplificationPass());
-
-    // Initialize pass manager.
-    opt_pm.doInitialization();
-
-    // Iterate over all functions and run the optimisation passes.
-    auto& functions = module->getFunctionList();
-    for (auto& function: functions) {
-        llvm::verifyFunction(function);
-        opt_pm.run(function);
-    }
-    opt_pm.doFinalization();
 }
 
 void CodegenLLVMVisitor::write_to_variable(const ast::VarName& node, llvm::Value* value) {
@@ -874,9 +857,10 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
         throw std::runtime_error("Error: incorrect IR has been generated!\n" + ostream.str());
     }
 
-    if (opt_passes) {
+    if (opt_level_ir) {
         logger->info("Running LLVM optimisation passes");
-        run_ir_opt_passes();
+        utils::initialise_optimisation_passes();
+        utils::optimise_module(*module, opt_level_ir);
     }
 
     // Optionally, replace LLVM math intrinsics with vector library calls.
@@ -893,14 +877,15 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
         add_vectorizable_functions_from_vec_lib(target_lib_info, triple);
 
         // Run passes that replace math intrinsics.
-        codegen_pm.add(new llvm::TargetLibraryInfoWrapperPass(target_lib_info));
-        codegen_pm.add(new llvm::ReplaceWithVeclibLegacy);
-        codegen_pm.doInitialization();
+        llvm::legacy::FunctionPassManager fpm(module.get());
+        fpm.add(new llvm::TargetLibraryInfoWrapperPass(target_lib_info));
+        fpm.add(new llvm::ReplaceWithVeclibLegacy);
+        fpm.doInitialization();
         for (auto& function: module->getFunctionList()) {
             if (!function.isDeclaration())
-                codegen_pm.run(function);
+                fpm.run(function);
         }
-        codegen_pm.doFinalization();
+        fpm.doFinalization();
 #endif
     }
 
