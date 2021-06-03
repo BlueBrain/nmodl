@@ -29,7 +29,7 @@ struct BenchmarkInfo {
     /// Object file output directory.
     std::string output_dir;
 
-    /// Optimisation level for generated IR.
+    /// Optimisation level for IT.
     int opt_level_ir;
 
     /// Optimisation level for machine code generation.

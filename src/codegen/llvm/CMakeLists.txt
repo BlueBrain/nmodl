@@ -9,7 +9,9 @@ set(LLVM_CODEGEN_SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/llvm_debug_builder.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/llvm_debug_builder.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/llvm_ir_builder.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/llvm_ir_builder.hpp)
+    ${CMAKE_CURRENT_SOURCE_DIR}/llvm_ir_builder.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/llvm_utils.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/llvm_utils.hpp)
 
 # =============================================================================
 # LLVM codegen library and executable

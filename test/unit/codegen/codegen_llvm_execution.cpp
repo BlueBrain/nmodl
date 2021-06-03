@@ -126,7 +126,7 @@ SCENARIO("Arithmetic expression", "[llvm][runner]") {
         SymtabVisitor().visit_program(*ast);
         codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"unknown",
                                                  /*output_dir=*/".",
-                                                 /*opt_passes=*/false);
+                                                 /*opt_level_ir=*/0);
         llvm_visitor.visit_program(*ast);
 
         std::unique_ptr<llvm::Module> m = llvm_visitor.get_module();
@@ -228,7 +228,7 @@ SCENARIO("Optimised arithmetic expression", "[llvm][runner]") {
         SymtabVisitor().visit_program(*ast);
         codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"unknown",
                                                  /*output_dir=*/".",
-                                                 /*opt_passes=*/true);
+                                                 /*opt_level_ir=*/3);
         llvm_visitor.visit_program(*ast);
 
         std::unique_ptr<llvm::Module> m = llvm_visitor.get_module();
@@ -301,7 +301,7 @@ SCENARIO("Simple scalar kernel", "[llvm][runner]") {
         SolveBlockVisitor().visit_program(*ast);
         codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"unknown",
                                                  /*output_dir=*/".",
-                                                 /*opt_passes=*/false,
+                                                 /*opt_level_ir=*/0,
                                                  /*use_single_precision=*/false,
                                                  /*vector_width=*/1);
         llvm_visitor.visit_program(*ast);
@@ -383,7 +383,7 @@ SCENARIO("Simple vectorised kernel", "[llvm][runner]") {
         SolveBlockVisitor().visit_program(*ast);
         codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"unknown",
                                                  /*output_dir=*/".",
-                                                 /*opt_passes=*/true,
+                                                 /*opt_level_ir=*/3,
                                                  /*use_single_precision=*/false,
                                                  /*vector_width=*/4);
         llvm_visitor.visit_program(*ast);
@@ -465,7 +465,7 @@ SCENARIO("Vectorised kernel with scatter instruction", "[llvm][runner]") {
         SolveBlockVisitor().visit_program(*ast);
         codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"unknown",
                                                  /*output_dir=*/".",
-                                                 /*opt_passes=*/false,
+                                                 /*opt_level_ir=*/0,
                                                  /*use_single_precision=*/false,
                                                  /*vector_width=*/2);
         llvm_visitor.visit_program(*ast);
@@ -556,7 +556,7 @@ SCENARIO("Vectorised kernel with simple control flow", "[llvm][runner]") {
         SolveBlockVisitor().visit_program(*ast);
         codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"unknown",
                                                  /*output_dir=*/".",
-                                                 /*opt_passes=*/false,
+                                                 /*opt_level_ir=*/0,
                                                  /*use_single_precision=*/false,
                                                  /*vector_width=*/2);
         llvm_visitor.visit_program(*ast);
