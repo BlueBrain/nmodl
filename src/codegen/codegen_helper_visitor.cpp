@@ -552,10 +552,6 @@ void CodegenHelperVisitor::visit_eigen_newton_solver_block(
 void CodegenHelperVisitor::visit_eigen_linear_solver_block(
     const ast::EigenLinearSolverBlock& node) {
     info.eigen_linear_solver_exist = true;
-
-    // Enabled only for GPUs
-    if (info.state_vars.size() > 4)
-        info.crout_solver_exist = true;
 }
 
 void CodegenHelperVisitor::visit_function_call(const FunctionCall& node) {

@@ -77,7 +77,7 @@ void CodegenAccVisitor::print_backend_includes() {
         printer->add_line("#include <openacc.h>");
     }
 
-    if (info.crout_solver_exist) {
+    if (info.eigen_linear_solver_exist && count_length(info.state_vars) > 4) {
         printer->add_line("#include <crout/crout.hpp>");
     }
 }
@@ -134,19 +134,11 @@ void CodegenAccVisitor::print_net_send_buffering_grow() {
     printer->add_line("coreneuron_abort();");
 }
 
-void CodegenAccVisitor::visit_eigen_linear_solver_block(const ast::EigenLinearSolverBlock& node) {
-    printer->add_newline();
-
-    // Check if there is a variable defined in the mod file as X, J, Jm or F and if yes
-    // try to use a different string for the matrices created by sympy in the form
-    // X_<random_number>, J_<random_number>, Jm_<random_number> and F_<random_number>
-    std::string X = find_var_unique_name("X");
-    std::string J = find_var_unique_name("J");
-    std::string Jm = find_var_unique_name("Jm");
-    std::string F = find_var_unique_name("F");
-
-    const std::string float_type = default_float_data_type();
-    int N = node.get_n_state_vars()->get_value();
+void CodegenAccVisitor::print_eigen_linear_solver_variables(const std::string& float_type,
+                                                            int N,
+                                                            const std::string& X,
+                                                            const std::string& Jm,
+                                                            const std::string& F) {
     printer->add_line("Eigen::Matrix<{0}, {1}, 1> {2}, {3};"_format(float_type, N, X, F));
     if (N <= 4) {
         printer->add_line("Eigen::Matrix<{0}, {1}, {1}> {2};"_format(float_type, N, Jm));
@@ -155,12 +147,13 @@ void CodegenAccVisitor::visit_eigen_linear_solver_block(const ast::EigenLinearSo
         printer->add_line(
             "Eigen::Matrix<{0}, {1}, {1}, Eigen::RowMajor> {2};"_format(float_type, N, Jm));
     }
-    printer->add_line("{}* {} = {}.data();"_format(float_type, J, Jm));
-    print_statement_block(*node.get_variable_block(), false, false);
-    print_statement_block(*node.get_initialize_block(), false, false);
-    print_statement_block(*node.get_setup_x_block(), false, false);
+}
 
-    printer->add_newline();
+void CodegenAccVisitor::print_eigen_linear_solver(const std::string& float_type,
+                                                  int N,
+                                                  const std::string& X,
+                                                  const std::string& Jm,
+                                                  const std::string& F) {
     // The Eigen::PartialPivLU is not compatible with GPUs (no __device__ tokens).
     // For matrices up to 4x4, the Eigen inverse() has template specializations decorated with
     // __host__ & __device__ tokens. Therefore, we use the inverse method instead of the
@@ -180,9 +173,6 @@ void CodegenAccVisitor::visit_eigen_linear_solver_block(const ast::EigenLinearSo
             "nmodl::crout::solveCrout<{0}>({1}, {2}.data(), {3}.data(), {4}.data());"_format(
                 float_type, N, Jm, F, X));
     }
-
-    print_statement_block(*node.get_update_states_block(), false, false);
-    print_statement_block(*node.get_finalize_block(), false, false);
 }
 
 /**

@@ -1656,6 +1656,13 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
         , float_type(float_type)
         , optimize_ionvar_copies(optimize_ionvar_copies) {}
 
+    static int count_length(const std::vector<SymbolType>& variables) {
+        int length = 0;
+        for (const auto& variable: variables) {
+            length += variable->get_length();
+        }
+        return length;
+    };
 
   public:
     /**
@@ -1849,6 +1856,16 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
     void visit_function_call(const ast::FunctionCall& node) override;
     void visit_eigen_newton_solver_block(const ast::EigenNewtonSolverBlock& node) override;
     void visit_eigen_linear_solver_block(const ast::EigenLinearSolverBlock& node) override;
+    virtual void print_eigen_linear_solver_variables(const std::string& float_type,
+                                                     int N,
+                                                     const std::string& X,
+                                                     const std::string& Jm,
+                                                     const std::string& F);
+    virtual void print_eigen_linear_solver(const std::string& float_type,
+                                           int N,
+                                           const std::string& X,
+                                           const std::string& Jm,
+                                           const std::string& F);
     void visit_if_statement(const ast::IfStatement& node) override;
     void visit_indexed_name(const ast::IndexedName& node) override;
     void visit_integer(const ast::Integer& node) override;

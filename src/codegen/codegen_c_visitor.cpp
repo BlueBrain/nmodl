@@ -525,14 +525,6 @@ std::string CodegenCVisitor::breakpoint_current(std::string current) const {
 
 
 int CodegenCVisitor::float_variables_size() const {
-    auto count_length = [](const std::vector<SymbolType>& variables) -> int {
-        int length = 0;
-        for (const auto& variable: variables) {
-            length += variable->get_length();
-        }
-        return length;
-    };
-
     int float_size = count_length(info.range_parameter_vars);
     float_size += count_length(info.range_assigned_vars);
     float_size += count_length(info.range_state_vars);
@@ -1779,14 +1771,33 @@ void CodegenCVisitor::visit_eigen_linear_solver_block(const ast::EigenLinearSolv
 
     const std::string float_type = default_float_data_type();
     int N = node.get_n_state_vars()->get_value();
-    printer->add_line("Eigen::Matrix<{0}, {1}, 1> {2}, {3};"_format(float_type, N, X, F));
-    printer->add_line("Eigen::Matrix<{0}, {1}, {1}> {2};"_format(float_type, N, Jm));
+    print_eigen_linear_solver_variables(float_type, N, X, Jm, F);
     printer->add_line("{}* {} = {}.data();"_format(float_type, J, Jm));
     print_statement_block(*node.get_variable_block(), false, false);
     print_statement_block(*node.get_initialize_block(), false, false);
     print_statement_block(*node.get_setup_x_block(), false, false);
 
     printer->add_newline();
+    print_eigen_linear_solver(float_type, N, X, Jm, F);
+
+    print_statement_block(*node.get_update_states_block(), false, false);
+    print_statement_block(*node.get_finalize_block(), false, false);
+}
+
+void CodegenCVisitor::print_eigen_linear_solver_variables(const std::string& float_type,
+                                                          int N,
+                                                          const std::string& X,
+                                                          const std::string& Jm,
+                                                          const std::string& F) {
+    printer->add_line("Eigen::Matrix<{0}, {1}, 1> {2}, {3};"_format(float_type, N, X, F));
+    printer->add_line("Eigen::Matrix<{0}, {1}, {1}> {2};"_format(float_type, N, Jm));
+}
+
+void CodegenCVisitor::print_eigen_linear_solver(const std::string& float_type,
+                                                int N,
+                                                const std::string& X,
+                                                const std::string& Jm,
+                                                const std::string& F) {
     if (N <= 4) {
         // Faster, as there is no pivoting and therefore no branches, but it is not numerically safe
         // for \f$N > 4\f$.
@@ -1796,9 +1807,6 @@ void CodegenCVisitor::visit_eigen_linear_solver_block(const ast::EigenLinearSolv
             "{0} = Eigen::PartialPivLU<Eigen::Ref<Eigen::Matrix<{1}, {2}, {2}>>>({3}).solve({4});"_format(
                 X, float_type, N, Jm, F));
     }
-
-    print_statement_block(*node.get_update_states_block(), false, false);
-    print_statement_block(*node.get_finalize_block(), false, false);
 }
 
 /****************************************************************************************/
