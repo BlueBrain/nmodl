@@ -159,7 +159,7 @@ ARCHITECTURES="skylake_avx512 broadwell nehalem"
 #ARCHITECTURES="avx512"
 #ARCHITECTURES="skylake_avx512"
 # set cpu option in jit according to the architecture
-COMPILERS="icpc clang cpp"
+COMPILERS="icpc clang gcc"
 #COMPILERS="clang"
 
 # loop over options
