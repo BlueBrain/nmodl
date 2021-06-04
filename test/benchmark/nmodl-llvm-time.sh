@@ -25,9 +25,11 @@ function showusage {
 -n NUMBER, --instance-size NUMBER
 -e NUMBER, --num-exeperiment NUMBER
 -v NUMBER, --vec-width NUMBER
--d, --dry-run
--h, --help       Display this usage information.
--V, --version    Show version and exit.
+-ext, --external-kernel    Runs external kernels.
+-o, --output-directory     Sets the output directory.
+-d, --dry-run              Debug run.
+-h, --help                 Display this usage information.
+-V, --version              Show version and exit.
 Driver for benchmarking.
 "
 }
@@ -55,15 +57,6 @@ while [[ "$1" != "" ]]; do
             ;;
         -ext|--external-kernel)
             external_kernel_exec=true
-            shift
-            ;;
-        -vec-sweep|--vec-width-sweep)
-            vec_width_sweep=true
-            shift
-            ;;
-        -mod-dir|--modfile-directory)
-            modfile_directory=$2
-            shift
             shift
             ;;
         -o|--output-directory)
@@ -126,12 +119,12 @@ declare -a icpc_flags_nehalem=(
 llvm_path="/gpfs/bbp.cscs.ch/apps/hpc/llvm-install/0621"
 llvm_lib=${llvm_path}/lib
 clang_exe=${llvm_path}/bin/clang++
-# -march=skylake-avx512 doesn't generate avx512 commands with clang
+llc_exe=${llvm_path}/bin/llc
 declare -a clang_flags_skylake_avx512=(
     "-O3 -march=skylake-avx512 -mtune=skylake -ffast-math -fveclib=SVML"
     "-O3 -march=skylake-avx512 -mtune=skylake -ffast-math -fopenmp -fveclib=SVML"
     )
-# check -mcpu=
+
 declare -a clang_flags_broadwell=(
     "-O3 -march=broadwell -mtune=broadwell -ffast-math -fopenmp -fveclib=SVML"
     )
@@ -161,19 +154,24 @@ declare -a benchmark_variance
 # also get variance
 KERNEL_TARGETS="compute-bound memory-bound hh"
 #KERNEL_TARGETS="compute-bound"
+#KERNEL_TARGETS="hh"
 ARCHITECTURES="skylake_avx512 broadwell nehalem"
 #ARCHITECTURES="avx512"
+#ARCHITECTURES="skylake_avx512"
 # set cpu option in jit according to the architecture
-
-#
-#inst_size_hh=$(($inst_size/5))
+COMPILERS="icpc clang cpp"
+#COMPILERS="clang"
 
 # loop over options
 for kernel_target in ${KERNEL_TARGETS}; do
     echo "Kernel: $kernel_target"
-    # if [ "$kernel_target" == "hh" ]; then
-    #     inst_size=$(($inst_size/5))
-    # fi
+
+    # hh mechanism size 5 times the compute-bound and memory-bound
+    if [ "$kernel_target" == "hh" ]; then
+        kernel_inst_size=$(($inst_size/5))
+    else
+        kernel_inst_size=$inst_size
+    fi
     for architecture in ${ARCHITECTURES}; do
         if [ "$architecture" = "skylake_avx512" ] ; then
             vec_width=8
@@ -192,7 +190,7 @@ for kernel_target in ${KERNEL_TARGETS}; do
         fi
 
         if $external_kernel_exec; then
-            for compiler in icpc clang gcc; do
+            for compiler in ${COMPILERS}; do
                 echo "|  |  Compiler: $compiler"
 			
 				compiler_exe=${compiler}_exe
@@ -201,34 +199,49 @@ for kernel_target in ${KERNEL_TARGETS}; do
 	        		echo "|  |  |  flags: "${flags}
            
 	                spec=${compiler}_${flags//[[:blank:]]/}
-	                rel_ext_path=${kernel_target}_${spec}
+	                rel_ext_path_cpp=${kernel_target}_${spec}_cpp
 
-                    # for avx512 compile and run without pragma omp simd and pragma ivdep
-	                ${debug} mkdir -p ${rel_ext_path}
-	                ${debug} cd ${rel_ext_path}
+	                ${debug} mkdir -p ${rel_ext_path_cpp}
+	                ${debug} cd ${rel_ext_path_cpp}
 	                ext_path=$(pwd)
 	                ${debug} ${!compiler_exe} ${flags} ${kernels_path}/${kernel_target}.cpp \
 	                -shared -fpic -o ${ext_lib}
-	                ${debug} eval "llvm-objdump ${ext_lib} -d > ${ext_lib::-1}"
+	                ${debug} eval "objdump ${ext_lib} -d > ${ext_lib::-1}"
 	                ${debug} cd ..
 
-                    nmodl_args="${kernels_path}/${kernel_target}.mod llvm --ir --vector-width ${vec_width} --veclib SVML --opt-level-ir 3 benchmark --run --instance-size ${inst_size} --repeat ${num_exp} --opt-level-codegen 3 --cpu ${nmodl_architecture} --libs ${vec_lib_path}/${vec_lib}"
-
+                    # add --fmf nnan contract afn here to generate .ll file similar to the fast-math options from external compilers
+                    nmodl_args="${kernels_path}/${kernel_target}.mod llvm --ir --vector-width ${vec_width} --veclib SVML --opt-level-ir 3 --fmf nnan contract afn benchmark --run --instance-size ${kernel_inst_size} --repeat ${num_exp} --opt-level-codegen 3 --cpu ${nmodl_architecture} --libs ${vec_lib_path}/${vec_lib}"
                     nmodl_args="${nmodl_args} --external"
-                    benchmark_ext_desc=ext_${kernel_target}_${compiler}_${architecture}_v${vec_width}_${flags//[[:blank:]]/}
+
+                    benchmark_ext_desc=ext_${kernel_target}_${compiler}_${nmodl_architecture}_v${vec_width}_${flags//[[:blank:]]/}
                     benchmark_description+=("${benchmark_ext_desc}")
                     # runs only external kernel
                     ${debug} eval "LD_LIBRARY_PATH=${ext_path}:${vec_lib_path}:${llvm_lib} ${nmodl_exe} ${nmodl_args} &> ${output_dir}/${benchmark_ext_desc}.log"
                     benchmark_time+=($(grep "Average compute time" ${output_dir}/${benchmark_ext_desc}.log | awk '{print $NF}'))
                     benchmark_variance+=($(grep "Compute time variance" ${output_dir}/${benchmark_ext_desc}.log | awk '{print $NF}'))
+
+                    if [ "$compiler" == "clang" ]; then
+                        rel_ext_path_llvm=${kernel_target}_${spec}_llvm
+                        ${debug} mkdir -p ${rel_ext_path_llvm}
+                        # Generate external library from LLVM IR of JIT
+                        ${debug} sed 's/nrn_state_hh/_Z16nrn_state_hh_extPv/g' v${vec_width}_${kernel_target}_opt.ll > ${output_dir}/v${vec_width}_${kernel_target}_opt_ext.ll
+                        ${debug} ${!compiler_exe} ${flags} -shared -fpic ${output_dir}/v${vec_width}_${kernel_target}_opt_ext.ll -o ${rel_ext_path_llvm}/${ext_lib} &>/dev/null # overwrites previous ${ext_lib}
+
+                        benchmark_ext_jit_desc=ext_jit_${kernel_target}_${compiler}_${nmodl_architecture}_v${vec_width}_${flags//[[:blank:]]/}
+                        benchmark_description+=("${benchmark_ext_jit_desc}")
+                        # run external library generated by the LLVM IR code of JIT
+                        ${debug} eval "LD_LIBRARY_PATH=${rel_ext_path_llvm}:${vec_lib_path}:${llvm_lib} ${nmodl_exe} ${nmodl_args} &> ${output_dir}/${benchmark_ext_jit_desc}.log"
+                        benchmark_time+=($(grep "Average compute time" ${output_dir}/${benchmark_ext_jit_desc}.log | awk '{print $NF}'))
+                        benchmark_variance+=($(grep "Compute time variance" ${output_dir}/${benchmark_ext_jit_desc}.log | awk '{print $NF}'))
+                    fi
                 done
             done
 		fi
         for fast_math in true false; do
             if $fast_math; then
-                fast_math_flag="--fmf fast"
-                fast_math_opt="fastmath"
-            else 
+                fast_math_flag="--fmf nnan contract afn"
+                fast_math_opt="nnancontractafn"
+            else
                 fast_math_flag=""
                 fast_math_opt="nonfastmath"
             fi
@@ -236,12 +249,12 @@ for kernel_target in ${KERNEL_TARGETS}; do
                 if $assume_may_alias; then
                     assume_may_alias_flag="--assume-may-alias"
                     assume_may_alias_opt="alias"
-                else 
+                else
                     assume_may_alias_flag=""
                     assume_may_alias_opt="noalias"
                 fi
-                nmodl_args="${kernels_path}/${kernel_target}.mod llvm --ir ${fast_math_flag} ${assume_may_alias_flag} --vector-width ${vec_width} --veclib SVML --opt-level-ir 3 benchmark --run --instance-size ${inst_size} --repeat ${num_exp} --opt-level-codegen 3 --cpu ${nmodl_architecture} --libs ${vec_lib_path}/${vec_lib}"
-                benchmark_nmodl_desc=nmodl_${kernel_target}_${architecture}_v${vec_width}_${fast_math_opt}_${assume_may_alias_opt}
+                nmodl_args="${kernels_path}/${kernel_target}.mod llvm --ir ${fast_math_flag} ${assume_may_alias_flag} --vector-width ${vec_width} --veclib SVML --opt-level-ir 3 benchmark --run --instance-size ${kernel_inst_size} --repeat ${num_exp} --opt-level-codegen 3 --cpu ${nmodl_architecture} --libs ${vec_lib_path}/${vec_lib}"
+                benchmark_nmodl_desc=nmodl_${kernel_target}_${nmodl_architecture}_v${vec_width}_${fast_math_opt}_${assume_may_alias_opt}
                 benchmark_description+=("${benchmark_nmodl_desc}")
                 # runs only kernel generated by LLVM IR
                 ${debug} eval "LD_LIBRARY_PATH=${ext_path}:${vec_lib_path}:${llvm_lib} ${nmodl_exe} ${nmodl_args} &> ${output_dir}/${benchmark_nmodl_desc}.log"
