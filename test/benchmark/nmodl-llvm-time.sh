@@ -112,9 +112,7 @@ intel_path="/gpfs/bbp.cscs.ch/ssd/apps/hpc/jenkins/deploy/compilers/2021-01-06/l
 icpc_exe=${intel_path}/icpc
 declare -a icpc_flags_skylake_avx512=(
     "-O2 -march=skylake-avx512 -mtune=skylake -prec-div -fimf-use-svml" # avx2
-    "-O2 -mavx512f -prec-div -fimf-use-svml" #generates avx512 code
     "-O2 -march=skylake-avx512 -mtune=skylake -prec-div -fimf-use-svml -fopenmp" # avx2
-    "-O2 -mavx512f -prec-div -fimf-use-svml -fopenmp"
     )
 
     #delete ivdep in handwrtten kernels
