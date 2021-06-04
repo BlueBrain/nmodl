@@ -111,14 +111,10 @@ intel_path="/gpfs/bbp.cscs.ch/ssd/apps/hpc/jenkins/deploy/compilers/2021-01-06/l
 # compilers
 icpc_exe=${intel_path}/icpc
 declare -a icpc_flags_skylake_avx512=(
-    "-O2 -march=skylake-avx512 -mtune=skylake -prec-div -fimf-use-svml" # avx2
-    "-O2 -march=skylake-avx512 -mtune=skylake -prec-div -fimf-use-svml -fopenmp" # avx2
+    "-O2 -march=skylake-avx512 -mtune=skylake -prec-div -fimf-use-svml"
+    "-O2 -march=skylake-avx512 -mtune=skylake -prec-div -fimf-use-svml -fopenmp"
     )
 
-    #delete ivdep in handwrtten kernels
-# check for haswell architecture option
-# replace -mavx2 with the procesor family
-# for one run keep both family and -mavx2
 declare -a icpc_flags_broadwell=(
     "-O2 -march=broadwell -mtune=broadwell -prec-div -fimf-use-svml"
     )
