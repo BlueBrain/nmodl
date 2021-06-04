@@ -237,6 +237,7 @@ for kernel_target in ${KERNEL_TARGETS}; do
                 done
             done
 		fi
+        echo "|  |  NMODL JIT"
         for fast_math in true false; do
             if $fast_math; then
                 fast_math_flag="--fmf nnan contract afn"
@@ -253,6 +254,7 @@ for kernel_target in ${KERNEL_TARGETS}; do
                     assume_may_alias_flag=""
                     assume_may_alias_opt="noalias"
                 fi
+                echo "|  |  options: ${fast_math_flag} ${assume_may_alias_flag}"
                 nmodl_args="${kernels_path}/${kernel_target}.mod llvm --ir ${fast_math_flag} ${assume_may_alias_flag} --vector-width ${vec_width} --veclib SVML --opt-level-ir 3 benchmark --run --instance-size ${kernel_inst_size} --repeat ${num_exp} --opt-level-codegen 3 --cpu ${nmodl_architecture} --libs ${vec_lib_path}/${vec_lib}"
                 benchmark_nmodl_desc=nmodl_${kernel_target}_${nmodl_architecture}_v${vec_width}_${fast_math_opt}_${assume_may_alias_opt}
                 benchmark_description+=("${benchmark_nmodl_desc}")
