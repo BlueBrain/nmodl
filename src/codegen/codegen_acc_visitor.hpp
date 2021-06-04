@@ -95,6 +95,9 @@ class CodegenAccVisitor: public CodegenCVisitor {
     void print_net_send_buffering_grow() override;
 
 
+    void visit_eigen_linear_solver_block(const ast::EigenLinearSolverBlock& node) override;
+
+
   public:
     CodegenAccVisitor(const std::string& mod_file,
                       const std::string& output_dir,

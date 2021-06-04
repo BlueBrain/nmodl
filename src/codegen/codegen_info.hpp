@@ -358,6 +358,9 @@ struct CodegenInfo {
     /// true if eigen linear solver is used
     bool eigen_linear_solver_exist = false;
 
+    /// true if crout solver is used
+    bool crout_solver_exist = false;
+
     /// if any ion has write variable
     bool ion_has_write_variable() const;
 

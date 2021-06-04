@@ -1780,34 +1780,23 @@ void CodegenCVisitor::visit_eigen_linear_solver_block(const ast::EigenLinearSolv
     const std::string float_type = default_float_data_type();
     int N = node.get_n_state_vars()->get_value();
     printer->add_line("Eigen::Matrix<{0}, {1}, 1> {2}, {3};"_format(float_type, N, X, F));
-    if (N <= 4) {
-        printer->add_line("Eigen::Matrix<{0}, {1}, {1}> {2};"_format(float_type, N, Jm));
-    } else {
-        // Eigen::RowMajor needed for Crout implementation
-        printer->add_line("Eigen::Matrix<{0}, {1}, {1}, Eigen::RowMajor> {2};"_format(float_type, N, Jm));
-    }
+    printer->add_line("Eigen::Matrix<{0}, {1}, {1}> {2};"_format(float_type, N, Jm));
     printer->add_line("{}* {} = {}.data();"_format(float_type, J, Jm));
     print_statement_block(*node.get_variable_block(), false, false);
     print_statement_block(*node.get_initialize_block(), false, false);
     print_statement_block(*node.get_setup_x_block(), false, false);
 
     printer->add_newline();
-    // The Eigen::PartialPivLU is not compatible with GPUs (no __device__ tokens).
-    // For matrices up to 4x4, the Eigen inverse() has template specializations decorated with __host__ & __device__ tokens.
-    // Therefore, we use the inverse method instead of the PartialPivLU (requires an invertible matrix)
-    // which supports both CPUs & GPUs.
-    // 
-    // For matrices 5x5 and above, Eigen does not provide GPU-enabled methods to solve small linear systems.
-    // For this reason, we use the Crout LU decomposition (Legacy code : coreneuron/sim/scopmath/crout_thread.cpp).
     if (N <= 4) {
+        // Faster, as there is no pivoting and therefore no branches, but it is not numerically safe
+        // for \f$N > 4\f$.
         printer->add_line("{0} = {1}.inverse()*{2};"_format(X, Jm, F));
     } else {
-        // In-place LU-Decomposition (Crout Algo) : Jm is replaced by its LU-decomposition
-        printer->add_line("nmodl::fast_math::Crout<{0}>({1}, {2}.data(), {2}.data());"_format(float_type, N, Jm));
-        // Solve the linear system : Forward/Backward substitution part
-        printer->add_line("nmodl::fast_math::solveCrout<{0}>({1}, {2}.data(), {3}.data(), {4}.data());"_format(float_type, N, Jm, F, X));
+        printer->add_line(
+            "{0} = Eigen::PartialPivLU<Eigen::Ref<Eigen::Matrix<{1}, {2}, {2}>>>({3}).solve({4});"_format(
+                X, float_type, N, Jm, F));
     }
-    
+
     print_statement_block(*node.get_update_states_block(), false, false);
     print_statement_block(*node.get_finalize_block(), false, false);
 }

@@ -103,6 +103,10 @@ class CodegenCudaVisitor: public CodegenCVisitor {
     /// entry point to code generation
     void print_codegen_routines() override;
 
+
+    void visit_eigen_linear_solver_block(const ast::EigenLinearSolverBlock& node) override;
+
+
   public:
     CodegenCudaVisitor(const std::string& mod_file,
                        const std::string& output_dir,
