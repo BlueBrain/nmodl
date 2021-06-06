@@ -10,4 +10,6 @@
 #include <iostream>
 
 // external kernel stub
-void nrn_state_hh_ext(void* ){}
+void nrn_state_hh_ext(void* ) {
+    throw std::runtime_error("Error: this should have been external nrn_state_hh_ext kernel, check library and LD_LIBRARY_PATH\n");
+}
