@@ -39,13 +39,13 @@ template <typename T>
 EIGEN_DEVICE_FUNC inline void Crout(int d, T* S, T* D) {
     for (int k = 0; k < d; ++k) {
         for (int i = k; i < d; ++i) {
-            T sum = ((T) (0.));
+            T sum = ((T)(0.));
             for (int p = 0; p < k; ++p)
                 sum += D[i * d + p] * D[p * d + k];
             D[i * d + k] = S[i * d + k] - sum;
         }
         for (int j = k + 1; j < d; ++j) {
-            T sum = ((T) (0.));
+            T sum = ((T)(0.));
             for (int p = 0; p < k; ++p)
                 sum += D[k * d + p] * D[p * d + j];
             D[k * d + j] = (S[k * d + j] - sum) / D[k * d + k];
@@ -71,13 +71,13 @@ template <typename T>
 EIGEN_DEVICE_FUNC inline void solveCrout(int d, T* LU, T* b, T* x) {
     T y[d];
     for (int i = 0; i < d; ++i) {
-        T sum = ((T) (0.));
+        T sum = ((T)(0.));
         for (int k = 0; k < i; ++k)
             sum += LU[i * d + k] * y[k];
         y[i] = (b[i] - sum) / LU[i * d + i];
     }
     for (int i = d - 1; i >= 0; --i) {
-        T sum = ((T) (0.));
+        T sum = ((T)(0.));
         for (int k = i + 1; k < d; ++k)
             sum += LU[i * d + k] * x[k];
         x[i] = (y[i] - sum);
