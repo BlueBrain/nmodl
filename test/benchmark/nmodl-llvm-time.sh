@@ -10,6 +10,11 @@ set -e
 # sample run
 # sh nmodl-llvm-time.sh -n 100000000 -o llvm_benchmark_all_big_100mil -ext -e 5
 
+module purge
+unset MODULEPATH
+export MODULEPATH="/gpfs/bbp.cscs.ch/ssd/apps/hpc/jenkins/modules/all"
+module load unstable
+
 # default params
 inst_size=100000000
 num_exp=5
@@ -90,9 +95,9 @@ while [[ "$1" != "" ]]; do
 done
 
 #intel paths
-intel_compiler_dir=/gpfs/bbp.cscs.ch/ssd/apps/hpc/jenkins/deploy/compilers/2021-01-06/linux-rhel7-x86_64/gcc-4.8.5/intel-20.0.2-ilowey/
-svml_lib=$intel_compiler_dir/lib/intel64_lin/libsvml.so
-icpc_exe=$intel_compiler_dir/bin/icpc
+intel_library_dir=$(module show intel 2>&1 | grep " LD_LIBRARY_PATH " | awk -F' ' '{print $3}' | head -n 1)
+svml_lib=$intel_library_dir/intel64_lin/libsvml.so
+intel_exe=$(module show intel 2>&1 | grep " PATH " | awk -F' ' '{print $3}' | head -n 1)/icpc
 
 #sleef library
 sleef_lib=/gpfs/bbp.cscs.ch/apps/hpc/llvm-install/0621/sleef-3.5.1/lib64/libsleefgnuabi.so
@@ -103,15 +108,14 @@ clang_exe=${llvm_path}/bin/clang++
 llc_exe=${llvm_path}/bin/llc
 
 #gcc path
-gcc_exe=/gpfs/bbp.cscs.ch/ssd/apps/hpc/jenkins/deploy/compilers/2021-01-06/linux-rhel7-x86_64/gcc-4.8.5/gcc-9.3.0-45gzrp/bin/g++
+gcc_exe=$(module show gcc 2>&1 | grep " PATH " | awk -F' ' '{print $3}' | head -n 1)/g++
 
 #add ld library path
 export LD_LIBRARY_PATH=`dirname $svml_lib`:`dirname $sleef_lib`:${llvm_path}/lib:$LD_LIBRARY_PATH
 
 # nmodl binary
 nmodl_src_dir=$(pwd)/../../
-nmodl_exe=${nmodl_src_dir}/build/bin/nmodl
-#nmodl_exe=/gpfs/bbp.cscs.ch/data/scratch/proj16/magkanar/nmodl/build_benchmark/install/bin/nmodl
+nmodl_exe=${nmodl_src_dir}/build_benchmark/bin/nmodl
 
 # external kernel
 kernels_path=${nmodl_src_dir}/test/benchmark/kernels
@@ -120,16 +124,16 @@ ext_lib="libextkernel.so"
 
 
 # compiler flags
-declare -a icpc_flags_skylake_avx512=(
+declare -a intel_flags_skylake_avx512=(
     "-O2 -march=skylake-avx512 -mtune=skylake -prec-div -fimf-use-svml"
     "-O2 -march=skylake-avx512 -mtune=skylake -prec-div -fimf-use-svml -fopenmp"
     )
 
-declare -a icpc_flags_broadwell=(
+declare -a intel_flags_broadwell=(
     "-O2 -march=broadwell -mtune=broadwell -prec-div -fimf-use-svml"
     )
 
-declare -a icpc_flags_nehalem=(
+declare -a intel_flags_nehalem=(
     "-O2 -msse2 -prec-div -fimf-use-svml"
     )
 
@@ -174,13 +178,10 @@ declare -a benchmark_variance
 # Kernels, architectures and compilers loop
 
 KERNEL_TARGETS="compute-bound memory-bound hh"
-KERNEL_TARGETS="hh"
 
-ARCHITECTURES="skylake_avx512"
 ARCHITECTURES="skylake_avx512 broadwell nehalem"
 
-COMPILERS="clang"
-COMPILERS="icpc clang gcc"
+COMPILERS="intel clang gcc"
 
 mkdir -p ${output_dir}
 
@@ -228,6 +229,16 @@ for kernel_target in ${KERNEL_TARGETS}; do
 	                ${debug} mkdir -p ${rel_ext_path_cpp}
 	                ${debug} cd ${rel_ext_path_cpp}
 	                ext_path=$(pwd)
+                    # replace pragmas with the corresponding ones for openmp or certain compiler
+                    if [[ "$kernel_target" == "hh" ]]; then
+                        if [[ "openmp" == *"$flags"* ]] || [[ "$compiler" == "intel" ]]; then
+                            ${debug} sed -i 's/#pragma.*/#pragma omp simd/g' ${kernels_path}/${kernel_target}.cpp
+                        elif [[ "$compiler" == "clang" ]]; then
+                            ${debug} sed -i 's/#pragma.*/#pragma clang vectorize(enable)/g' ${kernels_path}/${kernel_target}.cpp
+                        elif [[ "$compiler" == "gcc" ]]; then
+                            ${debug} sed -i 's/#pragma.*/#pragma GCC ivdep/g' ${kernels_path}/${kernel_target}.cpp
+                        fi
+                    fi
 	                ${debug} ${!compiler_exe} ${flags} ${kernels_path}/${kernel_target}.cpp -shared -fpic -o ${ext_lib}
 	                ${debug} eval "objdump ${ext_lib} -d > ${ext_lib::-1}"
 	                ${debug} cd ..
