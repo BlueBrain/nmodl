@@ -231,7 +231,7 @@ for kernel_target in ${KERNEL_TARGETS}; do
 	                ext_path=$(pwd)
                     # replace pragmas with the corresponding ones for openmp or certain compiler
                     if [[ "$kernel_target" == "hh" ]]; then
-                        if [[ "openmp" == *"$flags"* ]] || [[ "$compiler" == "intel" ]]; then
+                        if [[ "$flags" == *"openmp"* ]] || [[ "$compiler" == "intel" ]]; then
                             ${debug} sed -i 's/#pragma.*/#pragma omp simd/g' ${kernels_path}/${kernel_target}.cpp
                         elif [[ "$compiler" == "clang" ]]; then
                             ${debug} sed -i 's/#pragma.*/#pragma clang vectorize(enable)/g' ${kernels_path}/${kernel_target}.cpp
