@@ -77,7 +77,12 @@ void CodegenAccVisitor::print_backend_includes() {
         printer->add_line("#include <openacc.h>");
     }
 
-    if (info.eigen_linear_solver_exist && count_length(info.state_vars) > 4) {
+    if (info.eigen_linear_solver_exist && std::accumulate(info.state_vars.begin(),
+                                                          info.state_vars.end(),
+                                                          0,
+                                                          [](int l, const SymbolType& variable) {
+                                                              return l += variable->get_length();
+                                                          }) > 4) {
         printer->add_line("#include <crout/crout.hpp>");
     }
 }
@@ -160,17 +165,18 @@ void CodegenAccVisitor::print_eigen_linear_solver(const std::string& float_type,
     // PartialPivLU (requires an invertible matrix) which supports both CPUs & GPUs.
     //
     // For matrices 5x5 and above, Eigen does not provide GPU-enabled methods to solve small linear
-    // systems. For this reason, we use the Crout LU decomposition (Legacy code :
-    // coreneuron/sim/scopmath/crout_thread.cpp).
+    // systems. For this reason, we use the Crout LU decomposition.
     if (N <= 4) {
         printer->add_line("{0} = {1}.inverse()*{2};"_format(X, Jm, F));
     } else {
+        // pivot vector
+        printer->add_line("Eigen::Matrix<int, {0}, 1> pivot;"_format(N));
         // In-place LU-Decomposition (Crout Algo) : Jm is replaced by its LU-decomposition
         printer->add_line(
-            "nmodl::crout::Crout<{0}>({1}, {2}.data(), {2}.data());"_format(float_type, N, Jm));
+            "nmodl::crout::Crout<{0}>({1}, {2}.data(), pivot.data());"_format(float_type, N, Jm));
         // Solve the linear system : Forward/Backward substitution part
         printer->add_line(
-            "nmodl::crout::solveCrout<{0}>({1}, {2}.data(), {3}.data(), {4}.data());"_format(
+            "nmodl::crout::solveCrout<{0}>({1}, {2}.data(), {3}.data(), {4}.data(), pivot.data());"_format(
                 float_type, N, Jm, F, X));
     }
 }

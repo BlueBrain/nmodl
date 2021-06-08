@@ -525,13 +525,27 @@ std::string CodegenCVisitor::breakpoint_current(std::string current) const {
 
 
 int CodegenCVisitor::float_variables_size() const {
-    int float_size = count_length(info.range_parameter_vars);
-    float_size += count_length(info.range_assigned_vars);
-    float_size += count_length(info.range_state_vars);
-    float_size += count_length(info.assigned_vars);
+    auto count_length = [](int l, const SymbolType& variable) {
+        return l += variable->get_length();
+    };
+
+    int float_size = std::accumulate(info.range_parameter_vars.begin(),
+                                     info.range_parameter_vars.end(),
+                                     0,
+                                     count_length);
+    float_size += std::accumulate(info.range_assigned_vars.begin(),
+                                  info.range_assigned_vars.end(),
+                                  0,
+                                  count_length);
+    float_size += std::accumulate(info.range_state_vars.begin(),
+                                  info.range_state_vars.end(),
+                                  0,
+                                  count_length);
+    float_size +=
+        std::accumulate(info.assigned_vars.begin(), info.assigned_vars.end(), 0, count_length);
 
     /// all state variables for which we add Dstate variables
-    float_size += count_length(info.state_vars);
+    float_size += std::accumulate(info.state_vars.begin(), info.state_vars.end(), 0, count_length);
 
     /// for v_unused variable
     if (info.vectorize) {

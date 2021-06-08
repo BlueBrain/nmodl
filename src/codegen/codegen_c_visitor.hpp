@@ -18,6 +18,7 @@
 #include <algorithm>
 #include <cmath>
 #include <ctime>
+#include <numeric>
 #include <ostream>
 #include <string>
 #include <utility>
@@ -1655,14 +1656,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
         , mod_filename(mod_filename)
         , float_type(float_type)
         , optimize_ionvar_copies(optimize_ionvar_copies) {}
-
-    static int count_length(const std::vector<SymbolType>& variables) {
-        int length = 0;
-        for (const auto& variable: variables) {
-            length += variable->get_length();
-        }
-        return length;
-    };
 
   public:
     /**

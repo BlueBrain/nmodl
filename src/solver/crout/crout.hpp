@@ -16,72 +16,121 @@
  * Forward/Backward substitution
  */
 
+#include <cmath>
+
 #include <Eigen/LU>
 
 namespace nmodl {
 namespace crout {
 
 /**
- * \brief Crout matrix decomposition : LU Decomposition of (S)ource matrix stored in (D)estination
- * matrix.
+ * \brief Crout matrix decomposition : in-place LU Decomposition of matrix A.
  *
  * LU decomposition function.
- * Implementation details : http://www.sci.utah.edu/~wallstedt/LU.htm (Philip Wallstedt 2007-2008)
+ * Implementation details : (Legacy code) coreneuron/sim/scopmath/crout_thread.cpp
  *
- * \param d matrices of size d x d
- * \param S (S)ource matrix (C-style arrays : row-major order)
- * \param D (D)estination matrix (LU decomposition of S-matrix) (C-style arrays : row-major order)
+ * \param n The number of rows or columns of the matrix A
+ * \param A matrix of size nxn : in-place LU decomposition (C-style arrays : row-major order)
+ * \param pivot matrix of size n : The i-th element is the pivot row interchanged with row i
  */
 #ifdef _OPENACC
 #pragma acc routine seq
 #endif
 template <typename T>
-EIGEN_DEVICE_FUNC inline void Crout(int d, T* S, T* D) {
-    for (int k = 0; k < d; ++k) {
-        for (int i = k; i < d; ++i) {
-            T sum = ((T)(0.));
-            for (int p = 0; p < k; ++p)
-                sum += D[i * d + p] * D[p * d + k];
-            D[i * d + k] = S[i * d + k] - sum;
+EIGEN_DEVICE_FUNC inline void Crout(int n, T* A, int* pivot) {
+    int i, j, k;
+    T *p_k, *p_row, *p_col;
+    T max;
+
+    // For each row and column, k = 0, ..., n-1,
+    for (k = 0, p_k = A; k < n; p_k += n, k++) {
+        // find the pivot row
+        pivot[k] = k;
+        max = std::fabs(*(p_k + k));
+        for (j = k + 1, p_row = p_k + n; j < n; j++, p_row += n) {
+            if (max < std::fabs(*(p_row + k))) {
+                max = std::fabs(*(p_row + k));
+                pivot[k] = j;
+                p_col = p_row;
+            }
         }
-        for (int j = k + 1; j < d; ++j) {
-            T sum = ((T)(0.));
-            for (int p = 0; p < k; ++p)
-                sum += D[k * d + p] * D[p * d + j];
-            D[k * d + j] = (S[k * d + j] - sum) / D[k * d + k];
+
+        // and if the pivot row differs from the current row, then
+        // interchange the two rows.
+        if (pivot[k] != k)
+            for (j = 0; j < n; j++) {
+                max = *(p_k + j);
+                *(p_k + j) = *(p_col + j);
+                *(p_col + j) = max;
+            }
+
+        // and if the matrix is singular, return error
+        // if ( *(p_k + k) == 0.0 ) return -1;
+
+        // otherwise find the upper triangular matrix elements for row k.
+        for (j = k + 1; j < n; j++) {
+            *(p_k + j) /= *(p_k + k);
         }
+
+        // update remaining matrix
+        for (i = k + 1, p_row = p_k + n; i < n; p_row += n, i++)
+            for (j = k + 1; j < n; j++)
+                *(p_row + j) -= *(p_row + k) * *(p_k + j);
     }
+    // return 0;
 }
 
 /**
  * \brief Crout matrix decomposition : Forward/Backward substitution.
  *
  * Forward/Backward substitution function.
- * Implementation details : http://www.sci.utah.edu/~wallstedt/LU.htm (Philip Wallstedt 2007-2008)
+ * Implementation details : (Legacy code) coreneuron/sim/scopmath/crout_thread.cpp
  *
- * \param d matrices of size d x d
+ * \param n The number of rows or columns of the matrix LU
  * \param LU LU-factorized matrix (C-style arrays : row-major order)
- * \param b rhs vector
- * \param x solution of (LU)x=b linear system
+ * \param B rhs vector
+ * \param x solution of (LU)x=B linear system
+ * \param pivot matrix of size n : The i-th element is the pivot row interchanged with row i
  */
 #ifdef _OPENACC
 #pragma acc routine seq
 #endif
 template <typename T>
-EIGEN_DEVICE_FUNC inline void solveCrout(int d, T* LU, T* b, T* x) {
-    T y[d];
-    for (int i = 0; i < d; ++i) {
-        T sum = ((T)(0.));
-        for (int k = 0; k < i; ++k)
-            sum += LU[i * d + k] * y[k];
-        y[i] = (b[i] - sum) / LU[i * d + i];
+EIGEN_DEVICE_FUNC inline void solveCrout(int n, T* LU, T* B, T* x, int* pivot) {
+    int i, k;
+    T* p_k;
+    T dum;
+
+    // Solve the linear equation Lx = B for x, where L is a lower
+    // triangular matrix.
+    for (k = 0, p_k = LU; k < n; p_k += n, k++) {
+        if (pivot[k] != k) {
+            dum = B[k];
+            B[k] = B[pivot[k]];
+            B[pivot[k]] = dum;
+        }
+        x[k] = B[k];
+        for (i = 0; i < k; i++)
+            x[k] -= x[i] * *(p_k + i);
+        x[k] /= *(p_k + k);
     }
-    for (int i = d - 1; i >= 0; --i) {
-        T sum = ((T)(0.));
-        for (int k = i + 1; k < d; ++k)
-            sum += LU[i * d + k] * x[k];
-        x[i] = (y[i] - sum);
+
+    // Solve the linear equation Ux = y, where y is the solution
+    // obtained above of Lx = B and U is an upper triangular matrix.
+    // The diagonal part of the upper triangular part of the matrix is
+    // assumed to be 1.0.
+    for (k = n - 1, p_k = LU + n * (n - 1); k >= 0; k--, p_k -= n) {
+        if (pivot[k] != k) {
+            dum = B[k];
+            B[k] = B[pivot[k]];
+            B[pivot[k]] = dum;
+        }
+        for (i = k + 1; i < n; i++)
+            x[k] -= x[i] * *(p_k + i);
+        // if (*(p_k + k) == 0.0) return -1;
     }
+
+    // return 0;
 }
 
 }  // namespace crout

@@ -36,7 +36,7 @@ bool allclose(const Eigen::DenseBase<DerivedA>& a,
 
 
 template <typename T>
-bool test_Crout_correctness(T rtol = 1e-6, T atol = 1e-6) {
+bool test_Crout_correctness(T rtol = 1e-8, T atol = 1e-8) {
     using MatType = Matrix<T, Dynamic, Dynamic, Eigen::RowMajor>;
     using VecType = Matrix<T, Dynamic, 1>;
 
@@ -80,14 +80,18 @@ bool test_Crout_correctness(T rtol = 1e-6, T atol = 1e-6) {
             t2 = std::chrono::high_resolution_clock::now();
             eigen_solve_ColMajor += (t2 - t1);
 
-            if (!allclose(eigen_solution_RowMajor, eigen_solution_ColMajor, rtol, atol))
+            if (!allclose(eigen_solution_RowMajor, eigen_solution_ColMajor, rtol, atol)) {
+                cerr << "Eigen issue with RowMajor vs ColMajor storage order!" << endl << endl;
                 return false;
+            }
 
             // Crout LU-Decomposition CPU (in-place)
             VecType crout_solution_host(mat_size);
+            Matrix<int, Dynamic, 1> pivot(mat_size);
             t1 = std::chrono::high_resolution_clock::now();
-            crout::Crout<T>(mat_size, A_RowMajor.data(), A_RowMajor.data());
-            crout::solveCrout<T>(mat_size, A_RowMajor.data(), b.data(), crout_solution_host.data());
+            crout::Crout<T>(mat_size, A_RowMajor.data(), pivot.data());
+            crout::solveCrout<T>(
+                mat_size, A_RowMajor.data(), b.data(), crout_solution_host.data(), pivot.data());
             t2 = std::chrono::high_resolution_clock::now();
             crout_solve_host += (t2 - t1);
 
@@ -102,8 +106,8 @@ bool test_Crout_correctness(T rtol = 1e-6, T atol = 1e-6) {
 
 SCENARIO("Compare Crout solver with Eigen") {
     GIVEN("crout (double)") {
-        constexpr double rtol = 1e-6;
-        constexpr double atol = 1e-6;
+        constexpr double rtol = 1e-8;
+        constexpr double atol = 1e-8;
 
         auto test = test_Crout_correctness<double>(rtol, atol);
 
