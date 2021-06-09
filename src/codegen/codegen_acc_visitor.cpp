@@ -158,7 +158,7 @@ void CodegenAccVisitor::print_eigen_linear_solver(const std::string& float_type,
         // Crout's implementation requires matrices stored in RowMajor order (C-style arrays).
         // Therefore, the transposeInPlace is critical such that the data() method to give the rows
         // instead of the columns.
-        printer->add_line("{0}.transposeInPlace();"_format(Jm));
+        printer->add_line("if (!{0}.IsRowMajor) {0}.transposeInPlace();"_format(Jm));
 
         // pivot vector
         printer->add_line("Eigen::Matrix<int, {0}, 1> pivot;"_format(N));

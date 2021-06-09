@@ -33,7 +33,7 @@ namespace crout {
  * \param A matrix of size nxn : in-place LU decomposition (C-style arrays : row-major order)
  * \param pivot matrix of size n : The i-th element is the pivot row interchanged with row i
  */
-#ifdef _OPENACC
+#if defined(_OPENACC) && !defined(DISABLE_OPENACC)
 #pragma acc routine seq
 #endif
 template <typename T>
@@ -92,7 +92,7 @@ EIGEN_DEVICE_FUNC inline void Crout(int n, T* A, int* pivot) {
  * \param x solution of (LU)x=B linear system
  * \param pivot matrix of size n : The i-th element is the pivot row interchanged with row i
  */
-#ifdef _OPENACC
+#if defined(_OPENACC) && !defined(DISABLE_OPENACC)
 #pragma acc routine seq
 #endif
 template <typename T>

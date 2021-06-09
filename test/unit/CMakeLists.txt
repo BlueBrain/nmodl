@@ -52,6 +52,8 @@ add_executable(
 add_executable(testprinter printer/printer.cpp)
 add_executable(testsymtab symtab/symbol_table.cpp)
 add_executable(testnewton newton/newton.cpp ${NEWTON_SOLVER_SOURCE_FILES})
+add_executable(testnewton_crout_branch newton/newton.cpp ${NEWTON_SOLVER_SOURCE_FILES}
+                                       ${CROUT_SOLVER_SOURCE_FILES})
 add_executable(testcrout crout/crout.cpp ${CROUT_SOLVER_SOURCE_FILES})
 add_executable(testfast_math fast_math/fast_math.cpp ${NEWTON_SOLVER_SOURCE_FILES})
 add_executable(testunitlexer units/lexer.cpp)
@@ -94,6 +96,8 @@ target_link_libraries(testsymtab symtab lexer util)
 target_link_libraries(testunitlexer lexer util)
 target_link_libraries(testunitparser lexer test_util config)
 
+target_compile_definitions(testnewton_crout_branch PUBLIC TESTNEWTON_CROUT_BRANCH)
+
 # =============================================================================
 # Use catch_discover instead of add_test for granular test report if CMAKE ver is greater than 3.9,
 # else use the normal add_test method
@@ -116,6 +120,7 @@ foreach(
   testprinter
   testsymtab
   testnewton
+  testnewton_crout_branch
   testcrout
   testfast_math
   testunitlexer
