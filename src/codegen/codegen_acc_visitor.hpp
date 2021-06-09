@@ -95,11 +95,6 @@ class CodegenAccVisitor: public CodegenCVisitor {
     void print_net_send_buffering_grow() override;
 
 
-    void print_eigen_linear_solver_variables(const std::string& float_type,
-                                             int N,
-                                             const std::string& X,
-                                             const std::string& Jm,
-                                             const std::string& F) override;
     void print_eigen_linear_solver(const std::string& float_type,
                                    int N,
                                    const std::string& X,

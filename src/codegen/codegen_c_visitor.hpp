@@ -1849,11 +1849,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
     void visit_function_call(const ast::FunctionCall& node) override;
     void visit_eigen_newton_solver_block(const ast::EigenNewtonSolverBlock& node) override;
     void visit_eigen_linear_solver_block(const ast::EigenLinearSolverBlock& node) override;
-    virtual void print_eigen_linear_solver_variables(const std::string& float_type,
-                                                     int N,
-                                                     const std::string& X,
-                                                     const std::string& Jm,
-                                                     const std::string& F);
     virtual void print_eigen_linear_solver(const std::string& float_type,
                                            int N,
                                            const std::string& X,
