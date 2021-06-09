@@ -247,25 +247,23 @@ void CodegenCudaVisitor::print_eigen_linear_solver(const std::string& float_type
     if (N <= 4) {
         printer->add_line("{0} = {1}.inverse()*{2};"_format(X, Jm, F));
     } else {
-        // RowMajor storage order needed for Crout implementation
-        // With an Eigen Matrix (RowMajor), I get Seg Fault (GPU backend) and for this reason I fall
-        // back to simple C-Arrays.
-        printer->add_line("{0} {1}[{2}][{2}];"_format(float_type, Jm + "_RowMajor", N));
-        printer->add_line(
-            "for (int r=0;r<{0};r++) for (int c=0;c<{0};c++) {1}[r][c] = {2}(r,c);"_format(
-                N, Jm + "_RowMajor", Jm));
+        // In Eigen the default storage order is ColMajor.
+        // Crout's implementation requires matrices stored in RowMajor order (C-style arrays).
+        // Therefore, the transposeInPlace is critical such that the data() method to give the rows
+        // instead of the columns.
+        printer->add_line("{0}.transposeInPlace();"_format(Jm));
 
         // pivot vector
         printer->add_line("Eigen::Matrix<int, {0}, 1> pivot;"_format(N));
 
         // In-place LU-Decomposition (Crout Algo) : Jm is replaced by its LU-decomposition
-        printer->add_line("nmodl::crout::Crout<{0}>({1}, &{2}[0][0], pivot.data());"_format(
-            float_type, N, Jm + "_RowMajor"));
+        printer->add_line(
+            "nmodl::crout::Crout<{0}>({1}, {2}.data(), pivot.data());"_format(float_type, N, Jm));
 
         // Solve the linear system : Forward/Backward substitution part
         printer->add_line(
-            "nmodl::crout::solveCrout<{0}>({1}, &{2}[0][0], {3}.data(), {4}.data(), pivot.data());"_format(
-                float_type, N, Jm + "_RowMajor", F, X));
+            "nmodl::crout::solveCrout<{0}>({1}, {2}.data(), {3}.data(), {4}.data(), pivot.data());"_format(
+                float_type, N, Jm, F, X));
     }
 }
 
