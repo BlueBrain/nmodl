@@ -19,4 +19,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "PGI" OR CMAKE_CXX_COMPILER_ID MATCHES "NVHPC")
   # TODO : fix these warnings from template modification (#272)
   # ~~~
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --diag_suppress 1,82,111,115,177,186,611,997,1097,1625")
+
+  # Needed for Eigen
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wc,--pending_instantiations=0")
 endif()
