@@ -1739,7 +1739,7 @@ void CodegenCVisitor::visit_eigen_newton_solver_block(const ast::EigenNewtonSolv
     printer->add_text(
         "void operator()(const Eigen::Matrix<{0}, {1}, 1>& {2}, Eigen::Matrix<{0}, {1}, "
         "1>& {3}, "
-        "Eigen::Matrix<{0}, {1}, {1}>& {4}) const"_format(float_type, N, X, F, Jm));
+        "Eigen::Matrix<{0}, {1}, {1}>& {4}) "_format(float_type, N, X, F, Jm));
     printer->start_block();
     printer->add_line("{}* {} = {}.data();"_format(float_type, J, Jm));
     print_statement_block(*node.get_functor_block(), false, false);
