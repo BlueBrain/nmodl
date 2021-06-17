@@ -3242,6 +3242,8 @@ void CodegenCVisitor::print_global_function_common_code(BlockType type) {
         // We do not (currently) support DESTRUCTOR and CONSTRUCTOR blocks
         // running anything on the GPU.
         print_kernel_data_present_annotation_block_begin();
+    } else {
+        printer->add_line("#ifndef CORENEURON_BUILD");
     }
     printer->add_line("int nodecount = ml->nodecount;");
     printer->add_line("int pnodecount = ml->_nodecount_padded;");
@@ -3330,6 +3332,7 @@ void CodegenCVisitor::print_nrn_constructor() {
         const auto& block = info.constructor_node->get_statement_block();
         print_statement_block(*block.get(), false, false);
     }
+    printer->add_line("#endif");
     printer->end_block(1);
 }
 
@@ -3341,6 +3344,7 @@ void CodegenCVisitor::print_nrn_destructor() {
         const auto& block = info.destructor_node->get_statement_block();
         print_statement_block(*block.get(), false, false);
     }
+    printer->add_line("#endif");
     printer->end_block(1);
 }
 
