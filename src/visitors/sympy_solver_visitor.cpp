@@ -6,6 +6,7 @@
  *************************************************************************/
 
 #include "visitors/sympy_solver_visitor.hpp"
+#include "visitors/nmodl_visitor.hpp"
 #include "visitors/sympy_replace_solutions_visitor.hpp"
 
 #include "ast/all.hpp"
@@ -25,6 +26,9 @@ namespace visitor {
 using symtab::syminfo::NmodlType;
 
 using nmodl::utils::UseNumbersInString;
+
+using nmodl::ast::LocalListStatement;
+using nmodl::ast::LocalVar;
 
 void SympySolverVisitor::init_block_data(ast::Node* node) {
     // clear any previous data
@@ -205,9 +209,11 @@ void SympySolverVisitor::construct_eigen_solver_block(
 
     const auto& statements = block_with_expression_statements->get_statements();
 
-    ast::StatementVector variable_statements;    // LOCAL //
-    ast::StatementVector initialize_statements;  // pre_solve_statements //
-    ast::StatementVector setup_x_statements;     // old_x = x, X[0] = x //
+    ast::StatementVector variable_statements;                // struct variables (old_x)
+    ast::StatementVector functor_local_variable_statements;  // LOCAL variables in functor
+                                                             // operator()
+    ast::StatementVector initialize_statements;              // pre_solve_statements //
+    ast::StatementVector setup_x_statements;                 // old_x = x, X[0] = x //
     ast::StatementVector functor_statements;   // J[0]_row * X = F[0], additional assignments during
                                                // computation //
     ast::StatementVector finalize_statements;  // assignments at the end //
@@ -218,6 +224,43 @@ void SympySolverVisitor::construct_eigen_solver_block(
     for (size_t idx = 0; idx < statements.size(); ++idx) {
         auto& s = statements[idx];
         if (is_local_statement(s)) {
+            auto get_local_statement = [](const std::shared_ptr<ast::Statement>& statement) {
+                std::shared_ptr<LocalListStatement> ret_local_list_statement;
+                if (statement->is_local_list_statement()) {
+                    ret_local_list_statement = std::static_pointer_cast<LocalListStatement>(
+                        statement);
+                } else {
+                    auto e_statement = std::dynamic_pointer_cast<ast::ExpressionStatement>(
+                        statement);
+                    auto expression = e_statement->get_expression();
+                    if (expression->is_local_list_statement()) {
+                        ret_local_list_statement = std::static_pointer_cast<LocalListStatement>(
+                            statement);
+                    }
+                }
+                return ret_local_list_statement;
+            };
+            auto old_variables_statement = get_local_statement(s);
+            const auto local_variables = old_variables_statement->get_variables();
+            nmodl::ast::LocalVarVector local_var_vector;
+            for (auto pos = 0; pos < local_variables.size(); pos++) {
+                const auto& local_var = local_variables[pos];
+                if (local_var->get_node_name().rfind("old_", 0) != 0) {
+                    const auto& old_variables = old_variables_statement->get_variables();
+                    const auto& pos_to_remove = std::find_if(old_variables.begin(),
+                                                             old_variables.end(),
+                                                             [&](std::shared_ptr<LocalVar> var) {
+                                                                 return var->get_node_name() ==
+                                                                        local_var->get_node_name();
+                                                             });
+                    old_variables_statement->erase_local_var(pos_to_remove);
+                    local_var_vector.push_back(local_var);
+                }
+            }
+            if (local_var_vector.size()) {
+                functor_local_variable_statements.push_back(
+                    std::make_shared<LocalListStatement>(local_var_vector));
+            }
             variable_statements.push_back(s);
         } else if (sr_begin == statements.size()) {
             initialize_statements.push_back(s);
@@ -234,17 +277,18 @@ void SympySolverVisitor::construct_eigen_solver_block(
             ast::StatementVector(statements.begin() + sr_begin + pre_solve_statements.size(),
                                  statements.begin() + sr_begin + pre_solve_statements.size() +
                                      state_vars.size());
-        functor_statements = ast::StatementVector(statements.begin() + sr_begin +
-                                                      pre_solve_statements.size() +
-                                                      state_vars.size(),
-                                                  statements.begin() + sr_end);
+        functor_statements = {functor_local_variable_statements};
+        functor_statements.insert(functor_statements.end(),
+                                  statements.begin() + sr_begin + pre_solve_statements.size() +
+                                      state_vars.size(),
+                                  statements.begin() + sr_end);
         finalize_statements = ast::StatementVector(statements.begin() + sr_end, statements.end());
     }
 
     const size_t total_statements_size = variable_statements.size() + initialize_statements.size() +
                                          setup_x_statements.size() + functor_statements.size() +
                                          finalize_statements.size();
-    if (statements.size() != total_statements_size) {
+    if (statements.size() != total_statements_size - functor_local_variable_statements.size()) {
         logger->error(
             "SympySolverVisitor :: statement number missmatch ({} =/= {}) during splitting before "
             "creation of "
