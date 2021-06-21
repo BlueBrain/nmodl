@@ -3243,6 +3243,8 @@ void CodegenCVisitor::print_global_function_common_code(BlockType type) {
         // running anything on the GPU.
         print_kernel_data_present_annotation_block_begin();
     } else {
+        /// TODO: Remove this when the code generation is propery done
+        /// Related to https://github.com/BlueBrain/nmodl/issues/692
         printer->add_line("#ifndef CORENEURON_BUILD");
     }
     printer->add_line("int nodecount = ml->nodecount;");
