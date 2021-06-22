@@ -245,7 +245,8 @@ void SympySolverVisitor::construct_eigen_solver_block(
             nmodl::ast::LocalVarVector local_var_vector;
             for (auto pos = 0; pos < local_variables.size(); pos++) {
                 const auto& local_var = local_variables[pos];
-                if (local_var->get_node_name().rfind("old_", 0) != 0) {
+                if (local_var->get_node_name().rfind("old_", 0) != 0 &&
+                    local_var->get_node_name() != "dt_saved_value") {
                     const auto& old_variables = old_variables_statement->get_variables();
                     const auto& pos_to_remove = std::find_if(old_variables.begin(),
                                                              old_variables.end(),
@@ -277,7 +278,11 @@ void SympySolverVisitor::construct_eigen_solver_block(
             ast::StatementVector(statements.begin() + sr_begin + pre_solve_statements.size(),
                                  statements.begin() + sr_begin + pre_solve_statements.size() +
                                      state_vars.size());
-        functor_statements = {functor_local_variable_statements};
+        if (functor_local_variable_statements.size()) {
+            functor_statements = {functor_local_variable_statements};
+        } else {
+            functor_statements = {};
+        }
         functor_statements.insert(functor_statements.end(),
                                   statements.begin() + sr_begin + pre_solve_statements.size() +
                                       state_vars.size(),
