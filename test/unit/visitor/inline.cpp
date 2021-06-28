@@ -27,7 +27,7 @@ using nmodl::parser::NmodlDriver;
 // Procedure/Function inlining tests
 //=============================================================================
 
-std::string run_codegen_helper_visitor(const std::string& text) {
+std::string run_inline_visitor(const std::string& text) {
     NmodlDriver driver;
     const auto& ast = driver.parse_string(text);
 
@@ -57,7 +57,7 @@ SCENARIO("Inlining of external procedure calls", "[visitor][inline]") {
 
         THEN("nothing gets inlinine") {
             std::string input = reindent_text(nmodl_text);
-            auto result = run_codegen_helper_visitor(input);
+            auto result = run_inline_visitor(input);
             REQUIRE(result == input);
         }
     }
@@ -91,7 +91,7 @@ SCENARIO("Inlining of function call as argument in external function", "[visitor
         THEN("External function doesn't get inlined") {
             std::string input = reindent_text(input_nmodl);
             auto expected_result = reindent_text(output_nmodl);
-            auto result = run_codegen_helper_visitor(input);
+            auto result = run_inline_visitor(input);
             REQUIRE(result == expected_result);
         }
     }
@@ -129,7 +129,7 @@ SCENARIO("Inlining of simple, one level procedure call", "[visitor][inline]") {
         THEN("Procedure body gets inlined") {
             std::string input = reindent_text(input_nmodl);
             auto expected_result = reindent_text(output_nmodl);
-            auto result = run_codegen_helper_visitor(input);
+            auto result = run_inline_visitor(input);
             REQUIRE(result == expected_result);
         }
     }
@@ -197,7 +197,7 @@ SCENARIO("Inlining of nested procedure call", "[visitor][inline]") {
         THEN("Nested procedure gets inlined with variables renaming") {
             std::string input = reindent_text(input_nmodl);
             auto expected_result = reindent_text(output_nmodl);
-            auto result = run_codegen_helper_visitor(input);
+            auto result = run_inline_visitor(input);
             REQUIRE(result == expected_result);
         }
     }
@@ -238,7 +238,7 @@ SCENARIO("Inline function call in procedure", "[visitor][inline]") {
         THEN("Procedure body gets inlined") {
             std::string input = reindent_text(input_nmodl);
             auto expected_result = reindent_text(output_nmodl);
-            auto result = run_codegen_helper_visitor(input);
+            auto result = run_inline_visitor(input);
             REQUIRE(result == expected_result);
         }
     }
@@ -281,7 +281,7 @@ SCENARIO("Inling function call within conditional statement", "[visitor][inline]
         THEN("Procedure body gets inlined and return value is used in if condition") {
             std::string input = reindent_text(input_nmodl);
             auto expected_result = reindent_text(output_nmodl);
-            auto result = run_codegen_helper_visitor(input);
+            auto result = run_inline_visitor(input);
             REQUIRE(result == expected_result);
         }
     }
@@ -323,7 +323,7 @@ SCENARIO("Inline multiple function calls in same statement", "[visitor][inline]"
         THEN("Procedure body gets inlined") {
             std::string input = reindent_text(input_nmodl);
             auto expected_result = reindent_text(output_nmodl);
-            auto result = run_codegen_helper_visitor(input);
+            auto result = run_inline_visitor(input);
             REQUIRE(result == expected_result);
         }
     }
@@ -363,7 +363,7 @@ SCENARIO("Inline multiple function calls in same statement", "[visitor][inline]"
         THEN("Procedure body gets inlined and return values are used in an expression") {
             std::string input = reindent_text(input_nmodl);
             auto expected_result = reindent_text(output_nmodl);
-            auto result = run_codegen_helper_visitor(input);
+            auto result = run_inline_visitor(input);
             REQUIRE(result == expected_result);
         }
     }
@@ -441,7 +441,7 @@ SCENARIO("Inline nested function calls withing arguments", "[visitor][inline]") 
         THEN("Procedure body gets inlined") {
             std::string input = reindent_text(input_nmodl);
             auto expected_result = reindent_text(output_nmodl);
-            auto result = run_codegen_helper_visitor(input);
+            auto result = run_inline_visitor(input);
             REQUIRE(result == expected_result);
         }
     }
@@ -478,7 +478,7 @@ SCENARIO("Inline function call in non-binary expression", "[visitor][inline]") {
         THEN("Function gets inlined in the unary expression") {
             std::string input = reindent_text(input_nmodl);
             auto expected_result = reindent_text(output_nmodl);
-            auto result = run_codegen_helper_visitor(input);
+            auto result = run_inline_visitor(input);
             REQUIRE(result == expected_result);
         }
     }
@@ -517,7 +517,7 @@ SCENARIO("Inline function call in non-binary expression", "[visitor][inline]") {
         THEN("Function and it's arguments gets inlined recursively") {
             std::string input = reindent_text(input_nmodl);
             auto expected_result = reindent_text(output_nmodl);
-            auto result = run_codegen_helper_visitor(input);
+            auto result = run_inline_visitor(input);
             REQUIRE(result == expected_result);
         }
     }
@@ -554,7 +554,7 @@ SCENARIO("Inline function call as standalone expression", "[visitor][inline]") {
         THEN("Function gets inlined but it's value is not used") {
             std::string input = reindent_text(input_nmodl);
             auto expected_result = reindent_text(output_nmodl);
-            auto result = run_codegen_helper_visitor(input);
+            auto result = run_inline_visitor(input);
             REQUIRE(result == expected_result);
         }
     }
@@ -591,7 +591,7 @@ SCENARIO("Inline procedure call as standalone statement as well as part of expre
         THEN("Return statement from procedure (with zero value) is used") {
             std::string input = reindent_text(input_nmodl);
             auto expected_result = reindent_text(output_nmodl);
-            auto result = run_codegen_helper_visitor(input);
+            auto result = run_inline_visitor(input);
             REQUIRE(result == expected_result);
         }
     }
@@ -641,7 +641,7 @@ SCENARIO("Inlining pass handles local-global name conflict", "[visitor][inline]"
         THEN("Caller variables get renamed first and then inlining is done") {
             std::string input = reindent_text(input_nmodl);
             auto expected_result = reindent_text(output_nmodl);
-            auto result = run_codegen_helper_visitor(input);
+            auto result = run_inline_visitor(input);
             REQUIRE(result == expected_result);
         }
     }

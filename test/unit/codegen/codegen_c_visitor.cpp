@@ -45,7 +45,6 @@ std::string get_instance_var_setup_function(std::string& nmodl_text) {
 
 SCENARIO("Check instance variable definition order", "[codegen][var_order]") {
     GIVEN("cal_mig.mod: USEION variables declared as RANGE") {
-
         // In the below mod file, the ion variables cai and cao are also
         // declared as RANGE variables. The ordering issue was fixed in #443.
         std::string nmodl_text = R"(
