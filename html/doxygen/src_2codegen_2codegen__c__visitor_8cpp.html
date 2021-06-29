@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.13"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>User Guide: /home/runner/work/nmodl/nmodl/src/codegen/codegen_helper_visitor.cpp File Reference</title>
+<title>User Guide: /home/runner/work/nmodl/nmodl/src/codegen/codegen_c_visitor.cpp File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -69,7 +69,7 @@ $(function() {
   </div>
 </div>
 <script type="text/javascript">
-$(document).ready(function(){initNavTree('codegen__helper__visitor_8cpp.html','');});
+$(document).ready(function(){initNavTree('src_2codegen_2codegen__c__visitor_8cpp.html','');});
 </script>
 <div id="doc-content">
 <!-- window showing the filter options -->
@@ -88,19 +88,33 @@ $(document).ready(function(){initNavTree('codegen__helper__visitor_8cpp.html',''
 
 <div class="header">
   <div class="summary">
-<a href="#namespaces">Namespaces</a>  </div>
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
-<div class="title">codegen_helper_visitor.cpp File Reference</div>  </div>
+<div class="title">codegen_c_visitor.cpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;<a class="el" href="codegen__helper__visitor_8hpp_source.html">codegen/codegen_helper_visitor.hpp</a>&quot;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="codegen__c__visitor_8hpp_source.html">codegen/codegen_c_visitor.hpp</a>&quot;</code><br />
 <code>#include &lt;algorithm&gt;</code><br />
 <code>#include &lt;cmath&gt;</code><br />
+<code>#include &lt;ctime&gt;</code><br />
+<code>#include &lt;regex&gt;</code><br />
 <code>#include &quot;<a class="el" href="all_8hpp_source.html">ast/all.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="codegen__helper__visitor_8hpp_source.html">codegen/codegen_helper_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="codegen__naming_8hpp_source.html">codegen/codegen_naming.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="codegen__utils_8hpp_source.html">codegen/codegen_utils.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="config_8h_source.html">config/config.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="token__mapping_8hpp_source.html">lexer/token_mapping.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="c11__driver_8hpp_source.html">parser/c11_driver.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="logger_8hpp_source.html">utils/logger.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="string__utils_8hpp_source.html">utils/string_utils.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="rename__visitor_8hpp_source.html">visitors/rename_visitor.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="var__usage__visitor_8hpp_source.html">visitors/var_usage_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="visitor__utils_8hpp_source.html">visitors/visitor_utils.hpp</a>&quot;</code><br />
 </div>
-<p><a href="codegen__helper__visitor_8cpp_source.html">Go to the source code of this file.</a></p>
+<p><a href="src_2codegen_2codegen__c__visitor_8cpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
@@ -110,6 +124,24 @@ Namespaces</h2></td></tr>
 <tr class="memitem:namespacenmodl_1_1codegen"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1codegen.html">nmodl::codegen</a></td></tr>
 <tr class="memdesc:namespacenmodl_1_1codegen"><td class="mdescLeft">&#160;</td><td class="mdescRight">encapsulates code generation backend implementations <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a116af3668467bd43c2740658d7fd0612"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1codegen.html#a116af3668467bd43c2740658d7fd0612">nmodl::codegen::SymbolType</a> = std::shared_ptr&lt; symtab::Symbol &gt;</td></tr>
+<tr class="separator:a116af3668467bd43c2740658d7fd0612"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a1faf2e296586215399717f9d519de218"><td class="memItemLeft" align="right" valign="top">static const TableStatement *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1codegen.html#a1faf2e296586215399717f9d519de218">nmodl::codegen::get_table_statement</a> (const ast::Block &amp;node)</td></tr>
+<tr class="separator:a1faf2e296586215399717f9d519de218"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a983af1c34064b33f42068e2767c2287e"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1codegen.html#a983af1c34064b33f42068e2767c2287e">nmodl::codegen::rename_net_receive_arguments</a> (const ast::NetReceiveBlock &amp;net_receive_node, const ast::Node &amp;node)</td></tr>
+<tr class="memdesc:a983af1c34064b33f42068e2767c2287e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rename arguments to NET_RECEIVE block with corresponding pointer variable.  <a href="namespacenmodl_1_1codegen.html#a983af1c34064b33f42068e2767c2287e">More...</a><br /></td></tr>
+<tr class="separator:a983af1c34064b33f42068e2767c2287e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a7fe9cbd601e67e2d2726026c0008b16f"><td class="memItemLeft" align="right" valign="top">static const std::regex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1codegen.html#a7fe9cbd601e67e2d2726026c0008b16f">nmodl::codegen::regex_special_chars</a> {R&quot;([-[\]{}()*+?.,\^$|#\s])&quot;}</td></tr>
+<tr class="separator:a7fe9cbd601e67e2d2726026c0008b16f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -117,7 +149,7 @@ Namespaces</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath">
   <ul>
-    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_7cf1b5e32c0ccac638cac1ebc38d93b6.html">codegen</a></li><li class="navelem"><a class="el" href="codegen__helper__visitor_8cpp.html">codegen_helper_visitor.cpp</a></li>
+    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_7cf1b5e32c0ccac638cac1ebc38d93b6.html">codegen</a></li><li class="navelem"><a class="el" href="src_2codegen_2codegen__c__visitor_8cpp.html">codegen_c_visitor.cpp</a></li>
   </ul>
 </div>
 <hr class="footer"/>

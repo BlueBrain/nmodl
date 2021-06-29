@@ -4,7 +4,7 @@ var classnmodl_1_1codegen_1_1_codegen_helper_visitor =
     [ "SymbolVectorType", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#ac113b048e85347649e0845d55c08b376", null ],
     [ "CodegenHelperVisitor", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#ab683b05aa11c88966cf20a06d00f5ea7", null ],
     [ "analyze", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#aa0e74f461212bcc312cd413641e54c29", null ],
-    [ "find_ion_variables", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#af2f04ab4c385197c88ae854748752d1f", null ],
+    [ "find_ion_variables", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a8a4c6bf98efa9dec17d22c35a897560a", null ],
     [ "find_non_range_variables", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#adaa15452418bc8a98d8a205e8fcfb110", null ],
     [ "find_range_variables", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#ac6c0489e3926a2f2bf03888aa20d2fa7", null ],
     [ "find_table_variables", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a6b37a5ce78cf3de036311a43eae07e19", null ],
