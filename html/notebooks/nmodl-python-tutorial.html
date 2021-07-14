@@ -579,7 +579,17 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#34;Program&#34;:[{&#34;NeuronBlock&#34;:[{&#34;StatementBlock&#34;:[{&#34;Suffix&#34;:[{&#34;Name&#34;:[{&#34;String&#34;:[{&#34;name&#34;:&#34;SUFFIX&#34;}]}]},{&#34;Name&#34;:[{&#34;String&#34;:[{&#34;name&#34;:&#34;CaDynamics&#34;}]}]}]},{&#34;Useion&#34;:[{&#34;Name&#34;:[{&#34;String&#34;:[{&#34;name&#34;:&#34;ca&#34;}]}]},{&#34;R
+NEURON {
+    SUFFIX CaDynamics
+    USEION ca READ ica WRITE cai
+    RANGE decay, gamma, minCai, depth
+}
+
+UNITS {
+    (mV) = (millivolt)
+    (mA) = (milliamp)
+    FARADAY = (faraday) (coulombs)
+    (mo
 </pre></div></div>
 </div>
 </div>
