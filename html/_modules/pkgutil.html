@@ -594,6 +594,7 @@
 <span class="sd">    The cache (or part of it) can be cleared manually if a</span>
 <span class="sd">    rescan of sys.path_hooks is necessary.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">path_item</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">fsdecode</span><span class="p">(</span><span class="n">path_item</span><span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">importer</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">path_importer_cache</span><span class="p">[</span><span class="n">path_item</span><span class="p">]</span>
     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
