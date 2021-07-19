@@ -279,6 +279,9 @@ struct CodegenInfo {
     /// ions used in the mod file
     std::vector<Ion> ions;
 
+    /// symbol table for the program
+    symtab::SymbolTable* psymtab = nullptr;
+    
     using SymbolType = std::shared_ptr<symtab::Symbol>;
 
     /// range variables which are parameter as well

@@ -21,6 +21,7 @@
 #include "parser/c11_driver.hpp"
 #include "utils/logger.hpp"
 #include "utils/string_utils.hpp"
+#include "visitors/defuse_analyze_visitor.hpp"
 #include "visitors/rename_visitor.hpp"
 #include "visitors/var_usage_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
@@ -32,6 +33,8 @@ namespace codegen {
 
 using namespace ast;
 
+using visitor::DUChain;
+using visitor::DefUseAnalyzeVisitor;
 using visitor::RenameVisitor;
 using visitor::VarUsageVisitor;
 
@@ -1736,13 +1739,49 @@ void CodegenCVisitor::visit_eigen_newton_solver_block(const ast::EigenNewtonSolv
             instance_struct(), "{}"));
 
     printer->add_indent();
+
+    auto get_local_statement = [](const std::shared_ptr<ast::Statement>& statement) {
+        std::shared_ptr<LocalListStatement> ret_local_list_statement;
+        if (statement->is_local_list_statement()) {
+            ret_local_list_statement = std::static_pointer_cast<LocalListStatement>(
+                statement);
+        } else {
+            auto e_statement = std::dynamic_pointer_cast<ast::ExpressionStatement>(
+                statement);
+            auto expression = e_statement->get_expression();
+            if (expression->is_local_list_statement()) {
+                ret_local_list_statement = std::static_pointer_cast<LocalListStatement>(
+                    statement);
+            }
+        }
+        return ret_local_list_statement;
+    };
+    
+    const auto& variable_block = *node.get_variable_block();
+    const auto& functor_block = *node.get_functor_block();
+
+    std::vector<DUChain> chains;
+    DefUseAnalyzeVisitor v(*node.get_variable_block()->get_symbol_table());
+
+    const auto& variable_statements = (*node.get_variable_block()).get_statements();
+    for(const auto& variable_statement : variable_statements) {
+        const auto& variables = get_local_statement(variable_statement)->get_variables();
+        for(const auto& variable : variables) {
+            std::cout << "Variable: " << variable->get_node_name() << std::endl;
+            chains.push_back(v.analyze(functor_block, variable->get_node_name()));
+        }
+    }
+    for(const auto& chain : chains) {
+        std::cout << chain.to_string() << std::endl;
+    }
+
     printer->add_text(
         "void operator()(const Eigen::Matrix<{0}, {1}, 1>& {2}, Eigen::Matrix<{0}, {1}, "
         "1>& {3}, "
         "Eigen::Matrix<{0}, {1}, {1}>& {4}) const "_format(float_type, N, X, F, Jm));
     printer->start_block();
     printer->add_line("{}* {} = {}.data();"_format(float_type, J, Jm));
-    print_statement_block(*node.get_functor_block(), false, false);
+    print_statement_block(functor_block, false, false);
     printer->end_block(2);
 
     // assign newton solver results in matrix X to state vars
@@ -4390,6 +4429,7 @@ void CodegenCVisitor::setup(const Program& node) {
     CodegenHelperVisitor v;
     info = v.analyze(node);
     info.mod_file = mod_filename;
+    info.psymtab = program_symtab;
 
     if (!info.vectorize) {
         logger->warn("CodegenCVisitor : MOD file uses non-thread safe constructs of NMODL");
