@@ -7,6 +7,9 @@
 
 #include "codegen/codegen_acc_visitor.hpp"
 
+#include "ast/eigen_linear_solver_block.hpp"
+#include "ast/integer.hpp"
+
 
 using namespace fmt::literals;
 
@@ -73,6 +76,15 @@ void CodegenAccVisitor::print_backend_includes() {
         printer->add_line("#include <cuda_runtime_api.h>");
         printer->add_line("#include <openacc.h>");
     }
+
+    if (info.eigen_linear_solver_exist && std::accumulate(info.state_vars.begin(),
+                                                          info.state_vars.end(),
+                                                          0,
+                                                          [](int l, const SymbolType& variable) {
+                                                              return l += variable->get_length();
+                                                          }) > 4) {
+        printer->add_line("#include <crout/crout.hpp>");
+    }
 }
 
 
@@ -125,6 +137,41 @@ void CodegenAccVisitor::print_net_send_buffering_grow() {
 
     printer->add_line("printf({}, nsb->_cnt);"_format(error));
     printer->add_line("coreneuron_abort();");
+}
+
+void CodegenAccVisitor::print_eigen_linear_solver(const std::string& float_type,
+                                                  int N,
+                                                  const std::string& X,
+                                                  const std::string& Jm,
+                                                  const std::string& F) {
+    // The Eigen::PartialPivLU is not compatible with GPUs (no __device__ tokens).
+    // For matrices up to 4x4, the Eigen inverse() has template specializations decorated with
+    // __host__ & __device__ tokens. Therefore, we use the inverse method instead of the
+    // PartialPivLU (requires an invertible matrix) which supports both CPUs & GPUs.
+    //
+    // For matrices 5x5 and above, Eigen does not provide GPU-enabled methods to solve small linear
+    // systems. For this reason, we use the Crout LU decomposition.
+    if (N <= 4) {
+        printer->add_line("{0} = {1}.inverse()*{2};"_format(X, Jm, F));
+    } else {
+        // In Eigen the default storage order is ColMajor.
+        // Crout's implementation requires matrices stored in RowMajor order (C-style arrays).
+        // Therefore, the transposeInPlace is critical such that the data() method to give the rows
+        // instead of the columns.
+        printer->add_line("if (!{0}.IsRowMajor) {0}.transposeInPlace();"_format(Jm));
+
+        // pivot vector
+        printer->add_line("Eigen::Matrix<int, {0}, 1> pivot;"_format(N));
+
+        // In-place LU-Decomposition (Crout Algo) : Jm is replaced by its LU-decomposition
+        printer->add_line(
+            "nmodl::crout::Crout<{0}>({1}, {2}.data(), pivot.data());"_format(float_type, N, Jm));
+
+        // Solve the linear system : Forward/Backward substitution part
+        printer->add_line(
+            "nmodl::crout::solveCrout<{0}>({1}, {2}.data(), {3}.data(), {4}.data(), pivot.data());"_format(
+                float_type, N, Jm, F, X));
+    }
 }
 
 /**

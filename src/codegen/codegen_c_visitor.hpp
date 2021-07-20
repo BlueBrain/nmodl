@@ -18,6 +18,7 @@
 #include <algorithm>
 #include <cmath>
 #include <ctime>
+#include <numeric>
 #include <ostream>
 #include <string>
 #include <utility>
@@ -1643,7 +1644,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
         , float_type(float_type)
         , optimize_ionvar_copies(optimize_ionvar_copies) {}
 
-
   public:
     /**
      * \brief Constructs the C code generator visitor
@@ -1846,6 +1846,11 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
     void visit_function_call(const ast::FunctionCall& node) override;
     void visit_eigen_newton_solver_block(const ast::EigenNewtonSolverBlock& node) override;
     void visit_eigen_linear_solver_block(const ast::EigenLinearSolverBlock& node) override;
+    virtual void print_eigen_linear_solver(const std::string& float_type,
+                                           int N,
+                                           const std::string& X,
+                                           const std::string& Jm,
+                                           const std::string& F);
     void visit_if_statement(const ast::IfStatement& node) override;
     void visit_indexed_name(const ast::IndexedName& node) override;
     void visit_integer(const ast::Integer& node) override;
