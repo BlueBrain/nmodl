@@ -97,12 +97,9 @@ def test_modify_ast():
             self.old_name = old_name
             self.new_name = new_name
 
-        def visit_program(self, node):
-            node.visit_children(self)
-
         def visit_range_var(self, node):
             if nmodl.to_nmodl(node.name) == self.old_name:
-                node.name = ast.Name(ast.String(self.new_name))
+                node.name.value = ast.String(self.new_name)
             node.visit_children(self)
 
     driver = nmodl.NmodlDriver()
@@ -113,5 +110,5 @@ def test_modify_ast():
     SUFFIX test
     RANGE y
 }
-    """
+"""
     assert str(modast) == one_var_after
