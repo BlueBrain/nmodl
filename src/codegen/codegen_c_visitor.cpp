@@ -3333,6 +3333,11 @@ void CodegenCVisitor::print_nrn_init(bool skip_init_check) {
         printer->add_line("deriv_advance_flag = 1;");
         print_deriv_advance_flag_transfer_to_device();
     }
+
+    if(info.net_send_used && !info.artificial_cell) {
+       print_send_event_move();
+    }
+
     print_kernel_data_present_annotation_block_end();
     if (skip_init_check) {
         printer->end_block(1);
@@ -3475,14 +3480,11 @@ void CodegenCVisitor::print_watch_check() {
         // end block 3
 
         // start block 3
-        printer->start_block("} else {");
+        printer->decrease_indent();
+        printer->start_block("} else");
         printer->add_line("{} = 2;"_format(varname));
         printer->end_block(1);
         // end block 3
-
-        printer->decrease_indent();
-        printer->add_line("}");
-        // end block 2
 
         printer->end_block(1);
         // end block 1
@@ -3678,6 +3680,9 @@ void CodegenCVisitor::print_send_event_move() {
     printer->add_newline();
     printer->add_line("NetSendBuffer_t* nsb = ml->_net_send_buffer;");
     /// \todo Update net send buffer on host
+    printer->add_line("#pragma aacc wait(nt->stream_id)");
+    printer->add_line("#pragma acc update self(nsb->_cnt) if(nt->compute_gpu)");
+    printer->add_line("update_net_send_buffer_on_host(nt, nsb);");
     printer->add_line("for (int i=0; i < nsb->_cnt; i++) {");
     printer->add_line("    int type = nsb->_sendtype[i];");
     printer->add_line("    int tid = nt->id;");
@@ -3691,6 +3696,7 @@ void CodegenCVisitor::print_send_event_move() {
     // clang-format on
     printer->add_line("}");
     printer->add_line("nsb->_cnt = 0;");
+    printer->add_line("#pragma acc update device(nsb->_cnt) if (nt->compute_gpu)");
     /// \todo Update net send buffer count on device
 }
 
@@ -3754,14 +3760,15 @@ void CodegenCVisitor::print_net_receive_buffering(bool need_mech_inst) {
     printer->end_block(1);
     print_net_receive_loop_end();
 
+    printer->add_line("#pragma aacc wait(nt->stream_id)");
+    printer->add_line("nrb->_displ_cnt = 0;");
+    printer->add_line("nrb->_cnt = 0;");
+
     if (info.net_send_used || info.net_event_used) {
         print_send_event_move();
     }
 
     printer->add_newline();
-    printer->add_line("nrb->_displ_cnt = 0;");
-    printer->add_line("nrb->_cnt = 0;");
-
     print_kernel_data_present_annotation_block_end();
     printer->end_block(1);
 }
