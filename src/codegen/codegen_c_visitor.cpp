@@ -3346,8 +3346,8 @@ void CodegenCVisitor::print_nrn_init(bool skip_init_check) {
         print_deriv_advance_flag_transfer_to_device();
     }
 
-    if(info.net_send_used && !info.artificial_cell) {
-       print_send_event_move();
+    if (info.net_send_used && !info.artificial_cell) {
+        print_send_event_move();
     }
 
     print_kernel_data_present_annotation_block_end();
