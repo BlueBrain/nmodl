@@ -1434,6 +1434,11 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
+     * Print pragma annotation for increase and capture of variable in automatic way
+     */
+    virtual void print_device_atomic_capture_annotation() const;
+
+    /**
      * Print block / loop for statement requiring reduction
      *
      */

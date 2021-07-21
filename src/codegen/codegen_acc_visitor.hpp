@@ -94,6 +94,9 @@ class CodegenAccVisitor: public CodegenCVisitor {
     // update derivimplicit advance flag on the gpu device
     void print_deriv_advance_flag_transfer_to_device() const override;
 
+    // print aotmic capture pragma
+    void print_device_atomic_capture_annotation() const override;
+
     std::string get_variable_device_pointer(const std::string& variable,
                                             const std::string& type) const override;
 

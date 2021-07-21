@@ -255,5 +255,10 @@ void CodegenAccVisitor::print_deriv_advance_flag_transfer_to_device() const {
     printer->add_line("#pragma acc update device (deriv_advance_flag) if (nt->compute_gpu)");
 }
 
+
+void CodegenAccVisitor::print_device_atomic_capture_annotation() const {
+    printer->add_line("#pragma acc atomic capture");
+}
+
 }  // namespace codegen
 }  // namespace nmodl

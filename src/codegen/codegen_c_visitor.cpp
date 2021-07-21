@@ -1038,6 +1038,10 @@ void CodegenCVisitor::print_deriv_advance_flag_transfer_to_device() const {
     // backend specific, do nothing
 }
 
+void CodegenCVisitor::print_device_atomic_capture_annotation() const {
+    // backend specific, do nothing
+}
+
 /**
  * \details Each kernel such as \c nrn\_init, \c nrn\_state and \c nrn\_cur could be offloaded
  * to accelerator. In this case, at very top level, we print pragma
@@ -3305,6 +3309,9 @@ void CodegenCVisitor::print_nrn_init(bool skip_init_check) {
         // clang-format on
     }
 
+    // update global variable as those might be updated via python/hoc API
+    print_global_variable_device_update_annotation();
+
     if (skip_init_check) {
         printer->start_block("if (_nrn_skip_initmodel == 0)");
     }
@@ -3462,13 +3469,13 @@ void CodegenCVisitor::print_watch_check() {
         watch->get_value()->accept(*this);
         printer->add_text(");");
         printer->add_newline();
+        printer->end_block(1);
 
         printer->add_line("{} = 3;"_format(varname));
-        printer->end_block(1);
         // end block 3
 
         // start block 3
-        printer->start_block("else"_format());
+        printer->start_block("} else {");
         printer->add_line("{} = 2;"_format(varname));
         printer->end_block(1);
         // end block 3
@@ -3774,9 +3781,10 @@ void CodegenCVisitor::print_net_send_buffering() {
         "NetSendBuffer_t* nsb, int type, int vdata_index, "
         "int weight_index, int point_index, double t, double flag";
     printer->start_block("static inline void net_send_buffering({}) "_format(args));
-    printer->add_line("int i = nsb->_cnt;");
-    printer->add_line("nsb->_cnt++;");
-    printer->add_line("if(nsb->_cnt >= nsb->_size) {");
+    printer->add_line("int i = 0;");
+    print_device_atomic_capture_annotation();
+    printer->add_line("i = nsb->_cnt++;");
+    printer->add_line("if(i >= nsb->_size) {");
     printer->increase_indent();
     print_net_send_buffering_grow();
     printer->decrease_indent();
