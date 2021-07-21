@@ -1042,6 +1042,18 @@ void CodegenCVisitor::print_device_atomic_capture_annotation() const {
     // backend specific, do nothing
 }
 
+void CodegenCVisitor::print_net_send_buf_count_update_to_host() const {
+    // backend specific, do nothing
+}
+
+void CodegenCVisitor::print_net_send_buf_count_update_to_device() const {
+    // backend specific, do nothing
+}
+
+void CodegenCVisitor::print_device_stream_wait() const {
+    // backend specific, do nothing
+}
+
 /**
  * \details Each kernel such as \c nrn\_init, \c nrn\_state and \c nrn\_cur could be offloaded
  * to accelerator. In this case, at very top level, we print pragma
@@ -3679,9 +3691,7 @@ void CodegenCVisitor::print_net_init() {
 void CodegenCVisitor::print_send_event_move() {
     printer->add_newline();
     printer->add_line("NetSendBuffer_t* nsb = ml->_net_send_buffer;");
-    /// \todo Update net send buffer on host
-    printer->add_line("#pragma aacc wait(nt->stream_id)");
-    printer->add_line("#pragma acc update self(nsb->_cnt) if(nt->compute_gpu)");
+    print_net_send_buf_count_update_to_host();
     printer->add_line("update_net_send_buffer_on_host(nt, nsb);");
     printer->add_line("for (int i=0; i < nsb->_cnt; i++) {");
     printer->add_line("    int type = nsb->_sendtype[i];");
@@ -3696,8 +3706,7 @@ void CodegenCVisitor::print_send_event_move() {
     // clang-format on
     printer->add_line("}");
     printer->add_line("nsb->_cnt = 0;");
-    printer->add_line("#pragma acc update device(nsb->_cnt) if (nt->compute_gpu)");
-    /// \todo Update net send buffer count on device
+    print_net_send_buf_count_update_to_device();
 }
 
 
@@ -3760,7 +3769,7 @@ void CodegenCVisitor::print_net_receive_buffering(bool need_mech_inst) {
     printer->end_block(1);
     print_net_receive_loop_end();
 
-    printer->add_line("#pragma aacc wait(nt->stream_id)");
+    print_device_stream_wait();
     printer->add_line("nrb->_displ_cnt = 0;");
     printer->add_line("nrb->_cnt = 0;");
 

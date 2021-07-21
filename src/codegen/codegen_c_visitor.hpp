@@ -1086,10 +1086,29 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      */
     virtual void print_instance_variable_transfer_to_device() const;
 
+
     /**
      * Print the code to copy derivative advance flag to device
      */
     virtual void print_deriv_advance_flag_transfer_to_device() const;
+
+
+    /**
+     * Print the code to update NetSendBuffer_t count from device to host
+     */
+    virtual void print_net_send_buf_count_update_to_host() const;
+
+
+    /**
+     * Print the code to update NetSendBuffer_t count from host to device
+     */
+    virtual void print_net_send_buf_count_update_to_device() const;
+
+
+    /**
+     * Print the code to synchronise/wait on stream specific to NrnThread
+     */
+    virtual void print_device_stream_wait() const;
 
 
     /**
