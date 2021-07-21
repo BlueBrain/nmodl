@@ -1,5 +1,9 @@
 var NAVTREEINDEX41 =
 {
+"codegen__helper__visitor_8hpp.html":[4,0,1,1,9],
+"codegen__helper__visitor_8hpp_source.html":[4,0,1,1,9],
+"codegen__info_8cpp.html":[4,0,1,1,10],
+"codegen__info_8cpp_source.html":[4,0,1,1,10],
 "codegen__info_8hpp.html":[4,0,1,1,11],
 "codegen__info_8hpp_source.html":[4,0,1,1,11],
 "codegen__ispc_8cpp.html":[4,0,2,0,0,2],
@@ -245,9 +249,5 @@ var NAVTREEINDEX41 =
 "electrode__current_8hpp_source.html":[4,0,0,0,0,0,0,37],
 "else__if__statement_8hpp.html":[4,0,0,0,0,0,0,38],
 "else__if__statement_8hpp.html#a1db448a4642925bf4cbbc2cb9387917d":[4,0,0,0,0,0,0,38,0],
-"else__if__statement_8hpp_source.html":[4,0,0,0,0,0,0,38],
-"else__statement_8hpp.html":[4,0,0,0,0,0,0,39],
-"else__statement_8hpp.html#a9365ff4820188ed85fd015b400d96c99":[4,0,0,0,0,0,0,39,0],
-"else__statement_8hpp_source.html":[4,0,0,0,0,0,0,39],
-"expression_8hpp.html":[4,0,0,0,0,0,0,40]
+"else__if__statement_8hpp_source.html":[4,0,0,0,0,0,0,38]
 };

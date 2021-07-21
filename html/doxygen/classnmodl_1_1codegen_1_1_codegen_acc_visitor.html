@@ -740,6 +740,12 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a621a8824135ca3ca077dee6917e30943"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a621a8824135ca3ca077dee6917e30943">print_newtonspace_transfer_to_device</a> () const override</td></tr>
 <tr class="memdesc:a621a8824135ca3ca077dee6917e30943"><td class="mdescLeft">&#160;</td><td class="mdescRight">transfer newtonspace structure to device  <a href="#a621a8824135ca3ca077dee6917e30943">More...</a><br /></td></tr>
 <tr class="separator:a621a8824135ca3ca077dee6917e30943"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aecaa11e98257b4083c45603d93bbab22"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#aecaa11e98257b4083c45603d93bbab22">print_instance_variable_transfer_to_device</a> () const override</td></tr>
+<tr class="memdesc:aecaa11e98257b4083c45603d93bbab22"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the code to copy instance variable to device.  <a href="#aecaa11e98257b4083c45603d93bbab22">More...</a><br /></td></tr>
+<tr class="separator:aecaa11e98257b4083c45603d93bbab22"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf9de5982b1d8f6fb492e668183c2ee1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#abf9de5982b1d8f6fb492e668183c2ee1">print_deriv_advance_flag_transfer_to_device</a> () const override</td></tr>
+<tr class="memdesc:abf9de5982b1d8f6fb492e668183c2ee1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the code to copy derivative advance flag to device.  <a href="#abf9de5982b1d8f6fb492e668183c2ee1">More...</a><br /></td></tr>
+<tr class="separator:abf9de5982b1d8f6fb492e668183c2ee1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5391c250f0204d0276f7a8272eee7db6"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a5391c250f0204d0276f7a8272eee7db6">get_variable_device_pointer</a> (const std::string &amp;variable, const std::string &amp;type) const override</td></tr>
 <tr class="memdesc:a5391c250f0204d0276f7a8272eee7db6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get device variable pointer for corresponding host variable.  <a href="#a5391c250f0204d0276f7a8272eee7db6">More...</a><br /></td></tr>
 <tr class="separator:a5391c250f0204d0276f7a8272eee7db6"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1333,7 +1339,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8hpp_source.html#l00099">99</a> of file <a class="el" href="codegen__acc__visitor_8hpp_source.html">codegen_acc_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8hpp_source.html#l00105">105</a> of file <a class="el" href="codegen__acc__visitor_8hpp_source.html">codegen_acc_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1383,7 +1389,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8hpp_source.html#l00105">105</a> of file <a class="el" href="codegen__acc__visitor_8hpp_source.html">codegen_acc_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8hpp_source.html#l00111">111</a> of file <a class="el" href="codegen__acc__visitor_8hpp_source.html">codegen_acc_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1627,6 +1633,37 @@ for(int id=0; id&lt;nodecount; id++) {</pre>
 
 </div>
 </div>
+<a id="abf9de5982b1d8f6fb492e668183c2ee1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abf9de5982b1d8f6fb492e668183c2ee1">&#9670;&nbsp;</a></span>print_deriv_advance_flag_transfer_to_device()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void nmodl::codegen::CodegenAccVisitor::print_deriv_advance_flag_transfer_to_device </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Print the code to copy derivative advance flag to device. </p>
+
+<p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ab6599ed829d90c09d172ea47272c4577">nmodl::codegen::CodegenCVisitor</a>.</p>
+
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00254">254</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+
+</div>
+</div>
 <a id="af58d26884131b0cc711887c549bc7957"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af58d26884131b0cc711887c549bc7957">&#9670;&nbsp;</a></span>print_fast_imem_calculation()</h2>
 
@@ -1717,6 +1754,37 @@ for(int id=0; id&lt;nodecount; id++) {</pre>
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a5f545bed0818b1a5b30ad714f6268ba0">nmodl::codegen::CodegenCVisitor</a>.</p>
 
 <p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00212">212</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+
+</div>
+</div>
+<a id="aecaa11e98257b4083c45603d93bbab22"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aecaa11e98257b4083c45603d93bbab22">&#9670;&nbsp;</a></span>print_instance_variable_transfer_to_device()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void nmodl::codegen::CodegenAccVisitor::print_instance_variable_transfer_to_device </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Print the code to copy instance variable to device. </p>
+
+<p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a375c267d5b884b9dfec38d97aea892bc">nmodl::codegen::CodegenCVisitor</a>.</p>
+
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00246">246</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
