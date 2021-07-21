@@ -8,7 +8,6 @@
 import nmodl
 from nmodl.dsl import ast, visitor
 import pytest
-import sys
 
 
 def test_lookup_visitor(ch_ast):
