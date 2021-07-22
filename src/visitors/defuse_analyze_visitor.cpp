@@ -364,9 +364,7 @@ void DefUseAnalyzeVisitor::visit_argument(const ast::Argument& /*node*/) {}
  */
 void DefUseAnalyzeVisitor::update_defuse_chain(const std::string& name) {
     const auto& symbol = current_symtab->lookup_in_scope(name);
-    //if(symbol != nullptr) {
-        std::cout << current_symtab->to_string() << std::endl;
-    //}
+
     assert(symbol != nullptr);
     // variable properties that make variable local
     const auto properties = NmodlType::local_var | NmodlType::argument;

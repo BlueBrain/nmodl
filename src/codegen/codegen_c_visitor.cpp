@@ -1768,7 +1768,7 @@ void CodegenCVisitor::visit_eigen_newton_solver_block(const ast::EigenNewtonSolv
     // std::cout << to_nmodl(variable_block) << std::endl;
     // std::cout << to_nmodl(functor_block) << std::endl;
     
-    std::vector<DUChain> chains;
+    std::unordered_map<std::string, DUChain> chains;
     ast::StatementBlock complete_block(variable_block);
     for(const auto& statement : functor_block.get_statements()) {
         complete_block.insert_statement(complete_block.get_statements().end(), statement);
@@ -1783,11 +1783,11 @@ void CodegenCVisitor::visit_eigen_newton_solver_block(const ast::EigenNewtonSolv
         const auto& variables = get_local_statement(variable_statement)->get_variables();
         for(const auto& variable : variables) {
             std::cout << "Variable: " << variable->get_node_name() << std::endl;
-            chains.push_back(v.analyze(functor_block, variable->get_node_name()));
+            chains[variable->get_node_name()] = v.analyze(functor_block, variable->get_node_name());
         }
     }
     for(const auto& chain : chains) {
-        std::cout << chain.to_string() << std::endl;
+        std::cout << "Chain of " << chain.first << ": " << chain.second.to_string() << std::endl;
     }
 
     printer->add_text(

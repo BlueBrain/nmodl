@@ -36,7 +36,7 @@ namespace visitor {
  */
 class SymtabVisitor: public AstVisitor {
   private:
-    symtab::ModelSymbolTable* modsymtab;
+    symtab::ModelSymbolTable* modsymtab = nullptr;
 
     std::unique_ptr<printer::JSONPrinter> printer;
     std::set<std::string> block_to_solve;
