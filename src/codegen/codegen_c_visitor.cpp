@@ -36,6 +36,7 @@ using namespace ast;
 
 using visitor::DUChain;
 using visitor::DefUseAnalyzeVisitor;
+using visitor::DUState;
 using visitor::RenameVisitor;
 using visitor::VarUsageVisitor;
 using visitor::SymtabVisitor;
@@ -1775,7 +1776,8 @@ void CodegenCVisitor::visit_eigen_newton_solver_block(const ast::EigenNewtonSolv
     }
     std::cout << "Visiting statement block from codegen c visitor" << std::endl;
     SymtabVisitor().visit_statement_block(complete_block);
-    std::cout << "Complete block symbol table: " << complete_block.get_symbol_table()->to_string() << std::endl;
+    //std::cout << "Complete block symbol table: " << complete_block.get_symbol_table()->to_string() << std::endl;
+    std::cout << "Complete statement block: " << to_nmodl(complete_block) << std::endl;
     DefUseAnalyzeVisitor v(*complete_block.get_symbol_table());
 
     const auto& variable_statements = variable_block.get_statements();
@@ -1786,14 +1788,17 @@ void CodegenCVisitor::visit_eigen_newton_solver_block(const ast::EigenNewtonSolv
             chains[variable->get_node_name()] = v.analyze(functor_block, variable->get_node_name());
         }
     }
+    auto is_functor_const = true;
     for(const auto& chain : chains) {
         std::cout << "Chain of " << chain.first << ": " << chain.second.to_string() << std::endl;
+        std::cout << "Eval: " << chain.second.eval() << std::endl;
+        is_functor_const &= !(chain.second.eval() == DUState::D || chain.second.eval() == DUState::LD);
     }
 
     printer->add_text(
         "void operator()(const Eigen::Matrix<{0}, {1}, 1>& {2}, Eigen::Matrix<{0}, {1}, "
         "1>& {3}, "
-        "Eigen::Matrix<{0}, {1}, {1}>& {4}) const "_format(float_type, N, X, F, Jm));
+        "Eigen::Matrix<{0}, {1}, {1}>& {4}) {5}"_format(float_type, N, X, F, Jm, is_functor_const ? "const ": ""));
     printer->start_block();
     printer->add_line("{}* {} = {}.data();"_format(float_type, J, Jm));
     print_statement_block(functor_block, false, false);
