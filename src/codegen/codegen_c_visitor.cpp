@@ -25,6 +25,7 @@
 #include "visitors/rename_visitor.hpp"
 #include "visitors/var_usage_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
+#include "visitors/symtab_visitor.hpp"
 
 using namespace fmt::literals;
 
@@ -37,6 +38,7 @@ using visitor::DUChain;
 using visitor::DefUseAnalyzeVisitor;
 using visitor::RenameVisitor;
 using visitor::VarUsageVisitor;
+using visitor::SymtabVisitor;
 
 using symtab::syminfo::NmodlType;
 using SymbolType = std::shared_ptr<symtab::Symbol>;
@@ -1758,12 +1760,25 @@ void CodegenCVisitor::visit_eigen_newton_solver_block(const ast::EigenNewtonSolv
     };
     
     const auto& variable_block = *node.get_variable_block();
-    const auto& functor_block = *node.get_functor_block();
+    auto& functor_block = *node.get_functor_block();
 
+    // std::cout << "Variable block symbol table: " << variable_block.get_symbol_table()->to_string() << std::endl;
+    // std::cout << "Functor block symbol table: " << functor_block.get_symbol_table()->to_string() << std::endl;
+
+    // std::cout << to_nmodl(variable_block) << std::endl;
+    // std::cout << to_nmodl(functor_block) << std::endl;
+    
     std::vector<DUChain> chains;
-    DefUseAnalyzeVisitor v(*node.get_variable_block()->get_symbol_table());
+    ast::StatementBlock complete_block(variable_block);
+    for(const auto& statement : functor_block.get_statements()) {
+        complete_block.insert_statement(complete_block.get_statements().end(), statement);
+    }
+    std::cout << "Visiting statement block from codegen c visitor" << std::endl;
+    SymtabVisitor().visit_statement_block(complete_block);
+    std::cout << "Complete block symbol table: " << complete_block.get_symbol_table()->to_string() << std::endl;
+    DefUseAnalyzeVisitor v(*complete_block.get_symbol_table());
 
-    const auto& variable_statements = (*node.get_variable_block()).get_statements();
+    const auto& variable_statements = variable_block.get_statements();
     for(const auto& variable_statement : variable_statements) {
         const auto& variables = get_local_statement(variable_statement)->get_variables();
         for(const auto& variable : variables) {
