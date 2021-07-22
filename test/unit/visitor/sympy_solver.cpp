@@ -1046,7 +1046,7 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
         std::string expected_result = R"(
             DERIVATIVE ihkin {
                 EIGEN_LINEAR_SOLVE[5]{
-                    LOCAL alpha, beta, k3p, k4, k1ca, k2, old_c1, old_o1, old_p0
+                    LOCAL old_c1, old_o1, old_p0
                 }{
                     evaluate_fct(v, cai)
                     old_c1 = c1
@@ -1058,6 +1058,7 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
                     X[2] = o2
                     X[3] = p0
                     X[4] = p1
+                    LOCAL alpha, beta, k3p, k4, k1ca, k2
                     F[0] = -old_c1
                     F[1] = -old_o1
                     F[2] = -1.0

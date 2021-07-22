@@ -1746,7 +1746,7 @@ void CodegenCVisitor::visit_eigen_newton_solver_block(const ast::EigenNewtonSolv
     printer->add_text(
         "void operator()(const Eigen::Matrix<{0}, {1}, 1>& {2}, Eigen::Matrix<{0}, {1}, "
         "1>& {3}, "
-        "Eigen::Matrix<{0}, {1}, {1}>& {4}) const"_format(float_type, N, X, F, Jm));
+        "Eigen::Matrix<{0}, {1}, {1}>& {4}) const "_format(float_type, N, X, F, Jm));
     printer->start_block();
     printer->add_line("{}* {} = {}.data();"_format(float_type, J, Jm));
     print_statement_block(*node.get_functor_block(), false, false);
@@ -3250,6 +3250,10 @@ void CodegenCVisitor::print_global_function_common_code(BlockType type) {
         // We do not (currently) support DESTRUCTOR and CONSTRUCTOR blocks
         // running anything on the GPU.
         print_kernel_data_present_annotation_block_begin();
+    } else {
+        /// TODO: Remove this when the code generation is propery done
+        /// Related to https://github.com/BlueBrain/nmodl/issues/692
+        printer->add_line("#ifndef CORENEURON_BUILD");
     }
     printer->add_line("int nodecount = ml->nodecount;");
     printer->add_line("int pnodecount = ml->_nodecount_padded;");
@@ -3341,6 +3345,7 @@ void CodegenCVisitor::print_nrn_constructor() {
         const auto& block = info.constructor_node->get_statement_block();
         print_statement_block(*block.get(), false, false);
     }
+    printer->add_line("#endif");
     printer->end_block(1);
 }
 
@@ -3352,6 +3357,7 @@ void CodegenCVisitor::print_nrn_destructor() {
         const auto& block = info.destructor_node->get_statement_block();
         print_statement_block(*block.get(), false, false);
     }
+    printer->add_line("#endif");
     printer->end_block(1);
 }
 
