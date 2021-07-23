@@ -1,5 +1,13 @@
 var NAVTREEINDEX51 =
 {
+"valence_8hpp.html":[4,0,0,0,0,0,0,136],
+"valence_8hpp.html#a00327fd570b27a4b7cbcc088338bfea5":[4,0,0,0,0,0,0,136,0],
+"valence_8hpp_source.html":[4,0,0,0,0,0,0,136],
+"var__name_8hpp.html":[4,0,0,0,0,0,0,137],
+"var__name_8hpp.html#a10a89381f54acd6a82531d00d471a98a":[4,0,0,0,0,0,0,137,0],
+"var__name_8hpp_source.html":[4,0,0,0,0,0,0,137],
+"var__usage_8cpp.html":[4,0,2,0,10,23],
+"var__usage_8cpp.html#ab2c5538fecec788ffd560fce9bfd8ca6":[4,0,2,0,10,23,0],
 "var__usage_8cpp.html#abded330b1e70df5d1e8e7a6bacaf8739":[4,0,2,0,10,23,1],
 "var__usage_8cpp_source.html":[4,0,2,0,10,23],
 "var__usage__visitor_8cpp.html":[4,0,1,11,42],

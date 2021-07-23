@@ -746,6 +746,18 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:abf9de5982b1d8f6fb492e668183c2ee1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#abf9de5982b1d8f6fb492e668183c2ee1">print_deriv_advance_flag_transfer_to_device</a> () const override</td></tr>
 <tr class="memdesc:abf9de5982b1d8f6fb492e668183c2ee1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the code to copy derivative advance flag to device.  <a href="#abf9de5982b1d8f6fb492e668183c2ee1">More...</a><br /></td></tr>
 <tr class="separator:abf9de5982b1d8f6fb492e668183c2ee1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4977b3b4e02425431c95412ffdad10ed"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a4977b3b4e02425431c95412ffdad10ed">print_net_send_buf_count_update_to_host</a> () const override</td></tr>
+<tr class="memdesc:a4977b3b4e02425431c95412ffdad10ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the code to update NetSendBuffer_t count from device to host.  <a href="#a4977b3b4e02425431c95412ffdad10ed">More...</a><br /></td></tr>
+<tr class="separator:a4977b3b4e02425431c95412ffdad10ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4695bcf11295255ed5827ea2bad81fdf"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a4695bcf11295255ed5827ea2bad81fdf">print_net_send_buf_count_update_to_device</a> () const override</td></tr>
+<tr class="memdesc:a4695bcf11295255ed5827ea2bad81fdf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the code to update NetSendBuffer_t count from host to device.  <a href="#a4695bcf11295255ed5827ea2bad81fdf">More...</a><br /></td></tr>
+<tr class="separator:a4695bcf11295255ed5827ea2bad81fdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae69707b056c2db2a8c209b7e8cc97bf4"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#ae69707b056c2db2a8c209b7e8cc97bf4">print_device_stream_wait</a> () const override</td></tr>
+<tr class="memdesc:ae69707b056c2db2a8c209b7e8cc97bf4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the code to synchronise/wait on stream specific to NrnThread.  <a href="#ae69707b056c2db2a8c209b7e8cc97bf4">More...</a><br /></td></tr>
+<tr class="separator:ae69707b056c2db2a8c209b7e8cc97bf4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3cf0f9dd9a34da7d16712815c805576"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#ad3cf0f9dd9a34da7d16712815c805576">print_device_atomic_capture_annotation</a> () const override</td></tr>
+<tr class="memdesc:ad3cf0f9dd9a34da7d16712815c805576"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print pragma annotation for increase and capture of variable in automatic way.  <a href="#ad3cf0f9dd9a34da7d16712815c805576">More...</a><br /></td></tr>
+<tr class="separator:ad3cf0f9dd9a34da7d16712815c805576"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5391c250f0204d0276f7a8272eee7db6"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a5391c250f0204d0276f7a8272eee7db6">get_variable_device_pointer</a> (const std::string &amp;variable, const std::string &amp;type) const override</td></tr>
 <tr class="memdesc:a5391c250f0204d0276f7a8272eee7db6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get device variable pointer for corresponding host variable.  <a href="#a5391c250f0204d0276f7a8272eee7db6">More...</a><br /></td></tr>
 <tr class="separator:a5391c250f0204d0276f7a8272eee7db6"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1339,7 +1351,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8hpp_source.html#l00105">105</a> of file <a class="el" href="codegen__acc__visitor_8hpp_source.html">codegen_acc_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8hpp_source.html#l00117">117</a> of file <a class="el" href="codegen__acc__visitor_8hpp_source.html">codegen_acc_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1389,7 +1401,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8hpp_source.html#l00111">111</a> of file <a class="el" href="codegen__acc__visitor_8hpp_source.html">codegen_acc_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8hpp_source.html#l00123">123</a> of file <a class="el" href="codegen__acc__visitor_8hpp_source.html">codegen_acc_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1664,6 +1676,68 @@ for(int id=0; id&lt;nodecount; id++) {</pre>
 
 </div>
 </div>
+<a id="ad3cf0f9dd9a34da7d16712815c805576"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad3cf0f9dd9a34da7d16712815c805576">&#9670;&nbsp;</a></span>print_device_atomic_capture_annotation()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void nmodl::codegen::CodegenAccVisitor::print_device_atomic_capture_annotation </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Print pragma annotation for increase and capture of variable in automatic way. </p>
+
+<p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a77b15b945cdbc68d4f53dd9d031e40b5">nmodl::codegen::CodegenCVisitor</a>.</p>
+
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00259">259</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ae69707b056c2db2a8c209b7e8cc97bf4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae69707b056c2db2a8c209b7e8cc97bf4">&#9670;&nbsp;</a></span>print_device_stream_wait()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void nmodl::codegen::CodegenAccVisitor::print_device_stream_wait </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Print the code to synchronise/wait on stream specific to NrnThread. </p>
+
+<p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a03072394ac710ee93502cfe4a7ff4bfb">nmodl::codegen::CodegenCVisitor</a>.</p>
+
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00264">264</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+
+</div>
+</div>
 <a id="af58d26884131b0cc711887c549bc7957"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af58d26884131b0cc711887c549bc7957">&#9670;&nbsp;</a></span>print_fast_imem_calculation()</h2>
 
@@ -1881,6 +1955,68 @@ for(int id=0; id&lt;nodecount; id++) {</pre>
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#af0ee2415c65c2cf5e11141c4e831b725">nmodl::codegen::CodegenCVisitor</a>.</p>
 
 <p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00084">84</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a4695bcf11295255ed5827ea2bad81fdf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4695bcf11295255ed5827ea2bad81fdf">&#9670;&nbsp;</a></span>print_net_send_buf_count_update_to_device()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void nmodl::codegen::CodegenAccVisitor::print_net_send_buf_count_update_to_device </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Print the code to update NetSendBuffer_t count from host to device. </p>
+
+<p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a78bb0db813ac827668ed528f7de6d9a3">nmodl::codegen::CodegenCVisitor</a>.</p>
+
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00275">275</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a4977b3b4e02425431c95412ffdad10ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4977b3b4e02425431c95412ffdad10ed">&#9670;&nbsp;</a></span>print_net_send_buf_count_update_to_host()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void nmodl::codegen::CodegenAccVisitor::print_net_send_buf_count_update_to_host </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Print the code to update NetSendBuffer_t count from device to host. </p>
+
+<p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a9a755cf039492f8d0cdc386058d32d59">nmodl::codegen::CodegenCVisitor</a>.</p>
+
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00269">269</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
