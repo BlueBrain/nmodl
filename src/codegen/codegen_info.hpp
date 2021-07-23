@@ -281,7 +281,7 @@ struct CodegenInfo {
 
     /// symbol table for the program
     symtab::SymbolTable* psymtab = nullptr;
-    
+
     using SymbolType = std::shared_ptr<symtab::Symbol>;
 
     /// range variables which are parameter as well

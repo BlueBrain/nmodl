@@ -23,9 +23,9 @@
 #include "utils/string_utils.hpp"
 #include "visitors/defuse_analyze_visitor.hpp"
 #include "visitors/rename_visitor.hpp"
+#include "visitors/symtab_visitor.hpp"
 #include "visitors/var_usage_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
-#include "visitors/symtab_visitor.hpp"
 
 using namespace fmt::literals;
 
@@ -34,12 +34,12 @@ namespace codegen {
 
 using namespace ast;
 
-using visitor::DUChain;
 using visitor::DefUseAnalyzeVisitor;
+using visitor::DUChain;
 using visitor::DUState;
 using visitor::RenameVisitor;
-using visitor::VarUsageVisitor;
 using visitor::SymtabVisitor;
+using visitor::VarUsageVisitor;
 
 using symtab::syminfo::NmodlType;
 using SymbolType = std::shared_ptr<symtab::Symbol>;
@@ -1746,59 +1746,60 @@ void CodegenCVisitor::visit_eigen_newton_solver_block(const ast::EigenNewtonSolv
     auto get_local_statement = [](const std::shared_ptr<ast::Statement>& statement) {
         std::shared_ptr<LocalListStatement> ret_local_list_statement;
         if (statement->is_local_list_statement()) {
-            ret_local_list_statement = std::static_pointer_cast<LocalListStatement>(
-                statement);
+            ret_local_list_statement = std::static_pointer_cast<LocalListStatement>(statement);
         } else {
-            auto e_statement = std::dynamic_pointer_cast<ast::ExpressionStatement>(
-                statement);
+            auto e_statement = std::dynamic_pointer_cast<ast::ExpressionStatement>(statement);
             auto expression = e_statement->get_expression();
             if (expression->is_local_list_statement()) {
-                ret_local_list_statement = std::static_pointer_cast<LocalListStatement>(
-                    statement);
+                ret_local_list_statement = std::static_pointer_cast<LocalListStatement>(statement);
             }
         }
         return ret_local_list_statement;
     };
-    
+
     const auto& variable_block = *node.get_variable_block();
     auto& functor_block = *node.get_functor_block();
 
-    // std::cout << "Variable block symbol table: " << variable_block.get_symbol_table()->to_string() << std::endl;
-    // std::cout << "Functor block symbol table: " << functor_block.get_symbol_table()->to_string() << std::endl;
+    // std::cout << "Variable block symbol table: " <<
+    // variable_block.get_symbol_table()->to_string() << std::endl; std::cout << "Functor block
+    // symbol table: " << functor_block.get_symbol_table()->to_string() << std::endl;
 
     // std::cout << to_nmodl(variable_block) << std::endl;
     // std::cout << to_nmodl(functor_block) << std::endl;
-    
+
     std::unordered_map<std::string, DUChain> chains;
     ast::StatementBlock complete_block(variable_block);
-    for(const auto& statement : functor_block.get_statements()) {
+    for (const auto& statement: functor_block.get_statements()) {
         complete_block.insert_statement(complete_block.get_statements().end(), statement);
     }
     std::cout << "Visiting statement block from codegen c visitor" << std::endl;
     SymtabVisitor().visit_statement_block(complete_block);
-    //std::cout << "Complete block symbol table: " << complete_block.get_symbol_table()->to_string() << std::endl;
+    // std::cout << "Complete block symbol table: " <<
+    // complete_block.get_symbol_table()->to_string() << std::endl;
     std::cout << "Complete statement block: " << to_nmodl(complete_block) << std::endl;
     DefUseAnalyzeVisitor v(*complete_block.get_symbol_table());
 
     const auto& variable_statements = variable_block.get_statements();
-    for(const auto& variable_statement : variable_statements) {
+    for (const auto& variable_statement: variable_statements) {
         const auto& variables = get_local_statement(variable_statement)->get_variables();
-        for(const auto& variable : variables) {
+        for (const auto& variable: variables) {
             std::cout << "Variable: " << variable->get_node_name() << std::endl;
             chains[variable->get_node_name()] = v.analyze(functor_block, variable->get_node_name());
         }
     }
     auto is_functor_const = true;
-    for(const auto& chain : chains) {
+    for (const auto& chain: chains) {
         std::cout << "Chain of " << chain.first << ": " << chain.second.to_string() << std::endl;
         std::cout << "Eval: " << chain.second.eval() << std::endl;
-        is_functor_const &= !(chain.second.eval() == DUState::D || chain.second.eval() == DUState::LD);
+        is_functor_const &= !(chain.second.eval() == DUState::D ||
+                              chain.second.eval() == DUState::LD);
     }
 
     printer->add_text(
         "void operator()(const Eigen::Matrix<{0}, {1}, 1>& {2}, Eigen::Matrix<{0}, {1}, "
         "1>& {3}, "
-        "Eigen::Matrix<{0}, {1}, {1}>& {4}) {5}"_format(float_type, N, X, F, Jm, is_functor_const ? "const ": ""));
+        "Eigen::Matrix<{0}, {1}, {1}>& {4}) {5}"_format(
+            float_type, N, X, F, Jm, is_functor_const ? "const " : ""));
     printer->start_block();
     printer->add_line("{}* {} = {}.data();"_format(float_type, J, Jm));
     print_statement_block(functor_block, false, false);

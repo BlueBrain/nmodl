@@ -51,9 +51,7 @@ enum class DUState {
 };
 
 /// Variable type processed by DefUseAnalyzeVisitor
-enum class DUVariableType {
-    Local, Global
-};
+enum class DUVariableType { Local, Global };
 
 std::ostream& operator<<(std::ostream& os, DUState state);
 
@@ -138,7 +136,8 @@ class DUChain {
 
     DUChain() = default;
     DUChain(std::string name, DUVariableType type)
-        : name(std::move(name)), variable_type(type) {}
+        : name(std::move(name))
+        , variable_type(type) {}
 
     /// return "effective" usage of a variable
     DUState eval() const;

@@ -90,7 +90,10 @@ DUState DUInstance::sub_block_eval(DUVariableType variable_type = DUVariableType
     DUState result = DUState::NONE;
     for (const auto& chain: children) {
         const auto& child_state = chain.eval(variable_type);
-        if ((variable_type == DUVariableType::Global && (child_state == DUState::U || child_state == DUState::D)) || (variable_type == DUVariableType::Local && (child_state == DUState::LU || child_state == DUState::LD))) {
+        if ((variable_type == DUVariableType::Global &&
+             (child_state == DUState::U || child_state == DUState::D)) ||
+            (variable_type == DUVariableType::Local &&
+             (child_state == DUState::LU || child_state == DUState::LD))) {
             result = child_state;
             break;
         }
@@ -127,20 +130,24 @@ DUState DUInstance::sub_block_eval(DUVariableType variable_type = DUVariableType
  *    block encountered, this means every block has either "D" or "CD". In
  *    this case we can say that entire block effectively has "D".
  */
-DUState DUInstance::conditional_block_eval(DUVariableType variable_type = DUVariableType::Global) const {
+DUState DUInstance::conditional_block_eval(
+    DUVariableType variable_type = DUVariableType::Global) const {
     DUState result = DUState::NONE;
     bool block_with_none = false;
 
     for (const auto& chain: children) {
         auto child_state = chain.eval(variable_type);
-        if ((variable_type == DUVariableType::Global && child_state == DUState::U) || (variable_type == DUVariableType::Local && child_state == DUState::LU)) {
+        if ((variable_type == DUVariableType::Global && child_state == DUState::U) ||
+            (variable_type == DUVariableType::Local && child_state == DUState::LU)) {
             result = child_state;
             break;
         }
         if (child_state == DUState::NONE) {
             block_with_none = true;
         }
-        if ((variable_type == DUVariableType::Global && child_state == DUState::D) || (variable_type == DUVariableType::Local && child_state == DUState::LD) || child_state == DUState::CD) {
+        if ((variable_type == DUVariableType::Global && child_state == DUState::D) ||
+            (variable_type == DUVariableType::Local && child_state == DUState::LD) ||
+            child_state == DUState::CD) {
             result = DUState::CD;
             if (chain.state == DUState::ELSE && !block_with_none) {
                 result = child_state;
@@ -171,7 +178,8 @@ DUState DUChain::eval() const {
     auto result = DUState::NONE;
     for (auto& inst: chain) {
         auto re = inst.eval(variable_type);
-        if ((variable_type == DUVariableType::Global && (re == DUState::U || re == DUState::D)) || (variable_type == DUVariableType::Local && (re == DUState::LU || re == DUState::LD))) {
+        if ((variable_type == DUVariableType::Global && (re == DUState::U || re == DUState::D)) ||
+            (variable_type == DUVariableType::Local && (re == DUState::LU || re == DUState::LD))) {
             result = re;
             break;
         }
