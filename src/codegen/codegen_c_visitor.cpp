@@ -4472,7 +4472,6 @@ void CodegenCVisitor::setup(const Program& node) {
     CodegenHelperVisitor v;
     info = v.analyze(node);
     info.mod_file = mod_filename;
-    info.psymtab = program_symtab;
 
     if (!info.vectorize) {
         logger->warn("CodegenCVisitor : MOD file uses non-thread safe constructs of NMODL");
