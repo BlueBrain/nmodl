@@ -3457,13 +3457,16 @@ void CodegenCVisitor::print_watch_check() {
         printer->add_line("double v = voltage[node_id];");
     }
 
+    // flat to make sure only one WATCH statement can be triggered at a time
+    printer->add_line("bool watch_untriggered = true;");
+
     for (int i = 0; i < info.watch_statements.size(); i++) {
         auto statement = info.watch_statements[i];
         auto watch = statement->get_statements().front();
         auto varname = get_variable_name("watch{}"_format(i + 1));
 
         // start block 1
-        printer->start_block("if ({}&2)"_format(varname));
+        printer->start_block("if ({}&2 && watch_untriggered)"_format(varname));
 
         // start block 2
         printer->add_indent();
@@ -3475,6 +3478,8 @@ void CodegenCVisitor::print_watch_check() {
 
         // start block 3
         printer->start_block("if (({}&1) == 0)"_format(varname));
+
+        printer->add_line("watch_untriggered = false;");
 
         auto tqitem = get_variable_name("tqitem");
         auto point_process = get_variable_name("point_process");

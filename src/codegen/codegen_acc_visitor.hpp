@@ -103,7 +103,7 @@ class CodegenAccVisitor: public CodegenCVisitor {
     // synchronise/wait on stream specific to NrnThread
     virtual void print_device_stream_wait() const override;
 
-    // print aotmic capture pragma
+    // print atomic capture pragma
     void print_device_atomic_capture_annotation() const override;
 
     std::string get_variable_device_pointer(const std::string& variable,
