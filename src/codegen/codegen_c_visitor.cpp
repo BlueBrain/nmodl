@@ -3560,10 +3560,9 @@ void CodegenCVisitor::print_net_send_call(const FunctionCall& node) {
     std::string weight_index = "weight_index";
     std::string pnt = "pnt";
 
-    // for non-net-receieve functions there is no weight index argument
-    // and artificial cell is in vdata which is void**
+    // for non-net_receieve functions i.e. initial block, the weight_index argument is 0.
     if (!printing_net_receive) {
-        weight_index = "-1";
+        weight_index = "0";
         auto var = get_variable_name("point_process");
         if (info.artificial_cell) {
             pnt = "(Point_process*)" + var;
