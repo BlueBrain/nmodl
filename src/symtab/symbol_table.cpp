@@ -440,7 +440,6 @@ void ModelSymbolTable::set_mode(bool update_mode) {
     update_table = update_mode;
     if (!update_table) {
         symtab = nullptr;
-        std::cout << "setting symtab 2 (nullptr)" << std::endl;
         current_symtab = nullptr;
     }
     definition_order = 0;
