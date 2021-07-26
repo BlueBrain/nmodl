@@ -2504,6 +2504,13 @@ void CodegenCVisitor::print_mechanism_global_var_structure() {
 }
 
 
+void CodegenCVisitor::print_prcellstate_macros() const {
+    printer->add_line("#ifndef PRCELLSTATE");
+    printer->add_line("#define PRCELLSTATE 0");
+    printer->add_line("#endif");
+}
+
+
 void CodegenCVisitor::print_mechanism_info() {
     auto variable_printer = [&](std::vector<SymbolType>& variables) {
         for (const auto& v: variables) {
@@ -3190,6 +3197,9 @@ void CodegenCVisitor::print_initial_block(const InitialBlock* node) {
     } else {
         printer->add_line("int node_id = node_index[id];");
         printer->add_line("double v = voltage[node_id];");
+        printer->add_line("#if PRCELLSTATE");
+        printer->add_line("inst->v_unused[id] = v;");
+        printer->add_line("#endif");
     }
 
     if (ion_variable_struct_required()) {
@@ -3420,6 +3430,9 @@ void CodegenCVisitor::print_watch_check() {
     if (info.is_voltage_used_by_watch_statements()) {
         printer->add_line("int node_id = node_index[id];");
         printer->add_line("double v = voltage[node_id];");
+        printer->add_line("#if PRCELLSTATE");
+        printer->add_line("inst->v_unused[id] = v;");
+        printer->add_line("#endif");
     }
 
     for (int i = 0; i < info.watch_statements.size(); i++) {
@@ -4043,6 +4056,9 @@ void CodegenCVisitor::print_nrn_state() {
 
     printer->add_line("int node_id = node_index[id];");
     printer->add_line("double v = voltage[node_id];");
+    printer->add_line("#if PRCELLSTATE");
+    printer->add_line("inst->v_unused[id] = v;");
+    printer->add_line("#endif");
 
     /**
      * \todo Eigen solver node also emits IonCurVar variable in the functor
@@ -4141,6 +4157,12 @@ void CodegenCVisitor::print_nrn_cur_conductance_kernel(const BreakpointBlock& no
             printer->add_line(text);
         }
     }
+
+    if(!info.conductances.empty()) {
+        printer->add_line("#if PRCELLSTATE");
+        printer->add_line("inst->g_unused[id] = g;"); //
+        printer->add_line("#endif");
+    }
 }
 
 
@@ -4177,6 +4199,9 @@ void CodegenCVisitor::print_nrn_cur_non_conductance_kernel() {
 void CodegenCVisitor::print_nrn_cur_kernel(const BreakpointBlock& node) {
     printer->add_line("int node_id = node_index[id];");
     printer->add_line("double v = voltage[node_id];");
+    printer->add_line("#if PRCELLSTATE");
+    printer->add_line("inst->v_unused[id] = v;");
+    printer->add_line("#endif");
     if (ion_variable_struct_required()) {
         print_ion_variable();
     }
@@ -4348,6 +4373,7 @@ void CodegenCVisitor::print_codegen_routines() {
     print_headers_include();
     print_namespace_begin();
     print_nmodl_constants();
+    print_prcellstate_macros();
     print_mechanism_info();
     print_data_structures();
     print_global_variables_for_hoc();

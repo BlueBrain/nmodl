@@ -1037,6 +1037,11 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
+     * Print declaration of macro PRCELLSTATE for debugging
+     */
+    void print_prcellstate_macros() const;
+
+    /**
      * Print backend code for byte array that has mechanism information (to be registered
      * with coreneuron)
      */
