@@ -4158,9 +4158,9 @@ void CodegenCVisitor::print_nrn_cur_conductance_kernel(const BreakpointBlock& no
         }
     }
 
-    if(!info.conductances.empty()) {
+    if (!info.conductances.empty()) {
         printer->add_line("#if PRCELLSTATE");
-        printer->add_line("inst->g_unused[id] = g;"); //
+        printer->add_line("inst->g_unused[id] = g;");  //
         printer->add_line("#endif");
     }
 }
