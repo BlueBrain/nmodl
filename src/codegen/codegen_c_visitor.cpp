@@ -2505,8 +2505,8 @@ void CodegenCVisitor::print_mechanism_global_var_structure() {
 
 
 void CodegenCVisitor::print_prcellstate_macros() const {
-    printer->add_line("#ifndef PRCELLSTATE");
-    printer->add_line("#define PRCELLSTATE 0");
+    printer->add_line("#ifndef NRN_PRCELLSTATE");
+    printer->add_line("#define NRN_PRCELLSTATE 0");
     printer->add_line("#endif");
 }
 
@@ -4329,13 +4329,13 @@ void CodegenCVisitor::print_data_structures() {
 }
 
 void CodegenCVisitor::print_v_unused() const {
-    printer->add_line("#if PRCELLSTATE");
+    printer->add_line("#if NRN_PRCELLSTATE");
     printer->add_line("inst->v_unused[id] = v;");
     printer->add_line("#endif");
 }
 
 void CodegenCVisitor::print_g_unused() const {
-    printer->add_line("#if PRCELLSTATE");
+    printer->add_line("#if NRN_PRCELLSTATE");
     printer->add_line("inst->g_unused[id] = v;");
     printer->add_line("#endif");
 }

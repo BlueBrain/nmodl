@@ -151,7 +151,7 @@ SCENARIO("ISPC codegen", "[codegen][ispc]") {
                 foreach (id = start ... end) {
                     int node_id = node_index[id];
                     double v = voltage[node_id];
-                    #if PRCELLSTATE
+                    #if NRN_PRCELLSTATE
                     inst->v_unused[id] = v;
                     #endif
                     inst->a[id] = 0.0d;
@@ -175,7 +175,7 @@ SCENARIO("ISPC codegen", "[codegen][ispc]") {
                 foreach (id = start ... end) {
                     int node_id = node_index[id];
                     double v = voltage[node_id];
-                    #if PRCELLSTATE
+                    #if NRN_PRCELLSTATE
                     inst->v_unused[id] = v;
                     #endif
                     inst->a[id] = inst->b[id] + FARADAY;

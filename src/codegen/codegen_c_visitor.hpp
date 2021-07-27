@@ -1037,7 +1037,7 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
-     * Print declaration of macro PRCELLSTATE for debugging
+     * Print declaration of macro NRN_PRCELLSTATE for debugging
      */
     void print_prcellstate_macros() const;
 
@@ -1596,13 +1596,13 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
-     * Set v_unused (voltage) for PRCELLSTATE feature
+     * Set v_unused (voltage) for NRN_PRCELLSTATE feature
      */
     void print_v_unused() const;
 
 
     /**
-     * Set g_unused (conductance) for PRCELLSTATE feature
+     * Set g_unused (conductance) for NRN_PRCELLSTATE feature
      */
     void print_g_unused() const;
 
