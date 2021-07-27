@@ -4329,15 +4329,15 @@ void CodegenCVisitor::print_data_structures() {
 }
 
 void CodegenCVisitor::print_v_unused() const {
-        printer->add_line("#if PRCELLSTATE");
-        printer->add_line("inst->v_unused[id] = v;");
-        printer->add_line("#endif");
+    printer->add_line("#if PRCELLSTATE");
+    printer->add_line("inst->v_unused[id] = v;");
+    printer->add_line("#endif");
 }
 
 void CodegenCVisitor::print_g_unused() const {
-        printer->add_line("#if PRCELLSTATE");
-        printer->add_line("inst->g_unused[id] = v;");
-        printer->add_line("#endif");
+    printer->add_line("#if PRCELLSTATE");
+    printer->add_line("inst->g_unused[id] = v;");
+    printer->add_line("#endif");
 }
 
 void CodegenCVisitor::print_compute_functions() {
