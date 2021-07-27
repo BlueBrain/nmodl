@@ -1596,6 +1596,18 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
+     * Set v_unused (voltage) for PRCELLSTATE feature
+     */
+    void print_v_unused() const;
+
+
+    /**
+     * Set g_unused (conductance) for PRCELLSTATE feature
+     */
+    void print_g_unused() const;
+
+
+    /**
      * Print all compute functions for every backend
      *
      */

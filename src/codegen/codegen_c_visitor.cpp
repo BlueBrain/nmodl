@@ -3197,9 +3197,7 @@ void CodegenCVisitor::print_initial_block(const InitialBlock* node) {
     } else {
         printer->add_line("int node_id = node_index[id];");
         printer->add_line("double v = voltage[node_id];");
-        printer->add_line("#if PRCELLSTATE");
-        printer->add_line("inst->v_unused[id] = v;");
-        printer->add_line("#endif");
+        print_v_unused();
     }
 
     if (ion_variable_struct_required()) {
@@ -3430,9 +3428,7 @@ void CodegenCVisitor::print_watch_check() {
     if (info.is_voltage_used_by_watch_statements()) {
         printer->add_line("int node_id = node_index[id];");
         printer->add_line("double v = voltage[node_id];");
-        printer->add_line("#if PRCELLSTATE");
-        printer->add_line("inst->v_unused[id] = v;");
-        printer->add_line("#endif");
+        print_v_unused();
     }
 
     for (int i = 0; i < info.watch_statements.size(); i++) {
@@ -4056,9 +4052,7 @@ void CodegenCVisitor::print_nrn_state() {
 
     printer->add_line("int node_id = node_index[id];");
     printer->add_line("double v = voltage[node_id];");
-    printer->add_line("#if PRCELLSTATE");
-    printer->add_line("inst->v_unused[id] = v;");
-    printer->add_line("#endif");
+    print_v_unused();
 
     /**
      * \todo Eigen solver node also emits IonCurVar variable in the functor
@@ -4193,9 +4187,7 @@ void CodegenCVisitor::print_nrn_cur_non_conductance_kernel() {
 void CodegenCVisitor::print_nrn_cur_kernel(const BreakpointBlock& node) {
     printer->add_line("int node_id = node_index[id];");
     printer->add_line("double v = voltage[node_id];");
-    printer->add_line("#if PRCELLSTATE");
-    printer->add_line("inst->v_unused[id] = v;");
-    printer->add_line("#endif");
+    print_v_unused();
     if (ion_variable_struct_required()) {
         print_ion_variable();
     }
@@ -4224,9 +4216,7 @@ void CodegenCVisitor::print_nrn_cur_kernel(const BreakpointBlock& node) {
         printer->add_line("rhs = rhs*mfactor;");
     }
 
-    printer->add_line("#if PRCELLSTATE");
-    printer->add_line("inst->g_unused[id] = g;");  //
-    printer->add_line("#endif");
+    print_g_unused();
 }
 
 void CodegenCVisitor::print_fast_imem_calculation() {
@@ -4338,6 +4328,17 @@ void CodegenCVisitor::print_data_structures() {
     print_ion_var_structure();
 }
 
+void CodegenCVisitor::print_v_unused() const {
+        printer->add_line("#if PRCELLSTATE");
+        printer->add_line("inst->v_unused[id] = v;");
+        printer->add_line("#endif");
+}
+
+void CodegenCVisitor::print_g_unused() const {
+        printer->add_line("#if PRCELLSTATE");
+        printer->add_line("inst->g_unused[id] = v;");
+        printer->add_line("#endif");
+}
 
 void CodegenCVisitor::print_compute_functions() {
     print_top_verbatim_blocks();
