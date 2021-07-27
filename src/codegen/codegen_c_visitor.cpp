@@ -4137,17 +4137,17 @@ void CodegenCVisitor::print_nrn_cur_conductance_kernel(const BreakpointBlock& no
         }
         printer->add_line("double rhs = {};"_format(sum));
     }
-    if (!info.conductances.empty()) {
-        std::string sum;
-        for (const auto& conductance: info.conductances) {
-            auto var = breakpoint_current(conductance.variable);
-            sum += get_variable_name(var);
-            if (&conductance != &info.conductances.back()) {
-                sum += "+";
-            }
+
+    std::string sum;
+    for (const auto& conductance: info.conductances) {
+        auto var = breakpoint_current(conductance.variable);
+        sum += get_variable_name(var);
+        if (&conductance != &info.conductances.back()) {
+            sum += "+";
         }
-        printer->add_line("double g = {};"_format(sum));
     }
+    printer->add_line("double g = {};"_format(sum));
+
     for (const auto& conductance: info.conductances) {
         if (!conductance.ion.empty()) {
             auto lhs = "ion_di" + conductance.ion + "dv";
@@ -4156,12 +4156,6 @@ void CodegenCVisitor::print_nrn_cur_conductance_kernel(const BreakpointBlock& no
             auto text = process_shadow_update_statement(statement, BlockType::Equation);
             printer->add_line(text);
         }
-    }
-
-    if (!info.conductances.empty()) {
-        printer->add_line("#if PRCELLSTATE");
-        printer->add_line("inst->g_unused[id] = g;");  //
-        printer->add_line("#endif");
     }
 }
 
@@ -4229,6 +4223,10 @@ void CodegenCVisitor::print_nrn_cur_kernel(const BreakpointBlock& node) {
         printer->add_line("g = g*mfactor;");
         printer->add_line("rhs = rhs*mfactor;");
     }
+
+    printer->add_line("#if PRCELLSTATE");
+    printer->add_line("inst->g_unused[id] = g;");  //
+    printer->add_line("#endif");
 }
 
 void CodegenCVisitor::print_fast_imem_calculation() {
