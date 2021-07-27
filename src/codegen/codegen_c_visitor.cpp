@@ -4336,7 +4336,7 @@ void CodegenCVisitor::print_v_unused() const {
 
 void CodegenCVisitor::print_g_unused() const {
     printer->add_line("#if NRN_PRCELLSTATE");
-    printer->add_line("inst->g_unused[id] = v;");
+    printer->add_line("inst->g_unused[id] = g;");
     printer->add_line("#endif");
 }
 
