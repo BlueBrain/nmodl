@@ -1,5 +1,8 @@
 var NAVTREEINDEX41 =
 {
+"codegen__compatibility__visitor_8hpp_source.html":[4,0,1,1,5],
+"codegen__cuda__visitor_8cpp.html":[4,0,1,1,6],
+"codegen__cuda__visitor_8cpp_source.html":[4,0,1,1,6],
 "codegen__cuda__visitor_8hpp.html":[4,0,1,1,7],
 "codegen__cuda__visitor_8hpp_source.html":[4,0,1,1,7],
 "codegen__helper_8cpp.html":[4,0,2,0,0,1],
@@ -246,8 +249,5 @@ var NAVTREEINDEX41 =
 "eigen__linear__solver__block_8hpp.html":[4,0,0,0,0,0,0,34],
 "eigen__linear__solver__block_8hpp.html#aa10b2f8b05a723ff6de53e741c116e34":[4,0,0,0,0,0,0,34,0],
 "eigen__linear__solver__block_8hpp_source.html":[4,0,0,0,0,0,0,34],
-"eigen__newton__solver__block_8hpp.html":[4,0,0,0,0,0,0,35],
-"eigen__newton__solver__block_8hpp.html#af28742bf4332f54524656b97b2546974":[4,0,0,0,0,0,0,35,0],
-"eigen__newton__solver__block_8hpp_source.html":[4,0,0,0,0,0,0,35],
-"electrode__cur__var_8hpp.html":[4,0,0,0,0,0,0,36]
+"eigen__newton__solver__block_8hpp.html":[4,0,0,0,0,0,0,35]
 };
