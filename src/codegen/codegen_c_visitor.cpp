@@ -1737,7 +1737,8 @@ bool is_functor_const(const ast::StatementBlock& variable_block,
     }
 
     // Create Symbol Table for complete_block
-    SymtabVisitor().visit_statement_block(complete_block);
+    auto model_symbol_table = std::make_shared<symtab::ModelSymbolTable>();
+    SymtabVisitor(model_symbol_table.get()).visit_statement_block(complete_block);
     // Initialize DefUseAnalyzeVisitor to generate the DUChains for the variables defined in the
     // variable_block
     DefUseAnalyzeVisitor v(*complete_block.get_symbol_table());

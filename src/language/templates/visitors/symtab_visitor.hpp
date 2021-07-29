@@ -48,6 +48,10 @@ class SymtabVisitor: public AstVisitor {
         : printer(new printer::JSONPrinter())
         , update(update) {}
 
+    SymtabVisitor(symtab::ModelSymbolTable* _modsymtab, bool update = false)
+        : modsymtab(_modsymtab)
+        , update(update) {}
+
     SymtabVisitor(std::ostream& os, bool update = false)
         : printer(new printer::JSONPrinter(os))
         , update(update) {}
