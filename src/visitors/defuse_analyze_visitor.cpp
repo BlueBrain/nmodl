@@ -429,7 +429,8 @@ DUChain DefUseAnalyzeVisitor::analyze(const ast::Ast& node, const std::string& n
     auto symbol = current_symtab->lookup_in_scope(variable_name);
     // If symbol is local_var or is not present on the current_symtab (in this case same as the
     // global symtab) then we only look for evaluation of the DefUse chain as local var
-    if ((symbol != nullptr && symbol->has_any_property(NmodlType::local_var)) || symbol == nullptr) {
+    if ((symbol != nullptr && symbol->has_any_property(NmodlType::local_var)) ||
+        symbol == nullptr) {
         variable_type = DUVariableType::Local;
     } else {
         variable_type = DUVariableType::Global;

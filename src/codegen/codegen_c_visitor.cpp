@@ -1732,8 +1732,7 @@ bool is_functor_const(const ast::StatementBlock& variable_block,
     // Create the DUChains for all the variables in the variable_block
     const auto& variables = collect_nodes(variable_block, {ast::AstNodeType::LOCAL_VAR});
     for (const auto& variable: variables) {
-        chains[variable->get_node_name()] = v.analyze(complete_block,
-                                                     variable->get_node_name());
+        chains[variable->get_node_name()] = v.analyze(complete_block, variable->get_node_name());
     }
 
     // If variable is defined in complete_block don't add const quilifier in operator()

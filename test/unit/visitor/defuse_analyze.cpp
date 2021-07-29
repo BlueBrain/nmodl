@@ -385,7 +385,9 @@ SCENARIO("Perform DefUse analysis on NMODL constructs") {
         std::string expected_text =
             R"({"DerivativeBlock":[{"CONDITIONAL_BLOCK":[{"name":"IF"},{"name":"ELSE"}]}]})";
 
-        THEN("Def-Use chains should return NONE because the variable we look for is not one of them") {
+        THEN(
+            "Def-Use chains should return NONE because the variable we look for is not one of "
+            "them") {
             std::string input = reindent_text(nmodl_text);
             auto chains = run_defuse_visitor(input, "alpha");
             REQUIRE(chains[0].to_string() == expected_text);
