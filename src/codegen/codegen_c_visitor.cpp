@@ -1709,20 +1709,6 @@ std::string CodegenCVisitor::find_var_unique_name(const std::string& original_na
 
 bool is_functor_const(const ast::StatementBlock& variable_block,
                       const ast::StatementBlock& functor_block) {
-    auto get_local_statement = [](const std::shared_ptr<ast::Statement>& statement) {
-        std::shared_ptr<LocalListStatement> ret_local_list_statement;
-        if (statement->is_local_list_statement()) {
-            ret_local_list_statement = std::static_pointer_cast<LocalListStatement>(statement);
-        } else {
-            auto e_statement = std::dynamic_pointer_cast<ast::ExpressionStatement>(statement);
-            auto expression = e_statement->get_expression();
-            if (expression->is_local_list_statement()) {
-                ret_local_list_statement = std::static_pointer_cast<LocalListStatement>(statement);
-            }
-        }
-        return ret_local_list_statement;
-    };
-
     // Save DUChain for every variable in variable_block
     std::unordered_map<std::string, DUChain> chains;
 
@@ -1744,13 +1730,10 @@ bool is_functor_const(const ast::StatementBlock& variable_block,
     DefUseAnalyzeVisitor v(*complete_block.get_symbol_table());
 
     // Create the DUChains for all the variables in the variable_block
-    const auto& variable_statements = variable_block.get_statements();
-    for (const auto& variable_statement: variable_statements) {
-        const auto& variables = get_local_statement(variable_statement)->get_variables();
-        for (const auto& variable: variables) {
-            chains[variable->get_node_name()] = v.analyze(complete_block,
-                                                          variable->get_node_name());
-        }
+    const auto& variables = collect_nodes(variable_block, {ast::AstNodeType::LOCAL_VAR});
+    for (const auto& variable: variables) {
+        chains[variable->get_node_name()] = v.analyze(complete_block,
+                                                     variable->get_node_name());
     }
 
     // If variable is defined in complete_block don't add const quilifier in operator()
