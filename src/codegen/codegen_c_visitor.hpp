@@ -1037,6 +1037,11 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
+     * Print declaration of macro NRN_PRCELLSTATE for debugging
+     */
+    void print_prcellstate_macros() const;
+
+    /**
      * Print backend code for byte array that has mechanism information (to be registered
      * with coreneuron)
      */
@@ -1086,10 +1091,29 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      */
     virtual void print_instance_variable_transfer_to_device() const;
 
+
     /**
      * Print the code to copy derivative advance flag to device
      */
     virtual void print_deriv_advance_flag_transfer_to_device() const;
+
+
+    /**
+     * Print the code to update NetSendBuffer_t count from device to host
+     */
+    virtual void print_net_send_buf_count_update_to_host() const;
+
+
+    /**
+     * Print the code to update NetSendBuffer_t count from host to device
+     */
+    virtual void print_net_send_buf_count_update_to_device() const;
+
+
+    /**
+     * Print the code to synchronise/wait on stream specific to NrnThread
+     */
+    virtual void print_device_stream_wait() const;
 
 
     /**
@@ -1434,6 +1458,11 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
+     * Print pragma annotation for increase and capture of variable in automatic way
+     */
+    virtual void print_device_atomic_capture_annotation() const;
+
+    /**
      * Print block / loop for statement requiring reduction
      *
      */
@@ -1599,6 +1628,18 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      *
      */
     void print_data_structures();
+
+
+    /**
+     * Set v_unused (voltage) for NRN_PRCELLSTATE feature
+     */
+    void print_v_unused() const;
+
+
+    /**
+     * Set g_unused (conductance) for NRN_PRCELLSTATE feature
+     */
+    void print_g_unused() const;
 
 
     /**
