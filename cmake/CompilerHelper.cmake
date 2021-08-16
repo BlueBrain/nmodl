@@ -19,7 +19,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "PGI" OR CMAKE_CXX_COMPILER_ID MATCHES "NVHPC")
   # TODO : fix these warnings from template modification (#272)
   # ~~~
   if(${CMAKE_CXX_COMPILER_VERSION} VERSION_LESS 20.7)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --diag_suppress 1,82,111,115,177,186,611,997,1097,1625")
+    set(NMODL_COMPILER_WARNING_SUPPRESSIONS --diag_suppress=1,82,111,115,177,186,611,997,1097,1625)
   else()
     # https://forums.developer.nvidia.com/t/many-all-diagnostic-numbers-increased-by-1-from-previous-values/146268/3
     # changed the numbering scheme in newer versions. The following list is from a clean start 13
@@ -38,6 +38,6 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "PGI" OR CMAKE_CXX_COMPILER_ID MATCHES "NVHPC")
     # "src/codegen/codegen_cuda_visitor.cpp", NVC++-W-0277-Cannot inline function - data type mismatch
     # "nvc++IkWUbMugiSgNH.s: Warning: stand-alone `data16' prefix
     # ~~~
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --diag_suppress=1,111,186,998,1098,1626")
+    set(NMODL_COMPILER_WARNING_SUPPRESSIONS --diag_suppress=1,111,186,998,1098,1626)
   endif()
 endif()
