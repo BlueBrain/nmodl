@@ -200,7 +200,7 @@ jobs:
         -w /root/nmodl \
         -v $PWD:/root/nmodl \
         -e NMODL_NIGHTLY_TAG=$TAG \
-        'bluebrain/nmodl:wheel' \
+        'bluebrain/nmodl:wheel2014' \
         packaging/build_wheels.bash linux $(python.version)
     condition: succeeded()
     displayName: 'Building ManyLinux Wheel'
