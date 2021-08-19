@@ -124,7 +124,8 @@ setup(
     zip_safe=False,
     setup_requires=[
         "jinja2>=2.9.3",
-        "jupyter<7", # try and work around: TypeError in notebooks/nmodl-kinetic-schemes.ipynb: 'coroutine' object is not subscriptable
+        "jupyter-client<7", # try and work around: TypeError in notebooks/nmodl-kinetic-schemes.ipynb: 'coroutine' object is not subscriptable
+        "jupyter",
         "m2r",
         "mistune<2",  # prevents a version conflict with nbconvert
         "nbconvert<6.0",  # prevents issues with nbsphinx
