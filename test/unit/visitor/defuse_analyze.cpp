@@ -420,8 +420,7 @@ SCENARIO("Perform DefUse analysis on NMODL constructs") {
         std::string expected_text_c =
             R"({"DerivativeBlock":[{"CONDITIONAL_BLOCK":[{"IF":[{"name":"LD"}]}]}]})";
 
-        THEN(
-            "local and global variables are correctly analyzed") {
+        THEN("local and global variables are correctly analyzed") {
             std::string input = reindent_text(nmodl_text);
             auto chains_x = run_defuse_visitor(input, "x");
             // Global variable "x" should be U as it's only used in the IF-ELSE statement

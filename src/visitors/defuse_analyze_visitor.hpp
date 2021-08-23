@@ -52,7 +52,7 @@ enum class DUState {
 
 /**
  * Variable type processed by DefUseAnalyzeVisitor
- * 
+ *
  * DUVariableType::Local means that we are looking for LD, LU and CD DUStates, while Global means we
  * are looking for U, D and CD DUStates.
  */
