@@ -50,7 +50,12 @@ enum class DUState {
     NONE
 };
 
-/// Variable type processed by DefUseAnalyzeVisitor
+/**
+ * Variable type processed by DefUseAnalyzeVisitor
+ * 
+ * DUVariableType::Local means that we are looking for LD, LU and CD DUStates, while Global means we
+ * are looking for U, D and CD DUStates.
+ */
 enum class DUVariableType { Local, Global };
 
 std::ostream& operator<<(std::ostream& os, DUState state);
