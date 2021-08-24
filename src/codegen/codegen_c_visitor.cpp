@@ -1756,19 +1756,18 @@ bool is_functor_const(const ast::StatementBlock& variable_block,
     // variable_block
     DefUseAnalyzeVisitor v(*complete_block.get_symbol_table());
 
-    // Create the DUChains for all the variables in the variable_block
-    const auto& variables = collect_nodes(variable_block, {ast::AstNodeType::LOCAL_VAR});
-    for (const auto& variable: variables) {
-        chains[variable->get_node_name()] = v.analyze(complete_block, variable->get_node_name());
-    }
-
+    // Check the DUChains for all the variables in the variable_block
     // If variable is defined in complete_block don't add const quilifier in operator()
     auto is_functor_const = true;
-    for (const auto& chain: chains) {
-        is_functor_const &= !(chain.second.eval() == DUState::D ||
-                              chain.second.eval() == DUState::LD ||
-                              chain.second.eval() == DUState::CD);
+    const auto& variables = collect_nodes(variable_block, {ast::AstNodeType::LOCAL_VAR});
+    for (const auto& variable: variables) {
+        const auto& chain = v.analyze(complete_block, variable->get_node_name());
+        is_functor_const = !(chain.eval() == DUState::D || chain.eval() == DUState::LD ||
+                             chain.eval() == DUState::CD);
+        if (!is_functor_const)
+            break;
     }
+
     return is_functor_const;
 }
 
