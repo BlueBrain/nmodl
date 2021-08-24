@@ -5,7 +5,7 @@
 # See top-level LICENSE file for details.
 # =============================================================================
 
-cmake_minimum_required(VERSION 3.8 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.15 FATAL_ERROR)
 
 project(NMODL LANGUAGES CXX)
 
@@ -53,25 +53,27 @@ find_package(FLEX 2.6 REQUIRED)
 find_package(BISON 3.0 REQUIRED)
 
 # =============================================================================
-# Include cmake modules
+# Include cmake modules. Filenames ensure we always pick up NMODL's versions.
 # =============================================================================
-list(APPEND CMAKE_MODULE_PATH ${NMODL_PROJECT_SOURCE_DIR}/cmake)
-include(Catch)
-include(ClangTidyHelper)
-include(${NMODL_PROJECT_SOURCE_DIR}/cmake/CompilerHelper.cmake)
-include(FindPythonModule)
-include(FlexHelper)
-include(GitRevision)
-include(PythonLinkHelper)
-include(RpathHelper)
-include(ExternalProjectHelper)
+include(cmake/Catch.cmake)
+include(cmake/ClangTidyHelper.cmake)
+include(cmake/CompilerHelper.cmake)
+include(cmake/FindPythonModule.cmake)
+include(cmake/FlexHelper.cmake)
+include(cmake/GitRevision.cmake)
+include(cmake/PythonLinkHelper.cmake)
+include(cmake/RpathHelper.cmake)
+include(cmake/ExternalProjectHelper.cmake)
+
+# This should apply to all NMODL targets but should not leak out when NMODL is built as a submodule.
+add_compile_options(${NMODL_COMPILER_WARNING_SUPPRESSIONS})
 
 # =============================================================================
 # Set the project version now using git
 # =============================================================================
 project(
   NMODL
-  VERSION ${GIT_LAST_TAG}
+  VERSION ${NMODL_GIT_LAST_TAG}
   LANGUAGES CXX)
 
 # =============================================================================
@@ -140,11 +142,11 @@ endif()
 # =============================================================================
 message(STATUS "CHECKING FOR PYTHON")
 find_package(PythonInterp 3.5 REQUIRED)
-find_python_module(jinja2 2.9.3 REQUIRED)
-find_python_module(pytest 3.3.0 REQUIRED)
-find_python_module(sympy 1.2 REQUIRED)
-find_python_module(textwrap 0.9 REQUIRED)
-find_python_module(yaml 3.12 REQUIRED)
+nmodl_find_python_module(jinja2 2.9.3 REQUIRED)
+nmodl_find_python_module(pytest 3.3.0 REQUIRED)
+nmodl_find_python_module(sympy 1.2 REQUIRED)
+nmodl_find_python_module(textwrap 0.9 REQUIRED)
+nmodl_find_python_module(yaml 3.12 REQUIRED)
 
 # =============================================================================
 # Compiler specific flags for external submodules
@@ -233,36 +235,36 @@ endif()
 # Build status
 # =============================================================================
 message(STATUS "")
-message(STATUS "Configured NMODL ${PROJECT_VERSION} (${GIT_REVISION})")
+message(STATUS "Configured NMODL ${PROJECT_VERSION} (${NMODL_GIT_REVISION})")
 message(STATUS "")
-string(TOLOWER "${CMAKE_GENERATOR}" cmake_generator_tolower)
-if(cmake_generator_tolower MATCHES "makefile")
-  message(STATUS "Some things you can do now:")
-  message(STATUS "--------------------+--------------------------------------------------------")
-  message(STATUS "Command             |   Description")
-  message(STATUS "--------------------+--------------------------------------------------------")
-  message(STATUS "make                | Build the project")
-  message(STATUS "make test           | Run unit tests")
-  message(STATUS "make install        | Will install NMODL to: ${CMAKE_INSTALL_PREFIX}")
-  message(STATUS "--------------------+--------------------------------------------------------")
-  message(STATUS " Build option       | Status")
-  message(STATUS "--------------------+--------------------------------------------------------")
-  message(STATUS "CXX COMPILER        | ${CMAKE_CXX_COMPILER}")
-  message(STATUS "COMPILE FLAGS       | ${COMPILER_FLAGS}")
-  message(STATUS "Build Type          | ${CMAKE_BUILD_TYPE}")
-  message(STATUS "Legacy Units        | ${NMODL_ENABLE_LEGACY_UNITS}")
-  message(STATUS "Python Bindings     | ${NMODL_ENABLE_PYTHON_BINDINGS}")
-  message(STATUS "Flex                | ${FLEX_EXECUTABLE}")
-  message(STATUS "Bison               | ${BISON_EXECUTABLE}")
-  message(STATUS "Python              | ${PYTHON_EXECUTABLE}")
-  if(NMODL_CLANG_FORMAT)
-    message(STATUS "Clang Format        | ${ClangFormat_EXECUTABLE}")
-  endif()
-  if(NMODL_CMAKE_FORMAT)
-    message(STATUS "Cmake Format        | ${CMakeFormat_EXECUTABLE}")
-  endif()
-  message(STATUS "--------------+--------------------------------------------------------------")
-  message(STATUS " See documentation : https://github.com/BlueBrain/nmodl/")
-  message(STATUS "--------------+--------------------------------------------------------------")
+message(STATUS "You can now build NMODL using:")
+message(STATUS "  cmake --build . --parallel 8 [--target TARGET]")
+message(STATUS "You might want to adjust the number of parallel build jobs for your system.")
+message(STATUS "Some non-default targets you might want to build:")
+message(STATUS "Some things you can do now:")
+message(STATUS "--------------------+--------------------------------------------------------")
+message(STATUS " Target             |   Description")
+message(STATUS "--------------------+--------------------------------------------------------")
+message(STATUS "test                | Run unit tests")
+message(STATUS "install             | Will install NMODL to: ${CMAKE_INSTALL_PREFIX}")
+message(STATUS "--------------------+--------------------------------------------------------")
+message(STATUS " Build option       | Status")
+message(STATUS "--------------------+--------------------------------------------------------")
+message(STATUS "CXX COMPILER        | ${CMAKE_CXX_COMPILER}")
+message(STATUS "COMPILE FLAGS       | ${COMPILER_FLAGS}")
+message(STATUS "Build Type          | ${CMAKE_BUILD_TYPE}")
+message(STATUS "Legacy Units        | ${NMODL_ENABLE_LEGACY_UNITS}")
+message(STATUS "Python Bindings     | ${NMODL_ENABLE_PYTHON_BINDINGS}")
+message(STATUS "Flex                | ${FLEX_EXECUTABLE}")
+message(STATUS "Bison               | ${BISON_EXECUTABLE}")
+message(STATUS "Python              | ${PYTHON_EXECUTABLE}")
+if(NMODL_CLANG_FORMAT)
+  message(STATUS "Clang Format        | ${ClangFormat_EXECUTABLE}")
 endif()
+if(NMODL_CMAKE_FORMAT)
+  message(STATUS "Cmake Format        | ${CMakeFormat_EXECUTABLE}")
+endif()
+message(STATUS "--------------+--------------------------------------------------------------")
+message(STATUS " See documentation : https://github.com/BlueBrain/nmodl/")
+message(STATUS "--------------+--------------------------------------------------------------")
 message(STATUS "")

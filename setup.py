@@ -116,7 +116,7 @@ setup(
     packages=["nmodl"],
     scripts=["pywheel/shim/nmodl", "pywheel/shim/find_libpython.py"],
     include_package_data=True,
-    cmake_minimum_required_version="3.3.0",
+    cmake_minimum_required_version="3.15.0",
     cmake_args=cmake_args,
     cmdclass=lazy_dict(
         docs=Docs, doctest=get_sphinx_command, buildhtml=get_sphinx_command,
@@ -124,6 +124,7 @@ setup(
     zip_safe=False,
     setup_requires=[
         "jinja2>=2.9.3",
+        "jupyter-client<7", # try and work around: TypeError in notebooks/nmodl-kinetic-schemes.ipynb: 'coroutine' object is not subscriptable
         "jupyter",
         "m2r",
         "mistune<2",  # prevents a version conflict with nbconvert
