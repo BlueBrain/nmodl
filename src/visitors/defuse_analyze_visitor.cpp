@@ -426,14 +426,14 @@ DUChain DefUseAnalyzeVisitor::analyze(const ast::Ast& node, const std::string& n
     visiting_lhs = false;
     current_symtab = global_symtab;
     unsupported_node = false;
-    auto symbol = current_symtab->lookup_in_scope(variable_name);
-    // If symbol is local_var or is not present on the current_symtab (in this case same as the
-    // global symtab) then we only look for evaluation of the DefUse chain as local var
-    if ((symbol != nullptr && symbol->has_any_property(NmodlType::local_var)) ||
-        symbol == nullptr) {
-        variable_type = DUVariableType::Local;
-    } else {
+    auto global_symbol = global_symtab->lookup_in_scope(variable_name);
+    // If global_symbol exists in the global_symtab then search for a global variable. Otherwise the
+    // variable can only be local if it exists
+    auto global_symbol_properties = NmodlType::global_var | NmodlType::range_var;
+    if (global_symbol != nullptr && global_symbol->has_any_property(global_symbol_properties)) {
         variable_type = DUVariableType::Global;
+    } else {
+        variable_type = DUVariableType::Local;
     }
 
     /// new chain
