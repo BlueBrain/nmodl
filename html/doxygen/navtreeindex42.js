@@ -1,5 +1,11 @@
 var NAVTREEINDEX42 =
 {
+"double__unit_8hpp.html#af5a817b157d2af4a664728b293d8eb6b":[4,0,0,0,0,0,0,33,0],
+"double__unit_8hpp_source.html":[4,0,0,0,0,0,0,33],
+"eigen__linear__solver__block_8hpp.html":[4,0,0,0,0,0,0,34],
+"eigen__linear__solver__block_8hpp.html#aa10b2f8b05a723ff6de53e741c116e34":[4,0,0,0,0,0,0,34,0],
+"eigen__linear__solver__block_8hpp_source.html":[4,0,0,0,0,0,0,34],
+"eigen__newton__solver__block_8hpp.html":[4,0,0,0,0,0,0,35],
 "eigen__newton__solver__block_8hpp.html#af28742bf4332f54524656b97b2546974":[4,0,0,0,0,0,0,35,0],
 "eigen__newton__solver__block_8hpp_source.html":[4,0,0,0,0,0,0,35],
 "electrode__cur__var_8hpp.html":[4,0,0,0,0,0,0,36],
@@ -200,8 +206,8 @@ var NAVTREEINDEX42 =
 "functions_type.html":[3,3,3],
 "functions_u.html":[3,3,0,20],
 "functions_v.html":[3,3,0,21],
-"functions_vars.html":[3,3,2],
 "functions_vars.html":[3,3,2,0],
+"functions_vars.html":[3,3,2],
 "functions_vars_b.html":[3,3,2,1],
 "functions_vars_c.html":[3,3,2,2],
 "functions_vars_d.html":[3,3,2,3],
@@ -243,11 +249,5 @@ var NAVTREEINDEX42 =
 "globals_b.html":[4,1,0,1],
 "globals_c.html":[4,1,0,2],
 "globals_d.html":[4,1,0,3],
-"globals_defs.html":[4,1,4],
-"globals_defs.html":[4,1,4,0],
-"globals_defs_d.html":[4,1,4,1],
-"globals_defs_e.html":[4,1,4,2],
-"globals_defs_k.html":[4,1,4,3],
-"globals_defs_l.html":[4,1,4,4],
-"globals_defs_n.html":[4,1,4,5]
+"globals_defs.html":[4,1,4,0]
 };

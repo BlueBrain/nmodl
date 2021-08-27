@@ -119,6 +119,8 @@ Inheritance diagram for nmodl::visitor::SymtabVisitor:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:aa041988b814688f3414884a776064065"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_symtab_visitor.html#aa041988b814688f3414884a776064065">SymtabVisitor</a> (bool <a class="el" href="classnmodl_1_1visitor_1_1_symtab_visitor.html#aebadbe772951932770380eb1491adb37">update</a>=false)</td></tr>
 <tr class="separator:aa041988b814688f3414884a776064065"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a487a01781ce7f3ddcc2e4ba59b8dd8bb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_symtab_visitor.html#a487a01781ce7f3ddcc2e4ba59b8dd8bb">SymtabVisitor</a> (<a class="el" href="classnmodl_1_1symtab_1_1_model_symbol_table.html">symtab::ModelSymbolTable</a> *_modsymtab, bool <a class="el" href="classnmodl_1_1visitor_1_1_symtab_visitor.html#aebadbe772951932770380eb1491adb37">update</a>=false)</td></tr>
+<tr class="separator:a487a01781ce7f3ddcc2e4ba59b8dd8bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a742f8a8e66693ab35306fd01f0907ec7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_symtab_visitor.html#a742f8a8e66693ab35306fd01f0907ec7">SymtabVisitor</a> (std::ostream &amp;os, bool <a class="el" href="classnmodl_1_1visitor_1_1_symtab_visitor.html#aebadbe772951932770380eb1491adb37">update</a>=false)</td></tr>
 <tr class="separator:a742f8a8e66693ab35306fd01f0907ec7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a68c561839752e999d304a70550b3f6fb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_symtab_visitor.html#a68c561839752e999d304a70550b3f6fb">SymtabVisitor</a> (const std::string &amp;filename, bool <a class="el" href="classnmodl_1_1visitor_1_1_symtab_visitor.html#aebadbe772951932770380eb1491adb37">update</a>=false)</td></tr>
@@ -564,7 +566,7 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:a3b5a4ad837c8286968a71f96349a4206"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classnmodl_1_1symtab_1_1_model_symbol_table.html">symtab::ModelSymbolTable</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_symtab_visitor.html#a3b5a4ad837c8286968a71f96349a4206">modsymtab</a></td></tr>
+<tr class="memitem:a3b5a4ad837c8286968a71f96349a4206"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classnmodl_1_1symtab_1_1_model_symbol_table.html">symtab::ModelSymbolTable</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_symtab_visitor.html#a3b5a4ad837c8286968a71f96349a4206">modsymtab</a> = nullptr</td></tr>
 <tr class="separator:a3b5a4ad837c8286968a71f96349a4206"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa6e36b5a2ae601d5f35dc3ceaaa35417"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classnmodl_1_1printer_1_1_j_s_o_n_printer.html">printer::JSONPrinter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_symtab_visitor.html#aa6e36b5a2ae601d5f35dc3ceaaa35417">printer</a></td></tr>
 <tr class="separator:aa6e36b5a2ae601d5f35dc3ceaaa35417"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -577,7 +579,7 @@ Private Attributes</h2></td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aa041988b814688f3414884a776064065"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa041988b814688f3414884a776064065">&#9670;&nbsp;</a></span>SymtabVisitor() <span class="overload">[1/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aa041988b814688f3414884a776064065">&#9670;&nbsp;</a></span>SymtabVisitor() <span class="overload">[1/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -604,8 +606,46 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a487a01781ce7f3ddcc2e4ba59b8dd8bb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a487a01781ce7f3ddcc2e4ba59b8dd8bb">&#9670;&nbsp;</a></span>SymtabVisitor() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">nmodl::visitor::SymtabVisitor::SymtabVisitor </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classnmodl_1_1symtab_1_1_model_symbol_table.html">symtab::ModelSymbolTable</a> *&#160;</td>
+          <td class="paramname"><em>_modsymtab</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>update</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="symtab__visitor_8hpp_source.html#l00050">50</a> of file <a class="el" href="symtab__visitor_8hpp_source.html">symtab_visitor.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a742f8a8e66693ab35306fd01f0907ec7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a742f8a8e66693ab35306fd01f0907ec7">&#9670;&nbsp;</a></span>SymtabVisitor() <span class="overload">[2/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a742f8a8e66693ab35306fd01f0907ec7">&#9670;&nbsp;</a></span>SymtabVisitor() <span class="overload">[3/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -638,12 +678,12 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="symtab__visitor_8hpp_source.html#l00050">50</a> of file <a class="el" href="symtab__visitor_8hpp_source.html">symtab_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="symtab__visitor_8hpp_source.html#l00053">53</a> of file <a class="el" href="symtab__visitor_8hpp_source.html">symtab_visitor.hpp</a>.</p>
 
 </div>
 </div>
 <a id="a68c561839752e999d304a70550b3f6fb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a68c561839752e999d304a70550b3f6fb">&#9670;&nbsp;</a></span>SymtabVisitor() <span class="overload">[3/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a68c561839752e999d304a70550b3f6fb">&#9670;&nbsp;</a></span>SymtabVisitor() <span class="overload">[4/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -676,7 +716,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="symtab__visitor_8hpp_source.html#l00053">53</a> of file <a class="el" href="symtab__visitor_8hpp_source.html">symtab_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="symtab__visitor_8hpp_source.html#l00056">56</a> of file <a class="el" href="symtab__visitor_8hpp_source.html">symtab_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -2689,7 +2729,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classnmodl_1_1symtab_1_1_model_symbol_table.html">symtab::ModelSymbolTable</a>* nmodl::visitor::SymtabVisitor::modsymtab</td>
+          <td class="memname"><a class="el" href="classnmodl_1_1symtab_1_1_model_symbol_table.html">symtab::ModelSymbolTable</a>* nmodl::visitor::SymtabVisitor::modsymtab = nullptr</td>
         </tr>
       </table>
   </td>

@@ -1,5 +1,11 @@
 var NAVTREEINDEX48 =
 {
+"perf__stat_8hpp_source.html":[4,0,1,10,7],
+"perf__visitor_8cpp.html":[4,0,1,11,25],
+"perf__visitor_8cpp_source.html":[4,0,1,11,25],
+"perf__visitor_8hpp.html":[4,0,1,11,26],
+"perf__visitor_8hpp_source.html":[4,0,1,11,26],
+"plot__block_8hpp.html":[4,0,0,0,0,0,0,95],
 "plot__block_8hpp.html#a48ac5766de2c86451ab52d0d24f79f4b":[4,0,0,0,0,0,0,95,0],
 "plot__block_8hpp_source.html":[4,0,0,0,0,0,0,95],
 "plot__declaration_8hpp.html":[4,0,0,0,0,0,0,96],
@@ -127,8 +133,9 @@ var NAVTREEINDEX48 =
 "src_2codegen_2codegen__c__visitor_8cpp.html":[4,0,1,1,2],
 "src_2codegen_2codegen__c__visitor_8cpp.html#a116af3668467bd43c2740658d7fd0612":[4,0,1,1,2,0],
 "src_2codegen_2codegen__c__visitor_8cpp.html#a1faf2e296586215399717f9d519de218":[4,0,1,1,2,1],
-"src_2codegen_2codegen__c__visitor_8cpp.html#a7fe9cbd601e67e2d2726026c0008b16f":[4,0,1,1,2,3],
-"src_2codegen_2codegen__c__visitor_8cpp.html#a983af1c34064b33f42068e2767c2287e":[4,0,1,1,2,2],
+"src_2codegen_2codegen__c__visitor_8cpp.html#a7fe9cbd601e67e2d2726026c0008b16f":[4,0,1,1,2,4],
+"src_2codegen_2codegen__c__visitor_8cpp.html#a926e0525c9ac662aed2b91e99bef2d37":[4,0,1,1,2,2],
+"src_2codegen_2codegen__c__visitor_8cpp.html#a983af1c34064b33f42068e2767c2287e":[4,0,1,1,2,3],
 "src_2codegen_2codegen__c__visitor_8cpp_source.html":[4,0,1,1,2],
 "src_2codegen_2codegen__utils_8cpp.html":[4,0,1,1,17],
 "src_2codegen_2codegen__utils_8cpp.html#a37264733af5e0a57c9dfbc5818fcd4d0":[4,0,1,1,17,3],
@@ -242,12 +249,5 @@ var NAVTREEINDEX48 =
 "structnmodl_1_1codegen_1_1_codegen_info.html#a4ff9a275178c249645a980dad11a7c10":[1,1,0,6,44],
 "structnmodl_1_1codegen_1_1_codegen_info.html#a505912755f498817e454ad75c2f4bf26":[1,1,0,6,79],
 "structnmodl_1_1codegen_1_1_codegen_info.html#a5593ea6c3082c5cbf033c3a8a54aa6fd":[1,1,0,6,64],
-"structnmodl_1_1codegen_1_1_codegen_info.html#a59d67652a1ed0ffaacedb42e8d47b3eb":[1,1,0,6,76],
-"structnmodl_1_1codegen_1_1_codegen_info.html#a59fc90ae73af88ec567ddcdaf7644fa0":[1,1,0,6,13],
-"structnmodl_1_1codegen_1_1_codegen_info.html#a5b8aa561a6dd4c12ee1b8d6054520ccf":[1,1,0,6,48],
-"structnmodl_1_1codegen_1_1_codegen_info.html#a5d1b352f185f78beb36604d60870645a":[1,1,0,6,26],
-"structnmodl_1_1codegen_1_1_codegen_info.html#a5f1a8b4139be638aa43fa00d0767dff7":[1,1,0,6,6],
-"structnmodl_1_1codegen_1_1_codegen_info.html#a60fcb7609e01ff8c213b3aa5818203fc":[1,1,0,6,54],
-"structnmodl_1_1codegen_1_1_codegen_info.html#a611d35acab66592571befe3589b276cf":[1,1,0,6,45],
-"structnmodl_1_1codegen_1_1_codegen_info.html#a69cd4576b99cb1e1d34a6f9fe9f8d9f8":[1,1,0,6,42]
+"structnmodl_1_1codegen_1_1_codegen_info.html#a59d67652a1ed0ffaacedb42e8d47b3eb":[1,1,0,6,76]
 };

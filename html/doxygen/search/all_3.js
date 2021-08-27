@@ -103,7 +103,8 @@ var searchData=
   ['driver_5fparse_5fstream',['driver_parse_stream',['../namespacenmodl_1_1docstring.html#ae4ddbe38eea81939a6c189c07c3e128f',1,'nmodl::docstring']]],
   ['driver_5fparse_5fstring',['driver_parse_string',['../namespacenmodl_1_1docstring.html#ada22461ca25c42aeb5ad8806210a9f50',1,'nmodl::docstring']]],
   ['dt_5fvar',['dt_var',['../structnmodl_1_1pybind__wrappers_1_1_diffeq_solver_executor.html#a73c97b1aaaf2b613774bcb5aecef130b',1,'nmodl::pybind_wrappers::DiffeqSolverExecutor']]],
-  ['duchain',['DUChain',['../classnmodl_1_1visitor_1_1_d_u_chain.html',1,'nmodl::visitor::DUChain'],['../classnmodl_1_1visitor_1_1_d_u_chain.html#ae806d87e0597d4e94d2300071abd8ef4',1,'nmodl::visitor::DUChain::DUChain()=default'],['../classnmodl_1_1visitor_1_1_d_u_chain.html#a5c5e1195bd8a285d575f362dab8900b1',1,'nmodl::visitor::DUChain::DUChain(std::string name)']]],
+  ['duchain',['DUChain',['../classnmodl_1_1visitor_1_1_d_u_chain.html',1,'nmodl::visitor::DUChain'],['../classnmodl_1_1visitor_1_1_d_u_chain.html#ae806d87e0597d4e94d2300071abd8ef4',1,'nmodl::visitor::DUChain::DUChain()=default'],['../classnmodl_1_1visitor_1_1_d_u_chain.html#a39c9ee470abcf0906a4739f8911fa517',1,'nmodl::visitor::DUChain::DUChain(std::string name, DUVariableType type)']]],
   ['duinstance',['DUInstance',['../classnmodl_1_1visitor_1_1_d_u_instance.html',1,'nmodl::visitor::DUInstance'],['../classnmodl_1_1visitor_1_1_d_u_instance.html#a0801173d998866460ca44a05ca7569a3',1,'nmodl::visitor::DUInstance::DUInstance()']]],
-  ['dustate',['DUState',['../namespacenmodl_1_1visitor.html#a68c860c43f4bea4e1af16c016d2959f9',1,'nmodl::visitor']]]
+  ['dustate',['DUState',['../namespacenmodl_1_1visitor.html#a68c860c43f4bea4e1af16c016d2959f9',1,'nmodl::visitor']]],
+  ['duvariabletype',['DUVariableType',['../namespacenmodl_1_1visitor.html#a7518a3a6846afa59258bb48d63451c09',1,'nmodl::visitor']]]
 ];

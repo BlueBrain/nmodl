@@ -35,5 +35,6 @@ var classnmodl_1_1visitor_1_1_def_use_analyze_visitor =
     [ "symtab_stack", "classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html#acee3165baab4d78ae16550080324295e", null ],
     [ "unsupported_node", "classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html#a2f682676bfbdc4997ae779a9ae2aa2b7", null ],
     [ "variable_name", "classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html#af549f107ffbb1654232b46a65b8f9cc0", null ],
+    [ "variable_type", "classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html#a23386aacc20acb2a1e0f84385a6abb4f", null ],
     [ "visiting_lhs", "classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html#a7c5f4fcfd309aef1b1d46588a3cb4c86", null ]
 ];

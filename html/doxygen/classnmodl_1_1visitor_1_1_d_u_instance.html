@@ -103,7 +103,7 @@ $(document).ready(function(){initNavTree('classnmodl_1_1visitor_1_1_d_u_instance
 <p>For a given variable, say tau, when we have statement like <code>a = tau + c + tau</code> then def-use is simply <code>[<a class="el" href="namespacenmodl_1_1visitor.html#a68c860c43f4bea4e1af16c016d2959f9a4c614360da93c0a041b22e537de151eb" title="global variable is used ">DUState::U</a>, <a class="el" href="namespacenmodl_1_1visitor.html#a68c860c43f4bea4e1af16c016d2959f9a4c614360da93c0a041b22e537de151eb" title="global variable is used ">DUState::U</a>]</code>. But if we have if-else block like:</p>
 <div class="fragment"><div class="line">IF (...) {</div><div class="line">    a = tau</div><div class="line">    tau = c + d</div><div class="line">} ELSE {</div><div class="line">    tau = b</div><div class="line">}</div></div><!-- fragment --><p>Then to know the effective result, we have to analyze def-use in <code>IF</code> and <code>ELSE</code> blocks i.e. if variable is used in any of the if-elseif-else block then it needs to mark as <code><a class="el" href="namespacenmodl_1_1visitor.html#a68c860c43f4bea4e1af16c016d2959f9a4c614360da93c0a041b22e537de151eb" title="global variable is used ">DUState::U</a></code>. Hence we keep the track of all children in case of statements like if-else. </p>
 
-<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8hpp_source.html#l00077">77</a> of file <a class="el" href="defuse__analyze__visitor_8hpp_source.html">defuse_analyze_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8hpp_source.html#l00085">85</a> of file <a class="el" href="defuse__analyze__visitor_8hpp_source.html">defuse_analyze_visitor.hpp</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="defuse__analyze__visitor_8hpp_source.html">defuse_analyze_visitor.hpp</a>&gt;</code></p>
 <table class="memberdecls">
@@ -111,15 +111,15 @@ $(document).ready(function(){initNavTree('classnmodl_1_1visitor_1_1_d_u_instance
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a0801173d998866460ca44a05ca7569a3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_d_u_instance.html#a0801173d998866460ca44a05ca7569a3">DUInstance</a> (<a class="el" href="namespacenmodl_1_1visitor.html#a68c860c43f4bea4e1af16c016d2959f9">DUState</a> <a class="el" href="classnmodl_1_1visitor_1_1_d_u_instance.html#a600f82b877dc60c5fd45e9ba859836a5">state</a>, const std::shared_ptr&lt; const <a class="el" href="classnmodl_1_1ast_1_1_binary_expression.html">ast::BinaryExpression</a> &gt; <a class="el" href="classnmodl_1_1visitor_1_1_d_u_instance.html#a34b8d0b76d04cfa93a2068c39c5b5a4e">binary_expression</a>)</td></tr>
 <tr class="separator:a0801173d998866460ca44a05ca7569a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af52574a95cbe5bbecb795d30dfb6a51d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacenmodl_1_1visitor.html#a68c860c43f4bea4e1af16c016d2959f9">DUState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_d_u_instance.html#af52574a95cbe5bbecb795d30dfb6a51d">eval</a> () const</td></tr>
-<tr class="memdesc:af52574a95cbe5bbecb795d30dfb6a51d"><td class="mdescLeft">&#160;</td><td class="mdescRight">analyze all children and return "effective" usage  <a href="#af52574a95cbe5bbecb795d30dfb6a51d">More...</a><br /></td></tr>
-<tr class="separator:af52574a95cbe5bbecb795d30dfb6a51d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afc86f27c07f43de97928646084783edf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacenmodl_1_1visitor.html#a68c860c43f4bea4e1af16c016d2959f9">DUState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_d_u_instance.html#afc86f27c07f43de97928646084783edf">sub_block_eval</a> () const</td></tr>
-<tr class="memdesc:afc86f27c07f43de97928646084783edf"><td class="mdescLeft">&#160;</td><td class="mdescRight">if, elseif and else evaluation  <a href="#afc86f27c07f43de97928646084783edf">More...</a><br /></td></tr>
-<tr class="separator:afc86f27c07f43de97928646084783edf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5e1761aa50645dd99c5d3ce077c5eb43"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacenmodl_1_1visitor.html#a68c860c43f4bea4e1af16c016d2959f9">DUState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_d_u_instance.html#a5e1761aa50645dd99c5d3ce077c5eb43">conditional_block_eval</a> () const</td></tr>
-<tr class="memdesc:a5e1761aa50645dd99c5d3ce077c5eb43"><td class="mdescLeft">&#160;</td><td class="mdescRight">evaluate global usage i.e. with [D,U] states of children  <a href="#a5e1761aa50645dd99c5d3ce077c5eb43">More...</a><br /></td></tr>
-<tr class="separator:a5e1761aa50645dd99c5d3ce077c5eb43"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d6774d8c7ab13f8eec0a0203d8d4119"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacenmodl_1_1visitor.html#a68c860c43f4bea4e1af16c016d2959f9">DUState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_d_u_instance.html#a3d6774d8c7ab13f8eec0a0203d8d4119">eval</a> (<a class="el" href="namespacenmodl_1_1visitor.html#a7518a3a6846afa59258bb48d63451c09">DUVariableType</a> variable_type) const</td></tr>
+<tr class="memdesc:a3d6774d8c7ab13f8eec0a0203d8d4119"><td class="mdescLeft">&#160;</td><td class="mdescRight">analyze all children and return "effective" usage  <a href="#a3d6774d8c7ab13f8eec0a0203d8d4119">More...</a><br /></td></tr>
+<tr class="separator:a3d6774d8c7ab13f8eec0a0203d8d4119"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6ed3b41b95b3a6f353ce2cee28b995a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacenmodl_1_1visitor.html#a68c860c43f4bea4e1af16c016d2959f9">DUState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_d_u_instance.html#ac6ed3b41b95b3a6f353ce2cee28b995a">sub_block_eval</a> (<a class="el" href="namespacenmodl_1_1visitor.html#a7518a3a6846afa59258bb48d63451c09">DUVariableType</a> variable_type) const</td></tr>
+<tr class="memdesc:ac6ed3b41b95b3a6f353ce2cee28b995a"><td class="mdescLeft">&#160;</td><td class="mdescRight">if, elseif and else evaluation  <a href="#ac6ed3b41b95b3a6f353ce2cee28b995a">More...</a><br /></td></tr>
+<tr class="separator:ac6ed3b41b95b3a6f353ce2cee28b995a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6081d84ad38c6cd7ecb556a4d5e3da63"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacenmodl_1_1visitor.html#a68c860c43f4bea4e1af16c016d2959f9">DUState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_d_u_instance.html#a6081d84ad38c6cd7ecb556a4d5e3da63">conditional_block_eval</a> (<a class="el" href="namespacenmodl_1_1visitor.html#a7518a3a6846afa59258bb48d63451c09">DUVariableType</a> variable_type) const</td></tr>
+<tr class="memdesc:a6081d84ad38c6cd7ecb556a4d5e3da63"><td class="mdescLeft">&#160;</td><td class="mdescRight">evaluate global usage i.e. with [D,U] states of children  <a href="#a6081d84ad38c6cd7ecb556a4d5e3da63">More...</a><br /></td></tr>
+<tr class="separator:a6081d84ad38c6cd7ecb556a4d5e3da63"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6222b51c51758122efabe6bc31d32198"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_d_u_instance.html#a6222b51c51758122efabe6bc31d32198">print</a> (<a class="el" href="classnmodl_1_1printer_1_1_j_s_o_n_printer.html">printer::JSONPrinter</a> &amp;printer) const</td></tr>
 <tr class="memdesc:a6222b51c51758122efabe6bc31d32198"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classnmodl_1_1visitor_1_1_d_u_instance.html" title="Represent use of a variable in the statement. ">DUInstance</a> to JSON string.  <a href="#a6222b51c51758122efabe6bc31d32198">More...</a><br /></td></tr>
 <tr class="separator:a6222b51c51758122efabe6bc31d32198"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -171,13 +171,13 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8hpp_source.html#l00085">85</a> of file <a class="el" href="defuse__analyze__visitor_8hpp_source.html">defuse_analyze_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8hpp_source.html#l00093">93</a> of file <a class="el" href="defuse__analyze__visitor_8hpp_source.html">defuse_analyze_visitor.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a5e1761aa50645dd99c5d3ce077c5eb43"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5e1761aa50645dd99c5d3ce077c5eb43">&#9670;&nbsp;</a></span>conditional_block_eval()</h2>
+<a id="a6081d84ad38c6cd7ecb556a4d5e3da63"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6081d84ad38c6cd7ecb556a4d5e3da63">&#9670;&nbsp;</a></span>conditional_block_eval()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -185,7 +185,8 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="namespacenmodl_1_1visitor.html#a68c860c43f4bea4e1af16c016d2959f9">DUState</a> nmodl::visitor::DUInstance::conditional_block_eval </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype"><a class="el" href="namespacenmodl_1_1visitor.html#a7518a3a6846afa59258bb48d63451c09">DUVariableType</a>&#160;</td>
+          <td class="paramname"><em>variable_type</em> = <code><a class="el" href="namespacenmodl_1_1visitor.html#a7518a3a6846afa59258bb48d63451c09a4cc6684df7b4a92b1dec6fce3264fac8">DUVariableType::Global</a></code></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
@@ -193,7 +194,7 @@ Public Attributes</h2></td></tr>
 
 <p>evaluate global usage i.e. with [D,U] states of children </p>
 <p>Evaluate conditional block containing sub-blocks like if, elseif and else.</p>
-<p>Note that sub-blocks are already evaluated by <a class="el" href="classnmodl_1_1visitor_1_1_d_u_instance.html#afc86f27c07f43de97928646084783edf" title="if, elseif and else evaluation ">sub_block_eval()</a> and has only leaf nodes. In order to find effective defuse, following rules are used:</p>
+<p>Note that sub-blocks are already evaluated by <a class="el" href="classnmodl_1_1visitor_1_1_d_u_instance.html#ac6ed3b41b95b3a6f353ce2cee28b995a" title="if, elseif and else evaluation ">sub_block_eval()</a> and has only leaf nodes. In order to find effective defuse, following rules are used:</p>
 <ul>
 <li>If variable is "used" in any of the sub-block then it's effectively "U". This is because any branch can be taken at runtime.</li>
 <li>If variable is "defined" in all sub-blocks doesn't mean that it's effectively "D". This is because if we can have just "if-elseif" which could never be taken. Same for empty "if". In order to decide if it is "D", we make sure there is no empty block and there must be "else" block with "D". Note that "U" definitions are already covered in 1) and hence this rule is safe.</li>
@@ -202,12 +203,12 @@ Public Attributes</h2></td></tr>
 <li>If we reach else block with either D or CD and if there is no empty block encountered, this means every block has either "D" or "CD". In this case we can say that entire block effectively has "D". </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00130">130</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00133">133</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
 
 </div>
 </div>
-<a id="af52574a95cbe5bbecb795d30dfb6a51d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af52574a95cbe5bbecb795d30dfb6a51d">&#9670;&nbsp;</a></span>eval()</h2>
+<a id="a3d6774d8c7ab13f8eec0a0203d8d4119"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3d6774d8c7ab13f8eec0a0203d8d4119">&#9670;&nbsp;</a></span>eval()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -215,7 +216,8 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="namespacenmodl_1_1visitor.html#a68c860c43f4bea4e1af16c016d2959f9">DUState</a> nmodl::visitor::DUInstance::eval </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype"><a class="el" href="namespacenmodl_1_1visitor.html#a7518a3a6846afa59258bb48d63451c09">DUVariableType</a>&#160;</td>
+          <td class="paramname"><em>variable_type</em> = <code><a class="el" href="namespacenmodl_1_1visitor.html#a7518a3a6846afa59258bb48d63451c09a4cc6684df7b4a92b1dec6fce3264fac8">DUVariableType::Global</a></code></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
@@ -225,7 +227,7 @@ Public Attributes</h2></td></tr>
 <p>Find "effective" usage of variable from def-use chain.</p>
 <p>Note that we are interested in "global" variable usage and hence we consider only [U,D] states and not [LU, LD] </p>
 
-<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00158">158</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00165">165</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -251,8 +253,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="afc86f27c07f43de97928646084783edf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afc86f27c07f43de97928646084783edf">&#9670;&nbsp;</a></span>sub_block_eval()</h2>
+<a id="ac6ed3b41b95b3a6f353ce2cee28b995a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac6ed3b41b95b3a6f353ce2cee28b995a">&#9670;&nbsp;</a></span>sub_block_eval()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -260,7 +262,8 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="namespacenmodl_1_1visitor.html#a68c860c43f4bea4e1af16c016d2959f9">DUState</a> nmodl::visitor::DUInstance::sub_block_eval </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype"><a class="el" href="namespacenmodl_1_1visitor.html#a7518a3a6846afa59258bb48d63451c09">DUVariableType</a>&#160;</td>
+          <td class="paramname"><em>variable_type</em> = <code><a class="el" href="namespacenmodl_1_1visitor.html#a7518a3a6846afa59258bb48d63451c09a4cc6684df7b4a92b1dec6fce3264fac8">DUVariableType::Global</a></code></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
@@ -296,7 +299,7 @@ Public Attributes</h2></td></tr>
 <p>\( tau = tau + 1 \)</p>
 <p>we want to return the full statement, not only \( tau + 1 \) </p>
 
-<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8hpp_source.html#l00115">115</a> of file <a class="el" href="defuse__analyze__visitor_8hpp_source.html">defuse_analyze_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8hpp_source.html#l00123">123</a> of file <a class="el" href="defuse__analyze__visitor_8hpp_source.html">defuse_analyze_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -314,7 +317,7 @@ Public Attributes</h2></td></tr>
 
 <p>usage of variable in case of if like statements </p>
 
-<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8hpp_source.html#l00083">83</a> of file <a class="el" href="defuse__analyze__visitor_8hpp_source.html">defuse_analyze_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8hpp_source.html#l00091">91</a> of file <a class="el" href="defuse__analyze__visitor_8hpp_source.html">defuse_analyze_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -332,7 +335,7 @@ Public Attributes</h2></td></tr>
 
 <p>state of the usage </p>
 
-<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8hpp_source.html#l00080">80</a> of file <a class="el" href="defuse__analyze__visitor_8hpp_source.html">defuse_analyze_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8hpp_source.html#l00088">88</a> of file <a class="el" href="defuse__analyze__visitor_8hpp_source.html">defuse_analyze_visitor.hpp</a>.</p>
 
 </div>
 </div>

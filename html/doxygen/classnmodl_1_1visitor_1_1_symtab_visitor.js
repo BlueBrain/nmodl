@@ -1,6 +1,7 @@
 var classnmodl_1_1visitor_1_1_symtab_visitor =
 [
     [ "SymtabVisitor", "classnmodl_1_1visitor_1_1_symtab_visitor.html#aa041988b814688f3414884a776064065", null ],
+    [ "SymtabVisitor", "classnmodl_1_1visitor_1_1_symtab_visitor.html#a487a01781ce7f3ddcc2e4ba59b8dd8bb", null ],
     [ "SymtabVisitor", "classnmodl_1_1visitor_1_1_symtab_visitor.html#a742f8a8e66693ab35306fd01f0907ec7", null ],
     [ "SymtabVisitor", "classnmodl_1_1visitor_1_1_symtab_visitor.html#a68c561839752e999d304a70550b3f6fb", null ],
     [ "add_model_symbol_with_property", "classnmodl_1_1visitor_1_1_symtab_visitor.html#a36e427c852f7ea35cfc26c2db1baed7d", null ],

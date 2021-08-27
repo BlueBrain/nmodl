@@ -15,5 +15,9 @@ var defuse__analyze__visitor_8hpp =
       [ "ELSE", "defuse__analyze__visitor_8hpp.html#a68c860c43f4bea4e1af16c016d2959f9a778537b0acce06229cb78d5f72c907ab", null ],
       [ "NONE", "defuse__analyze__visitor_8hpp.html#a68c860c43f4bea4e1af16c016d2959f9ab50339a10e1de285ac99d4c3990b8693", null ]
     ] ],
+    [ "DUVariableType", "defuse__analyze__visitor_8hpp.html#a7518a3a6846afa59258bb48d63451c09", [
+      [ "Local", "defuse__analyze__visitor_8hpp.html#a7518a3a6846afa59258bb48d63451c09a509820290d57f333403f490dde7316f4", null ],
+      [ "Global", "defuse__analyze__visitor_8hpp.html#a7518a3a6846afa59258bb48d63451c09a4cc6684df7b4a92b1dec6fce3264fac8", null ]
+    ] ],
     [ "operator<<", "defuse__analyze__visitor_8hpp.html#a8510111d3c4032626374d463da3d429c", null ]
 ];

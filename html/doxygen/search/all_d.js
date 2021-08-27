@@ -280,7 +280,7 @@ var searchData=
   ['nominator',['nominator',['../classnmodl_1_1units_1_1_unit.html#a58cf659ca2555ee8a8bd31b186b5bbcf',1,'nmodl::units::Unit']]],
   ['non_5flin_5fequation',['NON_LIN_EQUATION',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033adc3297378cdadd0170bc50de2987146a',1,'nmodl::ast']]],
   ['non_5flin_5fequation_2ehpp',['non_lin_equation.hpp',['../non__lin__equation_8hpp.html',1,'']]],
-  ['non_5flinear_5fblock',['non_linear_block',['../namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dba44c78a36bc57458ac1d85ce630bc3618',1,'nmodl::symtab::syminfo::non_linear_block()'],['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033aad541a4debd0c30ab6ef23cd18746422',1,'nmodl::ast::NON_LINEAR_BLOCK()']]],
+  ['non_5flinear_5fblock',['NON_LINEAR_BLOCK',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033aad541a4debd0c30ab6ef23cd18746422',1,'nmodl::ast::NON_LINEAR_BLOCK()'],['../namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dba44c78a36bc57458ac1d85ce630bc3618',1,'nmodl::symtab::syminfo::non_linear_block()']]],
   ['non_5flinear_5fblock_2ehpp',['non_linear_block.hpp',['../non__linear__block_8hpp.html',1,'']]],
   ['non_5fstate_5fvar_5fbflux',['non_state_var_bflux',['../classnmodl_1_1visitor_1_1_kinetic_block_visitor.html#a49ce6f4d0d54db9e8ae4c51b09750c35',1,'nmodl::visitor::KineticBlockVisitor']]],
   ['non_5fstate_5fvar_5ffflux',['non_state_var_fflux',['../classnmodl_1_1visitor_1_1_kinetic_block_visitor.html#af46d59d6b3ddbde95e5bd071fcfbed17',1,'nmodl::visitor::KineticBlockVisitor']]],

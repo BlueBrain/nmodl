@@ -45,6 +45,7 @@ var group__visitor__classes =
       [ "symtab_stack", "classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html#acee3165baab4d78ae16550080324295e", null ],
       [ "unsupported_node", "classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html#a2f682676bfbdc4997ae779a9ae2aa2b7", null ],
       [ "variable_name", "classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html#af549f107ffbb1654232b46a65b8f9cc0", null ],
+      [ "variable_type", "classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html#a23386aacc20acb2a1e0f84385a6abb4f", null ],
       [ "visiting_lhs", "classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html#a7c5f4fcfd309aef1b1d46588a3cb4c86", null ]
     ] ],
     [ "GlobalToRangeVisitor", "classnmodl_1_1visitor_1_1_global_to_range_visitor.html", [
@@ -1039,6 +1040,7 @@ var group__visitor__classes =
     ] ],
     [ "SymtabVisitor", "classnmodl_1_1visitor_1_1_symtab_visitor.html", [
       [ "SymtabVisitor", "classnmodl_1_1visitor_1_1_symtab_visitor.html#aa041988b814688f3414884a776064065", null ],
+      [ "SymtabVisitor", "classnmodl_1_1visitor_1_1_symtab_visitor.html#a487a01781ce7f3ddcc2e4ba59b8dd8bb", null ],
       [ "SymtabVisitor", "classnmodl_1_1visitor_1_1_symtab_visitor.html#a742f8a8e66693ab35306fd01f0907ec7", null ],
       [ "SymtabVisitor", "classnmodl_1_1visitor_1_1_symtab_visitor.html#a68c561839752e999d304a70550b3f6fb", null ],
       [ "add_model_symbol_with_property", "classnmodl_1_1visitor_1_1_symtab_visitor.html#a36e427c852f7ea35cfc26c2db1baed7d", null ],

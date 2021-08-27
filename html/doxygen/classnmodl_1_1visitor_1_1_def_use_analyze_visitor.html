@@ -106,7 +106,7 @@ $(document).ready(function(){initNavTree('classnmodl_1_1visitor_1_1_def_use_anal
 <p>The analysis of if-elseif-else needs special attention because the def-use chain needs re-cursive evaluation in order to find end-result. For example:</p>
 <div class="fragment"><div class="line">IF(...) {</div><div class="line">    beta = y</div><div class="line">} ELSE {</div><div class="line">    IF(...) {</div><div class="line">        beta = x</div><div class="line">    } ELSE {</div><div class="line">        x = beta</div><div class="line">    }</div><div class="line">}</div></div><!-- fragment --><p>For if-else statements, in the above example, if the variable is used in any of the if-elseif-else part then it is considered as "used". And this is done recursively from innermost level to the top. </p>
 
-<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8hpp_source.html#l00202">202</a> of file <a class="el" href="defuse__analyze__visitor_8hpp_source.html">defuse_analyze_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8hpp_source.html#l00214">214</a> of file <a class="el" href="defuse__analyze__visitor_8hpp_source.html">defuse_analyze_visitor.hpp</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="defuse__analyze__visitor_8hpp_source.html">defuse_analyze_visitor.hpp</a>&gt;</code></p>
 <div class="dynheader">
@@ -222,6 +222,9 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:af549f107ffbb1654232b46a65b8f9cc0"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html#af549f107ffbb1654232b46a65b8f9cc0">variable_name</a></td></tr>
 <tr class="memdesc:af549f107ffbb1654232b46a65b8f9cc0"><td class="mdescLeft">&#160;</td><td class="mdescRight">variable for which to construct def-use chain  <a href="#af549f107ffbb1654232b46a65b8f9cc0">More...</a><br /></td></tr>
 <tr class="separator:af549f107ffbb1654232b46a65b8f9cc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23386aacc20acb2a1e0f84385a6abb4f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacenmodl_1_1visitor.html#a7518a3a6846afa59258bb48d63451c09">DUVariableType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html#a23386aacc20acb2a1e0f84385a6abb4f">variable_type</a></td></tr>
+<tr class="memdesc:a23386aacc20acb2a1e0f84385a6abb4f"><td class="mdescLeft">&#160;</td><td class="mdescRight">variable type (Local or Global)  <a href="#a23386aacc20acb2a1e0f84385a6abb4f">More...</a><br /></td></tr>
+<tr class="separator:a23386aacc20acb2a1e0f84385a6abb4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f682676bfbdc4997ae779a9ae2aa2b7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html#a2f682676bfbdc4997ae779a9ae2aa2b7">unsupported_node</a> = false</td></tr>
 <tr class="memdesc:a2f682676bfbdc4997ae779a9ae2aa2b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">indicate that there is unsupported construct encountered  <a href="#a2f682676bfbdc4997ae779a9ae2aa2b7">More...</a><br /></td></tr>
 <tr class="separator:a2f682676bfbdc4997ae779a9ae2aa2b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -711,7 +714,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8hpp_source.html#l00242">242</a> of file <a class="el" href="defuse__analyze__visitor_8hpp_source.html">defuse_analyze_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8hpp_source.html#l00257">257</a> of file <a class="el" href="defuse__analyze__visitor_8hpp_source.html">defuse_analyze_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -749,7 +752,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8hpp_source.html#l00245">245</a> of file <a class="el" href="defuse__analyze__visitor_8hpp_source.html">defuse_analyze_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8hpp_source.html#l00260">260</a> of file <a class="el" href="defuse__analyze__visitor_8hpp_source.html">defuse_analyze_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -785,7 +788,7 @@ Additional Inherited Members</h2></td></tr>
 <p>new chain</p>
 <p>analyze given node </p>
 
-<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00415">415</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00423">423</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -813,7 +816,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00389">389</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00397">397</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -851,7 +854,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00395">395</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00403">403</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -879,7 +882,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00410">410</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00418">418</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -916,7 +919,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <p>Update def-use chain if we encounter a variable that we are looking for. If we encounter non-supported construct then we mark that variable as "use" because we haven't completely analyzed the usage. Marking that variable "U" make sures that won't get optimized. Then we distinguish between local and non-local variables. All variables that appear on lhs are marked as "definitions" whereas the one on rhs are marked as "usages". </p>
 
-<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00365">365</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00373">373</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -948,7 +951,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a83680cb1ba9424a7138b1033d5bbc81d">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00350">350</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00358">358</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -981,7 +984,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a12b5df603a65d5b42f46b98e942029ea">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00221">221</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00229">229</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1013,7 +1016,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#acf76972ce331b959012b13022b10c128">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00346">346</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00354">354</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1045,7 +1048,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a7a34f9735dd7a346ba731e13ff70102a">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00309">309</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00317">317</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1077,7 +1080,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#aaa7f33b4069699375ee9e48fd72ad5c0">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00305">305</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00313">313</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1110,7 +1113,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#ab12abc878e58c73f8fbd8a2755a60366">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00196">196</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00204">204</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1148,7 +1151,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a33738049b35bf18fa9b3939de2b563bb">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00241">241</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00249">249</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1182,7 +1185,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a2133e14dda530c8b571615c8ae058f93">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00323">323</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00331">331</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1214,7 +1217,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a9ad8517fd7c60fe71d64e08824323edb">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00297">297</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00305">305</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1246,7 +1249,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#aaae32307e5824ff1bcdccadc964a4fd2">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00348">348</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00356">356</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1278,7 +1281,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a931e259772ad88acf0ea65ca505f141d">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00318">318</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00326">326</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1310,7 +1313,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#aa965ef3fd591d3aa565cf1cba4d95669">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00293">293</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00301">301</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1342,7 +1345,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#acc1ab81beaafa80a636eeaf7a3f63004">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00301">301</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00309">309</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1374,7 +1377,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#ae1acc09ddd54178588aa6c43b26bdf8b">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00289">289</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00297">297</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1406,7 +1409,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a79db386abc3a7633c0425faaaa951f2a">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00206">206</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00214">214</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1434,7 +1437,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00185">185</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00193">193</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1466,7 +1469,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#adbc80725dfe92a7d04311e41d126c80b">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00313">313</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00321">321</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1499,7 +1502,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a096625c78ed685a7ee6233a13b1793a3">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00279">279</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00287">287</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1537,7 +1540,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00403">403</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00411">411</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1562,7 +1565,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8hpp_source.html#l00229">229</a> of file <a class="el" href="defuse__analyze__visitor_8hpp_source.html">defuse_analyze_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8hpp_source.html#l00244">244</a> of file <a class="el" href="defuse__analyze__visitor_8hpp_source.html">defuse_analyze_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1588,7 +1591,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>def-use chain currently being constructed </p>
 
-<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8hpp_source.html#l00208">208</a> of file <a class="el" href="defuse__analyze__visitor_8hpp_source.html">defuse_analyze_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8hpp_source.html#l00220">220</a> of file <a class="el" href="defuse__analyze__visitor_8hpp_source.html">defuse_analyze_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1614,7 +1617,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>symbol table for current statement block (or of parent block if doesn't have) should be initialized by caller somehow </p>
 
-<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8hpp_source.html#l00212">212</a> of file <a class="el" href="defuse__analyze__visitor_8hpp_source.html">defuse_analyze_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8hpp_source.html#l00224">224</a> of file <a class="el" href="defuse__analyze__visitor_8hpp_source.html">defuse_analyze_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1640,7 +1643,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>symbol table containing global variables </p>
 
-<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8hpp_source.html#l00205">205</a> of file <a class="el" href="defuse__analyze__visitor_8hpp_source.html">defuse_analyze_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8hpp_source.html#l00217">217</a> of file <a class="el" href="defuse__analyze__visitor_8hpp_source.html">defuse_analyze_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1666,7 +1669,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>ignore verbatim blocks </p>
 
-<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8hpp_source.html#l00224">224</a> of file <a class="el" href="defuse__analyze__visitor_8hpp_source.html">defuse_analyze_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8hpp_source.html#l00239">239</a> of file <a class="el" href="defuse__analyze__visitor_8hpp_source.html">defuse_analyze_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1692,7 +1695,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>symbol tables in call hierarchy </p>
 
-<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8hpp_source.html#l00215">215</a> of file <a class="el" href="defuse__analyze__visitor_8hpp_source.html">defuse_analyze_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8hpp_source.html#l00227">227</a> of file <a class="el" href="defuse__analyze__visitor_8hpp_source.html">defuse_analyze_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1718,7 +1721,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>indicate that there is unsupported construct encountered </p>
 
-<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8hpp_source.html#l00221">221</a> of file <a class="el" href="defuse__analyze__visitor_8hpp_source.html">defuse_analyze_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8hpp_source.html#l00236">236</a> of file <a class="el" href="defuse__analyze__visitor_8hpp_source.html">defuse_analyze_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1744,7 +1747,33 @@ Additional Inherited Members</h2></td></tr>
 
 <p>variable for which to construct def-use chain </p>
 
-<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8hpp_source.html#l00218">218</a> of file <a class="el" href="defuse__analyze__visitor_8hpp_source.html">defuse_analyze_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8hpp_source.html#l00230">230</a> of file <a class="el" href="defuse__analyze__visitor_8hpp_source.html">defuse_analyze_visitor.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a23386aacc20acb2a1e0f84385a6abb4f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a23386aacc20acb2a1e0f84385a6abb4f">&#9670;&nbsp;</a></span>variable_type</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacenmodl_1_1visitor.html#a7518a3a6846afa59258bb48d63451c09">DUVariableType</a> nmodl::visitor::DefUseAnalyzeVisitor::variable_type</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>variable type (Local or Global) </p>
+
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8hpp_source.html#l00233">233</a> of file <a class="el" href="defuse__analyze__visitor_8hpp_source.html">defuse_analyze_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1770,7 +1799,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>starting visiting lhs of assignment statement </p>
 
-<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8hpp_source.html#l00227">227</a> of file <a class="el" href="defuse__analyze__visitor_8hpp_source.html">defuse_analyze_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8hpp_source.html#l00242">242</a> of file <a class="el" href="defuse__analyze__visitor_8hpp_source.html">defuse_analyze_visitor.hpp</a>.</p>
 
 </div>
 </div>

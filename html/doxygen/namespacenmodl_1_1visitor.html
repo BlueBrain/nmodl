@@ -239,6 +239,11 @@ Enumerations</h2></td></tr>
  }<tr class="memdesc:a68c860c43f4bea4e1af16c016d2959f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represent a state in Def-Use chain.  <a href="namespacenmodl_1_1visitor.html#a68c860c43f4bea4e1af16c016d2959f9">More...</a><br /></td></tr>
 </td></tr>
 <tr class="separator:a68c860c43f4bea4e1af16c016d2959f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7518a3a6846afa59258bb48d63451c09"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1visitor.html#a7518a3a6846afa59258bb48d63451c09">DUVariableType</a> { <a class="el" href="namespacenmodl_1_1visitor.html#a7518a3a6846afa59258bb48d63451c09a509820290d57f333403f490dde7316f4">DUVariableType::Local</a>, 
+<a class="el" href="namespacenmodl_1_1visitor.html#a7518a3a6846afa59258bb48d63451c09a4cc6684df7b4a92b1dec6fce3264fac8">DUVariableType::Global</a>
+ }<tr class="memdesc:a7518a3a6846afa59258bb48d63451c09"><td class="mdescLeft">&#160;</td><td class="mdescRight">Variable type processed by DefUseAnalyzeVisitor.  <a href="namespacenmodl_1_1visitor.html#a7518a3a6846afa59258bb48d63451c09">More...</a><br /></td></tr>
+</td></tr>
+<tr class="separator:a7518a3a6846afa59258bb48d63451c09"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -345,11 +350,11 @@ Functions</h2></td></tr>
 </td></tr>
 <tr><td class="fieldname"><a id="a68c860c43f4bea4e1af16c016d2959f9af623e75af30e62bbd73d6df5b50bb7b5"></a>D&#160;</td><td class="fielddoc"><p>global variable is defined </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a68c860c43f4bea4e1af16c016d2959f9a4170acd6af571e8d0d59fdad999cc605"></a>CD&#160;</td><td class="fielddoc"><p>global variable is conditionally defined </p>
+<tr><td class="fieldname"><a id="a68c860c43f4bea4e1af16c016d2959f9a4170acd6af571e8d0d59fdad999cc605"></a>CD&#160;</td><td class="fielddoc"><p>global or local variable is conditionally defined </p>
 </td></tr>
 <tr><td class="fieldname"><a id="a68c860c43f4bea4e1af16c016d2959f9a920d0c66f3d2ad926a6d590a5d244bd9"></a>LU&#160;</td><td class="fielddoc"><p>local variable is used </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a68c860c43f4bea4e1af16c016d2959f9ab2e68ec1fa49da52ca5b0f436e032dd6"></a>LD&#160;</td><td class="fielddoc"><p>local variable is used </p>
+<tr><td class="fieldname"><a id="a68c860c43f4bea4e1af16c016d2959f9ab2e68ec1fa49da52ca5b0f436e032dd6"></a>LD&#160;</td><td class="fielddoc"><p>local variable is defined </p>
 </td></tr>
 <tr><td class="fieldname"><a id="a68c860c43f4bea4e1af16c016d2959f9a696b031073e74bf2cb98e5ef201d4aa3"></a>UNKNOWN&#160;</td><td class="fielddoc"><p>state not known </p>
 </td></tr>
@@ -366,6 +371,37 @@ Functions</h2></td></tr>
 </table>
 
 <p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8hpp_source.html#l00028">28</a> of file <a class="el" href="defuse__analyze__visitor_8hpp_source.html">defuse_analyze_visitor.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a7518a3a6846afa59258bb48d63451c09"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7518a3a6846afa59258bb48d63451c09">&#9670;&nbsp;</a></span>DUVariableType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="namespacenmodl_1_1visitor.html#a7518a3a6846afa59258bb48d63451c09">nmodl::visitor::DUVariableType</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Variable type processed by <a class="el" href="classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html" title="Visitor to return Def-Use chain for a given variable in the block/node ">DefUseAnalyzeVisitor</a>. </p>
+<p><a class="el" href="namespacenmodl_1_1visitor.html#a7518a3a6846afa59258bb48d63451c09a509820290d57f333403f490dde7316f4">DUVariableType::Local</a> means that we are looking for LD, LU and CD DUStates, while Global means we are looking for U, D and CD DUStates. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a7518a3a6846afa59258bb48d63451c09a509820290d57f333403f490dde7316f4"></a>Local&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a7518a3a6846afa59258bb48d63451c09a4cc6684df7b4a92b1dec6fce3264fac8"></a>Global&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8hpp_source.html#l00059">59</a> of file <a class="el" href="defuse__analyze__visitor_8hpp_source.html">defuse_analyze_visitor.hpp</a>.</p>
 
 </div>
 </div>
