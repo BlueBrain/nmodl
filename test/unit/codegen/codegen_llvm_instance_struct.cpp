@@ -28,7 +28,7 @@ using nmodl::parser::NmodlDriver;
 
 codegen::CodegenInstanceData generate_instance_data(const std::string& text,
                                                     int opt_level = 0,
-                                                    bool use_single_precision = false,
+                                                    int precision = 64,
                                                     int vector_width = 1,
                                                     size_t num_elements = 100,
                                                     size_t seed = 1) {
@@ -39,16 +39,17 @@ codegen::CodegenInstanceData generate_instance_data(const std::string& text,
     SymtabVisitor().visit_program(*ast);
     NeuronSolveVisitor().visit_program(*ast);
 
+    codegen::Target* target_platfrom = codegen::Target::build_default_target()->with_instruction_width(vector_width)->with_precision(precision);
     codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"test",
                                              /*output_dir=*/".",
                                              opt_level,
-                                             use_single_precision,
-                                             vector_width);
+                                             target_platfrom);
     llvm_visitor.visit_program(*ast);
     llvm_visitor.dump_module();
     const auto& generated_instance_struct = llvm_visitor.get_instance_struct_ptr();
     auto codegen_data = codegen::CodegenDataHelper(ast, generated_instance_struct);
     auto instance_data = codegen_data.create_data(num_elements, seed);
+    delete target_platfrom;
     return instance_data;
 }
 
@@ -105,8 +106,8 @@ SCENARIO("Instance Struct creation", "[visitor][llvm][instance_struct]") {
             constexpr static double seed = 42;
             auto instance_data = generate_instance_data(nmodl_text,
                                                         /*opt_level=*/0,
-                                                        /*use_single_precision=*/true,
-                                                        /*vector_width*/ 1,
+                                                        /*precision=*/32,
+                                                        /*vector_width=*/1,
                                                         num_elements,
                                                         seed);
             size_t minf_index = 0;

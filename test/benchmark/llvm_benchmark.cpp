@@ -43,16 +43,28 @@ void LLVMBenchmark::run_benchmark(const std::shared_ptr<ast::Program>& node) {
     llvm_visitor.find_kernel_names(kernel_names);
 
     // Get feature's string and turn them off depending on the cpu.
-    std::string cpu_name = cpu == "default" ? llvm::sys::getHostCPUName().str() : cpu;
-    logger->info("CPU: {}", cpu_name);
+
+    auto get_target_name = [&](){
+        // There is no GPU support at the moment.
+        if (target_platform->is_gpu()) {
+            logger->warn("Benchmarking not supported for GPU targets. Using a default CPU instead.");
+            return llvm::sys::getHostCPUName().str();
+        }
+
+        // Get CPU's name.
+        // TODO: `llvm::sys::getHostCPUName().str()` can be moved to Target now!
+        return target_platform->is_default_platform() ? llvm::sys::getHostCPUName().str() : target_platform->get_name();
+    };
+    std::string target_name = get_target_name();
+    logger->info("Target platform: {}", target_name);
 
     std::unique_ptr<llvm::Module> m = llvm_visitor.get_module();
 
     // Create the benchmark runner and initialize it.
-    std::string filename = "v" + std::to_string(llvm_visitor.get_vector_width()) + "_" +
+    std::string filename = "v" + std::to_string(target_platform->get_instruction_width()) + "_" +
                            mod_filename;
     runner::BenchmarkRunner runner(
-        std::move(m), filename, output_dir, cpu_name, shared_libs, opt_level_ir, opt_level_codegen);
+        std::move(m), filename, output_dir, target_name, shared_libs, opt_level_ir, opt_level_codegen);
     runner.initialize_driver();
 
     // Benchmark every kernel.

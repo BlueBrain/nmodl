@@ -21,6 +21,7 @@
 #include "codegen/llvm/codegen_llvm_helper_visitor.hpp"
 #include "codegen/llvm/llvm_debug_builder.hpp"
 #include "codegen/llvm/llvm_ir_builder.hpp"
+#include "codegen/llvm/target_platform.hpp"
 #include "symtab/symbol_table.hpp"
 #include "utils/logger.hpp"
 #include "visitors/ast_visitor.hpp"
@@ -81,33 +82,25 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     /// Optimisation level for LLVM IR transformations.
     int opt_level_ir;
 
-    /// Vector library used for math functions.
-    std::string vector_library;
-
-    /// Explicit vectorisation width.
-    int vector_width;
+    /// Target for which LLVM IR is generated (Can be CPU, CPU with
+    /// vector ISA, or GPU).
+    Target* target_platform;
 
   public:
     CodegenLLVMVisitor(const std::string& mod_filename,
                        const std::string& output_dir,
                        int opt_level_ir,
-                       bool use_single_precision = false,
-                       int vector_width = 1,
-                       std::string vec_lib = "none",
+                       Target* target_platform,
                        bool add_debug_information = false,
-                       std::vector<std::string> fast_math_flags = {},
-                       bool llvm_assume_alias = false)
+                       std::vector<std::string> fast_math_flags = {})
         : mod_filename(mod_filename)
         , output_dir(output_dir)
+        , target_platform(target_platform)
         , opt_level_ir(opt_level_ir)
-        , vector_width(vector_width)
-        , vector_library(vec_lib)
         , add_debug_information(add_debug_information)
         , ir_builder(*context,
-                     use_single_precision,
-                     vector_width,
-                     fast_math_flags,
-                     !llvm_assume_alias)
+                     target_platform,
+                     fast_math_flags)
         , debug_builder(*module) {}
 
     /// Dumps the generated LLVM IR module to string.
@@ -135,11 +128,6 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     /// Returns InstanceVarHelper for the given MOD file.
     InstanceVarHelper get_instance_var_helper() {
         return instance_var_helper;
-    }
-
-    /// Returns vector width
-    int get_vector_width() const {
-        return vector_width;
     }
 
     // Visitors.

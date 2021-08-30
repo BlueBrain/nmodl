@@ -26,6 +26,9 @@ class LLVMBenchmark {
     /// LLVM visitor.
     codegen::CodegenLLVMVisitor& llvm_visitor;
 
+    /// User-provided or default target platform for benchmarking.
+    codegen::Target* target_platform;
+
     /// Source MOD file name.
     std::string mod_filename;
 
@@ -41,9 +44,6 @@ class LLVMBenchmark {
     /// The size of the instance struct for benchmarking.
     int instance_size;
 
-    /// CPU to target.
-    std::string cpu;
-
     /// Optimisation level for IR generation.
     int opt_level_ir;
 
@@ -55,21 +55,21 @@ class LLVMBenchmark {
 
   public:
     LLVMBenchmark(codegen::CodegenLLVMVisitor& llvm_visitor,
+                  codegen::Target* target_platform,
                   const std::string& mod_filename,
                   const std::string& output_dir,
                   std::vector<std::string> shared_libs,
                   int num_experiments,
                   int instance_size,
-                  const std::string& cpu,
                   int opt_level_ir,
                   int opt_level_codegen)
         : llvm_visitor(llvm_visitor)
+        , target_platform(target_platform)
         , mod_filename(mod_filename)
         , output_dir(output_dir)
         , shared_libs(shared_libs)
         , num_experiments(num_experiments)
         , instance_size(instance_size)
-        , cpu(cpu)
         , opt_level_ir(opt_level_ir)
         , opt_level_codegen(opt_level_codegen) {}
 

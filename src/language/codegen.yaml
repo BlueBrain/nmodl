@@ -277,3 +277,22 @@
                         - rhs:
                             brief: "Expression for atomic operation"
                             type: Expression
+                  - CodegenThreadId:
+                      brief: "Represents a generic thread id expression for GPU code generation"
+                      description: |
+                        For GPU code generation, we use a special AST node to enocde the thread
+                        id calculation. In NMODL, this expression is usually of the form:
+
+                        \code{.cpp}
+                            id = blockId.x * blockDim.x + threadId.x
+                        \endcode
+
+                        To be able to support multiple GPU backends, we choose to have a custom AST
+                        node. Therefore, the code generation for this node is kept very simple,
+                        mapping expression to target-specific GPU inrinsics.
+
+                      nmodl: "GPU_ID "
+                      members:
+                        - name:
+                            brief: "Name of the thread id variable"
+                            type: Identifier

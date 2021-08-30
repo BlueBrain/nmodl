@@ -20,6 +20,7 @@
 
 #ifdef NMODL_LLVM_BACKEND
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
+#include "codegen/llvm/target_platform.hpp"
 #include "test/benchmark/llvm_benchmark.hpp"
 #endif
 
@@ -165,47 +166,61 @@ int main(int argc, const char* argv[]) {
     std::string data_type("double");
 
 #ifdef NMODL_LLVM_BACKEND
-    /// generate llvm IR
-    bool llvm_ir(false);
 
-    /// use single precision floating-point types
-    bool llvm_float_type(false);
+    // =========================================================================
+    // IR generation options.
+    // =========================================================================
 
-    /// llvm vector width
-    int llvm_vec_width = 1;
+    /// Generate LLVM IR.
+    bool llvm_ir = false;
 
-    /// vector library name
-    std::string vector_library("none");
+    /// Precision for floating-point types.
+    int llvm_precision = 64;
 
-    /// disable debug information generation for the IR
-    bool disable_debug_information(false);
+    /// Do not add debug information to the generated IR.
+    bool llvm_no_debug = false;
 
-    /// fast math flags for LLVM backend
+    /// Fast math flags passed to LLVM arithmetic instructions.
     std::vector<std::string> llvm_fast_math_flags;
 
-    /// run llvm benchmark
-    bool run_llvm_benchmark(false);
-
-    /// do not assume that instance struct fields do not alias
-    bool llvm_assume_alias(false);
-
-    /// optimisation level for IR generation
+    /// Optimization level for IR generation.
     int llvm_opt_level_ir = 0;
 
-    /// optimisation level for machine code generation
+    // =========================================================================
+    // Target-specific options.
+    // =========================================================================
+
+    /// Names of target CPU and GPU platforms.
+    std::string llvm_cpu_target = Target::DEFAULT_TARGET_NAME;
+    std::string llvm_gpu_target = Target::DEFAULT_TARGET_NAME;
+
+    /// SIMD width to use for LLVM code generation. If 1, scalar code is produced.
+    int llvm_vector_width = 1;
+
+    /// Generate VLA IR (scalable vectors).
+    bool llvm_vla = false;
+
+    /// Name of a math (SIMD or SIMT) library to use.
+    std::string llvm_math_library = Target::DEFAULT_MATH_LIBRARY;
+
+    // =========================================================================
+    // Benchmark options.
+    // =========================================================================
+
+    /// Benchmark generated LLVM IR.
+    bool llvm_benchmark = false;
+
+    /// Optimization level for machine code generation.
     int llvm_opt_level_codegen = 0;
 
-    /// list of shared libraries to link against in JIT
-    std::vector<std::string> shared_lib_paths;
+    /// List of shared libraries to link against in JIT driver.
+    std::vector<std::string> llvm_shared_lib_paths;
 
-    /// the size of the instance struct for the benchmark
-    int instance_size = 10000;
+    /// Size of the mechanism data.
+    int llvm_mechanism_data_size = 10000;
 
-    /// the number of repeated experiments for the benchmarking
-    int num_experiments = 100;
-
-    /// specify the cpu for LLVM IR to target
-    std::string cpu = "default";
+    /// Number of experiments.
+    int llvm_num_experiments = 100;
 #endif
 
     app.get_formatter()->column_width(40);
@@ -315,51 +330,40 @@ int main(int argc, const char* argv[]) {
 
     // LLVM IR code generation options.
     auto llvm_opt = app.add_subcommand("llvm", "LLVM code generation option")->ignore_case();
-    llvm_opt->add_flag("--ir",
-        llvm_ir,
-        "Generate LLVM IR ({})"_format(llvm_ir))->ignore_case();
-    llvm_opt->add_flag("--disable-debug-info",
-                       disable_debug_information,
-                       "Disable debug information ({})"_format(disable_debug_information))->ignore_case();
-    llvm_opt->add_option("--opt-level-ir",
-                              llvm_opt_level_ir,
-                              "LLVM IR optimisation level (O{})"_format(llvm_opt_level_ir))->ignore_case()->check(CLI::IsMember({"0", "1", "2", "3"}));
-    llvm_opt->add_flag("--single-precision",
-                       llvm_float_type,
-                       "Use single precision floating-point types ({})"_format(llvm_float_type))->ignore_case();
-    llvm_opt->add_flag("--assume-may-alias",
-                       llvm_assume_alias,
-                       "Assume instance struct fields may alias ({})"_format(llvm_assume_alias))->ignore_case();
-    llvm_opt->add_option("--vector-width",
-        llvm_vec_width,
-        "LLVM explicit vectorisation width ({})"_format(llvm_vec_width))->ignore_case();
-    llvm_opt->add_option("--veclib",
-                         vector_library,
-                         "Vector library for maths functions ({})"_format(vector_library))->check(CLI::IsMember({"Accelerate", "libsystem_m", "libmvec", "MASSV", "SLEEF", "SVML", "none"}));
-    llvm_opt->add_option("--fmf",
-                         llvm_fast_math_flags,
-                         "Fast math flags for floating-point optimizations (none)")->check(CLI::IsMember({"afn", "arcp", "contract", "ninf", "nnan", "nsz", "reassoc", "fast"}));
+    auto llvm_ir_opt = llvm_opt->add_flag("--ir", llvm_ir, "Generate LLVM IR ({})"_format(llvm_ir))->ignore_case();
+    llvm_ir_opt->required(true);
+    llvm_opt->add_flag("--no-debug", llvm_no_debug, "Disable debug information ({})"_format(llvm_no_debug))->ignore_case();
+    llvm_opt->add_option("--opt-level-ir", llvm_opt_level_ir, "LLVM IR optimisation level (O{})"_format(llvm_opt_level_ir))->ignore_case()->check(CLI::IsMember({"0", "1", "2", "3"}));
+    llvm_opt->add_option("--precision",llvm_precision, "Precision of floating-point types ({})"_format(llvm_precision))->ignore_case()->check(CLI::IsMember({"32", "64"}));
+    llvm_opt->add_option("--fast-math-flags", llvm_fast_math_flags, "Fast math flags for floating-point optimizations (none)")->check(CLI::IsMember({"afn", "arcp", "contract", "ninf", "nnan", "nsz", "reassoc", "fast"}));
+
+    // Target options for LLVM code generation.
+    auto cpu_opt = app.add_subcommand("cpu", "LLVM CPU option")->ignore_case();
+    cpu_opt->needs(llvm_opt);
+    cpu_opt->add_option("--name", llvm_cpu_target, "Specific CPU target to use")->ignore_case();
+    auto simd_math_library_opt = cpu_opt->add_option("--math-library", llvm_math_library, "Math library for SIMD code generation ({})"_format(llvm_math_library));
+    simd_math_library_opt->check(CLI::IsMember({"Accelerate", "libmvec", "libsystem_m", "MASSV", "SLEEF", "SVML", "none"}));
+    cpu_opt->add_option("--vector-width", llvm_vector_width, "Explicit vectorization width for IR generation ({})"_format(llvm_vector_width))->ignore_case();
+    cpu_opt->add_option("--vla", llvm_vla, "Generate IR for VLA target ({})"_format(llvm_vla))->ignore_case();
+
+    auto gpu_opt = app.add_subcommand("gpu", "LLVM GPU option")->ignore_case();
+    gpu_opt->needs(llvm_opt);
+    gpu_opt->add_option("--name", llvm_gpu_target, "Specific CPU target to use")->ignore_case();
+    auto gpu_math_library_opt = gpu_opt->add_option("--math-library", llvm_math_library, "Math library for SIMT code generation ({})"_format(llvm_math_library));
+    gpu_math_library_opt->check(CLI::IsMember({"libdevice"}));
+
+    // Allow only one target.
+    cpu_opt->excludes(gpu_opt);
+    gpu_opt->excludes(cpu_opt);
 
     // LLVM IR benchmark options.
     auto benchmark_opt = app.add_subcommand("benchmark", "LLVM benchmark option")->ignore_case();
-    benchmark_opt->add_flag("--run",
-                            run_llvm_benchmark,
-                            "Run LLVM benchmark ({})"_format(run_llvm_benchmark))->ignore_case();
-    benchmark_opt->add_option("--opt-level-codegen",
-                              llvm_opt_level_codegen,
-                              "Machine code optimisation level (O{})"_format(llvm_opt_level_codegen))->ignore_case()->check(CLI::IsMember({"0", "1", "2", "3"}));
-    benchmark_opt->add_option("--libs", shared_lib_paths, "Shared libraries to link IR against")
-            ->ignore_case()
-            ->check(CLI::ExistingFile);
-    benchmark_opt->add_option("--instance-size",
-                       instance_size,
-                       "Instance struct size ({})"_format(instance_size))->ignore_case();
-    benchmark_opt->add_option("--repeat",
-                              num_experiments,
-                              "Number of experiments for benchmarking ({})"_format(num_experiments))->ignore_case();
-    benchmark_opt->add_option("--cpu",
-                       cpu,
-                       "Target's backend ({})"_format(cpu))->ignore_case();
+    benchmark_opt->needs(llvm_opt);
+    benchmark_opt->add_flag("--run", llvm_benchmark, "Run LLVM benchmark ({})"_format(llvm_benchmark))->ignore_case();
+    benchmark_opt->add_option("--opt-level-codegen", llvm_opt_level_codegen, "Machine code optimisation level (O{})"_format(llvm_opt_level_codegen))->ignore_case()->check(CLI::IsMember({"0", "1", "2", "3"}));
+    benchmark_opt->add_option("--shared-libs", llvm_shared_lib_paths, "Shared libraries to link in JIT driver")->ignore_case()->check(CLI::ExistingFile);
+    benchmark_opt->add_option("--mechanism-data-size", llvm_mechanism_data_size, "Size of mechanism data instance ({})"_format(llvm_mechanism_data_size))->ignore_case();
+    benchmark_opt->add_option("--num-experiments", llvm_num_experiments, "Number of experiments for benchmarking ({})"_format(llvm_num_experiments))->ignore_case();
 #endif
     // clang-format on
 
@@ -657,38 +661,47 @@ int main(int argc, const char* argv[]) {
             }
 
 #ifdef NMODL_LLVM_BACKEND
-            if (llvm_ir || run_llvm_benchmark) {
+            if (llvm_ir || llvm_benchmark) {
+                // First, create a target abstraction that will be used by LLVM visitor or
+                // when benchmarking.
+                Target* target =
+                    Target::build_target(llvm_cpu_target, llvm_gpu_target)
+                        ->with_math_library(llvm_math_library)
+                        ->with_instruction_width(llvm_vector_width)
+                        ->with_precision(llvm_precision)
+                        ->with_VLA(llvm_vla);
+
                 // If benchmarking, we want to optimize the IR with target information and not in
                 // LLVM visitor.
-                int llvm_opt_level = run_llvm_benchmark ? 0 : llvm_opt_level_ir;
+                int llvm_opt_level = llvm_benchmark ? 0 : llvm_opt_level_ir;
 
                 logger->info("Running LLVM backend code generator");
                 CodegenLLVMVisitor visitor(modfile,
                                            output_dir,
                                            llvm_opt_level,
-                                           llvm_float_type,
-                                           llvm_vec_width,
-                                           vector_library,
-                                           !disable_debug_information,
-                                           llvm_fast_math_flags,
-                                           llvm_assume_alias);
+                                           target,
+                                           !llvm_no_debug,
+                                           llvm_fast_math_flags);
                 visitor.visit_program(*ast);
                 ast_to_nmodl(*ast, filepath("llvm", "mod"));
                 ast_to_json(*ast, filepath("llvm", "json"));
 
-                if (run_llvm_benchmark) {
+                if (llvm_benchmark) {
                     logger->info("Running LLVM benchmark");
                     benchmark::LLVMBenchmark benchmark(visitor,
+                                                       target,
                                                        modfile,
                                                        output_dir,
-                                                       shared_lib_paths,
-                                                       num_experiments,
-                                                       instance_size,
-                                                       cpu,
+                                                       llvm_shared_lib_paths,
+                                                       llvm_num_experiments,
+                                                       llvm_mechanism_data_size,
                                                        llvm_opt_level_ir,
                                                        llvm_opt_level_codegen);
                     benchmark.run(ast);
                 }
+
+                // Clean-up;
+                delete target;
             }
 #endif
         }

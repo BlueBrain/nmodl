@@ -542,8 +542,8 @@ void CodegenLLVMVisitor::visit_boolean(const ast::Boolean& node) {
  * \todo support this properly.
  */
 void CodegenLLVMVisitor::visit_codegen_atomic_statement(const ast::CodegenAtomicStatement& node) {
-    if (vector_width > 1)
-        logger->warn("Atomic operations are not supported");
+    if (target_platform->is_cpu_with_simd())
+        logger->warn("Atomic operations for SIMD targets are not supported");
 
     // Support only assignment for now.
     llvm::Value* rhs = accept_and_get(node.get_rhs());
@@ -555,7 +555,7 @@ void CodegenLLVMVisitor::visit_codegen_atomic_statement(const ast::CodegenAtomic
         throw std::runtime_error("Error: only 'VarName' assignment is supported\n");
 
     // Process the assignment as if it was non-atomic.
-    if (vector_width > 1)
+    if (target_platform->is_cpu_with_simd())
         logger->warn("Treating write as non-atomic");
     write_to_variable(*var, rhs);
 }
@@ -625,7 +625,7 @@ void CodegenLLVMVisitor::visit_codegen_for_statement(const ast::CodegenForStatem
     ir_builder.set_insertion_point(for_body);
 
     // If not processing remainder of the loop, start vectorization.
-    if (vector_width > 1 && main_loop_initialization)
+    if (target_platform->is_cpu_with_simd() && main_loop_initialization)
         ir_builder.generate_vector_ir();
 
     // Generate code for the loop body and create the basic block for the increment.
@@ -666,7 +666,7 @@ void CodegenLLVMVisitor::visit_codegen_function(const ast::CodegenFunction& node
 
     // Process function or procedure body. If the function is a compute kernel, enable
     // vectorization. If so, the return statement is handled in a separate visitor.
-    if (vector_width > 1 && is_kernel_function(name)) {
+    if (target_platform->is_cpu_with_simd() && is_kernel_function(name)) {
         ir_builder.generate_vector_ir();
         block->accept(*this);
         ir_builder.generate_scalar_ir();
@@ -740,7 +740,7 @@ void CodegenLLVMVisitor::visit_function_call(const ast::FunctionCall& node) {
 
 void CodegenLLVMVisitor::visit_if_statement(const ast::IfStatement& node) {
     // If vectorizing the compute kernel with control flow, process it separately.
-    if (vector_width > 1 && ir_builder.vectorizing()) {
+    if (target_platform->is_cpu_with_simd() && ir_builder.vectorizing()) {
         create_vectorized_control_flow_block(node);
         return;
     }
@@ -815,7 +815,7 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
     //   - convert function and procedure blocks into CodegenFunctions
     //   - gather information about AST. For now, information about functions
     //     and procedures is used only.
-    CodegenLLVMHelperVisitor v{vector_width};
+    CodegenLLVMHelperVisitor v{target_platform};
     const auto& functions = v.get_codegen_functions(node);
     instance_var_helper = v.get_instance_var_helper();
     sym_tab = node.get_symbol_table();
@@ -864,7 +864,7 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
     }
 
     // Optionally, replace LLVM math intrinsics with vector library calls.
-    if (vector_width > 1) {
+    if (target_platform->is_cpu_with_simd()) {
 #if LLVM_VERSION_MAJOR < 13
         logger->warn(
             "This version of LLVM does not support replacement of LLVM intrinsics with vector "
@@ -872,6 +872,7 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
 #else
         // First, get the target library information and add vectorizable functions for the
         // specified vector library.
+        // TODO: since we have a Target calss now, this functionality (TargetLibraryInfoImpl/Triple) can go there!
         llvm::Triple triple(llvm::sys::getDefaultTargetTriple());
         llvm::TargetLibraryInfoImpl target_lib_info = llvm::TargetLibraryInfoImpl(triple);
         add_vectorizable_functions_from_vec_lib(target_lib_info, triple);

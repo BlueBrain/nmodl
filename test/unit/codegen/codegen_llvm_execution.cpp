@@ -124,9 +124,11 @@ SCENARIO("Arithmetic expression", "[llvm][runner]") {
         const auto& ast = driver.parse_string(nmodl_text);
 
         SymtabVisitor().visit_program(*ast);
+        codegen::Target* target_platform = codegen::Target::build_default_target();
         codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"unknown",
                                                  /*output_dir=*/".",
-                                                 /*opt_level_ir=*/0);
+                                                 /*opt_level_ir=*/0,
+                                                 target_platform);
         llvm_visitor.visit_program(*ast);
 
         std::unique_ptr<llvm::Module> m = llvm_visitor.get_module();
@@ -154,6 +156,9 @@ SCENARIO("Arithmetic expression", "[llvm][runner]") {
             auto loop_result = runner.run_without_arguments<double>("loop");
             REQUIRE(fabs(loop_result - 90.0) < EPSILON);
         }
+
+        // Clean-up;
+        delete target_platform;
     }
 }
 
@@ -226,9 +231,11 @@ SCENARIO("Optimised arithmetic expression", "[llvm][runner]") {
         const auto& ast = driver.parse_string(nmodl_text);
 
         SymtabVisitor().visit_program(*ast);
+        codegen::Target* target_platform = codegen::Target::build_default_target();
         codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"unknown",
                                                  /*output_dir=*/".",
-                                                 /*opt_level_ir=*/3);
+                                                 /*opt_level_ir=*/3,
+                                                 target_platform);
         llvm_visitor.visit_program(*ast);
 
         std::unique_ptr<llvm::Module> m = llvm_visitor.get_module();
@@ -299,11 +306,11 @@ SCENARIO("Simple scalar kernel", "[llvm][runner]") {
         SymtabVisitor().visit_program(*ast);
         NeuronSolveVisitor().visit_program(*ast);
         SolveBlockVisitor().visit_program(*ast);
+        codegen::Target* target_platform = codegen::Target::build_default_target();
         codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"unknown",
                                                  /*output_dir=*/".",
                                                  /*opt_level_ir=*/0,
-                                                 /*use_single_precision=*/false,
-                                                 /*vector_width=*/1);
+                                                 target_platform);
         llvm_visitor.visit_program(*ast);
         llvm_visitor.wrap_kernel_functions();
 
@@ -336,6 +343,8 @@ SCENARIO("Simple scalar kernel", "[llvm][runner]") {
             std::vector<double> x_expected = {4.0, 3.0, 2.0, 1.0};
             REQUIRE(check_instance_variable(instance_info, x_expected, "x"));
         }
+
+        delete target_platform;
     }
 }
 
@@ -381,11 +390,11 @@ SCENARIO("Simple vectorised kernel", "[llvm][runner]") {
         SymtabVisitor().visit_program(*ast);
         NeuronSolveVisitor().visit_program(*ast);
         SolveBlockVisitor().visit_program(*ast);
+        codegen::Target* target_platform = codegen::Target::build_default_target()->with_instruction_width(4);
         codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"unknown",
                                                  /*output_dir=*/".",
                                                  /*opt_level_ir=*/3,
-                                                 /*use_single_precision=*/false,
-                                                 /*vector_width=*/4);
+                                                 target_platform);
         llvm_visitor.visit_program(*ast);
         llvm_visitor.wrap_kernel_functions();
 
@@ -430,6 +439,8 @@ SCENARIO("Simple vectorised kernel", "[llvm][runner]") {
             std::vector<double> y_expected = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0};
             REQUIRE(check_instance_variable<double>(instance_info, y_expected, "y"));
         }
+
+        delete target_platform;
     }
 }
 
@@ -463,11 +474,11 @@ SCENARIO("Vectorised kernel with scatter instruction", "[llvm][runner]") {
         SymtabVisitor().visit_program(*ast);
         NeuronSolveVisitor().visit_program(*ast);
         SolveBlockVisitor().visit_program(*ast);
+        codegen::Target* target_platform = codegen::Target::build_default_target()->with_instruction_width(2);
         codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"unknown",
                                                  /*output_dir=*/".",
                                                  /*opt_level_ir=*/0,
-                                                 /*use_single_precision=*/false,
-                                                 /*vector_width=*/2);
+                                                 target_platform);
         llvm_visitor.visit_program(*ast);
         llvm_visitor.wrap_kernel_functions();
 
@@ -506,6 +517,8 @@ SCENARIO("Vectorised kernel with scatter instruction", "[llvm][runner]") {
             std::vector<double> ion_cai_expected = {2.0, 3.0, 4.0, 5.0, 6.0};
             REQUIRE(check_instance_variable(instance_info, ion_cai_expected, "ion_cai"));
         }
+
+        delete target_platform;
     }
 }
 
@@ -554,11 +567,11 @@ SCENARIO("Vectorised kernel with simple control flow", "[llvm][runner]") {
         SymtabVisitor().visit_program(*ast);
         NeuronSolveVisitor().visit_program(*ast);
         SolveBlockVisitor().visit_program(*ast);
+        codegen::Target* target_platform = codegen::Target::build_default_target()->with_instruction_width(2);
         codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"unknown",
                                                  /*output_dir=*/".",
                                                  /*opt_level_ir=*/0,
-                                                 /*use_single_precision=*/false,
-                                                 /*vector_width=*/2);
+                                                 target_platform);
         llvm_visitor.visit_program(*ast);
         llvm_visitor.wrap_kernel_functions();
 
@@ -607,5 +620,7 @@ SCENARIO("Vectorised kernel with simple control flow", "[llvm][runner]") {
             REQUIRE(check_instance_variable(instance_info, y_expected, "y"));
             REQUIRE(check_instance_variable(instance_info, z_expected, "z"));
         }
+
+        delete target_platform;
     }
 }
