@@ -98,9 +98,7 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
         , target_platform(target_platform)
         , opt_level_ir(opt_level_ir)
         , add_debug_information(add_debug_information)
-        , ir_builder(*context,
-                     target_platform,
-                     fast_math_flags)
+        , ir_builder(*context, target_platform, fast_math_flags)
         , debug_builder(*module) {}
 
     /// Dumps the generated LLVM IR module to string.

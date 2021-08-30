@@ -17,7 +17,7 @@ const std::string Target::DEFAULT_MATH_LIBRARY = "none";
 //                                 Builders.                                  //
 // ========================================================================== //
 
-Target* Target::build_target(std::string &cpu_name, std::string &gpu_name) {
+Target* Target::build_target(std::string& cpu_name, std::string& gpu_name) {
     if (cpu_name == Target::DEFAULT_TARGET_NAME && gpu_name != Target::DEFAULT_TARGET_NAME)
         return Target::build_gpu(gpu_name);
     // By default, we use CPU as a target.
@@ -46,7 +46,7 @@ GPUTarget* Target::build_gpu(std::string& gpu_name) {
 
 bool Target::is_default_platform() {
     // Default platform is a CPU.
-    return platform_id == TargetPlatformID::CPU &&  name == Target::DEFAULT_TARGET_NAME;
+    return platform_id == TargetPlatformID::CPU && name == Target::DEFAULT_TARGET_NAME;
 }
 
 bool Target::is_cpu() {

@@ -12,10 +12,7 @@
 namespace nmodl {
 namespace codegen {
 
-enum TargetPlatformID {
-    CPU,
-    GPU
-};
+enum TargetPlatformID { CPU, GPU };
 
 class CPUTarget;
 class GPUTarget;
@@ -59,17 +56,15 @@ class Target {
            const std::string& name,
            std::string& math_library,
            int instruction_width)
-            : platform_id(platform_id)
-            , name(name)
-            , math_library(math_library)
-            , instruction_width(instruction_width) {}
+        : platform_id(platform_id)
+        , name(name)
+        , math_library(math_library)
+        , instruction_width(instruction_width) {}
 
-    Target(TargetPlatformID platform_id,
-           const std::string& name,
-           int instruction_width)
-            : platform_id(platform_id)
-            , name(name)
-            , instruction_width(instruction_width) {}
+    Target(TargetPlatformID platform_id, const std::string& name, int instruction_width)
+        : platform_id(platform_id)
+        , name(name)
+        , instruction_width(instruction_width) {}
 
   public:
     virtual ~Target() = default;
@@ -111,7 +106,6 @@ class Target {
  */
 class CPUTarget: public Target {
   private:
-
     /// Flag to specify if the target has VLA ISA.
     bool is_VLA;
 
@@ -120,19 +114,16 @@ class CPUTarget: public Target {
               std::string& math_library,
               int instruction_width = 1,
               bool is_VLA = false)
-              : Target(TargetPlatformID::CPU, name, math_library, instruction_width)
-              , is_VLA(is_VLA) {}
+        : Target(TargetPlatformID::CPU, name, math_library, instruction_width)
+        , is_VLA(is_VLA) {}
 
-    CPUTarget(const std::string& name,
-              int instruction_width = 1,
-              bool is_VLA = false)
-            : Target(TargetPlatformID::CPU, name, instruction_width)
-            , is_VLA(is_VLA) {}
+    CPUTarget(const std::string& name, int instruction_width = 1, bool is_VLA = false)
+        : Target(TargetPlatformID::CPU, name, instruction_width)
+        , is_VLA(is_VLA) {}
 
-    CPUTarget(int instruction_width = 1,
-              bool is_VLA = false)
-            : Target(TargetPlatformID::CPU, Target::DEFAULT_TARGET_NAME, instruction_width)
-            , is_VLA(is_VLA) {}
+    CPUTarget(int instruction_width = 1, bool is_VLA = false)
+        : Target(TargetPlatformID::CPU, Target::DEFAULT_TARGET_NAME, instruction_width)
+        , is_VLA(is_VLA) {}
 
     Target* with_VLA(bool is_VLA) override;
 
@@ -146,11 +137,10 @@ class CPUTarget: public Target {
  */
 class GPUTarget: public Target {
   public:
-    GPUTarget(std::string& name,
-              std::string& math_library)
-            : Target(TargetPlatformID::GPU, name, math_library, /*instruction_width=*/1) {}
+    GPUTarget(std::string& name, std::string& math_library)
+        : Target(TargetPlatformID::GPU, name, math_library, /*instruction_width=*/1) {}
     explicit GPUTarget(std::string& name)
-            : Target(TargetPlatformID::GPU, name, /*instruction_width=*/1) {}
+        : Target(TargetPlatformID::GPU, name, /*instruction_width=*/1) {}
 
     Target* with_VLA(bool is_VLA) override;
 };

@@ -43,24 +43,26 @@ llvm::Type* IRBuilder::get_i64_type() {
 llvm::Type* IRBuilder::get_fp_type() {
     int precision = target_platform->get_precision();
     switch (precision) {
-        case 32:
-            return llvm::Type::getFloatTy(builder.getContext());
-        case 64:
-            return llvm::Type::getDoubleTy(builder.getContext());
-        default:
-            throw std::runtime_error("Error: precision of " + std::to_string(precision) + " bits is not supported\n");
+    case 32:
+        return llvm::Type::getFloatTy(builder.getContext());
+    case 64:
+        return llvm::Type::getDoubleTy(builder.getContext());
+    default:
+        throw std::runtime_error("Error: precision of " + std::to_string(precision) +
+                                 " bits is not supported\n");
     }
 }
 
 llvm::Type* IRBuilder::get_fp_ptr_type() {
     int precision = target_platform->get_precision();
     switch (precision) {
-        case 32:
-            return llvm::Type::getFloatPtrTy(builder.getContext());
-        case 64:
-            return llvm::Type::getDoublePtrTy(builder.getContext());
-        default:
-            throw std::runtime_error("Error: precision of " + std::to_string(precision) + " bits is not supported\n");
+    case 32:
+        return llvm::Type::getFloatPtrTy(builder.getContext());
+    case 64:
+        return llvm::Type::getDoublePtrTy(builder.getContext());
+    default:
+        throw std::runtime_error("Error: precision of " + std::to_string(precision) +
+                                 " bits is not supported\n");
     }
 }
 
@@ -455,7 +457,8 @@ void IRBuilder::create_scalar_or_vector_alloca(const std::string& name,
     // Even if generating vectorised code, some variables still need to be scalar. Particularly, the
     // induction variable "id" and remainder loop variables (that start with "epilogue" prefix).
     llvm::Type* type;
-    if (target_platform->is_cpu_with_simd() && vectorize && name != kernel_id && name.rfind("epilogue", 0)) {
+    if (target_platform->is_cpu_with_simd() && vectorize && name != kernel_id &&
+        name.rfind("epilogue", 0)) {
         int vector_width = target_platform->get_instruction_width();
         type = llvm::FixedVectorType::get(element_or_scalar_type, vector_width);
     } else {
@@ -542,7 +545,8 @@ void IRBuilder::maybe_replicate_value(llvm::Value* value) {
     } else {
         // Otherwise, we generate vectorized code inside the loop, so replicate the value to form a
         // vector.
-        llvm::Value* vector_value = builder.CreateVectorSplat(target_platform->get_instruction_width(), value);
+        llvm::Value* vector_value =
+            builder.CreateVectorSplat(target_platform->get_instruction_width(), value);
         value_stack.push_back(vector_value);
     }
 }

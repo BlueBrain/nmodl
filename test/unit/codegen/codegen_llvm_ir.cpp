@@ -51,7 +51,10 @@ std::string run_llvm_visitor(const std::string& text,
     NeuronSolveVisitor().visit_program(*ast);
     SolveBlockVisitor().visit_program(*ast);
 
-    codegen::Target* target_platform = codegen::Target::build_default_target()->with_precision(precision)->with_instruction_width(vector_width)->with_math_library(vec_lib);
+    codegen::Target* target_platform = codegen::Target::build_default_target()
+                                           ->with_precision(precision)
+                                           ->with_instruction_width(vector_width)
+                                           ->with_math_library(vec_lib);
     codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"unknown",
                                              /*output_dir=*/".",
                                              opt_level,
@@ -79,10 +82,11 @@ std::vector<std::shared_ptr<ast::Ast>> run_llvm_visitor_helper(
     SymtabVisitor().visit_program(*ast);
     SolveBlockVisitor().visit_program(*ast);
 
-    codegen::Target* target_platform = codegen::Target::build_default_target()->with_instruction_width(vector_width);
+    codegen::Target* target_platform =
+        codegen::Target::build_default_target()->with_instruction_width(vector_width);
     CodegenLLVMHelperVisitor(target_platform).visit_program(*ast);
     const auto& nodes = collect_nodes(*ast, nodes_to_collect);
-    
+
     delete target_platform;
 
     return nodes;
@@ -1374,12 +1378,11 @@ SCENARIO("Vector library calls", "[visitor][llvm][vector_lib]") {
             REQUIRE(std::regex_search(massv4_library_module_str, m, exp4_call));
 
             // Check correct replacement of @llvm.exp.v4f32 into @vexpf when using Accelerate.
-            std::string accelerate_library_module_str =
-                run_llvm_visitor(nmodl_text,
-                                 /*opt_level=*/0,
-                                 /*precision=*/32,
-                                 /*vector_width=*/4,
-                                 /*vec_lib=*/"Accelerate");
+            std::string accelerate_library_module_str = run_llvm_visitor(nmodl_text,
+                                                                         /*opt_level=*/0,
+                                                                         /*precision=*/32,
+                                                                         /*vector_width=*/4,
+                                                                         /*vec_lib=*/"Accelerate");
             std::regex accelerate_exp_decl(R"(declare <4 x float> @vexpf\(<4 x float>\))");
             std::regex accelerate_exp_call(R"(call <4 x float> @vexpf\(<4 x float> .*\))");
             std::regex fexp_call(R"(call <4 x float> @llvm\.exp\.v4f32\(<4 x float> .*\))");

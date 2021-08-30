@@ -390,7 +390,8 @@ SCENARIO("Simple vectorised kernel", "[llvm][runner]") {
         SymtabVisitor().visit_program(*ast);
         NeuronSolveVisitor().visit_program(*ast);
         SolveBlockVisitor().visit_program(*ast);
-        codegen::Target* target_platform = codegen::Target::build_default_target()->with_instruction_width(4);
+        codegen::Target* target_platform =
+            codegen::Target::build_default_target()->with_instruction_width(4);
         codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"unknown",
                                                  /*output_dir=*/".",
                                                  /*opt_level_ir=*/3,
@@ -474,7 +475,8 @@ SCENARIO("Vectorised kernel with scatter instruction", "[llvm][runner]") {
         SymtabVisitor().visit_program(*ast);
         NeuronSolveVisitor().visit_program(*ast);
         SolveBlockVisitor().visit_program(*ast);
-        codegen::Target* target_platform = codegen::Target::build_default_target()->with_instruction_width(2);
+        codegen::Target* target_platform =
+            codegen::Target::build_default_target()->with_instruction_width(2);
         codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"unknown",
                                                  /*output_dir=*/".",
                                                  /*opt_level_ir=*/0,
@@ -567,7 +569,8 @@ SCENARIO("Vectorised kernel with simple control flow", "[llvm][runner]") {
         SymtabVisitor().visit_program(*ast);
         NeuronSolveVisitor().visit_program(*ast);
         SolveBlockVisitor().visit_program(*ast);
-        codegen::Target* target_platform = codegen::Target::build_default_target()->with_instruction_width(2);
+        codegen::Target* target_platform =
+            codegen::Target::build_default_target()->with_instruction_width(2);
         codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"unknown",
                                                  /*output_dir=*/".",
                                                  /*opt_level_ir=*/0,

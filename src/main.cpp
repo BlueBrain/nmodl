@@ -664,12 +664,11 @@ int main(int argc, const char* argv[]) {
             if (llvm_ir || llvm_benchmark) {
                 // First, create a target abstraction that will be used by LLVM visitor or
                 // when benchmarking.
-                Target* target =
-                    Target::build_target(llvm_cpu_target, llvm_gpu_target)
-                        ->with_math_library(llvm_math_library)
-                        ->with_instruction_width(llvm_vector_width)
-                        ->with_precision(llvm_precision)
-                        ->with_VLA(llvm_vla);
+                Target* target = Target::build_target(llvm_cpu_target, llvm_gpu_target)
+                                     ->with_math_library(llvm_math_library)
+                                     ->with_instruction_width(llvm_vector_width)
+                                     ->with_precision(llvm_precision)
+                                     ->with_VLA(llvm_vla);
 
                 // If benchmarking, we want to optimize the IR with target information and not in
                 // LLVM visitor.

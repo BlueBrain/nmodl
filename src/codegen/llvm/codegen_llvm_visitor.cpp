@@ -872,7 +872,8 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
 #else
         // First, get the target library information and add vectorizable functions for the
         // specified vector library.
-        // TODO: since we have a Target calss now, this functionality (TargetLibraryInfoImpl/Triple) can go there!
+        // TODO: since we have a Target calss now, this functionality (TargetLibraryInfoImpl/Triple)
+        // can go there!
         llvm::Triple triple(llvm::sys::getDefaultTargetTriple());
         llvm::TargetLibraryInfoImpl target_lib_info = llvm::TargetLibraryInfoImpl(triple);
         add_vectorizable_functions_from_vec_lib(target_lib_info, triple);

@@ -39,7 +39,9 @@ codegen::CodegenInstanceData generate_instance_data(const std::string& text,
     SymtabVisitor().visit_program(*ast);
     NeuronSolveVisitor().visit_program(*ast);
 
-    codegen::Target* target_platfrom = codegen::Target::build_default_target()->with_instruction_width(vector_width)->with_precision(precision);
+    codegen::Target* target_platfrom = codegen::Target::build_default_target()
+                                           ->with_instruction_width(vector_width)
+                                           ->with_precision(precision);
     codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"test",
                                              /*output_dir=*/".",
                                              opt_level,

@@ -49,7 +49,10 @@ int main(int argc, const char* argv[]) {
 
     logger->info("Running LLVM Visitor");
     nmodl::codegen::CPUTarget target_platform(nmodl::codegen::CPUTarget::DEFAULT_TARGET_NAME);
-    codegen::CodegenLLVMVisitor llvm_visitor(filename, /*output_dir=*/".", /*opt_level_ir=*/0, &target_platform);
+    codegen::CodegenLLVMVisitor llvm_visitor(filename,
+                                             /*output_dir=*/".",
+                                             /*opt_level_ir=*/0,
+                                             &target_platform);
     llvm_visitor.visit_program(*ast);
     std::unique_ptr<llvm::Module> module = llvm_visitor.get_module();
 

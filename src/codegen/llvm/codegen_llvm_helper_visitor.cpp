@@ -626,15 +626,11 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
         /// access node index and corresponding voltage
         index_statements.push_back(
             visitor::create_statement("node_id = node_index[{}]"_format(INDUCTION_VAR)));
-        body_statements.push_back(
-            visitor::create_statement("v = {}[node_id]"_format(VOLTAGE_VAR)));
+        body_statements.push_back(visitor::create_statement("v = {}[node_id]"_format(VOLTAGE_VAR)));
 
         /// read ion variables
-        ion_read_statements(BlockType::State,
-                            int_variables,
-                            double_variables,
-                            index_statements,
-                            body_statements);
+        ion_read_statements(
+            BlockType::State, int_variables, double_variables, index_statements, body_statements);
 
         /// main compute node : extract solution expressions from the derivative block
         const auto& solutions = collect_nodes(node, {ast::AstNodeType::SOLUTION_EXPRESSION});
@@ -652,11 +648,8 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
         }
 
         /// write ion statements
-        ion_write_statements(BlockType::State,
-                             int_variables,
-                             double_variables,
-                             index_statements,
-                             body_statements);
+        ion_write_statements(
+            BlockType::State, int_variables, double_variables, index_statements, body_statements);
 
         // \todo handle process_shadow_update_statement and wrote_conc_call yet
     }
@@ -668,14 +661,15 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
     compute_body.insert(compute_body.end(), body_statements.begin(), body_statements.end());
 
     if (target_platform->is_gpu()) {
-        const auto& id_statement = std::make_shared<ast::CodegenThreadId>(create_varname(INDUCTION_VAR));
+        const auto& id_statement = std::make_shared<ast::CodegenThreadId>(
+            create_varname(INDUCTION_VAR));
         function_statements.push_back(id_statement);
         create_gpu_compute_body(compute_body, function_statements, int_variables, double_variables);
     } else {
         // Create induction variable
         std::vector<std::string> induction_variables{INDUCTION_VAR};
         function_statements.push_back(
-                create_local_variable_statement(induction_variables, INTEGER_TYPE));
+            create_local_variable_statement(induction_variables, INTEGER_TYPE));
         create_cpu_compute_body(compute_body, function_statements, int_variables, double_variables);
     }
 
@@ -712,7 +706,8 @@ void CodegenLLVMHelperVisitor::create_gpu_compute_body(ast::StatementVector& bod
     auto kernel_block = std::make_shared<ast::StatementBlock>(body);
     const auto& condition = loop_count_expression(INDUCTION_VAR, NODECOUNT_VAR, 1);
     ast::ElseIfStatementVector else_ifs = {};
-    auto if_statement = std::make_shared<ast::IfStatement>(condition, kernel_block, else_ifs, nullptr);
+    auto if_statement =
+        std::make_shared<ast::IfStatement>(condition, kernel_block, else_ifs, nullptr);
 
     convert_to_instance_variable(*if_statement, INDUCTION_VAR);
 
@@ -729,7 +724,11 @@ void CodegenLLVMHelperVisitor::create_cpu_compute_body(ast::StatementVector& bod
     auto loop_block = std::make_shared<ast::StatementBlock>(body);
     create_compute_body_loop(loop_block, function_statements, int_variables, double_variables);
     if (target_platform->is_cpu_with_simd())
-        create_compute_body_loop(loop_block, function_statements, int_variables, double_variables, /*is_remainder_loop=*/true);
+        create_compute_body_loop(loop_block,
+                                 function_statements,
+                                 int_variables,
+                                 double_variables,
+                                 /*is_remainder_loop=*/true);
 }
 
 void CodegenLLVMHelperVisitor::create_compute_body_loop(std::shared_ptr<ast::StatementBlock>& block,
@@ -740,15 +739,18 @@ void CodegenLLVMHelperVisitor::create_compute_body_loop(std::shared_ptr<ast::Sta
     // First, check if we are creating a main or remainder loop. If it is a remainder loop, then
     // no initialization is needed and instruction width is simply 1.
     int width = is_remainder_loop ? 1 : target_platform->get_instruction_width();
-    const auto& initialization = is_remainder_loop ? nullptr : int_initialization_expression(INDUCTION_VAR);
+    const auto& initialization = is_remainder_loop ? nullptr
+                                                   : int_initialization_expression(INDUCTION_VAR);
     const auto& condition = loop_count_expression(INDUCTION_VAR, NODECOUNT_VAR, width);
     const auto& increment = loop_increment_expression(INDUCTION_VAR, width);
 
     // Clone the statement block if needed since it can be used by the remainder loop.
-    auto loop_block = (is_remainder_loop || !target_platform->is_cpu_with_simd()) ? block : std::shared_ptr<ast::StatementBlock>(block->clone());
+    auto loop_block = (is_remainder_loop || !target_platform->is_cpu_with_simd())
+                          ? block
+                          : std::shared_ptr<ast::StatementBlock>(block->clone());
 
-    // Convert local statement to use CodegenVar statements and create  a FOR loop node. Also, if creating
-    // a remainder loop then rename variables to avoid conflicts.
+    // Convert local statement to use CodegenVar statements and create  a FOR loop node. Also, if
+    // creating a remainder loop then rename variables to avoid conflicts.
     if (is_remainder_loop)
         rename_local_variables(*loop_block);
     convert_local_statement(*loop_block);

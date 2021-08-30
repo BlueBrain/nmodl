@@ -102,7 +102,6 @@ struct InstanceVarHelper {
  * these will be common across all backends.
  */
 class CodegenLLVMHelperVisitor: public visitor::AstVisitor {
-
     /// Target for which LLVM IR is generated (Can be CPU, CPU with
     /// vector ISA, or GPU).
     Target* target_platform;
@@ -178,7 +177,6 @@ class CodegenLLVMHelperVisitor: public visitor::AstVisitor {
     void visit_program(ast::Program& node) override;
 
   private:
-
     /// Methods to populate`function_statements` with necessary AST constructs to form
     /// a kernel for a specific target.
     void create_gpu_compute_body(ast::StatementVector& body,
