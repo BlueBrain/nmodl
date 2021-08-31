@@ -9,8 +9,8 @@
 #include "ast/all.hpp"
 
 #include "llvm/ADT/StringSwitch.h"
-#include "llvm/IR/IntrinsicsNVPTX.h"
 #include "llvm/IR/Function.h"
+#include "llvm/IR/IntrinsicsNVPTX.h"
 #include "llvm/IR/ValueSymbolTable.h"
 
 namespace nmodl {
@@ -481,20 +481,20 @@ void IRBuilder::create_thread_id() {
     // Maps to intrinsics.
     // TODO: populate for other platforms.
     static std::map<std::string, llvm::Intrinsic::ID> block_ids = {
-        {"cuda", llvm::Intrinsic::NVVMIntrinsics::nvvm_read_ptx_sreg_ctaid_x}
-    };
+        {"cuda", llvm::Intrinsic::NVVMIntrinsics::nvvm_read_ptx_sreg_ctaid_x}};
     static std::map<std::string, llvm::Intrinsic::ID> block_dims = {
-        {"cuda", llvm::Intrinsic::NVVMIntrinsics::nvvm_read_ptx_sreg_ntid_x}
-    };
+        {"cuda", llvm::Intrinsic::NVVMIntrinsics::nvvm_read_ptx_sreg_ntid_x}};
     static std::map<std::string, llvm::Intrinsic::ID> thread_ids = {
-        {"cuda", llvm::Intrinsic::NVVMIntrinsics::nvvm_read_ptx_sreg_tid_x}
-    };
+        {"cuda", llvm::Intrinsic::NVVMIntrinsics::nvvm_read_ptx_sreg_tid_x}};
 
     llvm::Module* module = builder.GetInsertBlock()->getModule();
-    llvm::Value* block_id = builder.CreateCall(llvm::Intrinsic::getDeclaration(module, block_ids[platform_name]));
-    llvm::Value* block_dim = builder.CreateCall(llvm::Intrinsic::getDeclaration(module, block_dims[platform_name]));
+    llvm::Value* block_id = builder.CreateCall(
+        llvm::Intrinsic::getDeclaration(module, block_ids[platform_name]));
+    llvm::Value* block_dim = builder.CreateCall(
+        llvm::Intrinsic::getDeclaration(module, block_dims[platform_name]));
     llvm::Value* tmp = builder.CreateMul(block_dim, block_id);
-    llvm::Value* tid = builder.CreateCall(llvm::Intrinsic::getDeclaration(module, thread_ids[platform_name]));
+    llvm::Value* tid = builder.CreateCall(
+        llvm::Intrinsic::getDeclaration(module, thread_ids[platform_name]));
     llvm::Value* id = builder.CreateAdd(tmp, tid);
     value_stack.push_back(id);
 }

@@ -1609,4 +1609,3 @@ SCENARIO("Calculation for TID for CUDA platform", "[visitor][llvm]") {
         }
     }
 }
-
