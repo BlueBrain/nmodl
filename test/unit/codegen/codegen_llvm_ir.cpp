@@ -34,6 +34,23 @@ using nmodl::parser::NmodlDriver;
 // Utility to get LLVM module as a string
 //=============================================================================
 
+std::string run_llvm_visitor_on_gpu(const std::string& text, std::string& target_name) {
+    NmodlDriver driver;
+    const auto& ast = driver.parse_string(text);
+
+    SymtabVisitor().visit_program(*ast);
+    NeuronSolveVisitor().visit_program(*ast);
+    SolveBlockVisitor().visit_program(*ast);
+
+    codegen::GPUTarget gpu(target_name);
+    codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"unknown",
+                                             /*output_dir=*/".",
+                                             /*opt_level_ir=*/0,
+                                             &gpu);
+    llvm_visitor.visit_program(*ast);
+    return llvm_visitor.dump_module();
+}
+
 std::string run_llvm_visitor(const std::string& text,
                              int opt_level = 0,
                              int precision = 64,
@@ -1532,3 +1549,64 @@ SCENARIO("Removal of inlined functions and procedures", "[visitor][llvm][inline]
         }
     }
 }
+
+//=============================================================================
+// CodegenThreadId
+//=============================================================================
+
+SCENARIO("Calculation for TID for CUDA platform", "[visitor][llvm]") {
+    GIVEN("A neuron state update") {
+        std::string nmodl_text = R"(
+            NEURON {
+                SUFFIX hh
+                NONSPECIFIC_CURRENT il
+                RANGE minf, mtau, gl, el
+            }
+
+            STATE {
+                m
+            }
+
+            ASSIGNED {
+                v (mV)
+                minf
+                mtau (ms)
+            }
+
+            BREAKPOINT {
+                SOLVE states METHOD cnexp
+                il = gl * (v - el)
+            }
+
+            DERIVATIVE states {
+                    m = (minf-m) / mtau
+            }
+        )";
+
+        THEN("NVVM intrinsics are used") {
+            std::string platfrom = "cuda";
+            std::string module_string = run_llvm_visitor_on_gpu(nmodl_text, platfrom);
+            std::smatch m;
+
+            // Check declarations for NVVM intrinsics.
+            std::regex declaration1(R"(declare i32 @llvm\.nvvm\.read\.ptx\.sreg\.ctaid\.x\(\))");
+            std::regex declaration2(R"(declare i32 @llvm\.nvvm\.read\.ptx\.sreg\.ntid\.x\(\))");
+            std::regex declaration3(R"(declare i32 @llvm\.nvvm\.read\.ptx\.sreg\.tid\.x\(\))");
+            REQUIRE(std::regex_search(module_string, m, declaration1));
+            REQUIRE(std::regex_search(module_string, m, declaration2));
+            REQUIRE(std::regex_search(module_string, m, declaration3));
+
+            std::regex block_id(R"(%1 = call i32 @llvm\.nvvm\.read\.ptx\.sreg\.ctaid\.x\(\))");
+            std::regex block_dim(R"(%2 = call i32 @llvm\.nvvm\.read\.ptx\.sreg\.ntid\.x\(\))");
+            std::regex mul(R"(%3 = mul i32 %2, %1)");
+            std::regex tid(R"(%4 = call i32 @llvm\.nvvm\.read\.ptx\.sreg\.tid\.x\(\))");
+            std::regex add(R"( %5 = add i32 %3, %4)");
+            REQUIRE(std::regex_search(module_string, m, block_id));
+            REQUIRE(std::regex_search(module_string, m, block_dim));
+            REQUIRE(std::regex_search(module_string, m, mul));
+            REQUIRE(std::regex_search(module_string, m, tid));
+            REQUIRE(std::regex_search(module_string, m, add));
+        }
+    }
+}
+
