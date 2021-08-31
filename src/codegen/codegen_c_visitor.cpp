@@ -531,21 +531,27 @@ std::string CodegenCVisitor::breakpoint_current(std::string current) const {
 
 
 int CodegenCVisitor::float_variables_size() const {
-    auto count_length = [](const std::vector<SymbolType>& variables) -> int {
-        int length = 0;
-        for (const auto& variable: variables) {
-            length += variable->get_length();
-        }
-        return length;
+    auto count_length = [](int l, const SymbolType& variable) {
+        return l += variable->get_length();
     };
 
-    int float_size = count_length(info.range_parameter_vars);
-    float_size += count_length(info.range_assigned_vars);
-    float_size += count_length(info.range_state_vars);
-    float_size += count_length(info.assigned_vars);
+    int float_size = std::accumulate(info.range_parameter_vars.begin(),
+                                     info.range_parameter_vars.end(),
+                                     0,
+                                     count_length);
+    float_size += std::accumulate(info.range_assigned_vars.begin(),
+                                  info.range_assigned_vars.end(),
+                                  0,
+                                  count_length);
+    float_size += std::accumulate(info.range_state_vars.begin(),
+                                  info.range_state_vars.end(),
+                                  0,
+                                  count_length);
+    float_size +=
+        std::accumulate(info.assigned_vars.begin(), info.assigned_vars.end(), 0, count_length);
 
     /// all state variables for which we add Dstate variables
-    float_size += count_length(info.state_vars);
+    float_size += std::accumulate(info.state_vars.begin(), info.state_vars.end(), 0, count_length);
 
     /// for v_unused variable
     if (info.vectorize) {
@@ -1874,11 +1880,26 @@ void CodegenCVisitor::visit_eigen_linear_solver_block(const ast::EigenLinearSolv
     print_statement_block(*node.get_setup_x_block(), false, false);
 
     printer->add_newline();
-    printer->add_line(
-        "{0} = Eigen::PartialPivLU<Eigen::Ref<Eigen::Matrix<{1}, {2}, {2}>>>({3}).solve({4});"_format(
-            X, float_type, N, Jm, F));
+    print_eigen_linear_solver(float_type, N, X, Jm, F);
+    printer->add_newline();
+
     print_statement_block(*node.get_update_states_block(), false, false);
     print_statement_block(*node.get_finalize_block(), false, false);
+}
+
+void CodegenCVisitor::print_eigen_linear_solver(const std::string& float_type,
+                                                int N,
+                                                const std::string& X,
+                                                const std::string& Jm,
+                                                const std::string& F) {
+    if (N <= 4) {
+        // Faster compared to LU, given the template specialization in Eigen.
+        printer->add_line("{0} = {1}.inverse()*{2};"_format(X, Jm, F));
+    } else {
+        printer->add_line(
+            "{0} = Eigen::PartialPivLU<Eigen::Ref<Eigen::Matrix<{1}, {2}, {2}>>>({3}).solve({4});"_format(
+                X, float_type, N, Jm, F));
+    }
 }
 
 /****************************************************************************************/
