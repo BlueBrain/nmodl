@@ -39,7 +39,7 @@ static bool is_supported_statement(const ast::Statement& statement) {
     return statement.is_codegen_atomic_statement() || statement.is_codegen_for_statement() ||
            statement.is_if_statement() || statement.is_codegen_return_statement() ||
            statement.is_codegen_var_list_statement() || statement.is_expression_statement() ||
-           statement.is_while_statement();
+           statement.is_while_statement() || statement.is_codegen_thread_id();
 }
 
 /// A utility to check that the kernel body can be vectorised.
@@ -692,6 +692,16 @@ void CodegenLLVMVisitor::visit_codegen_return_statement(const ast::CodegenReturn
     std::string ret = "ret_" + ir_builder.get_current_function_name();
     llvm::Value* ret_value = ir_builder.create_load(ret);
     ir_builder.create_return(ret_value);
+}
+
+void CodegenLLVMVisitor::visit_codegen_thread_id(const ast::CodegenThreadId& node) {
+    // First, allocate memory for thread id. By convention, the name is always "id".
+    // TODO: avoid hardcoding "id", etc. - this is also a problem in IRBuilder and Helper visitor.
+    llvm::Value* id_alloca = ir_builder.create_alloca(/*name=*/"id", ir_builder.get_i32_type());
+
+    // Create id calculation: id = blockId.x * blockDim.x + threadId.x
+    ir_builder.create_thread_id();
+    ir_builder.create_store(id_alloca, ir_builder.pop_last_value());
 }
 
 void CodegenLLVMVisitor::visit_codegen_var_list_statement(

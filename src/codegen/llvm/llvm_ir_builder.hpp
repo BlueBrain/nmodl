@@ -231,6 +231,9 @@ class IRBuilder {
     void create_scalar_or_vector_alloca(const std::string& name,
                                         llvm::Type* element_or_scalar_type);
 
+    /// Generates differently flavoured LLVM IR (e.g NVVM IR) to create a thread id calculation.
+    void create_thread_id();
+
     /// Generates LLVM IR for the given unary operator.
     void create_unary_op(llvm::Value* value, ast::UnaryOp op);
 

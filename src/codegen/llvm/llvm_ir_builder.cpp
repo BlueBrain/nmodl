@@ -9,6 +9,7 @@
 #include "ast/all.hpp"
 
 #include "llvm/ADT/StringSwitch.h"
+#include "llvm/IR/IntrinsicsNVPTX.h"
 #include "llvm/IR/Function.h"
 #include "llvm/IR/ValueSymbolTable.h"
 
@@ -465,6 +466,37 @@ void IRBuilder::create_scalar_or_vector_alloca(const std::string& name,
         type = element_or_scalar_type;
     }
     create_alloca(name, type);
+}
+
+void IRBuilder::create_thread_id() {
+    // We create thread id calculation using the following expression:
+    //     blockId.x * blockDim.x + threadId.x
+    // Dimensions and ids are modelled with different LLVM intrinsics, varying
+    // by target platform.
+    std::string platform_name = target_platform->get_name();
+    if (!target_platform->is_gpu() || platform_name != "cuda")
+        throw std::runtime_error("Error: unsupported platform " + platform_name + "\n");
+
+
+    // Maps to intrinsics.
+    // TODO: populate for other platforms.
+    static std::map<std::string, llvm::Intrinsic::ID> block_ids = {
+        {"cuda", llvm::Intrinsic::NVVMIntrinsics::nvvm_read_ptx_sreg_ctaid_x}
+    };
+    static std::map<std::string, llvm::Intrinsic::ID> block_dims = {
+        {"cuda", llvm::Intrinsic::NVVMIntrinsics::nvvm_read_ptx_sreg_ntid_x}
+    };
+    static std::map<std::string, llvm::Intrinsic::ID> thread_ids = {
+        {"cuda", llvm::Intrinsic::NVVMIntrinsics::nvvm_read_ptx_sreg_tid_x}
+    };
+
+    llvm::Module* module = builder.GetInsertBlock()->getModule();
+    llvm::Value* block_id = builder.CreateCall(llvm::Intrinsic::getDeclaration(module, block_ids[platform_name]));
+    llvm::Value* block_dim = builder.CreateCall(llvm::Intrinsic::getDeclaration(module, block_dims[platform_name]));
+    llvm::Value* tmp = builder.CreateMul(block_dim, block_id);
+    llvm::Value* tid = builder.CreateCall(llvm::Intrinsic::getDeclaration(module, thread_ids[platform_name]));
+    llvm::Value* id = builder.CreateAdd(tmp, tid);
+    value_stack.push_back(id);
 }
 
 void IRBuilder::create_unary_op(llvm::Value* value, ast::UnaryOp op) {
