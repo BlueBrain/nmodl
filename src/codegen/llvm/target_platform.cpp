@@ -65,6 +65,10 @@ bool Target::is_gpu() {
     return platform_id == TargetPlatformID::GPU;
 }
 
+bool Target::is_nvidia_gpu() {
+    return is_gpu() && name == "cuda";
+}
+
 bool CPUTarget::has_VLA_support() {
     return is_VLA;
 }

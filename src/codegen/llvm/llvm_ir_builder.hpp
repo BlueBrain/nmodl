@@ -151,6 +151,9 @@ class IRBuilder {
     void allocate_function_arguments(llvm::Function* function,
                                      const ast::CodegenVarWithTypeVector& nmodl_arguments);
 
+    /// Adds kernel annotations for NVPTX backend.
+    void add_kernel_annotations(llvm::Function* function);
+
     llvm::Value* create_alloca(const std::string& name, llvm::Type* type);
 
     /// Generates IR for allocating an array.

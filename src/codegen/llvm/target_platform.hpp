@@ -74,7 +74,9 @@ class Target {
     bool is_cpu();
     bool is_cpu_with_simd();
     bool is_cpu_with_vla_simd();
+
     bool is_gpu();
+    bool is_nvidia_gpu();
 
     /// Generic target builder.
     static Target* build_target(std::string& cpu_name, std::string& gpu_name);

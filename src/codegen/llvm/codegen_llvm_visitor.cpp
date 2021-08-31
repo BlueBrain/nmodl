@@ -653,6 +653,10 @@ void CodegenLLVMVisitor::visit_codegen_function(const ast::CodegenFunction& node
     ir_builder.create_block_and_set_insertion_point(func);
     ir_builder.set_function(func);
 
+    // If generating code for NVIDIA GPUs, add kernel annotations.
+    if (target_platform->is_nvidia_gpu() && is_kernel_function(name))
+        ir_builder.add_kernel_annotations(func);
+
     // When processing a function, it returns a value named <function_name> in NMODL. Therefore, we
     // first run RenameVisitor to rename it into ret_<function_name>. This will aid in avoiding
     // symbolic conflicts.

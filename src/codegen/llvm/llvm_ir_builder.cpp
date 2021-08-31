@@ -232,6 +232,19 @@ void IRBuilder::set_kernel_attributes() {
 /*                                LLVM metadata utilities                               */
 /****************************************************************************************/
 
+void IRBuilder::add_kernel_annotations(llvm::Function* function) {
+    llvm::Module* module = function->getParent();
+    llvm::LLVMContext& context = builder.getContext();
+
+    // Create "nvvm.annotations" node.
+    llvm::NamedMDNode* annotations = module->getOrInsertNamedMetadata("nvvm.annotations");
+    llvm::Metadata* data[] = {llvm::ConstantAsMetadata::get(function),
+                              llvm::MDString::get(context, "kernel"),
+                              llvm::ConstantAsMetadata::get(
+                                  llvm::ConstantInt::get(get_i32_type(), 1))};
+    annotations->addOperand(llvm::MDNode::get(context, data));
+}
+
 void IRBuilder::set_loop_metadata(llvm::BranchInst* branch) {
     llvm::LLVMContext& context = builder.getContext();
     MetadataVector loop_metadata;
@@ -474,7 +487,7 @@ void IRBuilder::create_thread_id() {
     // Dimensions and ids are modelled with different LLVM intrinsics, varying
     // by target platform.
     std::string platform_name = target_platform->get_name();
-    if (!target_platform->is_gpu() || platform_name != "cuda")
+    if (!target_platform->is_nvidia_gpu())
         throw std::runtime_error("Error: unsupported platform " + platform_name + "\n");
 
 
