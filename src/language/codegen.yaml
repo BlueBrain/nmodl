@@ -291,7 +291,7 @@
                         node. Therefore, the code generation for this node is kept very simple,
                         mapping expression to target-specific GPU inrinsics.
 
-                      nmodl: "GPU_ID "
+                      nmodl: "TID "
                       members:
                         - name:
                             brief: "Name of the thread id variable"
