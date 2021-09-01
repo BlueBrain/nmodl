@@ -20,4 +20,4 @@ using VecType = Eigen::Matrix<double, dim, 1, Eigen::ColMajor, dim, 1>;
 #pragma acc routine seq
 #endif
 template<int dim>
-VecType<dim> partialPivLu(MatType<dim>, VecType<dim>);
+VecType<dim> partialPivLu(MatType<dim>*, VecType<dim>*);

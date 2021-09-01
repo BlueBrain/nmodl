@@ -149,7 +149,7 @@ void CodegenAccVisitor::print_eigen_linear_solver(const std::string& float_type,
         // them with
         // __device__ & acc routine tokens), which allows us to eventually call them from OpenACC.
         // Calling these functions from CUDA kernels presents no issue ...
-        printer->add_line("{0} = partialPivLu<{1}>({2}, {3});"_format(X, N, Jm, F));
+        printer->add_line("{0} = partialPivLu<{1}>(&{2}, &{3});"_format(X, N, Jm, F));
     }
 }
 

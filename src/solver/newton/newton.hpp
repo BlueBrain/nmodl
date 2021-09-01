@@ -79,7 +79,7 @@ EIGEN_DEVICE_FUNC int newton_solver(Eigen::Matrix<double, N, 1>& X,
         // them with
         // __device__ & acc routine tokens), which allows us to eventually call them from OpenACC.
         // Calling these functions from CUDA kernels presents no issue ...
-        X -= partialPivLu<N>(J, F);
+        X -= partialPivLu<N>(&J, &F);
 #else
         // update X use in-place LU decomposition of J with partial pivoting
         // (suitable for any N, but less efficient than .inverse() for N <=4)
@@ -161,7 +161,7 @@ EIGEN_DEVICE_FUNC int newton_numerical_diff_solver(Eigen::Matrix<double, N, 1>& 
         // them with
         // __device__ & acc routine tokens), which allows us to eventually call them from OpenACC.
         // Calling these functions from CUDA kernels presents no issue ...
-        X -= partialPivLu<N>(J, F);
+        X -= partialPivLu<N>(&J, &F);
 #else
         // update X use in-place LU decomposition of J with partial pivoting
         // (suitable for any N, but less efficient than .inverse() for N <=4)
