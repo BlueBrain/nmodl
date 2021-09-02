@@ -1739,7 +1739,8 @@ void CodegenCVisitor::visit_eigen_newton_solver_block(const ast::EigenNewtonSolv
 
     auto float_type = default_float_data_type();
     int N = node.get_n_state_vars()->get_value();
-    printer->add_line("Eigen::Matrix<{}, {}, 1> {};"_format(float_type, N, X));
+    printer->add_line("Eigen::Matrix<{}, {}, 1> {};"_format(float_type, N, Xm));
+    printer->add_line("{}* {} = {}.data();"_format(float_type, X, Xm));
 
     print_statement_block(*node.get_setup_x_block(), false, false);
 
@@ -1792,7 +1793,7 @@ void CodegenCVisitor::visit_eigen_newton_solver_block(const ast::EigenNewtonSolv
     printer->add_line("functor newton_functor(nt, inst, id, pnodecount, v, indexes);");
     printer->add_line("newton_functor.initialize();");
     printer->add_line(
-        "int newton_iterations = nmodl::newton::newton_solver({}, newton_functor);"_format(X));
+        "int newton_iterations = nmodl::newton::newton_solver({}, newton_functor);"_format(Xm));
 
     // assign newton solver results in matrix X to state vars
     print_statement_block(*node.get_update_states_block(), false, false);
