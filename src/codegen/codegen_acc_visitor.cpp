@@ -138,9 +138,9 @@ void CodegenAccVisitor::print_net_send_buffering_grow() {
 
 void CodegenAccVisitor::print_eigen_linear_solver(const std::string& float_type,
                                                   int N,
-                                                  const std::string& X,
+                                                  const std::string& Xm,
                                                   const std::string& Jm,
-                                                  const std::string& F) {
+                                                  const std::string& Fm) {
     // The Eigen::PartialPivLU is not compatible with GPUs (no __device__ tokens).
     // For matrices up to 4x4, the Eigen inverse() has template specializations decorated with
     // __host__ & __device__ tokens. Therefore, we use the inverse method instead of the
@@ -149,7 +149,7 @@ void CodegenAccVisitor::print_eigen_linear_solver(const std::string& float_type,
     // For matrices 5x5 and above, Eigen does not provide GPU-enabled methods to solve small linear
     // systems. For this reason, we use the Crout LU decomposition.
     if (N <= 4) {
-        printer->add_line("{0} = {1}.inverse()*{2};"_format(X, Jm, F));
+        printer->add_line("{0} = {1}.inverse()*{2};"_format(Xm, Jm, Fm));
     } else {
         // In Eigen the default storage order is ColMajor.
         // Crout's implementation requires matrices stored in RowMajor order (C-style arrays).
@@ -167,7 +167,7 @@ void CodegenAccVisitor::print_eigen_linear_solver(const std::string& float_type,
         // Solve the linear system : Forward/Backward substitution part
         printer->add_line(
             "nmodl::crout::solveCrout<{0}>({1}, {2}.data(), {3}.data(), {4}.data(), pivot.data());"_format(
-                float_type, N, Jm, F, X));
+                float_type, N, Jm, Fm, Xm));
     }
 }
 

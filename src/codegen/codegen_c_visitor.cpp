@@ -1731,9 +1731,11 @@ void CodegenCVisitor::visit_eigen_newton_solver_block(const ast::EigenNewtonSolv
     // try to use a different string for the matrices created by sympy in the form
     // X_<random_number>, J_<random_number>, Jm_<random_number> and F_<random_number>
     std::string X = find_var_unique_name("X");
+    std::string Xm = find_var_unique_name("Xm");
     std::string J = find_var_unique_name("J");
     std::string Jm = find_var_unique_name("Jm");
     std::string F = find_var_unique_name("F");
+    std::string Fm = find_var_unique_name("Fm");
 
     auto float_type = default_float_data_type();
     int N = node.get_n_state_vars()->get_value();
@@ -1768,9 +1770,11 @@ void CodegenCVisitor::visit_eigen_newton_solver_block(const ast::EigenNewtonSolv
     printer->add_text(
         "void operator()(const Eigen::Matrix<{0}, {1}, 1>& {2}, Eigen::Matrix<{0}, {1}, "
         "1>& {3}, "
-        "Eigen::Matrix<{0}, {1}, {1}>& {4}) const"_format(float_type, N, X, F, Jm));
+        "Eigen::Matrix<{0}, {1}, {1}>& {4}) const"_format(float_type, N, Xm, Fm, Jm));
     printer->start_block();
+    printer->add_line("const {}* {} = {}.data();"_format(float_type, X, Xm));
     printer->add_line("{}* {} = {}.data();"_format(float_type, J, Jm));
+    printer->add_line("{}* {} = {}.data();"_format(float_type, F, Fm));
     print_statement_block(*node.get_functor_block(), false, false);
     printer->end_block(2);
 
@@ -1802,21 +1806,25 @@ void CodegenCVisitor::visit_eigen_linear_solver_block(const ast::EigenLinearSolv
     // try to use a different string for the matrices created by sympy in the form
     // X_<random_number>, J_<random_number>, Jm_<random_number> and F_<random_number>
     std::string X = find_var_unique_name("X");
+    std::string Xm = find_var_unique_name("Xm");
     std::string J = find_var_unique_name("J");
     std::string Jm = find_var_unique_name("Jm");
     std::string F = find_var_unique_name("F");
+    std::string Fm = find_var_unique_name("Fm");
 
     const std::string float_type = default_float_data_type();
     int N = node.get_n_state_vars()->get_value();
-    printer->add_line("Eigen::Matrix<{0}, {1}, 1> {2}, {3};"_format(float_type, N, X, F));
+    printer->add_line("Eigen::Matrix<{0}, {1}, 1> {2}, {3};"_format(float_type, N, Xm, Fm));
     printer->add_line("Eigen::Matrix<{0}, {1}, {1}> {2};"_format(float_type, N, Jm));
+    printer->add_line("{}* {} = {}.data();"_format(float_type, X, Xm));
     printer->add_line("{}* {} = {}.data();"_format(float_type, J, Jm));
+    printer->add_line("{}* {} = {}.data();"_format(float_type, F, Fm));
     print_statement_block(*node.get_variable_block(), false, false);
     print_statement_block(*node.get_initialize_block(), false, false);
     print_statement_block(*node.get_setup_x_block(), false, false);
 
     printer->add_newline();
-    print_eigen_linear_solver(float_type, N, X, Jm, F);
+    print_eigen_linear_solver(float_type, N, Xm, Jm, Fm);
     printer->add_newline();
 
     print_statement_block(*node.get_update_states_block(), false, false);
@@ -1825,17 +1833,17 @@ void CodegenCVisitor::visit_eigen_linear_solver_block(const ast::EigenLinearSolv
 
 void CodegenCVisitor::print_eigen_linear_solver(const std::string& float_type,
                                                 int N,
-                                                const std::string& X,
+                                                const std::string& Xm,
                                                 const std::string& Jm,
-                                                const std::string& F) {
+                                                const std::string& Fm) {
     if (N <= 4) {
         // Faster, as there is no pivoting and therefore no branches, but it is not numerically safe
         // for \f$N > 4\f$.
-        printer->add_line("{0} = {1}.inverse()*{2};"_format(X, Jm, F));
+        printer->add_line("{0} = {1}.inverse()*{2};"_format(Xm, Jm, Fm));
     } else {
         printer->add_line(
             "{0} = Eigen::PartialPivLU<Eigen::Ref<Eigen::Matrix<{1}, {2}, {2}>>>({3}).solve({4});"_format(
-                X, float_type, N, Jm, F));
+                Xm, float_type, N, Jm, Fm));
     }
 }
 
