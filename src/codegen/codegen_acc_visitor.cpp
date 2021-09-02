@@ -133,10 +133,7 @@ void CodegenAccVisitor::print_abort_routine() const {
 }
 
 void CodegenAccVisitor::print_net_send_buffering_grow() {
-    auto error = add_escape_quote("Error : netsend buffer size (%d) exceeded\\n");
-
-    printer->add_line("printf({}, nsb->_cnt);"_format(error));
-    printer->add_line("coreneuron_abort();");
+    // can not grow buffer during gpu execution
 }
 
 void CodegenAccVisitor::print_eigen_linear_solver(const std::string& float_type,
@@ -278,7 +275,7 @@ void CodegenAccVisitor::print_newtonspace_transfer_to_device() const {
     int list_num = info.derivimplicit_list_num;
     printer->add_line("if (nt->compute_gpu) {");
     printer->add_line("    auto device_vec = static_cast<double*>(acc_copyin(vec, vec_size));");
-    printer->add_line("    auto device_ns = static_cast<NewtonSpace*>(acc_deviceptr(ns));");
+    printer->add_line("    auto device_ns = static_cast<NewtonSpace*>(acc_deviceptr(*ns));");
     printer->add_line("    auto device_thread = static_cast<ThreadDatum*>(acc_deviceptr(thread));");
     printer->add_line(
         "    acc_memcpy_to_device(&(device_thread[{}]._pvoid), &device_ns, sizeof(void*));"_format(
@@ -289,6 +286,39 @@ void CodegenAccVisitor::print_newtonspace_transfer_to_device() const {
     printer->add_line("}");
 }
 
+
+void CodegenAccVisitor::print_instance_variable_transfer_to_device() const {
+    printer->add_line("if (nt->compute_gpu) {");
+    printer->add_line("    auto dml = (Memb_list*) acc_deviceptr(ml);");
+    printer->add_line("    acc_memcpy_to_device(&(dml->instance), &inst, sizeof(void*));");
+    printer->add_line("}");
+}
+
+
+void CodegenAccVisitor::print_deriv_advance_flag_transfer_to_device() const {
+    printer->add_line("#pragma acc update device (deriv_advance_flag) if (nt->compute_gpu)");
+}
+
+
+void CodegenAccVisitor::print_device_atomic_capture_annotation() const {
+    printer->add_line("#pragma acc atomic capture");
+}
+
+
+void CodegenAccVisitor::print_device_stream_wait() const {
+    printer->add_line("#pragma acc wait(nt->stream_id)");
+}
+
+
+void CodegenAccVisitor::print_net_send_buf_count_update_to_host() const {
+    print_device_stream_wait();
+    printer->add_line("#pragma acc update self(nsb->_cnt) if(nt->compute_gpu)");
+}
+
+
+void CodegenAccVisitor::print_net_send_buf_count_update_to_device() const {
+    printer->add_line("#pragma acc update device(nsb->_cnt) if (nt->compute_gpu)");
+}
 
 }  // namespace codegen
 }  // namespace nmodl

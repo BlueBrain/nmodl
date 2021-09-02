@@ -1036,6 +1036,29 @@ void CodegenCVisitor::print_channel_iteration_tiling_block_end() {
     // backend specific, do nothing
 }
 
+void CodegenCVisitor::print_instance_variable_transfer_to_device() const {
+    // backend specific, do nothing
+}
+
+void CodegenCVisitor::print_deriv_advance_flag_transfer_to_device() const {
+    // backend specific, do nothing
+}
+
+void CodegenCVisitor::print_device_atomic_capture_annotation() const {
+    // backend specific, do nothing
+}
+
+void CodegenCVisitor::print_net_send_buf_count_update_to_host() const {
+    // backend specific, do nothing
+}
+
+void CodegenCVisitor::print_net_send_buf_count_update_to_device() const {
+    // backend specific, do nothing
+}
+
+void CodegenCVisitor::print_device_stream_wait() const {
+    // backend specific, do nothing
+}
 
 /**
  * \details Each kernel such as \c nrn\_init, \c nrn\_state and \c nrn\_cur could be offloaded
@@ -2526,6 +2549,13 @@ void CodegenCVisitor::print_mechanism_global_var_structure() {
 }
 
 
+void CodegenCVisitor::print_prcellstate_macros() const {
+    printer->add_line("#ifndef NRN_PRCELLSTATE");
+    printer->add_line("#define NRN_PRCELLSTATE 0");
+    printer->add_line("#endif");
+}
+
+
 void CodegenCVisitor::print_mechanism_info() {
     auto variable_printer = [&](std::vector<SymbolType>& variables) {
         for (const auto& v: variables) {
@@ -3191,6 +3221,7 @@ void CodegenCVisitor::print_instance_variable_setup() {
     }
 
     printer->add_line("ml->instance = (void*) inst;");
+    print_instance_variable_transfer_to_device();
     printer->end_block(3);
 
     printer->add_line("/** cleanup mechanism instance variables */");
@@ -3212,6 +3243,7 @@ void CodegenCVisitor::print_initial_block(const InitialBlock* node) {
     } else {
         printer->add_line("int node_id = node_index[id];");
         printer->add_line("double v = voltage[node_id];");
+        print_v_unused();
     }
 
     if (ion_variable_struct_required()) {
@@ -3303,7 +3335,9 @@ void CodegenCVisitor::print_nrn_init(bool skip_init_check) {
         int nequation = info.num_equations;
         int list_num = info.derivimplicit_list_num;
         // clang-format off
-        printer->add_line("*deriv{}_advance(thread) = 0;"_format(list_num));
+        printer->add_line("int& deriv_advance_flag = *deriv{}_advance(thread);"_format(list_num));
+        printer->add_line("deriv_advance_flag = 0;");
+        print_deriv_advance_flag_transfer_to_device();
         printer->add_line("auto ns = newtonspace{}(thread);"_format(list_num));
         printer->add_line("auto& th = thread[dith{}()];"_format(list_num));
 
@@ -3316,6 +3350,9 @@ void CodegenCVisitor::print_nrn_init(bool skip_init_check) {
         printer->add_line("}");
         // clang-format on
     }
+
+    // update global variable as those might be updated via python/hoc API
+    print_global_variable_device_update_annotation();
 
     if (skip_init_check) {
         printer->start_block("if (_nrn_skip_initmodel == 0)");
@@ -3335,8 +3372,14 @@ void CodegenCVisitor::print_nrn_init(bool skip_init_check) {
     printer->end_block(1);
 
     if (info.derivimplicit_used()) {
-        printer->add_line("*deriv{}_advance(thread) = 1;"_format(info.derivimplicit_list_num));
+        printer->add_line("deriv_advance_flag = 1;");
+        print_deriv_advance_flag_transfer_to_device();
     }
+
+    if (info.net_send_used && !info.artificial_cell) {
+        print_send_event_move();
+    }
+
     print_kernel_data_present_annotation_block_end();
     if (skip_init_check) {
         printer->end_block(1);
@@ -3442,7 +3485,11 @@ void CodegenCVisitor::print_watch_check() {
     if (info.is_voltage_used_by_watch_statements()) {
         printer->add_line("int node_id = node_index[id];");
         printer->add_line("double v = voltage[node_id];");
+        print_v_unused();
     }
+
+    // flat to make sure only one WATCH statement can be triggered at a time
+    printer->add_line("bool watch_untriggered = true;");
 
     for (int i = 0; i < info.watch_statements.size(); i++) {
         auto statement = info.watch_statements[i];
@@ -3450,7 +3497,7 @@ void CodegenCVisitor::print_watch_check() {
         auto varname = get_variable_name("watch{}"_format(i + 1));
 
         // start block 1
-        printer->start_block("if ({}&2)"_format(varname));
+        printer->start_block("if ({}&2 && watch_untriggered)"_format(varname));
 
         // start block 2
         printer->add_indent();
@@ -3463,6 +3510,8 @@ void CodegenCVisitor::print_watch_check() {
         // start block 3
         printer->start_block("if (({}&1) == 0)"_format(varname));
 
+        printer->add_line("watch_untriggered = false;");
+
         auto tqitem = get_variable_name("tqitem");
         auto point_process = get_variable_name("point_process");
         printer->add_indent();
@@ -3473,20 +3522,17 @@ void CodegenCVisitor::print_watch_check() {
         watch->get_value()->accept(*this);
         printer->add_text(");");
         printer->add_newline();
+        printer->end_block(1);
 
         printer->add_line("{} = 3;"_format(varname));
-        printer->end_block(1);
         // end block 3
 
         // start block 3
-        printer->start_block("else"_format());
+        printer->decrease_indent();
+        printer->start_block("} else");
         printer->add_line("{} = 2;"_format(varname));
         printer->end_block(1);
         // end block 3
-
-        printer->decrease_indent();
-        printer->add_line("}");
-        // end block 2
 
         printer->end_block(1);
         // end block 1
@@ -3545,10 +3591,9 @@ void CodegenCVisitor::print_net_send_call(const FunctionCall& node) {
     std::string weight_index = "weight_index";
     std::string pnt = "pnt";
 
-    // for non-net-receieve functions there is no weight index argument
-    // and artificial cell is in vdata which is void**
+    // for non-net_receieve functions i.e. initial block, the weight_index argument is 0.
     if (!printing_net_receive) {
-        weight_index = "-1";
+        weight_index = "0";
         auto var = get_variable_name("point_process");
         if (info.artificial_cell) {
             pnt = "(Point_process*)" + var;
@@ -3592,7 +3637,7 @@ void CodegenCVisitor::print_net_move_call(const FunctionCall& node) {
         auto point_process = get_variable_name("point_process");
         std::string t = get_variable_name("t");
         printer->add_text("net_send_buffering(");
-        printer->add_text("ml->_net_send_buffer, 2, {}, {}, {}, {}+"_format(tqitem, weight_index, point_process, t));
+        printer->add_text("ml->_net_send_buffer, 2, {}, {}, {}, "_format(tqitem, weight_index, point_process));
         print_vector_elements(arguments, ", ");
         printer->add_text(", 0.0");
         printer->add_text(")");
@@ -3681,7 +3726,8 @@ void CodegenCVisitor::print_net_init() {
 void CodegenCVisitor::print_send_event_move() {
     printer->add_newline();
     printer->add_line("NetSendBuffer_t* nsb = ml->_net_send_buffer;");
-    /// \todo Update net send buffer on host
+    print_net_send_buf_count_update_to_host();
+    printer->add_line("update_net_send_buffer_on_host(nt, nsb);");
     printer->add_line("for (int i=0; i < nsb->_cnt; i++) {");
     printer->add_line("    int type = nsb->_sendtype[i];");
     printer->add_line("    int tid = nt->id;");
@@ -3695,7 +3741,7 @@ void CodegenCVisitor::print_send_event_move() {
     // clang-format on
     printer->add_line("}");
     printer->add_line("nsb->_cnt = 0;");
-    /// \todo Update net send buffer count on device
+    print_net_send_buf_count_update_to_device();
 }
 
 
@@ -3758,20 +3804,23 @@ void CodegenCVisitor::print_net_receive_buffering(bool need_mech_inst) {
     printer->end_block(1);
     print_net_receive_loop_end();
 
+    print_device_stream_wait();
+    printer->add_line("nrb->_displ_cnt = 0;");
+    printer->add_line("nrb->_cnt = 0;");
+
     if (info.net_send_used || info.net_event_used) {
         print_send_event_move();
     }
 
     printer->add_newline();
-    printer->add_line("nrb->_displ_cnt = 0;");
-    printer->add_line("nrb->_cnt = 0;");
-
     print_kernel_data_present_annotation_block_end();
     printer->end_block(1);
 }
 
 void CodegenCVisitor::print_net_send_buffering_grow() {
-    printer->add_line("nsb->grow();");
+    printer->add_line("if(i >= nsb->_size) {");
+    printer->add_line("    nsb->grow();");
+    printer->add_line("}");
 }
 
 void CodegenCVisitor::print_net_send_buffering() {
@@ -3785,19 +3834,18 @@ void CodegenCVisitor::print_net_send_buffering() {
         "NetSendBuffer_t* nsb, int type, int vdata_index, "
         "int weight_index, int point_index, double t, double flag";
     printer->start_block("static inline void net_send_buffering({}) "_format(args));
-    printer->add_line("int i = nsb->_cnt;");
-    printer->add_line("nsb->_cnt++;");
-    printer->add_line("if(nsb->_cnt >= nsb->_size) {");
-    printer->increase_indent();
+    printer->add_line("int i = 0;");
+    print_device_atomic_capture_annotation();
+    printer->add_line("i = nsb->_cnt++;");
     print_net_send_buffering_grow();
-    printer->decrease_indent();
+    printer->add_line("if(i < nsb->_size) {");
+    printer->add_line("    nsb->_sendtype[i] = type;");
+    printer->add_line("    nsb->_vdata_index[i] = vdata_index;");
+    printer->add_line("    nsb->_weight_index[i] = weight_index;");
+    printer->add_line("    nsb->_pnt_index[i] = point_index;");
+    printer->add_line("    nsb->_nsb_t[i] = t;");
+    printer->add_line("    nsb->_nsb_flag[i] = flag;");
     printer->add_line("}");
-    printer->add_line("nsb->_sendtype[i] = type;");
-    printer->add_line("nsb->_vdata_index[i] = vdata_index;");
-    printer->add_line("nsb->_weight_index[i] = weight_index;");
-    printer->add_line("nsb->_pnt_index[i] = point_index;");
-    printer->add_line("nsb->_nsb_t[i] = t;");
-    printer->add_line("nsb->_nsb_flag[i] = flag;");
     printer->end_block(1);
 }
 
@@ -4065,6 +4113,7 @@ void CodegenCVisitor::print_nrn_state() {
 
     printer->add_line("int node_id = node_index[id];");
     printer->add_line("double v = voltage[node_id];");
+    print_v_unused();
 
     /**
      * \todo Eigen solver node also emits IonCurVar variable in the functor
@@ -4143,17 +4192,17 @@ void CodegenCVisitor::print_nrn_cur_conductance_kernel(const BreakpointBlock& no
         }
         printer->add_line("double rhs = {};"_format(sum));
     }
-    if (!info.conductances.empty()) {
-        std::string sum;
-        for (const auto& conductance: info.conductances) {
-            auto var = breakpoint_current(conductance.variable);
-            sum += get_variable_name(var);
-            if (&conductance != &info.conductances.back()) {
-                sum += "+";
-            }
+
+    std::string sum;
+    for (const auto& conductance: info.conductances) {
+        auto var = breakpoint_current(conductance.variable);
+        sum += get_variable_name(var);
+        if (&conductance != &info.conductances.back()) {
+            sum += "+";
         }
-        printer->add_line("double g = {};"_format(sum));
     }
+    printer->add_line("double g = {};"_format(sum));
+
     for (const auto& conductance: info.conductances) {
         if (!conductance.ion.empty()) {
             auto lhs = "ion_di" + conductance.ion + "dv";
@@ -4199,6 +4248,7 @@ void CodegenCVisitor::print_nrn_cur_non_conductance_kernel() {
 void CodegenCVisitor::print_nrn_cur_kernel(const BreakpointBlock& node) {
     printer->add_line("int node_id = node_index[id];");
     printer->add_line("double v = voltage[node_id];");
+    print_v_unused();
     if (ion_variable_struct_required()) {
         print_ion_variable();
     }
@@ -4226,6 +4276,8 @@ void CodegenCVisitor::print_nrn_cur_kernel(const BreakpointBlock& node) {
         printer->add_line("g = g*mfactor;");
         printer->add_line("rhs = rhs*mfactor;");
     }
+
+    print_g_unused();
 }
 
 void CodegenCVisitor::print_fast_imem_calculation() {
@@ -4337,6 +4389,17 @@ void CodegenCVisitor::print_data_structures() {
     print_ion_var_structure();
 }
 
+void CodegenCVisitor::print_v_unused() const {
+    printer->add_line("#if NRN_PRCELLSTATE");
+    printer->add_line("inst->v_unused[id] = v;");
+    printer->add_line("#endif");
+}
+
+void CodegenCVisitor::print_g_unused() const {
+    printer->add_line("#if NRN_PRCELLSTATE");
+    printer->add_line("inst->g_unused[id] = g;");
+    printer->add_line("#endif");
+}
 
 void CodegenCVisitor::print_compute_functions() {
     print_top_verbatim_blocks();
@@ -4370,6 +4433,7 @@ void CodegenCVisitor::print_codegen_routines() {
     print_headers_include();
     print_namespace_begin();
     print_nmodl_constants();
+    print_prcellstate_macros();
     print_mechanism_info();
     print_data_structures();
     print_global_variables_for_hoc();
