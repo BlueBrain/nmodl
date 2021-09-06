@@ -9,7 +9,7 @@
 
 template<int dim>
 EIGEN_DEVICE_FUNC 
-const VecType<dim> partialPivLu(const MatType<dim>& A, const VecType<dim>& b)
+VecType<dim> partialPivLu(const MatType<dim>& A, const VecType<dim>& b)
 {
     return A.partialPivLu().solve(b);
 }
