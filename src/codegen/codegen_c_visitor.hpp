@@ -1901,9 +1901,9 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
     void visit_eigen_linear_solver_block(const ast::EigenLinearSolverBlock& node) override;
     virtual void print_eigen_linear_solver(const std::string& float_type,
                                            int N,
-                                           const std::string& X,
+                                           const std::string& Xm,
                                            const std::string& Jm,
-                                           const std::string& F);
+                                           const std::string& Fm);
     void visit_if_statement(const ast::IfStatement& node) override;
     void visit_indexed_name(const ast::IndexedName& node) override;
     void visit_integer(const ast::Integer& node) override;

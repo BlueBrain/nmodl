@@ -115,9 +115,9 @@ class CodegenAccVisitor: public CodegenCVisitor {
 
     void print_eigen_linear_solver(const std::string& float_type,
                                    int N,
-                                   const std::string& X,
+                                   const std::string& Xm,
                                    const std::string& Jm,
-                                   const std::string& F) override;
+                                   const std::string& Fm) override;
 
 
   public:
