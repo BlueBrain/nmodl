@@ -10,5 +10,6 @@ var searchData=
   ['unitstate',['UnitState',['../classnmodl_1_1ast_1_1_unit_state.html',1,'nmodl::ast']]],
   ['unitsvisitor',['UnitsVisitor',['../classnmodl_1_1visitor_1_1_units_visitor.html',1,'nmodl::visitor']]],
   ['unittable',['UnitTable',['../classnmodl_1_1units_1_1_unit_table.html',1,'nmodl::units']]],
+  ['updatedt',['UpdateDt',['../classnmodl_1_1ast_1_1_update_dt.html',1,'nmodl::ast']]],
   ['useion',['Useion',['../classnmodl_1_1ast_1_1_useion.html',1,'nmodl::ast']]]
 ];

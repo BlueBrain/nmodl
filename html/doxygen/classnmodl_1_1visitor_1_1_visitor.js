@@ -132,6 +132,7 @@ var classnmodl_1_1visitor_1_1_visitor =
     [ "visit_unit_block", "classnmodl_1_1visitor_1_1_visitor.html#a32c67f2d38ceb2e2e8aa0fdf7927c243", null ],
     [ "visit_unit_def", "classnmodl_1_1visitor_1_1_visitor.html#adb86f744e5624860ec718554d480653d", null ],
     [ "visit_unit_state", "classnmodl_1_1visitor_1_1_visitor.html#aa0be97286400847b84f2268956130f9e", null ],
+    [ "visit_update_dt", "classnmodl_1_1visitor_1_1_visitor.html#a678f6ac01a78cff8a95ff0ac7b7115fb", null ],
     [ "visit_useion", "classnmodl_1_1visitor_1_1_visitor.html#a12b5a398abac1e051f948741825e1c00", null ],
     [ "visit_valence", "classnmodl_1_1visitor_1_1_visitor.html#a4b4f4e634c303036fe050006ffca3867", null ],
     [ "visit_var_name", "classnmodl_1_1visitor_1_1_visitor.html#a16aaa114081bb592ad8336a708efd32a", null ],

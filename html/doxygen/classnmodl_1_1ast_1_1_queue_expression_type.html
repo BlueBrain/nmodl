@@ -674,6 +674,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ga1f324c705485dbbeffcee8401aa1d097 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ast__class.html#ga1f324c705485dbbeffcee8401aa1d097">is_solution_expression</a> () const noexcept</td></tr>
 <tr class="memdesc:ga1f324c705485dbbeffcee8401aa1d097 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_solution_expression.html" title="Represent solution of a block in the AST. ">ast::SolutionExpression</a>.  <a href="group__ast__class.html#ga1f324c705485dbbeffcee8401aa1d097">More...</a><br /></td></tr>
 <tr class="separator:ga1f324c705485dbbeffcee8401aa1d097 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga0f2057e5ee6d098bea109648bcc226bd inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ast__class.html#ga0f2057e5ee6d098bea109648bcc226bd">is_update_dt</a> () const noexcept</td></tr>
+<tr class="memdesc:ga0f2057e5ee6d098bea109648bcc226bd inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_update_dt.html" title="Statement to indicate a change in timestep in a given block. ">ast::UpdateDt</a>.  <a href="group__ast__class.html#ga0f2057e5ee6d098bea109648bcc226bd">More...</a><br /></td></tr>
+<tr class="separator:ga0f2057e5ee6d098bea109648bcc226bd inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga8e133edb6222fbee34e5f0d342797ee4 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="structnmodl_1_1ast_1_1_ast.html">Ast</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ast__class.html#ga8e133edb6222fbee34e5f0d342797ee4">get_parent</a> () const</td></tr>
 <tr class="memdesc:ga8e133edb6222fbee34e5f0d342797ee4 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parent getter.  <a href="group__ast__class.html#ga8e133edb6222fbee34e5f0d342797ee4">More...</a><br /></td></tr>
 <tr class="separator:ga8e133edb6222fbee34e5f0d342797ee4 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -749,7 +752,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l07140">7140</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l07142">7142</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -774,7 +777,7 @@ Private Attributes</h2></td></tr>
 <p>if there is a token, make copy</p>
 <p>set parents </p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l07145">7145</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l07147">7147</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -985,7 +988,7 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_expression.html#a971985086691e3403bc78070059cbc23">nmodl::ast::Expression</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l07132">7132</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l07134">7134</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -1025,7 +1028,7 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_expression.html#a3cf111cd5c7e88c95974dd9849af1b4d">nmodl::ast::Expression</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l07136">7136</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l07138">7138</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -1658,7 +1661,7 @@ Private Attributes</h2></td></tr>
 <p>set this parent in the children</p>
 <p>This should be called in every object (with children) constructor to set parents. Since it is called only in the constructors it should not be virtual to avoid ambiguities (issue #295). </p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l07159">7159</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l07161">7161</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -1760,7 +1763,7 @@ Private Attributes</h2></td></tr>
 
 <p>Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_queue_expression_type.html#af1deee79bb3acd73bbc0d0e8c31c0d11">QueueExpressionType::value</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l07161">7161</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l07163">7163</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -1880,7 +1883,7 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_expression.html#a238e3ef13478bb47bfd8caac1718f7c6">nmodl::ast::Expression</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l07128">7128</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l07130">7130</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -1921,7 +1924,7 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_expression.html#a32a32b189bcfaee83a45311e63348808">nmodl::ast::Expression</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l07130">7130</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l07132">7132</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>

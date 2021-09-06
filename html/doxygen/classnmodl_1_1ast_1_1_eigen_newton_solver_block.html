@@ -816,6 +816,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ga1f324c705485dbbeffcee8401aa1d097 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ast__class.html#ga1f324c705485dbbeffcee8401aa1d097">is_solution_expression</a> () const noexcept</td></tr>
 <tr class="memdesc:ga1f324c705485dbbeffcee8401aa1d097 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_solution_expression.html" title="Represent solution of a block in the AST. ">ast::SolutionExpression</a>.  <a href="group__ast__class.html#ga1f324c705485dbbeffcee8401aa1d097">More...</a><br /></td></tr>
 <tr class="separator:ga1f324c705485dbbeffcee8401aa1d097 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga0f2057e5ee6d098bea109648bcc226bd inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ast__class.html#ga0f2057e5ee6d098bea109648bcc226bd">is_update_dt</a> () const noexcept</td></tr>
+<tr class="memdesc:ga0f2057e5ee6d098bea109648bcc226bd inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_update_dt.html" title="Statement to indicate a change in timestep in a given block. ">ast::UpdateDt</a>.  <a href="group__ast__class.html#ga0f2057e5ee6d098bea109648bcc226bd">More...</a><br /></td></tr>
+<tr class="separator:ga0f2057e5ee6d098bea109648bcc226bd inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga8e133edb6222fbee34e5f0d342797ee4 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="structnmodl_1_1ast_1_1_ast.html">Ast</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ast__class.html#ga8e133edb6222fbee34e5f0d342797ee4">get_parent</a> () const</td></tr>
 <tr class="memdesc:ga8e133edb6222fbee34e5f0d342797ee4 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parent getter.  <a href="group__ast__class.html#ga8e133edb6222fbee34e5f0d342797ee4">More...</a><br /></td></tr>
 <tr class="separator:ga8e133edb6222fbee34e5f0d342797ee4 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -943,7 +946,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l13799">13799</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l13801">13801</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -1011,7 +1014,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l13811">13811</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l13813">13813</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -1042,7 +1045,7 @@ Private Attributes</h2></td></tr>
 <p>if there is a token, make copy</p>
 <p>set parents </p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l13827">13827</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l13829">13829</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -1359,7 +1362,7 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_block.html#a36cf1424ee42cd3d8888114e105a5cac">nmodl::ast::Block</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l13791">13791</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l13793">13793</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -1399,7 +1402,7 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_block.html#a93b999a27e4943fdf6d3f77548b6bdc0">nmodl::ast::Block</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l13795">13795</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l13797">13797</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -2459,7 +2462,7 @@ Private Attributes</h2></td></tr>
 
 <p>Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_eigen_newton_solver_block.html#a8df11f7405904b3393bd1baddf0e4a83">EigenNewtonSolverBlock::finalize_block</a> (rvalue reference) </p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l14008">14008</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l14010">14010</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -2481,7 +2484,7 @@ Private Attributes</h2></td></tr>
 
 <p>Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_eigen_newton_solver_block.html#a8df11f7405904b3393bd1baddf0e4a83">EigenNewtonSolverBlock::finalize_block</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l14017">14017</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l14019">14019</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -2543,7 +2546,7 @@ Private Attributes</h2></td></tr>
 
 <p>Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_eigen_newton_solver_block.html#ae3b112b47bb0f22626f4299b4e64d25c">EigenNewtonSolverBlock::functor_block</a> (rvalue reference) </p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l13972">13972</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l13974">13974</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -2565,7 +2568,7 @@ Private Attributes</h2></td></tr>
 
 <p>Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_eigen_newton_solver_block.html#ae3b112b47bb0f22626f4299b4e64d25c">EigenNewtonSolverBlock::functor_block</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l13981">13981</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l13983">13983</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -2627,7 +2630,7 @@ Private Attributes</h2></td></tr>
 
 <p>Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_eigen_newton_solver_block.html#a86df1760985ca31f26914c6706c9d0ca">EigenNewtonSolverBlock::initialize_block</a> (rvalue reference) </p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l13936">13936</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l13938">13938</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -2649,7 +2652,7 @@ Private Attributes</h2></td></tr>
 
 <p>Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_eigen_newton_solver_block.html#a86df1760985ca31f26914c6706c9d0ca">EigenNewtonSolverBlock::initialize_block</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l13945">13945</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l13947">13947</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -2711,7 +2714,7 @@ Private Attributes</h2></td></tr>
 
 <p>Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_eigen_newton_solver_block.html#a5c20b93d4ef9ce8baaa461063efd4535">EigenNewtonSolverBlock::n_state_vars</a> (rvalue reference) </p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l13900">13900</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l13902">13902</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -2733,7 +2736,7 @@ Private Attributes</h2></td></tr>
 
 <p>Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_eigen_newton_solver_block.html#a5c20b93d4ef9ce8baaa461063efd4535">EigenNewtonSolverBlock::n_state_vars</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l13909">13909</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l13911">13911</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -2799,7 +2802,7 @@ Private Attributes</h2></td></tr>
 <p>optional member could be nullptr</p>
 <p>optional member could be nullptr </p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l13868">13868</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l13870">13870</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -2861,7 +2864,7 @@ Private Attributes</h2></td></tr>
 
 <p>Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_eigen_newton_solver_block.html#a083e6cac27a792700ac7218c1c8cc902">EigenNewtonSolverBlock::setup_x_block</a> (rvalue reference) </p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l13954">13954</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l13956">13956</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -2883,7 +2886,7 @@ Private Attributes</h2></td></tr>
 
 <p>Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_eigen_newton_solver_block.html#a083e6cac27a792700ac7218c1c8cc902">EigenNewtonSolverBlock::setup_x_block</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l13963">13963</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l13965">13965</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -3073,7 +3076,7 @@ Private Attributes</h2></td></tr>
 
 <p>Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_eigen_newton_solver_block.html#ae912ed37f2f88489446366597213bf63">EigenNewtonSolverBlock::update_states_block</a> (rvalue reference) </p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l13990">13990</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l13992">13992</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -3095,7 +3098,7 @@ Private Attributes</h2></td></tr>
 
 <p>Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_eigen_newton_solver_block.html#ae912ed37f2f88489446366597213bf63">EigenNewtonSolverBlock::update_states_block</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l13999">13999</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l14001">14001</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -3157,7 +3160,7 @@ Private Attributes</h2></td></tr>
 
 <p>Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_eigen_newton_solver_block.html#ab81891acf39f63ef3d633c8fc4c67089">EigenNewtonSolverBlock::variable_block</a> (rvalue reference) </p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l13918">13918</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l13920">13920</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -3179,7 +3182,7 @@ Private Attributes</h2></td></tr>
 
 <p>Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_eigen_newton_solver_block.html#ab81891acf39f63ef3d633c8fc4c67089">EigenNewtonSolverBlock::variable_block</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l13927">13927</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l13929">13929</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -3306,7 +3309,7 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_block.html#a435cdcbecebe2dedfc30d8a2b78f2dfc">nmodl::ast::Block</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l13743">13743</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l13745">13745</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -3354,7 +3357,7 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_block.html#ab6d01ca8f66c197694454e271693db8d">nmodl::ast::Block</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l13767">13767</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l13769">13769</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>

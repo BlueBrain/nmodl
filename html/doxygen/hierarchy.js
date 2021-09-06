@@ -317,6 +317,8 @@ var hierarchy =
             [ "nmodl::ast::ThreadSafe", "classnmodl_1_1ast_1_1_thread_safe.html", null ],
             [ "nmodl::ast::UnitState", "classnmodl_1_1ast_1_1_unit_state.html", null ],
             [ "nmodl::ast::UnitState", "classnmodl_1_1ast_1_1_unit_state.html", null ],
+            [ "nmodl::ast::UpdateDt", "classnmodl_1_1ast_1_1_update_dt.html", null ],
+            [ "nmodl::ast::UpdateDt", "classnmodl_1_1ast_1_1_update_dt.html", null ],
             [ "nmodl::ast::Useion", "classnmodl_1_1ast_1_1_useion.html", null ],
             [ "nmodl::ast::Useion", "classnmodl_1_1ast_1_1_useion.html", null ],
             [ "nmodl::ast::Verbatim", "classnmodl_1_1ast_1_1_verbatim.html", null ],

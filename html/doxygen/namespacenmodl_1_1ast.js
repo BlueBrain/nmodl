@@ -132,6 +132,7 @@ var namespacenmodl_1_1ast =
     [ "UnitBlock", "classnmodl_1_1ast_1_1_unit_block.html", "classnmodl_1_1ast_1_1_unit_block" ],
     [ "UnitDef", "classnmodl_1_1ast_1_1_unit_def.html", "classnmodl_1_1ast_1_1_unit_def" ],
     [ "UnitState", "classnmodl_1_1ast_1_1_unit_state.html", "classnmodl_1_1ast_1_1_unit_state" ],
+    [ "UpdateDt", "classnmodl_1_1ast_1_1_update_dt.html", "classnmodl_1_1ast_1_1_update_dt" ],
     [ "Useion", "classnmodl_1_1ast_1_1_useion.html", "classnmodl_1_1ast_1_1_useion" ],
     [ "Valence", "classnmodl_1_1ast_1_1_valence.html", "classnmodl_1_1ast_1_1_valence" ],
     [ "VarName", "classnmodl_1_1ast_1_1_var_name.html", "classnmodl_1_1ast_1_1_var_name" ],

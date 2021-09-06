@@ -140,6 +140,7 @@ var group__ast__type =
       [ "EIGEN_LINEAR_SOLVER_BLOCK", "group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a517df820ec4c846300b1dea014500d0f", null ],
       [ "WRAPPED_EXPRESSION", "group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a24e8edf8ee3bf4dc4d1a06e764665b53", null ],
       [ "DERIVIMPLICIT_CALLBACK", "group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a6fe40378290f559b18d043a4a4393206", null ],
-      [ "SOLUTION_EXPRESSION", "group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a03d2d4d474a5e228e6708a598e75d72d", null ]
+      [ "SOLUTION_EXPRESSION", "group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a03d2d4d474a5e228e6708a598e75d72d", null ],
+      [ "UPDATE_DT", "group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a4fb7ea683a98639d84f8d9b07c33a3a5", null ]
     ] ]
 ];

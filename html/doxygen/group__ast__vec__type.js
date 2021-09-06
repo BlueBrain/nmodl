@@ -131,6 +131,7 @@ var group__ast__vec__type =
     [ "UnitDefVector", "group__ast__vec__type.html#gad4b20113f5b065c462077db1ee11fa4e", null ],
     [ "UnitStateVector", "group__ast__vec__type.html#gae141f84df8c319ca23fbd35e4c3b8a0f", null ],
     [ "UnitVector", "group__ast__vec__type.html#ga5b9a796298d80fe97fcd47403947b9d0", null ],
+    [ "UpdateDtVector", "group__ast__vec__type.html#ga0406a473e874983914ba4adbc2cb881d", null ],
     [ "UseionVector", "group__ast__vec__type.html#ga5e52bb8c2b1ab57166cbf603c4a45cbb", null ],
     [ "ValenceVector", "group__ast__vec__type.html#ga94c1f13db006ede6849398172ec460fa", null ],
     [ "VarNameVector", "group__ast__vec__type.html#ga7f1c4cc6f4f3ee59c3448bd6aaa66dbd", null ],

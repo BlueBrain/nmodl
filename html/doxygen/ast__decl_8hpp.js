@@ -131,6 +131,7 @@ var ast__decl_8hpp =
     [ "UnitDefVector", "ast__decl_8hpp.html#gad4b20113f5b065c462077db1ee11fa4e", null ],
     [ "UnitStateVector", "ast__decl_8hpp.html#gae141f84df8c319ca23fbd35e4c3b8a0f", null ],
     [ "UnitVector", "ast__decl_8hpp.html#ga5b9a796298d80fe97fcd47403947b9d0", null ],
+    [ "UpdateDtVector", "ast__decl_8hpp.html#ga0406a473e874983914ba4adbc2cb881d", null ],
     [ "UseionVector", "ast__decl_8hpp.html#ga5e52bb8c2b1ab57166cbf603c4a45cbb", null ],
     [ "ValenceVector", "ast__decl_8hpp.html#ga94c1f13db006ede6849398172ec460fa", null ],
     [ "VarNameVector", "ast__decl_8hpp.html#ga7f1c4cc6f4f3ee59c3448bd6aaa66dbd", null ],
@@ -280,6 +281,7 @@ var ast__decl_8hpp =
       [ "EIGEN_LINEAR_SOLVER_BLOCK", "ast__decl_8hpp.html#ggac392e49849e60c05e42ea02c7b445033a517df820ec4c846300b1dea014500d0f", null ],
       [ "WRAPPED_EXPRESSION", "ast__decl_8hpp.html#ggac392e49849e60c05e42ea02c7b445033a24e8edf8ee3bf4dc4d1a06e764665b53", null ],
       [ "DERIVIMPLICIT_CALLBACK", "ast__decl_8hpp.html#ggac392e49849e60c05e42ea02c7b445033a6fe40378290f559b18d043a4a4393206", null ],
-      [ "SOLUTION_EXPRESSION", "ast__decl_8hpp.html#ggac392e49849e60c05e42ea02c7b445033a03d2d4d474a5e228e6708a598e75d72d", null ]
+      [ "SOLUTION_EXPRESSION", "ast__decl_8hpp.html#ggac392e49849e60c05e42ea02c7b445033a03d2d4d474a5e228e6708a598e75d72d", null ],
+      [ "UPDATE_DT", "ast__decl_8hpp.html#ggac392e49849e60c05e42ea02c7b445033a4fb7ea683a98639d84f8d9b07c33a3a5", null ]
     ] ]
 ];

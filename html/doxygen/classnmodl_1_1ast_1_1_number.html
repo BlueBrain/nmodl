@@ -646,6 +646,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ga1f324c705485dbbeffcee8401aa1d097 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ast__class.html#ga1f324c705485dbbeffcee8401aa1d097">is_solution_expression</a> () const noexcept</td></tr>
 <tr class="memdesc:ga1f324c705485dbbeffcee8401aa1d097 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_solution_expression.html" title="Represent solution of a block in the AST. ">ast::SolutionExpression</a>.  <a href="group__ast__class.html#ga1f324c705485dbbeffcee8401aa1d097">More...</a><br /></td></tr>
 <tr class="separator:ga1f324c705485dbbeffcee8401aa1d097 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga0f2057e5ee6d098bea109648bcc226bd inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ast__class.html#ga0f2057e5ee6d098bea109648bcc226bd">is_update_dt</a> () const noexcept</td></tr>
+<tr class="memdesc:ga0f2057e5ee6d098bea109648bcc226bd inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_update_dt.html" title="Statement to indicate a change in timestep in a given block. ">ast::UpdateDt</a>.  <a href="group__ast__class.html#ga0f2057e5ee6d098bea109648bcc226bd">More...</a><br /></td></tr>
+<tr class="separator:ga0f2057e5ee6d098bea109648bcc226bd inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga8e133edb6222fbee34e5f0d342797ee4 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="structnmodl_1_1ast_1_1_ast.html">Ast</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ast__class.html#ga8e133edb6222fbee34e5f0d342797ee4">get_parent</a> () const</td></tr>
 <tr class="memdesc:ga8e133edb6222fbee34e5f0d342797ee4 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parent getter.  <a href="group__ast__class.html#ga8e133edb6222fbee34e5f0d342797ee4">More...</a><br /></td></tr>
 <tr class="separator:ga8e133edb6222fbee34e5f0d342797ee4 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -851,7 +854,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1ast_1_1_boolean.html#ac34985632d4b4545a9d37c35e1f68a56">nmodl::ast::Boolean</a>, <a class="el" href="classnmodl_1_1ast_1_1_double.html#a07bccffd6a1630e0bcd1dfdfa71b756c">nmodl::ast::Double</a>, <a class="el" href="classnmodl_1_1ast_1_1_float.html#aae8fbf1b3a33b5ec9698d130e65a8a2d">nmodl::ast::Float</a>, <a class="el" href="classnmodl_1_1ast_1_1_integer.html#a42156110af6119efd3158b47fb81ebb8">nmodl::ast::Integer</a>, <a class="el" href="classnmodl_1_1ast_1_1_integer.html#a42156110af6119efd3158b47fb81ebb8">nmodl::ast::Integer</a>, <a class="el" href="classnmodl_1_1ast_1_1_double.html#a07bccffd6a1630e0bcd1dfdfa71b756c">nmodl::ast::Double</a>, <a class="el" href="classnmodl_1_1ast_1_1_float.html#aae8fbf1b3a33b5ec9698d130e65a8a2d">nmodl::ast::Float</a>, and <a class="el" href="classnmodl_1_1ast_1_1_boolean.html#ac34985632d4b4545a9d37c35e1f68a56">nmodl::ast::Boolean</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l00421">421</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l00423">423</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -893,7 +896,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1ast_1_1_boolean.html#a4f3a837ef4b07a1d8c68031ca572abf2">nmodl::ast::Boolean</a>, <a class="el" href="classnmodl_1_1ast_1_1_double.html#a9fcb818dc136b52d555f03bd01f68c58">nmodl::ast::Double</a>, <a class="el" href="classnmodl_1_1ast_1_1_float.html#a67785a60d6322fd901f10c4b14c11bc9">nmodl::ast::Float</a>, <a class="el" href="classnmodl_1_1ast_1_1_integer.html#ac8dd1f5a295b2e6d8ad3e4a055449520">nmodl::ast::Integer</a>, <a class="el" href="classnmodl_1_1ast_1_1_integer.html#ac8dd1f5a295b2e6d8ad3e4a055449520">nmodl::ast::Integer</a>, <a class="el" href="classnmodl_1_1ast_1_1_double.html#a9fcb818dc136b52d555f03bd01f68c58">nmodl::ast::Double</a>, <a class="el" href="classnmodl_1_1ast_1_1_float.html#a67785a60d6322fd901f10c4b14c11bc9">nmodl::ast::Float</a>, and <a class="el" href="classnmodl_1_1ast_1_1_boolean.html#a4f3a837ef4b07a1d8c68031ca572abf2">nmodl::ast::Boolean</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l00423">423</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l00425">425</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -1487,7 +1490,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1ast_1_1_boolean.html#a7f0965e621672a70bf395d048ce59166">nmodl::ast::Boolean</a>, <a class="el" href="classnmodl_1_1ast_1_1_double.html#a32a1c679fc40ffcdc1e386c706579f69">nmodl::ast::Double</a>, <a class="el" href="classnmodl_1_1ast_1_1_float.html#a0be1afa1793e27ac300fec30aaf83572">nmodl::ast::Float</a>, <a class="el" href="classnmodl_1_1ast_1_1_integer.html#a346b02c7c6e4b66f68f984df05965b54">nmodl::ast::Integer</a>, <a class="el" href="classnmodl_1_1ast_1_1_integer.html#a346b02c7c6e4b66f68f984df05965b54">nmodl::ast::Integer</a>, <a class="el" href="classnmodl_1_1ast_1_1_double.html#a32a1c679fc40ffcdc1e386c706579f69">nmodl::ast::Double</a>, <a class="el" href="classnmodl_1_1ast_1_1_float.html#a0be1afa1793e27ac300fec30aaf83572">nmodl::ast::Float</a>, and <a class="el" href="classnmodl_1_1ast_1_1_boolean.html#a7f0965e621672a70bf395d048ce59166">nmodl::ast::Boolean</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l00417">417</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l00419">419</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -1530,7 +1533,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1ast_1_1_boolean.html#a9b51ef94dc02d0508709db79fa128e5a">nmodl::ast::Boolean</a>, <a class="el" href="classnmodl_1_1ast_1_1_double.html#aa1a9eb45113df65da38a4142a2cd51f8">nmodl::ast::Double</a>, <a class="el" href="classnmodl_1_1ast_1_1_float.html#ac293279ace1fb0bf45a37695a2561d71">nmodl::ast::Float</a>, <a class="el" href="classnmodl_1_1ast_1_1_integer.html#ad1738713a8a243f001224230e75875c2">nmodl::ast::Integer</a>, <a class="el" href="classnmodl_1_1ast_1_1_integer.html#ad1738713a8a243f001224230e75875c2">nmodl::ast::Integer</a>, <a class="el" href="classnmodl_1_1ast_1_1_double.html#aa1a9eb45113df65da38a4142a2cd51f8">nmodl::ast::Double</a>, <a class="el" href="classnmodl_1_1ast_1_1_float.html#ac293279ace1fb0bf45a37695a2561d71">nmodl::ast::Float</a>, and <a class="el" href="classnmodl_1_1ast_1_1_boolean.html#a9b51ef94dc02d0508709db79fa128e5a">nmodl::ast::Boolean</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l00419">419</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l00421">421</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>

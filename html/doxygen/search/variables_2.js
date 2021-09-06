@@ -7,6 +7,7 @@ var searchData=
   ['caller_5fblock',['caller_block',['../classnmodl_1_1visitor_1_1_inline_visitor.html#ad8364b22d75e2c80ae6f81da015ad9de',1,'nmodl::visitor::InlineVisitor']]],
   ['caller_5fstatement',['caller_statement',['../classnmodl_1_1visitor_1_1_inline_visitor.html#a4dc09ec2105dfb167f2ba30c17e0f153',1,'nmodl::visitor::InlineVisitor']]],
   ['chain',['chain',['../classnmodl_1_1visitor_1_1_d_u_chain.html#a2f4b9624fedf24761f69095f058fb030',1,'nmodl::visitor::DUChain']]],
+  ['changed_5fdt',['changed_dt',['../structnmodl_1_1codegen_1_1_codegen_info.html#ad5f0120295010083fc2060f8e64b0ffd',1,'nmodl::codegen::CodegenInfo']]],
   ['child_5fkey',['child_key',['../classnmodl_1_1printer_1_1_j_s_o_n_printer.html#a10c5ec3075852e515580d5ec15534e01',1,'nmodl::printer::JSONPrinter']]],
   ['children',['children',['../classnmodl_1_1symtab_1_1_symbol_table.html#a8348f144800dc1cddb41454121a246e8',1,'nmodl::symtab::SymbolTable::children()'],['../classnmodl_1_1visitor_1_1_d_u_instance.html#a78c4c17cd88b42ad800695b80e50ceda',1,'nmodl::visitor::DUInstance::children()']]],
   ['children_5fblocks_5fperf',['children_blocks_perf',['../classnmodl_1_1visitor_1_1_perf_visitor.html#ab71cfa49467535a6a1b6d52c74fde957',1,'nmodl::visitor::PerfVisitor']]],

@@ -16,6 +16,7 @@ var classnmodl_1_1codegen_1_1_codegen_cuda_visitor =
     [ "print_codegen_routines", "classnmodl_1_1codegen_1_1_codegen_cuda_visitor.html#a5bbaad5a0ec7f7fa9e14c123357cdf19", null ],
     [ "print_compute_functions", "classnmodl_1_1codegen_1_1_codegen_cuda_visitor.html#aa4d35b90a3d001846c8e376823e35144", null ],
     [ "print_device_method_annotation", "classnmodl_1_1codegen_1_1_codegen_cuda_visitor.html#a355c23ac68023580c5685c50cfe66fab", null ],
+    [ "print_dt_update_to_device", "classnmodl_1_1codegen_1_1_codegen_cuda_visitor.html#abbadf8821120140cd59e9991a4486847", null ],
     [ "print_fast_imem_calculation", "classnmodl_1_1codegen_1_1_codegen_cuda_visitor.html#abbc04098333cee22d2b282f4dd916612", null ],
     [ "print_global_method_annotation", "classnmodl_1_1codegen_1_1_codegen_cuda_visitor.html#a64b5caba9f30c3c4388fb85507426fc5", null ],
     [ "print_nrn_cur_matrix_shadow_reduction", "classnmodl_1_1codegen_1_1_codegen_cuda_visitor.html#ae3cfafef889d1dde955bceab99362245", null ],

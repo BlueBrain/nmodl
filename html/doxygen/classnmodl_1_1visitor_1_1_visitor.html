@@ -558,6 +558,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a8e939e59938e1afd5c68d2cd2907c2f3"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_visitor.html#a8e939e59938e1afd5c68d2cd2907c2f3">visit_solution_expression</a> (<a class="el" href="classnmodl_1_1ast_1_1_solution_expression.html">ast::SolutionExpression</a> &amp;node)=0</td></tr>
 <tr class="memdesc:a8e939e59938e1afd5c68d2cd2907c2f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_solution_expression.html" title="Represent solution of a block in the AST. ">ast::SolutionExpression</a>  <a href="#a8e939e59938e1afd5c68d2cd2907c2f3">More...</a><br /></td></tr>
 <tr class="separator:a8e939e59938e1afd5c68d2cd2907c2f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a678f6ac01a78cff8a95ff0ac7b7115fb"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_visitor.html#a678f6ac01a78cff8a95ff0ac7b7115fb">visit_update_dt</a> (<a class="el" href="classnmodl_1_1ast_1_1_update_dt.html">ast::UpdateDt</a> &amp;node)=0</td></tr>
+<tr class="memdesc:a678f6ac01a78cff8a95ff0ac7b7115fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_update_dt.html" title="Statement to indicate a change in timestep in a given block. ">ast::UpdateDt</a>  <a href="#a678f6ac01a78cff8a95ff0ac7b7115fb">More...</a><br /></td></tr>
+<tr class="separator:a678f6ac01a78cff8a95ff0ac7b7115fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a38802415a9e8577ea0d66dff9c21afc8"></a>
@@ -4513,6 +4516,36 @@ Public Member Functions</h2></td></tr>
 <p>visit node of type <a class="el" href="classnmodl_1_1ast_1_1_unit_state.html" title="TODO. ">ast::UnitState</a> </p>
 
 <p>Implemented in <a class="el" href="classnmodl_1_1visitor_1_1_ast_visitor.html#a985c420338f9df1f8bf0091771c53842">nmodl::visitor::AstVisitor</a>.</p>
+
+</div>
+</div>
+<a id="a678f6ac01a78cff8a95ff0ac7b7115fb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a678f6ac01a78cff8a95ff0ac7b7115fb">&#9670;&nbsp;</a></span>visit_update_dt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void nmodl::visitor::Visitor::visit_update_dt </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classnmodl_1_1ast_1_1_update_dt.html">ast::UpdateDt</a> &amp;&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>visit node of type <a class="el" href="classnmodl_1_1ast_1_1_update_dt.html" title="Statement to indicate a change in timestep in a given block. ">ast::UpdateDt</a> </p>
+
+<p>Implemented in <a class="el" href="classnmodl_1_1visitor_1_1_ast_visitor.html#a72990838cc3629cdd0f471f64628e110">nmodl::visitor::AstVisitor</a>.</p>
 
 </div>
 </div>

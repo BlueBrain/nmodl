@@ -545,6 +545,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a928adab5f8100716956251fb3e540f87"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#a928adab5f8100716956251fb3e540f87">visit_solution_expression</a> (const <a class="el" href="classnmodl_1_1ast_1_1_solution_expression.html">ast::SolutionExpression</a> &amp;node) override</td></tr>
 <tr class="memdesc:a928adab5f8100716956251fb3e540f87"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_solution_expression.html" title="Represent solution of a block in the AST. ">ast::SolutionExpression</a>  <a href="#a928adab5f8100716956251fb3e540f87">More...</a><br /></td></tr>
 <tr class="separator:a928adab5f8100716956251fb3e540f87"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4fe6c4eb8ba276368fd51a88293f2a6a"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#a4fe6c4eb8ba276368fd51a88293f2a6a">visit_update_dt</a> (const <a class="el" href="classnmodl_1_1ast_1_1_update_dt.html">ast::UpdateDt</a> &amp;node) override</td></tr>
+<tr class="memdesc:a4fe6c4eb8ba276368fd51a88293f2a6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_update_dt.html" title="Statement to indicate a change in timestep in a given block. ">ast::UpdateDt</a>  <a href="#a4fe6c4eb8ba276368fd51a88293f2a6a">More...</a><br /></td></tr>
+<tr class="separator:a4fe6c4eb8ba276368fd51a88293f2a6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aee3b783439677539ca37e9683ded5c1f"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:aee3b783439677539ca37e9683ded5c1f"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#aee3b783439677539ca37e9683ded5c1f">visit_element</a> (const std::vector&lt; T &gt; &amp;elements, const std::string &amp;separator, bool program, bool statement)</td></tr>
 <tr class="memdesc:aee3b783439677539ca37e9683ded5c1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function to visit vector elements.  <a href="#aee3b783439677539ca37e9683ded5c1f">More...</a><br /></td></tr>
@@ -4975,6 +4978,38 @@ template&lt;typename T &gt; </div>
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#aa96b5a39b52ee05ceb75def97455d4df">nmodl::visitor::ConstVisitor</a>.</p>
 
 <p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01017">1017</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a4fe6c4eb8ba276368fd51a88293f2a6a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4fe6c4eb8ba276368fd51a88293f2a6a">&#9670;&nbsp;</a></span>visit_update_dt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void nmodl::visitor::NmodlPrintVisitor::visit_update_dt </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classnmodl_1_1ast_1_1_update_dt.html">ast::UpdateDt</a> &amp;&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>visit node of type <a class="el" href="classnmodl_1_1ast_1_1_update_dt.html" title="Statement to indicate a change in timestep in a given block. ">ast::UpdateDt</a> </p>
+
+<p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a00f4d360a1345e059f1e9e09a8d4f4a6">nmodl::visitor::ConstVisitor</a>.</p>
+
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01841">1841</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>

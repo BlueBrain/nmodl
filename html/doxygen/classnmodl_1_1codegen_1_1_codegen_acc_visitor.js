@@ -12,6 +12,7 @@ var classnmodl_1_1codegen_1_1_codegen_acc_visitor =
     [ "print_deriv_advance_flag_transfer_to_device", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#abf9de5982b1d8f6fb492e668183c2ee1", null ],
     [ "print_device_atomic_capture_annotation", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#ad3cf0f9dd9a34da7d16712815c805576", null ],
     [ "print_device_stream_wait", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#ae69707b056c2db2a8c209b7e8cc97bf4", null ],
+    [ "print_dt_update_to_device", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a3881733a09e8cd01a1829c3c5a9a629f", null ],
     [ "print_eigen_linear_solver", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#abc10c66d7634c9d6f163d00f156108fa", null ],
     [ "print_fast_imem_calculation", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#af58d26884131b0cc711887c549bc7957", null ],
     [ "print_global_variable_device_create_annotation", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#aa2da3c12a3e5ef399f5847e661134552", null ],

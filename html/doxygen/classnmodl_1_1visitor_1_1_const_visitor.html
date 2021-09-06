@@ -102,7 +102,7 @@ $(document).ready(function(){initNavTree('classnmodl_1_1visitor_1_1_const_visito
 <p>This class defines interface for all concrete constant visitors implementation. Note that this class only provides interface that could be implemented by concrete visitors like ast::ConstAstVisitor.</p>
 <dl class="section see"><dt>See also</dt><dd>ast::ConstAstVisitor </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="visitor_8hpp_source.html#l00338">338</a> of file <a class="el" href="visitor_8hpp_source.html">visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor_8hpp_source.html#l00340">340</a> of file <a class="el" href="visitor_8hpp_source.html">visitor.hpp</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="visitor_8hpp_source.html">visitor.hpp</a>&gt;</code></p>
 <div class="dynheader">
@@ -550,6 +550,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a62fc9a812bba862a3ec56eac5ceb2d38"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a62fc9a812bba862a3ec56eac5ceb2d38">visit_solution_expression</a> (const <a class="el" href="classnmodl_1_1ast_1_1_solution_expression.html">ast::SolutionExpression</a> &amp;node)=0</td></tr>
 <tr class="memdesc:a62fc9a812bba862a3ec56eac5ceb2d38"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_solution_expression.html" title="Represent solution of a block in the AST. ">ast::SolutionExpression</a>  <a href="#a62fc9a812bba862a3ec56eac5ceb2d38">More...</a><br /></td></tr>
 <tr class="separator:a62fc9a812bba862a3ec56eac5ceb2d38"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a00f4d360a1345e059f1e9e09a8d4f4a6"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a00f4d360a1345e059f1e9e09a8d4f4a6">visit_update_dt</a> (const <a class="el" href="classnmodl_1_1ast_1_1_update_dt.html">ast::UpdateDt</a> &amp;node)=0</td></tr>
+<tr class="memdesc:a00f4d360a1345e059f1e9e09a8d4f4a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_update_dt.html" title="Statement to indicate a change in timestep in a given block. ">ast::UpdateDt</a>  <a href="#a00f4d360a1345e059f1e9e09a8d4f4a6">More...</a><br /></td></tr>
+<tr class="separator:a00f4d360a1345e059f1e9e09a8d4f4a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a8513f0a9bc2e21f863dab3c9be0a99d0"></a>
@@ -2674,7 +2677,7 @@ Public Member Functions</h2></td></tr>
 
 <p>visit node of type <a class="el" href="classnmodl_1_1ast_1_1_match_block.html" title="TODO. ">ast::MatchBlock</a> </p>
 
-<p>Implemented in <a class="el" href="classnmodl_1_1visitor_1_1test_1_1_check_parent_visitor.html#a1f5af8e311289e9362467e4eda2a7e7d">nmodl::visitor::test::CheckParentVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_perf_visitor.html#a6d4392b4f73372235f0e4aa90cedbb40">nmodl::visitor::PerfVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_const_ast_visitor.html#a93a73f12f767a753b4bdd55ca6f75219">nmodl::visitor::ConstAstVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_j_s_o_n_visitor.html#ab794ac275fd53604bd03cb79c2b9268e">nmodl::visitor::JSONVisitor</a>, and <a class="el" href="classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#a952b04cc579fd5021424bd65441f2757">nmodl::visitor::NmodlPrintVisitor</a>.</p>
+<p>Implemented in <a class="el" href="classnmodl_1_1visitor_1_1test_1_1_check_parent_visitor.html#a1f5af8e311289e9362467e4eda2a7e7d">nmodl::visitor::test::CheckParentVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_const_ast_visitor.html#a93a73f12f767a753b4bdd55ca6f75219">nmodl::visitor::ConstAstVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_perf_visitor.html#a6d4392b4f73372235f0e4aa90cedbb40">nmodl::visitor::PerfVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_j_s_o_n_visitor.html#ab794ac275fd53604bd03cb79c2b9268e">nmodl::visitor::JSONVisitor</a>, and <a class="el" href="classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#a952b04cc579fd5021424bd65441f2757">nmodl::visitor::NmodlPrintVisitor</a>.</p>
 
 </div>
 </div>
@@ -4505,6 +4508,36 @@ Public Member Functions</h2></td></tr>
 <p>visit node of type <a class="el" href="classnmodl_1_1ast_1_1_unit_state.html" title="TODO. ">ast::UnitState</a> </p>
 
 <p>Implemented in <a class="el" href="classnmodl_1_1visitor_1_1test_1_1_check_parent_visitor.html#a7fd825d812ab23c4b10a031e6e31958d">nmodl::visitor::test::CheckParentVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_const_ast_visitor.html#a8b418f24c6785e1e2e0dbb9930409e5c">nmodl::visitor::ConstAstVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_j_s_o_n_visitor.html#acb8106d325c97d80e7882ad53526ab33">nmodl::visitor::JSONVisitor</a>, and <a class="el" href="classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#a4e1a9ead5e8148b1b56402318584cca4">nmodl::visitor::NmodlPrintVisitor</a>.</p>
+
+</div>
+</div>
+<a id="a00f4d360a1345e059f1e9e09a8d4f4a6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a00f4d360a1345e059f1e9e09a8d4f4a6">&#9670;&nbsp;</a></span>visit_update_dt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void nmodl::visitor::ConstVisitor::visit_update_dt </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classnmodl_1_1ast_1_1_update_dt.html">ast::UpdateDt</a> &amp;&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>visit node of type <a class="el" href="classnmodl_1_1ast_1_1_update_dt.html" title="Statement to indicate a change in timestep in a given block. ">ast::UpdateDt</a> </p>
+
+<p>Implemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a34ca7759632defa22bdcc93849e8f58a">nmodl::codegen::CodegenCVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1test_1_1_check_parent_visitor.html#af4a8a8f5b8c75d33527edaf9a197d6bc">nmodl::visitor::test::CheckParentVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_const_ast_visitor.html#aaee5bfcc26a1a00ee29b544c6c038803">nmodl::visitor::ConstAstVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_j_s_o_n_visitor.html#aed8be0656399e7a02450508f18c03e2c">nmodl::visitor::JSONVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#a4fe6c4eb8ba276368fd51a88293f2a6a">nmodl::visitor::NmodlPrintVisitor</a>, and <a class="el" href="classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a25bd3248de560198ae2c410d7d344652">nmodl::codegen::CodegenHelperVisitor</a>.</p>
 
 </div>
 </div>

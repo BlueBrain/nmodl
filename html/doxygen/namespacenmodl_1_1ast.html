@@ -500,6 +500,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_unit_state.html">UnitState</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">TODO.  <a href="classnmodl_1_1ast_1_1_unit_state.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_update_dt.html">UpdateDt</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classnmodl_1_1ast_1_1_statement.html" title="TODO. ">Statement</a> to indicate a change in timestep in a given block.  <a href="classnmodl_1_1ast_1_1_update_dt.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_useion.html">Useion</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents USEION statement in NMODL.  <a href="classnmodl_1_1ast_1_1_useion.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -810,6 +813,8 @@ Typedefs</h2></td></tr>
 <tr class="separator:gae61adf9ec92b26e3a88af2b70de5bda2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga722ab842ff7436c2c13c07924a9935b9"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ast__vec__type.html#ga722ab842ff7436c2c13c07924a9935b9">SolutionExpressionVector</a> = std::vector&lt; std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_solution_expression.html">SolutionExpression</a> &gt; &gt;</td></tr>
 <tr class="separator:ga722ab842ff7436c2c13c07924a9935b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga0406a473e874983914ba4adbc2cb881d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ast__vec__type.html#ga0406a473e874983914ba4adbc2cb881d">UpdateDtVector</a> = std::vector&lt; std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_update_dt.html">UpdateDt</a> &gt; &gt;</td></tr>
+<tr class="separator:ga0406a473e874983914ba4adbc2cb881d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
@@ -1042,7 +1047,9 @@ Enumerations</h2></td></tr>
 &#160;&#160;<a class="el" href="group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a517df820ec4c846300b1dea014500d0f">AstNodeType::EIGEN_LINEAR_SOLVER_BLOCK</a>, 
 <a class="el" href="group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a24e8edf8ee3bf4dc4d1a06e764665b53">AstNodeType::WRAPPED_EXPRESSION</a>, 
 <a class="el" href="group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a6fe40378290f559b18d043a4a4393206">AstNodeType::DERIVIMPLICIT_CALLBACK</a>, 
-<a class="el" href="group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a03d2d4d474a5e228e6708a598e75d72d">AstNodeType::SOLUTION_EXPRESSION</a>
+<a class="el" href="group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a03d2d4d474a5e228e6708a598e75d72d">AstNodeType::SOLUTION_EXPRESSION</a>, 
+<br />
+&#160;&#160;<a class="el" href="group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a4fb7ea683a98639d84f8d9b07c33a3a5">AstNodeType::UPDATE_DT</a>
 <br />
  }<tr class="memdesc:gac392e49849e60c05e42ea02c7b445033"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum type for every AST node type.  <a href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033">More...</a><br /></td></tr>
 </td></tr>

@@ -1578,6 +1578,12 @@ and it can be accessed using this method.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="nmodl.ast.Ast.is_update_dt">
+<code class="sig-name descname">is_update_dt</code><span class="sig-paren">(</span><em class="sig-param">self: nmodl._nmodl.ast.Ast</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#nmodl.ast.Ast.is_update_dt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if node is of type ast.UpdateDt</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="nmodl.ast.Ast.is_useion">
 <code class="sig-name descname">is_useion</code><span class="sig-paren">(</span><em class="sig-param">self: nmodl._nmodl.ast.Ast</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#nmodl.ast.Ast.is_useion" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check if node is of type ast.Useion</p>
@@ -1809,6 +1815,7 @@ this enum class. See nmodl::ast::AstNodeType for details.</p>
 <p>WRAPPED_EXPRESSION : AST node of type ast.WrappedExpression</p>
 <p>DERIVIMPLICIT_CALLBACK : AST node of type ast.DerivimplicitCallback</p>
 <p>SOLUTION_EXPRESSION : AST node of type ast.SolutionExpression</p>
+<p>UPDATE_DT : AST node of type ast.UpdateDt</p>
 </div></blockquote>
 <dl class="method">
 <dt id="nmodl.ast.AstNodeType.name">
@@ -12719,6 +12726,92 @@ recursively visits children using provided concrete visitor.</p>
 </dd></dl>
 
 <dl class="class">
+<dt id="nmodl.ast.UpdateDt">
+<em class="property">class </em><code class="sig-prename descclassname">nmodl.ast.</code><code class="sig-name descname">UpdateDt</code><a class="headerlink" href="#nmodl.ast.UpdateDt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">nmodl._nmodl.ast.Statement</span></code></p>
+<p>Statement to indicate a change in timestep in a given block</p>
+<dl class="method">
+<dt id="nmodl.ast.UpdateDt.accept">
+<code class="sig-name descname">accept</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#nmodl.ast.UpdateDt.accept" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p>accept(self: nmodl._nmodl.ast.UpdateDt, arg0: nmodl._nmodl.visitor.Visitor) -&gt; None</p>
+<blockquote>
+<div><p>Accept (or visit) the current AST node using current visitor</p>
+<p>Instead of visiting children of AST node, like Ast::visit_children,
+accept allows to visit the current node itself using the concrete
+visitor provided.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>v (Visitor):  Concrete visitor that will be used to recursively visit node</p>
+</dd>
+</dl>
+</div></blockquote>
+</li>
+<li><p>accept(self: nmodl._nmodl.ast.UpdateDt, arg0: nmodl._nmodl.visitor.ConstVisitor) -&gt; None</p>
+<blockquote>
+<div><p>Accept (or visit) the current AST node using current visitor</p>
+<p>Instead of visiting children of AST node, like Ast::visit_children,
+accept allows to visit the current node itself using the concrete
+visitor provided.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>v (Visitor):  Concrete visitor that will be used to recursively visit node</p>
+</dd>
+</dl>
+</div></blockquote>
+</li>
+</ol>
+</dd></dl>
+
+<dl class="method">
+<dt id="nmodl.ast.UpdateDt.clone">
+<code class="sig-name descname">clone</code><span class="sig-paren">(</span><em class="sig-param">self: nmodl._nmodl.ast.UpdateDt</em><span class="sig-paren">)</span> &#x2192; nmodl._nmodl.ast.UpdateDt<a class="headerlink" href="#nmodl.ast.UpdateDt.clone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a copy of the AST node</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nmodl.ast.UpdateDt.get_nmodl_name">
+<code class="sig-name descname">get_nmodl_name</code><span class="sig-paren">(</span><em class="sig-param">self: nmodl._nmodl.ast.UpdateDt</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#nmodl.ast.UpdateDt.get_nmodl_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return nmodl statement of the node</p>
+<p>Some ast nodes have a member designated as nmodl name. For example,
+in case of “NEURON { }” the statement of NMODL which is stored as nmodl
+name is “NEURON”. This function is only implemented by node types that
+have a nmodl statement.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nmodl.ast.UpdateDt.get_node_type">
+<code class="sig-name descname">get_node_type</code><span class="sig-paren">(</span><em class="sig-param">self: nmodl._nmodl.ast.UpdateDt</em><span class="sig-paren">)</span> &#x2192; nmodl._nmodl.ast.AstNodeType<a class="headerlink" href="#nmodl.ast.UpdateDt.get_node_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return type (ast.AstNodeType) of the ast node</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nmodl.ast.UpdateDt.get_node_type_name">
+<code class="sig-name descname">get_node_type_name</code><span class="sig-paren">(</span><em class="sig-param">self: nmodl._nmodl.ast.UpdateDt</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#nmodl.ast.UpdateDt.get_node_type_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return type (ast.AstNodeType) of the ast node as string</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nmodl.ast.UpdateDt.is_update_dt">
+<code class="sig-name descname">is_update_dt</code><span class="sig-paren">(</span><em class="sig-param">self: nmodl._nmodl.ast.UpdateDt</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#nmodl.ast.UpdateDt.is_update_dt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if node is of type ast.UpdateDt</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nmodl.ast.UpdateDt.visit_children">
+<code class="sig-name descname">visit_children</code><span class="sig-paren">(</span><em class="sig-param">self: nmodl._nmodl.ast.UpdateDt</em>, <em class="sig-param">arg0: nmodl._nmodl.visitor.Visitor</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#nmodl.ast.UpdateDt.visit_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Visit children i.e. member of current AST node using provided visitor</p>
+<p>Different nodes in the AST have different members (i.e. children). This method
+recursively visits children using provided concrete visitor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>v</strong> (<a class="reference internal" href="#nmodl.visitor.Visitor" title="nmodl.visitor.Visitor"><em>Visitor</em></a>) – Concrete visitor that will be used to recursively visit node</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="nmodl.ast.Useion">
 <em class="property">class </em><code class="sig-prename descclassname">nmodl.ast.</code><code class="sig-name descname">Useion</code><a class="headerlink" href="#nmodl.ast.Useion" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">nmodl._nmodl.ast.Statement</span></code></p>
@@ -16753,6 +16846,11 @@ parameter defines global variables and hence they go into single global symbol t
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="nmodl.symtab.SymtabVisitor.visit_update_dt">
+<code class="sig-name descname">visit_update_dt</code><span class="sig-paren">(</span><em class="sig-param">self: nmodl._nmodl.symtab.SymtabVisitor</em>, <em class="sig-param">arg0: nmodl._nmodl.ast.UpdateDt</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#nmodl.symtab.SymtabVisitor.visit_update_dt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="nmodl.symtab.SymtabVisitor.visit_useion">
 <code class="sig-name descname">visit_useion</code><span class="sig-paren">(</span><em class="sig-param">self: nmodl._nmodl.symtab.SymtabVisitor</em>, <em class="sig-param">arg0: nmodl._nmodl.ast.Useion</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#nmodl.symtab.SymtabVisitor.visit_useion" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -17537,6 +17635,11 @@ parameter defines global variables and hence they go into single global symbol t
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="nmodl.visitor.AstVisitor.visit_update_dt">
+<code class="sig-name descname">visit_update_dt</code><span class="sig-paren">(</span><em class="sig-param">self: nmodl._nmodl.visitor.AstVisitor</em>, <em class="sig-param">arg0: nmodl::ast::UpdateDt</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#nmodl.visitor.AstVisitor.visit_update_dt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="nmodl.visitor.AstVisitor.visit_useion">
 <code class="sig-name descname">visit_useion</code><span class="sig-paren">(</span><em class="sig-param">self: nmodl._nmodl.visitor.AstVisitor</em>, <em class="sig-param">arg0: nmodl::ast::Useion</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#nmodl.visitor.AstVisitor.visit_useion" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -18244,6 +18347,11 @@ parameter defines global variables and hence they go into single global symbol t
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="nmodl.visitor.ConstAstVisitor.visit_update_dt">
+<code class="sig-name descname">visit_update_dt</code><span class="sig-paren">(</span><em class="sig-param">self: nmodl._nmodl.visitor.ConstAstVisitor</em>, <em class="sig-param">arg0: nmodl::ast::UpdateDt</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#nmodl.visitor.ConstAstVisitor.visit_update_dt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="nmodl.visitor.ConstAstVisitor.visit_useion">
 <code class="sig-name descname">visit_useion</code><span class="sig-paren">(</span><em class="sig-param">self: nmodl._nmodl.visitor.ConstAstVisitor</em>, <em class="sig-param">arg0: nmodl::ast::Useion</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#nmodl.visitor.ConstAstVisitor.visit_useion" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -18948,6 +19056,11 @@ parameter defines global variables and hence they go into single global symbol t
 <dl class="method">
 <dt id="nmodl.visitor.ConstVisitor.visit_unit_state">
 <code class="sig-name descname">visit_unit_state</code><span class="sig-paren">(</span><em class="sig-param">self: nmodl._nmodl.visitor.ConstVisitor</em>, <em class="sig-param">arg0: nmodl::ast::UnitState</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#nmodl.visitor.ConstVisitor.visit_unit_state" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="nmodl.visitor.ConstVisitor.visit_update_dt">
+<code class="sig-name descname">visit_update_dt</code><span class="sig-paren">(</span><em class="sig-param">self: nmodl._nmodl.visitor.ConstVisitor</em>, <em class="sig-param">arg0: nmodl::ast::UpdateDt</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#nmodl.visitor.ConstVisitor.visit_update_dt" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -19706,6 +19819,11 @@ parameter defines global variables and hence they go into single global symbol t
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="nmodl.visitor.NmodlPrintVisitor.visit_update_dt">
+<code class="sig-name descname">visit_update_dt</code><span class="sig-paren">(</span><em class="sig-param">self: nmodl._nmodl.visitor.NmodlPrintVisitor</em>, <em class="sig-param">arg0: nmodl::ast::UpdateDt</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#nmodl.visitor.NmodlPrintVisitor.visit_update_dt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="nmodl.visitor.NmodlPrintVisitor.visit_useion">
 <code class="sig-name descname">visit_useion</code><span class="sig-paren">(</span><em class="sig-param">self: nmodl._nmodl.visitor.NmodlPrintVisitor</em>, <em class="sig-param">arg0: nmodl::ast::Useion</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#nmodl.visitor.NmodlPrintVisitor.visit_useion" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -20434,6 +20552,11 @@ parameter defines global variables and hence they go into single global symbol t
 <dl class="method">
 <dt id="nmodl.visitor.Visitor.visit_unit_state">
 <code class="sig-name descname">visit_unit_state</code><span class="sig-paren">(</span><em class="sig-param">self: nmodl._nmodl.visitor.Visitor</em>, <em class="sig-param">arg0: nmodl::ast::UnitState</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#nmodl.visitor.Visitor.visit_unit_state" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="nmodl.visitor.Visitor.visit_update_dt">
+<code class="sig-name descname">visit_update_dt</code><span class="sig-paren">(</span><em class="sig-param">self: nmodl._nmodl.visitor.Visitor</em>, <em class="sig-param">arg0: nmodl::ast::UpdateDt</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#nmodl.visitor.Visitor.visit_update_dt" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">

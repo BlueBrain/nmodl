@@ -19,6 +19,7 @@ var structnmodl_1_1codegen_1_1_codegen_info =
     [ "assigned_vars", "structnmodl_1_1codegen_1_1_codegen_info.html#a12ba46d98326a611fd34c91777466154", null ],
     [ "bbcore_pointer_used", "structnmodl_1_1codegen_1_1_codegen_info.html#a052dee5f484c7086984bc9cc9edfbb73", null ],
     [ "breakpoint_node", "structnmodl_1_1codegen_1_1_codegen_info.html#a4a46dea1ec9ad861822987e3c53e949a", null ],
+    [ "changed_dt", "structnmodl_1_1codegen_1_1_codegen_info.html#ad5f0120295010083fc2060f8e64b0ffd", null ],
     [ "conductances", "structnmodl_1_1codegen_1_1_codegen_info.html#ac618beb29e918cc9a2fd66885f4c04e1", null ],
     [ "constant_variables", "structnmodl_1_1codegen_1_1_codegen_info.html#a77a0c8f8fff0887d9afde6cae64ccab8", null ],
     [ "constructor_node", "structnmodl_1_1codegen_1_1_codegen_info.html#ae0ae57c15bffa577993551d4345276e3", null ],

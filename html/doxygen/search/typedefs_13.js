@@ -6,5 +6,6 @@ var searchData=
   ['unitdefvector',['UnitDefVector',['../group__ast__vec__type.html#gad4b20113f5b065c462077db1ee11fa4e',1,'nmodl::ast']]],
   ['unitstatevector',['UnitStateVector',['../group__ast__vec__type.html#gae141f84df8c319ca23fbd35e4c3b8a0f',1,'nmodl::ast']]],
   ['unitvector',['UnitVector',['../group__ast__vec__type.html#ga5b9a796298d80fe97fcd47403947b9d0',1,'nmodl::ast']]],
+  ['updatedtvector',['UpdateDtVector',['../group__ast__vec__type.html#ga0406a473e874983914ba4adbc2cb881d',1,'nmodl::ast']]],
   ['useionvector',['UseionVector',['../group__ast__vec__type.html#ga5e52bb8c2b1ab57166cbf603c4a45cbb',1,'nmodl::ast']]]
 ];

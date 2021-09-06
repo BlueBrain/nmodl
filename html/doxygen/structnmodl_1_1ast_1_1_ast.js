@@ -147,6 +147,7 @@ var structnmodl_1_1ast_1_1_ast =
     [ "is_unit_block", "group__ast__class.html#gaa892d22eb06997da03dc7a433f14ba1e", null ],
     [ "is_unit_def", "group__ast__class.html#gabcce17a4b7c2abd423cf2319dc492f24", null ],
     [ "is_unit_state", "group__ast__class.html#gab97c8fbc73008d36927a0377335bc0ba", null ],
+    [ "is_update_dt", "group__ast__class.html#ga0f2057e5ee6d098bea109648bcc226bd", null ],
     [ "is_useion", "group__ast__class.html#ga1769502899ac4dcbfe36a7f340edcd02", null ],
     [ "is_valence", "group__ast__class.html#gae1ca73bd18179c2c3a1c3a2751043437", null ],
     [ "is_var_name", "group__ast__class.html#ga5315152cdb0f8c1dcc759cdb1baef2e0", null ],

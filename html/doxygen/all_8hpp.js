@@ -136,6 +136,7 @@ var all_8hpp =
     [ "NMODL_AST_UNIT_DEF_HPP", "all_8hpp.html#a3b655040e3316ad328a021dc112b2bbb", null ],
     [ "NMODL_AST_UNIT_HPP", "all_8hpp.html#aa51ba88a0341b27f9c7b3627a6673340", null ],
     [ "NMODL_AST_UNIT_STATE_HPP", "all_8hpp.html#a3edd6fdf42d4e8ad4ba18a6a8803c4ea", null ],
+    [ "NMODL_AST_UPDATE_DT_HPP", "all_8hpp.html#ad1a56b618a503ea330cb8a41aa22fe5d", null ],
     [ "NMODL_AST_USEION_HPP", "all_8hpp.html#a2e9e61440509bbfcd8a1fd32e90ff87c", null ],
     [ "NMODL_AST_VALENCE_HPP", "all_8hpp.html#a00327fd570b27a4b7cbcc088338bfea5", null ],
     [ "NMODL_AST_VAR_NAME_HPP", "all_8hpp.html#a10a89381f54acd6a82531d00d471a98a", null ],
