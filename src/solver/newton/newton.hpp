@@ -74,12 +74,7 @@ EIGEN_DEVICE_FUNC int newton_solver(Eigen::Matrix<double, N, 1>& X,
             return iter;
         }
 #if defined(_OPENACC) && !defined(DISABLE_OPENACC)
-        // Eigen-3.5+ provides better GPU support. However, some functions cannot be called directly
-        // from within an OpenACC region. Therefore, we need to wrap them in a special API (decorate
-        // them with
-        // __device__ & acc routine tokens), which allows us to eventually call them from OpenACC.
-        // Calling these functions from CUDA kernels presents no issue ...
-        X -= partialPivLu<N>(&J, &F);
+        X -= partialPivLu<N>(J, F);
 #else
         // update X use in-place LU decomposition of J with partial pivoting
         // (suitable for any N, but less efficient than .inverse() for N <=4)
@@ -156,12 +151,7 @@ EIGEN_DEVICE_FUNC int newton_numerical_diff_solver(Eigen::Matrix<double, N, 1>& 
             X[i] += dX;
         }
 #if defined(_OPENACC) && !defined(DISABLE_OPENACC)
-        // Eigen-3.5+ provides better GPU support. However, some functions cannot be called directly
-        // from within an OpenACC region. Therefore, we need to wrap them in a special API (decorate
-        // them with
-        // __device__ & acc routine tokens), which allows us to eventually call them from OpenACC.
-        // Calling these functions from CUDA kernels presents no issue ...
-        X -= partialPivLu<N>(&J, &F);
+        X -= partialPivLu<N>(J, F);
 #else
         // update X use in-place LU decomposition of J with partial pivoting
         // (suitable for any N, but less efficient than .inverse() for N <=4)

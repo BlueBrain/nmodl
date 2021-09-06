@@ -138,18 +138,13 @@ void CodegenAccVisitor::print_net_send_buffering_grow() {
 
 void CodegenAccVisitor::print_eigen_linear_solver(const std::string& float_type,
                                                   int N,
-                                                  const std::string& X,
+                                                  const std::string& Xm,
                                                   const std::string& Jm,
-                                                  const std::string& F) {
+                                                  const std::string& Fm) {
     if (N <= 4) {
-        printer->add_line("{0} = {1}.inverse()*{2};"_format(X, Jm, F));
+        printer->add_line("{0} = {1}.inverse()*{2};"_format(Xm, Jm, Fm));
     } else {
-        // Eigen-3.5+ provides better GPU support. However, some functions cannot be called directly
-        // from within an OpenACC region. Therefore, we need to wrap them in a special API (decorate
-        // them with
-        // __device__ & acc routine tokens), which allows us to eventually call them from OpenACC.
-        // Calling these functions from CUDA kernels presents no issue ...
-        printer->add_line("{0} = partialPivLu<{1}>(&{2}, &{3});"_format(X, N, Jm, F));
+        printer->add_line("{0} = partialPivLu<{1}>({2}, {3});"_format(Xm, N, Jm, Fm));
     }
 }
 
