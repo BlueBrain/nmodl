@@ -22,6 +22,7 @@ var searchData=
   ['matchs',['matchs',['../classnmodl_1_1ast_1_1_match_block.html#acf72b997d9f56a53051db96849ca0581',1,'nmodl::ast::MatchBlock']]],
   ['matchvector',['MatchVector',['../group__ast__vec__type.html#gaf87d622276e5cdb845afade0d46ae7c9',1,'nmodl::ast']]],
   ['mathop',['MathOp',['../namespacenmodl_1_1parser_1_1diffeq.html#af8927fcf1d528baf607f9640c165ce64',1,'nmodl::parser::diffeq']]],
+  ['mattype',['MatType',['../partial__piv__lu_8h.html#a2a6ac9c88bd4c9f978ae2958511a5bfb',1,'partial_piv_lu.h']]],
   ['max',['max',['../classnmodl_1_1ast_1_1_limits.html#aa68680ceddcc991709f2e3cdfd9b7d56',1,'nmodl::ast::Limits::max()'],['../classnmodl_1_1ast_1_1_number_range.html#ab96ab45fbd32ab321fe18fbe69ee0a99',1,'nmodl::ast::NumberRange::max()']]],
   ['max_5fdims',['MAX_DIMS',['../group__units.html#gac26c7781e0924f73bac6a856f2c80217',1,'nmodl::units']]],
   ['max_5ferror_5fnorm',['max_error_norm',['../newton_8cpp.html#a9bff158456de7b1bf3c4a50ef96294ac',1,'newton.cpp']]],
