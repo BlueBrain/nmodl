@@ -1,72 +1,34 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <title>NMODL NONLINEAR solver &mdash; NMODL  documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
+  <title>NMODL NONLINEAR solver &mdash; NMODL  documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+  <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/language_data.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="NMODL CONDUCTANCE" href="nmodl-sympy-conductance.html" />
     <link rel="prev" title="NMODL LINEAR solver" href="nmodl-linear-solver.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="../index.html" class="icon icon-home"> NMODL
-          
-
-          
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -74,29 +36,18 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">Introduction:</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p><span class="caption-text">Introduction:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../readme.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installing the NMODL Framework</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../language.html">The NEURON MODeling language</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Contents:</span></p>
+<p><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../contents/visitors.html">Visitors</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Jupyter Notebooks:</span></p>
+<p><span class="caption-text">Jupyter Notebooks:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../notebooks.html">The NMODL Jupyter notebooks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nmodl-python-tutorial.html">NMODL Python Interface Tutorial</a></li>
@@ -113,81 +64,40 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="nmodl-sympy-conductance.html">NMODL CONDUCTANCE</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Contributing:</span></p>
+<p><span class="caption-text">Contributing:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to the NMODL Framework</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Reference:</span></p>
+<p><span class="caption-text">Reference:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../modules.html">Python package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C++ API</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">NMODL</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-        
       <li>NMODL NONLINEAR solver</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="../_sources/notebooks/nmodl-nonlinear-solver.ipynb.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   
 <style>
 /* CSS for nbsphinx extension */
@@ -458,7 +368,7 @@ div.rendered_html tbody tr:hover {
     text-align: unset;
 }
 </style>
-<div class="section" id="NMODL-NONLINEAR-solver">
+<section id="NMODL-NONLINEAR-solver">
 <h1>NMODL NONLINEAR solver<a class="headerlink" href="#NMODL-NONLINEAR-solver" title="Permalink to this headline">¶</a></h1>
 <p><code class="docutils literal notranslate"><span class="pre">NONLINEAR</span></code> blocks contain a set of non-linear simultaneous equations. They can be directly specified by the user in the MOD file, or more commonly can be constructed from <code class="docutils literal notranslate"><span class="pre">KINETIC</span></code> or <code class="docutils literal notranslate"><span class="pre">DERIVATIVE</span></code> blocks by the <code class="docutils literal notranslate"><span class="pre">KineticBlock</span></code> and <code class="docutils literal notranslate"><span class="pre">SympySolver</span></code> visitors.</p>
 <p>These equations are rewritten in the form</p>
@@ -469,12 +379,12 @@ div.rendered_html tbody tr:hover {
 <div class="math">
 <p><img src="../_images/math/d7bfbc519739caa4000592cf22023dffbc9c00ea.png" alt="X^{(n+1)} = X^{(n)} - J(X^{(n)})^{-1} F(X^{(n)})"/></p>
 </div><p>where <img class="math" src="../_images/math/14119b5039049b18912e6aac13169bc0b1322e4f.png" alt="J(X) = \frac{\partial F(X)_i}{\partial X_j}"/> is the Jacobian of <img class="math" src="../_images/math/df00656702b70b4b6f7ffbf6a9aa9a334bab1914.png" alt="F"/>.</p>
-<div class="section" id="Newton-solver">
+<section id="Newton-solver">
 <h2>Newton solver<a class="headerlink" href="#Newton-solver" title="Permalink to this headline">¶</a></h2>
 <p><img class="math" src="../_images/math/df00656702b70b4b6f7ffbf6a9aa9a334bab1914.png" alt="F"/> and <img class="math" src="../_images/math/32c06f8c59d4bd3d13eedea7765a8a74a11f2383.png" alt="J"/> are constructed by the <a class="reference external" href="https://github.com/BlueBrain/nmodl/blob/master/nmodl/ode.py#L209">solve_non_lin_system</a> python routine which uses SymPy to analytically differentiate <img class="math" src="../_images/math/df00656702b70b4b6f7ffbf6a9aa9a334bab1914.png" alt="F"/> to find the exact Jacobian at compile time. The initial approximate solution <img class="math" src="../_images/math/991807dfa2ae9914c3a50050b40f1a852206f92d.png" alt="X_0"/> is chosen to simply be the current values of the state variables: as long as <img class="math" src="../_images/math/a679bbf1184a6019c0b0085a592d1c7fc64335cf.png" alt="dt"/> is not too large the solution at <img class="math" src="../_images/math/9151ed16b82bab45c35665dd462c8dcd0ea82cfd.png" alt="t+dt"/> should not lie too far away.</p>
 <p>The iterative Newton solver is called <code class="docutils literal notranslate"><span class="pre">newton_solver</span></code> and is implemented in <a class="reference external" href="https://github.com/BlueBrain/nmodl/blob/master/src/solver/newton/newton.hpp#L33">src/solver/newton</a> using the Eigen header-only matrix algebra library. Unit tests are available in <a class="reference external" href="https://github.com/BlueBrain/nmodl/blob/master/test/newton/newton.cpp">test/newton/newton.cpp</a> with the tags “<code class="docutils literal notranslate"><span class="pre">[analytic][solver]</span></code>”.</p>
-</div>
-<div class="section" id="Fall-back-solver">
+</section>
+<section id="Fall-back-solver">
 <h2>Fall-back solver<a class="headerlink" href="#Fall-back-solver" title="Permalink to this headline">¶</a></h2>
 <p>A fall-back solution if the analytic Jacobian is not available (for example if the equations use some custom neuron function calls that SymPy doesn’t know how to differentiate, or if <code class="docutils literal notranslate"><span class="pre">VERBATIM</span></code> blocks are used within the <code class="docutils literal notranslate"><span class="pre">NONLINEAR</span></code> block) is to use the <code class="docutils literal notranslate"><span class="pre">newton_numerical_diff_solver</span></code> variant of this solver that uses a finite difference approximation to estimate the Jacobian numerically.</p>
 <p>This solver is also implemented in <a class="reference external" href="https://github.com/BlueBrain/nmodl/blob/master/src/solver/newton/newton.hpp#L33">src/solver/newton</a>, with Unit tests in <a class="reference external" href="https://github.com/BlueBrain/nmodl/blob/master/test/newton/newton.cpp">test/newton/newton.cpp</a> with the tags “<code class="docutils literal notranslate"><span class="pre">[numerical][solver]</span></code>”.</p>
@@ -488,55 +398,38 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="nmodl-sympy-conductance.html" class="btn btn-neutral float-right" title="NMODL CONDUCTANCE" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="nmodl-linear-solver.html" class="btn btn-neutral float-left" title="NMODL LINEAR solver" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="nmodl-sympy-conductance.html" class="btn btn-neutral float-right" title="NMODL CONDUCTANCE" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2019, BlueBrain HPC team.
-
-    </p>
+    <p>&#169; Copyright 2019, BlueBrain HPC team.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

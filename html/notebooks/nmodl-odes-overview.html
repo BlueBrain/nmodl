@@ -1,72 +1,34 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <title>NMODL integration of ODEs &mdash; NMODL  documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
+  <title>NMODL integration of ODEs &mdash; NMODL  documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+  <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/language_data.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="NMODL Kinetic Scheme" href="nmodl-kinetic-schemes.html" />
     <link rel="prev" title="NMODL Python Interface Tutorial" href="nmodl-python-tutorial.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="../index.html" class="icon icon-home"> NMODL
-          
-
-          
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -74,29 +36,18 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">Introduction:</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p><span class="caption-text">Introduction:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../readme.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installing the NMODL Framework</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../language.html">The NEURON MODeling language</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Contents:</span></p>
+<p><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../contents/visitors.html">Visitors</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Jupyter Notebooks:</span></p>
+<p><span class="caption-text">Jupyter Notebooks:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../notebooks.html">The NMODL Jupyter notebooks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nmodl-python-tutorial.html">NMODL Python Interface Tutorial</a></li>
@@ -115,81 +66,40 @@
 <li class="toctree-l1"><a class="reference internal" href="nmodl-nonlinear-solver.html">NMODL NONLINEAR solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nmodl-sympy-conductance.html">NMODL CONDUCTANCE</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Contributing:</span></p>
+<p><span class="caption-text">Contributing:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to the NMODL Framework</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Reference:</span></p>
+<p><span class="caption-text">Reference:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../modules.html">Python package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C++ API</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">NMODL</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-        
       <li>NMODL integration of ODEs</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="../_sources/notebooks/nmodl-odes-overview.ipynb.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   
 <style>
 /* CSS for nbsphinx extension */
@@ -460,7 +370,7 @@ div.rendered_html tbody tr:hover {
     text-align: unset;
 }
 </style>
-<div class="section" id="NMODL-integration-of-ODEs">
+<section id="NMODL-integration-of-ODEs">
 <h1>NMODL integration of ODEs<a class="headerlink" href="#NMODL-integration-of-ODEs" title="Permalink to this headline">¶</a></h1>
 <p>This is an overview of - the different ways a user can specify the equations that define the system they want to simulate in the MOD file - how these equations can be related to each other - how these equations are solved in NMODL</p>
 <hr class="docutils" />
@@ -469,16 +379,16 @@ Euler, transforms a system of ODEs into a system of linear or non-linear equatio
 <p>To reduce duplication of functionality for dealing with these related systems, we implement a hierarchy of transformations: - <code class="docutils literal notranslate"><span class="pre">KINETIC</span></code> blocks of reaction statements are translated to <code class="docutils literal notranslate"><span class="pre">DERIVATIVE</span></code> blocks of equivalent ODE systems using the law of Mass Action - <code class="docutils literal notranslate"><span class="pre">DERIVATIVE</span></code> blocks of ODEs are translated to <code class="docutils literal notranslate"><span class="pre">(NON)LINEAR</span></code> blocks of algebraic equations using a numerical integration scheme</p>
 <p>After these transformations we are left with only <code class="docutils literal notranslate"><span class="pre">LINEAR</span></code>/<code class="docutils literal notranslate"><span class="pre">NONLINEAR</span></code> blocks that are then solved numerically (by Gaussian Elimination, LU factorization or Newton iteration)</p>
 <hr class="docutils" />
-<div class="section" id="KINETIC-block">
+<section id="KINETIC-block">
 <h2><code class="docutils literal notranslate"><span class="pre">KINETIC</span></code> block<a class="headerlink" href="#KINETIC-block" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p>Mass Action kinetics: a set of reaction equations with associated reaction rates</p></li>
 <li><p>converted to a <code class="docutils literal notranslate"><span class="pre">DERIVATIVE</span></code> blocking containing an equivalent system of ODEs using the law of Mass Action</p></li>
 <li><p>see the <a class="reference internal" href="nmodl-kinetic-schemes.html"><span class="doc">nmodl-kinetic-schemes</span></a> notebook for more details</p></li>
 </ul>
-</div>
+</section>
 <hr class="docutils" />
-<div class="section" id="DERIVATIVE-block">
+<section id="DERIVATIVE-block">
 <h2><code class="docutils literal notranslate"><span class="pre">DERIVATIVE</span></code> block<a class="headerlink" href="#DERIVATIVE-block" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p>system of ODEs &amp; associated solve method: <code class="docutils literal notranslate"><span class="pre">cnexp</span></code>, <code class="docutils literal notranslate"><span class="pre">sparse</span></code>, <code class="docutils literal notranslate"><span class="pre">derivimplicit</span></code> or <code class="docutils literal notranslate"><span class="pre">euler</span></code></p></li>
@@ -507,9 +417,9 @@ Euler, transforms a system of ODEs into a system of linear or non-linear equatio
 <li><p><img class="math" src="../_images/math/f12a6514b4961252a43fb2c49b7421cea1a74272.png" alt="\mathcal{O}(\Delta t)"/> integration error</p></li>
 <li><p>not recommended due to instability of scheme</p></li>
 </ul>
-</div>
+</section>
 <hr class="docutils" />
-<div class="section" id="LINEAR-block">
+<section id="LINEAR-block">
 <h2><code class="docutils literal notranslate"><span class="pre">LINEAR</span></code> block<a class="headerlink" href="#LINEAR-block" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p>system of linear algebraic equations</p></li>
@@ -525,9 +435,9 @@ Euler, transforms a system of ODEs into a system of linear or non-linear equatio
 </li>
 <li><p>see the <a class="reference internal" href="nmodl-linear-solver.html"><span class="doc">nmodl-linear-solver</span></a> notebook for more details</p></li>
 </ul>
-</div>
+</section>
 <hr class="docutils" />
-<div class="section" id="NONLINEAR-block">
+<section id="NONLINEAR-block">
 <h2><code class="docutils literal notranslate"><span class="pre">NONLINEAR</span></code> block<a class="headerlink" href="#NONLINEAR-block" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p>system of non-linear algebraic equations</p></li>
@@ -546,55 +456,38 @@ Euler, transforms a system of ODEs into a system of linear or non-linear equatio
 </pre></div>
 </div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="nmodl-kinetic-schemes.html" class="btn btn-neutral float-right" title="NMODL Kinetic Scheme" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="nmodl-python-tutorial.html" class="btn btn-neutral float-left" title="NMODL Python Interface Tutorial" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="nmodl-kinetic-schemes.html" class="btn btn-neutral float-right" title="NMODL Kinetic Scheme" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2019, BlueBrain HPC team.
-
-    </p>
+    <p>&#169; Copyright 2019, BlueBrain HPC team.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>
