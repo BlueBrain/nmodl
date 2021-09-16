@@ -103,7 +103,7 @@ $(document).ready(function(){initNavTree('classnmodl_1_1ast_1_1_string.html','')
 <div class="textblock"><p>Represents a string. </p>
 <p>All statements encapsulating text block are stored in the AST as <a class="el" href="classnmodl_1_1ast_1_1_string.html" title="Represents a string. ">ast::String</a>. For example, nodes like <a class="el" href="classnmodl_1_1ast_1_1_line_comment.html" title="Represents a one line comment in NMODL. ">ast::LineComment</a> and <a class="el" href="classnmodl_1_1ast_1_1_verbatim.html" title="Represents a C code block. ">ast::Verbatim</a> block use <a class="el" href="classnmodl_1_1ast_1_1_string.html#adbf40ddad32c859cb81d54f2851e60c1" title="Value of string. ">ast::String::value</a> to store the underlying text:</p>
 <div class="fragment"><div class="line">COMMENT</div><div class="line">  This text is stored as String</div><div class="line">ENDCOMMENT</div><div class="line"></div><div class="line">VERBATIM</div><div class="line">    int *x;</div><div class="line">    *x = ...</div><div class="line">ENDVERBATIM</div></div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l00983">983</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l01136">1136</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="all_8hpp_source.html">all.hpp</a>&gt;</code></p>
 <div class="dynheader">
@@ -763,7 +763,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l00439">439</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l00511">511</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -788,7 +788,7 @@ Private Attributes</h2></td></tr>
 <p>if there is a token, make copy</p>
 <p>set parents </p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l00444">444</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l00517">517</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -1049,7 +1049,7 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_expression.html#a971985086691e3403bc78070059cbc23">nmodl::ast::Expression</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l00435">435</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l00502">502</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -1089,7 +1089,7 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_expression.html#a3cf111cd5c7e88c95974dd9849af1b4d">nmodl::ast::Expression</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l00437">437</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l00506">506</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -1122,7 +1122,7 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_expression.html#a662e7b901641a5d0906f389566c2f338">nmodl::ast::Expression</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00092">92</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00102">102</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
 
 </div>
 </div>
@@ -1155,7 +1155,7 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_expression.html#a662e7b901641a5d0906f389566c2f338">nmodl::ast::Expression</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l01019">1019</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l01180">1180</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
 
 </div>
 </div>
@@ -1186,7 +1186,7 @@ Private Attributes</h2></td></tr>
 <p>Base data type nodes like ast::Inetegr, <a class="el" href="classnmodl_1_1ast_1_1_double.html" title="Represents a double variable. ">ast::Double</a> can be evaluated to their literal values. This method is used to access underlying literal value.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classnmodl_1_1ast_1_1_string.html#a039af984f38edfda7e866739ecc8ab70" title="Set new value to the current ast node. ">String::set</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00239">239</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00268">268</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
 
 </div>
 </div>
@@ -1217,7 +1217,7 @@ Private Attributes</h2></td></tr>
 <p>Base data type nodes like ast::Inetegr, <a class="el" href="classnmodl_1_1ast_1_1_double.html" title="Represents a double variable. ">ast::Double</a> can be evaluated to their literal values. This method is used to access underlying literal value.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classnmodl_1_1ast_1_1_string.html#a039af984f38edfda7e866739ecc8ab70" title="Set new value to the current ast node. ">String::set</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l01166">1166</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l01346">1346</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
 
 </div>
 </div>
@@ -1251,7 +1251,7 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_expression.html#a72f0f9b4b6773de4c253e9ea3d03ac00">nmodl::ast::Expression</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00107">107</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00119">119</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
 
 </div>
 </div>
@@ -1285,7 +1285,7 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_expression.html#a72f0f9b4b6773de4c253e9ea3d03ac00">nmodl::ast::Expression</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l01034">1034</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l01197">1197</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
 
 </div>
 </div>
@@ -1319,7 +1319,7 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_expression.html#a58eb66d8605e02fa3e6c84eaa579bf77">nmodl::ast::Expression</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00122">122</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00134">134</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
 
 </div>
 </div>
@@ -1353,7 +1353,7 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_expression.html#a58eb66d8605e02fa3e6c84eaa579bf77">nmodl::ast::Expression</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l01049">1049</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l01212">1212</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
 
 </div>
 </div>
@@ -1384,7 +1384,7 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_expression.html#a6b89fad15aa3da16f607c5a2ff52ce13">nmodl::ast::Expression</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00127">127</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00142">142</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
 
 </div>
 </div>
@@ -1415,7 +1415,7 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_expression.html#adf01f8c493ffff32d6815b9a630d469c">nmodl::ast::Expression</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00134">134</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00149">149</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
 
 </div>
 </div>
@@ -1446,7 +1446,7 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_expression.html#a6b89fad15aa3da16f607c5a2ff52ce13">nmodl::ast::Expression</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l01054">1054</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l01220">1220</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
 
 </div>
 </div>
@@ -1477,7 +1477,7 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_expression.html#adf01f8c493ffff32d6815b9a630d469c">nmodl::ast::Expression</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l01061">1061</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l01227">1227</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
 
 </div>
 </div>
@@ -1510,7 +1510,7 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="group__ast__class.html#ga4892777c5b32b112d588b05d07f28549">nmodl::ast::Ast</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00148">148</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00162">162</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
 
 </div>
 </div>
@@ -1543,7 +1543,7 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="group__ast__class.html#ga4892777c5b32b112d588b05d07f28549">nmodl::ast::Ast</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l01075">1075</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l01240">1240</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
 
 </div>
 </div>
@@ -1572,7 +1572,7 @@ Private Attributes</h2></td></tr>
 
 <p>Getter for member variable <a class="el" href="classnmodl_1_1ast_1_1_string.html#adbf40ddad32c859cb81d54f2851e60c1">String::value</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00153">153</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00176">176</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
 
 </div>
 </div>
@@ -1601,7 +1601,7 @@ Private Attributes</h2></td></tr>
 
 <p>Getter for member variable <a class="el" href="classnmodl_1_1ast_1_1_string.html#adbf40ddad32c859cb81d54f2851e60c1">String::value</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l01080">1080</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l01254">1254</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
 
 </div>
 </div>
@@ -1633,7 +1633,7 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="group__ast__class.html#ga20fd0174b3cb40617279a34dc49d7d67">nmodl::ast::Ast</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00080">80</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00088">88</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
 
 </div>
 </div>
@@ -1665,7 +1665,7 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="group__ast__class.html#ga20fd0174b3cb40617279a34dc49d7d67">nmodl::ast::Ast</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l01007">1007</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l01166">1166</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
 
 </div>
 </div>
@@ -1696,7 +1696,7 @@ Private Attributes</h2></td></tr>
 <p>Set new value to the current ast node. </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classnmodl_1_1ast_1_1_string.html#a9d945b7863282b9e226e114bcbb1390f" title="Return value of the ast node. ">String::eval</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00171">171</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00198">198</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
 
 </div>
 </div>
@@ -1727,7 +1727,7 @@ Private Attributes</h2></td></tr>
 <p>Set new value to the current ast node. </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classnmodl_1_1ast_1_1_string.html#a9d945b7863282b9e226e114bcbb1390f" title="Return value of the ast node. ">String::eval</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l01098">1098</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l01276">1276</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
 
 </div>
 </div>
@@ -1786,7 +1786,7 @@ Private Attributes</h2></td></tr>
 <p>set this parent in the children</p>
 <p>This should be called in every object (with children) constructor to set parents. Since it is called only in the constructors it should not be virtual to avoid ambiguities (issue #295). </p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l00458">458</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l00532">532</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -1816,7 +1816,7 @@ Private Attributes</h2></td></tr>
 
 <p>Set token for the current ast node. </p>
 
-<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00163">163</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00191">191</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
 
 </div>
 </div>
@@ -1846,7 +1846,7 @@ Private Attributes</h2></td></tr>
 
 <p>Set token for the current ast node. </p>
 
-<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l01090">1090</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l01269">1269</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
 
 </div>
 </div>
@@ -1888,7 +1888,7 @@ Private Attributes</h2></td></tr>
 
 <p>Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_string.html#adbf40ddad32c859cb81d54f2851e60c1">String::value</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l00460">460</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l00539">539</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -2008,7 +2008,7 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_expression.html#a238e3ef13478bb47bfd8caac1718f7c6">nmodl::ast::Expression</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l00431">431</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l00496">496</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -2049,7 +2049,7 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_expression.html#a32a32b189bcfaee83a45311e63348808">nmodl::ast::Expression</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l00433">433</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l00499">499</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -2076,7 +2076,7 @@ Private Attributes</h2></td></tr>
 
 <p>token with location information </p>
 
-<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l00988">988</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l01141">1141</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
 
 </div>
 </div>
@@ -2102,7 +2102,7 @@ Private Attributes</h2></td></tr>
 
 <p>Value of string. </p>
 
-<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l00986">986</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l01139">1139</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
 
 </div>
 </div>
