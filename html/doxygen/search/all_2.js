@@ -118,7 +118,6 @@ var searchData=
   ['conserve_5fequation_5fstr',['conserve_equation_str',['../classnmodl_1_1visitor_1_1_kinetic_block_visitor.html#a379d46c73b8001aaf9c7726c7a7f16ef',1,'nmodl::visitor::KineticBlockVisitor']]],
   ['conserve_5fstatement_5fcount',['conserve_statement_count',['../classnmodl_1_1visitor_1_1_kinetic_block_visitor.html#a66933b21c147692c814bde07ef91974c',1,'nmodl::visitor::KineticBlockVisitor']]],
   ['conservevector',['ConserveVector',['../group__ast__vec__type.html#ga7e9083bb24805bee0d75c1fa120c3638',1,'nmodl::ast']]],
-  ['const_5fiter_5fcast',['const_iter_cast',['../group__utils.html#ga1c62510a4b36632a9f3e94980c59c02e',1,'nmodl::utils']]],
   ['const_5fmemr_5fkey',['const_memr_key',['../classnmodl_1_1visitor_1_1_perf_visitor.html#a89129086c226e54159d82007087b57fe',1,'nmodl::visitor::PerfVisitor']]],
   ['const_5fmemw_5fkey',['const_memw_key',['../classnmodl_1_1visitor_1_1_perf_visitor.html#a51b0a604668d6ccd02e99e5db0992e2a',1,'nmodl::visitor::PerfVisitor']]],
   ['constant',['constant',['../classnmodl_1_1ast_1_1_constant_statement.html#acea17e4d37dc5c6a50f9109e1330c089',1,'nmodl::ast::ConstantStatement']]],

@@ -5,7 +5,6 @@ var common__utils_8hpp =
       [ "WithoutNumbers", "common__utils_8hpp.html#ggabf78118141123c84917fbafa57c97b5ba48e615461371f586c42c6251440932f5", null ]
     ] ],
     [ "base_name", "common__utils_8hpp.html#gac9faaf95b672125040e7026edcc814a2", null ],
-    [ "const_iter_cast", "common__utils_8hpp.html#ga1c62510a4b36632a9f3e94980c59c02e", null ],
     [ "cwd", "common__utils_8hpp.html#gad81eb6544afc49b12e0c95a0b291abd6", null ],
     [ "file_exists", "common__utils_8hpp.html#gaab301e6d4341baac318c659b676e00d8", null ],
     [ "file_is_abs", "common__utils_8hpp.html#ga9010bf0e84d33e76e68b4cf164eabc38", null ],

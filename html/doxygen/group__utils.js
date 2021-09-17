@@ -75,7 +75,6 @@ var group__utils =
     ] ],
     [ "align_text", "group__utils.html#ga78e376180e14a209189043cab5e1d642", null ],
     [ "base_name", "group__utils.html#gac9faaf95b672125040e7026edcc814a2", null ],
-    [ "const_iter_cast", "group__utils.html#ga1c62510a4b36632a9f3e94980c59c02e", null ],
     [ "cwd", "group__utils.html#gad81eb6544afc49b12e0c95a0b291abd6", null ],
     [ "escape_quotes", "group__utils.html#ga45a5f9ecc1a019f6657d3e43bde9717d", null ],
     [ "file_exists", "group__utils.html#gaab301e6d4341baac318c659b676e00d8", null ],
