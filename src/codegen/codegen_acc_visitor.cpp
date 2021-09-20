@@ -172,6 +172,20 @@ void CodegenAccVisitor::print_kernel_data_present_annotation_block_begin() {
     }
 }
 
+void CodegenAccVisitor::print_net_init_acc_serial_annotation_block_begin() {
+    if (!info.artificial_cell) {
+        printer->add_line("#pragma acc serial present(inst, indexes, weights) if(nt->compute_gpu)");
+        printer->add_line("{");
+        printer->increase_indent();
+    }
+}
+
+void CodegenAccVisitor::print_net_init_acc_serial_annotation_block_end() {
+    if (!info.artificial_cell) {
+        printer->add_line("}");
+        printer->decrease_indent();
+    }
+}
 
 void CodegenAccVisitor::print_nrn_cur_matrix_shadow_update() {
     auto rhs_op = operator_for_rhs();

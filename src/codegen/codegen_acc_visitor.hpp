@@ -61,6 +61,14 @@ class CodegenAccVisitor: public CodegenCVisitor {
     void print_kernel_data_present_annotation_block_end() override;
 
 
+    /// start of annotation "acc kernels" for net_init kernel
+    void print_net_init_acc_serial_annotation_block_begin() override;
+
+
+    /// end of annotation "acc kernels" for net_init kernel
+    void print_net_init_acc_serial_annotation_block_end() override;
+
+
     /// update to matrix elements with/without shadow vectors
     void print_nrn_cur_matrix_shadow_update() override;
 

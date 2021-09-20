@@ -1309,6 +1309,18 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
+     * Print accelerator kernels begin annotation for net_init kernel
+     */
+    virtual void print_net_init_acc_serial_annotation_block_begin();
+
+
+    /**
+     * Print accelerator kernels end annotation for net_init kernel
+     */
+    virtual void print_net_init_acc_serial_annotation_block_end();
+
+
+    /**
      * Print backend specific channel instance iteration block start
      * \param type The block type in which we currently are
      */
