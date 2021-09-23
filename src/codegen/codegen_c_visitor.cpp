@@ -3837,7 +3837,6 @@ void CodegenCVisitor::print_net_init() {
             print_kernel_data_present_annotation_block_end();
             printer->add_line("auto nsb = ml->_net_send_buffer;");
             print_net_send_buf_count_update_to_host();
-            printer->add_line("update_net_send_buffer_on_host(nt, nsb);");
         }
     }
     printer->end_block(1);
