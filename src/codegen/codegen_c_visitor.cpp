@@ -1061,6 +1061,10 @@ void CodegenCVisitor::print_net_send_buf_count_update_to_host() const {
     // backend specific, do nothing
 }
 
+void CodegenCVisitor::print_net_send_buf_update_to_host() const {
+    // backend specific, do nothing
+}
+
 void CodegenCVisitor::print_net_send_buf_count_update_to_device() const {
     // backend specific, do nothing
 }
@@ -3836,7 +3840,7 @@ void CodegenCVisitor::print_net_init() {
             print_net_init_acc_serial_annotation_block_end();
             print_kernel_data_present_annotation_block_end();
             printer->add_line("auto nsb = ml->_net_send_buffer;");
-            print_net_send_buf_count_update_to_host();
+            print_net_send_buf_update_to_host();
         }
     }
     printer->end_block(1);
@@ -3847,8 +3851,7 @@ void CodegenCVisitor::print_net_init() {
 void CodegenCVisitor::print_send_event_move() {
     printer->add_newline();
     printer->add_line("NetSendBuffer_t* nsb = ml->_net_send_buffer;");
-    print_net_send_buf_count_update_to_host();
-    printer->add_line("update_net_send_buffer_on_host(nt, nsb);");
+    print_net_send_buf_update_to_host();
     printer->add_line("for (int i=0; i < nsb->_cnt; i++) {");
     printer->add_line("    int type = nsb->_sendtype[i];");
     printer->add_line("    int tid = nt->id;");

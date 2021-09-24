@@ -1104,6 +1104,11 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      */
     virtual void print_net_send_buf_count_update_to_host() const;
 
+    /**
+     * Print the code to update NetSendBuffer_t from device to host
+     */
+    virtual void print_net_send_buf_update_to_host() const;
+
 
     /**
      * Print the code to update NetSendBuffer_t count from host to device
