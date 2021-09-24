@@ -308,7 +308,7 @@ void CodegenAccVisitor::print_net_send_buf_count_update_to_host() const {
 
 void CodegenAccVisitor::print_net_send_buf_update_to_host() const {
     print_device_stream_wait();
-    printer->start_block("if (nsb) ");
+    printer->start_block("if (nsb)");
     print_net_send_buf_count_update_to_host();
     printer->add_line("update_net_send_buffer_on_host(nt, nsb);");
     printer->end_block(1);
