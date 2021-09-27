@@ -105,6 +105,9 @@ class CodegenAccVisitor: public CodegenCVisitor {
     // update NetSendBuffer_t count from device to host
     void print_net_send_buf_count_update_to_host() const override;
 
+    // update NetSendBuffer_t from device to host
+    void print_net_send_buf_update_to_host() const override;
+
     // update NetSendBuffer_t count from host to device
     virtual void print_net_send_buf_count_update_to_device() const override;
 
