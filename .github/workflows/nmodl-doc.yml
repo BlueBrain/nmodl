@@ -64,15 +64,15 @@ jobs:
         if: failure() && contains(github.event.head_commit.message, 'live-debug-docs')
         uses: mxschmitt/action-tmate@v3
 
-      #- name: Restore compiler cache
-      #  uses: actions/cache@v2
-      #  with:
-      #    path: |
-      #      ${{runner.workspace}}/ccache
-      #    key: docs-${{github.ref}}-${{github.sha}}
-      #    restore-keys: |
-      #      docs-${{github.ref}}-
-      #      docs-
+      - name: Restore compiler cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ${{runner.workspace}}/ccache
+          key: docs-${{github.ref}}-${{github.sha}}
+          restore-keys: |
+            docs-${{github.ref}}-
+            docs-
 
       - name: Documentation 
         id: documentation
