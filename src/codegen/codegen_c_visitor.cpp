@@ -3839,7 +3839,7 @@ void CodegenCVisitor::print_net_init() {
         if (node->is_initial_block()) {
             print_net_init_acc_serial_annotation_block_end();
             print_kernel_data_present_annotation_block_end();
-            printer->add_line("auto nsb = ml->_net_send_buffer;");
+            printer->add_line("auto& nsb = ml->_net_send_buffer;");
             print_net_send_buf_update_to_host();
         }
     }

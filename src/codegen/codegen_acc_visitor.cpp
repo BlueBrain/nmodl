@@ -172,6 +172,15 @@ void CodegenAccVisitor::print_kernel_data_present_annotation_block_begin() {
     }
 }
 
+/**
+ * `INITIAL` block from `NET_RECEIVE` generates `net_init` function. The `net_init`
+ * function pointer is registered with the coreneuron and called from the CPU.
+ * As the data is on GPU, we need to launch `net_init` on the GPU.
+ *
+ * \todo: With the current code structure for NMODL and MOD2C, we use `serial`
+ *        construct to launch serial kernels. This is during initialization
+ *        but still inefficient. This should be improved when we drop MOD2C.
+ */
 void CodegenAccVisitor::print_net_init_acc_serial_annotation_block_begin() {
     if (!info.artificial_cell) {
         printer->add_line("#pragma acc serial present(inst, indexes, weights) if(nt->compute_gpu)");
