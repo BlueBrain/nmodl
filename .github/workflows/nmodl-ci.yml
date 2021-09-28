@@ -105,6 +105,7 @@ jobs:
         working-directory: ${{runner.workspace}}/nmodl/build
         env:
           CCACHE_DIR: ${{runner.workspace}}/ccache
+          CCACHE_DEBUG: 1
         run:  |
           echo "------- Building -------"
           ccache -z
