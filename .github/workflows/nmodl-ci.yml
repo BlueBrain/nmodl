@@ -134,4 +134,4 @@ jobs:
       - name: live debug session on failure
         if: failure() #&& contains(github.event.head_commit.message, 'live-debug-tests')
         uses: mxschmitt/action-tmate@v3
-
+        timeout-minutes: 60
