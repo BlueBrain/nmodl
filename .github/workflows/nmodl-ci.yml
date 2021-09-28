@@ -108,9 +108,10 @@ jobs:
         run:  |
           echo "------- Building -------"
           ccache -z
-          ccache -s
+          # Older versions don't support -v (verbose)
+          ccache -sv || ccache -s
           cmake --build .
-          ccache -s
+          ccache -sv || ccache -s
 
       - name: Test
         shell: bash
