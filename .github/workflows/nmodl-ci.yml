@@ -94,7 +94,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: |
-            ${{runner.workspace}}/nmodl-ccache
+            ${{runner.workspace}}/ccache
           key: ${{matrix.os}}-${{github.ref}}-${{github.sha}}
           restore-keys: |
             ${{matrix.os}}-${{github.ref}}-
@@ -104,7 +104,7 @@ jobs:
         shell: bash
         working-directory: ${{runner.workspace}}/nmodl/build
         env:
-          CCACHE_DIR: ${{runner.workspace}}/nmodl-ccache
+          CCACHE_DIR: ${{runner.workspace}}/ccache
         run:  |
           echo "------- Building -------"
           ccache -z
