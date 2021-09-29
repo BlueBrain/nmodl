@@ -105,7 +105,9 @@ jobs:
         working-directory: ${{runner.workspace}}/nmodl/build
         env:
           CCACHE_DIR: ${{runner.workspace}}/ccache
+          GITHUB_CONTEXT: ${{ toJson(github) }}
         run:  |
+          echo "$GITHUB_CONTEXT"
           echo "------- Building -------"
           cccccccache -z
           ccache -s
