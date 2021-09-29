@@ -107,7 +107,7 @@ jobs:
           CCACHE_DIR: ${{runner.workspace}}/ccache
         run:  |
           echo "------- Building -------"
-          cccccccache -z
+          ccache -z
           ccache -s
           cmake --build .
           ccache -s
