@@ -67,6 +67,7 @@ jobs:
         working-directory: ${{runner.workspace}}/nmodl
         run:  |
           echo "------- Configure -------"
+          echo "github.event.head_commit.message=${{github.event.head_commit.message}}"
           if [[ "${{ startsWith(matrix.os, 'macos') }}" = "true" ]]; then
             export PATH=/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:${PATH}
           fi
@@ -107,6 +108,12 @@ jobs:
           CCACHE_DIR: ${{runner.workspace}}/ccache
           CCACHE_DEBUG: 1
         run:  |
+          if ccache --version | grep -P '^ccache version 4\.4(|\.1)$'
+          then
+            echo "------- Disable ccache direct mode -------"
+            # https://github.com/ccache/ccache/issues/935
+            export CCACHE_NODIRECT=1
+          fi
           echo "------- Building -------"
           ccache -z
           # Older versions don't support -v (verbose)
