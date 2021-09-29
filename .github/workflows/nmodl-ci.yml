@@ -108,7 +108,7 @@ jobs:
           CCACHE_DIR: ${{runner.workspace}}/ccache
           CCACHE_DEBUG: 1
         run:  |
-          if ccache --version | grep -P '^ccache version 4\.4(|\.1)$'
+          if ccache --version | grep -E '^ccache version 4\.(4|4\.1)$'
           then
             echo "------- Disable ccache direct mode -------"
             # https://github.com/ccache/ccache/issues/935
