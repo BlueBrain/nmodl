@@ -100,7 +100,7 @@ jobs:
             ${{matrix.os}}-${{github.ref}}-
             ${{matrix.os}}-
 
-      - name: Build
+      - name: Build, Test and Install
         shell: bash
         working-directory: ${{runner.workspace}}/nmodl/build
         env:
@@ -111,18 +111,10 @@ jobs:
           ccache -s
           cmake --build .
           ccache -s
-
-      - name: Test
-        shell: bash
-        working-directory: ${{runner.workspace}}/nmodl/build
-        run:  |
+          
           echo "------- Testing -------"
           ctest --output-on-failure
 
-      - name: Install
-        shell: bash
-        working-directory: ${{runner.workspace}}/nmodl/build
-        run:  |
           echo "------- Installing -------"
           cmake --build . --target install
 
