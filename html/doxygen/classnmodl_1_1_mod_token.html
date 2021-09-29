@@ -103,7 +103,7 @@ $(document).ready(function(){initNavTree('classnmodl_1_1_mod_token.html','');});
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Represent token returned by scanner. </p>
 <p>Every token returned by lexer is represented by <a class="el" href="classnmodl_1_1_mod_token.html" title="Represent token returned by scanner. ">ModToken</a>. Some tokens are also externally defined names like <code>dt</code>, <code>t</code>. These names are defined in NEURON and hence we set external property to true. Also, location class represent the position of the token in nmodl file. By default location is initialized to <code>line,column</code> as <code>1,1</code>. Some tokens are explicitly added during compiler passes. Hence we set the position to <code>0,0</code> so that we can distinguish them from other tokens produced by lexer.</p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000024">Todo:</a></b></dt><dd><ul>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000025">Todo:</a></b></dt><dd><ul>
 <li><a class="el" href="classnmodl_1_1_mod_token.html#a5edc9d18c2001be5017e2e2afc484ae1">LocationType</a> object is copyable except if we specify the stream name. It would be good to track filename when we go for multi-channel optimization and code generation.</li>
 </ul>
 </dd></dl>

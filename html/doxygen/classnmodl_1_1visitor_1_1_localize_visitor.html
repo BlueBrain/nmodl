@@ -108,7 +108,7 @@ $(document).ready(function(){initNavTree('classnmodl_1_1visitor_1_1_localize_vis
 <li>For every global variable in the mod file we have to compute def-use chains in global blocks (except procedure and functions, which should be already inlined).</li>
 <li>If every block has "definition" first then that variable is safe to "localize"</li>
 </ul>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000054">Todo:</a></b></dt><dd><ul>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000055">Todo:</a></b></dt><dd><ul>
 <li>We are excluding procedures/functions because they will be still using global variables. We need to have dead-code removal pass to eliminate unused procedures/ functions before localizer pass. </li>
 </ul>
 </dd></dl>
@@ -715,8 +715,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000052">Todo:</a></b></dt><dd>Voltage v can be global variable as well as external. In order to avoid optimizations, we need to handle this case properly </dd></dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000053">Todo:</a></b></dt><dd>Instead of ast node, use symbol properties to check variable type </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000053">Todo:</a></b></dt><dd>Voltage v can be global variable as well as external. In order to avoid optimizations, we need to handle this case properly </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000054">Todo:</a></b></dt><dd>Instead of ast node, use symbol properties to check variable type </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="localize__visitor_8cpp_source.html#l00071">71</a> of file <a class="el" href="localize__visitor_8cpp_source.html">localize_visitor.cpp</a>.</p>
 

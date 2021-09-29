@@ -102,7 +102,7 @@ $(document).ready(function(){initNavTree('classnmodl_1_1visitor_1_1_local_to_ass
 <p>Some of the existing mod file include declaration of LOCAL variables in the top level of the mod file. Those variables are normally written in the INITIAL block which is executed potentially by multiple threads. This results into race condition in case of CoreNEURON. To avoid this, such variables are converted to ASSIGNED variables which by default are handled as RANGE.</p>
 <p>For example:</p>
 <div class="fragment"><div class="line">NEURON {</div><div class="line">    SUFFIX test</div><div class="line">   RANGE x</div><div class="line">}</div><div class="line"></div><div class="line">LOCAL qt</div><div class="line"></div><div class="line">INITIAL {</div><div class="line">    qt = 10.0</div><div class="line">}</div><div class="line"></div><div class="line">PROCEDURE rates(v (mV)) {</div><div class="line">    x = qt + 12.2</div><div class="line">}</div></div><!-- fragment --><p>In the above example, <code>qt</code> is used as temporary variable to pass value from INITIAL block to PROCEDURE. This works fine in case of serial execution but in parallel execution we end up in race condition. To avoid this, we convert qt to ASSIGNED variable.</p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000050">Todo:</a></b></dt><dd><ul>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000051">Todo:</a></b></dt><dd><ul>
 <li>Variables like qt are often constant. As long as INITIAL block is executed serially or qt is updated in atomic way then we don't have a problem. </li>
 </ul>
 </dd></dl>

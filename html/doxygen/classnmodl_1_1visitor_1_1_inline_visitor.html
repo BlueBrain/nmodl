@@ -121,7 +121,7 @@ $(document).ready(function(){initNavTree('classnmodl_1_1visitor_1_1_inline_visit
 <li>Local statement gets added to callee block (if doesn't exist)</li>
 <li>Procedure body gets appended with extra assignment statement with variable used for returning value.</li>
 </ul>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000049">Todo:</a></b></dt><dd><ul>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000050">Todo:</a></b></dt><dd><ul>
 <li>Recursive function calls are not supported and need to add checks to avoid stack explosion</li>
 <li>Currently we rename variables more than necessary, this could be improved [low priority]</li>
 <li>Function calls as part of an argument of function call itself are not completely inlined [low priority]</li>
@@ -765,7 +765,7 @@ Private Attributes</h2></td></tr>
 <li>if expression is wrapped expression</li>
 <li>if wrapped expression is a function call</li>
 </ul>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000047">Todo:</a></b></dt><dd>Add method to ast itself to simplify this implementation </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000048">Todo:</a></b></dt><dd>Add method to ast itself to simplify this implementation </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="inline__visitor_8cpp_source.html#l00064">64</a> of file <a class="el" href="inline__visitor_8cpp_source.html">inline_visitor.cpp</a>.</p>
 
@@ -878,7 +878,7 @@ Private Attributes</h2></td></tr>
 <p>each block should already have local statement</p>
 <p>get a copy of function/procedure body</p>
 <p>function definition has function name as return value. we have to rename it with new variable name</p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000048">Todo:</a></b></dt><dd>Have to re-run symtab visitor pass to update symbol table </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000049">Todo:</a></b></dt><dd>Have to re-run symtab visitor pass to update symbol table </dd></dl>
 <p>each argument is added as new assignment statement</p>
 <p>to return value from procedure we have to add new variable</p>
 <p>variable name which will replace the function call that we just inlined </p>
