@@ -53,7 +53,7 @@ build:nvhpc:
 .nmodl_tests:
   variables:
     # https://github.com/BlueBrain/nmodl/issues/737
-    bb5_cpus_per_task: 1
+    bb5_ntasks: 1
 
 test:intel:
   extends:
