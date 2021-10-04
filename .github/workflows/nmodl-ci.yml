@@ -106,12 +106,19 @@ jobs:
         env:
           CCACHE_DIR: ${{runner.workspace}}/ccache
         run:  |
+          if ccache --version | grep -E '^ccache version 4\.(4|4\.1)$'
+          then
+            echo "------- Disable ccache direct mode -------"
+            # https://github.com/ccache/ccache/issues/935
+            export CCACHE_NODIRECT=1
+          fi
           echo "------- Building -------"
           ccache -z
-          ccache -s
+          # Older versions don't support -v (verbose)
+          ccache -sv || ccache -s
           cmake --build .
-          ccache -s
-          
+          ccache -sv || ccache -s
+
           echo "------- Testing -------"
           ctest --output-on-failure
 
@@ -125,4 +132,4 @@ jobs:
       - name: live debug session on failure (manual steps required, check `nmodl-ci.yml`)
         if: failure() && contains(github.event.pull_request.title, 'live-debug-tests')
         uses: mxschmitt/action-tmate@v3
-
+        timeout-minutes: 60
