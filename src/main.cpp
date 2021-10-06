@@ -557,6 +557,8 @@ int main(int argc, const char* argv[]) {
         }
     }
 
+    std::size_t foo = -42;
+
     if (sympy_opt) {
         nmodl::pybind_wrappers::EmbeddedPythonLoader::get_instance().api()->finalize_interpreter();
     }
