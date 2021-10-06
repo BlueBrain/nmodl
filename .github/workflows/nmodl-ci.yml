@@ -99,8 +99,8 @@ jobs:
             ${{matrix.os}}-${{github.ref}}-
             ${{matrix.os}}-
 
+      - uses: ammaraskar/gcc-problem-matcher@master
       - name: Build
-        uses: ammaraskar/gcc-problem-matcher@master
         shell: bash
         working-directory: ${{runner.workspace}}/nmodl/build
         env:
@@ -118,7 +118,7 @@ jobs:
           ccache -sv || ccache -s
           cmake --build .
           ccache -sv || ccache -s
-
+      
       - name: Test
         shell: bash
         working-directory: ${{runner.workspace}}/nmodl/build
