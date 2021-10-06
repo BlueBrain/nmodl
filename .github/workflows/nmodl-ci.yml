@@ -70,7 +70,6 @@ jobs:
           echo "------- Configure -------"
           mkdir build && pushd build
           cmake .. -G Ninja \
-            -DCMAKE_CXX_FLAGS=-Wall \
             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
             -DCMAKE_BUILD_TYPE=RelWithDebInfo \
             -DPYTHON_EXECUTABLE=$(which python3) \
