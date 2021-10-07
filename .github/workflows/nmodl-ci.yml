@@ -99,7 +99,8 @@ jobs:
             ${{matrix.os}}-${{github.ref}}-
             ${{matrix.os}}-
 
-      - uses: ammaraskar/gcc-problem-matcher@master
+      - name: Register gcc problem matcher
+        run: echo "::add-matcher::.github/problem-matchers/gcc.json"
       - name: Build
         shell: bash
         working-directory: ${{runner.workspace}}/nmodl/build
