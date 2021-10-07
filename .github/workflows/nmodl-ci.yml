@@ -152,4 +152,5 @@ jobs:
         uses: mxschmitt/action-tmate@v3
         timeout-minutes: 60
   launch-sanitizer-build:
+    needs: ci
     uses: olupton/nmodl/.github/workflows/nmodl-sanitizers.yml@test
