@@ -157,7 +157,8 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        sanitizer: [undefined, address, thread]
+        # TODO: might be interesting to add the thread sanitizer too
+        sanitizer: [undefined, address]
       fail-fast: false
     steps:
       - name: Setup cmake
@@ -191,13 +192,9 @@ jobs:
         run:  |
           echo "------- Configure -------"
           mkdir build && pushd build
-          # TODO only really need -shared-libasan for -fsanitize=address.
-          if [[ "${{matrix.sanitizer}}" == "address" ]]; then
-            extra_args=-shared-libasan
-          fi
           cmake .. -G Ninja \
             -DCMAKE_CXX_COMPILER=clang++ \
-            -DCMAKE_CXX_FLAGS="-fsanitize=${{matrix.sanitizer}} -fsanitize-recover=all -fno-omit-frame-pointer ${extra_args}" \
+            -DCMAKE_CXX_FLAGS="-fsanitize=${{matrix.sanitizer}} -fsanitize-recover=all -fno-omit-frame-pointer -shared-libsan" \
             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
             -DCMAKE_BUILD_TYPE=RelWithDebInfo \
             -DPYTHON_EXECUTABLE=$(which python3) \
@@ -252,6 +249,10 @@ jobs:
             export LD_PRELOAD=$(clang++ -print-file-name=libclang_rt.asan-x86_64.so)
             export ASAN_OPTIONS=detect_stack_use_after_return=1
             #export ASAN_SYMBOLIZER_PATH=$(command -v llvm-symbolizer-12)
+          elif [[ "${matrix.sanitizer}}" == "undefined" ]]; then
+            # Didn't find a good source for this, but...maybe it'll work.
+            # All of this is "just" to let non-sanitized Python load sanitized NMODL libraries.
+            export LD_PRELOAD=$(clang++ -print-file-name=libclang_rt.ubsan_standalone-x86_64.so)
           fi
           ctest --output-on-failure -T Test
           ctest -T Test --output-on-failure > >(tee test.stdout) 2> >(tee test.stderr >&2)
