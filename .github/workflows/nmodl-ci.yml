@@ -150,7 +150,9 @@ jobs:
         uses: mxschmitt/action-tmate@v3
         timeout-minutes: 60
   sanitizers:
-    needs: ci
+    # TODO: uncomment this so that we only launch the sanitizer builds once the
+    #       normal build+tests have completed successfully
+    # needs: ci
     name: ${{ matrix.sanitizer }}-sanitizer
     runs-on: ubuntu-20.04
     strategy:
@@ -165,6 +167,10 @@ jobs:
         run: |
           sudo apt install bison ccache flex libfl-dev clang-12 ninja-build \
             python3-dev python3-pip
+          # Make clang++ and llvm-symbolizer point at clang/llvm-12
+          sudo update-alternatives \
+            --install /usr/bin/clang++          clang++         /usr/bin/clang++-12 20 \
+            --slave   /usr/bin/llvm-symbolizer  llvm-symbolizer /usr/bin/llvm-symbolizer-12
         shell: bash
 
       - name: Set up Python3
@@ -190,7 +196,7 @@ jobs:
             extra_args=-shared-libasan
           fi
           cmake .. -G Ninja \
-            -DCMAKE_CXX_COMPILER=clang++-12 \
+            -DCMAKE_CXX_COMPILER=clang++ \
             -DCMAKE_CXX_FLAGS="-fsanitize=${{matrix.sanitizer}} -fsanitize-recover=all -fno-omit-frame-pointer ${extra_args}" \
             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
             -DCMAKE_BUILD_TYPE=RelWithDebInfo \
@@ -231,6 +237,7 @@ jobs:
           cmake --build . > >(tee build.stdout) 2> >(tee build.stderr >&2)
           ccache -vs 2>/dev/null || ccache -s
           ls -l build.stdout build.stderr
+          cat build.stderr
       
       - name: Test
         shell: bash
@@ -242,12 +249,14 @@ jobs:
             # Based on https://stackoverflow.com/questions/47021422/how-to-enable-address-sanitizer-for-multiple-c-binaries,
             # this should avoid undefined asan symbols when tests launched via
             # `python` load sanitized nmodl .so files.
-            export LD_PRELOAD=$(clang++-12 -print-file-name=libclang_rt.asan-x86_64.so)
+            export LD_PRELOAD=$(clang++ -print-file-name=libclang_rt.asan-x86_64.so)
             export ASAN_OPTIONS=detect_stack_use_after_return=1
-            export ASAN_SYMBOLIZER_PATH=$(command -v llvm-symbolizer-12)
+            #export ASAN_SYMBOLIZER_PATH=$(command -v llvm-symbolizer-12)
           fi
-          ctest --output-on-failure
-          ls -l
+          ctest --output-on-failure -T Test
+          ctest -T Test --output-on-failure > >(tee test.stdout) 2> >(tee test.stderr >&2)
+          ls -l test.stdout test.stderr
+          cat test.stderr
 
       - uses: actions/upload-artifact@v2
         with:
