@@ -151,6 +151,111 @@ jobs:
         if: failure() && contains(github.event.head_commit.message, 'live-debug-tests')
         uses: mxschmitt/action-tmate@v3
         timeout-minutes: 60
-  launch-sanitizer-build:
+  sanitizers:
     needs: ci
-    uses: olupton/nmodl/.github/workflows/nmodl-sanitizers.yml@test
+    name: ${{ matrix.sanitizer }}-sanitizer
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        sanitizer: [undefined, address, thread]
+    steps:
+      - name: Setup cmake
+        uses: jwlawson/actions-setup-cmake@v1.11
+          
+      - name: Install apt packages
+        run: |
+          sudo apt install bison ccache flex libfl-dev clang-12 ninja-build \
+            python3-dev python3-pip
+        shell: bash
+
+      - name: Set up Python3
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+       
+      - name: Install Python3 dependencies
+        run: |
+          pip3 install -U pip setuptools scikit-build Jinja2 PyYAML pytest \
+            'sympy>=1.3'
+          
+      - uses: actions/checkout@v2
+
+      - name: Configure
+        shell: bash
+        working-directory: ${{runner.workspace}}/nmodl
+        run:  |
+          echo "------- Configure -------"
+          mkdir build && pushd build
+          cmake .. -G Ninja \
+            -DCMAKE_CXX_COMPILER=clang++-12 \
+            -DCMAKE_CXX_FLAGS="-fsanitize=${{matrix.sanitizer}} -fsanitize-recover=all -fno-omit-frame-pointer -shared-libasan" \
+            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+            -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+            -DPYTHON_EXECUTABLE=$(which python3) \
+            -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR \
+            -DNMODL_FORMATTING:BOOL=ON
+        env:
+          INSTALL_DIR: ${{ runner.workspace }}/install
+
+      - name: Restore compiler cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ${{runner.workspace}}/ccache
+          key: ${{matrix.sanitizer}}-${{github.ref}}-${{github.sha}}
+          restore-keys: |
+            ${{matrix.sanitizer}}-${{github.ref}}-
+            ${{matrix.sanitizer}}-
+
+      - name: Register gcc problem matcher
+        run: echo "::add-matcher::.github/problem-matchers/gcc.json"
+
+      - name: Build
+        shell: bash
+        working-directory: ${{runner.workspace}}/nmodl/build
+        env:
+          CCACHE_DIR: ${{runner.workspace}}/ccache
+        run:  |
+          if ccache --version | grep -E '^ccache version 4\.(4|4\.1)$'
+          then
+            echo "------- Disable ccache direct mode -------"
+            # https://github.com/ccache/ccache/issues/935
+            export CCACHE_NODIRECT=1
+          fi
+          # Don't let the cache grow too big.
+          export CCACHE_MAXSIZE=512M
+          echo "------- Building -------"
+          ccache -z
+          # Older versions don't support -v (verbose)
+          ccache -vs 2>/dev/null || ccache -s
+          cmake --build . > >(tee build.stdout) 2> >(tee build.stderr >&2)
+          ccache -c
+          ccache -vs 2>/dev/null || ccache -s
+          ls -l build.stdout build.stderr
+      
+      - name: Test
+        shell: bash
+        working-directory: ${{runner.workspace}}/nmodl/build
+        run:  |
+          echo "------- Testing -------"
+          export UBSAN_OPTIONS=print_stacktrace=1
+          if [[ "${{matrix.sanitizer}" == "address" ]; then
+            export LD_PRELOAD=$(clang++-12 -print-file-name=libclang_rt.asan-x86_64.so)
+          fi
+          export ASAN_OPTIONS=detect_stack_use_after_return=1
+          export ASAN_SYMBOLIZER_PATH=$(command -v llvm-symbolizer-12)
+          ctest --output-on-failure --output-junit ctests.xml
+          ls -l ctests.xml
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: ctest-results
+          path: ctests.xml
+
+      # This step will set up an SSH connection on tmate.io for live debugging.
+      # To trigger it, simply add 'live-debug-tests' to your last pushed commit message
+      # OL210928: this does not seem to work, at least for commits on PRs.
+      - name: live debug session on failure
+        if: failure() && contains(github.event.head_commit.message, 'live-debug-tests')
+        uses: mxschmitt/action-tmate@v3
+        timeout-minutes: 60
