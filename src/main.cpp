@@ -57,6 +57,10 @@ using namespace codegen;
 using namespace visitor;
 using nmodl::parser::NmodlDriver;
 
+double* bug(double* p) {
+  return p + 42;
+}
+
 int main(int argc, const char* argv[]) {
     CLI::App app{
         "NMODL : Source-to-Source Code Generation Framework [{}]"_format(Version::to_string())};
@@ -558,6 +562,7 @@ int main(int argc, const char* argv[]) {
     }
 
     std::size_t foo = -42;
+    std::cout << bug(nullptr) << std::endl;
 
     if (sympy_opt) {
         nmodl::pybind_wrappers::EmbeddedPythonLoader::get_instance().api()->finalize_interpreter();
