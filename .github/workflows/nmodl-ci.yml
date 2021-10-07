@@ -152,4 +152,4 @@ jobs:
         uses: mxschmitt/action-tmate@v3
         timeout-minutes: 60
   launch-sanitizer-build:
-    uses: BlueBrain/nmodl/.github/workflows/nmodl-sanitizers.yml@${{github.ref}}
+    uses: BlueBrain/nmodl/.github/workflows/nmodl-sanitizers.yml@${{github.sha}}
