@@ -120,7 +120,6 @@ jobs:
           # Older versions don't support -v (verbose)
           ccache -vs 2>/dev/null || ccache -s
           cmake --build .
-          ccache -c
           ccache -vs 2>/dev/null || ccache -s
       
       - name: Test
@@ -187,7 +186,7 @@ jobs:
           echo "------- Configure -------"
           mkdir build && pushd build
           # TODO only really need -shared-libasan for -fsanitize=address.
-          if [[ "${{matrix.sanitizer}}" == "address" ]; then
+          if [[ "${{matrix.sanitizer}}" == "address" ]]; then
             extra_args=-shared-libasan
           fi
           cmake .. -G Ninja \
@@ -230,7 +229,6 @@ jobs:
           # Older versions don't support -v (verbose)
           ccache -vs 2>/dev/null || ccache -s
           cmake --build . > >(tee build.stdout) 2> >(tee build.stderr >&2)
-          ccache -c
           ccache -vs 2>/dev/null || ccache -s
           ls -l build.stdout build.stderr
       
@@ -240,7 +238,7 @@ jobs:
         run: |
           echo "------- Testing -------"
           export UBSAN_OPTIONS=print_stacktrace=1
-          if [[ "${{matrix.sanitizer}}" == "address" ]; then
+          if [[ "${{matrix.sanitizer}}" == "address" ]]; then
             # Based on https://stackoverflow.com/questions/47021422/how-to-enable-address-sanitizer-for-multiple-c-binaries,
             # this should avoid undefined asan symbols when tests launched via
             # `python` load sanitized nmodl .so files.
