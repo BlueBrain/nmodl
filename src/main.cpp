@@ -58,7 +58,7 @@ using namespace visitor;
 using nmodl::parser::NmodlDriver;
 
 double* bug(double* p) {
-  return p + 42;
+    return p + 42;
 }
 
 int main(int argc, const char* argv[]) {
