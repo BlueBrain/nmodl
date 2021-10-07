@@ -129,8 +129,8 @@ jobs:
         working-directory: ${{runner.workspace}}/nmodl/build
         run:  |
           echo "------- Testing -------"
-          ctest --output-on-failure --output-junit ctests.xml
-          ls -l ctests.xml
+          ctest --output-on-failure -T Test
+          ls -l
 
       - uses: actions/upload-artifact@v2
         with:
