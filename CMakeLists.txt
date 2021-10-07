@@ -25,6 +25,10 @@ option(NMODL_ENABLE_LEGACY_UNITS "Use original faraday, R, etc. instead of 2019 
 if(NMODL_ENABLE_LEGACY_UNITS)
   add_definitions(-DUSE_LEGACY_UNITS)
 endif()
+set(NMODL_EXTRA_CXX_FLAGS
+    ""
+    CACHE STRING "Add extra compile flags for NMODL sources")
+separate_arguments(NMODL_EXTRA_CXX_FLAGS)
 
 # =============================================================================
 # Settings to enable project as submodule
