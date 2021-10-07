@@ -151,3 +151,5 @@ jobs:
         if: failure() && contains(github.event.head_commit.message, 'live-debug-tests')
         uses: mxschmitt/action-tmate@v3
         timeout-minutes: 60
+  launch-sanitizer-build:
+    uses: BlueBrain/nmodl/.github/workflows/nmodl-sanitizers.yml

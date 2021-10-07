@@ -1,20 +1,18 @@
-name: NMODL Sanitizers
+name: Sanitizers
 
 concurrency:
   group: ${{ github.workflow }}#${{ github.ref }}
   cancel-in-progress: true
 
 on:
-  workflow_run:
-    workflows: ["NMODL CI"]
-    types: [completed]
+  workflow_call:
 
 env:
   CTEST_PARALLEL_LEVEL: 1
   CMAKE_BUILD_PARALLEL_LEVEL: 3
 
 jobs:
-  on-success:
+  sanitizers:
     name: ${{ matrix.sanitizer }}-sanitizer
     runs-on: ubuntu-20.04
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
