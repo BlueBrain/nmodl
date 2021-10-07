@@ -236,16 +236,16 @@ jobs:
       - name: Test
         shell: bash
         working-directory: ${{runner.workspace}}/nmodl/build
-        run:  |
+        run: |
           echo "------- Testing -------"
           export UBSAN_OPTIONS=print_stacktrace=1
-          if [[ "${{matrix.sanitizer}" == "address" ]; then
+          if [[ "${{matrix.sanitizer}}" == "address" ]; then
             export LD_PRELOAD=$(clang++-12 -print-file-name=libclang_rt.asan-x86_64.so)
           fi
           export ASAN_OPTIONS=detect_stack_use_after_return=1
           export ASAN_SYMBOLIZER_PATH=$(command -v llvm-symbolizer-12)
-          ctest --output-on-failure --output-junit ctests.xml
-          ls -l ctests.xml
+          ctest --output-on-failure
+          ls -l
 
       - uses: actions/upload-artifact@v2
         with:
