@@ -15,6 +15,7 @@ on:
       - release/**
 
 env:
+  CCACHE_MAXSIZE: 2G
   CTEST_PARALLEL_LEVEL: 1
   CMAKE_BUILD_PARALLEL_LEVEL: 3
   DEFAULT_PY_VERSION: 3.8
@@ -114,8 +115,6 @@ jobs:
             # https://github.com/ccache/ccache/issues/935
             export CCACHE_NODIRECT=1
           fi
-          # Don't let the cache grow too big.
-          export CCACHE_MAXSIZE=2G
           echo "------- Building -------"
           ccache -z
           # Older versions don't support -v (verbose)
@@ -158,6 +157,7 @@ jobs:
     strategy:
       matrix:
         sanitizer: [undefined, address, thread]
+      fail-fast: false
     steps:
       - name: Setup cmake
         uses: jwlawson/actions-setup-cmake@v1.11
@@ -186,14 +186,17 @@ jobs:
         run:  |
           echo "------- Configure -------"
           mkdir build && pushd build
+          # TODO only really need -shared-libasan for -fsanitize=address.
+          if [[ "${{matrix.sanitizer}}" == "address" ]; then
+            extra_args=-shared-libasan
+          fi
           cmake .. -G Ninja \
             -DCMAKE_CXX_COMPILER=clang++-12 \
-            -DCMAKE_CXX_FLAGS="-fsanitize=${{matrix.sanitizer}} -fsanitize-recover=all -fno-omit-frame-pointer -shared-libasan" \
+            -DCMAKE_CXX_FLAGS="-fsanitize=${{matrix.sanitizer}} -fsanitize-recover=all -fno-omit-frame-pointer ${extra_args}" \
             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
             -DCMAKE_BUILD_TYPE=RelWithDebInfo \
             -DPYTHON_EXECUTABLE=$(which python3) \
-            -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR \
-            -DNMODL_FORMATTING:BOOL=ON
+            -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR
         env:
           INSTALL_DIR: ${{ runner.workspace }}/install
 
@@ -222,8 +225,6 @@ jobs:
             # https://github.com/ccache/ccache/issues/935
             export CCACHE_NODIRECT=1
           fi
-          # Don't let the cache grow too big.
-          export CCACHE_MAXSIZE=512M
           echo "------- Building -------"
           ccache -z
           # Older versions don't support -v (verbose)
@@ -240,10 +241,13 @@ jobs:
           echo "------- Testing -------"
           export UBSAN_OPTIONS=print_stacktrace=1
           if [[ "${{matrix.sanitizer}}" == "address" ]; then
+            # Based on https://stackoverflow.com/questions/47021422/how-to-enable-address-sanitizer-for-multiple-c-binaries,
+            # this should avoid undefined asan symbols when tests launched via
+            # `python` load sanitized nmodl .so files.
             export LD_PRELOAD=$(clang++-12 -print-file-name=libclang_rt.asan-x86_64.so)
+            export ASAN_OPTIONS=detect_stack_use_after_return=1
+            export ASAN_SYMBOLIZER_PATH=$(command -v llvm-symbolizer-12)
           fi
-          export ASAN_OPTIONS=detect_stack_use_after_return=1
-          export ASAN_SYMBOLIZER_PATH=$(command -v llvm-symbolizer-12)
           ctest --output-on-failure
           ls -l
 
