@@ -115,7 +115,7 @@ jobs:
             export CCACHE_NODIRECT=1
           fi
           # Don't let the cache grow too big.
-          export CCACHE_MAXSIZE=512M
+          export CCACHE_MAXSIZE=2G
           echo "------- Building -------"
           ccache -z
           # Older versions don't support -v (verbose)
