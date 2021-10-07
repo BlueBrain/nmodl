@@ -101,6 +101,7 @@ jobs:
 
       - name: Register gcc problem matcher
         run: echo "::add-matcher::.github/problem-matchers/gcc.json"
+
       - name: Build
         shell: bash
         working-directory: ${{runner.workspace}}/nmodl/build
