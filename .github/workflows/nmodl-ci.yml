@@ -249,7 +249,7 @@ jobs:
             export LD_PRELOAD=$(clang++ -print-file-name=libclang_rt.asan-x86_64.so)
             export ASAN_OPTIONS=detect_stack_use_after_return=1
             #export ASAN_SYMBOLIZER_PATH=$(command -v llvm-symbolizer-12)
-          elif [[ "${matrix.sanitizer}}" == "undefined" ]]; then
+          elif [[ "${{matrix.sanitizer}}" == "undefined" ]]; then
             # Didn't find a good source for this, but...maybe it'll work.
             # All of this is "just" to let non-sanitized Python load sanitized NMODL libraries.
             export LD_PRELOAD=$(clang++ -print-file-name=libclang_rt.ubsan_standalone-x86_64.so)
