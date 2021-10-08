@@ -169,14 +169,12 @@ jobs:
           sudo apt install bison ccache flex libfl-dev clang-12 ninja-build \
             python3-dev python3-pip
           # Make clang++ and llvm-symbolizer point at clang/llvm-12
-          which clang++ clang++-12 llvm-symbolizer llvm-symbolizer-12 || true
-          ls -l $(command -v clang++) $(command -v llvm-symbolizer) $(readlink $(command -v clang++)) $(readlink $(command -v llvm-symbolizer)) || true
           # Priority (200) chosen to be bigger than that in
           # https://github.com/actions/virtual-environments/blob/main/images/linux/scripts/installers/clang.sh
           sudo update-alternatives --install /usr/bin/clang++         clang++         /usr/bin/clang++-12         200
           sudo update-alternatives --install /usr/bin/llvm-symbolizer llvm-symbolizer /usr/bin/llvm-symbolizer-12 200
-          which clang++ clang++-12 llvm-symbolizer llvm-symbolizer-12 || true
-          ls -l $(command -v clang++) $(command -v llvm-symbolizer) $(readlink $(command -v clang++)) $(readlink $(command -v llvm-symbolizer)) || true
+          clang++ --version
+          llvm-symbolizer --version
         shell: bash
       
       - name: live debug session on failure
