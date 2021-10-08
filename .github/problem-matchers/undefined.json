@@ -1,0 +1,26 @@
+
+{
+    "problemMatcher": [
+        {
+            "owner": "ubsan-problem-matcher",
+            "severity": "warning",
+            "pattern": [
+                {
+                    "regexp": "^\\d+:(.*)\\/(.*):(\\d+):(\\d+):.*: (.*)$",
+                    "fromPath": 1,
+                    "file": 2,
+                    "line": 3,
+                    "column": 4,
+                    "message": 5
+                },
+                {
+                    "regexp": "^\\d+:\\s*#\\d+.*$",
+                    "loop": true
+                },
+                {
+                    "regexp": "^.*UndefinedBehaviorSanitizer:.*$"
+                }
+            ]
+        }
+    ]
+}

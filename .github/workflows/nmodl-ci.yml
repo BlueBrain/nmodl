@@ -23,6 +23,7 @@ env:
 
 jobs:
   ci:
+    if: ${{ false }}  # disable for now
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.os }}
     strategy:
@@ -176,7 +177,7 @@ jobs:
           clang++ --version
           llvm-symbolizer --version
         shell: bash
-      
+
       - name: live debug session on failure
         if: failure() #always() #failure() && contains(github.event.head_commit.message, 'live-debug-tests')
         uses: mxschmitt/action-tmate@v3
@@ -186,12 +187,12 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.9
-       
+
       - name: Install Python3 dependencies
         run: |
           pip3 install -U pip setuptools scikit-build Jinja2 PyYAML pytest \
             'sympy>=1.3'
-          
+
       - uses: actions/checkout@v2
 
       - name: Configure
@@ -209,7 +210,7 @@ jobs:
           mkdir build && pushd build
           cmake .. -G Ninja \
             -DCMAKE_CXX_COMPILER=clang++ \
-            -DCMAKE_CXX_FLAGS="-fsanitize=${{matrix.sanitizer}} -fsanitize-recover=all -fno-omit-frame-pointer -shared-libsan" \
+            -DCMAKE_CXX_FLAGS="-fsanitize=${{matrix.sanitizer}} -fnosanitize-recover=all -fsanitize=float-divide-by-zero -fsanitize=float-cast-overflow -fsanitize=return -fsanitize=implicit-conversion -fno-omit-frame-pointer -shared-libsan" \
             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
             -DCMAKE_BUILD_TYPE=RelWithDebInfo \
             -DPYTHON_EXECUTABLE=$(which python3) \
@@ -227,8 +228,8 @@ jobs:
             ${{matrix.sanitizer}}-${{github.ref}}-
             ${{matrix.sanitizer}}-
 
-      - name: Register gcc problem matcher
-        run: echo "::add-matcher::.github/problem-matchers/gcc.json"
+      - name: Register problem matcher
+        run: echo "::add-matcher::.github/problem-matchers/${{matrix.sanitizer}}.json"
 
       - name: Build
         shell: bash
@@ -250,7 +251,7 @@ jobs:
           ccache -vs 2>/dev/null || ccache -s
           ls -l build.stdout build.stderr
           cat build.stderr
-      
+
       - name: Test
         shell: bash
         working-directory: ${{runner.workspace}}/nmodl/build
