@@ -158,7 +158,7 @@ jobs:
     strategy:
       matrix:
         # TODO: might be interesting to add the thread sanitizer too
-        sanitizer: [undefined, address]
+        sanitizer: [undefined] #, address]
       fail-fast: false
     steps:
       - name: Setup cmake
@@ -177,6 +177,11 @@ jobs:
           which clang++ clang++-12 llvm-symbolizer llvm-symbolizer-12 || true
           ls -l $(command -v clang++) $(command -v llvm-symbolizer) $(readlink $(command -v clang++)) $(readlink $(command -v llvm-symbolizer)) || true
         shell: bash
+      
+      - name: live debug session on failure
+        if: always() #failure() && contains(github.event.head_commit.message, 'live-debug-tests')
+        uses: mxschmitt/action-tmate@v3
+        timeout-minutes: 60
 
       - name: Set up Python3
         uses: actions/setup-python@v2
