@@ -172,6 +172,10 @@ jobs:
           sudo update-alternatives \
             --install /usr/bin/clang++          clang++         /usr/bin/clang++-12 20 \
             --slave   /usr/bin/llvm-symbolizer  llvm-symbolizer /usr/bin/llvm-symbolizer-12
+          command -v clang++
+          command -v clang++-12
+          command -v llvm-symbolizer
+          command -v llvm-symbolizer-12
         shell: bash
 
       - name: Set up Python3
@@ -195,10 +199,9 @@ jobs:
           ASAN_RUNTIME_LIB=$(clang++ -print-file-name=libclang_rt.asan-x86_64.so)
           SAN_RUNTIME_LIBS=$(dirname ${ASAN_RUNTIME_LIB})
           echo "Old LD_LIBRARY_PATH=${LD_LIBRARY_PATH}"
-          echo "ASAN_RUNTIME_LIB=${ASAN_RUNTIME_LIB}"
           echo "SAN_RUNTIME_LIBS=${SAN_RUNTIME_LIBS}"
           # Make sure LD_LIBRARY_PATH includes SAN_RUNTIME_LIBS in subsequent steps
-          echo "LD_LIBRARY_PATH=${SAN_RUNTIME_LIBS}" >> $GITHUB_ENV
+          echo "LD_LIBRARY_PATH=${SAN_RUNTIME_LIBS}:${LD_LIBRARY_PATH}" >> $GITHUB_ENV
           mkdir build && pushd build
           cmake .. -G Ninja \
             -DCMAKE_CXX_COMPILER=clang++ \
@@ -250,18 +253,18 @@ jobs:
         run: |
           echo "------- Testing -------"
           export UBSAN_OPTIONS=print_stacktrace=1
-          if [[ "${{matrix.sanitizer}}" == "address" ]]; then
-            # Based on https://stackoverflow.com/questions/47021422/how-to-enable-address-sanitizer-for-multiple-c-binaries,
-            # this should avoid undefined asan symbols when tests launched via
-            # `python` load sanitized nmodl .so files.
-            #export LD_PRELOAD=$(clang++ -print-file-name=libclang_rt.asan-x86_64.so)
-            export ASAN_OPTIONS=detect_stack_use_after_return=1
-            #export ASAN_SYMBOLIZER_PATH=$(command -v llvm-symbolizer-12)
-            #elif [[ "${{matrix.sanitizer}}" == "undefined" ]]; then
-            # Didn't find a good source for this, but...maybe it'll work.
-            # All of this is "just" to let non-sanitized Python load sanitized NMODL libraries.
-            #export LD_PRELOAD=$(clang++ -print-file-name=libclang_rt.ubsan_standalone-x86_64.so)
-          fi
+          export ASAN_OPTIONS=detect_stack_use_after_return=1
+          #if [[ "${{matrix.sanitizer}}" == "address" ]]; then
+          # Based on https://stackoverflow.com/questions/47021422/how-to-enable-address-sanitizer-for-multiple-c-binaries,
+          # this should avoid undefined asan symbols when tests launched via
+          # `python` load sanitized nmodl .so files.
+          #export LD_PRELOAD=$(clang++ -print-file-name=libclang_rt.asan-x86_64.so)
+          #export ASAN_SYMBOLIZER_PATH=$(command -v llvm-symbolizer-12)
+          #elif [[ "${{matrix.sanitizer}}" == "undefined" ]]; then
+          # Didn't find a good source for this, but...maybe it'll work.
+          # All of this is "just" to let non-sanitized Python load sanitized NMODL libraries.
+          #export LD_PRELOAD=$(clang++ -print-file-name=libclang_rt.ubsan_standalone-x86_64.so)
+          #fi
           ctest -T Test --output-on-failure > >(tee test.stdout) 2> >(tee test.stderr >&2)
           ls -l test.stdout test.stderr
           cat test.stderr
@@ -270,11 +273,3 @@ jobs:
         with:
           name: ctest-results
           path: ctests.xml
-
-      # This step will set up an SSH connection on tmate.io for live debugging.
-      # To trigger it, simply add 'live-debug-tests' to your last pushed commit message
-      # OL210928: this does not seem to work, at least for commits on PRs.
-      - name: live debug session on failure
-        if: failure() && contains(github.event.head_commit.message, 'live-debug-tests')
-        uses: mxschmitt/action-tmate@v3
-        timeout-minutes: 60
