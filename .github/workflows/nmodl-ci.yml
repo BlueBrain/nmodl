@@ -15,6 +15,7 @@ on:
       - release/**
 
 env:
+  CCACHE_MAXSIZE: 2G
   CTEST_PARALLEL_LEVEL: 1
   CMAKE_BUILD_PARALLEL_LEVEL: 3
   DEFAULT_PY_VERSION: 3.8
@@ -26,7 +27,7 @@ jobs:
     name: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ ubuntu-18.04, macos-10.15, ubuntu-20.04, macos-11 ]
+        os: [ ubuntu-20.04 ] #, ubuntu-18.04, macos-10.15, macos-11 ]
       fail-fast: true
 
     steps:
@@ -40,6 +41,7 @@ jobs:
         if: startsWith(matrix.os, 'macOS')
         run: |
           brew install ccache coreutils bison boost clang-format flex ninja
+          echo /usr/local/opt/flex/bin:/usr/local/opt/bison/bin >> $GITHUB_PATH
         shell: bash
 
       - name: Install apt packages
@@ -67,11 +69,9 @@ jobs:
         working-directory: ${{runner.workspace}}/nmodl
         run:  |
           echo "------- Configure -------"
-          if [[ "${{ startsWith(matrix.os, 'macos') }}" = "true" ]]; then
-            export PATH=/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:${PATH}
-          fi
           mkdir build && pushd build
           cmake .. -G Ninja \
+            -DCMAKE_CXX_FLAGS="-Wunused-variable" \
             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
             -DCMAKE_BUILD_TYPE=RelWithDebInfo \
             -DPYTHON_EXECUTABLE=$(which python3) \
@@ -100,6 +100,9 @@ jobs:
             ${{matrix.os}}-${{github.ref}}-
             ${{matrix.os}}-
 
+      - name: Register gcc problem matcher
+        run: echo "::add-matcher::.github/problem-matchers/gcc.json"
+
       - name: Build
         shell: bash
         working-directory: ${{runner.workspace}}/nmodl/build
@@ -115,16 +118,22 @@ jobs:
           echo "------- Building -------"
           ccache -z
           # Older versions don't support -v (verbose)
-          ccache -sv || ccache -s
+          ccache -vs 2>/dev/null || ccache -s
           cmake --build .
-          ccache -sv || ccache -s
-
+          ccache -vs 2>/dev/null || ccache -s
+      
       - name: Test
         shell: bash
         working-directory: ${{runner.workspace}}/nmodl/build
         run:  |
           echo "------- Testing -------"
-          ctest --output-on-failure
+          ctest --output-on-failure -T Test
+          ls -l
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: ctest-results
+          path: ctests.xml
 
       - name: Install
         shell: bash
@@ -140,3 +149,133 @@ jobs:
         if: failure() && contains(github.event.head_commit.message, 'live-debug-tests')
         uses: mxschmitt/action-tmate@v3
         timeout-minutes: 60
+  sanitizers:
+    # TODO: uncomment this so that we only launch the sanitizer builds once the
+    #       normal build+tests have completed successfully
+    # needs: ci
+    name: ${{ matrix.sanitizer }}-sanitizer
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        # TODO: might be interesting to add the thread sanitizer too
+        sanitizer: [undefined] #, address]
+      fail-fast: false
+    steps:
+      - name: Setup cmake
+        uses: jwlawson/actions-setup-cmake@v1.11
+          
+      - name: Install apt packages
+        run: |
+          sudo apt install bison ccache flex libfl-dev clang-12 ninja-build \
+            python3-dev python3-pip
+          # Make clang++ and llvm-symbolizer point at clang/llvm-12
+          # Priority (200) chosen to be bigger than that in
+          # https://github.com/actions/virtual-environments/blob/main/images/linux/scripts/installers/clang.sh
+          sudo update-alternatives --install /usr/bin/clang++         clang++         /usr/bin/clang++-12         200
+          sudo update-alternatives --install /usr/bin/llvm-symbolizer llvm-symbolizer /usr/bin/llvm-symbolizer-12 200
+          clang++ --version
+          llvm-symbolizer --version
+        shell: bash
+      
+      - name: live debug session on failure
+        if: failure() #always() #failure() && contains(github.event.head_commit.message, 'live-debug-tests')
+        uses: mxschmitt/action-tmate@v3
+        timeout-minutes: 60
+
+      - name: Set up Python3
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+       
+      - name: Install Python3 dependencies
+        run: |
+          pip3 install -U pip setuptools scikit-build Jinja2 PyYAML pytest \
+            'sympy>=1.3'
+          
+      - uses: actions/checkout@v2
+
+      - name: Configure
+        shell: bash
+        working-directory: ${{runner.workspace}}/nmodl
+        run:  |
+          echo "------- Configure -------"
+          # Figure out the path to clang's sanitizer runtime libraries
+          ASAN_RUNTIME_LIB=$(clang++ -print-file-name=libclang_rt.asan-x86_64.so)
+          SAN_RUNTIME_LIBS=$(dirname ${ASAN_RUNTIME_LIB})
+          echo "Old LD_LIBRARY_PATH=${LD_LIBRARY_PATH}"
+          echo "SAN_RUNTIME_LIBS=${SAN_RUNTIME_LIBS}"
+          # Make sure LD_LIBRARY_PATH includes SAN_RUNTIME_LIBS in subsequent steps
+          echo "LD_LIBRARY_PATH=${SAN_RUNTIME_LIBS}:${LD_LIBRARY_PATH}" >> $GITHUB_ENV
+          mkdir build && pushd build
+          cmake .. -G Ninja \
+            -DCMAKE_CXX_COMPILER=clang++ \
+            -DCMAKE_CXX_FLAGS="-fsanitize=${{matrix.sanitizer}} -fsanitize-recover=all -fno-omit-frame-pointer -shared-libsan" \
+            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+            -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+            -DPYTHON_EXECUTABLE=$(which python3) \
+            -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR
+        env:
+          INSTALL_DIR: ${{ runner.workspace }}/install
+
+      - name: Restore compiler cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ${{runner.workspace}}/ccache
+          key: ${{matrix.sanitizer}}-${{github.ref}}-${{github.sha}}
+          restore-keys: |
+            ${{matrix.sanitizer}}-${{github.ref}}-
+            ${{matrix.sanitizer}}-
+
+      - name: Register gcc problem matcher
+        run: echo "::add-matcher::.github/problem-matchers/gcc.json"
+
+      - name: Build
+        shell: bash
+        working-directory: ${{runner.workspace}}/nmodl/build
+        env:
+          CCACHE_DIR: ${{runner.workspace}}/ccache
+        run:  |
+          if ccache --version | grep -E '^ccache version 4\.(4|4\.1)$'
+          then
+            echo "------- Disable ccache direct mode -------"
+            # https://github.com/ccache/ccache/issues/935
+            export CCACHE_NODIRECT=1
+          fi
+          echo "------- Building -------"
+          ccache -z
+          # Older versions don't support -v (verbose)
+          ccache -vs 2>/dev/null || ccache -s
+          cmake --build . > >(tee build.stdout) 2> >(tee build.stderr >&2)
+          ccache -vs 2>/dev/null || ccache -s
+          ls -l build.stdout build.stderr
+          cat build.stderr
+      
+      - name: Test
+        shell: bash
+        working-directory: ${{runner.workspace}}/nmodl/build
+        run: |
+          echo "------- Testing -------"
+          export UBSAN_OPTIONS=print_stacktrace=1
+          export ASAN_OPTIONS=detect_stack_use_after_return=1
+          #if [[ "${{matrix.sanitizer}}" == "address" ]]; then
+          # Based on https://stackoverflow.com/questions/47021422/how-to-enable-address-sanitizer-for-multiple-c-binaries,
+          # this should avoid undefined asan symbols when tests launched via
+          # `python` load sanitized nmodl .so files.
+          #export LD_PRELOAD=$(clang++ -print-file-name=libclang_rt.asan-x86_64.so)
+          #export ASAN_SYMBOLIZER_PATH=$(command -v llvm-symbolizer-12)
+          #elif [[ "${{matrix.sanitizer}}" == "undefined" ]]; then
+          # Didn't find a good source for this, but...maybe it'll work.
+          # All of this is "just" to let non-sanitized Python load sanitized NMODL libraries.
+          #export LD_PRELOAD=$(clang++ -print-file-name=libclang_rt.ubsan_standalone-x86_64.so)
+          #fi
+          # Always succeed for the sake of ccache...
+          ctest -T Test -VV > >(tee test.stdout) 2> >(tee test.stderr >&2) || true
+          ls
+          ls -l test.stdout test.stderr
+          cat test.stderr
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: ctest-results
+          path: ctests.xml
