@@ -191,6 +191,14 @@ jobs:
         working-directory: ${{runner.workspace}}/nmodl
         run:  |
           echo "------- Configure -------"
+          # Figure out the path to clang's sanitizer runtime libraries
+          ASAN_RUNTIME_LIB=$(clang++ -print-file-name=libclang_rt.asan-x86_64.so)
+          SAN_RUNTIME_LIBS=$(dirname ${ASAN_RUNTIME_LIB})
+          echo "Old LD_LIBRARY_PATH=${LD_LIBRARY_PATH}"
+          echo "ASAN_RUNTIME_LIB=${ASAN_RUNTIME_LIB}"
+          echo "SAN_RUNTIME_LIBS=${SAN_RUNTIME_LIBS}"
+          # Make sure LD_LIBRARY_PATH includes SAN_RUNTIME_LIBS in subsequent steps
+          echo "LD_LIBRARY_PATH=${SAN_RUNTIME_LIBS}" >> $GITHUB_ENV
           mkdir build && pushd build
           cmake .. -G Ninja \
             -DCMAKE_CXX_COMPILER=clang++ \
@@ -246,15 +254,14 @@ jobs:
             # Based on https://stackoverflow.com/questions/47021422/how-to-enable-address-sanitizer-for-multiple-c-binaries,
             # this should avoid undefined asan symbols when tests launched via
             # `python` load sanitized nmodl .so files.
-            export LD_PRELOAD=$(clang++ -print-file-name=libclang_rt.asan-x86_64.so)
+            #export LD_PRELOAD=$(clang++ -print-file-name=libclang_rt.asan-x86_64.so)
             export ASAN_OPTIONS=detect_stack_use_after_return=1
             #export ASAN_SYMBOLIZER_PATH=$(command -v llvm-symbolizer-12)
-          elif [[ "${{matrix.sanitizer}}" == "undefined" ]]; then
+            #elif [[ "${{matrix.sanitizer}}" == "undefined" ]]; then
             # Didn't find a good source for this, but...maybe it'll work.
             # All of this is "just" to let non-sanitized Python load sanitized NMODL libraries.
-            export LD_PRELOAD=$(clang++ -print-file-name=libclang_rt.ubsan_standalone-x86_64.so)
+            #export LD_PRELOAD=$(clang++ -print-file-name=libclang_rt.ubsan_standalone-x86_64.so)
           fi
-          ctest --output-on-failure -T Test
           ctest -T Test --output-on-failure > >(tee test.stdout) 2> >(tee test.stderr >&2)
           ls -l test.stdout test.stderr
           cat test.stderr
