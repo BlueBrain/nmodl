@@ -269,7 +269,9 @@ jobs:
           # All of this is "just" to let non-sanitized Python load sanitized NMODL libraries.
           #export LD_PRELOAD=$(clang++ -print-file-name=libclang_rt.ubsan_standalone-x86_64.so)
           #fi
-          ctest -T Test --output-on-failure > >(tee test.stdout) 2> >(tee test.stderr >&2)
+          # Always succeed for the sake of ccache...
+          ctest -T Test -VV > >(tee test.stdout) 2> >(tee test.stderr >&2) || true
+          ls
           ls -l test.stdout test.stderr
           cat test.stderr
 
