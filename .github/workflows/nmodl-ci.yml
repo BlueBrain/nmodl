@@ -170,12 +170,12 @@ jobs:
             python3-dev python3-pip
           # Make clang++ and llvm-symbolizer point at clang/llvm-12
           which clang++ clang++-12 llvm-symbolizer llvm-symbolizer-12 || true
-          ls -l $(command -v clang++) $(command -v llvm-symbolizer) || true
+          ls -l $(command -v clang++) $(command -v llvm-symbolizer) $(readlink $(command -v clang++)) $(readlink $(command -v llvm-symbolizer)) || true
           sudo update-alternatives \
             --install /usr/bin/clang++          clang++         /usr/bin/clang++-12 20 \
             --slave   /usr/bin/llvm-symbolizer  llvm-symbolizer /usr/bin/llvm-symbolizer-12
           which clang++ clang++-12 llvm-symbolizer llvm-symbolizer-12 || true
-          ls -l $(command -v clang++) $(command -v llvm-symbolizer) || true
+          ls -l $(command -v clang++) $(command -v llvm-symbolizer) $(readlink $(command -v clang++)) $(readlink $(command -v llvm-symbolizer)) || true
         shell: bash
 
       - name: Set up Python3
