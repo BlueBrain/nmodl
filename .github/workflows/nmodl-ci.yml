@@ -58,7 +58,7 @@ jobs:
       - name: Install Python3 dependencies
         run: |
           pip3 install -U pip setuptools scikit-build Jinja2 PyYAML pytest \
-            'sympy>=1.3' 'cmake-format==0.6.13'
+            'sympy>=1.3' 'cmake-format==0.6.13' 
           
       - uses: actions/checkout@v2
 
