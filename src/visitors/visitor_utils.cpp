@@ -246,9 +246,12 @@ std::pair<std::string, std::unordered_set<std::string>> statement_dependencies(
         return {key, out};
     }
 
-    key = to_nmodl(lhs);
-    key.erase(std::remove(key.begin(), key.end(), '\''),
-              key.end());  // we want to match derivatives and variables
+    if (lhs->is_indexed_name()) {
+        auto index_name_node = std::dynamic_pointer_cast<ast::IndexedName>(lhs);
+        key = get_node_with_index(*index_name_node);
+    } else {
+        key = to_nmodl(lhs);
+    }
     visitor::AstLookupVisitor lookup_visitor;
     lookup_visitor.lookup(*rhs, ast::AstNodeType::VAR_NAME);
     auto rhs_nodes = lookup_visitor.get_nodes();
@@ -258,6 +261,10 @@ std::pair<std::string, std::unordered_set<std::string>> statement_dependencies(
 
 
     return {key, out};
+}
+
+std::string get_node_with_index(const ast::IndexedName& node) {
+    return node.get_node_name() + "[" + to_nmodl(node.get_length()) + "]";
 }
 
 }  // namespace nmodl

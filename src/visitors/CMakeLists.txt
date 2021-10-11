@@ -40,6 +40,8 @@ set(VISITOR_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/sympy_replace_solutions_visitor.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/sympy_replace_solutions_visitor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/symtab_visitor_helper.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/test_visitor.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/test_visitor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/units_visitor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/units_visitor.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/var_usage_visitor.cpp

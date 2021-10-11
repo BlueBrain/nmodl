@@ -124,5 +124,6 @@ std::pair<std::string, std::unordered_set<std::string>> statement_dependencies(
     const std::shared_ptr<ast::Expression>& lhs,
     const std::shared_ptr<ast::Expression>& rhs);
 
+std::string get_node_with_index(const ast::IndexedName& node);
 
 }  // namespace nmodl
