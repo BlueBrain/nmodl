@@ -9,20 +9,21 @@
 
 /**
  * \file
- * \brief \copybrief nmodl::visitor::TestVisitor
+ * \brief \copybrief nmodl::visitor::IndexedNameVisitor
  */
 
-#include <sstream>
 #include <string>
-#include <utility>
-#include <vector>
+#include <unordered_set>
 
+#include "ast/diff_eq_expression.hpp"
+#include "ast/indexed_name.hpp"
+#include "ast/program.hpp"
 #include "visitors/ast_visitor.hpp"
 
 namespace nmodl {
 namespace visitor {
 
-class TestVisitor: public AstVisitor {
+class IndexedNameVisitor: public AstVisitor {
   private:
     std::string indexed_name;
     std::pair<std::string, std::unordered_set<std::string>> dependencies;
@@ -32,7 +33,7 @@ class TestVisitor: public AstVisitor {
     /// \{
 
     /// Default constructor
-    TestVisitor() = default;
+    IndexedNameVisitor() = default;
 
     /// \}
 
