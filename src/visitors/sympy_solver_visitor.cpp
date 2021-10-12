@@ -418,7 +418,12 @@ void SympySolverVisitor::visit_diff_eq_expression(ast::DiffEqExpression& node) {
     check_expr_statements_in_same_block();
 
     const auto node_as_nmodl = to_nmodl_for_sympy(node);
-    auto diffeq_solver = pywrap::EmbeddedPythonLoader::get_instance().api()->create_des_executor();
+    const auto deleter = [](nmodl::pybind_wrappers::DiffeqSolverExecutor* ptr) {
+        pywrap::EmbeddedPythonLoader::get_instance().api()->destroy_des_executor(ptr);
+    };
+    std::unique_ptr<nmodl::pybind_wrappers::DiffeqSolverExecutor, decltype(deleter)> diffeq_solver{
+        pywrap::EmbeddedPythonLoader::get_instance().api()->create_des_executor(), deleter};
+
     diffeq_solver->node_as_nmodl = node_as_nmodl;
     diffeq_solver->dt_var = codegen::naming::NTHREAD_DT_VARIABLE;
     diffeq_solver->vars = vars;
@@ -462,7 +467,6 @@ void SympySolverVisitor::visit_diff_eq_expression(ast::DiffEqExpression& node) {
     logger->debug("SympySolverVisitor :: -> solution: {}", solution);
 
     auto exception_message = diffeq_solver->exception_message;
-    pywrap::EmbeddedPythonLoader::get_instance().api()->destroy_des_executor(diffeq_solver);
     if (!exception_message.empty()) {
         logger->warn("SympySolverVisitor :: python exception: " + exception_message);
         return;
