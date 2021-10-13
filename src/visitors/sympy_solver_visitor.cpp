@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (C) 2018-2019 Blue Brain Project
+ * Copyright (C) 2018-2021 Blue Brain Project
  *
  * This file is part of NMODL distributed under the terms of the GNU
  * Lesser General Public License. See top-level LICENSE file for details.
@@ -325,7 +325,6 @@ void SympySolverVisitor::solve_linear_system(const std::vector<std::string>& pre
     }
     // find out where to insert solutions in statement block
     const auto& statements = block_with_expression_statements->get_statements();
-    auto it = get_solution_location_iterator(statements);
     if (small_system) {
         // for small number of state vars, linear solver
         // directly returns solution by solving symbolically at compile time
