@@ -72,7 +72,7 @@ jobs:
   - script: |
       export PATH=$(pwd)/$CMAKE_PKG/bin:/home/vsts/.local/bin:$PATH
       export CXX='g++-8'
-      git clone --recursive --shallow-submodules https://github.com/neuronsimulator/nrn.git
+      git clone --recursive --single-branch --shallow-submodules https://github.com/neuronsimulator/nrn.git
       mkdir nrn/build
       cd nrn/build
       cmake --version
@@ -149,7 +149,7 @@ jobs:
   - script: |
       export PATH=$(pwd)/$CMAKE_PKG/bin:/home/vsts/.local/bin:$PATH
       export CXX='g++-8'
-      git clone --recursive --shallow-submodules https://github.com/neuronsimulator/nrn.git
+      git clone --single-branch --recursive --shallow-submodules https://github.com/neuronsimulator/nrn.git
       mkdir nrn/build
       cd nrn/build
       cmake --version
