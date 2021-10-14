@@ -1,0 +1,133 @@
+name: NMODL CI
+
+concurrency:
+  group: ${{ github.workflow }}#${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  push:
+    branches: 
+      - master
+      - release/**
+  pull_request:
+    branches:
+      - master
+      - release/**
+
+env:
+  CTEST_PARALLEL_LEVEL: 1
+  CMAKE_BUILD_PARALLEL_LEVEL: 3
+  DEFAULT_PY_VERSION: 3.8
+  DESIRED_CMAKE_VERSION: 3.15.0
+
+jobs:
+  ci:
+    runs-on: ${{ matrix.os }}
+    name: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ ubuntu-18.04, macos-10.15, ubuntu-20.04, macos-11 ]
+      fail-fast: true
+
+    steps:
+
+      - name: Setup cmake
+        uses: jwlawson/actions-setup-cmake@v1.4
+        with:
+          cmake-version: ${{ env.DESIRED_CMAKE_VERSION }}
+          
+      - name: Install homebrew packages
+        if: startsWith(matrix.os, 'macOS')
+        run: |
+          brew install ccache coreutils bison boost clang-format flex ninja
+          echo /usr/local/opt/flex/bin:/usr/local/opt/bison/bin >> $GITHUB_PATH
+        shell: bash
+
+      - name: Install apt packages
+        if: startsWith(matrix.os, 'ubuntu')
+        run: |
+          sudo apt-get install bison ccache flex libfl-dev ninja-build python3-dev python3-pip
+        shell: bash
+
+      - name: Set up Python3
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+        env:
+          PYTHON_VERSION:  ${{ env.DEFAULT_PY_VERSION }}
+       
+      - name: Install Python3 dependencies
+        run: |
+          pip3 install -U pip setuptools scikit-build Jinja2 PyYAML pytest \
+            'sympy>=1.3,<1.9' 'cmake-format==0.6.13'
+          
+      - uses: actions/checkout@v2
+
+      - name: Configure
+        shell: bash
+        working-directory: ${{runner.workspace}}/nmodl
+        run:  |
+          echo "------- Configure -------"
+          mkdir build && pushd build
+          cmake .. -G Ninja \
+            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+            -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+            -DPYTHON_EXECUTABLE=$(which python3) \
+            -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR \
+            -DNMODL_FORMATTING:BOOL=ON
+        env:
+          INSTALL_DIR: ${{ runner.workspace }}/install
+
+      - name: Formatting
+        shell: bash
+        working-directory: ${{runner.workspace}}/nmodl/build
+        run:  |
+          echo "------- Check formatting -------"
+          status=0 # Check both clang and cmake formatting before exiting.
+          if ! cmake --build . --target check-cmake-format; then status=1; fi
+          if ! cmake --build . --target check-clang-format; then status=1; fi
+          exit ${status}
+
+      - name: Restore compiler cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ${{runner.workspace}}/ccache
+          key: ${{matrix.os}}-${{github.ref}}-${{github.sha}}
+          restore-keys: |
+            ${{matrix.os}}-${{github.ref}}-
+            ${{matrix.os}}-
+
+      - name: Build, Test and Install
+        shell: bash
+        working-directory: ${{runner.workspace}}/nmodl/build
+        env:
+          CCACHE_DIR: ${{runner.workspace}}/ccache
+        run:  |
+          if ccache --version | grep -E '^ccache version 4\.(4|4\.1)$'
+          then
+            echo "------- Disable ccache direct mode -------"
+            # https://github.com/ccache/ccache/issues/935
+            export CCACHE_NODIRECT=1
+          fi
+          echo "------- Building -------"
+          ccache -z
+          # Older versions don't support -v (verbose)
+          ccache -sv || ccache -s
+          cmake --build .
+          ccache -sv || ccache -s
+
+          echo "------- Testing -------"
+          ctest --output-on-failure
+
+          echo "------- Installing -------"
+          cmake --build . --target install
+
+      # This step will set up an SSH connection on tmate.io for live debugging.
+      # To enable it, you have to: 
+      #   * add 'live-debug-tests' to your PR title
+      #   * push something to your PR branch (note that just re-running disregards the title update)
+      - name: live debug session on failure (manual steps required, check `nmodl-ci.yml`)
+        if: failure() && contains(github.event.pull_request.title, 'live-debug-tests')
+        uses: mxschmitt/action-tmate@v3
+        timeout-minutes: 60
