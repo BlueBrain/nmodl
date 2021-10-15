@@ -1,7 +1,7 @@
 var classnmodl_1_1parser_1_1diffeq_1_1_diff_eq_context =
 [
     [ "DiffEqContext", "classnmodl_1_1parser_1_1diffeq_1_1_diff_eq_context.html#a96f5b7ca4e6a5d550c9ed9f768a00e28", null ],
-    [ "DiffEqContext", "classnmodl_1_1parser_1_1diffeq_1_1_diff_eq_context.html#ad367f2e0d156bfcc892a73a1b265bbbc", null ],
+    [ "DiffEqContext", "classnmodl_1_1parser_1_1diffeq_1_1_diff_eq_context.html#a6deba0d7cd84d97f8e77ae6d0886b5ea", null ],
     [ "cvode_deriv", "classnmodl_1_1parser_1_1diffeq_1_1_diff_eq_context.html#ae54e71ef0da95411bf97f69e456da2d7", null ],
     [ "cvode_eqnrhs", "classnmodl_1_1parser_1_1diffeq_1_1_diff_eq_context.html#ab8b24b7a7cc1c4775723b7c4f67dc650", null ],
     [ "get_cnexp_solution", "classnmodl_1_1parser_1_1diffeq_1_1_diff_eq_context.html#ad3bb5bd06ff94e697110d7305c153bc9", null ],
@@ -16,7 +16,6 @@ var classnmodl_1_1parser_1_1diffeq_1_1_diff_eq_context =
     [ "deriv_invalid", "classnmodl_1_1parser_1_1diffeq_1_1_diff_eq_context.html#a5f210f7ba5f650b06a5d3862764d068a", null ],
     [ "eqn_invalid", "classnmodl_1_1parser_1_1diffeq_1_1_diff_eq_context.html#a2b5025d8eb7fa16fa9b6097ff636caac", null ],
     [ "method", "classnmodl_1_1parser_1_1diffeq_1_1_diff_eq_context.html#a0a5a82b0c53dd01eb76f88f5178cd326", null ],
-    [ "order", "classnmodl_1_1parser_1_1diffeq_1_1_diff_eq_context.html#a31f474d53250780be18a4a4e938ef8fe", null ],
     [ "rhs", "classnmodl_1_1parser_1_1diffeq_1_1_diff_eq_context.html#a097571cfede2e56e07c14f67da6d023d", null ],
     [ "solution", "classnmodl_1_1parser_1_1diffeq_1_1_diff_eq_context.html#a0e34a718990b451f9d3ee9c3752532ed", null ],
     [ "state", "classnmodl_1_1parser_1_1diffeq_1_1_diff_eq_context.html#a5ba3d149c3f2dff8337b344bc4db6895", null ]

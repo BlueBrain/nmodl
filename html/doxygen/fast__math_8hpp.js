@@ -11,7 +11,7 @@ var fast__math_8hpp =
     [ "log10", "fast__math_8hpp.html#a4293aad368133d946251c19dd25186db", null ],
     [ "log10", "fast__math_8hpp.html#adb2596369b022b0d138c7f7c34a97724", null ],
     [ "sp2uint32", "fast__math_8hpp.html#ae828e426613260ea759a99fa82cc557c", null ],
-    [ "uint642dp", "fast__math_8hpp.html#a653e29796b053db678017f83e39cca29", null ],
+    [ "uint642dp", "fast__math_8hpp.html#a251e872f7b2b2d735b4b631452fa5273", null ],
     [ "vexp", "fast__math_8hpp.html#a3a70f8615f2ac179cd96f02bdd20a1e7", null ],
     [ "vexp", "fast__math_8hpp.html#a6660a18354014bd51134ab2f6d8c8d57", null ],
     [ "vexpm1", "fast__math_8hpp.html#a6f984523c0700d6fcb347a823dfd29df", null ],

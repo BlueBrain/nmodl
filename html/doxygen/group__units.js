@@ -1,10 +1,9 @@
 var group__units =
 [
     [ "UnitLexer", "classnmodl_1_1parser_1_1_unit_lexer.html", [
-      [ "UnitLexer", "group__units.html#gad2c8946df6c6c4673f785cf8196fe5f3", null ],
+      [ "UnitLexer", "group__units.html#ga141975968d2f0eef8cfc36d80e8962c8", null ],
       [ "~UnitLexer", "group__units.html#gabab997408892d209edc2e6207bcf6b3a", null ],
       [ "next_token", "group__units.html#ga5beb2f005efacceb06427827ef45bf15", null ],
-      [ "driver", "group__units.html#ga442d255c86b44541b9ecbdcecff6423a", null ],
       [ "loc", "group__units.html#gacf73317c537bff91a6631c0c4f4cded0", null ]
     ] ],
     [ "UnitDriver", "classnmodl_1_1parser_1_1_unit_driver.html", [
@@ -88,9 +87,8 @@ var group__units =
     [ "set_verbose", "group__units.html#ga7ffa76ac1fa5595a4aa1f0f703b34717", null ],
     [ "UnitDriver", "group__units.html#gaaae2d7f1693c0e7abc23003e753d65ec", null ],
     [ "UnitDriver", "group__units.html#gae0d4c7dbd75815ee53391809a8dac74d", null ],
-    [ "UnitLexer", "group__units.html#gad2c8946df6c6c4673f785cf8196fe5f3", null ],
+    [ "UnitLexer", "group__units.html#ga141975968d2f0eef8cfc36d80e8962c8", null ],
     [ "~UnitLexer", "group__units.html#gabab997408892d209edc2e6207bcf6b3a", null ],
-    [ "driver", "group__units.html#ga442d255c86b44541b9ecbdcecff6423a", null ],
     [ "lexer", "group__units.html#ga20d9e1e26895ee030dff6ddb27124548", null ],
     [ "loc", "group__units.html#gacf73317c537bff91a6631c0c4f4cded0", null ],
     [ "MAX_DIMS", "group__units.html#gac26c7781e0924f73bac6a856f2c80217", null ],

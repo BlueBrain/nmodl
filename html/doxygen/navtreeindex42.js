@@ -1,6 +1,5 @@
 var NAVTREEINDEX42 =
 {
-"destructor__block_8hpp_source.html":[4,0,0,0,0,0,0,29],
 "diff__eq__expression_8hpp.html":[4,0,0,0,0,0,0,30],
 "diff__eq__expression_8hpp.html#a5138bb32aafcf794cb4e4630b228684a":[4,0,0,0,0,0,0,30,0],
 "diff__eq__expression_8hpp_source.html":[4,0,0,0,0,0,0,30],
@@ -119,6 +118,7 @@ var NAVTREEINDEX42 =
 "fast__math_8hpp.html#a1bd9eff08c3104fde74f0e87cfaf60ec":[4,0,1,1,19,21],
 "fast__math_8hpp.html#a1c7992725db7ba68a5b63b14e9ad2391":[4,0,1,1,19,19],
 "fast__math_8hpp.html#a23d477efaea5f10766969a599c1d02b7":[4,0,1,1,19,31],
+"fast__math_8hpp.html#a251e872f7b2b2d735b4b631452fa5273":[4,0,1,1,19,11],
 "fast__math_8hpp.html#a2681deaab3272127fb4c6ff7017b26f9":[4,0,1,1,19,7],
 "fast__math_8hpp.html#a34da4c0ee645f13f6d36d98c211a3e18":[4,0,1,1,19,34],
 "fast__math_8hpp.html#a3a70f8615f2ac179cd96f02bdd20a1e7":[4,0,1,1,19,12],
@@ -129,7 +129,6 @@ var NAVTREEINDEX42 =
 "fast__math_8hpp.html#a4a499ac3d238da798b3b63116f460b9b":[4,0,1,1,19,1],
 "fast__math_8hpp.html#a4a87fcd5ea3fea45572ead630ef989ec":[4,0,1,1,19,17],
 "fast__math_8hpp.html#a5dfc0f9c02d95462af09231bc15d690f":[4,0,1,1,19,23],
-"fast__math_8hpp.html#a653e29796b053db678017f83e39cca29":[4,0,1,1,19,11],
 "fast__math_8hpp.html#a6660a18354014bd51134ab2f6d8c8d57":[4,0,1,1,19,13],
 "fast__math_8hpp.html#a6a001efd16dfb8ed6a5eadcfadddeeda":[4,0,1,1,19,29],
 "fast__math_8hpp.html#a6acfb0d0667999676b980426c8cad72f":[4,0,1,1,19,20],
@@ -232,8 +231,8 @@ var NAVTREEINDEX42 =
 "functions_e.html":[3,3,0,4],
 "functions_enum.html":[3,3,4],
 "functions_f.html":[3,3,0,5],
-"functions_func.html":[3,3,1,0],
 "functions_func.html":[3,3,1],
+"functions_func.html":[3,3,1,0],
 "functions_func_0x7e.html":[3,3,1,23],
 "functions_func_b.html":[3,3,1,1],
 "functions_func_c.html":[3,3,1,2],
@@ -249,5 +248,6 @@ var NAVTREEINDEX42 =
 "functions_func_m.html":[3,3,1,12],
 "functions_func_n.html":[3,3,1,13],
 "functions_func_o.html":[3,3,1,14],
-"functions_func_p.html":[3,3,1,15]
+"functions_func_p.html":[3,3,1,15],
+"functions_func_q.html":[3,3,1,16]
 };

@@ -1,7 +1,7 @@
 var searchData=
 [
   ['u',['U',['../namespacenmodl_1_1visitor.html#a68c860c43f4bea4e1af16c016d2959f9a4c614360da93c0a041b22e537de151eb',1,'nmodl::visitor']]],
-  ['uint642dp',['uint642dp',['../namespacenmodl_1_1fast__math.html#a653e29796b053db678017f83e39cca29',1,'nmodl::fast_math::uint642dp()'],['../fast__math_8ispc.html#ad09840614184cdb38d2af2cf903bd8b8',1,'uint642dp():&#160;fast_math.ispc']]],
+  ['uint642dp',['uint642dp',['../namespacenmodl_1_1fast__math.html#a251e872f7b2b2d735b4b631452fa5273',1,'nmodl::fast_math::uint642dp()'],['../fast__math_8ispc.html#ad09840614184cdb38d2af2cf903bd8b8',1,'uint642dp():&#160;fast_math.ispc']]],
   ['unary_5fexpression',['UNARY_EXPRESSION',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a7f669fa1f9c86cf5c69c0b542529cb46',1,'nmodl::ast']]],
   ['unary_5fexpression_2ehpp',['unary_expression.hpp',['../unary__expression_8hpp.html',1,'']]],
   ['unary_5foperator',['UNARY_OPERATOR',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a595ffcc42d69b9b31afdd63557ee5d1e',1,'nmodl::ast']]],
@@ -46,7 +46,7 @@ var searchData=
   ['unitdef',['UnitDef',['../classnmodl_1_1ast_1_1_unit_def.html',1,'nmodl::ast::UnitDef'],['../classnmodl_1_1ast_1_1_unit_def.html#a4d5d2c36689b18646064b29281ff5bf3',1,'nmodl::ast::UnitDef::UnitDef(Unit *unit1, Unit *unit2)'],['../classnmodl_1_1ast_1_1_unit_def.html#a8d7ed4dfd58dfd2a40af17dd69a4ac73',1,'nmodl::ast::UnitDef::UnitDef(const std::shared_ptr&lt; Unit &gt; &amp;unit1, const std::shared_ptr&lt; Unit &gt; &amp;unit2)'],['../classnmodl_1_1ast_1_1_unit_def.html#aba854818c5321e4bf42ac7a45ece57e3',1,'nmodl::ast::UnitDef::UnitDef(const UnitDef &amp;obj)'],['../classnmodl_1_1ast_1_1_unit_def.html#a4d5d2c36689b18646064b29281ff5bf3',1,'nmodl::ast::UnitDef::UnitDef(Unit *unit1, Unit *unit2)'],['../classnmodl_1_1ast_1_1_unit_def.html#a8d7ed4dfd58dfd2a40af17dd69a4ac73',1,'nmodl::ast::UnitDef::UnitDef(const std::shared_ptr&lt; Unit &gt; &amp;unit1, const std::shared_ptr&lt; Unit &gt; &amp;unit2)'],['../classnmodl_1_1ast_1_1_unit_def.html#aba854818c5321e4bf42ac7a45ece57e3',1,'nmodl::ast::UnitDef::UnitDef(const UnitDef &amp;obj)']]],
   ['unitdefvector',['UnitDefVector',['../group__ast__vec__type.html#gad4b20113f5b065c462077db1ee11fa4e',1,'nmodl::ast']]],
   ['unitdriver',['UnitDriver',['../classnmodl_1_1parser_1_1_unit_driver.html',1,'nmodl::parser::UnitDriver'],['../group__units.html#gaaae2d7f1693c0e7abc23003e753d65ec',1,'nmodl::parser::UnitDriver::UnitDriver()=default'],['../group__units.html#gae0d4c7dbd75815ee53391809a8dac74d',1,'nmodl::parser::UnitDriver::UnitDriver(bool strace, bool ptrace)']]],
-  ['unitlexer',['UnitLexer',['../classnmodl_1_1parser_1_1_unit_lexer.html',1,'nmodl::parser::UnitLexer'],['../group__units.html#gad2c8946df6c6c4673f785cf8196fe5f3',1,'nmodl::parser::UnitLexer::UnitLexer()']]],
+  ['unitlexer',['UnitLexer',['../classnmodl_1_1parser_1_1_unit_lexer.html',1,'nmodl::parser::UnitLexer'],['../group__units.html#ga141975968d2f0eef8cfc36d80e8962c8',1,'nmodl::parser::UnitLexer::UnitLexer()']]],
   ['unit_20implementation',['Unit Implementation',['../group__units.html',1,'']]],
   ['units_2ecpp',['units.cpp',['../src_2units_2units_8cpp.html',1,'(Global Namespace)'],['../test_2unit_2visitor_2units_8cpp.html',1,'(Global Namespace)']]],
   ['units_2ehpp',['units.hpp',['../units_8hpp.html',1,'']]],
