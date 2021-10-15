@@ -195,8 +195,7 @@ jobs:
             SANITIZER_RUNTIME_LIB=$(clang++ -print-file-name=libclang_rt.asan-x86_64.so)
             SANITIZER_FLAGS="-fsanitize=${{matrix.sanitizer}} -fsanitize-address-use-after-scope"
           elif [[ "${{matrix.sanitizer}}" == "undefined" ]]; then
-            # Didn't find a good source for this, but...maybe it'll work.
-            # All of this is "just" to let non-sanitized Python load sanitized NMODL libraries.
+            # This is to let non-sanitized Python load sanitized NMODL libraries.
             SANITIZER_RUNTIME_LIB=$(clang++ -print-file-name=libclang_rt.ubsan_standalone-x86_64.so)
             # NOT: -fsanitize=implicit-conversion
             #      -fsanitize=local-bounds
@@ -218,6 +217,7 @@ jobs:
           export LD_LIBRARY_PATH=${SANITIZER_RUNTIME_DIR}${SANITIZER_RUNTIME_DIR:+:}${LD_LIBRARY_PATH}
           echo "SANITIZER_RUNTIME_LIB=${SANITIZER_RUNTIME_LIB}"
           echo "SANITIZER_RUNTIME_DIR=${SANITIZER_RUNTIME_DIR}"
+          echo "SANITIZER_FLAGS=${SANITIZER_FLAGS}"
           echo "LD_LIBRARY_PATH=${LD_LIBRARY_PATH}"
           mkdir build && pushd build
           cmake .. -G Ninja \
