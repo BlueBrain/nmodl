@@ -274,7 +274,7 @@ jobs:
           echo "------- Testing -------"
           export UBSAN_OPTIONS="print_stacktrace=0:halt_on_error=1"
           export ASAN_OPTIONS="detect_stack_use_after_return=1:check_initialization_order=1"
-          export LSAN_OPTIONS="suppressions=${PWD}/../sanitizers/lsan.supp"
+          export LSAN_OPTIONS="suppressions=${PWD}/../.sanitizers/lsan.supp"
           export LD_PRELOAD="${SANITIZER_RUNTIME_LIB}"
           if [[ "${{matrix.sanitizer}}" == "address" ]]; then
             # Force Python to use plain malloc. This removes a lot of noise...
