@@ -23,10 +23,10 @@
 %define parse.error verbose
 
 /** make a reentrant parser */
-%pure-parser
+%define api.pure
 
 /** parser prefix */
-%name-prefix "Verbatim_"
+%define api.prefix {Verbatim_}
 
 /** enable location tracking */
 %locations
