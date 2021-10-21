@@ -768,8 +768,9 @@ void CodegenCVisitor::update_index_semantics() {
         info.semantics.emplace_back(index++, naming::POINT_PROCESS_SEMANTIC, 1);
     }
     for (const auto& ion: info.ions) {
-        info.semantics.emplace_back(index, ion.name + "_ion", ion.reads.size());
-        index += ion.reads.size();
+        for (auto i = 0; i < ion.reads.size(); ++i) {
+            info.semantics.emplace_back(index++, ion.name + "_ion", 1);
+        }
         for (const auto& var: ion.writes) {
             /// add if variable is not present in the read list
             if (std::find(ion.reads.begin(), ion.reads.end(), var) == ion.reads.end()) {
