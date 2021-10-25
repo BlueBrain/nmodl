@@ -61,7 +61,7 @@ std::string VerbatimVarRenameVisitor::rename_variable(const std::string& name) {
         rename_plausible = true;
     }
     if (name.find(ION_PREFIX) == 0) {
-        new_name.erase(0, 5);
+        new_name.erase(0, 1);
         rename_plausible = true;
     }
     if (rename_plausible) {
