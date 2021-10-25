@@ -56,7 +56,7 @@ INCLUDE "var_init.inc"
 
 DERIVATIVE state {
     VERBATIM
-    _ion_cai = 2 * _ion_cai
+    cai = 2 * _ion_cai;
     ENDVERBATIM
 	drive_channel =  - (10000) * ica / (2 * FARADAY * depth)
 	if (drive_channel <= 0.) { drive_channel = 0.  }   : cannot pump inward 
