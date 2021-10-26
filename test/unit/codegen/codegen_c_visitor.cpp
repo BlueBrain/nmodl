@@ -12,8 +12,8 @@
 #include "parser/nmodl_driver.hpp"
 #include "test/unit/utils/test_utils.hpp"
 #include "visitors/kinetic_block_visitor.hpp"
+#include "visitors/solve_block_visitor.hpp"
 #include "visitors/steadystate_visitor.hpp"
-#include "visitors/sympy_solver_visitor.hpp"
 #include "visitors/symtab_visitor.hpp"
 
 using namespace nmodl;
@@ -40,8 +40,7 @@ std::shared_ptr<CodegenCVisitor> create_c_visitor(const std::string& text,
         SymtabVisitor{}.visit_program(*ast);
         SteadystateVisitor{}.visit_program(*ast);
         SymtabVisitor{}.visit_program(*ast);
-        SympySolverVisitor{}.visit_program(*ast);
-        SymtabVisitor{true}.visit_program(*ast);
+        SolveBlockVisitor{}.visit_program(*ast);
     }
 
     /// create C code generation visitor
@@ -255,10 +254,10 @@ SCENARIO("Check global variable setup", "[codegen][global_variables]") {
             }
             STATE { c1 c2 }
             BREAKPOINT {
-                SOLVE kin METHOD sparse
+                SOLVE kin METHOD cnexp
             }
             INITIAL {
-                SOLVE kin STEADYSTATE sparse
+                SOLVE kin STEADYSTATE cnexp
             }
             KINETIC kin {
                 ~ c1 <-> c2 (a1, b1)
@@ -277,8 +276,6 @@ SCENARIO("Check global variable setup", "[codegen][global_variables]") {
                     na8st_global.dlist1[0] = 2;
                     na8st_global.slist1[1] = 1;
                     na8st_global.dlist1[1] = 3;
-                    na8st_global.c10 = 0.0;
-                    na8st_global.c20 = 0.0;
 
                     setup_done = 1;
                 }
