@@ -264,11 +264,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
     std::string float_type = codegen::naming::DEFAULT_FLOAT_TYPE;
 
     /**
-     * All ast information for code generation
-     */
-    codegen::CodegenInfo info;
-
-    /**
      * Code printer object for target (C, CUDA, ispc, ...)
      */
     std::shared_ptr<CodePrinter> target_printer;
@@ -1176,6 +1171,13 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
+     * Print the setup method that initializes all global variables
+     *
+     */
+    void print_global_variable_setup();
+
+
+    /**
      * Print the pragma annotation to create global variables on the device
      *
      * \note This is not used for the C backend
@@ -1713,6 +1715,11 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
   public:
     /**
+     * All ast information for code generation
+     */
+    codegen::CodegenInfo info;
+
+    /**
      * \brief Constructs the C code generator visitor
      *
      * This constructor instantiates an NMODL C code generator and allows writing generated code
@@ -1896,12 +1903,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * Print the structure that wraps all range and int variables required for the NMODL
      */
     void print_mechanism_range_var_structure();
-
-    /**
-     * Print the setup method that initializes all global variables
-     *
-     */
-    void print_global_variable_setup();
 
     /**
      * Print the function that initialize instance structure
