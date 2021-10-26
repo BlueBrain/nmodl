@@ -11,6 +11,9 @@
 #include "codegen/codegen_c_visitor.hpp"
 #include "parser/nmodl_driver.hpp"
 #include "test/unit/utils/test_utils.hpp"
+#include "visitors/kinetic_block_visitor.hpp"
+#include "visitors/steadystate_visitor.hpp"
+#include "visitors/sympy_solver_visitor.hpp"
 #include "visitors/symtab_visitor.hpp"
 
 using namespace nmodl;
@@ -21,13 +24,25 @@ using nmodl::parser::NmodlDriver;
 using nmodl::test_utils::reindent_text;
 
 /// Helper for creating C codegen visitor
-std::shared_ptr<CodegenCVisitor> create_c_visitor(const std::string& text, std::stringstream& ss) {
+std::shared_ptr<CodegenCVisitor> create_c_visitor(const std::string& text,
+                                                  std::stringstream& ss,
+                                                  bool apply_extra_visitors = false) {
     /// parse mod file and create AST
     NmodlDriver driver;
     const auto& ast = driver.parse_string(text);
 
     /// construct symbol table
     SymtabVisitor().visit_program(*ast);
+
+    /// more visitors are required for the SH_na8st.mod test below to work.
+    if (apply_extra_visitors) {
+        KineticBlockVisitor{}.visit_program(*ast);
+        SymtabVisitor{}.visit_program(*ast);
+        SteadystateVisitor{}.visit_program(*ast);
+        SymtabVisitor{}.visit_program(*ast);
+        SympySolverVisitor{}.visit_program(*ast);
+        SymtabVisitor{true}.visit_program(*ast);
+    }
 
     /// create C code generation visitor
     auto cv = std::make_shared<CodegenCVisitor>("temp.mod", ss, "double", false);
@@ -40,6 +55,15 @@ std::string get_instance_var_setup_function(std::string& nmodl_text) {
     std::stringstream ss;
     auto cvisitor = create_c_visitor(nmodl_text, ss);
     cvisitor->print_instance_variable_setup();
+    return reindent_text(ss.str());
+}
+
+std::string get_global_variables_setup_function(std::string const& nmodl_text) {
+    std::stringstream ss;
+    auto cvisitor = create_c_visitor(nmodl_text, ss, true);
+    // This is needed for `print_global_variable_setup()` to print the correct suffixes.
+    cvisitor->print_mechanism_global_var_structure();
+    cvisitor->print_global_variable_setup();
     return reindent_text(ss.str());
 }
 
@@ -219,6 +243,48 @@ SCENARIO("Check instance variable definition order", "[codegen][var_order]") {
             auto expected = reindent_text(generated_code);
             auto result = get_instance_var_setup_function(nmodl_text);
             REQUIRE(result.find(expected) != std::string::npos);
+        }
+    }
+}
+
+SCENARIO("Check global variable setup", "[codegen][global_variables]") {
+    GIVEN("SH_na8st.mod: modfile from reduced_dentate model") {
+        std::string const nmodl_text{R"(
+            NEURON {
+                SUFFIX na8st
+            }
+            STATE { c1 c2 }
+            BREAKPOINT {
+                SOLVE kin METHOD sparse
+            }
+            INITIAL {
+                SOLVE kin STEADYSTATE sparse
+            }
+            KINETIC kin {
+                ~ c1 <-> c2 (a1, b1)
+            }
+        )"};
+        THEN("Correct number of global variables are initialised") {
+            auto const expected = reindent_text(R"(
+                static inline void setup_global_variables()  {
+                    static int setup_done = 0;
+                    if (setup_done) {
+                        return;
+                    }
+                    na8st_global.slist1 = (int*) mem_alloc(2, sizeof(int));
+                    na8st_global.dlist1 = (int*) mem_alloc(2, sizeof(int));
+                    na8st_global.slist1[0] = 0;
+                    na8st_global.dlist1[0] = 2;
+                    na8st_global.slist1[1] = 1;
+                    na8st_global.dlist1[1] = 3;
+                    na8st_global.c10 = 0.0;
+                    na8st_global.c20 = 0.0;
+
+                    setup_done = 1;
+                }
+            )");
+            auto const result = get_global_variables_setup_function(nmodl_text);
+            REQUIRE_THAT(result, Catch::Matchers::Contains(expected));
         }
     }
 }
