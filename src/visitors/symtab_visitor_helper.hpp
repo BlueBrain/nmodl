@@ -125,6 +125,18 @@ void SymtabVisitor::setup_symbol(ast::Node* node, NmodlType property) {
         symbol->set_value(define->get_value()->to_double());
     }
 
+    // if (node->iso_read_ion_var() || node->is_write_ion_var() || node->is_useion()) {
+    //     auto name = std::string("ion_") + node->name();
+    // should we give a parent?
+    //     auto node = std::make_shared<ast::ReadIonVar>(Name(String(std::string("ion_") + node->name())));
+    // auto symbol = create_symbol_for_node(node, <new_property>, under_state_block);
+
+    /// insert might return different symbol if already exist in the same scope
+    // symbol = modsymtab->insert(symbol);
+
+    //     
+    // }
+
     /// visit children, most likely variables are already
     /// leaf nodes, not necessary to visit
     node->visit_children(*this);
