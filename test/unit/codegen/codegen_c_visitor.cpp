@@ -60,13 +60,6 @@ std::string get_instance_var_setup_function(std::string& nmodl_text) {
     return reindent_text(ss.str());
 }
 
-std::string get_global_variables_setup_function(std::string const& nmodl_text) {
-    std::stringstream ss;
-    auto cvisitor = create_c_visitor(nmodl_text, ss, true);
-    cvisitor->print_global_variable_setup();
-    return reindent_text(ss.str());
-}
-
 SCENARIO("Check instance variable definition order", "[codegen][var_order]") {
     GIVEN("cal_mig.mod: USEION variables declared as RANGE") {
         // In the below mod file, the ion variables cai and cao are also
@@ -264,8 +257,10 @@ SCENARIO("Check global variable setup", "[codegen][global_variables]") {
                 ~ c1 <-> c2 (a1, b1)
             }
         )"};
+        std::stringstream ss;
+        auto cvisitor = create_c_visitor(nmodl_text, ss, true);
         THEN("Printing the global variable setup method does not throw") {
-            REQUIRE_NOTHROW(get_global_variables_setup_function(nmodl_text));
+            REQUIRE_NOTHROW(cvisitor->print_global_variable_setup());
         }
     }
 }
