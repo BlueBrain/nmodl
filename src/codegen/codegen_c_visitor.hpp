@@ -1050,6 +1050,12 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
+     * Print the structure that wraps all global variables used in the NMODL
+     */
+    void print_mechanism_global_var_structure();
+
+
+    /**
      * Print structure of ion variables used for local copies
      */
     void print_ion_var_structure();
@@ -1885,11 +1891,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * @return std::string Unique name produced as [original_name]_[random_string]
      */
     std::string find_var_unique_name(const std::string& original_name) const;
-
-    /**
-     * Print the structure that wraps all global variables used in the NMODL
-     */
-    void print_mechanism_global_var_structure();
 
     /**
      * Print the structure that wraps all range and int variables required for the NMODL

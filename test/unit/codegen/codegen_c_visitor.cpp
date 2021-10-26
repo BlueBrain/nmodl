@@ -12,6 +12,7 @@
 #include "parser/nmodl_driver.hpp"
 #include "test/unit/utils/test_utils.hpp"
 #include "visitors/kinetic_block_visitor.hpp"
+#include "visitors/neuron_solve_visitor.hpp"
 #include "visitors/solve_block_visitor.hpp"
 #include "visitors/steadystate_visitor.hpp"
 #include "visitors/symtab_visitor.hpp"
@@ -40,7 +41,9 @@ std::shared_ptr<CodegenCVisitor> create_c_visitor(const std::string& text,
         SymtabVisitor{}.visit_program(*ast);
         SteadystateVisitor{}.visit_program(*ast);
         SymtabVisitor{}.visit_program(*ast);
+        NeuronSolveVisitor{}.visit_program(*ast);
         SolveBlockVisitor{}.visit_program(*ast);
+        SymtabVisitor{true}.visit_program(*ast);
     }
 
     /// create C code generation visitor
@@ -60,8 +63,6 @@ std::string get_instance_var_setup_function(std::string& nmodl_text) {
 std::string get_global_variables_setup_function(std::string const& nmodl_text) {
     std::stringstream ss;
     auto cvisitor = create_c_visitor(nmodl_text, ss, true);
-    // This is needed for `print_global_variable_setup()` to print the correct suffixes.
-    cvisitor->print_mechanism_global_var_structure();
     cvisitor->print_global_variable_setup();
     return reindent_text(ss.str());
 }
@@ -254,34 +255,17 @@ SCENARIO("Check global variable setup", "[codegen][global_variables]") {
             }
             STATE { c1 c2 }
             BREAKPOINT {
-                SOLVE kin METHOD cnexp
+                SOLVE kin METHOD derivimplicit
             }
             INITIAL {
-                SOLVE kin STEADYSTATE cnexp
+                SOLVE kin STEADYSTATE derivimplicit
             }
             KINETIC kin {
                 ~ c1 <-> c2 (a1, b1)
             }
         )"};
-        THEN("Correct number of global variables are initialised") {
-            auto const expected = reindent_text(R"(
-                static inline void setup_global_variables()  {
-                    static int setup_done = 0;
-                    if (setup_done) {
-                        return;
-                    }
-                    na8st_global.slist1 = (int*) mem_alloc(2, sizeof(int));
-                    na8st_global.dlist1 = (int*) mem_alloc(2, sizeof(int));
-                    na8st_global.slist1[0] = 0;
-                    na8st_global.dlist1[0] = 2;
-                    na8st_global.slist1[1] = 1;
-                    na8st_global.dlist1[1] = 3;
-
-                    setup_done = 1;
-                }
-            )");
-            auto const result = get_global_variables_setup_function(nmodl_text);
-            REQUIRE_THAT(result, Catch::Matchers::Contains(expected));
+        THEN("Printing the global variable setup method does not throw") {
+            REQUIRE_NOTHROW(get_global_variables_setup_function(nmodl_text));
         }
     }
 }
