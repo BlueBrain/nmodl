@@ -259,6 +259,7 @@ SCENARIO("Check global variable setup", "[codegen][global_variables]") {
         )"};
         std::stringstream ss;
         auto cvisitor = create_c_visitor(nmodl_text, ss, true);
+        // See https://github.com/BlueBrain/nmodl/issues/736
         THEN("Checking that primes_size and prime_variables_by_order have the expected size") {
             REQUIRE(cvisitor->info.primes_size == 2);
             REQUIRE(cvisitor->info.prime_variables_by_order.size() == 2);
