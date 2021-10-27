@@ -264,6 +264,11 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
     std::string float_type = codegen::naming::DEFAULT_FLOAT_TYPE;
 
     /**
+     * All ast information for code generation
+     */
+    codegen::CodegenInfo info;
+
+    /**
      * Code printer object for target (C, CUDA, ispc, ...)
      */
     std::shared_ptr<CodePrinter> target_printer;
@@ -1714,11 +1719,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
   public:
-    /**
-     * All ast information for code generation
-     */
-    codegen::CodegenInfo info;
-
     /**
      * \brief Constructs the C code generator visitor
      *

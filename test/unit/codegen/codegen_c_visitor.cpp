@@ -11,10 +11,6 @@
 #include "codegen/codegen_c_visitor.hpp"
 #include "parser/nmodl_driver.hpp"
 #include "test/unit/utils/test_utils.hpp"
-#include "visitors/kinetic_block_visitor.hpp"
-#include "visitors/neuron_solve_visitor.hpp"
-#include "visitors/solve_block_visitor.hpp"
-#include "visitors/steadystate_visitor.hpp"
 #include "visitors/symtab_visitor.hpp"
 
 using namespace nmodl;
@@ -25,26 +21,13 @@ using nmodl::parser::NmodlDriver;
 using nmodl::test_utils::reindent_text;
 
 /// Helper for creating C codegen visitor
-std::shared_ptr<CodegenCVisitor> create_c_visitor(const std::string& text,
-                                                  std::stringstream& ss,
-                                                  bool apply_extra_visitors = false) {
+std::shared_ptr<CodegenCVisitor> create_c_visitor(const std::string& text, std::stringstream& ss) {
     /// parse mod file and create AST
     NmodlDriver driver;
     const auto& ast = driver.parse_string(text);
 
     /// construct symbol table
     SymtabVisitor().visit_program(*ast);
-
-    /// more visitors are required for the SH_na8st.mod test below to work.
-    if (apply_extra_visitors) {
-        KineticBlockVisitor{}.visit_program(*ast);
-        SymtabVisitor{}.visit_program(*ast);
-        SteadystateVisitor{}.visit_program(*ast);
-        SymtabVisitor{}.visit_program(*ast);
-        NeuronSolveVisitor{}.visit_program(*ast);
-        SolveBlockVisitor{}.visit_program(*ast);
-        SymtabVisitor{true}.visit_program(*ast);
-    }
 
     /// create C code generation visitor
     auto cv = std::make_shared<CodegenCVisitor>("temp.mod", ss, "double", false);
@@ -236,33 +219,6 @@ SCENARIO("Check instance variable definition order", "[codegen][var_order]") {
             auto expected = reindent_text(generated_code);
             auto result = get_instance_var_setup_function(nmodl_text);
             REQUIRE(result.find(expected) != std::string::npos);
-        }
-    }
-}
-
-SCENARIO("Check global variable setup", "[codegen][global_variables]") {
-    GIVEN("SH_na8st.mod: modfile from reduced_dentate model") {
-        std::string const nmodl_text{R"(
-            NEURON {
-                SUFFIX na8st
-            }
-            STATE { c1 c2 }
-            BREAKPOINT {
-                SOLVE kin METHOD derivimplicit
-            }
-            INITIAL {
-                SOLVE kin STEADYSTATE derivimplicit
-            }
-            KINETIC kin {
-                ~ c1 <-> c2 (a1, b1)
-            }
-        )"};
-        std::stringstream ss;
-        auto cvisitor = create_c_visitor(nmodl_text, ss, true);
-        // See https://github.com/BlueBrain/nmodl/issues/736
-        THEN("Checking that primes_size and prime_variables_by_order have the expected size") {
-            REQUIRE(cvisitor->info.primes_size == 2);
-            REQUIRE(cvisitor->info.prime_variables_by_order.size() == 2);
         }
     }
 }
