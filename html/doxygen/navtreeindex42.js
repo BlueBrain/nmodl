@@ -1,5 +1,6 @@
 var NAVTREEINDEX42 =
 {
+"destructor__block_8hpp_source.html":[4,0,0,0,0,0,0,29],
 "diff__eq__expression_8hpp.html":[4,0,0,0,0,0,0,30],
 "diff__eq__expression_8hpp.html#a5138bb32aafcf794cb4e4630b228684a":[4,0,0,0,0,0,0,30,0],
 "diff__eq__expression_8hpp_source.html":[4,0,0,0,0,0,0,30],
@@ -222,8 +223,8 @@ var NAVTREEINDEX42 =
 "function__table__block_8hpp.html":[4,0,0,0,0,0,0,52],
 "function__table__block_8hpp.html#a7a7b32d2b1034a95edb0c8a0e2a0153b":[4,0,0,0,0,0,0,52,0],
 "function__table__block_8hpp_source.html":[4,0,0,0,0,0,0,52],
-"functions.html":[3,3,0,0],
 "functions.html":[3,3,0],
+"functions.html":[3,3,0,0],
 "functions_0x7e.html":[3,3,0,23],
 "functions_b.html":[3,3,0,1],
 "functions_c.html":[3,3,0,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX42 =
 "functions_func_m.html":[3,3,1,12],
 "functions_func_n.html":[3,3,1,13],
 "functions_func_o.html":[3,3,1,14],
-"functions_func_p.html":[3,3,1,15],
-"functions_func_q.html":[3,3,1,16]
+"functions_func_p.html":[3,3,1,15]
 };

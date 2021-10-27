@@ -97,6 +97,10 @@ $(document).ready(function(){initNavTree('codegen__helper_8cpp.html','');});
 <code>#include &quot;<a class="el" href="program_8hpp_source.html">ast/program.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="codegen__helper__visitor_8hpp_source.html">codegen/codegen_helper_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="nmodl__driver_8hpp_source.html">parser/nmodl_driver.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="kinetic__block__visitor_8hpp_source.html">visitors/kinetic_block_visitor.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="neuron__solve__visitor_8hpp_source.html">visitors/neuron_solve_visitor.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="solve__block__visitor_8hpp_source.html">visitors/solve_block_visitor.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="steadystate__visitor_8hpp_source.html">visitors/steadystate_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="symtab__visitor_8hpp_source.html">visitors/symtab_visitor.hpp</a>&quot;</code><br />
 </div>
 <p><a href="codegen__helper_8cpp_source.html">Go to the source code of this file.</a></p>
@@ -107,6 +111,8 @@ Functions</h2></td></tr>
 <tr class="separator:ab0473102809db24d2b86e92917fd1260"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7d2977f3e5be90d8d19125e3b7c5afdb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="codegen__helper_8cpp.html#a7d2977f3e5be90d8d19125e3b7c5afdb">SCENARIO</a> (&quot;unusual / failing mod files&quot;, &quot;[codegen][var_order]&quot;)</td></tr>
 <tr class="separator:a7d2977f3e5be90d8d19125e3b7c5afdb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af719316d34d460bd5da40c71a23970f3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="codegen__helper_8cpp.html#af719316d34d460bd5da40c71a23970f3">SCENARIO</a> (&quot;Check global variable setup&quot;, &quot;[codegen][global_variables]&quot;)</td></tr>
+<tr class="separator:af719316d34d460bd5da40c71a23970f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="ab0473102809db24d2b86e92917fd1260"></a>
@@ -129,12 +135,12 @@ Functions</h2></td></tr>
 <p>semicolon separated list of variables</p>
 <p>range variables in order of code generation </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__helper_8cpp_source.html#l00024">24</a> of file <a class="el" href="codegen__helper_8cpp_source.html">codegen_helper.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__helper_8cpp_source.html#l00028">28</a> of file <a class="el" href="codegen__helper_8cpp_source.html">codegen_helper.cpp</a>.</p>
 
 </div>
 </div>
 <a id="a7d2977f3e5be90d8d19125e3b7c5afdb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7d2977f3e5be90d8d19125e3b7c5afdb">&#9670;&nbsp;</a></span>SCENARIO()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d2977f3e5be90d8d19125e3b7c5afdb">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -159,7 +165,38 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="codegen__helper_8cpp_source.html#l00055">55</a> of file <a class="el" href="codegen__helper_8cpp_source.html">codegen_helper.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__helper_8cpp_source.html#l00059">59</a> of file <a class="el" href="codegen__helper_8cpp_source.html">codegen_helper.cpp</a>.</p>
+
+</div>
+</div>
+<a id="af719316d34d460bd5da40c71a23970f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af719316d34d460bd5da40c71a23970f3">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">SCENARIO </td>
+          <td>(</td>
+          <td class="paramtype">&quot;Check global variable setup&quot;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&quot;&quot;&#160;</td>
+          <td class="paramname">[codegen][global_variables]&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>construct symbol table and run codegen helper visitor </p>
+
+<p class="definition">Definition at line <a class="el" href="codegen__helper_8cpp_source.html#l00176">176</a> of file <a class="el" href="codegen__helper_8cpp_source.html">codegen_helper.cpp</a>.</p>
 
 </div>
 </div>

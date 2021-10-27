@@ -102,7 +102,7 @@ $(document).ready(function(){initNavTree('classnmodl_1_1visitor_1_1_local_var_re
 <div class="textblock"><p>Visitor to rename local variables conflicting with global scope </p>
 <p>Motivation: During inlining we have to do data-flow-analysis. Consider below example:</p>
 <div class="fragment"><div class="line">NEURON {</div><div class="line">    RANGE tau, beta</div><div class="line">}</div><div class="line"></div><div class="line">DERIVATIVE states() {</div><div class="line">    LOCAL tau</div><div class="line">    ...</div><div class="line">    rates()</div><div class="line">}</div><div class="line"></div><div class="line">PROCEDURE rates() {</div><div class="line">    tau = beta * 0.12 * some_var</div><div class="line">}</div></div><!-- fragment --><p>When rates() will be inlined into states(), local definition of tau will conflict with range variable tau. Hence we can't just copy the statements. Dataflow analysis could be done at the time of inlining. Other way is to run this pass before inlining and pre-rename any local-global variable conflicts. As we are renaming local variables only, it's safe and there are no side effects.</p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000052">Todo:</a></b></dt><dd><ul>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000053">Todo:</a></b></dt><dd><ul>
 <li>Currently we are renaming variables even if there is no inlining candidates. In this case ideally we should not rename. </li>
 </ul>
 </dd></dl>
