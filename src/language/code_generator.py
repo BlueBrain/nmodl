@@ -1,5 +1,5 @@
 # ***********************************************************************
-# Copyright (C) 2018-2019 Blue Brain Project
+# Copyright (C) 2018-2021 Blue Brain Project
 #
 # This file is part of NMODL distributed under the terms of the GNU
 # Lesser General Public License. See top-level LICENSE file for details.
@@ -154,33 +154,19 @@ class CodeGenerator(
         node_hpp_tpl = self.jinja_templates_dir / "ast" / "node.hpp"
         # special template only included by other templates
         node_class_tpl = self.jinja_templates_dir / "ast" / "node_class.template"
-        node_class_inline_def_tpl = self.jinja_templates_dir / "ast" / "node_class_inline_definition.template"
-        # Jinja templates that should be ignored
-        ignored_templates = {node_class_tpl}
         # Additional dependencies Path -> [Path, ...]
         extradeps = collections.defaultdict(
             list,
             {
-                self.jinja_templates_dir / "ast" / "all.hpp": [node_class_tpl, node_class_inline_def_tpl],
-                node_hpp_tpl: [node_class_tpl, node_class_inline_def_tpl],
+                node_hpp_tpl: [node_class_tpl],
             },
         )
-        # Additional Jinja context set when rendering the template
-        extracontext = collections.defaultdict(
-            dict,
-            {
-                self.jinja_templates_dir / "ast" / "all.hpp": dict(render_ast_all=True)
-            }
-        )
-
         tasks = []
         for path in self.jinja_templates_dir.iterdir():
             sub_dir = PurePath(path).name
             # create output directory if missing
             (self.base_dir / sub_dir).mkdir(parents=True, exist_ok=True)
             for filepath in path.glob("*.[ch]pp"):
-                if filepath in ignored_templates:
-                    continue
                 if filepath == node_hpp_tpl:
                     # special treatment for this template.
                     # generate one C++ header per AST node type
@@ -189,7 +175,7 @@ class CodeGenerator(
                             app=self,
                             input=filepath,
                             output=self.base_dir / node.cpp_header,
-                            context=dict(node=node, **extracontext[filepath]),
+                            context=dict(node=node),
                             extradeps=extradeps[filepath],
                         )
                         tasks.append(task)
@@ -199,7 +185,7 @@ class CodeGenerator(
                         app=self,
                         input=filepath,
                         output=self.base_dir / sub_dir / filepath.name,
-                        context=dict(nodes=self.nodes, node_info=node_info, **extracontext[filepath]),
+                        context=dict(nodes=self.nodes, node_info=node_info),
                         extradeps=extradeps[filepath],
                     )
                     tasks.append(task)
