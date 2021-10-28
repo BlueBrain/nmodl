@@ -25,6 +25,7 @@
 #include "visitors/rename_visitor.hpp"
 #include "visitors/symtab_visitor.hpp"
 #include "visitors/var_usage_visitor.hpp"
+#include "visitors/verbatim_var_rename_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
 
 using namespace fmt::literals;
@@ -40,6 +41,7 @@ using visitor::DUState;
 using visitor::RenameVisitor;
 using visitor::SymtabVisitor;
 using visitor::VarUsageVisitor;
+using visitor::VerbatimVarRenameVisitor;
 
 using symtab::syminfo::NmodlType;
 using SymbolType = std::shared_ptr<symtab::Symbol>;
@@ -4585,6 +4587,20 @@ void CodegenCVisitor::set_codegen_global_variables(std::vector<SymbolType>& glob
 }
 
 
+void CodegenCVisitor::update_symbol_table() {
+    // iterate over all integer variables and add missing
+    // ones into symbol table
+    for (const auto& var: codegen_int_variables) {
+        std::string name = var.symbol->get_name();
+        if (program_symtab->lookup(name) == nullptr) {
+            auto symbol = std::make_shared<symtab::Symbol>(name, nullptr, ModToken());
+            symbol->add_property(NmodlType::codegen_var);
+            program_symtab->insert(symbol);
+        }
+    }
+}
+
+
 void CodegenCVisitor::setup(const Program& node) {
     program_symtab = node.get_symbol_table();
 
@@ -4600,6 +4616,7 @@ void CodegenCVisitor::setup(const Program& node) {
     codegen_int_variables = get_int_variables();
     codegen_shadow_variables = get_shadow_variables();
 
+    update_symbol_table();
     update_index_semantics();
     rename_function_arguments();
 }
@@ -4607,6 +4624,8 @@ void CodegenCVisitor::setup(const Program& node) {
 
 void CodegenCVisitor::visit_program(const Program& node) {
     setup(node);
+    // TODO: just to show but not like this :|
+    VerbatimVarRenameVisitor().visit_program(const_cast<Program&>(node));
     print_codegen_routines();
     print_wrapper_routines();
 }

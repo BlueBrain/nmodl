@@ -1886,6 +1886,21 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
+     * Update symbol table with codegen specific variables
+     *
+     * By default symbol table contains variables from the MOD file.
+     * There are internal, code generation specific variables that
+     * are not part of symbol table. Here we update symbol table with
+     * all code generation specific variables.
+     *
+     * \todo: Implementation related to float and integer variable
+     *        naming could be refactored from CodegenCVisitor into
+     *        a separate visitor. This will need some extra refactoring.
+     */
+    void update_symbol_table();
+
+
+    /**
      * Set the global variables to be generated in target backend code
      * \param global_vars
      */
