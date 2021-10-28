@@ -25,7 +25,6 @@
 #include "visitors/rename_visitor.hpp"
 #include "visitors/symtab_visitor.hpp"
 #include "visitors/var_usage_visitor.hpp"
-#include "visitors/verbatim_var_rename_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
 
 using namespace fmt::literals;
@@ -903,7 +902,7 @@ std::vector<IndexVariableInfo> CodegenCVisitor::get_int_variables() {
                                                         // not have doubles between read/write. Same
                                                         // name variables are allowed
         for (const auto& var: ion.reads) {
-            const std::string name = "ion_" + var;
+            const std::string name = naming::ION_VARNAME_PREFIX + var;
             variables.emplace_back(make_symbol(name));
             variables.back().is_constant = true;
             ion_vars[name] = variables.size() - 1;
@@ -913,16 +912,17 @@ std::vector<IndexVariableInfo> CodegenCVisitor::get_int_variables() {
         std::shared_ptr<symtab::Symbol> ion_di_dv_var = nullptr;
 
         for (const auto& var: ion.writes) {
-            const std::string name = "ion_" + var;
+            const std::string name = naming::ION_VARNAME_PREFIX + var;
 
             const auto ion_vars_it = ion_vars.find(name);
             if (ion_vars_it != ion_vars.end()) {
                 variables[ion_vars_it->second].is_constant = false;
             } else {
-                variables.emplace_back(make_symbol("ion_" + var));
+                variables.emplace_back(make_symbol(naming::ION_VARNAME_PREFIX + var));
             }
             if (ion.is_ionic_current(var)) {
-                ion_di_dv_var = make_symbol("ion_di" + ion.name + "dv");
+                ion_di_dv_var = make_symbol(std::string(naming::ION_VARNAME_PREFIX) + "di" +
+                                            ion.name + "dv");
             }
             if (ion.is_intra_cell_conc(var) || ion.is_extra_cell_conc(var)) {
                 need_style = true;
@@ -995,9 +995,10 @@ std::vector<SymbolType> CodegenCVisitor::get_shadow_variables() {
     std::vector<SymbolType> variables;
     for (const auto& ion: info.ions) {
         for (const auto& var: ion.writes) {
-            variables.push_back({make_symbol(shadow_varname("ion_" + var))});
+            variables.push_back({make_symbol(shadow_varname(naming::ION_VARNAME_PREFIX + var))});
             if (ion.is_ionic_current(var)) {
-                variables.push_back({make_symbol(shadow_varname("ion_di" + ion.name + "dv"))});
+                variables.push_back({make_symbol(shadow_varname(
+                    std::string(naming::ION_VARNAME_PREFIX) + "di" + ion.name + "dv"))});
             }
         }
     }
@@ -2084,20 +2085,20 @@ std::string CodegenCVisitor::register_mechanism_arguments() const {
 
 std::pair<std::string, std::string> CodegenCVisitor::read_ion_variable_name(
     const std::string& name) const {
-    return {name, "ion_" + name};
+    return {name, naming::ION_VARNAME_PREFIX + name};
 }
 
 
 std::pair<std::string, std::string> CodegenCVisitor::write_ion_variable_name(
     const std::string& name) const {
-    return {"ion_" + name, name};
+    return {naming::ION_VARNAME_PREFIX + name, name};
 }
 
 
 std::string CodegenCVisitor::conc_write_statement(const std::string& ion_name,
                                                   const std::string& concentration,
                                                   int index) {
-    auto conc_var_name = get_variable_name("ion_" + concentration);
+    auto conc_var_name = get_variable_name(naming::ION_VARNAME_PREFIX + concentration);
     auto style_var_name = get_variable_name("style_" + ion_name);
     return "nrn_wrote_conc({}_type,"
            " &({}),"
@@ -2356,7 +2357,7 @@ std::string CodegenCVisitor::update_if_ion_variable_name(const std::string& name
     std::string result(name);
     if (ion_variable_struct_required()) {
         if (info.is_ion_read_variable(name)) {
-            result = "ion_" + name;
+            result = naming::ION_VARNAME_PREFIX + name;
         }
         if (info.is_ion_write_variable(name)) {
             result = "ionvar." + name;
@@ -4328,7 +4329,7 @@ void CodegenCVisitor::print_nrn_cur_conductance_kernel(const BreakpointBlock& no
 
     for (const auto& conductance: info.conductances) {
         if (!conductance.ion.empty()) {
-            auto lhs = "ion_di" + conductance.ion + "dv";
+            auto lhs = std::string(naming::ION_VARNAME_PREFIX) + "di" + conductance.ion + "dv";
             auto rhs = get_variable_name(conductance.variable);
             ShadowUseStatement statement{lhs, "+=", rhs};
             auto text = process_shadow_update_statement(statement, BlockType::Equation);
@@ -4353,7 +4354,7 @@ void CodegenCVisitor::print_nrn_cur_non_conductance_kernel() {
     for (auto& ion: info.ions) {
         for (auto& var: ion.writes) {
             if (ion.is_ionic_current(var)) {
-                auto lhs = "ion_di" + ion.name + "dv";
+                auto lhs = std::string(naming::ION_VARNAME_PREFIX) + "di" + ion.name + "dv";
                 auto rhs = "(di{}-{})/0.001"_format(ion.name, get_variable_name(var));
                 if (info.point_process) {
                     auto area = get_variable_name(naming::NODE_AREA_VARIABLE);
@@ -4587,20 +4588,6 @@ void CodegenCVisitor::set_codegen_global_variables(std::vector<SymbolType>& glob
 }
 
 
-void CodegenCVisitor::update_symbol_table() {
-    // iterate over all integer variables and add missing
-    // ones into symbol table
-    for (const auto& var: codegen_int_variables) {
-        std::string name = var.symbol->get_name();
-        if (program_symtab->lookup(name) == nullptr) {
-            auto symbol = std::make_shared<symtab::Symbol>(name, nullptr, ModToken());
-            symbol->add_property(NmodlType::codegen_var);
-            program_symtab->insert(symbol);
-        }
-    }
-}
-
-
 void CodegenCVisitor::setup(const Program& node) {
     program_symtab = node.get_symbol_table();
 
@@ -4616,7 +4603,6 @@ void CodegenCVisitor::setup(const Program& node) {
     codegen_int_variables = get_int_variables();
     codegen_shadow_variables = get_shadow_variables();
 
-    update_symbol_table();
     update_index_semantics();
     rename_function_arguments();
 }
@@ -4624,8 +4610,6 @@ void CodegenCVisitor::setup(const Program& node) {
 
 void CodegenCVisitor::visit_program(const Program& node) {
     setup(node);
-    // TODO: just to show but not like this :|
-    VerbatimVarRenameVisitor().visit_program(const_cast<Program&>(node));
     print_codegen_routines();
     print_wrapper_routines();
 }
