@@ -40,7 +40,6 @@ using visitor::DUState;
 using visitor::RenameVisitor;
 using visitor::SymtabVisitor;
 using visitor::VarUsageVisitor;
-using visitor::VerbatimVarRenameVisitor;
 
 using symtab::syminfo::NmodlType;
 using SymbolType = std::shared_ptr<symtab::Symbol>;
