@@ -26,7 +26,7 @@
 %define api.pure
 
 /** parser prefix */
-%define api.prefix {Verbatim_}
+%name-prefix "Verbatim_"
 
 /** enable location tracking */
 %locations
