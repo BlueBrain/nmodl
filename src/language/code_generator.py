@@ -152,6 +152,8 @@ class CodeGenerator(
         """
         # special template "ast/node.hpp used to generate multiple .hpp files
         node_hpp_tpl = self.jinja_templates_dir / "ast" / "node.hpp"
+        pyast_cpp_tpl = self.jinja_templates_dir / "pybind" / "pyast.cpp"
+        pynode_cpp_tpl = self.jinja_templates_dir / "pybind" / "pynode.cpp"
         # special template only included by other templates
         node_class_tpl = self.jinja_templates_dir / "ast" / "node_class.template"
         # Additional dependencies Path -> [Path, ...]
@@ -161,6 +163,15 @@ class CodeGenerator(
                 node_hpp_tpl: [node_class_tpl],
             },
         )
+        # Additional Jinja context set when rendering the template
+        num_pybind_files = 2
+        extracontext = collections.defaultdict(
+            dict,
+            {
+                pyast_cpp_tpl: {'setup_pybind_methods': ['init_pybind_classes_{}'.format(x) for x in range(num_pybind_files)]}
+            }
+        )
+
         tasks = []
         for path in self.jinja_templates_dir.iterdir():
             sub_dir = PurePath(path).name
@@ -175,7 +186,18 @@ class CodeGenerator(
                             app=self,
                             input=filepath,
                             output=self.base_dir / node.cpp_header,
-                            context=dict(node=node),
+                            context=dict(node=node, **extracontext[filepath]),
+                            extradeps=extradeps[filepath],
+                        )
+                        tasks.append(task)
+                        yield task
+                elif filepath == pynode_cpp_tpl:
+                    for n in range(num_pybind_files):
+                        task = JinjaTask(
+                            app=self,
+                            input=filepath,
+                            output=self.base_dir / sub_dir / "pynode_{}.cpp".format(n),
+                            context=dict(nodes=[node for i, node in enumerate(self.nodes) if i%num_pybind_files == n], setup_pybind_method='init_pybind_classes_{}'.format(n)),
                             extradeps=extradeps[filepath],
                         )
                         tasks.append(task)
@@ -185,7 +207,7 @@ class CodeGenerator(
                         app=self,
                         input=filepath,
                         output=self.base_dir / sub_dir / filepath.name,
-                        context=dict(nodes=self.nodes, node_info=node_info),
+                        context=dict(nodes=self.nodes, node_info=node_info, **extracontext[filepath]),
                         extradeps=extradeps[filepath],
                     )
                     tasks.append(task)

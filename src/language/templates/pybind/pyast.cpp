@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (C) 2018-2019 Blue Brain Project
+ * Copyright (C) 2018-2021 Blue Brain Project
  *
  * This file is part of NMODL distributed under the terms of the GNU
  * Lesser General Public License. See top-level LICENSE file for details.
@@ -9,14 +9,11 @@
 /// THIS FILE IS GENERATED AT BUILD TIME AND SHALL NOT BE EDITED.
 ///
 
+#include "pybind/docstrings.hpp"
 #include "pybind/pyast.hpp"
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
-
-#include "visitors/json_visitor.hpp"
-#include "visitors/nmodl_visitor.hpp"
-
 
 /**
  * \file
@@ -26,144 +23,18 @@
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "OCDFAInspection"
 
-
-// clang-format off
-{% macro args(children) %}
-{% for c in children %}{{ c.get_shared_typename() }}{%- if not loop.last %}, {% endif %}{% endfor %}
-{%- endmacro -%}
-// clang-format on
-
 namespace nmodl {
-namespace docstring {
-
-static const char* binary_op_enum = R"(
-    Enum type for binary operators in NMODL
-
-    NMODL support different binary operators and this
-    type is used to store their value in the AST. See
-    nmodl::ast::Ast for details.
-)";
-
-static const char* ast_nodetype_enum = R"(
-    Enum type for every AST node type
-
-    Every node in the ast has associated type represented by
-    this enum class. See nmodl::ast::AstNodeType for details.
-
-)";
-
-static const char* ast_class = R"(
-    Base class for all Abstract Syntax Tree node types
-
-    Every node in the Abstract Syntax Tree is inherited from base class
-    Ast. This class provides base properties and functions that are implemented
-    by base classes.
-)";
-
-static const char* accept_method = R"(
-    Accept (or visit) the current AST node using current visitor
-
-    Instead of visiting children of AST node, like Ast::visit_children,
-    accept allows to visit the current node itself using the concrete
-    visitor provided.
-
-    Args:
-        v (Visitor):  Concrete visitor that will be used to recursively visit node
-)";
-
-static const char* visit_children_method = R"(
-    Visit children i.e. member of current AST node using provided visitor
-
-    Different nodes in the AST have different members (i.e. children). This method
-    recursively visits children using provided concrete visitor.
-
-    Args:
-        v (Visitor):  Concrete visitor that will be used to recursively visit node
-)";
-
-static const char* get_node_type_method = R"(
-    Return type (ast.AstNodeType) of the ast node
-)";
-
-static const char* get_node_type_name_method = R"(
-    Return type (ast.AstNodeType) of the ast node as string
-)";
-
-static const char* get_node_name_method = R"(
-    Return name of the node
-
-    Some ast nodes have a member designated as node name. For example,
-    in case of ast.FunctionCall, name of the function is returned as a node
-    name. Note that this is different from ast node type name and not every
-    ast node has name.
-)";
-
-static const char* get_nmodl_name_method = R"(
-    Return nmodl statement of the node
-
-    Some ast nodes have a member designated as nmodl name. For example,
-    in case of "NEURON { }" the statement of NMODL which is stored as nmodl
-    name is "NEURON". This function is only implemented by node types that
-    have a nmodl statement.
-)";
-
-
-static const char* clone_method = R"(
-    Create a copy of the AST node
-)";
-
-static const char* get_token_method = R"(
-    Return associated token for the AST node
-)";
-
-static const char* get_symbol_table_method = R"(
-    Return associated symbol table for the AST node
-
-    Certain ast nodes (e.g. inherited from ast.Block) have associated
-    symbol table. These nodes have nmodl.symtab.SymbolTable as member
-    and it can be accessed using this method.
-)";
-
-static const char* get_statement_block_method = R"(
-    Return associated statement block for the AST node
-
-    Top level block nodes encloses all statements in the ast::StatementBlock.
-    For example, ast.BreakpointBlock has all statements in curly brace (`{ }`)
-    stored in ast.StatementBlock :
-
-    BREAKPOINT {
-        SOLVE states METHOD cnexp
-        gNaTs2_t = gNaTs2_tbar*m*m*m*h
-        ina = gNaTs2_t*(v-ena)
-    }
-
-    This method return enclosing statement block.
-)";
-
-static const char* negate_method = R"(
-    Negate the value of AST node
-)";
-
-static const char* set_name_method = R"(
-    Set name for the AST node
-)";
-
-static const char* is_ast_method = R"(
-    Check if current node is of type ast.Ast
-)";
-
-static const char* eval_method = R"(
-    Return value of the ast node
-)";
-
-}  // namespace docstring
-}  // namespace nmodl
-
+namespace ast {
+namespace pybind {
+{% for setup_pybind_method in setup_pybind_methods %}
+void {{setup_pybind_method}}(pybind11::module&);
+{% endfor %}
+}
+}
+}
 
 namespace py = pybind11;
 using namespace nmodl::ast;
-using nmodl::visitor::JSONVisitor;
-using nmodl::visitor::NmodlPrintVisitor;
 using namespace pybind11::literals;
 
 
@@ -222,64 +93,9 @@ void init_ast_module(py::module& m) {
     {% if loop.last -%};{% endif %}
     {% endfor %}
 
-    {% for node in nodes %}
-    {
-        py::class_<{{ node.class_name }}, {{node.base_class}}, std::shared_ptr<{{ node.class_name }}>> tmp{m_ast, "{{ node.class_name }}"};
-        tmp.doc() = "{{ node.brief }}";
-        {% if node.children %}
-        tmp.def(py::init<{{ args(node.children) }}>());
-        {% endif %}
-        {% if node.is_program_node or node.is_ptr_excluded_node %}
-        tmp.def(py::init<>());
-        {% endif %}
-        // clang-format on
-
-        tmp.def("__repr__", []({{node.class_name}} & n) {
-                std::stringstream ss;
-                JSONVisitor v(ss);
-                v.compact_json(true);
-                n.accept(v);
-                v.flush();
-                return ss.str();
-            });
-        tmp.def("__str__", []({{node.class_name}} & n) {
-                std::stringstream ss;
-                NmodlPrintVisitor v(ss);
-                n.accept(v);
-                return ss.str();
-            });
-
-        // clang-format off
-        {% for member in node.public_members() %}
-        tmp.def_readwrite("{{ member[1] }}", &{{ node.class_name }}::{{ member[1] }});
-        {% endfor %}
-
-        {% for member in node.properties() %}
-        {% if member[2] == True %}
-        tmp.def_property("{{ member[1] }}", &{{ node.class_name }}::get_{{ member[1] }}, &{{ node.class_name }}::set_{{ member[1] }});
-        {% else %}
-        tmp.def_property("{{ member[1] }}", &{{ node.class_name }}::get_{{ member[1] }}, static_cast<void ({{ node.class_name }}::*)(const {{ member[0] }}&)>(&{{ node.class_name }}::set_{{ member[1] }}));
-        {% endif %}
-        {% endfor %}
-
-        tmp.def("visit_children", static_cast<void ({{ node.class_name }}::*)(visitor::Visitor&)>(&{{ node.class_name }}::visit_children), docstring::visit_children_method)
-           .def("accept", static_cast<void ({{ node.class_name }}::*)(visitor::Visitor&)>(&{{ node.class_name }}::accept), docstring::accept_method)
-           .def("accept", static_cast<void ({{ node.class_name }}::*)(visitor::ConstVisitor&) const>(&{{ node.class_name }}::accept), docstring::accept_method)
-           .def("clone", &{{ node.class_name }}::clone, docstring::clone_method)
-           .def("get_node_type", &{{ node.class_name }}::get_node_type, docstring::get_node_type_method)
-           .def("get_node_type_name", &{{ node.class_name }}::get_node_type_name, docstring::get_node_type_name_method)
-        {% if node.nmodl_name %}
-           .def("get_nmodl_name", &{{ node.class_name }}::get_nmodl_name, docstring::get_nmodl_name_method)
-        {% endif %}
-        {% if node.is_data_type_node %}
-           .def("eval", &{{ node.class_name }}::eval, docstring::eval_method)
-        {% endif %}
-           .def("is_{{ node.class_name | snake_case }}", &{{ node.class_name }}::is_{{ node.class_name | snake_case }}, "Check if node is of type ast.{{ node.class_name}}");
-
-        // clang-format on
-    }
+    {% for setup_pybind_method in setup_pybind_methods %}
+    nmodl::ast::pybind::{{setup_pybind_method}}(m_ast);
     {% endfor %}
 }
 
 #pragma clang diagnostic pop
-

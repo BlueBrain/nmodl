@@ -12,6 +12,7 @@ set(CODE_GENERATOR_JINJA_FILES
     ${PROJECT_SOURCE_DIR}/src/language/templates/ast/node_class.template
     ${PROJECT_SOURCE_DIR}/src/language/templates/pybind/pyast.cpp
     ${PROJECT_SOURCE_DIR}/src/language/templates/pybind/pyast.hpp
+    ${PROJECT_SOURCE_DIR}/src/language/templates/pybind/pynode.cpp
     ${PROJECT_SOURCE_DIR}/src/language/templates/pybind/pysymtab.cpp
     ${PROJECT_SOURCE_DIR}/src/language/templates/pybind/pyvisitor.cpp
     ${PROJECT_SOURCE_DIR}/src/language/templates/pybind/pyvisitor.hpp
@@ -195,6 +196,8 @@ set(AST_GENERATED_SOURCES
 set(PYBIND_GENERATED_SOURCES
     ${PROJECT_BINARY_DIR}/src/pybind/pyast.cpp
     ${PROJECT_BINARY_DIR}/src/pybind/pyast.hpp
+    ${PROJECT_BINARY_DIR}/src/pybind/pynode_0.cpp
+    ${PROJECT_BINARY_DIR}/src/pybind/pynode_1.cpp
     ${PROJECT_BINARY_DIR}/src/pybind/pysymtab.cpp
     ${PROJECT_BINARY_DIR}/src/pybind/pyvisitor.cpp
     ${PROJECT_BINARY_DIR}/src/pybind/pyvisitor.hpp
