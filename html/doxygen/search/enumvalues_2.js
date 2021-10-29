@@ -2,6 +2,7 @@ var searchData=
 [
   ['cd',['CD',['../namespacenmodl_1_1visitor.html#a68c860c43f4bea4e1af16c016d2959f9a4170acd6af571e8d0d59fdad999cc605',1,'nmodl::visitor']]],
   ['center',['center',['../group__utils.html#gga45f97a3d578ade6b9b49b1a92ec688a6aadb115059e28d960fa8badfac5516667',1,'nmodl::stringutils']]],
+  ['codegen_5fvar',['codegen_var',['../namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbaf502fdd34c60ff3223d4f18ec72f4cc8',1,'nmodl::symtab::syminfo']]],
   ['compartment',['COMPARTMENT',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033af97e22defb3be95f0a2361cdff43e24c',1,'nmodl::ast']]],
   ['conditional_5fblock',['CONDITIONAL_BLOCK',['../namespacenmodl_1_1visitor.html#a68c860c43f4bea4e1af16c016d2959f9a3a7cacb52c86f2098ddb46d24c3c9763',1,'nmodl::visitor']]],
   ['conductance_5fhint',['CONDUCTANCE_HINT',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a7562920021e6c8aae8f611595d816805',1,'nmodl::ast']]],

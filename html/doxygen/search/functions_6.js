@@ -100,6 +100,7 @@ var searchData=
   ['get_5fparent_5ftable_5fname',['get_parent_table_name',['../classnmodl_1_1symtab_1_1_symbol_table.html#aad712486c59473f8c08cd0b87b563c73',1,'nmodl::symtab::SymbolTable']]],
   ['get_5fpath',['get_path',['../structnmodl_1_1_nrn_units_lib.html#a35b39a048f9504008e6b2c4b36f99dbd',1,'nmodl::NrnUnitsLib']]],
   ['get_5fplot',['get_plot',['../classnmodl_1_1ast_1_1_plot_block.html#a3b5e5b0f15375eb9c00795d0ef669737',1,'nmodl::ast::PlotBlock::get_plot() const noexcept'],['../classnmodl_1_1ast_1_1_plot_block.html#a3b5e5b0f15375eb9c00795d0ef669737',1,'nmodl::ast::PlotBlock::get_plot() const noexcept']]],
+  ['get_5fpossible_5fvariables',['get_possible_variables',['../structnmodl_1_1codegen_1_1_ion.html#a31867a7ec328f7333c16c5049f330ed1',1,'nmodl::codegen::Ion']]],
   ['get_5fprime',['get_prime',['../classnmodl_1_1ast_1_1_partial_equation.html#a8dd3c48c74ce0e314c2ee7cdf7ca5ee7',1,'nmodl::ast::PartialEquation::get_prime() const noexcept'],['../classnmodl_1_1ast_1_1_partial_equation.html#a8dd3c48c74ce0e314c2ee7cdf7ca5ee7',1,'nmodl::ast::PartialEquation::get_prime() const noexcept']]],
   ['get_5fproperties',['get_properties',['../classnmodl_1_1symtab_1_1_symbol.html#ac609180bd29a9f1c820fb043e8298de6',1,'nmodl::symtab::Symbol']]],
   ['get_5fqtype',['get_qtype',['../classnmodl_1_1ast_1_1_queue_statement.html#a40930f28087d7f97470d391d89d90dd3',1,'nmodl::ast::QueueStatement::get_qtype() const noexcept'],['../classnmodl_1_1ast_1_1_queue_statement.html#a40930f28087d7f97470d391d89d90dd3',1,'nmodl::ast::QueueStatement::get_qtype() const noexcept']]],

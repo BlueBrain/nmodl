@@ -26,6 +26,8 @@ var searchData=
   ['interleaves_5fcounter',['interleaves_counter',['../classnmodl_1_1visitor_1_1_sympy_replace_solutions_visitor.html#aac3e707913c2457b3c58c0f93d4e7338',1,'nmodl::visitor::SympyReplaceSolutionsVisitor']]],
   ['internal_5fmethod_5fcall_5fencountered',['internal_method_call_encountered',['../classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a77272a3dbeaf183552eb37b7b1cac0f3',1,'nmodl::codegen::CodegenCVisitor']]],
   ['ion',['ion',['../structnmodl_1_1codegen_1_1_conductance.html#a9f303311f3cd92633f9f2230a88c784a',1,'nmodl::codegen::Conductance::ion()'],['../classnmodl_1_1ast_1_1_conductance_hint.html#a0a1baa5159b2bad414be1b34358ac362',1,'nmodl::ast::ConductanceHint::ion()']]],
+  ['ion_5fprefix',['ION_PREFIX',['../classnmodl_1_1visitor_1_1_verbatim_var_rename_visitor.html#ada5eadd4ae3c95ec6bee081d2a2a809b',1,'nmodl::visitor::VerbatimVarRenameVisitor']]],
+  ['ion_5fvarname_5fprefix',['ION_VARNAME_PREFIX',['../namespacenmodl_1_1codegen_1_1naming.html#ac1c238efdb0580c8b482fb29bcb0f4da',1,'nmodl::codegen::naming']]],
   ['ions',['ions',['../structnmodl_1_1codegen_1_1_codegen_info.html#a92c83194913f5a2766c912b3ed8ba55e',1,'nmodl::codegen::CodegenInfo']]],
   ['is',['is',['../classnmodl_1_1parser_1_1_verbatim_driver.html#a8a6ecbb4974a05f09c2947f0e500139e',1,'nmodl::parser::VerbatimDriver']]],
   ['is_5fconst_5fvisitor',['is_const_visitor',['../classnmodl_1_1visitor_1_1_meta_ast_lookup_visitor.html#a3e6044e0f8fddd6b11da701a601b3bbd',1,'nmodl::visitor::MetaAstLookupVisitor']]],

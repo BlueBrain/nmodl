@@ -4,6 +4,7 @@ var classnmodl_1_1visitor_1_1_verbatim_var_rename_visitor =
     [ "rename_variable", "classnmodl_1_1visitor_1_1_verbatim_var_rename_visitor.html#adf14ca58ed7e714c775a1b17872ffb1b", null ],
     [ "visit_statement_block", "classnmodl_1_1visitor_1_1_verbatim_var_rename_visitor.html#a833113da51ed807010e967faf7cda94e", null ],
     [ "visit_verbatim", "classnmodl_1_1visitor_1_1_verbatim_var_rename_visitor.html#aef890a20c23b7cba397d89f975bda18e", null ],
+    [ "ION_PREFIX", "classnmodl_1_1visitor_1_1_verbatim_var_rename_visitor.html#ada5eadd4ae3c95ec6bee081d2a2a809b", null ],
     [ "LOCAL_PREFIX", "classnmodl_1_1visitor_1_1_verbatim_var_rename_visitor.html#a86337176b625574704e557586d1b26f3", null ],
     [ "RANGE_PREFIX", "classnmodl_1_1visitor_1_1_verbatim_var_rename_visitor.html#a063d4ced09916994b851ebd16a00c25d", null ],
     [ "symtab", "classnmodl_1_1visitor_1_1_verbatim_var_rename_visitor.html#a688adb5ee5b504b51a910ae70a18124a", null ],

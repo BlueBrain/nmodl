@@ -2,6 +2,7 @@ var structnmodl_1_1codegen_1_1_ion =
 [
     [ "Ion", "structnmodl_1_1codegen_1_1_ion.html#acd8624aa31dffe4fcf3fbac9efc844d3", null ],
     [ "Ion", "structnmodl_1_1codegen_1_1_ion.html#a6266f04720d983a7cd76c92156740b18", null ],
+    [ "get_possible_variables", "structnmodl_1_1codegen_1_1_ion.html#a31867a7ec328f7333c16c5049f330ed1", null ],
     [ "is_extra_cell_conc", "structnmodl_1_1codegen_1_1_ion.html#ac16894db9591de9041e762e2cdecf964", null ],
     [ "is_intra_cell_conc", "structnmodl_1_1codegen_1_1_ion.html#a988a22e1dcd33471a5ec9017e3c7adbc", null ],
     [ "is_ionic_conc", "structnmodl_1_1codegen_1_1_ion.html#ab5f7c01c16f44a6fed509aa56a524b55", null ],

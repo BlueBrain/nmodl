@@ -89,6 +89,7 @@ $(document).ready(function(){initNavTree('structnmodl_1_1codegen_1_1_ion.html','
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="structnmodl_1_1codegen_1_1_ion-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -126,6 +127,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab5f7c01c16f44a6fed509aa56a524b55"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnmodl_1_1codegen_1_1_ion.html#ab5f7c01c16f44a6fed509aa56a524b55">is_ionic_conc</a> (const std::string &amp;text) const</td></tr>
 <tr class="memdesc:ab5f7c01c16f44a6fed509aa56a524b55"><td class="mdescLeft">&#160;</td><td class="mdescRight">check if it is either internal or external concentration  <a href="#ab5f7c01c16f44a6fed509aa56a524b55">More...</a><br /></td></tr>
 <tr class="separator:ab5f7c01c16f44a6fed509aa56a524b55"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a31867a7ec328f7333c16c5049f330ed1"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnmodl_1_1codegen_1_1_ion.html#a31867a7ec328f7333c16c5049f330ed1">get_possible_variables</a> (const std::string &amp;ion_name)</td></tr>
+<tr class="memdesc:a31867a7ec328f7333c16c5049f330ed1"><td class="mdescLeft">&#160;</td><td class="mdescRight">for a given ion, return different variable names/properties like internal/external concentration, reversial potential, ionic current etc.  <a href="#a31867a7ec328f7333c16c5049f330ed1">More...</a><br /></td></tr>
+<tr class="separator:a31867a7ec328f7333c16c5049f330ed1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -197,6 +204,36 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a31867a7ec328f7333c16c5049f330ed1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a31867a7ec328f7333c16c5049f330ed1">&#9670;&nbsp;</a></span>get_possible_variables()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::vector&lt;std::string&gt; nmodl::codegen::Ion::get_possible_variables </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>ion_name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>for a given ion, return different variable names/properties like internal/external concentration, reversial potential, ionic current etc. </p>
+
+<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00109">109</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
+
+</div>
+</div>
 <a id="ac16894db9591de9041e762e2cdecf964"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac16894db9591de9041e762e2cdecf964">&#9670;&nbsp;</a></span>is_extra_cell_conc()</h2>
 
