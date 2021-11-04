@@ -317,7 +317,11 @@ int main(int argc, const char* argv[]) {
         /// just visit the ast
         AstVisitor().visit_program(*ast);
 
-        SemanticAnalysisVisitor().visit_program(*ast);
+        /// Check some rules that ast should follow
+        {
+            logger->info("Running semantic analysis visitor");
+            SemanticAnalysisVisitor().visit_program(*ast);
+        }
 
         /// construct symbol table
         {
