@@ -65,6 +65,7 @@ DERIVATIVE state {
 }
 
 PROCEDURE test_table(br) {
+    LOCAL ainf
     TABLE ainf FROM 0 TO 1 WITH 1
     ainf = 1
 }
