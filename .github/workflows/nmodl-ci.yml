@@ -39,7 +39,7 @@ jobs:
       - name: Install homebrew packages
         if: startsWith(matrix.os, 'macOS')
         run: |
-          brew install ccache coreutils bison boost clang-format flex ninja
+          brew install ccache coreutils bison boost flex ninja
           echo /usr/local/opt/flex/bin:/usr/local/opt/bison/bin >> $GITHUB_PATH
         shell: bash
 
@@ -74,20 +74,9 @@ jobs:
             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
             -DCMAKE_BUILD_TYPE=RelWithDebInfo \
             -DPYTHON_EXECUTABLE=$(which python3) \
-            -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR \
-            -DNMODL_FORMATTING:BOOL=ON
+            -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR
         env:
           INSTALL_DIR: ${{ runner.workspace }}/install
-
-      - name: Formatting
-        shell: bash
-        working-directory: ${{runner.workspace}}/nmodl/build
-        run:  |
-          echo "------- Check formatting -------"
-          status=0 # Check both clang and cmake formatting before exiting.
-          if ! cmake --build . --target check-cmake-format; then status=1; fi
-          if ! cmake --build . --target check-clang-format; then status=1; fi
-          exit ${status}
 
       - name: Restore compiler cache
         uses: actions/cache@v2
