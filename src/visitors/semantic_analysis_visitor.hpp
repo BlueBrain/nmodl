@@ -23,7 +23,8 @@
  *
  * Current checks:
  *
- * - Check that a function or a procedure containing a TABLE statement contains only one argument (mandatory in mod2c).
+ * - Check that a function or a procedure containing a TABLE statement contains only one argument
+ * (mandatory in mod2c).
  */
 #include "ast/ast.hpp"
 #include "visitors/ast_visitor.hpp"
@@ -48,7 +49,7 @@ class SemanticAnalysisVisitor: public ConstAstVisitor {
     void visit_table_statement(const ast::TableStatement& node) override;
 };
 
-/** \} */ // end of visitor_classes
+/** \} */  // end of visitor_classes
 
 }  // namespace visitor
 }  // namespace nmodl
