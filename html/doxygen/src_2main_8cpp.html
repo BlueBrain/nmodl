@@ -123,6 +123,7 @@ $(document).ready(function(){initNavTree('src_2main_8cpp.html','');});
 <code>#include &quot;<a class="el" href="neuron__solve__visitor_8hpp_source.html">visitors/neuron_solve_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="nmodl__visitor_8hpp_source.html">visitors/nmodl_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="perf__visitor_8hpp_source.html">visitors/perf_visitor.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="semantic__analysis__visitor_8hpp_source.html">visitors/semantic_analysis_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="solve__block__visitor_8hpp_source.html">visitors/solve_block_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="steadystate__visitor_8hpp_source.html">visitors/steadystate_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="sympy__conductance__visitor_8hpp_source.html">visitors/sympy_conductance_visitor.hpp</a>&quot;</code><br />
@@ -203,6 +204,7 @@ Functions</h2></td></tr>
 <p>parse mod file and construct ast</p>
 <p>whether to update existing symbol table or create new one whenever we run symtab visitor.</p>
 <p>just visit the ast</p>
+<p>Check some rules that ast should follow</p>
 <p>construct symbol table</p>
 <p>use cnexp instead of after_cvode solve method</p>
 <p>Rename variables that match ISPC compiler double constants</p>
@@ -212,7 +214,7 @@ Functions</h2></td></tr>
 <p>Parsing units fron "nrnunits.lib" and mod files</p>
 <p>once we start modifying (especially removing) older constructs from ast then we should run symtab visitor in update mode so that old symbols (e.g. prime variables) are not lost </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2main_8cpp_source.html#l00060">60</a> of file <a class="el" href="src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2main_8cpp_source.html#l00061">61</a> of file <a class="el" href="src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>

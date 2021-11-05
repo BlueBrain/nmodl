@@ -210,6 +210,11 @@
     <span class="k">try</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">packaging</span><span class="o">.</span><span class="n">version</span><span class="o">.</span><span class="n">Version</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
     <span class="k">except</span> <span class="n">packaging</span><span class="o">.</span><span class="n">version</span><span class="o">.</span><span class="n">InvalidVersion</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2"> is an invalid version and will not be supported in &quot;</span>
+            <span class="s2">&quot;a future release&quot;</span><span class="p">,</span>
+            <span class="n">PkgResourcesDeprecationWarning</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="k">return</span> <span class="n">packaging</span><span class="o">.</span><span class="n">version</span><span class="o">.</span><span class="n">LegacyVersion</span><span class="p">(</span><span class="n">v</span><span class="p">)</span></div>
 
 
@@ -3336,6 +3341,15 @@
     <span class="p">)</span>
 
 
+<div class="viewcode-block" id="PkgResourcesDeprecationWarning"><a class="viewcode-back" href="../nmodl.html#nmodl.ast.PkgResourcesDeprecationWarning">[docs]</a><span class="k">class</span> <span class="nc">PkgResourcesDeprecationWarning</span><span class="p">(</span><span class="ne">Warning</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Base class for warning about deprecations in ``pkg_resources``</span>
+
+<span class="sd">    This class is not derived from ``DeprecationWarning``, and as such is</span>
+<span class="sd">    visible by default.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
 <span class="nd">@_call_aside</span>
 <span class="k">def</span> <span class="nf">_initialize_master_working_set</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -3374,15 +3388,6 @@
     <span class="c1"># match order</span>
     <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">working_set</span><span class="o">.</span><span class="n">add_entry</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">))</span>
     <span class="nb">globals</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">locals</span><span class="p">())</span>
-
-
-<div class="viewcode-block" id="PkgResourcesDeprecationWarning"><a class="viewcode-back" href="../nmodl.html#nmodl.ast.PkgResourcesDeprecationWarning">[docs]</a><span class="k">class</span> <span class="nc">PkgResourcesDeprecationWarning</span><span class="p">(</span><span class="ne">Warning</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Base class for warning about deprecations in ``pkg_resources``</span>
-
-<span class="sd">    This class is not derived from ``DeprecationWarning``, and as such is</span>
-<span class="sd">    visible by default.</span>
-<span class="sd">    &quot;&quot;&quot;</span></div>
 </pre></div>
 
            </div>

@@ -2,6 +2,7 @@ var searchData=
 [
   ['section',['Section',['../classnmodl_1_1ast_1_1_section.html',1,'nmodl::ast']]],
   ['sectionvar',['SectionVar',['../classnmodl_1_1ast_1_1_section_var.html',1,'nmodl::ast']]],
+  ['semanticanalysisvisitor',['SemanticAnalysisVisitor',['../class_semantic_analysis_visitor.html',1,'SemanticAnalysisVisitor'],['../classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html',1,'nmodl::visitor::SemanticAnalysisVisitor']]],
   ['sens',['Sens',['../classnmodl_1_1ast_1_1_sens.html',1,'nmodl::ast']]],
   ['shadowusestatement',['ShadowUseStatement',['../structnmodl_1_1codegen_1_1_shadow_use_statement.html',1,'nmodl::codegen']]],
   ['singletonrandomstring',['SingletonRandomString',['../classnmodl_1_1utils_1_1_singleton_random_string.html',1,'nmodl::utils']]],

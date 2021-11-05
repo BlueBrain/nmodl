@@ -1,5 +1,7 @@
 var group__visitor__classes =
 [
+    [ "nmodl", "namespacenmodl.html", null ],
+    [ "visitor", "namespacenmodl_1_1visitor.html", null ],
     [ "AfterCVodeToCnexpVisitor", "classnmodl_1_1visitor_1_1_after_c_vode_to_cnexp_visitor.html", [
       [ "AfterCVodeToCnexpVisitor", "classnmodl_1_1visitor_1_1_after_c_vode_to_cnexp_visitor.html#ae828f5954507fd77f9a7211948aad4da", null ],
       [ "visit_solve_block", "classnmodl_1_1visitor_1_1_after_c_vode_to_cnexp_visitor.html#a0402101b0b1ed4ce4b34fab1cef8e505", null ]
@@ -263,6 +265,14 @@ var group__visitor__classes =
       [ "rename_verbatim", "classnmodl_1_1visitor_1_1_rename_visitor.html#a4f9ae15a5360b051dd588eeaf5585d32", null ],
       [ "renamed_variables", "classnmodl_1_1visitor_1_1_rename_visitor.html#ab07b415423e7ce69da9d1239e8db9f9e", null ],
       [ "var_name_regex", "classnmodl_1_1visitor_1_1_rename_visitor.html#ad4b4a61656ec9fdf20a8ccad9750b115", null ]
+    ] ],
+    [ "SemanticAnalysisVisitor", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html", [
+      [ "SemanticAnalysisVisitor", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a7f7eba44f9fe830c3ba2e52d789082ca", null ],
+      [ "visit_function_block", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a0c3a7f34c86536de970e29b23d14092e", null ],
+      [ "visit_procedure_block", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a3e7dc3e1ddd25ecc1ec131ad5958de93", null ],
+      [ "visit_table_statement", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a973d5616f15e4048df98c1802269e9d3", null ],
+      [ "in_procedure_function", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a55042ca257a0a0d08a5cd146bbfd0711", null ],
+      [ "one_arg_in_procedure_function", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#abae9b5d11d661e22303535cb79de1398", null ]
     ] ],
     [ "SolveBlockVisitor", "classnmodl_1_1visitor_1_1_solve_block_visitor.html", [
       [ "SolveBlockVisitor", "classnmodl_1_1visitor_1_1_solve_block_visitor.html#a04cbc7d148a0e6a768d06c9c23d91223", null ],
@@ -1404,6 +1414,7 @@ var group__visitor__classes =
       [ "visit_wrapped_expression", "classnmodl_1_1visitor_1_1_const_visitor.html#a4db75b11c17eb4e53a4492bd3625dcba", null ],
       [ "visit_write_ion_var", "classnmodl_1_1visitor_1_1_const_visitor.html#ac886e47b2384ff0f4786a67c0ca54586", null ]
     ] ],
+    [ "SemanticAnalysisVisitor", "class_semantic_analysis_visitor.html", null ],
     [ "CheckParentVisitor", "classnmodl_1_1visitor_1_1test_1_1_check_parent_visitor.html", [
       [ "CheckParentVisitor", "classnmodl_1_1visitor_1_1test_1_1_check_parent_visitor.html#aaf4fab8d778eac2c0410c7dbc6bb3d6d", null ],
       [ "check_ast", "classnmodl_1_1visitor_1_1test_1_1_check_parent_visitor.html#ac8ab23f5630ef8d07c7323df4236fdf9", null ],

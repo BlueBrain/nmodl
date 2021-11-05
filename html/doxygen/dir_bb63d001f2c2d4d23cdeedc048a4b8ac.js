@@ -18,6 +18,7 @@ var dir_bb63d001f2c2d4d23cdeedc048a4b8ac =
     [ "nmodl.cpp", "nmodl_8cpp.html", "nmodl_8cpp" ],
     [ "perf.cpp", "perf_8cpp.html", "perf_8cpp" ],
     [ "rename.cpp", "rename_8cpp.html", "rename_8cpp" ],
+    [ "semantic_analysis.cpp", "semantic__analysis_8cpp.html", "semantic__analysis_8cpp" ],
     [ "solve_block.cpp", "solve__block_8cpp.html", "solve__block_8cpp" ],
     [ "steadystate.cpp", "steadystate_8cpp.html", "steadystate_8cpp" ],
     [ "sympy_conductance.cpp", "sympy__conductance_8cpp.html", "sympy__conductance_8cpp" ],

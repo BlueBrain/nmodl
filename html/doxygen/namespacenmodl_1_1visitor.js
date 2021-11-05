@@ -24,6 +24,7 @@ var namespacenmodl_1_1visitor =
     [ "NmodlPrintVisitor", "classnmodl_1_1visitor_1_1_nmodl_print_visitor.html", "classnmodl_1_1visitor_1_1_nmodl_print_visitor" ],
     [ "PerfVisitor", "classnmodl_1_1visitor_1_1_perf_visitor.html", "classnmodl_1_1visitor_1_1_perf_visitor" ],
     [ "RenameVisitor", "classnmodl_1_1visitor_1_1_rename_visitor.html", "classnmodl_1_1visitor_1_1_rename_visitor" ],
+    [ "SemanticAnalysisVisitor", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor" ],
     [ "SolveBlockVisitor", "classnmodl_1_1visitor_1_1_solve_block_visitor.html", "classnmodl_1_1visitor_1_1_solve_block_visitor" ],
     [ "SteadystateVisitor", "classnmodl_1_1visitor_1_1_steadystate_visitor.html", "classnmodl_1_1visitor_1_1_steadystate_visitor" ],
     [ "SympyConductanceVisitor", "classnmodl_1_1visitor_1_1_sympy_conductance_visitor.html", "classnmodl_1_1visitor_1_1_sympy_conductance_visitor" ],

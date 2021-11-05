@@ -31,6 +31,8 @@ var dir_5da0f2f50dc0c79639fb8a44dc3280da =
     [ "perf_visitor.hpp", "perf__visitor_8hpp.html", null ],
     [ "rename_visitor.cpp", "rename__visitor_8cpp.html", null ],
     [ "rename_visitor.hpp", "rename__visitor_8hpp.html", null ],
+    [ "semantic_analysis_visitor.cpp", "semantic__analysis__visitor_8cpp.html", null ],
+    [ "semantic_analysis_visitor.hpp", "semantic__analysis__visitor_8hpp.html", null ],
     [ "solve_block_visitor.cpp", "solve__block__visitor_8cpp.html", "solve__block__visitor_8cpp" ],
     [ "solve_block_visitor.hpp", "solve__block__visitor_8hpp.html", null ],
     [ "steadystate_visitor.cpp", "steadystate__visitor_8cpp.html", null ],

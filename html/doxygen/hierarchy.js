@@ -25,6 +25,7 @@ var hierarchy =
         [ "nmodl::visitor::RenameVisitor", "classnmodl_1_1visitor_1_1_rename_visitor.html", [
           [ "nmodl::visitor::IspcRenameVisitor", "classnmodl_1_1visitor_1_1_ispc_rename_visitor.html", null ]
         ] ],
+        [ "nmodl::visitor::SemanticAnalysisVisitor", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html", null ],
         [ "nmodl::visitor::test::CheckParentVisitor", "classnmodl_1_1visitor_1_1test_1_1_check_parent_visitor.html", null ],
         [ "nmodl::visitor::VarUsageVisitor", "classnmodl_1_1visitor_1_1_var_usage_visitor.html", null ],
         [ "nmodl::visitor::VerbatimVisitor", "classnmodl_1_1visitor_1_1_verbatim_visitor.html", null ]
@@ -366,6 +367,7 @@ var hierarchy =
       [ "nmodl::pybind_wrappers::SolveNonLinearSystemExecutor", "structnmodl_1_1pybind__wrappers_1_1_solve_non_linear_system_executor.html", null ]
     ] ],
     [ "nmodl::visitor::KineticBlockVisitor::RateEqs", "structnmodl_1_1visitor_1_1_kinetic_block_visitor_1_1_rate_eqs.html", null ],
+    [ "SemanticAnalysisVisitor", "class_semantic_analysis_visitor.html", null ],
     [ "nmodl::codegen::ShadowUseStatement", "structnmodl_1_1codegen_1_1_shadow_use_statement.html", null ],
     [ "nmodl::utils::SingletonRandomString< SIZE >", "classnmodl_1_1utils_1_1_singleton_random_string.html", null ],
     [ "nmodl::visitor::SympyReplaceSolutionsVisitor::StatementDispenser", "structnmodl_1_1visitor_1_1_sympy_replace_solutions_visitor_1_1_statement_dispenser.html", null ],

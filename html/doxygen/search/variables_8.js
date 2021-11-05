@@ -8,6 +8,7 @@ var searchData=
   ['ignore_5fverbatim',['ignore_verbatim',['../classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html#a993e5d9d3a54f3960ae8eab91e066645',1,'nmodl::visitor::DefUseAnalyzeVisitor::ignore_verbatim()'],['../classnmodl_1_1visitor_1_1_localize_visitor.html#ae318eb882cfa75e801452422e25ce7d1',1,'nmodl::visitor::LocalizeVisitor::ignore_verbatim()']]],
   ['in_5fbreakpoint_5fblock',['in_breakpoint_block',['../classnmodl_1_1visitor_1_1_solve_block_visitor.html#a9c5415754e8fd79158693dc6f6f16218',1,'nmodl::visitor::SolveBlockVisitor']]],
   ['in_5fconserve_5fstatement',['in_conserve_statement',['../classnmodl_1_1visitor_1_1_kinetic_block_visitor.html#a28a6a04b2606c3f2534dece889adbf58',1,'nmodl::visitor::KineticBlockVisitor']]],
+  ['in_5fprocedure_5ffunction',['in_procedure_function',['../classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a55042ca257a0a0d08a5cd146bbfd0711',1,'nmodl::visitor::SemanticAnalysisVisitor']]],
   ['in_5freaction_5fstatement',['in_reaction_statement',['../classnmodl_1_1visitor_1_1_kinetic_block_visitor.html#afdebab7eb9e503918dd2fa9889941e87',1,'nmodl::visitor::KineticBlockVisitor']]],
   ['in_5freaction_5fstatement_5flhs',['in_reaction_statement_lhs',['../classnmodl_1_1visitor_1_1_kinetic_block_visitor.html#af619542b61ca099df7799bdf8553a7cb',1,'nmodl::visitor::KineticBlockVisitor']]],
   ['in_5fsystem',['in_system',['../structnmodl_1_1visitor_1_1_sympy_replace_solutions_visitor_1_1_interleaves_counter.html#a16536118224b9dd215104896ae34b7df',1,'nmodl::visitor::SympyReplaceSolutionsVisitor::InterleavesCounter']]],
