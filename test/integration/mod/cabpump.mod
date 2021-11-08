@@ -6,7 +6,7 @@ NEURON {
         RANGE ca 
         GLOBAL depth,cainf,taur
         RANGE var
-     
+        RANGE ainf
 }
 
 UNITS {
@@ -16,18 +16,6 @@ UNITS {
         (mA) = (milliamp)
 	(msM)	= (ms mM)  
         FARADAY    = (faraday) (coul)
-}
-
-CONSTRUCTOR {
-VERBATIM
-// Nothing only to verify that it is well handled
-ENDVERBATIM
-}
-
-DESTRUCTOR {
-VERBATIM
-// Nothing only to verify that it is well handled
-ENDVERBATIM
 }
 
 PARAMETER {
@@ -41,6 +29,7 @@ ASSIGNED {
 	ica		(mA/cm2)
 	drive_channel	(mM/ms)
     var     (mV)
+    ainf
 }
 
 STATE {
@@ -64,8 +53,8 @@ DERIVATIVE state {
 	cai = ca
 }
 
+: to test code generation for TABLE statement
 PROCEDURE test_table(br) {
-    LOCAL ainf
     TABLE ainf FROM 0 TO 1 WITH 1
     ainf = 1
 }
