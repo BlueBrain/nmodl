@@ -64,6 +64,11 @@ DERIVATIVE state {
 	cai = ca
 }
 
+PROCEDURE test_table(br, e) {
+    TABLE ainf FROM 0 TO 1 WITH 1
+    ainf = 1
+}
+
 INITIAL {
     var_init(var)
     ca = cainf
