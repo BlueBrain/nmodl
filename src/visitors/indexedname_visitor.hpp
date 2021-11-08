@@ -23,6 +23,16 @@
 namespace nmodl {
 namespace visitor {
 
+/**
+ * \addtogroup visitor_classes
+ * \{
+ */
+
+/**
+ * \class IndexedNameVisitor
+ * \brief Get node name with indexed for the IndexedName node and
+ * the dependencies of DiffEqExpression node
+ */
 class IndexedNameVisitor: public AstVisitor {
   private:
     std::string indexed_name;
@@ -37,11 +47,18 @@ class IndexedNameVisitor: public AstVisitor {
 
     /// \}
 
+    /// Get node name with index for the IndexedName node
     void visit_indexed_name(ast::IndexedName& node) override;
+
+    /// Get dependencies for the DiffEqExpression node
     void visit_diff_eq_expression(ast::DiffEqExpression& node) override;
+
     void visit_program(ast::Program& node) override;
 
+    /// get the attribute indexed_name
     std::string get_indexed_name();
+
+    /// get the attribute dependencies
     std::pair<std::string, std::unordered_set<std::string>> get_dependencies();
 };
 

@@ -17,19 +17,13 @@ using namespace nmodl;
 using namespace visitor;
 
 //=============================================================================
-// get indexed name visitor tests
+// Get the indexed node name and the dependencies of differential equations
 //=============================================================================
-
-std::string run_test_indexed_name(ast::Program& node) {
+std::pair<std::string, std::pair<std::string, std::unordered_set<std::string>>>
+get_indexedname_dependencies(ast::Program& node) {
     IndexedNameVisitor testvisitor;
     testvisitor.visit_program(node);
-    return testvisitor.get_indexed_name();
-}
-
-std::pair<std::string, std::unordered_set<std::string>> run_test_dependencies(ast::Program& node) {
-    IndexedNameVisitor testvisitor;
-    testvisitor.visit_program(node);
-    return testvisitor.get_dependencies();
+    return std::make_pair(testvisitor.get_indexed_name(), testvisitor.get_dependencies());
 }
 
 SCENARIO("Get node name with index TestVisitor", "[visitor][node_index]") {
@@ -65,8 +59,8 @@ SCENARIO("Get node name with index TestVisitor", "[visitor][node_index]") {
                 std::unordered_set<std::string> vars{"mInf", "mTau"};
                 std::string var("m[0]");
                 auto expect = std::make_pair(var, vars);
-                auto result_name = run_test_indexed_name(*ast);
-                auto result_dependencies = run_test_dependencies(*ast);
+                auto result_name = get_indexedname_dependencies(*ast).first;
+                auto result_dependencies = get_indexedname_dependencies(*ast).second;
                 REQUIRE(result_name == var);
                 REQUIRE(result_dependencies.first == expect.first);
                 REQUIRE(result_dependencies.second == expect.second);
@@ -76,8 +70,8 @@ SCENARIO("Get node name with index TestVisitor", "[visitor][node_index]") {
                 std::unordered_set<std::string> vars{"m", "h"};
                 std::string var("m");
                 auto expect = std::make_pair(var, vars);
-                auto result_name = run_test_indexed_name(*ast);
-                auto result_dependencies = run_test_dependencies(*ast);
+                auto result_name = get_indexedname_dependencies(*ast).first;
+                auto result_dependencies = get_indexedname_dependencies(*ast).second;
                 REQUIRE(result_dependencies.first == expect.first);
                 REQUIRE(result_dependencies.second == expect.second);
             }
