@@ -158,19 +158,19 @@ class CodeGenerator(
         # special template only included by other templates
         node_class_tpl = self.jinja_templates_dir / "ast" / "node_class.template"
         # Additional dependencies Path -> [Path, ...]
-        extradeps = collections.defaultdict(
-            list,
-            {
-                node_hpp_tpl: [node_class_tpl],
-            },
-        )
+        extradeps = collections.defaultdict(list, {node_hpp_tpl: [node_class_tpl]})
         # Additional Jinja context set when rendering the template
         num_pybind_files = 2
         extracontext = collections.defaultdict(
             dict,
             {
-                pyast_cpp_tpl: {'setup_pybind_methods': ['init_pybind_classes_{}'.format(x) for x in range(num_pybind_files)]}
-            }
+                pyast_cpp_tpl: {
+                    "setup_pybind_methods": [
+                        "init_pybind_classes_{}".format(x)
+                        for x in range(num_pybind_files)
+                    ]
+                }
+            },
         )
 
         tasks = []
@@ -199,7 +199,12 @@ class CodeGenerator(
                             app=self,
                             input=filepath,
                             output=self.base_dir / sub_dir / "pynode_{}.cpp".format(n),
-                            context=dict(nodes=self.nodes[n*chunk_length:(n+1)*chunk_length], setup_pybind_method='init_pybind_classes_{}'.format(n)),
+                            context=dict(
+                                nodes=self.nodes[
+                                    n * chunk_length : (n + 1) * chunk_length
+                                ],
+                                setup_pybind_method="init_pybind_classes_{}".format(n),
+                            ),
                             extradeps=extradeps[filepath],
                         )
                         tasks.append(task)
