@@ -10,6 +10,7 @@ import collections
 import filecmp
 import itertools
 import logging
+import math
 import os
 from pathlib import Path, PurePath
 import shutil
@@ -192,12 +193,13 @@ class CodeGenerator(
                         tasks.append(task)
                         yield task
                 elif filepath == pynode_cpp_tpl:
+                    chunk_length = math.ceil(len(self.nodes) / num_pybind_files)
                     for n in range(num_pybind_files):
                         task = JinjaTask(
                             app=self,
                             input=filepath,
                             output=self.base_dir / sub_dir / "pynode_{}.cpp".format(n),
-                            context=dict(nodes=[node for i, node in enumerate(self.nodes) if i%num_pybind_files == n], setup_pybind_method='init_pybind_classes_{}'.format(n)),
+                            context=dict(nodes=self.nodes[n*chunk_length:(n+1)*chunk_length], setup_pybind_method='init_pybind_classes_{}'.format(n)),
                             extradeps=extradeps[filepath],
                         )
                         tasks.append(task)
