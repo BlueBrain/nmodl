@@ -14,6 +14,7 @@
 #include "visitors/nmodl_visitor.hpp"
 
 #include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
 
 // clang-format off
 {% macro args(children) %}
