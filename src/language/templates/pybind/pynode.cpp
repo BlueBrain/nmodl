@@ -37,22 +37,21 @@ void {{setup_pybind_method}}(pybind11::module& m_ast) {
         {% if node.is_program_node or node.is_ptr_excluded_node %}
         tmp.def(pybind11::init<>());
         {% endif %}
-        // clang-format on
 
         tmp.def("__repr__", []({{node.class_name}} & n) {
-                std::stringstream ss;
-                nmodl::visitor::JSONVisitor v(ss);
-                v.compact_json(true);
-                n.accept(v);
-                v.flush();
-                return ss.str();
-            });
+            std::stringstream ss;
+            nmodl::visitor::JSONVisitor v(ss);
+            v.compact_json(true);
+            n.accept(v);
+            v.flush();
+            return ss.str();
+        });
         tmp.def("__str__", []({{node.class_name}} & n) {
-                std::stringstream ss;
-                nmodl::visitor::NmodlPrintVisitor v(ss);
-                n.accept(v);
-                return ss.str();
-            });
+            std::stringstream ss;
+            nmodl::visitor::NmodlPrintVisitor v(ss);
+            n.accept(v);
+            return ss.str();
+        });
 
         // clang-format off
         {% for member in node.public_members() %}
@@ -67,17 +66,17 @@ void {{setup_pybind_method}}(pybind11::module& m_ast) {
         {% endif %}
         {% endfor %}
 
-        tmp.def("visit_children", static_cast<void ({{ node.class_name }}::*)(visitor::Visitor&)>(&{{ node.class_name }}::visit_children), docstring::visit_children_method)
-           .def("accept", static_cast<void ({{ node.class_name }}::*)(visitor::Visitor&)>(&{{ node.class_name }}::accept), docstring::accept_method)
-           .def("accept", static_cast<void ({{ node.class_name }}::*)(visitor::ConstVisitor&) const>(&{{ node.class_name }}::accept), docstring::accept_method)
-           .def("clone", &{{ node.class_name }}::clone, docstring::clone_method)
-           .def("get_node_type", &{{ node.class_name }}::get_node_type, docstring::get_node_type_method)
-           .def("get_node_type_name", &{{ node.class_name }}::get_node_type_name, docstring::get_node_type_name_method)
+        tmp.def("visit_children", static_cast<void ({{ node.class_name }}::*)(visitor::Visitor&)>(&{{ node.class_name }}::visit_children), docstring::visit_children_method())
+           .def("accept", static_cast<void ({{ node.class_name }}::*)(visitor::Visitor&)>(&{{ node.class_name }}::accept), docstring::accept_method())
+           .def("accept", static_cast<void ({{ node.class_name }}::*)(visitor::ConstVisitor&) const>(&{{ node.class_name }}::accept), docstring::accept_method())
+           .def("clone", &{{ node.class_name }}::clone, docstring::clone_method())
+           .def("get_node_type", &{{ node.class_name }}::get_node_type, docstring::get_node_type_method())
+           .def("get_node_type_name", &{{ node.class_name }}::get_node_type_name, docstring::get_node_type_name_method())
         {% if node.nmodl_name %}
-           .def("get_nmodl_name", &{{ node.class_name }}::get_nmodl_name, docstring::get_nmodl_name_method)
+           .def("get_nmodl_name", &{{ node.class_name }}::get_nmodl_name, docstring::get_nmodl_name_method())
         {% endif %}
         {% if node.is_data_type_node %}
-           .def("eval", &{{ node.class_name }}::eval, docstring::eval_method)
+           .def("eval", &{{ node.class_name }}::eval, docstring::eval_method())
         {% endif %}
            .def("is_{{ node.class_name | snake_case }}", &{{ node.class_name }}::is_{{ node.class_name | snake_case }}, "Check if node is of type ast.{{ node.class_name}}");
 
@@ -85,6 +84,6 @@ void {{setup_pybind_method}}(pybind11::module& m_ast) {
     }
     {% endfor %}
 }
-}
-}
-}
+}  // namespace pybind
+}  // namespace ast
+}  // namespace nmodl
