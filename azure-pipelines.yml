@@ -119,7 +119,7 @@ jobs:
 - job: 'osx1015'
   pool:
     vmImage: 'macOS-10.15'
-  displayName: 'MacOS (10.15), AppleClang 10.0'
+  displayName: 'MacOS (10.15), AppleClang 12.0'
   steps:
   - checkout: self
     submodules: True
