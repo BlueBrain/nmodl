@@ -53,6 +53,8 @@ DERIVATIVE state {
 	if (drive_channel <= 0.) { drive_channel = 0.  }   : cannot pump inward 
         ca' = drive_channel/18 + (cainf -ca)/taur*11
 	cai = ca
+
+    if (FOO == 0) { }
 }
 
 : to test code generation for TABLE statement
