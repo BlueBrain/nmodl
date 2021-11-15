@@ -194,16 +194,16 @@ class CodeGenerator(
                         yield task
                 elif filepath == pynode_cpp_tpl:
                     chunk_length = math.ceil(len(self.nodes) / num_pybind_files)
-                    for n in range(num_pybind_files):
+                    for chunk_k in range(num_pybind_files):
                         task = JinjaTask(
                             app=self,
                             input=filepath,
-                            output=self.base_dir / sub_dir / "pynode_{}.cpp".format(n),
+                            output=self.base_dir / sub_dir / "pynode_{}.cpp".format(chunk_k),
                             context=dict(
                                 nodes=self.nodes[
-                                    n * chunk_length : (n + 1) * chunk_length
+                                    chunk_k * chunk_length : (chunk_k + 1) * chunk_length
                                 ],
-                                setup_pybind_method="init_pybind_classes_{}".format(n),
+                                setup_pybind_method="init_pybind_classes_{}".format(chunk_k),
                             ),
                             extradeps=extradeps[filepath],
                         )
