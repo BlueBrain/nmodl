@@ -2112,7 +2112,7 @@
 
 <span class="sd">    &gt;&gt;&gt; names = &#39;bar&#39;, &#39;foo&#39;, &#39;Python-2.7.10.egg&#39;, &#39;Python-2.7.2.egg&#39;</span>
 <span class="sd">    &gt;&gt;&gt; _by_version_descending(names)</span>
-<span class="sd">    [&#39;Python-2.7.10.egg&#39;, &#39;Python-2.7.2.egg&#39;, &#39;foo&#39;, &#39;bar&#39;]</span>
+<span class="sd">    [&#39;Python-2.7.10.egg&#39;, &#39;Python-2.7.2.egg&#39;, &#39;bar&#39;, &#39;foo&#39;]</span>
 <span class="sd">    &gt;&gt;&gt; names = &#39;Setuptools-1.2.3b1.egg&#39;, &#39;Setuptools-1.2.3.egg&#39;</span>
 <span class="sd">    &gt;&gt;&gt; _by_version_descending(names)</span>
 <span class="sd">    [&#39;Setuptools-1.2.3.egg&#39;, &#39;Setuptools-1.2.3b1.egg&#39;]</span>
@@ -2120,13 +2120,22 @@
 <span class="sd">    &gt;&gt;&gt; _by_version_descending(names)</span>
 <span class="sd">    [&#39;Setuptools-1.2.3.post1.egg&#39;, &#39;Setuptools-1.2.3b1.egg&#39;]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">try_parse</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Attempt to parse as a version or return a null version.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">packaging</span><span class="o">.</span><span class="n">version</span><span class="o">.</span><span class="n">Version</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">packaging</span><span class="o">.</span><span class="n">version</span><span class="o">.</span><span class="n">Version</span><span class="p">(</span><span class="s1">&#39;0&#39;</span><span class="p">)</span>
+
     <span class="k">def</span> <span class="nf">_by_version</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parse each component of the filename</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">name</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="n">parts</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">),</span> <span class="p">[</span><span class="n">ext</span><span class="p">])</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">packaging</span><span class="o">.</span><span class="n">version</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">part</span><span class="p">)</span> <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">parts</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">try_parse</span><span class="p">(</span><span class="n">part</span><span class="p">)</span> <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">parts</span><span class="p">]</span>
 
     <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">_by_version</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
