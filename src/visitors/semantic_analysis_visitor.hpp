@@ -35,8 +35,6 @@ namespace visitor {
 
 class SemanticAnalysisVisitor: public ConstAstVisitor {
   private:
-    /// if we should continue even if a critical error has been found
-    bool continue_on_critical = false;
     /// true if the procedure or the function contains only one argument
     bool one_arg_in_procedure_function = false;
     /// true if we are in a procedure or a function block
@@ -45,8 +43,7 @@ class SemanticAnalysisVisitor: public ConstAstVisitor {
     bool is_point_process = false;
 
   public:
-    SemanticAnalysisVisitor(bool _continue)
-    : continue_on_critical(_continue) {}
+    SemanticAnalysisVisitor() = default;
 
     void visit_procedure_block(const ast::ProcedureBlock& node) override;
 

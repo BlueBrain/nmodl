@@ -30,9 +30,6 @@ void SemanticAnalysisVisitor::visit_table_statement(const ast::TableStatement&) 
     /// <-- This code is for test 1
     if (in_procedure_function && !one_arg_in_procedure_function) {
         logger->critical("SemanticAnalysisVisitor :: The procedure or function containing the TABLE statement should contains exactly one argument.");
-        if (!continue_on_critical) {
-            throw std::runtime_error("SemanticAnalysisVisitor :: The procedure or function containing the TABLE statement should contains exactly one argument.");
-        }
     }
     /// -->
 }

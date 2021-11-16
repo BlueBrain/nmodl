@@ -26,7 +26,7 @@ using nmodl::parser::NmodlDriver;
 void run_semantic_analysis_visitor(const std::string& text) {
     NmodlDriver driver;
     const auto& ast = driver.parse_string(text);
-    SemanticAnalysisVisitor(true).visit_program(*ast);
+    SemanticAnalysisVisitor().visit_program(*ast);
 }
 
 SCENARIO("TABLE stmt", "[visitor][semantic_analysis]") {

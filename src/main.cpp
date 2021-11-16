@@ -159,9 +159,6 @@ int main(int argc, const char* argv[]) {
     /// floating point data type
     std::string data_type("double");
 
-    /// true if we run only the static analysis
-    bool static_analysis{false};
-
     app.get_formatter()->column_width(40);
     app.set_help_all_flag("-H,--help-all", "Print this help message including all sub-commands");
 
@@ -179,7 +176,6 @@ int main(int argc, const char* argv[]) {
     app.add_option("--scratch", scratch_dir, "Directory for intermediate code output", true)
         ->ignore_case();
     app.add_option("--units", units_dir, "Directory of units lib file", true)->ignore_case();
-    app.add_flag("--static-analysis", static_analysis, "Run only static analysis ({})"_format(static_analysis))->ignore_case();
 
     auto host_opt = app.add_subcommand("host", "HOST/CPU code backends")->ignore_case();
     host_opt->add_flag("--c", c_backend, "C/C++ backend ({})"_format(c_backend))->ignore_case();
@@ -324,10 +320,7 @@ int main(int argc, const char* argv[]) {
         /// Check some rules that ast should follow
         {
             logger->info("Running semantic analysis visitor");
-            SemanticAnalysisVisitor(static_analysis).visit_program(*ast);
-            if (static_analysis) {
-                return 0;
-            }
+            SemanticAnalysisVisitor().visit_program(*ast);
         }
 
         /// construct symbol table
