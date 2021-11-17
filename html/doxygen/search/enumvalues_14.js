@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['watch',['WATCH',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033ae586513b443516b9e00a844bfbacd16e',1,'nmodl::ast::WATCH()'],['../group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbbaac20fc604795fbf01428e955d6d0f492',1,'nmodl::codegen::Watch()']]],
+  ['watch',['Watch',['../group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbbaac20fc604795fbf01428e955d6d0f492',1,'nmodl::codegen::Watch()'],['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033ae586513b443516b9e00a844bfbacd16e',1,'nmodl::ast::WATCH()']]],
   ['watch_5fstatement',['WATCH_STATEMENT',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a0cb4711609fabe3b8b5692b6e9e41ea6',1,'nmodl::ast']]],
   ['while_5fstatement',['WHILE_STATEMENT',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a5134faf37f3fe1bb05273b5e517834dd',1,'nmodl::ast']]],
   ['withnumbers',['WithNumbers',['../group__utils.html#ggabf78118141123c84917fbafa57c97b5ba6d494c0b7b8c95f1ca055e1afd307200',1,'nmodl::utils']]],

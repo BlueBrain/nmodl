@@ -103,29 +103,18 @@ $(document).ready(function(){initNavTree('classnmodl_1_1ast_1_1_lag_statement.ht
 <div class="textblock"><p>Represents a LAG statement in the mod file. </p>
 <p>An example of LAG statement usage:</p>
 <div class="fragment"><div class="line">PROCEDURE lates() {</div><div class="line">    LAG ina BY tau</div><div class="line">    neo = lag_ina_tau</div><div class="line">    if (ena &lt; 70) {ena = 70}</div><div class="line">}</div></div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l31771">31771</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="lag__statement_8hpp_source.html#l00050">50</a> of file <a class="el" href="lag__statement_8hpp_source.html">lag_statement.hpp</a>.</p>
 </div>
-<p><code>#include &lt;<a class="el" href="all_8hpp_source.html">all.hpp</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="lag__statement_8hpp_source.html">lag_statement.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for nmodl::ast::LagStatement:</div>
 <div class="dyncontent">
  <div class="center">
   <img src="classnmodl_1_1ast_1_1_lag_statement.png" usemap="#nmodl::ast::LagStatement_map" alt=""/>
   <map id="nmodl::ast::LagStatement_map" name="nmodl::ast::LagStatement_map">
-<area href="classnmodl_1_1ast_1_1_statement.html" title="TODO. " alt="nmodl::ast::Statement" shape="rect" coords="158,168,306,192"/>
-<area href="classnmodl_1_1ast_1_1_statement.html" title="TODO. " alt="nmodl::ast::Statement" shape="rect" coords="790,168,938,192"/>
-<area href="classnmodl_1_1ast_1_1_node.html" title="Base class for all AST node. " alt="nmodl::ast::Node" shape="rect" coords="0,112,148,136"/>
-<area href="classnmodl_1_1ast_1_1_node.html" title="Base class for all AST node. " alt="nmodl::ast::Node" shape="rect" coords="316,112,464,136"/>
-<area href="classnmodl_1_1ast_1_1_node.html" title="Base class for all AST node. " alt="nmodl::ast::Node" shape="rect" coords="632,112,780,136"/>
-<area href="classnmodl_1_1ast_1_1_node.html" title="Base class for all AST node. " alt="nmodl::ast::Node" shape="rect" coords="948,112,1096,136"/>
-<area href="structnmodl_1_1ast_1_1_ast.html" title="Base class for all Abstract Syntax Tree node types. " alt="nmodl::ast::Ast" shape="rect" coords="1106,56,1254,80"/>
-<area href="structnmodl_1_1ast_1_1_ast.html" title="Base class for all Abstract Syntax Tree node types. " alt="nmodl::ast::Ast" shape="rect" coords="1106,0,1254,24"/>
-<area href="structnmodl_1_1ast_1_1_ast.html" title="Base class for all Abstract Syntax Tree node types. " alt="nmodl::ast::Ast" shape="rect" coords="790,56,938,80"/>
-<area href="structnmodl_1_1ast_1_1_ast.html" title="Base class for all Abstract Syntax Tree node types. " alt="nmodl::ast::Ast" shape="rect" coords="790,0,938,24"/>
-<area href="structnmodl_1_1ast_1_1_ast.html" title="Base class for all Abstract Syntax Tree node types. " alt="nmodl::ast::Ast" shape="rect" coords="474,56,622,80"/>
-<area href="structnmodl_1_1ast_1_1_ast.html" title="Base class for all Abstract Syntax Tree node types. " alt="nmodl::ast::Ast" shape="rect" coords="474,0,622,24"/>
-<area href="structnmodl_1_1ast_1_1_ast.html" title="Base class for all Abstract Syntax Tree node types. " alt="nmodl::ast::Ast" shape="rect" coords="158,56,306,80"/>
-<area href="structnmodl_1_1ast_1_1_ast.html" title="Base class for all Abstract Syntax Tree node types. " alt="nmodl::ast::Ast" shape="rect" coords="158,0,306,24"/>
+<area href="classnmodl_1_1ast_1_1_statement.html" title="TODO. " alt="nmodl::ast::Statement" shape="rect" coords="0,168,218,192"/>
+<area href="classnmodl_1_1ast_1_1_node.html" title="Base class for all AST node. " alt="nmodl::ast::Node" shape="rect" coords="0,112,218,136"/>
+<area href="structnmodl_1_1ast_1_1_ast.html" title="Base class for all Abstract Syntax Tree node types. " alt="nmodl::ast::Ast" shape="rect" coords="0,56,218,80"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -137,27 +126,13 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad7c6edc4e0afc8a4ba3e9a94eb42e911"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html">LagStatement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#ad7c6edc4e0afc8a4ba3e9a94eb42e911">clone</a> () const override</td></tr>
 <tr class="memdesc:ad7c6edc4e0afc8a4ba3e9a94eb42e911"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a copy of the current node.  <a href="#ad7c6edc4e0afc8a4ba3e9a94eb42e911">More...</a><br /></td></tr>
 <tr class="separator:ad7c6edc4e0afc8a4ba3e9a94eb42e911"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2152c72030abc39b8f58311700c215e9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a2152c72030abc39b8f58311700c215e9">is_lag_statement</a> () const noexcept override</td></tr>
-<tr class="memdesc:a2152c72030abc39b8f58311700c215e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html" title="Represents a LAG statement in the mod file. ">ast::LagStatement</a>.  <a href="#a2152c72030abc39b8f58311700c215e9">More...</a><br /></td></tr>
-<tr class="separator:a2152c72030abc39b8f58311700c215e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad7c6edc4e0afc8a4ba3e9a94eb42e911"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html">LagStatement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#ad7c6edc4e0afc8a4ba3e9a94eb42e911">clone</a> () const override</td></tr>
-<tr class="memdesc:ad7c6edc4e0afc8a4ba3e9a94eb42e911"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a copy of the current node.  <a href="#ad7c6edc4e0afc8a4ba3e9a94eb42e911">More...</a><br /></td></tr>
-<tr class="separator:ad7c6edc4e0afc8a4ba3e9a94eb42e911"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Ctor &amp; dtor</div></td></tr>
-<tr class="memitem:a29318d6f0e9e9c82169d94fcc41ec0cf"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a29318d6f0e9e9c82169d94fcc41ec0cf">LagStatement</a> (<a class="el" href="classnmodl_1_1ast_1_1_identifier.html">Identifier</a> *<a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a0041af231a91f5fa881f165c93603ff8">name</a>, <a class="el" href="classnmodl_1_1ast_1_1_name.html">Name</a> *<a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a09fdee4c2eb6f4fc77cf5ff7da278df4">byname</a>)</td></tr>
+<tr class="memitem:a29318d6f0e9e9c82169d94fcc41ec0cf"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a29318d6f0e9e9c82169d94fcc41ec0cf">LagStatement</a> (<a class="el" href="classnmodl_1_1ast_1_1_identifier.html">Identifier</a> *<a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a55c94d644e6a379d1a64564ddde07cfa">name</a>, <a class="el" href="classnmodl_1_1ast_1_1_name.html">Name</a> *<a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#ac0f44ad32c2b8f4ca71a4eb3ce3027cb">byname</a>)</td></tr>
 <tr class="separator:a29318d6f0e9e9c82169d94fcc41ec0cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a71b88a05e45e9c5569e8aefb010e32c5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a71b88a05e45e9c5569e8aefb010e32c5">LagStatement</a> (const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_identifier.html">Identifier</a> &gt; &amp;<a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a0041af231a91f5fa881f165c93603ff8">name</a>, const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_name.html">Name</a> &gt; &amp;<a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a09fdee4c2eb6f4fc77cf5ff7da278df4">byname</a>)</td></tr>
+<tr class="memitem:a71b88a05e45e9c5569e8aefb010e32c5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a71b88a05e45e9c5569e8aefb010e32c5">LagStatement</a> (const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_identifier.html">Identifier</a> &gt; &amp;<a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a55c94d644e6a379d1a64564ddde07cfa">name</a>, const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_name.html">Name</a> &gt; &amp;<a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#ac0f44ad32c2b8f4ca71a4eb3ce3027cb">byname</a>)</td></tr>
 <tr class="separator:a71b88a05e45e9c5569e8aefb010e32c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa7db5bdc69740314ff226136d538507"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#afa7db5bdc69740314ff226136d538507">LagStatement</a> (const <a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html">LagStatement</a> &amp;obj)</td></tr>
 <tr class="memdesc:afa7db5bdc69740314ff226136d538507"><td class="mdescLeft">&#160;</td><td class="mdescRight">copy constructor implementation  <a href="#afa7db5bdc69740314ff226136d538507">More...</a><br /></td></tr>
-<tr class="separator:afa7db5bdc69740314ff226136d538507"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abe6f0b3a5da012137b175f99f2ce20d9"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#abe6f0b3a5da012137b175f99f2ce20d9">~LagStatement</a> ()=default</td></tr>
-<tr class="separator:abe6f0b3a5da012137b175f99f2ce20d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a29318d6f0e9e9c82169d94fcc41ec0cf"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a29318d6f0e9e9c82169d94fcc41ec0cf">LagStatement</a> (<a class="el" href="classnmodl_1_1ast_1_1_identifier.html">Identifier</a> *<a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a0041af231a91f5fa881f165c93603ff8">name</a>, <a class="el" href="classnmodl_1_1ast_1_1_name.html">Name</a> *<a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a09fdee4c2eb6f4fc77cf5ff7da278df4">byname</a>)</td></tr>
-<tr class="separator:a29318d6f0e9e9c82169d94fcc41ec0cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a71b88a05e45e9c5569e8aefb010e32c5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a71b88a05e45e9c5569e8aefb010e32c5">LagStatement</a> (const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_identifier.html">Identifier</a> &gt; &amp;<a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a0041af231a91f5fa881f165c93603ff8">name</a>, const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_name.html">Name</a> &gt; &amp;<a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a09fdee4c2eb6f4fc77cf5ff7da278df4">byname</a>)</td></tr>
-<tr class="separator:a71b88a05e45e9c5569e8aefb010e32c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afa7db5bdc69740314ff226136d538507"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#afa7db5bdc69740314ff226136d538507">LagStatement</a> (const <a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html">LagStatement</a> &amp;obj)</td></tr>
 <tr class="separator:afa7db5bdc69740314ff226136d538507"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe6f0b3a5da012137b175f99f2ce20d9"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#abe6f0b3a5da012137b175f99f2ce20d9">~LagStatement</a> ()=default</td></tr>
 <tr class="separator:abe6f0b3a5da012137b175f99f2ce20d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -181,79 +156,28 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a8141ef70a76a884be92cd324b6b6766e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return associated token for the current ast node.  <a href="#a8141ef70a76a884be92cd324b6b6766e">More...</a><br /></td></tr>
 <tr class="separator:a8141ef70a76a884be92cd324b6b6766e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab30884e1700e0a808374a8422764af74"><td class="memItemLeft" align="right" valign="top">const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_identifier.html">Identifier</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#ab30884e1700e0a808374a8422764af74">get_name</a> () const noexcept</td></tr>
-<tr class="memdesc:ab30884e1700e0a808374a8422764af74"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter for member variable <a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a0041af231a91f5fa881f165c93603ff8">LagStatement::name</a>.  <a href="#ab30884e1700e0a808374a8422764af74">More...</a><br /></td></tr>
+<tr class="memdesc:ab30884e1700e0a808374a8422764af74"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter for member variable <a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a55c94d644e6a379d1a64564ddde07cfa">LagStatement::name</a>.  <a href="#ab30884e1700e0a808374a8422764af74">More...</a><br /></td></tr>
 <tr class="separator:ab30884e1700e0a808374a8422764af74"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa4e6fe71122300e1a0a2c520b7992bc0"><td class="memItemLeft" align="right" valign="top">const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_name.html">Name</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#aa4e6fe71122300e1a0a2c520b7992bc0">get_byname</a> () const noexcept</td></tr>
-<tr class="memdesc:aa4e6fe71122300e1a0a2c520b7992bc0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter for member variable <a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a09fdee4c2eb6f4fc77cf5ff7da278df4">LagStatement::byname</a>.  <a href="#aa4e6fe71122300e1a0a2c520b7992bc0">More...</a><br /></td></tr>
-<tr class="separator:aa4e6fe71122300e1a0a2c520b7992bc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8fb5c08011a04d65d9d8e9608a24226c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033">AstNodeType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a8fb5c08011a04d65d9d8e9608a24226c">get_node_type</a> () const noexcept override</td></tr>
-<tr class="memdesc:a8fb5c08011a04d65d9d8e9608a24226c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return type (<a class="el" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033" title="Enum type for every AST node type. ">ast::AstNodeType</a>) of ast node.  <a href="#a8fb5c08011a04d65d9d8e9608a24226c">More...</a><br /></td></tr>
-<tr class="separator:a8fb5c08011a04d65d9d8e9608a24226c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a347d097b152ac8ce5ef9a4df7bcbb940"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a347d097b152ac8ce5ef9a4df7bcbb940">get_node_type_name</a> () const noexcept override</td></tr>
-<tr class="memdesc:a347d097b152ac8ce5ef9a4df7bcbb940"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return type (<a class="el" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033" title="Enum type for every AST node type. ">ast::AstNodeType</a>) of ast node as std::string.  <a href="#a347d097b152ac8ce5ef9a4df7bcbb940">More...</a><br /></td></tr>
-<tr class="separator:a347d097b152ac8ce5ef9a4df7bcbb940"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8b49804502b39e4c6d25a0edf4302ce6"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a8b49804502b39e4c6d25a0edf4302ce6">get_nmodl_name</a> () const noexcept override</td></tr>
-<tr class="memdesc:a8b49804502b39e4c6d25a0edf4302ce6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return NMODL statement of ast node as std::string.  <a href="#a8b49804502b39e4c6d25a0edf4302ce6">More...</a><br /></td></tr>
-<tr class="separator:a8b49804502b39e4c6d25a0edf4302ce6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ade367eb28a2beab713c38354ef7e377e"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="structnmodl_1_1ast_1_1_ast.html">Ast</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#ade367eb28a2beab713c38354ef7e377e">get_shared_ptr</a> () override</td></tr>
-<tr class="memdesc:ade367eb28a2beab713c38354ef7e377e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get std::shared_ptr from <code>this</code> pointer of the current ast node.  <a href="#ade367eb28a2beab713c38354ef7e377e">More...</a><br /></td></tr>
-<tr class="separator:ade367eb28a2beab713c38354ef7e377e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaf832a83ff3e84bfc916917e398049c3"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; const <a class="el" href="structnmodl_1_1ast_1_1_ast.html">Ast</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#aaf832a83ff3e84bfc916917e398049c3">get_shared_ptr</a> () const override</td></tr>
-<tr class="memdesc:aaf832a83ff3e84bfc916917e398049c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get std::shared_ptr from <code>this</code> pointer of the current ast node.  <a href="#aaf832a83ff3e84bfc916917e398049c3">More...</a><br /></td></tr>
-<tr class="separator:aaf832a83ff3e84bfc916917e398049c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8141ef70a76a884be92cd324b6b6766e"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classnmodl_1_1_mod_token.html">ModToken</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a8141ef70a76a884be92cd324b6b6766e">get_token</a> () const noexcept override</td></tr>
-<tr class="memdesc:a8141ef70a76a884be92cd324b6b6766e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return associated token for the current ast node.  <a href="#a8141ef70a76a884be92cd324b6b6766e">More...</a><br /></td></tr>
-<tr class="separator:a8141ef70a76a884be92cd324b6b6766e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab30884e1700e0a808374a8422764af74"><td class="memItemLeft" align="right" valign="top">const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_identifier.html">Identifier</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#ab30884e1700e0a808374a8422764af74">get_name</a> () const noexcept</td></tr>
-<tr class="memdesc:ab30884e1700e0a808374a8422764af74"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter for member variable <a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a0041af231a91f5fa881f165c93603ff8">LagStatement::name</a>.  <a href="#ab30884e1700e0a808374a8422764af74">More...</a><br /></td></tr>
-<tr class="separator:ab30884e1700e0a808374a8422764af74"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa4e6fe71122300e1a0a2c520b7992bc0"><td class="memItemLeft" align="right" valign="top">const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_name.html">Name</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#aa4e6fe71122300e1a0a2c520b7992bc0">get_byname</a> () const noexcept</td></tr>
-<tr class="memdesc:aa4e6fe71122300e1a0a2c520b7992bc0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter for member variable <a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a09fdee4c2eb6f4fc77cf5ff7da278df4">LagStatement::byname</a>.  <a href="#aa4e6fe71122300e1a0a2c520b7992bc0">More...</a><br /></td></tr>
+<tr class="memdesc:aa4e6fe71122300e1a0a2c520b7992bc0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter for member variable <a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#ac0f44ad32c2b8f4ca71a4eb3ce3027cb">LagStatement::byname</a>.  <a href="#aa4e6fe71122300e1a0a2c520b7992bc0">More...</a><br /></td></tr>
 <tr class="separator:aa4e6fe71122300e1a0a2c520b7992bc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Setters</div></td></tr>
 <tr class="memitem:ade53733f725efed09cf446add9426969"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#ade53733f725efed09cf446add9426969">set_token</a> (const <a class="el" href="classnmodl_1_1_mod_token.html">ModToken</a> &amp;tok)</td></tr>
 <tr class="memdesc:ade53733f725efed09cf446add9426969"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set token for the current ast node.  <a href="#ade53733f725efed09cf446add9426969">More...</a><br /></td></tr>
 <tr class="separator:ade53733f725efed09cf446add9426969"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0415b80d5f2d78fd60fcca9a6b6a56bb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a0415b80d5f2d78fd60fcca9a6b6a56bb">set_name</a> (std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_identifier.html">Identifier</a> &gt; &amp;&amp;<a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a0041af231a91f5fa881f165c93603ff8">name</a>)</td></tr>
-<tr class="memdesc:a0415b80d5f2d78fd60fcca9a6b6a56bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a0041af231a91f5fa881f165c93603ff8">LagStatement::name</a> (rvalue reference)  <a href="#a0415b80d5f2d78fd60fcca9a6b6a56bb">More...</a><br /></td></tr>
+<tr class="memitem:a0415b80d5f2d78fd60fcca9a6b6a56bb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a0415b80d5f2d78fd60fcca9a6b6a56bb">set_name</a> (std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_identifier.html">Identifier</a> &gt; &amp;&amp;<a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a55c94d644e6a379d1a64564ddde07cfa">name</a>)</td></tr>
+<tr class="memdesc:a0415b80d5f2d78fd60fcca9a6b6a56bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a55c94d644e6a379d1a64564ddde07cfa">LagStatement::name</a> (rvalue reference)  <a href="#a0415b80d5f2d78fd60fcca9a6b6a56bb">More...</a><br /></td></tr>
 <tr class="separator:a0415b80d5f2d78fd60fcca9a6b6a56bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeb20aa82d08bae93fadd63ab08dc202d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#aeb20aa82d08bae93fadd63ab08dc202d">set_name</a> (const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_identifier.html">Identifier</a> &gt; &amp;<a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a0041af231a91f5fa881f165c93603ff8">name</a>)</td></tr>
-<tr class="memdesc:aeb20aa82d08bae93fadd63ab08dc202d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a0041af231a91f5fa881f165c93603ff8">LagStatement::name</a>.  <a href="#aeb20aa82d08bae93fadd63ab08dc202d">More...</a><br /></td></tr>
+<tr class="memitem:aeb20aa82d08bae93fadd63ab08dc202d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#aeb20aa82d08bae93fadd63ab08dc202d">set_name</a> (const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_identifier.html">Identifier</a> &gt; &amp;<a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a55c94d644e6a379d1a64564ddde07cfa">name</a>)</td></tr>
+<tr class="memdesc:aeb20aa82d08bae93fadd63ab08dc202d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a55c94d644e6a379d1a64564ddde07cfa">LagStatement::name</a>.  <a href="#aeb20aa82d08bae93fadd63ab08dc202d">More...</a><br /></td></tr>
 <tr class="separator:aeb20aa82d08bae93fadd63ab08dc202d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a05d9f5b8c452a1aaa83a0f5ff700a890"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a05d9f5b8c452a1aaa83a0f5ff700a890">set_byname</a> (std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_name.html">Name</a> &gt; &amp;&amp;<a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a09fdee4c2eb6f4fc77cf5ff7da278df4">byname</a>)</td></tr>
-<tr class="memdesc:a05d9f5b8c452a1aaa83a0f5ff700a890"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a09fdee4c2eb6f4fc77cf5ff7da278df4">LagStatement::byname</a> (rvalue reference)  <a href="#a05d9f5b8c452a1aaa83a0f5ff700a890">More...</a><br /></td></tr>
+<tr class="memitem:a05d9f5b8c452a1aaa83a0f5ff700a890"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a05d9f5b8c452a1aaa83a0f5ff700a890">set_byname</a> (std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_name.html">Name</a> &gt; &amp;&amp;<a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#ac0f44ad32c2b8f4ca71a4eb3ce3027cb">byname</a>)</td></tr>
+<tr class="memdesc:a05d9f5b8c452a1aaa83a0f5ff700a890"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#ac0f44ad32c2b8f4ca71a4eb3ce3027cb">LagStatement::byname</a> (rvalue reference)  <a href="#a05d9f5b8c452a1aaa83a0f5ff700a890">More...</a><br /></td></tr>
 <tr class="separator:a05d9f5b8c452a1aaa83a0f5ff700a890"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2e33a27c6fe6c83db86f9f1f3d47e771"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a2e33a27c6fe6c83db86f9f1f3d47e771">set_byname</a> (const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_name.html">Name</a> &gt; &amp;<a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a09fdee4c2eb6f4fc77cf5ff7da278df4">byname</a>)</td></tr>
-<tr class="memdesc:a2e33a27c6fe6c83db86f9f1f3d47e771"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a09fdee4c2eb6f4fc77cf5ff7da278df4">LagStatement::byname</a>.  <a href="#a2e33a27c6fe6c83db86f9f1f3d47e771">More...</a><br /></td></tr>
-<tr class="separator:a2e33a27c6fe6c83db86f9f1f3d47e771"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ade53733f725efed09cf446add9426969"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#ade53733f725efed09cf446add9426969">set_token</a> (const <a class="el" href="classnmodl_1_1_mod_token.html">ModToken</a> &amp;tok)</td></tr>
-<tr class="memdesc:ade53733f725efed09cf446add9426969"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set token for the current ast node.  <a href="#ade53733f725efed09cf446add9426969">More...</a><br /></td></tr>
-<tr class="separator:ade53733f725efed09cf446add9426969"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0415b80d5f2d78fd60fcca9a6b6a56bb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a0415b80d5f2d78fd60fcca9a6b6a56bb">set_name</a> (std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_identifier.html">Identifier</a> &gt; &amp;&amp;<a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a0041af231a91f5fa881f165c93603ff8">name</a>)</td></tr>
-<tr class="memdesc:a0415b80d5f2d78fd60fcca9a6b6a56bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a0041af231a91f5fa881f165c93603ff8">LagStatement::name</a> (rvalue reference)  <a href="#a0415b80d5f2d78fd60fcca9a6b6a56bb">More...</a><br /></td></tr>
-<tr class="separator:a0415b80d5f2d78fd60fcca9a6b6a56bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeb20aa82d08bae93fadd63ab08dc202d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#aeb20aa82d08bae93fadd63ab08dc202d">set_name</a> (const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_identifier.html">Identifier</a> &gt; &amp;<a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a0041af231a91f5fa881f165c93603ff8">name</a>)</td></tr>
-<tr class="memdesc:aeb20aa82d08bae93fadd63ab08dc202d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a0041af231a91f5fa881f165c93603ff8">LagStatement::name</a>.  <a href="#aeb20aa82d08bae93fadd63ab08dc202d">More...</a><br /></td></tr>
-<tr class="separator:aeb20aa82d08bae93fadd63ab08dc202d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a05d9f5b8c452a1aaa83a0f5ff700a890"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a05d9f5b8c452a1aaa83a0f5ff700a890">set_byname</a> (std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_name.html">Name</a> &gt; &amp;&amp;<a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a09fdee4c2eb6f4fc77cf5ff7da278df4">byname</a>)</td></tr>
-<tr class="memdesc:a05d9f5b8c452a1aaa83a0f5ff700a890"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a09fdee4c2eb6f4fc77cf5ff7da278df4">LagStatement::byname</a> (rvalue reference)  <a href="#a05d9f5b8c452a1aaa83a0f5ff700a890">More...</a><br /></td></tr>
-<tr class="separator:a05d9f5b8c452a1aaa83a0f5ff700a890"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2e33a27c6fe6c83db86f9f1f3d47e771"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a2e33a27c6fe6c83db86f9f1f3d47e771">set_byname</a> (const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_name.html">Name</a> &gt; &amp;<a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a09fdee4c2eb6f4fc77cf5ff7da278df4">byname</a>)</td></tr>
-<tr class="memdesc:a2e33a27c6fe6c83db86f9f1f3d47e771"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a09fdee4c2eb6f4fc77cf5ff7da278df4">LagStatement::byname</a>.  <a href="#a2e33a27c6fe6c83db86f9f1f3d47e771">More...</a><br /></td></tr>
+<tr class="memitem:a2e33a27c6fe6c83db86f9f1f3d47e771"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a2e33a27c6fe6c83db86f9f1f3d47e771">set_byname</a> (const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_name.html">Name</a> &gt; &amp;<a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#ac0f44ad32c2b8f4ca71a4eb3ce3027cb">byname</a>)</td></tr>
+<tr class="memdesc:a2e33a27c6fe6c83db86f9f1f3d47e771"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#ac0f44ad32c2b8f4ca71a4eb3ce3027cb">LagStatement::byname</a>.  <a href="#a2e33a27c6fe6c83db86f9f1f3d47e771">More...</a><br /></td></tr>
 <tr class="separator:a2e33a27c6fe6c83db86f9f1f3d47e771"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Visitor</div></td></tr>
-<tr class="memitem:a47ec0a7f555dbe4788d14679e35f14ce"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a47ec0a7f555dbe4788d14679e35f14ce">visit_children</a> (<a class="el" href="classnmodl_1_1visitor_1_1_visitor.html">visitor::Visitor</a> &amp;v) override</td></tr>
-<tr class="memdesc:a47ec0a7f555dbe4788d14679e35f14ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit children i.e.  <a href="#a47ec0a7f555dbe4788d14679e35f14ce">More...</a><br /></td></tr>
-<tr class="separator:a47ec0a7f555dbe4788d14679e35f14ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9e75009e82322694461d5584b6f1f903"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a9e75009e82322694461d5584b6f1f903">visit_children</a> (<a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html">visitor::ConstVisitor</a> &amp;v) const override</td></tr>
-<tr class="memdesc:a9e75009e82322694461d5584b6f1f903"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit children i.e.  <a href="#a9e75009e82322694461d5584b6f1f903">More...</a><br /></td></tr>
-<tr class="separator:a9e75009e82322694461d5584b6f1f903"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b736a519c47ef8e56e20477449ba0bd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a3b736a519c47ef8e56e20477449ba0bd">accept</a> (<a class="el" href="classnmodl_1_1visitor_1_1_visitor.html">visitor::Visitor</a> &amp;v) override</td></tr>
-<tr class="memdesc:a3b736a519c47ef8e56e20477449ba0bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">accept (or visit) the current AST node using provided visitor  <a href="#a3b736a519c47ef8e56e20477449ba0bd">More...</a><br /></td></tr>
-<tr class="separator:a3b736a519c47ef8e56e20477449ba0bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1898e7ea59fd573c291c37e793d2f8c9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a1898e7ea59fd573c291c37e793d2f8c9">accept</a> (<a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html">visitor::ConstVisitor</a> &amp;v) const override</td></tr>
-<tr class="memdesc:a1898e7ea59fd573c291c37e793d2f8c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">accept (or visit) the current AST node using provided visitor  <a href="#a1898e7ea59fd573c291c37e793d2f8c9">More...</a><br /></td></tr>
-<tr class="separator:a1898e7ea59fd573c291c37e793d2f8c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a47ec0a7f555dbe4788d14679e35f14ce"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a47ec0a7f555dbe4788d14679e35f14ce">visit_children</a> (<a class="el" href="classnmodl_1_1visitor_1_1_visitor.html">visitor::Visitor</a> &amp;v) override</td></tr>
 <tr class="memdesc:a47ec0a7f555dbe4788d14679e35f14ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit children i.e.  <a href="#a47ec0a7f555dbe4788d14679e35f14ce">More...</a><br /></td></tr>
 <tr class="separator:a47ec0a7f555dbe4788d14679e35f14ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -270,22 +194,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2d3ad996272efa5c8ad70888ed11c0da inherit pub_methods_classnmodl_1_1ast_1_1_statement"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_statement.html#a2d3ad996272efa5c8ad70888ed11c0da">is_statement</a> () const noexcept override</td></tr>
 <tr class="memdesc:a2d3ad996272efa5c8ad70888ed11c0da inherit pub_methods_classnmodl_1_1ast_1_1_statement"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_statement.html" title="TODO. ">ast::Statement</a>.  <a href="classnmodl_1_1ast_1_1_statement.html#a2d3ad996272efa5c8ad70888ed11c0da">More...</a><br /></td></tr>
 <tr class="separator:a2d3ad996272efa5c8ad70888ed11c0da inherit pub_methods_classnmodl_1_1ast_1_1_statement"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2d3ad996272efa5c8ad70888ed11c0da inherit pub_methods_classnmodl_1_1ast_1_1_statement"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_statement.html#a2d3ad996272efa5c8ad70888ed11c0da">is_statement</a> () const noexcept override</td></tr>
-<tr class="memdesc:a2d3ad996272efa5c8ad70888ed11c0da inherit pub_methods_classnmodl_1_1ast_1_1_statement"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_statement.html" title="TODO. ">ast::Statement</a>.  <a href="classnmodl_1_1ast_1_1_statement.html#a2d3ad996272efa5c8ad70888ed11c0da">More...</a><br /></td></tr>
-<tr class="separator:a2d3ad996272efa5c8ad70888ed11c0da inherit pub_methods_classnmodl_1_1ast_1_1_statement"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae45cfb0443e9859520040dd13b21c0b7 inherit pub_methods_classnmodl_1_1ast_1_1_statement"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_statement.html#ae45cfb0443e9859520040dd13b21c0b7">~Statement</a> ()=default</td></tr>
-<tr class="separator:ae45cfb0443e9859520040dd13b21c0b7 inherit pub_methods_classnmodl_1_1ast_1_1_statement"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae45cfb0443e9859520040dd13b21c0b7 inherit pub_methods_classnmodl_1_1ast_1_1_statement"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_statement.html#ae45cfb0443e9859520040dd13b21c0b7">~Statement</a> ()=default</td></tr>
 <tr class="separator:ae45cfb0443e9859520040dd13b21c0b7 inherit pub_methods_classnmodl_1_1ast_1_1_statement"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classnmodl_1_1ast_1_1_node"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classnmodl_1_1ast_1_1_node')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classnmodl_1_1ast_1_1_node.html">nmodl::ast::Node</a></td></tr>
 <tr class="memitem:a2b7063dd9a77db12146baed67280953e inherit pub_methods_classnmodl_1_1ast_1_1_node"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_node.html#a2b7063dd9a77db12146baed67280953e">is_node</a> () const noexcept override</td></tr>
 <tr class="memdesc:a2b7063dd9a77db12146baed67280953e inherit pub_methods_classnmodl_1_1ast_1_1_node"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_node.html" title="Base class for all AST node. ">ast::Node</a>.  <a href="classnmodl_1_1ast_1_1_node.html#a2b7063dd9a77db12146baed67280953e">More...</a><br /></td></tr>
 <tr class="separator:a2b7063dd9a77db12146baed67280953e inherit pub_methods_classnmodl_1_1ast_1_1_node"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2b7063dd9a77db12146baed67280953e inherit pub_methods_classnmodl_1_1ast_1_1_node"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_node.html#a2b7063dd9a77db12146baed67280953e">is_node</a> () const noexcept override</td></tr>
-<tr class="memdesc:a2b7063dd9a77db12146baed67280953e inherit pub_methods_classnmodl_1_1ast_1_1_node"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_node.html" title="Base class for all AST node. ">ast::Node</a>.  <a href="classnmodl_1_1ast_1_1_node.html#a2b7063dd9a77db12146baed67280953e">More...</a><br /></td></tr>
-<tr class="separator:a2b7063dd9a77db12146baed67280953e inherit pub_methods_classnmodl_1_1ast_1_1_node"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a00b329e514a48fe3cc73944374144645 inherit pub_methods_classnmodl_1_1ast_1_1_node"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_node.html#a00b329e514a48fe3cc73944374144645">~Node</a> ()=default</td></tr>
-<tr class="separator:a00b329e514a48fe3cc73944374144645 inherit pub_methods_classnmodl_1_1ast_1_1_node"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a00b329e514a48fe3cc73944374144645 inherit pub_methods_classnmodl_1_1ast_1_1_node"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_node.html#a00b329e514a48fe3cc73944374144645">~Node</a> ()=default</td></tr>
 <tr class="separator:a00b329e514a48fe3cc73944374144645 inherit pub_methods_classnmodl_1_1ast_1_1_node"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_structnmodl_1_1ast_1_1_ast"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_structnmodl_1_1ast_1_1_ast')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="structnmodl_1_1ast_1_1_ast.html">nmodl::ast::Ast</a></td></tr>
@@ -740,25 +654,22 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:a09913a34ab4a812330c76962a1774ef2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a09913a34ab4a812330c76962a1774ef2">set_parent_in_children</a> ()</td></tr>
 <tr class="memdesc:a09913a34ab4a812330c76962a1774ef2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set this object as parent for all the children.  <a href="#a09913a34ab4a812330c76962a1774ef2">More...</a><br /></td></tr>
 <tr class="separator:a09913a34ab4a812330c76962a1774ef2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a09913a34ab4a812330c76962a1774ef2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a09913a34ab4a812330c76962a1774ef2">set_parent_in_children</a> ()</td></tr>
-<tr class="memdesc:a09913a34ab4a812330c76962a1774ef2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set this object as parent for all the children.  <a href="#a09913a34ab4a812330c76962a1774ef2">More...</a><br /></td></tr>
-<tr class="separator:a09913a34ab4a812330c76962a1774ef2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:a0041af231a91f5fa881f165c93603ff8"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_identifier.html">Identifier</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a0041af231a91f5fa881f165c93603ff8">name</a></td></tr>
-<tr class="memdesc:a0041af231a91f5fa881f165c93603ff8"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classnmodl_1_1ast_1_1_name.html" title="Represents a name. ">Name</a> of the variable (TODO)  <a href="#a0041af231a91f5fa881f165c93603ff8">More...</a><br /></td></tr>
-<tr class="separator:a0041af231a91f5fa881f165c93603ff8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a09fdee4c2eb6f4fc77cf5ff7da278df4"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_name.html">Name</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a09fdee4c2eb6f4fc77cf5ff7da278df4">byname</a></td></tr>
-<tr class="memdesc:a09fdee4c2eb6f4fc77cf5ff7da278df4"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classnmodl_1_1ast_1_1_name.html" title="Represents a name. ">Name</a> of the variable (TODO)  <a href="#a09fdee4c2eb6f4fc77cf5ff7da278df4">More...</a><br /></td></tr>
-<tr class="separator:a09fdee4c2eb6f4fc77cf5ff7da278df4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad8caf1e4a9366a3cbc5a16905473661e"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classnmodl_1_1_mod_token.html">ModToken</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#ad8caf1e4a9366a3cbc5a16905473661e">token</a></td></tr>
-<tr class="memdesc:ad8caf1e4a9366a3cbc5a16905473661e"><td class="mdescLeft">&#160;</td><td class="mdescRight">token with location information  <a href="#ad8caf1e4a9366a3cbc5a16905473661e">More...</a><br /></td></tr>
-<tr class="separator:ad8caf1e4a9366a3cbc5a16905473661e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a55c94d644e6a379d1a64564ddde07cfa"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_identifier.html">Identifier</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a55c94d644e6a379d1a64564ddde07cfa">name</a></td></tr>
+<tr class="memdesc:a55c94d644e6a379d1a64564ddde07cfa"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classnmodl_1_1ast_1_1_name.html" title="Represents a name. ">Name</a> of the variable (TODO)  <a href="#a55c94d644e6a379d1a64564ddde07cfa">More...</a><br /></td></tr>
+<tr class="separator:a55c94d644e6a379d1a64564ddde07cfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0f44ad32c2b8f4ca71a4eb3ce3027cb"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_name.html">Name</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#ac0f44ad32c2b8f4ca71a4eb3ce3027cb">byname</a></td></tr>
+<tr class="memdesc:ac0f44ad32c2b8f4ca71a4eb3ce3027cb"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classnmodl_1_1ast_1_1_name.html" title="Represents a name. ">Name</a> of the variable (TODO)  <a href="#ac0f44ad32c2b8f4ca71a4eb3ce3027cb">More...</a><br /></td></tr>
+<tr class="separator:ac0f44ad32c2b8f4ca71a4eb3ce3027cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c4ee0ed3bd560861764838063195665"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classnmodl_1_1_mod_token.html">ModToken</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a2c4ee0ed3bd560861764838063195665">token</a></td></tr>
+<tr class="memdesc:a2c4ee0ed3bd560861764838063195665"><td class="mdescLeft">&#160;</td><td class="mdescRight">token with location information  <a href="#a2c4ee0ed3bd560861764838063195665">More...</a><br /></td></tr>
+<tr class="separator:a2c4ee0ed3bd560861764838063195665"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a29318d6f0e9e9c82169d94fcc41ec0cf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a29318d6f0e9e9c82169d94fcc41ec0cf">&#9670;&nbsp;</a></span>LagStatement() <span class="overload">[1/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a29318d6f0e9e9c82169d94fcc41ec0cf">&#9670;&nbsp;</a></span>LagStatement() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -796,7 +707,7 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <a id="a71b88a05e45e9c5569e8aefb010e32c5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a71b88a05e45e9c5569e8aefb010e32c5">&#9670;&nbsp;</a></span>LagStatement() <span class="overload">[2/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a71b88a05e45e9c5569e8aefb010e32c5">&#9670;&nbsp;</a></span>LagStatement() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -834,7 +745,7 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <a id="afa7db5bdc69740314ff226136d538507"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afa7db5bdc69740314ff226136d538507">&#9670;&nbsp;</a></span>LagStatement() <span class="overload">[3/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#afa7db5bdc69740314ff226136d538507">&#9670;&nbsp;</a></span>LagStatement() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -860,122 +771,7 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <a id="abe6f0b3a5da012137b175f99f2ce20d9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abe6f0b3a5da012137b175f99f2ce20d9">&#9670;&nbsp;</a></span>~LagStatement() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual nmodl::ast::LagStatement::~LagStatement </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">default</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a29318d6f0e9e9c82169d94fcc41ec0cf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a29318d6f0e9e9c82169d94fcc41ec0cf">&#9670;&nbsp;</a></span>LagStatement() <span class="overload">[4/6]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">nmodl::ast::LagStatement::LagStatement </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classnmodl_1_1ast_1_1_identifier.html">Identifier</a> *&#160;</td>
-          <td class="paramname"><em>name</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classnmodl_1_1ast_1_1_name.html">Name</a> *&#160;</td>
-          <td class="paramname"><em>byname</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a71b88a05e45e9c5569e8aefb010e32c5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a71b88a05e45e9c5569e8aefb010e32c5">&#9670;&nbsp;</a></span>LagStatement() <span class="overload">[5/6]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">nmodl::ast::LagStatement::LagStatement </td>
-          <td>(</td>
-          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_identifier.html">Identifier</a> &gt; &amp;&#160;</td>
-          <td class="paramname"><em>name</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_name.html">Name</a> &gt; &amp;&#160;</td>
-          <td class="paramname"><em>byname</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="afa7db5bdc69740314ff226136d538507"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afa7db5bdc69740314ff226136d538507">&#9670;&nbsp;</a></span>LagStatement() <span class="overload">[6/6]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">nmodl::ast::LagStatement::LagStatement </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html">LagStatement</a> &amp;&#160;</td>
-          <td class="paramname"><em>obj</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="abe6f0b3a5da012137b175f99f2ce20d9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abe6f0b3a5da012137b175f99f2ce20d9">&#9670;&nbsp;</a></span>~LagStatement() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#abe6f0b3a5da012137b175f99f2ce20d9">&#9670;&nbsp;</a></span>~LagStatement()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1001,83 +797,7 @@ Private Attributes</h2></td></tr>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="a3b736a519c47ef8e56e20477449ba0bd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3b736a519c47ef8e56e20477449ba0bd">&#9670;&nbsp;</a></span>accept() <span class="overload">[1/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void nmodl::ast::LagStatement::accept </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classnmodl_1_1visitor_1_1_visitor.html">visitor::Visitor</a> &amp;&#160;</td>
-          <td class="paramname"><em>v</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>accept (or visit) the current AST node using provided visitor </p>
-<p>Instead of visiting children of AST node, like <a class="el" href="group__ast__class.html#gac81ffb4a2c7ca8ce7527f2b8c3b9d403" title="Visit children i.e. ">Ast::visit_children</a>, accept allows to visit the current node itself using provided concrete visitor.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">v</td><td>Concrete visitor that will be used to recursively visit node</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__ast__class.html#ga7955eda5565d690e7acfaead092c56aa" title="Accept (or visit) the AST node using current visitor. ">Ast::accept</a> for example. </dd></dl>
-
-<p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_statement.html#addf1e87311cdb1f01d04b449c2b77dab">nmodl::ast::Statement</a>.</p>
-
-</div>
-</div>
-<a id="a1898e7ea59fd573c291c37e793d2f8c9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1898e7ea59fd573c291c37e793d2f8c9">&#9670;&nbsp;</a></span>accept() <span class="overload">[2/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void nmodl::ast::LagStatement::accept </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html">visitor::ConstVisitor</a> &amp;&#160;</td>
-          <td class="paramname"><em>v</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>accept (or visit) the current AST node using provided visitor </p>
-<p>Instead of visiting children of AST node, like <a class="el" href="group__ast__class.html#gac81ffb4a2c7ca8ce7527f2b8c3b9d403" title="Visit children i.e. ">Ast::visit_children</a>, accept allows to visit the current node itself using provided concrete visitor.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">v</td><td>Concrete visitor that will be used to recursively visit node</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__ast__class.html#ga7955eda5565d690e7acfaead092c56aa" title="Accept (or visit) the AST node using current visitor. ">Ast::accept</a> for example. </dd></dl>
-
-<p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_statement.html#a0cc08003408b2932f40729fee4eeebf4">nmodl::ast::Statement</a>.</p>
-
-</div>
-</div>
-<a id="a3b736a519c47ef8e56e20477449ba0bd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3b736a519c47ef8e56e20477449ba0bd">&#9670;&nbsp;</a></span>accept() <span class="overload">[3/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a3b736a519c47ef8e56e20477449ba0bd">&#9670;&nbsp;</a></span>accept() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1117,7 +837,7 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <a id="a1898e7ea59fd573c291c37e793d2f8c9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1898e7ea59fd573c291c37e793d2f8c9">&#9670;&nbsp;</a></span>accept() <span class="overload">[4/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a1898e7ea59fd573c291c37e793d2f8c9">&#9670;&nbsp;</a></span>accept() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1157,7 +877,7 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <a id="ad7c6edc4e0afc8a4ba3e9a94eb42e911"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad7c6edc4e0afc8a4ba3e9a94eb42e911">&#9670;&nbsp;</a></span>clone() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ad7c6edc4e0afc8a4ba3e9a94eb42e911">&#9670;&nbsp;</a></span>clone()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1185,45 +905,12 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_statement.html#a5d3a93de6d4f4e2bc4a807fc802f7af7">nmodl::ast::Statement</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="lag__statement_8hpp_source.html#l00099">99</a> of file <a class="el" href="lag__statement_8hpp_source.html">lag_statement.hpp</a>.</p>
-
-</div>
-</div>
-<a id="ad7c6edc4e0afc8a4ba3e9a94eb42e911"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad7c6edc4e0afc8a4ba3e9a94eb42e911">&#9670;&nbsp;</a></span>clone() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html">LagStatement</a>* nmodl::ast::LagStatement::clone </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Return a copy of the current node. </p>
-<p>Recursively make a new copy/clone of the current node including all members and return a pointer to the node. This is used for passes like <a class="el" href="classnmodl_1_1visitor_1_1_inline_visitor.html" title="Visitor to inline local procedure and function calls ">nmodl::visitor::InlineVisitor</a> where nodes are cloned in the ast.</p>
-<dl class="section return"><dt>Returns</dt><dd>pointer to the clone/copy of the current node </dd></dl>
-
-<p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_statement.html#a5d3a93de6d4f4e2bc4a807fc802f7af7">nmodl::ast::Statement</a>.</p>
-
-<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l31817">31817</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="lag__statement_8hpp_source.html#l00096">96</a> of file <a class="el" href="lag__statement_8hpp_source.html">lag_statement.hpp</a>.</p>
 
 </div>
 </div>
 <a id="aa4e6fe71122300e1a0a2c520b7992bc0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa4e6fe71122300e1a0a2c520b7992bc0">&#9670;&nbsp;</a></span>get_byname() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aa4e6fe71122300e1a0a2c520b7992bc0">&#9670;&nbsp;</a></span>get_byname()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1245,43 +932,14 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Getter for member variable <a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a09fdee4c2eb6f4fc77cf5ff7da278df4">LagStatement::byname</a>. </p>
+<p>Getter for member variable <a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#ac0f44ad32c2b8f4ca71a4eb3ce3027cb">LagStatement::byname</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="lag__statement_8hpp_source.html#l00200">200</a> of file <a class="el" href="lag__statement_8hpp_source.html">lag_statement.hpp</a>.</p>
-
-</div>
-</div>
-<a id="aa4e6fe71122300e1a0a2c520b7992bc0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa4e6fe71122300e1a0a2c520b7992bc0">&#9670;&nbsp;</a></span>get_byname() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const std::shared_ptr&lt;<a class="el" href="classnmodl_1_1ast_1_1_name.html">Name</a>&gt;&amp; nmodl::ast::LagStatement::get_byname </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Getter for member variable <a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a09fdee4c2eb6f4fc77cf5ff7da278df4">LagStatement::byname</a>. </p>
-
-<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l31918">31918</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="lag__statement_8hpp_source.html#l00197">197</a> of file <a class="el" href="lag__statement_8hpp_source.html">lag_statement.hpp</a>.</p>
 
 </div>
 </div>
 <a id="ab30884e1700e0a808374a8422764af74"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab30884e1700e0a808374a8422764af74">&#9670;&nbsp;</a></span>get_name() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ab30884e1700e0a808374a8422764af74">&#9670;&nbsp;</a></span>get_name()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1303,43 +961,14 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Getter for member variable <a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a0041af231a91f5fa881f165c93603ff8">LagStatement::name</a>. </p>
+<p>Getter for member variable <a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a55c94d644e6a379d1a64564ddde07cfa">LagStatement::name</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="lag__statement_8hpp_source.html#l00187">187</a> of file <a class="el" href="lag__statement_8hpp_source.html">lag_statement.hpp</a>.</p>
-
-</div>
-</div>
-<a id="ab30884e1700e0a808374a8422764af74"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab30884e1700e0a808374a8422764af74">&#9670;&nbsp;</a></span>get_name() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const std::shared_ptr&lt;<a class="el" href="classnmodl_1_1ast_1_1_identifier.html">Identifier</a>&gt;&amp; nmodl::ast::LagStatement::get_name </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Getter for member variable <a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a0041af231a91f5fa881f165c93603ff8">LagStatement::name</a>. </p>
-
-<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l31905">31905</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="lag__statement_8hpp_source.html#l00184">184</a> of file <a class="el" href="lag__statement_8hpp_source.html">lag_statement.hpp</a>.</p>
 
 </div>
 </div>
 <a id="a8b49804502b39e4c6d25a0edf4302ce6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8b49804502b39e4c6d25a0edf4302ce6">&#9670;&nbsp;</a></span>get_nmodl_name() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b49804502b39e4c6d25a0edf4302ce6">&#9670;&nbsp;</a></span>get_nmodl_name()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1368,46 +997,12 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="group__ast__class.html#ga0e489400312bdda6525ce3b9c1a15278">nmodl::ast::Ast</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="lag__statement_8hpp_source.html#l00146">146</a> of file <a class="el" href="lag__statement_8hpp_source.html">lag_statement.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a8b49804502b39e4c6d25a0edf4302ce6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8b49804502b39e4c6d25a0edf4302ce6">&#9670;&nbsp;</a></span>get_nmodl_name() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string nmodl::ast::LagStatement::get_nmodl_name </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Return NMODL statement of ast node as std::string. </p>
-<p>Every node is related to a special statement in the NMODL. This statement can be returned as a std::string for printing to text/json form.</p>
-<dl class="section return"><dt>Returns</dt><dd>name of the statement as a string i.e. "LAG "</dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__ast__class.html#ga0e489400312bdda6525ce3b9c1a15278" title="Return NMODL statement of ast node as std::string. ">Ast::get_nmodl_name</a> </dd></dl>
-
-<p>Reimplemented from <a class="el" href="group__ast__class.html#ga0e489400312bdda6525ce3b9c1a15278">nmodl::ast::Ast</a>.</p>
-
-<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l31864">31864</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="lag__statement_8hpp_source.html#l00143">143</a> of file <a class="el" href="lag__statement_8hpp_source.html">lag_statement.hpp</a>.</p>
 
 </div>
 </div>
 <a id="a8fb5c08011a04d65d9d8e9608a24226c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8fb5c08011a04d65d9d8e9608a24226c">&#9670;&nbsp;</a></span>get_node_type() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a8fb5c08011a04d65d9d8e9608a24226c">&#9670;&nbsp;</a></span>get_node_type()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1436,46 +1031,12 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_statement.html#a2b3b098c6c3b4bffe6f601247f36087c">nmodl::ast::Statement</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="lag__statement_8hpp_source.html#l00116">116</a> of file <a class="el" href="lag__statement_8hpp_source.html">lag_statement.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a8fb5c08011a04d65d9d8e9608a24226c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8fb5c08011a04d65d9d8e9608a24226c">&#9670;&nbsp;</a></span>get_node_type() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033">AstNodeType</a> nmodl::ast::LagStatement::get_node_type </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Return type (<a class="el" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033" title="Enum type for every AST node type. ">ast::AstNodeType</a>) of ast node. </p>
-<p>Every node in the ast has a type defined in <a class="el" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033" title="Enum type for every AST node type. ">ast::AstNodeType</a> and this function is used to retrieve the same.</p>
-<dl class="section return"><dt>Returns</dt><dd>ast node type i.e. <a class="el" href="group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033aedc1e3df943d314eb4c16460d1bbd50c" title="type of ast::LagStatement ">ast::AstNodeType::LAG_STATEMENT</a></dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__ast__class.html#ga9a9684461a0f1ce3adb845a0715b1b9e" title="Return type (ast::AstNodeType) of ast node as std::string. ">Ast::get_node_type_name</a> </dd></dl>
-
-<p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_statement.html#a2b3b098c6c3b4bffe6f601247f36087c">nmodl::ast::Statement</a>.</p>
-
-<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l31834">31834</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="lag__statement_8hpp_source.html#l00113">113</a> of file <a class="el" href="lag__statement_8hpp_source.html">lag_statement.hpp</a>.</p>
 
 </div>
 </div>
 <a id="a347d097b152ac8ce5ef9a4df7bcbb940"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a347d097b152ac8ce5ef9a4df7bcbb940">&#9670;&nbsp;</a></span>get_node_type_name() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a347d097b152ac8ce5ef9a4df7bcbb940">&#9670;&nbsp;</a></span>get_node_type_name()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1504,46 +1065,12 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_statement.html#a166ef7aeca7d2cd9eb9ba1b461732422">nmodl::ast::Statement</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="lag__statement_8hpp_source.html#l00131">131</a> of file <a class="el" href="lag__statement_8hpp_source.html">lag_statement.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a347d097b152ac8ce5ef9a4df7bcbb940"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a347d097b152ac8ce5ef9a4df7bcbb940">&#9670;&nbsp;</a></span>get_node_type_name() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string nmodl::ast::LagStatement::get_node_type_name </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Return type (<a class="el" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033" title="Enum type for every AST node type. ">ast::AstNodeType</a>) of ast node as std::string. </p>
-<p>Every node in the ast has a type defined in <a class="el" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033" title="Enum type for every AST node type. ">ast::AstNodeType</a>. This type name can be returned as a std::string for printing node to text/json form.</p>
-<dl class="section return"><dt>Returns</dt><dd>name of the node type as a string i.e. "LagStatement"</dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__ast__class.html#gabe0d8be79f0e0c0967da29d186c86c3c" title="Return name of of the node. ">Ast::get_node_name</a> </dd></dl>
-
-<p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_statement.html#a166ef7aeca7d2cd9eb9ba1b461732422">nmodl::ast::Statement</a>.</p>
-
-<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l31849">31849</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="lag__statement_8hpp_source.html#l00128">128</a> of file <a class="el" href="lag__statement_8hpp_source.html">lag_statement.hpp</a>.</p>
 
 </div>
 </div>
 <a id="ade367eb28a2beab713c38354ef7e377e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ade367eb28a2beab713c38354ef7e377e">&#9670;&nbsp;</a></span>get_shared_ptr() <span class="overload">[1/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ade367eb28a2beab713c38354ef7e377e">&#9670;&nbsp;</a></span>get_shared_ptr() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1569,12 +1096,12 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_statement.html#a6b76165960598701cf2da1016eb0059d">nmodl::ast::Statement</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="lag__statement_8hpp_source.html#l00153">153</a> of file <a class="el" href="lag__statement_8hpp_source.html">lag_statement.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="lag__statement_8hpp_source.html#l00150">150</a> of file <a class="el" href="lag__statement_8hpp_source.html">lag_statement.hpp</a>.</p>
 
 </div>
 </div>
 <a id="aaf832a83ff3e84bfc916917e398049c3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaf832a83ff3e84bfc916917e398049c3">&#9670;&nbsp;</a></span>get_shared_ptr() <span class="overload">[2/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf832a83ff3e84bfc916917e398049c3">&#9670;&nbsp;</a></span>get_shared_ptr() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1600,74 +1127,12 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_statement.html#a2b50fd02e10cd87d86072668fdcde928">nmodl::ast::Statement</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="lag__statement_8hpp_source.html#l00160">160</a> of file <a class="el" href="lag__statement_8hpp_source.html">lag_statement.hpp</a>.</p>
-
-</div>
-</div>
-<a id="ade367eb28a2beab713c38354ef7e377e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ade367eb28a2beab713c38354ef7e377e">&#9670;&nbsp;</a></span>get_shared_ptr() <span class="overload">[3/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::shared_ptr&lt;<a class="el" href="structnmodl_1_1ast_1_1_ast.html">Ast</a>&gt; nmodl::ast::LagStatement::get_shared_ptr </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Get std::shared_ptr from <code>this</code> pointer of the current ast node. </p>
-
-<p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_statement.html#a6b76165960598701cf2da1016eb0059d">nmodl::ast::Statement</a>.</p>
-
-<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l31871">31871</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
-
-</div>
-</div>
-<a id="aaf832a83ff3e84bfc916917e398049c3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaf832a83ff3e84bfc916917e398049c3">&#9670;&nbsp;</a></span>get_shared_ptr() <span class="overload">[4/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::shared_ptr&lt;const <a class="el" href="structnmodl_1_1ast_1_1_ast.html">Ast</a>&gt; nmodl::ast::LagStatement::get_shared_ptr </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Get std::shared_ptr from <code>this</code> pointer of the current ast node. </p>
-
-<p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_statement.html#a2b50fd02e10cd87d86072668fdcde928">nmodl::ast::Statement</a>.</p>
-
-<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l31878">31878</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="lag__statement_8hpp_source.html#l00157">157</a> of file <a class="el" href="lag__statement_8hpp_source.html">lag_statement.hpp</a>.</p>
 
 </div>
 </div>
 <a id="a8141ef70a76a884be92cd324b6b6766e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8141ef70a76a884be92cd324b6b6766e">&#9670;&nbsp;</a></span>get_token() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a8141ef70a76a884be92cd324b6b6766e">&#9670;&nbsp;</a></span>get_token()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1695,45 +1160,12 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="group__ast__class.html#ga4892777c5b32b112d588b05d07f28549">nmodl::ast::Ast</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="lag__statement_8hpp_source.html#l00173">173</a> of file <a class="el" href="lag__statement_8hpp_source.html">lag_statement.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a8141ef70a76a884be92cd324b6b6766e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8141ef70a76a884be92cd324b6b6766e">&#9670;&nbsp;</a></span>get_token() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const <a class="el" href="classnmodl_1_1_mod_token.html">ModToken</a>* nmodl::ast::LagStatement::get_token </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Return associated token for the current ast node. </p>
-<p>Not all ast nodes have token information. For example, <a class="el" href="classnmodl_1_1visitor_1_1_neuron_solve_visitor.html" title="Visitor that solves ODEs using old solvers of NEURON ">nmodl::visitor::NeuronSolveVisitor</a> can insert new nodes in the ast as a solution of ODEs. In this case, we return nullptr to store in the <a class="el" href="classnmodl_1_1symtab_1_1_symbol_table.html" title="Represent symbol table for a NMODL block. ">nmodl::symtab::SymbolTable</a>.</p>
-<dl class="section return"><dt>Returns</dt><dd>pointer to token if exist otherwise nullptr </dd></dl>
-
-<p>Reimplemented from <a class="el" href="group__ast__class.html#ga4892777c5b32b112d588b05d07f28549">nmodl::ast::Ast</a>.</p>
-
-<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l31891">31891</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="lag__statement_8hpp_source.html#l00170">170</a> of file <a class="el" href="lag__statement_8hpp_source.html">lag_statement.hpp</a>.</p>
 
 </div>
 </div>
 <a id="a2152c72030abc39b8f58311700c215e9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2152c72030abc39b8f58311700c215e9">&#9670;&nbsp;</a></span>is_lag_statement() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a2152c72030abc39b8f58311700c215e9">&#9670;&nbsp;</a></span>is_lag_statement()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1760,44 +1192,12 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="group__ast__class.html#gab0ca0546b6c94aa502549453ff611811">nmodl::ast::Ast</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="lag__statement_8hpp_source.html#l00085">85</a> of file <a class="el" href="lag__statement_8hpp_source.html">lag_statement.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a2152c72030abc39b8f58311700c215e9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2152c72030abc39b8f58311700c215e9">&#9670;&nbsp;</a></span>is_lag_statement() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool nmodl::ast::LagStatement::is_lag_statement </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html" title="Represents a LAG statement in the mod file. ">ast::LagStatement</a>. </p>
-<dl class="section return"><dt>Returns</dt><dd>true as object is of type <a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html" title="Represents a LAG statement in the mod file. ">ast::LagStatement</a> </dd></dl>
-
-<p>Reimplemented from <a class="el" href="group__ast__class.html#gab0ca0546b6c94aa502549453ff611811">nmodl::ast::Ast</a>.</p>
-
-<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l31803">31803</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="lag__statement_8hpp_source.html#l00082">82</a> of file <a class="el" href="lag__statement_8hpp_source.html">lag_statement.hpp</a>.</p>
 
 </div>
 </div>
 <a id="a05d9f5b8c452a1aaa83a0f5ff700a890"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a05d9f5b8c452a1aaa83a0f5ff700a890">&#9670;&nbsp;</a></span>set_byname() <span class="overload">[1/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a05d9f5b8c452a1aaa83a0f5ff700a890">&#9670;&nbsp;</a></span>set_byname() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1812,54 +1212,14 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a09fdee4c2eb6f4fc77cf5ff7da278df4">LagStatement::byname</a> (rvalue reference) </p>
-
-</div>
-</div>
-<a id="a2e33a27c6fe6c83db86f9f1f3d47e771"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2e33a27c6fe6c83db86f9f1f3d47e771">&#9670;&nbsp;</a></span>set_byname() <span class="overload">[2/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void nmodl::ast::LagStatement::set_byname </td>
-          <td>(</td>
-          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_name.html">Name</a> &gt; &amp;&#160;</td>
-          <td class="paramname"><em>byname</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a09fdee4c2eb6f4fc77cf5ff7da278df4">LagStatement::byname</a>. </p>
-
-</div>
-</div>
-<a id="a05d9f5b8c452a1aaa83a0f5ff700a890"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a05d9f5b8c452a1aaa83a0f5ff700a890">&#9670;&nbsp;</a></span>set_byname() <span class="overload">[3/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void nmodl::ast::LagStatement::set_byname </td>
-          <td>(</td>
-          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_name.html">Name</a> &gt; &amp;&amp;&#160;</td>
-          <td class="paramname"><em>byname</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a09fdee4c2eb6f4fc77cf5ff7da278df4">LagStatement::byname</a> (rvalue reference) </p>
+<p>Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#ac0f44ad32c2b8f4ca71a4eb3ce3027cb">LagStatement::byname</a> (rvalue reference) </p>
 
 <p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l13232">13232</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
 <a id="a2e33a27c6fe6c83db86f9f1f3d47e771"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2e33a27c6fe6c83db86f9f1f3d47e771">&#9670;&nbsp;</a></span>set_byname() <span class="overload">[4/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a2e33a27c6fe6c83db86f9f1f3d47e771">&#9670;&nbsp;</a></span>set_byname() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1874,14 +1234,14 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a09fdee4c2eb6f4fc77cf5ff7da278df4">LagStatement::byname</a>. </p>
+<p>Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#ac0f44ad32c2b8f4ca71a4eb3ce3027cb">LagStatement::byname</a>. </p>
 
 <p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l13240">13240</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
 <a id="a0415b80d5f2d78fd60fcca9a6b6a56bb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0415b80d5f2d78fd60fcca9a6b6a56bb">&#9670;&nbsp;</a></span>set_name() <span class="overload">[1/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a0415b80d5f2d78fd60fcca9a6b6a56bb">&#9670;&nbsp;</a></span>set_name() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1896,54 +1256,14 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a0041af231a91f5fa881f165c93603ff8">LagStatement::name</a> (rvalue reference) </p>
-
-</div>
-</div>
-<a id="aeb20aa82d08bae93fadd63ab08dc202d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aeb20aa82d08bae93fadd63ab08dc202d">&#9670;&nbsp;</a></span>set_name() <span class="overload">[2/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void nmodl::ast::LagStatement::set_name </td>
-          <td>(</td>
-          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_identifier.html">Identifier</a> &gt; &amp;&#160;</td>
-          <td class="paramname"><em>name</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a0041af231a91f5fa881f165c93603ff8">LagStatement::name</a>. </p>
-
-</div>
-</div>
-<a id="a0415b80d5f2d78fd60fcca9a6b6a56bb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0415b80d5f2d78fd60fcca9a6b6a56bb">&#9670;&nbsp;</a></span>set_name() <span class="overload">[3/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void nmodl::ast::LagStatement::set_name </td>
-          <td>(</td>
-          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_identifier.html">Identifier</a> &gt; &amp;&amp;&#160;</td>
-          <td class="paramname"><em>name</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a0041af231a91f5fa881f165c93603ff8">LagStatement::name</a> (rvalue reference) </p>
+<p>Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a55c94d644e6a379d1a64564ddde07cfa">LagStatement::name</a> (rvalue reference) </p>
 
 <p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l13215">13215</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
 <a id="aeb20aa82d08bae93fadd63ab08dc202d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aeb20aa82d08bae93fadd63ab08dc202d">&#9670;&nbsp;</a></span>set_name() <span class="overload">[4/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aeb20aa82d08bae93fadd63ab08dc202d">&#9670;&nbsp;</a></span>set_name() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1958,42 +1278,14 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a0041af231a91f5fa881f165c93603ff8">LagStatement::name</a>. </p>
+<p>Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_lag_statement.html#a55c94d644e6a379d1a64564ddde07cfa">LagStatement::name</a>. </p>
 
 <p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l13223">13223</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
 <a id="a09913a34ab4a812330c76962a1774ef2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a09913a34ab4a812330c76962a1774ef2">&#9670;&nbsp;</a></span>set_parent_in_children() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void nmodl::ast::LagStatement::set_parent_in_children </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Set this object as parent for all the children. </p>
-<p>This should be called in every object (with children) constructor to set parents. Since it is called only in the constructors it should not be virtual to avoid ambiguities (issue #295). </p>
-
-</div>
-</div>
-<a id="a09913a34ab4a812330c76962a1774ef2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a09913a34ab4a812330c76962a1774ef2">&#9670;&nbsp;</a></span>set_parent_in_children() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a09913a34ab4a812330c76962a1774ef2">&#9670;&nbsp;</a></span>set_parent_in_children()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2026,7 +1318,7 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <a id="ade53733f725efed09cf446add9426969"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ade53733f725efed09cf446add9426969">&#9670;&nbsp;</a></span>set_token() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ade53733f725efed09cf446add9426969">&#9670;&nbsp;</a></span>set_token()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2051,120 +1343,12 @@ Private Attributes</h2></td></tr>
 
 <p>Set token for the current ast node. </p>
 
-<p class="definition">Definition at line <a class="el" href="lag__statement_8hpp_source.html#l00215">215</a> of file <a class="el" href="lag__statement_8hpp_source.html">lag_statement.hpp</a>.</p>
-
-</div>
-</div>
-<a id="ade53733f725efed09cf446add9426969"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ade53733f725efed09cf446add9426969">&#9670;&nbsp;</a></span>set_token() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void nmodl::ast::LagStatement::set_token </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classnmodl_1_1_mod_token.html">ModToken</a> &amp;&#160;</td>
-          <td class="paramname"><em>tok</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Set token for the current ast node. </p>
-
-<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l31933">31933</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="lag__statement_8hpp_source.html#l00212">212</a> of file <a class="el" href="lag__statement_8hpp_source.html">lag_statement.hpp</a>.</p>
 
 </div>
 </div>
 <a id="a47ec0a7f555dbe4788d14679e35f14ce"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a47ec0a7f555dbe4788d14679e35f14ce">&#9670;&nbsp;</a></span>visit_children() <span class="overload">[1/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void nmodl::ast::LagStatement::visit_children </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classnmodl_1_1visitor_1_1_visitor.html">visitor::Visitor</a> &amp;&#160;</td>
-          <td class="paramname"><em>v</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>visit children i.e. </p>
-<p>member variables of current node using provided visitor</p>
-<p>Different nodes in the AST have different members (i.e. children). This method recursively visits children using provided visitor.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">v</td><td>Concrete visitor that will be used to recursively visit children</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__ast__class.html#gac81ffb4a2c7ca8ce7527f2b8c3b9d403" title="Visit children i.e. ">Ast::visit_children</a> for example. </dd></dl>
-
-<p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_statement.html#a054725f5508756aa0dac4861c7152b7a">nmodl::ast::Statement</a>.</p>
-
-</div>
-</div>
-<a id="a9e75009e82322694461d5584b6f1f903"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9e75009e82322694461d5584b6f1f903">&#9670;&nbsp;</a></span>visit_children() <span class="overload">[2/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void nmodl::ast::LagStatement::visit_children </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html">visitor::ConstVisitor</a> &amp;&#160;</td>
-          <td class="paramname"><em>v</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>visit children i.e. </p>
-<p>member variables of current node using provided visitor</p>
-<p>Different nodes in the AST have different members (i.e. children). This method recursively visits children using provided visitor.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">v</td><td>Concrete constant visitor that will be used to recursively visit children</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__ast__class.html#gac81ffb4a2c7ca8ce7527f2b8c3b9d403" title="Visit children i.e. ">Ast::visit_children</a> for example. </dd></dl>
-
-<p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_statement.html#ab9753e2c6da4f9a35600897f8fbebc95">nmodl::ast::Statement</a>.</p>
-
-</div>
-</div>
-<a id="a47ec0a7f555dbe4788d14679e35f14ce"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a47ec0a7f555dbe4788d14679e35f14ce">&#9670;&nbsp;</a></span>visit_children() <span class="overload">[3/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a47ec0a7f555dbe4788d14679e35f14ce">&#9670;&nbsp;</a></span>visit_children() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2208,7 +1392,7 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <a id="a9e75009e82322694461d5584b6f1f903"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9e75009e82322694461d5584b6f1f903">&#9670;&nbsp;</a></span>visit_children() <span class="overload">[4/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a9e75009e82322694461d5584b6f1f903">&#9670;&nbsp;</a></span>visit_children() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2251,8 +1435,8 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a09fdee4c2eb6f4fc77cf5ff7da278df4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a09fdee4c2eb6f4fc77cf5ff7da278df4">&#9670;&nbsp;</a></span>byname</h2>
+<a id="ac0f44ad32c2b8f4ca71a4eb3ce3027cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0f44ad32c2b8f4ca71a4eb3ce3027cb">&#9670;&nbsp;</a></span>byname</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2261,7 +1445,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_name.html">Name</a> &gt; nmodl::ast::LagStatement::byname</td>
+          <td class="memname">std::shared_ptr&lt;<a class="el" href="classnmodl_1_1ast_1_1_name.html">Name</a>&gt; nmodl::ast::LagStatement::byname</td>
         </tr>
       </table>
   </td>
@@ -2273,12 +1457,12 @@ Private Attributes</h2></td></tr>
 
 <p><a class="el" href="classnmodl_1_1ast_1_1_name.html" title="Represents a name. ">Name</a> of the variable (TODO) </p>
 
-<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l31776">31776</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="lag__statement_8hpp_source.html#l00055">55</a> of file <a class="el" href="lag__statement_8hpp_source.html">lag_statement.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a0041af231a91f5fa881f165c93603ff8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0041af231a91f5fa881f165c93603ff8">&#9670;&nbsp;</a></span>name</h2>
+<a id="a55c94d644e6a379d1a64564ddde07cfa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a55c94d644e6a379d1a64564ddde07cfa">&#9670;&nbsp;</a></span>name</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2287,7 +1471,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_identifier.html">Identifier</a> &gt; nmodl::ast::LagStatement::name</td>
+          <td class="memname">std::shared_ptr&lt;<a class="el" href="classnmodl_1_1ast_1_1_identifier.html">Identifier</a>&gt; nmodl::ast::LagStatement::name</td>
         </tr>
       </table>
   </td>
@@ -2299,12 +1483,12 @@ Private Attributes</h2></td></tr>
 
 <p><a class="el" href="classnmodl_1_1ast_1_1_name.html" title="Represents a name. ">Name</a> of the variable (TODO) </p>
 
-<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l31774">31774</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="lag__statement_8hpp_source.html#l00053">53</a> of file <a class="el" href="lag__statement_8hpp_source.html">lag_statement.hpp</a>.</p>
 
 </div>
 </div>
-<a id="ad8caf1e4a9366a3cbc5a16905473661e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad8caf1e4a9366a3cbc5a16905473661e">&#9670;&nbsp;</a></span>token</h2>
+<a id="a2c4ee0ed3bd560861764838063195665"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c4ee0ed3bd560861764838063195665">&#9670;&nbsp;</a></span>token</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2313,7 +1497,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::shared_ptr&lt; <a class="el" href="classnmodl_1_1_mod_token.html">ModToken</a> &gt; nmodl::ast::LagStatement::token</td>
+          <td class="memname">std::shared_ptr&lt;<a class="el" href="classnmodl_1_1_mod_token.html">ModToken</a>&gt; nmodl::ast::LagStatement::token</td>
         </tr>
       </table>
   </td>
@@ -2325,12 +1509,11 @@ Private Attributes</h2></td></tr>
 
 <p>token with location information </p>
 
-<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l31778">31778</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="lag__statement_8hpp_source.html#l00057">57</a> of file <a class="el" href="lag__statement_8hpp_source.html">lag_statement.hpp</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/runner/work/nmodl/nmodl/_skbuild/linux-x86_64-3.8/cmake-build/src/ast/<a class="el" href="all_8hpp_source.html">all.hpp</a></li>
 <li>/home/runner/work/nmodl/nmodl/_skbuild/linux-x86_64-3.8/cmake-build/src/ast/<a class="el" href="lag__statement_8hpp_source.html">lag_statement.hpp</a></li>
 <li>/home/runner/work/nmodl/nmodl/_skbuild/linux-x86_64-3.8/cmake-build/src/ast/<a class="el" href="ast_8cpp_source.html">ast.cpp</a></li>
 </ul>

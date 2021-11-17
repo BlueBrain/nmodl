@@ -10,6 +10,7 @@ var dir_313caf1132e152dd9b58bea13a4052ca =
     [ "logger.hpp", "logger_8hpp.html", null ],
     [ "perf_stat.cpp", "perf__stat_8cpp.html", "perf__stat_8cpp" ],
     [ "perf_stat.hpp", "perf__stat_8hpp.html", null ],
+    [ "string_utils.cpp", "string__utils_8cpp.html", "string__utils_8cpp" ],
     [ "string_utils.hpp", "string__utils_8hpp.html", "string__utils_8hpp" ],
     [ "table_data.cpp", "table__data_8cpp.html", null ],
     [ "table_data.hpp", "table__data_8hpp.html", null ]

@@ -16,6 +16,7 @@ var searchData=
   ['diffeq_5fhelper_2ehpp',['diffeq_helper.hpp',['../diffeq__helper_8hpp.html',1,'']]],
   ['diffeq_5flexer_2ehpp',['diffeq_lexer.hpp',['../diffeq__lexer_8hpp.html',1,'']]],
   ['discrete_5fblock_2ehpp',['discrete_block.hpp',['../discrete__block_8hpp.html',1,'']]],
+  ['docstrings_2ehpp',['docstrings.hpp',['../docstrings_8hpp.html',1,'']]],
   ['double_2ehpp',['double.hpp',['../double_8hpp.html',1,'']]],
   ['double_5funit_2ehpp',['double_unit.hpp',['../double__unit_8hpp.html',1,'']]]
 ];

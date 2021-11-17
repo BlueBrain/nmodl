@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['qtype',['qtype',['../classnmodl_1_1ast_1_1_queue_statement.html#a51a33a9b9b223f4e14716902146776d3',1,'nmodl::ast::QueueStatement']]],
+  ['qtype',['qtype',['../classnmodl_1_1ast_1_1_queue_statement.html#a60191cf9ee66cdf9faf562968da82f3e',1,'nmodl::ast::QueueStatement']]],
   ['queuetypenames',['QueueTypeNames',['../group__ast__prop.html#ga02e59ee3f184cf58278701c87c0e910f',1,'nmodl::ast']]],
   ['qx1exp',['QX1exp',['../namespacenmodl_1_1fast__math.html#ac56a3fd337478fdb970edb7b7f451527',1,'nmodl::fast_math::QX1exp()'],['../fast__math_8ispc.html#a2b738086c1bce2cb0bb3465f0366fd9d',1,'QX1exp():&#160;fast_math.ispc']]],
   ['qx2exp',['QX2exp',['../namespacenmodl_1_1fast__math.html#aba81230b07610fef80be0851bf7e5d07',1,'nmodl::fast_math::QX2exp()'],['../fast__math_8ispc.html#ad42aaca0e737dfe2f8ddf9872b254599',1,'QX2exp():&#160;fast_math.ispc']]],

@@ -103,43 +103,23 @@ $(document).ready(function(){initNavTree('classnmodl_1_1ast_1_1_string.html','')
 <div class="textblock"><p>Represents a string. </p>
 <p>All statements encapsulating text block are stored in the AST as <a class="el" href="classnmodl_1_1ast_1_1_string.html" title="Represents a string. ">ast::String</a>. For example, nodes like <a class="el" href="classnmodl_1_1ast_1_1_line_comment.html" title="Represents a one line comment in NMODL. ">ast::LineComment</a> and <a class="el" href="classnmodl_1_1ast_1_1_verbatim.html" title="Represents a C code block. ">ast::Verbatim</a> block use <a class="el" href="classnmodl_1_1ast_1_1_string.html#adbf40ddad32c859cb81d54f2851e60c1" title="Value of string. ">ast::String::value</a> to store the underlying text:</p>
 <div class="fragment"><div class="line">COMMENT</div><div class="line">  This text is stored as String</div><div class="line">ENDCOMMENT</div><div class="line"></div><div class="line">VERBATIM</div><div class="line">    int *x;</div><div class="line">    *x = ...</div><div class="line">ENDVERBATIM</div></div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l01136">1136</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00055">55</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
 </div>
-<p><code>#include &lt;<a class="el" href="all_8hpp_source.html">all.hpp</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="string_8hpp_source.html">string.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for nmodl::ast::String:</div>
 <div class="dyncontent">
  <div class="center">
   <img src="classnmodl_1_1ast_1_1_string.png" usemap="#nmodl::ast::String_map" alt=""/>
   <map id="nmodl::ast::String_map" name="nmodl::ast::String_map">
-<area href="classnmodl_1_1ast_1_1_expression.html" title="Base class for all expressions in the NMODL. " alt="nmodl::ast::Expression" shape="rect" coords="145,168,280,192"/>
-<area href="classnmodl_1_1ast_1_1_expression.html" title="Base class for all expressions in the NMODL. " alt="nmodl::ast::Expression" shape="rect" coords="725,168,860,192"/>
-<area href="classnmodl_1_1ast_1_1_node.html" title="Base class for all AST node. " alt="nmodl::ast::Node" shape="rect" coords="0,112,135,136"/>
-<area href="classnmodl_1_1ast_1_1_node.html" title="Base class for all AST node. " alt="nmodl::ast::Node" shape="rect" coords="290,112,425,136"/>
-<area href="classnmodl_1_1ast_1_1_node.html" title="Base class for all AST node. " alt="nmodl::ast::Node" shape="rect" coords="580,112,715,136"/>
-<area href="classnmodl_1_1ast_1_1_node.html" title="Base class for all AST node. " alt="nmodl::ast::Node" shape="rect" coords="870,112,1005,136"/>
-<area href="structnmodl_1_1ast_1_1_ast.html" title="Base class for all Abstract Syntax Tree node types. " alt="nmodl::ast::Ast" shape="rect" coords="1015,56,1150,80"/>
-<area href="structnmodl_1_1ast_1_1_ast.html" title="Base class for all Abstract Syntax Tree node types. " alt="nmodl::ast::Ast" shape="rect" coords="1015,0,1150,24"/>
-<area href="structnmodl_1_1ast_1_1_ast.html" title="Base class for all Abstract Syntax Tree node types. " alt="nmodl::ast::Ast" shape="rect" coords="725,56,860,80"/>
-<area href="structnmodl_1_1ast_1_1_ast.html" title="Base class for all Abstract Syntax Tree node types. " alt="nmodl::ast::Ast" shape="rect" coords="725,0,860,24"/>
-<area href="structnmodl_1_1ast_1_1_ast.html" title="Base class for all Abstract Syntax Tree node types. " alt="nmodl::ast::Ast" shape="rect" coords="435,56,570,80"/>
-<area href="structnmodl_1_1ast_1_1_ast.html" title="Base class for all Abstract Syntax Tree node types. " alt="nmodl::ast::Ast" shape="rect" coords="435,0,570,24"/>
-<area href="structnmodl_1_1ast_1_1_ast.html" title="Base class for all Abstract Syntax Tree node types. " alt="nmodl::ast::Ast" shape="rect" coords="145,56,280,80"/>
-<area href="structnmodl_1_1ast_1_1_ast.html" title="Base class for all Abstract Syntax Tree node types. " alt="nmodl::ast::Ast" shape="rect" coords="145,0,280,24"/>
+<area href="classnmodl_1_1ast_1_1_expression.html" title="Base class for all expressions in the NMODL. " alt="nmodl::ast::Expression" shape="rect" coords="0,168,218,192"/>
+<area href="classnmodl_1_1ast_1_1_node.html" title="Base class for all AST node. " alt="nmodl::ast::Node" shape="rect" coords="0,112,218,136"/>
+<area href="structnmodl_1_1ast_1_1_ast.html" title="Base class for all Abstract Syntax Tree node types. " alt="nmodl::ast::Ast" shape="rect" coords="0,56,218,80"/>
 </map>
  </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aa0e5fc74e6ae08ec084e33c0c85f9564"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_string.html#aa0e5fc74e6ae08ec084e33c0c85f9564">is_string</a> () const noexcept override</td></tr>
-<tr class="memdesc:aa0e5fc74e6ae08ec084e33c0c85f9564"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_string.html" title="Represents a string. ">ast::String</a>.  <a href="#aa0e5fc74e6ae08ec084e33c0c85f9564">More...</a><br /></td></tr>
-<tr class="separator:aa0e5fc74e6ae08ec084e33c0c85f9564"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3ffe95a8a6a65c2c6559f8132961880a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classnmodl_1_1ast_1_1_string.html">String</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_string.html#a3ffe95a8a6a65c2c6559f8132961880a">clone</a> () const override</td></tr>
-<tr class="memdesc:a3ffe95a8a6a65c2c6559f8132961880a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a copy of the current node.  <a href="#a3ffe95a8a6a65c2c6559f8132961880a">More...</a><br /></td></tr>
-<tr class="separator:a3ffe95a8a6a65c2c6559f8132961880a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d945b7863282b9e226e114bcbb1390f"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_string.html#a9d945b7863282b9e226e114bcbb1390f">eval</a> () const</td></tr>
-<tr class="memdesc:a9d945b7863282b9e226e114bcbb1390f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return value of the ast node.  <a href="#a9d945b7863282b9e226e114bcbb1390f">More...</a><br /></td></tr>
-<tr class="separator:a9d945b7863282b9e226e114bcbb1390f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa0e5fc74e6ae08ec084e33c0c85f9564"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_string.html#aa0e5fc74e6ae08ec084e33c0c85f9564">is_string</a> () const noexcept override</td></tr>
 <tr class="memdesc:aa0e5fc74e6ae08ec084e33c0c85f9564"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_string.html" title="Represents a string. ">ast::String</a>.  <a href="#aa0e5fc74e6ae08ec084e33c0c85f9564">More...</a><br /></td></tr>
 <tr class="separator:aa0e5fc74e6ae08ec084e33c0c85f9564"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -159,33 +139,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a3be1e0837628932f5241ffead5a5533f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a97781cea237441dc08520e4eda4e3031"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_string.html#a97781cea237441dc08520e4eda4e3031">~String</a> ()=default</td></tr>
 <tr class="separator:a97781cea237441dc08520e4eda4e3031"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5ecd1f6647f20cb292602dae05d66e62"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_string.html#a5ecd1f6647f20cb292602dae05d66e62">String</a> (const std::string &amp;<a class="el" href="classnmodl_1_1ast_1_1_string.html#adbf40ddad32c859cb81d54f2851e60c1">value</a>)</td></tr>
-<tr class="separator:a5ecd1f6647f20cb292602dae05d66e62"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3d214f04a8d8691e5b0e257d3fb1630e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_string.html#a3d214f04a8d8691e5b0e257d3fb1630e">String</a> (const <a class="el" href="classnmodl_1_1ast_1_1_string.html">String</a> &amp;obj)</td></tr>
-<tr class="separator:a3d214f04a8d8691e5b0e257d3fb1630e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3be1e0837628932f5241ffead5a5533f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_string.html#a3be1e0837628932f5241ffead5a5533f">String</a> ()=default</td></tr>
-<tr class="separator:a3be1e0837628932f5241ffead5a5533f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a97781cea237441dc08520e4eda4e3031"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_string.html#a97781cea237441dc08520e4eda4e3031">~String</a> ()=default</td></tr>
-<tr class="separator:a97781cea237441dc08520e4eda4e3031"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Getters</div></td></tr>
-<tr class="memitem:adb51770a89797f3ed1d665d9232a0448"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033">AstNodeType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_string.html#adb51770a89797f3ed1d665d9232a0448">get_node_type</a> () const noexcept override</td></tr>
-<tr class="memdesc:adb51770a89797f3ed1d665d9232a0448"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return type (<a class="el" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033" title="Enum type for every AST node type. ">ast::AstNodeType</a>) of ast node.  <a href="#adb51770a89797f3ed1d665d9232a0448">More...</a><br /></td></tr>
-<tr class="separator:adb51770a89797f3ed1d665d9232a0448"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a73443af1500995afbbf356cf459f985a"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_string.html#a73443af1500995afbbf356cf459f985a">get_node_type_name</a> () const noexcept override</td></tr>
-<tr class="memdesc:a73443af1500995afbbf356cf459f985a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return type (<a class="el" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033" title="Enum type for every AST node type. ">ast::AstNodeType</a>) of ast node as std::string.  <a href="#a73443af1500995afbbf356cf459f985a">More...</a><br /></td></tr>
-<tr class="separator:a73443af1500995afbbf356cf459f985a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a695fe14312f507abfac1ee6dd8f0a03c"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="structnmodl_1_1ast_1_1_ast.html">Ast</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_string.html#a695fe14312f507abfac1ee6dd8f0a03c">get_shared_ptr</a> () override</td></tr>
-<tr class="memdesc:a695fe14312f507abfac1ee6dd8f0a03c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get std::shared_ptr from <code>this</code> pointer of the current ast node.  <a href="#a695fe14312f507abfac1ee6dd8f0a03c">More...</a><br /></td></tr>
-<tr class="separator:a695fe14312f507abfac1ee6dd8f0a03c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2d5d95394ff23a25c306df3a79ee07de"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; const <a class="el" href="structnmodl_1_1ast_1_1_ast.html">Ast</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_string.html#a2d5d95394ff23a25c306df3a79ee07de">get_shared_ptr</a> () const override</td></tr>
-<tr class="memdesc:a2d5d95394ff23a25c306df3a79ee07de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get std::shared_ptr from <code>this</code> pointer of the current ast node.  <a href="#a2d5d95394ff23a25c306df3a79ee07de">More...</a><br /></td></tr>
-<tr class="separator:a2d5d95394ff23a25c306df3a79ee07de"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a687706b2e0e000695ee7011f8d70af46"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classnmodl_1_1_mod_token.html">ModToken</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_string.html#a687706b2e0e000695ee7011f8d70af46">get_token</a> () const noexcept override</td></tr>
-<tr class="memdesc:a687706b2e0e000695ee7011f8d70af46"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return associated token for the current ast node.  <a href="#a687706b2e0e000695ee7011f8d70af46">More...</a><br /></td></tr>
-<tr class="separator:a687706b2e0e000695ee7011f8d70af46"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac1670898f78a004e702d5c1df6a81f2f"><td class="memItemLeft" align="right" valign="top">const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_string.html#ac1670898f78a004e702d5c1df6a81f2f">get_value</a> () const noexcept</td></tr>
-<tr class="memdesc:ac1670898f78a004e702d5c1df6a81f2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter for member variable <a class="el" href="classnmodl_1_1ast_1_1_string.html#adbf40ddad32c859cb81d54f2851e60c1">String::value</a>.  <a href="#ac1670898f78a004e702d5c1df6a81f2f">More...</a><br /></td></tr>
-<tr class="separator:ac1670898f78a004e702d5c1df6a81f2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adb51770a89797f3ed1d665d9232a0448"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033">AstNodeType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_string.html#adb51770a89797f3ed1d665d9232a0448">get_node_type</a> () const noexcept override</td></tr>
 <tr class="memdesc:adb51770a89797f3ed1d665d9232a0448"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return type (<a class="el" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033" title="Enum type for every AST node type. ">ast::AstNodeType</a>) of ast node.  <a href="#adb51770a89797f3ed1d665d9232a0448">More...</a><br /></td></tr>
 <tr class="separator:adb51770a89797f3ed1d665d9232a0448"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -214,28 +168,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4cf0999196414b1f38e84a3fcf132504"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_string.html#a4cf0999196414b1f38e84a3fcf132504">set_value</a> (std::string <a class="el" href="classnmodl_1_1ast_1_1_string.html#adbf40ddad32c859cb81d54f2851e60c1">value</a>)</td></tr>
 <tr class="memdesc:a4cf0999196414b1f38e84a3fcf132504"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_string.html#adbf40ddad32c859cb81d54f2851e60c1">String::value</a>.  <a href="#a4cf0999196414b1f38e84a3fcf132504">More...</a><br /></td></tr>
 <tr class="separator:a4cf0999196414b1f38e84a3fcf132504"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afb596e1302e0965d3465cd6a3b971101"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_string.html#afb596e1302e0965d3465cd6a3b971101">set_token</a> (const <a class="el" href="classnmodl_1_1_mod_token.html">ModToken</a> &amp;tok)</td></tr>
-<tr class="memdesc:afb596e1302e0965d3465cd6a3b971101"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set token for the current ast node.  <a href="#afb596e1302e0965d3465cd6a3b971101">More...</a><br /></td></tr>
-<tr class="separator:afb596e1302e0965d3465cd6a3b971101"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a039af984f38edfda7e866739ecc8ab70"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_string.html#a039af984f38edfda7e866739ecc8ab70">set</a> (std::string _value)</td></tr>
-<tr class="memdesc:a039af984f38edfda7e866739ecc8ab70"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set new value to the current ast node.  <a href="#a039af984f38edfda7e866739ecc8ab70">More...</a><br /></td></tr>
-<tr class="separator:a039af984f38edfda7e866739ecc8ab70"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4cf0999196414b1f38e84a3fcf132504"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_string.html#a4cf0999196414b1f38e84a3fcf132504">set_value</a> (std::string <a class="el" href="classnmodl_1_1ast_1_1_string.html#adbf40ddad32c859cb81d54f2851e60c1">value</a>)</td></tr>
-<tr class="memdesc:a4cf0999196414b1f38e84a3fcf132504"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_string.html#adbf40ddad32c859cb81d54f2851e60c1">String::value</a>.  <a href="#a4cf0999196414b1f38e84a3fcf132504">More...</a><br /></td></tr>
-<tr class="separator:a4cf0999196414b1f38e84a3fcf132504"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Visitor</div></td></tr>
-<tr class="memitem:a0b759ffe9b7374f3ce840681724b783a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_string.html#a0b759ffe9b7374f3ce840681724b783a">visit_children</a> (<a class="el" href="classnmodl_1_1visitor_1_1_visitor.html">visitor::Visitor</a> &amp;v) override</td></tr>
-<tr class="memdesc:a0b759ffe9b7374f3ce840681724b783a"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit children i.e.  <a href="#a0b759ffe9b7374f3ce840681724b783a">More...</a><br /></td></tr>
-<tr class="separator:a0b759ffe9b7374f3ce840681724b783a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afd416a8614195f03bec2124b20ec97d7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_string.html#afd416a8614195f03bec2124b20ec97d7">visit_children</a> (<a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html">visitor::ConstVisitor</a> &amp;v) const override</td></tr>
-<tr class="memdesc:afd416a8614195f03bec2124b20ec97d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit children i.e.  <a href="#afd416a8614195f03bec2124b20ec97d7">More...</a><br /></td></tr>
-<tr class="separator:afd416a8614195f03bec2124b20ec97d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa2c4f044a58fb750d3634f41e0a74651"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_string.html#aa2c4f044a58fb750d3634f41e0a74651">accept</a> (<a class="el" href="classnmodl_1_1visitor_1_1_visitor.html">visitor::Visitor</a> &amp;v) override</td></tr>
-<tr class="memdesc:aa2c4f044a58fb750d3634f41e0a74651"><td class="mdescLeft">&#160;</td><td class="mdescRight">accept (or visit) the current AST node using provided visitor  <a href="#aa2c4f044a58fb750d3634f41e0a74651">More...</a><br /></td></tr>
-<tr class="separator:aa2c4f044a58fb750d3634f41e0a74651"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a434324998877f7a839aad83246ef383c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_string.html#a434324998877f7a839aad83246ef383c">accept</a> (<a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html">visitor::ConstVisitor</a> &amp;v) const override</td></tr>
-<tr class="memdesc:a434324998877f7a839aad83246ef383c"><td class="mdescLeft">&#160;</td><td class="mdescRight">accept (or visit) the current AST node using provided visitor  <a href="#a434324998877f7a839aad83246ef383c">More...</a><br /></td></tr>
-<tr class="separator:a434324998877f7a839aad83246ef383c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0b759ffe9b7374f3ce840681724b783a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_string.html#a0b759ffe9b7374f3ce840681724b783a">visit_children</a> (<a class="el" href="classnmodl_1_1visitor_1_1_visitor.html">visitor::Visitor</a> &amp;v) override</td></tr>
 <tr class="memdesc:a0b759ffe9b7374f3ce840681724b783a"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit children i.e.  <a href="#a0b759ffe9b7374f3ce840681724b783a">More...</a><br /></td></tr>
 <tr class="separator:a0b759ffe9b7374f3ce840681724b783a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -252,22 +185,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a117edcfb698e0d8b0702e1944df51c96 inherit pub_methods_classnmodl_1_1ast_1_1_expression"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_expression.html#a117edcfb698e0d8b0702e1944df51c96">is_expression</a> () const noexcept override</td></tr>
 <tr class="memdesc:a117edcfb698e0d8b0702e1944df51c96 inherit pub_methods_classnmodl_1_1ast_1_1_expression"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_expression.html" title="Base class for all expressions in the NMODL. ">ast::Expression</a>.  <a href="classnmodl_1_1ast_1_1_expression.html#a117edcfb698e0d8b0702e1944df51c96">More...</a><br /></td></tr>
 <tr class="separator:a117edcfb698e0d8b0702e1944df51c96 inherit pub_methods_classnmodl_1_1ast_1_1_expression"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a117edcfb698e0d8b0702e1944df51c96 inherit pub_methods_classnmodl_1_1ast_1_1_expression"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_expression.html#a117edcfb698e0d8b0702e1944df51c96">is_expression</a> () const noexcept override</td></tr>
-<tr class="memdesc:a117edcfb698e0d8b0702e1944df51c96 inherit pub_methods_classnmodl_1_1ast_1_1_expression"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_expression.html" title="Base class for all expressions in the NMODL. ">ast::Expression</a>.  <a href="classnmodl_1_1ast_1_1_expression.html#a117edcfb698e0d8b0702e1944df51c96">More...</a><br /></td></tr>
-<tr class="separator:a117edcfb698e0d8b0702e1944df51c96 inherit pub_methods_classnmodl_1_1ast_1_1_expression"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeadef6e1b92ea37f41bb0ec3888c8768 inherit pub_methods_classnmodl_1_1ast_1_1_expression"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_expression.html#aeadef6e1b92ea37f41bb0ec3888c8768">~Expression</a> ()=default</td></tr>
-<tr class="separator:aeadef6e1b92ea37f41bb0ec3888c8768 inherit pub_methods_classnmodl_1_1ast_1_1_expression"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeadef6e1b92ea37f41bb0ec3888c8768 inherit pub_methods_classnmodl_1_1ast_1_1_expression"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_expression.html#aeadef6e1b92ea37f41bb0ec3888c8768">~Expression</a> ()=default</td></tr>
 <tr class="separator:aeadef6e1b92ea37f41bb0ec3888c8768 inherit pub_methods_classnmodl_1_1ast_1_1_expression"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classnmodl_1_1ast_1_1_node"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classnmodl_1_1ast_1_1_node')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classnmodl_1_1ast_1_1_node.html">nmodl::ast::Node</a></td></tr>
 <tr class="memitem:a2b7063dd9a77db12146baed67280953e inherit pub_methods_classnmodl_1_1ast_1_1_node"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_node.html#a2b7063dd9a77db12146baed67280953e">is_node</a> () const noexcept override</td></tr>
 <tr class="memdesc:a2b7063dd9a77db12146baed67280953e inherit pub_methods_classnmodl_1_1ast_1_1_node"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_node.html" title="Base class for all AST node. ">ast::Node</a>.  <a href="classnmodl_1_1ast_1_1_node.html#a2b7063dd9a77db12146baed67280953e">More...</a><br /></td></tr>
 <tr class="separator:a2b7063dd9a77db12146baed67280953e inherit pub_methods_classnmodl_1_1ast_1_1_node"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2b7063dd9a77db12146baed67280953e inherit pub_methods_classnmodl_1_1ast_1_1_node"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_node.html#a2b7063dd9a77db12146baed67280953e">is_node</a> () const noexcept override</td></tr>
-<tr class="memdesc:a2b7063dd9a77db12146baed67280953e inherit pub_methods_classnmodl_1_1ast_1_1_node"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_node.html" title="Base class for all AST node. ">ast::Node</a>.  <a href="classnmodl_1_1ast_1_1_node.html#a2b7063dd9a77db12146baed67280953e">More...</a><br /></td></tr>
-<tr class="separator:a2b7063dd9a77db12146baed67280953e inherit pub_methods_classnmodl_1_1ast_1_1_node"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a00b329e514a48fe3cc73944374144645 inherit pub_methods_classnmodl_1_1ast_1_1_node"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_node.html#a00b329e514a48fe3cc73944374144645">~Node</a> ()=default</td></tr>
-<tr class="separator:a00b329e514a48fe3cc73944374144645 inherit pub_methods_classnmodl_1_1ast_1_1_node"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a00b329e514a48fe3cc73944374144645 inherit pub_methods_classnmodl_1_1ast_1_1_node"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_node.html#a00b329e514a48fe3cc73944374144645">~Node</a> ()=default</td></tr>
 <tr class="separator:a00b329e514a48fe3cc73944374144645 inherit pub_methods_classnmodl_1_1ast_1_1_node"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_structnmodl_1_1ast_1_1_ast"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_structnmodl_1_1ast_1_1_ast')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="structnmodl_1_1ast_1_1_ast.html">nmodl::ast::Ast</a></td></tr>
@@ -725,22 +648,19 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:ad2cf99efdd0ec58f6aa03a9ee14ada8a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_string.html#ad2cf99efdd0ec58f6aa03a9ee14ada8a">set_parent_in_children</a> ()</td></tr>
 <tr class="memdesc:ad2cf99efdd0ec58f6aa03a9ee14ada8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set this object as parent for all the children.  <a href="#ad2cf99efdd0ec58f6aa03a9ee14ada8a">More...</a><br /></td></tr>
 <tr class="separator:ad2cf99efdd0ec58f6aa03a9ee14ada8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad2cf99efdd0ec58f6aa03a9ee14ada8a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_string.html#ad2cf99efdd0ec58f6aa03a9ee14ada8a">set_parent_in_children</a> ()</td></tr>
-<tr class="memdesc:ad2cf99efdd0ec58f6aa03a9ee14ada8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set this object as parent for all the children.  <a href="#ad2cf99efdd0ec58f6aa03a9ee14ada8a">More...</a><br /></td></tr>
-<tr class="separator:ad2cf99efdd0ec58f6aa03a9ee14ada8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:adbf40ddad32c859cb81d54f2851e60c1"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_string.html#adbf40ddad32c859cb81d54f2851e60c1">value</a></td></tr>
 <tr class="memdesc:adbf40ddad32c859cb81d54f2851e60c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Value of string.  <a href="#adbf40ddad32c859cb81d54f2851e60c1">More...</a><br /></td></tr>
 <tr class="separator:adbf40ddad32c859cb81d54f2851e60c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a63afb2eb5503a45c3dd254f9f68c13d1"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classnmodl_1_1_mod_token.html">ModToken</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_string.html#a63afb2eb5503a45c3dd254f9f68c13d1">token</a></td></tr>
-<tr class="memdesc:a63afb2eb5503a45c3dd254f9f68c13d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">token with location information  <a href="#a63afb2eb5503a45c3dd254f9f68c13d1">More...</a><br /></td></tr>
-<tr class="separator:a63afb2eb5503a45c3dd254f9f68c13d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1dcbd1f5e08b905cac128cffde385ca"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classnmodl_1_1_mod_token.html">ModToken</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_string.html#ae1dcbd1f5e08b905cac128cffde385ca">token</a></td></tr>
+<tr class="memdesc:ae1dcbd1f5e08b905cac128cffde385ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">token with location information  <a href="#ae1dcbd1f5e08b905cac128cffde385ca">More...</a><br /></td></tr>
+<tr class="separator:ae1dcbd1f5e08b905cac128cffde385ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a5ecd1f6647f20cb292602dae05d66e62"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5ecd1f6647f20cb292602dae05d66e62">&#9670;&nbsp;</a></span>String() <span class="overload">[1/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ecd1f6647f20cb292602dae05d66e62">&#9670;&nbsp;</a></span>String() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -768,7 +688,7 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <a id="a3d214f04a8d8691e5b0e257d3fb1630e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3d214f04a8d8691e5b0e257d3fb1630e">&#9670;&nbsp;</a></span>String() <span class="overload">[2/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a3d214f04a8d8691e5b0e257d3fb1630e">&#9670;&nbsp;</a></span>String() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -793,7 +713,7 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <a id="a3be1e0837628932f5241ffead5a5533f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3be1e0837628932f5241ffead5a5533f">&#9670;&nbsp;</a></span>String() <span class="overload">[3/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a3be1e0837628932f5241ffead5a5533f">&#9670;&nbsp;</a></span>String() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -818,101 +738,7 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <a id="a97781cea237441dc08520e4eda4e3031"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a97781cea237441dc08520e4eda4e3031">&#9670;&nbsp;</a></span>~String() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual nmodl::ast::String::~String </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">default</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a5ecd1f6647f20cb292602dae05d66e62"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5ecd1f6647f20cb292602dae05d66e62">&#9670;&nbsp;</a></span>String() <span class="overload">[4/6]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">nmodl::ast::String::String </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>value</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a3d214f04a8d8691e5b0e257d3fb1630e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3d214f04a8d8691e5b0e257d3fb1630e">&#9670;&nbsp;</a></span>String() <span class="overload">[5/6]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">nmodl::ast::String::String </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classnmodl_1_1ast_1_1_string.html">String</a> &amp;&#160;</td>
-          <td class="paramname"><em>obj</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a3be1e0837628932f5241ffead5a5533f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3be1e0837628932f5241ffead5a5533f">&#9670;&nbsp;</a></span>String() <span class="overload">[6/6]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">nmodl::ast::String::String </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">default</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a97781cea237441dc08520e4eda4e3031"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a97781cea237441dc08520e4eda4e3031">&#9670;&nbsp;</a></span>~String() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a97781cea237441dc08520e4eda4e3031">&#9670;&nbsp;</a></span>~String()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -938,83 +764,7 @@ Private Attributes</h2></td></tr>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="aa2c4f044a58fb750d3634f41e0a74651"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa2c4f044a58fb750d3634f41e0a74651">&#9670;&nbsp;</a></span>accept() <span class="overload">[1/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void nmodl::ast::String::accept </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classnmodl_1_1visitor_1_1_visitor.html">visitor::Visitor</a> &amp;&#160;</td>
-          <td class="paramname"><em>v</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>accept (or visit) the current AST node using provided visitor </p>
-<p>Instead of visiting children of AST node, like <a class="el" href="group__ast__class.html#gac81ffb4a2c7ca8ce7527f2b8c3b9d403" title="Visit children i.e. ">Ast::visit_children</a>, accept allows to visit the current node itself using provided concrete visitor.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">v</td><td>Concrete visitor that will be used to recursively visit node</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__ast__class.html#ga7955eda5565d690e7acfaead092c56aa" title="Accept (or visit) the AST node using current visitor. ">Ast::accept</a> for example. </dd></dl>
-
-<p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_expression.html#a971985086691e3403bc78070059cbc23">nmodl::ast::Expression</a>.</p>
-
-</div>
-</div>
-<a id="a434324998877f7a839aad83246ef383c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a434324998877f7a839aad83246ef383c">&#9670;&nbsp;</a></span>accept() <span class="overload">[2/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void nmodl::ast::String::accept </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html">visitor::ConstVisitor</a> &amp;&#160;</td>
-          <td class="paramname"><em>v</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>accept (or visit) the current AST node using provided visitor </p>
-<p>Instead of visiting children of AST node, like <a class="el" href="group__ast__class.html#gac81ffb4a2c7ca8ce7527f2b8c3b9d403" title="Visit children i.e. ">Ast::visit_children</a>, accept allows to visit the current node itself using provided concrete visitor.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">v</td><td>Concrete visitor that will be used to recursively visit node</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__ast__class.html#ga7955eda5565d690e7acfaead092c56aa" title="Accept (or visit) the AST node using current visitor. ">Ast::accept</a> for example. </dd></dl>
-
-<p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_expression.html#a3cf111cd5c7e88c95974dd9849af1b4d">nmodl::ast::Expression</a>.</p>
-
-</div>
-</div>
-<a id="aa2c4f044a58fb750d3634f41e0a74651"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa2c4f044a58fb750d3634f41e0a74651">&#9670;&nbsp;</a></span>accept() <span class="overload">[3/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aa2c4f044a58fb750d3634f41e0a74651">&#9670;&nbsp;</a></span>accept() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1054,7 +804,7 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <a id="a434324998877f7a839aad83246ef383c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a434324998877f7a839aad83246ef383c">&#9670;&nbsp;</a></span>accept() <span class="overload">[4/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a434324998877f7a839aad83246ef383c">&#9670;&nbsp;</a></span>accept() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1094,7 +844,7 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <a id="a3ffe95a8a6a65c2c6559f8132961880a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3ffe95a8a6a65c2c6559f8132961880a">&#9670;&nbsp;</a></span>clone() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ffe95a8a6a65c2c6559f8132961880a">&#9670;&nbsp;</a></span>clone()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1122,45 +872,12 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_expression.html#a662e7b901641a5d0906f389566c2f338">nmodl::ast::Expression</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00102">102</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a3ffe95a8a6a65c2c6559f8132961880a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3ffe95a8a6a65c2c6559f8132961880a">&#9670;&nbsp;</a></span>clone() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classnmodl_1_1ast_1_1_string.html">String</a>* nmodl::ast::String::clone </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Return a copy of the current node. </p>
-<p>Recursively make a new copy/clone of the current node including all members and return a pointer to the node. This is used for passes like <a class="el" href="classnmodl_1_1visitor_1_1_inline_visitor.html" title="Visitor to inline local procedure and function calls ">nmodl::visitor::InlineVisitor</a> where nodes are cloned in the ast.</p>
-<dl class="section return"><dt>Returns</dt><dd>pointer to the clone/copy of the current node </dd></dl>
-
-<p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_expression.html#a662e7b901641a5d0906f389566c2f338">nmodl::ast::Expression</a>.</p>
-
-<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l01180">1180</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00099">99</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
 
 </div>
 </div>
 <a id="a9d945b7863282b9e226e114bcbb1390f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9d945b7863282b9e226e114bcbb1390f">&#9670;&nbsp;</a></span>eval() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a9d945b7863282b9e226e114bcbb1390f">&#9670;&nbsp;</a></span>eval()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1186,43 +903,12 @@ Private Attributes</h2></td></tr>
 <p>Base data type nodes like ast::Inetegr, <a class="el" href="classnmodl_1_1ast_1_1_double.html" title="Represents a double variable. ">ast::Double</a> can be evaluated to their literal values. This method is used to access underlying literal value.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classnmodl_1_1ast_1_1_string.html#a039af984f38edfda7e866739ecc8ab70" title="Set new value to the current ast node. ">String::set</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00268">268</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a9d945b7863282b9e226e114bcbb1390f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9d945b7863282b9e226e114bcbb1390f">&#9670;&nbsp;</a></span>eval() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string nmodl::ast::String::eval </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Return value of the ast node. </p>
-<p>Base data type nodes like ast::Inetegr, <a class="el" href="classnmodl_1_1ast_1_1_double.html" title="Represents a double variable. ">ast::Double</a> can be evaluated to their literal values. This method is used to access underlying literal value.</p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classnmodl_1_1ast_1_1_string.html#a039af984f38edfda7e866739ecc8ab70" title="Set new value to the current ast node. ">String::set</a> </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l01346">1346</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00265">265</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
 
 </div>
 </div>
 <a id="adb51770a89797f3ed1d665d9232a0448"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adb51770a89797f3ed1d665d9232a0448">&#9670;&nbsp;</a></span>get_node_type() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#adb51770a89797f3ed1d665d9232a0448">&#9670;&nbsp;</a></span>get_node_type()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1251,46 +937,12 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_expression.html#a72f0f9b4b6773de4c253e9ea3d03ac00">nmodl::ast::Expression</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00119">119</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
-
-</div>
-</div>
-<a id="adb51770a89797f3ed1d665d9232a0448"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adb51770a89797f3ed1d665d9232a0448">&#9670;&nbsp;</a></span>get_node_type() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033">AstNodeType</a> nmodl::ast::String::get_node_type </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Return type (<a class="el" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033" title="Enum type for every AST node type. ">ast::AstNodeType</a>) of ast node. </p>
-<p>Every node in the ast has a type defined in <a class="el" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033" title="Enum type for every AST node type. ">ast::AstNodeType</a> and this function is used to retrieve the same.</p>
-<dl class="section return"><dt>Returns</dt><dd>ast node type i.e. <a class="el" href="group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a63b588d5559f64f89a416e656880b949" title="type of ast::String ">ast::AstNodeType::STRING</a></dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__ast__class.html#ga9a9684461a0f1ce3adb845a0715b1b9e" title="Return type (ast::AstNodeType) of ast node as std::string. ">Ast::get_node_type_name</a> </dd></dl>
-
-<p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_expression.html#a72f0f9b4b6773de4c253e9ea3d03ac00">nmodl::ast::Expression</a>.</p>
-
-<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l01197">1197</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00116">116</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
 
 </div>
 </div>
 <a id="a73443af1500995afbbf356cf459f985a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a73443af1500995afbbf356cf459f985a">&#9670;&nbsp;</a></span>get_node_type_name() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a73443af1500995afbbf356cf459f985a">&#9670;&nbsp;</a></span>get_node_type_name()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1319,46 +971,12 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_expression.html#a58eb66d8605e02fa3e6c84eaa579bf77">nmodl::ast::Expression</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00134">134</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a73443af1500995afbbf356cf459f985a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a73443af1500995afbbf356cf459f985a">&#9670;&nbsp;</a></span>get_node_type_name() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string nmodl::ast::String::get_node_type_name </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Return type (<a class="el" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033" title="Enum type for every AST node type. ">ast::AstNodeType</a>) of ast node as std::string. </p>
-<p>Every node in the ast has a type defined in <a class="el" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033" title="Enum type for every AST node type. ">ast::AstNodeType</a>. This type name can be returned as a std::string for printing node to text/json form.</p>
-<dl class="section return"><dt>Returns</dt><dd>name of the node type as a string i.e. "String"</dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__ast__class.html#gabe0d8be79f0e0c0967da29d186c86c3c" title="Return name of of the node. ">Ast::get_node_name</a> </dd></dl>
-
-<p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_expression.html#a58eb66d8605e02fa3e6c84eaa579bf77">nmodl::ast::Expression</a>.</p>
-
-<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l01212">1212</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00131">131</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
 
 </div>
 </div>
 <a id="a695fe14312f507abfac1ee6dd8f0a03c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a695fe14312f507abfac1ee6dd8f0a03c">&#9670;&nbsp;</a></span>get_shared_ptr() <span class="overload">[1/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a695fe14312f507abfac1ee6dd8f0a03c">&#9670;&nbsp;</a></span>get_shared_ptr() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1384,12 +1002,12 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_expression.html#a6b89fad15aa3da16f607c5a2ff52ce13">nmodl::ast::Expression</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00142">142</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00139">139</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
 
 </div>
 </div>
 <a id="a2d5d95394ff23a25c306df3a79ee07de"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2d5d95394ff23a25c306df3a79ee07de">&#9670;&nbsp;</a></span>get_shared_ptr() <span class="overload">[2/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d5d95394ff23a25c306df3a79ee07de">&#9670;&nbsp;</a></span>get_shared_ptr() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1415,74 +1033,12 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_expression.html#adf01f8c493ffff32d6815b9a630d469c">nmodl::ast::Expression</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00149">149</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a695fe14312f507abfac1ee6dd8f0a03c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a695fe14312f507abfac1ee6dd8f0a03c">&#9670;&nbsp;</a></span>get_shared_ptr() <span class="overload">[3/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::shared_ptr&lt;<a class="el" href="structnmodl_1_1ast_1_1_ast.html">Ast</a>&gt; nmodl::ast::String::get_shared_ptr </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Get std::shared_ptr from <code>this</code> pointer of the current ast node. </p>
-
-<p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_expression.html#a6b89fad15aa3da16f607c5a2ff52ce13">nmodl::ast::Expression</a>.</p>
-
-<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l01220">1220</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a2d5d95394ff23a25c306df3a79ee07de"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2d5d95394ff23a25c306df3a79ee07de">&#9670;&nbsp;</a></span>get_shared_ptr() <span class="overload">[4/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::shared_ptr&lt;const <a class="el" href="structnmodl_1_1ast_1_1_ast.html">Ast</a>&gt; nmodl::ast::String::get_shared_ptr </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Get std::shared_ptr from <code>this</code> pointer of the current ast node. </p>
-
-<p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_expression.html#adf01f8c493ffff32d6815b9a630d469c">nmodl::ast::Expression</a>.</p>
-
-<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l01227">1227</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00146">146</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
 
 </div>
 </div>
 <a id="a687706b2e0e000695ee7011f8d70af46"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a687706b2e0e000695ee7011f8d70af46">&#9670;&nbsp;</a></span>get_token() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a687706b2e0e000695ee7011f8d70af46">&#9670;&nbsp;</a></span>get_token()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1510,45 +1066,12 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="group__ast__class.html#ga4892777c5b32b112d588b05d07f28549">nmodl::ast::Ast</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00162">162</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a687706b2e0e000695ee7011f8d70af46"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a687706b2e0e000695ee7011f8d70af46">&#9670;&nbsp;</a></span>get_token() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const <a class="el" href="classnmodl_1_1_mod_token.html">ModToken</a>* nmodl::ast::String::get_token </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Return associated token for the current ast node. </p>
-<p>Not all ast nodes have token information. For example, <a class="el" href="classnmodl_1_1visitor_1_1_neuron_solve_visitor.html" title="Visitor that solves ODEs using old solvers of NEURON ">nmodl::visitor::NeuronSolveVisitor</a> can insert new nodes in the ast as a solution of ODEs. In this case, we return nullptr to store in the <a class="el" href="classnmodl_1_1symtab_1_1_symbol_table.html" title="Represent symbol table for a NMODL block. ">nmodl::symtab::SymbolTable</a>.</p>
-<dl class="section return"><dt>Returns</dt><dd>pointer to token if exist otherwise nullptr </dd></dl>
-
-<p>Reimplemented from <a class="el" href="group__ast__class.html#ga4892777c5b32b112d588b05d07f28549">nmodl::ast::Ast</a>.</p>
-
-<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l01240">1240</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00159">159</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
 
 </div>
 </div>
 <a id="ac1670898f78a004e702d5c1df6a81f2f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac1670898f78a004e702d5c1df6a81f2f">&#9670;&nbsp;</a></span>get_value() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ac1670898f78a004e702d5c1df6a81f2f">&#9670;&nbsp;</a></span>get_value()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1572,41 +1095,12 @@ Private Attributes</h2></td></tr>
 
 <p>Getter for member variable <a class="el" href="classnmodl_1_1ast_1_1_string.html#adbf40ddad32c859cb81d54f2851e60c1">String::value</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00176">176</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
-
-</div>
-</div>
-<a id="ac1670898f78a004e702d5c1df6a81f2f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac1670898f78a004e702d5c1df6a81f2f">&#9670;&nbsp;</a></span>get_value() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const std::string&amp; nmodl::ast::String::get_value </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Getter for member variable <a class="el" href="classnmodl_1_1ast_1_1_string.html#adbf40ddad32c859cb81d54f2851e60c1">String::value</a>. </p>
-
-<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l01254">1254</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00173">173</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
 
 </div>
 </div>
 <a id="aa0e5fc74e6ae08ec084e33c0c85f9564"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa0e5fc74e6ae08ec084e33c0c85f9564">&#9670;&nbsp;</a></span>is_string() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aa0e5fc74e6ae08ec084e33c0c85f9564">&#9670;&nbsp;</a></span>is_string()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1633,44 +1127,12 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="group__ast__class.html#ga20fd0174b3cb40617279a34dc49d7d67">nmodl::ast::Ast</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00088">88</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
-
-</div>
-</div>
-<a id="aa0e5fc74e6ae08ec084e33c0c85f9564"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa0e5fc74e6ae08ec084e33c0c85f9564">&#9670;&nbsp;</a></span>is_string() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool nmodl::ast::String::is_string </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_string.html" title="Represents a string. ">ast::String</a>. </p>
-<dl class="section return"><dt>Returns</dt><dd>true as object is of type <a class="el" href="classnmodl_1_1ast_1_1_string.html" title="Represents a string. ">ast::String</a> </dd></dl>
-
-<p>Reimplemented from <a class="el" href="group__ast__class.html#ga20fd0174b3cb40617279a34dc49d7d67">nmodl::ast::Ast</a>.</p>
-
-<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l01166">1166</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00085">85</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
 
 </div>
 </div>
 <a id="a039af984f38edfda7e866739ecc8ab70"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a039af984f38edfda7e866739ecc8ab70">&#9670;&nbsp;</a></span>set() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a039af984f38edfda7e866739ecc8ab70">&#9670;&nbsp;</a></span>set()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1696,71 +1158,12 @@ Private Attributes</h2></td></tr>
 <p>Set new value to the current ast node. </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classnmodl_1_1ast_1_1_string.html#a9d945b7863282b9e226e114bcbb1390f" title="Return value of the ast node. ">String::eval</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00198">198</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a039af984f38edfda7e866739ecc8ab70"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a039af984f38edfda7e866739ecc8ab70">&#9670;&nbsp;</a></span>set() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void nmodl::ast::String::set </td>
-          <td>(</td>
-          <td class="paramtype">std::string&#160;</td>
-          <td class="paramname"><em>_value</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Set new value to the current ast node. </p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classnmodl_1_1ast_1_1_string.html#a9d945b7863282b9e226e114bcbb1390f" title="Return value of the ast node. ">String::eval</a> </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l01276">1276</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00195">195</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
 
 </div>
 </div>
 <a id="ad2cf99efdd0ec58f6aa03a9ee14ada8a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad2cf99efdd0ec58f6aa03a9ee14ada8a">&#9670;&nbsp;</a></span>set_parent_in_children() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void nmodl::ast::String::set_parent_in_children </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Set this object as parent for all the children. </p>
-<p>This should be called in every object (with children) constructor to set parents. Since it is called only in the constructors it should not be virtual to avoid ambiguities (issue #295). </p>
-
-</div>
-</div>
-<a id="ad2cf99efdd0ec58f6aa03a9ee14ada8a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad2cf99efdd0ec58f6aa03a9ee14ada8a">&#9670;&nbsp;</a></span>set_parent_in_children() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ad2cf99efdd0ec58f6aa03a9ee14ada8a">&#9670;&nbsp;</a></span>set_parent_in_children()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1791,7 +1194,7 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <a id="afb596e1302e0965d3465cd6a3b971101"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afb596e1302e0965d3465cd6a3b971101">&#9670;&nbsp;</a></span>set_token() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#afb596e1302e0965d3465cd6a3b971101">&#9670;&nbsp;</a></span>set_token()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1816,62 +1219,12 @@ Private Attributes</h2></td></tr>
 
 <p>Set token for the current ast node. </p>
 
-<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00191">191</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
-
-</div>
-</div>
-<a id="afb596e1302e0965d3465cd6a3b971101"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afb596e1302e0965d3465cd6a3b971101">&#9670;&nbsp;</a></span>set_token() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void nmodl::ast::String::set_token </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classnmodl_1_1_mod_token.html">ModToken</a> &amp;&#160;</td>
-          <td class="paramname"><em>tok</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Set token for the current ast node. </p>
-
-<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l01269">1269</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00188">188</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
 
 </div>
 </div>
 <a id="a4cf0999196414b1f38e84a3fcf132504"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4cf0999196414b1f38e84a3fcf132504">&#9670;&nbsp;</a></span>set_value() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void nmodl::ast::String::set_value </td>
-          <td>(</td>
-          <td class="paramtype">std::string&#160;</td>
-          <td class="paramname"><em>value</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_string.html#adbf40ddad32c859cb81d54f2851e60c1">String::value</a>. </p>
-
-</div>
-</div>
-<a id="a4cf0999196414b1f38e84a3fcf132504"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4cf0999196414b1f38e84a3fcf132504">&#9670;&nbsp;</a></span>set_value() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a4cf0999196414b1f38e84a3fcf132504">&#9670;&nbsp;</a></span>set_value()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1893,85 +1246,7 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <a id="a0b759ffe9b7374f3ce840681724b783a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0b759ffe9b7374f3ce840681724b783a">&#9670;&nbsp;</a></span>visit_children() <span class="overload">[1/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void nmodl::ast::String::visit_children </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classnmodl_1_1visitor_1_1_visitor.html">visitor::Visitor</a> &amp;&#160;</td>
-          <td class="paramname"><em>v</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>visit children i.e. </p>
-<p>member variables of current node using provided visitor</p>
-<p>Different nodes in the AST have different members (i.e. children). This method recursively visits children using provided visitor.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">v</td><td>Concrete visitor that will be used to recursively visit children</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__ast__class.html#gac81ffb4a2c7ca8ce7527f2b8c3b9d403" title="Visit children i.e. ">Ast::visit_children</a> for example. </dd></dl>
-
-<p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_expression.html#a238e3ef13478bb47bfd8caac1718f7c6">nmodl::ast::Expression</a>.</p>
-
-</div>
-</div>
-<a id="afd416a8614195f03bec2124b20ec97d7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afd416a8614195f03bec2124b20ec97d7">&#9670;&nbsp;</a></span>visit_children() <span class="overload">[2/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void nmodl::ast::String::visit_children </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html">visitor::ConstVisitor</a> &amp;&#160;</td>
-          <td class="paramname"><em>v</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>visit children i.e. </p>
-<p>member variables of current node using provided visitor</p>
-<p>Different nodes in the AST have different members (i.e. children). This method recursively visits children using provided visitor.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">v</td><td>Concrete constant visitor that will be used to recursively visit children</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__ast__class.html#gac81ffb4a2c7ca8ce7527f2b8c3b9d403" title="Visit children i.e. ">Ast::visit_children</a> for example. </dd></dl>
-
-<p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_expression.html#a32a32b189bcfaee83a45311e63348808">nmodl::ast::Expression</a>.</p>
-
-</div>
-</div>
-<a id="a0b759ffe9b7374f3ce840681724b783a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0b759ffe9b7374f3ce840681724b783a">&#9670;&nbsp;</a></span>visit_children() <span class="overload">[3/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b759ffe9b7374f3ce840681724b783a">&#9670;&nbsp;</a></span>visit_children() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2013,7 +1288,7 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <a id="afd416a8614195f03bec2124b20ec97d7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afd416a8614195f03bec2124b20ec97d7">&#9670;&nbsp;</a></span>visit_children() <span class="overload">[4/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#afd416a8614195f03bec2124b20ec97d7">&#9670;&nbsp;</a></span>visit_children() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2054,8 +1329,8 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a63afb2eb5503a45c3dd254f9f68c13d1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a63afb2eb5503a45c3dd254f9f68c13d1">&#9670;&nbsp;</a></span>token</h2>
+<a id="ae1dcbd1f5e08b905cac128cffde385ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1dcbd1f5e08b905cac128cffde385ca">&#9670;&nbsp;</a></span>token</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2064,7 +1339,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::shared_ptr&lt; <a class="el" href="classnmodl_1_1_mod_token.html">ModToken</a> &gt; nmodl::ast::String::token</td>
+          <td class="memname">std::shared_ptr&lt;<a class="el" href="classnmodl_1_1_mod_token.html">ModToken</a>&gt; nmodl::ast::String::token</td>
         </tr>
       </table>
   </td>
@@ -2076,7 +1351,7 @@ Private Attributes</h2></td></tr>
 
 <p>token with location information </p>
 
-<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l01141">1141</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00060">60</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
 
 </div>
 </div>
@@ -2102,12 +1377,11 @@ Private Attributes</h2></td></tr>
 
 <p>Value of string. </p>
 
-<p class="definition">Definition at line <a class="el" href="all_8hpp_source.html#l01139">1139</a> of file <a class="el" href="all_8hpp_source.html">all.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="string_8hpp_source.html#l00058">58</a> of file <a class="el" href="string_8hpp_source.html">string.hpp</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/runner/work/nmodl/nmodl/_skbuild/linux-x86_64-3.8/cmake-build/src/ast/<a class="el" href="all_8hpp_source.html">all.hpp</a></li>
 <li>/home/runner/work/nmodl/nmodl/_skbuild/linux-x86_64-3.8/cmake-build/src/ast/<a class="el" href="string_8hpp_source.html">string.hpp</a></li>
 <li>/home/runner/work/nmodl/nmodl/_skbuild/linux-x86_64-3.8/cmake-build/src/ast/<a class="el" href="ast_8cpp_source.html">ast.cpp</a></li>
 </ul>
