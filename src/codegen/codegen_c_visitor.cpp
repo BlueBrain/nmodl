@@ -133,7 +133,7 @@ void CodegenCVisitor::visit_var_name(const VarName& node) {
     }
     if (index) {
         printer->add_text("[");
-        printer->add_text("((int)");
+        printer->add_text("static_cast<int>(");
         index->accept(*this);
         printer->add_text(")");
         printer->add_text("]");
@@ -147,7 +147,7 @@ void CodegenCVisitor::visit_indexed_name(const IndexedName& node) {
     }
     node.get_name()->accept(*this);
     printer->add_text("[");
-    printer->add_text("((int)");
+    printer->add_text("static_cast<int>(");
     node.get_length()->accept(*this);
     printer->add_text(")");
     printer->add_text("]");
