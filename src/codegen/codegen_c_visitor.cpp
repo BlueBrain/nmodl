@@ -69,13 +69,8 @@ void CodegenCVisitor::visit_integer(const Integer& node) {
     if (!codegen) {
         return;
     }
-    const auto& macro = node.get_macro();
     const auto& value = node.get_value();
-    if (macro) {
-        macro->accept(*this);
-    } else {
-        printer->add_text(std::to_string(value));
-    }
+    printer->add_text(std::to_string(value));
 }
 
 
@@ -138,7 +133,9 @@ void CodegenCVisitor::visit_var_name(const VarName& node) {
     }
     if (index) {
         printer->add_text("[");
+        printer->add_text("static_cast<int>(");
         index->accept(*this);
+        printer->add_text(")");
         printer->add_text("]");
     }
 }
@@ -150,7 +147,9 @@ void CodegenCVisitor::visit_indexed_name(const IndexedName& node) {
     }
     node.get_name()->accept(*this);
     printer->add_text("[");
+    printer->add_text("static_cast<int>(");
     node.get_length()->accept(*this);
+    printer->add_text(")");
     printer->add_text("]");
 }
 
