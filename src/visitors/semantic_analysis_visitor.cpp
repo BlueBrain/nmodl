@@ -35,7 +35,9 @@ void SemanticAnalysisVisitor::visit_function_block(const ast::FunctionBlock& nod
 void SemanticAnalysisVisitor::visit_table_statement(const ast::TableStatement&) {
     /// <-- This code is for test 1
     if (in_procedure_function && !one_arg_in_procedure_function) {
-        logger->critical("SemanticAnalysisVisitor :: The procedure or function containing the TABLE statement should contains exactly one argument.");
+        logger->critical(
+            "SemanticAnalysisVisitor :: The procedure or function containing the TABLE statement "
+            "should contains exactly one argument.");
         check_fail = true;
     }
     /// -->
@@ -51,7 +53,9 @@ void SemanticAnalysisVisitor::visit_suffix(const ast::Suffix& node) {
 void SemanticAnalysisVisitor::visit_destructor_block(const ast::DestructorBlock& node) {
     /// <-- This code is for test 2
     if (!is_point_process) {
-        logger->warn("SemanticAnalysisVisitor :: This mod file is not point process but contains a destructor.");
+        logger->warn(
+            "SemanticAnalysisVisitor :: This mod file is not point process but contains a "
+            "destructor.");
         check_fail = true;
     }
     /// -->

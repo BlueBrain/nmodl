@@ -53,6 +53,7 @@ class SemanticAnalysisVisitor: public ConstAstVisitor {
     void visit_suffix(const ast::Suffix& node) override;
 
     void visit_destructor_block(const ast::DestructorBlock& node) override;
+
   public:
     SemanticAnalysisVisitor() = default;
 
