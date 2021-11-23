@@ -35,15 +35,14 @@ namespace visitor {
 
 class SemanticAnalysisVisitor: public ConstAstVisitor {
   private:
+    bool check_fail = false;
+
     /// true if the procedure or the function contains only one argument
     bool one_arg_in_procedure_function = false;
     /// true if we are in a procedure or a function block
     bool in_procedure_function = false;
     /// true if the mod file is of type point process
     bool is_point_process = false;
-
-  public:
-    SemanticAnalysisVisitor() = default;
 
     void visit_procedure_block(const ast::ProcedureBlock& node) override;
 
@@ -54,6 +53,10 @@ class SemanticAnalysisVisitor: public ConstAstVisitor {
     void visit_suffix(const ast::Suffix& node) override;
 
     void visit_destructor_block(const ast::DestructorBlock& node) override;
+  public:
+    SemanticAnalysisVisitor() = default;
+
+    bool check(const ast::Program& node);
 };
 
 /** \} */  // end of visitor_classes
