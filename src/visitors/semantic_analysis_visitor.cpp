@@ -15,7 +15,7 @@ bool SemanticAnalysisVisitor::check(const ast::Program& node) {
 }
 
 void SemanticAnalysisVisitor::visit_procedure_block(const ast::ProcedureBlock& node) {
-    /// <-- This code is for test 1
+    /// <-- This code is for check 1
     in_procedure_function = true;
     one_arg_in_procedure_function = node.get_parameters().size() == 1;
     node.visit_children(*this);
@@ -24,7 +24,7 @@ void SemanticAnalysisVisitor::visit_procedure_block(const ast::ProcedureBlock& n
 }
 
 void SemanticAnalysisVisitor::visit_function_block(const ast::FunctionBlock& node) {
-    /// <-- This code is for test 1
+    /// <-- This code is for check 1
     in_procedure_function = true;
     one_arg_in_procedure_function = node.get_parameters().size() == 1;
     node.visit_children(*this);
@@ -33,7 +33,7 @@ void SemanticAnalysisVisitor::visit_function_block(const ast::FunctionBlock& nod
 }
 
 void SemanticAnalysisVisitor::visit_table_statement(const ast::TableStatement&) {
-    /// <-- This code is for test 1
+    /// <-- This code is for check 1
     if (in_procedure_function && !one_arg_in_procedure_function) {
         logger->critical(
             "SemanticAnalysisVisitor :: The procedure or function containing the TABLE statement "
@@ -44,14 +44,14 @@ void SemanticAnalysisVisitor::visit_table_statement(const ast::TableStatement&) 
 }
 
 void SemanticAnalysisVisitor::visit_suffix(const ast::Suffix& node) {
-    /// <-- This code is for test 2
+    /// <-- This code is for check 2
     const auto& type = node.get_type()->get_node_name();
     is_point_process = (type == "POINT_PROCESS" || type == "ARTIFICIAL_CELL");
     /// -->
 }
 
 void SemanticAnalysisVisitor::visit_destructor_block(const ast::DestructorBlock& node) {
-    /// <-- This code is for test 2
+    /// <-- This code is for check 2
     if (!is_point_process) {
         logger->warn(
             "SemanticAnalysisVisitor :: This mod file is not point process but contains a "

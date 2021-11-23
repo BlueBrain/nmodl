@@ -44,14 +44,19 @@ class SemanticAnalysisVisitor: public ConstAstVisitor {
     /// true if the mod file is of type point process
     bool is_point_process = false;
 
+    /// Store if we are in a procedure and if the arity of this is 1
     void visit_procedure_block(const ast::ProcedureBlock& node) override;
 
+    /// Store if we are in a function and if the arity of this is 1
     void visit_function_block(const ast::FunctionBlock& node) override;
 
+    /// Visit a table statement and check that the arity of the block were 1
     void visit_table_statement(const ast::TableStatement& node) override;
 
+    /// Store if the suffix of the file is of type POINT_PROCESS or ARTICIFIAL_CELL
     void visit_suffix(const ast::Suffix& node) override;
 
+    /// Visit destructor and check that the file is of type POINT_PROCESS or ARTIFICIAL_CELL
     void visit_destructor_block(const ast::DestructorBlock& node) override;
 
   public:
