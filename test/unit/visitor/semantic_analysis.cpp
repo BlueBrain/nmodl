@@ -68,11 +68,11 @@ SCENARIO("TABLE stmt", "[visitor][semantic_analysis]") {
 SCENARIO("Destructor block", "[visitor][semantic_analysis]") {
     GIVEN("A point-process mod file, with a destructor") {
         std::string nmodl_text = R"(
-            NEURON {
-                POINT_PROCESS test
+            DESTRUCTOR { : Destructor is before
             }
 
-            DESTRUCTOR {
+            NEURON {
+                POINT_PROCESS test
             }
         )";
         THEN("pass") {

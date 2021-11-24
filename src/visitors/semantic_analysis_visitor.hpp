@@ -53,9 +53,6 @@ class SemanticAnalysisVisitor: public ConstAstVisitor {
     /// Visit a table statement and check that the arity of the block were 1
     void visit_table_statement(const ast::TableStatement& node) override;
 
-    /// Store if the suffix of the file is of type POINT_PROCESS or ARTICIFIAL_CELL
-    void visit_suffix(const ast::Suffix& node) override;
-
     /// Visit destructor and check that the file is of type POINT_PROCESS or ARTIFICIAL_CELL
     void visit_destructor_block(const ast::DestructorBlock& node) override;
 
