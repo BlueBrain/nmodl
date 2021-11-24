@@ -1,11 +1,11 @@
 #include "visitors/semantic_analysis_visitor.hpp"
-#include "visitors/visitor_utils.hpp"
 #include "ast/function_block.hpp"
 #include "ast/procedure_block.hpp"
 #include "ast/program.hpp"
 #include "ast/suffix.hpp"
 #include "ast/table_statement.hpp"
 #include "utils/logger.hpp"
+#include "visitors/visitor_utils.hpp"
 
 namespace nmodl {
 namespace visitor {
