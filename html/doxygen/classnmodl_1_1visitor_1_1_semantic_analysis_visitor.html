@@ -89,6 +89,7 @@ $(document).ready(function(){initNavTree('classnmodl_1_1visitor_1_1_semantic_ana
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -97,7 +98,7 @@ $(document).ready(function(){initNavTree('classnmodl_1_1visitor_1_1_semantic_ana
 <div class="contents">
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00035">35</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00036">36</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>&gt;</code></p>
 <div class="dynheader">
@@ -115,15 +116,8 @@ Inheritance diagram for nmodl::visitor::SemanticAnalysisVisitor:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a7f7eba44f9fe830c3ba2e52d789082ca"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a7f7eba44f9fe830c3ba2e52d789082ca">SemanticAnalysisVisitor</a> ()=default</td></tr>
 <tr class="separator:a7f7eba44f9fe830c3ba2e52d789082ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3e7dc3e1ddd25ecc1ec131ad5958de93"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a3e7dc3e1ddd25ecc1ec131ad5958de93">visit_procedure_block</a> (const <a class="el" href="classnmodl_1_1ast_1_1_procedure_block.html">ast::ProcedureBlock</a> &amp;node) override</td></tr>
-<tr class="memdesc:a3e7dc3e1ddd25ecc1ec131ad5958de93"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_procedure_block.html" title="TODO. ">ast::ProcedureBlock</a>  <a href="#a3e7dc3e1ddd25ecc1ec131ad5958de93">More...</a><br /></td></tr>
-<tr class="separator:a3e7dc3e1ddd25ecc1ec131ad5958de93"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0c3a7f34c86536de970e29b23d14092e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a0c3a7f34c86536de970e29b23d14092e">visit_function_block</a> (const <a class="el" href="classnmodl_1_1ast_1_1_function_block.html">ast::FunctionBlock</a> &amp;node) override</td></tr>
-<tr class="memdesc:a0c3a7f34c86536de970e29b23d14092e"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_function_block.html" title="TODO. ">ast::FunctionBlock</a>  <a href="#a0c3a7f34c86536de970e29b23d14092e">More...</a><br /></td></tr>
-<tr class="separator:a0c3a7f34c86536de970e29b23d14092e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a973d5616f15e4048df98c1802269e9d3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a973d5616f15e4048df98c1802269e9d3">visit_table_statement</a> (const <a class="el" href="classnmodl_1_1ast_1_1_table_statement.html">ast::TableStatement</a> &amp;node) override</td></tr>
-<tr class="memdesc:a973d5616f15e4048df98c1802269e9d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_table_statement.html" title="Represents TABLE statement in NMODL. ">ast::TableStatement</a>  <a href="#a973d5616f15e4048df98c1802269e9d3">More...</a><br /></td></tr>
-<tr class="separator:a973d5616f15e4048df98c1802269e9d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a59bf1db427b5229d53adc6a18c15b2a0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a59bf1db427b5229d53adc6a18c15b2a0">check</a> (const <a class="el" href="classnmodl_1_1ast_1_1_program.html">ast::Program</a> &amp;node)</td></tr>
+<tr class="separator:a59bf1db427b5229d53adc6a18c15b2a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classnmodl_1_1visitor_1_1_const_ast_visitor"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classnmodl_1_1visitor_1_1_const_ast_visitor')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classnmodl_1_1visitor_1_1_const_ast_visitor.html">nmodl::visitor::ConstAstVisitor</a></td></tr>
 <tr class="memitem:a53fbe0d64501487bb776cd6b6d863cfd inherit pub_methods_classnmodl_1_1visitor_1_1_const_ast_visitor"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_const_ast_visitor.html#a53fbe0d64501487bb776cd6b6d863cfd">visit_node</a> (const <a class="el" href="classnmodl_1_1ast_1_1_node.html">ast::Node</a> &amp;node) override</td></tr>
 <tr class="memdesc:a53fbe0d64501487bb776cd6b6d863cfd inherit pub_methods_classnmodl_1_1visitor_1_1_const_ast_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_node.html" title="Base class for all AST node. ">ast::Node</a>  <a href="classnmodl_1_1visitor_1_1_const_ast_visitor.html#a53fbe0d64501487bb776cd6b6d863cfd">More...</a><br /></td></tr>
@@ -552,14 +546,34 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a8513f0a9bc2e21f863dab3c9be0a99d0 inherit pub_methods_classnmodl_1_1visitor_1_1_const_visitor"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a8513f0a9bc2e21f863dab3c9be0a99d0">~ConstVisitor</a> ()=default</td></tr>
 <tr class="separator:a8513f0a9bc2e21f863dab3c9be0a99d0 inherit pub_methods_classnmodl_1_1visitor_1_1_const_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a3e7dc3e1ddd25ecc1ec131ad5958de93"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a3e7dc3e1ddd25ecc1ec131ad5958de93">visit_procedure_block</a> (const <a class="el" href="classnmodl_1_1ast_1_1_procedure_block.html">ast::ProcedureBlock</a> &amp;node) override</td></tr>
+<tr class="memdesc:a3e7dc3e1ddd25ecc1ec131ad5958de93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Store if we are in a procedure and if the arity of this is 1.  <a href="#a3e7dc3e1ddd25ecc1ec131ad5958de93">More...</a><br /></td></tr>
+<tr class="separator:a3e7dc3e1ddd25ecc1ec131ad5958de93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c3a7f34c86536de970e29b23d14092e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a0c3a7f34c86536de970e29b23d14092e">visit_function_block</a> (const <a class="el" href="classnmodl_1_1ast_1_1_function_block.html">ast::FunctionBlock</a> &amp;node) override</td></tr>
+<tr class="memdesc:a0c3a7f34c86536de970e29b23d14092e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Store if we are in a function and if the arity of this is 1.  <a href="#a0c3a7f34c86536de970e29b23d14092e">More...</a><br /></td></tr>
+<tr class="separator:a0c3a7f34c86536de970e29b23d14092e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a973d5616f15e4048df98c1802269e9d3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a973d5616f15e4048df98c1802269e9d3">visit_table_statement</a> (const <a class="el" href="classnmodl_1_1ast_1_1_table_statement.html">ast::TableStatement</a> &amp;node) override</td></tr>
+<tr class="memdesc:a973d5616f15e4048df98c1802269e9d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Visit a table statement and check that the arity of the block were 1.  <a href="#a973d5616f15e4048df98c1802269e9d3">More...</a><br /></td></tr>
+<tr class="separator:a973d5616f15e4048df98c1802269e9d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa1a426b1539112feb8160914733013ab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#aa1a426b1539112feb8160914733013ab">visit_destructor_block</a> (const <a class="el" href="classnmodl_1_1ast_1_1_destructor_block.html">ast::DestructorBlock</a> &amp;node) override</td></tr>
+<tr class="memdesc:aa1a426b1539112feb8160914733013ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Visit destructor and check that the file is of type POINT_PROCESS or ARTIFICIAL_CELL.  <a href="#aa1a426b1539112feb8160914733013ab">More...</a><br /></td></tr>
+<tr class="separator:aa1a426b1539112feb8160914733013ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr class="memitem:a3bf4750e17d33e3a0b3168abbeca1b06"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a3bf4750e17d33e3a0b3168abbeca1b06">check_fail</a> = false</td></tr>
+<tr class="separator:a3bf4750e17d33e3a0b3168abbeca1b06"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abae9b5d11d661e22303535cb79de1398"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#abae9b5d11d661e22303535cb79de1398">one_arg_in_procedure_function</a> = false</td></tr>
 <tr class="memdesc:abae9b5d11d661e22303535cb79de1398"><td class="mdescLeft">&#160;</td><td class="mdescRight">true if the procedure or the function contains only one argument  <a href="#abae9b5d11d661e22303535cb79de1398">More...</a><br /></td></tr>
 <tr class="separator:abae9b5d11d661e22303535cb79de1398"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a55042ca257a0a0d08a5cd146bbfd0711"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a55042ca257a0a0d08a5cd146bbfd0711">in_procedure_function</a> = false</td></tr>
 <tr class="memdesc:a55042ca257a0a0d08a5cd146bbfd0711"><td class="mdescLeft">&#160;</td><td class="mdescRight">true if we are in a procedure or a function block  <a href="#a55042ca257a0a0d08a5cd146bbfd0711">More...</a><br /></td></tr>
 <tr class="separator:a55042ca257a0a0d08a5cd146bbfd0711"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa64fa814c90e3dac938c7378e2acc330"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#aa64fa814c90e3dac938c7378e2acc330">is_point_process</a> = false</td></tr>
+<tr class="memdesc:aa64fa814c90e3dac938c7378e2acc330"><td class="mdescLeft">&#160;</td><td class="mdescRight">true if the mod file is of type point process  <a href="#aa64fa814c90e3dac938c7378e2acc330">More...</a><br /></td></tr>
+<tr class="separator:aa64fa814c90e3dac938c7378e2acc330"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a7f7eba44f9fe830c3ba2e52d789082ca"></a>
@@ -588,6 +602,62 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a59bf1db427b5229d53adc6a18c15b2a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a59bf1db427b5229d53adc6a18c15b2a0">&#9670;&nbsp;</a></span>check()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool SemanticAnalysisVisitor::check </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classnmodl_1_1ast_1_1_program.html">ast::Program</a> &amp;&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>&lt;&ndash; This code is for check 2</p>
+<p>&ndash;&gt; </p>
+
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8cpp_source.html#l00013">13</a> of file <a class="el" href="semantic__analysis__visitor_8cpp_source.html">semantic_analysis_visitor.cpp</a>.</p>
+
+</div>
+</div>
+<a id="aa1a426b1539112feb8160914733013ab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa1a426b1539112feb8160914733013ab">&#9670;&nbsp;</a></span>visit_destructor_block()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SemanticAnalysisVisitor::visit_destructor_block </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classnmodl_1_1ast_1_1_destructor_block.html">ast::DestructorBlock</a> &amp;&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">private</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Visit destructor and check that the file is of type POINT_PROCESS or ARTIFICIAL_CELL. </p>
+<p>&lt;&ndash; This code is for check 2</p>
+<p>&ndash;&gt; </p>
+
+<p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#ae24208dec1498925f2e858bc3f57d327">nmodl::visitor::ConstVisitor</a>.</p>
+
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8cpp_source.html#l00058">58</a> of file <a class="el" href="semantic__analysis__visitor_8cpp_source.html">semantic_analysis_visitor.cpp</a>.</p>
+
+</div>
+</div>
 <a id="a0c3a7f34c86536de970e29b23d14092e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0c3a7f34c86536de970e29b23d14092e">&#9670;&nbsp;</a></span>visit_function_block()</h2>
 
@@ -607,16 +677,18 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">private</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>visit node of type <a class="el" href="classnmodl_1_1ast_1_1_function_block.html" title="TODO. ">ast::FunctionBlock</a> </p>
+<p>Store if we are in a function and if the arity of this is 1. </p>
+<p>&lt;&ndash; This code is for check 1</p>
+<p>&ndash;&gt; </p>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a6869926692e8976bcea7682751efba18">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8cpp_source.html#l00016">16</a> of file <a class="el" href="semantic__analysis__visitor_8cpp_source.html">semantic_analysis_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8cpp_source.html#l00038">38</a> of file <a class="el" href="semantic__analysis__visitor_8cpp_source.html">semantic_analysis_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -639,16 +711,18 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">private</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>visit node of type <a class="el" href="classnmodl_1_1ast_1_1_procedure_block.html" title="TODO. ">ast::ProcedureBlock</a> </p>
+<p>Store if we are in a procedure and if the arity of this is 1. </p>
+<p>&lt;&ndash; This code is for check 1</p>
+<p>&ndash;&gt; </p>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#aa720b8d776da0a450f2a2007a1443a08">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8cpp_source.html#l00009">9</a> of file <a class="el" href="semantic__analysis__visitor_8cpp_source.html">semantic_analysis_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8cpp_source.html#l00029">29</a> of file <a class="el" href="semantic__analysis__visitor_8cpp_source.html">semantic_analysis_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -671,20 +745,46 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">private</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>visit node of type <a class="el" href="classnmodl_1_1ast_1_1_table_statement.html" title="Represents TABLE statement in NMODL. ">ast::TableStatement</a> </p>
+<p>Visit a table statement and check that the arity of the block were 1. </p>
+<p>&lt;&ndash; This code is for check 1</p>
+<p>&ndash;&gt; </p>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a1a2f57a9e51cfb52b4d454e58b18ea79">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8cpp_source.html#l00023">23</a> of file <a class="el" href="semantic__analysis__visitor_8cpp_source.html">semantic_analysis_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8cpp_source.html#l00047">47</a> of file <a class="el" href="semantic__analysis__visitor_8cpp_source.html">semantic_analysis_visitor.cpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a3bf4750e17d33e3a0b3168abbeca1b06"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3bf4750e17d33e3a0b3168abbeca1b06">&#9670;&nbsp;</a></span>check_fail</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool nmodl::visitor::SemanticAnalysisVisitor::check_fail = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00038">38</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a55042ca257a0a0d08a5cd146bbfd0711"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a55042ca257a0a0d08a5cd146bbfd0711">&#9670;&nbsp;</a></span>in_procedure_function</h2>
 
@@ -707,7 +807,33 @@ Private Attributes</h2></td></tr>
 
 <p>true if we are in a procedure or a function block </p>
 
-<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00040">40</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00043">43</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aa64fa814c90e3dac938c7378e2acc330"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa64fa814c90e3dac938c7378e2acc330">&#9670;&nbsp;</a></span>is_point_process</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool nmodl::visitor::SemanticAnalysisVisitor::is_point_process = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>true if the mod file is of type point process </p>
+
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00045">45</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -733,7 +859,7 @@ Private Attributes</h2></td></tr>
 
 <p>true if the procedure or the function contains only one argument </p>
 
-<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00038">38</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00041">41</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
 
 </div>
 </div>

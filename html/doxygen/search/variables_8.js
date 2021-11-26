@@ -35,6 +35,7 @@ var searchData=
   ['is_5fconstant',['is_constant',['../structnmodl_1_1codegen_1_1_index_variable_info.html#a7ce67bd16a0c2fbad6ca3d7c8c9ca916',1,'nmodl::codegen::IndexVariableInfo']]],
   ['is_5findex',['is_index',['../structnmodl_1_1codegen_1_1_index_variable_info.html#a438bbebd66e7f73473924119c7510a33',1,'nmodl::codegen::IndexVariableInfo']]],
   ['is_5finteger',['is_integer',['../structnmodl_1_1codegen_1_1_index_variable_info.html#a325279ea71ed93b1ebd59dfdb867ed6b',1,'nmodl::codegen::IndexVariableInfo']]],
+  ['is_5fpoint_5fprocess',['is_point_process',['../classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#aa64fa814c90e3dac938c7378e2acc330',1,'nmodl::visitor::SemanticAnalysisVisitor']]],
   ['is_5froot_5fwith_5fnull_5fparent',['is_root_with_null_parent',['../classnmodl_1_1visitor_1_1test_1_1_check_parent_visitor.html#a77a12f26901eb62e3bc862e4b16058a3',1,'nmodl::visitor::test::CheckParentVisitor']]],
   ['is_5ftop_5flevel_5fstatement_5fblock',['is_top_level_statement_block',['../classnmodl_1_1visitor_1_1_sympy_replace_solutions_visitor.html#a7a642a6362e54ec41e54bc1d9814ba72',1,'nmodl::visitor::SympyReplaceSolutionsVisitor']]],
   ['is_5fvdata',['is_vdata',['../structnmodl_1_1codegen_1_1_index_variable_info.html#ae058f1f24bfc26439774ee98ec7ecd60',1,'nmodl::codegen::IndexVariableInfo']]]
