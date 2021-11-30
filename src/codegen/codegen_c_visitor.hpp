@@ -1187,8 +1187,14 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      *
      * \note This is not used for the C backend
      */
-    virtual void print_global_variable_device_create_annotation();
+    virtual void print_global_variable_device_create_annotation_pre();
 
+    /**
+     * Print the pragma annotation to create global variables on the device
+     *
+     * \note This is not used for the C backend
+     */
+    virtual void print_global_variable_device_create_annotation_post();
 
     /**
      * Print the pragma annotation to update global variables from host to the device
