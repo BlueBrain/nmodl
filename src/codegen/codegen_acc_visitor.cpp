@@ -54,7 +54,8 @@ void CodegenAccVisitor::print_channel_iteration_block_parallel_hint(BlockType ty
         "nrn_pragma_acc(parallel loop {} async(nt->stream_id) if(nt->compute_gpu))"_format(
             present_clause.str()));
     printer->add_line(
-        "nrn_pragma_omp(target teams distribute parallel for simd depend(inout: nt) is_device_ptr(inst) "
+        "nrn_pragma_omp(target teams distribute parallel for simd depend(inout: nt) "
+        "is_device_ptr(inst) nowait "
         "if(nt->compute_gpu))");
 }
 
@@ -308,7 +309,8 @@ void CodegenAccVisitor::print_instance_variable_transfer_to_device() const {
 
 
 void CodegenAccVisitor::print_deriv_advance_flag_transfer_to_device() const {
-    printer->add_line("#pragma acc update device (deriv_advance_flag) if (nt->compute_gpu)");
+    printer->add_line("nrn_pragma_acc(update device (deriv_advance_flag) if(nt->compute_gpu))");
+    printer->add_line("nrn_pragma_omp(target update to(deriv_advance_flag) if(nt->compute_gpu))");
 }
 
 
@@ -320,6 +322,7 @@ void CodegenAccVisitor::print_device_atomic_capture_annotation() const {
 void CodegenAccVisitor::print_device_stream_wait() const {
     printer->start_block("if(nt->compute_gpu)");
     printer->add_line("nrn_pragma_acc(wait(nt->stream_id))");
+    printer->add_line("nrn_pragma_omp(taskwait)");
     printer->end_block(1);
 }
 
