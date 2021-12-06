@@ -54,8 +54,7 @@ void CodegenAccVisitor::print_channel_iteration_block_parallel_hint(BlockType ty
         "nrn_pragma_acc(parallel loop {} async(nt->stream_id) if(nt->compute_gpu))"_format(
             present_clause.str()));
     printer->add_line(
-        "nrn_pragma_omp(target teams distribute parallel for simd depend(inout: nt) "
-        "is_device_ptr(inst) nowait "
+        "nrn_pragma_omp(target teams distribute parallel for simd is_device_ptr(inst) "
         "if(nt->compute_gpu))");
 }
 
