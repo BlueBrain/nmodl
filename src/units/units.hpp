@@ -291,7 +291,7 @@ class UnitTable {
     void print_base_units(std::ostream& base_units_details) const;
 
     /// Get base unit name based on the ID number of the dimension
-    const std::string& get_base_unit_name(int id) const noexcept {
+    const std::string& get_base_unit_name(size_t id) const noexcept {
         return base_units_names[id];
     }
 };

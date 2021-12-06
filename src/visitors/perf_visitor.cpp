@@ -93,9 +93,6 @@ void PerfVisitor::visit_binary_expression(const ast::BinaryExpression& node) {
         case ast::BOP_EXACT_EQUAL:
             current_block_perf.n_ee++;
             break;
-
-        default:
-            throw std::logic_error("Binary operator not handled in perf visitor");
         }
     }
 

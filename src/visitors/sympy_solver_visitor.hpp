@@ -169,7 +169,7 @@ class SympySolverVisitor: public AstVisitor {
     bool elimination;
 
     /// max number of state vars allowed for small system linear solver
-    int SMALL_LINEAR_SYSTEM_MAX_STATES;
+    size_t SMALL_LINEAR_SYSTEM_MAX_STATES;
 
   public:
     explicit SympySolverVisitor(bool use_pade_approx = false,
@@ -177,7 +177,7 @@ class SympySolverVisitor: public AstVisitor {
                                 int SMALL_LINEAR_SYSTEM_MAX_STATES = 3)
         : use_pade_approx(use_pade_approx)
         , elimination(elimination)
-        , SMALL_LINEAR_SYSTEM_MAX_STATES(SMALL_LINEAR_SYSTEM_MAX_STATES){};
+        , SMALL_LINEAR_SYSTEM_MAX_STATES(SMALL_LINEAR_SYSTEM_MAX_STATES) {}
 
     void visit_var_name(ast::VarName& node) override;
     void visit_diff_eq_expression(ast::DiffEqExpression& node) override;

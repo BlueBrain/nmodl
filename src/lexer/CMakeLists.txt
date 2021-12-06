@@ -199,6 +199,21 @@ add_custom_command(
 # Libraries & executables
 # =============================================================================
 
+foreach(compilation_unit ${AST_GENERATED_SOURCES})
+  set_source_files_properties(
+    ${compilation_unit}
+    PROPERTIES COMPILE_FLAGS
+               "-Wno-overloaded-virtual -Wno-unused-parameter -Wno-shadow -Wno-sign-conversion")
+endforeach()
+foreach(compilation_unit ${LEXER_SOURCE_FILES} ${BISON_GENERATED_SOURCE_FILES})
+  set_source_files_properties(
+    ${compilation_unit}
+    PROPERTIES
+      COMPILE_FLAGS
+      "-Wno-old-style-cast -Wno-unreachable-code -Wno-zero-as-null-pointer-constant -Wno-unused-macros -Wno-shorten-64-to-32 -Wno-switch-enum -Wno-unreachable-code-break"
+  )
+endforeach()
+
 add_library(lexer_obj OBJECT ${LEXER_SOURCE_FILES} ${BISON_GENERATED_SOURCE_FILES}
                              ${AST_GENERATED_SOURCES} ${UNIT_SOURCE_FILES})
 

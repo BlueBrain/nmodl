@@ -26,7 +26,7 @@ using namespace fmt::literals;
 using namespace nmodl;
 using Token = parser::CParser::token;
 
-void scan_c_code(std::istream& in) {
+static void scan_c_code(std::istream& in) {
     nmodl::parser::CDriver driver;
     nmodl::parser::CLexer scanner(driver, &in);
 

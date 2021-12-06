@@ -162,8 +162,8 @@ if(NMODL_PGI_COMPILER)
   add_compile_definitions(JSON_SKIP_UNSUPPORTED_COMPILER_CHECK=1)
 endif()
 
-include_directories(${NMODL_PROJECT_SOURCE_DIR} ${NMODL_PROJECT_SOURCE_DIR}/src
-                    ${PROJECT_BINARY_DIR}/src)
+include_directories(${NMODL_PROJECT_SOURCE_DIR} ${NMODL_PROJECT_SOURCE_DIR}/src)
+include_directories(SYSTEM ${PROJECT_BINARY_DIR}/src)
 
 # generate file with version number from git and nrnunits.lib file path
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/config/config.cpp.in

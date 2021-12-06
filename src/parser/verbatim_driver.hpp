@@ -38,12 +38,7 @@ class VerbatimDriver {
         this->is = is;
     }
 
-    virtual ~VerbatimDriver() {
-        destroy_scanner();
-        if (result) {
-            delete result;
-        }
-    }
+    virtual ~VerbatimDriver();
 };
 
 /** @} */  // end of parser

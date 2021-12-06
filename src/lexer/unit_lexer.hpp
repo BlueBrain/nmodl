@@ -61,10 +61,10 @@ class UnitLexer: public UnitFlexLexer {
      * @param in Input stream from where tokens will be read
      * @param out Output stream where output will be sent
      */
-    explicit UnitLexer(UnitDriver& /* driver */,
-                       std::istream* in = nullptr,
-                       std::ostream* out = nullptr)
-        : UnitFlexLexer(in, out) {}
+    explicit UnitLexer(UnitDriver& driver, std::istream* in = nullptr, std::ostream* out = nullptr)
+        : UnitFlexLexer(in, out) {
+        (void) driver;
+    }
 
     ~UnitLexer() override = default;
 

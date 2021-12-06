@@ -15,6 +15,8 @@ namespace nmodl {
 
 namespace pybind_wrappers {
 
+PythonExecutor::~PythonExecutor() {}
+
 bool EmbeddedPythonLoader::have_wrappers() {
 #if defined(NMODL_STATIC_PYWRAPPER)
     static auto wrapper_api = nmodl::pybind_wrappers::init_pybind_wrap_api();

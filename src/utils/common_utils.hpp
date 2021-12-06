@@ -18,10 +18,10 @@
 /**
  *
  * \dir
- * \brief Utility classes and function
+ * Utility classes and function
  *
  * \file
- * \brief Common utility functions for file/dir manipulation
+ * Common utility functions for file/dir manipulation
  */
 
 namespace nmodl {
@@ -102,7 +102,7 @@ enum UseNumbersInString : bool { WithNumbers = true, WithoutNumbers = false };
 
 /// Generate random std::string of length len based on a
 /// uniform distribution
-std::string generate_random_string(int len, UseNumbersInString use_numbers);
+std::string generate_random_string(unsigned int len, UseNumbersInString use_numbers);
 
 /**
  * \class SingletonRandomString
@@ -123,7 +123,7 @@ class SingletonRandomString {
 
     /// Function to instantiate the SingletonRandomString class
     static SingletonRandomString& instance() {
-        static SingletonRandomString srs;
+        [[clang::no_destroy]] static SingletonRandomString srs;
         return srs;
     }
 

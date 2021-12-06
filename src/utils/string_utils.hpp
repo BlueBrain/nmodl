@@ -9,7 +9,7 @@
 
 /**
  * \file
- * \brief Implement string manipulation functions
+ * Implement string manipulation functions
  *
  * String trimming and manipulation functions based on
  * stackoverflow.com/questions/216823/whats-the-best-way-to-trim-stdstring
@@ -95,12 +95,12 @@ static inline std::vector<std::string> split_string(const std::string& text, cha
 }
 
 /// Left/Right/Center-aligns string within a field of width "width"
-static inline std::string align_text(std::string text, int width, text_alignment type) {
+static inline std::string align_text(std::string text, unsigned long width, text_alignment type) {
     /// left and right spacing
     std::string left, right;
 
     /// count excess room to pad
-    int padding = width - text.size();
+    auto padding = width - text.size();
 
     if (padding > 0) {
         if (type == text_alignment::left) {

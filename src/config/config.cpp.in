@@ -7,11 +7,19 @@
 
 #include "config/config.h"
 
+#include <sstream>
+
 /// Git version of the project
-const std::string nmodl::Version::GIT_REVISION = "@NMODL_GIT_REVISION@";
+const char* nmodl::Version::GIT_REVISION = "@NMODL_GIT_REVISION@";
 
 /// NMODL version
-const std::string nmodl::Version::NMODL_VERSION = "@PROJECT_VERSION@";
+const char* nmodl::Version::NMODL_VERSION = "@PROJECT_VERSION@";
+
+std::string nmodl::Version::to_string() {
+    std::ostringstream oss;
+    oss << NMODL_VERSION << ' ' << GIT_REVISION;
+    return oss.str();
+}
 
 /**
  * \brief Path of nrnutils.lib file
@@ -21,5 +29,6 @@ const std::string nmodl::Version::NMODL_VERSION = "@PROJECT_VERSION@";
  * from CMAKE_INSTALL_PREFIX. Note that this use of NMODL_PROJECT_BINARY_DIR
  * will cause ccache misses when the build prefix is changed.
  */
+[[clang::no_destroy]]
 std::vector<std::string> nmodl::NrnUnitsLib::NRNUNITSLIB_PATH =
     {"@CMAKE_INSTALL_PREFIX@/share/nmodl/nrnunits.lib", "@NMODL_PROJECT_BINARY_DIR@/share/nmodl/nrnunits.lib"};

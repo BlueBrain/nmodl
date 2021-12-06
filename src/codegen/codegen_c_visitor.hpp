@@ -31,11 +31,11 @@
 #include "visitors/ast_visitor.hpp"
 
 
-using namespace fmt::literals;
-
 namespace nmodl {
 /// encapsulates code generation backend implementations
 namespace codegen {
+
+using namespace fmt::literals;
 
 /**
  * @defgroup codegen Code Generation Implementation
@@ -463,26 +463,25 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
-     * Check if net_send_buffer is required
+     * \return true if net_send_buffer is required, false otherwise
      */
     bool net_send_buffer_required() const noexcept;
 
 
     /**
-     * Check if setup_range_variable function is required
-     * \return
+     * \return true if setup_range_variable function is required, false otherwise
      */
     bool range_variable_setup_required() const noexcept;
 
 
     /**
-     * Check if net_receive node exist
+     * \return true if net_receive node exist, false otherwise
      */
     bool net_receive_exist() const noexcept;
 
 
     /**
-     * Check if breakpoint node exist
+     * \return true if breakpoint node exist, false otherwise
      */
     bool breakpoint_exist() const noexcept;
 
@@ -680,7 +679,7 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * current printer. Elements are expected to be of type nmodl::ast::Ast and are printed by being
      * visited. Care is taken to omit the separator after the the last element.
      *
-     * \tparam The element type in the vector, which must be of type nmodl::ast::Ast
+     * \tparam T element type in the vector, which must be of type nmodl::ast::Ast
      * \param  elements The vector of elements to be printed
      * \param  prefix A prefix string to printed before each element
      * \param  separator The seperator string to be printed between all elements
@@ -792,7 +791,7 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * Generate Function call statement for nrn_wrote_conc
      * \param ion_name      The name of the ion variable
      * \param concentration The name of the concentration variable
-     * \param index
+     * \param index         third parameter passed to the function
      * \return              The string representing the function call
      */
     std::string conc_write_statement(const std::string& ion_name,
@@ -827,7 +826,7 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * Functions registered in NEURON during initialization for callback must adhere to a prescribed
      * calling convention. This method generates the string representing the function parameters for
      * these externally called functions.
-     * \param table
+     * \param table FIXME
      * \return      A string representing the parameters of the function
      */
     std::string external_method_parameters(bool table = false) const;
@@ -890,7 +889,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * Instantiate global var instance
      *
      * For C code generation this is empty
-     * \return ""
      */
     virtual void print_global_var_struct_decl();
 
@@ -1270,7 +1268,7 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * Print channel iterations from which tasks are created
      *
      * \note This is not used for the C backend
-     * \param type
+     * \param type FIXME
      */
     virtual void print_channel_iteration_task_begin(BlockType type);
 
@@ -1707,25 +1705,26 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
                     const bool optimize_ionvar_copies,
                     const std::string& extension,
                     const std::string& wrapper_ext)
-        : target_printer(new CodePrinter(output_dir + "/" + mod_filename + extension))
-        , wrapper_printer(new CodePrinter(output_dir + "/" + mod_filename + wrapper_ext))
-        , printer(target_printer)
-        , mod_filename(mod_filename)
+        : mod_filename(mod_filename)
+        , optimize_ionvar_copies(optimize_ionvar_copies)
         , float_type(float_type)
-        , optimize_ionvar_copies(optimize_ionvar_copies) {}
+        , target_printer(new CodePrinter(output_dir + "/" + mod_filename + extension))
+        , wrapper_printer(new CodePrinter(output_dir + "/" + mod_filename + wrapper_ext))
+        , printer(target_printer) {}
+
 
     CodegenCVisitor(const std::string& mod_filename,
                     std::ostream& stream,
                     const std::string& float_type,
                     const bool optimize_ionvar_copies,
-                    const std::string& extension,
-                    const std::string& wrapper_ext)
-        : target_printer(new CodePrinter(stream))
-        , wrapper_printer(new CodePrinter(stream))
-        , printer(target_printer)
-        , mod_filename(mod_filename)
+                    const std::string& /* extension */,
+                    const std::string& /* wrapper_ext */)
+        : mod_filename(mod_filename)
+        , optimize_ionvar_copies(optimize_ionvar_copies)
         , float_type(float_type)
-        , optimize_ionvar_copies(optimize_ionvar_copies) {}
+        , target_printer(new CodePrinter(stream))
+        , wrapper_printer(new CodePrinter(stream))
+        , printer(target_printer) {}
 
 
   public:
@@ -1751,11 +1750,11 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
                     std::string float_type,
                     const bool optimize_ionvar_copies,
                     const std::string& extension = ".cpp")
-        : target_printer(new CodePrinter(output_dir + "/" + mod_filename + extension))
-        , printer(target_printer)
-        , mod_filename(mod_filename)
+        : mod_filename(mod_filename)
+        , optimize_ionvar_copies(optimize_ionvar_copies)
         , float_type(std::move(float_type))
-        , optimize_ionvar_copies(optimize_ionvar_copies) {}
+        , target_printer(new CodePrinter(output_dir + "/" + mod_filename + extension))
+        , printer(target_printer) {}
 
     /**
      * \copybrief nmodl::codegen::CodegenCVisitor
@@ -1777,11 +1776,11 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
                     std::ostream& stream,
                     const std::string& float_type,
                     const bool optimize_ionvar_copies)
-        : target_printer(new CodePrinter(stream))
-        , printer(target_printer)
-        , mod_filename(mod_filename)
+        : mod_filename(mod_filename)
+        , optimize_ionvar_copies(optimize_ionvar_copies)
         , float_type(float_type)
-        , optimize_ionvar_copies(optimize_ionvar_copies) {}
+        , target_printer(new CodePrinter(stream))
+        , printer(target_printer) {}
 
 
     /**
@@ -1805,11 +1804,11 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
                     std::string float_type,
                     const bool optimize_ionvar_copies,
                     std::shared_ptr<CodePrinter>& target_printer)
-        : target_printer(target_printer)
-        , printer(target_printer)
-        , mod_filename(mod_filename)
+        : mod_filename(mod_filename)
+        , optimize_ionvar_copies(optimize_ionvar_copies)
         , float_type(float_type)
-        , optimize_ionvar_copies(optimize_ionvar_copies) {}
+        , target_printer(target_printer)
+        , printer(target_printer) {}
 
 
     /**
@@ -1875,14 +1874,14 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
     /**
      * Print NMODL function in target backend code
-     * \param node
+     * \param node function to print
      */
     void print_function(const ast::FunctionBlock& node);
 
 
     /**
      * Print NMODL procedure in target backend code
-     * \param node
+     * \param node procedure to print
      */
     virtual void print_procedure(const ast::ProcedureBlock& node);
 
@@ -1897,9 +1896,9 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
     /**
      * Set the global variables to be generated in target backend code
-     * \param global_vars
+     * \param global_vars global variables to set
      */
-    void set_codegen_global_variables(std::vector<SymbolType>& global_vars);
+    void set_codegen_global_variables(const std::vector<SymbolType>& global_vars);
 
     /**
      * Find unique variable name defined in nmodl::utils::SingletonRandomString by the

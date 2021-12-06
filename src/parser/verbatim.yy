@@ -70,7 +70,7 @@
 
     extern int yylex(YYSTYPE*, YYLTYPE*, void*);
     extern int yyparse(VerbatimDriver*);
-    extern void yyerror(YYLTYPE*, VerbatimDriver*, const char *);
+    [[noreturn]] extern void yyerror(YYLTYPE*, VerbatimDriver*, const char *);
 %}
 
 

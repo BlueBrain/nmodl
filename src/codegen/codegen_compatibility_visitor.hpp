@@ -22,12 +22,11 @@
 #include "utils/logger.hpp"
 #include "visitors/ast_visitor.hpp"
 
-using namespace fmt::literals;
-
 namespace nmodl {
 namespace codegen {
 
 using namespace ast;
+using namespace fmt::literals;
 
 /**
  * @addtogroup codegen_backends
@@ -70,6 +69,8 @@ class CodegenCompatibilityVisitor: public visitor::AstVisitor {
     /// Default CodegenCompatibilityVisitor constructor
     CodegenCompatibilityVisitor() = default;
 
+    ~CodegenCompatibilityVisitor() override;
+
     /// \}
 
     /// Function that searches the ast::Ast for nodes that
@@ -101,6 +102,7 @@ class CodegenCompatibilityVisitor: public visitor::AstVisitor {
     /// \return std::string error
     template <typename T>
     std::string return_error_with_name(ast::Ast& node, const std::shared_ptr<ast::Ast>& ast_node) {
+        (void) node;
         auto real_type_block = std::dynamic_pointer_cast<T>(ast_node);
         return "\"{}\" {}construct found at [{}] is not handled\n"_format(
             ast_node->get_node_name(),
@@ -119,6 +121,7 @@ class CodegenCompatibilityVisitor: public visitor::AstVisitor {
     template <typename T>
     std::string return_error_without_name(ast::Ast& node,
                                           const std::shared_ptr<ast::Ast>& ast_node) {
+        (void) node;
         auto real_type_block = std::dynamic_pointer_cast<T>(ast_node);
         return "{}construct found at [{}] is not handled\n"_format(
             real_type_block->get_nmodl_name(), real_type_block->get_token()->position());

@@ -12,14 +12,14 @@
 #include <string>
 #include <vector>
 
-#include "pybind11/embed.h"
+#include <pybind11/embed.h>
 
 namespace nmodl {
 namespace pybind_wrappers {
 
 
 struct PythonExecutor {
-    virtual ~PythonExecutor() {}
+    virtual ~PythonExecutor();
 
     virtual void operator()() = 0;
 };
@@ -139,7 +139,7 @@ class EmbeddedPythonLoader {
      * @return the EmbeddedPythonLoader singleton instance
      */
     static EmbeddedPythonLoader& get_instance() {
-        static EmbeddedPythonLoader instance;
+        [[clang::no_destroy]] static EmbeddedPythonLoader instance;
 
         return instance;
     }

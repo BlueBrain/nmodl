@@ -9,6 +9,7 @@
 
 #include "codegen/codegen_c_visitor.hpp"
 #include "codegen/codegen_ispc_visitor.hpp"
+#include "utils/math_utils.hpp"
 
 namespace nmodl {
 namespace codegen {
@@ -24,7 +25,8 @@ namespace utils {
 template <>
 std::string format_double_string<CodegenCVisitor>(const std::string& s_value) {
     double value = std::stod(s_value);
-    if (std::ceil(value) == value && s_value.find_first_of("eE") == std::string::npos) {
+    if (nmodl::utils::approximaticaly_equal(std::ceil(value), value) &&
+        s_value.find_first_of("eE") == std::string::npos) {
         return "{:.1f}"_format(value);
     }
     return s_value;
@@ -59,7 +61,8 @@ std::string format_double_string<CodegenIspcVisitor>(const std::string& s_value)
 template <>
 std::string format_float_string<CodegenCVisitor>(const std::string& s_value) {
     float value = std::stof(s_value);
-    if (std::ceil(value) == value && s_value.find_first_of("eE") == std::string::npos) {
+    if (nmodl::utils::approximaticaly_equal(std::ceil(value), value) &&
+        s_value.find_first_of("eE") == std::string::npos) {
         return "{:.1f}"_format(value);
     }
     return s_value;

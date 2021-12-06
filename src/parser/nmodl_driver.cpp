@@ -145,7 +145,7 @@ void NmodlDriver::parse_error(const NmodlLexer& scanner,
     std::ostringstream oss;
     oss << "NMODL Parser Error : " << message << " [Location : " << location << "]";
     oss << scanner.get_curr_line() << '\n';
-    oss << std::string(location.begin.column - 1, '-');
+    oss << std::string(static_cast<size_t>(location.begin.column - 1), '-');
     oss << "^\n";
     throw std::runtime_error(oss.str());
 }

@@ -130,7 +130,7 @@ void CodegenAccVisitor::print_memory_allocation_routine() const {
 void CodegenAccVisitor::print_abort_routine() const {
     printer->add_newline(2);
     printer->add_line("static inline void coreneuron_abort() {");
-    printer->add_line("    printf(\"Error : Issue while running OpenACC kernel \\n\");");
+    printer->add_line(R"(    printf("Error : Issue while running OpenACC kernel \n");)");
     printer->add_line("    assert(0==1);");
     printer->add_line("}");
 }
@@ -139,7 +139,7 @@ void CodegenAccVisitor::print_net_send_buffering_grow() {
     // can not grow buffer during gpu execution
 }
 
-void CodegenAccVisitor::print_eigen_linear_solver(const std::string& float_type,
+void CodegenAccVisitor::print_eigen_linear_solver(const std::string& /* float_type */,
                                                   int N,
                                                   const std::string& Xm,
                                                   const std::string& Jm,

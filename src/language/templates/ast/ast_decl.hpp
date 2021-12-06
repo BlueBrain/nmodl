@@ -15,7 +15,7 @@
 #include <vector>
 
 /// \file
-/// \brief Auto generated  AST node types and aliases declaration
+/// Auto generated  AST node types and aliases declaration
 
 namespace nmodl {
 namespace ast {
@@ -44,7 +44,7 @@ class {{ node.class_name }};
  */
 enum class AstNodeType {
     {% for node in nodes %}
-    {{ node.class_name|snake_case|upper }}, ///< type of ast::{{ node.class_name }}
+    {{ node.class_name|snake_case|upper }}{% if not loop.last %},{% endif %} ///< type of ast::{{ node.class_name }}
     {% endfor %}
 };
 

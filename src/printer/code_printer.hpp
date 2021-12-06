@@ -43,7 +43,7 @@ class CodePrinter {
     std::streambuf* sbuf = nullptr;
     std::shared_ptr<std::ostream> result;
     size_t indent_level = 0;
-    const int NUM_SPACES = 4;
+    const size_t NUM_SPACES = 4;
 
   public:
     CodePrinter()
@@ -85,7 +85,7 @@ class CodePrinter {
     /// end of current block scope (i.e. end with "}")
     void end_block(int num_newlines = 0);
 
-    int indent_spaces() {
+    size_t indent_spaces() {
         return NUM_SPACES * indent_level;
     }
 };

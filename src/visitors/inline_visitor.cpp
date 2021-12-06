@@ -215,10 +215,10 @@ void InlineVisitor::visit_function_call(FunctionCall& node) {
     bool inlined = false;
 
     if (function_definition->is_procedure_block()) {
-        auto proc = (ProcedureBlock*) function_definition;
+        auto proc = dynamic_cast<ProcedureBlock*>(function_definition);
         inlined = inline_function_call(*proc, node, *caller_block);
     } else if (function_definition->is_function_block()) {
-        auto func = (FunctionBlock*) function_definition;
+        auto func = dynamic_cast<FunctionBlock*>(function_definition);
         inlined = inline_function_call(*func, node, *caller_block);
     }
 

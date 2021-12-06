@@ -17,11 +17,11 @@ namespace visitor {
 
 /** Helper function to visit vector elements
  *
- * @tparam T
- * @param elements vector of nodes/elements
- * @param separator separator to print for individual vector element
- * @param program  true if provided elements belong to program node
- * @param statement true if elements in vector of statement type
+ * \tparam T type of the elements to visit
+ * \param elements vector of nodes/elements
+ * \param separator separator to print for individual vector element
+ * \param program  true if provided elements belong to program node
+ * \param statement true if elements in vector of statement type
  */
 
 template <typename T>

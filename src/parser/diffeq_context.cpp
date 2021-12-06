@@ -168,18 +168,18 @@ std::string DiffEqContext::get_non_cnexp_solution() const {
  * files, especially kinetic schemes, reaction-diffusion etc.
  */
 std::string DiffEqContext::get_solution(bool& cnexp_possible) {
-    std::string solution;
+    std::string eq_solution;
     if (method == "euler") {
         cnexp_possible = false;
-        solution = get_euler_solution();
+        eq_solution = get_euler_solution();
     } else if (method == "cnexp" && !(deriv_invalid && eqn_invalid)) {
         cnexp_possible = true;
-        solution = get_cnexp_solution();
+        eq_solution = get_cnexp_solution();
     } else {
         cnexp_possible = false;
-        solution = get_non_cnexp_solution();
+        eq_solution = get_non_cnexp_solution();
     }
-    return solution;
+    return eq_solution;
 }
 
 }  // namespace diffeq

@@ -30,15 +30,13 @@ namespace nmodl {
  */
 struct Version {
     /// git revision id
-    static const std::string GIT_REVISION;
+    static const char* GIT_REVISION;
 
     /// project tagged version in the cmake
-    static const std::string NMODL_VERSION;
+    static const char* NMODL_VERSION;
 
     /// return version string (version + git id) as a string
-    static std::string to_string() {
-        return NMODL_VERSION + " " + GIT_REVISION;
-    }
+    static std::string to_string();
 };
 
 /**

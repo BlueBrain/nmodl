@@ -21,7 +21,7 @@ using namespace fmt::literals;
  * \details SympyReplaceSolutionsVisitor tells us that a new equation appear and, depending where
  * it is located, it can determine if it is part of the main system of equations or is something
  * else. Every time we are out of the system and we print a new equation that is in the system
- * we update the counter. \ref in_system follows, with lag, \param is_in_system and every time
+ * we update the counter. \ref in_system follows, with lag, \a is_in_system and every time
  * they are false and true respectively we detect a switch.
  *
  * \param is_in_system is a bool provided from outside that tells us if a new equation is indeed
@@ -41,9 +41,9 @@ SympyReplaceSolutionsVisitor::SympyReplaceSolutionsVisitor(
     const size_t n_next_equations,
     const std::string& tmp_unique_prefix)
     : pre_solve_statements(pre_solve_statements.begin(), pre_solve_statements.end(), 2)
-    , to_be_removed(&to_be_removed)
     , policy(policy)
     , n_next_equations(n_next_equations)
+    , to_be_removed(&to_be_removed)
     , replaced_statements_range(-1, -1) {
     // if tmp_unique_prefix we do not expect tmp_statements
     const auto ss_tmp_delimeter =

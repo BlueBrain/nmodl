@@ -96,28 +96,28 @@ class PerfVisitor: public ConstAstVisitor {
     std::stringstream stream;
 
     /// count of per channel instance variables
-    int num_instance_variables = 0;
+    size_t num_instance_variables = 0;
 
     /// subset of instance variables which are constant
-    int num_constant_instance_variables = 0;
+    size_t num_constant_instance_variables = 0;
 
     /// subset of instance variables which are localized
-    int num_localized_instance_variables = 0;
+    size_t num_localized_instance_variables = 0;
 
     /// count of global variables
-    int num_global_variables = 0;
+    size_t num_global_variables = 0;
 
     /// subset of global variables which are constant
-    int num_constant_global_variables = 0;
+    size_t num_constant_global_variables = 0;
 
     /// subset of global variables which are localized
-    int num_localized_global_variables = 0;
+    size_t num_localized_global_variables = 0;
 
     /// count of state variables
-    int num_state_variables = 0;
+    size_t num_state_variables = 0;
 
     /// count of pointer / bbcorepointer variables
-    int num_pointer_variables = 0;
+    size_t num_pointer_variables = 0;
 
     /// keys used in map to track var usage
     std::string const_memr_key = "cm_r_u";
@@ -158,23 +158,23 @@ class PerfVisitor: public ConstAstVisitor {
         return total_perf;
     }
 
-    int get_instance_variable_count() const noexcept {
+    size_t get_instance_variable_count() const noexcept {
         return num_instance_variables;
     }
 
-    int get_const_instance_variable_count() const noexcept {
+    size_t get_const_instance_variable_count() const noexcept {
         return num_constant_instance_variables;
     }
 
-    int get_const_global_variable_count() const noexcept {
+    size_t get_const_global_variable_count() const noexcept {
         return num_constant_global_variables;
     }
 
-    int get_global_variable_count() const noexcept {
+    size_t get_global_variable_count() const noexcept {
         return num_global_variables;
     }
 
-    int get_state_variable_count() const noexcept {
+    size_t get_state_variable_count() const noexcept {
         return num_state_variables;
     }
 

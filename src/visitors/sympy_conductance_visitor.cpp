@@ -190,7 +190,7 @@ void SympyConductanceVisitor::visit_conductance_hint(ast::ConductanceHint& node)
         logger->debug("SympyConductance :: -> Ignoring all non-specific currents");
         NONSPECIFIC_CONDUCTANCE_ALREADY_EXISTS = true;
     }
-};
+}
 
 void SympyConductanceVisitor::visit_breakpoint_block(ast::BreakpointBlock& node) {
     // return if it's not safe to insert conductance statements

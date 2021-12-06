@@ -56,7 +56,18 @@ static double compute(double lhs, ast::BinaryOp op, double rhs) {
     case ast::BOP_DIVISION:
         return lhs / rhs;
 
-    default:
+    case ast::BOP_POWER:
+        return std::pow(lhs, rhs);
+
+    case ast::BOP_AND:
+    case ast::BOP_OR:
+    case ast::BOP_GREATER:
+    case ast::BOP_LESS:
+    case ast::BOP_GREATER_EQUAL:
+    case ast::BOP_LESS_EQUAL:
+    case ast::BOP_ASSIGN:
+    case ast::BOP_NOT_EQUAL:
+    case ast::BOP_EXACT_EQUAL:
         throw std::logic_error("Invalid binary operator in constant folding");
     }
 }

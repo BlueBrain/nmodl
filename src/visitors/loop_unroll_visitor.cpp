@@ -16,6 +16,8 @@
 namespace nmodl {
 namespace visitor {
 
+namespace {
+
 /**
  * \class IndexRemover
  * \brief Helper visitor to replace index of array variable with integer
@@ -43,6 +45,8 @@ class IndexRemover: public AstVisitor {
     IndexRemover(std::string index, int value)
         : index(std::move(index))
         , value(value) {}
+
+    ~IndexRemover() override = default;
 
     /// if expression we are visiting is `Name` then return new `Integer` node
     std::shared_ptr<ast::Expression> replace_for_name(
@@ -78,6 +82,7 @@ class IndexRemover: public AstVisitor {
     }
 };
 
+}  // namespace
 
 /// return underlying expression wrapped by WrappedExpression
 static std::shared_ptr<ast::Expression> unwrap(const std::shared_ptr<ast::Expression>& expr) {

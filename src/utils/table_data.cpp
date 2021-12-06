@@ -28,7 +28,7 @@ namespace utils {
  *   ----------------------------------------------------------------------------------------
  */
 
-void TableData::print(std::ostream& stream, int indent) const {
+void TableData::print(std::ostream& stream, unsigned int indent) const {
     const int PADDING = 1;
 
     /// not necessary to print empty table
@@ -40,18 +40,18 @@ void TableData::print(std::ostream& stream, int indent) const {
     auto gutter = std::string(indent * 4, ' ');
 
     auto ncolumns = headers.size();
-    std::vector<unsigned> col_width(ncolumns);
+    std::vector<size_t> col_width(ncolumns);
 
     /// alignment is optional, so fill remaining with right alignment
     auto all_alignments = alignments;
     all_alignments.reserve(ncolumns);
-    for (unsigned i = alignments.size(); i < ncolumns; i++) {
+    for (size_t i = alignments.size(); i < ncolumns; i++) {
         all_alignments.push_back(stringutils::text_alignment::center);
     }
 
     /// calculate space required for each column
-    unsigned row_width = 0;
-    for (unsigned i = 0; i < headers.size(); i++) {
+    size_t row_width = 0;
+    for (size_t i = 0; i < headers.size(); i++) {
         col_width[i] = headers[i].length() + PADDING;
         row_width += col_width[i];
     }
@@ -59,8 +59,8 @@ void TableData::print(std::ostream& stream, int indent) const {
     /// if title is larger than headers then every column
     /// width needs to be scaled
     if (title.length() > row_width) {
-        int extra_size = title.length() - row_width;
-        int column_pad = extra_size / ncolumns;
+        auto extra_size = title.length() - row_width;
+        auto column_pad = extra_size / ncolumns;
         if ((extra_size % ncolumns) != 0) {
             column_pad++;
         }
@@ -114,7 +114,7 @@ void TableData::print(std::ostream& stream, int indent) const {
     stream << '\n' << gutter << separator_line << '\n';
 }
 
-void TableData::print(int indent) const {
+void TableData::print(unsigned int indent) const {
     print(std::cout, indent);
 }
 

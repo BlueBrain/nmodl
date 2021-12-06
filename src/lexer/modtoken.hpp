@@ -68,7 +68,7 @@ class ModToken {
     /// \{
 
     ModToken()
-        : pos(nullptr, 0){};
+        : pos(nullptr, 0) {}
 
     explicit ModToken(bool ext)
         : pos(nullptr, 0)
@@ -87,12 +87,12 @@ class ModToken {
     }
 
     /// Return token text from mod file
-    std::string text() const {
+    const std::string& text() const noexcept {
         return name;
     }
 
     /// Return token type from lexer
-    int type() const {
+    int type() const noexcept {
         return token;
     }
 

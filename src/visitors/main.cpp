@@ -37,7 +37,7 @@ using namespace fmt::literals;
 
 /**
  * \file
- * \brief Standalone program demonstrating usage of different visitors and driver classes.
+ * Standalone program demonstrating usage of different visitors and driver classes.
  **/
 
 template <typename T>
@@ -58,7 +58,7 @@ void visit_program(const std::string& mod_file,
     const std::string file = "{}.{}.mod"_format(mod_file, visitor.id);
     NmodlPrintVisitor(file).visit_program(ast);
     logger->info("NMODL visitor generated {}", file);
-};
+}
 
 int main(int argc, const char* argv[]) {
     CLI::App app{

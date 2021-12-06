@@ -33,15 +33,15 @@
 namespace nmodl {
 namespace docstring {
 
-static const char* sym_decl_type_enum = R"(
+static constexpr char* sym_decl_type_enum = R"(
     Variable DeclarationType enum
 )";
 
-static const char* symbol_class = R"(
+static constexpr char* symbol_class = R"(
     Symbol class
 )";
 
-static const char* symbol_table_class = R"(
+static constexpr char* symbol_table_class = R"(
     SymbolTable class
 
     Attributes:
@@ -54,7 +54,7 @@ static const char* symbol_table_class = R"(
         children (dict of (str, SymbolTable)): symbol table for each enclosing block in the current nmodl block construct.
 )";
 
-static const char* symtabvisitor_class = R"(
+static constexpr char* symtabvisitor_class = R"(
     SymtabVisitor class
 )";
 

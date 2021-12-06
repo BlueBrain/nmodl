@@ -33,7 +33,6 @@ namespace utils {
 template <typename T>
 std::string format_double_string(const std::string& s_value);
 
-
 /**
  * Handles the float constants format being printed in the generated code.
  *

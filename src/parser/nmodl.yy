@@ -398,6 +398,14 @@
 
     /// forward declaration for the function which handles interface with other parsers
     std::string parse_with_verbatim_parser(std::string);
+
+    VerbatimDriver::~VerbatimDriver() {
+        destroy_scanner();
+        if (result) {
+            delete result;
+        }
+    }
+
 %}
 
 /** start symbol */

@@ -17,27 +17,37 @@
 #include "visitors/rename_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
 
-using namespace fmt::literals;
 
 namespace nmodl {
 namespace codegen {
+
+using namespace fmt::literals;
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wc++98-compat-pedantic"
+extern template std::string utils::format_double_string<CodegenIspcVisitor>(
+    const std::string& s_value);
+extern template std::string utils::format_float_string<CodegenIspcVisitor>(
+    const std::string& s_value);
+#pragma clang diagnostic pop
 
 using symtab::syminfo::Status;
 
 using visitor::RenameVisitor;
 
-const std::vector<ast::AstNodeType> CodegenIspcVisitor::incompatible_node_types = {
-    ast::AstNodeType::VERBATIM,
-    ast::AstNodeType::EIGEN_NEWTON_SOLVER_BLOCK,
-    ast::AstNodeType::EIGEN_LINEAR_SOLVER_BLOCK,
-    ast::AstNodeType::WATCH_STATEMENT,
-    ast::AstNodeType::TABLE_STATEMENT};
+[[clang::no_destroy]] const std::vector<ast::AstNodeType>
+    CodegenIspcVisitor::incompatible_node_types = {ast::AstNodeType::VERBATIM,
+                                                   ast::AstNodeType::EIGEN_NEWTON_SOLVER_BLOCK,
+                                                   ast::AstNodeType::EIGEN_LINEAR_SOLVER_BLOCK,
+                                                   ast::AstNodeType::WATCH_STATEMENT,
+                                                   ast::AstNodeType::TABLE_STATEMENT};
 
-const std::unordered_set<std::string> CodegenIspcVisitor::incompatible_var_names = {
-    "cdo",           "cfor",           "cif",    "cwhile",   "foreach",      "foreach_active",
-    "foreach_tiled", "foreach_unique", "in",     "noinline", "__vectorcall", "int8",
-    "int16",         "int32",          "int64",  "launch",   "print",        "soa",
-    "sync",          "task",           "varying"};
+[[clang::no_destroy]] const std::unordered_set<std::string>
+    CodegenIspcVisitor::incompatible_var_names = {
+        "cdo",           "cfor",           "cif",    "cwhile",   "foreach",      "foreach_active",
+        "foreach_tiled", "foreach_unique", "in",     "noinline", "__vectorcall", "int8",
+        "int16",         "int32",          "int64",  "launch",   "print",        "soa",
+        "sync",          "task",           "varying"};
 
 /****************************************************************************************/
 /*                            Overloaded visitor methods                                */
@@ -198,7 +208,7 @@ std::string CodegenIspcVisitor::backend_name() const {
 }
 
 
-void CodegenIspcVisitor::print_channel_iteration_tiling_block_begin(BlockType type) {
+void CodegenIspcVisitor::print_channel_iteration_tiling_block_begin(BlockType /* type */) {
     // no tiling for ispc backend but make sure variables are declared as uniform
     printer->add_line("int uniform start = 0;");
     printer->add_line("int uniform end = nodecount;");
@@ -210,7 +220,7 @@ void CodegenIspcVisitor::print_channel_iteration_tiling_block_begin(BlockType ty
  *
  * Use ispc foreach loop
  */
-void CodegenIspcVisitor::print_channel_iteration_block_begin(BlockType type) {
+void CodegenIspcVisitor::print_channel_iteration_block_begin(BlockType /* type */) {
     printer->start_block("foreach (id = start ... end)");
 }
 
@@ -341,7 +351,7 @@ void CodegenIspcVisitor::print_backend_namespace_stop() {
 
 
 CodegenIspcVisitor::ParamVector CodegenIspcVisitor::get_global_function_parms(
-    const std::string& arg_qualifier) {
+    const std::string& /* arg_qualifier */) {
     auto params = ParamVector();
     params.emplace_back(param_type_qualifier(),
                         "{}*"_format(instance_struct()),
@@ -432,7 +442,7 @@ void CodegenIspcVisitor::print_ispc_globals() {
 }
 
 
-void CodegenIspcVisitor::print_ion_var_constructor(const std::vector<std::string>& members) {
+void CodegenIspcVisitor::print_ion_var_constructor(const std::vector<std::string>& /* members */) {
     /// no constructor for ispc
 }
 

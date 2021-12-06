@@ -36,7 +36,7 @@ using Token = parser::NmodlParser::token;
 using TokenType = parser::NmodlParser::token_type;
 
 
-void tokenize(const std::string& mod_text) {
+static void tokenize(const std::string& mod_text) {
     std::istringstream in(mod_text);
 
     /// lexer instance use driver object for error reporting

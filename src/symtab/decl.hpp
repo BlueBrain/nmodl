@@ -8,7 +8,7 @@
 #pragma once
 
 /// \file
-/// \brief Forward declarations of symbols in namespace nmodl::symtab
+/// Forward declarations of symbols in namespace nmodl::symtab
 
 namespace nmodl {
 namespace symtab {

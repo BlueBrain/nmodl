@@ -5,12 +5,11 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
-#include <cstring>
+#include "lexer/nmodl_utils.hpp"
+
 #include <iostream>
 
-#include "ast/ast.hpp"
 #include "lexer/modtoken.hpp"
-#include "lexer/nmodl_utils.hpp"
 #include "lexer/token_mapping.hpp"
 #include "utils/string_utils.hpp"
 
@@ -92,7 +91,7 @@ SymbolType name_symbol(const std::string& text, PositionType& pos, TokenType typ
  */
 SymbolType prime_symbol(std::string text, PositionType& pos) {
     ModToken token(text, Token::PRIME, pos);
-    auto order = std::count(text.begin(), text.end(), '\'');
+    auto order = static_cast<int>(std::count(text.begin(), text.end(), '\''));
     stringutils::remove_character(text, '\'');
 
     auto prime_name = new ast::String(text);

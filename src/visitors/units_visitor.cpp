@@ -12,7 +12,7 @@
 
 /**
  * \file
- * \brief AST Visitor to parse the ast::UnitDefs and ast::FactorDefs from the mod file
+ * AST Visitor to parse the ast::UnitDefs and ast::FactorDefs from the mod file
  * by the Units Parser used to parse the \c nrnunits.lib file
  */
 

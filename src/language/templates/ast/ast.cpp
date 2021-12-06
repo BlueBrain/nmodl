@@ -14,7 +14,7 @@
 
 /**
  * \file
- * \brief Auto generated AST classes implementations
+ * Auto generated AST classes implementations
  */
 
 namespace nmodl {

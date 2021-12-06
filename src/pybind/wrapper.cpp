@@ -9,8 +9,8 @@
 #include <set>
 #include <vector>
 
-#include "pybind11/embed.h"
-#include "pybind11/stl.h"
+#include <pybind11/embed.h>
+#include <pybind11/stl.h>
 
 #include "codegen/codegen_naming.hpp"
 #include "pybind/pyembed.hpp"
@@ -217,7 +217,6 @@ pybind_wrap_api init_pybind_wrap_api() noexcept {
 
 }  // namespace pybind_wrappers
 }  // namespace nmodl
-
 
 __attribute__((visibility("default"))) nmodl::pybind_wrappers::pybind_wrap_api nmodl_wrapper_api =
     nmodl::pybind_wrappers::init_pybind_wrap_api();

@@ -16,6 +16,8 @@ set(VISITOR_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/indexedname_visitor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/inline_visitor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/inline_visitor.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ispc_rename_visitor.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ispc_rename_visitor.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kinetic_block_visitor.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kinetic_block_visitor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/local_to_assigned_visitor.cpp
@@ -60,7 +62,7 @@ set_source_files_properties(${VISITORS_GENERATED_SOURCES} PROPERTIES GENERATED T
 # =============================================================================
 # Visitor library and executable
 # =============================================================================
-include_directories(${PYBIND11_INCLUDE_DIR} ${PYTHON_INCLUDE_DIRS})
+include_directories(SYSTEM ${PYBIND11_INCLUDE_DIR} ${PYTHON_INCLUDE_DIRS})
 add_library(visitor_obj OBJECT ${VISITOR_SOURCES} ${VISITORS_GENERATED_SOURCES})
 set_property(TARGET visitor_obj PROPERTY POSITION_INDEPENDENT_CODE ON)
 

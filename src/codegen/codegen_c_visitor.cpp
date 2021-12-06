@@ -11,6 +11,7 @@
 #include <cmath>
 #include <ctime>
 #include <regex>
+#include <sstream>
 
 #include "ast/all.hpp"
 #include "codegen/codegen_helper_visitor.hpp"
@@ -45,13 +46,19 @@ using symtab::syminfo::NmodlType;
 using SymbolType = std::shared_ptr<symtab::Symbol>;
 
 using nmodl::utils::UseNumbersInString;
-namespace codegen_utils = nmodl::codegen::utils;
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wc++98-compat-pedantic"
+extern template std::string utils::format_double_string<CodegenCVisitor>(
+    const std::string& s_value);
+extern template std::string utils::format_float_string<CodegenCVisitor>(const std::string& s_value);
+#pragma clang diagnostic pop
 
 /****************************************************************************************/
 /*                            Overloaded visitor routines                               */
 /****************************************************************************************/
 
-static const std::regex regex_special_chars{R"([-[\]{}()*+?.,\^$|#\s])"};
+[[clang::no_destroy]] static const std::regex regex_special_chars{R"([-[\]{}()*+?.,\^$|#\s])"};
 
 void CodegenCVisitor::visit_string(const String& node) {
     if (!codegen) {
@@ -106,12 +113,12 @@ void CodegenCVisitor::visit_name(const Name& node) {
 }
 
 
-void CodegenCVisitor::visit_unit(const ast::Unit& node) {
+void CodegenCVisitor::visit_unit(const ast::Unit& /* node */) {
     // do not print units
 }
 
 
-void CodegenCVisitor::visit_prime_name(const PrimeName& node) {
+void CodegenCVisitor::visit_prime_name(const PrimeName& /* node */) {
     throw std::runtime_error("PRIME encountered during code generation, ODEs not solved?");
 }
 
@@ -317,7 +324,7 @@ void CodegenCVisitor::visit_verbatim(const Verbatim& node) {
     }
 }
 
-void CodegenCVisitor::visit_update_dt(const ast::UpdateDt& node) {
+void CodegenCVisitor::visit_update_dt(const ast::UpdateDt& /* node */) {
     // dt change statement should be pulled outside already
 }
 
@@ -454,12 +461,12 @@ int CodegenCVisitor::position_of_int_var(const std::string& name) const {
  * representation (1e+20, 1E-15) then keep it as it is.
  */
 std::string CodegenCVisitor::format_double_string(const std::string& s_value) {
-    return codegen_utils::format_double_string<CodegenCVisitor>(s_value);
+    return utils::format_double_string<CodegenCVisitor>(s_value);
 }
 
 
 std::string CodegenCVisitor::format_float_string(const std::string& s_value) {
-    return codegen_utils::format_float_string<CodegenCVisitor>(s_value);
+    return utils::format_float_string<CodegenCVisitor>(s_value);
 }
 
 
@@ -767,7 +774,7 @@ void CodegenCVisitor::update_index_semantics() {
         info.semantics.emplace_back(index++, naming::POINT_PROCESS_SEMANTIC, 1);
     }
     for (const auto& ion: info.ions) {
-        for (auto i = 0; i < ion.reads.size(); ++i) {
+        for (size_t i = 0; i < ion.reads.size(); ++i) {
             info.semantics.emplace_back(index++, ion.name + "_ion", 1);
         }
         for (const auto& var: ion.writes) {
@@ -813,7 +820,7 @@ void CodegenCVisitor::update_index_semantics() {
      * actual watch statements in the mod file
      */
     if (!info.watch_statements.empty()) {
-        for (int i = 0; i < info.watch_statements.size() + 1; i++) {
+        for (size_t i = 0; i < info.watch_statements.size() + 1; i++) {
             info.semantics.emplace_back(index++, naming::WATCH_SEMANTIC, 1);
         }
     }
@@ -973,7 +980,7 @@ std::vector<IndexVariableInfo> CodegenCVisitor::get_int_variables() {
      * with neuron (which uses one extra Datum variable)
      */
     if (!info.watch_statements.empty()) {
-        for (int i = 0; i < info.watch_statements.size() + 1; i++) {
+        for (size_t i = 0; i < info.watch_statements.size() + 1; i++) {
             variables.emplace_back(make_symbol("watch{}"_format(i)), false, false, true);
         }
     }
@@ -1025,7 +1032,7 @@ std::string CodegenCVisitor::get_parameter_str(const ParamVector& params) {
 }
 
 
-void CodegenCVisitor::print_channel_iteration_task_begin(BlockType type) {
+void CodegenCVisitor::print_channel_iteration_task_begin(BlockType /* type */) {
     // backend specific, do nothing
 }
 
@@ -1035,7 +1042,7 @@ void CodegenCVisitor::print_channel_iteration_task_end() {
 }
 
 
-void CodegenCVisitor::print_channel_iteration_tiling_block_begin(BlockType type) {
+void CodegenCVisitor::print_channel_iteration_tiling_block_begin(BlockType /* type */) {
     // no tiling for cpu backend, just get loop bounds
     printer->add_line("int start = 0;");
     printer->add_line("int end = nodecount;");
@@ -1121,7 +1128,7 @@ void CodegenCVisitor::print_net_init_acc_serial_annotation_block_end() {
  *      for(int id = 0; id < nodecount; id++) {
  * \endcode
  */
-void CodegenCVisitor::print_channel_iteration_block_parallel_hint(BlockType type) {
+void CodegenCVisitor::print_channel_iteration_block_parallel_hint(BlockType /* type */) {
     printer->add_line("#pragma ivdep");
 }
 
@@ -1261,7 +1268,7 @@ std::string CodegenCVisitor::backend_name() const {
 }
 
 
-bool CodegenCVisitor::block_require_shadow_update(BlockType type) {
+bool CodegenCVisitor::block_require_shadow_update(BlockType /* type */) {
     return false;
 }
 
@@ -1348,7 +1355,7 @@ std::string CodegenCVisitor::k_const() {
 /****************************************************************************************/
 
 
-void CodegenCVisitor::visit_watch_statement(const ast::WatchStatement& node) {
+void CodegenCVisitor::visit_watch_statement(const ast::WatchStatement& /* node */) {
     printer->add_text("nrn_watch_activate(inst, id, pnodecount, {}, v, watch_remove)"_format(
         current_watch_statement++));
 }
@@ -1764,8 +1771,8 @@ std::string CodegenCVisitor::find_var_unique_name(const std::string& original_na
  *                      solver
  * @return True if operator() is const else False
  */
-bool is_functor_const(const ast::StatementBlock& variable_block,
-                      const ast::StatementBlock& functor_block) {
+static bool is_functor_const(const ast::StatementBlock& variable_block,
+                             const ast::StatementBlock& functor_block) {
     // Save DUChain for every variable in variable_block
     std::unordered_map<std::string, DUChain> chains;
 
@@ -2441,7 +2448,8 @@ void CodegenCVisitor::print_backend_info() {
     time_t tr;
     time(&tr);
     auto date = std::string(asctime(localtime(&tr)));
-    auto version = nmodl::Version::NMODL_VERSION + " [" + nmodl::Version::GIT_REVISION + "]";
+    std::ostringstream version;
+    version << nmodl::Version::NMODL_VERSION << " [" << nmodl::Version::GIT_REVISION << ']';
 
     printer->add_line("/*********************************************************");
     printer->add_line("Model Name      : {}"_format(info.mod_suffix));
@@ -2451,7 +2459,7 @@ void CodegenCVisitor::print_backend_info() {
     printer->add_line("Threadsafe      : {}"_format(info.thread_safe));
     printer->add_line("Created         : {}"_format(stringutils::trim(date)));
     printer->add_line("Backend         : {}"_format(backend_name()));
-    printer->add_line("NMODL Compiler  : {}"_format(version));
+    printer->add_line("NMODL Compiler  : {}"_format(version.str()));
     printer->add_line("*********************************************************/");
 }
 
@@ -3022,7 +3030,7 @@ void CodegenCVisitor::print_ion_var_constructor(const std::vector<std::string>& 
     // constructor
     printer->add_newline();
     printer->add_line("IonCurVar() : ", 0);
-    for (int i = 0; i < members.size(); i++) {
+    for (size_t i = 0; i < members.size(); i++) {
         printer->add_text("{}(0)"_format(members[i]));
         if (i + 1 < members.size()) {
             printer->add_text(", ");
@@ -3572,7 +3580,7 @@ void CodegenCVisitor::print_watch_activate() {
      * \todo Similar to neuron/coreneuron we are using
      * first watch and ignoring rest.
      */
-    for (int i = 0; i < info.watch_statements.size(); i++) {
+    for (size_t i = 0; i < info.watch_statements.size(); i++) {
         auto statement = info.watch_statements[i];
         printer->start_block("if (watch_id == {})"_format(i));
 
@@ -3615,7 +3623,7 @@ void CodegenCVisitor::print_watch_check() {
     // flat to make sure only one WATCH statement can be triggered at a time
     printer->add_line("bool watch_untriggered = true;");
 
-    for (int i = 0; i < info.watch_statements.size(); i++) {
+    for (size_t i = 0; i < info.watch_statements.size(); i++) {
         auto statement = info.watch_statements[i];
         auto watch = statement->get_statements().front();
         auto varname = get_variable_name("watch{}"_format(i + 1));
@@ -4595,7 +4603,7 @@ void CodegenCVisitor::print_wrapper_routines() {
 }
 
 
-void CodegenCVisitor::set_codegen_global_variables(std::vector<SymbolType>& global_vars) {
+void CodegenCVisitor::set_codegen_global_variables(const std::vector<SymbolType>& global_vars) {
     codegen_global_variables = global_vars;
 }
 

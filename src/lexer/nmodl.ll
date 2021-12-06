@@ -132,7 +132,7 @@ ELSE                    {
                             /** Lower or upper case if,else,while keywords are allowded.
                               * To avoid extra keywords, make token lower case */
                              for (char *ch = yytext; *ch; ++ch)
-                                *ch = tolower(*ch);
+                                *ch = static_cast<char>(tolower(*ch));
 
                             return token_symbol(yytext, loc);
                         }
@@ -544,7 +544,7 @@ void nmodl::parser::NmodlLexer::scan_unit() {
 
     /** Unit is a string until close parenthesis */
     while (1) {
-        auto lastch =  yyinput();
+        auto lastch =  static_cast<char>(yyinput());
         if(lastch == ')') {
             unput(')');
             break;
@@ -559,7 +559,7 @@ void nmodl::parser::NmodlLexer::scan_unit() {
     /** YY_USER_ACTION is not executed if are consuming input
      * using yyinput and hence increase location
      */
-    loc.columns(str.size());
+    loc.columns(static_cast<unsigned long>(str.size()));
 
     ModToken tok(str, Token::UNITS, loc);
     last_unit = new nmodl::ast::String(str);

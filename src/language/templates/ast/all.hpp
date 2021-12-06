@@ -13,10 +13,10 @@
 
 /**
  * \dir
- * \brief Auto generated AST Implementations
+ * Auto generated AST Implementations
  *
  * \file
- * \brief Auto generated AST classes declaration
+ * Auto generated AST classes declaration
  */
 
 #include "ast/ast.hpp"

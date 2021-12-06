@@ -79,9 +79,10 @@ class IspcRenameVisitor: public RenameVisitor {
     /// Default constructor
     IspcRenameVisitor() = delete;
 
+    ~IspcRenameVisitor() override;
+
     /// Constructor that takes as parameter the AST and calls the RenameVisitor
-    explicit IspcRenameVisitor(std::shared_ptr<ast::Program> ast)
-        : RenameVisitor(ast, "([0-9\\.]*d[\\-0-9]+)|([0-9\\.]+d[\\-0-9]*)", "var_", true, true) {}
+    explicit IspcRenameVisitor(const std::shared_ptr<ast::Program>& ast);
 };
 
 /** @} */  // end of visitor_classes

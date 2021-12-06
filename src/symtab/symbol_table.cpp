@@ -57,9 +57,9 @@ SymbolTable::SymbolTable(const SymbolTable& table) {
 bool SymbolTable::is_method_defined(const std::string& name) const {
     auto symbol = lookup_in_scope(name);
     if (symbol != nullptr) {
-        auto node = symbol->get_node();
-        if (node != nullptr) {
-            if (node->is_procedure_block() || node->is_function_block()) {
+        auto sym_node = symbol->get_node();
+        if (sym_node != nullptr) {
+            if (sym_node->is_procedure_block() || sym_node->is_function_block()) {
                 return true;
             }
         }
@@ -80,11 +80,12 @@ std::string SymbolTable::position() const {
 }
 
 
-void SymbolTable::insert_table(const std::string& name, std::shared_ptr<SymbolTable> table) {
+void SymbolTable::insert_table(const std::string& name,
+                               const std::shared_ptr<SymbolTable>& symbol_table) {
     if (children.find(name) != children.end()) {
         throw std::runtime_error("Trying to re-insert SymbolTable " + name);
     }
-    children[name] = std::move(table);
+    children[name] = std::move(symbol_table);
 }
 
 
@@ -451,19 +452,19 @@ void ModelSymbolTable::set_mode(bool update_mode) {
 //=============================================================================
 
 
-void SymbolTable::Table::print(std::ostream& stream, std::string title, int indent) const {
+void SymbolTable::Table::print(std::ostream& stream, std::string title, unsigned int indent) const {
     using stringutils::text_alignment;
     using utils::TableData;
     if (!symbols.empty()) {
-        TableData table;
-        table.title = std::move(title);
-        table.headers = {
+        TableData table_data;
+        table_data.title = std::move(title);
+        table_data.headers = {
             "NAME", "PROPERTIES", "STATUS", "LOCATION", "VALUE", "# READS", "# WRITES"};
-        table.alignments = {text_alignment::left,
-                            text_alignment::left,
-                            text_alignment::right,
-                            text_alignment::right,
-                            text_alignment::right};
+        table_data.alignments = {text_alignment::left,
+                                 text_alignment::left,
+                                 text_alignment::right,
+                                 text_alignment::right,
+                                 text_alignment::right};
 
         for (const auto& symbol: symbols) {
             auto is_external = symbol->is_external_variable();
@@ -489,9 +490,9 @@ void SymbolTable::Table::print(std::ostream& stream, std::string title, int inde
                 value = std::to_string(*sym_value);
             }
             auto writes = std::to_string(symbol->get_write_count());
-            table.rows.push_back({name, properties, status, position, value, reads, writes});
+            table_data.rows.push_back({name, properties, status, position, value, reads, writes});
         }
-        table.print(stream, indent);
+        table_data.print(stream, indent);
     }
 }
 
@@ -506,7 +507,7 @@ std::string SymbolTable::title() const {
 }
 
 
-void SymbolTable::print(std::ostream& ss, int level) const {
+void SymbolTable::print(std::ostream& ss, unsigned int level) const {
     table.print(ss, title(), level);
 
     /// when current symbol table is empty, the children
@@ -519,7 +520,7 @@ void SymbolTable::print(std::ostream& ss, int level) const {
 
     /// recursively print all children tables
     for (const auto& item: children) {
-        if (item.second->symbol_count() >= 0) {
+        if (item.second->symbol_count() > 0) {
             (item.second)->print(ss, ++next_level);
             next_level--;
         }

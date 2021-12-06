@@ -17,6 +17,7 @@
 
 #include <map>
 #include <memory>
+#include <utility>
 #include <vector>
 
 #include "symtab/symbol.hpp"
@@ -80,7 +81,7 @@ class SymbolTable {
         std::shared_ptr<Symbol> lookup(const std::string& name) const;
 
         /// pretty print
-        void print(std::ostream& stream, std::string title, int indent) const;
+        void print(std::ostream& stream, std::string title, unsigned int indent) const;
     };
 
     /// name of the block
@@ -111,7 +112,7 @@ class SymbolTable {
     /// \{
 
     SymbolTable(std::string name, ast::Ast* node, bool global = false)
-        : symtab_name(name)
+        : symtab_name(std::move(name))
         , node(node)
         , global(global) {}
 
@@ -123,11 +124,11 @@ class SymbolTable {
     /// \name Getter
     /// \{
 
-    SymbolTable* get_parent_table() const {
+    SymbolTable* get_parent_table() const noexcept {
         return parent;
     }
 
-    std::string get_parent_table_name() const {
+    std::string get_parent_table_name() const noexcept {
         return parent ? parent->name() : "None";
     }
 
@@ -161,21 +162,21 @@ class SymbolTable {
     /// \}
 
     /// convert symbol table to string
-    std::string to_string() {
+    std::string to_string() const {
         std::stringstream s;
         print(s, 0);
         return s.str();
     }
 
-    std::string name() const {
+    const std::string& name() const noexcept {
         return symtab_name;
     }
 
-    bool global_scope() const {
+    bool global_scope() const noexcept {
         return global;
     }
 
-    void insert(std::shared_ptr<Symbol> symbol) {
+    void insert(const std::shared_ptr<Symbol>& symbol) {
         table.insert(symbol);
     }
 
@@ -183,7 +184,7 @@ class SymbolTable {
         parent = block;
     }
 
-    int symbol_count() const {
+    auto symbol_count() const noexcept {
         return table.symbols.size();
     }
 
@@ -191,7 +192,7 @@ class SymbolTable {
      * Create a copy of symbol table
      * \todo Revisit the usage as tokens will be pointing to old nodes
      */
-    SymbolTable* clone() {
+    SymbolTable* clone() const {
         return new SymbolTable(*this);
     }
 
@@ -207,9 +208,9 @@ class SymbolTable {
     bool under_global_scope();
 
     /// insert new symbol table as one of the children block
-    void insert_table(const std::string& name, std::shared_ptr<SymbolTable> table);
+    void insert_table(const std::string& name, const std::shared_ptr<SymbolTable>& symbol_table);
 
-    void print(std::ostream& ss, int level) const;
+    void print(std::ostream& ss, unsigned int level) const;
 
     std::string title() const;
 

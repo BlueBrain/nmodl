@@ -37,18 +37,18 @@ namespace nmodl {
 /** \brief docstring of Python exposed API */
 namespace docstring {
 
-static const char* driver = R"(
+static constexpr char* driver = R"(
     This is the NmodlDriver class documentation
 )";
 
-static const char* driver_ast = R"(
+static constexpr char* driver_ast = R"(
     Get ast
 
     Returns:
         Instance of :py:class:`Program`
 )";
 
-static const char* driver_parse_string = R"(
+static constexpr char* driver_parse_string = R"(
     Parse NMODL provided as a string
 
     Args:
@@ -59,7 +59,7 @@ static const char* driver_parse_string = R"(
     >>> ast = driver.parse_string("DEFINE NSTEP 6")
 )";
 
-static const char* driver_parse_file = R"(
+static constexpr char* driver_parse_file = R"(
     Parse NMODL provided as a file
 
     Args:
@@ -69,7 +69,7 @@ static const char* driver_parse_file = R"(
         AST: ast root node if success, throws an exception otherwise
 )";
 
-static const char* driver_parse_stream = R"(
+static constexpr char* driver_parse_stream = R"(
     Parse NMODL file provided as istream
 
     Args:
@@ -79,7 +79,7 @@ static const char* driver_parse_stream = R"(
         AST: ast root node if success, throws an exception otherwise
 )";
 
-static const char* to_nmodl = R"(
+static constexpr char* to_nmodl = R"(
     Given AST node, return the NMODL string representation
 
     Args:
@@ -94,7 +94,7 @@ static const char* to_nmodl = R"(
     'NEURON {\n}\n'
 )";
 
-static const char* to_json = R"(
+static constexpr char* to_json = R"(
     Given AST node, return the JSON string representation
 
     Args:

@@ -67,44 +67,44 @@ typedef enum {
  * When AST is converted back to NMODL or C code, ast::BinaryOpNames
  * is used to lookup the corresponding symbol for the operator.
  */
-static const std::string BinaryOpNames[] =
+static constexpr char* const BinaryOpNames[] =
     {"+", "-", "*", "/", "^", "&&", "||", ">", "<", ">=", "<=", "=", "!=", "=="};
 
 /// enum type for unary operators
 typedef enum { UOP_NOT, UOP_NEGATION } UnaryOp;
 
 /// string representation of ast::UnaryOp
-static const std::string UnaryOpNames[] = {"!", "-"};
+static constexpr char* UnaryOpNames[] = {"!", "-"};
 
 /// enum type for partial equation types
 typedef enum { PEQ_FIRST, PEQ_LAST } FirstLastType;
 
 /// string representation of ast::FirstLastType
-static const std::string FirstLastTypeNames[] = {"FIRST", "LAST"};
+static constexpr char* const FirstLastTypeNames[] = {"FIRST", "LAST"};
 
 /// enum type for queue types
 typedef enum { PUT_QUEUE, GET_QUEUE } QueueType;
 
 /// string representation of ast::QueueType
-static const std::string QueueTypeNames[] = {"PUTQ", "GETQ"};
+static constexpr char* const QueueTypeNames[] = {"PUTQ", "GETQ"};
 
 /// enum type to distinguish BEFORE or AFTER blocks
 typedef enum { BATYPE_BREAKPOINT, BATYPE_SOLVE, BATYPE_INITIAL, BATYPE_STEP } BAType;
 
 /// string representation of ast::BAType
-static const std::string BATypeNames[] = {"BREAKPOINT", "SOLVE", "INITIAL", "STEP"};
+static constexpr char* const BATypeNames[] = {"BREAKPOINT", "SOLVE", "INITIAL", "STEP"};
 
 /// enum type used for UNIT_ON or UNIT_OFF state
 typedef enum { UNIT_ON, UNIT_OFF } UnitStateType;
 
 /// string representation of ast::UnitStateType
-static const std::string UnitStateTypeNames[] = {"UNITSON", "UNITSOFF"};
+static constexpr char* const UnitStateTypeNames[] = {"UNITSON", "UNITSOFF"};
 
 /// enum type used for Reaction statement
 typedef enum { LTMINUSGT, LTLT, MINUSGT } ReactionOp;
 
 /// string representation of ast::ReactionOp
-static const std::string ReactionOpNames[] = {"<->", "<<", "->"};
+static constexpr char* const ReactionOpNames[] = {"<->", "<<", "->"};
 
 /** @} */  // end of ast_prop
 

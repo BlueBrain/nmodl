@@ -8,6 +8,7 @@
 #pragma once
 
 #include "units/units.hpp"
+
 #include <algorithm>
 #include <map>
 #include <memory>
@@ -44,12 +45,6 @@ class UnitDriver {
     /// enable debug output in the bison parser
     bool trace_parser = false;
 
-    /// pointer to the lexer instance being used
-    UnitLexer* lexer = nullptr;
-
-    /// pointer to the parser instance being used
-    UnitParser* parser = nullptr;
-
     /// print messages from lexer/parser
     bool verbose = false;
 
@@ -75,11 +70,11 @@ class UnitDriver {
     void scan_string(std::string& text);
     void error(const std::string& m, const location& l);
 
-    void set_verbose(bool b) {
+    void set_verbose(bool b) noexcept {
         verbose = b;
     }
 
-    bool is_verbose() const {
+    bool is_verbose() const noexcept {
         return verbose;
     }
 };

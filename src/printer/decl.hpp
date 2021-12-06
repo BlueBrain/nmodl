@@ -9,7 +9,7 @@
 
 /**
  * \file
- * \brief Forward references of symbols defined in namespace nmodl::printer
+ * Forward references of symbols defined in namespace nmodl::printer
  */
 
 namespace nmodl {

@@ -181,7 +181,7 @@ void SympySolverVisitor::construct_eigen_solver_block(
 
     std::vector<std::string> pre_solve_statements_and_setup_x_eqs(pre_solve_statements);
     std::vector<std::string> update_statements;
-    for (int i = 0; i < state_vars.size(); i++) {
+    for (size_t i = 0; i < state_vars.size(); i++) {
         auto update_state = state_vars[i] + " = " + unique_X + "[" + std::to_string(i) + "]";
         auto setup_x = unique_X + "[" + std::to_string(i) + "] = " + state_vars[i];
 

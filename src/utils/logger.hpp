@@ -9,7 +9,7 @@
 
 /**
  * \file
- * \brief Implement logger based on spdlog library
+ * Implement logger based on spdlog library
  */
 
 // clang-format off

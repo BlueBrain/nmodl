@@ -156,7 +156,8 @@ static constexpr char ION_VARNAME_PREFIX[] = "ion_";
 /// commonly used variables in verbatim block and how they
 /// should be mapped to new code generation backends
 // clang-format off
-        const std::map<std::string, std::string> VERBATIM_VARIABLES_MAPPING{
+[[clang::no_destroy]]
+    const std::map<std::string, std::string> VERBATIM_VARIABLES_MAPPING{
                 {"_nt", "nt"},
                 {"_p", "data"},
                 {"_ppvar", "indexes"},

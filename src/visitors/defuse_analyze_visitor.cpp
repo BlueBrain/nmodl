@@ -20,7 +20,7 @@ using printer::JSONPrinter;
 using symtab::syminfo::NmodlType;
 
 /// DUState to string conversion for pretty-printing
-std::string to_string(DUState state) {
+static std::string to_string(DUState state) {
     switch (state) {
     case DUState::U:
         return "U";
@@ -44,8 +44,6 @@ std::string to_string(DUState state) {
         return "UNKNOWN";
     case DUState::NONE:
         return "NONE";
-    default:
-        throw std::runtime_error("Unhandled DUState?");
     }
 }
 
@@ -284,7 +282,7 @@ void DefUseAnalyzeVisitor::visit_if_statement(const ast::IfStatement& node) {
  * \todo One simple way would be to look for p_name in the string
  *        of verbatim block to find the variable usage.
  */
-void DefUseAnalyzeVisitor::visit_verbatim(const ast::Verbatim& node) {
+void DefUseAnalyzeVisitor::visit_verbatim(const ast::Verbatim& /* node */) {
     if (!ignore_verbatim) {
         current_chain->push_back(DUInstance(DUState::U, current_binary_expression));
     }

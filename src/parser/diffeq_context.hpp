@@ -108,9 +108,9 @@ class DiffEqContext {
     DiffEqContext() = default;
 
     DiffEqContext(std::string state, int /* order */, std::string rhs, std::string method)
-        : state(std::move(state))
-        , rhs(std::move(rhs))
-        , method(std::move(method)) {}
+        : method(std::move(method))
+        , state(std::move(state))
+        , rhs(std::move(rhs)) {}
 
     /// return the state variable
     const std::string& state_variable() const {

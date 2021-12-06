@@ -8,6 +8,7 @@ set(UTIL_SOURCE_FILES
     file_library.hpp
     logger.cpp
     logger.hpp
+    math_utils.hpp
     perf_stat.cpp
     perf_stat.hpp
     string_utils.cpp

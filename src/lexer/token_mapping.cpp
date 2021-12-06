@@ -5,13 +5,15 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
+#include "lexer/token_mapping.hpp"
+
+#include <array>
 #include <cstring>
 #include <map>
 #include <vector>
 
 #include "ast/ast.hpp"
 #include "lexer/modl.h"
-#include "lexer/token_mapping.hpp"
 #include "parser/nmodl/nmodl_parser.hpp"
 
 namespace nmodl {
@@ -34,7 +36,7 @@ namespace details {
  * in multiple context and hence we are keeping original names.
  * Once we finish code generation part then we change this.
  */
-const static std::map<std::string, TokenType> keywords = {
+[[clang::no_destroy]] static const std::map<std::string, TokenType> keywords = {
     {"VERBATIM", Token::VERBATIM},
     {"COMMENT", Token::BLOCK_COMMENT},
     {"TITLE", Token::MODEL},
@@ -157,25 +159,26 @@ struct MethodInfo {
  *
  * \todo MethodInfo::subtype should be changed from integer flag to proper type
  */
-const static std::map<std::string, MethodInfo> methods = {{"adams", MethodInfo(DERF | KINF, 0)},
-                                                          {"runge", MethodInfo(DERF | KINF, 0)},
-                                                          {"euler", MethodInfo(DERF | KINF, 0)},
-                                                          {"adeuler", MethodInfo(DERF | KINF, 1)},
-                                                          {"heun", MethodInfo(DERF | KINF, 0)},
-                                                          {"adrunge", MethodInfo(DERF | KINF, 1)},
-                                                          {"gear", MethodInfo(DERF | KINF, 1)},
-                                                          {"newton", MethodInfo(NLINF, 0)},
-                                                          {"simplex", MethodInfo(NLINF, 0)},
-                                                          {"simeq", MethodInfo(LINF, 0)},
-                                                          {"seidel", MethodInfo(LINF, 0)},
-                                                          {"_advance", MethodInfo(KINF, 0)},
-                                                          {"sparse", MethodInfo(KINF, 0)},
-                                                          {"derivimplicit", MethodInfo(DERF, 0)},
-                                                          {"cnexp", MethodInfo(DERF, 0)},
-                                                          {"clsoda", MethodInfo(DERF | KINF, 1)},
-                                                          {"after_cvode", MethodInfo(0, 0)},
-                                                          {"cvode_t", MethodInfo(0, 0)},
-                                                          {"cvode_t_v", MethodInfo(0, 0)}};
+[[clang::no_destroy]] static const std::map<std::string, MethodInfo> methods = {
+    {"adams", MethodInfo(DERF | KINF, 0)},
+    {"runge", MethodInfo(DERF | KINF, 0)},
+    {"euler", MethodInfo(DERF | KINF, 0)},
+    {"adeuler", MethodInfo(DERF | KINF, 1)},
+    {"heun", MethodInfo(DERF | KINF, 0)},
+    {"adrunge", MethodInfo(DERF | KINF, 1)},
+    {"gear", MethodInfo(DERF | KINF, 1)},
+    {"newton", MethodInfo(NLINF, 0)},
+    {"simplex", MethodInfo(NLINF, 0)},
+    {"simeq", MethodInfo(LINF, 0)},
+    {"seidel", MethodInfo(LINF, 0)},
+    {"_advance", MethodInfo(KINF, 0)},
+    {"sparse", MethodInfo(KINF, 0)},
+    {"derivimplicit", MethodInfo(DERF, 0)},
+    {"cnexp", MethodInfo(DERF, 0)},
+    {"clsoda", MethodInfo(DERF | KINF, 1)},
+    {"after_cvode", MethodInfo(0, 0)},
+    {"cvode_t", MethodInfo(0, 0)},
+    {"cvode_t_v", MethodInfo(0, 0)}};
 
 
 /**
@@ -197,8 +200,7 @@ const static std::map<std::string, MethodInfo> methods = {{"adams", MethodInfo(D
  */
 enum class DefinitionType { EXT_DOUBLE, EXT_2, EXT_3, EXT_4, EXT_5 };
 
-
-const static std::map<std::string, DefinitionType> extern_definitions = {
+[[clang::no_destroy]] static const std::map<std::string, DefinitionType> extern_definitions = {
     {"first_time", DefinitionType::EXT_DOUBLE},
     {"error", DefinitionType::EXT_DOUBLE},
     {"f_flux", DefinitionType::EXT_DOUBLE},
@@ -322,11 +324,12 @@ bool needs_neuron_thread_first_arg(const std::string& token) {
  * The passes like scope checker needs to know if certain variable is
  * undefined and hence these needs to be inserted into symbol table
  */
-static std::vector<std::string> NEURON_VARIABLES = {"t", "dt", "celsius", "v", "diam", "area"};
+static constexpr std::array<const char*, 6> NEURON_VARIABLES =
+    {"t", "dt", "celsius", "v", "diam", "area"};
 
 
 /// Return token type for the keyword
-TokenType keyword_type(const std::string& name) {
+static TokenType keyword_type(const std::string& name) {
     return keywords.at(name);
 }
 

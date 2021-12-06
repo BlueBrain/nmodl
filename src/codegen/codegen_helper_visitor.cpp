@@ -473,7 +473,7 @@ void CodegenHelperVisitor::visit_suffix(const Suffix& node) {
 }
 
 
-void CodegenHelperVisitor::visit_electrode_current(const ElectrodeCurrent& node) {
+void CodegenHelperVisitor::visit_electrode_current(const ElectrodeCurrent& /* node */) {
     info.electrode_current = true;
 }
 
@@ -654,12 +654,12 @@ void CodegenHelperVisitor::visit_binary_expression(const BinaryExpression& node)
 }
 
 
-void CodegenHelperVisitor::visit_bbcore_pointer(const BbcorePointer& node) {
+void CodegenHelperVisitor::visit_bbcore_pointer(const BbcorePointer& /* node */) {
     info.bbcore_pointer_used = true;
 }
 
 
-void CodegenHelperVisitor::visit_watch(const ast::Watch& node) {
+void CodegenHelperVisitor::visit_watch(const ast::Watch& /* node */) {
     info.watch_count++;
 }
 
@@ -670,12 +670,12 @@ void CodegenHelperVisitor::visit_watch_statement(const ast::WatchStatement& node
 }
 
 
-void CodegenHelperVisitor::visit_for_netcon(const ast::ForNetcon& node) {
+void CodegenHelperVisitor::visit_for_netcon(const ast::ForNetcon& /* node */) {
     info.for_netcon_used = true;
 }
 
 
-void CodegenHelperVisitor::visit_table_statement(const ast::TableStatement& node) {
+void CodegenHelperVisitor::visit_table_statement(const ast::TableStatement& /* node */) {
     info.table_count++;
     table_statement_used = true;
 }
@@ -703,19 +703,19 @@ CodegenInfo CodegenHelperVisitor::analyze(const ast::Program& node) {
     return info;
 }
 
-void CodegenHelperVisitor::visit_linear_block(const ast::LinearBlock& node) {
+void CodegenHelperVisitor::visit_linear_block(const ast::LinearBlock& /* node */) {
     info.vectorize = false;
 }
 
-void CodegenHelperVisitor::visit_non_linear_block(const ast::NonLinearBlock& node) {
+void CodegenHelperVisitor::visit_non_linear_block(const ast::NonLinearBlock& /* node */) {
     info.vectorize = false;
 }
 
-void CodegenHelperVisitor::visit_discrete_block(const ast::DiscreteBlock& node) {
+void CodegenHelperVisitor::visit_discrete_block(const ast::DiscreteBlock& /* node */) {
     info.vectorize = false;
 }
 
-void CodegenHelperVisitor::visit_partial_block(const ast::PartialBlock& node) {
+void CodegenHelperVisitor::visit_partial_block(const ast::PartialBlock& /* node */) {
     info.vectorize = false;
 }
 

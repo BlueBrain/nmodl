@@ -20,7 +20,9 @@ namespace codegen {
 
 using symtab::syminfo::NmodlType;
 
-const std::map<ast::AstNodeType, CodegenCompatibilityVisitor::FunctionPointer>
+CodegenCompatibilityVisitor::~CodegenCompatibilityVisitor() = default;
+
+[[clang::no_destroy]] const std::map<ast::AstNodeType, CodegenCompatibilityVisitor::FunctionPointer>
     CodegenCompatibilityVisitor::unhandled_ast_types_func(
         {{AstNodeType::MATCH_BLOCK,
           &CodegenCompatibilityVisitor::return_error_without_name<MatchBlock>},
@@ -46,7 +48,7 @@ const std::map<ast::AstNodeType, CodegenCompatibilityVisitor::FunctionPointer>
 
 
 std::string CodegenCompatibilityVisitor::return_error_if_solve_method_is_unhandled(
-    ast::Ast& node,
+    ast::Ast& /* node */,
     const std::shared_ptr<ast::Ast>& ast_node) {
     auto solve_block_ast_node = std::dynamic_pointer_cast<ast::SolveBlock>(ast_node);
     std::stringstream unhandled_method_error_message;
@@ -91,7 +93,7 @@ std::string CodegenCompatibilityVisitor::return_error_param_var(
 }
 
 std::string CodegenCompatibilityVisitor::return_error_pointer(
-    ast::Ast& node,
+    ast::Ast& /* node */,
     const std::shared_ptr<ast::Ast>& ast_node) {
     auto pointer_var = std::dynamic_pointer_cast<ast::PointerVar>(ast_node);
     return "\"{}\" POINTER found at [{}] should be defined as BBCOREPOINTER to use it in CoreNeuron\n"_format(
@@ -100,7 +102,7 @@ std::string CodegenCompatibilityVisitor::return_error_pointer(
 
 std::string CodegenCompatibilityVisitor::return_error_if_no_bbcore_read_write(
     ast::Ast& node,
-    const std::shared_ptr<ast::Ast>& ast_node) {
+    const std::shared_ptr<ast::Ast>& /* ast_node */) {
     std::stringstream error_message_no_bbcore_read_write;
     const auto& verbatim_nodes = collect_nodes(node, {AstNodeType::VERBATIM});
     auto found_bbcore_read = false;

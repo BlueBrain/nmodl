@@ -63,7 +63,7 @@ bool make_path(const std::string& path) {
     case ENOENT:
         // parent didn't exist, try to create it
         {
-            int pos = path.find_last_of('/');
+            auto pos = path.find_last_of('/');
             if (pos == std::string::npos) {
                 return false;
             }
@@ -101,7 +101,7 @@ TempFile::~TempFile() {
     }
 }
 
-std::string generate_random_string(const int len, UseNumbersInString use_numbers) {
+std::string generate_random_string(const unsigned int len, UseNumbersInString use_numbers) {
     std::string s(len, 0);
     static const char alphanum[] =
         "0123456789"
@@ -111,7 +111,7 @@ std::string generate_random_string(const int len, UseNumbersInString use_numbers
     std::mt19937 rng(dev());
     std::uniform_int_distribution<std::mt19937::result_type> dist(use_numbers ? 0 : 10,
                                                                   sizeof(alphanum) - 2);
-    for (int i = 0; i < len; ++i) {
+    for (unsigned int i = 0; i < len; ++i) {
         s[i] = alphanum[dist(rng)];
     }
     return s;

@@ -27,6 +27,10 @@ endforeach()
 add_library(pyembed ${CMAKE_CURRENT_SOURCE_DIR}/pyembed.cpp)
 set_property(TARGET pyembed PROPERTY POSITION_INDEPENDENT_CODE ON)
 
+set_source_files_properties(
+  ${CMAKE_CURRENT_SOURCE_DIR}/wrapper.cpp
+  PROPERTIES COMPILE_FLAGS "-Wno-missing-variable-declarations -Wno-global-constructors")
+
 if(NOT LINK_AGAINST_PYTHON)
   add_library(pywrapper SHARED ${CMAKE_CURRENT_SOURCE_DIR}/wrapper.cpp)
   set_target_properties(pywrapper PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -36,8 +40,8 @@ else()
   target_compile_definitions(pyembed PRIVATE NMODL_STATIC_PYWRAPPER=1)
 endif()
 
-target_include_directories(pyembed PRIVATE ${PYBIND11_INCLUDE_DIR} ${PYTHON_INCLUDE_DIRS})
-target_include_directories(pywrapper PRIVATE ${pybind11_INCLUDE_DIRS} ${PYTHON_INCLUDE_DIRS})
+target_include_directories(pyembed SYSTEM PRIVATE ${PYBIND11_INCLUDE_DIR} ${PYTHON_INCLUDE_DIRS})
+target_include_directories(pywrapper SYSTEM PRIVATE ${pybind11_INCLUDE_DIRS} ${PYTHON_INCLUDE_DIRS})
 
 # ~~~
 # pybind11::embed adds PYTHON_LIBRARIES to target_link_libraries. To avoid link to

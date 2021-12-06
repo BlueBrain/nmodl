@@ -13,10 +13,10 @@
 /**
  *
  * \dir
- * \brief Utility classes and function
+ * Utility classes and function
  *
  * \file
- * \brief Manage search path.
+ * Manage search path.
  */
 
 namespace nmodl {

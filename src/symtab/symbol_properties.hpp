@@ -24,7 +24,7 @@ namespace symtab {
 namespace syminfo {
 
 /// \todo Error with pybind if std::underlying_typ is used
-using enum_type = long long;
+using enum_type = std::uint64_t;
 
 /// kind of symbol
 enum class DeclarationType : enum_type {

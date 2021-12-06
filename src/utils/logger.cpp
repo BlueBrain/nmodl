@@ -11,7 +11,7 @@
 
 /**
  * \file
- * \brief \copybrief nmodl::Logger
+ * \copybrief nmodl::Logger
  */
 
 namespace nmodl {
@@ -29,7 +29,7 @@ struct Logger {
     }
 };
 
-Logger nmodl_logger("NMODL", "[%n] [%^%l%$] :: %v");
-logger_type logger = nmodl_logger.logger;
+[[clang::no_destroy]] static Logger nmodl_logger("NMODL", "[%n] [%^%l%$] :: %v");
+[[clang::no_destroy]] logger_type logger = nmodl_logger.logger;
 
 }  // namespace nmodl

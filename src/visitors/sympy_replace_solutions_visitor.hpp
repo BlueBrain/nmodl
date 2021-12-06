@@ -212,8 +212,8 @@ namespace visitor {
 class SympyReplaceSolutionsVisitor: public AstVisitor {
   public:
     enum class ReplacePolicy {
-        VALUE = 0,   //!< Replace statements matching by lhs varName
-        GREEDY = 1,  //!< Replace statements greedily
+        VALUE = 0,  //!< Replace statements matching by lhs varName
+        GREEDY = 1  //!< Replace statements greedily
     };
     /// Empty ctor
     SympyReplaceSolutionsVisitor() = delete;
@@ -455,7 +455,7 @@ class SympyReplaceSolutionsVisitor: public AstVisitor {
         size_t n_flushes = 0;
 
         /// Emit error when \ref n_flushes reaches this number. -1 disables the error entirely
-        int error_on_n_flushes;
+        size_t error_on_n_flushes;
     };
 
     /// Update state variable statements (i.e. \f$old_x = x \f$)

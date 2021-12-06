@@ -7,7 +7,7 @@ add_compile_options(${NMODL_EXTRA_CXX_FLAGS})
 add_link_options(${NMODL_EXTRA_CXX_FLAGS})
 add_compile_options(${NMODL_TESTS_COMPILER_WARNING_SUPPRESSIONS})
 
-include_directories(${PYBIND11_INCLUDE_DIR} ${PYTHON_INCLUDE_DIRS})
+include_directories(SYSTEM ${PYBIND11_INCLUDE_DIR} ${PYTHON_INCLUDE_DIRS})
 include_directories(${NMODL_PROJECT_SOURCE_DIR}/ext/catch ${NMODL_PROJECT_SOURCE_DIR}/test)
 include_directories(${NMODL_PROJECT_SOURCE_DIR}/src/solver)
 include_directories(${NMODL_PROJECT_SOURCE_DIR}/src/utils)

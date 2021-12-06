@@ -6,7 +6,6 @@
  *************************************************************************/
 
 #include <fstream>
-#include <sstream>
 
 #include "lexer/unit_lexer.hpp"
 #include "parser/unit_driver.hpp"
@@ -20,13 +19,10 @@ UnitDriver::UnitDriver(bool strace, bool ptrace)
 
 /// parse Units file provided as istream
 bool UnitDriver::parse_stream(std::istream& in) {
-    UnitLexer scanner(*this, &in);
-    UnitParser parser(scanner, *this);
+    UnitLexer lexer(*this, &in);
+    UnitParser parser(lexer, *this);
 
-    this->lexer = &scanner;
-    this->parser = &parser;
-
-    scanner.set_debug(trace_scanner);
+    lexer.set_debug(trace_scanner);
     parser.set_debug_level(trace_parser);
     return (parser.parse() == 0);
 }
@@ -58,12 +54,10 @@ void UnitDriver::error(const std::string& m, const location& l) {
 
 void UnitDriver::scan_string(std::string& text) {
     std::istringstream in(text);
-    UnitLexer scanner(*this, &in);
-    UnitParser parser(scanner, *this);
-    this->lexer = &scanner;
-    this->parser = &parser;
+    UnitLexer lexer(*this, &in);
+    UnitParser parser(lexer, *this);
     while (true) {
-        auto sym = lexer->next_token();
+        auto sym = lexer.next_token();
         auto token_type = sym.type_get();
         if (token_type == UnitParser::by_type(UnitParser::token::END).type_get()) {
             break;

@@ -20,7 +20,7 @@
 
 /**
  * \file
- * \brief Units processing while being processed from lexer and parser
+ * Units processing while being processed from lexer and parser
  */
 
 namespace nmodl {
@@ -41,8 +41,8 @@ void Unit::add_unit(const std::string& name) {
 void Unit::add_base_unit(const std::string& name) {
     // name = "*[a-j]*" which is a base unit
     const auto dim_name = name[1];
-    const int dim_no = dim_name - 'a';
-    unit_dimensions[dim_no] = 1;
+    const auto dim_no = dim_name - 'a';
+    unit_dimensions[static_cast<size_t>(dim_no)] = 1;
     add_nominator_unit(name);
 }
 
@@ -88,25 +88,25 @@ void Unit::mul_factor(const double double_factor) {
 
 void Unit::add_fraction(const std::string& fraction_string) {
     double nom, denom;
-    std::string nominator;
-    std::string denominator;
+    std::string p_nominator;
+    std::string p_denominator;
     std::string::const_iterator it;
     for (it = fraction_string.begin(); it != fraction_string.end() && *it != '|'; ++it) {
-        nominator.push_back(*it);
+        p_nominator.push_back(*it);
     }
     // pass "|" char
     ++it;
     for (auto itm = it; itm != fraction_string.end(); ++itm) {
-        denominator.push_back(*itm);
+        p_denominator.push_back(*itm);
     }
-    nom = parse_double(nominator);
-    denom = parse_double(denominator);
+    nom = parse_double(p_nominator);
+    denom = parse_double(p_denominator);
     unit_factor = nom / denom;
 }
 
 double Unit::parse_double(std::string double_string) {
     long double d_number;
-    double d_magnitude;
+    long double d_magnitude;
     std::string s_number;
     std::string s_magnitude;
     std::string::const_iterator it;
@@ -131,11 +131,11 @@ double Unit::parse_double(std::string double_string) {
     }
     d_number = std::stold(s_number);
     if (s_magnitude.empty()) {
-        d_magnitude = 0.0;
+        d_magnitude = 0.0l;
     } else {
-        d_magnitude = std::stod(s_magnitude);
+        d_magnitude = std::stold(s_magnitude);
     }
-    return static_cast<double>(d_number * powl(10.0, d_magnitude) * sign);
+    return static_cast<double>(d_number * std::pow(10.0, d_magnitude) * sign);
 }
 
 void UnitTable::calc_nominator_dims(const std::shared_ptr<Unit>& unit, std::string nominator_name) {
@@ -163,7 +163,8 @@ void UnitTable::calc_nominator_dims(const std::shared_ptr<Unit>& unit, std::stri
                     changed_nominator_name = 1;
                     nominator_prefix_factor *= it.second;
                     nominator_name.erase(nominator_name.begin(),
-                                         nominator_name.begin() + it.first.size());
+                                         nominator_name.begin() +
+                                             static_cast<int>(it.first.size()));
                 }
             }
         }
@@ -238,7 +239,8 @@ void UnitTable::calc_denominator_dims(const std::shared_ptr<Unit>& unit,
                     changed_denominator_name = 1;
                     denominator_prefix_factor *= it.second;
                     denominator_name.erase(denominator_name.begin(),
-                                           denominator_name.begin() + it.first.size());
+                                           denominator_name.begin() +
+                                               static_cast<long>(it.first.size()));
                 }
             }
         }
@@ -293,7 +295,7 @@ void UnitTable::insert(const std::shared_ptr<Unit>& unit) {
         (unit_nominator.front().front() == '*' && unit_nominator.front().back() == '*');
     if (only_base_unit_nominator) {
         // base_units_names[i] = "*i-th base unit*" (ex. base_units_names[0] = "*a*")
-        base_units_names[unit_nominator.front()[1] - 'a'] = unit->get_name();
+        base_units_names[static_cast<size_t>(unit_nominator.front()[1] - 'a')] = unit->get_name();
         // if  unit is found in table replace it
         auto find_unit_name = table.find(unit->get_name());
         if (find_unit_name == table.end()) {

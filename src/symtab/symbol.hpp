@@ -174,8 +174,8 @@ class Symbol {
         }
     }
 
-    void set_definition_order(int order) noexcept {
-        definition_order = order;
+    void set_definition_order(int ord) noexcept {
+        definition_order = ord;
     }
 
     void set_value(double val) {

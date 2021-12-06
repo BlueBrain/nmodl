@@ -235,17 +235,17 @@ struct CodegenInfo {
     int derivimplicit_list_num = -1;
 
     /// number of solve blocks in mod file
-    int num_solve_blocks = 0;
+    size_t num_solve_blocks = 0;
 
     /// number of primes (all state variables not necessary to be prime)
-    int num_primes = 0;
+    size_t num_primes = 0;
 
     /// sum of length of all prime variables
-    int primes_size = 0;
+    size_t primes_size = 0;
 
     /// number of equations (i.e. statements) in derivative block
     /// typically equal to number of primes
-    int num_equations = 0;
+    size_t num_equations = 0;
 
     /// derivative block
     const ast::BreakpointBlock* breakpoint_node = nullptr;
@@ -257,7 +257,7 @@ struct CodegenInfo {
     const ast::NetReceiveBlock* net_receive_node = nullptr;
 
     /// number of arguments to net_receive block
-    int num_net_receive_parameters = 0;
+    size_t num_net_receive_parameters = 0;
 
     /// initial block within net receive block
     const ast::InitialBlock* net_receive_initial_node = nullptr;

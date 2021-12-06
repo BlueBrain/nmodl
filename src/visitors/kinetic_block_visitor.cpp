@@ -94,7 +94,7 @@ void KineticBlockVisitor::process_conserve_reac_var(const std::string& varname, 
     }
 }
 
-std::shared_ptr<ast::Expression> create_expr(const std::string& str_expr) {
+static std::shared_ptr<ast::Expression> create_expr(const std::string& str_expr) {
     auto statement = create_statement("dummy = " + str_expr);
     auto expr = std::dynamic_pointer_cast<ast::ExpressionStatement>(statement)->get_expression();
     return std::dynamic_pointer_cast<ast::BinaryExpression>(expr)->get_rhs();
