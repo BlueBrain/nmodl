@@ -2636,10 +2636,11 @@ void CodegenCVisitor::print_mechanism_global_var_structure() {
 
     printer->add_newline(1);
     printer->add_line("/** holds object of global variable */");
+    print_global_variable_device_create_annotation_pre();
     print_global_var_struct_decl();
 
     // create copy on the device
-    print_global_variable_device_create_annotation();
+    print_global_variable_device_create_annotation_post();
 }
 
 
@@ -3037,7 +3038,11 @@ void CodegenCVisitor::print_ion_variable() {
 }
 
 
-void CodegenCVisitor::print_global_variable_device_create_annotation() {
+void CodegenCVisitor::print_global_variable_device_create_annotation_pre() {
+    // nothing for cpu
+}
+
+void CodegenCVisitor::print_global_variable_device_create_annotation_post() {
     // nothing for cpu
 }
 
