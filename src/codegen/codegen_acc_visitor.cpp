@@ -275,7 +275,7 @@ std::string CodegenAccVisitor::get_variable_device_pointer(const std::string& va
     if (info.artificial_cell) {
         return variable;
     }
-    return "reinterpret_cast<{}>(nt->compute_gpu ? acc_deviceptr({}) : {})"_format(type,
+    return "reinterpret_cast<{}>(nt->compute_gpu ? cnrn_target_deviceptr({}) : {})"_format(type,
                                                                                    variable,
                                                                                    variable);
 }
@@ -284,14 +284,14 @@ std::string CodegenAccVisitor::get_variable_device_pointer(const std::string& va
 void CodegenAccVisitor::print_newtonspace_transfer_to_device() const {
     int list_num = info.derivimplicit_list_num;
     printer->add_line("if (nt->compute_gpu) {");
-    printer->add_line("    auto device_vec = static_cast<double*>(acc_copyin(vec, vec_size));");
-    printer->add_line("    auto device_ns = static_cast<NewtonSpace*>(acc_deviceptr(*ns));");
-    printer->add_line("    auto device_thread = static_cast<ThreadDatum*>(acc_deviceptr(thread));");
+    printer->add_line("    auto device_vec = static_cast<double*>(cnrn_gpu_copyin(vec, vec_size));");
+    printer->add_line("    auto device_ns = static_cast<NewtonSpace*>(cnrn_target_deviceptr(*ns));");
+    printer->add_line("    auto device_thread = static_cast<ThreadDatum*>(cnrn_target_deviceptr(thread));");
     printer->add_line(
-        "    acc_memcpy_to_device(&(device_thread[{}]._pvoid), &device_ns, sizeof(void*));"_format(
+        "    cnrn_memcpy_to_device(&(device_thread[{}]._pvoid), &device_ns, sizeof(void*));"_format(
             info.thread_data_index - 1));
     printer->add_line(
-        "    acc_memcpy_to_device(&(device_thread[dith{}()].pval), &device_vec, sizeof(double*));"_format(
+        "    cnrn_memcpy_to_device(&(device_thread[dith{}()].pval), &device_vec, sizeof(double*));"_format(
             list_num));
     printer->add_line("}");
 }
@@ -299,8 +299,8 @@ void CodegenAccVisitor::print_newtonspace_transfer_to_device() const {
 
 void CodegenAccVisitor::print_instance_variable_transfer_to_device() const {
     printer->add_line("if (nt->compute_gpu) {");
-    printer->add_line("    auto dml = (Memb_list*) acc_deviceptr(ml);");
-    printer->add_line("    acc_memcpy_to_device(&(dml->instance), &inst, sizeof(void*));");
+    printer->add_line("    auto dml = (Memb_list*) cnrn_target_deviceptr(ml);");
+    printer->add_line("    cnrn_memcpy_to_device(&(dml->instance), &inst, sizeof(void*));");
     printer->add_line("}");
 }
 
