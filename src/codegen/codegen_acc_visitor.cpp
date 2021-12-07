@@ -77,9 +77,7 @@ void CodegenAccVisitor::print_backend_includes() {
         printer->add_line("#define DISABLE_OPENACC");
     } else {
         printer->add_line("#include <coreneuron/utils/offload.hpp>");
-        printer->add_line("#include <cuda.h>");
         printer->add_line("#include <cuda_runtime_api.h>");
-        printer->add_line("#include <openacc.h>");
     }
 
     if (info.eigen_linear_solver_exist && std::accumulate(info.state_vars.begin(),
