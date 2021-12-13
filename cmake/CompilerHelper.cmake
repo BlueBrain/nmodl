@@ -32,8 +32,8 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "PGI" OR CMAKE_CXX_COMPILER_ID MATCHES "NVHPC")
     # "src/codegen/codegen_cuda_visitor.cpp", NVC++-W-0277-Cannot inline function - data type mismatch
     # "nvc++IkWUbMugiSgNH.s: Warning: stand-alone `data16' prefix
     # ~~~
-    # The situation may be better once https://github.com/fmtlib/fmt/pull/2582
-    # is included in a release.
+    # The situation may be better once https://github.com/fmtlib/fmt/pull/2582 is included in a
+    # release.
     set(NMODL_COMPILER_WARNING_SUPPRESSIONS --diag_suppress=1,111,128,185,186,998,1098,1626,1676)
     # There are a few more warnings produced by the unit test infrastructure.
     # ~~~
