@@ -275,33 +275,31 @@ std::string CodegenAccVisitor::get_variable_device_pointer(const std::string& va
     if (info.artificial_cell) {
         return variable;
     }
-    return "reinterpret_cast<{}>(nt->compute_gpu ? cnrn_target_deviceptr({}) : {})"_format(type,
-                                                                                   variable,
-                                                                                   variable);
+    return "nt->compute_gpu ? cnrn_target_deviceptr({}) : {}"_format(variable, variable);
 }
 
 
 void CodegenAccVisitor::print_newtonspace_transfer_to_device() const {
     int list_num = info.derivimplicit_list_num;
-    printer->add_line("if (nt->compute_gpu) {");
-    printer->add_line("    auto device_vec = static_cast<double*>(cnrn_gpu_copyin(vec, vec_size));");
-    printer->add_line("    auto device_ns = static_cast<NewtonSpace*>(cnrn_target_deviceptr(*ns));");
-    printer->add_line("    auto device_thread = static_cast<ThreadDatum*>(cnrn_target_deviceptr(thread));");
+    printer->start_block("if(nt->compute_gpu)");
+    printer->add_line("double* device_vec = cnrn_target_copyin(vec, vec_size / sizeof(double));");
+    printer->add_line("void* device_ns = cnrn_target_deviceptr(*ns);");
+    printer->add_line("ThreadDatum* device_thread = cnrn_target_deviceptr(thread);");
     printer->add_line(
-        "    cnrn_memcpy_to_device(&(device_thread[{}]._pvoid), &device_ns, sizeof(void*));"_format(
+        "cnrn_target_memcpy_to_device(&(device_thread[{}]._pvoid), &device_ns);"_format(
             info.thread_data_index - 1));
     printer->add_line(
-        "    cnrn_memcpy_to_device(&(device_thread[dith{}()].pval), &device_vec, sizeof(double*));"_format(
+        "cnrn_target_memcpy_to_device(&(device_thread[dith{}()].pval), &device_vec);"_format(
             list_num));
-    printer->add_line("}");
+    printer->end_block(1);
 }
 
 
 void CodegenAccVisitor::print_instance_variable_transfer_to_device() const {
-    printer->add_line("if (nt->compute_gpu) {");
-    printer->add_line("    auto dml = (Memb_list*) cnrn_target_deviceptr(ml);");
-    printer->add_line("    cnrn_memcpy_to_device(&(dml->instance), &inst, sizeof(void*));");
-    printer->add_line("}");
+    printer->start_block("if(nt->compute_gpu)");
+    printer->add_line("Memb_list* dml = cnrn_target_deviceptr(ml);");
+    printer->add_line("cnrn_target_memcpy_to_device(&(dml->instance), &(ml->instance));");
+    printer->end_block(1);
 }
 
 

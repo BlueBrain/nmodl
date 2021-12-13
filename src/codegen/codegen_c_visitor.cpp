@@ -3324,7 +3324,7 @@ void CodegenCVisitor::print_instance_variable_setup() {
         printer->add_line("inst->{} = {};"_format(name, device_variable));
     }
 
-    printer->add_line("ml->instance = (void*) inst;");
+    printer->add_line("ml->instance = inst;");
     print_instance_variable_transfer_to_device();
     printer->end_block(3);
 
@@ -3448,14 +3448,13 @@ void CodegenCVisitor::print_nrn_init(bool skip_init_check) {
         print_deriv_advance_flag_transfer_to_device();
         printer->add_line("auto ns = newtonspace{}(thread);"_format(list_num));
         printer->add_line("auto& th = thread[dith{}()];"_format(list_num));
-
-        printer->add_line("if (*ns == nullptr) {");
-        printer->add_line("    int vec_size = 2*{}*pnodecount*sizeof(double);"_format(nequation));
-        printer->add_line("    double* vec = makevector(vec_size);"_format(nequation));
-        printer->add_line("    th.pval = vec;"_format(list_num));
-        printer->add_line("    *ns = nrn_cons_newtonspace({}, pnodecount);"_format(nequation));
+        printer->start_block("if (*ns == nullptr)");
+        printer->add_line("int vec_size = 2*{}*pnodecount*sizeof(double);"_format(nequation));
+        printer->add_line("double* vec = makevector(vec_size);"_format(nequation));
+        printer->add_line("th.pval = vec;"_format(list_num));
+        printer->add_line("*ns = nrn_cons_newtonspace({}, pnodecount);"_format(nequation));
         print_newtonspace_transfer_to_device();
-        printer->add_line("}");
+        printer->end_block(1);
         // clang-format on
     }
 
