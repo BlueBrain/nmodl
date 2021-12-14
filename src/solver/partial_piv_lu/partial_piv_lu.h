@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include "coreneuron/utils/offload.hpp"
+
 #include "Eigen/Dense"
 #include "Eigen/LU"
 
@@ -21,8 +23,8 @@ using VecType = Eigen::Matrix<double, dim, 1, Eigen::ColMajor, dim, 1>;
 // them with __device__ & acc routine tokens), which allows us to eventually call them from OpenACC.
 // Calling these functions from CUDA kernels presents no issue ...
 
-#if defined(_OPENACC) && !defined(DISABLE_OPENACC)
-#pragma acc routine seq
-#endif
+nrn_pragma_acc(routine seq)
+nrn_pragma_omp(declare target)
 template<int dim>
 VecType<dim> partialPivLu(const MatType<dim>&, const VecType<dim>&);
+nrn_pragma_omp(end declare target)
