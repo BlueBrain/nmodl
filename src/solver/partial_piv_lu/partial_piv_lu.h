@@ -25,6 +25,9 @@ using VecType = Eigen::Matrix<double, dim, 1, Eigen::ColMajor, dim, 1>;
 
 nrn_pragma_omp(declare target)
 nrn_pragma_acc(routine seq)
+template<int dim>
+VecType<dim> partialPivLu(const MatType<dim>&, const VecType<dim>&);
+nrn_pragma_acc(routine seq)
 VecType<1> partialPivLu1(const MatType<1>&, const VecType<1>&);
 nrn_pragma_acc(routine seq)
 VecType<2> partialPivLu2(const MatType<2>&, const VecType<2>&);
