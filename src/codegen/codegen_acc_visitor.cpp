@@ -54,7 +54,7 @@ void CodegenAccVisitor::print_channel_iteration_block_parallel_hint(BlockType ty
         "nrn_pragma_acc(parallel loop {} async(nt->stream_id) if(nt->compute_gpu))"_format(
             present_clause.str()));
     printer->add_line(
-        "nrn_pragma_omp(target teams distribute parallel for simd is_device_ptr(inst) "
+        "nrn_pragma_omp(target teams distribute parallel for is_device_ptr(inst) "
         "if(nt->compute_gpu))");
 }
 
@@ -77,9 +77,7 @@ void CodegenAccVisitor::print_backend_includes() {
         printer->add_line("#define DISABLE_OPENACC");
     } else {
         printer->add_line("#include <coreneuron/utils/offload.hpp>");
-        printer->add_line("#include <cuda.h>");
         printer->add_line("#include <cuda_runtime_api.h>");
-        printer->add_line("#include <openacc.h>");
     }
 
     if (info.eigen_linear_solver_exist && std::accumulate(info.state_vars.begin(),
@@ -277,33 +275,31 @@ std::string CodegenAccVisitor::get_variable_device_pointer(const std::string& va
     if (info.artificial_cell) {
         return variable;
     }
-    return "reinterpret_cast<{}>(nt->compute_gpu ? acc_deviceptr({}) : {})"_format(type,
-                                                                                   variable,
-                                                                                   variable);
+    return "nt->compute_gpu ? cnrn_target_deviceptr({}) : {}"_format(variable, variable);
 }
 
 
 void CodegenAccVisitor::print_newtonspace_transfer_to_device() const {
     int list_num = info.derivimplicit_list_num;
-    printer->add_line("if (nt->compute_gpu) {");
-    printer->add_line("    auto device_vec = static_cast<double*>(acc_copyin(vec, vec_size));");
-    printer->add_line("    auto device_ns = static_cast<NewtonSpace*>(acc_deviceptr(*ns));");
-    printer->add_line("    auto device_thread = static_cast<ThreadDatum*>(acc_deviceptr(thread));");
+    printer->start_block("if(nt->compute_gpu)");
+    printer->add_line("double* device_vec = cnrn_target_copyin(vec, vec_size / sizeof(double));");
+    printer->add_line("void* device_ns = cnrn_target_deviceptr(*ns);");
+    printer->add_line("ThreadDatum* device_thread = cnrn_target_deviceptr(thread);");
     printer->add_line(
-        "    acc_memcpy_to_device(&(device_thread[{}]._pvoid), &device_ns, sizeof(void*));"_format(
+        "cnrn_target_memcpy_to_device(&(device_thread[{}]._pvoid), &device_ns);"_format(
             info.thread_data_index - 1));
     printer->add_line(
-        "    acc_memcpy_to_device(&(device_thread[dith{}()].pval), &device_vec, sizeof(double*));"_format(
+        "cnrn_target_memcpy_to_device(&(device_thread[dith{}()].pval), &device_vec);"_format(
             list_num));
-    printer->add_line("}");
+    printer->end_block(1);
 }
 
 
 void CodegenAccVisitor::print_instance_variable_transfer_to_device() const {
-    printer->add_line("if (nt->compute_gpu) {");
-    printer->add_line("    auto dml = (Memb_list*) acc_deviceptr(ml);");
-    printer->add_line("    acc_memcpy_to_device(&(dml->instance), &inst, sizeof(void*));");
-    printer->add_line("}");
+    printer->start_block("if(nt->compute_gpu)");
+    printer->add_line("Memb_list* dml = cnrn_target_deviceptr(ml);");
+    printer->add_line("cnrn_target_memcpy_to_device(&(dml->instance), &(ml->instance));");
+    printer->end_block(1);
 }
 
 
