@@ -296,10 +296,12 @@ void CodegenAccVisitor::print_newtonspace_transfer_to_device() const {
 
 
 void CodegenAccVisitor::print_instance_variable_transfer_to_device() const {
-    printer->start_block("if(nt->compute_gpu)");
-    printer->add_line("Memb_list* dml = cnrn_target_deviceptr(ml);");
-    printer->add_line("cnrn_target_memcpy_to_device(&(dml->instance), &(ml->instance));");
-    printer->end_block(1);
+    if (!info.artificial_cell) {
+        printer->start_block("if(nt->compute_gpu)");
+        printer->add_line("Memb_list* dml = cnrn_target_deviceptr(ml);");
+        printer->add_line("cnrn_target_memcpy_to_device(&(dml->instance), &(ml->instance));");
+        printer->end_block(1);
+    }
 }
 
 
