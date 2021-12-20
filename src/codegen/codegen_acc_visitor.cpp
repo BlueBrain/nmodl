@@ -319,7 +319,7 @@ void CodegenAccVisitor::print_device_atomic_capture_annotation() const {
 
 void CodegenAccVisitor::print_device_stream_wait() const {
     printer->start_block("if(nt->compute_gpu)");
-    printer->add_line("nrn_pragma_acc(wait(nt->streams[nt->stream_id]))");
+    printer->add_line("nrn_pragma_acc(wait async(nt->streams[nt->stream_id]))");
     printer->add_line("nrn_pragma_omp(taskwait)");
     printer->end_block(1);
 }
