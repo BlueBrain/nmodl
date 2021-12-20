@@ -82,9 +82,9 @@ std::string CodegenCompatibilityVisitor::return_error_param_var(
     auto param_assign = std::dynamic_pointer_cast<ast::ParamAssign>(ast_node);
     std::stringstream error_message_global_var;
     auto symbol = node.get_symbol_table()->lookup(param_assign->get_node_name());
-    if (!symbol->has_any_property(NmodlType::range_var) && symbol->get_write_count() > 0) {
+    if (!symbol->is_writable() && symbol->get_write_count() > 0) {
         error_message_global_var
-            << "\"{}\" variable found at [{}] should be defined as a RANGE variable instead of GLOBAL to enable backend transformations\n"_format(
+            << "\"{}\" variable found at [{}] should be writable if it needs to be written\n"_format(
                    symbol->get_name(), symbol->get_token().position());
     }
     return error_message_global_var.str();

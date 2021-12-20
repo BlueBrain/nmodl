@@ -348,6 +348,10 @@ class Symbol {
     bool is_variable() const noexcept;
 
     std::string to_string() const;
+
+    bool is_writable() const noexcept {
+        return has_any_property(NModlType::range_var) || (has_any_property(NModlType::useion) && !has_any_property(NmodlType::write_ion_var));
+    }
 };
 
 /** @} */  // end of sym_tab
