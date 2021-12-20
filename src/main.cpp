@@ -38,6 +38,7 @@
 #include "visitors/neuron_solve_visitor.hpp"
 #include "visitors/nmodl_visitor.hpp"
 #include "visitors/perf_visitor.hpp"
+#include "visitors/semantic_analysis_visitor.hpp"
 #include "visitors/solve_block_visitor.hpp"
 #include "visitors/steadystate_visitor.hpp"
 #include "visitors/sympy_conductance_visitor.hpp"
@@ -117,7 +118,7 @@ int main(int argc, const char* argv[]) {
     bool localize_verbatim(false);
 
     /// true if local variables to be renamed
-    bool local_rename(false);
+    bool local_rename(true);
 
     /// true if inline even if verbatim block exist
     bool verbatim_inline(false);
@@ -316,6 +317,14 @@ int main(int argc, const char* argv[]) {
 
         /// just visit the ast
         AstVisitor().visit_program(*ast);
+
+        /// Check some rules that ast should follow
+        {
+            logger->info("Running semantic analysis visitor");
+            if (SemanticAnalysisVisitor().check(*ast)) {
+                return 1;
+            }
+        }
 
         /// construct symbol table
         {

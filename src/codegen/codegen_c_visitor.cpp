@@ -69,13 +69,8 @@ void CodegenCVisitor::visit_integer(const Integer& node) {
     if (!codegen) {
         return;
     }
-    const auto& macro = node.get_macro();
     const auto& value = node.get_value();
-    if (macro) {
-        macro->accept(*this);
-    } else {
-        printer->add_text(std::to_string(value));
-    }
+    printer->add_text(std::to_string(value));
 }
 
 
@@ -138,7 +133,9 @@ void CodegenCVisitor::visit_var_name(const VarName& node) {
     }
     if (index) {
         printer->add_text("[");
+        printer->add_text("static_cast<int>(");
         index->accept(*this);
+        printer->add_text(")");
         printer->add_text("]");
     }
 }
@@ -150,7 +147,9 @@ void CodegenCVisitor::visit_indexed_name(const IndexedName& node) {
     }
     node.get_name()->accept(*this);
     printer->add_text("[");
+    printer->add_text("static_cast<int>(");
     node.get_length()->accept(*this);
+    printer->add_text(")");
     printer->add_text("]");
 }
 
@@ -768,7 +767,7 @@ void CodegenCVisitor::update_index_semantics() {
         info.semantics.emplace_back(index++, naming::POINT_PROCESS_SEMANTIC, 1);
     }
     for (const auto& ion: info.ions) {
-        for (const auto& var: ion.reads) {
+        for (auto i = 0; i < ion.reads.size(); ++i) {
             info.semantics.emplace_back(index++, ion.name + "_ion", 1);
         }
         for (const auto& var: ion.writes) {
@@ -901,7 +900,7 @@ std::vector<IndexVariableInfo> CodegenCVisitor::get_int_variables() {
                                                         // not have doubles between read/write. Same
                                                         // name variables are allowed
         for (const auto& var: ion.reads) {
-            const std::string name = "ion_" + var;
+            const std::string name = naming::ION_VARNAME_PREFIX + var;
             variables.emplace_back(make_symbol(name));
             variables.back().is_constant = true;
             ion_vars[name] = variables.size() - 1;
@@ -911,16 +910,17 @@ std::vector<IndexVariableInfo> CodegenCVisitor::get_int_variables() {
         std::shared_ptr<symtab::Symbol> ion_di_dv_var = nullptr;
 
         for (const auto& var: ion.writes) {
-            const std::string name = "ion_" + var;
+            const std::string name = naming::ION_VARNAME_PREFIX + var;
 
             const auto ion_vars_it = ion_vars.find(name);
             if (ion_vars_it != ion_vars.end()) {
                 variables[ion_vars_it->second].is_constant = false;
             } else {
-                variables.emplace_back(make_symbol("ion_" + var));
+                variables.emplace_back(make_symbol(naming::ION_VARNAME_PREFIX + var));
             }
             if (ion.is_ionic_current(var)) {
-                ion_di_dv_var = make_symbol("ion_di" + ion.name + "dv");
+                ion_di_dv_var = make_symbol(std::string(naming::ION_VARNAME_PREFIX) + "di" +
+                                            ion.name + "dv");
             }
             if (ion.is_intra_cell_conc(var) || ion.is_extra_cell_conc(var)) {
                 need_style = true;
@@ -993,9 +993,10 @@ std::vector<SymbolType> CodegenCVisitor::get_shadow_variables() {
     std::vector<SymbolType> variables;
     for (const auto& ion: info.ions) {
         for (const auto& var: ion.writes) {
-            variables.push_back({make_symbol(shadow_varname("ion_" + var))});
+            variables.push_back({make_symbol(shadow_varname(naming::ION_VARNAME_PREFIX + var))});
             if (ion.is_ionic_current(var)) {
-                variables.push_back({make_symbol(shadow_varname("ion_di" + ion.name + "dv"))});
+                variables.push_back({make_symbol(shadow_varname(
+                    std::string(naming::ION_VARNAME_PREFIX) + "di" + ion.name + "dv"))});
             }
         }
     }
@@ -1604,12 +1605,17 @@ void CodegenCVisitor::print_table_replacement_function(const ast::Block& node) {
     print_function_declaration(node, name);
     printer->start_block();
     {
-        printer->add_line("if ( {} == 0) {}"_format(use_table_var, "{"));
-        printer->add_line("    {}({}, arg_v);"_format(function_name, internal_method_arguments()));
+        const auto& params = node.get_parameters();
+        printer->add_line("if ( {} == 0) {{"_format(use_table_var));
+        printer->add_line("    {}({}, {});"_format(function_name,
+                                                   internal_method_arguments(),
+                                                   params[0].get()->get_node_name()));
         printer->add_line("     return 0;");
         printer->add_line("}");
 
-        printer->add_line("double xi = {} * (arg_v - {});"_format(mfac_name, tmin_name));
+        printer->add_line("double xi = {} * ({} - {});"_format(mfac_name,
+                                                               params[0].get()->get_node_name(),
+                                                               tmin_name));
         printer->add_line("if (isnan(xi)) {");
         for (const auto& var: table_variables) {
             auto name = get_variable_name(var->get_node_name());
@@ -2082,20 +2088,20 @@ std::string CodegenCVisitor::register_mechanism_arguments() const {
 
 std::pair<std::string, std::string> CodegenCVisitor::read_ion_variable_name(
     const std::string& name) const {
-    return {name, "ion_" + name};
+    return {name, naming::ION_VARNAME_PREFIX + name};
 }
 
 
 std::pair<std::string, std::string> CodegenCVisitor::write_ion_variable_name(
     const std::string& name) const {
-    return {"ion_" + name, name};
+    return {naming::ION_VARNAME_PREFIX + name, name};
 }
 
 
 std::string CodegenCVisitor::conc_write_statement(const std::string& ion_name,
                                                   const std::string& concentration,
                                                   int index) {
-    auto conc_var_name = get_variable_name("ion_" + concentration);
+    auto conc_var_name = get_variable_name(naming::ION_VARNAME_PREFIX + concentration);
     auto style_var_name = get_variable_name("style_" + ion_name);
     return "nrn_wrote_conc({}_type,"
            " &({}),"
@@ -2298,7 +2304,6 @@ std::string CodegenCVisitor::float_variable_name(const SymbolType& symbol,
                                                  bool use_instance) const {
     auto name = symbol->get_name();
     auto dimension = symbol->get_length();
-    auto num_float = float_variables_size();
     auto position = position_of_float_var(name);
     // clang-format off
     if (symbol->is_array()) {
@@ -2319,7 +2324,6 @@ std::string CodegenCVisitor::int_variable_name(const IndexVariableInfo& symbol,
                                                const std::string& name,
                                                bool use_instance) const {
     auto position = position_of_int_var(name);
-    auto num_int = int_variables_size();
     // clang-format off
     if (symbol.is_index) {
         if (use_instance) {
@@ -2356,7 +2360,7 @@ std::string CodegenCVisitor::update_if_ion_variable_name(const std::string& name
     std::string result(name);
     if (ion_variable_struct_required()) {
         if (info.is_ion_read_variable(name)) {
-            result = "ion_" + name;
+            result = naming::ION_VARNAME_PREFIX + name;
         }
         if (info.is_ion_write_variable(name)) {
             result = "ionvar." + name;
@@ -3057,6 +3061,11 @@ void CodegenCVisitor::print_global_variable_setup() {
 
     // offsets for state variables
     if (info.primes_size != 0) {
+        if (info.primes_size != info.prime_variables_by_order.size()) {
+            throw std::runtime_error{
+                "primes_size = {} differs from prime_variables_by_order.size() = {}, this should not happen."_format(
+                    info.primes_size, info.prime_variables_by_order.size())};
+        }
         auto slist1 = get_variable_name("slist1");
         auto dlist1 = get_variable_name("dlist1");
         auto n = info.primes_size;
@@ -3995,7 +4004,6 @@ void CodegenCVisitor::visit_for_netcon(const ast::ForNetcon& node) {
         std::find_if(info.semantics.begin(), info.semantics.end(), [](const IndexSemantics& a) {
             return a.name == naming::FOR_NETCON_SEMANTIC;
         })->index;
-    const auto num_int = int_variables_size();
 
     printer->add_text("const size_t offset = {}*pnodecount + id;"_format(index));
     printer->add_newline();
@@ -4329,7 +4337,7 @@ void CodegenCVisitor::print_nrn_cur_conductance_kernel(const BreakpointBlock& no
 
     for (const auto& conductance: info.conductances) {
         if (!conductance.ion.empty()) {
-            auto lhs = "ion_di" + conductance.ion + "dv";
+            auto lhs = std::string(naming::ION_VARNAME_PREFIX) + "di" + conductance.ion + "dv";
             auto rhs = get_variable_name(conductance.variable);
             ShadowUseStatement statement{lhs, "+=", rhs};
             auto text = process_shadow_update_statement(statement, BlockType::Equation);
@@ -4354,7 +4362,7 @@ void CodegenCVisitor::print_nrn_cur_non_conductance_kernel() {
     for (auto& ion: info.ions) {
         for (auto& var: ion.writes) {
             if (ion.is_ionic_current(var)) {
-                auto lhs = "ion_di" + ion.name + "dv";
+                auto lhs = std::string(naming::ION_VARNAME_PREFIX) + "di" + ion.name + "dv";
                 auto rhs = "(di{}-{})/0.001"_format(ion.name, get_variable_name(var));
                 if (info.point_process) {
                     auto area = get_variable_name(naming::NODE_AREA_VARIABLE);
