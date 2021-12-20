@@ -350,7 +350,7 @@ class Symbol {
     std::string to_string() const;
 
     bool is_writable() const noexcept {
-        return has_any_property(NModlType::range_var) || (has_any_property(NModlType::useion) && !has_any_property(NmodlType::write_ion_var));
+        return has_any_property(syminfo::NmodlType::range_var) || has_any_property(syminfo::NmodlType::write_ion_var);
     }
 };
 
