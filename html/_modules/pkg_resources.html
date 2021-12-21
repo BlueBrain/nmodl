@@ -2493,18 +2493,19 @@
         <span class="nb">setattr</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">parent</span><span class="p">],</span> <span class="n">name</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">packageName</span><span class="p">])</span>
 
 
-<div class="viewcode-block" id="yield_lines"><a class="viewcode-back" href="../nmodl.html#nmodl.ast.yield_lines">[docs]</a><span class="k">def</span> <span class="nf">yield_lines</span><span class="p">(</span><span class="n">strs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Yield non-empty/non-comment lines of a string or sequence&quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">strs</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">strs</span><span class="o">.</span><span class="n">splitlines</span><span class="p">():</span>
-            <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-            <span class="c1"># skip blank lines/comments</span>
-            <span class="k">if</span> <span class="n">s</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">s</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="p">):</span>
-                <span class="k">yield</span> <span class="n">s</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">ss</span> <span class="ow">in</span> <span class="n">strs</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">yield_lines</span><span class="p">(</span><span class="n">ss</span><span class="p">):</span>
-                <span class="k">yield</span> <span class="n">s</span></div>
+<span class="k">def</span> <span class="nf">_nonblank</span><span class="p">(</span><span class="nb">str</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">str</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">str</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="yield_lines"><a class="viewcode-back" href="../nmodl.html#nmodl.ast.yield_lines">[docs]</a><span class="nd">@functools</span><span class="o">.</span><span class="n">singledispatch</span>
+<span class="k">def</span> <span class="nf">yield_lines</span><span class="p">(</span><span class="n">iterable</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Yield valid lines of a string or iterable&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">yield_lines</span><span class="p">,</span> <span class="n">iterable</span><span class="p">))</span></div>
+
+
+<span class="nd">@yield_lines</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">filter</span><span class="p">(</span><span class="n">_nonblank</span><span class="p">,</span> <span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="o">.</span><span class="n">strip</span><span class="p">,</span> <span class="n">text</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()))</span>
 
 
 <span class="n">MODULE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\w+(\.\w+)*$&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">match</span>
