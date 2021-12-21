@@ -18,6 +18,7 @@
 #include "visitors/lookup_visitor.hpp"
 #include "visitors/nmodl_visitor.hpp"
 
+#include <fmt/format.h>
 
 namespace nmodl {
 namespace visitor {
@@ -259,7 +260,7 @@ std::pair<std::string, std::unordered_set<std::string>> statement_dependencies(
 }
 
 std::string get_indexed_name(const ast::IndexedName& node) {
-    return node.get_node_name() + "[" + to_nmodl(node.get_length()) + "]";
+    return fmt::format("{}[{}]", node.get_node_name(), to_nmodl(node.get_length()));
 }
 
 std::string get_full_var_name(const ast::VarName& node) {
