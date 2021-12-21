@@ -83,6 +83,7 @@ var group__sym__tab =
       [ "is_array", "classnmodl_1_1symtab_1_1_symbol.html#a354834097a73cafb38c147c5ebdd8501", null ],
       [ "is_external_variable", "classnmodl_1_1symtab_1_1_symbol.html#aea4355d4eb499282cfcad1b29372efd3", null ],
       [ "is_variable", "classnmodl_1_1symtab_1_1_symbol.html#ae738a996fec11f79cac046b4116e4150", null ],
+      [ "is_writable", "classnmodl_1_1symtab_1_1_symbol.html#a7e85b9fbae2772b841b3c1e4f62c97c1", null ],
       [ "mark_created", "classnmodl_1_1symtab_1_1_symbol.html#a2e757470176ecdff0996e7242eb5bdf4", null ],
       [ "mark_inlined", "classnmodl_1_1symtab_1_1_symbol.html#aac99ff23e8b0cfd8dea2d6c7d8972a2b", null ],
       [ "mark_localized", "classnmodl_1_1symtab_1_1_symbol.html#a18ae2749da2a607bbde3bb44728150b9", null ],

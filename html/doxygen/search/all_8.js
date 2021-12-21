@@ -296,6 +296,7 @@ var searchData=
   ['is_5fwatch_5fused',['is_watch_used',['../structnmodl_1_1codegen_1_1_codegen_info.html#aa6f2efd9a16289c4131b197e7296337c',1,'nmodl::codegen::CodegenInfo']]],
   ['is_5fwhile_5fstatement',['is_while_statement',['../group__ast__class.html#ga02bcc1d4e04171fbf1fcccaf39bc0ed2',1,'nmodl::ast::Ast::is_while_statement()'],['../classnmodl_1_1ast_1_1_while_statement.html#a2fb6077eec64cd6eb228443891720271',1,'nmodl::ast::WhileStatement::is_while_statement()']]],
   ['is_5fwrapped_5fexpression',['is_wrapped_expression',['../group__ast__class.html#ga0881593dfbe4aaeabdadce8288f37bf6',1,'nmodl::ast::Ast::is_wrapped_expression()'],['../classnmodl_1_1ast_1_1_wrapped_expression.html#a76eee9f270645ac6bd497e2bc36a0280',1,'nmodl::ast::WrappedExpression::is_wrapped_expression()']]],
+  ['is_5fwritable',['is_writable',['../classnmodl_1_1symtab_1_1_symbol.html#a7e85b9fbae2772b841b3c1e4f62c97c1',1,'nmodl::symtab::Symbol']]],
   ['is_5fwrite_5fion_5fvar',['is_write_ion_var',['../group__ast__class.html#ga8ae7b3772077532d180c376c149ca59b',1,'nmodl::ast::Ast::is_write_ion_var()'],['../classnmodl_1_1ast_1_1_write_ion_var.html#a9aa5e2f409a814a37f71df8f027dfc27',1,'nmodl::ast::WriteIonVar::is_write_ion_var()']]],
   ['ispc_5frename_2ecpp',['ispc_rename.cpp',['../ispc__rename_8cpp.html',1,'']]],
   ['ispc_5frename_5fvisitor_2ehpp',['ispc_rename_visitor.hpp',['../ispc__rename__visitor_8hpp.html',1,'']]],

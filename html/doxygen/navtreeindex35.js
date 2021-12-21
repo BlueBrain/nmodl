@@ -1,5 +1,7 @@
 var NAVTREEINDEX35 =
 {
+"structnmodl_1_1codegen_1_1_codegen_info.html#a488be1456bcf72fedaec26349687ae86":[1,1,0,6,42],
+"structnmodl_1_1codegen_1_1_codegen_info.html#a4a46dea1ec9ad861822987e3c53e949a":[1,1,0,6,18],
 "structnmodl_1_1codegen_1_1_codegen_info.html#a4bcbe36d2867e8a47f8c9770b1542b42":[1,1,0,6,59],
 "structnmodl_1_1codegen_1_1_codegen_info.html#a4ff9a275178c249645a980dad11a7c10":[1,1,0,6,45],
 "structnmodl_1_1codegen_1_1_codegen_info.html#a505912755f498817e454ad75c2f4bf26":[1,1,0,6,80],
@@ -247,7 +249,5 @@ var NAVTREEINDEX35 =
 "structnmodl_1_1visitor_1_1_sympy_replace_solutions_visitor_1_1_statement_dispenser.html#aa1b038a1a5a13d89b2d148d9c3f46e85":[1,8,0,20,1,7],
 "structnmodl_1_1visitor_1_1_sympy_replace_solutions_visitor_1_1_statement_dispenser.html#adcaad0bbd226683a9d6072f1da606f63":[1,8,0,20,1,4],
 "structnmodl_1_1visitor_1_1_sympy_replace_solutions_visitor_1_1_statement_dispenser.html#ae4109ef5f92187d68ea0a05e4d9b9104":[1,8,0,20,1,1],
-"structnmodl_1_1visitor_1_1_sympy_replace_solutions_visitor_1_1_statement_dispenser.html#af3f7314423bdcb31729eb2f943ae739a":[1,8,0,20,1,5],
-"suffix_8hpp.html":[4,0,0,0,0,0,0,124],
-"suffix_8hpp_source.html":[4,0,0,0,0,0,0,124]
+"structnmodl_1_1visitor_1_1_sympy_replace_solutions_visitor_1_1_statement_dispenser.html#af3f7314423bdcb31729eb2f943ae739a":[1,8,0,20,1,5]
 };
