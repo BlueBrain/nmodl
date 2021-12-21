@@ -7,6 +7,7 @@ var searchData=
   ['independentblock',['IndependentBlock',['../classnmodl_1_1ast_1_1_independent_block.html',1,'nmodl::ast']]],
   ['independentdefinition',['IndependentDefinition',['../classnmodl_1_1ast_1_1_independent_definition.html',1,'nmodl::ast']]],
   ['indexedname',['IndexedName',['../classnmodl_1_1ast_1_1_indexed_name.html',1,'nmodl::ast']]],
+  ['indexednamevisitor',['IndexedNameVisitor',['../classnmodl_1_1visitor_1_1_indexed_name_visitor.html',1,'nmodl::visitor']]],
   ['indexremover',['IndexRemover',['../classnmodl_1_1visitor_1_1_index_remover.html',1,'nmodl::visitor']]],
   ['indexsemantics',['IndexSemantics',['../structnmodl_1_1codegen_1_1_index_semantics.html',1,'nmodl::codegen']]],
   ['indexvariableinfo',['IndexVariableInfo',['../structnmodl_1_1codegen_1_1_index_variable_info.html',1,'nmodl::codegen']]],

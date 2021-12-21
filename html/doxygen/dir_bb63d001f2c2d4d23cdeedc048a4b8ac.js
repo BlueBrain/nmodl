@@ -16,6 +16,7 @@ var dir_bb63d001f2c2d4d23cdeedc048a4b8ac =
     [ "misc.cpp", "misc_8cpp.html", "misc_8cpp" ],
     [ "neuron_solve.cpp", "neuron__solve_8cpp.html", "neuron__solve_8cpp" ],
     [ "nmodl.cpp", "nmodl_8cpp.html", "nmodl_8cpp" ],
+    [ "node_index.cpp", "node__index_8cpp.html", "node__index_8cpp" ],
     [ "perf.cpp", "perf_8cpp.html", "perf_8cpp" ],
     [ "rename.cpp", "rename_8cpp.html", "rename_8cpp" ],
     [ "semantic_analysis.cpp", "semantic__analysis_8cpp.html", "semantic__analysis_8cpp" ],

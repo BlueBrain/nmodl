@@ -137,6 +137,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_global_to_range_visitor.html">GlobalToRangeVisitor</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classnmodl_1_1visitor_1_1_visitor.html" title="Abstract base class for all visitors implementation. ">Visitor</a> to convert GLOBAL variables to RANGE variables.  <a href="classnmodl_1_1visitor_1_1_global_to_range_visitor.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_indexed_name_visitor.html">IndexedNameVisitor</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get node name with indexed for the IndexedName node and the dependencies of DiffEqExpression node.  <a href="classnmodl_1_1visitor_1_1_indexed_name_visitor.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_index_remover.html">IndexRemover</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper visitor to replace index of array variable with integer.  <a href="classnmodl_1_1visitor_1_1_index_remover.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -454,7 +457,7 @@ Functions</h2></td></tr>
 
 <p>Add empty local statement to given block if already doesn't exist. </p>
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00071">71</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00072">72</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -485,7 +488,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>each block should already have local statement </p>
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00080">80</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00081">81</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -517,7 +520,7 @@ Functions</h2></td></tr>
 
 <p>Add new local variable to the block. </p>
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00094">94</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00095">95</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -553,7 +556,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00099">99</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00100">100</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -585,7 +588,7 @@ Functions</h2></td></tr>
 
 <p>Checks whether block contains a call to a particular function. </p>
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00182">182</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00183">183</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -714,7 +717,7 @@ Functions</h2></td></tr>
 <p>We create dummy nmodl procedure containing given code statement and then parse it using NMODL parser. As there will be only one block with single statement, we return first statement.</p>
 <dl class="todo"><dt><b><a class="el" href="todo.html#_todo000062">Todo:</a></b></dt><dd>Need to revisit this during code generation passes to make sure if all statements can be part of procedure block. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00114">114</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00115">115</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -738,7 +741,7 @@ Functions</h2></td></tr>
 <p>Create ast statement block node from given code in string format.</p>
 <p>We create dummy nmodl procedure containing given code statement and then parse it using NMODL parser. As there will be only one block with single statement, we return first statement. </p>
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00143">143</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00144">144</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -770,7 +773,7 @@ Functions</h2></td></tr>
 
 <p>Same as for create_statement but for vectors of strings. </p>
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00124">124</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00125">125</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -838,7 +841,7 @@ Functions</h2></td></tr>
 
 <p>Return set of strings with the names of all global variables. </p>
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00158">158</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00159">159</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -860,7 +863,7 @@ Functions</h2></td></tr>
 
 <p>Return pointer to local statement in the given block, otherwise nullptr. </p>
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00061">61</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00062">62</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -898,7 +901,7 @@ Functions</h2></td></tr>
 
 <p>Return new name variable by appending <code>_suffix_COUNT</code> where <code>COUNT</code> is number of times the given variable is already used. </p>
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00049">49</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00050">50</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -1125,7 +1128,7 @@ Functions</h2></td></tr>
 <p>Return a std::string in the form "original_string"_"random_string", where random_string is a string defined in the <a class="el" href="classnmodl_1_1utils_1_1_singleton_random_string.html" title="Singleton class for random strings. ">nmodl::utils::SingletonRandomString</a> for the original_string. </p>
 <p>Vars is a const ref to std::set&lt;std::string&gt; which holds the names that need to be checked for uniqueness. Choose if the "random_string" will include numbers using "use_num" We make sure that the new string does not match any string in vars AND is not a prefix for any string in vars. In this way, appending to the result will always create new unique strings </p>
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00030">30</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00031">31</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>

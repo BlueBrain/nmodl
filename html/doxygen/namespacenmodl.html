@@ -244,6 +244,12 @@ Functions</h2></td></tr>
 <tr class="memitem:a1cf829797d75f00f7307a89776d9d735"><td class="memItemLeft" align="right" valign="top">std::pair&lt; std::string, std::unordered_set&lt; std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl.html#a1cf829797d75f00f7307a89776d9d735">statement_dependencies</a> (const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_expression.html">ast::Expression</a> &gt; &amp;lhs, const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_expression.html">ast::Expression</a> &gt; &amp;rhs)</td></tr>
 <tr class="memdesc:a1cf829797d75f00f7307a89776d9d735"><td class="mdescLeft">&#160;</td><td class="mdescRight">If <code>lhs</code> and <code>rhs</code> combined represent an assignment (we assume to have an "=" in between them) we extract the variables on which the assigned variable depends on.  <a href="#a1cf829797d75f00f7307a89776d9d735">More...</a><br /></td></tr>
 <tr class="separator:a1cf829797d75f00f7307a89776d9d735"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63b20bd823506ecccb7c2c79d5b153f2"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl.html#a63b20bd823506ecccb7c2c79d5b153f2">get_indexed_name</a> (const <a class="el" href="classnmodl_1_1ast_1_1_indexed_name.html">ast::IndexedName</a> &amp;node)</td></tr>
+<tr class="memdesc:a63b20bd823506ecccb7c2c79d5b153f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given a Indexed node, return the name with index.  <a href="#a63b20bd823506ecccb7c2c79d5b153f2">More...</a><br /></td></tr>
+<tr class="separator:a63b20bd823506ecccb7c2c79d5b153f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a65f5a4e348e6aae405a2087dc9b003cb"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl.html#a65f5a4e348e6aae405a2087dc9b003cb">get_full_var_name</a> (const <a class="el" href="classnmodl_1_1ast_1_1_var_name.html">ast::VarName</a> &amp;node)</td></tr>
+<tr class="memdesc:a65f5a4e348e6aae405a2087dc9b003cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given a VarName node, return the full var name including index.  <a href="#a65f5a4e348e6aae405a2087dc9b003cb">More...</a><br /></td></tr>
+<tr class="separator:a65f5a4e348e6aae405a2087dc9b003cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a457c69d76cbb7d9318af1fc030946326"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a457c69d76cbb7d9318af1fc030946326"><td class="memTemplItemLeft" align="right" valign="top">std::enable_if&lt; std::is_base_of&lt; <a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a>, T &gt;::value, std::string &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenmodl.html#a457c69d76cbb7d9318af1fc030946326">to_nmodl</a> (const std::shared_ptr&lt; T &gt; &amp;node, const std::set&lt; <a class="el" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033">ast::AstNodeType</a> &gt; &amp;exclude_types={})</td></tr>
 <tr class="memdesc:a457c69d76cbb7d9318af1fc030946326"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given a shared pointer to an AST node, return the NMODL string representation.  <a href="#a457c69d76cbb7d9318af1fc030946326">More...</a><br /></td></tr>
@@ -398,7 +404,7 @@ Variables</h2></td></tr>
 
 <p>traverse <em>node</em> recursively and collect nodes of given <em>types</em> </p>
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00194">194</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00195">195</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -430,7 +436,7 @@ Variables</h2></td></tr>
 
 <p>traverse <em>node</em> recursively and collect nodes of given <em>types</em> </p>
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00201">201</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00202">202</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -515,6 +521,50 @@ Variables</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>vector of NEURON variables </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="token__mapping_8cpp_source.html#l00376">376</a> of file <a class="el" href="token__mapping_8cpp_source.html">token_mapping.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a65f5a4e348e6aae405a2087dc9b003cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a65f5a4e348e6aae405a2087dc9b003cb">&#9670;&nbsp;</a></span>get_full_var_name()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string nmodl::get_full_var_name </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classnmodl_1_1ast_1_1_var_name.html">ast::VarName</a> &amp;&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Given a VarName node, return the full var name including index. </p>
+
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00266">266</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a63b20bd823506ecccb7c2c79d5b153f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a63b20bd823506ecccb7c2c79d5b153f2">&#9670;&nbsp;</a></span>get_indexed_name()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string nmodl::get_indexed_name </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classnmodl_1_1ast_1_1_indexed_name.html">ast::IndexedName</a> &amp;&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Given a Indexed node, return the name with index. </p>
+
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00262">262</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -793,7 +843,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00207">207</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00208">208</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -826,7 +876,7 @@ Variables</h2></td></tr>
 <p>If <code>lhs</code> and <code>rhs</code> combined represent an assignment (we assume to have an "=" in between them) we extract the variables on which the assigned variable depends on. </p>
 <p>We provide the input with lhs and rhs because there are a few nodes that have this similar structure but slightly different naming (binaryExpression, diff_eq_expression, linExpression) </p>
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00237">237</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00238">238</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -910,7 +960,7 @@ Variables</h2></td></tr>
 
 <p>Given AST node, return the JSON string representation. </p>
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00226">226</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00227">227</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -976,7 +1026,7 @@ template&lt;typename T &gt; </div>
 
 <p>Given AST node, return the NMODL string representation. </p>
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00218">218</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00219">219</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>

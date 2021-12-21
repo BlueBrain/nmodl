@@ -27,6 +27,7 @@ var searchData=
   ['del2',['del2',['../classnmodl_1_1ast_1_1_partial_boundary.html#a1e2a1f6605358eb32a26851bc3c45aa3',1,'nmodl::ast::PartialBoundary']]],
   ['denominator',['denominator',['../classnmodl_1_1units_1_1_unit.html#ac988479210da7cb06b3a7598c2afdbae',1,'nmodl::units::Unit']]],
   ['depend_5fvars',['depend_vars',['../classnmodl_1_1ast_1_1_table_statement.html#a65fa1129be49411a93966570c1305a51',1,'nmodl::ast::TableStatement']]],
+  ['dependencies',['dependencies',['../classnmodl_1_1visitor_1_1_indexed_name_visitor.html#ade1aecff238d2ca5022743048763c102',1,'nmodl::visitor::IndexedNameVisitor']]],
   ['dependency_5fmap',['dependency_map',['../structnmodl_1_1visitor_1_1_sympy_replace_solutions_visitor_1_1_statement_dispenser.html#a5d6d6fc78aaafbfd393bfa73b10aa6ac',1,'nmodl::visitor::SympyReplaceSolutionsVisitor::StatementDispenser']]],
   ['derf',['DERF',['../modl_8h.html#a03f3d7e17b9331f1e64621b43b411fc4',1,'modl.h']]],
   ['deriv',['deriv',['../structnmodl_1_1parser_1_1diffeq_1_1_term.html#af6ed229692db9a83f4183aac3d830ee4',1,'nmodl::parser::diffeq::Term']]],
