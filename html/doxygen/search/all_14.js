@@ -28,7 +28,7 @@ var searchData=
   ['unit2',['unit2',['../classnmodl_1_1ast_1_1_factor_def.html#a842b861427a497f3ee615d14babf6113',1,'nmodl::ast::FactorDef::unit2()'],['../classnmodl_1_1ast_1_1_unit_def.html#aad0139082153e72d94002e4e24b83055',1,'nmodl::ast::UnitDef::unit2()']]],
   ['unit_5fblock',['UNIT_BLOCK',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033aa54d6f2049cfa2512325e15bc0eec7b9',1,'nmodl::ast']]],
   ['unit_5fblock_2ehpp',['unit_block.hpp',['../unit__block_8hpp.html',1,'']]],
-  ['unit_5fdef',['UNIT_DEF',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a0388f8b1db741cd87766daf89bff5a7e',1,'nmodl::ast::UNIT_DEF()'],['../namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbaf12c974f6e07aad66d50de05b14c20b9',1,'nmodl::symtab::syminfo::unit_def()']]],
+  ['unit_5fdef',['unit_def',['../namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbaf12c974f6e07aad66d50de05b14c20b9',1,'nmodl::symtab::syminfo::unit_def()'],['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a0388f8b1db741cd87766daf89bff5a7e',1,'nmodl::ast::UNIT_DEF()']]],
   ['unit_5fdef_2ehpp',['unit_def.hpp',['../unit__def_8hpp.html',1,'']]],
   ['unit_5fdimensions',['unit_dimensions',['../classnmodl_1_1units_1_1_unit.html#a47e7e66491b6ad16539faf5c21c64da8',1,'nmodl::units::Unit']]],
   ['unit_5fdriver_2ecpp',['unit_driver.cpp',['../unit__driver_8cpp.html',1,'']]],

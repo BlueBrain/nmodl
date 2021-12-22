@@ -161,6 +161,8 @@ var searchData=
   ['nrn_5fcur_5frequired',['nrn_cur_required',['../classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a898a524f0cc7927ec2299a6ad9648be1',1,'nmodl::codegen::CodegenCVisitor']]],
   ['nrn_5fdestructor_5fmethod',['NRN_DESTRUCTOR_METHOD',['../namespacenmodl_1_1codegen_1_1naming.html#aa8e13564c94423c5e0bbb8ff593da54f',1,'nmodl::codegen::naming']]],
   ['nrn_5finit_5fmethod',['NRN_INIT_METHOD',['../namespacenmodl_1_1codegen_1_1naming.html#a1db378304b1b4c6ce0e1410895c179dd',1,'nmodl::codegen::naming']]],
+  ['nrn_5fpragma_5facc',['nrn_pragma_acc',['../partial__piv__lu_8h.html#a8ebf03f382ae6230be2a510f717c6fbd',1,'partial_piv_lu.h']]],
+  ['nrn_5fpragma_5fomp',['nrn_pragma_omp',['../partial__piv__lu_8h.html#a8069ac32a9bb2504f40ef1d7027c325f',1,'partial_piv_lu.h']]],
   ['nrn_5fstate_5fblock',['nrn_state_block',['../structnmodl_1_1codegen_1_1_codegen_info.html#a611d35acab66592571befe3589b276cf',1,'nmodl::codegen::CodegenInfo::nrn_state_block()'],['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033af189eb9042faaf839ba0d1de89355374',1,'nmodl::ast::NRN_STATE_BLOCK()']]],
   ['nrn_5fstate_5fblock_2ehpp',['nrn_state_block.hpp',['../nrn__state__block_8hpp.html',1,'']]],
   ['nrn_5fstate_5fhas_5feigen_5fsolver_5fblock',['nrn_state_has_eigen_solver_block',['../structnmodl_1_1codegen_1_1_codegen_info.html#a59fc90ae73af88ec567ddcdaf7644fa0',1,'nmodl::codegen::CodegenInfo']]],

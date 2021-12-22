@@ -743,9 +743,12 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a31d7b0c263809e51473f6769c402fb53"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a31d7b0c263809e51473f6769c402fb53">nrn_cur_reduction_loop_required</a> () override</td></tr>
 <tr class="memdesc:a31d7b0c263809e51473f6769c402fb53"><td class="mdescLeft">&#160;</td><td class="mdescRight">if reduction block in nrn_cur required  <a href="#a31d7b0c263809e51473f6769c402fb53">More...</a><br /></td></tr>
 <tr class="separator:a31d7b0c263809e51473f6769c402fb53"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa2da3c12a3e5ef399f5847e661134552"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#aa2da3c12a3e5ef399f5847e661134552">print_global_variable_device_create_annotation</a> () override</td></tr>
-<tr class="memdesc:aa2da3c12a3e5ef399f5847e661134552"><td class="mdescLeft">&#160;</td><td class="mdescRight">create global variable on the device  <a href="#aa2da3c12a3e5ef399f5847e661134552">More...</a><br /></td></tr>
-<tr class="separator:aa2da3c12a3e5ef399f5847e661134552"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a956438a374475b589e28fd63da100978"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a956438a374475b589e28fd63da100978">print_global_variable_device_create_annotation_pre</a> () override</td></tr>
+<tr class="memdesc:a956438a374475b589e28fd63da100978"><td class="mdescLeft">&#160;</td><td class="mdescRight">create global variable on the device  <a href="#a956438a374475b589e28fd63da100978">More...</a><br /></td></tr>
+<tr class="separator:a956438a374475b589e28fd63da100978"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aabaad23a0b17fd20a380954bee779422"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#aabaad23a0b17fd20a380954bee779422">print_global_variable_device_create_annotation_post</a> () override</td></tr>
+<tr class="memdesc:aabaad23a0b17fd20a380954bee779422"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the pragma annotation needed after a global variables that must be created on the device.  <a href="#aabaad23a0b17fd20a380954bee779422">More...</a><br /></td></tr>
+<tr class="separator:aabaad23a0b17fd20a380954bee779422"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab76d2ea624e89d175ff3456005e410da"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#ab76d2ea624e89d175ff3456005e410da">print_global_variable_device_update_annotation</a> () override</td></tr>
 <tr class="memdesc:ab76d2ea624e89d175ff3456005e410da"><td class="mdescLeft">&#160;</td><td class="mdescRight">update global variable from host to the device  <a href="#ab76d2ea624e89d175ff3456005e410da">More...</a><br /></td></tr>
 <tr class="separator:ab76d2ea624e89d175ff3456005e410da"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1380,7 +1383,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8hpp_source.html#l00138">138</a> of file <a class="el" href="codegen__acc__visitor_8hpp_source.html">codegen_acc_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8hpp_source.html#l00139">139</a> of file <a class="el" href="codegen__acc__visitor_8hpp_source.html">codegen_acc_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1430,7 +1433,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8hpp_source.html#l00144">144</a> of file <a class="el" href="codegen__acc__visitor_8hpp_source.html">codegen_acc_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8hpp_source.html#l00145">145</a> of file <a class="el" href="codegen__acc__visitor_8hpp_source.html">codegen_acc_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1462,7 +1465,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a5c4d821fb0e77328f582fc2b5026c65a">nmodl::codegen::CodegenCVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00091">91</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00094">94</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1505,7 +1508,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#acdd362dd3aa2eafde5806b70a1ddf1c6">nmodl::codegen::CodegenCVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00263">263</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00273">273</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1536,7 +1539,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a3fa3d39e2b0ffafaab35c54c962aa6f1">nmodl::codegen::CodegenCVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00244">244</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00247">247</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1570,7 +1573,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#aa7e1b78449a428dfee7f3eb77a9cee4b">nmodl::codegen::CodegenCVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00127">127</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00130">130</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1601,7 +1604,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ae2a49f740c86c3442faefc13b46bad67">nmodl::codegen::CodegenCVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00059">59</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00062">62</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1633,7 +1636,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a8f1967d146ea3387601e748a3fb0dfb0">nmodl::codegen::CodegenCVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00066">66</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00070">70</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1701,7 +1704,7 @@ for(int id=0; id&lt;nodecount; id++) {</pre>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ab6599ed829d90c09d172ea47272c4577">nmodl::codegen::CodegenCVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00298">298</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00308">308</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1732,7 +1735,7 @@ for(int id=0; id&lt;nodecount; id++) {</pre>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a77b15b945cdbc68d4f53dd9d031e40b5">nmodl::codegen::CodegenCVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00303">303</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00314">314</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1763,7 +1766,7 @@ for(int id=0; id&lt;nodecount; id++) {</pre>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a03072394ac710ee93502cfe4a7ff4bfb">nmodl::codegen::CodegenCVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00308">308</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00320">320</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1794,7 +1797,7 @@ for(int id=0; id&lt;nodecount; id++) {</pre>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a7e644c000f3f1708abe72bc77f564afb">nmodl::codegen::CodegenCVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00332">332</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00349">349</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1852,7 +1855,7 @@ for(int id=0; id&lt;nodecount; id++) {</pre>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a407bea37d7d30af41ede909cdf0dc6fa">nmodl::codegen::CodegenCVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00139">139</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00142">142</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1883,12 +1886,12 @@ for(int id=0; id&lt;nodecount; id++) {</pre>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ac85b67c8e0e11f0eaefb812f1744f7e0">nmodl::codegen::CodegenCVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00208">208</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00211">211</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
-<a id="aa2da3c12a3e5ef399f5847e661134552"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa2da3c12a3e5ef399f5847e661134552">&#9670;&nbsp;</a></span>print_global_variable_device_create_annotation()</h2>
+<a id="aabaad23a0b17fd20a380954bee779422"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aabaad23a0b17fd20a380954bee779422">&#9670;&nbsp;</a></span>print_global_variable_device_create_annotation_post()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1897,7 +1900,40 @@ for(int id=0; id&lt;nodecount; id++) {</pre>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void nmodl::codegen::CodegenAccVisitor::print_global_variable_device_create_annotation </td>
+          <td class="memname">void nmodl::codegen::CodegenAccVisitor::print_global_variable_device_create_annotation_post </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Print the pragma annotation needed after a global variables that must be created on the device. </p>
+<p>This always comes after a matching call to print_global_variable_device_create_annotation_pre.</p>
+<dl class="section note"><dt>Note</dt><dd>This is not used for the C backend </dd></dl>
+
+<p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#aa23932cc8fac20be9db85275262c7b82">nmodl::codegen::CodegenCVisitor</a>.</p>
+
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00258">258</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a956438a374475b589e28fd63da100978"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a956438a374475b589e28fd63da100978">&#9670;&nbsp;</a></span>print_global_variable_device_create_annotation_pre()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void nmodl::codegen::CodegenAccVisitor::print_global_variable_device_create_annotation_pre </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -1912,9 +1948,9 @@ for(int id=0; id&lt;nodecount; id++) {</pre>
 
 <p>create global variable on the device </p>
 
-<p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#af9187e006ff31ef8fe3f020086b2779c">nmodl::codegen::CodegenCVisitor</a>.</p>
+<p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ab925ad846ba49efd4c132327dd05c6c5">nmodl::codegen::CodegenCVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00249">249</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00252">252</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1945,7 +1981,7 @@ for(int id=0; id&lt;nodecount; id++) {</pre>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a5f545bed0818b1a5b30ad714f6268ba0">nmodl::codegen::CodegenCVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00256">256</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00265">265</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1976,7 +2012,7 @@ for(int id=0; id&lt;nodecount; id++) {</pre>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a375c267d5b884b9dfec38d97aea892bc">nmodl::codegen::CodegenCVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00290">290</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00298">298</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2009,7 +2045,7 @@ for(int id=0; id&lt;nodecount; id++) {</pre>
 <div class="fragment"><div class="line"><span class="keywordtype">void</span> nrn_state(...) {</div><div class="line"><span class="preprocessor">    #pragma acc data present (nt, ml...)</span></div><div class="line">    {</div><div class="line"></div><div class="line">    }</div><div class="line">}</div></div><!-- fragment --> 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a31fb779c3407ce7e590f01cb26b696ac">nmodl::codegen::CodegenCVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00165">165</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00168">168</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2041,7 +2077,7 @@ for(int id=0; id&lt;nodecount; id++) {</pre>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a66b7f00c0e753978da5f42475ee85de4">nmodl::codegen::CodegenCVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00231">231</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00234">234</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2072,7 +2108,7 @@ for(int id=0; id&lt;nodecount; id++) {</pre>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#af0ee2415c65c2cf5e11141c4e831b725">nmodl::codegen::CodegenCVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00096">96</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00099">99</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2106,7 +2142,7 @@ for(int id=0; id&lt;nodecount; id++) {</pre>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ae10e9f63d0ee5ff8347f2cb088dff5b5">nmodl::codegen::CodegenCVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00184">184</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00187">187</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2137,7 +2173,7 @@ for(int id=0; id&lt;nodecount; id++) {</pre>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ab258d958adaee49955a26edd88332094">nmodl::codegen::CodegenCVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00192">192</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00195">195</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2168,7 +2204,7 @@ for(int id=0; id&lt;nodecount; id++) {</pre>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a78bb0db813ac827668ed528f7de6d9a3">nmodl::codegen::CodegenCVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00327">327</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00343">343</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2199,7 +2235,7 @@ for(int id=0; id&lt;nodecount; id++) {</pre>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a9a755cf039492f8d0cdc386058d32d59">nmodl::codegen::CodegenCVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00313">313</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00328">328</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2230,7 +2266,7 @@ for(int id=0; id&lt;nodecount; id++) {</pre>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a14fe83aa07abd33a97f19f1ce99cd2a7">nmodl::codegen::CodegenCVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00318">318</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00334">334</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2262,7 +2298,7 @@ for(int id=0; id&lt;nodecount; id++) {</pre>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a00b98cabff21c58ac504f42defa9c77f">nmodl::codegen::CodegenCVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00135">135</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00138">138</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2293,7 +2329,7 @@ for(int id=0; id&lt;nodecount; id++) {</pre>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a6b77c570750599f4ab0850859cd94e04">nmodl::codegen::CodegenCVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00274">274</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00282">282</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2324,7 +2360,7 @@ for(int id=0; id&lt;nodecount; id++) {</pre>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a84552abb22773a2b854fed984d91b8e5">nmodl::codegen::CodegenCVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00223">223</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00226">226</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2355,7 +2391,7 @@ for(int id=0; id&lt;nodecount; id++) {</pre>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a19449f68f8e8dd9073451db8adcb9917">nmodl::codegen::CodegenCVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00199">199</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00202">202</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2386,7 +2422,7 @@ for(int id=0; id&lt;nodecount; id++) {</pre>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a9cc6bb467819f8b8a7c639179e743c6f">nmodl::codegen::CodegenCVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00239">239</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00242">242</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>

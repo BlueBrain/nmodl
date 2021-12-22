@@ -94,7 +94,8 @@ $(document).ready(function(){initNavTree('partial__piv__lu_8h.html','');});
 <div class="title">partial_piv_lu.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;Eigen/Dense&quot;</code><br />
+<div class="textblock"><code>#include &quot;coreneuron/utils/offload.hpp&quot;</code><br />
+<code>#include &quot;Eigen/Dense&quot;</code><br />
 <code>#include &quot;Eigen/LU&quot;</code><br />
 </div>
 <p><a href="partial__piv__lu_8h_source.html">Go to the source code of this file.</a></p>
@@ -110,9 +111,10 @@ Typedefs</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a62b92406eff0c88501c2d1feaf55e5aa"><td class="memTemplParams" colspan="2">template&lt;int dim&gt; </td></tr>
-<tr class="memitem:a62b92406eff0c88501c2d1feaf55e5aa"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="partial__piv__lu_8h.html#a8c4f72884cc84c9f70f2e894eeeaaf75">VecType</a>&lt; dim &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="partial__piv__lu_8h.html#a62b92406eff0c88501c2d1feaf55e5aa">partialPivLu</a> (const <a class="el" href="partial__piv__lu_8h.html#a2a6ac9c88bd4c9f978ae2958511a5bfb">MatType</a>&lt; dim &gt; &amp;, const <a class="el" href="partial__piv__lu_8h.html#a8c4f72884cc84c9f70f2e894eeeaaf75">VecType</a>&lt; dim &gt; &amp;)</td></tr>
-<tr class="separator:a62b92406eff0c88501c2d1feaf55e5aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8069ac32a9bb2504f40ef1d7027c325f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="partial__piv__lu_8h.html#a8069ac32a9bb2504f40ef1d7027c325f">nrn_pragma_omp</a> (declare target) <a class="el" href="partial__piv__lu_8h.html#a8ebf03f382ae6230be2a510f717c6fbd">nrn_pragma_acc</a>(routine seq) template&lt; int dim &gt; EIGEN_DEVICE_FUNC <a class="el" href="partial__piv__lu_8h.html#a8c4f72884cc84c9f70f2e894eeeaaf75">VecType</a>&lt; dim &gt; partialPivLu(const <a class="el" href="partial__piv__lu_8h.html#a2a6ac9c88bd4c9f978ae2958511a5bfb">MatType</a>&lt; dim &gt; &amp;</td></tr>
+<tr class="separator:a8069ac32a9bb2504f40ef1d7027c325f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ebf03f382ae6230be2a510f717c6fbd"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="partial__piv__lu_8h.html#a8c4f72884cc84c9f70f2e894eeeaaf75">VecType</a>&lt; dim &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="partial__piv__lu_8h.html#a8ebf03f382ae6230be2a510f717c6fbd">nrn_pragma_acc</a> (routine seq) EIGEN_DEVICE_FUNC <a class="el" href="partial__piv__lu_8h.html#a8c4f72884cc84c9f70f2e894eeeaaf75">VecType</a>&lt; 1 &gt; partialPivLu1(const <a class="el" href="partial__piv__lu_8h.html#a2a6ac9c88bd4c9f978ae2958511a5bfb">MatType</a>&lt; 1 &gt; &amp;</td></tr>
+<tr class="separator:a8ebf03f382ae6230be2a510f717c6fbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Typedef Documentation</h2>
 <a id="a2a6ac9c88bd4c9f978ae2958511a5bfb"></a>
@@ -129,7 +131,7 @@ template&lt;int dim&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="partial__piv__lu_8h_source.html#l00014">14</a> of file <a class="el" href="partial__piv__lu_8h_source.html">partial_piv_lu.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="partial__piv__lu_8h_source.html#l00016">16</a> of file <a class="el" href="partial__piv__lu_8h_source.html">partial_piv_lu.h</a>.</p>
 
 </div>
 </div>
@@ -147,35 +149,41 @@ template&lt;int dim&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="partial__piv__lu_8h_source.html#l00017">17</a> of file <a class="el" href="partial__piv__lu_8h_source.html">partial_piv_lu.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="partial__piv__lu_8h_source.html#l00019">19</a> of file <a class="el" href="partial__piv__lu_8h_source.html">partial_piv_lu.h</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="a62b92406eff0c88501c2d1feaf55e5aa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a62b92406eff0c88501c2d1feaf55e5aa">&#9670;&nbsp;</a></span>partialPivLu()</h2>
+<a id="a8ebf03f382ae6230be2a510f717c6fbd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8ebf03f382ae6230be2a510f717c6fbd">&#9670;&nbsp;</a></span>nrn_pragma_acc()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<div class="memtemplate">
-template&lt;int dim&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="partial__piv__lu_8h.html#a8c4f72884cc84c9f70f2e894eeeaaf75">VecType</a>&lt;dim&gt; partialPivLu </td>
+          <td class="memname">const <a class="el" href="partial__piv__lu_8h.html#a8c4f72884cc84c9f70f2e894eeeaaf75">VecType</a>&lt; dim &gt; const <a class="el" href="partial__piv__lu_8h.html#a8c4f72884cc84c9f70f2e894eeeaaf75">VecType</a>&lt; 1 &gt; const <a class="el" href="partial__piv__lu_8h.html#a8c4f72884cc84c9f70f2e894eeeaaf75">VecType</a>&lt; 2 &gt; const <a class="el" href="partial__piv__lu_8h.html#a8c4f72884cc84c9f70f2e894eeeaaf75">VecType</a>&lt; 3 &gt; const <a class="el" href="partial__piv__lu_8h.html#a8c4f72884cc84c9f70f2e894eeeaaf75">VecType</a>&lt; 4 &gt; const <a class="el" href="partial__piv__lu_8h.html#a8c4f72884cc84c9f70f2e894eeeaaf75">VecType</a>&lt; 5 &gt; const <a class="el" href="partial__piv__lu_8h.html#a8c4f72884cc84c9f70f2e894eeeaaf75">VecType</a>&lt; 6 &gt; const <a class="el" href="partial__piv__lu_8h.html#a8c4f72884cc84c9f70f2e894eeeaaf75">VecType</a>&lt; 7 &gt; const <a class="el" href="partial__piv__lu_8h.html#a8c4f72884cc84c9f70f2e894eeeaaf75">VecType</a>&lt; 8 &gt; const <a class="el" href="partial__piv__lu_8h.html#a8c4f72884cc84c9f70f2e894eeeaaf75">VecType</a>&lt; 9 &gt; const <a class="el" href="partial__piv__lu_8h.html#a8c4f72884cc84c9f70f2e894eeeaaf75">VecType</a>&lt; 10 &gt; const <a class="el" href="partial__piv__lu_8h.html#a8c4f72884cc84c9f70f2e894eeeaaf75">VecType</a>&lt; 11 &gt; const <a class="el" href="partial__piv__lu_8h.html#a8c4f72884cc84c9f70f2e894eeeaaf75">VecType</a>&lt; 12 &gt; const <a class="el" href="partial__piv__lu_8h.html#a8c4f72884cc84c9f70f2e894eeeaaf75">VecType</a>&lt; 13 &gt; const <a class="el" href="partial__piv__lu_8h.html#a8c4f72884cc84c9f70f2e894eeeaaf75">VecType</a>&lt; 14 &gt; const <a class="el" href="partial__piv__lu_8h.html#a8c4f72884cc84c9f70f2e894eeeaaf75">VecType</a>&lt; 15 &gt; &amp; nrn_pragma_acc </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="partial__piv__lu_8h.html#a2a6ac9c88bd4c9f978ae2958511a5bfb">MatType</a>&lt; dim &gt; &amp;&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramtype">routine&#160;</td>
+          <td class="paramname"><em>seq</em></td><td>)</td>
+          <td> const &amp;</td>
         </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8069ac32a9bb2504f40ef1d7027c325f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8069ac32a9bb2504f40ef1d7027c325f">&#9670;&nbsp;</a></span>nrn_pragma_omp()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
         <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="partial__piv__lu_8h.html#a8c4f72884cc84c9f70f2e894eeeaaf75">VecType</a>&lt; dim &gt; &amp;&#160;</td>
-          <td class="paramname">&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="memname">nrn_pragma_omp </td>
+          <td>(</td>
+          <td class="paramtype">declare&#160;</td>
+          <td class="paramname"><em>target</em></td><td>)</td>
+          <td> const &amp;</td>
         </tr>
       </table>
 </div><div class="memdoc">
