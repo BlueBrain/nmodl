@@ -22,11 +22,9 @@ using nmodl::parser::NmodlDriver;
 using nmodl::test_utils::reindent_text;
 
 /// Helper for creating C codegen visitor
-std::shared_ptr<CodegenCVisitor> create_c_visitor(const std::string& text, std::stringstream& ss) {
-    /// parse mod file and create AST
-    NmodlDriver driver;
-    const auto& ast = driver.parse_string(text);
-
+std::shared_ptr<CodegenCVisitor> create_c_visitor(const std::shared_ptr<ast::Program>& ast,
+                                                  const std::string& text,
+                                                  std::stringstream& ss) {
     /// construct symbol table
     SymtabVisitor().visit_program(*ast);
 
@@ -38,8 +36,9 @@ std::shared_ptr<CodegenCVisitor> create_c_visitor(const std::string& text, std::
 
 /// print instance structure for testing purpose
 std::string get_instance_var_setup_function(std::string& nmodl_text) {
+    const auto& ast = NmodlDriver().parse_string(nmodl_text);
     std::stringstream ss;
-    auto cvisitor = create_c_visitor(nmodl_text, ss);
+    auto cvisitor = create_c_visitor(ast, nmodl_text, ss);
     cvisitor->print_instance_variable_setup();
     return reindent_text(ss.str());
 }
@@ -249,7 +248,10 @@ SCENARIO("Check parameter constness with VERBATIM block",
 
         THEN("Variable used in VERBATIM shouldn't be marked as const") {
             std::stringstream ss;
-            auto cvisitor = create_c_visitor(nmodl_text, ss);
+
+            /// parse mod file & print mechanism structure
+            const auto& ast = NmodlDriver().parse_string(nmodl_text);
+            auto cvisitor = create_c_visitor(ast, nmodl_text, ss);
             cvisitor->print_mechanism_range_var_structure();
 
             std::string expected_code = R"(
