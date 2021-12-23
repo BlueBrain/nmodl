@@ -78,6 +78,7 @@ var structnmodl_1_1codegen_1_1_codegen_info =
     [ "top_verbatim_blocks", "structnmodl_1_1codegen_1_1_codegen_info.html#a786505a20434f555d6366e8a9ef1b281", null ],
     [ "tqitem_index", "structnmodl_1_1codegen_1_1_codegen_info.html#a333ca1f4d9a3d3d705ba9b170efb6f5a", null ],
     [ "use_ion_variables", "structnmodl_1_1codegen_1_1_codegen_info.html#a59d67652a1ed0ffaacedb42e8d47b3eb", null ],
+    [ "variables_in_verbatim", "structnmodl_1_1codegen_1_1_codegen_info.html#af61629cf3b042744e0ae3655e807e52a", null ],
     [ "vectorize", "structnmodl_1_1codegen_1_1_codegen_info.html#a44d3987c596ef9005b1f05fe34cc2b27", null ],
     [ "watch_count", "structnmodl_1_1codegen_1_1_codegen_info.html#ac4cde74eb4ad06d91359c7896e3575f1", null ],
     [ "watch_statements", "structnmodl_1_1codegen_1_1_codegen_info.html#a505912755f498817e454ad75c2f4bf26", null ],

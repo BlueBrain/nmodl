@@ -96,6 +96,7 @@ $(document).ready(function(){initNavTree('test_2unit_2codegen_2codegen__c__visit
 <div class="textblock"><code>#include &lt;catch/catch.hpp&gt;</code><br />
 <code>#include &quot;<a class="el" href="program_8hpp_source.html">ast/program.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="codegen__c__visitor_8hpp_source.html">codegen/codegen_c_visitor.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="codegen__helper__visitor_8hpp_source.html">codegen/codegen_helper_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="nmodl__driver_8hpp_source.html">parser/nmodl_driver.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="test__utils_8hpp_source.html">test/unit/utils/test_utils.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="symtab__visitor_8hpp_source.html">visitors/symtab_visitor.hpp</a>&quot;</code><br />
@@ -104,18 +105,20 @@ $(document).ready(function(){initNavTree('test_2unit_2codegen_2codegen__c__visit
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a49c078c7a8423b072d2c48e6a7fce1c8"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; CodegenCVisitor &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp.html#a49c078c7a8423b072d2c48e6a7fce1c8">create_c_visitor</a> (const std::string &amp;text, std::stringstream &amp;ss)</td></tr>
-<tr class="memdesc:a49c078c7a8423b072d2c48e6a7fce1c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper for creating C codegen visitor.  <a href="#a49c078c7a8423b072d2c48e6a7fce1c8">More...</a><br /></td></tr>
-<tr class="separator:a49c078c7a8423b072d2c48e6a7fce1c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d6192e702390c7bf21808d07cdad41a"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; CodegenCVisitor &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp.html#a0d6192e702390c7bf21808d07cdad41a">create_c_visitor</a> (const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_program.html">ast::Program</a> &gt; &amp;ast, const std::string &amp;text, std::stringstream &amp;ss)</td></tr>
+<tr class="memdesc:a0d6192e702390c7bf21808d07cdad41a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper for creating C codegen visitor.  <a href="#a0d6192e702390c7bf21808d07cdad41a">More...</a><br /></td></tr>
+<tr class="separator:a0d6192e702390c7bf21808d07cdad41a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aad099bc716a26661997af855020e2dc4"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp.html#aad099bc716a26661997af855020e2dc4">get_instance_var_setup_function</a> (std::string &amp;nmodl_text)</td></tr>
 <tr class="memdesc:aad099bc716a26661997af855020e2dc4"><td class="mdescLeft">&#160;</td><td class="mdescRight">print instance structure for testing purpose  <a href="#aad099bc716a26661997af855020e2dc4">More...</a><br /></td></tr>
 <tr class="separator:aad099bc716a26661997af855020e2dc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9c45dd7626fd81cd01383b4f8dc4e604"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp.html#a9c45dd7626fd81cd01383b4f8dc4e604">SCENARIO</a> (&quot;Check instance variable definition order&quot;, &quot;[codegen][var_order]&quot;)</td></tr>
 <tr class="separator:a9c45dd7626fd81cd01383b4f8dc4e604"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3642952acebad0f06c31a9b2bf3ea034"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp.html#a3642952acebad0f06c31a9b2bf3ea034">SCENARIO</a> (&quot;Check parameter constness with VERBATIM block&quot;, &quot;[codegen][verbatim_variable_constness]&quot;)</td></tr>
+<tr class="separator:a3642952acebad0f06c31a9b2bf3ea034"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="a49c078c7a8423b072d2c48e6a7fce1c8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a49c078c7a8423b072d2c48e6a7fce1c8">&#9670;&nbsp;</a></span>create_c_visitor()</h2>
+<a id="a0d6192e702390c7bf21808d07cdad41a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d6192e702390c7bf21808d07cdad41a">&#9670;&nbsp;</a></span>create_c_visitor()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -123,6 +126,12 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">std::shared_ptr&lt;CodegenCVisitor&gt; create_c_visitor </td>
           <td>(</td>
+          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_program.html">ast::Program</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>ast</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>text</em>, </td>
         </tr>
@@ -141,11 +150,10 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Helper for creating C codegen visitor. </p>
-<p>parse mod file and create AST</p>
 <p>construct symbol table</p>
 <p>create C code generation visitor </p>
 
-<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html#l00024">24</a> of file <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html#l00025">25</a> of file <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -167,12 +175,12 @@ Functions</h2></td></tr>
 
 <p>print instance structure for testing purpose </p>
 
-<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html#l00039">39</a> of file <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html#l00038">38</a> of file <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
 <a id="a9c45dd7626fd81cd01383b4f8dc4e604"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9c45dd7626fd81cd01383b4f8dc4e604">&#9670;&nbsp;</a></span>SCENARIO()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a9c45dd7626fd81cd01383b4f8dc4e604">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -198,6 +206,37 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html#l00046">46</a> of file <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a3642952acebad0f06c31a9b2bf3ea034"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3642952acebad0f06c31a9b2bf3ea034">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">SCENARIO </td>
+          <td>(</td>
+          <td class="paramtype">&quot;Check parameter constness with VERBATIM block&quot;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&quot;&quot;&#160;</td>
+          <td class="paramname">[codegen][verbatim_variable_constness]&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>parse mod file &amp; print mechanism structure </p>
+
+<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html#l00226">226</a> of file <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>

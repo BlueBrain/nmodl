@@ -37,6 +37,7 @@ var classnmodl_1_1codegen_1_1_codegen_helper_visitor =
     [ "visit_suffix", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a918445ffaed2bae4c01edf38b7a3a7cc", null ],
     [ "visit_table_statement", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a900ad5a010556de818cbebb627d3ab8f", null ],
     [ "visit_update_dt", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a25bd3248de560198ae2c410d7d344652", null ],
+    [ "visit_verbatim", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a92212a3394a81bd501d8fcddde0bd8fe", null ],
     [ "visit_watch", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#ac98fcbdbc8f2b054d5bb00672fb9d0e2", null ],
     [ "visit_watch_statement", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#ac01121d1dd0368351ce2e5d6a8ba2cf1", null ],
     [ "assign_lhs", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a7cb34bd62328c72fe1fabfadd868119d", null ],
