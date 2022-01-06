@@ -70,6 +70,12 @@ if(NMODL_ENABLE_PYTHON_BINDINGS)
 
   add_dependencies(_nmodl pyastgen lexer_obj util_obj)
   target_link_libraries(_nmodl PRIVATE fmt::fmt pyembed)
+  # Some of these generated files are very slow to compile; with Ninja we can put them in a separate
+  # pool where files will not be compiled in parallel
+  get_property(job_pools GLOBAL PROPERTY JOB_POOLS)
+  list(APPEND job_pools "compile_pybind=1")
+  set_property(GLOBAL PROPERTY JOB_POOLS "${job_pools}")
+  set_target_properties(_nmodl PROPERTIES JOB_POOL_COMPILE compile_pybind)
 
   # in case of wheel, python module shouldn't link to wrapper library
   if(LINK_AGAINST_PYTHON)
