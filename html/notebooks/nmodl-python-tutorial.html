@@ -319,7 +319,7 @@ div.nboutput.container div.output_area > div[class^='highlight']{
 }
 
 /* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
-.prompt a.copybtn {
+.prompt .copybtn {
     display: none;
 }
 
@@ -390,8 +390,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>%%capture
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%%capture
 ! pip install nmodl
 </pre></div>
 </div>
@@ -407,8 +406,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">nmodl.dsl</span> <span class="k">as</span> <span class="nn">nmodl</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">nmodl.dsl</span> <span class="k">as</span> <span class="nn">nmodl</span>
 </pre></div>
 </div>
 </div>
@@ -417,8 +415,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">channel</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">channel</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">NEURON  {</span>
 <span class="s2">    SUFFIX CaDynamics</span>
 <span class="s2">    USEION ca READ ica WRITE cai</span>
@@ -470,8 +467,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">driver</span> <span class="o">=</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">NmodlDriver</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">driver</span> <span class="o">=</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">NmodlDriver</span><span class="p">()</span>
 <span class="n">modast</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">parse_string</span><span class="p">(</span><span class="n">channel</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -482,8 +478,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%.200s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">modast</span><span class="p">)</span>  <span class="c1"># only first 200 characters</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%.200s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">modast</span><span class="p">)</span>  <span class="c1"># only first 200 characters</span>
 </pre></div>
 </div>
 </div>
@@ -516,8 +511,7 @@ UNITS {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">nmodl</span> <span class="kn">import</span> <span class="n">ast</span><span class="p">,</span> <span class="n">visitor</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nmodl</span> <span class="kn">import</span> <span class="n">ast</span><span class="p">,</span> <span class="n">visitor</span>
 
 <span class="n">lookup_visitor</span> <span class="o">=</span> <span class="n">visitor</span><span class="o">.</span><span class="n">AstLookupVisitor</span><span class="p">()</span>
 </pre></div>
@@ -528,8 +522,7 @@ UNITS {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">states</span> <span class="o">=</span> <span class="n">lookup_visitor</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="n">modast</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AstNodeType</span><span class="o">.</span><span class="n">STATE_BLOCK</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">states</span> <span class="o">=</span> <span class="n">lookup_visitor</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="n">modast</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AstNodeType</span><span class="o">.</span><span class="n">STATE_BLOCK</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">states</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">nmodl</span><span class="o">.</span><span class="n">to_nmodl</span><span class="p">(</span><span class="n">state</span><span class="p">))</span>
 </pre></div>
@@ -551,8 +544,7 @@ STATE {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">odes</span> <span class="o">=</span> <span class="n">lookup_visitor</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="n">modast</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AstNodeType</span><span class="o">.</span><span class="n">DIFF_EQ_EXPRESSION</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">odes</span> <span class="o">=</span> <span class="n">lookup_visitor</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="n">modast</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AstNodeType</span><span class="o">.</span><span class="n">DIFF_EQ_EXPRESSION</span><span class="p">)</span>
 <span class="n">primes</span> <span class="o">=</span> <span class="n">lookup_visitor</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="n">modast</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AstNodeType</span><span class="o">.</span><span class="n">PRIME_NAME</span><span class="p">)</span>
 <span class="n">range_vars</span> <span class="o">=</span> <span class="n">lookup_visitor</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="n">modast</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AstNodeType</span><span class="o">.</span><span class="n">RANGE_VAR</span><span class="p">)</span>
 <span class="n">parameters</span> <span class="o">=</span> <span class="n">lookup_visitor</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="n">modast</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AstNodeType</span><span class="o">.</span><span class="n">PARAM_ASSIGN</span><span class="p">)</span>
@@ -606,8 +598,7 @@ STATE {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">functions</span> <span class="o">=</span> <span class="n">lookup_visitor</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="n">modast</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AstNodeType</span><span class="o">.</span><span class="n">FUNCTION_BLOCK</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">functions</span> <span class="o">=</span> <span class="n">lookup_visitor</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="n">modast</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AstNodeType</span><span class="o">.</span><span class="n">FUNCTION_BLOCK</span><span class="p">)</span>
 <span class="n">function</span> <span class="o">=</span> <span class="n">functions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># first function</span>
 
 <span class="c1"># expression statements include assignments</span>
@@ -639,8 +630,7 @@ foo = 1.0+gamma
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">nmodl</span> <span class="kn">import</span> <span class="n">symtab</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nmodl</span> <span class="kn">import</span> <span class="n">symtab</span>
 
 <span class="n">symv</span> <span class="o">=</span> <span class="n">symtab</span><span class="o">.</span><span class="n">SymtabVisitor</span><span class="p">()</span>
 </pre></div>
@@ -651,8 +641,7 @@ foo = 1.0+gamma
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">symv</span><span class="o">.</span><span class="n">visit_program</span><span class="p">(</span><span class="n">modast</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">symv</span><span class="o">.</span><span class="n">visit_program</span><span class="p">(</span><span class="n">modast</span><span class="p">)</span>
 <span class="n">table</span> <span class="o">=</span> <span class="n">modast</span><span class="o">.</span><span class="n">get_symbol_table</span><span class="p">()</span>
 <span class="n">table_s</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
 
@@ -707,8 +696,7 @@ foo = 1.0+gamma
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">cai</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="s2">&quot;cai&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cai</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="s2">&quot;cai&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">cai</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -727,8 +715,7 @@ cai [Properties : prime_name assigned_definition write_ion state_var]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">range_vars</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">get_variables_with_properties</span><span class="p">(</span><span class="n">symtab</span><span class="o">.</span><span class="n">NmodlType</span><span class="o">.</span><span class="n">range_var</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">range_vars</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">get_variables_with_properties</span><span class="p">(</span><span class="n">symtab</span><span class="o">.</span><span class="n">NmodlType</span><span class="o">.</span><span class="n">range_var</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">range_vars</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
 </pre></div>
@@ -750,8 +737,7 @@ depth [Properties : range parameter]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">ions_var</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">get_variables_with_properties</span><span class="p">(</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ions_var</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">get_variables_with_properties</span><span class="p">(</span>
     <span class="n">symtab</span><span class="o">.</span><span class="n">NmodlType</span><span class="o">.</span><span class="n">read_ion_var</span> <span class="o">|</span> <span class="n">symtab</span><span class="o">.</span><span class="n">NmodlType</span><span class="o">.</span><span class="n">write_ion_var</span><span class="p">,</span> <span class="kc">False</span>
 <span class="p">)</span>
 <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">ions_var</span><span class="p">:</span>
@@ -776,8 +762,7 @@ cai [Properties : prime_name assigned_definition write_ion state_var]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">nmodl</span> <span class="kn">import</span> <span class="n">ast</span><span class="p">,</span> <span class="n">visitor</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nmodl</span> <span class="kn">import</span> <span class="n">ast</span><span class="p">,</span> <span class="n">visitor</span>
 
 
 <span class="k">class</span> <span class="nc">DoubleVisitor</span><span class="p">(</span><span class="n">visitor</span><span class="o">.</span><span class="n">AstVisitor</span><span class="p">):</span>
@@ -810,8 +795,7 @@ cai [Properties : prime_name assigned_definition write_ion state_var]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="k">class</span> <span class="nc">ParameterVisitor</span><span class="p">(</span><span class="n">visitor</span><span class="o">.</span><span class="n">AstVisitor</span><span class="p">):</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ParameterVisitor</span><span class="p">(</span><span class="n">visitor</span><span class="o">.</span><span class="n">AstVisitor</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">visitor</span><span class="o">.</span><span class="n">AstVisitor</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">in_parameter</span> <span class="o">=</span> <span class="kc">False</span>
@@ -863,8 +847,7 @@ minCai
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">mfunc_src</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;FUNCTION myfunc(x, y) {</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mfunc_src</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;FUNCTION myfunc(x, y) {</span>
 <span class="s2">     if (x &lt; y) {</span>
 <span class="s2">          myfunc = x + y</span>
 <span class="s2">     } else {</span>
@@ -884,8 +867,7 @@ minCai
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">nmodl.dsl</span> <span class="kn">import</span> <span class="n">ast</span><span class="p">,</span> <span class="n">visitor</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nmodl.dsl</span> <span class="kn">import</span> <span class="n">ast</span><span class="p">,</span> <span class="n">visitor</span>
 
 
 <span class="k">class</span> <span class="nc">PyGenerator</span><span class="p">(</span><span class="n">visitor</span><span class="o">.</span><span class="n">AstVisitor</span><span class="p">):</span>
@@ -968,8 +950,7 @@ minCai
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">pygen</span> <span class="o">=</span> <span class="n">PyGenerator</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pygen</span> <span class="o">=</span> <span class="n">PyGenerator</span><span class="p">()</span>
 <span class="n">pygen</span><span class="o">.</span><span class="n">visit_program</span><span class="p">(</span><span class="n">mfunc_ast</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">pygen</span><span class="o">.</span><span class="n">pycode</span><span class="p">)</span>
 </pre></div>
@@ -996,8 +977,7 @@ def myfunc(x, y):
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">nmodl.dsl</span> <span class="k">as</span> <span class="nn">nmodl</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">nmodl.dsl</span> <span class="k">as</span> <span class="nn">nmodl</span>
 <span class="kn">from</span> <span class="nn">nmodl.dsl</span> <span class="kn">import</span> <span class="n">ast</span><span class="p">,</span> <span class="n">visitor</span>
 
 <span class="n">driver</span> <span class="o">=</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">NmodlDriver</span><span class="p">()</span>
@@ -1044,8 +1024,7 @@ def myfunc(x, y):
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
 </div>

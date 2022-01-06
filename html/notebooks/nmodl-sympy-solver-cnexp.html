@@ -321,7 +321,7 @@ div.nboutput.container div.output_area > div[class^='highlight']{
 }
 
 /* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
-.prompt a.copybtn {
+.prompt .copybtn {
     display: none;
 }
 
@@ -447,8 +447,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>%%capture
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%%capture
 ! pip install nmodl
 </pre></div>
 </div>
@@ -457,8 +456,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">nmodl.dsl</span> <span class="k">as</span> <span class="nn">nmodl</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">nmodl.dsl</span> <span class="k">as</span> <span class="nn">nmodl</span>
 
 
 <span class="k">def</span> <span class="nf">run_sympy_solver</span><span class="p">(</span><span class="n">mod_string</span><span class="p">,</span> <span class="n">pade</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -489,8 +487,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">ex1</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ex1</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">BREAKPOINT {</span>
 <span class="s2">    SOLVE states METHOD cnexp</span>
 <span class="s2">}</span>
@@ -520,8 +517,7 @@ pade approx:         m = 4.0*dt+m
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">ex2</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ex2</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">BREAKPOINT {</span>
 <span class="s2">    SOLVE states METHOD cnexp</span>
 <span class="s2">}</span>
@@ -551,8 +547,7 @@ pade approx:         m = -m*(a*dt+2.0)/(a*dt-2.0)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">ex3</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ex3</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">BREAKPOINT {</span>
 <span class="s2">    SOLVE states METHOD cnexp</span>
 <span class="s2">}</span>
@@ -582,8 +577,7 @@ pade approx:         m = (-dt*m+2.0*dt*minf+2.0*m*mtau)/(dt+2.0*mtau)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">ex4</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ex4</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">BREAKPOINT {</span>
 <span class="s2">    SOLVE states METHOD cnexp</span>
 <span class="s2">}</span>
@@ -613,8 +607,7 @@ pade approx:         m = (-dt*m+2.0*dt*minf-2.0*m*mtau)/(dt-2.0*mtau)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">ex5</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ex5</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">BREAKPOINT {</span>
 <span class="s2">    SOLVE states METHOD cnexp</span>
 <span class="s2">}</span>
@@ -644,8 +637,7 @@ pade approx:         m = m*(dt*pow(m, 2)-2.0)/(3.0*dt*pow(m, 2)-2.0)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">ex6</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ex6</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">BREAKPOINT {</span>
 <span class="s2">    SOLVE states METHOD cnexp</span>
 <span class="s2">}</span>

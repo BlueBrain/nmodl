@@ -316,7 +316,7 @@ div.nboutput.container div.output_area > div[class^='highlight']{
 }
 
 /* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
-.prompt a.copybtn {
+.prompt .copybtn {
     display: none;
 }
 
@@ -401,8 +401,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>%%capture
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%%capture
 ! pip install nmodl
 </pre></div>
 </div>
@@ -411,8 +410,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">nmodl.dsl</span> <span class="k">as</span> <span class="nn">nmodl</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">nmodl.dsl</span> <span class="k">as</span> <span class="nn">nmodl</span>
 
 
 <span class="k">def</span> <span class="nf">run_sympy_solver</span><span class="p">(</span><span class="n">mod_string</span><span class="p">,</span> <span class="n">cse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -443,8 +441,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">ex1</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ex1</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">BREAKPOINT {</span>
 <span class="s2">    SOLVE states METHOD sparse</span>
 <span class="s2">}</span>
@@ -485,8 +482,7 @@ DERIVATIVE states {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">ex2</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ex2</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">STATE {</span>
 <span class="s2">    c1 o1 o2 p0 p1</span>
 <span class="s2">}</span>
@@ -573,8 +569,7 @@ DERIVATIVE ihkin {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
 </div>
