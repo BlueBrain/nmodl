@@ -15,6 +15,7 @@ var docstrings_8hpp =
     [ "get_token_method", "docstrings_8hpp.html#a50965876d8e02e547ffbcf3438569bfc", null ],
     [ "is_ast_method", "docstrings_8hpp.html#a294a40fb7f6b9cd82d5ea7f097eac16e", null ],
     [ "negate_method", "docstrings_8hpp.html#a03cc9adbbf70e0c0308730904bc3fe0b", null ],
+    [ "parent_property", "docstrings_8hpp.html#ab380ee10e567fce7ed1189fb0a7127a9", null ],
     [ "set_name_method", "docstrings_8hpp.html#af41557f53880e14ffada186373e9d9ec", null ],
     [ "visit_children_method", "docstrings_8hpp.html#a9f00adda58b0482a9fd56ad7041a4bca", null ]
 ];
