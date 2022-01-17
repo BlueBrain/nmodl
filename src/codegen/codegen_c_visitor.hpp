@@ -79,6 +79,9 @@ enum BlockType {
     /// net_receive block
     NetReceive,
 
+    /// before / after block
+    BeforeAfter,
+
     /// fake ending block type for loops on the enums. Keep it at the end
     BlockTypeEnd
 };
@@ -1610,7 +1613,8 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * Print common code for global functions like nrn_init, nrn_cur and nrn_state
      * \param type The target backend code block type
      */
-    virtual void print_global_function_common_code(BlockType type);
+    virtual void print_global_function_common_code(BlockType type,
+                                                   const std::string& function_name = "");
 
 
     /**
@@ -1886,6 +1890,12 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      */
     virtual void print_procedure(const ast::ProcedureBlock& node);
 
+    /**
+     * Print NMODL before / after block in target backend code
+     * @param node AST node of type before/after type being printed
+     * @param block_id Index of the before/after block
+     */
+    virtual void print_before_after_block(const ast::Block* node, size_t block_id);
 
     /** Setup the target backend code generator
      *

@@ -2737,6 +2737,45 @@ void CodegenCVisitor::print_global_variables_for_hoc() {
     printer->add_line("};");
 }
 
+/**
+ * Return registration type for a given BEFORE/AFTER block
+ * /param block A BEFORE/AFTER block being registered
+ *
+ * Depending on a block type i.e. BEFORE or AFTER and also type
+ * of it's associated block i.e. BREAKPOINT, INITIAL, SOLVE and
+ * STEP, the registration type (as an integer) is calculated.
+ * These values are then interpreted by CoreNEURON internally.
+ */
+static size_t get_register_type_for_ba_block(const ast::Block* block) {
+    size_t register_type = 0;
+    BAType ba_type;
+    /// before block have value 10 and after block 20
+    if (block->is_before_block()) {
+        register_type = 10;
+        ba_type =
+            dynamic_cast<const ast::BeforeBlock*>(block)->get_bablock()->get_type()->get_value();
+    } else {
+        register_type = 20;
+        ba_type =
+            dynamic_cast<const ast::AfterBlock*>(block)->get_bablock()->get_type()->get_value();
+    }
+
+    /// associated blocks have different values (1 to 4) based on type.
+    /// These values are based on neuron/coreneuron implementation details.
+    if (ba_type == BATYPE_BREAKPOINT) {
+        register_type += 1;
+    } else if (ba_type == BATYPE_SOLVE) {
+        register_type += 2;
+    } else if (ba_type == BATYPE_INITIAL) {
+        register_type += 3;
+    } else if (ba_type == BATYPE_STEP) {
+        register_type += 4;
+    } else {
+        throw std::runtime_error("Unhandled Before/After type encountered during code generation");
+    }
+    return register_type;
+}
+
 
 /**
  * \details Every mod file has register function to connect with the simulator.
@@ -2883,6 +2922,20 @@ void CodegenCVisitor::print_mechanism_register() {
 
     if (info.net_event_used || info.net_send_used) {
         printer->add_line("hoc_register_net_send_buffering(mech_type);");
+    }
+
+    /// register all before/after blocks
+    for (size_t i = 0; i < info.before_after_blocks.size(); i++) {
+        // \todo: mod2c/neuron implementation does some ion variable
+        // manipulation which is not clear and needs to be discussed/understood
+        // with Michael Hines:
+        // https://github.com/BlueBrain/mod2c/blob/4898ef45064804f9c7815765721d2b23b67e40b3/src/mod2c_core/nocpout.c#L1478
+
+        const auto& block = info.before_after_blocks[i];
+        // register type and associated function name for the block
+        size_t register_type = get_register_type_for_ba_block(block);
+        std::string function_name("nrn_before_after_{}"_format(i));
+        printer->add_line("hoc_reg_ba(mech_type, {}, {});"_format(function_name, register_type));
     }
 
     // register variables for hoc
@@ -3389,8 +3442,14 @@ void CodegenCVisitor::print_initial_block(const InitialBlock* node) {
 }
 
 
-void CodegenCVisitor::print_global_function_common_code(BlockType type) {
-    std::string method = compute_method_name(type);
+void CodegenCVisitor::print_global_function_common_code(BlockType type,
+                                                        const std::string& function_name) {
+    std::string method;
+    if (function_name.empty()) {
+        method = compute_method_name(type);
+    } else {
+        method = function_name;
+    }
     auto args = "NrnThread* nt, Memb_list* ml, int type";
 
     // watch statement function doesn't have type argument
@@ -3513,6 +3572,42 @@ void CodegenCVisitor::print_nrn_init(bool skip_init_check) {
     codegen = false;
 }
 
+void CodegenCVisitor::print_before_after_block(const ast::Block* node, size_t block_id) {
+    codegen = true;
+    /// name of the before/after function
+    std::string function_name("nrn_before_after_{}"_format(block_id));
+
+    /// print common function code like init/state/current
+    printer->add_newline(2);
+    printer->add_line("/** before/after block no {} */"_format(block_id));
+    print_global_function_common_code(BlockType::BeforeAfter, function_name);
+
+    print_channel_iteration_tiling_block_begin(BlockType::BeforeAfter);
+    print_channel_iteration_block_begin(BlockType::BeforeAfter);
+
+    printer->add_line("int node_id = node_index[id];");
+    printer->add_line("double v = voltage[node_id];");
+    print_v_unused();
+
+    /// print main body
+    std::shared_ptr<ast::BABlock> ba_block;
+    if (node->is_before_block()) {
+        ba_block = dynamic_cast<const ast::BeforeBlock*>(node)->get_bablock();
+    } else {
+        ba_block = dynamic_cast<const ast::AfterBlock*>(node)->get_bablock();
+    }
+    printer->add_indent();
+    ba_block->get_statement_block()->visit_children(*this);
+    printer->add_newline();
+
+    /// loop end including data annotation block
+    print_channel_iteration_block_end();
+    print_channel_iteration_tiling_block_end();
+    printer->end_block(1);
+    print_kernel_data_present_annotation_block_end();
+
+    codegen = false;
+}
 
 void CodegenCVisitor::print_nrn_constructor() {
     printer->add_newline(2);
@@ -4549,6 +4644,9 @@ void CodegenCVisitor::print_compute_functions() {
     }
     for (const auto& function: info.functions) {
         print_function(*function);
+    }
+    for (size_t i = 0; i < info.before_after_blocks.size(); i++) {
+        print_before_after_block(info.before_after_blocks[i], i);
     }
     for (const auto& callback: info.derivimplicit_callbacks) {
         auto block = callback->get_node_to_solve().get();
