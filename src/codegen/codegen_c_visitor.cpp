@@ -2124,7 +2124,7 @@ std::string CodegenCVisitor::conc_write_statement(const std::string& ion_name,
  * case we first update current mechanism's shadow vector and then add statement
  * to queue that will be used in reduction queue.
  */
-std::string CodegenCVisitor::process_shadow_update_statement(ShadowUseStatement& statement,
+std::string CodegenCVisitor::process_shadow_update_statement(const ShadowUseStatement& statement,
                                                              BlockType type) {
     // when there is no operator or rhs then that statement doesn't need shadow update
     if (statement.op.empty() && statement.rhs.empty()) {
@@ -2926,13 +2926,8 @@ void CodegenCVisitor::print_mechanism_register() {
 
     /// register all before/after blocks
     for (size_t i = 0; i < info.before_after_blocks.size(); i++) {
-        // \todo: mod2c/neuron implementation does some ion variable
-        // manipulation which is not clear and needs to be discussed/understood
-        // with Michael Hines:
-        // https://github.com/BlueBrain/mod2c/blob/4898ef45064804f9c7815765721d2b23b67e40b3/src/mod2c_core/nocpout.c#L1478
-
-        const auto& block = info.before_after_blocks[i];
         // register type and associated function name for the block
+        const auto& block = info.before_after_blocks[i];
         size_t register_type = get_register_type_for_ba_block(block);
         std::string function_name("nrn_before_after_{}"_format(i));
         printer->add_line("hoc_reg_ba(mech_type, {}, {});"_format(function_name, register_type));
@@ -3589,6 +3584,12 @@ void CodegenCVisitor::print_before_after_block(const ast::Block* node, size_t bl
     printer->add_line("double v = voltage[node_id];");
     print_v_unused();
 
+    // read ion statements
+    const auto& read_statements = ion_read_statements(BlockType::Equation);
+    for (auto& statement: read_statements) {
+        printer->add_line(statement);
+    }
+
     /// print main body
     std::shared_ptr<ast::BABlock> ba_block;
     if (node->is_before_block()) {
@@ -3599,6 +3600,13 @@ void CodegenCVisitor::print_before_after_block(const ast::Block* node, size_t bl
     printer->add_indent();
     ba_block->get_statement_block()->visit_children(*this);
     printer->add_newline();
+
+    // write ion statements
+    const auto& write_statements = ion_write_statements(BlockType::Equation);
+    for (auto& statement: write_statements) {
+        auto text = process_shadow_update_statement(statement, BlockType::Equation);
+        printer->add_line(text);
+    }
 
     /// loop end including data annotation block
     print_channel_iteration_block_end();

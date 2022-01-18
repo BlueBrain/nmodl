@@ -1535,7 +1535,7 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * \param type      The target backend code block type
      * \return          The generated target backend code
      */
-    std::string process_shadow_update_statement(ShadowUseStatement& statement, BlockType type);
+    std::string process_shadow_update_statement(const ShadowUseStatement& statement, BlockType type);
 
 
     /**
