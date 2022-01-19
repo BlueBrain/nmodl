@@ -3,6 +3,7 @@ var parser_2parser_8cpp =
     [ "CATCH_CONFIG_MAIN", "parser_2parser_8cpp.html#a656eb5868e824d59f489f910db438420", null ],
     [ "is_valid_construct", "parser_2parser_8cpp.html#ab8f5d9e0e195c3833834465f29dc25d3", null ],
     [ "parse_neuron_block_string", "parser_2parser_8cpp.html#a7d028c6bcce71b399707429f7ceca2a2", null ],
+    [ "SCENARIO", "parser_2parser_8cpp.html#a9f2191f8f875d13fe8c5df739280ae53", null ],
     [ "SCENARIO", "parser_2parser_8cpp.html#a6a826251ccc7325a9ae6198fca0a02f8", null ],
     [ "SCENARIO", "parser_2parser_8cpp.html#a8b501fbabfd46e7fc1fe7a45c67bebdb", null ],
     [ "SCENARIO", "parser_2parser_8cpp.html#ab2adb4404428700dd70cd976a828427b", null ],
