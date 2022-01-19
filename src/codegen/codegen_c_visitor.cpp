@@ -3569,12 +3569,26 @@ void CodegenCVisitor::print_nrn_init(bool skip_init_check) {
 
 void CodegenCVisitor::print_before_after_block(const ast::Block* node, size_t block_id) {
     codegen = true;
+
+    std::string ba_type;
+    std::shared_ptr<ast::BABlock> ba_block;
+
+    if (node->is_before_block()) {
+        ba_block = dynamic_cast<const ast::BeforeBlock*>(node)->get_bablock();
+        ba_type = "BEFORE";
+    } else {
+        ba_block = dynamic_cast<const ast::AfterBlock*>(node)->get_bablock();
+        ba_type = "AFTER";
+    }
+
+    std::string ba_block_type = ba_block->get_type()->eval();
+
     /// name of the before/after function
     std::string function_name = method_name("nrn_before_after_{}"_format(block_id));
 
     /// print common function code like init/state/current
     printer->add_newline(2);
-    printer->add_line("/** before/after block no {} */"_format(block_id));
+    printer->add_line("/** {} of block type {} # {} */"_format(ba_type, ba_block_type, block_id));
     print_global_function_common_code(BlockType::BeforeAfter, function_name);
 
     print_channel_iteration_tiling_block_begin(BlockType::BeforeAfter);
@@ -3591,14 +3605,8 @@ void CodegenCVisitor::print_before_after_block(const ast::Block* node, size_t bl
     }
 
     /// print main body
-    std::shared_ptr<ast::StatementBlock> block;
-    if (node->is_before_block()) {
-        block = dynamic_cast<const ast::BeforeBlock*>(node)->get_bablock()->get_statement_block();
-    } else {
-        block = dynamic_cast<const ast::AfterBlock*>(node)->get_bablock()->get_statement_block();
-    }
     printer->add_indent();
-    print_statement_block(*block);
+    print_statement_block(*ba_block->get_statement_block());
     printer->add_newline();
 
     // write ion statements
