@@ -2929,7 +2929,7 @@ void CodegenCVisitor::print_mechanism_register() {
         // register type and associated function name for the block
         const auto& block = info.before_after_blocks[i];
         size_t register_type = get_register_type_for_ba_block(block);
-        std::string function_name("nrn_before_after_{}"_format(i));
+        std::string function_name = method_name("nrn_before_after_{}"_format(i));
         printer->add_line("hoc_reg_ba(mech_type, {}, {});"_format(function_name, register_type));
     }
 
@@ -3570,7 +3570,7 @@ void CodegenCVisitor::print_nrn_init(bool skip_init_check) {
 void CodegenCVisitor::print_before_after_block(const ast::Block* node, size_t block_id) {
     codegen = true;
     /// name of the before/after function
-    std::string function_name("nrn_before_after_{}"_format(block_id));
+    std::string function_name = method_name("nrn_before_after_{}"_format(block_id));
 
     /// print common function code like init/state/current
     printer->add_newline(2);
@@ -3591,14 +3591,14 @@ void CodegenCVisitor::print_before_after_block(const ast::Block* node, size_t bl
     }
 
     /// print main body
-    std::shared_ptr<ast::BABlock> ba_block;
+    std::shared_ptr<ast::StatementBlock> block;
     if (node->is_before_block()) {
-        ba_block = dynamic_cast<const ast::BeforeBlock*>(node)->get_bablock();
+        block = dynamic_cast<const ast::BeforeBlock*>(node)->get_bablock()->get_statement_block();
     } else {
-        ba_block = dynamic_cast<const ast::AfterBlock*>(node)->get_bablock();
+        block = dynamic_cast<const ast::AfterBlock*>(node)->get_bablock()->get_statement_block();
     }
     printer->add_indent();
-    ba_block->get_statement_block()->visit_children(*this);
+    print_statement_block(*block);
     printer->add_newline();
 
     // write ion statements
