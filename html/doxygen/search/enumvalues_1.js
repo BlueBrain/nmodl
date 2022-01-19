@@ -9,6 +9,7 @@ var searchData=
   ['bbcore_5fpointer',['BBCORE_POINTER',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033aef0a7e6d2a2a86d794c80931b048c1c3',1,'nmodl::ast']]],
   ['bbcore_5fpointer_5fvar',['bbcore_pointer_var',['../namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dba6f94044281833340975e5ba95594adda',1,'nmodl::symtab::syminfo::bbcore_pointer_var()'],['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a1da923665ca7bc5d38149986465714f4',1,'nmodl::ast::BBCORE_POINTER_VAR()']]],
   ['before_5fblock',['BEFORE_BLOCK',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a4e7ad84d7d038ebca918e5148379fb28',1,'nmodl::ast']]],
+  ['beforeafter',['BeforeAfter',['../group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbbacaae51ccb73153644b415fedb93a776e',1,'nmodl::codegen']]],
   ['binary_5fexpression',['BINARY_EXPRESSION',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a75832c2ddfe13f917645df6b7dba0336',1,'nmodl::ast']]],
   ['binary_5foperator',['BINARY_OPERATOR',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a2ed76419226f5529848bcd8694a1f8dc',1,'nmodl::ast']]],
   ['block',['BLOCK',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a4d34f53389ed7f28ca91fc31ea360a66',1,'nmodl::ast']]],

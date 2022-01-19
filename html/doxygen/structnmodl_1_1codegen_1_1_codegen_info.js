@@ -18,6 +18,7 @@ var structnmodl_1_1codegen_1_1_codegen_info =
     [ "artificial_cell", "structnmodl_1_1codegen_1_1_codegen_info.html#a22703a43d8aeb4be4bf6ee4b03c741bb", null ],
     [ "assigned_vars", "structnmodl_1_1codegen_1_1_codegen_info.html#a12ba46d98326a611fd34c91777466154", null ],
     [ "bbcore_pointer_used", "structnmodl_1_1codegen_1_1_codegen_info.html#a052dee5f484c7086984bc9cc9edfbb73", null ],
+    [ "before_after_blocks", "structnmodl_1_1codegen_1_1_codegen_info.html#a8bdc4cd503f153bab8af4ea0aa40f761", null ],
     [ "breakpoint_node", "structnmodl_1_1codegen_1_1_codegen_info.html#a4a46dea1ec9ad861822987e3c53e949a", null ],
     [ "changed_dt", "structnmodl_1_1codegen_1_1_codegen_info.html#ad5f0120295010083fc2060f8e64b0ffd", null ],
     [ "conductances", "structnmodl_1_1codegen_1_1_codegen_info.html#ac618beb29e918cc9a2fd66885f4c04e1", null ],

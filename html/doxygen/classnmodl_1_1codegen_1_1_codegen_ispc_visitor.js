@@ -27,7 +27,7 @@ var classnmodl_1_1codegen_1_1_codegen_ispc_visitor =
     [ "print_codegen_routines", "classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#a33f93e371deee051ab3d1dab21d17b5f", null ],
     [ "print_compute_functions", "classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#a190038e20851f8c1cd500b9a2e1304c6", null ],
     [ "print_get_memb_list", "classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#af925ff5bf8ebcb7cbede60d08bc85eda", null ],
-    [ "print_global_function_common_code", "classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#a809bc1aaa7a3a9ffbdb28d835f441e4e", null ],
+    [ "print_global_function_common_code", "classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#a1c454e236ab362f887912f61d66d1d98", null ],
     [ "print_global_var_struct_decl", "classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#afc250e816154ef90ac6ecda3463bd54a", null ],
     [ "print_headers_include", "classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#a68bb083a6aa1b947d0dff636accaf156", null ],
     [ "print_ion_var_constructor", "classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#a9f7779d31f97d7587118b2cbd3e540bd", null ],

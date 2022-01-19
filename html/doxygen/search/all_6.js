@@ -120,6 +120,7 @@ var searchData=
   ['get_5freaction2',['get_reaction2',['../classnmodl_1_1ast_1_1_reaction_statement.html#a8db2d47206877230aef41f9204f911fd',1,'nmodl::ast::ReactionStatement']]],
   ['get_5fread_5fcount',['get_read_count',['../classnmodl_1_1symtab_1_1_symbol.html#aed3936d8bcfd917296344671350205c4',1,'nmodl::symtab::Symbol']]],
   ['get_5freadlist',['get_readlist',['../classnmodl_1_1ast_1_1_useion.html#aa82a15f2d34ab1d703db793d1b921410',1,'nmodl::ast::Useion']]],
+  ['get_5fregister_5ftype_5ffor_5fba_5fblock',['get_register_type_for_ba_block',['../namespacenmodl_1_1codegen.html#a172b9a60a508e7a59921fc6170ba8cd4',1,'nmodl::codegen']]],
   ['get_5frhs',['get_rhs',['../classnmodl_1_1ast_1_1_binary_expression.html#a9f254ac1c6ca2f222b11937fc9765907',1,'nmodl::ast::BinaryExpression::get_rhs()'],['../classnmodl_1_1ast_1_1_non_lin_equation.html#a1e6f8ccfdba2f7a47a1ed7acc82b4c5a',1,'nmodl::ast::NonLinEquation::get_rhs()']]],
   ['get_5fscope',['get_scope',['../classnmodl_1_1symtab_1_1_symbol.html#ab913950e6bc6b0b7472ebc529416826a',1,'nmodl::symtab::Symbol']]],
   ['get_5fsections',['get_sections',['../classnmodl_1_1ast_1_1_section.html#ae9cc4675b8ab8509011bf2710a04dedd',1,'nmodl::ast::Section']]],

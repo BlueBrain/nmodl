@@ -23,7 +23,9 @@ var group__codegen__details =
       [ "find_range_variables", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#ac6c0489e3926a2f2bf03888aa20d2fa7", null ],
       [ "find_table_variables", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a6b37a5ce78cf3de036311a43eae07e19", null ],
       [ "sort_with_mod2c_symbol_order", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a111b9a0b6fbbb0b4496f7d1c3897035a", null ],
+      [ "visit_after_block", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a75e92e573b9571340edc6c2035987905", null ],
       [ "visit_bbcore_pointer", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#ae9edcdf59cc1ff6de00f3c56dc406e44", null ],
+      [ "visit_before_block", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a1db6d90e3863c2558eeeb2df07c86b65", null ],
       [ "visit_binary_expression", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#adaed2d021c8c78df7337974f62474815", null ],
       [ "visit_breakpoint_block", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a17cfc480503668fa751bac2cdc2277ef", null ],
       [ "visit_conductance_hint", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a470d01cf57d6ec92c7e61a38dbedf004", null ],
@@ -106,6 +108,7 @@ var group__codegen__details =
       [ "artificial_cell", "structnmodl_1_1codegen_1_1_codegen_info.html#a22703a43d8aeb4be4bf6ee4b03c741bb", null ],
       [ "assigned_vars", "structnmodl_1_1codegen_1_1_codegen_info.html#a12ba46d98326a611fd34c91777466154", null ],
       [ "bbcore_pointer_used", "structnmodl_1_1codegen_1_1_codegen_info.html#a052dee5f484c7086984bc9cc9edfbb73", null ],
+      [ "before_after_blocks", "structnmodl_1_1codegen_1_1_codegen_info.html#a8bdc4cd503f153bab8af4ea0aa40f761", null ],
       [ "breakpoint_node", "structnmodl_1_1codegen_1_1_codegen_info.html#a4a46dea1ec9ad861822987e3c53e949a", null ],
       [ "changed_dt", "structnmodl_1_1codegen_1_1_codegen_info.html#ad5f0120295010083fc2060f8e64b0ffd", null ],
       [ "conductances", "structnmodl_1_1codegen_1_1_codegen_info.html#ac618beb29e918cc9a2fd66885f4c04e1", null ],
@@ -181,6 +184,7 @@ var group__codegen__details =
       [ "State", "group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba1f27f7d1e85f8d0915e4ab7e9f6e8e11", null ],
       [ "Watch", "group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbbaac20fc604795fbf01428e955d6d0f492", null ],
       [ "NetReceive", "group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbbaaf126b23c756faf77bb3ffbd9a34fc57", null ],
+      [ "BeforeAfter", "group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbbacaae51ccb73153644b415fedb93a776e", null ],
       [ "BlockTypeEnd", "group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba4618ace4464da4c213ec5e0df5e03fe8", null ]
     ] ],
     [ "MemberType", "group__codegen__details.html#gab185b9278fbfff591fbe3da84ba22d0b", [

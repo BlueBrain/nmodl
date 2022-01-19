@@ -5,6 +5,7 @@ var searchData=
   ['base_5funits_5fnames',['base_units_names',['../classnmodl_1_1units_1_1_unit_table.html#a281f8a51245b7e751d0401dd5dbc9e90',1,'nmodl::units::UnitTable']]],
   ['batypenames',['BATypeNames',['../group__ast__prop.html#gaedfbaa61dd5e6cf69e7e51528b9cc1e0',1,'nmodl::ast']]],
   ['bbcore_5fpointer_5fused',['bbcore_pointer_used',['../structnmodl_1_1codegen_1_1_codegen_info.html#a052dee5f484c7086984bc9cc9edfbb73',1,'nmodl::codegen::CodegenInfo']]],
+  ['before_5fafter_5fblocks',['before_after_blocks',['../structnmodl_1_1codegen_1_1_codegen_info.html#a8bdc4cd503f153bab8af4ea0aa40f761',1,'nmodl::codegen::CodegenInfo']]],
   ['bflux',['bflux',['../classnmodl_1_1visitor_1_1_kinetic_block_visitor.html#af3dd775a5427bb368d476c0be3092e63',1,'nmodl::visitor::KineticBlockVisitor']]],
   ['binary_5fexpr_5findex',['binary_expr_index',['../classnmodl_1_1visitor_1_1_sympy_conductance_visitor.html#ad6365771edeb1531c3da0d505378b76e',1,'nmodl::visitor::SympyConductanceVisitor']]],
   ['binary_5fexpression',['binary_expression',['../classnmodl_1_1visitor_1_1_d_u_instance.html#a34b8d0b76d04cfa93a2068c39c5b5a4e',1,'nmodl::visitor::DUInstance']]],

@@ -1,5 +1,10 @@
 var NAVTREEINDEX34 =
 {
+"pages.html":[],
+"param__assign_8hpp.html":[4,0,0,0,0,0,0,89],
+"param__assign_8hpp_source.html":[4,0,0,0,0,0,0,89],
+"param__block_8hpp.html":[4,0,0,0,0,0,0,90],
+"param__block_8hpp_source.html":[4,0,0,0,0,0,0,90],
 "paren__expression_8hpp.html":[4,0,0,0,0,0,0,91],
 "paren__expression_8hpp_source.html":[4,0,0,0,0,0,0,91],
 "parser_2main__c_8cpp.html":[4,0,1,4,7],
@@ -165,10 +170,11 @@ var NAVTREEINDEX34 =
 "solve__block__visitor_8hpp_source.html":[4,0,1,11,34],
 "src_2codegen_2codegen__c__visitor_8cpp.html":[4,0,1,1,2],
 "src_2codegen_2codegen__c__visitor_8cpp.html#a116af3668467bd43c2740658d7fd0612":[4,0,1,1,2,0],
-"src_2codegen_2codegen__c__visitor_8cpp.html#a1faf2e296586215399717f9d519de218":[4,0,1,1,2,1],
-"src_2codegen_2codegen__c__visitor_8cpp.html#a7fe9cbd601e67e2d2726026c0008b16f":[4,0,1,1,2,4],
-"src_2codegen_2codegen__c__visitor_8cpp.html#a926e0525c9ac662aed2b91e99bef2d37":[4,0,1,1,2,2],
-"src_2codegen_2codegen__c__visitor_8cpp.html#a983af1c34064b33f42068e2767c2287e":[4,0,1,1,2,3],
+"src_2codegen_2codegen__c__visitor_8cpp.html#a172b9a60a508e7a59921fc6170ba8cd4":[4,0,1,1,2,1],
+"src_2codegen_2codegen__c__visitor_8cpp.html#a1faf2e296586215399717f9d519de218":[4,0,1,1,2,2],
+"src_2codegen_2codegen__c__visitor_8cpp.html#a7fe9cbd601e67e2d2726026c0008b16f":[4,0,1,1,2,5],
+"src_2codegen_2codegen__c__visitor_8cpp.html#a926e0525c9ac662aed2b91e99bef2d37":[4,0,1,1,2,3],
+"src_2codegen_2codegen__c__visitor_8cpp.html#a983af1c34064b33f42068e2767c2287e":[4,0,1,1,2,4],
 "src_2codegen_2codegen__c__visitor_8cpp_source.html":[4,0,1,1,2],
 "src_2codegen_2codegen__utils_8cpp.html":[4,0,1,1,17],
 "src_2codegen_2codegen__utils_8cpp.html#a37264733af5e0a57c9dfbc5818fcd4d0":[4,0,1,1,17,3],
@@ -243,11 +249,5 @@ var NAVTREEINDEX34 =
 "structnmodl_1_1_nrn_units_lib.html":[3,0,0,14],
 "structnmodl_1_1_nrn_units_lib.html#a35b39a048f9504008e6b2c4b36f99dbd":[3,0,0,14,0],
 "structnmodl_1_1_nrn_units_lib.html#a4a437a7593b80831b607356db2588ffe":[3,0,0,14,1],
-"structnmodl_1_1_version.html":[3,0,0,16],
-"structnmodl_1_1_version.html#a14c75c06b7f3fb779053105e763fe091":[3,0,0,16,2],
-"structnmodl_1_1_version.html#adbc7fbe38420cc7498fbab186d5e33b5":[3,0,0,16,0],
-"structnmodl_1_1_version.html#af097f42c21c0e833ed31e3c2c2ea6b69":[3,0,0,16,1],
-"structnmodl_1_1ast_1_1_ast.html":[1,0,1,4],
-"structnmodl_1_1codegen_1_1_codegen_info.html":[1,1,0,6],
-"structnmodl_1_1codegen_1_1_codegen_info.html#a02c0064847b2d0e3a27ccc70a931e29a":[1,1,0,6,68]
+"structnmodl_1_1_version.html":[3,0,0,16]
 };

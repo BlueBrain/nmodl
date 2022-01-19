@@ -5,7 +5,7 @@ var searchData=
   ['unary_5foperator',['UNARY_OPERATOR',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a595ffcc42d69b9b31afdd63557ee5d1e',1,'nmodl::ast']]],
   ['unit',['UNIT',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033aec8fc2c42b9c76effd648a14b311411f',1,'nmodl::ast']]],
   ['unit_5fblock',['UNIT_BLOCK',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033aa54d6f2049cfa2512325e15bc0eec7b9',1,'nmodl::ast']]],
-  ['unit_5fdef',['unit_def',['../namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbaf12c974f6e07aad66d50de05b14c20b9',1,'nmodl::symtab::syminfo::unit_def()'],['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a0388f8b1db741cd87766daf89bff5a7e',1,'nmodl::ast::UNIT_DEF()']]],
+  ['unit_5fdef',['UNIT_DEF',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a0388f8b1db741cd87766daf89bff5a7e',1,'nmodl::ast::UNIT_DEF()'],['../namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbaf12c974f6e07aad66d50de05b14c20b9',1,'nmodl::symtab::syminfo::unit_def()']]],
   ['unit_5foff',['UNIT_OFF',['../group__ast__prop.html#gga524298752d3913086b9e8bf101091719a83ea87e7dfea14fcd4b049f0f5121d42',1,'nmodl::ast']]],
   ['unit_5fon',['UNIT_ON',['../group__ast__prop.html#gga524298752d3913086b9e8bf101091719aad53c828ee99cd8f1030d71420262077',1,'nmodl::ast']]],
   ['unit_5fstate',['UNIT_STATE',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a527342100cc944bc5df6f18ad3a62a4a',1,'nmodl::ast']]],

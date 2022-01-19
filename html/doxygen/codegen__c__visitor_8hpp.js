@@ -9,6 +9,7 @@ var codegen__c__visitor_8hpp =
       [ "State", "codegen__c__visitor_8hpp.html#gga2d0a1f473f039b495e9cc349c3b57dbba1f27f7d1e85f8d0915e4ab7e9f6e8e11", null ],
       [ "Watch", "codegen__c__visitor_8hpp.html#gga2d0a1f473f039b495e9cc349c3b57dbbaac20fc604795fbf01428e955d6d0f492", null ],
       [ "NetReceive", "codegen__c__visitor_8hpp.html#gga2d0a1f473f039b495e9cc349c3b57dbbaaf126b23c756faf77bb3ffbd9a34fc57", null ],
+      [ "BeforeAfter", "codegen__c__visitor_8hpp.html#gga2d0a1f473f039b495e9cc349c3b57dbbacaae51ccb73153644b415fedb93a776e", null ],
       [ "BlockTypeEnd", "codegen__c__visitor_8hpp.html#gga2d0a1f473f039b495e9cc349c3b57dbba4618ace4464da4c213ec5e0df5e03fe8", null ]
     ] ],
     [ "MemberType", "codegen__c__visitor_8hpp.html#gab185b9278fbfff591fbe3da84ba22d0b", [
