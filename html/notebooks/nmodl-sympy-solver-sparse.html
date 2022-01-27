@@ -463,14 +463,26 @@ div.rendered_html tbody tr:hover {
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 DERIVATIVE states {
-    LOCAL old_mc, old_m, tmp_0, tmp_1, tmp_2
-    old_mc = mc
-    old_m = m
-    tmp_0 = a*dt
-    tmp_1 = b*dt
-    tmp_2 = 1.0/(tmp_0+tmp_1+1.0)
-    mc = tmp_2*(old_m*tmp_1+old_mc*tmp_1+old_mc)
-    m = tmp_2*(old_m*tmp_0+old_m+old_mc*tmp_0)
+    EIGEN_NEWTON_SOLVE[2]{
+        LOCAL old_mc, old_m
+    }{
+        old_mc = mc
+        old_m = m
+    }{
+        X[0] = mc
+        X[1] = m
+    }{
+        F[0] = -X[0]*a*dt-X[0]+X[1]*b*dt+old_mc
+        J[0] = -a*dt-1.0
+        J[2] = b*dt
+        F[1] = X[0]*a*dt-X[1]*b*dt-X[1]+old_m
+        J[1] = a*dt
+        J[3] = -b*dt-1.0
+    }{
+        mc = X[0]
+        m = X[1]
+    }{
+    }
 }
 </pre></div></div>
 </div>
@@ -509,7 +521,7 @@ DERIVATIVE states {
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 DERIVATIVE ihkin {
-    EIGEN_LINEAR_SOLVE[5]{
+    EIGEN_NEWTON_SOLVE[5]{
         LOCAL alpha, beta, k3p, k4, k1ca, k2, old_c1, old_o1, old_o2, old_p0, old_p1
     }{
         evaluate_fct(v, cai)
@@ -524,31 +536,32 @@ DERIVATIVE ihkin {
         X[2] = o2
         X[3] = p0
         X[4] = p1
-        F[0] = -old_c1
+    }{
+        F[0] = -X[0]*alpha*dt-X[0]+X[1]*beta*dt+old_c1
         J[0] = -alpha*dt-1.0
         J[5] = beta*dt
         J[10] = 0
         J[15] = 0
         J[20] = 0
-        F[1] = -old_o1
+        F[1] = X[0]*alpha*dt-X[1]*beta*dt-X[1]*dt*k3p-X[1]+X[2]*dt*k4+old_o1
         J[1] = alpha*dt
         J[6] = -beta*dt-dt*k3p-1.0
         J[11] = dt*k4
         J[16] = 0
         J[21] = 0
-        F[2] = -old_o2
+        F[2] = X[1]*dt*k3p-X[2]*dt*k4-X[2]+old_o2
         J[2] = 0
         J[7] = dt*k3p
         J[12] = -dt*k4-1.0
         J[17] = 0
         J[22] = 0
-        F[3] = -old_p0
+        F[3] = -X[3]*dt*k1ca-X[3]+X[4]*dt*k2+old_p0
         J[3] = 0
         J[8] = 0
         J[13] = 0
         J[18] = -dt*k1ca-1.0
         J[23] = dt*k2
-        F[4] = -old_p1
+        F[4] = X[3]*dt*k1ca-X[4]*dt*k2-X[4]+old_p1
         J[4] = 0
         J[9] = 0
         J[14] = 0
