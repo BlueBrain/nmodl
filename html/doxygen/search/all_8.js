@@ -90,6 +90,7 @@ var searchData=
   ['insert_5fwatch',['insert_watch',['../classnmodl_1_1ast_1_1_watch_statement.html#ae6d0a6b694be6a0b1dd8ef91f1bd94fe',1,'nmodl::ast::WatchStatement::insert_watch(WatchVector::const_iterator position, const std::shared_ptr&lt; Watch &gt; &amp;n)'],['../classnmodl_1_1ast_1_1_watch_statement.html#aa0fb10c6d99342875d226b090f37a6aa',1,'nmodl::ast::WatchStatement::insert_watch(WatchVector::const_iterator position, NodeType &amp;to, InputIterator first, InputIterator last)']]],
   ['instance',['instance',['../classnmodl_1_1utils_1_1_singleton_random_string.html#ade5b240627e7f47d65b1ce72be1b85be',1,'nmodl::utils::SingletonRandomString']]],
   ['instance_5fstruct',['instance_struct',['../classnmodl_1_1codegen_1_1_codegen_c_visitor.html#adee55ae07a99da4f4c734ab9701016f2',1,'nmodl::codegen::CodegenCVisitor']]],
+  ['instantiatepartialpivlu',['InstantiatePartialPivLu',['../partial__piv__lu_8h.html#aafdf1b3a05c3a3408ec743424ce3aa2d',1,'partial_piv_lu.h']]],
   ['int322sp',['int322sp',['../namespacenmodl_1_1fast__math.html#a2681deaab3272127fb4c6ff7017b26f9',1,'nmodl::fast_math::int322sp()'],['../fast__math_8ispc.html#a6b1ab164940122822cf84488bf800e06',1,'int322sp():&#160;fast_math.ispc']]],
   ['int_5fvariable_5fname',['int_variable_name',['../classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a5d7705c75e63b43ffae68f9643da0196',1,'nmodl::codegen::CodegenCVisitor']]],
   ['int_5fvariables_5fsize',['int_variables_size',['../classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ac5e54711b7c41d590a6fc344aeefade3',1,'nmodl::codegen::CodegenCVisitor']]],

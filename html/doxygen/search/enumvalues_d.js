@@ -1,9 +1,9 @@
 var searchData=
 [
-  ['param_5fassign',['param_assign',['../namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbac89e419cdec37c6436386d0ccee1096a',1,'nmodl::symtab::syminfo::param_assign()'],['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a42cec2662d40b5ec92cc7d89c1f60a23',1,'nmodl::ast::PARAM_ASSIGN()']]],
+  ['param_5fassign',['PARAM_ASSIGN',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a42cec2662d40b5ec92cc7d89c1f60a23',1,'nmodl::ast::PARAM_ASSIGN()'],['../namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbac89e419cdec37c6436386d0ccee1096a',1,'nmodl::symtab::syminfo::param_assign()']]],
   ['param_5fblock',['PARAM_BLOCK',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a2d9c331bacf78cc6848dd60b92ae43f5',1,'nmodl::ast']]],
   ['paren_5fexpression',['PAREN_EXPRESSION',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a2dd631f70df9b6367b4b92089219249f',1,'nmodl::ast']]],
-  ['partial_5fblock',['partial_block',['../namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbae9554e65c34721189d78fe126de38518',1,'nmodl::symtab::syminfo::partial_block()'],['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033acc2bed43a481a47c2ae620dab6e54c44',1,'nmodl::ast::PARTIAL_BLOCK()']]],
+  ['partial_5fblock',['PARTIAL_BLOCK',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033acc2bed43a481a47c2ae620dab6e54c44',1,'nmodl::ast::PARTIAL_BLOCK()'],['../namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbae9554e65c34721189d78fe126de38518',1,'nmodl::symtab::syminfo::partial_block()']]],
   ['partial_5fboundary',['PARTIAL_BOUNDARY',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a2f03ea15c28c27950bec6b3aa831f4b2',1,'nmodl::ast']]],
   ['partial_5fequation',['PARTIAL_EQUATION',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a5aedc65a02af4d7ee57df49673983f6e',1,'nmodl::ast']]],
   ['peq_5ffirst',['PEQ_FIRST',['../group__ast__prop.html#ggaec4ec6ee645390df5ef1442a5b9270d7ae8d86ec22c2000d3e5e95ace882937e4',1,'nmodl::ast']]],
