@@ -1613,6 +1613,7 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
     /**
      * Print common code for global functions like nrn_init, nrn_cur and nrn_state
      * \param type The target backend code block type
+     * \param function_name The name of the function to print
      */
     virtual void print_global_function_common_code(BlockType type,
                                                    const std::string& function_name = "");
@@ -1749,6 +1750,7 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * \param output_dir   The directory where target C file should be generated.
      * \param float_type   The float type to use in the generated code. The string will be used
      *                     as-is in the target code. This defaults to \c double.
+     * \param optimize_ionvar_copies If ion variable copies should be avoided.
      * \param extension    The file extension to use. This defaults to \c .cpp .
      */
     CodegenCVisitor(const std::string& mod_filename,
@@ -1777,6 +1779,7 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * \param stream       The output stream onto which to write the generated code
      * \param float_type   The float type to use in the generated code. The string will be used
      *                     as-is in the target code. This defaults to \c double.
+     * \param optimize_ionvar_copies If ion variable copies should be avoided.
      */
     CodegenCVisitor(const std::string& mod_filename,
                     std::ostream& stream,
@@ -1803,6 +1806,7 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      *                       It is used for constructing an output filename.
      * \param float_type     The float type to use in the generated code. The string will be used
      *                       as-is in the target code. This defaults to \c double.
+     * \param optimize_ionvar_copies If ion variable copies should be avoided.
      * \param target_printer A printer defined outside this visitor to be used for the code
      *                       generation
      */
