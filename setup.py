@@ -131,7 +131,7 @@ setup(
         "nbconvert<6.0",  # prevents issues with nbsphinx
         "nbsphinx>=0.3.2",
         "pytest>=3.7.2",
-        "sphinx>=2.0",
+        "sphinx",
         "sphinx-rtd-theme",
     ]
     + install_requirements,
