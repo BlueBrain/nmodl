@@ -196,6 +196,9 @@ enum BlockType {
     /// initial block
     Initial,
 
+    /// constructor block
+    Constructor,
+
     /// destructor block
     Destructor,
 
@@ -214,9 +217,13 @@ enum BlockType {
     /// net_receive block
     NetReceive,
 
+    /// before / after block
+    BeforeAfter,
+
     /// fake ending block type for loops on the enums. Keep it at the end
     BlockTypeEnd
 };
+
 
 /**
  * \class ShadowUseStatement
