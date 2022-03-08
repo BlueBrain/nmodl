@@ -1354,8 +1354,8 @@ SCENARIO("Vector library calls", "[visitor][llvm][vector_lib]") {
                                                                      /*use_single_precision=*/false,
                                                                      /*vector_width=*/2,
                                                                      /*vec_lib=*/"MASSV");
-            std::regex massv2_exp_decl(R"(declare <2 x double> @__expd2_P8\(<2 x double>\))");
-            std::regex massv2_exp_call(R"(call <2 x double> @__expd2_P8\(<2 x double> .*\))");
+            std::regex massv2_exp_decl(R"(declare <2 x double> @__expd2\(<2 x double>\))");
+            std::regex massv2_exp_call(R"(call <2 x double> @__expd2\(<2 x double> .*\))");
             REQUIRE(std::regex_search(massv2_library_module_str, m, massv2_exp_decl));
             REQUIRE(std::regex_search(massv2_library_module_str, m, massv2_exp_call));
             REQUIRE(!std::regex_search(massv2_library_module_str, m, exp_call));
