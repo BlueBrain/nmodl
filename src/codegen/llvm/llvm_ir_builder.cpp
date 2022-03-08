@@ -347,11 +347,14 @@ llvm::Value* IRBuilder::create_inbounds_gep(const std::string& var_name, llvm::V
 
     // Since we index through the pointer, we need an extra 0 index in the indices list for GEP.
     ValueVector indices{llvm::ConstantInt::get(get_i64_type(), 0), index};
-    return builder.CreateInBoundsGEP(variable_ptr, indices);
+    llvm::Type* variable_type = variable_ptr->getType()->getPointerElementType();
+    return builder.CreateInBoundsGEP(variable_type, variable_ptr, indices);
 }
 
 llvm::Value* IRBuilder::create_inbounds_gep(llvm::Value* variable, llvm::Value* index) {
-    return builder.CreateInBoundsGEP(variable, {index});
+    ValueVector indices{index};
+    llvm::Type* variable_type = variable->getType()->getPointerElementType();
+    return builder.CreateInBoundsGEP(variable_type, variable, indices);
 }
 
 llvm::Value* IRBuilder::create_index(llvm::Value* value) {
@@ -378,23 +381,25 @@ llvm::Value* IRBuilder::create_index(llvm::Value* value) {
 
 llvm::Value* IRBuilder::create_load(const std::string& name, bool masked) {
     llvm::Value* ptr = lookup_value(name);
+    llvm::Type* loaded_type = ptr->getType()->getPointerElementType();
 
     // Check if the generated IR is vectorized and masked.
     if (masked) {
-        return builder.CreateMaskedLoad(ptr, llvm::Align(), mask);
+        builder.CreateMaskedLoad(loaded_type, ptr, llvm::Align(), mask);
     }
-    llvm::Type* loaded_type = ptr->getType()->getPointerElementType();
     llvm::Value* loaded = builder.CreateLoad(loaded_type, ptr);
     value_stack.push_back(loaded);
     return loaded;
 }
 
 llvm::Value* IRBuilder::create_load(llvm::Value* ptr, bool masked) {
+    llvm::Type* loaded_type = ptr->getType()->getPointerElementType();
+
     // Check if the generated IR is vectorized and masked.
     if (masked) {
-        return builder.CreateMaskedLoad(ptr, llvm::Align(), mask);
+        builder.CreateMaskedLoad(loaded_type, ptr, llvm::Align(), mask);
     }
-    llvm::Type* loaded_type = ptr->getType()->getPointerElementType();
+
     llvm::Value* loaded = builder.CreateLoad(loaded_type, ptr);
     value_stack.push_back(loaded);
     return loaded;
@@ -466,7 +471,9 @@ llvm::Value* IRBuilder::get_struct_member_ptr(llvm::Value* struct_variable, int 
     ValueVector indices;
     indices.push_back(llvm::ConstantInt::get(get_i32_type(), 0));
     indices.push_back(llvm::ConstantInt::get(get_i32_type(), member_index));
-    return builder.CreateInBoundsGEP(struct_variable, indices);
+
+    llvm::Type* type = struct_variable->getType()->getPointerElementType();
+    return builder.CreateInBoundsGEP(type, struct_variable, indices);
 }
 
 void IRBuilder::invert_mask() {
@@ -491,14 +498,23 @@ llvm::Value* IRBuilder::load_to_or_store_from_array(const std::string& id_name,
     bool generating_vector_ir = vector_width > 1 && vectorize;
 
     // If the vector code is generated, we need to distinguish between two cases. If the array is
-    // indexed indirectly (i.e. not by an induction variable `kernel_id`), create a gather
-    // instruction.
+    // indexed indirectly (i.e. not by an induction variable `kernel_id`), create gather/scatter
+    // instructions.
     if (id_name != kernel_id && generating_vector_ir) {
-        return maybe_value_to_store ? builder.CreateMaskedScatter(maybe_value_to_store,
-                                                                  element_ptr,
-                                                                  llvm::Align(),
-                                                                  mask)
-                                    : builder.CreateMaskedGather(element_ptr, llvm::Align(), mask);
+        if (maybe_value_to_store) {
+            return builder.CreateMaskedScatter(maybe_value_to_store,
+                                               element_ptr,
+                                               llvm::Align(),
+                                               mask);
+        } else {
+            // Construct the loaded vector type.
+            auto* ptrs = llvm::cast<llvm::VectorType>(element_ptr->getType());
+            llvm::ElementCount element_count = ptrs->getElementCount();
+            llvm::Type* element_type = ptrs->getElementType()->getPointerElementType();
+            llvm::Type* loaded_type = llvm::VectorType::get(element_type, element_count);
+
+            return builder.CreateMaskedGather(loaded_type, element_ptr, llvm::Align(), mask);
+        }
     }
 
     llvm::Value* ptr;
