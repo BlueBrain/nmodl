@@ -1,4 +1,5 @@
 #include <algorithm>
+#include "cuda.h"
 
 #include "ast/codegen_var_type.hpp"
 #include "codegen/llvm/codegen_llvm_helper_visitor.hpp"

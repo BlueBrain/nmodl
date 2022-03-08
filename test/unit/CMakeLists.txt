@@ -107,6 +107,9 @@ target_link_libraries(
 
 if(NMODL_ENABLE_LLVM)
   include_directories(${LLVM_INCLUDE_DIRS} codegen)
+  if(NMODL_ENABLE_LLVM_CUDA)
+    include_directories(${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES})
+  endif()
 
   add_library(benchmark_data STATIC codegen/codegen_data_helper.cpp)
   add_dependencies(benchmark_data lexer)
