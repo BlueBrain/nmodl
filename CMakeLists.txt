@@ -155,7 +155,7 @@ nmodl_find_python_module(yaml 3.12 REQUIRED)
 # Find LLVM dependencies
 # =============================================================================
 if(NMODL_ENABLE_LLVM)
-  include(LLVMHelper)
+  include(cmake/LLVMHelper.cmake)
   include_directories(${LLVM_INCLUDE_DIRS})
   add_definitions(-DNMODL_LLVM_BACKEND)
 endif()

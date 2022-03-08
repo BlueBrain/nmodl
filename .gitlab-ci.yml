@@ -27,6 +27,8 @@ trigger cvf:
   variables:
     SPACK_PACKAGE: nmodl
     SPACK_PACKAGE_SPEC: ~legacy-unit+python
+    SPACK_EXTRA_MODULES: llvm
+    SPACK_INSTALL_EXTRA_FLAGS: -v
 
 spack_setup:
   extends: .spack_setup_ccache
@@ -43,12 +45,12 @@ build:intel:
   variables:
     SPACK_PACKAGE_COMPILER: intel
 
-build:nvhpc:
+build:gcc:
   extends:
     - .spack_build
     - .spack_nmodl
   variables:
-    SPACK_PACKAGE_COMPILER: nvhpc
+    SPACK_PACKAGE_COMPILER: gcc
     SPACK_PACKAGE_DEPENDENCIES: ^bison%gcc^flex%gcc^py-jinja2%gcc^py-sympy%gcc^py-pyyaml%gcc
 
 .nmodl_tests:
@@ -62,8 +64,8 @@ test:intel:
     - .nmodl_tests
   needs: ["build:intel"]
 
-test:nvhpc:
+test:gcc:
   extends:
     - .ctest
     - .nmodl_tests
-  needs: ["build:nvhpc"]
+  needs: ["build:gcc"]
