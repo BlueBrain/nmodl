@@ -251,7 +251,7 @@ void CodegenInfo::get_int_variables() {
                                                         // not have doubles between read/write. Same
                                                         // name variables are allowed
         for (const auto& var: ion.reads) {
-            const std::string name = "ion_" + var;
+            const std::string name = naming::ION_VARNAME_PREFIX + var;
             codegen_int_variables.emplace_back(make_symbol(name));
             codegen_int_variables.back().is_constant = true;
             ion_vars[name] = codegen_int_variables.size() - 1;
@@ -261,16 +261,16 @@ void CodegenInfo::get_int_variables() {
         std::shared_ptr<symtab::Symbol> ion_di_dv_var = nullptr;
 
         for (const auto& var: ion.writes) {
-            const std::string name = "ion_" + var;
+            const std::string name = naming::ION_VARNAME_PREFIX + var;
 
             const auto ion_vars_it = ion_vars.find(name);
             if (ion_vars_it != ion_vars.end()) {
                 codegen_int_variables[ion_vars_it->second].is_constant = false;
             } else {
-                codegen_int_variables.emplace_back(make_symbol("ion_" + var));
+                codegen_int_variables.emplace_back(make_symbol(naming::ION_VARNAME_PREFIX + var));
             }
             if (ion.is_ionic_current(var)) {
-                ion_di_dv_var = make_symbol("ion_di" + ion.name + "dv");
+                ion_di_dv_var = make_symbol(naming::ION_VARNAME_PREFIX + "di" + ion.name + "dv");
             }
             if (ion.is_intra_cell_conc(var) || ion.is_extra_cell_conc(var)) {
                 need_style = true;
@@ -347,10 +347,10 @@ void CodegenInfo::get_int_variables() {
 void CodegenInfo::get_shadow_variables() {
     for (const auto& ion: ions) {
         for (const auto& var: ion.writes) {
-            codegen_shadow_variables.push_back({make_symbol(shadow_varname("ion_" + var))});
+            codegen_shadow_variables.push_back({make_symbol(shadow_varname(naming::ION_VARNAME_PREFIX + var))});
             if (ion.is_ionic_current(var)) {
                 codegen_shadow_variables.push_back(
-                    {make_symbol(shadow_varname("ion_di" + ion.name + "dv"))});
+                    {make_symbol(shadow_varname(naming::ION_VARNAME_PREFIX + "di" + ion.name + "dv"))});
             }
         }
     }
