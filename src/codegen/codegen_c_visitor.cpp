@@ -711,6 +711,15 @@ bool CodegenCVisitor::is_constant_variable(const std::string& name) const {
                  symbol->get_write_count() == 0) {
             is_constant = true;
         }
+    } else {
+        // Check whether the variable exists in the codegen_int_variables of the CodegenInfo struct
+        // which hold information whether the variables are const or not
+        const auto& int_variable_it = std::find_if(info.codegen_int_variables.begin(),
+                                                   info.codegen_int_variables.end(),
+                                                   [&name](const IndexVariableInfo& var) {
+                                                       return var.symbol->get_name() == name;
+                                                   });
+        return int_variable_it != info.codegen_int_variables.end() && int_variable_it->is_constant;
     }
     return is_constant;
 }
@@ -915,13 +924,19 @@ bool CodegenCVisitor::shadow_vector_setup_required() {
 }
 
 
+void CodegenCVisitor::print_channel_iteration_loop(const std::string& start = "start",
+                                                   const std::string& end = "end") {
+    printer->start_block("for (int id = {}; id < {}; id++)"_format(start, end));
+}
+
+
 /**
  * \details For CPU backend we iterate over all node counts. For cuda we use thread
  * index to check if block needs to be executed or not.
  */
 void CodegenCVisitor::print_channel_iteration_block_begin(BlockType type) {
     print_channel_iteration_block_parallel_hint(type);
-    printer->start_block("for (int id = start; id < end; id++)");
+    print_channel_iteration_loop();
 }
 
 
@@ -989,7 +1004,7 @@ void CodegenCVisitor::print_atomic_reduction_pragma() {
 
 
 void CodegenCVisitor::print_shadow_reduction_block_begin() {
-    printer->start_block("for (int id = start; id < end; id++)");
+    print_channel_iteration_loop();
 }
 
 

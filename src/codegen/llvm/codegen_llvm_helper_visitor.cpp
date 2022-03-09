@@ -244,7 +244,7 @@ std::shared_ptr<ast::InstanceStruct> CodegenLLVMHelperVisitor::create_instance_s
     add_var_with_type(naming::NTHREAD_DT_VARIABLE, FLOAT_TYPE, /*is_pointer=*/0);
     add_var_with_type(naming::CELSIUS_VARIABLE, FLOAT_TYPE, /*is_pointer=*/0);
     add_var_with_type(naming::SECOND_ORDER_VARIABLE, INTEGER_TYPE, /*is_pointer=*/0);
-    add_var_with_type(NODECOUNT_VAR, INTEGER_TYPE, /*is_pointer=*/0);
+    add_var_with_type(naming::MECH_NODECOUNT_VAR, INTEGER_TYPE, /*is_pointer=*/0);
 
     return std::make_shared<ast::InstanceStruct>(codegen_vars);
 }
@@ -462,7 +462,7 @@ void CodegenLLVMHelperVisitor::convert_to_instance_variable(ast::Node& node,
         /// instance_var_helper check of instance variables from mod file as well
         /// as extra variables like ion index variables added for code generation
         if (instance_var_helper.is_an_instance_variable(variable_name)) {
-            auto name = new ast::Name(new ast::String(MECH_INSTANCE_VAR));
+            auto name = new ast::Name(new ast::String(naming::MECH_INSTANCE_VAR));
             auto var = std::make_shared<ast::CodegenInstanceVar>(name, variable->clone());
             variable->set_name(var);
         }
@@ -631,7 +631,7 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
     {
         /// access node index and corresponding voltage
         loop_index_statements.push_back(
-            visitor::create_statement("node_id = node_index[{}]"_format(INDUCTION_VAR)));
+            visitor::create_statement("node_id = node_index[{}]"_format(naming::INDUCTION_VAR)));
         loop_body_statements.push_back(
             visitor::create_statement("v = {}[node_id]"_format(VOLTAGE_VAR)));
 
@@ -682,9 +682,10 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
     /// main loop possibly vectorized on vector_width
     {
         /// loop constructs : initialization, condition and increment
-        const auto& initialization = int_initialization_expression(INDUCTION_VAR);
-        const auto& condition = loop_count_expression(INDUCTION_VAR, NODECOUNT_VAR, vector_width);
-        const auto& increment = loop_increment_expression(INDUCTION_VAR, vector_width);
+        const auto& initialization = int_initialization_expression(naming::INDUCTION_VAR);
+        const auto& condition =
+            loop_count_expression(naming::INDUCTION_VAR, NODECOUNT_VAR, vector_width);
+        const auto& increment = loop_increment_expression(naming::INDUCTION_VAR, vector_width);
 
         /// clone it
         auto local_loop_block = std::shared_ptr<ast::StatementBlock>(loop_block->clone());
@@ -712,8 +713,9 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
     if (vector_width > 1) {
         /// loop constructs : initialization, condition and increment
         const auto& condition =
-            loop_count_expression(INDUCTION_VAR, NODECOUNT_VAR, /*vector_width=*/1);
-        const auto& increment = loop_increment_expression(INDUCTION_VAR, /*vector_width=*/1);
+            loop_count_expression(naming::INDUCTION_VAR, NODECOUNT_VAR, /*vector_width=*/1);
+        const auto& increment = loop_increment_expression(naming::INDUCTION_VAR,
+                                                          /*vector_width=*/1);
 
         /// rename local variables to avoid conflict with main loop
         rename_local_variables(*loop_block);
@@ -765,7 +767,7 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
     ast::CodegenVarWithTypeVector code_arguments;
 
     auto instance_var_type = new ast::CodegenVarType(ast::AstNodeType::INSTANCE_STRUCT);
-    auto instance_var_name = new ast::Name(new ast::String(MECH_INSTANCE_VAR));
+    auto instance_var_name = new ast::Name(new ast::String(naming::MECH_INSTANCE_VAR));
     auto instance_var = new ast::CodegenVarWithType(instance_var_type, 1, instance_var_name);
     code_arguments.emplace_back(instance_var);
 
