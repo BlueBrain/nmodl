@@ -16,7 +16,7 @@ on:
 
 env:
   BUILD_TYPE: Release
-  DEFAULT_PY_VERSION: 3.8
+  DEFAULT_PY_VERSION: 3.9
   DESIRED_CMAKE_VERSION: 3.15.0
 
 jobs:
@@ -86,7 +86,7 @@ jobs:
           python3 setup.py build_ext --inplace docs -j 2 -G Ninja \
             -- -DCMAKE_CXX_COMPILER_LAUNCHER=ccache;
           ccache -s
-          cd _skbuild/linux-x86_64-3.8/setuptools/sphinx;
+          cd _skbuild/linux-x86_64-3.9/setuptools/sphinx;
           rm -rf doctest doctrees && touch .nojekyll;
           echo "<meta http-equiv=\"refresh\" content=\"0; url=./html/index.html\" />" > index.html;
           echo ::set-output name=status::done
@@ -99,6 +99,6 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages # The branch the action should deploy to.
-          FOLDER: ${{runner.workspace}}/nmodl/_skbuild/linux-x86_64-3.8/setuptools/sphinx # The folder the action should deploy.
+          FOLDER: ${{runner.workspace}}/nmodl/_skbuild/linux-x86_64-3.9/setuptools/sphinx # The folder the action should deploy.
           CLEAN: false # Automatically remove deleted files from the deploy branch
 
