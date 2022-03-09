@@ -5,7 +5,7 @@
 # See top-level LICENSE file for details.
 # =============================================================================
 
-cmake_minimum_required(VERSION 3.15 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.17 FATAL_ERROR)
 
 project(NMODL LANGUAGES CXX)
 
@@ -164,6 +164,8 @@ if(NMODL_ENABLE_LLVM)
   add_definitions(-DNMODL_LLVM_BACKEND)
   if(NMODL_ENABLE_LLVM_CUDA)
     enable_language(CUDA)
+    find_package(CUDAToolkit)
+    add_definitions(-DNMODL_LLVM_CUDA_BACKEND)
   endif()
 endif()
 
@@ -273,8 +275,9 @@ if(NMODL_ENABLE_LLVM)
 endif()
 message(STATUS "LLVM CUDA Codegen   | ${NMODL_ENABLE_LLVM_CUDA}")
 if(NMODL_ENABLE_LLVM_CUDA)
-  message(STATUS "  CUDA VERSION      | ${CMAKE_CUDA_COMPILER_VERSION}")
-  message(STATUS "  INCLUDE           | ${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES}")
+  message(STATUS "  CUDA VERSION      | ${CUDAToolkit_VERSION}")
+  message(STATUS "  INCLUDE           | ${CUDAToolkit_INCLUDE_DIRS}")
+  message(STATUS "  LIBRARY           | ${CUDAToolkit_LIBRARY_DIR}")
 endif()
 if(NMODL_CLANG_FORMAT)
   message(STATUS "Clang Format        | ${ClangFormat_EXECUTABLE}")
