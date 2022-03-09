@@ -270,7 +270,8 @@ void CodegenInfo::get_int_variables() {
                 codegen_int_variables.emplace_back(make_symbol(naming::ION_VARNAME_PREFIX + var));
             }
             if (ion.is_ionic_current(var)) {
-                ion_di_dv_var = make_symbol(naming::ION_VARNAME_PREFIX + "di" + ion.name + "dv");
+                ion_di_dv_var = make_symbol(std::string(naming::ION_VARNAME_PREFIX) + "di" +
+                                            ion.name + "dv");
             }
             if (ion.is_intra_cell_conc(var) || ion.is_extra_cell_conc(var)) {
                 need_style = true;
@@ -347,10 +348,11 @@ void CodegenInfo::get_int_variables() {
 void CodegenInfo::get_shadow_variables() {
     for (const auto& ion: ions) {
         for (const auto& var: ion.writes) {
-            codegen_shadow_variables.push_back({make_symbol(shadow_varname(naming::ION_VARNAME_PREFIX + var))});
+            codegen_shadow_variables.push_back(
+                {make_symbol(shadow_varname(naming::ION_VARNAME_PREFIX + var))});
             if (ion.is_ionic_current(var)) {
-                codegen_shadow_variables.push_back(
-                    {make_symbol(shadow_varname(naming::ION_VARNAME_PREFIX + "di" + ion.name + "dv"))});
+                codegen_shadow_variables.push_back({make_symbol(shadow_varname(
+                    std::string(naming::ION_VARNAME_PREFIX) + "di" + ion.name + "dv"))});
             }
         }
     }

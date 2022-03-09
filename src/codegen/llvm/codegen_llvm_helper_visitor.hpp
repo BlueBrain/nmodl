@@ -17,8 +17,8 @@
 #include "ast/instance_struct.hpp"
 #include "codegen/codegen_info.hpp"
 #include "symtab/symbol_table.hpp"
+#include "utils/logger.hpp"
 #include "visitors/ast_visitor.hpp"
- #include "utils/logger.hpp"
 
 namespace nmodl {
 namespace codegen {

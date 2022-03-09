@@ -177,64 +177,64 @@ class CodegenLLVMVisitor: public CodegenCVisitor {
      * Override functions from CodegenCVisitor to the ones from visitor::ConstsAstVisitor as it was
      * originally for CodegenLLVMVisitor
      */
-    void visit_binary_operator(const ast::BinaryOperator& node) {
+    void visit_binary_operator(const ast::BinaryOperator& node) override {
         visitor::ConstAstVisitor::visit_binary_operator(node);
     }
-    void visit_else_if_statement(const ast::ElseIfStatement& node) {
+    void visit_else_if_statement(const ast::ElseIfStatement& node) override {
         visitor::ConstAstVisitor::visit_else_if_statement(node);
     }
-    void visit_else_statement(const ast::ElseStatement& node) {
+    void visit_else_statement(const ast::ElseStatement& node) override {
         visitor::ConstAstVisitor::visit_else_statement(node);
     }
-    void visit_float(const ast::Float& node) {
+    void visit_float(const ast::Float& node) override {
         visitor::ConstAstVisitor::visit_float(node);
     }
-    void visit_from_statement(const ast::FromStatement& node) {
+    void visit_from_statement(const ast::FromStatement& node) override {
         visitor::ConstAstVisitor::visit_from_statement(node);
     }
-    void visit_eigen_newton_solver_block(const ast::EigenNewtonSolverBlock& node) {
+    void visit_eigen_newton_solver_block(const ast::EigenNewtonSolverBlock& node) override {
         visitor::ConstAstVisitor::visit_eigen_newton_solver_block(node);
     }
-    void visit_eigen_linear_solver_block(const ast::EigenLinearSolverBlock& node) {
+    void visit_eigen_linear_solver_block(const ast::EigenLinearSolverBlock& node) override {
         visitor::ConstAstVisitor::visit_eigen_linear_solver_block(node);
     }
-    void visit_indexed_name(const ast::IndexedName& node) {
+    void visit_indexed_name(const ast::IndexedName& node) override {
         visitor::ConstAstVisitor::visit_indexed_name(node);
     }
-    void visit_local_list_statement(const ast::LocalListStatement& node) {
+    void visit_local_list_statement(const ast::LocalListStatement& node) override {
         visitor::ConstAstVisitor::visit_local_list_statement(node);
     }
-    void visit_name(const ast::Name& node) {
+    void visit_name(const ast::Name& node) override {
         visitor::ConstAstVisitor::visit_name(node);
     }
-    void visit_paren_expression(const ast::ParenExpression& node) {
+    void visit_paren_expression(const ast::ParenExpression& node) override {
         visitor::ConstAstVisitor::visit_paren_expression(node);
     }
-    void visit_prime_name(const ast::PrimeName& node) {
+    void visit_prime_name(const ast::PrimeName& node) override {
         visitor::ConstAstVisitor::visit_prime_name(node);
     }
-    void visit_string(const ast::String& node) {
+    void visit_string(const ast::String& node) override {
         visitor::ConstAstVisitor::visit_string(node);
     }
-    void visit_solution_expression(const ast::SolutionExpression& node) {
+    void visit_solution_expression(const ast::SolutionExpression& node) override {
         visitor::ConstAstVisitor::visit_solution_expression(node);
     }
-    void visit_unary_operator(const ast::UnaryOperator& node) {
+    void visit_unary_operator(const ast::UnaryOperator& node) override {
         visitor::ConstAstVisitor::visit_unary_operator(node);
     }
-    void visit_unit(const ast::Unit& node) {
+    void visit_unit(const ast::Unit& node) override {
         visitor::ConstAstVisitor::visit_unit(node);
     }
-    void visit_verbatim(const ast::Verbatim& node) {
+    void visit_verbatim(const ast::Verbatim& node) override {
         visitor::ConstAstVisitor::visit_verbatim(node);
     }
-    void visit_watch_statement(const ast::WatchStatement& node) {
+    void visit_watch_statement(const ast::WatchStatement& node) override {
         visitor::ConstAstVisitor::visit_watch_statement(node);
     }
-    void visit_derivimplicit_callback(const ast::DerivimplicitCallback& node) {
+    void visit_derivimplicit_callback(const ast::DerivimplicitCallback& node) override {
         visitor::ConstAstVisitor::visit_derivimplicit_callback(node);
     }
-    void visit_for_netcon(const ast::ForNetcon& node) {
+    void visit_for_netcon(const ast::ForNetcon& node) override {
         visitor::ConstAstVisitor::visit_for_netcon(node);
     }
 
