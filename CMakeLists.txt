@@ -5,7 +5,7 @@
 # See top-level LICENSE file for details.
 # =============================================================================
 
-cmake_minimum_required(VERSION 3.15 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.17 FATAL_ERROR)
 
 project(NMODL LANGUAGES CXX)
 
@@ -23,6 +23,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
 option(NMODL_ENABLE_PYTHON_BINDINGS "Enable pybind11 based python bindings" OFF)
 option(NMODL_ENABLE_LEGACY_UNITS "Use original faraday, R, etc. instead of 2019 nist constants" OFF)
 option(NMODL_ENABLE_LLVM "Enable LLVM based code generation" ON)
+option(NMODL_ENABLE_LLVM_GPU "Enable LLVM based GPU code generation" ON)
 option(NMODL_ENABLE_JIT_EVENT_LISTENERS "Enable JITEventListener for Perf and Vtune" OFF)
 
 if(NMODL_ENABLE_LEGACY_UNITS)
@@ -161,6 +162,11 @@ if(NMODL_ENABLE_LLVM)
   include(cmake/LLVMHelper.cmake)
   include_directories(${LLVM_INCLUDE_DIRS})
   add_definitions(-DNMODL_LLVM_BACKEND)
+  if(NMODL_ENABLE_LLVM_CUDA)
+    enable_language(CUDA)
+    find_package(CUDAToolkit)
+    add_definitions(-DNMODL_LLVM_CUDA_BACKEND)
+  endif()
 endif()
 
 # =============================================================================
@@ -266,6 +272,12 @@ if(NMODL_ENABLE_LLVM)
   message(STATUS "  INCLUDE           | ${LLVM_INCLUDE_DIRS}")
   message(STATUS "  CMAKE             | ${LLVM_CMAKE_DIR}")
   message(STATUS "  JIT LISTENERS     | ${NMODL_ENABLE_JIT_EVENT_LISTENERS}")
+endif()
+message(STATUS "LLVM CUDA Codegen   | ${NMODL_ENABLE_LLVM_CUDA}")
+if(NMODL_ENABLE_LLVM_CUDA)
+  message(STATUS "  CUDA VERSION      | ${CUDAToolkit_VERSION}")
+  message(STATUS "  INCLUDE           | ${CUDAToolkit_INCLUDE_DIRS}")
+  message(STATUS "  LIBRARY           | ${CUDAToolkit_LIBRARY_DIR}")
 endif()
 if(NMODL_CLANG_FORMAT)
   message(STATUS "Clang Format        | ${ClangFormat_EXECUTABLE}")

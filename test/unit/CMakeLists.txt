@@ -115,6 +115,12 @@ if(NMODL_ENABLE_LLVM)
                           codegen/codegen_data_helper.cpp codegen/codegen_llvm_instance_struct.cpp)
   add_executable(test_llvm_runner visitor/main.cpp codegen/codegen_data_helper.cpp
                                   codegen/codegen_llvm_execution.cpp)
+  if(NMODL_ENABLE_LLVM_CUDA)
+    include_directories(${CUDAToolkit_INCLUDE_DIRS})
+    target_link_libraries(benchmark_data PRIVATE CUDA::cudart)
+    target_link_libraries(testllvm CUDA::cudart)
+    target_link_libraries(test_llvm_runner CUDA::cudart)
+  endif()
   target_link_libraries(
     testllvm
     llvm_codegen
