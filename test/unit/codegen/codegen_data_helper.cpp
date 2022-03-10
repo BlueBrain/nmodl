@@ -1,5 +1,9 @@
 #include <algorithm>
 
+#ifdef NMODL_LLVM_CUDA_BACKEND
+#include <cuda_runtime_api.h>
+#endif
+
 #include "ast/codegen_var_type.hpp"
 #include "codegen/llvm/codegen_llvm_helper_visitor.hpp"
 
@@ -18,10 +22,18 @@ const int default_second_order_value = 0;
 CodegenInstanceData::~CodegenInstanceData() {
     // first free num_ptr_members members which are pointers
     for (size_t i = 0; i < num_ptr_members; i++) {
+#ifdef NMODL_LLVM_CUDA_BACKEND
+        cudaFree(members[i]);
+#else
         free(members[i]);
+#endif
     }
-    // and then pointer to container struct
+// and then pointer to container struct
+#ifdef NMODL_LLVM_CUDA_BACKEND
+    cudaFree(base_ptr);
+#else
     free(base_ptr);
+#endif
 }
 
 /**
@@ -85,8 +97,13 @@ CodegenInstanceData CodegenDataHelper::create_data(size_t num_elements, size_t s
     // max size of each member : pointer / double has maximum size
     size_t member_size = std::max(sizeof(double), sizeof(double*));
 
-    // allocate instance object with memory alignment
+// allocate instance object with memory alignment
+#ifdef NMODL_LLVM_CUDA_BACKEND
+    cudaMallocManaged(&base, member_size * variables.size());
+#else
     posix_memalign(&base, NBYTE_ALIGNMENT, member_size * variables.size());
+#endif
+
     data.base_ptr = base;
     data.num_bytes += member_size * variables.size();
 
@@ -114,7 +131,11 @@ CodegenInstanceData CodegenDataHelper::create_data(size_t num_elements, size_t s
 
         // allocate memory and setup a pointer
         void* member;
+#ifdef NMODL_LLVM_CUDA_BACKEND
+        cudaMallocManaged(&member, member_size * num_elements);
+#else
         posix_memalign(&member, NBYTE_ALIGNMENT, member_size * num_elements);
+#endif
 
         // integer values are often offsets so they must start from
         // 0 to num_elements-1 to avoid out of bound accesses.
