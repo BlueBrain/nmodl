@@ -4,16 +4,17 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NMODL Python Interface Tutorial &mdash; NMODL 0.0 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <title>NMODL Python Interface Tutorial &mdash; NMODL 0.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -40,17 +41,17 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p><span class="caption-text">Introduction:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Introduction:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../readme.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installing the NMODL Framework</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../language.html">The NEURON MODeling language</a></li>
 </ul>
-<p><span class="caption-text">Contents:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../contents/visitors.html">Visitors</a></li>
 </ul>
-<p><span class="caption-text">Jupyter Notebooks:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Jupyter Notebooks:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../notebooks.html">The NMODL Jupyter notebooks</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">NMODL Python Interface Tutorial</a><ul>
@@ -75,11 +76,11 @@
 <li class="toctree-l1"><a class="reference internal" href="nmodl-nonlinear-solver.html">NMODL NONLINEAR solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nmodl-sympy-conductance.html">NMODL CONDUCTANCE</a></li>
 </ul>
-<p><span class="caption-text">Contributing:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Contributing:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to the NMODL Framework</a></li>
 </ul>
-<p><span class="caption-text">Reference:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Reference:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../modules.html">Python package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C++ API</a></li>
@@ -380,9 +381,9 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <section id="NMODL-Python-Interface-Tutorial">
-<h1>NMODL Python Interface Tutorial<a class="headerlink" href="#NMODL-Python-Interface-Tutorial" title="Permalink to this headline">¶</a></h1>
+<h1>NMODL Python Interface Tutorial<a class="headerlink" href="#NMODL-Python-Interface-Tutorial" title="Permalink to this headline"></a></h1>
 <section id="Introduction">
-<h2>Introduction<a class="headerlink" href="#Introduction" title="Permalink to this headline">¶</a></h2>
+<h2>Introduction<a class="headerlink" href="#Introduction" title="Permalink to this headline"></a></h2>
 <p>NMODL is a code generation framework for NEURON Modeling Language. It is primarily designed to support optimised code generation backends for modern architectures including CPUs and GPUs. It provides high level Python interface that can be used for model introspection as well as performing various analysis on underlying model.</p>
 <p>This tutorial provides introduction to Python API with examples.</p>
 <p>To get started, let’s install nmodl via Python wheel as:</p>
@@ -400,7 +401,7 @@ div.rendered_html tbody tr:hover {
 </div></blockquote>
 </section>
 <section id="Parsing-Model-And-Constructing-AST">
-<h2>Parsing Model And Constructing AST<a class="headerlink" href="#Parsing-Model-And-Constructing-AST" title="Permalink to this headline">¶</a></h2>
+<h2>Parsing Model And Constructing AST<a class="headerlink" href="#Parsing-Model-And-Constructing-AST" title="Permalink to this headline"></a></h2>
 <p>Once the NMODL is setup properly we should be able to import <code class="docutils literal notranslate"><span class="pre">nmodl</span></code> module :</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
@@ -502,10 +503,10 @@ UNITS {
 </div>
 </section>
 <section id="Querying-AST-object-with-Visitors">
-<h2>Querying AST object with Visitors<a class="headerlink" href="#Querying-AST-object-with-Visitors" title="Permalink to this headline">¶</a></h2>
+<h2>Querying AST object with Visitors<a class="headerlink" href="#Querying-AST-object-with-Visitors" title="Permalink to this headline"></a></h2>
 <p>One of the strength of NMODL python interface is access to inbuilt <a class="reference external" href="https://en.wikipedia.org/wiki/Visitor_pattern">Visitors</a>. One can perform different queries and analysis on AST using different visitors. Lets start with the examples of inbuilt visitors.</p>
 <section id="Lookup-visitor">
-<h3>Lookup visitor<a class="headerlink" href="#Lookup-visitor" title="Permalink to this headline">¶</a></h3>
+<h3>Lookup visitor<a class="headerlink" href="#Lookup-visitor" title="Permalink to this headline"></a></h3>
 <p>As name suggest, lookup visitor allows to search different NMODL constructs in the AST. The <code class="docutils literal notranslate"><span class="pre">visitor</span></code> module provides access to inbuilt visitors. In order to use this visitor, we create an object of AstLookupVisitor :</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
@@ -624,7 +625,7 @@ foo = 1.0+gamma
 <p>Every AST node provides <code class="docutils literal notranslate"><span class="pre">accept</span></code> method that takes visitor object as parameter. In above example, we used <code class="docutils literal notranslate"><span class="pre">accept</span></code> method of <code class="docutils literal notranslate"><span class="pre">FunctionBock</span></code> node. This allows to run a given visitor on a specific node. <code class="docutils literal notranslate"><span class="pre">AstLookupVisitor</span></code> provides <code class="docutils literal notranslate"><span class="pre">get_nodes()</span></code> method that can be used to retrive the result of visitor. List of all <code class="docutils literal notranslate"><span class="pre">AstNodeType</span></code> can be found <a class="reference external" href="####">here (todo)</a>.</p>
 </section>
 <section id="Symbol-Table-Visitor">
-<h3>Symbol Table Visitor<a class="headerlink" href="#Symbol-Table-Visitor" title="Permalink to this headline">¶</a></h3>
+<h3>Symbol Table Visitor<a class="headerlink" href="#Symbol-Table-Visitor" title="Permalink to this headline"></a></h3>
 <p>Symbol table visitor is used to find out all variables and their usage in mod file. To use this, first create a visitor object as:</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
@@ -756,7 +757,7 @@ cai [Properties : prime_name assigned_definition write_ion state_var]
 </div>
 </section>
 <section id="Custom-AST-visitor">
-<h3>Custom AST visitor<a class="headerlink" href="#Custom-AST-visitor" title="Permalink to this headline">¶</a></h3>
+<h3>Custom AST visitor<a class="headerlink" href="#Custom-AST-visitor" title="Permalink to this headline"></a></h3>
 <p>If predefined visitors are limited, we can implement new visitor using AstVisitor interface. Lets say we want to implement a visitor that will print every floating point number in MOD file. Here is how we can do this:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
@@ -841,7 +842,7 @@ minCai
 </section>
 </section>
 <section id="Easy-code-generation-using-AST-visitors">
-<h2>Easy code generation using AST visitors<a class="headerlink" href="#Easy-code-generation-using-AST-visitors" title="Permalink to this headline">¶</a></h2>
+<h2>Easy code generation using AST visitors<a class="headerlink" href="#Easy-code-generation-using-AST-visitors" title="Permalink to this headline"></a></h2>
 <p>With a little more code we can even create a code generator for python using a the visitor pattern.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
@@ -971,7 +972,7 @@ def myfunc(x, y):
 </div>
 </section>
 <section id="Example-of-CURIE-information-parsing">
-<h2>Example of CURIE information parsing<a class="headerlink" href="#Example-of-CURIE-information-parsing" title="Permalink to this headline">¶</a></h2>
+<h2>Example of CURIE information parsing<a class="headerlink" href="#Example-of-CURIE-information-parsing" title="Permalink to this headline"></a></h2>
 <p>In this example we show how ontology information from NEURON block can be parsed.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:

@@ -4,16 +4,17 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NMODL integration of ODEs &mdash; NMODL 0.0 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <title>NMODL integration of ODEs &mdash; NMODL 0.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -40,17 +41,17 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p><span class="caption-text">Introduction:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Introduction:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../readme.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installing the NMODL Framework</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../language.html">The NEURON MODeling language</a></li>
 </ul>
-<p><span class="caption-text">Contents:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../contents/visitors.html">Visitors</a></li>
 </ul>
-<p><span class="caption-text">Jupyter Notebooks:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Jupyter Notebooks:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../notebooks.html">The NMODL Jupyter notebooks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nmodl-python-tutorial.html">NMODL Python Interface Tutorial</a></li>
@@ -69,11 +70,11 @@
 <li class="toctree-l1"><a class="reference internal" href="nmodl-nonlinear-solver.html">NMODL NONLINEAR solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nmodl-sympy-conductance.html">NMODL CONDUCTANCE</a></li>
 </ul>
-<p><span class="caption-text">Contributing:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Contributing:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to the NMODL Framework</a></li>
 </ul>
-<p><span class="caption-text">Reference:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Reference:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../modules.html">Python package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C++ API</a></li>
@@ -374,7 +375,7 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <section id="NMODL-integration-of-ODEs">
-<h1>NMODL integration of ODEs<a class="headerlink" href="#NMODL-integration-of-ODEs" title="Permalink to this headline">¶</a></h1>
+<h1>NMODL integration of ODEs<a class="headerlink" href="#NMODL-integration-of-ODEs" title="Permalink to this headline"></a></h1>
 <p>This is an overview of - the different ways a user can specify the equations that define the system they want to simulate in the MOD file - how these equations can be related to each other - how these equations are solved in NMODL</p>
 <hr class="docutils" />
 <p>The user can specify information about the system in a variety of ways: - A high level way to describe a system is to specify a Mass Action Kinetic scheme of reaction equations in a <code class="docutils literal notranslate"><span class="pre">KINETIC</span></code> block - Alternatively a system of ODEs can be specified in a <code class="docutils literal notranslate"><span class="pre">DERIVATIVE</span></code> block (any kinetic scheme can also be written as a system of ODEs) - Finally a system of linear/non-linear algebraic equations can be specified in a <code class="docutils literal notranslate"><span class="pre">LINEAR</span></code>/<code class="docutils literal notranslate"><span class="pre">NONLINEAR</span></code> block (a numerical integration scheme, such as backwards
@@ -383,7 +384,7 @@ Euler, transforms a system of ODEs into a system of linear or non-linear equatio
 <p>After these transformations we are left with only <code class="docutils literal notranslate"><span class="pre">LINEAR</span></code>/<code class="docutils literal notranslate"><span class="pre">NONLINEAR</span></code> blocks that are then solved numerically (by Gaussian Elimination, LU factorization or Newton iteration)</p>
 <hr class="docutils" />
 <section id="KINETIC-block">
-<h2><code class="docutils literal notranslate"><span class="pre">KINETIC</span></code> block<a class="headerlink" href="#KINETIC-block" title="Permalink to this headline">¶</a></h2>
+<h2><code class="docutils literal notranslate"><span class="pre">KINETIC</span></code> block<a class="headerlink" href="#KINETIC-block" title="Permalink to this headline"></a></h2>
 <ul class="simple">
 <li><p>Mass Action kinetics: a set of reaction equations with associated reaction rates</p></li>
 <li><p>converted to a <code class="docutils literal notranslate"><span class="pre">DERIVATIVE</span></code> blocking containing an equivalent system of ODEs using the law of Mass Action</p></li>
@@ -392,7 +393,7 @@ Euler, transforms a system of ODEs into a system of linear or non-linear equatio
 </section>
 <hr class="docutils" />
 <section id="DERIVATIVE-block">
-<h2><code class="docutils literal notranslate"><span class="pre">DERIVATIVE</span></code> block<a class="headerlink" href="#DERIVATIVE-block" title="Permalink to this headline">¶</a></h2>
+<h2><code class="docutils literal notranslate"><span class="pre">DERIVATIVE</span></code> block<a class="headerlink" href="#DERIVATIVE-block" title="Permalink to this headline"></a></h2>
 <ul class="simple">
 <li><p>system of ODEs &amp; associated solve method: <code class="docutils literal notranslate"><span class="pre">cnexp</span></code>, <code class="docutils literal notranslate"><span class="pre">sparse</span></code>, <code class="docutils literal notranslate"><span class="pre">derivimplicit</span></code> or <code class="docutils literal notranslate"><span class="pre">euler</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">cnexp</span></code></p></li>
@@ -423,7 +424,7 @@ Euler, transforms a system of ODEs into a system of linear or non-linear equatio
 </section>
 <hr class="docutils" />
 <section id="LINEAR-block">
-<h2><code class="docutils literal notranslate"><span class="pre">LINEAR</span></code> block<a class="headerlink" href="#LINEAR-block" title="Permalink to this headline">¶</a></h2>
+<h2><code class="docutils literal notranslate"><span class="pre">LINEAR</span></code> block<a class="headerlink" href="#LINEAR-block" title="Permalink to this headline"></a></h2>
 <ul class="simple">
 <li><p>system of linear algebraic equations</p></li>
 <li><p>for small systems (<img class="math" src="../_images/math/e664701bd5a097101c7d099cdaaf7b571c864e45.png" alt="N&lt;=3"/>)</p>
@@ -441,7 +442,7 @@ Euler, transforms a system of ODEs into a system of linear or non-linear equatio
 </section>
 <hr class="docutils" />
 <section id="NONLINEAR-block">
-<h2><code class="docutils literal notranslate"><span class="pre">NONLINEAR</span></code> block<a class="headerlink" href="#NONLINEAR-block" title="Permalink to this headline">¶</a></h2>
+<h2><code class="docutils literal notranslate"><span class="pre">NONLINEAR</span></code> block<a class="headerlink" href="#NONLINEAR-block" title="Permalink to this headline"></a></h2>
 <ul class="simple">
 <li><p>system of non-linear algebraic equations</p></li>
 <li><p>solve by Newton iteration</p></li>

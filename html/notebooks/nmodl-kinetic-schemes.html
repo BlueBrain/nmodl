@@ -4,16 +4,17 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NMODL Kinetic Scheme &mdash; NMODL 0.0 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <title>NMODL Kinetic Scheme &mdash; NMODL 0.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -40,17 +41,17 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p><span class="caption-text">Introduction:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Introduction:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../readme.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installing the NMODL Framework</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../language.html">The NEURON MODeling language</a></li>
 </ul>
-<p><span class="caption-text">Contents:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../contents/visitors.html">Visitors</a></li>
 </ul>
-<p><span class="caption-text">Jupyter Notebooks:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Jupyter Notebooks:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../notebooks.html">The NMODL Jupyter notebooks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nmodl-python-tutorial.html">NMODL Python Interface Tutorial</a></li>
@@ -79,11 +80,11 @@
 <li class="toctree-l1"><a class="reference internal" href="nmodl-nonlinear-solver.html">NMODL NONLINEAR solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nmodl-sympy-conductance.html">NMODL CONDUCTANCE</a></li>
 </ul>
-<p><span class="caption-text">Contributing:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Contributing:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to the NMODL Framework</a></li>
 </ul>
-<p><span class="caption-text">Reference:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Reference:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../modules.html">Python package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C++ API</a></li>
@@ -384,13 +385,13 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <section id="NMODL-Kinetic-Scheme">
-<h1>NMODL Kinetic Scheme<a class="headerlink" href="#NMODL-Kinetic-Scheme" title="Permalink to this headline">¶</a></h1>
+<h1>NMODL Kinetic Scheme<a class="headerlink" href="#NMODL-Kinetic-Scheme" title="Permalink to this headline"></a></h1>
 <p>This notebook describes the reaction kinetics &amp; mass action laws that apply within <code class="docutils literal notranslate"><span class="pre">KINETIC</span></code> blocks, and the implementation of the <code class="docutils literal notranslate"><span class="pre">KineticBlockVisitor</span></code> in NMODL which transforms <code class="docutils literal notranslate"><span class="pre">KINETIC</span></code> blocks into <code class="docutils literal notranslate"><span class="pre">DERIVATIVE</span></code> blocks containing an equivalent system of ODEs.</p>
 <p>For a higher level overview of the approach to solving ODEs in NMODL, please see the <a class="reference internal" href="nmodl-odes-overview.html"><span class="doc">nmodl-odes-overview</span></a> notebook.</p>
 <p>For a more general tutorial on using the NMODL python interface, please see the <a class="reference internal" href="nmodl-python-tutorial.html"><span class="doc">tutorial notebook</span></a>.</p>
 <hr class="docutils" />
 <section id="Reaction-Kinetics">
-<h2>Reaction Kinetics<a class="headerlink" href="#Reaction-Kinetics" title="Permalink to this headline">¶</a></h2>
+<h2>Reaction Kinetics<a class="headerlink" href="#Reaction-Kinetics" title="Permalink to this headline"></a></h2>
 <ul class="simple">
 <li><p>We consider a set of reaction species <img class="math" src="../_images/math/7897dc8f542a8255a10ef6d51e0b83b2c62d9107.png" alt="A_j"/>, with corresponding Molar concentrations <img class="math" src="../_images/math/694e50504c55bd9398472d7eb9c44e64b1120865.png" alt="Y_j"/></p></li>
 <li><p>They react according to a set of reaction equations:</p></li>
@@ -400,7 +401,7 @@ div.rendered_html tbody tr:hover {
 </div><p>where - <img class="math" src="../_images/math/10394fb9a1e2539ad64521b5d93d822aa0775a36.png" alt="k_i"/> is the rate coefficient - <img class="math" src="../_images/math/1256865f5326c3c08c8fbb635869ca4fff131d92.png" alt="\nu_{ij}^L"/>, <img class="math" src="../_images/math/b9ec24c1aa64852e54b5df0da279e43328f4f10c.png" alt="\nu_{ij}^R"/> are stoichiometric coefficients - must be positive integers (including zero)</p>
 </section>
 <section id="Law-of-Mass-Action">
-<h2>Law of Mass Action<a class="headerlink" href="#Law-of-Mass-Action" title="Permalink to this headline">¶</a></h2>
+<h2>Law of Mass Action<a class="headerlink" href="#Law-of-Mass-Action" title="Permalink to this headline"></a></h2>
 <ul class="simple">
 <li><p>This allows us to convert these reaction equations to a set of ODEs</p></li>
 </ul>
@@ -411,7 +412,7 @@ div.rendered_html tbody tr:hover {
 <p><img src="../_images/math/545ad59c0da12ec96d61163022208ec422fd391f.png" alt="r_i = k_i \prod_j Y_j^{\nu_{ij}^R}"/></p>
 </div></section>
 <section id="KINETIC-block-format">
-<h2>KINETIC block format<a class="headerlink" href="#KINETIC-block-format" title="Permalink to this headline">¶</a></h2>
+<h2>KINETIC block format<a class="headerlink" href="#KINETIC-block-format" title="Permalink to this headline"></a></h2>
 <p>A reaction equation is specifed in the mod file as</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>~ A0 + 3A1 + 2A2 + ... &lt;-&gt; 2A0 + A1 + ... (kf, kb)
 </pre></div>
@@ -429,7 +430,7 @@ div.rendered_html tbody tr:hover {
 \*\*\*"/></p>
 </div></section>
 <section id="Other-types-of-reaction-statement">
-<h2>Other types of reaction statement<a class="headerlink" href="#Other-types-of-reaction-statement" title="Permalink to this headline">¶</a></h2>
+<h2>Other types of reaction statement<a class="headerlink" href="#Other-types-of-reaction-statement" title="Permalink to this headline"></a></h2>
 <p>There is also have a reaction statement of the form</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>~ h &lt;&lt; (a)
 </pre></div>
@@ -451,14 +452,14 @@ div.rendered_html tbody tr:hover {
 <hr class="docutils" />
 </section>
 <section id="f_flux-/-b_flux-variables">
-<h2>f_flux / b_flux variables<a class="headerlink" href="#f_flux-/-b_flux-variables" title="Permalink to this headline">¶</a></h2>
+<h2>f_flux / b_flux variables<a class="headerlink" href="#f_flux-/-b_flux-variables" title="Permalink to this headline"></a></h2>
 <p>Within the <code class="docutils literal notranslate"><span class="pre">KINETIC</span></code> block in the MOD file, the user can make use of the <code class="docutils literal notranslate"><span class="pre">f_flux</span></code> and <code class="docutils literal notranslate"><span class="pre">b_flux</span></code> variables, which refer to the forwards <img class="math" src="../_images/math/0a937a53a56d05f2bf7c797f789b8a8433e4f9f2.png" alt="r^{(f)}"/> and backwards <img class="math" src="../_images/math/f65a6a5bdf41ee3f8d4fdccb7f52efd7a065970e.png" alt="r^{(b)}"/> fluxes of the preceeding reaction statement.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">KineticBlockVisitor</span></code> substitutes the current expression for these fluxes for these variables within the <code class="docutils literal notranslate"><span class="pre">KINETIC</span></code> block.</p>
 <p>If these variables are referenced before a reaction statement then they are assumed to be zero.</p>
 <hr class="docutils" />
 </section>
 <section id="[TODO]-CONSERVE">
-<h2>[TODO] CONSERVE<a class="headerlink" href="#[TODO]-CONSERVE" title="Permalink to this headline">¶</a></h2>
+<h2>[TODO] CONSERVE<a class="headerlink" href="#[TODO]-CONSERVE" title="Permalink to this headline"></a></h2>
 <p>Converse statement allows specification of a conservation law, e.g.</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>CONSERVE h + m + z = 1
 </pre></div>
@@ -471,7 +472,7 @@ div.rendered_html tbody tr:hover {
 </ul>
 </section>
 <section id="Examples">
-<h2>Examples<a class="headerlink" href="#Examples" title="Permalink to this headline">¶</a></h2>
+<h2>Examples<a class="headerlink" href="#Examples" title="Permalink to this headline"></a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
@@ -510,7 +511,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <section id="Ex.-1">
-<h3>Ex. 1<a class="headerlink" href="#Ex.-1" title="Permalink to this headline">¶</a></h3>
+<h3>Ex. 1<a class="headerlink" href="#Ex.-1" title="Permalink to this headline"></a></h3>
 <p>Given the following KINETIC statement</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>~ h &lt;-&gt; m (a,b)
 </pre></div>
@@ -595,7 +596,7 @@ DERIVATIVE kin {
 </div>
 </section>
 <section id="Ex.-2">
-<h3>Ex. 2<a class="headerlink" href="#Ex.-2" title="Permalink to this headline">¶</a></h3>
+<h3>Ex. 2<a class="headerlink" href="#Ex.-2" title="Permalink to this headline"></a></h3>
 <p>Annihilation reaction statement</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
@@ -625,7 +626,7 @@ DERIVATIVE kin {
 </div>
 </section>
 <section id="Ex.-3">
-<h3>Ex. 3<a class="headerlink" href="#Ex.-3" title="Permalink to this headline">¶</a></h3>
+<h3>Ex. 3<a class="headerlink" href="#Ex.-3" title="Permalink to this headline"></a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">&lt;&lt;</span></code> reaction statement</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
@@ -655,7 +656,7 @@ DERIVATIVE kin {
 </div>
 </section>
 <section id="Ex.-4">
-<h3>Ex. 4<a class="headerlink" href="#Ex.-4" title="Permalink to this headline">¶</a></h3>
+<h3>Ex. 4<a class="headerlink" href="#Ex.-4" title="Permalink to this headline"></a></h3>
 <p>Annihilation &amp; <code class="docutils literal notranslate"><span class="pre">&lt;&lt;</span></code> reaction statement for the same state variable</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
@@ -686,7 +687,7 @@ DERIVATIVE kin {
 </div>
 </section>
 <section id="Ex.-5">
-<h3>Ex. 5<a class="headerlink" href="#Ex.-5" title="Permalink to this headline">¶</a></h3>
+<h3>Ex. 5<a class="headerlink" href="#Ex.-5" title="Permalink to this headline"></a></h3>
 <p>Reaction statements and use of <code class="docutils literal notranslate"><span class="pre">f_flux</span></code>, <code class="docutils literal notranslate"><span class="pre">b_flux</span></code> variables</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:

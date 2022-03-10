@@ -4,16 +4,17 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NMODL SympySolver - cnexp &mdash; NMODL 0.0 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <title>NMODL SympySolver - cnexp &mdash; NMODL 0.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -40,17 +41,17 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p><span class="caption-text">Introduction:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Introduction:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../readme.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installing the NMODL Framework</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../language.html">The NEURON MODeling language</a></li>
 </ul>
-<p><span class="caption-text">Contents:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../contents/visitors.html">Visitors</a></li>
 </ul>
-<p><span class="caption-text">Jupyter Notebooks:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Jupyter Notebooks:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../notebooks.html">The NMODL Jupyter notebooks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nmodl-python-tutorial.html">NMODL Python Interface Tutorial</a></li>
@@ -77,11 +78,11 @@
 <li class="toctree-l1"><a class="reference internal" href="nmodl-nonlinear-solver.html">NMODL NONLINEAR solver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nmodl-sympy-conductance.html">NMODL CONDUCTANCE</a></li>
 </ul>
-<p><span class="caption-text">Contributing:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Contributing:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to the NMODL Framework</a></li>
 </ul>
-<p><span class="caption-text">Reference:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Reference:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../modules.html">Python package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C++ API</a></li>
@@ -382,13 +383,13 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <section id="NMODL-SympySolver---cnexp">
-<h1>NMODL SympySolver - cnexp<a class="headerlink" href="#NMODL-SympySolver---cnexp" title="Permalink to this headline">¶</a></h1>
+<h1>NMODL SympySolver - cnexp<a class="headerlink" href="#NMODL-SympySolver---cnexp" title="Permalink to this headline"></a></h1>
 <p>This notebook describes the implementation of the <code class="docutils literal notranslate"><span class="pre">cnexp</span></code> part of the <code class="docutils literal notranslate"><span class="pre">SympySolverVisitor</span></code>, which solves the systems of ODEs defined in <code class="docutils literal notranslate"><span class="pre">DERIVATIVE</span></code> blocks when these ODEs are <em>linear</em> and <em>independent</em>.</p>
 <p>For a higher level overview of the approach to solving ODEs in NMODL, please see the <a class="reference internal" href="nmodl-odes-overview.html"><span class="doc">nmodl-odes-overview</span></a> notebook.</p>
 <p>For a more general tutorial on using the NMODL python interface, please see the <a class="reference internal" href="nmodl-python-tutorial.html"><span class="doc">tutorial notebook</span></a>.</p>
 <hr class="docutils" />
 <section id="Implementation">
-<h2>Implementation<a class="headerlink" href="#Implementation" title="Permalink to this headline">¶</a></h2>
+<h2>Implementation<a class="headerlink" href="#Implementation" title="Permalink to this headline"></a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">SympySolverVisitor</span></code> for solver method <code class="docutils literal notranslate"><span class="pre">cnexp</span></code> does the following:</p>
 <ul class="simple">
 <li><p>Get list of all global scope variables from the Symbol Table, as well as any local variables in DERIVATIVE block</p></li>
@@ -415,7 +416,7 @@ div.rendered_html tbody tr:hover {
 </section>
 <hr class="docutils" />
 <section id="Pade-approximant">
-<h2>Pade approximant<a class="headerlink" href="#Pade-approximant" title="Permalink to this headline">¶</a></h2>
+<h2>Pade approximant<a class="headerlink" href="#Pade-approximant" title="Permalink to this headline"></a></h2>
 <p>There is an option <code class="docutils literal notranslate"><span class="pre">use_pade_approx</span></code> which if enabled does the following extra step:</p>
 <ul class="simple">
 <li><p>Given the analytic solution <img class="math" src="../_images/math/cef4cf670c70c7e481436563fe6832540700500d.png" alt="f(t)"/>:</p>
@@ -438,11 +439,11 @@ div.rendered_html tbody tr:hover {
 </section>
 <hr class="docutils" />
 <section id="Implementation-Tests">
-<h2>Implementation Tests<a class="headerlink" href="#Implementation-Tests" title="Permalink to this headline">¶</a></h2>
+<h2>Implementation Tests<a class="headerlink" href="#Implementation-Tests" title="Permalink to this headline"></a></h2>
 <p>The unit tests may be helpful to understand what these functions are doing - <code class="docutils literal notranslate"><span class="pre">SympySolverVisitor</span></code> tests are located in <a class="reference external" href="https://github.com/BlueBrain/nmodl/blob/master/test/visitor/sympy_solver.cpp">test/visitor/sympy_solver.cpp</a>, and tests involving <code class="docutils literal notranslate"><span class="pre">cnexp</span></code> have the tag “<code class="docutils literal notranslate"><span class="pre">[cnexp]</span></code>”</p>
 </section>
 <section id="Examples">
-<h2>Examples<a class="headerlink" href="#Examples" title="Permalink to this headline">¶</a></h2>
+<h2>Examples<a class="headerlink" href="#Examples" title="Permalink to this headline"></a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
@@ -481,7 +482,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <section id="Ex.-1">
-<h3>Ex. 1<a class="headerlink" href="#Ex.-1" title="Permalink to this headline">¶</a></h3>
+<h3>Ex. 1<a class="headerlink" href="#Ex.-1" title="Permalink to this headline"></a></h3>
 <p>Single constant ODE</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
@@ -511,7 +512,7 @@ pade approx:         m = 4.0*dt+m
 </div>
 </section>
 <section id="Ex.-2">
-<h3>Ex. 2<a class="headerlink" href="#Ex.-2" title="Permalink to this headline">¶</a></h3>
+<h3>Ex. 2<a class="headerlink" href="#Ex.-2" title="Permalink to this headline"></a></h3>
 <p>Single linear ODE</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
@@ -541,7 +542,7 @@ pade approx:         m = -m*(a*dt+2.0)/(a*dt-2.0)
 </div>
 </section>
 <section id="Ex.-3">
-<h3>Ex. 3<a class="headerlink" href="#Ex.-3" title="Permalink to this headline">¶</a></h3>
+<h3>Ex. 3<a class="headerlink" href="#Ex.-3" title="Permalink to this headline"></a></h3>
 <p>Single linear ODE</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
@@ -571,7 +572,7 @@ pade approx:         m = (-dt*m+2.0*dt*minf+2.0*m*mtau)/(dt+2.0*mtau)
 </div>
 </section>
 <section id="Ex.-4">
-<h3>Ex. 4<a class="headerlink" href="#Ex.-4" title="Permalink to this headline">¶</a></h3>
+<h3>Ex. 4<a class="headerlink" href="#Ex.-4" title="Permalink to this headline"></a></h3>
 <p>Single linear ODE that can be simplified</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
@@ -601,7 +602,7 @@ pade approx:         m = (-dt*m+2.0*dt*minf-2.0*m*mtau)/(dt-2.0*mtau)
 </div>
 </section>
 <section id="Ex.-5">
-<h3>Ex. 5<a class="headerlink" href="#Ex.-5" title="Permalink to this headline">¶</a></h3>
+<h3>Ex. 5<a class="headerlink" href="#Ex.-5" title="Permalink to this headline"></a></h3>
 <p>Single nonlinear ODE with analytic solution</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
@@ -631,7 +632,7 @@ pade approx:         m = m*(dt*pow(m, 2)-2.0)/(3.0*dt*pow(m, 2)-2.0)
 </div>
 </section>
 <section id="Ex.-6">
-<h3>Ex. 6<a class="headerlink" href="#Ex.-6" title="Permalink to this headline">¶</a></h3>
+<h3>Ex. 6<a class="headerlink" href="#Ex.-6" title="Permalink to this headline"></a></h3>
 <p>Single nonlinear ODE (more complicated and not handled yet): unsupported, so does not modify DERIVATIVE block, leaves it to a later visitor pass to deal with</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
