@@ -711,16 +711,20 @@ bool CodegenCVisitor::is_constant_variable(const std::string& name) const {
                  symbol->get_write_count() == 0) {
             is_constant = true;
         }
-    } else {
-        // Check whether the variable exists in the codegen_int_variables of the CodegenInfo struct
-        // which hold information whether the variables are const or not
-        const auto& int_variable_it = std::find_if(info.codegen_int_variables.begin(),
-                                                   info.codegen_int_variables.end(),
-                                                   [&name](const IndexVariableInfo& var) {
-                                                       return var.symbol->get_name() == name;
-                                                   });
-        return int_variable_it != info.codegen_int_variables.end() && int_variable_it->is_constant;
     }
+    // Check whether the variable exists in the codegen_int_variables of the CodegenInfo struct
+    // which hold information whether the variables are const or not
+    const auto& int_variable_it = std::find_if(info.codegen_int_variables.begin(),
+                                                info.codegen_int_variables.end(),
+                                                [&name](const IndexVariableInfo& var) {
+                                                    return var.symbol->get_name() == name;
+                                                });
+    const auto& const_variable_it = std::find_if(info.constant_variables.begin(),
+                                                    info.constant_variables.end(),
+                                                    [&name](const IndexVariableInfo& var) {
+                                                        return var.symbol->get_name() == name;
+                                                    });
+    is_constant = is_constant || (int_variable_it != info.codegen_int_variables.end() && int_variable_it->is_constant) || const_variable_it != info.constant_variables.end();
     return is_constant;
 }
 
