@@ -1007,11 +1007,8 @@ void CodegenLLVMVisitor::print_instance_variable_setup() {
     for (const auto& int_var: info.codegen_int_variables) {
         std::string var_name = int_var.symbol->get_name() + "_index";
         // Create for loop that instantiates the ion_<var>_index with
-        // indexes[<var_id>*pdnodecount+id] where id is from 0 to nodecount
-        printer->add_line("inst->{} = mem_alloc(pnodecount, sizeof(int));"_format(var_name));
-        print_channel_iteration_loop("0", "pnodecount");
-        printer->add_line("inst->{}[id] = indexes[{}*pnodecount+id];"_format(var_name, index_id));
-        printer->end_block(1);
+        // indexes[<var_id>*pdnodecount]
+        printer->add_line("inst->{} = indexes+{}*pnodecount;"_format(var_name, index_id));
         index_id++;
     }
 
@@ -1035,10 +1032,6 @@ void CodegenLLVMVisitor::print_instance_variable_setup() {
     printer->start_block("static inline void cleanup_instance(Memb_list* ml) ");
     printer->add_line(
         "{0}* inst = ({0}*) ml->instance;"_format(mod_filename + instance_struct_type_name));
-    for (const auto& int_var: info.codegen_int_variables) {
-        std::string var_name = int_var.symbol->get_name() + "_index";
-        printer->add_line("mem_free((void*)inst->{});"_format(var_name));
-    }
     if (range_variable_setup_required()) {
         for (auto& var: variables_to_free) {
             printer->add_line("mem_free((void*)inst->{});"_format(var));
