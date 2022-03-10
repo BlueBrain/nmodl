@@ -43,8 +43,6 @@ build:intel:
     - .spack_nmodl
   variables:
     SPACK_PACKAGE_COMPILER: intel
-    # intel build is slow with release
-    SPACK_PACKAGE_SPEC: ~legacy-unit+python build_type=Debug
 
 build:gcc:
   extends:
