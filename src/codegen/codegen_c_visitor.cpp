@@ -819,6 +819,9 @@ std::string CodegenCVisitor::get_parameter_str(const ParamVector& params) {
     return param;
 }
 
+void CodegenCVisitor::print_backend_compute_routine_decl() {
+    // backend specific, do nothing
+}
 
 void CodegenCVisitor::print_channel_iteration_task_begin(BlockType type) {
     // backend specific, do nothing
@@ -4453,11 +4456,13 @@ void CodegenCVisitor::print_g_unused() const {
 void CodegenCVisitor::print_compute_functions() {
     print_top_verbatim_blocks();
     print_function_prototypes();
-    for (const auto& procedure: info.procedures) {
-        print_procedure(*procedure);
-    }
-    for (const auto& function: info.functions) {
-        print_function(*function);
+    if (print_procedures_and_functions) {
+        for (const auto& procedure: info.procedures) {
+            print_procedure(*procedure);
+        }
+        for (const auto& function: info.functions) {
+            print_function(*function);
+        }
     }
     for (size_t i = 0; i < info.before_after_blocks.size(); i++) {
         print_before_after_block(info.before_after_blocks[i], i);
@@ -4466,6 +4471,7 @@ void CodegenCVisitor::print_compute_functions() {
         auto block = callback->get_node_to_solve().get();
         print_derivimplicit_kernel(block);
     }
+    print_backend_compute_routine_decl();
     print_net_send_buffering();
     print_net_init();
     print_watch_activate();

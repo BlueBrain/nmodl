@@ -115,7 +115,41 @@ class CodegenLLVMVisitor: public CodegenCVisitor {
                      vector_width,
                      fast_math_flags,
                      !llvm_assume_alias)
-        , debug_builder(*module) {}
+        , debug_builder(*module) {
+        instance_struct_type_suffix = "_instance_var__type";
+        print_procedures_and_functions = false;
+    }
+
+    CodegenLLVMVisitor(const std::string& mod_filename,
+                       std::ostream& stream,
+                       int opt_level_ir,
+                       bool use_single_precision = false,
+                       int vector_width = 1,
+                       std::string vec_lib = "none",
+                       bool add_debug_information = false,
+                       std::vector<std::string> fast_math_flags = {},
+                       bool llvm_assume_alias = false)
+        : CodegenCVisitor(mod_filename,
+                          stream,
+                          use_single_precision ? "float" : "double",
+                          false,
+                          ".ll",
+                          ".cpp")
+        , mod_filename(mod_filename)
+        , output_dir(".")
+        , opt_level_ir(opt_level_ir)
+        , vector_width(vector_width)
+        , vector_library(vec_lib)
+        , add_debug_information(add_debug_information)
+        , ir_builder(*context,
+                     use_single_precision,
+                     vector_width,
+                     fast_math_flags,
+                     !llvm_assume_alias)
+        , debug_builder(*module) {
+        instance_struct_type_suffix = "_instance_var__type";
+        print_procedures_and_functions = false;
+    }
 
     /// Dumps the generated LLVM IR module to string.
     std::string dump_module() const {
@@ -241,17 +275,30 @@ class CodegenLLVMVisitor: public CodegenCVisitor {
     /*
      * Functions related to printing the wrapper cpp file
      */
-    void print_compute_functions() override;
     void print_wrapper_routines() override;
     void print_wrapper_headers_include();
     void print_data_structures();
-    void print_mechanism_range_var_structure();
-    void print_instance_variable_setup();
+    void print_mechanism_range_var_structure() override;
+    void print_instance_variable_setup() override;
 
+    /**
+     * Print the \c nrn\_init function definition
+     * \param skip_init_check \c true if we want the generated code to execute the initialization
+     *                        conditionally
+     */
+    void print_nrn_init(bool skip_init_check = true) override;
+    /**
+     * Print nrn_state / state update function definition
+     */
+    void print_nrn_state() override;
+    /**
+     * Print nrn_cur / current update function definition
+     */
+    void print_nrn_cur() override;
     /*
      * Declare the external compute functions (nrn_init, nrn_cur and nrn_state)
      */
-    void print_backend_compute_routine_decl();
+    void print_backend_compute_routine_decl() override;
     /*
      * Define the wrappers for the external compute functions (nrn_init, nrn_cur and nrn_state)
      */

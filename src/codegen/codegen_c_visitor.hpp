@@ -166,6 +166,11 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
     int current_watch_statement = 0;
 
     /**
+     * Bool to select whether procedures and functions should be printed in the generated file
+     */
+    bool print_procedures_and_functions = true;
+
+    /**
      * Data type of floating point variables
      */
     std::string float_type = codegen::naming::DEFAULT_FLOAT_TYPE;
@@ -262,6 +267,10 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
         return codegen::naming::DEFAULT_INTEGER_TYPE;
     }
 
+    /**
+     * Instance Struct type name suffix
+     */
+    std::string instance_struct_type_suffix = "Instance";
 
     /**
      * Checks if given function name is \c net_send
@@ -295,7 +304,7 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * Name of structure that wraps range variables
      */
     std::string instance_struct() const {
-        return "{}_Instance"_format(info.mod_suffix);
+        return "{}_{}"_format(info.mod_suffix, instance_struct_type_suffix);
     }
 
 
@@ -1097,6 +1106,12 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
+     * Print backend compute routines declaration for various backends
+     */
+    virtual void print_backend_compute_routine_decl();
+
+
+    /**
      * Print channel iterations from which tasks are created
      *
      * \note This is not used for the C backend
@@ -1649,19 +1664,19 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * \param skip_init_check \c true if we want the generated code to execute the initialization
      *                        conditionally
      */
-    void print_nrn_init(bool skip_init_check = true);
+    virtual void print_nrn_init(bool skip_init_check = true);
 
 
     /**
      * Print nrn_state / state update function definition
      */
-    void print_nrn_state();
+    virtual void print_nrn_state();
 
 
     /**
      * Print nrn_cur / current update function definition
      */
-    void print_nrn_cur();
+    virtual void print_nrn_cur();
 
     /**
      * Print fast membrane current calculation code
@@ -1750,12 +1765,12 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
     /**
      * Print the structure that wraps all range and int variables required for the NMODL
      */
-    void print_mechanism_range_var_structure();
+    virtual void print_mechanism_range_var_structure();
 
     /**
      * Print the function that initialize instance structure
      */
-    void print_instance_variable_setup();
+    virtual void print_instance_variable_setup();
 
     void visit_binary_expression(const ast::BinaryExpression& node) override;
     void visit_binary_operator(const ast::BinaryOperator& node) override;
