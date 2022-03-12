@@ -707,7 +707,7 @@ void CodegenLLVMHelperVisitor::create_gpu_compute_body(ast::StatementVector& bod
                                                        ast::StatementVector& function_statements,
                                                        std::vector<std::string>& int_variables,
                                                        std::vector<std::string>& double_variables) {
-    // Then, create condition for thread id. For now - reuse the same functionality as for
+    // Then, create condition for thread id. For now reuse the functionality from `loop_count_expression`.
     auto kernel_block = std::make_shared<ast::StatementBlock>(body);
     const auto& condition = loop_count_expression(INDUCTION_VAR, NODECOUNT_VAR, 1);
     ast::ElseIfStatementVector else_ifs = {};
@@ -746,7 +746,7 @@ void CodegenLLVMHelperVisitor::create_compute_body_loop(std::shared_ptr<ast::Sta
     // Clone the statement block if needed since it can be used by the remainder loop.
     auto loop_block = (is_remainder_loop || !platform.is_cpu_with_simd()) ? block : std::shared_ptr<ast::StatementBlock>(block->clone());
 
-    // Convert local statement to use CodegenVar statements and create  a FOR loop node. Also, if creating
+    // Convert local statement to use CodegenVar statements and create a FOR loop node. Also, if creating
     // a remainder loop then rename variables to avoid conflicts.
     if (is_remainder_loop)
         rename_local_variables(*loop_block);
