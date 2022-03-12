@@ -71,6 +71,7 @@ set(AST_GENERATED_SOURCES
     ${PROJECT_BINARY_DIR}/src/ast/codegen_instance_var.hpp
     ${PROJECT_BINARY_DIR}/src/ast/codegen_return_statement.hpp
     ${PROJECT_BINARY_DIR}/src/ast/codegen_struct.hpp
+    ${PROJECT_BINARY_DIR}/src/ast/codegen_thread_id.hpp
     ${PROJECT_BINARY_DIR}/src/ast/codegen_var.hpp
     ${PROJECT_BINARY_DIR}/src/ast/codegen_var_list_statement.hpp
     ${PROJECT_BINARY_DIR}/src/ast/codegen_var_type.hpp
