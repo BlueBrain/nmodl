@@ -124,8 +124,12 @@ SCENARIO("Arithmetic expression", "[llvm][runner]") {
         const auto& ast = driver.parse_string(nmodl_text);
 
         SymtabVisitor().visit_program(*ast);
+
+        codegen::Platform cpu_platform(/*use_single_precision=*/false,
+                                       /*instruction_width=*/1);
         codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"unknown",
                                                  /*output_dir=*/".",
+                                                 cpu_platform,
                                                  /*opt_level_ir=*/0);
         llvm_visitor.visit_program(*ast);
 
@@ -226,8 +230,12 @@ SCENARIO("Optimised arithmetic expression", "[llvm][runner]") {
         const auto& ast = driver.parse_string(nmodl_text);
 
         SymtabVisitor().visit_program(*ast);
+
+        codegen::Platform cpu_platform(/*use_single_precision=*/false,
+                                       /*instruction_width=*/1);
         codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"unknown",
                                                  /*output_dir=*/".",
+                                                 cpu_platform,
                                                  /*opt_level_ir=*/3);
         llvm_visitor.visit_program(*ast);
 
@@ -299,11 +307,13 @@ SCENARIO("Simple scalar kernel", "[llvm][runner]") {
         SymtabVisitor().visit_program(*ast);
         NeuronSolveVisitor().visit_program(*ast);
         SolveBlockVisitor().visit_program(*ast);
+
+        codegen::Platform cpu_platform(/*use_single_precision=*/false,
+                                       /*instruction_width=*/1);
         codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"unknown",
                                                  /*output_dir=*/".",
-                                                 /*opt_level_ir=*/0,
-                                                 /*use_single_precision=*/false,
-                                                 /*vector_width=*/1);
+                                                 cpu_platform,
+                                                 /*opt_level_ir=*/0);
         llvm_visitor.visit_program(*ast);
         llvm_visitor.wrap_kernel_functions();
 
@@ -381,11 +391,13 @@ SCENARIO("Simple vectorised kernel", "[llvm][runner]") {
         SymtabVisitor().visit_program(*ast);
         NeuronSolveVisitor().visit_program(*ast);
         SolveBlockVisitor().visit_program(*ast);
+
+        codegen::Platform simd_cpu_platform(/*use_single_precision=*/false,
+                                            /*instruction_width=*/4);
         codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"unknown",
                                                  /*output_dir=*/".",
-                                                 /*opt_level_ir=*/3,
-                                                 /*use_single_precision=*/false,
-                                                 /*vector_width=*/4);
+                                                 simd_cpu_platform,
+                                                 /*opt_level_ir=*/3);
         llvm_visitor.visit_program(*ast);
         llvm_visitor.wrap_kernel_functions();
 
@@ -463,11 +475,13 @@ SCENARIO("Vectorised kernel with scatter instruction", "[llvm][runner]") {
         SymtabVisitor().visit_program(*ast);
         NeuronSolveVisitor().visit_program(*ast);
         SolveBlockVisitor().visit_program(*ast);
+
+        codegen::Platform simd_cpu_platform(/*use_single_precision=*/false,
+                                            /*instruction_width=*/2);
         codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"unknown",
                                                  /*output_dir=*/".",
-                                                 /*opt_level_ir=*/0,
-                                                 /*use_single_precision=*/false,
-                                                 /*vector_width=*/2);
+                                                 simd_cpu_platform,
+                                                 /*opt_level_ir=*/0);
         llvm_visitor.visit_program(*ast);
         llvm_visitor.wrap_kernel_functions();
 
@@ -554,11 +568,13 @@ SCENARIO("Vectorised kernel with simple control flow", "[llvm][runner]") {
         SymtabVisitor().visit_program(*ast);
         NeuronSolveVisitor().visit_program(*ast);
         SolveBlockVisitor().visit_program(*ast);
+
+        codegen::Platform simd_cpu_platform(/*use_single_precision=*/false,
+                                            /*instruction_width=*/2);
         codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"unknown",
                                                  /*output_dir=*/".",
-                                                 /*opt_level_ir=*/0,
-                                                 /*use_single_precision=*/false,
-                                                 /*vector_width=*/2);
+                                                 simd_cpu_platform,
+                                                 /*opt_level_ir=*/0);
         llvm_visitor.visit_program(*ast);
         llvm_visitor.wrap_kernel_functions();
 

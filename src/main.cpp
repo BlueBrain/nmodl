@@ -696,21 +696,29 @@ int main(int argc, const char* argv[]) {
               // information and not in LLVM visitor.
               int llvm_opt_level = llvm_benchmark ? 0 : llvm_opt_level_ir;
 
-              if (llvm_gpu_name != "default") {
-                logger->warn("GPU code generation is not supported, targeting "
-                             "CPU instead");
-              }
+              // Create platform abstraction.
+              PlatformID pid = llvm_gpu_name == "default" ? PlatformID::CPU
+                                                          : PlatformID::GPU;
+              const std::string name =
+                  llvm_gpu_name == "default" ? llvm_cpu_name : llvm_gpu_name;
+              Platform platform(pid, name, llvm_math_library, llvm_float_type,
+                                llvm_vector_width);
 
               logger->info("Running LLVM backend code generator");
-              CodegenLLVMVisitor visitor(modfile, output_dir, llvm_opt_level,
-                                         llvm_float_type, llvm_vector_width,
-                                         llvm_math_library, !llvm_no_debug,
-                                         llvm_fast_math_flags, true);
+              CodegenLLVMVisitor visitor(modfile, output_dir, platform,
+                                         llvm_opt_level, !llvm_no_debug,
+                                         llvm_fast_math_flags);
               visitor.visit_program(*ast);
               ast_to_nmodl(*ast, filepath("llvm", "mod"));
               ast_to_json(*ast, filepath("llvm", "json"));
 
               if (llvm_benchmark) {
+                // \todo integrate Platform class here
+                if (llvm_gpu_name != "default") {
+                  logger->warn("GPU benchmarking is not supported, targeting "
+                               "CPU instead");
+                }
+
                 logger->info("Running LLVM benchmark");
                 benchmark::LLVMBenchmark benchmark(
                     visitor, modfile, output_dir, shared_lib_paths,
