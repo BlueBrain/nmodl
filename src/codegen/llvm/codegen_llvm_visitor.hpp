@@ -81,33 +81,22 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     /// Optimisation level for LLVM IR transformations.
     int opt_level_ir;
 
-    /// Vector library used for math functions.
-    std::string vector_library;
-
-    /// Explicit vectorisation width.
-    int vector_width;
+    /// Target platform for the code generation.
+    Platform platform;
 
   public:
     CodegenLLVMVisitor(const std::string& mod_filename,
                        const std::string& output_dir,
+                       Platform& platform,
                        int opt_level_ir,
-                       bool use_single_precision = false,
-                       int vector_width = 1,
-                       std::string vec_lib = "none",
                        bool add_debug_information = false,
-                       std::vector<std::string> fast_math_flags = {},
-                       bool llvm_assume_alias = false)
+                       std::vector<std::string> fast_math_flags = {})
         : mod_filename(mod_filename)
         , output_dir(output_dir)
+        , platform(platform)
         , opt_level_ir(opt_level_ir)
-        , vector_width(vector_width)
-        , vector_library(vec_lib)
         , add_debug_information(add_debug_information)
-        , ir_builder(*context,
-                     use_single_precision,
-                     vector_width,
-                     fast_math_flags,
-                     !llvm_assume_alias)
+        , ir_builder(*context, platform, fast_math_flags)
         , debug_builder(*module) {}
 
     /// Dumps the generated LLVM IR module to string.
@@ -139,7 +128,7 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
 
     /// Returns vector width
     int get_vector_width() const {
-        return vector_width;
+        return platform.get_instruction_width();
     }
 
     // Visitors.
