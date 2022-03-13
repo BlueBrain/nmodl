@@ -64,6 +64,16 @@ static bool can_vectorize(const ast::CodegenForStatement& statement, symtab::Sym
     return unsupported.empty() && supported.size() <= 1;
 }
 
+void CodegenLLVMVisitor::annotate_kernel_with_nvvm(llvm::Function* kernel) {
+    llvm::Metadata* metadata[] = {
+        llvm::ValueAsMetadata::get(kernel),
+        llvm::MDString::get(*context, "kernel"),
+        llvm::ValueAsMetadata::get(
+            llvm::ConstantInt::get(llvm::Type::getInt32Ty(*context), 1))};
+    llvm::MDNode* node = llvm::MDNode::get(*context, metadata);
+    module->getOrInsertNamedMetadata("nvvm.annotations")->addOperand(node);
+}
+
 #if LLVM_VERSION_MAJOR >= 13
 void CodegenLLVMVisitor::add_vectorizable_functions_from_vec_lib(llvm::TargetLibraryInfoImpl& tli,
                                                                  llvm::Triple& triple) {
@@ -665,11 +675,19 @@ void CodegenLLVMVisitor::visit_codegen_function(const ast::CodegenFunction& node
     ir_builder.allocate_function_arguments(func, arguments);
 
     // Process function or procedure body. If the function is a compute kernel, enable
-    // vectorization. If so, the return statement is handled in a separate visitor.
-    if (platform.is_cpu_with_simd() && is_kernel_function(name)) {
-        ir_builder.generate_vector_ir();
-        block->accept(*this);
-        ir_builder.generate_scalar_ir();
+    // vectorization or add NVVM annotations. If this is the case, the return statement is
+    // handled in a separate visitor.
+    if (is_kernel_function(name)) {
+        if (platform.is_cpu_with_simd()) {
+            ir_builder.generate_vector_ir();
+            block->accept(*this);
+            ir_builder.generate_scalar_ir();
+        } else if (platform.is_gpu()) {
+            block->accept(*this);
+            annotate_kernel_with_nvvm(func);
+        } else { // scalar
+            block->accept(*this);
+        }
     } else {
         block->accept(*this);
     }
