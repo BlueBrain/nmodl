@@ -39,7 +39,7 @@ static bool is_supported_statement(const ast::Statement& statement) {
     return statement.is_codegen_atomic_statement() || statement.is_codegen_for_statement() ||
            statement.is_if_statement() || statement.is_codegen_return_statement() ||
            statement.is_codegen_var_list_statement() || statement.is_expression_statement() ||
-           statement.is_while_statement();
+           statement.is_while_statement() || statement.is_codegen_thread_id();
 }
 
 /// A utility to check that the kernel body can be vectorised.
@@ -694,6 +694,10 @@ void CodegenLLVMVisitor::visit_codegen_return_statement(const ast::CodegenReturn
     ir_builder.create_return(ret_value);
 }
 
+void CodegenLLVMVisitor::visit_codegen_thread_id(const ast::CodegenThreadId& node) {
+    ir_builder.create_thread_id();
+}
+
 void CodegenLLVMVisitor::visit_codegen_var_list_statement(
     const ast::CodegenVarListStatement& node) {
     llvm::Type* scalar_type = get_codegen_var_type(*node.get_var_type());
@@ -820,12 +824,6 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
     instance_var_helper = v.get_instance_var_helper();
     sym_tab = node.get_symbol_table();
     std::string kernel_id = v.get_kernel_id();
-
-    // \todo: implement GPU codegen functionality.
-    if (platform.is_gpu()) {
-      logger->warn("GPU code generation is not supported yet, aborting!");
-      return;
-    }
 
     // Initialize the builder for this NMODL program.
     ir_builder.initialize(*sym_tab, kernel_id);
