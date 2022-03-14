@@ -1412,12 +1412,15 @@ void CodegenCVisitor::print_function_call(const FunctionCall& node) {
     auto arguments = node.get_arguments();
     printer->add_text("{}("_format(function_name));
 
-    auto possible_nt_variable_types = arguments.front()->get_node_type() == AstNodeType::NAME &&
-                                      arguments.front()->get_node_type() == AstNodeType::STRING &&
-                                      arguments.front()->get_node_type() ==
-                                          AstNodeType::CONSTANT_VAR &&
-                                      arguments.front()->get_node_type() == AstNodeType::VAR_NAME &&
-                                      arguments.front()->get_node_type() == AstNodeType::LOCAL_VAR;
+    bool possible_nt_variable_types;
+    if (!defined_method(name)) {
+        possible_nt_variable_types = arguments.front()->get_node_type() == AstNodeType::NAME &&
+                                     arguments.front()->get_node_type() == AstNodeType::STRING &&
+                                     arguments.front()->get_node_type() ==
+                                         AstNodeType::CONSTANT_VAR &&
+                                     arguments.front()->get_node_type() == AstNodeType::VAR_NAME &&
+                                     arguments.front()->get_node_type() == AstNodeType::LOCAL_VAR;
+    }
     if (defined_method(name)) {
         printer->add_text(internal_method_arguments());
         if (!arguments.empty()) {
