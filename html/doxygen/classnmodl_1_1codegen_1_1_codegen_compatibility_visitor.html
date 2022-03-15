@@ -580,9 +580,6 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:afa10d176b1cf5811533427ffd46aefb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad20edb1334e67d851528bf1840e2302c"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#ad20edb1334e67d851528bf1840e2302c">return_error_param_var</a> (<a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &amp;node, const std::shared_ptr&lt; <a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &gt; &amp;ast_node)</td></tr>
 <tr class="separator:ad20edb1334e67d851528bf1840e2302c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a20337be24afb2cf614350485579b34b9"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a20337be24afb2cf614350485579b34b9">return_error_pointer</a> (<a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &amp;node, const std::shared_ptr&lt; <a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &gt; &amp;ast_node)</td></tr>
-<tr class="memdesc:a20337be24afb2cf614350485579b34b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Takes as parameter an std::shared_ptr&lt;ast::Ast&gt; node and returns a relative error with the name and the location of the pointer, as well as a suggestion to define it as BBCOREPOINTER.  <a href="#a20337be24afb2cf614350485579b34b9">More...</a><br /></td></tr>
-<tr class="separator:a20337be24afb2cf614350485579b34b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af32b7093b469e83dfd029bffebdf97a0"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#af32b7093b469e83dfd029bffebdf97a0">return_error_if_no_bbcore_read_write</a> (<a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &amp;node, const std::shared_ptr&lt; <a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &gt; &amp;ast_node)</td></tr>
 <tr class="memdesc:af32b7093b469e83dfd029bffebdf97a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Takes as parameter the <a class="el" href="structnmodl_1_1ast_1_1_ast.html" title="Base class for all Abstract Syntax Tree node types. ">ast::Ast</a> and checks if the functions "bbcore_read" and "bbcore_write" are defined in any of the <a class="el" href="structnmodl_1_1ast_1_1_ast.html" title="Base class for all Abstract Syntax Tree node types. ">ast::Ast</a> VERBATIM blocks.  <a href="#af32b7093b469e83dfd029bffebdf97a0">More...</a><br /></td></tr>
 <tr class="separator:af32b7093b469e83dfd029bffebdf97a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -684,7 +681,7 @@ Static Private Attributes</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>bool if there are unhandled nodes or not</dd></dl>
 <p>Checks all the <a class="el" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033" title="Enum type for every AST node type. ">ast::AstNodeType</a> that are not handled in NMODL code generation backend for CoreNEURON and prints related messages. If there is some kind of incompatibility return false. </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__compatibility__visitor_8cpp_source.html#l00143">143</a> of file <a class="el" href="codegen__compatibility__visitor_8cpp_source.html">codegen_compatibility_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__compatibility__visitor_8cpp_source.html#l00134">134</a> of file <a class="el" href="codegen__compatibility__visitor_8cpp_source.html">codegen_compatibility_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -732,7 +729,7 @@ Static Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>std::string error </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="codegen__compatibility__visitor_8cpp_source.html#l00062">62</a> of file <a class="el" href="codegen__compatibility__visitor_8cpp_source.html">codegen_compatibility_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__compatibility__visitor_8cpp_source.html#l00061">61</a> of file <a class="el" href="codegen__compatibility__visitor_8cpp_source.html">codegen_compatibility_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -781,7 +778,7 @@ Static Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>std::string error </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="codegen__compatibility__visitor_8cpp_source.html#l00097">97</a> of file <a class="el" href="codegen__compatibility__visitor_8cpp_source.html">codegen_compatibility_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__compatibility__visitor_8cpp_source.html#l00088">88</a> of file <a class="el" href="codegen__compatibility__visitor_8cpp_source.html">codegen_compatibility_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -829,7 +826,7 @@ Static Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>std::string error </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="codegen__compatibility__visitor_8cpp_source.html#l00044">44</a> of file <a class="el" href="codegen__compatibility__visitor_8cpp_source.html">codegen_compatibility_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__compatibility__visitor_8cpp_source.html#l00043">43</a> of file <a class="el" href="codegen__compatibility__visitor_8cpp_source.html">codegen_compatibility_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -867,55 +864,7 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="codegen__compatibility__visitor_8cpp_source.html#l00075">75</a> of file <a class="el" href="codegen__compatibility__visitor_8cpp_source.html">codegen_compatibility_visitor.cpp</a>.</p>
-
-</div>
-</div>
-<a id="a20337be24afb2cf614350485579b34b9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a20337be24afb2cf614350485579b34b9">&#9670;&nbsp;</a></span>return_error_pointer()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string nmodl::codegen::CodegenCompatibilityVisitor::return_error_pointer </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &amp;&#160;</td>
-          <td class="paramname"><em>node</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &gt; &amp;&#160;</td>
-          <td class="paramname"><em>ast_node</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Takes as parameter an std::shared_ptr&lt;ast::Ast&gt; node and returns a relative error with the name and the location of the pointer, as well as a suggestion to define it as BBCOREPOINTER. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">node</td><td>Not used by the function </td></tr>
-    <tr><td class="paramname">ast_node</td><td>Ast node which is checked </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>std::string error </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="codegen__compatibility__visitor_8cpp_source.html#l00089">89</a> of file <a class="el" href="codegen__compatibility__visitor_8cpp_source.html">codegen_compatibility_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__compatibility__visitor_8cpp_source.html#l00074">74</a> of file <a class="el" href="codegen__compatibility__visitor_8cpp_source.html">codegen_compatibility_visitor.cpp</a>.</p>
 
 </div>
 </div>

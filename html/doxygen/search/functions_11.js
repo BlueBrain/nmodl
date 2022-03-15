@@ -38,7 +38,6 @@ var searchData=
   ['return_5ferror_5fif_5fno_5fbbcore_5fread_5fwrite',['return_error_if_no_bbcore_read_write',['../classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#af32b7093b469e83dfd029bffebdf97a0',1,'nmodl::codegen::CodegenCompatibilityVisitor']]],
   ['return_5ferror_5fif_5fsolve_5fmethod_5fis_5funhandled',['return_error_if_solve_method_is_unhandled',['../classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#abdb4773e01ea26ccff60027d5ad27717',1,'nmodl::codegen::CodegenCompatibilityVisitor']]],
   ['return_5ferror_5fparam_5fvar',['return_error_param_var',['../classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#ad20edb1334e67d851528bf1840e2302c',1,'nmodl::codegen::CodegenCompatibilityVisitor']]],
-  ['return_5ferror_5fpointer',['return_error_pointer',['../classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a20337be24afb2cf614350485579b34b9',1,'nmodl::codegen::CodegenCompatibilityVisitor']]],
   ['return_5ferror_5fwith_5fname',['return_error_with_name',['../classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a9330dcc15a93adfd9e7950556e15af9e',1,'nmodl::codegen::CodegenCompatibilityVisitor']]],
   ['return_5ferror_5fwithout_5fname',['return_error_without_name',['../classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#aff329972edc880f9b3fe7c85ce2c5df2',1,'nmodl::codegen::CodegenCompatibilityVisitor']]],
   ['rtrim',['rtrim',['../group__utils.html#ga5ec898f06a934e7611fcd653e34da8aa',1,'nmodl::stringutils']]],

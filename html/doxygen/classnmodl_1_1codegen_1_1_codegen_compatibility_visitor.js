@@ -7,7 +7,6 @@ var classnmodl_1_1codegen_1_1_codegen_compatibility_visitor =
     [ "return_error_if_no_bbcore_read_write", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#af32b7093b469e83dfd029bffebdf97a0", null ],
     [ "return_error_if_solve_method_is_unhandled", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#abdb4773e01ea26ccff60027d5ad27717", null ],
     [ "return_error_param_var", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#ad20edb1334e67d851528bf1840e2302c", null ],
-    [ "return_error_pointer", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a20337be24afb2cf614350485579b34b9", null ],
     [ "return_error_with_name", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a9330dcc15a93adfd9e7950556e15af9e", null ],
     [ "return_error_without_name", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#aff329972edc880f9b3fe7c85ce2c5df2", null ],
     [ "handled_solvers", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#ab91d26dcf9a01cf7ca02cd70d8fc7e9a", null ],
