@@ -201,5 +201,63 @@ void JITDriver::init(const std::string& cpu, BenchmarkInfo* benchmark_info) {
             llvm::orc::DumpObjects(benchmark_info->output_dir, benchmark_info->filename));
     }
 }
+
+DeviceInfo get_device_info() {
+    DeviceInfo device_info;
+    checkCudaErrors(cuDeviceGetCount(&device_info.count));
+    checkCudaErrors(cuDeviceGet(&device, 0));
+    char name[128];
+    checkCudaErrors(cuDeviceGetName(name, 128, device));
+    device_info.name = std::string(name);
+    int devMajor, devMinor;
+    checkCudaErrors(cuDeviceGetAttribute(&device_info.compute_version_major, CU_DEVICE_ATTRIBUTE_COMPUTE_CAPABILITY_MAJOR, device));
+    checkCudaErrors(cuDeviceGetAttribute(&device_info.compute_version_major, CU_DEVICE_ATTRIBUTE_COMPUTE_CAPABILITY_MINOR, device));
+    if (devMajor < 2) {
+        throw std::runtime_error("ERROR: Device 0 is not SM 2.0 or greater");
+    }
+}
+
+
+void GPUJITDriver::init(const std::string& gpu, BenchmarkInfo* benchmark_info) {
+    // CUDA initialization
+    checkCudaErrors(cuInit(0));
+    device_info = get_device_info();
+
+    // Save the LLVM IR module to string
+    std::string kernel_llvm_ir;
+    llvm::raw_string_ostream os(kernel_llvm_ir);
+    os << *module;
+    os.flush();
+
+    // Create NVVM program object
+    nvvmCreateProgram(&prog);
+
+    // Add custom IR to program
+    nvvmAddModuleToProgram(prog, kernel_llvm_ir, kernel_llvm_ir.size(), "nmodl_llvm_ir");
+
+    // Declare compile options
+    const char *options[] = { "-ftz=1" };
+
+    // Compile the program
+    nvvmCompileProgram(prog, 1, options);
+
+    // Get compiled module
+    char* compiled_module;
+    size_t compiled_module_size;
+    nvvmGetCompiledResultSize(prog, &compiled_module_size);
+    std::cout << "Compiled module size: " << compiled_module_size << "\n";
+    compiled_module = (char*)malloc(compiled_module_size);
+    nvvmGetCompiledResult(prog, compiled_module);
+
+    // Create driver context
+    checkCudaErrors(cuCtxCreate(&context, 0, device));
+
+    // Create module for object
+    checkCudaErrors(cuModuleLoadDataEx(&cudaModule, kernel_llvm_ir.c_str(), 0, 0, 0));
+
+    // Get kernel function
+    checkCudaErrors(cuModuleGetFunction(&function, cudaModule, "kernel"));
+}
+
 }  // namespace runner
 }  // namespace nmodl

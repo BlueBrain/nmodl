@@ -19,6 +19,10 @@
 #include "llvm/ExecutionEngine/Orc/LLJIT.h"
 #include "llvm/Support/Host.h"
 
+#ifdef NMODL_LLVM_CUDA_BACKEND
+#include "cuda.h"
+#endif
+
 namespace nmodl {
 namespace runner {
 
@@ -93,6 +97,39 @@ class JITDriver {
         return result;
     }
 };
+
+#ifdef NMODL_LLVM_CUDA_BACKEND
+void checkCudaErrors(CUresult err) {
+  assert(err == CUDA_SUCCESS);
+}
+
+class DeviceInfo {
+    int count;
+    std::string name;
+    int compute_version_major;
+    int compute_version_minor;
+}
+
+class GPUJITDriver: public JITDriver {
+    nvvmProgram prog;
+    CUdevice    device;
+    CUmodule    cudaModule;
+    CUcontext   context;
+    CUfunction  function;
+    CUlinkState linker;
+    DeviceInfo device_info;
+
+    /// Gets available GPU device information
+   DeviceInfo get_device_info();
+
+    public:
+        explicit GPUJITDriver(std::unique_ptr<llvm::Module> m)
+            : JITDriver(std::move(m)) {}
+    
+        /// Initializes the CUDA GPU JIT driver.
+        void init(const std::string& cpu, BenchmarkInfo* benchmark_info = nullptr);
+};
+#endif
 
 /**
  * \class BaseRunner
