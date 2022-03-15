@@ -39,11 +39,11 @@ codegen::CodegenInstanceData generate_instance_data(const std::string& text,
     SymtabVisitor().visit_program(*ast);
     NeuronSolveVisitor().visit_program(*ast);
 
+    codegen::Platform cpu_platform(use_single_precision, vector_width);
     codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"test",
                                              /*output_dir=*/".",
-                                             opt_level,
-                                             use_single_precision,
-                                             vector_width);
+                                             cpu_platform,
+                                             opt_level);
     llvm_visitor.visit_program(*ast);
     llvm_visitor.dump_module();
     const auto& generated_instance_struct = llvm_visitor.get_instance_struct_ptr();
