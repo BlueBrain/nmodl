@@ -51,14 +51,12 @@ std::string run_llvm_visitor(const std::string& text,
     NeuronSolveVisitor().visit_program(*ast);
     SolveBlockVisitor().visit_program(*ast);
 
-    codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"unknown",
-                                             /*output_dir=*/".",
-                                             opt_level,
-                                             use_single_precision,
-                                             vector_width,
-                                             vec_lib,
-                                             /*add_debug_information=*/false,
-                                             fast_math_flags);
+    codegen::Platform cpu_platform(codegen::PlatformID::CPU, /*name=*/"default",
+                                   vec_lib, use_single_precision, vector_width);
+    codegen::CodegenLLVMVisitor llvm_visitor(
+        /*mod_filename=*/"unknown",
+        /*output_dir=*/".", cpu_platform, opt_level,
+        /*add_debug_information=*/false, fast_math_flags);
 
     llvm_visitor.visit_program(*ast);
     return llvm_visitor.dump_module();

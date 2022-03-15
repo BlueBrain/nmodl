@@ -10,6 +10,7 @@
 #include <string>
 
 #include "codegen/llvm/codegen_llvm_helper_visitor.hpp"
+#include "codegen/llvm/target_platform.hpp"
 #include "symtab/symbol_table.hpp"
 
 #include "llvm/IR/IRBuilder.h"
@@ -52,14 +53,8 @@ class IRBuilder {
     /// Flag to indicate that the generated IR should be vectorized.
     bool vectorize;
 
-    /// Precision of the floating-point numbers (32 or 64 bit).
-    unsigned fp_precision;
-
-    /// The vector width used for the vectorized code.
-    unsigned vector_width;
-
-    /// Instance struct fields do not alias.
-    bool assume_noalias;
+    /// Target platform for which IR is built.
+    Platform platform;
 
     /// Masked value used to predicate vector instructions.
     llvm::Value* mask;
@@ -72,21 +67,17 @@ class IRBuilder {
 
   public:
     IRBuilder(llvm::LLVMContext& context,
-              bool use_single_precision = false,
-              unsigned vector_width = 1,
-              std::vector<std::string> fast_math_flags = {},
-              bool assume_noalias = true)
+              Platform& platform,
+              std::vector<std::string> fast_math_flags = {})
         : builder(context)
+        , platform(platform)
         , symbol_table(nullptr)
         , current_function(nullptr)
         , vectorize(false)
         , alloca_ip(nullptr)
-        , fp_precision(use_single_precision ? single_precision : double_precision)
-        , vector_width(vector_width)
         , mask(nullptr)
         , kernel_id("")
-        , fast_math_flags(fast_math_flags)
-        , assume_noalias(assume_noalias) {}
+        , fast_math_flags(fast_math_flags) {}
 
     /// Transforms the fast math flags provided to the builder into LLVM's representation.
     llvm::FastMathFlags transform_to_fmf(std::vector<std::string>& flags) {

@@ -41,13 +41,13 @@ llvm::Type* IRBuilder::get_i64_type() {
 }
 
 llvm::Type* IRBuilder::get_fp_type() {
-    if (fp_precision == single_precision)
+    if (platform.is_single_precision())
         return llvm::Type::getFloatTy(builder.getContext());
     return llvm::Type::getDoubleTy(builder.getContext());
 }
 
 llvm::Type* IRBuilder::get_fp_ptr_type() {
-    if (fp_precision == single_precision)
+    if (platform.is_single_precision())
         return llvm::Type::getFloatPtrTy(builder.getContext());
     return llvm::Type::getDoublePtrTy(builder.getContext());
 }
@@ -92,7 +92,7 @@ llvm::Value* IRBuilder::pop_last_value() {
 /****************************************************************************************/
 
 void IRBuilder::create_boolean_constant(int value) {
-    if (vector_width > 1 && vectorize) {
+    if (platform.is_cpu_with_simd() && vectorize) {
         value_stack.push_back(get_vector_constant<llvm::ConstantInt>(get_boolean_type(), value));
     } else {
         value_stack.push_back(get_scalar_constant<llvm::ConstantInt>(get_boolean_type(), value));
@@ -100,7 +100,7 @@ void IRBuilder::create_boolean_constant(int value) {
 }
 
 void IRBuilder::create_fp_constant(const std::string& value) {
-    if (vector_width > 1 && vectorize) {
+    if (platform.is_cpu_with_simd() && vectorize) {
         value_stack.push_back(get_vector_constant<llvm::ConstantFP>(get_fp_type(), value));
     } else {
         value_stack.push_back(get_scalar_constant<llvm::ConstantFP>(get_fp_type(), value));
@@ -112,7 +112,7 @@ llvm::Value* IRBuilder::create_global_string(const ast::String& node) {
 }
 
 void IRBuilder::create_i32_constant(int value) {
-    if (vector_width > 1 && vectorize) {
+    if (platform.is_cpu_with_simd() && vectorize) {
         value_stack.push_back(get_vector_constant<llvm::ConstantInt>(get_i32_type(), value));
     } else {
         value_stack.push_back(get_scalar_constant<llvm::ConstantInt>(get_i32_type(), value));
@@ -126,6 +126,8 @@ llvm::Value* IRBuilder::get_scalar_constant(llvm::Type* type, V value) {
 
 template <typename C, typename V>
 llvm::Value* IRBuilder::get_vector_constant(llvm::Type* type, V value) {
+    int vector_width = platform.get_instruction_width();
+
     ConstantVector constants;
     for (unsigned i = 0; i < vector_width; ++i) {
         const auto& element = C::get(type, value);
@@ -206,9 +208,7 @@ void IRBuilder::set_kernel_attributes() {
     //  > The `noalias` attribute indicates that the only memory accesses inside function are loads
     //  > and stores from objects pointed to by its pointer-typed arguments, with arbitrary
     //  > offsets.
-    if (assume_noalias) {
-        current_function->addParamAttr(0, llvm::Attribute::NoAlias);
-    }
+    current_function->addParamAttr(0, llvm::Attribute::NoAlias);
 
     // Finally, specify that the struct pointer does not capture and is read-only.
     current_function->addParamAttr(0, llvm::Attribute::NoCapture);
@@ -227,7 +227,7 @@ void IRBuilder::set_loop_metadata(llvm::BranchInst* branch) {
     loop_metadata.push_back(nullptr);
 
     // If `vector_width` is 1, explicitly disable vectorization for benchmarking purposes.
-    if (vector_width == 1) {
+    if (platform.is_cpu() && platform.get_instruction_width() == 1) {
         llvm::MDString* name = llvm::MDString::get(context, "llvm.loop.vectorize.enable");
         llvm::Value* false_value = llvm::ConstantInt::get(get_boolean_type(), 0);
         llvm::ValueAsMetadata* value = llvm::ValueAsMetadata::get(false_value);
@@ -376,6 +376,7 @@ llvm::Value* IRBuilder::create_index(llvm::Value* value) {
     const auto& element_type = llvm::cast<llvm::IntegerType>(vector_type->getElementType());
     if (element_type->getBitWidth() == i64_type->getIntegerBitWidth())
         return value;
+    int vector_width = platform.get_instruction_width();
     return builder.CreateSExtOrTrunc(value, llvm::FixedVectorType::get(i64_type, vector_width));
 }
 
@@ -449,7 +450,8 @@ void IRBuilder::create_scalar_or_vector_alloca(const std::string& name,
     // Even if generating vectorised code, some variables still need to be scalar. Particularly, the
     // induction variable "id" and remainder loop variables (that start with "epilogue" prefix).
     llvm::Type* type;
-    if (vector_width > 1 && vectorize && name != kernel_id && name.rfind("epilogue", 0)) {
+    if (platform.is_cpu_with_simd() && vectorize && name != kernel_id && name.rfind("epilogue", 0)) {
+        int vector_width = platform.get_instruction_width();
         type = llvm::FixedVectorType::get(element_or_scalar_type, vector_width);
     } else {
         type = element_or_scalar_type;
@@ -495,7 +497,7 @@ llvm::Value* IRBuilder::load_to_or_store_from_array(const std::string& id_name,
     llvm::Value* element_ptr = create_inbounds_gep(array, id_value);
 
     // Find out if the vector code is generated.
-    bool generating_vector_ir = vector_width > 1 && vectorize;
+    bool generating_vector_ir = platform.is_cpu_with_simd() && vectorize;
 
     // If the vector code is generated, we need to distinguish between two cases. If the array is
     // indexed indirectly (i.e. not by an induction variable `kernel_id`), create gather/scatter
@@ -523,7 +525,7 @@ llvm::Value* IRBuilder::load_to_or_store_from_array(const std::string& id_name,
         // to a vector pointer
         llvm::Type* vector_type = llvm::PointerType::get(
             llvm::FixedVectorType::get(element_ptr->getType()->getPointerElementType(),
-                                       vector_width),
+                                       platform.get_instruction_width()),
             /*AddressSpace=*/0);
         ptr = builder.CreateBitCast(element_ptr, vector_type);
     } else {
@@ -541,11 +543,12 @@ llvm::Value* IRBuilder::load_to_or_store_from_array(const std::string& id_name,
 
 void IRBuilder::maybe_replicate_value(llvm::Value* value) {
     // If the value should not be vectorised, or it is already a vector, add it to the stack.
-    if (!vectorize || vector_width == 1 || value->getType()->isVectorTy()) {
+    if (!vectorize || !platform.is_cpu_with_simd() || value->getType()->isVectorTy()) {
         value_stack.push_back(value);
     } else {
         // Otherwise, we generate vectorized code inside the loop, so replicate the value to form a
         // vector.
+        int vector_width = platform.get_instruction_width();
         llvm::Value* vector_value = builder.CreateVectorSplat(vector_width, value);
         value_stack.push_back(vector_value);
     }
