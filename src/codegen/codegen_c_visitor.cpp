@@ -1412,7 +1412,7 @@ void CodegenCVisitor::print_function_call(const FunctionCall& node) {
     auto arguments = node.get_arguments();
     printer->add_text("{}("_format(function_name));
 
-    bool possible_nt_variable_types;
+    bool possible_nt_variable_types{false};
     if (!defined_method(name)) {
         possible_nt_variable_types = arguments.front()->get_node_type() == AstNodeType::NAME &&
                                      arguments.front()->get_node_type() == AstNodeType::STRING &&
