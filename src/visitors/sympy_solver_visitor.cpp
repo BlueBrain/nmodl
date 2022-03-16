@@ -161,19 +161,11 @@ void SympySolverVisitor::construct_eigen_solver_block(
     const std::vector<std::string>& pre_solve_statements,
     const std::vector<std::string>& solutions,
     bool linear) {
-    // Provide random string to append to X, J, Jm and F matrices that
-    // are produced by sympy
-    std::string unique_X = suffix_random_string(vars, "X");
-    std::string unique_J = suffix_random_string(vars, "J");
-    std::string unique_Jm = suffix_random_string(vars, "Jm");
-    std::string unique_F = suffix_random_string(vars, "F");
 
-    // filter solutions for matrices named "X", "J", "Jm" and "F" and change them to
-    // unique_X, unique_J, unique_Jm and unique_F respectively
-    auto solutions_filtered = filter_string_vector(solutions, "X[", unique_X + "[");
-    solutions_filtered = filter_string_vector(solutions_filtered, "J[", unique_J + "[");
-    solutions_filtered = filter_string_vector(solutions_filtered, "Jm[", unique_Jm + "[");
-    solutions_filtered = filter_string_vector(solutions_filtered, "F[", unique_F + "[");
+    auto solutions_filtered = filter_string_vector(solutions, "X[", "_x_eigen[");
+    solutions_filtered = filter_string_vector(solutions_filtered, "J[", "_j_eigen[");
+    solutions_filtered = filter_string_vector(solutions_filtered, "Jm[", "_jm_eigen[");
+    solutions_filtered = filter_string_vector(solutions_filtered, "F[", "_f_eigen[");
 
     for (const auto& sol: solutions_filtered) {
         logger->debug("SympySolverVisitor :: -> adding statement: {}", sol);
@@ -182,12 +174,12 @@ void SympySolverVisitor::construct_eigen_solver_block(
     std::vector<std::string> pre_solve_statements_and_setup_x_eqs(pre_solve_statements);
     std::vector<std::string> update_statements;
     for (int i = 0; i < state_vars.size(); i++) {
-        auto update_state = state_vars[i] + " = " + unique_X + "[" + std::to_string(i) + "]";
-        auto setup_x = unique_X + "[" + std::to_string(i) + "] = " + state_vars[i];
+        auto update_state = state_vars[i] + " = _x_eigen[" + std::to_string(i) + "]";
+        auto setup_x = "_x_eigen[" + std::to_string(i) + "] = " + state_vars[i];
 
         pre_solve_statements_and_setup_x_eqs.push_back(setup_x);
         update_statements.push_back(update_state);
-        logger->debug("SympySolverVisitor :: setup_", unique_X, ": {}", setup_x);
+        logger->debug("SympySolverVisitor :: setup_x_eigen: {}", setup_x);
         logger->debug("SympySolverVisitor :: update_state: {}", update_state);
     }
 
