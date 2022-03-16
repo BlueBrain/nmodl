@@ -1849,9 +1849,7 @@ void CodegenCVisitor::visit_eigen_newton_solver_block(const ast::EigenNewtonSolv
         "void operator()(const Eigen::Matrix<{0}, {1}, 1>& _xm_eigen, Eigen::Matrix<{0}, {1}, "
         "1>& _fm_eigen, "
         "Eigen::Matrix<{0}, {1}, {1}>& _jm_eigen) {2}"_format(
-            float_type,
-            N,
-            is_functor_const(variable_block, functor_block) ? "const " : ""));
+            float_type, N, is_functor_const(variable_block, functor_block) ? "const " : ""));
     printer->start_block();
     printer->add_line("const {}* _x_eigen = _xm_eigen.data();"_format(float_type));
     printer->add_line("{}* _j_eigen = _jm_eigen.data();"_format(float_type));

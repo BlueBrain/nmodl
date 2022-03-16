@@ -161,7 +161,6 @@ void SympySolverVisitor::construct_eigen_solver_block(
     const std::vector<std::string>& pre_solve_statements,
     const std::vector<std::string>& solutions,
     bool linear) {
-
     auto solutions_filtered = filter_string_vector(solutions, "X[", "_x_eigen[");
     solutions_filtered = filter_string_vector(solutions_filtered, "J[", "_j_eigen[");
     solutions_filtered = filter_string_vector(solutions_filtered, "Jm[", "_jm_eigen[");
