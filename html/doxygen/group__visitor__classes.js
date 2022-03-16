@@ -52,9 +52,9 @@ var group__visitor__classes =
     ] ],
     [ "GlobalToRangeVisitor", "classnmodl_1_1visitor_1_1_global_to_range_visitor.html", [
       [ "GlobalToRangeVisitor", "classnmodl_1_1visitor_1_1_global_to_range_visitor.html#a40121374fb9a41c948c5870d68aab965", null ],
-      [ "GlobalToRangeVisitor", "classnmodl_1_1visitor_1_1_global_to_range_visitor.html#a2727585dedfdf66e12555ae9828c6c84", null ],
+      [ "GlobalToRangeVisitor", "classnmodl_1_1visitor_1_1_global_to_range_visitor.html#ac25ca51cd3f6340904594700d60e70d7", null ],
       [ "visit_neuron_block", "classnmodl_1_1visitor_1_1_global_to_range_visitor.html#a9cd2cf44ddc4af5ab46848a334cf7bc1", null ],
-      [ "ast", "classnmodl_1_1visitor_1_1_global_to_range_visitor.html#aec3a9ec630e4316df8cc62bb7b2d241f", null ]
+      [ "ast", "classnmodl_1_1visitor_1_1_global_to_range_visitor.html#a129109fe76496b18296751e18c931e05", null ]
     ] ],
     [ "IndexedNameVisitor", "classnmodl_1_1visitor_1_1_indexed_name_visitor.html", [
       [ "IndexedNameVisitor", "classnmodl_1_1visitor_1_1_indexed_name_visitor.html#a03302e59521f3500b23322d9e159ce60", null ],
