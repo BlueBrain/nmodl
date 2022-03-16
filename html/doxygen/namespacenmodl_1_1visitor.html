@@ -291,7 +291,7 @@ Functions</h2></td></tr>
 <tr class="memitem:ad0996f89363fa0089656b1079bd0fd26"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1visitor.html#ad0996f89363fa0089656b1079bd0fd26">add_external_symbols</a> (<a class="el" href="classnmodl_1_1symtab_1_1_model_symbol_table.html">symtab::ModelSymbolTable</a> *symtab)</td></tr>
 <tr class="separator:ad0996f89363fa0089656b1079bd0fd26"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7fe096bb1d995226f2875d6cbc2ece0e"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1visitor.html#a7fe096bb1d995226f2875d6cbc2ece0e">suffix_random_string</a> (const std::set&lt; std::string &gt; &amp;vars, const std::string &amp;original_string, const UseNumbersInString use_num=nmodl::utils::UseNumbersInString::WithNumbers)</td></tr>
-<tr class="memdesc:a7fe096bb1d995226f2875d6cbc2ece0e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a std::string in the form "original_string"_"random_string", where random_string is a string defined in the <a class="el" href="classnmodl_1_1utils_1_1_singleton_random_string.html" title="Singleton class for random strings. ">nmodl::utils::SingletonRandomString</a> for the original_string.  <a href="#a7fe096bb1d995226f2875d6cbc2ece0e">More...</a><br /></td></tr>
+<tr class="memdesc:a7fe096bb1d995226f2875d6cbc2ece0e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the "original_string" with a random suffix if "original_string" exists in "vars".  <a href="#a7fe096bb1d995226f2875d6cbc2ece0e">More...</a><br /></td></tr>
 <tr class="separator:a7fe096bb1d995226f2875d6cbc2ece0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9b51e3f836995236060e8eb8596dd486"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1visitor.html#a9b51e3f836995236060e8eb8596dd486">get_new_name</a> (const std::string &amp;name, const std::string &amp;suffix, std::map&lt; std::string, int &gt; &amp;variables)</td></tr>
 <tr class="memdesc:a9b51e3f836995236060e8eb8596dd486"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return new name variable by appending <code>_suffix_COUNT</code> where <code>COUNT</code> is number of times the given variable is already used.  <a href="#a9b51e3f836995236060e8eb8596dd486">More...</a><br /></td></tr>
@@ -457,7 +457,7 @@ Functions</h2></td></tr>
 
 <p>Add empty local statement to given block if already doesn't exist. </p>
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00072">72</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00082">82</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -488,7 +488,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>each block should already have local statement </p>
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00081">81</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00091">91</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -520,7 +520,7 @@ Functions</h2></td></tr>
 
 <p>Add new local variable to the block. </p>
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00095">95</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00105">105</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -556,7 +556,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00100">100</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00110">110</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -588,7 +588,7 @@ Functions</h2></td></tr>
 
 <p>Checks whether block contains a call to a particular function. </p>
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00183">183</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00193">193</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -717,7 +717,7 @@ Functions</h2></td></tr>
 <p>We create dummy nmodl procedure containing given code statement and then parse it using NMODL parser. As there will be only one block with single statement, we return first statement.</p>
 <dl class="todo"><dt><b><a class="el" href="todo.html#_todo000062">Todo:</a></b></dt><dd>Need to revisit this during code generation passes to make sure if all statements can be part of procedure block. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00115">115</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00125">125</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -741,7 +741,7 @@ Functions</h2></td></tr>
 <p>Create ast statement block node from given code in string format.</p>
 <p>We create dummy nmodl procedure containing given code statement and then parse it using NMODL parser. As there will be only one block with single statement, we return first statement. </p>
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00144">144</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00154">154</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -773,7 +773,7 @@ Functions</h2></td></tr>
 
 <p>Same as for create_statement but for vectors of strings. </p>
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00125">125</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00135">135</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -841,7 +841,7 @@ Functions</h2></td></tr>
 
 <p>Return set of strings with the names of all global variables. </p>
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00159">159</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00169">169</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -863,7 +863,7 @@ Functions</h2></td></tr>
 
 <p>Return pointer to local statement in the given block, otherwise nullptr. </p>
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00062">62</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00072">72</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -901,7 +901,7 @@ Functions</h2></td></tr>
 
 <p>Return new name variable by appending <code>_suffix_COUNT</code> where <code>COUNT</code> is number of times the given variable is already used. </p>
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00050">50</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00060">60</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -1125,8 +1125,17 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Return a std::string in the form "original_string"_"random_string", where random_string is a string defined in the <a class="el" href="classnmodl_1_1utils_1_1_singleton_random_string.html" title="Singleton class for random strings. ">nmodl::utils::SingletonRandomString</a> for the original_string. </p>
-<p>Vars is a const ref to std::set&lt;std::string&gt; which holds the names that need to be checked for uniqueness. Choose if the "random_string" will include numbers using "use_num" We make sure that the new string does not match any string in vars AND is not a prefix for any string in vars. In this way, appending to the result will always create new unique strings </p>
+<p>Return the "original_string" with a random suffix if "original_string" exists in "vars". </p>
+<p>Return a std::string in the form "original_string"_"random_string", where random_string is a string defined in the <a class="el" href="classnmodl_1_1utils_1_1_singleton_random_string.html" title="Singleton class for random strings. ">nmodl::utils::SingletonRandomString</a> for the original_string. Vars is a const ref to std::set&lt;std::string&gt; which holds the names that need to be checked for uniqueness. Choose if the "random_string" will include numbers using "use_num"</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">vars</td><td>a const ref to std::set&lt;std::string&gt; which holds the names of the variables we should check for uniqueness. Normally this is a vector of all the variables defined in the mod file. </td></tr>
+    <tr><td class="paramname">original_string</td><td>the original string to be suffixed with a random string </td></tr>
+    <tr><td class="paramname">use_num</td><td>a UseNumbersInString enum value to choose if the random string will include numbers </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>std::string the new string with the proper suffix if needed </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00031">31</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
