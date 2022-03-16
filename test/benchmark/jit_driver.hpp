@@ -21,6 +21,7 @@
 
 #ifdef NMODL_LLVM_CUDA_BACKEND
 #include "cuda.h"
+#include "nvvm.h"
 #endif
 
 namespace nmodl {
@@ -49,7 +50,7 @@ struct BenchmarkInfo {
  * \brief Driver to execute a MOD file function via LLVM IR backend.
  */
 class JITDriver {
-  private:
+  protected:
     std::unique_ptr<llvm::LLVMContext> context = std::make_unique<llvm::LLVMContext>();
 
     std::unique_ptr<llvm::orc::LLJIT> jit;
@@ -99,16 +100,12 @@ class JITDriver {
 };
 
 #ifdef NMODL_LLVM_CUDA_BACKEND
-void checkCudaErrors(CUresult err) {
-  assert(err == CUDA_SUCCESS);
-}
-
-class DeviceInfo {
+struct DeviceInfo {
     int count;
     std::string name;
     int compute_version_major;
     int compute_version_minor;
-}
+};
 
 class GPUJITDriver: public JITDriver {
     nvvmProgram prog;
@@ -118,6 +115,7 @@ class GPUJITDriver: public JITDriver {
     CUfunction  function;
     CUlinkState linker;
     DeviceInfo device_info;
+    std::string ptx_compiled_module;
 
     /// Gets available GPU device information
    DeviceInfo get_device_info();
@@ -127,7 +125,7 @@ class GPUJITDriver: public JITDriver {
             : JITDriver(std::move(m)) {}
     
         /// Initializes the CUDA GPU JIT driver.
-        void init(const std::string& cpu, BenchmarkInfo* benchmark_info = nullptr);
+        void init(const std::string& gpu, BenchmarkInfo* benchmark_info = nullptr);
 };
 #endif
 

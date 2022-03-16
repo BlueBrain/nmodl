@@ -11,6 +11,9 @@ set(LLVM_BENCHMARK_SOURCE_FILES
 include_directories(${LLVM_INCLUDE_DIRS})
 add_library(llvm_benchmark STATIC ${LLVM_BENCHMARK_SOURCE_FILES})
 add_dependencies(llvm_benchmark lexer util visitor)
+if(NMODL_ENABLE_LLVM_CUDA)
+  target_link_libraries(llvm_benchmark PRIVATE CUDA::cudart CUDA::nvrtc ${CUDA_NVVM_LIBRARY_DIR}/libnvvm.so)
+endif()
 
 if(NMODL_ENABLE_JIT_EVENT_LISTENERS)
   target_compile_definitions(llvm_benchmark PUBLIC NMODL_HAVE_JIT_EVENT_LISTENERS)

@@ -5,7 +5,7 @@
 # See top-level LICENSE file for details.
 # =============================================================================
 
-cmake_minimum_required(VERSION 3.17 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.18 FATAL_ERROR)
 
 project(NMODL LANGUAGES CXX)
 
@@ -165,6 +165,10 @@ if(NMODL_ENABLE_LLVM)
   if(NMODL_ENABLE_LLVM_CUDA)
     enable_language(CUDA)
     find_package(CUDAToolkit)
+    set(CUDA_NVVM_INCLUDE_DIR ${CUDAToolkit_LIBRARY_ROOT}/nvvm/include)
+    set(CUDA_NVVM_LIBRARY_DIR ${CUDAToolkit_LIBRARY_ROOT}/nvvm/lib64)
+    set(NMODL_CUDA_INCLUDE_DIRECTORIES ${CUDAToolkit_INCLUDE_DIRS} ${CUDA_NVVM_INCLUDE_DIR})
+    include_directories(${NMODL_CUDA_INCLUDE_DIRECTORIES})
     add_definitions(-DNMODL_LLVM_CUDA_BACKEND)
   endif()
 endif()
@@ -276,7 +280,7 @@ endif()
 message(STATUS "LLVM CUDA Codegen   | ${NMODL_ENABLE_LLVM_CUDA}")
 if(NMODL_ENABLE_LLVM_CUDA)
   message(STATUS "  CUDA VERSION      | ${CUDAToolkit_VERSION}")
-  message(STATUS "  INCLUDE           | ${CUDAToolkit_INCLUDE_DIRS}")
+  message(STATUS "  INCLUDE           | ${NMODL_CUDA_INCLUDE_DIRECTORIES}")
   message(STATUS "  LIBRARY           | ${CUDAToolkit_LIBRARY_DIR}")
 endif()
 if(NMODL_CLANG_FORMAT)

@@ -201,27 +201,38 @@ void JITDriver::init(const std::string& cpu, BenchmarkInfo* benchmark_info) {
             llvm::orc::DumpObjects(benchmark_info->output_dir, benchmark_info->filename));
     }
 }
-
-DeviceInfo get_device_info() {
-    DeviceInfo device_info;
-    checkCudaErrors(cuDeviceGetCount(&device_info.count));
-    checkCudaErrors(cuDeviceGet(&device, 0));
-    char name[128];
-    checkCudaErrors(cuDeviceGetName(name, 128, device));
-    device_info.name = std::string(name);
-    int devMajor, devMinor;
-    checkCudaErrors(cuDeviceGetAttribute(&device_info.compute_version_major, CU_DEVICE_ATTRIBUTE_COMPUTE_CAPABILITY_MAJOR, device));
-    checkCudaErrors(cuDeviceGetAttribute(&device_info.compute_version_major, CU_DEVICE_ATTRIBUTE_COMPUTE_CAPABILITY_MINOR, device));
-    if (devMajor < 2) {
-        throw std::runtime_error("ERROR: Device 0 is not SM 2.0 or greater");
+#ifdef NMODL_LLVM_CUDA_BACKEND
+void checkCudaErrors(CUresult err) {
+    if (err != CUDA_SUCCESS) {
+        const char *ret = NULL;
+        cuGetErrorName(err, &ret);
+        throw std::runtime_error("CUDA error: " + std::string(ret));
     }
 }
 
-
+void checkNVVMErrors(nvvmResult err) {
+    if (err != NVVM_SUCCESS) {
+        throw std::runtime_error("NVVM Error: " + std::string(nvvmGetErrorString(err)));
+    }
+}
 void GPUJITDriver::init(const std::string& gpu, BenchmarkInfo* benchmark_info) {
     // CUDA initialization
     checkCudaErrors(cuInit(0));
-    device_info = get_device_info();
+    checkCudaErrors(cuDeviceGetCount(&device_info.count));
+    checkCudaErrors(cuDeviceGet(&device, 0));
+
+    char name[128];
+    checkCudaErrors(cuDeviceGetName(name, 128, device));
+    device_info.name = name;
+    std::cout << "Using CUDA Device [0]: " << device_info.name << "\n";
+
+    checkCudaErrors(cuDeviceGetAttribute(&device_info.compute_version_major, CU_DEVICE_ATTRIBUTE_COMPUTE_CAPABILITY_MAJOR, device));
+    checkCudaErrors(cuDeviceGetAttribute(&device_info.compute_version_minor, CU_DEVICE_ATTRIBUTE_COMPUTE_CAPABILITY_MINOR, device));
+    std::cout << "Device Compute Capability: "
+                << device_info.compute_version_major << "." << device_info.compute_version_minor << "\n";
+    if (device_info.compute_version_major < 2) {
+        throw std::runtime_error("ERROR: Device 0 is not SM 2.0 or greater");
+    }
 
     // Save the LLVM IR module to string
     std::string kernel_llvm_ir;
@@ -233,10 +244,10 @@ void GPUJITDriver::init(const std::string& gpu, BenchmarkInfo* benchmark_info) {
     nvvmCreateProgram(&prog);
 
     // Add custom IR to program
-    nvvmAddModuleToProgram(prog, kernel_llvm_ir, kernel_llvm_ir.size(), "nmodl_llvm_ir");
+    nvvmAddModuleToProgram(prog, kernel_llvm_ir.c_str(), kernel_llvm_ir.size(), "nmodl_llvm_ir");
 
     // Declare compile options
-    const char *options[] = { "-ftz=1" };
+    const char *options[] = { "-arch=compute_60" };
 
     // Compile the program
     nvvmCompileProgram(prog, 1, options);
@@ -245,19 +256,20 @@ void GPUJITDriver::init(const std::string& gpu, BenchmarkInfo* benchmark_info) {
     char* compiled_module;
     size_t compiled_module_size;
     nvvmGetCompiledResultSize(prog, &compiled_module_size);
-    std::cout << "Compiled module size: " << compiled_module_size << "\n";
     compiled_module = (char*)malloc(compiled_module_size);
     nvvmGetCompiledResult(prog, compiled_module);
+    ptx_compiled_module = std::string(compiled_module, compiled_module_size);
 
     // Create driver context
     checkCudaErrors(cuCtxCreate(&context, 0, device));
 
     // Create module for object
-    checkCudaErrors(cuModuleLoadDataEx(&cudaModule, kernel_llvm_ir.c_str(), 0, 0, 0));
+    checkCudaErrors(cuModuleLoadDataEx(&cudaModule, compiled_module, 0, 0, 0));
 
-    // Get kernel function
-    checkCudaErrors(cuModuleGetFunction(&function, cudaModule, "kernel"));
+    // // Get kernel function
+    // checkCudaErrors(cuModuleGetFunction(&function, cudaModule, "kernel"));
 }
+#endif
 
 }  // namespace runner
 }  // namespace nmodl
