@@ -30,9 +30,6 @@ using nmodl::utils::UseNumbersInString;
 /// for the original_string. Vars is a const ref to std::set<std::string> which
 /// holds the names that need to be checked for uniqueness. Choose if the
 /// "random_string" will include numbers using "use_num"
-/// We make sure that the new string does not match any string in vars AND is not
-/// a prefix for any string in vars. In this way, appending to the result
-/// will always create new unique strings
 std::string suffix_random_string(
     const std::set<std::string>& vars,
     const std::string& original_string,
