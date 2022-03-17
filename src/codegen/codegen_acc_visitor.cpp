@@ -143,7 +143,8 @@ void CodegenAccVisitor::print_eigen_linear_solver(const std::string& float_type,
     if (N <= 4) {
         printer->add_line("nmodl_eigen_xm = nmodl_eigen_jm.inverse()*nmodl_eigen_fm;");
     } else {
-        printer->add_line("nmodl_eigen_xm = partialPivLu<{}>nmodl_eigen_jm, nmodl_eigen_fm);"_format(N));
+        printer->add_line(
+            "nmodl_eigen_xm = partialPivLu<{}>nmodl_eigen_jm, nmodl_eigen_fm);"_format(N));
     }
 }
 

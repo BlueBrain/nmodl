@@ -1883,7 +1883,8 @@ void CodegenCVisitor::visit_eigen_linear_solver_block(const ast::EigenLinearSolv
 
     const std::string float_type = default_float_data_type();
     int N = node.get_n_state_vars()->get_value();
-    printer->add_line("Eigen::Matrix<{0}, {1}, 1> nmodl_eigen_xm, nmodl_eigen_fm;"_format(float_type, N));
+    printer->add_line(
+        "Eigen::Matrix<{0}, {1}, 1> nmodl_eigen_xm, nmodl_eigen_fm;"_format(float_type, N));
     printer->add_line("Eigen::Matrix<{0}, {1}, {1}> nmodl_eigen_jm;"_format(float_type, N));
     printer->add_line("{}* nmodl_eigen_x = nmodl_eigen_xm.data();"_format(float_type));
     printer->add_line("{}* nmodl_eigen_j = nmodl_eigen_jm.data();"_format(float_type));
