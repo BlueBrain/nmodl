@@ -1812,8 +1812,8 @@ void CodegenCVisitor::visit_eigen_newton_solver_block(const ast::EigenNewtonSolv
 
     auto float_type = default_float_data_type();
     int N = node.get_n_state_vars()->get_value();
-    printer->add_line("Eigen::Matrix<{}, {}, 1> _xm_eigen"_format(float_type, N));
-    printer->add_line("{}* _x_eigen = _xm_eigen.data();"_format(float_type));
+    printer->add_line("Eigen::Matrix<{}, {}, 1> nmodl_eigen_xm"_format(float_type, N));
+    printer->add_line("{}* nmodl_eigen_x = nmodl_eigen_xm.data();"_format(float_type));
 
     print_statement_block(*node.get_setup_x_block(), false, false);
 
@@ -1846,16 +1846,16 @@ void CodegenCVisitor::visit_eigen_newton_solver_block(const ast::EigenNewtonSolv
     const auto& functor_block = *node.get_functor_block();
 
     printer->add_text(
-        "void operator()(const Eigen::Matrix<{0}, {1}, 1>& _xm_eigen, Eigen::Matrix<{0}, {1}, "
-        "1>& _fm_eigen, "
-        "Eigen::Matrix<{0}, {1}, {1}>& _jm_eigen) {2}"_format(
+        "void operator()(const Eigen::Matrix<{0}, {1}, 1>& nmodl_eigen_xm, Eigen::Matrix<{0}, {1}, "
+        "1>& nmodl_eigen_fm, "
+        "Eigen::Matrix<{0}, {1}, {1}>& nmodl_eigen_jm) {2}"_format(
             float_type,
             N,
             is_functor_const(variable_block, functor_block) ? "const " : ""));
     printer->start_block();
-    printer->add_line("const {}* _x_eigen = _xm_eigen.data();"_format(float_type));
-    printer->add_line("{}* _j_eigen = _jm_eigen.data();"_format(float_type));
-    printer->add_line("{}* _f_eigen = _fm_eigen.data();"_format(float_type));
+    printer->add_line("const {}* nmodl_eigen_x = nmodl_eigen_xm.data();"_format(float_type));
+    printer->add_line("{}* nmodl_eigen_j = nmodl_eigen_jm.data();"_format(float_type));
+    printer->add_line("{}* nmodl_eigen_f = nmodl_eigen_fm.data();"_format(float_type));
     print_statement_block(functor_block, false, false);
     printer->end_block(2);
 
@@ -1873,7 +1873,7 @@ void CodegenCVisitor::visit_eigen_newton_solver_block(const ast::EigenNewtonSolv
     printer->add_line("functor newton_functor(nt, inst, id, pnodecount, v, indexes);");
     printer->add_line("newton_functor.initialize();");
     printer->add_line(
-        "int newton_iterations = nmodl::newton::newton_solver(_xm_eigen, newton_functor);");
+        "int newton_iterations = nmodl::newton::newton_solver(nmodl_eigen_xm, newton_functor);");
 
     // assign newton solver results in matrix X to state vars
     print_statement_block(*node.get_update_states_block(), false, false);
@@ -1885,11 +1885,11 @@ void CodegenCVisitor::visit_eigen_linear_solver_block(const ast::EigenLinearSolv
 
     const std::string float_type = default_float_data_type();
     int N = node.get_n_state_vars()->get_value();
-    printer->add_line("Eigen::Matrix<{0}, {1}, 1> _xm_eigen, _fm_eigen;"_format(float_type, N));
-    printer->add_line("Eigen::Matrix<{0}, {1}, {1}> _jm_eigen;"_format(float_type, N));
-    printer->add_line("{}* _x_eigen = _xm_eigen.data();"_format(float_type));
-    printer->add_line("{}* _j_eigen = _jm_eigen.data();"_format(float_type));
-    printer->add_line("{}* _f_eigen = _fm_eigen.data();"_format(float_type));
+    printer->add_line("Eigen::Matrix<{0}, {1}, 1> nmodl_eigen_xm, nmodl_eigen_fm;"_format(float_type, N));
+    printer->add_line("Eigen::Matrix<{0}, {1}, {1}> nmodl_eigen_jm;"_format(float_type, N));
+    printer->add_line("{}* nmodl_eigen_x = nmodl_eigen_xm.data();"_format(float_type));
+    printer->add_line("{}* nmodl_eigen_j = nmodl_eigen_jm.data();"_format(float_type));
+    printer->add_line("{}* nmodl_eigen_f = nmodl_eigen_fm.data();"_format(float_type));
     print_statement_block(*node.get_variable_block(), false, false);
     print_statement_block(*node.get_initialize_block(), false, false);
     print_statement_block(*node.get_setup_x_block(), false, false);
@@ -1905,10 +1905,10 @@ void CodegenCVisitor::visit_eigen_linear_solver_block(const ast::EigenLinearSolv
 void CodegenCVisitor::print_eigen_linear_solver(const std::string& float_type, int N) {
     if (N <= 4) {
         // Faster compared to LU, given the template specialization in Eigen.
-        printer->add_line("_xm_eigen = _jm_eigen.inverse()*_fm_eigen;");
+        printer->add_line("nmodl_eigen_xm = nmodl_eigen_jm.inverse()*nmodl_eigen_fm;");
     } else {
         printer->add_line(
-            "_xm_eigen = Eigen::PartialPivLU<Eigen::Ref<Eigen::Matrix<{0}, {1}, {1}>>>(_jm_eigen).solve(_fm_eigen);"_format(
+            "nmodl_eigen_xm = Eigen::PartialPivLU<Eigen::Ref<Eigen::Matrix<{0}, {1}, {1}>>>(nmodl_eigen_jm).solve(nmodl_eigen_fm);"_format(
                 float_type, N));
     }
 }

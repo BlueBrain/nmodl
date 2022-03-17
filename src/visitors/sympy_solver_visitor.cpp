@@ -162,10 +162,10 @@ void SympySolverVisitor::construct_eigen_solver_block(
     const std::vector<std::string>& solutions,
     bool linear) {
 
-    auto solutions_filtered = filter_string_vector(solutions, "X[", "_x_eigen[");
-    solutions_filtered = filter_string_vector(solutions_filtered, "J[", "_j_eigen[");
-    solutions_filtered = filter_string_vector(solutions_filtered, "Jm[", "_jm_eigen[");
-    solutions_filtered = filter_string_vector(solutions_filtered, "F[", "_f_eigen[");
+    auto solutions_filtered = filter_string_vector(solutions, "X[", "nmodl_eigen_x[");
+    solutions_filtered = filter_string_vector(solutions_filtered, "J[", "nmodl_eigen_j[");
+    solutions_filtered = filter_string_vector(solutions_filtered, "Jm[", "nmodl_eigen_jm[");
+    solutions_filtered = filter_string_vector(solutions_filtered, "F[", "nmodl_eigen_f[");
 
     for (const auto& sol: solutions_filtered) {
         logger->debug("SympySolverVisitor :: -> adding statement: {}", sol);
@@ -174,8 +174,8 @@ void SympySolverVisitor::construct_eigen_solver_block(
     std::vector<std::string> pre_solve_statements_and_setup_x_eqs(pre_solve_statements);
     std::vector<std::string> update_statements;
     for (int i = 0; i < state_vars.size(); i++) {
-        auto update_state = state_vars[i] + " = _x_eigen[" + std::to_string(i) + "]";
-        auto setup_x = "_x_eigen[" + std::to_string(i) + "] = " + state_vars[i];
+        auto update_state = state_vars[i] + " = nmodl_eigen_x[" + std::to_string(i) + "]";
+        auto setup_x = "nmodl_eigen_x[" + std::to_string(i) + "] = " + state_vars[i];
 
         pre_solve_statements_and_setup_x_eqs.push_back(setup_x);
         update_statements.push_back(update_state);

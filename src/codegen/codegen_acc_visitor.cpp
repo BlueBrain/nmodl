@@ -141,9 +141,9 @@ void CodegenAccVisitor::print_net_send_buffering_grow() {
 
 void CodegenAccVisitor::print_eigen_linear_solver(const std::string& float_type, int N) {
     if (N <= 4) {
-        printer->add_line("_xm_eigen = _jm_eigen.inverse()*_fm_eigen;");
+        printer->add_line("nmodl_eigen_xm = nmodl_eigen_jm.inverse()*nmodl_eigen_fm;");
     } else {
-        printer->add_line("_xm_eigen = partialPivLu<{}>_jm_eigen, _fm_eigen);"_format(N));
+        printer->add_line("nmodl_eigen_xm = partialPivLu<{}>nmodl_eigen_jm, nmodl_eigen_fm);"_format(N));
     }
 }
 
