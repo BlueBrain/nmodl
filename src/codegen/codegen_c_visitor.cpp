@@ -1812,7 +1812,7 @@ void CodegenCVisitor::visit_eigen_newton_solver_block(const ast::EigenNewtonSolv
 
     auto float_type = default_float_data_type();
     int N = node.get_n_state_vars()->get_value();
-    printer->add_line("Eigen::Matrix<{}, {}, 1> nmodl_eigen_xm"_format(float_type, N));
+    printer->add_line("Eigen::Matrix<{}, {}, 1> nmodl_eigen_xm;"_format(float_type, N));
     printer->add_line("{}* nmodl_eigen_x = nmodl_eigen_xm.data();"_format(float_type));
 
     print_statement_block(*node.get_setup_x_block(), false, false);
