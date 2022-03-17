@@ -201,6 +201,7 @@ void JITDriver::init(const std::string& cpu, BenchmarkInfo* benchmark_info) {
             llvm::orc::DumpObjects(benchmark_info->output_dir, benchmark_info->filename));
     }
 }
+
 #ifdef NMODL_LLVM_CUDA_BACKEND
 void checkCudaErrors(CUresult err) {
     if (err != CUDA_SUCCESS) {
@@ -215,7 +216,7 @@ void checkNVVMErrors(nvvmResult err) {
         throw std::runtime_error("NVVM Error: " + std::string(nvvmGetErrorString(err)));
     }
 }
-void GPUJITDriver::init(const std::string& gpu, BenchmarkInfo* benchmark_info) {
+void CUDADriver::init(const std::string& gpu, BenchmarkInfo* benchmark_info) {
     // CUDA initialization
     checkCudaErrors(cuInit(0));
     checkCudaErrors(cuDeviceGetCount(&device_info.count));

@@ -197,6 +197,24 @@ int main(int argc, const char* argv[]) {
     /// llvm vector width if generating code for CPUs
     int llvm_vector_width = 1;
 
+    /// X dimension of grid in blocks for GPU execution
+    int llvm_cuda_grid_dim_x = 1;
+
+    /// Y dimension of grid in blocks for GPU execution
+    int llvm_cuda_grid_dim_y = 1;
+
+    /// Z dimension of grid in blocks for GPU execution
+    int llvm_cuda_grid_dim_z = 1;
+
+    /// X dimension of block in threads for GPU execution
+    int llvm_cuda_block_dim_x = 1;
+
+    /// Y dimension of block in threads for GPU execution
+    int llvm_cuda_block_dim_y = 1;
+
+    /// Z dimension of block in threads for GPU execution
+    int llvm_cuda_block_dim_z = 1;
+
     /// run llvm benchmark
     bool llvm_benchmark(false);
 
@@ -386,6 +404,24 @@ int main(int argc, const char* argv[]) {
     benchmark_opt->add_option("--repeat",
                               num_experiments,
                               "Number of experiments for benchmarking ({})"_format(num_experiments))->ignore_case();
+    benchmark_opt->add_option("--gridDimX",
+                              gridDimX,
+                              "Grid dimension X ({})"_format(gridDimX))->ignore_case();
+    benchmark_opt->add_option("--gridDimY",
+                                gridDimY,
+                                "Grid dimension Y ({})"_format(gridDimY))->ignore_case();
+    benchmark_opt->add_option("--gridDimZ",
+                                gridDimZ,
+                                "Grid dimension Z ({})"_format(gridDimZ))->ignore_case();
+    benchmark_opt->add_option("--blockDimX",
+                                blockDimX,
+                                "Block dimension X ({})"_format(blockDimX))->ignore_case();
+    benchmark_opt->add_option("--blockDimY",
+                                blockDimY,
+                                "Block dimension Y ({})"_format(blockDimY))->ignore_case();
+    benchmark_opt->add_option("--blockDimZ",
+                                blockDimZ,
+                                "Block dimension Z ({})"_format(blockDimZ))->ignore_case();
 #endif
     // clang-format on
 
@@ -704,6 +740,8 @@ int main(int argc, const char* argv[]) {
               Platform platform(pid, name, llvm_math_library, llvm_float_type,
                                 llvm_vector_width);
 
+              
+
               logger->info("Running LLVM backend code generator");
               CodegenLLVMVisitor visitor(modfile, output_dir, platform,
                                          llvm_opt_level, !llvm_no_debug,
@@ -713,17 +751,19 @@ int main(int argc, const char* argv[]) {
               ast_to_json(*ast, filepath("llvm", "json"));
 
               if (llvm_benchmark) {
-                // \todo integrate Platform class here
-                if (llvm_gpu_name != "default") {
-                  logger->warn("GPU benchmarking is not supported, targeting "
-                               "CPU instead");
-                }
-
                 logger->info("Running LLVM benchmark");
-                benchmark::LLVMBenchmark benchmark(
+                if (llvm_gpu_name == "cuda"){
+                  const GPUExecutionParameters gpu_execution_parameters{llvm_cuda_grid_dim_x, llvm_cuda_grid_dim_y, llvm_cuda_grid_dim_z, llvm_cuda_block_dim_x, llvm_cuda_block_dim_y, llvm_cuda_block_dim_z};
+                  benchmark::LLVMBenchmark<CUDADriver> benchmark(
                     visitor, modfile, output_dir, shared_lib_paths,
-                    num_experiments, instance_size, llvm_cpu_name,
-                    llvm_opt_level_ir, llvm_opt_level_codegen);
+                    num_experiments, instance_size, platform,
+                    llvm_opt_level_ir, llvm_opt_level_codegen, gpu_execution_parameters);
+                } else {
+                    benchmark::LLVMBenchmark<JITDriver> benchmark(
+                        visitor, modfile, output_dir, shared_lib_paths,
+                        num_experiments, instance_size, platform,
+                        llvm_opt_level_ir, llvm_opt_level_codegen);
+                }
                 benchmark.run(ast);
               }
             }

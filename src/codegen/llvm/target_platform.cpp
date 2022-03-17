@@ -15,7 +15,7 @@ const std::string Platform::DEFAULT_MATH_LIBRARY = "none";
 
 bool Platform::is_default_platform() {
     // Default platform is a CPU.
-    return platform_id == PlatformID::CPU &&  name == Platform::DEFAULT_PLATFORM_NAME;
+    return platform_id == PlatformID::CPU && name == Platform::DEFAULT_PLATFORM_NAME;
 }
 
 bool Platform::is_cpu() {

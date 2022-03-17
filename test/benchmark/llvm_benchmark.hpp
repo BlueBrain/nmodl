@@ -11,7 +11,11 @@
 #include <string>
 
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
+#include "gpu_parameters.hpp"
 #include "utils/logger.hpp"
+
+using nmodl::codegen::Platform;
+using nmodl::cuda_details::GPUExecutionParameters;
 
 namespace nmodl {
 namespace benchmark {
@@ -41,8 +45,10 @@ class LLVMBenchmark {
     /// The size of the instance struct for benchmarking.
     int instance_size;
 
-    /// CPU to target.
-    std::string cpu;
+    /// Target platform for the code generation.
+    Platform platform;
+
+    GPUExecutionParameters gpu_execution_parameters;
 
     /// Optimisation level for IR generation.
     int opt_level_ir;
@@ -60,7 +66,7 @@ class LLVMBenchmark {
                   std::vector<std::string> shared_libs,
                   int num_experiments,
                   int instance_size,
-                  const std::string& cpu,
+                  const Platform& platform,
                   int opt_level_ir,
                   int opt_level_codegen)
         : llvm_visitor(llvm_visitor)
@@ -69,9 +75,29 @@ class LLVMBenchmark {
         , shared_libs(shared_libs)
         , num_experiments(num_experiments)
         , instance_size(instance_size)
-        , cpu(cpu)
+        , platform(platform)
         , opt_level_ir(opt_level_ir)
         , opt_level_codegen(opt_level_codegen) {}
+    LLVMBenchmark(codegen::CodegenLLVMVisitor& llvm_visitor,
+                  const std::string& mod_filename,
+                  const std::string& output_dir,
+                  std::vector<std::string> shared_libs,
+                  int num_experiments,
+                  int instance_size,
+                  const Platform& platform,
+                  int opt_level_ir,
+                  int opt_level_codegen
+                  const GPUExecutionParameters& gpu_exec_params)
+        : llvm_visitor(llvm_visitor)
+        , mod_filename(mod_filename)
+        , output_dir(output_dir)
+        , shared_libs(shared_libs)
+        , num_experiments(num_experiments)
+        , instance_size(instance_size)
+        , platform(platform)
+        , opt_level_ir(opt_level_ir)
+        , opt_level_codegen(opt_level_codegen)
+        , gpu_execution_parameters(gpu_exec_params) {}
 
     /// Runs the benchmark.
     void run(const std::shared_ptr<ast::Program>& node);

@@ -43,8 +43,8 @@ void LLVMBenchmark::run_benchmark(const std::shared_ptr<ast::Program>& node) {
     llvm_visitor.find_kernel_names(kernel_names);
 
     // Get feature's string and turn them off depending on the cpu.
-    std::string cpu_name = cpu == "default" ? llvm::sys::getHostCPUName().str() : cpu;
-    logger->info("CPU: {}", cpu_name);
+    const auto backend_name = platform.get_name();
+    logger->info("Backend: {}", backend_name);
 
     std::unique_ptr<llvm::Module> m = llvm_visitor.get_module();
 
@@ -52,7 +52,7 @@ void LLVMBenchmark::run_benchmark(const std::shared_ptr<ast::Program>& node) {
     std::string filename = "v" + std::to_string(llvm_visitor.get_vector_width()) + "_" +
                            mod_filename;
     runner::BenchmarkRunner runner(
-        std::move(m), filename, output_dir, cpu_name, shared_libs, opt_level_ir, opt_level_codegen);
+        std::move(m), filename, output_dir, backend_name, shared_libs, opt_level_ir, opt_level_codegen);
     runner.initialize_driver();
 
     // Benchmark every kernel.
@@ -75,7 +75,11 @@ void LLVMBenchmark::run_benchmark(const std::shared_ptr<ast::Program>& node) {
             // Record the execution time of the kernel.
             std::string wrapper_name = "__" + kernel_name + "_wrapper";
             auto start = std::chrono::steady_clock::now();
-            runner.run_with_argument<int, void*>(kernel_name, instance_data.base_ptr);
+            if (backend_name == "cuda") {
+                runner.run_with_argument<int, void*>(kernel_name, instance_data.base_ptr, gpu_execution_parameters);
+            } else {
+                runner.run_with_argument<int, void*>(kernel_name, instance_data.base_ptr);
+            }
             auto end = std::chrono::steady_clock::now();
             std::chrono::duration<double> diff = end - start;
 
