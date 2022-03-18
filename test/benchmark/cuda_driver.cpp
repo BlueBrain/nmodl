@@ -10,7 +10,10 @@
 #include "cuda_driver.hpp"
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
 #include "codegen/llvm/llvm_utils.hpp"
+#include "fmt/format.h"
 #include "utils/common_utils.hpp"
+
+using fmt::literals::operator""_format;
 
 namespace nmodl {
 namespace runner {
@@ -64,7 +67,8 @@ void CUDADriver::init(const std::string& gpu, BenchmarkInfo* benchmark_info) {
     nvvmAddModuleToProgram(prog, kernel_llvm_ir.c_str(), kernel_llvm_ir.size(), "nmodl_llvm_ir");
 
     // Declare compile options
-    const char* options[] = {"-arch=compute_60"};
+    const auto arch_option = "-arch=compute_{}0"_format(device_info.compute_version_major);
+    const char* options[] = {arch_option.c_str()};
 
     // Compile the program
     nvvmCompileProgram(prog, 1, options);
@@ -82,9 +86,6 @@ void CUDADriver::init(const std::string& gpu, BenchmarkInfo* benchmark_info) {
 
     // Create module for object
     checkCudaErrors(cuModuleLoadDataEx(&cudaModule, compiled_module, 0, 0, 0));
-
-    // // Get kernel function
-    // checkCudaErrors(cuModuleGetFunction(&function, cudaModule, "kernel"));
 }
 
 }  // namespace runner
