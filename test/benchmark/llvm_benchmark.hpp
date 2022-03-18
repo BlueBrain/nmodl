@@ -107,8 +107,11 @@ class LLVMBenchmark {
     /// Visits the AST to construct the LLVM IR module.
     void generate_llvm(const std::shared_ptr<ast::Program>& node);
 
-    /// Runs the main body of the benchmark, executing the compute kernels.
-    void run_benchmark(const std::shared_ptr<ast::Program>& node);
+    /// Runs the main body of the benchmark, executing the compute kernels on CPU.
+    void run_benchmark_on_cpu(const std::shared_ptr<ast::Program>& node);
+
+    /// Runs the main body of the benchmark, executing the compute kernels on GPU.
+    void run_benchmark_on_gpu(const std::shared_ptr<ast::Program>& node);
 
     /// Sets the log output stream (file or console).
     void set_log_output();

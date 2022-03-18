@@ -22,7 +22,11 @@ void LLVMBenchmark::run(const std::shared_ptr<ast::Program>& node) {
     // create functions
     generate_llvm(node);
     // Finally, run the benchmark and log the measurements.
-    run_benchmark(node);
+    if (platform.get_name() == "cuda") {
+        run_benchmark_on_gpu(node);
+    } else {
+        run_benchmark_on_cpu(node);
+    }
 }
 
 void LLVMBenchmark::generate_llvm(const std::shared_ptr<ast::Program>& node) {
@@ -36,15 +40,15 @@ void LLVMBenchmark::generate_llvm(const std::shared_ptr<ast::Program>& node) {
     logger->info("Created LLVM IR module from NMODL AST in {} sec", diff.count());
 }
 
-void LLVMBenchmark::run_benchmark(const std::shared_ptr<ast::Program>& node) {
+void LLVMBenchmark::run_benchmark_on_cpu(const std::shared_ptr<ast::Program>& node) {
     // Set the codegen data helper and find the kernels.
     auto codegen_data = codegen::CodegenDataHelper(node, llvm_visitor.get_instance_struct_ptr());
     std::vector<std::string> kernel_names;
     llvm_visitor.find_kernel_names(kernel_names);
 
     // Get feature's string and turn them off depending on the cpu.
-    const auto backend_name = platform.get_name();
-    logger->info("Backend: {}", backend_name);
+    const auto cpu_name = platform.get_name();
+    logger->info("CPU: {}", cpu_name);
 
     std::unique_ptr<llvm::Module> m = llvm_visitor.get_module();
 
@@ -52,7 +56,7 @@ void LLVMBenchmark::run_benchmark(const std::shared_ptr<ast::Program>& node) {
     std::string filename = "v" + std::to_string(llvm_visitor.get_vector_width()) + "_" +
                            mod_filename;
     runner::BenchmarkRunner<> runner(
-        std::move(m), filename, output_dir, backend_name, shared_libs, opt_level_ir, opt_level_codegen);
+        std::move(m), filename, output_dir, cpu_name, shared_libs, opt_level_ir, opt_level_codegen);
     runner.initialize_driver();
 
     // Benchmark every kernel.
@@ -75,11 +79,68 @@ void LLVMBenchmark::run_benchmark(const std::shared_ptr<ast::Program>& node) {
             // Record the execution time of the kernel.
             std::string wrapper_name = "__" + kernel_name + "_wrapper";
             auto start = std::chrono::steady_clock::now();
-            if (backend_name == "cuda") {
-                runner.run_with_argument<void, void*>(kernel_name, instance_data.base_ptr, gpu_execution_parameters);
-            } else {
-                runner.run_with_argument<int, void*>(kernel_name, instance_data.base_ptr);
+            runner.run_with_argument<int, void*>(kernel_name, instance_data.base_ptr);
+            auto end = std::chrono::steady_clock::now();
+            std::chrono::duration<double> diff = end - start;
+
+            // Log the time taken for each run.
+            logger->info("Experiment {} compute time = {:.6f} sec", i, diff.count());
+
+            // Update statistics.
+            time_sum += diff.count();
+            time_squared_sum += diff.count() * diff.count();
+            time_min = std::min(time_min, diff.count());
+            time_max = std::max(time_max, diff.count());
+        }
+        // Log the average time taken for the kernel.
+        double time_mean = time_sum / num_experiments;
+        logger->info("Average compute time = {:.6f}", time_mean);
+        logger->info("Compute time variance = {:g}",
+                     time_squared_sum / num_experiments - time_mean * time_mean);
+        logger->info("Minimum compute time = {:.6f}", time_min);
+        logger->info("Maximum compute time = {:.6f}\n", time_max);
+    }
+}
+
+void LLVMBenchmark::run_benchmark_on_gpu(const std::shared_ptr<ast::Program>& node) {
+    // Set the codegen data helper and find the kernels.
+    auto codegen_data = codegen::CodegenDataHelper(node, llvm_visitor.get_instance_struct_ptr());
+    std::vector<std::string> kernel_names;
+    llvm_visitor.find_kernel_names(kernel_names);
+
+    // Get feature's string and turn them off depending on the cpu.
+    const auto gpu_name = platform.get_name();
+    logger->info("GPU: {}", gpu_name);
+
+    std::unique_ptr<llvm::Module> m = llvm_visitor.get_module();
+
+    // Create the benchmark runner and initialize it.
+    std::string filename = "cuda_" + mod_filename;
+    runner::BenchmarkRunner<runner::CUDADriver> runner(
+        std::move(m), filename, output_dir, gpu_name, shared_libs, opt_level_ir, opt_level_codegen);
+    runner.initialize_driver();
+
+    // Benchmark every kernel.
+    for (const auto& kernel_name: kernel_names) {
+        // For every kernel run the benchmark `num_experiments` times.
+        double time_min = std::numeric_limits<double>::max();
+        double time_max = 0.0;
+        double time_sum = 0.0;
+        double time_squared_sum = 0.0;
+        for (int i = 0; i < num_experiments; ++i) {
+            // Initialise the data.
+            auto instance_data = codegen_data.create_data(instance_size, /*seed=*/1);
+
+            // Log instance size once.
+            if (i == 0) {
+                double size_mbs = instance_data.num_bytes / (1024.0 * 1024.0);
+                logger->info("Benchmarking kernel '{}' with {} MBs dataset", kernel_name, size_mbs);
             }
+
+            // Record the execution time of the kernel.
+            std::string wrapper_name = "__" + kernel_name + "_wrapper";
+            auto start = std::chrono::steady_clock::now();
+            runner.run_with_argument<void, void*, GPUExecutionParameters>(kernel_name, instance_data.base_ptr, gpu_execution_parameters);
             auto end = std::chrono::steady_clock::now();
             std::chrono::duration<double> diff = end - start;
 

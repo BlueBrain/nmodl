@@ -100,6 +100,18 @@ class JITDriver {
         ReturnType result = res(arg);
         return result;
     }
+
+    /// Lookups the entry-point with an argument in the JIT and executes it, returning the result.
+    template <typename ReturnType, typename ArgType1, typename ArgType2>
+    ReturnType execute_with_arguments(const std::string& entry_point, ArgType1 arg1, ArgType2 arg2) {
+        auto expected_symbol = jit->lookup(entry_point);
+        if (!expected_symbol)
+            throw std::runtime_error("Error: entry-point symbol not found in JIT\n");
+
+        auto (*res)(ArgType1, ArgType2) = (ReturnType(*)(ArgType1, ArgType2))(intptr_t) expected_symbol->getAddress();
+        ReturnType result = res(arg1, arg2);
+        return result;
+    }
 };
 
 #ifdef NMODL_LLVM_CUDA_BACKEND
@@ -130,7 +142,9 @@ void checkCudaErrors(CUresult err);
  */
 void checkNVVMErrors(nvvmResult err);
 
-class CUDADriver: public JITDriver {
+class CUDADriver {
+    /// LLVM IR module to execute.
+    std::unique_ptr<llvm::Module> module;
     nvvmProgram prog;
     CUdevice    device;
     CUmodule    cudaModule;
@@ -142,14 +156,14 @@ class CUDADriver: public JITDriver {
 
     public:
         explicit CUDADriver(std::unique_ptr<llvm::Module> m)
-            : JITDriver(std::move(m)) {}
+            : module(std::move(m)) {}
     
         /// Initializes the CUDA GPU JIT driver.
         void init(const std::string& gpu, BenchmarkInfo* benchmark_info = nullptr);
 
-        /// Lookups the entry-point without arguments in the JIT and executes it, returning the result.
-        template <typename ReturnType = void>
-        ReturnType execute_without_arguments(const std::string& entry_point, const GPUExecutionParameters& gpu_execution_parameters) {
+        /// Lookups the entry-point without arguments in the CUDA module and executes it.
+        template <typename ReturnType, const GPUExecutionParameters&>
+        ReturnType execute_with_arguments(const std::string& entry_point, const GPUExecutionParameters& gpu_execution_parameters) {
             // Get kernel function
             checkCudaErrors(cuModuleGetFunction(&function, cudaModule, entry_point.c_str()));
 
@@ -160,16 +174,17 @@ class CUDADriver: public JITDriver {
                                     gpu_execution_parameters.sharedMemBytes, nullptr, kernel_parameters, nullptr));
         }
 
-        /// Lookups the entry-point with an argument in the JIT and executes it, returning the result.
-        template <typename ReturnType = void, typename ArgType>
-        ReturnType execute_with_arguments(const std::string& entry_point, ArgType arg) {
-            auto expected_symbol = jit->lookup(entry_point);
-            if (!expected_symbol)
-                throw std::runtime_error("Error: entry-point symbol not found in JIT\n");
+        /// Lookups the entry-point with arguments in the CUDA module and executes it.
+        template <typename ReturnType, typename ArgType1, typename ArgType2>
+        ReturnType execute_with_arguments(const std::string& entry_point, ArgType1 arg1, ArgType2 gpu_execution_parameters) {
+            // Get kernel function
+            checkCudaErrors(cuModuleGetFunction(&function, cudaModule, entry_point.c_str()));
 
-            auto (*res)(ArgType) = (ReturnType(*)(ArgType))(intptr_t) expected_symbol->getAddress();
-            ReturnType result = res(arg);
-            return result;
+            // Kernel launch
+            void *kernel_parameters[] = {&arg1};
+            checkCudaErrors(cuLaunchKernel(function, gpu_execution_parameters.gridDimX, gpu_execution_parameters.gridDimY, gpu_execution_parameters.gridDimY,
+                                    gpu_execution_parameters.blockDimX, gpu_execution_parameters.blockDimY, gpu_execution_parameters.blockDimY,
+                                    gpu_execution_parameters.sharedMemBytes, nullptr, kernel_parameters, nullptr));
         }
 };
 #endif
@@ -201,6 +216,12 @@ class BaseRunner {
     template <typename ReturnType, typename ArgType>
     ReturnType run_with_argument(const std::string& entry_point, ArgType arg) {
         return driver->template execute_with_arguments<ReturnType, ArgType>(entry_point, arg);
+    }
+
+    /// Runs the entry-point function with a pointer to the data as an argument.
+    template <typename ReturnType, typename ArgType1, typename ArgType2>
+    ReturnType run_with_argument(const std::string& entry_point, ArgType1 arg1, ArgType2 arg2) {
+        return driver->template execute_with_arguments<ReturnType, ArgType1, ArgType2>(entry_point, arg1, arg2);
     }
 };
 
