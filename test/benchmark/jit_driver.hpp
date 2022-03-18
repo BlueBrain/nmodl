@@ -162,8 +162,8 @@ class CUDADriver {
         void init(const std::string& gpu, BenchmarkInfo* benchmark_info = nullptr);
 
         /// Lookups the entry-point without arguments in the CUDA module and executes it.
-        template <typename ReturnType, const GPUExecutionParameters&>
-        ReturnType execute_with_arguments(const std::string& entry_point, const GPUExecutionParameters& gpu_execution_parameters) {
+        template <typename ReturnType, typename ArgType2>
+        ReturnType execute_with_arguments(const std::string& entry_point, ArgType2 gpu_execution_parameters) {
             // Get kernel function
             checkCudaErrors(cuModuleGetFunction(&function, cudaModule, entry_point.c_str()));
 
