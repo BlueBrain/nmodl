@@ -51,7 +51,7 @@ void LLVMBenchmark::run_benchmark(const std::shared_ptr<ast::Program>& node) {
     // Create the benchmark runner and initialize it.
     std::string filename = "v" + std::to_string(llvm_visitor.get_vector_width()) + "_" +
                            mod_filename;
-    runner::BenchmarkRunner runner(
+    runner::BenchmarkRunner<> runner(
         std::move(m), filename, output_dir, backend_name, shared_libs, opt_level_ir, opt_level_codegen);
     runner.initialize_driver();
 
@@ -76,7 +76,7 @@ void LLVMBenchmark::run_benchmark(const std::shared_ptr<ast::Program>& node) {
             std::string wrapper_name = "__" + kernel_name + "_wrapper";
             auto start = std::chrono::steady_clock::now();
             if (backend_name == "cuda") {
-                runner.run_with_argument<int, void*>(kernel_name, instance_data.base_ptr, gpu_execution_parameters);
+                runner.run_with_argument<void, void*>(kernel_name, instance_data.base_ptr, gpu_execution_parameters);
             } else {
                 runner.run_with_argument<int, void*>(kernel_name, instance_data.base_ptr);
             }

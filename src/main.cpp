@@ -405,23 +405,23 @@ int main(int argc, const char* argv[]) {
                               num_experiments,
                               "Number of experiments for benchmarking ({})"_format(num_experiments))->ignore_case();
     benchmark_opt->add_option("--gridDimX",
-                              gridDimX,
-                              "Grid dimension X ({})"_format(gridDimX))->ignore_case();
+                              llvm_cuda_grid_dim_x,
+                              "Grid dimension X ({})"_format(llvm_cuda_grid_dim_x))->ignore_case();
     benchmark_opt->add_option("--gridDimY",
-                                gridDimY,
-                                "Grid dimension Y ({})"_format(gridDimY))->ignore_case();
+                                llvm_cuda_grid_dim_y,
+                                "Grid dimension Y ({})"_format(llvm_cuda_grid_dim_y))->ignore_case();
     benchmark_opt->add_option("--gridDimZ",
-                                gridDimZ,
-                                "Grid dimension Z ({})"_format(gridDimZ))->ignore_case();
+                                llvm_cuda_grid_dim_z,
+                                "Grid dimension Z ({})"_format(llvm_cuda_grid_dim_z))->ignore_case();
     benchmark_opt->add_option("--blockDimX",
-                                blockDimX,
-                                "Block dimension X ({})"_format(blockDimX))->ignore_case();
+                                llvm_cuda_block_dim_x,
+                                "Block dimension X ({})"_format(llvm_cuda_block_dim_x))->ignore_case();
     benchmark_opt->add_option("--blockDimY",
-                                blockDimY,
-                                "Block dimension Y ({})"_format(blockDimY))->ignore_case();
+                                llvm_cuda_block_dim_y,
+                                "Block dimension Y ({})"_format(llvm_cuda_block_dim_y))->ignore_case();
     benchmark_opt->add_option("--blockDimZ",
-                                blockDimZ,
-                                "Block dimension Z ({})"_format(blockDimZ))->ignore_case();
+                                llvm_cuda_block_dim_z,
+                                "Block dimension Z ({})"_format(llvm_cuda_block_dim_z))->ignore_case();
 #endif
     // clang-format on
 
@@ -728,44 +728,43 @@ int main(int argc, const char* argv[]) {
 
 #ifdef NMODL_LLVM_BACKEND
             if (llvm_ir || llvm_benchmark) {
-              // If benchmarking, we want to optimize the IR with target
-              // information and not in LLVM visitor.
-              int llvm_opt_level = llvm_benchmark ? 0 : llvm_opt_level_ir;
+                // If benchmarking, we want to optimize the IR with target
+                // information and not in LLVM visitor.
+                int llvm_opt_level = llvm_benchmark ? 0 : llvm_opt_level_ir;
 
-              // Create platform abstraction.
-              PlatformID pid = llvm_gpu_name == "default" ? PlatformID::CPU
-                                                          : PlatformID::GPU;
-              const std::string name =
-                  llvm_gpu_name == "default" ? llvm_cpu_name : llvm_gpu_name;
-              Platform platform(pid, name, llvm_math_library, llvm_float_type,
-                                llvm_vector_width);
+                // Create platform abstraction.
+                PlatformID pid = llvm_gpu_name == "default" ? PlatformID::CPU
+                                                            : PlatformID::GPU;
+                const std::string name =
+                    llvm_gpu_name == "default" ? llvm_cpu_name : llvm_gpu_name;
+                Platform platform(pid, name, llvm_math_library, llvm_float_type,
+                                    llvm_vector_width);
 
-              
+                logger->info("Running LLVM backend code generator");
+                CodegenLLVMVisitor visitor(modfile, output_dir, platform,
+                                            llvm_opt_level, !llvm_no_debug,
+                                            llvm_fast_math_flags);
+                visitor.visit_program(*ast);
+                ast_to_nmodl(*ast, filepath("llvm", "mod"));
+                ast_to_json(*ast, filepath("llvm", "json"));
 
-              logger->info("Running LLVM backend code generator");
-              CodegenLLVMVisitor visitor(modfile, output_dir, platform,
-                                         llvm_opt_level, !llvm_no_debug,
-                                         llvm_fast_math_flags);
-              visitor.visit_program(*ast);
-              ast_to_nmodl(*ast, filepath("llvm", "mod"));
-              ast_to_json(*ast, filepath("llvm", "json"));
-
-              if (llvm_benchmark) {
-                logger->info("Running LLVM benchmark");
-                if (llvm_gpu_name == "cuda"){
-                  const GPUExecutionParameters gpu_execution_parameters{llvm_cuda_grid_dim_x, llvm_cuda_grid_dim_y, llvm_cuda_grid_dim_z, llvm_cuda_block_dim_x, llvm_cuda_block_dim_y, llvm_cuda_block_dim_z};
-                  benchmark::LLVMBenchmark<CUDADriver> benchmark(
-                    visitor, modfile, output_dir, shared_lib_paths,
-                    num_experiments, instance_size, platform,
-                    llvm_opt_level_ir, llvm_opt_level_codegen, gpu_execution_parameters);
-                } else {
-                    benchmark::LLVMBenchmark<JITDriver> benchmark(
-                        visitor, modfile, output_dir, shared_lib_paths,
-                        num_experiments, instance_size, platform,
-                        llvm_opt_level_ir, llvm_opt_level_codegen);
+                if (llvm_benchmark) {
+                    logger->info("Running LLVM benchmark");
+                    if (llvm_gpu_name == "cuda"){
+                        const GPUExecutionParameters gpu_execution_parameters{llvm_cuda_grid_dim_x, llvm_cuda_grid_dim_y, llvm_cuda_grid_dim_z, llvm_cuda_block_dim_x, llvm_cuda_block_dim_y, llvm_cuda_block_dim_z};
+                        benchmark::LLVMBenchmark benchmark(
+                            visitor, modfile, output_dir, shared_lib_paths,
+                            num_experiments, instance_size, platform,
+                            llvm_opt_level_ir, llvm_opt_level_codegen, gpu_execution_parameters);
+                        benchmark.run(ast);
+                    } else {
+                        benchmark::LLVMBenchmark benchmark(
+                            visitor, modfile, output_dir, shared_lib_paths,
+                            num_experiments, instance_size, platform,
+                            llvm_opt_level_ir, llvm_opt_level_codegen);
+                        benchmark.run(ast);
+                    }
                 }
-                benchmark.run(ast);
-              }
             }
 #endif
         }

@@ -48,6 +48,7 @@ class LLVMBenchmark {
     /// Target platform for the code generation.
     Platform platform;
 
+    /// The GPU execution parameters needed to configure the kernels' execution.
     GPUExecutionParameters gpu_execution_parameters;
 
     /// Optimisation level for IR generation.
@@ -86,7 +87,7 @@ class LLVMBenchmark {
                   int instance_size,
                   const Platform& platform,
                   int opt_level_ir,
-                  int opt_level_codegen
+                  int opt_level_codegen,
                   const GPUExecutionParameters& gpu_exec_params)
         : llvm_visitor(llvm_visitor)
         , mod_filename(mod_filename)

@@ -25,6 +25,8 @@
 #include "gpu_parameters.hpp"
 #endif
 
+using nmodl::cuda_details::GPUExecutionParameters;
+
 namespace nmodl {
 namespace runner {
 
@@ -108,6 +110,26 @@ struct DeviceInfo {
     int compute_version_minor;
 };
 
+/**
+ * @brief Throw meaningful error in case CUDA API call fails
+ *
+ * Checks whether a call to the CUDA API was succsful and if not it throws a runntime_error with
+ * the error message from CUDA.
+ *
+ * @param err Return value of the CUDA API call
+ */
+void checkCudaErrors(CUresult err);
+
+/**
+ * @brief Throw meaningful error in case NVVM API call fails
+ *
+ * Checks whether a call to the NVVM API was succsful and if not it throws a runntime_error with
+ * the error message from NVVM.
+ *
+ * @param err Return value of the NVVM API call
+ */
+void checkNVVMErrors(nvvmResult err);
+
 class CUDADriver: public JITDriver {
     nvvmProgram prog;
     CUdevice    device;
@@ -126,24 +148,20 @@ class CUDADriver: public JITDriver {
         void init(const std::string& gpu, BenchmarkInfo* benchmark_info = nullptr);
 
         /// Lookups the entry-point without arguments in the JIT and executes it, returning the result.
-        template <typename ReturnType>
+        template <typename ReturnType = void>
         ReturnType execute_without_arguments(const std::string& entry_point, const GPUExecutionParameters& gpu_execution_parameters) {
             // Get kernel function
             checkCudaErrors(cuModuleGetFunction(&function, cudaModule, entry_point.c_str()));
 
             // Kernel launch
-            void *kernel_parameters = {}
-            checkCudaErrors(cuLaunchKernel(function, gpu_execution_parameters.grid_dim_x, gpu_execution_parameters.grid_dim_y, gpu_execution_parameters.grid_dim_z,
-                                    gpu_execution_parameters.block_dim_x, gpu_execution_parameters.block_dim_y, gpu_execution_parameters.block_dim_z,
-                                    gpu_execution_parameters.shared_mem_bytes, nullptr, kernel_parameters, nullptr));
-
-            auto (*res)() = (ReturnType(*)())(intptr_t) expected_symbol->getAddress();
-            ReturnType result = res();
-            return result;
+            void *kernel_parameters[] = {};
+            checkCudaErrors(cuLaunchKernel(function, gpu_execution_parameters.gridDimX, gpu_execution_parameters.gridDimY, gpu_execution_parameters.gridDimY,
+                                    gpu_execution_parameters.blockDimX, gpu_execution_parameters.blockDimY, gpu_execution_parameters.blockDimY,
+                                    gpu_execution_parameters.sharedMemBytes, nullptr, kernel_parameters, nullptr));
         }
 
         /// Lookups the entry-point with an argument in the JIT and executes it, returning the result.
-        template <typename ReturnType, typename ArgType>
+        template <typename ReturnType = void, typename ArgType>
         ReturnType execute_with_arguments(const std::string& entry_point, ArgType arg) {
             auto expected_symbol = jit->lookup(entry_point);
             if (!expected_symbol)
@@ -161,13 +179,13 @@ class CUDADriver: public JITDriver {
  * \brief A base runner class that provides functionality to execute an
  * entry point in the LLVM IR module.
  */
-template <typename JITType = JITDriver>
+template<typename DriverType = JITDriver>
 class BaseRunner {
   protected:
-    std::unique_ptr<JITType> driver;
+    std::unique_ptr<DriverType> driver;
 
-    explicit BaseRunner(std::unique_ptr<llvm::Module> m)
-        : driver(std::make_unique<JITType>(std::move(m))) {}
+    explicit BaseRunner<DriverType>(std::unique_ptr<llvm::Module> m)
+        : driver(std::make_unique<DriverType>(std::move(m))) {}
 
   public:
     /// Sets up the JIT driver.
@@ -190,14 +208,14 @@ class BaseRunner {
  * \class TestRunner
  * \brief A simple runner for testing purposes.
  */
-template <typename JITType = JITDriver>
-class TestRunner: public BaseRunner {
+template<typename DriverType = JITDriver>
+class TestRunner: public BaseRunner<DriverType> {
   public:
-    explicit TestRunner(std::unique_ptr<llvm::Module> m)
-        : BaseRunner(std::move(m)) {}
+    explicit TestRunner<DriverType>(std::unique_ptr<llvm::Module> m)
+        : BaseRunner<DriverType>(std::move(m)) {}
 
     virtual void initialize_driver() {
-        driver->init(llvm::sys::getHostCPUName().str());
+        this->driver->init(llvm::sys::getHostCPUName().str());
     }
 };
 
@@ -206,8 +224,8 @@ class TestRunner: public BaseRunner {
  * \brief A runner with benchmarking functionality. It takes user-specified CPU
  * features into account, as well as it can link against shared libraries.
  */
-template <typename JITType = JITDriver>
-class BenchmarkRunner: public BaseRunner {
+template<typename DriverType = JITDriver>
+class BenchmarkRunner: public BaseRunner<DriverType> {
   private:
     /// Benchmarking information passed to JIT driver.
     BenchmarkInfo benchmark_info;
@@ -216,19 +234,19 @@ class BenchmarkRunner: public BaseRunner {
     std::string backend;
 
   public:
-    BenchmarkRunner(std::unique_ptr<llvm::Module> m,
+    BenchmarkRunner<DriverType>(std::unique_ptr<llvm::Module> m,
                     std::string filename,
                     std::string output_dir,
                     std::string backend,
                     std::vector<std::string> lib_paths = {},
                     int opt_level_ir = 0,
                     int opt_level_codegen = 0)
-        : BaseRunner(std::move(m))
+        : BaseRunner<DriverType>(std::move(m))
         , backend(backend)
         , benchmark_info{filename, output_dir, lib_paths, opt_level_ir, opt_level_codegen} {}
 
     virtual void initialize_driver() {
-        driver->init(backend, &benchmark_info);
+        this->driver->init(backend, &benchmark_info);
     }
 };
 
