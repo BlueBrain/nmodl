@@ -134,7 +134,7 @@ SCENARIO("Arithmetic expression", "[llvm][runner]") {
         llvm_visitor.visit_program(*ast);
 
         std::unique_ptr<llvm::Module> m = llvm_visitor.get_module();
-        TestRunner<> runner(std::move(m));
+        TestRunner runner(std::move(m));
         runner.initialize_driver();
 
         THEN("functions are evaluated correctly") {
@@ -240,7 +240,7 @@ SCENARIO("Optimised arithmetic expression", "[llvm][runner]") {
         llvm_visitor.visit_program(*ast);
 
         std::unique_ptr<llvm::Module> m = llvm_visitor.get_module();
-        TestRunner<> runner(std::move(m));
+        TestRunner runner(std::move(m));
         runner.initialize_driver();
 
         THEN("optimizations preserve function results") {
@@ -337,7 +337,7 @@ SCENARIO("Simple scalar kernel", "[llvm][runner]") {
 
         // Set up the JIT runner.
         std::unique_ptr<llvm::Module> module = llvm_visitor.get_module();
-        TestRunner<> runner(std::move(module));
+        TestRunner runner(std::move(module));
         runner.initialize_driver();
 
         THEN("Values in struct have changed according to the formula") {
@@ -427,7 +427,7 @@ SCENARIO("Simple vectorised kernel", "[llvm][runner]") {
 
         // Set up the JIT runner.
         std::unique_ptr<llvm::Module> module = llvm_visitor.get_module();
-        TestRunner<> runner(std::move(module));
+        TestRunner runner(std::move(module));
         runner.initialize_driver();
 
         THEN("Values in struct have changed according to the formula") {
@@ -505,7 +505,7 @@ SCENARIO("Vectorised kernel with scatter instruction", "[llvm][runner]") {
 
         // Set up the JIT runner.
         std::unique_ptr<llvm::Module> module = llvm_visitor.get_module();
-        TestRunner<> runner(std::move(module));
+        TestRunner runner(std::move(module));
         runner.initialize_driver();
 
         THEN("Ion values in struct have been updated correctly") {
@@ -606,7 +606,7 @@ SCENARIO("Vectorised kernel with simple control flow", "[llvm][runner]") {
 
         // Set up the JIT runner.
         std::unique_ptr<llvm::Module> module = llvm_visitor.get_module();
-        TestRunner<> runner(std::move(module));
+        TestRunner runner(std::move(module));
         runner.initialize_driver();
 
         THEN("Masked instructions are generated") {

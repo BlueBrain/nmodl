@@ -28,5 +28,5 @@ struct GPUExecutionParameters {
     int sharedMemBytes;
 };
 
-} // namespace cuda_details
-} // namespace nmodl
+}  // namespace cuda_details
+}  // namespace nmodl

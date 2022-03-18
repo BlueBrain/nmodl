@@ -9,6 +9,7 @@
 
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
 #include "llvm_benchmark.hpp"
+#include "test/benchmark/cuda_driver.hpp"
 #include "test/benchmark/jit_driver.hpp"
 #include "llvm/Support/Host.h"
 
@@ -55,7 +56,7 @@ void LLVMBenchmark::run_benchmark_on_cpu(const std::shared_ptr<ast::Program>& no
     // Create the benchmark runner and initialize it.
     std::string filename = "v" + std::to_string(llvm_visitor.get_vector_width()) + "_" +
                            mod_filename;
-    runner::BenchmarkRunner<> runner(
+    runner::BenchmarkRunner runner(
         std::move(m), filename, output_dir, cpu_name, shared_libs, opt_level_ir, opt_level_codegen);
     runner.initialize_driver();
 
@@ -116,7 +117,7 @@ void LLVMBenchmark::run_benchmark_on_gpu(const std::shared_ptr<ast::Program>& no
 
     // Create the benchmark runner and initialize it.
     std::string filename = "cuda_" + mod_filename;
-    runner::BenchmarkRunner<runner::CUDADriver> runner(
+    runner::BenchmarkGPURunner runner(
         std::move(m), filename, output_dir, gpu_name, shared_libs, opt_level_ir, opt_level_codegen);
     runner.initialize_driver();
 
@@ -140,7 +141,9 @@ void LLVMBenchmark::run_benchmark_on_gpu(const std::shared_ptr<ast::Program>& no
             // Record the execution time of the kernel.
             std::string wrapper_name = "__" + kernel_name + "_wrapper";
             auto start = std::chrono::steady_clock::now();
-            runner.run_with_argument<void, void*, const GPUExecutionParameters&>(kernel_name, instance_data.base_ptr, gpu_execution_parameters);
+            runner.run_with_argument<void*>(kernel_name,
+                                            instance_data.base_ptr,
+                                            gpu_execution_parameters);
             auto end = std::chrono::steady_clock::now();
             std::chrono::duration<double> diff = end - start;
 

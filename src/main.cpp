@@ -733,35 +733,52 @@ int main(int argc, const char* argv[]) {
                 int llvm_opt_level = llvm_benchmark ? 0 : llvm_opt_level_ir;
 
                 // Create platform abstraction.
-                PlatformID pid = llvm_gpu_name == "default" ? PlatformID::CPU
-                                                            : PlatformID::GPU;
-                const std::string name =
-                    llvm_gpu_name == "default" ? llvm_cpu_name : llvm_gpu_name;
-                Platform platform(pid, name, llvm_math_library, llvm_float_type,
-                                    llvm_vector_width);
+                PlatformID pid = llvm_gpu_name == "default" ? PlatformID::CPU : PlatformID::GPU;
+                const std::string name = llvm_gpu_name == "default" ? llvm_cpu_name : llvm_gpu_name;
+                Platform platform(pid, name, llvm_math_library, llvm_float_type, llvm_vector_width);
 
                 logger->info("Running LLVM backend code generator");
-                CodegenLLVMVisitor visitor(modfile, output_dir, platform,
-                                            llvm_opt_level, !llvm_no_debug,
-                                            llvm_fast_math_flags);
+                CodegenLLVMVisitor visitor(modfile,
+                                           output_dir,
+                                           platform,
+                                           llvm_opt_level,
+                                           !llvm_no_debug,
+                                           llvm_fast_math_flags);
                 visitor.visit_program(*ast);
                 ast_to_nmodl(*ast, filepath("llvm", "mod"));
                 ast_to_json(*ast, filepath("llvm", "json"));
 
                 if (llvm_benchmark) {
                     logger->info("Running LLVM benchmark");
-                    if (llvm_gpu_name == "cuda"){
-                        const GPUExecutionParameters gpu_execution_parameters{llvm_cuda_grid_dim_x, llvm_cuda_grid_dim_y, llvm_cuda_grid_dim_z, llvm_cuda_block_dim_x, llvm_cuda_block_dim_y, llvm_cuda_block_dim_z};
-                        benchmark::LLVMBenchmark benchmark(
-                            visitor, modfile, output_dir, shared_lib_paths,
-                            num_experiments, instance_size, platform,
-                            llvm_opt_level_ir, llvm_opt_level_codegen, gpu_execution_parameters);
+                    if (llvm_gpu_name == "cuda") {
+                        const GPUExecutionParameters gpu_execution_parameters{
+                            llvm_cuda_grid_dim_x,
+                            llvm_cuda_grid_dim_y,
+                            llvm_cuda_grid_dim_z,
+                            llvm_cuda_block_dim_x,
+                            llvm_cuda_block_dim_y,
+                            llvm_cuda_block_dim_z};
+                        benchmark::LLVMBenchmark benchmark(visitor,
+                                                           modfile,
+                                                           output_dir,
+                                                           shared_lib_paths,
+                                                           num_experiments,
+                                                           instance_size,
+                                                           platform,
+                                                           llvm_opt_level_ir,
+                                                           llvm_opt_level_codegen,
+                                                           gpu_execution_parameters);
                         benchmark.run(ast);
                     } else {
-                        benchmark::LLVMBenchmark benchmark(
-                            visitor, modfile, output_dir, shared_lib_paths,
-                            num_experiments, instance_size, platform,
-                            llvm_opt_level_ir, llvm_opt_level_codegen);
+                        benchmark::LLVMBenchmark benchmark(visitor,
+                                                           modfile,
+                                                           output_dir,
+                                                           shared_lib_paths,
+                                                           num_experiments,
+                                                           instance_size,
+                                                           platform,
+                                                           llvm_opt_level_ir,
+                                                           llvm_opt_level_codegen);
                         benchmark.run(ast);
                     }
                 }
