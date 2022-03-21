@@ -158,7 +158,7 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
 
   private:
     // Annotates kernel function with NVVM metadata.
-    void annotate_kernel_with_nvvm(const std::string& kernel_name, llvm::Function* kernel);
+    void annotate_kernel_with_nvvm(llvm::Function* kernel);
 
 #if LLVM_VERSION_MAJOR >= 13
     /// Populates target library info with the vector library definitions.

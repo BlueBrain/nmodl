@@ -64,11 +64,12 @@ static bool can_vectorize(const ast::CodegenForStatement& statement, symtab::Sym
     return unsupported.empty() && supported.size() <= 1;
 }
 
-void CodegenLLVMVisitor::annotate_kernel_with_nvvm(const std::string& kernel_name, llvm::Function* kernel) {
-    llvm::Metadata* metadata[] = {llvm::ValueAsMetadata::get(kernel),
-                                  llvm::MDString::get(*context, kernel_name),
-                                  llvm::ValueAsMetadata::get(
-                                      llvm::ConstantInt::get(llvm::Type::getInt32Ty(*context), 1))};
+void CodegenLLVMVisitor::annotate_kernel_with_nvvm(llvm::Function* kernel) {
+    llvm::Metadata* metadata[] = {
+        llvm::ValueAsMetadata::get(kernel),
+        llvm::MDString::get(*context, "kernel"),
+        llvm::ValueAsMetadata::get(
+            llvm::ConstantInt::get(llvm::Type::getInt32Ty(*context), 1))};
     llvm::MDNode* node = llvm::MDNode::get(*context, metadata);
     module->getOrInsertNamedMetadata("nvvm.annotations")->addOperand(node);
 }
@@ -683,7 +684,7 @@ void CodegenLLVMVisitor::visit_codegen_function(const ast::CodegenFunction& node
             ir_builder.generate_scalar_ir();
         } else if (platform.is_gpu()) {
             block->accept(*this);
-            annotate_kernel_with_nvvm(name, func);
+            annotate_kernel_with_nvvm(func);
         } else { // scalar
             block->accept(*this);
         }
