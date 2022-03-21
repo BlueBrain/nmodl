@@ -21,7 +21,7 @@ using fmt::literals::operator""_format;
 namespace nmodl {
 namespace runner {
 
-void checkCudaErrors(CUresult err) {
+void CUDADriver::checkCudaErrors(CUresult err) {
     if (err != CUDA_SUCCESS) {
         const char* ret = NULL;
         cuGetErrorName(err, &ret);
@@ -29,9 +29,14 @@ void checkCudaErrors(CUresult err) {
     }
 }
 
-void checkNVVMErrors(nvvmResult err) {
+void CUDADriver::checkNVVMErrors(nvvmResult err) {
     if (err != NVVM_SUCCESS) {
-        throw std::runtime_error("NVVM Error: " + std::string(nvvmGetErrorString(err)));
+        size_t program_log_size;
+        nvvmGetProgramLogSize(prog, &program_log_size);
+        auto program_log = (char*) malloc(program_log_size);
+        nvvmGetProgramLog(prog, program_log);
+        throw std::runtime_error(
+            "Compilation Log:\n {}\nNVVM Error: {}\n"_format(program_log, nvvmGetErrorString(err)));
     }
 }
 
@@ -44,8 +49,8 @@ std::string load_file_to_string(const std::string& filename) {
     return str;
 }
 
-void load_libraries(const nvvmProgram& program, const BenchmarkInfo& benchmark_info) {
-    for (const auto& lib_path: benchmark_info.shared_lib_paths) {
+void CUDADriver::load_libraries(BenchmarkInfo* benchmark_info) {
+    for (const auto& lib_path: benchmark_info->shared_lib_paths) {
         const auto lib_name = lib_path.substr(lib_path.find_last_of("/\\") + 1);
         std::regex libdevice_bitcode_name{"libdevice.*.bc"};
         if (!std::regex_match(lib_name, libdevice_bitcode_name)) {
@@ -55,8 +60,25 @@ void load_libraries(const nvvmProgram& program, const BenchmarkInfo& benchmark_i
         const auto libdevice_module = load_file_to_string(lib_path);
         const auto libdevice_module_size = libdevice_module.size();
         checkNVVMErrors(nvvmAddModuleToProgram(
-            program, libdevice_module.c_str(), libdevice_module_size, "libdevice"));
+            prog, libdevice_module.c_str(), libdevice_module_size, "libdevice"));
     }
+}
+auto get_compilation_options(int compute_version_major, BenchmarkInfo* benchmark_info) {
+    std::vector<std::string> compilation_options;
+    // Set the correct architecture to generate the PTX for
+    // Architectures should be based on the major compute capability of the GPU
+    const std::string arch_option{"-arch=compute_{}0"_format(compute_version_major)};
+    compilation_options.push_back(arch_option);
+    // Set the correct optimization level
+    const std::string optimization_option{"-opt={}"_format(benchmark_info->opt_level_codegen)};
+    compilation_options.push_back(optimization_option);
+    return compilation_options;
+}
+
+void print_ptx_to_file(const std::string& ptx_compiled_module, const std::string& filename) {
+    std::ofstream ptx_file(filename);
+    ptx_file << ptx_compiled_module;
+    ptx_file.close();
 }
 
 void CUDADriver::init(const std::string& gpu, BenchmarkInfo* benchmark_info) {
@@ -89,21 +111,28 @@ void CUDADriver::init(const std::string& gpu, BenchmarkInfo* benchmark_info) {
     os.flush();
 
     // Create NVVM program object
-    nvvmCreateProgram(&prog);
+    checkNVVMErrors(nvvmCreateProgram(&prog));
 
     // Load the external libraries modules to the NVVM program
     // Currently only libdevice is supported
-    load_libraries(prog, *benchmark_info);
+    load_libraries(benchmark_info);
 
     // Add custom IR to program
-    nvvmAddModuleToProgram(prog, kernel_llvm_ir.c_str(), kernel_llvm_ir.size(), "nmodl_llvm_ir");
+    checkNVVMErrors(nvvmAddModuleToProgram(
+        prog, kernel_llvm_ir.c_str(), kernel_llvm_ir.size(), "nmodl_llvm_ir"));
 
     // Declare compile options
-    const auto arch_option = "-arch=compute_{}0"_format(device_info.compute_version_major);
-    const char* options[] = {arch_option.c_str()};
-
+    auto compilation_options = get_compilation_options(device_info.compute_version_major,
+                                                       benchmark_info);
+    // transform compilation options to vector of const char*
+    std::vector<const char*> compilation_options_c_str;
+    for (const auto& option: compilation_options) {
+        compilation_options_c_str.push_back(option.c_str());
+    }
     // Compile the program
-    nvvmCompileProgram(prog, 1, options);
+    checkNVVMErrors(nvvmCompileProgram(prog,
+                                       compilation_options_c_str.size(),
+                                       compilation_options_c_str.data()));
 
     // Get compiled module
     char* compiled_module;
@@ -113,6 +142,8 @@ void CUDADriver::init(const std::string& gpu, BenchmarkInfo* benchmark_info) {
     nvvmGetCompiledResult(prog, compiled_module);
     ptx_compiled_module = std::string(compiled_module);
     free(compiled_module);
+    print_ptx_to_file(ptx_compiled_module,
+                      benchmark_info->output_dir + "/" + benchmark_info->filename + ".ptx");
 
     // Create driver context
     checkCudaErrors(cuCtxCreate(&context, 0, device));

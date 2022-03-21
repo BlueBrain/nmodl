@@ -12,7 +12,7 @@
 
 /// A struct to hold the information for benchmarking.
 struct BenchmarkInfo {
-    /// Object filename to dump.
+    /// Object or PTX filename to dump.
     std::string filename;
 
     /// Object file output directory.

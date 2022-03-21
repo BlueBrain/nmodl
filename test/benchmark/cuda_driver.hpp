@@ -75,6 +75,10 @@ class CUDADriver {
     DeviceInfo device_info;
     std::string ptx_compiled_module;
 
+    void checkCudaErrors(CUresult err);
+    void checkNVVMErrors(nvvmResult err);
+    void load_libraries(BenchmarkInfo* benchmark_info);
+
   public:
     explicit CUDADriver(std::unique_ptr<llvm::Module> m)
         : module(std::move(m)) {}
@@ -171,7 +175,7 @@ class TestGPURunner: public BaseGPURunner {
         : BaseGPURunner(std::move(m)) {}
 
     virtual void initialize_driver() {
-        this->driver->init(backend);
+        driver->init(backend);
     }
 };
 
@@ -201,7 +205,7 @@ class BenchmarkGPURunner: public BaseGPURunner {
         , benchmark_info{filename, output_dir, lib_paths, opt_level_ir, opt_level_codegen} {}
 
     virtual void initialize_driver() {
-        this->driver->init(backend, &benchmark_info);
+        driver->init(backend, &benchmark_info);
     }
 };
 
