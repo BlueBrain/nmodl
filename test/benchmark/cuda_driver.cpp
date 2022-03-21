@@ -7,11 +7,15 @@
 
 #ifdef NMODL_LLVM_CUDA_BACKEND
 
+#include <regex>
+
 #include "cuda_driver.hpp"
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
 #include "codegen/llvm/llvm_utils.hpp"
 #include "fmt/format.h"
 #include "utils/common_utils.hpp"
+
+#include <fstream>
 
 using fmt::literals::operator""_format;
 
@@ -31,6 +35,31 @@ void checkNVVMErrors(nvvmResult err) {
         throw std::runtime_error("NVVM Error: " + std::string(nvvmGetErrorString(err)));
     }
 }
+
+std::string load_file_to_string(const std::string& filename) {
+    std::ifstream t(filename);
+    if (!t.is_open()) {
+        throw std::runtime_error("File {} not found"_format(filename));
+    }
+    std::string str((std::istreambuf_iterator<char>(t)),
+                    std::istreambuf_iterator<char>());
+    return str;
+}
+
+void load_libraries(const nvvmProgram& program, const BenchmarkInfo& benchmark_info) {
+    for (const auto& lib_path : benchmark_info.shared_lib_paths) {
+        const auto lib_name = lib_path.substr(lib_path.find_last_of("/\\") + 1);
+        std::regex libdevice_bitcode_name{"libdevice.*.bc"};
+        if (!std::regex_match(lib_name, libdevice_bitcode_name)) {
+            throw std::runtime_error("Only libdevice is supported for now");
+        }
+        // Load libdevice module to the NVVM program
+        const auto libdevice_module = load_file_to_string(lib_path);
+        const auto libdevice_module_size = libdevice_module.size();
+        checkNVVMErrors(nvvmAddModuleToProgram(program, libdevice_module.c_str(), libdevice_module_size, "libdevice"));
+    }
+}
+
 void CUDADriver::init(const std::string& gpu, BenchmarkInfo* benchmark_info) {
     // CUDA initialization
     checkCudaErrors(cuInit(0));
@@ -63,6 +92,10 @@ void CUDADriver::init(const std::string& gpu, BenchmarkInfo* benchmark_info) {
     // Create NVVM program object
     nvvmCreateProgram(&prog);
 
+    // Load the external libraries modules to the NVVM program
+    // Currently only libdevice is supported
+    load_libraries(prog, *benchmark_info);
+
     // Add custom IR to program
     nvvmAddModuleToProgram(prog, kernel_llvm_ir.c_str(), kernel_llvm_ir.size(), "nmodl_llvm_ir");
 
@@ -79,13 +112,14 @@ void CUDADriver::init(const std::string& gpu, BenchmarkInfo* benchmark_info) {
     nvvmGetCompiledResultSize(prog, &compiled_module_size);
     compiled_module = (char*) malloc(compiled_module_size);
     nvvmGetCompiledResult(prog, compiled_module);
-    ptx_compiled_module = std::string(compiled_module, compiled_module_size);
+    ptx_compiled_module = std::string(compiled_module);
+    free(compiled_module);
 
     // Create driver context
     checkCudaErrors(cuCtxCreate(&context, 0, device));
 
     // Create module for object
-    checkCudaErrors(cuModuleLoadDataEx(&cudaModule, compiled_module, 0, 0, 0));
+    checkCudaErrors(cuModuleLoadDataEx(&cudaModule, ptx_compiled_module.c_str(), 0, 0, 0));
 }
 
 }  // namespace runner
