@@ -103,6 +103,7 @@ void LLVMBenchmark::run_benchmark_on_cpu(const std::shared_ptr<ast::Program>& no
     }
 }
 
+#ifdef NMODL_LLVM_CUDA_BACKEND
 void LLVMBenchmark::run_benchmark_on_gpu(const std::shared_ptr<ast::Program>& node) {
     // Set the codegen data helper and find the kernels.
     auto codegen_data = codegen::CodegenDataHelper(node, llvm_visitor.get_instance_struct_ptr());
@@ -165,6 +166,12 @@ void LLVMBenchmark::run_benchmark_on_gpu(const std::shared_ptr<ast::Program>& no
         logger->info("Maximum compute time = {:.6f}\n", time_max);
     }
 }
+#else
+void LLVMBenchmark::run_benchmark_on_gpu(const std::shared_ptr<ast::Program>& node) {
+    throw std::runtime_error(
+        "GPU benchmarking is not supported if NMODL is not built with CUDA backend enabled.");
+}
+#endif
 
 }  // namespace benchmark
 }  // namespace nmodl
