@@ -68,7 +68,7 @@ void CUDADriver::init(const std::string& gpu, BenchmarkInfo* benchmark_info) {
     char name[128];
     checkCudaErrors(cuDeviceGetName(name, 128, device));
     device_info.name = name;
-    std::cout << "Using CUDA Device [0]: " << device_info.name << "\n";
+    logger->info("Using CUDA Device [0]: {}"_format(device_info.name));
 
     checkCudaErrors(cuDeviceGetAttribute(&device_info.compute_version_major,
                                          CU_DEVICE_ATTRIBUTE_COMPUTE_CAPABILITY_MAJOR,
@@ -76,8 +76,8 @@ void CUDADriver::init(const std::string& gpu, BenchmarkInfo* benchmark_info) {
     checkCudaErrors(cuDeviceGetAttribute(&device_info.compute_version_minor,
                                          CU_DEVICE_ATTRIBUTE_COMPUTE_CAPABILITY_MINOR,
                                          device));
-    std::cout << "Device Compute Capability: " << device_info.compute_version_major << "."
-              << device_info.compute_version_minor << "\n";
+    logger->info("Device Compute Capability: {}.{}"_format(device_info.compute_version_major,
+                                                           device_info.compute_version_minor));
     if (device_info.compute_version_major < 2) {
         throw std::runtime_error("ERROR: Device 0 is not SM 2.0 or greater");
     }

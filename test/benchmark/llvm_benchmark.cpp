@@ -112,7 +112,7 @@ void LLVMBenchmark::run_benchmark_on_gpu(const std::shared_ptr<ast::Program>& no
 
     // Get feature's string and turn them off depending on the cpu.
     const auto gpu_name = platform.get_name();
-    logger->info("GPU: {}", gpu_name);
+    logger->info("GPU backend: {}", gpu_name);
 
     std::unique_ptr<llvm::Module> m = llvm_visitor.get_module();
 
