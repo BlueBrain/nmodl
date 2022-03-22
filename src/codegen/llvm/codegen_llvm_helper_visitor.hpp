@@ -176,6 +176,15 @@ class CodegenLLVMHelperVisitor: public visitor::AstVisitor {
     void visit_program(ast::Program& node) override;
 
   private:
+    /// Methods to create target-specific loop constructs.
+    std::shared_ptr<ast::Expression> loop_initialization_expression(const std::string& induction_var,
+                                                                    bool is_remainder_loop);
+    std::shared_ptr<ast::Expression> loop_count_expression(const std::string& induction_var,
+                                                           const std::string& node_count,
+                                                           bool is_remainder_loop);
+    std::shared_ptr<ast::Expression> loop_increment_expression(const std::string& induction_var,
+                                                               bool is_remainder_loop);
+
     /// Methods to populate`function_statements` with necessary AST constructs to form
     /// a kernel for a specific target.
     void create_gpu_compute_body(ast::StatementVector& body,

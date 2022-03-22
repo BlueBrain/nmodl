@@ -555,9 +555,21 @@ void IRBuilder::maybe_replicate_value(llvm::Value* value) {
     }
 }
 
-void IRBuilder::create_thread_id() {
-    llvm::Value* alloca_ptr = create_alloca(kernel_id, get_i32_type());
+void IRBuilder::create_grid_stride() {
+    llvm::Module* m = builder.GetInsertBlock()->getParent()->getParent();
+    auto create_call = [&](llvm::Intrinsic::ID id) {
+      llvm::Function* intrinsic = llvm::Intrinsic::getDeclaration(m, id);
+      return builder.CreateCall(intrinsic, {});
+    };
 
+    llvm::Value* block_dim = create_call(llvm::Intrinsic::nvvm_read_ptx_sreg_ntid_x);
+    llvm::Value* grid_dim = create_call(llvm::Intrinsic::nvvm_read_ptx_sreg_nctaid_x);
+    llvm::Value* stride = builder.CreateMul(block_dim, grid_dim);
+
+    value_stack.push_back(stride);
+}
+
+void IRBuilder::create_thread_id() {
     llvm::Module* m = builder.GetInsertBlock()->getParent()->getParent();
     auto create_call = [&](llvm::Intrinsic::ID id) {
       llvm::Function* intrinsic = llvm::Intrinsic::getDeclaration(m, id);
@@ -573,7 +585,7 @@ void IRBuilder::create_thread_id() {
     llvm::Value* tid = create_call(llvm::Intrinsic::nvvm_read_ptx_sreg_tid_x);
     llvm::Value* id = builder.CreateAdd(tmp, tid);
 
-    builder.CreateStore(id, alloca_ptr);
+    value_stack.push_back(id);
 }
 
 

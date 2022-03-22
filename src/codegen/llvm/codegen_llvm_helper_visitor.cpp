@@ -549,48 +549,64 @@ void CodegenLLVMHelperVisitor::visit_function_block(ast::FunctionBlock& node) {
     create_function_for_node(node);
 }
 
-/**
- * Create loop increment expression `id = id + width`
- * \todo : same as int_initialization_expression()
- */
-static std::shared_ptr<ast::Expression> loop_increment_expression(const std::string& induction_var,
-                                                                  int vector_width) {
-    // first create id + x
+std::shared_ptr<ast::Expression>
+CodegenLLVMHelperVisitor::loop_initialization_expression(const std::string& induction_var,
+                                                         bool is_remainder_loop) {
+    if (platform.is_gpu()) {
+        const auto& id = create_varname(induction_var);
+        const auto& tid = new ast::CodegenThreadId();
+        return std::make_shared<ast::BinaryExpression>(id, ast::BinaryOperator(ast::BOP_ASSIGN), tid);
+    }
+
+  // Otherwise, platfrom is CPU. Since the loop can be a remainder loop, check if
+  // we need to initialize at all.
+    if (is_remainder_loop)
+        return nullptr;
+    return int_initialization_expression(induction_var);
+}
+
+std::shared_ptr<ast::Expression>
+CodegenLLVMHelperVisitor::loop_increment_expression(const std::string& induction_var,
+                                                    bool is_remainder_loop) {
     const auto& id = create_varname(induction_var);
-    const auto& inc = new ast::Integer(vector_width, nullptr);
+
+    // For GPU platforms, increment by grid stride.
+    if (platform.is_gpu()) {
+        const auto& stride = new ast::CodegenGridStride();
+        const auto& inc_expr =
+            new ast::BinaryExpression(id, ast::BinaryOperator(ast::BOP_ADDITION), stride);
+        return std::make_shared<ast::BinaryExpression>(id->clone(),
+                                                    ast::BinaryOperator(ast::BOP_ASSIGN),
+                                                    inc_expr);
+    }
+
+    // Otherwise, proceed with increment for CPU loop.
+    const int width = is_remainder_loop ? 1 : platform.get_instruction_width();
+    const auto& inc = new ast::Integer(width, nullptr);
     const auto& inc_expr =
         new ast::BinaryExpression(id, ast::BinaryOperator(ast::BOP_ADDITION), inc);
-    // now create id = id + x
     return std::make_shared<ast::BinaryExpression>(id->clone(),
                                                    ast::BinaryOperator(ast::BOP_ASSIGN),
                                                    inc_expr);
 }
 
-/**
- * Create loop count comparison expression
- *
- * Based on if loop is vectorised or not, the condition for loop
- * is different. For example:
- *  - serial loop : `id < node_count`
- *  - vector loop : `id < (node_count - vector_width + 1)`
- *
- * \todo : same as int_initialization_expression()
- */
-static std::shared_ptr<ast::Expression> loop_count_expression(const std::string& induction_var,
-                                                              const std::string& node_count,
-                                                              int vector_width) {
+std::shared_ptr<ast::Expression>
+CodegenLLVMHelperVisitor::loop_count_expression(const std::string& induction_var,
+                                                const std::string& node_count,
+                                                bool is_remainder_loop) {
+    const int width = is_remainder_loop ? 1 : platform.get_instruction_width();
     const auto& id = create_varname(induction_var);
     const auto& mech_node_count = create_varname(node_count);
 
     // For non-vectorised loop, the condition is id < mech->node_count
-    if (vector_width == 1) {
+    if (width == 1) {
         return std::make_shared<ast::BinaryExpression>(id->clone(),
                                                        ast::BinaryOperator(ast::BOP_LESS),
                                                        mech_node_count);
     }
 
-    // For vectorised loop, the condition is id < mech->node_count - vector_width + 1
-    const auto& remainder = new ast::Integer(vector_width - 1, /*macro=*/nullptr);
+    // For vectorised loop, the condition is id < mech->node_count - width + 1
+    const auto& remainder = new ast::Integer(width - 1, /*macro=*/nullptr);
     const auto& count = new ast::BinaryExpression(mech_node_count,
                                                   ast::BinaryOperator(ast::BOP_SUBTRACTION),
                                                   remainder);
@@ -667,15 +683,13 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
     compute_body.insert(compute_body.end(), index_statements.begin(), index_statements.end());
     compute_body.insert(compute_body.end(), body_statements.begin(), body_statements.end());
 
+    std::vector<std::string> induction_variables{INDUCTION_VAR};
+    function_statements.push_back(
+            create_local_variable_statement(induction_variables, INTEGER_TYPE));
+
     if (platform.is_gpu()) {
-        const auto& id_statement = std::make_shared<ast::CodegenThreadId>(create_varname(INDUCTION_VAR));
-        function_statements.push_back(id_statement);
         create_gpu_compute_body(compute_body, function_statements, int_variables, double_variables);
     } else {
-        // Create induction variable
-        std::vector<std::string> induction_variables{INDUCTION_VAR};
-        function_statements.push_back(
-                create_local_variable_statement(induction_variables, INTEGER_TYPE));
         create_cpu_compute_body(compute_body, function_statements, int_variables, double_variables);
     }
 
@@ -707,18 +721,10 @@ void CodegenLLVMHelperVisitor::create_gpu_compute_body(ast::StatementVector& bod
                                                        ast::StatementVector& function_statements,
                                                        std::vector<std::string>& int_variables,
                                                        std::vector<std::string>& double_variables) {
-    // Then, create condition for thread id. For now reuse the functionality from `loop_count_expression`.
     auto kernel_block = std::make_shared<ast::StatementBlock>(body);
-    const auto& condition = loop_count_expression(INDUCTION_VAR, NODECOUNT_VAR, 1);
-    ast::ElseIfStatementVector else_ifs = {};
-    auto if_statement = std::make_shared<ast::IfStatement>(condition, kernel_block, else_ifs, nullptr);
 
-    convert_to_instance_variable(*if_statement, INDUCTION_VAR);
-
-    // Push variables and the loop to the function statements vector.
-    function_statements.push_back(create_local_variable_statement(int_variables, INTEGER_TYPE));
-    function_statements.push_back(create_local_variable_statement(double_variables, FLOAT_TYPE));
-    function_statements.push_back(if_statement);
+    // dispatch loop creation with right parameters
+    create_compute_body_loop(kernel_block, function_statements, int_variables, double_variables);
 }
 
 void CodegenLLVMHelperVisitor::create_cpu_compute_body(ast::StatementVector& body,
@@ -736,12 +742,9 @@ void CodegenLLVMHelperVisitor::create_compute_body_loop(std::shared_ptr<ast::Sta
                                                         std::vector<std::string>& int_variables,
                                                         std::vector<std::string>& double_variables,
                                                         bool is_remainder_loop) {
-    // First, check if we are creating a main or remainder loop. If it is a remainder loop, then
-    // no initialization is needed and instruction width is simply 1.
-    int width = is_remainder_loop ? 1 : platform.get_instruction_width();
-    const auto& initialization = is_remainder_loop ? nullptr : int_initialization_expression(INDUCTION_VAR);
-    const auto& condition = loop_count_expression(INDUCTION_VAR, NODECOUNT_VAR, width);
-    const auto& increment = loop_increment_expression(INDUCTION_VAR, width);
+    const auto& initialization = loop_initialization_expression(INDUCTION_VAR, is_remainder_loop);
+    const auto& condition = loop_count_expression(INDUCTION_VAR, NODECOUNT_VAR, is_remainder_loop);
+    const auto& increment = loop_increment_expression(INDUCTION_VAR, is_remainder_loop);
 
     // Clone the statement block if needed since it can be used by the remainder loop.
     auto loop_block = (is_remainder_loop || !platform.is_cpu_with_simd()) ? block : std::shared_ptr<ast::StatementBlock>(block->clone());
