@@ -64,6 +64,16 @@ static bool can_vectorize(const ast::CodegenForStatement& statement, symtab::Sym
     return unsupported.empty() && supported.size() <= 1;
 }
 
+void CodegenLLVMVisitor::annotate_kernel_with_nvvm(llvm::Function* kernel) {
+    llvm::Metadata* metadata[] = {
+        llvm::ValueAsMetadata::get(kernel),
+        llvm::MDString::get(*context, "kernel"),
+        llvm::ValueAsMetadata::get(
+            llvm::ConstantInt::get(llvm::Type::getInt32Ty(*context), 1))};
+    llvm::MDNode* node = llvm::MDNode::get(*context, metadata);
+    module->getOrInsertNamedMetadata("nvvm.annotations")->addOperand(node);
+}
+
 #if LLVM_VERSION_MAJOR >= 13
 void CodegenLLVMVisitor::add_vectorizable_functions_from_vec_lib(llvm::TargetLibraryInfoImpl& tli,
                                                                  llvm::Triple& triple) {
@@ -665,11 +675,19 @@ void CodegenLLVMVisitor::visit_codegen_function(const ast::CodegenFunction& node
     ir_builder.allocate_function_arguments(func, arguments);
 
     // Process function or procedure body. If the function is a compute kernel, enable
-    // vectorization. If so, the return statement is handled in a separate visitor.
-    if (platform.is_cpu_with_simd() && is_kernel_function(name)) {
-        ir_builder.generate_vector_ir();
-        block->accept(*this);
-        ir_builder.generate_scalar_ir();
+    // vectorization or add NVVM annotations. If this is the case, the return statement is
+    // handled in a separate visitor.
+    if (is_kernel_function(name)) {
+        if (platform.is_cpu_with_simd()) {
+            ir_builder.generate_vector_ir();
+            block->accept(*this);
+            ir_builder.generate_scalar_ir();
+        } else if (platform.is_gpu()) {
+            block->accept(*this);
+            annotate_kernel_with_nvvm(func);
+        } else { // scalar
+            block->accept(*this);
+        }
     } else {
         block->accept(*this);
     }
@@ -685,6 +703,10 @@ void CodegenLLVMVisitor::visit_codegen_function(const ast::CodegenFunction& node
     ir_builder.clear_function();
 }
 
+void CodegenLLVMVisitor::visit_codegen_grid_stride(const ast::CodegenGridStride& node) {
+    ir_builder.create_grid_stride();
+}
+
 void CodegenLLVMVisitor::visit_codegen_return_statement(const ast::CodegenReturnStatement& node) {
     if (!node.get_statement()->is_name())
         throw std::runtime_error("Error: CodegenReturnStatement must contain a name node\n");
@@ -692,6 +714,10 @@ void CodegenLLVMVisitor::visit_codegen_return_statement(const ast::CodegenReturn
     std::string ret = "ret_" + ir_builder.get_current_function_name();
     llvm::Value* ret_value = ir_builder.create_load(ret);
     ir_builder.create_return(ret_value);
+}
+
+void CodegenLLVMVisitor::visit_codegen_thread_id(const ast::CodegenThreadId& node) {
+    ir_builder.create_thread_id();
 }
 
 void CodegenLLVMVisitor::visit_codegen_var_list_statement(
@@ -820,12 +846,6 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
     instance_var_helper = v.get_instance_var_helper();
     sym_tab = node.get_symbol_table();
     std::string kernel_id = v.get_kernel_id();
-
-    // \todo: implement GPU codegen functionality.
-    if (platform.is_gpu()) {
-      logger->warn("GPU code generation is not supported yet, aborting!");
-      return;
-    }
 
     // Initialize the builder for this NMODL program.
     ir_builder.initialize(*sym_tab, kernel_id);
