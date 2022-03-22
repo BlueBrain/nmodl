@@ -847,12 +847,6 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
     sym_tab = node.get_symbol_table();
     std::string kernel_id = v.get_kernel_id();
 
-    // \todo: implement GPU codegen functionality.
-    if (platform.is_gpu()) {
-      logger->warn("GPU code generation is not supported yet, aborting!");
-      return;
-    }
-
     // Initialize the builder for this NMODL program.
     ir_builder.initialize(*sym_tab, kernel_id);
 
