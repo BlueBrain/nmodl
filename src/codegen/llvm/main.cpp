@@ -47,8 +47,11 @@ int main(int argc, const char* argv[]) {
     logger->info("Running Symtab Visitor");
     visitor::SymtabVisitor().visit_program(*ast);
 
+    // Use default platform for this toy example.
+    codegen::Platform platform;
+
     logger->info("Running LLVM Visitor");
-    codegen::CodegenLLVMVisitor llvm_visitor(filename, /*output_dir=*/".", /*opt_level_ir=*/0);
+    codegen::CodegenLLVMVisitor llvm_visitor(filename, /*output_dir=*/".", platform, /*opt_level_ir=*/0);
     llvm_visitor.visit_program(*ast);
     std::unique_ptr<llvm::Module> module = llvm_visitor.get_module();
 

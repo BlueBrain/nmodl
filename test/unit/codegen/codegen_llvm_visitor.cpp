@@ -40,7 +40,8 @@ std::string get_wrapper_instance_struct(const std::string& nmodl_text) {
     SolveBlockVisitor().visit_program(*ast);
 
     /// create LLVM and C++ wrapper code generation visitor
-    codegen::CodegenLLVMVisitor llvm_visitor("hh.mod", oss, 0);
+    codegen::Platform cpu_platform(/*use_single_precision=*/false, /*instruction_width=*/1);
+    codegen::CodegenLLVMVisitor llvm_visitor("hh.mod", oss, cpu_platform, 0);
     llvm_visitor.visit_program(*ast);
     strbuf.str("");
     llvm_visitor.print_mechanism_range_var_structure();

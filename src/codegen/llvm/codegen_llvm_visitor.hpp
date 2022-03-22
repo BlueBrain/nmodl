@@ -82,39 +82,28 @@ class CodegenLLVMVisitor: public CodegenCVisitor {
     /// Optimisation level for LLVM IR transformations.
     int opt_level_ir;
 
-    /// Vector library used for math functions.
-    std::string vector_library;
-
-    /// Explicit vectorisation width.
-    int vector_width;
+    /// Target platform for the code generation.
+    Platform platform;
 
   public:
     CodegenLLVMVisitor(const std::string& mod_filename,
                        const std::string& output_dir,
+                       Platform& platform,
                        int opt_level_ir,
-                       bool use_single_precision = false,
-                       int vector_width = 1,
-                       std::string vec_lib = "none",
                        bool add_debug_information = false,
-                       std::vector<std::string> fast_math_flags = {},
-                       bool llvm_assume_alias = false)
+                       std::vector<std::string> fast_math_flags = {})
         : CodegenCVisitor(mod_filename,
                           output_dir,
-                          use_single_precision ? "float" : "double",
+                          platform.is_single_precision() ? "float" : "double",
                           false,
                           ".ll",
                           ".cpp")
         , mod_filename(mod_filename)
         , output_dir(output_dir)
+        , platform(platform)
         , opt_level_ir(opt_level_ir)
-        , vector_width(vector_width)
-        , vector_library(vec_lib)
         , add_debug_information(add_debug_information)
-        , ir_builder(*context,
-                     use_single_precision,
-                     vector_width,
-                     fast_math_flags,
-                     !llvm_assume_alias)
+        , ir_builder(*context, platform, fast_math_flags)
         , debug_builder(*module) {
         instance_struct_type_suffix = "_instance_var__type";
         print_procedures_and_functions = false;
@@ -122,30 +111,22 @@ class CodegenLLVMVisitor: public CodegenCVisitor {
 
     CodegenLLVMVisitor(const std::string& mod_filename,
                        std::ostream& stream,
+                       Platform& platform,
                        int opt_level_ir,
-                       bool use_single_precision = false,
-                       int vector_width = 1,
-                       std::string vec_lib = "none",
                        bool add_debug_information = false,
-                       std::vector<std::string> fast_math_flags = {},
-                       bool llvm_assume_alias = false)
+                       std::vector<std::string> fast_math_flags = {})
         : CodegenCVisitor(mod_filename,
                           stream,
-                          use_single_precision ? "float" : "double",
+                          platform.is_single_precision() ? "float" : "double",
                           false,
                           ".ll",
                           ".cpp")
         , mod_filename(mod_filename)
         , output_dir(".")
+        , platform(platform)
         , opt_level_ir(opt_level_ir)
-        , vector_width(vector_width)
-        , vector_library(vec_lib)
         , add_debug_information(add_debug_information)
-        , ir_builder(*context,
-                     use_single_precision,
-                     vector_width,
-                     fast_math_flags,
-                     !llvm_assume_alias)
+        , ir_builder(*context, platform, fast_math_flags)
         , debug_builder(*module) {
         instance_struct_type_suffix = "_instance_var__type";
         print_procedures_and_functions = false;
@@ -184,7 +165,7 @@ class CodegenLLVMVisitor: public CodegenCVisitor {
 
     /// Returns vector width
     int get_vector_width() const {
-        return vector_width;
+        return platform.get_instruction_width();
     }
 
     // Visitors.
@@ -193,7 +174,9 @@ class CodegenLLVMVisitor: public CodegenCVisitor {
     void visit_codegen_atomic_statement(const ast::CodegenAtomicStatement& node) override;
     void visit_codegen_for_statement(const ast::CodegenForStatement& node) override;
     void visit_codegen_function(const ast::CodegenFunction& node) override;
+    void visit_codegen_grid_stride(const ast::CodegenGridStride& node) override;
     void visit_codegen_return_statement(const ast::CodegenReturnStatement& node) override;
+    void visit_codegen_thread_id(const ast::CodegenThreadId& node) override;
     void visit_codegen_var_list_statement(const ast::CodegenVarListStatement& node) override;
     void visit_double(const ast::Double& node) override;
     void visit_function_block(const ast::FunctionBlock& node) override;
@@ -319,6 +302,9 @@ class CodegenLLVMVisitor: public CodegenCVisitor {
     void wrap_kernel_functions();
 
   private:
+    // Annotates kernel function with NVVM metadata.
+    void annotate_kernel_with_nvvm(llvm::Function* kernel);
+
 #if LLVM_VERSION_MAJOR >= 13
     /// Populates target library info with the vector library definitions.
     void add_vectorizable_functions_from_vec_lib(llvm::TargetLibraryInfoImpl& tli,
