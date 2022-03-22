@@ -34,6 +34,32 @@ using nmodl::parser::NmodlDriver;
 // Utility to get LLVM module as a string
 //=============================================================================
 
+std::string run_gpu_llvm_visitor(const std::string& text,
+                                 int opt_level = 0,
+                                 bool use_single_precision = false,
+                                 std::string math_library = "none",
+                                 bool nmodl_inline = false) {
+    NmodlDriver driver;
+    const auto& ast = driver.parse_string(text);
+
+    SymtabVisitor().visit_program(*ast);
+    if (nmodl_inline) {
+        InlineVisitor().visit_program(*ast);
+    }
+    NeuronSolveVisitor().visit_program(*ast);
+    SolveBlockVisitor().visit_program(*ast);
+
+    codegen::Platform gpu_platform(codegen::PlatformID::GPU, /*name=*/"nvidia",
+                                   math_library, use_single_precision, 1);
+    codegen::CodegenLLVMVisitor llvm_visitor(
+        /*mod_filename=*/"unknown",
+        /*output_dir=*/".", gpu_platform, opt_level,
+        /*add_debug_information=*/false);
+
+    llvm_visitor.visit_program(*ast);
+    return llvm_visitor.dump_module();
+}
+
 std::string run_llvm_visitor(const std::string& text,
                              int opt_level = 0,
                              bool use_single_precision = false,
@@ -1570,6 +1596,56 @@ SCENARIO("GPU kernel body", "[visitor][llvm][gpu]") {
 
             auto loop = reindent_text(to_nmodl(result[0]));
             REQUIRE(loop == reindent_text(expected_loop));
+        }
+    }
+}
+
+//=============================================================================
+// Basic NVVM/LLVM IR generation for GPU platforms
+//=============================================================================
+
+SCENARIO("GPU kernel body IR generation", "[visitor][llvm][gpu]") {
+    GIVEN("For GPU platforms") {
+        std::string nmodl_text = R"(
+            NEURON {
+                SUFFIX test
+                RANGE x, y
+            }
+
+            ASSIGNED { x y }
+
+            STATE { m }
+
+            BREAKPOINT {
+                SOLVE states METHOD cnexp
+            }
+
+            DERIVATIVE states {
+              m = y + 2
+            }
+        )";
+
+        THEN("kernel annotations are added and thread id intrinsics generated") {
+            std::string module_string = run_gpu_llvm_visitor(nmodl_text,
+                                                             /*opt_level=*/0,
+                                                             /*use_single_precision=*/false);
+            std::smatch m;
+
+            // Check kernel annotations are correclty created.
+            std::regex annotations(R"(!nvvm\.annotations = !\{!0\})");
+            std::regex kernel_data(R"(!0 = !\{void \(%.*__instance_var__type\*\)\* @nrn_state_.*, !\"kernel\", i32 1\})");
+            REQUIRE(std::regex_search(module_string, m, annotations));
+            REQUIRE(std::regex_search(module_string, m, kernel_data));
+
+            // Check thread/block id/dim instrinsics are created.
+            std::regex block_id(R"(call i32 @llvm\.nvvm\.read\.ptx\.sreg\.ctaid\.x\(\))");
+            std::regex block_dim(R"(call i32 @llvm\.nvvm\.read\.ptx\.sreg\.ntid\.x\(\))");
+            std::regex tid(R"(call i32 @llvm\.nvvm\.read\.ptx\.sreg\.tid\.x\(\))");
+            std::regex grid_dim(R"(call i32 @llvm\.nvvm\.read\.ptx\.sreg\.nctaid\.x\(\))");
+            REQUIRE(std::regex_search(module_string, m, block_id));
+            REQUIRE(std::regex_search(module_string, m, block_dim));
+            REQUIRE(std::regex_search(module_string, m, tid));
+            REQUIRE(std::regex_search(module_string, m, grid_dim));
         }
     }
 }
