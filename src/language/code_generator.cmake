@@ -68,6 +68,7 @@ set(AST_GENERATED_SOURCES
     ${PROJECT_BINARY_DIR}/src/ast/codegen_atomic_statement.hpp
     ${PROJECT_BINARY_DIR}/src/ast/codegen_for_statement.hpp
     ${PROJECT_BINARY_DIR}/src/ast/codegen_function.hpp
+    ${PROJECT_BINARY_DIR}/src/ast/codegen_grid_stride.hpp
     ${PROJECT_BINARY_DIR}/src/ast/codegen_instance_var.hpp
     ${PROJECT_BINARY_DIR}/src/ast/codegen_return_statement.hpp
     ${PROJECT_BINARY_DIR}/src/ast/codegen_struct.hpp

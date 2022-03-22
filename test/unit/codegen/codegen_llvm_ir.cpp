@@ -1552,29 +1552,24 @@ SCENARIO("GPU kernel body", "[visitor][llvm][gpu]") {
         )";
 
 
-        std::string expected_kernel = R"(
-            VOID nrn_state_test(INSTANCE_STRUCT *mech){
-                GPU_ID id
-                INTEGER node_id
-                DOUBLE v
-                IF (id<mech->node_count) {
-                    node_id = mech->node_index[id]
-                    v = mech->voltage[node_id]
-                    mech->m[id] = mech->y[id]+2
-                }
+        std::string expected_loop = R"(
+            for(id = THREAD_ID; id<mech->node_count; id = id+GRID_STRIDE) {
+                node_id = mech->node_index[id]
+                v = mech->voltage[node_id]
+                mech->m[id] = mech->y[id]+2
             })";
 
-        THEN("a kernel with thread id and if statement is created") {
+        THEN("a loop with GPU-specific AST nodes is constructed") {
             std::string name = "default";
             std::string math_library = "none";
             codegen::Platform gpu_platform(codegen::PlatformID::GPU, name, math_library);
             auto result = run_llvm_visitor_helper(nmodl_text,
                                                   gpu_platform,
-                                                  {ast::AstNodeType::CODEGEN_FUNCTION});
+                                                  {ast::AstNodeType::CODEGEN_FOR_STATEMENT});
             REQUIRE(result.size() == 1);
 
-            auto kernel = reindent_text(to_nmodl(result[0]));
-            REQUIRE(kernel == reindent_text(expected_kernel));
+            auto loop = reindent_text(to_nmodl(result[0]));
+            REQUIRE(loop == reindent_text(expected_loop));
         }
     }
 }
