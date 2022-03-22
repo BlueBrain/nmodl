@@ -815,11 +815,17 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
     //   - convert function and procedure blocks into CodegenFunctions
     //   - gather information about AST. For now, information about functions
     //     and procedures is used only.
-    CodegenLLVMHelperVisitor v{platform.get_instruction_width()};
+    CodegenLLVMHelperVisitor v{platform};
     const auto& functions = v.get_codegen_functions(node);
     instance_var_helper = v.get_instance_var_helper();
     sym_tab = node.get_symbol_table();
     std::string kernel_id = v.get_kernel_id();
+
+    // \todo: implement GPU codegen functionality.
+    if (platform.is_gpu()) {
+      logger->warn("GPU code generation is not supported yet, aborting!");
+      return;
+    }
 
     // Initialize the builder for this NMODL program.
     ir_builder.initialize(*sym_tab, kernel_id);

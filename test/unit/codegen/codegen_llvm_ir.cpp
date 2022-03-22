@@ -68,14 +68,14 @@ std::string run_llvm_visitor(const std::string& text,
 
 std::vector<std::shared_ptr<ast::Ast>> run_llvm_visitor_helper(
     const std::string& text,
-    int vector_width,
+    codegen::Platform& platform,
     const std::vector<ast::AstNodeType>& nodes_to_collect) {
     NmodlDriver driver;
     const auto& ast = driver.parse_string(text);
 
     SymtabVisitor().visit_program(*ast);
     SolveBlockVisitor().visit_program(*ast);
-    CodegenLLVMHelperVisitor(vector_width).visit_program(*ast);
+    CodegenLLVMHelperVisitor(platform).visit_program(*ast);
 
     const auto& nodes = collect_nodes(*ast, nodes_to_collect);
 
@@ -1228,8 +1228,9 @@ SCENARIO("Scalar derivative block", "[visitor][llvm][derivative]") {
             })";
 
         THEN("a single scalar loops is constructed") {
+            codegen::Platform default_platform;
             auto result = run_llvm_visitor_helper(nmodl_text,
-                                                  /*vector_width=*/1,
+                                                  default_platform,
                                                   {ast::AstNodeType::CODEGEN_FOR_STATEMENT});
             REQUIRE(result.size() == 1);
 
@@ -1279,8 +1280,9 @@ SCENARIO("Vectorised derivative block", "[visitor][llvm][derivative]") {
 
 
         THEN("vector and epilogue scalar loops are constructed") {
+            codegen::Platform simd_platform(/*use_single_precision=*/false, /*instruction_width=*/8);
             auto result = run_llvm_visitor_helper(nmodl_text,
-                                                  /*vector_width=*/8,
+                                                  simd_platform,
                                                   {ast::AstNodeType::CODEGEN_FOR_STATEMENT});
             REQUIRE(result.size() == 2);
 
@@ -1520,6 +1522,54 @@ SCENARIO("Removal of inlined functions and procedures", "[visitor][llvm][inline]
             REQUIRE(!std::regex_search(module_string, m, add_proc));
             std::regex sub_func(R"(define double @test_sub\(double %a[0-9].*, double %b[0-9].*\))");
             REQUIRE(!std::regex_search(module_string, m, sub_func));
+        }
+    }
+}
+
+//=============================================================================
+// Basic GPU kernel AST generation
+//=============================================================================
+
+SCENARIO("GPU kernel body", "[visitor][llvm][gpu]") {
+    GIVEN("For GPU platforms") {
+        std::string nmodl_text = R"(
+            NEURON {
+                SUFFIX test
+                RANGE x, y
+            }
+
+            ASSIGNED { x y }
+
+            STATE { m }
+
+            BREAKPOINT {
+                SOLVE states METHOD cnexp
+            }
+
+            DERIVATIVE states {
+              m = y + 2
+            }
+        )";
+
+
+        std::string expected_loop = R"(
+            for(id = THREAD_ID; id<mech->node_count; id = id+GRID_STRIDE) {
+                node_id = mech->node_index[id]
+                v = mech->voltage[node_id]
+                mech->m[id] = mech->y[id]+2
+            })";
+
+        THEN("a loop with GPU-specific AST nodes is constructed") {
+            std::string name = "default";
+            std::string math_library = "none";
+            codegen::Platform gpu_platform(codegen::PlatformID::GPU, name, math_library);
+            auto result = run_llvm_visitor_helper(nmodl_text,
+                                                  gpu_platform,
+                                                  {ast::AstNodeType::CODEGEN_FOR_STATEMENT});
+            REQUIRE(result.size() == 1);
+
+            auto loop = reindent_text(to_nmodl(result[0]));
+            REQUIRE(loop == reindent_text(expected_loop));
         }
     }
 }
