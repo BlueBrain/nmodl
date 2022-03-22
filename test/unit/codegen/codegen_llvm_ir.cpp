@@ -1641,9 +1641,11 @@ SCENARIO("GPU kernel body IR generation", "[visitor][llvm][gpu]") {
             std::regex block_id(R"(call i32 @llvm\.nvvm\.read\.ptx\.sreg\.ctaid\.x\(\))");
             std::regex block_dim(R"(call i32 @llvm\.nvvm\.read\.ptx\.sreg\.ntid\.x\(\))");
             std::regex tid(R"(call i32 @llvm\.nvvm\.read\.ptx\.sreg\.tid\.x\(\))");
+            std::regex grid_dim(R"(call i32 @llvm\.nvvm\.read\.ptx\.sreg\.nctaid\.x\(\))");
             REQUIRE(std::regex_search(module_string, m, block_id));
             REQUIRE(std::regex_search(module_string, m, block_dim));
             REQUIRE(std::regex_search(module_string, m, tid));
+            REQUIRE(std::regex_search(module_string, m, grid_dim));
         }
     }
 }

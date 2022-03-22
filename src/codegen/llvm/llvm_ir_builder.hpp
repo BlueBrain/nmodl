@@ -230,7 +230,10 @@ class IRBuilder {
     void create_scalar_or_vector_alloca(const std::string& name,
                                         llvm::Type* element_or_scalar_type);
 
-    /// Creates a variable of the form: id = blockIdx.x * blockDim.x + threadIdx.x
+    /// Creates an expression of the form: blockDim.x * gridDim.x
+    void create_grid_stride();
+
+    /// Creates an expression of the form: blockIdx.x * blockDim.x + threadIdx.x
     void create_thread_id();
 
     /// Generates LLVM IR for the given unary operator.

@@ -703,6 +703,10 @@ void CodegenLLVMVisitor::visit_codegen_function(const ast::CodegenFunction& node
     ir_builder.clear_function();
 }
 
+void CodegenLLVMVisitor::visit_codegen_grid_stride(const ast::CodegenGridStride& node) {
+    ir_builder.create_grid_stride();
+}
+
 void CodegenLLVMVisitor::visit_codegen_return_statement(const ast::CodegenReturnStatement& node) {
     if (!node.get_statement()->is_name())
         throw std::runtime_error("Error: CodegenReturnStatement must contain a name node\n");

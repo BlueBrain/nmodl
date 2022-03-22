@@ -137,6 +137,7 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     void visit_codegen_atomic_statement(const ast::CodegenAtomicStatement& node) override;
     void visit_codegen_for_statement(const ast::CodegenForStatement& node) override;
     void visit_codegen_function(const ast::CodegenFunction& node) override;
+    void visit_codegen_grid_stride(const ast::CodegenGridStride& node) override;
     void visit_codegen_return_statement(const ast::CodegenReturnStatement& node) override;
     void visit_codegen_thread_id(const ast::CodegenThreadId& node) override;
     void visit_codegen_var_list_statement(const ast::CodegenVarListStatement& node) override;
