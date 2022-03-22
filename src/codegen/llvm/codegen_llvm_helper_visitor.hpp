@@ -16,6 +16,7 @@
 
 #include "ast/instance_struct.hpp"
 #include "codegen/codegen_info.hpp"
+#include "codegen/llvm/target_platform.hpp"
 #include "symtab/symbol_table.hpp"
 #include "utils/logger.hpp"
 #include "visitors/ast_visitor.hpp"
@@ -101,8 +102,8 @@ struct InstanceVarHelper {
  * these will be common across all backends.
  */
 class CodegenLLVMHelperVisitor: public visitor::AstVisitor {
-    /// explicit vectorisation width
-    int vector_width;
+    /// target platform
+    Platform platform;
 
     /// newly generated code generation specific functions
     CodegenFunctionVector codegen_functions;
@@ -135,8 +136,8 @@ class CodegenLLVMHelperVisitor: public visitor::AstVisitor {
     static const std::string VOLTAGE_VAR;
     static const std::string NODE_INDEX_VAR;
 
-    CodegenLLVMHelperVisitor(int vector_width)
-        : vector_width(vector_width) {}
+    CodegenLLVMHelperVisitor(Platform& platform)
+        : platform(platform) {}
 
     const InstanceVarHelper& get_instance_var_helper() {
         return instance_var_helper;
@@ -161,7 +162,7 @@ class CodegenLLVMHelperVisitor: public visitor::AstVisitor {
                               ast::StatementVector& index_statements,
                               ast::StatementVector& body_statements);
 
-    void convert_to_instance_variable(ast::Node& node, std::string& index_var);
+    void convert_to_instance_variable(ast::Node& node, const std::string& index_var);
 
     void convert_local_statement(ast::StatementBlock& node);
     void rename_local_variables(ast::StatementBlock& node);
@@ -173,6 +174,32 @@ class CodegenLLVMHelperVisitor: public visitor::AstVisitor {
     void visit_function_block(ast::FunctionBlock& node) override;
     void visit_nrn_state_block(ast::NrnStateBlock& node) override;
     void visit_program(ast::Program& node) override;
+
+  private:
+    /// Methods to create target-specific loop constructs.
+    std::shared_ptr<ast::Expression> loop_initialization_expression(const std::string& induction_var,
+                                                                    bool is_remainder_loop);
+    std::shared_ptr<ast::Expression> loop_count_expression(const std::string& induction_var,
+                                                           const std::string& node_count,
+                                                           bool is_remainder_loop);
+    std::shared_ptr<ast::Expression> loop_increment_expression(const std::string& induction_var,
+                                                               bool is_remainder_loop);
+
+    /// Methods to populate`function_statements` with necessary AST constructs to form
+    /// a kernel for a specific target.
+    void create_gpu_compute_body(ast::StatementVector& body,
+                                 ast::StatementVector& function_statements,
+                                 std::vector<std::string>& int_variables,
+                                 std::vector<std::string>& double_variables);
+    void create_cpu_compute_body(ast::StatementVector& body,
+                                 ast::StatementVector& function_statements,
+                                 std::vector<std::string>& int_variables,
+                                 std::vector<std::string>& double_variables);
+    void create_compute_body_loop(std::shared_ptr<ast::StatementBlock>& block,
+                                  ast::StatementVector& function_statements,
+                                  std::vector<std::string>& int_variables,
+                                  std::vector<std::string>& double_variables,
+                                  bool is_remainder_loop = false);
 };
 
 /** @} */  // end of llvm_codegen_details
