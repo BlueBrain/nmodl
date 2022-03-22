@@ -570,7 +570,7 @@ CodegenLLVMHelperVisitor::loop_increment_expression(const std::string& induction
                                                     bool is_remainder_loop) {
     const auto& id = create_varname(induction_var);
 
-    // For GPU platforms, increment by frid stride.
+    // For GPU platforms, increment by grid stride.
     if (platform.is_gpu()) {
         const auto& stride = new ast::CodegenGridStride();
         const auto& inc_expr =
