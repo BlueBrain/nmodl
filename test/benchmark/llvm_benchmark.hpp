@@ -74,14 +74,14 @@ class LLVMBenchmark {
         , opt_level_codegen(opt_level_codegen) {}
 
     /// Runs the benchmark.
-    void run(const std::shared_ptr<ast::Program>& node);
+    void run();
 
   private:
     /// Visits the AST to construct the LLVM IR module.
-    void generate_llvm(const std::shared_ptr<ast::Program>& node);
+    void generate_llvm();
 
     /// Runs the main body of the benchmark, executing the compute kernels.
-    void run_benchmark(const std::shared_ptr<ast::Program>& node);
+    void run_benchmark();
 
     /// Sets the log output stream (file or console).
     void set_log_output();

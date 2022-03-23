@@ -70,7 +70,9 @@ if(NMODL_ENABLE_PYTHON_BINDINGS)
 
   add_dependencies(_nmodl pyastgen lexer_obj util_obj)
   target_link_libraries(_nmodl PRIVATE fmt::fmt pyembed)
-
+  if(NMODL_ENABLE_LLVM)
+    target_link_libraries(_nmodl PRIVATE codegen llvm_codegen llvm_benchmark benchmark_data ${LLVM_LIBS_TO_LINK})
+  endif()
   # in case of wheel, python module shouldn't link to wrapper library
   if(LINK_AGAINST_PYTHON)
     target_link_libraries(_nmodl PRIVATE pywrapper)

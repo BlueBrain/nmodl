@@ -18,14 +18,14 @@
 namespace nmodl {
 namespace benchmark {
 
-void LLVMBenchmark::run(const std::shared_ptr<ast::Program>& node) {
+void LLVMBenchmark::run() {
     // create functions
-    generate_llvm(node);
+    generate_llvm();
     // Finally, run the benchmark and log the measurements.
-    run_benchmark(node);
+    run_benchmark();
 }
 
-void LLVMBenchmark::generate_llvm(const std::shared_ptr<ast::Program>& node) {
+void LLVMBenchmark::generate_llvm() {
     // First, visit the AST to build the LLVM IR module and wrap the kernel function calls.
     auto start = std::chrono::steady_clock::now();
     llvm_visitor.wrap_kernel_functions();
@@ -36,9 +36,9 @@ void LLVMBenchmark::generate_llvm(const std::shared_ptr<ast::Program>& node) {
     logger->info("Created LLVM IR module from NMODL AST in {} sec", diff.count());
 }
 
-void LLVMBenchmark::run_benchmark(const std::shared_ptr<ast::Program>& node) {
+void LLVMBenchmark::run_benchmark() {
     // Set the codegen data helper and find the kernels.
-    auto codegen_data = codegen::CodegenDataHelper(node, llvm_visitor.get_instance_struct_ptr());
+    auto codegen_data = codegen::CodegenDataHelper(llvm_visitor.get_instance_struct_ptr());
     std::vector<std::string> kernel_names;
     llvm_visitor.find_kernel_names(kernel_names);
 

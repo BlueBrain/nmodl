@@ -30,7 +30,7 @@ class Platform {
 
   private:
     /// Name of the platform.
-    const std::string name = Platform::DEFAULT_PLATFORM_NAME;
+    std::string name = Platform::DEFAULT_PLATFORM_NAME;
 
     /// Target-specific id to compare platforms easily.
     PlatformID platform_id;
