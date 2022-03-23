@@ -468,6 +468,10 @@ void CodegenLLVMVisitor::write_to_variable(const ast::VarName& node, llvm::Value
 }
 
 void CodegenLLVMVisitor::wrap_kernel_functions() {
+    // Wrapper doesn't work on GPU
+    if (platform.is_gpu()) {
+        return;
+    }
     // First, identify all kernels.
     std::vector<std::string> kernel_names;
     find_kernel_names(kernel_names);
@@ -695,7 +699,9 @@ void CodegenLLVMVisitor::visit_codegen_function(const ast::CodegenFunction& node
     // If function is a compute kernel, add a void terminator explicitly, since there is no
     // `CodegenReturnVar` node. Also, set the necessary attributes.
     if (is_kernel_function(name)) {
-        ir_builder.set_kernel_attributes();
+        if (!platform.is_gpu()) {
+            ir_builder.set_kernel_attributes();
+        }
         ir_builder.create_return();
     }
 

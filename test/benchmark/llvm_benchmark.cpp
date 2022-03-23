@@ -80,7 +80,7 @@ void LLVMBenchmark::run_benchmark_on_cpu(const std::shared_ptr<ast::Program>& no
             // Record the execution time of the kernel.
             std::string wrapper_name = "__" + kernel_name + "_wrapper";
             auto start = std::chrono::steady_clock::now();
-            runner.run_with_argument<int, void*>(kernel_name, instance_data.base_ptr);
+            runner.run_with_argument<int, void*>(wrapper_name, instance_data.base_ptr);
             auto end = std::chrono::steady_clock::now();
             std::chrono::duration<double> diff = end - start;
 
@@ -140,7 +140,6 @@ void LLVMBenchmark::run_benchmark_on_gpu(const std::shared_ptr<ast::Program>& no
             }
 
             // Record the execution time of the kernel.
-            std::string wrapper_name = "__" + kernel_name + "_wrapper";
             auto start = std::chrono::steady_clock::now();
             runner.run_with_argument<void*>(kernel_name,
                                             instance_data.base_ptr,

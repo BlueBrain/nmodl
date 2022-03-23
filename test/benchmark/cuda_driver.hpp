@@ -24,6 +24,7 @@
 
 #include "benchmark_info.hpp"
 #include "cuda.h"
+#include "cuda_runtime.h"
 #include "gpu_parameters.hpp"
 #include "nvvm.h"
 
@@ -105,6 +106,7 @@ class CUDADriver {
                                        nullptr,
                                        kernel_parameters,
                                        nullptr));
+        cudaDeviceSynchronize();
     }
 
     /// Lookups the entry-point with arguments in the CUDA module and executes it.
@@ -113,6 +115,7 @@ class CUDADriver {
                                 ArgType arg,
                                 const GPUExecutionParameters& gpu_execution_parameters) {
         // Get kernel function
+        logger->info("Executing kernel {}", entry_point);
         checkCudaErrors(cuModuleGetFunction(&function, cudaModule, entry_point.c_str()));
 
         // Kernel launch
@@ -128,6 +131,7 @@ class CUDADriver {
                                        nullptr,
                                        kernel_parameters,
                                        nullptr));
+        cudaDeviceSynchronize();
     }
 };
 
