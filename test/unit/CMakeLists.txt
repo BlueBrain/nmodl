@@ -113,8 +113,9 @@ if(NMODL_ENABLE_LLVM)
   add_library(benchmark_data STATIC codegen/codegen_data_helper.cpp)
   add_dependencies(benchmark_data lexer)
 
-  add_executable(testllvm visitor/main.cpp codegen/codegen_llvm_ir.cpp
-                          codegen/codegen_data_helper.cpp codegen/codegen_llvm_instance_struct.cpp)
+  add_executable(
+    testllvm visitor/main.cpp codegen/codegen_llvm_ir.cpp codegen/codegen_data_helper.cpp
+             codegen/codegen_llvm_instance_struct.cpp codegen/codegen_llvm_visitor.cpp)
   add_executable(test_llvm_runner visitor/main.cpp codegen/codegen_data_helper.cpp
                                   codegen/codegen_llvm_execution.cpp)
   if(NMODL_ENABLE_LLVM_CUDA)
@@ -160,8 +161,10 @@ set(test_env ${NMODL_SANITIZER_ENABLE_ENVIRONMENT})
 set(testvisitor_env "PYTHONPATH=${PROJECT_BINARY_DIR}/lib:$ENV{PYTHONPATH}")
 if(NOT LINK_AGAINST_PYTHON)
   list(APPEND testvisitor_env "NMODL_PYLIB=$ENV{NMODL_PYLIB}")
-  list(APPEND testvisitor_env
-       "NMODL_WRAPLIB=${PROJECT_BINARY_DIR}/lib/nmodl/libpywrapper${CMAKE_SHARED_LIBRARY_SUFFIX}")
+  list(
+    APPEND
+      testvisitor_env
+      "NMODL_WRAPLIB=${PROJECT_BINARY_DIR}/lib/nmodl/libpywrapper${CMAKE_SHARED_LIBRARY_SUFFIX}")
 endif()
 
 foreach(

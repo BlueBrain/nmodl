@@ -12,4 +12,7 @@ foreach(modfile ${modfiles})
   get_filename_component(modfile_name "${modfile}" NAME)
   add_test(NAME ${modfile_name} COMMAND ${CMAKE_BINARY_DIR}/bin/nmodl ${modfile})
   cpp_cc_configure_sanitizers(TEST ${modfile_name})
+  add_test(NAME ${modfile_name}_oacc COMMAND ${PROJECT_BINARY_DIR}/bin/nmodl ${modfile} host --c
+                                             acc --oacc)
+  add_test(NAME ${modfile_name}_ispc COMMAND ${PROJECT_BINARY_DIR}/bin/nmodl ${modfile} host --ispc)
 endforeach()

@@ -18,6 +18,7 @@
 #include <ostream>
 #include <string>
 
+#include "codegen/codegen_c_visitor.hpp"
 #include "codegen/llvm/codegen_llvm_helper_visitor.hpp"
 #include "codegen/llvm/llvm_debug_builder.hpp"
 #include "codegen/llvm/llvm_ir_builder.hpp"
@@ -49,12 +50,15 @@ namespace codegen {
  * \class CodegenLLVMVisitor
  * \brief %Visitor for transforming NMODL AST to LLVM IR
  */
-class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
+class CodegenLLVMVisitor: public CodegenCVisitor {
     /// Name of mod file (without .mod suffix).
     std::string mod_filename;
 
     /// Output directory for code generation.
     std::string output_dir;
+
+    /// flag to indicate if visitor should print the the wrapper code
+    bool wrapper_codegen = false;
 
   private:
     /// Underlying LLVM context.
@@ -72,9 +76,6 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     /// Add debug information to the module.
     bool add_debug_information;
 
-    /// Pointer to AST symbol table.
-    symtab::SymbolTable* sym_tab;
-
     /// Instance variable helper.
     InstanceVarHelper instance_var_helper;
 
@@ -91,13 +92,45 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
                        int opt_level_ir,
                        bool add_debug_information = false,
                        std::vector<std::string> fast_math_flags = {})
-        : mod_filename(mod_filename)
+        : CodegenCVisitor(mod_filename,
+                          output_dir,
+                          platform.is_single_precision() ? "float" : "double",
+                          false,
+                          ".ll",
+                          ".cpp")
+        , mod_filename(mod_filename)
         , output_dir(output_dir)
         , platform(platform)
         , opt_level_ir(opt_level_ir)
         , add_debug_information(add_debug_information)
         , ir_builder(*context, platform, fast_math_flags)
-        , debug_builder(*module) {}
+        , debug_builder(*module) {
+        instance_struct_type_suffix = "_instance_var__type";
+        print_procedures_and_functions = false;
+    }
+
+    CodegenLLVMVisitor(const std::string& mod_filename,
+                       std::ostream& stream,
+                       Platform& platform,
+                       int opt_level_ir,
+                       bool add_debug_information = false,
+                       std::vector<std::string> fast_math_flags = {})
+        : CodegenCVisitor(mod_filename,
+                          stream,
+                          platform.is_single_precision() ? "float" : "double",
+                          false,
+                          ".ll",
+                          ".cpp")
+        , mod_filename(mod_filename)
+        , output_dir(".")
+        , platform(platform)
+        , opt_level_ir(opt_level_ir)
+        , add_debug_information(add_debug_information)
+        , ir_builder(*context, platform, fast_math_flags)
+        , debug_builder(*module) {
+        instance_struct_type_suffix = "_instance_var__type";
+        print_procedures_and_functions = false;
+    }
 
     /// Dumps the generated LLVM IR module to string.
     std::string dump_module() const {
@@ -106,6 +139,10 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
         os << *module;
         os.flush();
         return str;
+    }
+
+    void print_target_file() const {
+        target_printer->add_multi_line(dump_module());
     }
 
     /// Fills the container with the names of kernel functions from the MOD file.
@@ -153,6 +190,113 @@ class CodegenLLVMVisitor: public visitor::ConstAstVisitor {
     void visit_var_name(const ast::VarName& node) override;
     void visit_while_statement(const ast::WhileStatement& node) override;
 
+    /*
+     * Override functions from CodegenCVisitor to the ones from visitor::ConstsAstVisitor as it was
+     * originally for CodegenLLVMVisitor
+     */
+    void visit_binary_operator(const ast::BinaryOperator& node) override {
+        visitor::ConstAstVisitor::visit_binary_operator(node);
+    }
+    void visit_else_if_statement(const ast::ElseIfStatement& node) override {
+        visitor::ConstAstVisitor::visit_else_if_statement(node);
+    }
+    void visit_else_statement(const ast::ElseStatement& node) override {
+        visitor::ConstAstVisitor::visit_else_statement(node);
+    }
+    void visit_float(const ast::Float& node) override {
+        visitor::ConstAstVisitor::visit_float(node);
+    }
+    void visit_from_statement(const ast::FromStatement& node) override {
+        visitor::ConstAstVisitor::visit_from_statement(node);
+    }
+    void visit_eigen_newton_solver_block(const ast::EigenNewtonSolverBlock& node) override {
+        visitor::ConstAstVisitor::visit_eigen_newton_solver_block(node);
+    }
+    void visit_eigen_linear_solver_block(const ast::EigenLinearSolverBlock& node) override {
+        visitor::ConstAstVisitor::visit_eigen_linear_solver_block(node);
+    }
+    void visit_indexed_name(const ast::IndexedName& node) override {
+        visitor::ConstAstVisitor::visit_indexed_name(node);
+    }
+    void visit_local_list_statement(const ast::LocalListStatement& node) override {
+        visitor::ConstAstVisitor::visit_local_list_statement(node);
+    }
+    void visit_name(const ast::Name& node) override {
+        visitor::ConstAstVisitor::visit_name(node);
+    }
+    void visit_paren_expression(const ast::ParenExpression& node) override {
+        visitor::ConstAstVisitor::visit_paren_expression(node);
+    }
+    void visit_prime_name(const ast::PrimeName& node) override {
+        visitor::ConstAstVisitor::visit_prime_name(node);
+    }
+    void visit_string(const ast::String& node) override {
+        visitor::ConstAstVisitor::visit_string(node);
+    }
+    void visit_solution_expression(const ast::SolutionExpression& node) override {
+        visitor::ConstAstVisitor::visit_solution_expression(node);
+    }
+    void visit_unary_operator(const ast::UnaryOperator& node) override {
+        visitor::ConstAstVisitor::visit_unary_operator(node);
+    }
+    void visit_unit(const ast::Unit& node) override {
+        visitor::ConstAstVisitor::visit_unit(node);
+    }
+    void visit_verbatim(const ast::Verbatim& node) override {
+        visitor::ConstAstVisitor::visit_verbatim(node);
+    }
+    void visit_watch_statement(const ast::WatchStatement& node) override {
+        visitor::ConstAstVisitor::visit_watch_statement(node);
+    }
+    void visit_derivimplicit_callback(const ast::DerivimplicitCallback& node) override {
+        visitor::ConstAstVisitor::visit_derivimplicit_callback(node);
+    }
+    void visit_for_netcon(const ast::ForNetcon& node) override {
+        visitor::ConstAstVisitor::visit_for_netcon(node);
+    }
+
+    /*
+     * Functions related to printing the wrapper cpp file
+     */
+    void print_wrapper_routines() override;
+    void print_wrapper_headers_include();
+    void print_data_structures();
+    void print_mechanism_range_var_structure() override;
+    void print_instance_variable_setup() override;
+
+    /**
+     * Print the \c nrn\_init function definition
+     * \param skip_init_check \c true if we want the generated code to execute the initialization
+     *                        conditionally
+     */
+    void print_nrn_init(bool skip_init_check = true) override;
+    /**
+     * Print nrn_state / state update function definition
+     */
+    void print_nrn_state() override;
+    /**
+     * Print nrn_cur / current update function definition
+     */
+    void print_nrn_cur() override;
+    /*
+     * Declare the external compute functions (nrn_init, nrn_cur and nrn_state)
+     */
+    void print_backend_compute_routine_decl() override;
+    /*
+     * Define the wrappers for the external compute functions (nrn_init, nrn_cur and nrn_state)
+     */
+    void print_backend_compute_routine();
+    /*
+     * Print the wrapper routine based on the parameters given
+     * \param wrapper_function The name of the function to wrap
+     * \param type The \c BlockType that this function is based on
+     */
+    void print_wrapper_routine(const std::string& wrapper_function, BlockType type);
+    /*
+     * Function that returns a vector of Parameters needed to be passed to the compute routines.
+     * The first argument should be an object of \c mechanism_instance_struct_type_name
+     */
+    CodegenLLVMVisitor::ParamVector get_compute_function_parameter();
     /// Wraps all kernel function calls into wrapper functions that use `void*` to pass the data to
     /// the kernel.
     void wrap_kernel_functions();

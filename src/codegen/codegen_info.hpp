@@ -568,7 +568,7 @@ struct CodegenInfo {
         if (artificial_cell) {
             return false;
         }
-        return nrn_state_block != nullptr || currents.empty();
+        return nrn_state_block != nullptr || breakpoint_exist();
     }
 
     /**
