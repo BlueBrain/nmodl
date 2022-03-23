@@ -114,12 +114,6 @@ class CodegenLLVMHelperVisitor: public visitor::AstVisitor {
     /// mechanism data helper
     InstanceVarHelper instance_var_helper;
 
-    /// name of the mechanism instance parameter
-    const std::string MECH_INSTANCE_VAR = "mech";
-
-    /// name of induction variable used in the kernel.
-    const std::string INDUCTION_VAR = "id";
-
     /// create new function for FUNCTION or PROCEDURE block
     void create_function_for_node(ast::Block& node);
 
@@ -144,7 +138,7 @@ class CodegenLLVMHelperVisitor: public visitor::AstVisitor {
     }
 
     std::string get_kernel_id() {
-        return INDUCTION_VAR;
+        return naming::INDUCTION_VAR;
     }
 
     /// run visitor and return code generation functions
