@@ -39,7 +39,7 @@ static bool is_supported_statement(const ast::Statement& statement) {
     return statement.is_codegen_atomic_statement() || statement.is_codegen_for_statement() ||
            statement.is_if_statement() || statement.is_codegen_return_statement() ||
            statement.is_codegen_var_list_statement() || statement.is_expression_statement() ||
-           statement.is_while_statement() || statement.is_codegen_thread_id();
+           statement.is_while_statement();
 }
 
 /// A utility to check that the kernel body can be vectorised.
