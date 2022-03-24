@@ -921,16 +921,13 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
 #endif
     }
 
-    // If the output directory is specified, save the IR to .ll file.
-    if (output_dir != ".") {
-        utils::save_ir_to_ll_file(*module, output_dir + "/" + mod_filename);
-    }
-
     logger->debug("Dumping generated IR...\n" + dump_module());
     // Setup CodegenHelper for C++ wrapper file
     setup(node);
+    // Print C++ wrapper file
     print_wrapper_routines();
-    print_target_file();
+    // Print LLVM IR module to <mod_filename>.ll file
+    utils::save_ir_to_ll_file(*module, output_dir + "/" + mod_filename);
 }
 
 void CodegenLLVMVisitor::print_mechanism_range_var_structure() {

@@ -141,10 +141,6 @@ class CodegenLLVMVisitor: public CodegenCVisitor {
         return str;
     }
 
-    void print_target_file() const {
-        target_printer->add_multi_line(dump_module());
-    }
-
     /// Fills the container with the names of kernel functions from the MOD file.
     void find_kernel_names(std::vector<std::string>& container);
 
