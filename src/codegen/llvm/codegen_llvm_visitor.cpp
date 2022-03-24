@@ -889,8 +889,9 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
         throw std::runtime_error("Error: incorrect IR has been generated!\n" + ostream.str());
     }
 
-    if (opt_level_ir) {
-        logger->info("Running LLVM optimisation passes");
+    // Handle optimization passes for GPUs separately.
+    if (platform.is_cpu() && opt_level_ir) {
+        logger->info("Running LLVM optimisation passes for CPU platforms");
         utils::initialise_optimisation_passes();
         utils::optimise_module(*module, opt_level_ir);
     }
@@ -921,7 +922,21 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
 #endif
     }
 
-    logger->debug("Dumping generated IR...\n" + dump_module());
+    // Handle GPU optimizations (CUDA platfroms only for now).
+    if (platform.is_gpu() && opt_level_ir) {
+        // We only support CUDA backends anyway, so this works for now.
+        utils::initialise_nvptx_passes();
+
+        std::string target_asm;
+        utils::optimise_module_for_nvptx(*module, opt_level_ir, target_asm);
+
+        logger->debug("Dumping generated IR...\n" + dump_module());
+        logger->debug("Dumping generated PTX...\n" + target_asm);
+    } else {
+        // Workaround for debug outputs.
+        logger->debug("Dumping generated IR...\n" + dump_module());
+    }
+
     // Setup CodegenHelper for C++ wrapper file
     setup(node);
     // Print C++ wrapper file
