@@ -244,7 +244,7 @@ std::shared_ptr<ast::InstanceStruct> CodegenLLVMHelperVisitor::create_instance_s
     add_var_with_type(naming::NTHREAD_DT_VARIABLE, FLOAT_TYPE, /*is_pointer=*/0);
     add_var_with_type(naming::CELSIUS_VARIABLE, FLOAT_TYPE, /*is_pointer=*/0);
     add_var_with_type(naming::SECOND_ORDER_VARIABLE, INTEGER_TYPE, /*is_pointer=*/0);
-    add_var_with_type(NODECOUNT_VAR, INTEGER_TYPE, /*is_pointer=*/0);
+    add_var_with_type(naming::MECH_NODECOUNT_VAR, INTEGER_TYPE, /*is_pointer=*/0);
 
     return std::make_shared<ast::InstanceStruct>(codegen_vars);
 }
@@ -462,7 +462,7 @@ void CodegenLLVMHelperVisitor::convert_to_instance_variable(ast::Node& node,
         /// instance_var_helper check of instance variables from mod file as well
         /// as extra variables like ion index variables added for code generation
         if (instance_var_helper.is_an_instance_variable(variable_name)) {
-            auto name = new ast::Name(new ast::String(MECH_INSTANCE_VAR));
+            auto name = new ast::Name(new ast::String(naming::MECH_INSTANCE_VAR));
             auto var = std::make_shared<ast::CodegenInstanceVar>(name, variable->clone());
             variable->set_name(var);
         }
@@ -641,7 +641,7 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
     {
         /// access node index and corresponding voltage
         index_statements.push_back(
-            visitor::create_statement("node_id = node_index[{}]"_format(INDUCTION_VAR)));
+            visitor::create_statement("node_id = node_index[{}]"_format(naming::INDUCTION_VAR)));
         body_statements.push_back(
             visitor::create_statement("v = {}[node_id]"_format(VOLTAGE_VAR)));
 
@@ -683,7 +683,7 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
     compute_body.insert(compute_body.end(), index_statements.begin(), index_statements.end());
     compute_body.insert(compute_body.end(), body_statements.begin(), body_statements.end());
 
-    std::vector<std::string> induction_variables{INDUCTION_VAR};
+    std::vector<std::string> induction_variables{naming::INDUCTION_VAR};
     function_statements.push_back(
             create_local_variable_statement(induction_variables, INTEGER_TYPE));
 
@@ -705,7 +705,7 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
     ast::CodegenVarWithTypeVector code_arguments;
 
     auto instance_var_type = new ast::CodegenVarType(ast::AstNodeType::INSTANCE_STRUCT);
-    auto instance_var_name = new ast::Name(new ast::String(MECH_INSTANCE_VAR));
+    auto instance_var_name = new ast::Name(new ast::String(naming::MECH_INSTANCE_VAR));
     auto instance_var = new ast::CodegenVarWithType(instance_var_type, 1, instance_var_name);
     code_arguments.emplace_back(instance_var);
 
@@ -742,9 +742,9 @@ void CodegenLLVMHelperVisitor::create_compute_body_loop(std::shared_ptr<ast::Sta
                                                         std::vector<std::string>& int_variables,
                                                         std::vector<std::string>& double_variables,
                                                         bool is_remainder_loop) {
-    const auto& initialization = loop_initialization_expression(INDUCTION_VAR, is_remainder_loop);
-    const auto& condition = loop_count_expression(INDUCTION_VAR, NODECOUNT_VAR, is_remainder_loop);
-    const auto& increment = loop_increment_expression(INDUCTION_VAR, is_remainder_loop);
+    const auto& initialization = loop_initialization_expression(naming::INDUCTION_VAR, is_remainder_loop);
+    const auto& condition = loop_count_expression(naming::INDUCTION_VAR, NODECOUNT_VAR, is_remainder_loop);
+    const auto& increment = loop_increment_expression(naming::INDUCTION_VAR, is_remainder_loop);
 
     // Clone the statement block if needed since it can be used by the remainder loop.
     auto loop_block = (is_remainder_loop || !platform.is_cpu_with_simd()) ? block : std::shared_ptr<ast::StatementBlock>(block->clone());
@@ -760,7 +760,7 @@ void CodegenLLVMHelperVisitor::create_compute_body_loop(std::shared_ptr<ast::Sta
                                                                loop_block);
 
     // Convert all variables inside loop body to be instance variables.
-    convert_to_instance_variable(*for_loop, INDUCTION_VAR);
+    convert_to_instance_variable(*for_loop, naming::INDUCTION_VAR);
 
     // Rename variables if processing remainder loop.
     if (is_remainder_loop) {
