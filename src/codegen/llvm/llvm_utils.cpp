@@ -80,7 +80,7 @@ void optimise_module_for_nvptx(llvm::Module& module, int opt_level, std::string&
 
     // Hardcode target infromation for now. Change if necessary.
     llvm::Triple triple("nvptx64-nvidia-cuda");
-    std::string subtarget = "sm_20";
+    std::string subtarget = "sm_60";
     std::string features = "+ptx60";
 
     // Find the specified target in registry.

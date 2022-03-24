@@ -923,7 +923,7 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
     }
 
     // Handle GPU optimizations (CUDA platfroms only for now).
-    if (platform.is_gpu() && opt_level_ir) {
+    if (platform.is_gpu()) {
         // We only support CUDA backends anyway, so this works for now.
         utils::initialise_nvptx_passes();
 

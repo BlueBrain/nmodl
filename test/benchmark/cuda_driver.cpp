@@ -113,7 +113,7 @@ void CUDADriver::init(const std::string& gpu, BenchmarkInfo* benchmark_info) {
         throw std::runtime_error("ERROR: Device 0 is not SM 2.0 or greater");
     }
 
-    set_triple_and_data_layout(*module);
+    // set_triple_and_data_layout(*module);
 
     // Save the LLVM IR module to string
     std::string kernel_llvm_ir;
