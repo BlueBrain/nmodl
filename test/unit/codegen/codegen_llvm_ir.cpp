@@ -49,7 +49,7 @@ std::string run_gpu_llvm_visitor(const std::string& text,
     NeuronSolveVisitor().visit_program(*ast);
     SolveBlockVisitor().visit_program(*ast);
 
-    codegen::Platform gpu_platform(codegen::PlatformID::GPU, /*name=*/"nvidia",
+    codegen::Platform gpu_platform(codegen::PlatformID::GPU, /*name=*/"nvptx64",
                                    math_library, use_single_precision, 1);
     codegen::CodegenLLVMVisitor llvm_visitor(
         /*mod_filename=*/"unknown",
@@ -1677,7 +1677,7 @@ SCENARIO("GPU kernel body IR generation", "[visitor][llvm][gpu]") {
 
             // Check target information.
             // TODO: this may change when more platforms are supported.
-            std::regex data_layout(R"(target datalayout = \"e-i64:64-i128:128-v16:16-v32:32-n16:32:64\")");
+            std::regex data_layout(R"(target datalayout = \"e-p:64:64:64-i1:8:8-i8:8:8-i16:16:16-i32:32:32-i64:64:64-f32:32:32-f64:64:64-v16:16:16-v32:32:32-v64:64:64-v128:128:128-n16:32:64\")");
             std::regex triple(R"(nvptx64-nvidia-cuda)");
             REQUIRE(std::regex_search(module_string, m, data_layout));
             REQUIRE(std::regex_search(module_string, m, triple));

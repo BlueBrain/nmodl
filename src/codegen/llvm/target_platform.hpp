@@ -32,11 +32,16 @@ class Platform {
     /// Name of the platform.
     const std::string name = Platform::DEFAULT_PLATFORM_NAME;
 
+    /// Target chip for GPUs.
+    /// TODO: this should only be available to GPUs! If we refactor target
+    /// classes so that GPUPlatform <: Platform, it will be nicer!
+    const std::string subtarget_name = "sm_35";
+
     /// Target-specific id to compare platforms easily.
     PlatformID platform_id;
 
     /// User-provided width that is used to construct LLVM instructions
-    //  and types.
+    ///  and types.
     int instruction_width = 1;
 
     /// Use single-precision floating-point types.
@@ -46,6 +51,19 @@ class Platform {
     std::string math_library = Platform::DEFAULT_MATH_LIBRARY;
 
   public:
+    Platform(PlatformID platform_id,
+             const std::string& name,
+             const std::string& subtarget_name,
+             std::string& math_library,
+             bool use_single_precision = false,
+             int instruction_width = 1)
+              : platform_id(platform_id)
+              , name(name)
+              , subtarget_name(subtarget_name)
+              , math_library(math_library)
+              , use_single_precision(use_single_precision)
+              , instruction_width(instruction_width) {}
+
     Platform(PlatformID platform_id,
              const std::string& name,
              std::string& math_library,
@@ -77,9 +95,14 @@ class Platform {
     /// Checks if this platform is a GPU.
     bool is_gpu();
 
+    /// Checks if this platform is CUDA platform.
+    bool is_CUDA_gpu();
+
     bool is_single_precision();
 
     std::string get_name() const;
+
+    std::string get_subtarget_name() const;
 
     std::string get_math_library() const;
 

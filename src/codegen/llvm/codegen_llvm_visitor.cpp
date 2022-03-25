@@ -917,12 +917,15 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
     }
 
     // Handle GPU optimizations (CUDA platfroms only for now).
-    if (platform.is_gpu() && opt_level_ir) {
+    if (platform.is_gpu()) {
+        if (!platform.is_CUDA_gpu())
+            throw std::runtime_error("Error: unsupported GPU architecture!\n");
+
         // We only support CUDA backends anyway, so this works for now.
         utils::initialise_nvptx_passes();
 
         std::string target_asm;
-        utils::optimise_module_for_nvptx(*module, opt_level_ir, target_asm);
+        utils::optimise_module_for_nvptx(platform, *module, opt_level_ir, target_asm);
 
         logger->debug("Dumping generated IR...\n" + dump_module());
         logger->debug("Dumping generated PTX...\n" + target_asm);
