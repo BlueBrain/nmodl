@@ -7,6 +7,8 @@
 
 #include "codegen/llvm/target_platform.hpp"
 
+#include <stdexcept>
+
 namespace nmodl {
 namespace codegen {
 
