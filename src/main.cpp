@@ -374,9 +374,12 @@ int main(int argc, const char* argv[]) {
 
     auto gpu_opt = app.add_subcommand("gpu", "LLVM GPU option")->ignore_case();
     gpu_opt->needs(llvm_opt);
-    gpu_opt->add_option("--name",
+    auto gpu_target_name = gpu_opt->add_option("--name",
         llvm_gpu_name,
         "Name of GPU platform to use")->ignore_case();
+   gpu_opt->add_option("--target-chip",
+        llvm_cpu_name,
+        "Name of target chip to use")->ignore_case();
     auto gpu_math_library_opt = gpu_opt->add_option("--math-library",
         llvm_math_library,
         "Math library for GPU code generation ({})"_format(llvm_math_library));

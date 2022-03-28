@@ -7,6 +7,8 @@
 
 #include "codegen/llvm/target_platform.hpp"
 
+#include <stdexcept>
+
 namespace nmodl {
 namespace codegen {
 
@@ -30,12 +32,22 @@ bool Platform::is_gpu() {
     return platform_id == PlatformID::GPU;
 }
 
+bool Platform::is_CUDA_gpu() {
+  return platform_id == PlatformID::GPU && (name == "nvptx" || name == "nvptx64");
+}
+
 bool Platform::is_single_precision() {
   return use_single_precision;
 }
 
 std::string Platform::get_name() const {
     return name;
+}
+
+std::string Platform::get_subtarget_name() const {
+    if (platform_id != PlatformID::GPU)
+        throw std::runtime_error("Error: platform must be a GPU to query the subtarget!\n");
+    return subtarget_name;
 }
 
 std::string Platform::get_math_library() const {
