@@ -82,14 +82,6 @@ void print_ptx_to_file(const std::string& ptx_compiled_module, const std::string
     ptx_file.close();
 }
 
-/// Sets the target triple and the data layout of the module.
-void set_triple_and_data_layout(llvm::Module& module) {
-    module.setDataLayout(
-        "e-p:64:64:64-i1:8:8-i8:8:8-i16:16:16-i32:32:32-i64:64:64-f32:32:32-f64:64:64-v16:16:16-"
-        "v32:32:32-v64:64:64-v128:128:128-n16:32:64");
-    module.setTargetTriple("nvptx64-nvidia-cuda");
-}
-
 void CUDADriver::init(const std::string& gpu, BenchmarkInfo* benchmark_info) {
     // CUDA initialization
     checkCudaErrors(cuInit(0));
@@ -112,8 +104,6 @@ void CUDADriver::init(const std::string& gpu, BenchmarkInfo* benchmark_info) {
     if (device_info.compute_version_major < 2) {
         throw std::runtime_error("ERROR: Device 0 is not SM 2.0 or greater");
     }
-
-    // set_triple_and_data_layout(*module);
 
     // Save the LLVM IR module to string
     std::string kernel_llvm_ir;
