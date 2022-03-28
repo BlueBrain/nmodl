@@ -369,9 +369,12 @@ int main(int argc, const char* argv[]) {
 
     auto gpu_opt = app.add_subcommand("gpu", "LLVM GPU option")->ignore_case();
     gpu_opt->needs(llvm_opt);
-    gpu_opt->add_option("--name",
+    auto gpu_target_name = gpu_opt->add_option("--name",
         llvm_gpu_name,
         "Name of GPU platform to use")->ignore_case();
+   gpu_opt->add_option("--target-chip",
+        llvm_cpu_name,
+        "Name of target chip to use")->ignore_case();
     auto gpu_math_library_opt = gpu_opt->add_option("--math-library",
         llvm_math_library,
         "Math library for GPU code generation ({})"_format(llvm_math_library));
@@ -715,7 +718,7 @@ int main(int argc, const char* argv[]) {
                                                           : PlatformID::GPU;
               const std::string name =
                   llvm_gpu_name == "default" ? llvm_cpu_name : llvm_gpu_name;
-              Platform platform(pid, name, llvm_math_library, llvm_float_type,
+              Platform platform(pid, name, llvm_cpu_name, llvm_math_library, llvm_float_type,
                                 llvm_vector_width);
 
               logger->info("Running LLVM backend code generator");
