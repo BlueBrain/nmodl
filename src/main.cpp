@@ -753,7 +753,7 @@ int main(int argc, const char* argv[]) {
 
                 if (llvm_benchmark) {
                     logger->info("Running LLVM benchmark");
-                    if (llvm_gpu_name == "cuda") {
+                    if (platform.is_gpu()) {
                         const GPUExecutionParameters gpu_execution_parameters{
                             llvm_cuda_grid_dim_x,
                             llvm_cuda_grid_dim_y,

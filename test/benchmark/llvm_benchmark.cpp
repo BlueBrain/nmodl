@@ -23,7 +23,7 @@ void LLVMBenchmark::run(const std::shared_ptr<ast::Program>& node) {
     // create functions
     generate_llvm(node);
     // Finally, run the benchmark and log the measurements.
-    if (platform.get_name() == "cuda") {
+    if (platform.is_CUDA_gpu()) {
         run_benchmark_on_gpu(node);
     } else {
         run_benchmark_on_cpu(node);
