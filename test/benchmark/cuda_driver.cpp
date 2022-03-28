@@ -16,6 +16,8 @@
 #include "fmt/format.h"
 #include "utils/common_utils.hpp"
 
+#include "llvm/Bitcode/BitcodeWriter.h"
+
 using fmt::literals::operator""_format;
 
 namespace nmodl {
@@ -76,10 +78,18 @@ auto get_compilation_options(int compute_version_major, BenchmarkInfo* benchmark
     return compilation_options;
 }
 
-void print_ptx_to_file(const std::string& ptx_compiled_module, const std::string& filename) {
+void print_string_to_file(const std::string& ptx_compiled_module, const std::string& filename) {
     std::ofstream ptx_file(filename);
     ptx_file << ptx_compiled_module;
     ptx_file.close();
+}
+
+std::string print_bitcode_to_string(const llvm::Module& module) {
+    std::string bitcode_string;
+    llvm::raw_string_ostream os(bitcode_string);
+    WriteBitcodeToFile(module, os);
+    os.flush();
+    return bitcode_string;
 }
 
 void CUDADriver::init(const std::string& gpu, BenchmarkInfo* benchmark_info) {
@@ -105,11 +115,8 @@ void CUDADriver::init(const std::string& gpu, BenchmarkInfo* benchmark_info) {
         throw std::runtime_error("ERROR: Device 0 is not SM 2.0 or greater");
     }
 
-    // Save the LLVM IR module to string
-    std::string kernel_llvm_ir;
-    llvm::raw_string_ostream os(kernel_llvm_ir);
-    os << *module;
-    os.flush();
+    // Save the LLVM module bitcode to string
+    std::string kernel_bitcode = print_bitcode_to_string(*module);
 
     // Create NVVM program object
     checkNVVMErrors(nvvmCreateProgram(&prog));
@@ -120,7 +127,7 @@ void CUDADriver::init(const std::string& gpu, BenchmarkInfo* benchmark_info) {
 
     // Add custom IR to program
     checkNVVMErrors(nvvmAddModuleToProgram(
-        prog, kernel_llvm_ir.c_str(), kernel_llvm_ir.size(), "nmodl_llvm_ir"));
+        prog, kernel_bitcode.c_str(), kernel_bitcode.size(), "nmodl_kernel"));
 
     // Declare compile options
     auto compilation_options = get_compilation_options(device_info.compute_version_major,
@@ -143,8 +150,8 @@ void CUDADriver::init(const std::string& gpu, BenchmarkInfo* benchmark_info) {
     nvvmGetCompiledResult(prog, compiled_module);
     ptx_compiled_module = std::string(compiled_module);
     free(compiled_module);
-    print_ptx_to_file(ptx_compiled_module,
-                      benchmark_info->output_dir + "/" + benchmark_info->filename + ".ptx");
+    print_string_to_file(ptx_compiled_module,
+                         benchmark_info->output_dir + "/" + benchmark_info->filename + ".ptx");
 
     // Create driver context
     checkCudaErrors(cuCtxCreate(&context, 0, device));
