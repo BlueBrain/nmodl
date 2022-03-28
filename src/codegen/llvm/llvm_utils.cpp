@@ -95,8 +95,8 @@ void optimise_module_for_nvptx(codegen::Platform& platform,
                         "-v64:64:64-v128:128:128-n16:32:64"}};
 
     // Set data layout and target triple information for the module.
-    auto triple = triple_str.find(platform_name)->second;
-    module.setDataLayout(data_layout_str.find(platform_name)->second);
+    auto triple = triple_str.at(platform_name);
+    module.setDataLayout(data_layout_str.at(platform_name);
     module.setTargetTriple(triple);
 
     std::string subtarget = platform.get_subtarget_name();
