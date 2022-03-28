@@ -377,7 +377,8 @@ int main(int argc, const char* argv[]) {
     auto gpu_target_name = gpu_opt->add_option("--name",
         llvm_gpu_name,
         "Name of GPU platform to use")->ignore_case();
-   gpu_opt->add_option("--target-chip",
+    gpu_target_name->check(CLI::IsMember({"nvptx", "nvptx64"}));
+    gpu_opt->add_option("--target-chip",
         llvm_cpu_name,
         "Name of target chip to use")->ignore_case();
     auto gpu_math_library_opt = gpu_opt->add_option("--math-library",
@@ -753,6 +754,10 @@ int main(int argc, const char* argv[]) {
 
                 if (llvm_benchmark) {
                     logger->info("Running LLVM benchmark");
+                    if (platform.is_gpu() && !platform.is_CUDA_gpu()) {
+                        throw std::runtime_error(
+                            "Benchmarking is only supported on CUDA GPUs at the moment");
+                    }
                     if (platform.is_gpu()) {
                         const GPUExecutionParameters gpu_execution_parameters{
                             llvm_cuda_grid_dim_x,
