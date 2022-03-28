@@ -49,7 +49,7 @@ std::string run_gpu_llvm_visitor(const std::string& text,
     NeuronSolveVisitor().visit_program(*ast);
     SolveBlockVisitor().visit_program(*ast);
 
-    codegen::Platform gpu_platform(codegen::PlatformID::GPU, /*name=*/"nvidia",
+    codegen::Platform gpu_platform(codegen::PlatformID::GPU, /*name=*/"nvptx64",
                                    math_library, use_single_precision, 1);
     codegen::CodegenLLVMVisitor llvm_visitor(
         /*mod_filename=*/"unknown",
@@ -1646,6 +1646,49 @@ SCENARIO("GPU kernel body IR generation", "[visitor][llvm][gpu]") {
             REQUIRE(std::regex_search(module_string, m, block_dim));
             REQUIRE(std::regex_search(module_string, m, tid));
             REQUIRE(std::regex_search(module_string, m, grid_dim));
+        }
+    }
+
+    GIVEN("When optimizing for GPU platforms") {
+        std::string nmodl_text = R"(
+            NEURON {
+                SUFFIX test
+                RANGE x, y
+            }
+
+            ASSIGNED { x y }
+
+            STATE { m }
+
+            BREAKPOINT {
+                SOLVE states METHOD cnexp
+            }
+
+            DERIVATIVE states {
+              m = y + 2
+            }
+        )";
+
+        THEN("address spaces are inferred and target information added") {
+            std::string module_string = run_gpu_llvm_visitor(nmodl_text,
+                                                             /*opt_level=*/3,
+                                                             /*use_single_precision=*/false);
+            std::smatch m;
+
+            // Check target information.
+            // TODO: this may change when more platforms are supported.
+            std::regex data_layout(R"(target datalayout = \"e-p:64:64:64-i1:8:8-i8:8:8-i16:16:16-i32:32:32-i64:64:64-f32:32:32-f64:64:64-v16:16:16-v32:32:32-v64:64:64-v128:128:128-n16:32:64\")");
+            std::regex triple(R"(nvptx64-nvidia-cuda)");
+            REQUIRE(std::regex_search(module_string, m, data_layout));
+            REQUIRE(std::regex_search(module_string, m, triple));
+
+            // Check for address space casts and address spaces in general when loading data.
+            std::regex as_cast(R"(addrspacecast %.*__instance_var__type\* %.* to %.*__instance_var__type addrspace\(1\)\*)");
+            std::regex gep_as1(R"(getelementptr inbounds %.*__instance_var__type, %.*__instance_var__type addrspace\(1\)\* %.*, i64 0, i32 .*)");
+            std::regex load_as1(R"(load double\*, double\* addrspace\(1\)\* %.*)");
+            REQUIRE(std::regex_search(module_string, m, as_cast));
+            REQUIRE(std::regex_search(module_string, m, gep_as1));
+            REQUIRE(std::regex_search(module_string, m, load_as1));
         }
     }
 }

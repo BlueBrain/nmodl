@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include "codegen/llvm/target_platform.hpp"
+
 #include "llvm/IR/Module.h"
 #include "llvm/Support/TargetRegistry.h"
 
@@ -15,6 +17,15 @@ namespace utils {
 
 /// Initialises some LLVM optimisation passes.
 void initialise_optimisation_passes();
+
+/// Initialises NVPTX-specific optimisation passes.
+void initialise_nvptx_passes();
+
+/// Optimises the given LLVM IR module for NVPTX targets.
+void optimise_module_for_nvptx(codegen::Platform& platform,
+                               llvm::Module& module,
+                               int opt_level,
+                               std::string& target_asm);
 
 /// Optimises the given LLVM IR module.
 void optimise_module(llvm::Module& module, int opt_level, llvm::TargetMachine* tm = nullptr);
