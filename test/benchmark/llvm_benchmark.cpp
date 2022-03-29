@@ -63,12 +63,8 @@ void LLVMBenchmark::run_benchmark(const std::shared_ptr<ast::Program>& node) {
 #ifdef NMODL_LLVM_CUDA_BACKEND
     if (platform.is_CUDA_gpu()) {
         std::string filename = "cuda_" + mod_filename;
-        cuda_runner = std::make_unique<runner::BenchmarkGPURunner>(std::move(m),
-                                                                   filename,
-                                                                   output_dir,
-                                                                   shared_libs,
-                                                                   opt_level_ir,
-                                                                   opt_level_codegen);
+        cuda_runner = std::make_unique<runner::BenchmarkGPURunner>(
+            std::move(m), filename, output_dir, shared_libs, opt_level_ir, opt_level_codegen);
         cuda_runner->initialize_driver();
     } else {
 #endif

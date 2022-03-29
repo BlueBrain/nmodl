@@ -87,14 +87,13 @@ class CUDADriver {
     /// Initializes the CUDA GPU JIT driver.
     void init(BenchmarkInfo* benchmark_info = nullptr);
 
-    /// Lookups the entry-point without arguments in the CUDA module and executes it.
-    void execute_without_arguments(const std::string& entry_point,
-                                   const GPUExecutionParameters& gpu_execution_parameters) {
+    void launch_cuda_kernel(const std::string& entry_point,
+                            const GPUExecutionParameters& gpu_execution_parameters,
+                            void* kernel_parameters) {
         // Get kernel function
         checkCudaErrors(cuModuleGetFunction(&function, cudaModule, entry_point.c_str()));
 
         // Kernel launch
-        void* kernel_parameters[] = {};
         checkCudaErrors(cuLaunchKernel(function,
                                        gpu_execution_parameters.gridDimX,
                                        1,
@@ -104,9 +103,15 @@ class CUDADriver {
                                        1,
                                        0,
                                        nullptr,
-                                       kernel_parameters,
+                                       &kernel_parameters,
                                        nullptr));
         cudaDeviceSynchronize();
+    }
+
+    /// Lookups the entry-point without arguments in the CUDA module and executes it.
+    void execute_without_arguments(const std::string& entry_point,
+                                   const GPUExecutionParameters& gpu_execution_parameters) {
+        launch_cuda_kernel(entry_point, gpu_execution_parameters, {});
     }
 
     /// Lookups the entry-point with arguments in the CUDA module and executes it.
@@ -114,24 +119,7 @@ class CUDADriver {
     void execute_with_arguments(const std::string& entry_point,
                                 ArgType arg,
                                 const GPUExecutionParameters& gpu_execution_parameters) {
-        // Get kernel function
-        logger->info("Executing kernel {}", entry_point);
-        checkCudaErrors(cuModuleGetFunction(&function, cudaModule, entry_point.c_str()));
-
-        // Kernel launch
-        void* kernel_parameters[] = {&arg};
-        checkCudaErrors(cuLaunchKernel(function,
-                                       gpu_execution_parameters.gridDimX,
-                                       1,
-                                       1,
-                                       gpu_execution_parameters.blockDimX,
-                                       1,
-                                       1,
-                                       0,
-                                       nullptr,
-                                       kernel_parameters,
-                                       nullptr));
-        cudaDeviceSynchronize();
+        launch_cuda_kernel(entry_point, gpu_execution_parameters, {&arg});
     }
 };
 
