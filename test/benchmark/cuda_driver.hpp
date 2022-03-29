@@ -171,11 +171,8 @@ class BaseGPURunner {
  * \brief A simple runner for testing purposes.
  */
 class TestGPURunner: public BaseGPURunner {
-    /// GPU backend to target.
-    std::string backend;
-
   public:
-    explicit TestGPURunner(std::unique_ptr<llvm::Module> m, std::string backend)
+    explicit TestGPURunner(std::unique_ptr<llvm::Module> m)
         : BaseGPURunner(std::move(m)) {}
 
     virtual void initialize_driver() {
@@ -193,19 +190,14 @@ class BenchmarkGPURunner: public BaseGPURunner {
     /// Benchmarking information passed to JIT driver.
     BenchmarkInfo benchmark_info;
 
-    /// Beckend to target.
-    std::string backend;
-
   public:
     BenchmarkGPURunner(std::unique_ptr<llvm::Module> m,
                        std::string filename,
                        std::string output_dir,
-                       std::string backend,
                        std::vector<std::string> lib_paths = {},
                        int opt_level_ir = 0,
                        int opt_level_codegen = 0)
         : BaseGPURunner(std::move(m))
-        , backend(backend)
         , benchmark_info{filename, output_dir, lib_paths, opt_level_ir, opt_level_codegen} {}
 
     virtual void initialize_driver() {

@@ -66,7 +66,6 @@ void LLVMBenchmark::run_benchmark(const std::shared_ptr<ast::Program>& node) {
         cuda_runner = std::make_unique<runner::BenchmarkGPURunner>(std::move(m),
                                                                    filename,
                                                                    output_dir,
-                                                                   backend_name,
                                                                    shared_libs,
                                                                    opt_level_ir,
                                                                    opt_level_codegen);
