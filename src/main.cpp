@@ -200,20 +200,8 @@ int main(int argc, const char* argv[]) {
     /// X dimension of grid in blocks for GPU execution
     int llvm_cuda_grid_dim_x = 1;
 
-    /// Y dimension of grid in blocks for GPU execution
-    int llvm_cuda_grid_dim_y = 1;
-
-    /// Z dimension of grid in blocks for GPU execution
-    int llvm_cuda_grid_dim_z = 1;
-
     /// X dimension of block in threads for GPU execution
     int llvm_cuda_block_dim_x = 1;
-
-    /// Y dimension of block in threads for GPU execution
-    int llvm_cuda_block_dim_y = 1;
-
-    /// Z dimension of block in threads for GPU execution
-    int llvm_cuda_block_dim_z = 1;
 
     /// run llvm benchmark
     bool llvm_benchmark(false);
@@ -408,24 +396,12 @@ int main(int argc, const char* argv[]) {
     benchmark_opt->add_option("--repeat",
                               num_experiments,
                               "Number of experiments for benchmarking ({})"_format(num_experiments))->ignore_case();
-    benchmark_opt->add_option("--gridDimX",
+    benchmark_opt->add_option("--grid-dim-x",
                               llvm_cuda_grid_dim_x,
                               "Grid dimension X ({})"_format(llvm_cuda_grid_dim_x))->ignore_case();
-    benchmark_opt->add_option("--gridDimY",
-                                llvm_cuda_grid_dim_y,
-                                "Grid dimension Y ({})"_format(llvm_cuda_grid_dim_y))->ignore_case();
-    benchmark_opt->add_option("--gridDimZ",
-                                llvm_cuda_grid_dim_z,
-                                "Grid dimension Z ({})"_format(llvm_cuda_grid_dim_z))->ignore_case();
-    benchmark_opt->add_option("--blockDimX",
+    benchmark_opt->add_option("--block-dim-x",
                                 llvm_cuda_block_dim_x,
                                 "Block dimension X ({})"_format(llvm_cuda_block_dim_x))->ignore_case();
-    benchmark_opt->add_option("--blockDimY",
-                                llvm_cuda_block_dim_y,
-                                "Block dimension Y ({})"_format(llvm_cuda_block_dim_y))->ignore_case();
-    benchmark_opt->add_option("--blockDimZ",
-                                llvm_cuda_block_dim_z,
-                                "Block dimension Z ({})"_format(llvm_cuda_block_dim_z))->ignore_case();
 #endif
     // clang-format on
 
