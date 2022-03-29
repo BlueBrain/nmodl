@@ -378,9 +378,9 @@ int main(int argc, const char* argv[]) {
         llvm_gpu_name,
         "Name of GPU platform to use")->ignore_case();
     gpu_target_name->check(CLI::IsMember({"nvptx", "nvptx64"}));
-    gpu_opt->add_option("--target-chip",
+    gpu_opt->add_option("--target-arch",
         llvm_cpu_name,
-        "Name of target chip to use")->ignore_case();
+        "Name of target architecture to use")->ignore_case();
     auto gpu_math_library_opt = gpu_opt->add_option("--math-library",
         llvm_math_library,
         "Math library for GPU code generation ({})"_format(llvm_math_library));
