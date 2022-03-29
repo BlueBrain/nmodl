@@ -105,7 +105,10 @@ class CUDADriver {
                                        nullptr,
                                        &kernel_parameters,
                                        nullptr));
-        cudaDeviceSynchronize();
+        auto asyncErr = cudaDeviceSynchronize();
+        if (asyncErr != cudaSuccess) {
+            throw std::runtime_error("CUDA Execution Error: {}\n"_format(cudaGetErrorString(asyncErr)));
+        }
     }
 
     /// Lookups the entry-point without arguments in the CUDA module and executes it.
