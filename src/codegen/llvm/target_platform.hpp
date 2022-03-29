@@ -84,19 +84,19 @@ class Platform {
     Platform() : platform_id(PlatformID::CPU) {}
 
     /// Checks if this platform is a default platform.
-    bool is_default_platform();
+    bool is_default_platform() const;
 
     /// Checks if this platform is a CPU.
-    bool is_cpu();
+    bool is_cpu() const;
 
     /// Checks if this platform is a CPU with SIMD support.
-    bool is_cpu_with_simd();
+    bool is_cpu_with_simd() const;
 
     /// Checks if this platform is a GPU.
-    bool is_gpu();
+    bool is_gpu() const;
 
     /// Checks if this platform is CUDA platform.
-    bool is_CUDA_gpu();
+    bool is_CUDA_gpu() const;
 
     bool is_single_precision();
 

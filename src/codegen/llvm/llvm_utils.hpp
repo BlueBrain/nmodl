@@ -21,6 +21,10 @@ void initialise_optimisation_passes();
 /// Initialises NVPTX-specific optimisation passes.
 void initialise_nvptx_passes();
 
+/// Replaces calls to LLVM intrinsics with appropriate library calls.
+void replace_with_lib_functions(codegen::Platform& platform,
+                                llvm::Module& module);
+
 /// Optimises the given LLVM IR module for NVPTX targets.
 void optimise_module_for_nvptx(codegen::Platform& platform,
                                llvm::Module& module,
@@ -30,7 +34,7 @@ void optimise_module_for_nvptx(codegen::Platform& platform,
 /// Optimises the given LLVM IR module.
 void optimise_module(llvm::Module& module, int opt_level, llvm::TargetMachine* tm = nullptr);
 
-///
+/// Saves generated IR module to .ll file.
 void save_ir_to_ll_file(llvm::Module& module, const std::string& filename);
 
 }  // namespace utils
