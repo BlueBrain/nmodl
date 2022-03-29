@@ -734,32 +734,19 @@ int main(int argc, const char* argv[]) {
                         throw std::runtime_error(
                             "Benchmarking is only supported on CUDA GPUs at the moment");
                     }
-                    if (platform.is_gpu()) {
-                        const GPUExecutionParameters gpu_execution_parameters{
-                            llvm_cuda_grid_dim_x, llvm_cuda_block_dim_x};
-                        benchmark::LLVMBenchmark benchmark(visitor,
-                                                           modfile,
-                                                           output_dir,
-                                                           shared_lib_paths,
-                                                           num_experiments,
-                                                           instance_size,
-                                                           platform,
-                                                           llvm_opt_level_ir,
-                                                           llvm_opt_level_codegen,
-                                                           gpu_execution_parameters);
-                        benchmark.run(ast);
-                    } else {
-                        benchmark::LLVMBenchmark benchmark(visitor,
-                                                           modfile,
-                                                           output_dir,
-                                                           shared_lib_paths,
-                                                           num_experiments,
-                                                           instance_size,
-                                                           platform,
-                                                           llvm_opt_level_ir,
-                                                           llvm_opt_level_codegen);
-                        benchmark.run(ast);
-                    }
+                    const GPUExecutionParameters gpu_execution_parameters{llvm_cuda_grid_dim_x,
+                                                                          llvm_cuda_block_dim_x};
+                    benchmark::LLVMBenchmark benchmark(visitor,
+                                                       modfile,
+                                                       output_dir,
+                                                       shared_lib_paths,
+                                                       num_experiments,
+                                                       instance_size,
+                                                       platform,
+                                                       llvm_opt_level_ir,
+                                                       llvm_opt_level_codegen,
+                                                       gpu_execution_parameters);
+                    benchmark.run(ast);
                 }
             }
 #endif
