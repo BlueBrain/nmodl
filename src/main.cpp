@@ -736,12 +736,7 @@ int main(int argc, const char* argv[]) {
                     }
                     if (platform.is_gpu()) {
                         const GPUExecutionParameters gpu_execution_parameters{
-                            llvm_cuda_grid_dim_x,
-                            llvm_cuda_grid_dim_y,
-                            llvm_cuda_grid_dim_z,
-                            llvm_cuda_block_dim_x,
-                            llvm_cuda_block_dim_y,
-                            llvm_cuda_block_dim_z};
+                            llvm_cuda_grid_dim_x, llvm_cuda_block_dim_x};
                         benchmark::LLVMBenchmark benchmark(visitor,
                                                            modfile,
                                                            output_dir,
