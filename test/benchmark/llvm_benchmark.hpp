@@ -65,8 +65,10 @@ class LLVMBenchmark {
     /// CPU benchmark runner
     std::unique_ptr<runner::BenchmarkRunner> cpu_runner;
 
+#ifdef NMODL_LLVM_CUDA_BACKEND
     /// CUDA benchmark runner
     std::unique_ptr<runner::BenchmarkGPURunner> cuda_runner;
+#endif
 
   public:
     LLVMBenchmark(codegen::CodegenLLVMVisitor& llvm_visitor,

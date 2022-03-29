@@ -24,6 +24,7 @@ option(NMODL_ENABLE_PYTHON_BINDINGS "Enable pybind11 based python bindings" OFF)
 option(NMODL_ENABLE_LEGACY_UNITS "Use original faraday, R, etc. instead of 2019 nist constants" OFF)
 option(NMODL_ENABLE_LLVM "Enable LLVM based code generation" ON)
 option(NMODL_ENABLE_LLVM_GPU "Enable LLVM based GPU code generation" ON)
+option(NMODL_ENABLE_LLVM_CUDA "Enable LLVM CUDA backend to run GPU benchmark" OFF)
 option(NMODL_ENABLE_JIT_EVENT_LISTENERS "Enable JITEventListener for Perf and Vtune" OFF)
 
 if(NMODL_ENABLE_LEGACY_UNITS)
