@@ -104,7 +104,7 @@ void LLVMBenchmark::run_benchmark(const std::shared_ptr<ast::Program>& node) {
             auto start = std::chrono::steady_clock::now();
 #ifdef NMODL_LLVM_CUDA_BACKEND
             if (platform.is_CUDA_gpu()) {
-                cuda_runner->run_with_argument<void*>(kernel_name,
+                cuda_runner->run_with_argument<void*>(wrapper_name,
                                                       instance_data.base_ptr,
                                                       gpu_execution_parameters);
             } else {

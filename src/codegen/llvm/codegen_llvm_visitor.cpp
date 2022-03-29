@@ -465,10 +465,6 @@ void CodegenLLVMVisitor::write_to_variable(const ast::VarName& node, llvm::Value
 }
 
 void CodegenLLVMVisitor::wrap_kernel_functions() {
-    // Wrapper doesn't work on GPU
-    if (platform.is_gpu()) {
-        return;
-    }
     // First, identify all kernels.
     std::vector<std::string> kernel_names;
     find_kernel_names(kernel_names);
@@ -478,10 +474,15 @@ void CodegenLLVMVisitor::wrap_kernel_functions() {
         auto kernel = module->getFunction(kernel_name);
 
         // Create a wrapper void function that takes a void pointer as a single argument.
-        llvm::Type* i32_type = ir_builder.get_i32_type();
+        llvm::Type* return_type;
+        if (platform.is_gpu()) {
+            return_type = ir_builder.get_void_type();
+        } else {
+            return_type = ir_builder.get_i32_type();
+        }
         llvm::Type* void_ptr_type = ir_builder.get_i8_ptr_type();
         llvm::Function* wrapper_func = llvm::Function::Create(
-            llvm::FunctionType::get(i32_type, {void_ptr_type}, /*isVarArg=*/false),
+            llvm::FunctionType::get(return_type, {void_ptr_type}, /*isVarArg=*/false),
             llvm::Function::ExternalLinkage,
             "__" + kernel_name + "_wrapper",
             *module);
@@ -501,9 +502,20 @@ void CodegenLLVMVisitor::wrap_kernel_functions() {
         args.push_back(bitcasted);
         ir_builder.create_function_call(kernel, args, /*use_result=*/false);
 
-        // Create a 0 return value and a return instruction.
-        ir_builder.create_i32_constant(0);
-        ir_builder.create_return(ir_builder.pop_last_value());
+        // create return instructions and annotate wrapper with certain attributes depending on
+        // the backend type
+        if (platform.is_gpu()) {
+            // return void
+            ir_builder.create_return();
+            annotate_kernel_with_nvvm(wrapper_func);
+        } else {
+            // Create a 0 return value and a return instruction.
+            ir_builder.create_i32_constant(0);
+            ir_builder.create_return(ir_builder.pop_last_value());
+            ir_builder.set_function(wrapper_func);
+            ir_builder.set_kernel_attributes();
+        }
+        ir_builder.clear_function();
     }
 }
 
