@@ -92,7 +92,7 @@ std::string print_bitcode_to_string(const llvm::Module& module) {
     return bitcode_string;
 }
 
-void CUDADriver::init(const std::string& gpu, BenchmarkInfo* benchmark_info) {
+void CUDADriver::init(BenchmarkInfo* benchmark_info) {
     // CUDA initialization
     checkCudaErrors(cuInit(0));
     checkCudaErrors(cuDeviceGetCount(&device_info.count));

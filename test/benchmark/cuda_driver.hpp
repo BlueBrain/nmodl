@@ -85,7 +85,7 @@ class CUDADriver {
         : module(std::move(m)) {}
 
     /// Initializes the CUDA GPU JIT driver.
-    void init(const std::string& gpu, BenchmarkInfo* benchmark_info = nullptr);
+    void init(BenchmarkInfo* benchmark_info = nullptr);
 
     /// Lookups the entry-point without arguments in the CUDA module and executes it.
     void execute_without_arguments(const std::string& entry_point,
@@ -179,7 +179,7 @@ class TestGPURunner: public BaseGPURunner {
         : BaseGPURunner(std::move(m)) {}
 
     virtual void initialize_driver() {
-        driver->init(backend);
+        driver->init();
     }
 };
 
@@ -209,7 +209,7 @@ class BenchmarkGPURunner: public BaseGPURunner {
         , benchmark_info{filename, output_dir, lib_paths, opt_level_ir, opt_level_codegen} {}
 
     virtual void initialize_driver() {
-        driver->init(backend, &benchmark_info);
+        driver->init(&benchmark_info);
     }
 };
 
