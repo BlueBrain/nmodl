@@ -734,6 +734,13 @@ int main(int argc, const char* argv[]) {
                         throw std::runtime_error(
                             "Benchmarking is only supported on CUDA GPUs at the moment");
                     }
+#ifndef NMODL_LLVM_CUDA_BACKEND
+                    if (platform.is_CUDA_gpu()) {
+                        throw std::runtime_error(
+                            "GPU benchmarking is not supported if NMODL is not built with CUDA "
+                            "backend enabled.");
+                    }
+#endif
                     const GPUExecutionParameters gpu_execution_parameters{llvm_cuda_grid_dim_x,
                                                                           llvm_cuda_block_dim_x};
                     benchmark::LLVMBenchmark benchmark(visitor,

@@ -12,6 +12,8 @@
 
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
 #include "gpu_parameters.hpp"
+#include "test/benchmark/cuda_driver.hpp"
+#include "test/benchmark/jit_driver.hpp"
 #include "utils/logger.hpp"
 
 using nmodl::codegen::Platform;
@@ -60,6 +62,12 @@ class LLVMBenchmark {
     /// Filestream for dumping logs to the file.
     std::ofstream ofs;
 
+    /// CPU benchmark runner
+    std::unique_ptr<runner::BenchmarkRunner> cpu_runner;
+
+    /// CUDA benchmark runner
+    std::unique_ptr<runner::BenchmarkGPURunner> cuda_runner;
+
   public:
     LLVMBenchmark(codegen::CodegenLLVMVisitor& llvm_visitor,
                   const std::string& mod_filename,
@@ -107,11 +115,8 @@ class LLVMBenchmark {
     /// Visits the AST to construct the LLVM IR module.
     void generate_llvm(const std::shared_ptr<ast::Program>& node);
 
-    /// Runs the main body of the benchmark, executing the compute kernels on CPU.
-    void run_benchmark_on_cpu(const std::shared_ptr<ast::Program>& node);
-
-    /// Runs the main body of the benchmark, executing the compute kernels on GPU.
-    void run_benchmark_on_gpu(const std::shared_ptr<ast::Program>& node);
+    /// Runs the main body of the benchmark, executing the compute kernels on CPU or GPU.
+    void run_benchmark(const std::shared_ptr<ast::Program>& node);
 
     /// Sets the log output stream (file or console).
     void set_log_output();
