@@ -35,8 +35,8 @@ void CUDADriver::checkNVVMErrors(nvvmResult err) {
     if (err != NVVM_SUCCESS) {
         size_t program_log_size;
         nvvmGetProgramLogSize(prog, &program_log_size);
-        auto program_log = (char*) malloc(program_log_size);
-        nvvmGetProgramLog(prog, program_log);
+        std::string program_log(program_log_size, '\0');
+        nvvmGetProgramLog(prog, &program_log.front());
         throw std::runtime_error(
             "Compilation Log:\n {}\nNVVM Error: {}\n"_format(program_log, nvvmGetErrorString(err)));
     }
@@ -143,13 +143,10 @@ void CUDADriver::init(const std::string& gpu, BenchmarkInfo* benchmark_info) {
                                        compilation_options_c_str.data()));
 
     // Get compiled module
-    char* compiled_module;
     size_t compiled_module_size;
     nvvmGetCompiledResultSize(prog, &compiled_module_size);
-    compiled_module = (char*) malloc(compiled_module_size);
-    nvvmGetCompiledResult(prog, compiled_module);
-    ptx_compiled_module = std::string(compiled_module);
-    free(compiled_module);
+    ptx_compiled_module.resize(compiled_module_size);
+    nvvmGetCompiledResult(prog, &ptx_compiled_module.front());
     print_string_to_file(ptx_compiled_module,
                          benchmark_info->output_dir + "/" + benchmark_info->filename + ".ptx");
 
