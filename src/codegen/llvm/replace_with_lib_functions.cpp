@@ -42,7 +42,7 @@ bool ReplaceMathFunctions::runOnModule(Module& module) {
     }
 
     // For CUDA GPUs, replace with calls to libdevice.
-    if (platform->is_CUDA_gpu() && platform->get_math_library() == "libdevice") {
+    if (platform->is_CUDA_gpu()) {
         fpm.add(new ReplaceWithLibdevice);
     }
 
@@ -67,7 +67,7 @@ ReplaceMathFunctions::add_vectorizable_functions_from_vec_lib(TargetLibraryInfoI
 // clang-format on
 #define DISPATCH(func, vec_func, width) {func, vec_func, width},
 
-        // Populate function definitions of only exp and pow (for now)
+        // Populate function definitions of only exp and pow (for now).
         const VecDesc aarch64_functions[] = {
             // clang-format off
             DISPATCH("llvm.exp.f32", "_ZGVnN4v_expf", FIXED(4))
@@ -105,6 +105,7 @@ ReplaceMathFunctions::add_vectorizable_functions_from_vec_lib(TargetLibraryInfoI
             {"MASSV", VecLib::MASSV},
             {"none", VecLib::NoLibrary},
             {"SVML", VecLib::SVML}};
+
         const auto& library = llvm_supported_vector_libraries.find(platform->get_math_library());
         if (library == llvm_supported_vector_libraries.end())
             throw std::runtime_error("Error: unknown vector library - " + platform->get_math_library() + "\n");
@@ -134,7 +135,7 @@ void ReplaceWithLibdevice::getAnalysisUsage(AnalysisUsage& au) const {
 bool ReplaceWithLibdevice::runOnFunction(Function& function) {
     bool modified = false;
 
-    // Try to replace intrinsics.
+    // Try to replace math intrinsics.
     std::vector<CallInst*> replaced_calls;
     for (auto& instruction: instructions(function)) {
         if (auto* call_inst = dyn_cast<CallInst>(&instruction)) {
@@ -166,7 +167,7 @@ bool ReplaceWithLibdevice::replace_call(CallInst& call_inst) {
     if (id == Intrinsic::not_intrinsic || is_nvvm_intrinsic)
         return false;
 
-    // Map of supported replacements.
+    // Map of supported replacements. For now it is only exp.
     static const std::map<std::string, std::string> libdevice_name = {
             {"llvm.exp.f32", "__nv_expf"},
             {"llvm.exp.f64", "__nv_exp"}};
@@ -177,6 +178,7 @@ bool ReplaceWithLibdevice::replace_call(CallInst& call_inst) {
     if (it == libdevice_name.end())
         throw std::runtime_error("Error: replacements for " + old_name + " are not supported!\n");
 
+    // Get (or create) libdevice function.
     Function* libdevice_func = m->getFunction(it->second);
     if (!libdevice_func) {
         libdevice_func = Function::Create(function->getFunctionType(),
@@ -184,15 +186,19 @@ bool ReplaceWithLibdevice::replace_call(CallInst& call_inst) {
         libdevice_func->copyAttributesFrom(function);
     }
 
+    // Create a call to libdevice function with the same operands.
     IRBuilder<> builder(&call_inst);
-    SmallVector<Value*> args(call_inst.arg_operands());
+    std::vector<Value*> args(call_inst.arg_operands().begin(),
+                             call_inst.arg_operands().end());
     SmallVector<OperandBundleDef, 1> op_bundles;
     call_inst.getOperandBundlesAsDefs(op_bundles);
+    CallInst* new_call = builder.CreateCall(libdevice_func, args, op_bundles);
 
-    CallInst* new_function = builder.CreateCall(libdevice_func, args, op_bundles);
-    call_inst.replaceAllUsesWith(new_function);
-    if (isa<FPMathOperator>(new_function)) {
-        new_function->copyFastMathFlags(&call_inst);
+    // Replace all uses of old instruction with the new one. Also, copy
+    // fast math flags if necessary.
+    call_inst.replaceAllUsesWith(new_call);
+    if (isa<FPMathOperator>(new_call)) {
+        new_call->copyFastMathFlags(&call_inst);
     }
 
     return true;

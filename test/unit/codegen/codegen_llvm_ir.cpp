@@ -1689,4 +1689,41 @@ SCENARIO("GPU kernel body IR generation", "[visitor][llvm][gpu]") {
             REQUIRE(std::regex_search(module_string, m, load_as1));
         }
     }
+
+    GIVEN("When using math functions") {
+        std::string nmodl_text = R"(
+            NEURON {
+                SUFFIX test
+                RANGE x, y
+            }
+
+            ASSIGNED { x y }
+
+            STATE { m }
+
+            BREAKPOINT {
+                SOLVE states METHOD cnexp
+            }
+
+            DERIVATIVE states {
+              m = exp(y) + exp(x)
+            }
+        )";
+
+        THEN("calls to libdevice are created") {
+            std::string module_string = run_gpu_llvm_visitor(nmodl_text,
+                                                             /*opt_level=*/3,
+                                                             /*use_single_precision=*/false,
+                                                             /*math_library=*/"libdevice");
+            std::smatch m;
+
+            // Check if exp intrinsic has been replaced.
+            std::regex declaration(R"(declare double @__nv_exp\(double\))");
+            std::regex new_call(R"(call double @__nv_exp\(double %.*\))");
+            std::regex old_call(R"(call double @llvm\.exp\.f64\(double %.*\))");
+            REQUIRE(std::regex_search(module_string, m, declaration));
+            REQUIRE(std::regex_search(module_string, m, new_call));
+            REQUIRE(!std::regex_search(module_string, m, old_call));
+        }
+    }
 }
