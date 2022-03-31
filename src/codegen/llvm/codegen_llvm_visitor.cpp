@@ -708,9 +708,7 @@ void CodegenLLVMVisitor::visit_codegen_function(const ast::CodegenFunction& node
     // If function is a compute kernel, add a void terminator explicitly, since there is no
     // `CodegenReturnVar` node. Also, set the necessary attributes.
     if (is_kernel_function(name)) {
-        if (!platform.is_gpu()) {
-            ir_builder.set_kernel_attributes();
-        }
+        ir_builder.set_kernel_attributes();
         ir_builder.create_return();
     }
 
