@@ -22,7 +22,8 @@ void initialise_optimisation_passes();
 void initialise_nvptx_passes();
 
 //// Initializes a CUDA target machine
-std::unique_ptr<llvm::TargetMachine> create_CUDA_target_machine(const codegen::Platform& platform, llvm::Module& module);
+std::unique_ptr<llvm::TargetMachine> create_CUDA_target_machine(const codegen::Platform& platform,
+                                                                llvm::Module& module);
 
 /// Generate PTX code given a CUDA target machine and the module
 std::string get_module_ptx(llvm::TargetMachine& tm, llvm::Module& module);

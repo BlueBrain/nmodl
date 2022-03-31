@@ -45,11 +45,14 @@ void CUDADriver::link_libraries(llvm::Module& module, BenchmarkInfo* benchmark_i
         }
         // Load libdevice module to the LLVM Module
         auto libdevice_file_memory_buffer = llvm::MemoryBuffer::getFile(lib_path);
-        llvm::Expected<std::unique_ptr<llvm::Module>> libdevice_expected_module = parseBitcodeFile(libdevice_file_memory_buffer->get()->getMemBufferRef(), module.getContext());
+        llvm::Expected<std::unique_ptr<llvm::Module>> libdevice_expected_module =
+            parseBitcodeFile(libdevice_file_memory_buffer->get()->getMemBufferRef(),
+                             module.getContext());
         if (std::error_code error = errorToErrorCode(libdevice_expected_module.takeError())) {
             throw std::runtime_error("Error reading bitcode: {}"_format(error.message()));
         }
-        linker.linkInModule(std::move(libdevice_expected_module.get()), llvm::Linker::LinkOnlyNeeded);
+        linker.linkInModule(std::move(libdevice_expected_module.get()),
+                            llvm::Linker::LinkOnlyNeeded);
     }
 }
 
@@ -59,45 +62,46 @@ void print_string_to_file(const std::string& ptx_compiled_module, const std::str
     ptx_file.close();
 }
 
-CUjit_target get_compute_architecture(const int compute_version_major, const int compute_version_minor) {
-    auto compute_architecture = compute_version_major*10 + compute_version_minor;
-    switch(compute_architecture) {
-        case 20:
-            return CU_TARGET_COMPUTE_20;
-        case 21:
-            return CU_TARGET_COMPUTE_21;
-        case 30:
-            return CU_TARGET_COMPUTE_30;
-        case 32:
-            return CU_TARGET_COMPUTE_32;
-        case 35:
-            return CU_TARGET_COMPUTE_35;
-        case 37:
-            return CU_TARGET_COMPUTE_37;
-        case 50:
-            return CU_TARGET_COMPUTE_50;
-        case 52:
-            return CU_TARGET_COMPUTE_52;
-        case 53:
-            return CU_TARGET_COMPUTE_53;
-        case 60:
-            return CU_TARGET_COMPUTE_60;
-        case 61:
-            return CU_TARGET_COMPUTE_61;
-        case 62:
-            return CU_TARGET_COMPUTE_62;
-        case 70:
-            return CU_TARGET_COMPUTE_70;
-        case 72:
-            return CU_TARGET_COMPUTE_72;
-        case 75:
-            return CU_TARGET_COMPUTE_75;
-        case 80:
-            return CU_TARGET_COMPUTE_80;
-        case 86:
-            return CU_TARGET_COMPUTE_86;
-        default:
-            throw std::runtime_error("Unsupported compute architecture");
+CUjit_target get_compute_architecture(const int compute_version_major,
+                                      const int compute_version_minor) {
+    auto compute_architecture = compute_version_major * 10 + compute_version_minor;
+    switch (compute_architecture) {
+    case 20:
+        return CU_TARGET_COMPUTE_20;
+    case 21:
+        return CU_TARGET_COMPUTE_21;
+    case 30:
+        return CU_TARGET_COMPUTE_30;
+    case 32:
+        return CU_TARGET_COMPUTE_32;
+    case 35:
+        return CU_TARGET_COMPUTE_35;
+    case 37:
+        return CU_TARGET_COMPUTE_37;
+    case 50:
+        return CU_TARGET_COMPUTE_50;
+    case 52:
+        return CU_TARGET_COMPUTE_52;
+    case 53:
+        return CU_TARGET_COMPUTE_53;
+    case 60:
+        return CU_TARGET_COMPUTE_60;
+    case 61:
+        return CU_TARGET_COMPUTE_61;
+    case 62:
+        return CU_TARGET_COMPUTE_62;
+    case 70:
+        return CU_TARGET_COMPUTE_70;
+    case 72:
+        return CU_TARGET_COMPUTE_72;
+    case 75:
+        return CU_TARGET_COMPUTE_75;
+    case 80:
+        return CU_TARGET_COMPUTE_80;
+    case 86:
+        return CU_TARGET_COMPUTE_86;
+    default:
+        throw std::runtime_error("Unsupported compute architecture");
     }
 }
 
@@ -136,7 +140,7 @@ void CUDADriver::init(const codegen::Platform& platform, BenchmarkInfo* benchmar
     utils::optimise_module_for_nvptx(platform, *module, opt_level_codegen, ptx_compiled_module);
     if (benchmark_info) {
         print_string_to_file(ptx_compiled_module,
-                            benchmark_info->output_dir + "/" + benchmark_info->filename + ".ptx");
+                             benchmark_info->output_dir + "/" + benchmark_info->filename + ".ptx");
     }
 
     // Create driver context
@@ -145,34 +149,36 @@ void CUDADriver::init(const codegen::Platform& platform, BenchmarkInfo* benchmar
     // Create module for object
     logger->info("Loading PTX to CUDA module");
     const unsigned int jitNumOptions = 5;
-    CUjit_option *jitOptions = new CUjit_option[jitNumOptions];
-    void **jitOptVals = new void*[jitNumOptions];
+    CUjit_option* jitOptions = new CUjit_option[jitNumOptions];
+    void** jitOptVals = new void*[jitNumOptions];
 
-    // set up size of compilation log buffer                                                                                                     
+    // set up size of compilation log buffer
     jitOptions[0] = CU_JIT_INFO_LOG_BUFFER_SIZE_BYTES;
-    size_t jitLogBufferSize = 1024*1024;
-    jitOptVals[0] = (void*)jitLogBufferSize;
+    size_t jitLogBufferSize = 1024 * 1024;
+    jitOptVals[0] = (void*) jitLogBufferSize;
 
     // set up pointer to the compilation log buffer
     jitOptions[1] = CU_JIT_INFO_LOG_BUFFER;
-    char *jitLogBuffer = new char[jitLogBufferSize];
+    char* jitLogBuffer = new char[jitLogBufferSize];
     jitOptVals[1] = jitLogBuffer;
 
     // set up size of compilation error log buffer
     jitOptions[2] = CU_JIT_ERROR_LOG_BUFFER_SIZE_BYTES;
-    size_t jitErrorLogBufferSize = 1024*1024;
-    jitOptVals[2] = (void*)jitErrorLogBufferSize;
+    size_t jitErrorLogBufferSize = 1024 * 1024;
+    jitOptVals[2] = (void*) jitErrorLogBufferSize;
 
     // set up pointer to the compilation error log buffer
     jitOptions[3] = CU_JIT_ERROR_LOG_BUFFER;
-    char *jitErrorLogBuffer = new char[jitErrorLogBufferSize];
+    char* jitErrorLogBuffer = new char[jitErrorLogBufferSize];
     jitOptVals[3] = jitErrorLogBuffer;
 
     jitOptions[4] = CU_JIT_TARGET;
-    auto target_architecture = get_compute_architecture(device_info.compute_version_major, device_info.compute_version_minor);
-    jitOptVals[4] = (void*)target_architecture;
+    auto target_architecture = get_compute_architecture(device_info.compute_version_major,
+                                                        device_info.compute_version_minor);
+    jitOptVals[4] = (void*) target_architecture;
 
-    auto cuda_jit_ret = cuModuleLoadDataEx(&cudaModule, ptx_compiled_module.c_str(), jitNumOptions, jitOptions, jitOptVals);
+    auto cuda_jit_ret = cuModuleLoadDataEx(
+        &cudaModule, ptx_compiled_module.c_str(), jitNumOptions, jitOptions, jitOptVals);
     if (!std::string(jitLogBuffer).empty()) {
         logger->info("CUDA JIT INFO LOG: {}"_format(std::string(jitLogBuffer)));
     }

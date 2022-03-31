@@ -718,7 +718,12 @@ int main(int argc, const char* argv[]) {
                 // Create platform abstraction.
                 PlatformID pid = llvm_gpu_name == "default" ? PlatformID::CPU : PlatformID::GPU;
                 const std::string name = llvm_gpu_name == "default" ? llvm_cpu_name : llvm_gpu_name;
-                Platform platform(pid, name, llvm_gpu_target_architecture, llvm_math_library, llvm_float_type, llvm_vector_width);
+                Platform platform(pid,
+                                  name,
+                                  llvm_gpu_target_architecture,
+                                  llvm_math_library,
+                                  llvm_float_type,
+                                  llvm_vector_width);
 
                 logger->info("Running LLVM backend code generator");
                 CodegenLLVMVisitor visitor(modfile,

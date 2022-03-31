@@ -94,7 +94,8 @@ class CUDADriver {
                                        nullptr));
         auto asyncErr = cudaDeviceSynchronize();
         if (asyncErr != cudaSuccess) {
-            throw std::runtime_error("CUDA Execution Error: {}\n"_format(cudaGetErrorString(asyncErr)));
+            throw std::runtime_error(
+                "CUDA Execution Error: {}\n"_format(cudaGetErrorString(asyncErr)));
         }
     }
 

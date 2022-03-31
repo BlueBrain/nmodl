@@ -74,21 +74,24 @@ void initialise_nvptx_passes() {
     initialise_optimisation_passes();
 }
 
-std::unique_ptr<llvm::TargetMachine> create_CUDA_target_machine(const codegen::Platform& platform, llvm::Module& module) {
+std::unique_ptr<llvm::TargetMachine> create_CUDA_target_machine(const codegen::Platform& platform,
+                                                                llvm::Module& module) {
     // CUDA target machine we generating code for.
     std::string platform_name = platform.get_name();
 
     // Target and layout information.
-    static const std::map<std::string, std::string> triple_str = {
-            {"nvptx", "nvptx-nvidia-cuda"},
-            {"nvptx64", "nvptx64-nvidia-cuda"}};
+    static const std::map<std::string, std::string> triple_str = {{"nvptx", "nvptx-nvidia-cuda"},
+                                                                  {"nvptx64",
+                                                                   "nvptx64-nvidia-cuda"}};
     static const std::map<std::string, std::string> data_layout_str = {
-            {"nvptx", "e-p:32:32:32-i1:8:8-i8:8:8-i16:16:16-i32:32:32"
-                      "-i64:64:64-f32:32:32-f64:64:64-v16:16:16-v32:32:32"
-                      "-v64:64:64-v128:128:128-n16:32:64"},
-            {"nvptx64", "e-p:64:64:64-i1:8:8-i8:8:8-i16:16:16-i32:32:32"
-                        "-i64:64:64-f32:32:32-f64:64:64-v16:16:16-v32:32:32"
-                        "-v64:64:64-v128:128:128-n16:32:64"}};
+        {"nvptx",
+         "e-p:32:32:32-i1:8:8-i8:8:8-i16:16:16-i32:32:32"
+         "-i64:64:64-f32:32:32-f64:64:64-v16:16:16-v32:32:32"
+         "-v64:64:64-v128:128:128-n16:32:64"},
+        {"nvptx64",
+         "e-p:64:64:64-i1:8:8-i8:8:8-i16:16:16-i32:32:32"
+         "-i64:64:64-f32:32:32-f64:64:64-v16:16:16-v32:32:32"
+         "-v64:64:64-v128:128:128-n16:32:64"}};
 
     // Set data layout and target triple information for the module.
     auto triple = triple_str.at(platform_name);
