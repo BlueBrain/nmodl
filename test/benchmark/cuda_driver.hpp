@@ -26,7 +26,6 @@
 #include "cuda.h"
 #include "cuda_runtime.h"
 #include "gpu_parameters.hpp"
-#include "nvvm.h"
 
 using nmodl::cuda_details::GPUExecutionParameters;
 
@@ -51,23 +50,12 @@ struct DeviceInfo {
 void checkCudaErrors(CUresult err);
 
 /**
- * @brief Throw meaningful error in case NVVM API call fails
- *
- * Checks whether a call to the NVVM API was succsful and if not it throws a runntime_error with
- * the error message from NVVM.
- *
- * @param err Return value of the NVVM API call
- */
-void checkNVVMErrors(nvvmResult err);
-
-/**
  * \class CUDADriver
- * \brief Driver to execute a MOD file function via the CUDA and NVVM backend.
+ * \brief Driver to execute a MOD file function via the CUDA JIT backend.
  */
 class CUDADriver {
     /// LLVM IR module to execute.
     std::unique_ptr<llvm::Module> module;
-    nvvmProgram prog;
     CUdevice device;
     CUmodule cudaModule;
     CUcontext context;
@@ -77,7 +65,6 @@ class CUDADriver {
     std::string ptx_compiled_module;
 
     void checkCudaErrors(CUresult err);
-    void checkNVVMErrors(nvvmResult err);
     void link_libraries(llvm::Module& module, BenchmarkInfo* benchmark_info);
 
   public:
