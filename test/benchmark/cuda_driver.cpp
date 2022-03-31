@@ -16,10 +16,10 @@
 #include "fmt/format.h"
 #include "utils/common_utils.hpp"
 
-#include "llvm/Bitcode/BitcodeWriter.h"
+#include "llvm/Bitcode/BitcodeReader.h"
 #include "llvm/Linker/Linker.h"
-#include "llvm/IRReader/IRReader.h"
-#include "llvm/Support/SourceMgr.h"
+#include "llvm/Support/ErrorOr.h"
+#include "llvm/Support/MemoryBuffer.h"
 #include "llvm/Target/TargetMachine.h"
 
 using fmt::literals::operator""_format;
@@ -43,15 +43,13 @@ void CUDADriver::link_libraries(llvm::Module& module, BenchmarkInfo* benchmark_i
         if (!std::regex_match(lib_name, libdevice_bitcode_name)) {
             throw std::runtime_error("Only libdevice is supported for now");
         }
-        // Load libdevice module to the NVVM program
-        llvm::SMDiagnostic Error;
-
-        llvm::errs() << lib_name << "\n";
-        auto LibDeviceModule = parseIRFile(lib_name, Error, module.getContext());
-        if (!LibDeviceModule) {
-            throw std::runtime_error("Could not find or load libdevice\n");
+        // Load libdevice module to the LLVM Module
+        auto libdevice_file_memory_buffer = llvm::MemoryBuffer::getFile(lib_path);
+        llvm::Expected<std::unique_ptr<llvm::Module>> libdevice_expected_module = parseBitcodeFile(libdevice_file_memory_buffer->get()->getMemBufferRef(), module.getContext());
+        if (std::error_code error = errorToErrorCode(libdevice_expected_module.takeError())) {
+            throw std::runtime_error("Error reading bitcode: {}"_format(error.message()));
         }
-        linker.linkInModule(std::move(LibDeviceModule), llvm::Linker::LinkOnlyNeeded);
+        linker.linkInModule(std::move(libdevice_expected_module.get()), llvm::Linker::LinkOnlyNeeded);
     }
 }
 
@@ -128,7 +126,7 @@ void CUDADriver::init(const codegen::Platform& platform, BenchmarkInfo* benchmar
 
     // Load the external libraries modules to the NVVM program
     // Currently only libdevice is supported
-    // link_libraries(*module, benchmark_info);
+    link_libraries(*module, benchmark_info);
 
     // Compile the program
     logger->info("Compiling the LLVM IR to PTX");
