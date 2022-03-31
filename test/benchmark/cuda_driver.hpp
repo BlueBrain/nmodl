@@ -78,14 +78,14 @@ class CUDADriver {
 
     void checkCudaErrors(CUresult err);
     void checkNVVMErrors(nvvmResult err);
-    void load_libraries(BenchmarkInfo* benchmark_info);
+    void link_libraries(llvm::Module& module, BenchmarkInfo* benchmark_info);
 
   public:
     explicit CUDADriver(std::unique_ptr<llvm::Module> m)
         : module(std::move(m)) {}
 
     /// Initializes the CUDA GPU JIT driver.
-    void init(BenchmarkInfo* benchmark_info = nullptr);
+    void init(const codegen::Platform& platform, BenchmarkInfo* benchmark_info = nullptr);
 
     void launch_cuda_kernel(const std::string& entry_point,
                             const GPUExecutionParameters& gpu_execution_parameters,
@@ -140,7 +140,7 @@ class BaseGPURunner {
 
   public:
     /// Sets up the CUDA driver.
-    virtual void initialize_driver() = 0;
+    virtual void initialize_driver(const codegen::Platform& platform) = 0;
 
     /// Runs the entry-point function without arguments.
     void run_without_arguments(const std::string& entry_point,
@@ -166,8 +166,8 @@ class TestGPURunner: public BaseGPURunner {
     explicit TestGPURunner(std::unique_ptr<llvm::Module> m)
         : BaseGPURunner(std::move(m)) {}
 
-    virtual void initialize_driver() {
-        driver->init();
+    virtual void initialize_driver(const codegen::Platform& platform) {
+        driver->init(platform);
     }
 };
 
@@ -191,8 +191,8 @@ class BenchmarkGPURunner: public BaseGPURunner {
         : BaseGPURunner(std::move(m))
         , benchmark_info{filename, output_dir, lib_paths, opt_level_ir, opt_level_codegen} {}
 
-    virtual void initialize_driver() {
-        driver->init(&benchmark_info);
+    virtual void initialize_driver(const codegen::Platform& platform) {
+        driver->init(platform, &benchmark_info);
     }
 };
 

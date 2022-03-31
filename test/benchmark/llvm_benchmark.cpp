@@ -65,7 +65,7 @@ void LLVMBenchmark::run_benchmark(const std::shared_ptr<ast::Program>& node) {
         std::string filename = "cuda_" + mod_filename;
         cuda_runner = std::make_unique<runner::BenchmarkGPURunner>(
             std::move(m), filename, output_dir, shared_libs, opt_level_ir, opt_level_codegen);
-        cuda_runner->initialize_driver();
+        cuda_runner->initialize_driver(platform);
     } else {
 #endif
         std::string filename = "v" + std::to_string(llvm_visitor.get_vector_width()) + "_" +

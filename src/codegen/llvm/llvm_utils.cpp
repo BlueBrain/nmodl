@@ -74,12 +74,8 @@ void initialise_nvptx_passes() {
     initialise_optimisation_passes();
 }
 
-void optimise_module_for_nvptx(codegen::Platform& platform,
-                               llvm::Module& module,
-                               int opt_level,
-                               std::string& target_asm) {
+std::unique_ptr<llvm::TargetMachine> create_CUDA_target_machine(const codegen::Platform& platform, llvm::Module& module) {
     // CUDA target machine we generating code for.
-    std::unique_ptr<llvm::TargetMachine> tm;
     std::string platform_name = platform.get_name();
 
     // Target and layout information.
@@ -108,9 +104,30 @@ void optimise_module_for_nvptx(codegen::Platform& platform,
     if (!target)
         throw std::runtime_error("Error: " + error_msg + "\n");
 
+    std::unique_ptr<llvm::TargetMachine> tm;
     tm.reset(target->createTargetMachine(triple, subtarget, features, {}, {}));
     if (!tm)
         throw std::runtime_error("Error: creating target machine failed! Aborting.");
+    return tm;
+}
+
+std::string get_module_ptx(llvm::TargetMachine& tm, llvm::Module& module) {
+    std::string target_asm;
+    llvm::raw_string_ostream stream(target_asm);
+    llvm::buffer_ostream pstream(stream);
+    llvm::legacy::PassManager codegen_pm;
+
+    tm.addPassesToEmitFile(codegen_pm, pstream, nullptr, llvm::CGFT_AssemblyFile);
+    codegen_pm.run(module);
+    return target_asm;
+}
+
+void optimise_module_for_nvptx(const codegen::Platform& platform,
+                               llvm::Module& module,
+                               int opt_level,
+                               std::string& target_asm) {
+    // Create target machine for CUDA GPU
+    auto tm = create_CUDA_target_machine(platform, module);
 
     // Create pass managers.
     llvm::legacy::FunctionPassManager func_pm(&module);
@@ -134,12 +151,7 @@ void optimise_module_for_nvptx(codegen::Platform& platform,
 
     // Now, we want to run target-specific (e.g. NVPTX) passes. In LLVM, this
     // is done via `addPassesToEmitFile`.
-    llvm::raw_string_ostream stream(target_asm);
-    llvm::buffer_ostream pstream(stream);
-    llvm::legacy::PassManager codegen_pm;
-
-    tm->addPassesToEmitFile(codegen_pm, pstream, nullptr, llvm::CGFT_AssemblyFile);
-    codegen_pm.run(module);
+    target_asm = get_module_ptx(*tm, module);
 }
 
 void initialise_optimisation_passes() {
