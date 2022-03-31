@@ -175,8 +175,12 @@ void CUDADriver::init(const codegen::Platform& platform, BenchmarkInfo* benchmar
     jitOptVals[4] = (void*)target_architecture;
 
     auto cuda_jit_ret = cuModuleLoadDataEx(&cudaModule, ptx_compiled_module.c_str(), jitNumOptions, jitOptions, jitOptVals);
-    logger->info("CUDA JIT INFO LOG: {}"_format(std::string(jitLogBuffer)));
-    logger->info("CUDA JIT ERROR LOG: {}"_format(std::string(jitErrorLogBuffer)));
+    if (!std::string(jitLogBuffer).empty()) {
+        logger->info("CUDA JIT INFO LOG: {}"_format(std::string(jitLogBuffer)));
+    }
+    if (!std::string(jitErrorLogBuffer).empty()) {
+        logger->info("CUDA JIT ERROR LOG: {}"_format(std::string(jitErrorLogBuffer)));
+    }
     checkCudaErrors(cuda_jit_ret);
 }
 
