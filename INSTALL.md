@@ -21,7 +21,7 @@ To build the project from source, a modern C++ compiler with C++14 support is ne
 
 - flex (>=2.6)
 - bison (>=3.0)
-- CMake (>=3.18)
+- CMake (>=3.17)
 - Python (>=3.6)
 - Python packages : jinja2 (>=2.10), pyyaml (>=3.13), pytest (>=4.0.0), sympy (>=1.3), textwrap
 
