@@ -52,8 +52,8 @@ jobs:
       chmod +x llvm.sh
       sudo ./llvm.sh 13
     env:
-      CMAKE_VER: 'v3.18.0'
-      CMAKE_PKG: 'cmake-3.18.0-Linux-x86_64'
+      CMAKE_VER: 'v3.17.0'
+      CMAKE_PKG: 'cmake-3.17.0-Linux-x86_64'
     displayName: 'Install Dependencies'
   - script: |
       export PATH=$(pwd)/$CMAKE_PKG/bin:/home/vsts/.local/bin:$PATH
@@ -71,7 +71,7 @@ jobs:
       make install #this is needed for the integration tests
       env CTEST_OUTPUT_ON_FAILURE=1 make test
     env:
-      CMAKE_PKG: 'cmake-3.18.0-Linux-x86_64'
+      CMAKE_PKG: 'cmake-3.17.0-Linux-x86_64'
     displayName: 'Build and Run Unit Tests'
   - script: |
       export PATH=$(pwd)/$CMAKE_PKG/bin:/home/vsts/.local/bin:$PATH
@@ -94,7 +94,7 @@ jobs:
       fi
       ./bin/nrnivmodl-core $(Build.Repository.LocalPath)/test/integration/mod
     env:
-      CMAKE_PKG: 'cmake-3.18.0-Linux-x86_64'
+      CMAKE_PKG: 'cmake-3.17.0-Linux-x86_64'
       SHELL: 'bash'
     displayName: 'Build Neuron and Run Integration Tests'
   - script: |
@@ -118,7 +118,7 @@ jobs:
       fi
       ./bin/nrnivmodl-core $(Build.Repository.LocalPath)/test/integration/mod
     env:
-      CMAKE_PKG: 'cmake-3.18.0-Linux-x86_64'
+      CMAKE_PKG: 'cmake-3.17.0-Linux-x86_64'
     displayName: 'Build CoreNEURON and Run Integration Tests with ISPC compiler'
 - job: 'osx1015'
   pool:
