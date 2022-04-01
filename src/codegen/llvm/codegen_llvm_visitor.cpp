@@ -61,10 +61,10 @@ static bool can_vectorize(const ast::CodegenForStatement& statement, symtab::Sym
     return unsupported.empty() && supported.size() <= 1;
 }
 
-void CodegenLLVMVisitor::annotate_kernel_with_nvvm(llvm::Function* kernel) {
+void CodegenLLVMVisitor::annotate_kernel_with_nvvm(llvm::Function* kernel, const std::string& annotation = "kernel") {
     llvm::Metadata* metadata[] = {
         llvm::ValueAsMetadata::get(kernel),
-        llvm::MDString::get(*context, "kernel"),
+        llvm::MDString::get(*context, annotation),
         llvm::ValueAsMetadata::get(
             llvm::ConstantInt::get(llvm::Type::getInt32Ty(*context), 1))};
     llvm::MDNode* node = llvm::MDNode::get(*context, metadata);
@@ -135,6 +135,13 @@ void CodegenLLVMVisitor::add_vectorizable_functions_from_vec_lib(llvm::TargetLib
     }
 }
 #endif
+
+void CodegenLLVMVisitor::annotate_wrapper_with_nvvm(llvm::Function* kernel, llvm::Function* kernel_wrapper, const std::string& annotation = "kernel") {
+    auto module_named_metadata = module->getNamedMetadata("nvvm.annotations");
+    module->eraseNamedMetadata(module_named_metadata);
+    annotate_kernel_with_nvvm(kernel, "device");
+    annotate_kernel_with_nvvm(kernel_wrapper, annotation);
+}
 
 llvm::Value* CodegenLLVMVisitor::accept_and_get(const std::shared_ptr<ast::Node>& node) {
     node->accept(*this);
@@ -507,7 +514,7 @@ void CodegenLLVMVisitor::wrap_kernel_functions() {
         if (platform.is_gpu()) {
             // return void
             ir_builder.create_return();
-            annotate_kernel_with_nvvm(wrapper_func);
+            annotate_wrapper_with_nvvm(kernel, wrapper_func, "kernel");
         } else {
             // Create a 0 return value and a return instruction.
             ir_builder.create_i32_constant(0);
