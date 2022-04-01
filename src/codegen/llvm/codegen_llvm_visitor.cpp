@@ -31,6 +31,10 @@ namespace codegen {
 /*                                  Helper routines                                     */
 /****************************************************************************************/
 
+static std::string get_wrapper_name(const std::string& kernel_name) {
+    return "__" + kernel_name + "_wrapper";
+}
+
 /// A utility to check for supported Statement AST nodes.
 static bool is_supported_statement(const ast::Statement& statement) {
     return statement.is_codegen_atomic_statement() || statement.is_codegen_for_statement() ||
@@ -136,11 +140,23 @@ void CodegenLLVMVisitor::add_vectorizable_functions_from_vec_lib(llvm::TargetLib
 }
 #endif
 
-void CodegenLLVMVisitor::annotate_wrapper_with_nvvm(llvm::Function* kernel, llvm::Function* kernel_wrapper, const std::string& annotation = "kernel") {
+void CodegenLLVMVisitor::annotate_wrapper_kernels_with_nvvm() {
+    // First clear all the nvvm annotations from the module
     auto module_named_metadata = module->getNamedMetadata("nvvm.annotations");
     module->eraseNamedMetadata(module_named_metadata);
-    annotate_kernel_with_nvvm(kernel, "device");
-    annotate_kernel_with_nvvm(kernel_wrapper, annotation);
+
+    // Then each kernel should be annotated as "device" function and wrappers should be annotated as "kernel" functions 
+    std::vector<std::string> kernel_names;
+    find_kernel_names(kernel_names);
+
+    for (const auto& kernel_name: kernel_names) {
+        // Get the kernel function.
+        auto kernel = module->getFunction(kernel_name);
+        // Get the kernel wrapper function.
+        auto kernel_wrapper = module->getFunction(get_wrapper_name(kernel_name));
+        annotate_kernel_with_nvvm(kernel, "device");
+        annotate_kernel_with_nvvm(kernel_wrapper, "kernel");
+    }
 }
 
 llvm::Value* CodegenLLVMVisitor::accept_and_get(const std::shared_ptr<ast::Node>& node) {
@@ -491,7 +507,7 @@ void CodegenLLVMVisitor::wrap_kernel_functions() {
         llvm::Function* wrapper_func = llvm::Function::Create(
             llvm::FunctionType::get(return_type, {void_ptr_type}, /*isVarArg=*/false),
             llvm::Function::ExternalLinkage,
-            "__" + kernel_name + "_wrapper",
+            get_wrapper_name(kernel_name),
             *module);
 
         // Optionally, add debug information for the wrapper function.
@@ -514,7 +530,6 @@ void CodegenLLVMVisitor::wrap_kernel_functions() {
         if (platform.is_gpu()) {
             // return void
             ir_builder.create_return();
-            annotate_wrapper_with_nvvm(kernel, wrapper_func, "kernel");
         } else {
             // Create a 0 return value and a return instruction.
             ir_builder.create_i32_constant(0);
@@ -523,6 +538,10 @@ void CodegenLLVMVisitor::wrap_kernel_functions() {
             ir_builder.set_kernel_attributes();
         }
         ir_builder.clear_function();
+    }
+    // for GPU we need to first clear all the annotations and then reapply them
+    if (platform.is_gpu()) {
+        annotate_wrapper_kernels_with_nvvm();
     }
 }
 
