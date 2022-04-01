@@ -148,7 +148,7 @@ set `NMODL_PYLIB` before running cmake!
 -DNMODL_ENABLE_LLVM_CUDA=ON
 ```
 
-To find the need `CUDA` libraries (`cudart`, `nvrtc` and `nvvm`) it's needed to have CUDA Toolkit installed on your system.
+To find the need `CUDA` libraries (`cudart` and `nvrtc`) it's needed to have CUDA Toolkit installed on your system.
 This can be done by installing the CUDA Toolkit from the [CUDA Toolkit website](https://developer.nvidia.com/cuda-downloads) or by installing the `CUDA` spack package and loading the corresponding module.
 
 Then given a supported MOD file you can execute the benchmark on GPU in you supported NVIDIA GPU by running the following command:
