@@ -25,7 +25,7 @@ trigger cvf:
 .spack_nmodl:
   variables:
     SPACK_PACKAGE: nmodl
-    SPACK_PACKAGE_SPEC: ~legacy-unit+python
+    SPACK_PACKAGE_SPEC: ~legacy-unit+python+llvm
     SPACK_INSTALL_EXTRA_FLAGS: -v
 
 spack_setup:
@@ -73,14 +73,13 @@ test:gcc:
     bb5_ntasks: 2   # so we block 16 cores
     bb5_cpus_per_task: 8 # ninja -j {this}
     bb5_memory: 76G # ~16*384/80
-    bb5_constraint: "volta&clx"
+    bb5_constraint: clx&volta
 
 .spack_nmodl_cuda:
   variables:
     SPACK_PACKAGE: nmodl
     SPACK_PACKAGE_SPEC: ~legacy-unit~python+llvm+cuda
     SPACK_INSTALL_EXTRA_FLAGS: -v
-    SPACK_PACKAGE_DEPENDENCIES: ^cuda@11.4.2 # same as CUDA driver
 
 build_cuda:gcc:
   extends:
@@ -94,7 +93,6 @@ test_benchmark:cpu:
     - .benchmark_config
   script:
     - module load unstable nmodl/develop
-    - module unload cuda/11.6.0
     - nmodl test/integration/mod/test.mod llvm --ir --opt-level-ir 3 benchmark --run --opt-level-codegen 3 --instance-size 10000000 --repeat 2
   needs: ["build_cuda:gcc"]
 
@@ -103,6 +101,5 @@ test_benchmark:gpu:
     - .benchmark_config
   script:
     - module load unstable nmodl/develop
-    - module unload cuda/11.6.0
     - nmodl test/integration/mod/test.mod llvm --no-debug --ir --opt-level-ir 3 gpu --target-arch "sm_70" --name "nvptx64" --math-library libdevice benchmark --run --libs "${CUDA_HOME}/nvvm/libdevice/libdevice.10.bc" --opt-level-codegen 3 --instance-size 10000000 --repeat 2
   needs: ["build_cuda:gcc"]
