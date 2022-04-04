@@ -78,7 +78,7 @@ test:gcc:
 .spack_nmodl_cuda:
   variables:
     SPACK_PACKAGE: nmodl
-    SPACK_PACKAGE_SPEC: ~legacy-unit~python+llvm+cuda
+    SPACK_PACKAGE_SPEC: ~legacy-unit~python+llvm+llvm_cuda
     SPACK_INSTALL_EXTRA_FLAGS: -v
 
 build_cuda:gcc:
