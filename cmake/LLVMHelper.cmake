@@ -15,6 +15,9 @@ set(NMODL_LLVM_COMPONENTS
     ipo
     mc
     native
+    nvptxcodegen
+    nvptxdesc
+    nvptxinfo
     orcjit
     target
     transformutils

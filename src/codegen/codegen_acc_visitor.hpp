@@ -61,6 +61,14 @@ class CodegenAccVisitor: public CodegenCVisitor {
     void print_kernel_data_present_annotation_block_end() override;
 
 
+    /// start of annotation "acc kernels" for net_init kernel
+    void print_net_init_acc_serial_annotation_block_begin() override;
+
+
+    /// end of annotation "acc kernels" for net_init kernel
+    void print_net_init_acc_serial_annotation_block_end() override;
+
+
     /// update to matrix elements with/without shadow vectors
     void print_nrn_cur_matrix_shadow_update() override;
 
@@ -80,7 +88,8 @@ class CodegenAccVisitor: public CodegenCVisitor {
 
 
     /// create global variable on the device
-    void print_global_variable_device_create_annotation() override;
+    void print_global_variable_device_create_annotation_pre() override;
+    void print_global_variable_device_create_annotation_post() override;
 
     /// update global variable from host to the device
     void print_global_variable_device_update_annotation() override;
@@ -88,11 +97,42 @@ class CodegenAccVisitor: public CodegenCVisitor {
     /// transfer newtonspace structure to device
     void print_newtonspace_transfer_to_device() const override;
 
+    // update instance variable object pointer on the gpu device
+    void print_instance_variable_transfer_to_device() const override;
+
+    // update derivimplicit advance flag on the gpu device
+    void print_deriv_advance_flag_transfer_to_device() const override;
+
+    // update NetSendBuffer_t count from device to host
+    void print_net_send_buf_count_update_to_host() const override;
+
+    // update NetSendBuffer_t from device to host
+    void print_net_send_buf_update_to_host() const override;
+
+    // update NetSendBuffer_t count from host to device
+    virtual void print_net_send_buf_count_update_to_device() const override;
+
+    // update dt from host to device
+    virtual void print_dt_update_to_device() const override;
+
+    // synchronise/wait on stream specific to NrnThread
+    virtual void print_device_stream_wait() const override;
+
+    // print atomic capture pragma
+    void print_device_atomic_capture_annotation() const override;
+
     std::string get_variable_device_pointer(const std::string& variable,
                                             const std::string& type) const override;
 
 
     void print_net_send_buffering_grow() override;
+
+
+    void print_eigen_linear_solver(const std::string& float_type,
+                                   int N,
+                                   const std::string& Xm,
+                                   const std::string& Jm,
+                                   const std::string& Fm) override;
 
 
   public:

@@ -1,5 +1,5 @@
 # ***********************************************************************
-# Copyright (C) 2018-2019 Blue Brain Project
+# Copyright (C) 2018-2021 Blue Brain Project
 #
 # This file is part of NMODL distributed under the terms of the GNU
 # Lesser General Public License. See top-level LICENSE file for details.
@@ -44,17 +44,6 @@ class BaseNode:
     def cpp_header(self):
         """Path to C++ header file of this class relative to BUILD_DIR"""
         return "ast/" + to_snake_case(self.class_name) + ".hpp"
-
-    @property
-    def cpp_fence(self):
-        """Preprocessor macro to use to prevent symbol redefinition
-
-            #ifndef {{ node.cpp_fence }}
-            #define {{ node.cpp_fence }}
-            // ...
-            # endif
-        """
-        return "NMODL_AST_" + to_snake_case(self.class_name).upper() + '_HPP'
 
     @property
     def is_statement_block_node(self):
@@ -356,16 +345,13 @@ class ChildNode(BaseNode):
                           * \\brief Erase member to {self.varname}
                           */
                          {self.class_name}Vector::const_iterator {parent.class_name}::erase_{to_snake_case(self.class_name)}({self.class_name}Vector::const_iterator first) {{
-                            auto first_it = const_iter_cast({self.varname}, first);
-                            return {self.varname}.erase(first_it);
+                            return {self.varname}.erase(first);
                          }}
                          /**
                           * \\brief Erase members to {self.varname}
                           */
                          {self.class_name}Vector::const_iterator {parent.class_name}::erase_{to_snake_case(self.class_name)}({self.class_name}Vector::const_iterator first, {self.class_name}Vector::const_iterator last) {{
-                            auto first_it = const_iter_cast({self.varname}, first);
-                            auto last_it = const_iter_cast({self.varname}, last);
-                            return {self.varname}.erase(first_it, last_it);
+                            return {self.varname}.erase(first, last);
                          }}
                          /**
                           * \\brief Erase non-consecutive members to {self.varname}
@@ -398,8 +384,7 @@ class ChildNode(BaseNode):
                           */
                          {self.class_name}Vector::const_iterator {parent.class_name}::insert_{to_snake_case(self.class_name)}({self.class_name}Vector::const_iterator position, const std::shared_ptr<{self.class_name}>& n) {{
                              {set_parent}
-                            auto pos_it = const_iter_cast({self.varname}, position);
-                            return {self.varname}.insert(pos_it, n);
+                            return {self.varname}.insert(position, n);
                          }}
 
                          /**
@@ -447,10 +432,7 @@ class ChildNode(BaseNode):
                              //set parents
                              {set_parent}
                           }}
-                         auto pos_it = const_iter_cast({self.varname}, position);
-                         auto first_it = const_iter_cast(to, first);
-                         auto last_it = const_iter_cast(to, last);
-                         {self.varname}.insert(pos_it, first_it, last_it);
+                         {self.varname}.insert(position, first, last);
                      }}
                   """
             s = textwrap.dedent(method)
@@ -619,7 +601,7 @@ class Node(BaseNode):
         for child in self.children:
             if child.is_ptr_excluded_node or child.is_vector:
                 dependent_classes.add(child.class_name)
-        return ["ast/{}.hpp".format(to_snake_case(clazz)) for clazz in dependent_classes]
+        return sorted(["ast/{}.hpp".format(to_snake_case(clazz)) for clazz in dependent_classes])
 
     @property
     def ast_enum_name(self):

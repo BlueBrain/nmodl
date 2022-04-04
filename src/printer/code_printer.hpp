@@ -66,6 +66,8 @@ class CodePrinter {
 
     void start_block(std::string&&);
 
+    void start_block(const std::string& text);
+
     void add_text(const std::string&);
 
     void add_line(const std::string&, int num_new_lines = 1);

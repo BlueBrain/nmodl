@@ -69,7 +69,7 @@ class CodegenHelperVisitor: public visitor::ConstAstVisitor {
     /// lhs of assignment in derivative block
     std::shared_ptr<ast::Expression> assign_lhs;
 
-    void find_ion_variables();
+    void find_ion_variables(const ast::Program& node);
     void find_table_variables();
     void find_range_variables();
     void find_non_range_variables();
@@ -102,6 +102,7 @@ class CodegenHelperVisitor: public visitor::ConstAstVisitor {
     void visit_eigen_linear_solver_block(const ast::EigenLinearSolverBlock& node) override;
     void visit_statement_block(const ast::StatementBlock& node) override;
     void visit_initial_block(const ast::InitialBlock& node) override;
+    void visit_constructor_block(const ast::ConstructorBlock& node) override;
     void visit_destructor_block(const ast::DestructorBlock& node) override;
     void visit_breakpoint_block(const ast::BreakpointBlock& node) override;
     void visit_derivative_block(const ast::DerivativeBlock& node) override;
@@ -119,6 +120,10 @@ class CodegenHelperVisitor: public visitor::ConstAstVisitor {
     void visit_non_linear_block(const ast::NonLinearBlock& node) override;
     void visit_discrete_block(const ast::DiscreteBlock& node) override;
     void visit_partial_block(const ast::PartialBlock& node) override;
+    void visit_update_dt(const ast::UpdateDt& node) override;
+    void visit_verbatim(const ast::Verbatim& node) override;
+    void visit_before_block(const ast::BeforeBlock& node) override;
+    void visit_after_block(const ast::AfterBlock& node) override;
 };
 
 /** @} */  // end of codegen_details

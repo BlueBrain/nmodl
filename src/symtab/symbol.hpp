@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (C) 2018-2019 Blue Brain Project
+ * Copyright (C) 2018-2021 Blue Brain Project
  *
  * This file is part of NMODL distributed under the terms of the GNU
  * Lesser General Public License. See top-level LICENSE file for details.
@@ -22,7 +22,7 @@
 namespace nmodl {
 
 namespace ast {
-class Ast;
+struct Ast;
 }
 
 /// %Symbol table related implementations
@@ -348,6 +348,14 @@ class Symbol {
     bool is_variable() const noexcept;
 
     std::string to_string() const;
+
+    bool is_writable() const noexcept {
+        return has_any_property(syminfo::NmodlType::range_var) ||
+               has_any_property(syminfo::NmodlType::write_ion_var) ||
+               has_any_property(syminfo::NmodlType::assigned_definition) ||
+               has_any_property(syminfo::NmodlType::state_var) ||
+               has_any_property(syminfo::NmodlType::read_ion_var);
+    }
 };
 
 /** @} */  // end of sym_tab

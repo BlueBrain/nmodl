@@ -21,7 +21,9 @@
 #include "parser/c11_driver.hpp"
 #include "utils/logger.hpp"
 #include "utils/string_utils.hpp"
+#include "visitors/defuse_analyze_visitor.hpp"
 #include "visitors/rename_visitor.hpp"
+#include "visitors/symtab_visitor.hpp"
 #include "visitors/var_usage_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
 
@@ -32,7 +34,11 @@ namespace codegen {
 
 using namespace ast;
 
+using visitor::DefUseAnalyzeVisitor;
+using visitor::DUChain;
+using visitor::DUState;
 using visitor::RenameVisitor;
+using visitor::SymtabVisitor;
 using visitor::VarUsageVisitor;
 
 using symtab::syminfo::NmodlType;
@@ -63,13 +69,8 @@ void CodegenCVisitor::visit_integer(const Integer& node) {
     if (!codegen) {
         return;
     }
-    const auto& macro = node.get_macro();
     const auto& value = node.get_value();
-    if (macro) {
-        macro->accept(*this);
-    } else {
-        printer->add_text(std::to_string(value));
-    }
+    printer->add_text(std::to_string(value));
 }
 
 
@@ -132,7 +133,9 @@ void CodegenCVisitor::visit_var_name(const VarName& node) {
     }
     if (index) {
         printer->add_text("[");
+        printer->add_text("static_cast<int>(");
         index->accept(*this);
+        printer->add_text(")");
         printer->add_text("]");
     }
 }
@@ -144,7 +147,9 @@ void CodegenCVisitor::visit_indexed_name(const IndexedName& node) {
     }
     node.get_name()->accept(*this);
     printer->add_text("[");
+    printer->add_text("static_cast<int>(");
     node.get_length()->accept(*this);
+    printer->add_text(")");
     printer->add_text("]");
 }
 
@@ -312,6 +317,9 @@ void CodegenCVisitor::visit_verbatim(const Verbatim& node) {
     }
 }
 
+void CodegenCVisitor::visit_update_dt(const ast::UpdateDt& node) {
+    // dt change statement should be pulled outside already
+}
 
 /****************************************************************************************/
 /*                               Common helper routines                                 */
@@ -482,21 +490,27 @@ std::string CodegenCVisitor::breakpoint_current(std::string current) const {
 
 
 int CodegenCVisitor::float_variables_size() const {
-    auto count_length = [](const std::vector<SymbolType>& variables) -> int {
-        int length = 0;
-        for (const auto& variable: variables) {
-            length += variable->get_length();
-        }
-        return length;
+    auto count_length = [](int l, const SymbolType& variable) {
+        return l += variable->get_length();
     };
 
-    int float_size = count_length(info.range_parameter_vars);
-    float_size += count_length(info.range_assigned_vars);
-    float_size += count_length(info.range_state_vars);
-    float_size += count_length(info.assigned_vars);
+    int float_size = std::accumulate(info.range_parameter_vars.begin(),
+                                     info.range_parameter_vars.end(),
+                                     0,
+                                     count_length);
+    float_size += std::accumulate(info.range_assigned_vars.begin(),
+                                  info.range_assigned_vars.end(),
+                                  0,
+                                  count_length);
+    float_size += std::accumulate(info.range_state_vars.begin(),
+                                  info.range_state_vars.end(),
+                                  0,
+                                  count_length);
+    float_size +=
+        std::accumulate(info.assigned_vars.begin(), info.assigned_vars.end(), 0, count_length);
 
     /// all state variables for which we add Dstate variables
-    float_size += count_length(info.state_vars);
+    float_size += std::accumulate(info.state_vars.begin(), info.state_vars.end(), 0, count_length);
 
     /// for v_unused variable
     if (info.vectorize) {
@@ -689,11 +703,31 @@ bool CodegenCVisitor::is_constant_variable(const std::string& name) const {
         // per mechanism ion variables needs to be updated from neuron/coreneuron values
         if (info.is_ion_variable(name)) {
             is_constant = false;
-        } else if (symbol->has_any_property(NmodlType::param_assign) &&
-                   symbol->get_write_count() == 0) {
+        }
+        // for parameter variable to be const, make sure it's write count is 0
+        // and it's not used in the verbatim block
+        else if (symbol->has_any_property(NmodlType::param_assign) &&
+                 info.variables_in_verbatim.find(name) == info.variables_in_verbatim.end() &&
+                 symbol->get_write_count() == 0) {
             is_constant = true;
         }
     }
+    // Check whether the variable exists in the codegen_int_variables of the CodegenInfo struct
+    // which hold information whether the variables are const or not
+    const auto& int_variable_it = std::find_if(info.codegen_int_variables.begin(),
+                                               info.codegen_int_variables.end(),
+                                               [&name](const IndexVariableInfo& var) {
+                                                   return var.symbol->get_name() == name;
+                                               });
+    const auto& const_variable_it = std::find_if(info.constant_variables.begin(),
+                                                 info.constant_variables.end(),
+                                                 [&name](const IndexVariableInfo& var) {
+                                                     return var.symbol->get_name() == name;
+                                                 });
+    is_constant = is_constant ||
+                  (int_variable_it != info.codegen_int_variables.end() &&
+                   int_variable_it->is_constant) ||
+                  const_variable_it != info.constant_variables.end();
     return is_constant;
 }
 
@@ -710,7 +744,7 @@ void CodegenCVisitor::update_index_semantics() {
         info.semantics.emplace_back(index++, naming::POINT_PROCESS_SEMANTIC, 1);
     }
     for (const auto& ion: info.ions) {
-        for (const auto& var: ion.reads) {
+        for (auto i = 0; i < ion.reads.size(); ++i) {
             info.semantics.emplace_back(index++, ion.name + "_ion", 1);
         }
         for (const auto& var: ion.writes) {
@@ -785,6 +819,9 @@ std::string CodegenCVisitor::get_parameter_str(const ParamVector& params) {
     return param;
 }
 
+void CodegenCVisitor::print_backend_compute_routine_decl() {
+    // backend specific, do nothing
+}
 
 void CodegenCVisitor::print_channel_iteration_task_begin(BlockType type) {
     // backend specific, do nothing
@@ -807,6 +844,37 @@ void CodegenCVisitor::print_channel_iteration_tiling_block_end() {
     // backend specific, do nothing
 }
 
+void CodegenCVisitor::print_instance_variable_transfer_to_device() const {
+    // backend specific, do nothing
+}
+
+void CodegenCVisitor::print_deriv_advance_flag_transfer_to_device() const {
+    // backend specific, do nothing
+}
+
+void CodegenCVisitor::print_device_atomic_capture_annotation() const {
+    // backend specific, do nothing
+}
+
+void CodegenCVisitor::print_net_send_buf_count_update_to_host() const {
+    // backend specific, do nothing
+}
+
+void CodegenCVisitor::print_net_send_buf_update_to_host() const {
+    // backend specific, do nothing
+}
+
+void CodegenCVisitor::print_net_send_buf_count_update_to_device() const {
+    // backend specific, do nothing
+}
+
+void CodegenCVisitor::print_dt_update_to_device() const {
+    // backend specific, do nothing
+}
+
+void CodegenCVisitor::print_device_stream_wait() const {
+    // backend specific, do nothing
+}
 
 /**
  * \details Each kernel such as \c nrn\_init, \c nrn\_state and \c nrn\_cur could be offloaded
@@ -831,6 +899,13 @@ void CodegenCVisitor::print_kernel_data_present_annotation_block_end() {
     // backend specific, do nothing
 }
 
+void CodegenCVisitor::print_net_init_acc_serial_annotation_block_begin() {
+    // backend specific, do nothing
+}
+
+void CodegenCVisitor::print_net_init_acc_serial_annotation_block_end() {
+    // backend specific, do nothing
+}
 
 /**
  * \details Depending programming model and compiler, we print compiler hint
@@ -859,13 +934,19 @@ bool CodegenCVisitor::shadow_vector_setup_required() {
 }
 
 
+void CodegenCVisitor::print_channel_iteration_loop(const std::string& start = "start",
+                                                   const std::string& end = "end") {
+    printer->start_block("for (int id = {}; id < {}; id++)"_format(start, end));
+}
+
+
 /**
  * \details For CPU backend we iterate over all node counts. For cuda we use thread
  * index to check if block needs to be executed or not.
  */
 void CodegenCVisitor::print_channel_iteration_block_begin(BlockType type) {
     print_channel_iteration_block_parallel_hint(type);
-    printer->start_block("for (int id = start; id < end; id++)");
+    print_channel_iteration_loop();
 }
 
 
@@ -933,7 +1014,7 @@ void CodegenCVisitor::print_atomic_reduction_pragma() {
 
 
 void CodegenCVisitor::print_shadow_reduction_block_begin() {
-    printer->start_block("for (int id = start; id < end; id++)");
+    print_channel_iteration_loop();
 }
 
 
@@ -1027,6 +1108,9 @@ void CodegenCVisitor::print_abort_routine() const {
 std::string CodegenCVisitor::compute_method_name(BlockType type) const {
     if (type == BlockType::Initial) {
         return method_name(naming::NRN_INIT_METHOD);
+    }
+    if (type == BlockType::Constructor) {
+        return method_name(naming::NRN_CONSTRUCTOR_METHOD);
     }
     if (type == BlockType::Destructor) {
         return method_name(naming::NRN_DESTRUCTOR_METHOD);
@@ -1325,12 +1409,17 @@ void CodegenCVisitor::print_table_replacement_function(const ast::Block& node) {
     print_function_declaration(node, name);
     printer->start_block();
     {
-        printer->add_line("if ( {} == 0) {}"_format(use_table_var, "{"));
-        printer->add_line("    {}({}, arg_v);"_format(function_name, internal_method_arguments()));
+        const auto& params = node.get_parameters();
+        printer->add_line("if ( {} == 0) {{"_format(use_table_var));
+        printer->add_line("    {}({}, {});"_format(function_name,
+                                                   internal_method_arguments(),
+                                                   params[0].get()->get_node_name()));
         printer->add_line("     return 0;");
         printer->add_line("}");
 
-        printer->add_line("double xi = {} * (arg_v - {});"_format(mfac_name, tmin_name));
+        printer->add_line("double xi = {} * ({} - {});"_format(mfac_name,
+                                                               params[0].get()->get_node_name(),
+                                                               tmin_name));
         printer->add_line("if (isnan(xi)) {");
         for (const auto& var: table_variables) {
             auto name = get_variable_name(var->get_node_name());
@@ -1468,6 +1557,54 @@ std::string CodegenCVisitor::find_var_unique_name(const std::string& original_na
     return unique_name;
 }
 
+/**
+ * @brief Checks whether the functor_block generated by sympy solver modifies any variable outside
+ * its scope. If it does then return false, so that the operator() of the struct functor of the
+ * Eigen Newton solver doesn't have const qualifier.
+ *
+ * @param variable_block Statement Block of the variables declarations used in the functor struct of
+ *                       the solver
+ * @param functor_block Actual code being printed in the operator() of the functor struct of the
+ *                      solver
+ * @return True if operator() is const else False
+ */
+bool is_functor_const(const ast::StatementBlock& variable_block,
+                      const ast::StatementBlock& functor_block) {
+    // Save DUChain for every variable in variable_block
+    std::unordered_map<std::string, DUChain> chains;
+
+    // Create complete_block with both variable declarations (done in variable_block) and solver
+    // part (done in functor_block) to be able to run the SymtabVisitor and DefUseAnalyzeVisitor
+    // then and get the proper DUChains for the variables defined in the variable_block
+    ast::StatementBlock complete_block(functor_block);
+    // Typically variable_block has only one statement, a statement containing the declaration
+    // of the local variables
+    for (const auto& statement: variable_block.get_statements()) {
+        complete_block.insert_statement(complete_block.get_statements().begin(), statement);
+    }
+
+    // Create Symbol Table for complete_block
+    auto model_symbol_table = std::make_shared<symtab::ModelSymbolTable>();
+    SymtabVisitor(model_symbol_table.get()).visit_statement_block(complete_block);
+    // Initialize DefUseAnalyzeVisitor to generate the DUChains for the variables defined in the
+    // variable_block
+    DefUseAnalyzeVisitor v(*complete_block.get_symbol_table());
+
+    // Check the DUChains for all the variables in the variable_block
+    // If variable is defined in complete_block don't add const quilifier in operator()
+    auto is_functor_const = true;
+    const auto& variables = collect_nodes(variable_block, {ast::AstNodeType::LOCAL_VAR});
+    for (const auto& variable: variables) {
+        const auto& chain = v.analyze(complete_block, variable->get_node_name());
+        is_functor_const = !(chain.eval() == DUState::D || chain.eval() == DUState::LD ||
+                             chain.eval() == DUState::CD);
+        if (!is_functor_const)
+            break;
+    }
+
+    return is_functor_const;
+}
+
 void CodegenCVisitor::visit_eigen_newton_solver_block(const ast::EigenNewtonSolverBlock& node) {
     // solution vector to store copy of state vars for Newton solver
     printer->add_newline();
@@ -1476,13 +1613,16 @@ void CodegenCVisitor::visit_eigen_newton_solver_block(const ast::EigenNewtonSolv
     // try to use a different string for the matrices created by sympy in the form
     // X_<random_number>, J_<random_number>, Jm_<random_number> and F_<random_number>
     std::string X = find_var_unique_name("X");
+    std::string Xm = find_var_unique_name("Xm");
     std::string J = find_var_unique_name("J");
     std::string Jm = find_var_unique_name("Jm");
     std::string F = find_var_unique_name("F");
+    std::string Fm = find_var_unique_name("Fm");
 
     auto float_type = default_float_data_type();
     int N = node.get_n_state_vars()->get_value();
-    printer->add_line("Eigen::Matrix<{}, {}, 1> {};"_format(float_type, N, X));
+    printer->add_line("Eigen::Matrix<{}, {}, 1> {};"_format(float_type, N, Xm));
+    printer->add_line("{}* {} = {}.data();"_format(float_type, X, Xm));
 
     print_statement_block(*node.get_setup_x_block(), false, false);
 
@@ -1510,13 +1650,25 @@ void CodegenCVisitor::visit_eigen_newton_solver_block(const ast::EigenNewtonSolv
             instance_struct(), "{}"));
 
     printer->add_indent();
+
+    const auto& variable_block = *node.get_variable_block();
+    const auto& functor_block = *node.get_functor_block();
+
     printer->add_text(
         "void operator()(const Eigen::Matrix<{0}, {1}, 1>& {2}, Eigen::Matrix<{0}, {1}, "
         "1>& {3}, "
-        "Eigen::Matrix<{0}, {1}, {1}>& {4}) const"_format(float_type, N, X, F, Jm));
+        "Eigen::Matrix<{0}, {1}, {1}>& {4}) {5}"_format(
+            float_type,
+            N,
+            Xm,
+            Fm,
+            Jm,
+            is_functor_const(variable_block, functor_block) ? "const " : ""));
     printer->start_block();
+    printer->add_line("const {}* {} = {}.data();"_format(float_type, X, Xm));
     printer->add_line("{}* {} = {}.data();"_format(float_type, J, Jm));
-    print_statement_block(*node.get_functor_block(), false, false);
+    printer->add_line("{}* {} = {}.data();"_format(float_type, F, Fm));
+    print_statement_block(functor_block, false, false);
     printer->end_block(2);
 
     // assign newton solver results in matrix X to state vars
@@ -1533,7 +1685,7 @@ void CodegenCVisitor::visit_eigen_newton_solver_block(const ast::EigenNewtonSolv
     printer->add_line("functor newton_functor(nt, inst, id, pnodecount, v, indexes);");
     printer->add_line("newton_functor.initialize();");
     printer->add_line(
-        "int newton_iterations = nmodl::newton::newton_solver({}, newton_functor);"_format(X));
+        "int newton_iterations = nmodl::newton::newton_solver({}, newton_functor);"_format(Xm));
 
     // assign newton solver results in matrix X to state vars
     print_statement_block(*node.get_update_states_block(), false, false);
@@ -1547,25 +1699,44 @@ void CodegenCVisitor::visit_eigen_linear_solver_block(const ast::EigenLinearSolv
     // try to use a different string for the matrices created by sympy in the form
     // X_<random_number>, J_<random_number>, Jm_<random_number> and F_<random_number>
     std::string X = find_var_unique_name("X");
+    std::string Xm = find_var_unique_name("Xm");
     std::string J = find_var_unique_name("J");
     std::string Jm = find_var_unique_name("Jm");
     std::string F = find_var_unique_name("F");
+    std::string Fm = find_var_unique_name("Fm");
 
     const std::string float_type = default_float_data_type();
     int N = node.get_n_state_vars()->get_value();
-    printer->add_line("Eigen::Matrix<{0}, {1}, 1> {2}, {3};"_format(float_type, N, X, F));
+    printer->add_line("Eigen::Matrix<{0}, {1}, 1> {2}, {3};"_format(float_type, N, Xm, Fm));
     printer->add_line("Eigen::Matrix<{0}, {1}, {1}> {2};"_format(float_type, N, Jm));
+    printer->add_line("{}* {} = {}.data();"_format(float_type, X, Xm));
     printer->add_line("{}* {} = {}.data();"_format(float_type, J, Jm));
+    printer->add_line("{}* {} = {}.data();"_format(float_type, F, Fm));
     print_statement_block(*node.get_variable_block(), false, false);
     print_statement_block(*node.get_initialize_block(), false, false);
     print_statement_block(*node.get_setup_x_block(), false, false);
 
     printer->add_newline();
-    printer->add_line(
-        "{0} = Eigen::PartialPivLU<Eigen::Ref<Eigen::Matrix<{1}, {2}, {2}>>>({3}).solve({4});"_format(
-            X, float_type, N, Jm, F));
+    print_eigen_linear_solver(float_type, N, Xm, Jm, Fm);
+    printer->add_newline();
+
     print_statement_block(*node.get_update_states_block(), false, false);
     print_statement_block(*node.get_finalize_block(), false, false);
+}
+
+void CodegenCVisitor::print_eigen_linear_solver(const std::string& float_type,
+                                                int N,
+                                                const std::string& Xm,
+                                                const std::string& Jm,
+                                                const std::string& Fm) {
+    if (N <= 4) {
+        // Faster compared to LU, given the template specialization in Eigen.
+        printer->add_line("{0} = {1}.inverse()*{2};"_format(Xm, Jm, Fm));
+    } else {
+        printer->add_line(
+            "{0} = Eigen::PartialPivLU<Eigen::Ref<Eigen::Matrix<{1}, {2}, {2}>>>({3}).solve({4});"_format(
+                Xm, float_type, N, Jm, Fm));
+    }
 }
 
 /****************************************************************************************/
@@ -1721,20 +1892,20 @@ std::string CodegenCVisitor::register_mechanism_arguments() const {
 
 std::pair<std::string, std::string> CodegenCVisitor::read_ion_variable_name(
     const std::string& name) const {
-    return {name, "ion_" + name};
+    return {name, naming::ION_VARNAME_PREFIX + name};
 }
 
 
 std::pair<std::string, std::string> CodegenCVisitor::write_ion_variable_name(
     const std::string& name) const {
-    return {"ion_" + name, name};
+    return {naming::ION_VARNAME_PREFIX + name, name};
 }
 
 
 std::string CodegenCVisitor::conc_write_statement(const std::string& ion_name,
                                                   const std::string& concentration,
                                                   int index) {
-    auto conc_var_name = get_variable_name("ion_" + concentration);
+    auto conc_var_name = get_variable_name(naming::ION_VARNAME_PREFIX + concentration);
     auto style_var_name = get_variable_name("style_" + ion_name);
     return "nrn_wrote_conc({}_type,"
            " &({}),"
@@ -1753,7 +1924,7 @@ std::string CodegenCVisitor::conc_write_statement(const std::string& ion_name,
  * case we first update current mechanism's shadow vector and then add statement
  * to queue that will be used in reduction queue.
  */
-std::string CodegenCVisitor::process_shadow_update_statement(ShadowUseStatement& statement,
+std::string CodegenCVisitor::process_shadow_update_statement(const ShadowUseStatement& statement,
                                                              BlockType type) {
     // when there is no operator or rhs then that statement doesn't need shadow update
     if (statement.op.empty() && statement.rhs.empty()) {
@@ -1937,7 +2108,6 @@ std::string CodegenCVisitor::float_variable_name(const SymbolType& symbol,
                                                  bool use_instance) const {
     auto name = symbol->get_name();
     auto dimension = symbol->get_length();
-    auto num_float = float_variables_size();
     auto position = position_of_float_var(name);
     // clang-format off
     if (symbol->is_array()) {
@@ -1958,7 +2128,6 @@ std::string CodegenCVisitor::int_variable_name(const IndexVariableInfo& symbol,
                                                const std::string& name,
                                                bool use_instance) const {
     auto position = position_of_int_var(name);
-    auto num_int = int_variables_size();
     // clang-format off
     if (symbol.is_index) {
         if (use_instance) {
@@ -1995,7 +2164,7 @@ std::string CodegenCVisitor::update_if_ion_variable_name(const std::string& name
     std::string result(name);
     if (ion_variable_struct_required()) {
         if (info.is_ion_read_variable(name)) {
-            result = "ion_" + name;
+            result = naming::ION_VARNAME_PREFIX + name;
         }
         if (info.is_ion_write_variable(name)) {
             result = "ionvar." + name;
@@ -2272,10 +2441,18 @@ void CodegenCVisitor::print_mechanism_global_var_structure() {
 
     printer->add_newline(1);
     printer->add_line("/** holds object of global variable */");
+    print_global_variable_device_create_annotation_pre();
     print_global_var_struct_decl();
 
     // create copy on the device
-    print_global_variable_device_create_annotation();
+    print_global_variable_device_create_annotation_post();
+}
+
+
+void CodegenCVisitor::print_prcellstate_macros() const {
+    printer->add_line("#ifndef NRN_PRCELLSTATE");
+    printer->add_line("#define NRN_PRCELLSTATE 0");
+    printer->add_line("#endif");
 }
 
 
@@ -2361,6 +2538,45 @@ void CodegenCVisitor::print_global_variables_for_hoc() {
     printer->add_line("};");
 }
 
+/**
+ * Return registration type for a given BEFORE/AFTER block
+ * /param block A BEFORE/AFTER block being registered
+ *
+ * Depending on a block type i.e. BEFORE or AFTER and also type
+ * of it's associated block i.e. BREAKPOINT, INITIAL, SOLVE and
+ * STEP, the registration type (as an integer) is calculated.
+ * These values are then interpreted by CoreNEURON internally.
+ */
+static size_t get_register_type_for_ba_block(const ast::Block* block) {
+    size_t register_type = 0;
+    BAType ba_type;
+    /// before block have value 10 and after block 20
+    if (block->is_before_block()) {
+        register_type = 10;
+        ba_type =
+            dynamic_cast<const ast::BeforeBlock*>(block)->get_bablock()->get_type()->get_value();
+    } else {
+        register_type = 20;
+        ba_type =
+            dynamic_cast<const ast::AfterBlock*>(block)->get_bablock()->get_type()->get_value();
+    }
+
+    /// associated blocks have different values (1 to 4) based on type.
+    /// These values are based on neuron/coreneuron implementation details.
+    if (ba_type == BATYPE_BREAKPOINT) {
+        register_type += 1;
+    } else if (ba_type == BATYPE_SOLVE) {
+        register_type += 2;
+    } else if (ba_type == BATYPE_INITIAL) {
+        register_type += 3;
+    } else if (ba_type == BATYPE_STEP) {
+        register_type += 4;
+    } else {
+        throw std::runtime_error("Unhandled Before/After type encountered during code generation");
+    }
+    return register_type;
+}
+
 
 /**
  * \details Every mod file has register function to connect with the simulator.
@@ -2402,12 +2618,17 @@ void CodegenCVisitor::print_mechanism_register() {
     auto args = register_mechanism_arguments();
     auto nobjects = num_thread_objects();
     if (info.point_process) {
-        printer->add_line("point_register_mech({}, NULL, {}, {});"_format(
+        printer->add_line("point_register_mech({}, {}, {}, {});"_format(
             args,
+            info.constructor_node ? method_name(naming::NRN_CONSTRUCTOR_METHOD) : "NULL",
             info.destructor_node ? method_name(naming::NRN_DESTRUCTOR_METHOD) : "NULL",
             nobjects));
     } else {
         printer->add_line("register_mech({}, {});"_format(args, nobjects));
+        if (info.constructor_node) {
+            printer->add_line(
+                "register_constructor({});"_format(method_name(naming::NRN_CONSTRUCTOR_METHOD)));
+        }
     }
 
     // types for ion
@@ -2502,6 +2723,15 @@ void CodegenCVisitor::print_mechanism_register() {
 
     if (info.net_event_used || info.net_send_used) {
         printer->add_line("hoc_register_net_send_buffering(mech_type);");
+    }
+
+    /// register all before/after blocks
+    for (size_t i = 0; i < info.before_after_blocks.size(); i++) {
+        // register type and associated function name for the block
+        const auto& block = info.before_after_blocks[i];
+        size_t register_type = get_register_type_for_ba_block(block);
+        std::string function_name = method_name("nrn_before_after_{}"_format(i));
+        printer->add_line("hoc_reg_ba(mech_type, {}, {});"_format(function_name, register_type));
     }
 
     // register variables for hoc
@@ -2661,7 +2891,11 @@ void CodegenCVisitor::print_ion_variable() {
 }
 
 
-void CodegenCVisitor::print_global_variable_device_create_annotation() {
+void CodegenCVisitor::print_global_variable_device_create_annotation_pre() {
+    // nothing for cpu
+}
+
+void CodegenCVisitor::print_global_variable_device_create_annotation_post() {
     // nothing for cpu
 }
 
@@ -2685,6 +2919,11 @@ void CodegenCVisitor::print_global_variable_setup() {
 
     // offsets for state variables
     if (info.primes_size != 0) {
+        if (info.primes_size != info.prime_variables_by_order.size()) {
+            throw std::runtime_error{
+                "primes_size = {} differs from prime_variables_by_order.size() = {}, this should not happen."_format(
+                    info.primes_size, info.prime_variables_by_order.size())};
+        }
         auto slist1 = get_variable_name("slist1");
         auto dlist1 = get_variable_name("dlist1");
         auto n = info.primes_size;
@@ -2938,7 +3177,8 @@ void CodegenCVisitor::print_instance_variable_setup() {
         printer->add_line("inst->{} = {};"_format(name, device_variable));
     }
 
-    printer->add_line("ml->instance = (void*) inst;");
+    printer->add_line("ml->instance = inst;");
+    print_instance_variable_transfer_to_device();
     printer->end_block(3);
 
     printer->add_line("/** cleanup mechanism instance variables */");
@@ -2960,6 +3200,7 @@ void CodegenCVisitor::print_initial_block(const InitialBlock* node) {
     } else {
         printer->add_line("int node_id = node_index[id];");
         printer->add_line("double v = voltage[node_id];");
+        print_v_unused();
     }
 
     if (ion_variable_struct_required()) {
@@ -2997,8 +3238,14 @@ void CodegenCVisitor::print_initial_block(const InitialBlock* node) {
 }
 
 
-void CodegenCVisitor::print_global_function_common_code(BlockType type) {
-    std::string method = compute_method_name(type);
+void CodegenCVisitor::print_global_function_common_code(BlockType type,
+                                                        const std::string& function_name) {
+    std::string method;
+    if (function_name.empty()) {
+        method = compute_method_name(type);
+    } else {
+        method = function_name;
+    }
     auto args = "NrnThread* nt, Memb_list* ml, int type";
 
     // watch statement function doesn't have type argument
@@ -3008,7 +3255,15 @@ void CodegenCVisitor::print_global_function_common_code(BlockType type) {
 
     print_global_method_annotation();
     printer->start_block("void {}({})"_format(method, args));
-    print_kernel_data_present_annotation_block_begin();
+    if (type != BlockType::Destructor && type != BlockType::Constructor) {
+        // We do not (currently) support DESTRUCTOR and CONSTRUCTOR blocks
+        // running anything on the GPU.
+        print_kernel_data_present_annotation_block_begin();
+    } else {
+        /// TODO: Remove this when the code generation is propery done
+        /// Related to https://github.com/BlueBrain/nmodl/issues/692
+        printer->add_line("#ifndef CORENEURON_BUILD");
+    }
     printer->add_line("int nodecount = ml->nodecount;");
     printer->add_line("int pnodecount = ml->_nodecount_padded;");
     printer->add_line(
@@ -3047,22 +3302,34 @@ void CodegenCVisitor::print_nrn_init(bool skip_init_check) {
         int nequation = info.num_equations;
         int list_num = info.derivimplicit_list_num;
         // clang-format off
-        printer->add_line("*deriv{}_advance(thread) = 0;"_format(list_num));
+        printer->add_line("int& deriv_advance_flag = *deriv{}_advance(thread);"_format(list_num));
+        printer->add_line("deriv_advance_flag = 0;");
+        print_deriv_advance_flag_transfer_to_device();
         printer->add_line("auto ns = newtonspace{}(thread);"_format(list_num));
         printer->add_line("auto& th = thread[dith{}()];"_format(list_num));
-
-        printer->add_line("if (*ns == nullptr) {");
-        printer->add_line("    int vec_size = 2*{}*pnodecount*sizeof(double);"_format(nequation));
-        printer->add_line("    double* vec = makevector(vec_size);"_format(nequation));
-        printer->add_line("    th.pval = vec;"_format(list_num));
-        printer->add_line("    *ns = nrn_cons_newtonspace({}, pnodecount);"_format(nequation));
+        printer->start_block("if (*ns == nullptr)");
+        printer->add_line("int vec_size = 2*{}*pnodecount*sizeof(double);"_format(nequation));
+        printer->add_line("double* vec = makevector(vec_size);"_format(nequation));
+        printer->add_line("th.pval = vec;"_format(list_num));
+        printer->add_line("*ns = nrn_cons_newtonspace({}, pnodecount);"_format(nequation));
         print_newtonspace_transfer_to_device();
-        printer->add_line("}");
+        printer->end_block(1);
         // clang-format on
     }
 
+    // update global variable as those might be updated via python/hoc API
+    print_global_variable_device_update_annotation();
+
     if (skip_init_check) {
         printer->start_block("if (_nrn_skip_initmodel == 0)");
+    }
+
+    if (!info.changed_dt.empty()) {
+        printer->add_line(
+            "double _save_prev_dt = {};"_format(get_variable_name(naming::NTHREAD_DT_VARIABLE)));
+        printer->add_line(
+            "{} = {};"_format(get_variable_name(naming::NTHREAD_DT_VARIABLE), info.changed_dt));
+        print_dt_update_to_device();
     }
 
     print_channel_iteration_tiling_block_begin(BlockType::Initial);
@@ -3076,16 +3343,98 @@ void CodegenCVisitor::print_nrn_init(bool skip_init_check) {
     print_channel_iteration_block_end();
     print_shadow_reduction_statements();
     print_channel_iteration_tiling_block_end();
+
+    if (!info.changed_dt.empty()) {
+        printer->add_line(
+            "{} = _save_prev_dt;"_format(get_variable_name(naming::NTHREAD_DT_VARIABLE)));
+        print_dt_update_to_device();
+    }
+
     printer->end_block(1);
 
     if (info.derivimplicit_used()) {
-        printer->add_line("*deriv{}_advance(thread) = 1;"_format(info.derivimplicit_list_num));
+        printer->add_line("deriv_advance_flag = 1;");
+        print_deriv_advance_flag_transfer_to_device();
     }
+
+    if (info.net_send_used && !info.artificial_cell) {
+        print_send_event_move();
+    }
+
     print_kernel_data_present_annotation_block_end();
     if (skip_init_check) {
         printer->end_block(1);
     }
     codegen = false;
+}
+
+void CodegenCVisitor::print_before_after_block(const ast::Block* node, size_t block_id) {
+    codegen = true;
+
+    std::string ba_type;
+    std::shared_ptr<ast::BABlock> ba_block;
+
+    if (node->is_before_block()) {
+        ba_block = dynamic_cast<const ast::BeforeBlock*>(node)->get_bablock();
+        ba_type = "BEFORE";
+    } else {
+        ba_block = dynamic_cast<const ast::AfterBlock*>(node)->get_bablock();
+        ba_type = "AFTER";
+    }
+
+    std::string ba_block_type = ba_block->get_type()->eval();
+
+    /// name of the before/after function
+    std::string function_name = method_name("nrn_before_after_{}"_format(block_id));
+
+    /// print common function code like init/state/current
+    printer->add_newline(2);
+    printer->add_line("/** {} of block type {} # {} */"_format(ba_type, ba_block_type, block_id));
+    print_global_function_common_code(BlockType::BeforeAfter, function_name);
+
+    print_channel_iteration_tiling_block_begin(BlockType::BeforeAfter);
+    print_channel_iteration_block_begin(BlockType::BeforeAfter);
+
+    printer->add_line("int node_id = node_index[id];");
+    printer->add_line("double v = voltage[node_id];");
+    print_v_unused();
+
+    // read ion statements
+    const auto& read_statements = ion_read_statements(BlockType::Equation);
+    for (auto& statement: read_statements) {
+        printer->add_line(statement);
+    }
+
+    /// print main body
+    printer->add_indent();
+    print_statement_block(*ba_block->get_statement_block());
+    printer->add_newline();
+
+    // write ion statements
+    const auto& write_statements = ion_write_statements(BlockType::Equation);
+    for (auto& statement: write_statements) {
+        auto text = process_shadow_update_statement(statement, BlockType::Equation);
+        printer->add_line(text);
+    }
+
+    /// loop end including data annotation block
+    print_channel_iteration_block_end();
+    print_channel_iteration_tiling_block_end();
+    printer->end_block(1);
+    print_kernel_data_present_annotation_block_end();
+
+    codegen = false;
+}
+
+void CodegenCVisitor::print_nrn_constructor() {
+    printer->add_newline(2);
+    print_global_function_common_code(BlockType::Constructor);
+    if (info.constructor_node != nullptr) {
+        const auto& block = info.constructor_node->get_statement_block();
+        print_statement_block(*block.get(), false, false);
+    }
+    printer->add_line("#endif");
+    printer->end_block(1);
 }
 
 
@@ -3096,6 +3445,7 @@ void CodegenCVisitor::print_nrn_destructor() {
         const auto& block = info.destructor_node->get_statement_block();
         print_statement_block(*block.get(), false, false);
     }
+    printer->add_line("#endif");
     printer->end_block(1);
 }
 
@@ -3175,7 +3525,11 @@ void CodegenCVisitor::print_watch_check() {
     if (info.is_voltage_used_by_watch_statements()) {
         printer->add_line("int node_id = node_index[id];");
         printer->add_line("double v = voltage[node_id];");
+        print_v_unused();
     }
+
+    // flat to make sure only one WATCH statement can be triggered at a time
+    printer->add_line("bool watch_untriggered = true;");
 
     for (int i = 0; i < info.watch_statements.size(); i++) {
         auto statement = info.watch_statements[i];
@@ -3183,7 +3537,7 @@ void CodegenCVisitor::print_watch_check() {
         auto varname = get_variable_name("watch{}"_format(i + 1));
 
         // start block 1
-        printer->start_block("if ({}&2)"_format(varname));
+        printer->start_block("if ({}&2 && watch_untriggered)"_format(varname));
 
         // start block 2
         printer->add_indent();
@@ -3196,6 +3550,8 @@ void CodegenCVisitor::print_watch_check() {
         // start block 3
         printer->start_block("if (({}&1) == 0)"_format(varname));
 
+        printer->add_line("watch_untriggered = false;");
+
         auto tqitem = get_variable_name("tqitem");
         auto point_process = get_variable_name("point_process");
         printer->add_indent();
@@ -3206,20 +3562,17 @@ void CodegenCVisitor::print_watch_check() {
         watch->get_value()->accept(*this);
         printer->add_text(");");
         printer->add_newline();
+        printer->end_block(1);
 
         printer->add_line("{} = 3;"_format(varname));
-        printer->end_block(1);
         // end block 3
 
         // start block 3
-        printer->start_block("else"_format());
+        printer->decrease_indent();
+        printer->start_block("} else");
         printer->add_line("{} = 2;"_format(varname));
         printer->end_block(1);
         // end block 3
-
-        printer->decrease_indent();
-        printer->add_line("}");
-        // end block 2
 
         printer->end_block(1);
         // end block 1
@@ -3242,6 +3595,10 @@ void CodegenCVisitor::print_net_receive_common_code(const Block& node, bool need
         printer->add_line("NrnThread* nt = nrn_threads + tid;");
         printer->add_line("Memb_list* ml = nt->_ml_list[pnt->_type];");
     }
+    if (node.is_initial_block()) {
+        print_kernel_data_present_annotation_block_begin();
+    }
+
     printer->add_line("{}int nodecount = ml->nodecount;"_format(param_type_qualifier()));
     printer->add_line("{}int pnodecount = ml->_nodecount_padded;"_format(param_type_qualifier()));
     printer->add_line("double* data = ml->data;");
@@ -3250,6 +3607,10 @@ void CodegenCVisitor::print_net_receive_common_code(const Block& node, bool need
     printer->add_line("ThreadDatum* thread = ml->_thread;");
     if (need_mech_inst) {
         printer->add_line("{0}* inst = ({0}*) ml->instance;"_format(instance_struct()));
+    }
+
+    if (node.is_initial_block()) {
+        print_net_init_acc_serial_annotation_block_begin();
     }
 
     // rename variables but need to see if they are actually used
@@ -3278,10 +3639,9 @@ void CodegenCVisitor::print_net_send_call(const FunctionCall& node) {
     std::string weight_index = "weight_index";
     std::string pnt = "pnt";
 
-    // for non-net-receieve functions there is no weight index argument
-    // and artificial cell is in vdata which is void**
+    // for non-net_receieve functions i.e. initial block, the weight_index argument is 0.
     if (!printing_net_receive) {
-        weight_index = "-1";
+        weight_index = "0";
         auto var = get_variable_name("point_process");
         if (info.artificial_cell) {
             pnt = "(Point_process*)" + var;
@@ -3325,7 +3685,7 @@ void CodegenCVisitor::print_net_move_call(const FunctionCall& node) {
         auto point_process = get_variable_name("point_process");
         std::string t = get_variable_name("t");
         printer->add_text("net_send_buffering(");
-        printer->add_text("ml->_net_send_buffer, 2, {}, {}, {}, {}+"_format(tqitem, weight_index, point_process, t));
+        printer->add_text("ml->_net_send_buffer, 2, {}, {}, {}, "_format(tqitem, weight_index, point_process));
         print_vector_elements(arguments, ", ");
         printer->add_text(", 0.0");
         printer->add_text(")");
@@ -3405,6 +3765,12 @@ void CodegenCVisitor::print_net_init() {
     } else {
         print_net_receive_common_code(*node);
         print_statement_block(*block, false, false);
+        if (node->is_initial_block()) {
+            print_net_init_acc_serial_annotation_block_end();
+            print_kernel_data_present_annotation_block_end();
+            printer->add_line("auto& nsb = ml->_net_send_buffer;");
+            print_net_send_buf_update_to_host();
+        }
     }
     printer->end_block(1);
     codegen = false;
@@ -3414,7 +3780,7 @@ void CodegenCVisitor::print_net_init() {
 void CodegenCVisitor::print_send_event_move() {
     printer->add_newline();
     printer->add_line("NetSendBuffer_t* nsb = ml->_net_send_buffer;");
-    /// \todo Update net send buffer on host
+    print_net_send_buf_update_to_host();
     printer->add_line("for (int i=0; i < nsb->_cnt; i++) {");
     printer->add_line("    int type = nsb->_sendtype[i];");
     printer->add_line("    int tid = nt->id;");
@@ -3428,7 +3794,7 @@ void CodegenCVisitor::print_send_event_move() {
     // clang-format on
     printer->add_line("}");
     printer->add_line("nsb->_cnt = 0;");
-    /// \todo Update net send buffer count on device
+    print_net_send_buf_count_update_to_device();
 }
 
 
@@ -3491,20 +3857,23 @@ void CodegenCVisitor::print_net_receive_buffering(bool need_mech_inst) {
     printer->end_block(1);
     print_net_receive_loop_end();
 
+    print_device_stream_wait();
+    printer->add_line("nrb->_displ_cnt = 0;");
+    printer->add_line("nrb->_cnt = 0;");
+
     if (info.net_send_used || info.net_event_used) {
         print_send_event_move();
     }
 
     printer->add_newline();
-    printer->add_line("nrb->_displ_cnt = 0;");
-    printer->add_line("nrb->_cnt = 0;");
-
     print_kernel_data_present_annotation_block_end();
     printer->end_block(1);
 }
 
 void CodegenCVisitor::print_net_send_buffering_grow() {
-    printer->add_line("nsb->grow();");
+    printer->add_line("if(i >= nsb->_size) {");
+    printer->add_line("    nsb->grow();");
+    printer->add_line("}");
 }
 
 void CodegenCVisitor::print_net_send_buffering() {
@@ -3518,19 +3887,18 @@ void CodegenCVisitor::print_net_send_buffering() {
         "NetSendBuffer_t* nsb, int type, int vdata_index, "
         "int weight_index, int point_index, double t, double flag";
     printer->start_block("static inline void net_send_buffering({}) "_format(args));
-    printer->add_line("int i = nsb->_cnt;");
-    printer->add_line("nsb->_cnt++;");
-    printer->add_line("if(nsb->_cnt >= nsb->_size) {");
-    printer->increase_indent();
+    printer->add_line("int i = 0;");
+    print_device_atomic_capture_annotation();
+    printer->add_line("i = nsb->_cnt++;");
     print_net_send_buffering_grow();
-    printer->decrease_indent();
+    printer->add_line("if(i < nsb->_size) {");
+    printer->add_line("    nsb->_sendtype[i] = type;");
+    printer->add_line("    nsb->_vdata_index[i] = vdata_index;");
+    printer->add_line("    nsb->_weight_index[i] = weight_index;");
+    printer->add_line("    nsb->_pnt_index[i] = point_index;");
+    printer->add_line("    nsb->_nsb_t[i] = t;");
+    printer->add_line("    nsb->_nsb_flag[i] = flag;");
     printer->add_line("}");
-    printer->add_line("nsb->_sendtype[i] = type;");
-    printer->add_line("nsb->_vdata_index[i] = vdata_index;");
-    printer->add_line("nsb->_weight_index[i] = weight_index;");
-    printer->add_line("nsb->_pnt_index[i] = point_index;");
-    printer->add_line("nsb->_nsb_t[i] = t;");
-    printer->add_line("nsb->_nsb_flag[i] = flag;");
     printer->end_block(1);
 }
 
@@ -3556,7 +3924,6 @@ void CodegenCVisitor::visit_for_netcon(const ast::ForNetcon& node) {
         std::find_if(info.semantics.begin(), info.semantics.end(), [](const IndexSemantics& a) {
             return a.name == naming::FOR_NETCON_SEMANTIC;
         })->index;
-    const auto num_int = int_variables_size();
 
     printer->add_text("const size_t offset = {}*pnodecount + id;"_format(index));
     printer->add_newline();
@@ -3798,6 +4165,7 @@ void CodegenCVisitor::print_nrn_state() {
 
     printer->add_line("int node_id = node_index[id];");
     printer->add_line("double v = voltage[node_id];");
+    print_v_unused();
 
     /**
      * \todo Eigen solver node also emits IonCurVar variable in the functor
@@ -3876,20 +4244,20 @@ void CodegenCVisitor::print_nrn_cur_conductance_kernel(const BreakpointBlock& no
         }
         printer->add_line("double rhs = {};"_format(sum));
     }
-    if (!info.conductances.empty()) {
-        std::string sum;
-        for (const auto& conductance: info.conductances) {
-            auto var = breakpoint_current(conductance.variable);
-            sum += get_variable_name(var);
-            if (&conductance != &info.conductances.back()) {
-                sum += "+";
-            }
+
+    std::string sum;
+    for (const auto& conductance: info.conductances) {
+        auto var = breakpoint_current(conductance.variable);
+        sum += get_variable_name(var);
+        if (&conductance != &info.conductances.back()) {
+            sum += "+";
         }
-        printer->add_line("double g = {};"_format(sum));
     }
+    printer->add_line("double g = {};"_format(sum));
+
     for (const auto& conductance: info.conductances) {
         if (!conductance.ion.empty()) {
-            auto lhs = "ion_di" + conductance.ion + "dv";
+            auto lhs = std::string(naming::ION_VARNAME_PREFIX) + "di" + conductance.ion + "dv";
             auto rhs = get_variable_name(conductance.variable);
             ShadowUseStatement statement{lhs, "+=", rhs};
             auto text = process_shadow_update_statement(statement, BlockType::Equation);
@@ -3914,7 +4282,7 @@ void CodegenCVisitor::print_nrn_cur_non_conductance_kernel() {
     for (auto& ion: info.ions) {
         for (auto& var: ion.writes) {
             if (ion.is_ionic_current(var)) {
-                auto lhs = "ion_di" + ion.name + "dv";
+                auto lhs = std::string(naming::ION_VARNAME_PREFIX) + "di" + ion.name + "dv";
                 auto rhs = "(di{}-{})/0.001"_format(ion.name, get_variable_name(var));
                 if (info.point_process) {
                     auto area = get_variable_name(naming::NODE_AREA_VARIABLE);
@@ -3932,6 +4300,7 @@ void CodegenCVisitor::print_nrn_cur_non_conductance_kernel() {
 void CodegenCVisitor::print_nrn_cur_kernel(const BreakpointBlock& node) {
     printer->add_line("int node_id = node_index[id];");
     printer->add_line("double v = voltage[node_id];");
+    print_v_unused();
     if (ion_variable_struct_required()) {
         print_ion_variable();
     }
@@ -3959,6 +4328,8 @@ void CodegenCVisitor::print_nrn_cur_kernel(const BreakpointBlock& node) {
         printer->add_line("g = g*mfactor;");
         printer->add_line("rhs = rhs*mfactor;");
     }
+
+    print_g_unused();
 }
 
 void CodegenCVisitor::print_fast_imem_calculation() {
@@ -4070,20 +4441,37 @@ void CodegenCVisitor::print_data_structures() {
     print_ion_var_structure();
 }
 
+void CodegenCVisitor::print_v_unused() const {
+    printer->add_line("#if NRN_PRCELLSTATE");
+    printer->add_line("inst->v_unused[id] = v;");
+    printer->add_line("#endif");
+}
+
+void CodegenCVisitor::print_g_unused() const {
+    printer->add_line("#if NRN_PRCELLSTATE");
+    printer->add_line("inst->g_unused[id] = g;");
+    printer->add_line("#endif");
+}
 
 void CodegenCVisitor::print_compute_functions() {
     print_top_verbatim_blocks();
     print_function_prototypes();
-    for (const auto& procedure: info.procedures) {
-        print_procedure(*procedure);
+    if (print_procedures_and_functions) {
+        for (const auto& procedure: info.procedures) {
+            print_procedure(*procedure);
+        }
+        for (const auto& function: info.functions) {
+            print_function(*function);
+        }
     }
-    for (const auto& function: info.functions) {
-        print_function(*function);
+    for (size_t i = 0; i < info.before_after_blocks.size(); i++) {
+        print_before_after_block(info.before_after_blocks[i], i);
     }
     for (const auto& callback: info.derivimplicit_callbacks) {
         auto block = callback->get_node_to_solve().get();
         print_derivimplicit_kernel(block);
     }
+    print_backend_compute_routine_decl();
     print_net_send_buffering();
     print_net_init();
     print_watch_activate();
@@ -4103,6 +4491,7 @@ void CodegenCVisitor::print_codegen_routines() {
     print_headers_include();
     print_namespace_begin();
     print_nmodl_constants();
+    print_prcellstate_macros();
     print_mechanism_info();
     print_data_structures();
     print_global_variables_for_hoc();
@@ -4113,6 +4502,7 @@ void CodegenCVisitor::print_codegen_routines() {
     print_global_variable_setup();
     print_instance_variable_setup();
     print_nrn_alloc();
+    print_nrn_constructor();
     print_nrn_destructor();
     print_compute_functions();
     print_check_table_thread_function();

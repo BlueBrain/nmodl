@@ -131,7 +131,8 @@ class CodegenIspcVisitor: public CodegenCVisitor {
     ParamVector get_global_function_parms(const std::string& arg_qualifier);
 
 
-    void print_global_function_common_code(BlockType type) override;
+    void print_global_function_common_code(BlockType type,
+                                           const std::string& function_name = "") override;
 
 
     /// backend specific channel instance iteration block start
@@ -164,7 +165,7 @@ class CodegenIspcVisitor: public CodegenCVisitor {
     void print_procedure(const ast::ProcedureBlock& node) override;
 
 
-    void print_backend_compute_routine_decl();
+    void print_backend_compute_routine_decl() override;
 
 
     /// print wrapper function that calls ispc kernel

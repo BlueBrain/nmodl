@@ -13,6 +13,7 @@
  */
 
 #include <string>
+#include <unordered_set>
 
 #include "ast/ast.hpp"
 #include "codegen/codegen_naming.hpp"
@@ -153,6 +154,13 @@ struct Ion {
     bool is_ionic_conc(const std::string& text) const {
         return is_intra_cell_conc(text) || is_extra_cell_conc(text);
     }
+
+    /// for a given ion, return different variable names/properties
+    /// like internal/external concentration, reversial potential,
+    /// ionic current etc.
+    static std::vector<std::string> get_possible_variables(const std::string& ion_name) {
+        return {"i" + ion_name, ion_name + "i", ion_name + "o", "e" + ion_name};
+    }
 };
 
 
@@ -188,6 +196,9 @@ enum BlockType {
     /// initial block
     Initial,
 
+    /// constructor block
+    Constructor,
+
     /// destructor block
     Destructor,
 
@@ -205,6 +216,9 @@ enum BlockType {
 
     /// net_receive block
     NetReceive,
+
+    /// before / after block
+    BeforeAfter,
 
     /// fake ending block type for loops on the enums. Keep it at the end
     BlockTypeEnd
@@ -362,6 +376,9 @@ struct CodegenInfo {
     /// initial block
     const ast::InitialBlock* initial_node = nullptr;
 
+    /// constructor block
+    const ast::ConstructorBlock* constructor_node = nullptr;
+
     /// destructor block only for point process
     const ast::DestructorBlock* destructor_node = nullptr;
 
@@ -412,6 +429,10 @@ struct CodegenInfo {
     /// note that if tqitem doesn't exist then the default value should be 0
     int tqitem_index = 0;
 
+    // updated dt to use with steadystate solver (in initial block)
+    // empty string means no change in dt
+    std::string changed_dt;
+
     /// global variables
     std::vector<SymbolType> global_variables;
 
@@ -461,6 +482,12 @@ struct CodegenInfo {
 
     /// all watch statements
     std::vector<const ast::WatchStatement*> watch_statements;
+
+    /// all before after blocks
+    std::vector<const ast::Block*> before_after_blocks;
+
+    /// all variables/symbols used in the verbatim block
+    std::unordered_set<std::string> variables_in_verbatim;
 
     /// true if eigen newton solver is used
     bool eigen_newton_solver_exist = false;
@@ -537,7 +564,7 @@ struct CodegenInfo {
         if (artificial_cell) {
             return false;
         }
-        return nrn_state_block != nullptr || currents.empty();
+        return nrn_state_block != nullptr || breakpoint_exist();
     }
 
     /**

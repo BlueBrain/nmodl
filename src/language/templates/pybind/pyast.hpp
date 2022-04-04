@@ -102,6 +102,10 @@ struct PyAst: public Ast {
         PYBIND11_OVERLOAD(std::shared_ptr<Ast>, Ast, get_shared_ptr, );
     }
 
+    std::shared_ptr<const Ast> get_shared_ptr() const override {
+        PYBIND11_OVERLOAD(std::shared_ptr<const Ast>, Ast, get_shared_ptr, );
+    }
+
     const ModToken* get_token() const override {
         PYBIND11_OVERLOAD(const ModToken*, Ast, get_token, );
     }
@@ -137,6 +141,14 @@ struct PyAst: public Ast {
     }
 
     {% endfor %}
+
+    Ast* get_parent() const override {
+        PYBIND11_OVERLOAD(Ast*, Ast, get_parent, );
+    }
+
+    void set_parent(Ast* p) override {
+        PYBIND11_OVERLOAD(void, Ast, set_parent, p);
+    }
 };
 
 /** \} */  // end of ast_python

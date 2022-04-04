@@ -12,6 +12,8 @@
 
 #include "ast/all.hpp"
 #include "codegen/codegen_naming.hpp"
+#include "parser/c11_driver.hpp"
+#include "visitors/visitor_utils.hpp"
 
 
 namespace nmodl {
@@ -63,13 +65,25 @@ void CodegenHelperVisitor::sort_with_mod2c_symbol_order(std::vector<SymbolType>&
 /**
  * Find all ions used in mod file
  */
-void CodegenHelperVisitor::find_ion_variables() {
-    /// name of the ions used
-    auto ion_vars = psymtab->get_variables_with_properties(NmodlType::useion);
-    /// read variables from all ions
-    auto read_ion_vars = psymtab->get_variables_with_properties(NmodlType::read_ion_var);
-    /// write variables from all ions
-    auto write_ion_vars = psymtab->get_variables_with_properties(NmodlType::write_ion_var);
+void CodegenHelperVisitor::find_ion_variables(const ast::Program& node) {
+    // collect all use ion statements
+    const auto& ion_nodes = collect_nodes(node, {AstNodeType::USEION});
+
+    // ion names, read ion variables and write ion variables
+    std::vector<std::string> ion_vars;
+    std::vector<std::string> read_ion_vars;
+    std::vector<std::string> write_ion_vars;
+
+    for (const auto& ion_node: ion_nodes) {
+        const auto& ion = std::dynamic_pointer_cast<const ast::Useion>(ion_node);
+        ion_vars.push_back(ion->get_node_name());
+        for (const auto& var: ion->get_readlist()) {
+            read_ion_vars.push_back(var->get_node_name());
+        }
+        for (const auto& var: ion->get_writelist()) {
+            write_ion_vars.push_back(var->get_node_name());
+        }
+    }
 
     /**
      * Check if given variable belongs to given ion.
@@ -82,20 +96,17 @@ void CodegenHelperVisitor::find_ion_variables() {
     };
 
     /// iterate over all ion types and construct the Ion objects
-    for (auto& ion_var: ion_vars) {
-        auto ion_name = ion_var->get_name();
+    for (auto& ion_name: ion_vars) {
         Ion ion(ion_name);
         for (auto& read_var: read_ion_vars) {
-            auto var = read_var->get_name();
-            if (ion_variable(var, ion_name)) {
-                ion.reads.push_back(var);
+            if (ion_variable(read_var, ion_name)) {
+                ion.reads.push_back(read_var);
             }
         }
         for (auto& write_var: write_ion_vars) {
-            auto varname = write_var->get_name();
-            if (ion_variable(varname, ion_name)) {
-                ion.writes.push_back(varname);
-                if (ion.is_intra_cell_conc(varname) || ion.is_extra_cell_conc(varname)) {
+            if (ion_variable(write_var, ion_name)) {
+                ion.writes.push_back(write_var);
+                if (ion.is_intra_cell_conc(write_var) || ion.is_extra_cell_conc(write_var)) {
                     ion.need_style = true;
                     info.write_concentration = true;
                 }
@@ -480,6 +491,12 @@ void CodegenHelperVisitor::visit_initial_block(const InitialBlock& node) {
 }
 
 
+void CodegenHelperVisitor::visit_constructor_block(const ConstructorBlock& node) {
+    info.constructor_node = &node;
+    node.visit_children(*this);
+}
+
+
 void CodegenHelperVisitor::visit_destructor_block(const DestructorBlock& node) {
     info.destructor_node = &node;
     node.visit_children(*this);
@@ -543,11 +560,13 @@ void CodegenHelperVisitor::visit_function_block(const ast::FunctionBlock& node) 
 void CodegenHelperVisitor::visit_eigen_newton_solver_block(
     const ast::EigenNewtonSolverBlock& node) {
     info.eigen_newton_solver_exist = true;
+    node.visit_children(*this);
 }
 
 void CodegenHelperVisitor::visit_eigen_linear_solver_block(
     const ast::EigenLinearSolverBlock& node) {
     info.eigen_linear_solver_exist = true;
+    node.visit_children(*this);
 }
 
 void CodegenHelperVisitor::visit_function_call(const FunctionCall& node) {
@@ -586,6 +605,12 @@ void CodegenHelperVisitor::visit_conductance_hint(const ConductanceHint& node) {
  * Dstate then we have to lookup state to find out corresponding symbol. This
  * is because prime_variables_by_order should contain state variable name and
  * not the one replaced by solver pass.
+ *
+ * \todo AST can have duplicate DERIVATIVE blocks if a mod file uses SOLVE
+ *       statements in its INITIAL block (e.g. in case of kinetic schemes using
+ *       `STEADYSTATE sparse` solver). Such duplicated DERIVATIVE blocks could
+ *       be removed by `SolveBlockVisitor`, or we have to avoid visiting them
+ *       here. See e.g. SH_na8st.mod test and original reduced_dentate .mod.
  */
 void CodegenHelperVisitor::visit_statement_block(const ast::StatementBlock& node) {
     const auto& statements = node.get_statements();
@@ -602,8 +627,15 @@ void CodegenHelperVisitor::visit_statement_block(const ast::StatementBlock& node
                     if (from_state) {
                         symbol = psymtab->lookup(name.substr(1, name.size()));
                     }
-                    info.prime_variables_by_order.push_back(symbol);
-                    info.num_equations++;
+                    // See the \todo note above.
+                    if (std::find_if(info.prime_variables_by_order.begin(),
+                                     info.prime_variables_by_order.end(),
+                                     [&](auto const& sym) {
+                                         return sym->get_name() == symbol->get_name();
+                                     }) == info.prime_variables_by_order.end()) {
+                        info.prime_variables_by_order.push_back(symbol);
+                        info.num_equations++;
+                    }
                 }
             }
         }
@@ -662,7 +694,7 @@ void CodegenHelperVisitor::visit_program(const ast::Program& node) {
         }
     }
     node.visit_children(*this);
-    find_ion_variables();  // Keep this before find_*_range_variables()
+    find_ion_variables(node);  // Keep this before find_*_range_variables()
     find_range_variables();
     find_non_range_variables();
     find_table_variables();
@@ -691,6 +723,37 @@ void CodegenHelperVisitor::visit_discrete_block(const ast::DiscreteBlock& node) 
 
 void CodegenHelperVisitor::visit_partial_block(const ast::PartialBlock& node) {
     info.vectorize = false;
+}
+
+void CodegenHelperVisitor::visit_update_dt(const ast::UpdateDt& node) {
+    info.changed_dt = node.get_value()->eval();
+}
+
+/// visit verbatim block and find all symbols used
+void CodegenHelperVisitor::visit_verbatim(const Verbatim& node) {
+    const auto& text = node.get_statement()->eval();
+    // use C parser to get all tokens
+    parser::CDriver driver;
+    driver.scan_string(text);
+    const auto& tokens = driver.all_tokens();
+
+    // check if the token exist in the symbol table
+    for (auto& token: tokens) {
+        if (info.variables_in_verbatim.find(token) == info.variables_in_verbatim.end()) {
+            auto symbol = psymtab->lookup(token);
+            if (symbol != nullptr) {
+                info.variables_in_verbatim.insert(token);
+            }
+        }
+    }
+}
+
+void CodegenHelperVisitor::visit_before_block(const ast::BeforeBlock& node) {
+    info.before_after_blocks.push_back(&node);
+}
+
+void CodegenHelperVisitor::visit_after_block(const ast::AfterBlock& node) {
+    info.before_after_blocks.push_back(&node);
 }
 
 }  // namespace codegen

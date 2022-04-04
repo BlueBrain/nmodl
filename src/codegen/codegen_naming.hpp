@@ -66,7 +66,7 @@ static constexpr char POINT_PROCESS_VARIABLE[] = "point_process";
 static constexpr char TQITEM_VARIABLE[] = "tqitem";
 
 /// range variable for conductance
-static constexpr char CONDUCTANCE_VARIABLE[] = "_g";
+static constexpr char CONDUCTANCE_VARIABLE[] = "g";
 
 /// global variable to indicate if table is used
 static constexpr char USE_TABLE_VARIABLE[] = "usetable";
@@ -131,6 +131,9 @@ static constexpr char FOR_NETCON_SEMANTIC[] = "fornetcon";
 /// nrn_init method in generated code
 static constexpr char NRN_INIT_METHOD[] = "nrn_init";
 
+/// nrn_constructor method in generated code
+static constexpr char NRN_CONSTRUCTOR_METHOD[] = "nrn_constructor";
+
 /// nrn_destructor method in generated code
 static constexpr char NRN_DESTRUCTOR_METHOD[] = "nrn_destructor";
 
@@ -151,6 +154,16 @@ static constexpr char THREAD_ARGS[] = "_threadargs_";
 
 /// verbatim name of the variable for nrn thread arguments in prototype
 static constexpr char THREAD_ARGS_PROTO[] = "_threadargsproto_";
+
+/// prefix for ion variable
+static constexpr char ION_VARNAME_PREFIX[] = "ion_";
+
+/// name of the mechanism instance parameter in LLVM IR
+static constexpr char MECH_INSTANCE_VAR[] = "mech";
+static constexpr char MECH_NODECOUNT_VAR[] = "node_count";
+
+/// name of induction variable used in the kernel.
+static constexpr char INDUCTION_VAR[] = "id";
 
 /// commonly used variables in verbatim block and how they
 /// should be mapped to new code generation backends

@@ -10,6 +10,10 @@
 #include "ast/program.hpp"
 #include "codegen/codegen_helper_visitor.hpp"
 #include "parser/nmodl_driver.hpp"
+#include "visitors/kinetic_block_visitor.hpp"
+#include "visitors/neuron_solve_visitor.hpp"
+#include "visitors/solve_block_visitor.hpp"
+#include "visitors/steadystate_visitor.hpp"
 #include "visitors/symtab_visitor.hpp"
 
 using namespace nmodl;
@@ -19,9 +23,9 @@ using namespace codegen;
 using nmodl::parser::NmodlDriver;
 
 //=============================================================================
-// Helper for codege related visitor
+// Helper for codegen related visitor
 //=============================================================================
-std::string run_inline_visitor(const std::string& text) {
+std::string run_codegen_helper_visitor(const std::string& text) {
     NmodlDriver driver;
     const auto& ast = driver.parse_string(text);
 
@@ -88,7 +92,7 @@ SCENARIO("unusual / failing mod files", "[codegen][var_order]") {
 
         THEN("ionic current variable declared as RANGE appears first") {
             std::string expected = "gcalbar;ica;gcal;minf;tau;ggk;m;cai;cao;";
-            auto result = run_inline_visitor(nmodl_text);
+            auto result = run_codegen_helper_visitor(nmodl_text);
             REQUIRE(result == expected);
         }
     }
@@ -121,7 +125,7 @@ SCENARIO("unusual / failing mod files", "[codegen][var_order]") {
 
         THEN("ion state variable is ordered after parameter and assigned ionic current") {
             std::string expected = "gamma;decay;depth;minCai;ica;cai;";
-            auto result = run_inline_visitor(nmodl_text);
+            auto result = run_codegen_helper_visitor(nmodl_text);
             REQUIRE(result == expected);
         }
     }
@@ -163,8 +167,48 @@ SCENARIO("unusual / failing mod files", "[codegen][var_order]") {
 
         THEN("ion variables are ordered correctly") {
             std::string expected = "ca;cai;ica;drive_channel;";
-            auto result = run_inline_visitor(nmodl_text);
+            auto result = run_codegen_helper_visitor(nmodl_text);
             REQUIRE(result == expected);
+        }
+    }
+}
+
+SCENARIO("Check global variable setup", "[codegen][global_variables]") {
+    GIVEN("SH_na8st.mod: modfile from reduced_dentate model") {
+        std::string const nmodl_text{R"(
+            NEURON {
+                SUFFIX na8st
+            }
+            STATE { c1 c2 }
+            BREAKPOINT {
+                SOLVE kin METHOD derivimplicit
+            }
+            INITIAL {
+                SOLVE kin STEADYSTATE derivimplicit
+            }
+            KINETIC kin {
+                ~ c1 <-> c2 (a1, b1)
+            }
+        )"};
+        NmodlDriver driver;
+        const auto ast = driver.parse_string(nmodl_text);
+
+        /// construct symbol table and run codegen helper visitor
+        SymtabVisitor{}.visit_program(*ast);
+        KineticBlockVisitor{}.visit_program(*ast);
+        SymtabVisitor{}.visit_program(*ast);
+        SteadystateVisitor{}.visit_program(*ast);
+        SymtabVisitor{}.visit_program(*ast);
+        NeuronSolveVisitor{}.visit_program(*ast);
+        SolveBlockVisitor{}.visit_program(*ast);
+        SymtabVisitor{true}.visit_program(*ast);
+
+        CodegenHelperVisitor v;
+        const auto info = v.analyze(*ast);
+        // See https://github.com/BlueBrain/nmodl/issues/736
+        THEN("Checking that primes_size and prime_variables_by_order have the expected size") {
+            REQUIRE(info.primes_size == 2);
+            REQUIRE(info.prime_variables_by_order.size() == 2);
         }
     }
 }

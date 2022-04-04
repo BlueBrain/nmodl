@@ -9,11 +9,11 @@
 
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
 #include "llvm_benchmark.hpp"
-#include "ext_kernel.hpp"
 #include "test/benchmark/jit_driver.hpp"
-#include "test/unit/codegen/codegen_data_helper.hpp"
 #include "llvm/Support/Host.h"
 
+#include "ext_kernel.hpp"
+#include "test/unit/codegen/codegen_data_helper.hpp"
 
 
 namespace nmodl {

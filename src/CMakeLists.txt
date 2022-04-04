@@ -1,3 +1,9 @@
+# =============================================================================
+# Add extra compile flags to NMODL sources
+# =============================================================================
+add_compile_options(${NMODL_EXTRA_CXX_FLAGS})
+add_link_options(${NMODL_EXTRA_CXX_FLAGS})
+
 add_subdirectory(codegen)
 add_subdirectory(language)
 add_subdirectory(lexer)
@@ -29,7 +35,7 @@ target_link_libraries(
   lexer
   ${NMODL_WRAPPER_LIBS})
 if(NMODL_ENABLE_LLVM)
-  target_link_libraries(nmodl llvm_codegen llvm_benchmark benchmark_data ${LLVM_LIBS_TO_LINK}) 
+  target_link_libraries(nmodl llvm_codegen llvm_benchmark benchmark_data ${LLVM_LIBS_TO_LINK})
 endif()
 
 # =============================================================================

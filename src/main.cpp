@@ -32,6 +32,7 @@
 #include "visitors/ast_visitor.hpp"
 #include "visitors/constant_folder_visitor.hpp"
 #include "visitors/global_var_visitor.hpp"
+#include "visitors/indexedname_visitor.hpp"
 #include "visitors/inline_visitor.hpp"
 #include "visitors/ispc_rename_visitor.hpp"
 #include "visitors/json_visitor.hpp"
@@ -43,6 +44,7 @@
 #include "visitors/neuron_solve_visitor.hpp"
 #include "visitors/nmodl_visitor.hpp"
 #include "visitors/perf_visitor.hpp"
+#include "visitors/semantic_analysis_visitor.hpp"
 #include "visitors/solve_block_visitor.hpp"
 #include "visitors/steadystate_visitor.hpp"
 #include "visitors/sympy_conductance_visitor.hpp"
@@ -118,11 +120,14 @@ int main(int argc, const char* argv[]) {
     /// true if global variables to be converted to range
     bool nmodl_global_to_range(false);
 
+    /// true if top level local variables to be converted to range
+    bool nmodl_local_to_range(false);
+
     /// true if localize variables even if verbatim block is used
     bool localize_verbatim(false);
 
     /// true if local variables to be renamed
-    bool local_rename(false);
+    bool local_rename(true);
 
     /// true if inline even if verbatim block exist
     bool verbatim_inline(false);
@@ -171,26 +176,29 @@ int main(int argc, const char* argv[]) {
     /// use single precision floating-point types
     bool llvm_float_type(false);
 
-    /// llvm vector width
-    int llvm_vec_width = 1;
+    /// optimisation level for IR generation
+    int llvm_opt_level_ir = 0;
 
-    /// vector library name
-    std::string vector_library("none");
+    /// math library name
+    std::string llvm_math_library("none");
 
     /// disable debug information generation for the IR
-    bool disable_debug_information(false);
+    bool llvm_no_debug(false);
 
     /// fast math flags for LLVM backend
     std::vector<std::string> llvm_fast_math_flags;
 
+    /// traget CPU platform name
+    std::string llvm_cpu_name = "default";
+
+    /// traget GPU platform name
+    std::string llvm_gpu_name = "default";
+
+    /// llvm vector width if generating code for CPUs
+    int llvm_vector_width = 1;
+
     /// run llvm benchmark
-    bool run_llvm_benchmark(false);
-
-    /// do not assume that instance struct fields do not alias
-    bool llvm_assume_alias(false);
-
-    /// optimisation level for IR generation
-    int llvm_opt_level_ir = 0;
+    bool llvm_benchmark(false);
 
     /// optimisation level for machine code generation
     int llvm_opt_level_codegen = 0;
@@ -203,9 +211,6 @@ int main(int argc, const char* argv[]) {
 
     /// the number of repeated experiments for the benchmarking
     int num_experiments = 100;
-
-    /// specify the cpu for LLVM IR to target
-    std::string cpu = "default";
 
     /// benchmark external kernel with JIT
     bool external_kernel;
@@ -274,6 +279,9 @@ int main(int argc, const char* argv[]) {
     passes_opt->add_flag("--global-to-range",
          nmodl_global_to_range,
          "Convert GLOBAL variables to RANGE ({})"_format(nmodl_global_to_range))->ignore_case();
+    passes_opt->add_flag("--local-to-range",
+         nmodl_local_to_range,
+         "Convert top level LOCAL variables to RANGE ({})"_format(nmodl_local_to_range))->ignore_case();
     passes_opt->add_flag("--localize-verbatim",
         localize_verbatim,
         "Convert RANGE variables to LOCAL even if verbatim block exist ({})"_format(localize_verbatim))->ignore_case();
@@ -318,36 +326,60 @@ int main(int argc, const char* argv[]) {
 
     // LLVM IR code generation options.
     auto llvm_opt = app.add_subcommand("llvm", "LLVM code generation option")->ignore_case();
-    llvm_opt->add_flag("--ir",
+    auto llvm_ir_opt = llvm_opt->add_flag("--ir",
         llvm_ir,
         "Generate LLVM IR ({})"_format(llvm_ir))->ignore_case();
-    llvm_opt->add_flag("--disable-debug-info",
-                       disable_debug_information,
-                       "Disable debug information ({})"_format(disable_debug_information))->ignore_case();
+    llvm_ir_opt->required(true);
+    llvm_opt->add_flag("--no-debug",
+        llvm_no_debug,
+        "Disable debug information ({})"_format(llvm_no_debug))->ignore_case();
     llvm_opt->add_option("--opt-level-ir",
-                              llvm_opt_level_ir,
-                              "LLVM IR optimisation level (O{})"_format(llvm_opt_level_ir))->ignore_case()->check(CLI::IsMember({"0", "1", "2", "3"}));
+        llvm_opt_level_ir,
+        "LLVM IR optimisation level (O{})"_format(llvm_opt_level_ir))->ignore_case()->check(CLI::IsMember({"0", "1", "2", "3"}));
     llvm_opt->add_flag("--single-precision",
-                       llvm_float_type,
-                       "Use single precision floating-point types ({})"_format(llvm_float_type))->ignore_case();
-    llvm_opt->add_flag("--assume-may-alias",
-                       llvm_assume_alias,
-                       "Assume instance struct fields may alias ({})"_format(llvm_assume_alias))->ignore_case();
-    llvm_opt->add_option("--vector-width",
-        llvm_vec_width,
-        "LLVM explicit vectorisation width ({})"_format(llvm_vec_width))->ignore_case();
-    llvm_opt->add_option("--veclib",
-                         vector_library,
-                         "Vector library for maths functions ({})"_format(vector_library))->check(CLI::IsMember({"Accelerate", "libsystem_m", "libmvec", "MASSV", "SLEEF", "SVML", "none"}));
+        llvm_float_type,
+        "Use single precision floating-point types ({})"_format(llvm_float_type))->ignore_case();
     llvm_opt->add_option("--fmf",
-                         llvm_fast_math_flags,
-                         "Fast math flags for floating-point optimizations (none)")->check(CLI::IsMember({"afn", "arcp", "contract", "ninf", "nnan", "nsz", "reassoc", "fast"}));
+        llvm_fast_math_flags,
+        "Fast math flags for floating-point optimizations (none)")->check(CLI::IsMember({"afn", "arcp", "contract", "ninf", "nnan", "nsz", "reassoc", "fast"}));
+
+    // Platform options for LLVM code generation.
+    auto cpu_opt = app.add_subcommand("cpu", "LLVM CPU option")->ignore_case();
+    cpu_opt->needs(llvm_opt);
+    cpu_opt->add_option("--name",
+        llvm_cpu_name,
+        "Name of CPU platform to use")->ignore_case();
+    auto simd_math_library_opt = cpu_opt->add_option("--math-library",
+        llvm_math_library,
+        "Math library for SIMD code generation ({})"_format(llvm_math_library));
+    simd_math_library_opt->check(CLI::IsMember({"Accelerate", "libmvec", "libsystem_m", "MASSV", "SLEEF", "SVML", "none"}));
+    cpu_opt->add_option("--vector-width",
+        llvm_vector_width,
+        "Explicit vectorization width for IR generation ({})"_format(llvm_vector_width))->ignore_case();
+
+    auto gpu_opt = app.add_subcommand("gpu", "LLVM GPU option")->ignore_case();
+    gpu_opt->needs(llvm_opt);
+    auto gpu_target_name = gpu_opt->add_option("--name",
+        llvm_gpu_name,
+        "Name of GPU platform to use")->ignore_case();
+   gpu_opt->add_option("--target-chip",
+        llvm_cpu_name,
+        "Name of target chip to use")->ignore_case();
+    auto gpu_math_library_opt = gpu_opt->add_option("--math-library",
+        llvm_math_library,
+        "Math library for GPU code generation ({})"_format(llvm_math_library));
+    gpu_math_library_opt->check(CLI::IsMember({"libdevice"}));
+
+    // Allow only one platform at a time.
+    cpu_opt->excludes(gpu_opt);
+    gpu_opt->excludes(cpu_opt);
 
     // LLVM IR benchmark options.
     auto benchmark_opt = app.add_subcommand("benchmark", "LLVM benchmark option")->ignore_case();
+    benchmark_opt->needs(llvm_opt);
     benchmark_opt->add_flag("--run",
-                            run_llvm_benchmark,
-                            "Run LLVM benchmark ({})"_format(run_llvm_benchmark))->ignore_case();
+                            llvm_benchmark,
+                            "Run LLVM benchmark ({})"_format(llvm_benchmark))->ignore_case();
     benchmark_opt->add_option("--opt-level-codegen",
                               llvm_opt_level_codegen,
                               "Machine code optimisation level (O{})"_format(llvm_opt_level_codegen))->ignore_case()->check(CLI::IsMember({"0", "1", "2", "3"}));
@@ -360,9 +392,6 @@ int main(int argc, const char* argv[]) {
     benchmark_opt->add_option("--repeat",
                               num_experiments,
                               "Number of experiments for benchmarking ({})"_format(num_experiments))->ignore_case();
-    benchmark_opt->add_option("--cpu",
-                       cpu,
-                       "Target's backend ({})"_format(cpu))->ignore_case();
     benchmark_opt->add_flag("--external",
                               external_kernel,
                               "Benchmark external kernel ({})"_format(external_kernel))->ignore_case();
@@ -428,6 +457,14 @@ int main(int argc, const char* argv[]) {
         /// just visit the ast
         AstVisitor().visit_program(*ast);
 
+        /// Check some rules that ast should follow
+        {
+            logger->info("Running semantic analysis visitor");
+            if (SemanticAnalysisVisitor().check(*ast)) {
+                return 1;
+            }
+        }
+
         /// construct symbol table
         {
             logger->info("Running symtab visitor");
@@ -457,13 +494,13 @@ int main(int argc, const char* argv[]) {
             // make sure to run the GlobalToRange visitor after all the
             // reinitializations of Symtab
             logger->info("Running GlobalToRange visitor");
-            GlobalToRangeVisitor(ast).visit_program(*ast);
+            GlobalToRangeVisitor(*ast).visit_program(*ast);
             SymtabVisitor(update_symtab).visit_program(*ast);
             ast_to_nmodl(*ast, filepath("global_to_range", "mod"));
         }
 
         /// LOCAL to ASSIGNED visitor
-        {
+        if (nmodl_local_to_range) {
             logger->info("Running LOCAL to ASSIGNED visitor");
             PerfVisitor().visit_program(*ast);
             LocalToAssignedVisitor().visit_program(*ast);
@@ -663,39 +700,41 @@ int main(int argc, const char* argv[]) {
             }
 
 #ifdef NMODL_LLVM_BACKEND
-            if (llvm_ir || run_llvm_benchmark) {
-                // If benchmarking, we want to optimize the IR with target information and not in
-                // LLVM visitor.
-                int llvm_opt_level = run_llvm_benchmark ? 0 : llvm_opt_level_ir;
+            if (llvm_ir || llvm_benchmark) {
+              // If benchmarking, we want to optimize the IR with target
+              // information and not in LLVM visitor.
+              int llvm_opt_level = llvm_benchmark ? 0 : llvm_opt_level_ir;
 
-                logger->info("Running LLVM backend code generator");
-                CodegenLLVMVisitor visitor(modfile,
-                                           output_dir,
-                                           llvm_opt_level,
-                                           llvm_float_type,
-                                           llvm_vec_width,
-                                           vector_library,
-                                           !disable_debug_information,
-                                           llvm_fast_math_flags,
-                                           llvm_assume_alias);
-                visitor.visit_program(*ast);
-                ast_to_nmodl(*ast, filepath("llvm", "mod"));
-                ast_to_json(*ast, filepath("llvm", "json"));
+              // Create platform abstraction.
+              PlatformID pid = llvm_gpu_name == "default" ? PlatformID::CPU
+                                                          : PlatformID::GPU;
+              const std::string name =
+                  llvm_gpu_name == "default" ? llvm_cpu_name : llvm_gpu_name;
+              Platform platform(pid, name, llvm_cpu_name, llvm_math_library, llvm_float_type,
+                                llvm_vector_width);
 
-                if (run_llvm_benchmark) {
-                    logger->info("Running LLVM benchmark");
-                    benchmark::LLVMBenchmark benchmark(visitor,
-                                                       modfile,
-                                                       output_dir,
-                                                       shared_lib_paths,
-                                                       num_experiments,
-                                                       instance_size,
-                                                       cpu,
-                                                       llvm_opt_level_ir,
-                                                       llvm_opt_level_codegen,
-                                                       external_kernel);
-                    benchmark.run(ast);
+              logger->info("Running LLVM backend code generator");
+              CodegenLLVMVisitor visitor(modfile, output_dir, platform,
+                                         llvm_opt_level, !llvm_no_debug,
+                                         llvm_fast_math_flags);
+              visitor.visit_program(*ast);
+              ast_to_nmodl(*ast, filepath("llvm", "mod"));
+              ast_to_json(*ast, filepath("llvm", "json"));
+
+              if (llvm_benchmark) {
+                // \todo integrate Platform class here
+                if (llvm_gpu_name != "default") {
+                  logger->warn("GPU benchmarking is not supported, targeting "
+                               "CPU instead");
                 }
+
+                logger->info("Running LLVM benchmark");
+                benchmark::LLVMBenchmark benchmark(
+                    visitor, modfile, output_dir, shared_lib_paths,
+                    num_experiments, instance_size, llvm_cpu_name,
+                    llvm_opt_level_ir, llvm_opt_level_codegen, external_kernel);
+                benchmark.run(ast);
+              }
             }
 #endif
         }

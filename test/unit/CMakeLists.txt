@@ -1,5 +1,12 @@
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 
+# =============================================================================
+# Add extra compile flags to NMODL test sources
+# =============================================================================
+add_compile_options(${NMODL_EXTRA_CXX_FLAGS})
+add_link_options(${NMODL_EXTRA_CXX_FLAGS})
+add_compile_options(${NMODL_TESTS_COMPILER_WARNING_SUPPRESSIONS})
+
 include_directories(${PYBIND11_INCLUDE_DIR} ${PYTHON_INCLUDE_DIRS})
 include_directories(${NMODL_PROJECT_SOURCE_DIR}/ext/catch ${NMODL_PROJECT_SOURCE_DIR}/test)
 include_directories(${NMODL_PROJECT_SOURCE_DIR}/src/solver)
@@ -42,21 +49,23 @@ add_executable(
   visitor/nmodl.cpp
   visitor/perf.cpp
   visitor/rename.cpp
+  visitor/semantic_analysis.cpp
   visitor/solve_block.cpp
   visitor/steadystate.cpp
   visitor/sympy_conductance.cpp
   visitor/sympy_solver.cpp
   visitor/units.cpp
   visitor/var_usage.cpp
-  visitor/verbatim.cpp)
+  visitor/verbatim.cpp
+  visitor/node_index.cpp)
 add_executable(testprinter printer/printer.cpp)
 add_executable(testsymtab symtab/symbol_table.cpp)
-add_executable(testnewton newton/newton.cpp ${SOLVER_SOURCE_FILES})
-add_executable(testfast_math fast_math/fast_math.cpp ${SOLVER_SOURCE_FILES})
+add_executable(testnewton newton/newton.cpp ${NEWTON_SOLVER_SOURCE_FILES})
+add_executable(testfast_math fast_math/fast_math.cpp ${NEWTON_SOLVER_SOURCE_FILES})
 add_executable(testunitlexer units/lexer.cpp)
 add_executable(testunitparser units/parser.cpp)
 add_executable(testcodegen codegen/main.cpp codegen/codegen_ispc.cpp codegen/codegen_helper.cpp
-                           codegen/codegen_utils.cpp)
+                           codegen/codegen_utils.cpp codegen/codegen_c_visitor.cpp)
 
 target_link_libraries(testmodtoken lexer util)
 target_link_libraries(testlexer lexer util)
@@ -102,10 +111,17 @@ if(NMODL_ENABLE_LLVM)
   add_library(benchmark_data STATIC codegen/codegen_data_helper.cpp)
   add_dependencies(benchmark_data lexer)
 
-  add_executable(testllvm visitor/main.cpp codegen/codegen_llvm_ir.cpp
-                          codegen/codegen_data_helper.cpp codegen/codegen_llvm_instance_struct.cpp)
+  add_executable(
+    testllvm visitor/main.cpp codegen/codegen_llvm_ir.cpp codegen/codegen_data_helper.cpp
+             codegen/codegen_llvm_instance_struct.cpp codegen/codegen_llvm_visitor.cpp)
   add_executable(test_llvm_runner visitor/main.cpp codegen/codegen_data_helper.cpp
                                   codegen/codegen_llvm_execution.cpp)
+  if(NMODL_ENABLE_LLVM_CUDA)
+    include_directories(${CUDAToolkit_INCLUDE_DIRS})
+    target_link_libraries(benchmark_data PRIVATE CUDA::cudart)
+    target_link_libraries(testllvm CUDA::cudart)
+    target_link_libraries(test_llvm_runner CUDA::cudart)
+  endif()
   target_link_libraries(
     testllvm
     llvm_codegen
@@ -141,8 +157,10 @@ endif()
 set(testvisitor_env "PYTHONPATH=${PROJECT_BINARY_DIR}/lib:$ENV{PYTHONPATH}")
 if(NOT LINK_AGAINST_PYTHON)
   list(APPEND testvisitor_env "NMODL_PYLIB=$ENV{NMODL_PYLIB}")
-  list(APPEND testvisitor_env
-       "NMODL_WRAPLIB=${PROJECT_BINARY_DIR}/lib/nmodl/libpywrapper${CMAKE_SHARED_LIBRARY_SUFFIX}")
+  list(
+    APPEND
+      testvisitor_env
+      "NMODL_WRAPLIB=${PROJECT_BINARY_DIR}/lib/nmodl/libpywrapper${CMAKE_SHARED_LIBRARY_SUFFIX}")
 endif()
 
 foreach(
@@ -159,18 +177,11 @@ foreach(
   testunitlexer
   testunitparser
   ${CODEGEN_TEST})
-  if(${CMAKE_VERSION} VERSION_GREATER "3.10")
-    if(${test_name} STREQUAL "testvisitor")
-      catch_discover_tests(${test_name} TEST_PREFIX "${test_name}/" PROPERTIES ENVIRONMENT
-                           "${testvisitor_env}")
-    else()
-      catch_discover_tests(${test_name} TEST_PREFIX "${test_name}/")
-    endif()
+  if(${test_name} STREQUAL "testvisitor")
+    catch_discover_tests(${test_name} TEST_PREFIX "${test_name}/" PROPERTIES ENVIRONMENT
+                         "${testvisitor_env}")
   else()
-    add_test(NAME ${test_name} COMMAND ${test_name})
-    if(${test_name} STREQUAL "testvisitor")
-      set_tests_properties(${test_name} PROPERTIES ENVIRONMENT "${testvisitor_env}")
-    endif()
+    catch_discover_tests(${test_name} TEST_PREFIX "${test_name}/")
   endif()
 endforeach()
 

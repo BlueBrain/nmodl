@@ -1,15 +1,13 @@
 # =============================================================================
-# Copyright (C) 2018-2019 Blue Brain Project
+# Copyright (C) 2018-2021 Blue Brain Project
 #
 # This file is part of NMODL distributed under the terms of the GNU Lesser General Public License.
 # See top-level LICENSE file for details.
 # =============================================================================
 
-cmake_minimum_required(VERSION 3.8 FATAL_ERROR)
-project(
-  NMODL
-  VERSION 0.2
-  LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.17 FATAL_ERROR)
+
+project(NMODL LANGUAGES CXX)
 
 # =============================================================================
 # CMake common project settings
@@ -25,11 +23,16 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
 option(NMODL_ENABLE_PYTHON_BINDINGS "Enable pybind11 based python bindings" OFF)
 option(NMODL_ENABLE_LEGACY_UNITS "Use original faraday, R, etc. instead of 2019 nist constants" OFF)
 option(NMODL_ENABLE_LLVM "Enable LLVM based code generation" ON)
+option(NMODL_ENABLE_LLVM_GPU "Enable LLVM based GPU code generation" ON)
 option(NMODL_ENABLE_JIT_EVENT_LISTENERS "Enable JITEventListener for Perf and Vtune" OFF)
 
 if(NMODL_ENABLE_LEGACY_UNITS)
   add_definitions(-DUSE_LEGACY_UNITS)
 endif()
+set(NMODL_EXTRA_CXX_FLAGS
+    ""
+    CACHE STRING "Add extra compile flags for NMODL sources")
+separate_arguments(NMODL_EXTRA_CXX_FLAGS)
 
 # =============================================================================
 # Settings to enable project as submodule
@@ -58,18 +61,28 @@ find_package(FLEX 2.6 REQUIRED)
 find_package(BISON 3.0 REQUIRED)
 
 # =============================================================================
-# Include cmake modules
+# Include cmake modules. Filenames ensure we always pick up NMODL's versions.
 # =============================================================================
-list(APPEND CMAKE_MODULE_PATH ${NMODL_PROJECT_SOURCE_DIR}/cmake)
-include(Catch)
-include(ClangTidyHelper)
-include(CompilerHelper)
-include(FindPythonModule)
-include(FlexHelper)
-include(GitRevision)
-include(PythonLinkHelper)
-include(RpathHelper)
-include(ExternalProjectHelper)
+include(cmake/Catch.cmake)
+include(cmake/ClangTidyHelper.cmake)
+include(cmake/CompilerHelper.cmake)
+include(cmake/FindPythonModule.cmake)
+include(cmake/FlexHelper.cmake)
+include(cmake/GitRevision.cmake)
+include(cmake/PythonLinkHelper.cmake)
+include(cmake/RpathHelper.cmake)
+include(cmake/ExternalProjectHelper.cmake)
+
+# This should apply to all NMODL targets but should not leak out when NMODL is built as a submodule.
+add_compile_options(${NMODL_COMPILER_WARNING_SUPPRESSIONS})
+
+# =============================================================================
+# Set the project version now using git
+# =============================================================================
+project(
+  NMODL
+  VERSION "0.8"
+  LANGUAGES CXX)
 
 # =============================================================================
 # Initialize external libraries as submodule
@@ -83,7 +96,6 @@ add_external_project(eigen OFF)
 
 add_subdirectory(${THIRD_PARTY_DIRECTORY}/fmt EXCLUDE_FROM_ALL)
 set_property(TARGET fmt PROPERTY POSITION_INDEPENDENT_CODE ON)
-
 include_directories(
   SYSTEM ${THIRD_PARTY_DIRECTORY} ${THIRD_PARTY_DIRECTORY}/catch/include
   ${THIRD_PARTY_DIRECTORY}/fmt/include ${THIRD_PARTY_DIRECTORY}/spdlog/include
@@ -136,20 +148,25 @@ endif()
 # Find required python packages
 # =============================================================================
 message(STATUS "CHECKING FOR PYTHON")
-find_package(PythonInterp 3.5 REQUIRED)
-find_python_module(jinja2 2.9.3 REQUIRED)
-find_python_module(pytest 3.3.0 REQUIRED)
-find_python_module(sympy 1.2 REQUIRED)
-find_python_module(textwrap 0.9 REQUIRED)
-find_python_module(yaml 3.12 REQUIRED)
+find_package(PythonInterp 3.6 REQUIRED)
+nmodl_find_python_module(jinja2 2.9.3 REQUIRED)
+nmodl_find_python_module(pytest 3.3.0 REQUIRED)
+nmodl_find_python_module(sympy 1.2 REQUIRED)
+nmodl_find_python_module(textwrap 0.9 REQUIRED)
+nmodl_find_python_module(yaml 3.12 REQUIRED)
 
 # =============================================================================
 # Find LLVM dependencies
 # =============================================================================
 if(NMODL_ENABLE_LLVM)
-  include(LLVMHelper)
+  include(cmake/LLVMHelper.cmake)
   include_directories(${LLVM_INCLUDE_DIRS})
   add_definitions(-DNMODL_LLVM_BACKEND)
+  if(NMODL_ENABLE_LLVM_CUDA)
+    enable_language(CUDA)
+    find_package(CUDAToolkit)
+    add_definitions(-DNMODL_LLVM_CUDA_BACKEND)
+  endif()
 endif()
 
 # =============================================================================
@@ -187,19 +204,7 @@ if(NOT NMODL_AS_SUBPROJECT)
   include(CTest)
   add_subdirectory(test/benchmark)
   add_subdirectory(test/unit)
-endif()
-
-# =============================================================================
-# Check newer python for generating AST classes
-# =============================================================================
-# ~~~
-# AST classes are generated by python scripts which require Python >= 3.6
-# In case of older python, try to find newer python interpreter
-# ~~~
-if(PYTHON_VERSION_MINOR VERSION_LESS 6)
-  unset(PYTHONINTERP_FOUND CACHE)
-  unset(PYTHON_EXECUTABLE CACHE)
-  find_package(PythonInterp 3.6 REQUIRED)
+  add_subdirectory(test/integration)
 endif()
 
 # =============================================================================
@@ -239,16 +244,17 @@ endif()
 # Build status
 # =============================================================================
 message(STATUS "")
-message(STATUS "Configured NMODL ${PROJECT_VERSION} (${GIT_REVISION})")
+message(STATUS "Configured NMODL ${PROJECT_VERSION} (${NMODL_GIT_REVISION})")
 message(STATUS "")
-
-message(STATUS "Some things you can do now:")
+message(STATUS "You can now build NMODL using:")
+message(STATUS "  cmake --build . --parallel 8 [--target TARGET]")
+message(STATUS "You might want to adjust the number of parallel build jobs for your system.")
+message(STATUS "Some non-default targets you might want to build:")
 message(STATUS "--------------------+--------------------------------------------------------")
-message(STATUS "Command             |   Description")
+message(STATUS " Target             |   Description")
 message(STATUS "--------------------+--------------------------------------------------------")
-message(STATUS "make                | Build the project")
-message(STATUS "make test           | Run unit tests")
-message(STATUS "make install        | Will install NMODL to: ${CMAKE_INSTALL_PREFIX}")
+message(STATUS "test                | Run unit tests")
+message(STATUS "install             | Will install NMODL to: ${CMAKE_INSTALL_PREFIX}")
 message(STATUS "--------------------+--------------------------------------------------------")
 message(STATUS " Build option       | Status")
 message(STATUS "--------------------+--------------------------------------------------------")
@@ -267,6 +273,12 @@ if(NMODL_ENABLE_LLVM)
   message(STATUS "  CMAKE             | ${LLVM_CMAKE_DIR}")
   message(STATUS "  JIT LISTENERS     | ${NMODL_ENABLE_JIT_EVENT_LISTENERS}")
 endif()
+message(STATUS "LLVM CUDA Codegen   | ${NMODL_ENABLE_LLVM_CUDA}")
+if(NMODL_ENABLE_LLVM_CUDA)
+  message(STATUS "  CUDA VERSION      | ${CUDAToolkit_VERSION}")
+  message(STATUS "  INCLUDE           | ${CUDAToolkit_INCLUDE_DIRS}")
+  message(STATUS "  LIBRARY           | ${CUDAToolkit_LIBRARY_DIR}")
+endif()
 if(NMODL_CLANG_FORMAT)
   message(STATUS "Clang Format        | ${ClangFormat_EXECUTABLE}")
 endif()
@@ -276,5 +288,4 @@ endif()
 message(STATUS "--------------+--------------------------------------------------------------")
 message(STATUS " See documentation : https://github.com/BlueBrain/nmodl/")
 message(STATUS "--------------+--------------------------------------------------------------")
-
 message(STATUS "")

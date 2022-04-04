@@ -199,8 +199,38 @@
                             brief: "member functions of the class/struct"
                             type: CodegenFunction
                             vector: true
+                  - CodegenThreadId:
+                      brief: "Represents thread id expression for GPU code generation"
+                      description: |
+                        For GPU code generation, we use a special AST node to enocde the initial
+                        thread id calculation. In NMODL, this expression is usually of the form:
+                        \code{.cpp}
+                            tid = blockId.x * blockDim.x + threadId.x
+                        \endcode
+                        To be able to support multiple GPU backends, we choose to have a custom AST
+                        node. Therefore, the code generation for this node is kept very simple,
+                        mapping expression to target-specific GPU inrinsics.
+                      nmodl: "THREAD_ID"
+                  - CodegenGridStride:
+                      brief: "Represents grid stride for GPU code generation"
+                      description: |
+                        For GPU code generation, we use a special AST node to enocde the loop
+                        increment expression. In NMODL, this expression is usually of the form:
+                        \code{.cpp}
+                            for (int i = tid; i < n; i += blockDim.x * gridDim.x)
+                        \endcode
+                      nmodl: "GRID_STRIDE"
             - Statement:
+                brief: "Statement base class"
                 children:
+                  - UpdateDt:
+                      nmodl: "dt"
+                      members:
+                        - value:
+                            brief: "Value of new timestep"
+                            type: Double
+                            prefix: {value: " = "}
+                      brief: "Statement to indicate a change in timestep in a given block"
                   - CodegenForStatement:
                       brief: "Represent for loop used for code generation"
                       nmodl: "for("

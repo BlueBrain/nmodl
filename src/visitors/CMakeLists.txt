@@ -12,6 +12,8 @@ set(VISITOR_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/defuse_analyze_visitor.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/global_var_visitor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/global_var_visitor.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/indexedname_visitor.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/indexedname_visitor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/inline_visitor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/inline_visitor.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kinetic_block_visitor.hpp
@@ -31,6 +33,8 @@ set(VISITOR_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/perf_visitor.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/rename_visitor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/rename_visitor.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/semantic_analysis_visitor.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/semantic_analysis_visitor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/steadystate_visitor.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/steadystate_visitor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/sympy_conductance_visitor.hpp

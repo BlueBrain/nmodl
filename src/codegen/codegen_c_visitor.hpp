@@ -18,6 +18,7 @@
 #include <algorithm>
 #include <cmath>
 #include <ctime>
+#include <numeric>
 #include <ostream>
 #include <string>
 #include <utility>
@@ -165,6 +166,11 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
     int current_watch_statement = 0;
 
     /**
+     * Bool to select whether procedures and functions should be printed in the generated file
+     */
+    bool print_procedures_and_functions = true;
+
+    /**
      * Data type of floating point variables
      */
     std::string float_type = codegen::naming::DEFAULT_FLOAT_TYPE;
@@ -261,6 +267,10 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
         return codegen::naming::DEFAULT_INTEGER_TYPE;
     }
 
+    /**
+     * Instance Struct type name suffix
+     */
+    std::string instance_struct_type_suffix = "Instance";
 
     /**
      * Checks if given function name is \c net_send
@@ -294,7 +304,7 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * Name of structure that wraps range variables
      */
     std::string instance_struct() const {
-        return "{}_Instance"_format(info.mod_suffix);
+        return "{}_{}"_format(info.mod_suffix, instance_struct_type_suffix);
     }
 
 
@@ -861,6 +871,11 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
+     * Print declaration of macro NRN_PRCELLSTATE for debugging
+     */
+    void print_prcellstate_macros() const;
+
+    /**
      * Print backend code for byte array that has mechanism information (to be registered
      * with coreneuron)
      */
@@ -871,12 +886,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * Print the structure that wraps all global variables used in the NMODL
      */
     void print_mechanism_global_var_structure();
-
-
-    /**
-     * Print the structure that wraps all range and int variables required for the NMODL
-     */
-    void print_mechanism_range_var_structure();
 
 
     /**
@@ -912,10 +921,42 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
-     * Print the function that initialize instance structure
-     *
+     * Print the code to copy instance variable to device
      */
-    void print_instance_variable_setup();
+    virtual void print_instance_variable_transfer_to_device() const;
+
+
+    /**
+     * Print the code to copy derivative advance flag to device
+     */
+    virtual void print_deriv_advance_flag_transfer_to_device() const;
+
+
+    /**
+     * Print the code to update NetSendBuffer_t count from device to host
+     */
+    virtual void print_net_send_buf_count_update_to_host() const;
+
+    /**
+     * Print the code to update NetSendBuffer_t from device to host
+     */
+    virtual void print_net_send_buf_update_to_host() const;
+
+
+    /**
+     * Print the code to update NetSendBuffer_t count from host to device
+     */
+    virtual void print_net_send_buf_count_update_to_device() const;
+
+    /**
+     * Print the code to update dt from host to device
+     */
+    virtual void print_dt_update_to_device() const;
+
+    /**
+     * Print the code to synchronise/wait on stream specific to NrnThread
+     */
+    virtual void print_device_stream_wait() const;
 
 
     /**
@@ -975,12 +1016,22 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
-     * Print the pragma annotation to create global variables on the device
+     * Print the pragma annotation needed before a global variable that must be
+     * created on the device. This always comes before a matching call to
+     * print_global_variable_device_create_annotation_post.
      *
      * \note This is not used for the C backend
      */
-    virtual void print_global_variable_device_create_annotation();
+    virtual void print_global_variable_device_create_annotation_pre();
 
+    /**
+     * Print the pragma annotation needed after a global variables that must be
+     * created on the device. This always comes after a matching call to
+     * print_global_variable_device_create_annotation_pre.
+     *
+     * \note This is not used for the C backend
+     */
+    virtual void print_global_variable_device_create_annotation_post();
 
     /**
      * Print the pragma annotation to update global variables from host to the device
@@ -1049,6 +1100,18 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
+     * Print the for loop statement going through all the mechanism instances
+     */
+    void print_channel_iteration_loop(const std::string& start, const std::string& end);
+
+
+    /**
+     * Print backend compute routines declaration for various backends
+     */
+    virtual void print_backend_compute_routine_decl();
+
+
+    /**
      * Print channel iterations from which tasks are created
      *
      * \note This is not used for the C backend
@@ -1103,6 +1166,18 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * Print matching block end of accelerator annotations for data presence on device
      */
     virtual void print_kernel_data_present_annotation_block_end();
+
+
+    /**
+     * Print accelerator kernels begin annotation for net_init kernel
+     */
+    virtual void print_net_init_acc_serial_annotation_block_begin();
+
+
+    /**
+     * Print accelerator kernels end annotation for net_init kernel
+     */
+    virtual void print_net_init_acc_serial_annotation_block_end();
 
 
     /**
@@ -1260,6 +1335,11 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
+     * Print pragma annotation for increase and capture of variable in automatic way
+     */
+    virtual void print_device_atomic_capture_annotation() const;
+
+    /**
      * Print block / loop for statement requiring reduction
      *
      */
@@ -1297,7 +1377,8 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * \param type      The target backend code block type
      * \return          The generated target backend code
      */
-    std::string process_shadow_update_statement(ShadowUseStatement& statement, BlockType type);
+    std::string process_shadow_update_statement(const ShadowUseStatement& statement,
+                                                BlockType type);
 
 
     /**
@@ -1351,6 +1432,13 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
+     * Print nrn_constructor function definition
+     *
+     */
+    void print_nrn_constructor();
+
+
+    /**
      * Print nrn_destructor function definition
      *
      */
@@ -1368,7 +1456,8 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * Print common code for global functions like nrn_init, nrn_cur and nrn_state
      * \param type The target backend code block type
      */
-    virtual void print_global_function_common_code(BlockType type);
+    virtual void print_global_function_common_code(BlockType type,
+                                                   const std::string& function_name = "");
 
 
     /**
@@ -1418,6 +1507,18 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      *
      */
     void print_data_structures();
+
+
+    /**
+     * Set v_unused (voltage) for NRN_PRCELLSTATE feature
+     */
+    void print_v_unused() const;
+
+
+    /**
+     * Set g_unused (conductance) for NRN_PRCELLSTATE feature
+     */
+    void print_g_unused() const;
 
 
     /**
@@ -1563,19 +1664,19 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * \param skip_init_check \c true if we want the generated code to execute the initialization
      *                        conditionally
      */
-    void print_nrn_init(bool skip_init_check = true);
+    virtual void print_nrn_init(bool skip_init_check = true);
 
 
     /**
      * Print nrn_state / state update function definition
      */
-    void print_nrn_state();
+    virtual void print_nrn_state();
 
 
     /**
      * Print nrn_cur / current update function definition
      */
-    void print_nrn_cur();
+    virtual void print_nrn_cur();
 
     /**
      * Print fast membrane current calculation code
@@ -1632,6 +1733,12 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      */
     virtual void print_procedure(const ast::ProcedureBlock& node);
 
+    /**
+     * Print NMODL before / after block in target backend code
+     * @param node AST node of type before/after type being printed
+     * @param block_id Index of the before/after block
+     */
+    virtual void print_before_after_block(const ast::Block* node, size_t block_id);
 
     /** Setup the target backend code generator
      *
@@ -1655,6 +1762,16 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      */
     std::string find_var_unique_name(const std::string& original_name) const;
 
+    /**
+     * Print the structure that wraps all range and int variables required for the NMODL
+     */
+    virtual void print_mechanism_range_var_structure();
+
+    /**
+     * Print the function that initialize instance structure
+     */
+    virtual void print_instance_variable_setup();
+
     void visit_binary_expression(const ast::BinaryExpression& node) override;
     void visit_binary_operator(const ast::BinaryOperator& node) override;
     void visit_boolean(const ast::Boolean& node) override;
@@ -1666,6 +1783,11 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
     void visit_function_call(const ast::FunctionCall& node) override;
     void visit_eigen_newton_solver_block(const ast::EigenNewtonSolverBlock& node) override;
     void visit_eigen_linear_solver_block(const ast::EigenLinearSolverBlock& node) override;
+    virtual void print_eigen_linear_solver(const std::string& float_type,
+                                           int N,
+                                           const std::string& Xm,
+                                           const std::string& Jm,
+                                           const std::string& Fm);
     void visit_if_statement(const ast::IfStatement& node) override;
     void visit_indexed_name(const ast::IndexedName& node) override;
     void visit_integer(const ast::Integer& node) override;
@@ -1685,6 +1807,7 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
     void visit_while_statement(const ast::WhileStatement& node) override;
     void visit_derivimplicit_callback(const ast::DerivimplicitCallback& node) override;
     void visit_for_netcon(const ast::ForNetcon& node) override;
+    void visit_update_dt(const ast::UpdateDt& node) override;
 };
 
 

@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (C) 2018-2019 Blue Brain Project
+ * Copyright (C) 2018-2021 Blue Brain Project
  *
  * This file is part of NMODL distributed under the terms of the GNU
  * Lesser General Public License. See top-level LICENSE file for details.
@@ -151,6 +151,12 @@ std::string CodegenIspcVisitor::format_float_string(const std::string& s_value) 
 std::string CodegenIspcVisitor::compute_method_name(BlockType type) const {
     if (type == BlockType::Initial) {
         return method_name(naming::NRN_INIT_METHOD);
+    }
+    if (type == BlockType::Constructor) {
+        return method_name(naming::NRN_CONSTRUCTOR_METHOD);
+    }
+    if (type == BlockType::Destructor) {
+        return method_name(naming::NRN_DESTRUCTOR_METHOD);
     }
     if (type == BlockType::State) {
         return method_name(naming::NRN_STATE_METHOD);
@@ -356,7 +362,13 @@ void CodegenIspcVisitor::print_procedure(const ast::ProcedureBlock& node) {
 }
 
 
-void CodegenIspcVisitor::print_global_function_common_code(BlockType type) {
+void CodegenIspcVisitor::print_global_function_common_code(BlockType type,
+                                                           const std::string& function_name) {
+    // If we are printing the cpp file, we have to use the c version of this function
+    if (wrapper_codegen) {
+        return CodegenCVisitor::print_global_function_common_code(type);
+    }
+
     std::string method = compute_method_name(type);
 
     auto params = get_global_function_parms(ptr_type_qualifier());
@@ -538,7 +550,7 @@ void CodegenIspcVisitor::print_backend_compute_routine_decl() {
 }
 
 bool CodegenIspcVisitor::check_incompatibilities() {
-    const auto& has_incompatible_nodes = [this](const ast::Ast& node) {
+    const auto& has_incompatible_nodes = [](const ast::Ast& node) {
         return !collect_nodes(node, incompatible_node_types).empty();
     };
 
@@ -600,7 +612,8 @@ bool CodegenIspcVisitor::check_incompatibilities() {
     if (info.initial_node) {
         emit_fallback[BlockType::Initial] =
             emit_fallback[BlockType::Initial] || has_incompatible_nodes(*info.initial_node) ||
-            visitor::calls_function(*info.initial_node, "net_send") || info.require_wrote_conc;
+            visitor::calls_function(*info.initial_node, "net_send") || info.require_wrote_conc ||
+            info.net_send_used || info.net_event_used;
     } else {
         emit_fallback[BlockType::Initial] = emit_fallback[BlockType::Initial] ||
                                             info.net_receive_initial_node ||
@@ -640,7 +653,7 @@ void CodegenIspcVisitor::move_procs_to_wrapper() {
     populate_nameset(info.nrn_state_block);
     populate_nameset(info.breakpoint_node);
 
-    const auto& has_incompatible_nodes = [this](const ast::Ast& node) {
+    const auto& has_incompatible_nodes = [](const ast::Ast& node) {
         return !collect_nodes(node, incompatible_node_types).empty();
     };
 
@@ -788,6 +801,9 @@ void CodegenIspcVisitor::print_wrapper_routines() {
     }
 
     print_block_wrappers_initial_equation_state();
+
+    print_nrn_constructor();
+    print_nrn_destructor();
 
     print_mechanism_register();
 

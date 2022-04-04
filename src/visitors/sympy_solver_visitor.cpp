@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (C) 2018-2019 Blue Brain Project
+ * Copyright (C) 2018-2021 Blue Brain Project
  *
  * This file is part of NMODL distributed under the terms of the GNU
  * Lesser General Public License. See top-level LICENSE file for details.
@@ -324,8 +324,6 @@ void SympySolverVisitor::solve_linear_system(const std::vector<std::string>& pre
         return;
     }
     // find out where to insert solutions in statement block
-    const auto& statements = block_with_expression_statements->get_statements();
-    auto it = get_solution_location_iterator(statements);
     if (small_system) {
         // for small number of state vars, linear solver
         // directly returns solution by solving symbolically at compile time
@@ -401,7 +399,6 @@ void SympySolverVisitor::visit_var_name(ast::VarName& node) {
 
 void SympySolverVisitor::visit_diff_eq_expression(ast::DiffEqExpression& node) {
     const auto& lhs = node.get_expression()->get_lhs();
-    const auto& rhs = node.get_expression()->get_rhs();
 
     if (!lhs->is_var_name()) {
         logger->warn("SympySolverVisitor :: LHS of differential equation is not a VariableName");
@@ -418,7 +415,12 @@ void SympySolverVisitor::visit_diff_eq_expression(ast::DiffEqExpression& node) {
     check_expr_statements_in_same_block();
 
     const auto node_as_nmodl = to_nmodl_for_sympy(node);
-    auto diffeq_solver = pywrap::EmbeddedPythonLoader::get_instance().api()->create_des_executor();
+    const auto deleter = [](nmodl::pybind_wrappers::DiffeqSolverExecutor* ptr) {
+        pywrap::EmbeddedPythonLoader::get_instance().api()->destroy_des_executor(ptr);
+    };
+    std::unique_ptr<nmodl::pybind_wrappers::DiffeqSolverExecutor, decltype(deleter)> diffeq_solver{
+        pywrap::EmbeddedPythonLoader::get_instance().api()->create_des_executor(), deleter};
+
     diffeq_solver->node_as_nmodl = node_as_nmodl;
     diffeq_solver->dt_var = codegen::naming::NTHREAD_DT_VARIABLE;
     diffeq_solver->vars = vars;
@@ -462,7 +464,6 @@ void SympySolverVisitor::visit_diff_eq_expression(ast::DiffEqExpression& node) {
     logger->debug("SympySolverVisitor :: -> solution: {}", solution);
 
     auto exception_message = diffeq_solver->exception_message;
-    pywrap::EmbeddedPythonLoader::get_instance().api()->destroy_des_executor(diffeq_solver);
     if (!exception_message.empty()) {
         logger->warn("SympySolverVisitor :: python exception: " + exception_message);
         return;
@@ -554,9 +555,8 @@ void SympySolverVisitor::visit_derivative_block(ast::DerivativeBlock& node) {
             }
         }
 
-        if (solve_method == codegen::naming::SPARSE_METHOD) {
-            solve_linear_system(pre_solve_statements);
-        } else if (solve_method == codegen::naming::DERIVIMPLICIT_METHOD) {
+        if (solve_method == codegen::naming::SPARSE_METHOD ||
+            solve_method == codegen::naming::DERIVIMPLICIT_METHOD) {
             solve_non_linear_system(pre_solve_statements);
         } else {
             logger->error("SympySolverVisitor :: Solve method {} not supported", solve_method);

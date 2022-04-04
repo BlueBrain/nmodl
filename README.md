@@ -1,5 +1,5 @@
 ## The NMODL Framework
-[![Build Status](https://travis-ci.org/BlueBrain/nmodl.svg?branch=master)](https://travis-ci.org/BlueBrain/nmodl) [![Build Status](https://dev.azure.com/pramodskumbhar/nmodl/_apis/build/status/BlueBrain.nmodl?branchName=master)](https://dev.azure.com/pramodskumbhar/nmodl/_build/latest?definitionId=2&branchName=master) [![codecov](https://codecov.io/gh/BlueBrain/nmodl/branch/master/graph/badge.svg?token=A3NU9VbNcB)](https://codecov.io/gh/BlueBrain/nmodl)
+[![Build Status](https://travis-ci.org/BlueBrain/nmodl.svg?branch=master)](https://travis-ci.org/BlueBrain/nmodl) [![Build Status](https://dev.azure.com/pramodskumbhar/nmodl/_apis/build/status/BlueBrain.nmodl?branchName=master)](https://dev.azure.com/pramodskumbhar/nmodl/_build/latest?definitionId=2&branchName=master) [![codecov](https://codecov.io/gh/BlueBrain/nmodl/branch/master/graph/badge.svg?token=A3NU9VbNcB)](https://codecov.io/gh/BlueBrain/nmodl) [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/4467/badge)](https://bestpractices.coreinfrastructure.org/projects/4467)
 
 The NMODL Framework is a code generation engine for **N**EURON **MOD**eling **L**anguage ([NMODL](https://www.neuron.yale.edu/neuron/static/py_doc/modelspec/programmatic/mechanisms/nmodl.html)). It is designed with modern compiler and code generation techniques to:
 
@@ -303,10 +303,9 @@ The benchmarks used to test the performance and parsing capabilities of NMODL Fr
 * [NMODL Benchmark](https://github.com/BlueBrain/nmodlbench)
 * [NMODL Database](https://github.com/BlueBrain/nmodldb)
 
-### Authors
 
-See [contributors](https://github.com/BlueBrain/nmodl/graphs/contributors).
+## Funding & Acknowledgment
 
-### Funding
+The development of this software was supported by funding to the Blue Brain Project, a research center of the École polytechnique fédérale de Lausanne (EPFL), from the Swiss government's ETH Board of the Swiss Federal Institutes of Technology. In addition, the development was supported by funding from the National Institutes of Health (NIH) under the Grant Number R01NS11613 (Yale University) and the European Union’s Horizon 2020 Framework Programme for Research and Innovation under the Specific Grant Agreement No. 785907 (Human Brain Project SGA2).
 
-This work has been funded by the EPFL Blue Brain Project (funded by the Swiss ETH board), NIH grant number R01NS11613 (Yale University) and partially funded by the European Union's Horizon 2020 Framework Programme for Research and Innovation under Grant Agreement number 785907 (Human Brain Project SGA2).
+Copyright © 2017-2021 Blue Brain Project/EPFL
