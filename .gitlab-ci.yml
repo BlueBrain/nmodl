@@ -76,24 +76,27 @@ test:gcc:
     bb5_exclusive: full
     bb5_constraint: gpu_32g # CascadeLake GPU node
 
-.spack_nmodl_cuda:
+.build_allocation:
+  variables:
+    bb5_ntasks: 2   # so we block 16 cores
+    bb5_cpus_per_task: 8 # ninja -j {this}
+    bb5_memory: 76G # ~16*384/80
+
+build_cuda:gcc:
+  extends: [.spack_build, .build_allocation]
   variables:
     SPACK_PACKAGE: nmodl
     SPACK_PACKAGE_SPEC: ~legacy-unit~python+llvm+llvm_cuda
     SPACK_INSTALL_EXTRA_FLAGS: -v
-
-build_cuda:gcc:
-  extends:
-    - .spack_build
-    - .spack_nmodl_cuda
-  variables:
     SPACK_PACKAGE_COMPILER: gcc
 
 test_benchmark:cpu:
   extends:
     - .benchmark_config
   script:
-    - module load unstable nmodl/develop
+    - module load unstable git
+    - . ${SPACK_ROOT}/share/spack/setup-env.sh
+    - spack load nmodl/${SPACK_INSTALLED_HASH}
     - nmodl test/integration/mod/test.mod llvm --ir --opt-level-ir 3 benchmark --run --opt-level-codegen 3 --instance-size 10000000 --repeat 2
   needs: ["build_cuda:gcc"]
 
@@ -101,6 +104,8 @@ test_benchmark:gpu:
   extends:
     - .benchmark_config
   script:
-    - module load unstable nmodl/develop
+    - module load unstable git
+    - . ${SPACK_ROOT}/share/spack/setup-env.sh
+    - spack load nmodl/${SPACK_INSTALLED_HASH}
     - nmodl test/integration/mod/test.mod llvm --no-debug --ir --opt-level-ir 3 gpu --target-arch "sm_70" --name "nvptx64" --math-library libdevice benchmark --run --libs "${CUDA_HOME}/nvvm/libdevice/libdevice.10.bc" --opt-level-codegen 3 --instance-size 10000000 --repeat 2
   needs: ["build_cuda:gcc"]
