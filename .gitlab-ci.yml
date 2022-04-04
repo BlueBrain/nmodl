@@ -70,9 +70,8 @@ test:gcc:
 
 .benchmark_config:
   variables:
-    bb5_ntasks: 2   # so we block 16 cores
-    bb5_cpus_per_task: 8 # ninja -j {this}
-    bb5_memory: 76G # ~16*384/80
+    bb5_ntasks: 1
+    bb5_memory: 16G
     bb5_constraint: clx&volta
 
 .spack_nmodl_cuda:
