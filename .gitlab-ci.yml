@@ -26,7 +26,7 @@ trigger cvf:
 .spack_nmodl:
   variables:
     SPACK_PACKAGE: nmodl
-    SPACK_PACKAGE_SPEC: ~legacy-unit+python
+    SPACK_PACKAGE_SPEC: ~legacy-unit+python+llvm
     SPACK_EXTRA_MODULES: llvm
     SPACK_INSTALL_EXTRA_FLAGS: -v
 
