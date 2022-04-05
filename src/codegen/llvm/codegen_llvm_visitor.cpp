@@ -62,11 +62,10 @@ static bool can_vectorize(const ast::CodegenForStatement& statement, symtab::Sym
 }
 
 void CodegenLLVMVisitor::annotate_kernel_with_nvvm(llvm::Function* kernel) {
-    llvm::Metadata* metadata[] = {
-        llvm::ValueAsMetadata::get(kernel),
-        llvm::MDString::get(*context, "kernel"),
-        llvm::ValueAsMetadata::get(
-            llvm::ConstantInt::get(llvm::Type::getInt32Ty(*context), 1))};
+    llvm::Metadata* metadata[] = {llvm::ValueAsMetadata::get(kernel),
+                                  llvm::MDString::get(*context, "kernel"),
+                                  llvm::ValueAsMetadata::get(
+                                      llvm::ConstantInt::get(llvm::Type::getInt32Ty(*context), 1))};
     llvm::MDNode* node = llvm::MDNode::get(*context, metadata);
     module->getOrInsertNamedMetadata("nvvm.annotations")->addOperand(node);
 }
@@ -121,7 +120,8 @@ void CodegenLLVMVisitor::add_vectorizable_functions_from_vec_lib(llvm::TargetLib
             {"SVML", VecLib::SVML}};
         const auto& library = llvm_supported_vector_libraries.find(platform.get_math_library());
         if (library == llvm_supported_vector_libraries.end())
-            throw std::runtime_error("Error: unknown vector library - " + platform.get_math_library() + "\n");
+            throw std::runtime_error("Error: unknown vector library - " +
+                                     platform.get_math_library() + "\n");
 
         // Add vectorizable functions to the target library info.
         switch (library->second) {
@@ -682,7 +682,7 @@ void CodegenLLVMVisitor::visit_codegen_function(const ast::CodegenFunction& node
         } else if (platform.is_gpu()) {
             block->accept(*this);
             annotate_kernel_with_nvvm(func);
-        } else { // scalar
+        } else {  // scalar
             block->accept(*this);
         }
     } else {
