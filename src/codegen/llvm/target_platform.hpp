@@ -12,10 +12,7 @@
 namespace nmodl {
 namespace codegen {
 
-enum PlatformID {
-    CPU,
-    GPU
-};
+enum PlatformID { CPU, GPU };
 
 /**
  * \class Platform
@@ -57,31 +54,31 @@ class Platform {
              std::string& math_library,
              bool use_single_precision = false,
              int instruction_width = 1)
-              : platform_id(platform_id)
-              , name(name)
-              , subtarget_name(subtarget_name)
-              , math_library(math_library)
-              , use_single_precision(use_single_precision)
-              , instruction_width(instruction_width) {}
+        : platform_id(platform_id)
+        , name(name)
+        , subtarget_name(subtarget_name)
+        , math_library(math_library)
+        , use_single_precision(use_single_precision)
+        , instruction_width(instruction_width) {}
 
     Platform(PlatformID platform_id,
              const std::string& name,
              std::string& math_library,
              bool use_single_precision = false,
              int instruction_width = 1)
-              : platform_id(platform_id)
-              , name(name)
-              , math_library(math_library)
-              , use_single_precision(use_single_precision)
-              , instruction_width(instruction_width) {}
+        : platform_id(platform_id)
+        , name(name)
+        , math_library(math_library)
+        , use_single_precision(use_single_precision)
+        , instruction_width(instruction_width) {}
 
-    Platform(bool use_single_precision,
-             int instruction_width)
-            : platform_id(PlatformID::CPU)
-            , use_single_precision(use_single_precision)
-            , instruction_width(instruction_width) {}
+    Platform(bool use_single_precision, int instruction_width)
+        : platform_id(PlatformID::CPU)
+        , use_single_precision(use_single_precision)
+        , instruction_width(instruction_width) {}
 
-    Platform() : platform_id(PlatformID::CPU) {}
+    Platform()
+        : platform_id(PlatformID::CPU) {}
 
     /// Checks if this platform is a default platform.
     bool is_default_platform();

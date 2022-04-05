@@ -695,40 +695,51 @@ int main(int argc, const char* argv[]) {
 
 #ifdef NMODL_LLVM_BACKEND
             if (llvm_ir || llvm_benchmark) {
-              // If benchmarking, we want to optimize the IR with target
-              // information and not in LLVM visitor.
-              int llvm_opt_level = llvm_benchmark ? 0 : llvm_opt_level_ir;
+                // If benchmarking, we want to optimize the IR with target
+                // information and not in LLVM visitor.
+                int llvm_opt_level = llvm_benchmark ? 0 : llvm_opt_level_ir;
 
-              // Create platform abstraction.
-              PlatformID pid = llvm_gpu_name == "default" ? PlatformID::CPU
-                                                          : PlatformID::GPU;
-              const std::string name =
-                  llvm_gpu_name == "default" ? llvm_cpu_name : llvm_gpu_name;
-              Platform platform(pid, name, llvm_cpu_name, llvm_math_library, llvm_float_type,
-                                llvm_vector_width);
+                // Create platform abstraction.
+                PlatformID pid = llvm_gpu_name == "default" ? PlatformID::CPU : PlatformID::GPU;
+                const std::string name = llvm_gpu_name == "default" ? llvm_cpu_name : llvm_gpu_name;
+                Platform platform(pid,
+                                  name,
+                                  llvm_cpu_name,
+                                  llvm_math_library,
+                                  llvm_float_type,
+                                  llvm_vector_width);
 
-              logger->info("Running LLVM backend code generator");
-              CodegenLLVMVisitor visitor(modfile, output_dir, platform,
-                                         llvm_opt_level, !llvm_no_debug,
-                                         llvm_fast_math_flags);
-              visitor.visit_program(*ast);
-              ast_to_nmodl(*ast, filepath("llvm", "mod"));
-              ast_to_json(*ast, filepath("llvm", "json"));
+                logger->info("Running LLVM backend code generator");
+                CodegenLLVMVisitor visitor(modfile,
+                                           output_dir,
+                                           platform,
+                                           llvm_opt_level,
+                                           !llvm_no_debug,
+                                           llvm_fast_math_flags);
+                visitor.visit_program(*ast);
+                ast_to_nmodl(*ast, filepath("llvm", "mod"));
+                ast_to_json(*ast, filepath("llvm", "json"));
 
-              if (llvm_benchmark) {
-                // \todo integrate Platform class here
-                if (llvm_gpu_name != "default") {
-                  logger->warn("GPU benchmarking is not supported, targeting "
-                               "CPU instead");
+                if (llvm_benchmark) {
+                    // \todo integrate Platform class here
+                    if (llvm_gpu_name != "default") {
+                        logger->warn(
+                            "GPU benchmarking is not supported, targeting "
+                            "CPU instead");
+                    }
+
+                    logger->info("Running LLVM benchmark");
+                    benchmark::LLVMBenchmark benchmark(visitor,
+                                                       modfile,
+                                                       output_dir,
+                                                       shared_lib_paths,
+                                                       num_experiments,
+                                                       instance_size,
+                                                       llvm_cpu_name,
+                                                       llvm_opt_level_ir,
+                                                       llvm_opt_level_codegen);
+                    benchmark.run(ast);
                 }
-
-                logger->info("Running LLVM benchmark");
-                benchmark::LLVMBenchmark benchmark(
-                    visitor, modfile, output_dir, shared_lib_paths,
-                    num_experiments, instance_size, llvm_cpu_name,
-                    llvm_opt_level_ir, llvm_opt_level_codegen);
-                benchmark.run(ast);
-              }
             }
 #endif
         }
