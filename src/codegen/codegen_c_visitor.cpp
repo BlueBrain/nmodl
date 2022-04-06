@@ -2445,7 +2445,7 @@ void CodegenCVisitor::print_standard_includes() {
 
 void CodegenCVisitor::print_coreneuron_includes() {
     printer->add_newline();
-    printer->add_line("#include <coreneuron/mechanism/mech/cfile/scoplib.h>");
+    printer->add_line("#include <coreneuron/mechanism/api.hpp>");
     printer->add_line("#include <coreneuron/nrnconf.h>");
     printer->add_line("#include <coreneuron/sim/multicore.hpp>");
     printer->add_line("#include <coreneuron/mechanism/register_mech.hpp>");
