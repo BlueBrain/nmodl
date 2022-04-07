@@ -17,7 +17,7 @@ const std::string Platform::DEFAULT_MATH_LIBRARY = "none";
 
 bool Platform::is_default_platform() const {
     // Default platform is a CPU.
-    return platform_id == PlatformID::CPU &&  name == Platform::DEFAULT_PLATFORM_NAME;
+    return platform_id == PlatformID::CPU && name == Platform::DEFAULT_PLATFORM_NAME;
 }
 
 bool Platform::is_cpu() const {
@@ -32,12 +32,12 @@ bool Platform::is_gpu() const {
     return platform_id == PlatformID::GPU;
 }
 
-bool Platform::is_CUDA_gpu() const {
-  return platform_id == PlatformID::GPU && (name == "nvptx" || name == "nvptx64");
+bool Platform::is_CUDA_gpu() {
+    return platform_id == PlatformID::GPU && (name == "nvptx" || name == "nvptx64");
 }
 
 bool Platform::is_single_precision() {
-  return use_single_precision;
+    return use_single_precision;
 }
 
 std::string Platform::get_name() const {
@@ -59,7 +59,7 @@ int Platform::get_instruction_width() const {
 }
 
 int Platform::get_precision() const {
-    return use_single_precision? 32 : 64;
+    return use_single_precision ? 32 : 64;
 }
 
 }  // namespace codegen

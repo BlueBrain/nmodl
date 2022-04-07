@@ -451,7 +451,8 @@ void IRBuilder::create_scalar_or_vector_alloca(const std::string& name,
     // Even if generating vectorised code, some variables still need to be scalar. Particularly, the
     // induction variable "id" and remainder loop variables (that start with "epilogue" prefix).
     llvm::Type* type;
-    if (platform.is_cpu_with_simd() && vectorize && name != kernel_id && name.rfind("epilogue", 0)) {
+    if (platform.is_cpu_with_simd() && vectorize && name != kernel_id &&
+        name.rfind("epilogue", 0)) {
         int vector_width = platform.get_instruction_width();
         type = llvm::FixedVectorType::get(element_or_scalar_type, vector_width);
     } else {
@@ -558,8 +559,8 @@ void IRBuilder::maybe_replicate_value(llvm::Value* value) {
 void IRBuilder::create_grid_stride() {
     llvm::Module* m = builder.GetInsertBlock()->getParent()->getParent();
     auto create_call = [&](llvm::Intrinsic::ID id) {
-      llvm::Function* intrinsic = llvm::Intrinsic::getDeclaration(m, id);
-      return builder.CreateCall(intrinsic, {});
+        llvm::Function* intrinsic = llvm::Intrinsic::getDeclaration(m, id);
+        return builder.CreateCall(intrinsic, {});
     };
 
     llvm::Value* block_dim = create_call(llvm::Intrinsic::nvvm_read_ptx_sreg_ntid_x);
@@ -572,8 +573,8 @@ void IRBuilder::create_grid_stride() {
 void IRBuilder::create_thread_id() {
     llvm::Module* m = builder.GetInsertBlock()->getParent()->getParent();
     auto create_call = [&](llvm::Intrinsic::ID id) {
-      llvm::Function* intrinsic = llvm::Intrinsic::getDeclaration(m, id);
-      return builder.CreateCall(intrinsic, {});
+        llvm::Function* intrinsic = llvm::Intrinsic::getDeclaration(m, id);
+        return builder.CreateCall(intrinsic, {});
     };
 
     // For now, this function only supports NVPTX backend, however it can be easily

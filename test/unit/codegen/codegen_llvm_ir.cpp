@@ -49,11 +49,13 @@ std::string run_gpu_llvm_visitor(const std::string& text,
     NeuronSolveVisitor().visit_program(*ast);
     SolveBlockVisitor().visit_program(*ast);
 
-    codegen::Platform gpu_platform(codegen::PlatformID::GPU, /*name=*/"nvptx64",
-                                   math_library, use_single_precision, 1);
+    codegen::Platform gpu_platform(
+        codegen::PlatformID::GPU, /*name=*/"nvptx64", math_library, use_single_precision, 1);
     codegen::CodegenLLVMVisitor llvm_visitor(
         /*mod_filename=*/"unknown",
-        /*output_dir=*/".", gpu_platform, opt_level,
+        /*output_dir=*/".",
+        gpu_platform,
+        opt_level,
         /*add_debug_information=*/false);
 
     llvm_visitor.visit_program(*ast);
@@ -77,12 +79,15 @@ std::string run_llvm_visitor(const std::string& text,
     NeuronSolveVisitor().visit_program(*ast);
     SolveBlockVisitor().visit_program(*ast);
 
-    codegen::Platform cpu_platform(codegen::PlatformID::CPU, /*name=*/"default",
-                                   vec_lib, use_single_precision, vector_width);
+    codegen::Platform cpu_platform(
+        codegen::PlatformID::CPU, /*name=*/"default", vec_lib, use_single_precision, vector_width);
     codegen::CodegenLLVMVisitor llvm_visitor(
         /*mod_filename=*/"unknown",
-        /*output_dir=*/".", cpu_platform, opt_level,
-        /*add_debug_information=*/false, fast_math_flags);
+        /*output_dir=*/".",
+        cpu_platform,
+        opt_level,
+        /*add_debug_information=*/false,
+        fast_math_flags);
 
     llvm_visitor.visit_program(*ast);
     return llvm_visitor.dump_module();
@@ -1306,7 +1311,8 @@ SCENARIO("Vectorised derivative block", "[visitor][llvm][derivative]") {
 
 
         THEN("vector and epilogue scalar loops are constructed") {
-            codegen::Platform simd_platform(/*use_single_precision=*/false, /*instruction_width=*/8);
+            codegen::Platform simd_platform(/*use_single_precision=*/false,
+                                            /*instruction_width=*/8);
             auto result = run_llvm_visitor_helper(nmodl_text,
                                                   simd_platform,
                                                   {ast::AstNodeType::CODEGEN_FOR_STATEMENT});
@@ -1631,7 +1637,8 @@ SCENARIO("GPU kernel body IR generation", "[visitor][llvm][gpu]") {
 
             // Check kernel annotations are correclty created.
             std::regex annotations(R"(!nvvm\.annotations = !\{!0\})");
-            std::regex kernel_data(R"(!0 = !\{void \(%.*__instance_var__type\*\)\* @nrn_state_.*, !\"kernel\", i32 1\})");
+            std::regex kernel_data(
+                R"(!0 = !\{void \(%.*__instance_var__type\*\)\* @nrn_state_.*, !\"kernel\", i32 1\})");
             REQUIRE(std::regex_search(module_string, m, annotations));
             REQUIRE(std::regex_search(module_string, m, kernel_data));
 
@@ -1675,14 +1682,17 @@ SCENARIO("GPU kernel body IR generation", "[visitor][llvm][gpu]") {
 
             // Check target information.
             // TODO: this may change when more platforms are supported.
-            std::regex data_layout(R"(target datalayout = \"e-p:64:64:64-i1:8:8-i8:8:8-i16:16:16-i32:32:32-i64:64:64-f32:32:32-f64:64:64-v16:16:16-v32:32:32-v64:64:64-v128:128:128-n16:32:64\")");
+            std::regex data_layout(
+                R"(target datalayout = \"e-p:64:64:64-i1:8:8-i8:8:8-i16:16:16-i32:32:32-i64:64:64-f32:32:32-f64:64:64-v16:16:16-v32:32:32-v64:64:64-v128:128:128-n16:32:64\")");
             std::regex triple(R"(nvptx64-nvidia-cuda)");
             REQUIRE(std::regex_search(module_string, m, data_layout));
             REQUIRE(std::regex_search(module_string, m, triple));
 
             // Check for address space casts and address spaces in general when loading data.
-            std::regex as_cast(R"(addrspacecast %.*__instance_var__type\* %.* to %.*__instance_var__type addrspace\(1\)\*)");
-            std::regex gep_as1(R"(getelementptr inbounds %.*__instance_var__type, %.*__instance_var__type addrspace\(1\)\* %.*, i64 0, i32 .*)");
+            std::regex as_cast(
+                R"(addrspacecast %.*__instance_var__type\* %.* to %.*__instance_var__type addrspace\(1\)\*)");
+            std::regex gep_as1(
+                R"(getelementptr inbounds %.*__instance_var__type, %.*__instance_var__type addrspace\(1\)\* %.*, i64 0, i32 .*)");
             std::regex load_as1(R"(load double\*, double\* addrspace\(1\)\* %.*)");
             REQUIRE(std::regex_search(module_string, m, as_cast));
             REQUIRE(std::regex_search(module_string, m, gep_as1));
