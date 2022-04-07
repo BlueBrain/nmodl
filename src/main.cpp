@@ -156,6 +156,9 @@ int main(int argc, const char* argv[]) {
     /// true if symbol table should be printed
     bool show_symtab(false);
 
+    /// true if instead of producing a cpp file, it should clean and fix mod file
+    bool convert_neuron(false);
+
     /// floating point data type
     std::string data_type("double");
 
@@ -264,6 +267,7 @@ int main(int argc, const char* argv[]) {
     passes_opt->add_flag("--show-symtab",
         show_symtab,
         fmt::format("Write symbol table to stdout ({})", show_symtab))->ignore_case();
+    passes_opt->add_flag("--convert-neuron", convert_neuron, fmt::format("--convert-neuron ({})", convert_neuron))->ignore_case();
 
     auto codegen_opt = app.add_subcommand("codegen", "Code generation options")->ignore_case();
     codegen_opt->add_option("--datatype",
@@ -282,6 +286,12 @@ int main(int argc, const char* argv[]) {
     // clang-format on
 
     CLI11_PARSE(app, argc, argv);
+
+    if (convert_neuron) {
+        nmodl_global_to_range = true;
+        nmodl_local_to_range = true;
+        local_rename = true;
+    }
 
     // if any of the other backends is used we force the C backend to be off.
     if (omp_backend || ispc_backend) {
@@ -346,21 +356,6 @@ int main(int argc, const char* argv[]) {
             SymtabVisitor(update_symtab).visit_program(*ast);
         }
 
-        /// use cnexp instead of after_cvode solve method
-        {
-            logger->info("Running CVode to cnexp visitor");
-            AfterCVodeToCnexpVisitor().visit_program(*ast);
-            ast_to_nmodl(*ast, filepath("after_cvode_to_cnexp"));
-        }
-
-        /// Rename variables that match ISPC compiler double constants
-        if (ispc_backend) {
-            logger->info("Running ISPC variables rename visitor");
-            IspcRenameVisitor(ast).visit_program(*ast);
-            SymtabVisitor(update_symtab).visit_program(*ast);
-            ast_to_nmodl(*ast, filepath("ispc_double_rename"));
-        }
-
         /// GLOBAL to RANGE rename visitor
         if (nmodl_global_to_range) {
             // make sure to run perf visitor because code generator
@@ -381,6 +376,33 @@ int main(int argc, const char* argv[]) {
             LocalToAssignedVisitor().visit_program(*ast);
             SymtabVisitor(update_symtab).visit_program(*ast);
             ast_to_nmodl(*ast, filepath("local_to_assigned"));
+        }
+
+        if (local_rename) {
+            logger->info("Running local variable rename visitor");
+            LocalVarRenameVisitor().visit_program(*ast);
+            SymtabVisitor(update_symtab).visit_program(*ast);
+            ast_to_nmodl(*ast, filepath("local_rename"));
+        }
+
+        if (convert_neuron) {
+            NmodlPrintVisitor(output_dir + "/" + modfile + ".mod").visit_program(*ast);
+            return 0;
+        }
+
+        /// use cnexp instead of after_cvode solve method
+        {
+            logger->info("Running CVode to cnexp visitor");
+            AfterCVodeToCnexpVisitor().visit_program(*ast);
+            ast_to_nmodl(*ast, filepath("after_cvode_to_cnexp"));
+        }
+
+        /// Rename variables that match ISPC compiler double constants
+        if (ispc_backend) {
+            logger->info("Running ISPC variables rename visitor");
+            IspcRenameVisitor(ast).visit_program(*ast);
+            SymtabVisitor(update_symtab).visit_program(*ast);
+            ast_to_nmodl(*ast, filepath("ispc_double_rename"));
         }
 
         {
@@ -474,13 +496,6 @@ int main(int argc, const char* argv[]) {
             logger->info("Running nmodl inline visitor");
             InlineVisitor().visit_program(*ast);
             ast_to_nmodl(*ast, filepath("inline"));
-        }
-
-        if (local_rename) {
-            logger->info("Running local variable rename visitor");
-            LocalVarRenameVisitor().visit_program(*ast);
-            SymtabVisitor(update_symtab).visit_program(*ast);
-            ast_to_nmodl(*ast, filepath("local_rename"));
         }
 
         if (nmodl_localize) {
