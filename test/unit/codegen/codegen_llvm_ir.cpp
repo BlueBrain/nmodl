@@ -1716,7 +1716,7 @@ SCENARIO("GPU kernel body IR generation", "[visitor][llvm][gpu]") {
             }
 
             DERIVATIVE states {
-              m = exp(y) + exp(x)
+              m = exp(y) + x ^ 2
             }
         )";
 
@@ -1727,13 +1727,19 @@ SCENARIO("GPU kernel body IR generation", "[visitor][llvm][gpu]") {
                                                              /*math_library=*/"libdevice");
             std::smatch m;
 
-            // Check if exp intrinsic has been replaced.
-            std::regex declaration(R"(declare double @__nv_exp\(double\))");
-            std::regex new_call(R"(call double @__nv_exp\(double %.*\))");
-            std::regex old_call(R"(call double @llvm\.exp\.f64\(double %.*\))");
-            REQUIRE(std::regex_search(module_string, m, declaration));
-            REQUIRE(std::regex_search(module_string, m, new_call));
-            REQUIRE(!std::regex_search(module_string, m, old_call));
+            // Check if exp and pow intrinsics have been replaced.
+            std::regex exp_declaration(R"(declare double @__nv_exp\(double\))");
+            std::regex exp_new_call(R"(call double @__nv_exp\(double %.*\))");
+            std::regex exp_old_call(R"(call double @llvm\.exp\.f64\(double %.*\))");
+            std::regex pow_declaration(R"(declare double @__nv_pow\(double, double\))");
+            std::regex pow_new_call(R"(call double @__nv_pow\(double %.*, double .*\))");
+            std::regex pow_old_call(R"(call double @llvm\.pow\.f64\(double %.*, double .*\))");
+            REQUIRE(std::regex_search(module_string, m, exp_declaration));
+            REQUIRE(std::regex_search(module_string, m, exp_new_call));
+            REQUIRE(!std::regex_search(module_string, m, exp_old_call));
+            REQUIRE(std::regex_search(module_string, m, pow_declaration));
+            REQUIRE(std::regex_search(module_string, m, pow_new_call));
+            REQUIRE(!std::regex_search(module_string, m, pow_old_call));
         }
     }
 }

@@ -87,6 +87,7 @@ ReplaceMathFunctions::add_vectorizable_functions_from_vec_lib(TargetLibraryInfoI
             // clang-format on
         };
 #undef DISPATCH
+#undef FIXED
 
         if (triple.isAArch64()) {
             tli.addVectorizableFunctions(aarch64_functions);
@@ -111,13 +112,8 @@ ReplaceMathFunctions::add_vectorizable_functions_from_vec_lib(TargetLibraryInfoI
             throw std::runtime_error("Error: unknown vector library - " + platform->get_math_library() + "\n");
 
         // Add vectorizable functions to the target library info.
-        switch (library->second) {
-        case VecLib::LIBMVEC_X86:
-            if (!triple.isX86() || !triple.isArch64Bit())
-                break;
-        default:
+        if (library->second != VecLib::LIBMVEC_X86 || (triple.isX86() && triple.isArch64Bit())) {
             tli.addVectorizableFunctionsFromVecLib(library->second);
-            break;
         }
     }
 }
@@ -167,10 +163,12 @@ bool ReplaceWithLibdevice::replace_call(CallInst& call_inst) {
     if (id == Intrinsic::not_intrinsic || is_nvvm_intrinsic)
         return false;
 
-    // Map of supported replacements. For now it is only exp.
+    // Map of supported replacements. For now it is only exp and pow.
     static const std::map<std::string, std::string> libdevice_name = {
             {"llvm.exp.f32", "__nv_expf"},
-            {"llvm.exp.f64", "__nv_exp"}};
+            {"llvm.exp.f64", "__nv_exp"},
+            {"llvm.pow.f32", "__nv_powf"},
+            {"llvm.pow.f64", "__nv_pow"}};
 
     // If replacement is not supported, abort.
     std::string old_name = function->getName().str();
