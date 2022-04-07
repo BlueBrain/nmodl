@@ -22,8 +22,7 @@ void initialise_optimisation_passes();
 void initialise_nvptx_passes();
 
 /// Replaces calls to LLVM intrinsics with appropriate library calls.
-void replace_with_lib_functions(codegen::Platform& platform,
-                                llvm::Module& module);
+void replace_with_lib_functions(codegen::Platform& platform, llvm::Module& module);
 
 /// Optimises the given LLVM IR module for NVPTX targets.
 void optimise_module_for_nvptx(codegen::Platform& platform,

@@ -13,9 +13,9 @@
 #include "llvm/Analysis/OptimizationRemarkEmitter.h"
 #include "llvm/Analysis/ScalarEvolution.h"
 #include "llvm/CodeGen/ReplaceWithVeclib.h"
+#include "llvm/IR/IRBuilder.h"
 #include "llvm/IR/InstIterator.h"
 #include "llvm/IR/IntrinsicsNVPTX.h"
-#include "llvm/IR/IRBuilder.h"
 #include "llvm/IR/LegacyPassManager.h"
 
 namespace llvm {
@@ -29,7 +29,6 @@ bool ReplaceMathFunctions::runOnModule(Module& module) {
     // If the platform supports SIMD, replace math intrinsics with library
     // functions.
     if (platform->is_cpu_with_simd()) {
-
         // First, get the target library information and add vectorizable functions for the
         // specified vector library.
         Triple triple(sys::getDefaultTargetTriple());
@@ -57,9 +56,8 @@ bool ReplaceMathFunctions::runOnModule(Module& module) {
     return modified;
 }
 
-void
-ReplaceMathFunctions::add_vectorizable_functions_from_vec_lib(TargetLibraryInfoImpl& tli,
-                                                                 Triple& triple) {
+void ReplaceMathFunctions::add_vectorizable_functions_from_vec_lib(TargetLibraryInfoImpl& tli,
+                                                                   Triple& triple) {
     // Since LLVM does not support SLEEF as a vector library yet, process it separately.
     if (platform->get_math_library() == "SLEEF") {
 // clang-format off
@@ -109,7 +107,8 @@ ReplaceMathFunctions::add_vectorizable_functions_from_vec_lib(TargetLibraryInfoI
 
         const auto& library = llvm_supported_vector_libraries.find(platform->get_math_library());
         if (library == llvm_supported_vector_libraries.end())
-            throw std::runtime_error("Error: unknown vector library - " + platform->get_math_library() + "\n");
+            throw std::runtime_error("Error: unknown vector library - " +
+                                     platform->get_math_library() + "\n");
 
         // Add vectorizable functions to the target library info.
         if (library->second != VecLib::LIBMVEC_X86 || (triple.isX86() && triple.isArch64Bit())) {
@@ -119,13 +118,13 @@ ReplaceMathFunctions::add_vectorizable_functions_from_vec_lib(TargetLibraryInfoI
 }
 
 void ReplaceWithLibdevice::getAnalysisUsage(AnalysisUsage& au) const {
-  au.setPreservesCFG();
-  au.addPreserved<ScalarEvolutionWrapperPass>();
-  au.addPreserved<AAResultsWrapperPass>();
-  au.addPreserved<LoopAccessLegacyAnalysis>();
-  au.addPreserved<DemandedBitsWrapperPass>();
-  au.addPreserved<OptimizationRemarkEmitterWrapperPass>();
-  au.addPreserved<GlobalsAAWrapperPass>();
+    au.setPreservesCFG();
+    au.addPreserved<ScalarEvolutionWrapperPass>();
+    au.addPreserved<AAResultsWrapperPass>();
+    au.addPreserved<LoopAccessLegacyAnalysis>();
+    au.addPreserved<DemandedBitsWrapperPass>();
+    au.addPreserved<OptimizationRemarkEmitterWrapperPass>();
+    au.addPreserved<GlobalsAAWrapperPass>();
 }
 
 bool ReplaceWithLibdevice::runOnFunction(Function& function) {
@@ -157,18 +156,17 @@ bool ReplaceWithLibdevice::replace_call(CallInst& call_inst) {
     // Replace math intrinsics only!
     auto id = function->getIntrinsicID();
     bool is_nvvm_intrinsic = id == Intrinsic::nvvm_read_ptx_sreg_ntid_x ||
-            id == Intrinsic::nvvm_read_ptx_sreg_nctaid_x ||
-            id == Intrinsic::nvvm_read_ptx_sreg_ctaid_x ||
-            id == Intrinsic::nvvm_read_ptx_sreg_tid_x;
+                             id == Intrinsic::nvvm_read_ptx_sreg_nctaid_x ||
+                             id == Intrinsic::nvvm_read_ptx_sreg_ctaid_x ||
+                             id == Intrinsic::nvvm_read_ptx_sreg_tid_x;
     if (id == Intrinsic::not_intrinsic || is_nvvm_intrinsic)
         return false;
 
     // Map of supported replacements. For now it is only exp and pow.
-    static const std::map<std::string, std::string> libdevice_name = {
-            {"llvm.exp.f32", "__nv_expf"},
-            {"llvm.exp.f64", "__nv_exp"},
-            {"llvm.pow.f32", "__nv_powf"},
-            {"llvm.pow.f64", "__nv_pow"}};
+    static const std::map<std::string, std::string> libdevice_name = {{"llvm.exp.f32", "__nv_expf"},
+                                                                      {"llvm.exp.f64", "__nv_exp"},
+                                                                      {"llvm.pow.f32", "__nv_powf"},
+                                                                      {"llvm.pow.f64", "__nv_pow"}};
 
     // If replacement is not supported, abort.
     std::string old_name = function->getName().str();
@@ -180,14 +178,15 @@ bool ReplaceWithLibdevice::replace_call(CallInst& call_inst) {
     Function* libdevice_func = m->getFunction(it->second);
     if (!libdevice_func) {
         libdevice_func = Function::Create(function->getFunctionType(),
-                                   Function::ExternalLinkage, it->second, *m);
+                                          Function::ExternalLinkage,
+                                          it->second,
+                                          *m);
         libdevice_func->copyAttributesFrom(function);
     }
 
     // Create a call to libdevice function with the same operands.
     IRBuilder<> builder(&call_inst);
-    std::vector<Value*> args(call_inst.arg_operands().begin(),
-                             call_inst.arg_operands().end());
+    std::vector<Value*> args(call_inst.arg_operands().begin(), call_inst.arg_operands().end());
     SmallVector<OperandBundleDef, 1> op_bundles;
     call_inst.getOperandBundlesAsDefs(op_bundles);
     CallInst* new_call = builder.CreateCall(libdevice_func, args, op_bundles);
@@ -203,10 +202,9 @@ bool ReplaceWithLibdevice::replace_call(CallInst& call_inst) {
 }
 
 char ReplaceWithLibdevice::ID = 0;
-static RegisterPass<ReplaceWithLibdevice> X(
-        "libdevice-replacement",
-        "Pass replacing math functions with calls to libdevice",
-        false,
-        false);
+static RegisterPass<ReplaceWithLibdevice> X("libdevice-replacement",
+                                            "Pass replacing math functions with calls to libdevice",
+                                            false,
+                                            false);
 
 }  // namespace llvm

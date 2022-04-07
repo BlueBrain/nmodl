@@ -163,8 +163,7 @@ void optimise_module(llvm::Module& module, int opt_level, llvm::TargetMachine* t
     run_optimisation_passes(module, func_pm, module_pm);
 }
 
-void replace_with_lib_functions(codegen::Platform& platform,
-                                llvm::Module& module) {
+void replace_with_lib_functions(codegen::Platform& platform, llvm::Module& module) {
     llvm::legacy::PassManager pm;
     pm.add(new llvm::ReplaceMathFunctions(platform));
     pm.run(module);

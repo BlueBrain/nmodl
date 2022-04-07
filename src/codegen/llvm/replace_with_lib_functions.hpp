@@ -23,7 +23,7 @@ namespace llvm {
  * \brief A module LLVM pass that replaces math intrinsics with
  * SIMD or libdevice library calls.
  */
-class ReplaceMathFunctions : public ModulePass {
+class ReplaceMathFunctions: public ModulePass {
   private:
     const Platform* platform;
 
@@ -37,10 +37,8 @@ class ReplaceMathFunctions : public ModulePass {
     bool runOnModule(Module& module) override;
 
   private:
-
     /// Populates `tli` with vectorizable function definitions.
-    void add_vectorizable_functions_from_vec_lib(TargetLibraryInfoImpl& tli,
-                                                 Triple& triple);
+    void add_vectorizable_functions_from_vec_lib(TargetLibraryInfoImpl& tli, Triple& triple);
 };
 
 /**
@@ -48,11 +46,12 @@ class ReplaceMathFunctions : public ModulePass {
  * \brief A function LLVM pass that replaces math intrinsics with
  * libdevice library calls.
  */
-class ReplaceWithLibdevice : public FunctionPass {
+class ReplaceWithLibdevice: public FunctionPass {
   public:
     static char ID;
 
-    ReplaceWithLibdevice() : llvm::FunctionPass(ID) {}
+    ReplaceWithLibdevice()
+        : llvm::FunctionPass(ID) {}
 
     void getAnalysisUsage(AnalysisUsage& au) const override;
 
