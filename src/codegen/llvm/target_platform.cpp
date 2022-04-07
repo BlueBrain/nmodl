@@ -32,7 +32,7 @@ bool Platform::is_gpu() const {
     return platform_id == PlatformID::GPU;
 }
 
-bool Platform::is_CUDA_gpu() {
+bool Platform::is_CUDA_gpu() const {
     return platform_id == PlatformID::GPU && (name == "nvptx" || name == "nvptx64");
 }
 
