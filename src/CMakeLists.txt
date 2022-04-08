@@ -24,6 +24,13 @@ set(NMODL_SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp)
 # =============================================================================
 # Add executables
 # =============================================================================
+add_executable(formatter formatter.cpp)
+target_link_libraries(
+  formatter
+  printer
+  visitor
+  util
+  lexer)
 add_executable(nmodl ${NMODL_SOURCE_FILES})
 target_link_libraries(
   nmodl
