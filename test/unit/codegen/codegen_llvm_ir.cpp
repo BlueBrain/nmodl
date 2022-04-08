@@ -1366,7 +1366,6 @@ SCENARIO("Vector library calls", "[visitor][llvm][vector_lib]") {
             REQUIRE(std::regex_search(no_library_module_str, m, exp_decl));
             REQUIRE(std::regex_search(no_library_module_str, m, exp_call));
 
-#if LLVM_VERSION_MAJOR >= 13
             // Check exponential calls are replaced with calls to SVML library.
             std::string svml_library_module_str = run_llvm_visitor(nmodl_text,
                                                                    /*opt_level=*/0,
@@ -1444,7 +1443,6 @@ SCENARIO("Vector library calls", "[visitor][llvm][vector_lib]") {
             REQUIRE(std::regex_search(libsystem_m_library_module_str, m, libsystem_m_exp_decl));
             REQUIRE(std::regex_search(libsystem_m_library_module_str, m, libsystem_m_exp_call));
             REQUIRE(!std::regex_search(libsystem_m_library_module_str, m, fexp_call));
-#endif
         }
     }
 }
@@ -1699,6 +1697,49 @@ SCENARIO("GPU kernel body IR generation", "[visitor][llvm][gpu]") {
             REQUIRE(std::regex_search(module_string, m, as_cast));
             REQUIRE(std::regex_search(module_string, m, gep_as1));
             REQUIRE(std::regex_search(module_string, m, load_as1));
+        }
+    }
+
+    GIVEN("When using math functions") {
+        std::string nmodl_text = R"(
+            NEURON {
+                SUFFIX test
+                RANGE x, y
+            }
+
+            ASSIGNED { x y }
+
+            STATE { m }
+
+            BREAKPOINT {
+                SOLVE states METHOD cnexp
+            }
+
+            DERIVATIVE states {
+              m = exp(y) + x ^ 2
+            }
+        )";
+
+        THEN("calls to libdevice are created") {
+            std::string module_string = run_gpu_llvm_visitor(nmodl_text,
+                                                             /*opt_level=*/3,
+                                                             /*use_single_precision=*/false,
+                                                             /*math_library=*/"libdevice");
+            std::smatch m;
+
+            // Check if exp and pow intrinsics have been replaced.
+            std::regex exp_declaration(R"(declare double @__nv_exp\(double\))");
+            std::regex exp_new_call(R"(call double @__nv_exp\(double %.*\))");
+            std::regex exp_old_call(R"(call double @llvm\.exp\.f64\(double %.*\))");
+            std::regex pow_declaration(R"(declare double @__nv_pow\(double, double\))");
+            std::regex pow_new_call(R"(call double @__nv_pow\(double %.*, double .*\))");
+            std::regex pow_old_call(R"(call double @llvm\.pow\.f64\(double %.*, double .*\))");
+            REQUIRE(std::regex_search(module_string, m, exp_declaration));
+            REQUIRE(std::regex_search(module_string, m, exp_new_call));
+            REQUIRE(!std::regex_search(module_string, m, exp_old_call));
+            REQUIRE(std::regex_search(module_string, m, pow_declaration));
+            REQUIRE(std::regex_search(module_string, m, pow_new_call));
+            REQUIRE(!std::regex_search(module_string, m, pow_old_call));
         }
     }
 }
