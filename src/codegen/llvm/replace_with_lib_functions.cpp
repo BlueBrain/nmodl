@@ -86,7 +86,7 @@ void ReplaceMathFunctions::add_vectorizable_functions_from_vec_lib(TargetLibrary
             DISPATCH("llvm.pow.f64", "_ZGVeN8vv_pow", FIXED(8))
             DISPATCH("llvm.log.f64", "_ZGVbN2v_log", FIXED(2))
             DISPATCH("llvm.log.f64", "_ZGVdN4v_log", FIXED(4))
-            DISPATCH("llvm.log.f64", "_ZGVeN8vv_pow", FIXED(8))
+            DISPATCH("llvm.log.f64", "_ZGVeN8v_log", FIXED(8))
             // clang-format on
         };
 #undef DISPATCH
