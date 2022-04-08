@@ -12,5 +12,5 @@ BREAKPOINT {
 }
 
 DERIVATIVE states {
-    m = exp(y) + x ^ 2
+    m = exp(y) + x ^ 107  + log(x)
 }
