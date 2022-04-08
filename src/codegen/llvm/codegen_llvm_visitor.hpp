@@ -300,7 +300,8 @@ class CodegenLLVMVisitor: public CodegenCVisitor {
     /// Annotates kernel function with NVVM metadata.
     void annotate_kernel_with_nvvm(llvm::Function* kernel, const std::string& annotation);
 
-    /// Handles NVVM function annotations when we create the wrapper functions. All original kernels should be "device" functions and wrappers "kernel" functions
+    /// Handles NVVM function annotations when we create the wrapper functions. All original kernels
+    /// should be "device" functions and wrappers "kernel" functions
     void annotate_wrapper_kernels_with_nvvm();
 
     /// Accepts the given AST node and returns the processed value.

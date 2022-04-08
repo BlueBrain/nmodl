@@ -138,7 +138,9 @@ void CUDADriver::init(const codegen::Platform& platform, BenchmarkInfo* benchmar
     // Optimize code for nvptx including the wrapper functions and generate PTX
     const auto opt_level_codegen = benchmark_info ? benchmark_info->opt_level_codegen : 0;
     utils::optimise_module_for_nvptx(platform, *module, opt_level_codegen, ptx_compiled_module);
-    utils::save_ir_to_ll_file(*module,  benchmark_info->output_dir + "/" + benchmark_info->filename + "_benchmark");
+    utils::save_ir_to_ll_file(*module,
+                              benchmark_info->output_dir + "/" + benchmark_info->filename +
+                                  "_benchmark");
     if (benchmark_info) {
         print_string_to_file(ptx_compiled_module,
                              benchmark_info->output_dir + "/" + benchmark_info->filename + ".ptx");

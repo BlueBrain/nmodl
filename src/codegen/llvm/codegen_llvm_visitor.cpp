@@ -58,12 +58,12 @@ static bool can_vectorize(const ast::CodegenForStatement& statement, symtab::Sym
     return unsupported.empty() && supported.size() <= 1;
 }
 
-void CodegenLLVMVisitor::annotate_kernel_with_nvvm(llvm::Function* kernel, const std::string& annotation = "kernel") {
-    llvm::Metadata* metadata[] = {
-        llvm::ValueAsMetadata::get(kernel),
-        llvm::MDString::get(*context, annotation),
-        llvm::ValueAsMetadata::get(
-            llvm::ConstantInt::get(llvm::Type::getInt32Ty(*context), 1))};
+void CodegenLLVMVisitor::annotate_kernel_with_nvvm(llvm::Function* kernel,
+                                                   const std::string& annotation = "kernel") {
+    llvm::Metadata* metadata[] = {llvm::ValueAsMetadata::get(kernel),
+                                  llvm::MDString::get(*context, annotation),
+                                  llvm::ValueAsMetadata::get(
+                                      llvm::ConstantInt::get(llvm::Type::getInt32Ty(*context), 1))};
     llvm::MDNode* node = llvm::MDNode::get(*context, metadata);
     module->getOrInsertNamedMetadata("nvvm.annotations")->addOperand(node);
 }
@@ -73,7 +73,8 @@ void CodegenLLVMVisitor::annotate_wrapper_kernels_with_nvvm() {
     auto module_named_metadata = module->getNamedMetadata("nvvm.annotations");
     module->eraseNamedMetadata(module_named_metadata);
 
-    // Then each kernel should be annotated as "device" function and wrappers should be annotated as "kernel" functions
+    // Then each kernel should be annotated as "device" function and wrappers should be annotated as
+    // "kernel" functions
     std::vector<std::string> kernel_names;
     find_kernel_names(kernel_names);
 
