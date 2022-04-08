@@ -97,7 +97,7 @@ test_benchmark:cpu:
     - module load unstable git
     - . ${SPACK_ROOT}/share/spack/setup-env.sh
     - spack load nmodl/${SPACK_INSTALLED_HASH}
-    - nmodl test/integration/mod/test.mod llvm --ir --opt-level-ir 3 benchmark --run --opt-level-codegen 3 --instance-size 10000000 --repeat 2
+    - nmodl test/integration/mod/test_math.mod llvm --ir --opt-level-ir 3 benchmark --run --opt-level-codegen 3 --instance-size 10000000 --repeat 2
   needs: ["build_cuda:gcc"]
 
 test_benchmark:gpu:
@@ -107,5 +107,5 @@ test_benchmark:gpu:
     - module load unstable git
     - . ${SPACK_ROOT}/share/spack/setup-env.sh
     - spack load nmodl/${SPACK_INSTALLED_HASH}
-    - nmodl test/integration/mod/test.mod llvm --no-debug --ir --opt-level-ir 3 gpu --target-arch "sm_70" --name "nvptx64" --math-library libdevice benchmark --run --libs "${CUDA_HOME}/nvvm/libdevice/libdevice.10.bc" --opt-level-codegen 3 --instance-size 10000000 --repeat 2 --grid-dim-x 4096 --block-dim-x 256
+    - nmodl test/integration/mod/test_math.mod llvm --no-debug --ir --opt-level-ir 3 gpu --target-arch "sm_70" --name "nvptx64" --math-library libdevice benchmark --run --libs "${CUDA_HOME}/nvvm/libdevice/libdevice.10.bc" --opt-level-codegen 3 --instance-size 10000000 --repeat 2 --grid-dim-x 4096 --block-dim-x 256
   needs: ["build_cuda:gcc"]
