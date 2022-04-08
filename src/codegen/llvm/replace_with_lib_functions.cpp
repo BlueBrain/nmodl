@@ -72,6 +72,8 @@ void ReplaceMathFunctions::add_vectorizable_functions_from_vec_lib(TargetLibrary
             DISPATCH("llvm.exp.f64", "_ZGVnN2v_exp", FIXED(2))
             DISPATCH("llvm.pow.f32", "_ZGVnN4vv_powf", FIXED(4))
             DISPATCH("llvm.pow.f64", "_ZGVnN2vv_pow", FIXED(2))
+            DISPATCH("llvm.log.f32", "_ZGVnN4v_logf", FIXED(4))
+            DISPATCH("llvm.log.f64", "_ZGVnN2v_log", FIXED(2))
             // clang-format on
         };
         const VecDesc x86_functions[] = {
@@ -82,6 +84,9 @@ void ReplaceMathFunctions::add_vectorizable_functions_from_vec_lib(TargetLibrary
             DISPATCH("llvm.pow.f64", "_ZGVbN2vv_pow", FIXED(2))
             DISPATCH("llvm.pow.f64", "_ZGVdN4vv_pow", FIXED(4))
             DISPATCH("llvm.pow.f64", "_ZGVeN8vv_pow", FIXED(8))
+            DISPATCH("llvm.log.f64", "_ZGVbN2v_log", FIXED(2))
+            DISPATCH("llvm.log.f64", "_ZGVdN4v_log", FIXED(4))
+            DISPATCH("llvm.log.f64", "_ZGVeN8vv_pow", FIXED(8))
             // clang-format on
         };
 #undef DISPATCH
@@ -166,7 +171,9 @@ bool ReplaceWithLibdevice::replace_call(CallInst& call_inst) {
     static const std::map<std::string, std::string> libdevice_name = {{"llvm.exp.f32", "__nv_expf"},
                                                                       {"llvm.exp.f64", "__nv_exp"},
                                                                       {"llvm.pow.f32", "__nv_powf"},
-                                                                      {"llvm.pow.f64", "__nv_pow"}};
+                                                                      {"llvm.pow.f64", "__nv_pow"},
+                                                                      {"llvm.log.f32", "__nv_logf"},
+                                                                      {"llvm.log.f64", "__nv_log"}};
 
     // If replacement is not supported, abort.
     std::string old_name = function->getName().str();

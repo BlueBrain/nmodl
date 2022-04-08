@@ -68,6 +68,25 @@ void CodegenLLVMVisitor::annotate_kernel_with_nvvm(llvm::Function* kernel, const
     module->getOrInsertNamedMetadata("nvvm.annotations")->addOperand(node);
 }
 
+void CodegenLLVMVisitor::annotate_wrapper_kernels_with_nvvm() {
+    // First clear all the nvvm annotations from the module
+    auto module_named_metadata = module->getNamedMetadata("nvvm.annotations");
+    module->eraseNamedMetadata(module_named_metadata);
+
+    // Then each kernel should be annotated as "device" function and wrappers should be annotated as "kernel" functions
+    std::vector<std::string> kernel_names;
+    find_kernel_names(kernel_names);
+
+    for (const auto& kernel_name: kernel_names) {
+        // Get the kernel function.
+        auto kernel = module->getFunction(kernel_name);
+        // Get the kernel wrapper function.
+        auto kernel_wrapper = module->getFunction(get_wrapper_name(kernel_name));
+        annotate_kernel_with_nvvm(kernel, "device");
+        annotate_kernel_with_nvvm(kernel_wrapper, "kernel");
+    }
+}
+
 llvm::Value* CodegenLLVMVisitor::accept_and_get(const std::shared_ptr<ast::Node>& node) {
     node->accept(*this);
     return ir_builder.pop_last_value();
