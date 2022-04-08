@@ -6,6 +6,7 @@
  *************************************************************************/
 
 #include "codegen/llvm/llvm_utils.hpp"
+#include "codegen/llvm/replace_with_lib_functions.hpp"
 
 #include "llvm/Analysis/TargetTransformInfo.h"
 #include "llvm/IR/AssemblyAnnotationWriter.h"
@@ -173,6 +174,12 @@ void optimise_module(llvm::Module& module, int opt_level, llvm::TargetMachine* t
     llvm::legacy::PassManager module_pm;
     populate_pms(func_pm, module_pm, opt_level, /*size_level=*/0, tm);
     run_optimisation_passes(module, func_pm, module_pm);
+}
+
+void replace_with_lib_functions(codegen::Platform& platform, llvm::Module& module) {
+    llvm::legacy::PassManager pm;
+    pm.add(new llvm::ReplaceMathFunctions(platform));
+    pm.run(module);
 }
 
 /****************************************************************************************/

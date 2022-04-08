@@ -171,8 +171,9 @@ class CodegenLLVMHelperVisitor: public visitor::AstVisitor {
 
   private:
     /// Methods to create target-specific loop constructs.
-    std::shared_ptr<ast::Expression> loop_initialization_expression(const std::string& induction_var,
-                                                                    bool is_remainder_loop);
+    std::shared_ptr<ast::Expression> loop_initialization_expression(
+        const std::string& induction_var,
+        bool is_remainder_loop);
     std::shared_ptr<ast::Expression> loop_count_expression(const std::string& induction_var,
                                                            const std::string& node_count,
                                                            bool is_remainder_loop);

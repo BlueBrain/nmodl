@@ -28,6 +28,9 @@ std::unique_ptr<llvm::TargetMachine> create_CUDA_target_machine(const codegen::P
 /// Generate PTX code given a CUDA target machine and the module
 std::string get_module_ptx(llvm::TargetMachine& tm, llvm::Module& module);
 
+/// Replaces calls to LLVM intrinsics with appropriate library calls.
+void replace_with_lib_functions(codegen::Platform& platform, llvm::Module& module);
+
 /// Optimises the given LLVM IR module for NVPTX targets.
 void optimise_module_for_nvptx(const codegen::Platform& platform,
                                llvm::Module& module,
@@ -37,7 +40,7 @@ void optimise_module_for_nvptx(const codegen::Platform& platform,
 /// Optimises the given LLVM IR module.
 void optimise_module(llvm::Module& module, int opt_level, llvm::TargetMachine* tm = nullptr);
 
-///
+/// Saves generated IR module to .ll file.
 void save_ir_to_ll_file(llvm::Module& module, const std::string& filename);
 
 }  // namespace utils

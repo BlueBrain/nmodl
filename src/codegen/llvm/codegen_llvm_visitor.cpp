@@ -12,16 +12,9 @@
 #include "visitors/rename_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
 
-#include "llvm/Analysis/TargetLibraryInfo.h"
 #include "llvm/IR/BasicBlock.h"
 #include "llvm/IR/Function.h"
-#include "llvm/IR/LegacyPassManager.h"
 #include "llvm/IR/Type.h"
-#include "llvm/Support/Host.h"
-
-#if LLVM_VERSION_MAJOR >= 13
-#include "llvm/CodeGen/ReplaceWithVeclib.h"
-#endif
 
 namespace nmodl {
 namespace codegen {
@@ -73,90 +66,6 @@ void CodegenLLVMVisitor::annotate_kernel_with_nvvm(llvm::Function* kernel, const
             llvm::ConstantInt::get(llvm::Type::getInt32Ty(*context), 1))};
     llvm::MDNode* node = llvm::MDNode::get(*context, metadata);
     module->getOrInsertNamedMetadata("nvvm.annotations")->addOperand(node);
-}
-
-#if LLVM_VERSION_MAJOR >= 13
-void CodegenLLVMVisitor::add_vectorizable_functions_from_vec_lib(llvm::TargetLibraryInfoImpl& tli,
-                                                                 llvm::Triple& triple) {
-    // Since LLVM does not support SLEEF as a vector library yet, process it separately.
-    if (platform.get_math_library() == "SLEEF") {
-// clang-format off
-#define FIXED(w) llvm::ElementCount::getFixed(w)
-// clang-format on
-#define DISPATCH(func, vec_func, width) {func, vec_func, width},
-
-        // Populate function definitions of only exp and pow (for now)
-        const llvm::VecDesc aarch64_functions[] = {
-            // clang-format off
-            DISPATCH("llvm.exp.f32", "_ZGVnN4v_expf", FIXED(4))
-            DISPATCH("llvm.exp.f64", "_ZGVnN2v_exp", FIXED(2))
-            DISPATCH("llvm.pow.f32", "_ZGVnN4vv_powf", FIXED(4))
-            DISPATCH("llvm.pow.f64", "_ZGVnN2vv_pow", FIXED(2))
-            // clang-format on
-        };
-        const llvm::VecDesc x86_functions[] = {
-            // clang-format off
-            DISPATCH("llvm.exp.f64", "_ZGVbN2v_exp", FIXED(2))
-            DISPATCH("llvm.exp.f64", "_ZGVdN4v_exp", FIXED(4))
-            DISPATCH("llvm.exp.f64", "_ZGVeN8v_exp", FIXED(8))
-            DISPATCH("llvm.pow.f64", "_ZGVbN2vv_pow", FIXED(2))
-            DISPATCH("llvm.pow.f64", "_ZGVdN4vv_pow", FIXED(4))
-            DISPATCH("llvm.pow.f64", "_ZGVeN8vv_pow", FIXED(8))
-            // clang-format on
-        };
-#undef DISPATCH
-
-        if (triple.isAArch64()) {
-            tli.addVectorizableFunctions(aarch64_functions);
-        }
-        if (triple.isX86() && triple.isArch64Bit()) {
-            tli.addVectorizableFunctions(x86_functions);
-        }
-
-    } else {
-        // A map to query vector library by its string value.
-        using VecLib = llvm::TargetLibraryInfoImpl::VectorLibrary;
-        static const std::map<std::string, VecLib> llvm_supported_vector_libraries = {
-            {"Accelerate", VecLib::Accelerate},
-            {"libmvec", VecLib::LIBMVEC_X86},
-            {"libsystem_m", VecLib ::DarwinLibSystemM},
-            {"MASSV", VecLib::MASSV},
-            {"none", VecLib::NoLibrary},
-            {"SVML", VecLib::SVML}};
-        const auto& library = llvm_supported_vector_libraries.find(platform.get_math_library());
-        if (library == llvm_supported_vector_libraries.end())
-            throw std::runtime_error("Error: unknown vector library - " + platform.get_math_library() + "\n");
-
-        // Add vectorizable functions to the target library info.
-        switch (library->second) {
-        case VecLib::LIBMVEC_X86:
-            if (!triple.isX86() || !triple.isArch64Bit())
-                break;
-        default:
-            tli.addVectorizableFunctionsFromVecLib(library->second);
-            break;
-        }
-    }
-}
-#endif
-
-void CodegenLLVMVisitor::annotate_wrapper_kernels_with_nvvm() {
-    // First clear all the nvvm annotations from the module
-    auto module_named_metadata = module->getNamedMetadata("nvvm.annotations");
-    module->eraseNamedMetadata(module_named_metadata);
-
-    // Then each kernel should be annotated as "device" function and wrappers should be annotated as "kernel" functions 
-    std::vector<std::string> kernel_names;
-    find_kernel_names(kernel_names);
-
-    for (const auto& kernel_name: kernel_names) {
-        // Get the kernel function.
-        auto kernel = module->getFunction(kernel_name);
-        // Get the kernel wrapper function.
-        auto kernel_wrapper = module->getFunction(get_wrapper_name(kernel_name));
-        annotate_kernel_with_nvvm(kernel, "device");
-        annotate_kernel_with_nvvm(kernel_wrapper, "kernel");
-    }
 }
 
 llvm::Value* CodegenLLVMVisitor::accept_and_get(const std::shared_ptr<ast::Node>& node) {
@@ -724,7 +633,7 @@ void CodegenLLVMVisitor::visit_codegen_function(const ast::CodegenFunction& node
         } else if (platform.is_gpu()) {
             block->accept(*this);
             annotate_kernel_with_nvvm(func);
-        } else { // scalar
+        } else {  // scalar
             block->accept(*this);
         }
     } else {
@@ -932,31 +841,8 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
         utils::optimise_module(*module, opt_level_ir);
     }
 
-    // Optionally, replace LLVM math intrinsics with vector library calls.
-    if (platform.is_cpu_with_simd()) {
-#if LLVM_VERSION_MAJOR < 13
-        logger->warn(
-            "This version of LLVM does not support replacement of LLVM intrinsics with vector "
-            "library calls");
-#else
-        // First, get the target library information and add vectorizable functions for the
-        // specified vector library.
-        llvm::Triple triple(llvm::sys::getDefaultTargetTriple());
-        llvm::TargetLibraryInfoImpl target_lib_info = llvm::TargetLibraryInfoImpl(triple);
-        add_vectorizable_functions_from_vec_lib(target_lib_info, triple);
-
-        // Run passes that replace math intrinsics.
-        llvm::legacy::FunctionPassManager fpm(module.get());
-        fpm.add(new llvm::TargetLibraryInfoWrapperPass(target_lib_info));
-        fpm.add(new llvm::ReplaceWithVeclibLegacy);
-        fpm.doInitialization();
-        for (auto& function: module->getFunctionList()) {
-            if (!function.isDeclaration())
-                fpm.run(function);
-        }
-        fpm.doFinalization();
-#endif
-    }
+    // Optionally, replace LLVM math intrinsics with library calls.
+    utils::replace_with_lib_functions(platform, *module);
 
     // Handle GPU optimizations (CUDA platfroms only for now).
     if (platform.is_gpu()) {
