@@ -51,10 +51,6 @@ int main(int argc, const char* argv[]) {
     /// true if debug logger statements should be shown
     std::string verbose("info");
 
-
-    /// true if performance stats should be converted to json
-    bool json_perfstat(false);
-
     /// true if symbol table should be printed
     bool show_symtab(false);
 
@@ -159,8 +155,8 @@ int main(int argc, const char* argv[]) {
         cfg.nmodl_ast,
         "Write AST to NMODL file ({})"_format(cfg.nmodl_ast))->ignore_case();
     passes_opt->add_flag("--json-perf",
-        json_perfstat,
-        "Write performance statistics to JSON file ({})"_format(json_perfstat))->ignore_case();
+        cfg.json_perfstat,
+        "Write performance statistics to JSON file ({})"_format(cfg.json_perfstat))->ignore_case();
     passes_opt->add_flag("--show-symtab",
         show_symtab,
         "Write symbol table to stdout ({})"_format(show_symtab))->ignore_case();
@@ -290,6 +286,13 @@ int main(int argc, const char* argv[]) {
 
         auto cg_driver = CodegenDriver(cfg);
         auto success = cg_driver.prepare_mod(*ast);
+
+        if (show_symtab) {
+            logger->info("Printing symbol table");
+            auto symtab = ast->get_model_symbol_table();
+            symtab->print(std::cout);
+        }
+
         if (cfg.only_check_compatibility) {
             return !success;
         }

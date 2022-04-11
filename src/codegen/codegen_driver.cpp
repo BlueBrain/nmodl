@@ -30,6 +30,7 @@
 #include "visitors/solve_block_visitor.hpp"
 #include "visitors/nmodl_visitor.hpp"
 #include "visitors/units_visitor.hpp"
+#include "visitors/ispc_rename_visitor.hpp"
 
 using namespace nmodl;
 using namespace codegen;
@@ -70,6 +71,14 @@ bool CodegenDriver::prepare_mod(ast::Program& node) {
         logger->info("Running CVode to cnexp visitor");
         nmodl::visitor::AfterCVodeToCnexpVisitor().visit_program(node);
         ast_to_nmodl(node, filepath("after_cvode_to_cnexp", "mod"));
+    }
+
+    /// Rename variables that match ISPC compiler double constants
+    if (cfg.ispc_backend) {
+        logger->info("Running ISPC variables rename visitor");
+        IspcRenameVisitor(std::make_shared<ast::Program>(node)).visit_program(node);
+        SymtabVisitor(update_symtab).visit_program(node);
+        ast_to_nmodl(node, filepath("ispc_double_rename", "mod"));
     }
 
     /// GLOBAL to RANGE rename visitor
@@ -221,6 +230,12 @@ bool CodegenDriver::prepare_mod(ast::Program& node) {
         SolveBlockVisitor().visit_program(node);
         SymtabVisitor(update_symtab).visit_program(node);
         ast_to_nmodl(node, filepath("solveblock", "mod"));
+    }
+
+    if (cfg.json_perfstat) {
+        auto file = scratch_dir + "/" + modfile + ".perf.json";
+        logger->info("Writing performance statistics to {}", file);
+        PerfVisitor(file).visit_program(node);
     }
 
     {

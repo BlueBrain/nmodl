@@ -107,6 +107,9 @@ struct CodeGenConfig {
     /// true if ast should be converted to json
     bool json_ast = false;
 
+    /// true if performance stats should be converted to json
+    bool json_perfstat = false;
+
 #ifdef NMODL_LLVM_BACKEND
     /// generate llvm IR
     bool llvm_ir = false;

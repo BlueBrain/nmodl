@@ -6,6 +6,8 @@
  *************************************************************************/
 
 #include <chrono>
+#include <cmath>
+#include <numeric>
 
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
 #include "llvm_benchmark.hpp"
@@ -18,11 +20,11 @@
 namespace nmodl {
 namespace benchmark {
 
-void LLVMBenchmark::run() {
+BenchmarkResults LLVMBenchmark::run() {
     // create functions
     generate_llvm();
     // Finally, run the benchmark and log the measurements.
-    run_benchmark();
+    return run_benchmark();
 }
 
 void LLVMBenchmark::generate_llvm() {
@@ -36,7 +38,7 @@ void LLVMBenchmark::generate_llvm() {
     logger->info("Created LLVM IR module from NMODL AST in {} sec", diff.count());
 }
 
-void LLVMBenchmark::run_benchmark() {
+BenchmarkResults LLVMBenchmark::run_benchmark() {
     // Set the codegen data helper and find the kernels.
     auto codegen_data = codegen::CodegenDataHelper(llvm_visitor.get_instance_struct_ptr());
     std::vector<std::string> kernel_names;
@@ -55,13 +57,11 @@ void LLVMBenchmark::run_benchmark() {
         std::move(m), filename, output_dir, cpu_name, shared_libs, opt_level_ir, opt_level_codegen);
     runner.initialize_driver();
 
+    BenchmarkResults results{};
     // Benchmark every kernel.
     for (const auto& kernel_name: kernel_names) {
-        // For every kernel run the benchmark `num_experiments` times.
-        double time_min = std::numeric_limits<double>::max();
-        double time_max = 0.0;
-        double time_sum = 0.0;
-        double time_squared_sum = 0.0;
+        // For every kernel run the benchmark `num_experiments` times and collect runtimes.
+        auto times = std::vector<double>(num_experiments, 0.0);
         for (int i = 0; i < num_experiments; ++i) {
             // Initialise the data.
             auto instance_data = codegen_data.create_data(instance_size, /*seed=*/1);
@@ -80,22 +80,26 @@ void LLVMBenchmark::run_benchmark() {
             std::chrono::duration<double> diff = end - start;
 
             // Log the time taken for each run.
-            logger->info("Experiment {} compute time = {:.6f} sec", i, diff.count());
+            logger->debug("Experiment {} compute time = {:.6f} sec", i, diff.count());
 
-            // Update statistics.
-            time_sum += diff.count();
-            time_squared_sum += diff.count() * diff.count();
-            time_min = std::min(time_min, diff.count());
-            time_max = std::max(time_max, diff.count());
+            times[i] = diff.count();
         }
+        // Calculate statistics
+        double time_mean = std::accumulate(times.begin(), times.end(), 0.0)/ num_experiments;
+        double time_var = std::accumulate(times.begin(), times.end(), 0.0,
+                                           [time_mean](const double& pres, const double& e) {
+                                               return (e - time_mean)*(e - time_mean); }) / num_experiments;
+        double time_stdev = std::sqrt(time_var);
+        double time_min = *std::min_element(times.begin(), times.end());
+        double time_max = *std::max_element(times.begin(), times.end());
         // Log the average time taken for the kernel.
-        double time_mean = time_sum / num_experiments;
         logger->info("Average compute time = {:.6f}", time_mean);
-        logger->info("Compute time variance = {:g}",
-                     time_squared_sum / num_experiments - time_mean * time_mean);
+        logger->info("Compute time standard deviation = {:8f}", time_stdev);
         logger->info("Minimum compute time = {:.6f}", time_min);
         logger->info("Maximum compute time = {:.6f}\n", time_max);
+        results[kernel_name] = {time_mean, time_stdev, time_min, time_max};
     }
+    return results;
 }
 
 }  // namespace benchmark

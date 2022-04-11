@@ -171,14 +171,14 @@ class JitDriver  {
     }
 
 
-    void run(nmodl::ast::Program node, std::string& modname, int num_experiments, int instance_size ) {
+    benchmark::BenchmarkResults run(nmodl::ast::Program node, std::string& modname, int num_experiments, int instance_size ) {
         cg_driver.prepare_mod(node);
         nmodl::codegen::CodegenLLVMVisitor visitor(modname,cfg.output_dir ,platform, 0);
         visitor.visit_program(node);
         nmodl::benchmark::LLVMBenchmark benchmark(visitor, modname, cfg.output_dir, cfg.shared_lib_paths,
                                                   num_experiments, instance_size, cfg.llvm_cpu_name,
                                                   cfg.llvm_opt_level_ir, cfg.llvm_opt_level_codegen);
-        benchmark.run();
+        return benchmark.run();
     }
 };
 
