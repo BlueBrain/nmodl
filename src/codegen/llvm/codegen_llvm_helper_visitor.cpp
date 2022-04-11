@@ -377,8 +377,27 @@ void CodegenLLVMHelperVisitor::ion_write_statements(BlockType type,
         // push index definition, index statement and actual write statement
         int_variables.push_back(index_varname);
         index_statements.push_back(visitor::create_statement(index_statement));
+
         // pass ion variable to write and its index
-        body_statements.push_back(create_atomic_statement(ion_varname, index_varname, op, rhs));
+
+        // \todo: for ionic variable we don't need atomic operation for single threaded
+        //        execution. So let's skip this for now. See below comment for details:
+        //        https://github.com/BlueBrain/nmodl/pull/645#issuecomment-1095567789
+        // body_statements.push_back(create_atomic_statement(ion_varname, index_varname, op, rhs));
+
+        // lhs variable
+        std::string lhs = "{}[{}] "_format(ion_varname, index_varname);
+
+        // lets turn a += b into a = a + b if applicable
+        std::string statement;
+        if (!op.compare("+=")) {
+            statement = "{} = {} + {}"_format(lhs, lhs, rhs);
+        } else if (!op.compare("-=")) {
+            statement = "{} = {} - {}"_format(lhs, lhs, rhs);
+        } else {
+            statement = "{} {} {}"_format(lhs, op, rhs);
+        }
+        body_statements.push_back(visitor::create_statement(statement));
     };
 
     /// iterate over all ions and create write ion statements for given block type

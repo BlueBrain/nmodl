@@ -1579,10 +1579,10 @@
                                 \sa nmodl::visitor::SympyConductanceVisitor
 
                   - ExpressionStatement:
-                      brief: "TODO"
+                      brief: "Represent statement created from an expression"
                       members:
                         - expression:
-                            brief: "TODO"
+                            brief: "An expression which represent statement in MOD file"
                             type: Expression
 
                   - ProtectStatement:
