@@ -817,133 +817,57 @@ void CodegenLLVMHelperVisitor::visit_breakpoint_block(ast::BreakpointBlock& node
     /// statements for new function to be generated
     ast::StatementVector function_statements;
 
-    /// create variable definition for loop index and insert at the beginning
-    std::string loop_index_var = "id";
-    std::vector<std::string> induction_variables{"id"};
-    function_statements.push_back(
-        create_local_variable_statement(induction_variables, INTEGER_TYPE));
-
     /// create vectors of local variables that would be used in compute part
     std::vector<std::string> int_variables{"node_id"};
     std::vector<std::string> double_variables{"v"};
 
-    /// create now main compute part : for loop over channel instances
+    /// create now main compute part
 
-    /// loop body : initialization + solve blocks
-    ast::StatementVector loop_def_statements;
-    ast::StatementVector loop_index_statements;
-    ast::StatementVector loop_body_statements;
+    /// compute body : initialization + solve blocks
+    ast::StatementVector def_statements;
+    ast::StatementVector index_statements;
+    ast::StatementVector body_statements;
     {
         /// access node index and corresponding voltage
-        loop_index_statements.push_back(
+        index_statements.push_back(
             visitor::create_statement("node_id = node_index[{}]"_format(naming::INDUCTION_VAR)));
-        loop_body_statements.push_back(
-            visitor::create_statement("v = {}[node_id]"_format(VOLTAGE_VAR)));
+        body_statements.push_back(visitor::create_statement("v = {}[node_id]"_format(VOLTAGE_VAR)));
 
         /// read ion variables
         ion_read_statements(BlockType::Equation,
                             int_variables,
                             double_variables,
-                            loop_index_statements,
-                            loop_body_statements);
+                            index_statements,
+                            body_statements);
 
         /// main compute node : extract solution expressions from the derivative block
         const auto& block = node.get_statement_block();
-        append_statements_from_block(loop_body_statements, block);
+        append_statements_from_block(body_statements, block);
 
         /// write ion statements
         ion_write_statements(BlockType::Equation,
                              int_variables,
                              double_variables,
-                             loop_index_statements,
-                             loop_body_statements);
+                             index_statements,
+                             body_statements);
+
+        // \todo handle nrn_current calls, see how it's done in C visitor!
     }
 
-    ast::StatementVector loop_body;
-    loop_body.insert(loop_body.end(), loop_def_statements.begin(), loop_def_statements.end());
-    loop_body.insert(loop_body.end(), loop_index_statements.begin(), loop_index_statements.end());
-    loop_body.insert(loop_body.end(), loop_body_statements.begin(), loop_body_statements.end());
+    /// create target-specific compute body
+    ast::StatementVector compute_body;
+    compute_body.insert(compute_body.end(), def_statements.begin(), def_statements.end());
+    compute_body.insert(compute_body.end(), index_statements.begin(), index_statements.end());
+    compute_body.insert(compute_body.end(), body_statements.begin(), body_statements.end());
 
-    /// now construct a new code block which will become the body of the loop
-    auto loop_block = std::make_shared<ast::StatementBlock>(loop_body);
+    std::vector<std::string> induction_variables{naming::INDUCTION_VAR};
+    function_statements.push_back(
+        create_local_variable_statement(induction_variables, INTEGER_TYPE));
 
-    /// declare main FOR loop local variables
-    function_statements.push_back(create_local_variable_statement(int_variables, INTEGER_TYPE));
-    function_statements.push_back(create_local_variable_statement(double_variables, FLOAT_TYPE));
-
-    /// main loop possibly vectorized on vector_width
-    {
-        /// loop constructs : initialization, condition and increment
-        const auto& initialization = int_initialization_expression(naming::INDUCTION_VAR);
-        const auto& condition = loop_count_expression(naming::INDUCTION_VAR, NODECOUNT_VAR, platform.get_instruction_width());
-        const auto& increment = loop_increment_expression(naming::INDUCTION_VAR, platform.get_instruction_width());
-
-        /// clone it
-        auto local_loop_block = std::shared_ptr<ast::StatementBlock>(loop_block->clone());
-
-        /// convert local statement to codegenvar statement
-        convert_local_statement(*local_loop_block);
-
-        auto for_loop_statement_main = std::make_shared<ast::CodegenForStatement>(initialization,
-                                                                                  condition,
-                                                                                  increment,
-                                                                                  local_loop_block);
-
-        /// convert all variables inside loop body to instance variables
-        convert_to_instance_variable(*for_loop_statement_main, loop_index_var);
-
-        /// loop itself becomes one of the statement in the function
-        function_statements.push_back(for_loop_statement_main);
-    }
-
-
-    /// vectors containing renamed FOR loop local variables
-    std::vector<std::string> renamed_int_variables;
-    std::vector<std::string> renamed_double_variables;
-
-    /// remainder loop possibly vectorized on vector_width
-    if (platform.get_instruction_width() > 1) {
-        /// loop constructs : initialization, condition and increment
-        const auto& condition =
-            loop_count_expression(naming::INDUCTION_VAR, NODECOUNT_VAR, /*vector_width=*/1);
-        const auto& increment = loop_increment_expression(naming::INDUCTION_VAR, /*vector_width=*/1);
-
-        /// rename local variables to avoid conflict with main loop
-        rename_local_variables(*loop_block);
-
-        /// convert local statement to codegenvar statement
-        convert_local_statement(*loop_block);
-
-        auto for_loop_statement_remainder =
-            std::make_shared<ast::CodegenForStatement>(nullptr, condition, increment, loop_block);
-
-        const auto& loop_statements = for_loop_statement_remainder->get_statement_block();
-        // \todo: Change RenameVisitor to take a vector of names to which it would append a single
-        // prefix.
-        for (const auto& name: int_variables) {
-            std::string new_name = epilogue_variable_prefix + name;
-            renamed_int_variables.push_back(new_name);
-            visitor::RenameVisitor v(name, new_name);
-            loop_statements->accept(v);
-        }
-        for (const auto& name: double_variables) {
-            std::string new_name = epilogue_variable_prefix + name;
-            renamed_double_variables.push_back(new_name);
-            visitor::RenameVisitor v(name, epilogue_variable_prefix + name);
-            loop_statements->accept(v);
-        }
-
-        /// declare remainder FOR loop local variables
-        function_statements.push_back(
-            create_local_variable_statement(renamed_int_variables, INTEGER_TYPE));
-        function_statements.push_back(
-            create_local_variable_statement(renamed_double_variables, FLOAT_TYPE));
-
-        /// convert all variables inside loop body to instance variables
-        convert_to_instance_variable(*for_loop_statement_remainder, loop_index_var);
-
-        /// loop itself becomes one of the statement in the function
-        function_statements.push_back(for_loop_statement_remainder);
+    if (platform.is_gpu()) {
+        create_gpu_compute_body(compute_body, function_statements, int_variables, double_variables);
+    } else {
+        create_cpu_compute_body(compute_body, function_statements, int_variables, double_variables);
     }
 
     /// new block for the function
@@ -954,6 +878,7 @@ void CodegenLLVMHelperVisitor::visit_breakpoint_block(ast::BreakpointBlock& node
     auto name = new ast::Name(new ast::String(function_name));
     auto return_type = new ast::CodegenVarType(ast::AstNodeType::VOID);
 
+    /// \todo : currently there are no arguments
     ast::CodegenVarWithTypeVector code_arguments;
 
     auto instance_var_type = new ast::CodegenVarType(ast::AstNodeType::INSTANCE_STRUCT);
