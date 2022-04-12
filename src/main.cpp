@@ -725,6 +725,13 @@ int main(int argc, const char* argv[]) {
                                   llvm_float_type,
                                   llvm_vector_width);
 
+                // GPU code generation doesn't support debug information at the moment so disable it
+                // in case it's enabled
+                if (!llvm_no_debug && platform.is_gpu()) {
+                    logger->warn("Disabling addition of debug symbols in GPU code.");
+                    llvm_no_debug = true;
+                }
+
                 logger->info("Running LLVM backend code generator");
                 CodegenLLVMVisitor visitor(modfile,
                                            output_dir,
