@@ -164,7 +164,7 @@ class JitDriver  {
         init_platform();
     }
 
-    explicit JitDriver(nmodl::codegen::CodeGenConfig& cfg) :
+    explicit JitDriver(const nmodl::codegen::CodeGenConfig& cfg) :
         cfg(cfg),
         cg_driver(cfg) {
         init_platform();
@@ -254,6 +254,7 @@ PYBIND11_MODULE(_nmodl, m_nmodl) {
 
     py::class_<nmodl::JitDriver> jit_driver(m_nmodl, "Jit", nmodl::docstring::jit);
     jit_driver.def(py::init<>())
+        .def(py::init<const nmodl::codegen::CodeGenConfig&>())
         .def("run", &nmodl::JitDriver::run, "node"_a, "modname"_a, "num_experiments"_a, "instance_size"_a);
 
     m_nmodl.def("to_nmodl",
