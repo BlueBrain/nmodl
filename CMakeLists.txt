@@ -24,6 +24,7 @@ option(NMODL_ENABLE_PYTHON_BINDINGS "Enable pybind11 based python bindings" OFF)
 option(NMODL_ENABLE_LEGACY_UNITS "Use original faraday, R, etc. instead of 2019 nist constants" OFF)
 option(NMODL_ENABLE_LLVM "Enable LLVM based code generation" ON)
 option(NMODL_ENABLE_LLVM_GPU "Enable LLVM based GPU code generation" ON)
+option(NMODL_ENABLE_LLVM_CUDA "Enable LLVM CUDA backend to run GPU benchmark" OFF)
 option(NMODL_ENABLE_JIT_EVENT_LISTENERS "Enable JITEventListener for Perf and Vtune" OFF)
 
 if(NMODL_ENABLE_LEGACY_UNITS)
@@ -105,14 +106,11 @@ include_directories(
 # HPC Coding Conventions
 # =============================================================================
 set(NMODL_ClangFormat_EXCLUDES_RE
-    ".*/ext/.*$$"
+    "ext/.*$$" "src/language/templates/.*$$"
     CACHE STRING "list of regular expressions to exclude C/C++ files from formatting" FORCE)
 set(NMODL_CMakeFormat_EXCLUDES_RE
-    ".*/ext/.*$$" ".*/src/language/templates/.*$$"
+    "ext/.*$$" "src/language/templates/.*$$"
     CACHE STRING "list of regular expressions to exclude CMake files from formatting" FORCE)
-set(NMODL_ClangFormat_DEPENDENCIES
-    pyastgen parser-gen
-    CACHE STRING "list of CMake targets to build before formatting C++ code" FORCE)
 
 # initialize submodule of coding conventions under cmake
 set(THIRD_PARTY_DIRECTORY "${PROJECT_SOURCE_DIR}/cmake")
@@ -165,6 +163,7 @@ if(NMODL_ENABLE_LLVM)
   if(NMODL_ENABLE_LLVM_CUDA)
     enable_language(CUDA)
     find_package(CUDAToolkit)
+    include_directories(${CUDAToolkit_INCLUDE_DIRS})
     add_definitions(-DNMODL_LLVM_CUDA_BACKEND)
   endif()
 endif()

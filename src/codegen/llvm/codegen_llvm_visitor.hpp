@@ -26,7 +26,6 @@
 #include "utils/logger.hpp"
 #include "visitors/ast_visitor.hpp"
 
-#include "llvm/Analysis/TargetLibraryInfo.h"
 #include "llvm/IR/DIBuilder.h"
 #include "llvm/IR/LLVMContext.h"
 #include "llvm/IR/Module.h"
@@ -139,10 +138,6 @@ class CodegenLLVMVisitor: public CodegenCVisitor {
         os << *module;
         os.flush();
         return str;
-    }
-
-    void print_target_file() const {
-        target_printer->add_multi_line(dump_module());
     }
 
     /// Fills the container with the names of kernel functions from the MOD file.
@@ -302,14 +297,12 @@ class CodegenLLVMVisitor: public CodegenCVisitor {
     void wrap_kernel_functions();
 
   private:
-    // Annotates kernel function with NVVM metadata.
-    void annotate_kernel_with_nvvm(llvm::Function* kernel);
+    /// Annotates kernel function with NVVM metadata.
+    void annotate_kernel_with_nvvm(llvm::Function* kernel, const std::string& annotation);
 
-#if LLVM_VERSION_MAJOR >= 13
-    /// Populates target library info with the vector library definitions.
-    void add_vectorizable_functions_from_vec_lib(llvm::TargetLibraryInfoImpl& tli,
-                                                 llvm::Triple& triple);
-#endif
+    /// Handles NVVM function annotations when we create the wrapper functions. All original kernels
+    /// should be "device" functions and wrappers "kernel" functions
+    void annotate_wrapper_kernels_with_nvvm();
 
     /// Accepts the given AST node and returns the processed value.
     llvm::Value* accept_and_get(const std::shared_ptr<ast::Node>& node);

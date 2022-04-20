@@ -9,6 +9,7 @@
 
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
 #include "llvm_benchmark.hpp"
+#include "test/benchmark/cuda_driver.hpp"
 #include "test/benchmark/jit_driver.hpp"
 #include "llvm/Support/Host.h"
 
@@ -44,17 +45,43 @@ void LLVMBenchmark::run_benchmark(const std::shared_ptr<ast::Program>& node) {
     llvm_visitor.find_kernel_names(kernel_names);
 
     // Get feature's string and turn them off depending on the cpu.
-    std::string cpu_name = cpu == "default" ? llvm::sys::getHostCPUName().str() : cpu;
-    logger->info("CPU: {}", cpu_name);
+    std::string backend_name;
+#ifdef NMODL_LLVM_CUDA_BACKEND
+    if (platform.is_CUDA_gpu()) {
+        backend_name = platform.get_name();
+    } else {
+#endif
+        backend_name = platform.get_name() == "default" ? llvm::sys::getHostCPUName().str()
+                                                        : platform.get_name();
+#ifdef NMODL_LLVM_CUDA_BACKEND
+    }
+#endif
+    logger->info("Backend: {}", backend_name);
 
     std::unique_ptr<llvm::Module> m = llvm_visitor.get_module();
 
     // Create the benchmark runner and initialize it.
-    std::string filename = "v" + std::to_string(llvm_visitor.get_vector_width()) + "_" +
-                           mod_filename;
-    runner::BenchmarkRunner runner(
-        std::move(m), filename, output_dir, cpu_name, shared_libs, opt_level_ir, opt_level_codegen);
-    runner.initialize_driver();
+#ifdef NMODL_LLVM_CUDA_BACKEND
+    if (platform.is_CUDA_gpu()) {
+        std::string filename = "cuda_" + mod_filename;
+        cuda_runner = std::make_unique<runner::BenchmarkGPURunner>(
+            std::move(m), filename, output_dir, shared_libs, opt_level_ir, opt_level_codegen);
+        cuda_runner->initialize_driver(platform);
+    } else {
+#endif
+        std::string filename = "v" + std::to_string(llvm_visitor.get_vector_width()) + "_" +
+                               mod_filename;
+        cpu_runner = std::make_unique<runner::BenchmarkRunner>(std::move(m),
+                                                               filename,
+                                                               output_dir,
+                                                               backend_name,
+                                                               shared_libs,
+                                                               opt_level_ir,
+                                                               opt_level_codegen);
+        cpu_runner->initialize_driver();
+#ifdef NMODL_LLVM_CUDA_BACKEND
+    }
+#endif
 
     if (external_kernel) {
         // benchmark external kernel
@@ -116,7 +143,17 @@ void LLVMBenchmark::run_benchmark(const std::shared_ptr<ast::Program>& node) {
                 // Record the execution time of the kernel.
                 std::string wrapper_name = "__" + kernel_name + "_wrapper";
                 auto start = std::chrono::steady_clock::now();
-                runner.run_with_argument<int, void*>(kernel_name, instance_data.base_ptr);
+#ifdef NMODL_LLVM_CUDA_BACKEND
+                if (platform.is_CUDA_gpu()) {
+                    cuda_runner->run_with_argument<void*>(wrapper_name,
+                                                          instance_data.base_ptr,
+                                                          gpu_execution_parameters);
+                } else {
+#endif
+                    cpu_runner->run_with_argument<int, void*>(wrapper_name, instance_data.base_ptr);
+#ifdef NMODL_LLVM_CUDA_BACKEND
+                }
+#endif
                 auto end = std::chrono::steady_clock::now();
                 std::chrono::duration<double> diff = end - start;
 

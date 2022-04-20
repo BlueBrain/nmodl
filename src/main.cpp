@@ -194,8 +194,17 @@ int main(int argc, const char* argv[]) {
     /// traget GPU platform name
     std::string llvm_gpu_name = "default";
 
+    /// GPU target architecture
+    std::string llvm_gpu_target_architecture = "sm_70";
+
     /// llvm vector width if generating code for CPUs
     int llvm_vector_width = 1;
+
+    /// X dimension of grid in blocks for GPU execution
+    int llvm_cuda_grid_dim_x = 1;
+
+    /// X dimension of block in threads for GPU execution
+    int llvm_cuda_block_dim_x = 1;
 
     /// run llvm benchmark
     bool llvm_benchmark(false);
@@ -362,9 +371,10 @@ int main(int argc, const char* argv[]) {
     auto gpu_target_name = gpu_opt->add_option("--name",
         llvm_gpu_name,
         "Name of GPU platform to use")->ignore_case();
-   gpu_opt->add_option("--target-chip",
-        llvm_cpu_name,
-        "Name of target chip to use")->ignore_case();
+    gpu_target_name->check(CLI::IsMember({"nvptx", "nvptx64"}));
+    gpu_opt->add_option("--target-arch",
+        llvm_gpu_target_architecture,
+        "Name of target architecture to use")->ignore_case();
     auto gpu_math_library_opt = gpu_opt->add_option("--math-library",
         llvm_math_library,
         "Math library for GPU code generation ({})"_format(llvm_math_library));
@@ -395,6 +405,12 @@ int main(int argc, const char* argv[]) {
     benchmark_opt->add_flag("--external",
                               external_kernel,
                               "Benchmark external kernel ({})"_format(external_kernel))->ignore_case();
+    benchmark_opt->add_option("--grid-dim-x",
+                              llvm_cuda_grid_dim_x,
+                              "Grid dimension X ({})"_format(llvm_cuda_grid_dim_x))->ignore_case();
+    benchmark_opt->add_option("--block-dim-x",
+                                llvm_cuda_block_dim_x,
+                                "Block dimension X ({})"_format(llvm_cuda_block_dim_x))->ignore_case();
 #endif
     // clang-format on
 
@@ -701,40 +717,66 @@ int main(int argc, const char* argv[]) {
 
 #ifdef NMODL_LLVM_BACKEND
             if (llvm_ir || llvm_benchmark) {
-              // If benchmarking, we want to optimize the IR with target
-              // information and not in LLVM visitor.
-              int llvm_opt_level = llvm_benchmark ? 0 : llvm_opt_level_ir;
+                // If benchmarking, we want to optimize the IR with target
+                // information and not in LLVM visitor.
+                int llvm_opt_level = llvm_benchmark ? 0 : llvm_opt_level_ir;
 
-              // Create platform abstraction.
-              PlatformID pid = llvm_gpu_name == "default" ? PlatformID::CPU
-                                                          : PlatformID::GPU;
-              const std::string name =
-                  llvm_gpu_name == "default" ? llvm_cpu_name : llvm_gpu_name;
-              Platform platform(pid, name, llvm_cpu_name, llvm_math_library, llvm_float_type,
-                                llvm_vector_width);
+                // Create platform abstraction.
+                PlatformID pid = llvm_gpu_name == "default" ? PlatformID::CPU : PlatformID::GPU;
+                const std::string name = llvm_gpu_name == "default" ? llvm_cpu_name : llvm_gpu_name;
+                Platform platform(pid,
+                                  name,
+                                  llvm_gpu_target_architecture,
+                                  llvm_math_library,
+                                  llvm_float_type,
+                                  llvm_vector_width);
 
-              logger->info("Running LLVM backend code generator");
-              CodegenLLVMVisitor visitor(modfile, output_dir, platform,
-                                         llvm_opt_level, !llvm_no_debug,
-                                         llvm_fast_math_flags);
-              visitor.visit_program(*ast);
-              ast_to_nmodl(*ast, filepath("llvm", "mod"));
-              ast_to_json(*ast, filepath("llvm", "json"));
-
-              if (llvm_benchmark) {
-                // \todo integrate Platform class here
-                if (llvm_gpu_name != "default") {
-                  logger->warn("GPU benchmarking is not supported, targeting "
-                               "CPU instead");
+                // GPU code generation doesn't support debug information at the moment so disable it
+                // in case it's enabled
+                if (!llvm_no_debug && platform.is_gpu()) {
+                    logger->warn("Disabling addition of debug symbols in GPU code.");
+                    llvm_no_debug = true;
                 }
 
-                logger->info("Running LLVM benchmark");
-                benchmark::LLVMBenchmark benchmark(
-                    visitor, modfile, output_dir, shared_lib_paths,
-                    num_experiments, instance_size, llvm_cpu_name,
-                    llvm_opt_level_ir, llvm_opt_level_codegen, external_kernel);
-                benchmark.run(ast);
-              }
+                logger->info("Running LLVM backend code generator");
+                CodegenLLVMVisitor visitor(modfile,
+                                           output_dir,
+                                           platform,
+                                           llvm_opt_level,
+                                           !llvm_no_debug,
+                                           llvm_fast_math_flags);
+                visitor.visit_program(*ast);
+                ast_to_nmodl(*ast, filepath("llvm", "mod"));
+                ast_to_json(*ast, filepath("llvm", "json"));
+
+                if (llvm_benchmark) {
+                    logger->info("Running LLVM benchmark");
+                    if (platform.is_gpu() && !platform.is_CUDA_gpu()) {
+                        throw std::runtime_error(
+                            "Benchmarking is only supported on CUDA GPUs at the moment");
+                    }
+#ifndef NMODL_LLVM_CUDA_BACKEND
+                    if (platform.is_CUDA_gpu()) {
+                        throw std::runtime_error(
+                            "GPU benchmarking is not supported if NMODL is not built with CUDA "
+                            "backend enabled.");
+                    }
+#endif
+                    const GPUExecutionParameters gpu_execution_parameters{llvm_cuda_grid_dim_x,
+                                                                          llvm_cuda_block_dim_x};
+                    benchmark::LLVMBenchmark benchmark(visitor,
+                                                       modfile,
+                                                       output_dir,
+                                                       shared_lib_paths,
+                                                       num_experiments,
+                                                       instance_size,
+                                                       platform,
+                                                       llvm_opt_level_ir,
+                                                       llvm_opt_level_codegen,
+                                                       external_kernel,
+                                                       gpu_execution_parameters);
+                    benchmark.run(ast);
+                }
             }
 #endif
         }

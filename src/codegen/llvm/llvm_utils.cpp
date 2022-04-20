@@ -6,6 +6,7 @@
  *************************************************************************/
 
 #include "codegen/llvm/llvm_utils.hpp"
+#include "codegen/llvm/replace_with_lib_functions.hpp"
 
 #include "llvm/Analysis/TargetTransformInfo.h"
 #include "llvm/IR/AssemblyAnnotationWriter.h"
@@ -74,25 +75,24 @@ void initialise_nvptx_passes() {
     initialise_optimisation_passes();
 }
 
-void optimise_module_for_nvptx(codegen::Platform& platform,
-                               llvm::Module& module,
-                               int opt_level,
-                               std::string& target_asm) {
+std::unique_ptr<llvm::TargetMachine> create_CUDA_target_machine(const codegen::Platform& platform,
+                                                                llvm::Module& module) {
     // CUDA target machine we generating code for.
-    std::unique_ptr<llvm::TargetMachine> tm;
     std::string platform_name = platform.get_name();
 
     // Target and layout information.
-    static const std::map<std::string, std::string> triple_str = {
-            {"nvptx", "nvptx-nvidia-cuda"},
-            {"nvptx64", "nvptx64-nvidia-cuda"}};
+    static const std::map<std::string, std::string> triple_str = {{"nvptx", "nvptx-nvidia-cuda"},
+                                                                  {"nvptx64",
+                                                                   "nvptx64-nvidia-cuda"}};
     static const std::map<std::string, std::string> data_layout_str = {
-            {"nvptx", "e-p:32:32:32-i1:8:8-i8:8:8-i16:16:16-i32:32:32"
-                      "-i64:64:64-f32:32:32-f64:64:64-v16:16:16-v32:32:32"
-                      "-v64:64:64-v128:128:128-n16:32:64"},
-            {"nvptx64", "e-p:64:64:64-i1:8:8-i8:8:8-i16:16:16-i32:32:32"
-                        "-i64:64:64-f32:32:32-f64:64:64-v16:16:16-v32:32:32"
-                        "-v64:64:64-v128:128:128-n16:32:64"}};
+        {"nvptx",
+         "e-p:32:32:32-i1:8:8-i8:8:8-i16:16:16-i32:32:32"
+         "-i64:64:64-f32:32:32-f64:64:64-v16:16:16-v32:32:32"
+         "-v64:64:64-v128:128:128-n16:32:64"},
+        {"nvptx64",
+         "e-p:64:64:64-i1:8:8-i8:8:8-i16:16:16-i32:32:32"
+         "-i64:64:64-f32:32:32-f64:64:64-v16:16:16-v32:32:32"
+         "-v64:64:64-v128:128:128-n16:32:64"}};
 
     // Set data layout and target triple information for the module.
     auto triple = triple_str.at(platform_name);
@@ -108,9 +108,30 @@ void optimise_module_for_nvptx(codegen::Platform& platform,
     if (!target)
         throw std::runtime_error("Error: " + error_msg + "\n");
 
+    std::unique_ptr<llvm::TargetMachine> tm;
     tm.reset(target->createTargetMachine(triple, subtarget, features, {}, {}));
     if (!tm)
         throw std::runtime_error("Error: creating target machine failed! Aborting.");
+    return tm;
+}
+
+std::string get_module_ptx(llvm::TargetMachine& tm, llvm::Module& module) {
+    std::string target_asm;
+    llvm::raw_string_ostream stream(target_asm);
+    llvm::buffer_ostream pstream(stream);
+    llvm::legacy::PassManager codegen_pm;
+
+    tm.addPassesToEmitFile(codegen_pm, pstream, nullptr, llvm::CGFT_AssemblyFile);
+    codegen_pm.run(module);
+    return target_asm;
+}
+
+void optimise_module_for_nvptx(const codegen::Platform& platform,
+                               llvm::Module& module,
+                               int opt_level,
+                               std::string& target_asm) {
+    // Create target machine for CUDA GPU
+    auto tm = create_CUDA_target_machine(platform, module);
 
     // Create pass managers.
     llvm::legacy::FunctionPassManager func_pm(&module);
@@ -134,12 +155,7 @@ void optimise_module_for_nvptx(codegen::Platform& platform,
 
     // Now, we want to run target-specific (e.g. NVPTX) passes. In LLVM, this
     // is done via `addPassesToEmitFile`.
-    llvm::raw_string_ostream stream(target_asm);
-    llvm::buffer_ostream pstream(stream);
-    llvm::legacy::PassManager codegen_pm;
-
-    tm->addPassesToEmitFile(codegen_pm, pstream, nullptr, llvm::CGFT_AssemblyFile);
-    codegen_pm.run(module);
+    target_asm = get_module_ptx(*tm, module);
 }
 
 void initialise_optimisation_passes() {
@@ -158,6 +174,12 @@ void optimise_module(llvm::Module& module, int opt_level, llvm::TargetMachine* t
     llvm::legacy::PassManager module_pm;
     populate_pms(func_pm, module_pm, opt_level, /*size_level=*/0, tm);
     run_optimisation_passes(module, func_pm, module_pm);
+}
+
+void replace_with_lib_functions(codegen::Platform& platform, llvm::Module& module) {
+    llvm::legacy::PassManager pm;
+    pm.add(new llvm::ReplaceMathFunctions(platform));
+    pm.run(module);
 }
 
 /****************************************************************************************/

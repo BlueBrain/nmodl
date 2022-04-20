@@ -15,30 +15,14 @@
  * \brief \copybrief nmodl::runner::JITDriver
  */
 
+#include "benchmark_info.hpp"
+
 #include "llvm/ExecutionEngine/JITEventListener.h"
 #include "llvm/ExecutionEngine/Orc/LLJIT.h"
 #include "llvm/Support/Host.h"
 
 namespace nmodl {
 namespace runner {
-
-/// A struct to hold the information for benchmarking.
-struct BenchmarkInfo {
-    /// Object filename to dump.
-    std::string filename;
-
-    /// Object file output directory.
-    std::string output_dir;
-
-    /// Shared libraries' paths to link against.
-    std::vector<std::string> shared_lib_paths;
-
-    /// Optimisation level for IT.
-    int opt_level_ir;
-
-    /// Optimisation level for machine code generation.
-    int opt_level_codegen;
-};
 
 /**
  * \class JITDriver
