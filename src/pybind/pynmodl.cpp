@@ -8,19 +8,14 @@
 #include <memory>
 #include <set>
 
-#include <pybind11/iostream.h>
 #include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
 
 #include "ast/program.hpp"
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
 #include "config/config.h"
 #include "parser/nmodl_driver.hpp"
 #include "pybind/pybind_utils.hpp"
-#include "visitors/semantic_analysis_visitor.hpp"
-#include "visitors/symtab_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
-#include "visitors/after_cvode_to_cnexp_visitor.hpp"
 #include "codegen/codegen_driver.hpp"
 #include "test/benchmark/llvm_benchmark.hpp"
 
