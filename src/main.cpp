@@ -213,9 +213,12 @@ int main(int argc, const char* argv[]) {
 
     auto gpu_opt = app.add_subcommand("gpu", "LLVM GPU option")->ignore_case();
     gpu_opt->needs(llvm_opt);
-    gpu_opt->add_option("--name",
+    auto gpu_target_name = gpu_opt->add_option("--name",
         cfg.llvm_gpu_name,
         "Name of GPU platform to use")->ignore_case();
+   gpu_opt->add_option("--target-chip",
+        cfg.llvm_gpu_target_architecture,
+        "Name of target chip to use")->ignore_case();
     auto gpu_math_library_opt = gpu_opt->add_option("--math-library",
         cfg.llvm_math_library,
         "Math library for GPU code generation ({})"_format(cfg.llvm_math_library));
@@ -348,46 +351,59 @@ int main(int argc, const char* argv[]) {
 
 #ifdef NMODL_LLVM_BACKEND
             if (cfg.llvm_ir || llvm_benchmark) {
-              // If benchmarking, we want to optimize the IR with target
-              // information and not in LLVM visitor.
-              int llvm_opt_level = llvm_benchmark ? 0 : cfg.llvm_opt_level_ir;
+                // If benchmarking, we want to optimize the IR with target
+                // information and not in LLVM visitor.
+                int llvm_opt_level = llvm_benchmark ? 0 : cfg.llvm_opt_level_ir;
 
-              // Create platform abstraction.
-              PlatformID pid = cfg.llvm_gpu_name == "default" ? PlatformID::CPU
-                                                          : PlatformID::GPU;
-              const std::string name =
-                  cfg.llvm_gpu_name == "default" ? cfg.llvm_cpu_name : cfg.llvm_gpu_name;
-              Platform platform(pid, name, cfg.llvm_math_library, cfg.llvm_float_type,
-                                cfg.llvm_vector_width);
+                // Create platform abstraction.
+                PlatformID pid = cfg.llvm_gpu_name == "default" ? PlatformID::CPU
+                                                                : PlatformID::GPU;
+                const std::string name =
+                    cfg.llvm_gpu_name == "default" ? cfg.llvm_cpu_name : cfg.llvm_gpu_name;
+                Platform platform(pid,
+                                  name,
+                                  cfg.llvm_cpu_name,
+                                  cfg.llvm_math_library,
+                                  cfg.llvm_float_type,
+                                  cfg.llvm_vector_width);
 
-              logger->info("Running LLVM backend code generator");
-              CodegenLLVMVisitor visitor(modfile, cfg.output_dir, platform,
-                                         llvm_opt_level, !cfg.llvm_no_debug,
-                                         cfg.llvm_fast_math_flags);
-              visitor.visit_program(*ast);
-              if (cfg.nmodl_ast) {
-                  NmodlPrintVisitor(filepath("llvm", "mod")).visit_program(*ast);
-                  logger->info("AST to NMODL transformation written to {}", filepath("llvm", "mod"));
-              }
-              if (cfg.json_ast) {
-                  JSONVisitor(filepath("llvm", "json")).write(*ast);
-                  logger->info("AST to JSON transformation written to {}", filepath("llvm", "json"));
-              }
-
-              if (llvm_benchmark) {
-                // \todo integrate Platform class here
-                if (cfg.llvm_gpu_name != "default") {
-                  logger->warn("GPU benchmarking is not supported, targeting "
-                               "CPU instead");
+                logger->info("Running LLVM backend code generator");
+                CodegenLLVMVisitor visitor(modfile,
+                                           cfg.output_dir,
+                                           platform,
+                                           llvm_opt_level,
+                                           !cfg.llvm_no_debug,
+                                           cfg.llvm_fast_math_flags);
+                visitor.visit_program(*ast);
+                if (cfg.nmodl_ast) {
+                    NmodlPrintVisitor(filepath("llvm", "mod")).visit_program(*ast);
+                    logger->info("AST to NMODL transformation written to {}", filepath("llvm", "mod"));
+                }
+                if (cfg.json_ast) {
+                    JSONVisitor(filepath("llvm", "json")).write(*ast);
+                    logger->info("AST to JSON transformation written to {}", filepath("llvm", "json"));
                 }
 
-                logger->info("Running LLVM benchmark");
-                benchmark::LLVMBenchmark benchmark(
-                    visitor, modfile, cfg.output_dir, cfg.shared_lib_paths,
-                    num_experiments, instance_size, cfg.llvm_cpu_name,
-                    cfg.llvm_opt_level_ir, cfg.llvm_opt_level_codegen);
-                benchmark.run();
-              }
+                if (llvm_benchmark) {
+                    // \todo integrate Platform class here
+                    if (cfg.llvm_gpu_name != "default") {
+                        logger->warn(
+                            "GPU benchmarking is not supported, targeting "
+                            "CPU instead");
+                    }
+
+                    logger->info("Running LLVM benchmark");
+                    benchmark::LLVMBenchmark benchmark(visitor,
+                                                       modfile,
+                                                       cfg.output_dir,
+                                                       cfg.shared_lib_paths,
+                                                       num_experiments,
+                                                       instance_size,
+                                                       cfg.llvm_cpu_name,
+                                                       cfg.llvm_opt_level_ir,
+                                                       cfg.llvm_opt_level_codegen);
+                    benchmark.run();
+                }
             }
 #endif
         }

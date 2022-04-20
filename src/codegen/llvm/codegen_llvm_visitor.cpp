@@ -12,22 +12,12 @@
 #include "visitors/rename_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
 
-#include "llvm/Analysis/TargetLibraryInfo.h"
 #include "llvm/IR/BasicBlock.h"
 #include "llvm/IR/Function.h"
-#include "llvm/IR/LegacyPassManager.h"
 #include "llvm/IR/Type.h"
-#include "llvm/Support/Host.h"
-
-#if LLVM_VERSION_MAJOR >= 13
-#include "llvm/CodeGen/ReplaceWithVeclib.h"
-#endif
 
 namespace nmodl {
 namespace codegen {
-
-
-static constexpr const char instance_struct_type_name[] = "__instance_var__type";
 
 
 /****************************************************************************************/
@@ -64,70 +54,14 @@ static bool can_vectorize(const ast::CodegenForStatement& statement, symtab::Sym
     return unsupported.empty() && supported.size() <= 1;
 }
 
-#if LLVM_VERSION_MAJOR >= 13
-void CodegenLLVMVisitor::add_vectorizable_functions_from_vec_lib(llvm::TargetLibraryInfoImpl& tli,
-                                                                 llvm::Triple& triple) {
-    // Since LLVM does not support SLEEF as a vector library yet, process it separately.
-    if (platform.get_math_library() == "SLEEF") {
-// clang-format off
-#define FIXED(w) llvm::ElementCount::getFixed(w)
-// clang-format on
-#define DISPATCH(func, vec_func, width) {func, vec_func, width},
-
-        // Populate function definitions of only exp and pow (for now)
-        const llvm::VecDesc aarch64_functions[] = {
-            // clang-format off
-            DISPATCH("llvm.exp.f32", "_ZGVnN4v_expf", FIXED(4))
-            DISPATCH("llvm.exp.f64", "_ZGVnN2v_exp", FIXED(2))
-            DISPATCH("llvm.pow.f32", "_ZGVnN4vv_powf", FIXED(4))
-            DISPATCH("llvm.pow.f64", "_ZGVnN2vv_pow", FIXED(2))
-            // clang-format on
-        };
-        const llvm::VecDesc x86_functions[] = {
-            // clang-format off
-            DISPATCH("llvm.exp.f64", "_ZGVbN2v_exp", FIXED(2))
-            DISPATCH("llvm.exp.f64", "_ZGVdN4v_exp", FIXED(4))
-            DISPATCH("llvm.exp.f64", "_ZGVeN8v_exp", FIXED(8))
-            DISPATCH("llvm.pow.f64", "_ZGVbN2vv_pow", FIXED(2))
-            DISPATCH("llvm.pow.f64", "_ZGVdN4vv_pow", FIXED(4))
-            DISPATCH("llvm.pow.f64", "_ZGVeN8vv_pow", FIXED(8))
-            // clang-format on
-        };
-#undef DISPATCH
-
-        if (triple.isAArch64()) {
-            tli.addVectorizableFunctions(aarch64_functions);
-        }
-        if (triple.isX86() && triple.isArch64Bit()) {
-            tli.addVectorizableFunctions(x86_functions);
-        }
-
-    } else {
-        // A map to query vector library by its string value.
-        using VecLib = llvm::TargetLibraryInfoImpl::VectorLibrary;
-        static const std::map<std::string, VecLib> llvm_supported_vector_libraries = {
-            {"Accelerate", VecLib::Accelerate},
-            {"libmvec", VecLib::LIBMVEC_X86},
-            {"libsystem_m", VecLib ::DarwinLibSystemM},
-            {"MASSV", VecLib::MASSV},
-            {"none", VecLib::NoLibrary},
-            {"SVML", VecLib::SVML}};
-        const auto& library = llvm_supported_vector_libraries.find(platform.get_math_library());
-        if (library == llvm_supported_vector_libraries.end())
-            throw std::runtime_error("Error: unknown vector library - " + platform.get_math_library() + "\n");
-
-        // Add vectorizable functions to the target library info.
-        switch (library->second) {
-        case VecLib::LIBMVEC_X86:
-            if (!triple.isX86() || !triple.isArch64Bit())
-                break;
-        default:
-            tli.addVectorizableFunctionsFromVecLib(library->second);
-            break;
-        }
-    }
+void CodegenLLVMVisitor::annotate_kernel_with_nvvm(llvm::Function* kernel) {
+    llvm::Metadata* metadata[] = {llvm::ValueAsMetadata::get(kernel),
+                                  llvm::MDString::get(*context, "kernel"),
+                                  llvm::ValueAsMetadata::get(
+                                      llvm::ConstantInt::get(llvm::Type::getInt32Ty(*context), 1))};
+    llvm::MDNode* node = llvm::MDNode::get(*context, metadata);
+    module->getOrInsertNamedMetadata("nvvm.annotations")->addOperand(node);
 }
-#endif
 
 llvm::Value* CodegenLLVMVisitor::accept_and_get(const std::shared_ptr<ast::Node>& node) {
     node->accept(*this);
@@ -308,7 +242,7 @@ llvm::Type* CodegenLLVMVisitor::get_instance_struct_type() {
         }
     }
 
-    return ir_builder.get_struct_ptr_type(mod_filename + instance_struct_type_name, member_types);
+    return ir_builder.get_struct_ptr_type(instance_struct(), member_types);
 }
 
 int CodegenLLVMVisitor::get_num_elements(const ast::IndexedName& node) {
@@ -322,7 +256,7 @@ int CodegenLLVMVisitor::get_num_elements(const ast::IndexedName& node) {
         return integer->get_value();
 
     // Otherwise, the length is taken from the macro.
-    const auto& macro = sym_tab->lookup(integer->get_macro()->get_node_name());
+    const auto& macro = program_symtab->lookup(integer->get_macro()->get_node_name());
     return static_cast<int>(*macro->get_value());
 }
 
@@ -665,11 +599,19 @@ void CodegenLLVMVisitor::visit_codegen_function(const ast::CodegenFunction& node
     ir_builder.allocate_function_arguments(func, arguments);
 
     // Process function or procedure body. If the function is a compute kernel, enable
-    // vectorization. If so, the return statement is handled in a separate visitor.
-    if (platform.is_cpu_with_simd() && is_kernel_function(name)) {
-        ir_builder.generate_vector_ir();
-        block->accept(*this);
-        ir_builder.generate_scalar_ir();
+    // vectorization or add NVVM annotations. If this is the case, the return statement is
+    // handled in a separate visitor.
+    if (is_kernel_function(name)) {
+        if (platform.is_cpu_with_simd()) {
+            ir_builder.generate_vector_ir();
+            block->accept(*this);
+            ir_builder.generate_scalar_ir();
+        } else if (platform.is_gpu()) {
+            block->accept(*this);
+            annotate_kernel_with_nvvm(func);
+        } else {  // scalar
+            block->accept(*this);
+        }
     } else {
         block->accept(*this);
     }
@@ -685,6 +627,10 @@ void CodegenLLVMVisitor::visit_codegen_function(const ast::CodegenFunction& node
     ir_builder.clear_function();
 }
 
+void CodegenLLVMVisitor::visit_codegen_grid_stride(const ast::CodegenGridStride& node) {
+    ir_builder.create_grid_stride();
+}
+
 void CodegenLLVMVisitor::visit_codegen_return_statement(const ast::CodegenReturnStatement& node) {
     if (!node.get_statement()->is_name())
         throw std::runtime_error("Error: CodegenReturnStatement must contain a name node\n");
@@ -692,6 +638,10 @@ void CodegenLLVMVisitor::visit_codegen_return_statement(const ast::CodegenReturn
     std::string ret = "ret_" + ir_builder.get_current_function_name();
     llvm::Value* ret_value = ir_builder.create_load(ret);
     ir_builder.create_return(ret_value);
+}
+
+void CodegenLLVMVisitor::visit_codegen_thread_id(const ast::CodegenThreadId& node) {
+    ir_builder.create_thread_id();
 }
 
 void CodegenLLVMVisitor::visit_codegen_var_list_statement(
@@ -729,7 +679,7 @@ void CodegenLLVMVisitor::visit_function_call(const ast::FunctionCall& node) {
     if (func) {
         create_function_call(func, name, node.get_arguments());
     } else {
-        auto symbol = sym_tab->lookup(name);
+        auto symbol = program_symtab->lookup(name);
         if (symbol && symbol->has_any_property(symtab::syminfo::NmodlType::extern_method)) {
             create_external_function_call(name, node.get_arguments());
         } else {
@@ -815,14 +765,14 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
     //   - convert function and procedure blocks into CodegenFunctions
     //   - gather information about AST. For now, information about functions
     //     and procedures is used only.
-    CodegenLLVMHelperVisitor v{platform.get_instruction_width()};
+    CodegenLLVMHelperVisitor v{platform};
     const auto& functions = v.get_codegen_functions(node);
     instance_var_helper = v.get_instance_var_helper();
-    sym_tab = node.get_symbol_table();
+    program_symtab = node.get_symbol_table();
     std::string kernel_id = v.get_kernel_id();
 
     // Initialize the builder for this NMODL program.
-    ir_builder.initialize(*sym_tab, kernel_id);
+    ir_builder.initialize(*program_symtab, kernel_id);
 
     // Create compile unit if adding debug information to the module.
     if (add_debug_information) {
@@ -834,6 +784,9 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
     for (const auto& func: functions) {
         create_function_declaration(*func);
     }
+
+    // Set the AST symbol table.
+    program_symtab = node.get_symbol_table();
 
     // Proceed with code generation. Right now, we do not do
     //     node.visit_children(*this);
@@ -857,36 +810,32 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
         throw std::runtime_error("Error: incorrect IR has been generated!\n" + ostream.str());
     }
 
-    if (opt_level_ir) {
-        logger->info("Running LLVM optimisation passes");
+    // Handle optimization passes for GPUs separately.
+    if (platform.is_cpu() && opt_level_ir) {
+        logger->info("Running LLVM optimisation passes for CPU platforms");
         utils::initialise_optimisation_passes();
         utils::optimise_module(*module, opt_level_ir);
     }
 
-    // Optionally, replace LLVM math intrinsics with vector library calls.
-    if (platform.is_cpu_with_simd()) {
-#if LLVM_VERSION_MAJOR < 13
-        logger->warn(
-            "This version of LLVM does not support replacement of LLVM intrinsics with vector "
-            "library calls");
-#else
-        // First, get the target library information and add vectorizable functions for the
-        // specified vector library.
-        llvm::Triple triple(llvm::sys::getDefaultTargetTriple());
-        llvm::TargetLibraryInfoImpl target_lib_info = llvm::TargetLibraryInfoImpl(triple);
-        add_vectorizable_functions_from_vec_lib(target_lib_info, triple);
+    // Optionally, replace LLVM math intrinsics with library calls.
+    utils::replace_with_lib_functions(platform, *module);
 
-        // Run passes that replace math intrinsics.
-        llvm::legacy::FunctionPassManager fpm(module.get());
-        fpm.add(new llvm::TargetLibraryInfoWrapperPass(target_lib_info));
-        fpm.add(new llvm::ReplaceWithVeclibLegacy);
-        fpm.doInitialization();
-        for (auto& function: module->getFunctionList()) {
-            if (!function.isDeclaration())
-                fpm.run(function);
-        }
-        fpm.doFinalization();
-#endif
+    // Handle GPU optimizations (CUDA platfroms only for now).
+    if (platform.is_gpu()) {
+        if (!platform.is_CUDA_gpu())
+            throw std::runtime_error("Error: unsupported GPU architecture!\n");
+
+        // We only support CUDA backends anyway, so this works for now.
+        utils::initialise_nvptx_passes();
+
+        std::string target_asm;
+        utils::optimise_module_for_nvptx(platform, *module, opt_level_ir, target_asm);
+
+        logger->debug("Dumping generated IR...\n" + dump_module());
+        logger->debug("Dumping generated PTX...\n" + target_asm);
+    } else {
+        // Workaround for debug outputs.
+        logger->debug("Dumping generated IR...\n" + dump_module());
     }
 
     // If the output directory is specified, save the IR to .ll file.
@@ -894,7 +843,218 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
         utils::save_ir_to_ll_file(*module, output_dir + "/" + mod_filename);
     }
 
-    logger->debug("Dumping generated IR...\n" + dump_module());
+    // Setup CodegenHelper for C++ wrapper file
+    setup(node);
+    print_wrapper_routines();
+    print_target_file();
+}
+
+void CodegenLLVMVisitor::print_mechanism_range_var_structure() {
+    printer->add_newline(2);
+    printer->add_line("/** Instance Struct passed as argument to LLVM IR kernels */");
+    printer->start_block("struct {} "_format(instance_struct()));
+    for (const auto& variable: instance_var_helper.instance->get_codegen_vars()) {
+        auto is_pointer = variable->get_is_pointer();
+        auto name = to_nmodl(variable->get_name());
+        auto qualifier = is_constant_variable(name) ? k_const() : "";
+        auto nmodl_type = variable->get_type()->get_type();
+        auto pointer = is_pointer ? "*" : "";
+        auto var_name = variable->get_node_name();
+        switch (nmodl_type) {
+#define DISPATCH(type, c_type)                                                              \
+    case type:                                                                              \
+        printer->add_line("{}{}{} {}{};"_format(                                            \
+            qualifier, c_type, pointer, is_pointer ? ptr_type_qualifier() : "", var_name)); \
+        break;
+
+            DISPATCH(ast::AstNodeType::DOUBLE, "double");
+            DISPATCH(ast::AstNodeType::INTEGER, "int");
+
+#undef DISPATCH
+        default:
+            throw std::runtime_error("Error: unsupported type found in instance struct");
+        }
+    }
+    printer->end_block();
+    printer->add_text(";");
+    printer->add_newline();
+}
+
+void CodegenLLVMVisitor::print_instance_variable_setup() {
+    if (range_variable_setup_required()) {
+        print_setup_range_variable();
+    }
+
+    if (shadow_vector_setup_required()) {
+        print_shadow_vector_setup();
+    }
+    printer->add_newline(2);
+    printer->add_line("/** initialize mechanism instance variables */");
+    printer->start_block("static inline void setup_instance(NrnThread* nt, Memb_list* ml) ");
+    printer->add_line("{0}* inst = ({0}*) mem_alloc(1, sizeof({0}));"_format(instance_struct()));
+    if (channel_task_dependency_enabled() && !info.codegen_shadow_variables.empty()) {
+        printer->add_line("setup_shadow_vectors(inst, ml);");
+    }
+
+    std::string stride;
+    printer->add_line("int pnodecount = ml->_nodecount_padded;");
+    stride = "*pnodecount";
+
+    printer->add_line("Datum* indexes = ml->pdata;");
+
+    std::string float_type = default_float_data_type();
+    std::string int_type = default_int_data_type();
+    std::string float_type_pointer = float_type + "*";
+    std::string int_type_pointer = int_type + "*";
+
+    int id = 0;
+    std::vector<std::string> variables_to_free;
+
+    for (auto& var: info.codegen_float_variables) {
+        auto name = var->get_name();
+        auto range_var_type = get_range_var_float_type(var);
+        if (float_type == range_var_type) {
+            auto variable = "ml->data+{}{}"_format(id, stride);
+            auto device_variable = get_variable_device_pointer(variable, float_type_pointer);
+            printer->add_line("inst->{} = {};"_format(name, device_variable));
+        } else {
+            printer->add_line("inst->{} = setup_range_variable(ml->data+{}{}, pnodecount);"_format(
+                name, id, stride));
+            variables_to_free.push_back(name);
+        }
+        id += var->get_length();
+    }
+
+    for (auto& var: info.codegen_int_variables) {
+        auto name = var.symbol->get_name();
+        std::string variable = name;
+        std::string type = "";
+        if (var.is_index || var.is_integer) {
+            variable = "ml->pdata";
+            type = int_type_pointer;
+        } else if (var.is_vdata) {
+            variable = "nt->_vdata";
+            type = "void**";
+        } else {
+            variable = "nt->_data";
+            type = info.artificial_cell ? "void*" : float_type_pointer;
+        }
+        auto device_variable = get_variable_device_pointer(variable, type);
+        printer->add_line("inst->{} = {};"_format(name, device_variable));
+    }
+
+    int index_id = 0;
+    // for integer variables, there should be index
+    for (const auto& int_var: info.codegen_int_variables) {
+        std::string var_name = int_var.symbol->get_name() + "_index";
+        // Create for loop that instantiates the ion_<var>_index with
+        // indexes[<var_id>*pdnodecount]
+        printer->add_line("inst->{} = indexes+{}*pnodecount;"_format(var_name, index_id));
+        index_id++;
+    }
+
+    // Pass voltage pointer to the the instance struct
+    printer->add_line("inst->voltage = nt->_actual_v;");
+
+    // Pass ml->nodeindices pointer to node_index
+    printer->add_line("inst->node_index = ml->nodeindices;");
+
+    // Setup global variables
+    printer->add_line("inst->{0} = nt->{0};"_format(naming::NTHREAD_T_VARIABLE));
+    printer->add_line("inst->{0} = nt->{0};"_format(naming::NTHREAD_DT_VARIABLE));
+    printer->add_line("inst->{0} = {0};"_format(naming::CELSIUS_VARIABLE));
+    printer->add_line("inst->{0} = {0};"_format(naming::SECOND_ORDER_VARIABLE));
+    printer->add_line("inst->{} = ml->nodecount;"_format(naming::MECH_NODECOUNT_VAR));
+
+    printer->add_line("ml->instance = inst;");
+    printer->end_block(3);
+
+    printer->add_line("/** cleanup mechanism instance variables */");
+    printer->start_block("static inline void cleanup_instance(Memb_list* ml) ");
+    printer->add_line("{0}* inst = ({0}*) ml->instance;"_format(instance_struct()));
+    if (range_variable_setup_required()) {
+        for (auto& var: variables_to_free) {
+            printer->add_line("mem_free((void*)inst->{});"_format(var));
+        }
+    }
+    printer->add_line("mem_free((void*)inst);");
+    printer->end_block(1);
+}
+
+CodegenLLVMVisitor::ParamVector CodegenLLVMVisitor::get_compute_function_parameter() {
+    auto params = ParamVector();
+    params.emplace_back(param_type_qualifier(),
+                        "{}*"_format(instance_struct()),
+                        ptr_type_qualifier(),
+                        "inst");
+    return params;
+}
+
+void CodegenLLVMVisitor::print_backend_compute_routine_decl() {
+    auto params = get_compute_function_parameter();
+    auto compute_function = compute_method_name(BlockType::Initial);
+
+    printer->add_newline(2);
+    printer->add_line("extern void {}({});"_format(compute_function, get_parameter_str(params)));
+
+    if (info.nrn_cur_required()) {
+        compute_function = compute_method_name(BlockType::Equation);
+        printer->add_line(
+            "extern void {}({});"_format(compute_function, get_parameter_str(params)));
+    }
+
+    if (info.nrn_state_required()) {
+        compute_function = compute_method_name(BlockType::State);
+        printer->add_line(
+            "extern void {}({});"_format(compute_function, get_parameter_str(params)));
+    }
+}
+
+// Copied from CodegenIspcVisitor
+void CodegenLLVMVisitor::print_wrapper_routine(const std::string& wrapper_function,
+                                               BlockType type) {
+    static const auto args = "NrnThread* nt, Memb_list* ml, int type";
+    const auto function_name = method_name(wrapper_function);
+    auto compute_function = compute_method_name(type);
+
+    printer->add_newline(2);
+    printer->start_block("void {}({})"_format(function_name, args));
+    printer->add_line("int nodecount = ml->nodecount;");
+    // clang-format off
+    printer->add_line("{0}* {1}inst = ({0}*) ml->instance;"_format(instance_struct(), ptr_type_qualifier()));
+    // clang-format on
+
+    if (type == BlockType::Initial) {
+        printer->add_newline();
+        printer->add_line("setup_instance(nt, ml);");
+        printer->add_newline();
+        printer->start_block("if (_nrn_skip_initmodel)");
+        printer->add_line("return;");
+        printer->end_block();
+        printer->add_newline();
+    }
+
+    printer->add_line("{}(inst);"_format(compute_function));
+    printer->end_block();
+    printer->add_newline();
+}
+
+void CodegenLLVMVisitor::print_nrn_init(bool skip_init_check) {
+    print_wrapper_routine(naming::NRN_INIT_METHOD, BlockType::Initial);
+}
+
+void CodegenLLVMVisitor::print_nrn_cur() {
+    print_wrapper_routine(naming::NRN_CUR_METHOD, BlockType::Equation);
+}
+
+void CodegenLLVMVisitor::print_nrn_state() {
+    print_wrapper_routine(naming::NRN_STATE_METHOD, BlockType::State);
+}
+
+void CodegenLLVMVisitor::print_wrapper_routines() {
+    printer = wrapper_printer;
+    wrapper_codegen = true;
+    CodegenCVisitor::print_codegen_routines();
 }
 
 void CodegenLLVMVisitor::visit_procedure_block(const ast::ProcedureBlock& node) {

@@ -34,6 +34,34 @@ using nmodl::parser::NmodlDriver;
 // Utility to get LLVM module as a string
 //=============================================================================
 
+std::string run_gpu_llvm_visitor(const std::string& text,
+                                 int opt_level = 0,
+                                 bool use_single_precision = false,
+                                 std::string math_library = "none",
+                                 bool nmodl_inline = false) {
+    NmodlDriver driver;
+    const auto& ast = driver.parse_string(text);
+
+    SymtabVisitor().visit_program(*ast);
+    if (nmodl_inline) {
+        InlineVisitor().visit_program(*ast);
+    }
+    NeuronSolveVisitor().visit_program(*ast);
+    SolveBlockVisitor().visit_program(*ast);
+
+    codegen::Platform gpu_platform(
+        codegen::PlatformID::GPU, /*name=*/"nvptx64", math_library, use_single_precision, 1);
+    codegen::CodegenLLVMVisitor llvm_visitor(
+        /*mod_filename=*/"unknown",
+        /*output_dir=*/".",
+        gpu_platform,
+        opt_level,
+        /*add_debug_information=*/false);
+
+    llvm_visitor.visit_program(*ast);
+    return llvm_visitor.dump_module();
+}
+
 std::string run_llvm_visitor(const std::string& text,
                              int opt_level = 0,
                              bool use_single_precision = false,
@@ -51,12 +79,15 @@ std::string run_llvm_visitor(const std::string& text,
     NeuronSolveVisitor().visit_program(*ast);
     SolveBlockVisitor().visit_program(*ast);
 
-    codegen::Platform cpu_platform(codegen::PlatformID::CPU, /*name=*/"default",
-                                   vec_lib, use_single_precision, vector_width);
+    codegen::Platform cpu_platform(
+        codegen::PlatformID::CPU, /*name=*/"default", vec_lib, use_single_precision, vector_width);
     codegen::CodegenLLVMVisitor llvm_visitor(
         /*mod_filename=*/"unknown",
-        /*output_dir=*/".", cpu_platform, opt_level,
-        /*add_debug_information=*/false, fast_math_flags);
+        /*output_dir=*/".",
+        cpu_platform,
+        opt_level,
+        /*add_debug_information=*/false,
+        fast_math_flags);
 
     llvm_visitor.visit_program(*ast);
     return llvm_visitor.dump_module();
@@ -68,14 +99,14 @@ std::string run_llvm_visitor(const std::string& text,
 
 std::vector<std::shared_ptr<ast::Ast>> run_llvm_visitor_helper(
     const std::string& text,
-    int vector_width,
+    codegen::Platform& platform,
     const std::vector<ast::AstNodeType>& nodes_to_collect) {
     NmodlDriver driver;
     const auto& ast = driver.parse_string(text);
 
     SymtabVisitor().visit_program(*ast);
     SolveBlockVisitor().visit_program(*ast);
-    CodegenLLVMHelperVisitor(vector_width).visit_program(*ast);
+    CodegenLLVMHelperVisitor(platform).visit_program(*ast);
 
     const auto& nodes = collect_nodes(*ast, nodes_to_collect);
 
@@ -1228,8 +1259,9 @@ SCENARIO("Scalar derivative block", "[visitor][llvm][derivative]") {
             })";
 
         THEN("a single scalar loops is constructed") {
+            codegen::Platform default_platform;
             auto result = run_llvm_visitor_helper(nmodl_text,
-                                                  /*vector_width=*/1,
+                                                  default_platform,
                                                   {ast::AstNodeType::CODEGEN_FOR_STATEMENT});
             REQUIRE(result.size() == 1);
 
@@ -1279,8 +1311,10 @@ SCENARIO("Vectorised derivative block", "[visitor][llvm][derivative]") {
 
 
         THEN("vector and epilogue scalar loops are constructed") {
+            codegen::Platform simd_platform(/*use_single_precision=*/false,
+                                            /*instruction_width=*/8);
             auto result = run_llvm_visitor_helper(nmodl_text,
-                                                  /*vector_width=*/8,
+                                                  simd_platform,
                                                   {ast::AstNodeType::CODEGEN_FOR_STATEMENT});
             REQUIRE(result.size() == 2);
 
@@ -1332,7 +1366,6 @@ SCENARIO("Vector library calls", "[visitor][llvm][vector_lib]") {
             REQUIRE(std::regex_search(no_library_module_str, m, exp_decl));
             REQUIRE(std::regex_search(no_library_module_str, m, exp_call));
 
-#if LLVM_VERSION_MAJOR >= 13
             // Check exponential calls are replaced with calls to SVML library.
             std::string svml_library_module_str = run_llvm_visitor(nmodl_text,
                                                                    /*opt_level=*/0,
@@ -1410,7 +1443,6 @@ SCENARIO("Vector library calls", "[visitor][llvm][vector_lib]") {
             REQUIRE(std::regex_search(libsystem_m_library_module_str, m, libsystem_m_exp_decl));
             REQUIRE(std::regex_search(libsystem_m_library_module_str, m, libsystem_m_exp_call));
             REQUIRE(!std::regex_search(libsystem_m_library_module_str, m, fexp_call));
-#endif
         }
     }
 }
@@ -1520,6 +1552,194 @@ SCENARIO("Removal of inlined functions and procedures", "[visitor][llvm][inline]
             REQUIRE(!std::regex_search(module_string, m, add_proc));
             std::regex sub_func(R"(define double @test_sub\(double %a[0-9].*, double %b[0-9].*\))");
             REQUIRE(!std::regex_search(module_string, m, sub_func));
+        }
+    }
+}
+
+//=============================================================================
+// Basic GPU kernel AST generation
+//=============================================================================
+
+SCENARIO("GPU kernel body", "[visitor][llvm][gpu]") {
+    GIVEN("For GPU platforms") {
+        std::string nmodl_text = R"(
+            NEURON {
+                SUFFIX test
+                RANGE x, y
+            }
+
+            ASSIGNED { x y }
+
+            STATE { m }
+
+            BREAKPOINT {
+                SOLVE states METHOD cnexp
+            }
+
+            DERIVATIVE states {
+              m = y + 2
+            }
+        )";
+
+
+        std::string expected_loop = R"(
+            for(id = THREAD_ID; id<mech->node_count; id = id+GRID_STRIDE) {
+                node_id = mech->node_index[id]
+                v = mech->voltage[node_id]
+                mech->m[id] = mech->y[id]+2
+            })";
+
+        THEN("a loop with GPU-specific AST nodes is constructed") {
+            std::string name = "default";
+            std::string math_library = "none";
+            codegen::Platform gpu_platform(codegen::PlatformID::GPU, name, math_library);
+            auto result = run_llvm_visitor_helper(nmodl_text,
+                                                  gpu_platform,
+                                                  {ast::AstNodeType::CODEGEN_FOR_STATEMENT});
+            REQUIRE(result.size() == 1);
+
+            auto loop = reindent_text(to_nmodl(result[0]));
+            REQUIRE(loop == reindent_text(expected_loop));
+        }
+    }
+}
+
+//=============================================================================
+// Basic NVVM/LLVM IR generation for GPU platforms
+//=============================================================================
+
+SCENARIO("GPU kernel body IR generation", "[visitor][llvm][gpu]") {
+    GIVEN("For GPU platforms") {
+        std::string nmodl_text = R"(
+            NEURON {
+                SUFFIX test
+                RANGE x, y
+            }
+
+            ASSIGNED { x y }
+
+            STATE { m }
+
+            BREAKPOINT {
+                SOLVE states METHOD cnexp
+            }
+
+            DERIVATIVE states {
+              m = y + 2
+            }
+        )";
+
+        THEN("kernel annotations are added and thread id intrinsics generated") {
+            std::string module_string = run_gpu_llvm_visitor(nmodl_text,
+                                                             /*opt_level=*/0,
+                                                             /*use_single_precision=*/false);
+            std::smatch m;
+
+            // Check kernel annotations are correclty created.
+            std::regex annotations(R"(!nvvm\.annotations = !\{!0\})");
+            std::regex kernel_data(
+                R"(!0 = !\{void \(%.*__instance_var__type\*\)\* @nrn_state_.*, !\"kernel\", i32 1\})");
+            REQUIRE(std::regex_search(module_string, m, annotations));
+            REQUIRE(std::regex_search(module_string, m, kernel_data));
+
+            // Check thread/block id/dim instrinsics are created.
+            std::regex block_id(R"(call i32 @llvm\.nvvm\.read\.ptx\.sreg\.ctaid\.x\(\))");
+            std::regex block_dim(R"(call i32 @llvm\.nvvm\.read\.ptx\.sreg\.ntid\.x\(\))");
+            std::regex tid(R"(call i32 @llvm\.nvvm\.read\.ptx\.sreg\.tid\.x\(\))");
+            std::regex grid_dim(R"(call i32 @llvm\.nvvm\.read\.ptx\.sreg\.nctaid\.x\(\))");
+            REQUIRE(std::regex_search(module_string, m, block_id));
+            REQUIRE(std::regex_search(module_string, m, block_dim));
+            REQUIRE(std::regex_search(module_string, m, tid));
+            REQUIRE(std::regex_search(module_string, m, grid_dim));
+        }
+    }
+
+    GIVEN("When optimizing for GPU platforms") {
+        std::string nmodl_text = R"(
+            NEURON {
+                SUFFIX test
+                RANGE x, y
+            }
+
+            ASSIGNED { x y }
+
+            STATE { m }
+
+            BREAKPOINT {
+                SOLVE states METHOD cnexp
+            }
+
+            DERIVATIVE states {
+              m = y + 2
+            }
+        )";
+
+        THEN("address spaces are inferred and target information added") {
+            std::string module_string = run_gpu_llvm_visitor(nmodl_text,
+                                                             /*opt_level=*/3,
+                                                             /*use_single_precision=*/false);
+            std::smatch m;
+
+            // Check target information.
+            // TODO: this may change when more platforms are supported.
+            std::regex data_layout(
+                R"(target datalayout = \"e-p:64:64:64-i1:8:8-i8:8:8-i16:16:16-i32:32:32-i64:64:64-f32:32:32-f64:64:64-v16:16:16-v32:32:32-v64:64:64-v128:128:128-n16:32:64\")");
+            std::regex triple(R"(nvptx64-nvidia-cuda)");
+            REQUIRE(std::regex_search(module_string, m, data_layout));
+            REQUIRE(std::regex_search(module_string, m, triple));
+
+            // Check for address space casts and address spaces in general when loading data.
+            std::regex as_cast(
+                R"(addrspacecast %.*__instance_var__type\* %.* to %.*__instance_var__type addrspace\(1\)\*)");
+            std::regex gep_as1(
+                R"(getelementptr inbounds %.*__instance_var__type, %.*__instance_var__type addrspace\(1\)\* %.*, i64 0, i32 .*)");
+            std::regex load_as1(R"(load double\*, double\* addrspace\(1\)\* %.*)");
+            REQUIRE(std::regex_search(module_string, m, as_cast));
+            REQUIRE(std::regex_search(module_string, m, gep_as1));
+            REQUIRE(std::regex_search(module_string, m, load_as1));
+        }
+    }
+
+    GIVEN("When using math functions") {
+        std::string nmodl_text = R"(
+            NEURON {
+                SUFFIX test
+                RANGE x, y
+            }
+
+            ASSIGNED { x y }
+
+            STATE { m }
+
+            BREAKPOINT {
+                SOLVE states METHOD cnexp
+            }
+
+            DERIVATIVE states {
+              m = exp(y) + x ^ 2
+            }
+        )";
+
+        THEN("calls to libdevice are created") {
+            std::string module_string = run_gpu_llvm_visitor(nmodl_text,
+                                                             /*opt_level=*/3,
+                                                             /*use_single_precision=*/false,
+                                                             /*math_library=*/"libdevice");
+            std::smatch m;
+
+            // Check if exp and pow intrinsics have been replaced.
+            std::regex exp_declaration(R"(declare double @__nv_exp\(double\))");
+            std::regex exp_new_call(R"(call double @__nv_exp\(double %.*\))");
+            std::regex exp_old_call(R"(call double @llvm\.exp\.f64\(double %.*\))");
+            std::regex pow_declaration(R"(declare double @__nv_pow\(double, double\))");
+            std::regex pow_new_call(R"(call double @__nv_pow\(double %.*, double .*\))");
+            std::regex pow_old_call(R"(call double @llvm\.pow\.f64\(double %.*, double .*\))");
+            REQUIRE(std::regex_search(module_string, m, exp_declaration));
+            REQUIRE(std::regex_search(module_string, m, exp_new_call));
+            REQUIRE(!std::regex_search(module_string, m, exp_old_call));
+            REQUIRE(std::regex_search(module_string, m, pow_declaration));
+            REQUIRE(std::regex_search(module_string, m, pow_new_call));
+            REQUIRE(!std::regex_search(module_string, m, pow_old_call));
         }
     }
 }
