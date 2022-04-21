@@ -13,7 +13,6 @@
 #include <tuple>
 
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
-#include "utils/logger.hpp"
 
 namespace nmodl {
 namespace benchmark {

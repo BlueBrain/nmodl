@@ -9,10 +9,10 @@
 #include <cmath>
 #include <numeric>
 
-#include "codegen/llvm/codegen_llvm_visitor.hpp"
 #include "llvm_benchmark.hpp"
-#include "test/benchmark/jit_driver.hpp"
 #include "llvm/Support/Host.h"
+#include "test/benchmark/jit_driver.hpp"
+#include "utils/logger.hpp"
 
 #include "test/unit/codegen/codegen_data_helper.hpp"
 

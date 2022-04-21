@@ -9,6 +9,7 @@
 
 #include "codegen/codegen_driver.hpp"
 #include "codegen_compatibility_visitor.hpp"
+#include "utils/logger.hpp"
 #include "visitors/ast_visitor.hpp"
 #include "visitors/semantic_analysis_visitor.hpp"
 #include "visitors/symtab_visitor.hpp"

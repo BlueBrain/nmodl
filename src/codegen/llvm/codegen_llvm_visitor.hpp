@@ -23,7 +23,6 @@
 #include "codegen/llvm/llvm_debug_builder.hpp"
 #include "codegen/llvm/llvm_ir_builder.hpp"
 #include "symtab/symbol_table.hpp"
-#include "utils/logger.hpp"
 #include "visitors/ast_visitor.hpp"
 
 #include "llvm/IR/DIBuilder.h"

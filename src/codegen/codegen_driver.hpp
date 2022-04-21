@@ -13,7 +13,6 @@
 
 #include "ast/program.hpp"
 #include "config/config.h"
-#include "utils/logger.hpp"
 
 namespace nmodl {
 namespace codegen {
