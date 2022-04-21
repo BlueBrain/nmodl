@@ -135,6 +135,9 @@ struct CodeGenConfig {
     /// traget GPU platform name
     std::string llvm_gpu_name = "default";
 
+    /// GPU target architecture
+    std::string llvm_gpu_target_architecture = "sm_70";
+
     /// llvm vector width if generating code for CPUs
     int llvm_vector_width = 1;
 

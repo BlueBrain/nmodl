@@ -32,7 +32,7 @@ class Platform {
     /// Target chip for GPUs.
     /// TODO: this should only be available to GPUs! If we refactor target
     /// classes so that GPUPlatform <: Platform, it will be nicer!
-    const std::string subtarget_name = "sm_70";
+    std::string subtarget_name = "sm_70";
 
     /// Target-specific id to compare platforms easily.
     PlatformID platform_id;
