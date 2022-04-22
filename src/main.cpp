@@ -288,7 +288,7 @@ int main(int argc, const char* argv[]) {
         const auto& ast = nmodl_driver.parse_file(file);
 
         auto cg_driver = CodegenDriver(cfg);
-        auto success = cg_driver.prepare_mod(*ast);
+        auto success = cg_driver.prepare_mod(ast);
 
         if (show_symtab) {
             logger->info("Printing symbol table");

@@ -155,7 +155,7 @@ class CodegenDriver {
     explicit CodegenDriver(CodeGenConfig  _cfg) :
         cfg(std::move(_cfg)) {}
 
-    bool prepare_mod(nmodl::ast::Program& node);
+    bool prepare_mod(std::shared_ptr<nmodl::ast::Program> node);
 
   private:
     CodeGenConfig cfg;
