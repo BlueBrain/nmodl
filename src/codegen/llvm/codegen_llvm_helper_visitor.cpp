@@ -389,6 +389,8 @@ void CodegenLLVMHelperVisitor::ion_write_statements(BlockType type,
         std::string lhs = "{}[{}] "_format(ion_varname, index_varname);
 
         // lets turn a += b into a = a + b if applicable
+        // note that this is done in order to facilitate existing implementation in the llvm
+        // backend which doesn't support += or -= operators.
         std::string statement;
         if (!op.compare("+=")) {
             statement = "{} = {} + {}"_format(lhs, lhs, rhs);
@@ -825,8 +827,6 @@ void CodegenLLVMHelperVisitor::remove_inlined_nodes(ast::Program& node) {
  * \brief Convert ast::BreakpointBlock to corresponding code generation function nrn_cur
  * @param node AST node representing ast::BreakpointBlock
  *
- * \todo : This is work-in-progress. We need to refactor visit_nrn_state_block and
- *         visit_breakpoint_block to avoid code duplication.
  */
 void CodegenLLVMHelperVisitor::visit_breakpoint_block(ast::BreakpointBlock& node) {
     if (!info.nrn_cur_required()) {
@@ -870,7 +870,7 @@ void CodegenLLVMHelperVisitor::visit_breakpoint_block(ast::BreakpointBlock& node
                              index_statements,
                              body_statements);
 
-        // \todo handle nrn_current calls, see how it's done in C visitor!
+        // \todo handle nrn_current calls similar to C codegen backend
     }
 
     /// create target-specific compute body
@@ -897,7 +897,6 @@ void CodegenLLVMHelperVisitor::visit_breakpoint_block(ast::BreakpointBlock& node
     auto name = new ast::Name(new ast::String(function_name));
     auto return_type = new ast::CodegenVarType(ast::AstNodeType::VOID);
 
-    /// \todo : currently there are no arguments
     ast::CodegenVarWithTypeVector code_arguments;
 
     auto instance_var_type = new ast::CodegenVarType(ast::AstNodeType::INSTANCE_STRUCT);
