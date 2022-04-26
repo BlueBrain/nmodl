@@ -103,7 +103,7 @@ class LLVMBenchmark {
                   const Platform& platform,
                   int opt_level_ir,
                   int opt_level_codegen,
-                  bool external_kernel
+                  bool external_kernel,
                   const GPUExecutionParameters& gpu_exec_params)
         : llvm_visitor(llvm_visitor)
         , mod_filename(mod_filename)
