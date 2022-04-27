@@ -94,7 +94,7 @@ test_benchmark:cpu:
   extends:
     - .benchmark_config
   script:
-    - module load unstable git
+    - module load unstable
     - . ${SPACK_ROOT}/share/spack/setup-env.sh
     - spack load nmodl/${SPACK_INSTALLED_HASH}
     - nmodl test/integration/mod/test_math.mod llvm --ir --opt-level-ir 3 benchmark --run --opt-level-codegen 3 --instance-size 10000000 --repeat 2
@@ -104,7 +104,7 @@ test_benchmark:gpu:
   extends:
     - .benchmark_config
   script:
-    - module load unstable git
+    - module load unstable
     - . ${SPACK_ROOT}/share/spack/setup-env.sh
     - spack load nmodl/${SPACK_INSTALLED_HASH}
     - nmodl test/integration/mod/test_math.mod llvm --no-debug --ir --opt-level-ir 3 gpu --target-arch "sm_70" --name "nvptx64" --math-library libdevice benchmark --run --libs "${CUDA_HOME}/nvvm/libdevice/libdevice.10.bc" --opt-level-codegen 3 --instance-size 10000000 --repeat 2 --grid-dim-x 4096 --block-dim-x 256
