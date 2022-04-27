@@ -8,7 +8,9 @@
 #pragma once
 
 #include <fstream>
+#include <map>
 #include <string>
+#include <tuple>
 
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
 #include "gpu_parameters.hpp"
@@ -24,6 +26,11 @@ using nmodl::cuda_details::GPUExecutionParameters;
 
 namespace nmodl {
 namespace benchmark {
+
+/**
+ * map of {name: [avg, stdev, min, max]}
+ */
+using BenchmarkResults = std::map<std::string, std::tuple<double, double, double, double>>;
 
 /**
  * \class LLVMBenchmark
@@ -114,14 +121,14 @@ class LLVMBenchmark {
         , gpu_execution_parameters(gpu_exec_params) {}
 
     /// Runs the benchmark.
-    void run(const std::shared_ptr<ast::Program>& node);
+    BenchmarkResults run();
 
   private:
     /// Visits the AST to construct the LLVM IR module.
-    void generate_llvm(const std::shared_ptr<ast::Program>& node);
+    void generate_llvm();
 
-    /// Runs the main body of the benchmark, executing the compute kernels on CPU or GPU.
-    void run_benchmark(const std::shared_ptr<ast::Program>& node);
+    /// Runs the main body of the benchmark, executing the compute kernels.
+    BenchmarkResults run_benchmark();
 
     /// Sets the log output stream (file or console).
     void set_log_output();

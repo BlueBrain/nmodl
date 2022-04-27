@@ -22,3 +22,20 @@ endif()
 if(NMODL_ENABLE_JIT_EVENT_LISTENERS)
   target_compile_definitions(llvm_benchmark PUBLIC NMODL_HAVE_JIT_EVENT_LISTENERS)
 endif()
+
+# =============================================================================
+# LLVM pyjit
+# =============================================================================
+
+if(NMODL_ENABLE_PYTHON_BINDINGS)
+  file(GLOB modfiles "${NMODL_PROJECT_SOURCE_DIR}/test/benchmark/kernels/*.mod")
+  foreach(modfile ${modfiles})
+    get_filename_component(modfile_name "${modfile}" NAME)
+    add_test(NAME "PyJIT/${modfile_name}"
+             COMMAND ${PYTHON_EXECUTABLE} ${NMODL_PROJECT_SOURCE_DIR}/test/benchmark/benchmark.py
+                     ${modfile})
+    set_tests_properties(
+      "PyJIT/${modfile_name}" PROPERTIES ENVIRONMENT
+                                         PYTHONPATH=${PROJECT_BINARY_DIR}/lib:$ENV{PYTHONPATH})
+  endforeach()
+endif()

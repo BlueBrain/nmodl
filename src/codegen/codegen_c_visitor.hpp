@@ -31,12 +31,11 @@
 #include "visitors/ast_visitor.hpp"
 
 
-using namespace fmt::literals;
-
 namespace nmodl {
 /// encapsulates code generation backend implementations
 namespace codegen {
 
+using namespace fmt::literals;
 /**
  * @defgroup codegen Code Generation Implementation
  * @brief Implementations of code generation backends

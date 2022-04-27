@@ -20,7 +20,11 @@ set(CODEGEN_SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/codegen_ispc_visitor.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/codegen_naming.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/codegen_utils.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/codegen_utils.hpp)
+    ${CMAKE_CURRENT_SOURCE_DIR}/codegen_utils.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/codegen_driver.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/codegen_driver.hpp)
+
+include_directories(${PYBIND11_INCLUDE_DIR} ${PYTHON_INCLUDE_DIRS})
 
 # =============================================================================
 # Codegen library and executable
