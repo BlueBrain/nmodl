@@ -96,15 +96,12 @@ std::vector<T> generate_dummy_data(size_t initial_value, size_t num_elements) {
  * to the MOD file.
  */
 class CodegenDataHelper {
-    std::shared_ptr<ast::Program> program;
     std::shared_ptr<ast::InstanceStruct> instance;
 
   public:
     CodegenDataHelper() = delete;
-    CodegenDataHelper(const std::shared_ptr<ast::Program>& program,
-                      const std::shared_ptr<ast::InstanceStruct>& instance)
-        : program(program)
-        , instance(instance) {}
+    CodegenDataHelper(const std::shared_ptr<ast::InstanceStruct>& instance)
+        : instance(instance) {}
 
     CodegenInstanceData create_data(size_t num_elements, size_t seed);
 };
