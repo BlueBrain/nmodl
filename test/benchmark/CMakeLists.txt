@@ -37,5 +37,13 @@ if(NMODL_ENABLE_PYTHON_BINDINGS)
     set_tests_properties(
       "PyJIT/${modfile_name}" PROPERTIES ENVIRONMENT
                                          PYTHONPATH=${PROJECT_BINARY_DIR}/lib:$ENV{PYTHONPATH})
+    if(NMODL_ENABLE_LLVM_CUDA)
+      add_test(NAME "PyJIT/${modfile_name}_gpu"
+              COMMAND ${PYTHON_EXECUTABLE} ${NMODL_PROJECT_SOURCE_DIR}/test/benchmark/benchmark.py
+                      ${modfile} gpu)
+      set_tests_properties(
+        "PyJIT/${modfile_name}_gpu" PROPERTIES ENVIRONMENT
+                                          PYTHONPATH=${PROJECT_BINARY_DIR}/lib:$ENV{PYTHONPATH})
+    endif()
   endforeach()
 endif()

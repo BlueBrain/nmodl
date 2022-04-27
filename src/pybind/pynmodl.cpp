@@ -153,6 +153,17 @@ class JitDriver {
                                                                 : cfg.llvm_gpu_name;
         platform = nmodl::codegen::Platform(
             pid, name, cfg.llvm_math_library, cfg.llvm_float_type, cfg.llvm_vector_width);
+        if (platform.is_gpu() && !platform.is_CUDA_gpu()) {
+            throw std::runtime_error(
+                "Benchmarking is only supported on CUDA GPUs at the moment");
+        }
+#ifndef NMODL_LLVM_CUDA_BACKEND
+        if (platform.is_CUDA_gpu()) {
+            throw std::runtime_error(
+                "GPU benchmarking is not supported if NMODL is not built with CUDA "
+                "backend enabled.");
+        }
+#endif
     }
 
   public:
@@ -171,10 +182,14 @@ class JitDriver {
     benchmark::BenchmarkResults run(std::shared_ptr<nmodl::ast::Program> node,
                                     std::string& modname,
                                     int num_experiments,
-                                    int instance_size) {
+                                    int instance_size,
+                                    int cuda_grid_dim_x,
+                                    int cuda_block_dim_x) {
         cg_driver.prepare_mod(node);
         nmodl::codegen::CodegenLLVMVisitor visitor(modname, cfg.output_dir, platform, 0);
         visitor.visit_program(*node);
+        const GPUExecutionParameters gpu_execution_parameters{cuda_grid_dim_x,
+                                                              cuda_block_dim_x};
         nmodl::benchmark::LLVMBenchmark benchmark(visitor,
                                                   modname,
                                                   cfg.output_dir,
@@ -183,7 +198,8 @@ class JitDriver {
                                                   instance_size,
                                                   platform,
                                                   cfg.llvm_opt_level_ir,
-                                                  cfg.llvm_opt_level_codegen);
+                                                  cfg.llvm_opt_level_codegen,
+                                                  gpu_execution_parameters);
         return benchmark.run();
     }
 };
@@ -257,6 +273,7 @@ PYBIND11_MODULE(_nmodl, m_nmodl) {
         .def_readwrite("llvm_fast_math_flags", &nmodl::codegen::CodeGenConfig::llvm_fast_math_flags)
         .def_readwrite("llvm_cpu_name", &nmodl::codegen::CodeGenConfig::llvm_cpu_name)
         .def_readwrite("llvm_gpu_name", &nmodl::codegen::CodeGenConfig::llvm_gpu_name)
+        .def_readwrite("llvm_gpu_target_architecture", &nmodl::codegen::CodeGenConfig::llvm_gpu_target_architecture)
         .def_readwrite("llvm_vector_width", &nmodl::codegen::CodeGenConfig::llvm_vector_width)
         .def_readwrite("llvm_opt_level_codegen",
                        &nmodl::codegen::CodeGenConfig::llvm_opt_level_codegen)
@@ -270,7 +287,9 @@ PYBIND11_MODULE(_nmodl, m_nmodl) {
              "node"_a,
              "modname"_a,
              "num_experiments"_a,
-             "instance_size"_a);
+             "instance_size"_a,
+             "cuda_grid_dim_x"_a = 1,
+             "cuda_block_dim_x"_a = 1);
 
     m_nmodl.def("to_nmodl",
                 static_cast<std::string (*)(const nmodl::ast::Ast&,
