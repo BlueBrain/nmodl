@@ -356,6 +356,7 @@ void SympySolverVisitor::solve_non_linear_system(
     (*solver)();
     // returns a vector of solutions, i.e. new statements to add to block:
     auto solutions = solver->solutions;
+    bool linear    = solver->linear;
     // may also return a python exception message:
     auto exception_message = solver->exception_message;
     pywrap::EmbeddedPythonLoader::get_instance().api()->destroy_nsls_executor(solver);
@@ -364,8 +365,13 @@ void SympySolverVisitor::solve_non_linear_system(
                      exception_message);
         return;
     }
-    logger->debug("SympySolverVisitor :: Constructing eigen newton solve block");
-    construct_eigen_solver_block(pre_solve_statements, solutions, false);
+    if (!linear) {
+        logger->debug("SympySolverVisitor :: Constructing eigen newton solve block");
+    }
+    else {
+        logger->debug("SympySolverVisitor :: Constructing eigen solve block");
+    }
+    construct_eigen_solver_block(pre_solve_statements, solutions, linear);
 }
 
 void SympySolverVisitor::visit_var_name(ast::VarName& node) {

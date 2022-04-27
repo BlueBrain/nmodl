@@ -66,13 +66,14 @@ void SolveNonLinearSystemExecutor::operator()() {
                 from nmodl.ode import solve_non_lin_system
                 exception_message = ""
                 try:
-                    solutions = solve_non_lin_system(equation_strings,
+                    solutions, linear = solve_non_lin_system(equation_strings,
                                                      state_vars,
                                                      vars,
                                                      function_calls)
                 except Exception as e:
                     # if we fail, fail silently and return empty string
                     solutions = [""]
+                    linear = False
                     new_local_vars = [""]
                     exception_message = str(e)
                 )",
@@ -80,6 +81,7 @@ void SolveNonLinearSystemExecutor::operator()() {
              locals);
     // returns a vector of solutions, i.e. new statements to add to block:
     solutions = locals["solutions"].cast<std::vector<std::string>>();
+    linear    = locals["linear"].cast<bool>();
     // may also return a python exception message:
     exception_message = locals["exception_message"].cast<std::string>();
 }
