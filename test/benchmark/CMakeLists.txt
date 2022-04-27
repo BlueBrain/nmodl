@@ -29,6 +29,7 @@ endif()
 
 if(NMODL_ENABLE_PYTHON_BINDINGS)
   file(GLOB modfiles "${NMODL_PROJECT_SOURCE_DIR}/test/benchmark/kernels/*.mod")
+  list(APPEND modfiles "${NMODL_PROJECT_SOURCE_DIR}/test/integration/mod/test_math.mod")
   foreach(modfile ${modfiles})
     get_filename_component(modfile_name "${modfile}" NAME)
     add_test(NAME "PyJIT/${modfile_name}"
