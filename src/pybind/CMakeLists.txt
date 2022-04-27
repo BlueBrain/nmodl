@@ -77,7 +77,8 @@ if(NMODL_ENABLE_PYTHON_BINDINGS)
     set_property(TARGET llvm_codegen PROPERTY POSITION_INDEPENDENT_CODE ON)
     set_property(TARGET llvm_benchmark PROPERTY POSITION_INDEPENDENT_CODE ON)
     set_property(TARGET benchmark_data PROPERTY POSITION_INDEPENDENT_CODE ON)
-    target_link_libraries(_nmodl PRIVATE codegen llvm_codegen llvm_benchmark benchmark_data ${LLVM_LIBS_TO_LINK})
+    target_link_libraries(_nmodl PRIVATE codegen llvm_codegen llvm_benchmark benchmark_data
+                                         ${LLVM_LIBS_TO_LINK})
   endif()
   # in case of wheel, python module shouldn't link to wrapper library
   if(LINK_AGAINST_PYTHON)

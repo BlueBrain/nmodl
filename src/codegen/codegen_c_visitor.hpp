@@ -31,7 +31,6 @@
 #include "visitors/ast_visitor.hpp"
 
 
-
 namespace nmodl {
 /// encapsulates code generation backend implementations
 namespace codegen {

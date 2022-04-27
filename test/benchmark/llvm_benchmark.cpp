@@ -10,9 +10,9 @@
 #include <numeric>
 
 #include "llvm_benchmark.hpp"
-#include "llvm/Support/Host.h"
 #include "test/benchmark/jit_driver.hpp"
 #include "utils/logger.hpp"
+#include "llvm/Support/Host.h"
 
 #include "test/unit/codegen/codegen_data_helper.hpp"
 
@@ -85,10 +85,14 @@ BenchmarkResults LLVMBenchmark::run_benchmark() {
             times[i] = diff.count();
         }
         // Calculate statistics
-        double time_mean = std::accumulate(times.begin(), times.end(), 0.0)/ num_experiments;
-        double time_var = std::accumulate(times.begin(), times.end(), 0.0,
-                                           [time_mean](const double& pres, const double& e) {
-                                               return (e - time_mean)*(e - time_mean); }) / num_experiments;
+        double time_mean = std::accumulate(times.begin(), times.end(), 0.0) / num_experiments;
+        double time_var = std::accumulate(times.begin(),
+                                          times.end(),
+                                          0.0,
+                                          [time_mean](const double& pres, const double& e) {
+                                              return (e - time_mean) * (e - time_mean);
+                                          }) /
+                          num_experiments;
         double time_stdev = std::sqrt(time_var);
         double time_min = *std::min_element(times.begin(), times.end());
         double time_max = *std::max_element(times.begin(), times.end());

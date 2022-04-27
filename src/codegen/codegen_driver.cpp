@@ -10,28 +10,28 @@
 #include "codegen/codegen_driver.hpp"
 #include "codegen_compatibility_visitor.hpp"
 #include "utils/logger.hpp"
-#include "visitors/ast_visitor.hpp"
-#include "visitors/semantic_analysis_visitor.hpp"
-#include "visitors/symtab_visitor.hpp"
 #include "visitors/after_cvode_to_cnexp_visitor.hpp"
-#include "visitors/perf_visitor.hpp"
-#include "visitors/global_var_visitor.hpp"
-#include "visitors/local_to_assigned_visitor.hpp"
-#include "visitors/verbatim_var_rename_visitor.hpp"
+#include "visitors/ast_visitor.hpp"
 #include "visitors/constant_folder_visitor.hpp"
-#include "visitors/loop_unroll_visitor.hpp"
-#include "visitors/kinetic_block_visitor.hpp"
-#include "visitors/steadystate_visitor.hpp"
+#include "visitors/global_var_visitor.hpp"
 #include "visitors/inline_visitor.hpp"
+#include "visitors/ispc_rename_visitor.hpp"
+#include "visitors/kinetic_block_visitor.hpp"
+#include "visitors/local_to_assigned_visitor.hpp"
 #include "visitors/local_var_rename_visitor.hpp"
 #include "visitors/localize_visitor.hpp"
+#include "visitors/loop_unroll_visitor.hpp"
+#include "visitors/neuron_solve_visitor.hpp"
+#include "visitors/nmodl_visitor.hpp"
+#include "visitors/perf_visitor.hpp"
+#include "visitors/semantic_analysis_visitor.hpp"
+#include "visitors/solve_block_visitor.hpp"
+#include "visitors/steadystate_visitor.hpp"
 #include "visitors/sympy_conductance_visitor.hpp"
 #include "visitors/sympy_solver_visitor.hpp"
-#include "visitors/neuron_solve_visitor.hpp"
-#include "visitors/solve_block_visitor.hpp"
-#include "visitors/nmodl_visitor.hpp"
+#include "visitors/symtab_visitor.hpp"
 #include "visitors/units_visitor.hpp"
-#include "visitors/ispc_rename_visitor.hpp"
+#include "visitors/verbatim_var_rename_visitor.hpp"
 
 using namespace nmodl;
 using namespace codegen;
@@ -46,8 +46,7 @@ bool CodegenDriver::prepare_mod(std::shared_ptr<ast::Program> node) {
     std::string scratch_dir = "tmp";
     auto filepath = [scratch_dir, modfile](const std::string& suffix, const std::string& ext) {
         static int count = 0;
-        return "{}/{}.{}.{}.{}"_format(
-            scratch_dir, modfile, std::to_string(count++), suffix, ext);
+        return "{}/{}.{}.{}.{}"_format(scratch_dir, modfile, std::to_string(count++), suffix, ext);
     };
 
     /// just visit the ast
@@ -110,11 +109,11 @@ bool CodegenDriver::prepare_mod(std::shared_ptr<ast::Program> node) {
         // run perfvisitor to update read/write counts
         PerfVisitor().visit_program(*node);
 
-        auto ast_has_unhandled_nodes = CodegenCompatibilityVisitor().find_unhandled_ast_nodes(*node);
+        auto ast_has_unhandled_nodes = CodegenCompatibilityVisitor().find_unhandled_ast_nodes(
+            *node);
         // If we want to just check compatibility we return the result
         if (cfg.only_check_compatibility) {
-            return !ast_has_unhandled_nodes; // negate since this function returns false on failure
-
+            return !ast_has_unhandled_nodes;  // negate since this function returns false on failure
         }
 
         // If there is an incompatible construct and code generation is not forced exit NMODL

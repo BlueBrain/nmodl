@@ -21,6 +21,7 @@
 #include "test/benchmark/llvm_benchmark.hpp"
 #endif
 
+#include "codegen/codegen_driver.hpp"
 #include "config/config.h"
 #include "parser/nmodl_driver.hpp"
 #include "pybind/pyembed.hpp"
@@ -28,7 +29,6 @@
 #include "utils/logger.hpp"
 #include "visitors/json_visitor.hpp"
 #include "visitors/nmodl_visitor.hpp"
-#include "codegen/codegen_driver.hpp"
 
 /**
  * \dir
@@ -89,17 +89,29 @@ int main(int argc, const char* argv[]) {
     app.add_option("--units", cfg.units_dir, "Directory of units lib file", true)->ignore_case();
 
     auto host_opt = app.add_subcommand("host", "HOST/CPU code backends")->ignore_case();
-    host_opt->add_flag("--c", cfg.c_backend, "C/C++ backend ({})"_format(cfg.c_backend))->ignore_case();
-    host_opt->add_flag("--omp", cfg.omp_backend, "C/C++ backend with OpenMP ({})"_format(cfg.omp_backend))
+    host_opt->add_flag("--c", cfg.c_backend, "C/C++ backend ({})"_format(cfg.c_backend))
         ->ignore_case();
-    host_opt->add_flag("--ispc", cfg.ispc_backend, "C/C++ backend with ISPC ({})"_format(cfg.ispc_backend))
+    host_opt
+        ->add_flag("--omp",
+                   cfg.omp_backend,
+                   "C/C++ backend with OpenMP ({})"_format(cfg.omp_backend))
+        ->ignore_case();
+    host_opt
+        ->add_flag("--ispc",
+                   cfg.ispc_backend,
+                   "C/C++ backend with ISPC ({})"_format(cfg.ispc_backend))
         ->ignore_case();
 
     auto acc_opt = app.add_subcommand("acc", "Accelerator code backends")->ignore_case();
     acc_opt
-        ->add_flag("--oacc", cfg.oacc_backend, "C/C++ backend with OpenACC ({})"_format(cfg.oacc_backend))
+        ->add_flag("--oacc",
+                   cfg.oacc_backend,
+                   "C/C++ backend with OpenACC ({})"_format(cfg.oacc_backend))
         ->ignore_case();
-    acc_opt->add_flag("--cuda", cfg.cuda_backend, "C/C++ backend with CUDA ({})"_format(cfg.cuda_backend))
+    acc_opt
+        ->add_flag("--cuda",
+                   cfg.cuda_backend,
+                   "C/C++ backend with CUDA ({})"_format(cfg.cuda_backend))
         ->ignore_case();
 
     // clang-format off
@@ -268,7 +280,6 @@ int main(int argc, const char* argv[]) {
     logger->set_level(spdlog::level::from_str(verbose));
 
 
-
     for (const auto& file: mod_files) {
         logger->info("Processing {}", file);
 
@@ -356,10 +367,9 @@ int main(int argc, const char* argv[]) {
                 int llvm_opt_level = llvm_benchmark ? 0 : cfg.llvm_opt_level_ir;
 
                 // Create platform abstraction.
-                PlatformID pid = cfg.llvm_gpu_name == "default" ? PlatformID::CPU
-                                                                : PlatformID::GPU;
-                const std::string name =
-                    cfg.llvm_gpu_name == "default" ? cfg.llvm_cpu_name : cfg.llvm_gpu_name;
+                PlatformID pid = cfg.llvm_gpu_name == "default" ? PlatformID::CPU : PlatformID::GPU;
+                const std::string name = cfg.llvm_gpu_name == "default" ? cfg.llvm_cpu_name
+                                                                        : cfg.llvm_gpu_name;
                 Platform platform(pid,
                                   name,
                                   cfg.llvm_cpu_name,
@@ -377,11 +387,13 @@ int main(int argc, const char* argv[]) {
                 visitor.visit_program(*ast);
                 if (cfg.nmodl_ast) {
                     NmodlPrintVisitor(filepath("llvm", "mod")).visit_program(*ast);
-                    logger->info("AST to NMODL transformation written to {}", filepath("llvm", "mod"));
+                    logger->info("AST to NMODL transformation written to {}",
+                                 filepath("llvm", "mod"));
                 }
                 if (cfg.json_ast) {
                     JSONVisitor(filepath("llvm", "json")).write(*ast);
-                    logger->info("AST to JSON transformation written to {}", filepath("llvm", "json"));
+                    logger->info("AST to JSON transformation written to {}",
+                                 filepath("llvm", "json"));
                 }
 
                 if (llvm_benchmark) {

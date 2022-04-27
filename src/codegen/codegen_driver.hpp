@@ -89,7 +89,7 @@ struct CodeGenConfig {
     bool optimize_ionvar_copies_codegen = false;
 
     /// directory where code will be generated
-    std::string output_dir  = ".";
+    std::string output_dir = ".";
 
     /// directory where intermediate file will be generated
     std::string scratch_dir = "tmp";
@@ -146,14 +146,12 @@ struct CodeGenConfig {
     /// list of shared libraries to link against in JIT
     std::vector<std::string> shared_lib_paths;
 #endif
-
 };
 
 class CodegenDriver {
-
   public:
-    explicit CodegenDriver(CodeGenConfig  _cfg) :
-        cfg(std::move(_cfg)) {}
+    explicit CodegenDriver(CodeGenConfig _cfg)
+        : cfg(std::move(_cfg)) {}
 
     bool prepare_mod(std::shared_ptr<nmodl::ast::Program> node);
 
@@ -161,11 +159,10 @@ class CodegenDriver {
     CodeGenConfig cfg;
 
 
-
     /// write ast to nmodl
     void ast_to_nmodl(ast::Program& ast, const std::string& filepath) const;
     void ast_to_json(ast::Program& ast, const std::string& filepath) const;
 };
 
-}
-}
+}  // namespace codegen
+}  // namespace nmodl
