@@ -9,6 +9,7 @@
 #include "codegen/llvm/llvm_utils.hpp"
 
 #include "ast/all.hpp"
+#include "utils/logger.hpp"
 #include "visitors/rename_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
 

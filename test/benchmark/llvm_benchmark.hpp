@@ -8,13 +8,19 @@
 #pragma once
 
 #include <fstream>
+#include <map>
 #include <string>
+#include <tuple>
 
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
-#include "utils/logger.hpp"
 
 namespace nmodl {
 namespace benchmark {
+
+/**
+ * map of {name: [avg, stdev, min, max]}
+ */
+using BenchmarkResults = std::map<std::string, std::tuple<double, double, double, double>>;
 
 /**
  * \class LLVMBenchmark
@@ -74,14 +80,14 @@ class LLVMBenchmark {
         , opt_level_codegen(opt_level_codegen) {}
 
     /// Runs the benchmark.
-    void run(const std::shared_ptr<ast::Program>& node);
+    BenchmarkResults run();
 
   private:
     /// Visits the AST to construct the LLVM IR module.
-    void generate_llvm(const std::shared_ptr<ast::Program>& node);
+    void generate_llvm();
 
     /// Runs the main body of the benchmark, executing the compute kernels.
-    void run_benchmark(const std::shared_ptr<ast::Program>& node);
+    BenchmarkResults run_benchmark();
 
     /// Sets the log output stream (file or console).
     void set_log_output();
