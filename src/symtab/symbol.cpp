@@ -43,10 +43,10 @@ bool Symbol::is_variable() const noexcept {
 std::string Symbol::to_string() const {
     std::string s(name);
     if (properties != NmodlType::empty) {
-        s += " [Properties : {}]"_format(syminfo::to_string(properties));
+        s += fmt::format(" [Properties : {}]", syminfo::to_string(properties));
     }
     if (status != Status::empty) {
-        s += " [Status : {}]"_format(syminfo::to_string(status));
+        s += fmt::format(" [Status : {}]", syminfo::to_string(status));
     }
     return s;
 }
