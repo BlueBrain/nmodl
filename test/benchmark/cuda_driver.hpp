@@ -15,8 +15,6 @@
  * \brief \copybrief nmodl::runner::CUDADriver
  */
 
-#ifdef NMODL_LLVM_CUDA_BACKEND
-
 #include <memory>
 #include <string>
 
@@ -187,5 +185,3 @@ class BenchmarkGPURunner: public BaseGPURunner {
 
 }  // namespace runner
 }  // namespace nmodl
-
-#endif

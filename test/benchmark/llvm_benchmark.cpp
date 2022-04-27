@@ -9,12 +9,14 @@
 
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
 #include "llvm_benchmark.hpp"
-#include "test/benchmark/cuda_driver.hpp"
 #include "test/benchmark/jit_driver.hpp"
 #include "llvm/Support/Host.h"
 
 #include "test/unit/codegen/codegen_data_helper.hpp"
 
+#ifdef NMODL_LLVM_CUDA_BACKEND
+#include "test/benchmark/cuda_driver.hpp"
+#endif
 
 namespace nmodl {
 namespace benchmark {

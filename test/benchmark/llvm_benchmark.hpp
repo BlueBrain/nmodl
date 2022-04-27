@@ -12,9 +12,12 @@
 
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
 #include "gpu_parameters.hpp"
-#include "test/benchmark/cuda_driver.hpp"
 #include "test/benchmark/jit_driver.hpp"
 #include "utils/logger.hpp"
+
+#ifdef NMODL_LLVM_CUDA_BACKEND
+#include "test/benchmark/cuda_driver.hpp"
+#endif
 
 using nmodl::codegen::Platform;
 using nmodl::cuda_details::GPUExecutionParameters;

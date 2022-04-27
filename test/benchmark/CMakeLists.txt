@@ -3,8 +3,11 @@
 # =============================================================================
 set(LLVM_BENCHMARK_SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/jit_driver.cpp ${CMAKE_CURRENT_SOURCE_DIR}/jit_driver.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/cuda_driver.cpp ${CMAKE_CURRENT_SOURCE_DIR}/cuda_driver.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/llvm_benchmark.cpp ${CMAKE_CURRENT_SOURCE_DIR}/llvm_benchmark.hpp)
+
+if(NMODL_ENABLE_LLVM_CUDA)
+  list(APPEND LLVM_BENCHMARK_SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/cuda_driver.cpp ${CMAKE_CURRENT_SOURCE_DIR}/cuda_driver.hpp)
+endif()
 
 # =============================================================================
 # LLVM benchmark library
