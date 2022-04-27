@@ -179,7 +179,9 @@ int main(int argc, const char* argv[]) {
     app.add_option("--scratch", scratch_dir, "Directory for intermediate code output")
         ->capture_default_str()
         ->ignore_case();
-    app.add_option("--units", units_dir, "Directory of units lib file")->capture_default_str()->ignore_case();
+    app.add_option("--units", units_dir, "Directory of units lib file")
+        ->capture_default_str()
+        ->ignore_case();
 
     auto host_opt = app.add_subcommand("host", "HOST/CPU code backends")->ignore_case();
     host_opt->add_flag("--c", c_backend, fmt::format("C/C++ backend ({})", c_backend))
