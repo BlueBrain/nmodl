@@ -6,7 +6,8 @@ set(LLVM_BENCHMARK_SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/llvm_benchmark.cpp ${CMAKE_CURRENT_SOURCE_DIR}/llvm_benchmark.hpp)
 
 if(NMODL_ENABLE_LLVM_CUDA)
-  list(APPEND LLVM_BENCHMARK_SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/cuda_driver.cpp ${CMAKE_CURRENT_SOURCE_DIR}/cuda_driver.hpp)
+  list(APPEND LLVM_BENCHMARK_SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/cuda_driver.cpp
+       ${CMAKE_CURRENT_SOURCE_DIR}/cuda_driver.hpp)
 endif()
 
 # =============================================================================
@@ -40,11 +41,15 @@ if(NMODL_ENABLE_PYTHON_BINDINGS)
                                          PYTHONPATH=${PROJECT_BINARY_DIR}/lib:$ENV{PYTHONPATH})
     if(NMODL_ENABLE_LLVM_CUDA)
       add_test(NAME "PyJIT/${modfile_name}_gpu"
-              COMMAND ${PYTHON_EXECUTABLE} ${NMODL_PROJECT_SOURCE_DIR}/test/benchmark/benchmark.py
-                      ${modfile} gpu)
+               COMMAND ${PYTHON_EXECUTABLE} ${NMODL_PROJECT_SOURCE_DIR}/test/benchmark/benchmark.py
+                       ${modfile} gpu)
+      message(STATUS "CUDA_HOME is ${CUDAToolkit_TARGET_DIR}")
       set_tests_properties(
-        "PyJIT/${modfile_name}_gpu" PROPERTIES ENVIRONMENT
-                                          PYTHONPATH=${PROJECT_BINARY_DIR}/lib:$ENV{PYTHONPATH})
+        "PyJIT/${modfile_name}_gpu"
+        PROPERTIES
+          ENVIRONMENT
+          "PYTHONPATH=${PROJECT_BINARY_DIR}/lib:$ENV{PYTHONPATH};CUDA_HOME=${CUDAToolkit_TARGET_DIR}"
+      )
     endif()
   endforeach()
 endif()

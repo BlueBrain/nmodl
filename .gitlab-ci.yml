@@ -76,7 +76,7 @@ build_cuda:gcc:
     SPACK_INSTALL_EXTRA_FLAGS: -v
     SPACK_PACKAGE_COMPILER: gcc
 
-test_benchmark:
+test_benchmark:gcc:
   extends:
     - .benchmark_config
     - .ctest
