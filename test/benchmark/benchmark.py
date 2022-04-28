@@ -16,6 +16,8 @@ def main():
         cfg.llvm_math_library = "libdevice"
         cfg.llvm_gpu_name = "nvptx64"
         cfg.llvm_gpu_target_architecture = "sm_70"
+        if not os.environ.get("CUDA_HOME"):
+            raise RuntimeError("CUDA_HOME environment variable not set")
         cfg.shared_lib_paths = [os.getenv("CUDA_HOME") + "/nvvm/libdevice/libdevice.10.bc"]
     with open(fname) as f:
         hh = f.read()
