@@ -19,6 +19,7 @@
 #ifdef NMODL_LLVM_BACKEND
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
 #include "test/benchmark/llvm_benchmark.hpp"
+#include "visitors/inline_visitor.hpp"
 #endif
 
 #include "codegen/codegen_driver.hpp"

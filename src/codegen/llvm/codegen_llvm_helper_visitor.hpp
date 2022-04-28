@@ -167,7 +167,13 @@ class CodegenLLVMHelperVisitor: public visitor::AstVisitor {
     void visit_procedure_block(ast::ProcedureBlock& node) override;
     void visit_function_block(ast::FunctionBlock& node) override;
     void visit_nrn_state_block(ast::NrnStateBlock& node) override;
+
+    /**
+     * \brief Convert ast::BreakpointBlock to corresponding code generation function nrn_cur
+     * @param node AST node representing ast::BreakpointBlock
+     */
     void visit_breakpoint_block(ast::BreakpointBlock& node) override;
+
     void visit_program(ast::Program& node) override;
 
   private:
@@ -196,6 +202,20 @@ class CodegenLLVMHelperVisitor: public visitor::AstVisitor {
                                   std::vector<std::string>& int_variables,
                                   std::vector<std::string>& double_variables,
                                   bool is_remainder_loop = false);
+
+    void print_nrn_current_body(const ast::BreakpointBlock& node,
+                                ast::StatementVector& body_statements,
+                                const std::string& variable);
+    void print_nrn_cur_non_conductance_kernel(const ast::BreakpointBlock& node,
+                                              std::vector<std::string>& int_variables,
+                                              std::vector<std::string>& double_variables,
+                                              ast::StatementVector& index_statements,
+                                              ast::StatementVector& body_statements);
+    void print_nrn_cur_conductance_kernel(const ast::BreakpointBlock& node,
+                                          std::vector<std::string>& int_variables,
+                                          std::vector<std::string>& double_variables,
+                                          ast::StatementVector& index_statements,
+                                          ast::StatementVector& body_statements);
 };
 
 /** @} */  // end of llvm_codegen_details

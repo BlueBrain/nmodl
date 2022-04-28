@@ -158,6 +158,10 @@ SCENARIO("Check instance struct declaration and setup in wrapper",
                 double celsius;
                 int secondorder;
                 int node_count;
+                double* __restrict__ vec_rhs;
+                double* __restrict__ vec_d;
+                double* __restrict__ _shadow_rhs;
+                double* __restrict__ _shadow_d;
             };
         )";
         std::string generated_instance_struct_setup = R"(

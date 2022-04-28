@@ -981,7 +981,7 @@ SCENARIO("Scalar state kernel", "[visitor][llvm]") {
             std::regex struct_type(
                 "%.*__instance_var__type = type \\{ double\\*, double\\*, double\\*, double\\*, "
                 "double\\*, double\\*, double\\*, double\\*, double\\*, double\\*, i32\\*, double, "
-                "double, double, i32, i32 \\}");
+                "double, double, i32, i32, double\\*, double\\*, double\\*, double\\* \\}");
             std::regex kernel_declaration(
                 R"(define void @nrn_state_hh\(%.*__instance_var__type.0\* noalias nocapture readonly .*\) #0)");
             REQUIRE(std::regex_search(module_string, m, struct_type));
@@ -1334,12 +1334,35 @@ SCENARIO("Vectorised derivative block", "[visitor][llvm][derivative]") {
             for(id = 0; id<mech->node_count-7; id = id+8) {
                 node_id = mech->node_index[id]
                 ena_id = mech->ion_ena_index[id]
+                ion_dinadv_id = mech->ion_dinadv_index[id]
                 ion_ina_id = mech->ion_ina_index[id]
                 v = mech->voltage[node_id]
                 mech->ena[id] = mech->ion_ena[ena_id]
-                mech->gna[id] = mech->gnabar[id]*mech->m[id]*mech->m[id]*mech->m[id]*mech->h[id]
-                mech->ina[id] = mech->gna[id]*(v-mech->ena[id])
+                v_org = v
+                v = v+0.001
+                {
+                    current = 0
+                    mech->gna[id] = mech->gnabar[id]*mech->m[id]*mech->m[id]*mech->m[id]*mech->h[id]
+                    mech->ina[id] = mech->gna[id]*(v-mech->ena[id])
+                    current = current+il
+                    current = current+mech->ina[id]
+                    g = current
+                }
+                dina = mech->ina[id]
+                v = v_org
+                {
+                    current = 0
+                    mech->gna[id] = mech->gnabar[id]*mech->m[id]*mech->m[id]*mech->m[id]*mech->h[id]
+                    mech->ina[id] = mech->gna[id]*(v-mech->ena[id])
+                    current = current+il
+                    current = current+mech->ina[id]
+                    rhs = current
+                }
+                g = (g-rhs)/0.001
+                mech->ion_dinadv[ion_dinadv_id] = mech->ion_dinadv[ion_dinadv_id]+(dina-mech->ina[id])/0.001
                 mech->ion_ina[ion_ina_id] = mech->ion_ina[ion_ina_id]+mech->ina[id]
+                mech->vec_rhs[node_id] = mech->vec_rhs[node_id]-rhs
+                mech->vec_d[node_id] = mech->vec_d[node_id]+g
             })";
 
         THEN("vector and epilogue scalar loops are constructed") {
