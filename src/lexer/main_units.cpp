@@ -20,7 +20,6 @@
  * demonstrate use of UnitLexer and UnitDriver classes.
  */
 
-using namespace fmt::literals;
 using namespace nmodl;
 using Token = parser::UnitParser::token;
 

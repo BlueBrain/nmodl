@@ -22,8 +22,6 @@
 #include "utils/logger.hpp"
 #include "visitors/ast_visitor.hpp"
 
-using namespace fmt::literals;
-
 namespace nmodl {
 namespace codegen {
 

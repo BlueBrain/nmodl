@@ -8,8 +8,6 @@
 #include "codegen/codegen_omp_visitor.hpp"
 
 
-using namespace fmt::literals;
-
 namespace nmodl {
 namespace codegen {
 

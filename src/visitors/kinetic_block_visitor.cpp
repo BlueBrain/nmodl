@@ -18,7 +18,6 @@ namespace nmodl {
 namespace visitor {
 
 using symtab::syminfo::NmodlType;
-using namespace fmt::literals;
 
 void KineticBlockVisitor::process_reac_var(const std::string& varname, int count) {
     // lookup index of state var

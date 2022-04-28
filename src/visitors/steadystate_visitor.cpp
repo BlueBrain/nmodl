@@ -15,7 +15,6 @@
 namespace nmodl {
 namespace visitor {
 
-using namespace fmt::literals;
 using symtab::syminfo::NmodlType;
 
 std::shared_ptr<ast::DerivativeBlock> SteadystateVisitor::create_steadystate_block(

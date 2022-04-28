@@ -20,7 +20,6 @@
  *
  */
 
-using namespace fmt::literals;
 using namespace nmodl;
 
 

@@ -26,7 +26,6 @@
  * it's value and location.
  */
 
-using namespace fmt::literals;
 using namespace nmodl;
 
 using parser::NmodlDriver;

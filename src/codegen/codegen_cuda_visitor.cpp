@@ -9,8 +9,6 @@
 #include "symtab/symbol_table.hpp"
 #include "utils/string_utils.hpp"
 
-using namespace fmt::literals;
-
 namespace nmodl {
 namespace codegen {
 

@@ -20,7 +20,6 @@ namespace nmodl {
 namespace visitor {
 namespace test {
 
-using namespace fmt::literals;
 using namespace ast;
 
 int CheckParentVisitor::check_ast(const Ast& node) {

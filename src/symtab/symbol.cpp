@@ -8,8 +8,6 @@
 #include "symtab/symbol.hpp"
 #include "utils/logger.hpp"
 
-using namespace fmt::literals;
-
 namespace nmodl {
 namespace symtab {
 

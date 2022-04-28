@@ -22,7 +22,6 @@
  * to scan arbitrary C code.
  */
 
-using namespace fmt::literals;
 using namespace nmodl;
 using Token = parser::CParser::token;
 

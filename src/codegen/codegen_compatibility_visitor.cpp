@@ -13,8 +13,6 @@
 #include "visitors/visitor_utils.hpp"
 
 
-using namespace fmt::literals;
-
 namespace nmodl {
 namespace codegen {
 

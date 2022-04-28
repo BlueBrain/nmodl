@@ -18,7 +18,6 @@
  * basic usage of parser and driver classes.
  */
 
-using namespace fmt::literals;
 using namespace nmodl;
 
 int main(int argc, const char* argv[]) {

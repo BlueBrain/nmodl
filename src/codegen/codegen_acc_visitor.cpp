@@ -11,9 +11,6 @@
 #include "ast/integer.hpp"
 
 
-using namespace fmt::literals;
-
-
 namespace nmodl {
 namespace codegen {
 

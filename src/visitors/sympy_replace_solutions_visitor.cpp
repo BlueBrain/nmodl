@@ -15,8 +15,6 @@
 namespace nmodl {
 namespace visitor {
 
-using namespace fmt::literals;
-
 /**
  * \details SympyReplaceSolutionsVisitor tells us that a new equation appear and, depending where
  * it is located, it can determine if it is part of the main system of equations or is something
