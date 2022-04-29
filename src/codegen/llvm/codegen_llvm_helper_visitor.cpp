@@ -840,7 +840,6 @@ void CodegenLLVMHelperVisitor::create_compute_body_loop(std::shared_ptr<ast::Sta
     function_statements.push_back(for_loop);
 }
 
-
 void CodegenLLVMHelperVisitor::remove_inlined_nodes(ast::Program& node) {
     auto program_symtab = node.get_model_symbol_table();
     const auto& func_proc_nodes =
@@ -1053,6 +1052,10 @@ void CodegenLLVMHelperVisitor::visit_breakpoint_block(ast::BreakpointBlock& node
 
         /// as multiple point processes can exist at same node, with simd or gpu execution we have
         /// to create atomic statements that will be handled by llvm ir generation
+        // \todo note that we are not creating rhs and d updates based on the shadow vectors. This
+        //       is because llvm backend for cpu as well as gpu is going to take care for
+        //       reductions. if these codegen functions will be used for C backend then we will need
+        //       to implement separate reduction loop like mod2c or nmodl's c backend.
         if (info.point_process && (platform.is_gpu() || platform.is_cpu_with_simd())) {
             body_statements.emplace_back(create_atomic_statement(
                 naming::NTHREAD_RHS, "node_id", info.operator_for_rhs(), "rhs"));
