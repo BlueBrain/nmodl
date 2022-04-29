@@ -37,13 +37,12 @@ using namespace nmodl;
 using namespace codegen;
 using namespace visitor;
 
-bool CodegenDriver::prepare_mod(std::shared_ptr<ast::Program> node) {
+bool CodegenDriver::prepare_mod(std::shared_ptr<ast::Program> node, const std::string& modfile) {
     /// whether to update existing symbol table or create new
     /// one whenever we run symtab visitor.
     bool update_symtab = false;
 
-    std::string modfile;
-    std::string scratch_dir = "tmp";
+    const auto scratch_dir = cfg.scratch_dir;
     auto filepath = [scratch_dir, modfile](const std::string& suffix, const std::string& ext) {
         static int count = 0;
         return "{}/{}.{}.{}.{}"_format(scratch_dir, modfile, std::to_string(count++), suffix, ext);

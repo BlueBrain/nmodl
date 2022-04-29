@@ -172,7 +172,12 @@ class JitDriver {
                                     std::string& modname,
                                     int num_experiments,
                                     int instance_size) {
-        cg_driver.prepare_mod(node);
+        // create "tmp" directory if nmodl_ast is set
+        if (!utils::is_dir_exist(cfg.scratch_dir) && cfg.nmodl_ast || cfg.json_ast ||
+            cfg.json_perfstat) {
+            utils::make_path(cfg.scratch_dir);
+        }
+        cg_driver.prepare_mod(node, modname);
         nmodl::codegen::CodegenLLVMVisitor visitor(modname, cfg.output_dir, platform, 0);
         visitor.visit_program(*node);
         nmodl::benchmark::LLVMBenchmark benchmark(visitor,
@@ -249,6 +254,9 @@ PYBIND11_MODULE(_nmodl, m_nmodl) {
         .def_readwrite("output_dir", &nmodl::codegen::CodeGenConfig::output_dir)
         .def_readwrite("scratch_dir", &nmodl::codegen::CodeGenConfig::scratch_dir)
         .def_readwrite("data_type", &nmodl::codegen::CodeGenConfig::data_type)
+        .def_readwrite("nmodl_ast", &nmodl::codegen::CodeGenConfig::nmodl_ast)
+        .def_readwrite("json_ast", &nmodl::codegen::CodeGenConfig::json_ast)
+        .def_readwrite("json_perfstat", &nmodl::codegen::CodeGenConfig::json_perfstat)
         .def_readwrite("llvm_ir", &nmodl::codegen::CodeGenConfig::llvm_ir)
         .def_readwrite("llvm_float_type", &nmodl::codegen::CodeGenConfig::llvm_float_type)
         .def_readwrite("llvm_opt_level_ir", &nmodl::codegen::CodeGenConfig::llvm_opt_level_ir)
