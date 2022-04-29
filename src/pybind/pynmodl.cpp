@@ -172,9 +172,9 @@ class JitDriver {
                                     std::string& modname,
                                     int num_experiments,
                                     int instance_size) {
-        // create "tmp" directory if nmodl_ast is set
-        if (!utils::is_dir_exist(cfg.scratch_dir) && cfg.nmodl_ast || cfg.json_ast ||
-            cfg.json_perfstat) {
+        // New directory is needed to be created otherwise the directory cannot be created
+        // automatically through python
+        if (cfg.nmodl_ast || cfg.json_ast || cfg.json_perfstat) {
             utils::make_path(cfg.scratch_dir);
         }
         cg_driver.prepare_mod(node, modname);
