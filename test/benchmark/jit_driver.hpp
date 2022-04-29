@@ -76,7 +76,7 @@ class JITDriver {
         if (!expected_symbol)
             throw std::runtime_error("Error: entry-point symbol not found in JIT\n");
 
-        auto (*res)() = (ReturnType(*)())(intptr_t) expected_symbol->getAddress();
+        auto(*res)() = (ReturnType(*)())(intptr_t) expected_symbol->getAddress();
         ReturnType result = res();
         return result;
     }
@@ -88,7 +88,7 @@ class JITDriver {
         if (!expected_symbol)
             throw std::runtime_error("Error: entry-point symbol not found in JIT\n");
 
-        auto (*res)(ArgType) = (ReturnType(*)(ArgType))(intptr_t) expected_symbol->getAddress();
+        auto(*res)(ArgType) = (ReturnType(*)(ArgType))(intptr_t) expected_symbol->getAddress();
         ReturnType result = res(arg);
         return result;
     }
