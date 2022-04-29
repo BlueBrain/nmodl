@@ -556,8 +556,7 @@ void CodegenLLVMVisitor::visit_codegen_atomic_statement(const ast::CodegenAtomic
         // Some sanity checks.
         auto codegen_var_with_type = instance_var_helper.get_variable(member_name);
         if (!codegen_var_with_type->get_is_pointer())
-            throw std::runtime_error(
-                "Error: atomic updates are allowed on pointer variables only\n");
+            throw std::runtime_error("Error: atomic updates are allowed on pointer variables only\n");
         const auto& member_var_name = std::dynamic_pointer_cast<ast::VarName>(member_node);
         if (!member_var_name->get_name()->is_indexed_name())
             throw std::runtime_error("Error: " + member_name + " is not an IndexedName\n");

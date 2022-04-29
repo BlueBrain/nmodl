@@ -294,24 +294,22 @@ void IRBuilder::create_array_alloca(const std::string& name,
 }
 
 ast::BinaryOp IRBuilder::extract_atomic_op(ast::BinaryOp op) {
-    switch (op) {
-    case ast::BinaryOp::BOP_SUB_ASSIGN:
-        return ast::BinaryOp::BOP_SUBTRACTION;
-    case ast::BinaryOp::BOP_ADD_ASSIGN:
-        return ast::BinaryOp::BOP_ADDITION;
-    default:
-        throw std::runtime_error("Error: only atomic addition and subtraction is supported\n");
+    switch(op) {
+        case ast::BinaryOp::BOP_SUB_ASSIGN:
+            return  ast::BinaryOp::BOP_SUBTRACTION;
+        case ast::BinaryOp::BOP_ADD_ASSIGN:
+            return ast::BinaryOp::BOP_ADDITION;
+        default:
+            throw std::runtime_error(
+                "Error: only atomic addition and subtraction is supported\n");
     }
 }
 
 void IRBuilder::create_atomic_op(llvm::Value* ptr, llvm::Value* update, ast::BinaryOp op) {
-    if (op == ast::BinaryOp::BOP_SUBTRACTION) {
-        update = builder.CreateFNeg(update);
+    if (op == ast::BinaryOp::BOP_SUBTRACTION)  {
+       update = builder.CreateFNeg(update);
     }
-    builder.CreateAtomicRMW(llvm::AtomicRMWInst::FAdd,
-                            ptr,
-                            update,
-                            llvm::MaybeAlign(),
+    builder.CreateAtomicRMW(llvm::AtomicRMWInst::FAdd, ptr, update, llvm::MaybeAlign(),
                             llvm::AtomicOrdering::SequentiallyConsistent);
 }
 
