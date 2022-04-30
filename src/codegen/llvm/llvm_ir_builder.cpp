@@ -59,9 +59,13 @@ llvm::Type* IRBuilder::get_void_type() {
 
 llvm::Type* IRBuilder::get_struct_ptr_type(const std::string& struct_type_name,
                                            TypeVector& member_types) {
-    llvm::StructType* llvm_struct_type = llvm::StructType::create(builder.getContext(),
-                                                                  struct_type_name);
-    llvm_struct_type->setBody(member_types);
+    llvm::StructType* llvm_struct_type = llvm::StructType::getTypeByName(builder.getContext(), struct_type_name);
+
+    if (!llvm_struct_type) {
+        llvm_struct_type = llvm::StructType::create(builder.getContext(), struct_type_name);
+        llvm_struct_type->setBody(member_types);
+    }
+
     return llvm::PointerType::get(llvm_struct_type, /*AddressSpace=*/0);
 }
 
