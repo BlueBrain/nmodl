@@ -983,7 +983,7 @@ SCENARIO("Scalar state kernel", "[visitor][llvm]") {
                 "double\\*, double\\*, double\\*, double\\*, double\\*, double\\*, i32\\*, double, "
                 "double, double, i32, i32, double\\*, double\\*, double\\*, double\\* \\}");
             std::regex kernel_declaration(
-                R"(define void @nrn_state_hh\(%.*__instance_var__type.0\* noalias nocapture readonly .*\) #0)");
+                R"(define void @nrn_state_hh\(%.*__instance_var__type\* noalias nocapture readonly .*\) #0)");
             REQUIRE(std::regex_search(module_string, m, struct_type));
             REQUIRE(std::regex_search(module_string, m, kernel_declaration));
 
