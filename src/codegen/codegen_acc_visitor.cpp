@@ -185,8 +185,8 @@ void CodegenAccVisitor::print_net_init_acc_serial_annotation_block_end() {
 }
 
 void CodegenAccVisitor::print_nrn_cur_matrix_shadow_update() {
-    auto rhs_op = operator_for_rhs();
-    auto d_op = operator_for_d();
+    const auto& rhs_op = info.operator_for_rhs();
+    const auto& d_op = info.operator_for_d();
     if (info.point_process) {
         print_atomic_reduction_pragma();
     }
@@ -202,8 +202,8 @@ void CodegenAccVisitor::print_fast_imem_calculation() {
         return;
     }
 
-    auto rhs_op = operator_for_rhs();
-    auto d_op = operator_for_d();
+    const auto& rhs_op = info.operator_for_rhs();
+    const auto& d_op = info.operator_for_d();
     printer->start_block("if (nt->nrn_fast_imem)");
     if (info.point_process) {
         print_atomic_reduction_pragma();

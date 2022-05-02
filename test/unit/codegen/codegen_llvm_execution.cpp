@@ -288,6 +288,7 @@ SCENARIO("Simple scalar kernel", "[llvm][runner]") {
                 v
                 x0
                 x1
+                i (mA/cm2)
             }
 
             BREAKPOINT {
@@ -371,6 +372,7 @@ SCENARIO("Simple vectorised kernel", "[llvm][runner]") {
                 v
                 x0
                 x1
+                i (mA/cm2)
             }
 
             BREAKPOINT {

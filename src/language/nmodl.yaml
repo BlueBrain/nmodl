@@ -1573,11 +1573,28 @@
                                 \sa nmodl::visitor::SympyConductanceVisitor
 
                   - ExpressionStatement:
-                      brief: "TODO"
                       members:
                         - expression:
-                            brief: "TODO"
+                            brief: "An expression representing a construct in the mod file"
                             type: Expression
+                      brief: "Represent statement encpasulated by underlying expression of ast node typeExpression"
+                      description: |
+                                Certain statements defined in the NMODL are complex than typical "single line" statements.
+                                For example, often SOLVE block is written as:
+
+                                    SOLVE states METHOD cnexp
+
+                                but language allow it to be more complex as:
+
+                                    SOLVE states METHOD cnexp {
+                                        statement_1
+                                        statement_2
+                                    }
+
+                                So this type of construct is not really "single line" statement. There are other such cases
+                                where they are categorised as "statement" in the bison specification. Also, there are cases
+                                when a binary expression `a = b` is also a full statement..
+                                In all such cases we wrap underlying expression as statement using ExpressionStatement node.
 
                   - ProtectStatement:
                       brief: "TODO"

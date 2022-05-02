@@ -95,6 +95,12 @@ static constexpr char CELSIUS_VARIABLE[] = "celsius";
 /// instance struct member pointing to the global variable structure
 static constexpr char INST_GLOBAL_MEMBER[] = "global";
 
+/// rhs variable in neuron thread structure
+static constexpr char NTHREAD_RHS[] = "vec_rhs";
+
+/// d variable in neuron thread structure
+static constexpr char NTHREAD_D[] = "vec_d";
+
 /// t variable in neuron thread structure
 static constexpr char NTHREAD_T_VARIABLE[] = "t";
 

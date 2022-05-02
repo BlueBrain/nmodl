@@ -92,18 +92,18 @@ static std::shared_ptr<ast::Expression> create_statement_as_expression(const std
 }
 
 /**
- * \brief Create expression for given NMODL code expression
+ * \brief Create an expression for a given NMODL expression in string form
  * @param code NMODL code expression
- * @return Expression representing NMODL code
+ * @return Expression ast node representing NMODL code
  */
-std::shared_ptr<ast::Expression> create_expression(const std::string& code) {
+static ast::Expression* create_expression(const std::string& code) {
     /// as provided code is only expression and not a full statement, create
     /// a temporary assignment statement
     const auto& wrapped_expr = create_statement_as_expression("some_var = " + code);
     /// now extract RHS (representing original code) and return it as expression
     auto expr = std::dynamic_pointer_cast<ast::WrappedExpression>(wrapped_expr)->get_expression();
     auto rhs = std::dynamic_pointer_cast<ast::BinaryExpression>(expr)->get_rhs();
-    return std::make_shared<ast::WrappedExpression>(rhs->clone());
+    return new ast::WrappedExpression(rhs->clone());
 }
 
 CodegenFunctionVector CodegenLLVMHelperVisitor::get_codegen_functions(const ast::Program& node) {
@@ -246,35 +246,72 @@ std::shared_ptr<ast::InstanceStruct> CodegenLLVMHelperVisitor::create_instance_s
     add_var_with_type(naming::SECOND_ORDER_VARIABLE, INTEGER_TYPE, /*is_pointer=*/0);
     add_var_with_type(naming::MECH_NODECOUNT_VAR, INTEGER_TYPE, /*is_pointer=*/0);
 
+    // As we do not have `NrnThread` object as an argument, we store points to rhs
+    // and d to in the instance struct as well. Also need their respective shadow variables
+    // in case of point process mechanism.
+    // Note: shadow variables are not used at the moment because reduction will be taken care
+    // by LLVM backend (even on CPU via sequential add like ISPC).
+    add_var_with_type(naming::NTHREAD_RHS, FLOAT_TYPE, /*is_pointer=*/1);
+    add_var_with_type(naming::NTHREAD_D, FLOAT_TYPE, /*is_pointer=*/1);
+    add_var_with_type(naming::NTHREAD_RHS_SHADOW, FLOAT_TYPE, /*is_pointer=*/1);
+    add_var_with_type(naming::NTHREAD_D_SHADOW, FLOAT_TYPE, /*is_pointer=*/1);
+
     return std::make_shared<ast::InstanceStruct>(codegen_vars);
 }
 
+/**
+ * Append all code specific statements from StatementBlock to given StatementVector
+ * @param statements Statement vector to which statements to be added
+ * @param block Statement block from which statetments should be appended
+ * @param info CodegenInfo object with necessary data and helper functions
+ */
 static void append_statements_from_block(ast::StatementVector& statements,
-                                         const std::shared_ptr<ast::StatementBlock>& block) {
-    const auto& block_statements = block->get_statements();
-    for (const auto& statement: block_statements) {
-        const auto& expression_statement = std::dynamic_pointer_cast<ast::ExpressionStatement>(
-            statement);
-        if (!expression_statement || !expression_statement->get_expression()->is_solve_block())
-            statements.push_back(statement);
+                                         const std::shared_ptr<ast::StatementBlock> block,
+                                         const codegen::CodegenInfo& info) {
+    for (const auto& statement: block->get_statements()) {
+        if (!info.statement_to_skip(*statement)) {
+            statements.emplace_back(statement->clone());
+        }
     }
 }
 
+/**
+ * Create atomic statement for given expression of the form a[i] += expression
+ * @param var Name of the variable on the LHS (it's an array), e.g. `a`
+ * @param var_index Name of the index variable to access variable `var` e.g. `i`
+ * @param op_str Operators like += or -=
+ * @param rhs_str expression that will be added or subtracted from `var[var_index]`
+ * @return A statement representing atomic operation using `ast::CodegenAtomicStatement`
+ */
 static std::shared_ptr<ast::CodegenAtomicStatement> create_atomic_statement(
-    std::string& ion_varname,
-    std::string& index_varname,
-    std::string& op_str,
-    std::string& rhs_str) {
+    const std::string& var,
+    const std::string& var_index,
+    const std::string& op_str,
+    const std::string& rhs_str) {
     // create lhs expression
-    auto varname = new ast::Name(new ast::String(ion_varname));
-    auto index = new ast::Name(new ast::String(index_varname));
-    auto lhs = std::make_shared<ast::VarName>(new ast::IndexedName(varname, index),
-                                              /*at=*/nullptr,
-                                              /*index=*/nullptr);
+    auto varname = new ast::Name(new ast::String(var));
+    auto index = new ast::Name(new ast::String(var_index));
+    auto lhs = new ast::VarName(new ast::IndexedName(varname, index),
+                                /*at=*/nullptr,
+                                /*index=*/nullptr);
 
-    auto op = ast::BinaryOperator(ast::string_to_binaryop(op_str));
-    auto rhs = create_expression(rhs_str);
-    return std::make_shared<ast::CodegenAtomicStatement>(lhs, op, rhs);
+    // LLVM IR generation is now only supporting assignment (=) and not += or -=
+    // So we need to write increment operation a += b as an assignment operation
+    // a = a + b.
+    // See https://github.com/BlueBrain/nmodl/issues/851
+
+    std::string op(op_str);
+    stringutils::remove_character(op, '=');
+
+    // make sure only + or - operator is used
+    if (op_str != "-" && op_str != "+") {
+        throw std::runtime_error("Unsupported binary operator for atomic statement");
+    }
+
+    auto* rhs = create_expression("{}[{}] {} {} "_format(var, var_index, op, rhs_str));
+    return std::make_shared<ast::CodegenAtomicStatement>(lhs,
+                                                         ast::BinaryOperator{ast::BOP_ASSIGN},
+                                                         rhs);
 }
 
 /**
@@ -289,7 +326,7 @@ static std::shared_ptr<ast::CodegenAtomicStatement> create_atomic_statement(
  * @param type The type of code block being generated
  * @param int_variables Index variables to be created
  * @param double_variables Floating point variables to be created
- * @param index_statements Statements for loading indexes (typically for ions)
+ * @param index_statements Statements for loading indexes (typically for ions, rhs, d)
  * @param body_statements main compute/update statements
  *
  * \todo After looking into mod2c and neuron implementation, it seems like
@@ -379,8 +416,24 @@ void CodegenLLVMHelperVisitor::ion_write_statements(BlockType type,
         // push index definition, index statement and actual write statement
         int_variables.push_back(index_varname);
         index_statements.push_back(visitor::create_statement(index_statement));
+
         // pass ion variable to write and its index
-        body_statements.push_back(create_atomic_statement(ion_varname, index_varname, op, rhs));
+
+        // lhs variable
+        std::string lhs = "{}[{}] "_format(ion_varname, index_varname);
+
+        // lets turn a += b into a = a + b if applicable
+        // note that this is done in order to facilitate existing implementation in the llvm
+        // backend which doesn't support += or -= operators.
+        std::string statement;
+        if (!op.compare("+=")) {
+            statement = "{} = {} + {}"_format(lhs, lhs, rhs);
+        } else if (!op.compare("-=")) {
+            statement = "{} = {} - {}"_format(lhs, lhs, rhs);
+        } else {
+            statement = "{} {} {}"_format(lhs, op, rhs);
+        }
+        body_statements.push_back(visitor::create_statement(statement));
     };
 
     /// iterate over all ions and create write ion statements for given block type
@@ -399,7 +452,7 @@ void CodegenLLVMHelperVisitor::ion_write_statements(BlockType type,
                     // for synapse type
                     if (info.point_process) {
                         auto area = codegen::naming::NODE_AREA_VARIABLE;
-                        rhs += fmt::format("*(1.e2/{})", area);
+                        rhs += fmt::format("*(1.e2/{0}[{0}_id])", area);
                     }
                     create_write_statements(lhs, op, rhs);
                 }
@@ -629,19 +682,17 @@ std::shared_ptr<ast::Expression> CodegenLLVMHelperVisitor::loop_count_expression
  * create new code generation function.
  */
 void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
-    /// statements for new function to be generated
-    ast::StatementVector function_statements;
-
-    /// create vectors of local variables that would be used in compute part
+    // create vectors of local variables that would be used in compute part
     std::vector<std::string> int_variables{"node_id"};
     std::vector<std::string> double_variables{"v"};
 
-    /// create now main compute part
-
-    /// compute body : initialization + solve blocks
-    ast::StatementVector def_statements;
+    // statements to load indexes for gather/scatter like variables
     ast::StatementVector index_statements;
+
+    // statements for the main body of nrn_state
     ast::StatementVector body_statements;
+
+    // prepare main body of the compute function
     {
         /// access node index and corresponding voltage
         index_statements.push_back(
@@ -658,13 +709,13 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
             const auto& solution = std::dynamic_pointer_cast<ast::SolutionExpression>(statement);
             const auto& block = std::dynamic_pointer_cast<ast::StatementBlock>(
                 solution->get_node_to_solve());
-            append_statements_from_block(body_statements, block);
+            append_statements_from_block(body_statements, block, info);
         }
 
         /// add breakpoint block if no current
         if (info.currents.empty() && info.breakpoint_node != nullptr) {
             auto block = info.breakpoint_node->get_statement_block();
-            append_statements_from_block(body_statements, block);
+            append_statements_from_block(body_statements, block, info);
         }
 
         /// write ion statements
@@ -676,9 +727,11 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
 
     /// create target-specific compute body
     ast::StatementVector compute_body;
-    compute_body.insert(compute_body.end(), def_statements.begin(), def_statements.end());
     compute_body.insert(compute_body.end(), index_statements.begin(), index_statements.end());
     compute_body.insert(compute_body.end(), body_statements.begin(), body_statements.end());
+
+    /// statements for new function to be generated
+    ast::StatementVector function_statements;
 
     std::vector<std::string> induction_variables{naming::INDUCTION_VAR};
     function_statements.push_back(
@@ -698,9 +751,8 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
     auto name = new ast::Name(new ast::String(function_name));
     auto return_type = new ast::CodegenVarType(ast::AstNodeType::VOID);
 
-    /// \todo : currently there are no arguments
+    // argument to function: currently only instance structure
     ast::CodegenVarWithTypeVector code_arguments;
-
     auto instance_var_type = new ast::CodegenVarType(ast::AstNodeType::INSTANCE_STRUCT);
     auto instance_var_name = new ast::Name(new ast::String(naming::MECH_INSTANCE_VAR));
     auto instance_var = new ast::CodegenVarWithType(instance_var_type, 1, instance_var_name);
@@ -711,7 +763,8 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
         std::make_shared<ast::CodegenFunction>(return_type, name, code_arguments, function_block);
     codegen_functions.push_back(function);
 
-    std::cout << nmodl::to_nmodl(function) << std::endl;
+    // todo: remove this, temporary
+    std::cout << nmodl::to_nmodl(*function) << std::endl;
 }
 
 void CodegenLLVMHelperVisitor::create_gpu_compute_body(ast::StatementVector& body,
@@ -802,6 +855,281 @@ void CodegenLLVMHelperVisitor::remove_inlined_nodes(ast::Program& node) {
         }
     }
     node.erase_node(nodes_to_erase);
+}
+
+/**
+ * Print `nrn_cur` kernel with`CONDUCTANCE` statements in the BREAKPOINT block
+ * @param node Ast node representing BREAKPOINT block
+ * @param int_variables Vector of integer variables in the kernel being generated
+ * @param double_variables Vector of double variables in the kernel being generated
+ * @param index_statements Statements for loading indexes (typically for ions, rhs, d)
+ * @param body_statements Vector of statements representing loop body of the `nrn_cur` kernel
+ */
+void CodegenLLVMHelperVisitor::print_nrn_cur_conductance_kernel(
+    const ast::BreakpointBlock& node,
+    std::vector<std::string>& int_variables,
+    std::vector<std::string>& double_variables,
+    ast::StatementVector& index_statements,
+    ast::StatementVector& body_statements) {
+    // TODO: this is not used by default but only with sympy --conductance option. This should be
+    // implemented later and hence just throw an error for now.
+    throw std::runtime_error(
+        "BREAKPOINT block with CONDUCTANCE statements is not supported in the LLVM backend yet");
+}
+
+/**
+ * Print `nrn_current` function that is typically generated as part of `nrn_cur()`
+ * @param node Ast node representing BREAKPOINT block
+ * @param body_statements Vector of statements representing loop body of the `nrn_cur` kernel
+ * @param variable Variable to which computed current will be assigned
+ */
+void CodegenLLVMHelperVisitor::print_nrn_current_body(const ast::BreakpointBlock& node,
+                                                      ast::StatementVector& body_statements,
+                                                      const std::string& variable) {
+    ast::StatementVector statements;
+
+    // starts with current initialized to 0
+    statements.emplace_back(visitor::create_statement("current = 0"));
+
+    // append compatible code statements from the breakpoint block
+    append_statements_from_block(statements, node.get_statement_block(), info);
+
+    // sum now all currents
+    for (auto& current: info.currents) {
+        statements.emplace_back(
+            visitor::create_statement("current = current + {}"_format(current)));
+    }
+
+    // assign computed current to the given variable
+    statements.emplace_back(visitor::create_statement("{} = current"_format(variable)));
+
+    // create StatementBlock for better readability of the generated code and add that to the main
+    // body statements
+    body_statements.emplace_back(new ast::ExpressionStatement(new ast::StatementBlock(statements)));
+}
+
+/**
+ * Print `nrn_cur` kernel without `CONDUCTANCE` statements in the BREAKPOINT block
+ * @param node Ast node representing BREAKPOINT block
+ * @param int_variables Vector of integer variables in the kernel being generated
+ * @param double_variables Vector of double variables in the kernel being generated
+ * @param index_statements Statements for loading indexes (typically for ions, rhs, d)
+ * @param body_statements Vector of statements representing loop body of the `nrn_cur` kernel
+ */
+void CodegenLLVMHelperVisitor::print_nrn_cur_non_conductance_kernel(
+    const ast::BreakpointBlock& node,
+    std::vector<std::string>& int_variables,
+    std::vector<std::string>& double_variables,
+    ast::StatementVector& index_statements,
+    ast::StatementVector& body_statements) {
+    // add double variables needed in the local scope
+    double_variables.emplace_back("g");
+    double_variables.emplace_back("rhs");
+    double_variables.emplace_back("v_org");
+    double_variables.emplace_back("current");
+
+    // store original voltage value as we are going to calculate current with v + 0.001
+    body_statements.emplace_back(visitor::create_statement("v_org = v"));
+
+    // first current calculation with v+0.001 and assign it to variable g
+    body_statements.emplace_back(visitor::create_statement("v = v + 0.001"));
+    print_nrn_current_body(node, body_statements, "g");
+
+    // now store all ionic currents to local variable
+    for (const auto& ion: info.ions) {
+        for (const auto& var: ion.writes) {
+            if (ion.is_ionic_current(var)) {
+                // also create local variable
+                std::string name{"di{}"_format(ion.name)};
+                double_variables.emplace_back(name);
+                body_statements.emplace_back(
+                    visitor::create_statement("{} = {}"_format(name, var)));
+            }
+        }
+    }
+
+    // now restore original v and calculate current and store it in rhs
+    body_statements.emplace_back(visitor::create_statement("v = v_org"));
+    print_nrn_current_body(node, body_statements, "rhs");
+
+    // calculate g
+    body_statements.emplace_back(visitor::create_statement("g = (g-rhs)/0.001"));
+
+    // in case of point process we need to load area from another vector.
+    if (info.point_process) {
+        // create integer variable for index and then load value from area_index vector
+        int_variables.emplace_back("{}_id"_format(naming::NODE_AREA_VARIABLE));
+        index_statements.emplace_back(visitor::create_statement(
+            " {0}_id = {0}_index[id]"_format(naming::NODE_AREA_VARIABLE)));
+    }
+
+    // update all ionic currents now
+    for (const auto& ion: info.ions) {
+        for (const auto& var: ion.writes) {
+            if (ion.is_ionic_current(var)) {
+                // variable on the lhs
+                std::string lhs{"{}di{}dv"_format(naming::ION_VARNAME_PREFIX, ion.name)};
+
+                // expression on the rhs
+                std::string rhs{"(di{}-{})/0.001"_format(ion.name, var)};
+                if (info.point_process) {
+                    rhs += "*1.e2/{0}[{0}_id]"_format(naming::NODE_AREA_VARIABLE);
+                }
+
+                // load the index for lhs variable
+                int_variables.emplace_back(lhs + "_id");
+                std::string index_statement{"{}_id = {}_index[id]"_format(lhs, lhs)};
+                index_statements.emplace_back(visitor::create_statement(index_statement));
+
+                // add statement that actually updates the
+                body_statements.emplace_back(
+                    visitor::create_statement("{0}[{0}_id] = {0}[{0}_id] + {1}"_format(lhs, rhs)));
+            }
+        }
+    }
+}
+
+/**
+ * \brief Convert ast::BreakpointBlock to corresponding code generation function nrn_cur
+ * @param node AST node representing ast::BreakpointBlock
+ *
+ * The BREAKPOINT block from MOD file (ast::NrnStateBlock node in the AST) is converted
+ * to `nrn_cur` function in the generated CPP code via various transformations. Here we
+ * perform those transformations and create new codegen node in the AST.
+ */
+void CodegenLLVMHelperVisitor::visit_breakpoint_block(ast::BreakpointBlock& node) {
+    // no-op in case there are no currents or breakpoint block doesn't exist
+    if (!info.nrn_cur_required()) {
+        return;
+    }
+
+    /// local variables in the function scope for integer and double variables
+    std::vector<std::string> int_variables{"node_id"};
+    std::vector<std::string> double_variables{"v"};
+
+    /// statements to load indexes for gather/scatter like expressions
+    ast::StatementVector index_statements;
+
+    /// statements for the rest of compute body
+    ast::StatementVector body_statements;
+
+    /// prepare all function statements
+    {
+        /// access node index and corresponding voltage
+        index_statements.push_back(
+            visitor::create_statement("node_id = node_index[{}]"_format(naming::INDUCTION_VAR)));
+        body_statements.push_back(visitor::create_statement("v = {}[node_id]"_format(VOLTAGE_VAR)));
+
+        /// read ion variables
+        ion_read_statements(BlockType::Equation,
+                            int_variables,
+                            double_variables,
+                            index_statements,
+                            body_statements);
+
+        /// print main current kernel based on conductance exist of not
+        if (info.conductances.empty()) {
+            print_nrn_cur_non_conductance_kernel(
+                node, int_variables, double_variables, index_statements, body_statements);
+        } else {
+            print_nrn_cur_conductance_kernel(
+                node, int_variables, double_variables, index_statements, body_statements);
+        }
+
+        /// add write ion statements
+        ion_write_statements(BlockType::Equation,
+                             int_variables,
+                             double_variables,
+                             index_statements,
+                             body_statements);
+
+        /// in case of point process, we have to scale values based on the area
+        if (info.point_process) {
+            double_variables.emplace_back("mfactor");
+            body_statements.emplace_back(visitor::create_statement(
+                "mfactor = 1.e2/{0}[{0}_id]"_format(naming::NODE_AREA_VARIABLE)));
+            body_statements.emplace_back(visitor::create_statement("g = g*mfactor"));
+            body_statements.emplace_back(visitor::create_statement("rhs = rhs*mfactor"));
+        }
+
+        /// as multiple point processes can exist at same node, with simd or gpu execution we have
+        /// to create atomic statements that will be handled by llvm ir generation
+        // \todo note that we are not creating rhs and d updates based on the shadow vectors. This
+        //       is because llvm backend for cpu as well as gpu is going to take care for
+        //       reductions. if these codegen functions will be used for C backend then we will need
+        //       to implement separate reduction loop like mod2c or nmodl's c backend.
+        if (info.point_process && (platform.is_gpu() || platform.is_cpu_with_simd())) {
+            body_statements.emplace_back(create_atomic_statement(
+                naming::NTHREAD_RHS, "node_id", info.operator_for_rhs(), "rhs"));
+            body_statements.emplace_back(create_atomic_statement(
+                naming::NTHREAD_D, "node_id", info.operator_for_rhs(), "g"));
+        } else {
+            auto rhs_op(info.operator_for_rhs());
+            auto d_op(info.operator_for_d());
+
+            // convert a += b to a = a + b, see BlueBrain/nmodl/issues/851
+            // hence write update of rhs and de in the form of assignment statements
+            stringutils::remove_character(rhs_op, '=');
+            stringutils::remove_character(d_op, '=');
+
+            body_statements.emplace_back(visitor::create_statement(
+                "vec_rhs[node_id] = vec_rhs[node_id] {} rhs"_format(rhs_op)));
+            body_statements.emplace_back(
+                visitor::create_statement("vec_d[node_id] = vec_d[node_id] {} g"_format(d_op)));
+        }
+    }
+
+    /// now create codegen function
+    {
+        /// compute body, index loading statements at the begining and then compute functions
+        ast::StatementVector compute_body;
+        compute_body.insert(compute_body.end(), index_statements.begin(), index_statements.end());
+        compute_body.insert(compute_body.end(), body_statements.begin(), body_statements.end());
+
+        /// statements for new function to be generated
+        ast::StatementVector function_statements;
+
+        std::vector<std::string> induction_variables{naming::INDUCTION_VAR};
+        function_statements.push_back(
+            create_local_variable_statement(induction_variables, INTEGER_TYPE));
+
+        if (platform.is_gpu()) {
+            create_gpu_compute_body(compute_body,
+                                    function_statements,
+                                    int_variables,
+                                    double_variables);
+        } else {
+            create_cpu_compute_body(compute_body,
+                                    function_statements,
+                                    int_variables,
+                                    double_variables);
+        }
+
+        /// new block for the function
+        auto function_block = new ast::StatementBlock(function_statements);
+
+        /// name of the function and it's return type
+        std::string function_name = "nrn_cur_" + stringutils::tolower(info.mod_suffix);
+        auto name = new ast::Name(new ast::String(function_name));
+        auto return_type = new ast::CodegenVarType(ast::AstNodeType::VOID);
+
+        /// only instance struct as an argument for now
+        ast::CodegenVarWithTypeVector code_arguments;
+        auto instance_var_type = new ast::CodegenVarType(ast::AstNodeType::INSTANCE_STRUCT);
+        auto instance_var_name = new ast::Name(new ast::String(naming::MECH_INSTANCE_VAR));
+        auto instance_var = new ast::CodegenVarWithType(instance_var_type, 1, instance_var_name);
+        code_arguments.emplace_back(instance_var);
+
+        /// finally, create new function
+        auto function = std::make_shared<ast::CodegenFunction>(return_type,
+                                                               name,
+                                                               code_arguments,
+                                                               function_block);
+        codegen_functions.push_back(function);
+
+        // todo: remove this, temporary
+        std::cout << nmodl::to_nmodl(*function) << std::endl;
+    }
 }
 
 void CodegenLLVMHelperVisitor::visit_program(ast::Program& node) {
