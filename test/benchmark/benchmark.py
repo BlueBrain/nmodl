@@ -11,6 +11,7 @@ def main():
     cfg = nmodl.CodeGenConfig()
     cfg.llvm_vector_width = 4
     cfg.llvm_opt_level_ir = 2
+    cfg.nmodl_ast = True
     fname = sys.argv[1]
     if len(sys.argv) > 2:  # GPU enabled
         cfg.llvm_math_library = "libdevice"

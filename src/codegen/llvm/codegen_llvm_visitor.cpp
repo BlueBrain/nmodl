@@ -1136,5 +1136,11 @@ void CodegenLLVMVisitor::visit_while_statement(const ast::WhileStatement& node) 
     ir_builder.set_insertion_point(exit);
 }
 
+// for the llvm backend we only support breakpoint and derivative blocks
+void CodegenLLVMVisitor::print_compute_functions() {
+    print_nrn_cur();
+    print_nrn_state();
+}
+
 }  // namespace codegen
 }  // namespace nmodl

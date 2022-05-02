@@ -185,7 +185,12 @@ class JitDriver {
                                     int instance_size,
                                     int cuda_grid_dim_x,
                                     int cuda_block_dim_x) {
-        cg_driver.prepare_mod(node);
+        // New directory is needed to be created otherwise the directory cannot be created
+        // automatically through python
+        if (cfg.nmodl_ast || cfg.json_ast || cfg.json_perfstat) {
+            utils::make_path(cfg.scratch_dir);
+        }
+        cg_driver.prepare_mod(node, modname);
         nmodl::codegen::CodegenLLVMVisitor visitor(modname, cfg.output_dir, platform, 0);
         visitor.visit_program(*node);
         const GPUExecutionParameters gpu_execution_parameters{cuda_grid_dim_x,
@@ -265,6 +270,9 @@ PYBIND11_MODULE(_nmodl, m_nmodl) {
         .def_readwrite("output_dir", &nmodl::codegen::CodeGenConfig::output_dir)
         .def_readwrite("scratch_dir", &nmodl::codegen::CodeGenConfig::scratch_dir)
         .def_readwrite("data_type", &nmodl::codegen::CodeGenConfig::data_type)
+        .def_readwrite("nmodl_ast", &nmodl::codegen::CodeGenConfig::nmodl_ast)
+        .def_readwrite("json_ast", &nmodl::codegen::CodeGenConfig::json_ast)
+        .def_readwrite("json_perfstat", &nmodl::codegen::CodeGenConfig::json_perfstat)
         .def_readwrite("llvm_ir", &nmodl::codegen::CodeGenConfig::llvm_ir)
         .def_readwrite("llvm_float_type", &nmodl::codegen::CodeGenConfig::llvm_float_type)
         .def_readwrite("llvm_opt_level_ir", &nmodl::codegen::CodeGenConfig::llvm_opt_level_ir)
