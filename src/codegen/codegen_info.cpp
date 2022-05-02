@@ -404,5 +404,34 @@ void CodegenInfo::get_float_variables() {
     }
 }
 
+/**
+ * \details Certain statements like unit, comment, solve can/need to be skipped
+ * during code generation. Note that solve block is wrapped in expression
+ * statement and hence we have to check inner expression. It's also true
+ * for the initial block defined inside net receive block.
+ */
+bool CodegenInfo::statement_to_skip(const ast::Statement& node) const {
+    // clang-format off
+    if (node.is_unit_state()
+        || node.is_line_comment()
+        || node.is_block_comment()
+        || node.is_solve_block()
+        || node.is_conductance_hint()
+        || node.is_table_statement()) {
+        return true;
+    }
+    // clang-format on
+    if (node.is_expression_statement()) {
+        auto expression = dynamic_cast<const ast::ExpressionStatement*>(&node)->get_expression();
+        if (expression->is_solve_block()) {
+            return true;
+        }
+        if (expression->is_initial_block()) {
+            return true;
+        }
+    }
+    return false;
+}
+
 }  // namespace codegen
 }  // namespace nmodl

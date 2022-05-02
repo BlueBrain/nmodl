@@ -218,23 +218,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
         return "\"" + text + "\"";
     }
 
-
-    /**
-     * Operator for rhs vector update (matrix update)
-     */
-    std::string operator_for_rhs() const noexcept {
-        return info.electrode_current ? "+=" : "-=";
-    }
-
-
-    /**
-     * Operator for diagonal vector update (matrix update)
-     */
-    std::string operator_for_d() const noexcept {
-        return info.electrode_current ? "-=" : "+=";
-    }
-
-
     /**
      * Data type for the local variables
      */

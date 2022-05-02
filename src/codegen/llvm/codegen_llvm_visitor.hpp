@@ -299,6 +299,9 @@ class CodegenLLVMVisitor: public CodegenCVisitor {
     /// the kernel.
     void wrap_kernel_functions();
 
+    /// print compute functions relevant for this backend
+    void print_compute_functions() override;
+
   private:
     // Annotates kernel function with NVVM metadata.
     void annotate_kernel_with_nvvm(llvm::Function* kernel);

@@ -323,37 +323,6 @@ void CodegenCVisitor::visit_update_dt(const ast::UpdateDt& node) {
 /*                               Common helper routines                                 */
 /****************************************************************************************/
 
-
-/**
- * \details Certain statements like unit, comment, solve can/need to be skipped
- * during code generation. Note that solve block is wrapped in expression
- * statement and hence we have to check inner expression. It's also true
- * for the initial block defined inside net receive block.
- */
-bool CodegenCVisitor::statement_to_skip(const Statement& node) const {
-    // clang-format off
-    if (node.is_unit_state()
-        || node.is_line_comment()
-        || node.is_block_comment()
-        || node.is_solve_block()
-        || node.is_conductance_hint()
-        || node.is_table_statement()) {
-        return true;
-    }
-    // clang-format on
-    if (node.is_expression_statement()) {
-        auto expression = dynamic_cast<const ExpressionStatement*>(&node)->get_expression();
-        if (expression->is_solve_block()) {
-            return true;
-        }
-        if (expression->is_initial_block()) {
-            return true;
-        }
-    }
-    return false;
-}
-
-
 /**
  * \details When floating point data type is not default (i.e. double) then we
  * have to copy old array to new type (for range variables).
@@ -973,8 +942,8 @@ void CodegenCVisitor::print_nrn_cur_matrix_shadow_update() {
             printer->add_line("shadow_rhs[id] = rhs;");
             printer->add_line("shadow_d[id] = g;");
         } else {
-            auto rhs_op = operator_for_rhs();
-            auto d_op = operator_for_d();
+            const auto& rhs_op = info.operator_for_rhs();
+            const auto& d_op = info.operator_for_d();
             print_atomic_reduction_pragma();
             printer->add_line(fmt::format("vec_rhs[node_id] {} rhs;", rhs_op));
             print_atomic_reduction_pragma();
@@ -985,8 +954,8 @@ void CodegenCVisitor::print_nrn_cur_matrix_shadow_update() {
 
 
 void CodegenCVisitor::print_nrn_cur_matrix_shadow_reduction() {
-    auto rhs_op = operator_for_rhs();
-    auto d_op = operator_for_d();
+    const auto& rhs_op = info.operator_for_rhs();
+    const auto& d_op = info.operator_for_d();
     if (channel_task_dependency_enabled()) {
         auto rhs = get_variable_name("ml_rhs");
         auto d = get_variable_name("ml_d");
@@ -1166,7 +1135,7 @@ void CodegenCVisitor::print_statement_block(const ast::StatementBlock& node,
 
     auto statements = node.get_statements();
     for (const auto& statement: statements) {
-        if (statement_to_skip(*statement)) {
+        if (info.statement_to_skip(*statement)) {
             continue;
         }
         /// not necessary to add indent for verbatim block (pretty-printing)
@@ -4350,8 +4319,8 @@ void CodegenCVisitor::print_fast_imem_calculation() {
         return;
     }
     std::string rhs, d;
-    auto rhs_op = operator_for_rhs();
-    auto d_op = operator_for_d();
+    const auto& rhs_op = info.operator_for_rhs();
+    const auto& d_op = info.operator_for_d();
     if (channel_task_dependency_enabled()) {
         rhs = get_variable_name("ml_rhs");
         d = get_variable_name("ml_d");

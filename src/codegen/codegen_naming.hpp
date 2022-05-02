@@ -92,6 +92,12 @@ static constexpr char NTHREAD_RHS_SHADOW[] = "_shadow_rhs";
 /// shadow d variable in neuron thread structure
 static constexpr char NTHREAD_D_SHADOW[] = "_shadow_d";
 
+/// rhs variable in neuron thread structure
+static constexpr char NTHREAD_RHS[] = "vec_rhs";
+
+/// d variable in neuron thread structure
+static constexpr char NTHREAD_D[] = "vec_d";
+
 /// t variable in neuron thread structure
 static constexpr char NTHREAD_T_VARIABLE[] = "t";
 
