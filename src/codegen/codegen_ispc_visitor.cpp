@@ -248,8 +248,8 @@ void CodegenIspcVisitor::print_atomic_op(const std::string& lhs,
 
 
 void CodegenIspcVisitor::print_nrn_cur_matrix_shadow_reduction() {
-    auto rhs_op = operator_for_rhs();
-    auto d_op = operator_for_d();
+    const auto& rhs_op = info.operator_for_rhs();
+    const auto& d_op = info.operator_for_d();
     if (info.point_process) {
         printer->add_line("uniform int node_id = node_index[id];");
         printer->add_line("vec_rhs[node_id] {} shadow_rhs[id];"_format(rhs_op));
