@@ -38,6 +38,9 @@ struct CodegenInstanceData {
     /// number of pointer members
     size_t num_ptr_members = 0;
 
+    /// size of member type. If member is ptr size of elements of the vector
+    std::vector<size_t> members_size;
+
     /// offset relative to base_ptr to locate
     /// each member variable in instance struct
     std::vector<size_t> offsets;

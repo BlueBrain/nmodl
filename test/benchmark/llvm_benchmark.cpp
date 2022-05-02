@@ -38,6 +38,71 @@ void LLVMBenchmark::generate_llvm(const std::shared_ptr<ast::Program>& node) {
     logger->info("Created LLVM IR module from NMODL AST in {} sec", diff.count());
 }
 
+void checkCudaErrors(cudaError error) {
+    if (error != cudaSuccess) {
+        throw std::runtime_error(
+                "CUDA Execution Error: {}\n"_format(cudaGetErrorString(error)));
+    }
+}
+
+void* copy_instance_data_gpu(const codegen::CodegenInstanceData& data) {
+    // // Copy CodegenInstanceData struct to GPU
+    // logger->info("Copying struct to GPU");
+    // codegen::CodegenInstanceData* data_dev, data_dev_helper;
+    // // data_dev_helper = (codegen::CodegenInstanceData*)malloc(sizeof(codegen::CodegenInstanceData));
+    // checkCudaErrors(cudaMalloc((void**)&data_dev, sizeof(codegen::CodegenInstanceData)));
+    // checkCudaErrors(cudaMemcpy(data_dev, &data, sizeof(codegen::CodegenInstanceData), cudaMemcpyHostToDevice));
+    // // Update internal members of CodegenInstance data to the GPU
+    // void** dev_ptrs = new (void*)[]
+    // for (auto i = 0; i < data.num_ptr_members; i++) {
+    //     // void** dev_member_ptr = &(data_dev->members[i]);
+    //     logger->info("Allocating each member in the GPU");
+    //     checkCudaErrors(cudaMalloc(&(data_dev->members.data()[i]), sizeof(double) * data.num_elements));
+    //     // Copy data to GPU
+    //     logger->info("Copying {} ({})", data.members[i], sizeof(double) * data.num_elements);
+    //     checkCudaErrors(cudaMemcpy(data_dev->members.data()[i], data.members[i], sizeof(double) * data.num_elements, cudaMemcpyHostToDevice));
+    //     logger->info("Copied to {}", data_dev->members[i]);
+    //     // logger->info("Copying {} to {} ({})", data.members[i], *member_dev_ptr, data.offsets[i+1] - data.offsets[i]);
+    // }
+    // logger->info("Copying base_ptr to GPU");
+    // checkCudaErrors(cudaMemcpy(&(data_dev->base_ptr), &(data_dev->members.data()[0]), sizeof(void*), cudaMemcpyDeviceToDevice));
+    // const auto scalar_variables = data.members.size() - data.num_ptr_members;
+    // logger->info("Copying scalar variables to GPU");
+    // for (auto i = data.num_ptr_members; i < data.num_ptr_members + scalar_variables; i++) {
+    //     // Copy data to GPU
+    //     checkCudaErrors(cudaMemcpy(data_dev->members[i], data.members[i], sizeof(double), cudaMemcpyHostToDevice));
+    // }
+    // return data_dev;
+    void* dev_base_ptr;
+    const auto ptr_vars_size = data.num_ptr_members * sizeof(double*);
+    auto scalar_vars_size = 0;
+    const auto num_scalar_vars = data.members.size() - data.num_ptr_members;
+    for (int i = 0; i < num_scalar_vars; i++) {
+        scalar_vars_size += data.members_size[i+data.num_ptr_members];
+    }
+    logger->info("Malloc dev_base_ptr for the struct");
+    checkCudaErrors(cudaMalloc(&dev_base_ptr, ptr_vars_size + scalar_vars_size));
+    logger->info("dev_base_ptr addr: {}", dev_base_ptr);
+    for (auto i = 0; i < data.num_ptr_members; i++) {
+        // Allocate a vector with the correct size
+        void* dev_member_ptr;
+        auto size_of_var = data.members_size[i];
+        logger->info("Malloc member {}", i);
+        checkCudaErrors(cudaMalloc(&dev_member_ptr, size_of_var*data.num_elements));
+        logger->info("Memcpy vector of member {}: {} ({})", i, data.members[i], size_of_var*data.num_elements);
+        checkCudaErrors(cudaMemcpy(dev_member_ptr, data.members[i], size_of_var*data.num_elements, cudaMemcpyHostToDevice));
+        // Copy the pointer addresses to the struct
+        auto offseted_place = (char*)dev_base_ptr+data.offsets[i];
+        logger->info("Memcpy pointer to dev_base_ptr {}: {} ({})", i, dev_member_ptr, sizeof(double*));
+        checkCudaErrors(cudaMemcpy(offseted_place, &dev_member_ptr, sizeof(double*), cudaMemcpyHostToDevice));
+    }
+    // memcpy the scalar values
+    auto offseted_place_dev = (char*)dev_base_ptr+data.offsets[data.num_ptr_members];
+    auto offseted_place_host = (char*)(data.base_ptr)+data.offsets[data.num_ptr_members];
+    checkCudaErrors(cudaMemcpy(offseted_place_dev, offseted_place_host, scalar_vars_size, cudaMemcpyHostToDevice));
+    return dev_base_ptr;
+}
+
 void LLVMBenchmark::run_benchmark(const std::shared_ptr<ast::Program>& node) {
     // Set the codegen data helper and find the kernels.
     auto codegen_data = codegen::CodegenDataHelper(node, llvm_visitor.get_instance_struct_ptr());
@@ -133,7 +198,12 @@ void LLVMBenchmark::run_benchmark(const std::shared_ptr<ast::Program>& node) {
             for (int i = 0; i < num_experiments; ++i) {
                 // Initialise the data.
                 auto instance_data = codegen_data.create_data(instance_size, /*seed=*/1);
-
+#ifdef NMODL_LLVM_CUDA_BACKEND
+                void* dev_ptr;
+                if (platform.is_CUDA_gpu()) {
+                    dev_ptr = copy_instance_data_gpu(instance_data);
+                }
+#endif
                 // Log instance size once.
                 if (i == 0) {
                     double size_mbs = instance_data.num_bytes / (1024.0 * 1024.0);
@@ -145,8 +215,18 @@ void LLVMBenchmark::run_benchmark(const std::shared_ptr<ast::Program>& node) {
                 auto start = std::chrono::steady_clock::now();
 #ifdef NMODL_LLVM_CUDA_BACKEND
                 if (platform.is_CUDA_gpu()) {
+                    // int deviceId;
+                    // cudaGetDevice(&deviceId);
+                    // int cudaDevAttrConcurrentManagedAccess_value;
+                    // cudaDeviceGetAttribute(&cudaDevAttrConcurrentManagedAccess_value, cudaDevAttrConcurrentManagedAccess, deviceId);
+                    // logger->info("Using GPU with deviceId {} number of bytes {} cudaDevAttrConcurrentManagedAccess {}", deviceId, instance_data.num_bytes, cudaDevAttrConcurrentManagedAccess_value);
+                    // cudaMemPrefetchAsync(instance_data.base_ptr, instance_data.num_bytes, deviceId);
+                    // void* base_ptr_dev;
+                    // cudaMemcpy(base_ptr_dev, instance_data.base_ptr, instance_data.num_bytes, cudaMemcpyHostToDevice);
+                    // prefetch_gpu_memory(instance_data);
+                    // const auto& dev_ptr = copy_instance_data_gpu(instance_data);
                     cuda_runner->run_with_argument<void*>(wrapper_name,
-                                                          instance_data.base_ptr,
+                                                          dev_ptr,
                                                           gpu_execution_parameters);
                 } else {
 #endif

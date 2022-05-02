@@ -98,11 +98,11 @@ CodegenInstanceData CodegenDataHelper::create_data(size_t num_elements, size_t s
     size_t member_size = std::max(sizeof(double), sizeof(double*));
 
 // allocate instance object with memory alignment
-#ifdef NMODL_LLVM_CUDA_BACKEND
-    cudaMallocManaged(&base, member_size * variables.size());
-#else
+// #ifdef NMODL_LLVM_CUDA_BACKEND
+//     cudaMallocManaged(&base, member_size * variables.size());
+// #else
     posix_memalign(&base, NBYTE_ALIGNMENT, member_size * variables.size());
-#endif
+// #endif
 
     data.base_ptr = base;
     data.num_bytes += member_size * variables.size();
@@ -128,14 +128,19 @@ CodegenInstanceData CodegenDataHelper::create_data(size_t num_elements, size_t s
         } else if (type == ast::AstNodeType::INTEGER) {
             member_size = sizeof(int);
         }
+        data.members_size.push_back(member_size);
 
         // allocate memory and setup a pointer
         void* member;
-#ifdef NMODL_LLVM_CUDA_BACKEND
-        cudaMallocManaged(&member, member_size * num_elements);
-#else
+// #ifdef NMODL_LLVM_CUDA_BACKEND
+//         cudaMallocManaged(&member, member_size * num_elements);
+//         int deviceId;
+//         cudaGetDevice(&deviceId);
+//         cudaMemPrefetchAsync(&member, member_size * num_elements, deviceId);
+// #else
         posix_memalign(&member, NBYTE_ALIGNMENT, member_size * num_elements);
-#endif
+// #endif
+        logger->info("Allocated {} bytes in {}", member_size * num_elements, member);
 
         // integer values are often offsets so they must start from
         // 0 to num_elements-1 to avoid out of bound accesses.
@@ -199,18 +204,21 @@ CodegenInstanceData CodegenDataHelper::create_data(size_t num_elements, size_t s
 
         if (type == ast::AstNodeType::DOUBLE) {
             *((double*) ptr) = value;
+            data.members_size.push_back(sizeof(double));
             data.offsets.push_back(offset);
             data.members.push_back(ptr);
             offset += sizeof(double);
             ptr = (char*) base + offset;
         } else if (type == ast::AstNodeType::FLOAT) {
             *((float*) ptr) = float(value);
+            data.members_size.push_back(sizeof(float));
             data.offsets.push_back(offset);
             data.members.push_back(ptr);
             offset += sizeof(float);
             ptr = (char*) base + offset;
         } else if (type == ast::AstNodeType::INTEGER) {
             *((int*) ptr) = int(value);
+            data.members_size.push_back(sizeof(int));
             data.offsets.push_back(offset);
             data.members.push_back(ptr);
             offset += sizeof(int);
