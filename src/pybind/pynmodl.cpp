@@ -244,7 +244,7 @@ PYBIND11_MODULE(_nmodl, m_nmodl) {
     cfg.def(py::init([]() {
            auto cfg = std::make_unique<nmodl::codegen::CodeGenConfig>();
            // set to more sensible defaults for python binding
-           cfg->llvm_backend = true;
+           cfg->llvm_ir = true;
            return cfg;
        }))
         .def_readwrite("sympy_analytic", &nmodl::codegen::CodeGenConfig::sympy_analytic)
