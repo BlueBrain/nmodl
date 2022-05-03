@@ -226,6 +226,10 @@ SCENARIO("Check instance struct declaration and setup in wrapper",
                 inst->ion_dikdv_index = indexes+5*pnodecount;
                 inst->voltage = nt->_actual_v;
                 inst->node_index = ml->nodeindices;
+                inst->vec_rhs = nt->_actual_rhs;
+                inst->vec_d = nt->_actual_d;
+                inst->_shadow_rhs = nt->_shadow_rhs;
+                inst->_shadow_d = nt->_shadow_d;
                 inst->t = nt->t;
                 inst->dt = nt->dt;
                 inst->celsius = celsius;
