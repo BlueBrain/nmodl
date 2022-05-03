@@ -1124,11 +1124,6 @@ bool CodegenCVisitor::nrn_cur_reduction_loop_required() {
 }
 
 
-bool CodegenCVisitor::shadow_vector_setup_required() {
-    return false;
-}
-
-
 /**
  * \details For CPU backend we iterate over all node counts. For cuda we use thread
  * index to check if block needs to be executed or not.
@@ -3185,20 +3180,6 @@ void CodegenCVisitor::print_global_variable_setup() {
 }
 
 
-void CodegenCVisitor::print_shadow_vector_setup() {
-    printer->add_newline(2);
-    printer->add_line("/** allocate and initialize shadow vector */");
-    auto args = fmt::format("{}* inst, Memb_list* ml", instance_struct());
-    printer->start_block(fmt::format("static inline void setup_shadow_vectors({}) ", args));
-    printer->end_block(3);
-
-    printer->add_line("/** free shadow vector */");
-    args = fmt::format("{}* inst", instance_struct());
-    printer->start_block(fmt::format("static inline void free_shadow_vectors({}) ", args));
-    printer->end_block(1);
-}
-
-
 void CodegenCVisitor::print_setup_range_variable() {
     auto type = float_data_type();
     printer->add_newline(2);
@@ -3250,9 +3231,6 @@ void CodegenCVisitor::print_instance_variable_setup() {
         print_setup_range_variable();
     }
 
-    if (shadow_vector_setup_required()) {
-        print_shadow_vector_setup();
-    }
     printer->add_newline(2);
     printer->add_line("/** initialize mechanism instance variables */");
     printer->start_block("static inline void setup_instance(NrnThread* nt, Memb_list* ml) ");

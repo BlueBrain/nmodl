@@ -996,12 +996,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
-     * Check if \c shadow\_vector\_setup function is required
-     */
-    bool shadow_vector_setup_required();
-
-
-    /**
      * Check if ion variable copies should be avoided
      */
     bool optimize_ion_variable_copies() const;
@@ -1190,13 +1184,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * \note This is not used for the C backend
      */
     virtual void print_global_variable_device_update_annotation();
-
-
-    /**
-     * Print the setup method for allocation of shadow vectors
-     *
-     */
-    void print_shadow_vector_setup();
 
 
     /**
