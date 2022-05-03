@@ -998,6 +998,12 @@ void CodegenLLVMVisitor::print_instance_variable_setup() {
     // Pass ml->nodeindices pointer to node_index
     printer->add_line("inst->node_index = ml->nodeindices;");
 
+    // Setup rhs, d and their shadow vectors
+    printer->add_line(fmt::format("inst->{} = nt->_actual_rhs;", naming::NTHREAD_RHS));
+    printer->add_line(fmt::format("inst->{} = nt->_actual_d;", naming::NTHREAD_D));
+    printer->add_line(fmt::format("inst->{} = nt->_shadow_rhs;", naming::NTHREAD_RHS_SHADOW));
+    printer->add_line(fmt::format("inst->{} = nt->_shadow_d;", naming::NTHREAD_D_SHADOW));
+
     // Setup global variables
     printer->add_line("inst->{0} = nt->{0};"_format(naming::NTHREAD_T_VARIABLE));
     printer->add_line("inst->{0} = nt->{0};"_format(naming::NTHREAD_DT_VARIABLE));
