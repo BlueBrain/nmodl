@@ -44,7 +44,7 @@ void LLVMBenchmark::generate_llvm() {
 
 void checkCudaErrors(cudaError error) {
     if (error != cudaSuccess) {
-        throw std::runtime_error("CUDA Execution Error: {}\n"_format(cudaGetErrorString(error)));
+        throw std::runtime_error(fmt::format("CUDA Execution Error: {}\n", cudaGetErrorString(error)));
     }
 }
 
@@ -150,21 +150,11 @@ BenchmarkResults LLVMBenchmark::run_benchmark() {
     }
 #endif
 
-<<<<<<< HEAD
+    BenchmarkResults results{};
     if (external_kernel) {
         // benchmark external kernel
         logger->info("Benchmarking external kernel");
-        double time_min = std::numeric_limits<double>::max();
-        double time_max = 0.0;
-        double time_sum = 0.0;
-        double time_squared_sum = 0.0;
-=======
-    BenchmarkResults results{};
-    // Benchmark every kernel.
-    for (const auto& kernel_name: kernel_names) {
-        // For every kernel run the benchmark `num_experiments` times and collect runtimes.
         auto times = std::vector<double>(num_experiments, 0.0);
->>>>>>> magkanar/gpu-runner
         for (int i = 0; i < num_experiments; ++i) {
             // Initialise the data.
             auto instance_data = codegen_data.create_data(instance_size, /*seed=*/1);
@@ -203,15 +193,12 @@ BenchmarkResults LLVMBenchmark::run_benchmark() {
         logger->info("Compute time standard deviation = {:8f}", time_stdev);
         logger->info("Minimum compute time = {:.6f}", time_min);
         logger->info("Maximum compute time = {:.6f}\n", time_max);
-<<<<<<< HEAD
+        results["nrn_state_hh_ext"] = {time_mean, time_stdev, time_min, time_max};
     } else {
         // Benchmark every kernel.
         for (const auto& kernel_name: kernel_names) {
-            // For every kernel run the benchmark `num_experiments` times.
-            double time_min = std::numeric_limits<double>::max();
-            double time_max = 0.0;
-            double time_sum = 0.0;
-            double time_squared_sum = 0.0;
+            // For every kernel run the benchmark `num_experiments` times and collect runtimes.
+            auto times = std::vector<double>(num_experiments, 0.0);
             for (int i = 0; i < num_experiments; ++i) {
                 // Initialise the data.
                 auto instance_data = codegen_data.create_data(instance_size, /*seed=*/1);
@@ -251,25 +238,30 @@ BenchmarkResults LLVMBenchmark::run_benchmark() {
                 }
 #endif
                 // Log the time taken for each run.
-                logger->info("Experiment {} compute time = {:.6f} sec", i, diff.count());
+                logger->debug("Experiment {} compute time = {:.6f} sec", i, diff.count());
 
                 // Update statistics.
-                time_sum += diff.count();
-                time_squared_sum += diff.count() * diff.count();
-                time_min = std::min(time_min, diff.count());
-                time_max = std::max(time_max, diff.count());
+                times[i] = diff.count();
             }
+            // Calculate statistics
+            double time_mean = std::accumulate(times.begin(), times.end(), 0.0) / num_experiments;
+            double time_var = std::accumulate(times.begin(),
+                                            times.end(),
+                                            0.0,
+                                            [time_mean](const double& pres, const double& e) {
+                                                return (e - time_mean) * (e - time_mean);
+                                            }) /
+                            num_experiments;
+            double time_stdev = std::sqrt(time_var);
+            double time_min = *std::min_element(times.begin(), times.end());
+            double time_max = *std::max_element(times.begin(), times.end());
             // Log the average time taken for the kernel.
-            double time_mean = time_sum / num_experiments;
             logger->info("Average compute time = {:.6f}", time_mean);
-            logger->info("Compute time variance = {:g}",
-                         time_squared_sum / num_experiments - time_mean * time_mean);
+            logger->info("Compute time standard deviation = {:8f}", time_stdev);
             logger->info("Minimum compute time = {:.6f}", time_min);
             logger->info("Maximum compute time = {:.6f}\n", time_max);
+            results[kernel_name] = {time_mean, time_stdev, time_min, time_max};
         }
-=======
-        results[kernel_name] = {time_mean, time_stdev, time_min, time_max};
->>>>>>> magkanar/gpu-runner
     }
     return results;
 }

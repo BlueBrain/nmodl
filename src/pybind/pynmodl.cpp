@@ -204,6 +204,7 @@ class JitDriver {
                                                   platform,
                                                   cfg.llvm_opt_level_ir,
                                                   cfg.llvm_opt_level_codegen,
+                                                  false,
                                                   gpu_execution_parameters);
         return benchmark.run();
     }

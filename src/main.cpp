@@ -444,14 +444,9 @@ int main(int argc, const char* argv[]) {
                                                        num_experiments,
                                                        instance_size,
                                                        platform,
-<<<<<<< HEAD
-                                                       llvm_opt_level_ir,
-                                                       llvm_opt_level_codegen,
-                                                       external_kernel,
-=======
                                                        cfg.llvm_opt_level_ir,
                                                        cfg.llvm_opt_level_codegen,
->>>>>>> magkanar/gpu-runner
+                                                       external_kernel,
                                                        gpu_execution_parameters);
                     benchmark.run();
                 }
