@@ -46,33 +46,6 @@ void checkCudaErrors(cudaError error) {
 }
 
 void* copy_instance_data_gpu(const codegen::CodegenInstanceData& data) {
-    // // Copy CodegenInstanceData struct to GPU
-    // logger->info("Copying struct to GPU");
-    // codegen::CodegenInstanceData* data_dev, data_dev_helper;
-    // // data_dev_helper = (codegen::CodegenInstanceData*)malloc(sizeof(codegen::CodegenInstanceData));
-    // checkCudaErrors(cudaMalloc((void**)&data_dev, sizeof(codegen::CodegenInstanceData)));
-    // checkCudaErrors(cudaMemcpy(data_dev, &data, sizeof(codegen::CodegenInstanceData), cudaMemcpyHostToDevice));
-    // // Update internal members of CodegenInstance data to the GPU
-    // void** dev_ptrs = new (void*)[]
-    // for (auto i = 0; i < data.num_ptr_members; i++) {
-    //     // void** dev_member_ptr = &(data_dev->members[i]);
-    //     logger->info("Allocating each member in the GPU");
-    //     checkCudaErrors(cudaMalloc(&(data_dev->members.data()[i]), sizeof(double) * data.num_elements));
-    //     // Copy data to GPU
-    //     logger->info("Copying {} ({})", data.members[i], sizeof(double) * data.num_elements);
-    //     checkCudaErrors(cudaMemcpy(data_dev->members.data()[i], data.members[i], sizeof(double) * data.num_elements, cudaMemcpyHostToDevice));
-    //     logger->info("Copied to {}", data_dev->members[i]);
-    //     // logger->info("Copying {} to {} ({})", data.members[i], *member_dev_ptr, data.offsets[i+1] - data.offsets[i]);
-    // }
-    // logger->info("Copying base_ptr to GPU");
-    // checkCudaErrors(cudaMemcpy(&(data_dev->base_ptr), &(data_dev->members.data()[0]), sizeof(void*), cudaMemcpyDeviceToDevice));
-    // const auto scalar_variables = data.members.size() - data.num_ptr_members;
-    // logger->info("Copying scalar variables to GPU");
-    // for (auto i = data.num_ptr_members; i < data.num_ptr_members + scalar_variables; i++) {
-    //     // Copy data to GPU
-    //     checkCudaErrors(cudaMemcpy(data_dev->members[i], data.members[i], sizeof(double), cudaMemcpyHostToDevice));
-    // }
-    // return data_dev;
     void* dev_base_ptr;
     const auto ptr_vars_size = data.num_ptr_members * sizeof(double*);
     auto scalar_vars_size = 0;
@@ -95,12 +68,37 @@ void* copy_instance_data_gpu(const codegen::CodegenInstanceData& data) {
         auto offseted_place = (char*)dev_base_ptr+data.offsets[i];
         logger->info("Memcpy pointer to dev_base_ptr {}: {} ({})", i, dev_member_ptr, sizeof(double*));
         checkCudaErrors(cudaMemcpy(offseted_place, &dev_member_ptr, sizeof(double*), cudaMemcpyHostToDevice));
+        logger->info("Pointer saved to {}", (void*)offseted_place);
     }
     // memcpy the scalar values
     auto offseted_place_dev = (char*)dev_base_ptr+data.offsets[data.num_ptr_members];
     auto offseted_place_host = (char*)(data.base_ptr)+data.offsets[data.num_ptr_members];
     checkCudaErrors(cudaMemcpy(offseted_place_dev, offseted_place_host, scalar_vars_size, cudaMemcpyHostToDevice));
     return dev_base_ptr;
+}
+
+void copy_instance_data_host(codegen::CodegenInstanceData& data, void* dev_base_ptr) {
+    const auto ptr_vars_size = data.num_ptr_members * sizeof(double*);
+    auto scalar_vars_size = 0;
+    const auto num_scalar_vars = data.members.size() - data.num_ptr_members;
+    for (int i = 0; i < num_scalar_vars; i++) {
+        scalar_vars_size += data.members_size[i+data.num_ptr_members];
+    }
+    const auto host_base_ptr = data.base_ptr;
+    logger->info("dev_base_ptr addr: {} host_base_ptr {}", dev_base_ptr, host_base_ptr);
+    for (auto i = 0; i < data.num_ptr_members; i++) {
+        auto size_of_var = data.members_size[i];
+        void* offset_dev_ptr = (char*)dev_base_ptr+data.offsets[i];
+        logger->info("Copying data {} from GPU back to host {} from {}", i, data.members[i], offset_dev_ptr);
+        void* gpu_offset_addr;
+        checkCudaErrors(cudaMemcpy(&gpu_offset_addr, offset_dev_ptr, sizeof(double*), cudaMemcpyDeviceToHost));
+        logger->info("GPU mem addr {}", gpu_offset_addr);
+        checkCudaErrors(cudaMemcpy(data.members[i], gpu_offset_addr, size_of_var*data.num_elements, cudaMemcpyDeviceToHost));
+    }
+    // memcpy the scalar values
+    void* offseted_place_dev = (char*)dev_base_ptr+data.offsets[data.num_ptr_members];
+    void* offseted_place_host = (char*)(data.base_ptr)+data.offsets[data.num_ptr_members];
+    checkCudaErrors(cudaMemcpy(offseted_place_host, offseted_place_dev, scalar_vars_size, cudaMemcpyDeviceToHost));
 }
 
 void LLVMBenchmark::run_benchmark(const std::shared_ptr<ast::Program>& node) {
@@ -212,19 +210,30 @@ void LLVMBenchmark::run_benchmark(const std::shared_ptr<ast::Program>& node) {
 
                 // Record the execution time of the kernel.
                 std::string wrapper_name = "__" + kernel_name + "_wrapper";
+                struct test__instance_var__type  {
+                    double* __restrict__ x;
+                    double* __restrict__ y;
+                    double* __restrict__ m;
+                    double* __restrict__ Dm;
+                    double* __restrict__ v_unused;
+                    double* __restrict__ g_unused;
+                    double* __restrict__ voltage;
+                    int* __restrict__ node_index;
+                    double t;
+                    double dt;
+                    double celsius;
+                    int secondorder;
+                    int node_count;
+                };
+                for(int i = 0; i < 5; ++i) {
+                    std::cout << static_cast<test__instance_var__type*>(instance_data.base_ptr)->y[i] << std::endl;;
+                }
+                for(int i = 0; i < 5; ++i) {
+                    std::cout << static_cast<test__instance_var__type*>(instance_data.base_ptr)->m[i] << std::endl;;
+                }
                 auto start = std::chrono::steady_clock::now();
 #ifdef NMODL_LLVM_CUDA_BACKEND
                 if (platform.is_CUDA_gpu()) {
-                    // int deviceId;
-                    // cudaGetDevice(&deviceId);
-                    // int cudaDevAttrConcurrentManagedAccess_value;
-                    // cudaDeviceGetAttribute(&cudaDevAttrConcurrentManagedAccess_value, cudaDevAttrConcurrentManagedAccess, deviceId);
-                    // logger->info("Using GPU with deviceId {} number of bytes {} cudaDevAttrConcurrentManagedAccess {}", deviceId, instance_data.num_bytes, cudaDevAttrConcurrentManagedAccess_value);
-                    // cudaMemPrefetchAsync(instance_data.base_ptr, instance_data.num_bytes, deviceId);
-                    // void* base_ptr_dev;
-                    // cudaMemcpy(base_ptr_dev, instance_data.base_ptr, instance_data.num_bytes, cudaMemcpyHostToDevice);
-                    // prefetch_gpu_memory(instance_data);
-                    // const auto& dev_ptr = copy_instance_data_gpu(instance_data);
                     cuda_runner->run_with_argument<void*>(wrapper_name,
                                                           dev_ptr,
                                                           gpu_execution_parameters);
@@ -236,6 +245,17 @@ void LLVMBenchmark::run_benchmark(const std::shared_ptr<ast::Program>& node) {
 #endif
                 auto end = std::chrono::steady_clock::now();
                 std::chrono::duration<double> diff = end - start;
+#ifdef NMODL_LLVM_CUDA_BACKEND
+                if (platform.is_CUDA_gpu()) {
+                    copy_instance_data_host(instance_data, dev_ptr);
+                }
+#endif
+                for(int i = 0; i < 5; ++i) {
+                    std::cout << static_cast<test__instance_var__type*>(instance_data.base_ptr)->y[i] << std::endl;;
+                }
+                for(int i = 0; i < 5; ++i) {
+                    std::cout << static_cast<test__instance_var__type*>(instance_data.base_ptr)->m[i] << std::endl;;
+                }
 
                 // Log the time taken for each run.
                 logger->info("Experiment {} compute time = {:.6f} sec", i, diff.count());

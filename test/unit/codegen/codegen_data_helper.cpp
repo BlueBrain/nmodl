@@ -22,11 +22,11 @@ const int default_second_order_value = 0;
 CodegenInstanceData::~CodegenInstanceData() {
     // first free num_ptr_members members which are pointers
     for (size_t i = 0; i < num_ptr_members; i++) {
-#ifdef NMODL_LLVM_CUDA_BACKEND
-        cudaFree(members[i]);
-#else
+// #ifdef NMODL_LLVM_CUDA_BACKEND
+//         cudaFree(members[i]);
+// #else
         free(members[i]);
-#endif
+// #endif
     }
 // and then pointer to container struct
 #ifdef NMODL_LLVM_CUDA_BACKEND
