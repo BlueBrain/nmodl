@@ -1801,4 +1801,38 @@ SCENARIO("GPU kernel body IR generation", "[visitor][llvm][gpu]") {
             REQUIRE(!std::regex_search(module_string, m, pow_old_call));
         }
     }
+
+    GIVEN("For current update with atomic addition ") {
+        std::string nmodl_text = R"(
+            NEURON {
+                SUFFIX test
+                USEION na READ ena WRITE ina
+            }
+
+            STATE { }
+
+            ASSIGNED {
+                v (mV)
+                ena (mV)
+                ina (mA/cm2)
+            }
+
+            BREAKPOINT {
+                SOLVE states METHOD cnexp
+            }
+
+            DERIVATIVE states { }
+        )";
+
+        THEN("corresponding LLVM atomic instruction is generated") {
+            std::string module_string = run_gpu_llvm_visitor(nmodl_text,
+                                                             /*opt_level=*/0,
+                                                             /*use_single_precision=*/false);
+            std::smatch m;
+
+            // Check for atomic addition.
+            std::regex add(R"(atomicrmw fadd double\* %.*, double %.* seq_cst)");
+            REQUIRE(std::regex_search(module_string, m, add));
+        }
+    }
 }
