@@ -951,10 +951,16 @@ SCENARIO("Scalar state kernel", "[visitor][llvm]") {
                 m
             }
 
+            PARAMETER {
+                gl = .0003 (S/cm2)  <0,1e9>
+                el = -54.3 (mV)
+            }
+
             ASSIGNED {
                 v (mV)
                 minf
                 mtau (ms)
+                il (mA/cm2)
             }
 
             BREAKPOINT {
@@ -974,7 +980,8 @@ SCENARIO("Scalar state kernel", "[visitor][llvm]") {
             // Check the struct type with correct attributes and the kernel declaration.
             std::regex struct_type(
                 "%.*__instance_var__type = type \\{ double\\*, double\\*, double\\*, double\\*, "
-                "double\\*, double\\*, double\\*, i32\\*, double, double, double, i32, i32 \\}");
+                "double\\*, double\\*, double\\*, double\\*, double\\*, double\\*, i32\\*, "
+                "double\\*, double\\*, double\\*, double\\*, double, double, double, i32, i32 \\}");
             std::regex kernel_declaration(
                 R"(define void @nrn_state_hh\(%.*__instance_var__type\* noalias nocapture readonly .*\) #0)");
             REQUIRE(std::regex_search(module_string, m, struct_type));
@@ -1063,6 +1070,7 @@ SCENARIO("Vectorised simple kernel", "[visitor][llvm]") {
 
             ASSIGNED {
                 v (mV)
+                i (mA/cm2)
             }
 
             BREAKPOINT {
@@ -1251,7 +1259,7 @@ SCENARIO("Scalar derivative block", "[visitor][llvm][derivative]") {
             }
         )";
 
-        std::string expected_loop = R"(
+        std::string expected_state_loop = R"(
             for(id = 0; id<mech->node_count; id = id+1) {
                 node_id = mech->node_index[id]
                 v = mech->voltage[node_id]
@@ -1263,10 +1271,10 @@ SCENARIO("Scalar derivative block", "[visitor][llvm][derivative]") {
             auto result = run_llvm_visitor_helper(nmodl_text,
                                                   default_platform,
                                                   {ast::AstNodeType::CODEGEN_FOR_STATEMENT});
-            REQUIRE(result.size() == 1);
+            REQUIRE(result.size() == 2);
 
-            auto main_loop = reindent_text(to_nmodl(result[0]));
-            REQUIRE(main_loop == reindent_text(expected_loop));
+            auto main_state_loop = reindent_text(to_nmodl(result[1]));
+            REQUIRE(main_state_loop == reindent_text(expected_state_loop));
         }
     }
 }
@@ -1276,39 +1284,86 @@ SCENARIO("Vectorised derivative block", "[visitor][llvm][derivative]") {
         std::string nmodl_text = R"(
             NEURON {
                 SUFFIX hh
+                USEION na READ ena WRITE ina
                 NONSPECIFIC_CURRENT il
-                RANGE minf, mtau
+                RANGE minf, mtau, gna, gnabar
             }
             STATE {
-                m
+                m h
+            }
+            PARAMETER {
+                gnabar = .12 (S/cm2) <0,1e9>
             }
             ASSIGNED {
                 v (mV)
                 minf
                 mtau (ms)
+                ena (mV)
+                ina (mA/cm2)
+                gna (S/cm2)
             }
             BREAKPOINT {
                 SOLVE states METHOD cnexp
-                il = 2
+                gna = gnabar*m*m*m*h
+                ina = gna*(v - ena)
             }
             DERIVATIVE states {
                 m = (minf-m)/mtau
             }
         )";
 
-        std::string expected_main_loop = R"(
+        std::string expected_state_main_loop = R"(
             for(id = 0; id<mech->node_count-7; id = id+8) {
                 node_id = mech->node_index[id]
+                ena_id = mech->ion_ena_index[id]
                 v = mech->voltage[node_id]
-                mech->m[id] = (mech->minf[id]-mech->m[id])/mech->mtau[id]
-            })";
-        std::string expected_epilogue_loop = R"(
-            for(; id<mech->node_count; id = id+1) {
-                epilogue_node_id = mech->node_index[id]
-                epilogue_v = mech->voltage[epilogue_node_id]
+                mech->ena[id] = mech->ion_ena[ena_id]
                 mech->m[id] = (mech->minf[id]-mech->m[id])/mech->mtau[id]
             })";
 
+        std::string expected_state_epilogue_loop = R"(
+            for(; id<mech->node_count; id = id+1) {
+                epilogue_node_id = mech->node_index[id]
+                epilogue_ena_id = mech->ion_ena_index[id]
+                epilogue_v = mech->voltage[epilogue_node_id]
+                mech->ena[id] = mech->ion_ena[epilogue_ena_id]
+                mech->m[id] = (mech->minf[id]-mech->m[id])/mech->mtau[id]
+            })";
+
+        std::string expected_cur_main_loop = R"(
+            for(id = 0; id<mech->node_count-7; id = id+8) {
+                node_id = mech->node_index[id]
+                ena_id = mech->ion_ena_index[id]
+                ion_dinadv_id = mech->ion_dinadv_index[id]
+                ion_ina_id = mech->ion_ina_index[id]
+                v = mech->voltage[node_id]
+                mech->ena[id] = mech->ion_ena[ena_id]
+                v_org = v
+                v = v+0.001
+                {
+                    current = 0
+                    mech->gna[id] = mech->gnabar[id]*mech->m[id]*mech->m[id]*mech->m[id]*mech->h[id]
+                    mech->ina[id] = mech->gna[id]*(v-mech->ena[id])
+                    current = current+il
+                    current = current+mech->ina[id]
+                    g = current
+                }
+                dina = mech->ina[id]
+                v = v_org
+                {
+                    current = 0
+                    mech->gna[id] = mech->gnabar[id]*mech->m[id]*mech->m[id]*mech->m[id]*mech->h[id]
+                    mech->ina[id] = mech->gna[id]*(v-mech->ena[id])
+                    current = current+il
+                    current = current+mech->ina[id]
+                    rhs = current
+                }
+                g = (g-rhs)/0.001
+                mech->ion_dinadv[ion_dinadv_id] = mech->ion_dinadv[ion_dinadv_id]+(dina-mech->ina[id])/0.001
+                mech->ion_ina[ion_ina_id] = mech->ion_ina[ion_ina_id]+mech->ina[id]
+                mech->vec_rhs[node_id] = mech->vec_rhs[node_id]-rhs
+                mech->vec_d[node_id] = mech->vec_d[node_id]+g
+            })";
 
         THEN("vector and epilogue scalar loops are constructed") {
             codegen::Platform simd_platform(/*use_single_precision=*/false,
@@ -1316,13 +1371,16 @@ SCENARIO("Vectorised derivative block", "[visitor][llvm][derivative]") {
             auto result = run_llvm_visitor_helper(nmodl_text,
                                                   simd_platform,
                                                   {ast::AstNodeType::CODEGEN_FOR_STATEMENT});
-            REQUIRE(result.size() == 2);
+            REQUIRE(result.size() == 4);
 
-            auto main_loop = reindent_text(to_nmodl(result[0]));
-            REQUIRE(main_loop == reindent_text(expected_main_loop));
+            auto cur_main_loop = reindent_text(to_nmodl(result[0]));
+            REQUIRE(cur_main_loop == reindent_text(expected_cur_main_loop));
 
-            auto epilogue_loop = reindent_text(to_nmodl(result[1]));
-            REQUIRE(epilogue_loop == reindent_text(expected_epilogue_loop));
+            auto state_main_loop = reindent_text(to_nmodl(result[2]));
+            REQUIRE(state_main_loop == reindent_text(expected_state_main_loop));
+
+            auto state_epilogue_loop = reindent_text(to_nmodl(result[3]));
+            REQUIRE(state_epilogue_loop == reindent_text(expected_state_epilogue_loop));
         }
     }
 }
@@ -1343,6 +1401,7 @@ SCENARIO("Vector library calls", "[visitor][llvm][vector_lib]") {
             }
             ASSIGNED {
                 v (mV)
+                il (mA/cm2)
             }
             BREAKPOINT {
                 SOLVE states METHOD cnexp

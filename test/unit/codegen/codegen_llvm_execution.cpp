@@ -287,6 +287,7 @@ SCENARIO("Simple scalar kernel", "[llvm][runner]") {
                 v
                 x0
                 x1
+                i (mA/cm2)
             }
 
             BREAKPOINT {
@@ -320,7 +321,7 @@ SCENARIO("Simple scalar kernel", "[llvm][runner]") {
         // Create the instance struct data.
         int num_elements = 4;
         const auto& generated_instance_struct = llvm_visitor.get_instance_struct_ptr();
-        auto codegen_data = codegen::CodegenDataHelper(ast, generated_instance_struct);
+        auto codegen_data = codegen::CodegenDataHelper(generated_instance_struct);
         auto instance_data = codegen_data.create_data(num_elements, /*seed=*/1);
 
         // Fill the instance struct data with some values.
@@ -370,6 +371,7 @@ SCENARIO("Simple vectorised kernel", "[llvm][runner]") {
                 v
                 x0
                 x1
+                i (mA/cm2)
             }
 
             BREAKPOINT {
@@ -404,7 +406,7 @@ SCENARIO("Simple vectorised kernel", "[llvm][runner]") {
         // Create the instance struct data.
         int num_elements = 10;
         const auto& generated_instance_struct = llvm_visitor.get_instance_struct_ptr();
-        auto codegen_data = codegen::CodegenDataHelper(ast, generated_instance_struct);
+        auto codegen_data = codegen::CodegenDataHelper(generated_instance_struct);
         auto instance_data = codegen_data.create_data(num_elements, /*seed=*/1);
 
         // Fill the instance struct data with some values for unit testing.
@@ -488,7 +490,7 @@ SCENARIO("Vectorised kernel with scatter instruction", "[llvm][runner]") {
         // Create the instance struct data.
         int num_elements = 5;
         const auto& generated_instance_struct = llvm_visitor.get_instance_struct_ptr();
-        auto codegen_data = codegen::CodegenDataHelper(ast, generated_instance_struct);
+        auto codegen_data = codegen::CodegenDataHelper(generated_instance_struct);
         auto instance_data = codegen_data.create_data(num_elements, /*seed=*/1);
 
         // Fill the instance struct data with some values.
@@ -581,7 +583,7 @@ SCENARIO("Vectorised kernel with simple control flow", "[llvm][runner]") {
         // Create the instance struct data.
         int num_elements = 5;
         const auto& generated_instance_struct = llvm_visitor.get_instance_struct_ptr();
-        auto codegen_data = codegen::CodegenDataHelper(ast, generated_instance_struct);
+        auto codegen_data = codegen::CodegenDataHelper(generated_instance_struct);
         auto instance_data = codegen_data.create_data(num_elements, /*seed=*/1);
 
         // Fill the instance struct data with some values.

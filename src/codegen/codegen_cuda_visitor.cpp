@@ -96,8 +96,8 @@ void CodegenCudaVisitor::print_device_method_annotation() {
 
 
 void CodegenCudaVisitor::print_nrn_cur_matrix_shadow_update() {
-    auto rhs_op = operator_for_rhs();
-    auto d_op = operator_for_d();
+    auto rhs_op = info.operator_for_rhs();
+    auto d_op = info.operator_for_d();
     stringutils::remove_character(rhs_op, '=');
     stringutils::remove_character(d_op, '=');
     print_atomic_op("vec_rhs[node_id]", rhs_op, "rhs");
@@ -109,8 +109,8 @@ void CodegenCudaVisitor::print_fast_imem_calculation() {
         return;
     }
 
-    auto rhs_op = operator_for_rhs();
-    auto d_op = operator_for_d();
+    auto rhs_op = info.operator_for_rhs();
+    auto d_op = info.operator_for_d();
     stringutils::remove_character(rhs_op, '=');
     stringutils::remove_character(d_op, '=');
     printer->start_block("if (nt->nrn_fast_imem)");

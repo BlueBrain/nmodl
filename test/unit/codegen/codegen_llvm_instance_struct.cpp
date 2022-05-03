@@ -47,7 +47,7 @@ codegen::CodegenInstanceData generate_instance_data(const std::string& text,
     llvm_visitor.visit_program(*ast);
     llvm_visitor.dump_module();
     const auto& generated_instance_struct = llvm_visitor.get_instance_struct_ptr();
-    auto codegen_data = codegen::CodegenDataHelper(ast, generated_instance_struct);
+    auto codegen_data = codegen::CodegenDataHelper(generated_instance_struct);
     auto instance_data = codegen_data.create_data(num_elements, seed);
     return instance_data;
 }
@@ -120,11 +120,15 @@ SCENARIO("Instance Struct creation", "[visitor][llvm][instance_struct]") {
             size_t ion_ena_index_index = 8;
             size_t voltage_index = 9;
             size_t node_index_index = 10;
-            size_t t_index = 11;
-            size_t dt_index = 12;
-            size_t celsius_index = 13;
-            size_t secondorder_index = 14;
-            size_t node_count_index = 15;
+            size_t rhs_index = 11;
+            size_t d_index = 12;
+            size_t rhs_shadow_index = 13;
+            size_t d_shadow_index = 14;
+            size_t t_index = 15;
+            size_t dt_index = 16;
+            size_t celsius_index = 17;
+            size_t secondorder_index = 18;
+            size_t node_count_index = 19;
             // Check if the various instance struct fields are properly initialized
             REQUIRE(compare(instance_data.members[minf_index],
                             generate_dummy_data<double>(minf_index, num_elements)));
@@ -155,6 +159,10 @@ SCENARIO("Instance Struct creation", "[visitor][llvm][instance_struct]") {
                 int* ion_ena_index;
                 double* voltage;
                 int* node_index;
+                double* vec_rhs;
+                double* vec_d;
+                double* _shadow_rhs;
+                double* _shadow_d;
                 double t;
                 double dt;
                 double celsius;

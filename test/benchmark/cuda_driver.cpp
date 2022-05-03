@@ -5,8 +5,6 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
-#ifdef NMODL_LLVM_CUDA_BACKEND
-
 #include <fstream>
 #include <regex>
 
@@ -197,5 +195,3 @@ void CUDADriver::init(const codegen::Platform& platform, BenchmarkInfo* benchmar
 
 }  // namespace runner
 }  // namespace nmodl
-
-#endif

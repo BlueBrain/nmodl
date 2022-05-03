@@ -590,6 +590,29 @@ struct CodegenInfo {
 
 
     /**
+     * Operator for rhs vector update (matrix update)
+     *
+     * Note that we only rely on following two syntax for
+     * increment and decrement. Code generation backends
+     * are relying on this convention.
+     */
+    std::string operator_for_rhs() const noexcept {
+        return electrode_current ? "+=" : "-=";
+    }
+
+
+    /**
+     * Operator for diagonal vector update (matrix update)
+     *
+     * Note that we only rely on following two syntax for
+     * increment and decrement. Code generation backends
+     * are relying on this convention.
+     */
+    std::string operator_for_d() const noexcept {
+        return electrode_current ? "-=" : "+=";
+    }
+
+    /**
      * Check if net_receive function is required
      */
     bool net_receive_required() const noexcept {
@@ -656,6 +679,13 @@ struct CodegenInfo {
      * \return A \c vector of \c float variables
      */
     void get_float_variables();
+
+    /**
+     * Check if statement should be skipped for code generation
+     * @param node Statement to be checked for code generation
+     * @return True if statement should be skipped otherwise false
+     */
+    bool statement_to_skip(const ast::Statement& node) const;
 };
 
 /** @} */  // end of codegen_backends

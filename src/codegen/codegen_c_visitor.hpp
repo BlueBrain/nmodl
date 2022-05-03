@@ -31,12 +31,11 @@
 #include "visitors/ast_visitor.hpp"
 
 
-using namespace fmt::literals;
-
 namespace nmodl {
 /// encapsulates code generation backend implementations
 namespace codegen {
 
+using namespace fmt::literals;
 /**
  * @defgroup codegen Code Generation Implementation
  * @brief Implementations of code generation backends
@@ -218,23 +217,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
     std::string add_escape_quote(const std::string& text) const {
         return "\"" + text + "\"";
     }
-
-
-    /**
-     * Operator for rhs vector update (matrix update)
-     */
-    std::string operator_for_rhs() const noexcept {
-        return info.electrode_current ? "+=" : "-=";
-    }
-
-
-    /**
-     * Operator for diagonal vector update (matrix update)
-     */
-    std::string operator_for_d() const noexcept {
-        return info.electrode_current ? "-=" : "+=";
-    }
-
 
     /**
      * Data type for the local variables

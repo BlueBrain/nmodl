@@ -173,7 +173,9 @@ bool ReplaceWithLibdevice::replace_call(CallInst& call_inst) {
                                                                       {"llvm.pow.f32", "__nv_powf"},
                                                                       {"llvm.pow.f64", "__nv_pow"},
                                                                       {"llvm.log.f32", "__nv_logf"},
-                                                                      {"llvm.log.f64", "__nv_log"}};
+                                                                      {"llvm.log.f64", "__nv_log"},
+                                                                      {"llvm.fabs.f32", "__nv_fabsf"},
+                                                                      {"llvm.fabs.f64", "__nv_fabs"}};
 
     // If replacement is not supported, abort.
     std::string old_name = function->getName().str();

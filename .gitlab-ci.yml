@@ -43,14 +43,6 @@ build:intel:
   variables:
     SPACK_PACKAGE_COMPILER: intel
 
-build:gcc:
-  extends:
-    - .spack_build
-    - .spack_nmodl
-  variables:
-    SPACK_PACKAGE_COMPILER: gcc
-    SPACK_PACKAGE_DEPENDENCIES: ^bison%gcc^flex%gcc^py-jinja2%gcc^py-sympy%gcc^py-pyyaml%gcc
-
 .nmodl_tests:
   variables:
     # https://github.com/BlueBrain/nmodl/issues/737
@@ -61,12 +53,6 @@ test:intel:
     - .ctest
     - .nmodl_tests
   needs: ["build:intel"]
-
-test:gcc:
-  extends:
-    - .ctest
-    - .nmodl_tests
-  needs: ["build:gcc"]
 
 .benchmark_config:
   variables:
@@ -86,26 +72,12 @@ build_cuda:gcc:
   extends: [.spack_build, .build_allocation]
   variables:
     SPACK_PACKAGE: nmodl
-    SPACK_PACKAGE_SPEC: ~legacy-unit~python+llvm+llvm_cuda
+    SPACK_PACKAGE_SPEC: ~legacy-unit+python+llvm+llvm_cuda
     SPACK_INSTALL_EXTRA_FLAGS: -v
     SPACK_PACKAGE_COMPILER: gcc
 
-test_benchmark:cpu:
+test_benchmark:gcc:
   extends:
     - .benchmark_config
-  script:
-    - module load unstable git
-    - . ${SPACK_ROOT}/share/spack/setup-env.sh
-    - spack load nmodl/${SPACK_INSTALLED_HASH}
-    - nmodl test/integration/mod/test_math.mod llvm --ir --opt-level-ir 3 benchmark --run --opt-level-codegen 3 --instance-size 10000000 --repeat 2
-  needs: ["build_cuda:gcc"]
-
-test_benchmark:gpu:
-  extends:
-    - .benchmark_config
-  script:
-    - module load unstable git
-    - . ${SPACK_ROOT}/share/spack/setup-env.sh
-    - spack load nmodl/${SPACK_INSTALLED_HASH}
-    - nmodl test/integration/mod/test_math.mod llvm --no-debug --ir --opt-level-ir 3 gpu --target-arch "sm_70" --name "nvptx64" --math-library libdevice benchmark --run --libs "${CUDA_HOME}/nvvm/libdevice/libdevice.10.bc" --opt-level-codegen 3 --instance-size 10000000 --repeat 2 --grid-dim-x 4096 --block-dim-x 256
+    - .ctest
   needs: ["build_cuda:gcc"]

@@ -23,7 +23,6 @@
 #include "codegen/llvm/llvm_debug_builder.hpp"
 #include "codegen/llvm/llvm_ir_builder.hpp"
 #include "symtab/symbol_table.hpp"
-#include "utils/logger.hpp"
 #include "visitors/ast_visitor.hpp"
 
 #include "llvm/IR/DIBuilder.h"
@@ -295,6 +294,9 @@ class CodegenLLVMVisitor: public CodegenCVisitor {
     /// Wraps all kernel function calls into wrapper functions that use `void*` to pass the data to
     /// the kernel.
     void wrap_kernel_functions();
+
+    /// print compute functions relevant for this backend
+    void print_compute_functions() override;
 
   private:
     /// Annotates kernel function with NVVM metadata.
