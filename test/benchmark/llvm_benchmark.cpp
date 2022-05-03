@@ -40,8 +40,7 @@ void LLVMBenchmark::generate_llvm(const std::shared_ptr<ast::Program>& node) {
 
 void checkCudaErrors(cudaError error) {
     if (error != cudaSuccess) {
-        throw std::runtime_error(
-                "CUDA Execution Error: {}\n"_format(cudaGetErrorString(error)));
+        throw std::runtime_error("CUDA Execution Error: {}\n"_format(cudaGetErrorString(error)));
     }
 }
 
@@ -51,23 +50,28 @@ void* copy_instance_data_gpu(const codegen::CodegenInstanceData& data) {
     auto scalar_vars_size = 0;
     const auto num_scalar_vars = data.members.size() - data.num_ptr_members;
     for (int i = 0; i < num_scalar_vars; i++) {
-        scalar_vars_size += data.members_size[i+data.num_ptr_members];
+        scalar_vars_size += data.members_size[i + data.num_ptr_members];
     }
     checkCudaErrors(cudaMalloc(&dev_base_ptr, ptr_vars_size + scalar_vars_size));
     for (auto i = 0; i < data.num_ptr_members; i++) {
         // Allocate a vector with the correct size
         void* dev_member_ptr;
         auto size_of_var = data.members_size[i];
-        checkCudaErrors(cudaMalloc(&dev_member_ptr, size_of_var*data.num_elements));
-        checkCudaErrors(cudaMemcpy(dev_member_ptr, data.members[i], size_of_var*data.num_elements, cudaMemcpyHostToDevice));
+        checkCudaErrors(cudaMalloc(&dev_member_ptr, size_of_var * data.num_elements));
+        checkCudaErrors(cudaMemcpy(dev_member_ptr,
+                                   data.members[i],
+                                   size_of_var * data.num_elements,
+                                   cudaMemcpyHostToDevice));
         // Copy the pointer addresses to the struct
-        auto offseted_place = (char*)dev_base_ptr+data.offsets[i];
-        checkCudaErrors(cudaMemcpy(offseted_place, &dev_member_ptr, sizeof(double*), cudaMemcpyHostToDevice));
+        auto offseted_place = (char*) dev_base_ptr + data.offsets[i];
+        checkCudaErrors(
+            cudaMemcpy(offseted_place, &dev_member_ptr, sizeof(double*), cudaMemcpyHostToDevice));
     }
     // memcpy the scalar values
-    auto offseted_place_dev = (char*)dev_base_ptr+data.offsets[data.num_ptr_members];
-    auto offseted_place_host = (char*)(data.base_ptr)+data.offsets[data.num_ptr_members];
-    checkCudaErrors(cudaMemcpy(offseted_place_dev, offseted_place_host, scalar_vars_size, cudaMemcpyHostToDevice));
+    auto offseted_place_dev = (char*) dev_base_ptr + data.offsets[data.num_ptr_members];
+    auto offseted_place_host = (char*) (data.base_ptr) + data.offsets[data.num_ptr_members];
+    checkCudaErrors(cudaMemcpy(
+        offseted_place_dev, offseted_place_host, scalar_vars_size, cudaMemcpyHostToDevice));
     return dev_base_ptr;
 }
 
@@ -76,20 +80,25 @@ void copy_instance_data_host(codegen::CodegenInstanceData& data, void* dev_base_
     auto scalar_vars_size = 0;
     const auto num_scalar_vars = data.members.size() - data.num_ptr_members;
     for (int i = 0; i < num_scalar_vars; i++) {
-        scalar_vars_size += data.members_size[i+data.num_ptr_members];
+        scalar_vars_size += data.members_size[i + data.num_ptr_members];
     }
     const auto host_base_ptr = data.base_ptr;
     for (auto i = 0; i < data.num_ptr_members; i++) {
         auto size_of_var = data.members_size[i];
-        void* offset_dev_ptr = (char*)dev_base_ptr+data.offsets[i];
+        void* offset_dev_ptr = (char*) dev_base_ptr + data.offsets[i];
         void* gpu_offset_addr;
-        checkCudaErrors(cudaMemcpy(&gpu_offset_addr, offset_dev_ptr, sizeof(double*), cudaMemcpyDeviceToHost));
-        checkCudaErrors(cudaMemcpy(data.members[i], gpu_offset_addr, size_of_var*data.num_elements, cudaMemcpyDeviceToHost));
+        checkCudaErrors(
+            cudaMemcpy(&gpu_offset_addr, offset_dev_ptr, sizeof(double*), cudaMemcpyDeviceToHost));
+        checkCudaErrors(cudaMemcpy(data.members[i],
+                                   gpu_offset_addr,
+                                   size_of_var * data.num_elements,
+                                   cudaMemcpyDeviceToHost));
     }
     // memcpy the scalar values
-    void* offseted_place_dev = (char*)dev_base_ptr+data.offsets[data.num_ptr_members];
-    void* offseted_place_host = (char*)(data.base_ptr)+data.offsets[data.num_ptr_members];
-    checkCudaErrors(cudaMemcpy(offseted_place_host, offseted_place_dev, scalar_vars_size, cudaMemcpyDeviceToHost));
+    void* offseted_place_dev = (char*) dev_base_ptr + data.offsets[data.num_ptr_members];
+    void* offseted_place_host = (char*) (data.base_ptr) + data.offsets[data.num_ptr_members];
+    checkCudaErrors(cudaMemcpy(
+        offseted_place_host, offseted_place_dev, scalar_vars_size, cudaMemcpyDeviceToHost));
 }
 
 void LLVMBenchmark::run_benchmark(const std::shared_ptr<ast::Program>& node) {
@@ -173,7 +182,7 @@ void LLVMBenchmark::run_benchmark(const std::shared_ptr<ast::Program>& node) {
         double time_mean = time_sum / num_experiments;
         logger->info("Average compute time = {:.6f}", time_mean);
         logger->info("Compute time variance = {:g}",
-                        time_squared_sum / num_experiments - time_mean * time_mean);
+                     time_squared_sum / num_experiments - time_mean * time_mean);
         logger->info("Minimum compute time = {:.6f}", time_min);
         logger->info("Maximum compute time = {:.6f}\n", time_max);
     } else {
@@ -196,7 +205,9 @@ void LLVMBenchmark::run_benchmark(const std::shared_ptr<ast::Program>& node) {
                 // Log instance size once.
                 if (i == 0) {
                     double size_mbs = instance_data.num_bytes / (1024.0 * 1024.0);
-                    logger->info("Benchmarking kernel '{}' with {} MBs dataset", kernel_name, size_mbs);
+                    logger->info("Benchmarking kernel '{}' with {} MBs dataset",
+                                 kernel_name,
+                                 size_mbs);
                 }
 
                 // Record the execution time of the kernel.
@@ -233,7 +244,7 @@ void LLVMBenchmark::run_benchmark(const std::shared_ptr<ast::Program>& node) {
             double time_mean = time_sum / num_experiments;
             logger->info("Average compute time = {:.6f}", time_mean);
             logger->info("Compute time variance = {:g}",
-                        time_squared_sum / num_experiments - time_mean * time_mean);
+                         time_squared_sum / num_experiments - time_mean * time_mean);
             logger->info("Minimum compute time = {:.6f}", time_min);
             logger->info("Maximum compute time = {:.6f}\n", time_max);
         }
