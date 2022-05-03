@@ -32,17 +32,22 @@ if(NMODL_ENABLE_PYTHON_BINDINGS)
   file(GLOB modfiles "${NMODL_PROJECT_SOURCE_DIR}/test/benchmark/kernels/*.mod")
   list(APPEND modfiles "${NMODL_PROJECT_SOURCE_DIR}/test/integration/mod/test_math.mod")
   foreach(modfile ${modfiles})
+    # For expsyn.mod set the vector width to 1 since atomic operations are not supported for vector
+    # widths > 1. See https://github.com/BlueBrain/nmodl/issues/857
+    if(${modfile} STREQUAL "${NMODL_PROJECT_SOURCE_DIR}/test/benchmark/kernels/expsyn.mod")
+      set(extra_args "--vec 1")
+    endif()
     get_filename_component(modfile_name "${modfile}" NAME)
     add_test(NAME "PyJIT/${modfile_name}"
              COMMAND ${PYTHON_EXECUTABLE} ${NMODL_PROJECT_SOURCE_DIR}/test/benchmark/benchmark.py
-                     ${modfile})
+                     --file ${modfile} ${extra_args})
     set_tests_properties(
       "PyJIT/${modfile_name}" PROPERTIES ENVIRONMENT
                                          PYTHONPATH=${PROJECT_BINARY_DIR}/lib:$ENV{PYTHONPATH})
     if(NMODL_ENABLE_LLVM_CUDA)
       add_test(NAME "PyJIT/${modfile_name}_gpu"
                COMMAND ${PYTHON_EXECUTABLE} ${NMODL_PROJECT_SOURCE_DIR}/test/benchmark/benchmark.py
-                       ${modfile} gpu)
+                      --file ${modfile} --gpu ${extra_args})
       message(STATUS "CUDA_HOME is ${CUDAToolkit_TARGET_DIR}")
       set_tests_properties(
         "PyJIT/${modfile_name}_gpu"
