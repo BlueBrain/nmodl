@@ -1360,7 +1360,7 @@ SCENARIO("Vectorised derivative block", "[visitor][llvm][derivative]") {
                 }
                 g = (g-rhs)/0.001
                 mech->ion_dinadv[ion_dinadv_id] = mech->ion_dinadv[ion_dinadv_id]+(dina-mech->ina[id])/0.001
-                mech->ion_ina[ion_ina_id] = mech->ion_ina[ion_ina_id]+mech->ina[id]
+                mech->ion_ina[ion_ina_id] += mech->ina[id]
                 mech->vec_rhs[node_id] = mech->vec_rhs[node_id]-rhs
                 mech->vec_d[node_id] = mech->vec_d[node_id]+g
             })";

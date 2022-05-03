@@ -372,7 +372,7 @@ int main(int argc, const char* argv[]) {
                                                                         : cfg.llvm_gpu_name;
                 Platform platform(pid,
                                   name,
-                                  cfg.llvm_cpu_name,
+                                  cfg.llvm_gpu_target_architecture,
                                   cfg.llvm_math_library,
                                   cfg.llvm_float_type,
                                   cfg.llvm_vector_width);
