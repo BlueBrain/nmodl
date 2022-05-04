@@ -4259,8 +4259,8 @@ void CodegenCVisitor::print_derivimplicit_kernel(Block* block) {
     printer->add_newline(2);
 
     printer->start_block("namespace");
-    printer->start_block(fmt::format("struct _newton_{}_{}", block_name, info.mod_suffix));
-    printer->start_block(fmt::format("int operator()({}) const", external_method_parameters()));
+    printer->fmt_start_block("struct _newton_{}_{}", block_name, info.mod_suffix);
+    printer->fmt_start_block("int operator()({}) const", external_method_parameters());
     auto const instance = fmt::format("{0}* inst = ({0}*)get_memb_list(nt)->instance;",
                                       instance_struct());
     auto const slist1 = fmt::format("int* slist{} = {};",
@@ -4281,8 +4281,7 @@ void CodegenCVisitor::print_derivimplicit_kernel(Block* block) {
     if (ion_variable_struct_required()) {
         print_ion_variable();
     }
-    printer->add_line(
-        fmt::format("double* savstate{} = (double*) thread[dith{}()].pval;", list_num, list_num));
+    printer->fmt_line("double* savstate{} = (double*) thread[dith{}()].pval;", list_num, list_num);
     printer->add_line(slist1);
     printer->add_line(dlist1);
     printer->add_line(dlist2);
@@ -4290,51 +4289,46 @@ void CodegenCVisitor::print_derivimplicit_kernel(Block* block) {
     print_statement_block(*block->get_statement_block(), false, false);
     codegen = false;
     printer->add_line("int counter = -1;");
-    printer->start_block(fmt::format("for (int i=0; i<{}; i++)", info.num_primes));
-    printer->start_block(fmt::format("if (*deriv{}_advance(thread))", list_num));
-    printer->add_line(
-        fmt::format("dlist{0}[(++counter){1}] = "
-                    "data[dlist{2}[i]{1}]-(data[slist{2}[i]{1}]-savstate{2}[i{1}])/nt->_dt;",
-                    list_num + 1,
-                    stride,
-                    list_num));
+    printer->fmt_start_block("for (int i=0; i<{}; i++)", info.num_primes);
+    printer->fmt_start_block("if (*deriv{}_advance(thread))", list_num);
+    printer->fmt_line(
+        "dlist{0}[(++counter){1}] = "
+        "data[dlist{2}[i]{1}]-(data[slist{2}[i]{1}]-savstate{2}[i{1}])/nt->_dt;",
+        list_num + 1,
+        stride,
+        list_num);
     printer->restart_block("else");
-    printer->add_line(
-        fmt::format("dlist{0}[(++counter){1}] = data[slist{2}[i]{1}]-savstate{2}[i{1}];",
-                    list_num + 1,
-                    stride,
-                    list_num));
+    printer->fmt_line("dlist{0}[(++counter){1}] = data[slist{2}[i]{1}]-savstate{2}[i{1}];",
+                      list_num + 1,
+                      stride,
+                      list_num);
     printer->end_block(1);
     printer->end_block(1);
     printer->add_line("return 0;");
-    printer->end_block(1);
-    printer->end_block();
+    printer->end_block(1);  // operator()
+    printer->end_block();   // struct
     printer->add_text(";");
     printer->add_newline();
-    printer->end_block(2);
-    printer->start_block(fmt::format("int {}_{}({})", block_name, suffix, ext_params));
+    printer->end_block(2);  // namespace
+    printer->fmt_start_block("int {}_{}({})", block_name, suffix, ext_params);
     printer->add_line(instance);
-    printer->add_line(
-        fmt::format("double* savstate{} = (double*) thread[dith{}()].pval;", list_num, list_num));
+    printer->fmt_line("double* savstate{} = (double*) thread[dith{}()].pval;", list_num, list_num);
     printer->add_line(slist1);
     printer->add_line(slist2);
     printer->add_line(dlist2);
-    printer->start_block(fmt::format("for (int i=0; i<{}; i++)", info.num_primes));
-    printer->add_line(
-        fmt::format("savstate{}[i{}] = data[slist{}[i]{}];", list_num, stride, list_num, stride));
+    printer->fmt_start_block("for (int i=0; i<{}; i++)", info.num_primes);
+    printer->fmt_line("savstate{}[i{}] = data[slist{}[i]{}];", list_num, stride, list_num, stride);
     printer->end_block(1);
-    auto const argument = fmt::format("{}, slist{}, _newton_{}_{}{{}}, dlist{}, {}",
-                                      primes_size,
-                                      list_num + 1,
-                                      block_name,
-                                      suffix,
-                                      list_num + 1,
-                                      ext_args);
-    printer->add_line(fmt::format(
-        "int reset = nrn_newton_thread(static_cast<NewtonSpace*>(*newtonspace{}(thread)), "
-        "{});",
+    printer->fmt_line(
+        "int reset = nrn_newton_thread(static_cast<NewtonSpace*>(*newtonspace{}(thread)), {}, "
+        "slist{}, _newton_{}_{}{{}}, dlist{}, {});",
         list_num,
-        argument));
+        primes_size,
+        list_num + 1,
+        block_name,
+        suffix,
+        list_num + 1,
+        ext_args);
     printer->add_line("return reset;");
     printer->end_block(3);
 }
@@ -4349,10 +4343,10 @@ void CodegenCVisitor::visit_derivimplicit_callback(const ast::DerivimplicitCallb
     if (!codegen) {
         return;
     }
-    printer->add_line(fmt::format("{}_{}({});",
-                                  node.get_node_to_solve()->get_node_name(),
-                                  info.mod_suffix,
-                                  external_method_arguments()));
+    printer->fmt_line("{}_{}({});",
+                      node.get_node_to_solve()->get_node_name(),
+                      info.mod_suffix,
+                      external_method_arguments());
 }
 
 void CodegenCVisitor::visit_solution_expression(const SolutionExpression& node) {

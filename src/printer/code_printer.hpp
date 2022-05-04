@@ -14,6 +14,7 @@
  * \file
  * \brief \copybrief nmodl::printer::CodePrinter
  */
+#include <spdlog/spdlog.h>  // want fmt but <submodule rant>
 
 #include <fstream>
 #include <iostream>
@@ -73,6 +74,17 @@ class CodePrinter {
     void add_text(const std::string&);
 
     void add_line(const std::string&, int num_new_lines = 1);
+
+    /// fmt_line(x, y, z) is just shorthand for add_line(fmt::format(x, y, z))
+    template <typename... Args>
+    void fmt_line(Args&&... args) {
+        add_line(fmt::format(std::forward<Args>(args)...));
+    }
+
+    template <typename... Args>
+    void fmt_start_block(Args&&... args) {
+        start_block(fmt::format(std::forward<Args>(args)...));
+    }
 
     void add_multi_line(const std::string&);
 
