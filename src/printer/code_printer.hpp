@@ -61,10 +61,14 @@ class CodePrinter {
     /// print whitespaces for indentation
     void add_indent();
 
-    /// start a block scope (i.e. start with "{")
+    /// start a block scope without indentation (i.e. "{\n")
     void start_block();
 
-    void start_block(std::string&&);
+    /// start a block scope with an expression (i.e. "[indent][expression] {\n")
+    void start_block(std::string&& expression);
+
+    /// end a block and immediately start a new one (i.e. "[indent-1]} [expression] {\n")
+    void restart_block(std::string const& expression);
 
     void add_text(const std::string&);
 
