@@ -44,7 +44,9 @@ if(NMODL_ENABLE_PYTHON_BINDINGS)
     set_tests_properties(
       "PyJIT/${modfile_name}" PROPERTIES ENVIRONMENT
                                          PYTHONPATH=${PROJECT_BINARY_DIR}/lib:$ENV{PYTHONPATH})
-    if(NMODL_ENABLE_LLVM_CUDA)
+    # Disable running the expsyn.mod on GPU because atomic instructions are not supported yet on GPU
+    # See https://github.com/BlueBrain/nmodl/issues/834
+    if(NMODL_ENABLE_LLVM_CUDA AND NOT ${modfile} STREQUAL "${NMODL_PROJECT_SOURCE_DIR}/test/benchmark/kernels/expsyn.mod")
       add_test(NAME "PyJIT/${modfile_name}_gpu"
                COMMAND ${PYTHON_EXECUTABLE} ${NMODL_PROJECT_SOURCE_DIR}/test/benchmark/benchmark.py
                       --file ${modfile} --gpu ${extra_args})
