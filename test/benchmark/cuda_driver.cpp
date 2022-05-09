@@ -190,10 +190,10 @@ void CUDADriver::init(const codegen::Platform& platform, BenchmarkInfo* benchmar
     if (!std::string(jitErrorLogBuffer).empty()) {
         logger->info("CUDA JIT ERROR LOG: {}"_format(std::string(jitErrorLogBuffer)));
     }
-    free(jitOptions);
-    free(jitOptVals);
-    free(jitLogBuffer);
-    free(jitErrorLogBuffer);
+    delete[] jitOptions;
+    delete[] jitOptVals;
+    delete[] jitLogBuffer;
+    delete[] jitErrorLogBuffer;
     checkCudaErrors(cuda_jit_ret);
 }
 
