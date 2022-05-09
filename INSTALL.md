@@ -21,7 +21,7 @@ To build the project from source, a modern C++ compiler with C++14 support is ne
 
 - flex (>=2.6)
 - bison (>=3.0)
-- CMake (>=3.15)
+- CMake (>=3.17)
 - Python (>=3.7)
 - Python packages : jinja2 (>=2.10), pyyaml (>=3.13), pytest (>=4.0.0), sympy (>=1.3), textwrap
 
@@ -141,6 +141,29 @@ export NMODL_WRAPLIB=/opt/nmodl/lib/libpywrapper.so
 **Note**: In order for all unit tests to function correctly when building without linking against libpython we must
 set `NMODL_PYLIB` before running cmake!
 
+### Using CUDA backend to run benchmarks
+
+`NMODL` supports generating code and compiling it for execution on an `NVIDIA` GPU via its benchmark infrastructure using the `LLVM` backend. To enable the `CUDA` backend to compile and execute the GPU code we need to set the following `CMake` flag during compilation of `NMODL`:
+```
+-DNMODL_ENABLE_LLVM_CUDA=ON
+```
+
+To find the need `CUDA` libraries (`cudart` and `nvrtc`) it's needed to have CUDA Toolkit installed on your system.
+This can be done by installing the CUDA Toolkit from the [CUDA Toolkit website](https://developer.nvidia.com/cuda-downloads) or by installing the `CUDA` spack package and loading the corresponding module.
+
+Then given a supported MOD file you can execute the benchmark on GPU in you supported NVIDIA GPU by running the following command:
+```
+./bin/nmodl <file>.mod llvm --no-debug --ir --opt-level-ir 3 gpu --target-arch "sm_80" --name "nvptx64" --math-library libdevice benchmark --run --libs "${CUDA_ROOT}/nvvm/libdevice/libdevice.10.bc" --opt-level-codegen 3 --instance-size 10000000 --repeat 2 --grid-dim-x 4096 --block-dim-x 256
+```
+The above command executes the benchmark on a GPU with `Compute Architecture` `sm_80` and links the generated code to the `libdevice` optimized math library provided by `NVIDIA`.
+Using the above command you can also select the optimization level of the generated code, the instance size of the generated data, the number of repetitions and the grid and block dimensions for the GPU execution.
+
+**Note**: In order for the CUDA backend to be able to compile and execute the generated code on GPU the CUDA Toolkit version installed needs to have the same version as the `CUDA` installed by the NVIDIA driver in the system that will be used to run the benchmark.
+You can find the CUDA Toolkit version by running the following command:
+```
+nvidia-smi
+```
+and noting the `CUDA Version` stated there. For example if `CUDA Version` reported by `nvidia-smi` is CUDA 11.4 you need to install the `CUDA Toolkit 11.4.*` to be able to compile and execute the GPU code.
 
 ## Testing the Installed Module
 
