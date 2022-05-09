@@ -151,8 +151,12 @@ class JitDriver {
                                              : nmodl::codegen::PlatformID::GPU;
         const std::string name = cfg.llvm_gpu_name == "default" ? cfg.llvm_cpu_name
                                                                 : cfg.llvm_gpu_name;
-        platform = nmodl::codegen::Platform(
-            pid, name, cfg.llvm_math_library, cfg.llvm_float_type, cfg.llvm_vector_width);
+        platform = nmodl::codegen::Platform(pid,
+                                            name,
+                                            cfg.llvm_gpu_target_architecture,
+                                            cfg.llvm_math_library,
+                                            cfg.llvm_float_type,
+                                            cfg.llvm_vector_width);
         if (platform.is_gpu() && !platform.is_CUDA_gpu()) {
             throw std::runtime_error("Benchmarking is only supported on CUDA GPUs at the moment");
         }
