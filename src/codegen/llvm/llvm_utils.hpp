@@ -21,11 +21,18 @@ void initialise_optimisation_passes();
 /// Initialises NVPTX-specific optimisation passes.
 void initialise_nvptx_passes();
 
+//// Initializes a CUDA target machine
+std::unique_ptr<llvm::TargetMachine> create_CUDA_target_machine(const codegen::Platform& platform,
+                                                                llvm::Module& module);
+
+/// Generate PTX code given a CUDA target machine and the module
+std::string get_module_ptx(llvm::TargetMachine& tm, llvm::Module& module);
+
 /// Replaces calls to LLVM intrinsics with appropriate library calls.
 void replace_with_lib_functions(codegen::Platform& platform, llvm::Module& module);
 
 /// Optimises the given LLVM IR module for NVPTX targets.
-void optimise_module_for_nvptx(codegen::Platform& platform,
+void optimise_module_for_nvptx(const codegen::Platform& platform,
                                llvm::Module& module,
                                int opt_level,
                                std::string& target_asm);

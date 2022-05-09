@@ -980,8 +980,8 @@ SCENARIO("Scalar state kernel", "[visitor][llvm]") {
             // Check the struct type with correct attributes and the kernel declaration.
             std::regex struct_type(
                 "%.*__instance_var__type = type \\{ double\\*, double\\*, double\\*, double\\*, "
-                "double\\*, double\\*, double\\*, double\\*, double\\*, double\\*, i32\\*, double, "
-                "double, double, i32, i32, double\\*, double\\*, double\\*, double\\* \\}");
+                "double\\*, double\\*, double\\*, double\\*, double\\*, double\\*, i32\\*, "
+                "double\\*, double\\*, double\\*, double\\*, double, double, double, i32, i32 \\}");
             std::regex kernel_declaration(
                 R"(define void @nrn_state_hh\(%.*__instance_var__type\* noalias nocapture readonly .*\) #0)");
             REQUIRE(std::regex_search(module_string, m, struct_type));
@@ -1775,7 +1775,7 @@ SCENARIO("GPU kernel body IR generation", "[visitor][llvm][gpu]") {
             }
 
             DERIVATIVE states {
-              m = exp(y) + x ^ 2
+              m = exp(y) + x ^ 2 + log(x)
             }
         )";
 
@@ -1793,12 +1793,18 @@ SCENARIO("GPU kernel body IR generation", "[visitor][llvm][gpu]") {
             std::regex pow_declaration(R"(declare double @__nv_pow\(double, double\))");
             std::regex pow_new_call(R"(call double @__nv_pow\(double %.*, double .*\))");
             std::regex pow_old_call(R"(call double @llvm\.pow\.f64\(double %.*, double .*\))");
+            std::regex log_declaration(R"(declare double @__nv_log\(double\))");
+            std::regex log_new_call(R"(call double @__nv_log\(double %.*\))");
+            std::regex log_old_call(R"(call double @llvm\.log\.f64\(double %.*\))");
             REQUIRE(std::regex_search(module_string, m, exp_declaration));
             REQUIRE(std::regex_search(module_string, m, exp_new_call));
             REQUIRE(!std::regex_search(module_string, m, exp_old_call));
             REQUIRE(std::regex_search(module_string, m, pow_declaration));
             REQUIRE(std::regex_search(module_string, m, pow_new_call));
             REQUIRE(!std::regex_search(module_string, m, pow_old_call));
+            REQUIRE(std::regex_search(module_string, m, log_declaration));
+            REQUIRE(std::regex_search(module_string, m, log_new_call));
+            REQUIRE(!std::regex_search(module_string, m, log_old_call));
         }
     }
 }
