@@ -25,6 +25,10 @@ namespace codegen {
 /*                                  Helper routines                                     */
 /****************************************************************************************/
 
+static std::string get_wrapper_name(const std::string& kernel_name) {
+    return "__" + kernel_name + "_wrapper";
+}
+
 /// A utility to check for supported Statement AST nodes.
 static bool is_supported_statement(const ast::Statement& statement) {
     return statement.is_codegen_atomic_statement() || statement.is_codegen_for_statement() ||
@@ -55,13 +59,34 @@ static bool can_vectorize(const ast::CodegenForStatement& statement, symtab::Sym
     return unsupported.empty() && supported.size() <= 1;
 }
 
-void CodegenLLVMVisitor::annotate_kernel_with_nvvm(llvm::Function* kernel) {
+void CodegenLLVMVisitor::annotate_kernel_with_nvvm(llvm::Function* kernel,
+                                                   const std::string& annotation = "kernel") {
     llvm::Metadata* metadata[] = {llvm::ValueAsMetadata::get(kernel),
-                                  llvm::MDString::get(*context, "kernel"),
+                                  llvm::MDString::get(*context, annotation),
                                   llvm::ValueAsMetadata::get(
                                       llvm::ConstantInt::get(llvm::Type::getInt32Ty(*context), 1))};
     llvm::MDNode* node = llvm::MDNode::get(*context, metadata);
     module->getOrInsertNamedMetadata("nvvm.annotations")->addOperand(node);
+}
+
+void CodegenLLVMVisitor::annotate_wrapper_kernels_with_nvvm() {
+    // First clear all the nvvm annotations from the module
+    auto module_named_metadata = module->getNamedMetadata("nvvm.annotations");
+    module->eraseNamedMetadata(module_named_metadata);
+
+    // Then each kernel should be annotated as "device" function and wrappers should be annotated as
+    // "kernel" functions
+    std::vector<std::string> kernel_names;
+    find_kernel_names(kernel_names);
+
+    for (const auto& kernel_name: kernel_names) {
+        // Get the kernel function.
+        auto kernel = module->getFunction(kernel_name);
+        // Get the kernel wrapper function.
+        auto kernel_wrapper = module->getFunction(get_wrapper_name(kernel_name));
+        annotate_kernel_with_nvvm(kernel, "device");
+        annotate_kernel_with_nvvm(kernel_wrapper, "kernel");
+    }
 }
 
 llvm::Value* CodegenLLVMVisitor::accept_and_get(const std::shared_ptr<ast::Node>& node) {
@@ -402,12 +427,17 @@ void CodegenLLVMVisitor::wrap_kernel_functions() {
         auto kernel = module->getFunction(kernel_name);
 
         // Create a wrapper void function that takes a void pointer as a single argument.
-        llvm::Type* i32_type = ir_builder.get_i32_type();
+        llvm::Type* return_type;
+        if (platform.is_gpu()) {
+            return_type = ir_builder.get_void_type();
+        } else {
+            return_type = ir_builder.get_i32_type();
+        }
         llvm::Type* void_ptr_type = ir_builder.get_i8_ptr_type();
         llvm::Function* wrapper_func = llvm::Function::Create(
-            llvm::FunctionType::get(i32_type, {void_ptr_type}, /*isVarArg=*/false),
+            llvm::FunctionType::get(return_type, {void_ptr_type}, /*isVarArg=*/false),
             llvm::Function::ExternalLinkage,
-            "__" + kernel_name + "_wrapper",
+            get_wrapper_name(kernel_name),
             *module);
 
         // Optionally, add debug information for the wrapper function.
@@ -425,9 +455,23 @@ void CodegenLLVMVisitor::wrap_kernel_functions() {
         args.push_back(bitcasted);
         ir_builder.create_function_call(kernel, args, /*use_result=*/false);
 
-        // Create a 0 return value and a return instruction.
-        ir_builder.create_i32_constant(0);
-        ir_builder.create_return(ir_builder.pop_last_value());
+        // create return instructions and annotate wrapper with certain attributes depending on
+        // the backend type
+        if (platform.is_gpu()) {
+            // return void
+            ir_builder.create_return();
+        } else {
+            // Create a 0 return value and a return instruction.
+            ir_builder.create_i32_constant(0);
+            ir_builder.create_return(ir_builder.pop_last_value());
+            ir_builder.set_function(wrapper_func);
+            ir_builder.set_kernel_attributes();
+        }
+        ir_builder.clear_function();
+    }
+    // for GPU we need to first clear all the annotations and then reapply them
+    if (platform.is_gpu()) {
+        annotate_wrapper_kernels_with_nvvm();
     }
 }
 
@@ -823,9 +867,6 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
 
     // Handle GPU optimizations (CUDA platfroms only for now).
     if (platform.is_gpu()) {
-        if (!platform.is_CUDA_gpu())
-            throw std::runtime_error("Error: unsupported GPU architecture!\n");
-
         // We only support CUDA backends anyway, so this works for now.
         utils::initialise_nvptx_passes();
 
@@ -839,15 +880,12 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
         logger->debug("Dumping generated IR...\n" + dump_module());
     }
 
-    // If the output directory is specified, save the IR to .ll file.
-    if (output_dir != ".") {
-        utils::save_ir_to_ll_file(*module, output_dir + "/" + mod_filename);
-    }
-
     // Setup CodegenHelper for C++ wrapper file
     setup(node);
+    // Print C++ wrapper file
     print_wrapper_routines();
-    print_target_file();
+    // Print LLVM IR module to <mod_filename>.ll file
+    utils::save_ir_to_ll_file(*module, output_dir + "/" + mod_filename);
 }
 
 void CodegenLLVMVisitor::print_mechanism_range_var_structure() {
@@ -959,6 +997,12 @@ void CodegenLLVMVisitor::print_instance_variable_setup() {
 
     // Pass ml->nodeindices pointer to node_index
     printer->add_line("inst->node_index = ml->nodeindices;");
+
+    // Setup rhs, d and their shadow vectors
+    printer->add_line(fmt::format("inst->{} = nt->_actual_rhs;", naming::NTHREAD_RHS));
+    printer->add_line(fmt::format("inst->{} = nt->_actual_d;", naming::NTHREAD_D));
+    printer->add_line(fmt::format("inst->{} = nt->_shadow_rhs;", naming::NTHREAD_RHS_SHADOW));
+    printer->add_line(fmt::format("inst->{} = nt->_shadow_d;", naming::NTHREAD_D_SHADOW));
 
     // Setup global variables
     printer->add_line("inst->{0} = nt->{0};"_format(naming::NTHREAD_T_VARIABLE));
