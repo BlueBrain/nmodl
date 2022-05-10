@@ -102,7 +102,9 @@ int main(int argc, const char* argv[]) {
     host_opt->add_flag("--c", cfg.c_backend, fmt::format("C/C++ backend ({})", cfg.c_backend))
         ->ignore_case();
     host_opt
-        ->add_flag("--omp", cfg.omp_backend, fmt::format("C/C++ backend with OpenMP ({})", cfg.omp_backend))
+        ->add_flag("--omp",
+                   cfg.omp_backend,
+                   fmt::format("C/C++ backend with OpenMP ({})", cfg.omp_backend))
         ->ignore_case();
     host_opt
         ->add_flag("--ispc",
@@ -302,7 +304,8 @@ int main(int argc, const char* argv[]) {
         /// create file path for nmodl file
         auto filepath = [cfg, modfile](const std::string& suffix, const std::string& ext) {
             static int count = 0;
-            return fmt::format("{}/{}.{}.{}.{}", cfg.scratch_dir, modfile, std::to_string(count++), suffix, ext);
+            return fmt::format(
+                "{}/{}.{}.{}.{}", cfg.scratch_dir, modfile, std::to_string(count++), suffix, ext);
         };
 
         /// nmodl_driver object creates lexer and parser, just call parser method

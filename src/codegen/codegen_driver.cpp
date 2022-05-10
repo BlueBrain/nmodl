@@ -45,7 +45,8 @@ bool CodegenDriver::prepare_mod(std::shared_ptr<ast::Program> node, const std::s
     const auto scratch_dir = cfg.scratch_dir;
     auto filepath = [scratch_dir, modfile](const std::string& suffix, const std::string& ext) {
         static int count = 0;
-        return fmt::format("{}/{}.{}.{}.{}", scratch_dir, modfile, std::to_string(count++), suffix, ext);
+        return fmt::format(
+            "{}/{}.{}.{}.{}", scratch_dir, modfile, std::to_string(count++), suffix, ext);
     };
 
     /// just visit the ast
