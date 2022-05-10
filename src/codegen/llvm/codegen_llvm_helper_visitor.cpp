@@ -239,13 +239,6 @@ std::shared_ptr<ast::InstanceStruct> CodegenLLVMHelperVisitor::create_instance_s
     add_var_with_type(VOLTAGE_VAR, FLOAT_TYPE, /*is_pointer=*/1);
     add_var_with_type(NODE_INDEX_VAR, INTEGER_TYPE, /*is_pointer=*/1);
 
-    // add dt, t, celsius
-    add_var_with_type(naming::NTHREAD_T_VARIABLE, FLOAT_TYPE, /*is_pointer=*/0);
-    add_var_with_type(naming::NTHREAD_DT_VARIABLE, FLOAT_TYPE, /*is_pointer=*/0);
-    add_var_with_type(naming::CELSIUS_VARIABLE, FLOAT_TYPE, /*is_pointer=*/0);
-    add_var_with_type(naming::SECOND_ORDER_VARIABLE, INTEGER_TYPE, /*is_pointer=*/0);
-    add_var_with_type(naming::MECH_NODECOUNT_VAR, INTEGER_TYPE, /*is_pointer=*/0);
-
     // As we do not have `NrnThread` object as an argument, we store points to rhs
     // and d to in the instance struct as well. Also need their respective shadow variables
     // in case of point process mechanism.
@@ -255,6 +248,17 @@ std::shared_ptr<ast::InstanceStruct> CodegenLLVMHelperVisitor::create_instance_s
     add_var_with_type(naming::NTHREAD_D, FLOAT_TYPE, /*is_pointer=*/1);
     add_var_with_type(naming::NTHREAD_RHS_SHADOW, FLOAT_TYPE, /*is_pointer=*/1);
     add_var_with_type(naming::NTHREAD_D_SHADOW, FLOAT_TYPE, /*is_pointer=*/1);
+
+    // NOTE: All the pointer variables should be declared before the scalar variables otherwise
+    // the allocation of memory for the variables in the InstanceStruct and their offsets will be
+    // wrong
+
+    // add dt, t, celsius
+    add_var_with_type(naming::NTHREAD_T_VARIABLE, FLOAT_TYPE, /*is_pointer=*/0);
+    add_var_with_type(naming::NTHREAD_DT_VARIABLE, FLOAT_TYPE, /*is_pointer=*/0);
+    add_var_with_type(naming::CELSIUS_VARIABLE, FLOAT_TYPE, /*is_pointer=*/0);
+    add_var_with_type(naming::SECOND_ORDER_VARIABLE, INTEGER_TYPE, /*is_pointer=*/0);
+    add_var_with_type(naming::MECH_NODECOUNT_VAR, INTEGER_TYPE, /*is_pointer=*/0);
 
     return std::make_shared<ast::InstanceStruct>(codegen_vars);
 }

@@ -26,7 +26,6 @@ trigger cvf:
   variables:
     SPACK_PACKAGE: nmodl
     SPACK_PACKAGE_SPEC: ~legacy-unit+python+llvm
-    SPACK_EXTRA_MODULES: llvm
     SPACK_INSTALL_EXTRA_FLAGS: -v
 
 spack_setup:
@@ -44,14 +43,6 @@ build:intel:
   variables:
     SPACK_PACKAGE_COMPILER: intel
 
-build:gcc:
-  extends:
-    - .spack_build
-    - .spack_nmodl
-  variables:
-    SPACK_PACKAGE_COMPILER: gcc
-    SPACK_PACKAGE_DEPENDENCIES: ^bison%gcc^flex%gcc^py-jinja2%gcc^py-sympy%gcc^py-pyyaml%gcc
-
 .nmodl_tests:
   variables:
     # https://github.com/BlueBrain/nmodl/issues/737
@@ -63,8 +54,30 @@ test:intel:
     - .nmodl_tests
   needs: ["build:intel"]
 
-test:gcc:
+.benchmark_config:
+  variables:
+    bb5_ntasks: 1
+    bb5_cpus_per_task: 1
+    bb5_memory: 16G
+    bb5_exclusive: full
+    bb5_constraint: gpu_32g # CascadeLake CPU & V100 GPU node
+
+.build_allocation:
+  variables:
+    bb5_ntasks: 2   # so we block 16 cores
+    bb5_cpus_per_task: 8 # ninja -j {this}
+    bb5_memory: 76G # ~16*384/80
+
+build_cuda:gcc:
+  extends: [.spack_build, .build_allocation]
+  variables:
+    SPACK_PACKAGE: nmodl
+    SPACK_PACKAGE_SPEC: ~legacy-unit+python+llvm+llvm_cuda
+    SPACK_INSTALL_EXTRA_FLAGS: -v
+    SPACK_PACKAGE_COMPILER: gcc
+
+test_benchmark:gcc:
   extends:
+    - .benchmark_config
     - .ctest
-    - .nmodl_tests
-  needs: ["build:gcc"]
+  needs: ["build_cuda:gcc"]

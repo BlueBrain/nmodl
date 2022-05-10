@@ -33,9 +33,6 @@ struct CodeGenConfig {
     /// true if cuda code to be generated
     bool cuda_backend = false;
 
-    /// true if llvm code to be generated
-    bool llvm_backend = false;
-
     /// true if sympy should be used for solving ODEs analytically
     bool sympy_analytic = false;
 
