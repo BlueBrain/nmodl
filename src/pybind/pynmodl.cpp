@@ -151,11 +151,14 @@ class JitDriver {
                                              : nmodl::codegen::PlatformID::GPU;
         const std::string name = cfg.llvm_gpu_name == "default" ? cfg.llvm_cpu_name
                                                                 : cfg.llvm_gpu_name;
-        platform = nmodl::codegen::Platform(
-            pid, name, cfg.llvm_math_library, cfg.llvm_float_type, cfg.llvm_vector_width);
+        platform = nmodl::codegen::Platform(pid,
+                                            name,
+                                            cfg.llvm_gpu_target_architecture,
+                                            cfg.llvm_math_library,
+                                            cfg.llvm_float_type,
+                                            cfg.llvm_vector_width);
         if (platform.is_gpu() && !platform.is_CUDA_gpu()) {
-            throw std::runtime_error(
-                "Benchmarking is only supported on CUDA GPUs at the moment");
+            throw std::runtime_error("Benchmarking is only supported on CUDA GPUs at the moment");
         }
 #ifndef NMODL_LLVM_CUDA_BACKEND
         if (platform.is_CUDA_gpu()) {
@@ -193,8 +196,7 @@ class JitDriver {
         cg_driver.prepare_mod(node, modname);
         nmodl::codegen::CodegenLLVMVisitor visitor(modname, cfg.output_dir, platform, 0);
         visitor.visit_program(*node);
-        const GPUExecutionParameters gpu_execution_parameters{cuda_grid_dim_x,
-                                                              cuda_block_dim_x};
+        const GPUExecutionParameters gpu_execution_parameters{cuda_grid_dim_x, cuda_block_dim_x};
         nmodl::benchmark::LLVMBenchmark benchmark(visitor,
                                                   modname,
                                                   cfg.output_dir,
@@ -282,7 +284,8 @@ PYBIND11_MODULE(_nmodl, m_nmodl) {
         .def_readwrite("llvm_fast_math_flags", &nmodl::codegen::CodeGenConfig::llvm_fast_math_flags)
         .def_readwrite("llvm_cpu_name", &nmodl::codegen::CodeGenConfig::llvm_cpu_name)
         .def_readwrite("llvm_gpu_name", &nmodl::codegen::CodeGenConfig::llvm_gpu_name)
-        .def_readwrite("llvm_gpu_target_architecture", &nmodl::codegen::CodeGenConfig::llvm_gpu_target_architecture)
+        .def_readwrite("llvm_gpu_target_architecture",
+                       &nmodl::codegen::CodeGenConfig::llvm_gpu_target_architecture)
         .def_readwrite("llvm_vector_width", &nmodl::codegen::CodeGenConfig::llvm_vector_width)
         .def_readwrite("llvm_opt_level_codegen",
                        &nmodl::codegen::CodeGenConfig::llvm_opt_level_codegen)

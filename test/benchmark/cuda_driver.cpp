@@ -60,8 +60,8 @@ void print_string_to_file(const std::string& ptx_compiled_module, const std::str
     ptx_file.close();
 }
 
-CUjit_target get_compute_architecture(const int compute_version_major,
-                                      const int compute_version_minor) {
+// Converts the CUDA compute version to the CUjit_target enum used by the CUJIT
+CUjit_target get_CUjit_target(const int compute_version_major, const int compute_version_minor) {
     auto compute_architecture = compute_version_major * 10 + compute_version_minor;
     switch (compute_architecture) {
     case 20:
@@ -114,6 +114,7 @@ void CUDADriver::init(const codegen::Platform& platform, BenchmarkInfo* benchmar
     device_info.name = name;
     logger->info("Using CUDA Device [0]: {}"_format(device_info.name));
 
+    // Get the compute capability of the device that is actually going to be used to run the kernel
     checkCudaErrors(cuDeviceGetAttribute(&device_info.compute_version_major,
                                          CU_DEVICE_ATTRIBUTE_COMPUTE_CAPABILITY_MAJOR,
                                          device));
@@ -173,11 +174,14 @@ void CUDADriver::init(const codegen::Platform& platform, BenchmarkInfo* benchmar
     char* jitErrorLogBuffer = new char[jitErrorLogBufferSize];
     jitOptVals[3] = jitErrorLogBuffer;
 
+    // set the exact CUDA compute target architecture based on the GPU it's going to be actually
+    // used
     jitOptions[4] = CU_JIT_TARGET;
-    auto target_architecture = get_compute_architecture(device_info.compute_version_major,
-                                                        device_info.compute_version_minor);
+    auto target_architecture = get_CUjit_target(device_info.compute_version_major,
+                                                device_info.compute_version_minor);
     jitOptVals[4] = (void*) target_architecture;
 
+    // load the LLVM module to the CUDA module (CUDA JIT compilation)
     auto cuda_jit_ret = cuModuleLoadDataEx(
         &cudaModule, ptx_compiled_module.c_str(), jitNumOptions, jitOptions, jitOptVals);
     if (!std::string(jitLogBuffer).empty()) {
@@ -186,10 +190,10 @@ void CUDADriver::init(const codegen::Platform& platform, BenchmarkInfo* benchmar
     if (!std::string(jitErrorLogBuffer).empty()) {
         logger->info("CUDA JIT ERROR LOG: {}"_format(std::string(jitErrorLogBuffer)));
     }
-    free(jitOptions);
-    free(jitOptVals);
-    free(jitLogBuffer);
-    free(jitErrorLogBuffer);
+    delete[] jitOptions;
+    delete[] jitOptVals;
+    delete[] jitLogBuffer;
+    delete[] jitErrorLogBuffer;
     checkCudaErrors(cuda_jit_ret);
 }
 
