@@ -313,6 +313,10 @@ class IRBuilder {
     /// Generates an inbounds GEP instruction for the given value and returns calculated address.
     llvm::Value* create_inbounds_gep(llvm::Value* variable, llvm::Value* index);
 
+    llvm::Value* create_member_addresses(llvm::Value* member_ptr);
+    llvm::Value* create_member_offsets(llvm::Value* start, llvm::Value* indices);
+    llvm::Value* create_atomic_loop(llvm::Value* ptrs_arr, llvm::Value* rhs, ast::BinaryOp op);
+
   private:
     /// Generates an inbounds GEP instruction for the given name and returns calculated address.
     llvm::Value* create_inbounds_gep(const std::string& variable_name, llvm::Value* index);

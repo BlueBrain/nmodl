@@ -315,6 +315,75 @@ void IRBuilder::create_atomic_op(llvm::Value* ptr, llvm::Value* update, ast::Bin
                             llvm::AtomicOrdering::SequentiallyConsistent);
 }
 
+llvm::Value*  IRBuilder::create_member_addresses(llvm::Value* member_ptr) {
+    llvm::BasicBlock* bb = builder.GetInsertBlock();
+    llvm::Module* m = bb->getParent()->getParent();
+    const int vector_width = platform.get_instruction_width();
+
+    llvm::Type* int_ptr_type = m->getDataLayout().getIntPtrType(builder.getContext());
+    llvm::Value* ptr_to_int = builder.CreatePtrToInt(member_ptr, int_ptr_type);
+
+    llvm::Type* vector_type = llvm::FixedVectorType::get(int_ptr_type, vector_width);
+    llvm::Value* zero = get_scalar_constant<llvm::ConstantInt>(get_i32_type(), 0);
+    llvm::Value* tmp =
+        builder.CreateInsertElement(llvm::UndefValue::get(vector_type), ptr_to_int, zero);
+
+    // Then, use `shufflevector` with zeroinitializer to select only 0th element.
+    llvm::Value* select = llvm::Constant::getNullValue(vector_type);
+    llvm::Value* res = builder.CreateShuffleVector(tmp, llvm::UndefValue::get(vector_type), select);
+
+    builder.SetInsertPoint(bb);
+
+    return res;
+}
+
+llvm::Value* IRBuilder::create_member_offsets(llvm::Value* start, llvm::Value* indices) {
+    llvm::Value* factor = get_vector_constant<llvm::ConstantInt>(get_i64_type(), platform.get_precision() / 8);
+    llvm::Value* offset = builder.CreateMul(indices, factor);
+    return builder.CreateAdd(start, offset);
+}
+
+llvm::Value* IRBuilder::create_atomic_loop(llvm::Value* ptrs_arr, llvm::Value* rhs, ast::BinaryOp op) {
+    const int vector_width = platform.get_instruction_width();
+    llvm::BasicBlock* curr = get_current_block();
+    llvm::BasicBlock* prev = curr->getPrevNode();
+    llvm::BasicBlock* next = curr->getNextNode();
+
+    llvm::PHINode* mask = builder.CreatePHI(get_i64_type(), /*NumReservedValues=*/2);
+    // TODO: use proper mask instead of 255!
+    llvm::Value* init_value = get_scalar_constant<llvm::ConstantInt>(get_i64_type(), ~((~0) << vector_width));
+    mask->addIncoming(init_value, prev);
+
+    llvm::Value* zero = get_scalar_constant<llvm::ConstantInt>(get_i64_type(), 0);
+    
+
+    llvm::Value* false_value = get_scalar_constant<llvm::ConstantInt>(get_boolean_type(), 0);
+    llvm::Value* count = builder.CreateIntrinsic(llvm::Intrinsic::cttz, {get_i64_type()}, {mask, false_value});
+
+    llvm::Value* one = get_scalar_constant<llvm::ConstantInt>(get_i64_type(), 1);
+    llvm::Value* minus_one = get_scalar_constant<llvm::ConstantInt>(get_i64_type(), -1);
+    llvm::Value* new_mask= builder.CreateShl(one, count);
+    new_mask = builder.CreateXor(new_mask, minus_one);
+    new_mask = builder.CreateAnd(mask, new_mask);
+
+    mask->addIncoming(new_mask, curr);
+
+    // compute!
+
+    ValueVector indices{zero, count};
+    llvm::Type* ptrs_arr_type = ptrs_arr->getType()->getPointerElementType();
+    llvm::Value* gep = builder.CreateGEP(ptrs_arr_type, ptrs_arr, indices);
+    llvm::Value* ptr = create_load(gep);
+    llvm::Value* source = create_load(ptr);
+    llvm::Value* update = builder.CreateExtractElement(rhs, count);
+
+    create_binary_op(source, update, op);
+    llvm::Value* result = pop_last_value();
+    create_store(ptr, result);
+    
+    return builder.CreateICmpEQ(new_mask, zero);
+}
+
 void IRBuilder::create_binary_op(llvm::Value* lhs, llvm::Value* rhs, ast::BinaryOp op) {
     // Check that both lhs and rhs have the same types.
     if (lhs->getType() != rhs->getType())

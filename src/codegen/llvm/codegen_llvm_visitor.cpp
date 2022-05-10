@@ -531,8 +531,105 @@ void CodegenLLVMVisitor::visit_codegen_atomic_statement(const ast::CodegenAtomic
     ast::BinaryOp op = ir_builder.extract_atomic_op(atomic_op);
 
     // For different platforms, we handle atomic updates differently!
-    if (platform.is_cpu_with_simd()) {
-        throw std::runtime_error("Error: no atomic update support for SIMD CPUs\n");
+    if (platform.is_cpu_with_simd() && ir_builder.vectorizing()) {
+        const auto& identifier = var->get_name();
+
+        // Some duplication :)
+        if (!identifier->is_codegen_instance_var())
+            throw std::runtime_error("Error: atomic updates for non-instance variable\n");
+        
+        const auto& node = std::dynamic_pointer_cast<ast::CodegenInstanceVar>(identifier);
+        const auto& instance_name = node->get_instance_var()->get_node_name();
+        const auto& member_node = node->get_member_var();
+        const auto& member_name = member_node->get_node_name();
+
+        if (!instance_var_helper.is_an_instance_variable(member_name))
+            throw std::runtime_error("Error: " + member_name +
+                                     " is not a member of the instance variable\n");
+
+        const int vector_width = platform.get_instruction_width();
+        // Step 1: insert at alloca's entry point:
+        // %p = gep to struct.result
+        // %pi = ptrtoint %p to i64
+        // broadcast (insert element) to <vector>
+        // replicate value (shufflevector)
+        // res = %start
+        
+        llvm::Value* instance_ptr = ir_builder.create_load(instance_name);
+        int member_index = instance_var_helper.get_variable_index(member_name);
+        llvm::Value* member_ptr = ir_builder.get_struct_member_ptr(instance_ptr, member_index); 
+        llvm::Value* instance_member = ir_builder.create_load(member_ptr);
+        llvm::Value* starts = ir_builder.create_member_addresses(instance_member);
+
+        // Also have: (aka type punning)
+        // %ptr.i    = < vec_length x i64 >*
+        // %tmp.cast = [array of vec_length x (fp_type)*]*
+        llvm::Type* i64_type = ir_builder.get_i64_type();
+        llvm::Type* vi64_type = llvm::FixedVectorType::get(i64_type, vector_width);
+        llvm::Value* vec_ptr = ir_builder.create_alloca(/*name=*/"ptrs", vi64_type);
+
+        llvm::Type* array_type = llvm::ArrayType::get(ir_builder.get_fp_ptr_type(), vector_width);
+        llvm::Value* ptrs_arr = ir_builder.create_bitcast(vec_ptr, llvm::PointerType::get(array_type, /*AddressSpace=*/0));
+
+        // some more duplication :(
+        auto codegen_var_with_type = instance_var_helper.get_variable(member_name);
+        if (!codegen_var_with_type->get_is_pointer())
+            throw std::runtime_error(
+                "Error: atomic updates are allowed on pointer variables only\n");
+        const auto& member_var_name = std::dynamic_pointer_cast<ast::VarName>(member_node);
+        if (!member_var_name->get_name()->is_indexed_name())
+            throw std::runtime_error("Error: " + member_name + " is not an IndexedName\n");
+        const auto& member_indexed_name = std::dynamic_pointer_cast<ast::IndexedName>(
+            member_var_name->get_name());
+        if (!member_indexed_name->get_length()->is_name())
+            throw std::runtime_error("Error: " + member_name + " must be indexed with a variable!");
+
+        // Step 2: in current block:
+        // get index as vector: %ind = < .. >
+        // calculate address: %addr = %start + %(i64)(%ind * sizeof(fp_type))
+        // store to %ptr.i (store addresses/ptrs basically)
+        llvm::Value* i64_index = get_index(*member_indexed_name);
+        llvm::Value* offsets = ir_builder.create_member_offsets(starts, i64_index);
+        ir_builder.create_store(vec_ptr, offsets);
+
+        // Step 3: create a new block by splitting it in 2, generating code, and then
+        // resetting insertion point.
+        //    [ body ]      [ body ]
+        //              ->  [scalar]
+        //                  [body]
+        llvm::BasicBlock* body_bb = ir_builder.get_current_block();
+        llvm::BasicBlock* cond_bb = body_bb->getNextNode();
+        llvm::Function* func = body_bb->getParent();
+        llvm::BasicBlock* atomic_bb = 
+            llvm::BasicBlock::Create(*context, /*Name=*/"atomic.update", func, cond_bb);
+        llvm::BasicBlock* remaining_body_bb = 
+            llvm::BasicBlock::Create(*context, /*Name=*/"for.body.remaining", func, cond_bb);
+
+        ir_builder.create_br_and_set_insertion_point(atomic_bb);
+
+        // Step 4: find next active element
+        // %mask = phi [%body, 255 (or vector length)] [%this, %new_mask]
+        // %ci = cttz %mask
+        // %tmp = shl 1, %ci
+        // %not.tmp = xor -1, %tmp
+        // %new_mask = and %mask, %not.tmp
+        llvm::Value* cmp = ir_builder.create_atomic_loop(ptrs_arr, rhs, op);
+
+        // %ptr_offsets.addr = gep %tmp_cast, 0, %ci
+        // %ptr = load from %ptr_offsets.addr
+        // %val = load from %ptr
+
+        // extract element using extractelement %update (i32)%ci
+        // perform atomic operation
+        // store result at %ptr
+
+        // icmp new_mask with 0
+        // branch based on cmp
+
+        // Restore insertion point
+        ir_builder.create_cond_br(cmp, remaining_body_bb, atomic_bb);
+        ir_builder.set_insertion_point(remaining_body_bb);
+
     } else if (platform.is_gpu()) {
         const auto& identifier = var->get_name();
 
@@ -572,7 +669,7 @@ void CodegenLLVMVisitor::visit_codegen_atomic_statement(const ast::CodegenAtomic
 
         ir_builder.create_atomic_op(ptr, rhs, op);
     } else {
-        // For non-SIMD CPUs, updates don't have to be atomic at all!
+        // For non-SIMD CPUs (or any scalar code), updates don't have to be atomic at all!
         llvm::Value* lhs = accept_and_get(node.get_lhs());
         ir_builder.create_binary_op(lhs, rhs, op);
         llvm::Value* result = ir_builder.pop_last_value();
