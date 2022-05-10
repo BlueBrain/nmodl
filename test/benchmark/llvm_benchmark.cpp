@@ -153,72 +153,36 @@ BenchmarkResults LLVMBenchmark::run_benchmark() {
     BenchmarkResults results{};
     if (external_kernel) {
         // benchmark external kernel
-        logger->info("Benchmarking external kernel");
+        logger->info("Benchmarking external kernels");
+        kernel_names = {"nrn_state_hh_ext"};
+    }
+    // Benchmark every kernel.
+    for (const auto& kernel_name: kernel_names) {
+        // For every kernel run the benchmark `num_experiments` times and collect runtimes.
         auto times = std::vector<double>(num_experiments, 0.0);
         for (int i = 0; i < num_experiments; ++i) {
             // Initialise the data.
             auto instance_data = codegen_data.create_data(instance_size, /*seed=*/1);
-
+#ifdef NMODL_LLVM_CUDA_BACKEND
+            void* dev_ptr;
+            if (platform.is_CUDA_gpu()) {
+                dev_ptr = copy_instance_data_gpu(instance_data);
+            }
+#endif
             // Log instance size once.
             if (i == 0) {
                 double size_mbs = instance_data.num_bytes / (1024.0 * 1024.0);
-                logger->info("Benchmarking kernel nrn_state_hh_ext with {} MBs dataset", size_mbs);
+                logger->info("Benchmarking kernel '{}' with {} MBs dataset",
+                                kernel_name,
+                                size_mbs);
             }
 
             // Record the execution time of the kernel.
+            std::string wrapper_name = "__" + kernel_name + "_wrapper";
             auto start = std::chrono::steady_clock::now();
-            nrn_state_hh_ext(instance_data.base_ptr);
-            auto end = std::chrono::steady_clock::now();
-            std::chrono::duration<double> diff = end - start;
-
-            // Log the time taken for each run.
-            logger->debug("Experiment {} compute time = {:.6f} sec", i, diff.count());
-
-            times[i] = diff.count();
-        }
-        // Calculate statistics
-        double time_mean = std::accumulate(times.begin(), times.end(), 0.0) / num_experiments;
-        double time_var = std::accumulate(times.begin(),
-                                          times.end(),
-                                          0.0,
-                                          [time_mean](const double& pres, const double& e) {
-                                              return (e - time_mean) * (e - time_mean);
-                                          }) /
-                          num_experiments;
-        double time_stdev = std::sqrt(time_var);
-        double time_min = *std::min_element(times.begin(), times.end());
-        double time_max = *std::max_element(times.begin(), times.end());
-        // Log the average time taken for the kernel.
-        logger->info("Average compute time = {:.6f}", time_mean);
-        logger->info("Compute time standard deviation = {:8f}", time_stdev);
-        logger->info("Minimum compute time = {:.6f}", time_min);
-        logger->info("Maximum compute time = {:.6f}\n", time_max);
-        results["nrn_state_hh_ext"] = {time_mean, time_stdev, time_min, time_max};
-    } else {
-        // Benchmark every kernel.
-        for (const auto& kernel_name: kernel_names) {
-            // For every kernel run the benchmark `num_experiments` times and collect runtimes.
-            auto times = std::vector<double>(num_experiments, 0.0);
-            for (int i = 0; i < num_experiments; ++i) {
-                // Initialise the data.
-                auto instance_data = codegen_data.create_data(instance_size, /*seed=*/1);
-#ifdef NMODL_LLVM_CUDA_BACKEND
-                void* dev_ptr;
-                if (platform.is_CUDA_gpu()) {
-                    dev_ptr = copy_instance_data_gpu(instance_data);
-                }
-#endif
-                // Log instance size once.
-                if (i == 0) {
-                    double size_mbs = instance_data.num_bytes / (1024.0 * 1024.0);
-                    logger->info("Benchmarking kernel '{}' with {} MBs dataset",
-                                 kernel_name,
-                                 size_mbs);
-                }
-
-                // Record the execution time of the kernel.
-                std::string wrapper_name = "__" + kernel_name + "_wrapper";
-                auto start = std::chrono::steady_clock::now();
+            if (external_kernel) {
+                nrn_state_hh_ext(instance_data.base_ptr);
+            } else {
 #ifdef NMODL_LLVM_CUDA_BACKEND
                 if (platform.is_CUDA_gpu()) {
                     cuda_runner->run_with_argument<void*>(wrapper_name,
@@ -230,38 +194,38 @@ BenchmarkResults LLVMBenchmark::run_benchmark() {
 #ifdef NMODL_LLVM_CUDA_BACKEND
                 }
 #endif
-                auto end = std::chrono::steady_clock::now();
-                std::chrono::duration<double> diff = end - start;
-#ifdef NMODL_LLVM_CUDA_BACKEND
-                if (platform.is_CUDA_gpu()) {
-                    copy_instance_data_host(instance_data, dev_ptr);
-                }
-#endif
-                // Log the time taken for each run.
-                logger->debug("Experiment {} compute time = {:.6f} sec", i, diff.count());
-
-                // Update statistics.
-                times[i] = diff.count();
             }
-            // Calculate statistics
-            double time_mean = std::accumulate(times.begin(), times.end(), 0.0) / num_experiments;
-            double time_var = std::accumulate(times.begin(),
-                                            times.end(),
-                                            0.0,
-                                            [time_mean](const double& pres, const double& e) {
-                                                return (e - time_mean) * (e - time_mean);
-                                            }) /
-                            num_experiments;
-            double time_stdev = std::sqrt(time_var);
-            double time_min = *std::min_element(times.begin(), times.end());
-            double time_max = *std::max_element(times.begin(), times.end());
-            // Log the average time taken for the kernel.
-            logger->info("Average compute time = {:.6f}", time_mean);
-            logger->info("Compute time standard deviation = {:8f}", time_stdev);
-            logger->info("Minimum compute time = {:.6f}", time_min);
-            logger->info("Maximum compute time = {:.6f}\n", time_max);
-            results[kernel_name] = {time_mean, time_stdev, time_min, time_max};
+            auto end = std::chrono::steady_clock::now();
+            std::chrono::duration<double> diff = end - start;
+#ifdef NMODL_LLVM_CUDA_BACKEND
+            if (platform.is_CUDA_gpu()) {
+                copy_instance_data_host(instance_data, dev_ptr);
+            }
+#endif
+            // Log the time taken for each run.
+            logger->debug("Experiment {} compute time = {:.6f} sec", i, diff.count());
+
+            // Update statistics.
+            times[i] = diff.count();
         }
+        // Calculate statistics
+        double time_mean = std::accumulate(times.begin(), times.end(), 0.0) / num_experiments;
+        double time_var = std::accumulate(times.begin(),
+                                        times.end(),
+                                        0.0,
+                                        [time_mean](const double& pres, const double& e) {
+                                            return (e - time_mean) * (e - time_mean);
+                                        }) /
+                        num_experiments;
+        double time_stdev = std::sqrt(time_var);
+        double time_min = *std::min_element(times.begin(), times.end());
+        double time_max = *std::max_element(times.begin(), times.end());
+        // Log the average time taken for the kernel.
+        logger->info("Average compute time = {:.6f}", time_mean);
+        logger->info("Compute time standard deviation = {:8f}", time_stdev);
+        logger->info("Minimum compute time = {:.6f}", time_min);
+        logger->info("Maximum compute time = {:.6f}\n", time_max);
+        results[kernel_name] = {time_mean, time_stdev, time_min, time_max};
     }
     return results;
 }
