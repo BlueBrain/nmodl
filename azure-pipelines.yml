@@ -34,8 +34,8 @@ jobs:
       sudo apt-add-repository -y ppa:deadsnakes/ppa
       sudo apt-get update
       sudo apt-get install -y g++-8 flex bison libfl-dev cython libx11-dev libxcomposite-dev libncurses-dev mpich
-      sudo apt-get install -y python3.7 python3.7-dev python3.7-venv
-      python3.7 -m pip install --upgrade pip 'setuptools<59.7.0'
+      sudo apt-get install -y python3.7 python3.7-dev python3.7-venv ninja-build
+      python3.7 -m pip install --upgrade pip setuptools
       python3.7 -m pip install --user 'Jinja2>=2.9.3' 'PyYAML>=3.13' pytest pytest-cov 'sympy>=1.3,<1.6' numpy
       # we manually get version 3.15.0 to make sure that changes in the cmake
       # files do not require unsupported versions of cmake in our package.
@@ -76,12 +76,18 @@ jobs:
   - script: |
       export PATH=$(pwd)/$CMAKE_PKG/bin:/home/vsts/.local/bin:$PATH
       export CXX='g++-8'
-      git clone --recursive --single-branch --shallow-submodules https://github.com/neuronsimulator/nrn.git
+      git clone${NEURON_BRANCH:+ --branch }${NEURON_BRANCH} --single-branch https://github.com/neuronsimulator/nrn.git
+      if [[ -n "${CORENEURON_BRANCH}" ]]; then
+        pushd nrn
+        git submodule update --init external/coreneuron
+        cd external/coreneuron
+        git checkout ${CORENEURON_BRANCH}
+        popd
+      fi
       mkdir nrn/build
       cd nrn/build
       cmake --version
       cmake .. -DNRN_ENABLE_CORENEURON=ON -DNRN_ENABLE_INTERVIEWS=OFF -DNRN_ENABLE_RX3D=OFF -DNRN_ENABLE_MPI=ON -DNRN_ENABLE_TESTS=ON -DCORENRN_ENABLE_NMODL=ON -DCORENRN_NMODL_DIR=$HOME/nmodl -Dnmodl_PYTHONPATH=$HOME/nmodl/lib -DPYTHON_EXECUTABLE=$(which python3.7) -DCORENRN_NMODL_FLAGS="sympy --analytic"
-      make -j 2
       if [ $? -ne 0 ]
       then
         make VERBOSE=1
@@ -100,7 +106,7 @@ jobs:
   - script: |
       export PATH=$(pwd)/$CMAKE_PKG/bin:/home/vsts/.local/bin:$PATH
       export CXX='g++-8'
-      git clone --recursive https://github.com/BlueBrain/CoreNeuron.git
+      git clone${CORENEURON_BRANCH:+ --branch }${CORENEURON_BRANCH} https://github.com/BlueBrain/CoreNeuron.git
       mkdir CoreNeuron/build_ispc
       cd CoreNeuron/build_ispc
       cmake --version
@@ -153,7 +159,14 @@ jobs:
   - script: |
       export PATH=$(pwd)/$CMAKE_PKG/bin:/home/vsts/.local/bin:$PATH
       export CXX='g++-8'
-      git clone --single-branch --recursive --shallow-submodules https://github.com/neuronsimulator/nrn.git
+      git clone${NEURON_BRANCH:+ --branch }${NEURON_BRANCH} --single-branch https://github.com/neuronsimulator/nrn.git
+      if [[ -n "${CORENEURON_BRANCH}" ]]; then
+        pushd nrn
+        git submodule update --init external/coreneuron
+        cd external/coreneuron
+        git checkout ${CORENEURON_BRANCH}
+        popd
+      fi
       mkdir nrn/build
       cd nrn/build
       cmake --version

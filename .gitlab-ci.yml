@@ -7,13 +7,14 @@ include:
     file: enable-upload.yml
 
 trigger cvf:
-  stage: .pre
+  needs: [spack_setup] # for SPACK_SETUP_COMMIT_MAPPING_URL
   rules:
     # Don't run on PRs targeting the LLVM development branch
     - if: '$CI_EXTERNAL_PULL_REQUEST_TARGET_BRANCH_NAME == "llvm"'
       when: never
     # Otherwise always run this
     - when: always
+  stage: .pre
   trigger:
     project: hpc/cvf
     # Make the NMODL CI status depend on the CVF CI status

@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (C) 2018-2019 Blue Brain Project
+ * Copyright (C) 2018-2022 Blue Brain Project
  *
  * This file is part of NMODL distributed under the terms of the GNU
  * Lesser General Public License. See top-level LICENSE file for details.
@@ -20,12 +20,12 @@
  *
  */
 
-using namespace fmt::literals;
 using namespace nmodl;
 
 
 int main(int argc, const char* argv[]) {
-    CLI::App app{"Unit-Parser : Standalone Parser for Units({})"_format(Version::to_string())};
+    CLI::App app{
+        fmt::format("Unit-Parser : Standalone Parser for Units({})", Version::to_string())};
 
     std::vector<std::string> units_files;
     units_files.push_back(NrnUnitsLib::get_path());

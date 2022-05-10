@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (C) 2018-2019 Blue Brain Project
+ * Copyright (C) 2018-2022 Blue Brain Project
  *
  * This file is part of NMODL distributed under the terms of the GNU
  * Lesser General Public License. See top-level LICENSE file for details.
@@ -18,11 +18,11 @@
  * basic usage of parser and driver classes.
  */
 
-using namespace fmt::literals;
 using namespace nmodl;
 
 int main(int argc, const char* argv[]) {
-    CLI::App app{"NMODL-Parser : Standalone Parser for NMODL({})"_format(Version::to_string())};
+    CLI::App app{
+        fmt::format("NMODL-Parser : Standalone Parser for NMODL({})", Version::to_string())};
 
     std::vector<std::string> mod_files;
     std::vector<std::string> mod_texts;

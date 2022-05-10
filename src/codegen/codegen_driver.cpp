@@ -45,7 +45,7 @@ bool CodegenDriver::prepare_mod(std::shared_ptr<ast::Program> node, const std::s
     const auto scratch_dir = cfg.scratch_dir;
     auto filepath = [scratch_dir, modfile](const std::string& suffix, const std::string& ext) {
         static int count = 0;
-        return "{}/{}.{}.{}.{}"_format(scratch_dir, modfile, std::to_string(count++), suffix, ext);
+        return fmt::format("{}/{}.{}.{}.{}", scratch_dir, modfile, std::to_string(count++), suffix, ext);
     };
 
     /// just visit the ast
@@ -156,8 +156,7 @@ bool CodegenDriver::prepare_mod(std::shared_ptr<ast::Program> node, const std::s
         ast_to_nmodl(*node, filename);
         if (cfg.nmodl_ast && kineticBlockVisitor.get_conserve_statement_count()) {
             logger->warn(
-                "{} presents non-standard CONSERVE statements in DERIVATIVE blocks. Use it only for debugging/developing"_format(
-                    filename));
+                fmt::format("{} presents non-standard CONSERVE statements in DERIVATIVE blocks. Use it only for debugging/developing", filename);
         }
     }
 

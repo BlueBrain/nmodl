@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (C) 2018-2019 Blue Brain Project
+ * Copyright (C) 2018-2022 Blue Brain Project
  *
  * This file is part of NMODL distributed under the terms of the GNU
  * Lesser General Public License. See top-level LICENSE file for details.
@@ -7,8 +7,6 @@
 
 #include "symtab/symbol.hpp"
 #include "utils/logger.hpp"
-
-using namespace fmt::literals;
 
 namespace nmodl {
 namespace symtab {
@@ -43,10 +41,10 @@ bool Symbol::is_variable() const noexcept {
 std::string Symbol::to_string() const {
     std::string s(name);
     if (properties != NmodlType::empty) {
-        s += " [Properties : {}]"_format(syminfo::to_string(properties));
+        s += fmt::format(" [Properties : {}]", syminfo::to_string(properties));
     }
     if (status != Status::empty) {
-        s += " [Status : {}]"_format(syminfo::to_string(status));
+        s += fmt::format(" [Status : {}]", syminfo::to_string(status));
     }
     return s;
 }

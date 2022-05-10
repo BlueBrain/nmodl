@@ -1,6 +1,6 @@
 /*************************************************************************
- * Copyright (C) 2018-2019 Blue Brain Project
- * Copyright (C) 2018-2019 Michael Hines
+ * Copyright (C) 2018-2022 Blue Brain Project
+ * Copyright (C) 2018-2022 Michael Hines
  *
  * This file is part of NMODL distributed under the terms of the GNU
  * Lesser General Public License. See top-level LICENSE file for details.
@@ -475,7 +475,8 @@ ELSE                    {
                         }
 
 <LINE_MODE>\n   |
-<LINE_MODE>\r\n         {
+<LINE_MODE>\r\n |
+<LINE_MODE>\r           {
                             /** For title return string without new line character */
                             loc.lines(1);
                             std::string str(yytext);
