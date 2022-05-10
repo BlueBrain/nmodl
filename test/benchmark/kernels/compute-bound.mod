@@ -12,6 +12,12 @@ ASSIGNED {
     v (mV)
     minf
     mtau (ms)
+    il (mA/cm2)
+}
+
+PARAMETER {
+    gl = .0003 (S/cm2)	<0,1e9>
+    el = -54.3 (mV)
 }
 
 BREAKPOINT {
