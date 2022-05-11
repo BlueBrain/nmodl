@@ -131,51 +131,51 @@ SCENARIO("Instance Struct creation", "[visitor][llvm][instance_struct]") {
             size_t node_count_index = 19;
             // Check if the various instance struct fields are properly initialized
             REQUIRE(compare(instance_data.members[minf_index],
-                            generate_dummy_data<double>(minf_index, num_elements)));
+                            generate_dummy_data<float>(minf_index, num_elements)));
             REQUIRE(compare(instance_data.members[ena_index],
-                            generate_dummy_data<double>(ena_index, num_elements)));
+                            generate_dummy_data<float>(ena_index, num_elements)));
             REQUIRE(compare(instance_data.members[ion_ena_index],
-                            generate_dummy_data<double>(ion_ena_index, num_elements)));
+                            generate_dummy_data<float>(ion_ena_index, num_elements)));
             // index variables are offsets, they start from 0
             REQUIRE(compare(instance_data.members[ion_ena_index_index],
                             generate_dummy_data<int>(0, num_elements)));
             REQUIRE(compare(instance_data.members[node_index_index],
                             generate_dummy_data<int>(0, num_elements)));
 
-            REQUIRE(*static_cast<double*>(instance_data.members[t_index]) ==
+            REQUIRE(*static_cast<float*>(instance_data.members[t_index]) ==
                     default_nthread_t_value);
             REQUIRE(*static_cast<int*>(instance_data.members[node_count_index]) == num_elements);
 
             // Hard code TestInstanceType struct
             struct TestInstanceType {
-                double* minf;
-                double* mtau;
-                double* m;
-                double* Dm;
-                double* ena;
-                double* v_unused;
-                double* g_unused;
-                double* ion_ena;
+                float* minf;
+                float* mtau;
+                float* m;
+                float* Dm;
+                float* ena;
+                float* v_unused;
+                float* g_unused;
+                float* ion_ena;
                 int* ion_ena_index;
-                double* voltage;
+                float* voltage;
                 int* node_index;
-                double* vec_rhs;
-                double* vec_d;
-                double* _shadow_rhs;
-                double* _shadow_d;
-                double t;
-                double dt;
-                double celsius;
+                float* vec_rhs;
+                float* vec_d;
+                float* _shadow_rhs;
+                float* _shadow_d;
+                float t;
+                float dt;
+                float celsius;
                 int secondorder;
                 int node_count;
             };
             // Test if TestInstanceType struct is properly initialized
             // Cast void ptr instance_data.base_ptr to TestInstanceType*
             TestInstanceType* instance = (TestInstanceType*) instance_data.base_ptr;
-            REQUIRE(compare(instance->minf, generate_dummy_data<double>(minf_index, num_elements)));
-            REQUIRE(compare(instance->ena, generate_dummy_data<double>(ena_index, num_elements)));
+            REQUIRE(compare(instance->minf, generate_dummy_data<float>(minf_index, num_elements)));
+            REQUIRE(compare(instance->ena, generate_dummy_data<float>(ena_index, num_elements)));
             REQUIRE(compare(instance->ion_ena,
-                            generate_dummy_data<double>(ion_ena_index, num_elements)));
+                            generate_dummy_data<float>(ion_ena_index, num_elements)));
             REQUIRE(compare(instance->node_index, generate_dummy_data<int>(0, num_elements)));
             REQUIRE(instance->t == default_nthread_t_value);
             REQUIRE(instance->celsius == default_celsius_value);
