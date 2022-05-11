@@ -135,8 +135,9 @@ class CodegenLLVMHelperVisitor: public visitor::AstVisitor {
 
     CodegenLLVMHelperVisitor(Platform& platform)
         : platform(platform) {
-        fp_type = platform.is_single_precision() ? ast::AstNodeType::FLOAT : ast::AstNodeType::DOUBLE;
-        }
+        fp_type = platform.is_single_precision() ? ast::AstNodeType::FLOAT
+                                                 : ast::AstNodeType::DOUBLE;
+    }
 
     const InstanceVarHelper& get_instance_var_helper() {
         return instance_var_helper;
