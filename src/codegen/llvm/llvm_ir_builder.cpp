@@ -316,25 +316,21 @@ void IRBuilder::create_atomic_op(llvm::Value* ptr, llvm::Value* update, ast::Bin
 }
 
 llvm::Value*  IRBuilder::create_member_addresses(llvm::Value* member_ptr) {
-    llvm::BasicBlock* bb = builder.GetInsertBlock();
-    llvm::Module* m = bb->getParent()->getParent();
-    const int vector_width = platform.get_instruction_width();
+    llvm::Module* m = builder.GetInsertBlock()->getParent()->getParent();
 
+    // Treat this member address as integer value. 
     llvm::Type* int_ptr_type = m->getDataLayout().getIntPtrType(builder.getContext());
     llvm::Value* ptr_to_int = builder.CreatePtrToInt(member_ptr, int_ptr_type);
 
-    llvm::Type* vector_type = llvm::FixedVectorType::get(int_ptr_type, vector_width);
+    // Create a vector that has address at 0.
+    llvm::Type* vector_type = llvm::FixedVectorType::get(int_ptr_type, platform.get_instruction_width());
     llvm::Value* zero = get_scalar_constant<llvm::ConstantInt>(get_i32_type(), 0);
     llvm::Value* tmp =
         builder.CreateInsertElement(llvm::UndefValue::get(vector_type), ptr_to_int, zero);
 
-    // Then, use `shufflevector` with zeroinitializer to select only 0th element.
+    // Finally, use `shufflevector` with zeroinitializer to replicate the 0th element.
     llvm::Value* select = llvm::Constant::getNullValue(vector_type);
-    llvm::Value* res = builder.CreateShuffleVector(tmp, llvm::UndefValue::get(vector_type), select);
-
-    builder.SetInsertPoint(bb);
-
-    return res;
+    return builder.CreateShuffleVector(tmp, llvm::UndefValue::get(vector_type), select);
 }
 
 llvm::Value* IRBuilder::create_member_offsets(llvm::Value* start, llvm::Value* indices) {
@@ -349,38 +345,44 @@ llvm::Value* IRBuilder::create_atomic_loop(llvm::Value* ptrs_arr, llvm::Value* r
     llvm::BasicBlock* prev = curr->getPrevNode();
     llvm::BasicBlock* next = curr->getNextNode();
 
-    llvm::PHINode* mask = builder.CreatePHI(get_i64_type(), /*NumReservedValues=*/2);
-    // TODO: use proper mask instead of 255!
-    llvm::Value* init_value = get_scalar_constant<llvm::ConstantInt>(get_i64_type(), ~((~0) << vector_width));
-    mask->addIncoming(init_value, prev);
-
-    llvm::Value* zero = get_scalar_constant<llvm::ConstantInt>(get_i64_type(), 0);
-    
-
+    // Some constant values.
     llvm::Value* false_value = get_scalar_constant<llvm::ConstantInt>(get_boolean_type(), 0);
-    llvm::Value* count = builder.CreateIntrinsic(llvm::Intrinsic::cttz, {get_i64_type()}, {mask, false_value});
-
+    llvm::Value* zero = get_scalar_constant<llvm::ConstantInt>(get_i64_type(), 0);
     llvm::Value* one = get_scalar_constant<llvm::ConstantInt>(get_i64_type(), 1);
     llvm::Value* minus_one = get_scalar_constant<llvm::ConstantInt>(get_i64_type(), -1);
-    llvm::Value* new_mask= builder.CreateShl(one, count);
+
+    // First, we create a PHI node that holds the mask of active vector elements.
+    llvm::PHINode* mask = builder.CreatePHI(get_i64_type(), /*NumReservedValues=*/2);
+
+    // Intially, all elements are active.
+    llvm::Value* init_value = get_scalar_constant<llvm::ConstantInt>(get_i64_type(), ~((~0) << vector_width));
+
+    // Find the index of the next active element and update the mask. This can be easily computed with:
+    //     index    = cttz(mask)
+    //     new_mask = mask & ((1 << index) ^ -1)
+    llvm::Value* index = builder.CreateIntrinsic(llvm::Intrinsic::cttz, {get_i64_type()}, {mask, false_value});
+    llvm::Value* new_mask= builder.CreateShl(one, index);
     new_mask = builder.CreateXor(new_mask, minus_one);
     new_mask = builder.CreateAnd(mask, new_mask);
 
+    // Update PHI with appropriate values.
+    mask->addIncoming(init_value, prev);
     mask->addIncoming(new_mask, curr);
 
-    // compute!
-
-    ValueVector indices{zero, count};
-    llvm::Type* ptrs_arr_type = ptrs_arr->getType()->getPointerElementType();
-    llvm::Value* gep = builder.CreateGEP(ptrs_arr_type, ptrs_arr, indices);
+    // Get the pointer to the current value, the value itself and the update.b
+    llvm::Value* gep = builder.CreateGEP(ptrs_arr->getType()->getPointerElementType(), ptrs_arr, {zero, index});
     llvm::Value* ptr = create_load(gep);
     llvm::Value* source = create_load(ptr);
-    llvm::Value* update = builder.CreateExtractElement(rhs, count);
+    llvm::Value* update = builder.CreateExtractElement(rhs, index);
 
+    // Perform the update and store the result back.
+    //     source = *ptr
+    //     *ptr = source + update
     create_binary_op(source, update, op);
     llvm::Value* result = pop_last_value();
     create_store(ptr, result);
     
+    // Return condition to break out of atomic update loop.
     return builder.CreateICmpEQ(new_mask, zero);
 }
 

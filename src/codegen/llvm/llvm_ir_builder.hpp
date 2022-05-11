@@ -313,8 +313,15 @@ class IRBuilder {
     /// Generates an inbounds GEP instruction for the given value and returns calculated address.
     llvm::Value* create_inbounds_gep(llvm::Value* variable, llvm::Value* index);
 
+    /// Creates a vector splat of starting addresses of the given member. 
     llvm::Value* create_member_addresses(llvm::Value* member_ptr);
+
+    /// Creates IR for calculating offest to member values. For more context, see `visit_codegen_atomic_statement` in LLVM visitor.
     llvm::Value* create_member_offsets(llvm::Value* start, llvm::Value* indices);
+
+    /// Creates IR to perform scalar updates to instance member based on `ptrs_arr` for every element in a vector by
+    ///     member[*ptrs_arr[i]] = member[*ptrs_arr[i]] op rhs.
+    /// Returns condition (i1 value) to break out of atomic update loop.
     llvm::Value* create_atomic_loop(llvm::Value* ptrs_arr, llvm::Value* rhs, ast::BinaryOp op);
 
   private:
