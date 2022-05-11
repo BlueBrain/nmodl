@@ -715,8 +715,7 @@ SCENARIO("Kernel with atomic updates", "[llvm][runner]") {
         runner.initialize_driver();
 
         THEN("updates are commputed correctly with vector instructions and optimizations on") {
-            runner.run_with_argument<int, void*>("__nrn_cur_test_wrapper",
-                                                 instance_data.base_ptr);
+            runner.run_with_argument<int, void*>("__nrn_cur_test_wrapper", instance_data.base_ptr);
             // Recall:
             //     ion_ina_id = mech->ion_ina_index[id]
             //     ion_ika_id = mech->ion_ika_index[id]
@@ -812,8 +811,7 @@ SCENARIO("Kernel with atomic updates", "[llvm][runner]") {
         runner.initialize_driver();
 
         THEN("Atomic updates are correct without optimizations") {
-            runner.run_with_argument<int, void*>("__nrn_cur_test_wrapper",
-                                                 instance_data.base_ptr);
+            runner.run_with_argument<int, void*>("__nrn_cur_test_wrapper", instance_data.base_ptr);
             // Recall:
             //     ion_ina_id = mech->ion_ina_index[id]
             //     ion_ika_id = mech->ion_ika_index[id]

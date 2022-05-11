@@ -545,26 +545,27 @@ void CodegenLLVMVisitor::visit_codegen_atomic_statement(const ast::CodegenAtomic
 
     // Otherwise, we either have a GPU or a SIMD CPU. Double-check to be sure.
     if (!platform.is_gpu() && !platform.is_cpu_with_simd())
-      throw std::runtime_error("Error: unknown platform - " + platform.get_name() + "\n");
+        throw std::runtime_error("Error: unknown platform - " + platform.get_name() + "\n");
 
     const auto& identifier = var->get_name();
     if (!identifier->is_codegen_instance_var())
-            throw std::runtime_error("Error: atomic updates for non-instance variable\n");
+        throw std::runtime_error("Error: atomic updates for non-instance variable\n");
 
-    const auto& codegen_intance_node = std::dynamic_pointer_cast<ast::CodegenInstanceVar>(identifier);
+    const auto& codegen_intance_node = std::dynamic_pointer_cast<ast::CodegenInstanceVar>(
+        identifier);
     const auto& instance_name = codegen_intance_node->get_instance_var()->get_node_name();
     const auto& member_node = codegen_intance_node->get_member_var();
     const auto& member_name = member_node->get_node_name();
 
-    // Sanity checks. Not that there is a bit of duplication with `read_from_or_write_to_instance` but this is not crucial for now.
+    // Sanity checks. Not that there is a bit of duplication with `read_from_or_write_to_instance`
+    // but this is not crucial for now.
     // TODO: remove this duplication!
     if (!instance_var_helper.is_an_instance_variable(member_name))
-            throw std::runtime_error("Error: " + member_name +
-                                     " is not a member of the instance variable\n");
+        throw std::runtime_error("Error: " + member_name +
+                                 " is not a member of the instance variable\n");
     auto codegen_var_with_type = instance_var_helper.get_variable(member_name);
     if (!codegen_var_with_type->get_is_pointer())
-        throw std::runtime_error(
-            "Error: atomic updates are allowed on pointer variables only\n");
+        throw std::runtime_error("Error: atomic updates are allowed on pointer variables only\n");
     const auto& member_var_name = std::dynamic_pointer_cast<ast::VarName>(member_node);
     if (!member_var_name->get_name()->is_indexed_name())
         throw std::runtime_error("Error: " + member_name + " is not an IndexedName\n");
@@ -585,7 +586,8 @@ void CodegenLLVMVisitor::visit_codegen_atomic_statement(const ast::CodegenAtomic
         llvm::Value* ptr = ir_builder.create_inbounds_gep(instance_member, i64_index);
         ir_builder.create_atomic_op(ptr, rhs, op);
     } else {
-        // SIMD case is more elaborate. We will create a scalar block that will perform necessary update. The overall structure will be
+        // SIMD case is more elaborate. We will create a scalar block that will perform necessary
+        // update. The overall structure will be
         //  +---------------------------+
         //  | <for body code>           |
         //  | <some initialisation>     |
@@ -604,20 +606,23 @@ void CodegenLLVMVisitor::visit_codegen_atomic_statement(const ast::CodegenAtomic
         //  +---------------------------+
         //  | <for body remaining code> |
         //  |                           |
-        //  +---------------------------+ 
+        //  +---------------------------+
 
-        // Step 1: Create a vector of (replicated) starting addresses of the given member. 
+        // Step 1: Create a vector of (replicated) starting addresses of the given member.
         llvm::Value* start = ir_builder.create_member_addresses(instance_member);
 
-        // Step 2: Create a vector alloca that will store addresses of member values. Then also create an array of these addresses (as pointers).
-        // While this can be moved to `IRBuilder`, the amount of code is rather negligible and thus can be left here.
+        // Step 2: Create a vector alloca that will store addresses of member values. Then also
+        // create an array of these addresses (as pointers). While this can be moved to `IRBuilder`,
+        // the amount of code is rather negligible and thus can be left here.
         const int vector_width = platform.get_instruction_width();
         llvm::Type* vi64_type = llvm::FixedVectorType::get(ir_builder.get_i64_type(), vector_width);
         llvm::Type* array_type = llvm::ArrayType::get(ir_builder.get_fp_ptr_type(), vector_width);
 
         llvm::Value* ptrs_vec = ir_builder.create_alloca(/*name=*/"ptrs", vi64_type);
-        llvm::Value* ptrs_arr = ir_builder.create_bitcast(ptrs_vec, llvm::PointerType::get(array_type, /*AddressSpace=*/0));
-        
+        llvm::Value* ptrs_arr =
+            ir_builder.create_bitcast(ptrs_vec,
+                                      llvm::PointerType::get(array_type, /*AddressSpace=*/0));
+
         // Step 3: Calculate offsets of the values in the member by:
         //     offset = start + (index * sizeof(fp_type))
         // Store this vector to a temporary for later reuse.
@@ -628,13 +633,14 @@ void CodegenLLVMVisitor::visit_codegen_atomic_statement(const ast::CodegenAtomic
         llvm::BasicBlock* body_bb = ir_builder.get_current_block();
         llvm::BasicBlock* cond_bb = body_bb->getNextNode();
         llvm::Function* func = body_bb->getParent();
-        llvm::BasicBlock* atomic_bb = 
+        llvm::BasicBlock* atomic_bb =
             llvm::BasicBlock::Create(*context, /*Name=*/"atomic.update", func, cond_bb);
-        llvm::BasicBlock* remaining_body_bb = 
+        llvm::BasicBlock* remaining_body_bb =
             llvm::BasicBlock::Create(*context, /*Name=*/"for.body.remaining", func, cond_bb);
         ir_builder.create_br_and_set_insertion_point(atomic_bb);
 
-        // Step 5: Generate code for the atomic update: go through each element in the vector performing the computation.
+        // Step 5: Generate code for the atomic update: go through each element in the vector
+        // performing the computation.
         llvm::Value* cmp = ir_builder.create_atomic_loop(ptrs_arr, rhs, op);
 
         // Create branch to close the loop and restore the insertion point.
