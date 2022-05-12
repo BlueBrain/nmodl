@@ -283,7 +283,7 @@ static void append_statements_from_block(ast::StatementVector& statements,
  * Create atomic statement for given expression of the form a[i] += expression
  * @param var Name of the variable on the LHS (it's an array), e.g. `a`
  * @param var_index Name of the index variable to access variable `var` e.g. `i`
- * @param op_str Operators like += or -=
+ * @param op_str Operators like =, += or -=
  * @param rhs_str expression that will be added or subtracted from `var[var_index]`
  * @return A statement representing atomic operation using `ast::CodegenAtomicStatement`
  */
@@ -299,23 +299,9 @@ static std::shared_ptr<ast::CodegenAtomicStatement> create_atomic_statement(
                                 /*at=*/nullptr,
                                 /*index=*/nullptr);
 
-    // LLVM IR generation is now only supporting assignment (=) and not += or -=
-    // So we need to write increment operation a += b as an assignment operation
-    // a = a + b.
-    // See https://github.com/BlueBrain/nmodl/issues/851
-
-    std::string op(op_str);
-    stringutils::remove_character(op, '=');
-
-    // make sure only + or - operator is used
-    if (op_str != "-" && op_str != "+") {
-        throw std::runtime_error("Unsupported binary operator for atomic statement");
-    }
-
-    auto* rhs = create_expression("{}[{}] {} {} "_format(var, var_index, op, rhs_str));
-    return std::make_shared<ast::CodegenAtomicStatement>(lhs,
-                                                         ast::BinaryOperator{ast::BOP_ASSIGN},
-                                                         rhs);
+    auto op = ast::BinaryOperator(ast::string_to_binaryop(op_str));
+    auto rhs = create_expression(rhs_str);
+    return std::make_shared<ast::CodegenAtomicStatement>(lhs, op, rhs);
 }
 
 /**
@@ -422,22 +408,7 @@ void CodegenLLVMHelperVisitor::ion_write_statements(BlockType type,
         index_statements.push_back(visitor::create_statement(index_statement));
 
         // pass ion variable to write and its index
-
-        // lhs variable
-        std::string lhs = "{}[{}] "_format(ion_varname, index_varname);
-
-        // lets turn a += b into a = a + b if applicable
-        // note that this is done in order to facilitate existing implementation in the llvm
-        // backend which doesn't support += or -= operators.
-        std::string statement;
-        if (!op.compare("+=")) {
-            statement = "{} = {} + {}"_format(lhs, lhs, rhs);
-        } else if (!op.compare("-=")) {
-            statement = "{} = {} - {}"_format(lhs, lhs, rhs);
-        } else {
-            statement = "{} {} {}"_format(lhs, op, rhs);
-        }
-        body_statements.push_back(visitor::create_statement(statement));
+        body_statements.push_back(create_atomic_statement(ion_varname, index_varname, op, rhs));
     };
 
     /// iterate over all ions and create write ion statements for given block type

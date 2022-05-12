@@ -1360,7 +1360,7 @@ SCENARIO("Vectorised derivative block", "[visitor][llvm][derivative]") {
                 }
                 g = (g-rhs)/0.001
                 mech->ion_dinadv[ion_dinadv_id] = mech->ion_dinadv[ion_dinadv_id]+(dina-mech->ina[id])/0.001
-                mech->ion_ina[ion_ina_id] = mech->ion_ina[ion_ina_id]+mech->ina[id]
+                mech->ion_ina[ion_ina_id] += mech->ina[id]
                 mech->vec_rhs[node_id] = mech->vec_rhs[node_id]-rhs
                 mech->vec_d[node_id] = mech->vec_d[node_id]+g
             })";
@@ -1805,6 +1805,40 @@ SCENARIO("GPU kernel body IR generation", "[visitor][llvm][gpu]") {
             REQUIRE(std::regex_search(module_string, m, log_declaration));
             REQUIRE(std::regex_search(module_string, m, log_new_call));
             REQUIRE(!std::regex_search(module_string, m, log_old_call));
+        }
+    }
+
+    GIVEN("For current update with atomic addition ") {
+        std::string nmodl_text = R"(
+            NEURON {
+                SUFFIX test
+                USEION na READ ena WRITE ina
+            }
+
+            STATE { }
+
+            ASSIGNED {
+                v (mV)
+                ena (mV)
+                ina (mA/cm2)
+            }
+
+            BREAKPOINT {
+                SOLVE states METHOD cnexp
+            }
+
+            DERIVATIVE states { }
+        )";
+
+        THEN("corresponding LLVM atomic instruction is generated") {
+            std::string module_string = run_gpu_llvm_visitor(nmodl_text,
+                                                             /*opt_level=*/0,
+                                                             /*use_single_precision=*/false);
+            std::smatch m;
+
+            // Check for atomic addition.
+            std::regex add(R"(atomicrmw fadd double\* %.*, double %.* seq_cst)");
+            REQUIRE(std::regex_search(module_string, m, add));
         }
     }
 }
