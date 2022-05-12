@@ -157,8 +157,9 @@ bool CodegenDriver::prepare_mod(std::shared_ptr<ast::Program> node, const std::s
         ast_to_nmodl(*node, filename);
         if (cfg.nmodl_ast && kineticBlockVisitor.get_conserve_statement_count()) {
             logger->warn(
-                fmt::format("{} presents non-standard CONSERVE statements in DERIVATIVE blocks. Use it only for debugging/developing",
-                    filename));
+                fmt::format("{} presents non-standard CONSERVE statements in DERIVATIVE blocks. "
+                            "Use it only for debugging/developing",
+                            filename));
         }
     }
 

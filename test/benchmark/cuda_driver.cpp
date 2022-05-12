@@ -20,8 +20,6 @@
 #include "llvm/Support/MemoryBuffer.h"
 #include "llvm/Target/TargetMachine.h"
 
-using fmt::literals::operator""_format;
-
 namespace nmodl {
 namespace runner {
 
@@ -47,7 +45,7 @@ void CUDADriver::link_libraries(llvm::Module& module, BenchmarkInfo* benchmark_i
             parseBitcodeFile(libdevice_file_memory_buffer->get()->getMemBufferRef(),
                              module.getContext());
         if (std::error_code error = errorToErrorCode(libdevice_expected_module.takeError())) {
-            throw std::runtime_error("Error reading bitcode: {}"_format(error.message()));
+            throw std::runtime_error(fmt::format("Error reading bitcode: {}", error.message()));
         }
         linker.linkInModule(std::move(libdevice_expected_module.get()),
                             llvm::Linker::LinkOnlyNeeded);
@@ -112,7 +110,7 @@ void CUDADriver::init(const codegen::Platform& platform, BenchmarkInfo* benchmar
     char name[128];
     checkCudaErrors(cuDeviceGetName(name, 128, device));
     device_info.name = name;
-    logger->info("Using CUDA Device [0]: {}"_format(device_info.name));
+    logger->info(fmt::format("Using CUDA Device [0]: {}", device_info.name));
 
     // Get the compute capability of the device that is actually going to be used to run the kernel
     checkCudaErrors(cuDeviceGetAttribute(&device_info.compute_version_major,
@@ -121,8 +119,9 @@ void CUDADriver::init(const codegen::Platform& platform, BenchmarkInfo* benchmar
     checkCudaErrors(cuDeviceGetAttribute(&device_info.compute_version_minor,
                                          CU_DEVICE_ATTRIBUTE_COMPUTE_CAPABILITY_MINOR,
                                          device));
-    logger->info("Device Compute Capability: {}.{}"_format(device_info.compute_version_major,
-                                                           device_info.compute_version_minor));
+    logger->info(fmt::format("Device Compute Capability: {}.{}",
+                             device_info.compute_version_major,
+                             device_info.compute_version_minor));
     if (device_info.compute_version_major < 2) {
         throw std::runtime_error("ERROR: Device 0 is not SM 2.0 or greater");
     }
@@ -185,10 +184,10 @@ void CUDADriver::init(const codegen::Platform& platform, BenchmarkInfo* benchmar
     auto cuda_jit_ret = cuModuleLoadDataEx(
         &cudaModule, ptx_compiled_module.c_str(), jitNumOptions, jitOptions, jitOptVals);
     if (!std::string(jitLogBuffer).empty()) {
-        logger->info("CUDA JIT INFO LOG: {}"_format(std::string(jitLogBuffer)));
+        logger->info(fmt::format("CUDA JIT INFO LOG: {}", std::string(jitLogBuffer)));
     }
     if (!std::string(jitErrorLogBuffer).empty()) {
-        logger->info("CUDA JIT ERROR LOG: {}"_format(std::string(jitErrorLogBuffer)));
+        logger->info(fmt::format("CUDA JIT ERROR LOG: {}", std::string(jitErrorLogBuffer)));
     }
     delete[] jitOptions;
     delete[] jitOptVals;

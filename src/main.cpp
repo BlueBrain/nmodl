@@ -102,7 +102,9 @@ int main(int argc, const char* argv[]) {
     host_opt->add_flag("--c", cfg.c_backend, fmt::format("C/C++ backend ({})", cfg.c_backend))
         ->ignore_case();
     host_opt
-        ->add_flag("--omp", cfg.omp_backend, fmt::format("C/C++ backend with OpenMP ({})", cfg.omp_backend))
+        ->add_flag("--omp",
+                   cfg.omp_backend,
+                   fmt::format("C/C++ backend with OpenMP ({})", cfg.omp_backend))
         ->ignore_case();
     host_opt
         ->add_flag("--ispc",
@@ -201,17 +203,17 @@ int main(int argc, const char* argv[]) {
     auto llvm_opt = app.add_subcommand("llvm", "LLVM code generation option")->ignore_case();
     auto llvm_ir_opt = llvm_opt->add_flag("--ir",
         cfg.llvm_ir,
-        "Generate LLVM IR ({})"_format(cfg.llvm_ir))->ignore_case();
+        fmt::format("Generate LLVM IR ({})", cfg.llvm_ir))->ignore_case();
     llvm_ir_opt->required(true);
     llvm_opt->add_flag("--no-debug",
         cfg.llvm_no_debug,
-        "Disable debug information ({})"_format(cfg.llvm_no_debug))->ignore_case();
+        fmt::format("Disable debug information ({})", cfg.llvm_no_debug))->ignore_case();
     llvm_opt->add_option("--opt-level-ir",
         cfg.llvm_opt_level_ir,
-        "LLVM IR optimisation level (O{})"_format(cfg.llvm_opt_level_ir))->ignore_case()->check(CLI::IsMember({"0", "1", "2", "3"}));
+        fmt::format("LLVM IR optimisation level (O{})", cfg.llvm_opt_level_ir))->ignore_case()->check(CLI::IsMember({"0", "1", "2", "3"}));
     llvm_opt->add_flag("--single-precision",
         cfg.llvm_float_type,
-        "Use single precision floating-point types ({})"_format(cfg.llvm_float_type))->ignore_case();
+        fmt::format("Use single precision floating-point types ({})", cfg.llvm_float_type))->ignore_case();
     llvm_opt->add_option("--fmf",
         cfg.llvm_fast_math_flags,
         "Fast math flags for floating-point optimizations (none)")->check(CLI::IsMember({"afn", "arcp", "contract", "ninf", "nnan", "nsz", "reassoc", "fast"}));
@@ -224,11 +226,11 @@ int main(int argc, const char* argv[]) {
         "Name of CPU platform to use")->ignore_case();
     auto simd_math_library_opt = cpu_opt->add_option("--math-library",
         cfg.llvm_math_library,
-        "Math library for SIMD code generation ({})"_format(cfg.llvm_math_library));
+        fmt::format("Math library for SIMD code generation ({})", cfg.llvm_math_library));
     simd_math_library_opt->check(CLI::IsMember({"Accelerate", "libmvec", "libsystem_m", "MASSV", "SLEEF", "SVML", "none"}));
     cpu_opt->add_option("--vector-width",
         cfg.llvm_vector_width,
-        "Explicit vectorization width for IR generation ({})"_format(cfg.llvm_vector_width))->ignore_case();
+        fmt::format("Explicit vectorization width for IR generation ({})", cfg.llvm_vector_width))->ignore_case();
 
     auto gpu_opt = app.add_subcommand("gpu", "LLVM GPU option")->ignore_case();
     gpu_opt->needs(llvm_opt);
@@ -241,7 +243,7 @@ int main(int argc, const char* argv[]) {
         "Name of target architecture to use")->ignore_case();
     auto gpu_math_library_opt = gpu_opt->add_option("--math-library",
         cfg.llvm_math_library,
-        "Math library for GPU code generation ({})"_format(cfg.llvm_math_library));
+        fmt::format("Math library for GPU code generation ({})", cfg.llvm_math_library));
     gpu_math_library_opt->check(CLI::IsMember({"libdevice"}));
 
     // Allow only one platform at a time.
@@ -253,25 +255,25 @@ int main(int argc, const char* argv[]) {
     benchmark_opt->needs(llvm_opt);
     benchmark_opt->add_flag("--run",
                             llvm_benchmark,
-                            "Run LLVM benchmark ({})"_format(llvm_benchmark))->ignore_case();
+                            fmt::format("Run LLVM benchmark ({})", llvm_benchmark))->ignore_case();
     benchmark_opt->add_option("--opt-level-codegen",
                               cfg.llvm_opt_level_codegen,
-                              "Machine code optimisation level (O{})"_format(cfg.llvm_opt_level_codegen))->ignore_case()->check(CLI::IsMember({"0", "1", "2", "3"}));
+                              fmt::format("Machine code optimisation level (O{})", cfg.llvm_opt_level_codegen))->ignore_case()->check(CLI::IsMember({"0", "1", "2", "3"}));
     benchmark_opt->add_option("--libs", cfg.shared_lib_paths, "Shared libraries to link IR against")
             ->ignore_case()
             ->check(CLI::ExistingFile);
     benchmark_opt->add_option("--instance-size",
                        instance_size,
-                       "Instance struct size ({})"_format(instance_size))->ignore_case();
+                       fmt::format("Instance struct size ({})", instance_size))->ignore_case();
     benchmark_opt->add_option("--repeat",
                               num_experiments,
-                              "Number of experiments for benchmarking ({})"_format(num_experiments))->ignore_case();
+                              fmt::format("Number of experiments for benchmarking ({})", num_experiments))->ignore_case();
     benchmark_opt->add_option("--grid-dim-x",
                               llvm_cuda_grid_dim_x,
-                              "Grid dimension X ({})"_format(llvm_cuda_grid_dim_x))->ignore_case();
+                              fmt::format("Grid dimension X ({})", llvm_cuda_grid_dim_x))->ignore_case();
     benchmark_opt->add_option("--block-dim-x",
                                 llvm_cuda_block_dim_x,
-                                "Block dimension X ({})"_format(llvm_cuda_block_dim_x))->ignore_case();
+                                fmt::format("Block dimension X ({})", llvm_cuda_block_dim_x))->ignore_case();
 #endif
     // clang-format on
 
