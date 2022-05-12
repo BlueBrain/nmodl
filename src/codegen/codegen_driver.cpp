@@ -181,7 +181,11 @@ bool CodegenDriver::prepare_mod(std::shared_ptr<ast::Program> node, const std::s
     /// that old symbols (e.g. prime variables) are not lost
     update_symtab = true;
 
+#ifdef NMODL_LLVM_BACKEND
     if (cfg.nmodl_inline || cfg.llvm_ir) {
+#else
+    if (cfg.nmodl_inline) {
+#endif
         logger->info("Running nmodl inline visitor");
         InlineVisitor().visit_program(*node);
         ast_to_nmodl(*node, filepath("inline", "mod"));
