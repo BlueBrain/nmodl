@@ -22,7 +22,6 @@ using symtab::syminfo::Status;
 
 /// initialize static member variables
 const ast::AstNodeType CodegenLLVMHelperVisitor::INTEGER_TYPE = ast::AstNodeType::INTEGER;
-const ast::AstNodeType CodegenLLVMHelperVisitor::FLOAT_TYPE = ast::AstNodeType::DOUBLE;
 const std::string CodegenLLVMHelperVisitor::NODECOUNT_VAR = "node_count";
 const std::string CodegenLLVMHelperVisitor::VOLTAGE_VAR = "voltage";
 const std::string CodegenLLVMHelperVisitor::NODE_INDEX_VAR = "node_index";
@@ -152,7 +151,7 @@ void CodegenLLVMHelperVisitor::create_function_for_node(ast::Block& node) {
     /// return type based on node type
     ast::CodegenVarType* ret_var_type = nullptr;
     if (node.get_node_type() == ast::AstNodeType::FUNCTION_BLOCK) {
-        ret_var_type = new ast::CodegenVarType(FLOAT_TYPE);
+        ret_var_type = new ast::CodegenVarType(fp_type);
     } else {
         ret_var_type = new ast::CodegenVarType(INTEGER_TYPE);
     }
@@ -183,7 +182,7 @@ void CodegenLLVMHelperVisitor::create_function_for_node(ast::Block& node) {
     ast::CodegenVarWithTypeVector arguments;
     for (const auto& param: node.get_parameters()) {
         /// create new type and name for creating new ast node
-        auto type = new ast::CodegenVarType(FLOAT_TYPE);
+        auto type = new ast::CodegenVarType(fp_type);
         auto var = param->get_name()->clone();
         arguments.emplace_back(new ast::CodegenVarWithType(type, /*is_pointer=*/0, var));
     }
@@ -219,12 +218,12 @@ std::shared_ptr<ast::InstanceStruct> CodegenLLVMHelperVisitor::create_instance_s
 
     /// float variables are standard pointers to float vectors
     for (const auto& float_var: info.codegen_float_variables) {
-        add_var_with_type(float_var->get_name(), FLOAT_TYPE, /*is_pointer=*/1);
+        add_var_with_type(float_var->get_name(), fp_type, /*is_pointer=*/1);
     }
 
     /// int variables are pointers to indexes for other vectors
     for (const auto& int_var: info.codegen_int_variables) {
-        add_var_with_type(int_var.symbol->get_name(), FLOAT_TYPE, /*is_pointer=*/1);
+        add_var_with_type(int_var.symbol->get_name(), fp_type, /*is_pointer=*/1);
     }
 
     // for integer variables, there should be index
@@ -234,7 +233,7 @@ std::shared_ptr<ast::InstanceStruct> CodegenLLVMHelperVisitor::create_instance_s
     }
 
     // add voltage and node index
-    add_var_with_type(VOLTAGE_VAR, FLOAT_TYPE, /*is_pointer=*/1);
+    add_var_with_type(VOLTAGE_VAR, fp_type, /*is_pointer=*/1);
     add_var_with_type(NODE_INDEX_VAR, INTEGER_TYPE, /*is_pointer=*/1);
 
     // As we do not have `NrnThread` object as an argument, we store points to rhs
@@ -242,19 +241,19 @@ std::shared_ptr<ast::InstanceStruct> CodegenLLVMHelperVisitor::create_instance_s
     // in case of point process mechanism.
     // Note: shadow variables are not used at the moment because reduction will be taken care
     // by LLVM backend (even on CPU via sequential add like ISPC).
-    add_var_with_type(naming::NTHREAD_RHS, FLOAT_TYPE, /*is_pointer=*/1);
-    add_var_with_type(naming::NTHREAD_D, FLOAT_TYPE, /*is_pointer=*/1);
-    add_var_with_type(naming::NTHREAD_RHS_SHADOW, FLOAT_TYPE, /*is_pointer=*/1);
-    add_var_with_type(naming::NTHREAD_D_SHADOW, FLOAT_TYPE, /*is_pointer=*/1);
+    add_var_with_type(naming::NTHREAD_RHS, fp_type, /*is_pointer=*/1);
+    add_var_with_type(naming::NTHREAD_D, fp_type, /*is_pointer=*/1);
+    add_var_with_type(naming::NTHREAD_RHS_SHADOW, fp_type, /*is_pointer=*/1);
+    add_var_with_type(naming::NTHREAD_D_SHADOW, fp_type, /*is_pointer=*/1);
 
     // NOTE: All the pointer variables should be declared before the scalar variables otherwise
     // the allocation of memory for the variables in the InstanceStruct and their offsets will be
     // wrong
 
     // add dt, t, celsius
-    add_var_with_type(naming::NTHREAD_T_VARIABLE, FLOAT_TYPE, /*is_pointer=*/0);
-    add_var_with_type(naming::NTHREAD_DT_VARIABLE, FLOAT_TYPE, /*is_pointer=*/0);
-    add_var_with_type(naming::CELSIUS_VARIABLE, FLOAT_TYPE, /*is_pointer=*/0);
+    add_var_with_type(naming::NTHREAD_T_VARIABLE, fp_type, /*is_pointer=*/0);
+    add_var_with_type(naming::NTHREAD_DT_VARIABLE, fp_type, /*is_pointer=*/0);
+    add_var_with_type(naming::CELSIUS_VARIABLE, fp_type, /*is_pointer=*/0);
     add_var_with_type(naming::SECOND_ORDER_VARIABLE, INTEGER_TYPE, /*is_pointer=*/0);
     add_var_with_type(naming::MECH_NODECOUNT_VAR, INTEGER_TYPE, /*is_pointer=*/0);
 
@@ -526,7 +525,7 @@ void CodegenLLVMHelperVisitor::convert_local_statement(ast::StatementBlock& node
         parent_node->erase_statement(to_delete);
 
         /// create new codegen variable statement and insert at the beginning of the block
-        auto type = new ast::CodegenVarType(FLOAT_TYPE);
+        auto type = new ast::CodegenVarType(fp_type);
         auto new_statement = std::make_shared<ast::CodegenVarListStatement>(type, variables);
         const auto& statements = parent_node->get_statements();
         parent_node->insert_statement(statements.begin(), new_statement);
@@ -811,7 +810,7 @@ void CodegenLLVMHelperVisitor::create_compute_body_loop(std::shared_ptr<ast::Sta
 
     // Push variables and  the loop to the function statements vector.
     function_statements.push_back(create_local_variable_statement(int_variables, INTEGER_TYPE));
-    function_statements.push_back(create_local_variable_statement(double_variables, FLOAT_TYPE));
+    function_statements.push_back(create_local_variable_statement(double_variables, fp_type));
     function_statements.push_back(for_loop);
 }
 
