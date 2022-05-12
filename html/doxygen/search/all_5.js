@@ -43,6 +43,8 @@ var searchData=
   ['float_5fvariables_5fsize',['float_variables_size',['../classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a4aaff090ebeca524472fbb842a8fd357',1,'nmodl::codegen::CodegenCVisitor']]],
   ['floatvector',['FloatVector',['../group__ast__vec__type.html#ga4204478b34e54d7328143823b2917049',1,'nmodl::ast']]],
   ['flush',['flush',['../classnmodl_1_1printer_1_1_j_s_o_n_printer.html#a0fafa2042d3c4868e7571614702b9d00',1,'nmodl::printer::JSONPrinter::flush()'],['../classnmodl_1_1visitor_1_1_j_s_o_n_visitor.html#aadfc27a4800413c0bda95ddb0d640f7a',1,'nmodl::visitor::JSONVisitor::flush()']]],
+  ['fmt_5fline',['fmt_line',['../classnmodl_1_1printer_1_1_code_printer.html#afa07551e3c50df27cd236c5c27f2fbed',1,'nmodl::printer::CodePrinter']]],
+  ['fmt_5fstart_5fblock',['fmt_start_block',['../classnmodl_1_1printer_1_1_code_printer.html#a01d7c39fba39be68ea35f81f9ed1b5da',1,'nmodl::printer::CodePrinter']]],
   ['for_5fall_5fstatement',['FOR_ALL_STATEMENT',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033ac3975f300c81346cf1cc3931bed38f59',1,'nmodl::ast']]],
   ['for_5fall_5fstatement_2ehpp',['for_all_statement.hpp',['../for__all__statement_8hpp.html',1,'']]],
   ['for_5fnetcon',['FOR_NETCON',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033ac370771ae7d028d9e7edb7342d9a1b74',1,'nmodl::ast']]],

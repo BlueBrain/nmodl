@@ -134,7 +134,7 @@ var searchData=
   ['sparse_5fsolver_5fexists',['sparse_solver_exists',['../namespacenmodl.html#a21160c42746b7846b552e45572d8e083',1,'nmodl']]],
   ['spfloor',['spfloor',['../fast__math_8ispc.html#a764e7d6293a6b079335e147c126dab3e',1,'fast_math.ispc']]],
   ['split_5fstring',['split_string',['../group__utils.html#gab27701783c8231e8a759a2ce717dfc8b',1,'nmodl::stringutils']]],
-  ['start_5fblock',['start_block',['../classnmodl_1_1printer_1_1_code_printer.html#a1113dc8a5738c4c284cd996fbe5904ca',1,'nmodl::printer::CodePrinter::start_block()'],['../classnmodl_1_1printer_1_1_code_printer.html#a639b3334a258eb9f98694104017086b3',1,'nmodl::printer::CodePrinter::start_block(std::string &amp;&amp;)']]],
+  ['start_5fblock',['start_block',['../classnmodl_1_1printer_1_1_code_printer.html#a1113dc8a5738c4c284cd996fbe5904ca',1,'nmodl::printer::CodePrinter::start_block()'],['../classnmodl_1_1printer_1_1_code_printer.html#aa4f32cc8cf4d66ed06f530b2465eda1f',1,'nmodl::printer::CodePrinter::start_block(std::string &amp;&amp;expression)']]],
   ['start_5fcolumn',['start_column',['../classnmodl_1_1_mod_token.html#aaa3b18bfbd865d04756ce30625d57735',1,'nmodl::ModToken']]],
   ['start_5fline',['start_line',['../classnmodl_1_1_mod_token.html#a9c2ef58ff89439f410f81ee9a7255849',1,'nmodl::ModToken']]],
   ['start_5fnew_5fchain',['start_new_chain',['../classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html#a7a8de523f58ac55c992b436cac1e8477',1,'nmodl::visitor::DefUseAnalyzeVisitor']]],

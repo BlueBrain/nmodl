@@ -103,7 +103,7 @@ $(document).ready(function(){initNavTree('classnmodl_1_1codegen_1_1_codegen_help
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Helper visitor to gather AST information to help code generation. </p>
 <p>Code generation pass needs various information from AST and symbol table. Different code generation backends will need this information. This helper pass visit ast and collect all information into single class object of <a class="el" href="structnmodl_1_1codegen_1_1_codegen_info.html" title="Represent information collected from AST for code generation. ">CodegenInfo</a>.</p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000022">Todo:</a></b></dt><dd><ul>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000021">Todo:</a></b></dt><dd><ul>
 <li>Determine <code>vectorize</code> as part of the pass</li>
 <li>Determine <code>threadsafe</code> as part of the pass</li>
 <li>Global variable order is not preserved, for example, below gives different order:<ul>
@@ -872,7 +872,7 @@ Private Attributes</h2></td></tr>
 <p>Top local variables are local variables appear in global scope. All local variables in program symbol table are in global scope.</p>
 <p>All global variables remain global if mod file is not marked thread safe. Otherwise, global variables written at least once gets promoted to thread variables.</p>
 <p>If parameter is not a range and used only as read variable then it becomes global variable. To qualify it as thread variable it must be be written at least once and mod file must be marked as thread safe. To exclusively get parameters only, we exclude all other variables (in without) and then sort them with neuron/mod2c order.</p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000020">Todo:</a></b></dt><dd>Below we calculate thread related id and sizes. This will need to do from global analysis pass as here we are handling top local variables, global variables, derivimplicit method. There might be more use cases with other solver methods. </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000019">Todo:</a></b></dt><dd>Below we calculate thread related id and sizes. This will need to do from global analysis pass as here we are handling top local variables, global variables, derivimplicit method. There might be more use cases with other solver methods. </dd></dl>
 <p>If derivimplicit is used, then first three thread ids get assigned to: 1st thread is used for: deriv_advance 2nd thread is used for: dith 3rd thread is used for: newtonspace</p>
 <p>slist and dlist represent the offsets for prime variables used. For euler or derivimplicit methods its always first number.</p>
 <p>next thread id is allocated for top local variables</p>
@@ -1876,7 +1876,7 @@ Private Attributes</h2></td></tr>
 <p>Visit statement block and find prime symbols appear in derivative block. </p>
 <p>Equation statements in derivative block has prime on the lhs. The order of primes could be different that declaration state block. Also, not all state variables need to appear in equation block. In this case, we want to find out the the primes in the order of equation definition. This is just to keep the same order as neuron implementation.</p>
 <p>The primes are already solved and replaced by Dstate or name. And hence we need to check if the lhs variable is derived from prime name. If it's Dstate then we have to lookup state to find out corresponding symbol. This is because prime_variables_by_order should contain state variable name and not the one replaced by solver pass.</p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000021">Todo:</a></b></dt><dd>AST can have duplicate DERIVATIVE blocks if a mod file uses SOLVE statements in its INITIAL block (e.g. in case of kinetic schemes using <code>STEADYSTATE sparse</code> solver). Such duplicated DERIVATIVE blocks could be removed by <code>SolveBlockVisitor</code>, or we have to avoid visiting them here. See e.g. SH_na8st.mod test and original reduced_dentate .mod. </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000020">Todo:</a></b></dt><dd>AST can have duplicate DERIVATIVE blocks if a mod file uses SOLVE statements in its INITIAL block (e.g. in case of kinetic schemes using <code>STEADYSTATE sparse</code> solver). Such duplicated DERIVATIVE blocks could be removed by <code>SolveBlockVisitor</code>, or we have to avoid visiting them here. See e.g. SH_na8st.mod test and original reduced_dentate .mod. </dd></dl>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a79db386abc3a7633c0425faaaa951f2a">nmodl::visitor::ConstVisitor</a>.</p>
 

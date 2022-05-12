@@ -179,7 +179,7 @@ var searchData=
   ['square_5froot_5fulp',['SQUARE_ROOT_ULP',['../group__solver.html#ga893d5f51da0a0a677d9ec6a310592c9c',1,'nmodl::newton']]],
   ['stack',['stack',['../classnmodl_1_1printer_1_1_j_s_o_n_printer.html#affc73b2da5c85b5035fcb0a30a9ef04b',1,'nmodl::printer::JSONPrinter']]],
   ['start',['start',['../classnmodl_1_1ast_1_1_assigned_definition.html#a88b67a185afd13c015de00a64d098754',1,'nmodl::ast::AssignedDefinition::start()'],['../classnmodl_1_1ast_1_1_independent_definition.html#ab3c2446c09f750b4d64ff8e852fab77e',1,'nmodl::ast::IndependentDefinition::start()']]],
-  ['start_5fblock',['start_block',['../classnmodl_1_1printer_1_1_code_printer.html#a1113dc8a5738c4c284cd996fbe5904ca',1,'nmodl::printer::CodePrinter::start_block()'],['../classnmodl_1_1printer_1_1_code_printer.html#a639b3334a258eb9f98694104017086b3',1,'nmodl::printer::CodePrinter::start_block(std::string &amp;&amp;)']]],
+  ['start_5fblock',['start_block',['../classnmodl_1_1printer_1_1_code_printer.html#a1113dc8a5738c4c284cd996fbe5904ca',1,'nmodl::printer::CodePrinter::start_block()'],['../classnmodl_1_1printer_1_1_code_printer.html#aa4f32cc8cf4d66ed06f530b2465eda1f',1,'nmodl::printer::CodePrinter::start_block(std::string &amp;&amp;expression)']]],
   ['start_5fcolumn',['start_column',['../classnmodl_1_1_mod_token.html#aaa3b18bfbd865d04756ce30625d57735',1,'nmodl::ModToken']]],
   ['start_5fline',['start_line',['../classnmodl_1_1_mod_token.html#a9c2ef58ff89439f410f81ee9a7255849',1,'nmodl::ModToken']]],
   ['start_5fmeasurement',['start_measurement',['../classnmodl_1_1visitor_1_1_perf_visitor.html#aeaab694b2635c7c0d6187ab382c976cb',1,'nmodl::visitor::PerfVisitor']]],
