@@ -887,7 +887,7 @@ bool CodegenCVisitor::nrn_cur_reduction_loop_required() {
 
 void CodegenCVisitor::print_channel_iteration_loop(const std::string& start = "start",
                                                    const std::string& end = "end") {
-    printer->start_block("for (int id = {}; id < {}; id++)"_format(start, end));
+    printer->start_block(fmt::format("for (int id = {}; id < {}; id++)", start, end));
 }
 
 

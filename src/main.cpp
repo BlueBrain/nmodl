@@ -222,11 +222,11 @@ int main(int argc, const char* argv[]) {
         "Name of CPU platform to use")->ignore_case();
     auto simd_math_library_opt = cpu_opt->add_option("--math-library",
         cfg.llvm_math_library,
-        "Math library for SIMD code generation ({})"_format(cfg.llvm_math_library));
+        fmt::format("Math library for SIMD code generation ({})", cfg.llvm_math_library));
     simd_math_library_opt->check(CLI::IsMember({"Accelerate", "libmvec", "libsystem_m", "MASSV", "SLEEF", "SVML", "none"}));
     cpu_opt->add_option("--vector-width",
         cfg.llvm_vector_width,
-        "Explicit vectorization width for IR generation ({})"_format(cfg.llvm_vector_width))->ignore_case();
+        fmt::format("Explicit vectorization width for IR generation ({})", cfg.llvm_vector_width))->ignore_case();
 
     auto gpu_opt = app.add_subcommand("gpu", "LLVM GPU option")->ignore_case();
     gpu_opt->needs(llvm_opt);
@@ -239,7 +239,7 @@ int main(int argc, const char* argv[]) {
         "Name of target architecture to use")->ignore_case();
     auto gpu_math_library_opt = gpu_opt->add_option("--math-library",
         cfg.llvm_math_library,
-        "Math library for GPU code generation ({})"_format(cfg.llvm_math_library));
+        fmt::format("Math library for GPU code generation ({})", cfg.llvm_math_library));
     gpu_math_library_opt->check(CLI::IsMember({"libdevice"}));
 
     // Allow only one platform at a time.

@@ -933,7 +933,7 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
 void CodegenLLVMVisitor::print_mechanism_range_var_structure() {
     printer->add_newline(2);
     printer->add_line("/** Instance Struct passed as argument to LLVM IR kernels */");
-    printer->start_block("struct {} "_format(instance_struct()));
+    printer->start_block(fmt::format("struct {} ", instance_struct()));
     for (const auto& variable: instance_var_helper.instance->get_codegen_vars()) {
         auto is_pointer = variable->get_is_pointer();
         auto name = to_nmodl(variable->get_name());
@@ -942,10 +942,14 @@ void CodegenLLVMVisitor::print_mechanism_range_var_structure() {
         auto pointer = is_pointer ? "*" : "";
         auto var_name = variable->get_node_name();
         switch (nmodl_type) {
-#define DISPATCH(type, c_type)                                                              \
-    case type:                                                                              \
-        printer->add_line("{}{}{} {}{};"_format(                                            \
-            qualifier, c_type, pointer, is_pointer ? ptr_type_qualifier() : "", var_name)); \
+#define DISPATCH(type, c_type)                                                \
+    case type:                                                                \
+        printer->add_line(fmt::format("{}{}{} {}{};",                         \
+                                      qualifier,                              \
+                                      c_type,                                 \
+                                      pointer,                                \
+                                      is_pointer ? ptr_type_qualifier() : "", \
+                                      var_name));                             \
         break;
 
             DISPATCH(ast::AstNodeType::DOUBLE, "double");
@@ -972,7 +976,8 @@ void CodegenLLVMVisitor::print_instance_variable_setup() {
     printer->add_newline(2);
     printer->add_line("/** initialize mechanism instance variables */");
     printer->start_block("static inline void setup_instance(NrnThread* nt, Memb_list* ml) ");
-    printer->add_line("{0}* inst = ({0}*) mem_alloc(1, sizeof({0}));"_format(instance_struct()));
+    printer->add_line(
+        fmt::format("{0}* inst = ({0}*) mem_alloc(1, sizeof({0}));", instance_struct()));
     if (channel_task_dependency_enabled() && !info.codegen_shadow_variables.empty()) {
         printer->add_line("setup_shadow_vectors(inst, ml);");
     }
@@ -995,12 +1000,12 @@ void CodegenLLVMVisitor::print_instance_variable_setup() {
         auto name = var->get_name();
         auto range_var_type = get_range_var_float_type(var);
         if (float_type == range_var_type) {
-            auto variable = "ml->data+{}{}"_format(id, stride);
+            auto variable = fmt::format("ml->data+{}{}", id, stride);
             auto device_variable = get_variable_device_pointer(variable, float_type_pointer);
-            printer->add_line("inst->{} = {};"_format(name, device_variable));
+            printer->add_line(fmt::format("inst->{} = {};", name, device_variable));
         } else {
-            printer->add_line("inst->{} = setup_range_variable(ml->data+{}{}, pnodecount);"_format(
-                name, id, stride));
+            printer->add_line(fmt::format(
+                "inst->{} = setup_range_variable(ml->data+{}{}, pnodecount);", name, id, stride));
             variables_to_free.push_back(name);
         }
         id += var->get_length();
@@ -1021,7 +1026,7 @@ void CodegenLLVMVisitor::print_instance_variable_setup() {
             type = info.artificial_cell ? "void*" : float_type_pointer;
         }
         auto device_variable = get_variable_device_pointer(variable, type);
-        printer->add_line("inst->{} = {};"_format(name, device_variable));
+        printer->add_line(fmt::format("inst->{} = {};", name, device_variable));
     }
 
     int index_id = 0;
@@ -1030,7 +1035,7 @@ void CodegenLLVMVisitor::print_instance_variable_setup() {
         std::string var_name = int_var.symbol->get_name() + "_index";
         // Create for loop that instantiates the ion_<var>_index with
         // indexes[<var_id>*pdnodecount]
-        printer->add_line("inst->{} = indexes+{}*pnodecount;"_format(var_name, index_id));
+        printer->add_line(fmt::format("inst->{} = indexes+{}*pnodecount;", var_name, index_id));
         index_id++;
     }
 
@@ -1047,21 +1052,21 @@ void CodegenLLVMVisitor::print_instance_variable_setup() {
     printer->add_line(fmt::format("inst->{} = nt->_shadow_d;", naming::NTHREAD_D_SHADOW));
 
     // Setup global variables
-    printer->add_line("inst->{0} = nt->{0};"_format(naming::NTHREAD_T_VARIABLE));
-    printer->add_line("inst->{0} = nt->{0};"_format(naming::NTHREAD_DT_VARIABLE));
-    printer->add_line("inst->{0} = {0};"_format(naming::CELSIUS_VARIABLE));
-    printer->add_line("inst->{0} = {0};"_format(naming::SECOND_ORDER_VARIABLE));
-    printer->add_line("inst->{} = ml->nodecount;"_format(naming::MECH_NODECOUNT_VAR));
+    printer->add_line(fmt::format("inst->{0} = nt->{0};", naming::NTHREAD_T_VARIABLE));
+    printer->add_line(fmt::format("inst->{0} = nt->{0};", naming::NTHREAD_DT_VARIABLE));
+    printer->add_line(fmt::format("inst->{0} = {0};", naming::CELSIUS_VARIABLE));
+    printer->add_line(fmt::format("inst->{0} = {0};", naming::SECOND_ORDER_VARIABLE));
+    printer->add_line(fmt::format("inst->{} = ml->nodecount;", naming::MECH_NODECOUNT_VAR));
 
     printer->add_line("ml->instance = inst;");
     printer->end_block(3);
 
     printer->add_line("/** cleanup mechanism instance variables */");
     printer->start_block("static inline void cleanup_instance(Memb_list* ml) ");
-    printer->add_line("{0}* inst = ({0}*) ml->instance;"_format(instance_struct()));
+    printer->add_line(fmt::format("{0}* inst = ({0}*) ml->instance;", instance_struct()));
     if (range_variable_setup_required()) {
         for (auto& var: variables_to_free) {
-            printer->add_line("mem_free((void*)inst->{});"_format(var));
+            printer->add_line(fmt::format("mem_free((void*)inst->{});", var));
         }
     }
     printer->add_line("mem_free((void*)inst);");
@@ -1071,7 +1076,7 @@ void CodegenLLVMVisitor::print_instance_variable_setup() {
 CodegenLLVMVisitor::ParamVector CodegenLLVMVisitor::get_compute_function_parameter() {
     auto params = ParamVector();
     params.emplace_back(param_type_qualifier(),
-                        "{}*"_format(instance_struct()),
+                        fmt::format("{}*", instance_struct()),
                         ptr_type_qualifier(),
                         "inst");
     return params;
@@ -1082,18 +1087,19 @@ void CodegenLLVMVisitor::print_backend_compute_routine_decl() {
     auto compute_function = compute_method_name(BlockType::Initial);
 
     printer->add_newline(2);
-    printer->add_line("extern void {}({});"_format(compute_function, get_parameter_str(params)));
+    printer->add_line(
+        fmt::format("extern void {}({});", compute_function, get_parameter_str(params)));
 
     if (info.nrn_cur_required()) {
         compute_function = compute_method_name(BlockType::Equation);
         printer->add_line(
-            "extern void {}({});"_format(compute_function, get_parameter_str(params)));
+            fmt::format("extern void {}({});", compute_function, get_parameter_str(params)));
     }
 
     if (info.nrn_state_required()) {
         compute_function = compute_method_name(BlockType::State);
         printer->add_line(
-            "extern void {}({});"_format(compute_function, get_parameter_str(params)));
+            fmt::format("extern void {}({});", compute_function, get_parameter_str(params)));
     }
 }
 
@@ -1105,10 +1111,10 @@ void CodegenLLVMVisitor::print_wrapper_routine(const std::string& wrapper_functi
     auto compute_function = compute_method_name(type);
 
     printer->add_newline(2);
-    printer->start_block("void {}({})"_format(function_name, args));
+    printer->start_block(fmt::format("void {}({})", function_name, args));
     printer->add_line("int nodecount = ml->nodecount;");
     // clang-format off
-    printer->add_line("{0}* {1}inst = ({0}*) ml->instance;"_format(instance_struct(), ptr_type_qualifier()));
+    printer->add_line(fmt::format("{0}* {1}inst = ({0}*) ml->instance;", instance_struct(), ptr_type_qualifier()));
     // clang-format on
 
     if (type == BlockType::Initial) {
@@ -1121,7 +1127,7 @@ void CodegenLLVMVisitor::print_wrapper_routine(const std::string& wrapper_functi
         printer->add_newline();
     }
 
-    printer->add_line("{}(inst);"_format(compute_function));
+    printer->add_line(fmt::format("{}(inst);", compute_function));
     printer->end_block();
     printer->add_newline();
 }

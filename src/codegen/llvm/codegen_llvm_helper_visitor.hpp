@@ -24,7 +24,6 @@
 namespace nmodl {
 namespace codegen {
 
-using namespace fmt::literals;
 typedef std::vector<std::shared_ptr<ast::CodegenFunction>> CodegenFunctionVector;
 
 /**
@@ -66,7 +65,7 @@ struct InstanceVarHelper {
         const auto& vars = instance->get_codegen_vars();
         auto it = find_variable(vars, name);
         if (it == vars.end()) {
-            throw std::runtime_error("Can not find variable with name {}"_format(name));
+            throw std::runtime_error(fmt::format("Can not find variable with name {}", name));
         }
         return *it;
     }
@@ -76,7 +75,8 @@ struct InstanceVarHelper {
         const auto& vars = instance->get_codegen_vars();
         auto it = find_variable(vars, name);
         if (it == vars.end()) {
-            throw std::runtime_error("Can not find codegen variable with name {}"_format(name));
+            throw std::runtime_error(
+                fmt::format("Can not find codegen variable with name {}", name));
         }
         return (it - vars.begin());
     }
