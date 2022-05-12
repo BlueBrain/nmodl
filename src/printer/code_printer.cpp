@@ -47,6 +47,14 @@ void CodePrinter::start_block(const std::string& text) {
     indent_level++;
 }
 
+void CodePrinter::restart_block(std::string const& expression) {
+    --indent_level;
+    add_indent();
+    *result << "} " << expression << " {";
+    add_newline();
+    ++indent_level;
+}
+
 void CodePrinter::add_indent() {
     *result << std::string(indent_level * NUM_SPACES, ' ');
 }
