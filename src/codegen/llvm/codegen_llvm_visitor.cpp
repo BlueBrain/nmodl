@@ -512,31 +512,73 @@ void CodegenLLVMVisitor::visit_boolean(const ast::Boolean& node) {
     ir_builder.create_boolean_constant(node.get_value());
 }
 
-/**
- * Currently, this functions is very similar to visiting the binary operator. However, the
- * difference here is that the writes to the LHS variable must be atomic. These has a particular
- * use case in synapse kernels. For simplicity, we choose not to support atomic writes at this
- * stage and emit a warning.
- *
- * \todo support this properly.
- */
 void CodegenLLVMVisitor::visit_codegen_atomic_statement(const ast::CodegenAtomicStatement& node) {
-    if (platform.is_cpu_with_simd())
-        logger->warn("Atomic operations are not supported");
-
-    // Support only assignment for now.
-    llvm::Value* rhs = accept_and_get(node.get_rhs());
-    if (node.get_atomic_op().get_value() != ast::BinaryOp::BOP_ASSIGN)
-        throw std::runtime_error(
-            "Error: only assignment is supported for CodegenAtomicStatement\n");
-    const auto& var = dynamic_cast<ast::VarName*>(node.get_lhs().get());
+    // Get the variable node that need an atomic update.
+    const auto& var = std::dynamic_pointer_cast<ast::VarName>(node.get_lhs());
     if (!var)
-        throw std::runtime_error("Error: only 'VarName' assignment is supported\n");
+        throw std::runtime_error("Error: only 'VarName' update is supported\n");
 
-    // Process the assignment as if it was non-atomic.
-    if (platform.is_cpu_with_simd())
-        logger->warn("Treating write as non-atomic");
-    write_to_variable(*var, rhs);
+    // Evaluate RHS of the update.
+    llvm::Value* rhs = accept_and_get(node.get_rhs());
+
+    // First, check if it is an atomic write only and we can return early.
+    // Otherwise, extract what kind of atomic update we want to make.
+    ast::BinaryOp atomic_op = node.get_atomic_op().get_value();
+    if (atomic_op == ast::BinaryOp::BOP_ASSIGN) {
+        write_to_variable(*var, rhs);
+        return;
+    }
+    ast::BinaryOp op = ir_builder.extract_atomic_op(atomic_op);
+
+    // For different platforms, we handle atomic updates differently!
+    if (platform.is_cpu_with_simd()) {
+        throw std::runtime_error("Error: no atomic update support for SIMD CPUs\n");
+    } else if (platform.is_gpu()) {
+        const auto& identifier = var->get_name();
+
+        // We only need to support atomic updates to instance struct members.
+        if (!identifier->is_codegen_instance_var())
+            throw std::runtime_error("Error: atomic updates for non-instance variable\n");
+
+        const auto& node = std::dynamic_pointer_cast<ast::CodegenInstanceVar>(identifier);
+        const auto& instance_name = node->get_instance_var()->get_node_name();
+        const auto& member_node = node->get_member_var();
+        const auto& member_name = member_node->get_node_name();
+
+        if (!instance_var_helper.is_an_instance_variable(member_name))
+            throw std::runtime_error("Error: " + member_name +
+                                     " is not a member of the instance variable\n");
+
+        llvm::Value* instance_ptr = ir_builder.create_load(instance_name);
+        int member_index = instance_var_helper.get_variable_index(member_name);
+        llvm::Value* member_ptr = ir_builder.get_struct_member_ptr(instance_ptr, member_index);
+
+        // Some sanity checks.
+        auto codegen_var_with_type = instance_var_helper.get_variable(member_name);
+        if (!codegen_var_with_type->get_is_pointer())
+            throw std::runtime_error(
+                "Error: atomic updates are allowed on pointer variables only\n");
+        const auto& member_var_name = std::dynamic_pointer_cast<ast::VarName>(member_node);
+        if (!member_var_name->get_name()->is_indexed_name())
+            throw std::runtime_error("Error: " + member_name + " is not an IndexedName\n");
+        const auto& member_indexed_name = std::dynamic_pointer_cast<ast::IndexedName>(
+            member_var_name->get_name());
+        if (!member_indexed_name->get_length()->is_name())
+            throw std::runtime_error("Error: " + member_name + " must be indexed with a variable!");
+
+        llvm::Value* i64_index = get_index(*member_indexed_name);
+        llvm::Value* instance_member = ir_builder.create_load(member_ptr);
+        llvm::Value* ptr = ir_builder.create_inbounds_gep(instance_member, i64_index);
+
+        ir_builder.create_atomic_op(ptr, rhs, op);
+    } else {
+        // For non-SIMD CPUs, updates don't have to be atomic at all!
+        llvm::Value* lhs = accept_and_get(node.get_lhs());
+        ir_builder.create_binary_op(lhs, rhs, op);
+        llvm::Value* result = ir_builder.pop_last_value();
+
+        write_to_variable(*var, result);
+    }
 }
 
 // Generating FOR loop in LLVM IR creates the following structure:
