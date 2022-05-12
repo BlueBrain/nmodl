@@ -395,7 +395,7 @@ SCENARIO("Simple vectorised kernel", "[llvm][runner]") {
         NeuronSolveVisitor().visit_program(*ast);
         SolveBlockVisitor().visit_program(*ast);
 
-        codegen::Platform simd_cpu_platform(/*use_single_precision=*/false,
+        codegen::Platform simd_cpu_platform(/*use_single_precision=*/true,
                                             /*instruction_width=*/4);
         codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"unknown",
                                                  /*output_dir=*/".",
@@ -411,21 +411,21 @@ SCENARIO("Simple vectorised kernel", "[llvm][runner]") {
         auto instance_data = codegen_data.create_data(num_elements, /*seed=*/1);
 
         // Fill the instance struct data with some values for unit testing.
-        std::vector<double> x = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0};
-        std::vector<double> x0 = {11.0, 11.0, 11.0, 11.0, 11.0, 11.0, 11.0, 11.0, 11.0, 11.0};
-        std::vector<double> x1 = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
+        std::vector<float> x = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0};
+        std::vector<float> x0 = {11.0, 11.0, 11.0, 11.0, 11.0, 11.0, 11.0, 11.0, 11.0, 11.0};
+        std::vector<float> x1 = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
 
-        std::vector<double> voltage = {3.0, 4.0, 7.0, 1.0, 2.0, 5.0, 8.0, 6.0, 10.0, 9.0};
+        std::vector<float> voltage = {3.0, 4.0, 7.0, 1.0, 2.0, 5.0, 8.0, 6.0, 10.0, 9.0};
         std::vector<int> node_index = {3, 4, 0, 1, 5, 7, 2, 6, 9, 8};
 
         InstanceTestInfo instance_info{&instance_data,
                                        llvm_visitor.get_instance_var_helper(),
                                        num_elements};
-        initialise_instance_variable<double>(instance_info, x, "x");
-        initialise_instance_variable<double>(instance_info, x0, "x0");
-        initialise_instance_variable<double>(instance_info, x1, "x1");
+        initialise_instance_variable<float>(instance_info, x, "x");
+        initialise_instance_variable<float>(instance_info, x0, "x0");
+        initialise_instance_variable<float>(instance_info, x1, "x1");
 
-        initialise_instance_variable<double>(instance_info, voltage, "voltage");
+        initialise_instance_variable<float>(instance_info, voltage, "voltage");
         initialise_instance_variable<int>(instance_info, node_index, "node_index");
 
         // Set up the JIT runner.
@@ -437,13 +437,13 @@ SCENARIO("Simple vectorised kernel", "[llvm][runner]") {
             runner.run_with_argument<int, void*>("__nrn_state_test_wrapper",
                                                  instance_data.base_ptr);
             // Check that the main and remainder loops correctly change the data stored in x.
-            std::vector<double> x_expected = {10.0, 9.0, 8.0, 7.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0};
-            REQUIRE(check_instance_variable<double>(instance_info, x_expected, "x"));
+            std::vector<float> x_expected = {10.0, 9.0, 8.0, 7.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0};
+            REQUIRE(check_instance_variable<float>(instance_info, x_expected, "x"));
 
             // Check that the gather load produces correct results in y:
             //   y[id] = voltage[node_index[id]]
-            std::vector<double> y_expected = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0};
-            REQUIRE(check_instance_variable<double>(instance_info, y_expected, "y"));
+            std::vector<float> y_expected = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0};
+            REQUIRE(check_instance_variable<float>(instance_info, y_expected, "y"));
         }
     }
 }
