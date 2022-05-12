@@ -462,8 +462,8 @@ SCENARIO("Channel: Derivative and breakpoint block llvm transformations",
                     g = (g-rhs)/0.001
                     mech->ion_dinadv[ion_dinadv_id] = mech->ion_dinadv[ion_dinadv_id]+(dina-mech->ina[id])/0.001
                     mech->ion_dikdv[ion_dikdv_id] = mech->ion_dikdv[ion_dikdv_id]+(dik-mech->ik[id])/0.001
-                    mech->ion_ina[ion_ina_id] = mech->ion_ina[ion_ina_id]+mech->ina[id]
-                    mech->ion_ik[ion_ik_id] = mech->ion_ik[ion_ik_id]+mech->ik[id]
+                    mech->ion_ina[ion_ina_id] += mech->ina[id]
+                    mech->ion_ik[ion_ik_id] += mech->ik[id]
                     mech->vec_rhs[node_id] = mech->vec_rhs[node_id]-rhs
                     mech->vec_d[node_id] = mech->vec_d[node_id]+g
                 }
@@ -593,7 +593,7 @@ SCENARIO("Synapse: Derivative and breakpoint block llvm transformations",
                     }
                     mech->g[id] = (mech->g[id]-rhs)/0.001
                     mech->ion_dinadv[ion_dinadv_id] = mech->ion_dinadv[ion_dinadv_id]+(dina-mech->ina[id])/0.001*1.e2/mech->node_area[node_area_id]
-                    mech->ion_ina[ion_ina_id] = mech->ion_ina[ion_ina_id]+mech->ina[id]*(1.e2/mech->node_area[node_area_id])
+                    mech->ion_ina[ion_ina_id] += mech->ina[id]*(1.e2/mech->node_area[node_area_id])
                     mfactor = 1.e2/mech->node_area[node_area_id]
                     mech->g[id] = mech->g[id]*mfactor
                     rhs = rhs*mfactor
