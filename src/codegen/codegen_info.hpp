@@ -224,6 +224,7 @@ enum BlockType {
     BlockTypeEnd
 };
 
+
 /**
  * \class ShadowUseStatement
  * \brief Represents ion write statement during code generation

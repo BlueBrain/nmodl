@@ -273,7 +273,7 @@ int main(int argc, const char* argv[]) {
                               fmt::format("Number of experiments for benchmarking ({})", num_experiments))->ignore_case();
     benchmark_opt->add_flag("--external",
                               external_kernel,
-                              "Benchmark external kernel ({})"_format(external_kernel))->ignore_case();
+                              fmt::format("Benchmark external kernel ({})", external_kernel))->ignore_case();
     benchmark_opt->add_option("--grid-dim-x",
                               llvm_cuda_grid_dim_x,
                               fmt::format("Grid dimension X ({})", llvm_cuda_grid_dim_x))->ignore_case();

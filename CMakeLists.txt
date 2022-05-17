@@ -82,7 +82,7 @@ add_compile_options(${NMODL_COMPILER_WARNING_SUPPRESSIONS})
 # =============================================================================
 project(
   NMODL
-  VERSION "0.8"
+  VERSION "1.0"
   LANGUAGES CXX)
 
 # =============================================================================
