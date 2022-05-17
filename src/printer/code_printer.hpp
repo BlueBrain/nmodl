@@ -72,8 +72,6 @@ class CodePrinter {
     /// end a block and immediately start a new one (i.e. "[indent-1]} [expression] {\n")
     void restart_block(std::string const& expression);
 
-    void start_block(const std::string& text);
-
     void add_text(const std::string&);
 
     void add_line(const std::string&, int num_new_lines = 1);
