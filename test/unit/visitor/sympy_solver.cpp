@@ -564,11 +564,14 @@ SCENARIO("Solve ODEs with cnexp or euler method using SympySolverVisitor",
             auto result = run_sympy_solver_visitor(nmodl_text);
             REQUIRE(result.size() == 4);
             /// sympy 1.9 able to solve ode but not older versions
-            REQUIRE((result[0] == "z' = a/z+b/z/z" || result[0] == "z = (0.5*pow(a, 2)*pow(z, 2)-a*b*z+pow(b, 2)*log(a*z+b))/pow(a, 3)"));
+            REQUIRE((result[0] == "z' = a/z+b/z/z" ||
+                     result[0] ==
+                         "z = (0.5*pow(a, 2)*pow(z, 2)-a*b*z+pow(b, 2)*log(a*z+b))/pow(a, 3)"));
             REQUIRE(result[1] == "h = -h/(c2*dt*h-1.0)");
             REQUIRE(result[2] == "x = a*dt+x");
             /// sympy 1.4 able to solve ode but not older versions
-            REQUIRE((result[3] == "y' = c3*y*y*y" || result[3] == "y = sqrt(-pow(y, 2)/(2.0*c3*dt*pow(y, 2)-1.0))"));
+            REQUIRE((result[3] == "y' = c3*y*y*y" ||
+                     result[3] == "y = sqrt(-pow(y, 2)/(2.0*c3*dt*pow(y, 2)-1.0))"));
         }
     }
     GIVEN("Derivative block with cnexp solver method, AST after SympySolver pass") {
