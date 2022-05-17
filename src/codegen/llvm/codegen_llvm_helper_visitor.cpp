@@ -18,13 +18,10 @@
 namespace nmodl {
 namespace codegen {
 
-using namespace fmt::literals;
-
 using symtab::syminfo::Status;
 
 /// initialize static member variables
 const ast::AstNodeType CodegenLLVMHelperVisitor::INTEGER_TYPE = ast::AstNodeType::INTEGER;
-const ast::AstNodeType CodegenLLVMHelperVisitor::FLOAT_TYPE = ast::AstNodeType::DOUBLE;
 const std::string CodegenLLVMHelperVisitor::NODECOUNT_VAR = "node_count";
 const std::string CodegenLLVMHelperVisitor::VOLTAGE_VAR = "voltage";
 const std::string CodegenLLVMHelperVisitor::NODE_INDEX_VAR = "node_index";
@@ -148,13 +145,13 @@ void CodegenLLVMHelperVisitor::create_function_for_node(ast::Block& node) {
     auto name = new ast::Name(new ast::String(function_name));
 
     /// return variable name has "ret_" prefix
-    std::string return_var_name = "ret_{}"_format(function_name);
+    std::string return_var_name = fmt::format("ret_{}", function_name);
     auto return_var = new ast::Name(new ast::String(return_var_name));
 
     /// return type based on node type
     ast::CodegenVarType* ret_var_type = nullptr;
     if (node.get_node_type() == ast::AstNodeType::FUNCTION_BLOCK) {
-        ret_var_type = new ast::CodegenVarType(FLOAT_TYPE);
+        ret_var_type = new ast::CodegenVarType(fp_type);
     } else {
         ret_var_type = new ast::CodegenVarType(INTEGER_TYPE);
     }
@@ -185,7 +182,7 @@ void CodegenLLVMHelperVisitor::create_function_for_node(ast::Block& node) {
     ast::CodegenVarWithTypeVector arguments;
     for (const auto& param: node.get_parameters()) {
         /// create new type and name for creating new ast node
-        auto type = new ast::CodegenVarType(FLOAT_TYPE);
+        auto type = new ast::CodegenVarType(fp_type);
         auto var = param->get_name()->clone();
         arguments.emplace_back(new ast::CodegenVarWithType(type, /*is_pointer=*/0, var));
     }
@@ -221,12 +218,12 @@ std::shared_ptr<ast::InstanceStruct> CodegenLLVMHelperVisitor::create_instance_s
 
     /// float variables are standard pointers to float vectors
     for (const auto& float_var: info.codegen_float_variables) {
-        add_var_with_type(float_var->get_name(), FLOAT_TYPE, /*is_pointer=*/1);
+        add_var_with_type(float_var->get_name(), fp_type, /*is_pointer=*/1);
     }
 
     /// int variables are pointers to indexes for other vectors
     for (const auto& int_var: info.codegen_int_variables) {
-        add_var_with_type(int_var.symbol->get_name(), FLOAT_TYPE, /*is_pointer=*/1);
+        add_var_with_type(int_var.symbol->get_name(), fp_type, /*is_pointer=*/1);
     }
 
     // for integer variables, there should be index
@@ -236,7 +233,7 @@ std::shared_ptr<ast::InstanceStruct> CodegenLLVMHelperVisitor::create_instance_s
     }
 
     // add voltage and node index
-    add_var_with_type(VOLTAGE_VAR, FLOAT_TYPE, /*is_pointer=*/1);
+    add_var_with_type(VOLTAGE_VAR, fp_type, /*is_pointer=*/1);
     add_var_with_type(NODE_INDEX_VAR, INTEGER_TYPE, /*is_pointer=*/1);
 
     // As we do not have `NrnThread` object as an argument, we store points to rhs
@@ -244,19 +241,19 @@ std::shared_ptr<ast::InstanceStruct> CodegenLLVMHelperVisitor::create_instance_s
     // in case of point process mechanism.
     // Note: shadow variables are not used at the moment because reduction will be taken care
     // by LLVM backend (even on CPU via sequential add like ISPC).
-    add_var_with_type(naming::NTHREAD_RHS, FLOAT_TYPE, /*is_pointer=*/1);
-    add_var_with_type(naming::NTHREAD_D, FLOAT_TYPE, /*is_pointer=*/1);
-    add_var_with_type(naming::NTHREAD_RHS_SHADOW, FLOAT_TYPE, /*is_pointer=*/1);
-    add_var_with_type(naming::NTHREAD_D_SHADOW, FLOAT_TYPE, /*is_pointer=*/1);
+    add_var_with_type(naming::NTHREAD_RHS, fp_type, /*is_pointer=*/1);
+    add_var_with_type(naming::NTHREAD_D, fp_type, /*is_pointer=*/1);
+    add_var_with_type(naming::NTHREAD_RHS_SHADOW, fp_type, /*is_pointer=*/1);
+    add_var_with_type(naming::NTHREAD_D_SHADOW, fp_type, /*is_pointer=*/1);
 
     // NOTE: All the pointer variables should be declared before the scalar variables otherwise
     // the allocation of memory for the variables in the InstanceStruct and their offsets will be
     // wrong
 
     // add dt, t, celsius
-    add_var_with_type(naming::NTHREAD_T_VARIABLE, FLOAT_TYPE, /*is_pointer=*/0);
-    add_var_with_type(naming::NTHREAD_DT_VARIABLE, FLOAT_TYPE, /*is_pointer=*/0);
-    add_var_with_type(naming::CELSIUS_VARIABLE, FLOAT_TYPE, /*is_pointer=*/0);
+    add_var_with_type(naming::NTHREAD_T_VARIABLE, fp_type, /*is_pointer=*/0);
+    add_var_with_type(naming::NTHREAD_DT_VARIABLE, fp_type, /*is_pointer=*/0);
+    add_var_with_type(naming::CELSIUS_VARIABLE, fp_type, /*is_pointer=*/0);
     add_var_with_type(naming::SECOND_ORDER_VARIABLE, INTEGER_TYPE, /*is_pointer=*/0);
     add_var_with_type(naming::MECH_NODECOUNT_VAR, INTEGER_TYPE, /*is_pointer=*/0);
 
@@ -283,7 +280,7 @@ static void append_statements_from_block(ast::StatementVector& statements,
  * Create atomic statement for given expression of the form a[i] += expression
  * @param var Name of the variable on the LHS (it's an array), e.g. `a`
  * @param var_index Name of the index variable to access variable `var` e.g. `i`
- * @param op_str Operators like += or -=
+ * @param op_str Operators like =, += or -=
  * @param rhs_str expression that will be added or subtracted from `var[var_index]`
  * @return A statement representing atomic operation using `ast::CodegenAtomicStatement`
  */
@@ -299,23 +296,9 @@ static std::shared_ptr<ast::CodegenAtomicStatement> create_atomic_statement(
                                 /*at=*/nullptr,
                                 /*index=*/nullptr);
 
-    // LLVM IR generation is now only supporting assignment (=) and not += or -=
-    // So we need to write increment operation a += b as an assignment operation
-    // a = a + b.
-    // See https://github.com/BlueBrain/nmodl/issues/851
-
-    std::string op(op_str);
-    stringutils::remove_character(op, '=');
-
-    // make sure only + or - operator is used
-    if (op_str != "-" && op_str != "+") {
-        throw std::runtime_error("Unsupported binary operator for atomic statement");
-    }
-
-    auto* rhs = create_expression("{}[{}] {} {} "_format(var, var_index, op, rhs_str));
-    return std::make_shared<ast::CodegenAtomicStatement>(lhs,
-                                                         ast::BinaryOperator{ast::BOP_ASSIGN},
-                                                         rhs);
+    auto op = ast::BinaryOperator(ast::string_to_binaryop(op_str));
+    auto rhs = create_expression(rhs_str);
+    return std::make_shared<ast::CodegenAtomicStatement>(lhs, op, rhs);
 }
 
 /**
@@ -351,11 +334,12 @@ void CodegenLLVMHelperVisitor::ion_read_statements(BlockType type,
         // ion variable to be read
         std::string& ion_varname = variable_names.second;
         // index for reading ion variable
-        std::string index_varname = "{}_id"_format(varname);
+        std::string index_varname = fmt::format("{}_id", varname);
         // first load the index
-        std::string index_statement = "{} = {}_index[id]"_format(index_varname, ion_varname);
+        std::string index_statement = fmt::format("{} = {}_index[id]", index_varname, ion_varname);
         // now assign the value
-        std::string read_statement = "{} = {}[{}]"_format(varname, ion_varname, index_varname);
+        std::string read_statement =
+            fmt::format("{} = {}[{}]", varname, ion_varname, index_varname);
         // push index definition, index statement and actual read statement
         int_variables.push_back(index_varname);
         index_statements.push_back(visitor::create_statement(index_statement));
@@ -412,30 +396,15 @@ void CodegenLLVMHelperVisitor::ion_write_statements(BlockType type,
     /// create write ion and corresponding index statements
     auto create_write_statements = [&](std::string ion_varname, std::string op, std::string rhs) {
         // index for writing ion variable
-        std::string index_varname = "{}_id"_format(ion_varname);
+        std::string index_varname = fmt::format("{}_id", ion_varname);
         // load index
-        std::string index_statement = "{} = {}_index[id]"_format(index_varname, ion_varname);
+        std::string index_statement = fmt::format("{} = {}_index[id]", index_varname, ion_varname);
         // push index definition, index statement and actual write statement
         int_variables.push_back(index_varname);
         index_statements.push_back(visitor::create_statement(index_statement));
 
         // pass ion variable to write and its index
-
-        // lhs variable
-        std::string lhs = "{}[{}] "_format(ion_varname, index_varname);
-
-        // lets turn a += b into a = a + b if applicable
-        // note that this is done in order to facilitate existing implementation in the llvm
-        // backend which doesn't support += or -= operators.
-        std::string statement;
-        if (!op.compare("+=")) {
-            statement = "{} = {} + {}"_format(lhs, lhs, rhs);
-        } else if (!op.compare("-=")) {
-            statement = "{} = {} - {}"_format(lhs, lhs, rhs);
-        } else {
-            statement = "{} {} {}"_format(lhs, op, rhs);
-        }
-        body_statements.push_back(visitor::create_statement(statement));
+        body_statements.push_back(create_atomic_statement(ion_varname, index_varname, op, rhs));
     };
 
     /// iterate over all ions and create write ion statements for given block type
@@ -454,7 +423,7 @@ void CodegenLLVMHelperVisitor::ion_write_statements(BlockType type,
                     // for synapse type
                     if (info.point_process) {
                         auto area = codegen::naming::NODE_AREA_VARIABLE;
-                        rhs += "*(1.e2/{0}[{0}_id])"_format(area);
+                        rhs += fmt::format("*(1.e2/{0}[{0}_id])", area);
                     }
                     create_write_statements(lhs, op, rhs);
                 }
@@ -478,10 +447,10 @@ void CodegenLLVMHelperVisitor::ion_write_statements(BlockType type,
                 index = 2;
             } else {
                 /// \todo Unhandled case also in neuron implementation
-                throw std::logic_error("codegen error for {} ion"_format(ion.name));
+                throw std::logic_error(fmt::format("codegen error for {} ion", ion.name));
             }
-            std::string ion_type_name = "{}_type"_format(ion.name);
-            std::string lhs = "int {}"_format(ion_type_name);
+            std::string ion_type_name = fmt::format("{}_type", ion.name);
+            std::string lhs = fmt::format("int {}", ion_type_name);
             std::string op = "=";
             std::string rhs = ion_type_name;
             create_write_statements(lhs, op, rhs);
@@ -556,7 +525,7 @@ void CodegenLLVMHelperVisitor::convert_local_statement(ast::StatementBlock& node
         parent_node->erase_statement(to_delete);
 
         /// create new codegen variable statement and insert at the beginning of the block
-        auto type = new ast::CodegenVarType(FLOAT_TYPE);
+        auto type = new ast::CodegenVarType(fp_type);
         auto new_statement = std::make_shared<ast::CodegenVarListStatement>(type, variables);
         const auto& statements = parent_node->get_statements();
         parent_node->insert_statement(statements.begin(), new_statement);
@@ -586,7 +555,7 @@ void CodegenLLVMHelperVisitor::rename_local_variables(ast::StatementBlock& node)
         /// rename local variable in entire statement block
         for (auto& var: local_statement->get_variables()) {
             std::string old_name = var->get_node_name();
-            std::string new_name = "{}_{}"_format(old_name, local_block_counter);
+            std::string new_name = fmt::format("{}_{}", old_name, local_block_counter);
             visitor::RenameVisitor(old_name, new_name).visit_statement_block(node);
         }
     }
@@ -697,9 +666,10 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
     // prepare main body of the compute function
     {
         /// access node index and corresponding voltage
-        index_statements.push_back(
-            visitor::create_statement("node_id = node_index[{}]"_format(naming::INDUCTION_VAR)));
-        body_statements.push_back(visitor::create_statement("v = {}[node_id]"_format(VOLTAGE_VAR)));
+        index_statements.push_back(visitor::create_statement(
+            fmt::format("node_id = node_index[{}]", naming::INDUCTION_VAR)));
+        body_statements.push_back(
+            visitor::create_statement(fmt::format("v = {}[node_id]", VOLTAGE_VAR)));
 
         /// read ion variables
         ion_read_statements(
@@ -840,7 +810,7 @@ void CodegenLLVMHelperVisitor::create_compute_body_loop(std::shared_ptr<ast::Sta
 
     // Push variables and  the loop to the function statements vector.
     function_statements.push_back(create_local_variable_statement(int_variables, INTEGER_TYPE));
-    function_statements.push_back(create_local_variable_statement(double_variables, FLOAT_TYPE));
+    function_statements.push_back(create_local_variable_statement(double_variables, fp_type));
     function_statements.push_back(for_loop);
 }
 
@@ -899,11 +869,11 @@ void CodegenLLVMHelperVisitor::print_nrn_current_body(const ast::BreakpointBlock
     // sum now all currents
     for (auto& current: info.currents) {
         statements.emplace_back(
-            visitor::create_statement("current = current + {}"_format(current)));
+            visitor::create_statement(fmt::format("current = current + {}", current)));
     }
 
     // assign computed current to the given variable
-    statements.emplace_back(visitor::create_statement("{} = current"_format(variable)));
+    statements.emplace_back(visitor::create_statement(fmt::format("{} = current", variable)));
 
     // create StatementBlock for better readability of the generated code and add that to the main
     // body statements
@@ -942,10 +912,10 @@ void CodegenLLVMHelperVisitor::print_nrn_cur_non_conductance_kernel(
         for (const auto& var: ion.writes) {
             if (ion.is_ionic_current(var)) {
                 // also create local variable
-                std::string name{"di{}"_format(ion.name)};
+                std::string name{fmt::format("di{}", ion.name)};
                 double_variables.emplace_back(name);
                 body_statements.emplace_back(
-                    visitor::create_statement("{} = {}"_format(name, var)));
+                    visitor::create_statement(fmt::format("{} = {}", name, var)));
             }
         }
     }
@@ -960,9 +930,9 @@ void CodegenLLVMHelperVisitor::print_nrn_cur_non_conductance_kernel(
     // in case of point process we need to load area from another vector.
     if (info.point_process) {
         // create integer variable for index and then load value from area_index vector
-        int_variables.emplace_back("{}_id"_format(naming::NODE_AREA_VARIABLE));
+        int_variables.emplace_back(fmt::format("{}_id", naming::NODE_AREA_VARIABLE));
         index_statements.emplace_back(visitor::create_statement(
-            " {0}_id = {0}_index[id]"_format(naming::NODE_AREA_VARIABLE)));
+            fmt::format(" {0}_id = {0}_index[id]", naming::NODE_AREA_VARIABLE)));
     }
 
     // update all ionic currents now
@@ -970,22 +940,22 @@ void CodegenLLVMHelperVisitor::print_nrn_cur_non_conductance_kernel(
         for (const auto& var: ion.writes) {
             if (ion.is_ionic_current(var)) {
                 // variable on the lhs
-                std::string lhs{"{}di{}dv"_format(naming::ION_VARNAME_PREFIX, ion.name)};
+                std::string lhs{fmt::format("{}di{}dv", naming::ION_VARNAME_PREFIX, ion.name)};
 
                 // expression on the rhs
-                std::string rhs{"(di{}-{})/0.001"_format(ion.name, var)};
+                std::string rhs{fmt::format("(di{}-{})/0.001", ion.name, var)};
                 if (info.point_process) {
-                    rhs += "*1.e2/{0}[{0}_id]"_format(naming::NODE_AREA_VARIABLE);
+                    rhs += fmt::format("*1.e2/{0}[{0}_id]", naming::NODE_AREA_VARIABLE);
                 }
 
                 // load the index for lhs variable
                 int_variables.emplace_back(lhs + "_id");
-                std::string index_statement{"{}_id = {}_index[id]"_format(lhs, lhs)};
+                std::string index_statement{fmt::format("{}_id = {}_index[id]", lhs, lhs)};
                 index_statements.emplace_back(visitor::create_statement(index_statement));
 
                 // add statement that actually updates the
-                body_statements.emplace_back(
-                    visitor::create_statement("{0}[{0}_id] = {0}[{0}_id] + {1}"_format(lhs, rhs)));
+                body_statements.emplace_back(visitor::create_statement(
+                    fmt::format("{0}[{0}_id] = {0}[{0}_id] + {1}", lhs, rhs)));
             }
         }
     }
@@ -1018,9 +988,10 @@ void CodegenLLVMHelperVisitor::visit_breakpoint_block(ast::BreakpointBlock& node
     /// prepare all function statements
     {
         /// access node index and corresponding voltage
-        index_statements.push_back(
-            visitor::create_statement("node_id = node_index[{}]"_format(naming::INDUCTION_VAR)));
-        body_statements.push_back(visitor::create_statement("v = {}[node_id]"_format(VOLTAGE_VAR)));
+        index_statements.push_back(visitor::create_statement(
+            fmt::format("node_id = node_index[{}]", naming::INDUCTION_VAR)));
+        body_statements.push_back(
+            visitor::create_statement(fmt::format("v = {}[node_id]", VOLTAGE_VAR)));
 
         /// read ion variables
         ion_read_statements(BlockType::Equation,
@@ -1049,7 +1020,7 @@ void CodegenLLVMHelperVisitor::visit_breakpoint_block(ast::BreakpointBlock& node
         if (info.point_process) {
             double_variables.emplace_back("mfactor");
             body_statements.emplace_back(visitor::create_statement(
-                "mfactor = 1.e2/{0}[{0}_id]"_format(naming::NODE_AREA_VARIABLE)));
+                fmt::format("mfactor = 1.e2/{0}[{0}_id]", naming::NODE_AREA_VARIABLE)));
             body_statements.emplace_back(visitor::create_statement("g = g*mfactor"));
             body_statements.emplace_back(visitor::create_statement("rhs = rhs*mfactor"));
         }
@@ -1075,9 +1046,9 @@ void CodegenLLVMHelperVisitor::visit_breakpoint_block(ast::BreakpointBlock& node
             stringutils::remove_character(d_op, '=');
 
             body_statements.emplace_back(visitor::create_statement(
-                "vec_rhs[node_id] = vec_rhs[node_id] {} rhs"_format(rhs_op)));
-            body_statements.emplace_back(
-                visitor::create_statement("vec_d[node_id] = vec_d[node_id] {} g"_format(d_op)));
+                fmt::format("vec_rhs[node_id] = vec_rhs[node_id] {} rhs", rhs_op)));
+            body_statements.emplace_back(visitor::create_statement(
+                fmt::format("vec_d[node_id] = vec_d[node_id] {} g", d_op)));
         }
     }
 

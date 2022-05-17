@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (C) 2018-2019 Blue Brain Project
+ * Copyright (C) 2018-2022 Blue Brain Project
  *
  * This file is part of NMODL distributed under the terms of the GNU
  * Lesser General Public License. See top-level LICENSE file for details.
@@ -16,7 +16,6 @@
 namespace nmodl {
 namespace codegen {
 
-using namespace fmt::literals;
 using symtab::syminfo::NmodlType;
 using visitor::VarUsageVisitor;
 
@@ -328,7 +327,7 @@ void CodegenInfo::get_int_variables() {
      */
     if (!watch_statements.empty()) {
         for (int i = 0; i < watch_statements.size() + 1; i++) {
-            codegen_int_variables.emplace_back(make_symbol("watch{}"_format(i)),
+            codegen_int_variables.emplace_back(make_symbol(fmt::format("watch{}", i)),
                                                false,
                                                false,
                                                true);

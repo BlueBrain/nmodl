@@ -20,8 +20,6 @@
 #include "llvm/Support/MemoryBuffer.h"
 #include "llvm/Target/TargetMachine.h"
 
-using fmt::literals::operator""_format;
-
 namespace nmodl {
 namespace runner {
 
@@ -47,7 +45,7 @@ void CUDADriver::link_libraries(llvm::Module& module, BenchmarkInfo* benchmark_i
             parseBitcodeFile(libdevice_file_memory_buffer->get()->getMemBufferRef(),
                              module.getContext());
         if (std::error_code error = errorToErrorCode(libdevice_expected_module.takeError())) {
-            throw std::runtime_error("Error reading bitcode: {}"_format(error.message()));
+            throw std::runtime_error(fmt::format("Error reading bitcode: {}", error.message()));
         }
         linker.linkInModule(std::move(libdevice_expected_module.get()),
                             llvm::Linker::LinkOnlyNeeded);
@@ -60,8 +58,8 @@ void print_string_to_file(const std::string& ptx_compiled_module, const std::str
     ptx_file.close();
 }
 
-CUjit_target get_compute_architecture(const int compute_version_major,
-                                      const int compute_version_minor) {
+// Converts the CUDA compute version to the CUjit_target enum used by the CUJIT
+CUjit_target get_CUjit_target(const int compute_version_major, const int compute_version_minor) {
     auto compute_architecture = compute_version_major * 10 + compute_version_minor;
     switch (compute_architecture) {
     case 20:
@@ -112,16 +110,18 @@ void CUDADriver::init(const codegen::Platform& platform, BenchmarkInfo* benchmar
     char name[128];
     checkCudaErrors(cuDeviceGetName(name, 128, device));
     device_info.name = name;
-    logger->info("Using CUDA Device [0]: {}"_format(device_info.name));
+    logger->info(fmt::format("Using CUDA Device [0]: {}", device_info.name));
 
+    // Get the compute capability of the device that is actually going to be used to run the kernel
     checkCudaErrors(cuDeviceGetAttribute(&device_info.compute_version_major,
                                          CU_DEVICE_ATTRIBUTE_COMPUTE_CAPABILITY_MAJOR,
                                          device));
     checkCudaErrors(cuDeviceGetAttribute(&device_info.compute_version_minor,
                                          CU_DEVICE_ATTRIBUTE_COMPUTE_CAPABILITY_MINOR,
                                          device));
-    logger->info("Device Compute Capability: {}.{}"_format(device_info.compute_version_major,
-                                                           device_info.compute_version_minor));
+    logger->info(fmt::format("Device Compute Capability: {}.{}",
+                             device_info.compute_version_major,
+                             device_info.compute_version_minor));
     if (device_info.compute_version_major < 2) {
         throw std::runtime_error("ERROR: Device 0 is not SM 2.0 or greater");
     }
@@ -173,23 +173,26 @@ void CUDADriver::init(const codegen::Platform& platform, BenchmarkInfo* benchmar
     char* jitErrorLogBuffer = new char[jitErrorLogBufferSize];
     jitOptVals[3] = jitErrorLogBuffer;
 
+    // set the exact CUDA compute target architecture based on the GPU it's going to be actually
+    // used
     jitOptions[4] = CU_JIT_TARGET;
-    auto target_architecture = get_compute_architecture(device_info.compute_version_major,
-                                                        device_info.compute_version_minor);
+    auto target_architecture = get_CUjit_target(device_info.compute_version_major,
+                                                device_info.compute_version_minor);
     jitOptVals[4] = (void*) target_architecture;
 
+    // load the LLVM module to the CUDA module (CUDA JIT compilation)
     auto cuda_jit_ret = cuModuleLoadDataEx(
         &cudaModule, ptx_compiled_module.c_str(), jitNumOptions, jitOptions, jitOptVals);
     if (!std::string(jitLogBuffer).empty()) {
-        logger->info("CUDA JIT INFO LOG: {}"_format(std::string(jitLogBuffer)));
+        logger->info(fmt::format("CUDA JIT INFO LOG: {}", std::string(jitLogBuffer)));
     }
     if (!std::string(jitErrorLogBuffer).empty()) {
-        logger->info("CUDA JIT ERROR LOG: {}"_format(std::string(jitErrorLogBuffer)));
+        logger->info(fmt::format("CUDA JIT ERROR LOG: {}", std::string(jitErrorLogBuffer)));
     }
-    free(jitOptions);
-    free(jitOptVals);
-    free(jitLogBuffer);
-    free(jitErrorLogBuffer);
+    delete[] jitOptions;
+    delete[] jitOptVals;
+    delete[] jitLogBuffer;
+    delete[] jitErrorLogBuffer;
     checkCudaErrors(cuda_jit_ret);
 }
 

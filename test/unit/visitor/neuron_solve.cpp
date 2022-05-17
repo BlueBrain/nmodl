@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (C) 2018-2019 Blue Brain Project
+ * Copyright (C) 2018-2022 Blue Brain Project
  *
  * This file is part of NMODL distributed under the terms of the GNU
  * Lesser General Public License. See top-level LICENSE file for details.
@@ -52,7 +52,7 @@ SCENARIO("NeuronSolveVisitor visitor solves different ODE types") {
             }
 
             DERIVATIVE states {
-                m' = (mInf-m)/mTau
+                m' = (mInf-m)/mTau[0]
                 h' = (hInf-h)/hTau
                 m = m + h
             }
@@ -64,7 +64,7 @@ SCENARIO("NeuronSolveVisitor visitor solves different ODE types") {
             }
 
             DERIVATIVE states {
-                m = m+(1.0-exp(dt*((((-1.0)))/mTau)))*(-(((mInf))/mTau)/((((-1.0)))/mTau)-m)
+                m = m+(1.0-exp(dt*((((-1.0)))/mTau[0])))*(-(((mInf))/mTau[0])/((((-1.0)))/mTau[0])-m)
                 h = h+(1.0-exp(dt*((((-1.0)))/hTau)))*(-(((hInf))/hTau)/((((-1.0)))/hTau)-h)
                 m = m+h
             }

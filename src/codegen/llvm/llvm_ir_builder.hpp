@@ -146,6 +146,9 @@ class IRBuilder {
         return vectorize && mask;
     }
 
+    /// Extracts binary operator (+ or -) from atomic update (+= or =-).
+    ast::BinaryOp extract_atomic_op(ast::BinaryOp op);
+
     /// Generates LLVM IR to allocate the arguments of the function on the stack.
     void allocate_function_arguments(llvm::Function* function,
                                      const ast::CodegenVarWithTypeVector& nmodl_arguments);
@@ -157,6 +160,9 @@ class IRBuilder {
 
     /// Generates LLVM IR for the given binary operator.
     void create_binary_op(llvm::Value* lhs, llvm::Value* rhs, ast::BinaryOp op);
+
+    /// Generates LLVM IR for the given atomic operator.
+    void create_atomic_op(llvm::Value* ptr, llvm::Value* update, ast::BinaryOp op);
 
     /// Generates LLVM IR for the bitcast instruction.
     llvm::Value* create_bitcast(llvm::Value* value, llvm::Type* dst_type);
@@ -304,12 +310,12 @@ class IRBuilder {
     /// Pops the last visited value from the value stack.
     llvm::Value* pop_last_value();
 
+    /// Generates an inbounds GEP instruction for the given value and returns calculated address.
+    llvm::Value* create_inbounds_gep(llvm::Value* variable, llvm::Value* index);
+
   private:
     /// Generates an inbounds GEP instruction for the given name and returns calculated address.
     llvm::Value* create_inbounds_gep(const std::string& variable_name, llvm::Value* index);
-
-    /// Generates an inbounds GEP instruction for the given value and returns calculated address.
-    llvm::Value* create_inbounds_gep(llvm::Value* variable, llvm::Value* index);
 
     /// Returns a scalar constant of the provided type.
     template <typename C, typename V>

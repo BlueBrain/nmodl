@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (C) 2018-2019 Blue Brain Project
+ * Copyright (C) 2018-2022 Blue Brain Project
  *
  * This file is part of NMODL distributed under the terms of the GNU
  * Lesser General Public License. See top-level LICENSE file for details.
@@ -286,7 +286,7 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * Name of structure that wraps range variables
      */
     std::string instance_struct() const {
-        return "{}_{}"_format(info.mod_suffix, instance_struct_type_suffix);
+        return fmt::format("{}_{}", info.mod_suffix, instance_struct_type_suffix);
     }
 
 
@@ -294,7 +294,7 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * Name of structure that wraps range variables
      */
     std::string global_struct() const {
-        return "{}_Store"_format(info.mod_suffix);
+        return fmt::format("{}_Store", info.mod_suffix);
     }
 
 
@@ -1765,11 +1765,7 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
     void visit_function_call(const ast::FunctionCall& node) override;
     void visit_eigen_newton_solver_block(const ast::EigenNewtonSolverBlock& node) override;
     void visit_eigen_linear_solver_block(const ast::EigenLinearSolverBlock& node) override;
-    virtual void print_eigen_linear_solver(const std::string& float_type,
-                                           int N,
-                                           const std::string& Xm,
-                                           const std::string& Jm,
-                                           const std::string& Fm);
+    virtual void print_eigen_linear_solver(const std::string& float_type, int N);
     void visit_if_statement(const ast::IfStatement& node) override;
     void visit_indexed_name(const ast::IndexedName& node) override;
     void visit_integer(const ast::Integer& node) override;
@@ -1853,9 +1849,8 @@ void CodegenCVisitor::print_function_declaration(const T& node, const std::strin
 
     print_device_method_annotation();
     printer->add_indent();
-    printer->add_text("inline {} {}({})"_format(return_type,
-                                                method_name(name),
-                                                get_parameter_str(internal_params)));
+    printer->add_text(fmt::format(
+        "inline {} {}({})", return_type, method_name(name), get_parameter_str(internal_params)));
 
     enable_variable_name_lookup = true;
 }

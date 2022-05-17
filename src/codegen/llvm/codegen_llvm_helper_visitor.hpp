@@ -24,7 +24,6 @@
 namespace nmodl {
 namespace codegen {
 
-using namespace fmt::literals;
 typedef std::vector<std::shared_ptr<ast::CodegenFunction>> CodegenFunctionVector;
 
 /**
@@ -66,7 +65,7 @@ struct InstanceVarHelper {
         const auto& vars = instance->get_codegen_vars();
         auto it = find_variable(vars, name);
         if (it == vars.end()) {
-            throw std::runtime_error("Can not find variable with name {}"_format(name));
+            throw std::runtime_error(fmt::format("Can not find variable with name {}", name));
         }
         return *it;
     }
@@ -76,7 +75,8 @@ struct InstanceVarHelper {
         const auto& vars = instance->get_codegen_vars();
         auto it = find_variable(vars, name);
         if (it == vars.end()) {
-            throw std::runtime_error("Can not find codegen variable with name {}"_format(name));
+            throw std::runtime_error(
+                fmt::format("Can not find codegen variable with name {}", name));
         }
         return (it - vars.begin());
     }
@@ -120,10 +120,13 @@ class CodegenLLVMHelperVisitor: public visitor::AstVisitor {
     /// create new InstanceStruct
     std::shared_ptr<ast::InstanceStruct> create_instance_struct();
 
+  private:
+    /// floating-point type
+    ast::AstNodeType fp_type;
+
   public:
-    /// default integer and float node type
+    /// default integer type
     static const ast::AstNodeType INTEGER_TYPE;
-    static const ast::AstNodeType FLOAT_TYPE;
 
     // node count, voltage and node index variables
     static const std::string NODECOUNT_VAR;
@@ -131,7 +134,10 @@ class CodegenLLVMHelperVisitor: public visitor::AstVisitor {
     static const std::string NODE_INDEX_VAR;
 
     CodegenLLVMHelperVisitor(Platform& platform)
-        : platform(platform) {}
+        : platform(platform) {
+        fp_type = platform.is_single_precision() ? ast::AstNodeType::FLOAT
+                                                 : ast::AstNodeType::DOUBLE;
+    }
 
     const InstanceVarHelper& get_instance_var_helper() {
         return instance_var_helper;

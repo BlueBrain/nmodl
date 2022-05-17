@@ -225,6 +225,7 @@ llvm::Type* CodegenLLVMVisitor::get_codegen_var_type(const ast::CodegenVarType& 
     switch (node.get_type()) {
     case ast::AstNodeType::BOOLEAN:
         return ir_builder.get_boolean_type();
+    case ast::AstNodeType::FLOAT:
     case ast::AstNodeType::DOUBLE:
         return ir_builder.get_fp_type();
     case ast::AstNodeType::INSTANCE_STRUCT:
@@ -255,6 +256,7 @@ llvm::Type* CodegenLLVMVisitor::get_instance_struct_type() {
 
         // Create the corresponding LLVM type.
         switch (nmodl_type) {
+        case ast::AstNodeType::FLOAT:
         case ast::AstNodeType::DOUBLE:
             member_types.push_back(is_pointer ? ir_builder.get_fp_ptr_type()
                                               : ir_builder.get_fp_type());
@@ -512,31 +514,73 @@ void CodegenLLVMVisitor::visit_boolean(const ast::Boolean& node) {
     ir_builder.create_boolean_constant(node.get_value());
 }
 
-/**
- * Currently, this functions is very similar to visiting the binary operator. However, the
- * difference here is that the writes to the LHS variable must be atomic. These has a particular
- * use case in synapse kernels. For simplicity, we choose not to support atomic writes at this
- * stage and emit a warning.
- *
- * \todo support this properly.
- */
 void CodegenLLVMVisitor::visit_codegen_atomic_statement(const ast::CodegenAtomicStatement& node) {
-    if (platform.is_cpu_with_simd())
-        logger->warn("Atomic operations are not supported");
-
-    // Support only assignment for now.
-    llvm::Value* rhs = accept_and_get(node.get_rhs());
-    if (node.get_atomic_op().get_value() != ast::BinaryOp::BOP_ASSIGN)
-        throw std::runtime_error(
-            "Error: only assignment is supported for CodegenAtomicStatement\n");
-    const auto& var = dynamic_cast<ast::VarName*>(node.get_lhs().get());
+    // Get the variable node that need an atomic update.
+    const auto& var = std::dynamic_pointer_cast<ast::VarName>(node.get_lhs());
     if (!var)
-        throw std::runtime_error("Error: only 'VarName' assignment is supported\n");
+        throw std::runtime_error("Error: only 'VarName' update is supported\n");
 
-    // Process the assignment as if it was non-atomic.
-    if (platform.is_cpu_with_simd())
-        logger->warn("Treating write as non-atomic");
-    write_to_variable(*var, rhs);
+    // Evaluate RHS of the update.
+    llvm::Value* rhs = accept_and_get(node.get_rhs());
+
+    // First, check if it is an atomic write only and we can return early.
+    // Otherwise, extract what kind of atomic update we want to make.
+    ast::BinaryOp atomic_op = node.get_atomic_op().get_value();
+    if (atomic_op == ast::BinaryOp::BOP_ASSIGN) {
+        write_to_variable(*var, rhs);
+        return;
+    }
+    ast::BinaryOp op = ir_builder.extract_atomic_op(atomic_op);
+
+    // For different platforms, we handle atomic updates differently!
+    if (platform.is_cpu_with_simd()) {
+        throw std::runtime_error("Error: no atomic update support for SIMD CPUs\n");
+    } else if (platform.is_gpu()) {
+        const auto& identifier = var->get_name();
+
+        // We only need to support atomic updates to instance struct members.
+        if (!identifier->is_codegen_instance_var())
+            throw std::runtime_error("Error: atomic updates for non-instance variable\n");
+
+        const auto& node = std::dynamic_pointer_cast<ast::CodegenInstanceVar>(identifier);
+        const auto& instance_name = node->get_instance_var()->get_node_name();
+        const auto& member_node = node->get_member_var();
+        const auto& member_name = member_node->get_node_name();
+
+        if (!instance_var_helper.is_an_instance_variable(member_name))
+            throw std::runtime_error("Error: " + member_name +
+                                     " is not a member of the instance variable\n");
+
+        llvm::Value* instance_ptr = ir_builder.create_load(instance_name);
+        int member_index = instance_var_helper.get_variable_index(member_name);
+        llvm::Value* member_ptr = ir_builder.get_struct_member_ptr(instance_ptr, member_index);
+
+        // Some sanity checks.
+        auto codegen_var_with_type = instance_var_helper.get_variable(member_name);
+        if (!codegen_var_with_type->get_is_pointer())
+            throw std::runtime_error(
+                "Error: atomic updates are allowed on pointer variables only\n");
+        const auto& member_var_name = std::dynamic_pointer_cast<ast::VarName>(member_node);
+        if (!member_var_name->get_name()->is_indexed_name())
+            throw std::runtime_error("Error: " + member_name + " is not an IndexedName\n");
+        const auto& member_indexed_name = std::dynamic_pointer_cast<ast::IndexedName>(
+            member_var_name->get_name());
+        if (!member_indexed_name->get_length()->is_name())
+            throw std::runtime_error("Error: " + member_name + " must be indexed with a variable!");
+
+        llvm::Value* i64_index = get_index(*member_indexed_name);
+        llvm::Value* instance_member = ir_builder.create_load(member_ptr);
+        llvm::Value* ptr = ir_builder.create_inbounds_gep(instance_member, i64_index);
+
+        ir_builder.create_atomic_op(ptr, rhs, op);
+    } else {
+        // For non-SIMD CPUs, updates don't have to be atomic at all!
+        llvm::Value* lhs = accept_and_get(node.get_lhs());
+        ir_builder.create_binary_op(lhs, rhs, op);
+        llvm::Value* result = ir_builder.pop_last_value();
+
+        write_to_variable(*var, result);
+    }
 }
 
 // Generating FOR loop in LLVM IR creates the following structure:
@@ -711,6 +755,10 @@ void CodegenLLVMVisitor::visit_codegen_var_list_statement(
 }
 
 void CodegenLLVMVisitor::visit_double(const ast::Double& node) {
+    ir_builder.create_fp_constant(node.get_value());
+}
+
+void CodegenLLVMVisitor::visit_float(const ast::Float& node) {
     ir_builder.create_fp_constant(node.get_value());
 }
 
@@ -891,7 +939,7 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
 void CodegenLLVMVisitor::print_mechanism_range_var_structure() {
     printer->add_newline(2);
     printer->add_line("/** Instance Struct passed as argument to LLVM IR kernels */");
-    printer->start_block("struct {} "_format(instance_struct()));
+    printer->start_block(fmt::format("struct {} ", instance_struct()));
     for (const auto& variable: instance_var_helper.instance->get_codegen_vars()) {
         auto is_pointer = variable->get_is_pointer();
         auto name = to_nmodl(variable->get_name());
@@ -900,12 +948,17 @@ void CodegenLLVMVisitor::print_mechanism_range_var_structure() {
         auto pointer = is_pointer ? "*" : "";
         auto var_name = variable->get_node_name();
         switch (nmodl_type) {
-#define DISPATCH(type, c_type)                                                              \
-    case type:                                                                              \
-        printer->add_line("{}{}{} {}{};"_format(                                            \
-            qualifier, c_type, pointer, is_pointer ? ptr_type_qualifier() : "", var_name)); \
+#define DISPATCH(type, c_type)                                                \
+    case type:                                                                \
+        printer->add_line(fmt::format("{}{}{} {}{};",                         \
+                                      qualifier,                              \
+                                      c_type,                                 \
+                                      pointer,                                \
+                                      is_pointer ? ptr_type_qualifier() : "", \
+                                      var_name));                             \
         break;
 
+            DISPATCH(ast::AstNodeType::FLOAT, "float");
             DISPATCH(ast::AstNodeType::DOUBLE, "double");
             DISPATCH(ast::AstNodeType::INTEGER, "int");
 
@@ -930,7 +983,8 @@ void CodegenLLVMVisitor::print_instance_variable_setup() {
     printer->add_newline(2);
     printer->add_line("/** initialize mechanism instance variables */");
     printer->start_block("static inline void setup_instance(NrnThread* nt, Memb_list* ml) ");
-    printer->add_line("{0}* inst = ({0}*) mem_alloc(1, sizeof({0}));"_format(instance_struct()));
+    printer->add_line(
+        fmt::format("{0}* inst = ({0}*) mem_alloc(1, sizeof({0}));", instance_struct()));
     if (channel_task_dependency_enabled() && !info.codegen_shadow_variables.empty()) {
         printer->add_line("setup_shadow_vectors(inst, ml);");
     }
@@ -953,12 +1007,12 @@ void CodegenLLVMVisitor::print_instance_variable_setup() {
         auto name = var->get_name();
         auto range_var_type = get_range_var_float_type(var);
         if (float_type == range_var_type) {
-            auto variable = "ml->data+{}{}"_format(id, stride);
+            auto variable = fmt::format("ml->data+{}{}", id, stride);
             auto device_variable = get_variable_device_pointer(variable, float_type_pointer);
-            printer->add_line("inst->{} = {};"_format(name, device_variable));
+            printer->add_line(fmt::format("inst->{} = {};", name, device_variable));
         } else {
-            printer->add_line("inst->{} = setup_range_variable(ml->data+{}{}, pnodecount);"_format(
-                name, id, stride));
+            printer->add_line(fmt::format(
+                "inst->{} = setup_range_variable(ml->data+{}{}, pnodecount);", name, id, stride));
             variables_to_free.push_back(name);
         }
         id += var->get_length();
@@ -979,7 +1033,7 @@ void CodegenLLVMVisitor::print_instance_variable_setup() {
             type = info.artificial_cell ? "void*" : float_type_pointer;
         }
         auto device_variable = get_variable_device_pointer(variable, type);
-        printer->add_line("inst->{} = {};"_format(name, device_variable));
+        printer->add_line(fmt::format("inst->{} = {};", name, device_variable));
     }
 
     int index_id = 0;
@@ -988,7 +1042,7 @@ void CodegenLLVMVisitor::print_instance_variable_setup() {
         std::string var_name = int_var.symbol->get_name() + "_index";
         // Create for loop that instantiates the ion_<var>_index with
         // indexes[<var_id>*pdnodecount]
-        printer->add_line("inst->{} = indexes+{}*pnodecount;"_format(var_name, index_id));
+        printer->add_line(fmt::format("inst->{} = indexes+{}*pnodecount;", var_name, index_id));
         index_id++;
     }
 
@@ -1005,21 +1059,21 @@ void CodegenLLVMVisitor::print_instance_variable_setup() {
     printer->add_line(fmt::format("inst->{} = nt->_shadow_d;", naming::NTHREAD_D_SHADOW));
 
     // Setup global variables
-    printer->add_line("inst->{0} = nt->{0};"_format(naming::NTHREAD_T_VARIABLE));
-    printer->add_line("inst->{0} = nt->{0};"_format(naming::NTHREAD_DT_VARIABLE));
-    printer->add_line("inst->{0} = {0};"_format(naming::CELSIUS_VARIABLE));
-    printer->add_line("inst->{0} = {0};"_format(naming::SECOND_ORDER_VARIABLE));
-    printer->add_line("inst->{} = ml->nodecount;"_format(naming::MECH_NODECOUNT_VAR));
+    printer->add_line(fmt::format("inst->{0} = nt->{0};", naming::NTHREAD_T_VARIABLE));
+    printer->add_line(fmt::format("inst->{0} = nt->{0};", naming::NTHREAD_DT_VARIABLE));
+    printer->add_line(fmt::format("inst->{0} = {0};", naming::CELSIUS_VARIABLE));
+    printer->add_line(fmt::format("inst->{0} = {0};", naming::SECOND_ORDER_VARIABLE));
+    printer->add_line(fmt::format("inst->{} = ml->nodecount;", naming::MECH_NODECOUNT_VAR));
 
     printer->add_line("ml->instance = inst;");
     printer->end_block(3);
 
     printer->add_line("/** cleanup mechanism instance variables */");
     printer->start_block("static inline void cleanup_instance(Memb_list* ml) ");
-    printer->add_line("{0}* inst = ({0}*) ml->instance;"_format(instance_struct()));
+    printer->add_line(fmt::format("{0}* inst = ({0}*) ml->instance;", instance_struct()));
     if (range_variable_setup_required()) {
         for (auto& var: variables_to_free) {
-            printer->add_line("mem_free((void*)inst->{});"_format(var));
+            printer->add_line(fmt::format("mem_free((void*)inst->{});", var));
         }
     }
     printer->add_line("mem_free((void*)inst);");
@@ -1029,7 +1083,7 @@ void CodegenLLVMVisitor::print_instance_variable_setup() {
 CodegenLLVMVisitor::ParamVector CodegenLLVMVisitor::get_compute_function_parameter() {
     auto params = ParamVector();
     params.emplace_back(param_type_qualifier(),
-                        "{}*"_format(instance_struct()),
+                        fmt::format("{}*", instance_struct()),
                         ptr_type_qualifier(),
                         "inst");
     return params;
@@ -1040,18 +1094,19 @@ void CodegenLLVMVisitor::print_backend_compute_routine_decl() {
     auto compute_function = compute_method_name(BlockType::Initial);
 
     printer->add_newline(2);
-    printer->add_line("extern void {}({});"_format(compute_function, get_parameter_str(params)));
+    printer->add_line(
+        fmt::format("extern void {}({});", compute_function, get_parameter_str(params)));
 
     if (info.nrn_cur_required()) {
         compute_function = compute_method_name(BlockType::Equation);
         printer->add_line(
-            "extern void {}({});"_format(compute_function, get_parameter_str(params)));
+            fmt::format("extern void {}({});", compute_function, get_parameter_str(params)));
     }
 
     if (info.nrn_state_required()) {
         compute_function = compute_method_name(BlockType::State);
         printer->add_line(
-            "extern void {}({});"_format(compute_function, get_parameter_str(params)));
+            fmt::format("extern void {}({});", compute_function, get_parameter_str(params)));
     }
 }
 
@@ -1063,10 +1118,10 @@ void CodegenLLVMVisitor::print_wrapper_routine(const std::string& wrapper_functi
     auto compute_function = compute_method_name(type);
 
     printer->add_newline(2);
-    printer->start_block("void {}({})"_format(function_name, args));
+    printer->start_block(fmt::format("void {}({})", function_name, args));
     printer->add_line("int nodecount = ml->nodecount;");
     // clang-format off
-    printer->add_line("{0}* {1}inst = ({0}*) ml->instance;"_format(instance_struct(), ptr_type_qualifier()));
+    printer->add_line(fmt::format("{0}* {1}inst = ({0}*) ml->instance;", instance_struct(), ptr_type_qualifier()));
     // clang-format on
 
     if (type == BlockType::Initial) {
@@ -1079,7 +1134,7 @@ void CodegenLLVMVisitor::print_wrapper_routine(const std::string& wrapper_functi
         printer->add_newline();
     }
 
-    printer->add_line("{}(inst);"_format(compute_function));
+    printer->add_line(fmt::format("{}(inst);", compute_function));
     printer->end_block();
     printer->add_newline();
 }

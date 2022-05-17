@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (C) 2018-2020 Blue Brain Project
+ * Copyright (C) 2018-2022 Blue Brain Project
  *
  * This file is part of NMODL distributed under the terms of the GNU
  * Lesser General Public License. See top-level LICENSE file for details.
@@ -25,7 +25,7 @@ template <>
 std::string format_double_string<CodegenCVisitor>(const std::string& s_value) {
     double value = std::stod(s_value);
     if (std::ceil(value) == value && s_value.find_first_of("eE") == std::string::npos) {
-        return "{:.1f}"_format(value);
+        return fmt::format("{:.1f}", value);
     }
     return s_value;
 }
@@ -60,7 +60,7 @@ template <>
 std::string format_float_string<CodegenCVisitor>(const std::string& s_value) {
     float value = std::stof(s_value);
     if (std::ceil(value) == value && s_value.find_first_of("eE") == std::string::npos) {
-        return "{:.1f}"_format(value);
+        return fmt::format("{:.1f}", value);
     }
     return s_value;
 }

@@ -105,7 +105,7 @@ SCENARIO("Instance Struct creation", "[visitor][llvm][instance_struct]") {
             constexpr static double seed = 42;
             auto instance_data = generate_instance_data(nmodl_text,
                                                         /*opt_level=*/0,
-                                                        /*use_single_precision=*/true,
+                                                        /*use_single_precision=*/false,
                                                         /*vector_width*/ 1,
                                                         num_elements,
                                                         seed);
