@@ -56,6 +56,8 @@ struct SolveNonLinearSystemExecutor: public PythonExecutor {
     // output
     // returns a vector of solutions, i.e. new statements to add to block:
     std::vector<std::string> solutions;
+    // returns if the system is linear or not.
+    bool linear;
     // may also return a python exception message:
     std::string exception_message;
 

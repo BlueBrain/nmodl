@@ -621,7 +621,7 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
         )";
         std::string expected_result = R"(
             DERIVATIVE states {
-                EIGEN_NEWTON_SOLVE[1]{
+                EIGEN_LINEAR_SOLVE[1]{
                     LOCAL old_m
                 }{
                     IF (mInf == 1) {
@@ -630,7 +630,6 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
                     old_m = m
                 }{
                     nmodl_eigen_x[0] = m
-                }{
                     nmodl_eigen_f[0] = (-nmodl_eigen_x[0]*dt+dt*mInf+mTau*(-nmodl_eigen_x[0]+old_m))/mTau
                     nmodl_eigen_j[0] = -(dt+mTau)/mTau
                 }{
@@ -661,7 +660,7 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
             })";
         std::string expected_result = R"(
             DERIVATIVE states {
-                EIGEN_NEWTON_SOLVE[2]{
+                EIGEN_LINEAR_SOLVE[2]{
                     LOCAL a, b, old_y, old_x
                 }{
                     old_y = y
@@ -669,7 +668,6 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
                 }{
                     nmodl_eigen_x[0] = x
                     nmodl_eigen_x[1] = y
-                }{
                     nmodl_eigen_f[0] = -nmodl_eigen_x[1]+a*dt+old_y
                     nmodl_eigen_j[0] = 0
                     nmodl_eigen_j[2] = -1.0
@@ -705,7 +703,7 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
             })";
         std::string expected_result = R"(
             DERIVATIVE states {
-                EIGEN_NEWTON_SOLVE[2]{
+                EIGEN_LINEAR_SOLVE[2]{
                     LOCAL a, b, old_M_1, old_M_0
                 }{
                     old_M_1 = M[1]
@@ -713,7 +711,6 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
                 }{
                     nmodl_eigen_x[0] = M[0]
                     nmodl_eigen_x[1] = M[1]
-                }{
                     nmodl_eigen_f[0] = -nmodl_eigen_x[1]+a*dt+old_M_1
                     nmodl_eigen_j[0] = 0
                     nmodl_eigen_j[2] = -1.0
@@ -750,7 +747,7 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
             })";
         std::string expected_result = R"(
             DERIVATIVE states {
-                EIGEN_NEWTON_SOLVE[2]{
+                EIGEN_LINEAR_SOLVE[2]{
                     LOCAL a, b, old_x, old_y
                 }{
                     old_x = x
@@ -758,7 +755,6 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
                 }{
                     nmodl_eigen_x[0] = x
                     nmodl_eigen_x[1] = y
-                }{
                     nmodl_eigen_f[0] = -nmodl_eigen_x[0]+a*dt+old_x
                     nmodl_eigen_j[0] = -1.0
                     nmodl_eigen_j[2] = 0
@@ -827,7 +823,7 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
             DERIVATIVE states {
                 LOCAL a, b
                 IF (a == 1) {
-                    EIGEN_NEWTON_SOLVE[2]{
+                    EIGEN_LINEAR_SOLVE[2]{
                         LOCAL old_x, old_y
                     }{
                         old_x = x
@@ -835,7 +831,6 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
                     }{
                         nmodl_eigen_x[0] = x
                         nmodl_eigen_x[1] = y
-                    }{
                         nmodl_eigen_f[0] = -nmodl_eigen_x[0]+a*dt+old_x
                         nmodl_eigen_j[0] = -1.0
                         nmodl_eigen_j[2] = 0
@@ -877,7 +872,7 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
             })";
         std::string expected_result = R"(
             DERIVATIVE states {
-                EIGEN_NEWTON_SOLVE[2]{
+                EIGEN_LINEAR_SOLVE[2]{
                     LOCAL a, b, old_x, old_y
                 }{
                     old_x = x
@@ -885,7 +880,6 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
                 }{
                     nmodl_eigen_x[0] = x
                     nmodl_eigen_x[1] = y
-                }{
                     nmodl_eigen_f[0] = -nmodl_eigen_x[0]+nmodl_eigen_x[1]*a*dt+b*dt+old_x
                     nmodl_eigen_j[0] = -1.0
                     nmodl_eigen_j[2] = a*dt
@@ -903,7 +897,7 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
             })";
         std::string expected_result_cse = R"(
             DERIVATIVE states {
-                EIGEN_NEWTON_SOLVE[2]{
+                EIGEN_LINEAR_SOLVE[2]{
                     LOCAL a, b, old_x, old_y
                 }{
                     old_x = x
@@ -911,7 +905,6 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
                 }{
                     nmodl_eigen_x[0] = x
                     nmodl_eigen_x[1] = y
-                }{
                     nmodl_eigen_f[0] = -nmodl_eigen_x[0]+nmodl_eigen_x[1]*a*dt+b*dt+old_x
                     nmodl_eigen_j[0] = -1.0
                     nmodl_eigen_j[2] = a*dt
@@ -956,7 +949,7 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
         )";
         std::string expected_result = R"(
             DERIVATIVE states {
-                EIGEN_NEWTON_SOLVE[3]{
+                EIGEN_LINEAR_SOLVE[3]{
                     LOCAL a, b, c, d, h, old_x, old_y, old_z
                 }{
                     old_x = x
@@ -966,7 +959,6 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
                     nmodl_eigen_x[0] = x
                     nmodl_eigen_x[1] = y
                     nmodl_eigen_x[2] = z
-                }{
                     nmodl_eigen_f[0] = -nmodl_eigen_x[0]+nmodl_eigen_x[2]*a*dt+b*dt*h+old_x
                     nmodl_eigen_j[0] = -1.0
                     nmodl_eigen_j[3] = 0
@@ -988,7 +980,7 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
             })";
         std::string expected_cse_result = R"(
             DERIVATIVE states {
-                EIGEN_NEWTON_SOLVE[3]{
+                EIGEN_LINEAR_SOLVE[3]{
                     LOCAL a, b, c, d, h, old_x, old_y, old_z
                 }{
                     old_x = x
@@ -998,7 +990,6 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
                     nmodl_eigen_x[0] = x
                     nmodl_eigen_x[1] = y
                     nmodl_eigen_x[2] = z
-                }{
                     nmodl_eigen_f[0] = -nmodl_eigen_x[0]+nmodl_eigen_x[2]*a*dt+b*dt*h+old_x
                     nmodl_eigen_j[0] = -1.0
                     nmodl_eigen_j[3] = 0
@@ -1044,7 +1035,7 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
         )";
         std::string expected_result = R"(
             DERIVATIVE scheme1 {
-                EIGEN_NEWTON_SOLVE[2]{
+                EIGEN_LINEAR_SOLVE[2]{
                     LOCAL old_mc, old_m
                 }{
                     old_mc = mc
@@ -1052,7 +1043,6 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
                 }{
                     nmodl_eigen_x[0] = mc
                     nmodl_eigen_x[1] = m
-                }{
                     nmodl_eigen_f[0] = -nmodl_eigen_x[0]*a*dt-nmodl_eigen_x[0]+nmodl_eigen_x[1]*b*dt+old_mc
                     nmodl_eigen_j[0] = -a*dt-1.0
                     nmodl_eigen_j[2] = b*dt
@@ -1088,14 +1078,13 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
         )";
         std::string expected_result = R"(
             DERIVATIVE scheme1 {
-                EIGEN_NEWTON_SOLVE[2]{
+                EIGEN_LINEAR_SOLVE[2]{
                     LOCAL old_mc
                 }{
                     old_mc = mc
                 }{
                     nmodl_eigen_x[0] = mc
                     nmodl_eigen_x[1] = m
-                }{
                     nmodl_eigen_f[0] = -nmodl_eigen_x[0]*a*dt-nmodl_eigen_x[0]+nmodl_eigen_x[1]*b*dt+old_mc
                     nmodl_eigen_j[0] = -a*dt-1.0
                     nmodl_eigen_j[2] = b*dt
@@ -1133,7 +1122,7 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
         )";
         std::string expected_result = R"(
             DERIVATIVE scheme1 {
-                EIGEN_NEWTON_SOLVE[2]{
+                EIGEN_LINEAR_SOLVE[2]{
                     LOCAL old_mc, old_m
                 }{
                     old_mc = mc
@@ -1141,7 +1130,6 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
                 }{
                     nmodl_eigen_x[0] = mc
                     nmodl_eigen_x[1] = m
-                }{
                     nmodl_eigen_f[0] = -nmodl_eigen_x[0]*a*dt-nmodl_eigen_x[0]+nmodl_eigen_x[1]*b*dt+old_mc
                     nmodl_eigen_j[0] = -a*dt-1.0
                     nmodl_eigen_j[2] = b*dt
@@ -1182,7 +1170,7 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
             })";
         std::string expected_result = R"(
             DERIVATIVE ihkin {
-                EIGEN_NEWTON_SOLVE[5]{
+                EIGEN_LINEAR_SOLVE[5]{
                     LOCAL alpha, beta, k3p, k4, k1ca, k2, old_c1, old_o1, old_p0
                 }{
                     evaluate_fct(v, cai)
@@ -1195,7 +1183,6 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
                     nmodl_eigen_x[2] = o2
                     nmodl_eigen_x[3] = p0
                     nmodl_eigen_x[4] = p1
-                }{
                     nmodl_eigen_f[0] = -nmodl_eigen_x[0]*alpha*dt-nmodl_eigen_x[0]+nmodl_eigen_x[1]*beta*dt+old_c1
                     nmodl_eigen_j[0] = -alpha*dt-1.0
                     nmodl_eigen_j[5] = beta*dt
@@ -1262,13 +1249,12 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
         )";
         std::string expected_result = R"(
             DERIVATIVE scheme1 {
-                EIGEN_NEWTON_SOLVE[1]{
+                EIGEN_LINEAR_SOLVE[1]{
                     LOCAL old_W_0
                 }{
                     old_W_0 = W[0]
                 }{
                     nmodl_eigen_x[0] = W[0]
-                }{
                     nmodl_eigen_f[0] = -nmodl_eigen_x[0]*dt*A[0]+nmodl_eigen_x[0]*dt*B[0]-nmodl_eigen_x[0]+3.0*dt*A[1]+old_W_0
                     nmodl_eigen_j[0] = -dt*A[0]+dt*B[0]-1.0
                 }{
@@ -1302,7 +1288,7 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
         )";
         std::string expected_result = R"(
             DERIVATIVE scheme1 {
-                EIGEN_NEWTON_SOLVE[2]{
+                EIGEN_LINEAR_SOLVE[2]{
                     LOCAL old_M_0, old_M_1
                 }{
                     old_M_0 = M[0]
@@ -1310,7 +1296,6 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
                 }{
                     nmodl_eigen_x[0] = M[0]
                     nmodl_eigen_x[1] = M[1]
-                }{
                     nmodl_eigen_f[0] = -nmodl_eigen_x[0]*dt*A[0]-nmodl_eigen_x[0]+nmodl_eigen_x[1]*dt*B[0]+old_M_0
                     nmodl_eigen_j[0] = -dt*A[0]-1.0
                     nmodl_eigen_j[2] = dt*B[0]
@@ -1348,13 +1333,12 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
         )";
         std::string expected_result = R"(
             DERIVATIVE scheme1 {
-                EIGEN_NEWTON_SOLVE[1]{
+                EIGEN_LINEAR_SOLVE[1]{
                     LOCAL old_W_0
                 }{
                     old_W_0 = W[0]
                 }{
                     nmodl_eigen_x[0] = W[0]
-                }{
                     nmodl_eigen_f[0] = -nmodl_eigen_x[0]*dt*A[0]+nmodl_eigen_x[0]*dt*B[0]-nmodl_eigen_x[0]+3.0*dt*A[1]+old_W_0
                     nmodl_eigen_j[0] = -dt*A[0]+dt*B[0]-1.0
                 }{
@@ -2055,7 +2039,7 @@ SCENARIO("Solve NONLINEAR block using SympySolver Visitor", "[visitor][solver][s
                 x
             }
             NONLINEAR nonlin {
-                ~ x = 5
+                ~ x * x * x = 5
             })";
         std::string expected_text = R"(
             NONLINEAR nonlin {
@@ -2064,8 +2048,8 @@ SCENARIO("Solve NONLINEAR block using SympySolver Visitor", "[visitor][solver][s
                 }{
                     nmodl_eigen_x[0] = x
                 }{
-                    nmodl_eigen_f[0] = 5.0-nmodl_eigen_x[0]
-                    nmodl_eigen_j[0] = -1.0
+                    nmodl_eigen_f[0] = 5.0-pow(nmodl_eigen_x[0], 3)
+                    nmodl_eigen_j[0] = -3.0 * pow(nmodl_eigen_x[0], 2)
                 }{
                     x = nmodl_eigen_x[0]
                 }{
@@ -2086,7 +2070,7 @@ SCENARIO("Solve NONLINEAR block using SympySolver Visitor", "[visitor][solver][s
             NONLINEAR nonlin {
                 ~ s[0] = 1
                 ~ s[1] = 3
-                ~ s[2] + s[1] = s[0]
+                ~ s[2] + s[1] = s[0] * s[0]
             })";
         std::string expected_text = R"(
             NONLINEAR nonlin {
@@ -2099,14 +2083,14 @@ SCENARIO("Solve NONLINEAR block using SympySolver Visitor", "[visitor][solver][s
                 }{
                     nmodl_eigen_f[0] = 1.0-nmodl_eigen_x[0]
                     nmodl_eigen_f[1] = 3.0-nmodl_eigen_x[1]
-                    nmodl_eigen_f[2] = nmodl_eigen_x[0]-nmodl_eigen_x[1]-nmodl_eigen_x[2]
+                    nmodl_eigen_f[2] = pow(nmodl_eigen_x[0], 2)-nmodl_eigen_x[1]-nmodl_eigen_x[2]
                     nmodl_eigen_j[0] = -1.0
                     nmodl_eigen_j[3] = 0
                     nmodl_eigen_j[6] = 0
                     nmodl_eigen_j[1] = 0
                     nmodl_eigen_j[4] = -1.0
                     nmodl_eigen_j[7] = 0
-                    nmodl_eigen_j[2] = 1.0
+                    nmodl_eigen_j[2] = 2.0 * nmodl_eigen_x[0]
                     nmodl_eigen_j[5] = -1.0
                     nmodl_eigen_j[8] = -1.0
                 }{

@@ -8,6 +8,7 @@
 from importlib import import_module
 
 import sympy as sp
+import itertools
 
 # import known_functions through low-level mechanism because the ccode
 # module is overwritten in sympy and contents of that submodule cannot be
@@ -272,6 +273,8 @@ def solve_non_lin_system(eq_strings, vars, constants, function_calls):
 
     eqs, state_vars, sympy_vars = _sympify_eqs(eq_strings, vars, constants)
 
+    linear = _is_linear(eqs, state_vars, sympy_vars)
+
     custom_fcts = _get_custom_functions(function_calls)
 
     jacobian = sp.Matrix(eqs).jacobian(state_vars)
@@ -291,7 +294,18 @@ def solve_non_lin_system(eq_strings, vars, constants, function_calls):
     # interweave
     code = _interweave_eqs(vecFcode, vecJcode)
 
-    return code
+    return code, linear
+
+
+def _is_linear(eqs, state_vars, sympy_vars):
+    for expr in eqs:
+        for (x, y) in itertools.combinations_with_replacement(state_vars, 2):
+            try:
+                if not sp.Eq(sp.diff(expr, x, y), 0):
+                    return False
+            except TypeError:
+                return False
+    return True
 
 
 def integrate2c(diff_string, dt_var, vars, use_pade_approx=False):
