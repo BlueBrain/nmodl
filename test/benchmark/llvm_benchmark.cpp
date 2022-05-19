@@ -42,13 +42,13 @@ void LLVMBenchmark::generate_llvm() {
     logger->info("Created LLVM IR module from NMODL AST in {} sec", diff.count());
 }
 
+#ifdef NMODL_LLVM_CUDA_BACKEND
 void checkCudaErrors(cudaError error) {
     if (error != cudaSuccess) {
         throw std::runtime_error(fmt::format("CUDA Execution Error: {}\n", cudaGetErrorString(error)));
     }
 }
 
-#ifdef NMODL_LLVM_CUDA_BACKEND
 void* copy_instance_data_gpu(const codegen::CodegenInstanceData& data) {
     void* dev_base_ptr;
     const auto ptr_vars_size = data.num_ptr_members * sizeof(double*);
