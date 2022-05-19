@@ -27,8 +27,8 @@ set(NMODL_SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp)
 add_executable(nmodl ${NMODL_SOURCE_FILES})
 target_link_libraries(
   nmodl
-  printer
   codegen
+  printer
   visitor
   symtab
   util
