@@ -12,12 +12,15 @@
 
 #include "ast/program.hpp"
 #include "codegen/codegen_driver.hpp"
-#include "codegen/llvm/codegen_llvm_visitor.hpp"
 #include "config/config.h"
 #include "parser/nmodl_driver.hpp"
 #include "pybind/pybind_utils.hpp"
-#include "test/benchmark/llvm_benchmark.hpp"
 #include "visitors/visitor_utils.hpp"
+
+#ifdef NMODL_LLVM_BACKEND
+#include "codegen/llvm/codegen_llvm_visitor.hpp"
+#include "test/benchmark/llvm_benchmark.hpp"
+#endif
 
 /**
  * \dir
@@ -110,9 +113,11 @@ static const char* to_json = R"(
     '{"Program":[{"NeuronBlock":[{"StatementBlock":[]}]}]}'
 )";
 
+#ifdef NMODL_LLVM_BACKEND
 static const char* jit = R"(
     This is the Jit class documentation
 )";
+#endif
 
 }  // namespace docstring
 
@@ -137,6 +142,7 @@ class PyNmodlDriver: public nmodl::parser::NmodlDriver {
     }
 };
 
+#ifdef NMODL_LLVM_BACKEND
 class JitDriver {
   private:
     nmodl::codegen::Platform platform;
@@ -211,6 +217,7 @@ class JitDriver {
         return benchmark.run();
     }
 };
+#endif
 
 }  // namespace nmodl
 
@@ -246,8 +253,10 @@ PYBIND11_MODULE(_nmodl, m_nmodl) {
     py::class_<nmodl::codegen::CodeGenConfig> cfg(m_nmodl, "CodeGenConfig");
     cfg.def(py::init([]() {
            auto cfg = std::make_unique<nmodl::codegen::CodeGenConfig>();
+#ifdef NMODL_LLVM_BACKEND
            // set to more sensible defaults for python binding
            cfg->llvm_ir = true;
+#endif
            return cfg;
        }))
         .def_readwrite("sympy_analytic", &nmodl::codegen::CodeGenConfig::sympy_analytic)
@@ -276,6 +285,7 @@ PYBIND11_MODULE(_nmodl, m_nmodl) {
         .def_readwrite("nmodl_ast", &nmodl::codegen::CodeGenConfig::nmodl_ast)
         .def_readwrite("json_ast", &nmodl::codegen::CodeGenConfig::json_ast)
         .def_readwrite("json_perfstat", &nmodl::codegen::CodeGenConfig::json_perfstat)
+#ifdef NMODL_LLVM_BACKEND
         .def_readwrite("llvm_ir", &nmodl::codegen::CodeGenConfig::llvm_ir)
         .def_readwrite("llvm_float_type", &nmodl::codegen::CodeGenConfig::llvm_float_type)
         .def_readwrite("llvm_opt_level_ir", &nmodl::codegen::CodeGenConfig::llvm_opt_level_ir)
@@ -302,6 +312,9 @@ PYBIND11_MODULE(_nmodl, m_nmodl) {
              "instance_size"_a,
              "cuda_grid_dim_x"_a = 1,
              "cuda_block_dim_x"_a = 1);
+#else
+        ;
+#endif
 
     m_nmodl.def("to_nmodl",
                 static_cast<std::string (*)(const nmodl::ast::Ast&,
