@@ -120,10 +120,13 @@ class CodegenLLVMHelperVisitor: public visitor::AstVisitor {
     /// create new InstanceStruct
     std::shared_ptr<ast::InstanceStruct> create_instance_struct();
 
+  private:
+    /// floating-point type
+    ast::AstNodeType fp_type;
+
   public:
-    /// default integer and float node type
+    /// default integer type
     static const ast::AstNodeType INTEGER_TYPE;
-    static const ast::AstNodeType FLOAT_TYPE;
 
     // node count, voltage and node index variables
     static const std::string NODECOUNT_VAR;
@@ -131,7 +134,10 @@ class CodegenLLVMHelperVisitor: public visitor::AstVisitor {
     static const std::string NODE_INDEX_VAR;
 
     CodegenLLVMHelperVisitor(Platform& platform)
-        : platform(platform) {}
+        : platform(platform) {
+        fp_type = platform.is_single_precision() ? ast::AstNodeType::FLOAT
+                                                 : ast::AstNodeType::DOUBLE;
+    }
 
     const InstanceVarHelper& get_instance_var_helper() {
         return instance_var_helper;

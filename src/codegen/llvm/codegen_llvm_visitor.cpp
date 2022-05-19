@@ -225,6 +225,7 @@ llvm::Type* CodegenLLVMVisitor::get_codegen_var_type(const ast::CodegenVarType& 
     switch (node.get_type()) {
     case ast::AstNodeType::BOOLEAN:
         return ir_builder.get_boolean_type();
+    case ast::AstNodeType::FLOAT:
     case ast::AstNodeType::DOUBLE:
         return ir_builder.get_fp_type();
     case ast::AstNodeType::INSTANCE_STRUCT:
@@ -255,6 +256,7 @@ llvm::Type* CodegenLLVMVisitor::get_instance_struct_type() {
 
         // Create the corresponding LLVM type.
         switch (nmodl_type) {
+        case ast::AstNodeType::FLOAT:
         case ast::AstNodeType::DOUBLE:
             member_types.push_back(is_pointer ? ir_builder.get_fp_ptr_type()
                                               : ir_builder.get_fp_type());
@@ -824,6 +826,10 @@ void CodegenLLVMVisitor::visit_double(const ast::Double& node) {
     ir_builder.create_fp_constant(node.get_value());
 }
 
+void CodegenLLVMVisitor::visit_float(const ast::Float& node) {
+    ir_builder.create_fp_constant(node.get_value());
+}
+
 void CodegenLLVMVisitor::visit_function_block(const ast::FunctionBlock& node) {
     // do nothing. \todo: remove old function blocks from ast.
 }
@@ -1020,6 +1026,7 @@ void CodegenLLVMVisitor::print_mechanism_range_var_structure() {
                                       var_name));                             \
         break;
 
+            DISPATCH(ast::AstNodeType::FLOAT, "float");
             DISPATCH(ast::AstNodeType::DOUBLE, "double");
             DISPATCH(ast::AstNodeType::INTEGER, "int");
 
