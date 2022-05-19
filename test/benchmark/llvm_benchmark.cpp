@@ -48,6 +48,7 @@ void checkCudaErrors(cudaError error) {
     }
 }
 
+#ifdef NMODL_LLVM_CUDA_BACKEND
 void* copy_instance_data_gpu(const codegen::CodegenInstanceData& data) {
     void* dev_base_ptr;
     const auto ptr_vars_size = data.num_ptr_members * sizeof(double*);
@@ -104,6 +105,7 @@ void copy_instance_data_host(codegen::CodegenInstanceData& data, void* dev_base_
     checkCudaErrors(cudaMemcpy(
         offseted_place_host, offseted_place_dev, scalar_vars_size, cudaMemcpyDeviceToHost));
 }
+#endif
 
 BenchmarkResults LLVMBenchmark::run_benchmark() {
     // Set the codegen data helper and find the kernels.
