@@ -1,6 +1,6 @@
 /*************************************************************************
- * Copyright (C) 2018-2019 Blue Brain Project
- * Copyright (C) 2018-2019 Michael Hines
+ * Copyright (C) 2018-2022 Blue Brain Project
+ * Copyright (C) 2018-2022 Michael Hines
  *
  * This file is part of NMODL distributed under the terms of the GNU
  * Lesser General Public License. See top-level LICENSE file for details.
@@ -27,6 +27,7 @@
 
 D   [0-9]
 E   [Ee][-+]?{D}+
+N   [a-zA-Z][a-zA-Z0-9_]*
 
 /** if want to use yymore feature in copy modes */
 %option yymore
@@ -93,7 +94,8 @@ E   [Ee][-+]?{D}+
 {D}+"."{D}*({E})?       |
 {D}*"."{D}+({E})?       |
 {D}+{E}                 |
-[a-zA-Z][a-zA-Z0-9_]*   { return DiffeqParser::make_ATOM(yytext, loc); }
+{N}\[(({D}+)|({N}))\]   |
+{N}                     { return DiffeqParser::make_ATOM(yytext, loc); }
 
 "\n"                    { return DiffeqParser::make_NEWLINE(yytext, loc); }
 

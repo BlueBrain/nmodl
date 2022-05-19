@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (C) 2018-2019 Blue Brain Project
+ * Copyright (C) 2018-2022 Blue Brain Project
  *
  * This file is part of NMODL distributed under the terms of the GNU
  * Lesser General Public License. See top-level LICENSE file for details.
@@ -7,8 +7,6 @@
 
 #include "codegen/codegen_omp_visitor.hpp"
 
-
-using namespace fmt::literals;
 
 namespace nmodl {
 namespace codegen {
@@ -26,7 +24,7 @@ void CodegenOmpVisitor::print_channel_iteration_task_begin(BlockType type) {
     } else {
         vars = "start, end, node_index, indexes, voltage, inst, thread, nt";
     }
-    printer->add_line("#pragma omp task default(shared) firstprivate({})"_format(vars));
+    printer->add_line(fmt::format("#pragma omp task default(shared) firstprivate({})", vars));
     printer->add_line("{");
     printer->increase_indent();
 }

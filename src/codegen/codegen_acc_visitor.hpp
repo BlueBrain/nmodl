@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (C) 2018-2019 Blue Brain Project
+ * Copyright (C) 2018-2022 Blue Brain Project
  *
  * This file is part of NMODL distributed under the terms of the GNU
  * Lesser General Public License. See top-level LICENSE file for details.
@@ -128,11 +128,7 @@ class CodegenAccVisitor: public CodegenCVisitor {
     void print_net_send_buffering_grow() override;
 
 
-    void print_eigen_linear_solver(const std::string& float_type,
-                                   int N,
-                                   const std::string& Xm,
-                                   const std::string& Jm,
-                                   const std::string& Fm) override;
+    void print_eigen_linear_solver(const std::string& float_type, int N) override;
 
 
   public:

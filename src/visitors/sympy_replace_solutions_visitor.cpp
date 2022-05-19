@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (C) 2018-2021 Blue Brain Project
+ * Copyright (C) 2018-2022 Blue Brain Project
  *
  * This file is part of NMODL distributed under the terms of the GNU
  * Lesser General Public License. See top-level LICENSE file for details.
@@ -14,8 +14,6 @@
 
 namespace nmodl {
 namespace visitor {
-
-using namespace fmt::literals;
 
 /**
  * \details SympyReplaceSolutionsVisitor tells us that a new equation appear and, depending where
@@ -135,7 +133,7 @@ void SympyReplaceSolutionsVisitor::visit_statement_block(ast::StatementBlock& no
             for (const auto ii: solution_statements.tags) {
                 ss << to_nmodl(solution_statements.statements[ii]) << '\n';
             }
-            throw std::runtime_error(
+            throw std::runtime_error(fmt::format(
                 "Not all solutions were replaced! Sympy returned {} equations but I could not find "
                 "a place "
                 "for all of them. In particular, the following equations remain to be replaced "
@@ -145,8 +143,9 @@ void SympyReplaceSolutionsVisitor::visit_statement_block(ast::StatementBlock& no
                 "sympy "
                 "returned more equations than what we expected\n - There is a bug in the GREEDY "
                 "pass\n - some "
-                "solutions were replaced but not untagged"_format(
-                    solution_statements.statements.size(), ss.str()));
+                "solutions were replaced but not untagged",
+                solution_statements.statements.size(),
+                ss.str()));
         }
 
         if (replaced_statements_range.first == -1) {

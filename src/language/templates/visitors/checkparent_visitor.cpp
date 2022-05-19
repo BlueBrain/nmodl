@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (C) 2018-2019 Blue Brain Project
+ * Copyright (C) 2018-2022 Blue Brain Project
  *
  * This file is part of NMODL distributed under the terms of the GNU
  * Lesser General Public License. See top-level LICENSE file for details.
@@ -20,7 +20,6 @@ namespace nmodl {
 namespace visitor {
 namespace test {
 
-using namespace fmt::literals;
 using namespace ast;
 
 int CheckParentVisitor::check_ast(const Ast& node) {
@@ -36,13 +35,16 @@ void CheckParentVisitor::check_parent(const ast::Ast& node) const {
     if (!parent) {
         if (is_root_with_null_parent && node.get_parent()) {
             const auto& parent_type = parent->get_node_type_name();
-            throw std::runtime_error("root->parent: {} is set when it should be nullptr"_format(parent_type));
+            throw std::runtime_error(
+                fmt::format("root->parent: {} is set when it should be nullptr", parent_type));
         }
     } else {
         if (parent != node.get_parent()) {
             const std::string parent_type = (parent  == nullptr) ? "nullptr" : parent->get_node_type_name();
             const std::string node_parent_type = (node.get_parent() == nullptr) ? "nullptr" : node.get_parent()->get_node_type_name();
-            throw std::runtime_error("parent: {} and child->parent: {} missmatch"_format(parent_type, node_parent_type));
+            throw std::runtime_error(fmt::format("parent: {} and child->parent: {} missmatch",
+                                                 parent_type,
+                                                 node_parent_type));
         }
     }
 }

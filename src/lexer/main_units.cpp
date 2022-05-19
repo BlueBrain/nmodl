@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (C) 2018-2019 Blue Brain Project
+ * Copyright (C) 2018-2022 Blue Brain Project
  *
  * This file is part of NMODL distributed under the terms of the GNU
  * Lesser General Public License. See top-level LICENSE file for details.
@@ -20,12 +20,11 @@
  * demonstrate use of UnitLexer and UnitDriver classes.
  */
 
-using namespace fmt::literals;
 using namespace nmodl;
 using Token = parser::UnitParser::token;
 
 int main(int argc, const char* argv[]) {
-    CLI::App app{"Unit-Lexer : Standalone Lexer for Units({})"_format(Version::to_string())};
+    CLI::App app{fmt::format("Unit-Lexer : Standalone Lexer for Units({})", Version::to_string())};
 
     std::vector<std::string> files;
     app.add_option("file", files, "One or more units files to process")

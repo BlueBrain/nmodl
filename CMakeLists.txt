@@ -1,5 +1,5 @@
 # =============================================================================
-# Copyright (C) 2018-2021 Blue Brain Project
+# Copyright (C) 2018-2022 Blue Brain Project
 #
 # This file is part of NMODL distributed under the terms of the GNU Lesser General Public License.
 # See top-level LICENSE file for details.
@@ -82,7 +82,7 @@ add_compile_options(${NMODL_COMPILER_WARNING_SUPPRESSIONS})
 # =============================================================================
 project(
   NMODL
-  VERSION "0.8"
+  VERSION "1.0"
   LANGUAGES CXX)
 
 # =============================================================================

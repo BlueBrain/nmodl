@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (C) 2018-2019 Blue Brain Project
+ * Copyright (C) 2018-2022 Blue Brain Project
  *
  * This file is part of NMODL distributed under the terms of the GNU
  * Lesser General Public License. See top-level LICENSE file for details.
@@ -45,6 +45,14 @@ void CodePrinter::start_block(const std::string& text) {
     *result << text << " {";
     add_newline();
     indent_level++;
+}
+
+void CodePrinter::restart_block(std::string const& expression) {
+    --indent_level;
+    add_indent();
+    *result << "} " << expression << " {";
+    add_newline();
+    ++indent_level;
 }
 
 void CodePrinter::add_indent() {

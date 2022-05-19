@@ -173,6 +173,7 @@ class CodegenLLVMVisitor: public CodegenCVisitor {
     void visit_codegen_thread_id(const ast::CodegenThreadId& node) override;
     void visit_codegen_var_list_statement(const ast::CodegenVarListStatement& node) override;
     void visit_double(const ast::Double& node) override;
+    void visit_float(const ast::Float& node) override;
     void visit_function_block(const ast::FunctionBlock& node) override;
     void visit_function_call(const ast::FunctionCall& node) override;
     void visit_if_statement(const ast::IfStatement& node) override;
@@ -196,9 +197,6 @@ class CodegenLLVMVisitor: public CodegenCVisitor {
     }
     void visit_else_statement(const ast::ElseStatement& node) override {
         visitor::ConstAstVisitor::visit_else_statement(node);
-    }
-    void visit_float(const ast::Float& node) override {
-        visitor::ConstAstVisitor::visit_float(node);
     }
     void visit_from_statement(const ast::FromStatement& node) override {
         visitor::ConstAstVisitor::visit_from_statement(node);

@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (C) 2018-2019 Blue Brain Project
+ * Copyright (C) 2018-2022 Blue Brain Project
  *
  * This file is part of NMODL distributed under the terms of the GNU
  * Lesser General Public License. See top-level LICENSE file for details.
@@ -35,15 +35,14 @@
  * \brief Main NMODL code generation program
  */
 
-using namespace fmt::literals;
 using namespace nmodl;
 using namespace codegen;
 using namespace visitor;
 using nmodl::parser::NmodlDriver;
 
 int main(int argc, const char* argv[]) {
-    CLI::App app{
-        "NMODL : Source-to-Source Code Generation Framework [{}]"_format(Version::to_string())};
+    CLI::App app{fmt::format("NMODL : Source-to-Source Code Generation Framework [{}]",
+                             Version::to_string())};
 
     /// list of mod files to process
     std::vector<std::string> mod_files;
@@ -82,7 +81,8 @@ int main(int argc, const char* argv[]) {
     app.get_formatter()->column_width(40);
     app.set_help_all_flag("-H,--help-all", "Print this help message including all sub-commands");
 
-    app.add_option("--verbose", verbose, "Verbosity of logger output", true)
+    app.add_option("--verbose", verbose, "Verbosity of logger output")
+        ->capture_default_str()
         ->ignore_case()
         ->check(CLI::IsMember({"trace", "debug", "info", "warning", "error", "critical", "off"}));
 
@@ -91,102 +91,105 @@ int main(int argc, const char* argv[]) {
         ->required()
         ->check(CLI::ExistingFile);
 
-    app.add_option("-o,--output", cfg.output_dir, "Directory for backend code output", true)
+    app.add_option("-o,--output", cfg.output_dir, "Directory for backend code output")
+        ->capture_default_str()
         ->ignore_case();
-    app.add_option("--scratch", cfg.scratch_dir, "Directory for intermediate code output", true)
+    app.add_option("--scratch", cfg.scratch_dir, "Directory for intermediate code output")
+        ->capture_default_str()
         ->ignore_case();
-    app.add_option("--units", cfg.units_dir, "Directory of units lib file", true)->ignore_case();
+    app.add_option("--units", cfg.units_dir, "Directory of units lib file")
+        ->capture_default_str()
+        ->ignore_case();
 
     auto host_opt = app.add_subcommand("host", "HOST/CPU code backends")->ignore_case();
-    host_opt->add_flag("--c", cfg.c_backend, "C/C++ backend ({})"_format(cfg.c_backend))
+    host_opt->add_flag("--c", cfg.c_backend, fmt::format("C/C++ backend ({})", cfg.c_backend))
         ->ignore_case();
     host_opt
         ->add_flag("--omp",
                    cfg.omp_backend,
-                   "C/C++ backend with OpenMP ({})"_format(cfg.omp_backend))
+                   fmt::format("C/C++ backend with OpenMP ({})", cfg.omp_backend))
         ->ignore_case();
     host_opt
         ->add_flag("--ispc",
                    cfg.ispc_backend,
-                   "C/C++ backend with ISPC ({})"_format(cfg.ispc_backend))
+                   fmt::format("C/C++ backend with ISPC ({})", cfg.ispc_backend))
         ->ignore_case();
 
     auto acc_opt = app.add_subcommand("acc", "Accelerator code backends")->ignore_case();
     acc_opt
         ->add_flag("--oacc",
                    cfg.oacc_backend,
-                   "C/C++ backend with OpenACC ({})"_format(cfg.oacc_backend))
+                   fmt::format("C/C++ backend with OpenACC ({})", cfg.oacc_backend))
         ->ignore_case();
     acc_opt
         ->add_flag("--cuda",
                    cfg.cuda_backend,
-                   "C/C++ backend with CUDA ({})"_format(cfg.cuda_backend))
+                   fmt::format("C/C++ backend with CUDA ({})", cfg.cuda_backend))
         ->ignore_case();
 
     // clang-format off
     auto sympy_opt = app.add_subcommand("sympy", "SymPy based analysis and optimizations")->ignore_case();
     sympy_opt->add_flag("--analytic",
         cfg.sympy_analytic,
-        "Solve ODEs using SymPy analytic integration ({})"_format(cfg.sympy_analytic))->ignore_case();
+        fmt::format("Solve ODEs using SymPy analytic integration ({})", cfg.sympy_analytic))->ignore_case();
     sympy_opt->add_flag("--pade",
         cfg.sympy_pade,
-        "Pade approximation in SymPy analytic integration ({})"_format(cfg.sympy_pade))->ignore_case();
+        fmt::format("Pade approximation in SymPy analytic integration ({})", cfg.sympy_pade))->ignore_case();
     sympy_opt->add_flag("--cse",
         cfg.sympy_cse,
-        "CSE (Common Subexpression Elimination) in SymPy analytic integration ({})"_format(cfg.sympy_cse))->ignore_case();
+        fmt::format("CSE (Common Subexpression Elimination) in SymPy analytic integration ({})", cfg.sympy_cse))->ignore_case();
     sympy_opt->add_flag("--conductance",
         cfg.sympy_conductance,
-        "Add CONDUCTANCE keyword in BREAKPOINT ({})"_format(cfg.sympy_conductance))->ignore_case();
+        fmt::format("Add CONDUCTANCE keyword in BREAKPOINT ({})", cfg.sympy_conductance))->ignore_case();
 
     auto passes_opt = app.add_subcommand("passes", "Analyse/Optimization passes")->ignore_case();
     passes_opt->add_flag("--inline",
         cfg.nmodl_inline,
-        "Perform inlining at NMODL level ({})"_format(cfg.nmodl_inline))->ignore_case();
+        fmt::format("Perform inlining at NMODL level ({})", cfg.nmodl_inline))->ignore_case();
     passes_opt->add_flag("--unroll",
         cfg.nmodl_unroll,
-        "Perform loop unroll at NMODL level ({})"_format(cfg.nmodl_unroll))->ignore_case();
+        fmt::format("Perform loop unroll at NMODL level ({})", cfg.nmodl_unroll))->ignore_case();
     passes_opt->add_flag("--const-folding",
         cfg.nmodl_const_folding,
-        "Perform constant folding at NMODL level ({})"_format(cfg.nmodl_const_folding))->ignore_case();
+        fmt::format("Perform constant folding at NMODL level ({})", cfg.nmodl_const_folding))->ignore_case();
     passes_opt->add_flag("--localize",
         cfg.nmodl_localize,
-        "Convert RANGE variables to LOCAL ({})"_format(cfg.nmodl_localize))->ignore_case();
+        fmt::format("Convert RANGE variables to LOCAL ({})", cfg.nmodl_localize))->ignore_case();
     passes_opt->add_flag("--global-to-range",
          cfg.nmodl_global_to_range,
-         "Convert GLOBAL variables to RANGE ({})"_format(cfg.nmodl_global_to_range))->ignore_case();
+         fmt::format("Convert GLOBAL variables to RANGE ({})", cfg.nmodl_global_to_range))->ignore_case();
     passes_opt->add_flag("--local-to-range",
          cfg.nmodl_local_to_range,
-         "Convert top level LOCAL variables to RANGE ({})"_format(cfg.nmodl_local_to_range))->ignore_case();
+         fmt::format("Convert top level LOCAL variables to RANGE ({})", cfg.nmodl_local_to_range))->ignore_case();
     passes_opt->add_flag("--localize-verbatim",
         cfg.localize_verbatim,
-        "Convert RANGE variables to LOCAL even if verbatim block exist ({})"_format(cfg.localize_verbatim))->ignore_case();
+        fmt::format("Convert RANGE variables to LOCAL even if verbatim block exist ({})", cfg.localize_verbatim))->ignore_case();
     passes_opt->add_flag("--local-rename",
         cfg.local_rename,
-        "Rename LOCAL variable if variable of same name exist in global scope ({})"_format(cfg.local_rename))->ignore_case();
+        fmt::format("Rename LOCAL variable if variable of same name exist in global scope ({})", cfg.local_rename))->ignore_case();
     passes_opt->add_flag("--verbatim-inline",
         cfg.verbatim_inline,
-        "Inline even if verbatim block exist ({})"_format(cfg.verbatim_inline))->ignore_case();
+        fmt::format("Inline even if verbatim block exist ({})", cfg.verbatim_inline))->ignore_case();
     passes_opt->add_flag("--verbatim-rename",
         cfg.verbatim_rename,
-        "Rename variables in verbatim block ({})"_format(cfg.verbatim_rename))->ignore_case();
+        fmt::format("Rename variables in verbatim block ({})", cfg.verbatim_rename))->ignore_case();
     passes_opt->add_flag("--json-ast",
         cfg.json_ast,
-        "Write AST to JSON file ({})"_format(cfg.json_ast))->ignore_case();
+        fmt::format("Write AST to JSON file ({})", cfg.json_ast))->ignore_case();
     passes_opt->add_flag("--nmodl-ast",
         cfg.nmodl_ast,
-        "Write AST to NMODL file ({})"_format(cfg.nmodl_ast))->ignore_case();
+        fmt::format("Write AST to NMODL file ({})", cfg.nmodl_ast))->ignore_case();
     passes_opt->add_flag("--json-perf",
         cfg.json_perfstat,
-        "Write performance statistics to JSON file ({})"_format(cfg.json_perfstat))->ignore_case();
+        fmt::format("Write performance statistics to JSON file ({})", cfg.json_perfstat))->ignore_case();
     passes_opt->add_flag("--show-symtab",
         show_symtab,
-        "Write symbol table to stdout ({})"_format(show_symtab))->ignore_case();
+        fmt::format("Write symbol table to stdout ({})", show_symtab))->ignore_case();
 
     auto codegen_opt = app.add_subcommand("codegen", "Code generation options")->ignore_case();
     codegen_opt->add_option("--datatype",
         cfg.data_type,
-        "Data type for floating point variables",
-        true)->ignore_case()->check(CLI::IsMember({"float", "double"}));
+        "Data type for floating point variables")->capture_default_str()->ignore_case()->check(CLI::IsMember({"float", "double"}));
     codegen_opt->add_flag("--force",
         cfg.force_codegen,
         "Force code generation even if there is any incompatibility");
@@ -195,7 +198,7 @@ int main(int argc, const char* argv[]) {
                           "Check compatibility and return without generating code");
     codegen_opt->add_flag("--opt-ionvar-copy",
         cfg.optimize_ionvar_copies_codegen,
-        "Optimize copies of ion variables ({})"_format(cfg.optimize_ionvar_copies_codegen))->ignore_case();
+        fmt::format("Optimize copies of ion variables ({})", cfg.optimize_ionvar_copies_codegen))->ignore_case();
 
 #ifdef NMODL_LLVM_BACKEND
 
@@ -203,17 +206,17 @@ int main(int argc, const char* argv[]) {
     auto llvm_opt = app.add_subcommand("llvm", "LLVM code generation option")->ignore_case();
     auto llvm_ir_opt = llvm_opt->add_flag("--ir",
         cfg.llvm_ir,
-        "Generate LLVM IR ({})"_format(cfg.llvm_ir))->ignore_case();
+        fmt::format("Generate LLVM IR ({})", cfg.llvm_ir))->ignore_case();
     llvm_ir_opt->required(true);
     llvm_opt->add_flag("--no-debug",
         cfg.llvm_no_debug,
-        "Disable debug information ({})"_format(cfg.llvm_no_debug))->ignore_case();
+        fmt::format("Disable debug information ({})", cfg.llvm_no_debug))->ignore_case();
     llvm_opt->add_option("--opt-level-ir",
         cfg.llvm_opt_level_ir,
-        "LLVM IR optimisation level (O{})"_format(cfg.llvm_opt_level_ir))->ignore_case()->check(CLI::IsMember({"0", "1", "2", "3"}));
+        fmt::format("LLVM IR optimisation level (O{})", cfg.llvm_opt_level_ir))->ignore_case()->check(CLI::IsMember({"0", "1", "2", "3"}));
     llvm_opt->add_flag("--single-precision",
         cfg.llvm_float_type,
-        "Use single precision floating-point types ({})"_format(cfg.llvm_float_type))->ignore_case();
+        fmt::format("Use single precision floating-point types ({})", cfg.llvm_float_type))->ignore_case();
     llvm_opt->add_option("--fmf",
         cfg.llvm_fast_math_flags,
         "Fast math flags for floating-point optimizations (none)")->check(CLI::IsMember({"afn", "arcp", "contract", "ninf", "nnan", "nsz", "reassoc", "fast"}));
@@ -226,11 +229,11 @@ int main(int argc, const char* argv[]) {
         "Name of CPU platform to use")->ignore_case();
     auto simd_math_library_opt = cpu_opt->add_option("--math-library",
         cfg.llvm_math_library,
-        "Math library for SIMD code generation ({})"_format(cfg.llvm_math_library));
+        fmt::format("Math library for SIMD code generation ({})", cfg.llvm_math_library));
     simd_math_library_opt->check(CLI::IsMember({"Accelerate", "libmvec", "libsystem_m", "MASSV", "SLEEF", "SVML", "none"}));
     cpu_opt->add_option("--vector-width",
         cfg.llvm_vector_width,
-        "Explicit vectorization width for IR generation ({})"_format(cfg.llvm_vector_width))->ignore_case();
+        fmt::format("Explicit vectorization width for IR generation ({})", cfg.llvm_vector_width))->ignore_case();
 
     auto gpu_opt = app.add_subcommand("gpu", "LLVM GPU option")->ignore_case();
     gpu_opt->needs(llvm_opt);
@@ -243,7 +246,7 @@ int main(int argc, const char* argv[]) {
         "Name of target architecture to use")->ignore_case();
     auto gpu_math_library_opt = gpu_opt->add_option("--math-library",
         cfg.llvm_math_library,
-        "Math library for GPU code generation ({})"_format(cfg.llvm_math_library));
+        fmt::format("Math library for GPU code generation ({})", cfg.llvm_math_library));
     gpu_math_library_opt->check(CLI::IsMember({"libdevice"}));
 
     // Allow only one platform at a time.
@@ -255,28 +258,28 @@ int main(int argc, const char* argv[]) {
     benchmark_opt->needs(llvm_opt);
     benchmark_opt->add_flag("--run",
                             llvm_benchmark,
-                            "Run LLVM benchmark ({})"_format(llvm_benchmark))->ignore_case();
+                            fmt::format("Run LLVM benchmark ({})", llvm_benchmark))->ignore_case();
     benchmark_opt->add_option("--opt-level-codegen",
                               cfg.llvm_opt_level_codegen,
-                              "Machine code optimisation level (O{})"_format(cfg.llvm_opt_level_codegen))->ignore_case()->check(CLI::IsMember({"0", "1", "2", "3"}));
+                              fmt::format("Machine code optimisation level (O{})", cfg.llvm_opt_level_codegen))->ignore_case()->check(CLI::IsMember({"0", "1", "2", "3"}));
     benchmark_opt->add_option("--libs", cfg.shared_lib_paths, "Shared libraries to link IR against")
             ->ignore_case()
             ->check(CLI::ExistingFile);
     benchmark_opt->add_option("--instance-size",
                        instance_size,
-                       "Instance struct size ({})"_format(instance_size))->ignore_case();
+                       fmt::format("Instance struct size ({})", instance_size))->ignore_case();
     benchmark_opt->add_option("--repeat",
                               num_experiments,
-                              "Number of experiments for benchmarking ({})"_format(num_experiments))->ignore_case();
+                              fmt::format("Number of experiments for benchmarking ({})", num_experiments))->ignore_case();
     benchmark_opt->add_flag("--external",
                               external_kernel,
-                              "Benchmark external kernel ({})"_format(external_kernel))->ignore_case();
+                              fmt::format("Benchmark external kernel ({})", external_kernel))->ignore_case();
     benchmark_opt->add_option("--grid-dim-x",
                               llvm_cuda_grid_dim_x,
-                              "Grid dimension X ({})"_format(llvm_cuda_grid_dim_x))->ignore_case();
+                              fmt::format("Grid dimension X ({})", llvm_cuda_grid_dim_x))->ignore_case();
     benchmark_opt->add_option("--block-dim-x",
                                 llvm_cuda_block_dim_x,
-                                "Block dimension X ({})"_format(llvm_cuda_block_dim_x))->ignore_case();
+                                fmt::format("Block dimension X ({})", llvm_cuda_block_dim_x))->ignore_case();
 #endif
     // clang-format on
 
@@ -307,8 +310,8 @@ int main(int argc, const char* argv[]) {
         /// create file path for nmodl file
         auto filepath = [cfg, modfile](const std::string& suffix, const std::string& ext) {
             static int count = 0;
-            return "{}/{}.{}.{}.{}"_format(
-                cfg.scratch_dir, modfile, std::to_string(count++), suffix, ext);
+            return fmt::format(
+                "{}/{}.{}.{}.{}", cfg.scratch_dir, modfile, std::to_string(count++), suffix, ext);
         };
 
         /// nmodl_driver object creates lexer and parser, just call parser method
