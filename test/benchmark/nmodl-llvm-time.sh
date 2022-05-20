@@ -252,7 +252,8 @@ for kernel_target in ${KERNEL_TARGETS}; do
                             ${debug} sed -i 's/#pragma.*/#pragma GCC ivdep/g' ${kernels_path}/${kernel_target}.cpp
                         fi
                     fi
-	                ${debug} ${!compiler_exe} ${flags} ${kernels_path}/${kernel_target}.cpp -shared -fpic -o ${ext_lib}
+                    # Create shared library that is linked with SVML shared library and add its RPATH to the generated shared library to be found later by NMODL
+	                ${debug} ${!compiler_exe} ${flags} ${kernels_path}/${kernel_target}.cpp -shared -fpic -o ${ext_lib} -Wl,-rpath $intel_library_dir -L$intel_library_dir -lsvml
 	                ${debug} eval "objdump ${ext_lib} -d > ${ext_lib::-1}"
 	                ${debug} cd ..
 
