@@ -46,7 +46,6 @@ bool check_instance_variable(InstanceTestInfo& instance_info,
 
     // While we are comparing double types as well, for simplicity the test cases are hand-crafted
     // so that no floating-point arithmetic is really involved.
-    std::cout << fmt::format("[{}]: {}", variable_name, fmt::join(actual, ", "));
     return actual == expected;
 }
 
