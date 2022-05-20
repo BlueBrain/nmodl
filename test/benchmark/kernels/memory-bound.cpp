@@ -1,6 +1,6 @@
 
 
-struct hh_Instance  {
+struct hh_Instance {
     double* __restrict__ minf;
     double* __restrict__ mtau;
     double* __restrict__ m;
@@ -21,18 +21,18 @@ struct hh_Instance  {
     int node_count;
 };
 
-void nrn_state_hh_ext(void* __restrict__ mech){
+void nrn_state_hh_ext(void* __restrict__ mech) {
     auto inst = static_cast<hh_Instance*>(mech);
     int id;
     int node_id, nai_id, ion_nai_id;
     double v;
-    for(int id = 0; id<inst->node_count; ++id) {
+    for (int id = 0; id < inst->node_count; ++id) {
         node_id = inst->node_index[id];
         nai_id = inst->ion_nai_index[id];
         ion_nai_id = inst->ion_nai_index[id];
         v = inst->voltage[node_id];
         inst->nai[id] = inst->ion_nai[nai_id];
-        inst->m[id] = (inst->minf[id]-inst->m[id])/inst->mtau[id];
+        inst->m[id] = (inst->minf[id] - inst->m[id]) / inst->mtau[id];
         inst->ion_nai[ion_nai_id] = inst->nai[id];
     }
 }
