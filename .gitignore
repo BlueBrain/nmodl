@@ -49,3 +49,19 @@ venv.bak/
 .cmake-format.yaml
 .pre-commit-config.yaml
 .ipynb_checkpoints
+
+# Benchmark outputs
+test/benchmark/*.ll
+test/benchmark/*.ptx
+test/benchmark/*.out
+test/benchmark/*.log
+test/benchmark/*.cpp
+test/benchmark/*.txt
+test/benchmark/core.*
+test/benchmark/memory_bound_*
+test/benchmark/memory-bound_*
+test/benchmark/hh_*
+test/benchmark/compute_bound_*
+test/benchmark/compute-bound_*
+test/benchmark/llvm_benchmark_*
+test/benchmark/v*
