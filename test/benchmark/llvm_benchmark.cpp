@@ -7,6 +7,7 @@
 
 #include <chrono>
 #include <cmath>
+#include <dlfcn.h>
 #include <numeric>
 
 #include "llvm_benchmark.hpp"
@@ -45,7 +46,8 @@ void LLVMBenchmark::generate_llvm() {
 #ifdef NMODL_LLVM_CUDA_BACKEND
 void checkCudaErrors(cudaError error) {
     if (error != cudaSuccess) {
-        throw std::runtime_error(fmt::format("CUDA Execution Error: {}\n", cudaGetErrorString(error)));
+        throw std::runtime_error(
+            fmt::format("CUDA Execution Error: {}\n", cudaGetErrorString(error)));
     }
 }
 
@@ -153,10 +155,33 @@ BenchmarkResults LLVMBenchmark::run_benchmark() {
 #endif
 
     BenchmarkResults results{};
-    if (external_kernel) {
+
+    // Kernel functions pointers from the external shared library loaded
+    std::unordered_map<std::string, void (*)(void* __restrict__)> kernel_functions;
+    if (!external_kernel_library.empty()) {
         // benchmark external kernel
         logger->info("Benchmarking external kernels");
         kernel_names = {"nrn_state_hh_ext"};
+        std::unordered_map<std::string, std::string> kernel_names_map = {
+            {"nrn_state_hh_ext", "_Z16nrn_state_hh_extPv"}};
+        // Dlopen the shared library
+        void* handle = dlopen(external_kernel_library.c_str(), RTLD_LAZY);
+        if (!handle) {
+            logger->error("Cannot open shared library: {}", dlerror());
+            exit(EXIT_FAILURE);
+        }
+        // Get the function pointers
+        for (auto& kernel_name: kernel_names) {
+            auto func_ptr = dlsym(handle, kernel_names_map[kernel_name].c_str());
+            if (!func_ptr) {
+                logger->error("Cannot find function {} in shared library {}",
+                              kernel_name,
+                              external_kernel_library);
+                exit(EXIT_FAILURE);
+            }
+            kernel_functions[kernel_name] = reinterpret_cast<void (*)(void* __restrict__)>(
+                func_ptr);
+        }
     }
     // Benchmark every kernel.
     for (const auto& kernel_name: kernel_names) {
@@ -174,16 +199,14 @@ BenchmarkResults LLVMBenchmark::run_benchmark() {
             // Log instance size once.
             if (i == 0) {
                 double size_mbs = instance_data.num_bytes / (1024.0 * 1024.0);
-                logger->info("Benchmarking kernel '{}' with {} MBs dataset",
-                                kernel_name,
-                                size_mbs);
+                logger->info("Benchmarking kernel '{}' with {} MBs dataset", kernel_name, size_mbs);
             }
 
             // Record the execution time of the kernel.
             std::string wrapper_name = "__" + kernel_name + "_wrapper";
             auto start = std::chrono::steady_clock::now();
-            if (external_kernel) {
-                nrn_state_hh_ext(instance_data.base_ptr);
+            if (!external_kernel_library.empty()) {
+                kernel_functions[kernel_name](instance_data.base_ptr);
             } else {
 #ifdef NMODL_LLVM_CUDA_BACKEND
                 if (platform.is_CUDA_gpu()) {
@@ -213,12 +236,12 @@ BenchmarkResults LLVMBenchmark::run_benchmark() {
         // Calculate statistics
         double time_mean = std::accumulate(times.begin(), times.end(), 0.0) / num_experiments;
         double time_var = std::accumulate(times.begin(),
-                                        times.end(),
-                                        0.0,
-                                        [time_mean](const double& pres, const double& e) {
-                                            return (e - time_mean) * (e - time_mean);
-                                        }) /
-                        num_experiments;
+                                          times.end(),
+                                          0.0,
+                                          [time_mean](const double& pres, const double& e) {
+                                              return (e - time_mean) * (e - time_mean);
+                                          }) /
+                          num_experiments;
         double time_stdev = std::sqrt(time_var);
         double time_min = *std::min_element(times.begin(), times.end());
         double time_max = *std::max_element(times.begin(), times.end());
