@@ -295,7 +295,7 @@ for kernel_target in ${KERNEL_TARGETS}; do
             done
 		fi
         echo "|  |  NMODL JIT"
-        for fast_math in false; do
+        for fast_math in false true; do
             if $fast_math; then
                 fast_math_flag="--fmf nnan contract afn"
                 fast_math_opt="nnancontractafn"
