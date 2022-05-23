@@ -1,8 +1,8 @@
 import argparse
+import shutil
+import os
 
 import nmodl.dsl as nmodl
-from nmodl import ast, visitor
-
 
 class CompilersConfig:
     svml_lib = ""
@@ -41,7 +41,7 @@ class BenchmarkConfig:
     compilers = ""
     math_libraries = ["SVML", "SLEEF"]
     fast_math = [False, True]
-    llvm_fast_math_flags = "nnan contract afn"
+    llvm_fast_math_flags = ["nnan", "contract", "afn"]
     external_kernel = False
     instances = 100000000
     experiments = 5
@@ -49,6 +49,9 @@ class BenchmarkConfig:
     output_directory = "benchmark_output"
     ext_lib_name = "libextkernel.so"
     compiler_flags = {}
+    compiler_flags["intel"] = {}
+    compiler_flags["clang"] = {}
+    compiler_flags["gcc"] = {}
     compiler_flags["intel"]["skylake-avx512"] = [
         "-O2 -march=skylake-avx512 -mtune=skylake -prec-div -fimf-use-svml",
         "-O2 -march=skylake-avx512 -mtune=skylake -prec-div -fimf-use-svml -fopenmp",
@@ -87,14 +90,13 @@ class BenchmarkConfig:
     ]
 
     def __init__(
-        self, mod_files, architectures, compilers, external_kernel, output, modfile_dir
+        self, mod_files, architectures, compilers, external_kernel, output
     ):
         self.mod_files = mod_files
         self.architectures = architectures
         self.compilers = compilers
         self.external_kernel = external_kernel
         self.output_directory = output
-        self.modfile_directory = modfile_dir
 
     def __init__(
         self,
@@ -103,7 +105,6 @@ class BenchmarkConfig:
         compilers,
         external_kernel,
         output,
-        modfile_dir,
         instances,
         experiments,
     ):
@@ -112,7 +113,6 @@ class BenchmarkConfig:
         self.compilers = compilers
         self.external_kernel = external_kernel
         self.output_directory = output
-        self.modfile_directory = modfile_dir
         self.instances = instances
         self.experiments = experiments
 
@@ -176,41 +176,47 @@ class Benchmark:
             cfg.llvm_vector_width = 1
         cfg.llvm_opt_level_codegen = 3
         if math_lib == "SVML":
-            cfg.shared_lib_paths = self.compiler_config.svml_lib
+            cfg.shared_lib_paths = [self.compiler_config.svml_lib]
         elif math_lib == "SLEEF":
-            cfg.shared_lib_paths = self.compiler_config.sleef_lib
+            cfg.shared_lib_paths = [self.compiler_config.sleef_lib]
         cfg.output_dir = self.benchmark_config.output_directory
         jit = nmodl.Jit(cfg)
-        res = jit.run(modast, modname, 1000, 1000)
+        res = jit.run(modast, modname, (int)(instances), (int)(experiments))
         return res
+
+    def init_ast(self, mod_file_string):
+        driver = nmodl.NmodlDriver()
+        modast = driver.parse_string(mod_file_string)
+        return modast
 
     def run_benchmark(self):
         for modfile in self.benchmark_config.mod_files:
+            modname = modfile.split("/")[-1].split(".")[0]
+            print("Running benchmark for mod file: {}".format(modfile))
             if modfile not in self.results:
-                self.results[modfile] = {}
+                self.results[modname] = {}
             # Make number of instances smalle for hh kernel due to it's already large memory footprint
             if [modfile == "hh.mod"]:
                 kernel_instance_size = self.benchmark_config.instances / 5
             else:
                 kernel_instance_size = self.benchmark_config.instances
 
-            driver = nmodl.NmodlDriver()
-            lookup_visitor = visitor.AstLookupVisitor()
-
             with open(modfile) as f:
                 hh = f.read()
-                modast = driver.parse_string(hh)
-                modname = lookup_visitor.lookup(modast, ast.AstNodeType.SUFFIX)[
-                    0
-                ].get_node_name()
+
+                # Create output directory for mod file
+                output_dir = os.path.join(self.benchmark_config.output_directory, modname)
+                if os.path.isdir(output_dir):
+                    shutil.rmtree(output_dir)
+                os.makedirs(output_dir)
 
                 for architecture in self.benchmark_config.architectures:
-                    if architecture not in self.results[modfile]:
-                        self.results[modfile][architecture] = {}
+                    if architecture not in self.results[modname]:
+                        self.results[modname][architecture] = {}
                     if self.benchmark_config.external_kernel:
                         for compiler in self.benchmark_config.compilers:
-                            if compiler not in self.results[modfile][architecture]:
-                                self.results[modfile][architecture][compiler] = {}
+                            if compiler not in self.results[modname][architecture]:
+                                self.results[modname][architecture][compiler] = {}
                             for flags in self.benchmark_config.compiler_flags[compiler][
                                 architecture
                             ]:
@@ -218,7 +224,7 @@ class Benchmark:
                                 # Compile the .cpp file to a shared library
                                 # Run NMODL JIT with external shared library
                                 print(
-                                    "self.results[modfile][architecture][compiler][flags] = jit.run(modast, modname, self.config.instances, self.config.experiments, external_lib)"
+                                    "self.results[modname][architecture][compiler][flags] = jit.run(modast, modname, self.config.instances, self.config.experiments, external_lib)"
                                 )
                                 if compiler == "clang":
                                     for (
@@ -229,26 +235,28 @@ class Benchmark:
                                         # compile LLVM IR using clang and the compiler flags of the architecture used and generate shared library
                                         # Run NMODL JIT with external shared library
                                         print(
-                                            'self.results[modfile][architecture][compiler][flags+"jit"] = jit.run(modast, modname, self.config.instances, self.config.experiments, external_lib)'
+                                            'self.results[modname][architecture][compiler][flags+"jit"] = jit.run(modast, modname, self.config.instances, self.config.experiments, external_lib)'
                                         )
+                    self.results[modname][architecture]["nmodl_jit"] = {}
                     for fast_math in self.benchmark_config.fast_math:
                         if fast_math:
-                            fast_math_flags = self.llvm_fast_math_flags
+                            fast_math_flags = self.benchmark_config.llvm_fast_math_flags
                             fast_math_name = "nnancontractafn"
                         else:
-                            fast_math_flags = ""
+                            fast_math_flags = [""]
                             fast_math_name = "nonfastmath"
                         if architecture != "nvptx64":
                             for math_lib in self.benchmark_config.math_libraries:
                                 # Run NMODL JIT on CPU
                                 print(
-                                    'self.results[modfile][architecture]["nmodl_jit"][math_lib+fast_math_name] = jit.run(modast, modname, self.config.instances, self.config.experiments)'
+                                    'self.results[modname][architecture]["nmodl_jit"][math_lib+fast_math_name] = jit.run(modast, modname, self.config.instances, self.config.experiments)'
                                 )
-                                self.results[modfile][architecture]["nmodl_jit"][
+                                modast = self.init_ast(hh)
+                                self.results[modname][architecture]["nmodl_jit"][
                                     math_lib + "_" + fast_math_name
                                 ] = self.run_JIT_kernels(
-                                    modname,
                                     modast,
+                                    modname,
                                     architecture,
                                     "",
                                     fast_math_flags,
@@ -259,8 +267,9 @@ class Benchmark:
                         else:
                             # Run NMODL JIT on GPU
                             print(
-                                'self.results[modfile][architecture]["nmodl_jit_cuda"]["libdevice"+fast_math_name] = jit.run(modast, modname, self.config.instances, self.config.experiments)'
+                                'self.results[modname][architecture]["nmodl_jit_cuda"]["libdevice"+fast_math_name] = jit.run(modast, modname, self.config.instances, self.config.experiments)'
                             )
+            print(self.results)
 
 
 def parse_arguments():
@@ -282,13 +291,9 @@ def parse_arguments():
         "--external_kernel",
         help="Run external kernel benchmarks",
         action="store_true",
-        required=True,
     )
     parser.add_argument(
         "--output", help="Output directory for benchmark results", required=True
-    )
-    parser.add_argument(
-        "--modfile_dir", help="Directory containing mod files", required=True
     )
     parser.add_argument(
         "--instances",
@@ -345,7 +350,6 @@ def main():
         args.compilers,
         args.external_kernel,
         args.output,
-        args.modfile_dir,
         args.instances,
         args.experiments,
     )
@@ -359,6 +363,9 @@ def main():
         args.libdevice_lib,
         args.nmodl_exe,
     )
-    benchmark = Benchmark(benchmark_config, compilers_config)
+    benchmark = Benchmark(compilers_config, benchmark_config)
     benchmark.run_benchmark()
     return
+
+if __name__ == "__main__":
+    main()

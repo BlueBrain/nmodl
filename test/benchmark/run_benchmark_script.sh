@@ -14,12 +14,12 @@
 #
 
 set -e
-#set -x
+set -x
 
 module purge
 unset MODULEPATH
 export MODULEPATH=/gpfs/bbp.cscs.ch/ssd/apps/bsd/modules/_meta
-module load unstable gcc cuda
+module load unstable gcc cuda python-dev
 
 
 #intel paths
@@ -53,4 +53,6 @@ kernels_path=${nmodl_src_dir}/test/benchmark/kernels
 modfile_directory=${nmodl_src_dir}/test/benchmark/kernels
 ext_lib="libextkernel.so"
 
-srun -n 1 python run_benchmark_script.py 
+export PYTHONPATH=/gpfs/bbp.cscs.ch/data/scratch/proj16/magkanar/nmodl_llvm_benchmark/nmodl/build_benchmark_gpu/install/lib:$PYTHONPATH
+
+python benchmark_script.py --modfiles "./kernels/hh.mod" --architectures "default" --compilers "" --output "./python_script_test" --instances 10 --experiments 1 --svml_lib $svml_lib --intel_exe $intel_exe --sleef_lib $sleef_lib --clang_exe $clang_exe --llc_exe $llc_exe --gcc_exe $gcc_exe --libdevice_lib $libdevice_lib --nmodl_exe $nmodl_exe
