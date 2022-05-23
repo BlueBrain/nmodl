@@ -628,3 +628,297 @@ SCENARIO("Vectorised kernel with simple control flow", "[llvm][runner]") {
         }
     }
 }
+
+//=============================================================================
+// Kernel with atomic updates.
+//=============================================================================
+
+SCENARIO("Kernel with atomic updates", "[llvm][runner]") {
+    GIVEN("An atomic update") {
+        std::string nmodl_text = R"(
+            NEURON {
+                SUFFIX test
+                USEION na READ ena WRITE ina
+                USEION ka READ eka WRITE ika
+            }
+
+            STATE { }
+
+            ASSIGNED {
+                v (mV)
+                ena (mV)
+                ina (mA/cm2)
+            }
+
+            BREAKPOINT { }
+
+            DERIVATIVE states { }
+
+            : The atomic update that we want to check is:
+            :
+            :     ion_ina_id = mech->ion_ina_index[id]
+            :     ion_ika_id = mech->ion_ika_index[id]
+            :     mech->ion_ina[ion_ina_id] += mech->ina[id]
+            :     mech->ion_ika[ion_ika_id] += mech->ika[id]
+        )";
+
+
+        NmodlDriver driver;
+        const auto& ast = driver.parse_string(nmodl_text);
+
+        // Run passes on the AST to generate LLVM.
+        SymtabVisitor().visit_program(*ast);
+        NeuronSolveVisitor().visit_program(*ast);
+        SolveBlockVisitor().visit_program(*ast);
+
+        codegen::Platform simd_cpu_platform(/*use_single_precision=*/false,
+                                            /*instruction_width=*/4);
+        codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"unknown",
+                                                 /*output_dir=*/".",
+                                                 simd_cpu_platform,
+                                                 /*opt_level_ir=*/3);
+        llvm_visitor.visit_program(*ast);
+        llvm_visitor.wrap_kernel_functions();
+
+        // Create the instance struct data.
+        int num_elements = 5;
+        const auto& generated_instance_struct = llvm_visitor.get_instance_struct_ptr();
+        auto codegen_data = codegen::CodegenDataHelper(generated_instance_struct);
+        auto instance_data = codegen_data.create_data(num_elements, /*seed=*/1);
+
+        // With these indices ion_ina[1] = 1 + 2 + 3 + 4 + 5 = 15.
+        std::vector<int> ion_ina_index = {1, 1, 1, 1, 1};
+        std::vector<double> ion_ina = {0.0, 0.0, 0.0, 0.0, 0.0};
+        std::vector<double> ina = {1.0, 2.0, 3.0, 4.0, 5.0};
+
+        // With these indices:
+        //     ion_ika[1] = 3 + 4 = 7.
+        //     ion_ika[2] = 1 + 20 = 21.
+        //     ion_ika[3] = -5 + 5 = 0.
+        std::vector<int> ion_ika_index = {2, 2, 1, 1, 3};
+        std::vector<double> ion_ika = {0.0, 0.0, 0.0, -5.0, 0.0};
+        std::vector<double> ika = {1.0, 20.0, 3.0, 4.0, 5.0};
+
+        InstanceTestInfo instance_info{&instance_data,
+                                       llvm_visitor.get_instance_var_helper(),
+                                       num_elements};
+
+        initialise_instance_variable(instance_info, ion_ina_index, "ion_ina_index");
+        initialise_instance_variable(instance_info, ion_ina, "ion_ina");
+        initialise_instance_variable(instance_info, ina, "ina");
+        initialise_instance_variable(instance_info, ion_ika_index, "ion_ika_index");
+        initialise_instance_variable(instance_info, ion_ika, "ion_ika");
+        initialise_instance_variable(instance_info, ika, "ika");
+
+        // Set up the JIT runner.
+        std::unique_ptr<llvm::Module> module = llvm_visitor.get_module();
+        TestRunner runner(std::move(module));
+        runner.initialize_driver();
+
+        THEN("updates are commputed correctly with vector instructions and optimizations on") {
+            runner.run_with_argument<int, void*>("__nrn_cur_test_wrapper", instance_data.base_ptr);
+            // Recall:
+            //     ion_ina_id = mech->ion_ina_index[id]
+            //     ion_ika_id = mech->ion_ika_index[id]
+            //     mech->ion_ina[ion_ina_id] += mech->ina[id]
+            //     mech->ion_ika[ion_ika_id] += mech->ika[id]
+            std::vector<double> ion_ina_expected = {0.0, 15.0, 0.0, 0.0, 0.0};
+            REQUIRE(check_instance_variable(instance_info, ion_ina_expected, "ion_ina"));
+
+            std::vector<double> ion_ika_expected = {0.0, 7.0, 21.0, 0.0, 0.0};
+            REQUIRE(check_instance_variable(instance_info, ion_ika_expected, "ion_ika"));
+        }
+    }
+
+    GIVEN("Another atomic update") {
+        std::string nmodl_text = R"(
+            NEURON {
+                SUFFIX test
+                USEION na READ ena WRITE ina
+                USEION ka READ eka WRITE ika
+            }
+
+            STATE { }
+
+            ASSIGNED {
+                v (mV)
+                ena (mV)
+                ina (mA/cm2)
+            }
+
+            BREAKPOINT { }
+
+            DERIVATIVE states { }
+
+            : The atomic update that we want to check is again:
+            :
+            :     ion_ina_id = mech->ion_ina_index[id]
+            :     ion_ika_id = mech->ion_ika_index[id]
+            :     mech->ion_ina[ion_ina_id] += mech->ina[id]
+            :     mech->ion_ika[ion_ika_id] += mech->ika[id]
+        )";
+
+
+        NmodlDriver driver;
+        const auto& ast = driver.parse_string(nmodl_text);
+
+        // Run passes on the AST to generate LLVM.
+        SymtabVisitor().visit_program(*ast);
+        NeuronSolveVisitor().visit_program(*ast);
+        SolveBlockVisitor().visit_program(*ast);
+
+        codegen::Platform simd_cpu_platform(/*use_single_precision=*/false,
+                                            /*instruction_width=*/2);
+        codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"unknown",
+                                                 /*output_dir=*/".",
+                                                 simd_cpu_platform,
+                                                 /*opt_level_ir=*/0);
+        llvm_visitor.visit_program(*ast);
+        llvm_visitor.wrap_kernel_functions();
+
+        // Create the instance struct data.
+        int num_elements = 6;
+        const auto& generated_instance_struct = llvm_visitor.get_instance_struct_ptr();
+        auto codegen_data = codegen::CodegenDataHelper(generated_instance_struct);
+        auto instance_data = codegen_data.create_data(num_elements, /*seed=*/1);
+
+        // With these indices ion_ina[1] = 1 + 3 + 5 = 9.
+        // With these indices ion_ina[4] = 2 + 4 + 6 = 12.
+        std::vector<int> ion_ina_index = {1, 4, 1, 4, 1, 4};
+        std::vector<double> ion_ina = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+        std::vector<double> ina = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
+
+        // With these indices:
+        //     ion_ika[1] = 3 + 4 + 5 = 12.
+        //     ion_ika[2] = 1 + 20 + 6 = 27.
+        std::vector<int> ion_ika_index = {2, 2, 1, 1, 1, 2};
+        std::vector<double> ion_ika = {0.0, 0.0, 0.0, -5.0, 0.0, 0.0};
+        std::vector<double> ika = {1.0, 20.0, 3.0, 4.0, 5.0, 6.0};
+
+        InstanceTestInfo instance_info{&instance_data,
+                                       llvm_visitor.get_instance_var_helper(),
+                                       num_elements};
+
+        initialise_instance_variable(instance_info, ion_ina_index, "ion_ina_index");
+        initialise_instance_variable(instance_info, ion_ina, "ion_ina");
+        initialise_instance_variable(instance_info, ina, "ina");
+        initialise_instance_variable(instance_info, ion_ika_index, "ion_ika_index");
+        initialise_instance_variable(instance_info, ion_ika, "ion_ika");
+        initialise_instance_variable(instance_info, ika, "ika");
+
+        // Set up the JIT runner.
+        std::unique_ptr<llvm::Module> module = llvm_visitor.get_module();
+        TestRunner runner(std::move(module));
+        runner.initialize_driver();
+
+        THEN("Atomic updates are correct without optimizations") {
+            runner.run_with_argument<int, void*>("__nrn_cur_test_wrapper", instance_data.base_ptr);
+            // Recall:
+            //     ion_ina_id = mech->ion_ina_index[id]
+            //     ion_ika_id = mech->ion_ika_index[id]
+            //     mech->ion_ina[ion_ina_id] += mech->ina[id]
+            //     mech->ion_ika[ion_ika_id] += mech->ika[id]
+            std::vector<double> ion_ina_expected = {0.0, 9.0, 0.0, 0.0, 12.0, 0.0};
+            REQUIRE(check_instance_variable(instance_info, ion_ina_expected, "ion_ina"));
+
+            std::vector<double> ion_ika_expected = {0.0, 12.0, 27.0, -5.0, 0.0, 0.0};
+            REQUIRE(check_instance_variable(instance_info, ion_ika_expected, "ion_ika"));
+        }
+    }
+
+    GIVEN("Atomic updates of rhs and d") {
+        std::string nmodl_text = R"(
+            NEURON {
+                POINT_PROCESS test
+                USEION na READ ena WRITE ina
+                USEION ka READ eka WRITE ika
+            }
+
+            STATE { }
+
+            ASSIGNED {
+                v (mV)
+                ena (mV)
+                ina (mA/cm2)
+            }
+
+            BREAKPOINT { }
+
+            DERIVATIVE states { }
+
+            : The atomic update that we want to check is again:
+            :
+            :     node_id = mech->node_index[id]
+            :     mech->vec_rhs[node_id] -= rhs
+            :     mech->vec_d[node_id] -= g
+        )";
+
+
+        NmodlDriver driver;
+        const auto& ast = driver.parse_string(nmodl_text);
+
+        // Run passes on the AST to generate LLVM.
+        SymtabVisitor().visit_program(*ast);
+        NeuronSolveVisitor().visit_program(*ast);
+        SolveBlockVisitor().visit_program(*ast);
+
+        codegen::Platform simd_cpu_platform(/*use_single_precision=*/false,
+                                            /*instruction_width=*/2);
+        codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"unknown",
+                                                 /*output_dir=*/".",
+                                                 simd_cpu_platform,
+                                                 /*opt_level_ir=*/0);
+        llvm_visitor.visit_program(*ast);
+        llvm_visitor.wrap_kernel_functions();
+
+        // Create the instance struct data.
+        int num_elements = 6;
+        const auto& generated_instance_struct = llvm_visitor.get_instance_struct_ptr();
+        auto codegen_data = codegen::CodegenDataHelper(generated_instance_struct);
+        auto instance_data = codegen_data.create_data(num_elements, /*seed=*/1);
+
+        // With these indices vec_rhs[1] = -0.2-1.e2/1.5*2-1.e2/3.4*6-1.e2/5.2*10 =
+        // -502.3116138763197.
+        // With these indices vec_rhs[4] =
+        // -0.54-1.e2/2.3*22.0-1.e2/4.1*8.0-1.e2/6.0*12.0 = -1351.103690349947.
+        // vec_d remains the same because the contribution of g each time is 0.0.
+        std::vector<int> node_index = {1, 4, 1, 4, 1, 4};
+        std::vector<double> ina = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
+        std::vector<double> ika = {1.0, 20.0, 3.0, 4.0, 5.0, 6.0};
+        std::vector<double> vec_rhs = {0.64, -0.2, 1.1, 0.42, 0.54, -0.36};
+        std::vector<double> vec_d = {1.6, 2.5, 3.4, 4.3, 5.2, 6.1};
+        std::vector<int> node_area_index = {0, 1, 2, 3, 4, 5};
+        std::vector<double> node_area = {1.5, 2.3, 3.4, 4.1, 5.2, 6.0};
+
+        InstanceTestInfo instance_info{&instance_data,
+                                       llvm_visitor.get_instance_var_helper(),
+                                       num_elements};
+
+        initialise_instance_variable(instance_info, node_index, "node_index");
+        initialise_instance_variable(instance_info, ina, "ina");
+        initialise_instance_variable(instance_info, ika, "ika");
+        initialise_instance_variable(instance_info, vec_rhs, "vec_rhs");
+        initialise_instance_variable(instance_info, vec_d, "vec_d");
+        initialise_instance_variable(instance_info, node_area_index, "node_area_index");
+        initialise_instance_variable(instance_info, node_area, "node_area");
+
+        // Set up the JIT runner.
+        std::unique_ptr<llvm::Module> module = llvm_visitor.get_module();
+        TestRunner runner(std::move(module));
+        runner.initialize_driver();
+
+        THEN("Atomic updates are correct") {
+            runner.run_with_argument<int, void*>("__nrn_cur_test_wrapper", instance_data.base_ptr);
+            // Recall:
+            //     node_id = mech->node_index[id]
+            //     mech->vec_rhs[node_id] -= rhs
+            //     mech->vec_d[node_id] -= g
+            std::vector<double> vec_rhs_expected = {
+                0.64, -502.3116138763197, 1.1, 0.42, -1351.103690349947, -0.36};
+            REQUIRE(check_instance_variable(instance_info, vec_rhs_expected, "vec_rhs"));
+
+            std::vector<double> vec_d_expected = {1.6, 2.5, 3.4, 4.3, 5.2, 6.1};
+            REQUIRE(check_instance_variable(instance_info, vec_d_expected, "vec_d"));
+        }
+    }
+}

@@ -1841,4 +1841,110 @@ SCENARIO("GPU kernel body IR generation", "[visitor][llvm][gpu]") {
             REQUIRE(std::regex_search(module_string, m, add));
         }
     }
+
+    GIVEN("For current update with atomic addition ") {
+        std::string nmodl_text = R"(
+            NEURON {
+                SUFFIX test
+                USEION na READ ena WRITE ina
+            }
+
+            STATE { }
+
+            ASSIGNED {
+                v (mV)
+                ena (mV)
+                ina (mA/cm2)
+            }
+
+            BREAKPOINT {
+                SOLVE states METHOD cnexp
+            }
+
+            DERIVATIVE states { }
+        )";
+
+        THEN("corresponding LLVM atomic instruction is generated") {
+            std::string module_string = run_gpu_llvm_visitor(nmodl_text,
+                                                             /*opt_level=*/0,
+                                                             /*use_single_precision=*/false);
+            std::smatch m;
+
+            // Check for atomic addition.
+            std::regex add(R"(atomicrmw fadd double\* %.*, double %.* seq_cst)");
+            REQUIRE(std::regex_search(module_string, m, add));
+        }
+    }
+}
+
+//=============================================================================
+// Atomics for vectorised kernel
+//=============================================================================
+
+SCENARIO("A simple kernel with atomic current updates", "[visitor][llvm]") {
+    GIVEN("A simple atomic update") {
+        std::string nmodl_text = R"(
+            NEURON {
+                SUFFIX test
+                USEION na READ ena WRITE ina
+            }
+
+            STATE { }
+
+            ASSIGNED {
+                v (mV)
+                ena (mV)
+                ina (mA/cm2)
+            }
+
+            BREAKPOINT { }
+
+            DERIVATIVE states { }
+        )";
+
+        THEN("an atomic loop is created") {
+            std::string module_string = run_llvm_visitor(nmodl_text,
+                                                         /*opt_level=*/0,
+                                                         /*use_single_precision=*/true,
+                                                         /*vector_width=*/4);
+            std::smatch m;
+
+            // Check for correct %ptrs calculation and bitcast to an array.
+            std::regex ptrtoint(R"(ptrtoint float\* %.* to i64)");
+            std::regex insertelement(R"(insertelement <4 x i64> undef, i64 %.*, i32 0)");
+            std::regex shufflevector(
+                R"(shufflevector <4 x i64> %.*, <4 x i64> undef, <4 x i32> zeroinitializer)");
+            std::regex bitcast(R"(bitcast <4 x i64>\* %ptrs to \[4 x float\*\]\*)");
+            REQUIRE(std::regex_search(module_string, m, ptrtoint));
+            REQUIRE(std::regex_search(module_string, m, insertelement));
+            REQUIRE(std::regex_search(module_string, m, shufflevector));
+            REQUIRE(std::regex_search(module_string, m, bitcast));
+
+            // Check for %ptrs store and branch to atomic update block.
+            std::regex ptrs_store(R"(store <4 x i64> %.*, <4 x i64>\* %ptrs)");
+            std::regex atomic_branch(R"(br label %atomic\.update)");
+            REQUIRE(std::regex_search(module_string, m, ptrs_store));
+            REQUIRE(std::regex_search(module_string, m, atomic_branch));
+
+            // Check the scalar loop for atomic update mis implemented correctly.
+            std::regex atomic_update(
+                "  %.* = phi i64 \\[ 15, %for\\.body \\], \\[ %.*, %atomic\\.update \\]\n"
+                "  %.* = call i64 @llvm\\.cttz\\.i64\\(i64 %.*, i1 false\\)\n"
+                "  %.* = shl i64 1, %.*\n"
+                "  %.* = xor i64 %.*, -1\n"
+                "  %.* = and i64 %.*, %.*\n"
+                "  %.* = getelementptr \\[4 x float\\*\\], \\[4 x float\\*\\]\\* %.*, i64 0, i64 "
+                "%.*\n"
+                "  %.* = load float\\*, float\\*\\* %.*, align 8\n"
+                "  %.* = load float, float\\* %.*, align 4\n"
+                "  %.* = extractelement <4 x float> %.*, i64 %.*\n"
+                "  %.* = fadd float %.*, %.*\n"
+                "  store float %.*, float\\* %.*, align 4\n"
+                "  %.* = icmp eq i64 %.*, 0\n");
+            std::regex remaining(
+                R"(br i1 %.*, label %for\.body\.remaining, label %atomic\.update)");
+            REQUIRE(std::regex_search(module_string, m, atomic_update));
+            REQUIRE(std::regex_search(module_string, m, remaining));
+        }
+    }
 }
