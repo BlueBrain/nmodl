@@ -146,7 +146,7 @@ if(NMODL_ENABLE_LLVM)
     printer
     ${NMODL_WRAPPER_LIBS}
     ${LLVM_LIBS_TO_LINK})
-  set(CODEGEN_TEST testllvm)
+  set(CODEGEN_TEST "testllvm;test_llvm_runner")
 endif()
 
 # =============================================================================
