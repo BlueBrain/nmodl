@@ -145,12 +145,12 @@ CodegenInstanceData CodegenDataHelper::create_data(size_t num_elements, size_t s
     }
 
 
-    int cnt{};
-    for (auto& var: variables) {
-        // printout vars
-        std::cout << cnt++ << ":\t" << to_string(var->get_type()->get_type()) << '\t'
-                  << var->get_is_pointer() << '\t' << var->get_name()->get_node_name() << '\n';
-    }
+    // int cnt{};
+    // for (auto& var: variables) {
+    //     // printout vars
+    //     std::cout << cnt++ << ":\t" << to_string(var->get_type()->get_type()) << '\t'
+    //               << var->get_is_pointer() << '\t' << var->get_name()->get_node_name() << '\n';
+    // }
 
 
     // we are now switching from pointer type to next member type (e.g. double)

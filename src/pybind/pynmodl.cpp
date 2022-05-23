@@ -199,6 +199,7 @@ class JitDriver {
         if (cfg.nmodl_ast || cfg.json_ast || cfg.json_perfstat) {
             utils::make_path(cfg.scratch_dir);
         }
+        utils::make_path(cfg.output_dir);
         cg_driver.prepare_mod(node, modname);
         nmodl::codegen::CodegenLLVMVisitor visitor(modname, cfg.output_dir, platform, 0);
         visitor.visit_program(*node);

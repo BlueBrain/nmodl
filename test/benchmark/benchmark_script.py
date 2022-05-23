@@ -1,6 +1,10 @@
 import argparse
 import shutil
 import os
+import pickle
+
+from matplotlib import pyplot as plt
+import seaborn as sns
 
 import nmodl.dsl as nmodl
 
@@ -146,7 +150,7 @@ class Benchmark:
 
     def run_JIT_kernels(
         self,
-        modast,
+        modfile_str,
         modname,
         architecture,
         gpu_target_architecture,
@@ -179,9 +183,10 @@ class Benchmark:
             cfg.shared_lib_paths = [self.compiler_config.svml_lib]
         elif math_lib == "SLEEF":
             cfg.shared_lib_paths = [self.compiler_config.sleef_lib]
-        cfg.output_dir = self.benchmark_config.output_directory
+        cfg.output_dir = os.path.join(self.benchmark_config.output_directory, modname, architecture, math_lib)
+        modast = self.init_ast(modfile_str)
         jit = nmodl.Jit(cfg)
-        res = jit.run(modast, modname, (int)(instances), (int)(experiments))
+        res = jit.run(modast, modname, (int)(experiments), (int)(instances))
         return res
 
     def init_ast(self, mod_file_string):
@@ -202,15 +207,15 @@ class Benchmark:
                 kernel_instance_size = self.benchmark_config.instances
 
             with open(modfile) as f:
-                hh = f.read()
+                modfile_str = f.read()
 
-                # Create output directory for mod file
+                # Delete existing output directory for mod file
                 output_dir = os.path.join(self.benchmark_config.output_directory, modname)
                 if os.path.isdir(output_dir):
                     shutil.rmtree(output_dir)
-                os.makedirs(output_dir)
 
                 for architecture in self.benchmark_config.architectures:
+                    print('Architecture: {}'.format(architecture))
                     if architecture not in self.results[modname]:
                         self.results[modname][architecture] = {}
                     if self.benchmark_config.external_kernel:
@@ -221,7 +226,9 @@ class Benchmark:
                                 architecture
                             ]:
                                 # Translate mod file to .cpp to be compiled by the certain compiler
+                                # TODO: see above
                                 # Compile the .cpp file to a shared library
+                                self.compile_external_library(modname+".cpp", compiler, architecture, flags)
                                 # Run NMODL JIT with external shared library
                                 print(
                                     "self.results[modname][architecture][compiler][flags] = jit.run(modast, modname, self.config.instances, self.config.experiments, external_lib)"
@@ -251,11 +258,10 @@ class Benchmark:
                                 print(
                                     'self.results[modname][architecture]["nmodl_jit"][math_lib+fast_math_name] = jit.run(modast, modname, self.config.instances, self.config.experiments)'
                                 )
-                                modast = self.init_ast(hh)
                                 self.results[modname][architecture]["nmodl_jit"][
                                     math_lib + "_" + fast_math_name
                                 ] = self.run_JIT_kernels(
-                                    modast,
+                                    modfile_str,
                                     modname,
                                     architecture,
                                     "",
@@ -270,6 +276,39 @@ class Benchmark:
                                 'self.results[modname][architecture]["nmodl_jit_cuda"]["libdevice"+fast_math_name] = jit.run(modast, modname, self.config.instances, self.config.experiments)'
                             )
             print(self.results)
+            with open('benchmark_results.pickle', 'wb') as handle:
+                pickle.dump(self.results, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+    def plot_results(self):
+        with open('benchmark_results.pickle', 'rb') as handle:
+            self.results = pickle.load(handle)
+        # plot results in bar for each mod file, architecture and flags with matplotlib
+        for modname in self.results:
+            bar_labels = []
+            bar_data_state = {}
+            bar_data_cur = {}
+            for architecture in self.results[modname]:
+                for compiler in self.results[modname][architecture]:
+                    if compiler == "nmodl_jit" or compiler == "nmodl_jit_cuda":
+                        for math_lib_fast_math_flag in self.results[modname][architecture][compiler]:
+                            dict_label = "{}_{}_{}".format(
+                                    architecture, compiler, math_lib_fast_math_flag
+                                )
+                            bar_data_state[dict_label] = self.results[modname][architecture][compiler][math_lib_fast_math_flag]["nrn_state_hh"][0]
+                            bar_data_cur[dict_label] = self.results[modname][architecture][compiler][math_lib_fast_math_flag]["nrn_cur_hh"][0]
+            keys = list(bar_data_state.keys())
+            state_vals = [float(bar_data_state[k]) for k in keys]
+            cur_vals = [float(bar_data_cur[k]) for k in keys]
+            state_barplot = sns.barplot(x=keys, y=state_vals)
+            for item in state_barplot.get_xticklabels():
+                item.set_rotation(45)
+            plt.savefig("{}_state_benchmark.pdf".format(modname), format="pdf", bbox_inches="tight")
+            plt.close()
+            cur_barplot = sns.barplot(x=keys, y=cur_vals)
+            for item in cur_barplot.get_xticklabels():
+                item.set_rotation(45)
+            plt.savefig("{}_cur_benchmark.pdf".format(modname), format="pdf", bbox_inches="tight")
+            plt.close()
 
 
 def parse_arguments():
@@ -365,6 +404,7 @@ def main():
     )
     benchmark = Benchmark(compilers_config, benchmark_config)
     benchmark.run_benchmark()
+    benchmark.plot_results()
     return
 
 if __name__ == "__main__":
