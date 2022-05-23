@@ -192,6 +192,7 @@ class JitDriver {
                                     std::string& modname,
                                     int num_experiments,
                                     int instance_size,
+                                    std::string& external_kernel_library,
                                     int cuda_grid_dim_x,
                                     int cuda_block_dim_x) {
         // New directory is needed to be created otherwise the directory cannot be created
@@ -213,7 +214,7 @@ class JitDriver {
                                                   platform,
                                                   cfg.llvm_opt_level_ir,
                                                   cfg.llvm_opt_level_codegen,
-                                                  "",
+                                                  external_kernel_library,
                                                   gpu_execution_parameters);
         return benchmark.run();
     }
@@ -311,6 +312,7 @@ PYBIND11_MODULE(_nmodl, m_nmodl) {
              "modname"_a,
              "num_experiments"_a,
              "instance_size"_a,
+             "external_kernel_library"_a = "",
              "cuda_grid_dim_x"_a = 1,
              "cuda_block_dim_x"_a = 1);
 #else

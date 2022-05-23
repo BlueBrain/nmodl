@@ -2,6 +2,7 @@ import argparse
 import shutil
 import os
 import pickle
+import subprocess
 
 from matplotlib import pyplot as plt
 import seaborn as sns
@@ -142,11 +143,64 @@ class Benchmark:
         that has the state and current kernels and can be
         then loaded by NMODL to execute these kernels
         """
-        pass
+        print("Compiling external library with {} compiler ({}, {})".format(compiler, architecture, flags))
+        compiler_cmd = ""
+        if compiler == "intel":
+            compiler_cmd = self.compiler_config.intel_exe
+        elif compiler == "clang":
+            compiler_cmd = self.compiler_config.clang_exe
+        elif compiler == "gcc":
+            compiler_cmd = self.compiler_config.gcc_exe
+        else:
+            raise Exception("Unknown compiler")
+        
+        external_lib_dir = os.path.join(self.benchmark_config.output_directory, cpp_file.split("/")[-1].split(".")[0], compiler, architecture, flags.replace(" ", "_").replace('-','').replace('=',''))
+        if not os.path.exists(external_lib_dir):
+            os.makedirs(external_lib_dir)
+        external_lib_path = os.path.join(external_lib_dir, self.benchmark_config.ext_lib_name)
+        intel_lib_dir = '/'.join(self.compiler_config.svml_lib.split("/")[0:-1])
+        bash_command = [compiler_cmd] + flags.split(" ") + ["./"+cpp_file, "-shared", "-fpic", "-o {}".format(external_lib_path), "-Wl,-rpath,{}".format(intel_lib_dir), "-L{}".format(intel_lib_dir), "-lsvml"]
+        print("Executing command: {}".format(bash_command))
+        process = subprocess.Popen(bash_command, stdout=subprocess.PIPE, shell=True)
+        output, error = process.communicate()
+        if error:
+            raise Exception(error)
+        print("Compilation output of shared ext kernel lib with {} compiler: {}".format(compiler, output))
 
-    def run_external_kernel(self):
+    def run_external_kernel(
+        self,
+        modfile_str,
+        modname,
+        compiler,
+        architecture,
+        flags,
+        instances,
+        experiments,
+    ):
         """Runs all external kernel related benchmarks"""
-        pass
+        """Runs NMODL JIT kernels"""
+        cfg = nmodl.CodeGenConfig()
+        cfg.llvm_ir = True
+        cfg.llvm_opt_level_ir = 3
+        cfg.llvm_math_library = "SVML"
+        cfg.llvm_fast_math_flags = self.benchmark_config.llvm_fast_math_flags
+        cfg.llvm_cpu_name = architecture
+        if architecture == "skylake-avx512":
+            cfg.llvm_vector_width = 8
+        elif architecture == "broadwell":
+            cfg.llvm_vector_width = 4
+        elif architecture == "nehalem":
+            cfg.llvm_vector_width = 2
+        else:
+            cfg.llvm_vector_width = 1
+        cfg.llvm_opt_level_codegen = 3
+        cfg.shared_lib_paths = [self.compiler_config.svml_lib]
+        cfg.output_dir = os.path.join(self.benchmark_config.output_directory, modname, architecture, math_lib)
+        modast = self.init_ast(modfile_str)
+        jit = nmodl.Jit(cfg)
+        external_lib_path = os.path.join(self.benchmark_config.output_directory, modname, compiler, architecture, flags.replace(" ", "_"), self.benchmark_config.ext_lib_name)
+        res = jit.run(modast, modname, (int)(experiments), (int)(instances), external_lib_path)
+        return res
 
     def run_JIT_kernels(
         self,
@@ -228,7 +282,7 @@ class Benchmark:
                                 # Translate mod file to .cpp to be compiled by the certain compiler
                                 # TODO: see above
                                 # Compile the .cpp file to a shared library
-                                self.compile_external_library(modname+".cpp", compiler, architecture, flags)
+                                self.compile_external_library(os.path.join("kernels", modname+".cpp"), compiler, architecture, flags)
                                 # Run NMODL JIT with external shared library
                                 print(
                                     "self.results[modname][architecture][compiler][flags] = jit.run(modast, modname, self.config.instances, self.config.experiments, external_lib)"
@@ -279,9 +333,10 @@ class Benchmark:
             with open('benchmark_results.pickle', 'wb') as handle:
                 pickle.dump(self.results, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
-    def plot_results(self):
-        with open('benchmark_results.pickle', 'rb') as handle:
-            self.results = pickle.load(handle)
+    def plot_results(self, file = ""):
+        if file != "":
+            with open(file, 'rb') as handle:
+                self.results = pickle.load(handle)
         # plot results in bar for each mod file, architecture and flags with matplotlib
         for modname in self.results:
             bar_labels = []
@@ -301,12 +356,12 @@ class Benchmark:
             cur_vals = [float(bar_data_cur[k]) for k in keys]
             state_barplot = sns.barplot(x=keys, y=state_vals)
             for item in state_barplot.get_xticklabels():
-                item.set_rotation(45)
+                item.set_rotation(90)
             plt.savefig("{}_state_benchmark.pdf".format(modname), format="pdf", bbox_inches="tight")
             plt.close()
             cur_barplot = sns.barplot(x=keys, y=cur_vals)
             for item in cur_barplot.get_xticklabels():
-                item.set_rotation(45)
+                item.set_rotation(90)
             plt.savefig("{}_cur_benchmark.pdf".format(modname), format="pdf", bbox_inches="tight")
             plt.close()
 
