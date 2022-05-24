@@ -1,19 +1,26 @@
 
 
-struct hh_Instance {
+struct hh_Instance  {
+    const double* __restrict__ gl;
+    const double* __restrict__ el;
     double* __restrict__ minf;
     double* __restrict__ mtau;
+    double* __restrict__ il;
     double* __restrict__ m;
     double* __restrict__ nai;
     double* __restrict__ Dm;
     double* __restrict__ v_unused;
     double* __restrict__ g_unused;
     double* __restrict__ ion_nai;
-    double* __restrict__ style_na;
+    const double* __restrict__ style_na;
     int* __restrict__ ion_nai_index;
     int* __restrict__ style_na_index;
     double* __restrict__ voltage;
     int* __restrict__ node_index;
+    double* __restrict__ vec_rhs;
+    double* __restrict__ vec_d;
+    double* __restrict__ _shadow_rhs;
+    double* __restrict__ _shadow_d;
     double t;
     double dt;
     double celsius;

@@ -1,19 +1,26 @@
 #include <cmath>
 
-struct hh_Instance {                // address
-    double* __restrict__ minf;      //  0
-    double* __restrict__ mtau;      //  8
-    double* __restrict__ m;         // 16
-    double* __restrict__ Dm;        // 24
-    double* __restrict__ v_unused;  // 32
-    double* __restrict__ g_unused;  // 40
-    double* __restrict__ voltage;   // 48
-    int* __restrict__ node_index;   // 56
-    double t;                       // 64
-    double dt;                      // 72
-    double celsius;                 // 80
-    int secondorder;                // 88
-    int node_count;                 // 92
+struct hh_Instance {
+    const double* __restrict__ gl;
+    const double* __restrict__ el;
+    double* __restrict__ minf;
+    double* __restrict__ mtau;
+    double* __restrict__ il;
+    double* __restrict__ m;
+    double* __restrict__ Dm;
+    double* __restrict__ v_unused;
+    double* __restrict__ g_unused;
+    double* __restrict__ voltage;
+    int* __restrict__ node_index;
+    double* __restrict__ vec_rhs;
+    double* __restrict__ vec_d;
+    double* __restrict__ _shadow_rhs;
+    double* __restrict__ _shadow_d;
+    double t;
+    double dt;
+    double celsius;
+    int secondorder;
+    int node_count;
 };
 
 void nrn_state_hh_ext(void* __restrict__ mech) {

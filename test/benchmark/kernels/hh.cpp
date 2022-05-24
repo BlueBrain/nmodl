@@ -1,10 +1,10 @@
 #include <cmath>
 
 struct hh_Instance {
-    double* __restrict__ gnabar;
-    double* __restrict__ gkbar;
-    double* __restrict__ gl;
-    double* __restrict__ el;
+    const double* __restrict__ gnabar;
+    const double* __restrict__ gkbar;
+    const double* __restrict__ gl;
+    const double* __restrict__ el;
     double* __restrict__ gna;
     double* __restrict__ gk;
     double* __restrict__ il;
@@ -26,10 +26,10 @@ struct hh_Instance {
     double* __restrict__ ik;
     double* __restrict__ v_unused;
     double* __restrict__ g_unused;
-    double* __restrict__ ion_ena;
+    const double* __restrict__ ion_ena;
     double* __restrict__ ion_ina;
     double* __restrict__ ion_dinadv;
-    double* __restrict__ ion_ek;
+    const double* __restrict__ ion_ek;
     double* __restrict__ ion_ik;
     double* __restrict__ ion_dikdv;
     int* __restrict__ ion_ena_index;
@@ -40,6 +40,10 @@ struct hh_Instance {
     int* __restrict__ ion_dikdv_index;
     double* __restrict__ voltage;
     int* __restrict__ node_index;
+    double* __restrict__ vec_rhs;
+    double* __restrict__ vec_d;
+    double* __restrict__ _shadow_rhs;
+    double* __restrict__ _shadow_d;
     double t;
     double dt;
     double celsius;
