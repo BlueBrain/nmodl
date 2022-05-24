@@ -158,6 +158,7 @@ BenchmarkResults LLVMBenchmark::run_benchmark() {
 
     // Kernel functions pointers from the external shared library loaded
     std::unordered_map<std::string, void (*)(void* __restrict__)> kernel_functions;
+    void* external_kernel_lib_handle = nullptr;
     if (!external_kernel_library.empty()) {
         // benchmark external kernel
         logger->info("Benchmarking external kernels");
@@ -165,14 +166,14 @@ BenchmarkResults LLVMBenchmark::run_benchmark() {
         std::unordered_map<std::string, std::string> kernel_names_map = {
             {"nrn_state_hh_ext", "_Z16nrn_state_hh_extPv"}};
         // Dlopen the shared library
-        void* handle = dlopen(external_kernel_library.c_str(), RTLD_LAZY);
-        if (!handle) {
+        external_kernel_lib_handle = dlopen(external_kernel_library.c_str(), RTLD_LAZY);
+        if (!external_kernel_lib_handle) {
             logger->error("Cannot open shared library: {}", dlerror());
             exit(EXIT_FAILURE);
         }
         // Get the function pointers
         for (auto& kernel_name: kernel_names) {
-            auto func_ptr = dlsym(handle, kernel_names_map[kernel_name].c_str());
+            auto func_ptr = dlsym(external_kernel_lib_handle, kernel_names_map[kernel_name].c_str());
             if (!func_ptr) {
                 logger->error("Cannot find function {} in shared library {}",
                               kernel_name,
@@ -232,6 +233,10 @@ BenchmarkResults LLVMBenchmark::run_benchmark() {
 
             // Update statistics.
             times[i] = diff.count();
+        }
+        // Close handle of shared library in case it was dlopened.
+        if (external_kernel_lib_handle) {
+            dlclose(external_kernel_lib_handle);
         }
         // Calculate statistics
         double time_mean = std::accumulate(times.begin(), times.end(), 0.0) / num_experiments;
