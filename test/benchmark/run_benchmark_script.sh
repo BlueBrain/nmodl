@@ -55,4 +55,20 @@ ext_lib="libextkernel.so"
 
 export PYTHONPATH=/gpfs/bbp.cscs.ch/data/scratch/proj16/magkanar/nmodl_llvm_benchmark/nmodl/build_benchmark_gpu/install/lib:$PYTHONPATH
 
-python benchmark_script.py --modfiles "./kernels/hh.mod" --architectures "skylake-avx512" --compilers "intel" --external --output "./python_script_test" --instances 100000000 --experiments 1 --svml_lib $svml_lib --intel_exe $intel_exe --sleef_lib $sleef_lib --clang_exe $clang_exe --llc_exe $llc_exe --gcc_exe $gcc_exe --libdevice_lib $libdevice_lib --nmodl_exe $nmodl_exe
+python benchmark_script.py \
+    --modfiles "./kernels/hh.mod" "./kernels/compute-bound.mod" "./kernels/memory-bound.mod" \
+    --architectures "default" "nehalem" "broadwell" "skylake-avx512" \
+    --compilers "intel" "gcc" "clang" \
+    --external \
+    --nmodl_jit \
+    --output "./python_script_test" \
+    --instances 100000000 \
+    --experiments 5 \
+    --svml_lib $svml_lib \
+    --intel_exe $intel_exe \
+    --sleef_lib $sleef_lib \
+    --clang_exe $clang_exe \
+    --llc_exe $llc_exe \
+    --gcc_exe $gcc_exe \
+    --libdevice_lib $libdevice_lib \
+    --nmodl_exe $nmodl_exe /
