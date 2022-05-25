@@ -100,7 +100,7 @@ include(cmake/hpc-coding-conventions/cpp/cmake/FindClangFormat.cmake)
 # =============================================================================
 set(NMODL_3RDPARTY_DIR "${PROJECT_SOURCE_DIR}/ext")
 include(cmake/hpc-coding-conventions/cpp/cmake/3rdparty.cmake)
-cpp_cc_git_submodule(cli11)
+cpp_cc_git_submodule(cli11 BUILD)
 cpp_cc_git_submodule(eigen)
 # TODO make sure that in a Spack build we actually use an external fmt
 cpp_cc_git_submodule(fmt BUILD)
@@ -114,7 +114,7 @@ cpp_cc_git_submodule(spdlog BUILD)
 # Otherwise we fail to link it into a shared nmodl library
 set_property(TARGET spdlog PROPERTY POSITION_INDEPENDENT_CODE ON)
 # ${NMODL_3RDPARTY_DIR} is for catch and json
-include_directories(SYSTEM ${NMODL_3RDPARTY_DIR} ${NMODL_3RDPARTY_DIR}/cli11/include)
+include_directories(SYSTEM ${NMODL_3RDPARTY_DIR})
 
 # =============================================================================
 # Format & execute ipynb notebooks in place (pip install nbconvert clean-ipynb)

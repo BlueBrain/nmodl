@@ -53,6 +53,7 @@ if(NOT NMODL_AS_SUBPROJECT)
 
   target_link_libraries(
     nmodl_visitor
+    CLI11::CLI11
     printer
     visitor
     symtab

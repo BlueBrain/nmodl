@@ -193,9 +193,9 @@ if(NOT NMODL_AS_SUBPROJECT)
   add_executable(c_lexer main_c.cpp)
   add_executable(units_lexer main_units.cpp)
 
-  target_link_libraries(nmodl_lexer lexer util)
-  target_link_libraries(c_lexer lexer util)
-  target_link_libraries(units_lexer lexer util)
+  target_link_libraries(nmodl_lexer CLI11::CLI11 lexer util)
+  target_link_libraries(c_lexer CLI11::CLI11 lexer util)
+  target_link_libraries(units_lexer CLI11::CLI11 lexer util)
 endif()
 
 # =============================================================================
