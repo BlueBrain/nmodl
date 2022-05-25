@@ -59,7 +59,6 @@ find_package(BISON 3.0 REQUIRED)
 # =============================================================================
 # Include cmake modules. Filenames ensure we always pick up NMODL's versions.
 # =============================================================================
-include(cmake/Catch.cmake)
 include(cmake/ClangTidyHelper.cmake)
 include(cmake/CompilerHelper.cmake)
 include(cmake/FlexHelper.cmake)
@@ -100,6 +99,14 @@ include(cmake/hpc-coding-conventions/cpp/cmake/FindClangFormat.cmake)
 # =============================================================================
 set(NMODL_3RDPARTY_DIR "${PROJECT_SOURCE_DIR}/ext")
 include(cmake/hpc-coding-conventions/cpp/cmake/3rdparty.cmake)
+cpp_cc_git_submodule(catch2 BUILD PACKAGE Catch2 REQUIRED)
+if(NMODL_3RDPARTY_USE_CATCH2)
+  # If we're using the submodule then make sure the Catch.cmake helper can be
+  # find. This should be set by add_subdirectory, it probably doesn't work
+  # because cpp_cc_git_submodule is a function and not a macro.
+  list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/ext/catch2/extras")
+endif()
+include(Catch)
 cpp_cc_git_submodule(cli11 BUILD PACKAGE CLI11 REQUIRED)
 # For the moment do not try and use an external Eigen.
 cpp_cc_git_submodule(eigen)
@@ -119,8 +126,6 @@ if(NMODL_3RDPARTY_USE_SPDLOG)
   # See above, same logic as fmt
   set_property(TARGET spdlog PROPERTY POSITION_INDEPENDENT_CODE ON)
 endif()
-# ${NMODL_3RDPARTY_DIR} is for catch2
-include_directories(SYSTEM ${NMODL_3RDPARTY_DIR})
 
 # =============================================================================
 # Format & execute ipynb notebooks in place (pip install nbconvert clean-ipynb)

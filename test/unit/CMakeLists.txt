@@ -128,6 +128,7 @@ foreach(
   testunitlexer
   testunitparser)
 
+  target_link_libraries(${test_name} Catch2::Catch2)
   if(${test_name} STREQUAL "testvisitor")
     catch_discover_tests(${test_name} TEST_PREFIX "${test_name}/" PROPERTIES ENVIRONMENT
                          "${testvisitor_env}")
