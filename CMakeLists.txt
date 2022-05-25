@@ -104,7 +104,7 @@ if(NMODL_3RDPARTY_USE_CATCH2)
   # If we're using the submodule then make sure the Catch.cmake helper can be
   # find. This should be set by add_subdirectory, it probably doesn't work
   # because cpp_cc_git_submodule is a function and not a macro.
-  list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/ext/catch2/extras")
+  list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/ext/catch2/contrib")
 endif()
 include(Catch)
 cpp_cc_git_submodule(cli11 BUILD PACKAGE CLI11 REQUIRED)
