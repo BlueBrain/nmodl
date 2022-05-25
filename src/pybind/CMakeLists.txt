@@ -57,12 +57,9 @@ if(NMODL_ENABLE_PYTHON_BINDINGS)
   # for pybind using NO_EXTRAS. See #266.
   # ~~~
   pybind11_add_module(
-    _nmodl
-    NO_EXTRAS
-    ${NMODL_PROJECT_SOURCE_DIR}/src/ast/ast_common.hpp
+    _nmodl NO_EXTRAS ${NMODL_PROJECT_SOURCE_DIR}/src/ast/ast_common.hpp
     ${NMODL_PROJECT_SOURCE_DIR}/src/pybind/pybind_utils.hpp
-    ${NMODL_PROJECT_SOURCE_DIR}/src/pybind/pynmodl.cpp
-    ${PYBIND_GENERATED_SOURCES})
+    ${NMODL_PROJECT_SOURCE_DIR}/src/pybind/pynmodl.cpp ${PYBIND_GENERATED_SOURCES})
   add_dependencies(_nmodl pyastgen)
   target_link_libraries(_nmodl PRIVATE printer symtab visitor pyembed)
 
