@@ -101,9 +101,8 @@ set(NMODL_3RDPARTY_DIR "${PROJECT_SOURCE_DIR}/ext")
 include(cmake/hpc-coding-conventions/cpp/cmake/3rdparty.cmake)
 cpp_cc_git_submodule(catch2 BUILD PACKAGE Catch2 REQUIRED)
 if(NMODL_3RDPARTY_USE_CATCH2)
-  # If we're using the submodule then make sure the Catch.cmake helper can be
-  # find. This should be set by add_subdirectory, it probably doesn't work
-  # because cpp_cc_git_submodule is a function and not a macro.
+  # If we're using the submodule then make sure the Catch.cmake helper can be found. In newer
+  # versions of Catch2, and with hpc-coding-conventions#130, this should just work...
   list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/ext/catch2/contrib")
 endif()
 include(Catch)
