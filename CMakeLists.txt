@@ -109,6 +109,7 @@ cpp_cc_git_submodule(fmt BUILD PACKAGE fmt REQUIRED)
 if(NMODL_3RDPARTY_USE_FMT)
   set_property(TARGET fmt PROPERTY POSITION_INDEPENDENT_CODE ON)
 endif()
+cpp_cc_git_submodule(json BUILD PACKAGE nlohmann_json REQUIRED)
 cpp_cc_git_submodule(pybind11 BUILD PACKAGE pybind11 REQUIRED)
 # Tell spdlog not to use its bundled fmt, it should either use the fmt submodule or a truly external
 # installation for consistency. This line should be harmless if we use an external spdlog.
@@ -118,7 +119,7 @@ if(NMODL_3RDPARTY_USE_SPDLOG)
   # See above, same logic as fmt
   set_property(TARGET spdlog PROPERTY POSITION_INDEPENDENT_CODE ON)
 endif()
-# ${NMODL_3RDPARTY_DIR} is for catch and json
+# ${NMODL_3RDPARTY_DIR} is for catch2
 include_directories(SYSTEM ${NMODL_3RDPARTY_DIR})
 
 # =============================================================================
