@@ -100,19 +100,24 @@ include(cmake/hpc-coding-conventions/cpp/cmake/FindClangFormat.cmake)
 # =============================================================================
 set(NMODL_3RDPARTY_DIR "${PROJECT_SOURCE_DIR}/ext")
 include(cmake/hpc-coding-conventions/cpp/cmake/3rdparty.cmake)
-cpp_cc_git_submodule(cli11 BUILD)
+cpp_cc_git_submodule(cli11 BUILD PACKAGE CLI11 REQUIRED)
+# For the moment do not try and use an external Eigen.
 cpp_cc_git_submodule(eigen)
-# TODO make sure that in a Spack build we actually use an external fmt
-cpp_cc_git_submodule(fmt BUILD)
-# Otherwise we fail to link it into a shared nmodl library
-set_property(TARGET fmt PROPERTY POSITION_INDEPENDENT_CODE ON)
-cpp_cc_git_submodule(pybind11 BUILD)
+cpp_cc_git_submodule(fmt BUILD PACKAGE fmt REQUIRED)
+# If we're building from the submodule, make sure we pass -fPIC so that we can link the code into a
+# shared library later.
+if(NMODL_3RDPARTY_USE_FMT)
+  set_property(TARGET fmt PROPERTY POSITION_INDEPENDENT_CODE ON)
+endif()
+cpp_cc_git_submodule(pybind11 BUILD PACKAGE pybind11 REQUIRED)
 # Tell spdlog not to use its bundled fmt, it should either use the fmt submodule or a truly external
-# installation for consistency.
+# installation for consistency. This line should be harmless if we use an external spdlog.
 set(SPDLOG_FMT_EXTERNAL ON)
-cpp_cc_git_submodule(spdlog BUILD)
-# Otherwise we fail to link it into a shared nmodl library
-set_property(TARGET spdlog PROPERTY POSITION_INDEPENDENT_CODE ON)
+cpp_cc_git_submodule(spdlog BUILD PACKAGE spdlog REQUIRED)
+if(NMODL_3RDPARTY_USE_SPDLOG)
+  # See above, same logic as fmt
+  set_property(TARGET spdlog PROPERTY POSITION_INDEPENDENT_CODE ON)
+endif()
 # ${NMODL_3RDPARTY_DIR} is for catch and json
 include_directories(SYSTEM ${NMODL_3RDPARTY_DIR})
 
