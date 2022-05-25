@@ -36,7 +36,8 @@ add_library(
   visitor_utils.cpp
   ${VISITORS_GENERATED_SOURCES})
 set_property(TARGET visitor PROPERTY POSITION_INDEPENDENT_CODE ON)
-target_link_libraries(visitor PUBLIC lexer pywrapper util)
+add_dependencies(visitor pywrapper)
+target_link_libraries(visitor PUBLIC lexer util)
 
 # ~~~
 # pybind11::embed adds PYTHON_LIBRARIES to target_link_libraries. To avoid link to
