@@ -60,7 +60,7 @@ if(NMODL_ENABLE_PYTHON_BINDINGS)
     _nmodl NO_EXTRAS ${NMODL_PROJECT_SOURCE_DIR}/src/ast/ast_common.hpp
     ${NMODL_PROJECT_SOURCE_DIR}/src/pybind/pybind_utils.hpp
     ${NMODL_PROJECT_SOURCE_DIR}/src/pybind/pynmodl.cpp ${PYBIND_GENERATED_SOURCES})
-  add_dependencies(_nmodl pyastgen)
+  add_dependencies(_nmodl lexer pyastgen util)
   target_link_libraries(_nmodl PRIVATE printer symtab visitor pyembed)
 
   # in case of wheel, python module shouldn't link to wrapper library
