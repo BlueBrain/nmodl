@@ -24,8 +24,9 @@ foreach(file ast.py dsl.py ode.py symtab.py visitor.py __init__.py)
   list(APPEND NMODL_PYTHON_FILES_OUT ${PROJECT_BINARY_DIR}/lib/nmodl/${file})
 endforeach()
 
-add_library(pyembed ${CMAKE_CURRENT_SOURCE_DIR}/pyembed.cpp)
+add_library(pyembed pyembed.cpp)
 set_property(TARGET pyembed PROPERTY POSITION_INDEPENDENT_CODE ON)
+target_link_libraries(pyembed PRIVATE util)
 
 if(NOT LINK_AGAINST_PYTHON)
   add_library(pywrapper SHARED ${CMAKE_CURRENT_SOURCE_DIR}/wrapper.cpp)
@@ -61,15 +62,9 @@ if(NMODL_ENABLE_PYTHON_BINDINGS)
     ${NMODL_PROJECT_SOURCE_DIR}/src/ast/ast_common.hpp
     ${NMODL_PROJECT_SOURCE_DIR}/src/pybind/pybind_utils.hpp
     ${NMODL_PROJECT_SOURCE_DIR}/src/pybind/pynmodl.cpp
-    ${PYBIND_GENERATED_SOURCES}
-    $<TARGET_OBJECTS:symtab_obj>
-    $<TARGET_OBJECTS:visitor_obj>
-    $<TARGET_OBJECTS:lexer_obj>
-    $<TARGET_OBJECTS:util_obj>
-    $<TARGET_OBJECTS:printer_obj>)
-
-  add_dependencies(_nmodl pyastgen lexer_obj util_obj)
-  target_link_libraries(_nmodl PRIVATE fmt::fmt pyembed)
+    ${PYBIND_GENERATED_SOURCES})
+  add_dependencies(_nmodl pyastgen)
+  target_link_libraries(_nmodl PRIVATE printer symtab visitor pyembed)
 
   # in case of wheel, python module shouldn't link to wrapper library
   if(LINK_AGAINST_PYTHON)
