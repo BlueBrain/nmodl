@@ -404,7 +404,7 @@ class Benchmark:
                 state_barplot = sns.barplot(x=state_keys, y=state_vals)
                 for item in state_barplot.get_xticklabels():
                     item.set_rotation(90)
-                plt.savefig("{}_state_benchmark.pdf".format(modname), format="pdf", bbox_inches="tight")
+                plt.savefig("{}/{}_state_benchmark.pdf".format(self.benchmark_config.output_directory, modname), format="pdf", bbox_inches="tight")
                 plt.close()
             else:
                 print("No results for state kernel of {}".format(modname))
@@ -412,7 +412,7 @@ class Benchmark:
                 cur_barplot = sns.barplot(x=cur_keys, y=cur_vals)
                 for item in cur_barplot.get_xticklabels():
                     item.set_rotation(90)
-                plt.savefig("{}_cur_benchmark.pdf".format(modname), format="pdf", bbox_inches="tight")
+                plt.savefig("{}/{}_cur_benchmark.pdf".format(self.benchmark_config.output_directory, modname), format="pdf", bbox_inches="tight")
                 plt.close()
             else:
                 print("No results for current kernel of {}".format(modname))
