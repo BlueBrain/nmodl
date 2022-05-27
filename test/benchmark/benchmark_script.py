@@ -74,7 +74,7 @@ class Benchmark:
         return flags.replace(" ", "_").replace('-','').replace('=','_')
 
     def _make_external_lib_basepath(self, cpp_file, compiler, architecture, flags):
-        cpp_basename = os.path.splitext(os.path.basename(cpp_file))
+        cpp_basename = os.path.splitext(os.path.basename(cpp_file))[0]
         external_lib_dir = (Path(self.benchmark_config.output_directory)
                 / cpp_basename
                 / compiler
@@ -97,12 +97,12 @@ class Benchmark:
         print("Compiling external library with {} compiler ({}, {})".format(compiler, architecture, flags))
         compiler_cmd = self.compiler_config.get_compiler_cmd(compiler)
 
-        cpp_basename = os.path.splitext(os.path.basename(cpp_file))
+        cpp_basename = os.path.splitext(os.path.basename(cpp_file))[0]
         external_lib_dir = self._make_external_lib_basepath(cpp_file, compiler, architecture, flags)
         # Replace current cpp_file pragma with correct one and write it in new file
-        sed_replaced_cpp_file = external_lib_dir / cpp_basename + "_ext.cpp"
+        sed_replaced_cpp_file = external_lib_dir / (Path(cpp_basename + "_ext.cpp"))
         with open(cpp_file, "r") as inf:
-            cpp_file_content = f.read()
+            cpp_file_content = inf.read()
             if "-fopenmp" in flags or compiler == "intel":
                 cpp_file_content = re.sub(r'#pragma.*', r'#pragma omp simd', cpp_file_content)
             elif compiler == "clang":
@@ -114,7 +114,7 @@ class Benchmark:
 
         external_lib_path = self._get_external_lib_path(cpp_file, compiler, architecture, flags)
         intel_lib_dir = os.path.dirname(self.compiler_config.svml_lib)
-        bash_command = [compiler_cmd] + flags.split(" ") + ["./"+sed_replaced_cpp_file, "-fpic", "-shared", "-o {}".format(external_lib_path), "-Wl,-rpath,{}".format(intel_lib_dir), "-L{}".format(intel_lib_dir), "-lsvml"]
+        bash_command = [compiler_cmd] + flags.split(" ") + ["./"+str(sed_replaced_cpp_file), "-fpic", "-shared", "-o {}".format(external_lib_path), "-Wl,-rpath,{}".format(intel_lib_dir), "-L{}".format(intel_lib_dir), "-lsvml"]
         if "-fopenmp" in flags:
             if compiler == "gcc":
                 bash_command.append("-Wl,-rpath,{}".format("/".join(self.compiler_config.gcc_exe.split("/")[0:-2]+["lib64"])))
@@ -154,15 +154,15 @@ class Benchmark:
             cfg.llvm_vector_width = 1
         cfg.llvm_opt_level_codegen = 3
         cfg.shared_lib_paths = [self.compiler_config.svml_lib]
-        cfg.output_dir = (Path(self.benchmark_config.output_directory)
+        cfg.output_dir = str((Path(self.benchmark_config.output_directory)
             / modname
             / compiler
             / architecture
-            / self._get_flags_string(flags))
+            / self._get_flags_string(flags)))
         modast = self.init_ast(modfile_str)
         jit = nmodl.Jit(cfg)
         external_lib_path = self._get_external_lib_path(modname+".cpp", compiler, architecture, flags)
-        res = jit.run(modast, modname, (int)(experiments), (int)(instances), external_lib_path)
+        res = jit.run(modast, modname, (int)(experiments), (int)(instances), str(external_lib_path))
         return res
 
     def run_JIT_kernels(
@@ -200,11 +200,11 @@ class Benchmark:
             cfg.shared_lib_paths = [self.compiler_config.svml_lib]
         elif math_lib == "SLEEF":
             cfg.shared_lib_paths = [self.compiler_config.sleef_lib]
-        cfg.output_dir = (Path(self.benchmark_config.output_directory)
+        cfg.output_dir = str((Path(self.benchmark_config.output_directory)
                 / modname
                 / "nmodl_jit"
                 / architecture
-                / math_lib)
+                / math_lib))
         modast = self.init_ast(modfile_str)
         jit = nmodl.Jit(cfg)
         res = jit.run(modast, modname, (int)(experiments), (int)(instances))
@@ -217,7 +217,7 @@ class Benchmark:
 
     def run_benchmark(self):
         for modfile in self.benchmark_config.mod_files:
-            modname = os.path.splitext(os.path.basename(modfile.split("/")))
+            modname = os.path.splitext(os.path.basename(modfile))[0]
             print("Running benchmark for mod file: {}".format(modfile))
             if modfile not in self.results:
                 self.results[modname] = {}
