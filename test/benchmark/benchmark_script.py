@@ -1,6 +1,8 @@
 import argparse
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+import json
 import os
+from pathlib import Path
 import pickle
 import re
 import shutil
@@ -22,104 +24,42 @@ class CompilersConfig:
     libdevice_lib: str = ""
     nmodl_exe: str = ""
 
+    def get_compiler_cmd(self, compiler):
+        if compiler == "intel":
+            return self.intel_exe
+        elif compiler == "clang":
+            return self.clang_exe
+        elif compiler == "gcc":
+            return self.gcc_exe
+        else:
+            raise Exception("Unknown compiler")
 
+@dataclass
 class BenchmarkConfig:
-    mod_files = ""
-    architectures = ""
-    compilers = ""
     math_libraries = ["SVML", "SLEEF"]
-    fast_math = [False, True]
     llvm_fast_math_flags = ["nnan", "contract", "afn"]
-    external_kernel = False
-    nmodl_jit = True
-    instances = 100000000
-    experiments = 5
-    modfile_directory = "."
-    output_directory = "benchmark_output"
-    ext_lib_name = "libextkernel.so"
-    compiler_flags = {}
-    compiler_flags["intel"] = {}
-    compiler_flags["clang"] = {}
-    compiler_flags["gcc"] = {}
-    compiler_flags["intel"]["skylake-avx512"] = [
-        "-O2 -march=skylake-avx512 -mtune=skylake -prec-div -fimf-use-svml",
-        "-O2 -march=skylake-avx512 -mtune=skylake -prec-div -fimf-use-svml -fopenmp",
-    ]
-    compiler_flags["intel"]["broadwell"] = [
-        "-O2 -march=broadwell -mtune=broadwell -prec-div -fimf-use-svml"
-    ]
-    compiler_flags["intel"]["nehalem"] = ["-O2 -msse2 -prec-div -fimf-use-svml"]
-    compiler_flags["intel"]["default"] = [
-        "-O2 -prec-div"
-    ]
-    compiler_flags["clang"]["skylake-avx512"] = [
-        "-O3 -march=skylake-avx512 -mtune=skylake -ffast-math",
-        "-O3 -march=skylake-avx512 -mtune=skylake -ffast-math -fopenmp",
-        "-O3 -march=skylake-avx512 -mtune=skylake -ffast-math -fveclib=SVML",
-        "-O3 -march=skylake-avx512 -mtune=skylake -ffast-math -fopenmp -fveclib=SVML",
-    ]
-    compiler_flags["clang"]["broadwell"] = [
-        "-O3 -march=broadwell -mtune=broadwell -ffast-math -fopenmp",
-        "-O3 -march=broadwell -mtune=broadwell -ffast-math -fopenmp -fveclib=SVML",
-    ]
-    compiler_flags["clang"]["nehalem"] = [
-        "-O3 -march=nehalem -mtune=nehalem -ffast-math -fopenmp",
-        "-O3 -march=nehalem -mtune=nehalem -ffast-math -fopenmp -fveclib=SVML",
-    ]
-    compiler_flags["clang"]["default"] = ["-O3 -ffast-math"]
-    compiler_flags["gcc"]["skylake-avx512"] = [
-        "-O3 -march=skylake-avx512 -mtune=skylake -ffast-math -ftree-vectorize",
-        "-O3 -march=skylake-avx512 -mtune=skylake -ffast-math -ftree-vectorize -fopenmp",
-        "-O3 -march=skylake-avx512 -mtune=skylake -ffast-math -ftree-vectorize -mveclibabi=svml",
-        "-O3 -march=skylake-avx512 -mtune=skylake -ffast-math -ftree-vectorize -mveclibabi=svml -fopenmp",
-    ]
-    compiler_flags["gcc"]["broadwell"] = [
-        "-O3 -march=broadwell -mtune=broadwell -ffast-math -ftree-vectorize -fopenmp",
-        "-O3 -march=broadwell -mtune=broadwell -ffast-math -ftree-vectorize -mveclibabi=svml -fopenmp",
-    ]
-    compiler_flags["gcc"]["nehalem"] = [
-        "-O3 -march=nehalem -mtune=nehalem -ffast-math -ftree-vectorize -fopenmp",
-        "-O3 -march=nehalem -mtune=nehalem -ffast-math -ftree-vectorize -mveclibabi=svml -fopenmp",
-    ]
-    compiler_flags["gcc"]["default"] = ["-O3 -ffast-math -ftree-vectorize"]
 
-    def __init__(
-        self, mod_files, architectures, compilers, external_kernel, nmodl_jit, output
-    ):
-        self.mod_files = mod_files
-        self.architectures = architectures
-        self.compilers = compilers
-        self.external_kernel = external_kernel
-        self.nmodl_jit = nmodl_jit
-        self.output_directory = output
+    mod_files: str = ""
+    architectures: str = ""
+    compilers: str = ""
+    external_kernel: bool = False
+    nmodl_jit: bool = True
+    output_directory: str = "benchmark_output"
+    instances: int = 100000000
+    experiments: int = 5
+    modfile_directory: str = "."
+    ext_lib_name: str = "libextkernel.so"
+    compiler_flags: dict = field(init=False)
 
-    def __init__(
-        self,
-        mod_files,
-        architectures,
-        compilers,
-        external_kernel,
-        nmodl_jit,
-        output,
-        instances,
-        experiments,
-    ):
-        self.mod_files = mod_files
-        self.architectures = architectures
-        self.compilers = compilers
-        self.external_kernel = external_kernel
-        self.nmodl_jit = nmodl_jit
-        self.output_directory = output
-        self.instances = instances
-        self.experiments = experiments
+    def __post_init__(self):
+        with open('compiler_flags.json','r') as fp:
+            self.compiler_flags = json.load(fp)
 
 
 class Benchmark:
-    benchmark_config = None
-    compiler_config = None
-    results = {}
 
     def __init__(self, compiler_config, benchmark_config):
+        self.results = {}
         self.compiler_config = compiler_config
         self.benchmark_config = benchmark_config
 
@@ -133,11 +73,20 @@ class Benchmark:
     def _get_flags_string(self, flags):
         return flags.replace(" ", "_").replace('-','').replace('=','_')
 
-    def _get_external_lib_path(self, cpp_file, compiler, architecture, flags):
-        external_lib_dir = os.path.join(self.benchmark_config.output_directory, cpp_file.split("/")[-1].split(".")[0], compiler, architecture, self._get_flags_string(flags))
+    def _make_external_lib_basepath(self, cpp_file, compiler, architecture, flags):
+        cpp_basename = os.path.splitext(os.path.basename(cpp_file))
+        external_lib_dir = (Path(self.benchmark_config.output_directory)
+                / cpp_basename
+                / compiler
+                / architecture
+                / self._get_flags_string(flags))
         if not os.path.exists(external_lib_dir):
             os.makedirs(external_lib_dir)
-        external_lib_path = os.path.join(external_lib_dir, self.benchmark_config.ext_lib_name)
+        return external_lib_dir
+
+    def _get_external_lib_path(self, cpp_file, compiler, architecture, flags):
+        external_lib_path = self._make_external_lib_basepath(
+                cpp_file, compiler, architecture, flags) / self.benchmark_config.ext_lib_name
         return external_lib_path
 
     def compile_external_library(self, cpp_file, compiler, architecture, flags):
@@ -146,22 +95,13 @@ class Benchmark:
         then loaded by NMODL to execute these kernels
         """
         print("Compiling external library with {} compiler ({}, {})".format(compiler, architecture, flags))
-        compiler_cmd = ""
-        if compiler == "intel":
-            compiler_cmd = self.compiler_config.intel_exe
-        elif compiler == "clang":
-            compiler_cmd = self.compiler_config.clang_exe
-        elif compiler == "gcc":
-            compiler_cmd = self.compiler_config.gcc_exe
-        else:
-            raise Exception("Unknown compiler")
-        
-        external_lib_dir = os.path.join(self.benchmark_config.output_directory, cpp_file.split("/")[-1].split(".")[0], compiler, architecture, self._get_flags_string(flags))
-        if not os.path.exists(external_lib_dir):
-            os.makedirs(external_lib_dir)
+        compiler_cmd = self.compiler_config.get_compiler_cmd(compiler)
+
+        cpp_basename = os.path.splitext(os.path.basename(cpp_file))
+        external_lib_dir = self._make_external_lib_basepath(cpp_file, compiler, architecture, flags)
         # Replace current cpp_file pragma with correct one and write it in new file
-        sed_replaced_cpp_file = os.path.join(external_lib_dir, cpp_file.split("/")[-1].split(".")[0] + "_ext.cpp")
-        with open(cpp_file, "r") as f:
+        sed_replaced_cpp_file = external_lib_dir / cpp_basename + "_ext.cpp"
+        with open(cpp_file, "r") as inf:
             cpp_file_content = f.read()
             if "-fopenmp" in flags or compiler == "intel":
                 cpp_file_content = re.sub(r'#pragma.*', r'#pragma omp simd', cpp_file_content)
@@ -169,11 +109,11 @@ class Benchmark:
                 cpp_file_content = re.sub(r'#pragma.*', r'#pragma clang vectorize(enable)', cpp_file_content)
             elif compiler == "gcc":
                 cpp_file_content = re.sub(r'#pragma.*', r'#pragma GCC ivdep', cpp_file_content)
-            with open(sed_replaced_cpp_file, "w") as f:
-                f.write(cpp_file_content)
+            with open(sed_replaced_cpp_file, "w") as outf:
+                outf.write(cpp_file_content)
 
         external_lib_path = self._get_external_lib_path(cpp_file, compiler, architecture, flags)
-        intel_lib_dir = '/'.join(self.compiler_config.svml_lib.split("/")[0:-1])
+        intel_lib_dir = os.path.dirname(self.compiler_config.svml_lib)
         bash_command = [compiler_cmd] + flags.split(" ") + ["./"+sed_replaced_cpp_file, "-fpic", "-shared", "-o {}".format(external_lib_path), "-Wl,-rpath,{}".format(intel_lib_dir), "-L{}".format(intel_lib_dir), "-lsvml"]
         if "-fopenmp" in flags:
             if compiler == "gcc":
@@ -214,7 +154,11 @@ class Benchmark:
             cfg.llvm_vector_width = 1
         cfg.llvm_opt_level_codegen = 3
         cfg.shared_lib_paths = [self.compiler_config.svml_lib]
-        cfg.output_dir = os.path.join(self.benchmark_config.output_directory, modname, compiler, architecture, self._get_flags_string(flags))
+        cfg.output_dir = (Path(self.benchmark_config.output_directory)
+            / modname
+            / compiler
+            / architecture
+            / self._get_flags_string(flags))
         modast = self.init_ast(modfile_str)
         jit = nmodl.Jit(cfg)
         external_lib_path = self._get_external_lib_path(modname+".cpp", compiler, architecture, flags)
@@ -256,7 +200,11 @@ class Benchmark:
             cfg.shared_lib_paths = [self.compiler_config.svml_lib]
         elif math_lib == "SLEEF":
             cfg.shared_lib_paths = [self.compiler_config.sleef_lib]
-        cfg.output_dir = os.path.join(self.benchmark_config.output_directory, modname, "nmodl_jit", architecture, math_lib)
+        cfg.output_dir = (Path(self.benchmark_config.output_directory)
+                / modname
+                / "nmodl_jit"
+                / architecture
+                / math_lib)
         modast = self.init_ast(modfile_str)
         jit = nmodl.Jit(cfg)
         res = jit.run(modast, modname, (int)(experiments), (int)(instances))
@@ -269,7 +217,7 @@ class Benchmark:
 
     def run_benchmark(self):
         for modfile in self.benchmark_config.mod_files:
-            modname = modfile.split("/")[-1].split(".")[0]
+            modname = os.path.splitext(os.path.basename(modfile.split("/")))
             print("Running benchmark for mod file: {}".format(modfile))
             if modfile not in self.results:
                 self.results[modname] = {}
@@ -303,14 +251,18 @@ class Benchmark:
                                 # Compile the .cpp file to a shared library
                                 self.compile_external_library(os.path.join("kernels", modname+".cpp"), compiler, architecture, flags)
                                 # Run NMODL JIT with external shared library
-                                self.results[modname][architecture][compiler][self._get_flags_string(flags)] = self.run_external_kernel(modfile_str, modname, compiler, architecture, flags, kernel_instance_size, self.benchmark_config.experiments)
+                                self.results[modname][architecture][compiler][self._get_flags_string(flags)] = self.run_external_kernel(modfile_str,
+                                        modname,
+                                        compiler,
+                                        architecture,
+                                        flags,
+                                        kernel_instance_size,
+                                        self.benchmark_config.experiments)
                                 print(
                                     "self.results[modname][architecture][compiler][flags] = jit.run(modast, modname, self.config.instances, self.config.experiments, external_lib)"
                                 )
                                 if compiler == "clang":
-                                    for (
-                                        math_lib
-                                    ) in self.benchmark_config.math_libraries:
+                                    for math_lib in self.benchmark_config.math_libraries:
                                         # Generate LLVM IR from NMODL JIT
                                         # sed the nrn_state_hh name to _Z16nrn_state_hh_extPv to match the external kernel signature name of the external shared lib
                                         # compile LLVM IR using clang and the compiler flags of the architecture used and generate shared library
@@ -320,7 +272,7 @@ class Benchmark:
                                         )
                     if self.benchmark_config.nmodl_jit:
                         self.results[modname][architecture]["nmodl_jit"] = {}
-                        for fast_math in self.benchmark_config.fast_math:
+                        for fast_math in [False, True]:
                             if fast_math:
                                 fast_math_flags = self.benchmark_config.llvm_fast_math_flags
                                 fast_math_name = "nnancontractafn"
@@ -413,7 +365,8 @@ def parse_arguments():
         "--architectures", nargs="+", help="Architectures to benchmark", required=True
     )
     parser.add_argument(
-        "--compilers", nargs="+", help="Compilers to benchmark", required=True
+        "--compilers", nargs="+", help="Compilers to benchmark", required=True,
+        choices=["intel", "clang", "gcc"]
     )
     parser.add_argument(
         "--external_kernel",
