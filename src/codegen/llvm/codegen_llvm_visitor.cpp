@@ -559,7 +559,7 @@ void CodegenLLVMVisitor::visit_codegen_atomic_statement(const ast::CodegenAtomic
     const auto& member_node = codegen_intance_node->get_member_var();
     const auto& member_name = member_node->get_node_name();
 
-    // Sanity checks. Not that there is a bit of duplication with `read_from_or_write_to_instance`
+    // Sanity checks. Note that there is a bit of duplication with `read_from_or_write_to_instance`
     // but this is not crucial for now.
     // TODO: remove this duplication!
     if (!instance_var_helper.is_an_instance_variable(member_name))

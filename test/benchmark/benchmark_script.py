@@ -1,8 +1,9 @@
 import argparse
-import re
-import shutil
+from dataclasses import dataclass
 import os
 import pickle
+import re
+import shutil
 import subprocess
 
 from matplotlib import pyplot as plt
@@ -10,35 +11,16 @@ import seaborn as sns
 
 import nmodl.dsl as nmodl
 
+@dataclass
 class CompilersConfig:
-    svml_lib = ""
-    intel_exe = ""
-    sleef_lib = ""
-    clang_exe = ""
-    llc_exe = ""
-    gcc_exe = ""
-    libdevice_lib = ""
-    nmodl_exe = ""
-
-    def __init__(
-        self,
-        svml_lib,
-        intel_exe,
-        sleef_lib,
-        clang_exe,
-        llc_exe,
-        gcc_exe,
-        libdevice_lib,
-        nmodl_exe,
-    ):
-        self.svml_lib = svml_lib
-        self.intel_exe = intel_exe
-        self.sleef_lib = sleef_lib
-        self.clang_exe = clang_exe
-        self.llc_exe = llc_exe
-        self.gcc_exe = gcc_exe
-        self.libdevice_lib = libdevice_lib
-        self.nmodl_exe = nmodl_exe
+    svml_lib: str = ""
+    intel_exe: str = ""
+    sleef_lib: str = ""
+    clang_exe: str = ""
+    llc_exe: str = ""
+    gcc_exe: str = ""
+    libdevice_lib: str = ""
+    nmodl_exe: str = ""
 
 
 class BenchmarkConfig:
