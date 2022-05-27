@@ -51,51 +51,6 @@ struct hh_Instance {
     int node_count;
 };
 
-// void nrn_state_hh_ext(void* __restrict__ mech) {
-//     auto inst = static_cast<hh_Instance*>(mech);
-//     int id;
-//     int node_id, ena_id, ek_id;
-//     double v;
-// #pragma omp simd
-//     for (id = 0; id < inst->node_count; ++id) {
-//         node_id = inst->node_index[id];
-//         ena_id = inst->ion_ena_index[id];
-//         ek_id = inst->ion_ek_index[id];
-//         v = inst->voltage[node_id];
-//         inst->ena[id] = inst->ion_ena[ena_id];
-//         inst->ek[id] = inst->ion_ek[ek_id];
-//         {
-//             double alpha, beta, sum, q10, vtrap_in_0, v_in_1;
-//             v_in_1 = v;
-//             q10 = 3 * ((inst->celsius - 6.3) / 10);
-//             alpha = .07 * exp(-(v_in_1 + 65) / 20);
-//             beta = 1 / (exp(-(v_in_1 + 35) / 10) + 1);
-//             sum = alpha + beta;
-//             inst->htau[id] = 1 / (q10 * sum);
-//             inst->hinf[id] = alpha / sum;
-//             {
-//                 double x_in_0, y_in_0;
-//                 x_in_0 = alpha;
-//                 y_in_0 = alpha;
-//                 vtrap_in_0 = y_in_0 * (1 - x_in_0 / y_in_0 / 2);
-//             }
-//             inst->hinf[id] = vtrap_in_0;
-//         }
-//         inst->m[id] = inst->m[id] +
-//                       (1.0 - exp(inst->dt * ((((-1.0))) / inst->mtau[id]))) *
-//                           (-(((inst->minf[id])) / inst->mtau[id]) / ((((-1.0))) / inst->mtau[id]) -
-//                            inst->m[id]);
-//         inst->h[id] = inst->h[id] +
-//                       (1.0 - exp(inst->dt * ((((-1.0))) / inst->htau[id]))) *
-//                           (-(((inst->hinf[id])) / inst->htau[id]) / ((((-1.0))) / inst->htau[id]) -
-//                            inst->h[id]);
-//         inst->n[id] = inst->n[id] +
-//                       (1.0 - exp(inst->dt * ((((-1.0))) / inst->ntau[id]))) *
-//                           (-(((inst->ninf[id])) / inst->ntau[id]) / ((((-1.0))) / inst->ntau[id]) -
-//                            inst->n[id]);
-//     }
-// }
-
 void nrn_state_hh_ext(void* __restrict__ mech) {
     auto inst = static_cast<hh_Instance*>(mech);
     int id;
