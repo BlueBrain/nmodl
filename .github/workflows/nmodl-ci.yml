@@ -152,13 +152,15 @@ jobs:
   sanitizers:
     needs: ci
     name: ${{ matrix.sanitizer }}-sanitizer
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     env:
       CMAKE_BUILD_PARALLEL_LEVEL: 2
     strategy:
       matrix:
         # TODO: might be interesting to add the thread sanitizer too
-        sanitizer: [undefined, address]
+        # Hyphens here will be replaced with commas before the value is passed
+        # to NMODL_SANITIZERS
+        sanitizer: [undefined, address-leak]
       fail-fast: false
     steps:
       - name: Setup cmake
@@ -166,13 +168,12 @@ jobs:
 
       - name: Install apt packages
         run: |
-          sudo apt install bison ccache flex libfl-dev clang-12 ninja-build \
-            python3-dev python3-pip
-          # Make clang++ and llvm-symbolizer point at clang/llvm-12
+          sudo apt install bison ccache flex libfl-dev clang-14 ninja-build
+          # Make clang++ and llvm-symbolizer point at clang/llvm-14
           # Priority (200) chosen to be bigger than that in
           # https://github.com/actions/virtual-environments/blob/main/images/linux/scripts/installers/clang.sh
-          sudo update-alternatives --install /usr/bin/clang++         clang++         /usr/bin/clang++-12         200
-          sudo update-alternatives --install /usr/bin/llvm-symbolizer llvm-symbolizer /usr/bin/llvm-symbolizer-12 200
+          sudo update-alternatives --install /usr/bin/clang++         clang++         /usr/bin/clang++-14         200
+          sudo update-alternatives --install /usr/bin/llvm-symbolizer llvm-symbolizer /usr/bin/llvm-symbolizer-14 200
           clang++ --version
           llvm-symbolizer --version
         shell: bash
@@ -184,7 +185,7 @@ jobs:
 
       - name: Install Python3 dependencies
         run: |
-          pip3 install -U pip setuptools scikit-build Jinja2 PyYAML pytest sympy
+          python3 -m pip install -U pip setuptools scikit-build Jinja2 PyYAML pytest sympy
 
       - uses: actions/checkout@v3
 
@@ -193,47 +194,15 @@ jobs:
         working-directory: ${{runner.workspace}}/nmodl
         run:  |
           echo "------- Configure -------"
-          # Figure out the path to clang's sanitizer runtime libraries
-          # See also: https://github.com/google/sanitizers/issues/1086
-          if [[ "${{matrix.sanitizer}}" == "address" ]]; then
-            # Based on https://stackoverflow.com/questions/47021422/how-to-enable-address-sanitizer-for-multiple-c-binaries,
-            # this should avoid undefined asan symbols when tests launched via
-            # `python` load sanitized nmodl .so files
-            SANITIZER_RUNTIME_LIB=$(clang++ -print-file-name=libclang_rt.asan-x86_64.so)
-            SANITIZER_FLAGS="-fsanitize=${{matrix.sanitizer}} -fsanitize-address-use-after-scope"
-          elif [[ "${{matrix.sanitizer}}" == "undefined" ]]; then
-            # This is to let non-sanitized Python load sanitized NMODL libraries.
-            SANITIZER_RUNTIME_LIB=$(clang++ -print-file-name=libclang_rt.ubsan_standalone-x86_64.so)
-            # NOT: -fsanitize=implicit-conversion
-            #      -fsanitize=local-bounds
-            #      -fsanitize=nullability-arg
-            #      -fsanitize=nullability-assign
-            #      -fsanitize=nullability-return
-            #      -fsanitize=unsigned-integer-overflow
-            SANITIZER_FLAGS="-fsanitize=${{matrix.sanitizer}} -fsanitize=float-divide-by-zero"
-          else
-            echo "WARNING: do not know what runtime library to load for ${{matrix.sanitizer}}"
-          fi
-          # Save SANITIZER_RUNTIME_LIB for the next steps, where it will be
-          # added to LD_PRELOAD.
-          echo "SANITIZER_RUNTIME_LIB=${SANITIZER_RUNTIME_LIB}" >> $GITHUB_ENV
-          # Add the directory containing the runtime library to LD_LIBRARY_PATH
-          # now, so that CMake is able to execute the test executables it makes
-          SANITIZER_RUNTIME_DIR=$(dirname "${SANITIZER_RUNTIME_LIB}")
-          echo "SANITIZER_RUNTIME_DIR=${SANITIZER_RUNTIME_DIR}" >> $GITHUB_ENV
-          export LD_LIBRARY_PATH=${SANITIZER_RUNTIME_DIR}${SANITIZER_RUNTIME_DIR:+:}${LD_LIBRARY_PATH}
-          echo "SANITIZER_RUNTIME_LIB=${SANITIZER_RUNTIME_LIB}"
-          echo "SANITIZER_RUNTIME_DIR=${SANITIZER_RUNTIME_DIR}"
-          echo "SANITIZER_FLAGS=${SANITIZER_FLAGS}"
-          echo "LD_LIBRARY_PATH=${LD_LIBRARY_PATH}"
           mkdir build && pushd build
           cmake .. -G Ninja \
+            -DCMAKE_BUILD_TYPE=Custom \
+            -DCMAKE_CXX_FLAGS="-O1 -g" \
             -DCMAKE_CXX_COMPILER=clang++ \
-            -DNMODL_EXTRA_CXX_FLAGS="-fno-omit-frame-pointer ${SANITIZER_FLAGS} -shared-libsan" \
             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
-            -DCMAKE_BUILD_TYPE=RelWithDebInfo \
             -DPYTHON_EXECUTABLE=$(which python3) \
-            -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR
+            -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR \
+            -DNMODL_SANITIZERS=$(echo ${{matrix.sanitizer}} | sed -e 's/-/,/g')
         env:
           INSTALL_DIR: ${{ runner.workspace }}/install
 
@@ -263,11 +232,6 @@ jobs:
           ccache -z
           # Older versions don't support -v (verbose)
           ccache -vs 2>/dev/null || ccache -s
-          # NMODL likes to execute bits of itself during the build, so it must
-          # be possible to find the sanitizer runtime libraries.
-          export LD_LIBRARY_PATH=${SANITIZER_RUNTIME_DIR}${SANITIZER_RUNTIME_DIR:+:}${LD_LIBRARY_PATH}
-          # Be tolerant of bad code during the build.
-          export ASAN_OPTIONS=detect_leaks=0
           cmake --build .
           ccache -vs 2>/dev/null || ccache -s
 
@@ -279,14 +243,6 @@ jobs:
         working-directory: ${{runner.workspace}}/nmodl/build
         run: |
           echo "------- Testing -------"
-          export UBSAN_OPTIONS="print_stacktrace=0:halt_on_error=1"
-          export ASAN_OPTIONS="detect_stack_use_after_return=1:check_initialization_order=1"
-          export LSAN_OPTIONS="suppressions=${PWD}/../.sanitizers/lsan.supp"
-          export LD_PRELOAD="${SANITIZER_RUNTIME_LIB}"
-          if [[ "${{matrix.sanitizer}}" == "address" ]]; then
-            # Force Python to use plain malloc. This removes a lot of noise...
-            export PYTHONMALLOC=malloc
-          fi
           ctest -T Test --output-on-failure
 
       - uses: actions/upload-artifact@v3
