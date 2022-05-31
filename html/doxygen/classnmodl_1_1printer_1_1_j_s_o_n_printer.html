@@ -103,7 +103,7 @@ $(document).ready(function(){initNavTree('classnmodl_1_1printer_1_1_j_s_o_n_prin
 <p>We need to print AST in human readable format for debugging or visualization of in memory structure. This printer class provides simple interface to construct JSON object from AST like data structures. We use nlohmann's json library which considerably simplify implementation.</p>
 <dl class="todo"><dt><b><a class="el" href="todo.html#_todo000036">Todo:</a></b></dt><dd>We need to explicitly call <code><a class="el" href="classnmodl_1_1printer_1_1_j_s_o_n_printer.html#a0fafa2042d3c4868e7571614702b9d00" title="Dump json object to stream (typically at the end) nspaces is number of spaces used for indentation...">flush()</a></code> in order to get write/return results. We simply can't dump block in <code>popBlock()</code> because block itself will be part of other parent elements. Also we are writing results to file, <code>stringstream</code> and <code>cout</code>. And hence we can't simply reset/clear previously written text. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="json__printer_8hpp_source.html#l00047">47</a> of file <a class="el" href="json__printer_8hpp_source.html">json_printer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="json__printer_8hpp_source.html#l00046">46</a> of file <a class="el" href="json__printer_8hpp_source.html">json_printer.hpp</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="json__printer_8hpp_source.html">json_printer.hpp</a>&gt;</code></p>
 <table class="memberdecls">
@@ -221,7 +221,7 @@ Private Attributes</h2></td></tr>
 
 <p>By default dump output to std::cout. </p>
 
-<p class="definition">Definition at line <a class="el" href="json__printer_8hpp_source.html#l00075">75</a> of file <a class="el" href="json__printer_8hpp_source.html">json_printer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="json__printer_8hpp_source.html#l00074">74</a> of file <a class="el" href="json__printer_8hpp_source.html">json_printer.hpp</a>.</p>
 
 </div>
 </div>
@@ -249,7 +249,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="json__printer_8hpp_source.html#l00079">79</a> of file <a class="el" href="json__printer_8hpp_source.html">json_printer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="json__printer_8hpp_source.html#l00078">78</a> of file <a class="el" href="json__printer_8hpp_source.html">json_printer.hpp</a>.</p>
 
 </div>
 </div>
@@ -276,7 +276,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="json__printer_8hpp_source.html#l00082">82</a> of file <a class="el" href="json__printer_8hpp_source.html">json_printer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="json__printer_8hpp_source.html#l00081">81</a> of file <a class="el" href="json__printer_8hpp_source.html">json_printer.hpp</a>.</p>
 
 </div>
 </div>
@@ -371,7 +371,7 @@ Private Attributes</h2></td></tr>
 
 <p>print json in compact mode </p>
 
-<p class="definition">Definition at line <a class="el" href="json__printer_8hpp_source.html#l00093">93</a> of file <a class="el" href="json__printer_8hpp_source.html">json_printer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="json__printer_8hpp_source.html#l00092">92</a> of file <a class="el" href="json__printer_8hpp_source.html">json_printer.hpp</a>.</p>
 
 </div>
 </div>
@@ -399,7 +399,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="json__printer_8hpp_source.html#l00097">97</a> of file <a class="el" href="json__printer_8hpp_source.html">json_printer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="json__printer_8hpp_source.html#l00096">96</a> of file <a class="el" href="json__printer_8hpp_source.html">json_printer.hpp</a>.</p>
 
 </div>
 </div>
@@ -500,7 +500,7 @@ Private Attributes</h2></td></tr>
 
 <p>single (current) nmodl block / statement </p>
 
-<p class="definition">Definition at line <a class="el" href="json__printer_8hpp_source.html#l00056">56</a> of file <a class="el" href="json__printer_8hpp_source.html">json_printer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="json__printer_8hpp_source.html#l00055">55</a> of file <a class="el" href="json__printer_8hpp_source.html">json_printer.hpp</a>.</p>
 
 </div>
 </div>
@@ -526,7 +526,7 @@ Private Attributes</h2></td></tr>
 
 <p>json key for children </p>
 
-<p class="definition">Definition at line <a class="el" href="json__printer_8hpp_source.html#l00069">69</a> of file <a class="el" href="json__printer_8hpp_source.html">json_printer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="json__printer_8hpp_source.html#l00068">68</a> of file <a class="el" href="json__printer_8hpp_source.html">json_printer.hpp</a>.</p>
 
 </div>
 </div>
@@ -552,7 +552,7 @@ Private Attributes</h2></td></tr>
 
 <p>true if need to print json in compact format </p>
 
-<p class="definition">Definition at line <a class="el" href="json__printer_8hpp_source.html#l00062">62</a> of file <a class="el" href="json__printer_8hpp_source.html">json_printer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="json__printer_8hpp_source.html#l00061">61</a> of file <a class="el" href="json__printer_8hpp_source.html">json_printer.hpp</a>.</p>
 
 </div>
 </div>
@@ -579,7 +579,7 @@ Private Attributes</h2></td></tr>
 <p>true if we need to expand keys i.e. </p>
 <p>add separate key/value pair for node name and it's children </p>
 
-<p class="definition">Definition at line <a class="el" href="json__printer_8hpp_source.html#l00066">66</a> of file <a class="el" href="json__printer_8hpp_source.html">json_printer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="json__printer_8hpp_source.html#l00065">65</a> of file <a class="el" href="json__printer_8hpp_source.html">json_printer.hpp</a>.</p>
 
 </div>
 </div>
@@ -603,7 +603,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="json__printer_8hpp_source.html#l00049">49</a> of file <a class="el" href="json__printer_8hpp_source.html">json_printer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="json__printer_8hpp_source.html#l00048">48</a> of file <a class="el" href="json__printer_8hpp_source.html">json_printer.hpp</a>.</p>
 
 </div>
 </div>
@@ -629,7 +629,7 @@ Private Attributes</h2></td></tr>
 
 <p>common output stream for file, cout or stringstream </p>
 
-<p class="definition">Definition at line <a class="el" href="json__printer_8hpp_source.html#l00053">53</a> of file <a class="el" href="json__printer_8hpp_source.html">json_printer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="json__printer_8hpp_source.html#l00052">52</a> of file <a class="el" href="json__printer_8hpp_source.html">json_printer.hpp</a>.</p>
 
 </div>
 </div>
@@ -653,7 +653,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="json__printer_8hpp_source.html#l00050">50</a> of file <a class="el" href="json__printer_8hpp_source.html">json_printer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="json__printer_8hpp_source.html#l00049">49</a> of file <a class="el" href="json__printer_8hpp_source.html">json_printer.hpp</a>.</p>
 
 </div>
 </div>
@@ -679,7 +679,7 @@ Private Attributes</h2></td></tr>
 
 <p>stack that holds all parent blocks / statements </p>
 
-<p class="definition">Definition at line <a class="el" href="json__printer_8hpp_source.html#l00059">59</a> of file <a class="el" href="json__printer_8hpp_source.html">json_printer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="json__printer_8hpp_source.html#l00058">58</a> of file <a class="el" href="json__printer_8hpp_source.html">json_printer.hpp</a>.</p>
 
 </div>
 </div>
