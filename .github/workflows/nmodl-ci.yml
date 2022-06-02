@@ -114,6 +114,7 @@ jobs:
         shell: bash
         working-directory: ${{runner.workspace}}/nmodl/build
         env:
+          CCACHE_BASEDIR: ${{runner.workspace}}/nmodl
           CCACHE_DIR: ${{runner.workspace}}/ccache
         run:  |
           if ccache --version | grep -E '^ccache version 4\.(4|4\.1)$'
@@ -220,6 +221,7 @@ jobs:
         shell: bash
         working-directory: ${{runner.workspace}}/nmodl/build
         env:
+          CCACHE_BASEDIR: ${{runner.workspace}}/nmodl
           CCACHE_DIR: ${{runner.workspace}}/ccache
         run:  |
           if ccache --version | grep -E '^ccache version 4\.(4|4\.1)$'
