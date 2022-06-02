@@ -107,7 +107,7 @@ jobs:
 
       - name: Register gcc problem matcher
         # Only report warnings from one gcc build and one clang build
-        if: ${{matrix.os == 'ubuntu-20.04' || matrix.os == 'macos-11'}}
+        if: ${{matrix.os == 'ubuntu-22.04' || matrix.os == 'macos-11'}}
         run: echo "::add-matcher::.github/problem-matchers/gcc.json"
 
       - name: Build, Test and Install
