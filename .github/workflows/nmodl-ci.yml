@@ -224,18 +224,11 @@ jobs:
           CCACHE_BASEDIR: ${{runner.workspace}}/nmodl
           CCACHE_DIR: ${{runner.workspace}}/ccache
         run:  |
-          if ccache --version | grep -E '^ccache version 4\.(4|4\.1)$'
-          then
-            echo "------- Disable ccache direct mode -------"
-            # https://github.com/ccache/ccache/issues/935
-            export CCACHE_NODIRECT=1
-          fi
           echo "------- Building -------"
           ccache -z
-          # Older versions don't support -v (verbose)
-          ccache -vs 2>/dev/null || ccache -s
+          ccache -s
           cmake --build .
-          ccache -vs 2>/dev/null || ccache -s
+          ccache -s
 
       - name: Register problem matcher
         run: echo "::add-matcher::.github/problem-matchers/${{matrix.sanitizer}}.json"
