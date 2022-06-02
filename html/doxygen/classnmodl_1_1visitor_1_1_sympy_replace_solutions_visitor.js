@@ -7,7 +7,7 @@ var classnmodl_1_1visitor_1_1_sympy_replace_solutions_visitor =
       [ "GREEDY", "classnmodl_1_1visitor_1_1_sympy_replace_solutions_visitor.html#a1e49fcb9c416a45a1607f335948228c1a349ab98a75758a304b172797510f0f06", null ]
     ] ],
     [ "SympyReplaceSolutionsVisitor", "classnmodl_1_1visitor_1_1_sympy_replace_solutions_visitor.html#a553fe8c6f3287965bd56d2f1bc007fe6", null ],
-    [ "SympyReplaceSolutionsVisitor", "classnmodl_1_1visitor_1_1_sympy_replace_solutions_visitor.html#ab7c7d978d3bac5dfbb16f908382530bb", null ],
+    [ "SympyReplaceSolutionsVisitor", "classnmodl_1_1visitor_1_1_sympy_replace_solutions_visitor.html#a354b8a8019267e8f94f9acf9fd95afdc", null ],
     [ "replaced_statements_begin", "classnmodl_1_1visitor_1_1_sympy_replace_solutions_visitor.html#a63502ec42fb5f500a6af3c39c0b77fd1", null ],
     [ "replaced_statements_end", "classnmodl_1_1visitor_1_1_sympy_replace_solutions_visitor.html#aeb334753f7b2306ff78ab2d887257b21", null ],
     [ "try_replace_tagged_statement", "classnmodl_1_1visitor_1_1_sympy_replace_solutions_visitor.html#a2ec9f822cfb924898d45252f24a33ab8", null ],

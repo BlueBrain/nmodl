@@ -15,8 +15,8 @@ var token__mapping_8cpp =
     [ "keyword_type", "token__mapping_8cpp.html#ac7dd6707d4aedf9e72c6ea049adc6d79", null ],
     [ "needs_neuron_thread_first_arg", "token__mapping_8cpp.html#a627448d33f111c7c26f69416bead82f6", null ],
     [ "token_type", "token__mapping_8cpp.html#a1932dc8f598d068751391d892d439400", null ],
-    [ "extern_definitions", "token__mapping_8cpp.html#a62056670e0a82c52072573ce0fe69810", null ],
-    [ "keywords", "token__mapping_8cpp.html#af8848d52bfe6c5128bb476ac5c604563", null ],
-    [ "methods", "token__mapping_8cpp.html#a7f29649995b2bc1d04ba4314e71afcb4", null ],
+    [ "extern_definitions", "token__mapping_8cpp.html#a494159b483f5b5fd25743ea638f03bb5", null ],
+    [ "keywords", "token__mapping_8cpp.html#a19154f9c7b5074c9177b1da18950f29d", null ],
+    [ "methods", "token__mapping_8cpp.html#a4f8e77160ea60cb0cd045106de94bf92", null ],
     [ "NEURON_VARIABLES", "token__mapping_8cpp.html#a597385217ee64b4531c041a8e8cd5324", null ]
 ];

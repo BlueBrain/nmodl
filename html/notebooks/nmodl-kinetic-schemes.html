@@ -417,18 +417,17 @@ div.rendered_html tbody tr:hover {
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>~ A0 + 3A1 + 2A2 + ... &lt;-&gt; 2A0 + A1 + ... (kf, kb)
 </pre></div>
 </div>
-<p>where - <code class="docutils literal notranslate"><span class="pre">A0</span></code> etc are the species <img class="math" src="../_images/math/7897dc8f542a8255a10ef6d51e0b83b2c62d9107.png" alt="A_j"/> - the integer preceeding a species (with or without a space) is the corresponding stochiometric coefficient <img class="math" src="../_images/math/6a65ddb6549c895a837dc881c6fe1aa6c626c1b9.png" alt="\nu_{ij}"/> (implicitly 1 if not specified) - <code class="docutils literal notranslate"><span class="pre">kf</span></code> is the forwards reaction rate <img class="math" src="../_images/math/7c43e1b2e4b9a4e788e52c98d9a8d50faa58d971.png" alt="k^{(f)}_j"/> - <code class="docutils literal notranslate"><span class="pre">kb</span></code> is the backwards reaction rate <img class="math" src="../_images/math/5d33f50f070c0d51adc52a0e369662d131ad9601.png" alt="k^{(b)}_j"/>, i.e. the reaction rate for the same reaction with the LHS and RHS exchanged *** We can convert these statements to a system of ODEs using the law of Mass Action:</p>
+<p>where - <code class="docutils literal notranslate"><span class="pre">A0</span></code> etc are the species <img class="math" src="../_images/math/7897dc8f542a8255a10ef6d51e0b83b2c62d9107.png" alt="A_j"/> - the integer preceeding a species (with or without a space) is the corresponding stochiometric coefficient <img class="math" src="../_images/math/6a65ddb6549c895a837dc881c6fe1aa6c626c1b9.png" alt="\nu_{ij}"/> (implicitly 1 if not specified) - <code class="docutils literal notranslate"><span class="pre">kf</span></code> is the forwards reaction rate <img class="math" src="../_images/math/7c43e1b2e4b9a4e788e52c98d9a8d50faa58d971.png" alt="k^{(f)}_j"/> - <code class="docutils literal notranslate"><span class="pre">kb</span></code> is the backwards reaction rate <img class="math" src="../_images/math/5d33f50f070c0d51adc52a0e369662d131ad9601.png" alt="k^{(b)}_j"/>, i.e. the reaction rate for the same reaction with the LHS and RHS exchanged *** We can convert these statements to a system of ODEs using the law of Mass Action:</p>
 <div class="math">
 <p><img src="../_images/math/0566e68083ea6ed9980aa57e68db5abacd1d8466.png" alt="\frac{dY_j}{dt} = \sum_i \Delta \nu_{ij} (r^{(f)}_i - r^{(b)}_i)"/></p>
 </div><p>where <img class="math" src="../_images/math/c68eefc0329741b6a3c7083e098a58f1066e42a3.png" alt="\Delta \nu_{ij} = \nu_{ij}^R - \nu_{ij}^L"/>, and</p>
 <div class="math">
-<p><img src="../_images/math/b31c07b450f7e6215a4eb2ec4a90d64cda1efa11.png" alt="\begin{aligned}
-  r^{(f)}_i &amp;= k^{(f)}_i \prod_j Y_j^{\nu_{ij}^{L}} \\
-  r^{(b)}_i &amp;= k^{(b)}_i \prod_j Y_j^{\nu_{ij}^{R}}
-  \end{aligned}
-
-\*\*\*"/></p>
-</div></section>
+<p><img src="../_images/math/4285f319908811b271d3f3b633089c6ba030de44.png" alt="\begin{aligned}
+r^{(f)}_i &amp;= k^{(f)}_i \prod_j Y_j^{\nu_{ij}^{L}} \\
+r^{(b)}_i &amp;= k^{(b)}_i \prod_j Y_j^{\nu_{ij}^{R}}
+\end{aligned}"/></p>
+</div><p>***</p>
+</section>
 <section id="Other-types-of-reaction-statement">
 <h2>Other types of reaction statement<a class="headerlink" href="#Other-types-of-reaction-statement" title="Permalink to this headline"></a></h2>
 <p>There is also have a reaction statement of the form</p>
@@ -438,10 +437,9 @@ div.rendered_html tbody tr:hover {
 <p>where the LHS must be a state variable, and the RHS is an expression inside parentheses.</p>
 <p>The meaning of this statement is to add <code class="docutils literal notranslate"><span class="pre">a</span></code> to the differential equation for <code class="docutils literal notranslate"><span class="pre">h</span></code>, i.e.</p>
 <div class="math">
-<p><img src="../_images/math/a7abfd4c4571de864db411c648690eb4e8ba3b8b.png" alt="\frac{dh}{dt} += a
-
-\*\*\* Finally there is a statement of the form"/></p>
-</div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>~ x + 2y + ... -&gt; (a)
+<p><img src="../_images/math/143a203a45b594a7c6efeea1226aaa08e02d4745.png" alt="\frac{dh}{dt} += a"/></p>
+</div><p>*** Finally there is a statement of the form</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>~ x + 2y + ... -&gt; (a)
 </pre></div>
 </div>
 <p>which is a one-way reaction statement with no reaction products.</p>
@@ -517,31 +515,33 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <p>We have 2 state variables, and 1 reaction statement, so - <img class="math" src="../_images/math/c5111b6a0d11f04e94c6d082373c94544d894d31.png" alt="i = \{0\}"/> - <img class="math" src="../_images/math/ca6d16973a72e48d8878ab2b918fb08c5b8b5a93.png" alt="j = \{0, 1\}"/></p>
-<p>i.e. - the state vector <img class="math" src="../_images/math/7daf0d4815e763eb90f0d5f1dc406f668c1e21db.png" alt="Y"/> has 2 elements</p>
+<p>i.e.  - the state vector <img class="math" src="../_images/math/7daf0d4815e763eb90f0d5f1dc406f668c1e21db.png" alt="Y"/> has 2 elements</p>
 <div class="math">
-<p><img src="../_images/math/492accb1e436a18f1cfe72ba21f89a836c6b97d5.png" alt="Y = \left(
-  \begin{aligned}
-  h \\
-  m
-  \end{aligned}
-  \right)
-
-- the stoichiometric coefficients are 1x2 matrices"/></p>
-</div><div class="math">
+<p><img src="../_images/math/85abd7550225ea64e3332e320d0e1cacbefd5c01.png" alt="Y = \left(
+\begin{aligned}
+h \\
+m
+\end{aligned}
+\right)"/></p>
+</div><ul class="simple">
+<li><p>the stoichiometric coefficients are 1x2 matrices</p></li>
+</ul>
+<div class="math">
 <p><img src="../_images/math/1d70dc22192943ca2620c1c2ca0f30dcbca82c90.png" alt="\nu^L = \left(
 \begin{aligned}
 1 &amp;&amp; 0
 \end{aligned}
 \right)"/></p>
 </div><div class="math">
-<p><img src="../_images/math/d7373b7e7eaaac74fb668aa6ce6d93673022838b.png" alt="\nu^R = \left(
-  \begin{aligned}
-  0 &amp;&amp; 1
-  \end{aligned}
-  \right)
-
-- the rate vectors contain 1 element:"/></p>
-</div><div class="math">
+<p><img src="../_images/math/909025780e38b3de7856afddcfa686df79b134ec.png" alt="\nu^R = \left(
+\begin{aligned}
+0 &amp;&amp; 1
+\end{aligned}
+\right)"/></p>
+</div><ul class="simple">
+<li><p>the rate vectors contain 1 element:</p></li>
+</ul>
+<div class="math">
 <p><img src="../_images/math/b9661fdf81766efdaf34f6a92ce35f10e765c583.png" alt="k^{(f)} = a"/></p>
 </div><div class="math">
 <p><img src="../_images/math/6104fd80272862fd63e16fa6c99b4269bec42b3e.png" alt="k^{(b)} = b"/></p>
@@ -549,20 +549,18 @@ div.rendered_html tbody tr:hover {
 <div class="math">
 <p><img src="../_images/math/6174a73d2a4005899a4d557addf5082e90513aa0.png" alt="r^{(f)} = a h"/></p>
 </div><div class="math">
-<p><img src="../_images/math/46c03d1837e9ad018d4e5b5c13fc7bbe9c997038.png" alt="r^{(b)} = b m
-
-and finally we find the ODEs in matrix form:"/></p>
-</div><div class="math">
-<p><img src="../_images/math/83b794e77cf19362f50d9d8210bf6fad45e3a4e5.png" alt="\frac{dY}{dt} =
-  \left(
-  \begin{aligned}
-  -1 &amp;&amp; 1
-  \end{aligned}
-  \right)
-  (ah - bm)
-
-which in terms of the state variables can be written:"/></p>
-</div><div class="math">
+<p><img src="../_images/math/ed8e88f746e5ed5af308076768a20ce53744cff3.png" alt="r^{(b)} = b m"/></p>
+</div><p>and finally we find the ODEs in matrix form:</p>
+<div class="math">
+<p><img src="../_images/math/2de93f2ea0293210d23ea33bafea274b9669c1bd.png" alt="\frac{dY}{dt} =
+\left(
+\begin{aligned}
+-1 &amp;&amp; 1
+\end{aligned}
+\right)
+(ah - bm)"/></p>
+</div><p>which in terms of the state variables can be written:</p>
+<div class="math">
 <p><img src="../_images/math/b2b36a4271e219b86916babb67bfe5e5dbe519b2.png" alt="\begin{aligned}
 \frac{dh}{dt} &amp;= bm - ah \\
 \frac{dm}{dt} &amp;= ah - bm

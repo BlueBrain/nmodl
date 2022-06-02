@@ -131,7 +131,7 @@ var group__visitor__classes =
       [ "non_state_var_bflux", "classnmodl_1_1visitor_1_1_kinetic_block_visitor.html#a49ce6f4d0d54db9e8ae4c51b09750c35", null ],
       [ "non_state_var_fflux", "classnmodl_1_1visitor_1_1_kinetic_block_visitor.html#af46d59d6b3ddbde95e5bd071fcfbed17", null ],
       [ "odes", "classnmodl_1_1visitor_1_1_kinetic_block_visitor.html#ab2c7410816e47e28196a3119d23163b0", null ],
-      [ "rate_eqs", "classnmodl_1_1visitor_1_1_kinetic_block_visitor.html#a492290a14bcaedf7b8915140c57bce74", null ],
+      [ "rate_eqs", "classnmodl_1_1visitor_1_1_kinetic_block_visitor.html#a105e93baab41c8a126ab00f670fa0560", null ],
       [ "state_var", "classnmodl_1_1visitor_1_1_kinetic_block_visitor.html#af809cc8abb5c303787674513befe1055", null ],
       [ "state_var_count", "classnmodl_1_1visitor_1_1_kinetic_block_visitor.html#a04423c9af2e5529c885cbb3654f9040d", null ],
       [ "state_var_index", "classnmodl_1_1visitor_1_1_kinetic_block_visitor.html#adc63947b144bc946306d2811b4f683bb", null ],
@@ -358,7 +358,7 @@ var group__visitor__classes =
         [ "GREEDY", "classnmodl_1_1visitor_1_1_sympy_replace_solutions_visitor.html#a1e49fcb9c416a45a1607f335948228c1a349ab98a75758a304b172797510f0f06", null ]
       ] ],
       [ "SympyReplaceSolutionsVisitor", "classnmodl_1_1visitor_1_1_sympy_replace_solutions_visitor.html#a553fe8c6f3287965bd56d2f1bc007fe6", null ],
-      [ "SympyReplaceSolutionsVisitor", "classnmodl_1_1visitor_1_1_sympy_replace_solutions_visitor.html#ab7c7d978d3bac5dfbb16f908382530bb", null ],
+      [ "SympyReplaceSolutionsVisitor", "classnmodl_1_1visitor_1_1_sympy_replace_solutions_visitor.html#a354b8a8019267e8f94f9acf9fd95afdc", null ],
       [ "replaced_statements_begin", "classnmodl_1_1visitor_1_1_sympy_replace_solutions_visitor.html#a63502ec42fb5f500a6af3c39c0b77fd1", null ],
       [ "replaced_statements_end", "classnmodl_1_1visitor_1_1_sympy_replace_solutions_visitor.html#aeb334753f7b2306ff78ab2d887257b21", null ],
       [ "try_replace_tagged_statement", "classnmodl_1_1visitor_1_1_sympy_replace_solutions_visitor.html#a2ec9f822cfb924898d45252f24a33ab8", null ],

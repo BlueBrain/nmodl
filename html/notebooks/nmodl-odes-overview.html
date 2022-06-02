@@ -396,30 +396,42 @@ Euler, transforms a system of ODEs into a system of linear or non-linear equatio
 <h2><code class="docutils literal notranslate"><span class="pre">DERIVATIVE</span></code> block<a class="headerlink" href="#DERIVATIVE-block" title="Permalink to this headline"></a></h2>
 <ul class="simple">
 <li><p>system of ODEs &amp; associated solve method: <code class="docutils literal notranslate"><span class="pre">cnexp</span></code>, <code class="docutils literal notranslate"><span class="pre">sparse</span></code>, <code class="docutils literal notranslate"><span class="pre">derivimplicit</span></code> or <code class="docutils literal notranslate"><span class="pre">euler</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">cnexp</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cnexp</span></code></p>
+<ul>
 <li><p>applicable if ODEs are linear &amp; independent</p></li>
 <li><p>exact analytic integration</p></li>
 <li><p>see the <a class="reference internal" href="nmodl-sympy-solver-cnexp.html"><span class="doc">nmodl-sympy-solver-cnexp</span></a> notebook for more details</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">sparse</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sparse</span></code></p>
+<ul>
 <li><p>applicable if ODEs are linear &amp; coupled</p></li>
 <li><p>backwards Euler numerical integration scheme: <img class="math" src="../_images/math/a401297e45d1755fc7e05242249de35e748e03d4.png" alt="f(t+\Delta t) = f(t) + dt f'(t+ \Delta t)"/></p></li>
 <li><p>results in a linear algebraic system to solve</p></li>
 <li><p>numerically stable</p></li>
 <li><p><img class="math" src="../_images/math/f12a6514b4961252a43fb2c49b7421cea1a74272.png" alt="\mathcal{O}(\Delta t)"/> integration error</p></li>
 <li><p>see the <a class="reference internal" href="nmodl-sympy-solver-sparse.html"><span class="doc">nmodl-sympy-solver-sparse</span></a> notebook for more details</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">derivimplcit</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">derivimplcit</span></code></p>
+<ul>
 <li><p>always applicable</p></li>
 <li><p>backwards Euler numerical integration scheme: <img class="math" src="../_images/math/a401297e45d1755fc7e05242249de35e748e03d4.png" alt="f(t+\Delta t) = f(t) + dt f'(t+ \Delta t)"/></p></li>
 <li><p>results in a non-linear algebraic system to solve</p></li>
 <li><p>numerically stable</p></li>
 <li><p><img class="math" src="../_images/math/f12a6514b4961252a43fb2c49b7421cea1a74272.png" alt="\mathcal{O}(\Delta t)"/> integration error</p></li>
 <li><p>see the <a class="reference internal" href="nmodl-sympy-solver-derivimplicit.html"><span class="doc">nmodl-sympy-solver-sparse</span></a> notebook for more details</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">euler</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">euler</span></code></p>
+<ul>
 <li><p>always applicable</p></li>
 <li><p>forwards Euler numerical integration scheme: <img class="math" src="../_images/math/fd0185768cf776f68c109accbf6d8b61701041cc.png" alt="f(t+\Delta t) = f(t) + \Delta t f'(t)"/></p></li>
 <li><p>numerically unstable</p></li>
 <li><p><img class="math" src="../_images/math/f12a6514b4961252a43fb2c49b7421cea1a74272.png" alt="\mathcal{O}(\Delta t)"/> integration error</p></li>
 <li><p>not recommended due to instability of scheme</p></li>
+</ul>
+</li>
 </ul>
 </section>
 <hr class="docutils" />
@@ -445,10 +457,13 @@ Euler, transforms a system of ODEs into a system of linear or non-linear equatio
 <h2><code class="docutils literal notranslate"><span class="pre">NONLINEAR</span></code> block<a class="headerlink" href="#NONLINEAR-block" title="Permalink to this headline"></a></h2>
 <ul class="simple">
 <li><p>system of non-linear algebraic equations</p></li>
-<li><p>solve by Newton iteration</p></li>
+<li><p>solve by Newton iteration</p>
+<ul>
 <li><p>construct <img class="math" src="../_images/math/e51ff30b3231dd3d8d85e9eaa6afce1fd95eb79d.png" alt="F(X)"/>, with Jacobian <img class="math" src="../_images/math/4968aa0458a2629385c87348f6e4f3a4459cb9b5.png" alt="J(X)=\frac{\partial F_i}{\partial X_j}"/></p></li>
 <li><p>such that desired solution <img class="math" src="../_images/math/99fae140d4794fc8ca645dc9392d01f6bea8a154.png" alt="X^*"/> satisfies condition <img class="math" src="../_images/math/fbe07f7aa9e40df468a9ba0e2434f7ff86e557a1.png" alt="F(X^*) = 0"/></p></li>
 <li><p>iterative solution given by <img class="math" src="../_images/math/bd0250b654637c48042240e4531ad8487c56dec6.png" alt="X_{n+1} = X_n + J(X_n)^{-1} F(X_n)"/></p></li>
+</ul>
+</li>
 <li><p>see the <a class="reference internal" href="nmodl-nonlinear-solver.html"><span class="doc">nmodl-nonlinear-solver</span></a> notebook for more details ***</p></li>
 </ul>
 <div class="nbinput nblast docutils container">
