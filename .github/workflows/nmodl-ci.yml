@@ -21,23 +21,31 @@ env:
 
 jobs:
   ci:
-    runs-on: ${{ matrix.os }}
-    name: ${{ matrix.os }}
+    runs-on: ${{matrix.config.os}}
+    name: ${{toJson(matrix.config)}}
     strategy:
       matrix:
-        # Core counts taken from https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners#supported-runners-and-hardware-resources
         include:
-          - os: ubuntu-20.04
-            cores: 2
-          - os: ubuntu-22.04
-            cores: 2
-          - os: macos-10.15
-            cores: 3
-          - os: macos-11
-            cores: 3
+          - config:
+              os: ubuntu-20.04
+          - config:
+              os: ubuntu-22.04
+              flag_warnings: ON
+          - config:
+              os: macos-10.15
+          - config:
+              os: macos-11
+          # TODO: might be interesting to add the thread sanitizer too
+          - config:
+              os: ubuntu-22.04
+              # Hyphens here will be replaced with commas before the value is
+              # passed to NMODL_SANITIZERS
+              sanitizer: address-leak
+            config:
+              flag_warnings: ON
+              os: ubuntu-22.04
+              sanitizer: undefined
       fail-fast: true
-    env:
-      CMAKE_BUILD_PARALLEL_LEVEL: ${{matrix.cores}}
     steps:
       - name: Setup cmake
         uses: jwlawson/actions-setup-cmake@v1
@@ -45,16 +53,20 @@ jobs:
           cmake-version: ${{ env.DESIRED_CMAKE_VERSION }}
 
       - name: Install homebrew packages
-        if: startsWith(matrix.os, 'macOS')
+        if: startsWith(matrix.config.os, 'macOS')
         run: |
           brew install ccache coreutils bison boost clang-format flex ninja
           echo /usr/local/opt/flex/bin:/usr/local/opt/bison/bin >> $GITHUB_PATH
+          # Taken from https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners#supported-runners-and-hardware-resources
+          echo CMAKE_BUILD_PARALLEL_LEVEL=3 >> $GITHUB_ENV
         shell: bash
 
       - name: Install apt packages
-        if: startsWith(matrix.os, 'ubuntu')
+        if: startsWith(matrix.config.os, 'ubuntu')
         run: |
           sudo apt-get install bison ccache flex libfl-dev ninja-build python3-dev python3-pip
+          # Taken from https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners#supported-runners-and-hardware-resources
+          echo CMAKE_BUILD_PARALLEL_LEVEL=2 >> $GITHUB_ENV
         shell: bash
 
       - name: Set up Python3
@@ -64,10 +76,18 @@ jobs:
 
       - name: Install Python3 dependencies
         run: |
-          pip3 install -U pip setuptools scikit-build Jinja2 PyYAML pytest \
-            sympy 'cmake-format==0.6.13'
+          python3 -m pip install -U pip setuptools scikit-build Jinja2 PyYAML \
+            pytest sympy 'cmake-format==0.6.13'
 
       - uses: actions/checkout@v3
+
+      - name: Register compiler warning problem matcher
+        if: ${{matrix.config.flag_warnings == 'ON'}}
+        run: echo "::add-matcher::.github/problem-matchers/gcc.json"
+
+      - name: Register sanitizer problem matcher
+        if: ${{matrix.config.sanitizer}}
+        run: echo "::add-matcher::.github/problem-matchers/${{matrix.config.sanitizer}}.json"
 
       - name: Configure
         shell: bash
@@ -75,13 +95,28 @@ jobs:
         run:  |
           echo "------- Configure -------"
           mkdir build && pushd build
-          cmake .. -G Ninja \
-            -DNMODL_EXTRA_CXX_FLAGS="-Wall -Wno-reorder -Wno-unknown-pragmas -Wno-sign-compare -Wno-overloaded-virtual" \
-            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
-            -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-            -DPYTHON_EXECUTABLE=$(which python3) \
-            -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR \
-            -DNMODL_FORMATTING:BOOL=ON
+          cmake_args=(-G Ninja
+                      -DPYTHON_EXECUTABLE=$(which python3) \
+                      -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR \
+                      -DNMODL_FORMATTING:BOOL=ON)
+          if [[ -n "${{matrix.config.flag_warnings}}" ]]; then
+            cmake_args+=(-DNMODL_EXTRA_CXX_FLAGS="-Wall \
+                          -Wno-reorder \
+                          -Wno-unknown-pragmas \
+                          -Wno-sign-compare \
+                          -Wno-overloaded-virtual")
+          fi
+          if [[ -n "${{matrix.config.sanitizer}}" ]]; then
+            cmake_args+=(-DCMAKE_BUILD_TYPE=Custom \
+                         -DCMAKE_CXX_FLAGS="-O1 -g" \
+                         -DNMODL_SANITIZERS=$(echo ${{matrix.config.sanitizer}} | sed -e 's/-/,/g'))
+            CXX=$(command -v clang++-14)
+          else
+            CXX=${CXX:-g++}
+          fi
+          cmake_args+=(-DCMAKE_CXX_COMPILER=${CXX} \
+                       -DCMAKE_CXX_COMPILER_LAUNCHER=ccache)
+          cmake .. "${cmake_args[@]}"
         env:
           INSTALL_DIR: ${{ runner.workspace }}/install
 
@@ -95,20 +130,24 @@ jobs:
           if ! cmake --build . --target check-clang-format; then status=1; fi
           exit ${status}
 
+      - name: Dump config dictionary
+        run: |
+          cat << EOF > matrix.json
+          ${{toJSON(matrix.config)}}
+          EOF
+          echo matrix.config JSON:
+          cat matrix.json
+          echo -----
+
       - name: Restore compiler cache
-        uses: actions/cache@v3
+        uses: pat-s/always-upload-cache@v3
         with:
           path: |
             ${{runner.workspace}}/ccache
-          key: ${{matrix.os}}-${{github.ref}}-${{github.sha}}
+          key: ${{hashfiles('matrix.json')}}-${{github.ref}}-${{github.sha}}
           restore-keys: |
-            ${{matrix.os}}-${{github.ref}}-
-            ${{matrix.os}}-
-
-      - name: Register gcc problem matcher
-        # Only report warnings from one gcc build and one clang build
-        if: ${{matrix.os == 'ubuntu-22.04' || matrix.os == 'macos-11'}}
-        run: echo "::add-matcher::.github/problem-matchers/gcc.json"
+            ${{hashfiles('matrix.json')}}-${{github.ref}}-
+            ${{hashfiles('matrix.json')}}-
 
       - name: Build, Test and Install
         shell: bash
@@ -138,7 +177,7 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: ctest-results-${{matrix.os}}
+          name: ctest-results-${{hashfiles('matrix.json')}}
           path: ${{runner.workspace}}/nmodl/build/Testing/*/Test.xml
 
       # This step will set up an SSH connection on tmate.io for live debugging.
@@ -149,98 +188,3 @@ jobs:
         if: failure() && contains(github.event.pull_request.title, 'live-debug-tests')
         uses: mxschmitt/action-tmate@v3
         timeout-minutes: 60
-
-  sanitizers:
-    needs: ci
-    name: ${{ matrix.sanitizer }}-sanitizer
-    runs-on: ubuntu-22.04
-    env:
-      CMAKE_BUILD_PARALLEL_LEVEL: 2
-    strategy:
-      matrix:
-        # TODO: might be interesting to add the thread sanitizer too
-        # Hyphens here will be replaced with commas before the value is passed
-        # to NMODL_SANITIZERS
-        sanitizer: [undefined, address-leak]
-      fail-fast: false
-    steps:
-      - name: Setup cmake
-        uses: jwlawson/actions-setup-cmake@v1
-
-      - name: Install apt packages
-        run: |
-          sudo apt install bison ccache flex libfl-dev clang-14 ninja-build
-          # Make clang++ and llvm-symbolizer point at clang/llvm-14
-          # Priority (200) chosen to be bigger than that in
-          # https://github.com/actions/virtual-environments/blob/main/images/linux/scripts/installers/clang.sh
-          sudo update-alternatives --install /usr/bin/clang++         clang++         /usr/bin/clang++-14         200
-          sudo update-alternatives --install /usr/bin/llvm-symbolizer llvm-symbolizer /usr/bin/llvm-symbolizer-14 200
-          clang++ --version
-          llvm-symbolizer --version
-        shell: bash
-
-      - name: Set up Python3
-        uses: actions/setup-python@v3
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-
-      - name: Install Python3 dependencies
-        run: |
-          python3 -m pip install -U pip setuptools scikit-build Jinja2 PyYAML pytest sympy
-
-      - uses: actions/checkout@v3
-
-      - name: Configure
-        shell: bash
-        working-directory: ${{runner.workspace}}/nmodl
-        run:  |
-          echo "------- Configure -------"
-          mkdir build && pushd build
-          cmake .. -G Ninja \
-            -DCMAKE_BUILD_TYPE=Custom \
-            -DCMAKE_CXX_FLAGS="-O1 -g" \
-            -DCMAKE_CXX_COMPILER=clang++ \
-            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
-            -DPYTHON_EXECUTABLE=$(which python3) \
-            -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR \
-            -DNMODL_SANITIZERS=$(echo ${{matrix.sanitizer}} | sed -e 's/-/,/g')
-        env:
-          INSTALL_DIR: ${{ runner.workspace }}/install
-
-      - name: Restore compiler cache
-        uses: pat-s/always-upload-cache@v3
-        with:
-          path: |
-            ${{runner.workspace}}/ccache
-          key: ${{matrix.sanitizer}}-${{github.ref}}-${{github.sha}}
-          restore-keys: |
-            ${{matrix.sanitizer}}-${{github.ref}}-
-            ${{matrix.sanitizer}}-
-
-      - name: Build
-        shell: bash
-        working-directory: ${{runner.workspace}}/nmodl/build
-        env:
-          CCACHE_BASEDIR: ${{runner.workspace}}/nmodl
-          CCACHE_DIR: ${{runner.workspace}}/ccache
-        run:  |
-          echo "------- Building -------"
-          ccache -z
-          ccache -s
-          cmake --build .
-          ccache -s
-
-      - name: Register problem matcher
-        run: echo "::add-matcher::.github/problem-matchers/${{matrix.sanitizer}}.json"
-
-      - name: Test
-        shell: bash
-        working-directory: ${{runner.workspace}}/nmodl/build
-        run: |
-          echo "------- Testing -------"
-          ctest -T Test --output-on-failure
-
-      - uses: actions/upload-artifact@v3
-        with:
-          name: ctest-results-${{matrix.sanitizer}}-sanitizer
-          path: ${{runner.workspace}}/nmodl/build/Testing/*/Test.xml
