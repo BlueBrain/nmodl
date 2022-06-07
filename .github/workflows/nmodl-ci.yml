@@ -29,8 +29,8 @@ jobs:
           - config:
               os: ubuntu-20.04
           - config:
-              os: ubuntu-22.04
               flag_warnings: ON
+              os: ubuntu-22.04
           - config:
               os: macos-10.15
           - config:
@@ -41,7 +41,7 @@ jobs:
               # Hyphens here will be replaced with commas before the value is
               # passed to NMODL_SANITIZERS
               sanitizer: address-leak
-            config:
+          - config:
               flag_warnings: ON
               os: ubuntu-22.04
               sanitizer: undefined
