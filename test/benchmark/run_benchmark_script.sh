@@ -57,7 +57,7 @@ export PYTHONPATH=/gpfs/bbp.cscs.ch/data/scratch/proj16/magkanar/nmodl_llvm_benc
 
 python benchmark_script.py \
     --modfiles "./kernels/hh.mod" "./kernels/compute-bound.mod" "./kernels/memory-bound.mod" \
-    --architectures "default" "nehalem" "broadwell" "skylake-avx512" \
+    --architectures "default" "nehalem" "broadwell" "skylake-avx512" "nvptx64" \
     --compilers "intel" "gcc" "clang" \
     --external \
     --nmodl_jit \

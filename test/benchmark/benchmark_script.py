@@ -175,6 +175,8 @@ class Benchmark:
         math_lib,
         instances,
         experiments,
+        gpu_grid_dim = 1,
+        gpu_block_dim = 1
     ):
         """Runs NMODL JIT kernels"""
         cfg = nmodl.CodeGenConfig()
@@ -200,6 +202,8 @@ class Benchmark:
             cfg.shared_lib_paths = [self.compiler_config.svml_lib]
         elif math_lib == "SLEEF":
             cfg.shared_lib_paths = [self.compiler_config.sleef_lib]
+        elif math_lib == "libdevice":
+            cfg.shared_lib_paths = [self.compiler_config.libdevice_lib]
         cfg.output_dir = str((Path(self.benchmark_config.output_directory)
                 / modname
                 / "nmodl_jit"
@@ -207,7 +211,7 @@ class Benchmark:
                 / math_lib))
         modast = self.init_ast(modfile_str)
         jit = nmodl.Jit(cfg)
-        res = jit.run(modast, modname, (int)(experiments), (int)(instances))
+        res = jit.run(modast, modname, (int)(experiments), (int)(instances), "", gpu_grid_dim, gpu_block_dim)
         return res
 
     def init_ast(self, mod_file_string):
@@ -295,18 +299,32 @@ class Benchmark:
                                         fast_math_flags,
                                         math_lib,
                                         kernel_instance_size,
-                                        self.benchmark_config.experiments,
+                                        self.benchmark_config.experiments
                                     )
                             else:
                                 # Run NMODL JIT on GPU
+                                self.results[modname][architecture]["nmodl_jit"][
+                                    "libdevice_" + fast_math_name
+                                ] = self.run_JIT_kernels(
+                                    modfile_str,
+                                    modname,
+                                    architecture,
+                                    "sm_70",
+                                    fast_math_flags,
+                                    "libdevice",
+                                    kernel_instance_size,
+                                    self.benchmark_config.experiments,
+                                    16384,
+                                    512
+                                )
                                 print(
                                     'self.results[modname][architecture]["nmodl_jit_cuda"]["libdevice"+fast_math_name] = jit.run(modast, modname, self.config.instances, self.config.experiments)'
                                 )
                     if not self.benchmark_config.external_kernel and not self.benchmark_config.nmodl_jit:
                         raise Exception("No kernel to run. Select either --external or/and --nmodl_jit")
             print(self.results)
-            with open('benchmark_results_{}.pickle'.format(modname), 'wb') as handle:
-                pickle.dump(self.results, handle, protocol=pickle.HIGHEST_PROTOCOL)
+        with open('{}/benchmark_results.pickle'.format(self.benchmark_config.output_directory), 'wb') as handle:
+            pickle.dump(self.results, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
     def plot_results(self, file = None):
         if file is not None:
@@ -335,17 +353,15 @@ class Benchmark:
             cur_vals = [float(bar_data_cur[k]) for k in cur_keys]
             # if state_vals is not empty
             if len(state_vals) > 0:
-                state_barplot = sns.barplot(x=state_keys, y=state_vals)
-                for item in state_barplot.get_xticklabels():
-                    item.set_rotation(90)
+                state_barplot = sns.barplot(x=state_vals, y=state_keys, orient="h")
+                state_barplot.tick_params(labelsize=6)
                 plt.savefig("{}/{}_state_benchmark.pdf".format(self.benchmark_config.output_directory, modname), format="pdf", bbox_inches="tight")
                 plt.close()
             else:
                 print("No results for state kernel of {}".format(modname))
             if len(cur_vals) > 0:
-                cur_barplot = sns.barplot(x=cur_keys, y=cur_vals)
-                for item in cur_barplot.get_xticklabels():
-                    item.set_rotation(90)
+                cur_barplot = sns.barplot(x=cur_vals, y=cur_keys, orient="h")
+                cur_barplot.tick_params(labelsize=6)
                 plt.savefig("{}/{}_cur_benchmark.pdf".format(self.benchmark_config.output_directory, modname), format="pdf", bbox_inches="tight")
                 plt.close()
             else:
