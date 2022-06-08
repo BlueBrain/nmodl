@@ -69,6 +69,8 @@ class CUDADriver {
     explicit CUDADriver(std::unique_ptr<llvm::Module> m)
         : module(std::move(m)) {}
 
+    ~CUDADriver();
+
     /// Initializes the CUDA GPU JIT driver.
     void init(const codegen::Platform& platform, BenchmarkInfo* benchmark_info = nullptr);
 

@@ -18,10 +18,6 @@
 #include "ext_kernel.hpp"
 #include "test/unit/codegen/codegen_data_helper.hpp"
 
-#ifdef NMODL_LLVM_CUDA_BACKEND
-#include "test/benchmark/cuda_driver.hpp"
-#endif
-
 namespace nmodl {
 namespace benchmark {
 
@@ -42,72 +38,6 @@ void LLVMBenchmark::generate_llvm() {
     std::chrono::duration<double> diff = end - start;
     logger->info("Created LLVM IR module from NMODL AST in {} sec", diff.count());
 }
-
-#ifdef NMODL_LLVM_CUDA_BACKEND
-void checkCudaErrors(cudaError error) {
-    if (error != cudaSuccess) {
-        throw std::runtime_error(
-            fmt::format("CUDA Execution Error: {}\n", cudaGetErrorString(error)));
-    }
-}
-
-void* copy_instance_data_gpu(const codegen::CodegenInstanceData& data) {
-    void* dev_base_ptr;
-    const auto ptr_vars_size = data.num_ptr_members * sizeof(double*);
-    auto scalar_vars_size = 0;
-    const auto num_scalar_vars = data.members.size() - data.num_ptr_members;
-    for (int i = 0; i < num_scalar_vars; i++) {
-        scalar_vars_size += data.members_size[i + data.num_ptr_members];
-    }
-    checkCudaErrors(cudaMalloc(&dev_base_ptr, ptr_vars_size + scalar_vars_size));
-    for (auto i = 0; i < data.num_ptr_members; i++) {
-        // Allocate a vector with the correct size
-        void* dev_member_ptr;
-        auto size_of_var = data.members_size[i];
-        checkCudaErrors(cudaMalloc(&dev_member_ptr, size_of_var * data.num_elements));
-        checkCudaErrors(cudaMemcpy(dev_member_ptr,
-                                   data.members[i],
-                                   size_of_var * data.num_elements,
-                                   cudaMemcpyHostToDevice));
-        // Copy the pointer addresses to the struct
-        auto offseted_place = (char*) dev_base_ptr + data.offsets[i];
-        checkCudaErrors(
-            cudaMemcpy(offseted_place, &dev_member_ptr, sizeof(double*), cudaMemcpyHostToDevice));
-    }
-    // memcpy the scalar values
-    auto offseted_place_dev = (char*) dev_base_ptr + data.offsets[data.num_ptr_members];
-    auto offseted_place_host = (char*) (data.base_ptr) + data.offsets[data.num_ptr_members];
-    checkCudaErrors(cudaMemcpy(
-        offseted_place_dev, offseted_place_host, scalar_vars_size, cudaMemcpyHostToDevice));
-    return dev_base_ptr;
-}
-
-void copy_instance_data_host(codegen::CodegenInstanceData& data, void* dev_base_ptr) {
-    const auto ptr_vars_size = data.num_ptr_members * sizeof(double*);
-    auto scalar_vars_size = 0;
-    const auto num_scalar_vars = data.members.size() - data.num_ptr_members;
-    for (int i = 0; i < num_scalar_vars; i++) {
-        scalar_vars_size += data.members_size[i + data.num_ptr_members];
-    }
-    const auto host_base_ptr = data.base_ptr;
-    for (auto i = 0; i < data.num_ptr_members; i++) {
-        auto size_of_var = data.members_size[i];
-        void* offset_dev_ptr = (char*) dev_base_ptr + data.offsets[i];
-        void* gpu_offset_addr;
-        checkCudaErrors(
-            cudaMemcpy(&gpu_offset_addr, offset_dev_ptr, sizeof(double*), cudaMemcpyDeviceToHost));
-        checkCudaErrors(cudaMemcpy(data.members[i],
-                                   gpu_offset_addr,
-                                   size_of_var * data.num_elements,
-                                   cudaMemcpyDeviceToHost));
-    }
-    // memcpy the scalar values
-    void* offseted_place_dev = (char*) dev_base_ptr + data.offsets[data.num_ptr_members];
-    void* offseted_place_host = (char*) (data.base_ptr) + data.offsets[data.num_ptr_members];
-    checkCudaErrors(cudaMemcpy(
-        offseted_place_host, offseted_place_dev, scalar_vars_size, cudaMemcpyDeviceToHost));
-}
-#endif
 
 BenchmarkResults LLVMBenchmark::run_benchmark() {
     // Set the codegen data helper and find the kernels.
@@ -192,9 +122,8 @@ BenchmarkResults LLVMBenchmark::run_benchmark() {
             // Initialise the data.
             auto instance_data = codegen_data.create_data(instance_size, /*seed=*/1);
 #ifdef NMODL_LLVM_CUDA_BACKEND
-            void* dev_ptr;
             if (platform.is_CUDA_gpu()) {
-                dev_ptr = copy_instance_data_gpu(instance_data);
+                instance_data.copy_instance_data_gpu();
             }
 #endif
             // Log instance size once.
@@ -212,7 +141,7 @@ BenchmarkResults LLVMBenchmark::run_benchmark() {
 #ifdef NMODL_LLVM_CUDA_BACKEND
                 if (platform.is_CUDA_gpu()) {
                     cuda_runner->run_with_argument<void*>(wrapper_name,
-                                                          dev_ptr,
+                                                          instance_data.dev_base_ptr,
                                                           gpu_execution_parameters);
                 } else {
 #endif
@@ -225,7 +154,7 @@ BenchmarkResults LLVMBenchmark::run_benchmark() {
             std::chrono::duration<double> diff = end - start;
 #ifdef NMODL_LLVM_CUDA_BACKEND
             if (platform.is_CUDA_gpu()) {
-                copy_instance_data_host(instance_data, dev_ptr);
+                instance_data.copy_instance_data_host();
             }
 #endif
             // Log the time taken for each run.
