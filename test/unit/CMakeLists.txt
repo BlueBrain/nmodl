@@ -8,7 +8,7 @@ add_link_options(${NMODL_EXTRA_CXX_FLAGS})
 add_compile_options(${NMODL_TESTS_COMPILER_WARNING_SUPPRESSIONS})
 
 include_directories(${PYBIND11_INCLUDE_DIR} ${PYTHON_INCLUDE_DIRS})
-include_directories(${NMODL_PROJECT_SOURCE_DIR}/ext/catch ${NMODL_PROJECT_SOURCE_DIR}/test)
+include_directories(${NMODL_PROJECT_SOURCE_DIR}/test)
 include_directories(${NMODL_PROJECT_SOURCE_DIR}/src/solver)
 include_directories(${NMODL_PROJECT_SOURCE_DIR}/src/utils)
 include_directories(${NMODL_PROJECT_SOURCE_DIR}/ext/eigen)
@@ -103,15 +103,14 @@ target_link_libraries(testunitlexer lexer util)
 target_link_libraries(testunitparser lexer test_util config)
 
 # =============================================================================
-# Use catch_discover instead of add_test for granular test report if CMAKE ver is greater than 3.9,
-# else use the normal add_test method
+# Use catch_discover instead of add_test for granular test result reporting.
 # =============================================================================
+set(test_env ${NMODL_SANITIZER_ENABLE_ENVIRONMENT})
 set(testvisitor_env "PYTHONPATH=${PROJECT_BINARY_DIR}/lib:$ENV{PYTHONPATH}")
 if(NOT LINK_AGAINST_PYTHON)
   list(APPEND testvisitor_env "NMODL_PYLIB=$ENV{NMODL_PYLIB}")
   list(APPEND testvisitor_env
        "NMODL_WRAPLIB=${PROJECT_BINARY_DIR}/lib/nmodl/libpywrapper${CMAKE_SHARED_LIBRARY_SUFFIX}")
-
 endif()
 
 foreach(
@@ -128,12 +127,18 @@ foreach(
   testunitlexer
   testunitparser)
 
-  if(${test_name} STREQUAL "testvisitor")
-    catch_discover_tests(${test_name} TEST_PREFIX "${test_name}/" PROPERTIES ENVIRONMENT
-                         "${testvisitor_env}")
-  else()
-    catch_discover_tests(${test_name} TEST_PREFIX "${test_name}/")
-  endif()
+  target_link_libraries(${test_name} Catch2::Catch2)
+  cpp_cc_configure_sanitizers(TARGET ${test_name})
+  set(env ${test_env})
+  list(APPEND env ${${test_name}_env})
+  # See https://github.com/catchorg/Catch2/issues/2424
+  string(REPLACE ";" ";ENVIRONMENT;" _environment_vars_list "${env}")
+  # Catch2 doesn't set these environment variables when running the executable to discover tests
+  # (https://github.com/catchorg/Catch2/issues/1810). This means that in builds that enable it, we
+  # see errors from the LeakSanitizer during the build. These seem to be harmless because Catch2
+  # does not seem to check the exit code.
+  catch_discover_tests(${test_name} TEST_PREFIX "${test_name}/" PROPERTIES ENVIRONMENT
+                       "${_environment_vars_list}")
 endforeach()
 
 # =============================================================================
@@ -148,4 +153,5 @@ if(NMODL_ENABLE_PYTHON_BINDINGS)
                                ${NMODL_PROJECT_SOURCE_DIR}/test/unit/pybind)
   set_tests_properties(Pybind PROPERTIES ENVIRONMENT
                                          PYTHONPATH=${PROJECT_BINARY_DIR}/lib:$ENV{PYTHONPATH})
+  cpp_cc_configure_sanitizers(TEST Pybind PRELOAD)
 endif()

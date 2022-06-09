@@ -100,7 +100,7 @@ def _config_exe(exe_name):
 
 install_requirements = [
     "PyYAML>=3.13",
-    "sympy>=1.3,<1.9",
+    "sympy>=1.3",
 ]
 
 
@@ -138,7 +138,7 @@ setup(
         "nbconvert",
         "nbsphinx>=0.3.2",
         "pytest>=3.7.2",
-        "sphinx",
+        "sphinx<5", # myst_parser requires <5 and pip falls over
         "sphinx-rtd-theme",
     ]
     + install_requirements,
