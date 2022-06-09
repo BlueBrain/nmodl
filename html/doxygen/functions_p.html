@@ -276,7 +276,6 @@ $(document).ready(function(){initNavTree('functions_p.html',''); initResizable()
 <li>print_atomic_reduction_pragma()
 : <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#af3e32e5cec32f5b55fa81a654bc4afef">nmodl::codegen::CodegenAccVisitor</a>
 , <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ae2a49f740c86c3442faefc13b46bad67">nmodl::codegen::CodegenCVisitor</a>
-, <a class="el" href="classnmodl_1_1codegen_1_1_codegen_omp_visitor.html#aa03f9f779de6808508e8f442dc61c60d">nmodl::codegen::CodegenOmpVisitor</a>
 </li>
 <li>print_backend_compute_routine_decl()
 : <a class="el" href="classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#aa4dcda16240343a3853322739593b7e9">nmodl::codegen::CodegenIspcVisitor</a>
@@ -286,7 +285,6 @@ $(document).ready(function(){initNavTree('functions_p.html',''); initResizable()
 , <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cuda_visitor.html#a7d6dfa1301070654014b0a2955c7ed89">nmodl::codegen::CodegenCudaVisitor</a>
 , <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a8f1967d146ea3387601e748a3fb0dfb0">nmodl::codegen::CodegenCVisitor</a>
 , <a class="el" href="classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#a635b7af7176f95ac760b2071b5e936c9">nmodl::codegen::CodegenIspcVisitor</a>
-, <a class="el" href="classnmodl_1_1codegen_1_1_codegen_omp_visitor.html#a83a96936a9d3d88157fa337463f3329e">nmodl::codegen::CodegenOmpVisitor</a>
 </li>
 <li>print_backend_info()
 : <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a3e9c0e9171fa3d30d86c02a9d1ce1d65">nmodl::codegen::CodegenCVisitor</a>
@@ -323,24 +321,13 @@ $(document).ready(function(){initNavTree('functions_p.html',''); initResizable()
 <li>print_channel_iteration_block_parallel_hint()
 : <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a607b38ab6c54cc6dce98bf0ab86235e1">nmodl::codegen::CodegenAccVisitor</a>
 , <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ac154c0c5ba5e34a53504ae6e95574f33">nmodl::codegen::CodegenCVisitor</a>
-, <a class="el" href="classnmodl_1_1codegen_1_1_codegen_omp_visitor.html#ad9500ab463da8a4364ed95c37079cfce">nmodl::codegen::CodegenOmpVisitor</a>
-</li>
-<li>print_channel_iteration_task_begin()
-: <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a86a6e00f07d78326d54b06e60279d45a">nmodl::codegen::CodegenCVisitor</a>
-, <a class="el" href="classnmodl_1_1codegen_1_1_codegen_omp_visitor.html#ac1e240dc01096d017db9f2d59e4611a5">nmodl::codegen::CodegenOmpVisitor</a>
-</li>
-<li>print_channel_iteration_task_end()
-: <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ac26f21f783c157f4a6f7a26a7b4812aa">nmodl::codegen::CodegenCVisitor</a>
-, <a class="el" href="classnmodl_1_1codegen_1_1_codegen_omp_visitor.html#ad09adb5948cc98c6434f225bc9b8a827">nmodl::codegen::CodegenOmpVisitor</a>
 </li>
 <li>print_channel_iteration_tiling_block_begin()
 : <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a535bcbf7f0bae6a9dc4dd250e4bea790">nmodl::codegen::CodegenCVisitor</a>
 , <a class="el" href="classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#a767dcb7fee6f2de5c7dc828240253668">nmodl::codegen::CodegenIspcVisitor</a>
-, <a class="el" href="classnmodl_1_1codegen_1_1_codegen_omp_visitor.html#a0e9c5ff6cb1135a6974ba07ea33f647a">nmodl::codegen::CodegenOmpVisitor</a>
 </li>
 <li>print_channel_iteration_tiling_block_end()
 : <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ad8fc55ba8ec696f02e7d0308f55d469b">nmodl::codegen::CodegenCVisitor</a>
-, <a class="el" href="classnmodl_1_1codegen_1_1_codegen_omp_visitor.html#aa6e5cc1de85535a27e5594c7ec5284f9">nmodl::codegen::CodegenOmpVisitor</a>
 </li>
 <li>print_check_table_thread_function()
 : <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ac959bf153ca7a5b0626168dc695b8925">nmodl::codegen::CodegenCVisitor</a>
@@ -674,9 +661,6 @@ $(document).ready(function(){initNavTree('functions_p.html',''); initResizable()
 <li>print_shadow_reduction_statements()
 : <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a27f31ed985d519d259946c2dd1270877">nmodl::codegen::CodegenCVisitor</a>
 </li>
-<li>print_shadow_vector_setup()
-: <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a54e2c4b0011d820d9ac0c74db9e71829">nmodl::codegen::CodegenCVisitor</a>
-</li>
 <li>print_standard_includes()
 : <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a2144d310a1ab8fc4717f6b8b6fd249be">nmodl::codegen::CodegenCVisitor</a>
 </li>
@@ -756,7 +740,7 @@ $(document).ready(function(){initNavTree('functions_p.html',''); initResizable()
 : <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a917c35d69ab6a67b4ccc7e3937249c6e">nmodl::codegen::CodegenCVisitor</a>
 </li>
 <li>process_variable()
-: <a class="el" href="classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html#a87e566fcf029a317582663c07c9ceba1">nmodl::visitor::DefUseAnalyzeVisitor</a>
+: <a class="el" href="classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html#a9e067ed5dcbf4d182ed6626f7585e6bd">nmodl::visitor::DefUseAnalyzeVisitor</a>
 </li>
 <li>process_verbatim_text()
 : <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ab81c255c3616a2c95c74cc4ebcb27be2">nmodl::codegen::CodegenCVisitor</a>
@@ -765,7 +749,7 @@ $(document).ready(function(){initNavTree('functions_p.html',''); initResizable()
 : <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a271f98f0c422df96ce7667a45b3c5ad7">nmodl::codegen::CodegenCVisitor</a>
 </li>
 <li>Program()
-: <a class="el" href="classnmodl_1_1ast_1_1_program.html#a16d5c4912ad1d43a83e2bf9276d0c244">nmodl::ast::Program</a>
+: <a class="el" href="classnmodl_1_1ast_1_1_program.html#a6acc56aed4073772b975d8466419c131">nmodl::ast::Program</a>
 </li>
 <li>program_symtab
 : <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#aa9f1fe87f6b2ede0883ce0a5f9771e80">nmodl::codegen::CodegenCVisitor</a>
@@ -777,7 +761,7 @@ $(document).ready(function(){initNavTree('functions_p.html',''); initResizable()
 : <a class="el" href="classnmodl_1_1symtab_1_1_symbol.html#a03950ba814ced23a815fe41dc8336cfe">nmodl::symtab::Symbol</a>
 </li>
 <li>ProtectStatement()
-: <a class="el" href="classnmodl_1_1ast_1_1_protect_statement.html#ae0d5dfc2a596a6f07541dd042d471e06">nmodl::ast::ProtectStatement</a>
+: <a class="el" href="classnmodl_1_1ast_1_1_protect_statement.html#aacd00392c08a306a7b5ba9ca4008c297">nmodl::ast::ProtectStatement</a>
 </li>
 <li>psymtab
 : <a class="el" href="classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#aca39902c52d91249971ef71c786b0a66">nmodl::codegen::CodegenHelperVisitor</a>

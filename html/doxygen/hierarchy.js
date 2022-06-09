@@ -14,8 +14,7 @@ var hierarchy =
         [ "nmodl::codegen::CodegenCVisitor", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html", [
           [ "nmodl::codegen::CodegenAccVisitor", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html", null ],
           [ "nmodl::codegen::CodegenCudaVisitor", "classnmodl_1_1codegen_1_1_codegen_cuda_visitor.html", null ],
-          [ "nmodl::codegen::CodegenIspcVisitor", "classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html", null ],
-          [ "nmodl::codegen::CodegenOmpVisitor", "classnmodl_1_1codegen_1_1_codegen_omp_visitor.html", null ]
+          [ "nmodl::codegen::CodegenIspcVisitor", "classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html", null ]
         ] ],
         [ "nmodl::codegen::CodegenHelperVisitor", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html", null ],
         [ "nmodl::visitor::DefUseAnalyzeVisitor", "classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html", null ],
