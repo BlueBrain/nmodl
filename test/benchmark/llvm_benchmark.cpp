@@ -94,9 +94,11 @@ BenchmarkResults LLVMBenchmark::run_benchmark() {
     if (!external_kernel_library.empty()) {
         // benchmark external kernel
         logger->info("Benchmarking external kernels");
-        kernel_names = {"nrn_state_hh_ext"};
+        kernel_names = {"nrn_cur_ext", "nrn_state_ext"};
         std::unordered_map<std::string, std::string> kernel_names_map = {
-            {"nrn_state_hh_ext", "_Z16nrn_state_hh_extPv"}};
+            {"nrn_cur_ext", "_Z11nrn_cur_extPv"},
+            {"nrn_state_ext", "_Z13nrn_state_extPv"}
+        };
         // Dlopen the shared library
         logger->info("Loading external kernel library: {}", external_kernel_library);
         external_kernel_lib_handle = dlopen(external_kernel_library.c_str(), RTLD_LAZY);
@@ -177,10 +179,6 @@ BenchmarkResults LLVMBenchmark::run_benchmark() {
             // Update statistics.
             times[i] = diff.count();
         }
-        // Close handle of shared library in case it was dlopened.
-        if (external_kernel_lib_handle) {
-            dlclose(external_kernel_lib_handle);
-        }
         // Calculate statistics
         double time_mean = std::accumulate(times.begin(), times.end(), 0.0) / num_experiments;
         double time_var = std::accumulate(times.begin(),
@@ -199,6 +197,10 @@ BenchmarkResults LLVMBenchmark::run_benchmark() {
         logger->info("Minimum compute time = {:.6f}", time_min);
         logger->info("Maximum compute time = {:.6f}\n", time_max);
         results[kernel_name] = {time_mean, time_stdev, time_min, time_max};
+    }
+    // Close handle of shared library in case it was dlopened.
+    if (external_kernel_lib_handle) {
+        dlclose(external_kernel_lib_handle);
     }
     return results;
 }
