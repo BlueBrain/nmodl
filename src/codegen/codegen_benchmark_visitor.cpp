@@ -1,0 +1,449 @@
+/*************************************************************************
+ * Copyright (C) 2018-2022 Blue Brain Project
+ *
+ * This file is part of NMODL distributed under the terms of the GNU
+ * Lesser General Public License. See top-level LICENSE file for details.
+ *************************************************************************/
+
+#include "codegen/codegen_benchmark_visitor.hpp"
+#include "codegen/llvm/codegen_llvm_visitor.hpp"
+
+#include "visitors/visitor_utils.hpp"
+
+#include "ast/eigen_linear_solver_block.hpp"
+#include "ast/integer.hpp"
+#include "ast/program.hpp"
+#include "ast/statement_block.hpp"
+
+#include "ast/name.hpp"
+#include "ast/codegen_var_type.hpp"
+#include "ast/codegen_atomic_statement.hpp"
+#include "ast/codegen_for_statement.hpp"
+#include "ast/codegen_function.hpp"
+#include "ast/codegen_var_list_statement.hpp"
+#include "ast/codegen_return_statement.hpp"
+#include "ast/codegen_var_type.hpp"
+#include "ast/codegen_instance_var.hpp"
+
+#include "visitors/json_visitor.hpp"
+
+namespace nmodl {
+namespace codegen {
+
+/****************************************************************************************/
+/*                      Routines must be overloaded in backend                          */
+/****************************************************************************************/
+
+
+/**
+ * Depending programming model and compiler, we print compiler hint
+ * for parallelization. For example:
+ *
+ *      #pragma ivdep
+ *      for(int id=0; id<nodecount; id++) {
+ *
+ *      #pragma acc parallel loop
+ *      for(int id=0; id<nodecount; id++) {
+ *
+ */
+void CodegenBenchmarkVisitor::print_channel_iteration_block_parallel_hint(BlockType type) {
+    if (info.artificial_cell) {
+        return;
+    }
+
+    std::ostringstream present_clause;
+    present_clause << "present(inst";
+
+    if (type == BlockType::NetReceive) {
+        present_clause << ", nrb";
+    } else {
+        present_clause << ", node_index, data, voltage, indexes, thread";
+        if (type == BlockType::Equation) {
+            present_clause << ", vec_rhs, vec_d";
+        }
+    }
+    present_clause << ')';
+    printer->add_line(
+        fmt::format("nrn_pragma_acc(parallel loop {} async(nt->stream_id) if(nt->compute_gpu))",
+                    present_clause.str()));
+    printer->add_line(
+        "nrn_pragma_omp(target teams distribute parallel for is_device_ptr(inst) "
+        "if(nt->compute_gpu))");
+}
+
+
+void CodegenBenchmarkVisitor::print_atomic_reduction_pragma() {
+    if (!info.artificial_cell) {
+        printer->add_line("nrn_pragma_acc(atomic update)");
+        printer->add_line("nrn_pragma_omp(atomic update)");
+    }
+}
+
+
+void CodegenBenchmarkVisitor::print_backend_includes() {
+    /**
+     * Artificial cells are executed on CPU. As Random123 is allocated on GPU by default,
+     * we have to disable GPU allocations using `DISABLE_OPENACC` macro.
+     */
+    if (info.artificial_cell) {
+        printer->add_line("#undef DISABLE_OPENACC");
+        printer->add_line("#define DISABLE_OPENACC");
+    } else {
+        printer->add_line("#include <coreneuron/utils/offload.hpp>");
+        printer->add_line("#include <cuda_runtime_api.h>");
+    }
+
+    if (info.eigen_linear_solver_exist && std::accumulate(info.state_vars.begin(),
+                                                          info.state_vars.end(),
+                                                          0,
+                                                          [](int l, const SymbolType& variable) {
+                                                              return l += variable->get_length();
+                                                          }) > 4) {
+        printer->add_line("#include <partial_piv_lu/partial_piv_lu.h>");
+    }
+}
+
+
+std::string CodegenBenchmarkVisitor::backend_name() const {
+    return "C-OpenAcc (api-compatibility)";
+}
+
+
+void CodegenBenchmarkVisitor::print_memory_allocation_routine() const {
+    // memory for artificial cells should be allocated on CPU
+    if (info.artificial_cell) {
+        CodegenCVisitor::print_memory_allocation_routine();
+        return;
+    }
+    printer->add_newline(2);
+    auto args = "size_t num, size_t size, size_t alignment = 16";
+    printer->add_line(fmt::format("static inline void* mem_alloc({}) {}", args, "{"));
+    printer->add_line("    void* ptr;");
+    printer->add_line("    cudaMallocManaged(&ptr, num*size);");
+    printer->add_line("    cudaMemset(ptr, 0, num*size);");
+    printer->add_line("    return ptr;");
+    printer->add_line("}");
+
+    printer->add_newline(2);
+    printer->add_line("static inline void mem_free(void* ptr) {");
+    printer->add_line("    cudaFree(ptr);");
+    printer->add_line("}");
+}
+
+/**
+ * OpenACC kernels running on GPU doesn't support `abort()`. CUDA/OpenACC supports
+ * `assert()` in device kernel that can be used for similar purpose. Also, `printf`
+ * is supported on device.
+ *
+ * @todo : we need to implement proper error handling mechanism to propogate errors
+ *         from GPU to CPU. For example, error code can be returned like original
+ *         neuron implementation. For now we use `assert(0==1)` pattern which is
+ *         used for OpenACC/CUDA.
+ */
+void CodegenBenchmarkVisitor::print_abort_routine() const {
+    printer->add_newline(2);
+    printer->add_line("static inline void coreneuron_abort() {");
+    printer->add_line("    printf(\"Error : Issue while running OpenACC kernel \\n\");");
+    printer->add_line("    assert(0==1);");
+    printer->add_line("}");
+}
+
+void CodegenBenchmarkVisitor::print_net_send_buffering_grow() {
+    // can not grow buffer during gpu execution
+}
+
+void CodegenBenchmarkVisitor::print_eigen_linear_solver(const std::string& float_type, int N) {
+    if (N <= 4) {
+        printer->add_line("nmodl_eigen_xm = nmodl_eigen_jm.inverse()*nmodl_eigen_fm;");
+    } else {
+        printer->add_line(
+            fmt::format("nmodl_eigen_xm = partialPivLu<{}>nmodl_eigen_jm, nmodl_eigen_fm);", N));
+    }
+}
+
+/**
+ * Each kernel like nrn_init, nrn_state and nrn_cur could be offloaded
+ * to accelerator. In this case, at very top level, we print pragma
+ * for data present. For example:
+ *
+ * \code{.cpp}
+ *  void nrn_state(...) {
+ *      #pragma acc data present (nt, ml...)
+ *      {
+ *
+ *      }
+ *  }
+ * \endcode
+ */
+void CodegenBenchmarkVisitor::print_kernel_data_present_annotation_block_begin() {
+    if (!info.artificial_cell) {
+        auto global_variable = fmt::format("{}_global", info.mod_suffix);
+        printer->add_line(
+            fmt::format("nrn_pragma_acc(data present(nt, ml, {}) if(nt->compute_gpu))",
+                        global_variable));
+        printer->add_line("{");
+        printer->increase_indent();
+    }
+}
+
+/**
+ * `INITIAL` block from `NET_RECEIVE` generates `net_init` function. The `net_init`
+ * function pointer is registered with the coreneuron and called from the CPU.
+ * As the data is on GPU, we need to launch `net_init` on the GPU.
+ *
+ * \todo: With the current code structure for NMODL and MOD2C, we use `serial`
+ *        construct to launch serial kernels. This is during initialization
+ *        but still inefficient. This should be improved when we drop MOD2C.
+ */
+void CodegenBenchmarkVisitor::print_net_init_acc_serial_annotation_block_begin() {
+    if (!info.artificial_cell) {
+        printer->add_line("#pragma acc serial present(inst, indexes, weights) if(nt->compute_gpu)");
+        printer->add_line("{");
+        printer->increase_indent();
+    }
+}
+
+void CodegenBenchmarkVisitor::print_net_init_acc_serial_annotation_block_end() {
+    if (!info.artificial_cell) {
+        printer->add_line("}");
+        printer->decrease_indent();
+    }
+}
+
+void CodegenBenchmarkVisitor::print_nrn_cur_matrix_shadow_update() {
+    const auto& rhs_op = info.operator_for_rhs();
+    const auto& d_op = info.operator_for_d();
+    print_atomic_reduction_pragma();
+    printer->add_line(fmt::format("vec_rhs[node_id] {} rhs;", rhs_op));
+    print_atomic_reduction_pragma();
+    printer->add_line(fmt::format("vec_d[node_id] {} g;", d_op));
+}
+
+void CodegenBenchmarkVisitor::print_fast_imem_calculation() {
+    if (!info.electrode_current) {
+        return;
+    }
+
+    const auto& rhs_op = info.operator_for_rhs();
+    const auto& d_op = info.operator_for_d();
+    printer->start_block("if (nt->nrn_fast_imem)");
+    print_atomic_reduction_pragma();
+    printer->add_line(fmt::format("nt->nrn_fast_imem->nrn_sav_rhs[node_id] {} rhs;", rhs_op));
+    print_atomic_reduction_pragma();
+    printer->add_line(fmt::format("nt->nrn_fast_imem->nrn_sav_d[node_id] {} g;", d_op));
+    printer->end_block(1);
+}
+
+void CodegenBenchmarkVisitor::print_nrn_cur_matrix_shadow_reduction() {
+    // do nothing
+}
+
+
+/**
+ * End of print_kernel_enter_data_begin
+ */
+void CodegenBenchmarkVisitor::print_kernel_data_present_annotation_block_end() {
+    if (!info.artificial_cell) {
+        printer->decrease_indent();
+        printer->add_line("}");
+    }
+}
+
+
+void CodegenBenchmarkVisitor::print_rhs_d_shadow_variables() {
+    // do nothing
+}
+
+
+bool CodegenBenchmarkVisitor::nrn_cur_reduction_loop_required() {
+    return false;
+}
+
+
+void CodegenBenchmarkVisitor::print_global_variable_device_create_annotation_pre() {
+    if (!info.artificial_cell) {
+        printer->add_line("nrn_pragma_omp(declare target)");
+    }
+}
+
+void CodegenBenchmarkVisitor::print_global_variable_device_create_annotation_post() {
+    if (!info.artificial_cell) {
+        printer->add_line(
+            fmt::format("nrn_pragma_acc(declare create ({}_global))", info.mod_suffix));
+        printer->add_line("nrn_pragma_omp(end declare target)");
+    }
+}
+
+void CodegenBenchmarkVisitor::print_global_variable_device_update_annotation() {
+    if (!info.artificial_cell) {
+        printer->add_line(
+            fmt::format("nrn_pragma_acc(update device ({}_global))", info.mod_suffix));
+        printer->add_line(
+            fmt::format("nrn_pragma_omp(target update to({}_global))", info.mod_suffix));
+    }
+}
+
+
+std::string CodegenBenchmarkVisitor::get_variable_device_pointer(const std::string& variable,
+                                                           const std::string& type) const {
+    if (info.artificial_cell) {
+        return variable;
+    }
+    return fmt::format("nt->compute_gpu ? cnrn_target_deviceptr({}) : {}", variable, variable);
+}
+
+
+void CodegenBenchmarkVisitor::print_newtonspace_transfer_to_device() const {
+    int list_num = info.derivimplicit_list_num;
+    printer->start_block("if(nt->compute_gpu)");
+    printer->add_line("double* device_vec = cnrn_target_copyin(vec, vec_size / sizeof(double));");
+    printer->add_line("void* device_ns = cnrn_target_deviceptr(*ns);");
+    printer->add_line("ThreadDatum* device_thread = cnrn_target_deviceptr(thread);");
+    printer->add_line(
+        fmt::format("cnrn_target_memcpy_to_device(&(device_thread[{}]._pvoid), &device_ns);",
+                    info.thread_data_index - 1));
+    printer->add_line(
+        fmt::format("cnrn_target_memcpy_to_device(&(device_thread[dith{}()].pval), &device_vec);",
+                    list_num));
+    printer->end_block(1);
+}
+
+
+void CodegenBenchmarkVisitor::print_instance_variable_transfer_to_device() const {
+    if (!info.artificial_cell) {
+        printer->start_block("if(nt->compute_gpu)");
+        printer->add_line("Memb_list* dml = cnrn_target_deviceptr(ml);");
+        printer->add_line("cnrn_target_memcpy_to_device(&(dml->instance), &(ml->instance));");
+        printer->end_block(1);
+    }
+}
+
+
+void CodegenBenchmarkVisitor::print_deriv_advance_flag_transfer_to_device() const {
+    printer->add_line("nrn_pragma_acc(update device (deriv_advance_flag) if(nt->compute_gpu))");
+    printer->add_line("nrn_pragma_omp(target update to(deriv_advance_flag) if(nt->compute_gpu))");
+}
+
+
+void CodegenBenchmarkVisitor::print_device_atomic_capture_annotation() const {
+    printer->add_line("nrn_pragma_acc(atomic capture)");
+    printer->add_line("nrn_pragma_omp(atomic capture)");
+}
+
+
+void CodegenBenchmarkVisitor::print_device_stream_wait() const {
+    printer->start_block("if(nt->compute_gpu)");
+    printer->add_line("nrn_pragma_acc(wait(nt->stream_id))");
+    printer->add_line("nrn_pragma_omp(taskwait)");
+    printer->end_block(1);
+}
+
+
+void CodegenBenchmarkVisitor::print_net_send_buf_count_update_to_host() const {
+    printer->add_line("nrn_pragma_acc(update self(nsb->_cnt) if(nt->compute_gpu))");
+    printer->add_line("nrn_pragma_omp(target update from(nsb->_cnt) if(nt->compute_gpu))");
+}
+
+
+void CodegenBenchmarkVisitor::print_net_send_buf_update_to_host() const {
+    print_device_stream_wait();
+    printer->start_block("if (nsb)");
+    print_net_send_buf_count_update_to_host();
+    printer->add_line("update_net_send_buffer_on_host(nt, nsb);");
+    printer->end_block(1);
+}
+
+
+void CodegenBenchmarkVisitor::print_net_send_buf_count_update_to_device() const {
+    printer->add_line("nrn_pragma_acc(update device(nsb->_cnt) if(nt->compute_gpu))");
+    printer->add_line("nrn_pragma_omp(target update to(nsb->_cnt) if(nt->compute_gpu))");
+}
+
+
+void CodegenBenchmarkVisitor::print_dt_update_to_device() const {
+    printer->add_line(fmt::format("#pragma acc update device({}) if (nt->compute_gpu)",
+                                  get_variable_name(naming::NTHREAD_DT_VARIABLE)));
+}
+
+void CodegenBenchmarkVisitor::visit_codegen_var_type(const ast::CodegenVarType& node) {
+    if(node.get_type() == ast::AstNodeType::VOID) {
+        printer->add_text("void");
+    } else if(node.get_type() == ast::AstNodeType::INTEGER) {
+        printer->add_text("int");
+    } else if(node.get_type() == ast::AstNodeType::FLOAT) {
+        printer->add_text("float");
+    } else if(node.get_type() == ast::AstNodeType::DOUBLE) {
+        printer->add_text("double");
+    }
+    printer->add_text(" ");
+}
+
+void CodegenBenchmarkVisitor::visit_codegen_atomic_statement(const ast::CodegenAtomicStatement& node) {
+    node.visit_children(*this);
+}
+
+void CodegenBenchmarkVisitor::visit_codegen_for_statement(const ast::CodegenForStatement& node) {
+    printer->add_indent();
+    printer->add_text("for(");
+    node.get_initialization()->accept(*this);
+    printer->add_text(";");
+    node.get_condition()->accept(*this);
+    printer->add_text(";");
+    node.get_increment()->accept(*this);
+    printer->add_text(")");
+    node.get_statement_block()->accept(*this);
+}
+
+void CodegenBenchmarkVisitor::visit_codegen_instance_var(const ast::CodegenInstanceVar& node) {
+    node.get_instance_var()->accept(*this);
+    printer->add_text("->");
+    node.get_member_var()->accept(*this);
+}
+
+void CodegenBenchmarkVisitor::visit_codegen_function(const ast::CodegenFunction& node) {
+    node.get_return_type()->accept(*this);
+    node.get_name()->visit_children(*this);
+    printer->add_text("(InstanceStruct* mech)");
+    printer->start_block();
+    node.get_statement_block()->visit_children(*this);
+    printer->add_newline();
+    printer->end_block();
+    printer->add_newline(2);
+}
+
+void CodegenBenchmarkVisitor::visit_codegen_return_statement(const ast::CodegenReturnStatement& node) {
+    node.visit_children(*this);
+    // TODO
+}
+
+void CodegenBenchmarkVisitor::visit_codegen_var_list_statement(const ast::CodegenVarListStatement& node) {
+    printer->add_indent();
+    node.get_var_type()->accept(*this);
+
+    bool first = true;
+    for (const auto& variable: node.get_variables()) {
+        if(!first) {
+            printer->add_text(", ");
+        }
+        variable->visit_children(*this);
+        first = false;
+    }
+    printer->add_text(";");
+    printer->add_newline();
+}
+
+void CodegenBenchmarkVisitor::visit_program(const ast::Program& node) {
+    program_symtab = node.get_symbol_table();
+    const auto& nodes = collect_nodes(node,
+                                      {ast::AstNodeType::CODEGEN_FUNCTION});
+    codegen = true;
+    // print InstanceStruct here
+    for(auto& node: nodes) {
+        node->accept(*this);
+    }
+    visitor::JSONVisitor("ast.json").write(node);
+    codegen = false;
+}
+
+}  // namespace codegen
+}  // namespace nmodl
