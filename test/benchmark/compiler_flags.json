@@ -51,5 +51,10 @@
     "default": [
       "-O3 -ffast-math -ftree-vectorize"
     ]
+  },
+  "nvhpc": {
+    "nvptx64": [
+      "-O3 -gpu=nordc,fastmath"
+    ]
   }
 }

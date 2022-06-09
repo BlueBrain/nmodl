@@ -21,7 +21,6 @@ unset MODULEPATH
 export MODULEPATH=/gpfs/bbp.cscs.ch/ssd/apps/bsd/modules/_meta
 module load unstable gcc cuda python-dev
 
-
 #intel paths
 intel_library_dir=$(module show intel-oneapi-compilers 2>&1 | grep " LD_LIBRARY_PATH " | grep "intel64_lin" | awk -F' ' '{print $3}' | head -n 1)
 svml_lib=$intel_library_dir/libsvml.so
@@ -37,6 +36,9 @@ llc_exe=${llvm_path}/llc
 
 #gcc path
 gcc_exe=$(module show gcc 2>&1 | grep " PATH " | awk -F' ' '{print $3}' | head -n 1)/g++
+
+#nvhpc path
+nvhpc_exe=$(module show nvhpc 2>&1 | grep " PATH " | awk -F' ' '{print $3}' | head -n 1)/nvc++
 
 #libdevice path
 libdevice_lib=${CUDA_HOME}/nvvm/libdevice/libdevice.10.bc
@@ -58,7 +60,7 @@ export PYTHONPATH=/gpfs/bbp.cscs.ch/data/scratch/proj16/magkanar/nmodl_llvm_benc
 python benchmark_script.py \
     --modfiles "./kernels/hh.mod" "./kernels/compute-bound.mod" "./kernels/memory-bound.mod" \
     --architectures "default" "nehalem" "broadwell" "skylake-avx512" "nvptx64" \
-    --compilers "intel" "gcc" "clang" \
+    --compilers "intel" "gcc" "clang" "nvhpc" \
     --external \
     --nmodl_jit \
     --output "./python_script_test" \
@@ -70,5 +72,6 @@ python benchmark_script.py \
     --clang_exe $clang_exe \
     --llc_exe $llc_exe \
     --gcc_exe $gcc_exe \
+    --nvhpc_exe $nvhpc_exe \
     --libdevice_lib $libdevice_lib \
     --nmodl_exe $nmodl_exe /

@@ -8,9 +8,6 @@ import re
 import shutil
 import subprocess
 
-from matplotlib import pyplot as plt
-import seaborn as sns
-
 import nmodl.dsl as nmodl
 
 @dataclass
@@ -21,6 +18,7 @@ class CompilersConfig:
     clang_exe: str = ""
     llc_exe: str = ""
     gcc_exe: str = ""
+    nvhpc_exe: str = ""
     libdevice_lib: str = ""
     nmodl_exe: str = ""
 
@@ -31,6 +29,8 @@ class CompilersConfig:
             return self.clang_exe
         elif compiler == "gcc":
             return self.gcc_exe
+        elif compiler == "nvhpc":
+            return self.nvhpc_exe
         else:
             raise Exception("Unknown compiler")
 
@@ -50,6 +50,7 @@ class BenchmarkConfig:
     modfile_directory: str = "."
     ext_lib_name: str = "libextkernel.so"
     compiler_flags: dict = field(init=False)
+    gpu_target_architecture: str = "sm_70"
 
     def __post_init__(self):
         with open('compiler_flags.json','r') as fp:
@@ -168,18 +169,23 @@ class Benchmark:
                 cpp_file_content = re.sub(r'#pragma.*', r'#pragma clang vectorize(enable)', cpp_file_content)
             elif compiler == "gcc":
                 cpp_file_content = re.sub(r'#pragma.*', r'#pragma GCC ivdep', cpp_file_content)
+            elif compiler == "nvhpc":
+                cpp_file_content = re.sub(r'#pragma.*', r'#pragma acc parallel loop deviceptr(inst)', cpp_file_content)
             with open(sed_replaced_cpp_file, "w") as outf:
                 outf.write(cpp_file_content)
 
         external_lib_path = self._get_external_lib_path(cpp_file, compiler, architecture, flags)
         intel_lib_dir = os.path.dirname(self.compiler_config.svml_lib)
-        bash_command = [compiler_cmd] + flags.split(" ") + ["./"+str(sed_replaced_cpp_file), "-fpic", "-shared", "-o {}".format(external_lib_path), "-Wl,-rpath,{}".format(intel_lib_dir), "-L{}".format(intel_lib_dir), "-lsvml"]
+        if compiler != "nvhpc":
+            bash_command = [compiler_cmd] + flags.split(" ") + ["./"+str(sed_replaced_cpp_file), "-fpic", "-shared", "-o {}".format(external_lib_path), "-Wl,-rpath,{}".format(intel_lib_dir), "-L{}".format(intel_lib_dir), "-lsvml"]
+        else:
+            bash_command = [compiler_cmd] + flags.split(" ") + ["./"+str(sed_replaced_cpp_file), "-fPIC", "-shared", "-o {}".format(external_lib_path), "-acc", "-nomp"]
         if "-fopenmp" in flags:
             if compiler == "gcc":
                 bash_command.append("-Wl,-rpath,{}".format("/".join(self.compiler_config.gcc_exe.split("/")[0:-2]+["lib64"])))
             elif compiler == "clang":
                 bash_command.append("-Wl,-rpath,{}".format("/".join(self.compiler_config.clang_exe.split("/")[0:-2]+["lib"])))
-        print("Executing command: {} {}".format(compiler_cmd, ' '.join(bash_command)))
+        print("Executing command: {}".format(' '.join(bash_command)))
         result = subprocess.run(" ".join(bash_command), capture_output=True, text=True, shell=True, env=os.environ.copy())
         print("stdout:", result.stdout)
         print("stderr:", result.stderr)
@@ -191,6 +197,7 @@ class Benchmark:
         modname,
         compiler,
         architecture,
+        gpu_target_architecture,
         flags,
         instances,
         experiments,
@@ -200,9 +207,13 @@ class Benchmark:
         cfg = nmodl.CodeGenConfig()
         cfg.llvm_ir = True
         cfg.llvm_opt_level_ir = 3
-        cfg.llvm_math_library = "SVML"
+        if architecture != "nvptx64":
+            cfg.llvm_math_library = "SVML"
+        else:
+            cfg.llvm_math_library = "libdevice"
         cfg.llvm_fast_math_flags = self.benchmark_config.llvm_fast_math_flags
-        cfg.llvm_cpu_name = architecture
+        if architecture != "nvptx64":
+            cfg.llvm_cpu_name = architecture
         if architecture == "skylake-avx512":
             cfg.llvm_vector_width = 8
         elif architecture == "broadwell":
@@ -212,7 +223,12 @@ class Benchmark:
         else:
             cfg.llvm_vector_width = 1
         cfg.llvm_opt_level_codegen = 3
-        cfg.shared_lib_paths = [self.compiler_config.svml_lib]
+        if architecture != "nvptx64":
+            cfg.shared_lib_paths = [self.compiler_config.svml_lib]
+        else:
+            cfg.shared_lib_paths = [self.compiler_config.libdevice_lib]
+            cfg.llvm_gpu_name = "nvptx64"
+            cfg.llvm_gpu_target_architecture = gpu_target_architecture
         cfg.output_dir = str((Path(self.benchmark_config.output_directory)
             / modname
             / compiler
@@ -220,7 +236,7 @@ class Benchmark:
             / self._get_flags_string(flags)))
         modast = self.init_ast(modfile_str)
         jit = nmodl.Jit(cfg)
-        external_lib_path = self._get_external_lib_path(modname+".cpp", compiler, architecture, flags)
+        external_lib_path = "./" / self._get_external_lib_path(modname+".cpp", compiler, architecture, flags)
         res = jit.run(modast, modname, (int)(experiments), (int)(instances), str(external_lib_path))
         return res
 
@@ -299,13 +315,14 @@ class Benchmark:
                     shutil.rmtree(output_dir)
 
                 for architecture in self.benchmark_config.architectures:
-                    if architecture == "nvptx64" and compiler != "nvhpc":
-                        continue
                     print('Architecture: {}'.format(architecture))
                     if architecture not in self.results[modname]:
                         self.results[modname][architecture] = {}
                     if self.benchmark_config.external_kernel:
                         for compiler in self.benchmark_config.compilers:
+                            # Don't try to use NVPTX64 arch for compilers except NVHPC and other architectures with NVHPC compiler
+                            if (architecture == "nvptx64" and compiler != "nvhpc") or (architecture != "nvptx64" and compiler == "nvhpc"):
+                                continue
                             if compiler not in self.results[modname][architecture]:
                                 self.results[modname][architecture][compiler] = {}
                             for flags in self.benchmark_config.compiler_flags[compiler][
@@ -320,6 +337,7 @@ class Benchmark:
                                         modname,
                                         compiler,
                                         architecture,
+                                        self.benchmark_config.gpu_target_architecture,
                                         flags,
                                         kernel_instance_size,
                                         self.benchmark_config.experiments)
@@ -339,6 +357,7 @@ class Benchmark:
                                                 modname,
                                                 compiler,
                                                 architecture,
+                                                self.benchmark_config.gpu_target_architecture,
                                                 flags+"_jit",
                                                 kernel_instance_size,
                                                 self.benchmark_config.experiments)
@@ -380,7 +399,7 @@ class Benchmark:
                                     modfile_str,
                                     modname,
                                     architecture,
-                                    "sm_70",
+                                    self.benchmark_config.gpu_target_architecture,
                                     fast_math_flags,
                                     "libdevice",
                                     kernel_instance_size,
@@ -398,6 +417,9 @@ class Benchmark:
             pickle.dump(self.results, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
     def plot_results(self, file = None):
+        # import the plotting packages after running NMODL due to issues with numpy+intel mkl
+        from matplotlib import pyplot as plt
+        import seaborn as sns
         if file is not None:
             with open(file, 'rb') as handle:
                 self.results = pickle.load(handle)
@@ -453,7 +475,7 @@ def parse_arguments():
     )
     parser.add_argument(
         "--compilers", nargs="+", help="Compilers to benchmark", required=True,
-        choices=["intel", "clang", "gcc"]
+        choices=["intel", "clang", "gcc", "nvhpc"]
     )
     parser.add_argument(
         "--external_kernel",
@@ -502,6 +524,9 @@ def parse_arguments():
         "--gcc_exe", type=str, help="GCC compiler executable to use", required=True
     )
     parser.add_argument(
+        "--nvhpc_exe", type=str, help="NVHPC compiler executable to use", required=True
+    )
+    parser.add_argument(
         "--libdevice_lib",
         type=str,
         help="Libdevice library directory to use",
@@ -528,7 +553,7 @@ def main():
         args.nmodl_jit,
         args.output,
         args.instances,
-        args.experiments,
+        args.experiments
     )
     compilers_config = CompilersConfig(
         args.svml_lib,
@@ -537,8 +562,9 @@ def main():
         args.clang_exe,
         args.llc_exe,
         args.gcc_exe,
+        args.nvhpc_exe,
         args.libdevice_lib,
-        args.nmodl_exe,
+        args.nmodl_exe
     )
     benchmark = Benchmark(compilers_config, benchmark_config)
     if args.plot is None:
