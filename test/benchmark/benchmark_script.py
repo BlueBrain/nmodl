@@ -70,6 +70,65 @@ class Benchmark:
         """
         pass
 
+    def compile_llvm_ir_clang(self, llvm_ir_file_path, flags, external_lib_path):
+        """Compile LLVM IR file with clang"""
+        print("Compiling LLVM IR file with clang")
+        compiler_cmd = self.compiler_config.get_compiler_cmd("clang")
+        bash_command = [compiler_cmd] + flags.split(" ") + ["./"+llvm_ir_file_path, "-fpic", "-shared", "-o {}".format(external_lib_path)]
+        print("Executing command: {} {}".format(compiler_cmd, ' '.join(bash_command)))
+        result = subprocess.run(" ".join(bash_command), capture_output=True, text=True, shell=True, env=os.environ.copy())
+        print("stdout:", result.stdout)
+        print("stderr:", result.stderr)
+        result.check_returncode()
+
+    def translate_mod_file_to_llvm_ir_for_clang(self,
+        modfile_str,
+        modname,
+        compiler,
+        architecture,
+        math_lib,
+        flags):
+        """Translate mod file to cpp wrapper file and
+        LLVM IR file that can be compiled by the compilers
+        specified and then executed by NMODL
+        """
+        cfg = nmodl.CodeGenConfig()
+        cfg.llvm_ir = True
+        cfg.llvm_opt_level_ir = 3
+        cfg.llvm_math_library = math_lib
+        cfg.llvm_fast_math_flags = self.benchmark_config.llvm_fast_math_flags
+        cfg.llvm_cpu_name = architecture
+        if architecture == "skylake-avx512":
+            cfg.llvm_vector_width = 8
+        elif architecture == "broadwell":
+            cfg.llvm_vector_width = 4
+        elif architecture == "nehalem":
+            cfg.llvm_vector_width = 2
+        else:
+            cfg.llvm_vector_width = 1
+        cfg.llvm_opt_level_codegen = 3
+        if math_lib == "SVML":
+            cfg.shared_lib_paths = [self.compiler_config.svml_lib]
+        elif math_lib == "SLEEF":
+            cfg.shared_lib_paths = [self.compiler_config.sleef_lib]
+        cfg.output_dir = str((Path(self.benchmark_config.output_directory)
+            / modname
+            / compiler
+            / architecture
+            / self._get_flags_string(flags)))
+        modast = self.init_ast(modfile_str)
+        # Run JIT to generate the LLVM IR with the wrappers needed to run JIT later
+        jit = nmodl.Jit(cfg)
+        res = jit.run(modast, modname, 1, 1)
+        jit_llvm_ir_file_path = str(Path(cfg.output_dir) / "v{}_{}_opt.ll".format(cfg.llvm_vector_width, modname))
+        jit_llvm_ir_file_ext_path = str(Path(cfg.output_dir) / "v{}_{}_opt_ext.ll".format(cfg.llvm_vector_width, modname))
+        with open(jit_llvm_ir_file_path, "r") as inf:
+            llvm_ir_file_content = inf.read()
+            llvm_ir_file_content = re.sub(r'nrn_state_hh', r'_Z16nrn_state_hh_extPv', llvm_ir_file_content)
+            with open(jit_llvm_ir_file_ext_path, "w") as outf:
+                outf.write(llvm_ir_file_content)
+        return jit_llvm_ir_file_ext_path
+
     def _get_flags_string(self, flags):
         return flags.replace(" ", "_").replace('-','').replace('=','_')
 
@@ -240,6 +299,8 @@ class Benchmark:
                     shutil.rmtree(output_dir)
 
                 for architecture in self.benchmark_config.architectures:
+                    if architecture == "nvptx64" and compiler != "nvhpc":
+                        continue
                     print('Architecture: {}'.format(architecture))
                     if architecture not in self.results[modname]:
                         self.results[modname][architecture] = {}
@@ -271,6 +332,16 @@ class Benchmark:
                                         # sed the nrn_state_hh name to _Z16nrn_state_hh_extPv to match the external kernel signature name of the external shared lib
                                         # compile LLVM IR using clang and the compiler flags of the architecture used and generate shared library
                                         # Run NMODL JIT with external shared library
+                                        jit_llvm_ir_file_ext_path = self.translate_mod_file_to_llvm_ir_for_clang(modfile_str, modname, compiler, architecture, math_lib, flags+"_jit")
+                                        external_lib_path = self._get_external_lib_path(modname, "clang", architecture, flags+"_jit")
+                                        self.compile_llvm_ir_clang(jit_llvm_ir_file_ext_path, flags, external_lib_path)
+                                        self.results[modname][architecture][compiler][self._get_flags_string(flags)+"_jit"] = self.run_external_kernel(modfile_str,
+                                                modname,
+                                                compiler,
+                                                architecture,
+                                                flags+"_jit",
+                                                kernel_instance_size,
+                                                self.benchmark_config.experiments)
                                         print(
                                             'self.results[modname][architecture][compiler][flags+"jit"] = jit.run(modast, modname, self.config.instances, self.config.experiments, external_lib)'
                                         )
