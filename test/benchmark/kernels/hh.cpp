@@ -51,7 +51,64 @@ struct hh_Instance {
     int node_count;
 };
 
-void nrn_state_hh_ext(void* __restrict__ mech) {
+void nrn_cur_ext(void* __restrict__ mech) {
+    auto inst = static_cast<hh_Instance*>(mech);
+    int id;
+    int node_id, ena_id, ek_id, ion_dinadv_id, ion_dikdv_id, ion_ina_id, ion_ik_id;
+    double v, g, rhs, v_org, current, dina, dik;
+
+    #pragma ivdep
+    for (id = 0; id < inst->node_count; id++) {
+        node_id = inst->node_index[id];
+        ena_id = inst->ion_ena_index[id];
+        ek_id = inst->ion_ek_index[id];
+        ion_dinadv_id = inst->ion_dinadv_index[id];
+        ion_dikdv_id = inst->ion_dikdv_index[id];
+        ion_ina_id = inst->ion_ina_index[id];
+        ion_ik_id = inst->ion_ik_index[id];
+        v = inst->voltage[node_id];
+        inst->ena[id] = inst->ion_ena[ena_id];
+        inst->ek[id] = inst->ion_ek[ek_id];
+        v_org = v;
+        v = v + 0.001;
+        {
+            double current = 0.0;
+            inst->gna[id] = inst->gnabar[id] * inst->m[id] * inst->m[id] * inst->m[id] * inst->h[id];
+            inst->ina[id] = inst->gna[id] * (v - inst->ena[id]);
+            inst->gk[id] = inst->gkbar[id] * inst->n[id] * inst->n[id] * inst->n[id] * inst->n[id];
+            inst->ik[id] = inst->gk[id] * (v - inst->ek[id]);
+            inst->il[id] = inst->gl[id] * (v - inst->el[id]);
+            current += inst->il[id];
+            current += inst->ina[id];
+            current += inst->ik[id];
+            g = current;
+        }
+        dina = inst->ina[id];
+        dik = inst->ik[id];
+        v = v_org;
+        {
+            double current = 0.0;
+            inst->gna[id] = inst->gnabar[id] * inst->m[id] * inst->m[id] * inst->m[id] * inst->h[id];
+            inst->ina[id] = inst->gna[id] * (v - inst->ena[id]);
+            inst->gk[id] = inst->gkbar[id] * inst->n[id] * inst->n[id] * inst->n[id] * inst->n[id];
+            inst->ik[id] = inst->gk[id] * (v - inst->ek[id]);
+            inst->il[id] = inst->gl[id] * (v - inst->el[id]);
+            current += inst->il[id];
+            current += inst->ina[id];
+            current += inst->ik[id];
+            rhs = current;
+        }
+        g = (g-rhs)/0.001;
+        inst->ion_dinadv[ion_dinadv_id] += (dina-inst->ina[id])/0.001;
+        inst->ion_dikdv[ion_dikdv_id] += (dik-inst->ik[id])/0.001;
+        inst->ion_ina[ion_ina_id] += inst->ina[id];
+        inst->ion_ik[ion_ik_id] += inst->ik[id];
+        inst->vec_rhs[node_id] -= rhs;
+        inst->vec_d[node_id] += g;
+    }
+}
+
+void nrn_state_ext(void* __restrict__ mech) {
     auto inst = static_cast<hh_Instance*>(mech);
     int id;
     int node_id, ena_id, ek_id;
