@@ -125,8 +125,8 @@ class Benchmark:
         jit_llvm_ir_file_ext_path = str(Path(cfg.output_dir) / "v{}_{}_opt_ext.ll".format(cfg.llvm_vector_width, modname))
         with open(jit_llvm_ir_file_path, "r") as inf:
             llvm_ir_file_content = inf.read()
-            llvm_ir_file_content = re.sub(r'nrn_state_{}'.format(modname), r'_Z13nrn_state_extPv', llvm_ir_file_content)
-            llvm_ir_file_content = re.sub(r'nrn_cur_{}'.format(modname), r'_Z11nrn_cur_extPv', llvm_ir_file_content)
+            llvm_ir_file_content = re.sub(r'nrn_state_{}'.format(modname.replace('-','_')), r'_Z13nrn_state_extPv', llvm_ir_file_content)
+            llvm_ir_file_content = re.sub(r'nrn_cur_{}'.format(modname.replace('-','_')), r'_Z11nrn_cur_extPv', llvm_ir_file_content)
             with open(jit_llvm_ir_file_ext_path, "w") as outf:
                 outf.write(llvm_ir_file_content)
         return jit_llvm_ir_file_ext_path
