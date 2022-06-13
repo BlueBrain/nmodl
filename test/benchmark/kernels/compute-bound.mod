@@ -1,5 +1,5 @@
 NEURON {
-    SUFFIX hh
+    SUFFIX compute_bound
     NONSPECIFIC_CURRENT il
     RANGE minf, mtau, gl, el
 }

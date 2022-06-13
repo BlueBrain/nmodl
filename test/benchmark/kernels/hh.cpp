@@ -72,7 +72,7 @@ void nrn_cur_ext(void* __restrict__ mech) {
         v_org = v;
         v = v + 0.001;
         {
-            double current = 0.0;
+            current = 0.0;
             inst->gna[id] = inst->gnabar[id] * inst->m[id] * inst->m[id] * inst->m[id] * inst->h[id];
             inst->ina[id] = inst->gna[id] * (v - inst->ena[id]);
             inst->gk[id] = inst->gkbar[id] * inst->n[id] * inst->n[id] * inst->n[id] * inst->n[id];
@@ -87,7 +87,7 @@ void nrn_cur_ext(void* __restrict__ mech) {
         dik = inst->ik[id];
         v = v_org;
         {
-            double current = 0.0;
+            current = 0.0;
             inst->gna[id] = inst->gnabar[id] * inst->m[id] * inst->m[id] * inst->m[id] * inst->h[id];
             inst->ina[id] = inst->gna[id] * (v - inst->ena[id]);
             inst->gk[id] = inst->gkbar[id] * inst->n[id] * inst->n[id] * inst->n[id] * inst->n[id];
