@@ -97,6 +97,7 @@ void CodegenCVisitor::visit_boolean(const Boolean& node) {
 
 
 void CodegenCVisitor::visit_name(const Name& node) {
+
     if (!codegen) {
         return;
     }

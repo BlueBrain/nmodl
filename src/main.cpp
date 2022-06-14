@@ -11,6 +11,7 @@
 #include <CLI/CLI.hpp>
 
 #include "codegen/codegen_acc_visitor.hpp"
+#include "codegen/codegen_benchmark_visitor.hpp"
 #include "codegen/codegen_c_visitor.hpp"
 #include "codegen/codegen_cuda_visitor.hpp"
 #include "codegen/codegen_ispc_visitor.hpp"
@@ -408,6 +409,17 @@ int main(int argc, const char* argv[]) {
                                            !cfg.llvm_no_debug,
                                            cfg.llvm_fast_math_flags);
                 visitor.visit_program(*ast);
+
+                {
+                    logger->info("Running Benchmark code generator");
+                    SymtabVisitor().visit_program(*ast);
+                    CodegenBenchmarkVisitor visitor(modfile + "_kernel",
+                                                    cfg.output_dir,
+                                                    data_type,
+                                                    cfg.optimize_ionvar_copies_codegen);
+                    visitor.visit_program(*ast);
+                }
+
                 if (cfg.nmodl_ast) {
                     NmodlPrintVisitor(filepath("llvm", "mod")).visit_program(*ast);
                     logger->info("AST to NMODL transformation written to {}",

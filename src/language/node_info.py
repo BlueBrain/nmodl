@@ -93,7 +93,8 @@ SYMBOL_BLOCK_TYPES = {"FunctionBlock",
                       "DiscreteBlock",
                       "PartialBlock",
                       "KineticBlock",
-                      "FunctionTableBlock"
+                      "FunctionTableBlock",
+                      "CodegenFunction"
                       }
 
 # nodes which need extra handling to augument symbol table
