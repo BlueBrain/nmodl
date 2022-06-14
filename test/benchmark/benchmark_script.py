@@ -116,7 +116,7 @@ class Benchmark:
             / modname
             / compiler
             / architecture
-            / self._get_flags_string(flags)))
+            / self._get_flags_string(flags+"_"+math_lib)))
         modast = self.init_ast(modfile_str)
         # Run JIT to generate the LLVM IR with the wrappers needed to run JIT later
         jit = nmodl.Jit(cfg)
@@ -345,21 +345,21 @@ class Benchmark:
                                 print(
                                     "self.results[modname][architecture][compiler][flags] = jit.run(modast, modname, self.config.instances, self.config.experiments, external_lib)"
                                 )
-                                if compiler == "clang":
+                                if compiler == "clang" and "SVML" not in flags:
                                     for math_lib in self.benchmark_config.math_libraries:
                                         # Generate LLVM IR from NMODL JIT
                                         # sed the nrn_state_hh name to _Z16nrn_state_hh_extPv to match the external kernel signature name of the external shared lib
                                         # compile LLVM IR using clang and the compiler flags of the architecture used and generate shared library
                                         # Run NMODL JIT with external shared library
                                         jit_llvm_ir_file_ext_path = self.translate_mod_file_to_llvm_ir_for_clang(modfile_str, modname, compiler, architecture, math_lib, flags+"_jit")
-                                        external_lib_path = self._get_external_lib_path(modname, "clang", architecture, flags+"_jit")
+                                        external_lib_path = self._get_external_lib_path(modname, "clang", architecture, flags+"_jit_"+math_lib)
                                         self.compile_llvm_ir_clang(jit_llvm_ir_file_ext_path, flags, external_lib_path)
-                                        self.results[modname][architecture][compiler][self._get_flags_string(flags)+"_jit"] = self.run_external_kernel(modfile_str,
+                                        self.results[modname][architecture][compiler][self._get_flags_string(flags)+"_jit_"+math_lib] = self.run_external_kernel(modfile_str,
                                                 modname,
                                                 compiler,
                                                 architecture,
                                                 self.benchmark_config.gpu_target_architecture,
-                                                flags+"_jit",
+                                                flags+"_jit_"+math_lib,
                                                 kernel_instance_size,
                                                 self.benchmark_config.experiments)
                                         print(
