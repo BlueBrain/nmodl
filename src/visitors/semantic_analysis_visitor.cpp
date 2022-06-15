@@ -2,8 +2,10 @@
 #include "ast/function_block.hpp"
 #include "ast/procedure_block.hpp"
 #include "ast/program.hpp"
+#include "ast/string.hpp"
 #include "ast/suffix.hpp"
 #include "ast/table_statement.hpp"
+#include "ast/unit.hpp"
 #include "utils/logger.hpp"
 #include "visitors/visitor_utils.hpp"
 
@@ -61,6 +63,15 @@ void SemanticAnalysisVisitor::visit_destructor_block(const ast::DestructorBlock&
         logger->warn(
             "SemanticAnalysisVisitor :: This mod file is not point process but contains a "
             "destructor.");
+        check_fail = true;
+    }
+    /// -->
+}
+
+void SemanticAnalysisVisitor::visit_unit(const ast::Unit& node) {
+    /// <-- This code is for check 3
+    if (node.get_name()->get_value().empty()) {
+        logger->warn("SemanticAnalysisVisitor:: An unit cannot be created without name.");
         check_fail = true;
     }
     /// -->

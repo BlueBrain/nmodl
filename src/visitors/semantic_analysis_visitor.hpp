@@ -26,6 +26,7 @@
  * 1. Check that a function or a procedure containing a TABLE statement contains only one argument
  * (mandatory in mod2c).
  * 2. Check that destructor blocks are only inside mod file that are point_process
+ * 3. Check that unit always have a name
  */
 #include "ast/ast.hpp"
 #include "visitors/ast_visitor.hpp"
@@ -55,6 +56,9 @@ class SemanticAnalysisVisitor: public ConstAstVisitor {
 
     /// Visit destructor and check that the file is of type POINT_PROCESS or ARTIFICIAL_CELL
     void visit_destructor_block(const ast::DestructorBlock& node) override;
+
+    /// Visit an unit and check that name is not empty
+    void visit_unit(const ast::Unit& node) override;
 
   public:
     SemanticAnalysisVisitor() = default;

@@ -618,7 +618,6 @@ units           :   {
 
 unit            :   "(" { scanner.scan_unit(); } ")"
                     {
-                        // @todo Empty units should be handled in semantic analysis
                         auto unit = scanner.get_unit();
                         auto text = unit->eval();
                         $$ = new ast::Unit(unit);
