@@ -1909,7 +1909,7 @@ CodegenCVisitor::ParamVector CodegenCVisitor::internal_method_parameters() {
         params.emplace_back("", "IonCurVar&", "", "ionvar");
     }
     params.emplace_back("", "double*", "", "data");
-    params.emplace_back("const", "", "Datum*", "", "indexes");
+    params.emplace_back("const ", "Datum*", "", "indexes");
     params.emplace_back(param_type_qualifier(), "ThreadDatum*", "", "thread");
     params.emplace_back(param_type_qualifier(), "NrnThread*", param_ptr_qualifier(), "nt");
     params.emplace_back("", "double", "", "v");
