@@ -255,167 +255,168 @@ $(document).ready(function(){initNavTree('inline__visitor_8cpp_source.html','');
 <div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;    }</div>
 <div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;<span class="comment"></span> </div>
 <div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;<span class="comment">    /// get a copy of function/procedure body</span></div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;<span class="comment"></span>    <span class="keyword">auto</span> inlined_block = callee.<a class="code" href="group__ast__class.html#gaff1198162aa1868c30e0e6e335890c5e">get_statement_block</a>()-&gt;clone();</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;<span class="comment">    /// function definition has function name as return value. we have to rename</span></div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;<span class="comment">    /// it with new variable name</span></div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;<span class="comment"></span>    RenameVisitor visitor(function_name, new_varname);</div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;    inlined_block-&gt;visit_children(visitor);</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;<span class="comment">    /// \todo Have to re-run symtab visitor pass to update symbol table</span></div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;<span class="comment"></span>    inlined_block-&gt;set_symbol_table(<span class="keyword">nullptr</span>);</div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;<span class="comment">    /// each argument is added as new assignment statement</span></div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;<span class="comment"></span>    inline_arguments(*inlined_block, callee.<a class="code" href="classnmodl_1_1ast_1_1_block.html#a9ecaa3973c7620d76cf0e89b6696ff48">get_parameters</a>(), caller_arguments);</div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;<span class="comment">    /// to return value from procedure we have to add new variable</span></div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;<span class="comment"></span>    <span class="keywordflow">if</span> (callee.<a class="code" href="group__ast__class.html#gac8ca9b958f672aac8f178f6df6a4bd05">is_procedure_block</a>() &amp;&amp; to_replace == <span class="keyword">false</span>) {</div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;        add_return_variable(*inlined_block, new_varname);</div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;    }</div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160; </div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;    <span class="keyword">auto</span> statement = <span class="keyword">new</span> ast::ExpressionStatement(inlined_block);</div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160; </div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;    <span class="keywordflow">if</span> (to_replace) {</div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;        replaced_statements[caller_statement] = statement;</div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;        inlined_statements[caller_statement].push_back(</div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;            std::shared_ptr&lt;ast::ExpressionStatement&gt;(statement));</div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;    }</div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;<span class="comment">    /// variable name which will replace the function call that we just inlined</span></div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;<span class="comment"></span>    replaced_fun_calls[&amp;node] = new_varname;</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;}</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160; </div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;<span class="comment"></span>    <span class="keyword">auto</span> inlined_block = std::unique_ptr&lt;ast::StatementBlock&gt;(</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;        callee.<a class="code" href="group__ast__class.html#gaff1198162aa1868c30e0e6e335890c5e">get_statement_block</a>()-&gt;clone());</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;<span class="comment">    /// function definition has function name as return value. we have to rename</span></div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;<span class="comment">    /// it with new variable name</span></div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;<span class="comment"></span>    RenameVisitor visitor(function_name, new_varname);</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;    inlined_block-&gt;visit_children(visitor);</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;<span class="comment">    /// \todo Have to re-run symtab visitor pass to update symbol table</span></div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;<span class="comment"></span>    inlined_block-&gt;set_symbol_table(<span class="keyword">nullptr</span>);</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;<span class="comment">    /// each argument is added as new assignment statement</span></div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;<span class="comment"></span>    inline_arguments(*inlined_block, callee.<a class="code" href="classnmodl_1_1ast_1_1_block.html#a9ecaa3973c7620d76cf0e89b6696ff48">get_parameters</a>(), caller_arguments);</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;<span class="comment">    /// to return value from procedure we have to add new variable</span></div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;<span class="comment"></span>    <span class="keywordflow">if</span> (callee.<a class="code" href="group__ast__class.html#gac8ca9b958f672aac8f178f6df6a4bd05">is_procedure_block</a>() &amp;&amp; to_replace == <span class="keyword">false</span>) {</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;        add_return_variable(*inlined_block, new_varname);</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;    }</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160; </div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;    <span class="keyword">auto</span> statement = <span class="keyword">new</span> ast::ExpressionStatement(std::move(inlined_block));</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160; </div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;    <span class="keywordflow">if</span> (to_replace) {</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;        replaced_statements[caller_statement] = statement;</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;        inlined_statements[caller_statement].push_back(</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;            std::shared_ptr&lt;ast::ExpressionStatement&gt;(statement));</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;    }</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;<span class="comment">    /// variable name which will replace the function call that we just inlined</span></div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;<span class="comment"></span>    replaced_fun_calls[&amp;node] = new_varname;</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;}</div>
 <div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160; </div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1visitor_1_1_inline_visitor.html#ad5221292ed92a4624f93db350cba06d9">InlineVisitor::visit_function_call</a>(FunctionCall&amp; node) {<span class="comment"></span></div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;<span class="comment">    /// argument can be function call itself</span></div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;<span class="comment"></span>    node.visit_children(*<span class="keyword">this</span>);</div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160; </div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; function_name = node.get_name()-&gt;get_node_name();</div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;    <span class="keyword">auto</span> symbol = program_symtab-&gt;lookup_in_scope(function_name);</div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;<span class="comment">    /// nothing to do if called function is not defined or it&#39;s external</span></div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;<span class="comment"></span>    <span class="keywordflow">if</span> (symbol == <span class="keyword">nullptr</span> || symbol-&gt;is_external_variable()) {</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;        <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00205"></a><span class="lineno"><a class="line" href="classnmodl_1_1visitor_1_1_inline_visitor.html#ad5221292ed92a4624f93db350cba06d9">  205</a></span>&#160;    }</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160; </div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;    <span class="keyword">auto</span> function_definition = symbol-&gt;get_node();</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;    <span class="keywordflow">if</span> (function_definition == <span class="keyword">nullptr</span>) {</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;        <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;symbol table doesn&#39;t have ast node for &quot;</span> + function_name);</div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;    }</div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;<span class="comment">    /// first inline called function</span></div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;<span class="comment"></span>    function_definition-&gt;visit_children(*<span class="keyword">this</span>);</div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160; </div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;    <span class="keywordtype">bool</span> inlined = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160; </div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;    <span class="keywordflow">if</span> (function_definition-&gt;is_procedure_block()) {</div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;        <span class="keyword">auto</span> proc = (ProcedureBlock*) function_definition;</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;        inlined = inline_function_call(*proc, node, *caller_block);</div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;    } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (function_definition-&gt;is_function_block()) {</div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;        <span class="keyword">auto</span> func = (FunctionBlock*) function_definition;</div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;        inlined = inline_function_call(*func, node, *caller_block);</div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;    }</div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160; </div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;    <span class="keywordflow">if</span> (inlined) {</div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;        symbol-&gt;mark_inlined();</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;    }</div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;}</div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160; </div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1visitor_1_1_inline_visitor.html#ac277f2dbeb82075f8f7abaf1cdd227fe">InlineVisitor::visit_statement_block</a>(StatementBlock&amp; node) {<span class="comment"></span></div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;<span class="comment">    /** While inlining we have to add new statements before call site.</span></div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;<span class="comment">     *  In order to return result we also have to add new local variable</span></div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;<span class="comment">     *  to the caller block. Hence we have to keep track of caller block,</span></div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;<span class="comment">     *  caller block&#39;s symbol table and caller statement.</span></div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;    caller_block = &amp;node;</div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;    statementblock_stack.push(&amp;node);</div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;<span class="comment">    /** Add empty local statement at the begining of block if already doesn&#39;t exist.</span></div>
-<div class="line"><a name="l00240"></a><span class="lineno"><a class="line" href="classnmodl_1_1visitor_1_1_inline_visitor.html#ac277f2dbeb82075f8f7abaf1cdd227fe">  240</a></span>&#160;<span class="comment">     * Why? When we iterate over statements and inline function call, we have to add</span></div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;<span class="comment">     * local variable to return the result. As we can&#39;t modify vector while iterating,</span></div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;<span class="comment">     * we pre-add local statement without any local variables. If inlining pass doesn&#39;t</span></div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;<span class="comment">     * add any variable then this statement will be removed.</span></div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;    <a class="code" href="namespacenmodl_1_1visitor.html#aab8fd730b218414affb4b93f13ea59bd">add_local_statement</a>(node);</div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160; </div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; statements = node.get_statements();</div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160; </div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; statement: statements) {</div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;        caller_statement = statement;</div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;        statement_stack.push(statement);</div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;        caller_statement-&gt;visit_children(*<span class="keyword">this</span>);</div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;        statement_stack.pop();</div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;    }</div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;<span class="comment">    /// each block should already have local statement</span></div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;<span class="comment"></span>    <span class="keyword">auto</span> local_list_statement = <a class="code" href="namespacenmodl_1_1visitor.html#adbdbb124708e64f8604f01b60ee326cc">get_local_list_statement</a>(node);</div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;    <span class="keywordflow">if</span> (local_list_statement-&gt;get_variables().empty()) {</div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;        node.erase_statement(statements.begin());</div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;    }</div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;<span class="comment">    /// check if any statement is candidate for replacement due to inlining</span></div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;<span class="comment">    /// this is typicall case of procedure calls</span></div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;<span class="comment"></span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span> it = statements.begin(); it &lt; statements.end(); ++it) {</div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;        <span class="keyword">const</span> <span class="keyword">auto</span>&amp; statement = *it;</div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;        <span class="keywordflow">if</span> (replaced_statements.find(statement) != replaced_statements.end()) {</div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;            node.reset_statement(it, replaced_statements[statement]);</div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;        }</div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;    }</div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;<span class="comment">    /// all statements from inlining needs to be added before the caller statement</span></div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;<span class="comment"></span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; element: inlined_statements) {</div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;        <span class="keyword">auto</span> it = std::find(statements.begin(), statements.end(), element.first);</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;        <span class="keywordflow">if</span> (it != statements.end()) {</div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;            node.insert_statement(it, element.second, element.second.begin(), element.second.end());</div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;            element.second.clear();</div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;        }</div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;    }</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;<span class="comment">    /** Restore the caller context : consider call chain A() -&gt; B() -&gt; none.</span></div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;<span class="comment">     * When we finishes processing B&#39;s statements, even we pop the stack,</span></div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;<span class="comment">     * caller_* variables still point to B&#39;s context. Hence first we have</span></div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;<span class="comment">     * to pop elements and then use top() to get context of A(). We have to</span></div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;<span class="comment">     * check for non-empty() stack because if there is only A() -&gt; none then</span></div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;<span class="comment">     * stack is already empty.</span></div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;    statementblock_stack.pop();</div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160; </div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;    <span class="keywordflow">if</span> (!statement_stack.empty()) {</div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;        caller_statement = statement_stack.top();</div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;    }</div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;    <span class="keywordflow">if</span> (!statementblock_stack.empty()) {</div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;        caller_block = statementblock_stack.top();</div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;    }</div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;}</div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;<span class="comment">/** Visit all wrapped expressions which can contain function calls.</span></div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;<span class="comment"> *  If a function call is replaced then the wrapped expression is</span></div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;<span class="comment"> *  also replaced with new variable node from the inlining result.</span></div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1visitor_1_1_inline_visitor.html#af3a3ff4e27c999ca83715ded49a37229">InlineVisitor::visit_wrapped_expression</a>(WrappedExpression&amp; node) {</div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;    node.visit_children(*<span class="keyword">this</span>);</div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; e = node.get_expression();</div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;    <span class="keywordflow">if</span> (e-&gt;is_function_call()) {</div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;        <span class="keyword">auto</span> expression = <span class="keyword">dynamic_cast&lt;</span>FunctionCall*<span class="keyword">&gt;</span>(e.get());</div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;        <span class="keywordflow">if</span> (replaced_fun_calls.find(expression) != replaced_fun_calls.end()) {</div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;            <span class="keyword">auto</span> var = replaced_fun_calls[expression];</div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;            node.set_expression(std::make_shared&lt;Name&gt;(<span class="keyword">new</span> String(var)));</div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;        }</div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;    }</div>
-<div class="line"><a name="l00311"></a><span class="lineno"><a class="line" href="classnmodl_1_1visitor_1_1_inline_visitor.html#af3a3ff4e27c999ca83715ded49a37229">  311</a></span>&#160;}</div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160; </div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1visitor_1_1_inline_visitor.html#a3cb907aee8aebc2a4a49e60d5495a45c">InlineVisitor::visit_program</a>(<a class="code" href="classnmodl_1_1ast_1_1_program.html">Program</a>&amp; node) {</div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;    program_symtab = node.<a class="code" href="classnmodl_1_1ast_1_1_program.html#aff29b2ef3f10492a873ec9c035e289b2">get_symbol_table</a>();</div>
-<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;    <span class="keywordflow">if</span> (program_symtab == <span class="keyword">nullptr</span>) {</div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;        <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;Program node doesn&#39;t have symbol table&quot;</span>);</div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;    }</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;    node.<a class="code" href="classnmodl_1_1ast_1_1_program.html#abbc13ee98c7f3c9650c42f0f43e1fd9d">visit_children</a>(*<span class="keyword">this</span>);</div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;}</div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160; </div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;}  <span class="comment">// namespace visitor</span></div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;}  <span class="comment">// namespace nmodl</span></div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160; </div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1visitor_1_1_inline_visitor.html#ad5221292ed92a4624f93db350cba06d9">InlineVisitor::visit_function_call</a>(FunctionCall&amp; node) {<span class="comment"></span></div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;<span class="comment">    /// argument can be function call itself</span></div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;<span class="comment"></span>    node.visit_children(*<span class="keyword">this</span>);</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160; </div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; function_name = node.get_name()-&gt;get_node_name();</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;    <span class="keyword">auto</span> symbol = program_symtab-&gt;lookup_in_scope(function_name);</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;<span class="comment">    /// nothing to do if called function is not defined or it&#39;s external</span></div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;<span class="comment"></span>    <span class="keywordflow">if</span> (symbol == <span class="keyword">nullptr</span> || symbol-&gt;is_external_variable()) {</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;        <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00206"></a><span class="lineno"><a class="line" href="classnmodl_1_1visitor_1_1_inline_visitor.html#ad5221292ed92a4624f93db350cba06d9">  206</a></span>&#160;    }</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160; </div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;    <span class="keyword">auto</span> function_definition = symbol-&gt;get_node();</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;    <span class="keywordflow">if</span> (function_definition == <span class="keyword">nullptr</span>) {</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;        <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;symbol table doesn&#39;t have ast node for &quot;</span> + function_name);</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;    }</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;<span class="comment">    /// first inline called function</span></div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;<span class="comment"></span>    function_definition-&gt;visit_children(*<span class="keyword">this</span>);</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160; </div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;    <span class="keywordtype">bool</span> inlined = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160; </div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;    <span class="keywordflow">if</span> (function_definition-&gt;is_procedure_block()) {</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;        <span class="keyword">auto</span> proc = (ProcedureBlock*) function_definition;</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;        inlined = inline_function_call(*proc, node, *caller_block);</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;    } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (function_definition-&gt;is_function_block()) {</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;        <span class="keyword">auto</span> func = (FunctionBlock*) function_definition;</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;        inlined = inline_function_call(*func, node, *caller_block);</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;    }</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160; </div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;    <span class="keywordflow">if</span> (inlined) {</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;        symbol-&gt;mark_inlined();</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;    }</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;}</div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160; </div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1visitor_1_1_inline_visitor.html#ac277f2dbeb82075f8f7abaf1cdd227fe">InlineVisitor::visit_statement_block</a>(StatementBlock&amp; node) {<span class="comment"></span></div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;<span class="comment">    /** While inlining we have to add new statements before call site.</span></div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;<span class="comment">     *  In order to return result we also have to add new local variable</span></div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;<span class="comment">     *  to the caller block. Hence we have to keep track of caller block,</span></div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;<span class="comment">     *  caller block&#39;s symbol table and caller statement.</span></div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;    caller_block = &amp;node;</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;    statementblock_stack.push(&amp;node);</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;<span class="comment">    /** Add empty local statement at the begining of block if already doesn&#39;t exist.</span></div>
+<div class="line"><a name="l00241"></a><span class="lineno"><a class="line" href="classnmodl_1_1visitor_1_1_inline_visitor.html#ac277f2dbeb82075f8f7abaf1cdd227fe">  241</a></span>&#160;<span class="comment">     * Why? When we iterate over statements and inline function call, we have to add</span></div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;<span class="comment">     * local variable to return the result. As we can&#39;t modify vector while iterating,</span></div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;<span class="comment">     * we pre-add local statement without any local variables. If inlining pass doesn&#39;t</span></div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;<span class="comment">     * add any variable then this statement will be removed.</span></div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;    <a class="code" href="namespacenmodl_1_1visitor.html#aab8fd730b218414affb4b93f13ea59bd">add_local_statement</a>(node);</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160; </div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; statements = node.get_statements();</div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160; </div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; statement: statements) {</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;        caller_statement = statement;</div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;        statement_stack.push(statement);</div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;        caller_statement-&gt;visit_children(*<span class="keyword">this</span>);</div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;        statement_stack.pop();</div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;    }</div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;<span class="comment">    /// each block should already have local statement</span></div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;<span class="comment"></span>    <span class="keyword">auto</span> local_list_statement = <a class="code" href="namespacenmodl_1_1visitor.html#adbdbb124708e64f8604f01b60ee326cc">get_local_list_statement</a>(node);</div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;    <span class="keywordflow">if</span> (local_list_statement-&gt;get_variables().empty()) {</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;        node.erase_statement(statements.begin());</div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;    }</div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;<span class="comment">    /// check if any statement is candidate for replacement due to inlining</span></div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;<span class="comment">    /// this is typicall case of procedure calls</span></div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;<span class="comment"></span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span> it = statements.begin(); it &lt; statements.end(); ++it) {</div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;        <span class="keyword">const</span> <span class="keyword">auto</span>&amp; statement = *it;</div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;        <span class="keywordflow">if</span> (replaced_statements.find(statement) != replaced_statements.end()) {</div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;            node.reset_statement(it, replaced_statements[statement]);</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;        }</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;    }</div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;<span class="comment">    /// all statements from inlining needs to be added before the caller statement</span></div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;<span class="comment"></span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; element: inlined_statements) {</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;        <span class="keyword">auto</span> it = std::find(statements.begin(), statements.end(), element.first);</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;        <span class="keywordflow">if</span> (it != statements.end()) {</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;            node.insert_statement(it, element.second, element.second.begin(), element.second.end());</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;            element.second.clear();</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;        }</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;    }</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;<span class="comment">    /** Restore the caller context : consider call chain A() -&gt; B() -&gt; none.</span></div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;<span class="comment">     * When we finishes processing B&#39;s statements, even we pop the stack,</span></div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;<span class="comment">     * caller_* variables still point to B&#39;s context. Hence first we have</span></div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;<span class="comment">     * to pop elements and then use top() to get context of A(). We have to</span></div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;<span class="comment">     * check for non-empty() stack because if there is only A() -&gt; none then</span></div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;<span class="comment">     * stack is already empty.</span></div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;    statementblock_stack.pop();</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160; </div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;    <span class="keywordflow">if</span> (!statement_stack.empty()) {</div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;        caller_statement = statement_stack.top();</div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;    }</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;    <span class="keywordflow">if</span> (!statementblock_stack.empty()) {</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;        caller_block = statementblock_stack.top();</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;    }</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;}</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;<span class="comment">/** Visit all wrapped expressions which can contain function calls.</span></div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;<span class="comment"> *  If a function call is replaced then the wrapped expression is</span></div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;<span class="comment"> *  also replaced with new variable node from the inlining result.</span></div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;<span class="comment"> */</span></div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1visitor_1_1_inline_visitor.html#af3a3ff4e27c999ca83715ded49a37229">InlineVisitor::visit_wrapped_expression</a>(WrappedExpression&amp; node) {</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;    node.visit_children(*<span class="keyword">this</span>);</div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; e = node.get_expression();</div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;    <span class="keywordflow">if</span> (e-&gt;is_function_call()) {</div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;        <span class="keyword">auto</span> expression = <span class="keyword">dynamic_cast&lt;</span>FunctionCall*<span class="keyword">&gt;</span>(e.get());</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;        <span class="keywordflow">if</span> (replaced_fun_calls.find(expression) != replaced_fun_calls.end()) {</div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;            <span class="keyword">auto</span> var = replaced_fun_calls[expression];</div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;            node.set_expression(std::make_shared&lt;Name&gt;(<span class="keyword">new</span> String(var)));</div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;        }</div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;    }</div>
+<div class="line"><a name="l00312"></a><span class="lineno"><a class="line" href="classnmodl_1_1visitor_1_1_inline_visitor.html#af3a3ff4e27c999ca83715ded49a37229">  312</a></span>&#160;}</div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160; </div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1visitor_1_1_inline_visitor.html#a3cb907aee8aebc2a4a49e60d5495a45c">InlineVisitor::visit_program</a>(<a class="code" href="classnmodl_1_1ast_1_1_program.html">Program</a>&amp; node) {</div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;    program_symtab = node.<a class="code" href="classnmodl_1_1ast_1_1_program.html#aff29b2ef3f10492a873ec9c035e289b2">get_symbol_table</a>();</div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;    <span class="keywordflow">if</span> (program_symtab == <span class="keyword">nullptr</span>) {</div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;        <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;Program node doesn&#39;t have symbol table&quot;</span>);</div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;    }</div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;    node.<a class="code" href="classnmodl_1_1ast_1_1_program.html#abbc13ee98c7f3c9650c42f0f43e1fd9d">visit_children</a>(*<span class="keyword">this</span>);</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;}</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160; </div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;}  <span class="comment">// namespace visitor</span></div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;}  <span class="comment">// namespace nmodl</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aclassnmodl_1_1ast_1_1_verbatim_html"><div class="ttname"><a href="classnmodl_1_1ast_1_1_verbatim.html">nmodl::ast::Verbatim</a></div><div class="ttdoc">Represents a C code block.</div><div class="ttdef"><b>Definition:</b> <a href="verbatim_8hpp_source.html#l00041">verbatim.hpp:41</a></div></div>
@@ -434,7 +435,7 @@ $(document).ready(function(){initNavTree('inline__visitor_8cpp_source.html','');
 <div class="ttc" id="aclassnmodl_1_1parser_1_1_c_driver_html"><div class="ttname"><a href="classnmodl_1_1parser_1_1_c_driver.html">nmodl::parser::CDriver</a></div><div class="ttdoc">Class that binds all pieces together for parsing C verbatim blocks.</div><div class="ttdef"><b>Definition:</b> <a href="c11__driver_8hpp_source.html#l00047">c11_driver.hpp:47</a></div></div>
 <div class="ttc" id="aclassnmodl_1_1ast_1_1_expression_statement_html"><div class="ttname"><a href="classnmodl_1_1ast_1_1_expression_statement.html">nmodl::ast::ExpressionStatement</a></div><div class="ttdoc">TODO.</div><div class="ttdef"><b>Definition:</b> <a href="expression__statement_8hpp_source.html#l00041">expression_statement.hpp:41</a></div></div>
 <div class="ttc" id="aclassnmodl_1_1ast_1_1_block_html"><div class="ttname"><a href="classnmodl_1_1ast_1_1_block.html">nmodl::ast::Block</a></div><div class="ttdoc">Base class for all block scoped nodes.</div><div class="ttdef"><b>Definition:</b> <a href="block_8hpp_source.html#l00044">block.hpp:44</a></div></div>
-<div class="ttc" id="aclassnmodl_1_1visitor_1_1_inline_visitor_html_ad5221292ed92a4624f93db350cba06d9"><div class="ttname"><a href="classnmodl_1_1visitor_1_1_inline_visitor.html#ad5221292ed92a4624f93db350cba06d9">nmodl::visitor::InlineVisitor::visit_function_call</a></div><div class="ttdeci">void visit_function_call(ast::FunctionCall &amp;node) override</div><div class="ttdoc">visit node of type ast::FunctionCall</div><div class="ttdef"><b>Definition:</b> <a href="inline__visitor_8cpp_source.html#l00205">inline_visitor.cpp:205</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1visitor_1_1_inline_visitor_html_ad5221292ed92a4624f93db350cba06d9"><div class="ttname"><a href="classnmodl_1_1visitor_1_1_inline_visitor.html#ad5221292ed92a4624f93db350cba06d9">nmodl::visitor::InlineVisitor::visit_function_call</a></div><div class="ttdeci">void visit_function_call(ast::FunctionCall &amp;node) override</div><div class="ttdoc">visit node of type ast::FunctionCall</div><div class="ttdef"><b>Definition:</b> <a href="inline__visitor_8cpp_source.html#l00206">inline_visitor.cpp:206</a></div></div>
 <div class="ttc" id="avisitor__utils_8hpp_html"><div class="ttname"><a href="visitor__utils_8hpp.html">visitor_utils.hpp</a></div><div class="ttdoc">Utility functions for visitors implementation.</div></div>
 <div class="ttc" id="agroup__ast__vec__type_html_ga0892cdce1448e2ee170779e304ed372f"><div class="ttname"><a href="group__ast__vec__type.html#ga0892cdce1448e2ee170779e304ed372f">nmodl::ast::ArgumentVector</a></div><div class="ttdeci">std::vector&lt; std::shared_ptr&lt; Argument &gt; &gt; ArgumentVector</div><div class="ttdef"><b>Definition:</b> <a href="ast__decl_8hpp_source.html#l00350">ast_decl.hpp:350</a></div></div>
 <div class="ttc" id="aunits_2parser_8cpp_html_adb772fffa624f2b39f88e66cafd5b05a"><div class="ttname"><a href="units_2parser_8cpp.html#adb772fffa624f2b39f88e66cafd5b05a">driver</a></div><div class="ttdeci">nmodl::parser::UnitDriver driver</div><div class="ttdef"><b>Definition:</b> <a href="units_2parser_8cpp_source.html#l00028">parser.cpp:28</a></div></div>
@@ -442,7 +443,7 @@ $(document).ready(function(){initNavTree('inline__visitor_8cpp_source.html','');
 <div class="ttc" id="ac11__driver_8hpp_html"><div class="ttname"><a href="c11__driver_8hpp.html">c11_driver.hpp</a></div></div>
 <div class="ttc" id="agroup__units_html_ga4bb3089099469478c73df5f61037af4f"><div class="ttname"><a href="group__units.html#ga4bb3089099469478c73df5f61037af4f">nmodl::parser::UnitDriver::scan_string</a></div><div class="ttdeci">void scan_string(std::string &amp;text)</div><div class="ttdef"><b>Definition:</b> <a href="unit__driver_8cpp_source.html#l00069">unit_driver.cpp:69</a></div></div>
 <div class="ttc" id="aclassnmodl_1_1ast_1_1_program_html_abbc13ee98c7f3c9650c42f0f43e1fd9d"><div class="ttname"><a href="classnmodl_1_1ast_1_1_program.html#abbc13ee98c7f3c9650c42f0f43e1fd9d">nmodl::ast::Program::visit_children</a></div><div class="ttdeci">void visit_children(visitor::Visitor &amp;v) override</div><div class="ttdoc">visit children i.e.</div><div class="ttdef"><b>Definition:</b> <a href="ast_8cpp_source.html#l15330">ast.cpp:15330</a></div></div>
-<div class="ttc" id="aclassnmodl_1_1visitor_1_1_inline_visitor_html_a3cb907aee8aebc2a4a49e60d5495a45c"><div class="ttname"><a href="classnmodl_1_1visitor_1_1_inline_visitor.html#a3cb907aee8aebc2a4a49e60d5495a45c">nmodl::visitor::InlineVisitor::visit_program</a></div><div class="ttdeci">void visit_program(ast::Program &amp;node) override</div><div class="ttdoc">visit node of type ast::Program</div><div class="ttdef"><b>Definition:</b> <a href="inline__visitor_8cpp_source.html#l00323">inline_visitor.cpp:323</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1visitor_1_1_inline_visitor_html_a3cb907aee8aebc2a4a49e60d5495a45c"><div class="ttname"><a href="classnmodl_1_1visitor_1_1_inline_visitor.html#a3cb907aee8aebc2a4a49e60d5495a45c">nmodl::visitor::InlineVisitor::visit_program</a></div><div class="ttdeci">void visit_program(ast::Program &amp;node) override</div><div class="ttdoc">visit node of type ast::Program</div><div class="ttdef"><b>Definition:</b> <a href="inline__visitor_8cpp_source.html#l00324">inline_visitor.cpp:324</a></div></div>
 <div class="ttc" id="aclassnmodl_1_1ast_1_1_function_call_html_a2116644b094e5b112d4f5d05310af56a"><div class="ttname"><a href="classnmodl_1_1ast_1_1_function_call.html#a2116644b094e5b112d4f5d05310af56a">nmodl::ast::FunctionCall::get_arguments</a></div><div class="ttdeci">const ExpressionVector &amp; get_arguments() const noexcept</div><div class="ttdoc">Getter for member variable FunctionCall::arguments.</div><div class="ttdef"><b>Definition:</b> <a href="function__call_8hpp_source.html#l00186">function_call.hpp:186</a></div></div>
 <div class="ttc" id="alocal__var__rename__visitor_8hpp_html"><div class="ttname"><a href="local__var__rename__visitor_8hpp.html">local_var_rename_visitor.hpp</a></div><div class="ttdoc">Visitor to rename local variables conflicting with global scope</div></div>
 <div class="ttc" id="aclassnmodl_1_1visitor_1_1_rename_visitor_html"><div class="ttname"><a href="classnmodl_1_1visitor_1_1_rename_visitor.html">nmodl::visitor::RenameVisitor</a></div><div class="ttdoc">Blindly rename given variable to new name</div><div class="ttdef"><b>Definition:</b> <a href="rename__visitor_8hpp_source.html#l00043">rename_visitor.hpp:43</a></div></div>
@@ -453,7 +454,7 @@ $(document).ready(function(){initNavTree('inline__visitor_8cpp_source.html','');
 <div class="ttc" id="aclassnmodl_1_1ast_1_1_statement_block_html"><div class="ttname"><a href="classnmodl_1_1ast_1_1_statement_block.html">nmodl::ast::StatementBlock</a></div><div class="ttdoc">Represents block encapsulating list of statements.</div><div class="ttdef"><b>Definition:</b> <a href="statement__block_8hpp_source.html#l00056">statement_block.hpp:56</a></div></div>
 <div class="ttc" id="agroup__ast__vec__type_html_gad917e6770aaf25cf69378a517b8d11c9"><div class="ttname"><a href="group__ast__vec__type.html#gad917e6770aaf25cf69378a517b8d11c9">nmodl::ast::ExpressionVector</a></div><div class="ttdeci">std::vector&lt; std::shared_ptr&lt; Expression &gt; &gt; ExpressionVector</div><div class="ttdef"><b>Definition:</b> <a href="ast__decl_8hpp_source.html#l00337">ast_decl.hpp:337</a></div></div>
 <div class="ttc" id="aclassnmodl_1_1visitor_1_1_inline_visitor_html_a019402313e57bf8a27a1c6e63661bac9"><div class="ttname"><a href="classnmodl_1_1visitor_1_1_inline_visitor.html#a019402313e57bf8a27a1c6e63661bac9">nmodl::visitor::InlineVisitor::add_return_variable</a></div><div class="ttdeci">void add_return_variable(ast::StatementBlock &amp;block, std::string &amp;varname)</div><div class="ttdoc">add assignment statement at end of block (to use as a return statement in case of procedure blocks)</div><div class="ttdef"><b>Definition:</b> <a href="inline__visitor_8cpp_source.html#l00058">inline_visitor.cpp:58</a></div></div>
-<div class="ttc" id="aclassnmodl_1_1visitor_1_1_inline_visitor_html_af3a3ff4e27c999ca83715ded49a37229"><div class="ttname"><a href="classnmodl_1_1visitor_1_1_inline_visitor.html#af3a3ff4e27c999ca83715ded49a37229">nmodl::visitor::InlineVisitor::visit_wrapped_expression</a></div><div class="ttdeci">void visit_wrapped_expression(ast::WrappedExpression &amp;node) override</div><div class="ttdoc">Visit all wrapped expressions which can contain function calls.</div><div class="ttdef"><b>Definition:</b> <a href="inline__visitor_8cpp_source.html#l00311">inline_visitor.cpp:311</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1visitor_1_1_inline_visitor_html_af3a3ff4e27c999ca83715ded49a37229"><div class="ttname"><a href="classnmodl_1_1visitor_1_1_inline_visitor.html#af3a3ff4e27c999ca83715ded49a37229">nmodl::visitor::InlineVisitor::visit_wrapped_expression</a></div><div class="ttdeci">void visit_wrapped_expression(ast::WrappedExpression &amp;node) override</div><div class="ttdoc">Visit all wrapped expressions which can contain function calls.</div><div class="ttdef"><b>Definition:</b> <a href="inline__visitor_8cpp_source.html#l00312">inline_visitor.cpp:312</a></div></div>
 <div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_operator_html"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_operator.html">nmodl::ast::BinaryOperator</a></div><div class="ttdoc">Operator used in ast::BinaryExpression.</div><div class="ttdef"><b>Definition:</b> <a href="binary__operator_8hpp_source.html#l00041">binary_operator.hpp:41</a></div></div>
 <div class="ttc" id="alogger_8hpp_html"><div class="ttname"><a href="logger_8hpp.html">logger.hpp</a></div><div class="ttdoc">Implement logger based on spdlog library.</div></div>
 <div class="ttc" id="anamespacenmodl_1_1visitor_html_a7ceabe160b2e9cce30f64b4d8722b74c"><div class="ttname"><a href="namespacenmodl_1_1visitor.html#a7ceabe160b2e9cce30f64b4d8722b74c">nmodl::visitor::add_local_variable</a></div><div class="ttdeci">LocalVar * add_local_variable(StatementBlock &amp;node, Identifier *varname)</div><div class="ttdef"><b>Definition:</b> <a href="visitor__utils_8cpp_source.html#l00101">visitor_utils.cpp:101</a></div></div>
@@ -471,7 +472,7 @@ $(document).ready(function(){initNavTree('inline__visitor_8cpp_source.html','');
 <div class="ttc" id="aclassnmodl_1_1ast_1_1_string_html"><div class="ttname"><a href="classnmodl_1_1ast_1_1_string.html">nmodl::ast::String</a></div><div class="ttdoc">Represents a string.</div><div class="ttdef"><b>Definition:</b> <a href="string_8hpp_source.html#l00055">string.hpp:55</a></div></div>
 <div class="ttc" id="aall_8hpp_html"><div class="ttname"><a href="all_8hpp.html">all.hpp</a></div><div class="ttdoc">Auto generated AST classes declaration.</div></div>
 <div class="ttc" id="aclassnmodl_1_1ast_1_1_wrapped_expression_html"><div class="ttname"><a href="classnmodl_1_1ast_1_1_wrapped_expression.html">nmodl::ast::WrappedExpression</a></div><div class="ttdoc">Wrap any other expression type.</div><div class="ttdef"><b>Definition:</b> <a href="wrapped__expression_8hpp_source.html#l00041">wrapped_expression.hpp:41</a></div></div>
-<div class="ttc" id="aclassnmodl_1_1visitor_1_1_inline_visitor_html_ac277f2dbeb82075f8f7abaf1cdd227fe"><div class="ttname"><a href="classnmodl_1_1visitor_1_1_inline_visitor.html#ac277f2dbeb82075f8f7abaf1cdd227fe">nmodl::visitor::InlineVisitor::visit_statement_block</a></div><div class="ttdeci">void visit_statement_block(ast::StatementBlock &amp;node) override</div><div class="ttdoc">visit node of type ast::StatementBlock</div><div class="ttdef"><b>Definition:</b> <a href="inline__visitor_8cpp_source.html#l00240">inline_visitor.cpp:240</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1visitor_1_1_inline_visitor_html_ac277f2dbeb82075f8f7abaf1cdd227fe"><div class="ttname"><a href="classnmodl_1_1visitor_1_1_inline_visitor.html#ac277f2dbeb82075f8f7abaf1cdd227fe">nmodl::visitor::InlineVisitor::visit_statement_block</a></div><div class="ttdeci">void visit_statement_block(ast::StatementBlock &amp;node) override</div><div class="ttdoc">visit node of type ast::StatementBlock</div><div class="ttdef"><b>Definition:</b> <a href="inline__visitor_8cpp_source.html#l00241">inline_visitor.cpp:241</a></div></div>
 <!-- HTML footer for doxygen 1.8.15-->
 <!-- start footer part -->
 <div id="nav-path" class="navpath">
