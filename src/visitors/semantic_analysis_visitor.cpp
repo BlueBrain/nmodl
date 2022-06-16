@@ -71,7 +71,7 @@ void SemanticAnalysisVisitor::visit_destructor_block(const ast::DestructorBlock&
 void SemanticAnalysisVisitor::visit_unit(const ast::Unit& node) {
     /// <-- This code is for check 3
     if (node.get_name()->get_value().empty()) {
-        logger->warn("SemanticAnalysisVisitor:: An unit cannot be created without name.");
+        logger->error("SemanticAnalysisVisitor:: An unit cannot be created without name.");
         check_fail = true;
     }
     /// -->
