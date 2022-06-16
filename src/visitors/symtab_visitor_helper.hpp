@@ -149,6 +149,9 @@ void SymtabVisitor::setup_symbol(ast::Node* node, NmodlType property) {
 
 void SymtabVisitor::add_model_symbol_with_property(ast::Node* node, NmodlType property) {
     auto token = node->get_token();
+    if (!token) { // token can be nullptr
+        return;
+    }
     auto name = node->get_node_name();
     auto symbol = std::make_shared<Symbol>(name, node, *token);
     symbol->add_property(property);
