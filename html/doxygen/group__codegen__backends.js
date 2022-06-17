@@ -83,7 +83,6 @@ var group__codegen__backends =
       [ "is_net_event", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a684bb9d1af1410d2647477d24155c5a5", null ],
       [ "is_net_move", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a92be7204f7384ad3c6e999c351798790", null ],
       [ "is_net_send", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a2239749bcc89d0893f3ecbcfd0b36e8f", null ],
-      [ "k_const", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a70917081c37cabaa82da8b4fac3e7ca3", null ],
       [ "local_var_type", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a7d020b0010e29446d9f249a4e8444bad", null ],
       [ "make_symbol", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ada11a9e50c6c124899b5575f8c89a06d", null ],
       [ "method_name", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ac5b7ce082c345b547928b56bb3dd9ace", null ],
