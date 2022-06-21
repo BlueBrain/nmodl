@@ -1116,6 +1116,7 @@ void CodegenCVisitor::print_net_init_acc_serial_annotation_block_end() {
  */
 void CodegenCVisitor::print_channel_iteration_block_parallel_hint(BlockType type) {
     printer->add_line("#pragma ivdep");
+    printer->add_line("#pragma omp simd");
 }
 
 
