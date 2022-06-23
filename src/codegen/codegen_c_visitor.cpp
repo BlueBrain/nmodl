@@ -4387,8 +4387,9 @@ void CodegenCVisitor::print_nrn_cur_conductance_kernel(const BreakpointBlock& no
 
 
 void CodegenCVisitor::print_nrn_cur_non_conductance_kernel() {
-    printer->add_line(
-        fmt::format("double g = nrn_current_{}({}+0.001);", info.mod_suffix, internal_method_arguments()));
+    printer->add_line(fmt::format("double g = nrn_current_{}({}+0.001);",
+                                  info.mod_suffix,
+                                  internal_method_arguments()));
     for (auto& ion: info.ions) {
         for (auto& var: ion.writes) {
             if (ion.is_ionic_current(var)) {
@@ -4397,7 +4398,9 @@ void CodegenCVisitor::print_nrn_cur_non_conductance_kernel() {
             }
         }
     }
-    printer->add_line(fmt::format("double rhs = nrn_current_{}({});", info.mod_suffix, internal_method_arguments()));
+    printer->add_line(fmt::format("double rhs = nrn_current_{}({});",
+                                  info.mod_suffix,
+                                  internal_method_arguments()));
     printer->add_line("g = (g-rhs)/0.001;");
     for (auto& ion: info.ions) {
         for (auto& var: ion.writes) {
