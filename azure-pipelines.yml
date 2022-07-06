@@ -294,19 +294,19 @@ stages:
         ${{ if eq(variables.buildWheel, True) }}:
           Python37:
             python.version: '3.7'
-            python.org.version: '3.7.7'
+            python.org.version: '3.7.9'
             python.installer.name: 'macosx10.9.pkg'
           Python38:
             python.version: '3.8'
-            python.org.version: '3.8.2'
+            python.org.version: '3.8.10'
             python.installer.name: 'macosx10.9.pkg'
           Python39:
             python.version: '3.9'
-            python.org.version: '3.9.0'
+            python.org.version: '3.9.13'
             python.installer.name: 'macosx10.9.pkg'
           Python310:
             python.version: '3.10'
-            python.org.version: '3.10.1'
+            python.org.version: '3.10.5'
             python.installer.name: 'macos11.pkg'
 
         ${{ if eq(variables.buildWheel, False) }}:
