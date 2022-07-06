@@ -15,6 +15,10 @@ schedules:
     - master
   always: True
 
+# Auto cancel old PR builds
+pr:
+  autoCancel: true
+
 # Trigger build for certain branches only
 trigger:
 - master
