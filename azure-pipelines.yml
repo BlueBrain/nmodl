@@ -207,6 +207,7 @@ stages:
       displayName: 'Build and Run Tests'
     - script: |
         export PATH=$(pwd)/$CMAKE_PKG/bin:/home/vsts/.local/bin:$PATH
+        export PATH=/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH;
         export CC='gcc-8'
         export CXX='g++-8'
         git clone${NEURON_BRANCH:+ --branch }${NEURON_BRANCH} --single-branch https://github.com/neuronsimulator/nrn.git
