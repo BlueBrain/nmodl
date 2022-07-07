@@ -312,7 +312,7 @@ stages:
         ${{ if eq(variables.buildWheel, False) }}:
           Python39:
             python.version: '3.9'
-            python.org.version: '3.9.0'
+            python.org.version: '3.9.13'
             python.installer.name: 'macosx10.9.pkg'
     steps:
     - checkout: self
