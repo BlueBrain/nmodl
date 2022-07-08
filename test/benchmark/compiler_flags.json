@@ -1,24 +1,25 @@
 {
   "intel": {
     "skylake-avx512": [
-      "-O2 -march=skylake-avx512 -mtune=skylake -prec-div -fimf-use-svml",
+      "-O2 -march=skylake-avx512 -mtune=skylake -prec-div -fopenmp",
       "-O2 -march=skylake-avx512 -mtune=skylake -prec-div -fimf-use-svml -fopenmp"
     ],
     "broadwell": [
+      "-O2 -march=broadwell -mtune=broadwell -prec-div",
       "-O2 -march=broadwell -mtune=broadwell -prec-div -fimf-use-svml"
     ],
     "nehalem": [
+      "-O2 -msse2 -prec-div",
       "-O2 -msse2 -prec-div -fimf-use-svml"
     ],
     "default": [
-      "-O2 -prec-div"
+      "-O2 -prec-div",
+      "-O2 -prec-div -fimf-use-svml"
     ]
   },
   "clang": {
     "skylake-avx512": [
-      "-O3 -march=skylake-avx512 -mtune=skylake -ffast-math",
       "-O3 -march=skylake-avx512 -mtune=skylake -ffast-math -fopenmp",
-      "-O3 -march=skylake-avx512 -mtune=skylake -ffast-math -fveclib=SVML",
       "-O3 -march=skylake-avx512 -mtune=skylake -ffast-math -fopenmp -fveclib=SVML"
     ],
     "broadwell": [
@@ -30,14 +31,13 @@
       "-O3 -march=nehalem -mtune=nehalem -ffast-math -fopenmp -fveclib=SVML"
     ],
     "default": [
-      "-O3 -ffast-math"
+      "-O3 -ffast-math",
+      "-O3 -ffast-math -fopenmp -fveclib=SVML"
     ]
   },
   "gcc": {
     "skylake-avx512": [
-      "-O3 -march=skylake-avx512 -mtune=skylake -ffast-math -ftree-vectorize",
       "-O3 -march=skylake-avx512 -mtune=skylake -ffast-math -ftree-vectorize -fopenmp",
-      "-O3 -march=skylake-avx512 -mtune=skylake -ffast-math -ftree-vectorize -mveclibabi=svml",
       "-O3 -march=skylake-avx512 -mtune=skylake -ffast-math -ftree-vectorize -mveclibabi=svml -fopenmp"
     ],
     "broadwell": [
@@ -49,7 +49,8 @@
       "-O3 -march=nehalem -mtune=nehalem -ffast-math -ftree-vectorize -mveclibabi=svml -fopenmp"
     ],
     "default": [
-      "-O3 -ffast-math -ftree-vectorize"
+      "-O3 -ffast-math -ftree-vectorize",
+      "-O3 -ffast-math -ftree-vectorize -mveclibabi=svml -fopenmp"
     ]
   },
   "nvhpc": {
