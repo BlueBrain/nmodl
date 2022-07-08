@@ -142,7 +142,7 @@ stages:
           make VERBOSE=1
           exit 1
         fi
-        ctest --output-on-failure
+        ctest -VV #--output-on-failure
         if [ $? -ne 0 ]
         then
           exit 1
@@ -166,7 +166,7 @@ stages:
           make VERBOSE=1
           exit 1
         fi
-        ctest --output-on-failure
+        ctest -VV #--output-on-failure
         if [ $? -ne 0 ]
         then
           exit 1
@@ -198,7 +198,7 @@ stages:
           make VERBOSE=1
           exit 1
         fi
-        ctest --output-on-failure
+        ctest -VV #--output-on-failure
         if [ $? -ne 0 ]
         then
           exit 1
@@ -228,7 +228,7 @@ stages:
           make VERBOSE=1
           exit 1
         fi
-        ctest --output-on-failure
+        ctest -VV #--output-on-failure
         if [ $? -ne 0 ]
         then
           exit 1
