@@ -19,12 +19,12 @@ set -x
 module purge
 unset MODULEPATH
 export MODULEPATH=/gpfs/bbp.cscs.ch/ssd/apps/bsd/modules/_meta
-module load unstable gcc cuda python-dev
+module load unstable gcc/11.2.0 cuda/11.6.1 python-dev
 
 #intel paths
-intel_library_dir=$(module show intel-oneapi-compilers 2>&1 | grep " LD_LIBRARY_PATH " | grep "intel64_lin" | awk -F' ' '{print $3}' | head -n 1)
+intel_library_dir=$(module show intel-oneapi-compilers/2021.4.0 2>&1 | grep " LD_LIBRARY_PATH " | grep "intel64_lin" | awk -F' ' '{print $3}' | head -n 1)
 svml_lib=$intel_library_dir/libsvml.so
-intel_exe=$(module show intel 2>&1 | grep " PATH " | awk -F' ' '{print $3}' | head -n 1)/icpc
+intel_exe=$(module show intel-oneapi-compilers/2021.4.0 2>&1 | grep " PATH " | awk -F' ' '{print $3}' | head -n 1)/intel64/icc
 
 #sleef library
 sleef_lib=/gpfs/bbp.cscs.ch/apps/hpc/llvm-install/0621/sleef-3.5.1/lib64/libsleefgnuabi.so
@@ -35,10 +35,10 @@ clang_exe=${llvm_path}/clang++
 llc_exe=${llvm_path}/llc
 
 #gcc path
-gcc_exe=$(module show gcc 2>&1 | grep " PATH " | awk -F' ' '{print $3}' | head -n 1)/g++
+gcc_exe=$(module show gcc/11.2.0 2>&1 | grep " PATH " | awk -F' ' '{print $3}' | head -n 1)/g++
 
 #nvhpc path
-nvhpc_exe=$(module show nvhpc 2>&1 | grep " PATH " | awk -F' ' '{print $3}' | head -n 1)/nvc++
+nvhpc_exe=$(module show nvhpc/22.3 2>&1 | grep " PATH " | awk -F' ' '{print $3}' | head -n 1)/nvc++
 
 #libdevice path
 libdevice_lib=${CUDA_HOME}/nvvm/libdevice/libdevice.10.bc
@@ -48,7 +48,7 @@ export LD_LIBRARY_PATH=`dirname $svml_lib`:`dirname $sleef_lib`:${llvm_path}/lib
 
 # nmodl binary
 nmodl_src_dir=$(pwd)/../../
-nmodl_exe=${nmodl_src_dir}/build_benchmark_gpu/bin/nmodl
+nmodl_exe=${nmodl_src_dir}/build_benchmark_gpu_math1/bin/nmodl
 
 # external kernel
 kernels_path=${nmodl_src_dir}/test/benchmark/kernels
