@@ -417,81 +417,6 @@ class Benchmark:
         with open('{}/benchmark_results.pickle'.format(self.benchmark_config.output_directory), 'wb') as handle:
             pickle.dump(self.results, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
-    def plot_results(self, file = None):
-        # import the plotting packages after running NMODL due to issues with numpy+intel mkl
-        from matplotlib import pyplot as plt
-        import seaborn as sns
-        if file is not None:
-            with open(file, 'rb') as handle:
-                self.results = pickle.load(handle)
-        # plot results in bar for each mod file, architecture and flags with matplotlib
-        for modname in self.results:
-            bar_data_state_cpu = {}
-            bar_data_cur_cpu = {}
-            bar_data_state_gpu = {}
-            bar_data_cur_gpu = {}
-            for architecture in self.results[modname]:
-                for compiler in self.results[modname][architecture]:
-                    if compiler == "nmodl_jit" or compiler == "nmodl_jit_cuda":
-                        for math_lib_fast_math_flag in self.results[modname][architecture][compiler]:
-                            dict_label = "{}_{}_{}".format(
-                                    architecture, compiler, math_lib_fast_math_flag
-                                )
-                            if architecture != "nvptx64":
-                                bar_data_state_cpu[dict_label] = self.results[modname][architecture][compiler][math_lib_fast_math_flag]["nrn_state_hh"][0]
-                                bar_data_cur_cpu[dict_label] = self.results[modname][architecture][compiler][math_lib_fast_math_flag]["nrn_cur_hh"][0]
-                            else:
-                                bar_data_state_gpu[dict_label] = self.results[modname][architecture][compiler][math_lib_fast_math_flag]["nrn_state_hh"][0]
-                                bar_data_cur_gpu[dict_label] = self.results[modname][architecture][compiler][math_lib_fast_math_flag]["nrn_cur_hh"][0]
-                    else:
-                        for flags in self.results[modname][architecture][compiler]:
-                            dict_label = "{}_{}_{}".format(architecture, compiler, flags)
-                            if architecture != "nvptx64":
-                                bar_data_state_cpu[dict_label] = self.results[modname][architecture][compiler][flags]["nrn_state_ext"][0]
-                                bar_data_cur_cpu[dict_label] = self.results[modname][architecture][compiler][flags]["nrn_cur_ext"][0]
-                            else:
-                                bar_data_state_gpu[dict_label] = self.results[modname][architecture][compiler][flags]["nrn_state_ext"][0]
-                                bar_data_cur_gpu[dict_label] = self.results[modname][architecture][compiler][flags]["nrn_cur_ext"][0]
-            state_keys_cpu = list(bar_data_state_cpu.keys())
-            state_vals_cpu = [float(bar_data_state_cpu[k]) for k in state_keys_cpu]
-            cur_keys_cpu = list(bar_data_cur_cpu.keys())
-            cur_vals_cpu = [float(bar_data_cur_cpu[k]) for k in cur_keys_cpu]
-            state_keys_gpu = list(bar_data_state_gpu.keys())
-            state_vals_gpu = [float(bar_data_state_gpu[k]) for k in state_keys_gpu]
-            cur_keys_gpu = list(bar_data_cur_gpu.keys())
-            cur_vals_gpu = [float(bar_data_cur_gpu[k]) for k in cur_keys_gpu]
-            # if state_vals is not empty
-            if len(state_vals_cpu) > 0:
-                state_barplot = sns.barplot(x=state_vals_cpu, y=state_keys_cpu, orient="h")
-                state_barplot.tick_params(labelsize=6)
-                plt.savefig("{}/{}_state_benchmark_cpu.pdf".format(self.benchmark_config.output_directory, modname), format="pdf", bbox_inches="tight")
-                plt.close()
-            else:
-                print("No results for state kernel of {} for CPU".format(modname))
-            if len(cur_vals_cpu) > 0:
-                cur_barplot = sns.barplot(x=cur_vals_cpu, y=cur_keys_cpu, orient="h")
-                cur_barplot.tick_params(labelsize=6)
-                plt.savefig("{}/{}_cur_benchmark_cpu.pdf".format(self.benchmark_config.output_directory, modname), format="pdf", bbox_inches="tight")
-                plt.close()
-            else:
-                print("No results for current kernel of {} for CPU".format(modname))
-            # if state_vals is not empty
-            if len(state_vals_gpu) > 0:
-                state_barplot = sns.barplot(x=state_vals_gpu, y=state_keys_gpu, orient="h")
-                state_barplot.tick_params(labelsize=6)
-                plt.savefig("{}/{}_state_benchmark_gpu.pdf".format(self.benchmark_config.output_directory, modname), format="pdf", bbox_inches="tight")
-                plt.close()
-            else:
-                print("No results for state kernel of {} for GPU".format(modname))
-            if len(cur_vals_gpu) > 0:
-                cur_barplot = sns.barplot(x=cur_vals_gpu, y=cur_keys_gpu, orient="h")
-                cur_barplot.tick_params(labelsize=6)
-                plt.savefig("{}/{}_cur_benchmark_gpu.pdf".format(self.benchmark_config.output_directory, modname), format="pdf", bbox_inches="tight")
-                plt.close()
-            else:
-                print("No results for current kernel of {} for GPU".format(modname))
-
-
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Benchmark script for NMODL LLVM.")
     # Arguments to initialize BenchmarkConfig
@@ -566,9 +491,6 @@ def parse_arguments():
     parser.add_argument(
         "--nmodl_exe", type=str, help="NMODL executable to use", required=True
     )
-    parser.add_argument(
-        "--plot", type=str, help="Pickle file to use for plotting without rerunning the benchmark", required=False
-    )
 
     args, _ = parser.parse_known_args()
     return args
@@ -598,9 +520,7 @@ def main():
         args.nmodl_exe
     )
     benchmark = Benchmark(compilers_config, benchmark_config)
-    if args.plot is None:
-        benchmark.run_benchmark()
-    benchmark.plot_results(args.plot)
+    benchmark.run_benchmark()
     return
 
 if __name__ == "__main__":
