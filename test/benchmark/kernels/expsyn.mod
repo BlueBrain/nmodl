@@ -21,22 +21,22 @@ ASSIGNED {
 }
 
 STATE {
-	g (uS)
+	g_state (uS)
 }
 
 INITIAL {
-	g=0
+	g_state=0
 }
 
 BREAKPOINT {
 	SOLVE state METHOD cnexp
-	i = g*(v - e)
+	i = g_state*(v - e)
 }
 
 DERIVATIVE state {
-	g' = -g/tau
+	g_state' = -g_state/tau
 }
 
 NET_RECEIVE(weight (uS)) {
-	g = g + weight
+	g_state = g_state + weight
 }
