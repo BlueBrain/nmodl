@@ -7,6 +7,7 @@
 
 #include "codegen/llvm/llvm_utils.hpp"
 #include "codegen/llvm/replace_with_lib_functions.hpp"
+#include "codegen/llvm/annotation.hpp"
 
 #include "llvm/Analysis/TargetTransformInfo.h"
 #include "llvm/IR/AssemblyAnnotationWriter.h"
@@ -180,6 +181,21 @@ void replace_with_lib_functions(codegen::Platform& platform, llvm::Module& modul
     llvm::legacy::PassManager pm;
     pm.add(new llvm::ReplaceMathFunctions(platform));
     pm.run(module);
+}
+
+void annotate(codegen::Platform& platform, llvm::Module& module) {
+    llvm::legacy::PassManager pm;
+
+    Annotator *annotator = nullptr;
+    if (platform.is_CUDA_gpu()) {
+        annotator = new custom::CUDAAnnotator();
+    } else {
+        annotator = new custom::CPUAnnotator();
+    }
+    pm.add(new llvm::AnnotationPass(annotator));
+    pm.run(module);
+
+    delete annotator;
 }
 
 /****************************************************************************************/
