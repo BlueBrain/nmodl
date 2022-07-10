@@ -156,6 +156,9 @@
                                   brief: "Body of the function"
                                   type: StatementBlock
                                   getter: {override: true}
+                              - is_kernel:
+                                  brief: "If function is compute kernel"
+                                  type: int
                         - InstanceStruct:
                             nmodl: "INSTANCE_STRUCT "
                             members:
