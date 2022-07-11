@@ -71,5 +71,7 @@ class AnnotationPass: public ModulePass {
         , annotator(annotator) {}
 
     bool runOnModule(Module& module) override;
+
+    void getAnalysisUsage(AnalysisUsage& au) const override;
 };
 }  // namespace llvm
