@@ -23,7 +23,7 @@ class Annotator {
     virtual ~Annotator() = default;
 
     /// Marks LLVM function as NMODL compute kernel. 
-    static void add_nmodl_compute_kernel_annotation(llvm::Function* function);
+    static void add_nmodl_compute_kernel_annotation(llvm::Function& function);
 
     /// Returns true if LLVM function is marked as NMODL compute kernel. 
     static bool has_nmodl_compute_kernel_annotation(llvm::Function& function);
@@ -49,7 +49,6 @@ class CUDAAnnotator: public Annotator {
 };
 }  // namespace custom
 }  // namespace nmodl
-
 
 using nmodl::custom::Annotator;
 namespace llvm {

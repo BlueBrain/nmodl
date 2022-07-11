@@ -114,10 +114,10 @@ void CodegenLLVMVisitor::create_function_declaration(const ast::CodegenFunction&
 
     TypeVector arg_types;
     if (wrap_kernel_functions && node.get_is_kernel()) {
-        // We are wrapping NMODL compute kernels as a function taling void*. Thus,
-        // ignore struct pointer argument type and create function signature with
+        // We are wrapping NMODL compute kernels as a function taking void*. Thus,
+        // ignore struct pointer argument type and create a function signature with
         // void* - actual conversion to struct pointer is done when generating
-        // function body!
+        // the function body!
         arg_types.push_back(ir_builder.get_i8_ptr_type());
     } else {
         // Otherwise, process argument types as usual.
@@ -670,7 +670,7 @@ void CodegenLLVMVisitor::visit_codegen_function(const ast::CodegenFunction& node
     // Allocate parameters on the stack and add them to the symbol table.
     if (wrap_kernel_functions && node.get_is_kernel()) {
         // If we wrap NMODL compute kernel, the parameter will be void*! Hence,
-        // get the actual struct pointer type and allocate parameters on the
+        // we get the actual struct pointer type and allocate parameters on the
         // stack with additional bitcast.
         llvm::Type* struct_ty = get_codegen_var_type(*arguments[0]->get_type());
         ir_builder.allocate_and_wrap_kernel_arguments(func, arguments, struct_ty);
@@ -699,7 +699,7 @@ void CodegenLLVMVisitor::visit_codegen_function(const ast::CodegenFunction& node
     // If function is a compute kernel, add a void terminator explicitly, since there is no
     // `CodegenReturnVar` node. Also, set the necessary attributes.
     if (node.get_is_kernel()) {
-        custom::Annotator::add_nmodl_compute_kernel_annotation(func);
+        custom::Annotator::add_nmodl_compute_kernel_annotation(*func);
         ir_builder.create_return();
     }
 

@@ -23,10 +23,10 @@ static constexpr const char nmodl_compute_kernel[] = "nmodl.compute-kernel";
 namespace nmodl {
 namespace custom {
 
-void Annotator::add_nmodl_compute_kernel_annotation(llvm::Function* function) {
-    llvm::LLVMContext& context = function->getContext();
+void Annotator::add_nmodl_compute_kernel_annotation(llvm::Function& function) {
+    llvm::LLVMContext& context = function.getContext();
     llvm::MDNode* node = llvm::MDNode::get(context, llvm::MDString::get(context, nmodl_compute_kernel));
-    function->setMetadata(nmodl_annotations, node);
+    function.setMetadata(nmodl_annotations, node);
 }
 
 bool Annotator::has_nmodl_compute_kernel_annotation(llvm::Function& function) {
