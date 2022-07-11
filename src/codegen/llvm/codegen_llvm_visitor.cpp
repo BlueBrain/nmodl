@@ -7,6 +7,7 @@
 
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
 #include "codegen/llvm/llvm_utils.hpp"
+#include "codegen/llvm/annotation.hpp"
 
 #include "ast/all.hpp"
 #include "utils/logger.hpp"
@@ -24,10 +25,6 @@ namespace codegen {
 /****************************************************************************************/
 /*                                  Helper routines                                     */
 /****************************************************************************************/
-
-static std::string get_wrapper_name(const std::string& kernel_name) {
-    return "__" + kernel_name + "_wrapper";
-}
 
 /// A utility to check for supported Statement AST nodes.
 static bool is_supported_statement(const ast::Statement& statement) {
@@ -57,36 +54,6 @@ static bool can_vectorize(const ast::CodegenForStatement& statement, symtab::Sym
     const auto& unsupported = collect_nodes(statement, unsupported_nodes);
 
     return unsupported.empty() && supported.size() <= 1;
-}
-
-void CodegenLLVMVisitor::annotate_kernel_with_nvvm(llvm::Function* kernel,
-                                                   const std::string& annotation = "kernel") {
-    llvm::Metadata* metadata[] = {llvm::ValueAsMetadata::get(kernel),
-                                  llvm::MDString::get(*context, annotation),
-                                  llvm::ValueAsMetadata::get(
-                                      llvm::ConstantInt::get(llvm::Type::getInt32Ty(*context), 1))};
-    llvm::MDNode* node = llvm::MDNode::get(*context, metadata);
-    module->getOrInsertNamedMetadata("nvvm.annotations")->addOperand(node);
-}
-
-void CodegenLLVMVisitor::annotate_wrapper_kernels_with_nvvm() {
-    // First clear all the nvvm annotations from the module
-    auto module_named_metadata = module->getNamedMetadata("nvvm.annotations");
-    module->eraseNamedMetadata(module_named_metadata);
-
-    // Then each kernel should be annotated as "device" function and wrappers should be annotated as
-    // "kernel" functions
-    std::vector<std::string> kernel_names;
-    find_kernel_names(kernel_names);
-
-    for (const auto& kernel_name: kernel_names) {
-        // Get the kernel function.
-        auto kernel = module->getFunction(kernel_name);
-        // Get the kernel wrapper function.
-        auto kernel_wrapper = module->getFunction(get_wrapper_name(kernel_name));
-        annotate_kernel_with_nvvm(kernel, "device");
-        annotate_kernel_with_nvvm(kernel_wrapper, "kernel");
-    }
 }
 
 llvm::Value* CodegenLLVMVisitor::accept_and_get(const std::shared_ptr<ast::Node>& node) {
@@ -145,11 +112,18 @@ void CodegenLLVMVisitor::create_function_declaration(const ast::CodegenFunction&
     const auto& name = node.get_node_name();
     const auto& arguments = node.get_arguments();
 
-    // Procedure or function parameters are doubles by default.
     TypeVector arg_types;
-    for (size_t i = 0; i < arguments.size(); ++i)
-        arg_types.push_back(get_codegen_var_type(*arguments[i]->get_type()));
-
+    if (wrap_kernel_functions && node.get_is_kernel()) {
+        // We are wrapping NMODL compute kernels as a function taling void*. Thus,
+        // ignore struct pointer argument type and create function signature with
+        // void* - actual conversion to struct pointer is done when generating
+        // function body!
+        arg_types.push_back(ir_builder.get_i8_ptr_type());
+    } else {
+        // Otherwise, process argument types as usual.
+        for (size_t i = 0; i < arguments.size(); ++i)
+            arg_types.push_back(get_codegen_var_type(*arguments[i]->get_type()));
+    }
     llvm::Type* return_type = get_codegen_var_type(*node.get_return_type());
 
     // Create a function that is automatically inserted into module's symbol table.
@@ -215,7 +189,7 @@ void CodegenLLVMVisitor::find_kernel_names(std::vector<std::string>& container) 
     auto& functions = module->getFunctionList();
     for (auto& func: functions) {
         const std::string name = func.getName().str();
-        if (is_kernel_function(name)) {
+        if (Annotator::has_nmodl_compute_kernel_annotation(func)) {
             container.push_back(name);
         }
     }
@@ -418,65 +392,6 @@ void CodegenLLVMVisitor::write_to_variable(const ast::VarName& node, llvm::Value
         read_from_or_write_to_instance(*instance_var, value);
     }
 }
-
-void CodegenLLVMVisitor::wrap_kernel_functions() {
-    // First, identify all kernels.
-    std::vector<std::string> kernel_names;
-    find_kernel_names(kernel_names);
-
-    for (const auto& kernel_name: kernel_names) {
-        // Get the kernel function.
-        auto kernel = module->getFunction(kernel_name);
-
-        // Create a wrapper void function that takes a void pointer as a single argument.
-        llvm::Type* return_type;
-        if (platform.is_gpu()) {
-            return_type = ir_builder.get_void_type();
-        } else {
-            return_type = ir_builder.get_i32_type();
-        }
-        llvm::Type* void_ptr_type = ir_builder.get_i8_ptr_type();
-        llvm::Function* wrapper_func = llvm::Function::Create(
-            llvm::FunctionType::get(return_type, {void_ptr_type}, /*isVarArg=*/false),
-            llvm::Function::ExternalLinkage,
-            get_wrapper_name(kernel_name),
-            *module);
-
-        // Optionally, add debug information for the wrapper function.
-        if (add_debug_information) {
-            debug_builder.add_function_debug_info(wrapper_func);
-        }
-
-        ir_builder.create_block_and_set_insertion_point(wrapper_func);
-
-        // Proceed with bitcasting the void pointer to the struct pointer type, calling the kernel
-        // and adding a terminator.
-        llvm::Value* bitcasted = ir_builder.create_bitcast(wrapper_func->getArg(0),
-                                                           kernel->getArg(0)->getType());
-        ValueVector args;
-        args.push_back(bitcasted);
-        ir_builder.create_function_call(kernel, args, /*use_result=*/false);
-
-        // create return instructions and annotate wrapper with certain attributes depending on
-        // the backend type
-        if (platform.is_gpu()) {
-            // return void
-            ir_builder.create_return();
-        } else {
-            // Create a 0 return value and a return instruction.
-            ir_builder.create_i32_constant(0);
-            ir_builder.create_return(ir_builder.pop_last_value());
-            ir_builder.set_function(wrapper_func);
-            ir_builder.set_kernel_attributes();
-        }
-        ir_builder.clear_function();
-    }
-    // for GPU we need to first clear all the annotations and then reapply them
-    if (platform.is_gpu()) {
-        annotate_wrapper_kernels_with_nvvm();
-    }
-}
-
 
 /****************************************************************************************/
 /*                            Overloaded visitor routines                               */
@@ -753,19 +668,27 @@ void CodegenLLVMVisitor::visit_codegen_function(const ast::CodegenFunction& node
     block->accept(v);
 
     // Allocate parameters on the stack and add them to the symbol table.
-    ir_builder.allocate_function_arguments(func, arguments);
+    if (wrap_kernel_functions && node.get_is_kernel()) {
+        // If we wrap NMODL compute kernel, the parameter will be void*! Hence,
+        // get the actual struct pointer type and allocate parameters on the
+        // stack with additional bitcast.
+        llvm::Type* struct_ty = get_codegen_var_type(*arguments[0]->get_type());
+        ir_builder.allocate_and_wrap_kernel_arguments(func, arguments, struct_ty);
+    } else {
+        // Otherwise, nothing specific needed.
+        ir_builder.allocate_function_arguments(func, arguments);
+    }
 
     // Process function or procedure body. If the function is a compute kernel, enable
-    // vectorization or add NVVM annotations. If this is the case, the return statement is
-    // handled in a separate visitor.
-    if (is_kernel_function(name)) {
+    // vectorization. If this is the case, the return statement is handled in a
+    // separate visitor.
+    if (node.get_is_kernel()) {
         if (platform.is_cpu_with_simd()) {
             ir_builder.generate_vector_ir();
             block->accept(*this);
             ir_builder.generate_scalar_ir();
         } else if (platform.is_gpu()) {
             block->accept(*this);
-            annotate_kernel_with_nvvm(func);
         } else {  // scalar
             block->accept(*this);
         }
@@ -775,8 +698,8 @@ void CodegenLLVMVisitor::visit_codegen_function(const ast::CodegenFunction& node
 
     // If function is a compute kernel, add a void terminator explicitly, since there is no
     // `CodegenReturnVar` node. Also, set the necessary attributes.
-    if (is_kernel_function(name)) {
-        ir_builder.set_kernel_attributes();
+    if (node.get_is_kernel()) {
+        custom::Annotator::add_nmodl_compute_kernel_annotation(func);
         ir_builder.create_return();
     }
 
@@ -978,8 +901,12 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
         utils::optimise_module(*module, opt_level_ir);
     }
 
-    // Optionally, replace LLVM math intrinsics with library calls.
+    // Pass 1: replace LLVM math intrinsics with library calls.
+    // TODO: this needs to be done in the same way as Annotator!
     utils::replace_with_lib_functions(platform, *module);
+
+    // Pass 2: annotate NMODL compute kernels.
+    utils::annotate(platform, *module);
 
     // Handle GPU optimizations (CUDA platfroms only for now).
     if (platform.is_gpu()) {

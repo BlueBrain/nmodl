@@ -158,6 +158,22 @@ void IRBuilder::allocate_function_arguments(llvm::Function* function,
     }
 }
 
+void IRBuilder::allocate_and_wrap_kernel_arguments(llvm::Function* function,
+                                                   const ast::CodegenVarWithTypeVector& nmodl_arguments,
+                                                   llvm::Type* struct_type) {
+    // In theory, this should never happen but let's guard anyway.
+    if (nmodl_arguments.size() != 1) {
+        throw std::runtime_error("Error: NMODL computer kernel must have a single argument\n");
+    }
+
+    // Bitcast void* pointer provided as compute kernel argument to mechanism data type.
+    llvm::Value* data_ptr = create_bitcast(function->getArg(0), struct_type);
+
+    std::string arg_name = nmodl_arguments[0].get()->get_node_name();
+    llvm::Value* alloca = create_alloca(arg_name, struct_type);
+    builder.CreateStore(data_ptr, alloca);
+}
+
 std::string IRBuilder::get_current_function_name() {
     return current_function->getName().str();
 }
@@ -203,29 +219,12 @@ void IRBuilder::create_intrinsic(const std::string& name,
     }
 }
 
-void IRBuilder::set_kernel_attributes() {
-    // By convention, the compute kernel does not free memory and does not throw exceptions.
-    current_function->setDoesNotFreeMemory();
-    current_function->setDoesNotThrow();
-
-    // We also want to specify that the pointers that instance struct holds do not alias, unless
-    // specified otherwise. In order to do that, we add a `noalias` attribute to the argument. As
-    // per Clang's specification:
-    //  > The `noalias` attribute indicates that the only memory accesses inside function are loads
-    //  > and stores from objects pointed to by its pointer-typed arguments, with arbitrary
-    //  > offsets.
-    current_function->addParamAttr(0, llvm::Attribute::NoAlias);
-
-    // Finally, specify that the struct pointer does not capture and is read-only.
-    current_function->addParamAttr(0, llvm::Attribute::NoCapture);
-    current_function->addParamAttr(0, llvm::Attribute::ReadOnly);
-}
-
 /****************************************************************************************/
 /*                                LLVM metadata utilities                               */
 /****************************************************************************************/
 
 void IRBuilder::set_loop_metadata(llvm::BranchInst* branch) {
+    /// TODO: do we really need this?
     llvm::LLVMContext& context = builder.getContext();
     MetadataVector loop_metadata;
 

@@ -83,13 +83,18 @@ class CodegenLLVMVisitor: public CodegenCVisitor {
     /// Target platform for the code generation.
     Platform platform;
 
+    /// Wrap calls to NMODL compute kernels by taking void* and casting to
+    /// appropriate struct type pointer. Used when executing kernels with JIT.
+    bool wrap_kernel_functions;
+
   public:
     CodegenLLVMVisitor(const std::string& mod_filename,
                        const std::string& output_dir,
                        Platform& platform,
                        int opt_level_ir,
                        bool add_debug_information = false,
-                       std::vector<std::string> fast_math_flags = {})
+                       std::vector<std::string> fast_math_flags = {},
+                       bool wrap_kernel_functions = false)
         : CodegenCVisitor(mod_filename,
                           output_dir,
                           platform.is_single_precision() ? "float" : "double",
@@ -102,7 +107,8 @@ class CodegenLLVMVisitor: public CodegenCVisitor {
         , opt_level_ir(opt_level_ir)
         , add_debug_information(add_debug_information)
         , ir_builder(*context, platform, fast_math_flags)
-        , debug_builder(*module) {
+        , debug_builder(*module)
+        , wrap_kernel_functions(wrap_kernel_functions) {
         instance_struct_type_suffix = "_instance_var__type";
         print_procedures_and_functions = false;
     }
@@ -112,7 +118,8 @@ class CodegenLLVMVisitor: public CodegenCVisitor {
                        Platform& platform,
                        int opt_level_ir,
                        bool add_debug_information = false,
-                       std::vector<std::string> fast_math_flags = {})
+                       std::vector<std::string> fast_math_flags = {},
+                       bool wrap_kernel_functions = false)
         : CodegenCVisitor(mod_filename,
                           stream,
                           platform.is_single_precision() ? "float" : "double",
@@ -125,7 +132,8 @@ class CodegenLLVMVisitor: public CodegenCVisitor {
         , opt_level_ir(opt_level_ir)
         , add_debug_information(add_debug_information)
         , ir_builder(*context, platform, fast_math_flags)
-        , debug_builder(*module) {
+        , debug_builder(*module)
+        , wrap_kernel_functions(wrap_kernel_functions) {
         instance_struct_type_suffix = "_instance_var__type";
         print_procedures_and_functions = false;
     }
@@ -289,9 +297,6 @@ class CodegenLLVMVisitor: public CodegenCVisitor {
      * The first argument should be an object of \c mechanism_instance_struct_type_name
      */
     CodegenLLVMVisitor::ParamVector get_compute_function_parameter();
-    /// Wraps all kernel function calls into wrapper functions that use `void*` to pass the data to
-    /// the kernel.
-    void wrap_kernel_functions();
 
     /// print compute functions relevant for this backend
     void print_compute_functions() override;
