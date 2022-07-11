@@ -83,6 +83,8 @@ class ReplacePass: public ModulePass {
 
     bool runOnModule(Module& module) override;
 
+    void getAnalysisUsage(AnalysisUsage& au) const override;
+
   private:
     /// Populates `tli` with vectorizable function definitions (hook for default replacements).
     void add_vectorizable_functions_from_vec_lib(TargetLibraryInfoImpl& tli, Triple& triple);

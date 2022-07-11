@@ -101,6 +101,16 @@ bool ReplacePass::runOnModule(Module& module) {
     return modified;
 }
 
+void ReplacePass::getAnalysisUsage(AnalysisUsage& au) const {
+    au.setPreservesCFG();
+    au.addPreserved<ScalarEvolutionWrapperPass>();
+    au.addPreserved<AAResultsWrapperPass>();
+    au.addPreserved<LoopAccessLegacyAnalysis>();
+    au.addPreserved<DemandedBitsWrapperPass>();
+    au.addPreserved<OptimizationRemarkEmitterWrapperPass>();
+    au.addPreserved<GlobalsAAWrapperPass>();
+}
+
 void ReplacePass::add_vectorizable_functions_from_vec_lib(TargetLibraryInfoImpl& tli,
                                                           Triple& triple) {
     // Since LLVM does not support SLEEF as a vector library yet, process it separately.
