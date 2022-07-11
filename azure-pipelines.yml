@@ -5,7 +5,7 @@ variables:
   # defined in UI
   #- ReleaseWheelBuild: False
   #- UploadWheel: False
-  buildWheel: True #TODO: revertthis ${{ or(in(variables['Build.Reason'], 'Schedule'), in(variables['Build.Reason'], 'Manual')) }}
+  buildWheel: ${{ or(in(variables['Build.Reason'], 'Schedule'), in(variables['Build.Reason'], 'Manual')) }}
 
 # Nightly build master for pypi upload
 schedules:
@@ -269,7 +269,7 @@ stages:
           -w /root/nmodl \
           -v $PWD:/root/nmodl \
           -e NMODL_NIGHTLY_TAG=$TAG \
-          'bluebrain/nmodl:wheel-test' \
+          'bluebrain/nmodl:wheel' \
           packaging/build_wheels.bash linux $(python.version)
       condition: succeeded()
       displayName: 'Building ManyLinux Wheel'
