@@ -18,17 +18,45 @@
 #include "llvm/IR/IntrinsicsNVPTX.h"
 #include "llvm/IR/LegacyPassManager.h"
 
+namespace nmodl {
+namespace custom {
+
+Patterns DefaultCPUReplacer::patterns() const {
+    throw std::runtime_error("Error: DefaultCPUReplacer has no patterns and uses built-in LLVM passes instead.\n");
+}
+
+std::string DefaultCPUReplacer::get_library_name() {
+    return this->library_name;
+}
+
+Patterns CUDAReplacer::patterns() const {
+    return {
+        {"llvm.exp.f32", "__nv_expf"},
+        {"llvm.exp.f64", "__nv_exp"},
+        {"llvm.pow.f32", "__nv_powf"},
+        {"llvm.pow.f64", "__nv_pow"},
+        {"llvm.log.f32", "__nv_logf"},
+        {"llvm.log.f64", "__nv_log"},
+        {"llvm.fabs.f32", "__nv_fabsf"},
+        {"llvm.fabs.f64", "__nv_fabs"}
+    };
+}
+}  // namespace custom
+}  // namespace nmodl
+
+using nmodl::custom::DefaultCPUReplacer;
 namespace llvm {
 
-char ReplaceMathFunctions::ID = 0;
+char ReplacePass::ID = 0;
 
-bool ReplaceMathFunctions::runOnModule(Module& module) {
-    legacy::FunctionPassManager fpm(&module);
+bool ReplacePass::runOnModule(Module& module) {
     bool modified = false;
 
     // If the platform supports SIMD, replace math intrinsics with library
     // functions.
-    if (platform->is_cpu_with_simd()) {
+    if (dynamic_cast<const DefaultCPUReplacer*>(replacer)) {
+        legacy::FunctionPassManager fpm(&module);
+
         // First, get the target library information and add vectorizable functions for the
         // specified vector library.
         Triple triple(sys::getDefaultTargetTriple());
@@ -38,28 +66,45 @@ bool ReplaceMathFunctions::runOnModule(Module& module) {
         // Add passes that replace math intrinsics with calls.
         fpm.add(new TargetLibraryInfoWrapperPass(tli));
         fpm.add(new ReplaceWithVeclibLegacy);
-    }
 
-    // For CUDA GPUs, replace with calls to libdevice.
-    if (platform->is_CUDA_gpu()) {
-        fpm.add(new ReplaceWithLibdevice);
-    }
+        // Run passes.
+        fpm.doInitialization();
+        for (auto& function: module.getFunctionList()) {
+            if (!function.isDeclaration())
+                modified |= fpm.run(function);
+        }
+        fpm.doFinalization();
+    } else {
+        // Otherwise, the replacer is not default and we need to apply patterns
+        // from it to each function!
+        for (auto& function: module.getFunctionList()) {
+            if (!function.isDeclaration()) {
+                // Try to replace a call instruction.
+                std::vector<CallInst*> replaced_calls;
+                for (auto& instruction: instructions(function)) {
+                    if (auto* call_inst = dyn_cast<CallInst>(&instruction)) {
+                        if (replace_call(*call_inst)) {
+                            replaced_calls.push_back(call_inst);
+                            modified = true;
+                        }
+                    }
+                }
 
-    // Run passes.
-    fpm.doInitialization();
-    for (auto& function: module.getFunctionList()) {
-        if (!function.isDeclaration())
-            modified |= fpm.run(function);
+                // Remove calls to replaced functions.
+                for (auto* call_inst: replaced_calls) {
+                    call_inst->eraseFromParent();
+                }
+            }
+        }
     }
-    fpm.doFinalization();
 
     return modified;
 }
 
-void ReplaceMathFunctions::add_vectorizable_functions_from_vec_lib(TargetLibraryInfoImpl& tli,
-                                                                   Triple& triple) {
+void ReplacePass::add_vectorizable_functions_from_vec_lib(TargetLibraryInfoImpl& tli,
+                                                          Triple& triple) {
     // Since LLVM does not support SLEEF as a vector library yet, process it separately.
-    if (platform->get_math_library() == "SLEEF") {
+    if (((DefaultCPUReplacer*)replacer)->get_library_name() == "SLEEF") {
 // clang-format off
 #define FIXED(w) ElementCount::getFixed(w)
 // clang-format on
@@ -110,10 +155,10 @@ void ReplaceMathFunctions::add_vectorizable_functions_from_vec_lib(TargetLibrary
             {"none", VecLib::NoLibrary},
             {"SVML", VecLib::SVML}};
 
-        const auto& library = llvm_supported_vector_libraries.find(platform->get_math_library());
+        const auto& library = llvm_supported_vector_libraries.find(((DefaultCPUReplacer*)replacer)->get_library_name());
         if (library == llvm_supported_vector_libraries.end())
             throw std::runtime_error("Error: unknown vector library - " +
-                                     platform->get_math_library() + "\n");
+                                     ((DefaultCPUReplacer*)replacer)->get_library_name() + "\n");
 
         // Add vectorizable functions to the target library info.
         if (library->second != VecLib::LIBMVEC_X86 || (triple.isX86() && triple.isArch64Bit())) {
@@ -122,77 +167,27 @@ void ReplaceMathFunctions::add_vectorizable_functions_from_vec_lib(TargetLibrary
     }
 }
 
-void ReplaceWithLibdevice::getAnalysisUsage(AnalysisUsage& au) const {
-    au.setPreservesCFG();
-    au.addPreserved<ScalarEvolutionWrapperPass>();
-    au.addPreserved<AAResultsWrapperPass>();
-    au.addPreserved<LoopAccessLegacyAnalysis>();
-    au.addPreserved<DemandedBitsWrapperPass>();
-    au.addPreserved<OptimizationRemarkEmitterWrapperPass>();
-    au.addPreserved<GlobalsAAWrapperPass>();
-}
-
-bool ReplaceWithLibdevice::runOnFunction(Function& function) {
-    bool modified = false;
-
-    // Try to replace math intrinsics.
-    std::vector<CallInst*> replaced_calls;
-    for (auto& instruction: instructions(function)) {
-        if (auto* call_inst = dyn_cast<CallInst>(&instruction)) {
-            if (replace_call(*call_inst)) {
-                replaced_calls.push_back(call_inst);
-                modified = true;
-            }
-        }
-    }
-
-    // Remove calls to replaced intrinsics.
-    for (auto* call_inst: replaced_calls) {
-        call_inst->eraseFromParent();
-    }
-
-    return modified;
-}
-
-bool ReplaceWithLibdevice::replace_call(CallInst& call_inst) {
+bool ReplacePass::replace_call(CallInst& call_inst) {
     Module* m = call_inst.getModule();
     Function* function = call_inst.getCalledFunction();
 
-    // Replace math intrinsics only!
-    auto id = function->getIntrinsicID();
-    bool is_nvvm_intrinsic = id == Intrinsic::nvvm_read_ptx_sreg_ntid_x ||
-                             id == Intrinsic::nvvm_read_ptx_sreg_nctaid_x ||
-                             id == Intrinsic::nvvm_read_ptx_sreg_ctaid_x ||
-                             id == Intrinsic::nvvm_read_ptx_sreg_tid_x;
-    if (id == Intrinsic::not_intrinsic || is_nvvm_intrinsic)
+    // Get supported replacement patterns.
+    Patterns patterns = replacer->patterns();
+
+    // Check if replacement is not supported.
+    std::string old_name = function->getName().str();
+    auto it = patterns.find(old_name);
+    if (it == patterns.end())
         return false;
 
-    // Map of supported replacements. For now it is only exp and pow.
-    static const std::map<std::string, std::string> libdevice_name = {{"llvm.exp.f32", "__nv_expf"},
-                                                                      {"llvm.exp.f64", "__nv_exp"},
-                                                                      {"llvm.pow.f32", "__nv_powf"},
-                                                                      {"llvm.pow.f64", "__nv_pow"},
-                                                                      {"llvm.log.f32", "__nv_logf"},
-                                                                      {"llvm.log.f64", "__nv_log"},
-                                                                      {"llvm.fabs.f32",
-                                                                       "__nv_fabsf"},
-                                                                      {"llvm.fabs.f64",
-                                                                       "__nv_fabs"}};
-
-    // If replacement is not supported, abort.
-    std::string old_name = function->getName().str();
-    auto it = libdevice_name.find(old_name);
-    if (it == libdevice_name.end())
-        throw std::runtime_error("Error: replacements for " + old_name + " are not supported!\n");
-
-    // Get (or create) libdevice function.
-    Function* libdevice_func = m->getFunction(it->second);
-    if (!libdevice_func) {
-        libdevice_func = Function::Create(function->getFunctionType(),
-                                          Function::ExternalLinkage,
-                                          it->second,
-                                          *m);
-        libdevice_func->copyAttributesFrom(function);
+    // Get (or create) new function.
+    Function* new_func = m->getFunction(it->second);
+    if (!new_func) {
+        new_func = Function::Create(function->getFunctionType(),
+                                    Function::ExternalLinkage,
+                                    it->second,
+                                    *m);
+        new_func->copyAttributesFrom(function);
     }
 
     // Create a call to libdevice function with the same operands.
@@ -200,7 +195,7 @@ bool ReplaceWithLibdevice::replace_call(CallInst& call_inst) {
     std::vector<Value*> args(call_inst.arg_operands().begin(), call_inst.arg_operands().end());
     SmallVector<OperandBundleDef, 1> op_bundles;
     call_inst.getOperandBundlesAsDefs(op_bundles);
-    CallInst* new_call = builder.CreateCall(libdevice_func, args, op_bundles);
+    CallInst* new_call = builder.CreateCall(new_func, args, op_bundles);
 
     // Replace all uses of old instruction with the new one. Also, copy
     // fast math flags if necessary.
@@ -211,11 +206,4 @@ bool ReplaceWithLibdevice::replace_call(CallInst& call_inst) {
 
     return true;
 }
-
-char ReplaceWithLibdevice::ID = 0;
-static RegisterPass<ReplaceWithLibdevice> X("libdevice-replacement",
-                                            "Pass replacing math functions with calls to libdevice",
-                                            false,
-                                            false);
-
 }  // namespace llvm
