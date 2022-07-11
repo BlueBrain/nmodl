@@ -38,7 +38,7 @@ bool Annotator::has_nmodl_compute_kernel_annotation(llvm::Function& function) {
     return type == nmodl_compute_kernel;
 }
 
-void CPUAnnotator::annotate(llvm::Function& function) const {
+void DefaultCPUAnnotator::annotate(llvm::Function& function) const {
     // By convention, the compute kernel does not free memory and does not
     // throw exceptions.
     function.setDoesNotFreeMemory();

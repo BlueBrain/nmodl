@@ -30,10 +30,11 @@ class Annotator {
 };
 
 /**
- * \class CPUAnnotator
- * \brief Specifies how LLVM IR functions for CPU platforms are annotated. 
+ * \class DefaultAnnotator
+ * \brief Specifies how LLVM IR functions for CPU platforms are annotated. Used
+ * by default.
  */
-class CPUAnnotator: public Annotator {
+class DefaultCPUAnnotator: public Annotator {
   public:
     void annotate(llvm::Function& function) const override;
 };

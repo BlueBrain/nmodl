@@ -190,7 +190,7 @@ void annotate(codegen::Platform& platform, llvm::Module& module) {
     if (platform.is_CUDA_gpu()) {
         annotator = new custom::CUDAAnnotator();
     } else {
-        annotator = new custom::CPUAnnotator();
+        annotator = new custom::DefaultCPUAnnotator();
     }
     pm.add(new llvm::AnnotationPass(annotator));
     pm.run(module);
