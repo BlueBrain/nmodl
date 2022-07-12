@@ -161,10 +161,11 @@ class Benchmark:
         cpp_basename = os.path.splitext(os.path.basename(cpp_file))[0]
         external_lib_dir = self._make_external_lib_basepath(cpp_file, compiler, architecture, flags)
         # expsyn mod file openacc execution is diferent than the rest of the mod files
-        if cpp_basename == "expsyn" and compiler == "nvhpc":
-            cpp_basename = "expsyn_openacc"
+        if compiler == "nvhpc":
+            cpp_basename_org = cpp_basename
+            cpp_basename = cpp_basename + "_openacc"
             cpp_file_org = cpp_file
-            cpp_file = cpp_file.replace('expsyn', 'expsyn_openacc')
+            cpp_file = cpp_file.replace(cpp_basename_org, cpp_basename)
             print("Changing {} file to {}".format(cpp_file_org, cpp_file))
         # Replace current cpp_file pragma with correct one and write it in new file
         sed_replaced_cpp_file = external_lib_dir / (Path(cpp_basename + "_ext.cpp"))
