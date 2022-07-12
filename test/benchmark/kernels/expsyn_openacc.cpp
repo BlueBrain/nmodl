@@ -32,7 +32,7 @@ void nrn_cur_ext(void* __restrict__ mech) {
     int node_id, node_area_id;
     double v, g, rhs, v_org, current, mfactor;
 
-    #pragma ivdep
+    #pragma acc parallel loop deviceptr(inst)
     for (id = 0; id < inst->node_count; id++) {
         node_id = inst->node_index[id];
         node_area_id = inst->node_area_index[id];
@@ -56,13 +56,10 @@ void nrn_cur_ext(void* __restrict__ mech) {
         mfactor = 1.e2/inst->node_area[node_area_id];
         g = g*mfactor;
         rhs = rhs*mfactor;
-        inst->_shadow_rhs[id] = rhs;
-        inst->_shadow_d[id] = g;
-    }
-    for (id = 0; id < inst->node_count; id++) {
-        node_id = inst->node_index[id];
-        inst->vec_rhs[node_id] -= inst->_shadow_rhs[id];
-        inst->vec_d[node_id] += inst->_shadow_d[id];
+        #pragma acc atomic update
+        inst->vec_rhs[node_id] -= rhs;
+        #pragma acc atomic update
+        inst->vec_d[node_id] += g;
     }
 }
 
@@ -72,7 +69,7 @@ void nrn_state_ext(void* __restrict__ mech) {
     int node_id;
     double v;
 
-    #pragma ivdep
+    #pragma acc parallel loop deviceptr(inst)
     for (id = 0; id < inst->node_count; ++id) {
         node_id = inst->node_index[id];
         v = inst->voltage[node_id];

@@ -48,14 +48,14 @@ export LD_LIBRARY_PATH=`dirname $svml_lib`:`dirname $sleef_lib`:${llvm_path}/lib
 
 # nmodl binary
 nmodl_src_dir=$(pwd)/../../
-nmodl_exe=${nmodl_src_dir}/build_benchmark_gpu_math1/bin/nmodl
+nmodl_exe=${nmodl_src_dir}/build_benchmark_gpu_math1/install/bin/nmodl
 
 # external kernel
 kernels_path=${nmodl_src_dir}/test/benchmark/kernels
 modfile_directory=${nmodl_src_dir}/test/benchmark/kernels
 ext_lib="libextkernel.so"
 
-export PYTHONPATH=/gpfs/bbp.cscs.ch/data/scratch/proj16/magkanar/nmodl_llvm_benchmark/nmodl/build_benchmark_gpu/install/lib:$PYTHONPATH
+export PYTHONPATH=/gpfs/bbp.cscs.ch/data/scratch/proj16/magkanar/nmodl_llvm_benchmark/nmodl/build_benchmark_gpu_math1/install/lib:$PYTHONPATH
 
 python benchmark_script.py \
     --modfiles "./kernels/hh.mod" "./kernels/compute-bound.mod" "./kernels/memory-bound.mod" \

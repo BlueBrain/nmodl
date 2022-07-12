@@ -160,6 +160,12 @@ class Benchmark:
 
         cpp_basename = os.path.splitext(os.path.basename(cpp_file))[0]
         external_lib_dir = self._make_external_lib_basepath(cpp_file, compiler, architecture, flags)
+        # expsyn mod file openacc execution is diferent than the rest of the mod files
+        if cpp_basename == "expsyn" and compiler == "nvhpc":
+            cpp_basename = "expsyn_openacc"
+            cpp_file_org = cpp_file
+            cpp_file = cpp_file.replace('expsyn', 'expsyn_openacc')
+            print("Changing {} file to {}".format(cpp_file_org, cpp_file))
         # Replace current cpp_file pragma with correct one and write it in new file
         sed_replaced_cpp_file = external_lib_dir / (Path(cpp_basename + "_ext.cpp"))
         with open(cpp_file, "r") as inf:
@@ -170,10 +176,13 @@ class Benchmark:
                 cpp_file_content = re.sub(r'#pragma.*', r'#pragma clang vectorize(enable)', cpp_file_content)
             elif compiler == "gcc":
                 cpp_file_content = re.sub(r'#pragma.*', r'#pragma GCC ivdep', cpp_file_content)
-            elif compiler == "nvhpc":
+            elif compiler == "nvhpc" and "openacc" not in cpp_basename:
                 cpp_file_content = re.sub(r'#pragma.*', r'#pragma acc parallel loop deviceptr(inst)', cpp_file_content)
             with open(sed_replaced_cpp_file, "w") as outf:
                 outf.write(cpp_file_content)
+
+        if "openacc" in cpp_file:
+            cpp_file = cpp_file.replace("_openacc", "")
 
         external_lib_path = self._get_external_lib_path(cpp_file, compiler, architecture, flags)
         intel_lib_dir = os.path.dirname(self.compiler_config.svml_lib)
