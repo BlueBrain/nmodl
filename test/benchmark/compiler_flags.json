@@ -1,8 +1,8 @@
 {
   "intel": {
     "skylake-avx512": [
-      "-O2 -march=skylake-avx512 -mtune=skylake -prec-div -fopenmp",
-      "-O2 -march=skylake-avx512 -mtune=skylake -prec-div -fimf-use-svml -fopenmp"
+      "-O2 -mavx512f -prec-div -fopenmp",
+      "-O2 -mavx512f -prec-div -fimf-use-svml -fopenmp"
     ],
     "broadwell": [
       "-O2 -march=broadwell -mtune=broadwell -prec-div",
@@ -37,8 +37,8 @@
   },
   "gcc": {
     "skylake-avx512": [
-      "-O3 -march=skylake-avx512 -mtune=skylake -ffast-math -ftree-vectorize -fopenmp",
-      "-O3 -march=skylake-avx512 -mtune=skylake -ffast-math -ftree-vectorize -mveclibabi=svml -fopenmp"
+      "-O3 -march=skylake-avx512 -mtune=skylake -mavx512f -ffast-math -ftree-vectorize -fopenmp",
+      "-O3 -march=skylake-avx512 -mtune=skylake -mavx512f -ffast-math -ftree-vectorize -mveclibabi=svml -fopenmp"
     ],
     "broadwell": [
       "-O3 -march=broadwell -mtune=broadwell -ffast-math -ftree-vectorize -fopenmp",

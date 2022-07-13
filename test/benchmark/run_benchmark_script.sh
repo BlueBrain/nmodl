@@ -18,7 +18,7 @@ set -x
 
 module purge
 unset MODULEPATH
-export MODULEPATH=/gpfs/bbp.cscs.ch/ssd/apps/bsd/modules/_meta
+export MODULEPATH=/gpfs/bbp.cscs.ch/ssd/apps/bsd/modules/_meta:/gpfs/bbp.cscs.ch/data/scratch/proj16/magkanar/spack_modules/linux-rhel7-skylake
 module load unstable gcc/11.2.0 cuda/11.6.1 python-dev
 
 #intel paths
@@ -57,21 +57,73 @@ ext_lib="libextkernel.so"
 
 export PYTHONPATH=/gpfs/bbp.cscs.ch/data/scratch/proj16/magkanar/nmodl_llvm_benchmark/nmodl/build_benchmark_gpu_math1/install/lib:$PYTHONPATH
 
-python benchmark_script.py \
-    --modfiles "./kernels/hh.mod" "./kernels/compute-bound.mod" "./kernels/memory-bound.mod" \
-    --architectures "default" "nehalem" "broadwell" "skylake-avx512" "nvptx64" \
-    --compilers "intel" "gcc" "clang" "nvhpc" \
-    --external \
-    --nmodl_jit \
-    --output "./python_script_test" \
-    --instances 100000000 \
-    --experiments 5 \
-    --svml_lib $svml_lib \
-    --intel_exe $intel_exe \
-    --sleef_lib $sleef_lib \
-    --clang_exe $clang_exe \
-    --llc_exe $llc_exe \
-    --gcc_exe $gcc_exe \
-    --nvhpc_exe $nvhpc_exe \
-    --libdevice_lib $libdevice_lib \
-    --nmodl_exe $nmodl_exe /
+execute_benchmark() {
+    python benchmark_script.py \
+        --modfiles "./kernels/hh.mod" "./kernels/expsyn.mod" \
+        --architectures "default" "skylake-avx512" \
+        --compilers "intel" "gcc" "clang" \
+        --external \
+        --nmodl_jit \
+        --output "./hh_expsyn_mavx512f" \
+        --instances 100000000 \
+        --experiments 5 \
+        --svml_lib $svml_lib \
+        --intel_exe $intel_exe \
+        --sleef_lib $sleef_lib \
+        --clang_exe $clang_exe \
+        --llc_exe $llc_exe \
+        --gcc_exe $gcc_exe \
+        --nvhpc_exe $nvhpc_exe \
+        --libdevice_lib $libdevice_lib \
+        --nmodl_exe $nmodl_exe /
+}
+
+roofline_gpu() {
+    mod_name=$1
+    ncu --set full -f -o "${mod_name}_full" python benchmark_script.py \
+        --modfiles "./kernels/${mod_name}.mod" \
+        --architectures "nvptx64" \
+        --compilers "nvhpc" \
+        --external \
+        --nmodl_jit \
+        --output "./${mod_name}_nvhpc_ncu" \
+        --instances 100000000 \
+        --experiments 1 \
+        --svml_lib $svml_lib \
+        --intel_exe $intel_exe \
+        --sleef_lib $sleef_lib \
+        --clang_exe $clang_exe \
+        --llc_exe $llc_exe \
+        --gcc_exe $gcc_exe \
+        --nvhpc_exe $nvhpc_exe \
+        --libdevice_lib $libdevice_lib \
+        --nmodl_exe $nmodl_exe /
+}
+
+roofline_cpu() {
+    mod_name=$1
+    module load intel-oneapi-advisor/2021.4.0
+    advisor --collect roofline --project-dir "${mod_name}_advisor" python benchmark_script.py \
+        --modfiles "./kernels/${mod_name}.mod" \
+        --architectures "default" "skylake-avx512" \
+        --compilers "intel" \
+        --external \
+        --nmodl_jit \
+        --output "./${mod_name}_icc_default_skylake_advisor" \
+        --instances 100000000 \
+        --experiments 1 \
+        --svml_lib $svml_lib \
+        --intel_exe $intel_exe \
+        --sleef_lib $sleef_lib \
+        --clang_exe $clang_exe \
+        --llc_exe $llc_exe \
+        --gcc_exe $gcc_exe \
+        --nvhpc_exe $nvhpc_exe \
+        --libdevice_lib $libdevice_lib \
+        --nmodl_exe $nmodl_exe /
+    module unload intel-oneapi-advisor/2021.4.0
+}
+
+execute_benchmark
+# roofline_gpu hh
+# roofline_cpu hh
