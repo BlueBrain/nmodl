@@ -496,7 +496,7 @@ SCENARIO("Synapse: Derivative and breakpoint block llvm transformations",
                 USEION na READ ena WRITE ina
                 RANGE tau1, tau2, e, i
                 NONSPECIFIC_CURRENT i
-                RANGE g, gna
+                RANGE g_var, gna
             }
 
             UNITS {
@@ -514,7 +514,7 @@ SCENARIO("Synapse: Derivative and breakpoint block llvm transformations",
             ASSIGNED {
                 v (mV)
                 i (nA)
-                g (uS)
+                g_var (uS)
                 gna (S/cm2)
                 factor
             }
@@ -542,8 +542,8 @@ SCENARIO("Synapse: Derivative and breakpoint block llvm transformations",
             BREAKPOINT {
                 SOLVE state METHOD cnexp
                 ina = gna*(v-ena)
-                g = B-A
-                i = g*(v-e)
+                g_var = B-A
+                i = g_var*(v-e)
             }
 
             DERIVATIVE state {
@@ -574,31 +574,31 @@ SCENARIO("Synapse: Derivative and breakpoint block llvm transformations",
                     {
                         current = 0
                         mech->ina[id] = mech->gna[id]*(v-mech->ena[id])
-                        mech->g[id] = mech->B[id]-mech->A[id]
-                        mech->i[id] = mech->g[id]*(v-mech->e[id])
+                        mech->g_var[id] = mech->B[id]-mech->A[id]
+                        mech->i[id] = mech->g_var[id]*(v-mech->e[id])
                         current = current+mech->i[id]
                         current = current+mech->ina[id]
-                        mech->g[id] = current
+                        g = current
                     }
                     dina = mech->ina[id]
                     v = v_org
                     {
                         current = 0
                         mech->ina[id] = mech->gna[id]*(v-mech->ena[id])
-                        mech->g[id] = mech->B[id]-mech->A[id]
-                        mech->i[id] = mech->g[id]*(v-mech->e[id])
+                        mech->g_var[id] = mech->B[id]-mech->A[id]
+                        mech->i[id] = mech->g_var[id]*(v-mech->e[id])
                         current = current+mech->i[id]
                         current = current+mech->ina[id]
                         rhs = current
                     }
-                    mech->g[id] = (mech->g[id]-rhs)/0.001
+                    g = (g-rhs)/0.001
                     mech->ion_dinadv[ion_dinadv_id] = mech->ion_dinadv[ion_dinadv_id]+(dina-mech->ina[id])/0.001*1.e2/mech->node_area[node_area_id]
                     mech->ion_ina[ion_ina_id] += mech->ina[id]*(1.e2/mech->node_area[node_area_id])
                     mfactor = 1.e2/mech->node_area[node_area_id]
-                    mech->g[id] = mech->g[id]*mfactor
+                    g = g*mfactor
                     rhs = rhs*mfactor
                     mech->vec_rhs[node_id] = mech->vec_rhs[node_id]-rhs
-                    mech->vec_d[node_id] = mech->vec_d[node_id]+mech->g[id]
+                    mech->vec_d[node_id] = mech->vec_d[node_id]+g
                 }
             })";
 
