@@ -179,8 +179,17 @@ void optimise_module(llvm::Module& module, int opt_level, llvm::TargetMachine* t
 
 void replace_with_lib_functions(codegen::Platform& platform, llvm::Module& module) {
     llvm::legacy::PassManager pm;
-    pm.add(new llvm::ReplaceMathFunctions(platform));
+
+    Replacer *replacer = nullptr;
+    if (platform.is_CUDA_gpu()) {
+        replacer = new custom::CUDAReplacer();
+    } else {
+        replacer = new custom::DefaultCPUReplacer(platform.get_math_library());
+    }
+    pm.add(new llvm::ReplacePass(replacer));
     pm.run(module);
+
+    delete replacer;
 }
 
 void annotate(codegen::Platform& platform, llvm::Module& module) {
