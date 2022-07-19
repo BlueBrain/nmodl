@@ -139,7 +139,7 @@ BenchmarkResults LLVMBenchmark::run_benchmark() {
 
             // Record the execution time of the kernel.
             std::string wrapper_name = "__" + kernel_name + "_wrapper";
-            std::chrono::_V2::steady_clock::time_point start, end;
+            std::chrono::steady_clock::time_point start, end;
             if (!external_kernel_library.empty()) {
                 if (platform.is_CUDA_gpu()) {
                     start = std::chrono::steady_clock::now();
