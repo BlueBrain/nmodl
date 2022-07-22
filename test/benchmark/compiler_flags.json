@@ -54,6 +54,9 @@
     ]
   },
   "nvhpc": {
+    "skylake-avx512": [
+      "-fast -O3 -mp=autopar -tp=skylake -Msafeptr=all -Minfo -Mvect=simd:512,gather -mavx512vbmi -mavx512vbmi2 -mavx512vl"
+    ],
     "nvptx64": [
       "-O3 -gpu=nordc,fastmath"
     ]

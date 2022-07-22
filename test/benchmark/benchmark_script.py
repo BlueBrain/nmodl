@@ -161,7 +161,7 @@ class Benchmark:
         cpp_basename = os.path.splitext(os.path.basename(cpp_file))[0]
         external_lib_dir = self._make_external_lib_basepath(cpp_file, compiler, architecture, flags)
         # expsyn mod file openacc execution is diferent than the rest of the mod files
-        if compiler == "nvhpc":
+        if compiler == "nvhpc" and architecture == "nvptx64":
             cpp_basename_org = cpp_basename
             cpp_basename = cpp_basename + "_openacc"
             cpp_file_org = cpp_file
@@ -171,13 +171,13 @@ class Benchmark:
         sed_replaced_cpp_file = external_lib_dir / (Path(cpp_basename + "_ext.cpp"))
         with open(cpp_file, "r") as inf:
             cpp_file_content = inf.read()
-            if "-fopenmp" in flags or compiler == "intel":
+            if "-fopenmp" in flags or "-mp=autopar" in flags or compiler == "intel":
                 cpp_file_content = re.sub(r'#pragma.*', r'#pragma omp simd', cpp_file_content)
             elif compiler == "clang":
                 cpp_file_content = re.sub(r'#pragma.*', r'#pragma clang vectorize(enable)', cpp_file_content)
             elif compiler == "gcc":
                 cpp_file_content = re.sub(r'#pragma.*', r'#pragma GCC ivdep', cpp_file_content)
-            elif compiler == "nvhpc" and "openacc" not in cpp_basename:
+            elif compiler == "nvhpc" and "openacc" not in cpp_basename and architecture == "nvptx64":
                 cpp_file_content = re.sub(r'#pragma.*', r'#pragma acc parallel loop deviceptr(inst)', cpp_file_content)
             with open(sed_replaced_cpp_file, "w") as outf:
                 outf.write(cpp_file_content)
@@ -187,10 +187,10 @@ class Benchmark:
 
         external_lib_path = self._get_external_lib_path(cpp_file, compiler, architecture, flags)
         intel_lib_dir = os.path.dirname(self.compiler_config.svml_lib)
-        if compiler != "nvhpc":
+        if architecture != "nvptx64":
             bash_command = [compiler_cmd] + flags.split(" ") + ["./"+str(sed_replaced_cpp_file), "-fpic", "-shared", "-o {}".format(external_lib_path), "-Wl,-rpath,{}".format(intel_lib_dir), "-L{}".format(intel_lib_dir), "-lsvml"]
         else:
-            bash_command = [compiler_cmd] + flags.split(" ") + ["./"+str(sed_replaced_cpp_file), "-fPIC", "-shared", "-o {}".format(external_lib_path), "-acc", "-nomp"]
+            bash_command = [compiler_cmd] + flags.split(" ") + ["./"+str(sed_replaced_cpp_file), "-fPIC", "-shared", "-o {}".format(external_lib_path), "-acc", "-nomp", "-gpu=cc70"]
         if "-fopenmp" in flags:
             if compiler == "gcc":
                 bash_command.append("-Wl,-rpath,{}".format("/".join(self.compiler_config.gcc_exe.split("/")[0:-2]+["lib64"])))
@@ -332,7 +332,7 @@ class Benchmark:
                     if self.benchmark_config.external_kernel:
                         for compiler in self.benchmark_config.compilers:
                             # Don't try to use NVPTX64 arch for compilers except NVHPC and other architectures with NVHPC compiler
-                            if (architecture == "nvptx64" and compiler != "nvhpc") or (architecture != "nvptx64" and compiler == "nvhpc"):
+                            if (architecture == "nvptx64" and compiler != "nvhpc") or (architecture not in ["skylake-avx512", "nvptx64"] and compiler == "nvhpc"):
                                 continue
                             if compiler not in self.results[modname][architecture]:
                                 self.results[modname][architecture][compiler] = {}
@@ -415,8 +415,8 @@ class Benchmark:
                                     "libdevice",
                                     kernel_instance_size,
                                     self.benchmark_config.experiments,
-                                    16384,
-                                    512
+                                    1024,
+                                    128
                                 )
                                 print(
                                     'self.results[modname][architecture]["nmodl_jit_cuda"]["libdevice"+fast_math_name] = jit.run(modast, modname, self.config.instances, self.config.experiments)'
