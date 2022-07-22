@@ -177,8 +177,8 @@ stages:
       displayName: 'Build CoreNEURON and Run Integration Tests with ISPC compiler'
   - job: 'osx1015'
     pool:
-      vmImage: 'macOS-10.15'
-    displayName: 'MacOS (10.15), AppleClang 12.0'
+      vmImage: 'macOS-11'
+    displayName: 'MacOS (11), AppleClang 12.0'
     steps:
     - checkout: self
       submodules: True
@@ -289,7 +289,7 @@ stages:
   - job: 'macos_wheels'
     timeoutInMinutes: 45
     pool:
-      vmImage: 'macOS-10.15'
+      vmImage: 'macOS-11'
     strategy:
       matrix:
         ${{ if eq(variables.buildWheel, True) }}:
