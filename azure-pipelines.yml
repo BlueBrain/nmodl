@@ -6,6 +6,7 @@ variables:
   #- ReleaseWheelBuild: False
   #- UploadWheel: False
   buildWheel: ${{ or(in(variables['Build.Reason'], 'Schedule'), in(variables['Build.Reason'], 'Manual')) }}
+  MACOSX_DEPLOYMENT_TARGET: 10.14
 
 # Nightly build master for pypi upload
 schedules:
@@ -175,7 +176,7 @@ stages:
       env:
         CMAKE_PKG: 'cmake-3.15.0-Linux-x86_64'
       displayName: 'Build CoreNEURON and Run Integration Tests with ISPC compiler'
-  - job: 'osx1015'
+  - job: 'osx11'
     pool:
       vmImage: 'macOS-11'
     displayName: 'MacOS (11), AppleClang 12.0'
@@ -332,7 +333,6 @@ stages:
       condition: succeeded()
       displayName: 'Install Python from python.org'
     - script: |
-        export MACOSX_DEPLOYMENT_TARGET=10.14
         export PATH=/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH
         export SDKROOT=$(xcrun --sdk macosx --show-sdk-path)
         if [[ "$(RELEASEWHEELBUILD)" != "True" ]]; then
