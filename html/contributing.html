@@ -189,9 +189,16 @@ discussion might inform you of workarounds readily available.</p>
 </div>
 </li>
 <li><p>Create your patch, <strong>including appropriate test cases</strong>.</p></li>
-<li><p>Enable <code class="docutils literal notranslate"><span class="pre">NMODL_FORMATTING</span></code> and <code class="docutils literal notranslate"><span class="pre">NMODL_PRECOMMIT</span></code> CMake variables
-to ensure that your change follows coding conventions of this project.
-Please see <span class="xref myst">README.md</span> for more information.</p></li>
+<li><p>Enable <code class="docutils literal notranslate"><span class="pre">NMODL_TEST_FORMATTING</span></code> CMake variable
+to ensure that your change follows the coding conventions of this project when running the tests.
+The formatting utility can also be used directly:</p>
+<ul class="simple">
+<li><p>to format CMake and C++ files: <code class="docutils literal notranslate"><span class="pre">cmake/hpc-coding-conventions/bin/format</span></code></p></li>
+<li><p>to format only the C++ files: <code class="docutils literal notranslate"><span class="pre">cmake/hpc-coding-conventions/bin/format</span> <span class="pre">--lang</span> <span class="pre">c++</span></code></p></li>
+<li><p>to format a subset of files or directories: <code class="docutils literal notranslate"><span class="pre">cmake/hpc-coding-conventions/bin/format</span> <span class="pre">src/codegen/</span> <span class="pre">src/main.cpp</span></code></p></li>
+<li><p>to check the formatting of CMake files: <code class="docutils literal notranslate"><span class="pre">cmake/hpc-coding-conventions/bin/format</span> <span class="pre">--dry-run</span> <span class="pre">--lang</span> <span class="pre">cmake</span></code></p></li>
+</ul>
+</li>
 <li><p>Run the full test suite, and ensure that all tests pass.</p></li>
 <li><p>Commit your changes using a descriptive commit message.</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git commit -a
