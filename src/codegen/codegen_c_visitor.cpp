@@ -2244,9 +2244,9 @@ std::string CodegenCVisitor::float_variable_name(const SymbolType& symbol,
     // clang-format off
     if (symbol->is_array()) {
         if (use_instance) {
-            return fmt::format("(inst->{}+id*{})", name, dimension);
+            return fmt::format("inst->{}[id*{}]", name, dimension);
         }
-        return fmt::format("(data + {}*pnodecount + id*{})", position, dimension);
+        return fmt::format("data[{}*pnodecount + id*{}]", position, dimension);
     }
     if (use_instance) {
         return fmt::format("inst->{}[id]", name);
