@@ -145,10 +145,6 @@ class Unit {
     /// Parse a fraction given as string and store the result to the factor of the Unit
     void add_fraction(const std::string& fraction_string);
 
-    /// Parse a double number given as string. The double can be positive or negative and
-    /// have all kinds of representations
-    double parse_double(std::string double_string);
-
     /// Getter for the vector of nominators of the Unit
     const std::vector<std::string>& get_nominator_unit() const noexcept {
         return nominator;

@@ -96,6 +96,7 @@ SymbolType prime_symbol(std::string text, PositionType& pos) {
     stringutils::remove_character(text, '\'');
 
     auto prime_name = new ast::String(text);
+    assert(order <= std::numeric_limits<int>::max());
     auto prime_order = new ast::Integer(order, nullptr);
     ast::PrimeName value(prime_name, prime_order);
     value.set_token(token);

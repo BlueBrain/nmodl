@@ -137,13 +137,13 @@ class NmodlDriver {
      * Emit a parsing error
      * \throw std::runtime_error
      */
-    void parse_error(const location& location, const std::string& message);
+    static void parse_error(const location& location, const std::string& message);
 
     /**
      * Emit a parsing error. Takes additionally a Lexer instance to print code context
      * \throw std::runtime_error
      */
-    void parse_error(const NmodlLexer& scanner,
+    static void parse_error(const NmodlLexer& scanner,
                      const location& location,
                      const std::string& message);
 

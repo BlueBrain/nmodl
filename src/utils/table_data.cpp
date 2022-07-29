@@ -5,6 +5,7 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
+#include <cassert>
 #include <iostream>
 #include <numeric>
 
@@ -37,10 +38,11 @@ void TableData::print(std::ostream& stream, int indent) const {
     }
 
     /// based on indentation level, spaces to prefix
-    auto gutter = std::string(indent * 4, ' ');
+    assert(indent >= 0);
+    auto gutter = std::string(static_cast<std::size_t>(indent) * 4, ' ');
 
-    auto ncolumns = headers.size();
-    std::vector<unsigned> col_width(ncolumns);
+    auto const ncolumns = headers.size();
+    std::vector<int> col_width(ncolumns);
 
     /// alignment is optional, so fill remaining with right alignment
     auto all_alignments = alignments;
@@ -59,8 +61,8 @@ void TableData::print(std::ostream& stream, int indent) const {
     /// if title is larger than headers then every column
     /// width needs to be scaled
     if (title.length() > row_width) {
-        int extra_size = title.length() - row_width;
-        int column_pad = extra_size / ncolumns;
+        auto const extra_size = title.length() - row_width;
+        auto column_pad = extra_size / ncolumns;
         if ((extra_size % ncolumns) != 0) {
             column_pad++;
         }

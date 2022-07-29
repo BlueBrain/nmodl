@@ -44,6 +44,7 @@ static bool conductance_statement_possible(const ast::BreakpointBlock& node) {
 
 
 // Generate statement strings to be added to BREAKPOINT section
+// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 std::vector<std::string> SympyConductanceVisitor::generate_statement_strings(
     ast::BreakpointBlock& node) {
     std::vector<std::string> statements;
@@ -69,7 +70,7 @@ std::vector<std::string> SympyConductanceVisitor::generate_statement_strings(
             // SymPy needs the current expression & all previous expressions
             std::vector<std::string> expressions(ordered_binary_exprs.begin(),
                                                  ordered_binary_exprs.begin() +
-                                                     binary_expr_index[lhs_str] + 1);
+                                                     binary_expr_index[lhs_str] + 1ul);
             // differentiate dI/dV
             auto analytic_diff =
                 pywrap::EmbeddedPythonLoader::get_instance().api()->create_ads_executor();
@@ -141,7 +142,6 @@ void SympyConductanceVisitor::lookup_nonspecific_statements() {
             logger->debug("SympyConductance :: Found NONSPECIFIC_CURRENT statement");
             for (const auto& write_name:
                  std::dynamic_pointer_cast<const ast::Nonspecific>(ns_curr_ast)
-                     .get()
                      ->get_currents()) {
                 const std::string& curr_write = write_name->get_node_name();
                 logger->debug("SympyConductance :: -> Adding non-specific current write name: {}",

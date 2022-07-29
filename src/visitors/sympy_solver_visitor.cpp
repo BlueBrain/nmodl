@@ -24,8 +24,6 @@ namespace visitor {
 
 using symtab::syminfo::NmodlType;
 
-using nmodl::utils::UseNumbersInString;
-
 void SympySolverVisitor::init_block_data(ast::Node* node) {
     // clear any previous data
     expression_statements.clear();
@@ -135,7 +133,7 @@ static bool is_local_statement(const std::shared_ptr<ast::Statement>& statement)
 
 std::string& SympySolverVisitor::replaceAll(std::string& context,
                                             const std::string& from,
-                                            const std::string& to) const {
+                                            const std::string& to) {
     std::size_t lookHere = 0;
     std::size_t foundHere;
     while ((foundHere = context.find(from, lookHere)) != std::string::npos) {
@@ -202,17 +200,15 @@ void SympySolverVisitor::construct_eigen_solver_block(
     ast::StatementVector functor_statements;   // J[0]_row * X = F[0], additional assignments during
                                                // computation //
     ast::StatementVector finalize_statements;  // assignments at the end //
-    const size_t sr_begin = solution_replacer.replaced_statements_begin();
-    const size_t sr_end = solution_replacer.replaced_statements_end();
+    std::ptrdiff_t const sr_begin{solution_replacer.replaced_statements_begin()};
+    std::ptrdiff_t const sr_end{solution_replacer.replaced_statements_end()};
 
     // initialize and edge case where the system of equations is empty
     for (size_t idx = 0; idx < statements.size(); ++idx) {
         auto& s = statements[idx];
         if (is_local_statement(s)) {
             variable_statements.push_back(s);
-        } else if (sr_begin == statements.size()) {
-            initialize_statements.push_back(s);
-        } else if (idx < sr_begin) {
+        } else if (sr_begin == statements.size() || idx < sr_begin) {
             initialize_statements.push_back(s);
         }
     }
@@ -513,8 +509,8 @@ void SympySolverVisitor::visit_derivative_block(ast::DerivativeBlock& node) {
             auto split_eq = stringutils::split_string(eq, '=');
             auto x_prime_split = stringutils::split_string(split_eq[0], '\'');
             auto x = stringutils::trim(x_prime_split[0]);
-            std::string x_array_index = "";
-            std::string x_array_index_i = "";
+            std::string x_array_index;
+            std::string x_array_index_i;
             if (x_prime_split.size() > 1 && stringutils::trim(x_prime_split[1]).size() > 2) {
                 x_array_index = stringutils::trim(x_prime_split[1]);
                 x_array_index_i = "_" + x_array_index.substr(1, x_array_index.size() - 2);
@@ -532,16 +528,33 @@ void SympySolverVisitor::visit_derivative_block(ast::DerivativeBlock& node) {
                 // no CONSERVE equation, construct Euler equation
                 auto dxdt = stringutils::trim(split_eq[1]);
 
-
-                const auto old_x = suffix_random_string(vars, "old_" + x + x_array_index_i);
+                auto const old_x = [&]() {
+                    std::string old_x_name{"old_"};
+                    old_x_name.append(x);
+                    old_x_name.append(x_array_index_i);
+                    return suffix_random_string(vars, old_x_name);
+                }();
                 // declare old_x
                 logger->debug("SympySolverVisitor :: -> declaring new local variable: {}", old_x);
                 add_local_variable(*block_with_expression_statements, old_x);
                 // assign old_x = x
-                pre_solve_statements.push_back(old_x + " = " + x + x_array_index);
+                {
+                    std::string expression{old_x};
+                    expression.append(" = ");
+                    expression.append(x);
+                    expression.append(x_array_index);
+                    pre_solve_statements.push_back(std::move(expression));
+                }
                 // replace ODE with Euler equation
-                eq = x + x_array_index + " = " + old_x + " + " +
-                     codegen::naming::NTHREAD_DT_VARIABLE + " * (" + dxdt + ")";
+                eq = x;
+                eq.append(x_array_index);
+                eq.append(" = ");
+                eq.append(old_x);
+                eq.append(" + ");
+                eq.append(codegen::naming::NTHREAD_DT_VARIABLE);
+                eq.append(" * (");
+                eq.append(dxdt);
+                eq.append(")");
                 logger->debug("SympySolverVisitor :: -> constructed Euler eq: {}", eq);
             }
         }

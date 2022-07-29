@@ -131,8 +131,9 @@ class CodegenCompatibilityVisitor: public visitor::AstVisitor {
     /// \param node Ast
     /// \param ast_node Ast node which is checked
     /// \return std::string error
+    // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
     std::string return_error_global_var(ast::Ast& node, const std::shared_ptr<ast::Ast>& ast_node);
-
+    // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
     std::string return_error_param_var(ast::Ast& node, const std::shared_ptr<ast::Ast>& ast_node);
 
     /// Takes as parameter the ast::Ast and checks if the
@@ -144,6 +145,7 @@ class CodegenCompatibilityVisitor: public visitor::AstVisitor {
     /// \param node Ast
     /// \param ast_node Not used by the function
     /// \return std::string error
+    // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
     std::string return_error_if_no_bbcore_read_write(ast::Ast& node,
                                                      const std::shared_ptr<ast::Ast>& ast_node);
 };
