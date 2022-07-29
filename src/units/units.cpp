@@ -53,7 +53,7 @@ void Unit::add_base_unit(const std::string& name) {
 }
 
 void Unit::add_nominator_double(const std::string& double_string) {
-    unit_factor = std::stod(double_string);
+    unit_factor = parse_double(double_string);
 }
 
 void Unit::add_nominator_dims(const std::array<int, MAX_DIMS>& dimensions) {
@@ -105,9 +105,44 @@ void Unit::add_fraction(const std::string& fraction_string) {
     for (auto itm = it; itm != fraction_string.end(); ++itm) {
         denominator.push_back(*itm);
     }
-    nom = std::stod(nominator);
-    denom = std::stod(denominator);
+    nom = parse_double(nominator);
+    denom = parse_double(denominator);
     unit_factor = nom / denom;
+}
+
+double Unit::parse_double(std::string double_string) {
+    long double d_number;
+    double d_magnitude;
+    std::string s_number;
+    std::string s_magnitude;
+    std::string::const_iterator it;
+    // if double is positive sign = 1 else sign = -1
+    // to be able to be multiplied by the d_number
+    int sign = 1;
+    if (double_string.front() == '-') {
+        sign = -1;
+        double_string.erase(double_string.begin());
+    }
+    // if *it reached an exponent related char, then the whole double number is read
+    for (it = double_string.begin();
+         it != double_string.end() && *it != 'e' && *it != '+' && *it != '-';
+         ++it) {
+        s_number.push_back(*it);
+    }
+    // then read the magnitude of the double number
+    for (auto itm = it; itm != double_string.end(); ++itm) {
+        if (*itm != 'e') {
+            s_magnitude.push_back(*itm);
+        }
+    }
+    d_number = std::stold(s_number);
+    if (s_magnitude.empty()) {
+        d_magnitude = 0.0;
+    } else {
+        d_magnitude = std::stod(s_magnitude);
+    }
+    // NOLINTNEXTLINE(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)
+    return static_cast<double>(d_number * powl(10.0, d_magnitude) * sign);
 }
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
