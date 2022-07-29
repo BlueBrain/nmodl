@@ -2684,11 +2684,13 @@ static size_t get_register_type_for_ba_block(const ast::Block* block) {
     BAType ba_type{};
     /// before block have value 10 and after block 20
     if (block->is_before_block()) {
-        register_type = 10; // NOLINT(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)
+        // NOLINTNEXTLINE(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)
+        register_type = 10;
         ba_type =
             dynamic_cast<const ast::BeforeBlock*>(block)->get_bablock()->get_type()->get_value();
     } else {
-        register_type = 20; // NOLINT(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)
+        // NOLINTNEXTLINE(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)
+        register_type = 20;
         ba_type =
             dynamic_cast<const ast::AfterBlock*>(block)->get_bablock()->get_type()->get_value();
     }

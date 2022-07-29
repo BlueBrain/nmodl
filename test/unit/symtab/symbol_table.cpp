@@ -40,7 +40,7 @@ SCENARIO("Symbol properties can be added and converted to string") {
             }
         }
         WHEN("adding another empty property") {
-            NmodlType result = prop1 | prop1; // NOLINT(misc-redundant-expression)
+            NmodlType result = prop1 | prop1;  // NOLINT(misc-redundant-expression)
             THEN("to_string still returns empty string") {
                 REQUIRE(to_string(result).empty());
             }

@@ -36,17 +36,17 @@ class DiffeqParser;
 class DiffeqDriver {
   private:
     static std::string solve_equation(std::string& state,
-                               int order,
-                               std::string& rhs,
-                               std::string& method,
-                               bool& cnexp_possible,
-                               bool debug = false);
+                                      int order,
+                                      std::string& rhs,
+                                      std::string& method,
+                                      bool& cnexp_possible,
+                                      bool debug = false);
 
     /// parse given equation into lhs, rhs and find it's order and state variable
     static void parse_equation(const std::string& equation,
-                        std::string& state,
-                        std::string& rhs,
-                        int& order);
+                               std::string& state,
+                               std::string& rhs,
+                               int& order);
 
   public:
     DiffeqDriver() = default;

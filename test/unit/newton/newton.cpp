@@ -125,8 +125,7 @@ SCENARIO("Non-linear system to solve with Newton Numerical Diff Solver", "[numer
                             Eigen::Matrix<double, 4, 1>& F) const {
                 F[0] = -(-3.0 * X[0] * X[2] * dt + X[0] - X0_old + 2.0 * dt / X[1]);
                 F[1] = -(X[1] - X1_old + dt * (4.0 * X[0] - 6.2 * X[1] + X[3]));
-                F[2] = -((X[2] * (X[2] - X2_old) - dt * (X[2] * (-1.2 * X[1] + 3.0) + 0.3)) /
-                         X[2]);
+                F[2] = -((X[2] * (X[2] - X2_old) - dt * (X[2] * (-1.2 * X[1] + 3.0) + 0.3)) / X[2]);
                 F[3] = -(-4.0 * X[0] * X[1] * X[2] * dt + X[3] - X3_old + 6.0 * dt / X[2]);
             }
         };
@@ -335,8 +334,7 @@ SCENARIO("Non-linear system to solve with Newton Solver", "[analytic][solver]") 
                             Eigen::Matrix<double, 4, 4>& J) const {
                 F[0] = -(-3.0 * X[0] * X[2] * dt + X[0] - X0_old + 2.0 * dt / X[1]);
                 F[1] = -(X[1] - X1_old + dt * (4.0 * X[0] - 6.2 * X[1] + X[3]));
-                F[2] = -((X[2] * (X[2] - X2_old) - dt * (X[2] * (-1.2 * X[1] + 3.0) + 0.3)) /
-                         X[2]);
+                F[2] = -((X[2] * (X[2] - X2_old) - dt * (X[2] * (-1.2 * X[1] + 3.0) + 0.3)) / X[2]);
                 F[3] = -(-4.0 * X[0] * X[1] * X[2] * dt + X[3] - X3_old + 6.0 * dt / X[2]);
                 J(0, 0) = 3.0 * X[2] * dt - 1.0;
                 J(0, 1) = 2.0 * dt / std::pow(X[1], 2);

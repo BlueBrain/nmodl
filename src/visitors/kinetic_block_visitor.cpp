@@ -176,7 +176,8 @@ void KineticBlockVisitor::visit_reaction_operator(ast::ReactionOperator& node) {
     }
 }
 
-void KineticBlockVisitor::visit_react_var_name(ast::ReactVarName& node) { // NOLINT(readability-function-cognitive-complexity)
+void KineticBlockVisitor::visit_react_var_name(
+    ast::ReactVarName& node) {  // NOLINT(readability-function-cognitive-complexity)
     // ReactVarName node contains a VarName and an Integer
     // the VarName is the state variable which we convert to an index
     // the Integer is the value to be added to the stoichiometric matrix at this index
@@ -475,7 +476,9 @@ void KineticBlockVisitor::visit_program(ast::Program& node) {
     for (auto* kinetic_block: kinetic_blocks) {
         for (auto it = blocks.begin(); it != blocks.end(); ++it) {
             if (it->get() == kinetic_block) {
-                auto dblock = std::make_shared<ast::DerivativeBlock>(kinetic_block->get_name(), kinetic_block->get_statement_block());
+                auto dblock =
+                    std::make_shared<ast::DerivativeBlock>(kinetic_block->get_name(),
+                                                           kinetic_block->get_statement_block());
                 ModToken tok{};
                 dblock->set_token(tok);
                 *it = dblock;

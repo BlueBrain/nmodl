@@ -136,7 +136,8 @@ void UnitTable::calc_nominator_dims(const std::shared_ptr<Unit>& unit, std::stri
                     changed_nominator_name = 1;
                     nominator_prefix_factor *= it.second;
                     nominator_name.erase(nominator_name.begin(),
-                                         nominator_name.begin() + static_cast<std::ptrdiff_t>(it.first.size()));
+                                         nominator_name.begin() +
+                                             static_cast<std::ptrdiff_t>(it.first.size()));
                 }
             }
         }
@@ -212,7 +213,8 @@ void UnitTable::calc_denominator_dims(const std::shared_ptr<Unit>& unit,
                     changed_denominator_name = 1;
                     denominator_prefix_factor *= it.second;
                     denominator_name.erase(denominator_name.begin(),
-                                           denominator_name.begin() + static_cast<std::ptrdiff_t>(it.first.size()));
+                                           denominator_name.begin() +
+                                               static_cast<std::ptrdiff_t>(it.first.size()));
                 }
             }
         }

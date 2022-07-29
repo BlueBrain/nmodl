@@ -144,8 +144,8 @@ class NmodlDriver {
      * \throw std::runtime_error
      */
     static void parse_error(const NmodlLexer& scanner,
-                     const location& location,
-                     const std::string& message);
+                            const location& location,
+                            const std::string& message);
 
     /**
      * Ensure \a file argument given to the INCLUDE directive is valid:

@@ -217,5 +217,6 @@ pybind_wrap_api init_pybind_wrap_api() noexcept {
 }  // namespace nmodl
 
 
-__attribute__((visibility("default"))) nmodl::pybind_wrappers::pybind_wrap_api const nmodl_wrapper_api =
+__attribute__((visibility("default")))
+nmodl::pybind_wrappers::pybind_wrap_api const nmodl_wrapper_api =
     nmodl::pybind_wrappers::init_pybind_wrap_api();

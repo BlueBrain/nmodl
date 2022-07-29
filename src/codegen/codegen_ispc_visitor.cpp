@@ -398,14 +398,12 @@ void CodegenIspcVisitor::print_global_function_common_code(BlockType type,
 
 void CodegenIspcVisitor::print_compute_functions() {
     for (const auto& function: info.functions) {
-        if (!program_symtab->lookup(function->get_node_name())
-                 ->has_all_status(Status::inlined)) {
+        if (!program_symtab->lookup(function->get_node_name())->has_all_status(Status::inlined)) {
             print_function(*function);
         }
     }
     for (const auto& procedure: info.procedures) {
-        if (!program_symtab->lookup(procedure->get_node_name())
-                 ->has_all_status(Status::inlined)) {
+        if (!program_symtab->lookup(procedure->get_node_name())->has_all_status(Status::inlined)) {
             print_procedure(*procedure);
         }
     }

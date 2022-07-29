@@ -59,8 +59,8 @@ std::string run_units_visitor(const std::string& text) {
         auto unit_name = unit_def->get_node_name();
         unit_name.erase(remove_if(unit_name.begin(), unit_name.end(), isspace), unit_name.end());
         auto unit = units_driver.table->get_unit(unit_name);
-        ss << std::fixed << std::setprecision(output_precision) << unit->get_name() << ' ' << unit->get_factor()
-           << ':';
+        ss << std::fixed << std::setprecision(output_precision) << unit->get_name() << ' '
+           << unit->get_factor() << ':';
         // Dimensions of the unit are printed to check that the units are successfully
         // parsed to the units::UnitTable
         int dimension_id = 0;

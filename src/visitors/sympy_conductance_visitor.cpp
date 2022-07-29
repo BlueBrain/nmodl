@@ -141,8 +141,7 @@ void SympyConductanceVisitor::lookup_nonspecific_statements() {
         for (const auto& ns_curr_ast: nonspecific_nodes) {
             logger->debug("SympyConductance :: Found NONSPECIFIC_CURRENT statement");
             for (const auto& write_name:
-                 std::dynamic_pointer_cast<const ast::Nonspecific>(ns_curr_ast)
-                     ->get_currents()) {
+                 std::dynamic_pointer_cast<const ast::Nonspecific>(ns_curr_ast)->get_currents()) {
                 const std::string& curr_write = write_name->get_node_name();
                 logger->debug("SympyConductance :: -> Adding non-specific current write name: {}",
                               curr_write);
