@@ -23,11 +23,9 @@
 
 using namespace nmodl::test_utils;
 
-namespace {
 // Driver is defined as global to store all the units inserted to it and to be
 // able to define complex units based on base units
-nmodl::parser::UnitDriver driver;
-}  // namespace
+nmodl::parser::UnitDriver driver;  // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
 
 bool is_valid_construct(const std::string& construct) {
     return driver.parse_string(construct);

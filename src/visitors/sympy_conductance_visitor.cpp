@@ -70,7 +70,9 @@ std::vector<std::string> SympyConductanceVisitor::generate_statement_strings(
             // SymPy needs the current expression & all previous expressions
             std::vector<std::string> expressions(ordered_binary_exprs.begin(),
                                                  ordered_binary_exprs.begin() +
-                                                     binary_expr_index[lhs_str] + 1ul);
+                                                     static_cast<std::ptrdiff_t>(
+                                                         binary_expr_index[lhs_str]) +
+                                                     1);
             // differentiate dI/dV
             auto analytic_diff =
                 pywrap::EmbeddedPythonLoader::get_instance().api()->create_ads_executor();

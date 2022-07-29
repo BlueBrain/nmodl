@@ -97,9 +97,10 @@ class SympySolverVisitor: public AstVisitor {
 
     /// Check original_vector for elements that contain a variable named original_string and
     /// rename it to substitution_string
-    std::vector<std::string> filter_string_vector(const std::vector<std::string>& original_vector,
-                                                  const std::string& original_string,
-                                                  const std::string& substitution_string) const;
+    static std::vector<std::string> filter_string_vector(
+        const std::vector<std::string>& original_vector,
+        const std::string& original_string,
+        const std::string& substitution_string);
 
     /// global variables
     std::set<std::string> global_vars;

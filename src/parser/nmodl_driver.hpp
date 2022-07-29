@@ -154,7 +154,8 @@ class NmodlDriver {
      *
      * \return unquoted string
      */
-    std::string check_include_argument(const location& location, const std::string& filename);
+    static std::string check_include_argument(const location& location,
+                                              const std::string& filename);
 };
 
 /** \} */  // end of parser

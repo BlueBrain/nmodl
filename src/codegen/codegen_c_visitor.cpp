@@ -2775,7 +2775,7 @@ void CodegenCVisitor::print_mechanism_register() {
         line.append(" = nrn_get_mechtype(");
         line.append(name);
         line.append(");");
-        printer->add_line(std::move(line));
+        printer->add_line(line);
     }
     printer->add_newline();
 

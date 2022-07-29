@@ -135,7 +135,7 @@ std::string& SympySolverVisitor::replaceAll(std::string& context,
                                             const std::string& from,
                                             const std::string& to) {
     std::size_t lookHere = 0;
-    std::size_t foundHere;
+    std::size_t foundHere{};
     while ((foundHere = context.find(from, lookHere)) != std::string::npos) {
         context.replace(foundHere, from.size(), to);
         lookHere = foundHere + to.size();
@@ -146,7 +146,7 @@ std::string& SympySolverVisitor::replaceAll(std::string& context,
 std::vector<std::string> SympySolverVisitor::filter_string_vector(
     const std::vector<std::string>& original_vector,
     const std::string& original_string,
-    const std::string& substitution_string) const {
+    const std::string& substitution_string) {
     std::vector<std::string> filtered_vector;
     for (auto element: original_vector) {
         std::string filtered_element = replaceAll(element, original_string, substitution_string);
@@ -216,15 +216,17 @@ void SympySolverVisitor::construct_eigen_solver_block(
     if (sr_begin != statements.size()) {
         initialize_statements.insert(initialize_statements.end(),
                                      statements.begin() + sr_begin,
-                                     statements.begin() + sr_begin + pre_solve_statements.size());
-        setup_x_statements =
-            ast::StatementVector(statements.begin() + sr_begin + pre_solve_statements.size(),
-                                 statements.begin() + sr_begin + pre_solve_statements.size() +
-                                     state_vars.size());
-        functor_statements = ast::StatementVector(statements.begin() + sr_begin +
-                                                      pre_solve_statements.size() +
-                                                      state_vars.size(),
-                                                  statements.begin() + sr_end);
+                                     statements.begin() + sr_begin +
+                                         static_cast<std::ptrdiff_t>(pre_solve_statements.size()));
+        setup_x_statements = ast::StatementVector(
+            statements.begin() + sr_begin +
+                static_cast<std::ptrdiff_t>(pre_solve_statements.size()),
+            statements.begin() + sr_begin +
+                static_cast<std::ptrdiff_t>(pre_solve_statements.size() + state_vars.size()));
+        functor_statements = ast::StatementVector(
+            statements.begin() + sr_begin +
+                static_cast<std::ptrdiff_t>(pre_solve_statements.size() + state_vars.size()),
+            statements.begin() + sr_end);
         finalize_statements = ast::StatementVector(statements.begin() + sr_end, statements.end());
     }
 
