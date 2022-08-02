@@ -132,6 +132,7 @@ class CodegenCompatibilityVisitor: public visitor::AstVisitor {
     /// \param ast_node Ast node which is checked
     /// \return std::string error
     std::string return_error_global_var(ast::Ast& node, const std::shared_ptr<ast::Ast>& ast_node);
+
     std::string return_error_param_var(ast::Ast& node, const std::shared_ptr<ast::Ast>& ast_node);
 
     /// Takes as parameter the ast::Ast and checks if the
