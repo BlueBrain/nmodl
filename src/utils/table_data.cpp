@@ -95,8 +95,10 @@ void TableData::print(std::ostream& stream, int indent) const {
 
     /// title row
     if (!title.empty()) {
-        auto fmt_title =
-            stringutils::align_text(title, row_width - 3, stringutils::text_alignment::center);
+        assert(row_width >= 3 && row_width - 3 <= std::numeric_limits<int>::max());
+        auto fmt_title = stringutils::align_text(title,
+                                                 static_cast<int>(row_width - 3),
+                                                 stringutils::text_alignment::center);
         stream << '\n' << gutter << separator_line;
         stream << '\n' << gutter << '|' << fmt_title << '|';
     }
@@ -110,7 +112,11 @@ void TableData::print(std::ostream& stream, int indent) const {
     for (const auto& row: rows) {
         stream << '\n' << gutter << "| ";
         for (unsigned i = 0; i < row.size(); i++) {
-            stream << stringutils::align_text(row[i], col_width[i], all_alignments[i]) << " | ";
+            assert(col_width[i] <= std::numeric_limits<int>::max());
+            stream << stringutils::align_text(row[i],
+                                              static_cast<int>(col_width[i]),
+                                              all_alignments[i])
+                   << " | ";
         }
     }
 

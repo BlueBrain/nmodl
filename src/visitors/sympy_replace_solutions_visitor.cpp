@@ -96,7 +96,7 @@ void SympyReplaceSolutionsVisitor::visit_statement_block(ast::StatementBlock& no
         node.visit_children(*this);
     }
 
-    auto& old_statements = node.get_statements();
+    auto const& old_statements = node.get_statements();
 
     ast::StatementVector new_statements;
     new_statements.reserve(2 * old_statements.size());
@@ -121,7 +121,7 @@ void SympyReplaceSolutionsVisitor::visit_statement_block(ast::StatementBlock& no
                    to_be_removed->find(&(*old_statement)) == to_be_removed->end()) {
             logger->debug("SympyReplaceSolutionsVisitor :: found {}, nothing to do",
                           to_nmodl(old_statement));
-            new_statements.emplace_back(std::move(old_statement));
+            new_statements.emplace_back(old_statement);
         } else {
             logger->debug("SympyReplaceSolutionsVisitor :: erasing {}", to_nmodl(old_statement));
         }
