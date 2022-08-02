@@ -197,6 +197,7 @@ void KineticBlockVisitor::visit_react_var_name(
     }
 }
 
+// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 void KineticBlockVisitor::visit_reaction_statement(ast::ReactionStatement& node) {
     statements_to_remove.insert(&node);
 

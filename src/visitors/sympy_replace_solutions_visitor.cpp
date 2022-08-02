@@ -96,7 +96,7 @@ void SympyReplaceSolutionsVisitor::visit_statement_block(ast::StatementBlock& no
         node.visit_children(*this);
     }
 
-    const auto& old_statements = node.get_statements();
+    auto& old_statements = node.get_statements();
 
     ast::StatementVector new_statements;
     new_statements.reserve(2 * old_statements.size());

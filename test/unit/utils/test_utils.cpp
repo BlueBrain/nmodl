@@ -17,7 +17,7 @@ int count_leading_spaces(std::string text) {
     nmodl::stringutils::ltrim(text);
     auto const num_whitespaces = length - text.size();
     assert(num_whitespaces <= std::numeric_limits<int>::max());
-    return num_whitespaces;
+    return static_cast<int>(num_whitespaces);
 }
 
 /// check if string has only whitespaces

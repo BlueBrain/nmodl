@@ -48,6 +48,7 @@ void Unit::add_base_unit(const std::string& name) {
     const auto dim_name = name[1];
     const int dim_no = dim_name - 'a';
     assert(dim_no >= 0 && dim_no < unit_dimensions.size());
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-constant-array-index)
     unit_dimensions[dim_no] = 1;
     add_nominator_unit(name);
 }
@@ -111,8 +112,8 @@ void Unit::add_fraction(const std::string& fraction_string) {
 }
 
 double Unit::parse_double(std::string double_string) {
-    long double d_number;
-    double d_magnitude;
+    long double d_number{};
+    double d_magnitude{};
     std::string s_number;
     std::string s_magnitude;
     std::string::const_iterator it;
@@ -306,6 +307,7 @@ void UnitTable::insert(const std::shared_ptr<Unit>& unit) {
         // base_units_names[i] = "*i-th base unit*" (ex. base_units_names[0] = "*a*")
         auto const index = unit_nominator.front()[1] - 'a';
         assert(index >= 0 && index < base_units_names.size());
+        // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-constant-array-index)
         base_units_names[index] = unit->get_name();
         // if  unit is found in table replace it
         auto find_unit_name = table.find(unit->get_name());

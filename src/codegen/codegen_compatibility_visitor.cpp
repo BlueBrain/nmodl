@@ -57,6 +57,7 @@ std::string CodegenCompatibilityVisitor::return_error_if_solve_method_is_unhandl
     return unhandled_method_error_message.str();
 }
 
+// NOLINTNEXTLINE(readability-convert-member-functions-to-static)
 std::string CodegenCompatibilityVisitor::return_error_global_var(
     ast::Ast& node,
     const std::shared_ptr<ast::Ast>& ast_node) {
@@ -72,6 +73,7 @@ std::string CodegenCompatibilityVisitor::return_error_global_var(
     return error_message_global_var.str();
 }
 
+// NOLINTNEXTLINE(readability-convert-member-functions-to-static)
 std::string CodegenCompatibilityVisitor::return_error_param_var(
     ast::Ast& node,
     const std::shared_ptr<ast::Ast>& ast_node) {
@@ -87,6 +89,7 @@ std::string CodegenCompatibilityVisitor::return_error_param_var(
     return error_message_global_var.str();
 }
 
+// NOLINTNEXTLINE(readability-convert-member-functions-to-static)
 std::string CodegenCompatibilityVisitor::return_error_if_no_bbcore_read_write(
     ast::Ast& node,
     const std::shared_ptr<ast::Ast>& /* ast_node */) {

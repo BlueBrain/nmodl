@@ -52,10 +52,10 @@ class DiffeqDriver {
     DiffeqDriver() = default;
 
     /// solve equation using provided method
-    std::string solve(const std::string& equation, std::string method, bool debug = false);
+    static std::string solve(const std::string& equation, std::string method, bool debug = false);
 
     /// check if given equation can be solved using cnexp method
-    bool cnexp_possible(const std::string& equation, std::string& solution);
+    static bool cnexp_possible(const std::string& equation, std::string& solution);
 };
 
 /** @} */  // end of parser

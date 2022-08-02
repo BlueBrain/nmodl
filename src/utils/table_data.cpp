@@ -30,7 +30,7 @@ namespace utils {
  */
 
 void TableData::print(std::ostream& stream, int indent) const {
-    const int PADDING = 1;
+    constexpr std::size_t PADDING{1};
 
     /// not necessary to print empty table
     if (rows.empty() || headers.empty()) {
@@ -42,7 +42,7 @@ void TableData::print(std::ostream& stream, int indent) const {
     auto gutter = std::string(static_cast<std::size_t>(indent) * 4, ' ');
 
     auto const ncolumns = headers.size();
-    std::vector<int> col_width(ncolumns);
+    std::vector<std::size_t> col_width(ncolumns);
 
     /// alignment is optional, so fill remaining with right alignment
     auto all_alignments = alignments;
@@ -52,7 +52,7 @@ void TableData::print(std::ostream& stream, int indent) const {
     }
 
     /// calculate space required for each column
-    unsigned row_width = 0;
+    std::size_t row_width{};
     for (unsigned i = 0; i < headers.size(); i++) {
         col_width[i] = headers[i].length() + PADDING;
         row_width += col_width[i];
@@ -83,8 +83,10 @@ void TableData::print(std::ostream& stream, int indent) const {
     std::stringstream header;
     header << "| ";
     for (size_t i = 0; i < headers.size(); i++) {
-        auto text =
-            stringutils::align_text(headers[i], col_width[i], stringutils::text_alignment::center);
+        assert(col_width[i] <= std::numeric_limits<int>::max());
+        auto text = stringutils::align_text(headers[i],
+                                            static_cast<int>(col_width[i]),
+                                            stringutils::text_alignment::center);
         header << text << " | ";
     }
 

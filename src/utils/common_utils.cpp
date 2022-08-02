@@ -47,8 +47,7 @@ bool file_is_abs(const std::string& path) {
 }
 
 std::string cwd() {
-    std::array<char, MAXPATHLEN + 1> cwd;
-
+    std::array<char, MAXPATHLEN + 1> cwd{};
     if (nullptr == getcwd(cwd.data(), MAXPATHLEN + 1)) {
         throw std::runtime_error("working directory name too long");
     }

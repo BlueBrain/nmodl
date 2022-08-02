@@ -74,7 +74,7 @@ bool check_token_type(const std::string& name, TokenType type) {
     // const char*
     else if (token_type == get_token_type(Token::STRING)) {
         auto value = sym.value.as<ast::String>();
-        REQUIRE(value.get_value() != "");
+        REQUIRE(!value.get_value().empty());
     }
     // string block representation verbatim or block comment
     else if (token_type == get_token_type(Token::VERBATIM) ||

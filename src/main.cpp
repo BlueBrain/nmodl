@@ -521,7 +521,10 @@ int main(int argc, const char* argv[]) {
         }
 
         if (json_perfstat) {
-            auto file = scratch_dir + "/" + modfile + ".perf.json";
+            std::string file{scratch_dir};
+            file.append("/");
+            file.append(modfile);
+            file.append(".perf.json");
             logger->info("Writing performance statistics to {}", file);
             PerfVisitor(file).visit_program(*ast);
         }

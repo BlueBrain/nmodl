@@ -116,7 +116,9 @@ void InlineVisitor::inline_arguments(StatementBlock& inlined_block,
         /// create assignment statement and insert after the local variables
         auto expression = new BinaryExpression(lhs, BinaryOperator(ast::BOP_ASSIGN), rhs);
         auto statement = std::make_shared<ExpressionStatement>(expression);
-        inlined_block.insert_statement(statements.begin() + counter + 1ul, statement);
+        inlined_block.insert_statement(statements.begin() +
+                                           static_cast<std::ptrdiff_t>(counter + 1ul),
+                                       statement);
         counter++;
     }
 }

@@ -101,6 +101,7 @@ class {{ node.class_name }} : public {{ node.base_class }} {
    *
    * @return pointer to the clone/copy of the current node
    */
+  // NOLINTNEXTLINE(clang-analyzer-cplusplus.NewDeleteLeaks)
   {{ virtual(node) }} {{ node.class_name }}* clone() const override {
     return new {{ node.class_name }}(*this);
   }

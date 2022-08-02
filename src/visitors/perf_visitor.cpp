@@ -115,7 +115,7 @@ void PerfVisitor::visit_binary_expression(const ast::BinaryExpression& node) {
 
 /// add performance stats to json printer
 void PerfVisitor::add_perf_to_printer(const PerfStat& perf) const {
-    const auto& keys = perf.keys();
+    const auto& keys = nmodl::utils::PerfStat::keys();
     const auto& values = perf.values();
     assert(keys.size() == values.size());
 
