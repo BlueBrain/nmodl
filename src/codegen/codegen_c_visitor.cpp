@@ -117,25 +117,25 @@ void CodegenCVisitor::visit_prime_name(const PrimeName& node) {
 /**
  * \todo : Validate how @ is being handled in neuron implementation
  */
-void CodegenCVisitor::visit_var_name(const VarName& node) {
-    if (!codegen) {
-        return;
-    }
-    const auto& name = node.get_name();
-    const auto& at_index = node.get_at();
-    const auto& index = node.get_index();
-    name->accept(*this);
-    if (at_index) {
-        printer->add_text("@");
-        at_index->accept(*this);
-    }
-    if (index) {
-        printer->add_text("[");
-        printer->add_text("static_cast<int>(");
-        index->accept(*this);
-        printer->add_text(")");
-        printer->add_text("]");
-    }
+void CodegenCVisitor::visit_identifier(const Identifier& node) {
+//     if (!codegen) {
+//         return;
+//     }
+//     const auto& name = node.get_name();
+//     const auto& at_index = node.get_at();
+//     const auto& index = node.get_index();
+//     name->accept(*this);
+//     if (at_index) {
+//         printer->add_text("@");
+//         at_index->accept(*this);
+//     }
+//     if (index) {
+//         printer->add_text("[");
+//         printer->add_text("static_cast<int>(");
+//         index->accept(*this);
+//         printer->add_text(")");
+//         printer->add_text("]");
+//     }
 }
 
 
@@ -1371,7 +1371,7 @@ void CodegenCVisitor::print_function_call(const FunctionCall& node) {
                                      arguments.front()->get_node_type() == AstNodeType::STRING &&
                                      arguments.front()->get_node_type() ==
                                          AstNodeType::CONSTANT_VAR &&
-                                     arguments.front()->get_node_type() == AstNodeType::VAR_NAME &&
+                                     arguments.front()->get_node_type() == AstNodeType::IDENTIFIER &&
                                      arguments.front()->get_node_type() == AstNodeType::LOCAL_VAR;
     }
     if (defined_method(name)) {

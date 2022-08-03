@@ -235,7 +235,7 @@
 %type   <ast::Name*>                        Name
 %type   <ast::Number*>                      NUMBER
 %type   <ast::Number*>                      number
-%type   <ast::VarName*>                     variable_name
+%type   <ast::Identifier*>                  identifier
 
 %type   <ast::Model*>                       model
 %type   <ast::Unit*>                        units
@@ -270,7 +270,7 @@
 %type   <ast::StatementBlock*>              if_solution_error
 %type   <ast::Expression*>                  optional_increment
 %type   <ast::Number*>                      optional_start
-%type   <ast::VarNameVector>                sens_list
+%type   <ast::IdentifierVector>                sens_list
 %type   <ast::Sens*>                        sens
 %type   <ast::LagStatement*>                lag_statement
 %type   <ast::ForAllStatement*>             forall_statement
@@ -1220,13 +1220,12 @@ statement_type2 :   assignment
                 ;
 
 
-assignment      :   variable_name "=" expression
+assignment      :   identifier "=" expression
                     {
                         auto expression = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_ASSIGN), $3);
-                        auto name = $1->get_name();
-                        if ((name->is_prime_name()) ||
-                            (name->is_indexed_name() &&
-                            std::dynamic_pointer_cast<ast::IndexedName>(name)->get_name()->is_prime_name()))
+                        if (($1->get_node_type() == ast::AstNodeType::PRIME_NAME) ||
+                            ($1->get_node_type() == ast::AstNodeType::INDEXED_NAME &&
+                            std::dynamic_cast<ast::IndexedName>($1)->get_name()->is_prime_name()))
                         {
                             $$ = new ast::DiffEqExpression(expression);
                         } else {
@@ -1244,15 +1243,15 @@ assignment      :   variable_name "=" expression
                 ;
 
 
-variable_name   :   name
+identifier   :   name
                     {
-                        $$ = new ast::VarName($1, nullptr, nullptr);
+                        $$ = new ast::Name($1);
                     }
                 |   name "[" integer_expression "]"
                     {
-                        $$ = new ast::VarName(new ast::IndexedName($1, $3), nullptr, nullptr);
+                        $$ = new ast::IndexedName($1, $3);
                     }
-                |   NAME_PTR "@" integer
+                /* |   NAME_PTR "@" integer
                     {
                         $$ = new ast::VarName($1, $3, nullptr);
                     }
@@ -1260,6 +1259,7 @@ variable_name   :   name
                     {
                         $$ = new ast::VarName($1, $3, $5);
                     }
+                */
                 ;
 
 
@@ -1303,7 +1303,7 @@ integer_expression : Name
                 ;
 
 
-expression      :   variable_name
+expression      :   identifier
                     {
                         $$ = $1;
                     }
@@ -1465,7 +1465,7 @@ primary         :   term
                 ;
 
 
-term            :   variable_name
+term            :   identifier
                     {
                         $$ = $1;
                     }
@@ -1883,7 +1883,7 @@ for_netcon      :   FOR_NETCONS "(" optional_argument_list ")" statement_list "}
                 ;
 
 
-watch_expression :  variable_name
+watch_expression :  identifier
                     {
                         $$ = $1;
                     }
@@ -1941,12 +1941,12 @@ sens            :   SENS sens_list
                 ;
 
 
-sens_list       :   variable_name
+sens_list       :   identifier
                     {
-                        $$ = ast::VarNameVector();
+                        $$ = ast::IdentifierVector();
                         $$.emplace_back($1);
                     }
-                |   sens_list "," variable_name
+                |   sens_list "," identifier
                     {
                         $1.emplace_back($3);
                         $$ = $1;
@@ -2030,21 +2030,21 @@ reaction_statement : REACTION react REACT1 react "(" expression "," expression "
                 ;
 
 
-react           :   variable_name
+react           :   identifier
                     {
                         $$ = new ast::ReactVarName(nullptr, $1);
                     }
-                |   integer variable_name
+                |   integer identifier
                     {
                         $$ = new ast::ReactVarName($1, $2);
                     }
-                |   react "+" variable_name
+                |   react "+" identifier
                     {
                         auto op = ast::BinaryOperator(ast::BOP_ADDITION);
                         auto variable = new ast::ReactVarName(nullptr, $3);
                         $$ = new ast::BinaryExpression($1, op, variable);
                     }
-                |   react "+" integer variable_name
+                |   react "+" integer identifier
                     {
                         auto op = ast::BinaryOperator(ast::BOP_ADDITION);
                         auto variable = new ast::ReactVarName($3, $4);

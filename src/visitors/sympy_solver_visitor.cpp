@@ -368,7 +368,7 @@ void SympySolverVisitor::solve_non_linear_system(
     construct_eigen_solver_block(pre_solve_statements, solutions, false);
 }
 
-void SympySolverVisitor::visit_var_name(ast::VarName& node) {
+void SympySolverVisitor::visit_identifier(ast::Identifier& node) {
     if (collect_state_vars) {
         std::string var_name = node.get_node_name();
         if (node.get_name()->is_indexed_name()) {
@@ -391,7 +391,7 @@ void SympySolverVisitor::visit_var_name(ast::VarName& node) {
 void SympySolverVisitor::visit_diff_eq_expression(ast::DiffEqExpression& node) {
     const auto& lhs = node.get_expression()->get_lhs();
 
-    if (!lhs->is_var_name()) {
+    if (!lhs->is_identifier()) {
         logger->warn("SympySolverVisitor :: LHS of differential equation is not a VariableName");
         return;
     }

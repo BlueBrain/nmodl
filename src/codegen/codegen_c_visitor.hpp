@@ -1899,7 +1899,7 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
     void visit_solution_expression(const ast::SolutionExpression& node) override;
     void visit_unary_operator(const ast::UnaryOperator& node) override;
     void visit_unit(const ast::Unit& node) override;
-    void visit_var_name(const ast::VarName& node) override;
+    void visit_identifier(const ast::Identifier& node) override;
     void visit_verbatim(const ast::Verbatim& node) override;
     void visit_watch_statement(const ast::WatchStatement& node) override;
     void visit_while_statement(const ast::WhileStatement& node) override;

@@ -318,7 +318,7 @@ void DefUseAnalyzeVisitor::visit_conserve(const ast::Conserve& node) {
     visit_unsupported_node(node);
 }
 
-void DefUseAnalyzeVisitor::visit_var_name(const ast::VarName& node) {
+void DefUseAnalyzeVisitor::visit_Identifier(const ast::Identifier& node) {
     const std::string& variable = to_nmodl(node);
     process_variable(variable);
 }

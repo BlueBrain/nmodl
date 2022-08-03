@@ -279,31 +279,6 @@
                                         }
                                     \endcode
 
-                        - VarName:
-                            members:
-                              - name:
-                                  brief: "Name of variable"
-                                  type: Identifier
-                                  node_name: true
-                              - at:
-                                  brief: "Value specified with `@`"
-                                  type: Integer
-                                  optional: true
-                                  prefix: {value: "@"}
-                              - index:
-                                  brief: "index value in case of array"
-                                  type: Expression
-                                  optional: true
-                                  prefix: {value: "["}
-                                  suffix: {value: "]"}
-                            brief: "Represents a variable"
-                            description: |
-                                    This type was introduced to store variables of different types like
-                                    ast::Name or ast::IndexedName in the AST.
-
-                                    \note With ast::Identifier as top level base class, this type can be
-                                    removed in the future refactoring.
-
                         - Argument:
                             members:
                               - name:
@@ -337,7 +312,7 @@
                                   prefix: {value: " "}
                               - name:
                                   brief: "TODO"
-                                  type: VarName
+                                  type: Identifier
                                   node_name: true
 
                         - ReadIonVar:
@@ -1781,7 +1756,7 @@
                       members:
                         - variables:
                             brief: "TODO"
-                            type: VarName
+                            type: Identifier
                             vector: true
                             separator: ", "
                       brief: "Represent SENS statement in NMODL"

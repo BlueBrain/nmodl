@@ -137,6 +137,6 @@ std::pair<std::string, std::unordered_set<std::string>> statement_dependencies(
 std::string get_indexed_name(const ast::IndexedName& node);
 
 /// Given a VarName node, return the full var name including index
-std::string get_full_var_name(const ast::VarName& node);
+std::string get_full_var_name(const ast::Identifier& node);
 
 }  // namespace nmodl

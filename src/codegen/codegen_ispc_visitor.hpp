@@ -235,7 +235,7 @@ class CodegenIspcVisitor: public CodegenCVisitor {
         , fallback_codegen(mod_file, float_type, optimize_ionvar_copies, wrapper_printer) {}
 
     void visit_function_call(const ast::FunctionCall& node) override;
-    void visit_var_name(const ast::VarName& node) override;
+    void visit_identifier(const ast::Identifier& node) override;
     void visit_program(const ast::Program& node) override;
     void visit_local_list_statement(const ast::LocalListStatement& node) override;
 

@@ -171,7 +171,7 @@ class SympySolverVisitor: public AstVisitor {
         , elimination(elimination)
         , SMALL_LINEAR_SYSTEM_MAX_STATES(SMALL_LINEAR_SYSTEM_MAX_STATES){};
 
-    void visit_var_name(ast::VarName& node) override;
+    void visit_identifier(ast::Identifier& node) override;
     void visit_diff_eq_expression(ast::DiffEqExpression& node) override;
     void visit_conserve(ast::Conserve& node) override;
     void visit_derivative_block(ast::DerivativeBlock& node) override;

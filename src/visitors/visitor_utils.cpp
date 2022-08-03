@@ -255,11 +255,11 @@ std::pair<std::string, std::unordered_set<std::string>> statement_dependencies(
         return {key, out};
     }
 
-    const auto& lhs_var_name = std::dynamic_pointer_cast<ast::VarName>(lhs);
+    const auto& lhs_var_name = std::dynamic_pointer_cast<ast::Identifier>(lhs);
     key = get_full_var_name(*lhs_var_name);
 
     visitor::AstLookupVisitor lookup_visitor;
-    lookup_visitor.lookup(*rhs, ast::AstNodeType::VAR_NAME);
+    lookup_visitor.lookup(*rhs, ast::AstNodeType::IDENTIFIER);
     auto rhs_nodes = lookup_visitor.get_nodes();
     std::for_each(rhs_nodes.begin(),
                   rhs_nodes.end(),
@@ -273,7 +273,7 @@ std::string get_indexed_name(const ast::IndexedName& node) {
     return fmt::format("{}[{}]", node.get_node_name(), to_nmodl(node.get_length()));
 }
 
-std::string get_full_var_name(const ast::VarName& node) {
+std::string get_full_var_name(const ast::Identifier& node) {
     std::string full_var_name;
     if (node.get_name()->is_indexed_name()) {
         auto index_name_node = std::dynamic_pointer_cast<ast::IndexedName>(node.get_name());

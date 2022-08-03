@@ -615,7 +615,7 @@ void CodegenHelperVisitor::visit_statement_block(const ast::StatementBlock& node
     for (auto& statement: statements) {
         statement->accept(*this);
         if (under_derivative_block && assign_lhs &&
-            (assign_lhs->is_name() || assign_lhs->is_var_name())) {
+            (assign_lhs->is_name() || assign_lhs->is_identifier())) {
             auto name = assign_lhs->get_node_name();
             auto symbol = psymtab->lookup(name);
             if (symbol != nullptr) {

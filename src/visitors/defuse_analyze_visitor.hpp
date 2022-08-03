@@ -286,7 +286,7 @@ class DefUseAnalyzeVisitor: protected ConstAstVisitor {
 
     void visit_conserve(const ast::Conserve& node) override;
 
-    void visit_var_name(const ast::VarName& node) override;
+    void visit_identifier(const ast::Identifier& node) override;
 
     void visit_name(const ast::Name& node) override;
 

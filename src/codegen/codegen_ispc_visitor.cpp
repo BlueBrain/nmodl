@@ -62,7 +62,7 @@ void CodegenIspcVisitor::visit_function_call(const ast::FunctionCall& node) {
 /*
  * Rename special global variables
  */
-void CodegenIspcVisitor::visit_var_name(const ast::VarName& node) {
+void CodegenIspcVisitor::visit_identifier(const ast::Identifier& node) {
     if (!codegen) {
         return;
     }
@@ -70,7 +70,7 @@ void CodegenIspcVisitor::visit_var_name(const ast::VarName& node) {
     node.accept(celsius_rename);
     RenameVisitor pi_rename("PI", "ISPC_PI");
     node.accept(pi_rename);
-    CodegenCVisitor::visit_var_name(node);
+    CodegenCVisitor::visit_identifier(node);
 }
 
 void CodegenIspcVisitor::visit_local_list_statement(const ast::LocalListStatement& node) {
