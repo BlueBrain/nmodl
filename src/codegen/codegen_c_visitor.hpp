@@ -1148,32 +1148,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
-     * Print the pragma annotation needed before a global variable that must be
-     * created on the device. This always comes before a matching call to
-     * print_global_variable_device_create_annotation_post.
-     *
-     * \note This is not used for the C backend
-     */
-    virtual void print_global_variable_device_create_annotation_pre();
-
-    /**
-     * Print the pragma annotation needed after a global variables that must be
-     * created on the device. This always comes after a matching call to
-     * print_global_variable_device_create_annotation_pre.
-     *
-     * \note This is not used for the C backend
-     */
-    virtual void print_global_variable_device_create_annotation_post();
-
-    /**
-     * Print the pragma annotation to update global variables from host to the device
-     *
-     * \note This is not used for the C backend
-     */
-    virtual void print_global_variable_device_update_annotation();
-
-
-    /**
      * Print the setup method for setting matrix shadow vectors
      *
      */

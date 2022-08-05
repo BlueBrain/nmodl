@@ -455,9 +455,9 @@ void CodegenIspcVisitor::print_net_receive_buffering_wrapper() {
     printer->start_block("if (ml == NULL)");
     printer->add_line("return;");
     printer->end_block(1);
-    printer->add_line(fmt::format("{0}* {1}inst = ({0}*) ml->instance;",
-                                  instance_struct(),
-                                  ptr_type_qualifier()));
+    printer->fmt_line("auto* const {1}inst = static_cast<{0}*>(ml->instance);",
+                      instance_struct(),
+                      ptr_type_qualifier());
 
     printer->add_line(fmt::format("{}(inst, nt, ml);", method_name("ispc_net_buf_receive")));
 
@@ -496,9 +496,9 @@ void CodegenIspcVisitor::print_wrapper_routine(const std::string& wrapper_functi
     printer->add_newline(2);
     printer->start_block(fmt::format("void {}({})", function_name, args));
     printer->add_line("int nodecount = ml->nodecount;");
-    // clang-format off
-    printer->add_line(fmt::format("{0}* {1}inst = ({0}*) ml->instance;", instance_struct(), ptr_type_qualifier()));
-    // clang-format on
+    printer->fmt_line("auto* const {1}inst = static_cast<{0}*>(ml->instance);",
+                      instance_struct(),
+                      ptr_type_qualifier());
 
     if (type == BlockType::Initial) {
         printer->add_newline();

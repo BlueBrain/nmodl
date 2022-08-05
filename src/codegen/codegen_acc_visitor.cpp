@@ -159,7 +159,9 @@ void CodegenAccVisitor::print_eigen_linear_solver(const std::string& /* float_ty
  */
 void CodegenAccVisitor::print_kernel_data_present_annotation_block_begin() {
     if (!info.artificial_cell) {
-        printer->start_block("nrn_pragma_acc(data present(nt, ml) if(nt->compute_gpu))");
+        printer->add_line("nrn_pragma_acc(data present(nt, ml) if(nt->compute_gpu))");
+        printer->add_line("{");
+        printer->increase_indent();
     }
 }
 
@@ -174,14 +176,15 @@ void CodegenAccVisitor::print_kernel_data_present_annotation_block_begin() {
  */
 void CodegenAccVisitor::print_net_init_acc_serial_annotation_block_begin() {
     if (!info.artificial_cell) {
-        printer->start_block(
-            "#pragma acc serial present(inst, indexes, weights) if(nt->compute_gpu)");
+        printer->add_line("#pragma acc serial present(inst, indexes, weights) if(nt->compute_gpu)");
+        printer->add_line("{");
+        printer->increase_indent();
     }
 }
 
 void CodegenAccVisitor::print_net_init_acc_serial_annotation_block_end() {
     if (!info.artificial_cell) {
-        printer->end_block();
+        printer->end_block(1);
     }
 }
 
@@ -227,7 +230,7 @@ void CodegenAccVisitor::print_nrn_cur_matrix_shadow_reduction() {
  */
 void CodegenAccVisitor::print_kernel_data_present_annotation_block_end() {
     if (!info.artificial_cell) {
-        printer->end_block();
+        printer->end_block(1);
     }
 }
 
@@ -239,29 +242,6 @@ void CodegenAccVisitor::print_rhs_d_shadow_variables() {
 
 bool CodegenAccVisitor::nrn_cur_reduction_loop_required() {
     return false;
-}
-
-
-void CodegenAccVisitor::print_global_variable_device_create_annotation_pre() {
-    if (!info.artificial_cell) {
-        printer->add_line("nrn_pragma_omp(declare target)");
-    }
-}
-
-void CodegenAccVisitor::print_global_variable_device_create_annotation_post() {
-    if (!info.artificial_cell) {
-        printer->add_line(
-            fmt::format("nrn_pragma_acc(declare create ({}_global))", info.mod_suffix));
-        printer->add_line("nrn_pragma_omp(end declare target)");
-    }
-}
-
-void CodegenAccVisitor::print_global_variable_device_update_annotation() {
-    if (!info.artificial_cell) {
-        printer->add_line("// FIXME sync instance struct to device?");
-        // printer->fmt_line("nrn_pragma_acc(update device ({}_global))", info.mod_suffix);
-        // printer->fmt_line("nrn_pragma_omp(target update to({}_global))", info.mod_suffix);
-    }
 }
 
 
@@ -293,8 +273,8 @@ void CodegenAccVisitor::print_newtonspace_transfer_to_device() const {
 void CodegenAccVisitor::print_instance_variable_transfer_to_device() const {
     if (!info.artificial_cell) {
         printer->start_block("if(nt->compute_gpu)");
-        printer->add_line("Memb_list* dml = cnrn_target_deviceptr(ml);");
-        printer->add_line("cnrn_target_memcpy_to_device(&(dml->instance), &(ml->instance));");
+        printer->add_line("auto* const d_inst = cnrn_target_deviceptr(inst);");
+        printer->add_line("cnrn_target_memcpy_to_device(d_inst, inst);");
         printer->end_block(1);
     }
 }
