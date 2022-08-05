@@ -1298,6 +1298,7 @@ std::string CodegenCVisitor::global_var_struct_type_qualifier() {
 }
 
 void CodegenCVisitor::print_global_var_struct_decl() {
+    codegen_global_variables.push_back(make_symbol("mech_type"));
     printer->fmt_line("static int {}{{-1}};", get_variable_name("mech_type"));
 }
 
@@ -2765,15 +2766,17 @@ void CodegenCVisitor::print_mechanism_register() {
     auto nobjects = num_thread_objects();
     if (info.point_process) {
         printer->fmt_line("point_register_mech({}, {}, {}, {});",
-                        args,
-                        info.constructor_node ? method_name(naming::NRN_CONSTRUCTOR_METHOD)
-                                              : "nullptr",
-                        info.destructor_node ? method_name(naming::NRN_DESTRUCTOR_METHOD) : "nullptr",
-                        nobjects);
+                          args,
+                          info.constructor_node ? method_name(naming::NRN_CONSTRUCTOR_METHOD)
+                                                : "nullptr",
+                          info.destructor_node ? method_name(naming::NRN_DESTRUCTOR_METHOD)
+                                               : "nullptr",
+                          nobjects);
     } else {
         printer->fmt_line("register_mech({}, {});", args, nobjects);
         if (info.constructor_node) {
-            printer->fmt_line("register_constructor({});", method_name(naming::NRN_CONSTRUCTOR_METHOD));
+            printer->fmt_line("register_constructor({});",
+                              method_name(naming::NRN_CONSTRUCTOR_METHOD));
         }
     }
 
@@ -3003,7 +3006,10 @@ void CodegenCVisitor::print_mechanism_range_var_structure() {
     const auto qualifier = global_var_struct_type_qualifier();
     for (const auto& ion: info.ions) {
         auto name = fmt::format("{}_type", ion.name);
-        printer->fmt_line("{}int const {}{{nrn_get_mechtype({})}};", qualifier, name, add_escape_quote(ion.name + "_ion"));
+        printer->fmt_line("{}int const {}{{nrn_get_mechtype({})}};",
+                          qualifier,
+                          name,
+                          add_escape_quote(ion.name + "_ion"));
         codegen_global_variables.push_back(make_symbol(name));
     }
 
@@ -3044,7 +3050,10 @@ void CodegenCVisitor::print_mechanism_range_var_structure() {
 
     if (!info.thread_variables.empty()) {
         printer->fmt_line("{}int thread_data_in_use;", qualifier);
-        printer->fmt_line("{}{} thread_data[{}];", qualifier, float_type, info.thread_var_data_size);
+        printer->fmt_line("{}{} thread_data[{}];",
+                          qualifier,
+                          float_type,
+                          info.thread_var_data_size);
         codegen_global_variables.push_back(make_symbol("thread_data_in_use"));
         auto symbol = make_symbol("thread_data");
         symbol->set_as_array(info.thread_var_data_size);
@@ -3054,9 +3063,7 @@ void CodegenCVisitor::print_mechanism_range_var_structure() {
     printer->fmt_line("{}int reset;", qualifier);
     codegen_global_variables.push_back(make_symbol("reset"));
 
-    codegen_global_variables.push_back(make_symbol("mech_type"));
-    printer->fmt_line("{}int const mech_type{{{}}};",
-                      qualifier, get_variable_name("mech_type"));
+    printer->fmt_line("{}int const mech_type{{{}}};", qualifier, get_variable_name("mech_type"));
 
     auto& globals = info.global_variables;
     auto& constants = info.constant_variables;
@@ -3102,14 +3109,23 @@ void CodegenCVisitor::print_mechanism_range_var_structure() {
             }
             return list;
         };
-        printer->fmt_line("std::array<int, {}> const {}slist1{{{}}};", info.primes_size, qualifier, initializer_list(info.prime_variables_by_order, ""));
-        printer->fmt_line("std::array<int, {}> const {}dlist1{{{}}};", info.primes_size, qualifier, initializer_list(info.prime_variables_by_order, "D"));
+        printer->fmt_line("std::array<int, {}> const {}slist1{{{}}};",
+                          info.primes_size,
+                          qualifier,
+                          initializer_list(info.prime_variables_by_order, ""));
+        printer->fmt_line("std::array<int, {}> const {}dlist1{{{}}};",
+                          info.primes_size,
+                          qualifier,
+                          initializer_list(info.prime_variables_by_order, "D"));
         codegen_global_variables.push_back(make_symbol("slist1"));
         codegen_global_variables.push_back(make_symbol("dlist1"));
         // additional list for derivimplicit method
         if (info.derivimplicit_used()) {
             auto primes = program_symtab->get_variables_with_properties(NmodlType::prime_name);
-            printer->fmt_line("std::array<int, {}> const {}slist2{{{}}};", info.primes_size, qualifier, initializer_list(primes, ""));
+            printer->fmt_line("std::array<int, {}> const {}slist2{{{}}};",
+                              info.primes_size,
+                              qualifier,
+                              initializer_list(primes, ""));
             codegen_global_variables.push_back(make_symbol("slist2"));
         }
     }
@@ -3354,7 +3370,7 @@ void CodegenCVisitor::print_instance_variable_setup() {
     }
 
     printer->add_newline();
-    printer->add_line("// Allocate instance structure and initialise constant global data inside it");
+    printer->add_line("// Allocate instance structure and initialise constant global data");
     printer->fmt_start_block("static void {}(NrnThread* nt, Memb_list* ml, int type)",
                              method_name(naming::NRN_PRIVATE_CONSTRUCTOR_METHOD));
     printer->add_line("assert(!ml->instance);");

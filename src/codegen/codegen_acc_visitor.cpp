@@ -174,7 +174,8 @@ void CodegenAccVisitor::print_kernel_data_present_annotation_block_begin() {
  */
 void CodegenAccVisitor::print_net_init_acc_serial_annotation_block_begin() {
     if (!info.artificial_cell) {
-        printer->start_block("#pragma acc serial present(inst, indexes, weights) if(nt->compute_gpu)");
+        printer->start_block(
+            "#pragma acc serial present(inst, indexes, weights) if(nt->compute_gpu)");
     }
 }
 
