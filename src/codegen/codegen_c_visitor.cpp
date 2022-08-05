@@ -2473,7 +2473,6 @@ void CodegenCVisitor::print_mechanism_global_var_structure() {
 
     for (const auto& var: info.state_vars) {
         auto name = var->get_name() + "0";
-        // TODO is this safe here?
         auto symbol = program_symtab->lookup(name);
         if (symbol == nullptr) {
             // Zero initialize everything
@@ -2550,7 +2549,6 @@ void CodegenCVisitor::print_mechanism_global_var_structure() {
                             info.primes_size,
                             info.prime_variables_by_order.size())};
         }
-        // TODO is it safe to call position_of_float_var at this point?
         auto const initializer_list = [&](auto const& primes, const char* prefix) {
             std::string list;
             for (auto iter = primes.begin(); iter != primes.end(); ++iter) {
@@ -2575,7 +2573,6 @@ void CodegenCVisitor::print_mechanism_global_var_structure() {
         codegen_global_variables.push_back(make_symbol("dlist1"));
         // additional list for derivimplicit method
         if (info.derivimplicit_used()) {
-            // TODO is it safe to call this at this point?
             auto primes = program_symtab->get_variables_with_properties(NmodlType::prime_name);
             printer->fmt_line("{} {}slist2{{{}}};",
                               array_type,
@@ -3205,7 +3202,6 @@ void CodegenCVisitor::print_instance_variable_setup() {
     printer->add_line("// Allocate instance structure and initialise constant global data");
     printer->fmt_start_block("static void {}(NrnThread* nt, Memb_list* ml, int type)",
                              method_name(naming::NRN_PRIVATE_CONSTRUCTOR_METHOD));
-    printer->add_line("assert(get_memb_list(nt) == ml);");
     printer->add_line("assert(!ml->instance);");
     printer->add_line("assert(!ml->instance_size);");
     printer->fmt_line("ml->instance = new {}{{}};", instance_struct());
