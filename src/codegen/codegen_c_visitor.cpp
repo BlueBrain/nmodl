@@ -1298,7 +1298,7 @@ std::string CodegenCVisitor::global_var_struct_type_qualifier() {
 }
 
 void CodegenCVisitor::print_global_var_struct_decl() {
-    printer->add_line(fmt::format("{} {}_global;", global_struct(), info.mod_suffix));
+    printer->fmt_line("static int {}{{-1}};", get_variable_name("mech_type"));
 }
 
 /****************************************************************************************/
@@ -2290,7 +2290,13 @@ std::string CodegenCVisitor::int_variable_name(const IndexVariableInfo& symbol,
 
 
 std::string CodegenCVisitor::global_variable_name(const SymbolType& symbol) const {
-    return fmt::format("inst->{}", info.mod_suffix, symbol->get_name());
+    if (symbol->get_name() == "mech_type") {
+        // This seems to necessary so that get_memb_list can be implemented --
+        // otherwise global variables can be stored inside the instance struct
+        return "global_mech_type";
+    } else {
+        return fmt::format("inst->{}", symbol->get_name());
+    }
 }
 
 
@@ -3048,9 +3054,9 @@ void CodegenCVisitor::print_mechanism_range_var_structure() {
     printer->fmt_line("{}int reset;", qualifier);
     codegen_global_variables.push_back(make_symbol("reset"));
 
-    printer->fmt_line("{}int const mech_type{{nrn_get_mechtype({})}};",
-                      qualifier, add_escape_quote(info.mod_suffix));
     codegen_global_variables.push_back(make_symbol("mech_type"));
+    printer->fmt_line("{}int const mech_type{{{}}};",
+                      qualifier, get_variable_name("mech_type"));
 
     auto& globals = info.global_variables;
     auto& constants = info.constant_variables;
@@ -3140,7 +3146,6 @@ void CodegenCVisitor::print_mechanism_range_var_structure() {
     // printer->add_newline(1);
     // printer->add_line("/** holds object of global variable */");
     // print_global_variable_device_create_annotation_pre();
-    // print_global_var_struct_decl();
     // // create copy on the device
     // print_global_variable_device_create_annotation_post();
 }
@@ -4699,6 +4704,7 @@ void CodegenCVisitor::print_common_getters() {
 
 
 void CodegenCVisitor::print_data_structures() {
+    print_global_var_struct_decl();
     print_mechanism_range_var_structure();
     print_ion_var_structure();
 }
