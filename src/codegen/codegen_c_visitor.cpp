@@ -2290,7 +2290,8 @@ std::string CodegenCVisitor::int_variable_name(const IndexVariableInfo& symbol,
 }
 
 
-std::string CodegenCVisitor::global_variable_name(const SymbolType& symbol, bool use_instance) const {
+std::string CodegenCVisitor::global_variable_name(const SymbolType& symbol,
+                                                  bool use_instance) const {
     if (use_instance) {
         return fmt::format("inst->global.{}", symbol->get_name());
     } else {
@@ -2352,12 +2353,9 @@ std::string CodegenCVisitor::get_variable_name(const std::string& name, bool use
     // global variable
     auto g = std::find_if(codegen_global_variables.begin(),
                           codegen_global_variables.end(),
-                          [&varname](const auto& pair) {
-                              auto const& [sym, type] = pair;
-                              return varname == sym->get_name();
-                          });
+                          symbol_comparator);
     if (g != codegen_global_variables.end()) {
-        return global_variable_name(g->first, use_instance);
+        return global_variable_name(*g, use_instance);
     }
 
     // shadow variable
@@ -2465,21 +2463,22 @@ void CodegenCVisitor::print_mechanism_global_var_structure() {
     for (const auto& ion: info.ions) {
         auto name = fmt::format("{}_type", ion.name);
         printer->fmt_line("{}int {};", qualifier, name);
-        codegen_global_variables.emplace_back(make_symbol(name), "int");
+        codegen_global_variables.push_back(make_symbol(name));
     }
 
     if (info.point_process) {
         printer->fmt_line("{}int point_type;", qualifier);
-        codegen_global_variables.emplace_back(make_symbol("point_type"), "int");
+        codegen_global_variables.push_back(make_symbol("point_type"));
     }
 
     for (const auto& var: info.state_vars) {
         auto name = var->get_name() + "0";
+        // TODO is this safe here?
         auto symbol = program_symtab->lookup(name);
         if (symbol == nullptr) {
             // Zero initialize everything
             printer->fmt_line("{}{} {}{{0}};", qualifier, float_type, name);
-            codegen_global_variables.emplace_back(make_symbol(name), float_type);
+            codegen_global_variables.push_back(make_symbol(name));
         }
     }
 
@@ -2498,7 +2497,7 @@ void CodegenCVisitor::print_mechanism_global_var_structure() {
             } else {
                 printer->fmt_line("{}{} {};", qualifier, float_type, name);
             }
-            codegen_global_variables.emplace_back(var, float_type);
+            codegen_global_variables.push_back(var);
         }
     }
 
@@ -2508,18 +2507,18 @@ void CodegenCVisitor::print_mechanism_global_var_structure() {
                           qualifier,
                           float_type,
                           info.thread_var_data_size);
-        codegen_global_variables.emplace_back(make_symbol("thread_data_in_use"), "int");
+        codegen_global_variables.push_back(make_symbol("thread_data_in_use"));
         auto symbol = make_symbol("thread_data");
         symbol->set_as_array(info.thread_var_data_size);
         // FIXME
-        codegen_global_variables.emplace_back(symbol, float_type);
+        codegen_global_variables.push_back(symbol);
     }
 
     printer->fmt_line("{}int reset;", qualifier);
-    codegen_global_variables.emplace_back(make_symbol("reset"), "int");
+    codegen_global_variables.push_back(make_symbol("reset"));
 
     printer->fmt_line("{}int mech_type;", qualifier);
-    codegen_global_variables.emplace_back(make_symbol("mech_type"), "int");
+    codegen_global_variables.push_back(make_symbol("mech_type"));
 
     auto& globals = info.global_variables;
     auto& constants = info.constant_variables;
@@ -2533,14 +2532,14 @@ void CodegenCVisitor::print_mechanism_global_var_structure() {
         } else {
             printer->fmt_line("{}{} {};", qualifier, float_type, name);
         }
-        codegen_global_variables.emplace_back(var, float_type);
+        codegen_global_variables.push_back(var);
     }
 
     for (const auto& var: constants) {
         auto name = var->get_name();
         auto value_ptr = var->get_value();
         printer->fmt_line("{}{} {};", qualifier, float_type, name);
-        codegen_global_variables.emplace_back(var, float_type);
+        codegen_global_variables.push_back(var);
     }
 
     if (info.primes_size != 0) {
@@ -2551,6 +2550,7 @@ void CodegenCVisitor::print_mechanism_global_var_structure() {
                             info.primes_size,
                             info.prime_variables_by_order.size())};
         }
+        // TODO is it safe to call position_of_float_var at this point?
         auto const initializer_list = [&](auto const& primes, const char* prefix) {
             std::string list;
             for (auto iter = primes.begin(); iter != primes.end(); ++iter) {
@@ -2571,41 +2571,42 @@ void CodegenCVisitor::print_mechanism_global_var_structure() {
                           array_type,
                           qualifier,
                           initializer_list(info.prime_variables_by_order, "D"));
-        codegen_global_variables.emplace_back(make_symbol("slist1"), array_type);
-        codegen_global_variables.emplace_back(make_symbol("dlist1"), array_type);
+        codegen_global_variables.push_back(make_symbol("slist1"));
+        codegen_global_variables.push_back(make_symbol("dlist1"));
         // additional list for derivimplicit method
         if (info.derivimplicit_used()) {
+            // TODO is it safe to call this at this point?
             auto primes = program_symtab->get_variables_with_properties(NmodlType::prime_name);
             printer->fmt_line("{} {}slist2{{{}}};",
                               array_type,
                               qualifier,
                               initializer_list(primes, ""));
-            codegen_global_variables.emplace_back(make_symbol("slist2"), array_type);
+            codegen_global_variables.push_back(make_symbol("slist2"));
         }
     }
 
     if (info.table_count > 0) {
         printer->fmt_line("{}double usetable;", qualifier);
-        codegen_global_variables.emplace_back(make_symbol(naming::USE_TABLE_VARIABLE), "double");
+        codegen_global_variables.push_back(make_symbol(naming::USE_TABLE_VARIABLE));
 
         for (const auto& block: info.functions_with_table) {
             auto name = block->get_node_name();
             printer->fmt_line("{}{} tmin_{};", qualifier, float_type, name);
             printer->fmt_line("{}{} mfac_{};", qualifier, float_type, name);
-            codegen_global_variables.emplace_back(make_symbol("tmin_" + name), float_type);
-            codegen_global_variables.emplace_back(make_symbol("mfac_" + name), float_type);
+            codegen_global_variables.push_back(make_symbol("tmin_" + name));
+            codegen_global_variables.push_back(make_symbol("mfac_" + name));
         }
 
         for (const auto& variable: info.table_statement_variables) {
             auto name = "t_" + variable->get_name();
             printer->fmt_line("{}* {}{};", float_type, qualifier, name);
-            codegen_global_variables.emplace_back(make_symbol(name), float_type + "*");
+            codegen_global_variables.push_back(make_symbol(name));
         }
     }
 
     if (info.vectorize) {
         printer->fmt_line("ThreadDatum* {}ext_call_thread;", qualifier);
-        codegen_global_variables.emplace_back(make_symbol("ext_call_thread"), "ThreadDatum*");
+        codegen_global_variables.push_back(make_symbol("ext_call_thread"));
     }
 
     printer->end_block();
@@ -2804,7 +2805,9 @@ void CodegenCVisitor::print_mechanism_register() {
 
     // types for ion
     for (const auto& ion: info.ions) {
-        printer->fmt_line("{} = nrn_get_mechtype({}" + name + ");", get_variable_name(ion.name + "_type", false), add_escape_quote(ion.name + "_ion"));
+        printer->fmt_line("{} = nrn_get_mechtype({});",
+                          get_variable_name(ion.name + "_type", false),
+                          add_escape_quote(ion.name + "_ion"));
     }
     printer->add_newline();
 
@@ -3001,21 +3004,10 @@ void CodegenCVisitor::print_mechanism_range_var_structure() {
             printer->fmt_line("{}{}* {}{};", qualifier, type, ptr_type_qualifier(), name);
         }
     }
-    
+
     printer->fmt_line("{} global{{{}_global}};", global_struct(), info.mod_suffix);
-    // Now duplicate all of the global variables from the global variable
-    // structure in this instance structure. These are the copies that will be
-    // used during computation.
-    // const auto qualifier = global_var_struct_type_qualifier();
-    // for (auto const& [global_var, global_var_type]: codegen_global_variables) {
-    //     printer->fmt_line("{0}{1} {2}{{{3}_global.{2}}}",
-    //                       qualifier,
-    //                       global_var_type,
-    //                       global_var->get_name(),
-    //                       info.mod_suffix);
-    // }
-    // TODO: add code to sync changes from global to instance later, after 
-    // TODO: add global struct as a subobject of the instance struct
+    // TODO: add code to sync changes from global to instance later, after the
+    // instance struct(s) have been allocated
 
     printer->end_block();
     printer->add_text(";");
@@ -4644,9 +4636,8 @@ void CodegenCVisitor::print_wrapper_routines() {
 }
 
 
-void CodegenCVisitor::set_codegen_global_variables(
-    std::vector<std::pair<SymbolType, std::string>> global_vars) {
-    codegen_global_variables = std::move(global_vars);
+void CodegenCVisitor::set_codegen_global_variables(std::vector<SymbolType>& global_vars) {
+    codegen_global_variables = global_vars;
 }
 
 

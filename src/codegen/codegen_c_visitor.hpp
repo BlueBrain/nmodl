@@ -232,7 +232,7 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * All global variables for the model
      * \todo: this has become different than CodegenInfo
      */
-    std::vector<std::pair<SymbolType, std::string>> codegen_global_variables;
+    std::vector<SymbolType> codegen_global_variables;
 
     /**
      * All ion variables that could be possibly written
@@ -1830,7 +1830,7 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * Set the global variables to be generated in target backend code
      * \param global_vars
      */
-    void set_codegen_global_variables(std::vector<std::pair<SymbolType, std::string>> global_vars);
+    void set_codegen_global_variables(std::vector<SymbolType>& global_vars);
 
     /**
      * Find unique variable name defined in nmodl::utils::SingletonRandomString by the
