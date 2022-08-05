@@ -131,6 +131,12 @@ static constexpr char NRN_CONSTRUCTOR_METHOD[] = "nrn_constructor";
 /// nrn_destructor method in generated code
 static constexpr char NRN_DESTRUCTOR_METHOD[] = "nrn_destructor";
 
+/// nrn_private_constructor method in generated code
+inline constexpr char NRN_PRIVATE_CONSTRUCTOR_METHOD[] = "nrn_private_constructor";
+
+/// nrn_private_destructor method in generated code
+inline constexpr char NRN_PRIVATE_DESTRUCTOR_METHOD[] = "nrn_private_destructor";
+
 /// nrn_alloc method in generated code
 static constexpr char NRN_ALLOC_METHOD[] = "nrn_alloc";
 

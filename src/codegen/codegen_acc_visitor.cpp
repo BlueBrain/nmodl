@@ -159,12 +159,7 @@ void CodegenAccVisitor::print_eigen_linear_solver(const std::string& /* float_ty
  */
 void CodegenAccVisitor::print_kernel_data_present_annotation_block_begin() {
     if (!info.artificial_cell) {
-        auto global_variable = fmt::format("{}_global", info.mod_suffix);
-        printer->add_line(
-            fmt::format("nrn_pragma_acc(data present(nt, ml, {}) if(nt->compute_gpu))",
-                        global_variable));
-        printer->add_line("{");
-        printer->increase_indent();
+        printer->start_block("nrn_pragma_acc(data present(nt, ml) if(nt->compute_gpu))");
     }
 }
 
@@ -179,16 +174,13 @@ void CodegenAccVisitor::print_kernel_data_present_annotation_block_begin() {
  */
 void CodegenAccVisitor::print_net_init_acc_serial_annotation_block_begin() {
     if (!info.artificial_cell) {
-        printer->add_line("#pragma acc serial present(inst, indexes, weights) if(nt->compute_gpu)");
-        printer->add_line("{");
-        printer->increase_indent();
+        printer->start_block("#pragma acc serial present(inst, indexes, weights) if(nt->compute_gpu)");
     }
 }
 
 void CodegenAccVisitor::print_net_init_acc_serial_annotation_block_end() {
     if (!info.artificial_cell) {
-        printer->add_line("}");
-        printer->decrease_indent();
+        printer->end_block();
     }
 }
 
@@ -234,8 +226,7 @@ void CodegenAccVisitor::print_nrn_cur_matrix_shadow_reduction() {
  */
 void CodegenAccVisitor::print_kernel_data_present_annotation_block_end() {
     if (!info.artificial_cell) {
-        printer->decrease_indent();
-        printer->add_line("}");
+        printer->end_block();
     }
 }
 
@@ -266,10 +257,9 @@ void CodegenAccVisitor::print_global_variable_device_create_annotation_post() {
 
 void CodegenAccVisitor::print_global_variable_device_update_annotation() {
     if (!info.artificial_cell) {
-        printer->add_line(
-            fmt::format("nrn_pragma_acc(update device ({}_global))", info.mod_suffix));
-        printer->add_line(
-            fmt::format("nrn_pragma_omp(target update to({}_global))", info.mod_suffix));
+        printer->add_line("// FIXME sync instance struct to device?");
+        // printer->fmt_line("nrn_pragma_acc(update device ({}_global))", info.mod_suffix);
+        // printer->fmt_line("nrn_pragma_omp(target update to({}_global))", info.mod_suffix);
     }
 }
 

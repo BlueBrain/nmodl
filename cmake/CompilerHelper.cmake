@@ -41,4 +41,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "PGI" OR CMAKE_CXX_COMPILER_ID MATCHES "NVHPC")
     # ~~~
     set(NMODL_TESTS_COMPILER_WARNING_SUPPRESSIONS --diag_suppress=177)
   endif()
+
+  # Crude workaround for https://github.com/BlueBrain/nmodl/issues/897
+  list(APPEND NMODL_COMPILER_WARNING_SUPPRESSIONS -DNDEBUG)
 endif()

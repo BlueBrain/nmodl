@@ -1021,12 +1021,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
-     * Print the structure that wraps all global variables used in the NMODL
-     */
-    void print_mechanism_global_var_structure();
-
-
-    /**
      * Print structure of ion variables used for local copies
      */
     void print_ion_var_structure();
