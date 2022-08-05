@@ -232,7 +232,7 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * All global variables for the model
      * \todo: this has become different than CodegenInfo
      */
-    std::vector<SymbolType> codegen_global_variables;
+    std::vector<std::pair<SymbolType, std::string>> codegen_global_variables;
 
     /**
      * All ion variables that could be possibly written
@@ -614,9 +614,11 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
     /**
      * Determine the variable name for a global variable given its symbol
      * \param symbol The symbol of a variable for which we want to obtain its name
+     * \param use_instance Should the variable be accessed via the (host-only)
+     * global variable or the instance-specific copy (also available on GPU).
      * \return       The C string representing the access to the global variable
      */
-    std::string global_variable_name(const SymbolType& symbol) const;
+    std::string global_variable_name(const SymbolType& symbol, bool use_instance = true) const;
 
 
     /**
@@ -1018,6 +1020,12 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * with coreneuron)
      */
     void print_mechanism_info();
+
+
+    /**
+     * Print the structure that wraps all global variables used in the NMODL
+     */
+    void print_mechanism_global_var_structure();
 
 
     /**
@@ -1822,7 +1830,7 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * Set the global variables to be generated in target backend code
      * \param global_vars
      */
-    void set_codegen_global_variables(std::vector<SymbolType>& global_vars);
+    void set_codegen_global_variables(std::vector<std::pair<SymbolType, std::string>> global_vars);
 
     /**
      * Find unique variable name defined in nmodl::utils::SingletonRandomString by the
