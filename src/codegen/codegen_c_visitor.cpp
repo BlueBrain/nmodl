@@ -2560,7 +2560,7 @@ void CodegenCVisitor::print_mechanism_global_var_structure() {
             }
             return list;
         };
-        auto const array_type = fmt::format("std::array<int, {}> const", info.primes_size);
+        auto const array_type = fmt::format("std::array<int, {}>", info.primes_size);
         printer->fmt_line("{} {}slist1{{{}}};",
                           array_type,
                           qualifier,
@@ -3003,9 +3003,6 @@ void CodegenCVisitor::print_mechanism_range_var_structure() {
     }
 
     printer->fmt_line("{} global{{{}_global}};", global_struct(), info.mod_suffix);
-    // TODO: add code to sync changes from global to instance later, after the
-    // instance struct(s) have been allocated
-
     printer->end_block();
     printer->add_text(";");
     printer->add_newline();
@@ -3061,6 +3058,10 @@ void CodegenCVisitor::print_ion_var_constructor(const std::vector<std::string>& 
 
 void CodegenCVisitor::print_ion_variable() {
     printer->add_line("IonCurVar ionvar;");
+}
+
+void CodegenCVisitor::print_global_variable_device_update_annotation() {
+    // nothing for cpu
 }
 
 
@@ -3199,7 +3200,7 @@ void CodegenCVisitor::print_instance_variable_setup() {
     }
 
     printer->add_newline();
-    printer->add_line("// Allocate instance structure and initialise constant global data");
+    printer->add_line("// Allocate instance structure");
     printer->fmt_start_block("static void {}(NrnThread* nt, Memb_list* ml, int type)",
                              method_name(naming::NRN_PRIVATE_CONSTRUCTOR_METHOD));
     printer->add_line("assert(!ml->instance);");
@@ -3417,6 +3418,7 @@ void CodegenCVisitor::print_nrn_init(bool skip_init_check) {
     }
 
     // update global variable as those might be updated via python/hoc API
+    print_global_variable_device_update_annotation();
     print_instance_variable_transfer_to_device();
 
     if (skip_init_check) {
