@@ -2529,7 +2529,11 @@ void CodegenCVisitor::print_mechanism_global_var_structure() {
         if (var->is_array()) {
             printer->fmt_line("{}{} {}[{}];", qualifier, float_type, name, length);
         } else {
-            printer->fmt_line("{}{} {};", qualifier, float_type, name);
+            double value{};
+            if (auto const& value_ptr = var->get_value()) {
+                value = *value_ptr;
+            }
+            printer->fmt_line("{}{} {}{{{:g}}};", qualifier, float_type, name, value);
         }
         codegen_global_variables.push_back(var);
     }
@@ -2602,7 +2606,7 @@ void CodegenCVisitor::print_mechanism_global_var_structure() {
     }
 
     if (info.vectorize) {
-        printer->fmt_line("ThreadDatum* {}ext_call_thread;", qualifier);
+        printer->fmt_line("std::array<ThreadDatum, {}> {}ext_call_thread{{}};", info.thread_data_index, qualifier);
         codegen_global_variables.push_back(make_symbol("ext_call_thread"));
     }
 
@@ -2819,8 +2823,9 @@ void CodegenCVisitor::print_mechanism_register() {
      *  represent total number of thread used minus 1 (i.e. index of last thread).
      */
     if (info.vectorize && (info.thread_data_index != 0)) {
-        auto name = get_variable_name("ext_call_thread");
-        printer->add_line(fmt::format("thread_mem_init({});", name));
+        // false to avoid getting the copy from the instance structure
+        auto name = get_variable_name("ext_call_thread", false);
+        printer->fmt_line("thread_mem_init({});", name);
     }
 
     if (!info.thread_variables.empty()) {
@@ -2923,7 +2928,7 @@ void CodegenCVisitor::print_thread_memory_callbacks() {
     // thread_mem_init callback
     printer->add_newline(2);
     printer->add_line("/** thread memory allocation callback */");
-    printer->start_block("static void thread_mem_init(ThreadDatum* thread) ");
+    printer->fmt_start_block("static void thread_mem_init(std::array<ThreadDatum, {}>& thread) ", info.thread_data_index);
 
     if (info.vectorize && info.derivimplicit_used()) {
         printer->add_line(
@@ -3080,33 +3085,9 @@ void CodegenCVisitor::print_global_variable_setup() {
     printer->add_line("    return;");
     printer->add_line("}");
 
-    // memory for thread member
-    if (info.vectorize && (info.thread_data_index != 0)) {
-        auto n = info.thread_data_index;
-        auto alloc = fmt::format("(ThreadDatum*) mem_alloc({}, sizeof(ThreadDatum))", n);
-        auto name = get_variable_name("ext_call_thread");
-        printer->add_line(fmt::format("{} = {};", name, alloc));
-        allocated_variables.push_back(name);
-    }
-
     // note : v is not needed in global structure for nmodl even if vectorize is false
-
     if (!info.thread_variables.empty()) {
         printer->add_line(fmt::format("{} = 0;", get_variable_name("thread_data_in_use")));
-    }
-
-    // initialize global variables
-    for (auto& var: info.global_variables) {
-        if (!var->is_array()) {
-            auto name = get_variable_name(var->get_name());
-            double value = 0;
-            auto value_ptr = var->get_value();
-            if (value_ptr != nullptr) {
-                value = *value_ptr;
-            }
-            /// use %g to be same as nocmodl in neuron
-            printer->add_line(fmt::format("{} = {:g};", name, value));
-        }
     }
 
     // initialize constant variables
@@ -4169,17 +4150,17 @@ void CodegenCVisitor::print_derivimplicit_kernel(Block* block) {
     auto const instance =
         fmt::format("auto* const inst = static_cast<{0}*>(get_memb_list(nt)->instance);",
                     instance_struct());
-    auto const slist1 = fmt::format("int* slist{} = {};",
+    auto const slist1 = fmt::format("auto const& slist{} = {};",
                                     list_num,
                                     get_variable_name(fmt::format("slist{}", list_num)));
-    auto const slist2 = fmt::format("int* slist{} = {};",
+    auto const slist2 = fmt::format("auto const& slist{} = {};",
                                     list_num + 1,
                                     get_variable_name(fmt::format("slist{}", list_num + 1)));
-    auto const dlist1 = fmt::format("int* dlist{} = {};",
+    auto const dlist1 = fmt::format("auto const& dlist{} = {};",
                                     list_num,
                                     get_variable_name(fmt::format("dlist{}", list_num)));
     auto const dlist2 =
-        fmt::format("double* dlist{} = (double*) thread[dith{}()].pval + ({}*pnodecount);",
+        fmt::format("double* dlist{} = static_cast<double*>(thread[dith{}()].pval) + ({}*pnodecount);",
                     list_num + 1,
                     list_num,
                     info.primes_size);
@@ -4187,7 +4168,7 @@ void CodegenCVisitor::print_derivimplicit_kernel(Block* block) {
     if (ion_variable_struct_required()) {
         print_ion_variable();
     }
-    printer->fmt_line("double* savstate{} = (double*) thread[dith{}()].pval;", list_num, list_num);
+    printer->fmt_line("double* savstate{} = static_cast<double*>(thread[dith{}()].pval);", list_num, list_num);
     printer->add_line(slist1);
     printer->add_line(dlist1);
     printer->add_line(dlist2);
