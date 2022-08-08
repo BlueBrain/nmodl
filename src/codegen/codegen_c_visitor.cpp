@@ -2663,13 +2663,15 @@ void CodegenCVisitor::print_global_variables_for_hoc() {
         [&](const std::vector<SymbolType>& variables, bool if_array, bool if_vector) {
             for (const auto& variable: variables) {
                 if (variable->is_array() == if_array) {
-                    auto name = get_variable_name(variable->get_name());
+                    // false => do not use the instance struct, which is not
+                    // defined in the global declaration that we are printing
+                    auto name = get_variable_name(variable->get_name(), false);
                     auto ename = add_escape_quote(variable->get_name() + "_" + info.mod_suffix);
                     auto length = variable->get_length();
                     if (if_vector) {
-                        printer->add_line(fmt::format("{}, {}, {},", ename, name, length));
+                        printer->fmt_line("{}, {}, {},", ename, name, length);
                     } else {
-                        printer->add_line(fmt::format("{}, &{},", ename, name));
+                        printer->fmt_line("{}, &{},", ename, name);
                     }
                 }
             }
@@ -2688,7 +2690,7 @@ void CodegenCVisitor::print_global_variables_for_hoc() {
     printer->increase_indent();
     variable_printer(globals, false, false);
     variable_printer(thread_vars, false, false);
-    printer->add_line("0, 0");
+    printer->add_line("nullptr, nullptr");
     printer->decrease_indent();
     printer->add_line("};");
 
@@ -2698,7 +2700,7 @@ void CodegenCVisitor::print_global_variables_for_hoc() {
     printer->increase_indent();
     variable_printer(globals, true, true);
     variable_printer(thread_vars, true, true);
-    printer->add_line("0, 0, 0");
+    printer->add_line("nullptr, nullptr, 0");
     printer->decrease_indent();
     printer->add_line("};");
 }
