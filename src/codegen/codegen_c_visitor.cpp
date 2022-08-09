@@ -2519,10 +2519,8 @@ void CodegenCVisitor::print_mechanism_global_var_structure() {
     printer->fmt_line("{}int mech_type;", qualifier);
     codegen_global_variables.push_back(make_symbol("mech_type"));
 
-    auto& globals = info.global_variables;
     auto& constants = info.constant_variables;
-
-    for (const auto& var: globals) {
+    for (const auto& var: info.global_variables) {
         auto name = var->get_name();
         auto length = var->get_length();
         // TODO use std::array?
@@ -2825,7 +2823,7 @@ void CodegenCVisitor::print_mechanism_register() {
     if (info.vectorize && (info.thread_data_index != 0)) {
         // false to avoid getting the copy from the instance structure
         auto name = get_variable_name("ext_call_thread", false);
-        printer->fmt_line("thread_mem_init({});", name);
+        printer->fmt_line("thread_mem_init({}.data());", name);
     }
 
     if (!info.thread_variables.empty()) {
@@ -2928,7 +2926,7 @@ void CodegenCVisitor::print_thread_memory_callbacks() {
     // thread_mem_init callback
     printer->add_newline(2);
     printer->add_line("/** thread memory allocation callback */");
-    printer->fmt_start_block("static void thread_mem_init(std::array<ThreadDatum, {}>& thread) ", info.thread_data_index);
+    printer->start_block("static void thread_mem_init(ThreadDatum* thread) ");
 
     if (info.vectorize && info.derivimplicit_used()) {
         printer->add_line(
@@ -3086,6 +3084,7 @@ void CodegenCVisitor::print_global_variable_setup() {
     printer->add_line("}");
 
     // note : v is not needed in global structure for nmodl even if vectorize is false
+
     if (!info.thread_variables.empty()) {
         printer->add_line(fmt::format("{} = 0;", get_variable_name("thread_data_in_use")));
     }
