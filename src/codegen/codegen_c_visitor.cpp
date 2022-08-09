@@ -1298,7 +1298,7 @@ std::string CodegenCVisitor::global_var_struct_type_qualifier() {
 }
 
 void CodegenCVisitor::print_global_var_struct_decl() {
-    printer->add_line(fmt::format("{} {}_global;", global_struct(), info.mod_suffix));
+    printer->fmt_line("{} {}_global;", global_struct(), info.mod_suffix);
 }
 
 /****************************************************************************************/
@@ -2608,9 +2608,15 @@ void CodegenCVisitor::print_mechanism_global_var_structure() {
         codegen_global_variables.push_back(make_symbol("ext_call_thread"));
     }
 
-    printer->end_block();
-    printer->add_text(";");
-    printer->add_newline();
+    printer->end_block(";");
+
+    // Assert some things that we assume when copying instances of this struct
+    // to the GPU and so on.
+    printer->fmt_line("static_assert(std::is_trivially_copy_constructible_v<{}>);", global_struct());
+    printer->fmt_line("static_assert(std::is_trivially_move_constructible_v<{}>);", global_struct());
+    printer->fmt_line("static_assert(std::is_trivially_copy_assignable_v<{}>);", global_struct());
+    printer->fmt_line("static_assert(std::is_trivially_move_assignable_v<{}>);", global_struct());
+    printer->fmt_line("static_assert(std::is_trivially_destructible_v<{}>);", global_struct());
 
     print_global_var_struct_decl();
 }
@@ -2671,9 +2677,9 @@ void CodegenCVisitor::print_global_variables_for_hoc() {
                     auto ename = add_escape_quote(variable->get_name() + "_" + info.mod_suffix);
                     auto length = variable->get_length();
                     if (if_vector) {
-                        printer->fmt_line("{}, {}, {},", ename, name, length);
+                        printer->fmt_line("{{{}, {}, {}}},", ename, name, length);
                     } else {
-                        printer->fmt_line("{}, &{},", ename, name);
+                        printer->fmt_line("{{{}, &{}}},", ename, name);
                     }
                 }
             }
@@ -2692,7 +2698,7 @@ void CodegenCVisitor::print_global_variables_for_hoc() {
     printer->increase_indent();
     variable_printer(globals, false, false);
     variable_printer(thread_vars, false, false);
-    printer->add_line("nullptr, nullptr");
+    printer->add_line("{nullptr, nullptr}");
     printer->decrease_indent();
     printer->add_line("};");
 
@@ -2702,7 +2708,7 @@ void CodegenCVisitor::print_global_variables_for_hoc() {
     printer->increase_indent();
     variable_printer(globals, true, true);
     variable_printer(thread_vars, true, true);
-    printer->add_line("nullptr, nullptr, 0");
+    printer->add_line("{nullptr, nullptr, 0}");
     printer->decrease_indent();
     printer->add_line("};");
 }
@@ -3008,9 +3014,7 @@ void CodegenCVisitor::print_mechanism_range_var_structure() {
     }
 
     printer->fmt_line("{} global{{{}_global}};", global_struct(), info.mod_suffix);
-    printer->end_block();
-    printer->add_text(";");
-    printer->add_newline();
+    printer->end_block(";");
 }
 
 
@@ -4146,13 +4150,11 @@ void CodegenCVisitor::print_derivimplicit_kernel(Block* block) {
     printer->start_block("namespace");
     printer->fmt_start_block("struct _newton_{}_{}", block_name, info.mod_suffix);
     printer->fmt_start_block("int operator()({}) const", external_method_parameters());
-    auto const instance =
-        fmt::format("auto* const inst = static_cast<{0}*>(get_memb_list(nt)->instance);",
-                    instance_struct());
+    auto const instance = fmt::format("auto* const inst = static_cast<{0}*>(ml->instance);", instance_struct());
     auto const slist1 = fmt::format("auto const& slist{} = {};",
                                     list_num,
                                     get_variable_name(fmt::format("slist{}", list_num)));
-    auto const slist2 = fmt::format("auto const& slist{} = {};",
+    auto const slist2 = fmt::format("auto& slist{} = {};",
                                     list_num + 1,
                                     get_variable_name(fmt::format("slist{}", list_num + 1)));
     auto const dlist1 = fmt::format("auto const& dlist{} = {};",
@@ -4207,7 +4209,7 @@ void CodegenCVisitor::print_derivimplicit_kernel(Block* block) {
     printer->end_block(1);
     printer->fmt_line(
         "int reset = nrn_newton_thread(static_cast<NewtonSpace*>(*newtonspace{}(thread)), {}, "
-        "slist{}, _newton_{}_{}{{}}, dlist{}, {});",
+        "slist{}.data(), _newton_{}_{}{{}}, dlist{}, {});",
         list_num,
         primes_size,
         list_num + 1,
