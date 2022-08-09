@@ -2062,7 +2062,7 @@ std::string CodegenCVisitor::conc_write_statement(const std::string& ion_name,
         conc_var_name,
         index,
         style_var_name,
-        get_variable_name("celsius"),
+        get_variable_name(naming::CELSIUS_VARIABLE),
         ion_name);
 }
 
@@ -2377,16 +2377,12 @@ std::string CodegenCVisitor::get_variable_name(const std::string& name, bool use
         return std::string("nt->_") + naming::NTHREAD_T_VARIABLE;
     }
 
-    // external global variable (celsius, ...)
-    auto e_g = std::find_if(info.global_external_variables.begin(),
-                            info.global_external_variables.end(),
-                            symbol_comparator);
-    if (e_g != info.global_external_variables.end()) {
+    if (varname == naming::CELSIUS_VARIABLE) {
         std::string ret;
         if (use_instance) {
             ret = "inst->";
         }
-        ret.append(varname);
+        ret.append(naming::CELSIUS_VARIABLE);
         return ret;
     }
 
@@ -3013,10 +3009,8 @@ void CodegenCVisitor::print_mechanism_range_var_structure() {
     printer->add_newline(2);
     printer->add_line("/** all mechanism instance variables and global variables */");
     printer->fmt_start_block("struct {} ", instance_struct());
-    for (auto const& var: info.global_external_variables) {
-        // TODO what about other types?
-        printer->fmt_line("double {0}{{{0}}};", var->get_name());
-    }
+    // TODO dynamically [don't] include this depending on whether it's used
+    printer->add_line("double celsius{celsius};");
     for (auto& var: codegen_float_variables) {
         auto name = var->get_name();
         auto type = get_range_var_float_type(var);
@@ -3400,13 +3394,10 @@ void CodegenCVisitor::print_global_function_common_code(BlockType type,
 
 void CodegenCVisitor::print_global_struct_update_from_global_vars() {
     printer->add_line("// Update global state struct from true globals");
-    for (auto const& var: info.global_external_variables) {
-        auto const& var_name = var->get_name();
-        // Update the version inside the instance struct from the global version
-        printer->fmt_line("{} = {};",
-                          get_variable_name(var_name, true),
-                          get_variable_name(var_name, false));
-    }
+    // Update the version inside the instance struct from the global version
+    printer->fmt_line("{} = {};",
+                      get_variable_name(naming::CELSIUS_VARIABLE, true),
+                      get_variable_name(naming::CELSIUS_VARIABLE, false));
 }
 
 void CodegenCVisitor::print_nrn_init(bool skip_init_check) {

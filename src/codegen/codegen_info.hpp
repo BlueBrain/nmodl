@@ -323,9 +323,6 @@ struct CodegenInfo {
     // empty string means no change in dt
     std::string changed_dt;
 
-    /// global variables defined externally (celsius, ...)
-    std::vector<SymbolType> global_external_variables;
-
     /// global variables
     std::vector<SymbolType> global_variables;
 

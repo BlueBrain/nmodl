@@ -113,7 +113,9 @@ class PySymtabVisitor: private VisitorOStreamResources, public SymtabVisitor {
 void init_symtab_module(py::module& m) {
     py::module m_symtab = m.def_submodule("symtab");
 
-    py::enum_<syminfo::DeclarationType>(m_symtab, "DeclarationType", docstring::sym_decl_type_enum)
+    py::enum_<syminfo::DeclarationType>(m_symtab,
+                                        "DeclarationType",
+                                        docstring::sym_decl_type_enum)
         .value("function", syminfo::DeclarationType::function)
         .value("variable", syminfo::DeclarationType::variable)
         .export_values();
@@ -158,8 +160,6 @@ void init_symtab_module(py::module& m) {
         .value("electrode_cur_var", syminfo::NmodlType::electrode_cur_var)
         .value("extern_method", syminfo::NmodlType::extern_method)
         .value("extern_neuron_variable", syminfo::NmodlType::extern_neuron_variable)
-        .value("external_neuron_global_variable",
-               syminfo::NmodlType::external_neuron_global_variable)
         .value("extern_var", syminfo::NmodlType::extern_var)
         .value("vector_def", syminfo::NmodlType::factor_def)
         .value("function_block", syminfo::NmodlType::function_block)
@@ -262,3 +262,4 @@ void init_symtab_module(py::module& m) {
 }
 
 #pragma clang diagnostic pop
+
