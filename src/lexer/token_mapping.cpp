@@ -323,9 +323,19 @@ bool needs_neuron_thread_first_arg(const std::string& token) {
  * The passes like scope checker needs to know if certain variable is
  * undefined and hence these needs to be inserted into symbol table
  */
-static std::vector<std::string> const NEURON_VARIABLES =
-    {"t", "dt", "celsius", "v", "diam", "area"};
+static std::vector<std::string> const NEURON_VARIABLES = {"t", "dt", "v", "diam", "area"};
 
+
+/**
+ * Global variables from NEURON that are directly used in NMODL.
+ *
+ * These are appended to NEURON_VARIABLES just above, but have the additional
+ * property that copies of them are maintained in the instance structs generated
+ * for each mechanism and kept in sync with global variables of the same name.
+ *
+ * @todo Consider adding pi, secondorder here.
+ */
+static std::vector<std::string> NEURON_GLOBAL_VARIABLES = {"celsius"};
 
 /// Return token type for the keyword
 TokenType keyword_type(const std::string& name) {
@@ -376,9 +386,16 @@ TokenType token_type(const std::string& name) {
  * @return vector of NEURON variables
  */
 std::vector<std::string> get_external_variables() {
-    std::vector<std::string> result;
+    std::vector<std::string> result{details::NEURON_GLOBAL_VARIABLES};
     result.insert(result.end(), details::NEURON_VARIABLES.begin(), details::NEURON_VARIABLES.end());
     return result;
+}
+
+/**
+ * Return global variables declared in NEURON that are available in NMODL.
+ */
+std::vector<std::string> get_external_global_variables() {
+    return details::NEURON_GLOBAL_VARIABLES;
 }
 
 

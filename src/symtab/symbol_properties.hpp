@@ -223,7 +223,10 @@ enum class NmodlType : enum_type {
     define = 1L << 34,
 
     /// Codegen specific variable
-    codegen_var = 1L << 35
+    codegen_var = 1L << 35,
+
+    // neuron variable acessible in mod file and updated from a global
+    external_neuron_global_variable = 1L << 36
 };
 
 template <typename T>

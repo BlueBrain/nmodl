@@ -1156,6 +1156,12 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
+     * Print the code that updates the mechanism-global global variable struct
+     * from application-global variables such as celsius, secondorder, etc.
+     */
+    virtual void print_global_struct_update_from_global_vars();
+
+    /**
      * Print the pragma annotation to update global variables from host to the device
      *
      * \note This is not used for the C backend

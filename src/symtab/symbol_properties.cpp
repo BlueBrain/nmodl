@@ -139,6 +139,10 @@ std::vector<std::string> to_string_vector(const NmodlType& obj) {
         properties.emplace_back("extern_neuron_var");
     }
 
+    if (has_property(obj, NmodlType::external_neuron_global_variable)) {
+        properties.emplace_back("external_neuron_global_variable");
+    }
+
     if (has_property(obj, NmodlType::extern_method)) {
         properties.emplace_back("extern_method");
     }

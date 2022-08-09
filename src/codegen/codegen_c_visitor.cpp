@@ -2056,12 +2056,13 @@ std::string CodegenCVisitor::conc_write_statement(const std::string& ion_name,
         " {},"
         " {},"
         " nrn_ion_global_map,"
-        " celsius,"
+        " {},"
         " nt->_ml_list[{}_type]->_nodecount_padded)",
         ion_name,
         conc_var_name,
         index,
         style_var_name,
+        get_variable_name("celsius"),
         ion_name);
 }
 
@@ -2374,6 +2375,17 @@ std::string CodegenCVisitor::get_variable_name(const std::string& name, bool use
     // ne used instead of nt->_t which is current time of thread
     if (varname == naming::NTHREAD_T_VARIABLE && !printing_net_receive) {
         return std::string("nt->_") + naming::NTHREAD_T_VARIABLE;
+    }
+
+    // external global variable (celsius, ...)
+    auto e_g = std::find_if(info.global_external_variables.begin(), info.global_external_variables.end(), symbol_comparator);
+    if (e_g != info.global_external_variables.end()) {
+        std::string ret;
+        if (use_instance) {
+            ret = "inst->";
+        }
+        ret.append(varname);
+        return ret;
     }
 
     // otherwise return original name
@@ -2995,6 +3007,10 @@ void CodegenCVisitor::print_mechanism_range_var_structure() {
     printer->add_newline(2);
     printer->add_line("/** all mechanism instance variables and global variables */");
     printer->fmt_start_block("struct {} ", instance_struct());
+    for (auto const& var : info.global_external_variables) {
+        // TODO what about other types?
+        printer->fmt_line("double {0}{{{0}}};", var->get_name());
+    }
     for (auto& var: codegen_float_variables) {
         auto name = var->get_name();
         auto type = get_range_var_float_type(var);
@@ -3376,6 +3392,14 @@ void CodegenCVisitor::print_global_function_common_code(BlockType type,
     printer->add_newline(1);
 }
 
+void CodegenCVisitor::print_global_struct_update_from_global_vars() {
+    printer->add_line("// Update global state struct from true globals");
+    for (auto const& var: info.global_external_variables) {
+        auto const& var_name = var->get_name();
+        // Update the version inside the instance struct from the global version
+        printer->fmt_line("{} = {};", get_variable_name(var_name, true), get_variable_name(var_name, false));
+    }
+}
 
 void CodegenCVisitor::print_nrn_init(bool skip_init_check) {
     codegen = true;
@@ -3404,6 +3428,7 @@ void CodegenCVisitor::print_nrn_init(bool skip_init_check) {
     }
 
     // update global variable as those might be updated via python/hoc API
+    print_global_struct_update_from_global_vars();
     print_global_variable_device_update_annotation();
     print_instance_variable_transfer_to_device();
 

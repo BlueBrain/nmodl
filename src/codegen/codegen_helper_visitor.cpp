@@ -196,6 +196,12 @@ void CodegenHelperVisitor::find_non_range_variables() {
     // clang-format on
     vars = psymtab->get_variables(with, without);
     for (auto& var: vars) {
+        // Track if global variables such as celsius have been used
+        if (var->has_all_properties(NmodlType::external_neuron_global_variable)) {
+            info.global_external_variables.push_back(var);
+            continue;
+        }
+
         // some variables like area and diam are declared in parameter
         // block but they are not global
         if (var->get_name() == naming::DIAM_VARIABLE || var->get_name() == naming::AREA_VARIABLE ||

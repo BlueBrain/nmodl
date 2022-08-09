@@ -23,6 +23,7 @@ bool is_method(const std::string& name);
 
 parser::NmodlParser::token_type token_type(const std::string& name);
 std::vector<std::string> get_external_variables();
+std::vector<std::string> get_external_global_variables();
 std::vector<std::string> get_external_functions();
 
 namespace details {
