@@ -2378,7 +2378,9 @@ std::string CodegenCVisitor::get_variable_name(const std::string& name, bool use
     }
 
     // external global variable (celsius, ...)
-    auto e_g = std::find_if(info.global_external_variables.begin(), info.global_external_variables.end(), symbol_comparator);
+    auto e_g = std::find_if(info.global_external_variables.begin(),
+                            info.global_external_variables.end(),
+                            symbol_comparator);
     if (e_g != info.global_external_variables.end()) {
         std::string ret;
         if (use_instance) {
@@ -2616,7 +2618,9 @@ void CodegenCVisitor::print_mechanism_global_var_structure() {
     }
 
     if (info.vectorize) {
-        printer->fmt_line("std::array<ThreadDatum, {}> {}ext_call_thread{{}};", info.thread_data_index, qualifier);
+        printer->fmt_line("std::array<ThreadDatum, {}> {}ext_call_thread{{}};",
+                          info.thread_data_index,
+                          qualifier);
         codegen_global_variables.push_back(make_symbol("ext_call_thread"));
     }
 
@@ -2624,8 +2628,10 @@ void CodegenCVisitor::print_mechanism_global_var_structure() {
 
     // Assert some things that we assume when copying instances of this struct
     // to the GPU and so on.
-    printer->fmt_line("static_assert(std::is_trivially_copy_constructible_v<{}>);", global_struct());
-    printer->fmt_line("static_assert(std::is_trivially_move_constructible_v<{}>);", global_struct());
+    printer->fmt_line("static_assert(std::is_trivially_copy_constructible_v<{}>);",
+                      global_struct());
+    printer->fmt_line("static_assert(std::is_trivially_move_constructible_v<{}>);",
+                      global_struct());
     printer->fmt_line("static_assert(std::is_trivially_copy_assignable_v<{}>);", global_struct());
     printer->fmt_line("static_assert(std::is_trivially_move_assignable_v<{}>);", global_struct());
     printer->fmt_line("static_assert(std::is_trivially_destructible_v<{}>);", global_struct());
@@ -3007,7 +3013,7 @@ void CodegenCVisitor::print_mechanism_range_var_structure() {
     printer->add_newline(2);
     printer->add_line("/** all mechanism instance variables and global variables */");
     printer->fmt_start_block("struct {} ", instance_struct());
-    for (auto const& var : info.global_external_variables) {
+    for (auto const& var: info.global_external_variables) {
         // TODO what about other types?
         printer->fmt_line("double {0}{{{0}}};", var->get_name());
     }
@@ -3397,7 +3403,9 @@ void CodegenCVisitor::print_global_struct_update_from_global_vars() {
     for (auto const& var: info.global_external_variables) {
         auto const& var_name = var->get_name();
         // Update the version inside the instance struct from the global version
-        printer->fmt_line("{} = {};", get_variable_name(var_name, true), get_variable_name(var_name, false));
+        printer->fmt_line("{} = {};",
+                          get_variable_name(var_name, true),
+                          get_variable_name(var_name, false));
     }
 }
 
@@ -4175,7 +4183,8 @@ void CodegenCVisitor::print_derivimplicit_kernel(Block* block) {
     printer->start_block("namespace");
     printer->fmt_start_block("struct _newton_{}_{}", block_name, info.mod_suffix);
     printer->fmt_start_block("int operator()({}) const", external_method_parameters());
-    auto const instance = fmt::format("auto* const inst = static_cast<{0}*>(ml->instance);", instance_struct());
+    auto const instance = fmt::format("auto* const inst = static_cast<{0}*>(ml->instance);",
+                                      instance_struct());
     auto const slist1 = fmt::format("auto const& slist{} = {};",
                                     list_num,
                                     get_variable_name(fmt::format("slist{}", list_num)));
@@ -4185,16 +4194,18 @@ void CodegenCVisitor::print_derivimplicit_kernel(Block* block) {
     auto const dlist1 = fmt::format("auto const& dlist{} = {};",
                                     list_num,
                                     get_variable_name(fmt::format("dlist{}", list_num)));
-    auto const dlist2 =
-        fmt::format("double* dlist{} = static_cast<double*>(thread[dith{}()].pval) + ({}*pnodecount);",
-                    list_num + 1,
-                    list_num,
-                    info.primes_size);
+    auto const dlist2 = fmt::format(
+        "double* dlist{} = static_cast<double*>(thread[dith{}()].pval) + ({}*pnodecount);",
+        list_num + 1,
+        list_num,
+        info.primes_size);
     printer->add_line(instance);
     if (ion_variable_struct_required()) {
         print_ion_variable();
     }
-    printer->fmt_line("double* savstate{} = static_cast<double*>(thread[dith{}()].pval);", list_num, list_num);
+    printer->fmt_line("double* savstate{} = static_cast<double*>(thread[dith{}()].pval);",
+                      list_num,
+                      list_num);
     printer->add_line(slist1);
     printer->add_line(dlist1);
     printer->add_line(dlist2);

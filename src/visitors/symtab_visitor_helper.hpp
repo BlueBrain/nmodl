@@ -170,7 +170,9 @@ static void add_external_symbols(symtab::ModelSymbolTable* symtab) {
     auto variables = nmodl::get_external_variables();
     auto const global_variables = nmodl::get_external_global_variables();
     for (auto& variable: variables) {
-        bool const is_global{std::find(global_variables.begin(), global_variables.end(), variable) != global_variables.end()};
+        bool const is_global{std::find(global_variables.begin(),
+                                       global_variables.end(),
+                                       variable) != global_variables.end()};
         auto symbol = std::make_shared<Symbol>(std::move(variable), nullptr, tok);
         symbol->add_property(NmodlType::extern_neuron_variable);
         if (is_global) {
