@@ -536,6 +536,8 @@ int main(int argc, const char* argv[]) {
             PerfVisitor().visit_program(*ast);
         }
 
+        // Add implicit arguments (like celsius) to NEURON functions (like
+        // nrn_ghk) whose signatures we have to massage.
         ImplicitArgumentVisitor{}.visit_program(*ast);
 
         {
