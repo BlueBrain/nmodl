@@ -34,17 +34,24 @@ using VecType = Eigen::Matrix<double, dim, 1, Eigen::ColMajor, dim, 1>;
 //    instantiations visible in this header file that call:
 //  - partialPivLuN(...), functions that are declared in this header but defined
 //    in the CUDA file partial_piv_lu.cu.
+#ifdef NMODL_EIGEN_NO_OPENACC
+#define NMODL_EIGEN_ATTR __host__ __device__
+#define NMODL_EIGEN_ROUTINE_SEQ
+#else
 nrn_pragma_omp(declare target)
-nrn_pragma_acc(routine seq)
+#define NMODL_EIGEN_ATTR
+#define NMODL_EIGEN_ROUTINE_SEQ nrn_pragma_acc(routine seq)
+#endif
+NMODL_EIGEN_ROUTINE_SEQ
 template <int dim>
-EIGEN_DEVICE_FUNC VecType<dim> partialPivLu(const MatType<dim>&, const VecType<dim>&);
-#define InstantiatePartialPivLu(N)                                                               \
-    nrn_pragma_acc(routine seq)                                                                  \
-    EIGEN_DEVICE_FUNC VecType<N> partialPivLu##N(const MatType<N>&, const VecType<N>&);          \
-    nrn_pragma_acc(routine seq)                                                                  \
-    template <>                                                                                  \
-    EIGEN_DEVICE_FUNC inline VecType<N> partialPivLu(const MatType<N>& A, const VecType<N>& b) { \
-        return partialPivLu##N(A, b);                                                            \
+NMODL_EIGEN_ATTR VecType<dim> partialPivLu(const MatType<dim>&, const VecType<dim>&);
+#define InstantiatePartialPivLu(N)                                                              \
+    NMODL_EIGEN_ROUTINE_SEQ                                                                     \
+    NMODL_EIGEN_ATTR VecType<N> partialPivLu##N(const MatType<N>&, const VecType<N>&);          \
+    NMODL_EIGEN_ROUTINE_SEQ                                                                     \
+    template <>                                                                                 \
+    NMODL_EIGEN_ATTR inline VecType<N> partialPivLu(const MatType<N>& A, const VecType<N>& b) { \
+        return partialPivLu##N(A, b);                                                           \
     }
 InstantiatePartialPivLu(1)
 InstantiatePartialPivLu(2)
@@ -63,4 +70,6 @@ InstantiatePartialPivLu(14)
 InstantiatePartialPivLu(15)
 InstantiatePartialPivLu(16)
 #undef InstantiatePartialPivLu
+#ifndef NMODL_EIGEN_NO_OPENACC
 nrn_pragma_omp(end declare target)
+#endif
