@@ -47,12 +47,9 @@ void CodegenAccVisitor::print_channel_iteration_block_parallel_hint(BlockType ty
         }
     }
     present_clause << ')';
-    printer->add_line(
-        fmt::format("nrn_pragma_acc(parallel loop {} async(nt->stream_id) if(nt->compute_gpu))",
-                    present_clause.str()));
-    printer->add_line(
-        "nrn_pragma_omp(target teams distribute parallel for is_device_ptr(inst) "
-        "if(nt->compute_gpu))");
+    printer->fmt_line("nrn_pragma_acc(parallel loop {} async(nt->stream_id) if(nt->compute_gpu))",
+                      present_clause.str());
+    printer->add_line("nrn_pragma_omp(target teams distribute parallel for if(nt->compute_gpu))");
 }
 
 
