@@ -2417,7 +2417,6 @@ void CodegenCVisitor::print_backend_info() {
 
 void CodegenCVisitor::print_standard_includes() {
     printer->add_newline();
-    printer->add_line("#include <array>");
     printer->add_line("#include <math.h>");
     printer->add_line("#include \"nmodl/fast_math.hpp\" // extend math with some useful functions");
     printer->add_line("#include <stdio.h>");
