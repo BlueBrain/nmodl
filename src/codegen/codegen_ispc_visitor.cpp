@@ -312,6 +312,20 @@ void CodegenIspcVisitor::print_global_var_struct_decl() {
     }
 }
 
+void CodegenIspcVisitor::print_global_var_struct_assertions() const {
+    // Print static_assert in .cpp but not .ispc
+    if (wrapper_codegen) {
+        CodegenCVisitor::print_global_var_struct_assertions();
+    }
+}
+
+void CodegenIspcVisitor::print_global_struct_update_from_global_vars() const {
+    // Print update in .cpp but not .ispc
+    if (wrapper_codegen) {
+        CodegenCVisitor::print_global_struct_update_from_global_vars();
+    }
+}
+
 std::string CodegenIspcVisitor::param_type_qualifier() {
     if (wrapper_codegen) {
         return CodegenCVisitor::param_type_qualifier();
@@ -732,7 +746,7 @@ void CodegenIspcVisitor::print_codegen_routines() {
     print_backend_info();
     print_headers_include();
     print_nmodl_constants();
-    print_data_structures();
+    print_data_structures(false);
     print_compute_functions();
 }
 
@@ -747,7 +761,7 @@ void CodegenIspcVisitor::print_wrapper_routines() {
 
     CodegenCVisitor::print_nmodl_constants();
     print_mechanism_info();
-    print_data_structures();
+    print_data_structures(true);
     print_global_variables_for_hoc();
     print_common_getters();
 

@@ -2463,7 +2463,7 @@ void CodegenCVisitor::print_coreneuron_includes() {
  * same for some variables to keep same code as neuron.
  */
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
-void CodegenCVisitor::print_mechanism_global_var_structure() {
+void CodegenCVisitor::print_mechanism_global_var_structure(bool print_initialisers) {
     const auto qualifier = global_var_struct_type_qualifier();
 
     auto float_type = default_float_data_type();
@@ -2487,7 +2487,8 @@ void CodegenCVisitor::print_mechanism_global_var_structure() {
         auto symbol = program_symtab->lookup(name);
         if (symbol == nullptr) {
             // Zero initialize everything
-            printer->fmt_line("{}{} {}{{0}};", qualifier, float_type, name);
+            printer->fmt_line(
+                "{}{} {}{};", qualifier, float_type, name, print_initialisers ? "{0}" : "");
             codegen_global_variables.push_back(make_symbol(name));
         }
     }
@@ -2536,13 +2537,18 @@ void CodegenCVisitor::print_mechanism_global_var_structure() {
         auto length = var->get_length();
         // TODO use std::array?
         if (var->is_array()) {
+            // TODO initializer list?
             printer->fmt_line("{}{} {}[{}];", qualifier, float_type, name, length);
         } else {
             double value{};
             if (auto const& value_ptr = var->get_value()) {
                 value = *value_ptr;
             }
-            printer->fmt_line("{}{} {}{{{:g}}};", qualifier, float_type, name, value);
+            printer->fmt_line("{}{} {}{};",
+                              qualifier,
+                              float_type,
+                              name,
+                              print_initialisers ? fmt::format("{{{:g}}}", value) : std::string{});
         }
         codegen_global_variables.push_back(var);
     }
@@ -2562,8 +2568,11 @@ void CodegenCVisitor::print_mechanism_global_var_structure() {
                             info.primes_size,
                             info.prime_variables_by_order.size())};
         }
-        auto const initializer_list = [&](auto const& primes, const char* prefix) {
-            std::string list;
+        auto const initializer_list = [&](auto const& primes, const char* prefix) -> std::string {
+            if (!print_initialisers) {
+                return {};
+            }
+            std::string list{"{"};
             for (auto iter = primes.begin(); iter != primes.end(); ++iter) {
                 auto const& prime = *iter;
                 list.append(std::to_string(position_of_float_var(prefix + prime->get_name())));
@@ -2571,25 +2580,25 @@ void CodegenCVisitor::print_mechanism_global_var_structure() {
                     list.append(", ");
                 }
             }
+            list.append("}");
             return list;
         };
-        auto const array_type = fmt::format("std::array<int, {}>", info.primes_size);
-        printer->fmt_line("{} {}slist1{{{}}};",
-                          array_type,
+        printer->fmt_line("{}int slist1[{}]{};",
                           qualifier,
+                          info.primes_size,
                           initializer_list(info.prime_variables_by_order, ""));
-        printer->fmt_line("{} {}dlist1{{{}}};",
-                          array_type,
+        printer->fmt_line("{}int dlist1[{}]{};",
                           qualifier,
+                          info.primes_size,
                           initializer_list(info.prime_variables_by_order, "D"));
         codegen_global_variables.push_back(make_symbol("slist1"));
         codegen_global_variables.push_back(make_symbol("dlist1"));
         // additional list for derivimplicit method
         if (info.derivimplicit_used()) {
             auto primes = program_symtab->get_variables_with_properties(NmodlType::prime_name);
-            printer->fmt_line("{} {}slist2{{{}}};",
-                              array_type,
+            printer->fmt_line("{}int slist2[{}]{};",
                               qualifier,
+                              info.primes_size,
                               initializer_list(primes, ""));
             codegen_global_variables.push_back(make_symbol("slist2"));
         }
@@ -2614,15 +2623,21 @@ void CodegenCVisitor::print_mechanism_global_var_structure() {
         }
     }
 
-    if (info.vectorize) {
-        printer->fmt_line("std::array<ThreadDatum, {}> {}ext_call_thread{{}};",
+    if (info.vectorize && info.thread_data_index) {
+        printer->fmt_line("{}ThreadDatum ext_call_thread[{}]{};",
+                          qualifier,
                           info.thread_data_index,
-                          qualifier);
+                          print_initialisers ? "{}" : "");
         codegen_global_variables.push_back(make_symbol("ext_call_thread"));
     }
 
     printer->end_block(";");
 
+    print_global_var_struct_assertions();
+    print_global_var_struct_decl();
+}
+
+void CodegenCVisitor::print_global_var_struct_assertions() const {
     // Assert some things that we assume when copying instances of this struct
     // to the GPU and so on.
     printer->fmt_line("static_assert(std::is_trivially_copy_constructible_v<{}>);",
@@ -2632,8 +2647,6 @@ void CodegenCVisitor::print_mechanism_global_var_structure() {
     printer->fmt_line("static_assert(std::is_trivially_copy_assignable_v<{}>);", global_struct());
     printer->fmt_line("static_assert(std::is_trivially_move_assignable_v<{}>);", global_struct());
     printer->fmt_line("static_assert(std::is_trivially_destructible_v<{}>);", global_struct());
-
-    print_global_var_struct_decl();
 }
 
 
@@ -2843,8 +2856,7 @@ void CodegenCVisitor::print_mechanism_register() {
      */
     if (info.vectorize && (info.thread_data_index != 0)) {
         // false to avoid getting the copy from the instance structure
-        auto name = get_variable_name("ext_call_thread", false);
-        printer->fmt_line("thread_mem_init({}.data());", name);
+        printer->fmt_line("thread_mem_init({});", get_variable_name("ext_call_thread", false));
     }
 
     if (!info.thread_variables.empty()) {
@@ -3004,14 +3016,14 @@ void CodegenCVisitor::print_thread_memory_callbacks() {
 }
 
 
-void CodegenCVisitor::print_mechanism_range_var_structure() {
+void CodegenCVisitor::print_mechanism_range_var_structure(bool print_initialisers) {
     auto float_type = default_float_data_type();
     auto int_type = default_int_data_type();
     printer->add_newline(2);
     printer->add_line("/** all mechanism instance variables and global variables */");
     printer->fmt_start_block("struct {} ", instance_struct());
     // TODO dynamically [don't] include this depending on whether it's used
-    printer->add_line("double celsius{celsius};");
+    printer->fmt_line("double celsius{};", print_initialisers ? "{celsius}" : "");
     for (auto& var: codegen_float_variables) {
         auto name = var->get_name();
         auto type = get_range_var_float_type(var);
@@ -3030,7 +3042,10 @@ void CodegenCVisitor::print_mechanism_range_var_structure() {
         }
     }
 
-    printer->fmt_line("{} global{{{}_global}};", global_struct(), info.mod_suffix);
+    printer->fmt_line("{} global{};",
+                      global_struct(),
+                      print_initialisers ? fmt::format("{{{}_global}}", info.mod_suffix)
+                                         : std::string{});
     printer->end_block(";");
 }
 
@@ -3393,7 +3408,7 @@ void CodegenCVisitor::print_global_function_common_code(BlockType type,
     printer->add_newline(1);
 }
 
-void CodegenCVisitor::print_global_struct_update_from_global_vars() {
+void CodegenCVisitor::print_global_struct_update_from_global_vars() const {
     printer->add_line("// Update global state struct from true globals");
     // Update the version inside the instance struct from the global version
     printer->fmt_line("{} = {};",
@@ -4567,9 +4582,9 @@ void CodegenCVisitor::print_common_getters() {
 }
 
 
-void CodegenCVisitor::print_data_structures() {
-    print_mechanism_global_var_structure();
-    print_mechanism_range_var_structure();
+void CodegenCVisitor::print_data_structures(bool print_initialisers) {
+    print_mechanism_global_var_structure(print_initialisers);
+    print_mechanism_range_var_structure(print_initialisers);
     print_ion_var_structure();
 }
 
@@ -4622,7 +4637,7 @@ void CodegenCVisitor::print_codegen_routines() {
     print_nmodl_constants();
     print_prcellstate_macros();
     print_mechanism_info();
-    print_data_structures();
+    print_data_structures(true);
     print_global_variables_for_hoc();
     print_common_getters();
     print_memory_allocation_routine();

@@ -898,6 +898,13 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
     virtual void print_global_var_struct_decl();
 
     /**
+     * Print static assertions about the global variable struct.
+     *
+     * For ISPC this has to be disabled.
+     */
+    virtual void print_global_var_struct_assertions() const;
+
+    /**
      * The used parameter type qualifier
      * \return an empty string
      */
@@ -1024,8 +1031,11 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
     /**
      * Print the structure that wraps all global variables used in the NMODL
+     *
+     * @param print_initialisers Whether to include default values in the struct
+     *                           definition (true: int foo{42}; false: int foo;)
      */
-    void print_mechanism_global_var_structure();
+    void print_mechanism_global_var_structure(bool print_initialisers);
 
 
     /**
@@ -1159,7 +1169,7 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * Print the code that updates the mechanism-global global variable struct
      * from application-global variables such as celsius, secondorder, etc.
      */
-    virtual void print_global_struct_update_from_global_vars();
+    virtual void print_global_struct_update_from_global_vars() const;
 
     /**
      * Print the pragma annotation to update global variables from host to the device
@@ -1596,9 +1606,9 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
     /**
      * Print all classes
-     *
+     * @param print_initialisers Whether to include default values.
      */
-    void print_data_structures();
+    void print_data_structures(bool print_initialisers);
 
 
     /**
@@ -1856,8 +1866,11 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
     /**
      * Print the structure that wraps all range and int variables required for the NMODL
+     *
+     * @param print_initialisers Whether or not default values for variables
+     *                           be included in the struct declaration.
      */
-    void print_mechanism_range_var_structure();
+    void print_mechanism_range_var_structure(bool print_initialisers);
 
     /**
      * Print the function that initialize instance structure

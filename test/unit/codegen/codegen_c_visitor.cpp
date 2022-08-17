@@ -252,7 +252,7 @@ SCENARIO("Check parameter constness with VERBATIM block",
             /// parse mod file & print mechanism structure
             const auto& ast = NmodlDriver().parse_string(nmodl_text);
             auto cvisitor = create_c_visitor(ast, nmodl_text, ss);
-            cvisitor->print_mechanism_range_var_structure();
+            cvisitor->print_mechanism_range_var_structure(true);
 
             std::string expected_code = R"(
                 /** all mechanism instance variables */

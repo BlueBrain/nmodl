@@ -91,7 +91,11 @@ class CodegenIspcVisitor: public CodegenCVisitor {
 
     std::string global_var_struct_type_qualifier() override;
 
+
     void print_global_var_struct_decl() override;
+    void print_global_var_struct_assertions() const override;
+    void print_global_struct_update_from_global_vars() const override;
+
 
     std::string param_type_qualifier() override;
 
