@@ -66,8 +66,6 @@ void CodegenIspcVisitor::visit_var_name(const ast::VarName& node) {
     if (!codegen) {
         return;
     }
-    RenameVisitor celsius_rename(naming::CELSIUS_VARIABLE, "ispc_celsius");
-    node.accept(celsius_rename);
     RenameVisitor pi_rename("PI", "ISPC_PI");
     node.accept(pi_rename);
     CodegenCVisitor::visit_var_name(node);
@@ -437,13 +435,6 @@ void CodegenIspcVisitor::print_compute_functions() {
 }
 
 
-void CodegenIspcVisitor::print_ispc_globals() {
-    printer->start_block("extern \"C\"");
-    printer->add_line("extern double ispc_celsius;");
-    printer->end_block();
-}
-
-
 void CodegenIspcVisitor::print_ion_var_constructor(const std::vector<std::string>& members) {
     /// no constructor for ispc
 }
@@ -517,7 +508,6 @@ void CodegenIspcVisitor::print_wrapper_routine(const std::string& wrapper_functi
     if (type == BlockType::Initial) {
         printer->add_newline();
         printer->add_line("setup_instance(nt, ml);");
-        printer->add_line("ispc_celsius = celsius;");
         printer->add_newline();
         printer->start_block("if (_nrn_skip_initmodel)");
         printer->add_line("return;");
@@ -756,7 +746,6 @@ void CodegenIspcVisitor::print_wrapper_routines() {
     wrapper_codegen = true;
     print_backend_info();
     print_wrapper_headers_include();
-    print_ispc_globals();
     print_namespace_begin();
 
     CodegenCVisitor::print_nmodl_constants();

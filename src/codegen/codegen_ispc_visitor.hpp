@@ -180,9 +180,6 @@ class CodegenIspcVisitor: public CodegenCVisitor {
     void print_block_wrappers_initial_equation_state();
 
 
-    void print_ispc_globals();
-
-
     void print_get_memb_list() override;
 
 
