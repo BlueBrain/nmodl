@@ -4252,7 +4252,7 @@ void CodegenCVisitor::print_derivimplicit_kernel(Block* block) {
     printer->end_block(1);
     printer->fmt_line(
         "int reset = nrn_newton_thread(static_cast<NewtonSpace*>(*newtonspace{}(thread)), {}, "
-        "slist{}.data(), _newton_{}_{}{{}}, dlist{}, {});",
+        "slist{}, _newton_{}_{}{{}}, dlist{}, {});",
         list_num,
         primes_size,
         list_num + 1,
