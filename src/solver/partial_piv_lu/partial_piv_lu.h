@@ -4,10 +4,11 @@
  * This file is part of NMODL distributed under the terms of the GNU
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
-
 #pragma once
 
+#ifndef NMODL_EIGEN_NO_OPENACC
 #include "coreneuron/utils/offload.hpp"
+#endif
 
 #include <Eigen/Dense>
 #include <Eigen/LU>
@@ -56,7 +57,8 @@ NMODL_EIGEN_ATTR VecType<dim> partialPivLu(const MatType<dim>&, const VecType<di
         return partialPivLu##N(A, b);                                                           \
     }
 // This PartialPivLuInstantiations is used in partial_piv_lu.cpp with a
-// different definition of the InstantiatePartialPivLu macro.
+// different definition of the InstantiatePartialPivLu macro. As of 2022-08-18 there is still an
+// issue with instantiating for matrices larger than 16x16.
 #define PartialPivLuInstantiations \
     InstantiatePartialPivLu(1)     \
     InstantiatePartialPivLu(2)     \
@@ -79,6 +81,7 @@ PartialPivLuInstantiations
 #ifndef NMODL_EIGEN_NO_OPENACC
 nrn_pragma_omp(end declare target)
 #endif
+// partial_piv_lu.cpp will request that this is left defined
 #ifndef NMODL_LEAVE_PartialPivLuInstantiations_DEFINED
 #undef PartialPivLuInstantiations
 #endif

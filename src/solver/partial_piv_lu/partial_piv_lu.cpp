@@ -15,5 +15,3 @@
     }
 PartialPivLuInstantiations
 #undef InstantiatePartialPivLu
-
-// As of 2022-08-18 there is still an issue with instantiating for matrices larger than 16x16
