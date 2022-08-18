@@ -31,10 +31,10 @@ bool SemanticAnalysisVisitor::check(const ast::Program& node) {
     assert(sym_table != nullptr);
 
     // get all ion variables
-    const auto& variables = sym_table->get_variables_with_properties(with_prop, false);
+    const auto& ion_variables = sym_table->get_variables_with_properties(with_prop, false);
 
     /// make sure ion variables aren't redefined in a `CONSTANT` block.
-    for (const auto& var: variables) {
+    for (const auto& var: ion_variables) {
         if (var->has_any_property(NmodlType::constant_var)) {
             logger->critical(
                 fmt::format("SemanticAnalysisVisitor :: ion variable {} from the USEION statement "
