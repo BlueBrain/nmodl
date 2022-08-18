@@ -110,7 +110,6 @@ set(AST_GENERATED_SOURCES
     ${PROJECT_BINARY_DIR}/src/ast/initial_block.hpp
     ${PROJECT_BINARY_DIR}/src/ast/integer.hpp
     ${PROJECT_BINARY_DIR}/src/ast/kinetic_block.hpp
-    ${PROJECT_BINARY_DIR}/src/ast/lag_statement.hpp
     ${PROJECT_BINARY_DIR}/src/ast/limits.hpp
     ${PROJECT_BINARY_DIR}/src/ast/lin_equation.hpp
     ${PROJECT_BINARY_DIR}/src/ast/line_comment.hpp

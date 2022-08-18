@@ -1004,19 +1004,6 @@ std::map<std::string, NmodlTestCase> nmodl_valid_constructs{
     },
 
     {
-        "lag_statement_1",
-        {
-            "LAG statement",
-            R"(
-                PROCEDURE lates() {
-                    LAG ina BY tau
-                    neo = lag_ina_tau
-                }
-            )"
-        }
-    },
-
-    {
         "queue_statement_1",
         {
             "PUTQ and GETQ statement",

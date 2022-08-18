@@ -114,7 +114,6 @@
 %token  <ModToken>              INDEPENDENT
 %token  <ModToken>              INITIAL1
 %token  <ModToken>              KINETIC
-%token  <ModToken>              LAG
 %token  <ModToken>              LAST
 %token  <ModToken>              LIN1
 %token  <ModToken>              LINEAR
@@ -271,7 +270,6 @@
 %type   <ast::Number*>                      optional_start
 %type   <ast::VarNameVector>                sens_list
 %type   <ast::Sens*>                        sens
-%type   <ast::LagStatement*>                lag_statement
 %type   <ast::ForAllStatement*>             forall_statement
 %type   <ast::ParamAssign*>                 parameter_assignment
 %type   <ast::Stepped*>                     stepped_statement
@@ -1142,10 +1140,6 @@ statement_type1 :   from_statement
                         $$ = $1;
                     }
                 |   conserve
-                    {
-                        $$ = $1;
-                    }
-                |   lag_statement
                     {
                         $$ = $1;
                     }
@@ -2044,17 +2038,6 @@ react           :   variable_name
                         auto op = ast::BinaryOperator(ast::BOP_ADDITION);
                         auto variable = new ast::ReactVarName($3, $4);
                         $$ = new ast::BinaryExpression($1, op, variable);
-                    }
-                ;
-
-
-lag_statement   :   LAG name BY NAME_PTR
-                    {
-                        $$ = new ast::LagStatement($2, $4);
-                    }
-                |   LAG error
-                    {
-                        error(scanner.loc, "lag_statement");
                     }
                 ;
 

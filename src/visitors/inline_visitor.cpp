@@ -24,8 +24,8 @@ bool InlineVisitor::can_inline_block(const StatementBlock& block) const {
     bool to_inline = true;
     const auto& statements = block.get_statements();
     for (const auto& statement: statements) {
-        /// inlining is disabled if function/procedure contains table or lag statement
-        if (statement->is_table_statement() || statement->is_lag_statement()) {
+        /// inlining is disabled if function/procedure contains table
+        if (statement->is_table_statement()) {
             to_inline = false;
             break;
         }

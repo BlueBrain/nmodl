@@ -1866,28 +1866,6 @@
                             suffix: {value: ")", force: true}
                             optional: true
 
-                  - LagStatement:
-                      nmodl: "LAG "
-                      members:
-                        - name:
-                            brief: "Name of the variable (TODO)"
-                            type: Identifier
-                        - byname:
-                            brief: "Name of the variable (TODO)"
-                            type: Name
-                            prefix: {value: " BY "}
-                      brief: "Represents a LAG statement in the mod file"
-                      description: |
-                                An example of LAG statement usage:
-
-                                \code{.mod}
-                                    PROCEDURE lates() {
-                                        LAG ina BY tau
-                                        neo = lag_ina_tau
-                                        if (ena < 70) {ena = 70}
-                                    }
-                                \endcode
-
                   - QueueStatement:
                       members:
                         - qtype:

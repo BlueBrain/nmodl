@@ -210,8 +210,6 @@ SymbolType token_symbol(const std::string& key, PositionType& pos, TokenType typ
         return Parser::make_INITIAL1(token, pos);
     case Token::KINETIC:
         return Parser::make_KINETIC(token, pos);
-    case Token::LAG:
-        return Parser::make_LAG(token, pos);
     case Token::LAST:
         return Parser::make_LAST(token, pos);
     case Token::LINEAR:

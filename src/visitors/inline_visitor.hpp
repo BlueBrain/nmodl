@@ -70,7 +70,7 @@ namespace visitor {
  *    replace the node. Hence WrappedExpression node has added. With this we
  *    can just override visit function of a single node and then can easily
  *    replace the expression to whatever the result will be
- *  - In case of lag and table statement inlining is disabled (haven't carefully
+ *  - In case of table statement inlining is disabled (haven't carefully
  *    looked into side effects)
  *  - Inlining pass needs to be run after symbol table pass
  *  - Inlining is done in recursive way i.e. if A() calls B() then first B()
