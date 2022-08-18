@@ -55,7 +55,6 @@ const static std::map<std::string, TokenType> keywords = {
     {"FUNCTION", Token::FUNCTION1},
     {"FUNCTION_TABLE", Token::FUNCTION_TABLE},
     {"PROCEDURE", Token::PROCEDURE},
-    {"PARTIAL", Token::PARTIAL},
     {"DEL2", Token::DEL2},
     {"DEL", Token::DEL},
     {"LOCAL", Token::LOCAL},

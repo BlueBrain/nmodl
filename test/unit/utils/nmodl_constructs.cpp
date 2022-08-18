@@ -1005,20 +1005,6 @@ std::map<std::string, NmodlTestCase> nmodl_valid_constructs{
     },
 
     {
-        "partial_block_partial_equation_1",
-        {
-            "PARTIAL block and partial equation statements",
-            R"(
-                PARTIAL some_name {
-                    ~ a' = a*DEL2(b)+c
-                    ~ DEL abc[FIRST] = (a*b/c)
-                    ~ abc[LAST] = (a*b/c)
-                }
-            )"
-        }
-    },
-
-    {
         "linear_block_1",
         {
             "LINEAR block",

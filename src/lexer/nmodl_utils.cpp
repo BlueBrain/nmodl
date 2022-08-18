@@ -238,8 +238,6 @@ SymbolType token_symbol(const std::string& key, PositionType& pos, TokenType typ
         return Parser::make_NRNMUTEXUNLOCK(token, pos);
     case Token::PARAMETER:
         return Parser::make_PARAMETER(token, pos);
-    case Token::PARTIAL:
-        return Parser::make_PARTIAL(token, pos);
     case Token::PLOT:
         return Parser::make_PLOT(token, pos);
     case Token::POINTER:

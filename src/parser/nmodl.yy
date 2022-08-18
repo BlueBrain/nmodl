@@ -130,7 +130,6 @@
 %token  <ModToken>              NRNMUTEXLOCK
 %token  <ModToken>              NRNMUTEXUNLOCK
 %token  <ModToken>              PARAMETER
-%token  <ModToken>              PARTIAL
 %token  <ModToken>              PLOT
 %token  <ModToken>              POINTER
 %token  <ModToken>              PROCEDURE
@@ -344,7 +343,6 @@
 %type   <ast::NeuronBlock*>                 neuron_block
 %type   <ast::NonLinearBlock*>              non_linear_block
 %type   <ast::ParamBlock*>                  parameter_block
-%type   <ast::PartialBlock*>                partial_block
 %type   <ast::ProcedureBlock*>              procedure_block
 %type   <ast::SolveBlock*>                  solve_block
 %type   <ast::StateBlock*>                  state_block
@@ -889,10 +887,6 @@ procedure       :   initial_block
                         $$ = $1;
                     }
                 |   discrete_block
-                    {
-                        $$ = $1;
-                    }
-                |   partial_block
                     {
                         $$ = $1;
                     }
@@ -1562,19 +1556,6 @@ discrete_block  :   DISCRETE NAME_PTR statement_list "}"
                         $$ = new ast::DiscreteBlock($2, $3);
                         ModToken block_token = $1 + $4;
                         $$->set_token(block_token);
-                    }
-                ;
-
-
-partial_block   :   PARTIAL NAME_PTR statement_list "}"
-                    {
-                        $$ = new ast::PartialBlock($2, $3);
-                        ModToken block_token = $1 + $4;
-                        $$->set_token(block_token);
-                    }
-                |   PARTIAL error
-                    {
-                        error(scanner.loc, "partial_block");
                     }
                 ;
 

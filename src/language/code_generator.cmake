@@ -137,7 +137,6 @@ set(AST_GENERATED_SOURCES
     ${PROJECT_BINARY_DIR}/src/ast/param_assign.hpp
     ${PROJECT_BINARY_DIR}/src/ast/param_block.hpp
     ${PROJECT_BINARY_DIR}/src/ast/paren_expression.hpp
-    ${PROJECT_BINARY_DIR}/src/ast/partial_block.hpp
     ${PROJECT_BINARY_DIR}/src/ast/partial_boundary.hpp
     ${PROJECT_BINARY_DIR}/src/ast/partial_equation.hpp
     ${PROJECT_BINARY_DIR}/src/ast/plot_block.hpp

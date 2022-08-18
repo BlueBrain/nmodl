@@ -90,7 +90,6 @@ SYMBOL_BLOCK_TYPES = {"FunctionBlock",
                       "LinearBlock",
                       "NonLinearBlock",
                       "DiscreteBlock",
-                      "PartialBlock",
                       "KineticBlock",
                       "FunctionTableBlock"
                       }

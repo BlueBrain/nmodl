@@ -745,20 +745,6 @@
                                   type: StatementBlock
                                   getter: {override: true}
 
-                        - PartialBlock:
-                            brief: "TODO"
-                            nmodl: "PARTIAL "
-                            members:
-                              - name:
-                                  brief: "Name of the partial block"
-                                  type: Name
-                                  node_name: true
-                                  suffix: {value: " "}
-                              - statement_block:
-                                  brief: "Block with statements vector"
-                                  type: StatementBlock
-                                  getter: {override: true}
-
                         - FunctionTableBlock:
                             brief: "TODO"
                             nmodl: "FUNCTION_TABLE "
