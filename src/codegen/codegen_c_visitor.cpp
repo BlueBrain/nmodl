@@ -1642,12 +1642,6 @@ void CodegenCVisitor::print_check_table_thread_function() {
         printer->fmt_line("{}({});", name, arguments);
     }
 
-    /**
-     * \todo `check_table_thread` is called multiple times from coreneuron including
-     * after `finitialize`. If we cleaup the instance then it will result in segfault
-     * but if we don't then there is memory leak
-     */
-    printer->add_line("// cleanup_instance(ml);");
     printer->end_block(1);
 }
 
@@ -3294,19 +3288,7 @@ void CodegenCVisitor::print_instance_variable_setup() {
         printer->fmt_line("inst->{} = {};", name, device_variable);
     }
 
-    // print_instance_variable_transfer_to_device();
-    printer->end_block(1);
-
-    // TODO this is never called
-    printer->add_line("/** cleanup mechanism instance variables */");
-    printer->start_block("static inline void cleanup_instance(Memb_list* ml)");
-    printer->fmt_line("auto* const inst = static_cast<{0}*>(ml->instance);", instance_struct());
-    if (range_variable_setup_required()) {
-        for (auto& var: variables_to_free) {
-            printer->fmt_line("mem_free(inst->{});", var);
-        }
-    }
-    printer->end_block();
+    printer->end_block(1); // setup_instance
 }
 
 
