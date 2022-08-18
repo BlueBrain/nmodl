@@ -168,7 +168,6 @@ set(AST_GENERATED_SOURCES
     ${PROJECT_BINARY_DIR}/src/ast/string.hpp
     ${PROJECT_BINARY_DIR}/src/ast/suffix.hpp
     ${PROJECT_BINARY_DIR}/src/ast/table_statement.hpp
-    ${PROJECT_BINARY_DIR}/src/ast/terminal_block.hpp
     ${PROJECT_BINARY_DIR}/src/ast/thread_safe.hpp
     ${PROJECT_BINARY_DIR}/src/ast/threadsafe_var.hpp
     ${PROJECT_BINARY_DIR}/src/ast/unary_expression.hpp

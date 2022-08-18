@@ -149,7 +149,6 @@
 %token  <ModToken>              STEP
 %token  <ModToken>              SWEEP
 %token  <ModToken>              TABLE
-%token  <ModToken>              TERMINAL
 %token  <ModToken>              THREADSAFE
 %token  <ModToken>              TO
 %token  <ModToken>              UNITS
@@ -349,7 +348,6 @@
 %type   <ast::ProcedureBlock*>              procedure_block
 %type   <ast::SolveBlock*>                  solve_block
 %type   <ast::StateBlock*>                  state_block
-%type   <ast::TerminalBlock*>               terminal_block
 %type   <ast::UnitBlock*>                   unit_block
 
 %type   <ast::Integer*>                     INTEGER_PTR
@@ -887,10 +885,6 @@ procedure       :   initial_block
                         $$ = $1;
                     }
                 |   net_receive_block
-                    {
-                        $$ = $1;
-                    }
-                |   terminal_block
                     {
                         $$ = $1;
                     }
@@ -1743,15 +1737,6 @@ solvefor        :   SOLVEFOR NAME_PTR
 breakpoint_block :  BREAKPOINT statement_list "}"
                     {
                         $$ = new ast::BreakpointBlock($2);
-                    }
-                ;
-
-
-terminal_block  :   TERMINAL statement_list "}"
-                    {
-                        $$ = new ast::TerminalBlock($2);
-                        ModToken block_token = $1 + $3;
-                        $$->set_token(block_token);
                     }
                 ;
 

@@ -404,10 +404,6 @@ void PerfVisitor::visit_breakpoint_block(const ast::BreakpointBlock& node) {
     measure_performance(node);
 }
 
-void PerfVisitor::visit_terminal_block(const ast::TerminalBlock& node) {
-    measure_performance(node);
-}
-
 void PerfVisitor::visit_before_block(const ast::BeforeBlock& node) {
     measure_performance(node);
 }

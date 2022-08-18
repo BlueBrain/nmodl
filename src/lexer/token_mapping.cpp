@@ -43,7 +43,6 @@ const static std::map<std::string, TokenType> keywords = {
     {"INDEPENDENT", Token::INDEPENDENT},
     {"ASSIGNED", Token::ASSIGNED},
     {"INITIAL", Token::INITIAL1},
-    {"TERMINAL", Token::TERMINAL},
     {"DERIVATIVE", Token::DERIVATIVE},
     {"EQUATION", Token::BREAKPOINT},
     {"BREAKPOINT", Token::BREAKPOINT},

@@ -1189,20 +1189,6 @@ std::map<std::string, NmodlTestCase> nmodl_valid_constructs{
     },
 
     {
-        "function_call_1",
-        {
-            "FUNCTION call",
-            R"(
-                TERMINAL {
-                    a = fun1()
-                    b = fun2(a, 2)
-                    fun3()
-                }
-            )"
-        }
-    },
-
-    {
         "kinetic_block_1",
         {
             "KINETIC block taken from mod file",

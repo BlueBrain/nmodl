@@ -272,8 +272,6 @@ SymbolType token_symbol(const std::string& key, PositionType& pos, TokenType typ
         return Parser::make_SWEEP(token, pos);
     case Token::TABLE:
         return Parser::make_TABLE(token, pos);
-    case Token::TERMINAL:
-        return Parser::make_TERMINAL(token, pos);
     case Token::THREADSAFE:
         return Parser::make_THREADSAFE(token, pos);
     case Token::TO:

@@ -899,15 +899,6 @@
 
                                         \sa ast::DerivativeBlock ast::InitialBlock
 
-                        - TerminalBlock:
-                            brief: "TODO"
-                            nmodl: "TERMINAL "
-                            members:
-                              - statement_block:
-                                  brief: "Block with statements vector"
-                                  type: StatementBlock
-                                  getter: {override: true}
-
                         - BeforeBlock:
                             nmodl: "BEFORE "
                             members:
