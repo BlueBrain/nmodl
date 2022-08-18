@@ -30,7 +30,7 @@ var group__printer =
       [ "JSONPrinter", "classnmodl_1_1printer_1_1_j_s_o_n_printer.html#afb5cfbbcfad4b6a78c219e743ee7261c", null ],
       [ "JSONPrinter", "classnmodl_1_1printer_1_1_j_s_o_n_printer.html#ae6651a64ed3ec719c121370b4c8d7e56", null ],
       [ "~JSONPrinter", "classnmodl_1_1printer_1_1_j_s_o_n_printer.html#a7440689acc917d6339f328800e377a97", null ],
-      [ "add_block_property", "classnmodl_1_1printer_1_1_j_s_o_n_printer.html#a564eece974fff5b2191e72a72586b0f0", null ],
+      [ "add_block_property", "classnmodl_1_1printer_1_1_j_s_o_n_printer.html#a9871d73dcf1e7120e5c23cfd8bca24df", null ],
       [ "add_node", "classnmodl_1_1printer_1_1_j_s_o_n_printer.html#a5322346deb73399d1fc364b19735143c", null ],
       [ "compact_json", "classnmodl_1_1printer_1_1_j_s_o_n_printer.html#a5a33298debb3e81334f5ae67791549eb", null ],
       [ "expand_keys", "classnmodl_1_1printer_1_1_j_s_o_n_printer.html#a9d25dffd62a146eca46acbadecde6b08", null ],

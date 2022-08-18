@@ -104,413 +104,428 @@ $(document).ready(function(){initNavTree('src_2units_2units_8cpp_source.html',''
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;algorithm&gt;</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;array&gt;</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;fstream&gt;</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;iostream&gt;</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;map&gt;</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;regex&gt;</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &lt;sstream&gt;</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="units_8hpp.html">units.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">/**</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment"> * \file</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment"> * \brief Units processing while being processed from lexer and parser</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacenmodl.html">nmodl</a> {</div>
-<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="namespacenmodl_1_1units.html">   27</a></span>&#160;<span class="keyword">namespace </span>units {</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="classnmodl_1_1units_1_1_prefix.html#a7a661210a647e424e4650f674dae64c7">   29</a></span>&#160;<a class="code" href="classnmodl_1_1units_1_1_prefix.html#a3bfe9dfed8a2a78b4d02ab8c90473ac3">Prefix::Prefix</a>(std::string name, <span class="keyword">const</span> std::string&amp; factor) {</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="keywordflow">if</span> (name.back() == <span class="charliteral">&#39;-&#39;</span>) {</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        name.pop_back();</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    }</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <a class="code" href="classnmodl_1_1units_1_1_prefix.html#a8cdadb1617448fff16a9447da48d0584">prefix_name</a> = name;</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <a class="code" href="classnmodl_1_1units_1_1_prefix.html#a65b23de972d3ac92212b9e2685f8c75a">prefix_factor</a> = std::stod(factor);</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;}</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
-<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="classnmodl_1_1units_1_1_unit.html#a9b45dd9b5497136c54bd15236f834948">   37</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1units_1_1_unit.html#a9b45dd9b5497136c54bd15236f834948">Unit::add_unit</a>(<span class="keyword">const</span> std::string&amp; name) {</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <a class="code" href="classnmodl_1_1units_1_1_unit.html#ab10e1584ff73f42ea61a3fe1e3496ff0">unit_name</a> = name;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;}</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
-<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="classnmodl_1_1units_1_1_unit.html#ad225ab3e1fa5aafe76142366913c012c">   41</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1units_1_1_unit.html#ad225ab3e1fa5aafe76142366913c012c">Unit::add_base_unit</a>(<span class="keyword">const</span> std::string&amp; name) {</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="comment">// name = &quot;*[a-j]*&quot; which is a base unit</span></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keyword">const</span> <span class="keyword">auto</span> dim_name = name[1];</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">int</span> dim_no = dim_name - <span class="charliteral">&#39;a&#39;</span>;</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <a class="code" href="classnmodl_1_1units_1_1_unit.html#a47e7e66491b6ad16539faf5c21c64da8">unit_dimensions</a>[dim_no] = 1;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <a class="code" href="classnmodl_1_1units_1_1_unit.html#ad61fecc0295d281e361a322b29c0a3f9">add_nominator_unit</a>(name);</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;}</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
-<div class="line"><a name="l00049"></a><span class="lineno"><a class="line" href="classnmodl_1_1units_1_1_unit.html#a61c3fda4127c9511d46ceaa3bc02d100">   49</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1units_1_1_unit.html#a61c3fda4127c9511d46ceaa3bc02d100">Unit::add_nominator_double</a>(<span class="keyword">const</span> std::string&amp; double_string) {</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <a class="code" href="classnmodl_1_1units_1_1_unit.html#a57a74f9b2a5b7c94e16434bb9d99af69">unit_factor</a> = <a class="code" href="classnmodl_1_1units_1_1_unit.html#aedd28ff0320b0f99d44df7a504e8dd5f">parse_double</a>(double_string);</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;}</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
-<div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="classnmodl_1_1units_1_1_unit.html#a68fb30ffb73b5faa43079407a67bae45">   53</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1units_1_1_unit.html#a68fb30ffb73b5faa43079407a67bae45">Unit::add_nominator_dims</a>(<span class="keyword">const</span> std::array&lt;int, MAX_DIMS&gt;&amp; dimensions) {</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    std::transform(<a class="code" href="classnmodl_1_1units_1_1_unit.html#a47e7e66491b6ad16539faf5c21c64da8">unit_dimensions</a>.begin(),</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;                   <a class="code" href="classnmodl_1_1units_1_1_unit.html#a47e7e66491b6ad16539faf5c21c64da8">unit_dimensions</a>.end(),</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;                   dimensions.begin(),</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;                   <a class="code" href="classnmodl_1_1units_1_1_unit.html#a47e7e66491b6ad16539faf5c21c64da8">unit_dimensions</a>.begin(),</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;                   std::plus&lt;int&gt;());</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;}</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
-<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="classnmodl_1_1units_1_1_unit.html#a275364244dc0f57822073cad9df33884">   61</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1units_1_1_unit.html#a275364244dc0f57822073cad9df33884">Unit::add_denominator_dims</a>(<span class="keyword">const</span> std::array&lt;int, MAX_DIMS&gt;&amp; dimensions) {</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    std::transform(<a class="code" href="classnmodl_1_1units_1_1_unit.html#a47e7e66491b6ad16539faf5c21c64da8">unit_dimensions</a>.begin(),</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;                   <a class="code" href="classnmodl_1_1units_1_1_unit.html#a47e7e66491b6ad16539faf5c21c64da8">unit_dimensions</a>.end(),</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;                   dimensions.begin(),</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;                   <a class="code" href="classnmodl_1_1units_1_1_unit.html#a47e7e66491b6ad16539faf5c21c64da8">unit_dimensions</a>.begin(),</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                   std::minus&lt;int&gt;());</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;}</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
-<div class="line"><a name="l00069"></a><span class="lineno"><a class="line" href="classnmodl_1_1units_1_1_unit.html#ad61fecc0295d281e361a322b29c0a3f9">   69</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1units_1_1_unit.html#ad61fecc0295d281e361a322b29c0a3f9">Unit::add_nominator_unit</a>(<span class="keyword">const</span> std::string&amp; nom) {</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <a class="code" href="classnmodl_1_1units_1_1_unit.html#a58cf659ca2555ee8a8bd31b186b5bbcf">nominator</a>.push_back(nom);</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;}</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
-<div class="line"><a name="l00073"></a><span class="lineno"><a class="line" href="classnmodl_1_1units_1_1_unit.html#a5a90aef7f3a9f8e3772626b8713f174e">   73</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1units_1_1_unit.html#ad61fecc0295d281e361a322b29c0a3f9">Unit::add_nominator_unit</a>(<span class="keyword">const</span> std::shared_ptr&lt;std::vector&lt;std::string&gt;&gt;&amp; nom) {</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <a class="code" href="classnmodl_1_1units_1_1_unit.html#a58cf659ca2555ee8a8bd31b186b5bbcf">nominator</a>.insert(<a class="code" href="classnmodl_1_1units_1_1_unit.html#a58cf659ca2555ee8a8bd31b186b5bbcf">nominator</a>.end(), nom-&gt;begin(), nom-&gt;end());</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;}</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
-<div class="line"><a name="l00077"></a><span class="lineno"><a class="line" href="classnmodl_1_1units_1_1_unit.html#abb6f1a315c651f9b6e525ec94bfdebce">   77</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1units_1_1_unit.html#abb6f1a315c651f9b6e525ec94bfdebce">Unit::add_denominator_unit</a>(<span class="keyword">const</span> std::string&amp; denom) {</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <a class="code" href="classnmodl_1_1units_1_1_unit.html#ac988479210da7cb06b3a7598c2afdbae">denominator</a>.push_back(denom);</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;}</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
-<div class="line"><a name="l00081"></a><span class="lineno"><a class="line" href="classnmodl_1_1units_1_1_unit.html#aa53fde115e36b35ffd6a72a914d8d545">   81</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1units_1_1_unit.html#abb6f1a315c651f9b6e525ec94bfdebce">Unit::add_denominator_unit</a>(<span class="keyword">const</span> std::shared_ptr&lt;std::vector&lt;std::string&gt;&gt;&amp; denom) {</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <a class="code" href="classnmodl_1_1units_1_1_unit.html#ac988479210da7cb06b3a7598c2afdbae">denominator</a>.insert(<a class="code" href="classnmodl_1_1units_1_1_unit.html#ac988479210da7cb06b3a7598c2afdbae">denominator</a>.end(), denom-&gt;begin(), denom-&gt;end());</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;}</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
-<div class="line"><a name="l00085"></a><span class="lineno"><a class="line" href="classnmodl_1_1units_1_1_unit.html#ae414d2adb6865e85cf4fa0619c0b6c46">   85</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1units_1_1_unit.html#ae414d2adb6865e85cf4fa0619c0b6c46">Unit::mul_factor</a>(<span class="keyword">const</span> <span class="keywordtype">double</span> double_factor) {</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <a class="code" href="classnmodl_1_1units_1_1_unit.html#a57a74f9b2a5b7c94e16434bb9d99af69">unit_factor</a> *= double_factor;</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;}</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
-<div class="line"><a name="l00089"></a><span class="lineno"><a class="line" href="classnmodl_1_1units_1_1_unit.html#ac7bf4a54c1f6633baf99afe9caa6fdcf">   89</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1units_1_1_unit.html#ac7bf4a54c1f6633baf99afe9caa6fdcf">Unit::add_fraction</a>(<span class="keyword">const</span> std::string&amp; fraction_string) {</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="keywordtype">double</span> nom, denom;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    std::string <a class="code" href="classnmodl_1_1units_1_1_unit.html#a58cf659ca2555ee8a8bd31b186b5bbcf">nominator</a>;</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    std::string <a class="code" href="classnmodl_1_1units_1_1_unit.html#ac988479210da7cb06b3a7598c2afdbae">denominator</a>;</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    std::string::const_iterator it;</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="keywordflow">for</span> (it = fraction_string.begin(); it != fraction_string.end() &amp;&amp; *it != <span class="charliteral">&#39;|&#39;</span>; ++it) {</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        <a class="code" href="classnmodl_1_1units_1_1_unit.html#a58cf659ca2555ee8a8bd31b186b5bbcf">nominator</a>.push_back(*it);</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    }</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    <span class="comment">// pass &quot;|&quot; char</span></div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    ++it;</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">auto</span> itm = it; itm != fraction_string.end(); ++itm) {</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        <a class="code" href="classnmodl_1_1units_1_1_unit.html#ac988479210da7cb06b3a7598c2afdbae">denominator</a>.push_back(*itm);</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    }</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    nom = <a class="code" href="classnmodl_1_1units_1_1_unit.html#aedd28ff0320b0f99d44df7a504e8dd5f">parse_double</a>(<a class="code" href="classnmodl_1_1units_1_1_unit.html#a58cf659ca2555ee8a8bd31b186b5bbcf">nominator</a>);</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    denom = <a class="code" href="classnmodl_1_1units_1_1_unit.html#aedd28ff0320b0f99d44df7a504e8dd5f">parse_double</a>(<a class="code" href="classnmodl_1_1units_1_1_unit.html#ac988479210da7cb06b3a7598c2afdbae">denominator</a>);</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    <a class="code" href="classnmodl_1_1units_1_1_unit.html#a57a74f9b2a5b7c94e16434bb9d99af69">unit_factor</a> = nom / denom;</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;}</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
-<div class="line"><a name="l00107"></a><span class="lineno"><a class="line" href="classnmodl_1_1units_1_1_unit.html#aedd28ff0320b0f99d44df7a504e8dd5f">  107</a></span>&#160;<span class="keywordtype">double</span> <a class="code" href="classnmodl_1_1units_1_1_unit.html#aedd28ff0320b0f99d44df7a504e8dd5f">Unit::parse_double</a>(std::string double_string) {</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <span class="keywordtype">long</span> <span class="keywordtype">double</span> d_number;</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <span class="keywordtype">double</span> d_magnitude;</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    std::string s_number;</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    std::string s_magnitude;</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    std::string::const_iterator it;</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    <span class="comment">// if double is positive sign = 1 else sign = -1</span></div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    <span class="comment">// to be able to be multiplied by the d_number</span></div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    <span class="keywordtype">int</span> sign = 1;</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    <span class="keywordflow">if</span> (double_string.front() == <span class="charliteral">&#39;-&#39;</span>) {</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;        sign = -1;</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;        double_string.erase(double_string.begin());</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    }</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    <span class="comment">// if *it reached an exponent related char, then the whole double number is read</span></div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    <span class="keywordflow">for</span> (it = double_string.begin();</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;         it != double_string.end() &amp;&amp; *it != <span class="charliteral">&#39;e&#39;</span> &amp;&amp; *it != <span class="charliteral">&#39;+&#39;</span> &amp;&amp; *it != <span class="charliteral">&#39;-&#39;</span>;</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;         ++it) {</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;        s_number.push_back(*it);</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    }</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    <span class="comment">// then read the magnitude of the double number</span></div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">auto</span> itm = it; itm != double_string.end(); ++itm) {</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;        <span class="keywordflow">if</span> (*itm != <span class="charliteral">&#39;e&#39;</span>) {</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;            s_magnitude.push_back(*itm);</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;        }</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    }</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    d_number = std::stold(s_number);</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;    <span class="keywordflow">if</span> (s_magnitude.empty()) {</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;        d_magnitude = 0.0;</div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;        d_magnitude = std::stod(s_magnitude);</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;    }</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">static_cast&lt;</span><span class="keywordtype">double</span><span class="keyword">&gt;</span>(d_number * powl(10.0, d_magnitude) * sign);</div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;}</div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160; </div>
-<div class="line"><a name="l00141"></a><span class="lineno"><a class="line" href="classnmodl_1_1units_1_1_unit_table.html#a74660152526652ce3737906d2bf20b8f">  141</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a74660152526652ce3737906d2bf20b8f">UnitTable::calc_nominator_dims</a>(<span class="keyword">const</span> std::shared_ptr&lt;Unit&gt;&amp; unit, std::string nominator_name) {</div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;    <span class="keywordtype">double</span> nominator_prefix_factor = 1.0;</div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;    <span class="keywordtype">int</span> nominator_power = 1;</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160; </div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;    <span class="comment">// if the nominator is DOUBLE, divide it from the unit factor</span></div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;    <span class="keywordflow">if</span> (nominator_name.front() &gt;= <span class="charliteral">&#39;1&#39;</span> &amp;&amp; nominator_name.front() &lt;= <span class="charliteral">&#39;9&#39;</span>) {</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;        unit-&gt;mul_factor(1 / std::stod(nominator_name));</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;        <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;    }</div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160; </div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;    std::string nom_name = nominator_name;</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;    <span class="keyword">auto</span> nominator = <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.find(nominator_name);</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;cassert&gt;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;fstream&gt;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;iostream&gt;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;map&gt;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &lt;regex&gt;</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &lt;sstream&gt;</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="units_8hpp.html">units.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">/**</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment"> * \file</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment"> * \brief Units processing while being processed from lexer and parser</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="comment"> */</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keyword">namespace </span>{</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;constexpr std::size_t output_precision{8};</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;}</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacenmodl.html">nmodl</a> {</div>
+<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="namespacenmodl_1_1units.html">   32</a></span>&#160;<span class="keyword">namespace </span>units {</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="classnmodl_1_1units_1_1_prefix.html#a7a661210a647e424e4650f674dae64c7">   34</a></span>&#160;<a class="code" href="classnmodl_1_1units_1_1_prefix.html#a3bfe9dfed8a2a78b4d02ab8c90473ac3">Prefix::Prefix</a>(std::string name, <span class="keyword">const</span> std::string&amp; factor) {</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keywordflow">if</span> (name.back() == <span class="charliteral">&#39;-&#39;</span>) {</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        name.pop_back();</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    }</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <a class="code" href="classnmodl_1_1units_1_1_prefix.html#a8cdadb1617448fff16a9447da48d0584">prefix_name</a> = name;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <a class="code" href="classnmodl_1_1units_1_1_prefix.html#a65b23de972d3ac92212b9e2685f8c75a">prefix_factor</a> = std::stod(factor);</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;}</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
+<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="classnmodl_1_1units_1_1_unit.html#a9b45dd9b5497136c54bd15236f834948">   42</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1units_1_1_unit.html#a9b45dd9b5497136c54bd15236f834948">Unit::add_unit</a>(<span class="keyword">const</span> std::string&amp; name) {</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <a class="code" href="classnmodl_1_1units_1_1_unit.html#ab10e1584ff73f42ea61a3fe1e3496ff0">unit_name</a> = name;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;}</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
+<div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="classnmodl_1_1units_1_1_unit.html#ad225ab3e1fa5aafe76142366913c012c">   46</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1units_1_1_unit.html#ad225ab3e1fa5aafe76142366913c012c">Unit::add_base_unit</a>(<span class="keyword">const</span> std::string&amp; name) {</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="comment">// name = &quot;*[a-j]*&quot; which is a base unit</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="keyword">const</span> <span class="keyword">auto</span> dim_name = name[1];</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">int</span> dim_no = dim_name - <span class="charliteral">&#39;a&#39;</span>;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    assert(dim_no &gt;= 0 &amp;&amp; dim_no &lt; <a class="code" href="classnmodl_1_1units_1_1_unit.html#a47e7e66491b6ad16539faf5c21c64da8">unit_dimensions</a>.size());</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="comment">// NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-constant-array-index)</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <a class="code" href="classnmodl_1_1units_1_1_unit.html#a47e7e66491b6ad16539faf5c21c64da8">unit_dimensions</a>[dim_no] = 1;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <a class="code" href="classnmodl_1_1units_1_1_unit.html#ad61fecc0295d281e361a322b29c0a3f9">add_nominator_unit</a>(name);</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;}</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
+<div class="line"><a name="l00056"></a><span class="lineno"><a class="line" href="classnmodl_1_1units_1_1_unit.html#a61c3fda4127c9511d46ceaa3bc02d100">   56</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1units_1_1_unit.html#a61c3fda4127c9511d46ceaa3bc02d100">Unit::add_nominator_double</a>(<span class="keyword">const</span> std::string&amp; double_string) {</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <a class="code" href="classnmodl_1_1units_1_1_unit.html#a57a74f9b2a5b7c94e16434bb9d99af69">unit_factor</a> = <a class="code" href="classnmodl_1_1units_1_1_unit.html#aedd28ff0320b0f99d44df7a504e8dd5f">parse_double</a>(double_string);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;}</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
+<div class="line"><a name="l00060"></a><span class="lineno"><a class="line" href="classnmodl_1_1units_1_1_unit.html#a68fb30ffb73b5faa43079407a67bae45">   60</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1units_1_1_unit.html#a68fb30ffb73b5faa43079407a67bae45">Unit::add_nominator_dims</a>(<span class="keyword">const</span> std::array&lt;int, MAX_DIMS&gt;&amp; dimensions) {</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    std::transform(<a class="code" href="classnmodl_1_1units_1_1_unit.html#a47e7e66491b6ad16539faf5c21c64da8">unit_dimensions</a>.begin(),</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;                   <a class="code" href="classnmodl_1_1units_1_1_unit.html#a47e7e66491b6ad16539faf5c21c64da8">unit_dimensions</a>.end(),</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;                   dimensions.begin(),</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;                   <a class="code" href="classnmodl_1_1units_1_1_unit.html#a47e7e66491b6ad16539faf5c21c64da8">unit_dimensions</a>.begin(),</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;                   std::plus&lt;int&gt;());</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;}</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
+<div class="line"><a name="l00068"></a><span class="lineno"><a class="line" href="classnmodl_1_1units_1_1_unit.html#a275364244dc0f57822073cad9df33884">   68</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1units_1_1_unit.html#a275364244dc0f57822073cad9df33884">Unit::add_denominator_dims</a>(<span class="keyword">const</span> std::array&lt;int, MAX_DIMS&gt;&amp; dimensions) {</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    std::transform(<a class="code" href="classnmodl_1_1units_1_1_unit.html#a47e7e66491b6ad16539faf5c21c64da8">unit_dimensions</a>.begin(),</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;                   <a class="code" href="classnmodl_1_1units_1_1_unit.html#a47e7e66491b6ad16539faf5c21c64da8">unit_dimensions</a>.end(),</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;                   dimensions.begin(),</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;                   <a class="code" href="classnmodl_1_1units_1_1_unit.html#a47e7e66491b6ad16539faf5c21c64da8">unit_dimensions</a>.begin(),</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;                   std::minus&lt;int&gt;());</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;}</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
+<div class="line"><a name="l00076"></a><span class="lineno"><a class="line" href="classnmodl_1_1units_1_1_unit.html#ad61fecc0295d281e361a322b29c0a3f9">   76</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1units_1_1_unit.html#ad61fecc0295d281e361a322b29c0a3f9">Unit::add_nominator_unit</a>(<span class="keyword">const</span> std::string&amp; nom) {</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <a class="code" href="classnmodl_1_1units_1_1_unit.html#a58cf659ca2555ee8a8bd31b186b5bbcf">nominator</a>.push_back(nom);</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;}</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
+<div class="line"><a name="l00080"></a><span class="lineno"><a class="line" href="classnmodl_1_1units_1_1_unit.html#a5a90aef7f3a9f8e3772626b8713f174e">   80</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1units_1_1_unit.html#ad61fecc0295d281e361a322b29c0a3f9">Unit::add_nominator_unit</a>(<span class="keyword">const</span> std::shared_ptr&lt;std::vector&lt;std::string&gt;&gt;&amp; nom) {</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <a class="code" href="classnmodl_1_1units_1_1_unit.html#a58cf659ca2555ee8a8bd31b186b5bbcf">nominator</a>.insert(<a class="code" href="classnmodl_1_1units_1_1_unit.html#a58cf659ca2555ee8a8bd31b186b5bbcf">nominator</a>.end(), nom-&gt;begin(), nom-&gt;end());</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;}</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
+<div class="line"><a name="l00084"></a><span class="lineno"><a class="line" href="classnmodl_1_1units_1_1_unit.html#abb6f1a315c651f9b6e525ec94bfdebce">   84</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1units_1_1_unit.html#abb6f1a315c651f9b6e525ec94bfdebce">Unit::add_denominator_unit</a>(<span class="keyword">const</span> std::string&amp; denom) {</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <a class="code" href="classnmodl_1_1units_1_1_unit.html#ac988479210da7cb06b3a7598c2afdbae">denominator</a>.push_back(denom);</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;}</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
+<div class="line"><a name="l00088"></a><span class="lineno"><a class="line" href="classnmodl_1_1units_1_1_unit.html#aa53fde115e36b35ffd6a72a914d8d545">   88</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1units_1_1_unit.html#abb6f1a315c651f9b6e525ec94bfdebce">Unit::add_denominator_unit</a>(<span class="keyword">const</span> std::shared_ptr&lt;std::vector&lt;std::string&gt;&gt;&amp; denom) {</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <a class="code" href="classnmodl_1_1units_1_1_unit.html#ac988479210da7cb06b3a7598c2afdbae">denominator</a>.insert(<a class="code" href="classnmodl_1_1units_1_1_unit.html#ac988479210da7cb06b3a7598c2afdbae">denominator</a>.end(), denom-&gt;begin(), denom-&gt;end());</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;}</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
+<div class="line"><a name="l00092"></a><span class="lineno"><a class="line" href="classnmodl_1_1units_1_1_unit.html#ae414d2adb6865e85cf4fa0619c0b6c46">   92</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1units_1_1_unit.html#ae414d2adb6865e85cf4fa0619c0b6c46">Unit::mul_factor</a>(<span class="keyword">const</span> <span class="keywordtype">double</span> double_factor) {</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <a class="code" href="classnmodl_1_1units_1_1_unit.html#a57a74f9b2a5b7c94e16434bb9d99af69">unit_factor</a> *= double_factor;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;}</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
+<div class="line"><a name="l00096"></a><span class="lineno"><a class="line" href="classnmodl_1_1units_1_1_unit.html#ac7bf4a54c1f6633baf99afe9caa6fdcf">   96</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1units_1_1_unit.html#ac7bf4a54c1f6633baf99afe9caa6fdcf">Unit::add_fraction</a>(<span class="keyword">const</span> std::string&amp; fraction_string) {</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    <span class="keywordtype">double</span> nom{}, denom{};</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    std::string <a class="code" href="classnmodl_1_1units_1_1_unit.html#a58cf659ca2555ee8a8bd31b186b5bbcf">nominator</a>;</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    std::string <a class="code" href="classnmodl_1_1units_1_1_unit.html#ac988479210da7cb06b3a7598c2afdbae">denominator</a>;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    std::string::const_iterator it;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <span class="keywordflow">for</span> (it = fraction_string.begin(); it != fraction_string.end() &amp;&amp; *it != <span class="charliteral">&#39;|&#39;</span>; ++it) {</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        <a class="code" href="classnmodl_1_1units_1_1_unit.html#a58cf659ca2555ee8a8bd31b186b5bbcf">nominator</a>.push_back(*it);</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    }</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    <span class="comment">// pass &quot;|&quot; char</span></div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    ++it;</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">auto</span> itm = it; itm != fraction_string.end(); ++itm) {</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        <a class="code" href="classnmodl_1_1units_1_1_unit.html#ac988479210da7cb06b3a7598c2afdbae">denominator</a>.push_back(*itm);</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    }</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    nom = <a class="code" href="classnmodl_1_1units_1_1_unit.html#aedd28ff0320b0f99d44df7a504e8dd5f">parse_double</a>(<a class="code" href="classnmodl_1_1units_1_1_unit.html#a58cf659ca2555ee8a8bd31b186b5bbcf">nominator</a>);</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    denom = <a class="code" href="classnmodl_1_1units_1_1_unit.html#aedd28ff0320b0f99d44df7a504e8dd5f">parse_double</a>(<a class="code" href="classnmodl_1_1units_1_1_unit.html#ac988479210da7cb06b3a7598c2afdbae">denominator</a>);</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    <a class="code" href="classnmodl_1_1units_1_1_unit.html#a57a74f9b2a5b7c94e16434bb9d99af69">unit_factor</a> = nom / denom;</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;}</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
+<div class="line"><a name="l00114"></a><span class="lineno"><a class="line" href="classnmodl_1_1units_1_1_unit.html#aedd28ff0320b0f99d44df7a504e8dd5f">  114</a></span>&#160;<span class="keywordtype">double</span> <a class="code" href="classnmodl_1_1units_1_1_unit.html#aedd28ff0320b0f99d44df7a504e8dd5f">Unit::parse_double</a>(std::string double_string) {</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    <span class="keywordtype">long</span> <span class="keywordtype">double</span> d_number{};</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    <span class="keywordtype">double</span> d_magnitude{};</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    std::string s_number;</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    std::string s_magnitude;</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    std::string::const_iterator it;</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    <span class="comment">// if double is positive sign = 1 else sign = -1</span></div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    <span class="comment">// to be able to be multiplied by the d_number</span></div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    <span class="keywordtype">int</span> sign = 1;</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;    <span class="keywordflow">if</span> (double_string.front() == <span class="charliteral">&#39;-&#39;</span>) {</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;        sign = -1;</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        double_string.erase(double_string.begin());</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    }</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;    <span class="comment">// if *it reached an exponent related char, then the whole double number is read</span></div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;    <span class="keywordflow">for</span> (it = double_string.begin();</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;         it != double_string.end() &amp;&amp; *it != <span class="charliteral">&#39;e&#39;</span> &amp;&amp; *it != <span class="charliteral">&#39;+&#39;</span> &amp;&amp; *it != <span class="charliteral">&#39;-&#39;</span>;</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;         ++it) {</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;        s_number.push_back(*it);</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    }</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;    <span class="comment">// then read the magnitude of the double number</span></div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">auto</span> itm = it; itm != double_string.end(); ++itm) {</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;        <span class="keywordflow">if</span> (*itm != <span class="charliteral">&#39;e&#39;</span>) {</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;            s_magnitude.push_back(*itm);</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;        }</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;    }</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;    d_number = std::stold(s_number);</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;    <span class="keywordflow">if</span> (s_magnitude.empty()) {</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;        d_magnitude = 0.0;</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;        d_magnitude = std::stod(s_magnitude);</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;    }</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;    <span class="comment">// NOLINTNEXTLINE(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)</span></div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">static_cast&lt;</span><span class="keywordtype">double</span><span class="keyword">&gt;</span>(d_number * powl(10.0, d_magnitude) * sign);</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;}</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160; </div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;<span class="comment">// NOLINTNEXTLINE(readability-function-cognitive-complexity)</span></div>
+<div class="line"><a name="l00150"></a><span class="lineno"><a class="line" href="classnmodl_1_1units_1_1_unit_table.html#a74660152526652ce3737906d2bf20b8f">  150</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a74660152526652ce3737906d2bf20b8f">UnitTable::calc_nominator_dims</a>(<span class="keyword">const</span> std::shared_ptr&lt;Unit&gt;&amp; unit, std::string nominator_name) {</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;    <span class="keywordtype">double</span> nominator_prefix_factor = 1.0;</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;    <span class="keywordtype">int</span> nominator_power = 1;</div>
 <div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160; </div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;    <span class="comment">// if the nominator_name is not in the table, check if there are any prefixes or power</span></div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;    <span class="keywordflow">if</span> (nominator == <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.end()) {</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;        <span class="keywordtype">int</span> changed_nominator_name = 1;</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160; </div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;        <span class="keywordflow">while</span> (changed_nominator_name) {</div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;            changed_nominator_name = 0;</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; it: <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a903aa71e430ec0e389152faed99c11ec">prefixes</a>) {</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;                <span class="keyword">auto</span> res = std::mismatch(it.first.begin(), it.first.end(), nominator_name.begin());</div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;                <span class="keywordflow">if</span> (res.first == it.first.end()) {</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;                    changed_nominator_name = 1;</div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;                    nominator_prefix_factor *= it.second;</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;                    nominator_name.erase(nominator_name.begin(),</div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;                                         nominator_name.begin() + it.first.size());</div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;                }</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;            }</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;        }</div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;        <span class="comment">// if the nominator is only a prefix, just multiply the prefix factor with the unit factor</span></div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;        <span class="keywordflow">if</span> (nominator_name.empty()) {</div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; it: <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a903aa71e430ec0e389152faed99c11ec">prefixes</a>) {</div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;                <span class="keyword">auto</span> res = std::mismatch(it.first.begin(), it.first.end(), nom_name.begin());</div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;                <span class="keywordflow">if</span> (res.first == it.first.end()) {</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;                    unit-&gt;mul_factor(it.second);</div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;                    <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;    <span class="comment">// if the nominator is DOUBLE, divide it from the unit factor</span></div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;    <span class="keywordflow">if</span> (nominator_name.front() &gt;= <span class="charliteral">&#39;1&#39;</span> &amp;&amp; nominator_name.front() &lt;= <span class="charliteral">&#39;9&#39;</span>) {</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;        unit-&gt;mul_factor(1 / std::stod(nominator_name));</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;        <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;    }</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160; </div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;    std::string nom_name = nominator_name;</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;    <span class="keyword">auto</span> nominator = <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.find(nominator_name);</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160; </div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;    <span class="comment">// if the nominator_name is not in the table, check if there are any prefixes or power</span></div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;    <span class="keywordflow">if</span> (nominator == <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.end()) {</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;        <span class="keywordtype">int</span> changed_nominator_name = 1;</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160; </div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;        <span class="keywordflow">while</span> (changed_nominator_name) {</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;            changed_nominator_name = 0;</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; it: <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a903aa71e430ec0e389152faed99c11ec">prefixes</a>) {</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;                <span class="keyword">auto</span> res = std::mismatch(it.first.begin(), it.first.end(), nominator_name.begin());</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;                <span class="keywordflow">if</span> (res.first == it.first.end()) {</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;                    changed_nominator_name = 1;</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;                    nominator_prefix_factor *= it.second;</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;                    nominator_name.erase(nominator_name.begin(),</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;                                         nominator_name.begin() +</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;                                             <span class="keyword">static_cast&lt;</span>std::ptrdiff_t<span class="keyword">&gt;</span>(it.first.size()));</div>
 <div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;                }</div>
 <div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;            }</div>
 <div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;        }</div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160; </div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;        <span class="comment">// if the nominator_back is a UNIT_POWER save the power to be able</span></div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;        <span class="comment">// to calculate the correct factor and dimensions later</span></div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;        <span class="keywordtype">char</span> nominator_back = nominator_name.back();</div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;        <span class="keywordflow">if</span> (nominator_back &gt;= <span class="charliteral">&#39;2&#39;</span> &amp;&amp; nominator_back &lt;= <span class="charliteral">&#39;9&#39;</span>) {</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;            nominator_power = nominator_back - <span class="charliteral">&#39;0&#39;</span>;</div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;            nominator_name.pop_back();</div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;        }</div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160; </div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;        nominator = <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.find(nominator_name);</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;        <span class="comment">// if the nominator is only a prefix, just multiply the prefix factor with the unit factor</span></div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;        <span class="keywordflow">if</span> (nominator_name.empty()) {</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; it: <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a903aa71e430ec0e389152faed99c11ec">prefixes</a>) {</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;                <span class="keyword">auto</span> res = std::mismatch(it.first.begin(), it.first.end(), nom_name.begin());</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;                <span class="keywordflow">if</span> (res.first == it.first.end()) {</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;                    unit-&gt;mul_factor(it.second);</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;                    <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;                }</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;            }</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;        }</div>
 <div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160; </div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;        <span class="comment">// delete &quot;s&quot; char for plural of the nominator_name</span></div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;        <span class="keywordflow">if</span> (nominator == <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.end()) {</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;            <span class="keywordflow">if</span> (nominator_name.back() == <span class="charliteral">&#39;s&#39;</span>) {</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;                nominator_name.pop_back();</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;            }</div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;            nominator = <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.find(nominator_name);</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;        <span class="comment">// if the nominator_back is a UNIT_POWER save the power to be able</span></div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;        <span class="comment">// to calculate the correct factor and dimensions later</span></div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;        <span class="keywordtype">char</span> nominator_back = nominator_name.back();</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;        <span class="keywordflow">if</span> (nominator_back &gt;= <span class="charliteral">&#39;2&#39;</span> &amp;&amp; nominator_back &lt;= <span class="charliteral">&#39;9&#39;</span>) {</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;            nominator_power = nominator_back - <span class="charliteral">&#39;0&#39;</span>;</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;            nominator_name.pop_back();</div>
 <div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;        }</div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;    }</div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160; </div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;    <span class="comment">// if the nominator is still not found in the table then output error</span></div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;    <span class="comment">// else multiply its factor to the unit factor and calculate unit&#39;s dimensions</span></div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;    <span class="keywordflow">if</span> (nominator == <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.end()) {</div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;        std::stringstream ss;</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;        ss &lt;&lt; <span class="stringliteral">&quot;Unit &quot;</span> &lt;&lt; nominator_name &lt;&lt; <span class="stringliteral">&quot; not defined!&quot;</span> &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;        <span class="keywordflow">throw</span> std::runtime_error(ss.str());</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; nominator_power; i++) {</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;            unit-&gt;mul_factor(nominator_prefix_factor * nominator-&gt;second-&gt;get_factor());</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;            unit-&gt;add_nominator_dims(nominator-&gt;second-&gt;get_dimensions());</div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;        }</div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;    }</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;}</div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160; </div>
-<div class="line"><a name="l00214"></a><span class="lineno"><a class="line" href="classnmodl_1_1units_1_1_unit_table.html#a4498767eaa8525f38b68ed29a2732e80">  214</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a4498767eaa8525f38b68ed29a2732e80">UnitTable::calc_denominator_dims</a>(<span class="keyword">const</span> std::shared_ptr&lt;Unit&gt;&amp; unit,</div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;                                      std::string denominator_name) {</div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;    <span class="keywordtype">double</span> denominator_prefix_factor = 1.0;</div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;    <span class="keywordtype">int</span> denominator_power = 1;</div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160; </div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;    <span class="comment">// if the denominator is DOUBLE, divide it from the unit factor</span></div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;    <span class="keywordflow">if</span> (denominator_name.front() &gt;= <span class="charliteral">&#39;1&#39;</span> &amp;&amp; denominator_name.front() &lt;= <span class="charliteral">&#39;9&#39;</span>) {</div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;        unit-&gt;mul_factor(std::stod(denominator_name));</div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;        <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;    }</div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160; </div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;    std::string denom_name = denominator_name;</div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;    <span class="keyword">auto</span> denominator = <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.find(denominator_name);</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160; </div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;    <span class="comment">// if the denominator_name is not in the table, check if there are any prefixes or power</span></div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;    <span class="keywordflow">if</span> (denominator == <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.end()) {</div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;        <span class="keywordtype">int</span> changed_denominator_name = 1;</div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160; </div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;        <span class="keywordflow">while</span> (changed_denominator_name) {</div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;            changed_denominator_name = 0;</div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; it: <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a903aa71e430ec0e389152faed99c11ec">prefixes</a>) {</div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;                <span class="keyword">auto</span> res =</div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;                    std::mismatch(it.first.begin(), it.first.end(), denominator_name.begin());</div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;                <span class="keywordflow">if</span> (res.first == it.first.end()) {</div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;                    changed_denominator_name = 1;</div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;                    denominator_prefix_factor *= it.second;</div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;                    denominator_name.erase(denominator_name.begin(),</div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;                                           denominator_name.begin() + it.first.size());</div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;                }</div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;            }</div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;        }</div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;        <span class="comment">// if the denominator is only a prefix, just multiply the prefix factor with the unit factor</span></div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;        <span class="keywordflow">if</span> (denominator_name.empty()) {</div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; it: <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a903aa71e430ec0e389152faed99c11ec">prefixes</a>) {</div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;                <span class="keyword">auto</span> res = std::mismatch(it.first.begin(), it.first.end(), denom_name.begin());</div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;                <span class="keywordflow">if</span> (res.first == it.first.end()) {</div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;                    unit-&gt;mul_factor(it.second);</div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;                    <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;                }</div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;            }</div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;        }</div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160; </div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;        <span class="comment">// if the denominator_back is a UNIT_POWER save the power to be able</span></div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;        <span class="comment">// to calculate the correct factor and dimensions later</span></div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;        <span class="keywordtype">char</span> denominator_back = denominator_name.back();</div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;        <span class="keywordflow">if</span> (denominator_back &gt;= <span class="charliteral">&#39;2&#39;</span> &amp;&amp; denominator_back &lt;= <span class="charliteral">&#39;9&#39;</span>) {</div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;            denominator_power = denominator_back - <span class="charliteral">&#39;0&#39;</span>;</div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;            denominator_name.pop_back();</div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;        }</div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160; </div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;        denominator = <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.find(denominator_name);</div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160; </div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;        <span class="comment">// delete &quot;s&quot; char for plural of the denominator_name</span></div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;        <span class="keywordflow">if</span> (denominator == <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.end()) {</div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;            <span class="keywordflow">if</span> (denominator_name.back() == <span class="charliteral">&#39;s&#39;</span>) {</div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;                denominator_name.pop_back();</div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;            }</div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;            denominator = <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.find(denominator_name);</div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;        }</div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;    }</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160; </div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;    <span class="keywordflow">if</span> (denominator == <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.end()) {</div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;        std::stringstream ss;</div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;        ss &lt;&lt; <span class="stringliteral">&quot;Unit &quot;</span> &lt;&lt; denominator_name &lt;&lt; <span class="stringliteral">&quot; not defined!&quot;</span> &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;        <span class="keywordflow">throw</span> std::runtime_error(ss.str());</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; denominator_power; i++) {</div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;            unit-&gt;mul_factor(1.0 / (denominator_prefix_factor * denominator-&gt;second-&gt;get_factor()));</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;            unit-&gt;add_denominator_dims(denominator-&gt;second-&gt;get_dimensions());</div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;        }</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;    }</div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;}</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160; </div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;        nominator = <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.find(nominator_name);</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160; </div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;        <span class="comment">// delete &quot;s&quot; char for plural of the nominator_name</span></div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;        <span class="keywordflow">if</span> (nominator == <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.end()) {</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;            <span class="keywordflow">if</span> (nominator_name.back() == <span class="charliteral">&#39;s&#39;</span>) {</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;                nominator_name.pop_back();</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;            }</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;            nominator = <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.find(nominator_name);</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;        }</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;    }</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160; </div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;    <span class="comment">// if the nominator is still not found in the table then output error</span></div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;    <span class="comment">// else multiply its factor to the unit factor and calculate unit&#39;s dimensions</span></div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;    <span class="keywordflow">if</span> (nominator == <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.end()) {</div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;        std::stringstream ss;</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;        ss &lt;&lt; <span class="stringliteral">&quot;Unit &quot;</span> &lt;&lt; nominator_name &lt;&lt; <span class="stringliteral">&quot; not defined!&quot;</span> &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;        <span class="keywordflow">throw</span> std::runtime_error(ss.str());</div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; nominator_power; i++) {</div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;            unit-&gt;mul_factor(nominator_prefix_factor * nominator-&gt;second-&gt;get_factor());</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;            unit-&gt;add_nominator_dims(nominator-&gt;second-&gt;get_dimensions());</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;        }</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;    }</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;}</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160; </div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;<span class="comment">// NOLINTNEXTLINE(readability-function-cognitive-complexity)</span></div>
+<div class="line"><a name="l00225"></a><span class="lineno"><a class="line" href="classnmodl_1_1units_1_1_unit_table.html#a4498767eaa8525f38b68ed29a2732e80">  225</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a4498767eaa8525f38b68ed29a2732e80">UnitTable::calc_denominator_dims</a>(<span class="keyword">const</span> std::shared_ptr&lt;Unit&gt;&amp; unit,</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;                                      std::string denominator_name) {</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;    <span class="keywordtype">double</span> denominator_prefix_factor = 1.0;</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;    <span class="keywordtype">int</span> denominator_power = 1;</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160; </div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;    <span class="comment">// if the denominator is DOUBLE, divide it from the unit factor</span></div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;    <span class="keywordflow">if</span> (denominator_name.front() &gt;= <span class="charliteral">&#39;1&#39;</span> &amp;&amp; denominator_name.front() &lt;= <span class="charliteral">&#39;9&#39;</span>) {</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;        unit-&gt;mul_factor(std::stod(denominator_name));</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;        <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;    }</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160; </div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;    std::string denom_name = denominator_name;</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;    <span class="keyword">auto</span> denominator = <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.find(denominator_name);</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160; </div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;    <span class="comment">// if the denominator_name is not in the table, check if there are any prefixes or power</span></div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;    <span class="keywordflow">if</span> (denominator == <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.end()) {</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;        <span class="keywordtype">int</span> changed_denominator_name = 1;</div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160; </div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;        <span class="keywordflow">while</span> (changed_denominator_name) {</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;            changed_denominator_name = 0;</div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; it: <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a903aa71e430ec0e389152faed99c11ec">prefixes</a>) {</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;                <span class="keyword">auto</span> res =</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;                    std::mismatch(it.first.begin(), it.first.end(), denominator_name.begin());</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;                <span class="keywordflow">if</span> (res.first == it.first.end()) {</div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;                    changed_denominator_name = 1;</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;                    denominator_prefix_factor *= it.second;</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;                    denominator_name.erase(denominator_name.begin(),</div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;                                           denominator_name.begin() +</div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;                                               <span class="keyword">static_cast&lt;</span>std::ptrdiff_t<span class="keyword">&gt;</span>(it.first.size()));</div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;                }</div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;            }</div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;        }</div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;        <span class="comment">// if the denominator is only a prefix, just multiply the prefix factor with the unit factor</span></div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;        <span class="keywordflow">if</span> (denominator_name.empty()) {</div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; it: <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a903aa71e430ec0e389152faed99c11ec">prefixes</a>) {</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;                <span class="keyword">auto</span> res = std::mismatch(it.first.begin(), it.first.end(), denom_name.begin());</div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;                <span class="keywordflow">if</span> (res.first == it.first.end()) {</div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;                    unit-&gt;mul_factor(it.second);</div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;                    <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;                }</div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;            }</div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;        }</div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160; </div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;        <span class="comment">// if the denominator_back is a UNIT_POWER save the power to be able</span></div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;        <span class="comment">// to calculate the correct factor and dimensions later</span></div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;        <span class="keywordtype">char</span> denominator_back = denominator_name.back();</div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;        <span class="keywordflow">if</span> (denominator_back &gt;= <span class="charliteral">&#39;2&#39;</span> &amp;&amp; denominator_back &lt;= <span class="charliteral">&#39;9&#39;</span>) {</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;            denominator_power = denominator_back - <span class="charliteral">&#39;0&#39;</span>;</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;            denominator_name.pop_back();</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;        }</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160; </div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;        denominator = <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.find(denominator_name);</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160; </div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;        <span class="comment">// delete &quot;s&quot; char for plural of the denominator_name</span></div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;        <span class="keywordflow">if</span> (denominator == <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.end()) {</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;            <span class="keywordflow">if</span> (denominator_name.back() == <span class="charliteral">&#39;s&#39;</span>) {</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;                denominator_name.pop_back();</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;            }</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;            denominator = <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.find(denominator_name);</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;        }</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;    }</div>
 <div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160; </div>
-<div class="line"><a name="l00287"></a><span class="lineno"><a class="line" href="classnmodl_1_1units_1_1_unit_table.html#af6de7c20d7a497cfd04e8c132d9e3b36">  287</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#af6de7c20d7a497cfd04e8c132d9e3b36">UnitTable::insert</a>(<span class="keyword">const</span> std::shared_ptr&lt;Unit&gt;&amp; unit) {</div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;    <span class="comment">// check if the unit is a base unit and</span></div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;    <span class="comment">// then add it to the base units vector</span></div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;    <span class="keyword">auto</span> unit_nominator = unit-&gt;get_nominator_unit();</div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;    <span class="keyword">auto</span> only_base_unit_nominator =</div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;        unit_nominator.size() == 1 &amp;&amp; unit_nominator.front().size() == 3 &amp;&amp;</div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;        (unit_nominator.front().front() == <span class="charliteral">&#39;*&#39;</span> &amp;&amp; unit_nominator.front().back() == <span class="charliteral">&#39;*&#39;</span>);</div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;    <span class="keywordflow">if</span> (only_base_unit_nominator) {</div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;        <span class="comment">// base_units_names[i] = &quot;*i-th base unit*&quot; (ex. base_units_names[0] = &quot;*a*&quot;)</span></div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;        <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a281f8a51245b7e751d0401dd5dbc9e90">base_units_names</a>[unit_nominator.front()[1] - <span class="charliteral">&#39;a&#39;</span>] = unit-&gt;get_name();</div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;        <span class="comment">// if  unit is found in table replace it</span></div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;        <span class="keyword">auto</span> find_unit_name = <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.find(unit-&gt;get_name());</div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;        <span class="keywordflow">if</span> (find_unit_name == <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.end()) {</div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;            <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.insert({unit-&gt;get_name(), unit});</div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;            <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.erase(unit-&gt;get_name());</div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;            <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.insert({unit-&gt;get_name(), unit});</div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;        }</div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;        <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;    }</div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;    <span class="comment">// calculate unit&#39;s dimensions based on its nominator and denominator</span></div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; it: unit-&gt;get_nominator_unit()) {</div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;        <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a74660152526652ce3737906d2bf20b8f">calc_nominator_dims</a>(unit, it);</div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;    }</div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; it: unit-&gt;get_denominator_unit()) {</div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;        <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a4498767eaa8525f38b68ed29a2732e80">calc_denominator_dims</a>(unit, it);</div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;    }</div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;    <span class="comment">// if unit is not in the table simply insert it, else replace with it with</span></div>
-<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;    <span class="comment">// new definition</span></div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;    <span class="keyword">auto</span> find_unit_name = <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.find(unit-&gt;get_name());</div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;    <span class="keywordflow">if</span> (find_unit_name == <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.end()) {</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;        <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.insert({unit-&gt;get_name(), unit});</div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;        <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.erase(unit-&gt;get_name());</div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;        <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.insert({unit-&gt;get_name(), unit});</div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;    }</div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;}</div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160; </div>
-<div class="line"><a name="l00325"></a><span class="lineno"><a class="line" href="classnmodl_1_1units_1_1_unit_table.html#a0e2bd5e6a65ec891d75e0635b95ebb2c">  325</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a0e2bd5e6a65ec891d75e0635b95ebb2c">UnitTable::insert_prefix</a>(<span class="keyword">const</span> std::shared_ptr&lt;Prefix&gt;&amp; prfx) {</div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;    <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a903aa71e430ec0e389152faed99c11ec">prefixes</a>.insert({prfx-&gt;get_name(), prfx-&gt;get_factor()});</div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;}</div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160; </div>
-<div class="line"><a name="l00329"></a><span class="lineno"><a class="line" href="classnmodl_1_1units_1_1_unit_table.html#a8078b3eacca6856dc4908bf3582deb6a">  329</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a8078b3eacca6856dc4908bf3582deb6a">UnitTable::print_units</a>()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; it: <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>) {</div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;        std::cout &lt;&lt; std::fixed &lt;&lt; std::setprecision(8) &lt;&lt; it.first &lt;&lt; <span class="charliteral">&#39; &#39;</span></div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;                  &lt;&lt; it.second-&gt;get_factor() &lt;&lt; <span class="charliteral">&#39;:&#39;</span>;</div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; dims: it.second-&gt;get_dimensions()) {</div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;            std::cout &lt;&lt; <span class="charliteral">&#39; &#39;</span> &lt;&lt; dims;</div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;        }</div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;        std::cout &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;    <span class="keywordflow">if</span> (denominator == <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.end()) {</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;        std::stringstream ss;</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;        ss &lt;&lt; <span class="stringliteral">&quot;Unit &quot;</span> &lt;&lt; denominator_name &lt;&lt; <span class="stringliteral">&quot; not defined!&quot;</span> &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;        <span class="keywordflow">throw</span> std::runtime_error(ss.str());</div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; denominator_power; i++) {</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;            unit-&gt;mul_factor(1.0 / (denominator_prefix_factor * denominator-&gt;second-&gt;get_factor()));</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;            unit-&gt;add_denominator_dims(denominator-&gt;second-&gt;get_dimensions());</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;        }</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;    }</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;}</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160; </div>
+<div class="line"><a name="l00299"></a><span class="lineno"><a class="line" href="classnmodl_1_1units_1_1_unit_table.html#af6de7c20d7a497cfd04e8c132d9e3b36">  299</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#af6de7c20d7a497cfd04e8c132d9e3b36">UnitTable::insert</a>(<span class="keyword">const</span> std::shared_ptr&lt;Unit&gt;&amp; unit) {</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;    <span class="comment">// check if the unit is a base unit and</span></div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;    <span class="comment">// then add it to the base units vector</span></div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;    <span class="keyword">auto</span> unit_nominator = unit-&gt;get_nominator_unit();</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;    <span class="keyword">auto</span> only_base_unit_nominator =</div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;        unit_nominator.size() == 1 &amp;&amp; unit_nominator.front().size() == 3 &amp;&amp;</div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;        (unit_nominator.front().front() == <span class="charliteral">&#39;*&#39;</span> &amp;&amp; unit_nominator.front().back() == <span class="charliteral">&#39;*&#39;</span>);</div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;    <span class="keywordflow">if</span> (only_base_unit_nominator) {</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;        <span class="comment">// base_units_names[i] = &quot;*i-th base unit*&quot; (ex. base_units_names[0] = &quot;*a*&quot;)</span></div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;        <span class="keyword">auto</span> <span class="keyword">const</span> index = unit_nominator.front()[1] - <span class="charliteral">&#39;a&#39;</span>;</div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;        assert(index &gt;= 0 &amp;&amp; index &lt; <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a281f8a51245b7e751d0401dd5dbc9e90">base_units_names</a>.size());</div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;        <span class="comment">// NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-constant-array-index)</span></div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;        <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a281f8a51245b7e751d0401dd5dbc9e90">base_units_names</a>[index] = unit-&gt;get_name();</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;        <span class="comment">// if  unit is found in table replace it</span></div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;        <span class="keyword">auto</span> find_unit_name = <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.find(unit-&gt;get_name());</div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;        <span class="keywordflow">if</span> (find_unit_name == <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.end()) {</div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;            <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.insert({unit-&gt;get_name(), unit});</div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;        } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;            <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.erase(unit-&gt;get_name());</div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;            <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.insert({unit-&gt;get_name(), unit});</div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;        }</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;        <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;    }</div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;    <span class="comment">// calculate unit&#39;s dimensions based on its nominator and denominator</span></div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; it: unit-&gt;get_nominator_unit()) {</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;        <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a74660152526652ce3737906d2bf20b8f">calc_nominator_dims</a>(unit, it);</div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;    }</div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; it: unit-&gt;get_denominator_unit()) {</div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;        <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a4498767eaa8525f38b68ed29a2732e80">calc_denominator_dims</a>(unit, it);</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;    }</div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;    <span class="comment">// if unit is not in the table simply insert it, else replace with it with</span></div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;    <span class="comment">// new definition</span></div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;    <span class="keyword">auto</span> find_unit_name = <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.find(unit-&gt;get_name());</div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;    <span class="keywordflow">if</span> (find_unit_name == <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.end()) {</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;        <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.insert({unit-&gt;get_name(), unit});</div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;        <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.erase(unit-&gt;get_name());</div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;        <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.insert({unit-&gt;get_name(), unit});</div>
 <div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;    }</div>
 <div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;}</div>
 <div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160; </div>
-<div class="line"><a name="l00340"></a><span class="lineno"><a class="line" href="classnmodl_1_1units_1_1_unit_table.html#a1244d18cee355fdd2200bd7e5f710d84">  340</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a1244d18cee355fdd2200bd7e5f710d84">UnitTable::print_base_units</a>()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;    <span class="keywordtype">int</span> first_print = 1;</div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; it: <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a281f8a51245b7e751d0401dd5dbc9e90">base_units_names</a>) {</div>
-<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;        <span class="keywordflow">if</span> (!it.empty()) {</div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;            <span class="keywordflow">if</span> (first_print) {</div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;                first_print = 0;</div>
-<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;                std::cout &lt;&lt; it;</div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;            } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;                std::cout &lt;&lt; <span class="charliteral">&#39; &#39;</span> &lt;&lt; it;</div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;            }</div>
+<div class="line"><a name="l00340"></a><span class="lineno"><a class="line" href="classnmodl_1_1units_1_1_unit_table.html#a0e2bd5e6a65ec891d75e0635b95ebb2c">  340</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a0e2bd5e6a65ec891d75e0635b95ebb2c">UnitTable::insert_prefix</a>(<span class="keyword">const</span> std::shared_ptr&lt;Prefix&gt;&amp; prfx) {</div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;    <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a903aa71e430ec0e389152faed99c11ec">prefixes</a>.insert({prfx-&gt;get_name(), prfx-&gt;get_factor()});</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;}</div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160; </div>
+<div class="line"><a name="l00344"></a><span class="lineno"><a class="line" href="classnmodl_1_1units_1_1_unit_table.html#a8078b3eacca6856dc4908bf3582deb6a">  344</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a8078b3eacca6856dc4908bf3582deb6a">UnitTable::print_units</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; it: <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>) {</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;        std::cout &lt;&lt; std::fixed &lt;&lt; std::setprecision(output_precision) &lt;&lt; it.first &lt;&lt; <span class="charliteral">&#39; &#39;</span></div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;                  &lt;&lt; it.second-&gt;get_factor() &lt;&lt; <span class="charliteral">&#39;:&#39;</span>;</div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; dims: it.second-&gt;get_dimensions()) {</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;            std::cout &lt;&lt; <span class="charliteral">&#39; &#39;</span> &lt;&lt; dims;</div>
 <div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;        }</div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;    }</div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;    std::cout &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;        std::cout &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;    }</div>
 <div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;}</div>
 <div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160; </div>
-<div class="line"><a name="l00355"></a><span class="lineno"><a class="line" href="classnmodl_1_1units_1_1_unit_table.html#a490ce6a69e1a7cc8e148f34299544006">  355</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a490ce6a69e1a7cc8e148f34299544006">UnitTable::print_units_sorted</a>(std::ostream&amp; units_details)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;    std::vector&lt;std::pair&lt;std::string, std::shared_ptr&lt;Unit&gt;&gt;&gt; sorted_elements(<a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.begin(),</div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;                                                                               <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.end());</div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;    std::sort(sorted_elements.begin(), sorted_elements.end());</div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; it: sorted_elements) {</div>
-<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;        units_details &lt;&lt; std::fixed &lt;&lt; std::setprecision(8) &lt;&lt; it.first &lt;&lt; <span class="charliteral">&#39; &#39;</span></div>
-<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;                      &lt;&lt; it.second-&gt;get_factor() &lt;&lt; <span class="charliteral">&#39;:&#39;</span>;</div>
-<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; dims: it.second-&gt;get_dimensions()) {</div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;            units_details &lt;&lt; <span class="charliteral">&#39; &#39;</span> &lt;&lt; dims;</div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;        }</div>
-<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;        units_details &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
+<div class="line"><a name="l00355"></a><span class="lineno"><a class="line" href="classnmodl_1_1units_1_1_unit_table.html#a1244d18cee355fdd2200bd7e5f710d84">  355</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a1244d18cee355fdd2200bd7e5f710d84">UnitTable::print_base_units</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;    <span class="keywordtype">int</span> first_print = 1;</div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; it: <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a281f8a51245b7e751d0401dd5dbc9e90">base_units_names</a>) {</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;        <span class="keywordflow">if</span> (!it.empty()) {</div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;            <span class="keywordflow">if</span> (first_print) {</div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;                first_print = 0;</div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;                std::cout &lt;&lt; it;</div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;            } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;                std::cout &lt;&lt; <span class="charliteral">&#39; &#39;</span> &lt;&lt; it;</div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;            }</div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;        }</div>
 <div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;    }</div>
-<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;}</div>
-<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160; </div>
-<div class="line"><a name="l00369"></a><span class="lineno"><a class="line" href="classnmodl_1_1units_1_1_unit_table.html#a33c4d8277abb65e84cfcb9f53906bfbb">  369</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a1244d18cee355fdd2200bd7e5f710d84">UnitTable::print_base_units</a>(std::ostream&amp; base_units_details)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;    <span class="keywordtype">int</span> first_print = 1;</div>
-<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; it: <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a281f8a51245b7e751d0401dd5dbc9e90">base_units_names</a>) {</div>
-<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;        <span class="keywordflow">if</span> (!it.empty()) {</div>
-<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;            <span class="keywordflow">if</span> (first_print) {</div>
-<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;                first_print = 0;</div>
-<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;                base_units_details &lt;&lt; it;</div>
-<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;            } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;                base_units_details &lt;&lt; <span class="charliteral">&#39; &#39;</span> &lt;&lt; it;</div>
-<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;            }</div>
+<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;    std::cout &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;}</div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160; </div>
+<div class="line"><a name="l00370"></a><span class="lineno"><a class="line" href="classnmodl_1_1units_1_1_unit_table.html#a490ce6a69e1a7cc8e148f34299544006">  370</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a490ce6a69e1a7cc8e148f34299544006">UnitTable::print_units_sorted</a>(std::ostream&amp; units_details)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;    std::vector&lt;std::pair&lt;std::string, std::shared_ptr&lt;Unit&gt;&gt;&gt; sorted_elements(<a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.begin(),</div>
+<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;                                                                               <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">table</a>.end());</div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;    std::sort(sorted_elements.begin(), sorted_elements.end());</div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; it: sorted_elements) {</div>
+<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;        units_details &lt;&lt; std::fixed &lt;&lt; std::setprecision(output_precision) &lt;&lt; it.first &lt;&lt; <span class="charliteral">&#39; &#39;</span></div>
+<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;                      &lt;&lt; it.second-&gt;get_factor() &lt;&lt; <span class="charliteral">&#39;:&#39;</span>;</div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; dims: it.second-&gt;get_dimensions()) {</div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;            units_details &lt;&lt; <span class="charliteral">&#39; &#39;</span> &lt;&lt; dims;</div>
 <div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;        }</div>
-<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;    }</div>
-<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;    base_units_details &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;        units_details &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;    }</div>
 <div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;}</div>
 <div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160; </div>
-<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;}  <span class="comment">// namespace units</span></div>
-<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;}  <span class="comment">// namespace nmodl</span></div>
+<div class="line"><a name="l00384"></a><span class="lineno"><a class="line" href="classnmodl_1_1units_1_1_unit_table.html#a33c4d8277abb65e84cfcb9f53906bfbb">  384</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a1244d18cee355fdd2200bd7e5f710d84">UnitTable::print_base_units</a>(std::ostream&amp; base_units_details)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;    <span class="keywordtype">int</span> first_print = 1;</div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; it: <a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a281f8a51245b7e751d0401dd5dbc9e90">base_units_names</a>) {</div>
+<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;        <span class="keywordflow">if</span> (!it.empty()) {</div>
+<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;            <span class="keywordflow">if</span> (first_print) {</div>
+<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;                first_print = 0;</div>
+<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;                base_units_details &lt;&lt; it;</div>
+<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;            } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;                base_units_details &lt;&lt; <span class="charliteral">&#39; &#39;</span> &lt;&lt; it;</div>
+<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;            }</div>
+<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;        }</div>
+<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;    }</div>
+<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;    base_units_details &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
+<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;}</div>
+<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160; </div>
+<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;}  <span class="comment">// namespace units</span></div>
+<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;}  <span class="comment">// namespace nmodl</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="aclassnmodl_1_1units_1_1_unit_html_ad61fecc0295d281e361a322b29c0a3f9"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit.html#ad61fecc0295d281e361a322b29c0a3f9">nmodl::units::Unit::add_nominator_unit</a></div><div class="ttdeci">void add_nominator_unit(const std::string &amp;nom)</div><div class="ttdoc">Add a unit to the vector of nominator strings of the Unit, so it can be processed later.</div><div class="ttdef"><b>Definition:</b> <a href="src_2units_2units_8cpp_source.html#l00069">units.cpp:69</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1units_1_1_unit_html_ad61fecc0295d281e361a322b29c0a3f9"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit.html#ad61fecc0295d281e361a322b29c0a3f9">nmodl::units::Unit::add_nominator_unit</a></div><div class="ttdeci">void add_nominator_unit(const std::string &amp;nom)</div><div class="ttdoc">Add a unit to the vector of nominator strings of the Unit, so it can be processed later.</div><div class="ttdef"><b>Definition:</b> <a href="src_2units_2units_8cpp_source.html#l00076">units.cpp:76</a></div></div>
 <div class="ttc" id="aclassnmodl_1_1units_1_1_unit_table_html_a9b16f5d18026997167924aaaf455ef2a"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit_table.html#a9b16f5d18026997167924aaaf455ef2a">nmodl::units::UnitTable::table</a></div><div class="ttdeci">std::unordered_map&lt; std::string, std::shared_ptr&lt; Unit &gt; &gt; table</div><div class="ttdoc">Hash map that stores all the Units.</div><div class="ttdef"><b>Definition:</b> <a href="units_8hpp_source.html#l00243">units.hpp:243</a></div></div>
 <div class="ttc" id="aclassnmodl_1_1units_1_1_unit_html_a47e7e66491b6ad16539faf5c21c64da8"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit.html#a47e7e66491b6ad16539faf5c21c64da8">nmodl::units::Unit::unit_dimensions</a></div><div class="ttdeci">std::array&lt; int, MAX_DIMS &gt; unit_dimensions</div><div class="ttdoc">Array of MAX_DIMS size that keeps the Unit's dimensions.</div><div class="ttdef"><b>Definition:</b> <a href="units_8hpp_source.html#l00079">units.hpp:79</a></div></div>
 <div class="ttc" id="aclassnmodl_1_1units_1_1_unit_table_html_a903aa71e430ec0e389152faed99c11ec"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit_table.html#a903aa71e430ec0e389152faed99c11ec">nmodl::units::UnitTable::prefixes</a></div><div class="ttdeci">std::unordered_map&lt; std::string, double &gt; prefixes</div><div class="ttdoc">Hash map that stores all the Prefixes.</div><div class="ttdef"><b>Definition:</b> <a href="units_8hpp_source.html#l00246">units.hpp:246</a></div></div>
 <div class="ttc" id="aclassnmodl_1_1units_1_1_prefix_html_a65b23de972d3ac92212b9e2685f8c75a"><div class="ttname"><a href="classnmodl_1_1units_1_1_prefix.html#a65b23de972d3ac92212b9e2685f8c75a">nmodl::units::Prefix::prefix_factor</a></div><div class="ttdeci">double prefix_factor</div><div class="ttdoc">Prefix's double factor.</div><div class="ttdef"><b>Definition:</b> <a href="units_8hpp_source.html#l00190">units.hpp:190</a></div></div>
-<div class="ttc" id="aclassnmodl_1_1units_1_1_unit_table_html_af6de7c20d7a497cfd04e8c132d9e3b36"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit_table.html#af6de7c20d7a497cfd04e8c132d9e3b36">nmodl::units::UnitTable::insert</a></div><div class="ttdeci">void insert(const std::shared_ptr&lt; Unit &gt; &amp;unit)</div><div class="ttdoc">Insert a unit to the UnitTable table and calculate its dimensions and factor based on the previously ...</div><div class="ttdef"><b>Definition:</b> <a href="src_2units_2units_8cpp_source.html#l00287">units.cpp:287</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1units_1_1_unit_table_html_af6de7c20d7a497cfd04e8c132d9e3b36"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit_table.html#af6de7c20d7a497cfd04e8c132d9e3b36">nmodl::units::UnitTable::insert</a></div><div class="ttdeci">void insert(const std::shared_ptr&lt; Unit &gt; &amp;unit)</div><div class="ttdoc">Insert a unit to the UnitTable table and calculate its dimensions and factor based on the previously ...</div><div class="ttdef"><b>Definition:</b> <a href="src_2units_2units_8cpp_source.html#l00299">units.cpp:299</a></div></div>
 <div class="ttc" id="anamespacenmodl_html"><div class="ttname"><a href="namespacenmodl.html">nmodl</a></div><div class="ttdoc">encapsulates everything related to NMODL code generation framework</div><div class="ttdef"><b>Definition:</b> <a href="ast__common_8hpp_source.html#l00026">ast_common.hpp:26</a></div></div>
-<div class="ttc" id="aclassnmodl_1_1units_1_1_unit_html_a68fb30ffb73b5faa43079407a67bae45"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit.html#a68fb30ffb73b5faa43079407a67bae45">nmodl::units::Unit::add_nominator_dims</a></div><div class="ttdeci">void add_nominator_dims(const std::array&lt; int, MAX_DIMS &gt; &amp;dimensions)</div><div class="ttdoc">Add the dimensions of a nominator of the unit to the dimensions of the Unit.</div><div class="ttdef"><b>Definition:</b> <a href="src_2units_2units_8cpp_source.html#l00053">units.cpp:53</a></div></div>
-<div class="ttc" id="aclassnmodl_1_1units_1_1_unit_html_a275364244dc0f57822073cad9df33884"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit.html#a275364244dc0f57822073cad9df33884">nmodl::units::Unit::add_denominator_dims</a></div><div class="ttdeci">void add_denominator_dims(const std::array&lt; int, MAX_DIMS &gt; &amp;dimensions)</div><div class="ttdoc">Subtract the dimensions of a nominator of the unit to the dimensions of the Unit.</div><div class="ttdef"><b>Definition:</b> <a href="src_2units_2units_8cpp_source.html#l00061">units.cpp:61</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1units_1_1_unit_html_a68fb30ffb73b5faa43079407a67bae45"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit.html#a68fb30ffb73b5faa43079407a67bae45">nmodl::units::Unit::add_nominator_dims</a></div><div class="ttdeci">void add_nominator_dims(const std::array&lt; int, MAX_DIMS &gt; &amp;dimensions)</div><div class="ttdoc">Add the dimensions of a nominator of the unit to the dimensions of the Unit.</div><div class="ttdef"><b>Definition:</b> <a href="src_2units_2units_8cpp_source.html#l00060">units.cpp:60</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1units_1_1_unit_html_a275364244dc0f57822073cad9df33884"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit.html#a275364244dc0f57822073cad9df33884">nmodl::units::Unit::add_denominator_dims</a></div><div class="ttdeci">void add_denominator_dims(const std::array&lt; int, MAX_DIMS &gt; &amp;dimensions)</div><div class="ttdoc">Subtract the dimensions of a nominator of the unit to the dimensions of the Unit.</div><div class="ttdef"><b>Definition:</b> <a href="src_2units_2units_8cpp_source.html#l00068">units.cpp:68</a></div></div>
 <div class="ttc" id="aclassnmodl_1_1units_1_1_unit_html_a57a74f9b2a5b7c94e16434bb9d99af69"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit.html#a57a74f9b2a5b7c94e16434bb9d99af69">nmodl::units::Unit::unit_factor</a></div><div class="ttdeci">double unit_factor</div><div class="ttdoc">Double factor of the Unit.</div><div class="ttdef"><b>Definition:</b> <a href="units_8hpp_source.html#l00076">units.hpp:76</a></div></div>
-<div class="ttc" id="aclassnmodl_1_1units_1_1_unit_html_ae414d2adb6865e85cf4fa0619c0b6c46"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit.html#ae414d2adb6865e85cf4fa0619c0b6c46">nmodl::units::Unit::mul_factor</a></div><div class="ttdeci">void mul_factor(double double_factor)</div><div class="ttdoc">Multiply Unit's factor with a double factor.</div><div class="ttdef"><b>Definition:</b> <a href="src_2units_2units_8cpp_source.html#l00085">units.cpp:85</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1units_1_1_unit_html_ae414d2adb6865e85cf4fa0619c0b6c46"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit.html#ae414d2adb6865e85cf4fa0619c0b6c46">nmodl::units::Unit::mul_factor</a></div><div class="ttdeci">void mul_factor(double double_factor)</div><div class="ttdoc">Multiply Unit's factor with a double factor.</div><div class="ttdef"><b>Definition:</b> <a href="src_2units_2units_8cpp_source.html#l00092">units.cpp:92</a></div></div>
 <div class="ttc" id="aclassnmodl_1_1units_1_1_unit_html_a58cf659ca2555ee8a8bd31b186b5bbcf"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit.html#a58cf659ca2555ee8a8bd31b186b5bbcf">nmodl::units::Unit::nominator</a></div><div class="ttdeci">std::vector&lt; std::string &gt; nominator</div><div class="ttdoc">Vector of nominators of the Unit.</div><div class="ttdef"><b>Definition:</b> <a href="units_8hpp_source.html#l00085">units.hpp:85</a></div></div>
 <div class="ttc" id="aclassnmodl_1_1units_1_1_prefix_html_a3bfe9dfed8a2a78b4d02ab8c90473ac3"><div class="ttname"><a href="classnmodl_1_1units_1_1_prefix.html#a3bfe9dfed8a2a78b4d02ab8c90473ac3">nmodl::units::Prefix::Prefix</a></div><div class="ttdeci">Prefix()=delete</div><div class="ttdoc">Default constructor for Prefix.</div></div>
 <div class="ttc" id="aunits_8hpp_html"><div class="ttname"><a href="units_8hpp.html">units.hpp</a></div><div class="ttdoc">Classes for storing different units specification.</div></div>
-<div class="ttc" id="aclassnmodl_1_1units_1_1_unit_html_a9b45dd9b5497136c54bd15236f834948"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit.html#a9b45dd9b5497136c54bd15236f834948">nmodl::units::Unit::add_unit</a></div><div class="ttdeci">void add_unit(const std::string &amp;name)</div><div class="ttdoc">Add unit name to the Unit.</div><div class="ttdef"><b>Definition:</b> <a href="src_2units_2units_8cpp_source.html#l00037">units.cpp:37</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1units_1_1_unit_html_a9b45dd9b5497136c54bd15236f834948"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit.html#a9b45dd9b5497136c54bd15236f834948">nmodl::units::Unit::add_unit</a></div><div class="ttdeci">void add_unit(const std::string &amp;name)</div><div class="ttdoc">Add unit name to the Unit.</div><div class="ttdef"><b>Definition:</b> <a href="src_2units_2units_8cpp_source.html#l00042">units.cpp:42</a></div></div>
 <div class="ttc" id="aclassnmodl_1_1units_1_1_unit_table_html_a281f8a51245b7e751d0401dd5dbc9e90"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit_table.html#a281f8a51245b7e751d0401dd5dbc9e90">nmodl::units::UnitTable::base_units_names</a></div><div class="ttdeci">std::array&lt; std::string, MAX_DIMS &gt; base_units_names</div><div class="ttdoc">Hash map that stores all the base units' names.</div><div class="ttdef"><b>Definition:</b> <a href="units_8hpp_source.html#l00249">units.hpp:249</a></div></div>
 <div class="ttc" id="aclassnmodl_1_1units_1_1_unit_html_ab10e1584ff73f42ea61a3fe1e3496ff0"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit.html#ab10e1584ff73f42ea61a3fe1e3496ff0">nmodl::units::Unit::unit_name</a></div><div class="ttdeci">std::string unit_name</div><div class="ttdoc">Name of the Unit.</div><div class="ttdef"><b>Definition:</b> <a href="units_8hpp_source.html#l00082">units.hpp:82</a></div></div>
-<div class="ttc" id="aclassnmodl_1_1units_1_1_unit_table_html_a4498767eaa8525f38b68ed29a2732e80"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit_table.html#a4498767eaa8525f38b68ed29a2732e80">nmodl::units::UnitTable::calc_denominator_dims</a></div><div class="ttdeci">void calc_denominator_dims(const std::shared_ptr&lt; Unit &gt; &amp;unit, std::string denominator_name)</div><div class="ttdoc">Calculate unit's dimensions based on its denominator unit named denominator_name which is stored in t...</div><div class="ttdef"><b>Definition:</b> <a href="src_2units_2units_8cpp_source.html#l00214">units.cpp:214</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1units_1_1_unit_table_html_a4498767eaa8525f38b68ed29a2732e80"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit_table.html#a4498767eaa8525f38b68ed29a2732e80">nmodl::units::UnitTable::calc_denominator_dims</a></div><div class="ttdeci">void calc_denominator_dims(const std::shared_ptr&lt; Unit &gt; &amp;unit, std::string denominator_name)</div><div class="ttdoc">Calculate unit's dimensions based on its denominator unit named denominator_name which is stored in t...</div><div class="ttdef"><b>Definition:</b> <a href="src_2units_2units_8cpp_source.html#l00225">units.cpp:225</a></div></div>
 <div class="ttc" id="aclassnmodl_1_1units_1_1_prefix_html_a8cdadb1617448fff16a9447da48d0584"><div class="ttname"><a href="classnmodl_1_1units_1_1_prefix.html#a8cdadb1617448fff16a9447da48d0584">nmodl::units::Prefix::prefix_name</a></div><div class="ttdeci">std::string prefix_name</div><div class="ttdoc">Prefix's name.</div><div class="ttdef"><b>Definition:</b> <a href="units_8hpp_source.html#l00193">units.hpp:193</a></div></div>
-<div class="ttc" id="aclassnmodl_1_1units_1_1_unit_table_html_a490ce6a69e1a7cc8e148f34299544006"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit_table.html#a490ce6a69e1a7cc8e148f34299544006">nmodl::units::UnitTable::print_units_sorted</a></div><div class="ttdeci">void print_units_sorted(std::ostream &amp;units_details) const</div><div class="ttdoc">Print the details of the units that are stored in the UnitTable to the output stream units_details in...</div><div class="ttdef"><b>Definition:</b> <a href="src_2units_2units_8cpp_source.html#l00355">units.cpp:355</a></div></div>
-<div class="ttc" id="aclassnmodl_1_1units_1_1_unit_table_html_a74660152526652ce3737906d2bf20b8f"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit_table.html#a74660152526652ce3737906d2bf20b8f">nmodl::units::UnitTable::calc_nominator_dims</a></div><div class="ttdeci">void calc_nominator_dims(const std::shared_ptr&lt; Unit &gt; &amp;unit, std::string nominator_name)</div><div class="ttdoc">Calculate unit's dimensions based on its nominator unit named nominator_name which is stored in the U...</div><div class="ttdef"><b>Definition:</b> <a href="src_2units_2units_8cpp_source.html#l00141">units.cpp:141</a></div></div>
-<div class="ttc" id="aclassnmodl_1_1units_1_1_unit_table_html_a1244d18cee355fdd2200bd7e5f710d84"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit_table.html#a1244d18cee355fdd2200bd7e5f710d84">nmodl::units::UnitTable::print_base_units</a></div><div class="ttdeci">void print_base_units() const</div><div class="ttdoc">Print the base units that are stored in the UnitTable.</div><div class="ttdef"><b>Definition:</b> <a href="src_2units_2units_8cpp_source.html#l00340">units.cpp:340</a></div></div>
-<div class="ttc" id="aclassnmodl_1_1units_1_1_unit_html_abb6f1a315c651f9b6e525ec94bfdebce"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit.html#abb6f1a315c651f9b6e525ec94bfdebce">nmodl::units::Unit::add_denominator_unit</a></div><div class="ttdeci">void add_denominator_unit(const std::string &amp;denom)</div><div class="ttdoc">Add a unit to the vector of denominator strings of the Unit, so it can be processed later.</div><div class="ttdef"><b>Definition:</b> <a href="src_2units_2units_8cpp_source.html#l00077">units.cpp:77</a></div></div>
-<div class="ttc" id="aclassnmodl_1_1units_1_1_unit_table_html_a0e2bd5e6a65ec891d75e0635b95ebb2c"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit_table.html#a0e2bd5e6a65ec891d75e0635b95ebb2c">nmodl::units::UnitTable::insert_prefix</a></div><div class="ttdeci">void insert_prefix(const std::shared_ptr&lt; Prefix &gt; &amp;prfx)</div><div class="ttdoc">Insert a prefix to the prefixes of the UnitTable.</div><div class="ttdef"><b>Definition:</b> <a href="src_2units_2units_8cpp_source.html#l00325">units.cpp:325</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1units_1_1_unit_table_html_a490ce6a69e1a7cc8e148f34299544006"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit_table.html#a490ce6a69e1a7cc8e148f34299544006">nmodl::units::UnitTable::print_units_sorted</a></div><div class="ttdeci">void print_units_sorted(std::ostream &amp;units_details) const</div><div class="ttdoc">Print the details of the units that are stored in the UnitTable to the output stream units_details in...</div><div class="ttdef"><b>Definition:</b> <a href="src_2units_2units_8cpp_source.html#l00370">units.cpp:370</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1units_1_1_unit_table_html_a74660152526652ce3737906d2bf20b8f"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit_table.html#a74660152526652ce3737906d2bf20b8f">nmodl::units::UnitTable::calc_nominator_dims</a></div><div class="ttdeci">void calc_nominator_dims(const std::shared_ptr&lt; Unit &gt; &amp;unit, std::string nominator_name)</div><div class="ttdoc">Calculate unit's dimensions based on its nominator unit named nominator_name which is stored in the U...</div><div class="ttdef"><b>Definition:</b> <a href="src_2units_2units_8cpp_source.html#l00150">units.cpp:150</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1units_1_1_unit_table_html_a1244d18cee355fdd2200bd7e5f710d84"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit_table.html#a1244d18cee355fdd2200bd7e5f710d84">nmodl::units::UnitTable::print_base_units</a></div><div class="ttdeci">void print_base_units() const</div><div class="ttdoc">Print the base units that are stored in the UnitTable.</div><div class="ttdef"><b>Definition:</b> <a href="src_2units_2units_8cpp_source.html#l00355">units.cpp:355</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1units_1_1_unit_html_abb6f1a315c651f9b6e525ec94bfdebce"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit.html#abb6f1a315c651f9b6e525ec94bfdebce">nmodl::units::Unit::add_denominator_unit</a></div><div class="ttdeci">void add_denominator_unit(const std::string &amp;denom)</div><div class="ttdoc">Add a unit to the vector of denominator strings of the Unit, so it can be processed later.</div><div class="ttdef"><b>Definition:</b> <a href="src_2units_2units_8cpp_source.html#l00084">units.cpp:84</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1units_1_1_unit_table_html_a0e2bd5e6a65ec891d75e0635b95ebb2c"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit_table.html#a0e2bd5e6a65ec891d75e0635b95ebb2c">nmodl::units::UnitTable::insert_prefix</a></div><div class="ttdeci">void insert_prefix(const std::shared_ptr&lt; Prefix &gt; &amp;prfx)</div><div class="ttdoc">Insert a prefix to the prefixes of the UnitTable.</div><div class="ttdef"><b>Definition:</b> <a href="src_2units_2units_8cpp_source.html#l00340">units.cpp:340</a></div></div>
 <div class="ttc" id="aclassnmodl_1_1units_1_1_unit_html_ac988479210da7cb06b3a7598c2afdbae"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit.html#ac988479210da7cb06b3a7598c2afdbae">nmodl::units::Unit::denominator</a></div><div class="ttdeci">std::vector&lt; std::string &gt; denominator</div><div class="ttdoc">Vector of denominators of the Unit.</div><div class="ttdef"><b>Definition:</b> <a href="units_8hpp_source.html#l00088">units.hpp:88</a></div></div>
-<div class="ttc" id="aclassnmodl_1_1units_1_1_unit_html_aedd28ff0320b0f99d44df7a504e8dd5f"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit.html#aedd28ff0320b0f99d44df7a504e8dd5f">nmodl::units::Unit::parse_double</a></div><div class="ttdeci">double parse_double(std::string double_string)</div><div class="ttdoc">Parse a double number given as string.</div><div class="ttdef"><b>Definition:</b> <a href="src_2units_2units_8cpp_source.html#l00107">units.cpp:107</a></div></div>
-<div class="ttc" id="aclassnmodl_1_1units_1_1_unit_html_a61c3fda4127c9511d46ceaa3bc02d100"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit.html#a61c3fda4127c9511d46ceaa3bc02d100">nmodl::units::Unit::add_nominator_double</a></div><div class="ttdeci">void add_nominator_double(const std::string &amp;double_string)</div><div class="ttdoc">Takes as argument a double as string, parses it as double and stores it to the Unit factor.</div><div class="ttdef"><b>Definition:</b> <a href="src_2units_2units_8cpp_source.html#l00049">units.cpp:49</a></div></div>
-<div class="ttc" id="aclassnmodl_1_1units_1_1_unit_html_ad225ab3e1fa5aafe76142366913c012c"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit.html#ad225ab3e1fa5aafe76142366913c012c">nmodl::units::Unit::add_base_unit</a></div><div class="ttdeci">void add_base_unit(const std::string &amp;name)</div><div class="ttdoc">If the Unit is a base unit the dimensions of the Unit should be calculated based on the name of the b...</div><div class="ttdef"><b>Definition:</b> <a href="src_2units_2units_8cpp_source.html#l00041">units.cpp:41</a></div></div>
-<div class="ttc" id="aclassnmodl_1_1units_1_1_unit_html_ac7bf4a54c1f6633baf99afe9caa6fdcf"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit.html#ac7bf4a54c1f6633baf99afe9caa6fdcf">nmodl::units::Unit::add_fraction</a></div><div class="ttdeci">void add_fraction(const std::string &amp;fraction_string)</div><div class="ttdoc">Parse a fraction given as string and store the result to the factor of the Unit.</div><div class="ttdef"><b>Definition:</b> <a href="src_2units_2units_8cpp_source.html#l00089">units.cpp:89</a></div></div>
-<div class="ttc" id="aclassnmodl_1_1units_1_1_unit_table_html_a8078b3eacca6856dc4908bf3582deb6a"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit_table.html#a8078b3eacca6856dc4908bf3582deb6a">nmodl::units::UnitTable::print_units</a></div><div class="ttdeci">void print_units() const</div><div class="ttdoc">Print the details of the units that are stored in the UnitTable.</div><div class="ttdef"><b>Definition:</b> <a href="src_2units_2units_8cpp_source.html#l00329">units.cpp:329</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1units_1_1_unit_html_aedd28ff0320b0f99d44df7a504e8dd5f"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit.html#aedd28ff0320b0f99d44df7a504e8dd5f">nmodl::units::Unit::parse_double</a></div><div class="ttdeci">static double parse_double(std::string double_string)</div><div class="ttdoc">Parse a double number given as string.</div><div class="ttdef"><b>Definition:</b> <a href="src_2units_2units_8cpp_source.html#l00114">units.cpp:114</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1units_1_1_unit_html_a61c3fda4127c9511d46ceaa3bc02d100"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit.html#a61c3fda4127c9511d46ceaa3bc02d100">nmodl::units::Unit::add_nominator_double</a></div><div class="ttdeci">void add_nominator_double(const std::string &amp;double_string)</div><div class="ttdoc">Takes as argument a double as string, parses it as double and stores it to the Unit factor.</div><div class="ttdef"><b>Definition:</b> <a href="src_2units_2units_8cpp_source.html#l00056">units.cpp:56</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1units_1_1_unit_html_ad225ab3e1fa5aafe76142366913c012c"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit.html#ad225ab3e1fa5aafe76142366913c012c">nmodl::units::Unit::add_base_unit</a></div><div class="ttdeci">void add_base_unit(const std::string &amp;name)</div><div class="ttdoc">If the Unit is a base unit the dimensions of the Unit should be calculated based on the name of the b...</div><div class="ttdef"><b>Definition:</b> <a href="src_2units_2units_8cpp_source.html#l00046">units.cpp:46</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1units_1_1_unit_html_ac7bf4a54c1f6633baf99afe9caa6fdcf"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit.html#ac7bf4a54c1f6633baf99afe9caa6fdcf">nmodl::units::Unit::add_fraction</a></div><div class="ttdeci">void add_fraction(const std::string &amp;fraction_string)</div><div class="ttdoc">Parse a fraction given as string and store the result to the factor of the Unit.</div><div class="ttdef"><b>Definition:</b> <a href="src_2units_2units_8cpp_source.html#l00096">units.cpp:96</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1units_1_1_unit_table_html_a8078b3eacca6856dc4908bf3582deb6a"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit_table.html#a8078b3eacca6856dc4908bf3582deb6a">nmodl::units::UnitTable::print_units</a></div><div class="ttdeci">void print_units() const</div><div class="ttdoc">Print the details of the units that are stored in the UnitTable.</div><div class="ttdef"><b>Definition:</b> <a href="src_2units_2units_8cpp_source.html#l00344">units.cpp:344</a></div></div>
 <!-- HTML footer for doxygen 1.8.15-->
 <!-- start footer part -->
 <div id="nav-path" class="navpath">

@@ -2,7 +2,7 @@ var classnmodl_1_1visitor_1_1_inline_visitor =
 [
     [ "InlineVisitor", "classnmodl_1_1visitor_1_1_inline_visitor.html#a21cd28ddad2bcbbb0923242862427038", null ],
     [ "add_return_variable", "classnmodl_1_1visitor_1_1_inline_visitor.html#a019402313e57bf8a27a1c6e63661bac9", null ],
-    [ "can_inline_block", "classnmodl_1_1visitor_1_1_inline_visitor.html#a68c0a221f8c419fac09f289cefe4158d", null ],
+    [ "can_inline_block", "classnmodl_1_1visitor_1_1_inline_visitor.html#a1394232e847baba11e3b948e42a27961", null ],
     [ "can_replace_statement", "classnmodl_1_1visitor_1_1_inline_visitor.html#aec884c3dd17991a7fb6a4ae7e2d19eb4", null ],
     [ "inline_arguments", "classnmodl_1_1visitor_1_1_inline_visitor.html#afddeeb1fc4133c5893c91a3dd5ac85e8", null ],
     [ "inline_function_call", "classnmodl_1_1visitor_1_1_inline_visitor.html#a3ee1887842a2e1379f0510971f4c3933", null ],

@@ -93,6 +93,7 @@ $(document).ready(function(){initNavTree('classnmodl_1_1visitor_1_1_perf_visitor
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classnmodl_1_1visitor_1_1_perf_visitor-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -690,13 +691,9 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:a612892dabaa7522074e18bf3d7a54716"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_perf_visitor.html#a612892dabaa7522074e18bf3d7a54716">update_memory_ops</a> (const std::string &amp;name)</td></tr>
 <tr class="memdesc:a612892dabaa7522074e18bf3d7a54716"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find symbol in closest scope (up to parent) and update read/write count.  <a href="classnmodl_1_1visitor_1_1_perf_visitor.html#a612892dabaa7522074e18bf3d7a54716">More...</a><br /></td></tr>
 <tr class="separator:a612892dabaa7522074e18bf3d7a54716"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab0b3a075f2481bfaa2315602d781e599"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_perf_visitor.html#ab0b3a075f2481bfaa2315602d781e599">symbol_to_skip</a> (const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1symtab_1_1_symbol.html">symtab::Symbol</a> &gt; &amp;symbol)</td></tr>
-<tr class="memdesc:ab0b3a075f2481bfaa2315602d781e599"><td class="mdescLeft">&#160;</td><td class="mdescRight">Certain statements / symbols needs extra check while measuring read/write operations.  <a href="classnmodl_1_1visitor_1_1_perf_visitor.html#ab0b3a075f2481bfaa2315602d781e599">More...</a><br /></td></tr>
-<tr class="separator:ab0b3a075f2481bfaa2315602d781e599"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1b90ab47bfd0fde55812534762a44801"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_perf_visitor.html#a1b90ab47bfd0fde55812534762a44801">is_local_variable</a> (const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1symtab_1_1_symbol.html">symtab::Symbol</a> &gt; &amp;symbol) const</td></tr>
-<tr class="separator:a1b90ab47bfd0fde55812534762a44801"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a87ffb5daec136ff4afc52c9b3f439069"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_perf_visitor.html#a87ffb5daec136ff4afc52c9b3f439069">is_constant_variable</a> (const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1symtab_1_1_symbol.html">symtab::Symbol</a> &gt; &amp;symbol) const</td></tr>
-<tr class="separator:a87ffb5daec136ff4afc52c9b3f439069"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af1c33fb5105b359af2320fcfcdef5e38"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_perf_visitor.html#af1c33fb5105b359af2320fcfcdef5e38">symbol_to_skip</a> (const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1symtab_1_1_symbol.html">symtab::Symbol</a> &gt; &amp;symbol) const</td></tr>
+<tr class="memdesc:af1c33fb5105b359af2320fcfcdef5e38"><td class="mdescLeft">&#160;</td><td class="mdescRight">Certain statements / symbols needs extra check while measuring read/write operations.  <a href="classnmodl_1_1visitor_1_1_perf_visitor.html#af1c33fb5105b359af2320fcfcdef5e38">More...</a><br /></td></tr>
+<tr class="separator:af1c33fb5105b359af2320fcfcdef5e38"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa4b4623c055eeb4600ffe13c7da6e77"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_perf_visitor.html#afa4b4623c055eeb4600ffe13c7da6e77">count_variables</a> ()</td></tr>
 <tr class="separator:afa4b4623c055eeb4600ffe13c7da6e77"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a77a4650544145614068d7a84fee77f7d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_perf_visitor.html#a77a4650544145614068d7a84fee77f7d">measure_performance</a> (const <a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &amp;node)</td></tr>
@@ -707,6 +704,13 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:aa38b15f3678994450128821f424525e2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_perf_visitor.html#aa38b15f3678994450128821f424525e2">add_perf_to_printer</a> (const <a class="el" href="structnmodl_1_1utils_1_1_perf_stat.html">utils::PerfStat</a> &amp;perf) const</td></tr>
 <tr class="memdesc:aa38b15f3678994450128821f424525e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">add performance stats to json printer  <a href="classnmodl_1_1visitor_1_1_perf_visitor.html#aa38b15f3678994450128821f424525e2">More...</a><br /></td></tr>
 <tr class="separator:aa38b15f3678994450128821f424525e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
+Static Private Member Functions</h2></td></tr>
+<tr class="memitem:ae3aea3387fc83e06e3315246cb9502d7"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_perf_visitor.html#ae3aea3387fc83e06e3315246cb9502d7">is_local_variable</a> (const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1symtab_1_1_symbol.html">symtab::Symbol</a> &gt; &amp;symbol)</td></tr>
+<tr class="separator:ae3aea3387fc83e06e3315246cb9502d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2588aaed18960d52b698585179d24479"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_perf_visitor.html#a2588aaed18960d52b698585179d24479">is_constant_variable</a> (const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1symtab_1_1_symbol.html">symtab::Symbol</a> &gt; &amp;symbol)</td></tr>
+<tr class="separator:a2588aaed18960d52b698585179d24479"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -1081,8 +1085,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a87ffb5daec136ff4afc52c9b3f439069"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a87ffb5daec136ff4afc52c9b3f439069">&#9670;&nbsp;</a></span>is_constant_variable()</h2>
+<a id="a2588aaed18960d52b698585179d24479"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2588aaed18960d52b698585179d24479">&#9670;&nbsp;</a></span>is_constant_variable()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1095,12 +1099,12 @@ Private Attributes</h2></td></tr>
           <td>(</td>
           <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1symtab_1_1_symbol.html">symtab::Symbol</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>symbol</em></td><td>)</td>
-          <td> const</td>
+          <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1109,8 +1113,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a1b90ab47bfd0fde55812534762a44801"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1b90ab47bfd0fde55812534762a44801">&#9670;&nbsp;</a></span>is_local_variable()</h2>
+<a id="ae3aea3387fc83e06e3315246cb9502d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae3aea3387fc83e06e3315246cb9502d7">&#9670;&nbsp;</a></span>is_local_variable()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1123,12 +1127,12 @@ Private Attributes</h2></td></tr>
           <td>(</td>
           <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1symtab_1_1_symbol.html">symtab::Symbol</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>symbol</em></td><td>)</td>
-          <td> const</td>
+          <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1225,8 +1229,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ab0b3a075f2481bfaa2315602d781e599"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab0b3a075f2481bfaa2315602d781e599">&#9670;&nbsp;</a></span>symbol_to_skip()</h2>
+<a id="af1c33fb5105b359af2320fcfcdef5e38"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af1c33fb5105b359af2320fcfcdef5e38">&#9670;&nbsp;</a></span>symbol_to_skip()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1239,7 +1243,7 @@ Private Attributes</h2></td></tr>
           <td>(</td>
           <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1symtab_1_1_symbol.html">symtab::Symbol</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>symbol</em></td><td>)</td>
-          <td></td>
+          <td> const</td>
         </tr>
       </table>
   </td>

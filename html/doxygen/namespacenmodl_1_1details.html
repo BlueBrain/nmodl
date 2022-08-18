@@ -144,9 +144,9 @@ Variables</h2></td></tr>
 <tr class="separator:a4f8e77160ea60cb0cd045106de94bf92"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a494159b483f5b5fd25743ea638f03bb5"><td class="memItemLeft" align="right" valign="top">const static std::map&lt; std::string, <a class="el" href="namespacenmodl_1_1details.html#aebd8510a4e3fa3414c2152102018deaa">DefinitionType</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1details.html#a494159b483f5b5fd25743ea638f03bb5">extern_definitions</a></td></tr>
 <tr class="separator:a494159b483f5b5fd25743ea638f03bb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a597385217ee64b4531c041a8e8cd5324"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1details.html#a597385217ee64b4531c041a8e8cd5324">NEURON_VARIABLES</a> = {&quot;t&quot;, &quot;dt&quot;, &quot;celsius&quot;, &quot;v&quot;, &quot;diam&quot;, &quot;area&quot;}</td></tr>
-<tr class="memdesc:a597385217ee64b4531c041a8e8cd5324"><td class="mdescLeft">&#160;</td><td class="mdescRight">Variables from NEURON that are directly used in NMODL.  <a href="namespacenmodl_1_1details.html#a597385217ee64b4531c041a8e8cd5324">More...</a><br /></td></tr>
-<tr class="separator:a597385217ee64b4531c041a8e8cd5324"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca8ea385dc064f4648544878cd05da9a"><td class="memItemLeft" align="right" valign="top">static const std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1details.html#aca8ea385dc064f4648544878cd05da9a">NEURON_VARIABLES</a></td></tr>
+<tr class="memdesc:aca8ea385dc064f4648544878cd05da9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Variables from NEURON that are directly used in NMODL.  <a href="namespacenmodl_1_1details.html#aca8ea385dc064f4648544878cd05da9a">More...</a><br /></td></tr>
+<tr class="separator:aca8ea385dc064f4648544878cd05da9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Enumeration Type Documentation</h2>
 <a id="aebd8510a4e3fa3414c2152102018deaa"></a>
@@ -209,7 +209,7 @@ Variables</h2></td></tr>
 
 <p>Return token type for the keyword. </p>
 
-<p class="definition">Definition at line <a class="el" href="token__mapping_8cpp_source.html#l00335">335</a> of file <a class="el" href="token__mapping_8cpp_source.html">token_mapping.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="token__mapping_8cpp_source.html#l00336">336</a> of file <a class="el" href="token__mapping_8cpp_source.html">token_mapping.cpp</a>.</p>
 
 </div>
 </div>
@@ -342,8 +342,8 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="a597385217ee64b4531c041a8e8cd5324"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a597385217ee64b4531c041a8e8cd5324">&#9670;&nbsp;</a></span>NEURON_VARIABLES</h2>
+<a id="aca8ea385dc064f4648544878cd05da9a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aca8ea385dc064f4648544878cd05da9a">&#9670;&nbsp;</a></span>NEURON_VARIABLES</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -352,7 +352,7 @@ Variables</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt;std::string&gt; nmodl::details::NEURON_VARIABLES = {&quot;t&quot;, &quot;dt&quot;, &quot;celsius&quot;, &quot;v&quot;, &quot;diam&quot;, &quot;area&quot;}</td>
+          <td class="memname">const std::vector&lt;std::string&gt; nmodl::details::NEURON_VARIABLES</td>
         </tr>
       </table>
   </td>
@@ -361,7 +361,9 @@ Variables</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-
+<b>Initial value:</b><div class="fragment"><div class="line">=</div>
+<div class="line">    {<span class="stringliteral">&quot;t&quot;</span>, <span class="stringliteral">&quot;dt&quot;</span>, <span class="stringliteral">&quot;celsius&quot;</span>, <span class="stringliteral">&quot;v&quot;</span>, <span class="stringliteral">&quot;diam&quot;</span>, <span class="stringliteral">&quot;area&quot;</span>}</div>
+</div><!-- fragment -->
 <p>Variables from NEURON that are directly used in NMODL. </p>
 <p>NEURON exposes certain variable that can be directly used in NMODLvar. The passes like scope checker needs to know if certain variable is undefined and hence these needs to be inserted into symbol table </p>
 

@@ -1,7 +1,7 @@
 var structnmodl_1_1utils_1_1_perf_stat =
 [
-    [ "keys", "structnmodl_1_1utils_1_1_perf_stat.html#a534bcbb91e767c4a4278bb84adf969eb", null ],
-    [ "print", "structnmodl_1_1utils_1_1_perf_stat.html#a5f100172a60452bff25f014a8476eafc", null ],
+    [ "keys", "structnmodl_1_1utils_1_1_perf_stat.html#ae253575915ad0a83b66d3fc740b15bc2", null ],
+    [ "print", "structnmodl_1_1utils_1_1_perf_stat.html#a1ae5a6a039afaaef47fdc302ead7a413", null ],
     [ "values", "structnmodl_1_1utils_1_1_perf_stat.html#a73b03ee433317593a5a8112f58aa0163", null ],
     [ "operator+", "structnmodl_1_1utils_1_1_perf_stat.html#acd368e365af8efe0966c2833d84f52eb", null ],
     [ "n_add", "structnmodl_1_1utils_1_1_perf_stat.html#a9ffc41c68e3caa6bd13eb6f6606e06bb", null ],

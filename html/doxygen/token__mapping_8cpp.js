@@ -18,5 +18,5 @@ var token__mapping_8cpp =
     [ "extern_definitions", "token__mapping_8cpp.html#a494159b483f5b5fd25743ea638f03bb5", null ],
     [ "keywords", "token__mapping_8cpp.html#a19154f9c7b5074c9177b1da18950f29d", null ],
     [ "methods", "token__mapping_8cpp.html#a4f8e77160ea60cb0cd045106de94bf92", null ],
-    [ "NEURON_VARIABLES", "token__mapping_8cpp.html#a597385217ee64b4531c041a8e8cd5324", null ]
+    [ "NEURON_VARIABLES", "token__mapping_8cpp.html#aca8ea385dc064f4648544878cd05da9a", null ]
 ];

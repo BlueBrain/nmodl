@@ -93,6 +93,7 @@ $(document).ready(function(){initNavTree('classnmodl_1_1visitor_1_1_inline_visit
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classnmodl_1_1visitor_1_1_inline_visitor-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -630,9 +631,6 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a68c0a221f8c419fac09f289cefe4158d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_inline_visitor.html#a68c0a221f8c419fac09f289cefe4158d">can_inline_block</a> (const <a class="el" href="classnmodl_1_1ast_1_1_statement_block.html">ast::StatementBlock</a> &amp;block) const</td></tr>
-<tr class="memdesc:a68c0a221f8c419fac09f289cefe4158d"><td class="mdescLeft">&#160;</td><td class="mdescRight">true if given statement block can be inlined  <a href="classnmodl_1_1visitor_1_1_inline_visitor.html#a68c0a221f8c419fac09f289cefe4158d">More...</a><br /></td></tr>
-<tr class="separator:a68c0a221f8c419fac09f289cefe4158d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aec884c3dd17991a7fb6a4ae7e2d19eb4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_inline_visitor.html#aec884c3dd17991a7fb6a4ae7e2d19eb4">can_replace_statement</a> (const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_statement.html">ast::Statement</a> &gt; &amp;statement)</td></tr>
 <tr class="memdesc:aec884c3dd17991a7fb6a4ae7e2d19eb4"><td class="mdescLeft">&#160;</td><td class="mdescRight">true if statement can be replaced with inlined body this is possible for standalone function/procedure call as statement  <a href="classnmodl_1_1visitor_1_1_inline_visitor.html#aec884c3dd17991a7fb6a4ae7e2d19eb4">More...</a><br /></td></tr>
 <tr class="separator:aec884c3dd17991a7fb6a4ae7e2d19eb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -642,7 +640,13 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:afddeeb1fc4133c5893c91a3dd5ac85e8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_inline_visitor.html#afddeeb1fc4133c5893c91a3dd5ac85e8">inline_arguments</a> (<a class="el" href="classnmodl_1_1ast_1_1_statement_block.html">ast::StatementBlock</a> &amp;inlined_block, const <a class="el" href="group__ast__vec__type.html#ga0892cdce1448e2ee170779e304ed372f">ast::ArgumentVector</a> &amp;callee_parameters, const <a class="el" href="group__ast__vec__type.html#gad917e6770aaf25cf69378a517b8d11c9">ast::ExpressionVector</a> &amp;caller_expressions)</td></tr>
 <tr class="memdesc:afddeeb1fc4133c5893c91a3dd5ac85e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">add assignment statements into given statement block to inline arguments  <a href="classnmodl_1_1visitor_1_1_inline_visitor.html#afddeeb1fc4133c5893c91a3dd5ac85e8">More...</a><br /></td></tr>
 <tr class="separator:afddeeb1fc4133c5893c91a3dd5ac85e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a019402313e57bf8a27a1c6e63661bac9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_inline_visitor.html#a019402313e57bf8a27a1c6e63661bac9">add_return_variable</a> (<a class="el" href="classnmodl_1_1ast_1_1_statement_block.html">ast::StatementBlock</a> &amp;block, std::string &amp;varname)</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
+Static Private Member Functions</h2></td></tr>
+<tr class="memitem:a1394232e847baba11e3b948e42a27961"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_inline_visitor.html#a1394232e847baba11e3b948e42a27961">can_inline_block</a> (const <a class="el" href="classnmodl_1_1ast_1_1_statement_block.html">ast::StatementBlock</a> &amp;block)</td></tr>
+<tr class="memdesc:a1394232e847baba11e3b948e42a27961"><td class="mdescLeft">&#160;</td><td class="mdescRight">true if given statement block can be inlined  <a href="classnmodl_1_1visitor_1_1_inline_visitor.html#a1394232e847baba11e3b948e42a27961">More...</a><br /></td></tr>
+<tr class="separator:a1394232e847baba11e3b948e42a27961"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a019402313e57bf8a27a1c6e63661bac9"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_inline_visitor.html#a019402313e57bf8a27a1c6e63661bac9">add_return_variable</a> (<a class="el" href="classnmodl_1_1ast_1_1_statement_block.html">ast::StatementBlock</a> &amp;block, std::string &amp;varname)</td></tr>
 <tr class="memdesc:a019402313e57bf8a27a1c6e63661bac9"><td class="mdescLeft">&#160;</td><td class="mdescRight">add assignment statement at end of block (to use as a return statement in case of procedure blocks)  <a href="classnmodl_1_1visitor_1_1_inline_visitor.html#a019402313e57bf8a27a1c6e63661bac9">More...</a><br /></td></tr>
 <tr class="separator:a019402313e57bf8a27a1c6e63661bac9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -732,19 +736,19 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 <p>add assignment statement at end of block (to use as a return statement in case of procedure blocks) </p>
 
-<p class="definition">Definition at line <a class="el" href="inline__visitor_8cpp_source.html#l00058">58</a> of file <a class="el" href="inline__visitor_8cpp_source.html">inline_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="inline__visitor_8cpp_source.html#l00059">59</a> of file <a class="el" href="inline__visitor_8cpp_source.html">inline_visitor.cpp</a>.</p>
 
 </div>
 </div>
-<a id="a68c0a221f8c419fac09f289cefe4158d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a68c0a221f8c419fac09f289cefe4158d">&#9670;&nbsp;</a></span>can_inline_block()</h2>
+<a id="a1394232e847baba11e3b948e42a27961"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1394232e847baba11e3b948e42a27961">&#9670;&nbsp;</a></span>can_inline_block()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -757,12 +761,12 @@ Private Attributes</h2></td></tr>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classnmodl_1_1ast_1_1_statement_block.html">ast::StatementBlock</a> &amp;&#160;</td>
           <td class="paramname"><em>block</em></td><td>)</td>
-          <td> const</td>
+          <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -807,7 +811,7 @@ Private Attributes</h2></td></tr>
 </ul>
 <dl class="todo"><dt><b><a class="el" href="todo.html#_todo000048">Todo:</a></b></dt><dd>Add method to ast itself to simplify this implementation </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="inline__visitor_8cpp_source.html#l00074">74</a> of file <a class="el" href="inline__visitor_8cpp_source.html">inline_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="inline__visitor_8cpp_source.html#l00075">75</a> of file <a class="el" href="inline__visitor_8cpp_source.html">inline_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -857,7 +861,7 @@ Private Attributes</h2></td></tr>
 <p>variables in cloned block needs to be renamed</p>
 <p>create assignment statement and insert after the local variables</p>
 
-<p class="definition">Definition at line <a class="el" href="inline__visitor_8cpp_source.html#l00096">96</a> of file <a class="el" href="inline__visitor_8cpp_source.html">inline_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="inline__visitor_8cpp_source.html#l00099">99</a> of file <a class="el" href="inline__visitor_8cpp_source.html">inline_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -923,7 +927,7 @@ Private Attributes</h2></td></tr>
 <p>to return value from procedure we have to add new variable</p>
 <p>variable name which will replace the function call that we just inlined</p>
 
-<p class="definition">Definition at line <a class="el" href="inline__visitor_8cpp_source.html#l00132">132</a> of file <a class="el" href="inline__visitor_8cpp_source.html">inline_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="inline__visitor_8cpp_source.html#l00137">137</a> of file <a class="el" href="inline__visitor_8cpp_source.html">inline_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -958,7 +962,7 @@ Private Attributes</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_visitor.html#aac969cc5226d009638cb0dff682ded18">nmodl::visitor::Visitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="inline__visitor_8cpp_source.html#l00206">206</a> of file <a class="el" href="inline__visitor_8cpp_source.html">inline_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="inline__visitor_8cpp_source.html#l00211">211</a> of file <a class="el" href="inline__visitor_8cpp_source.html">inline_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -990,7 +994,7 @@ Private Attributes</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_visitor.html#a51eb42b5990b2d5afaa2ab5130ae8203">nmodl::visitor::Visitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="inline__visitor_8cpp_source.html#l00324">324</a> of file <a class="el" href="inline__visitor_8cpp_source.html">inline_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="inline__visitor_8cpp_source.html#l00331">331</a> of file <a class="el" href="inline__visitor_8cpp_source.html">inline_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1028,7 +1032,7 @@ Private Attributes</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_visitor.html#a04b7de6f30085597fd91b5d74f67ed79">nmodl::visitor::Visitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="inline__visitor_8cpp_source.html#l00241">241</a> of file <a class="el" href="inline__visitor_8cpp_source.html">inline_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="inline__visitor_8cpp_source.html#l00248">248</a> of file <a class="el" href="inline__visitor_8cpp_source.html">inline_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1061,7 +1065,7 @@ Private Attributes</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_visitor.html#a188d49ecb68f8c78707db675b2b0c2ce">nmodl::visitor::Visitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="inline__visitor_8cpp_source.html#l00312">312</a> of file <a class="el" href="inline__visitor_8cpp_source.html">inline_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="inline__visitor_8cpp_source.html#l00319">319</a> of file <a class="el" href="inline__visitor_8cpp_source.html">inline_visitor.cpp</a>.</p>
 
 </div>
 </div>

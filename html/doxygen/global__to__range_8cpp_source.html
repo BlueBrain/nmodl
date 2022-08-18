@@ -115,73 +115,71 @@ $(document).ready(function(){initNavTree('global__to__range_8cpp_source.html',''
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keyword">using namespace </span>visitor;</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keyword">using namespace </span>test_utils;</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">using</span> <a class="code" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033">ast::AstNodeType</a>;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keyword">using</span> <a class="code" href="classnmodl_1_1parser_1_1_nmodl_driver.html">nmodl::parser::NmodlDriver</a>;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">using</span> <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4db">symtab::syminfo::NmodlType</a>;</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="comment">//=============================================================================</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="comment">// GlobalToRange visitor tests</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="comment">//=============================================================================</span></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
-<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="global__to__range_8cpp.html#aa6eb24642458ede75b8099e80679f4f7">   30</a></span>&#160;std::shared_ptr&lt;ast::Program&gt; <a class="code" href="global__to__range_8cpp.html#aa6eb24642458ede75b8099e80679f4f7">run_global_to_var_visitor</a>(<span class="keyword">const</span> std::string&amp; text) {</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <a class="code" href="classnmodl_1_1parser_1_1_nmodl_driver.html">NmodlDriver</a> <a class="code" href="units_2parser_8cpp.html#adb772fffa624f2b39f88e66cafd5b05a">driver</a>;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="keyword">auto</span> ast = <a class="code" href="units_2parser_8cpp.html#adb772fffa624f2b39f88e66cafd5b05a">driver</a>.<a class="code" href="group__units.html#ga53666d277469c1f00a3b0fd26a094178">parse_string</a>(text);</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    SymtabVisitor().visit_program(*ast);</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    PerfVisitor().visit_program(*ast);</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    GlobalToRangeVisitor(*ast).visit_program(*ast);</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    SymtabVisitor().visit_program(*ast);</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keywordflow">return</span> ast;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;}</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
-<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="global__to__range_8cpp.html#a57ae01d6d0a9d0587d49611bd66ab59d">   41</a></span>&#160;<a class="code" href="global__to__range_8cpp.html#a57ae01d6d0a9d0587d49611bd66ab59d">SCENARIO</a>(<span class="stringliteral">&quot;GLOBAL to RANGE variable transformer&quot;</span>, <span class="stringliteral">&quot;[visitor][globaltorange]&quot;</span>) {</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    GIVEN(<span class="stringliteral">&quot;mod file with GLOBAL variables that are written&quot;</span>) {</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        std::string input_nmodl = R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="stringliteral">            NEURON {</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="stringliteral">                SUFFIX test</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="stringliteral">                RANGE a, b</span></div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="stringliteral">                GLOBAL x, y</span></div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="stringliteral">            }</span></div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="stringliteral">            ASSIGNED {</span></div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="stringliteral">                x</span></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="stringliteral">            }</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="stringliteral">            BREAKPOINT {</span></div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="stringliteral">                x = y</span></div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="stringliteral">            }</span></div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="stringliteral">        )&quot;;</span></div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="stringliteral">        </span><span class="keyword">auto</span> ast = <a class="code" href="global__to__range_8cpp.html#aa6eb24642458ede75b8099e80679f4f7">run_global_to_var_visitor</a>(input_nmodl);</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keyword">auto</span> symtab = ast-&gt;get_symbol_table();</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        THEN(<span class="stringliteral">&quot;GLOBAL variables that are written are turned to RANGE&quot;</span>) {<span class="comment"></span></div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="comment">            /// check for all RANGE variables : old ones + newly converted ones</span></div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="comment"></span>            <span class="keyword">auto</span> vars = symtab-&gt;get_variables_with_properties(NmodlType::range_var);</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;            REQUIRE(vars.size() == 3);</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="comment">            /// x should be converted from GLOBAL to RANGE</span></div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="comment"></span>            <span class="keyword">auto</span> x = symtab-&gt;lookup(<span class="stringliteral">&quot;x&quot;</span>);</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;            REQUIRE(x != <span class="keyword">nullptr</span>);</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;            REQUIRE(x-&gt;has_any_property(NmodlType::range_var) == <span class="keyword">true</span>);</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;            REQUIRE(x-&gt;has_any_property(NmodlType::global_var) == <span class="keyword">false</span>);</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        }</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        THEN(<span class="stringliteral">&quot;GLOBAL variables that are read only remain GLOBAL&quot;</span>) {</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;            <span class="keyword">auto</span> vars = symtab-&gt;get_variables_with_properties(NmodlType::global_var);</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;            REQUIRE(vars.size() == 1);</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;            REQUIRE(vars[0]-&gt;get_name() == <span class="stringliteral">&quot;y&quot;</span>);</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        }</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    }</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;}</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">using</span> <a class="code" href="classnmodl_1_1parser_1_1_nmodl_driver.html">nmodl::parser::NmodlDriver</a>;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keyword">using</span> <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4db">symtab::syminfo::NmodlType</a>;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="comment">//=============================================================================</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="comment">// GlobalToRange visitor tests</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="comment">//=============================================================================</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
+<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="global__to__range_8cpp.html#aa6eb24642458ede75b8099e80679f4f7">   29</a></span>&#160;std::shared_ptr&lt;ast::Program&gt; <a class="code" href="global__to__range_8cpp.html#aa6eb24642458ede75b8099e80679f4f7">run_global_to_var_visitor</a>(<span class="keyword">const</span> std::string&amp; text) {</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <a class="code" href="classnmodl_1_1parser_1_1_nmodl_driver.html">NmodlDriver</a> <a class="code" href="units_2parser_8cpp.html#adb772fffa624f2b39f88e66cafd5b05a">driver</a>;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="keyword">auto</span> ast = <a class="code" href="units_2parser_8cpp.html#adb772fffa624f2b39f88e66cafd5b05a">driver</a>.<a class="code" href="group__units.html#ga53666d277469c1f00a3b0fd26a094178">parse_string</a>(text);</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    SymtabVisitor().visit_program(*ast);</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    PerfVisitor().visit_program(*ast);</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    GlobalToRangeVisitor(*ast).visit_program(*ast);</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    SymtabVisitor().visit_program(*ast);</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="keywordflow">return</span> ast;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;}</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="global__to__range_8cpp.html#a57ae01d6d0a9d0587d49611bd66ab59d">   40</a></span>&#160;<a class="code" href="global__to__range_8cpp.html#a57ae01d6d0a9d0587d49611bd66ab59d">SCENARIO</a>(<span class="stringliteral">&quot;GLOBAL to RANGE variable transformer&quot;</span>, <span class="stringliteral">&quot;[visitor][globaltorange]&quot;</span>) {</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    GIVEN(<span class="stringliteral">&quot;mod file with GLOBAL variables that are written&quot;</span>) {</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        std::string input_nmodl = R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="stringliteral">            NEURON {</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="stringliteral">                SUFFIX test</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="stringliteral">                RANGE a, b</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="stringliteral">                GLOBAL x, y</span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="stringliteral">            }</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="stringliteral">            ASSIGNED {</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="stringliteral">                x</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="stringliteral">            }</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="stringliteral">            BREAKPOINT {</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="stringliteral">                x = y</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="stringliteral">            }</span></div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="stringliteral">        )&quot;;</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="stringliteral">        </span><span class="keyword">auto</span> ast = <a class="code" href="global__to__range_8cpp.html#aa6eb24642458ede75b8099e80679f4f7">run_global_to_var_visitor</a>(input_nmodl);</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="keyword">auto</span> symtab = ast-&gt;get_symbol_table();</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        THEN(<span class="stringliteral">&quot;GLOBAL variables that are written are turned to RANGE&quot;</span>) {<span class="comment"></span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="comment">            /// check for all RANGE variables : old ones + newly converted ones</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="comment"></span>            <span class="keyword">auto</span> vars = symtab-&gt;get_variables_with_properties(NmodlType::range_var);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;            REQUIRE(vars.size() == 3);</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="comment">            /// x should be converted from GLOBAL to RANGE</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="comment"></span>            <span class="keyword">auto</span> x = symtab-&gt;lookup(<span class="stringliteral">&quot;x&quot;</span>);</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;            REQUIRE(x != <span class="keyword">nullptr</span>);</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;            REQUIRE(x-&gt;has_any_property(NmodlType::range_var) == <span class="keyword">true</span>);</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;            REQUIRE(x-&gt;has_any_property(NmodlType::global_var) == <span class="keyword">false</span>);</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        }</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        THEN(<span class="stringliteral">&quot;GLOBAL variables that are read only remain GLOBAL&quot;</span>) {</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;            <span class="keyword">auto</span> vars = symtab-&gt;get_variables_with_properties(NmodlType::global_var);</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;            REQUIRE(vars.size() == 1);</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;            REQUIRE(vars[0]-&gt;get_name() == <span class="stringliteral">&quot;y&quot;</span>);</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        }</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    }</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aclassnmodl_1_1parser_1_1_nmodl_driver_html"><div class="ttname"><a href="classnmodl_1_1parser_1_1_nmodl_driver.html">nmodl::parser::NmodlDriver</a></div><div class="ttdoc">Class that binds all pieces together for parsing nmodl file.</div><div class="ttdef"><b>Definition:</b> <a href="nmodl__driver_8hpp_source.html#l00062">nmodl_driver.hpp:62</a></div></div>
 <div class="ttc" id="aperf__visitor_8hpp_html"><div class="ttname"><a href="perf__visitor_8hpp.html">perf_visitor.hpp</a></div><div class="ttdoc">Visitor for measuring performance related information</div></div>
 <div class="ttc" id="anamespacenmodl_html"><div class="ttname"><a href="namespacenmodl.html">nmodl</a></div><div class="ttdoc">encapsulates everything related to NMODL code generation framework</div><div class="ttdef"><b>Definition:</b> <a href="ast__common_8hpp_source.html#l00026">ast_common.hpp:26</a></div></div>
 <div class="ttc" id="aglobal__var__visitor_8hpp_html"><div class="ttname"><a href="global__var__visitor_8hpp.html">global_var_visitor.hpp</a></div><div class="ttdoc">Visitor to convert GLOBAL variables to RANGE variables.</div></div>
-<div class="ttc" id="aglobal__to__range_8cpp_html_a57ae01d6d0a9d0587d49611bd66ab59d"><div class="ttname"><a href="global__to__range_8cpp.html#a57ae01d6d0a9d0587d49611bd66ab59d">SCENARIO</a></div><div class="ttdeci">SCENARIO(&quot;GLOBAL to RANGE variable transformer&quot;, &quot;[visitor][globaltorange]&quot;)</div><div class="ttdef"><b>Definition:</b> <a href="global__to__range_8cpp_source.html#l00041">global_to_range.cpp:41</a></div></div>
-<div class="ttc" id="agroup__ast__type_html_gac392e49849e60c05e42ea02c7b445033"><div class="ttname"><a href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033">nmodl::ast::AstNodeType</a></div><div class="ttdeci">AstNodeType</div><div class="ttdoc">Enum type for every AST node type.</div><div class="ttdef"><b>Definition:</b> <a href="ast__decl_8hpp_source.html#l00183">ast_decl.hpp:183</a></div></div>
+<div class="ttc" id="aglobal__to__range_8cpp_html_a57ae01d6d0a9d0587d49611bd66ab59d"><div class="ttname"><a href="global__to__range_8cpp.html#a57ae01d6d0a9d0587d49611bd66ab59d">SCENARIO</a></div><div class="ttdeci">SCENARIO(&quot;GLOBAL to RANGE variable transformer&quot;, &quot;[visitor][globaltorange]&quot;)</div><div class="ttdef"><b>Definition:</b> <a href="global__to__range_8cpp_source.html#l00040">global_to_range.cpp:40</a></div></div>
 <div class="ttc" id="aprogram_8hpp_html"><div class="ttname"><a href="program_8hpp.html">program.hpp</a></div><div class="ttdoc">Auto generated AST classes declaration.</div></div>
 <div class="ttc" id="aunits_2parser_8cpp_html_adb772fffa624f2b39f88e66cafd5b05a"><div class="ttname"><a href="units_2parser_8cpp.html#adb772fffa624f2b39f88e66cafd5b05a">driver</a></div><div class="ttdeci">nmodl::parser::UnitDriver driver</div><div class="ttdef"><b>Definition:</b> <a href="units_2parser_8cpp_source.html#l00028">parser.cpp:28</a></div></div>
 <div class="ttc" id="agroup__units_html_ga53666d277469c1f00a3b0fd26a094178"><div class="ttname"><a href="group__units.html#ga53666d277469c1f00a3b0fd26a094178">nmodl::parser::UnitDriver::parse_string</a></div><div class="ttdeci">bool parse_string(const std::string &amp;input)</div><div class="ttdoc">parser Units provided as string (used for testing)</div><div class="ttdef"><b>Definition:</b> <a href="unit__driver_8cpp_source.html#l00056">unit_driver.cpp:56</a></div></div>
 <div class="ttc" id="anamespacenmodl_1_1symtab_1_1syminfo_html_ad9b6b8559b36d0a500ef5110badcc4db"><div class="ttname"><a href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4db">nmodl::symtab::syminfo::NmodlType</a></div><div class="ttdeci">NmodlType</div><div class="ttdoc">NMODL variable properties.</div><div class="ttdef"><b>Definition:</b> <a href="symbol__properties_8hpp_source.html#l00116">symbol_properties.hpp:116</a></div></div>
-<div class="ttc" id="aglobal__to__range_8cpp_html_aa6eb24642458ede75b8099e80679f4f7"><div class="ttname"><a href="global__to__range_8cpp.html#aa6eb24642458ede75b8099e80679f4f7">run_global_to_var_visitor</a></div><div class="ttdeci">std::shared_ptr&lt; ast::Program &gt; run_global_to_var_visitor(const std::string &amp;text)</div><div class="ttdef"><b>Definition:</b> <a href="global__to__range_8cpp_source.html#l00030">global_to_range.cpp:30</a></div></div>
+<div class="ttc" id="aglobal__to__range_8cpp_html_aa6eb24642458ede75b8099e80679f4f7"><div class="ttname"><a href="global__to__range_8cpp.html#aa6eb24642458ede75b8099e80679f4f7">run_global_to_var_visitor</a></div><div class="ttdeci">std::shared_ptr&lt; ast::Program &gt; run_global_to_var_visitor(const std::string &amp;text)</div><div class="ttdef"><b>Definition:</b> <a href="global__to__range_8cpp_source.html#l00029">global_to_range.cpp:29</a></div></div>
 <div class="ttc" id="anmodl__driver_8hpp_html"><div class="ttname"><a href="nmodl__driver_8hpp.html">nmodl_driver.hpp</a></div></div>
 <div class="ttc" id="asymtab__visitor_8hpp_html"><div class="ttname"><a href="symtab__visitor_8hpp.html">symtab_visitor.hpp</a></div><div class="ttdoc">THIS FILE IS GENERATED AT BUILD TIME AND SHALL NOT BE EDITED.</div></div>
 <div class="ttc" id="anmodl__constructs_8hpp_html"><div class="ttname"><a href="nmodl__constructs_8hpp.html">nmodl_constructs.hpp</a></div></div>

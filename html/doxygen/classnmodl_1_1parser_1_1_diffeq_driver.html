@@ -92,7 +92,8 @@ $(document).ready(function(){initNavTree('classnmodl_1_1parser_1_1_diffeq_driver
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="classnmodl_1_1parser_1_1_diffeq_driver-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">nmodl::parser::DiffeqDriver Class Reference<div class="ingroups"><a class="el" href="group__parser.html">Parser Implementation</a></div></div>  </div>
@@ -113,18 +114,21 @@ $(document).ready(function(){initNavTree('classnmodl_1_1parser_1_1_diffeq_driver
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a271f11b8348efa75f3a969935df829a8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1parser_1_1_diffeq_driver.html#a271f11b8348efa75f3a969935df829a8">DiffeqDriver</a> ()=default</td></tr>
 <tr class="separator:a271f11b8348efa75f3a969935df829a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a855090422f6014f1e0182332d0850940"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1parser_1_1_diffeq_driver.html#a855090422f6014f1e0182332d0850940">solve</a> (const std::string &amp;equation, std::string method, bool debug=false)</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a855090422f6014f1e0182332d0850940"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1parser_1_1_diffeq_driver.html#a855090422f6014f1e0182332d0850940">solve</a> (const std::string &amp;equation, std::string method, bool debug=false)</td></tr>
 <tr class="memdesc:a855090422f6014f1e0182332d0850940"><td class="mdescLeft">&#160;</td><td class="mdescRight">solve equation using provided method  <a href="classnmodl_1_1parser_1_1_diffeq_driver.html#a855090422f6014f1e0182332d0850940">More...</a><br /></td></tr>
 <tr class="separator:a855090422f6014f1e0182332d0850940"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab89e4d42c0781358310684a3d5fc59ae"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1parser_1_1_diffeq_driver.html#ab89e4d42c0781358310684a3d5fc59ae">cnexp_possible</a> (const std::string &amp;equation, std::string &amp;solution)</td></tr>
+<tr class="memitem:ab89e4d42c0781358310684a3d5fc59ae"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1parser_1_1_diffeq_driver.html#ab89e4d42c0781358310684a3d5fc59ae">cnexp_possible</a> (const std::string &amp;equation, std::string &amp;solution)</td></tr>
 <tr class="memdesc:ab89e4d42c0781358310684a3d5fc59ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">check if given equation can be solved using cnexp method  <a href="classnmodl_1_1parser_1_1_diffeq_driver.html#ab89e4d42c0781358310684a3d5fc59ae">More...</a><br /></td></tr>
 <tr class="separator:ab89e4d42c0781358310684a3d5fc59ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
-Private Member Functions</h2></td></tr>
-<tr class="memitem:a6acae0904b6f7f3b5f0ee965e3352fe3"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1parser_1_1_diffeq_driver.html#a6acae0904b6f7f3b5f0ee965e3352fe3">solve_equation</a> (std::string &amp;state, int order, std::string &amp;rhs, std::string &amp;method, bool &amp;<a class="el" href="classnmodl_1_1parser_1_1_diffeq_driver.html#ab89e4d42c0781358310684a3d5fc59ae">cnexp_possible</a>, bool debug=false)</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
+Static Private Member Functions</h2></td></tr>
+<tr class="memitem:a6acae0904b6f7f3b5f0ee965e3352fe3"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1parser_1_1_diffeq_driver.html#a6acae0904b6f7f3b5f0ee965e3352fe3">solve_equation</a> (std::string &amp;state, int order, std::string &amp;rhs, std::string &amp;method, bool &amp;<a class="el" href="classnmodl_1_1parser_1_1_diffeq_driver.html#ab89e4d42c0781358310684a3d5fc59ae">cnexp_possible</a>, bool debug=false)</td></tr>
 <tr class="separator:a6acae0904b6f7f3b5f0ee965e3352fe3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0b12993c9cce64d36c083f940dc1db06"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1parser_1_1_diffeq_driver.html#a0b12993c9cce64d36c083f940dc1db06">parse_equation</a> (const std::string &amp;equation, std::string &amp;state, std::string &amp;rhs, int &amp;order)</td></tr>
+<tr class="memitem:a0b12993c9cce64d36c083f940dc1db06"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1parser_1_1_diffeq_driver.html#a0b12993c9cce64d36c083f940dc1db06">parse_equation</a> (const std::string &amp;equation, std::string &amp;state, std::string &amp;rhs, int &amp;order)</td></tr>
 <tr class="memdesc:a0b12993c9cce64d36c083f940dc1db06"><td class="mdescLeft">&#160;</td><td class="mdescRight">parse given equation into lhs, rhs and find it's order and state variable  <a href="classnmodl_1_1parser_1_1_diffeq_driver.html#a0b12993c9cce64d36c083f940dc1db06">More...</a><br /></td></tr>
 <tr class="separator:a0b12993c9cce64d36c083f940dc1db06"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -160,6 +164,9 @@ Private Member Functions</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool nmodl::parser::DiffeqDriver::cnexp_possible </td>
@@ -179,12 +186,17 @@ Private Member Functions</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>check if given equation can be solved using cnexp method </p>
 <dl class="todo"><dt><b><a class="el" href="todo.html#_todo000032">Todo:</a></b></dt><dd>Instead of using neuron like api, we need to refactor </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="diffeq__driver_8cpp_source.html#l00072">72</a> of file <a class="el" href="diffeq__driver_8cpp_source.html">diffeq_driver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="diffeq__driver_8cpp_source.html#l00074">74</a> of file <a class="el" href="diffeq__driver_8cpp_source.html">diffeq_driver.cpp</a>.</p>
 
 </div>
 </div>
@@ -229,7 +241,7 @@ Private Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -247,6 +259,9 @@ Private Member Functions</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">std::string nmodl::parser::DiffeqDriver::solve </td>
@@ -272,11 +287,16 @@ Private Member Functions</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>solve equation using provided method </p>
 
-<p class="definition">Definition at line <a class="el" href="diffeq__driver_8cpp_source.html#l00046">46</a> of file <a class="el" href="diffeq__driver_8cpp_source.html">diffeq_driver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="diffeq__driver_8cpp_source.html#l00048">48</a> of file <a class="el" href="diffeq__driver_8cpp_source.html">diffeq_driver.cpp</a>.</p>
 
 </div>
 </div>
@@ -333,12 +353,12 @@ Private Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="diffeq__driver_8cpp_source.html#l00054">54</a> of file <a class="el" href="diffeq__driver_8cpp_source.html">diffeq_driver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="diffeq__driver_8cpp_source.html#l00056">56</a> of file <a class="el" href="diffeq__driver_8cpp_source.html">diffeq_driver.cpp</a>.</p>
 
 </div>
 </div>

@@ -145,7 +145,7 @@ $(document).ready(function(){initNavTree('c11__driver_8cpp_source.html',''); ini
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keywordflow">return</span> parse_stream(iss);</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;}</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="keywordtype">void</span> CDriver::error(<span class="keyword">const</span> std::string&amp; m)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="keywordtype">void</span> CDriver::error(<span class="keyword">const</span> std::string&amp; m) {</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    std::cerr &lt;&lt; m &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;}</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
@@ -154,8 +154,8 @@ $(document).ready(function(){initNavTree('c11__driver_8cpp_source.html',''); ini
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="comment">// here we will query and look into symbol table or register callback</span></div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;}</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="keywordtype">void</span> CDriver::error(<span class="keyword">const</span> std::string&amp; m, <span class="keyword">const</span> location&amp; l)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00062"></a><span class="lineno"><a class="line" href="classnmodl_1_1parser_1_1_c_driver.html#af30dac682210e0fc38c76ff954b273d4">   62</a></span>&#160;    std::cerr &lt;&lt; l &lt;&lt; <span class="stringliteral">&quot; : &quot;</span> &lt;&lt; m &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="keywordtype">void</span> CDriver::error(<span class="keyword">const</span> std::string&amp; m, <span class="keyword">const</span> location&amp; l) {</div>
+<div class="line"><a name="l00062"></a><span class="lineno"><a class="line" href="classnmodl_1_1parser_1_1_c_driver.html#a43b1c0e96107027c6d4a268c996dd2af">   62</a></span>&#160;    std::cerr &lt;&lt; l &lt;&lt; <span class="stringliteral">&quot; : &quot;</span> &lt;&lt; m &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;}</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="keywordtype">void</span> CDriver::scan_string(<span class="keyword">const</span> std::string&amp; text) {</div>
@@ -164,7 +164,7 @@ $(document).ready(function(){initNavTree('c11__driver_8cpp_source.html',''); ini
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    parser.reset(<span class="keyword">new</span> CParser(*lexer, *<span class="keyword">this</span>));</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keywordflow">while</span> (<span class="keyword">true</span>) {</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="keyword">auto</span> sym = lexer-&gt;next_token();</div>
-<div class="line"><a name="l00071"></a><span class="lineno"><a class="line" href="classnmodl_1_1parser_1_1_c_driver.html#a399b819ecb7aac1596903d98da9b7343">   71</a></span>&#160;        <span class="keyword">auto</span> <a class="code" href="namespacenmodl.html#a1932dc8f598d068751391d892d439400">token_type</a> = sym.type_get();</div>
+<div class="line"><a name="l00071"></a><span class="lineno"><a class="line" href="classnmodl_1_1parser_1_1_c_driver.html#a33144d820e9f5efd51409bed76caf254">   71</a></span>&#160;        <span class="keyword">auto</span> <a class="code" href="namespacenmodl.html#a1932dc8f598d068751391d892d439400">token_type</a> = sym.type_get();</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="namespacenmodl.html#a1932dc8f598d068751391d892d439400">token_type</a> == CParser::by_type(CParser::token::END).type_get()) {</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;            <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        }</div>
@@ -181,7 +181,7 @@ $(document).ready(function(){initNavTree('c11__driver_8cpp_source.html',''); ini
 <div class="ttc" id="anamespacenmodl_html"><div class="ttname"><a href="namespacenmodl.html">nmodl</a></div><div class="ttdoc">encapsulates everything related to NMODL code generation framework</div><div class="ttdef"><b>Definition:</b> <a href="ast__common_8hpp_source.html#l00026">ast_common.hpp:26</a></div></div>
 <div class="ttc" id="ac11__driver_8hpp_html"><div class="ttname"><a href="c11__driver_8hpp.html">c11_driver.hpp</a></div></div>
 <div class="ttc" id="ac11__lexer_8hpp_html"><div class="ttname"><a href="c11__lexer_8hpp.html">c11_lexer.hpp</a></div></div>
-<div class="ttc" id="anamespacenmodl_html_a1932dc8f598d068751391d892d439400"><div class="ttname"><a href="namespacenmodl.html#a1932dc8f598d068751391d892d439400">nmodl::token_type</a></div><div class="ttdeci">TokenType token_type(const std::string &amp;name)</div><div class="ttdoc">Return token type for given token name.</div><div class="ttdef"><b>Definition:</b> <a href="token__mapping_8cpp_source.html#l00367">token_mapping.cpp:367</a></div></div>
+<div class="ttc" id="anamespacenmodl_html_a1932dc8f598d068751391d892d439400"><div class="ttname"><a href="namespacenmodl.html#a1932dc8f598d068751391d892d439400">nmodl::token_type</a></div><div class="ttdeci">TokenType token_type(const std::string &amp;name)</div><div class="ttdoc">Return token type for given token name.</div><div class="ttdef"><b>Definition:</b> <a href="token__mapping_8cpp_source.html#l00368">token_mapping.cpp:368</a></div></div>
 <!-- HTML footer for doxygen 1.8.15-->
 <!-- start footer part -->
 <div id="nav-path" class="navpath">

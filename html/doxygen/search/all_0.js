@@ -8,7 +8,7 @@ var searchData=
   ['access_5',['Access',['../namespacenmodl_1_1symtab_1_1syminfo.html#a3024cbfc3a7ebf7dd349303e70d82d4d',1,'nmodl::symtab::syminfo']]],
   ['add_6',['add',['../namespacenmodl_1_1parser_1_1diffeq.html#af8927fcf1d528baf607f9640c165ce64a34ec78fcc91ffb1e54cd85e4a0924332',1,'nmodl::parser::diffeq']]],
   ['add_5fbase_5funit_7',['add_base_unit',['../classnmodl_1_1units_1_1_unit.html#ad225ab3e1fa5aafe76142366913c012c',1,'nmodl::units::Unit']]],
-  ['add_5fblock_5fproperty_8',['add_block_property',['../classnmodl_1_1printer_1_1_j_s_o_n_printer.html#a564eece974fff5b2191e72a72586b0f0',1,'nmodl::printer::JSONPrinter']]],
+  ['add_5fblock_5fproperty_8',['add_block_property',['../classnmodl_1_1printer_1_1_j_s_o_n_printer.html#a9871d73dcf1e7120e5c23cfd8bca24df',1,'nmodl::printer::JSONPrinter']]],
   ['add_5fdefined_5fvar_9',['add_defined_var',['../classnmodl_1_1parser_1_1_nmodl_driver.html#a392a55b47274ea338f94ecc8708a13cb',1,'nmodl::parser::NmodlDriver']]],
   ['add_5fdenominator_5fdims_10',['add_denominator_dims',['../classnmodl_1_1units_1_1_unit.html#a275364244dc0f57822073cad9df33884',1,'nmodl::units::Unit']]],
   ['add_5fdenominator_5funit_11',['add_denominator_unit',['../classnmodl_1_1units_1_1_unit.html#abb6f1a315c651f9b6e525ec94bfdebce',1,'nmodl::units::Unit::add_denominator_unit(const std::string &amp;denom)'],['../classnmodl_1_1units_1_1_unit.html#aa53fde115e36b35ffd6a72a914d8d545',1,'nmodl::units::Unit::add_denominator_unit(const std::shared_ptr&lt; std::vector&lt; std::string &gt;&gt; &amp;denom)']]],

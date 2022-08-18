@@ -2,7 +2,7 @@ var searchData=
 [
   ['k_5fb_1201',['k_b',['../structnmodl_1_1visitor_1_1_kinetic_block_visitor_1_1_rate_eqs.html#a37784e80a83ac79bbe1afc8934aaa099',1,'nmodl::visitor::KineticBlockVisitor::RateEqs']]],
   ['k_5ff_1202',['k_f',['../structnmodl_1_1visitor_1_1_kinetic_block_visitor_1_1_rate_eqs.html#addb0baf3354fda34a4ba34b5263b4624',1,'nmodl::visitor::KineticBlockVisitor::RateEqs']]],
-  ['keys_1203',['keys',['../structnmodl_1_1utils_1_1_perf_stat.html#a534bcbb91e767c4a4278bb84adf969eb',1,'nmodl::utils::PerfStat']]],
+  ['keys_1203',['keys',['../structnmodl_1_1utils_1_1_perf_stat.html#ae253575915ad0a83b66d3fc740b15bc2',1,'nmodl::utils::PerfStat']]],
   ['keyword_5ftype_1204',['keyword_type',['../namespacenmodl_1_1details.html#ac7dd6707d4aedf9e72c6ea049adc6d79',1,'nmodl::details']]],
   ['keywords_1205',['keywords',['../namespacenmodl_1_1details.html#a19154f9c7b5074c9177b1da18950f29d',1,'nmodl::details']]],
   ['kinetic_5fblock_1206',['kinetic_block',['../namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dba806afad5f66c1de108516de837610832',1,'nmodl::symtab::syminfo::kinetic_block()'],['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033aa5e16f03b03b7646a6957397f874a5d4',1,'nmodl::ast::KINETIC_BLOCK()']]],

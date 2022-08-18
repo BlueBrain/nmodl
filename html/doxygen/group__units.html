@@ -127,7 +127,7 @@ Functions</h2></td></tr>
 <tr class="memitem:ga5beb2f005efacceb06427827ef45bf15"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="group__token__test.html#ga752aa45201ab43cc2d13b3ce5a5f1144">UnitParser::symbol_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__units.html#ga5beb2f005efacceb06427827ef45bf15">nmodl::parser::UnitLexer::next_token</a> ()</td></tr>
 <tr class="memdesc:ga5beb2f005efacceb06427827ef45bf15"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function for lexer to scan token (replacement for <code>yylex()</code>)  <a href="group__units.html#ga5beb2f005efacceb06427827ef45bf15">More...</a><br /></td></tr>
 <tr class="separator:ga5beb2f005efacceb06427827ef45bf15"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga77c74d5c7ebc9f2c57bc192dbfbcf329"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__units.html#ga77c74d5c7ebc9f2c57bc192dbfbcf329">nmodl::parser::UnitDriver::error</a> (const std::string &amp;m)</td></tr>
+<tr class="memitem:ga77c74d5c7ebc9f2c57bc192dbfbcf329"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__units.html#ga77c74d5c7ebc9f2c57bc192dbfbcf329">nmodl::parser::UnitDriver::error</a> (const std::string &amp;m)</td></tr>
 <tr class="separator:ga77c74d5c7ebc9f2c57bc192dbfbcf329"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga08e9b606cb5ea92658765b82a886f2f8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__units.html#ga08e9b606cb5ea92658765b82a886f2f8">nmodl::parser::UnitDriver::parse_stream</a> (std::istream &amp;in)</td></tr>
 <tr class="memdesc:ga08e9b606cb5ea92658765b82a886f2f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">parse Units file provided as istream  <a href="group__units.html#ga08e9b606cb5ea92658765b82a886f2f8">More...</a><br /></td></tr>
@@ -140,7 +140,7 @@ Functions</h2></td></tr>
 <tr class="separator:gae62d367c779588c163dcfe9cdd9efa37"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga4bb3089099469478c73df5f61037af4f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__units.html#ga4bb3089099469478c73df5f61037af4f">nmodl::parser::UnitDriver::scan_string</a> (std::string &amp;text)</td></tr>
 <tr class="separator:ga4bb3089099469478c73df5f61037af4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gafee97ce81e2e4f416b5bbd5d33dd7a36"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__units.html#gafee97ce81e2e4f416b5bbd5d33dd7a36">nmodl::parser::UnitDriver::error</a> (const std::string &amp;m, const location &amp;l)</td></tr>
+<tr class="memitem:gafee97ce81e2e4f416b5bbd5d33dd7a36"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__units.html#gafee97ce81e2e4f416b5bbd5d33dd7a36">nmodl::parser::UnitDriver::error</a> (const std::string &amp;m, const location &amp;l)</td></tr>
 <tr class="separator:gafee97ce81e2e4f416b5bbd5d33dd7a36"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga7ffa76ac1fa5595a4aa1f0f703b34717"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__units.html#ga7ffa76ac1fa5595a4aa1f0f703b34717">nmodl::parser::UnitDriver::set_verbose</a> (bool b)</td></tr>
 <tr class="separator:ga7ffa76ac1fa5595a4aa1f0f703b34717"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -198,6 +198,9 @@ Ctor &amp; dtor</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void nmodl::parser::UnitDriver::error </td>
@@ -207,6 +210,11 @@ Ctor &amp; dtor</h2></td></tr>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="unit__driver_8cpp_source.html#l00061">61</a> of file <a class="el" href="unit__driver_8cpp_source.html">unit_driver.cpp</a>.</p>
@@ -218,6 +226,9 @@ Ctor &amp; dtor</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void nmodl::parser::UnitDriver::error </td>
@@ -237,6 +248,11 @@ Ctor &amp; dtor</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="unit__driver_8cpp_source.html#l00065">65</a> of file <a class="el" href="unit__driver_8cpp_source.html">unit_driver.cpp</a>.</p>

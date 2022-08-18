@@ -92,6 +92,7 @@ $(document).ready(function(){initNavTree('classnmodl_1_1parser_1_1_nmodl_driver.
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classnmodl_1_1parser_1_1_nmodl_driver-members.html">List of all members</a>  </div>
@@ -157,13 +158,16 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab6b1773a65bddb48f76da62ebd302c9b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1parser_1_1_nmodl_driver.html#ab6b1773a65bddb48f76da62ebd302c9b">set_ast</a> (<a class="el" href="classnmodl_1_1ast_1_1_program.html">ast::Program</a> *node) noexcept</td></tr>
 <tr class="memdesc:ab6b1773a65bddb48f76da62ebd302c9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">set new ast root  <a href="classnmodl_1_1parser_1_1_nmodl_driver.html#ab6b1773a65bddb48f76da62ebd302c9b">More...</a><br /></td></tr>
 <tr class="separator:ab6b1773a65bddb48f76da62ebd302c9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a054af38fb8cc89aace91c111673566c4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1parser_1_1_nmodl_driver.html#a054af38fb8cc89aace91c111673566c4">parse_error</a> (const location &amp;location, const std::string &amp;message)</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a054af38fb8cc89aace91c111673566c4"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1parser_1_1_nmodl_driver.html#a054af38fb8cc89aace91c111673566c4">parse_error</a> (const location &amp;location, const std::string &amp;message)</td></tr>
 <tr class="memdesc:a054af38fb8cc89aace91c111673566c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emit a parsing error.  <a href="classnmodl_1_1parser_1_1_nmodl_driver.html#a054af38fb8cc89aace91c111673566c4">More...</a><br /></td></tr>
 <tr class="separator:a054af38fb8cc89aace91c111673566c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9171b24030fc917356188f8aa129ebb8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1parser_1_1_nmodl_driver.html#a9171b24030fc917356188f8aa129ebb8">parse_error</a> (const <a class="el" href="classnmodl_1_1parser_1_1_nmodl_lexer.html">NmodlLexer</a> &amp;scanner, const location &amp;location, const std::string &amp;message)</td></tr>
+<tr class="memitem:a9171b24030fc917356188f8aa129ebb8"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1parser_1_1_nmodl_driver.html#a9171b24030fc917356188f8aa129ebb8">parse_error</a> (const <a class="el" href="classnmodl_1_1parser_1_1_nmodl_lexer.html">NmodlLexer</a> &amp;scanner, const location &amp;location, const std::string &amp;message)</td></tr>
 <tr class="memdesc:a9171b24030fc917356188f8aa129ebb8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emit a parsing error.  <a href="classnmodl_1_1parser_1_1_nmodl_driver.html#a9171b24030fc917356188f8aa129ebb8">More...</a><br /></td></tr>
 <tr class="separator:a9171b24030fc917356188f8aa129ebb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aae8c132458d65ad91e0f8861b08957e0"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1parser_1_1_nmodl_driver.html#aae8c132458d65ad91e0f8861b08957e0">check_include_argument</a> (const location &amp;location, const std::string &amp;filename)</td></tr>
+<tr class="memitem:aae8c132458d65ad91e0f8861b08957e0"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1parser_1_1_nmodl_driver.html#aae8c132458d65ad91e0f8861b08957e0">check_include_argument</a> (const location &amp;location, const std::string &amp;filename)</td></tr>
 <tr class="memdesc:aae8c132458d65ad91e0f8861b08957e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ensure <em>file</em> argument given to the INCLUDE directive is valid:  <a href="classnmodl_1_1parser_1_1_nmodl_driver.html#aae8c132458d65ad91e0f8861b08957e0">More...</a><br /></td></tr>
 <tr class="separator:aae8c132458d65ad91e0f8861b08957e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -291,6 +295,9 @@ Private Attributes</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">std::string nmodl::parser::NmodlDriver::check_include_argument </td>
@@ -310,6 +317,11 @@ Private Attributes</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Ensure <em>file</em> argument given to the INCLUDE directive is valid: </p>
@@ -428,6 +440,9 @@ Private Attributes</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void nmodl::parser::NmodlDriver::parse_error </td>
@@ -447,6 +462,11 @@ Private Attributes</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Emit a parsing error. </p>
@@ -466,6 +486,9 @@ Private Attributes</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void nmodl::parser::NmodlDriver::parse_error </td>
@@ -491,6 +514,11 @@ Private Attributes</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Emit a parsing error. </p>

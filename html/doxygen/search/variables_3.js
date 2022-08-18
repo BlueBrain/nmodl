@@ -29,12 +29,12 @@ var searchData=
   ['destructor_5fnode_5139',['destructor_node',['../structnmodl_1_1codegen_1_1_codegen_info.html#a5d1b352f185f78beb36604d60870645a',1,'nmodl::codegen::CodegenInfo']]],
   ['diam_5fused_5140',['diam_used',['../structnmodl_1_1codegen_1_1_codegen_info.html#a356665162e1a17fc044499e8c130d343',1,'nmodl::codegen::CodegenInfo']]],
   ['diam_5fvariable_5141',['DIAM_VARIABLE',['../namespacenmodl_1_1codegen_1_1naming.html#aaa763fc5e88f6855340132e3470bb940',1,'nmodl::codegen::naming']]],
-  ['diff_5feq_5fconstructs_5142',['diff_eq_constructs',['../namespacenmodl_1_1test__utils.html#a2b549fa5c2448806889246616d1b54c5',1,'nmodl::test_utils']]],
+  ['diff_5feq_5fconstructs_5142',['diff_eq_constructs',['../namespacenmodl_1_1test__utils.html#afa0fb3043e49c1857f834096a4f0b1b1',1,'nmodl::test_utils']]],
   ['differential_5fequation_5143',['differential_equation',['../classnmodl_1_1visitor_1_1_neuron_solve_visitor.html#a62dff35d8874dcc4c4d404986a325f80',1,'nmodl::visitor::NeuronSolveVisitor']]],
-  ['driver_5144',['driver',['../classnmodl_1_1parser_1_1_c_lexer.html#a1ef4386018fd95edc6f94a0ae9a5cc3b',1,'nmodl::parser::CLexer::driver()'],['../classnmodl_1_1parser_1_1_nmodl_lexer.html#a1910e25d34edffb39c637474cc1b0d00',1,'nmodl::parser::NmodlLexer::driver()'],['../class_ispc_codegen_test_helper.html#a5ae285a776421f8f33568d63039b07c6',1,'IspcCodegenTestHelper::driver()'],['../namespacenmodl_1_1docstring.html#adf0d10df35f49023b8fd657bcc66c563',1,'nmodl::docstring::driver()'],['../units_2parser_8cpp.html#adb772fffa624f2b39f88e66cafd5b05a',1,'driver():&#160;parser.cpp']]],
-  ['driver_5fast_5145',['driver_ast',['../namespacenmodl_1_1docstring.html#ae191ad972da711432715b6b47147db65',1,'nmodl::docstring']]],
-  ['driver_5fparse_5ffile_5146',['driver_parse_file',['../namespacenmodl_1_1docstring.html#a10fbacc3dbafe18c546e38d2397ea6bd',1,'nmodl::docstring']]],
-  ['driver_5fparse_5fstream_5147',['driver_parse_stream',['../namespacenmodl_1_1docstring.html#ae4ddbe38eea81939a6c189c07c3e128f',1,'nmodl::docstring']]],
-  ['driver_5fparse_5fstring_5148',['driver_parse_string',['../namespacenmodl_1_1docstring.html#ada22461ca25c42aeb5ad8806210a9f50',1,'nmodl::docstring']]],
+  ['driver_5144',['driver',['../classnmodl_1_1parser_1_1_c_lexer.html#a1ef4386018fd95edc6f94a0ae9a5cc3b',1,'nmodl::parser::CLexer::driver()'],['../classnmodl_1_1parser_1_1_nmodl_lexer.html#a1910e25d34edffb39c637474cc1b0d00',1,'nmodl::parser::NmodlLexer::driver()'],['../class_ispc_codegen_test_helper.html#a5ae285a776421f8f33568d63039b07c6',1,'IspcCodegenTestHelper::driver()'],['../namespacenmodl_1_1docstring.html#ad22b073fd0c7f42b684dec068e353f1c',1,'nmodl::docstring::driver()'],['../units_2parser_8cpp.html#adb772fffa624f2b39f88e66cafd5b05a',1,'driver():&#160;parser.cpp']]],
+  ['driver_5fast_5145',['driver_ast',['../namespacenmodl_1_1docstring.html#aa458e3599e621ccf452566de89f07419',1,'nmodl::docstring']]],
+  ['driver_5fparse_5ffile_5146',['driver_parse_file',['../namespacenmodl_1_1docstring.html#a19c0402d9b25c7483a970d6b85b06e4d',1,'nmodl::docstring']]],
+  ['driver_5fparse_5fstream_5147',['driver_parse_stream',['../namespacenmodl_1_1docstring.html#ad7464779774fc6cb7bb6fbad60a4285e',1,'nmodl::docstring']]],
+  ['driver_5fparse_5fstring_5148',['driver_parse_string',['../namespacenmodl_1_1docstring.html#a2753fa1d1b13adaaeb083213a35088d6',1,'nmodl::docstring']]],
   ['dt_5fvar_5149',['dt_var',['../structnmodl_1_1pybind__wrappers_1_1_diffeq_solver_executor.html#a73c97b1aaaf2b613774bcb5aecef130b',1,'nmodl::pybind_wrappers::DiffeqSolverExecutor']]]
 ];
