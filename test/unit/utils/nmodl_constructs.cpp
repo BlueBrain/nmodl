@@ -991,20 +991,6 @@ std::map<std::string, NmodlTestCase> nmodl_valid_constructs{
     },
 
     {
-        "match_block_1",
-        {
-            "MATCH block",
-            R"(
-                PROCEDURE lates() {
-                    MATCH { name1 }
-                    MATCH { name1 name2 }
-                    MATCH { name1[INDEX](expr1+expr2) = (expr3+expr4) }
-                }
-            )"
-        }
-    },
-
-    {
         "linear_block_1",
         {
             "LINEAR block",

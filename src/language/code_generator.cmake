@@ -118,7 +118,6 @@ set(AST_GENERATED_SOURCES
     ${PROJECT_BINARY_DIR}/src/ast/local_var.hpp
     ${PROJECT_BINARY_DIR}/src/ast/lon_difuse.hpp
     ${PROJECT_BINARY_DIR}/src/ast/match.hpp
-    ${PROJECT_BINARY_DIR}/src/ast/match_block.hpp
     ${PROJECT_BINARY_DIR}/src/ast/model.hpp
     ${PROJECT_BINARY_DIR}/src/ast/mutex_lock.hpp
     ${PROJECT_BINARY_DIR}/src/ast/mutex_unlock.hpp

@@ -20,9 +20,7 @@ using symtab::syminfo::NmodlType;
 
 const std::map<ast::AstNodeType, CodegenCompatibilityVisitor::FunctionPointer>
     CodegenCompatibilityVisitor::unhandled_ast_types_func(
-        {{AstNodeType::MATCH_BLOCK,
-          &CodegenCompatibilityVisitor::return_error_without_name<MatchBlock>},
-         {AstNodeType::DISCRETE_BLOCK,
+        {{AstNodeType::DISCRETE_BLOCK,
           &CodegenCompatibilityVisitor::return_error_with_name<DiscreteBlock>},
          {AstNodeType::FUNCTION_TABLE_BLOCK,
           &CodegenCompatibilityVisitor::return_error_without_name<FunctionTableBlock>},

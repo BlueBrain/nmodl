@@ -119,7 +119,6 @@
 %token  <ModToken>              LINEAR
 %token  <ModToken>              LOCAL
 %token  <ModToken>              LONGDIFUS
-%token  <ModToken>              MATCH
 %token  <ModToken>              MODEL
 %token  <ModToken>              MODEL_LEVEL
 %token  <ModToken>              NETRECEIVE
@@ -279,9 +278,6 @@
 %type   <ast::PlotDeclaration*>             plot_declaration
 %type   <ast::PlotVarVector>                plot_variable_list
 %type   <ast::ConstantStatementVector>      constant_statement
-%type   <ast::MatchVector>                  match_list
-%type   <ast::Match*>                       match
-%type   <ast::Identifier*>                  match_name
 %type   <ast::PartialBoundary*>             partial_equation
 %type   <ast::FirstLastTypeIndex*>          first_last
 %type   <ast::ReactionStatement*>           reaction_statement
@@ -338,7 +334,6 @@
 %type   <ast::InitialBlock*>                initial_block
 %type   <ast::KineticBlock*>                kinetic_block
 %type   <ast::LinearBlock*>                 linear_block
-%type   <ast::MatchBlock*>                  match_block
 %type   <ast::NetReceiveBlock*>             net_receive_block
 %type   <ast::NeuronBlock*>                 neuron_block
 %type   <ast::NonLinearBlock*>              non_linear_block
@@ -1094,10 +1089,6 @@ statement_type1 :   from_statement
                 |   queue_statement
                     {
                         $$ = $1;
-                    }
-                |   match_block
-                    {
-                        $$ = new ast::ExpressionStatement($1);
                     }
                 |   partial_equation
                     {
@@ -1951,58 +1942,6 @@ queue_statement :   PUTQ name
                 |   GETQ name
                     {
                         $$ = new ast::QueueStatement(new ast::QueueExpressionType(ast::GET_QUEUE), $2);
-                    }
-                ;
-
-
-match_block     :   MATCH "{" match_list "}"
-                    {
-                        $$ = new ast::MatchBlock($3);
-                        ModToken block_token = $1 + $4;
-                        $$->set_token(block_token);
-                    }
-                ;
-
-
-match_list      :   match
-                    {
-                        $$ = ast::MatchVector();
-                        $$.emplace_back($1);
-                    }
-                |   match_list match
-                    {
-                        $1.emplace_back($2);
-                        $$ = $1;
-                    }
-                ;
-
-
-match           :   name
-                    {
-                        $$ = new ast::Match($1, NULL);
-                    }
-                |   match_name "(" expression ")" "=" expression
-                    {
-                        auto op = ast::BinaryOperator(ast::BOP_ASSIGN);
-                        auto lhs = new ast::ParenExpression($3);
-                        auto rhs = $6;
-                        auto expression = new ast::BinaryExpression(lhs, op, rhs);
-                        $$ = new ast::Match($1, expression);
-                    }
-                |   error
-                    {
-                        error(scanner.loc, "match ");
-                    }
-                ;
-
-
-match_name      :   name
-                    {
-                        $$ = $1;
-                    }
-                |   name "[" NAME_PTR "]"
-                    {
-                        $$ = new ast::IndexedName($1, $3);
                     }
                 ;
 

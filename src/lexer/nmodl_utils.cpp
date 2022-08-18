@@ -218,8 +218,6 @@ SymbolType token_symbol(const std::string& key, PositionType& pos, TokenType typ
         return Parser::make_LOCAL(token, pos);
     case Token::LONGDIFUS:
         return Parser::make_LONGDIFUS(token, pos);
-    case Token::MATCH:
-        return Parser::make_MATCH(token, pos);
     case Token::MODEL:
         return Parser::make_MODEL(token, pos);
     case Token::MODEL_LEVEL:
