@@ -280,8 +280,7 @@ void CodegenAccVisitor::print_newtonspace_transfer_to_device() const {
 void CodegenAccVisitor::print_instance_variable_transfer_to_device() const {
     if (!info.artificial_cell) {
         printer->start_block("if(nt->compute_gpu)");
-        printer->add_line("auto* const d_inst = cnrn_target_deviceptr(inst);");
-        printer->add_line("cnrn_target_memcpy_to_device(d_inst, inst);");
+        printer->add_line("cnrn_target_update_on_device(inst);");
         printer->end_block(1);
     }
 }
