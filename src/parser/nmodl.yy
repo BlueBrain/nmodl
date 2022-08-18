@@ -141,7 +141,6 @@
 %token  <ModToken>              REACTION
 %token  <ModToken>              READ
 %token  <ModToken>              SECTION
-%token  <ModToken>              SENS
 %token  <ModToken>              SOLVE
 %token  <ModToken>              SOLVEFOR
 %token  <ModToken>              START1
@@ -267,8 +266,6 @@
 %type   <ast::StatementBlock*>              if_solution_error
 %type   <ast::Expression*>                  optional_increment
 %type   <ast::Number*>                      optional_start
-%type   <ast::VarNameVector>                sens_list
-%type   <ast::Sens*>                        sens
 %type   <ast::ForAllStatement*>             forall_statement
 %type   <ast::ParamAssign*>                 parameter_assignment
 %type   <ast::IndependentDefinition*>       independent_definition
@@ -1094,10 +1091,6 @@ statement_type1 :   from_statement
                     {   auto text = parse_with_verbatim_parser($1);
                         $$ = new ast::BlockComment(new ast::String(text));
                     }
-                |   sens
-                    {
-                        $$ = $1;
-                    }
                 |   compartment
                     {
                         $$ = $1;
@@ -1882,30 +1875,6 @@ watch_expression :  variable_name
                 |   error
                     {
                         error(scanner.loc, "watch_expression");
-                    }
-                ;
-
-
-sens            :   SENS sens_list
-                    {
-                        $$ = new ast::Sens($2);
-                    }
-                |   SENS error
-                    {
-                        error(scanner.loc, "sens");
-                    }
-                ;
-
-
-sens_list       :   variable_name
-                    {
-                        $$ = ast::VarNameVector();
-                        $$.emplace_back($1);
-                    }
-                |   sens_list "," variable_name
-                    {
-                        $1.emplace_back($3);
-                        $$ = $1;
                     }
                 ;
 

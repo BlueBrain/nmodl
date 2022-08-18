@@ -159,7 +159,6 @@ set(AST_GENERATED_SOURCES
     ${PROJECT_BINARY_DIR}/src/ast/read_ion_var.hpp
     ${PROJECT_BINARY_DIR}/src/ast/section.hpp
     ${PROJECT_BINARY_DIR}/src/ast/section_var.hpp
-    ${PROJECT_BINARY_DIR}/src/ast/sens.hpp
     ${PROJECT_BINARY_DIR}/src/ast/solution_expression.hpp
     ${PROJECT_BINARY_DIR}/src/ast/solve_block.hpp
     ${PROJECT_BINARY_DIR}/src/ast/state_block.hpp

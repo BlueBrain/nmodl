@@ -920,18 +920,6 @@ std::map<std::string, NmodlTestCase> nmodl_valid_constructs{
     },
 
     {
-        "sens_1",
-        {
-            "SENS statement",
-            R"(
-                BREAKPOINT {
-                    SENS a, b
-                }
-            )"
-        }
-    },
-
-    {
         "conserve_1",
         {
             "CONSERVE statement",

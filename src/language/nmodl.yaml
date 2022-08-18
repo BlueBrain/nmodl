@@ -1752,16 +1752,6 @@
                       nmodl: MUTEXUNLOCK
                       brief: "Represent MUTEXUNLOCK statement in NMODL"
 
-                  - Sens:
-                      nmodl: "SENS "
-                      members:
-                        - variables:
-                            brief: "TODO"
-                            type: VarName
-                            vector: true
-                            separator: ", "
-                      brief: "Represent SENS statement in NMODL"
-
                   - Conserve:
                       nmodl: CONSERVE
                       members:
