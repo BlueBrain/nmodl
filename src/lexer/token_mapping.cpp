@@ -80,7 +80,6 @@ const static std::map<std::string, TokenType> keywords = {
     {"PLOT", Token::PLOT},
     {"VS", Token::VS},
     {"LAG", Token::LAG},
-    {"RESET", Token::RESET},
     {"MATCH", Token::MATCH},
     {"MODEL_LEVEL", Token::MODEL_LEVEL},
     {"SWEEP", Token::SWEEP},

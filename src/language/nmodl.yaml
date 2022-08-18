@@ -1772,10 +1772,6 @@
                       nmodl: MUTEXUNLOCK
                       brief: "Represent MUTEXUNLOCK statement in NMODL"
 
-                  - Reset:
-                      nmodl: RESET
-                      brief: "Represent RESET statement in NMODL"
-
                   - Sens:
                       nmodl: "SENS "
                       members:

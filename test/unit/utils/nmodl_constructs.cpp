@@ -1030,18 +1030,6 @@ std::map<std::string, NmodlTestCase> nmodl_valid_constructs{
     },
 
     {
-        "reset_statement_1",
-        {
-            "RESET statement",
-            R"(
-                PROCEDURE lates() {
-                    RESET
-                }
-            )"
-        }
-    },
-
-    {
         "match_block_1",
         {
             "MATCH block",

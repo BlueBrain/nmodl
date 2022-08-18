@@ -141,7 +141,6 @@
 %token  <ModToken>              REACT1
 %token  <ModToken>              REACTION
 %token  <ModToken>              READ
-%token  <ModToken>              RESET
 %token  <ModToken>              SECTION
 %token  <ModToken>              SENS
 %token  <ModToken>              SOLVE
@@ -1153,10 +1152,6 @@ statement_type1 :   from_statement
                 |   queue_statement
                     {
                         $$ = $1;
-                    }
-                |   RESET
-                    {
-                        $$ = new ast::Reset();
                     }
                 |   match_block
                     {

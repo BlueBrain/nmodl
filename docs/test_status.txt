@@ -72,7 +72,6 @@ The following symbols are used in the document to descrive the status :
 |PLOT | ✅ |
 |VS | ✅ |
 |LAG | ✅ |
-|RESET | ✅ |
 |MATCH | ✅ |
 |MODEL_LEVEL | ✅ |
 |SWEEP | ✅ |

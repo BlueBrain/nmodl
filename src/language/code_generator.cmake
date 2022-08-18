@@ -158,7 +158,6 @@ set(AST_GENERATED_SOURCES
     ${PROJECT_BINARY_DIR}/src/ast/reaction_operator.hpp
     ${PROJECT_BINARY_DIR}/src/ast/reaction_statement.hpp
     ${PROJECT_BINARY_DIR}/src/ast/read_ion_var.hpp
-    ${PROJECT_BINARY_DIR}/src/ast/reset.hpp
     ${PROJECT_BINARY_DIR}/src/ast/section.hpp
     ${PROJECT_BINARY_DIR}/src/ast/section_var.hpp
     ${PROJECT_BINARY_DIR}/src/ast/sens.hpp

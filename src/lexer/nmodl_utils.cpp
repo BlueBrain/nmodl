@@ -256,8 +256,6 @@ SymbolType token_symbol(const std::string& key, PositionType& pos, TokenType typ
         return Parser::make_RANGE(token, pos);
     case Token::READ:
         return Parser::make_READ(token, pos);
-    case Token::RESET:
-        return Parser::make_RESET(token, pos);
     case Token::SECTION:
         return Parser::make_SECTION(token, pos);
     case Token::SENS:
