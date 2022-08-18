@@ -1631,7 +1631,6 @@ void CodegenCVisitor::print_check_table_thread_function() {
     auto parameters = external_method_parameters(true);
 
     printer->fmt_start_block("static void {} ({})", name, parameters);
-    printer->add_line("Memb_list* ml = nt->_ml_list[tml_id];");
     printer->add_line("setup_instance(nt, ml);");
     printer->fmt_line("auto* const inst = static_cast<{0}*>(ml->instance);", instance_struct());
     printer->add_line("double v = 0;");
@@ -2607,15 +2606,17 @@ void CodegenCVisitor::print_mechanism_global_var_structure(bool print_initialise
 
         for (const auto& block: info.functions_with_table) {
             auto name = block->get_node_name();
-            printer->fmt_line("{}{} tmin_{} /* TODO init tmin */;", qualifier, float_type, name);
-            printer->fmt_line("{}{} mfac_{} /* TODO init mfac */;", qualifier, float_type, name);
+            printer->fmt_line("{}{} tmin_{}{};", qualifier, float_type, name, value_initialise);
+            printer->fmt_line("{}{} mfac_{}{};", qualifier, float_type, name, value_initialise);
             codegen_global_variables.push_back(make_symbol("tmin_" + name));
             codegen_global_variables.push_back(make_symbol("mfac_" + name));
         }
 
         for (const auto& variable: info.table_statement_variables) {
-            auto name = "t_" + variable->get_name();
-            printer->fmt_line("{}* {}{} /* TODO init table */;", float_type, qualifier, name);
+            auto const name = "t_" + variable->get_name();
+            auto const num_values = variable->get_num_values();
+            printer->fmt_line(
+                "{}{} {}[{}]{};", qualifier, float_type, name, num_values, value_initialise);
             codegen_global_variables.push_back(make_symbol(name));
         }
     }
@@ -3136,15 +3137,6 @@ void CodegenCVisitor::print_global_variable_setup() {
         }
         /// use %g to be same as nocmodl in neuron
         printer->add_line(fmt::format("{} = {:g};", name, value));
-    }
-
-    if (info.table_count > 0) {
-        for (auto& variable: info.table_statement_variables) {
-            auto name = get_variable_name("t_" + variable->get_name());
-            int num_values = variable->get_num_values();
-            printer->add_line(
-                fmt::format("{} = (double*) mem_alloc({}, sizeof(double));", name, num_values));
-        }
     }
 
     printer->add_newline();
