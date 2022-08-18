@@ -14,6 +14,8 @@
 #include "test/unit/utils/test_utils.hpp"
 #include "visitors/symtab_visitor.hpp"
 
+using Catch::Matchers::Contains;  // ContainsSubstring in newer Catch2
+
 using namespace nmodl;
 using namespace visitor;
 using namespace codegen;
@@ -74,8 +76,10 @@ SCENARIO("Check instance variable definition order", "[codegen][var_order]") {
 
         THEN("ionic current variable declared as RANGE appears first") {
             std::string generated_code = R"(
-                static inline void setup_instance(NrnThread* nt, Memb_list* ml)  {
-                    cal_Instance* inst = (cal_Instance*) mem_alloc(1, sizeof(cal_Instance));
+                static inline void setup_instance(NrnThread* nt, Memb_list* ml) {
+                    assert(ml->instance);
+                    assert(ml->instance_size == sizeof(cal_Instance));
+                    auto* const inst = static_cast<cal_Instance*>(ml->instance);
                     int pnodecount = ml->_nodecount_padded;
                     Datum* indexes = ml->pdata;
                     inst->gcalbar = ml->data+0*pnodecount;
@@ -93,12 +97,11 @@ SCENARIO("Check instance variable definition order", "[codegen][var_order]") {
                     inst->ion_cao = nt->_data;
                     inst->ion_ica = nt->_data;
                     inst->ion_dicadv = nt->_data;
-                    ml->instance = inst;
                 }
             )";
-            auto expected = reindent_text(generated_code);
-            auto result = get_instance_var_setup_function(nmodl_text);
-            REQUIRE(result.find(expected) != std::string::npos);
+            auto const expected = reindent_text(generated_code);
+            auto const result = get_instance_var_setup_function(nmodl_text);
+            REQUIRE_THAT(result, Contains(expected));
         }
     }
 
@@ -126,8 +129,10 @@ SCENARIO("Check instance variable definition order", "[codegen][var_order]") {
 
         THEN("Ion variables are defined in the order of USEION") {
             std::string generated_code = R"(
-                static inline void setup_instance(NrnThread* nt, Memb_list* ml)  {
-                    lca_Instance* inst = (lca_Instance*) mem_alloc(1, sizeof(lca_Instance));
+                static inline void setup_instance(NrnThread* nt, Memb_list* ml) {
+                    assert(ml->instance);
+                    assert(ml->instance_size == sizeof(lca_Instance));
+                    auto* const inst = static_cast<lca_Instance*>(ml->instance);
                     int pnodecount = ml->_nodecount_padded;
                     Datum* indexes = ml->pdata;
                     inst->m = ml->data+0*pnodecount;
@@ -137,13 +142,12 @@ SCENARIO("Check instance variable definition order", "[codegen][var_order]") {
                     inst->v_unused = ml->data+4*pnodecount;
                     inst->ion_cai = nt->_data;
                     inst->ion_cao = nt->_data;
-                    ml->instance = inst;
                 }
             )";
 
-            auto expected = reindent_text(generated_code);
-            auto result = get_instance_var_setup_function(nmodl_text);
-            REQUIRE(result.find(expected) != std::string::npos);
+            auto const expected = reindent_text(generated_code);
+            auto const result = get_instance_var_setup_function(nmodl_text);
+            REQUIRE_THAT(result, Contains(expected));
         }
     }
 
@@ -186,8 +190,10 @@ SCENARIO("Check instance variable definition order", "[codegen][var_order]") {
 
         THEN("Ion variables are defined in the order of USEION") {
             std::string generated_code = R"(
-                static inline void setup_instance(NrnThread* nt, Memb_list* ml)  {
-                    ccanl_Instance* inst = (ccanl_Instance*) mem_alloc(1, sizeof(ccanl_Instance));
+                static inline void setup_instance(NrnThread* nt, Memb_list* ml) {
+                    assert(ml->instance);
+                    assert(ml->instance_size == sizeof(ccanl_Instance));
+                    auto* const inst = static_cast<ccanl_Instance*>(ml->instance);
                     int pnodecount = ml->_nodecount_padded;
                     Datum* indexes = ml->pdata;
                     inst->catau = ml->data+0*pnodecount;
@@ -212,13 +218,12 @@ SCENARIO("Check instance variable definition order", "[codegen][var_order]") {
                     inst->ion_ilca = nt->_data;
                     inst->ion_elca = nt->_data;
                     inst->style_lca = ml->pdata;
-                    ml->instance = inst;
                 }
             )";
 
-            auto expected = reindent_text(generated_code);
-            auto result = get_instance_var_setup_function(nmodl_text);
-            REQUIRE(result.find(expected) != std::string::npos);
+            auto const expected = reindent_text(generated_code);
+            auto const result = get_instance_var_setup_function(nmodl_text);
+            REQUIRE_THAT(result, Contains(expected));
         }
     }
 }
@@ -255,11 +260,13 @@ SCENARIO("Check parameter constness with VERBATIM block",
             cvisitor->print_mechanism_range_var_structure(true);
 
             std::string expected_code = R"(
-                /** all mechanism instance variables */
+                /** all mechanism instance variables and global variables */
                 struct IntervalFire_Instance  {
-                    double* __restrict__ invl;
-                    const double* __restrict__ burst_start;
-                    double* __restrict__ v_unused;
+                    double celsius{celsius};
+                    double* __restrict__ invl{};
+                    const double* __restrict__ burst_start{};
+                    double* __restrict__ v_unused{};
+                    IntervalFire_Store global{IntervalFire_global};
                 };
             )";
 

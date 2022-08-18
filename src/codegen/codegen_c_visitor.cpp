@@ -3230,7 +3230,7 @@ void CodegenCVisitor::print_instance_variable_setup() {
 
     printer->add_newline(1);
     printer->add_line("/** initialize mechanism instance variables */");
-    printer->start_block("static inline void setup_instance(NrnThread* nt, Memb_list* ml) ");
+    printer->start_block("static inline void setup_instance(NrnThread* nt, Memb_list* ml)");
     printer->add_line("assert(ml->instance);");
     printer->fmt_line("assert(ml->instance_size == sizeof({}));", instance_struct());
     printer->fmt_line("auto* const inst = static_cast<{0}*>(ml->instance);", instance_struct());
