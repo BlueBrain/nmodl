@@ -50,7 +50,6 @@ const static std::map<std::string, TokenType> keywords = {
     {"CONDUCTANCE", Token::CONDUCTANCE},
     {"SOLVE", Token::SOLVE},
     {"STATE", Token::STATE},
-    {"STEPPED", Token::STEPPED},
     {"LINEAR", Token::LINEAR},
     {"NONLINEAR", Token::NONLINEAR},
     {"DISCRETE", Token::DISCRETE},

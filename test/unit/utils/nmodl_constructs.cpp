@@ -440,20 +440,6 @@ std::map<std::string, NmodlTestCase> nmodl_valid_constructs{
     },
 
     {
-        "step_block_1",
-        {
-            "STEP block with all statement types",
-            R"(
-                STEPPED {
-                    tau_r_AMPA = 1, -2
-                    tau_d_AMPA = 1.1, -2.1
-                    tau_r_NMDA = 1, 2.1, 3 (mV)
-                }
-            )"
-        }
-    },
-
-    {
         "independent_block_1",
         {
             "INDEPENDENT block with all statement types",

@@ -463,26 +463,6 @@
 
                                     All parameters are stored in the ast::ParamBlock::statements as vector.
 
-                        - StepBlock:
-                            nmodl: "STEPPED "
-                            members:
-                              - statements:
-                                  brief: "Vector of statements"
-                                  type: Stepped
-                                  vector: true
-                            brief: "Represents a `STEPPED` block in the NMODL"
-                            description: |
-                                    `STEPPED` has following form in the NMODL specification :
-
-                                    \code{.mod}
-                                        STEPPED {
-                                            name1 = number1 (mM)
-                                            name2 = number2, number3
-                                        }
-                                    \endcode
-
-                                    \todo Check ModelDB and other databse for example of channel.
-
                         - IndependentBlock:
                             nmodl: "INDEPENDENT "
                             members:

@@ -148,7 +148,6 @@
 %token  <ModToken>              STATE
 %token  <ModToken>              STEADYSTATE
 %token  <ModToken>              STEP
-%token  <ModToken>              STEPPED
 %token  <ModToken>              SWEEP
 %token  <ModToken>              TABLE
 %token  <ModToken>              TERMINAL
@@ -272,14 +271,12 @@
 %type   <ast::Sens*>                        sens
 %type   <ast::ForAllStatement*>             forall_statement
 %type   <ast::ParamAssign*>                 parameter_assignment
-%type   <ast::Stepped*>                     stepped_statement
 %type   <ast::IndependentDefinition*>       independent_definition
 %type   <ast::AssignedDefinition*>          dependent_definition
 %type   <ast::Block*>                       declare
 %type   <ast::ParamAssignVector>            parameter_block_body
 %type   <ast::IndependentDefinitionVector>  independent_block_body
 %type   <ast::AssignedDefinitionVector>     dependent_block_body
-%type   <ast::SteppedVector>                step_block_body
 %type   <ast::WatchStatement*>              watch_statement
 %type   <ast::BinaryOperator>               watch_direction
 %type   <ast::Watch*>                       watch
@@ -355,7 +352,6 @@
 %type   <ast::ProcedureBlock*>              procedure_block
 %type   <ast::SolveBlock*>                  solve_block
 %type   <ast::StateBlock*>                  state_block
-%type   <ast::StepBlock*>                   step_block
 %type   <ast::TerminalBlock*>               terminal_block
 %type   <ast::UnitBlock*>                   unit_block
 
@@ -542,10 +538,6 @@ declare         :   parameter_block
                     {
                         $$ = $1;
                     }
-                |   step_block
-                    {
-                        $$ = $1;
-                    }
                 |   plot_declaration
                     {
                         $$ = new ast::PlotBlock($1);
@@ -640,31 +632,6 @@ limits          :   {
                 |   LT double "," double GT
                     {
                         $$ = new ast::Limits($2, $4);
-                    }
-                ;
-
-
-step_block      :   STEPPED "{" step_block_body "}"
-                    {
-                        $$ = new ast::StepBlock($3);
-                    }
-                ;
-
-
-step_block_body :   {
-                        $$ = ast::SteppedVector();
-                    }
-                |   step_block_body stepped_statement
-                    {
-                            $1.emplace_back($2);
-                            $$ = $1;
-                    }
-                ;
-
-
-stepped_statement : NAME_PTR "=" number_list units
-                    {
-                        $$ = new ast::Stepped($1, $3, $4);
                     }
                 ;
 
