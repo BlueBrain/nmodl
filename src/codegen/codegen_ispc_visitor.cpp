@@ -505,10 +505,10 @@ void CodegenIspcVisitor::print_wrapper_routine(const std::string& wrapper_functi
         printer->add_newline();
         printer->add_line("setup_instance(nt, ml);");
         printer->add_newline();
+        print_global_struct_update_from_global_vars();
         printer->start_block("if (_nrn_skip_initmodel)");
         printer->add_line("return;");
         printer->end_block(1);
-        print_global_struct_update_from_global_vars();
     }
     printer->fmt_line("{}(inst, nt, ml, type);", compute_function);
     printer->end_block(1);
