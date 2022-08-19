@@ -302,11 +302,7 @@ std::string CodegenIspcVisitor::global_var_struct_type_qualifier() {
 
 void CodegenIspcVisitor::print_global_var_struct_decl() {
     if (wrapper_codegen) {
-        printer->start_block("extern \"C\"");
-        printer->add_line(fmt::format("{} {}_global;", global_struct(), info.mod_suffix));
-        printer->end_block(2);
-    } else {
-        printer->add_line(fmt::format("extern {} {}_global;", global_struct(), info.mod_suffix));
+        CodegenCVisitor::print_global_var_struct_decl();
     }
 }
 
