@@ -1487,32 +1487,37 @@ void CodegenCVisitor::print_table_check_function(const Block& node) {
     auto name = node.get_node_name();
     auto internal_params = internal_method_parameters();
     auto with = statement->get_with()->eval();
-    auto use_table_var = get_variable_name(naming::USE_TABLE_VARIABLE);
-    auto tmin_name = get_variable_name("tmin_" + name);
-    auto mfac_name = get_variable_name("mfac_" + name);
+    // false => use the global instance of the global variable struct; the
+    // values of that instance will be copied into the instance struct as part
+    // of print_global_struct_update_from_global_vars. In other words, the table
+    // data are always generated on the host and use global state.
+    constexpr bool use_instance_struct{false};
+    auto use_table_var = get_variable_name(naming::USE_TABLE_VARIABLE, use_instance_struct);
+    auto tmin_name = get_variable_name("tmin_" + name, use_instance_struct);
+    auto mfac_name = get_variable_name("mfac_" + name, use_instance_struct);
     auto float_type = default_float_data_type();
 
     printer->add_newline(2);
     print_device_method_annotation();
-    printer->start_block(
-        fmt::format("void check_{}({})", method_name(name), get_parameter_str(internal_params)));
+    printer->fmt_start_block("void check_{}({})",
+                             method_name(name),
+                             get_parameter_str(internal_params));
     {
-        printer->add_line(fmt::format("if ( {} == 0) {}", use_table_var, "{"));
-        printer->add_line("    return;");
-        printer->add_line("}");
+        printer->fmt_start_block("if ({} == 0)", use_table_var);
+        printer->add_line("return;");
+        printer->end_block(1);
 
         printer->add_line("static bool make_table = true;");
         for (const auto& variable: depend_variables) {
-            printer->add_line(
-                fmt::format("static {} save_{};", float_type, variable->get_node_name()));
+            printer->fmt_line("static {} save_{};", float_type, variable->get_node_name());
         }
 
         for (const auto& variable: depend_variables) {
             auto name = variable->get_node_name();
             auto instance_name = get_variable_name(name);
-            printer->add_line(fmt::format("if (save_{} != {}) {}", name, instance_name, "{"));
-            printer->add_line("    make_table = true;");
-            printer->add_line("}");
+            printer->fmt_start_block("if (save_{} != {})", name, instance_name);
+            printer->add_line("make_table = true;");
+            printer->end_block(1);
         }
 
         printer->start_block("if (make_table)");
@@ -1521,38 +1526,39 @@ void CodegenCVisitor::print_table_check_function(const Block& node) {
 
             printer->add_indent();
             printer->add_text(fmt::format("{} = ", tmin_name));
-            from->accept(*this);
+            from->accept(*this);  // TODO: use_instance_struct
             printer->add_text(";");
             printer->add_newline();
 
             printer->add_indent();
             printer->add_text("double tmax = ");
-            to->accept(*this);
+            to->accept(*this);  // TODO: use_instance_struct
             printer->add_text(";");
             printer->add_newline();
 
 
-            printer->add_line(fmt::format("double dx = (tmax-{})/{}.0;", tmin_name, with));
-            printer->add_line(fmt::format("{} = 1.0/dx;", mfac_name));
+            printer->fmt_line("double dx = (tmax - {})/{}.0;", tmin_name, with);
+            printer->fmt_line("{} = 1.0/dx;", mfac_name);
 
             printer->add_line("int i = 0;");
             printer->add_line("double x = 0;");
-            printer->add_line(fmt::format(
-                "for(i = 0, x = {}; i < {}; x += dx, i++) {}", tmin_name, with + 1, "{"));
+            printer->fmt_start_block("for(i = 0, x = {}; i < {}; x += dx, i++)",
+                                     tmin_name,
+                                     with + 1);
             auto function = method_name("f_" + name);
-            printer->add_line(fmt::format("    {}({}, x);", function, internal_method_arguments()));
+            printer->fmt_line("{}({}, x);", function, internal_method_arguments());
             for (const auto& variable: table_variables) {
                 auto name = variable->get_node_name();
                 auto instance_name = get_variable_name(name);
-                auto table_name = get_variable_name("t_" + name);
-                printer->add_line(fmt::format("    {}[i] = {};", table_name, instance_name));
+                auto table_name = get_variable_name("t_" + name, use_instance_struct);
+                printer->fmt_line("{}[i] = {};", table_name, instance_name);
             }
-            printer->add_line("}");
+            printer->end_block(1);
 
             for (const auto& variable: depend_variables) {
                 auto name = variable->get_node_name();
                 auto instance_name = get_variable_name(name);
-                printer->add_line(fmt::format("save_{} = {};", name, instance_name));
+                printer->fmt_line("save_{} = {};", name, instance_name);
             }
         }
         printer->end_block(1);
