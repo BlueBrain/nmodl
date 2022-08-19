@@ -241,16 +241,6 @@ bool CodegenAccVisitor::nrn_cur_reduction_loop_required() {
     return false;
 }
 
-void CodegenAccVisitor::print_global_variable_device_update_annotation() {
-    if (!info.artificial_cell) {
-        printer->add_line(
-            "// Update the instance struct copies of 'global' variables from the global struct");
-        printer->fmt_line("inst->global = {}_global;", info.mod_suffix);
-        // The actual host -> device synchronisation is done separately, when
-        // the whole instance struct is updated on the device.
-    }
-}
-
 
 std::string CodegenAccVisitor::get_variable_device_pointer(const std::string& variable,
                                                            const std::string& /* type */) const {

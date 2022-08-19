@@ -86,9 +86,6 @@ class CodegenAccVisitor: public CodegenCVisitor {
     /// if reduction block in nrn_cur required
     bool nrn_cur_reduction_loop_required() override;
 
-    /// update global variable from host to the device
-    void print_global_variable_device_update_annotation() override;
-
     /// transfer newtonspace structure to device
     void print_newtonspace_transfer_to_device() const override;
 

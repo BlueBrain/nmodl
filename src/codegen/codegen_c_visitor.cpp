@@ -3103,11 +3103,6 @@ void CodegenCVisitor::print_ion_variable() {
     printer->add_line("IonCurVar ionvar;");
 }
 
-void CodegenCVisitor::print_global_variable_device_update_annotation() {
-    // nothing for cpu
-}
-
-
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 void CodegenCVisitor::print_global_variable_setup() {
     std::vector<std::string> allocated_variables;
@@ -3392,6 +3387,9 @@ void CodegenCVisitor::print_global_struct_update_from_global_vars() const {
     printer->fmt_line("{} = {};",
                       get_variable_name(naming::CELSIUS_VARIABLE, true),
                       get_variable_name(naming::CELSIUS_VARIABLE, false));
+    printer->add_line(
+        "// Update the instance struct copies of 'global' variables from the global struct");
+    printer->fmt_line("inst->global = {}_global;", info.mod_suffix);
 }
 
 void CodegenCVisitor::print_nrn_init(bool skip_init_check) {
@@ -3422,7 +3420,6 @@ void CodegenCVisitor::print_nrn_init(bool skip_init_check) {
 
     // update global variable as those might be updated via python/hoc API
     print_global_struct_update_from_global_vars();
-    print_global_variable_device_update_annotation();
     print_instance_variable_transfer_to_device();
 
     if (skip_init_check) {

@@ -1171,13 +1171,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      */
     virtual void print_global_struct_update_from_global_vars() const;
 
-    /**
-     * Print the pragma annotation to update global variables from host to the device
-     *
-     * \note This is not used for the C backend
-     */
-    virtual void print_global_variable_device_update_annotation();
-
 
     /**
      * Print the setup method for setting matrix shadow vectors
