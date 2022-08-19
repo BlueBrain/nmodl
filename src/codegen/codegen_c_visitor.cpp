@@ -2534,7 +2534,6 @@ void CodegenCVisitor::print_mechanism_global_var_structure(bool print_initialise
     printer->fmt_line("{}int mech_type{};", qualifier, value_initialise);
     codegen_global_variables.push_back(make_symbol("mech_type"));
 
-    auto& constants = info.constant_variables;
     for (const auto& var: info.global_variables) {
         auto name = var->get_name();
         auto length = var->get_length();
@@ -2555,10 +2554,15 @@ void CodegenCVisitor::print_mechanism_global_var_structure(bool print_initialise
         codegen_global_variables.push_back(var);
     }
 
-    for (const auto& var: constants) {
-        auto name = var->get_name();
-        auto value_ptr = var->get_value();
-        printer->fmt_line("{}{} {} /* TODO init const */;", qualifier, float_type, name);
+    for (const auto& var: info.constant_variables) {
+        auto const name = var->get_name();
+        auto* const value_ptr = var->get_value().get();
+        double const value{value_ptr ? *value_ptr : 0};
+        printer->fmt_line("{}{} {}{};",
+                          qualifier,
+                          float_type,
+                          name,
+                          print_initialisers ? fmt::format("{{{:g}}}", value) : std::string{});
         codegen_global_variables.push_back(var);
     }
 
@@ -2793,9 +2797,7 @@ static size_t get_register_type_for_ba_block(const ast::Block* block) {
  * the simulator using suffix_reg() function.
  *
  * Here are details:
- *  - setup_global_variables function used to create vectors necessary for specific
- *    solvers like euler and derivimplicit. All global variables are initialized as well.
- *    We should exclude that callback based on the solver, watch statements.
+ *  - We should exclude that callback based on the solver, watch statements.
  *  - If nrn_get_mechtype is < -1 means that mechanism is not used in the
  *    context of neuron execution and hence could be ignored in coreneuron
  *    execution.
@@ -2850,11 +2852,7 @@ void CodegenCVisitor::print_mechanism_register() {
     }
     printer->add_newline();
 
-    // allocate global variables
-    printer->add_line("setup_global_variables();");
-
     /*
-     *  If threads are used then memory is allocated in setup_global_variables.
      *  Register callbacks for thread allocation and cleanup. Note that thread_data_index
      *  represent total number of thread used minus 1 (i.e. index of last thread).
      */
@@ -3107,53 +3105,6 @@ void CodegenCVisitor::print_ion_var_constructor(const std::vector<std::string>& 
 
 void CodegenCVisitor::print_ion_variable() {
     printer->add_line("IonCurVar ionvar;");
-}
-
-// NOLINTNEXTLINE(readability-function-cognitive-complexity)
-void CodegenCVisitor::print_global_variable_setup() {
-    std::vector<std::string> allocated_variables;
-
-    printer->add_newline(2);
-    printer->add_line("/** initialize global variables */");
-    printer->start_block("static inline void setup_global_variables() ");
-
-    printer->add_line("static int setup_done = 0;");
-    printer->add_line("if (setup_done) {");
-    printer->add_line("    return;");
-    printer->add_line("}");
-
-    // note : v is not needed in global structure for nmodl even if vectorize is false
-
-    if (!info.thread_variables.empty()) {
-        printer->add_line(fmt::format("{} = 0;", get_variable_name("thread_data_in_use")));
-    }
-
-    // initialize constant variables
-    for (auto& var: info.constant_variables) {
-        auto name = get_variable_name(var->get_name());
-        auto value_ptr = var->get_value();
-        double value = 0;
-        if (value_ptr != nullptr) {
-            value = *value_ptr;
-        }
-        /// use %g to be same as nocmodl in neuron
-        printer->add_line(fmt::format("{} = {:g};", name, value));
-    }
-
-    printer->add_newline();
-    printer->add_line("setup_done = 1;");
-    printer->end_block(3);
-
-    printer->add_line("/** free global variables */");
-    printer->start_block("static inline void free_global_variables() ");
-    if (allocated_variables.empty()) {
-        printer->add_line("// do nothing");
-    } else {
-        for (auto& var: allocated_variables) {
-            printer->add_line(fmt::format("mem_free({});", var));
-        }
-    }
-    printer->end_block(1);
 }
 
 
@@ -4624,7 +4575,6 @@ void CodegenCVisitor::print_codegen_routines() {
     print_memory_allocation_routine();
     print_abort_routine();
     print_thread_memory_callbacks();
-    print_global_variable_setup();
     print_instance_variable_setup();
     print_nrn_alloc();
     print_nrn_constructor();

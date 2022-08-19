@@ -1159,13 +1159,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
-     * Print the setup method that initializes all global variables
-     *
-     */
-    void print_global_variable_setup();
-
-
-    /**
      * Print the code that updates the mechanism-global global variable struct
      * from application-global variables such as celsius, secondorder, etc.
      */
