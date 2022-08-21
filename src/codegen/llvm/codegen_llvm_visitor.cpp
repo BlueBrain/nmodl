@@ -627,7 +627,6 @@ void CodegenLLVMVisitor::visit_codegen_for_statement(const ast::CodegenForStatem
     // Extract the condition to decide whether to branch to the loop body or loop exit.
     llvm::Value* cond = accept_and_get(node.get_condition());
     llvm::BranchInst* loop_br = ir_builder.create_cond_br(cond, for_body, exit);
-    ir_builder.set_loop_metadata(loop_br);
     ir_builder.set_insertion_point(for_body);
 
     // If not processing remainder of the loop, start vectorization.
@@ -902,7 +901,6 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
     }
 
     // Pass 1: replace LLVM math intrinsics with library calls.
-    // TODO: this needs to be done in the same way as Annotator!
     utils::replace_with_lib_functions(platform, *module);
 
     // Pass 2: annotate NMODL compute kernels.

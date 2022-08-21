@@ -220,36 +220,6 @@ void IRBuilder::create_intrinsic(const std::string& name,
 }
 
 /****************************************************************************************/
-/*                                LLVM metadata utilities                               */
-/****************************************************************************************/
-
-void IRBuilder::set_loop_metadata(llvm::BranchInst* branch) {
-    /// TODO: do we really need this?
-    llvm::LLVMContext& context = builder.getContext();
-    MetadataVector loop_metadata;
-
-    // Add nullptr to reserve the first place for loop's metadata self-reference.
-    loop_metadata.push_back(nullptr);
-
-    // If `vector_width` is 1, explicitly disable vectorization for benchmarking purposes.
-    if (platform.is_cpu() && platform.get_instruction_width() == 1) {
-        llvm::MDString* name = llvm::MDString::get(context, "llvm.loop.vectorize.enable");
-        llvm::Value* false_value = llvm::ConstantInt::get(get_boolean_type(), 0);
-        llvm::ValueAsMetadata* value = llvm::ValueAsMetadata::get(false_value);
-        loop_metadata.push_back(llvm::MDNode::get(context, {name, value}));
-    }
-
-    // No metadata to add.
-    if (loop_metadata.size() <= 1)
-        return;
-
-    // Add loop's metadata self-reference and attach it to the branch.
-    llvm::MDNode* metadata = llvm::MDNode::get(context, loop_metadata);
-    metadata->replaceOperandWith(0, metadata);
-    branch->setMetadata(llvm::LLVMContext::MD_loop, metadata);
-}
-
-/****************************************************************************************/
 /*                             LLVM instruction utilities                               */
 /****************************************************************************************/
 

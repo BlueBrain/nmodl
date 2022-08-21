@@ -25,7 +25,6 @@ static constexpr const unsigned double_precision = 64;
 
 /// Some typedefs.
 using ConstantVector = std::vector<llvm::Constant*>;
-using MetadataVector = std::vector<llvm::Metadata*>;
 using TypeVector = std::vector<llvm::Type*>;
 using ValueVector = std::vector<llvm::Value*>;
 
@@ -306,9 +305,6 @@ class IRBuilder {
 
     /// Sets builder's insertion point to the given block.
     void set_insertion_point(llvm::BasicBlock* block);
-
-    /// Sets the loop metadata for the given branch from the loop.
-    void set_loop_metadata(llvm::BranchInst* branch);
 
     /// Pops the last visited value from the value stack.
     llvm::Value* pop_last_value();
