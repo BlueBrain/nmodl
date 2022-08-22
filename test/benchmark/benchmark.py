@@ -25,6 +25,8 @@ def main():
     cfg = nmodl.CodeGenConfig()
     cfg.llvm_vector_width = args.vec
     cfg.llvm_opt_level_ir = 2
+    cfg.llvm_fast_math_flags = ["nnan", "contract", "afn"]
+    cfg.llvm_no_debug = False
     cfg.nmodl_ast = True
     fname = args.file
     if args.gpu:  # GPU enabled
