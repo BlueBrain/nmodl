@@ -315,9 +315,11 @@ SCENARIO("Simple scalar kernel", "[llvm][runner]") {
         codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"unknown",
                                                  /*output_dir=*/".",
                                                  cpu_platform,
-                                                 /*opt_level_ir=*/0);
+                                                 /*opt_level_ir=*/0,
+                                                 /*add_debug_information=*/false,
+                                                 /*fast_math_flags=*/{},
+                                                 /*wrap_kernel_functions=*/true);
         llvm_visitor.visit_program(*ast);
-        llvm_visitor.wrap_kernel_functions();
 
         // Create the instance struct data.
         int num_elements = 4;
@@ -343,7 +345,7 @@ SCENARIO("Simple scalar kernel", "[llvm][runner]") {
         runner.initialize_driver();
 
         THEN("Values in struct have changed according to the formula") {
-            runner.run_with_argument<int, void*>("__nrn_state_test_wrapper",
+            runner.run_with_argument<int, void*>("nrn_state_test",
                                                  instance_data.base_ptr);
             std::vector<double> x_expected = {4.0, 3.0, 2.0, 1.0};
             REQUIRE(check_instance_variable(instance_info, x_expected, "x"));
@@ -400,9 +402,11 @@ SCENARIO("Simple vectorised kernel", "[llvm][runner]") {
         codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"unknown",
                                                  /*output_dir=*/".",
                                                  simd_cpu_platform,
-                                                 /*opt_level_ir=*/3);
+                                                 /*opt_level_ir=*/3,
+                                                 /*add_debug_information=*/false,
+                                                 /*fast_math_flags=*/{},
+                                                 /*wrap_kernel_functions=*/true);
         llvm_visitor.visit_program(*ast);
-        llvm_visitor.wrap_kernel_functions();
 
         // Create the instance struct data.
         int num_elements = 10;
@@ -434,7 +438,7 @@ SCENARIO("Simple vectorised kernel", "[llvm][runner]") {
         runner.initialize_driver();
 
         THEN("Values in struct have changed according to the formula") {
-            runner.run_with_argument<int, void*>("__nrn_state_test_wrapper",
+            runner.run_with_argument<int, void*>("nrn_state_test",
                                                  instance_data.base_ptr);
             // Check that the main and remainder loops correctly change the data stored in x.
             std::vector<float> x_expected = {10.0, 9.0, 8.0, 7.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0};
@@ -484,9 +488,11 @@ SCENARIO("Vectorised kernel with scatter instruction", "[llvm][runner]") {
         codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"unknown",
                                                  /*output_dir=*/".",
                                                  simd_cpu_platform,
-                                                 /*opt_level_ir=*/0);
+                                                 /*opt_level_ir=*/0,
+                                                 /*add_debug_information=*/false,
+                                                 /*fast_math_flags=*/{},
+                                                 /*wrap_kernel_functions=*/true);
         llvm_visitor.visit_program(*ast);
-        llvm_visitor.wrap_kernel_functions();
 
         // Create the instance struct data.
         int num_elements = 5;
@@ -512,7 +518,7 @@ SCENARIO("Vectorised kernel with scatter instruction", "[llvm][runner]") {
         runner.initialize_driver();
 
         THEN("Ion values in struct have been updated correctly") {
-            runner.run_with_argument<int, void*>("__nrn_state_test_wrapper",
+            runner.run_with_argument<int, void*>("nrn_state_test",
                                                  instance_data.base_ptr);
             // cai[id] = ion_cai[ion_cai_index[id]]
             // cai[id] += 1
@@ -577,9 +583,11 @@ SCENARIO("Vectorised kernel with simple control flow", "[llvm][runner]") {
         codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"unknown",
                                                  /*output_dir=*/".",
                                                  simd_cpu_platform,
-                                                 /*opt_level_ir=*/0);
+                                                 /*opt_level_ir=*/0,
+                                                 /*add_debug_information=*/false,
+                                                 /*fast_math_flags=*/{},
+                                                 /*wrap_kernel_functions=*/true);
         llvm_visitor.visit_program(*ast);
-        llvm_visitor.wrap_kernel_functions();
 
         // Create the instance struct data.
         int num_elements = 5;
@@ -613,7 +621,7 @@ SCENARIO("Vectorised kernel with simple control flow", "[llvm][runner]") {
         runner.initialize_driver();
 
         THEN("Masked instructions are generated") {
-            runner.run_with_argument<int, void*>("__nrn_state_test_wrapper",
+            runner.run_with_argument<int, void*>("nrn_state_test",
                                                  instance_data.base_ptr);
             std::vector<double> w_expected = {20.0, 20.0, 60.0, 40.0, 50.0};
             REQUIRE(check_instance_variable(instance_info, w_expected, "w"));
@@ -676,9 +684,11 @@ SCENARIO("Kernel with atomic updates", "[llvm][runner]") {
         codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"unknown",
                                                  /*output_dir=*/".",
                                                  simd_cpu_platform,
-                                                 /*opt_level_ir=*/3);
+                                                 /*opt_level_ir=*/3,
+                                                 /*add_debug_information=*/false,
+                                                 /*fast_math_flags=*/{},
+                                                 /*wrap_kernel_functions=*/true);
         llvm_visitor.visit_program(*ast);
-        llvm_visitor.wrap_kernel_functions();
 
         // Create the instance struct data.
         int num_elements = 5;
@@ -716,7 +726,7 @@ SCENARIO("Kernel with atomic updates", "[llvm][runner]") {
         runner.initialize_driver();
 
         THEN("updates are commputed correctly with vector instructions and optimizations on") {
-            runner.run_with_argument<int, void*>("__nrn_cur_test_wrapper", instance_data.base_ptr);
+            runner.run_with_argument<int, void*>("nrn_cur_test", instance_data.base_ptr);
             // Recall:
             //     ion_ina_id = mech->ion_ina_index[id]
             //     ion_ika_id = mech->ion_ika_index[id]
@@ -772,9 +782,11 @@ SCENARIO("Kernel with atomic updates", "[llvm][runner]") {
         codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"unknown",
                                                  /*output_dir=*/".",
                                                  simd_cpu_platform,
-                                                 /*opt_level_ir=*/0);
+                                                 /*opt_level_ir=*/0,
+                                                 /*add_debug_information=*/false,
+                                                 /*fast_math_flags=*/{},
+                                                 /*wrap_kernel_functions=*/true);
         llvm_visitor.visit_program(*ast);
-        llvm_visitor.wrap_kernel_functions();
 
         // Create the instance struct data.
         int num_elements = 6;
@@ -812,7 +824,7 @@ SCENARIO("Kernel with atomic updates", "[llvm][runner]") {
         runner.initialize_driver();
 
         THEN("Atomic updates are correct without optimizations") {
-            runner.run_with_argument<int, void*>("__nrn_cur_test_wrapper", instance_data.base_ptr);
+            runner.run_with_argument<int, void*>("nrn_cur_test", instance_data.base_ptr);
             // Recall:
             //     ion_ina_id = mech->ion_ina_index[id]
             //     ion_ika_id = mech->ion_ika_index[id]
@@ -867,9 +879,11 @@ SCENARIO("Kernel with atomic updates", "[llvm][runner]") {
         codegen::CodegenLLVMVisitor llvm_visitor(/*mod_filename=*/"unknown",
                                                  /*output_dir=*/".",
                                                  simd_cpu_platform,
-                                                 /*opt_level_ir=*/0);
+                                                 /*opt_level_ir=*/0,
+                                                 /*add_debug_information=*/false,
+                                                 /*fast_math_flags=*/{},
+                                                 /*wrap_kernel_functions=*/true);
         llvm_visitor.visit_program(*ast);
-        llvm_visitor.wrap_kernel_functions();
 
         // Create the instance struct data.
         int num_elements = 6;
@@ -908,7 +922,7 @@ SCENARIO("Kernel with atomic updates", "[llvm][runner]") {
         runner.initialize_driver();
 
         THEN("Atomic updates are correct") {
-            runner.run_with_argument<int, void*>("__nrn_cur_test_wrapper", instance_data.base_ptr);
+            runner.run_with_argument<int, void*>("nrn_cur_test", instance_data.base_ptr);
             // Recall:
             //     node_id = mech->node_index[id]
             //     mech->vec_rhs[node_id] -= rhs

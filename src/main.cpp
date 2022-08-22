@@ -369,6 +369,9 @@ int main(int argc, const char* argv[]) {
                 // information and not in LLVM visitor.
                 int llvm_opt_level = llvm_benchmark ? 0 : cfg.llvm_opt_level_ir;
 
+                // If benchmarking, kernel functions should be wrapped taking void*.
+                bool wrap_kernel_functions = llvm_benchmark;
+
                 // Create platform abstraction.
                 PlatformID pid = cfg.llvm_gpu_name == "default" ? PlatformID::CPU : PlatformID::GPU;
                 const std::string name = cfg.llvm_gpu_name == "default" ? cfg.llvm_cpu_name
@@ -393,7 +396,8 @@ int main(int argc, const char* argv[]) {
                                            platform,
                                            llvm_opt_level,
                                            !cfg.llvm_no_debug,
-                                           cfg.llvm_fast_math_flags);
+                                           cfg.llvm_fast_math_flags,
+                                           wrap_kernel_functions);
                 visitor.visit_program(*ast);
                 if (cfg.nmodl_ast) {
                     NmodlPrintVisitor(filepath("llvm", "mod")).visit_program(*ast);

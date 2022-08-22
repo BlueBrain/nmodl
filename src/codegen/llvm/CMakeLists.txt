@@ -2,6 +2,8 @@
 # Codegen sources
 # =============================================================================
 set(LLVM_CODEGEN_SOURCE_FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/annotation.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/annotation.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/codegen_llvm_visitor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/codegen_llvm_visitor.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/codegen_llvm_helper_visitor.cpp

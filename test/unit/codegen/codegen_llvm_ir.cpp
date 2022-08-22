@@ -1015,15 +1015,6 @@ SCENARIO("Scalar state kernel", "[visitor][llvm]") {
             REQUIRE(std::regex_search(module_string, m, condition));
             REQUIRE(std::regex_search(module_string, m, cond_br));
 
-            // Check that loop metadata is attached to the scalar kernel.
-            std::regex loop_metadata(R"(!llvm\.loop !0)");
-            std::regex loop_metadata_self_reference(R"(!0 = distinct !\{!0, !1\})");
-            std::regex loop_metadata_disable_vectorization(
-                R"(!1 = !\{!\"llvm\.loop\.vectorize\.enable\", i1 false\})");
-            REQUIRE(std::regex_search(module_string, m, loop_metadata));
-            REQUIRE(std::regex_search(module_string, m, loop_metadata_self_reference));
-            REQUIRE(std::regex_search(module_string, m, loop_metadata_disable_vectorization));
-
             // Check for correct loads from the struct with GEPs.
             std::regex load_from_struct(
                 "  %.* = load %.*__instance_var__type\\*, %.*__instance_var__type\\*\\* %.*\n"
