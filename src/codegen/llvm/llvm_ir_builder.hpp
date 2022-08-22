@@ -25,7 +25,6 @@ static constexpr const unsigned double_precision = 64;
 
 /// Some typedefs.
 using ConstantVector = std::vector<llvm::Constant*>;
-using MetadataVector = std::vector<llvm::Metadata*>;
 using TypeVector = std::vector<llvm::Type*>;
 using ValueVector = std::vector<llvm::Value*>;
 
@@ -152,6 +151,12 @@ class IRBuilder {
     /// Generates LLVM IR to allocate the arguments of the function on the stack.
     void allocate_function_arguments(llvm::Function* function,
                                      const ast::CodegenVarWithTypeVector& nmodl_arguments);
+
+    /// Generates LLVM IR to allocate the arguments of the NMODL compute kernel
+    /// on the stack, bitcasting void* pointer to mechanism struct pointers.
+    void allocate_and_wrap_kernel_arguments(llvm::Function* function,
+                                            const ast::CodegenVarWithTypeVector& nmodl_arguments,
+                                            llvm::Type* struct_type);
 
     llvm::Value* create_alloca(const std::string& name, llvm::Type* type);
 
@@ -300,12 +305,6 @@ class IRBuilder {
 
     /// Sets builder's insertion point to the given block.
     void set_insertion_point(llvm::BasicBlock* block);
-
-    /// Sets the necessary attributes for the kernel and its arguments.
-    void set_kernel_attributes();
-
-    /// Sets the loop metadata for the given branch from the loop.
-    void set_loop_metadata(llvm::BranchInst* branch);
 
     /// Pops the last visited value from the value stack.
     llvm::Value* pop_last_value();

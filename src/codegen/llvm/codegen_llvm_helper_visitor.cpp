@@ -192,7 +192,7 @@ void CodegenLLVMHelperVisitor::create_function_for_node(ast::Block& node) {
 
     /// we have all information for code generation function, create a new node
     /// which will be inserted later into AST
-    auto function = std::make_shared<ast::CodegenFunction>(fun_ret_type, name, arguments, block);
+    auto function = std::make_shared<ast::CodegenFunction>(fun_ret_type, name, arguments, block, /*is_kernel=*/0);
     if (node.get_token()) {
         function->set_token(*node.get_token()->clone());
     }
@@ -732,7 +732,7 @@ void CodegenLLVMHelperVisitor::visit_nrn_state_block(ast::NrnStateBlock& node) {
 
     /// finally, create new function
     auto function =
-        std::make_shared<ast::CodegenFunction>(return_type, name, code_arguments, function_block);
+        std::make_shared<ast::CodegenFunction>(return_type, name, code_arguments, function_block, /*is_kernel=*/1);
     codegen_functions.push_back(function);
 
     // todo: remove this, temporary
@@ -1097,7 +1097,8 @@ void CodegenLLVMHelperVisitor::visit_breakpoint_block(ast::BreakpointBlock& node
         auto function = std::make_shared<ast::CodegenFunction>(return_type,
                                                                name,
                                                                code_arguments,
-                                                               function_block);
+                                                               function_block,
+                                                               /*is_kernel=*/1);
         codegen_functions.push_back(function);
 
         // todo: remove this, temporary

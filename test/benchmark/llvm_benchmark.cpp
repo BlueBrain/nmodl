@@ -24,24 +24,6 @@ namespace nmodl {
 namespace benchmark {
 
 BenchmarkResults LLVMBenchmark::run() {
-    // create functions
-    generate_llvm();
-    // Finally, run the benchmark and log the measurements.
-    return run_benchmark();
-}
-
-void LLVMBenchmark::generate_llvm() {
-    // First, visit the AST to build the LLVM IR module and wrap the kernel function calls.
-    auto start = std::chrono::steady_clock::now();
-    llvm_visitor.wrap_kernel_functions();
-    auto end = std::chrono::steady_clock::now();
-
-    // Log the time taken to visit the AST and build LLVM IR.
-    std::chrono::duration<double> diff = end - start;
-    logger->info("Created LLVM IR module from NMODL AST in {} sec", diff.count());
-}
-
-BenchmarkResults LLVMBenchmark::run_benchmark() {
     // Set the codegen data helper and find the kernels.
     auto codegen_data = codegen::CodegenDataHelper(llvm_visitor.get_instance_struct_ptr());
     std::vector<std::string> kernel_names;
@@ -102,16 +84,15 @@ BenchmarkResults LLVMBenchmark::run_benchmark() {
             }
 
             // Record the execution time of the kernel.
-            std::string wrapper_name = "__" + kernel_name + "_wrapper";
             auto start = std::chrono::steady_clock::now();
 #ifdef NMODL_LLVM_CUDA_BACKEND
             if (platform.is_CUDA_gpu()) {
-                cuda_runner->run_with_argument<void*>(wrapper_name,
+                cuda_runner->run_with_argument<void*>(kernel_name,
                                                       instance_data.base_ptr,
                                                       gpu_execution_parameters);
             } else {
 #endif
-                cpu_runner->run_with_argument<int, void*>(wrapper_name, instance_data.base_ptr);
+                cpu_runner->run_with_argument<int, void*>(kernel_name, instance_data.base_ptr);
 #ifdef NMODL_LLVM_CUDA_BACKEND
             }
 #endif

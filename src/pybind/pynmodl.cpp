@@ -200,7 +200,7 @@ class JitDriver {
             utils::make_path(cfg.scratch_dir);
         }
         cg_driver.prepare_mod(node, modname);
-        nmodl::codegen::CodegenLLVMVisitor visitor(modname, cfg.output_dir, platform, 0);
+        nmodl::codegen::CodegenLLVMVisitor visitor(modname, cfg.output_dir, platform, 0, false, {}, true);
         visitor.visit_program(*node);
         const GPUExecutionParameters gpu_execution_parameters{cuda_grid_dim_x, cuda_block_dim_x};
         nmodl::benchmark::LLVMBenchmark benchmark(visitor,
