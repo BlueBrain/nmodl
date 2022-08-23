@@ -244,10 +244,8 @@ bool CodegenAccVisitor::nrn_cur_reduction_loop_required() {
 
 void CodegenAccVisitor::print_global_variable_device_update_annotation() {
     if (!info.artificial_cell) {
-        printer->add_line(
-            fmt::format("nrn_pragma_acc(update device ({}_global))", info.mod_suffix));
-        printer->add_line(
-            fmt::format("nrn_pragma_omp(target update to({}_global))", info.mod_suffix));
+        printer->fmt_line("nrn_pragma_acc(update device ({}))", global_struct_instance());
+        printer->fmt_line("nrn_pragma_omp(target update to({}))", global_struct_instance());
     }
 }
 

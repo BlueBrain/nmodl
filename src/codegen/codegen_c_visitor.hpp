@@ -395,10 +395,18 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
-     * Name of structure that wraps range variables
+     * Name of structure that wraps global variables
      */
     std::string global_struct() const {
         return fmt::format("{}_Store", info.mod_suffix);
+    }
+
+
+    /**
+     * Name of the (host-only) global instance of `global_struct`
+     */
+    std::string global_struct_instance() const {
+        return info.mod_suffix + "_global";
     }
 
 

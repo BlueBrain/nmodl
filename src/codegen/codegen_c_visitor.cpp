@@ -1304,7 +1304,7 @@ std::string CodegenCVisitor::global_var_struct_type_qualifier() {
 }
 
 void CodegenCVisitor::print_global_var_struct_decl() {
-    printer->fmt_line("{} {}_global;", global_struct(), info.mod_suffix);
+    printer->fmt_line("{} {};", global_struct(), global_struct_instance());
 }
 
 /****************************************************************************************/
@@ -2296,7 +2296,7 @@ std::string CodegenCVisitor::global_variable_name(const SymbolType& symbol,
     if (use_instance) {
         return fmt::format("inst->global->{}", symbol->get_name());
     } else {
-        return fmt::format("{}_global.{}", info.mod_suffix, symbol->get_name());
+        return fmt::format("{}.{}", global_struct_instance(), symbol->get_name());
     }
 }
 
@@ -3054,7 +3054,7 @@ void CodegenCVisitor::print_mechanism_range_var_structure(bool print_initialiser
 
     printer->fmt_line("{}* global{};",
                       global_struct(),
-                      print_initialisers ? fmt::format("{{&{}_global}}", info.mod_suffix)
+                      print_initialisers ? fmt::format("{{&{}}}", global_struct_instance())
                                          : std::string{});
     printer->end_block(";");
 }
@@ -3167,18 +3167,17 @@ void CodegenCVisitor::print_instance_variable_setup() {
     printer->add_line("assert(!ml->global_variables);");
     printer->add_line("assert(ml->global_variables_size == 0);");
     printer->fmt_line("auto* inst = new {}{{}};", instance_struct());
-    printer->fmt_line("assert(inst->global = &{}_global);", info.mod_suffix);
+    printer->fmt_line("assert(inst->global = &{});", global_struct_instance());
     printer->add_line("ml->instance = inst;");
     printer->add_line("ml->global_variables = inst->global;");
     printer->fmt_line("ml->global_variables_size = sizeof({});", global_struct());
-    printer->fmt_line("assert(ml->global_variables = &{}_global);", info.mod_suffix);
     printer->end_block(2);
 
     auto const cast_inst_and_assert_validity = [&]() {
         printer->fmt_line("auto* inst = static_cast<{}*>(ml->instance);", instance_struct());
         printer->add_line("assert(inst);");
         printer->add_line("assert(inst->global);");
-        printer->fmt_line("assert(inst->global == &{}_global);", info.mod_suffix);
+        printer->fmt_line("assert(inst->global == &{});", global_struct_instance());
         printer->add_line("assert(inst->global == ml->global_variables);");
         printer->fmt_line("assert(ml->global_variables_size == sizeof({}));", global_struct());
     };
