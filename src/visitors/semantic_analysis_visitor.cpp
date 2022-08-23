@@ -57,7 +57,8 @@ void SemanticAnalysisVisitor::visit_table_statement(const ast::TableStatement& t
     const auto& table_vars = tableStmt.get_table_vars();
     if (in_function && !table_vars.empty()) {
         logger->critical(
-            "SemanticAnalysisVisitor :: TABLE statement in FUNCTION cannot have a table name list.");
+            "SemanticAnalysisVisitor :: TABLE statement in FUNCTION cannot have a table name "
+            "list.");
     }
     if (in_procedure && table_vars.empty()) {
         logger->critical(

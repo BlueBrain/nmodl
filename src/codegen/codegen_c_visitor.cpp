@@ -1503,8 +1503,7 @@ void CodegenCVisitor::print_table_check_function(const Block& node) {
 
         printer->add_line("static bool make_table = true;");
         for (const auto& variable: depend_variables) {
-            printer->fmt_line(
-                "static {} save_{};", float_type, variable->get_node_name());
+            printer->fmt_line("static {} save_{};", float_type, variable->get_node_name());
         }
 
         for (const auto& variable: depend_variables) {
@@ -1536,8 +1535,7 @@ void CodegenCVisitor::print_table_check_function(const Block& node) {
             printer->fmt_line("{} = 1./dx;", mfac_name);
 
             printer->fmt_line("double x = {};", tmin_name);
-            printer->fmt_start_block(
-                "for (size_t i = 0; i < {}; x += dx, i++)", with + 1);
+            printer->fmt_start_block("for (size_t i = 0; i < {}; x += dx, i++)", with + 1);
             auto function = method_name("f_" + name);
             if (node.is_procedure_block()) {
                 printer->fmt_line("{}({}, x);", function, internal_method_arguments());
@@ -1549,7 +1547,10 @@ void CodegenCVisitor::print_table_check_function(const Block& node) {
                 }
             } else {
                 auto table_name = get_variable_name("t_" + name);
-                printer->fmt_line("{}[i] = {}({}, x);", table_name, function, internal_method_arguments());
+                printer->fmt_line("{}[i] = {}({}, x);",
+                                  table_name,
+                                  function,
+                                  internal_method_arguments());
             }
             printer->end_block(1);
 
@@ -1596,12 +1597,15 @@ void CodegenCVisitor::print_table_replacement_function(const ast::Block& node) {
         }
         printer->end_block(1);
 
-        printer->fmt_line("double xi = {} * ({} - {});", mfac_name, params[0].get()->get_node_name(), tmin_name);
+        printer->fmt_line("double xi = {} * ({} - {});",
+                          mfac_name,
+                          params[0].get()->get_node_name(),
+                          tmin_name);
         printer->start_block("if (isnan(xi))");
         if (node.is_procedure_block()) {
             for (const auto& var: table_variables) {
                 auto name = get_variable_name(var->get_node_name());
-                    printer->fmt_line("{} = xi;", name);
+                printer->fmt_line("{} = xi;", name);
             }
             printer->add_line("return 0;");
         } else {
@@ -1631,15 +1635,15 @@ void CodegenCVisitor::print_table_replacement_function(const ast::Block& node) {
             for (const auto& var: table_variables) {
                 auto instance_name = get_variable_name(var->get_node_name());
                 auto table_name = get_variable_name("t_" + var->get_node_name());
-                printer->fmt_line(
-                    "{0} = {1}[i] + theta*({1}[i+1]-{1}[i]);", instance_name, table_name);
+                printer->fmt_line("{0} = {1}[i] + theta*({1}[i+1]-{1}[i]);",
+                                  instance_name,
+                                  table_name);
             }
             printer->add_line("return 0;");
         } else {
             auto table_name = get_variable_name("t_" + name);
             printer->fmt_line("return {0}[i] + theta * ({0}[i+1] - {0}[i]);", table_name);
         }
-
     }
     printer->end_block(1);
 }
@@ -2517,7 +2521,10 @@ void CodegenCVisitor::print_mechanism_global_var_structure() {
 
     if (!info.thread_variables.empty()) {
         printer->fmt_line("{}int thread_data_in_use;", qualifier);
-        printer->fmt_line("{}{} thread_data[{}];", qualifier, float_type, info.thread_var_data_size);
+        printer->fmt_line("{}{} thread_data[{}];",
+                          qualifier,
+                          float_type,
+                          info.thread_var_data_size);
         codegen_global_variables.push_back(make_symbol("thread_data_in_use"));
         auto symbol = make_symbol("thread_data");
         symbol->set_as_array(info.thread_var_data_size);
