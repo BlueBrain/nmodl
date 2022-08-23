@@ -1045,6 +1045,11 @@ void CodegenCVisitor::print_instance_variable_transfer_to_device(
     // backend specific, do nothing
 }
 
+void CodegenCVisitor::print_instance_variable_deletion_from_device(
+    std::vector<std::pair<std::string, bool>> const& /* pointer_members */) const {
+    // backend specific, do nothing
+}
+
 void CodegenCVisitor::print_deriv_advance_flag_transfer_to_device() const {
     // backend specific, do nothing
 }
@@ -3173,15 +3178,22 @@ void CodegenCVisitor::print_instance_variable_setup() {
         printer->fmt_line("assert(ml->global_variables_size == sizeof({}));", global_struct());
     };
 
+    printer->add_line("static inline void copy_instance_to_device(NrnThread* nt, Memb_list* ml);");
+    printer->add_line(
+        "static inline void delete_instance_from_device(NrnThread* nt, Memb_list* ml);");
+    printer->add_newline();
+
     printer->add_line("// Deallocate the instance structure");
     printer->fmt_start_block("static void {}(NrnThread* nt, Memb_list* ml, int type)",
                              method_name(naming::NRN_PRIVATE_DESTRUCTOR_METHOD));
     cast_inst_and_assert_validity();
+    printer->add_line("delete_instance_from_device(nt, ml);");
     printer->add_line("delete inst;");
     printer->add_line("ml->instance = nullptr;");
     printer->add_line("ml->global_variables = nullptr;");
     printer->add_line("ml->global_variables_size = 0;");
     printer->end_block(2);
+
 
     printer->add_line("/** initialize mechanism instance variables */");
     printer->start_block("static inline void setup_instance(NrnThread* nt, Memb_list* ml)");
@@ -3232,10 +3244,21 @@ void CodegenCVisitor::print_instance_variable_setup() {
         printer->fmt_line("inst->{} = {};", name, variable);
         pointer_members.push_back({std::move(name), true});
     }
-
-    print_instance_variable_transfer_to_device(pointer_members);
-
+    printer->add_line("copy_instance_to_device(nt, ml);");
     printer->end_block(1);  // setup_instance
+
+    printer->add_line("// Set up the device-side copy of the instance structure");
+    printer->start_block(
+        "static inline void copy_instance_to_device(NrnThread* nt, Memb_list* ml)");
+    cast_inst_and_assert_validity();
+    print_instance_variable_transfer_to_device(pointer_members);
+    printer->end_block(2);  // copy_instance_to_device
+
+    printer->start_block(
+        "static inline void delete_instance_from_device(NrnThread* nt, Memb_list* ml)");
+    cast_inst_and_assert_validity();
+    print_instance_variable_deletion_from_device(pointer_members);
+    printer->end_block(1);  // delete_instance_from_device
 }
 
 

@@ -1079,6 +1079,13 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
+     * Print the code to delete the instance structure from the device
+     */
+    virtual void print_instance_variable_deletion_from_device(
+        std::vector<std::pair<std::string, bool>> const& pointer_members) const;
+
+
+    /**
      * Print the code to copy derivative advance flag to device
      */
     virtual void print_deriv_advance_flag_transfer_to_device() const;

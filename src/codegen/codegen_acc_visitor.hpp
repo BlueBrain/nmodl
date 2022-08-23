@@ -93,6 +93,10 @@ class CodegenAccVisitor: public CodegenCVisitor {
     void print_instance_variable_transfer_to_device(
         std::vector<std::pair<std::string, bool>> const& pointer_members) const override;
 
+    // TODO
+    void print_instance_variable_deletion_from_device(
+        std::vector<std::pair<std::string, bool>> const& pointer_members) const override;
+
     // update derivimplicit advance flag on the gpu device
     void print_deriv_advance_flag_transfer_to_device() const override;
 
