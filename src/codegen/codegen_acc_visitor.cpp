@@ -261,12 +261,11 @@ void CodegenAccVisitor::print_newtonspace_transfer_to_device() const {
 void CodegenAccVisitor::print_instance_variable_transfer_to_device(
     std::vector<std::pair<std::string, bool>> const& pointer_members) const {
     if (!info.artificial_cell) {
-        printer->start_block("if (nt->compute_gpu)");
-        printer->fmt_line("auto d_inst_tmp = *inst;");
-        printer->add_line("auto* d_inst = cnrn_target_is_present(inst);");
+        printer->fmt_line("auto d_inst_tmp = inst;");
+        printer->add_line("auto* d_inst = cnrn_target_is_present(&inst);");
         printer->add_line("bool const first_time{!d_inst};");
         printer->start_block("if (first_time)");
-        printer->add_line("d_inst = cnrn_target_copyin(inst);");
+        printer->add_line("d_inst = cnrn_target_copyin(&inst);");
         printer->end_block(1);
         for (auto const& [pointer_member, assume_already_present]: pointer_members) {
             auto const name = "d_inst_tmp." + pointer_member;
@@ -279,20 +278,19 @@ void CodegenAccVisitor::print_instance_variable_transfer_to_device(
             }
         }
         printer->add_line("cnrn_target_memcpy_to_device(d_inst, &d_inst_tmp);");
-        printer->end_block(1);
     }
 }
 
 void CodegenAccVisitor::print_instance_variable_deletion_from_device(
     std::vector<std::pair<std::string, bool>> const& pointer_members) const {
     if (!info.artificial_cell) {
-        printer->start_block("if (cnrn_target_is_present(inst))");
+        printer->start_block("if (cnrn_target_is_present(&inst))");
         for (auto const& [pointer_member, assume_already_present]: pointer_members) {
             if (!assume_already_present) {
-                printer->fmt_line("cnrn_target_delete(inst->{});", pointer_member);
+                printer->fmt_line("cnrn_target_delete(inst.{});", pointer_member);
             }
         }
-        printer->add_line("cnrn_target_delete(inst);");
+        printer->add_line("cnrn_target_delete(&inst);");
         printer->end_block(1);
     }
 }
