@@ -21,6 +21,7 @@
 #include <numeric>
 #include <ostream>
 #include <string>
+#include <string_view>
 #include <utility>
 
 #include "codegen/codegen_info.hpp"
@@ -1073,7 +1074,8 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
     /**
      * Print the code to copy instance variable to device
      */
-    virtual void print_instance_variable_transfer_to_device() const;
+    virtual void print_instance_variable_transfer_to_device(
+        std::vector<std::pair<std::string, bool>> const& pointer_members) const;
 
 
     /**
@@ -1156,13 +1158,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      *
      */
     void print_mech_type_getter();
-
-
-    /**
-     * Print the code that updates the mechanism-global global variable struct
-     * from application-global variables such as celsius, secondorder, etc.
-     */
-    virtual void print_global_struct_update_from_global_vars() const;
 
 
     /**
@@ -1627,13 +1622,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * Print entry point to code generation for wrappers
      */
     virtual void print_wrapper_routines();
-
-
-    /**
-     * Get device variable pointer for corresponding host variable
-     */
-    virtual std::string get_variable_device_pointer(const std::string& variable,
-                                                    const std::string& type) const;
 
 
     CodegenCVisitor(const std::string& mod_filename,

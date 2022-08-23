@@ -313,13 +313,6 @@ void CodegenIspcVisitor::print_global_var_struct_assertions() const {
     }
 }
 
-void CodegenIspcVisitor::print_global_struct_update_from_global_vars() const {
-    // Print update in .cpp but not .ispc
-    if (wrapper_codegen) {
-        CodegenCVisitor::print_global_struct_update_from_global_vars();
-    }
-}
-
 std::string CodegenIspcVisitor::param_type_qualifier() {
     if (wrapper_codegen) {
         return CodegenCVisitor::param_type_qualifier();
@@ -505,7 +498,6 @@ void CodegenIspcVisitor::print_wrapper_routine(const std::string& wrapper_functi
         printer->add_newline();
         printer->add_line("setup_instance(nt, ml);");
         printer->add_newline();
-        print_global_struct_update_from_global_vars();
         printer->start_block("if (_nrn_skip_initmodel)");
         printer->add_line("return;");
         printer->end_block(1);

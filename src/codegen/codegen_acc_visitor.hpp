@@ -90,7 +90,8 @@ class CodegenAccVisitor: public CodegenCVisitor {
     void print_newtonspace_transfer_to_device() const override;
 
     // update instance variable object pointer on the gpu device
-    void print_instance_variable_transfer_to_device() const override;
+    void print_instance_variable_transfer_to_device(
+        std::vector<std::pair<std::string, bool>> const& pointer_members) const override;
 
     // update derivimplicit advance flag on the gpu device
     void print_deriv_advance_flag_transfer_to_device() const override;
@@ -112,10 +113,6 @@ class CodegenAccVisitor: public CodegenCVisitor {
 
     // print atomic capture pragma
     void print_device_atomic_capture_annotation() const override;
-
-    std::string get_variable_device_pointer(const std::string& variable,
-                                            const std::string& type) const override;
-
 
     void print_net_send_buffering_grow() override;
 

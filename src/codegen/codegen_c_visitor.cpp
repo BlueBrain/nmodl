@@ -1040,7 +1040,8 @@ void CodegenCVisitor::print_channel_iteration_tiling_block_end() {
     // backend specific, do nothing
 }
 
-void CodegenCVisitor::print_instance_variable_transfer_to_device() const {
+void CodegenCVisitor::print_instance_variable_transfer_to_device(
+    std::vector<std::pair<std::string, bool>> const& /* pointer_members */) const {
     // backend specific, do nothing
 }
 
@@ -1487,14 +1488,9 @@ void CodegenCVisitor::print_table_check_function(const Block& node) {
     auto name = node.get_node_name();
     auto internal_params = internal_method_parameters();
     auto with = statement->get_with()->eval();
-    // false => use the global instance of the global variable struct; the
-    // values of that instance will be copied into the instance struct as part
-    // of print_global_struct_update_from_global_vars. In other words, the table
-    // data are always generated on the host and use global state.
-    constexpr bool use_instance_struct{false};
-    auto use_table_var = get_variable_name(naming::USE_TABLE_VARIABLE, use_instance_struct);
-    auto tmin_name = get_variable_name("tmin_" + name, use_instance_struct);
-    auto mfac_name = get_variable_name("mfac_" + name, use_instance_struct);
+    auto use_table_var = get_variable_name(naming::USE_TABLE_VARIABLE);
+    auto tmin_name = get_variable_name("tmin_" + name);
+    auto mfac_name = get_variable_name("mfac_" + name);
     auto float_type = default_float_data_type();
 
     printer->add_newline(2);
@@ -1526,13 +1522,13 @@ void CodegenCVisitor::print_table_check_function(const Block& node) {
 
             printer->add_indent();
             printer->add_text(fmt::format("{} = ", tmin_name));
-            from->accept(*this);  // TODO: use_instance_struct
+            from->accept(*this);
             printer->add_text(";");
             printer->add_newline();
 
             printer->add_indent();
             printer->add_text("double tmax = ");
-            to->accept(*this);  // TODO: use_instance_struct
+            to->accept(*this);
             printer->add_text(";");
             printer->add_newline();
 
@@ -1550,7 +1546,7 @@ void CodegenCVisitor::print_table_check_function(const Block& node) {
             for (const auto& variable: table_variables) {
                 auto name = variable->get_node_name();
                 auto instance_name = get_variable_name(name);
-                auto table_name = get_variable_name("t_" + name, use_instance_struct);
+                auto table_name = get_variable_name("t_" + name);
                 printer->fmt_line("{}[i] = {};", table_name, instance_name);
             }
             printer->end_block(1);
@@ -2293,7 +2289,7 @@ std::string CodegenCVisitor::int_variable_name(const IndexVariableInfo& symbol,
 std::string CodegenCVisitor::global_variable_name(const SymbolType& symbol,
                                                   bool use_instance) const {
     if (use_instance) {
-        return fmt::format("inst->global.{}", symbol->get_name());
+        return fmt::format("inst->global->{}", symbol->get_name());
     } else {
         return fmt::format("{}_global.{}", info.mod_suffix, symbol->get_name());
     }
@@ -2379,9 +2375,12 @@ std::string CodegenCVisitor::get_variable_name(const std::string& name, bool use
     if (varname == naming::CELSIUS_VARIABLE) {
         std::string ret;
         if (use_instance) {
-            ret = "inst->";
+            ret = "*(inst->";
         }
         ret.append(naming::CELSIUS_VARIABLE);
+        if (use_instance) {
+            ret.append(")");
+        }
         return ret;
     }
 
@@ -3026,7 +3025,7 @@ void CodegenCVisitor::print_mechanism_range_var_structure(bool print_initialiser
     printer->add_line("/** all mechanism instance variables and global variables */");
     printer->fmt_start_block("struct {} ", instance_struct());
     // TODO dynamically [don't] include this depending on whether it's used
-    printer->fmt_line("double celsius{};", print_initialisers ? "{celsius}" : "");
+    printer->fmt_line("double* celsius{};", print_initialisers ? "{&coreneuron::celsius}" : "");
     for (auto& var: codegen_float_variables) {
         auto name = var->get_name();
         auto type = get_range_var_float_type(var);
@@ -3048,9 +3047,9 @@ void CodegenCVisitor::print_mechanism_range_var_structure(bool print_initialiser
         }
     }
 
-    printer->fmt_line("{} global{};",
+    printer->fmt_line("{}* global{};",
                       global_struct(),
-                      print_initialisers ? fmt::format("{{{}_global}}", info.mod_suffix)
+                      print_initialisers ? fmt::format("{{&{}_global}}", info.mod_suffix)
                                          : std::string{});
     printer->end_block(";");
 }
@@ -3144,15 +3143,6 @@ std::string CodegenCVisitor::get_range_var_float_type(const SymbolType& symbol) 
     return float_data_type();
 }
 
-/**
- * \details For CPU/Host target there is no device pointer. In this case
- * just use the host variable name directly.
- */
-std::string CodegenCVisitor::get_variable_device_pointer(const std::string& variable,
-                                                         const std::string& /*type*/) const {
-    return variable;
-}
-
 
 void CodegenCVisitor::print_instance_variable_setup() {
     if (range_variable_setup_required()) {
@@ -3164,28 +3154,38 @@ void CodegenCVisitor::print_instance_variable_setup() {
     printer->fmt_start_block("static void {}(NrnThread* nt, Memb_list* ml, int type)",
                              method_name(naming::NRN_PRIVATE_CONSTRUCTOR_METHOD));
     printer->add_line("assert(!ml->instance);");
-    printer->add_line("assert(!ml->instance_size);");
-    printer->fmt_line("ml->instance = new {}{{}};", instance_struct());
-    printer->fmt_line("ml->instance_size = sizeof({});", instance_struct());
-    printer->end_block(1);
+    printer->add_line("assert(!ml->global_variables);");
+    printer->add_line("assert(ml->global_variables_size == 0);");
+    printer->fmt_line("auto* inst = new {}{{}};", instance_struct());
+    printer->fmt_line("assert(inst->global = &{}_global);", info.mod_suffix);
+    printer->add_line("ml->instance = inst;");
+    printer->add_line("ml->global_variables = inst->global;");
+    printer->fmt_line("ml->global_variables_size = sizeof({});", global_struct());
+    printer->fmt_line("assert(ml->global_variables = &{}_global);", info.mod_suffix);
+    printer->end_block(2);
 
-    printer->add_newline();
+    auto const cast_inst_and_assert_validity = [&]() {
+        printer->fmt_line("auto* inst = static_cast<{}*>(ml->instance);", instance_struct());
+        printer->add_line("assert(inst);");
+        printer->add_line("assert(inst->global);");
+        printer->fmt_line("assert(inst->global == &{}_global);", info.mod_suffix);
+        printer->add_line("assert(inst->global == ml->global_variables);");
+        printer->fmt_line("assert(ml->global_variables_size == sizeof({}));", global_struct());
+    };
+
     printer->add_line("// Deallocate the instance structure");
     printer->fmt_start_block("static void {}(NrnThread* nt, Memb_list* ml, int type)",
                              method_name(naming::NRN_PRIVATE_DESTRUCTOR_METHOD));
-    printer->add_line("assert(ml->instance);");
-    printer->fmt_line("assert(ml->instance_size == sizeof({}));", instance_struct());
-    printer->fmt_line("delete static_cast<{}*>(ml->instance);", instance_struct());
+    cast_inst_and_assert_validity();
+    printer->add_line("delete inst;");
     printer->add_line("ml->instance = nullptr;");
-    printer->add_line("ml->instance_size = 0;");
-    printer->end_block(1);
+    printer->add_line("ml->global_variables = nullptr;");
+    printer->add_line("ml->global_variables_size = 0;");
+    printer->end_block(2);
 
-    printer->add_newline(1);
     printer->add_line("/** initialize mechanism instance variables */");
     printer->start_block("static inline void setup_instance(NrnThread* nt, Memb_list* ml)");
-    printer->add_line("assert(ml->instance);");
-    printer->fmt_line("assert(ml->instance_size == sizeof({}));", instance_struct());
-    printer->fmt_line("auto* const inst = static_cast<{0}*>(ml->instance);", instance_struct());
+    cast_inst_and_assert_validity();
 
     std::string stride;
     printer->add_line("int pnodecount = ml->_nodecount_padded;");
@@ -3193,49 +3193,47 @@ void CodegenCVisitor::print_instance_variable_setup() {
 
     printer->add_line("Datum* indexes = ml->pdata;");
 
-    std::string float_type = default_float_data_type();
-    std::string int_type = default_int_data_type();
-    std::string float_type_pointer = float_type + "*";
-    std::string int_type_pointer = int_type + "*";
+    auto const float_type = default_float_data_type();
 
     int id = 0;
-    std::vector<std::string> variables_to_free;
-
+    std::vector<std::pair<std::string, bool>> pointer_members{{"celsius", false},
+                                                              {"global", false}};  // TODO celsius
+                                                                                   // on demand
+    pointer_members.reserve(pointer_members.size() + codegen_float_variables.size() +
+                            codegen_int_variables.size());
     for (auto& var: codegen_float_variables) {
         auto name = var->get_name();
         auto range_var_type = get_range_var_float_type(var);
         if (float_type == range_var_type) {
-            auto variable = fmt::format("ml->data+{}{}", id, stride);
-            auto device_variable = get_variable_device_pointer(variable, float_type_pointer);
-            printer->fmt_line("inst->{} = {};", name, device_variable);
+            auto const variable = fmt::format("ml->data+{}{}", id, stride);
+            printer->fmt_line("inst->{} = {};", name, variable);
         } else {
             // TODO what MOD file exercises this?
             printer->fmt_line("inst->{} = setup_range_variable(ml->data+{}{}, pnodecount);",
                               name,
                               id,
                               stride);
-            variables_to_free.push_back(name);
         }
+        pointer_members.push_back({std::move(name), true});
         id += var->get_length();
     }
 
     for (auto& var: codegen_int_variables) {
         auto name = var.symbol->get_name();
-        std::string variable = name;
-        std::string type;
-        if (var.is_index || var.is_integer) {
-            variable = "ml->pdata";
-            type = int_type_pointer;
-        } else if (var.is_vdata) {
-            variable = "nt->_vdata";
-            type = "void**";
-        } else {
-            variable = "nt->_data";
-            type = info.artificial_cell ? "void*" : float_type_pointer;
-        }
-        auto device_variable = get_variable_device_pointer(variable, type);
-        printer->fmt_line("inst->{} = {};", name, device_variable);
+        auto const variable = [&var]() {
+            if (var.is_index || var.is_integer) {
+                return "ml->pdata";
+            } else if (var.is_vdata) {
+                return "nt->_vdata";
+            } else {
+                return "nt->_data";
+            }
+        }();
+        printer->fmt_line("inst->{} = {};", name, variable);
+        pointer_members.push_back({std::move(name), true});
     }
+
+    print_instance_variable_transfer_to_device(pointer_members);
 
     printer->end_block(1);  // setup_instance
 }
@@ -3338,17 +3336,6 @@ void CodegenCVisitor::print_global_function_common_code(BlockType type,
     printer->add_newline(1);
 }
 
-void CodegenCVisitor::print_global_struct_update_from_global_vars() const {
-    printer->add_line("// Update global state struct from true globals");
-    // Update the version inside the instance struct from the global version
-    printer->fmt_line("{} = {};",
-                      get_variable_name(naming::CELSIUS_VARIABLE, true),
-                      get_variable_name(naming::CELSIUS_VARIABLE, false));
-    printer->add_line(
-        "// Update the instance struct copies of 'global' variables from the global struct");
-    printer->fmt_line("inst->global = {}_global;", info.mod_suffix);
-}
-
 void CodegenCVisitor::print_nrn_init(bool skip_init_check) {
     codegen = true;
     printer->add_newline(2);
@@ -3374,10 +3361,6 @@ void CodegenCVisitor::print_nrn_init(bool skip_init_check) {
         printer->end_block(1);
         // clang-format on
     }
-
-    // update global variable as those might be updated via python/hoc API
-    print_global_struct_update_from_global_vars();
-    print_instance_variable_transfer_to_device();
 
     if (skip_init_check) {
         printer->start_block("if (_nrn_skip_initmodel == 0)");

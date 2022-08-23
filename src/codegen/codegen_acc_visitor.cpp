@@ -242,15 +242,6 @@ bool CodegenAccVisitor::nrn_cur_reduction_loop_required() {
 }
 
 
-std::string CodegenAccVisitor::get_variable_device_pointer(const std::string& variable,
-                                                           const std::string& /* type */) const {
-    if (info.artificial_cell) {
-        return variable;
-    }
-    return fmt::format("nt->compute_gpu ? cnrn_target_deviceptr({}) : {}", variable, variable);
-}
-
-
 void CodegenAccVisitor::print_newtonspace_transfer_to_device() const {
     int list_num = info.derivimplicit_list_num;
     printer->start_block("if(nt->compute_gpu)");
@@ -267,10 +258,17 @@ void CodegenAccVisitor::print_newtonspace_transfer_to_device() const {
 }
 
 
-void CodegenAccVisitor::print_instance_variable_transfer_to_device() const {
+void CodegenAccVisitor::print_instance_variable_transfer_to_device(
+    std::vector<std::pair<std::string, bool>> const& pointer_members) const {
     if (!info.artificial_cell) {
-        printer->start_block("if(nt->compute_gpu)");
-        printer->add_line("cnrn_target_update_on_device(inst);");
+        printer->start_block("if (nt->compute_gpu && !cnrn_target_is_present(inst))");
+        printer->fmt_line("auto d_inst = *inst;");
+        for (auto const& [pointer_member, assume_already_present]: pointer_members) {
+            printer->fmt_line("d_inst.{0} = cnrn_target_{1}(d_inst.{0});",
+                              pointer_member,
+                              assume_already_present ? "deviceptr" : "copyin");
+        }
+        printer->add_line("cnrn_target_memcpy_to_device(cnrn_target_deviceptr(inst), &d_inst);");
         printer->end_block(1);
     }
 }
