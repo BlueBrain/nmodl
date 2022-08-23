@@ -3112,6 +3112,11 @@ void CodegenCVisitor::print_ion_variable() {
 }
 
 
+void CodegenCVisitor::print_global_variable_device_update_annotation() {
+    // nothing for cpu
+}
+
+
 void CodegenCVisitor::print_setup_range_variable() {
     auto type = float_data_type();
     printer->add_newline(2);
@@ -3385,6 +3390,9 @@ void CodegenCVisitor::print_nrn_init(bool skip_init_check) {
         printer->end_block(1);
         // clang-format on
     }
+
+    // update global variable as those might be updated via python/hoc API
+    print_global_variable_device_update_annotation();
 
     if (skip_init_check) {
         printer->start_block("if (_nrn_skip_initmodel == 0)");
