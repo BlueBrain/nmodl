@@ -7,6 +7,7 @@
 #include "visitors/implicit_argument_visitor.hpp"
 #include "ast/function_call.hpp"
 #include "ast/string.hpp"
+#include "lexer/token_mapping.hpp"
 
 #include <cassert>
 #include <iostream>
@@ -14,8 +15,6 @@
 namespace nmodl {
 namespace visitor {
 
-// TODO should this also handle the case covered by
-// needs_neuron_thread_first_arg?
 void ImplicitArgumentVisitor::visit_function_call(ast::FunctionCall& node) {
     auto function_name = node.get_node_name();
     auto const& arguments = node.get_arguments();
@@ -26,6 +25,14 @@ void ImplicitArgumentVisitor::visit_function_call(ast::FunctionCall& node) {
         if (arguments.size() == 4) {
             auto new_arguments = arguments;
             new_arguments.insert(new_arguments.end(), std::make_shared<ast::String>("celsius"));
+            node.set_arguments(std::move(new_arguments));
+        }
+    } else if (nmodl::details::needs_neuron_thread_first_arg(function_name)) {
+        // We need to insert `nt` as the first argument if it's not already
+        // there
+        if (arguments.empty() || arguments.front()->get_node_name() != "nt") {
+            auto new_arguments = arguments;
+            new_arguments.insert(new_arguments.begin(), std::make_shared<ast::String>("nt"));
             node.set_arguments(std::move(new_arguments));
         }
     }
