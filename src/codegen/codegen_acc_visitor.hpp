@@ -92,13 +92,12 @@ class CodegenAccVisitor: public CodegenCVisitor {
     /// transfer newtonspace structure to device
     void print_newtonspace_transfer_to_device() const override;
 
-    // update instance variable object pointer on the gpu device
+    /// copy the instance struct to the device
     void print_instance_variable_transfer_to_device(
-        std::vector<std::pair<std::string, bool>> const& pointer_members) const override;
+        std::vector<std::string> const& ptr_members) const override;
 
-    // TODO
-    void print_instance_variable_deletion_from_device(
-        std::vector<std::pair<std::string, bool>> const& pointer_members) const override;
+    /// delete the instance struct from the device
+    void print_instance_variable_deletion_from_device() const override;
 
     // update derivimplicit advance flag on the gpu device
     void print_deriv_advance_flag_transfer_to_device() const override;

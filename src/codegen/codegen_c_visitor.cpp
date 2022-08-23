@@ -1040,15 +1040,17 @@ void CodegenCVisitor::print_channel_iteration_tiling_block_end() {
     // backend specific, do nothing
 }
 
+
 void CodegenCVisitor::print_instance_variable_transfer_to_device(
-    std::vector<std::pair<std::string, bool>> const& /* pointer_members */) const {
+    std::vector<std::string> const& ptr_members) const {
     // backend specific, do nothing
 }
 
-void CodegenCVisitor::print_instance_variable_deletion_from_device(
-    std::vector<std::pair<std::string, bool>> const& /* pointer_members */) const {
+
+void CodegenCVisitor::print_instance_variable_deletion_from_device() const {
     // backend specific, do nothing
 }
+
 
 void CodegenCVisitor::print_deriv_advance_flag_transfer_to_device() const {
     // backend specific, do nothing
@@ -3213,11 +3215,10 @@ void CodegenCVisitor::print_instance_variable_setup() {
     auto const float_type = default_float_data_type();
 
     int id = 0;
-    std::vector<std::pair<std::string, bool>> pointer_members{{"celsius", false},
-                                                              {"global", false}};  // TODO celsius
-                                                                                   // on demand
-    pointer_members.reserve(pointer_members.size() + codegen_float_variables.size() +
-                            codegen_int_variables.size());
+    // TODO celsius on demand
+    std::vector<std::string> ptr_members{"celsius", "global"};
+    ptr_members.reserve(ptr_members.size() + codegen_float_variables.size() +
+                        codegen_int_variables.size());
     for (auto& var: codegen_float_variables) {
         auto name = var->get_name();
         auto range_var_type = get_range_var_float_type(var);
@@ -3231,7 +3232,7 @@ void CodegenCVisitor::print_instance_variable_setup() {
                               id,
                               stride);
         }
-        pointer_members.push_back({std::move(name), true});
+        ptr_members.push_back(std::move(name));
         id += var->get_length();
     }
 
@@ -3247,7 +3248,7 @@ void CodegenCVisitor::print_instance_variable_setup() {
             }
         }();
         printer->fmt_line("inst->{} = {};", name, variable);
-        pointer_members.push_back({std::move(name), true});
+        ptr_members.push_back(std::move(name));
     }
     printer->start_block("if (nt->compute_gpu)");
     printer->add_line("copy_instance_to_device(*inst);");
@@ -3257,12 +3258,12 @@ void CodegenCVisitor::print_instance_variable_setup() {
     printer->add_line("// Set up the device-side copy of the instance structure");
     printer->fmt_start_block("static inline void copy_instance_to_device({} const& inst)",
                              instance_struct());
-    print_instance_variable_transfer_to_device(pointer_members);
+    print_instance_variable_transfer_to_device(ptr_members);
     printer->end_block(2);  // copy_instance_to_device
 
     printer->fmt_start_block("static inline void delete_instance_from_device({}& inst)",
                              instance_struct());
-    print_instance_variable_deletion_from_device(pointer_members);
+    print_instance_variable_deletion_from_device();
     printer->end_block(2);  // delete_instance_from_device
 }
 
@@ -3391,6 +3392,8 @@ void CodegenCVisitor::print_nrn_init(bool skip_init_check) {
     }
 
     // update global variable as those might be updated via python/hoc API
+    // NOTE: CoreNEURON has enough information to do this on its own, which
+    // would be neater.
     print_global_variable_device_update_annotation();
 
     if (skip_init_check) {

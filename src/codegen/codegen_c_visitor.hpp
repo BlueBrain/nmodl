@@ -1080,17 +1080,19 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
-     * Print the code to copy instance variable to device
+     * Print the code to copy instance struct members to the device,
+     * substituting host pointers for device ones.
+     *
+     * \param ptr_members Members to update.
      */
     virtual void print_instance_variable_transfer_to_device(
-        std::vector<std::pair<std::string, bool>> const& pointer_members) const;
+        std::vector<std::string> const& ptr_members) const;
 
 
     /**
-     * Print the code to delete the instance structure from the device
+     * Print the code to delete the instance structure from the device.
      */
-    virtual void print_instance_variable_deletion_from_device(
-        std::vector<std::pair<std::string, bool>> const& pointer_members) const;
+    virtual void print_instance_variable_deletion_from_device() const;
 
 
     /**
