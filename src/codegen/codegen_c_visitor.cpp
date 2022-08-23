@@ -3168,7 +3168,7 @@ void CodegenCVisitor::print_instance_variable_setup() {
     printer->add_line("assert(!ml->instance);");
     printer->add_line("assert(!ml->global_variables);");
     printer->add_line("assert(ml->global_variables_size == 0);");
-    printer->fmt_line("auto* inst = new {}{{}};", instance_struct());
+    printer->fmt_line("auto* const inst = new {}{{}};", instance_struct());
     printer->fmt_line("assert(inst->global = &{});", global_struct_instance());
     printer->add_line("ml->instance = inst;");
     printer->add_line("ml->global_variables = inst->global;");
@@ -3176,7 +3176,7 @@ void CodegenCVisitor::print_instance_variable_setup() {
     printer->end_block(2);
 
     auto const cast_inst_and_assert_validity = [&]() {
-        printer->fmt_line("auto* inst = static_cast<{}*>(ml->instance);", instance_struct());
+        printer->fmt_line("auto* const inst = static_cast<{}*>(ml->instance);", instance_struct());
         printer->add_line("assert(inst);");
         printer->add_line("assert(inst->global);");
         printer->fmt_line("assert(inst->global == &{});", global_struct_instance());
