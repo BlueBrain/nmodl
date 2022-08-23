@@ -125,8 +125,8 @@ if(NOT NMODL_3RDPARTY_USE_FMT AND
      COMPILER_VERSION_MAJOR LESS_EQUAL 22 AND
      COMPILER_VERSION_MINOR LESS_EQUAL 3) OR
      CMAKE_CXX_COMPILER_ID STREQUAL "INTEL"))
-  message(ERROR "fmt might generate issues with NVHPC <=22.3 and Intel compiler when installed with
-                 C++11 or later standard enabled")
+  message(FATAL_ERROR "fmt might generate issues with NVHPC <=22.3 and Intel compiler when installed
+                       with C++11 or later standard enabled")
 endif()
 cpp_cc_git_submodule(json BUILD PACKAGE nlohmann_json REQUIRED)
 cpp_cc_git_submodule(pybind11 BUILD PACKAGE pybind11 REQUIRED)
