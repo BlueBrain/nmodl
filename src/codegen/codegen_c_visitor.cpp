@@ -2392,12 +2392,16 @@ std::string CodegenCVisitor::get_variable_name(const std::string& name, bool use
         return std::string("nt->_") + naming::NTHREAD_T_VARIABLE;
     }
 
-    if (varname == naming::CELSIUS_VARIABLE) {
+    auto const iter =
+        std::find_if(info.neuron_global_variables.begin(),
+                     info.neuron_global_variables.end(),
+                     [&varname](auto const& entry) { return entry.first->get_name() == varname; });
+    if (iter != info.neuron_global_variables.end()) {
         std::string ret;
         if (use_instance) {
             ret = "*(inst->";
         }
-        ret.append(naming::CELSIUS_VARIABLE);
+        ret.append(varname);
         if (use_instance) {
             ret.append(")");
         }
@@ -3049,10 +3053,14 @@ void CodegenCVisitor::print_mechanism_range_var_structure(bool print_initialiser
     printer->add_line("/** all mechanism instance variables and global variables */");
     printer->fmt_start_block("struct {} ", instance_struct());
 
-    // TODO figure out which globals (celsius, pi, secondorder) are used
-
-    // TODO dynamically [don't] include this depending on whether it's used
-    printer->fmt_line("double* celsius{};", print_initialisers ? "{&coreneuron::celsius}" : "");
+    for (auto const& [var, type]: info.neuron_global_variables) {
+        auto const name = var->get_name();
+        printer->fmt_line("{}* {}{};",
+                          type,
+                          name,
+                          print_initialisers ? fmt::format("{{&coreneuron::{}}}", name)
+                                             : std::string{});
+    }
     for (auto& var: codegen_float_variables) {
         auto name = var->get_name();
         auto type = get_range_var_float_type(var);
@@ -3241,7 +3249,9 @@ void CodegenCVisitor::print_instance_variable_setup() {
 
     int id = 0;
     std::vector<std::string> ptr_members{naming::INST_GLOBAL_MEMBER};
-    ptr_members.push_back(naming::CELSIUS_VARIABLE);  // TODO on demand
+    for (auto const& [var, type]: info.neuron_global_variables) {
+        ptr_members.push_back(var->get_name());
+    }
     ptr_members.reserve(ptr_members.size() + codegen_float_variables.size() +
                         codegen_int_variables.size());
     for (auto& var: codegen_float_variables) {

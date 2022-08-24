@@ -8,6 +8,7 @@
 #include "ast/ast_decl.hpp"
 #include "ast/function_call.hpp"
 #include "ast/string.hpp"
+#include "codegen/codegen_naming.hpp"
 #include "lexer/token_mapping.hpp"
 
 namespace nmodl {
@@ -22,7 +23,8 @@ void ImplicitArgumentVisitor::visit_function_call(ast::FunctionCall& node) {
         // function in CoreNEURON has a 5th argument for that.
         if (arguments.size() == 4) {
             auto new_arguments = arguments;
-            new_arguments.insert(new_arguments.end(), std::make_shared<ast::String>("celsius"));
+            new_arguments.insert(new_arguments.end(),
+                                 std::make_shared<ast::String>(codegen::naming::CELSIUS_VARIABLE));
             node.set_arguments(std::move(new_arguments));
         }
     } else if (nmodl::details::needs_neuron_thread_first_arg(function_name)) {
