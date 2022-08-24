@@ -101,7 +101,7 @@ $(document).ready(function(){initNavTree('classnmodl_1_1visitor_1_1_semantic_ana
 <div class="contents">
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00036">36</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00037">37</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>&gt;</code></p>
 <div class="dynheader">
@@ -571,9 +571,12 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:abae9b5d11d661e22303535cb79de1398"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#abae9b5d11d661e22303535cb79de1398">one_arg_in_procedure_function</a> = false</td></tr>
 <tr class="memdesc:abae9b5d11d661e22303535cb79de1398"><td class="mdescLeft">&#160;</td><td class="mdescRight">true if the procedure or the function contains only one argument  <a href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#abae9b5d11d661e22303535cb79de1398">More...</a><br /></td></tr>
 <tr class="separator:abae9b5d11d661e22303535cb79de1398"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a55042ca257a0a0d08a5cd146bbfd0711"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a55042ca257a0a0d08a5cd146bbfd0711">in_procedure_function</a> = false</td></tr>
-<tr class="memdesc:a55042ca257a0a0d08a5cd146bbfd0711"><td class="mdescLeft">&#160;</td><td class="mdescRight">true if we are in a procedure or a function block  <a href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a55042ca257a0a0d08a5cd146bbfd0711">More...</a><br /></td></tr>
-<tr class="separator:a55042ca257a0a0d08a5cd146bbfd0711"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92f2fb4fed52101d4c7fd59221a9d12c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a92f2fb4fed52101d4c7fd59221a9d12c">in_procedure</a> = false</td></tr>
+<tr class="memdesc:a92f2fb4fed52101d4c7fd59221a9d12c"><td class="mdescLeft">&#160;</td><td class="mdescRight">true if we are in a procedure block  <a href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a92f2fb4fed52101d4c7fd59221a9d12c">More...</a><br /></td></tr>
+<tr class="separator:a92f2fb4fed52101d4c7fd59221a9d12c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a91b8ab1a73ce4cc96f4076c8d6b165ca"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a91b8ab1a73ce4cc96f4076c8d6b165ca">in_function</a> = false</td></tr>
+<tr class="memdesc:a91b8ab1a73ce4cc96f4076c8d6b165ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">true if we are in a function block  <a href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a91b8ab1a73ce4cc96f4076c8d6b165ca">More...</a><br /></td></tr>
+<tr class="separator:a91b8ab1a73ce4cc96f4076c8d6b165ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa64fa814c90e3dac938c7378e2acc330"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#aa64fa814c90e3dac938c7378e2acc330">is_point_process</a> = false</td></tr>
 <tr class="memdesc:aa64fa814c90e3dac938c7378e2acc330"><td class="mdescLeft">&#160;</td><td class="mdescRight">true if the mod file is of type point process  <a href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#aa64fa814c90e3dac938c7378e2acc330">More...</a><br /></td></tr>
 <tr class="separator:aa64fa814c90e3dac938c7378e2acc330"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -657,7 +660,7 @@ Private Attributes</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#ae24208dec1498925f2e858bc3f57d327">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8cpp_source.html#l00058">58</a> of file <a class="el" href="semantic__analysis__visitor_8cpp_source.html">semantic_analysis_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8cpp_source.html#l00070">70</a> of file <a class="el" href="semantic__analysis__visitor_8cpp_source.html">semantic_analysis_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -755,6 +758,7 @@ Private Attributes</h2></td></tr>
 
 <p>Visit a table statement and check that the arity of the block were 1. </p>
 <p>&lt;&ndash; This code is for check 1</p>
+<p>--&gt; &lt;&ndash; This code is for check 3</p>
 <p>--&gt;</p>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a1a2f57a9e51cfb52b4d454e58b18ea79">nmodl::visitor::ConstVisitor</a>.</p>
@@ -784,12 +788,12 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00038">38</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00039">39</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a55042ca257a0a0d08a5cd146bbfd0711"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a55042ca257a0a0d08a5cd146bbfd0711">&#9670;&nbsp;</a></span>in_procedure_function</h2>
+<a id="a91b8ab1a73ce4cc96f4076c8d6b165ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a91b8ab1a73ce4cc96f4076c8d6b165ca">&#9670;&nbsp;</a></span>in_function</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -798,7 +802,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool nmodl::visitor::SemanticAnalysisVisitor::in_procedure_function = false</td>
+          <td class="memname">bool nmodl::visitor::SemanticAnalysisVisitor::in_function = false</td>
         </tr>
       </table>
   </td>
@@ -808,9 +812,35 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>true if we are in a procedure or a function block </p>
+<p>true if we are in a function block </p>
 
-<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00043">43</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00046">46</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a92f2fb4fed52101d4c7fd59221a9d12c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a92f2fb4fed52101d4c7fd59221a9d12c">&#9670;&nbsp;</a></span>in_procedure</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool nmodl::visitor::SemanticAnalysisVisitor::in_procedure = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>true if we are in a procedure block </p>
+
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00044">44</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -836,7 +866,7 @@ Private Attributes</h2></td></tr>
 
 <p>true if the mod file is of type point process </p>
 
-<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00045">45</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00048">48</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -862,7 +892,7 @@ Private Attributes</h2></td></tr>
 
 <p>true if the procedure or the function contains only one argument </p>
 
-<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00041">41</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00042">42</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
 
 </div>
 </div>
