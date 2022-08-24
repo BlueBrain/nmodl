@@ -135,7 +135,7 @@ setup(
         "jupyter",
         "myst_parser",
         "mistune<2",  # prevents a version conflict with nbconvert
-        "nbconvert",
+        "nbconvert<3",
         "nbsphinx>=0.3.2",
         "pytest>=3.7.2",
         "sphinx<5", # myst_parser requires <5 and pip falls over
