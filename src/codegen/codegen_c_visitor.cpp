@@ -3016,6 +3016,9 @@ void CodegenCVisitor::print_mechanism_range_var_structure(bool print_initialiser
     printer->add_newline(2);
     printer->add_line("/** all mechanism instance variables and global variables */");
     printer->fmt_start_block("struct {} ", instance_struct());
+
+    // TODO figure out which globals (celsius, pi, secondorder) are used
+
     // TODO dynamically [don't] include this depending on whether it's used
     printer->fmt_line("double* celsius{};", print_initialisers ? "{&coreneuron::celsius}" : "");
     for (auto& var: codegen_float_variables) {
