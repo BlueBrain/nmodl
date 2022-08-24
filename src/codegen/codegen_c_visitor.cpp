@@ -2309,7 +2309,7 @@ std::string CodegenCVisitor::int_variable_name(const IndexVariableInfo& symbol,
 std::string CodegenCVisitor::global_variable_name(const SymbolType& symbol,
                                                   bool use_instance) const {
     if (use_instance) {
-        return fmt::format("inst->global->{}", symbol->get_name());
+        return fmt::format("inst->{}->{}", naming::INST_GLOBAL_MEMBER, symbol->get_name());
     } else {
         return fmt::format("{}.{}", global_struct_instance(), symbol->get_name());
     }
@@ -3074,8 +3074,9 @@ void CodegenCVisitor::print_mechanism_range_var_structure(bool print_initialiser
         }
     }
 
-    printer->fmt_line("{}* global{};",
+    printer->fmt_line("{}* {}{};",
                       global_struct(),
+                      naming::INST_GLOBAL_MEMBER,
                       print_initialisers ? fmt::format("{{&{}}}", global_struct_instance())
                                          : std::string{});
     printer->end_block(";");
@@ -3189,18 +3190,22 @@ void CodegenCVisitor::print_instance_variable_setup() {
     printer->add_line("assert(!ml->global_variables);");
     printer->add_line("assert(ml->global_variables_size == 0);");
     printer->fmt_line("auto* const inst = new {}{{}};", instance_struct());
-    printer->fmt_line("assert(inst->global = &{});", global_struct_instance());
+    printer->fmt_line("assert(inst->{} = &{});",
+                      naming::INST_GLOBAL_MEMBER,
+                      global_struct_instance());
     printer->add_line("ml->instance = inst;");
-    printer->add_line("ml->global_variables = inst->global;");
+    printer->fmt_line("ml->global_variables = inst->{};", naming::INST_GLOBAL_MEMBER);
     printer->fmt_line("ml->global_variables_size = sizeof({});", global_struct());
     printer->end_block(2);
 
     auto const cast_inst_and_assert_validity = [&]() {
         printer->fmt_line("auto* const inst = static_cast<{}*>(ml->instance);", instance_struct());
         printer->add_line("assert(inst);");
-        printer->add_line("assert(inst->global);");
-        printer->fmt_line("assert(inst->global == &{});", global_struct_instance());
-        printer->add_line("assert(inst->global == ml->global_variables);");
+        printer->fmt_line("assert(inst->{});", naming::INST_GLOBAL_MEMBER);
+        printer->fmt_line("assert(inst->{} == &{});",
+                          naming::INST_GLOBAL_MEMBER,
+                          global_struct_instance());
+        printer->fmt_line("assert(inst->{} == ml->global_variables);", naming::INST_GLOBAL_MEMBER);
         printer->fmt_line("assert(ml->global_variables_size == sizeof({}));", global_struct());
     };
 
@@ -3235,8 +3240,8 @@ void CodegenCVisitor::print_instance_variable_setup() {
     auto const float_type = default_float_data_type();
 
     int id = 0;
-    // TODO celsius on demand
-    std::vector<std::string> ptr_members{"celsius", "global"};
+    std::vector<std::string> ptr_members{naming::INST_GLOBAL_MEMBER};
+    ptr_members.push_back(naming::CELSIUS_VARIABLE);  // TODO on demand
     ptr_members.reserve(ptr_members.size() + codegen_float_variables.size() +
                         codegen_int_variables.size());
     for (auto& var: codegen_float_variables) {

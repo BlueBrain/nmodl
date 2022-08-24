@@ -89,6 +89,9 @@ static constexpr char NTHREAD_D_SHADOW[] = "_shadow_d";
 /// global temperature variable
 static constexpr char CELSIUS_VARIABLE[] = "celsius";
 
+/// instance struct member pointing to the global variable structure
+static constexpr char INST_GLOBAL_MEMBER[] = "global";
+
 /// t variable in neuron thread structure
 static constexpr char NTHREAD_T_VARIABLE[] = "t";
 
