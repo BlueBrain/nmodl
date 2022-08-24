@@ -12,6 +12,8 @@
 #include "codegen/codegen_helper_visitor.hpp"
 #include "parser/nmodl_driver.hpp"
 #include "test/unit/utils/test_utils.hpp"
+#include "visitors/implicit_argument_visitor.hpp"
+#include "visitors/perf_visitor.hpp"
 #include "visitors/symtab_visitor.hpp"
 
 using Catch::Matchers::Contains;  // ContainsSubstring in newer Catch2
@@ -246,6 +248,24 @@ SCENARIO("Check instance variable definition order", "[codegen][var_order]") {
     }
 }
 
+std::string get_instance_structure(std::string nmodl_text) {
+    // parse mod file & print mechanism structure
+    auto const ast = NmodlDriver{}.parse_string(nmodl_text);
+    // add implicit arguments
+    ImplicitArgumentVisitor{}.visit_program(*ast);
+    // update the symbol table for PerfVisitor
+    SymtabVisitor{}.visit_program(*ast);
+    // we need the read/write counts so the codegen knows whether or not
+    // global variables are used
+    PerfVisitor{}.visit_program(*ast);
+    // setup codegen
+    std::stringstream ss{};
+    CodegenCVisitor cv{"temp.mod", ss, "double", false};
+    cv.setup(*ast);
+    cv.print_mechanism_range_var_structure(true);
+    return ss.str();
+}
+
 SCENARIO("Check parameter constness with VERBATIM block",
          "[codegen][verbatim_variable_constness]") {
     GIVEN("A mod file containing parameter range variables that are updated in VERBATIM block") {
@@ -270,25 +290,67 @@ SCENARIO("Check parameter constness with VERBATIM block",
         )";
 
         THEN("Variable used in VERBATIM shouldn't be marked as const") {
-            std::stringstream ss;
-
-            /// parse mod file & print mechanism structure
-            const auto& ast = NmodlDriver().parse_string(nmodl_text);
-            auto cvisitor = create_c_visitor(ast, nmodl_text, ss);
-            cvisitor->print_mechanism_range_var_structure(true);
-
+            auto const generated = get_instance_structure(nmodl_text);
             std::string expected_code = R"(
                 /** all mechanism instance variables and global variables */
                 struct IntervalFire_Instance  {
-                    double* celsius{&coreneuron::celsius};
                     double* __restrict__ invl{};
                     const double* __restrict__ burst_start{};
                     double* __restrict__ v_unused{};
                     IntervalFire_Store* global{&IntervalFire_global};
                 };
             )";
+            REQUIRE(reindent_text(generated) == reindent_text(expected_code));
+        }
+    }
+}
 
-            REQUIRE(reindent_text(ss.str()) == reindent_text(expected_code));
+SCENARIO("Check NEURON globals are added to the instance struct on demand",
+         "[codegen][global_variables]") {
+    GIVEN("A MOD file that uses global variables") {
+        std::string const nmodl_text = R"(
+            NEURON {
+                SUFFIX GlobalTest
+                RANGE temperature
+            }
+            INITIAL {
+                temperature = celsius + secondorder + pi
+            }
+        )";
+        THEN("The instance struct should contain these variables") {
+            auto const generated = get_instance_structure(nmodl_text);
+            REQUIRE_THAT(generated, Contains("double* __restrict__ celsius{&coreneuron::celsius}"));
+            REQUIRE_THAT(generated, Contains("double* __restrict__ pi{&coreneuron::pi}"));
+            REQUIRE_THAT(generated,
+                         Contains("int* __restrict__ secondorder{&coreneuron::secondorder}"));
+        }
+    }
+    GIVEN("A MOD file that implicitly uses global variables") {
+        std::string const nmodl_text = R"(
+            NEURON {
+                SUFFIX ImplicitTest
+            }
+            INITIAL {
+                LOCAL x
+                x = nrn_ghk(1, 2, 3, 4)
+            }
+        )";
+        THEN("The instance struct should contain celsius for the implicit 5th argument") {
+            auto const generated = get_instance_structure(nmodl_text);
+            REQUIRE_THAT(generated, Contains("celsius"));
+        }
+    }
+    GIVEN("A MOD file that does not touch celsius, secondorder or pi") {
+        std::string const nmodl_text = R"(
+            NEURON {
+                SUFFIX GlobalTest
+            }
+        )";
+        THEN("The instance struct should not contain those variables") {
+            auto const generated = get_instance_structure(nmodl_text);
+            REQUIRE_THAT(generated, !Contains("celsius"));
+            REQUIRE_THAT(generated, !Contains("pi"));
+            REQUIRE_THAT(generated, !Contains("secondorder"));
         }
     }
 }

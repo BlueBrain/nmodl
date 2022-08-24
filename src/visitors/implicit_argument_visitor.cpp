@@ -24,7 +24,8 @@ void ImplicitArgumentVisitor::visit_function_call(ast::FunctionCall& node) {
         if (arguments.size() == 4) {
             auto new_arguments = arguments;
             new_arguments.insert(new_arguments.end(),
-                                 std::make_shared<ast::String>(codegen::naming::CELSIUS_VARIABLE));
+                                 std::make_shared<ast::Name>(std::make_shared<ast::String>(
+                                     codegen::naming::CELSIUS_VARIABLE)));
             node.set_arguments(std::move(new_arguments));
         }
     } else if (nmodl::details::needs_neuron_thread_first_arg(function_name)) {

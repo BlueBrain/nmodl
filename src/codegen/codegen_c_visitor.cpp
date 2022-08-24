@@ -3055,8 +3055,9 @@ void CodegenCVisitor::print_mechanism_range_var_structure(bool print_initialiser
 
     for (auto const& [var, type]: info.neuron_global_variables) {
         auto const name = var->get_name();
-        printer->fmt_line("{}* {}{};",
+        printer->fmt_line("{}* {}{}{};",
                           type,
+                          ptr_type_qualifier(),
                           name,
                           print_initialisers ? fmt::format("{{&coreneuron::{}}}", name)
                                              : std::string{});

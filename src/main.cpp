@@ -530,16 +530,16 @@ int main(int argc, const char* argv[]) {
             PerfVisitor(file).visit_program(*ast);
         }
 
+        // Add implicit arguments (like celsius, nt) to NEURON functions (like
+        // nrn_ghk, at_time) whose signatures we have to massage.
+        ImplicitArgumentVisitor{}.visit_program(*ast);
+        SymtabVisitor(update_symtab).visit_program(*ast);
+
         {
             // make sure to run perf visitor because code generator
             // looks for read/write counts const/non-const declaration
             PerfVisitor().visit_program(*ast);
         }
-
-        // Add implicit arguments (like celsius, nt) to NEURON functions (like
-        // nrn_ghk, at_time) whose signatures we have to massage.
-        ImplicitArgumentVisitor{}.visit_program(*ast);
-        SymtabVisitor(update_symtab).visit_program(*ast);
 
         {
             if (ispc_backend) {
