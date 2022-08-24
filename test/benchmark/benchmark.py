@@ -25,12 +25,16 @@ def main():
     cfg = nmodl.CodeGenConfig()
     cfg.llvm_vector_width = args.vec
     cfg.llvm_opt_level_ir = 2
+    cfg.llvm_fast_math_flags = ["nnan", "contract", "afn"]
+    cfg.llvm_no_debug = False
     cfg.nmodl_ast = True
     fname = args.file
     if args.gpu:  # GPU enabled
         cfg.llvm_math_library = "libdevice"
         cfg.llvm_gpu_name = "nvptx64"
         cfg.llvm_gpu_target_architecture = "sm_70"
+        # Disable debug symbols generation for GPU code since the PTX generated is not valid
+        cfg.llvm_no_debug = True
         if not os.environ.get("CUDA_HOME"):
             raise RuntimeError("CUDA_HOME environment variable not set")
         cfg.shared_lib_paths = [os.getenv("CUDA_HOME") + "/nvvm/libdevice/libdevice.10.bc"]
