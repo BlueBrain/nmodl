@@ -3199,7 +3199,7 @@ void CodegenCVisitor::print_instance_variable_setup() {
     printer->add_line("assert(!ml->global_variables);");
     printer->add_line("assert(ml->global_variables_size == 0);");
     printer->fmt_line("auto* const inst = new {}{{}};", instance_struct());
-    printer->fmt_line("assert(inst->{} = &{});",
+    printer->fmt_line("assert(inst->{} == &{});",
                       naming::INST_GLOBAL_MEMBER,
                       global_struct_instance());
     printer->add_line("ml->instance = inst;");
