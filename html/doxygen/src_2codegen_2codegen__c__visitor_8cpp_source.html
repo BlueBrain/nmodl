@@ -3923,7 +3923,7 @@ $(document).ready(function(){initNavTree('src_2codegen_2codegen__c__visitor_8cpp
 <div class="line"><a name="l03827"></a><span class="lineno"> 3827</span>&#160;    <span class="comment">// artificial cells don&#39;t use spike buffering</span></div>
 <div class="line"><a name="l03828"></a><span class="lineno"> 3828</span>&#160;    <span class="comment">// clang-format off</span></div>
 <div class="line"><a name="l03829"></a><span class="lineno"> 3829</span>&#160;    <span class="keywordflow">if</span> (info.artificial_cell) {</div>
-<div class="line"><a name="l03830"></a><span class="lineno"> 3830</span>&#160;        printer-&gt;add_text(fmt::format(<span class="stringliteral">&quot;artcell_net_move(&amp;{}, {}, nt-&gt;_t+&quot;</span>, tqitem, pnt));</div>
+<div class="line"><a name="l03830"></a><span class="lineno"> 3830</span>&#160;        printer-&gt;add_text(fmt::format(<span class="stringliteral">&quot;artcell_net_move(&amp;{}, {}, &quot;</span>, tqitem, pnt));</div>
 <div class="line"><a name="l03831"></a><span class="lineno"> 3831</span>&#160;        print_vector_elements(arguments, <span class="stringliteral">&quot;, &quot;</span>);</div>
 <div class="line"><a name="l03832"></a><span class="lineno"> 3832</span>&#160;        printer-&gt;add_text(<span class="stringliteral">&quot;)&quot;</span>);</div>
 <div class="line"><a name="l03833"></a><span class="lineno"> 3833</span>&#160;    } <span class="keywordflow">else</span> {</div>
