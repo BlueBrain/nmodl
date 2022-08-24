@@ -244,8 +244,10 @@ bool CodegenAccVisitor::nrn_cur_reduction_loop_required() {
 
 void CodegenAccVisitor::print_global_variable_device_update_annotation() {
     if (!info.artificial_cell) {
+        printer->start_block("if (nt->compute_gpu)");
         printer->fmt_line("nrn_pragma_acc(update device ({}))", global_struct_instance());
         printer->fmt_line("nrn_pragma_omp(target update to({}))", global_struct_instance());
+        printer->end_block(1);
     }
 }
 
