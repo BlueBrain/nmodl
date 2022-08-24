@@ -1525,21 +1525,26 @@ void CodegenCVisitor::print_table_check_function(const Block& node) {
             printer->add_newline();
 
 
-            printer->fmt_line("double dx = (tmax - {})/{}.0;", tmin_name, with);
-            printer->fmt_line("{} = 1.0/dx;", mfac_name);
+            printer->fmt_line("double dx = (tmax-{}) / {}.;", tmin_name, with);
+            printer->fmt_line("{} = 1./dx;", mfac_name);
 
-            printer->add_line("int i = 0;");
-            printer->add_line("double x = 0;");
-            printer->fmt_start_block("for(i = 0, x = {}; i < {}; x += dx, i++)",
-                                     tmin_name,
-                                     with + 1);
+            printer->fmt_line("double x = {};", tmin_name);
+            printer->fmt_start_block("for (std::size_t i = 0; i < {}; x += dx, i++)", with + 1);
             auto function = method_name("f_" + name);
-            printer->fmt_line("{}({}, x);", function, internal_method_arguments());
-            for (const auto& variable: table_variables) {
-                auto name = variable->get_node_name();
-                auto instance_name = get_variable_name(name);
+            if (node.is_procedure_block()) {
+                printer->fmt_line("{}({}, x);", function, internal_method_arguments());
+                for (const auto& variable: table_variables) {
+                    auto name = variable->get_node_name();
+                    auto instance_name = get_variable_name(name);
+                    auto table_name = get_variable_name("t_" + name);
+                    printer->fmt_line("{}[i] = {};", table_name, instance_name);
+                }
+            } else {
                 auto table_name = get_variable_name("t_" + name);
-                printer->fmt_line("{}[i] = {};", table_name, instance_name);
+                printer->fmt_line("{}[i] = {}({}, x);",
+                                  table_name,
+                                  function,
+                                  internal_method_arguments());
             }
             printer->end_block(1);
 
@@ -1571,45 +1576,68 @@ void CodegenCVisitor::print_table_replacement_function(const ast::Block& node) {
     printer->start_block();
     {
         const auto& params = node.get_parameters();
-        printer->add_line(fmt::format("if ( {} == 0) {{", use_table_var));
-        printer->add_line(fmt::format("    {}({}, {});",
-                                      function_name,
-                                      internal_method_arguments(),
-                                      params[0].get()->get_node_name()));
-        printer->add_line("     return 0;");
-        printer->add_line("}");
-
-        printer->add_line(fmt::format(
-            "double xi = {} * ({} - {});", mfac_name, params[0].get()->get_node_name(), tmin_name));
-        printer->add_line("if (isnan(xi)) {");
-        for (const auto& var: table_variables) {
-            auto name = get_variable_name(var->get_node_name());
-            printer->add_line(fmt::format("    {} = xi;", name));
+        printer->fmt_start_block("if ({} == 0)", use_table_var);
+        if (node.is_procedure_block()) {
+            printer->fmt_line("{}({}, {});",
+                              function_name,
+                              internal_method_arguments(),
+                              params[0].get()->get_node_name());
+            printer->add_line("return 0;");
+        } else {
+            printer->fmt_line("return {}({}, {});",
+                              function_name,
+                              internal_method_arguments(),
+                              params[0].get()->get_node_name());
         }
-        printer->add_line("    return 0;");
-        printer->add_line("}");
+        printer->end_block(1);
 
-        printer->add_line(fmt::format("if (xi <= 0.0 || xi >= {}) {}", with, "{"));
-        printer->add_line(fmt::format("    int index = (xi <= 0.0) ? 0 : {};", with));
-        for (const auto& variable: table_variables) {
-            auto name = variable->get_node_name();
-            auto instance_name = get_variable_name(name);
+        printer->fmt_line("double xi = {} * ({} - {});",
+                          mfac_name,
+                          params[0].get()->get_node_name(),
+                          tmin_name);
+        printer->start_block("if (isnan(xi))");
+        if (node.is_procedure_block()) {
+            for (const auto& var: table_variables) {
+                auto name = get_variable_name(var->get_node_name());
+                printer->fmt_line("{} = xi;", name);
+            }
+            printer->add_line("return 0;");
+        } else {
+            printer->add_line("return xi;");
+        }
+        printer->end_block(1);
+
+        printer->fmt_start_block("if (xi <= 0. || xi >= {}.)", with);
+        printer->fmt_line("int index = (xi <= 0.) ? 0 : {};", with);
+        if (node.is_procedure_block()) {
+            for (const auto& variable: table_variables) {
+                auto name = variable->get_node_name();
+                auto instance_name = get_variable_name(name);
+                auto table_name = get_variable_name("t_" + name);
+                printer->fmt_line("{} = {}[index];", instance_name, table_name);
+            }
+            printer->add_line("return 0;");
+        } else {
             auto table_name = get_variable_name("t_" + name);
-            printer->add_line(fmt::format("    {} = {}[index];", instance_name, table_name));
+            printer->fmt_line("return {}[index];", table_name);
         }
-        printer->add_line("    return 0;");
-        printer->add_line("}");
+        printer->end_block(1);
 
         printer->add_line("int i = int(xi);");
         printer->add_line("double theta = xi - double(i);");
-        for (const auto& var: table_variables) {
-            auto instance_name = get_variable_name(var->get_node_name());
-            auto table_name = get_variable_name("t_" + var->get_node_name());
-            printer->add_line(
-                fmt::format("{0} = {1}[i] + theta*({1}[i+1]-{1}[i]);", instance_name, table_name));
+        if (node.is_procedure_block()) {
+            for (const auto& var: table_variables) {
+                auto instance_name = get_variable_name(var->get_node_name());
+                auto table_name = get_variable_name("t_" + var->get_node_name());
+                printer->fmt_line("{0} = {1}[i] + theta*({1}[i+1]-{1}[i]);",
+                                  instance_name,
+                                  table_name);
+            }
+            printer->add_line("return 0;");
+        } else {
+            auto table_name = get_variable_name("t_" + name);
+            printer->fmt_line("return {0}[i] + theta * ({0}[i+1] - {0}[i]);", table_name);
         }
-
-        printer->add_line("return 0;");
     }
     printer->end_block(1);
 }
@@ -2611,6 +2639,10 @@ void CodegenCVisitor::print_mechanism_global_var_structure(bool print_initialise
             printer->fmt_line("{}{} mfac_{}{};", qualifier, float_type, name, value_initialise);
             codegen_global_variables.push_back(make_symbol("tmin_" + name));
             codegen_global_variables.push_back(make_symbol("mfac_" + name));
+            if (block->is_function_block()) {
+                printer->fmt_line("{}* {}t_{};", float_type, qualifier, name);
+                codegen_global_variables.push_back(make_symbol("t_" + name));
+            }
         }
 
         for (const auto& variable: info.table_statement_variables) {
