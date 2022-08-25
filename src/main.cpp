@@ -13,6 +13,7 @@
 #include "ast/program.hpp"
 #include "codegen/codegen_acc_visitor.hpp"
 #include "codegen/codegen_c_visitor.hpp"
+#include "codegen/codegen_c_modif_visitor.hpp"
 #include "codegen/codegen_compatibility_visitor.hpp"
 #include "codegen/codegen_cuda_visitor.hpp"
 #include "codegen/codegen_ispc_visitor.hpp"
@@ -544,6 +545,10 @@ int main(int argc, const char* argv[]) {
         {
             if (ispc_backend) {
                 logger->info("Running ISPC backend code generator");
+                CodegenCModifVisitor{}.visit_program(*ast);
+                ast_to_nmodl(*ast, filepath("CModifVisitor"));
+                SymtabVisitor(update_symtab).visit_program(*ast);
+
                 CodegenIspcVisitor visitor(modfile,
                                            output_dir,
                                            data_type,
@@ -553,6 +558,10 @@ int main(int argc, const char* argv[]) {
 
             else if (oacc_backend) {
                 logger->info("Running OpenACC backend code generator");
+                CodegenCModifVisitor{}.visit_program(*ast);
+                ast_to_nmodl(*ast, filepath("CModifVisitor"));
+                SymtabVisitor(update_symtab).visit_program(*ast);
+
                 CodegenAccVisitor visitor(modfile,
                                           output_dir,
                                           data_type,
@@ -562,6 +571,10 @@ int main(int argc, const char* argv[]) {
 
             else if (c_backend) {
                 logger->info("Running C backend code generator");
+                CodegenCModifVisitor{}.visit_program(*ast);
+                ast_to_nmodl(*ast, filepath("CModifVisitor"));
+                SymtabVisitor(update_symtab).visit_program(*ast);
+
                 CodegenCVisitor visitor(modfile,
                                         output_dir,
                                         data_type,
