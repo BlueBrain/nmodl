@@ -44,7 +44,7 @@ SCENARIO("Check insertion of implicit arguments", "[codegen][implicit_arguments]
                 nrn_ghk(-50(mV), .001(mM), 10(mM), 2, -273.15)
             }
         )";
-        auto const modified_nmodl = generate_cpp_after_implicit_argument_visitor(nmodl_text);
+        auto const modified_nmodl = generate_mod_after_implicit_argument_visitor(nmodl_text);
         THEN("at_time should have nt as its first argument") {
             REQUIRE_THAT(modified_nmodl, Contains("at_time(nt, foo)"));
             REQUIRE_THAT(modified_nmodl, Contains("at_time(nt, a+b)"));
