@@ -9,6 +9,7 @@
 #include "visitors/implicit_argument_visitor.hpp"
 #include "visitors/nmodl_visitor.hpp"
 #include "visitors/symtab_visitor.hpp"
+#include "visitors/visitor_utils.hpp"
 
 #include <catch2/catch.hpp>
 
@@ -18,17 +19,15 @@ using nmodl::test_utils::reindent_text;
 using Catch::Matchers::Contains;  // ContainsSubstring in newer Catch2
 
 //=============================================================================
-// Localizer visitor tests
+// Implicit visitor tests
 //=============================================================================
 
-std::string generate_cpp_after_implicit_argument_visitor(std::string const& text) {
+std::string generate_mod_after_implicit_argument_visitor(std::string const& text) {
     parser::NmodlDriver driver{};
     auto const ast = driver.parse_string(text);
     visitor::SymtabVisitor{}.visit_program(*ast);
     visitor::ImplicitArgumentVisitor{}.visit_program(*ast);
-    std::stringstream stream;
-    visitor::NmodlPrintVisitor{stream}.visit_program(*ast);
-    return stream.str();
+    return to_nmodl(*ast);
 }
 
 SCENARIO("Check insertion of implicit arguments", "[codegen][implicit_arguments]") {
