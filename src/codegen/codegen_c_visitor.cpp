@@ -3218,8 +3218,9 @@ void CodegenCVisitor::print_instance_variable_setup() {
         printer->fmt_line("assert(ml->global_variables_size == sizeof({}));", global_struct());
     };
 
-    printer->fmt_line("static inline void copy_instance_to_device({} const& inst);",
-                      instance_struct());
+    printer->fmt_line(
+        "static inline void copy_instance_to_device(NrnThread* nt, Memb_list* ml, {} const* inst);",
+        instance_struct());
     printer->fmt_line("static inline void delete_instance_from_device({}& inst);",
                       instance_struct());
     printer->add_newline();
@@ -3286,14 +3287,13 @@ void CodegenCVisitor::print_instance_variable_setup() {
         printer->fmt_line("inst->{} = {};", name, variable);
         ptr_members.push_back(std::move(name));
     }
-    printer->start_block("if (nt->compute_gpu)");
-    printer->add_line("copy_instance_to_device(*inst);");
-    printer->end_block(1);
+    printer->add_line("copy_instance_to_device(nt, ml, inst);");
     printer->end_block(2);  // setup_instance
 
     printer->add_line("// Set up the device-side copy of the instance structure");
-    printer->fmt_start_block("static inline void copy_instance_to_device({} const& inst)",
-                             instance_struct());
+    printer->fmt_start_block(
+        "static inline void copy_instance_to_device(NrnThread* nt, Memb_list* ml, {} const* inst)",
+        instance_struct());
     print_instance_variable_transfer_to_device(ptr_members);
     printer->end_block(2);  // copy_instance_to_device
 

@@ -273,15 +273,21 @@ void CodegenAccVisitor::print_instance_variable_transfer_to_device(
     if (info.artificial_cell) {
         return;
     }
-    printer->fmt_line("auto tmp = inst;");
-    printer->add_line("auto* d_inst = cnrn_target_is_present(&inst);");
+    printer->start_block("if (!nt->compute_gpu)");
+    printer->add_line("return;");
+    printer->end_block(1);
+    printer->fmt_line("auto tmp = *inst;");
+    printer->add_line("auto* d_inst = cnrn_target_is_present(inst);");
     printer->start_block("if (!d_inst)");
-    printer->add_line("d_inst = cnrn_target_copyin(&inst);");
+    printer->add_line("d_inst = cnrn_target_copyin(inst);");
     printer->end_block(1);
     for (auto const& ptr_mem: ptr_members) {
         printer->fmt_line("tmp.{0} = cnrn_target_deviceptr(tmp.{0});", ptr_mem);
     }
     printer->add_line("cnrn_target_memcpy_to_device(d_inst, &tmp);");
+    printer->add_line("auto* d_ml = cnrn_target_deviceptr(ml);");
+    printer->add_line("void* d_inst_void = d_inst;");
+    printer->add_line("cnrn_target_memcpy_to_device(&(d_ml->instance), &d_inst_void);");
 }
 
 
