@@ -9,12 +9,12 @@
 #include <memory>
 #include <unordered_set>
 
-#include "codegen/codegen_c_modif_visitor.hpp"
-#include "visitors/visitor_utils.hpp"
 #include "ast/ast_decl.hpp"
-#include "ast/table_statement.hpp"
 #include "ast/function_block.hpp"
 #include "ast/string.hpp"
+#include "ast/table_statement.hpp"
+#include "codegen/codegen_c_modif_visitor.hpp"
+#include "visitors/visitor_utils.hpp"
 
 namespace nmodl {
 using namespace ast;

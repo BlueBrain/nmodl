@@ -12,8 +12,8 @@
 
 #include "ast/program.hpp"
 #include "codegen/codegen_acc_visitor.hpp"
-#include "codegen/codegen_c_visitor.hpp"
 #include "codegen/codegen_c_modif_visitor.hpp"
+#include "codegen/codegen_c_visitor.hpp"
 #include "codegen/codegen_compatibility_visitor.hpp"
 #include "codegen/codegen_cuda_visitor.hpp"
 #include "codegen/codegen_ispc_visitor.hpp"
