@@ -12,7 +12,9 @@ driver = nmodl.NmodlDriver()
 lookup_visitor = visitor.AstLookupVisitor()
 for mod in models:
     models_ast.append(driver.parse_file(mod))
-    models_name.append(lookup_visitor.lookup(models_ast[-1], ast.AstNodeType.SUFFIX)[0].get_node_name())
+    models_name.append(
+        lookup_visitor.lookup(models_ast[-1], ast.AstNodeType.SUFFIX)[0].get_node_name()
+    )
 
 # code generation and JIT configuration
 cfg = nmodl.CodeGenConfig()
