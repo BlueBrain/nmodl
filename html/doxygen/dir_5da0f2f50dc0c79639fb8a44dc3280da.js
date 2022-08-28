@@ -8,6 +8,8 @@ var dir_5da0f2f50dc0c79639fb8a44dc3280da =
     [ "defuse_analyze_visitor.hpp", "defuse__analyze__visitor_8hpp.html", "defuse__analyze__visitor_8hpp" ],
     [ "global_var_visitor.cpp", "global__var__visitor_8cpp.html", null ],
     [ "global_var_visitor.hpp", "global__var__visitor_8hpp.html", null ],
+    [ "implicit_argument_visitor.cpp", "implicit__argument__visitor_8cpp.html", null ],
+    [ "implicit_argument_visitor.hpp", "implicit__argument__visitor_8hpp.html", null ],
     [ "indexedname_visitor.cpp", "indexedname__visitor_8cpp.html", null ],
     [ "indexedname_visitor.hpp", "indexedname__visitor_8hpp.html", null ],
     [ "inline_visitor.cpp", "inline__visitor_8cpp.html", null ],

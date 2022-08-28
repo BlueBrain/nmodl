@@ -106,8 +106,8 @@ $(document).ready(function(){initNavTree('classnmodl_1_1parser_1_1_nmodl_driver.
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class that binds all pieces together for parsing nmodl file. </p>
 <p>Driver class bind components required for lexing, parsing and ast generation from nmodl file. We create an instance of lexer, parser and provides different methods to parse from file, stream or string. The scanner also gets reference to driver object for two purposes : scanner store/query the macro definitions into/from driver class and erros can be propogated back to driver (not implemented yet). Parser class also gets a reference to driver class as a parameter. Parsing actions generate ast and it's pointer is stored in driver class.</p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000034">Todo:</a></b></dt><dd>Lexer, parser and ast member variables are used inside lexer/ parser instances. The local instaces are created inside parse_stream and hence the pointers are no longer valid except ast. Need better way to handle this.</dd></dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000035">Todo:</a></b></dt><dd>Stream name is not used as it will need better support as location object used in scanner takes string pointer which could be invalid when we copy location object. </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000033">Todo:</a></b></dt><dd>Lexer, parser and ast member variables are used inside lexer/ parser instances. The local instaces are created inside parse_stream and hence the pointers are no longer valid except ast. Need better way to handle this.</dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000034">Todo:</a></b></dt><dd>Stream name is not used as it will need better support as location object used in scanner takes string pointer which could be invalid when we copy location object. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="nmodl__driver_8hpp_source.html#l00062">62</a> of file <a class="el" href="nmodl__driver_8hpp_source.html">nmodl_driver.hpp</a>.</p>
 </div>

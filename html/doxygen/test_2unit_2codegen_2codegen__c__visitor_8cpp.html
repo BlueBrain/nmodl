@@ -102,6 +102,8 @@ $(document).ready(function(){initNavTree('test_2unit_2codegen_2codegen__c__visit
 <code>#include &quot;<a class="el" href="codegen__helper__visitor_8hpp_source.html">codegen/codegen_helper_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="nmodl__driver_8hpp_source.html">parser/nmodl_driver.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="test__utils_8hpp_source.html">test/unit/utils/test_utils.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="implicit__argument__visitor_8hpp_source.html">visitors/implicit_argument_visitor.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="perf__visitor_8hpp_source.html">visitors/perf_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="symtab__visitor_8hpp_source.html">visitors/symtab_visitor.hpp</a>&quot;</code><br />
 </div>
 <p><a href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html">Go to the source code of this file.</a></p>
@@ -116,8 +118,12 @@ Functions</h2></td></tr>
 <tr class="separator:aad099bc716a26661997af855020e2dc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9c45dd7626fd81cd01383b4f8dc4e604"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp.html#a9c45dd7626fd81cd01383b4f8dc4e604">SCENARIO</a> (&quot;Check instance variable definition order&quot;, &quot;[codegen][var_order]&quot;)</td></tr>
 <tr class="separator:a9c45dd7626fd81cd01383b4f8dc4e604"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6505bf89fc4573d824bb53a5f591c9e"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp.html#ab6505bf89fc4573d824bb53a5f591c9e">get_instance_structure</a> (std::string nmodl_text)</td></tr>
+<tr class="separator:ab6505bf89fc4573d824bb53a5f591c9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3642952acebad0f06c31a9b2bf3ea034"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp.html#a3642952acebad0f06c31a9b2bf3ea034">SCENARIO</a> (&quot;Check parameter constness with VERBATIM block&quot;, &quot;[codegen][verbatim_variable_constness]&quot;)</td></tr>
 <tr class="separator:a3642952acebad0f06c31a9b2bf3ea034"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67c4def89805f51294ffa34f183d488c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp.html#a67c4def89805f51294ffa34f183d488c">SCENARIO</a> (&quot;Check NEURON globals are added to the instance struct on demand&quot;, &quot;[codegen][global_variables]&quot;)</td></tr>
+<tr class="separator:a67c4def89805f51294ffa34f183d488c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="ad5868eeaa048f3a22739a790a9a2016c"></a>
@@ -156,7 +162,27 @@ Functions</h2></td></tr>
 <p>construct symbol table</p>
 <p>create C code generation visitor</p>
 
-<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html#l00025">25</a> of file <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html#l00029">29</a> of file <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ab6505bf89fc4573d824bb53a5f591c9e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab6505bf89fc4573d824bb53a5f591c9e">&#9670;&nbsp;</a></span>get_instance_structure()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string get_instance_structure </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>nmodl_text</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html#l00245">245</a> of file <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -178,12 +204,12 @@ Functions</h2></td></tr>
 
 <p>print instance structure for testing purpose </p>
 
-<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html#l00038">38</a> of file <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html#l00042">42</a> of file <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
 <a id="a9c45dd7626fd81cd01383b4f8dc4e604"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9c45dd7626fd81cd01383b4f8dc4e604">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a9c45dd7626fd81cd01383b4f8dc4e604">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -208,12 +234,42 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html#l00046">46</a> of file <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html#l00050">50</a> of file <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a67c4def89805f51294ffa34f183d488c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a67c4def89805f51294ffa34f183d488c">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">SCENARIO </td>
+          <td>(</td>
+          <td class="paramtype">&quot;Check NEURON globals are added to the instance struct on demand&quot;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&quot;&quot;&#160;</td>
+          <td class="paramname">[codegen][global_variables]&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html#l00302">302</a> of file <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
 <a id="a3642952acebad0f06c31a9b2bf3ea034"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3642952acebad0f06c31a9b2bf3ea034">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a3642952acebad0f06c31a9b2bf3ea034">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -237,9 +293,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>parse mod file &amp; print mechanism structure</p>
 
-<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html#l00226">226</a> of file <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html#l00263">263</a> of file <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>

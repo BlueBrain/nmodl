@@ -106,8 +106,14 @@ $(document).ready(function(){initNavTree('partial__piv__lu_8h.html',''); initRes
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
+<tr class="memitem:a0e30a8b9c17905bcd6191c08b288889a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="partial__piv__lu_8h.html#a0e30a8b9c17905bcd6191c08b288889a">NMODL_EIGEN_ATTR</a></td></tr>
+<tr class="separator:a0e30a8b9c17905bcd6191c08b288889a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a366535ef5265dafb47d6dc62bd5d64c3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="partial__piv__lu_8h.html#a366535ef5265dafb47d6dc62bd5d64c3">NMODL_EIGEN_ROUTINE_SEQ</a>&#160;&#160;&#160;nrn_pragma_acc(routine seq)</td></tr>
+<tr class="separator:a366535ef5265dafb47d6dc62bd5d64c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aafdf1b3a05c3a3408ec743424ce3aa2d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="partial__piv__lu_8h.html#aafdf1b3a05c3a3408ec743424ce3aa2d">InstantiatePartialPivLu</a>(N)</td></tr>
 <tr class="separator:aafdf1b3a05c3a3408ec743424ce3aa2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f5b761a4dcb54b8e517503d8ef297cc"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="partial__piv__lu_8h.html#a6f5b761a4dcb54b8e517503d8ef297cc">PartialPivLuInstantiations</a></td></tr>
+<tr class="separator:a6f5b761a4dcb54b8e517503d8ef297cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
@@ -120,8 +126,8 @@ Typedefs</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a8069ac32a9bb2504f40ef1d7027c325f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="partial__piv__lu_8h.html#a8069ac32a9bb2504f40ef1d7027c325f">nrn_pragma_omp</a> (declare target) nrn_pragma_acc(routine seq) template&lt; int dim &gt; EIGEN_DEVICE_FUNC <a class="el" href="partial__piv__lu_8h.html#a8c4f72884cc84c9f70f2e894eeeaaf75">VecType</a>&lt; dim &gt; partialPivLu(const <a class="el" href="partial__piv__lu_8h.html#a2a6ac9c88bd4c9f978ae2958511a5bfb">MatType</a>&lt; dim &gt; &amp;</td></tr>
-<tr class="separator:a8069ac32a9bb2504f40ef1d7027c325f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3489477f6edf292d76de8a57db8a3bc3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="partial__piv__lu_8h.html#a3489477f6edf292d76de8a57db8a3bc3">nrn_pragma_omp</a> (declare target) <a class="el" href="partial__piv__lu_8h.html#a366535ef5265dafb47d6dc62bd5d64c3">NMODL_EIGEN_ROUTINE_SEQ</a> template&lt; int dim &gt; <a class="el" href="partial__piv__lu_8h.html#a0e30a8b9c17905bcd6191c08b288889a">NMODL_EIGEN_ATTR</a> <a class="el" href="partial__piv__lu_8h.html#a8c4f72884cc84c9f70f2e894eeeaaf75">VecType</a>&lt; dim &gt; partialPivLu(const <a class="el" href="partial__piv__lu_8h.html#a2a6ac9c88bd4c9f978ae2958511a5bfb">MatType</a>&lt; dim &gt; &amp;</td></tr>
+<tr class="separator:a3489477f6edf292d76de8a57db8a3bc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="aafdf1b3a05c3a3408ec743424ce3aa2d"></a>
@@ -139,15 +145,75 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">    nrn_pragma_acc(routine seq)                                                                  \</div>
-<div class="line">    EIGEN_DEVICE_FUNC <a class="code" href="partial__piv__lu_8h.html#a8c4f72884cc84c9f70f2e894eeeaaf75">VecType&lt;N&gt;</a> partialPivLu##N(<span class="keyword">const</span> <a class="code" href="partial__piv__lu_8h.html#a2a6ac9c88bd4c9f978ae2958511a5bfb">MatType&lt;N&gt;</a>&amp;, <span class="keyword">const</span> <a class="code" href="partial__piv__lu_8h.html#a8c4f72884cc84c9f70f2e894eeeaaf75">VecType&lt;N&gt;</a>&amp;);          \</div>
-<div class="line">    nrn_pragma_acc(routine seq)                                                                  \</div>
-<div class="line">    template &lt;&gt;                                                                                  \</div>
-<div class="line">    EIGEN_DEVICE_FUNC <span class="keyword">inline</span> <a class="code" href="partial__piv__lu_8h.html#a8c4f72884cc84c9f70f2e894eeeaaf75">VecType&lt;N&gt;</a> partialPivLu(<span class="keyword">const</span> <a class="code" href="partial__piv__lu_8h.html#a2a6ac9c88bd4c9f978ae2958511a5bfb">MatType&lt;N&gt;</a>&amp; A, <span class="keyword">const</span> <a class="code" href="partial__piv__lu_8h.html#a8c4f72884cc84c9f70f2e894eeeaaf75">VecType&lt;N&gt;</a>&amp; b) { \</div>
-<div class="line">        return partialPivLu##N(A, b);                                                            \</div>
+<b>Value:</b><div class="fragment"><div class="line">    NMODL_EIGEN_ROUTINE_SEQ                                                                     \</div>
+<div class="line">    NMODL_EIGEN_ATTR <a class="code" href="partial__piv__lu_8h.html#a8c4f72884cc84c9f70f2e894eeeaaf75">VecType&lt;N&gt;</a> partialPivLu##N(<span class="keyword">const</span> <a class="code" href="partial__piv__lu_8h.html#a2a6ac9c88bd4c9f978ae2958511a5bfb">MatType&lt;N&gt;</a>&amp;, <span class="keyword">const</span> <a class="code" href="partial__piv__lu_8h.html#a8c4f72884cc84c9f70f2e894eeeaaf75">VecType&lt;N&gt;</a>&amp;);          \</div>
+<div class="line">    NMODL_EIGEN_ROUTINE_SEQ                                                                     \</div>
+<div class="line">    template &lt;&gt;                                                                                 \</div>
+<div class="line">    NMODL_EIGEN_ATTR <span class="keyword">inline</span> <a class="code" href="partial__piv__lu_8h.html#a8c4f72884cc84c9f70f2e894eeeaaf75">VecType&lt;N&gt;</a> partialPivLu(<span class="keyword">const</span> <a class="code" href="partial__piv__lu_8h.html#a2a6ac9c88bd4c9f978ae2958511a5bfb">MatType&lt;N&gt;</a>&amp; A, <span class="keyword">const</span> <a class="code" href="partial__piv__lu_8h.html#a8c4f72884cc84c9f70f2e894eeeaaf75">VecType&lt;N&gt;</a>&amp; b) { \</div>
+<div class="line">        return partialPivLu##N(A, b);                                                           \</div>
 <div class="line">    }</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="partial__piv__lu_8h_source.html#l00041">41</a> of file <a class="el" href="partial__piv__lu_8h_source.html">partial_piv_lu.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="partial__piv__lu_8h_source.html#l00051">51</a> of file <a class="el" href="partial__piv__lu_8h_source.html">partial_piv_lu.h</a>.</p>
+
+</div>
+</div>
+<a id="a0e30a8b9c17905bcd6191c08b288889a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0e30a8b9c17905bcd6191c08b288889a">&#9670;&nbsp;</a></span>NMODL_EIGEN_ATTR</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define NMODL_EIGEN_ATTR</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a366535ef5265dafb47d6dc62bd5d64c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a366535ef5265dafb47d6dc62bd5d64c3">&#9670;&nbsp;</a></span>NMODL_EIGEN_ROUTINE_SEQ</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define NMODL_EIGEN_ROUTINE_SEQ&#160;&#160;&#160;nrn_pragma_acc(routine seq)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6f5b761a4dcb54b8e517503d8ef297cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6f5b761a4dcb54b8e517503d8ef297cc">&#9670;&nbsp;</a></span>PartialPivLuInstantiations</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define PartialPivLuInstantiations</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    <a class="code" href="partial__piv__lu_8h.html#aafdf1b3a05c3a3408ec743424ce3aa2d">InstantiatePartialPivLu</a>(1)     \</div>
+<div class="line">    InstantiatePartialPivLu(2)     \</div>
+<div class="line">    InstantiatePartialPivLu(3)     \</div>
+<div class="line">    InstantiatePartialPivLu(4)     \</div>
+<div class="line">    InstantiatePartialPivLu(5)     \</div>
+<div class="line">    InstantiatePartialPivLu(6)     \</div>
+<div class="line">    InstantiatePartialPivLu(7)     \</div>
+<div class="line">    InstantiatePartialPivLu(8)     \</div>
+<div class="line">    InstantiatePartialPivLu(9)     \</div>
+<div class="line">    InstantiatePartialPivLu(10)    \</div>
+<div class="line">    InstantiatePartialPivLu(11)    \</div>
+<div class="line">    InstantiatePartialPivLu(12)    \</div>
+<div class="line">    InstantiatePartialPivLu(13)    \</div>
+<div class="line">    InstantiatePartialPivLu(14)    \</div>
+<div class="line">    InstantiatePartialPivLu(15)    \</div>
+<div class="line">    InstantiatePartialPivLu(16)</div>
+</div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="partial__piv__lu_8h_source.html#l00062">62</a> of file <a class="el" href="partial__piv__lu_8h_source.html">partial_piv_lu.h</a>.</p>
 
 </div>
 </div>
@@ -166,7 +232,7 @@ template&lt;int dim&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="partial__piv__lu_8h_source.html#l00016">16</a> of file <a class="el" href="partial__piv__lu_8h_source.html">partial_piv_lu.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="partial__piv__lu_8h_source.html#l00017">17</a> of file <a class="el" href="partial__piv__lu_8h_source.html">partial_piv_lu.h</a>.</p>
 
 </div>
 </div>
@@ -184,13 +250,13 @@ template&lt;int dim&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="partial__piv__lu_8h_source.html#l00019">19</a> of file <a class="el" href="partial__piv__lu_8h_source.html">partial_piv_lu.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="partial__piv__lu_8h_source.html#l00020">20</a> of file <a class="el" href="partial__piv__lu_8h_source.html">partial_piv_lu.h</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="a8069ac32a9bb2504f40ef1d7027c325f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8069ac32a9bb2504f40ef1d7027c325f">&#9670;&nbsp;</a></span>nrn_pragma_omp()</h2>
+<a id="a3489477f6edf292d76de8a57db8a3bc3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3489477f6edf292d76de8a57db8a3bc3">&#9670;&nbsp;</a></span>nrn_pragma_omp()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -209,8 +275,9 @@ template&lt;int dim&gt; </div>
 </div>
 </div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="apartial__piv__lu_8h_html_a2a6ac9c88bd4c9f978ae2958511a5bfb"><div class="ttname"><a href="partial__piv__lu_8h.html#a2a6ac9c88bd4c9f978ae2958511a5bfb">MatType</a></div><div class="ttdeci">Eigen::Matrix&lt; double, dim, dim, Eigen::ColMajor, dim, dim &gt; MatType</div><div class="ttdef"><b>Definition:</b> <a href="partial__piv__lu_8h_source.html#l00016">partial_piv_lu.h:16</a></div></div>
-<div class="ttc" id="apartial__piv__lu_8h_html_a8c4f72884cc84c9f70f2e894eeeaaf75"><div class="ttname"><a href="partial__piv__lu_8h.html#a8c4f72884cc84c9f70f2e894eeeaaf75">VecType</a></div><div class="ttdeci">Eigen::Matrix&lt; double, dim, 1, Eigen::ColMajor, dim, 1 &gt; VecType</div><div class="ttdef"><b>Definition:</b> <a href="partial__piv__lu_8h_source.html#l00019">partial_piv_lu.h:19</a></div></div>
+<div class="ttc" id="apartial__piv__lu_8h_html_aafdf1b3a05c3a3408ec743424ce3aa2d"><div class="ttname"><a href="partial__piv__lu_8h.html#aafdf1b3a05c3a3408ec743424ce3aa2d">InstantiatePartialPivLu</a></div><div class="ttdeci">#define InstantiatePartialPivLu(N)</div><div class="ttdef"><b>Definition:</b> <a href="partial__piv__lu_8h_source.html#l00051">partial_piv_lu.h:51</a></div></div>
+<div class="ttc" id="apartial__piv__lu_8h_html_a2a6ac9c88bd4c9f978ae2958511a5bfb"><div class="ttname"><a href="partial__piv__lu_8h.html#a2a6ac9c88bd4c9f978ae2958511a5bfb">MatType</a></div><div class="ttdeci">Eigen::Matrix&lt; double, dim, dim, Eigen::ColMajor, dim, dim &gt; MatType</div><div class="ttdef"><b>Definition:</b> <a href="partial__piv__lu_8h_source.html#l00017">partial_piv_lu.h:17</a></div></div>
+<div class="ttc" id="apartial__piv__lu_8h_html_a8c4f72884cc84c9f70f2e894eeeaaf75"><div class="ttname"><a href="partial__piv__lu_8h.html#a8c4f72884cc84c9f70f2e894eeeaaf75">VecType</a></div><div class="ttdeci">Eigen::Matrix&lt; double, dim, 1, Eigen::ColMajor, dim, 1 &gt; VecType</div><div class="ttdef"><b>Definition:</b> <a href="partial__piv__lu_8h_source.html#l00020">partial_piv_lu.h:20</a></div></div>
 <!-- HTML footer for doxygen 1.8.15-->
 <!-- start footer part -->
 <div id="nav-path" class="navpath">

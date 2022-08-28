@@ -56,6 +56,9 @@ var group__visitor__classes =
       [ "visit_neuron_block", "classnmodl_1_1visitor_1_1_global_to_range_visitor.html#a9cd2cf44ddc4af5ab46848a334cf7bc1", null ],
       [ "ast", "classnmodl_1_1visitor_1_1_global_to_range_visitor.html#a129109fe76496b18296751e18c931e05", null ]
     ] ],
+    [ "ImplicitArgumentVisitor", "structnmodl_1_1visitor_1_1_implicit_argument_visitor.html", [
+      [ "visit_function_call", "structnmodl_1_1visitor_1_1_implicit_argument_visitor.html#a446f7946fecb49b14dece70c57355bb6", null ]
+    ] ],
     [ "IndexedNameVisitor", "classnmodl_1_1visitor_1_1_indexed_name_visitor.html", [
       [ "IndexedNameVisitor", "classnmodl_1_1visitor_1_1_indexed_name_visitor.html#a03302e59521f3500b23322d9e159ce60", null ],
       [ "get_dependencies", "classnmodl_1_1visitor_1_1_indexed_name_visitor.html#a43a68d5e134c9ed21e40c9c70367d0ee", null ],

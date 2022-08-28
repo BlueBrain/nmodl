@@ -10,6 +10,7 @@ var namespacenmodl_1_1visitor =
     [ "DUChain", "classnmodl_1_1visitor_1_1_d_u_chain.html", "classnmodl_1_1visitor_1_1_d_u_chain" ],
     [ "DUInstance", "classnmodl_1_1visitor_1_1_d_u_instance.html", "classnmodl_1_1visitor_1_1_d_u_instance" ],
     [ "GlobalToRangeVisitor", "classnmodl_1_1visitor_1_1_global_to_range_visitor.html", "classnmodl_1_1visitor_1_1_global_to_range_visitor" ],
+    [ "ImplicitArgumentVisitor", "structnmodl_1_1visitor_1_1_implicit_argument_visitor.html", "structnmodl_1_1visitor_1_1_implicit_argument_visitor" ],
     [ "IndexedNameVisitor", "classnmodl_1_1visitor_1_1_indexed_name_visitor.html", "classnmodl_1_1visitor_1_1_indexed_name_visitor" ],
     [ "IndexRemover", "classnmodl_1_1visitor_1_1_index_remover.html", "classnmodl_1_1visitor_1_1_index_remover" ],
     [ "InlineVisitor", "classnmodl_1_1visitor_1_1_inline_visitor.html", "classnmodl_1_1visitor_1_1_inline_visitor" ],

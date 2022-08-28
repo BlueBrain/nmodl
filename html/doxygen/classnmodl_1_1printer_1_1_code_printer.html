@@ -105,7 +105,7 @@ $(document).ready(function(){initNavTree('classnmodl_1_1printer_1_1_code_printer
 <div class="textblock"><p>Helper class for printing C/C++ code. </p>
 <p>This class provides common functionality required by code generation visitor to print C/C++/Cuda code. </p>
 
-<p class="definition">Definition at line <a class="el" href="code__printer_8hpp_source.html#l00041">41</a> of file <a class="el" href="code__printer_8hpp_source.html">code_printer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="code__printer_8hpp_source.html#l00042">42</a> of file <a class="el" href="code__printer_8hpp_source.html">code_printer.hpp</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="code__printer_8hpp_source.html">code_printer.hpp</a>&gt;</code></p>
 <table class="memberdecls">
@@ -153,6 +153,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a675921c9748b4b962aabfa878526c019"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1printer_1_1_code_printer.html#a675921c9748b4b962aabfa878526c019">end_block</a> (int num_newlines=0)</td></tr>
 <tr class="memdesc:a675921c9748b4b962aabfa878526c019"><td class="mdescLeft">&#160;</td><td class="mdescRight">end of current block scope (i.e. end with "}")  <a href="classnmodl_1_1printer_1_1_code_printer.html#a675921c9748b4b962aabfa878526c019">More...</a><br /></td></tr>
 <tr class="separator:a675921c9748b4b962aabfa878526c019"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3347020781de1beb70dcd05cf48fca8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1printer_1_1_code_printer.html#ae3347020781de1beb70dcd05cf48fca8">end_block</a> (std::string_view suffix, std::size_t num_newlines=1)</td></tr>
+<tr class="memdesc:ae3347020781de1beb70dcd05cf48fca8"><td class="mdescLeft">&#160;</td><td class="mdescRight">end a block with <code>suffix</code> before the newline(s) (i.e. [indent]}[suffix]<br  />
+*num_newlines)  <a href="classnmodl_1_1printer_1_1_code_printer.html#ae3347020781de1beb70dcd05cf48fca8">More...</a><br /></td></tr>
+<tr class="separator:ae3347020781de1beb70dcd05cf48fca8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a634482601bf3f03b9f887ea3ebb77cf0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1printer_1_1_code_printer.html#a634482601bf3f03b9f887ea3ebb77cf0">indent_spaces</a> ()</td></tr>
 <tr class="separator:a634482601bf3f03b9f887ea3ebb77cf0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -193,7 +197,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="code__printer_8hpp_source.html#l00050">50</a> of file <a class="el" href="code__printer_8hpp_source.html">code_printer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="code__printer_8hpp_source.html#l00051">51</a> of file <a class="el" href="code__printer_8hpp_source.html">code_printer.hpp</a>.</p>
 
 </div>
 </div>
@@ -221,7 +225,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="code__printer_8hpp_source.html#l00053">53</a> of file <a class="el" href="code__printer_8hpp_source.html">code_printer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="code__printer_8hpp_source.html#l00054">54</a> of file <a class="el" href="code__printer_8hpp_source.html">code_printer.hpp</a>.</p>
 
 </div>
 </div>
@@ -268,7 +272,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="code__printer_8hpp_source.html#l00058">58</a> of file <a class="el" href="code__printer_8hpp_source.html">code_printer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="code__printer_8hpp_source.html#l00059">59</a> of file <a class="el" href="code__printer_8hpp_source.html">code_printer.hpp</a>.</p>
 
 </div>
 </div>
@@ -407,12 +411,12 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="code__printer_8hpp_source.html#l00097">97</a> of file <a class="el" href="code__printer_8hpp_source.html">code_printer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="code__printer_8hpp_source.html#l00098">98</a> of file <a class="el" href="code__printer_8hpp_source.html">code_printer.hpp</a>.</p>
 
 </div>
 </div>
 <a id="a675921c9748b4b962aabfa878526c019"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a675921c9748b4b962aabfa878526c019">&#9670;&nbsp;</a></span>end_block()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a675921c9748b4b962aabfa878526c019">&#9670;&nbsp;</a></span>end_block() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -430,6 +434,39 @@ Private Attributes</h2></td></tr>
 <p>end of current block scope (i.e. end with "}") </p>
 
 <p class="definition">Definition at line <a class="el" href="code__printer_8cpp_source.html#l00088">88</a> of file <a class="el" href="code__printer_8cpp_source.html">code_printer.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ae3347020781de1beb70dcd05cf48fca8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae3347020781de1beb70dcd05cf48fca8">&#9670;&nbsp;</a></span>end_block() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void nmodl::printer::CodePrinter::end_block </td>
+          <td>(</td>
+          <td class="paramtype">std::string_view&#160;</td>
+          <td class="paramname"><em>suffix</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>num_newlines</em> = <code>1</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>end a block with <code>suffix</code> before the newline(s) (i.e. [indent]}[suffix]<br  />
+*num_newlines) </p>
+
+<p class="definition">Definition at line <a class="el" href="code__printer_8cpp_source.html#l00095">95</a> of file <a class="el" href="code__printer_8cpp_source.html">code_printer.cpp</a>.</p>
 
 </div>
 </div>
@@ -461,7 +498,7 @@ template&lt;typename... Args&gt; </div>
 
 <p>fmt_line(x, y, z) is just shorthand for add_line(fmt::format(x, y, z)) </p>
 
-<p class="definition">Definition at line <a class="el" href="code__printer_8hpp_source.html#l00080">80</a> of file <a class="el" href="code__printer_8hpp_source.html">code_printer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="code__printer_8hpp_source.html#l00081">81</a> of file <a class="el" href="code__printer_8hpp_source.html">code_printer.hpp</a>.</p>
 
 </div>
 </div>
@@ -491,7 +528,7 @@ template&lt;typename... Args&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="code__printer_8hpp_source.html#l00085">85</a> of file <a class="el" href="code__printer_8hpp_source.html">code_printer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="code__printer_8hpp_source.html#l00086">86</a> of file <a class="el" href="code__printer_8hpp_source.html">code_printer.hpp</a>.</p>
 
 </div>
 </div>
@@ -518,7 +555,7 @@ template&lt;typename... Args&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="code__printer_8hpp_source.html#l00093">93</a> of file <a class="el" href="code__printer_8hpp_source.html">code_printer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="code__printer_8hpp_source.html#l00094">94</a> of file <a class="el" href="code__printer_8hpp_source.html">code_printer.hpp</a>.</p>
 
 </div>
 </div>
@@ -545,7 +582,7 @@ template&lt;typename... Args&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="code__printer_8hpp_source.html#l00104">104</a> of file <a class="el" href="code__printer_8hpp_source.html">code_printer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="code__printer_8hpp_source.html#l00108">108</a> of file <a class="el" href="code__printer_8hpp_source.html">code_printer.hpp</a>.</p>
 
 </div>
 </div>
@@ -635,7 +672,7 @@ template&lt;typename... Args&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="code__printer_8hpp_source.html#l00046">46</a> of file <a class="el" href="code__printer_8hpp_source.html">code_printer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="code__printer_8hpp_source.html#l00047">47</a> of file <a class="el" href="code__printer_8hpp_source.html">code_printer.hpp</a>.</p>
 
 </div>
 </div>
@@ -659,7 +696,7 @@ template&lt;typename... Args&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="code__printer_8hpp_source.html#l00047">47</a> of file <a class="el" href="code__printer_8hpp_source.html">code_printer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="code__printer_8hpp_source.html#l00048">48</a> of file <a class="el" href="code__printer_8hpp_source.html">code_printer.hpp</a>.</p>
 
 </div>
 </div>
@@ -683,7 +720,7 @@ template&lt;typename... Args&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="code__printer_8hpp_source.html#l00043">43</a> of file <a class="el" href="code__printer_8hpp_source.html">code_printer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="code__printer_8hpp_source.html#l00044">44</a> of file <a class="el" href="code__printer_8hpp_source.html">code_printer.hpp</a>.</p>
 
 </div>
 </div>
@@ -707,7 +744,7 @@ template&lt;typename... Args&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="code__printer_8hpp_source.html#l00045">45</a> of file <a class="el" href="code__printer_8hpp_source.html">code_printer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="code__printer_8hpp_source.html#l00046">46</a> of file <a class="el" href="code__printer_8hpp_source.html">code_printer.hpp</a>.</p>
 
 </div>
 </div>
@@ -731,7 +768,7 @@ template&lt;typename... Args&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="code__printer_8hpp_source.html#l00044">44</a> of file <a class="el" href="code__printer_8hpp_source.html">code_printer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="code__printer_8hpp_source.html#l00045">45</a> of file <a class="el" href="code__printer_8hpp_source.html">code_printer.hpp</a>.</p>
 
 </div>
 </div>

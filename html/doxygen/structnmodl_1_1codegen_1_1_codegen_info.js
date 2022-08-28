@@ -47,6 +47,7 @@ var structnmodl_1_1codegen_1_1_codegen_info =
     [ "net_receive_initial_node", "structnmodl_1_1codegen_1_1_codegen_info.html#a69cd4576b99cb1e1d34a6f9fe9f8d9f8", null ],
     [ "net_receive_node", "structnmodl_1_1codegen_1_1_codegen_info.html#a9bff24568ad35f141f35b426dc7db4b5", null ],
     [ "net_send_used", "structnmodl_1_1codegen_1_1_codegen_info.html#a4ff9a275178c249645a980dad11a7c10", null ],
+    [ "neuron_global_variables", "structnmodl_1_1codegen_1_1_codegen_info.html#a04914559f3a67551dfa95ca1514f4719", null ],
     [ "nrn_state_block", "structnmodl_1_1codegen_1_1_codegen_info.html#a611d35acab66592571befe3589b276cf", null ],
     [ "num_equations", "structnmodl_1_1codegen_1_1_codegen_info.html#a2260251717d28a09ab177acc3d4f5190", null ],
     [ "num_net_receive_parameters", "structnmodl_1_1codegen_1_1_codegen_info.html#a81336b4924d6409aca5fcff1603e60d5", null ],

@@ -106,13 +106,13 @@ $(document).ready(function(){initNavTree('classnmodl_1_1codegen_1_1_codegen_c_vi
  <a href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#details">More...</a></p>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Visitor for printing C code compatible with legacy api of CoreNEURON </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000017">Todo:</a></b></dt><dd><ul>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000016">Todo:</a></b></dt><dd><ul>
 <li>Handle define statement (i.e. macros)</li>
 <li>If there is a return statement in the verbatim block of inlined function then it will be error. Need better error checking. For example, see netstim.mod where we have removed return from verbatim block. </li>
 </ul>
 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00182">182</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00183">183</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>&gt;</code></p>
 <div class="dynheader">
@@ -185,9 +185,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a9f4693cf9931b86ec30930eb6e8d87a9"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a9f4693cf9931b86ec30930eb6e8d87a9">find_var_unique_name</a> (const std::string &amp;original_name) const</td></tr>
 <tr class="memdesc:a9f4693cf9931b86ec30930eb6e8d87a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find unique variable name defined in <a class="el" href="classnmodl_1_1utils_1_1_singleton_random_string.html" title="Singleton class for random strings.">nmodl::utils::SingletonRandomString</a> by the <a class="el" href="classnmodl_1_1visitor_1_1_sympy_solver_visitor.html" title="Visitor for systems of algebraic and differential equations">nmodl::visitor::SympySolverVisitor</a>.  <a href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a9f4693cf9931b86ec30930eb6e8d87a9">More...</a><br /></td></tr>
 <tr class="separator:a9f4693cf9931b86ec30930eb6e8d87a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a88032932f9e57dec40509526e730caa1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a88032932f9e57dec40509526e730caa1">print_mechanism_range_var_structure</a> ()</td></tr>
-<tr class="memdesc:a88032932f9e57dec40509526e730caa1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the structure that wraps all range and int variables required for the NMODL.  <a href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a88032932f9e57dec40509526e730caa1">More...</a><br /></td></tr>
-<tr class="separator:a88032932f9e57dec40509526e730caa1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aacf67d4751f483db59246766be8819d0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#aacf67d4751f483db59246766be8819d0">print_mechanism_range_var_structure</a> (bool print_initialisers)</td></tr>
+<tr class="memdesc:aacf67d4751f483db59246766be8819d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the structure that wraps all range and int variables required for the NMODL.  <a href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#aacf67d4751f483db59246766be8819d0">More...</a><br /></td></tr>
+<tr class="separator:aacf67d4751f483db59246766be8819d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a02afd7f4cee1a40a1223e629cec9ceb0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a02afd7f4cee1a40a1223e629cec9ceb0">print_instance_variable_setup</a> ()</td></tr>
 <tr class="memdesc:a02afd7f4cee1a40a1223e629cec9ceb0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the function that initialize instance structure.  <a href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a02afd7f4cee1a40a1223e629cec9ceb0">More...</a><br /></td></tr>
 <tr class="separator:a02afd7f4cee1a40a1223e629cec9ceb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -759,8 +759,11 @@ Protected Member Functions</h2></td></tr>
 <tr class="memdesc:adee55ae07a99da4f4c734ab9701016f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Name of structure that wraps range variables.  <a href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#adee55ae07a99da4f4c734ab9701016f2">More...</a><br /></td></tr>
 <tr class="separator:adee55ae07a99da4f4c734ab9701016f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa98c3e4f47c5763aba406ac9f7c9cb92"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#aa98c3e4f47c5763aba406ac9f7c9cb92">global_struct</a> () const</td></tr>
-<tr class="memdesc:aa98c3e4f47c5763aba406ac9f7c9cb92"><td class="mdescLeft">&#160;</td><td class="mdescRight">Name of structure that wraps range variables.  <a href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#aa98c3e4f47c5763aba406ac9f7c9cb92">More...</a><br /></td></tr>
+<tr class="memdesc:aa98c3e4f47c5763aba406ac9f7c9cb92"><td class="mdescLeft">&#160;</td><td class="mdescRight">Name of structure that wraps global variables.  <a href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#aa98c3e4f47c5763aba406ac9f7c9cb92">More...</a><br /></td></tr>
 <tr class="separator:aa98c3e4f47c5763aba406ac9f7c9cb92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6bffbf9392faaf152435db9714de4374"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a6bffbf9392faaf152435db9714de4374">global_struct_instance</a> () const</td></tr>
+<tr class="memdesc:a6bffbf9392faaf152435db9714de4374"><td class="mdescLeft">&#160;</td><td class="mdescRight">Name of the (host-only) global instance of <code>global_struct</code>  <a href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a6bffbf9392faaf152435db9714de4374">More...</a><br /></td></tr>
+<tr class="separator:a6bffbf9392faaf152435db9714de4374"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac5b7ce082c345b547928b56bb3dd9ace"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ac5b7ce082c345b547928b56bb3dd9ace">method_name</a> (const std::string &amp;name) const</td></tr>
 <tr class="memdesc:ac5b7ce082c345b547928b56bb3dd9ace"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs the name of a function or procedure.  <a href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ac5b7ce082c345b547928b56bb3dd9ace">More...</a><br /></td></tr>
 <tr class="separator:ac5b7ce082c345b547928b56bb3dd9ace"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -833,9 +836,9 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a5d7705c75e63b43ffae68f9643da0196"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a5d7705c75e63b43ffae68f9643da0196">int_variable_name</a> (const <a class="el" href="structnmodl_1_1codegen_1_1_index_variable_info.html">IndexVariableInfo</a> &amp;symbol, const std::string &amp;name, bool use_instance) const</td></tr>
 <tr class="memdesc:a5d7705c75e63b43ffae68f9643da0196"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine the name of an <code>int</code> variable given its symbol.  <a href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a5d7705c75e63b43ffae68f9643da0196">More...</a><br /></td></tr>
 <tr class="separator:a5d7705c75e63b43ffae68f9643da0196"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae8de19fe2451d2ceec60d7bca17d83c5"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ae8de19fe2451d2ceec60d7bca17d83c5">global_variable_name</a> (const <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a84bb623825207181bd987df2a2863ac7">SymbolType</a> &amp;symbol) const</td></tr>
-<tr class="memdesc:ae8de19fe2451d2ceec60d7bca17d83c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine the variable name for a global variable given its symbol.  <a href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ae8de19fe2451d2ceec60d7bca17d83c5">More...</a><br /></td></tr>
-<tr class="separator:ae8de19fe2451d2ceec60d7bca17d83c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a057412e75b05f6e57a3a72798d0d4ad4"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a057412e75b05f6e57a3a72798d0d4ad4">global_variable_name</a> (const <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a84bb623825207181bd987df2a2863ac7">SymbolType</a> &amp;symbol, bool use_instance=true) const</td></tr>
+<tr class="memdesc:a057412e75b05f6e57a3a72798d0d4ad4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine the variable name for a global variable given its symbol.  <a href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a057412e75b05f6e57a3a72798d0d4ad4">More...</a><br /></td></tr>
+<tr class="separator:a057412e75b05f6e57a3a72798d0d4ad4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8fba203730058e7486a2eab49122b432"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a8fba203730058e7486a2eab49122b432">get_variable_name</a> (const std::string &amp;name, bool use_instance=true) const</td></tr>
 <tr class="memdesc:a8fba203730058e7486a2eab49122b432"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine variable name in the structure of mechanism properties.  <a href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a8fba203730058e7486a2eab49122b432">More...</a><br /></td></tr>
 <tr class="separator:a8fba203730058e7486a2eab49122b432"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -915,6 +918,9 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a2f2e14d308a85b73b0ffad862d15efb7"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a2f2e14d308a85b73b0ffad862d15efb7">print_global_var_struct_decl</a> ()</td></tr>
 <tr class="memdesc:a2f2e14d308a85b73b0ffad862d15efb7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Instantiate global var instance.  <a href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a2f2e14d308a85b73b0ffad862d15efb7">More...</a><br /></td></tr>
 <tr class="separator:a2f2e14d308a85b73b0ffad862d15efb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aced8458bb6462f57cc251bbdda54cfe8"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#aced8458bb6462f57cc251bbdda54cfe8">print_global_var_struct_assertions</a> () const</td></tr>
+<tr class="memdesc:aced8458bb6462f57cc251bbdda54cfe8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print static assertions about the global variable struct.  <a href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#aced8458bb6462f57cc251bbdda54cfe8">More...</a><br /></td></tr>
+<tr class="separator:aced8458bb6462f57cc251bbdda54cfe8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acaa6b26cc200ceac225cc3ffe4b7ed83"><td class="memItemLeft" align="right" valign="top">virtual std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#acaa6b26cc200ceac225cc3ffe4b7ed83">param_type_qualifier</a> ()</td></tr>
 <tr class="memdesc:acaa6b26cc200ceac225cc3ffe4b7ed83"><td class="mdescLeft">&#160;</td><td class="mdescRight">The used parameter type qualifier.  <a href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#acaa6b26cc200ceac225cc3ffe4b7ed83">More...</a><br /></td></tr>
 <tr class="separator:acaa6b26cc200ceac225cc3ffe4b7ed83"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -969,9 +975,9 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a4ed768600a3109d178c13d071e56433f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a4ed768600a3109d178c13d071e56433f">print_mechanism_info</a> ()</td></tr>
 <tr class="memdesc:a4ed768600a3109d178c13d071e56433f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print backend code for byte array that has mechanism information (to be registered with coreneuron)  <a href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a4ed768600a3109d178c13d071e56433f">More...</a><br /></td></tr>
 <tr class="separator:a4ed768600a3109d178c13d071e56433f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abea894325f5c955e6d298fb268276ca9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#abea894325f5c955e6d298fb268276ca9">print_mechanism_global_var_structure</a> ()</td></tr>
-<tr class="memdesc:abea894325f5c955e6d298fb268276ca9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the structure that wraps all global variables used in the NMODL.  <a href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#abea894325f5c955e6d298fb268276ca9">More...</a><br /></td></tr>
-<tr class="separator:abea894325f5c955e6d298fb268276ca9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a997f5c2ddbd4c8dce7e66e313152ae5e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a997f5c2ddbd4c8dce7e66e313152ae5e">print_mechanism_global_var_structure</a> (bool print_initialisers)</td></tr>
+<tr class="memdesc:a997f5c2ddbd4c8dce7e66e313152ae5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the structure that wraps all global variables used in the NMODL.  <a href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a997f5c2ddbd4c8dce7e66e313152ae5e">More...</a><br /></td></tr>
+<tr class="separator:a997f5c2ddbd4c8dce7e66e313152ae5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d2be835c005bdcbc7c5625846998231"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a5d2be835c005bdcbc7c5625846998231">print_ion_var_structure</a> ()</td></tr>
 <tr class="memdesc:a5d2be835c005bdcbc7c5625846998231"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print structure of ion variables used for local copies.  <a href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a5d2be835c005bdcbc7c5625846998231">More...</a><br /></td></tr>
 <tr class="separator:a5d2be835c005bdcbc7c5625846998231"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -987,9 +993,12 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:afa0a037ac21a9f1f3725ffec9cde40c2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#afa0a037ac21a9f1f3725ffec9cde40c2">print_setup_range_variable</a> ()</td></tr>
 <tr class="memdesc:afa0a037ac21a9f1f3725ffec9cde40c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the function that initialize range variable with different data type.  <a href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#afa0a037ac21a9f1f3725ffec9cde40c2">More...</a><br /></td></tr>
 <tr class="separator:afa0a037ac21a9f1f3725ffec9cde40c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a375c267d5b884b9dfec38d97aea892bc"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a375c267d5b884b9dfec38d97aea892bc">print_instance_variable_transfer_to_device</a> () const</td></tr>
-<tr class="memdesc:a375c267d5b884b9dfec38d97aea892bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the code to copy instance variable to device.  <a href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a375c267d5b884b9dfec38d97aea892bc">More...</a><br /></td></tr>
-<tr class="separator:a375c267d5b884b9dfec38d97aea892bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49900e407f757f306a1cf6b91e42314e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a49900e407f757f306a1cf6b91e42314e">print_instance_variable_transfer_to_device</a> (std::vector&lt; std::string &gt; const &amp;ptr_members) const</td></tr>
+<tr class="memdesc:a49900e407f757f306a1cf6b91e42314e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the code to copy instance struct members to the device, substituting host pointers for device ones.  <a href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a49900e407f757f306a1cf6b91e42314e">More...</a><br /></td></tr>
+<tr class="separator:a49900e407f757f306a1cf6b91e42314e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e8fa3aeb40aa51a969c6b3df6565e99"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a0e8fa3aeb40aa51a969c6b3df6565e99">print_instance_variable_deletion_from_device</a> () const</td></tr>
+<tr class="memdesc:a0e8fa3aeb40aa51a969c6b3df6565e99"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the code to delete the instance structure from the device.  <a href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a0e8fa3aeb40aa51a969c6b3df6565e99">More...</a><br /></td></tr>
+<tr class="separator:a0e8fa3aeb40aa51a969c6b3df6565e99"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab6599ed829d90c09d172ea47272c4577"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ab6599ed829d90c09d172ea47272c4577">print_deriv_advance_flag_transfer_to_device</a> () const</td></tr>
 <tr class="memdesc:ab6599ed829d90c09d172ea47272c4577"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the code to copy derivative advance flag to device.  <a href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ab6599ed829d90c09d172ea47272c4577">More...</a><br /></td></tr>
 <tr class="separator:ab6599ed829d90c09d172ea47272c4577"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1029,15 +1038,6 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a4b993457c516b04f03f44d2f031fd68e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a4b993457c516b04f03f44d2f031fd68e">print_mech_type_getter</a> ()</td></tr>
 <tr class="memdesc:a4b993457c516b04f03f44d2f031fd68e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the getter method for returning mechtype.  <a href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a4b993457c516b04f03f44d2f031fd68e">More...</a><br /></td></tr>
 <tr class="separator:a4b993457c516b04f03f44d2f031fd68e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af39f36d5a6a7abe3061e11d5960daa2f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#af39f36d5a6a7abe3061e11d5960daa2f">print_global_variable_setup</a> ()</td></tr>
-<tr class="memdesc:af39f36d5a6a7abe3061e11d5960daa2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the setup method that initializes all global variables.  <a href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#af39f36d5a6a7abe3061e11d5960daa2f">More...</a><br /></td></tr>
-<tr class="separator:af39f36d5a6a7abe3061e11d5960daa2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab925ad846ba49efd4c132327dd05c6c5"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ab925ad846ba49efd4c132327dd05c6c5">print_global_variable_device_create_annotation_pre</a> ()</td></tr>
-<tr class="memdesc:ab925ad846ba49efd4c132327dd05c6c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the pragma annotation needed before a global variable that must be created on the device.  <a href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ab925ad846ba49efd4c132327dd05c6c5">More...</a><br /></td></tr>
-<tr class="separator:ab925ad846ba49efd4c132327dd05c6c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa23932cc8fac20be9db85275262c7b82"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#aa23932cc8fac20be9db85275262c7b82">print_global_variable_device_create_annotation_post</a> ()</td></tr>
-<tr class="memdesc:aa23932cc8fac20be9db85275262c7b82"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the pragma annotation needed after a global variables that must be created on the device.  <a href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#aa23932cc8fac20be9db85275262c7b82">More...</a><br /></td></tr>
-<tr class="separator:aa23932cc8fac20be9db85275262c7b82"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5f545bed0818b1a5b30ad714f6268ba0"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a5f545bed0818b1a5b30ad714f6268ba0">print_global_variable_device_update_annotation</a> ()</td></tr>
 <tr class="memdesc:a5f545bed0818b1a5b30ad714f6268ba0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the pragma annotation to update global variables from host to the device.  <a href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a5f545bed0818b1a5b30ad714f6268ba0">More...</a><br /></td></tr>
 <tr class="separator:a5f545bed0818b1a5b30ad714f6268ba0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1216,9 +1216,9 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a241af0c7b8834cb59627a46dbfbb2bd3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a241af0c7b8834cb59627a46dbfbb2bd3">print_common_getters</a> ()</td></tr>
 <tr class="memdesc:a241af0c7b8834cb59627a46dbfbb2bd3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print common getters.  <a href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a241af0c7b8834cb59627a46dbfbb2bd3">More...</a><br /></td></tr>
 <tr class="separator:a241af0c7b8834cb59627a46dbfbb2bd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a392050b4d6439c7f977eb537b1764b20"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a392050b4d6439c7f977eb537b1764b20">print_data_structures</a> ()</td></tr>
-<tr class="memdesc:a392050b4d6439c7f977eb537b1764b20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print all classes.  <a href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a392050b4d6439c7f977eb537b1764b20">More...</a><br /></td></tr>
-<tr class="separator:a392050b4d6439c7f977eb537b1764b20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a313ecc5e143ab86fd794a8fcf2a5ac7c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a313ecc5e143ab86fd794a8fcf2a5ac7c">print_data_structures</a> (bool print_initialisers)</td></tr>
+<tr class="memdesc:a313ecc5e143ab86fd794a8fcf2a5ac7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print all classes.  <a href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a313ecc5e143ab86fd794a8fcf2a5ac7c">More...</a><br /></td></tr>
+<tr class="separator:a313ecc5e143ab86fd794a8fcf2a5ac7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa37fd76772f35d8099ae6f5e3e9d4d0b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#aa37fd76772f35d8099ae6f5e3e9d4d0b">print_v_unused</a> () const</td></tr>
 <tr class="memdesc:aa37fd76772f35d8099ae6f5e3e9d4d0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set v_unused (voltage) for NRN_PRCELLSTATE feature.  <a href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#aa37fd76772f35d8099ae6f5e3e9d4d0b">More...</a><br /></td></tr>
 <tr class="separator:aa37fd76772f35d8099ae6f5e3e9d4d0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1234,9 +1234,6 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a9780378be353a250c6112945ec4335a0"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a9780378be353a250c6112945ec4335a0">print_wrapper_routines</a> ()</td></tr>
 <tr class="memdesc:a9780378be353a250c6112945ec4335a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print entry point to code generation for wrappers.  <a href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a9780378be353a250c6112945ec4335a0">More...</a><br /></td></tr>
 <tr class="separator:a9780378be353a250c6112945ec4335a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acdd362dd3aa2eafde5806b70a1ddf1c6"><td class="memItemLeft" align="right" valign="top">virtual std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#acdd362dd3aa2eafde5806b70a1ddf1c6">get_variable_device_pointer</a> (const std::string &amp;variable, const std::string &amp;type) const</td></tr>
-<tr class="memdesc:acdd362dd3aa2eafde5806b70a1ddf1c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get device variable pointer for corresponding host variable.  <a href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#acdd362dd3aa2eafde5806b70a1ddf1c6">More...</a><br /></td></tr>
-<tr class="separator:acdd362dd3aa2eafde5806b70a1ddf1c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a591d2d244b5007508f38c34c1f0002ae"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a591d2d244b5007508f38c34c1f0002ae">CodegenCVisitor</a> (const std::string &amp;<a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ac43358c931aff1bf690c24ed82ae7d2c">mod_filename</a>, const std::string &amp;output_dir, const std::string &amp;<a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a09805affa22a793df5d4cfba0dae3985">float_type</a>, const bool <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a4f326e90973fc971f85169fd5e79ece1">optimize_ionvar_copies</a>, const std::string &amp;extension, const std::string &amp;wrapper_ext)</td></tr>
 <tr class="separator:a591d2d244b5007508f38c34c1f0002ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a64fc883e8b074802adb7fc57e5ced5a6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a64fc883e8b074802adb7fc57e5ced5a6">CodegenCVisitor</a> (const std::string &amp;<a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ac43358c931aff1bf690c24ed82ae7d2c">mod_filename</a>, std::ostream &amp;stream, const std::string &amp;<a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a09805affa22a793df5d4cfba0dae3985">float_type</a>, const bool <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a4f326e90973fc971f85169fd5e79ece1">optimize_ionvar_copies</a>, const std::string &amp;extension, const std::string &amp;wrapper_ext)</td></tr>
@@ -1358,7 +1355,7 @@ Protected Attributes</h2></td></tr>
 <li>parameter name (e.g. <code>data</code>) </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00194">194</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00195">195</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1382,7 +1379,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00184">184</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00185">185</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1445,7 +1442,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l01653">1653</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l01652">1652</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1507,7 +1504,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l01666">1666</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l01665">1665</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1576,7 +1573,7 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l01698">1698</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l01697">1697</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1638,7 +1635,7 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l01725">1725</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l01724">1724</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1700,7 +1697,7 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l01753">1753</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l01752">1752</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1738,7 +1735,7 @@ Protected Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The same string with double-quotes pre- and postfixed </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00307">307</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00308">308</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1769,7 +1766,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#a7b70703995654e1cae5d7848d4fa33f2">nmodl::codegen::CodegenIspcVisitor</a>, <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cuda_visitor.html#aa8eb0b57a7ab10ec65553969bb0b7cc9">nmodl::codegen::CodegenCudaVisitor</a>, and <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a9792284d98f398b86f3bffbb3dfd68e4">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01242">1242</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01250">1250</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1874,7 +1871,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#ad2c5ac80f9a1e89e9a3136f74c8c6bac">nmodl::codegen::CodegenIspcVisitor</a>, and <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cuda_visitor.html#a14fa25a973b127330b06829593884125">nmodl::codegen::CodegenCudaVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01277">1277</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01285">1285</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1929,7 +1926,7 @@ Protected Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The string representing the function call </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02081">2081</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02073">2073</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1958,7 +1955,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Default data type for floating point elements. </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00339">339</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00340">340</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1987,7 +1984,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Default data type for integer (offset) elements. </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00355">355</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00356">356</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -2054,7 +2051,7 @@ Protected Attributes</h2></td></tr>
 <p>Arguments for external functions called from generated code. </p>
 <dl class="section return"><dt>Returns</dt><dd>A string representing the arguments passed to an external function </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01961">1961</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01949">1949</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2091,7 +2088,7 @@ Protected Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A string representing the parameters of the function </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01966">1966</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01954">1954</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2147,7 +2144,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Data type for floating point elements specified on command line. </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00347">347</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00348">348</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -2196,7 +2193,7 @@ Protected Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The backend code string representing the access to the given variable symbol </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02279">2279</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02273">2273</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2460,7 +2457,7 @@ Protected Attributes</h2></td></tr>
 </dl>
 <p>If floating point type like "float" is specified on command line then we can't turn all variables to new type. This is because certain variables are pointers to internal variables (e.g. ions). Hence, we check if given variable can be safely converted to new type. If so, return new type. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03250">3250</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03183">3183</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2493,49 +2490,6 @@ Protected Attributes</h2></td></tr>
 <dl class="todo"><dt><b><a class="el" href="todo.html#_todo000006">Todo:</a></b></dt><dd>If conductances are specified, we don't need all below variables </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01005">1005</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
-
-</div>
-</div>
-<a id="acdd362dd3aa2eafde5806b70a1ddf1c6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acdd362dd3aa2eafde5806b70a1ddf1c6">&#9670;&nbsp;</a></span>get_variable_device_pointer()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string nmodl::codegen::CodegenCVisitor::get_variable_device_pointer </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>variable</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>type</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Get device variable pointer for corresponding host variable. </p>
-<p>For CPU/Host target there is no device pointer. In this case just use the host variable name directly. </p>
-
-<p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a5391c250f0204d0276f7a8272eee7db6">nmodl::codegen::CodegenAccVisitor</a>.</p>
-
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03269">3269</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2583,7 +2537,7 @@ Protected Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The C string representing the access to the variable in the neuron thread structure </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02352">2352</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02351">2351</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2610,9 +2564,38 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Name of structure that wraps range variables. </p>
+<p>Name of structure that wraps global variables. </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00399">399</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00400">400</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a6bffbf9392faaf152435db9714de4374"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6bffbf9392faaf152435db9714de4374">&#9670;&nbsp;</a></span>global_struct_instance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string nmodl::codegen::CodegenCVisitor::global_struct_instance </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Name of the (host-only) global instance of <code>global_struct</code> </p>
+
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00408">408</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -2646,12 +2629,12 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#a9b0bb437a5e55cd7308ea198c29418c1">nmodl::codegen::CodegenIspcVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01306">1306</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01314">1314</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
-<a id="ae8de19fe2451d2ceec60d7bca17d83c5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae8de19fe2451d2ceec60d7bca17d83c5">&#9670;&nbsp;</a></span>global_variable_name()</h2>
+<a id="a057412e75b05f6e57a3a72798d0d4ad4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a057412e75b05f6e57a3a72798d0d4ad4">&#9670;&nbsp;</a></span>global_variable_name()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2663,8 +2646,18 @@ Protected Attributes</h2></td></tr>
           <td class="memname">std::string nmodl::codegen::CodegenCVisitor::global_variable_name </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a84bb623825207181bd987df2a2863ac7">SymbolType</a> &amp;&#160;</td>
-          <td class="paramname"><em>symbol</em></td><td>)</td>
-          <td> const</td>
+          <td class="paramname"><em>symbol</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>use_instance</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
         </tr>
       </table>
   </td>
@@ -2678,12 +2671,13 @@ Protected Attributes</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">symbol</td><td>The symbol of a variable for which we want to obtain its name </td></tr>
+    <tr><td class="paramname">use_instance</td><td>Should the variable be accessed via the (host-only) global variable or the instance-specific copy (also available on GPU). </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The C string representing the access to the global variable </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02325">2325</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02319">2319</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2712,7 +2706,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Name of structure that wraps range variables. </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00391">391</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00392">392</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -2768,7 +2762,7 @@ Protected Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The backend code string representing the access to the given variable symbol </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02299">2299</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02293">2293</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2827,7 +2821,7 @@ Protected Attributes</h2></td></tr>
 <p>Arguments for functions that are defined and used internally. </p>
 <dl class="section return"><dt>Returns</dt><dd>the method arguments </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01920">1920</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01907">1907</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2856,9 +2850,9 @@ Protected Attributes</h2></td></tr>
 
 <p>Parameters for internally defined functions. </p>
 <dl class="section return"><dt>Returns</dt><dd>the method parameters</dd></dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000009">Todo:</a></b></dt><dd>: figure out how to correctly handle qualifiers </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000008">Todo:</a></b></dt><dd>: figure out how to correctly handle qualifiers </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01941">1941</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01928">1928</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2971,7 +2965,7 @@ Protected Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The C string representing the access to the shadow variable </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02330">2330</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02329">2329</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3116,7 +3110,7 @@ Protected Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> if the function is net_event </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00383">383</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00384">384</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -3153,7 +3147,7 @@ Protected Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> if the function is net_move </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00374">374</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00375">375</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -3190,7 +3184,7 @@ Protected Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> if the function is net_send </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00365">365</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00366">366</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -3219,7 +3213,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Data type for the local variables. </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00331">331</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00332">332</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -3256,7 +3250,7 @@ Protected Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A symbol based on the given name </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00429">429</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00438">438</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -3293,7 +3287,7 @@ Protected Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The name of the function or procedure postfixed with the model name </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00409">409</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00418">418</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -3363,7 +3357,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#a1e5ac6b189e994f733f9437f6da13ef6">nmodl::codegen::CodegenIspcVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03960">3960</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03928">3928</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3509,7 +3503,7 @@ Protected Attributes</h2></td></tr>
 <p>Return Nmodl language version. </p>
 <dl class="section return"><dt>Returns</dt><dd>A version </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00297">297</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00298">298</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -3540,7 +3534,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#a15c6c12b422ea36bd1373a3ca4fdcf65">nmodl::codegen::CodegenIspcVisitor</a>, <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a31d7b0c263809e51473f6769c402fb53">nmodl::codegen::CodegenAccVisitor</a>, and <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cuda_visitor.html#a8b2f9aea5be3dd20ea7e1cee6525156c">nmodl::codegen::CodegenCudaVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01134">1134</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01142">1142</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3627,7 +3621,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Arguments for "_threadargs_" macro in neuron implementation. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01976">1976</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01964">1964</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3657,7 +3651,7 @@ Protected Attributes</h2></td></tr>
 <p>Arguments for "_threadargs_" macro in neuron implementation. </p>
 <p>Function call arguments when function or procedure is defined in the same mod file itself. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01988">1988</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01976">1976</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3686,7 +3680,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Determine the number of threads to allocate. </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00518">518</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00527">527</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -3715,7 +3709,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Operator for diagonal vector update (matrix update) </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00323">323</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00324">324</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -3744,7 +3738,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Operator for rhs vector update (matrix update) </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00315">315</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00316">316</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -3773,7 +3767,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Check if ion variable copies should be avoided. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01247">1247</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01255">1255</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3805,7 +3799,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#afab52ac062b56fdf09c185006264b35e">nmodl::codegen::CodegenIspcVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01933">1933</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01920">1920</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3837,7 +3831,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#ad1059c625d5d1d2450fc5197aafca762">nmodl::codegen::CodegenIspcVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01928">1928</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01915">1915</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3942,7 +3936,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a0afbe91263bad633cba874fd9c7b5af6">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01269">1269</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01277">1277</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3973,7 +3967,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#af3e32e5cec32f5b55fa81a654bc4afef">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01190">1190</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01198">1198</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4004,7 +3998,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#a635b7af7176f95ac760b2071b5e936c9">nmodl::codegen::CodegenIspcVisitor</a>, <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cuda_visitor.html#a7d6dfa1301070654014b0a2955c7ed89">nmodl::codegen::CodegenCudaVisitor</a>, and <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a2a52b48b11fbf0757fb037d7e579daf3">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01237">1237</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01245">1245</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4033,7 +4027,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Print top file header printed in generated code. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02416">2416</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02431">2431</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4065,7 +4059,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#a9d73d494ad0af6c0d7ebc556b4f679fb">nmodl::codegen::CodegenIspcVisitor</a>, and <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cuda_visitor.html#ab81d43488a5a66ef999ec0380fd2ff17">nmodl::codegen::CodegenCudaVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01227">1227</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01235">1235</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4097,7 +4091,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#ac949f63f3bce020b2598bbd0a2e7d083">nmodl::codegen::CodegenIspcVisitor</a>, and <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cuda_visitor.html#a2a536332cfc8a7a7ed153c7350be243b">nmodl::codegen::CodegenCudaVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01232">1232</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01240">1240</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4148,7 +4142,7 @@ Protected Attributes</h2></td></tr>
 <p>print main body</p>
 <p>loop end including data annotation block</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03526">3526</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03494">3494</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4187,7 +4181,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#a4895f3473469b3c136e7750feec4b184">nmodl::codegen::CodegenIspcVisitor</a>, and <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cuda_visitor.html#adcdec4a1350802ec77478925710dd64b">nmodl::codegen::CodegenCudaVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01143">1143</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01151">1151</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4218,7 +4212,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#a08e95460c33cb2cf98975ab82f499bfe">nmodl::codegen::CodegenIspcVisitor</a>, and <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cuda_visitor.html#a763f5b8eb97dd8ab8888b744d655c1e9">nmodl::codegen::CodegenCudaVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01149">1149</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01157">1157</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4264,7 +4258,7 @@ Protected Attributes</h2></td></tr>
 </div><!-- fragment --> 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a607b38ab6c54cc6dce98bf0ab86235e1">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01128">1128</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01136">1136</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4353,9 +4347,8 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Print check_table functions. </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000008">Todo:</a></b></dt><dd><code>check_table_thread</code> is called multiple times from coreneuron including after <code>finitialize</code>. If we cleaup the instance then it will result in segfault but if we don't then there is memory leak </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01662">1662</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01656">1656</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4386,7 +4379,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#a33f93e371deee051ab3d1dab21d17b5f">nmodl::codegen::CodegenIspcVisitor</a>, and <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cuda_visitor.html#a5bbaad5a0ec7f7fa9e14c123357cdf19">nmodl::codegen::CodegenCudaVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04657">4657</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04627">4627</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4415,7 +4408,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Print common getters. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04600">4600</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04570">4570</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4446,7 +4439,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#a190038e20851f8c1cd500b9a2e1304c6">nmodl::codegen::CodegenIspcVisitor</a>, and <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cuda_visitor.html#aa4d35b90a3d001846c8e376823e35144">nmodl::codegen::CodegenCudaVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04628">4628</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04598">4598</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4475,12 +4468,12 @@ Protected Attributes</h2></td></tr>
 
 <p>Print includes from coreneuron. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02445">2445</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02460">2460</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
-<a id="a392050b4d6439c7f977eb537b1764b20"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a392050b4d6439c7f977eb537b1764b20">&#9670;&nbsp;</a></span>print_data_structures()</h2>
+<a id="a313ecc5e143ab86fd794a8fcf2a5ac7c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a313ecc5e143ab86fd794a8fcf2a5ac7c">&#9670;&nbsp;</a></span>print_data_structures()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -4491,7 +4484,8 @@ Protected Attributes</h2></td></tr>
         <tr>
           <td class="memname">void nmodl::codegen::CodegenCVisitor::print_data_structures </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>print_initialisers</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -4503,8 +4497,14 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Print all classes. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">print_initialisers</td><td>Whether to include default values. </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04610">4610</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04580">4580</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4535,7 +4535,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#abf9de5982b1d8f6fb492e668183c2ee1">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01057">1057</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01065">1065</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4570,10 +4570,10 @@ Protected Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000014">Todo:</a></b></dt><dd>Data is not derived.</dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000013">Todo:</a></b></dt><dd>Data is not derived.</dd></dl>
 <p>Need to add instance into instance struct? data used here is wrong in AoS because as in original implementation, data is not incremented every iteration for AoS. May be better to derive actual variable names? [resolved now?] slist needs to added as local variable </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04206">4206</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04174">4174</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4604,7 +4604,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#ad3cf0f9dd9a34da7d16712815c805576">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01061">1061</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01069">1069</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4636,7 +4636,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cuda_visitor.html#a355c23ac68023580c5685c50cfe66fab">nmodl::codegen::CodegenCudaVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01217">1217</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01225">1225</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4667,7 +4667,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#ae69707b056c2db2a8c209b7e8cc97bf4">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01081">1081</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01089">1089</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4698,7 +4698,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a3881733a09e8cd01a1829c3c5a9a629f">nmodl::codegen::CodegenAccVisitor</a>, and <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cuda_visitor.html#abbadf8821120140cd59e9991a4486847">nmodl::codegen::CodegenCudaVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01077">1077</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01085">1085</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4738,7 +4738,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a0a173eb1091bfce67fe3414dd8d811b0">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01902">1902</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01889">1889</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4769,7 +4769,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#af58d26884131b0cc711887c549bc7957">nmodl::codegen::CodegenAccVisitor</a>, and <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cuda_visitor.html#abbc04098333cee22d2b282f4dd916612">nmodl::codegen::CodegenCudaVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04510">4510</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04480">4480</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4798,7 +4798,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Print the getter method for index position of first pointer variable. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02150">2150</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02143">2143</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4826,7 +4826,7 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01735">1735</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01722">1722</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4862,7 +4862,7 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01354">1354</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01362">1362</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4909,7 +4909,7 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01693">1693</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01680">1680</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4945,7 +4945,7 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01713">1713</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01700">1700</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4974,7 +4974,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Print function and procedures prototype declaration. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01456">1456</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01449">1449</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5003,7 +5003,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Set g_unused (conductance) for NRN_PRCELLSTATE feature. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04622">4622</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04592">4592</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5034,7 +5034,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#af925ff5bf8ebcb7cbede60d08bc85eda">nmodl::codegen::CodegenIspcVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03965">3965</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03933">3933</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5083,7 +5083,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#a1c454e236ab362f887912f61d66d1d98">nmodl::codegen::CodegenIspcVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03394">3394</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03361">3361</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5115,7 +5115,39 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cuda_visitor.html#a64b5caba9f30c3c4388fb85507426fc5">nmodl::codegen::CodegenCudaVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01222">1222</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01230">1230</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+
+</div>
+</div>
+<a id="aced8458bb6462f57cc251bbdda54cfe8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aced8458bb6462f57cc251bbdda54cfe8">&#9670;&nbsp;</a></span>print_global_var_struct_assertions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void nmodl::codegen::CodegenCVisitor::print_global_var_struct_assertions </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Print static assertions about the global variable struct. </p>
+<p>For ISPC this has to be disabled. </p>
+
+<p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#aaecc70f5f43a3735e9fcab23f3e56717">nmodl::codegen::CodegenIspcVisitor</a>.</p>
+
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02685">2685</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5147,73 +5179,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#afc250e816154ef90ac6ecda3463bd54a">nmodl::codegen::CodegenIspcVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01310">1310</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
-
-</div>
-</div>
-<a id="aa23932cc8fac20be9db85275262c7b82"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa23932cc8fac20be9db85275262c7b82">&#9670;&nbsp;</a></span>print_global_variable_device_create_annotation_post()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void nmodl::codegen::CodegenCVisitor::print_global_variable_device_create_annotation_post </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Print the pragma annotation needed after a global variables that must be created on the device. </p>
-<p>This always comes after a matching call to print_global_variable_device_create_annotation_pre.</p>
-<dl class="section note"><dt>Note</dt><dd>This is not used for the C backend </dd></dl>
-
-<p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#aabaad23a0b17fd20a380954bee779422">nmodl::codegen::CodegenAccVisitor</a>.</p>
-
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03082">3082</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
-
-</div>
-</div>
-<a id="ab925ad846ba49efd4c132327dd05c6c5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab925ad846ba49efd4c132327dd05c6c5">&#9670;&nbsp;</a></span>print_global_variable_device_create_annotation_pre()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void nmodl::codegen::CodegenCVisitor::print_global_variable_device_create_annotation_pre </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Print the pragma annotation needed before a global variable that must be created on the device. </p>
-<p>This always comes before a matching call to print_global_variable_device_create_annotation_post.</p>
-<dl class="section note"><dt>Note</dt><dd>This is not used for the C backend </dd></dl>
-
-<p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a956438a374475b589e28fd63da100978">nmodl::codegen::CodegenAccVisitor</a>.</p>
-
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03078">3078</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01318">1318</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5245,38 +5211,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#ab76d2ea624e89d175ff3456005e410da">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03087">3087</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
-
-</div>
-</div>
-<a id="af39f36d5a6a7abe3061e11d5960daa2f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af39f36d5a6a7abe3061e11d5960daa2f">&#9670;&nbsp;</a></span>print_global_variable_setup()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void nmodl::codegen::CodegenCVisitor::print_global_variable_setup </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Print the setup method that initializes all global variables. </p>
-<p>use g to be same as nocmodl in neuron</p>
-<p>use g to be same as nocmodl in neuron</p>
-
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03092">3092</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03157">3157</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5306,7 +5241,7 @@ Protected Attributes</h2></td></tr>
 <p>Print byte arrays that register scalar and vector variables for hoc interface. </p>
 <p>Print structs that encapsulate information about scalar and vector elements of type global and thread variables.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02671">2671</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02742">2742</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5337,7 +5272,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#a68bb083a6aa1b947d0dff636accaf156">nmodl::codegen::CodegenIspcVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04581">4581</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04551">4551</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5374,7 +5309,38 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03350">3350</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03317">3317</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a0e8fa3aeb40aa51a969c6b3df6565e99"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0e8fa3aeb40aa51a969c6b3df6565e99">&#9670;&nbsp;</a></span>print_instance_variable_deletion_from_device()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void nmodl::codegen::CodegenCVisitor::print_instance_variable_deletion_from_device </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Print the code to delete the instance structure from the device. </p>
+
+<p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#aed499839ad7b16786a43fd205dc526cb">nmodl::codegen::CodegenAccVisitor</a>.</p>
+
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01060">1060</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5395,12 +5361,12 @@ Protected Attributes</h2></td></tr>
 
 <p>Print the function that initialize instance structure. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03275">3275</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03199">3199</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
-<a id="a375c267d5b884b9dfec38d97aea892bc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a375c267d5b884b9dfec38d97aea892bc">&#9670;&nbsp;</a></span>print_instance_variable_transfer_to_device()</h2>
+<a id="a49900e407f757f306a1cf6b91e42314e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49900e407f757f306a1cf6b91e42314e">&#9670;&nbsp;</a></span>print_instance_variable_transfer_to_device()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -5411,7 +5377,8 @@ Protected Attributes</h2></td></tr>
         <tr>
           <td class="memname">void nmodl::codegen::CodegenCVisitor::print_instance_variable_transfer_to_device </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">std::vector&lt; std::string &gt; const &amp;&#160;</td>
+          <td class="paramname"><em>ptr_members</em></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
@@ -5422,11 +5389,17 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Print the code to copy instance variable to device. </p>
+<p>Print the code to copy instance struct members to the device, substituting host pointers for device ones. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ptr_members</td><td>Members to update. </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#aecaa11e98257b4083c45603d93bbab22">nmodl::codegen::CodegenAccVisitor</a>.</p>
+<p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a6e9436c2f3475cc857f9b5e976635048">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01053">1053</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01054">1054</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5464,7 +5437,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#a9f7779d31f97d7587118b2cbd3e540bd">nmodl::codegen::CodegenIspcVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03058">3058</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03137">3137</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5493,7 +5466,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Print structure of ion variables used for local copies. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03026">3026</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03105">3105</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5524,7 +5497,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#a38a679e853972a65c9119002de46eb1a">nmodl::codegen::CodegenIspcVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03073">3073</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03152">3152</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5562,7 +5535,7 @@ Protected Attributes</h2></td></tr>
 </div><!-- fragment --> 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a00ab6b70ec3753d393abd3ccf383a313">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01099">1099</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01107">1107</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5593,7 +5566,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#acfa06ee31afd8591ab20911e53bbef8a">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01104">1104</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01112">1112</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5622,12 +5595,12 @@ Protected Attributes</h2></td></tr>
 
 <p>Print the getter method for returning mechtype. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02186">2186</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02179">2179</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
-<a id="abea894325f5c955e6d298fb268276ca9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abea894325f5c955e6d298fb268276ca9">&#9670;&nbsp;</a></span>print_mechanism_global_var_structure()</h2>
+<a id="a997f5c2ddbd4c8dce7e66e313152ae5e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a997f5c2ddbd4c8dce7e66e313152ae5e">&#9670;&nbsp;</a></span>print_mechanism_global_var_structure()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -5638,7 +5611,8 @@ Protected Attributes</h2></td></tr>
         <tr>
           <td class="memname">void nmodl::codegen::CodegenCVisitor::print_mechanism_global_var_structure </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>print_initialisers</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -5650,12 +5624,18 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Print the structure that wraps all global variables used in the NMODL. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">print_initialisers</td><td>Whether to include default values in the struct definition (true: int foo{42}; false: int foo;)</td></tr>
+  </table>
+  </dd>
+</dl>
 <p>Variables required for type of ion, type of point process etc. are of static int type. For any backend type (C,C++), it's ok to have these variables as file scoped static variables.</p>
 <p>Initial values of state variables (h0) are also defined as static variables. Note that the state could be ion variable and it could be also range variable. Hence lookup into symbol table before.</p>
 <p>When model is not vectorized (shouldn't be the case in coreneuron) the top local variables become static variables.</p>
 <p>Note that static variables are already initialized to 0. We do the same for some variables to keep same code as neuron. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02482">2482</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02497">2497</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5684,12 +5664,12 @@ Protected Attributes</h2></td></tr>
 
 <p>Print backend code for byte array that has mechanism information (to be registered with coreneuron) </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02634">2634</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02705">2705</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
-<a id="a88032932f9e57dec40509526e730caa1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a88032932f9e57dec40509526e730caa1">&#9670;&nbsp;</a></span>print_mechanism_range_var_structure()</h2>
+<a id="aacf67d4751f483db59246766be8819d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aacf67d4751f483db59246766be8819d0">&#9670;&nbsp;</a></span>print_mechanism_range_var_structure()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -5697,15 +5677,22 @@ Protected Attributes</h2></td></tr>
         <tr>
           <td class="memname">void nmodl::codegen::CodegenCVisitor::print_mechanism_range_var_structure </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>print_initialisers</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>Print the structure that wraps all range and int variables required for the NMODL. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">print_initialisers</td><td>Whether or not default values for variables be included in the struct declaration. </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02995">2995</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03058">3058</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5735,7 +5722,7 @@ Protected Attributes</h2></td></tr>
 <p>Print the mechanism registration function. </p>
 <p>Every mod file has register function to connect with the simulator. Various information about mechanism and callbacks get registered with the simulator using suffix_reg() function.</p>
 <p>Here are details:</p><ul>
-<li>setup_global_variables function used to create vectors necessary for specific solvers like euler and derivimplicit. All global variables are initialized as well. We should exclude that callback based on the solver, watch statements.</li>
+<li>We should exclude that callback based on the solver, watch statements.</li>
 <li>If nrn_get_mechtype is &lt; -1 means that mechanism is not used in the context of neuron execution and hence could be ignored in coreneuron execution.</li>
 <li>Ions are internally defined and their types can be queried similar to other mechanisms.</li>
 <li>hoc_register_var may not be needed in the context of coreneuron</li>
@@ -5743,7 +5730,7 @@ Protected Attributes</h2></td></tr>
 </ul>
 <p>register all before/after blocks</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02777">2777</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02848">2848</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5772,7 +5759,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Print the getter method for returning membrane list from NrnThread. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02195">2195</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02189">2189</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5803,7 +5790,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#acc69070aadaba5d5749d249fd7390a31">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01252">1252</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01260">1260</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5832,7 +5819,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Print start of namespaces. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04588">4588</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04558">4558</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5861,7 +5848,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Print end of namespaces. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04594">4594</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04564">4564</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5890,7 +5877,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Prints the start of the <code>coreneuron</code> namespace. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02207">2207</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02201">2201</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5919,7 +5906,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Prints the end of the <code>coreneuron</code> namespace. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02213">2213</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02207">2207</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5955,7 +5942,7 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03855">3855</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03823">3823</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5984,7 +5971,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Print initial block in the net receive block. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03907">3907</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03875">3875</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -6015,7 +6002,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a532e903a7bb7f8c3dfeac467f53e111d">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01108">1108</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01116">1116</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -6046,7 +6033,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a8fa54f732815ba17581f6a30e3f6ec47">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01112">1112</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01120">1120</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -6082,7 +6069,7 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03826">3826</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03794">3794</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -6111,7 +6098,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Print <code>net_receive</code> function definition. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04166">4166</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04134">4134</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -6140,7 +6127,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Print the getter method for getting number of arguments for net_receive. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02174">2174</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02167">2167</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -6168,7 +6155,7 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03986">3986</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03954">3954</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -6215,7 +6202,7 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03748">3748</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03716">3716</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -6236,7 +6223,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Print <code>net_receive</code> kernel function definition. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04102">4102</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04070">4070</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -6267,7 +6254,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#ab0d3875ef8cfe5f2620f755fac00bc4d">nmodl::codegen::CodegenIspcVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03974">3974</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03942">3942</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -6296,7 +6283,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Print the code for closing the main <code>net_receive</code> loop. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03981">3981</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03949">3949</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -6327,7 +6314,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a4695bcf11295255ed5827ea2bad81fdf">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01073">1073</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01081">1081</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -6358,7 +6345,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a4977b3b4e02425431c95412ffdad10ed">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01065">1065</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01073">1073</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -6389,7 +6376,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a6c88ece1cdc90d7d3e3c4932b69d903a">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01069">1069</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01077">1077</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -6419,7 +6406,7 @@ Protected Attributes</h2></td></tr>
 <p>Print kernel for buffering net_send events. </p>
 <p>This kernel is only needed for accelerator backends where <code>net_send</code> needs to be executed in two stages as the actual communication must be done in the host code. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04038">4038</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04006">4006</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -6451,7 +6438,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a7b0b928aacf93947a478e2c37ba2f551">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04032">4032</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04000">4000</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -6487,7 +6474,7 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03795">3795</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03763">3763</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -6518,7 +6505,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a621a8824135ca3ca077dee6917e30943">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04293">4293</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04263">4263</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -6554,7 +6541,7 @@ Protected Attributes</h2></td></tr>
 </div><!-- fragment -->
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#aa21bea74907323e551c4132ba31efa33">nmodl::codegen::CodegenIspcVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02132">2132</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02125">2125</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -6583,7 +6570,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Print nrn_alloc function definition. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03609">3609</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03577">3577</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -6612,7 +6599,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Print nrn_constructor function definition. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03585">3585</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03553">3553</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -6633,7 +6620,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Print nrn_cur / current update function definition. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04540">4540</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04510">4510</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -6670,7 +6657,7 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04404">4404</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04374">4374</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -6706,7 +6693,7 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04475">4475</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04445">4445</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -6737,7 +6724,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#a149b9a7f576f325fd03d1e94644f1eff">nmodl::codegen::CodegenIspcVisitor</a>, <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a6a6d2369a69a4de0bda555ffe52c946e">nmodl::codegen::CodegenAccVisitor</a>, and <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cuda_visitor.html#ae3cfafef889d1dde955bceab99362245">nmodl::codegen::CodegenCudaVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01177">1177</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01185">1185</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -6768,7 +6755,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a645c96bca7fc93af0c4e1898ec06f02e">nmodl::codegen::CodegenAccVisitor</a>, and <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cuda_visitor.html#af1e05b6b848340b4e20a86172630e5ba">nmodl::codegen::CodegenCudaVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01162">1162</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01170">1170</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -6798,7 +6785,7 @@ Protected Attributes</h2></td></tr>
 <p>Print the <code>nrn_cur</code> kernel without NMODL <code>conductance</code> keyword provisions. </p>
 <p>If the NMODL <code>conductance</code> keyword is <b>not</b> used in the <code>breakpoint</code> block, then <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a45a4f9dd6ec0e07d6d9231bd356ab3be" title="Print main body of nrn_cur function.">CodegenCVisitor::print_nrn_cur_kernel</a> will use this printer </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04441">4441</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04411">4411</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -6835,7 +6822,7 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04386">4386</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04356">4356</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -6864,7 +6851,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Print nrn_destructor function definition. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03597">3597</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03565">3565</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -6892,7 +6879,7 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03448">3448</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03414">3414</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -6912,9 +6899,9 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Print nrn_state / state update function definition. </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000015">Todo:</a></b></dt><dd>Eigen solver node also emits IonCurVar variable in the functor but that shouldn't update ions in derivative block </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000014">Todo:</a></b></dt><dd>Eigen solver node also emits IonCurVar variable in the functor but that shouldn't update ions in derivative block </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04324">4324</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04294">4294</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -6943,7 +6930,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Print the getter methods for float and integer variables count. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02159">2159</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02152">2152</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -6972,7 +6959,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Print declaration of macro NRN_PRCELLSTATE for debugging. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02627">2627</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02698">2698</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -7010,7 +6997,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#a8ff849af27f8ab3420c446f575b2a47d">nmodl::codegen::CodegenIspcVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01730">1730</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01717">1717</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -7041,7 +7028,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#a46de2fba2fa2fbfdc5d46f56517f0c16">nmodl::codegen::CodegenIspcVisitor</a>, <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#ab2b1180f70d5559ced0633638dd14b5a">nmodl::codegen::CodegenAccVisitor</a>, and <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cuda_visitor.html#a9a6a779c0c19b7541f01909cd18e634d">nmodl::codegen::CodegenCudaVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01154">1154</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01162">1162</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -7070,7 +7057,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Print send event move block used in net receive as well as watch. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03939">3939</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03907">3907</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -7099,7 +7086,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Print the function that initialize range variable with different data type. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03229">3229</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03162">3162</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -7130,7 +7117,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#aac86cb632204c543764c601e0b97a511">nmodl::codegen::CodegenIspcVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01195">1195</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01203">1203</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -7161,7 +7148,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#af6513104d482474aeaadc19d91df6493">nmodl::codegen::CodegenIspcVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01212">1212</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01220">1220</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -7190,7 +7177,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Print all reduction statements. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01200">1200</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01208">1208</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -7219,7 +7206,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Print standard C/C++ includes. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02435">2435</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02450">2450</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -7275,7 +7262,7 @@ Protected Attributes</h2></td></tr>
 </dl>
 <p>not necessary to add indent for verbatim block (pretty-printing)</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01325">1325</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01333">1333</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -7303,7 +7290,7 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01491">1491</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01484">1484</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -7331,7 +7318,7 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01579">1579</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01573">1573</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -7366,7 +7353,7 @@ Protected Attributes</h2></td></tr>
 </ul>
 <p>These variables are allocated into different thread structures and have corresponding thread ids. Thread id start from 0. In mod2c implementation, thread_data_index is increased at various places and it is used to decide the index of thread. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02230">2230</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02224">2224</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -7395,7 +7382,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Print thread related memory allocation and deallocation callbacks. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02930">2930</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02993">2993</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -7424,7 +7411,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Print top level (global scope) verbatim blocks. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01406">1406</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01399">1399</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -7453,7 +7440,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Set v_unused (voltage) for NRN_PRCELLSTATE feature. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04616">4616</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04586">4586</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -7481,11 +7468,11 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Print watch activate function. </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000011">Todo:</a></b></dt><dd>Number of watch could be more than number of statements according to grammar.</dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000010">Todo:</a></b></dt><dd>Number of watch could be more than number of statements according to grammar.</dd></dl>
 <p>Check if this is correctly handled in neuron and coreneuron. </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000012">Todo:</a></b></dt><dd>Similar to neuron/coreneuron we are using first watch and ignoring rest. </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000011">Todo:</a></b></dt><dd>Similar to neuron/coreneuron we are using first watch and ignoring rest. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03623">3623</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03591">3591</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -7505,10 +7492,10 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Print watch activate function. </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000013">Todo:</a></b></dt><dd>Similar to print_watch_activate, we are using only first watch.</dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000012">Todo:</a></b></dt><dd>Similar to print_watch_activate, we are using only first watch.</dd></dl>
 <p>need to verify with neuron/coreneuron about rest. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03672">3672</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l03640">3640</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -7539,7 +7526,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#afd18022eb1440ed623a3d1aed1a7f0b5">nmodl::codegen::CodegenIspcVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04684">4684</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04653">4653</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -7590,7 +7577,7 @@ Protected Attributes</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>The generated target backend code</dd></dl>
 <p>In this case we first update current mechanism's shadow vector and then add statement to queue that will be used in reduction queue. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02108">2108</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02101">2101</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -7627,9 +7614,9 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The code with all variables renamed as needed</dd></dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000010">Todo:</a></b></dt><dd>: this is still ad-hoc and requires re-implementation to handle it more elegantly. </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000009">Todo:</a></b></dt><dd>: this is still ad-hoc and requires re-implementation to handle it more elegantly. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02029">2029</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02017">2017</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -7699,7 +7686,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#a9cd76791a8a653a9f014064f86fd1967">nmodl::codegen::CodegenIspcVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01301">1301</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01309">1309</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -7767,7 +7754,7 @@ Protected Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The ion read variable name </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02069">2069</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02061">2061</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -7796,7 +7783,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Arguments for register_mech or point_register_mech function. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02056">2056</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02044">2044</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -7827,7 +7814,7 @@ Protected Attributes</h2></td></tr>
 <dl class="todo"><dt><b><a class="el" href="todo.html#_todo000007">Todo:</a></b></dt><dd>Issue with verbatim renaming.</dd></dl>
 <p>e.g. pattern.mod has info struct with index variable. If we use "index" instead of "indexes" as default argument then during verbatim replacement we don't know the index is which one. This is because verbatim renaming pass has already stripped out prefixes from the text. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01437">1437</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01430">1430</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -7866,7 +7853,7 @@ Protected Attributes</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>The possibly replace variable name </dd></dl>
 <p>if function is defined the same mod file then the arguments must contain mechanism instance as well.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02000">2000</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01988">1988</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -7894,7 +7881,7 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04689">4689</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04658">4658</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -7917,7 +7904,7 @@ Protected Attributes</h2></td></tr>
 <p>Setup the target backend code generator. </p>
 <p>Typically called from within <code>visit_program</code> but may be called from specialized targets to setup this Code generator as fallback. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04694">4694</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04663">4663</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -7954,7 +7941,7 @@ Protected Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The name of the variable prefixed with <code>shadow_</code> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00419">419</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00428">428</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -8066,7 +8053,7 @@ Protected Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The updated name of the variable has been optimized (e.g. <code>ena</code> --&gt; <code>ion_ena</code>) </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02335">2335</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02334">2334</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -8225,7 +8212,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#afab4e50b8b3fa41bc61d8269d4de0997">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04298">4298</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04268">4268</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -8289,7 +8276,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a823773ac45f20e28d2400f7b16f3adca">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01879">1879</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01866">1866</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -8321,7 +8308,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#aa237a490b65cf3077675dfd495ebd253">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01803">1803</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01790">1790</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -8449,7 +8436,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a7c2beec36345e9b372ddf32c6002c77f">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04065">4065</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04033">4033</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -8775,7 +8762,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html#afc745b4df1053d0e6ddb6bc99fa619ca">nmodl::codegen::CodegenIspcVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04714">4714</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04683">4683</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -8807,7 +8794,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a62fc9a812bba862a3ec56eac5ceb2d38">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04308">4308</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l04278">4278</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -9063,7 +9050,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a88dbedea2307312541fe8475f054f57a">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01319">1319</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l01327">1327</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -9132,7 +9119,7 @@ Protected Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The ion write variable name </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02075">2075</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html#l02067">2067</a> of file <a class="el" href="src_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -9159,7 +9146,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Flag to indicate if visitor should print the visited nodes. </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00204">204</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00205">205</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -9185,7 +9172,7 @@ Protected Attributes</h2></td></tr>
 
 <p>All float variables for the model. </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00224">224</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00225">225</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -9210,9 +9197,9 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>All global variables for the model. </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000018">Todo:</a></b></dt><dd>: this has become different than <a class="el" href="structnmodl_1_1codegen_1_1_codegen_info.html" title="Represent information collected from AST for code generation.">CodegenInfo</a> </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000017">Todo:</a></b></dt><dd>: this has become different than <a class="el" href="structnmodl_1_1codegen_1_1_codegen_info.html" title="Represent information collected from AST for code generation.">CodegenInfo</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00235">235</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00236">236</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -9238,7 +9225,7 @@ Protected Attributes</h2></td></tr>
 
 <p>All int variables for the model. </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00229">229</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00230">230</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -9264,7 +9251,7 @@ Protected Attributes</h2></td></tr>
 
 <p>All ion variables that could be possibly written. </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00240">240</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00241">241</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -9290,7 +9277,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Index of watch statement being printed. </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00260">260</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00261">261</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -9316,7 +9303,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Variable name should be converted to instance name (but not for function arguments) </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00214">214</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00215">215</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -9342,7 +9329,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Data type of floating point variables. </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00265">265</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00266">266</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -9368,7 +9355,7 @@ Protected Attributes</h2></td></tr>
 
 <p>All ast information for code generation. </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00270">270</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00271">271</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -9394,7 +9381,7 @@ Protected Attributes</h2></td></tr>
 
 <p><code>true</code> if internal method call was encountered while processing verbatim block </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00255">255</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00256">256</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -9420,7 +9407,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Name of mod file (without .mod suffix) </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00199">199</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00200">200</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -9446,7 +9433,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Flag to indicate if visitor should avoid ion variable copies. </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00209">209</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00210">210</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -9472,7 +9459,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Pointer to active code printer. </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00285">285</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00286">286</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -9498,7 +9485,7 @@ Protected Attributes</h2></td></tr>
 
 <p><code>true</code> if currently net_receive block being printed </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00245">245</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00246">246</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -9524,7 +9511,7 @@ Protected Attributes</h2></td></tr>
 
 <p><code>true</code> if currently printing top level verbatim blocks </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00250">250</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00251">251</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -9550,7 +9537,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Symbol table for the program. </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00219">219</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00220">220</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -9576,7 +9563,7 @@ Protected Attributes</h2></td></tr>
 
 <p>List of shadow statements in the current block. </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00290">290</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00291">291</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -9602,7 +9589,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Code printer object for target (C, CUDA, ispc, ...) </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00275">275</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00276">276</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -9628,7 +9615,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Code printer object for wrappers. </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00280">280</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__c__visitor_8hpp_source.html#l00281">281</a> of file <a class="el" href="codegen__c__visitor_8hpp_source.html">codegen_c_visitor.hpp</a>.</p>
 
 </div>
 </div>

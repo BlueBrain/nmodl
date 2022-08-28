@@ -4,6 +4,7 @@ var dir_bb63d001f2c2d4d23cdeedc048a4b8ac =
     [ "constant_folder.cpp", "constant__folder_8cpp.html", "constant__folder_8cpp" ],
     [ "defuse_analyze.cpp", "defuse__analyze_8cpp.html", "defuse__analyze_8cpp" ],
     [ "global_to_range.cpp", "global__to__range_8cpp.html", "global__to__range_8cpp" ],
+    [ "implicit_argument.cpp", "implicit__argument_8cpp.html", "implicit__argument_8cpp" ],
     [ "inline.cpp", "inline_8cpp.html", "inline_8cpp" ],
     [ "ispc_rename.cpp", "ispc__rename_8cpp.html", "ispc__rename_8cpp" ],
     [ "json.cpp", "json_8cpp.html", "json_8cpp" ],

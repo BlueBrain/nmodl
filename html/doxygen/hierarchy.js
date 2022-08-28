@@ -249,6 +249,7 @@ var hierarchy =
         [ "nmodl::visitor::AfterCVodeToCnexpVisitor", "classnmodl_1_1visitor_1_1_after_c_vode_to_cnexp_visitor.html", null ],
         [ "nmodl::visitor::ConstantFolderVisitor", "classnmodl_1_1visitor_1_1_constant_folder_visitor.html", null ],
         [ "nmodl::visitor::GlobalToRangeVisitor", "classnmodl_1_1visitor_1_1_global_to_range_visitor.html", null ],
+        [ "nmodl::visitor::ImplicitArgumentVisitor", "structnmodl_1_1visitor_1_1_implicit_argument_visitor.html", null ],
         [ "nmodl::visitor::IndexedNameVisitor", "classnmodl_1_1visitor_1_1_indexed_name_visitor.html", null ],
         [ "nmodl::visitor::IndexRemover", "classnmodl_1_1visitor_1_1_index_remover.html", null ],
         [ "nmodl::visitor::InlineVisitor", "classnmodl_1_1visitor_1_1_inline_visitor.html", null ],

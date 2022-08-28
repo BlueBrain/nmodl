@@ -105,7 +105,7 @@ $(document).ready(function(){initNavTree('structnmodl_1_1codegen_1_1_codegen_inf
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Represent information collected from AST for code generation. </p>
 <p>Code generation passes require different information from AST. This information is gathered in this single class.</p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000022">Todo:</a></b></dt><dd>Need to store all Define i.e. macro definitions? </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000021">Todo:</a></b></dt><dd>Need to store all Define i.e. macro definitions? </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00147">147</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
 </div>
@@ -329,6 +329,9 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a91beaa484a3ecdbc9e3c3c5b8fb30381"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afbc429aec58b9dbf16f0db7fc2d1869a"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structnmodl_1_1codegen_1_1_codegen_info.html#a9ed0ac0e4a57563e267a4ebbbcbd4203">SymbolType</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnmodl_1_1codegen_1_1_codegen_info.html#afbc429aec58b9dbf16f0db7fc2d1869a">table_assigned_variables</a></td></tr>
 <tr class="separator:afbc429aec58b9dbf16f0db7fc2d1869a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a04914559f3a67551dfa95ca1514f4719"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::pair&lt; <a class="el" href="structnmodl_1_1codegen_1_1_codegen_info.html#a9ed0ac0e4a57563e267a4ebbbcbd4203">SymbolType</a>, std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnmodl_1_1codegen_1_1_codegen_info.html#a04914559f3a67551dfa95ca1514f4719">neuron_global_variables</a></td></tr>
+<tr class="memdesc:a04914559f3a67551dfa95ca1514f4719"><td class="mdescLeft">&#160;</td><td class="mdescRight">[Core]NEURON global variables used (e.g. celsius) and their types  <a href="structnmodl_1_1codegen_1_1_codegen_info.html#a04914559f3a67551dfa95ca1514f4719">More...</a><br /></td></tr>
+<tr class="separator:a04914559f3a67551dfa95ca1514f4719"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9246fe1c2f29c711726afe73fcff0227"><td class="memItemLeft" align="right" valign="top">std::vector&lt; const <a class="el" href="classnmodl_1_1ast_1_1_block.html">ast::Block</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnmodl_1_1codegen_1_1_codegen_info.html#a9246fe1c2f29c711726afe73fcff0227">functions_with_table</a></td></tr>
 <tr class="memdesc:a9246fe1c2f29c711726afe73fcff0227"><td class="mdescLeft">&#160;</td><td class="mdescRight">function or procedures with table statement  <a href="structnmodl_1_1codegen_1_1_codegen_info.html#a9246fe1c2f29c711726afe73fcff0227">More...</a><br /></td></tr>
 <tr class="separator:a9246fe1c2f29c711726afe73fcff0227"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -409,7 +412,7 @@ Public Attributes</h2></td></tr>
 
 <p>if legacy derivimplicit solver from coreneuron to be used </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00410">410</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00413">413</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
 
 </div>
 </div>
@@ -436,7 +439,7 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00405">405</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00408">408</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
 
 </div>
 </div>
@@ -666,7 +669,7 @@ Public Attributes</h2></td></tr>
 
 <p>if watch statements are used </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00401">401</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00404">404</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
 
 </div>
 </div>
@@ -780,7 +783,7 @@ Public Attributes</h2></td></tr>
 
 <p>all before after blocks </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00368">368</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00371">371</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
 
 </div>
 </div>
@@ -832,7 +835,7 @@ Public Attributes</h2></td></tr>
 
 <p>represent conductance statements used in mod file </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00350">350</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00353">353</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
 
 </div>
 </div>
@@ -886,7 +889,7 @@ Public Attributes</h2></td></tr>
 
 <p>non specific and ionic currents </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00356">356</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00359">359</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
 
 </div>
 </div>
@@ -994,7 +997,7 @@ Public Attributes</h2></td></tr>
 
 <p>true if eigen linear solver is used </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00377">377</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00380">380</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
 
 </div>
 </div>
@@ -1012,7 +1015,7 @@ Public Attributes</h2></td></tr>
 
 <p>true if eigen newton solver is used </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00374">374</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00377">377</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
 
 </div>
 </div>
@@ -1120,7 +1123,7 @@ Public Attributes</h2></td></tr>
 
 <p>function or procedures with table statement </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00347">347</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00350">350</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
 
 </div>
 </div>
@@ -1283,6 +1286,24 @@ Public Attributes</h2></td></tr>
 <p>if net_send function is used </p>
 
 <p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00183">183</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a04914559f3a67551dfa95ca1514f4719"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a04914559f3a67551dfa95ca1514f4719">&#9670;&nbsp;</a></span>neuron_global_variables</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::pair&lt;<a class="el" href="structnmodl_1_1codegen_1_1_codegen_info.html#a9ed0ac0e4a57563e267a4ebbbcbd4203">SymbolType</a>, std::string&gt; &gt; nmodl::codegen::CodegenInfo::neuron_global_variables</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>[Core]NEURON global variables used (e.g. celsius) and their types </p>
+
+<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00347">347</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
 
 </div>
 </div>
@@ -1536,7 +1557,7 @@ Public Attributes</h2></td></tr>
 
 <p>if we need a call back to wrote_conc in neuron/coreneuron </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00423">423</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00426">426</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
 
 </div>
 </div>
@@ -1554,7 +1575,7 @@ Public Attributes</h2></td></tr>
 
 <p>index variable semantic information </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00353">353</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00356">356</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
 
 </div>
 </div>
@@ -1749,7 +1770,7 @@ Public Attributes</h2></td></tr>
 
 <p>all top level global blocks </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00359">359</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00362">362</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
 
 </div>
 </div>
@@ -1822,7 +1843,7 @@ Public Attributes</h2></td></tr>
 
 <p>all top level verbatim blocks </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00362">362</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00365">365</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
 
 </div>
 </div>
@@ -1876,7 +1897,7 @@ Public Attributes</h2></td></tr>
 
 <p>all variables/symbols used in the verbatim block </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00371">371</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00374">374</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
 
 </div>
 </div>
@@ -1931,7 +1952,7 @@ Public Attributes</h2></td></tr>
 
 <p>all watch statements </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00365">365</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00368">368</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
 
 </div>
 </div>
