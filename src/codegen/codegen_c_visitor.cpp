@@ -1892,9 +1892,9 @@ void CodegenCVisitor::print_eigen_linear_solver(const std::string& float_type, i
 
 std::string CodegenCVisitor::internal_method_arguments() {
     if (ion_variable_struct_required()) {
-        return "id, pnodecount, inst, ionvar, data, indexes, thread, nt, ml, v";
+        return "id, pnodecount, inst, ionvar, data, indexes, thread, nt, v";
     }
-    return "id, pnodecount, inst, data, indexes, thread, nt, ml, v";
+    return "id, pnodecount, inst, data, indexes, thread, nt, v";
 }
 
 
@@ -1926,7 +1926,6 @@ CodegenCVisitor::ParamVector CodegenCVisitor::internal_method_parameters() {
     params.emplace_back("const ", "Datum*", "", "indexes");
     params.emplace_back(param_type_qualifier(), "ThreadDatum*", "", "thread");
     params.emplace_back(param_type_qualifier(), "NrnThread*", param_ptr_qualifier(), "nt");
-    params.emplace_back(param_type_qualifier(), "Memb_list*", param_ptr_qualifier(), "ml");
     params.emplace_back("", "double", "", "v");
     return params;
 }
@@ -1961,9 +1960,9 @@ std::string CodegenCVisitor::nrn_thread_arguments() {
  */
 std::string CodegenCVisitor::nrn_thread_internal_arguments() {
     if (ion_variable_struct_required()) {
-        return "id, pnodecount, inst, ionvar, data, indexes, thread, nt, ml, v";
+        return "id, pnodecount, inst, ionvar, data, indexes, thread, nt, v";
     }
-    return "id, pnodecount, inst, data, indexes, thread, nt, ml, v";
+    return "id, pnodecount, inst, data, indexes, thread, nt, v";
 }
 
 
