@@ -250,7 +250,6 @@ void CodegenIspcVisitor::print_nrn_cur_matrix_shadow_reduction() {
     if (info.point_process) {
         printer->add_line("uniform int node_id = node_index[id];");
         printer->fmt_line("vec_rhs[node_id] {} shadow_rhs[id];", rhs_op);
-        printer->fmt_line("vec_rhs[node_id] {} shadow_rhs[id];", rhs_op);
         printer->fmt_line("vec_d[node_id] {} shadow_d[id];", d_op);
     }
 }
