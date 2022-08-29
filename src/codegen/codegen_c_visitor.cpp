@@ -1836,9 +1836,7 @@ void CodegenCVisitor::visit_eigen_newton_solver_block(const ast::EigenNewtonSolv
     print_statement_block(*node.get_finalize_block(), false, false);
     printer->end_block(1);
 
-    printer->end_block(0);
-    printer->add_text(";");
-    printer->add_newline();
+    printer->end_block(";");
 
     // call newton solver with functor and X matrix that contains state vars
     printer->add_line("// call newton solver");
@@ -3108,9 +3106,7 @@ void CodegenCVisitor::print_ion_var_structure() {
 
     print_ion_var_constructor(members);
 
-    printer->end_block();
-    printer->add_text(";");
-    printer->add_newline();
+    printer->end_block(";");
 }
 
 
@@ -4198,9 +4194,7 @@ void CodegenCVisitor::print_derivimplicit_kernel(Block* block) {
     printer->end_block(1);
     printer->add_line("return 0;");
     printer->end_block(1);  // operator()
-    printer->end_block();   // struct
-    printer->add_text(";");
-    printer->add_newline();
+    printer->end_block(";");   // struct
     printer->end_block(2);  // namespace
     printer->fmt_start_block("int {}_{}({})", block_name, suffix, ext_params);
     printer->add_line(instance);
