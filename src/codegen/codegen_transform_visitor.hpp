@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (C) 2018-2022 Blue Brain Project
+ * Copyright (C) 2022 Blue Brain Project
  *
  * This file is part of NMODL distributed under the terms of the GNU
  * Lesser General Public License. See top-level LICENSE file for details.
@@ -9,7 +9,7 @@
 
 /**
  * \file
- * \brief \copybrief nmodl::visitor::LocalToAssignedVisitor
+ * \brief \copybrief nmodl::visitor::CodegenTransformVisitor
  */
 
 #include "visitors/ast_visitor.hpp"
@@ -26,7 +26,7 @@ namespace nmodl {
  * \brief Visitor to make last transformation to AST before codegen
  *
  * Modifications made:
- * - add an argument to table if there are inside a function. In this case
+ * - add an argument to the table if it is inside a function. In this case
  *   the argument is the name of the function.
  */
 
