@@ -214,15 +214,15 @@ void CodegenCVisitor::visit_from_statement(const ast::FromStatement& node) {
     const auto& to = node.get_to();
     const auto& inc = node.get_increment();
     const auto& block = node.get_statement_block();
-    printer->add_text(fmt::format("for(int {}=", name));
+    printer->fmt_text("for(int {}=", name);
     from->accept(*this);
-    printer->add_text(fmt::format("; {}<=", name));
+    printer->fmt_text("; {}<=", name);
     to->accept(*this);
     if (inc) {
-        printer->add_text(fmt::format("; {}+=", name));
+        printer->fmt_text("; {}+=", name);
         inc->accept(*this);
     } else {
-        printer->add_text(fmt::format("; {}++", name));
+        printer->fmt_text("; {}++", name);
     }
     printer->add_text(")");
     block->accept(*this);
@@ -1371,7 +1371,7 @@ void CodegenCVisitor::print_function_call(const FunctionCall& node) {
     }
 
     auto arguments = node.get_arguments();
-    printer->add_text(fmt::format("{}(", function_name));
+    printer->fmt_text("{}(", function_name);
 
     if (defined_method(name)) {
         printer->add_text(internal_method_arguments());
@@ -1512,7 +1512,7 @@ void CodegenCVisitor::print_table_check_function(const Block& node) {
             printer->add_line("make_table = false;");
 
             printer->add_indent();
-            printer->add_text(fmt::format("{} = ", tmin_name));
+            printer->fmt_text("{} = ", tmin_name);
             from->accept(*this);
             printer->add_text(";");
             printer->add_newline();
@@ -1817,13 +1817,13 @@ void CodegenCVisitor::visit_eigen_newton_solver_block(const ast::EigenNewtonSolv
     const auto& variable_block = *node.get_variable_block();
     const auto& functor_block = *node.get_functor_block();
 
-    printer->add_text(fmt::format(
+    printer->fmt_text(
         "void operator()(const Eigen::Matrix<{0}, {1}, 1>& nmodl_eigen_xm, Eigen::Matrix<{0}, {1}, "
         "1>& nmodl_eigen_fm, "
         "Eigen::Matrix<{0}, {1}, {1}>& nmodl_eigen_jm) {2}",
         float_type,
         N,
-        is_functor_const(variable_block, functor_block) ? "const " : ""));
+        is_functor_const(variable_block, functor_block) ? "const " : "");
     printer->start_block();
     printer->fmt_line("const {}* nmodl_eigen_x = nmodl_eigen_xm.data();", float_type);
     printer->fmt_line("{}* nmodl_eigen_j = nmodl_eigen_jm.data();", float_type);
@@ -3119,7 +3119,7 @@ void CodegenCVisitor::print_ion_var_constructor(const std::vector<std::string>& 
     printer->add_newline();
     printer->add_line("IonCurVar() : ", 0);
     for (int i = 0; i < members.size(); i++) {
-        printer->add_text(fmt::format("{}(0)", members[i]));
+        printer->fmt_text("{}(0)", members[i]);
         if (i + 1 < members.size()) {
             printer->add_text(", ");
         }
@@ -3594,7 +3594,7 @@ void CodegenCVisitor::print_watch_activate() {
 
         auto varname = get_variable_name(fmt::format("watch{}", i + 1));
         printer->add_indent();
-        printer->add_text(fmt::format("{} = 2 + (", varname));
+        printer->fmt_text("{} = 2 + (", varname);
         auto watch = statement->get_statements().front();
         watch->get_expression()->visit_children(*this);
         printer->add_text(");");
@@ -3750,12 +3750,12 @@ void CodegenCVisitor::print_net_send_call(const FunctionCall& node) {
     // artificial cells don't use spike buffering
     // clang-format off
     if (info.artificial_cell) {
-        printer->add_text(fmt::format("artcell_net_send(&{}, {}, {}, nt->_t+", tqitem, weight_index, pnt));
+        printer->fmt_text("artcell_net_send(&{}, {}, {}, nt->_t+", tqitem, weight_index, pnt);
     } else {
         auto point_process = get_variable_name("point_process");
         std::string t = get_variable_name("t");
         printer->add_text("net_send_buffering(");
-        printer->add_text(fmt::format("ml->_net_send_buffer, 0, {}, {}, {}, {}+", tqitem, weight_index, point_process, t));
+        printer->fmt_text("ml->_net_send_buffer, 0, {}, {}, {}, {}+", tqitem, weight_index, point_process, t);
     }
     // clang-format off
     print_vector_elements(arguments, ", ");
@@ -3777,14 +3777,14 @@ void CodegenCVisitor::print_net_move_call(const FunctionCall& node) {
     // artificial cells don't use spike buffering
     // clang-format off
     if (info.artificial_cell) {
-        printer->add_text(fmt::format("artcell_net_move(&{}, {}, ", tqitem, pnt));
+        printer->fmt_text("artcell_net_move(&{}, {}, ", tqitem, pnt);
         print_vector_elements(arguments, ", ");
         printer->add_text(")");
     } else {
         auto point_process = get_variable_name("point_process");
         std::string t = get_variable_name("t");
         printer->add_text("net_send_buffering(");
-        printer->add_text(fmt::format("ml->_net_send_buffer, 2, {}, {}, {}, ", tqitem, weight_index, point_process));
+        printer->fmt_text("ml->_net_send_buffer, 2, {}, {}, {}, ", tqitem, weight_index, point_process);
         print_vector_elements(arguments, ", ");
         printer->add_text(", 0.0");
         printer->add_text(")");
@@ -3800,7 +3800,7 @@ void CodegenCVisitor::print_net_event_call(const FunctionCall& node) {
     } else {
         auto point_process = get_variable_name("point_process");
         printer->add_text("net_send_buffering(");
-        printer->add_text(fmt::format("ml->_net_send_buffer, 1, -1, -1, {}, ", point_process));
+        printer->fmt_text("ml->_net_send_buffer, 1, -1, -1, {}, ", point_process);
         print_vector_elements(arguments, ", ");
         printer->add_text(", 0.0");
     }
@@ -4019,7 +4019,7 @@ void CodegenCVisitor::visit_for_netcon(const ast::ForNetcon& node) {
             return a.name == naming::FOR_NETCON_SEMANTIC;
         })->index;
 
-    printer->add_text(fmt::format("const size_t offset = {}*pnodecount + id;", index));
+    printer->fmt_text("const size_t offset = {}*pnodecount + id;", index);
     printer->add_newline();
     printer->add_line(
         "const size_t for_netcon_start = nt->_fornetcon_perm_indices[indexes[offset]];");
