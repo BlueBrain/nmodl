@@ -336,7 +336,7 @@ std::vector<std::string> get_external_functions() {
     for (auto& method: details::methods) {
         result.push_back(method.first);
     }
-    result.insert(result.cbegin(),
+    result.insert(result.cend(),
                   details::extern_definitions.begin(),
                   details::extern_definitions.end());
     return result;
