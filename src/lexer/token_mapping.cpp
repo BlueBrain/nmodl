@@ -18,7 +18,6 @@ namespace nmodl {
 
 using Token = parser::NmodlParser::token;
 using TokenType = parser::NmodlParser::token_type;
-using Parser = parser::NmodlParser;
 
 /// details of lexer tokens
 namespace details {
@@ -285,7 +284,7 @@ TokenType keyword_type(const std::string& name) {
  * @return true if name is a keyword
  */
 bool is_keyword(const std::string& name) {
-    return (details::keywords.find(name) != details::keywords.end());
+    return details::keywords.find(name) != details::keywords.end();
 }
 
 
@@ -320,9 +319,7 @@ TokenType token_type(const std::string& name) {
  * @return vector of NEURON variables
  */
 std::vector<std::string> get_external_variables() {
-    std::vector<std::string> result;
-    result.insert(result.end(), details::NEURON_VARIABLES.begin(), details::NEURON_VARIABLES.end());
-    return result;
+    return details::NEURON_VARIABLES;
 }
 
 
