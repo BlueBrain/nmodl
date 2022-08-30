@@ -177,6 +177,10 @@ var group__codegen__details =
       [ "watch_statements", "structnmodl_1_1codegen_1_1_codegen_info.html#a505912755f498817e454ad75c2f4bf26", null ],
       [ "write_concentration", "structnmodl_1_1codegen_1_1_codegen_info.html#a070255cbb1fca8863a4cb85fae2cdfcb", null ]
     ] ],
+    [ "CodegenTransformVisitor", "classnmodl_1_1_codegen_transform_visitor.html", [
+      [ "CodegenTransformVisitor", "classnmodl_1_1_codegen_transform_visitor.html#aef355a879c8cbcf42428cb9ebbf118fb", null ],
+      [ "visit_function_block", "classnmodl_1_1_codegen_transform_visitor.html#ac09b61af6cd6080b9798c1c8f805d3e8", null ]
+    ] ],
     [ "BlockType", "group__codegen__details.html#ga2d0a1f473f039b495e9cc349c3b57dbb", [
       [ "Initial", "group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba560a4dff90c58651347affffd44f7419", null ],
       [ "Constructor", "group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba2720cc542e6d281f618eb1f62a064ce7", null ],

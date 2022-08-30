@@ -116,26 +116,27 @@ Inheritance diagram for nmodl::visitor::Visitor:</div>
   <map id="nmodl::visitor::Visitor_map" name="nmodl::visitor::Visitor_map">
 <area href="classnmodl_1_1visitor_1_1_ast_visitor.html" title="Concrete visitor for all AST classes." alt="nmodl::visitor::AstVisitor" shape="rect" coords="0,56,264,80"/>
 <area href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html" title="Visitor for printing compatibility issues of the mod file" alt="nmodl::codegen::CodegenCompatibilityVisitor" shape="rect" coords="274,112,538,136"/>
-<area href="classnmodl_1_1visitor_1_1_after_c_vode_to_cnexp_visitor.html" title="Visitor to change usage of after_cvode solver to cnexp." alt="nmodl::visitor::AfterCVodeToCnexpVisitor" shape="rect" coords="274,168,538,192"/>
-<area href="classnmodl_1_1visitor_1_1_constant_folder_visitor.html" title="Perform constant folding of integer/float/double expressions." alt="nmodl::visitor::ConstantFolderVisitor" shape="rect" coords="274,224,538,248"/>
-<area href="classnmodl_1_1visitor_1_1_global_to_range_visitor.html" title="Visitor to convert GLOBAL variables to RANGE variables." alt="nmodl::visitor::GlobalToRangeVisitor" shape="rect" coords="274,280,538,304"/>
-<area href="structnmodl_1_1visitor_1_1_implicit_argument_visitor.html" title="Visitor for adding implicit arguments to [Core]NEURON functions." alt="nmodl::visitor::ImplicitArgumentVisitor" shape="rect" coords="274,336,538,360"/>
-<area href="classnmodl_1_1visitor_1_1_indexed_name_visitor.html" title="Get node name with indexed for the IndexedName node and the dependencies of DiffEqExpression node." alt="nmodl::visitor::IndexedNameVisitor" shape="rect" coords="274,392,538,416"/>
-<area href="classnmodl_1_1visitor_1_1_index_remover.html" title="Helper visitor to replace index of array variable with integer." alt="nmodl::visitor::IndexRemover" shape="rect" coords="274,448,538,472"/>
-<area href="classnmodl_1_1visitor_1_1_inline_visitor.html" title="Visitor to inline local procedure and function calls" alt="nmodl::visitor::InlineVisitor" shape="rect" coords="274,504,538,528"/>
-<area href="classnmodl_1_1visitor_1_1_kinetic_block_visitor.html" title="Visitor for kinetic block statements" alt="nmodl::visitor::KineticBlockVisitor" shape="rect" coords="274,560,538,584"/>
-<area href="classnmodl_1_1visitor_1_1_local_to_assigned_visitor.html" title="Visitor to convert top level LOCAL variables to ASSIGNED variables." alt="nmodl::visitor::LocalToAssignedVisitor" shape="rect" coords="274,616,538,640"/>
-<area href="classnmodl_1_1visitor_1_1_local_var_rename_visitor.html" title="Visitor to rename local variables conflicting with global scope" alt="nmodl::visitor::LocalVarRenameVisitor" shape="rect" coords="274,672,538,696"/>
-<area href="classnmodl_1_1visitor_1_1_loop_unroll_visitor.html" title="Unroll for loop in the AST." alt="nmodl::visitor::LoopUnrollVisitor" shape="rect" coords="274,728,538,752"/>
-<area href="classnmodl_1_1visitor_1_1_neuron_solve_visitor.html" title="Visitor that solves ODEs using old solvers of NEURON" alt="nmodl::visitor::NeuronSolveVisitor" shape="rect" coords="274,784,538,808"/>
-<area href="classnmodl_1_1visitor_1_1_solve_block_visitor.html" title="Replace solve block statements with actual solution node in the AST." alt="nmodl::visitor::SolveBlockVisitor" shape="rect" coords="274,840,538,864"/>
-<area href="classnmodl_1_1visitor_1_1_steadystate_visitor.html" title="Visitor for STEADYSTATE solve statements" alt="nmodl::visitor::SteadystateVisitor" shape="rect" coords="274,896,538,920"/>
-<area href="classnmodl_1_1visitor_1_1_sympy_conductance_visitor.html" title="Visitor for generating CONDUCTANCE statements for ions" alt="nmodl::visitor::SympyConductanceVisitor" shape="rect" coords="274,952,538,976"/>
-<area href="classnmodl_1_1visitor_1_1_sympy_replace_solutions_visitor.html" title="Replace statements in node with pre_solve_statements, tmp_statements, and solutions." alt="nmodl::visitor::SympyReplaceSolutionsVisitor" shape="rect" coords="274,1008,538,1032"/>
-<area href="classnmodl_1_1visitor_1_1_sympy_solver_visitor.html" title="Visitor for systems of algebraic and differential equations" alt="nmodl::visitor::SympySolverVisitor" shape="rect" coords="274,1064,538,1088"/>
-<area href="classnmodl_1_1visitor_1_1_symtab_visitor.html" title="Concrete visitor for constructing symbol table from AST." alt="nmodl::visitor::SymtabVisitor" shape="rect" coords="274,1120,538,1144"/>
-<area href="classnmodl_1_1visitor_1_1_units_visitor.html" title="Visitor for Units blocks of AST." alt="nmodl::visitor::UnitsVisitor" shape="rect" coords="274,1176,538,1200"/>
-<area href="classnmodl_1_1visitor_1_1_verbatim_var_rename_visitor.html" title="Rename variable in verbatim block." alt="nmodl::visitor::VerbatimVarRenameVisitor" shape="rect" coords="274,1232,538,1256"/>
+<area href="classnmodl_1_1_codegen_transform_visitor.html" title="Visitor to make last transformation to AST before codegen." alt="nmodl::CodegenTransformVisitor" shape="rect" coords="274,168,538,192"/>
+<area href="classnmodl_1_1visitor_1_1_after_c_vode_to_cnexp_visitor.html" title="Visitor to change usage of after_cvode solver to cnexp." alt="nmodl::visitor::AfterCVodeToCnexpVisitor" shape="rect" coords="274,224,538,248"/>
+<area href="classnmodl_1_1visitor_1_1_constant_folder_visitor.html" title="Perform constant folding of integer/float/double expressions." alt="nmodl::visitor::ConstantFolderVisitor" shape="rect" coords="274,280,538,304"/>
+<area href="classnmodl_1_1visitor_1_1_global_to_range_visitor.html" title="Visitor to convert GLOBAL variables to RANGE variables." alt="nmodl::visitor::GlobalToRangeVisitor" shape="rect" coords="274,336,538,360"/>
+<area href="structnmodl_1_1visitor_1_1_implicit_argument_visitor.html" title="Visitor for adding implicit arguments to [Core]NEURON functions." alt="nmodl::visitor::ImplicitArgumentVisitor" shape="rect" coords="274,392,538,416"/>
+<area href="classnmodl_1_1visitor_1_1_indexed_name_visitor.html" title="Get node name with indexed for the IndexedName node and the dependencies of DiffEqExpression node." alt="nmodl::visitor::IndexedNameVisitor" shape="rect" coords="274,448,538,472"/>
+<area href="classnmodl_1_1visitor_1_1_index_remover.html" title="Helper visitor to replace index of array variable with integer." alt="nmodl::visitor::IndexRemover" shape="rect" coords="274,504,538,528"/>
+<area href="classnmodl_1_1visitor_1_1_inline_visitor.html" title="Visitor to inline local procedure and function calls" alt="nmodl::visitor::InlineVisitor" shape="rect" coords="274,560,538,584"/>
+<area href="classnmodl_1_1visitor_1_1_kinetic_block_visitor.html" title="Visitor for kinetic block statements" alt="nmodl::visitor::KineticBlockVisitor" shape="rect" coords="274,616,538,640"/>
+<area href="classnmodl_1_1visitor_1_1_local_to_assigned_visitor.html" title="Visitor to convert top level LOCAL variables to ASSIGNED variables." alt="nmodl::visitor::LocalToAssignedVisitor" shape="rect" coords="274,672,538,696"/>
+<area href="classnmodl_1_1visitor_1_1_local_var_rename_visitor.html" title="Visitor to rename local variables conflicting with global scope" alt="nmodl::visitor::LocalVarRenameVisitor" shape="rect" coords="274,728,538,752"/>
+<area href="classnmodl_1_1visitor_1_1_loop_unroll_visitor.html" title="Unroll for loop in the AST." alt="nmodl::visitor::LoopUnrollVisitor" shape="rect" coords="274,784,538,808"/>
+<area href="classnmodl_1_1visitor_1_1_neuron_solve_visitor.html" title="Visitor that solves ODEs using old solvers of NEURON" alt="nmodl::visitor::NeuronSolveVisitor" shape="rect" coords="274,840,538,864"/>
+<area href="classnmodl_1_1visitor_1_1_solve_block_visitor.html" title="Replace solve block statements with actual solution node in the AST." alt="nmodl::visitor::SolveBlockVisitor" shape="rect" coords="274,896,538,920"/>
+<area href="classnmodl_1_1visitor_1_1_steadystate_visitor.html" title="Visitor for STEADYSTATE solve statements" alt="nmodl::visitor::SteadystateVisitor" shape="rect" coords="274,952,538,976"/>
+<area href="classnmodl_1_1visitor_1_1_sympy_conductance_visitor.html" title="Visitor for generating CONDUCTANCE statements for ions" alt="nmodl::visitor::SympyConductanceVisitor" shape="rect" coords="274,1008,538,1032"/>
+<area href="classnmodl_1_1visitor_1_1_sympy_replace_solutions_visitor.html" title="Replace statements in node with pre_solve_statements, tmp_statements, and solutions." alt="nmodl::visitor::SympyReplaceSolutionsVisitor" shape="rect" coords="274,1064,538,1088"/>
+<area href="classnmodl_1_1visitor_1_1_sympy_solver_visitor.html" title="Visitor for systems of algebraic and differential equations" alt="nmodl::visitor::SympySolverVisitor" shape="rect" coords="274,1120,538,1144"/>
+<area href="classnmodl_1_1visitor_1_1_symtab_visitor.html" title="Concrete visitor for constructing symbol table from AST." alt="nmodl::visitor::SymtabVisitor" shape="rect" coords="274,1176,538,1200"/>
+<area href="classnmodl_1_1visitor_1_1_units_visitor.html" title="Visitor for Units blocks of AST." alt="nmodl::visitor::UnitsVisitor" shape="rect" coords="274,1232,538,1256"/>
+<area href="classnmodl_1_1visitor_1_1_verbatim_var_rename_visitor.html" title="Rename variable in verbatim block." alt="nmodl::visitor::VerbatimVarRenameVisitor" shape="rect" coords="274,1288,538,1312"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -2000,7 +2001,7 @@ Public Member Functions</h2></td></tr>
 
 <p>visit node of type <a class="el" href="classnmodl_1_1ast_1_1_function_block.html" title="TODO.">ast::FunctionBlock</a> </p>
 
-<p>Implemented in <a class="el" href="classnmodl_1_1visitor_1_1_symtab_visitor.html#aa0cdc461e0d5d407988efc6cefa85de4">nmodl::visitor::SymtabVisitor</a>, and <a class="el" href="classnmodl_1_1visitor_1_1_ast_visitor.html#a4e6493db0e228601405b27563293e2f7">nmodl::visitor::AstVisitor</a>.</p>
+<p>Implemented in <a class="el" href="classnmodl_1_1visitor_1_1_symtab_visitor.html#aa0cdc461e0d5d407988efc6cefa85de4">nmodl::visitor::SymtabVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_ast_visitor.html#a4e6493db0e228601405b27563293e2f7">nmodl::visitor::AstVisitor</a>, and <a class="el" href="classnmodl_1_1_codegen_transform_visitor.html#ac09b61af6cd6080b9798c1c8f805d3e8">nmodl::CodegenTransformVisitor</a>.</p>
 
 </div>
 </div>

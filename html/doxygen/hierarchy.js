@@ -246,6 +246,7 @@ var hierarchy =
     [ "nmodl::visitor::Visitor", "classnmodl_1_1visitor_1_1_visitor.html", [
       [ "nmodl::visitor::AstVisitor", "classnmodl_1_1visitor_1_1_ast_visitor.html", [
         [ "nmodl::codegen::CodegenCompatibilityVisitor", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html", null ],
+        [ "nmodl::CodegenTransformVisitor", "classnmodl_1_1_codegen_transform_visitor.html", null ],
         [ "nmodl::visitor::AfterCVodeToCnexpVisitor", "classnmodl_1_1visitor_1_1_after_c_vode_to_cnexp_visitor.html", null ],
         [ "nmodl::visitor::ConstantFolderVisitor", "classnmodl_1_1visitor_1_1_constant_folder_visitor.html", null ],
         [ "nmodl::visitor::GlobalToRangeVisitor", "classnmodl_1_1visitor_1_1_global_to_range_visitor.html", null ],

@@ -1,7 +1,14 @@
 var NAVTREEINDEX35 =
 {
-"structnmodl_1_1_version.html#adbc7fbe38420cc7498fbab186d5e33b5":[3,0,0,16,0],
-"structnmodl_1_1_version.html#af097f42c21c0e833ed31e3c2c2ea6b69":[3,0,0,16,1],
+"structnmodl_1_1_logger.html#a7e4aa72877c7fc521f7228f9b2dc3e25":[3,0,0,13,0],
+"structnmodl_1_1_logger.html#a9f2c68046d1f0133459be1a31905fc2f":[3,0,0,13,1],
+"structnmodl_1_1_nrn_units_lib.html":[3,0,0,15],
+"structnmodl_1_1_nrn_units_lib.html#a35b39a048f9504008e6b2c4b36f99dbd":[3,0,0,15,0],
+"structnmodl_1_1_nrn_units_lib.html#a4a437a7593b80831b607356db2588ffe":[3,0,0,15,1],
+"structnmodl_1_1_version.html":[3,0,0,17],
+"structnmodl_1_1_version.html#a14c75c06b7f3fb779053105e763fe091":[3,0,0,17,2],
+"structnmodl_1_1_version.html#adbc7fbe38420cc7498fbab186d5e33b5":[3,0,0,17,0],
+"structnmodl_1_1_version.html#af097f42c21c0e833ed31e3c2c2ea6b69":[3,0,0,17,1],
 "structnmodl_1_1ast_1_1_ast.html":[1,0,1,4],
 "structnmodl_1_1codegen_1_1_codegen_info.html":[1,1,0,6],
 "structnmodl_1_1codegen_1_1_codegen_info.html#a02c0064847b2d0e3a27ccc70a931e29a":[1,1,0,6,70],
@@ -242,12 +249,5 @@ var NAVTREEINDEX35 =
 "structnmodl_1_1utils_1_1_table_data.html":[1,7,3],
 "structnmodl_1_1utils_1_1_table_data.html#a407094b179280fe0fb5bdbae67155ed4":[1,7,3,2],
 "structnmodl_1_1utils_1_1_table_data.html#a5d52acd4ad1f650e788e5d3b10ff47d7":[1,7,3,4],
-"structnmodl_1_1utils_1_1_table_data.html#a605a25702332726991bf997bd9c18a7f":[1,7,3,5],
-"structnmodl_1_1utils_1_1_table_data.html#a62d93ed24adbe07a9f72ec732e176018":[1,7,3,1],
-"structnmodl_1_1utils_1_1_table_data.html#a79b7598195460c06ecce7d8f642ef742":[1,7,3,6],
-"structnmodl_1_1utils_1_1_table_data.html#a9d63777ef2cd60ca65cade107b1d48cc":[1,7,3,3],
-"structnmodl_1_1utils_1_1_table_data.html#acc5dd038c1055d590465a29931f94c8a":[1,7,3,0],
-"structnmodl_1_1utils_1_1_temp_file.html":[1,7,0],
-"structnmodl_1_1utils_1_1_temp_file.html#a2ab69e65ad64f478c35c095a162f72a9":[1,7,0,3],
-"structnmodl_1_1utils_1_1_temp_file.html#aac3f58124aaa4662afad83560d7a9972":[1,7,0,1]
+"structnmodl_1_1utils_1_1_table_data.html#a605a25702332726991bf997bd9c18a7f":[1,7,3,5]
 };
