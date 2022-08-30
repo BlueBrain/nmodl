@@ -141,7 +141,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:afa07551e3c50df27cd236c5c27f2fbed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a01d7c39fba39be68ea35f81f9ed1b5da"><td class="memTemplParams" colspan="2">template&lt;typename... Args&gt; </td></tr>
 <tr class="memitem:a01d7c39fba39be68ea35f81f9ed1b5da"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classnmodl_1_1printer_1_1_code_printer.html#a01d7c39fba39be68ea35f81f9ed1b5da">fmt_start_block</a> (Args &amp;&amp;... args)</td></tr>
+<tr class="memdesc:a01d7c39fba39be68ea35f81f9ed1b5da"><td class="mdescLeft">&#160;</td><td class="mdescRight">fmt_start_block(args...) is just shorthand for start_block(fmt::format(args...))  <a href="classnmodl_1_1printer_1_1_code_printer.html#a01d7c39fba39be68ea35f81f9ed1b5da">More...</a><br /></td></tr>
 <tr class="separator:a01d7c39fba39be68ea35f81f9ed1b5da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add57197c8f8ecd17df4ba3aba1c1deec"><td class="memTemplParams" colspan="2">template&lt;typename... Args&gt; </td></tr>
+<tr class="memitem:add57197c8f8ecd17df4ba3aba1c1deec"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classnmodl_1_1printer_1_1_code_printer.html#add57197c8f8ecd17df4ba3aba1c1deec">fmt_text</a> (Args &amp;&amp;... args)</td></tr>
+<tr class="memdesc:add57197c8f8ecd17df4ba3aba1c1deec"><td class="mdescLeft">&#160;</td><td class="mdescRight">fmt_text(args...) is just shorthand for add_text(fmt::format(args...))  <a href="classnmodl_1_1printer_1_1_code_printer.html#add57197c8f8ecd17df4ba3aba1c1deec">More...</a><br /></td></tr>
+<tr class="separator:add57197c8f8ecd17df4ba3aba1c1deec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7d45e932533914cb6f5b224b2c7853f7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1printer_1_1_code_printer.html#a7d45e932533914cb6f5b224b2c7853f7">add_multi_line</a> (const std::string &amp;)</td></tr>
 <tr class="separator:a7d45e932533914cb6f5b224b2c7853f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afe04b0066229f3ff59b2c123acfef90d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1printer_1_1_code_printer.html#afe04b0066229f3ff59b2c123acfef90d">add_newline</a> (int n=1)</td></tr>
@@ -411,7 +416,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="code__printer_8hpp_source.html#l00098">98</a> of file <a class="el" href="code__printer_8hpp_source.html">code_printer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="code__printer_8hpp_source.html#l00105">105</a> of file <a class="el" href="code__printer_8hpp_source.html">code_printer.hpp</a>.</p>
 
 </div>
 </div>
@@ -528,7 +533,41 @@ template&lt;typename... Args&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="code__printer_8hpp_source.html#l00086">86</a> of file <a class="el" href="code__printer_8hpp_source.html">code_printer.hpp</a>.</p>
+<p>fmt_start_block(args...) is just shorthand for start_block(fmt::format(args...)) </p>
+
+<p class="definition">Definition at line <a class="el" href="code__printer_8hpp_source.html#l00087">87</a> of file <a class="el" href="code__printer_8hpp_source.html">code_printer.hpp</a>.</p>
+
+</div>
+</div>
+<a id="add57197c8f8ecd17df4ba3aba1c1deec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#add57197c8f8ecd17df4ba3aba1c1deec">&#9670;&nbsp;</a></span>fmt_text()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename... Args&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void nmodl::printer::CodePrinter::fmt_text </td>
+          <td>(</td>
+          <td class="paramtype">Args &amp;&amp;...&#160;</td>
+          <td class="paramname"><em>args</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>fmt_text(args...) is just shorthand for add_text(fmt::format(args...)) </p>
+
+<p class="definition">Definition at line <a class="el" href="code__printer_8hpp_source.html#l00093">93</a> of file <a class="el" href="code__printer_8hpp_source.html">code_printer.hpp</a>.</p>
 
 </div>
 </div>
@@ -555,7 +594,7 @@ template&lt;typename... Args&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="code__printer_8hpp_source.html#l00094">94</a> of file <a class="el" href="code__printer_8hpp_source.html">code_printer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="code__printer_8hpp_source.html#l00101">101</a> of file <a class="el" href="code__printer_8hpp_source.html">code_printer.hpp</a>.</p>
 
 </div>
 </div>
@@ -582,7 +621,7 @@ template&lt;typename... Args&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="code__printer_8hpp_source.html#l00108">108</a> of file <a class="el" href="code__printer_8hpp_source.html">code_printer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="code__printer_8hpp_source.html#l00115">115</a> of file <a class="el" href="code__printer_8hpp_source.html">code_printer.hpp</a>.</p>
 
 </div>
 </div>

@@ -1,5 +1,6 @@
 var NAVTREEINDEX34 =
 {
+"parser_2main__c_8cpp_source.html":[4,0,1,4,7],
 "parser_2main__nmodl_8cpp.html":[4,0,1,4,8],
 "parser_2main__nmodl_8cpp.html#ac0f2228420376f4db7e1274f2b41667c":[4,0,1,4,8,0],
 "parser_2main__nmodl_8cpp_source.html":[4,0,1,4,8],
@@ -248,6 +249,5 @@ var NAVTREEINDEX34 =
 "structnmodl_1_1_nrn_units_lib.html#a35b39a048f9504008e6b2c4b36f99dbd":[3,0,0,14,0],
 "structnmodl_1_1_nrn_units_lib.html#a4a437a7593b80831b607356db2588ffe":[3,0,0,14,1],
 "structnmodl_1_1_version.html":[3,0,0,16],
-"structnmodl_1_1_version.html#a14c75c06b7f3fb779053105e763fe091":[3,0,0,16,2],
-"structnmodl_1_1_version.html#adbc7fbe38420cc7498fbab186d5e33b5":[3,0,0,16,0]
+"structnmodl_1_1_version.html#a14c75c06b7f3fb779053105e763fe091":[3,0,0,16,2]
 };

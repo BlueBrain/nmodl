@@ -15,6 +15,7 @@ var group__printer =
       [ "end_block", "classnmodl_1_1printer_1_1_code_printer.html#ae3347020781de1beb70dcd05cf48fca8", null ],
       [ "fmt_line", "classnmodl_1_1printer_1_1_code_printer.html#afa07551e3c50df27cd236c5c27f2fbed", null ],
       [ "fmt_start_block", "classnmodl_1_1printer_1_1_code_printer.html#a01d7c39fba39be68ea35f81f9ed1b5da", null ],
+      [ "fmt_text", "classnmodl_1_1printer_1_1_code_printer.html#add57197c8f8ecd17df4ba3aba1c1deec", null ],
       [ "increase_indent", "classnmodl_1_1printer_1_1_code_printer.html#aa9b5ebae0dd3cada657dafab54ba2fb3", null ],
       [ "indent_spaces", "classnmodl_1_1printer_1_1_code_printer.html#a634482601bf3f03b9f887ea3ebb77cf0", null ],
       [ "restart_block", "classnmodl_1_1printer_1_1_code_printer.html#a5d4cdffc1e08764ac3b752dd0f503339", null ],
