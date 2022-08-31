@@ -1,10 +1,5 @@
 var NAVTREEINDEX37 =
 {
-"token__mapping_8hpp.html#a2d1b1903ca3f4f531b67406da6b62ae6":[4,0,1,3,12,3],
-"token__mapping_8hpp.html#a627448d33f111c7c26f69416bead82f6":[4,0,1,3,12,4],
-"token__mapping_8hpp.html#a7711df7469359fc31a262c8c15dff311":[4,0,1,3,12,0],
-"token__mapping_8hpp.html#ab8c6fbb1722584c4990afd054942b365":[4,0,1,3,12,2],
-"token__mapping_8hpp_source.html":[4,0,1,3,12],
 "tokens_8cpp.html":[4,0,2,0,2,0],
 "tokens_8cpp.html#a033ff9e843be86e3e33d10c9d4bcb01a":[4,0,2,0,2,0,5],
 "tokens_8cpp.html#a1c3f1fcd05bd2327afc35b22449cfb54":[4,0,2,0,2,0,3],
