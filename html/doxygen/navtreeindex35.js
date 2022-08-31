@@ -1,5 +1,9 @@
 var NAVTREEINDEX35 =
 {
+"struct_class_info.html#a7c7a57635798572a0b1e3f7eb4f18511":[3,0,2,0],
+"struct_class_info.html#ad1d72a713940eb32cc3427fee7816876":[3,0,2,1],
+"struct_class_info.html#ad96673848ab1ba13aabf89ecf1abd6db":[3,0,2,2],
+"structnmodl_1_1_logger.html":[3,0,0,13],
 "structnmodl_1_1_logger.html#a7e4aa72877c7fc521f7228f9b2dc3e25":[3,0,0,13,0],
 "structnmodl_1_1_logger.html#a9f2c68046d1f0133459be1a31905fc2f":[3,0,0,13,1],
 "structnmodl_1_1_nrn_units_lib.html":[3,0,0,15],
@@ -245,9 +249,5 @@ var NAVTREEINDEX35 =
 "structnmodl_1_1utils_1_1_perf_stat.html#ae253575915ad0a83b66d3fc740b15bc2":[1,7,2,0],
 "structnmodl_1_1utils_1_1_perf_stat.html#ae258b793cb7955bc685b80596997f913":[1,7,2,22],
 "structnmodl_1_1utils_1_1_perf_stat.html#aefe9902a2b64360be6e65741e0d4ee4e":[1,7,2,12],
-"structnmodl_1_1utils_1_1_perf_stat.html#af615b59c588f3b078272fe767a903046":[1,7,2,14],
-"structnmodl_1_1utils_1_1_table_data.html":[1,7,3],
-"structnmodl_1_1utils_1_1_table_data.html#a407094b179280fe0fb5bdbae67155ed4":[1,7,3,2],
-"structnmodl_1_1utils_1_1_table_data.html#a5d52acd4ad1f650e788e5d3b10ff47d7":[1,7,3,4],
-"structnmodl_1_1utils_1_1_table_data.html#a605a25702332726991bf997bd9c18a7f":[1,7,3,5]
+"structnmodl_1_1utils_1_1_perf_stat.html#af615b59c588f3b078272fe767a903046":[1,7,2,14]
 };

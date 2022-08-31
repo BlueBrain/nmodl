@@ -755,12 +755,18 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a621a8824135ca3ca077dee6917e30943"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a621a8824135ca3ca077dee6917e30943">print_newtonspace_transfer_to_device</a> () const override</td></tr>
 <tr class="memdesc:a621a8824135ca3ca077dee6917e30943"><td class="mdescLeft">&#160;</td><td class="mdescRight">transfer newtonspace structure to device  <a href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a621a8824135ca3ca077dee6917e30943">More...</a><br /></td></tr>
 <tr class="separator:a621a8824135ca3ca077dee6917e30943"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6e9436c2f3475cc857f9b5e976635048"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a6e9436c2f3475cc857f9b5e976635048">print_instance_variable_transfer_to_device</a> (std::vector&lt; std::string &gt; const &amp;ptr_members) const override</td></tr>
-<tr class="memdesc:a6e9436c2f3475cc857f9b5e976635048"><td class="mdescLeft">&#160;</td><td class="mdescRight">copy the instance struct to the device  <a href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a6e9436c2f3475cc857f9b5e976635048">More...</a><br /></td></tr>
-<tr class="separator:a6e9436c2f3475cc857f9b5e976635048"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aed499839ad7b16786a43fd205dc526cb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#aed499839ad7b16786a43fd205dc526cb">print_instance_variable_deletion_from_device</a> () const override</td></tr>
-<tr class="memdesc:aed499839ad7b16786a43fd205dc526cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">delete the instance struct from the device  <a href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#aed499839ad7b16786a43fd205dc526cb">More...</a><br /></td></tr>
-<tr class="separator:aed499839ad7b16786a43fd205dc526cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4cb9e164e869f63d499d5f4c84f66f90"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a4cb9e164e869f63d499d5f4c84f66f90">print_instance_struct_transfer_routine_declarations</a> () override</td></tr>
+<tr class="memdesc:a4cb9e164e869f63d499d5f4c84f66f90"><td class="mdescLeft">&#160;</td><td class="mdescRight">declare helper functions for copying the instance struct to the device  <a href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a4cb9e164e869f63d499d5f4c84f66f90">More...</a><br /></td></tr>
+<tr class="separator:a4cb9e164e869f63d499d5f4c84f66f90"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a9fd5a45fccdcc754f30c9d8f2a1e0b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a7a9fd5a45fccdcc754f30c9d8f2a1e0b">print_instance_struct_transfer_routines</a> (std::vector&lt; std::string &gt; const &amp;) override</td></tr>
+<tr class="memdesc:a7a9fd5a45fccdcc754f30c9d8f2a1e0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">define helper functions for copying the instance struct to the device  <a href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a7a9fd5a45fccdcc754f30c9d8f2a1e0b">More...</a><br /></td></tr>
+<tr class="separator:a7a9fd5a45fccdcc754f30c9d8f2a1e0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a69e320fadc7ed977df7f9c8a7b686e6f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a69e320fadc7ed977df7f9c8a7b686e6f">print_instance_struct_copy_to_device</a> () override</td></tr>
+<tr class="memdesc:a69e320fadc7ed977df7f9c8a7b686e6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">call helper function for copying the instance struct to the device  <a href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a69e320fadc7ed977df7f9c8a7b686e6f">More...</a><br /></td></tr>
+<tr class="separator:a69e320fadc7ed977df7f9c8a7b686e6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a791fea41ba7dc986ed211172d3558e2c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a791fea41ba7dc986ed211172d3558e2c">print_instance_struct_delete_from_device</a> () override</td></tr>
+<tr class="memdesc:a791fea41ba7dc986ed211172d3558e2c"><td class="mdescLeft">&#160;</td><td class="mdescRight">call helper function that deletes the instance struct from the device  <a href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a791fea41ba7dc986ed211172d3558e2c">More...</a><br /></td></tr>
+<tr class="separator:a791fea41ba7dc986ed211172d3558e2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abf9de5982b1d8f6fb492e668183c2ee1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#abf9de5982b1d8f6fb492e668183c2ee1">print_deriv_advance_flag_transfer_to_device</a> () const override</td></tr>
 <tr class="memdesc:abf9de5982b1d8f6fb492e668183c2ee1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the code to copy derivative advance flag to device.  <a href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#abf9de5982b1d8f6fb492e668183c2ee1">More...</a><br /></td></tr>
 <tr class="separator:abf9de5982b1d8f6fb492e668183c2ee1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1366,7 +1372,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8hpp_source.html#l00130">130</a> of file <a class="el" href="codegen__acc__visitor_8hpp_source.html">codegen_acc_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8hpp_source.html#l00135">135</a> of file <a class="el" href="codegen__acc__visitor_8hpp_source.html">codegen_acc_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1416,7 +1422,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8hpp_source.html#l00136">136</a> of file <a class="el" href="codegen__acc__visitor_8hpp_source.html">codegen_acc_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8hpp_source.html#l00141">141</a> of file <a class="el" href="codegen__acc__visitor_8hpp_source.html">codegen_acc_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1645,7 +1651,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ab6599ed829d90c09d172ea47272c4577">nmodl::codegen::CodegenCVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00310">310</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00340">340</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1676,7 +1682,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a77b15b945cdbc68d4f53dd9d031e40b5">nmodl::codegen::CodegenCVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00316">316</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00346">346</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1707,7 +1713,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a03072394ac710ee93502cfe4a7ff4bfb">nmodl::codegen::CodegenCVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00322">322</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00352">352</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1738,7 +1744,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a7e644c000f3f1708abe72bc77f564afb">nmodl::codegen::CodegenCVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00350">350</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00380">380</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1844,8 +1850,8 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="aed499839ad7b16786a43fd205dc526cb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aed499839ad7b16786a43fd205dc526cb">&#9670;&nbsp;</a></span>print_instance_variable_deletion_from_device()</h2>
+<a id="a69e320fadc7ed977df7f9c8a7b686e6f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a69e320fadc7ed977df7f9c8a7b686e6f">&#9670;&nbsp;</a></span>print_instance_struct_copy_to_device()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1854,10 +1860,10 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void nmodl::codegen::CodegenAccVisitor::print_instance_variable_deletion_from_device </td>
+          <td class="memname">void nmodl::codegen::CodegenAccVisitor::print_instance_struct_copy_to_device </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> const</td>
+          <td></td>
         </tr>
       </table>
   </td>
@@ -1867,16 +1873,16 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>delete the instance struct from the device </p>
+<p>call helper function for copying the instance struct to the device </p>
 
-<p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a0e8fa3aeb40aa51a969c6b3df6565e99">nmodl::codegen::CodegenCVisitor</a>.</p>
+<p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a4f9f888a858ae00efad14b83ffb470a1">nmodl::codegen::CodegenCVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00301">301</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00324">324</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
-<a id="a6e9436c2f3475cc857f9b5e976635048"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6e9436c2f3475cc857f9b5e976635048">&#9670;&nbsp;</a></span>print_instance_variable_transfer_to_device()</h2>
+<a id="a791fea41ba7dc986ed211172d3558e2c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a791fea41ba7dc986ed211172d3558e2c">&#9670;&nbsp;</a></span>print_instance_struct_delete_from_device()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1885,11 +1891,73 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void nmodl::codegen::CodegenAccVisitor::print_instance_variable_transfer_to_device </td>
+          <td class="memname">void nmodl::codegen::CodegenAccVisitor::print_instance_struct_delete_from_device </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>call helper function that deletes the instance struct from the device </p>
+
+<p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#abbe6142c6c2b10815e6e30272268d24a">nmodl::codegen::CodegenCVisitor</a>.</p>
+
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00332">332</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a4cb9e164e869f63d499d5f4c84f66f90"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4cb9e164e869f63d499d5f4c84f66f90">&#9670;&nbsp;</a></span>print_instance_struct_transfer_routine_declarations()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void nmodl::codegen::CodegenAccVisitor::print_instance_struct_transfer_routine_declarations </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>declare helper functions for copying the instance struct to the device </p>
+
+<p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a2b19e5efe194ce2a133da7c38bdb9b6f">nmodl::codegen::CodegenCVisitor</a>.</p>
+
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00278">278</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a7a9fd5a45fccdcc754f30c9d8f2a1e0b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a9fd5a45fccdcc754f30c9d8f2a1e0b">&#9670;&nbsp;</a></span>print_instance_struct_transfer_routines()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void nmodl::codegen::CodegenAccVisitor::print_instance_struct_transfer_routines </td>
           <td>(</td>
           <td class="paramtype">std::vector&lt; std::string &gt; const &amp;&#160;</td>
           <td class="paramname"><em>ptr_members</em></td><td>)</td>
-          <td> const</td>
+          <td></td>
         </tr>
       </table>
   </td>
@@ -1899,11 +1967,11 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>copy the instance struct to the device </p>
+<p>define helper functions for copying the instance struct to the device </p>
 
-<p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a49900e407f757f306a1cf6b91e42314e">nmodl::codegen::CodegenCVisitor</a>.</p>
+<p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a1c48ee16f0ac30f8447b107f0e6ebb90">nmodl::codegen::CodegenCVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00278">278</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00290">290</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2101,7 +2169,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a78bb0db813ac827668ed528f7de6d9a3">nmodl::codegen::CodegenCVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00344">344</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00374">374</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2132,7 +2200,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a9a755cf039492f8d0cdc386058d32d59">nmodl::codegen::CodegenCVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00329">329</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00359">359</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2163,7 +2231,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a14fe83aa07abd33a97f19f1ce99cd2a7">nmodl::codegen::CodegenCVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00335">335</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00365">365</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
