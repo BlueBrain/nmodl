@@ -27,7 +27,9 @@ std::vector<std::string> get_external_functions();
 
 namespace details {
 
+bool is_external_definitions(const std::string& token);
 bool needs_neuron_thread_first_arg(const std::string& token);
+bool is_not_thread_safe(const std::string& token);
 
 }  // namespace details
 
