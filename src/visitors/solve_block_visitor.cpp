@@ -11,6 +11,7 @@
 
 #include "ast/all.hpp"
 #include "codegen/codegen_naming.hpp"
+#include "utils/logger.hpp"
 #include "visitor_utils.hpp"
 
 namespace nmodl {
@@ -42,7 +43,9 @@ ast::SolutionExpression* SolveBlockVisitor::create_solution_expression(
     /// find out the block that is going to solved
     const auto& block_name = solve_block.get_block_name()->get_node_name();
     const auto& solve_node_symbol = symtab->lookup(block_name);
-    assert(solve_node_symbol != nullptr);
+    if (solve_node_symbol == nullptr) {
+        logger->critical("SolveBlockVisitor :: cannot find the block '{}' to solve it", block_name);
+    }
     auto node_to_solve = solve_node_symbol->get_node();
 
     /// in case of derivimplicit method if neuron solver is used (i.e. not sympy) then
