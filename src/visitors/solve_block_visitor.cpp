@@ -8,10 +8,10 @@
 #include "visitors/solve_block_visitor.hpp"
 
 #include <cassert>
+#include <fmt/format.h>
 
 #include "ast/all.hpp"
 #include "codegen/codegen_naming.hpp"
-#include "utils/logger.hpp"
 #include "visitor_utils.hpp"
 
 namespace nmodl {
@@ -44,7 +44,8 @@ ast::SolutionExpression* SolveBlockVisitor::create_solution_expression(
     const auto& block_name = solve_block.get_block_name()->get_node_name();
     const auto& solve_node_symbol = symtab->lookup(block_name);
     if (solve_node_symbol == nullptr) {
-        logger->critical("SolveBlockVisitor :: cannot find the block '{}' to solve it", block_name);
+        throw std::runtime_error(
+            fmt::format("SolveBlockVisitor :: cannot find the block '{}' to solve it", block_name));
     }
     auto node_to_solve = solve_node_symbol->get_node();
 
