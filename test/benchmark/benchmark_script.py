@@ -377,7 +377,7 @@ class Benchmark:
                                         )
                     if self.benchmark_config.nmodl_jit:
                         self.results[modname][architecture]["nmodl_jit"] = {}
-                        for fast_math in [False, True]:
+                        for fast_math in [True]:
                             if fast_math:
                                 fast_math_flags = self.benchmark_config.llvm_fast_math_flags
                                 fast_math_name = "nnancontractafn"

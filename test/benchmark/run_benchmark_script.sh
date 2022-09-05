@@ -24,7 +24,7 @@ module load unstable gcc/11.2.0 cuda/11.6.1 python-dev
 #intel paths
 intel_library_dir=$(module show intel-oneapi-compilers/2021.4.0 2>&1 | grep " LD_LIBRARY_PATH " | grep "intel64_lin" | awk -F' ' '{print $3}' | head -n 1)
 svml_lib=$intel_library_dir/libsvml.so
-intel_exe=$(module show intel-oneapi-compilers/2021.4.0 2>&1 | grep " PATH " | awk -F' ' '{print $3}' | head -n 1)/intel64/icc
+intel_exe=$(module show intel-oneapi-compilers/2021.4.0 2>&1 | grep " PATH " | awk -F' ' '{print $3}' | head -n 1)/intel64/icpc
 
 #sleef library
 sleef_lib=/gpfs/bbp.cscs.ch/apps/hpc/llvm-install/0621/sleef-3.5.1/lib64/libsleefgnuabi.so
@@ -60,11 +60,11 @@ export PYTHONPATH=/gpfs/bbp.cscs.ch/data/scratch/proj16/magkanar/nmodl_llvm_benc
 execute_benchmark() {
     python benchmark_script.py \
         --modfiles "./kernels/hh.mod" "./kernels/expsyn.mod" \
-        --architectures "default" "skylake-avx512" \
-        --compilers "intel" "gcc" "clang" \
+        --architectures "skylake-avx512" "nvptx64" \
+        --compilers "intel" "gcc" "nvhpc" "clang" \
         --external \
         --nmodl_jit \
-        --output "./hh_expsyn_mavx512f" \
+        --output "./hh_expsyn_final_cpu" \
         --instances 100000000 \
         --experiments 5 \
         --svml_lib $svml_lib \
@@ -80,13 +80,13 @@ execute_benchmark() {
 
 roofline_gpu() {
     mod_name=$1
-    ncu --set full -f -o "${mod_name}_full" python benchmark_script.py \
+    ncu --set full -f -o "${mod_name}_full_200mil" python benchmark_script.py \
         --modfiles "./kernels/${mod_name}.mod" \
         --architectures "nvptx64" \
         --compilers "nvhpc" \
         --external \
         --nmodl_jit \
-        --output "./${mod_name}_nvhpc_ncu" \
+        --output "./${mod_name}_nvhpc_ncu_200mil" \
         --instances 100000000 \
         --experiments 1 \
         --svml_lib $svml_lib \
@@ -103,13 +103,12 @@ roofline_gpu() {
 roofline_cpu() {
     mod_name=$1
     module load intel-oneapi-advisor/2021.4.0
-    advisor --collect roofline --project-dir "${mod_name}_advisor" python benchmark_script.py \
+    advisor --collect roofline --project-dir "${mod_name}_advisor_clang_avx512" python benchmark_script.py \
         --modfiles "./kernels/${mod_name}.mod" \
-        --architectures "default" "skylake-avx512" \
-        --compilers "intel" \
+        --architectures "skylake-avx512" \
+        --compilers "clang" \
         --external \
-        --nmodl_jit \
-        --output "./${mod_name}_icc_default_skylake_advisor" \
+        --output "./${mod_name}_clang_avx512_skylake_advisor" \
         --instances 100000000 \
         --experiments 1 \
         --svml_lib $svml_lib \
@@ -126,4 +125,6 @@ roofline_cpu() {
 
 execute_benchmark
 # roofline_gpu hh
+# roofline_gpu expsyn
 # roofline_cpu hh
+# roofline_cpu expsyn
