@@ -89,6 +89,10 @@ target_link_libraries(
   test_util
   printer
   ${NMODL_WRAPPER_LIBS})
+get_target_property(in_l_o util "INTERFACE_LINK_OPTIONS")
+message(STATUS "util depends o: ${in_l_o}")
+get_target_property(in_l_l util "INTERFACE_LINK_LIBRARIES")
+message(STATUS "util depends l: ${in_l_l}")
 target_link_libraries(
   testcodegen
   codegen
