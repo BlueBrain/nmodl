@@ -1542,7 +1542,8 @@ void CodegenCVisitor::print_table_check_function(const Block& node) {
                     auto [is_array, array_length] = check_if_var_is_array(name);
                     if (is_array) {
                         for (int j = 0; j < array_length; j++) {
-                            printer->fmt_line("{}[i] = {}[{}];", table_name, instance_name, j);
+                            printer->fmt_line(
+                                "{}[{}][i] = {}[{}];", table_name, j, instance_name, j);
                         }
                     } else {
                         printer->fmt_line("{}[i] = {};", table_name, instance_name);
@@ -1633,7 +1634,8 @@ void CodegenCVisitor::print_table_replacement_function(const ast::Block& node) {
                 auto [is_array, array_length] = check_if_var_is_array(name);
                 if (is_array) {
                     for (int j = 0; j < array_length; j++) {
-                        printer->fmt_line("{}[{}] = {}[index];", instance_name, j, table_name);
+                        printer->fmt_line(
+                            "{}[{}] = {}[{}][index];", instance_name, j, table_name, j);
                     }
                 } else {
                     printer->fmt_line("{} = {}[index];", instance_name, table_name);
@@ -1656,10 +1658,11 @@ void CodegenCVisitor::print_table_replacement_function(const ast::Block& node) {
                 auto [is_array, array_length] = check_if_var_is_array(var->get_node_name());
                 if (is_array) {
                     for (size_t j = 0; j < array_length; j++) {
-                        printer->fmt_line("{0}[{1}] = {2}[i] + theta*({2}[i+1]-{2}[i]);",
-                                          instance_name,
-                                          j,
-                                          table_name);
+                        printer->fmt_line(
+                            "{0}[{1}] = {2}[{1}][i] + theta*({2}[{1}][i+1]-{2}[{1}][i]);",
+                            instance_name,
+                            j,
+                            table_name);
                     }
                 } else {
                     printer->fmt_line("{0} = {1}[i] + theta*({1}[i+1]-{1}[i]);",
@@ -2676,8 +2679,19 @@ void CodegenCVisitor::print_mechanism_global_var_structure(bool print_initialise
         for (const auto& variable: info.table_statement_variables) {
             auto const name = "t_" + variable->get_name();
             auto const num_values = variable->get_num_values();
-            printer->fmt_line(
-                "{}{} {}[{}]{};", qualifier, float_type, name, num_values, value_initialise);
+            if (variable->is_array()) {
+                int array_len = variable->get_length();
+                printer->fmt_line("{}{} {}[{}][{}]{};",
+                                  qualifier,
+                                  float_type,
+                                  name,
+                                  array_len,
+                                  num_values,
+                                  value_initialise);
+            } else {
+                printer->fmt_line(
+                    "{}{} {}[{}]{};", qualifier, float_type, name, num_values, value_initialise);
+            }
             codegen_global_variables.push_back(make_symbol(name));
         }
     }
