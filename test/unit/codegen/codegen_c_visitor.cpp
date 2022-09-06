@@ -38,8 +38,6 @@ std::shared_ptr<CodegenCVisitor> create_c_visitor(const std::shared_ptr<ast::Pro
 
     /// run all necessary pass
     InlineVisitor().visit_program(*ast);
-    SympySolverVisitor().visit_program(*ast);
-    SymtabVisitor(true).visit_program(*ast);
     NeuronSolveVisitor().visit_program(*ast);
     SolveBlockVisitor().visit_program(*ast);
 
