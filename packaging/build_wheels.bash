@@ -55,6 +55,7 @@ build_wheel_linux() {
     rm -rf dist _skbuild
     # Workaround for https://github.com/pypa/manylinux/issues/1309
     git config --global --add safe.directory "*"
+    export VERBOSE=1
     python setup.py bdist_wheel
 
     if [ "$TRAVIS" = true ] ; then
