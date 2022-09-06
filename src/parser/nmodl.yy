@@ -140,7 +140,6 @@
 %token  <ModToken>              REACTION
 %token  <ModToken>              READ
 %token  <ModToken>              RESET
-%token  <ModToken>              SECTION
 %token  <ModToken>              SENS
 %token  <ModToken>              SOLVE
 %token  <ModToken>              SOLVEFOR
@@ -151,7 +150,6 @@
 %token  <ModToken>              STEPPED
 %token  <ModToken>              SWEEP
 %token  <ModToken>              TABLE
-%token  <ModToken>              TERMINAL
 %token  <ModToken>              THREADSAFE
 %token  <ModToken>              TO
 %token  <ModToken>              UNITS
@@ -318,7 +316,6 @@
 %type   <ast::String*>                      ontology
 %type   <ast::NonspecificCurVarVector>      nonspecific_var_list
 %type   <ast::ElectrodeCurVarVector>        electrode_current_var_list
-%type   <ast::SectionVarVector>             section_var_list
 %type   <ast::RangeVarVector>               range_var_list
 %type   <ast::GlobalVarVector>              global_var_list
 %type   <ast::PointerVarVector>             pointer_var_list
@@ -356,7 +353,6 @@
 %type   <ast::SolveBlock*>                  solve_block
 %type   <ast::StateBlock*>                  state_block
 %type   <ast::StepBlock*>                   step_block
-%type   <ast::TerminalBlock*>               terminal_block
 %type   <ast::UnitBlock*>                   unit_block
 
 %type   <ast::Integer*>                     INTEGER_PTR
@@ -923,10 +919,6 @@ procedure       :   initial_block
                         $$ = $1;
                     }
                 |   net_receive_block
-                    {
-                        $$ = $1;
-                    }
-                |   terminal_block
                     {
                         $$ = $1;
                     }
@@ -1791,15 +1783,6 @@ breakpoint_block :  BREAKPOINT statement_list "}"
                 ;
 
 
-terminal_block  :   TERMINAL statement_list "}"
-                    {
-                        $$ = new ast::TerminalBlock($2);
-                        ModToken block_token = $1 + $3;
-                        $$->set_token(block_token);
-                    }
-                ;
-
-
 before_after_block : BREAKPOINT statement_list "}"
                     {
                         $$ = new ast::BABlock(new ast::BABlockType(ast::BATYPE_BREAKPOINT), $2);
@@ -2269,11 +2252,6 @@ neuron_statement :
                         $1.emplace_back(new ast::ElectrodeCurrent($3));
                         $$ = $1;
                     }
-                |   neuron_statement SECTION section_var_list
-                    {
-                        $1.emplace_back(new ast::Section($3));
-                        $$ = $1;
-                    }
                 |   neuron_statement RANGE range_var_list
                     {
                         $1.emplace_back(new ast::Range($3));
@@ -2422,23 +2400,6 @@ electrode_current_var_list : NAME_PTR
                 |   error
                     {
                         error(scanner.loc, "electrode_current_var_list");
-                    }
-                ;
-
-
-section_var_list :  NAME_PTR
-                    {
-                        $$ = ast::SectionVarVector();
-                        $$.emplace_back(new ast::SectionVar($1));
-                    }
-                |   section_var_list "," NAME_PTR
-                    {
-                        $1.emplace_back(new ast::SectionVar($3));
-                        $$ = $1;
-                    }
-                |   error
-                    {
-                        error(scanner.loc, "section_var_list");
                     }
                 ;
 

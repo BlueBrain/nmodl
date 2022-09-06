@@ -227,8 +227,6 @@ class PerfVisitor: public ConstAstVisitor {
 
     void visit_breakpoint_block(const ast::BreakpointBlock& node) override;
 
-    void visit_terminal_block(const ast::TerminalBlock& node) override;
-
     void visit_before_block(const ast::BeforeBlock& node) override;
 
     void visit_after_block(const ast::AfterBlock& node) override;

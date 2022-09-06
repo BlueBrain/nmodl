@@ -372,14 +372,6 @@
                                   type: Name
                                   node_name: true
 
-                        - SectionVar:
-                            brief: "TODO"
-                            members:
-                              - name:
-                                  brief: "TODO"
-                                  type: Name
-                                  node_name: true
-
                         - RangeVar:
                             brief: "TODO"
                             members:
@@ -918,15 +910,6 @@
                                         \endcode
 
                                         \sa ast::DerivativeBlock ast::InitialBlock
-
-                        - TerminalBlock:
-                            brief: "TODO"
-                            nmodl: "TERMINAL "
-                            members:
-                              - statement_block:
-                                  brief: "Block with statements vector"
-                                  type: StatementBlock
-                                  getter: {override: true}
 
                         - BeforeBlock:
                             nmodl: "BEFORE "
@@ -1985,16 +1968,6 @@
                             vector: true
                             separator: ", "
                       brief: "Represents ELECTRODE_CURRENT variables statement in NMODL"
-
-                  - Section:
-                      nmodl: "SECTION "
-                      members:
-                        - sections:
-                            brief: "Vector of section variables"
-                            type: SectionVar
-                            vector: true
-                            separator: ", "
-                      brief: "Represents SECTION variables statement in NMODL"
 
                   - Range:
                       nmodl: "RANGE "

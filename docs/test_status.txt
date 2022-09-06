@@ -43,7 +43,6 @@ The following symbols are used in the document to descrive the status :
 |IFERROR | ✅ |
 |PARAMETER | ✅ |
 |EQUATION | ✅ |
-|TERMINAL | ✅ |
 |LINEAR | ✅ |
 |NONLINEAR | ✅ |
 |FUNCTION | ✅ |
@@ -92,7 +91,6 @@ The following symbols are used in the document to descrive the status :
 |USEION | ✅ |
 |THREADSAFE | ✅ |
 |GLOBAL | ✅ |
-|SECTION | ✅ |
 |RANGE | ✅ |
 |POINTER | ✅ |
 |BBCOREPOINTER | ✅ |

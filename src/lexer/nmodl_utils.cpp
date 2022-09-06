@@ -255,8 +255,6 @@ SymbolType token_symbol(const std::string& key, PositionType& pos, TokenType typ
         return Parser::make_READ(token, pos);
     case Token::RESET:
         return Parser::make_RESET(token, pos);
-    case Token::SECTION:
-        return Parser::make_SECTION(token, pos);
     case Token::SENS:
         return Parser::make_SENS(token, pos);
     case Token::SOLVE:
@@ -277,8 +275,6 @@ SymbolType token_symbol(const std::string& key, PositionType& pos, TokenType typ
         return Parser::make_SWEEP(token, pos);
     case Token::TABLE:
         return Parser::make_TABLE(token, pos);
-    case Token::TERMINAL:
-        return Parser::make_TERMINAL(token, pos);
     case Token::THREADSAFE:
         return Parser::make_THREADSAFE(token, pos);
     case Token::TO:

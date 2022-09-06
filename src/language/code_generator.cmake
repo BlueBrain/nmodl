@@ -158,7 +158,6 @@ set(AST_GENERATED_SOURCES
     ${PROJECT_BINARY_DIR}/src/ast/read_ion_var.hpp
     ${PROJECT_BINARY_DIR}/src/ast/reset.hpp
     ${PROJECT_BINARY_DIR}/src/ast/section.hpp
-    ${PROJECT_BINARY_DIR}/src/ast/section_var.hpp
     ${PROJECT_BINARY_DIR}/src/ast/sens.hpp
     ${PROJECT_BINARY_DIR}/src/ast/solution_expression.hpp
     ${PROJECT_BINARY_DIR}/src/ast/solve_block.hpp
@@ -170,7 +169,6 @@ set(AST_GENERATED_SOURCES
     ${PROJECT_BINARY_DIR}/src/ast/string.hpp
     ${PROJECT_BINARY_DIR}/src/ast/suffix.hpp
     ${PROJECT_BINARY_DIR}/src/ast/table_statement.hpp
-    ${PROJECT_BINARY_DIR}/src/ast/terminal_block.hpp
     ${PROJECT_BINARY_DIR}/src/ast/thread_safe.hpp
     ${PROJECT_BINARY_DIR}/src/ast/threadsafe_var.hpp
     ${PROJECT_BINARY_DIR}/src/ast/unary_expression.hpp
