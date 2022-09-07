@@ -1,5 +1,6 @@
 var NAVTREEINDEX34 =
 {
+"number__range_8hpp_source.html":[4,0,0,0,0,0,0,87],
 "ontology__statement_8hpp.html":[4,0,0,0,0,0,0,88],
 "ontology__statement_8hpp_source.html":[4,0,0,0,0,0,0,88],
 "pages.html":[],
@@ -248,6 +249,5 @@ var NAVTREEINDEX34 =
 "string__utils_8hpp.html#gga45f97a3d578ade6b9b49b1a92ec688a6a7c4f29407893c334a6cb7a87bf045c0d":[4,0,1,10,9,0,1],
 "string__utils_8hpp.html#gga45f97a3d578ade6b9b49b1a92ec688a6a811882fecd5c7618d7099ebbd39ea254":[4,0,1,10,9,0,0],
 "string__utils_8hpp.html#gga45f97a3d578ade6b9b49b1a92ec688a6aadb115059e28d960fa8badfac5516667":[4,0,1,10,9,0,2],
-"string__utils_8hpp_source.html":[4,0,1,10,9],
-"struct_class_info.html":[3,0,2]
+"string__utils_8hpp_source.html":[4,0,1,10,9]
 };

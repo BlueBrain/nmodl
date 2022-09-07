@@ -46,6 +46,7 @@ var group__codegen__backends =
       [ "backend_name", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a5c4d821fb0e77328f582fc2b5026c65a", null ],
       [ "breakpoint_current", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a73601eee6bd8816614447f695a1c7704", null ],
       [ "breakpoint_exist", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#af3215a8eb6ae13c2bde20ad66e708b8d", null ],
+      [ "check_if_var_is_array", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ac0c596bad8491df90a548819262fd50e", null ],
       [ "compute_method_name", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#aed60d16c3efda67f46e53eecea211988", null ],
       [ "conc_write_statement", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a3188a8f78b469bd4370af03158d26508", null ],
       [ "default_float_data_type", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a4b7d8142130482dff2464cb54cc86de1", null ],

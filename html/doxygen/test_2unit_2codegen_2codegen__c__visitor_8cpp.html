@@ -103,7 +103,11 @@ $(document).ready(function(){initNavTree('test_2unit_2codegen_2codegen__c__visit
 <code>#include &quot;<a class="el" href="nmodl__driver_8hpp_source.html">parser/nmodl_driver.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="test__utils_8hpp_source.html">test/unit/utils/test_utils.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="implicit__argument__visitor_8hpp_source.html">visitors/implicit_argument_visitor.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="inline__visitor_8hpp_source.html">visitors/inline_visitor.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="neuron__solve__visitor_8hpp_source.html">visitors/neuron_solve_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="perf__visitor_8hpp_source.html">visitors/perf_visitor.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="solve__block__visitor_8hpp_source.html">visitors/solve_block_visitor.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="sympy__solver__visitor_8hpp_source.html">visitors/sympy_solver_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="symtab__visitor_8hpp_source.html">visitors/symtab_visitor.hpp</a>&quot;</code><br />
 </div>
 <p><a href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html">Go to the source code of this file.</a></p>
@@ -116,6 +120,9 @@ Functions</h2></td></tr>
 <tr class="memitem:aad099bc716a26661997af855020e2dc4"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp.html#aad099bc716a26661997af855020e2dc4">get_instance_var_setup_function</a> (std::string &amp;nmodl_text)</td></tr>
 <tr class="memdesc:aad099bc716a26661997af855020e2dc4"><td class="mdescLeft">&#160;</td><td class="mdescRight">print instance structure for testing purpose  <a href="test_2unit_2codegen_2codegen__c__visitor_8cpp.html#aad099bc716a26661997af855020e2dc4">More...</a><br /></td></tr>
 <tr class="separator:aad099bc716a26661997af855020e2dc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab7518722cbffea33018ffc7c653e1f87"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp.html#ab7518722cbffea33018ffc7c653e1f87">get_cpp_code</a> (const std::string &amp;nmodl_text)</td></tr>
+<tr class="memdesc:ab7518722cbffea33018ffc7c653e1f87"><td class="mdescLeft">&#160;</td><td class="mdescRight">print entire code  <a href="test_2unit_2codegen_2codegen__c__visitor_8cpp.html#ab7518722cbffea33018ffc7c653e1f87">More...</a><br /></td></tr>
+<tr class="separator:ab7518722cbffea33018ffc7c653e1f87"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9c45dd7626fd81cd01383b4f8dc4e604"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp.html#a9c45dd7626fd81cd01383b4f8dc4e604">SCENARIO</a> (&quot;Check instance variable definition order&quot;, &quot;[codegen][var_order]&quot;)</td></tr>
 <tr class="separator:a9c45dd7626fd81cd01383b4f8dc4e604"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab6505bf89fc4573d824bb53a5f591c9e"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp.html#ab6505bf89fc4573d824bb53a5f591c9e">get_instance_structure</a> (std::string nmodl_text)</td></tr>
@@ -124,6 +131,8 @@ Functions</h2></td></tr>
 <tr class="separator:a3642952acebad0f06c31a9b2bf3ea034"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67c4def89805f51294ffa34f183d488c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp.html#a67c4def89805f51294ffa34f183d488c">SCENARIO</a> (&quot;Check NEURON globals are added to the instance struct on demand&quot;, &quot;[codegen][global_variables]&quot;)</td></tr>
 <tr class="separator:a67c4def89805f51294ffa34f183d488c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeabcf0ad13cf3e5ae258accc595743e2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp.html#aeabcf0ad13cf3e5ae258accc595743e2">SCENARIO</a> (&quot;Check code generation for TABLE statements&quot;, &quot;[codegen][array_variables]&quot;)</td></tr>
+<tr class="separator:aeabcf0ad13cf3e5ae258accc595743e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="ad5868eeaa048f3a22739a790a9a2016c"></a>
@@ -160,9 +169,32 @@ Functions</h2></td></tr>
 
 <p>Helper for creating C codegen visitor. </p>
 <p>construct symbol table</p>
+<p>run all necessary pass</p>
 <p>create C code generation visitor</p>
 
-<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html#l00029">29</a> of file <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html#l00033">33</a> of file <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ab7518722cbffea33018ffc7c653e1f87"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab7518722cbffea33018ffc7c653e1f87">&#9670;&nbsp;</a></span>get_cpp_code()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string get_cpp_code </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>nmodl_text</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>print entire code </p>
+
+<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html#l00060">60</a> of file <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -182,7 +214,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html#l00242">242</a> of file <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html#l00260">260</a> of file <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -204,12 +236,42 @@ Functions</h2></td></tr>
 
 <p>print instance structure for testing purpose </p>
 
-<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html#l00042">42</a> of file <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html#l00051">51</a> of file <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+
+</div>
+</div>
+<a id="aeabcf0ad13cf3e5ae258accc595743e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeabcf0ad13cf3e5ae258accc595743e2">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[1/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">SCENARIO </td>
+          <td>(</td>
+          <td class="paramtype">&quot;Check code generation for TABLE statements&quot;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&quot;&quot;&#160;</td>
+          <td class="paramname">[codegen][array_variables]&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html#l00367">367</a> of file <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
 <a id="a9c45dd7626fd81cd01383b4f8dc4e604"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9c45dd7626fd81cd01383b4f8dc4e604">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[1/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a9c45dd7626fd81cd01383b4f8dc4e604">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[2/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -234,12 +296,12 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html#l00050">50</a> of file <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html#l00068">68</a> of file <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
 <a id="a67c4def89805f51294ffa34f183d488c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a67c4def89805f51294ffa34f183d488c">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[2/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a67c4def89805f51294ffa34f183d488c">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[3/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -264,12 +326,12 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html#l00299">299</a> of file <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html#l00317">317</a> of file <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
 <a id="a3642952acebad0f06c31a9b2bf3ea034"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3642952acebad0f06c31a9b2bf3ea034">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[3/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a3642952acebad0f06c31a9b2bf3ea034">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[4/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -294,7 +356,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html#l00260">260</a> of file <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html#l00278">278</a> of file <a class="el" href="test_2unit_2codegen_2codegen__c__visitor_8cpp_source.html">codegen_c_visitor.cpp</a>.</p>
 
 </div>
 </div>
