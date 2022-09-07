@@ -455,26 +455,6 @@
 
                                     All parameters are stored in the ast::ParamBlock::statements as vector.
 
-                        - StepBlock:
-                            nmodl: "STEPPED "
-                            members:
-                              - statements:
-                                  brief: "Vector of statements"
-                                  type: Stepped
-                                  vector: true
-                            brief: "Represents a `STEPPED` block in the NMODL"
-                            description: |
-                                    `STEPPED` has following form in the NMODL specification :
-
-                                    \code{.mod}
-                                        STEPPED {
-                                            name1 = number1 (mM)
-                                            name2 = number2, number3
-                                        }
-                                    \endcode
-
-                                    \todo Check ModelDB and other databse for example of channel.
-
                         - IndependentBlock:
                             nmodl: "INDEPENDENT "
                             members:
@@ -540,22 +520,6 @@
 
                                     Note that the state variable specification has form of ast::AssignedDefinition and
                                     hence can have associated unit specification.
-
-                        - PlotBlock:
-                            members:
-                              - plot:
-                                  brief: "Vector of plot variables"
-                                  type: PlotDeclaration
-                            brief: "Represents a `PLOT` statement in the NMODL"
-                            description: |
-                                  `PLOT` construct doesn't have block scope but it's standalone, global scoped
-                                  statement of the form:
-
-                                    \code{.mod}
-                                        PLOT name1, index_var2 VS name3
-                                    \endcode
-
-                                    \todo Check ModelDB and other databse for example of channel.
 
                         - InitialBlock:
                             nmodl: "INITIAL "
@@ -1116,19 +1080,6 @@
                             type: Number
                             suffix: {value: ">"}
 
-                  - PlotVar:
-                      brief: "TODO"
-                      members:
-                        - name:
-                            brief: "TODO"
-                            type: Identifier
-                        - index:
-                            brief: "TODO"
-                            type: Integer
-                            optional: true
-                            prefix: {value: "["}
-                            suffix: {value: "]"}
-
                   - ConstantVar:
                       members:
                         - name:
@@ -1427,24 +1378,6 @@
                             optional: true
                             prefix: {value: " "}
 
-                  - Stepped:
-                      brief: "TODO"
-                      members:
-                        - name:
-                            brief: "TODO"
-                            type: Name
-                        - values:
-                            brief: "TODO"
-                            type: Number
-                            vector: true
-                            prefix: {value: " = "}
-                            separator: ", "
-                        - unit:
-                            brief: "TODO"
-                            type: Unit
-                            optional: true
-                            prefix: {value: " "}
-
                   - IndependentDefinition:
                       brief: "TODO"
                       members:
@@ -1518,20 +1451,6 @@
                             suffix: {value: ">"}
                             optional: true
                       brief: "Represents a statement in `ASSIGNED` or `STATE` block"
-
-                  - PlotDeclaration:
-                      brief: "TODO"
-                      nmodl: "PLOT "
-                      members:
-                        - variables:
-                            brief: "TODO"
-                            type: PlotVar
-                            vector: true
-                            separator: ", "
-                        - name:
-                            brief: "TODO"
-                            type: PlotVar
-                            prefix: {value: " VS "}
 
                   - ConductanceHint:
                       nmodl: "CONDUCTANCE "
@@ -1752,16 +1671,6 @@
                   - Reset:
                       nmodl: RESET
                       brief: "Represent RESET statement in NMODL"
-
-                  - Sens:
-                      nmodl: "SENS "
-                      members:
-                        - variables:
-                            brief: "TODO"
-                            type: VarName
-                            vector: true
-                            separator: ", "
-                      brief: "Represent SENS statement in NMODL"
 
                   - Conserve:
                       nmodl: CONSERVE

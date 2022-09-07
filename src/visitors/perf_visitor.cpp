@@ -343,10 +343,6 @@ void PerfVisitor::visit_program(const ast::Program& node) {
     print_memory_usage();
 }
 
-void PerfVisitor::visit_plot_block(const ast::PlotBlock& node) {
-    measure_performance(node);
-}
-
 /// skip initial block under net_receive block
 void PerfVisitor::visit_initial_block(const ast::InitialBlock& node) {
     if (!under_net_receive_block) {

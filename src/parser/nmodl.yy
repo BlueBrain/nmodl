@@ -131,7 +131,6 @@
 %token  <ModToken>              NRNMUTEXUNLOCK
 %token  <ModToken>              PARAMETER
 %token  <ModToken>              PARTIAL
-%token  <ModToken>              PLOT
 %token  <ModToken>              POINTER
 %token  <ModToken>              PROCEDURE
 %token  <ModToken>              PROTECT
@@ -140,14 +139,12 @@
 %token  <ModToken>              REACTION
 %token  <ModToken>              READ
 %token  <ModToken>              RESET
-%token  <ModToken>              SENS
 %token  <ModToken>              SOLVE
 %token  <ModToken>              SOLVEFOR
 %token  <ModToken>              START1
 %token  <ModToken>              STATE
 %token  <ModToken>              STEADYSTATE
 %token  <ModToken>              STEP
-%token  <ModToken>              STEPPED
 %token  <ModToken>              SWEEP
 %token  <ModToken>              TABLE
 %token  <ModToken>              THREADSAFE
@@ -235,7 +232,6 @@
 
 %type   <ast::Model*>                       model
 %type   <ast::Unit*>                        units
-%type   <ast::Integer*>                     optional_index
 %type   <ast::Unit*>                        unit
 %type   <ast::Block*>                       procedure
 %type   <ast::Limits*>                      limits
@@ -245,7 +241,6 @@
 %type   <ast::Expression*>                  term
 %type   <ast::Expression*>                  left_linear_expression
 %type   <ast::Expression*>                  linear_expression
-%type   <ast::NumberVector>                 number_list
 %type   <ast::Expression*>                  expression
 %type   <ast::Expression*>                  watch_expression
 %type   <ast::Statement*>                   statement_type1
@@ -265,25 +260,19 @@
 %type   <ast::StatementBlock*>              if_solution_error
 %type   <ast::Expression*>                  optional_increment
 %type   <ast::Number*>                      optional_start
-%type   <ast::VarNameVector>                sens_list
-%type   <ast::Sens*>                        sens
 %type   <ast::LagStatement*>                lag_statement
 %type   <ast::ForAllStatement*>             forall_statement
 %type   <ast::ParamAssign*>                 parameter_assignment
-%type   <ast::Stepped*>                     stepped_statement
 %type   <ast::IndependentDefinition*>       independent_definition
 %type   <ast::AssignedDefinition*>          dependent_definition
 %type   <ast::Block*>                       declare
 %type   <ast::ParamAssignVector>            parameter_block_body
 %type   <ast::IndependentDefinitionVector>  independent_block_body
 %type   <ast::AssignedDefinitionVector>     dependent_block_body
-%type   <ast::SteppedVector>                step_block_body
 %type   <ast::WatchStatement*>              watch_statement
 %type   <ast::BinaryOperator>               watch_direction
 %type   <ast::Watch*>                       watch
 %type   <ast::ForNetcon*>                   for_netcon
-%type   <ast::PlotDeclaration*>             plot_declaration
-%type   <ast::PlotVarVector>                plot_variable_list
 %type   <ast::ConstantStatementVector>      constant_statement
 %type   <ast::MatchVector>                  match_list
 %type   <ast::Match*>                       match
@@ -352,7 +341,6 @@
 %type   <ast::ProcedureBlock*>              procedure_block
 %type   <ast::SolveBlock*>                  solve_block
 %type   <ast::StateBlock*>                  state_block
-%type   <ast::StepBlock*>                   step_block
 %type   <ast::UnitBlock*>                   unit_block
 
 %type   <ast::Integer*>                     INTEGER_PTR
@@ -538,14 +526,6 @@ declare         :   parameter_block
                     {
                         $$ = $1;
                     }
-                |   step_block
-                    {
-                        $$ = $1;
-                    }
-                |   plot_declaration
-                    {
-                        $$ = new ast::PlotBlock($1);
-                    }
                 |   neuron_block
                     {
                         $$ = $1;
@@ -636,45 +616,6 @@ limits          :   {
                 |   LT double "," double GT
                     {
                         $$ = new ast::Limits($2, $4);
-                    }
-                ;
-
-
-step_block      :   STEPPED "{" step_block_body "}"
-                    {
-                        $$ = new ast::StepBlock($3);
-                    }
-                ;
-
-
-step_block_body :   {
-                        $$ = ast::SteppedVector();
-                    }
-                |   step_block_body stepped_statement
-                    {
-                            $1.emplace_back($2);
-                            $$ = $1;
-                    }
-                ;
-
-
-stepped_statement : NAME_PTR "=" number_list units
-                    {
-                        $$ = new ast::Stepped($1, $3, $4);
-                    }
-                ;
-
-
-number_list     :   number "," number
-                    {
-                        $$ = ast::NumberVector();
-                        $$.emplace_back($1);
-                        $$.emplace_back($3);
-                    }
-                |   number_list "," number
-                    {
-                        $1.emplace_back($3);
-                        $$ = $1;
                     }
                 ;
 
@@ -849,43 +790,6 @@ abs_tolerance   :
 state_block     :   STATE  "{" dependent_block_body "}"
                     {
                         $$ = new ast::StateBlock($3);
-                    }
-                ;
-
-
-plot_declaration :  PLOT plot_variable_list VS name optional_index
-                    {
-                        $$ = new ast::PlotDeclaration($2, new ast::PlotVar($4,$5));
-                    }
-                |   PLOT error
-                    {
-                        error(scanner.loc, "plot_declaration");
-                    }
-                ;
-
-
-plot_variable_list : name optional_index
-                    {
-                        $$ = ast::PlotVarVector();
-                        auto variable = new ast::PlotVar($1, $2);
-                        $$.emplace_back(variable);
-                    }
-                |   plot_variable_list "," name optional_index
-                    {
-                        $$ = $1;
-                        auto variable = new ast::PlotVar($3, $4);
-                        $$.emplace_back(variable);
-                    }
-                ;
-
-
-optional_index  :
-                    {
-                        $$ = nullptr;
-                    }
-                |   "[" INTEGER_PTR "]"
-                    {
-                        $$ = $2;
                     }
                 ;
 
@@ -1118,10 +1022,6 @@ statement_type1 :   from_statement
                 |   BLOCK_COMMENT
                     {   auto text = parse_with_verbatim_parser($1);
                         $$ = new ast::BlockComment(new ast::String(text));
-                    }
-                |   sens
-                    {
-                        $$ = $1;
                     }
                 |   compartment
                     {
@@ -1902,30 +1802,6 @@ watch_expression :  variable_name
                 |   error
                     {
                         error(scanner.loc, "watch_expression");
-                    }
-                ;
-
-
-sens            :   SENS sens_list
-                    {
-                        $$ = new ast::Sens($2);
-                    }
-                |   SENS error
-                    {
-                        error(scanner.loc, "sens");
-                    }
-                ;
-
-
-sens_list       :   variable_name
-                    {
-                        $$ = ast::VarNameVector();
-                        $$.emplace_back($1);
-                    }
-                |   sens_list "," variable_name
-                    {
-                        $1.emplace_back($3);
-                        $$ = $1;
                     }
                 ;
 

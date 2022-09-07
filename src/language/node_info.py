@@ -113,7 +113,6 @@ STATEMENT_TYPES = {"Statement",
                    "AssignedDefinition",
                    "ParamAssign",
                    "ConstantStatement",
-                   "Stepped",
                    }
 
 # data types which have token as an argument to the constructor

@@ -440,20 +440,6 @@ std::map<std::string, NmodlTestCase> const nmodl_valid_constructs{
     },
 
     {
-        "step_block_1",
-        {
-            "STEP block with all statement types",
-            R"(
-                STEPPED {
-                    tau_r_AMPA = 1, -2
-                    tau_d_AMPA = 1.1, -2.1
-                    tau_r_NMDA = 1, 2.1, 3 (mV)
-                }
-            )"
-        }
-    },
-
-    {
         "independent_block_1",
         {
             "INDEPENDENT block with all statement types",
@@ -586,37 +572,6 @@ std::map<std::string, NmodlTestCase> const nmodl_valid_constructs{
             )"
         }
     },
-
-    {
-        "plot_declare_1",
-        {
-            "PLOT declaration with single variables",
-            R"(
-                PLOT x VS y
-            )"
-        }
-    },
-
-    {
-        "plot_declare_2",
-        {
-            "PLOT declaration with multiple variables",
-            R"(
-                PLOT x, y, z VS a
-            )"
-        }
-    },
-
-    {
-        "plot_declare_3",
-        {
-            "PLOT declaration with indexed variables",
-            R"(
-                PLOT x[1], y[2], z VS a[1]
-            )"
-        }
-    },
-
 
     {
         "statement_list_1",
@@ -928,18 +883,6 @@ std::map<std::string, NmodlTestCase> const nmodl_valid_constructs{
             R"(
                 BREAKPOINT {
                     CONDUCTANCE gIm USEION k
-                }
-            )"
-        }
-    },
-
-    {
-        "sens_1",
-        {
-            "SENS statement",
-            R"(
-                BREAKPOINT {
-                    SENS a, b
                 }
             )"
         }
