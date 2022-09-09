@@ -857,11 +857,21 @@ std::vector<SymbolType> CodegenCVisitor::get_float_variables() {
     if (info.vectorize) {
         variables.push_back(make_symbol(naming::VOLTAGE_UNUSED_VARIABLE));
     }
+
     if (breakpoint_exist()) {
         std::string name = info.vectorize ? naming::CONDUCTANCE_UNUSED_VARIABLE
                                           : naming::CONDUCTANCE_VARIABLE;
-        variables.push_back(make_symbol(name));
+
+        // make sure conductance variable like `g` is not already defined
+        auto iter =
+            std::find_if(variables.begin(), variables.end(), [&name](const SymbolType& sym) {
+                return name == sym->get_name();
+            });
+        if (iter == variables.end()) {
+            variables.push_back(make_symbol(name));
+        }
     }
+
     if (net_receive_exist()) {
         variables.push_back(make_symbol(naming::T_SAVE_VARIABLE));
     }
