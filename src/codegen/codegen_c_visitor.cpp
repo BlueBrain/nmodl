@@ -863,11 +863,10 @@ std::vector<SymbolType> CodegenCVisitor::get_float_variables() {
                                           : naming::CONDUCTANCE_VARIABLE;
 
         // make sure conductance variable like `g` is not already defined
-        auto iter =
-            std::find_if(variables.begin(), variables.end(), [&name](const SymbolType& sym) {
-                return name == sym->get_name();
-            });
-        if (iter == variables.end()) {
+        if (auto r = std::find_if(variables.cbegin(),
+                                  variables.cend(),
+                                  [&](const auto& s) { return name == s->get_name(); });
+            r == variables.cend()) {
             variables.push_back(make_symbol(name));
         }
     }
