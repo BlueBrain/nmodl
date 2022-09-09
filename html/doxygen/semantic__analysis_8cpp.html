@@ -101,6 +101,7 @@ $(document).ready(function(){initNavTree('semantic__analysis_8cpp.html',''); ini
 <code>#include &quot;<a class="el" href="nmodl__driver_8hpp_source.html">parser/nmodl_driver.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="test__utils_8hpp_source.html">test/unit/utils/test_utils.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="semantic__analysis__visitor_8hpp_source.html">visitors/semantic_analysis_visitor.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="symtab__visitor_8hpp_source.html">visitors/symtab_visitor.hpp</a>&quot;</code><br />
 </div>
 <p><a href="semantic__analysis_8cpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -112,6 +113,8 @@ Functions</h2></td></tr>
 <tr class="separator:aee0bd47b9ed7e5d067451085fc583edf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67f211b3348104545dc76a9f1a5b1937"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="semantic__analysis_8cpp.html#a67f211b3348104545dc76a9f1a5b1937">SCENARIO</a> (&quot;Destructor block&quot;, &quot;[visitor][semantic_analysis]&quot;)</td></tr>
 <tr class="separator:a67f211b3348104545dc76a9f1a5b1937"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7578425c8abb90dc292aa69aea0d651d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="semantic__analysis_8cpp.html#a7578425c8abb90dc292aa69aea0d651d">SCENARIO</a> (&quot;Ion variable in CONSTANT block&quot;, &quot;[visitor][semantic_analysis]&quot;)</td></tr>
+<tr class="separator:a7578425c8abb90dc292aa69aea0d651d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="a9fde5e10dcf117bedb1539da0d50d4ac"></a>
@@ -130,12 +133,12 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="semantic__analysis_8cpp_source.html#l00026">26</a> of file <a class="el" href="semantic__analysis_8cpp_source.html">semantic_analysis.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="semantic__analysis_8cpp_source.html#l00027">27</a> of file <a class="el" href="semantic__analysis_8cpp_source.html">semantic_analysis.cpp</a>.</p>
 
 </div>
 </div>
 <a id="a67f211b3348104545dc76a9f1a5b1937"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a67f211b3348104545dc76a9f1a5b1937">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a67f211b3348104545dc76a9f1a5b1937">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -160,12 +163,42 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="semantic__analysis_8cpp_source.html#l00068">68</a> of file <a class="el" href="semantic__analysis_8cpp_source.html">semantic_analysis.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="semantic__analysis_8cpp_source.html#l00070">70</a> of file <a class="el" href="semantic__analysis_8cpp_source.html">semantic_analysis.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a7578425c8abb90dc292aa69aea0d651d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7578425c8abb90dc292aa69aea0d651d">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">SCENARIO </td>
+          <td>(</td>
+          <td class="paramtype">&quot;Ion variable in CONSTANT block&quot;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&quot;&quot;&#160;</td>
+          <td class="paramname">[visitor][semantic_analysis]&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="semantic__analysis_8cpp_source.html#l00111">111</a> of file <a class="el" href="semantic__analysis_8cpp_source.html">semantic_analysis.cpp</a>.</p>
 
 </div>
 </div>
 <a id="aee0bd47b9ed7e5d067451085fc583edf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aee0bd47b9ed7e5d067451085fc583edf">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aee0bd47b9ed7e5d067451085fc583edf">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -190,7 +223,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="semantic__analysis_8cpp_source.html#l00032">32</a> of file <a class="el" href="semantic__analysis_8cpp_source.html">semantic_analysis.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="semantic__analysis_8cpp_source.html#l00034">34</a> of file <a class="el" href="semantic__analysis_8cpp_source.html">semantic_analysis.cpp</a>.</p>
 
 </div>
 </div>
