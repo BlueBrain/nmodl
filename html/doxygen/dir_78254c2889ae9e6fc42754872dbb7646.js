@@ -104,8 +104,6 @@ var dir_78254c2889ae9e6fc42754872dbb7646 =
     [ "procedure_block.hpp", "procedure__block_8hpp.html", null ],
     [ "program.hpp", "program_8hpp.html", null ],
     [ "protect_statement.hpp", "protect__statement_8hpp.html", null ],
-    [ "queue_expression_type.hpp", "queue__expression__type_8hpp.html", null ],
-    [ "queue_statement.hpp", "queue__statement_8hpp.html", null ],
     [ "range.hpp", "range_8hpp.html", null ],
     [ "range_var.hpp", "range__var_8hpp.html", null ],
     [ "react_var_name.hpp", "react__var__name_8hpp.html", null ],

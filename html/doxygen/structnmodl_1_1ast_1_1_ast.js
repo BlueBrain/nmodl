@@ -116,8 +116,6 @@ var structnmodl_1_1ast_1_1_ast =
     [ "is_procedure_block", "group__ast__class.html#gac8ca9b958f672aac8f178f6df6a4bd05", null ],
     [ "is_program", "group__ast__class.html#gac774fd9ccb62cfdba927225ef59a4de3", null ],
     [ "is_protect_statement", "group__ast__class.html#ga630659747411ec7b03685256c92dab8f", null ],
-    [ "is_queue_expression_type", "group__ast__class.html#gaaaa9a5fba605b90a4b0ba4e56dbc9466", null ],
-    [ "is_queue_statement", "group__ast__class.html#ga0f8abda7647cfede117b34244bf75f19", null ],
     [ "is_range", "group__ast__class.html#ga63717e8a77ff61eb334fd3389a3c354b", null ],
     [ "is_range_var", "group__ast__class.html#ga3e1362838ed4cc6d1ab04e6a9fc86bf2", null ],
     [ "is_react_var_name", "group__ast__class.html#ga2a8ed6832a20d3b6e5b400b6cb772ca8", null ],

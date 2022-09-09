@@ -101,8 +101,6 @@ var namespacenmodl_1_1ast =
     [ "ProcedureBlock", "classnmodl_1_1ast_1_1_procedure_block.html", "classnmodl_1_1ast_1_1_procedure_block" ],
     [ "Program", "classnmodl_1_1ast_1_1_program.html", "classnmodl_1_1ast_1_1_program" ],
     [ "ProtectStatement", "classnmodl_1_1ast_1_1_protect_statement.html", "classnmodl_1_1ast_1_1_protect_statement" ],
-    [ "QueueExpressionType", "classnmodl_1_1ast_1_1_queue_expression_type.html", "classnmodl_1_1ast_1_1_queue_expression_type" ],
-    [ "QueueStatement", "classnmodl_1_1ast_1_1_queue_statement.html", "classnmodl_1_1ast_1_1_queue_statement" ],
     [ "Range", "classnmodl_1_1ast_1_1_range.html", "classnmodl_1_1ast_1_1_range" ],
     [ "RangeVar", "classnmodl_1_1ast_1_1_range_var.html", "classnmodl_1_1ast_1_1_range_var" ],
     [ "ReactionOperator", "classnmodl_1_1ast_1_1_reaction_operator.html", "classnmodl_1_1ast_1_1_reaction_operator" ],

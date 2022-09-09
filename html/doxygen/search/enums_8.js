@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['scope_5849',['Scope',['../namespacenmodl_1_1symtab_1_1syminfo.html#a901f9299d7c59b1694463d26928f2a75',1,'nmodl::symtab::syminfo']]],
-  ['status_5850',['Status',['../namespacenmodl_1_1symtab_1_1syminfo.html#a7d0b8aa765db0de7491021b4d403b6e2',1,'nmodl::symtab::syminfo']]]
+  ['text_5falignment_5811',['text_alignment',['../group__utils.html#ga45f97a3d578ade6b9b49b1a92ec688a6',1,'nmodl::stringutils']]]
 ];

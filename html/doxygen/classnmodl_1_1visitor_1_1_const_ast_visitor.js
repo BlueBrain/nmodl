@@ -100,8 +100,6 @@ var classnmodl_1_1visitor_1_1_const_ast_visitor =
     [ "visit_procedure_block", "classnmodl_1_1visitor_1_1_const_ast_visitor.html#a5dad4d483fa20621cc3e2f59c25abb01", null ],
     [ "visit_program", "classnmodl_1_1visitor_1_1_const_ast_visitor.html#a55485b9ec4a13882106d7bb4e59bbd4b", null ],
     [ "visit_protect_statement", "classnmodl_1_1visitor_1_1_const_ast_visitor.html#af2bdb091626313753da1b37c0938a551", null ],
-    [ "visit_queue_expression_type", "classnmodl_1_1visitor_1_1_const_ast_visitor.html#a764ccf18f5e54c9529953ffb0a39258a", null ],
-    [ "visit_queue_statement", "classnmodl_1_1visitor_1_1_const_ast_visitor.html#ab905cb34ab01a5e7ab69906def48c041", null ],
     [ "visit_range", "classnmodl_1_1visitor_1_1_const_ast_visitor.html#a3bc7a69317a5c8afeb159288668a8514", null ],
     [ "visit_range_var", "classnmodl_1_1visitor_1_1_const_ast_visitor.html#a3be5160087e440b4687ad9fddbede81b", null ],
     [ "visit_react_var_name", "classnmodl_1_1visitor_1_1_const_ast_visitor.html#a2187b2e7f7e672c9b05a4a63c16e027e", null ],

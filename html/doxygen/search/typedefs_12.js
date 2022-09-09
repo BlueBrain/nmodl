@@ -1,11 +1,11 @@
 var searchData=
 [
-  ['tablerowtype_5807',['TableRowType',['../structnmodl_1_1utils_1_1_table_data.html#acc5dd038c1055d590465a29931f94c8a',1,'nmodl::utils::TableData']]],
-  ['tablestatementvector_5808',['TableStatementVector',['../group__ast__vec__type.html#ga1ead20bf2c713c99815bc2ca3f4195b4',1,'nmodl::ast']]],
-  ['terminalblockvector_5809',['TerminalBlockVector',['../group__ast__vec__type.html#gac7f93eb3b47bd3b2d93899730c20d650',1,'nmodl::ast']]],
-  ['threadsafevarvector_5810',['ThreadsafeVarVector',['../group__ast__vec__type.html#gae8db48bf3f9d9b20f9f82d5b32a5828e',1,'nmodl::ast']]],
-  ['threadsafevector_5811',['ThreadSafeVector',['../group__ast__vec__type.html#ga0fec2779dfad9f346a23cf1c6457b2e7',1,'nmodl::ast']]],
-  ['token_5812',['Token',['../lexer_2main__c_8cpp.html#a07070de75a13aaa8478cfe8f16047238',1,'Token():&#160;main_c.cpp'],['../lexer_2main__nmodl_8cpp.html#ae15d8a86d952ad71d291baaf2801a2e1',1,'Token():&#160;main_nmodl.cpp'],['../lexer_2main__units_8cpp.html#a34a56aad59db8d8f912bd4a8432068a1',1,'Token():&#160;main_units.cpp'],['../namespacenmodl.html#a5f4247bc09fd496e5015912ef0382a5e',1,'nmodl::Token()'],['../tokens_8cpp.html#a8082bbc97ceeb44c3c94b603d0d98615',1,'Token():&#160;tokens.cpp'],['../lexer_8cpp.html#a2b663cffb7ddab2fb2c3624349a5db50',1,'Token():&#160;lexer.cpp']]],
-  ['tokentype_5813',['TokenType',['../lexer_2main__nmodl_8cpp.html#a328ac0d7a63eba908b18e747bd16c963',1,'TokenType():&#160;main_nmodl.cpp'],['../namespacenmodl.html#a84a18ff49e1535de813a7f86968f6ae5',1,'nmodl::TokenType()'],['../tokens_8cpp.html#a1c3f1fcd05bd2327afc35b22449cfb54',1,'TokenType():&#160;tokens.cpp'],['../lexer_8cpp.html#a2b597e3cc6f45306cebb574c9b1c26b9',1,'TokenType():&#160;lexer.cpp']]],
-  ['type_5814',['type',['../structnmodl_1_1visitor_1_1_meta_ast_lookup_visitor_1_1identity.html#a3f96ba5731a089829fa5dedc82c44565',1,'nmodl::visitor::MetaAstLookupVisitor::identity']]]
+  ['unaryexpressionvector_5776',['UnaryExpressionVector',['../group__ast__vec__type.html#gaac23c1368062cf7c85d2b98ac1733fbe',1,'nmodl::ast']]],
+  ['unaryoperatorvector_5777',['UnaryOperatorVector',['../group__ast__vec__type.html#ga9da029ff503bc7b7d0cf76d0a5ce7226',1,'nmodl::ast']]],
+  ['unitblockvector_5778',['UnitBlockVector',['../group__ast__vec__type.html#ga27878077f766189e3aec4396da69345c',1,'nmodl::ast']]],
+  ['unitdefvector_5779',['UnitDefVector',['../group__ast__vec__type.html#gad4b20113f5b065c462077db1ee11fa4e',1,'nmodl::ast']]],
+  ['unitstatevector_5780',['UnitStateVector',['../group__ast__vec__type.html#gae141f84df8c319ca23fbd35e4c3b8a0f',1,'nmodl::ast']]],
+  ['unitvector_5781',['UnitVector',['../group__ast__vec__type.html#ga5b9a796298d80fe97fcd47403947b9d0',1,'nmodl::ast']]],
+  ['updatedtvector_5782',['UpdateDtVector',['../group__ast__vec__type.html#ga0406a473e874983914ba4adbc2cb881d',1,'nmodl::ast']]],
+  ['useionvector_5783',['UseionVector',['../group__ast__vec__type.html#ga5e52bb8c2b1ab57166cbf603c4a45cbb',1,'nmodl::ast']]]
 ];

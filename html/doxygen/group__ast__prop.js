@@ -26,10 +26,6 @@ var group__ast__prop =
       [ "PEQ_FIRST", "group__ast__prop.html#ggaec4ec6ee645390df5ef1442a5b9270d7ae8d86ec22c2000d3e5e95ace882937e4", null ],
       [ "PEQ_LAST", "group__ast__prop.html#ggaec4ec6ee645390df5ef1442a5b9270d7afc0d7c541efb1ed6f6451480d1a56efe", null ]
     ] ],
-    [ "QueueType", "group__ast__prop.html#ga623e24041ebcb2c162dd9ff79131cf80", [
-      [ "PUT_QUEUE", "group__ast__prop.html#gga623e24041ebcb2c162dd9ff79131cf80aef4e411a639f552672709804e0556989", null ],
-      [ "GET_QUEUE", "group__ast__prop.html#gga623e24041ebcb2c162dd9ff79131cf80a373306bf9d76ad1be242c784734733cf", null ]
-    ] ],
     [ "ReactionOp", "group__ast__prop.html#ga132ea63177a1f70f366ea0edb09dfa14", [
       [ "LTMINUSGT", "group__ast__prop.html#gga132ea63177a1f70f366ea0edb09dfa14aa2c6106ceef9ca6372bfdb3be8e4de31", null ],
       [ "LTLT", "group__ast__prop.html#gga132ea63177a1f70f366ea0edb09dfa14a0f6a2801127bda3c03edc3e423546e26", null ],
@@ -46,7 +42,6 @@ var group__ast__prop =
     [ "BATypeNames", "group__ast__prop.html#gaedfbaa61dd5e6cf69e7e51528b9cc1e0", null ],
     [ "BinaryOpNames", "group__ast__prop.html#ga63c88c3a516daebe4b2c0e17cc68c6a8", null ],
     [ "FirstLastTypeNames", "group__ast__prop.html#ga08ae578b84c5c56fa5e2b07de2a7c559", null ],
-    [ "QueueTypeNames", "group__ast__prop.html#ga02e59ee3f184cf58278701c87c0e910f", null ],
     [ "ReactionOpNames", "group__ast__prop.html#ga32d114ef0de557e3a3dc518fae523116", null ],
     [ "UnaryOpNames", "group__ast__prop.html#gaa1009e88254967aabd8e9f9b6e829a66", null ],
     [ "UnitStateTypeNames", "group__ast__prop.html#gaa5b7d0fedb85c6e2927399ba1e744da0", null ]

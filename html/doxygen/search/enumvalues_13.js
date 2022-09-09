@@ -1,8 +1,11 @@
 var searchData=
 [
-  ['valence_6068',['VALENCE',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033ad4c282fc67c65a77faf3d6bf6128a069',1,'nmodl::ast']]],
-  ['value_6069',['VALUE',['../classnmodl_1_1visitor_1_1_sympy_replace_solutions_visitor.html#a1e49fcb9c416a45a1607f335948228c1aecc2e9c313faddb07e7da223c1dc5c3f',1,'nmodl::visitor::SympyReplaceSolutionsVisitor']]],
-  ['var_5fname_6070',['VAR_NAME',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a04278d9c3e8692412e2d9cb9f7e0af30',1,'nmodl::ast']]],
-  ['variable_6071',['variable',['../namespacenmodl_1_1symtab_1_1syminfo.html#ac6634cac7a1e74208a7197e34683cd61ae04aa5104d082e4a51d241391941ba26',1,'nmodl::symtab::syminfo']]],
-  ['verbatim_6072',['VERBATIM',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033abbbf736d1511689a00bb221cf7a98042',1,'nmodl::ast']]]
+  ['watch_6029',['WATCH',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033ae586513b443516b9e00a844bfbacd16e',1,'nmodl::ast::WATCH()'],['../group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbbaac20fc604795fbf01428e955d6d0f492',1,'nmodl::codegen::Watch()']]],
+  ['watch_5fstatement_6030',['WATCH_STATEMENT',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a0cb4711609fabe3b8b5692b6e9e41ea6',1,'nmodl::ast']]],
+  ['while_5fstatement_6031',['WHILE_STATEMENT',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a5134faf37f3fe1bb05273b5e517834dd',1,'nmodl::ast']]],
+  ['withnumbers_6032',['WithNumbers',['../group__utils.html#ggabf78118141123c84917fbafa57c97b5ba6d494c0b7b8c95f1ca055e1afd307200',1,'nmodl::utils']]],
+  ['withoutnumbers_6033',['WithoutNumbers',['../group__utils.html#ggabf78118141123c84917fbafa57c97b5ba48e615461371f586c42c6251440932f5',1,'nmodl::utils']]],
+  ['wrapped_5fexpression_6034',['WRAPPED_EXPRESSION',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a24e8edf8ee3bf4dc4d1a06e764665b53',1,'nmodl::ast']]],
+  ['write_6035',['write',['../namespacenmodl_1_1symtab_1_1syminfo.html#a3024cbfc3a7ebf7dd349303e70d82d4daefb2a684e4afb7d55e6147fbe5a332ee',1,'nmodl::symtab::syminfo']]],
+  ['write_5fion_5fvar_6036',['WRITE_ION_VAR',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a6a032955d350a7dd5254b35acf0ce26a',1,'nmodl::ast::WRITE_ION_VAR()'],['../namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dba7b0b4b63b7695c9d325544455f858b7c',1,'nmodl::symtab::syminfo::write_ion_var()']]]
 ];

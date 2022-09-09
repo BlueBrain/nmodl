@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['reactionop_5847',['ReactionOp',['../group__ast__prop.html#ga132ea63177a1f70f366ea0edb09dfa14',1,'nmodl::ast']]],
-  ['replacepolicy_5848',['ReplacePolicy',['../classnmodl_1_1visitor_1_1_sympy_replace_solutions_visitor.html#a1e49fcb9c416a45a1607f335948228c1',1,'nmodl::visitor::SympyReplaceSolutionsVisitor']]]
+  ['scope_5809',['Scope',['../namespacenmodl_1_1symtab_1_1syminfo.html#a901f9299d7c59b1694463d26928f2a75',1,'nmodl::symtab::syminfo']]],
+  ['status_5810',['Status',['../namespacenmodl_1_1symtab_1_1syminfo.html#a7d0b8aa765db0de7491021b4d403b6e2',1,'nmodl::symtab::syminfo']]]
 ];

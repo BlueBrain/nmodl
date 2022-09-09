@@ -1,9 +1,8 @@
 var searchData=
 [
-  ['valencevector_5823',['ValenceVector',['../group__ast__vec__type.html#ga94c1f13db006ede6849398172ec460fa',1,'nmodl::ast']]],
-  ['varnamevector_5824',['VarNameVector',['../group__ast__vec__type.html#ga7f1c4cc6f4f3ee59c3448bd6aaa66dbd',1,'nmodl::ast']]],
-  ['vectype_5825',['VecType',['../partial__piv__lu_8h.html#a8c4f72884cc84c9f70f2e894eeeaaf75',1,'partial_piv_lu.h']]],
-  ['verbatimvector_5826',['VerbatimVector',['../group__ast__vec__type.html#ga6c0d3b1c09d8e89d64779c8a227e3253',1,'nmodl::ast']]],
-  ['visit_5farg_5ftrait_5827',['visit_arg_trait',['../classnmodl_1_1visitor_1_1_meta_ast_lookup_visitor.html#a2b780cb504f51c876c523689a04e8fe8',1,'nmodl::visitor::MetaAstLookupVisitor']]],
-  ['visitorinfo_5828',['VisitorInfo',['../src_2visitors_2main_8cpp.html#ad8feec777a853728b608b334428e12b5',1,'main.cpp']]]
+  ['watchstatementvector_5790',['WatchStatementVector',['../group__ast__vec__type.html#gaa118ce0ee551b1b0a67dc6f840cc1e03',1,'nmodl::ast']]],
+  ['watchvector_5791',['WatchVector',['../group__ast__vec__type.html#ga7462b559e39bb040b4284979a47fe9e4',1,'nmodl::ast']]],
+  ['whilestatementvector_5792',['WhileStatementVector',['../group__ast__vec__type.html#ga1432db32888302910ed1bb729a0d3eba',1,'nmodl::ast']]],
+  ['wrappedexpressionvector_5793',['WrappedExpressionVector',['../group__ast__vec__type.html#ga14f26d676627a4771b541cef2a35748f',1,'nmodl::ast']]],
+  ['writeionvarvector_5794',['WriteIonVarVector',['../group__ast__vec__type.html#ga3fa547a7a2c751581063c09420c195e0',1,'nmodl::ast']]]
 ];

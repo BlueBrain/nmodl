@@ -1,12 +1,8 @@
 var searchData=
 [
-  ['valence_3139',['Valence',['../classnmodl_1_1ast_1_1_valence.html',1,'nmodl::ast']]],
-  ['varname_3140',['VarName',['../classnmodl_1_1ast_1_1_var_name.html',1,'nmodl::ast']]],
-  ['varusagevisitor_3141',['VarUsageVisitor',['../classnmodl_1_1visitor_1_1_var_usage_visitor.html',1,'nmodl::visitor']]],
-  ['verbatim_3142',['Verbatim',['../classnmodl_1_1ast_1_1_verbatim.html',1,'nmodl::ast']]],
-  ['verbatimdriver_3143',['VerbatimDriver',['../classnmodl_1_1parser_1_1_verbatim_driver.html',1,'nmodl::parser']]],
-  ['verbatimvarrenamevisitor_3144',['VerbatimVarRenameVisitor',['../classnmodl_1_1visitor_1_1_verbatim_var_rename_visitor.html',1,'nmodl::visitor']]],
-  ['verbatimvisitor_3145',['VerbatimVisitor',['../classnmodl_1_1visitor_1_1_verbatim_visitor.html',1,'nmodl::visitor']]],
-  ['version_3146',['Version',['../structnmodl_1_1_version.html',1,'nmodl']]],
-  ['visitor_3147',['Visitor',['../classnmodl_1_1visitor_1_1_visitor.html',1,'nmodl::visitor']]]
+  ['watch_3125',['Watch',['../classnmodl_1_1ast_1_1_watch.html',1,'nmodl::ast']]],
+  ['watchstatement_3126',['WatchStatement',['../classnmodl_1_1ast_1_1_watch_statement.html',1,'nmodl::ast']]],
+  ['whilestatement_3127',['WhileStatement',['../classnmodl_1_1ast_1_1_while_statement.html',1,'nmodl::ast']]],
+  ['wrappedexpression_3128',['WrappedExpression',['../classnmodl_1_1ast_1_1_wrapped_expression.html',1,'nmodl::ast']]],
+  ['writeionvar_3129',['WriteIonVar',['../classnmodl_1_1ast_1_1_write_ion_var.html',1,'nmodl::ast']]]
 ];

@@ -100,8 +100,6 @@ var group__ast__vec__type =
     [ "ProcedureBlockVector", "group__ast__vec__type.html#ga031b3c7c9f581864fdcf8ff30f466580", null ],
     [ "ProgramVector", "group__ast__vec__type.html#gae0477d36e881ecdd50a5d973e4d8ffe4", null ],
     [ "ProtectStatementVector", "group__ast__vec__type.html#gad88e3f65e35313dec0d5c377bf09fca5", null ],
-    [ "QueueExpressionTypeVector", "group__ast__vec__type.html#gaeac534601202003d420b02f53a401c23", null ],
-    [ "QueueStatementVector", "group__ast__vec__type.html#ga4bc8480ed4cfe6d67ad143b51a6654cb", null ],
     [ "RangeVarVector", "group__ast__vec__type.html#ga246aa8db5fc687abf00fdc9b53312662", null ],
     [ "RangeVector", "group__ast__vec__type.html#ga44ce674af26e2057d4262412eef87128", null ],
     [ "ReactionOperatorVector", "group__ast__vec__type.html#gab5bc253411d34f6f6795f146c63700ee", null ],

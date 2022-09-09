@@ -106,8 +106,6 @@ var classnmodl_1_1visitor_1_1_nmodl_print_visitor =
     [ "visit_procedure_block", "classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#ab2c8312a6b0b4270f1a31d571a028528", null ],
     [ "visit_program", "classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#a6d701737317db0582452ddec8b288dda", null ],
     [ "visit_protect_statement", "classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#a1328bf72643e9d7997310c8fae89d568", null ],
-    [ "visit_queue_expression_type", "classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#acbff4bf5e5a232b81e35c50f80a751a9", null ],
-    [ "visit_queue_statement", "classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#a754985980cf477e19926dade62a767a6", null ],
     [ "visit_range", "classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#aa24128b174f683886061af8137419ff6", null ],
     [ "visit_range_var", "classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#aab691f69b35c5a9ae91460bffb525e57", null ],
     [ "visit_react_var_name", "classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#a3bafa4cc62fd3d59b671dd16a50e88cd", null ],

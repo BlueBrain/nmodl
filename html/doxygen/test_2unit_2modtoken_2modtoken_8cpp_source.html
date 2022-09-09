@@ -145,14 +145,14 @@ $(document).ready(function(){initNavTree('test_2unit_2modtoken_2modtoken_8cpp_so
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;            std::stringstream ss;</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;            <a class="code" href="group__token__test.html#ga752aa45201ab43cc2d13b3ce5a5f1144">symbol_type</a>(<span class="stringliteral">&quot;text&quot;</span>, value);</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;            ss &lt;&lt; *(value.<a class="code" href="classnmodl_1_1ast_1_1_name.html#adc557a9ae861750dc44fb593795b4678">get_token</a>());</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;            REQUIRE(ss.str() == <span class="stringliteral">&quot;           text at [1.1-4] type 357&quot;</span>);</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;            REQUIRE(ss.str() == <span class="stringliteral">&quot;           text at [1.1-4] type 355&quot;</span>);</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        }</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        {</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;            std::stringstream ss;</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;            <a class="code" href="group__token__test.html#ga752aa45201ab43cc2d13b3ce5a5f1144">symbol_type</a>(<span class="stringliteral">&quot;  some_text&quot;</span>, value);</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;            ss &lt;&lt; *(value.<a class="code" href="classnmodl_1_1ast_1_1_name.html#adc557a9ae861750dc44fb593795b4678">get_token</a>());</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;            REQUIRE(ss.str() == <span class="stringliteral">&quot;      some_text at [1.3-11] type 357&quot;</span>);</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;            REQUIRE(ss.str() == <span class="stringliteral">&quot;      some_text at [1.3-11] type 355&quot;</span>);</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        }</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    }</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
@@ -162,7 +162,7 @@ $(document).ready(function(){initNavTree('test_2unit_2modtoken_2modtoken_8cpp_so
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;            std::stringstream ss;</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;            <a class="code" href="group__token__test.html#ga752aa45201ab43cc2d13b3ce5a5f1144">symbol_type</a>(<span class="stringliteral">&quot;h&#39;&#39; = &quot;</span>, value);</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;            ss &lt;&lt; *(value.<a class="code" href="classnmodl_1_1ast_1_1_prime_name.html#ae2660b8c818a9a277c1041ba40f8f597">get_token</a>());</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;            REQUIRE(ss.str() == <span class="stringliteral">&quot;            h&#39;&#39; at [1.1-3] type 364&quot;</span>);</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;            REQUIRE(ss.str() == <span class="stringliteral">&quot;            h&#39;&#39; at [1.1-3] type 362&quot;</span>);</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;            REQUIRE(value.<a class="code" href="classnmodl_1_1ast_1_1_prime_name.html#a285c08411f4f797f6f59726f0d7b908a">get_order</a>()-&gt;eval() == 2);</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        }</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    }</div>
