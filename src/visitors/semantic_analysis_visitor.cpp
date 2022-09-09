@@ -23,7 +23,7 @@ bool SemanticAnalysisVisitor::check(const ast::Program& node) {
     }
     /// -->
 
-    /// <-- This code is for check 3
+    /// <-- This code is for check 4
     using namespace symtab::syminfo;
     const auto& with_prop = NmodlType::read_ion_var | NmodlType::write_ion_var;
 
