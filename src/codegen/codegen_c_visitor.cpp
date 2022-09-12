@@ -4591,6 +4591,9 @@ void CodegenCVisitor::print_data_structures(bool print_initialisers) {
 }
 
 void CodegenCVisitor::print_v_unused() const {
+    if (!info.vectorize) {
+        return;
+    }
     printer->add_line("#if NRN_PRCELLSTATE");
     printer->add_line("inst->v_unused[id] = v;");
     printer->add_line("#endif");
