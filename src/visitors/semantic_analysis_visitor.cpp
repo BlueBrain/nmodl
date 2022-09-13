@@ -4,6 +4,7 @@
 #include "ast/program.hpp"
 #include "ast/suffix.hpp"
 #include "ast/table_statement.hpp"
+#include "lexer/token_mapping.hpp"
 #include "symtab/symbol_properties.hpp"
 #include "utils/logger.hpp"
 #include "visitors/visitor_utils.hpp"
@@ -96,6 +97,18 @@ void SemanticAnalysisVisitor::visit_destructor_block(const ast::DestructorBlock&
         logger->warn(
             "SemanticAnalysisVisitor :: This mod file is not point process but contains a "
             "destructor.");
+        check_fail = true;
+    }
+    /// -->
+}
+
+void SemanticAnalysisVisitor::visit_function_call(const ast::FunctionCall& node) {
+    /// <-- This code is for check 5
+    const auto& name = node.get_node_name();
+    if (details::is_external_definitions(name) && details::is_not_thread_safe(name)) {
+        logger->critical(
+            "SemanticAnalysisVisitor :: '{}' is not thread safe and incompatible with CoreNEURON",
+            name);
         check_fail = true;
     }
     /// -->

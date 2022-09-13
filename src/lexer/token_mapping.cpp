@@ -244,6 +244,31 @@ const static std::vector<std::string> extern_definitions = {"acos",
                                                             "tanh",
                                                             "threshold"};
 const static std::vector<std::string> need_nt = {"at_time"};
+const static std::vector<std::string> not_thread_safe = {"force",
+                                                         "deflate",
+                                                         "expfit",
+                                                         "derivs",
+                                                         "spline",
+                                                         "exprand",
+                                                         "gauss",
+                                                         "normrand",
+                                                         "poisrand",
+                                                         "poisson",
+                                                         "setseed",
+                                                         "scop_random",
+                                                         "boundary",
+                                                         "romberg",
+                                                         "invert",
+                                                         "stepforce",
+                                                         "schedule",
+                                                         "set_seed",
+                                                         "nrn_random_play"};
+
+bool is_external_definitions(const std::string& token) {
+    return std::find(extern_definitions.cbegin(), extern_definitions.cend(), token) !=
+           extern_definitions.cend();
+}
+
 
 /**
  * Checks if \c token is one of the functions coming from NEURON/CoreNEURON and needs
@@ -254,6 +279,12 @@ const static std::vector<std::string> need_nt = {"at_time"};
  */
 bool needs_neuron_thread_first_arg(const std::string& token) {
     return std::find(need_nt.cbegin(), need_nt.cend(), token) != need_nt.cend();
+}
+
+
+bool is_not_thread_safe(const std::string& token) {
+    return std::find(not_thread_safe.cbegin(), not_thread_safe.cend(), token) !=
+           not_thread_safe.cend();
 }
 
 
