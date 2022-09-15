@@ -39,9 +39,11 @@ class Replacer {
 class DefaultCPUReplacer: public Replacer {
   private:
     std::string library_name;
+
   public:
     DefaultCPUReplacer(std::string library_name)
-      : Replacer(), library_name(library_name) {}
+        : Replacer()
+        , library_name(library_name) {}
 
     Patterns patterns() const final override;
 

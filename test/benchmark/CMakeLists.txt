@@ -44,7 +44,7 @@ if(NMODL_ENABLE_PYTHON_BINDINGS)
     if(NMODL_ENABLE_LLVM_CUDA)
       add_test(NAME "PyJIT/${modfile_name}_gpu"
                COMMAND ${PYTHON_EXECUTABLE} ${NMODL_PROJECT_SOURCE_DIR}/test/benchmark/benchmark.py
-                      --file ${modfile} --gpu ${extra_args})
+                       --file ${modfile} --gpu ${extra_args})
       message(STATUS "CUDA_HOME is ${CUDAToolkit_TARGET_DIR}")
       set_tests_properties(
         "PyJIT/${modfile_name}_gpu"

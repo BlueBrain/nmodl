@@ -124,7 +124,6 @@ class LLVMBenchmark {
     BenchmarkResults run();
 
   private:
-
     /// Sets the log output stream (file or console).
     void set_log_output();
 };

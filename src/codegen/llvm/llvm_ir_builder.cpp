@@ -158,9 +158,10 @@ void IRBuilder::allocate_function_arguments(llvm::Function* function,
     }
 }
 
-void IRBuilder::allocate_and_wrap_kernel_arguments(llvm::Function* function,
-                                                   const ast::CodegenVarWithTypeVector& nmodl_arguments,
-                                                   llvm::Type* struct_type) {
+void IRBuilder::allocate_and_wrap_kernel_arguments(
+    llvm::Function* function,
+    const ast::CodegenVarWithTypeVector& nmodl_arguments,
+    llvm::Type* struct_type) {
     // In theory, this should never happen but let's guard anyway.
     if (nmodl_arguments.size() != 1) {
         throw std::runtime_error("Error: NMODL computer kernel must have a single argument\n");

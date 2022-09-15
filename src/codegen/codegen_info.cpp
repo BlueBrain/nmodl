@@ -371,7 +371,7 @@ void CodegenInfo::get_float_variables() {
 
     if (breakpoint_exist()) {
         std::string name = vectorize ? naming::CONDUCTANCE_UNUSED_VARIABLE
-                                          : naming::CONDUCTANCE_VARIABLE;
+                                     : naming::CONDUCTANCE_VARIABLE;
 
         // make sure conductance variable like `g` is not already defined
         if (auto r = std::find_if(codegen_float_variables.cbegin(),

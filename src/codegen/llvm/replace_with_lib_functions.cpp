@@ -22,7 +22,8 @@ namespace nmodl {
 namespace custom {
 
 Patterns DefaultCPUReplacer::patterns() const {
-    throw std::runtime_error("Error: DefaultCPUReplacer has no patterns and uses built-in LLVM passes instead.\n");
+    throw std::runtime_error(
+        "Error: DefaultCPUReplacer has no patterns and uses built-in LLVM passes instead.\n");
 }
 
 std::string DefaultCPUReplacer::get_library_name() {
@@ -30,16 +31,14 @@ std::string DefaultCPUReplacer::get_library_name() {
 }
 
 Patterns CUDAReplacer::patterns() const {
-    return {
-        {"llvm.exp.f32", "__nv_expf"},
-        {"llvm.exp.f64", "__nv_exp"},
-        {"llvm.pow.f32", "__nv_powf"},
-        {"llvm.pow.f64", "__nv_pow"},
-        {"llvm.log.f32", "__nv_logf"},
-        {"llvm.log.f64", "__nv_log"},
-        {"llvm.fabs.f32", "__nv_fabsf"},
-        {"llvm.fabs.f64", "__nv_fabs"}
-    };
+    return {{"llvm.exp.f32", "__nv_expf"},
+            {"llvm.exp.f64", "__nv_exp"},
+            {"llvm.pow.f32", "__nv_powf"},
+            {"llvm.pow.f64", "__nv_pow"},
+            {"llvm.log.f32", "__nv_logf"},
+            {"llvm.log.f64", "__nv_log"},
+            {"llvm.fabs.f32", "__nv_fabsf"},
+            {"llvm.fabs.f64", "__nv_fabs"}};
 }
 }  // namespace custom
 }  // namespace nmodl
@@ -114,7 +113,7 @@ void ReplacePass::getAnalysisUsage(AnalysisUsage& au) const {
 void ReplacePass::add_vectorizable_functions_from_vec_lib(TargetLibraryInfoImpl& tli,
                                                           Triple& triple) {
     // Since LLVM does not support SLEEF as a vector library yet, process it separately.
-    if (((DefaultCPUReplacer*)replacer)->get_library_name() == "SLEEF") {
+    if (((DefaultCPUReplacer*) replacer)->get_library_name() == "SLEEF") {
 // clang-format off
 #define FIXED(w) ElementCount::getFixed(w)
 // clang-format on
@@ -165,10 +164,11 @@ void ReplacePass::add_vectorizable_functions_from_vec_lib(TargetLibraryInfoImpl&
             {"none", VecLib::NoLibrary},
             {"SVML", VecLib::SVML}};
 
-        const auto& library = llvm_supported_vector_libraries.find(((DefaultCPUReplacer*)replacer)->get_library_name());
+        const auto& library = llvm_supported_vector_libraries.find(
+            ((DefaultCPUReplacer*) replacer)->get_library_name());
         if (library == llvm_supported_vector_libraries.end())
             throw std::runtime_error("Error: unknown vector library - " +
-                                     ((DefaultCPUReplacer*)replacer)->get_library_name() + "\n");
+                                     ((DefaultCPUReplacer*) replacer)->get_library_name() + "\n");
 
         // Add vectorizable functions to the target library info.
         if (library->second != VecLib::LIBMVEC_X86 || (triple.isX86() && triple.isArch64Bit())) {

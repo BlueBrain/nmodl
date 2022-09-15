@@ -6,8 +6,8 @@
  *************************************************************************/
 
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
-#include "codegen/llvm/llvm_utils.hpp"
 #include "codegen/llvm/annotation.hpp"
+#include "codegen/llvm/llvm_utils.hpp"
 
 #include "ast/all.hpp"
 #include "utils/logger.hpp"

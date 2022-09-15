@@ -25,14 +25,15 @@ namespace custom {
 
 void Annotator::add_nmodl_compute_kernel_annotation(llvm::Function& function) {
     llvm::LLVMContext& context = function.getContext();
-    llvm::MDNode* node = llvm::MDNode::get(context, llvm::MDString::get(context, nmodl_compute_kernel));
+    llvm::MDNode* node = llvm::MDNode::get(context,
+                                           llvm::MDString::get(context, nmodl_compute_kernel));
     function.setMetadata(nmodl_annotations, node);
 }
 
 bool Annotator::has_nmodl_compute_kernel_annotation(llvm::Function& function) {
     if (!function.hasMetadata(nmodl_annotations))
         return false;
-    
+
     llvm::MDNode* node = function.getMetadata(nmodl_annotations);
     std::string type = llvm::cast<llvm::MDString>(node->getOperand(0))->getString().str();
     return type == nmodl_compute_kernel;
@@ -54,12 +55,12 @@ void DefaultCPUAnnotator::annotate(llvm::Function& function) const {
     function.addParamAttr(0, llvm::Attribute::NoAlias);
 
     // Finally, specify that the mechanism data struct pointer does not
-    // capture and is read-only. 
+    // capture and is read-only.
     function.addParamAttr(0, llvm::Attribute::NoCapture);
     function.addParamAttr(0, llvm::Attribute::ReadOnly);
 }
 
-void CUDAAnnotator::annotate(llvm::Function& function) const {    
+void CUDAAnnotator::annotate(llvm::Function& function) const {
     llvm::LLVMContext& context = function.getContext();
     llvm::Module* m = function.getParent();
 
@@ -83,8 +84,7 @@ bool AnnotationPass::runOnModule(Module& module) {
     bool modified = false;
 
     for (auto& function: module.getFunctionList()) {
-        if (!function.isDeclaration() &&
-            Annotator::has_nmodl_compute_kernel_annotation(function)) {
+        if (!function.isDeclaration() && Annotator::has_nmodl_compute_kernel_annotation(function)) {
             annotator->annotate(function);
             modified = true;
         }
