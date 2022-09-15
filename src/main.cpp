@@ -14,7 +14,6 @@
 #include "codegen/codegen_c_visitor.hpp"
 #include "codegen/codegen_cuda_visitor.hpp"
 #include "codegen/codegen_ispc_visitor.hpp"
-#include "codegen/codegen_transform_visitor.hpp"
 #ifdef NMODL_LLVM_BACKEND
 #include "codegen/llvm/codegen_llvm_visitor.hpp"
 #include "test/benchmark/llvm_benchmark.hpp"
@@ -277,7 +276,7 @@ int main(int argc, const char* argv[]) {
 
     // if any of the other backends is used we force the C backend to be off.
     if (cfg.ispc_backend) {
-        c_backend = false;
+        cfg.c_backend = false;
     }
 
     utils::make_path(cfg.output_dir);

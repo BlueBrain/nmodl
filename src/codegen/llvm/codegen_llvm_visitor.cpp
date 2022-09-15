@@ -929,14 +929,14 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
     utils::save_ir_to_ll_file(*module, output_dir + "/" + mod_filename);
 }
 
-void CodegenLLVMVisitor::print_mechanism_range_var_structure() {
+void CodegenLLVMVisitor::print_mechanism_range_var_structure(bool) {
     printer->add_newline(2);
     printer->add_line("/** Instance Struct passed as argument to LLVM IR kernels */");
     printer->start_block(fmt::format("struct {} ", instance_struct()));
     for (const auto& variable: instance_var_helper.instance->get_codegen_vars()) {
         auto is_pointer = variable->get_is_pointer();
         auto name = to_nmodl(variable->get_name());
-        auto qualifier = is_constant_variable(name) ? k_const() : "";
+        auto qualifier = is_constant_variable(name) ? "const " : "";
         auto nmodl_type = variable->get_type()->get_type();
         auto pointer = is_pointer ? "*" : "";
         auto var_name = variable->get_node_name();
@@ -970,17 +970,11 @@ void CodegenLLVMVisitor::print_instance_variable_setup() {
         print_setup_range_variable();
     }
 
-    if (shadow_vector_setup_required()) {
-        print_shadow_vector_setup();
-    }
     printer->add_newline(2);
     printer->add_line("/** initialize mechanism instance variables */");
     printer->start_block("static inline void setup_instance(NrnThread* nt, Memb_list* ml) ");
     printer->add_line(
         fmt::format("{0}* inst = ({0}*) mem_alloc(1, sizeof({0}));", instance_struct()));
-    if (channel_task_dependency_enabled() && !info.codegen_shadow_variables.empty()) {
-        printer->add_line("setup_shadow_vectors(inst, ml);");
-    }
 
     std::string stride;
     printer->add_line("int pnodecount = ml->_nodecount_padded;");
@@ -1001,8 +995,7 @@ void CodegenLLVMVisitor::print_instance_variable_setup() {
         auto range_var_type = get_range_var_float_type(var);
         if (float_type == range_var_type) {
             auto variable = fmt::format("ml->data+{}{}", id, stride);
-            auto device_variable = get_variable_device_pointer(variable, float_type_pointer);
-            printer->add_line(fmt::format("inst->{} = {};", name, device_variable));
+            printer->add_line(fmt::format("inst->{} = {};", name, variable));
         } else {
             printer->add_line(fmt::format(
                 "inst->{} = setup_range_variable(ml->data+{}{}, pnodecount);", name, id, stride));
@@ -1025,8 +1018,7 @@ void CodegenLLVMVisitor::print_instance_variable_setup() {
             variable = "nt->_data";
             type = info.artificial_cell ? "void*" : float_type_pointer;
         }
-        auto device_variable = get_variable_device_pointer(variable, type);
-        printer->add_line(fmt::format("inst->{} = {};", name, device_variable));
+        printer->add_line(fmt::format("inst->{} = {};", name, variable));
     }
 
     int index_id = 0;

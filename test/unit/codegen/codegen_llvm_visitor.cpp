@@ -5,7 +5,7 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
-#include <catch/catch.hpp>
+#include <catch2/catch.hpp>
 
 #include "ast/program.hpp"
 #include "codegen/codegen_helper_visitor.hpp"
@@ -45,7 +45,7 @@ std::string get_wrapper_instance_struct(const std::string& nmodl_text) {
     codegen::CodegenLLVMVisitor llvm_visitor("hh.mod", oss, cpu_platform, 0);
     llvm_visitor.visit_program(*ast);
     strbuf.str("");
-    llvm_visitor.print_mechanism_range_var_structure();
+    llvm_visitor.print_mechanism_range_var_structure(false);
     llvm_visitor.print_instance_variable_setup();
     return strbuf.str();
 }

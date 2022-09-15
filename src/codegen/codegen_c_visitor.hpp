@@ -1088,23 +1088,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
-     * Print channel iterations from which tasks are created
-     *
-     * \note This is not used for the C backend
-     * \param type
-     */
-    virtual void print_channel_iteration_task_begin(BlockType type);
-
-
-    /**
-     * Print end of channel iteration for task
-     *
-     * \note This is not used for the C backend
-     */
-    virtual void print_channel_iteration_task_end();
-
-
-    /**
      * Print block start for tiling on channel iteration
      */
     virtual void print_channel_iteration_tiling_block_begin(BlockType type);
@@ -1737,7 +1720,7 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * @param print_initialisers Whether or not default values for variables
      *                           be included in the struct declaration.
      */
-    virtual void print_mechanism_range_var_structure();
+    virtual void print_mechanism_range_var_structure(bool print_initialisers);
 
     /**
      * Print the function that initialize instance structure

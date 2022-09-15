@@ -112,6 +112,7 @@ if(NMODL_ENABLE_LLVM)
 
   add_library(benchmark_data STATIC codegen/codegen_data_helper.cpp)
   add_dependencies(benchmark_data lexer)
+  target_link_libraries(benchmark_data PRIVATE util)
 
   add_executable(
     testllvm visitor/main.cpp codegen/codegen_llvm_ir.cpp codegen/codegen_data_helper.cpp

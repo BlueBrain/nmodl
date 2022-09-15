@@ -8,12 +8,14 @@
 #include <string>
 
 #include "codegen/codegen_driver.hpp"
+#include "codegen/codegen_transform_visitor.hpp"
 #include "codegen_compatibility_visitor.hpp"
 #include "utils/logger.hpp"
 #include "visitors/after_cvode_to_cnexp_visitor.hpp"
 #include "visitors/ast_visitor.hpp"
 #include "visitors/constant_folder_visitor.hpp"
 #include "visitors/global_var_visitor.hpp"
+#include "visitors/implicit_argument_visitor.hpp"
 #include "visitors/inline_visitor.hpp"
 #include "visitors/ispc_rename_visitor.hpp"
 #include "visitors/kinetic_block_visitor.hpp"
@@ -237,20 +239,20 @@ bool CodegenDriver::prepare_mod(std::shared_ptr<ast::Program> node, const std::s
         ast_to_nmodl(*node, filepath("solveblock", "mod"));
     }
 
-    if (json_perfstat) {
+    if (cfg.json_perfstat) {
         std::string file{scratch_dir};
         file.append("/");
         file.append(modfile);
         file.append(".perf.json");
         logger->info("Writing performance statistics to {}", file);
-        PerfVisitor(file).visit_program(*ast);
+        PerfVisitor(file).visit_program(*node);
     }
 
     {
         // Add implicit arguments (like celsius, nt) to NEURON functions (like
         // nrn_ghk, at_time) whose signatures we have to massage.
-        ImplicitArgumentVisitor{}.visit_program(*ast);
-        SymtabVisitor(update_symtab).visit_program(*ast);
+        ImplicitArgumentVisitor{}.visit_program(*node);
+        SymtabVisitor(update_symtab).visit_program(*node);
     }
 
     {
@@ -260,9 +262,9 @@ bool CodegenDriver::prepare_mod(std::shared_ptr<ast::Program> node, const std::s
     }
 
     {
-        CodegenTransformVisitor{}.visit_program(*ast);
-        ast_to_nmodl(*ast, filepath("TransformVisitor"));
-        SymtabVisitor(update_symtab).visit_program(*ast);
+        CodegenTransformVisitor{}.visit_program(*node);
+        ast_to_nmodl(*node, filepath("TransformVisitor", "mod"));
+        SymtabVisitor(update_symtab).visit_program(*node);
     }
     return true;
 }

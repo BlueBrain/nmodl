@@ -261,7 +261,7 @@ class CodegenLLVMVisitor: public CodegenCVisitor {
     void print_wrapper_routines() override;
     void print_wrapper_headers_include();
     void print_data_structures();
-    void print_mechanism_range_var_structure() override;
+    void print_mechanism_range_var_structure(bool) override;
     void print_instance_variable_setup() override;
 
     /**
