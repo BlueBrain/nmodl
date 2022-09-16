@@ -1,3 +1,4 @@
 implicit-integer-sign-change:double vector[2] Eigen::internal::pabs<double vector[2]>(double vector[2] const&)
 unsigned-integer-overflow:nmodl::fast_math::vexp(double)
 unsigned-integer-overflow:nmodl::fast_math::vexpm1(double)
+unsigned-integer-overflow:std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>::_M_gen_rand()
