@@ -5,6 +5,7 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
+#include <ast/ast.hpp>
 #include "symtab/symbol.hpp"
 #include "utils/logger.hpp"
 
@@ -48,6 +49,19 @@ std::string Symbol::to_string() const {
     }
     return s;
 }
+
+std::vector<ast::Ast*> Symbol::get_nodes_by_token(std::initializer_list<ast::AstNodeType> l) const noexcept {
+        std::vector<ast::Ast*> _nodes;
+        for (const auto& n: nodes) {
+            for (const auto& m: l) {
+                if (n->get_node_type() == m) {
+                    _nodes.push_back(n);
+                    break;
+                }
+            }
+        }
+        return nodes;
+    }
 
 }  // namespace symtab
 }  // namespace nmodl

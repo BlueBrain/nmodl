@@ -47,7 +47,8 @@ ast::SolutionExpression* SolveBlockVisitor::create_solution_expression(
         throw std::runtime_error(
             fmt::format("SolveBlockVisitor :: cannot find the block '{}' to solve it", block_name));
     }
-    auto node_to_solve = solve_node_symbol->get_node();
+    auto nodes_to_solve = solve_node_symbol->get_nodes();
+    auto node_to_solve = nodes_to_solve.front();
 
     /// in case of derivimplicit method if neuron solver is used (i.e. not sympy) then
     /// the solution is not in place but we have to create a callback to newton solver

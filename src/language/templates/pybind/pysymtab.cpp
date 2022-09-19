@@ -200,7 +200,7 @@ void init_symtab_module(py::module& m) {
         .def("get_id", &Symbol::get_id)
         .def("get_status", &Symbol::get_status)
         .def("get_properties", &Symbol::get_properties)
-        .def("get_node", &Symbol::get_node)
+        .def("get_node", [](const std::shared_ptr<Symbol>& s){ return s->get_nodes().front(); })
         .def("get_original_name", &Symbol::get_original_name)
         .def("get_name", &Symbol::get_name)
         .def("has_any_property", &Symbol::has_any_property)
