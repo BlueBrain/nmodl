@@ -61,7 +61,7 @@ std::vector<ast::Ast*> Symbol::get_nodes_by_type(
             }
         }
     }
-    return nodes;
+    return _nodes;
 }
 
 }  // namespace symtab
