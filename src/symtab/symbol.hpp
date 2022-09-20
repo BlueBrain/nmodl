@@ -66,10 +66,10 @@ class Symbol {
     /// Variable can appear multiple times in the mod file. This node
     /// represent the first occurance of the variable in the input. Currently
     /// we don't track all AST nodes.
-    std::vector<ast::Ast*> nodes = {};
+    std::vector<ast::Ast*> nodes{};
 
     /// token associated with symbol (from node)
-    ModToken token;
+    ModToken token{};
 
     /// properties of symbol as a result of usage across whole mod file
     syminfo::NmodlType properties{syminfo::NmodlType::empty};
@@ -112,6 +112,9 @@ class Symbol {
     /// \{
 
     Symbol() = delete;
+
+    Symbol(std::string name)
+        : name(std::move(name)) {}
 
     Symbol(std::string name, ast::Ast* node)
         : name(std::move(name)) {

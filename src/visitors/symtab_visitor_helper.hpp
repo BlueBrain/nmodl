@@ -135,7 +135,7 @@ void SymtabVisitor::setup_symbol(ast::Node* node, NmodlType property) {
         auto name = use_ion->get_name()->get_node_name();
         for (const auto& variable: codegen::Ion::get_possible_variables(name)) {
             std::string ion_variable(codegen::naming::ION_VARNAME_PREFIX + variable);
-            auto symbol = std::make_shared<symtab::Symbol>(ion_variable, ModToken());
+            auto symbol = std::make_shared<symtab::Symbol>(ion_variable);
             symbol->add_property(NmodlType::codegen_var);
             modsymtab->insert(symbol);
         }
