@@ -15,9 +15,9 @@
 #include <map>
 #include <memory>
 
-#include <ast/ast_decl.hpp>
 #include "lexer/modtoken.hpp"
 #include "symtab/symbol_properties.hpp"
+#include <ast/ast_decl.hpp>
 
 
 namespace nmodl {
@@ -114,10 +114,9 @@ class Symbol {
     Symbol() = delete;
 
     Symbol(std::string name, ast::Ast* node)
-        : name(std::move(name))
-        {
-            nodes.push_back(node);
-        }
+        : name(std::move(name)) {
+        nodes.push_back(node);
+    }
 
     Symbol(std::string name, ModToken token)
         : name(std::move(name))
@@ -125,10 +124,9 @@ class Symbol {
 
     Symbol(std::string name, ast::Ast* node, ModToken token)
         : name(std::move(name))
-        , token(std::move(token))
-        {
-            nodes.push_back(node);
-        }
+        , token(std::move(token)) {
+        nodes.push_back(node);
+    }
 
     /// \}
 
@@ -249,7 +247,8 @@ class Symbol {
         return nodes;
     }
 
-    std::vector<ast::Ast*> get_nodes_by_token(std::initializer_list<ast::AstNodeType> l) const noexcept;
+    std::vector<ast::Ast*> get_nodes_by_token(
+        std::initializer_list<ast::AstNodeType> l) const noexcept;
 
     ModToken get_token() const noexcept {
         return token;

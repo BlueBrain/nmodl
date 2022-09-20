@@ -211,7 +211,8 @@ void InlineVisitor::visit_function_call(FunctionCall& node) {
         return;
     }
 
-    auto nodes = symbol->get_nodes_by_token({AstNodeType::FUNCTION_BLOCK, AstNodeType::PROCEDURE_BLOCK});
+    auto nodes = symbol->get_nodes_by_token(
+        {AstNodeType::FUNCTION_BLOCK, AstNodeType::PROCEDURE_BLOCK});
     if (nodes.empty()) {
         throw std::runtime_error("symbol table doesn't have ast node for " + function_name);
     }

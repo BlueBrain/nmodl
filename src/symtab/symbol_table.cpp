@@ -58,7 +58,8 @@ bool SymbolTable::is_method_defined(const std::string& name) const {
     if (symbol == nullptr) {
         return false;
     }
-    auto nodes = symbol->get_nodes_by_token({AstNodeType::FUNCTION_BLOCK, AstNodeType::PROCEDURE_BLOCK});
+    auto nodes = symbol->get_nodes_by_token(
+        {AstNodeType::FUNCTION_BLOCK, AstNodeType::PROCEDURE_BLOCK});
     return !nodes.empty();
 }
 
