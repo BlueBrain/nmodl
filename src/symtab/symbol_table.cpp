@@ -318,7 +318,9 @@ std::shared_ptr<Symbol> ModelSymbolTable::insert(const std::shared_ptr<Symbol>& 
             emit_message(symbol, search_symbol, true);
         } else {
             search_symbol->add_properties(symbol->get_properties());
-            search_symbol->add_node(symbol->get_nodes().front());
+            for (const auto& n: symbol->get_nodes()) {
+                search_symbol->add_node(n);
+            }
         }
         return search_symbol;
     }
