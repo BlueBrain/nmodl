@@ -50,7 +50,7 @@ std::string Symbol::to_string() const {
     return s;
 }
 
-std::vector<ast::Ast*> Symbol::get_nodes_by_token(
+std::vector<ast::Ast*> Symbol::get_nodes_by_type(
     std::initializer_list<ast::AstNodeType> l) const noexcept {
     std::vector<ast::Ast*> _nodes;
     for (const auto& n: nodes) {

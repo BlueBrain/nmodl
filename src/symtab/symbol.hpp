@@ -250,7 +250,7 @@ class Symbol {
         return nodes;
     }
 
-    std::vector<ast::Ast*> get_nodes_by_token(
+    std::vector<ast::Ast*> get_nodes_by_type(
         std::initializer_list<ast::AstNodeType> l) const noexcept;
 
     ModToken get_token() const noexcept {
