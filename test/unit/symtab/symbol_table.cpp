@@ -11,10 +11,10 @@
 
 #include <catch2/catch.hpp>
 
-#include "ast/program.hpp"
 #include "ast/function_block.hpp"
 #include "ast/name.hpp"
 #include "ast/procedure_block.hpp"
+#include "ast/program.hpp"
 #include "ast/string.hpp"
 #include "symtab/symbol.hpp"
 #include "symtab/symbol_table.hpp"
@@ -357,8 +357,11 @@ SCENARIO("Global symbol table (ModelSymbol) allows scope based operations") {
 
 SCENARIO("Symbol class allows manipulation") {
     GIVEN("A symbol can have several nodes") {
-        Symbol symbol1("alpha", new ast::FunctionBlock(std::make_shared<ast::Name>(new ast::String("alpha")), {}, {}, {}));
-        symbol1.add_node(new ast::ProcedureBlock(std::make_shared<ast::Name>(new ast::String("alpha")), {}, {}, {}));
+        Symbol symbol1("alpha",
+                       new ast::FunctionBlock(
+                           std::make_shared<ast::Name>(new ast::String("alpha")), {}, {}, {}));
+        symbol1.add_node(new ast::ProcedureBlock(
+            std::make_shared<ast::Name>(new ast::String("alpha")), {}, {}, {}));
         Symbol symbol2("beta");
 
         WHEN("trying to get all nodes") {
