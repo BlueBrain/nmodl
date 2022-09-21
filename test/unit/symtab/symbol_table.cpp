@@ -7,13 +7,12 @@
 
 #define CATCH_CONFIG_MAIN
 
+#include <memory>
 #include <string>
 
 #include <catch2/catch.hpp>
 
-#include "ast/function_block.hpp"
-#include "ast/name.hpp"
-#include "ast/procedure_block.hpp"
+#include "ast/float.hpp"
 #include "ast/program.hpp"
 #include "ast/string.hpp"
 #include "symtab/symbol.hpp"
@@ -357,11 +356,12 @@ SCENARIO("Global symbol table (ModelSymbol) allows scope based operations") {
 
 SCENARIO("Symbol class allows manipulation") {
     GIVEN("A symbol can have several nodes") {
-        Symbol symbol1("alpha",
-                       new ast::FunctionBlock(
-                           std::make_shared<ast::Name>(new ast::String("alpha")), {}, {}, {}));
-        symbol1.add_node(new ast::ProcedureBlock(
-            std::make_shared<ast::Name>(new ast::String("alpha")), {}, {}, {}));
+        auto st = std::make_shared<ast::String>("node1");
+        auto fl = std::make_shared<ast::Float>("1.1");
+        Symbol symbol1("alpha");
+        symbol1.add_node(st.get());
+        symbol1.add_node(fl.get());
+
         Symbol symbol2("beta");
 
         WHEN("trying to get all nodes") {
@@ -373,8 +373,8 @@ SCENARIO("Symbol class allows manipulation") {
 
         WHEN("trying to get specific node") {
             THEN("it works") {
-                REQUIRE(symbol1.get_nodes_by_type({ast::AstNodeType::FUNCTION_BLOCK}).size() == 1);
-                REQUIRE(symbol2.get_nodes_by_type({ast::AstNodeType::FUNCTION_BLOCK}).empty());
+                REQUIRE(symbol1.get_nodes_by_type({ast::AstNodeType::STRING}).size() == 1);
+                REQUIRE(symbol2.get_nodes_by_type({ast::AstNodeType::STRING}).empty());
             }
         }
     }
