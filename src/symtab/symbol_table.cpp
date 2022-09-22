@@ -204,7 +204,6 @@ void ModelSymbolTable::emit_message(const std::shared_ptr<Symbol>& first,
     std::string name = first->get_name();
     auto properties = to_string(second->get_properties());
     std::string type = "UNKNOWN";
-    // Here we take the first one, because this is a redefinition
     if (!nodes.empty()) {
         // Here we take the first one, because this is a redefinition
         type = nodes.front()->get_node_type_name();

@@ -15,9 +15,9 @@
 #include <map>
 #include <memory>
 
+#include "ast/ast_decl.hpp"
 #include "lexer/modtoken.hpp"
 #include "symtab/symbol_properties.hpp"
-#include <ast/ast_decl.hpp>
 
 
 namespace nmodl {
@@ -62,10 +62,8 @@ class Symbol {
     /// unique id or index position when symbol is inserted into specific table
     int id = 0;
 
-    /// first AST node for which symbol is inserted
-    /// Variable can appear multiple times in the mod file. This node
-    /// represent the first occurance of the variable in the input. Currently
-    /// we don't track all AST nodes.
+    /// All given AST nodes for this symbol.
+    /// Variable can appear multiple times in the mod file.
     std::vector<ast::Ast*> nodes{};
 
     /// token associated with symbol (from node)
