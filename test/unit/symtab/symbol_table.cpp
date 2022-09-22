@@ -364,6 +364,13 @@ SCENARIO("Symbol class allows manipulation") {
 
         Symbol symbol2("beta");
 
+        WHEN("trying to get name") {
+            THEN("it works") {
+                REQUIRE(symbol1.get_name() == "alpha");
+                REQUIRE(symbol2.get_name() == "beta");
+            }
+        }
+
         WHEN("trying to get all nodes") {
             THEN("it works") {
                 REQUIRE(symbol1.get_nodes().size() == 2);
@@ -372,9 +379,47 @@ SCENARIO("Symbol class allows manipulation") {
         }
 
         WHEN("trying to get specific node") {
+            auto nodes = symbol1.get_nodes_by_type({ast::AstNodeType::STRING});
+
             THEN("it works") {
-                REQUIRE(symbol1.get_nodes_by_type({ast::AstNodeType::STRING}).size() == 1);
+                REQUIRE(nodes.size() == 1);
+                REQUIRE(nodes.front()->is_string());
                 REQUIRE(symbol2.get_nodes_by_type({ast::AstNodeType::STRING}).empty());
+            }
+        }
+        WHEN("read and write counters works") {
+            symbol1.read();
+            symbol1.read();
+            symbol1.write();
+
+            THEN("it works") {
+                REQUIRE(symbol1.get_read_count() == 2);
+                REQUIRE(symbol1.get_write_count() == 1);
+                REQUIRE(symbol2.get_read_count() == 0);
+                REQUIRE(symbol2.get_write_count() == 0);
+            }
+        }
+
+        WHEN("renaming a symbol") {
+            symbol2.set_name("gamma");
+            THEN("get_name return the new name") {
+                REQUIRE(symbol2.get_name() == "gamma");
+                REQUIRE(symbol2.get_original_name() == "beta");
+            }
+            symbol2.set_original_name("gamma");
+            THEN("get_original_name return the new name") {
+                REQUIRE(symbol2.get_original_name() == "gamma");
+            }
+        }
+
+        WHEN("set as array") {
+            symbol1.set_as_array(15);
+            THEN("recognized as an array") {
+                REQUIRE(symbol1.get_length() == 15);
+                REQUIRE(symbol1.is_array());
+
+                REQUIRE(symbol2.get_length() == 1);
+                REQUIRE(!symbol2.is_array());
             }
         }
     }
