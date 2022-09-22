@@ -228,7 +228,7 @@ def solve_lin_system(eq_strings, vars, constants, function_calls, tmp_unique_pre
             )
             for var, expr in sub_exprs:
                 new_local_vars.append(sp.ccode(var))
-                code.append(f"{var} = {sp.ccode(expr.evalf())}")
+                code.append(f"{var} = {sp.ccode(expr.evalf(), user_functions=custom_fcts)}")
             solution_vector = simplified_solution_vector[0]
         for var, expr in zip(state_vars, solution_vector):
             code.append(f"{sp.ccode(var)} = {sp.ccode(expr.evalf(), contract=False, user_functions=custom_fcts)}")
@@ -240,7 +240,7 @@ def solve_lin_system(eq_strings, vars, constants, function_calls, tmp_unique_pre
         # construct vector F
         vecFcode = []
         for i, expr in enumerate(vecF):
-            vecFcode.append(f"F[{i}] = {sp.ccode(expr.simplify().evalf())}")
+            vecFcode.append(f"F[{i}] = {sp.ccode(expr.simplify().evalf(), user_functions=custom_fcts)}")
         # construct matrix J
         vecJcode = []
         for i, expr in enumerate(matJ):
@@ -280,7 +280,7 @@ def solve_non_lin_system(eq_strings, vars, constants, function_calls):
 
     vecFcode = []
     for i, eq in enumerate(eqs):
-        vecFcode.append(f"F[{i}] = {sp.ccode(eq.simplify().subs(X_vec_map).evalf())}")
+        vecFcode.append(f"F[{i}] = {sp.ccode(eq.simplify().subs(X_vec_map).evalf(), user_functions=custom_fcts)}")
     vecJcode = []
     for i, jac in enumerate(jacobian):
         # todo: fix indexing to be ascending order
