@@ -12,6 +12,7 @@
 #include "test/unit/utils/test_utils.hpp"
 #include "visitors/checkparent_visitor.hpp"
 #include "visitors/constant_folder_visitor.hpp"
+#include "visitors/kinetic_block_visitor.hpp"
 #include "visitors/loop_unroll_visitor.hpp"
 #include "visitors/nmodl_visitor.hpp"
 #include "visitors/sympy_solver_visitor.hpp"
@@ -35,7 +36,8 @@ std::vector<std::string> run_sympy_solver_visitor(
     const std::string& text,
     bool pade = false,
     bool cse = false,
-    AstNodeType ret_nodetype = AstNodeType::DIFF_EQ_EXPRESSION) {
+    AstNodeType ret_nodetype = AstNodeType::DIFF_EQ_EXPRESSION,
+    bool kinetic = false) {
     std::vector<std::string> results;
 
     // construct AST from text
@@ -50,6 +52,10 @@ std::vector<std::string> run_sympy_solver_visitor(
     LoopUnrollVisitor().visit_program(*ast);
     ConstantFolderVisitor().visit_program(*ast);
     SymtabVisitor().visit_program(*ast);
+
+    if (kinetic) {
+        KineticBlockVisitor().visit_program(*ast);
+    }
 
     // run SympySolver on AST
     SympySolverVisitor(pade, cse).visit_program(*ast);
@@ -2120,6 +2126,27 @@ SCENARIO("Solve NONLINEAR block using SympySolver Visitor", "[visitor][solver][s
             auto result =
                 run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::NON_LINEAR_BLOCK);
             compare_blocks(reindent_text(result[0]), reindent_text(expected_text));
+        }
+    }
+}
+SCENARIO("Solve KINETIC block using SympySolver Visitor", "[visitor][solver][sympy][kinetic]") {
+    GIVEN("NONLINEAR block with not inlined function should work") {
+        std::string nmodl_text = R"(
+            BREAKPOINT {
+                SOLVE kstates METHOD sparse
+            }
+            STATE {
+                C1
+                C2
+            }
+            FUNCTION alfa(v(mV)) {
+                alfa = v
+            }
+            KINETIC kstates {
+                ~ C1 <-> C2 (alfa(v), alfa(v))
+            })";
+        THEN("Run Kinetic and Sympy Visitor") {
+            REQUIRE_NOTHROW(run_sympy_solver_visitor(nmodl_text, false, false, {}, true));
         }
     }
 }
