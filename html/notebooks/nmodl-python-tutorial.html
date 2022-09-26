@@ -664,39 +664,39 @@ foo = 1.0+gamma
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 
-------------------------------------------------------------------------------------------------------------------------------------
-|                                 NMODL_GLOBAL [Program IN None] POSITION : UNKNOWN SCOPE : GLOBAL                                 |
-------------------------------------------------------------------------------------------------------------------------------------
-|   NAME   |                     PROPERTIES                      |  STATUS   |  LOCATION   |   VALUE    |  # READS   |  # WRITES   |
-------------------------------------------------------------------------------------------------------------------------------------
-| ca       | ion                                                 |           |     UNKNOWN |            |     0      |      0      |
-| ion_ica  | codegen_var                                         |           |     UNKNOWN |            |     0      |      0      |
-| ion_cai  | codegen_var                                         |           |     UNKNOWN |            |     0      |      0      |
-| ion_cao  | codegen_var                                         |           |     UNKNOWN |            |     0      |      0      |
-| ion_eca  | codegen_var                                         |           |     UNKNOWN |            |     0      |      0      |
-| ica      | assigned_definition read_ion                        |           |     UNKNOWN |            |     0      |      0      |
-| cai      | prime_name assigned_definition write_ion state_var  |           |     UNKNOWN |            |     0      |      0      |
-| decay    | range parameter                                     |           |     UNKNOWN |  80.000000 |     0      |      0      |
-| gamma    | range parameter                                     |           |     UNKNOWN |   0.050000 |     0      |      0      |
-| minCai   | range parameter                                     |           |     UNKNOWN |   0.000100 |     0      |      0      |
-| depth    | range parameter                                     |           |     UNKNOWN |   0.100000 |     0      |      0      |
-| mV       | unit_def                                            |           |     UNKNOWN |            |     0      |      0      |
-| mA       | unit_def                                            |           |     UNKNOWN |            |     0      |      0      |
-| FARADAY  | factor_def                                          |           |     11.5-11 |            |     0      |      0      |
-| molar    | unit_def                                            |           |     UNKNOWN |            |     0      |      0      |
-| mM       | unit_def                                            |           |     UNKNOWN |            |     0      |      0      |
-| um       | unit_def                                            |           |     UNKNOWN |            |     0      |      0      |
-| states   | derivative_block to_solve                           |           |     36.1-10 |            |     0      |      0      |
-| foo      | function_block                                      |           |      40.1-8 |            |     0      |      0      |
-------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------------
+|                                     NMODL_GLOBAL [Program IN None] POSITION : UNKNOWN SCOPE : GLOBAL                                     |
+--------------------------------------------------------------------------------------------------------------------------------------------
+|   NAME   |  # NODES  |                     PROPERTIES                      |  STATUS  |  LOCATION  |   VALUE    |  # READS  |  # WRITES  |
+--------------------------------------------------------------------------------------------------------------------------------------------
+| ca       | 1         | ion                                                 |          |    UNKNOWN |            |     0     |     0      |
+| ion_ica  | 0         | codegen_var                                         |          |    UNKNOWN |            |     0     |     0      |
+| ion_cai  | 0         | codegen_var                                         |          |    UNKNOWN |            |     0     |     0      |
+| ion_cao  | 0         | codegen_var                                         |          |    UNKNOWN |            |     0     |     0      |
+| ion_eca  | 0         | codegen_var                                         |          |    UNKNOWN |            |     0     |     0      |
+| ica      | 2         | assigned_definition read_ion                        |          |    UNKNOWN |            |     0     |     0      |
+| cai      | 2         | prime_name assigned_definition write_ion state_var  |          |    UNKNOWN |            |     0     |     0      |
+| decay    | 2         | range parameter                                     |          |    UNKNOWN |  80.000000 |     0     |     0      |
+| gamma    | 2         | range parameter                                     |          |    UNKNOWN |   0.050000 |     0     |     0      |
+| minCai   | 2         | range parameter                                     |          |    UNKNOWN |   0.000100 |     0     |     0      |
+| depth    | 2         | range parameter                                     |          |    UNKNOWN |   0.100000 |     0     |     0      |
+| mV       | 1         | unit_def                                            |          |    UNKNOWN |            |     0     |     0      |
+| mA       | 1         | unit_def                                            |          |    UNKNOWN |            |     0     |     0      |
+| FARADAY  | 1         | factor_def                                          |          |    11.5-11 |            |     0     |     0      |
+| molar    | 1         | unit_def                                            |          |    UNKNOWN |            |     0     |     0      |
+| mM       | 1         | unit_def                                            |          |    UNKNOWN |            |     0     |     0      |
+| um       | 1         | unit_def                                            |          |    UNKNOWN |            |     0     |     0      |
+| states   | 1         | derivative_block to_solve                           |          |    36.1-10 |            |     0     |     0      |
+| foo      | 1         | function_block                                      |          |     40.1-8 |            |     0     |     0      |
+--------------------------------------------------------------------------------------------------------------------------------------------
 
-    --------------------------------------------------------------------------------------------------
-    |             StatementBlock4 [StatementBlock IN foo] POSITION : 40.16 SCOPE : LOCAL             |
-    --------------------------------------------------------------------------------------------------
-    |   NAME   |   PROPERTIES   |   STATUS   |   LOCATION   |   VALUE   |   # READS   |   # WRITES   |
-    --------------------------------------------------------------------------------------------------
-    | temp     | local          |            |      UNKNOWN |           |      0      |      0       |
-    --------------------------------------------------------------------------------------------------
+    ------------------------------------------------------------------------------------------------
+    |            StatementBlock4 [StatementBlock IN foo] POSITION : 40.16 SCOPE : LOCAL            |
+    ------------------------------------------------------------------------------------------------
+    |  NAME  |  # NODES  |  PROPERTIES  |  STATUS  |  LOCATION  |  VALUE  |  # READS  |  # WRITES  |
+    ------------------------------------------------------------------------------------------------
+    | temp   | 1         | local        |          |    UNKNOWN |         |     0     |     0      |
+    ------------------------------------------------------------------------------------------------
 
 </pre></div></div>
 </div>

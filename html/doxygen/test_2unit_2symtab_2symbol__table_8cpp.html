@@ -97,9 +97,12 @@ $(document).ready(function(){initNavTree('test_2unit_2symtab_2symbol__table_8cpp
 <div class="title">symbol_table.cpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;string&gt;</code><br />
+<div class="textblock"><code>#include &lt;memory&gt;</code><br />
+<code>#include &lt;string&gt;</code><br />
 <code>#include &lt;catch2/catch.hpp&gt;</code><br />
+<code>#include &quot;<a class="el" href="float_8hpp_source.html">ast/float.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="program_8hpp_source.html">ast/program.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="string_8hpp_source.html">ast/string.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="symbol_8hpp_source.html">symtab/symbol.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="symbol__table_8hpp_source.html">symtab/symbol_table.hpp</a>&quot;</code><br />
 </div>
@@ -120,6 +123,8 @@ Functions</h2></td></tr>
 <tr class="separator:a4d3f8a35d6368f6d53a0d21be3de672c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a780700b9cd74cc6da7faa0250d3e64d5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test_2unit_2symtab_2symbol__table_8cpp.html#a780700b9cd74cc6da7faa0250d3e64d5">SCENARIO</a> (&quot;Global symbol table (ModelSymbol) allows scope based operations&quot;)</td></tr>
 <tr class="separator:a780700b9cd74cc6da7faa0250d3e64d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3412b512c3ebac30608514f7d19c5b18"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test_2unit_2symtab_2symbol__table_8cpp.html#a3412b512c3ebac30608514f7d19c5b18">SCENARIO</a> (&quot;Symbol class allows manipulation&quot;)</td></tr>
+<tr class="separator:a3412b512c3ebac30608514f7d19c5b18"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="a656eb5868e824d59f489f910db438420"></a>
@@ -140,7 +145,7 @@ Functions</h2></td></tr>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="a780700b9cd74cc6da7faa0250d3e64d5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a780700b9cd74cc6da7faa0250d3e64d5">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[1/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a780700b9cd74cc6da7faa0250d3e64d5">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[1/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -156,12 +161,12 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <dl class="todo"><dt><b><a class="el" href="todo.html#_todo000061">Todo:</a></b></dt><dd>: not sure how to capture std::cout </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="test_2unit_2symtab_2symbol__table_8cpp_source.html#l00278">278</a> of file <a class="el" href="test_2unit_2symtab_2symbol__table_8cpp_source.html">symbol_table.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2unit_2symtab_2symbol__table_8cpp_source.html#l00281">281</a> of file <a class="el" href="test_2unit_2symtab_2symbol__table_8cpp_source.html">symbol_table.cpp</a>.</p>
 
 </div>
 </div>
 <a id="af3fc0da0fc33b5b42ee5cd414df1eb94"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af3fc0da0fc33b5b42ee5cd414df1eb94">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[2/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#af3fc0da0fc33b5b42ee5cd414df1eb94">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[2/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -176,12 +181,32 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test_2unit_2symtab_2symbol__table_8cpp_source.html#l00094">94</a> of file <a class="el" href="test_2unit_2symtab_2symbol__table_8cpp_source.html">symbol_table.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2unit_2symtab_2symbol__table_8cpp_source.html#l00097">97</a> of file <a class="el" href="test_2unit_2symtab_2symbol__table_8cpp_source.html">symbol_table.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a3412b512c3ebac30608514f7d19c5b18"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3412b512c3ebac30608514f7d19c5b18">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[3/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">SCENARIO </td>
+          <td>(</td>
+          <td class="paramtype">&quot;Symbol class allows manipulation&quot;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="test_2unit_2symtab_2symbol__table_8cpp_source.html#l00357">357</a> of file <a class="el" href="test_2unit_2symtab_2symbol__table_8cpp_source.html">symbol_table.cpp</a>.</p>
 
 </div>
 </div>
 <a id="ab03122583d9875aaa2471ca4e456a441"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab03122583d9875aaa2471ca4e456a441">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[3/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ab03122583d9875aaa2471ca4e456a441">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[4/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -196,12 +221,12 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test_2unit_2symtab_2symbol__table_8cpp_source.html#l00026">26</a> of file <a class="el" href="test_2unit_2symtab_2symbol__table_8cpp_source.html">symbol_table.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2unit_2symtab_2symbol__table_8cpp_source.html#l00029">29</a> of file <a class="el" href="test_2unit_2symtab_2symbol__table_8cpp_source.html">symbol_table.cpp</a>.</p>
 
 </div>
 </div>
 <a id="a4d3f8a35d6368f6d53a0d21be3de672c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4d3f8a35d6368f6d53a0d21be3de672c">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[4/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d3f8a35d6368f6d53a0d21be3de672c">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[5/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -226,7 +251,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test_2unit_2symtab_2symbol__table_8cpp_source.html#l00164">164</a> of file <a class="el" href="test_2unit_2symtab_2symbol__table_8cpp_source.html">symbol_table.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2unit_2symtab_2symbol__table_8cpp_source.html#l00167">167</a> of file <a class="el" href="test_2unit_2symtab_2symbol__table_8cpp_source.html">symbol_table.cpp</a>.</p>
 
 </div>
 </div>

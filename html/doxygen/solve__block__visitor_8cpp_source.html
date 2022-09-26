@@ -143,7 +143,7 @@ $(document).ready(function(){initNavTree('solve__block__visitor_8cpp_source.html
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="keywordflow">throw</span> std::runtime_error(</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;            fmt::format(<span class="stringliteral">&quot;SolveBlockVisitor :: cannot find the block &#39;{}&#39; to solve it&quot;</span>, block_name));</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    }</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keyword">auto</span> node_to_solve = solve_node_symbol-&gt;get_node();</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keyword">auto</span> node_to_solve = solve_node_symbol-&gt;get_nodes().front();</div>
 <div class="line"><a name="l00051"></a><span class="lineno"><a class="line" href="classnmodl_1_1visitor_1_1_solve_block_visitor.html#a2c57c47470c35a8f78be8408edfbb39e">   51</a></span>&#160;<span class="comment"></span> </div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="comment">    /// in case of derivimplicit method if neuron solver is used (i.e. not sympy) then</span></div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="comment">    /// the solution is not in place but we have to create a callback to newton solver</span></div>
