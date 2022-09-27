@@ -2175,4 +2175,52 @@ SCENARIO("Solve KINETIC block using SympySolver Visitor", "[visitor][solver][sym
             compare_blocks(reindent_text(result[0]), reindent_text(expected_text));
         }
     }
+    GIVEN("Protected names in Sympy are respected") {
+        std::string nmodl_text = R"(
+            BREAKPOINT {
+                SOLVE kstates METHOD sparse
+            }
+            STATE {
+                C1
+                C2
+            }
+            FUNCTION beta(v(mV)) {
+                beta = v
+            }
+            FUNCTION lowergamma(v(mV)) {
+                lowergamma = v
+            }
+            KINETIC kstates {
+                ~ C1 <-> C2 (beta(v), lowergamma(v))
+            })";
+        std::string expected_text = R"(
+            DERIVATIVE kstates {
+                EIGEN_NEWTON_SOLVE[2]{
+                    LOCAL old_C1, old_C2
+                }{
+                    old_C1 = C1
+                    old_C2 = C2
+                }{
+                    nmodl_eigen_x[0] = C1
+                    nmodl_eigen_x[1] = C2
+                }{
+                    nmodl_eigen_f[0] = -nmodl_eigen_x[0]*dt*beta(v)-nmodl_eigen_x[0]+nmodl_eigen_x[1]*dt*lowergamma(v)+old_C1
+                    nmodl_eigen_j[0] = -dt*beta(v)-1.0
+                    nmodl_eigen_j[2] = dt*lowergamma(v)
+                    nmodl_eigen_f[1] = nmodl_eigen_x[0]*dt*beta(v)-nmodl_eigen_x[1]*dt*lowergamma(v)-nmodl_eigen_x[1]+old_C2
+                    nmodl_eigen_j[1] = dt*beta(v)
+                    nmodl_eigen_j[3] = -dt*lowergamma(v)-1.0
+                }{
+                    C1 = nmodl_eigen_x[0]
+                    C2 = nmodl_eigen_x[1]
+                }{
+                }
+            })";
+        THEN("Run Kinetic and Sympy Visitor") {
+            std::vector<std::string> result;
+            REQUIRE_NOTHROW(result = run_sympy_solver_visitor(
+                                nmodl_text, false, false, AstNodeType::DERIVATIVE_BLOCK, true));
+            compare_blocks(reindent_text(result[0]), reindent_text(expected_text));
+        }
+    }
 }
