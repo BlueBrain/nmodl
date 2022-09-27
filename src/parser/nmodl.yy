@@ -854,7 +854,7 @@ withby          :   WITH
 
 dependent_block :   ASSIGNED "{" dependent_block_body "}"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 61, "ASSIGNED \"{\" dependent_block_body \"}\"");
                         $$ = new ast::AssignedBlock($3);
                     }
                 ;
@@ -862,12 +862,12 @@ dependent_block :   ASSIGNED "{" dependent_block_body "}"
 
 dependent_block_body :
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 62, "");
                         $$ = ast::AssignedDefinitionVector();
                     }
                 |   dependent_block_body dependent_definition
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 63, "dependent_block_body dependent_definition");
                         $1.emplace_back($2);
                         $$ = $1;
                     }
@@ -876,22 +876,22 @@ dependent_block_body :
 
 dependent_definition : name optional_start units abs_tolerance
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 64, "name optional_start units abs_tolerance");
                         $$ = new ast::AssignedDefinition($1, NULL, NULL, NULL, $2, $3, $4);
                     }
                 |   name "[" integer "]" optional_start units abs_tolerance
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 65, "name \"[\" integer \"]\" optional_start units abs_tolerance");
                         $$ = new ast::AssignedDefinition($1, $3, NULL, NULL, $5, $6, $7);
                     }
                 |   name FROM number TO number optional_start units abs_tolerance
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 66, "name FROM number TO number optional_start units abs_tolerance");
                         $$ = new ast::AssignedDefinition($1, NULL, $3, $5, $6, $7, $8);
                     }
                 |   name "[" integer "]" FROM number TO number optional_start units abs_tolerance
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 67, "name \"[\" integer \"]\" FROM number TO number optional_start units abs_tolerance");
                         $$ = new ast::AssignedDefinition($1, $3, $6, $8, $9, $10, $11);
                     }
                 |   error
@@ -903,12 +903,12 @@ dependent_definition : name optional_start units abs_tolerance
 
 optional_start  :
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 68, "");
                         $$ = nullptr;
                     }
                 |   START1 number
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 69, "START1 number");
                         $$ = $2;
                     }
                 ;
@@ -916,12 +916,12 @@ optional_start  :
 
 abs_tolerance   :
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 70, "error");
                         $$ = nullptr;
                     }
                 |   LT double GT
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 71, "LT double GT");
                         $$ = $2;
                     }
                 ;
@@ -929,7 +929,7 @@ abs_tolerance   :
 
 state_block     :   STATE  "{" dependent_block_body "}"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 72, "STATE  \"{\" dependent_block_body \"}\"");
                         $$ = new ast::StateBlock($3);
                     }
                 ;
@@ -937,7 +937,7 @@ state_block     :   STATE  "{" dependent_block_body "}"
 
 plot_declaration :  PLOT plot_variable_list VS name optional_index
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 73, "PLOT plot_variable_list VS name optional_index");
                         $$ = new ast::PlotDeclaration($2, new ast::PlotVar($4,$5));
                     }
                 |   PLOT error
@@ -949,14 +949,14 @@ plot_declaration :  PLOT plot_variable_list VS name optional_index
 
 plot_variable_list : name optional_index
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 74, "name optional_index");
                         $$ = ast::PlotVarVector();
                         auto variable = new ast::PlotVar($1, $2);
                         $$.emplace_back(variable);
                     }
                 |   plot_variable_list "," name optional_index
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 75, "plot_variable_list \",\" name optional_index");
                         $$ = $1;
                         auto variable = new ast::PlotVar($3, $4);
                         $$.emplace_back(variable);
@@ -966,12 +966,12 @@ plot_variable_list : name optional_index
 
 optional_index  :
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 75, "");
                         $$ = nullptr;
                     }
                 |   "[" INTEGER_PTR "]"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 76, "\"[\" INTEGER_PTR \"]\"");
                         $$ = $2;
                     }
                 ;
@@ -979,82 +979,82 @@ optional_index  :
 
 procedure       :   initial_block
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 77, "initial_block");
                         $$ = $1;
                     }
                 |   derivative_block
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 78, "derivative_block");
                         $$ = $1;
                     }
                 |   breakpoint_block
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 79, "breakpoint_block");
                         $$ = $1;
                     }
                 |   linear_block
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 80, "linear_block");
                         $$ = $1;
                     }
                 |   non_linear_block
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 81, "non_linear_block");
                         $$ = $1;
                     }
                 |   function_block
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 82, "function_block");
                         $$ = $1;
                     }
                 |   procedure_block
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 83, "procedure_block");
                         $$ = $1;
                     }
                 |   net_receive_block
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 84, "net_receive_block");
                         $$ = $1;
                     }
                 |   terminal_block
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 85, "terminal_block");
                         $$ = $1;
                     }
                 |   discrete_block
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 86, "discrete_block");
                         $$ = $1;
                     }
                 |   partial_block
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 87, "partial_block");
                         $$ = $1;
                     }
                 |   kinetic_block
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 88, "kinetic_block");
                         $$ = $1;
                     }
                 |   constructor_block
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 89, "constructor_block");
                         $$ = $1;
                     }
                 |   destructor_block
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 90, "destructor_block");
                         $$ = $1;
                     }
                 |   function_table_block
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 91, "function_table_block");
                         $$ = $1;
                     }
                 |   BEFORE before_after_block
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 92, "BEFORE before_after_block");
                         auto new_before_block = new ast::BeforeBlock($2);
                         ModToken block_token = $1+*($2->get_token());
                         new_before_block->set_token(block_token);
@@ -1062,7 +1062,7 @@ procedure       :   initial_block
                     }
                 |   AFTER before_after_block
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 93, "AFTER before_after_block");
                         auto new_after_block = new ast::AfterBlock($2);
                         ModToken block_token = $1+*($2->get_token());
                         new_after_block->set_token(block_token);
@@ -1073,7 +1073,7 @@ procedure       :   initial_block
 
 initial_block   :   INITIAL1 statement_list "}"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 94, "INITIAL1 statement_list \"}\"");
                         $$ = new ast::InitialBlock($2);
                     }
                 ;
@@ -1081,7 +1081,7 @@ initial_block   :   INITIAL1 statement_list "}"
 
 constructor_block : CONSTRUCTOR statement_list "}"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 95, "CONSTRUCTOR statement_list \"}\"");
                         $$ = new ast::ConstructorBlock($2);
                         ModToken block_token = $1 + $3;
                         $$->set_token(block_token);
@@ -1091,7 +1091,7 @@ constructor_block : CONSTRUCTOR statement_list "}"
 
 destructor_block :  DESTRUCTOR statement_list "}"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 96, "DESTRUCTOR statement_list \"}\"");
                         $$ = new ast::DestructorBlock($2);
                         ModToken block_token = $1 + $3;
                         $$->set_token(block_token);
@@ -1101,13 +1101,13 @@ destructor_block :  DESTRUCTOR statement_list "}"
 
 statement_list  :   "{" optional_statement_list
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 97, "\"{\" optional_statement_list");
                         $$ = new ast::StatementBlock($2);
                         $$->set_token($1);
                     }
                 |   "{" local_statement optional_statement_list
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 98, "\"{\" local_statement optional_statement_list");
                         $3.insert($3.begin(), std::shared_ptr<ast::LocalListStatement>($2));
                         $$ = new ast::StatementBlock($3);
                         $$->set_token($1);
@@ -1117,12 +1117,12 @@ statement_list  :   "{" optional_statement_list
 
 conductance     :   CONDUCTANCE Name
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 99, " CONDUCTANCE Name");
                         $$ = new ast::ConductanceHint($2, NULL);
                     }
                 |   CONDUCTANCE Name USEION NAME_PTR
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 100, "CONDUCTANCE Name USEION NAME_PTR");
                         $$ = new ast::ConductanceHint($2, $4);
                     }
                 ;
@@ -1130,7 +1130,7 @@ conductance     :   CONDUCTANCE Name
 
 local_statement :   LOCAL local_var_list
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 101, "LOCAL local_var_list");
                         $$ = new ast::LocalListStatement($2);
                     }
                 |   LOCAL error
@@ -1142,7 +1142,7 @@ local_statement :   LOCAL local_var_list
 
 local_var_list  :   NAME_PTR optional_array_index
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 102, "NAME_PTR optional_array_index");
                         $$ = ast::LocalVarVector();
                         if($2) {
                             auto variable = new ast::LocalVar(new ast::IndexedName($1, $2));
@@ -1154,7 +1154,7 @@ local_var_list  :   NAME_PTR optional_array_index
                     }
                 |   local_var_list "," NAME_PTR optional_array_index
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 103, "local_var_list \",\" NAME_PTR optional_array_index");
                         if($4) {
                             auto variable = new ast::LocalVar(new ast::IndexedName($3, $4));
                             $1.emplace_back(variable);
@@ -1169,12 +1169,12 @@ local_var_list  :   NAME_PTR optional_array_index
 
 optional_array_index :
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 104, "");
                         $$ = nullptr;
                     }
                 |   "[" integer "]"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 105, "\"[\" integer \"]\"");
                         $$ = $2;
                     }
                 ;
@@ -1182,24 +1182,24 @@ optional_array_index :
 
 optional_statement_list :
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 106, "");
                         $$ = ast::StatementVector();
                     }
                 |   optional_statement_list statement_type1
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 107, "optional_statement_list statement_type1");
                         $1.emplace_back($2);
                         $$ = $1;
                     }
                 |   optional_statement_list statement_type2
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 108, "optional_statement_list statement_type2");
                         $1.emplace_back($2);
                         $$ = $1;
                     }
                 |   optional_statement_list LINE_COMMENT
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 109, "optional_statement_list LINE_COMMENT");
                         auto statement = new ast::LineComment(new ast::String($2));
                         $1.emplace_back(statement);
                         $$ = $1;
@@ -1209,124 +1209,124 @@ optional_statement_list :
 
 statement_type1 :   from_statement
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 110, "from_statement");
                         $$ = $1;
                     }
                 |   forall_statement
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 111, "forall_statement");
                         $$ = $1;
                     }
                 |   while_statement
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 112, "while_statement");
                         $$ = $1;
                     }
                 |   if_statement
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 113, "if_statement");
                         $$ = $1;
                     }
                 |   statement_list "}"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 114, "statement_list \"}\"");
                         $$ = new ast::ExpressionStatement($1);
                     }
                 |   solve_block
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 115, "solve_block");
                         $$ = new ast::ExpressionStatement($1);
                     }
                 |   conductance
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 116, "conductance");
                         $$ = $1;
                     }
                 |   VERBATIM
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 117, "VERBATIM");
                         auto text = parse_with_verbatim_parser($1);
                         $$ = new ast::Verbatim(new ast::String(text));
                     }
                 |   BLOCK_COMMENT
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 118, "BLOCK_COMMENT");
                         auto text = parse_with_verbatim_parser($1);
                         $$ = new ast::BlockComment(new ast::String(text));
                     }
                 |   sens
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 119, "sens");
                         $$ = $1;
                     }
                 |   compartment
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 120, "compartment");
                         $$ = $1;
                     }
                 |   longitudinal_diffusion
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 121, "longitudinal_diffusion");
                         $$ = $1;
                     }
                 |   conserve
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 122, "conserve");
                         $$ = $1;
                     }
                 |   lag_statement
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 123, "lag_statement");
                         $$ = $1;
                     }
                 |   RESET
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 124, "RESET");
                         $$ = new ast::Reset();
                     }
                 |   match_block
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 126, "match_block");
                         $$ = new ast::ExpressionStatement($1);
                     }
                 |   partial_equation
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 126, "partial_equation");
                         $$ = $1;
                     }
                 |   table_statement
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 127, "table_statement");
                         $$ = $1;
                     }
                 |   unit_state
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 128, "unit_state");
                         $$ = $1;
                     }
                 |   initial_statement
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 129, "initial_statement");
                         $$ = $1;
                     }
                 |   watch_statement
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 130, "watch_statement");
                         $$ = $1;
                     }
                 |   for_netcon
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 131, "for_netcon");
                         $$ = new ast::ExpressionStatement($1);
                     }
                 |   NRNMUTEXLOCK
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc,132, "NRNMUTEXLOCK");
                         $$ = new ast::MutexLock();
                     }
                 |   NRNMUTEXUNLOCK
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 133, "NRNMUTEXUNLOCK");
                         $$ = new ast::MutexUnlock();
                     }
                 |   error
@@ -1338,22 +1338,22 @@ statement_type1 :   from_statement
 
 statement_type2 :   assignment
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 134, "assignment");
                         $$ = new ast::ExpressionStatement($1);
                     }
                 |   PROTECT assignment
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 135, "PROTECT assignment");
                         $$ = new ast::ProtectStatement($2);
                     }
                 |   reaction_statement
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 136, "reaction_statement");
                         $$ = $1;
                     }
                 |   function_call
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 137, "function_call");
                         $$ = new ast::ExpressionStatement($1);
                     }
                 ;
@@ -1361,7 +1361,7 @@ statement_type2 :   assignment
 
 assignment      :   variable_name "=" expression
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 138, "variable_name \"=\" expression");
                         auto expression = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_ASSIGN), $3);
                         auto name = $1->get_name();
                         if ((name->is_prime_name()) ||
@@ -1375,12 +1375,12 @@ assignment      :   variable_name "=" expression
                     }
                 |   nonlineqn expression "=" expression
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 139, "nonlineqn expression \"=\" expression");
                         $$ = new ast::NonLinEquation($2, $4);
                     }
                 |   lineqn left_linear_expression "=" linear_expression
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 140, " lineqn left_linear_expression \"=\" linear_expression");
                         $$ = new ast::LinEquation($2, $4);
                     }
                 ;
@@ -1388,22 +1388,22 @@ assignment      :   variable_name "=" expression
 
 variable_name   :   name
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 141, "name");
                         $$ = new ast::VarName($1, nullptr, nullptr);
                     }
                 |   name "[" integer_expression "]"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 142, "name \"[\" integer_expression \"]\"");
                         $$ = new ast::VarName(new ast::IndexedName($1, $3), nullptr, nullptr);
                     }
                 |   NAME_PTR "@" integer
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 143, "NAME_PTR \"@\" integer");
                         $$ = new ast::VarName($1, $3, nullptr);
                     }
                 |   NAME_PTR "@" integer "[" integer_expression "]"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 144, "NAME_PTR \"@\" integer \"[\" integer_expression \"]\"");
                         $$ = new ast::VarName($1, $3, $5);
                     }
                 ;
@@ -1411,41 +1411,41 @@ variable_name   :   name
 
 integer_expression : Name
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 145, "Name");
                         $$ = $1;
                     }
                 |   integer
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 146, "integer");
                         $$ = $1;
                     }
                 |   "(" integer_expression ")"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 147, "\"(\" integer_expression \")\"");
                         auto expression = new ast::ParenExpression($2);
                         $$ = new ast::WrappedExpression(expression);
                     }
                 |   integer_expression "+" integer_expression
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 148, "integer_expression \"+\" integer_expression");
                         auto expression = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_ADDITION), $3);
                         $$ = new ast::WrappedExpression(expression);
                     }
                 |   integer_expression "-" integer_expression
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 149, "integer_expression \"-\" integer_expression");
                         auto expression = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_SUBTRACTION), $3);
                         $$ = new ast::WrappedExpression(expression);
                     }
                 |   integer_expression "*" integer_expression
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 150, "integer_expression \"*\" integer_expression");
                         auto expression = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_MULTIPLICATION), $3);
                         $$ = new ast::WrappedExpression(expression);
                     }
                 |   integer_expression "/" integer_expression
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 151, "integer_expression \"/\" integer_expression");
                         auto expression = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_DIVISION), $3);
                         $$ = new ast::WrappedExpression(expression);
                     }
@@ -1458,17 +1458,17 @@ integer_expression : Name
 
 expression      :   variable_name
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 152, "variable_name");
                         $$ = $1;
                     }
                 |   flux_variable
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 153, "flux_variable");
                         $$ = $1;
                     }
                 |   double units
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 154, "double units");
                         if($2)
                             $$ = new ast::DoubleUnit($1, $2);
                         else
@@ -1476,93 +1476,93 @@ expression      :   variable_name
                     }
                 |   function_call
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 155, "function_call");
                         $$ = $1;
                     }
                 |   "(" expression ")"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 156, "\"(\" expression \")\"");
                         auto expression = new ast::ParenExpression($2);
                         $$ = new ast::WrappedExpression(expression);
                     }
                 |   expression "+" expression
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 157, "expression \"+\" expression");
                         auto expression  = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_ADDITION), $3);
                         $$ = new ast::WrappedExpression(expression);
                     }
                 |   expression "-" expression
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 158, "expression \"-\" expression");
                         auto expression  = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_SUBTRACTION), $3);
                         $$ = new ast::WrappedExpression(expression);
                     }
                 |   expression "*" expression
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 159, "expression \"*\" expression");
                         auto expression  = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_MULTIPLICATION), $3);
                         $$ = new ast::WrappedExpression(expression);
                     }
                 |   expression "/" expression
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 160, "expression \"/\" expression");
                         auto expression  = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_DIVISION), $3);
                         $$ = new ast::WrappedExpression(expression);
                     }
                 |   expression "^" expression
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 161, "expression \"^\" expression");
                         auto expression  = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_POWER), $3);
                         $$ = new ast::WrappedExpression(expression);
                     }
                 |   expression OR expression
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 162, "expression OR expression");
                         $$ = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_OR), $3);
                     }
                 |   expression AND expression
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 163, "expression AND expression");
                         $$ = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_AND), $3);
                     }
                 |   expression GT expression
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 164, "expression GT expression");
                         $$ = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_GREATER), $3);
                     }
                 |   expression LT expression
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 165, "expression LT expression");
                         $$ = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_LESS), $3);
                     }
                 |   expression GE expression
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 166, "expression GE expression");
                         $$ = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_GREATER_EQUAL), $3);
                     }
                 |   expression LE expression
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 167, "expression LE expression");
                         $$ = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_LESS_EQUAL), $3);
                     }
                 |   expression EQ expression
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 168, "expression EQ expression");
                         $$ = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_EXACT_EQUAL), $3);
                     }
                 |   expression NE expression
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 169, "expression NE expression");
                         $$ = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_NOT_EQUAL), $3);
                     }
                 |   NOT expression
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 170, "NOT expression");
                         $$ = new ast::UnaryExpression(ast::UnaryOperator(ast::UOP_NOT), $2);
                     }
                 |   "-" expression %prec UNARYMINUS
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 171, "\"-\" expression %prec UNARYMINUS");
                         $$ = new ast::UnaryExpression(ast::UnaryOperator(ast::UOP_NEGATION), $2);
                     }
                 |   error
@@ -1576,7 +1576,6 @@ expression      :   variable_name
 
                 | "(" expression
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
                         yyerror("Unbalanced left parenthesis followed by valid expressions");
                     }
                 | "(" error
@@ -1600,7 +1599,7 @@ lineqn          : LIN1
 
 left_linear_expression : linear_expression
                 {
-                    nmodl_trace_rule(scanner.loc, 2, "error");
+                    nmodl_trace_rule(scanner.loc, 172, "linear_expression");
                     $$ = $1;
                 }
                 ;
@@ -1608,22 +1607,22 @@ left_linear_expression : linear_expression
 
 linear_expression : primary
                 {
-                    nmodl_trace_rule(scanner.loc, 2, "error");
+                    nmodl_trace_rule(scanner.loc, 173, "primary");
                     $$ = $1;
                 }
                 |   "-" primary
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 174, "\"-\" primary");
                         $$ = new ast::UnaryExpression(ast::UnaryOperator(ast::UOP_NEGATION), $2);
                     }
                 |   linear_expression "+" primary
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 175, "linear_expression \"+\" primary");
                         $$ = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_ADDITION), $3);
                     }
                 |   linear_expression "-" primary
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 176, "linear_expression \"-\" primary");
                         $$ = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_SUBTRACTION), $3);
                     }
                 ;
@@ -1631,17 +1630,17 @@ linear_expression : primary
 
 primary         :   term
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 177, "error");
                         $$ = $1;
                     }
                 |   primary "*" term
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 178, "primary \"*\" term");
                         $$ = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_MULTIPLICATION), $3);
                     }
                 |   primary "/" term
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 179, "primary \"/\" term");
                         $$ = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_DIVISION), $3);
                     }
                 ;
@@ -1649,22 +1648,22 @@ primary         :   term
 
 term            :   variable_name
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 180, "variable_name");
                         $$ = $1;
                     }
                 |   double
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 181, "double");
                         $$ = $1;
                     }
                 |   function_call
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 182, "function_call");
                         $$ = $1;
                     }
                 |   "(" expression ")"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 183, "\"(\" expression \")\"");
                         $$ = new ast::ParenExpression($2);
                     }
                 |   error
@@ -1676,7 +1675,7 @@ term            :   variable_name
 
 function_call   :   NAME_PTR "(" expression_list ")"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 184, "NAME_PTR \"(\" expression_list \")\"");
                         auto expression = new ast::FunctionCall($1, $3);
                         $$ = new ast::WrappedExpression(expression);
                     }
@@ -1684,30 +1683,30 @@ function_call   :   NAME_PTR "(" expression_list ")"
 
 
 expression_list :   {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 185, "");
                         $$ = ast::ExpressionVector();
                     }
                 |   expression
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 186, "expression");
                         $$ = ast::ExpressionVector();
                         $$.emplace_back($1);
                     }
                 |   STRING_PTR
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 187, "STRING_PTR");
                         $$ = ast::ExpressionVector();
                         $$.emplace_back($1);
                     }
                 |   expression_list "," expression
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 188, "expression_list \",\" expression");
                         $1.emplace_back($3);
                         $$ = $1;
                     }
                 |   expression_list "," STRING_PTR
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 189, "expression_list \",\" STRING_PTR");
                         $1.emplace_back($3);
                         $$ = $1;
                     }
@@ -1716,7 +1715,7 @@ expression_list :   {
 
 from_statement  :   FROM NAME_PTR "=" integer_expression TO integer_expression optional_increment statement_list "}"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 190, "FROM NAME_PTR \"=\" integer_expression TO integer_expression optional_increment statement_list \"}\"");
                         $$ = new ast::FromStatement($2, $4, $6, $7, $8);
                     }
                 |   FROM error
@@ -1728,12 +1727,12 @@ from_statement  :   FROM NAME_PTR "=" integer_expression TO integer_expression o
 
 optional_increment :
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 191, "");
                         $$ = nullptr;
                     }
                 | BY integer_expression
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 192, "BY integer_expression");
                         $$ = $2;
                     }
                 ;
@@ -1741,7 +1740,7 @@ optional_increment :
 
 forall_statement :  FORALL1 NAME_PTR statement_list "}"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 193, "FORALL1 NAME_PTR statement_list \"}\"");
                         $$ = new ast::ForAllStatement($2, $3);
                     }
                 |   FORALL1 error
@@ -1753,7 +1752,7 @@ forall_statement :  FORALL1 NAME_PTR statement_list "}"
 
 while_statement :   WHILE "(" expression ")" statement_list "}"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 194, "WHILE \"(\" expression \")\" statement_list \"}\"");
                         $$ = new ast::WhileStatement($3, $5);
                     }
                 ;
@@ -1761,19 +1760,19 @@ while_statement :   WHILE "(" expression ")" statement_list "}"
 
 if_statement    :   IF "(" expression ")" statement_list "}" optional_else_if optional_else
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 195, "IF \"(\" expression \")\" statement_list \"}\" optional_else_if optional_else");
                         $$ = new ast::IfStatement($3, $5, $7, $8);
                     }
                 ;
 
 
 optional_else_if :  {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 196, "");
                         $$ = ast::ElseIfStatementVector();
                     }
                 |   optional_else_if ELSE IF "(" expression ")" statement_list "}"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 197, "optional_else_if ELSE IF \"(\" expression \")\" statement_list \"}\"");
                         $1.emplace_back(new ast::ElseIfStatement($5, $7));
                         $$ = $1;
                     }
@@ -1781,12 +1780,12 @@ optional_else_if :  {
 
 
 optional_else   :   {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 198, "");
                         $$ = nullptr;
                     }
                 |   ELSE statement_list "}"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 199, "ELSE statement_list \"}\"");
                         $$ = new ast::ElseStatement($2);
                     }
                 ;
@@ -1794,7 +1793,7 @@ optional_else   :   {
 
 derivative_block :  DERIVATIVE NAME_PTR statement_list "}"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 200, "DERIVATIVE NAME_PTR statement_list \"}\"");
                         $$ = new ast::DerivativeBlock($2, $3);
                         $$->set_token($1);
                     }
@@ -1803,7 +1802,7 @@ derivative_block :  DERIVATIVE NAME_PTR statement_list "}"
 
 linear_block    :   LINEAR NAME_PTR optional_solvefor statement_list "}"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 201, "LINEAR NAME_PTR optional_solvefor statement_list \"}\"");
                         $$ = new ast::LinearBlock($2, $3, $4);
                         $$->set_token($1);
                     }
@@ -1812,7 +1811,7 @@ linear_block    :   LINEAR NAME_PTR optional_solvefor statement_list "}"
 
 non_linear_block :  NONLINEAR NAME_PTR optional_solvefor statement_list "}"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 202, "NONLINEAR NAME_PTR optional_solvefor statement_list \"}\"");
                         $$ = new ast::NonLinearBlock($2, $3, $4);
                         $$->set_token($1);
                     }
@@ -1821,7 +1820,7 @@ non_linear_block :  NONLINEAR NAME_PTR optional_solvefor statement_list "}"
 
 discrete_block  :   DISCRETE NAME_PTR statement_list "}"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 203, "DISCRETE NAME_PTR statement_list \"}\"");
                         $$ = new ast::DiscreteBlock($2, $3);
                         ModToken block_token = $1 + $4;
                         $$->set_token(block_token);
@@ -1831,8 +1830,7 @@ discrete_block  :   DISCRETE NAME_PTR statement_list "}"
 
 partial_block   :   PARTIAL NAME_PTR statement_list "}"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 204, "PARTIAL NAME_PTR statement_list \"}\"");
                         $$ = new ast::PartialBlock($2, $3);
                         ModToken block_token = $1 + $4;
                         $$->set_token(block_token);
@@ -1846,17 +1844,17 @@ partial_block   :   PARTIAL NAME_PTR statement_list "}"
 
 partial_equation :  "~" PRIME "=" NAME_PTR "*" DEL2 "(" NAME_PTR ")" "+" NAME_PTR
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 205, "\"~\" PRIME \"=\" NAME_PTR \"*\" DEL2 \"(\" NAME_PTR \")\" \"+\" NAME_PTR");
                         $$ = new ast::PartialBoundary(NULL, $2.clone(), NULL, NULL, $4, $6.clone(), $8, $11);
                     }
                 |   "~" DEL NAME_PTR "[" first_last "]" "=" expression
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 206, "\"~\" DEL NAME_PTR \"[\" first_last \"]\" \"=\" expression");
                         $$ = new ast::PartialBoundary($2.clone(), $3, $5, $8, NULL, NULL, NULL, NULL);
                     }
                 |   "~" NAME_PTR "[" first_last "]" "=" expression
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 207, "\"~\" NAME_PTR \"[\" first_last \"]\" \"=\" expression");
                         $$ = new ast::PartialBoundary(NULL, $2, $4, $7, NULL, NULL, NULL, NULL);
                     }
                 ;
@@ -1864,12 +1862,12 @@ partial_equation :  "~" PRIME "=" NAME_PTR "*" DEL2 "(" NAME_PTR ")" "+" NAME_PT
 
 first_last      :   FIRST
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 208, "FIRST");
                         $$ = new ast::FirstLastTypeIndex(ast::PEQ_FIRST);
                     }
                 |   LAST
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 209, "LAST");
                         $$ = new ast::FirstLastTypeIndex(ast::PEQ_LAST);
                     }
                 ;
@@ -1877,7 +1875,7 @@ first_last      :   FIRST
 
 function_table_block : FUNCTION_TABLE NAME_PTR "(" optional_argument_list ")" units
                 {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 210, "FUNCTION_TABLE NAME_PTR \"(\" optional_argument_list \")\" units");
                         $$ = new ast::FunctionTableBlock($2, $4, $6);
                         // units don't have token, use ")" as end location
                         ModToken block_token = $1 + $5;
@@ -1888,7 +1886,7 @@ function_table_block : FUNCTION_TABLE NAME_PTR "(" optional_argument_list ")" un
 
 function_block  :   FUNCTION1 NAME_PTR "(" optional_argument_list ")" units statement_list "}"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 211, "FUNCTION1 NAME_PTR \"(\" optional_argument_list \")\" units statement_list \"}\"");
                         $$ = new ast::FunctionBlock($2, $4, $6, $7);
                         $$->set_token($1);
                     }
@@ -1897,12 +1895,12 @@ function_block  :   FUNCTION1 NAME_PTR "(" optional_argument_list ")" units stat
 
 optional_argument_list :
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 212, "");
                         $$ = ast::ArgumentVector();
                     }
                 |   argument_list
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 213, "argument_list");
                         $$ = $1;
                     }
                 ;
@@ -1910,13 +1908,13 @@ optional_argument_list :
 
 argument_list   :   name units
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 214, "name units");
                         $$ = ast::ArgumentVector();
                         $$.emplace_back(new ast::Argument($1, $2));
                     }
                 |   argument_list "," name units
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 215, "argument_list \",\" name units");
                         $1.emplace_back(new ast::Argument($3, $4));
                         $$ = $1;
                     }
@@ -1925,7 +1923,7 @@ argument_list   :   name units
 
 procedure_block :   PROCEDURE NAME_PTR "(" optional_argument_list ")" units statement_list "}"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 216, "PROCEDURE NAME_PTR \"(\" optional_argument_list \")\" units statement_list \"}\"");
                         $$ = new ast::ProcedureBlock($2, $4, $6, $7); $$->set_token($1);
                     }
                 ;
@@ -1933,7 +1931,7 @@ procedure_block :   PROCEDURE NAME_PTR "(" optional_argument_list ")" units stat
 
 net_receive_block : NETRECEIVE "(" optional_argument_list ")" statement_list "}"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 217, "NETRECEIVE \"(\" optional_argument_list \")\" statement_list \"}\"");
                         $$ = new ast::NetReceiveBlock($3, $5);
                     }
                 |   NETRECEIVE error
@@ -1945,7 +1943,7 @@ net_receive_block : NETRECEIVE "(" optional_argument_list ")" statement_list "}"
 
 initial_statement : INITIAL1 statement_list "}"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 218, "INITIAL1 statement_list \"}\"");
                         $$ = new ast::ExpressionStatement(new ast::InitialBlock($2));
                     }
                 ;
@@ -1953,20 +1951,20 @@ initial_statement : INITIAL1 statement_list "}"
 
 solve_block     :   SOLVE NAME_PTR if_solution_error
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 219, "SOLVE NAME_PTR if_solution_error");
                         $$ = new ast::SolveBlock($2, NULL, NULL, $3);
                         $$->set_token(*($2->get_token()));
                     }
                 |   SOLVE NAME_PTR USING METHOD if_solution_error
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 220, "SOLVE NAME_PTR USING METHOD if_solution_error");
                         $$ = new ast::SolveBlock($2, $4.clone(), NULL, $5);
                         $$->set_token(*($2->get_token()));
                     }
                 |
                     SOLVE NAME_PTR STEADYSTATE METHOD if_solution_error
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 221, "SOLVE NAME_PTR STEADYSTATE METHOD if_solution_error");
                         $$ = new ast::SolveBlock($2, NULL, $4.clone(), $5);
                         $$->set_token(*($2->get_token()));
                     }
@@ -1979,12 +1977,12 @@ solve_block     :   SOLVE NAME_PTR if_solution_error
 
 if_solution_error :
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 222, "");
                         $$ = nullptr;
                     }
                 |   IFERROR statement_list "}"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 223, "IFERROR statement_list \"}\"");
                         $$ = $2;
                     }
                 ;
@@ -1992,12 +1990,12 @@ if_solution_error :
 
 optional_solvefor :
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 224, "");
                         $$ = ast::NameVector();
                     }
                 |   solvefor
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 225, "solvefor");
                         $$ = $1;
                     }
                 ;
@@ -2005,13 +2003,13 @@ optional_solvefor :
 
 solvefor        :   SOLVEFOR NAME_PTR
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 226, "SOLVEFOR NAME_PTR");
                         $$ = ast::NameVector();
                         $$.emplace_back($2);
                     }
                 |   solvefor "," NAME_PTR
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 227, "solvefor \",\" NAME_PTR");
                         $1.emplace_back($3);
                         $$ = $1;
                     }
@@ -2024,7 +2022,7 @@ solvefor        :   SOLVEFOR NAME_PTR
 
 breakpoint_block :  BREAKPOINT statement_list "}"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 228, "BREAKPOINT statement_list \"}\"");
                         $$ = new ast::BreakpointBlock($2);
                     }
                 ;
@@ -2032,7 +2030,7 @@ breakpoint_block :  BREAKPOINT statement_list "}"
 
 terminal_block  :   TERMINAL statement_list "}"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 229, "TERMINAL statement_list \"}\"");
                         $$ = new ast::TerminalBlock($2);
                         ModToken block_token = $1 + $3;
                         $$->set_token(block_token);
@@ -2042,28 +2040,28 @@ terminal_block  :   TERMINAL statement_list "}"
 
 before_after_block : BREAKPOINT statement_list "}"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 230, "BREAKPOINT statement_list \"}\"");
                         $$ = new ast::BABlock(new ast::BABlockType(ast::BATYPE_BREAKPOINT), $2);
                         ModToken block_token = $1 + $3;
                         $$->set_token(block_token);
                     }
                 |   SOLVE statement_list "}"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 231, "SOLVE statement_list \"}\"");
                         $$ = new ast::BABlock(new ast::BABlockType(ast::BATYPE_SOLVE), $2);
                         ModToken block_token = $1 + $3;
                         $$->set_token(block_token);
                     }
                 |   INITIAL1 statement_list "}"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 232, "INITIAL1 statement_list \"}\"");
                         $$ = new ast::BABlock(new ast::BABlockType(ast::BATYPE_INITIAL), $2);
                         ModToken block_token = $1 + $3;
                         $$->set_token(block_token);
                     }
                 |   STEP statement_list "}"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 233, "STEP statement_list \"}\"");
                         $$ = new ast::BABlock(new ast::BABlockType(ast::BATYPE_STEP), $2);
                         ModToken block_token = $1 + $3;
                         $$->set_token(block_token);
@@ -2077,13 +2075,13 @@ before_after_block : BREAKPOINT statement_list "}"
 
 watch_statement :   WATCH watch
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 234, "WATCH watch");
                         $$ = new ast::WatchStatement(ast::WatchVector());
                         $$->emplace_back_watch($2);
                     }
                 |   watch_statement "," watch
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 235, "watch_statement \",\" watch");
                         $1->emplace_back_watch($3); $$ = $1;
                     }
                 |   WATCH error
@@ -2095,7 +2093,7 @@ watch_statement :   WATCH watch
 
 watch           :   "(" watch_expression watch_direction watch_expression ")" double
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 236, "\"(\" watch_expression watch_direction watch_expression \")\" double");
                         $$ = new ast::Watch( new ast::BinaryExpression($2, $3, $4), $6);
                     }
                 ;
@@ -2103,12 +2101,12 @@ watch           :   "(" watch_expression watch_direction watch_expression ")" do
 
 watch_direction :   GT
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 237, "GT");
                         $$ = ast::BinaryOperator(ast::BOP_GREATER);
                     }
                 |   LT
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 238, "LT");
                         $$ = ast::BinaryOperator(ast::BOP_LESS);
                     }
                 ;
@@ -2116,7 +2114,7 @@ watch_direction :   GT
 
 for_netcon      :   FOR_NETCONS "(" optional_argument_list ")" statement_list "}"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 239, "FOR_NETCONS \"(\" optional_argument_list \")\" statement_list \"}\"");
                         $$ = new ast::ForNetcon($3, $5);
                     }
                 |   FOR_NETCONS error
@@ -2128,52 +2126,52 @@ for_netcon      :   FOR_NETCONS "(" optional_argument_list ")" statement_list "}
 
 watch_expression :  variable_name
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 240, "variable_name");
                         $$ = $1;
                     }
                 |   double units
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 241, "double units");
                         $$ = new ast::DoubleUnit($1, $2);
                     }
                 |   function_call
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 242, "function_call");
                         $$ = $1;
                     }
                 |   "(" watch_expression ")"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 243, "\"(\" watch_expression \")\"");
                         $$ = new ast::ParenExpression($2);
                     }
                 |   watch_expression "+" watch_expression
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 244, "watch_expression \"+\" watch_expression");
                         $$ = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_ADDITION), $3);
                     }
                 |   watch_expression "-" watch_expression
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 245, "watch_expression \"-\" watch_expression");
                         $$ = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_SUBTRACTION), $3);
                     }
                 |   watch_expression "*" watch_expression
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 246, "watch_expression \"*\" watch_expression");
                         $$ = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_MULTIPLICATION), $3);
                     }
                 |   watch_expression "/" watch_expression
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 247, "watch_expression \"/\" watch_expression");
                         $$ = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_DIVISION), $3);
                     }
                 |   watch_expression "^" watch_expression
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 248, "watch_expression \"^\" watch_expression");
                         $$ = new ast::BinaryExpression($1, ast::BinaryOperator(ast::BOP_POWER), $3);
                     }
                 |   "-" watch_expression %prec UNARYMINUS
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 249, "\"-\" watch_expression %prec UNARYMINUS");
                         $$ = new ast::UnaryExpression(ast::UnaryOperator(ast::UOP_NEGATION), $2);
                     }
                 |   error
@@ -2185,12 +2183,12 @@ watch_expression :  variable_name
 
 sens            :   SENS sens_list
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 250, "SENS sens_list");
                         $$ = new ast::Sens($2);
                     }
                 |   SENS error
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 251, "error");
                         error(scanner.loc, "sens");
                     }
                 ;
@@ -2198,13 +2196,13 @@ sens            :   SENS sens_list
 
 sens_list       :   variable_name
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 252, "variable_name");
                         $$ = ast::VarNameVector();
                         $$.emplace_back($1);
                     }
                 |   sens_list "," variable_name
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 253, "sens_list \",\" variable_name");
                         $1.emplace_back($3);
                         $$ = $1;
                     }
@@ -2213,7 +2211,7 @@ sens_list       :   variable_name
 
 conserve        :   CONSERVE react "=" expression
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 254, "CONSERVE react \"=\" expression");
                         $$ = new ast::Conserve($2, $4);
                     }
                 |   CONSERVE error
@@ -2225,12 +2223,12 @@ conserve        :   CONSERVE react "=" expression
 
 compartment     :   COMPARTMENT NAME_PTR "," expression "{" name_list "}"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 255, "COMPARTMENT NAME_PTR \",\" expression \"{\" name_list \"}\"");
                         $$ = new ast::Compartment($2, $4, $6);
                     }
                 |   COMPARTMENT expression "{" name_list "}"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 256, "COMPARTMENT expression \"{\" name_list \"}\"");
                         $$ = new ast::Compartment(NULL, $2, $4);
                     }
                 ;
@@ -2238,12 +2236,12 @@ compartment     :   COMPARTMENT NAME_PTR "," expression "{" name_list "}"
 
 longitudinal_diffusion : LONGDIFUS NAME_PTR "," expression "{" name_list "}"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 257, "LONGDIFUS NAME_PTR \",\" expression \"{\" name_list \"}\"");
                         $$ = new ast::LonDifuse($2, $4, $6);
                     }
                 |   LONGDIFUS expression "{" name_list "}"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 258, "LONGDIFUS expression \"{\" name_list \"}\"");
                         $$ = new ast::LonDifuse(NULL, $2, $4);
                     }
                 ;
@@ -2251,13 +2249,13 @@ longitudinal_diffusion : LONGDIFUS NAME_PTR "," expression "{" name_list "}"
 
 name_list       :   NAME_PTR
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 259, "NAME_PTR");
                         $$ = ast::NameVector();
                         $$.emplace_back($1);
                     }
                 |   name_list NAME_PTR
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 260, "name_list NAME_PTR");
                         $1.emplace_back($2);
                         $$ = $1;
                     }
@@ -2266,7 +2264,7 @@ name_list       :   NAME_PTR
 
 kinetic_block   :   KINETIC NAME_PTR optional_solvefor statement_list "}"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 261, "KINETIC NAME_PTR optional_solvefor statement_list \"}\"");
                         $$ = new ast::KineticBlock($2, $3, $4);
                         $$->set_token($1);
                     }
@@ -2275,19 +2273,19 @@ kinetic_block   :   KINETIC NAME_PTR optional_solvefor statement_list "}"
 
 reaction_statement : REACTION react REACT1 react "(" expression "," expression ")"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 262, "REACTION react REACT1 react \"(\" expression \",\" expression \")\"");
                         auto op = ast::ReactionOperator(ast::LTMINUSGT);
                         $$ = new ast::ReactionStatement($2, op, $4, $6, $8);
                     }
                 |   REACTION react LT LT  "(" expression ")"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 263, "REACTION react LT LT  \"(\" expression \")\"");
                         auto op = ast::ReactionOperator(ast::LTLT);
                         $$ = new ast::ReactionStatement($2, op, NULL, $6, NULL);
                     }
                 |   REACTION react "-" GT "(" expression ")"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 264, "REACTION react \"-\" GT \"(\" expression \")\"");
                         auto op = ast::ReactionOperator(ast::MINUSGT);
                         $$ = new ast::ReactionStatement($2, op, NULL, $6, NULL);
                     }
@@ -2300,24 +2298,24 @@ reaction_statement : REACTION react REACT1 react "(" expression "," expression "
 
 react           :   variable_name
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 265, "variable_name");
                         $$ = new ast::ReactVarName(nullptr, $1);
                     }
                 |   integer variable_name
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 266, "integer variable_name");
                         $$ = new ast::ReactVarName($1, $2);
                     }
                 |   react "+" variable_name
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 267, "react \"+\" variable_name");
                         auto op = ast::BinaryOperator(ast::BOP_ADDITION);
                         auto variable = new ast::ReactVarName(nullptr, $3);
                         $$ = new ast::BinaryExpression($1, op, variable);
                     }
                 |   react "+" integer variable_name
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 268, "react \"+\" integer variable_name");
                         auto op = ast::BinaryOperator(ast::BOP_ADDITION);
                         auto variable = new ast::ReactVarName($3, $4);
                         $$ = new ast::BinaryExpression($1, op, variable);
@@ -2327,7 +2325,7 @@ react           :   variable_name
 
 lag_statement   :   LAG name BY NAME_PTR
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 269, "LAG name BY NAME_PTR");
                         $$ = new ast::LagStatement($2, $4);
                     }
                 |   LAG error
@@ -2339,7 +2337,7 @@ lag_statement   :   LAG name BY NAME_PTR
 
 match_block     :   MATCH "{" match_list "}"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 270, "MATCH \"{\" match_list \"}\"");
                         $$ = new ast::MatchBlock($3);
                         ModToken block_token = $1 + $4;
                         $$->set_token(block_token);
@@ -2349,13 +2347,13 @@ match_block     :   MATCH "{" match_list "}"
 
 match_list      :   match
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 271, "match");
                         $$ = ast::MatchVector();
                         $$.emplace_back($1);
                     }
                 |   match_list match
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 272, "match_list match");
                         $1.emplace_back($2);
                         $$ = $1;
                     }
@@ -2364,12 +2362,12 @@ match_list      :   match
 
 match           :   name
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 273, "name");
                         $$ = new ast::Match($1, NULL);
                     }
                 |   match_name "(" expression ")" "=" expression
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 274, "match_name \"(\" expression \")\" \"=\" expression");
                         auto op = ast::BinaryOperator(ast::BOP_ASSIGN);
                         auto lhs = new ast::ParenExpression($3);
                         auto rhs = $6;
@@ -2385,12 +2383,12 @@ match           :   name
 
 match_name      :   name
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 275, "name");
                         $$ = $1;
                     }
                 |   name "[" NAME_PTR "]"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 276, "name \"[\" NAME_PTR \"]\"");
                         $$ = new ast::IndexedName($1, $3);
                     }
                 ;
@@ -2398,25 +2396,25 @@ match_name      :   name
 
 unit_block      :   UNITS "{" unit_block_body "}"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 277, "UNITS \"{\" unit_block_body \"}\"");
                         $$ = new ast::UnitBlock($3);
                     }
                 ;
 
 
 unit_block_body :   {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 278, "");
                         $$ = ast::ExpressionVector();
                     }
                 |   unit_block_body unit_definition
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 279, "unit_block_body unit_definition");
                         $1.emplace_back($2);
                         $$ = $1;
                     }
                 |   unit_block_body factor_definition
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 280, "unit_block_body factor_definition");
                         $1.emplace_back($2);
                         $$ = $1;
                     }
@@ -2425,7 +2423,7 @@ unit_block_body :   {
 
 unit_definition :   unit "=" unit
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 281, "unit \"=\" unit");
                         $$ = new ast::UnitDef($1, $3);
                     }
                 |   unit error
@@ -2437,19 +2435,19 @@ unit_definition :   unit "=" unit
 
 factor_definition : NAME_PTR "=" double unit
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 282, "NAME_PTR \"=\" double unit");
                         $$ = new ast::FactorDef($1, $3, $4, NULL, NULL);
                         $$->set_token(*($1->get_token()));
                     }
                 |   NAME_PTR "=" unit unit
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 283, "NAME_PTR \"=\" unit unit");
                         $$ = new ast::FactorDef($1, NULL, $3, NULL, $4);
                         $$->set_token(*($1->get_token()));
                     }
                 |   NAME_PTR "=" unit "-" GT unit
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 284, "NAME_PTR \"=\" unit \"-\" GT unit");
                         $$ = new ast::FactorDef($1, NULL, $3, new ast::Boolean(1), $6);
                         $$->set_token(*($1->get_token()));
                     }
@@ -2462,7 +2460,7 @@ factor_definition : NAME_PTR "=" double unit
 
 constant_block  :   CONSTANT "{" constant_statement "}"
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 285, "CONSTANT \"{\" constant_statement \"}\"");
                         $$ = new ast::ConstantBlock($3);
                         ModToken block_token = $1 + $4;
                         $$->set_token(block_token);
@@ -2472,12 +2470,12 @@ constant_block  :   CONSTANT "{" constant_statement "}"
 
 constant_statement :
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 286, "constant_statement");
                         $$ = ast::ConstantStatementVector();
                     }
                 |   constant_statement NAME_PTR "=" number units
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 287, "constant_statement NAME_PTR \"=\" number units");
                         auto constant = new ast::ConstantVar($2, $4, $5);
                         $1.emplace_back(new ast::ConstantStatement(constant));
                         $$ = $1;
@@ -2487,7 +2485,7 @@ constant_statement :
 
 table_statement :   TABLE optional_table_var_list optional_dependent_var_list FROM expression TO expression WITH INTEGER_PTR
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 288, "TABLE optional_table_var_list optional_dependent_var_list FROM expression TO expression WITH INTEGER_PTR");
                         $$ = new ast::TableStatement($2, $3, $5, $7, $9);
                     }
                 |   TABLE error
@@ -2499,12 +2497,12 @@ table_statement :   TABLE optional_table_var_list optional_dependent_var_list FR
 
 optional_table_var_list :
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 289, "optional_table_var_list");
                         $$ = ast::NameVector();
                     }
                 |   table_var_list
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 290, "table_var_list");
                         $$ = $1;
                     }
                 ;
@@ -2512,13 +2510,13 @@ optional_table_var_list :
 
 table_var_list  :   Name
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 291, "Name");
                         $$ = ast::NameVector();
                         $$.emplace_back($1);
                     }
                 |   table_var_list "," Name
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 292, "table_var_list \",\" Name");
                         $1.emplace_back($3);
                         $$ = $1;
                     }
@@ -2527,12 +2525,12 @@ table_var_list  :   Name
 
 optional_dependent_var_list :
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 293, "");
                         $$ = ast::NameVector();
                     }
                 |   DEPEND table_var_list
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 293, "DEPEND table_var_list");
                         $$ = $2;
                     }
                 ;
@@ -2540,7 +2538,7 @@ optional_dependent_var_list :
 
 neuron_block    :   NEURON OPEN_BRACE neuron_statement CLOSE_BRACE
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 294, "NEURON OPEN_BRACE neuron_statement CLOSE_BRACE");
                         auto block = new ast::StatementBlock($3);
                         ModToken statement_block = $2 + $4;
                         block->set_token(statement_block);
@@ -2553,78 +2551,78 @@ neuron_block    :   NEURON OPEN_BRACE neuron_statement CLOSE_BRACE
 
 neuron_statement :
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 295, "");
                         $$ = ast::StatementVector();
                     }
                 |   neuron_statement SUFFIX NAME_PTR
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 296, "neuron_statement SUFFIX NAME_PTR");
                         $1.emplace_back(new ast::Suffix($2.clone(), $3));
                         $$ = $1;
                     }
                 |   neuron_statement use_ion_statement
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 297, "neuron_statement use_ion_statement");
                         $1.emplace_back($2);
                         $$ = $1;
                     }
                 |   neuron_statement NONSPECIFIC nonspecific_var_list
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 298, "neuron_statement NONSPECIFIC nonspecific_var_list");
                         $1.emplace_back(new ast::Nonspecific($3));
                         $$ = $1;
                     }
                 |   neuron_statement ELECTRODE_CURRENT electrode_current_var_list
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 299, "neuron_statement ELECTRODE_CURRENT electrode_current_var_list");
                         $1.emplace_back(new ast::ElectrodeCurrent($3));
                         $$ = $1;
                     }
                 |   neuron_statement SECTION section_var_list
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 300, "neuron_statement SECTION section_var_list");
                         $1.emplace_back(new ast::Section($3));
                         $$ = $1;
                     }
                 |   neuron_statement RANGE range_var_list
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 301, "neuron_statement RANGE range_var_list");
                         $1.emplace_back(new ast::Range($3));
                         $$ = $1;
                     }
                 |   neuron_statement GLOBAL global_var_list
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 302, "neuron_statement GLOBAL global_var_list");
                         $1.emplace_back(new ast::Global($3));
                         $$ = $1;
                     }
                 |   neuron_statement POINTER pointer_var_list
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 303, "neuron_statement POINTER pointer_var_list");
                         $1.emplace_back(new ast::Pointer($3));
                         $$ = $1;
                     }
                 |   neuron_statement BBCOREPOINTER bbcore_pointer_var_list
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 304, "neuron_statement BBCOREPOINTER bbcore_pointer_var_list");
                         $1.emplace_back(new ast::BbcorePointer($3));
                         $$ = $1;
                     }
                 |   neuron_statement EXTERNAL external_var_list
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 305, "neuron_statement EXTERNAL external_var_list");
                         $1.emplace_back(new ast::External($3));
                         $$ = $1;
                     }
                 |   neuron_statement THREADSAFE optional_threadsafe_var_list
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 306, "neuron_statement THREADSAFE optional_threadsafe_var_list");
                         $1.emplace_back(new ast::ThreadSafe($3));
                         $$ = $1;
                     }
                 |   neuron_statement REPRESENTS ONTOLOGY_ID
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 307, "neuron_statement REPRESENTS ONTOLOGY_ID");
                         $1.emplace_back(new ast::OntologyStatement(new ast::String($3)));
                         $$ = $1;
                     }
@@ -2633,17 +2631,17 @@ neuron_statement :
 
 use_ion_statement : USEION NAME_PTR READ read_ion_list valence ontology
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 308, "USEION NAME_PTR READ read_ion_list valence ontology");
                         $$ = new ast::Useion($2, $4, ast::WriteIonVarVector(), $5, $6);
                     }
                 |   USEION NAME_PTR WRITE write_ion_list valence ontology
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 309, "USEION NAME_PTR WRITE write_ion_list valence ontology");
                         $$ = new ast::Useion($2, ast::ReadIonVarVector(), $4, $5, $6);
                     }
                 |   USEION NAME_PTR READ read_ion_list WRITE write_ion_list valence ontology
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 310, "USEION NAME_PTR READ read_ion_list WRITE write_ion_list valence ontology");
                         $$ = new ast::Useion($2, $4, $6, $7, $8);
                     }
                 |   USEION error
@@ -2655,13 +2653,13 @@ use_ion_statement : USEION NAME_PTR READ read_ion_list valence ontology
 
 read_ion_list   :   NAME_PTR
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 311, "NAME_PTR");
                         $$ = ast::ReadIonVarVector();
                         $$.emplace_back(new ast::ReadIonVar($1));
                     }
                 |   read_ion_list "," NAME_PTR
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 312, "read_ion_list \",\" NAME_PTR");
                         $1.emplace_back(new ast::ReadIonVar($3));
                         $$ = $1;
                     }
@@ -2674,13 +2672,13 @@ read_ion_list   :   NAME_PTR
 
 write_ion_list  :   NAME_PTR
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 313, "NAME_PTR");
                         $$ = ast::WriteIonVarVector();
                         $$.emplace_back(new ast::WriteIonVar($1));
                     }
                 |   write_ion_list "," NAME_PTR
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 314, "write_ion_list \",\" NAME_PTR");
                         $1.emplace_back(new ast::WriteIonVar($3));
                         $$ = $1;
                     }
@@ -2693,17 +2691,17 @@ write_ion_list  :   NAME_PTR
 
 valence         :
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 315, "");
                         $$ = nullptr;
                     }
                 |   VALENCE double
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 316, "VALENCE double");
                         $$ = new ast::Valence($1.clone(), $2);
                     }
                 |   VALENCE "-" double
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 317, "VALENCE \"-\" double");
                         $3->negate();
                         $$ = new ast::Valence($1.clone(), $3);
                     }
@@ -2712,12 +2710,12 @@ valence         :
 
 ontology        :
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 318, "");
                         $$ = nullptr;
                     }
                 |   REPRESENTS ONTOLOGY_ID
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 319, "REPRESENTS ONTOLOGY_ID");
                         $$ = new ast::String($2);
                     }
                 ;
@@ -2725,13 +2723,13 @@ ontology        :
 
 nonspecific_var_list : NAME_PTR
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 320, "NAME_PTR");
                         $$ = ast::NonspecificCurVarVector();
                         $$.emplace_back(new ast::NonspecificCurVar($1));
                     }
                 |   nonspecific_var_list "," NAME_PTR
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 321, "nonspecific_var_list \",\" NAME_PTR");
                         $1.emplace_back(new ast::NonspecificCurVar($3));
                         $$ = $1;
                     }
@@ -2744,13 +2742,13 @@ nonspecific_var_list : NAME_PTR
 
 electrode_current_var_list : NAME_PTR
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 322, "NAME_PTR");
                         $$ = ast::ElectrodeCurVarVector();
                         $$.emplace_back(new ast::ElectrodeCurVar($1));
                     }
                 |   electrode_current_var_list "," NAME_PTR
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 323, "electrode_current_var_list \",\" NAME_PTR");
                         $1.emplace_back(new ast::ElectrodeCurVar($3));
                         $$ = $1;
                     }
@@ -2763,13 +2761,13 @@ electrode_current_var_list : NAME_PTR
 
 section_var_list :  NAME_PTR
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 324, "NAME_PTR");
                         $$ = ast::SectionVarVector();
                         $$.emplace_back(new ast::SectionVar($1));
                     }
                 |   section_var_list "," NAME_PTR
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 325, "section_var_list \",\" NAME_PTR");
                         $1.emplace_back(new ast::SectionVar($3));
                         $$ = $1;
                     }
@@ -2782,13 +2780,13 @@ section_var_list :  NAME_PTR
 
 range_var_list  :   NAME_PTR
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 326, "NAME_PTR");
                         $$ = ast::RangeVarVector();
                         $$.emplace_back(new ast::RangeVar($1));
                     }
                 |   range_var_list "," NAME_PTR
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 327, "range_var_list \",\" NAME_PTR");
                         $1.emplace_back(new ast::RangeVar($3));
                         $$ = $1;
                     }
@@ -2801,7 +2799,7 @@ range_var_list  :   NAME_PTR
 
 global_var_list:   NAME_PTR
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 328, "NAME_PTR");
                         $$ = ast::GlobalVarVector();
                         auto new_global_var = new ast::GlobalVar($1);
                         new_global_var->set_token(*($1->get_token()));
@@ -2809,7 +2807,7 @@ global_var_list:   NAME_PTR
                     }
                 |   global_var_list "," NAME_PTR
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 329, "global_var_list \",\" NAME_PTR");
                         auto new_global_var = new ast::GlobalVar($3);
                         new_global_var->set_token(*($3->get_token()));
                         $1.emplace_back(new_global_var);
@@ -2824,7 +2822,7 @@ global_var_list:   NAME_PTR
 
 pointer_var_list :  NAME_PTR
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 330, "NAME_PTR");
                         $$ = ast::PointerVarVector();
                         auto new_pointer_var = new ast::PointerVar($1);
                         new_pointer_var->set_token(*($1->get_token()));
@@ -2832,7 +2830,7 @@ pointer_var_list :  NAME_PTR
                     }
                 |   pointer_var_list "," NAME_PTR
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 331, "pointer_var_list \",\" NAME_PTR");
                         auto new_pointer_var = new ast::PointerVar($3);
                         new_pointer_var->set_token(*($3->get_token()));
                         $1.emplace_back(new_pointer_var);
@@ -2847,13 +2845,13 @@ pointer_var_list :  NAME_PTR
 
 bbcore_pointer_var_list : NAME_PTR
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 332, "NAME_PTR");
                         $$ = ast::BbcorePointerVarVector();
                         $$.emplace_back(new ast::BbcorePointerVar($1));
                     }
                 |   bbcore_pointer_var_list "," NAME_PTR
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 333, "bbcore_pointer_var_list \",\" NAME_PTR");
                         $1.emplace_back(new ast::BbcorePointerVar($3));
                         $$ = $1;
                     }
@@ -2866,13 +2864,13 @@ bbcore_pointer_var_list : NAME_PTR
 
 external_var_list : NAME_PTR
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 334, "NAME_PTR");
                         $$ = ast::ExternVarVector();
                         $$.emplace_back(new ast::ExternVar($1));
                     }
                 |   external_var_list "," NAME_PTR
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 335, "external_var_list \",\" NAME_PTR");
                         $1.emplace_back(new ast::ExternVar($3));
                         $$ = $1;
                     }
@@ -2885,12 +2883,12 @@ external_var_list : NAME_PTR
 
 optional_threadsafe_var_list :
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 336, "");
                         $$ = ast::ThreadsafeVarVector();
                     }
                 |   threadsafe_var_list
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 337, "threadsafe_var_list");
                         $$ = $1;
                     }
                 ;
@@ -2898,13 +2896,13 @@ optional_threadsafe_var_list :
 
 threadsafe_var_list : NAME_PTR
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 338, "NAME_PTR");
                         $$ = ast::ThreadsafeVarVector();
                         $$.emplace_back(new ast::ThreadsafeVar($1));
                     }
                 |   threadsafe_var_list "," NAME_PTR
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 339, "threadsafe_var_list \",\" NAME_PTR");
                         $1.emplace_back(new ast::ThreadsafeVar($3));
                         $$ = $1;
                     }
@@ -2912,7 +2910,7 @@ threadsafe_var_list : NAME_PTR
 
  INTEGER_PTR    :   INTEGER
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 340, "error");
                         $$ = $1.clone();
                     }
                  ;
@@ -2920,7 +2918,7 @@ threadsafe_var_list : NAME_PTR
 
  NAME_PTR        :  NAME
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 341, "error");
                         $$ = $1.clone();
                     }
                  ;
@@ -2928,14 +2926,14 @@ threadsafe_var_list : NAME_PTR
 
  STRING_PTR      :  STRING
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 342, "error");
                         $$ = $1.clone();
                     }
                  ;
 
  flux_variable   :  FLUX_VAR
                     {
-                        nmodl_trace_rule(scanner.loc, 2, "error");
+                        nmodl_trace_rule(scanner.loc, 343, "error");
                         $$ = new ast::WrappedExpression($1.clone());
                     }
                  ;
