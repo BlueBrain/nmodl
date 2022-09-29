@@ -107,7 +107,6 @@
 %token  <ModToken>              FUNCTION_TABLE
 %token  <ModToken>              GLOBAL
 %token  <ModToken>              IF
-%token  <ModToken>              IFERROR
 %token  <ModToken>              INCLUDE1
 %token  <ModToken>              INDEPENDENT
 %token  <ModToken>              INITIAL1
@@ -254,7 +253,6 @@
 %type   <ast::ElseIfStatementVector>        optional_else_if
 %type   <ast::ElseStatement*>               optional_else
 %type   <ast::WrappedExpression*>           function_call
-%type   <ast::StatementBlock*>              if_solution_error
 %type   <ast::Expression*>                  optional_increment
 %type   <ast::Number*>                      optional_start
 %type   <ast::LagStatement*>                lag_statement
@@ -1561,36 +1559,25 @@ initial_statement : INITIAL1 statement_list "}"
                 ;
 
 
-solve_block     :   SOLVE NAME_PTR if_solution_error
+solve_block     :   SOLVE NAME_PTR
                     {
-                        $$ = new ast::SolveBlock($2, NULL, NULL, $3);
+                        $$ = new ast::SolveBlock($2, NULL, NULL);
                         $$->set_token(*($2->get_token()));
                     }
-                |   SOLVE NAME_PTR USING METHOD if_solution_error
+                |   SOLVE NAME_PTR USING METHOD
                     {
-                        $$ = new ast::SolveBlock($2, $4.clone(), NULL, $5);
+                        $$ = new ast::SolveBlock($2, $4.clone(), NULL);
                         $$->set_token(*($2->get_token()));
                     }
                 |
-                    SOLVE NAME_PTR STEADYSTATE METHOD if_solution_error
+                    SOLVE NAME_PTR STEADYSTATE METHOD
                     {
-                        $$ = new ast::SolveBlock($2, NULL, $4.clone(), $5);
+                        $$ = new ast::SolveBlock($2, NULL, $4.clone());
                         $$->set_token(*($2->get_token()));
                     }
                 |   SOLVE error
                     {
                         error(scanner.loc, "solve_block");
-                    }
-                ;
-
-
-if_solution_error :
-                    {
-                        $$ = nullptr;
-                    }
-                |   IFERROR statement_list "}"
-                    {
-                        $$ = $2;
                     }
                 ;
 

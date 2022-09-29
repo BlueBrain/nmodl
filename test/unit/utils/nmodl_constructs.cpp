@@ -794,20 +794,6 @@ std::map<std::string, NmodlTestCase> const nmodl_valid_constructs{
     },
 
     {
-        "solve_block_3",
-        {
-            "Solve statement with iferror block",
-            R"(
-                BREAKPOINT {
-                    SOLVE states METHOD cnexp IFERROR {
-                        a = 1
-                    }
-                }
-            )"
-        }
-    },
-
-    {
         "solve_block_equation_1",
         {
             "Solve statement without method using EQUATION, generating BREAKPOINT",
@@ -846,17 +832,19 @@ std::map<std::string, NmodlTestCase> const nmodl_valid_constructs{
     {
         "solve_block_equation_3",
         {
-            "Solve statement with iferror block using EQUATION, generating BREAKPOINT",
+            "Solve statement using EQUATION, generating BREAKPOINT",
             R"(
                 EQUATION {
-                    SOLVE states METHOD cnexp IFERROR {
+                    SOLVE states METHOD cnexp
+                    {
                         a = 1
                     }
                 }
             )",
             R"(
                 BREAKPOINT {
-                    SOLVE states METHOD cnexp IFERROR {
+                    SOLVE states METHOD cnexp
+                    {
                         a = 1
                     }
                 }

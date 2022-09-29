@@ -80,7 +80,6 @@ const static std::map<std::string, TokenType> keywords = {
     {"SWEEP", Token::SWEEP},
     {"COMPARTMENT", Token::COMPARTMENT},
     {"LONGITUDINAL_DIFFUSION", Token::LONGDIFUS},
-    {"IFERROR", Token::IFERROR},
     {"SOLVEFOR", Token::SOLVEFOR},
     {"UNITS", Token::UNITS},
     {"UNITSON", Token::UNITSON},

@@ -197,8 +197,6 @@ SymbolType token_symbol(const std::string& key, PositionType& pos, TokenType typ
         return Parser::make_GLOBAL(token, pos);
     case Token::IF:
         return Parser::make_IF(token, pos);
-    case Token::IFERROR:
-        return Parser::make_IFERROR(token, pos);
     case Token::INCLUDE1:
         return Parser::make_INCLUDE1(token, pos);
     case Token::INDEPENDENT:

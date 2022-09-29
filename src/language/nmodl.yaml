@@ -830,11 +830,6 @@
                                   type: Name
                                   optional: true
                                   prefix: {value: " STEADYSTATE "}
-                              - ifsolerr:
-                                  brief: "Block to be executed on error"
-                                  type: StatementBlock
-                                  optional: true
-                                  prefix: {value: " IFERROR "}
 
                         - BreakpointBlock:
                             nmodl: "BREAKPOINT "
