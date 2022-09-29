@@ -857,11 +857,20 @@ std::vector<SymbolType> CodegenCVisitor::get_float_variables() {
     if (info.vectorize) {
         variables.push_back(make_symbol(naming::VOLTAGE_UNUSED_VARIABLE));
     }
+
     if (breakpoint_exist()) {
         std::string name = info.vectorize ? naming::CONDUCTANCE_UNUSED_VARIABLE
                                           : naming::CONDUCTANCE_VARIABLE;
-        variables.push_back(make_symbol(name));
+
+        // make sure conductance variable like `g` is not already defined
+        if (auto r = std::find_if(variables.cbegin(),
+                                  variables.cend(),
+                                  [&](const auto& s) { return name == s->get_name(); });
+            r == variables.cend()) {
+            variables.push_back(make_symbol(name));
+        }
     }
+
     if (net_receive_exist()) {
         variables.push_back(make_symbol(naming::T_SAVE_VARIABLE));
     }
@@ -1833,6 +1842,9 @@ void CodegenCVisitor::visit_eigen_newton_solver_block(const ast::EigenNewtonSolv
     printer->add_line("int id, pnodecount;");
     printer->add_line("double v;");
     printer->add_line("Datum* indexes;");
+    printer->add_line("double* data;");
+    printer->add_line("ThreadDatum* thread;");
+
     if (ion_variable_struct_required()) {
         print_ion_variable();
     }
@@ -1845,8 +1857,10 @@ void CodegenCVisitor::visit_eigen_newton_solver_block(const ast::EigenNewtonSolv
     printer->end_block(2);
 
     printer->fmt_line(
-        "functor(NrnThread* nt, {}* inst, int id, int pnodecount, double v, Datum* indexes) : "
-        "nt{{nt}}, inst{{inst}}, id{{id}}, pnodecount{{pnodecount}}, v{{v}}, indexes{{indexes}} "
+        "functor(NrnThread* nt, {}* inst, int id, int pnodecount, double v, Datum* indexes, "
+        "double* data, ThreadDatum* thread) : "
+        "nt{{nt}}, inst{{inst}}, id{{id}}, pnodecount{{pnodecount}}, v{{v}}, indexes{{indexes}}, "
+        "data{{data}}, thread{{thread}} "
         "{{}}",
         instance_struct());
 
@@ -1878,7 +1892,8 @@ void CodegenCVisitor::visit_eigen_newton_solver_block(const ast::EigenNewtonSolv
 
     // call newton solver with functor and X matrix that contains state vars
     printer->add_line("// call newton solver");
-    printer->add_line("functor newton_functor(nt, inst, id, pnodecount, v, indexes);");
+    printer->add_line(
+        "functor newton_functor(nt, inst, id, pnodecount, v, indexes, data, thread);");
     printer->add_line("newton_functor.initialize();");
     printer->add_line(
         "int newton_iterations = nmodl::newton::newton_solver(nmodl_eigen_xm, newton_functor);");
@@ -4576,6 +4591,9 @@ void CodegenCVisitor::print_data_structures(bool print_initialisers) {
 }
 
 void CodegenCVisitor::print_v_unused() const {
+    if (!info.vectorize) {
+        return;
+    }
     printer->add_line("#if NRN_PRCELLSTATE");
     printer->add_line("inst->v_unused[id] = v;");
     printer->add_line("#endif");

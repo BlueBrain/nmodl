@@ -960,19 +960,6 @@ std::map<std::string, NmodlTestCase> const nmodl_valid_constructs{
     },
 
     {
-        "queue_statement_1",
-        {
-            "PUTQ and GETQ statement",
-            R"(
-                PROCEDURE lates() {
-                    PUTQ one_name
-                    GETQ another_name
-                }
-            )"
-        }
-    },
-
-    {
         "reset_statement_1",
         {
             "RESET statement",
