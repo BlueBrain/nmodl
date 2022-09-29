@@ -159,7 +159,6 @@ set(AST_GENERATED_SOURCES
     ${PROJECT_BINARY_DIR}/src/ast/state_block.hpp
     ${PROJECT_BINARY_DIR}/src/ast/statement.hpp
     ${PROJECT_BINARY_DIR}/src/ast/statement_block.hpp
-    ${PROJECT_BINARY_DIR}/src/ast/step_block.hpp
     ${PROJECT_BINARY_DIR}/src/ast/string.hpp
     ${PROJECT_BINARY_DIR}/src/ast/suffix.hpp
     ${PROJECT_BINARY_DIR}/src/ast/table_statement.hpp
