@@ -36,7 +36,6 @@ The following symbols are used in the document to descrive the status :
 |STEP | ✅ |
 |SOLVEFOR | ✅ |
 |PROCEDURE | ✅ |
-|PARTIAL | ✅ |
 |DEFINE | ✅ |
 |IFERROR | ✅ |
 |PARAMETER | ✅ |
@@ -70,8 +69,6 @@ The following symbols are used in the document to descrive the status :
 |MATCH | ✅ |
 |MODEL_LEVEL | ✅ |
 |SWEEP | ✅ |
-|FIRST | ✅ |
-|LAST | ✅ |
 |KINETIC | ✅ |
 |CONSERVE | ✅ |
 |REACTION | ✅ |

@@ -100,7 +100,6 @@
 %token  <ModToken>              ELSE
 %token  <ModToken>              EQUATION
 %token  <ModToken>              EXTERNAL
-%token  <ModToken>              FIRST
 %token  <ModToken>              FORALL1
 %token  <ModToken>              FOR_NETCONS
 %token  <ModToken>              FROM
@@ -114,7 +113,6 @@
 %token  <ModToken>              INITIAL1
 %token  <ModToken>              KINETIC
 %token  <ModToken>              LAG
-%token  <ModToken>              LAST
 %token  <ModToken>              LIN1
 %token  <ModToken>              LINEAR
 %token  <ModToken>              LOCAL
@@ -130,7 +128,6 @@
 %token  <ModToken>              NRNMUTEXLOCK
 %token  <ModToken>              NRNMUTEXUNLOCK
 %token  <ModToken>              PARAMETER
-%token  <ModToken>              PARTIAL
 %token  <ModToken>              POINTER
 %token  <ModToken>              PROCEDURE
 %token  <ModToken>              PROTECT
@@ -277,8 +274,6 @@
 %type   <ast::MatchVector>                  match_list
 %type   <ast::Match*>                       match
 %type   <ast::Identifier*>                  match_name
-%type   <ast::PartialBoundary*>             partial_equation
-%type   <ast::FirstLastTypeIndex*>          first_last
 %type   <ast::ReactionStatement*>           reaction_statement
 %type   <ast::Conserve*>                    conserve
 %type   <ast::Expression*>                  react
@@ -337,7 +332,6 @@
 %type   <ast::NeuronBlock*>                 neuron_block
 %type   <ast::NonLinearBlock*>              non_linear_block
 %type   <ast::ParamBlock*>                  parameter_block
-%type   <ast::PartialBlock*>                partial_block
 %type   <ast::ProcedureBlock*>              procedure_block
 %type   <ast::SolveBlock*>                  solve_block
 %type   <ast::StateBlock*>                  state_block
@@ -830,10 +824,6 @@ procedure       :   initial_block
                     {
                         $$ = $1;
                     }
-                |   partial_block
-                    {
-                        $$ = $1;
-                    }
                 |   kinetic_block
                     {
                         $$ = $1;
@@ -1046,10 +1036,6 @@ statement_type1 :   from_statement
                 |   match_block
                     {
                         $$ = new ast::ExpressionStatement($1);
-                    }
-                |   partial_equation
-                    {
-                        $$ = $1;
                     }
                 |   table_statement
                     {
@@ -1504,45 +1490,6 @@ discrete_block  :   DISCRETE NAME_PTR statement_list "}"
                         $$ = new ast::DiscreteBlock($2, $3);
                         ModToken block_token = $1 + $4;
                         $$->set_token(block_token);
-                    }
-                ;
-
-
-partial_block   :   PARTIAL NAME_PTR statement_list "}"
-                    {
-                        $$ = new ast::PartialBlock($2, $3);
-                        ModToken block_token = $1 + $4;
-                        $$->set_token(block_token);
-                    }
-                |   PARTIAL error
-                    {
-                        error(scanner.loc, "partial_block");
-                    }
-                ;
-
-
-partial_equation :  "~" PRIME "=" NAME_PTR "*" DEL2 "(" NAME_PTR ")" "+" NAME_PTR
-                    {
-                        $$ = new ast::PartialBoundary(NULL, $2.clone(), NULL, NULL, $4, $6.clone(), $8, $11);
-                    }
-                |   "~" DEL NAME_PTR "[" first_last "]" "=" expression
-                    {
-                        $$ = new ast::PartialBoundary($2.clone(), $3, $5, $8, NULL, NULL, NULL, NULL);
-                    }
-                |   "~" NAME_PTR "[" first_last "]" "=" expression
-                    {
-                        $$ = new ast::PartialBoundary(NULL, $2, $4, $7, NULL, NULL, NULL, NULL);
-                    }
-                ;
-
-
-first_last      :   FIRST
-                    {
-                        $$ = new ast::FirstLastTypeIndex(ast::PEQ_FIRST);
-                    }
-                |   LAST
-                    {
-                        $$ = new ast::FirstLastTypeIndex(ast::PEQ_LAST);
                     }
                 ;
 

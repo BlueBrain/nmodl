@@ -180,9 +180,6 @@ enum class NmodlType : enum_type {
     /// constant variable
     constant_var = 1L << 21,
 
-    /// Partial Block
-    partial_block = 1L << 22,
-
     /// Kinetic Block
     kinetic_block = 1L << 23,
 
