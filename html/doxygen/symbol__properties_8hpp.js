@@ -25,7 +25,6 @@ var symbol__properties_8hpp =
       [ "write_ion_var", "symbol__properties_8hpp.html#ad9b6b8559b36d0a500ef5110badcc4dba7b0b4b63b7695c9d325544455f858b7c", null ],
       [ "nonspecific_cur_var", "symbol__properties_8hpp.html#ad9b6b8559b36d0a500ef5110badcc4dba6d3d0566f58f05416957b1a9bbffca39", null ],
       [ "electrode_cur_var", "symbol__properties_8hpp.html#ad9b6b8559b36d0a500ef5110badcc4dba9b0129aafa77fbe64fd8092a39d79079", null ],
-      [ "section_var", "symbol__properties_8hpp.html#ad9b6b8559b36d0a500ef5110badcc4dba16c7cce7fd0fca13ee4b45e0fc9b722d", null ],
       [ "argument", "symbol__properties_8hpp.html#ad9b6b8559b36d0a500ef5110badcc4dba03cde060e90acdd58ff9f0a4d785d43b", null ],
       [ "function_block", "symbol__properties_8hpp.html#ad9b6b8559b36d0a500ef5110badcc4dba1e14f5d79ad56ae13a299ba4186f11ee", null ],
       [ "procedure_block", "symbol__properties_8hpp.html#ad9b6b8559b36d0a500ef5110badcc4dbacb2f7556254f071fb944800a31272b6b", null ],
