@@ -47,7 +47,6 @@ var classnmodl_1_1visitor_1_1_symtab_visitor =
     [ "visit_nrn_state_block", "classnmodl_1_1visitor_1_1_symtab_visitor.html#a693e3b1f3b2d2993230f15e1d375cbbd", null ],
     [ "visit_param_assign", "classnmodl_1_1visitor_1_1_symtab_visitor.html#aaaffa1414f6da179fbc8c1d04e6bd269", null ],
     [ "visit_param_block", "classnmodl_1_1visitor_1_1_symtab_visitor.html#aae088c9dd064701abbecf27acf7b8cbe", null ],
-    [ "visit_partial_block", "classnmodl_1_1visitor_1_1_symtab_visitor.html#a55d8d16400c32c90c33ca8b804e79449", null ],
     [ "visit_pointer_var", "classnmodl_1_1visitor_1_1_symtab_visitor.html#a20942c1a25bca6fbec4f886060e847ec", null ],
     [ "visit_prime_name", "classnmodl_1_1visitor_1_1_symtab_visitor.html#af8cc7d8f0b8dfbc05bfe248bd686fb85", null ],
     [ "visit_procedure_block", "classnmodl_1_1visitor_1_1_symtab_visitor.html#ae89cf84d4e3a08c1e3b359715c5c73b8", null ],

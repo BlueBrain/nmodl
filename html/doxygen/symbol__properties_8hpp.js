@@ -32,7 +32,6 @@ var symbol__properties_8hpp =
       [ "linear_block", "symbol__properties_8hpp.html#ad9b6b8559b36d0a500ef5110badcc4dba16b85db0b548ca6672ed2e9caad6eab1", null ],
       [ "non_linear_block", "symbol__properties_8hpp.html#ad9b6b8559b36d0a500ef5110badcc4dba44c78a36bc57458ac1d85ce630bc3618", null ],
       [ "constant_var", "symbol__properties_8hpp.html#ad9b6b8559b36d0a500ef5110badcc4dbaf6eef5cd575969d1e89a947bbe44773b", null ],
-      [ "partial_block", "symbol__properties_8hpp.html#ad9b6b8559b36d0a500ef5110badcc4dbae9554e65c34721189d78fe126de38518", null ],
       [ "kinetic_block", "symbol__properties_8hpp.html#ad9b6b8559b36d0a500ef5110badcc4dba806afad5f66c1de108516de837610832", null ],
       [ "function_table_block", "symbol__properties_8hpp.html#ad9b6b8559b36d0a500ef5110badcc4dbac8de66f1a4787fe20ffdde46def4be3a", null ],
       [ "factor_def", "symbol__properties_8hpp.html#ad9b6b8559b36d0a500ef5110badcc4dba1d2d99387ccae2a82889f0fdcc69742d", null ],

@@ -47,7 +47,6 @@ var group__codegen__details =
       [ "visit_net_receive_block", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#ab54869b24980697de8034a756a39e290", null ],
       [ "visit_non_linear_block", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a0a80f1e473082fab332fb68134382ba9", null ],
       [ "visit_nrn_state_block", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a29fcfd40619e84e41d6d11834fd7116f", null ],
-      [ "visit_partial_block", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#acc6437f54f8570fe1b3989a7d4bd3246", null ],
       [ "visit_procedure_block", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#ae68d4e127294bf206fec2f8aed9dfba8", null ],
       [ "visit_program", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#aca76a55d964776301826e82460442e92", null ],
       [ "visit_statement_block", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#ab0efef492595d0e818b6ad5ab50ea595", null ],

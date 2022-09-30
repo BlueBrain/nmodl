@@ -20,7 +20,6 @@ var classnmodl_1_1visitor_1_1_def_use_analyze_visitor =
     [ "visit_local_list_statement", "classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html#a86c8e5330351c86444e00720a6d236d2", null ],
     [ "visit_name", "classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html#a31ab644a31190425d9749c05f5aa79f9", null ],
     [ "visit_non_lin_equation", "classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html#a51f3fc543abba6c2ce397d760faffe7b", null ],
-    [ "visit_partial_boundary", "classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html#aa4dc2fe26fe41ae9a0431f829903f0bf", null ],
     [ "visit_reaction_statement", "classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html#aa079450b81550749ffba0a0066efacdb", null ],
     [ "visit_statement_block", "classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html#acd8c469242c4ec015dc80e187fc71d00", null ],
     [ "visit_unsupported_node", "classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html#adc9a4aa31446e1eb56097271441e0bbf", null ],

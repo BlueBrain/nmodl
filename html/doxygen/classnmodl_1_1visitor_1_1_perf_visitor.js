@@ -42,7 +42,6 @@ var classnmodl_1_1visitor_1_1_perf_visitor =
     [ "visit_name", "classnmodl_1_1visitor_1_1_perf_visitor.html#a6919523a1b27266d93d0559fafba1e4f", null ],
     [ "visit_net_receive_block", "classnmodl_1_1visitor_1_1_perf_visitor.html#abb9fa025a33e64d4fa557e264c2369f0", null ],
     [ "visit_non_linear_block", "classnmodl_1_1visitor_1_1_perf_visitor.html#ad04231380f523e85adb5e0dce531f471", null ],
-    [ "visit_partial_block", "classnmodl_1_1visitor_1_1_perf_visitor.html#ad701cdd142bff0570a3ef9997ffaff3e", null ],
     [ "visit_prime_name", "classnmodl_1_1visitor_1_1_perf_visitor.html#a9c1165355592120fef8efc7ac9defc87", null ],
     [ "visit_procedure_block", "classnmodl_1_1visitor_1_1_perf_visitor.html#adb10791f8b4b750b2bf36181003f7238", null ],
     [ "visit_program", "classnmodl_1_1visitor_1_1_perf_visitor.html#a1d23a57269080183ebae80b1a5529e46", null ],
