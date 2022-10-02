@@ -108,7 +108,6 @@ var classnmodl_1_1visitor_1_1test_1_1_check_parent_visitor =
     [ "visit_suffix", "classnmodl_1_1visitor_1_1test_1_1_check_parent_visitor.html#a392fa77ff451c512dbfe1af268de5c31", null ],
     [ "visit_table_statement", "classnmodl_1_1visitor_1_1test_1_1_check_parent_visitor.html#a7a3c53a8b889a55c74245de7ce079c59", null ],
     [ "visit_thread_safe", "classnmodl_1_1visitor_1_1test_1_1_check_parent_visitor.html#a8bf61e2d5c54ed41f97236ced5f9196e", null ],
-    [ "visit_threadsafe_var", "classnmodl_1_1visitor_1_1test_1_1_check_parent_visitor.html#a02a4f0d61db1f30191a73541e1942851", null ],
     [ "visit_unary_expression", "classnmodl_1_1visitor_1_1test_1_1_check_parent_visitor.html#a91d15c09ea8be395cb53b1a08de04194", null ],
     [ "visit_unary_operator", "classnmodl_1_1visitor_1_1test_1_1_check_parent_visitor.html#af9d9ac835e22932cdb84f704737a57e2", null ],
     [ "visit_unit", "classnmodl_1_1visitor_1_1test_1_1_check_parent_visitor.html#a178f6d11a853e5cb814a7bef330d9777", null ],

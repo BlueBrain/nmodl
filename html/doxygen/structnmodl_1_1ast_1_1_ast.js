@@ -121,7 +121,6 @@ var structnmodl_1_1ast_1_1_ast =
     [ "is_suffix", "group__ast__class.html#ga6eadddbece7bcde0e0198e61b707d4c4", null ],
     [ "is_table_statement", "group__ast__class.html#ga0d48ad506faa8de6dca6d5182c7d7352", null ],
     [ "is_thread_safe", "group__ast__class.html#gaed858f15cec95707094262eff7f96003", null ],
-    [ "is_threadsafe_var", "group__ast__class.html#ga0f208b6f804d0db0e9ab49a07831f5e6", null ],
     [ "is_unary_expression", "group__ast__class.html#ga2a96d8e7cc4dd454135b86ffd4c456e7", null ],
     [ "is_unary_operator", "group__ast__class.html#ga4efd89b3e621b205a36fb120b62b954b", null ],
     [ "is_unit", "group__ast__class.html#gae3fb3e72b2a86631da0a81cbeb96a2e3", null ],

@@ -222,9 +222,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a1d921ab6c9ab40ecc4b4241a474c9d59"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_visitor.html#a1d921ab6c9ab40ecc4b4241a474c9d59">visit_extern_var</a> (<a class="el" href="classnmodl_1_1ast_1_1_extern_var.html">ast::ExternVar</a> &amp;node)=0</td></tr>
 <tr class="memdesc:a1d921ab6c9ab40ecc4b4241a474c9d59"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_extern_var.html" title="TODO.">ast::ExternVar</a>  <a href="classnmodl_1_1visitor_1_1_visitor.html#a1d921ab6c9ab40ecc4b4241a474c9d59">More...</a><br /></td></tr>
 <tr class="separator:a1d921ab6c9ab40ecc4b4241a474c9d59"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acc96d76e396f1eeaa422d666424ddcf6"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_visitor.html#acc96d76e396f1eeaa422d666424ddcf6">visit_threadsafe_var</a> (<a class="el" href="classnmodl_1_1ast_1_1_threadsafe_var.html">ast::ThreadsafeVar</a> &amp;node)=0</td></tr>
-<tr class="memdesc:acc96d76e396f1eeaa422d666424ddcf6"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_threadsafe_var.html" title="TODO.">ast::ThreadsafeVar</a>  <a href="classnmodl_1_1visitor_1_1_visitor.html#acc96d76e396f1eeaa422d666424ddcf6">More...</a><br /></td></tr>
-<tr class="separator:acc96d76e396f1eeaa422d666424ddcf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa81822104684049ebe612e3bd6f006f1"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_visitor.html#aa81822104684049ebe612e3bd6f006f1">visit_param_block</a> (<a class="el" href="classnmodl_1_1ast_1_1_param_block.html">ast::ParamBlock</a> &amp;node)=0</td></tr>
 <tr class="memdesc:aa81822104684049ebe612e3bd6f006f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_param_block.html" title="Represents a PARAMETER block in the NMODL.">ast::ParamBlock</a>  <a href="classnmodl_1_1visitor_1_1_visitor.html#aa81822104684049ebe612e3bd6f006f1">More...</a><br /></td></tr>
 <tr class="separator:aa81822104684049ebe612e3bd6f006f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -2994,7 +2991,7 @@ Public Member Functions</h2></td></tr>
 
 <p>visit node of type <a class="el" href="classnmodl_1_1ast_1_1_param_assign.html" title="TODO.">ast::ParamAssign</a> </p>
 
-<p>Implemented in <a class="el" href="classnmodl_1_1visitor_1_1_ast_visitor.html#a18e96194e401e08e6ec7620bd56ac5e8">nmodl::visitor::AstVisitor</a>, and <a class="el" href="classnmodl_1_1visitor_1_1_symtab_visitor.html#aaaffa1414f6da179fbc8c1d04e6bd269">nmodl::visitor::SymtabVisitor</a>.</p>
+<p>Implemented in <a class="el" href="classnmodl_1_1visitor_1_1_symtab_visitor.html#aaaffa1414f6da179fbc8c1d04e6bd269">nmodl::visitor::SymtabVisitor</a>, and <a class="el" href="classnmodl_1_1visitor_1_1_ast_visitor.html#a18e96194e401e08e6ec7620bd56ac5e8">nmodl::visitor::AstVisitor</a>.</p>
 
 </div>
 </div>
@@ -3685,36 +3682,6 @@ Public Member Functions</h2></td></tr>
 <p>visit node of type <a class="el" href="classnmodl_1_1ast_1_1_thread_safe.html" title="Represents THREADSAFE statement in NMODL.">ast::ThreadSafe</a> </p>
 
 <p>Implemented in <a class="el" href="classnmodl_1_1visitor_1_1_ast_visitor.html#a85c3e08349f626e3e8bcb80bf9db8464">nmodl::visitor::AstVisitor</a>.</p>
-
-</div>
-</div>
-<a id="acc96d76e396f1eeaa422d666424ddcf6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acc96d76e396f1eeaa422d666424ddcf6">&#9670;&nbsp;</a></span>visit_threadsafe_var()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void nmodl::visitor::Visitor::visit_threadsafe_var </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classnmodl_1_1ast_1_1_threadsafe_var.html">ast::ThreadsafeVar</a> &amp;&#160;</td>
-          <td class="paramname"><em>node</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>visit node of type <a class="el" href="classnmodl_1_1ast_1_1_threadsafe_var.html" title="TODO.">ast::ThreadsafeVar</a> </p>
-
-<p>Implemented in <a class="el" href="classnmodl_1_1visitor_1_1_ast_visitor.html#aee10e8f18f60edf988e6e859d08334f3">nmodl::visitor::AstVisitor</a>.</p>
 
 </div>
 </div>

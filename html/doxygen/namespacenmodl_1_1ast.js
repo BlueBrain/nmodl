@@ -106,7 +106,6 @@ var namespacenmodl_1_1ast =
     [ "Suffix", "classnmodl_1_1ast_1_1_suffix.html", "classnmodl_1_1ast_1_1_suffix" ],
     [ "TableStatement", "classnmodl_1_1ast_1_1_table_statement.html", "classnmodl_1_1ast_1_1_table_statement" ],
     [ "ThreadSafe", "classnmodl_1_1ast_1_1_thread_safe.html", "classnmodl_1_1ast_1_1_thread_safe" ],
-    [ "ThreadsafeVar", "classnmodl_1_1ast_1_1_threadsafe_var.html", "classnmodl_1_1ast_1_1_threadsafe_var" ],
     [ "UnaryExpression", "classnmodl_1_1ast_1_1_unary_expression.html", "classnmodl_1_1ast_1_1_unary_expression" ],
     [ "UnaryOperator", "classnmodl_1_1ast_1_1_unary_operator.html", "classnmodl_1_1ast_1_1_unary_operator" ],
     [ "Unit", "classnmodl_1_1ast_1_1_unit.html", "classnmodl_1_1ast_1_1_unit" ],

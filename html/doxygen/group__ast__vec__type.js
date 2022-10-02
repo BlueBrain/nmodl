@@ -104,7 +104,6 @@ var group__ast__vec__type =
     [ "StringVector", "group__ast__vec__type.html#ga4c26a082adfe4f6fda7451b32fb735e3", null ],
     [ "SuffixVector", "group__ast__vec__type.html#gafcd60e4a0a5c7f255fe5fcb69597fb35", null ],
     [ "TableStatementVector", "group__ast__vec__type.html#ga1ead20bf2c713c99815bc2ca3f4195b4", null ],
-    [ "ThreadsafeVarVector", "group__ast__vec__type.html#gae8db48bf3f9d9b20f9f82d5b32a5828e", null ],
     [ "ThreadSafeVector", "group__ast__vec__type.html#ga0fec2779dfad9f346a23cf1c6457b2e7", null ],
     [ "UnaryExpressionVector", "group__ast__vec__type.html#gaac23c1368062cf7c85d2b98ac1733fbe", null ],
     [ "UnaryOperatorVector", "group__ast__vec__type.html#ga9da029ff503bc7b7d0cf76d0a5ce7226", null ],

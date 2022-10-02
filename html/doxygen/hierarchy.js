@@ -101,7 +101,6 @@ var hierarchy =
               [ "nmodl::ast::RangeVar", "classnmodl_1_1ast_1_1_range_var.html", null ],
               [ "nmodl::ast::ReactVarName", "classnmodl_1_1ast_1_1_react_var_name.html", null ],
               [ "nmodl::ast::ReadIonVar", "classnmodl_1_1ast_1_1_read_ion_var.html", null ],
-              [ "nmodl::ast::ThreadsafeVar", "classnmodl_1_1ast_1_1_threadsafe_var.html", null ],
               [ "nmodl::ast::VarName", "classnmodl_1_1ast_1_1_var_name.html", null ],
               [ "nmodl::ast::WriteIonVar", "classnmodl_1_1ast_1_1_write_ion_var.html", null ]
             ] ],

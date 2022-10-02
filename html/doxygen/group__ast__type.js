@@ -27,7 +27,6 @@ var group__ast__type =
       [ "POINTER_VAR", "group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a3a3272fa820b01f3d9c1fccea599956e", null ],
       [ "BBCORE_POINTER_VAR", "group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a1da923665ca7bc5d38149986465714f4", null ],
       [ "EXTERN_VAR", "group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033ae67b8164080984e00eed89d8dabf7339", null ],
-      [ "THREADSAFE_VAR", "group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033aa5938e879446ce7577a72e6508daecca", null ],
       [ "PARAM_BLOCK", "group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a2d9c331bacf78cc6848dd60b92ae43f5", null ],
       [ "INDEPENDENT_BLOCK", "group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a9217db46679b03baa861452afa1aa9e1", null ],
       [ "ASSIGNED_BLOCK", "group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a7f85400a8b80c1115bab9ee41b1ddefa", null ],

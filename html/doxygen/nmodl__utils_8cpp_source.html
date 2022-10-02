@@ -309,143 +309,141 @@ $(document).ready(function(){initNavTree('nmodl__utils_8cpp_source.html',''); in
 <div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;        <span class="keywordflow">return</span> Parser::make_LONGDIFUS(token, pos);</div>
 <div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;    <span class="keywordflow">case</span> Token::MODEL:</div>
 <div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;        <span class="keywordflow">return</span> Parser::make_MODEL(token, pos);</div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;    <span class="keywordflow">case</span> Token::MODEL_LEVEL:</div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;        <span class="keywordflow">return</span> Parser::make_MODEL_LEVEL(token, pos);</div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;    <span class="keywordflow">case</span> Token::NETRECEIVE:</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;        <span class="keywordflow">return</span> Parser::make_NETRECEIVE(token, pos);</div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;    <span class="keywordflow">case</span> Token::NEURON:</div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;        <span class="keywordflow">return</span> Parser::make_NEURON(token, pos);</div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;    <span class="keywordflow">case</span> Token::NONLINEAR:</div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;        <span class="keywordflow">return</span> Parser::make_NONLINEAR(token, pos);</div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;    <span class="keywordflow">case</span> Token::NONSPECIFIC:</div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;        <span class="keywordflow">return</span> Parser::make_NONSPECIFIC(token, pos);</div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;    <span class="keywordflow">case</span> Token::NRNMUTEXLOCK:</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;        <span class="keywordflow">return</span> Parser::make_NRNMUTEXLOCK(token, pos);</div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;    <span class="keywordflow">case</span> Token::NRNMUTEXUNLOCK:</div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;        <span class="keywordflow">return</span> Parser::make_NRNMUTEXUNLOCK(token, pos);</div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;    <span class="keywordflow">case</span> Token::PARAMETER:</div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;        <span class="keywordflow">return</span> Parser::make_PARAMETER(token, pos);</div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;    <span class="keywordflow">case</span> Token::POINTER:</div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;        <span class="keywordflow">return</span> Parser::make_POINTER(token, pos);</div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;    <span class="keywordflow">case</span> Token::PROCEDURE:</div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;        <span class="keywordflow">return</span> Parser::make_PROCEDURE(token, pos);</div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;    <span class="keywordflow">case</span> Token::PROTECT:</div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;        <span class="keywordflow">return</span> Parser::make_PROTECT(token, pos);</div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;    <span class="keywordflow">case</span> Token::RANGE:</div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;        <span class="keywordflow">return</span> Parser::make_RANGE(token, pos);</div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;    <span class="keywordflow">case</span> Token::READ:</div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;        <span class="keywordflow">return</span> Parser::make_READ(token, pos);</div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;    <span class="keywordflow">case</span> Token::SOLVE:</div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;        <span class="keywordflow">return</span> Parser::make_SOLVE(token, pos);</div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;    <span class="keywordflow">case</span> Token::SOLVEFOR:</div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;        <span class="keywordflow">return</span> Parser::make_SOLVEFOR(token, pos);</div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;    <span class="keywordflow">case</span> Token::START1:</div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;        <span class="keywordflow">return</span> Parser::make_START1(token, pos);</div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;    <span class="keywordflow">case</span> Token::STATE:</div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;        <span class="keywordflow">return</span> Parser::make_STATE(token, pos);</div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;    <span class="keywordflow">case</span> Token::STEADYSTATE:</div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;        <span class="keywordflow">return</span> Parser::make_STEADYSTATE(token, pos);</div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;    <span class="keywordflow">case</span> Token::STEP:</div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;        <span class="keywordflow">return</span> Parser::make_STEP(token, pos);</div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;    <span class="keywordflow">case</span> Token::SWEEP:</div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;        <span class="keywordflow">return</span> Parser::make_SWEEP(token, pos);</div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;    <span class="keywordflow">case</span> Token::TABLE:</div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;        <span class="keywordflow">return</span> Parser::make_TABLE(token, pos);</div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;    <span class="keywordflow">case</span> Token::THREADSAFE:</div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;        <span class="keywordflow">return</span> Parser::make_THREADSAFE(token, pos);</div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;    <span class="keywordflow">case</span> Token::TO:</div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;        <span class="keywordflow">return</span> Parser::make_TO(token, pos);</div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;    <span class="keywordflow">case</span> Token::UNITS:</div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;        <span class="keywordflow">return</span> Parser::make_UNITS(token, pos);</div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;    <span class="keywordflow">case</span> Token::UNITSOFF:</div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;        <span class="keywordflow">return</span> Parser::make_UNITSOFF(token, pos);</div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;    <span class="keywordflow">case</span> Token::UNITSON:</div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;        <span class="keywordflow">return</span> Parser::make_UNITSON(token, pos);</div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;    <span class="keywordflow">case</span> Token::USEION:</div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;        <span class="keywordflow">return</span> Parser::make_USEION(token, pos);</div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;    <span class="keywordflow">case</span> Token::USING:</div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;        <span class="keywordflow">return</span> Parser::make_USING(token, pos);</div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;    <span class="keywordflow">case</span> Token::VS:</div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;        <span class="keywordflow">return</span> Parser::make_VS(token, pos);</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;    <span class="keywordflow">case</span> Token::WATCH:</div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;        <span class="keywordflow">return</span> Parser::make_WATCH(token, pos);</div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;    <span class="keywordflow">case</span> Token::WHILE:</div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;        <span class="keywordflow">return</span> Parser::make_WHILE(token, pos);</div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;    <span class="keywordflow">case</span> Token::WITH:</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;        <span class="keywordflow">return</span> Parser::make_WITH(token, pos);</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;    <span class="keywordflow">case</span> Token::WRITE:</div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;        <span class="keywordflow">return</span> Parser::make_WRITE(token, pos);</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;    <span class="keywordflow">case</span> Token::REACT1:</div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;        <span class="keywordflow">return</span> Parser::make_REACT1(token, pos);</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;    <span class="keywordflow">case</span> Token::NONLIN1:</div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;        <span class="keywordflow">return</span> Parser::make_NONLIN1(token, pos);</div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;    <span class="keywordflow">case</span> Token::LIN1:</div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;        <span class="keywordflow">return</span> Parser::make_LIN1(token, pos);</div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;    <span class="keywordflow">case</span> Token::REACTION:</div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;        <span class="keywordflow">return</span> Parser::make_REACTION(token, pos);</div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;    <span class="keywordflow">case</span> Token::GT:</div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;        <span class="keywordflow">return</span> Parser::make_GT(token, pos);</div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;    <span class="keywordflow">case</span> Token::GE:</div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;        <span class="keywordflow">return</span> Parser::make_GE(token, pos);</div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;    <span class="keywordflow">case</span> Token::LT:</div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;        <span class="keywordflow">return</span> Parser::make_LT(token, pos);</div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;    <span class="keywordflow">case</span> Token::LE:</div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;        <span class="keywordflow">return</span> Parser::make_LE(token, pos);</div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;    <span class="keywordflow">case</span> Token::EQ:</div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;        <span class="keywordflow">return</span> Parser::make_EQ(token, pos);</div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;    <span class="keywordflow">case</span> Token::NE:</div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;        <span class="keywordflow">return</span> Parser::make_NE(token, pos);</div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;    <span class="keywordflow">case</span> Token::NOT:</div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;        <span class="keywordflow">return</span> Parser::make_NOT(token, pos);</div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;    <span class="keywordflow">case</span> Token::AND:</div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;        <span class="keywordflow">return</span> Parser::make_AND(token, pos);</div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;    <span class="keywordflow">case</span> Token::OR:</div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;        <span class="keywordflow">return</span> Parser::make_OR(token, pos);</div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;    <span class="keywordflow">case</span> Token::OPEN_BRACE:</div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;        <span class="keywordflow">return</span> Parser::make_OPEN_BRACE(token, pos);</div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;    <span class="keywordflow">case</span> Token::CLOSE_BRACE:</div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;        <span class="keywordflow">return</span> Parser::make_CLOSE_BRACE(token, pos);</div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;    <span class="keywordflow">case</span> Token::OPEN_PARENTHESIS:</div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;        <span class="keywordflow">return</span> Parser::make_OPEN_PARENTHESIS(token, pos);</div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;    <span class="keywordflow">case</span> Token::CLOSE_PARENTHESIS:</div>
-<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;        <span class="keywordflow">return</span> Parser::make_CLOSE_PARENTHESIS(token, pos);</div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;    <span class="keywordflow">case</span> Token::OPEN_BRACKET:</div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;        <span class="keywordflow">return</span> Parser::make_OPEN_BRACKET(token, pos);</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;    <span class="keywordflow">case</span> Token::CLOSE_BRACKET:</div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;        <span class="keywordflow">return</span> Parser::make_CLOSE_BRACKET(token, pos);</div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;    <span class="keywordflow">case</span> Token::AT:</div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;        <span class="keywordflow">return</span> Parser::make_AT(token, pos);</div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;    <span class="keywordflow">case</span> Token::ADD:</div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;        <span class="keywordflow">return</span> Parser::make_ADD(token, pos);</div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;    <span class="keywordflow">case</span> Token::MINUS:</div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;        <span class="keywordflow">return</span> Parser::make_MINUS(token, pos);</div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;    <span class="keywordflow">case</span> Token::MULTIPLY:</div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;        <span class="keywordflow">return</span> Parser::make_MULTIPLY(token, pos);</div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;    <span class="keywordflow">case</span> Token::DIVIDE:</div>
-<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;        <span class="keywordflow">return</span> Parser::make_DIVIDE(token, pos);</div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;    <span class="keywordflow">case</span> Token::EQUAL:</div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;        <span class="keywordflow">return</span> Parser::make_EQUAL(token, pos);</div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;    <span class="keywordflow">case</span> Token::CARET:</div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;        <span class="keywordflow">return</span> Parser::make_CARET(token, pos);</div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;    <span class="keywordflow">case</span> Token::COLON:</div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;        <span class="keywordflow">return</span> Parser::make_COLON(token, pos);</div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;    <span class="keywordflow">case</span> Token::COMMA:</div>
-<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;        <span class="keywordflow">return</span> Parser::make_COMMA(token, pos);</div>
-<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;    <span class="keywordflow">case</span> Token::PERIOD:</div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;        <span class="keywordflow">return</span> Parser::make_PERIOD(token, pos);</div>
-<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;    <span class="keywordflow">case</span> Token::REPRESENTS:</div>
-<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;        <span class="keywordflow">return</span> Parser::make_REPRESENTS(token, pos);<span class="comment"></span></div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;<span class="comment">    /**</span></div>
-<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;<span class="comment">     * we hit default case for missing token type. This is more likely</span></div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;<span class="comment">     * a bug in the implementation where we forgot to handle token type.</span></div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;    <span class="keywordflow">default</span>:</div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;        <span class="keyword">auto</span> msg = <span class="stringliteral">&quot;Token type not found while creating a symbol!&quot;</span>;</div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;        <span class="keywordflow">throw</span> std::runtime_error(msg);</div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;    }</div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;}</div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160; </div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;}  <span class="comment">// namespace nmodl</span></div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;    <span class="keywordflow">case</span> Token::NETRECEIVE:</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;        <span class="keywordflow">return</span> Parser::make_NETRECEIVE(token, pos);</div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;    <span class="keywordflow">case</span> Token::NEURON:</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;        <span class="keywordflow">return</span> Parser::make_NEURON(token, pos);</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;    <span class="keywordflow">case</span> Token::NONLINEAR:</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;        <span class="keywordflow">return</span> Parser::make_NONLINEAR(token, pos);</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;    <span class="keywordflow">case</span> Token::NONSPECIFIC:</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;        <span class="keywordflow">return</span> Parser::make_NONSPECIFIC(token, pos);</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;    <span class="keywordflow">case</span> Token::NRNMUTEXLOCK:</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;        <span class="keywordflow">return</span> Parser::make_NRNMUTEXLOCK(token, pos);</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;    <span class="keywordflow">case</span> Token::NRNMUTEXUNLOCK:</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;        <span class="keywordflow">return</span> Parser::make_NRNMUTEXUNLOCK(token, pos);</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;    <span class="keywordflow">case</span> Token::PARAMETER:</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;        <span class="keywordflow">return</span> Parser::make_PARAMETER(token, pos);</div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;    <span class="keywordflow">case</span> Token::POINTER:</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;        <span class="keywordflow">return</span> Parser::make_POINTER(token, pos);</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;    <span class="keywordflow">case</span> Token::PROCEDURE:</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;        <span class="keywordflow">return</span> Parser::make_PROCEDURE(token, pos);</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;    <span class="keywordflow">case</span> Token::PROTECT:</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;        <span class="keywordflow">return</span> Parser::make_PROTECT(token, pos);</div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;    <span class="keywordflow">case</span> Token::RANGE:</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;        <span class="keywordflow">return</span> Parser::make_RANGE(token, pos);</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;    <span class="keywordflow">case</span> Token::READ:</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;        <span class="keywordflow">return</span> Parser::make_READ(token, pos);</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;    <span class="keywordflow">case</span> Token::SOLVE:</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;        <span class="keywordflow">return</span> Parser::make_SOLVE(token, pos);</div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;    <span class="keywordflow">case</span> Token::SOLVEFOR:</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;        <span class="keywordflow">return</span> Parser::make_SOLVEFOR(token, pos);</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;    <span class="keywordflow">case</span> Token::START1:</div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;        <span class="keywordflow">return</span> Parser::make_START1(token, pos);</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;    <span class="keywordflow">case</span> Token::STATE:</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;        <span class="keywordflow">return</span> Parser::make_STATE(token, pos);</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;    <span class="keywordflow">case</span> Token::STEADYSTATE:</div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;        <span class="keywordflow">return</span> Parser::make_STEADYSTATE(token, pos);</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;    <span class="keywordflow">case</span> Token::STEP:</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;        <span class="keywordflow">return</span> Parser::make_STEP(token, pos);</div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;    <span class="keywordflow">case</span> Token::SWEEP:</div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;        <span class="keywordflow">return</span> Parser::make_SWEEP(token, pos);</div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;    <span class="keywordflow">case</span> Token::TABLE:</div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;        <span class="keywordflow">return</span> Parser::make_TABLE(token, pos);</div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;    <span class="keywordflow">case</span> Token::THREADSAFE:</div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;        <span class="keywordflow">return</span> Parser::make_THREADSAFE(token, pos);</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;    <span class="keywordflow">case</span> Token::TO:</div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;        <span class="keywordflow">return</span> Parser::make_TO(token, pos);</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;    <span class="keywordflow">case</span> Token::UNITS:</div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;        <span class="keywordflow">return</span> Parser::make_UNITS(token, pos);</div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;    <span class="keywordflow">case</span> Token::UNITSOFF:</div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;        <span class="keywordflow">return</span> Parser::make_UNITSOFF(token, pos);</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;    <span class="keywordflow">case</span> Token::UNITSON:</div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;        <span class="keywordflow">return</span> Parser::make_UNITSON(token, pos);</div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;    <span class="keywordflow">case</span> Token::USEION:</div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;        <span class="keywordflow">return</span> Parser::make_USEION(token, pos);</div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;    <span class="keywordflow">case</span> Token::USING:</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;        <span class="keywordflow">return</span> Parser::make_USING(token, pos);</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;    <span class="keywordflow">case</span> Token::VS:</div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;        <span class="keywordflow">return</span> Parser::make_VS(token, pos);</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;    <span class="keywordflow">case</span> Token::WATCH:</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;        <span class="keywordflow">return</span> Parser::make_WATCH(token, pos);</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;    <span class="keywordflow">case</span> Token::WHILE:</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;        <span class="keywordflow">return</span> Parser::make_WHILE(token, pos);</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;    <span class="keywordflow">case</span> Token::WITH:</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;        <span class="keywordflow">return</span> Parser::make_WITH(token, pos);</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;    <span class="keywordflow">case</span> Token::WRITE:</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;        <span class="keywordflow">return</span> Parser::make_WRITE(token, pos);</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;    <span class="keywordflow">case</span> Token::REACT1:</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;        <span class="keywordflow">return</span> Parser::make_REACT1(token, pos);</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;    <span class="keywordflow">case</span> Token::NONLIN1:</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;        <span class="keywordflow">return</span> Parser::make_NONLIN1(token, pos);</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;    <span class="keywordflow">case</span> Token::LIN1:</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;        <span class="keywordflow">return</span> Parser::make_LIN1(token, pos);</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;    <span class="keywordflow">case</span> Token::REACTION:</div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;        <span class="keywordflow">return</span> Parser::make_REACTION(token, pos);</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;    <span class="keywordflow">case</span> Token::GT:</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;        <span class="keywordflow">return</span> Parser::make_GT(token, pos);</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;    <span class="keywordflow">case</span> Token::GE:</div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;        <span class="keywordflow">return</span> Parser::make_GE(token, pos);</div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;    <span class="keywordflow">case</span> Token::LT:</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;        <span class="keywordflow">return</span> Parser::make_LT(token, pos);</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;    <span class="keywordflow">case</span> Token::LE:</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;        <span class="keywordflow">return</span> Parser::make_LE(token, pos);</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;    <span class="keywordflow">case</span> Token::EQ:</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;        <span class="keywordflow">return</span> Parser::make_EQ(token, pos);</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;    <span class="keywordflow">case</span> Token::NE:</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;        <span class="keywordflow">return</span> Parser::make_NE(token, pos);</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;    <span class="keywordflow">case</span> Token::NOT:</div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;        <span class="keywordflow">return</span> Parser::make_NOT(token, pos);</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;    <span class="keywordflow">case</span> Token::AND:</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;        <span class="keywordflow">return</span> Parser::make_AND(token, pos);</div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;    <span class="keywordflow">case</span> Token::OR:</div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;        <span class="keywordflow">return</span> Parser::make_OR(token, pos);</div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;    <span class="keywordflow">case</span> Token::OPEN_BRACE:</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;        <span class="keywordflow">return</span> Parser::make_OPEN_BRACE(token, pos);</div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;    <span class="keywordflow">case</span> Token::CLOSE_BRACE:</div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;        <span class="keywordflow">return</span> Parser::make_CLOSE_BRACE(token, pos);</div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;    <span class="keywordflow">case</span> Token::OPEN_PARENTHESIS:</div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;        <span class="keywordflow">return</span> Parser::make_OPEN_PARENTHESIS(token, pos);</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;    <span class="keywordflow">case</span> Token::CLOSE_PARENTHESIS:</div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;        <span class="keywordflow">return</span> Parser::make_CLOSE_PARENTHESIS(token, pos);</div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;    <span class="keywordflow">case</span> Token::OPEN_BRACKET:</div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;        <span class="keywordflow">return</span> Parser::make_OPEN_BRACKET(token, pos);</div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;    <span class="keywordflow">case</span> Token::CLOSE_BRACKET:</div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;        <span class="keywordflow">return</span> Parser::make_CLOSE_BRACKET(token, pos);</div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;    <span class="keywordflow">case</span> Token::AT:</div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;        <span class="keywordflow">return</span> Parser::make_AT(token, pos);</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;    <span class="keywordflow">case</span> Token::ADD:</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;        <span class="keywordflow">return</span> Parser::make_ADD(token, pos);</div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;    <span class="keywordflow">case</span> Token::MINUS:</div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;        <span class="keywordflow">return</span> Parser::make_MINUS(token, pos);</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;    <span class="keywordflow">case</span> Token::MULTIPLY:</div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;        <span class="keywordflow">return</span> Parser::make_MULTIPLY(token, pos);</div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;    <span class="keywordflow">case</span> Token::DIVIDE:</div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;        <span class="keywordflow">return</span> Parser::make_DIVIDE(token, pos);</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;    <span class="keywordflow">case</span> Token::EQUAL:</div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;        <span class="keywordflow">return</span> Parser::make_EQUAL(token, pos);</div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;    <span class="keywordflow">case</span> Token::CARET:</div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;        <span class="keywordflow">return</span> Parser::make_CARET(token, pos);</div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;    <span class="keywordflow">case</span> Token::COLON:</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;        <span class="keywordflow">return</span> Parser::make_COLON(token, pos);</div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;    <span class="keywordflow">case</span> Token::COMMA:</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;        <span class="keywordflow">return</span> Parser::make_COMMA(token, pos);</div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;    <span class="keywordflow">case</span> Token::PERIOD:</div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;        <span class="keywordflow">return</span> Parser::make_PERIOD(token, pos);</div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;    <span class="keywordflow">case</span> Token::REPRESENTS:</div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;        <span class="keywordflow">return</span> Parser::make_REPRESENTS(token, pos);<span class="comment"></span></div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;<span class="comment">    /**</span></div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;<span class="comment">     * we hit default case for missing token type. This is more likely</span></div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;<span class="comment">     * a bug in the implementation where we forgot to handle token type.</span></div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;    <span class="keywordflow">default</span>:</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;        <span class="keyword">auto</span> msg = <span class="stringliteral">&quot;Token type not found while creating a symbol!&quot;</span>;</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;        <span class="keywordflow">throw</span> std::runtime_error(msg);</div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;    }</div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;}</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160; </div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;}  <span class="comment">// namespace nmodl</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="anamespacenmodl_html_ade3f7ab91ca790e74f4d3196de33cc09"><div class="ttname"><a href="namespacenmodl.html#ade3f7ab91ca790e74f4d3196de33cc09">nmodl::string_symbol</a></div><div class="ttdeci">SymbolType string_symbol(const std::string &amp;text, PositionType &amp;pos)</div><div class="ttdoc">Create symbol for ast::String AST class.</div><div class="ttdef"><b>Definition:</b> <a href="nmodl__utils_8cpp_source.html#l00118">nmodl_utils.cpp:118</a></div></div>
@@ -459,10 +457,10 @@ $(document).ready(function(){initNavTree('nmodl__utils_8cpp_source.html',''); in
 <div class="ttc" id="anamespacenmodl_html_a21403ee2d75755a88023abc4ca9bc9a9"><div class="ttname"><a href="namespacenmodl.html#a21403ee2d75755a88023abc4ca9bc9a9">nmodl::SymbolType</a></div><div class="ttdeci">parser::NmodlParser::symbol_type SymbolType</div><div class="ttdef"><b>Definition:</b> <a href="nmodl__utils_8hpp_source.html#l00026">nmodl_utils.hpp:26</a></div></div>
 <div class="ttc" id="anamespacenmodl_html_ae1bae1bfa39b1ff514d3a894b9513eb4"><div class="ttname"><a href="namespacenmodl.html#ae1bae1bfa39b1ff514d3a894b9513eb4">nmodl::integer_symbol</a></div><div class="ttdeci">SymbolType integer_symbol(int value, PositionType &amp;pos, const char *text)</div><div class="ttdoc">Create a symbol for ast::Integer AST.</div><div class="ttdef"><b>Definition:</b> <a href="nmodl__utils_8cpp_source.html#l00052">nmodl_utils.cpp:52</a></div></div>
 <div class="ttc" id="anamespacenmodl_html_add1d0349c5a29bed1dd6bb012345c0e4"><div class="ttname"><a href="namespacenmodl.html#add1d0349c5a29bed1dd6bb012345c0e4">nmodl::PositionType</a></div><div class="ttdeci">parser::location PositionType</div><div class="ttdef"><b>Definition:</b> <a href="nmodl__utils_8hpp_source.html#l00025">nmodl_utils.hpp:25</a></div></div>
-<div class="ttc" id="anamespacenmodl_html_a2d1b1903ca3f4f531b67406da6b62ae6"><div class="ttname"><a href="namespacenmodl.html#a2d1b1903ca3f4f531b67406da6b62ae6">nmodl::is_method</a></div><div class="ttdeci">bool is_method(const std::string &amp;name)</div><div class="ttdoc">Check if given name is an integration method in NMODL.</div><div class="ttdef"><b>Definition:</b> <a href="token__mapping_8cpp_source.html#l00287">token_mapping.cpp:287</a></div></div>
+<div class="ttc" id="anamespacenmodl_html_a2d1b1903ca3f4f531b67406da6b62ae6"><div class="ttname"><a href="namespacenmodl.html#a2d1b1903ca3f4f531b67406da6b62ae6">nmodl::is_method</a></div><div class="ttdeci">bool is_method(const std::string &amp;name)</div><div class="ttdoc">Check if given name is an integration method in NMODL.</div><div class="ttdef"><b>Definition:</b> <a href="token__mapping_8cpp_source.html#l00286">token_mapping.cpp:286</a></div></div>
 <div class="ttc" id="agroup__utils_html_gaa513b048823060be6e9c01f371d6e12c"><div class="ttname"><a href="group__utils.html#gaa513b048823060be6e9c01f371d6e12c">nmodl::stringutils::remove_character</a></div><div class="ttdeci">static void remove_character(std::string &amp;str, const char c)</div><div class="ttdef"><b>Definition:</b> <a href="string__utils_8hpp_source.html#l00055">string_utils.hpp:55</a></div></div>
 <div class="ttc" id="anamespacenmodl_html_afd3bfb775fca5f96fae93f7f4650560d"><div class="ttname"><a href="namespacenmodl.html#afd3bfb775fca5f96fae93f7f4650560d">nmodl::Parser</a></div><div class="ttdeci">parser::NmodlParser Parser</div><div class="ttdef"><b>Definition:</b> <a href="nmodl__utils_8cpp_source.html#l00024">nmodl_utils.cpp:24</a></div></div>
-<div class="ttc" id="anamespacenmodl_html_ab8c6fbb1722584c4990afd054942b365"><div class="ttname"><a href="namespacenmodl.html#ab8c6fbb1722584c4990afd054942b365">nmodl::is_keyword</a></div><div class="ttdeci">bool is_keyword(const std::string &amp;name)</div><div class="ttdoc">Check if given name is a keyword in NMODL.</div><div class="ttdef"><b>Definition:</b> <a href="token__mapping_8cpp_source.html#l00277">token_mapping.cpp:277</a></div></div>
+<div class="ttc" id="anamespacenmodl_html_ab8c6fbb1722584c4990afd054942b365"><div class="ttname"><a href="namespacenmodl.html#ab8c6fbb1722584c4990afd054942b365">nmodl::is_keyword</a></div><div class="ttdeci">bool is_keyword(const std::string &amp;name)</div><div class="ttdoc">Check if given name is a keyword in NMODL.</div><div class="ttdef"><b>Definition:</b> <a href="token__mapping_8cpp_source.html#l00276">token_mapping.cpp:276</a></div></div>
 <div class="ttc" id="anamespacenmodl_1_1symtab_1_1syminfo_html_a9615978047cc9d7b43df2f549f2baffe"><div class="ttname"><a href="namespacenmodl_1_1symtab_1_1syminfo.html#a9615978047cc9d7b43df2f549f2baffe">nmodl::symtab::syminfo::to_string</a></div><div class="ttdeci">std::string to_string(const T &amp;obj)</div><div class="ttdef"><b>Definition:</b> <a href="symbol__properties_8hpp_source.html#l00274">symbol_properties.hpp:274</a></div></div>
 <div class="ttc" id="anmodl__utils_8hpp_html"><div class="ttname"><a href="nmodl__utils_8hpp.html">nmodl_utils.hpp</a></div><div class="ttdoc">Utility functions for NMODL lexer.</div></div>
 <div class="ttc" id="anamespacenmodl_html_ae7ac813a4b0304bdef3c4ab70ec37130"><div class="ttname"><a href="namespacenmodl.html#ae7ac813a4b0304bdef3c4ab70ec37130">nmodl::token_symbol</a></div><div class="ttdeci">SymbolType token_symbol(const std::string &amp;key, PositionType &amp;pos, TokenType type)</div><div class="ttdoc">Create symbol for AST class.</div><div class="ttdef"><b>Definition:</b> <a href="nmodl__utils_8cpp_source.html#l00140">nmodl_utils.cpp:140</a></div></div>
@@ -473,7 +471,7 @@ $(document).ready(function(){initNavTree('nmodl__utils_8cpp_source.html',''); in
 <div class="ttc" id="amodtoken_8hpp_html"><div class="ttname"><a href="modtoken_8hpp.html">modtoken.hpp</a></div></div>
 <div class="ttc" id="anamespacenmodl_html_aa7c0916e51ccaf5779b7db1d1cd9fd8d"><div class="ttname"><a href="namespacenmodl.html#aa7c0916e51ccaf5779b7db1d1cd9fd8d">nmodl::name_symbol</a></div><div class="ttdeci">SymbolType name_symbol(const std::string &amp;text, PositionType &amp;pos, TokenType type)</div><div class="ttdoc">Create symbol for ast::Name AST class.</div><div class="ttdef"><b>Definition:</b> <a href="nmodl__utils_8cpp_source.html#l00080">nmodl_utils.cpp:80</a></div></div>
 <div class="ttc" id="aclassnmodl_1_1ast_1_1_name_html"><div class="ttname"><a href="classnmodl_1_1ast_1_1_name.html">nmodl::ast::Name</a></div><div class="ttdoc">Represents a name.</div><div class="ttdef"><b>Definition:</b> <a href="name_8hpp_source.html#l00047">name.hpp:47</a></div></div>
-<div class="ttc" id="anamespacenmodl_html_a1932dc8f598d068751391d892d439400"><div class="ttname"><a href="namespacenmodl.html#a1932dc8f598d068751391d892d439400">nmodl::token_type</a></div><div class="ttdeci">TokenType token_type(const std::string &amp;name)</div><div class="ttdoc">Return token type for given token name.</div><div class="ttdef"><b>Definition:</b> <a href="token__mapping_8cpp_source.html#l00297">token_mapping.cpp:297</a></div></div>
+<div class="ttc" id="anamespacenmodl_html_a1932dc8f598d068751391d892d439400"><div class="ttname"><a href="namespacenmodl.html#a1932dc8f598d068751391d892d439400">nmodl::token_type</a></div><div class="ttdeci">TokenType token_type(const std::string &amp;name)</div><div class="ttdoc">Return token type for given token name.</div><div class="ttdef"><b>Definition:</b> <a href="token__mapping_8cpp_source.html#l00296">token_mapping.cpp:296</a></div></div>
 <div class="ttc" id="aclassnmodl_1_1ast_1_1_double_html_a7b98d35ab5f62ff41f02ec88b9a61bd2"><div class="ttname"><a href="classnmodl_1_1ast_1_1_double.html#a7b98d35ab5f62ff41f02ec88b9a61bd2">nmodl::ast::Double::set_token</a></div><div class="ttdeci">void set_token(const ModToken &amp;tok)</div><div class="ttdoc">Set token for the current ast node.</div><div class="ttdef"><b>Definition:</b> <a href="double_8hpp_source.html#l00191">double.hpp:191</a></div></div>
 <div class="ttc" id="aclassnmodl_1_1_mod_token_html"><div class="ttname"><a href="classnmodl_1_1_mod_token.html">nmodl::ModToken</a></div><div class="ttdoc">Represent token returned by scanner.</div><div class="ttdef"><b>Definition:</b> <a href="modtoken_8hpp_source.html#l00055">modtoken.hpp:55</a></div></div>
 <div class="ttc" id="aclassnmodl_1_1ast_1_1_string_html"><div class="ttname"><a href="classnmodl_1_1ast_1_1_string.html">nmodl::ast::String</a></div><div class="ttdoc">Represents a string.</div><div class="ttdef"><b>Definition:</b> <a href="string_8hpp_source.html#l00055">string.hpp:55</a></div></div>

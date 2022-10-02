@@ -105,7 +105,6 @@ var classnmodl_1_1visitor_1_1_ast_visitor =
     [ "visit_suffix", "classnmodl_1_1visitor_1_1_ast_visitor.html#aea19973278e2246f253d45bc2f38e991", null ],
     [ "visit_table_statement", "classnmodl_1_1visitor_1_1_ast_visitor.html#a918e225ad636fed4c3823dd9117fbe9f", null ],
     [ "visit_thread_safe", "classnmodl_1_1visitor_1_1_ast_visitor.html#a85c3e08349f626e3e8bcb80bf9db8464", null ],
-    [ "visit_threadsafe_var", "classnmodl_1_1visitor_1_1_ast_visitor.html#aee10e8f18f60edf988e6e859d08334f3", null ],
     [ "visit_unary_expression", "classnmodl_1_1visitor_1_1_ast_visitor.html#a0a7350660eb6b0dfb468e8c19a7b84be", null ],
     [ "visit_unary_operator", "classnmodl_1_1visitor_1_1_ast_visitor.html#abe5dbc32e00d123de756164936e14674", null ],
     [ "visit_unit", "classnmodl_1_1visitor_1_1_ast_visitor.html#afd0701d5e328b83111ef2f9c9225f44b", null ],
