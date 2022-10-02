@@ -10,44 +10,23 @@
 
 #include <CLI/CLI.hpp>
 
-#include "ast/program.hpp"
 #include "codegen/codegen_acc_visitor.hpp"
 #include "codegen/codegen_c_visitor.hpp"
-#include "codegen/codegen_compatibility_visitor.hpp"
 #include "codegen/codegen_cuda_visitor.hpp"
 #include "codegen/codegen_ispc_visitor.hpp"
-#include "codegen/codegen_transform_visitor.hpp"
+#ifdef NMODL_LLVM_BACKEND
+#include "codegen/llvm/codegen_llvm_visitor.hpp"
+#include "test/benchmark/llvm_benchmark.hpp"
+#endif
+
+#include "codegen/codegen_driver.hpp"
 #include "config/config.h"
 #include "parser/nmodl_driver.hpp"
 #include "pybind/pyembed.hpp"
 #include "utils/common_utils.hpp"
 #include "utils/logger.hpp"
-#include "visitors/after_cvode_to_cnexp_visitor.hpp"
-#include "visitors/ast_visitor.hpp"
-#include "visitors/constant_folder_visitor.hpp"
-#include "visitors/global_var_visitor.hpp"
-#include "visitors/implicit_argument_visitor.hpp"
-#include "visitors/indexedname_visitor.hpp"
-#include "visitors/inline_visitor.hpp"
-#include "visitors/ispc_rename_visitor.hpp"
 #include "visitors/json_visitor.hpp"
-#include "visitors/kinetic_block_visitor.hpp"
-#include "visitors/local_to_assigned_visitor.hpp"
-#include "visitors/local_var_rename_visitor.hpp"
-#include "visitors/localize_visitor.hpp"
-#include "visitors/loop_unroll_visitor.hpp"
-#include "visitors/neuron_solve_visitor.hpp"
 #include "visitors/nmodl_visitor.hpp"
-#include "visitors/perf_visitor.hpp"
-#include "visitors/semantic_analysis_visitor.hpp"
-#include "visitors/solve_block_visitor.hpp"
-#include "visitors/steadystate_visitor.hpp"
-#include "visitors/sympy_conductance_visitor.hpp"
-#include "visitors/sympy_solver_visitor.hpp"
-#include "visitors/symtab_visitor.hpp"
-#include "visitors/units_visitor.hpp"
-#include "visitors/verbatim_var_rename_visitor.hpp"
-#include "visitors/verbatim_visitor.hpp"
 
 /**
  * \dir
@@ -70,93 +49,30 @@ int main(int argc, const char* argv[]) {
     /// true if debug logger statements should be shown
     std::string verbose("info");
 
-    /// true if serial c code to be generated
-    bool c_backend(true);
-
-    /// true if ispc code to be generated
-    bool ispc_backend(false);
-
-    /// true if c code with openacc to be generated
-    bool oacc_backend(false);
-
-    /// true if cuda code to be generated
-    bool cuda_backend(false);
-
-    /// true if sympy should be used for solving ODEs analytically
-    bool sympy_analytic(false);
-
-    /// true if Pade approximation to be used
-    bool sympy_pade(false);
-
-    /// true if CSE (temp variables) to be used
-    bool sympy_cse(false);
-
-    /// true if conductance keyword can be added to breakpoint
-    bool sympy_conductance(false);
-
-    /// true if inlining at nmodl level to be done
-    bool nmodl_inline(false);
-
-    /// true if unroll at nmodl level to be done
-    bool nmodl_unroll(false);
-
-    /// true if perform constant folding at nmodl level to be done
-    bool nmodl_const_folding(false);
-
-    /// true if range variables to be converted to local
-    bool nmodl_localize(false);
-
-    /// true if global variables to be converted to range
-    bool nmodl_global_to_range(false);
-
-    /// true if top level local variables to be converted to range
-    bool nmodl_local_to_range(false);
-
-    /// true if localize variables even if verbatim block is used
-    bool localize_verbatim(false);
-
-    /// true if local variables to be renamed
-    bool local_rename(true);
-
-    /// true if inline even if verbatim block exist
-    bool verbatim_inline(false);
-
-    /// true if verbatim blocks
-    bool verbatim_rename(true);
-
-    /// true if code generation is forced to happen even if there
-    /// is any incompatibility
-    bool force_codegen(false);
-
-    /// true if we want to only check compatibility without generating code
-    bool only_check_compatibility(false);
-
-    /// true if ion variable copies should be avoided
-    bool optimize_ionvar_copies_codegen(false);
-
-    /// directory where code will be generated
-    std::string output_dir(".");
-
-    /// directory where intermediate file will be generated
-    std::string scratch_dir("tmp");
-
-    /// directory where units lib file is located
-    std::string units_dir(NrnUnitsLib::get_path());
-
-    /// true if ast should be converted to json
-    bool json_ast(false);
-
-    /// true if ast should be converted to nmodl
-    bool nmodl_ast(false);
-
-    /// true if performance stats should be converted to json
-    bool json_perfstat(false);
-
     /// true if symbol table should be printed
     bool show_symtab(false);
 
     /// floating point data type
     std::string data_type("double");
+
+#ifdef NMODL_LLVM_BACKEND
+    /// run llvm benchmark
+    bool llvm_benchmark(false);
+
+    /// the size of the instance struct for the benchmark
+    int instance_size = 10000;
+
+    /// the number of repeated experiments for the benchmarking
+    int num_experiments = 100;
+
+    /// X dimension of grid in blocks for GPU execution
+    int llvm_cuda_grid_dim_x = 1;
+
+    /// X dimension of block in threads for GPU execution
+    int llvm_cuda_block_dim_x = 1;
+#endif
+
+    CodeGenConfig cfg;
 
     // NOLINTNEXTLINE(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)
     app.get_formatter()->column_width(40);
@@ -172,121 +88,199 @@ int main(int argc, const char* argv[]) {
         ->required()
         ->check(CLI::ExistingFile);
 
-    app.add_option("-o,--output", output_dir, "Directory for backend code output")
+    app.add_option("-o,--output", cfg.output_dir, "Directory for backend code output")
         ->capture_default_str()
         ->ignore_case();
-    app.add_option("--scratch", scratch_dir, "Directory for intermediate code output")
+    app.add_option("--scratch", cfg.scratch_dir, "Directory for intermediate code output")
         ->capture_default_str()
         ->ignore_case();
-    app.add_option("--units", units_dir, "Directory of units lib file")
+    app.add_option("--units", cfg.units_dir, "Directory of units lib file")
         ->capture_default_str()
         ->ignore_case();
 
     auto host_opt = app.add_subcommand("host", "HOST/CPU code backends")->ignore_case();
-    host_opt->add_flag("--c", c_backend, fmt::format("C/C++ backend ({})", c_backend))
+    host_opt->add_flag("--c", cfg.c_backend, fmt::format("C/C++ backend ({})", cfg.c_backend))
         ->ignore_case();
     host_opt
         ->add_flag("--ispc",
-                   ispc_backend,
-                   fmt::format("C/C++ backend with ISPC ({})", ispc_backend))
+                   cfg.ispc_backend,
+                   fmt::format("C/C++ backend with ISPC ({})", cfg.ispc_backend))
         ->ignore_case();
 
     auto acc_opt = app.add_subcommand("acc", "Accelerator code backends")->ignore_case();
     acc_opt
         ->add_flag("--oacc",
-                   oacc_backend,
-                   fmt::format("C/C++ backend with OpenACC ({})", oacc_backend))
+                   cfg.oacc_backend,
+                   fmt::format("C/C++ backend with OpenACC ({})", cfg.oacc_backend))
         ->ignore_case();
     acc_opt
         ->add_flag("--cuda",
-                   cuda_backend,
-                   fmt::format("C/C++ backend with CUDA ({})", cuda_backend))
+                   cfg.cuda_backend,
+                   fmt::format("C/C++ backend with CUDA ({})", cfg.cuda_backend))
         ->ignore_case();
 
     // clang-format off
     auto sympy_opt = app.add_subcommand("sympy", "SymPy based analysis and optimizations")->ignore_case();
     sympy_opt->add_flag("--analytic",
-        sympy_analytic,
-        fmt::format("Solve ODEs using SymPy analytic integration ({})", sympy_analytic))->ignore_case();
+        cfg.sympy_analytic,
+        fmt::format("Solve ODEs using SymPy analytic integration ({})", cfg.sympy_analytic))->ignore_case();
     sympy_opt->add_flag("--pade",
-        sympy_pade,
-        fmt::format("Pade approximation in SymPy analytic integration ({})", sympy_pade))->ignore_case();
+        cfg.sympy_pade,
+        fmt::format("Pade approximation in SymPy analytic integration ({})", cfg.sympy_pade))->ignore_case();
     sympy_opt->add_flag("--cse",
-        sympy_cse,
-        fmt::format("CSE (Common Subexpression Elimination) in SymPy analytic integration ({})", sympy_cse))->ignore_case();
+        cfg.sympy_cse,
+        fmt::format("CSE (Common Subexpression Elimination) in SymPy analytic integration ({})", cfg.sympy_cse))->ignore_case();
     sympy_opt->add_flag("--conductance",
-        sympy_conductance,
-        fmt::format("Add CONDUCTANCE keyword in BREAKPOINT ({})", sympy_conductance))->ignore_case();
+        cfg.sympy_conductance,
+        fmt::format("Add CONDUCTANCE keyword in BREAKPOINT ({})", cfg.sympy_conductance))->ignore_case();
 
     auto passes_opt = app.add_subcommand("passes", "Analyse/Optimization passes")->ignore_case();
     passes_opt->add_flag("--inline",
-        nmodl_inline,
-        fmt::format("Perform inlining at NMODL level ({})", nmodl_inline))->ignore_case();
+        cfg.nmodl_inline,
+        fmt::format("Perform inlining at NMODL level ({})", cfg.nmodl_inline))->ignore_case();
     passes_opt->add_flag("--unroll",
-        nmodl_unroll,
-        fmt::format("Perform loop unroll at NMODL level ({})", nmodl_unroll))->ignore_case();
+        cfg.nmodl_unroll,
+        fmt::format("Perform loop unroll at NMODL level ({})", cfg.nmodl_unroll))->ignore_case();
     passes_opt->add_flag("--const-folding",
-        nmodl_const_folding,
-        fmt::format("Perform constant folding at NMODL level ({})", nmodl_const_folding))->ignore_case();
+        cfg.nmodl_const_folding,
+        fmt::format("Perform constant folding at NMODL level ({})", cfg.nmodl_const_folding))->ignore_case();
     passes_opt->add_flag("--localize",
-        nmodl_localize,
-        fmt::format("Convert RANGE variables to LOCAL ({})", nmodl_localize))->ignore_case();
+        cfg.nmodl_localize,
+        fmt::format("Convert RANGE variables to LOCAL ({})", cfg.nmodl_localize))->ignore_case();
     passes_opt->add_flag("--global-to-range",
-         nmodl_global_to_range,
-         fmt::format("Convert GLOBAL variables to RANGE ({})", nmodl_global_to_range))->ignore_case();
+         cfg.nmodl_global_to_range,
+         fmt::format("Convert GLOBAL variables to RANGE ({})", cfg.nmodl_global_to_range))->ignore_case();
     passes_opt->add_flag("--local-to-range",
-         nmodl_local_to_range,
-         fmt::format("Convert top level LOCAL variables to RANGE ({})", nmodl_local_to_range))->ignore_case();
+         cfg.nmodl_local_to_range,
+         fmt::format("Convert top level LOCAL variables to RANGE ({})", cfg.nmodl_local_to_range))->ignore_case();
     passes_opt->add_flag("--localize-verbatim",
-        localize_verbatim,
-        fmt::format("Convert RANGE variables to LOCAL even if verbatim block exist ({})", localize_verbatim))->ignore_case();
+        cfg.localize_verbatim,
+        fmt::format("Convert RANGE variables to LOCAL even if verbatim block exist ({})", cfg.localize_verbatim))->ignore_case();
     passes_opt->add_flag("--local-rename",
-        local_rename,
-        fmt::format("Rename LOCAL variable if variable of same name exist in global scope ({})", local_rename))->ignore_case();
+        cfg.local_rename,
+        fmt::format("Rename LOCAL variable if variable of same name exist in global scope ({})", cfg.local_rename))->ignore_case();
     passes_opt->add_flag("--verbatim-inline",
-        verbatim_inline,
-        fmt::format("Inline even if verbatim block exist ({})", verbatim_inline))->ignore_case();
+        cfg.verbatim_inline,
+        fmt::format("Inline even if verbatim block exist ({})", cfg.verbatim_inline))->ignore_case();
     passes_opt->add_flag("--verbatim-rename",
-        verbatim_rename,
-        fmt::format("Rename variables in verbatim block ({})", verbatim_rename))->ignore_case();
+        cfg.verbatim_rename,
+        fmt::format("Rename variables in verbatim block ({})", cfg.verbatim_rename))->ignore_case();
     passes_opt->add_flag("--json-ast",
-        json_ast,
-        fmt::format("Write AST to JSON file ({})", json_ast))->ignore_case();
+        cfg.json_ast,
+        fmt::format("Write AST to JSON file ({})", cfg.json_ast))->ignore_case();
     passes_opt->add_flag("--nmodl-ast",
-        nmodl_ast,
-        fmt::format("Write AST to NMODL file ({})", nmodl_ast))->ignore_case();
+        cfg.nmodl_ast,
+        fmt::format("Write AST to NMODL file ({})", cfg.nmodl_ast))->ignore_case();
     passes_opt->add_flag("--json-perf",
-        json_perfstat,
-        fmt::format("Write performance statistics to JSON file ({})", json_perfstat))->ignore_case();
+        cfg.json_perfstat,
+        fmt::format("Write performance statistics to JSON file ({})", cfg.json_perfstat))->ignore_case();
     passes_opt->add_flag("--show-symtab",
         show_symtab,
         fmt::format("Write symbol table to stdout ({})", show_symtab))->ignore_case();
 
     auto codegen_opt = app.add_subcommand("codegen", "Code generation options")->ignore_case();
     codegen_opt->add_option("--datatype",
-        data_type,
+        cfg.data_type,
         "Data type for floating point variables")->capture_default_str()->ignore_case()->check(CLI::IsMember({"float", "double"}));
     codegen_opt->add_flag("--force",
-        force_codegen,
+        cfg.force_codegen,
         "Force code generation even if there is any incompatibility");
     codegen_opt->add_flag("--only-check-compatibility",
-                          only_check_compatibility,
+                          cfg.only_check_compatibility,
                           "Check compatibility and return without generating code");
     codegen_opt->add_flag("--opt-ionvar-copy",
-        optimize_ionvar_copies_codegen,
-        fmt::format("Optimize copies of ion variables ({})", optimize_ionvar_copies_codegen))->ignore_case();
+        cfg.optimize_ionvar_copies_codegen,
+        fmt::format("Optimize copies of ion variables ({})", cfg.optimize_ionvar_copies_codegen))->ignore_case();
 
+#ifdef NMODL_LLVM_BACKEND
+
+    // LLVM IR code generation options.
+    auto llvm_opt = app.add_subcommand("llvm", "LLVM code generation option")->ignore_case();
+    auto llvm_ir_opt = llvm_opt->add_flag("--ir",
+        cfg.llvm_ir,
+        fmt::format("Generate LLVM IR ({})", cfg.llvm_ir))->ignore_case();
+    llvm_ir_opt->required(true);
+    llvm_opt->add_flag("--no-debug",
+        cfg.llvm_no_debug,
+        fmt::format("Disable debug information ({})", cfg.llvm_no_debug))->ignore_case();
+    llvm_opt->add_option("--opt-level-ir",
+        cfg.llvm_opt_level_ir,
+        fmt::format("LLVM IR optimisation level (O{})", cfg.llvm_opt_level_ir))->ignore_case()->check(CLI::IsMember({"0", "1", "2", "3"}));
+    llvm_opt->add_flag("--single-precision",
+        cfg.llvm_float_type,
+        fmt::format("Use single precision floating-point types ({})", cfg.llvm_float_type))->ignore_case();
+    llvm_opt->add_option("--fmf",
+        cfg.llvm_fast_math_flags,
+        "Fast math flags for floating-point optimizations (none)")->check(CLI::IsMember({"afn", "arcp", "contract", "ninf", "nnan", "nsz", "reassoc", "fast"}));
+
+    // Platform options for LLVM code generation.
+    auto cpu_opt = app.add_subcommand("cpu", "LLVM CPU option")->ignore_case();
+    cpu_opt->needs(llvm_opt);
+    cpu_opt->add_option("--name",
+        cfg.llvm_cpu_name,
+        "Name of CPU platform to use")->ignore_case();
+    auto simd_math_library_opt = cpu_opt->add_option("--math-library",
+        cfg.llvm_math_library,
+        fmt::format("Math library for SIMD code generation ({})", cfg.llvm_math_library));
+    simd_math_library_opt->check(CLI::IsMember({"Accelerate", "libmvec", "libsystem_m", "MASSV", "SLEEF", "SVML", "none"}));
+    cpu_opt->add_option("--vector-width",
+        cfg.llvm_vector_width,
+        fmt::format("Explicit vectorization width for IR generation ({})", cfg.llvm_vector_width))->ignore_case();
+
+    auto gpu_opt = app.add_subcommand("gpu", "LLVM GPU option")->ignore_case();
+    gpu_opt->needs(llvm_opt);
+    auto gpu_target_name = gpu_opt->add_option("--name",
+        cfg.llvm_gpu_name,
+        "Name of GPU platform to use")->ignore_case();
+    gpu_target_name->check(CLI::IsMember({"nvptx", "nvptx64"}));
+    gpu_opt->add_option("--target-arch",
+        cfg.llvm_gpu_target_architecture,
+        "Name of target architecture to use")->ignore_case();
+    auto gpu_math_library_opt = gpu_opt->add_option("--math-library",
+        cfg.llvm_math_library,
+        fmt::format("Math library for GPU code generation ({})", cfg.llvm_math_library));
+    gpu_math_library_opt->check(CLI::IsMember({"libdevice"}));
+
+    // Allow only one platform at a time.
+    cpu_opt->excludes(gpu_opt);
+    gpu_opt->excludes(cpu_opt);
+
+    // LLVM IR benchmark options.
+    auto benchmark_opt = app.add_subcommand("benchmark", "LLVM benchmark option")->ignore_case();
+    benchmark_opt->needs(llvm_opt);
+    benchmark_opt->add_flag("--run",
+                            llvm_benchmark,
+                            fmt::format("Run LLVM benchmark ({})", llvm_benchmark))->ignore_case();
+    benchmark_opt->add_option("--opt-level-codegen",
+                              cfg.llvm_opt_level_codegen,
+                              fmt::format("Machine code optimisation level (O{})", cfg.llvm_opt_level_codegen))->ignore_case()->check(CLI::IsMember({"0", "1", "2", "3"}));
+    benchmark_opt->add_option("--libs", cfg.shared_lib_paths, "Shared libraries to link IR against")
+            ->ignore_case()
+            ->check(CLI::ExistingFile);
+    benchmark_opt->add_option("--instance-size",
+                       instance_size,
+                       fmt::format("Instance struct size ({})", instance_size))->ignore_case();
+    benchmark_opt->add_option("--repeat",
+                              num_experiments,
+                              fmt::format("Number of experiments for benchmarking ({})", num_experiments))->ignore_case();
+    benchmark_opt->add_option("--grid-dim-x",
+                              llvm_cuda_grid_dim_x,
+                              fmt::format("Grid dimension X ({})", llvm_cuda_grid_dim_x))->ignore_case();
+    benchmark_opt->add_option("--block-dim-x",
+                                llvm_cuda_block_dim_x,
+                                fmt::format("Block dimension X ({})", llvm_cuda_block_dim_x))->ignore_case();
+#endif
     // clang-format on
 
     CLI11_PARSE(app, argc, argv);
 
     // if any of the other backends is used we force the C backend to be off.
-    if (ispc_backend) {
-        c_backend = false;
+    if (cfg.ispc_backend) {
+        cfg.c_backend = false;
     }
 
-    utils::make_path(output_dir);
-    utils::make_path(scratch_dir);
+    utils::make_path(cfg.output_dir);
+    utils::make_path(cfg.scratch_dir);
 
     if (sympy_opt) {
         nmodl::pybind_wrappers::EmbeddedPythonLoader::get_instance()
@@ -296,13 +290,6 @@ int main(int argc, const char* argv[]) {
 
     logger->set_level(spdlog::level::from_str(verbose));
 
-    /// write ast to nmodl
-    const auto ast_to_nmodl = [nmodl_ast](ast::Program& ast, const std::string& filepath) {
-        if (nmodl_ast) {
-            NmodlPrintVisitor(filepath).visit_program(ast);
-            logger->info("AST to NMODL transformation written to {}", filepath);
-        }
-    };
 
     for (const auto& file: mod_files) {
         logger->info("Processing {}", file);
@@ -310,92 +297,20 @@ int main(int argc, const char* argv[]) {
         const auto modfile = utils::remove_extension(utils::base_name(file));
 
         /// create file path for nmodl file
-        auto filepath = [scratch_dir, modfile](const std::string& suffix) {
+        auto filepath = [cfg, modfile](const std::string& suffix, const std::string& ext) {
             static int count = 0;
             return fmt::format(
-                "{}/{}.{}.{}.mod", scratch_dir, modfile, std::to_string(count++), suffix);
+                "{}/{}.{}.{}.{}", cfg.scratch_dir, modfile, std::to_string(count++), suffix, ext);
         };
 
-        /// driver object creates lexer and parser, just call parser method
-        NmodlDriver driver;
+        /// nmodl_driver object creates lexer and parser, just call parser method
+        NmodlDriver nmodl_driver;
 
         /// parse mod file and construct ast
-        const auto& ast = driver.parse_file(file);
+        const auto& ast = nmodl_driver.parse_file(file);
 
-        /// whether to update existing symbol table or create new
-        /// one whenever we run symtab visitor.
-        bool update_symtab = false;
-
-        /// just visit the ast
-        AstVisitor().visit_program(*ast);
-
-        /// construct symbol table
-        {
-            logger->info("Running symtab visitor");
-            SymtabVisitor(update_symtab).visit_program(*ast);
-        }
-
-        /// Check some rules that ast should follow
-        {
-            logger->info("Running semantic analysis visitor");
-            if (SemanticAnalysisVisitor().check(*ast)) {
-                return 1;
-            }
-        }
-
-        /// use cnexp instead of after_cvode solve method
-        {
-            logger->info("Running CVode to cnexp visitor");
-            AfterCVodeToCnexpVisitor().visit_program(*ast);
-            ast_to_nmodl(*ast, filepath("after_cvode_to_cnexp"));
-        }
-
-        /// Rename variables that match ISPC compiler double constants
-        if (ispc_backend) {
-            logger->info("Running ISPC variables rename visitor");
-            IspcRenameVisitor(ast).visit_program(*ast);
-            SymtabVisitor(update_symtab).visit_program(*ast);
-            ast_to_nmodl(*ast, filepath("ispc_double_rename"));
-        }
-
-        /// GLOBAL to RANGE rename visitor
-        if (nmodl_global_to_range) {
-            // make sure to run perf visitor because code generator
-            // looks for read/write counts const/non-const declaration
-            PerfVisitor().visit_program(*ast);
-            // make sure to run the GlobalToRange visitor after all the
-            // reinitializations of Symtab
-            logger->info("Running GlobalToRange visitor");
-            GlobalToRangeVisitor(*ast).visit_program(*ast);
-            SymtabVisitor(update_symtab).visit_program(*ast);
-            ast_to_nmodl(*ast, filepath("global_to_range"));
-        }
-
-        /// LOCAL to ASSIGNED visitor
-        if (nmodl_local_to_range) {
-            logger->info("Running LOCAL to ASSIGNED visitor");
-            PerfVisitor().visit_program(*ast);
-            LocalToAssignedVisitor().visit_program(*ast);
-            SymtabVisitor(update_symtab).visit_program(*ast);
-            ast_to_nmodl(*ast, filepath("local_to_assigned"));
-        }
-
-        {
-            // Compatibility Checking
-            logger->info("Running code compatibility checker");
-            // run perfvisitor to update read/write counts
-            PerfVisitor().visit_program(*ast);
-
-            // If we want to just check compatibility we return the result
-            if (only_check_compatibility) {
-                return CodegenCompatibilityVisitor().find_unhandled_ast_nodes(*ast);
-            }
-
-            // If there is an incompatible construct and code generation is not forced exit NMODL
-            if (CodegenCompatibilityVisitor().find_unhandled_ast_nodes(*ast) && !force_codegen) {
-                return 1;
-            }
-        }
+        auto cg_driver = CodegenDriver(cfg);
+        auto success = cg_driver.prepare_mod(ast, modfile);
 
         if (show_symtab) {
             logger->info("Printing symbol table");
@@ -403,187 +318,126 @@ int main(int argc, const char* argv[]) {
             symtab->print(std::cout);
         }
 
-        ast_to_nmodl(*ast, filepath("ast"));
-
-        if (json_ast) {
-            std::string file{scratch_dir};
-            file += "/";
-            file += modfile;
-            file += ".ast.json";
-            logger->info("Writing AST into {}", file);
-            JSONVisitor(file).write(*ast);
+        if (cfg.only_check_compatibility) {
+            return !success;
         }
-
-        if (verbatim_rename) {
-            logger->info("Running verbatim rename visitor");
-            VerbatimVarRenameVisitor().visit_program(*ast);
-            ast_to_nmodl(*ast, filepath("verbatim_rename"));
-        }
-
-        if (nmodl_const_folding) {
-            logger->info("Running nmodl constant folding visitor");
-            ConstantFolderVisitor().visit_program(*ast);
-            ast_to_nmodl(*ast, filepath("constfold"));
-        }
-
-        if (nmodl_unroll) {
-            logger->info("Running nmodl loop unroll visitor");
-            LoopUnrollVisitor().visit_program(*ast);
-            ConstantFolderVisitor().visit_program(*ast);
-            ast_to_nmodl(*ast, filepath("unroll"));
-            SymtabVisitor(update_symtab).visit_program(*ast);
-        }
-
-        /// note that we can not symtab visitor in update mode as we
-        /// replace kinetic block with derivative block of same name
-        /// in global scope
-        {
-            logger->info("Running KINETIC block visitor");
-            auto kineticBlockVisitor = KineticBlockVisitor();
-            kineticBlockVisitor.visit_program(*ast);
-            SymtabVisitor(update_symtab).visit_program(*ast);
-            const auto filename = filepath("kinetic");
-            ast_to_nmodl(*ast, filename);
-            if (nmodl_ast && kineticBlockVisitor.get_conserve_statement_count()) {
-                logger->warn(
-                    fmt::format("{} presents non-standard CONSERVE statements in DERIVATIVE "
-                                "blocks. Use it only for debugging/developing",
-                                filename));
-            }
+        if (!success && !cfg.force_codegen) {
+            return 1;
         }
 
         {
-            logger->info("Running STEADYSTATE visitor");
-            SteadystateVisitor().visit_program(*ast);
-            SymtabVisitor(update_symtab).visit_program(*ast);
-            ast_to_nmodl(*ast, filepath("steadystate"));
-        }
-
-        /// Parsing units fron "nrnunits.lib" and mod files
-        {
-            logger->info("Parsing Units");
-            UnitsVisitor(units_dir).visit_program(*ast);
-        }
-
-        /// once we start modifying (especially removing) older constructs
-        /// from ast then we should run symtab visitor in update mode so
-        /// that old symbols (e.g. prime variables) are not lost
-        update_symtab = true;
-
-        if (nmodl_inline) {
-            logger->info("Running nmodl inline visitor");
-            InlineVisitor().visit_program(*ast);
-            ast_to_nmodl(*ast, filepath("inline"));
-        }
-
-        if (local_rename) {
-            logger->info("Running local variable rename visitor");
-            LocalVarRenameVisitor().visit_program(*ast);
-            SymtabVisitor(update_symtab).visit_program(*ast);
-            ast_to_nmodl(*ast, filepath("local_rename"));
-        }
-
-        if (nmodl_localize) {
-            // localize pass must follow rename pass to avoid conflict
-            logger->info("Running localize visitor");
-            LocalizeVisitor(localize_verbatim).visit_program(*ast);
-            LocalVarRenameVisitor().visit_program(*ast);
-            SymtabVisitor(update_symtab).visit_program(*ast);
-            ast_to_nmodl(*ast, filepath("localize"));
-        }
-
-        if (sympy_conductance) {
-            logger->info("Running sympy conductance visitor");
-            SympyConductanceVisitor().visit_program(*ast);
-            SymtabVisitor(update_symtab).visit_program(*ast);
-            ast_to_nmodl(*ast, filepath("sympy_conductance"));
-        }
-
-        if (sympy_analytic || sparse_solver_exists(*ast)) {
-            if (!sympy_analytic) {
-                logger->info(
-                    "Automatically enable sympy_analytic because it exists solver of type sparse");
-            }
-            logger->info("Running sympy solve visitor");
-            SympySolverVisitor(sympy_pade, sympy_cse).visit_program(*ast);
-            SymtabVisitor(update_symtab).visit_program(*ast);
-            ast_to_nmodl(*ast, filepath("sympy_solve"));
-        }
-
-        {
-            logger->info("Running cnexp visitor");
-            NeuronSolveVisitor().visit_program(*ast);
-            ast_to_nmodl(*ast, filepath("cnexp"));
-        }
-
-        {
-            SolveBlockVisitor().visit_program(*ast);
-            SymtabVisitor(update_symtab).visit_program(*ast);
-            ast_to_nmodl(*ast, filepath("solveblock"));
-        }
-
-        if (json_perfstat) {
-            std::string file{scratch_dir};
-            file.append("/");
-            file.append(modfile);
-            file.append(".perf.json");
-            logger->info("Writing performance statistics to {}", file);
-            PerfVisitor(file).visit_program(*ast);
-        }
-
-        // Add implicit arguments (like celsius, nt) to NEURON functions (like
-        // nrn_ghk, at_time) whose signatures we have to massage.
-        ImplicitArgumentVisitor{}.visit_program(*ast);
-        SymtabVisitor(update_symtab).visit_program(*ast);
-
-        {
-            // make sure to run perf visitor because code generator
-            // looks for read/write counts const/non-const declaration
-            PerfVisitor().visit_program(*ast);
-        }
-
-        {
-            CodegenTransformVisitor{}.visit_program(*ast);
-            ast_to_nmodl(*ast, filepath("TransformVisitor"));
-            SymtabVisitor(update_symtab).visit_program(*ast);
-        }
-
-        {
-            if (ispc_backend) {
+            if (cfg.ispc_backend) {
                 logger->info("Running ISPC backend code generator");
                 CodegenIspcVisitor visitor(modfile,
-                                           output_dir,
+                                           cfg.output_dir,
                                            data_type,
-                                           optimize_ionvar_copies_codegen);
+                                           cfg.optimize_ionvar_copies_codegen);
                 visitor.visit_program(*ast);
             }
 
-            else if (oacc_backend) {
+            else if (cfg.oacc_backend) {
                 logger->info("Running OpenACC backend code generator");
                 CodegenAccVisitor visitor(modfile,
-                                          output_dir,
+                                          cfg.output_dir,
                                           data_type,
-                                          optimize_ionvar_copies_codegen);
+                                          cfg.optimize_ionvar_copies_codegen);
                 visitor.visit_program(*ast);
             }
 
-            else if (c_backend) {
+            else if (cfg.c_backend) {
                 logger->info("Running C backend code generator");
                 CodegenCVisitor visitor(modfile,
-                                        output_dir,
+                                        cfg.output_dir,
                                         data_type,
-                                        optimize_ionvar_copies_codegen);
+                                        cfg.optimize_ionvar_copies_codegen);
                 visitor.visit_program(*ast);
             }
 
-            if (cuda_backend) {
+            if (cfg.cuda_backend) {
                 logger->info("Running CUDA backend code generator");
                 CodegenCudaVisitor visitor(modfile,
-                                           output_dir,
+                                           cfg.output_dir,
                                            data_type,
-                                           optimize_ionvar_copies_codegen);
+                                           cfg.optimize_ionvar_copies_codegen);
                 visitor.visit_program(*ast);
             }
+
+#ifdef NMODL_LLVM_BACKEND
+            if (cfg.llvm_ir || llvm_benchmark) {
+                // If benchmarking, we want to optimize the IR with target
+                // information and not in LLVM visitor.
+                int llvm_opt_level = llvm_benchmark ? 0 : cfg.llvm_opt_level_ir;
+
+                // If benchmarking, kernel functions should be wrapped taking void*.
+                bool wrap_kernel_functions = llvm_benchmark;
+
+                // Create platform abstraction.
+                PlatformID pid = cfg.llvm_gpu_name == "default" ? PlatformID::CPU : PlatformID::GPU;
+                const std::string name = cfg.llvm_gpu_name == "default" ? cfg.llvm_cpu_name
+                                                                        : cfg.llvm_gpu_name;
+                Platform platform(pid,
+                                  name,
+                                  cfg.llvm_gpu_target_architecture,
+                                  cfg.llvm_math_library,
+                                  cfg.llvm_float_type,
+                                  cfg.llvm_vector_width);
+
+                // GPU code generation doesn't support debug information at the moment so disable it
+                // in case it's enabled
+                if (!cfg.llvm_no_debug && platform.is_gpu()) {
+                    logger->warn("Disabling addition of debug symbols in GPU code.");
+                    cfg.llvm_no_debug = true;
+                }
+
+                logger->info("Running LLVM backend code generator");
+                CodegenLLVMVisitor visitor(modfile,
+                                           cfg.output_dir,
+                                           platform,
+                                           llvm_opt_level,
+                                           !cfg.llvm_no_debug,
+                                           cfg.llvm_fast_math_flags,
+                                           wrap_kernel_functions);
+                visitor.visit_program(*ast);
+                if (cfg.nmodl_ast) {
+                    NmodlPrintVisitor(filepath("llvm", "mod")).visit_program(*ast);
+                    logger->info("AST to NMODL transformation written to {}",
+                                 filepath("llvm", "mod"));
+                }
+                if (cfg.json_ast) {
+                    JSONVisitor(filepath("llvm", "json")).write(*ast);
+                    logger->info("AST to JSON transformation written to {}",
+                                 filepath("llvm", "json"));
+                }
+
+                if (llvm_benchmark) {
+                    logger->info("Running LLVM benchmark");
+                    if (platform.is_gpu() && !platform.is_CUDA_gpu()) {
+                        throw std::runtime_error(
+                            "Benchmarking is only supported on CUDA GPUs at the moment");
+                    }
+#ifndef NMODL_LLVM_CUDA_BACKEND
+                    if (platform.is_CUDA_gpu()) {
+                        throw std::runtime_error(
+                            "GPU benchmarking is not supported if NMODL is not built with CUDA "
+                            "backend enabled.");
+                    }
+#endif
+                    const GPUExecutionParameters gpu_execution_parameters{llvm_cuda_grid_dim_x,
+                                                                          llvm_cuda_block_dim_x};
+                    benchmark::LLVMBenchmark benchmark(visitor,
+                                                       modfile,
+                                                       cfg.output_dir,
+                                                       cfg.shared_lib_paths,
+                                                       num_experiments,
+                                                       instance_size,
+                                                       platform,
+                                                       cfg.llvm_opt_level_ir,
+                                                       cfg.llvm_opt_level_codegen,
+                                                       gpu_execution_parameters);
+                    benchmark.run();
+                }
+            }
+#endif
         }
     }
 

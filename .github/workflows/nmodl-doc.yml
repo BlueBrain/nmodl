@@ -17,7 +17,7 @@ on:
 env:
   BUILD_TYPE: Release
   PYTHON_VERSION: 3.8
-  DESIRED_CMAKE_VERSION: 3.15.0
+  DESIRED_CMAKE_VERSION: 3.17.0
 
 jobs:
   ci:

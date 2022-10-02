@@ -71,6 +71,11 @@ add_executable(
 
 target_link_libraries(testmodtoken lexer util)
 target_link_libraries(testlexer lexer util)
+target_link_libraries(testprinter printer util)
+target_link_libraries(testsymtab symtab lexer util)
+target_link_libraries(testunitlexer lexer util)
+target_link_libraries(testunitparser lexer test_util config)
+
 target_link_libraries(
   testparser
   visitor
@@ -80,6 +85,7 @@ target_link_libraries(
   test_util
   printer
   ${NMODL_WRAPPER_LIBS})
+
 target_link_libraries(
   testvisitor
   visitor
@@ -89,6 +95,7 @@ target_link_libraries(
   test_util
   printer
   ${NMODL_WRAPPER_LIBS})
+
 target_link_libraries(
   testcodegen
   codegen
@@ -99,10 +106,53 @@ target_link_libraries(
   test_util
   printer
   ${NMODL_WRAPPER_LIBS})
-target_link_libraries(testprinter printer util)
-target_link_libraries(testsymtab symtab lexer util)
-target_link_libraries(testunitlexer lexer util)
-target_link_libraries(testunitparser lexer test_util config)
+
+if(NMODL_ENABLE_LLVM)
+  include_directories(${LLVM_INCLUDE_DIRS} codegen)
+
+  add_library(benchmark_data STATIC codegen/codegen_data_helper.cpp)
+  add_dependencies(benchmark_data lexer)
+  target_link_libraries(benchmark_data PRIVATE util)
+
+  add_executable(
+    testllvm visitor/main.cpp codegen/codegen_llvm_ir.cpp codegen/codegen_data_helper.cpp
+             codegen/codegen_llvm_instance_struct.cpp codegen/codegen_llvm_visitor.cpp)
+  add_executable(test_llvm_runner visitor/main.cpp codegen/codegen_data_helper.cpp
+                                  codegen/codegen_llvm_execution.cpp)
+  if(NMODL_ENABLE_LLVM_CUDA)
+    target_link_libraries(benchmark_data PRIVATE CUDA::cudart)
+    target_link_libraries(testllvm CUDA::cudart)
+    target_link_libraries(test_llvm_runner CUDA::cudart)
+  endif()
+  target_link_libraries(
+    testllvm
+    Catch2::Catch2
+    llvm_codegen
+    codegen
+    visitor
+    symtab
+    lexer
+    util
+    test_util
+    printer
+    ${NMODL_WRAPPER_LIBS}
+    ${LLVM_LIBS_TO_LINK})
+  target_link_libraries(
+    test_llvm_runner
+    Catch2::Catch2
+    llvm_codegen
+    llvm_benchmark
+    codegen
+    visitor
+    symtab
+    lexer
+    util
+    test_util
+    printer
+    ${NMODL_WRAPPER_LIBS}
+    ${LLVM_LIBS_TO_LINK})
+  set(CODEGEN_TEST "testllvm;test_llvm_runner")
+endif()
 
 # =============================================================================
 # Use catch_discover instead of add_test for granular test result reporting.
@@ -127,7 +177,8 @@ foreach(
   testnewton
   testfast_math
   testunitlexer
-  testunitparser)
+  testunitparser
+  ${CODEGEN_TEST})
 
   target_link_libraries(${test_name} Catch2::Catch2)
   cpp_cc_configure_sanitizers(TARGET ${test_name})

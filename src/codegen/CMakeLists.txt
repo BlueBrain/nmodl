@@ -11,15 +11,31 @@ add_library(
   codegen_helper_visitor.cpp
   codegen_info.cpp
   codegen_ispc_visitor.cpp
-  codegen_utils.cpp)
+  codegen_utils.cpp
+  codegen_driver.cpp)
 add_dependencies(codegen lexer util visitor)
 target_link_libraries(codegen PRIVATE util)
+
+# ~~~
+# pybind11::embed adds PYTHON_LIBRARIES to target_link_libraries. To avoid link to
+# libpython, we can use `pybind11::module` interface library from pybind11.
+# ~~~
+if(NOT LINK_AGAINST_PYTHON)
+  target_link_libraries(codegen PRIVATE pybind11::module)
+else()
+  target_link_libraries(codegen PRIVATE pybind11::embed)
+endif()
 
 # copy to build directory to make usable from build directory
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/fast_math.ispc
                ${CMAKE_BINARY_DIR}/include/nmodl/fast_math.ispc COPYONLY)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/fast_math.hpp
                ${CMAKE_BINARY_DIR}/include/nmodl/fast_math.hpp COPYONLY)
+
+# build llvm visitor if enabled
+if(NMODL_ENABLE_LLVM)
+  add_subdirectory(llvm)
+endif()
 
 # =============================================================================
 # Install include files

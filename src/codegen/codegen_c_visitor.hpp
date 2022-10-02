@@ -47,46 +47,6 @@ namespace codegen {
  */
 
 /**
- * \enum BlockType
- * \brief Helper to represent various block types
- *
- * Note: do not assign integers to these enums
- *
- */
-enum BlockType {
-    /// initial block
-    Initial,
-
-    /// constructor block
-    Constructor,
-
-    /// destructor block
-    Destructor,
-
-    /// breakpoint block
-    Equation,
-
-    /// ode_* routines block (not used)
-    Ode,
-
-    /// derivative block
-    State,
-
-    /// watch block
-    Watch,
-
-    /// net_receive block
-    NetReceive,
-
-    /// before / after block
-    BeforeAfter,
-
-    /// fake ending block type for loops on the enums. Keep it at the end
-    BlockTypeEnd
-};
-
-
-/**
  * \enum MemberType
  * \brief Helper to represent various variables types
  *
@@ -103,57 +63,6 @@ enum class MemberType {
 
     /// thread variables
     thread
-};
-
-
-/**
- * \class IndexVariableInfo
- * \brief Helper to represent information about index/int variables
- *
- */
-struct IndexVariableInfo {
-    /// symbol for the variable
-    const std::shared_ptr<symtab::Symbol> symbol;
-
-    /// if variable reside in vdata field of NrnThread
-    /// typically true for bbcore pointer
-    bool is_vdata = false;
-
-    /// if this is pure index (e.g. style_ion) variables is directly
-    /// index and shouldn't be printed with data/vdata
-    bool is_index = false;
-
-    /// if this is an integer (e.g. tqitem, point_process) variable which
-    /// is printed as array accesses
-    bool is_integer = false;
-
-    /// if the variable is qualified as constant (this is property of IndexVariable)
-    bool is_constant = false;
-
-    IndexVariableInfo(std::shared_ptr<symtab::Symbol> symbol,
-                      bool is_vdata = false,
-                      bool is_index = false,
-                      bool is_integer = false)
-        : symbol(std::move(symbol))
-        , is_vdata(is_vdata)
-        , is_index(is_index)
-        , is_integer(is_integer) {}
-};
-
-
-/**
- * \class ShadowUseStatement
- * \brief Represents ion write statement during code generation
- *
- * Ion update statement needs use of shadow vectors for certain backends
- * as atomics operations are not supported on cpu backend.
- *
- * \todo If shadow_lhs is empty then we assume shadow statement not required
- */
-struct ShadowUseStatement {
-    std::string lhs;
-    std::string op;
-    std::string rhs;
 };
 
 /** @} */  // end of codegen_details
@@ -220,11 +129,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
     symtab::SymbolTable* program_symtab = nullptr;
 
     /**
-     * All float variables for the model
-     */
-    std::vector<SymbolType> codegen_float_variables;
-
-    /**
      * All int variables for the model
      */
     std::vector<IndexVariableInfo> codegen_int_variables;
@@ -259,6 +163,11 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * Index of watch statement being printed
      */
     int current_watch_statement = 0;
+
+    /**
+     * Bool to select whether procedures and functions should be printed in the generated file
+     */
+    bool print_procedures_and_functions = true;
 
     /**
      * Data type of floating point variables
@@ -309,23 +218,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
         return "\"" + text + "\"";
     }
 
-
-    /**
-     * Operator for rhs vector update (matrix update)
-     */
-    std::string operator_for_rhs() const noexcept {
-        return info.electrode_current ? "+=" : "-=";
-    }
-
-
-    /**
-     * Operator for diagonal vector update (matrix update)
-     */
-    std::string operator_for_d() const noexcept {
-        return info.electrode_current ? "-=" : "+=";
-    }
-
-
     /**
      * Data type for the local variables
      */
@@ -357,6 +249,10 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
         return codegen::naming::DEFAULT_INTEGER_TYPE;
     }
 
+    /**
+     * Instance Struct type name suffix
+     */
+    std::string instance_struct_type_suffix = "Instance";
 
     /**
      * Checks if given function name is \c net_send
@@ -390,7 +286,7 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * Name of structure that wraps range variables
      */
     std::string instance_struct() const {
-        return fmt::format("{}_Instance", info.mod_suffix);
+        return fmt::format("{}_{}", info.mod_suffix, instance_struct_type_suffix);
     }
 
 
@@ -421,26 +317,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
-     * Constructs a shadow variable name
-     * \param name The name of the variable
-     * \return     The name of the variable prefixed with \c shadow_
-     */
-    std::string shadow_varname(const std::string& name) const {
-        return "shadow_" + name;
-    }
-
-
-    /**
-     * Creates a temporary symbol
-     * \param name The name of the symbol
-     * \return     A symbol based on the given name
-     */
-    SymbolType make_symbol(const std::string& name) const {
-        return std::make_shared<symtab::Symbol>(name, ModToken());
-    }
-
-
-    /**
      * Checks if the given variable name belongs to a state variable
      * \param name The variable name
      * \return     \c true if the variable is a state variable
@@ -449,52 +325,10 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
-     * Check if net receive/send buffering kernels required
-     */
-    bool net_receive_buffering_required() const noexcept;
-
-
-    /**
-     * Check if nrn_state function is required
-     */
-    bool nrn_state_required() const noexcept;
-
-
-    /**
-     * Check if nrn_cur function is required
-     */
-    bool nrn_cur_required() const noexcept;
-
-
-    /**
-     * Check if net_receive function is required
-     */
-    bool net_receive_required() const noexcept;
-
-
-    /**
-     * Check if net_send_buffer is required
-     */
-    bool net_send_buffer_required() const noexcept;
-
-
-    /**
      * Check if setup_range_variable function is required
      * \return
      */
     bool range_variable_setup_required() const noexcept;
-
-
-    /**
-     * Check if net_receive node exist
-     */
-    bool net_receive_exist() const noexcept;
-
-
-    /**
-     * Check if breakpoint node exist
-     */
-    bool breakpoint_exist() const noexcept;
 
 
     /**
@@ -662,27 +496,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * populate all index semantics needed for registration with coreneuron
      */
     void update_index_semantics();
-
-
-    /**
-     * Determine all \c float variables required during code generation
-     * \return A \c vector of \c float variables
-     */
-    std::vector<SymbolType> get_float_variables();
-
-
-    /**
-     * Determine all \c int variables required during code generation
-     * \return A \c vector of \c int variables
-     */
-    std::vector<IndexVariableInfo> get_int_variables();
-
-
-    /**
-     * Determine all ion write variables that require shadow vectors during code generation
-     * \return A \c vector of ion variables
-     */
-    std::vector<SymbolType> get_shadow_variables();
 
 
     /**
@@ -1263,6 +1076,18 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
+     * Print the for loop statement going through all the mechanism instances
+     */
+    void print_channel_iteration_loop(const std::string& start, const std::string& end);
+
+
+    /**
+     * Print backend compute routines declaration for various backends
+     */
+    virtual void print_backend_compute_routine_decl();
+
+
+    /**
      * Print block start for tiling on channel iteration
      */
     virtual void print_channel_iteration_tiling_block_begin(BlockType type);
@@ -1791,19 +1616,19 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * \param skip_init_check \c true if we want the generated code to execute the initialization
      *                        conditionally
      */
-    void print_nrn_init(bool skip_init_check = true);
+    virtual void print_nrn_init(bool skip_init_check = true);
 
 
     /**
      * Print nrn_state / state update function definition
      */
-    void print_nrn_state();
+    virtual void print_nrn_state();
 
 
     /**
      * Print nrn_cur / current update function definition
      */
-    void print_nrn_cur();
+    virtual void print_nrn_cur();
 
     /**
      * Print fast membrane current calculation code
@@ -1895,12 +1720,12 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * @param print_initialisers Whether or not default values for variables
      *                           be included in the struct declaration.
      */
-    void print_mechanism_range_var_structure(bool print_initialisers);
+    virtual void print_mechanism_range_var_structure(bool print_initialisers);
 
     /**
      * Print the function that initialize instance structure
      */
-    void print_instance_variable_setup();
+    virtual void print_instance_variable_setup();
 
     void visit_binary_expression(const ast::BinaryExpression& node) override;
     void visit_binary_operator(const ast::BinaryOperator& node) override;

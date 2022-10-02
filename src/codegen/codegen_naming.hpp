@@ -80,6 +80,9 @@ static constexpr char VOLTAGE_UNUSED_VARIABLE[] = "v_unused";
 /// variable t indicating last execution time of net receive block
 static constexpr char T_SAVE_VARIABLE[] = "tsave";
 
+/// global variable second_order
+static constexpr char SECOND_ORDER_VARIABLE[] = "secondorder";
+
 /// shadow rhs variable in neuron thread structure
 static constexpr char NTHREAD_RHS_SHADOW[] = "_shadow_rhs";
 
@@ -91,6 +94,12 @@ static constexpr char CELSIUS_VARIABLE[] = "celsius";
 
 /// instance struct member pointing to the global variable structure
 static constexpr char INST_GLOBAL_MEMBER[] = "global";
+
+/// rhs variable in neuron thread structure
+static constexpr char NTHREAD_RHS[] = "vec_rhs";
+
+/// d variable in neuron thread structure
+static constexpr char NTHREAD_D[] = "vec_d";
 
 /// t variable in neuron thread structure
 static constexpr char NTHREAD_T_VARIABLE[] = "t";
@@ -164,6 +173,12 @@ static constexpr char THREAD_ARGS_PROTO[] = "_threadargsproto_";
 /// prefix for ion variable
 static constexpr char ION_VARNAME_PREFIX[] = "ion_";
 
+/// name of the mechanism instance parameter in LLVM IR
+static constexpr char MECH_INSTANCE_VAR[] = "mech";
+static constexpr char MECH_NODECOUNT_VAR[] = "node_count";
+
+/// name of induction variable used in the kernel.
+static constexpr char INDUCTION_VAR[] = "id";
 
 /// commonly used variables in verbatim block and how they
 /// should be mapped to new code generation backends

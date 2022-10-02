@@ -5,7 +5,7 @@
 # See top-level LICENSE file for details.
 # =============================================================================
 
-cmake_minimum_required(VERSION 3.15 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.17 FATAL_ERROR)
 
 project(NMODL LANGUAGES CXX)
 
@@ -22,6 +22,11 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
 # =============================================================================
 option(NMODL_ENABLE_PYTHON_BINDINGS "Enable pybind11 based python bindings" ON)
 option(NMODL_ENABLE_LEGACY_UNITS "Use original faraday, R, etc. instead of 2019 nist constants" OFF)
+option(NMODL_ENABLE_LLVM "Enable LLVM based code generation" OFF)
+option(NMODL_ENABLE_LLVM_GPU "Enable LLVM based GPU code generation" OFF)
+option(NMODL_ENABLE_LLVM_CUDA "Enable LLVM CUDA backend to run GPU benchmark" OFF)
+option(NMODL_ENABLE_JIT_EVENT_LISTENERS "Enable JITEventListener for Perf and Vtune" OFF)
+
 if(NMODL_ENABLE_LEGACY_UNITS)
   add_definitions(-DUSE_LEGACY_UNITS)
 endif()
@@ -175,6 +180,21 @@ cpp_cc_find_python_module(textwrap 0.9 REQUIRED)
 cpp_cc_find_python_module(yaml 3.12 REQUIRED)
 
 # =============================================================================
+# Find LLVM dependencies
+# =============================================================================
+if(NMODL_ENABLE_LLVM)
+  include(cmake/LLVMHelper.cmake)
+  include_directories(${LLVM_INCLUDE_DIRS})
+  add_definitions(-DNMODL_LLVM_BACKEND)
+  if(NMODL_ENABLE_LLVM_CUDA)
+    enable_language(CUDA)
+    find_package(CUDAToolkit)
+    include_directories(${CUDAToolkit_INCLUDE_DIRS})
+    add_definitions(-DNMODL_LLVM_CUDA_BACKEND)
+  endif()
+endif()
+
+# =============================================================================
 # Compiler specific flags for external submodules
 # =============================================================================
 if(NMODL_PGI_COMPILER)
@@ -207,6 +227,9 @@ set(MEMORYCHECK_COMMAND_OPTIONS
 # do not enable tests if nmodl is used as submodule
 if(NOT NMODL_AS_SUBPROJECT)
   include(CTest)
+  if(NMODL_ENABLE_LLVM)
+    add_subdirectory(test/benchmark)
+  endif()
   add_subdirectory(test/unit)
   add_subdirectory(test/integration)
 endif()
@@ -271,6 +294,19 @@ message(STATUS "Python Bindings     | ${NMODL_ENABLE_PYTHON_BINDINGS}")
 message(STATUS "Flex                | ${FLEX_EXECUTABLE}")
 message(STATUS "Bison               | ${BISON_EXECUTABLE}")
 message(STATUS "Python              | ${PYTHON_EXECUTABLE}")
+message(STATUS "LLVM Codegen        | ${NMODL_ENABLE_LLVM}")
+if(NMODL_ENABLE_LLVM)
+  message(STATUS "  VERSION           | ${LLVM_PACKAGE_VERSION}")
+  message(STATUS "  INCLUDE           | ${LLVM_INCLUDE_DIRS}")
+  message(STATUS "  CMAKE             | ${LLVM_CMAKE_DIR}")
+  message(STATUS "  JIT LISTENERS     | ${NMODL_ENABLE_JIT_EVENT_LISTENERS}")
+endif()
+message(STATUS "LLVM CUDA Codegen   | ${NMODL_ENABLE_LLVM_CUDA}")
+if(NMODL_ENABLE_LLVM_CUDA)
+  message(STATUS "  CUDA VERSION      | ${CUDAToolkit_VERSION}")
+  message(STATUS "  INCLUDE           | ${CUDAToolkit_INCLUDE_DIRS}")
+  message(STATUS "  LIBRARY           | ${CUDAToolkit_LIBRARY_DIR}")
+endif()
 message(STATUS "--------------+--------------------------------------------------------------")
 message(STATUS " See documentation : https://github.com/BlueBrain/nmodl/")
 message(STATUS "--------------+--------------------------------------------------------------")

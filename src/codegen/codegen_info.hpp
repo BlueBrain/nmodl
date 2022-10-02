@@ -16,10 +16,61 @@
 #include <unordered_set>
 
 #include "ast/ast.hpp"
+#include "codegen/codegen_naming.hpp"
 #include "symtab/symbol_table.hpp"
 
 namespace nmodl {
 namespace codegen {
+
+using SymbolType = std::shared_ptr<symtab::Symbol>;
+
+/**
+ * Creates a temporary symbol
+ * \param name The name of the symbol
+ * \return     A symbol based on the given name
+ */
+SymbolType make_symbol(const std::string& name);
+
+/**
+ * Constructs a shadow variable name
+ * \param name The name of the variable
+ * \return     The name of the variable prefixed with \c shadow_
+ */
+std::string shadow_varname(const std::string& name);
+
+/**
+ * \class IndexVariableInfo
+ * \brief Helper to represent information about index/int variables
+ *
+ */
+struct IndexVariableInfo {
+    /// symbol for the variable
+    const std::shared_ptr<symtab::Symbol> symbol;
+
+    /// if variable reside in vdata field of NrnThread
+    /// typically true for bbcore pointer
+    bool is_vdata = false;
+
+    /// if this is pure index (e.g. style_ion) variables is directly
+    /// index and shouldn't be printed with data/vdata
+    bool is_index = false;
+
+    /// if this is an integer (e.g. tqitem, point_process) variable which
+    /// is printed as array accesses
+    bool is_integer = false;
+
+    /// if the variable is qualified as constant (this is property of IndexVariable)
+    bool is_constant = false;
+
+    IndexVariableInfo(std::shared_ptr<symtab::Symbol> symbol,
+                      bool is_vdata = false,
+                      bool is_index = false,
+                      bool is_integer = false)
+        : symbol(std::move(symbol))
+        , is_vdata(is_vdata)
+        , is_index(is_index)
+        , is_integer(is_integer) {}
+};
 
 /**
  * @addtogroup codegen_details
@@ -134,6 +185,66 @@ struct IndexSemantics {
         , size(size) {}
 };
 
+/**
+ * \enum BlockType
+ * \brief Helper to represent various block types
+ *
+ * Note: do not assign integers to these enums
+ *
+ */
+enum BlockType {
+    /// initial block
+    Initial,
+
+    /// constructor block
+    Constructor,
+
+    /// destructor block
+    Destructor,
+
+    /// breakpoint block
+    Equation,
+
+    /// ode_* routines block (not used)
+    Ode,
+
+    /// derivative block
+    State,
+
+    /// watch block
+    Watch,
+
+    /// net_receive block
+    NetReceive,
+
+    /// before / after block
+    BeforeAfter,
+
+    /// fake ending block type for loops on the enums. Keep it at the end
+    BlockTypeEnd
+};
+
+
+/**
+ * \class ShadowUseStatement
+ * \brief Represents ion write statement during code generation
+ *
+ * Ion update statement needs use of shadow vectors for certain backends
+ * as atomics operations are not supported on cpu backend.
+ *
+ * \todo Currently `nrn_wrote_conc` is also added to shadow update statements
+ * list as it's corresponding to ion update statement in INITIAL block. This
+ * needs to be factored out.
+ * \todo This can be represented as AST node (like ast::CodegenAtomicStatement)
+ * but currently C backend use this same implementation. So we are using this
+ * same structure and then converting to ast::CodegenAtomicStatement for LLVM
+ * visitor.
+ */
+struct ShadowUseStatement {
+    std::string lhs;
+    std::string op;
+    std::string rhs;
+};
 
 /**
  * \class CodegenInfo
@@ -335,6 +446,15 @@ struct CodegenInfo {
     /// new one used in print_ion_types
     std::vector<SymbolType> use_ion_variables;
 
+    /// all int variables for the model
+    std::vector<IndexVariableInfo> codegen_int_variables;
+
+    /// all ion variables that could be possibly written
+    std::vector<SymbolType> codegen_shadow_variables;
+
+    /// all float variables for the model
+    std::vector<SymbolType> codegen_float_variables;
+
     /// this is the order in which they appear in derivative block
     /// this is required while printing them in initlist function
     std::vector<SymbolType> prime_variables_by_order;
@@ -422,8 +542,154 @@ struct CodegenInfo {
     /// true if WatchStatement uses voltage v variable
     bool is_voltage_used_by_watch_statements() const;
 
+    /**
+     * Check if net_send_buffer is required
+     */
+    bool net_send_buffer_required() const noexcept {
+        if (net_receive_required() && !artificial_cell) {
+            if (net_event_used || net_send_used || is_watch_used()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Check if net receive/send buffering kernels required
+     */
+    bool net_receive_buffering_required() const noexcept {
+        return point_process && !artificial_cell && net_receive_node != nullptr;
+    }
+
+    /**
+     * Check if nrn_state function is required
+     */
+    bool nrn_state_required() const noexcept {
+        if (artificial_cell) {
+            return false;
+        }
+        return nrn_state_block != nullptr || breakpoint_exist();
+    }
+
+    /**
+     * Check if nrn_cur function is required
+     */
+    bool nrn_cur_required() const noexcept {
+        return breakpoint_node != nullptr && !currents.empty();
+    }
+
+    /**
+     * Check if net_receive node exist
+     */
+    bool net_receive_exist() const noexcept {
+        return net_receive_node != nullptr;
+    }
+
+    /**
+     * Check if breakpoint node exist
+     */
+    bool breakpoint_exist() const noexcept {
+        return breakpoint_node != nullptr;
+    }
+
+
+    /**
+     * Operator for rhs vector update (matrix update)
+     *
+     * Note that we only rely on following two syntax for
+     * increment and decrement. Code generation backends
+     * are relying on this convention.
+     */
+    std::string operator_for_rhs() const noexcept {
+        return electrode_current ? "+=" : "-=";
+    }
+
+
+    /**
+     * Operator for diagonal vector update (matrix update)
+     *
+     * Note that we only rely on following two syntax for
+     * increment and decrement. Code generation backends
+     * are relying on this convention.
+     */
+    std::string operator_for_d() const noexcept {
+        return electrode_current ? "-=" : "+=";
+    }
+
+    /**
+     * Check if net_receive function is required
+     */
+    bool net_receive_required() const noexcept {
+        return net_receive_exist();
+    }
+
+    /**
+     * Checks if the given variable name belongs to a state variable
+     * \param name The variable name
+     * \return     \c true if the variable is a state variable
+     */
+    bool state_variable(const std::string& name) const;
+
+    /**
+     * Return ion variable name and corresponding ion read variable name
+     * \param name The ion variable name
+     * \return     The ion read variable name
+     */
+    std::pair<std::string, std::string> read_ion_variable_name(const std::string& name) const;
+
+    /**
+     * Return ion variable name and corresponding ion write variable name
+     * \param name The ion variable name
+     * \return     The ion write variable name
+     */
+    std::pair<std::string, std::string> write_ion_variable_name(const std::string& name) const;
+
+    /**
+     * Determine the variable name for the "current" used in breakpoint block taking into account
+     * intermediate code transformations.
+     * \param current The variable name for the current used in the model
+     * \return        The name for the current to be printed in C
+     */
+    std::string breakpoint_current(std::string current) const;
+
+    /**
+     * Check if variable with given name is an instance variable
+     *
+     * Instance varaibles are local to each mechanism instance and
+     * needs to be accessed with an array index. Such variables are
+     * assigned, range, parameter+range etc.
+     * @param varname Name of the variable
+     * @return True if variable is per mechanism instance
+     */
+    bool is_an_instance_variable(const std::string& varname) const;
+
     /// if we need a call back to wrote_conc in neuron/coreneuron
     bool require_wrote_conc = false;
+
+    /**
+     * Determine all \c int variables required during code generation
+     * \return A \c vector of \c int variables
+     */
+    void get_int_variables();
+
+    /**
+     * Determine all ion write variables that require shadow vectors during code generation
+     * \return A \c vector of ion variables
+     */
+    void get_shadow_variables();
+
+    /**
+     * Determine all \c float variables required during code generation
+     * \return A \c vector of \c float variables
+     */
+    void get_float_variables();
+
+    /**
+     * Check if statement should be skipped for code generation
+     * @param node Statement to be checked for code generation
+     * @return True if statement should be skipped otherwise false
+     */
+    bool statement_to_skip(const ast::Statement& node) const;
 };
 
 /** @} */  // end of codegen_backends

@@ -43,9 +43,12 @@ namespace ast {
  *
  * NMODL support different binary operators and this
  * type is used to store their value in the AST.
+ *
+ * \note `+=` and `-=` are not supported by NMODL but they
+ * are added for code generation nodes.
  */
 typedef enum {
-    BOP_ADDITION,        ///< \+
+    BOP_ADDITION = 0,    ///< \+
     BOP_SUBTRACTION,     ///< --
     BOP_MULTIPLICATION,  ///< \c *
     BOP_DIVISION,        ///< \/
@@ -58,7 +61,9 @@ typedef enum {
     BOP_LESS_EQUAL,      ///< <=
     BOP_ASSIGN,          ///< =
     BOP_NOT_EQUAL,       ///< !=
-    BOP_EXACT_EQUAL      ///< ==
+    BOP_EXACT_EQUAL,     ///< ==
+    BOP_ADD_ASSIGN,      ///< \+=
+    BOP_SUB_ASSIGN       ///< \-=
 } BinaryOp;
 
 /**
@@ -68,7 +73,7 @@ typedef enum {
  * is used to lookup the corresponding symbol for the operator.
  */
 static const std::string BinaryOpNames[] =
-    {"+", "-", "*", "/", "^", "&&", "||", ">", "<", ">=", "<=", "=", "!=", "=="};
+    {"+", "-", "*", "/", "^", "&&", "||", ">", "<", ">=", "<=", "=", "!=", "==", "+=", "-="};
 
 /// enum type for unary operators
 typedef enum { UOP_NOT, UOP_NEGATION } UnaryOp;
@@ -94,6 +99,20 @@ typedef enum { LTMINUSGT, LTLT, MINUSGT } ReactionOp;
 /// string representation of ast::ReactionOp
 static const std::string ReactionOpNames[] = {"<->", "<<", "->"};
 
+/**
+ * Get corresponding ast::BinaryOp for given string
+ * @param op Binary operator in string format
+ * @return ast::BinaryOp for given string
+ */
+static inline BinaryOp string_to_binaryop(const std::string& op) {
+    /// check if binary operator supported otherwise error
+    auto it = std::find(std::begin(BinaryOpNames), std::end(BinaryOpNames), op);
+    if (it == std::end(BinaryOpNames)) {
+        throw std::runtime_error("Error in string_to_binaryop, can't find " + op);
+    }
+    int pos = std::distance(std::begin(BinaryOpNames), it);
+    return static_cast<BinaryOp>(pos);
+}
 /** @} */  // end of ast_prop
 
 }  // namespace ast

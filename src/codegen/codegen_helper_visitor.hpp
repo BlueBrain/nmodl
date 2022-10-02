@@ -76,6 +76,16 @@ class CodegenHelperVisitor: public visitor::ConstAstVisitor {
     void find_neuron_global_variables();
     static void sort_with_mod2c_symbol_order(std::vector<SymbolType>& symbols);
 
+    /**
+     * Check if breakpoint node exist
+     */
+    bool breakpoint_exist() const noexcept;
+
+    /**
+     * Check if net_receive node exist
+     */
+    bool net_receive_exist() const noexcept;
+
   public:
     CodegenHelperVisitor() = default;
 

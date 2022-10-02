@@ -65,6 +65,18 @@ set(AST_GENERATED_SOURCES
     ${PROJECT_BINARY_DIR}/src/ast/block_comment.hpp
     ${PROJECT_BINARY_DIR}/src/ast/boolean.hpp
     ${PROJECT_BINARY_DIR}/src/ast/breakpoint_block.hpp
+    ${PROJECT_BINARY_DIR}/src/ast/codegen_atomic_statement.hpp
+    ${PROJECT_BINARY_DIR}/src/ast/codegen_for_statement.hpp
+    ${PROJECT_BINARY_DIR}/src/ast/codegen_function.hpp
+    ${PROJECT_BINARY_DIR}/src/ast/codegen_grid_stride.hpp
+    ${PROJECT_BINARY_DIR}/src/ast/codegen_instance_var.hpp
+    ${PROJECT_BINARY_DIR}/src/ast/codegen_return_statement.hpp
+    ${PROJECT_BINARY_DIR}/src/ast/codegen_struct.hpp
+    ${PROJECT_BINARY_DIR}/src/ast/codegen_thread_id.hpp
+    ${PROJECT_BINARY_DIR}/src/ast/codegen_var.hpp
+    ${PROJECT_BINARY_DIR}/src/ast/codegen_var_list_statement.hpp
+    ${PROJECT_BINARY_DIR}/src/ast/codegen_var_type.hpp
+    ${PROJECT_BINARY_DIR}/src/ast/codegen_var_with_type.hpp
     ${PROJECT_BINARY_DIR}/src/ast/compartment.hpp
     ${PROJECT_BINARY_DIR}/src/ast/conductance_hint.hpp
     ${PROJECT_BINARY_DIR}/src/ast/conserve.hpp
@@ -106,6 +118,7 @@ set(AST_GENERATED_SOURCES
     ${PROJECT_BINARY_DIR}/src/ast/independent_definition.hpp
     ${PROJECT_BINARY_DIR}/src/ast/indexed_name.hpp
     ${PROJECT_BINARY_DIR}/src/ast/initial_block.hpp
+    ${PROJECT_BINARY_DIR}/src/ast/instance_struct.hpp
     ${PROJECT_BINARY_DIR}/src/ast/integer.hpp
     ${PROJECT_BINARY_DIR}/src/ast/kinetic_block.hpp
     ${PROJECT_BINARY_DIR}/src/ast/lag_statement.hpp
@@ -166,6 +179,7 @@ set(AST_GENERATED_SOURCES
     ${PROJECT_BINARY_DIR}/src/ast/valence.hpp
     ${PROJECT_BINARY_DIR}/src/ast/var_name.hpp
     ${PROJECT_BINARY_DIR}/src/ast/verbatim.hpp
+    ${PROJECT_BINARY_DIR}/src/ast/void.hpp
     ${PROJECT_BINARY_DIR}/src/ast/watch.hpp
     ${PROJECT_BINARY_DIR}/src/ast/watch_statement.hpp
     ${PROJECT_BINARY_DIR}/src/ast/while_statement.hpp

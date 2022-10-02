@@ -168,7 +168,7 @@ class CodegenIspcVisitor: public CodegenCVisitor {
     void print_procedure(const ast::ProcedureBlock& node) override;
 
 
-    void print_backend_compute_routine_decl();
+    void print_backend_compute_routine_decl() override;
 
 
     /// print wrapper function that calls ispc kernel
