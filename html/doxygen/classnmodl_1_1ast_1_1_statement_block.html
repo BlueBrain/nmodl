@@ -187,10 +187,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a9d9d6d5b6eda480a573331bfe03e3d4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Insert members to statements.  <a href="classnmodl_1_1ast_1_1_statement_block.html#a9d9d6d5b6eda480a573331bfe03e3d4c">More...</a><br /></td></tr>
 <tr class="separator:a9d9d6d5b6eda480a573331bfe03e3d4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a30699aa410016b772036187ef160b199"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_statement_block.html#a30699aa410016b772036187ef160b199">reset_statement</a> (StatementVector::const_iterator position, <a class="el" href="classnmodl_1_1ast_1_1_statement.html">Statement</a> *n)</td></tr>
-<tr class="memdesc:a30699aa410016b772036187ef160b199"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classnmodl_1_1ast_1_1_reset.html" title="Represent RESET statement in NMODL.">Reset</a> member to statements.  <a href="classnmodl_1_1ast_1_1_statement_block.html#a30699aa410016b772036187ef160b199">More...</a><br /></td></tr>
+<tr class="memdesc:a30699aa410016b772036187ef160b199"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reset member to statements.  <a href="classnmodl_1_1ast_1_1_statement_block.html#a30699aa410016b772036187ef160b199">More...</a><br /></td></tr>
 <tr class="separator:a30699aa410016b772036187ef160b199"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0dbe2983d5412f1a83facf054205747c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_statement_block.html#a0dbe2983d5412f1a83facf054205747c">reset_statement</a> (StatementVector::const_iterator position, std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_statement.html">Statement</a> &gt; n)</td></tr>
-<tr class="memdesc:a0dbe2983d5412f1a83facf054205747c"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classnmodl_1_1ast_1_1_reset.html" title="Represent RESET statement in NMODL.">Reset</a> member to statements.  <a href="classnmodl_1_1ast_1_1_statement_block.html#a0dbe2983d5412f1a83facf054205747c">More...</a><br /></td></tr>
+<tr class="memdesc:a0dbe2983d5412f1a83facf054205747c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reset member to statements.  <a href="classnmodl_1_1ast_1_1_statement_block.html#a0dbe2983d5412f1a83facf054205747c">More...</a><br /></td></tr>
 <tr class="separator:a0dbe2983d5412f1a83facf054205747c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5eb6111d1bfb461a5f0ba331d1faceac"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="group__ast__vec__type.html#ga07d36a9033d375be0d2fa59b1790558f">StatementVector</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_statement_block.html#a5eb6111d1bfb461a5f0ba331d1faceac">get_statements</a> () const noexcept</td></tr>
 <tr class="memdesc:a5eb6111d1bfb461a5f0ba331d1faceac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter for member variable <a class="el" href="classnmodl_1_1ast_1_1_statement_block.html#a82102c5188ad671d871f64be041a8263">StatementBlock::statements</a>.  <a href="classnmodl_1_1ast_1_1_statement_block.html#a5eb6111d1bfb461a5f0ba331d1faceac">More...</a><br /></td></tr>
@@ -383,9 +383,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:gad7bcccf631ed5bf00705df5d1c0e5669 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ast__class.html#gad7bcccf631ed5bf00705df5d1c0e5669">is_kinetic_block</a> () const noexcept</td></tr>
 <tr class="memdesc:gad7bcccf631ed5bf00705df5d1c0e5669 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_kinetic_block.html" title="TODO.">ast::KineticBlock</a>.  <a href="group__ast__class.html#gad7bcccf631ed5bf00705df5d1c0e5669">More...</a><br /></td></tr>
 <tr class="separator:gad7bcccf631ed5bf00705df5d1c0e5669 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga689b016c1b7bc9c7d49ce66f5283b97f inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ast__class.html#ga689b016c1b7bc9c7d49ce66f5283b97f">is_match_block</a> () const noexcept</td></tr>
-<tr class="memdesc:ga689b016c1b7bc9c7d49ce66f5283b97f inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_match_block.html" title="TODO.">ast::MatchBlock</a>.  <a href="group__ast__class.html#ga689b016c1b7bc9c7d49ce66f5283b97f">More...</a><br /></td></tr>
-<tr class="separator:ga689b016c1b7bc9c7d49ce66f5283b97f inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaa892d22eb06997da03dc7a433f14ba1e inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ast__class.html#gaa892d22eb06997da03dc7a433f14ba1e">is_unit_block</a> () const noexcept</td></tr>
 <tr class="memdesc:gaa892d22eb06997da03dc7a433f14ba1e inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_unit_block.html" title="TODO.">ast::UnitBlock</a>.  <a href="group__ast__class.html#gaa892d22eb06997da03dc7a433f14ba1e">More...</a><br /></td></tr>
 <tr class="separator:gaa892d22eb06997da03dc7a433f14ba1e inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -446,9 +443,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ga079817547a0614589146a2be9b03a3bb inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ast__class.html#ga079817547a0614589146a2be9b03a3bb">is_watch</a> () const noexcept</td></tr>
 <tr class="memdesc:ga079817547a0614589146a2be9b03a3bb inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_watch.html" title="TODO.">ast::Watch</a>.  <a href="group__ast__class.html#ga079817547a0614589146a2be9b03a3bb">More...</a><br /></td></tr>
 <tr class="separator:ga079817547a0614589146a2be9b03a3bb inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga55932b13179dadc9fe4c8e34dbbf9d79 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ast__class.html#ga55932b13179dadc9fe4c8e34dbbf9d79">is_match</a> () const noexcept</td></tr>
-<tr class="memdesc:ga55932b13179dadc9fe4c8e34dbbf9d79 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_match.html" title="TODO.">ast::Match</a>.  <a href="group__ast__class.html#ga55932b13179dadc9fe4c8e34dbbf9d79">More...</a><br /></td></tr>
-<tr class="separator:ga55932b13179dadc9fe4c8e34dbbf9d79 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gacb75345ef088d81fcbc33cf08b5dcde3 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ast__class.html#gacb75345ef088d81fcbc33cf08b5dcde3">is_ba_block_type</a> () const noexcept</td></tr>
 <tr class="memdesc:gacb75345ef088d81fcbc33cf08b5dcde3 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_b_a_block_type.html" title="Type to represent different block types for before/after block.">ast::BABlockType</a>.  <a href="group__ast__class.html#gacb75345ef088d81fcbc33cf08b5dcde3">More...</a><br /></td></tr>
 <tr class="separator:gacb75345ef088d81fcbc33cf08b5dcde3 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -497,9 +491,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:gade58bfc61f86b2713d50b523aee0c92f inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ast__class.html#gade58bfc61f86b2713d50b523aee0c92f">is_from_statement</a> () const noexcept</td></tr>
 <tr class="memdesc:gade58bfc61f86b2713d50b523aee0c92f inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_from_statement.html" title="TODO.">ast::FromStatement</a>.  <a href="group__ast__class.html#gade58bfc61f86b2713d50b523aee0c92f">More...</a><br /></td></tr>
 <tr class="separator:gade58bfc61f86b2713d50b523aee0c92f inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gadf7361e0739e3a8b1abc47e071d49eb0 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ast__class.html#gadf7361e0739e3a8b1abc47e071d49eb0">is_for_all_statement</a> () const noexcept</td></tr>
-<tr class="memdesc:gadf7361e0739e3a8b1abc47e071d49eb0 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_for_all_statement.html" title="TODO.">ast::ForAllStatement</a>.  <a href="group__ast__class.html#gadf7361e0739e3a8b1abc47e071d49eb0">More...</a><br /></td></tr>
-<tr class="separator:gadf7361e0739e3a8b1abc47e071d49eb0 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga02bcc1d4e04171fbf1fcccaf39bc0ed2 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ast__class.html#ga02bcc1d4e04171fbf1fcccaf39bc0ed2">is_while_statement</a> () const noexcept</td></tr>
 <tr class="memdesc:ga02bcc1d4e04171fbf1fcccaf39bc0ed2 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_while_statement.html" title="TODO.">ast::WhileStatement</a>.  <a href="group__ast__class.html#ga02bcc1d4e04171fbf1fcccaf39bc0ed2">More...</a><br /></td></tr>
 <tr class="separator:ga02bcc1d4e04171fbf1fcccaf39bc0ed2 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -521,9 +512,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:gaefcd48a1c371deac5a65b9ccf68a3cdf inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ast__class.html#gaefcd48a1c371deac5a65b9ccf68a3cdf">is_mutex_unlock</a> () const noexcept</td></tr>
 <tr class="memdesc:gaefcd48a1c371deac5a65b9ccf68a3cdf inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_mutex_unlock.html" title="Represent MUTEXUNLOCK statement in NMODL.">ast::MutexUnlock</a>.  <a href="group__ast__class.html#gaefcd48a1c371deac5a65b9ccf68a3cdf">More...</a><br /></td></tr>
 <tr class="separator:gaefcd48a1c371deac5a65b9ccf68a3cdf inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga87871e463c7124eab53e4090c72403ac inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ast__class.html#ga87871e463c7124eab53e4090c72403ac">is_reset</a> () const noexcept</td></tr>
-<tr class="memdesc:ga87871e463c7124eab53e4090c72403ac inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_reset.html" title="Represent RESET statement in NMODL.">ast::Reset</a>.  <a href="group__ast__class.html#ga87871e463c7124eab53e4090c72403ac">More...</a><br /></td></tr>
-<tr class="separator:ga87871e463c7124eab53e4090c72403ac inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga9af56bff5b44e1074a94e9c357e255bf inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ast__class.html#ga9af56bff5b44e1074a94e9c357e255bf">is_conserve</a> () const noexcept</td></tr>
 <tr class="memdesc:ga9af56bff5b44e1074a94e9c357e255bf inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_conserve.html" title="Represent CONSERVE statement in NMODL.">ast::Conserve</a>.  <a href="group__ast__class.html#ga9af56bff5b44e1074a94e9c357e255bf">More...</a><br /></td></tr>
 <tr class="separator:ga9af56bff5b44e1074a94e9c357e255bf inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -680,7 +668,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l03192">3192</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l03184">3184</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -705,7 +693,7 @@ Private Attributes</h2></td></tr>
 <p>if there is a token, make copy</p>
 <p>set parents</p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l03198">3198</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l03190">3190</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -771,7 +759,7 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_block.html#a93b999a27e4943fdf6d3f77548b6bdc0">nmodl::ast::Block</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l03187">3187</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l03179">3179</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -811,7 +799,7 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_block.html#a36cf1424ee42cd3d8888114e105a5cac">nmodl::ast::Block</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l03183">3183</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l03175">3175</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -868,7 +856,7 @@ Private Attributes</h2></td></tr>
 <p><a class="el" href="classnmodl_1_1ast_1_1_statement_block.html" title="Represents block encapsulating list of statements.">StatementBlock</a> member functions definition.</p>
 <p>Add member to statements by raw pointer </p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l03082">3082</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l03074">3074</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -890,7 +878,7 @@ Private Attributes</h2></td></tr>
 
 <p>Add member to statements by shared_ptr. </p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l03092">3092</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l03084">3084</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -912,7 +900,7 @@ Private Attributes</h2></td></tr>
 
 <p>Erase member to statements. </p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l03101">3101</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l03093">3093</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -944,7 +932,7 @@ Private Attributes</h2></td></tr>
 
 <p>Erase members to statements. </p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l03107">3107</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l03099">3099</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -967,7 +955,7 @@ Private Attributes</h2></td></tr>
 <p>Erase non-consecutive members to statements. </p>
 <p>loosely following the cpp reference of remove_if </p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l03115">3115</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l03107">3107</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -1225,7 +1213,7 @@ Private Attributes</h2></td></tr>
 
 <p>Insert member to statements. </p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l03139">3139</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l03131">3131</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -1333,9 +1321,9 @@ template&lt;class NodeType , class InputIterator &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p><a class="el" href="classnmodl_1_1ast_1_1_reset.html" title="Represent RESET statement in NMODL.">Reset</a> member to statements. </p>
+<p>Reset member to statements. </p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l03147">3147</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l03139">3139</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -1365,9 +1353,9 @@ template&lt;class NodeType , class InputIterator &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p><a class="el" href="classnmodl_1_1ast_1_1_reset.html" title="Represent RESET statement in NMODL.">Reset</a> member to statements. </p>
+<p>Reset member to statements. </p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l03157">3157</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l03149">3149</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -1399,7 +1387,7 @@ template&lt;class NodeType , class InputIterator &gt; </div>
 <p>This should be called in every object (with children) constructor to set parents. Since it is called only in the constructors it should not be virtual to avoid ambiguities (issue #295). </p>
 <p>set parent for each element of the vector</p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l03215">3215</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l03207">3207</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -1421,7 +1409,7 @@ template&lt;class NodeType , class InputIterator &gt; </div>
 
 <p>Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_statement_block.html#a82102c5188ad671d871f64be041a8263">StatementBlock::statements</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l03235">3235</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l03227">3227</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -1443,7 +1431,7 @@ template&lt;class NodeType , class InputIterator &gt; </div>
 
 <p>Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_statement_block.html#a82102c5188ad671d871f64be041a8263">StatementBlock::statements</a> (rvalue reference) </p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l03227">3227</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l03219">3219</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -1549,7 +1537,7 @@ template&lt;class NodeType , class InputIterator &gt; </div>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_block.html#ab6d01ca8f66c197694454e271693db8d">nmodl::ast::Block</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l03175">3175</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l03167">3167</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -1591,7 +1579,7 @@ template&lt;class NodeType , class InputIterator &gt; </div>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_block.html#a435cdcbecebe2dedfc30d8a2b78f2dfc">nmodl::ast::Block</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l03167">3167</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l03159">3159</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
