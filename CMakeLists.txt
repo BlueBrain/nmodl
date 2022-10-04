@@ -67,6 +67,9 @@ include(cmake/PythonLinkHelper.cmake)
 include(cmake/RpathHelper.cmake)
 include(cmake/ExternalProjectHelper.cmake)
 
+set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O0 -g")
+set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g")
+
 # This should apply to all NMODL targets but should not leak out when NMODL is built as a submodule.
 add_compile_options(${NMODL_COMPILER_WARNING_SUPPRESSIONS})
 

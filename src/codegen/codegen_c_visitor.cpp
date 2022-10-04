@@ -144,9 +144,9 @@ void CodegenCVisitor::visit_indexed_name(const IndexedName& node) {
     }
     node.get_name()->accept(*this);
     printer->add_text("[");
-    printer->add_text("static_cast<int>(");
+    //printer->add_text("static_cast<int>(");
     node.get_length()->accept(*this);
-    printer->add_text(")");
+    //printer->add_text(")");
     printer->add_text("]");
 }
 
@@ -1896,6 +1896,7 @@ void CodegenCVisitor::visit_eigen_newton_solver_block(const ast::EigenNewtonSolv
     printer->add_line("newton_functor.initialize();");
     printer->add_line(
         "int newton_iterations = nmodl::newton::newton_solver(nmodl_eigen_xm, newton_functor);");
+    printer->add_line("printf(\"newton iterations : %d \\n\", newton_iterations);");
 
     // assign newton solver results in matrix X to state vars
     print_statement_block(*node.get_update_states_block(), false, false);
