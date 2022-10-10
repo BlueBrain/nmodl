@@ -114,6 +114,9 @@ class CodegenHelperVisitor: public visitor::ConstAstVisitor {
     void visit_verbatim(const ast::Verbatim& node) override;
     void visit_before_block(const ast::BeforeBlock& node) override;
     void visit_after_block(const ast::AfterBlock& node) override;
+    void visit_protect_statement(const ast::ProtectStatement&) override;
+    void visit_mutex_lock(const ast::MutexLock&) override;
+    void visit_mutex_unlock(const ast::MutexUnlock&) override;
 };
 
 /** @} */  // end of codegen_details

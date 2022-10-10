@@ -762,5 +762,17 @@ void CodegenHelperVisitor::visit_after_block(const ast::AfterBlock& node) {
     info.before_after_blocks.push_back(&node);
 }
 
+void CodegenHelperVisitor::visit_protect_statement(const ast::ProtectStatement&) {
+    info.mutex_used = true;
+}
+
+void CodegenHelperVisitor::visit_mutex_lock(const ast::MutexLock&) {
+    info.mutex_used = true;
+}
+
+void CodegenHelperVisitor::visit_mutex_unlock(const ast::MutexUnlock&) {
+    info.mutex_used = true;
+}
+
 }  // namespace codegen
 }  // namespace nmodl

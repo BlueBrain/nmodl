@@ -101,5 +101,31 @@ void SemanticAnalysisVisitor::visit_destructor_block(const ast::DestructorBlock&
     /// -->
 }
 
+void SemanticAnalysisVisitor::visit_protect_statement(const ast::ProtectStatement& /* node */) {
+    /// <-- This code is for check 5
+    if (in_mutex) {
+        logger->warn("SemanticAnalysisVisitor :: Find a PROTECT inside a already locked part.");
+    }
+    /// -->
+}
+
+void SemanticAnalysisVisitor::visit_mutex_lock(const ast::MutexLock& /* node */) {
+    /// <-- This code is for check 5
+    if (in_mutex) {
+        logger->warn("SemanticAnalysisVisitor :: Found a MUTEXLOCK inside an already locked part.");
+    }
+    in_mutex = true;
+    /// -->
+}
+
+void SemanticAnalysisVisitor::visit_mutex_unlock(const ast::MutexUnlock& /* node */) {
+    /// <-- This code is for check 5
+    if (!in_mutex) {
+        logger->warn("SemanticAnalysisVisitor :: Found a MUTEXUNLOCK outside a locked part.");
+    }
+    in_mutex = false;
+    /// -->
+}
+
 }  // namespace visitor
 }  // namespace nmodl

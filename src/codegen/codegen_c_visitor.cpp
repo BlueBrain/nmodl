@@ -318,6 +318,24 @@ void CodegenCVisitor::visit_update_dt(const ast::UpdateDt& node) {
     // dt change statement should be pulled outside already
 }
 
+void CodegenCVisitor::visit_protect_statement(const ast::ProtectStatement& node) {
+    printer->start_block();
+    printer->add_line("const std::lock_guard<std::mutex> lock(nmodlmutex);");
+    printer->add_indent();
+    node.get_expression()->accept(*this);
+    printer->add_text(";");
+    printer->add_newline(1);
+    printer->end_block(1);
+}
+
+void CodegenCVisitor::visit_mutex_lock(const ast::MutexLock& node) {
+    printer->add_text("nmodlmutex->lock();");
+}
+
+void CodegenCVisitor::visit_mutex_unlock(const ast::MutexUnlock& node) {
+    printer->add_text("nmodlmutex->unlock();");
+}
+
 /****************************************************************************************/
 /*                               Common helper routines                                 */
 /****************************************************************************************/
@@ -475,7 +493,10 @@ bool CodegenCVisitor::need_semicolon(Statement* node) {
         || node->is_verbatim()
         || node->is_from_statement()
         || node->is_conductance_hint()
-        || node->is_while_statement()) {
+        || node->is_while_statement()
+        || node->is_protect_statement()
+        || node->is_mutex_lock()
+        || node->is_mutex_unlock()) {
         return false;
     }
     if (node->is_expression_statement()) {
@@ -2176,6 +2197,13 @@ void CodegenCVisitor::print_nmodl_constants() {
     }
 }
 
+void CodegenCVisitor::print_mutex_decl() {
+    if (!info.mutex_used) {
+        return;
+    }
+
+    printer->add_line("std::unique_ptr<std::mutex> nmodlmutex;", 2);
+}
 
 void CodegenCVisitor::print_first_pointer_var_index_getter() {
     printer->add_newline(2);
@@ -2489,6 +2517,11 @@ void CodegenCVisitor::print_standard_includes() {
     printer->add_line("#include <stdio.h>");
     printer->add_line("#include <stdlib.h>");
     printer->add_line("#include <string.h>");
+
+    if (info.mutex_used) {
+        printer->add_line("#include <mutex>");
+        printer->add_line("#include <memory>");
+    }
 }
 
 
@@ -4376,7 +4409,6 @@ void CodegenCVisitor::print_nrn_current(const BreakpointBlock& node) {
     printer->end_block(1);
 }
 
-
 void CodegenCVisitor::print_nrn_cur_conductance_kernel(const BreakpointBlock& node) {
     const auto& block = node.get_statement_block();
     print_statement_block(*block, false, false);
@@ -4639,6 +4671,7 @@ void CodegenCVisitor::print_codegen_routines() {
     print_headers_include();
     print_namespace_begin();
     print_nmodl_constants();
+    print_mutex_decl();
     print_prcellstate_macros();
     print_mechanism_info();
     print_data_structures(true);
