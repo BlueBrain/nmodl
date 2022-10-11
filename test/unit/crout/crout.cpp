@@ -46,7 +46,7 @@ bool test_Crout_correctness(T rtol = 1e-8, T atol = 1e-8) {
         Matrix<T, Dynamic, Dynamic, Eigen::RowMajor> A_RowMajor(mat_size, mat_size);
         Matrix<T, Dynamic, 1> b(mat_size);
 
-        for (int repetitions = 0; repetitions < 10000; ++repetitions) {
+        for (int repetitions = 0; repetitions < 1000; ++repetitions) {
             do {
                 // initialization
                 for (int r = 0; r < mat_size; r++) {
@@ -104,12 +104,7 @@ bool test_Crout_correctness(T rtol = 1e-8, T atol = 1e-8) {
 
 SCENARIO("Compare Crout solver with Eigen") {
     GIVEN("crout (double)") {
-        constexpr double tol = 1e-8;
-        constexpr double rtol = tol;
-        constexpr double atol = tol;
-
-        auto test = test_Crout_correctness<double>(rtol, atol);
-
+        auto test = test_Crout_correctness<double>();
         THEN("run tests & compare") {
             REQUIRE(test);
         }
