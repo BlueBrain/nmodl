@@ -1037,18 +1037,6 @@ std::string CodegenCVisitor::get_parameter_str(const ParamVector& params) {
 }
 
 
-void CodegenCVisitor::print_channel_iteration_tiling_block_begin(BlockType /* type */) {
-    // no tiling for cpu backend, just get loop bounds
-    printer->add_line("int start = 0;");
-    printer->add_line("int end = nodecount;");
-}
-
-
-void CodegenCVisitor::print_channel_iteration_tiling_block_end() {
-    // backend specific, do nothing
-}
-
-
 void CodegenCVisitor::print_deriv_advance_flag_transfer_to_device() const {
     // backend specific, do nothing
 }
@@ -1128,20 +1116,6 @@ void CodegenCVisitor::print_channel_iteration_block_parallel_hint(BlockType /* t
 
 bool CodegenCVisitor::nrn_cur_reduction_loop_required() {
     return info.point_process;
-}
-
-
-/**
- * \details For CPU backend we iterate over all node counts.
- */
-void CodegenCVisitor::print_channel_iteration_block_begin(BlockType type) {
-    print_channel_iteration_block_parallel_hint(type);
-    printer->start_block("for (int id = start; id < end; id++)");
-}
-
-
-void CodegenCVisitor::print_channel_iteration_block_end() {
-    printer->end_block(1);
 }
 
 
@@ -3471,17 +3445,16 @@ void CodegenCVisitor::print_nrn_init(bool skip_init_check) {
         print_dt_update_to_device();
     }
 
-    print_channel_iteration_tiling_block_begin(BlockType::Initial);
-    print_channel_iteration_block_begin(BlockType::Initial);
+    print_channel_iteration_block_parallel_hint(BlockType::Initial);
+    printer->start_block("for (int id = 0; id < nodecount; id++)");
 
     if (info.net_receive_node != nullptr) {
         printer->fmt_line("{} = -1e20;", get_variable_name("tsave"));
     }
 
     print_initial_block(info.initial_node);
-    print_channel_iteration_block_end();
+    printer->end_block(1);
     print_shadow_reduction_statements();
-    print_channel_iteration_tiling_block_end();
 
     if (!info.changed_dt.empty()) {
         printer->fmt_line("{} = _save_prev_dt;", get_variable_name(naming::NTHREAD_DT_VARIABLE));
@@ -3530,8 +3503,8 @@ void CodegenCVisitor::print_before_after_block(const ast::Block* node, size_t bl
     printer->fmt_line("/** {} of block type {} # {} */", ba_type, ba_block_type, block_id);
     print_global_function_common_code(BlockType::BeforeAfter, function_name);
 
-    print_channel_iteration_tiling_block_begin(BlockType::BeforeAfter);
-    print_channel_iteration_block_begin(BlockType::BeforeAfter);
+    print_channel_iteration_block_parallel_hint(BlockType::BeforeAfter);
+    printer->start_block("for (int id = 0; id < nodecount; id++)");
 
     printer->add_line("int node_id = node_index[id];");
     printer->add_line("double v = voltage[node_id];");
@@ -3556,8 +3529,7 @@ void CodegenCVisitor::print_before_after_block(const ast::Block* node, size_t bl
     }
 
     /// loop end including data annotation block
-    print_channel_iteration_block_end();
-    print_channel_iteration_tiling_block_end();
+    printer->end_block(1);
     printer->end_block(1);
     print_kernel_data_present_annotation_block_end();
 
@@ -3658,8 +3630,8 @@ void CodegenCVisitor::print_watch_check() {
     printer->add_newline(2);
     printer->add_line("/** routine to check watch activation */");
     print_global_function_common_code(BlockType::Watch);
-    print_channel_iteration_tiling_block_begin(BlockType::Watch);
-    print_channel_iteration_block_begin(BlockType::Watch);
+    print_channel_iteration_block_parallel_hint(BlockType::Watch);
+    printer->start_block("for (int id = 0; id < nodecount; id++)");
 
     if (info.is_voltage_used_by_watch_statements()) {
         printer->add_line("int node_id = node_index[id];");
@@ -3717,9 +3689,8 @@ void CodegenCVisitor::print_watch_check() {
         // end block 1
     }
 
-    print_channel_iteration_block_end();
+    printer->end_block(1);
     print_send_event_move();
-    print_channel_iteration_tiling_block_end();
     print_kernel_data_present_annotation_block_end();
     printer->end_block(1);
     codegen = false;
@@ -4303,8 +4274,8 @@ void CodegenCVisitor::print_nrn_state() {
     printer->add_newline(2);
     printer->add_line("/** update state */");
     print_global_function_common_code(BlockType::State);
-    print_channel_iteration_tiling_block_begin(BlockType::State);
-    print_channel_iteration_block_begin(BlockType::State);
+    print_channel_iteration_block_parallel_hint(BlockType::State);
+    printer->start_block("for (int id = 0; id < nodecount; id++)");
 
     printer->add_line("int node_id = node_index[id];");
     printer->add_line("double v = voltage[node_id];");
@@ -4337,13 +4308,12 @@ void CodegenCVisitor::print_nrn_state() {
         auto text = process_shadow_update_statement(statement, BlockType::State);
         printer->add_line(text);
     }
-    print_channel_iteration_block_end();
+    printer->end_block(1);
     if (!shadow_statements.empty()) {
         print_shadow_reduction_block_begin();
         print_shadow_reduction_statements();
         print_shadow_reduction_block_end();
     }
-    print_channel_iteration_tiling_block_end();
 
     print_kernel_data_present_annotation_block_end();
     printer->end_block(1);
@@ -4524,14 +4494,14 @@ void CodegenCVisitor::print_nrn_cur() {
     printer->add_newline(2);
     printer->add_line("/** update current */");
     print_global_function_common_code(BlockType::Equation);
-    print_channel_iteration_tiling_block_begin(BlockType::Equation);
-    print_channel_iteration_block_begin(BlockType::Equation);
+    print_channel_iteration_block_parallel_hint(BlockType::Equation);
+    printer->start_block("for (int id = 0; id < nodecount; id++)");
     print_nrn_cur_kernel(*info.breakpoint_node);
     print_nrn_cur_matrix_shadow_update();
     if (!nrn_cur_reduction_loop_required()) {
         print_fast_imem_calculation();
     }
-    print_channel_iteration_block_end();
+    printer->end_block(1);
 
     if (nrn_cur_reduction_loop_required()) {
         print_shadow_reduction_block_begin();
@@ -4541,7 +4511,6 @@ void CodegenCVisitor::print_nrn_cur() {
         print_fast_imem_calculation();
     }
 
-    print_channel_iteration_tiling_block_end();
     print_kernel_data_present_annotation_block_end();
     printer->end_block(1);
     codegen = false;
