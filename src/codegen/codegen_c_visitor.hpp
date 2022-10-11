@@ -271,7 +271,7 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
     codegen::CodegenInfo info;
 
     /**
-     * Code printer object for target (C, ispc, ...)
+     * Code printer object for target (C)
      */
     std::shared_ptr<CodePrinter> target_printer;
 
@@ -893,7 +893,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * For C code generation this is empty
      * \return ""
      *
-     * For ispc
      * \return "uniform "
      */
     virtual std::string global_var_struct_type_qualifier();
@@ -908,8 +907,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
     /**
      * Print static assertions about the global variable struct.
-     *
-     * For ISPC this has to be disabled.
      */
     virtual void print_global_var_struct_assertions() const;
 
