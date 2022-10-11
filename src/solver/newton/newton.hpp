@@ -15,9 +15,7 @@
  * \brief Implementation of Newton method for solving system of non-linear equations
  */
 
-#if defined(CORENEURON_ENABLE_GPU) && !defined(DISABLE_OPENACC)
-#include "partial_piv_lu/partial_piv_lu.h"
-#endif
+#include <crout/crout.hpp>
 
 #include <Eigen/LU>
 
@@ -73,13 +71,17 @@ EIGEN_DEVICE_FUNC int newton_solver(Eigen::Matrix<double, N, 1>& X,
             // we have converged: return iteration count
             return iter;
         }
-#if defined(CORENEURON_ENABLE_GPU) && !defined(DISABLE_OPENACC)
-        X -= partialPivLu<N>(J, F);
-#else
-        // update X use in-place LU decomposition of J with partial pivoting
-        // (suitable for any N, but less efficient than .inverse() for N <=4)
-        X -= Eigen::PartialPivLU<Eigen::Ref<Eigen::Matrix<double, N, N>>>(J).solve(F);
-#endif
+        // In Eigen the default storage order is ColMajor.
+        // Crout's implementation requires matrices stored in RowMajor order (C-style arrays).
+        // Therefore, the transposeInPlace is critical such that the data() method to give the rows
+        // instead of the columns.
+        if (!J.IsRowMajor)
+            J.transposeInPlace();
+        Eigen::Matrix<int, N, 1> pivot;
+        nmodl::crout::Crout<double>(N, J.data(), pivot.data());
+        Eigen::Matrix<double, N, 1> X_solve;
+        nmodl::crout::solveCrout<double>(N, J.data(), F.data(), X_solve.data(), pivot.data());
+        X -= X_solve;
     }
     // If we fail to converge after max_iter iterations, return -1
     return -1;
@@ -150,13 +152,13 @@ EIGEN_DEVICE_FUNC int newton_numerical_diff_solver(Eigen::Matrix<double, N, 1>& 
             // restore X
             X[i] += dX;
         }
-#if defined(CORENEURON_ENABLE_GPU) && !defined(DISABLE_OPENACC)
-        X -= partialPivLu<N>(J, F);
-#else
-        // update X use in-place LU decomposition of J with partial pivoting
-        // (suitable for any N, but less efficient than .inverse() for N <=4)
-        X -= Eigen::PartialPivLU<Eigen::Ref<Eigen::Matrix<double, N, N>>>(J).solve(F);
-#endif
+        if (!J.IsRowMajor)
+            J.transposeInPlace();
+        Eigen::Matrix<int, N, 1> pivot;
+        nmodl::crout::Crout<double>(N, J.data(), pivot.data());
+        Eigen::Matrix<double, N, 1> X_solve;
+        nmodl::crout::solveCrout<double>(N, J.data(), F.data(), X_solve.data(), pivot.data());
+        X -= X_solve;
     }
     // If we fail to converge after max_iter iterations, return -1
     return -1;

@@ -128,9 +128,6 @@ class CodegenAccVisitor: public CodegenCVisitor {
     void print_net_send_buffering_grow() override;
 
 
-    void print_eigen_linear_solver(const std::string& float_type, int N) override;
-
-
   public:
     CodegenAccVisitor(const std::string& mod_file,
                       const std::string& output_dir,

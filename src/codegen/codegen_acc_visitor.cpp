@@ -78,7 +78,7 @@ void CodegenAccVisitor::print_backend_includes() {
                                                           [](int l, const SymbolType& variable) {
                                                               return l += variable->get_length();
                                                           }) > 4) {
-        printer->add_line("#include <partial_piv_lu/partial_piv_lu.h>");
+        printer->add_line("#include <crout/crout.hpp>");
     }
 }
 
@@ -129,14 +129,6 @@ void CodegenAccVisitor::print_abort_routine() const {
 
 void CodegenAccVisitor::print_net_send_buffering_grow() {
     // can not grow buffer during gpu execution
-}
-
-void CodegenAccVisitor::print_eigen_linear_solver(const std::string& /* float_type */, int N) {
-    if (N <= 4) {
-        printer->add_line("nmodl_eigen_xm = nmodl_eigen_jm.inverse()*nmodl_eigen_fm;");
-    } else {
-        printer->fmt_line("nmodl_eigen_xm = partialPivLu<{}>nmodl_eigen_jm, nmodl_eigen_fm);", N);
-    }
 }
 
 /**

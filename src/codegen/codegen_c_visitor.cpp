@@ -1928,9 +1928,24 @@ void CodegenCVisitor::print_eigen_linear_solver(const std::string& float_type, i
         // Faster compared to LU, given the template specialization in Eigen.
         printer->add_line("nmodl_eigen_xm = nmodl_eigen_jm.inverse()*nmodl_eigen_fm;");
     } else {
+        // In Eigen the default storage order is ColMajor.
+        // Crout's implementation requires matrices stored in RowMajor order (C-style arrays).
+        // Therefore, the transposeInPlace is critical such that the data() method to give the rows
+        // instead of the columns.
+        printer->add_line("if (!nmodl_eigen_jm.IsRowMajor) nmodl_eigen_jm.transposeInPlace();");
+
+        // pivot vector
+        printer->fmt_line("Eigen::Matrix<int, {}, 1> pivot;", N);
+
+        // In-place LU-Decomposition (Crout Algo) : Jm is replaced by its LU-decomposition
+        printer->fmt_line("nmodl::crout::Crout<{0}>({1}, nmodl_eigen_jm.data(), pivot.data());",
+                          float_type,
+                          N);
+
+        // Solve the linear system : Forward/Backward substitution part
         printer->fmt_line(
-            "nmodl_eigen_xm = Eigen::PartialPivLU<Eigen::Ref<Eigen::Matrix<{0}, {1}, "
-            "{1}>>>(nmodl_eigen_jm).solve(nmodl_eigen_fm);",
+            "nmodl::crout::solveCrout<{0}>({1}, nmodl_eigen_jm.data(), nmodl_eigen_fm.data(), "
+            "nmodl_eigen_xm.data(), pivot.data());",
             float_type,
             N);
     }
@@ -2506,8 +2521,13 @@ void CodegenCVisitor::print_coreneuron_includes() {
     if (info.eigen_newton_solver_exist) {
         printer->add_line("#include <newton/newton.hpp>");
     }
-    if (info.eigen_linear_solver_exist) {
-        printer->add_line("#include <Eigen/LU>");
+    if (info.eigen_linear_solver_exist && std::accumulate(info.state_vars.begin(),
+                                                          info.state_vars.end(),
+                                                          0,
+                                                          [](int l, const SymbolType& variable) {
+                                                              return l += variable->get_length();
+                                                          }) > 4) {
+        printer->add_line("#include <crout/crout.hpp>");
     }
 }
 
