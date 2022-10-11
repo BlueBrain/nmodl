@@ -222,8 +222,8 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <p>The NMODL Framework provides rich model introspection and analysis capabilities using <a href="https://bluebrain.github.io/nmodl/html/doxygen/group__visitor__classes.html">various visitors</a>. Here is an example of theoretical performance characterisation of channels and synapses from rat neocortical column microcircuit <a href="https://www.cell.com/abstract/S0092-8674%2815%2901191-5">published in 2015</a>:</p>
 <p><img src="https://user-images.githubusercontent.com/666852/57336711-2cc0b200-7127-11e9-8053-8f662e2ec191.png" alt="nmodl-perf-stats" title="Example of performance characterisation" class="inline"/></p>
 <p>To understand how you can write your own introspection and analysis tool, see <a href="docs/notebooks/nmodl-python-tutorial.ipynb">this tutorial</a>.</p>
-<p>Once analysis and optimization passes are performed, the NMODL Framework can generate optimised code for modern compute architectures including CPUs (Intel, AMD, ARM) and GPUs (NVIDIA, AMD) platforms. For example, C++, OpenACC, OpenMP, CUDA and ISPC backends are implemented and one can choose these backends on command line as:</p>
-<div class="fragment"><div class="line">$ nmodl expsyn.mod host --ispc acc --cuda sympy --analytic</div>
+<p>Once analysis and optimization passes are performed, the NMODL Framework can generate optimised code for modern compute architectures including CPUs (Intel, AMD, ARM) and GPUs (NVIDIA, AMD) platforms. For example, C++, OpenACC, OpenMP and ISPC backends are implemented and one can choose these backends on command line as:</p>
+<div class="fragment"><div class="line">$ nmodl expsyn.mod host --ispc acc sympy --analytic</div>
 </div><!-- fragment --><p>Here is an example of generated <a href="https://ispc.github.io/">ISPC</a> kernel for DERIVATIVE block :</p>
 <div class="fragment"><div class="line"> {c++}</div>
 <div class="line">export void nrn_state_ExpSyn(uniform ExpSyn_Instance* uniform inst, uniform NrnThread* uniform nt ...) {</div>
@@ -268,7 +268,6 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <div class="line">  Accelerator code backends</div>
 <div class="line">  Options:</div>
 <div class="line">    --oacc                                C/C++ backend with OpenACC (false)</div>
-<div class="line">    --cuda                                C/C++ backend with CUDA (false)</div>
 <div class="line"> </div>
 <div class="line">sympy</div>
 <div class="line">  SymPy based analysis and optimizations</div>

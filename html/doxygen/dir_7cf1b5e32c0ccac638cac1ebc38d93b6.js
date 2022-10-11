@@ -6,8 +6,6 @@ var dir_7cf1b5e32c0ccac638cac1ebc38d93b6 =
     [ "codegen_c_visitor.hpp", "codegen__c__visitor_8hpp.html", "codegen__c__visitor_8hpp" ],
     [ "codegen_compatibility_visitor.cpp", "codegen__compatibility__visitor_8cpp.html", null ],
     [ "codegen_compatibility_visitor.hpp", "codegen__compatibility__visitor_8hpp.html", null ],
-    [ "codegen_cuda_visitor.cpp", "codegen__cuda__visitor_8cpp.html", null ],
-    [ "codegen_cuda_visitor.hpp", "codegen__cuda__visitor_8hpp.html", null ],
     [ "codegen_helper_visitor.cpp", "codegen__helper__visitor_8cpp.html", null ],
     [ "codegen_helper_visitor.hpp", "codegen__helper__visitor_8hpp.html", null ],
     [ "codegen_info.cpp", "codegen__info_8cpp.html", null ],
