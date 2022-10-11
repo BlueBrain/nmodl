@@ -22,16 +22,15 @@ using namespace std;
 
 
 /// https://stackoverflow.com/questions/15051367/how-to-compare-vectors-approximately-in-eigen
-template<typename DerivedA, typename DerivedB>
+template <typename DerivedA, typename DerivedB>
 bool allclose(const Eigen::DenseBase<DerivedA>& a,
               const Eigen::DenseBase<DerivedB>& b,
-              const typename DerivedA::RealScalar& rtol
-                  = Eigen::NumTraits<typename DerivedA::RealScalar>::dummy_precision(),
-              const typename DerivedA::RealScalar& atol
-                  = Eigen::NumTraits<typename DerivedA::RealScalar>::epsilon())
-{
-  return ((a.derived() - b.derived()).array().abs()
-          <= (atol + rtol * b.derived().array().abs())).all();
+              const typename DerivedA::RealScalar& rtol =
+                  Eigen::NumTraits<typename DerivedA::RealScalar>::dummy_precision(),
+              const typename DerivedA::RealScalar& atol =
+                  Eigen::NumTraits<typename DerivedA::RealScalar>::epsilon()) {
+    return ((a.derived() - b.derived()).array().abs() <= (atol + rtol * b.derived().array().abs()))
+        .all();
 }
 
 
@@ -42,7 +41,8 @@ bool test_Crout_correctness(T rtol = 1e-8, T atol = 1e-8) {
     std::uniform_real_distribution<T> nums(-100, 100);
 
     for (int mat_size = 5; mat_size < 15; mat_size++) {
-        Matrix<T, Dynamic, Dynamic, Eigen::ColMajor> A_ColMajor(mat_size, mat_size);  // default in Eigen!
+        Matrix<T, Dynamic, Dynamic, Eigen::ColMajor> A_ColMajor(mat_size,
+                                                                mat_size);  // default in Eigen!
         Matrix<T, Dynamic, Dynamic, Eigen::RowMajor> A_RowMajor(mat_size, mat_size);
         Matrix<T, Dynamic, 1> b(mat_size);
 
@@ -73,11 +73,12 @@ bool test_Crout_correctness(T rtol = 1e-8, T atol = 1e-8) {
 
             // Crout with A_ColMajor
             Matrix<T, Dynamic, 1> crout_x_ColMajor(mat_size);
-            if (!A_ColMajor.IsRowMajor) 
+            if (!A_ColMajor.IsRowMajor)
                 A_ColMajor.transposeInPlace();
             Matrix<int, Dynamic, 1> pivot(mat_size);
             crout::Crout<T>(mat_size, A_ColMajor.data(), pivot.data());
-            crout::solveCrout<T>(mat_size, A_ColMajor.data(), b.data(), crout_x_ColMajor.data(), pivot.data());
+            crout::solveCrout<T>(
+                mat_size, A_ColMajor.data(), b.data(), crout_x_ColMajor.data(), pivot.data());
 
             if (!allclose(eigen_x_ColMajor, crout_x_ColMajor, rtol, atol)) {
                 cerr << "eigen_x_ColMajor vs crout_x_ColMajor (issue)" << endl;
@@ -87,7 +88,8 @@ bool test_Crout_correctness(T rtol = 1e-8, T atol = 1e-8) {
             // Crout with A_RowMajor
             Matrix<T, Dynamic, 1> crout_x_RowMajor(mat_size);
             crout::Crout<T>(mat_size, A_RowMajor.data(), pivot.data());
-            crout::solveCrout<T>(mat_size, A_RowMajor.data(), b.data(), crout_x_RowMajor.data(), pivot.data());
+            crout::solveCrout<T>(
+                mat_size, A_RowMajor.data(), b.data(), crout_x_RowMajor.data(), pivot.data());
 
             if (!allclose(eigen_x_RowMajor, crout_x_RowMajor, rtol, atol)) {
                 cerr << "eigen_x_RowMajor vs crout_x_RowMajor (issue)" << endl;

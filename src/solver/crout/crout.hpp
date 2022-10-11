@@ -15,8 +15,8 @@
  * Forward/Backward substitution
  */
 
-#include <cmath>
 #include <Eigen/Core>
+#include <cmath>
 
 #if defined(CORENEURON_ENABLE_GPU) && !defined(DISABLE_OPENACC)
 #include "coreneuron/utils/offload.hpp"
