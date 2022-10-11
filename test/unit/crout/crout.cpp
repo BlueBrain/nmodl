@@ -104,7 +104,7 @@ bool test_Crout_correctness(T rtol = 1e-8, T atol = 1e-8) {
 
 SCENARIO("Compare Crout solver with Eigen") {
     GIVEN("crout (double)") {
-        constexpr double tol = 1e-9;
+        constexpr double tol = 1e-8;
         constexpr double rtol = tol;
         constexpr double atol = tol;
 
