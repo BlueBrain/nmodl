@@ -73,6 +73,7 @@ bool test_Crout_correctness(T rtol = 1e-8, T atol = 1e-8) {
 
             // Crout with A_RowMajor
             Matrix<T, Dynamic, 1> crout_x_RowMajor(mat_size);
+            Matrix<int, Dynamic, 1> pivot(mat_size);
             crout::Crout<T>(mat_size, A_RowMajor.data(), pivot.data());
             crout::solveCrout<T>(
                 mat_size, A_RowMajor.data(), b.data(), crout_x_RowMajor.data(), pivot.data());
@@ -86,7 +87,6 @@ bool test_Crout_correctness(T rtol = 1e-8, T atol = 1e-8) {
             Matrix<T, Dynamic, 1> crout_x_ColMajor(mat_size);
             if (!A_ColMajor.IsRowMajor)
                 A_ColMajor.transposeInPlace();
-            Matrix<int, Dynamic, 1> pivot(mat_size);
             crout::Crout<T>(mat_size, A_ColMajor.data(), pivot.data());
             crout::solveCrout<T>(
                 mat_size, A_ColMajor.data(), b.data(), crout_x_ColMajor.data(), pivot.data());
