@@ -38,7 +38,7 @@ template <typename T>
 bool test_Crout_correctness(T rtol = 1e-8, T atol = 1e-8) {
     std::random_device rd;  // seeding
     std::mt19937 mt(rd());
-    std::uniform_real_distribution<T> nums(-100, 100);
+    std::uniform_real_distribution<T> nums(-1e3, 1e3);
 
     for (int mat_size = 5; mat_size < 15; mat_size++) {
         Matrix<T, Dynamic, Dynamic, Eigen::ColMajor> A_ColMajor(mat_size,
@@ -46,7 +46,7 @@ bool test_Crout_correctness(T rtol = 1e-8, T atol = 1e-8) {
         Matrix<T, Dynamic, Dynamic, Eigen::RowMajor> A_RowMajor(mat_size, mat_size);
         Matrix<T, Dynamic, 1> b(mat_size);
 
-        for (int repetitions = 0; repetitions < 10000; ++repetitions) {
+        for (int repetitions = 0; repetitions < static_cast<int>(1e4); ++repetitions) {
             do {
                 // initialization
                 for (int r = 0; r < mat_size; r++) {
@@ -104,8 +104,9 @@ bool test_Crout_correctness(T rtol = 1e-8, T atol = 1e-8) {
 
 SCENARIO("Compare Crout solver with Eigen") {
     GIVEN("crout (double)") {
-        constexpr double rtol = 1e-8;
-        constexpr double atol = 1e-8;
+        constexpr double tol = 1e-9;
+        constexpr double rtol = tol;
+        constexpr double atol = tol;
 
         auto test = test_Crout_correctness<double>(rtol, atol);
 
