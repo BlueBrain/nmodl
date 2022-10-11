@@ -46,7 +46,7 @@ bool test_Crout_correctness(T rtol = 1e-8, T atol = 1e-8) {
         Matrix<T, Dynamic, Dynamic, Eigen::RowMajor> A_RowMajor(mat_size, mat_size);
         Matrix<T, Dynamic, 1> b(mat_size);
 
-        for (int repetitions = 0; repetitions < static_cast<int>(1e4); ++repetitions) {
+        for (int repetitions = 0; repetitions < 10000; ++repetitions) {
             do {
                 // initialization
                 for (int r = 0; r < mat_size; r++) {
@@ -71,6 +71,17 @@ bool test_Crout_correctness(T rtol = 1e-8, T atol = 1e-8) {
                 return false;
             }
 
+            // Crout with A_RowMajor
+            Matrix<T, Dynamic, 1> crout_x_RowMajor(mat_size);
+            crout::Crout<T>(mat_size, A_RowMajor.data(), pivot.data());
+            crout::solveCrout<T>(
+                mat_size, A_RowMajor.data(), b.data(), crout_x_RowMajor.data(), pivot.data());
+
+            if (!allclose(eigen_x_RowMajor, crout_x_RowMajor, rtol, atol)) {
+                cerr << "eigen_x_RowMajor vs crout_x_RowMajor (issue)" << endl;
+                return false;
+            }
+
             // Crout with A_ColMajor
             Matrix<T, Dynamic, 1> crout_x_ColMajor(mat_size);
             if (!A_ColMajor.IsRowMajor)
@@ -82,17 +93,6 @@ bool test_Crout_correctness(T rtol = 1e-8, T atol = 1e-8) {
 
             if (!allclose(eigen_x_ColMajor, crout_x_ColMajor, rtol, atol)) {
                 cerr << "eigen_x_ColMajor vs crout_x_ColMajor (issue)" << endl;
-                return false;
-            }
-
-            // Crout with A_RowMajor
-            Matrix<T, Dynamic, 1> crout_x_RowMajor(mat_size);
-            crout::Crout<T>(mat_size, A_RowMajor.data(), pivot.data());
-            crout::solveCrout<T>(
-                mat_size, A_RowMajor.data(), b.data(), crout_x_RowMajor.data(), pivot.data());
-
-            if (!allclose(eigen_x_RowMajor, crout_x_RowMajor, rtol, atol)) {
-                cerr << "eigen_x_RowMajor vs crout_x_RowMajor (issue)" << endl;
                 return false;
             }
         }
