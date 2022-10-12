@@ -2521,13 +2521,17 @@ void CodegenCVisitor::print_coreneuron_includes() {
     if (info.eigen_newton_solver_exist) {
         printer->add_line("#include <newton/newton.hpp>");
     }
-    if (info.eigen_linear_solver_exist && std::accumulate(info.state_vars.begin(),
-                                                          info.state_vars.end(),
-                                                          0,
-                                                          [](int l, const SymbolType& variable) {
-                                                              return l += variable->get_length();
-                                                          }) > 4) {
-        printer->add_line("#include <crout/crout.hpp>");
+    if (info.eigen_linear_solver_exist) {
+        if (std::accumulate(info.state_vars.begin(),
+                            info.state_vars.end(),
+                            0,
+                            [](int l, const SymbolType& variable) {
+                                return l += variable->get_length();
+                            }) > 4) {
+            printer->add_line("#include <crout/crout.hpp>");
+        } else {
+            printer->add_line("#include <Eigen/Dense>");
+        }
     }
 }
 
