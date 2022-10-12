@@ -37,7 +37,8 @@ bool allclose(const Eigen::DenseBase<DerivedA>& a,
 template <typename T>
 bool test_Crout_correctness(T rtol = 1e-8, T atol = 1e-8) {
     std::random_device rd;  // seeding
-    std::mt19937 mt(rd());
+    auto seed = rd();
+    std::mt19937 mt(seed);
     std::uniform_real_distribution<T> nums(-1e3, 1e3);
 
     for (int mat_size = 5; mat_size < 15; mat_size++) {
@@ -67,7 +68,7 @@ bool test_Crout_correctness(T rtol = 1e-8, T atol = 1e-8) {
             eigen_x_RowMajor = A_RowMajor.partialPivLu().solve(b);
 
             if (!allclose(eigen_x_ColMajor, eigen_x_RowMajor, rtol, atol)) {
-                cerr << "eigen_x_ColMajor vs eigen_x_RowMajor (issue)" << endl;
+                cerr << "eigen_x_ColMajor vs eigen_x_RowMajor (issue) / seed = " << seed << endl;
                 return false;
             }
 
@@ -81,7 +82,7 @@ bool test_Crout_correctness(T rtol = 1e-8, T atol = 1e-8) {
                 mat_size, A_ColMajor.data(), b.data(), crout_x_ColMajor.data(), pivot.data());
 
             if (!allclose(eigen_x_ColMajor, crout_x_ColMajor, rtol, atol)) {
-                cerr << "eigen_x_ColMajor vs crout_x_ColMajor (issue)" << endl;
+                cerr << "eigen_x_ColMajor vs crout_x_ColMajor (issue) / seed = " << seed << endl;
                 return false;
             }
 
@@ -92,7 +93,7 @@ bool test_Crout_correctness(T rtol = 1e-8, T atol = 1e-8) {
                 mat_size, A_RowMajor.data(), b.data(), crout_x_RowMajor.data(), pivot.data());
 
             if (!allclose(eigen_x_RowMajor, crout_x_RowMajor, rtol, atol)) {
-                cerr << "eigen_x_RowMajor vs crout_x_RowMajor (issue)" << endl;
+                cerr << "eigen_x_RowMajor vs crout_x_RowMajor (issue) / seed = " << seed << endl;
                 return false;
             }
         }
