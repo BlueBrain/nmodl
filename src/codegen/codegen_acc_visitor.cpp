@@ -71,15 +71,6 @@ void CodegenAccVisitor::print_backend_includes() {
         printer->add_line("#include <coreneuron/utils/offload.hpp>");
         printer->add_line("#include <cuda_runtime_api.h>");
     }
-
-    if (info.eigen_linear_solver_exist && std::accumulate(info.state_vars.begin(),
-                                                          info.state_vars.end(),
-                                                          0,
-                                                          [](int l, const SymbolType& variable) {
-                                                              return l += variable->get_length();
-                                                          }) > 4) {
-        printer->add_line("#include <crout/crout.hpp>");
-    }
 }
 
 
