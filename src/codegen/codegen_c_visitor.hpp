@@ -1446,20 +1446,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
     virtual void print_device_atomic_capture_annotation() const;
 
     /**
-     * Print block / loop for statement requiring reduction
-     *
-     */
-    virtual void print_shadow_reduction_block_begin();
-
-
-    /**
-     * Print end of block / loop for statement requiring reduction
-     *
-     */
-    virtual void print_shadow_reduction_block_end();
-
-
-    /**
      * Print atomic update pragma for reduction statements
      *
      */

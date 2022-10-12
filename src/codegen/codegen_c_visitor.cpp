@@ -1160,11 +1160,6 @@ void CodegenCVisitor::print_atomic_reduction_pragma() {
 }
 
 
-void CodegenCVisitor::print_shadow_reduction_block_begin() {
-    printer->start_block("for (int id = start; id < end; id++)");
-}
-
-
 void CodegenCVisitor::print_shadow_reduction_statements() {
     for (const auto& statement: shadow_statements) {
         print_atomic_reduction_pragma();
@@ -1173,11 +1168,6 @@ void CodegenCVisitor::print_shadow_reduction_statements() {
         printer->fmt_line("{} {} {};", lhs, statement.op, rhs);
     }
     shadow_statements.clear();
-}
-
-
-void CodegenCVisitor::print_shadow_reduction_block_end() {
-    printer->end_block(1);
 }
 
 
@@ -4310,9 +4300,9 @@ void CodegenCVisitor::print_nrn_state() {
     }
     printer->end_block(1);
     if (!shadow_statements.empty()) {
-        print_shadow_reduction_block_begin();
+        printer->start_block("for (int id = 0; id < nodecount; id++)");
         print_shadow_reduction_statements();
-        print_shadow_reduction_block_end();
+        printer->end_block(1);
     }
 
     print_kernel_data_present_annotation_block_end();
@@ -4468,7 +4458,7 @@ void CodegenCVisitor::print_fast_imem_calculation() {
 
     printer->start_block("if (nt->nrn_fast_imem)");
     if (nrn_cur_reduction_loop_required()) {
-        print_shadow_reduction_block_begin();
+        printer->start_block("for (int id = 0; id < nodecount; id++)");
         printer->add_line("int node_id = node_index[id];");
     }
     print_atomic_reduction_pragma();
@@ -4476,7 +4466,7 @@ void CodegenCVisitor::print_fast_imem_calculation() {
     print_atomic_reduction_pragma();
     printer->fmt_line("nt->nrn_fast_imem->nrn_sav_d[node_id] {} {};", d_op, d);
     if (nrn_cur_reduction_loop_required()) {
-        print_shadow_reduction_block_end();
+        printer->end_block(1);
     }
     printer->end_block(1);
 }
@@ -4504,10 +4494,10 @@ void CodegenCVisitor::print_nrn_cur() {
     printer->end_block(1);
 
     if (nrn_cur_reduction_loop_required()) {
-        print_shadow_reduction_block_begin();
+        printer->start_block("for (int id = 0; id < nodecount; id++)");
         print_nrn_cur_matrix_shadow_reduction();
         print_shadow_reduction_statements();
-        print_shadow_reduction_block_end();
+        printer->end_block(1);
         print_fast_imem_calculation();
     }
 
