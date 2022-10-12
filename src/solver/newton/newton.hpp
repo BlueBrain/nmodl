@@ -17,7 +17,7 @@
 
 #include <crout/crout.hpp>
 
-#include <Eigen/LU>
+#include <Eigen/Dense>
 
 namespace nmodl {
 /// newton solver implementations
