@@ -39,10 +39,10 @@ jobs:
               # Hyphens here will be replaced with commas before the value is
               # passed to NMODL_SANITIZERS
               sanitizer: address-leak
-          #- config:
-          #    flag_warnings: ON
-          #    os: ubuntu-22.04
-          #    sanitizer: undefined
+          - config:
+              flag_warnings: ON
+              os: ubuntu-22.04
+              sanitizer: undefined
       fail-fast: true
     steps:
       - name: Setup cmake
