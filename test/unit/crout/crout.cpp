@@ -37,7 +37,7 @@ bool allclose(const Eigen::DenseBase<DerivedA>& a,
 template <typename T>
 bool test_Crout_correctness(T rtol = 1e-8, T atol = 1e-8) {
     std::random_device rd;  // seeding
-    std::mt19937 mt(rd());
+    std::default_random_engine mt(rd());
     std::uniform_real_distribution<T> nums(-1e3, 1e3);
 
     for (int mat_size = 5; mat_size < 15; mat_size++) {
