@@ -103,7 +103,6 @@ $(document).ready(function(){initNavTree('src_2main_8cpp.html',''); initResizabl
 <code>#include &quot;<a class="el" href="codegen__acc__visitor_8hpp_source.html">codegen/codegen_acc_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="codegen__c__visitor_8hpp_source.html">codegen/codegen_c_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="codegen__compatibility__visitor_8hpp_source.html">codegen/codegen_compatibility_visitor.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="codegen__ispc__visitor_8hpp_source.html">codegen/codegen_ispc_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="codegen__transform__visitor_8hpp_source.html">codegen/codegen_transform_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="config_8h_source.html">config/config.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="nmodl__driver_8hpp_source.html">parser/nmodl_driver.hpp</a>&quot;</code><br />
@@ -117,7 +116,6 @@ $(document).ready(function(){initNavTree('src_2main_8cpp.html',''); initResizabl
 <code>#include &quot;<a class="el" href="implicit__argument__visitor_8hpp_source.html">visitors/implicit_argument_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="indexedname__visitor_8hpp_source.html">visitors/indexedname_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="inline__visitor_8hpp_source.html">visitors/inline_visitor.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="ispc__rename__visitor_8hpp_source.html">visitors/ispc_rename_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="json__visitor_8hpp_source.html">visitors/json_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="kinetic__block__visitor_8hpp_source.html">visitors/kinetic_block_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="local__to__assigned__visitor_8hpp_source.html">visitors/local_to_assigned_visitor.hpp</a>&quot;</code><br />
@@ -173,7 +171,6 @@ Functions</h2></td></tr>
 <p>list of mod files to process</p>
 <p>true if debug logger statements should be shown</p>
 <p>true if serial c code to be generated</p>
-<p>true if ispc code to be generated</p>
 <p>true if c code with openacc to be generated</p>
 <p>true if sympy should be used for solving ODEs analytically</p>
 <p>true if Pade approximation to be used</p>
@@ -209,14 +206,13 @@ Functions</h2></td></tr>
 <p>construct symbol table</p>
 <p>Check some rules that ast should follow</p>
 <p>use cnexp instead of after_cvode solve method</p>
-<p>Rename variables that match ISPC compiler double constants</p>
 <p>GLOBAL to RANGE rename visitor</p>
 <p>LOCAL to ASSIGNED visitor</p>
 <p>note that we can not symtab visitor in update mode as we replace kinetic block with derivative block of same name in global scope</p>
 <p>Parsing units fron "nrnunits.lib" and mod files</p>
 <p>once we start modifying (especially removing) older constructs from ast then we should run symtab visitor in update mode so that old symbols (e.g. prime variables) are not lost</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2main_8cpp_source.html#l00062">62</a> of file <a class="el" href="src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2main_8cpp_source.html#l00060">60</a> of file <a class="el" href="src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>

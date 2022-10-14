@@ -89,10 +89,6 @@ var group__visitor__classes =
       [ "statement_stack", "classnmodl_1_1visitor_1_1_inline_visitor.html#a9883e6dd815cc907140562f2bb574e5b", null ],
       [ "statementblock_stack", "classnmodl_1_1visitor_1_1_inline_visitor.html#abc282598b1ffcf4b9581f64143476fa5", null ]
     ] ],
-    [ "IspcRenameVisitor", "classnmodl_1_1visitor_1_1_ispc_rename_visitor.html", [
-      [ "IspcRenameVisitor", "classnmodl_1_1visitor_1_1_ispc_rename_visitor.html#a64a8d7e119e254632fa90215a3fd6ce2", null ],
-      [ "IspcRenameVisitor", "classnmodl_1_1visitor_1_1_ispc_rename_visitor.html#ab3764d9b80dcb11f57a94668d1d1523f", null ]
-    ] ],
     [ "KineticBlockVisitor", "classnmodl_1_1visitor_1_1_kinetic_block_visitor.html", [
       [ "RateEqs", "structnmodl_1_1visitor_1_1_kinetic_block_visitor_1_1_rate_eqs.html", [
         [ "k_b", "structnmodl_1_1visitor_1_1_kinetic_block_visitor_1_1_rate_eqs.html#a37784e80a83ac79bbe1afc8934aaa099", null ],

@@ -102,15 +102,9 @@ Functions</h2></td></tr>
 <tr class="memitem:ad7f64bb2383682a662311a40a6a96a25"><td class="memItemLeft" align="right" valign="top">template&lt;&gt; </td></tr>
 <tr class="memitem:ad7f64bb2383682a662311a40a6a96a25"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1codegen_1_1utils.html#ad7f64bb2383682a662311a40a6a96a25">format_double_string&lt; CodegenCVisitor &gt;</a> (const std::string &amp;s_value)</td></tr>
 <tr class="separator:ad7f64bb2383682a662311a40a6a96a25"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5fa2745b0f28ad56c202031703c2fc33"><td class="memItemLeft" align="right" valign="top">template&lt;&gt; </td></tr>
-<tr class="memitem:a5fa2745b0f28ad56c202031703c2fc33"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1codegen_1_1utils.html#a5fa2745b0f28ad56c202031703c2fc33">format_double_string&lt; CodegenIspcVisitor &gt;</a> (const std::string &amp;s_value)</td></tr>
-<tr class="separator:a5fa2745b0f28ad56c202031703c2fc33"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8a05545df87abde7bd9c140c1c4d5d42"><td class="memItemLeft" align="right" valign="top">template&lt;&gt; </td></tr>
 <tr class="memitem:a8a05545df87abde7bd9c140c1c4d5d42"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1codegen_1_1utils.html#a8a05545df87abde7bd9c140c1c4d5d42">format_float_string&lt; CodegenCVisitor &gt;</a> (const std::string &amp;s_value)</td></tr>
 <tr class="separator:a8a05545df87abde7bd9c140c1c4d5d42"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a37264733af5e0a57c9dfbc5818fcd4d0"><td class="memItemLeft" align="right" valign="top">template&lt;&gt; </td></tr>
-<tr class="memitem:a37264733af5e0a57c9dfbc5818fcd4d0"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1codegen_1_1utils.html#a37264733af5e0a57c9dfbc5818fcd4d0">format_float_string&lt; CodegenIspcVisitor &gt;</a> (const std::string &amp;s_value)</td></tr>
-<tr class="separator:a37264733af5e0a57c9dfbc5818fcd4d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa632f88f428f21e6befeab48d9401997"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:aa632f88f428f21e6befeab48d9401997"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1codegen_1_1utils.html#aa632f88f428f21e6befeab48d9401997">format_double_string</a> (const std::string &amp;s_value)</td></tr>
 <tr class="memdesc:aa632f88f428f21e6befeab48d9401997"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handles the double constants format being printed in the generated code.  <a href="namespacenmodl_1_1codegen_1_1utils.html#aa632f88f428f21e6befeab48d9401997">More...</a><br /></td></tr>
@@ -140,7 +134,7 @@ template&lt;typename T &gt; </div>
 </div><div class="memdoc">
 
 <p>Handles the double constants format being printed in the generated code. </p>
-<p>It takes care of printing the values with the correct floating point precision for each backend, similar to mod2c and Neuron. This function can be called using as template <code><a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html" title="Visitor for printing C code compatible with legacy api of CoreNEURON">CodegenCVisitor</a></code> or <code><a class="el" href="classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html" title="Visitor for printing C code with ISPC backend">CodegenIspcVisitor</a></code>.</p>
+<p>It takes care of printing the values with the correct floating point precision for each backend, similar to mod2c and Neuron. This function can be called using as template <code><a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html" title="Visitor for printing C code compatible with legacy api of CoreNEURON">CodegenCVisitor</a></code></p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">s_value</td><td>The double constant as string </td></tr>
@@ -168,32 +162,9 @@ template&lt;&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>We can directly print value but if user specify value as integer then then it gets printed as an integer. To avoid this, we use below wrapper. If user has provided integer then it gets printed as 1.0 (similar to mod2c and neuron where ".0" is appended). Otherwise we print double variables as they are represented in the mod file by user. If the value is in scientific representation (1e+20, 1E-15) then keep it as it is. </p>
+<p>We can directly print value but if user specify value as integer then then it gets printed as an integer. To avoid this, we use below wrappers. If user has provided integer then it gets printed as 1.0 (similar to mod2c and neuron where ".0" is appended). Otherwise we print double variables as they are represented in the mod file by user. If the value is in scientific representation (1e+20, 1E-15) then keep it as it is. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__utils_8cpp_source.html#l00040">40</a> of file <a class="el" href="src_2codegen_2codegen__utils_8cpp_source.html">codegen_utils.cpp</a>.</p>
-
-</div>
-</div>
-<a id="a5fa2745b0f28ad56c202031703c2fc33"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5fa2745b0f28ad56c202031703c2fc33">&#9670;&nbsp;</a></span>format_double_string&lt; CodegenIspcVisitor &gt;()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string <a class="el" href="namespacenmodl_1_1codegen_1_1utils.html#aa632f88f428f21e6befeab48d9401997">nmodl::codegen::utils::format_double_string</a>&lt; <a class="el" href="classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html">CodegenIspcVisitor</a> &gt; </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>s_value</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>In ISPC we have to explicitly append <code>d</code> to a floating point number otherwise it is treated as float. A value stored in the AST can be in scientific notation and hence we can't just append <code>d</code> to the string. Hence, we have to transform the value into the ISPC compliant format by replacing <code>e</code> and <code>E</code> with <code>d</code> to keep the same representation of the number as in the cpp backend. </p>
-
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__utils_8cpp_source.html#l00058">58</a> of file <a class="el" href="src_2codegen_2codegen__utils_8cpp_source.html">codegen_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__utils_8cpp_source.html#l00039">39</a> of file <a class="el" href="src_2codegen_2codegen__utils_8cpp_source.html">codegen_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -216,7 +187,7 @@ template&lt;typename T &gt; </div>
 </div><div class="memdoc">
 
 <p>Handles the float constants format being printed in the generated code. </p>
-<p>It takes care of printing the values with the correct floating point precision for each backend, similar to mod2c and Neuron. This function can be called using as template <code><a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html" title="Visitor for printing C code compatible with legacy api of CoreNEURON">CodegenCVisitor</a></code> or <code><a class="el" href="classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html" title="Visitor for printing C code with ISPC backend">CodegenIspcVisitor</a></code>.</p>
+<p>It takes care of printing the values with the correct floating point precision for each backend, similar to mod2c and Neuron. This function can be called using as template <code><a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html" title="Visitor for printing C code compatible with legacy api of CoreNEURON">CodegenCVisitor</a></code></p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">s_value</td><td>The double constant as string </td></tr>
@@ -245,30 +216,7 @@ template&lt;&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__utils_8cpp_source.html#l00075">75</a> of file <a class="el" href="src_2codegen_2codegen__utils_8cpp_source.html">codegen_utils.cpp</a>.</p>
-
-</div>
-</div>
-<a id="a37264733af5e0a57c9dfbc5818fcd4d0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a37264733af5e0a57c9dfbc5818fcd4d0">&#9670;&nbsp;</a></span>format_float_string&lt; CodegenIspcVisitor &gt;()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string <a class="el" href="namespacenmodl_1_1codegen_1_1utils.html#af37aaecb81df71fda4c68e0da90baee8">nmodl::codegen::utils::format_float_string</a>&lt; <a class="el" href="classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html">CodegenIspcVisitor</a> &gt; </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>s_value</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>For float variables we don't have to do the conversion with changing <code>e</code> and <code>E</code> with <code>f</code>, since the scientific notation numbers are already parsed as floats by ISPC. Instead we need to take care of only appending <code>f</code> to the end of floating point numbers, which is optional on ISPC. </p>
-
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__utils_8cpp_source.html#l00091">91</a> of file <a class="el" href="src_2codegen_2codegen__utils_8cpp_source.html">codegen_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__utils_8cpp_source.html#l00049">49</a> of file <a class="el" href="src_2codegen_2codegen__utils_8cpp_source.html">codegen_utils.cpp</a>.</p>
 
 </div>
 </div>

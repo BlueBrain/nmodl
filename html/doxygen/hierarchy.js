@@ -12,17 +12,14 @@ var hierarchy =
     [ "nmodl::visitor::ConstVisitor", "classnmodl_1_1visitor_1_1_const_visitor.html", [
       [ "nmodl::visitor::ConstAstVisitor", "classnmodl_1_1visitor_1_1_const_ast_visitor.html", [
         [ "nmodl::codegen::CodegenCVisitor", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html", [
-          [ "nmodl::codegen::CodegenAccVisitor", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html", null ],
-          [ "nmodl::codegen::CodegenIspcVisitor", "classnmodl_1_1codegen_1_1_codegen_ispc_visitor.html", null ]
+          [ "nmodl::codegen::CodegenAccVisitor", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html", null ]
         ] ],
         [ "nmodl::codegen::CodegenHelperVisitor", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html", null ],
         [ "nmodl::visitor::DefUseAnalyzeVisitor", "classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html", null ],
         [ "nmodl::visitor::JSONVisitor", "classnmodl_1_1visitor_1_1_j_s_o_n_visitor.html", null ],
         [ "nmodl::visitor::LocalizeVisitor", "classnmodl_1_1visitor_1_1_localize_visitor.html", null ],
         [ "nmodl::visitor::PerfVisitor", "classnmodl_1_1visitor_1_1_perf_visitor.html", null ],
-        [ "nmodl::visitor::RenameVisitor", "classnmodl_1_1visitor_1_1_rename_visitor.html", [
-          [ "nmodl::visitor::IspcRenameVisitor", "classnmodl_1_1visitor_1_1_ispc_rename_visitor.html", null ]
-        ] ],
+        [ "nmodl::visitor::RenameVisitor", "classnmodl_1_1visitor_1_1_rename_visitor.html", null ],
         [ "nmodl::visitor::SemanticAnalysisVisitor", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html", null ],
         [ "nmodl::visitor::test::CheckParentVisitor", "classnmodl_1_1visitor_1_1test_1_1_check_parent_visitor.html", null ],
         [ "nmodl::visitor::VarUsageVisitor", "classnmodl_1_1visitor_1_1_var_usage_visitor.html", null ],
@@ -179,7 +176,6 @@ var hierarchy =
     [ "nmodl::codegen::IndexVariableInfo", "structnmodl_1_1codegen_1_1_index_variable_info.html", null ],
     [ "nmodl::visitor::SympyReplaceSolutionsVisitor::InterleavesCounter", "structnmodl_1_1visitor_1_1_sympy_replace_solutions_visitor_1_1_interleaves_counter.html", null ],
     [ "nmodl::codegen::Ion", "structnmodl_1_1codegen_1_1_ion.html", null ],
-    [ "IspcCodegenTestHelper", "class_ispc_codegen_test_helper.html", null ],
     [ "nmodl::printer::JSONPrinter", "classnmodl_1_1printer_1_1_j_s_o_n_printer.html", null ],
     [ "nmodl::Logger", "structnmodl_1_1_logger.html", null ],
     [ "nmodl::details::MethodInfo", "structnmodl_1_1details_1_1_method_info.html", null ],

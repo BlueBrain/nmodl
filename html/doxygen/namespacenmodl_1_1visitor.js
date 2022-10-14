@@ -14,7 +14,6 @@ var namespacenmodl_1_1visitor =
     [ "IndexedNameVisitor", "classnmodl_1_1visitor_1_1_indexed_name_visitor.html", "classnmodl_1_1visitor_1_1_indexed_name_visitor" ],
     [ "IndexRemover", "classnmodl_1_1visitor_1_1_index_remover.html", "classnmodl_1_1visitor_1_1_index_remover" ],
     [ "InlineVisitor", "classnmodl_1_1visitor_1_1_inline_visitor.html", "classnmodl_1_1visitor_1_1_inline_visitor" ],
-    [ "IspcRenameVisitor", "classnmodl_1_1visitor_1_1_ispc_rename_visitor.html", "classnmodl_1_1visitor_1_1_ispc_rename_visitor" ],
     [ "JSONVisitor", "classnmodl_1_1visitor_1_1_j_s_o_n_visitor.html", "classnmodl_1_1visitor_1_1_j_s_o_n_visitor" ],
     [ "KineticBlockVisitor", "classnmodl_1_1visitor_1_1_kinetic_block_visitor.html", "classnmodl_1_1visitor_1_1_kinetic_block_visitor" ],
     [ "LocalizeVisitor", "classnmodl_1_1visitor_1_1_localize_visitor.html", "classnmodl_1_1visitor_1_1_localize_visitor" ],
