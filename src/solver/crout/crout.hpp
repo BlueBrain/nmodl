@@ -67,7 +67,7 @@ nrn_pragma_omp(declare target)
 template <typename T>
 EIGEN_DEVICE_FUNC inline int Crout(int n, T* A, int* pivot) {
     int i, j, k;
-    T *p_k, *p_row, *p_col;
+    T *p_k{}, *p_row{}, *p_col{};
     T max;
 
     // For each row and column, k = 0, ..., n-1,
