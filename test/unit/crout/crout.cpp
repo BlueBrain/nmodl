@@ -11,6 +11,8 @@
 
 #include <catch2/catch.hpp>
 
+#include <chrono>
+#include <iostream>
 #include <random>
 
 #include "Eigen/Dense"
@@ -41,6 +43,12 @@ bool test_Crout_correctness(T rtol = 1e-8, T atol = 1e-8) {
     std::mt19937 mt(seed);
     std::uniform_real_distribution<T> nums(-1e3, 1e3);
 
+    std::chrono::duration<double> eigen_timing(std::chrono::duration<double>::zero());
+    std::chrono::duration<double> crout_timing(std::chrono::duration<double>::zero());
+
+    auto t1 = std::chrono::high_resolution_clock::now();
+    auto t2 = std::chrono::high_resolution_clock::now();
+
     for (int mat_size = 5; mat_size < 15; mat_size++) {
         Matrix<T, Dynamic, Dynamic, Eigen::ColMajor> A_ColMajor(mat_size,
                                                                 mat_size);  // default in Eigen!
@@ -59,6 +67,7 @@ bool test_Crout_correctness(T rtol = 1e-8, T atol = 1e-8) {
                 }
             } while (!A_ColMajor.fullPivLu().isInvertible());  // Checking Invertibility
 
+            t1 = std::chrono::high_resolution_clock::now();
             // Eigen (ColMajor)
             Matrix<T, Dynamic, 1> eigen_x_ColMajor(mat_size);
             eigen_x_ColMajor = A_ColMajor.partialPivLu().solve(b);
@@ -66,12 +75,15 @@ bool test_Crout_correctness(T rtol = 1e-8, T atol = 1e-8) {
             // Eigen (RowMajor)
             Matrix<T, Dynamic, 1> eigen_x_RowMajor(mat_size);
             eigen_x_RowMajor = A_RowMajor.partialPivLu().solve(b);
+            t2 = std::chrono::high_resolution_clock::now();
+            eigen_timing += (t2 - t1);
 
             if (!allclose(eigen_x_ColMajor, eigen_x_RowMajor, rtol, atol)) {
                 cerr << "eigen_x_ColMajor vs eigen_x_RowMajor (issue) / seed = " << seed << endl;
                 return false;
             }
 
+            t1 = std::chrono::high_resolution_clock::now();
             // Crout with A_ColMajor
             Matrix<T, Dynamic, 1> crout_x_ColMajor(mat_size);
             if (!A_ColMajor.IsRowMajor)
@@ -81,16 +93,18 @@ bool test_Crout_correctness(T rtol = 1e-8, T atol = 1e-8) {
             crout::solveCrout<T>(
                 mat_size, A_ColMajor.data(), b.data(), crout_x_ColMajor.data(), pivot.data());
 
-            if (!allclose(eigen_x_ColMajor, crout_x_ColMajor, rtol, atol)) {
-                cerr << "eigen_x_ColMajor vs crout_x_ColMajor (issue) / seed = " << seed << endl;
-                return false;
-            }
-
             // Crout with A_RowMajor
             Matrix<T, Dynamic, 1> crout_x_RowMajor(mat_size);
             crout::Crout<T>(mat_size, A_RowMajor.data(), pivot.data());
             crout::solveCrout<T>(
                 mat_size, A_RowMajor.data(), b.data(), crout_x_RowMajor.data(), pivot.data());
+            t2 = std::chrono::high_resolution_clock::now();
+            crout_timing += (t2 - t1);
+
+            if (!allclose(eigen_x_ColMajor, crout_x_ColMajor, rtol, atol)) {
+                cerr << "eigen_x_ColMajor vs crout_x_ColMajor (issue) / seed = " << seed << endl;
+                return false;
+            }
 
             if (!allclose(eigen_x_RowMajor, crout_x_RowMajor, rtol, atol)) {
                 cerr << "eigen_x_RowMajor vs crout_x_RowMajor (issue) / seed = " << seed << endl;
@@ -98,6 +112,9 @@ bool test_Crout_correctness(T rtol = 1e-8, T atol = 1e-8) {
             }
         }
     }
+
+    std::cout << "eigen_timing [ms] : " << eigen_timing.count() * 1e3 << std::endl;
+    std::cout << "crout_timing [ms] : " << crout_timing.count() * 1e3 << std::endl;
 
     return true;
 }
