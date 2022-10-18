@@ -108,7 +108,9 @@ void SemanticAnalysisVisitor::visit_independent_block(const ast::IndependentBloc
     for (const auto& n: node.get_variables()) {
         if (n->get_value()->get_value() != "t") {
             logger->warn(
-                "SemanticAnalysisVisitor :: '{}' cannot be used as an independent variable, only 't' is allowed.", n->get_value()->get_value());
+                "SemanticAnalysisVisitor :: '{}' cannot be used as an independent variable, only "
+                "'t' is allowed.",
+                n->get_value()->get_value());
         }
     }
     /// -->
