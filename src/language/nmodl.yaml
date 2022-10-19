@@ -454,6 +454,7 @@
                                   brief: "List of variable that should be independent"
                                   type: Name
                                   vector: true
+                                  separator: " "
                             brief: "Represents a `INDEPENDENT` block in the NMODL"
                             description: |
                                     `INDEPENDENT` has following form in the NMODL specification :

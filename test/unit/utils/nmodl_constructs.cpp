@@ -434,7 +434,7 @@ std::map<std::string, NmodlTestCase> const nmodl_valid_constructs{
             )",
             R"(
                 INDEPENDENT {
-                tu}
+                t u}
             )"
         }
     },
