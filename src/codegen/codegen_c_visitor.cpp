@@ -3074,8 +3074,7 @@ void CodegenCVisitor::print_mechanism_range_var_structure(bool print_initialiser
         auto name = var.symbol->get_name();
         if (var.is_index || var.is_integer) {
             auto qualifier = var.is_constant ? "const " : "";
-            printer->fmt_line(
-                "{}{}* {}{};", qualifier, int_type, name, value_initialise);
+            printer->fmt_line("{}{}* {}{};", qualifier, int_type, name, value_initialise);
         } else {
             auto qualifier = var.is_constant ? "const " : "";
             auto type = var.is_vdata ? "void*" : default_float_data_type();
@@ -3377,8 +3376,7 @@ void CodegenCVisitor::print_global_function_common_code(BlockType type,
         printer->add_newline();
         printer->add_line("setup_instance(nt, ml);");
     }
-    printer->fmt_line("auto* const inst = static_cast<{}*>(ml->instance);",
-                      instance_struct());
+    printer->fmt_line("auto* const inst = static_cast<{}*>(ml->instance);", instance_struct());
     printer->add_newline(1);
 }
 
