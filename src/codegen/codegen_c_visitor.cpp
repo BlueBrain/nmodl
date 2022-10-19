@@ -1041,6 +1041,8 @@ void CodegenCVisitor::print_channel_iteration_tiling_block_begin(BlockType /* ty
     // no tiling for cpu backend, just get loop bounds
     printer->add_line("int start = 0;");
     printer->add_line("int end = nodecount;");
+    if (info.eigen_newton_solver_exist || info.eigen_linear_solver_exist)
+        printer->add_line("int solver_error = 0;");
 }
 
 
@@ -1895,6 +1897,7 @@ void CodegenCVisitor::visit_eigen_newton_solver_block(const ast::EigenNewtonSolv
     printer->add_line("newton_functor.initialize();");
     printer->add_line(
         "int newton_iterations = nmodl::newton::newton_solver(nmodl_eigen_xm, newton_functor);");
+    printer->add_line("if (newton_iterations < 0) solver_error += 1;");
 
     // assign newton solver results in matrix X to state vars
     print_statement_block(*node.get_update_states_block(), false, false);
@@ -1908,6 +1911,10 @@ void CodegenCVisitor::visit_eigen_linear_solver_block(const ast::EigenLinearSolv
     int N = node.get_n_state_vars()->get_value();
     printer->fmt_line("Eigen::Matrix<{0}, {1}, 1> nmodl_eigen_xm, nmodl_eigen_fm;", float_type, N);
     printer->fmt_line("Eigen::Matrix<{0}, {1}, {1}> nmodl_eigen_jm;", float_type, N);
+    if (N <= 4) {
+        printer->add_line("bool invertible;");
+        printer->fmt_line("Eigen::Matrix<{0}, {1}, {1}> nmodl_eigen_jm_inv;", float_type, N);
+    }
     printer->fmt_line("{}* nmodl_eigen_x = nmodl_eigen_xm.data();", float_type);
     printer->fmt_line("{}* nmodl_eigen_j = nmodl_eigen_jm.data();", float_type);
     printer->fmt_line("{}* nmodl_eigen_f = nmodl_eigen_fm.data();", float_type);
@@ -1926,7 +1933,9 @@ void CodegenCVisitor::visit_eigen_linear_solver_block(const ast::EigenLinearSolv
 void CodegenCVisitor::print_eigen_linear_solver(const std::string& float_type, int N) {
     if (N <= 4) {
         // Faster compared to LU, given the template specialization in Eigen.
-        printer->add_line("nmodl_eigen_xm = nmodl_eigen_jm.inverse()*nmodl_eigen_fm;");
+        printer->add_line("nmodl_eigen_jm.computeInverseWithCheck(nmodl_eigen_jm_inv,invertible);");
+        printer->add_line("nmodl_eigen_xm = nmodl_eigen_jm_inv*nmodl_eigen_fm;");
+        printer->add_line("if(!invertible) solver_error += 1;");
     } else {
         // In Eigen the default storage order is ColMajor.
         // Crout's implementation requires matrices stored in RowMajor order (C-style arrays).
@@ -1938,9 +1947,11 @@ void CodegenCVisitor::print_eigen_linear_solver(const std::string& float_type, i
         printer->fmt_line("Eigen::Matrix<int, {}, 1> pivot;", N);
 
         // In-place LU-Decomposition (Crout Algo) : Jm is replaced by its LU-decomposition
-        printer->fmt_line("nmodl::crout::Crout<{0}>({1}, nmodl_eigen_jm.data(), pivot.data());",
-                          float_type,
-                          N);
+        printer->fmt_line(
+            "if (nmodl::crout::Crout<{0}>({1}, nmodl_eigen_jm.data(), pivot.data()) < 0) "
+            "solver_error += 1;",
+            float_type,
+            N);
 
         // Solve the linear system : Forward/Backward substitution part
         printer->fmt_line(
@@ -2531,6 +2542,7 @@ void CodegenCVisitor::print_coreneuron_includes() {
             printer->add_line("#include <crout/crout.hpp>");
         } else {
             printer->add_line("#include <Eigen/Dense>");
+            printer->add_line("#include <Eigen/LU>");
         }
     }
 }
@@ -4371,6 +4383,12 @@ void CodegenCVisitor::print_nrn_state() {
     print_channel_iteration_tiling_block_end();
 
     print_kernel_data_present_annotation_block_end();
+
+    if (info.eigen_newton_solver_exist)
+        printer->add_line("if (solver_error > 0) throw std::runtime_error(\"Newton solver does not converge!\");");
+    if (info.eigen_linear_solver_exist)
+        printer->add_line("if (solver_error > 0) throw std::runtime_error(\"Singular matrices (Crout/Inverse)!\");");
+
     printer->end_block(1);
     codegen = false;
 }

@@ -18,6 +18,7 @@
 #include <crout/crout.hpp>
 
 #include <Eigen/Dense>
+#include <Eigen/LU>
 
 namespace nmodl {
 /// newton solver implementations
@@ -78,7 +79,9 @@ EIGEN_DEVICE_FUNC int newton_solver(Eigen::Matrix<double, N, 1>& X,
         if (!J.IsRowMajor)
             J.transposeInPlace();
         Eigen::Matrix<int, N, 1> pivot;
-        nmodl::crout::Crout<double>(N, J.data(), pivot.data());
+        // Check if J is singular
+        if (nmodl::crout::Crout<double>(N, J.data(), pivot.data()) < 0)
+            return -1;
         Eigen::Matrix<double, N, 1> X_solve;
         nmodl::crout::solveCrout<double>(N, J.data(), F.data(), X_solve.data(), pivot.data());
         X -= X_solve;
@@ -155,7 +158,9 @@ EIGEN_DEVICE_FUNC int newton_numerical_diff_solver(Eigen::Matrix<double, N, 1>& 
         if (!J.IsRowMajor)
             J.transposeInPlace();
         Eigen::Matrix<int, N, 1> pivot;
-        nmodl::crout::Crout<double>(N, J.data(), pivot.data());
+        // Check if J is singular
+        if (nmodl::crout::Crout<double>(N, J.data(), pivot.data()) < 0)
+            return -1;
         Eigen::Matrix<double, N, 1> X_solve;
         nmodl::crout::solveCrout<double>(N, J.data(), F.data(), X_solve.data(), pivot.data());
         X -= X_solve;
@@ -175,8 +180,9 @@ EIGEN_DEVICE_FUNC int newton_solver_small_N(Eigen::Matrix<double, N, 1>& X,
                                             FUNC functor,
                                             double eps,
                                             int max_iter) {
+    bool invertible;
     Eigen::Matrix<double, N, 1> F;
-    Eigen::Matrix<double, N, N> J;
+    Eigen::Matrix<double, N, N> J, J_inv;
     int iter = -1;
     while (++iter < max_iter) {
         functor(X, F, J);
@@ -186,7 +192,11 @@ EIGEN_DEVICE_FUNC int newton_solver_small_N(Eigen::Matrix<double, N, 1>& X,
         }
         // The inverse can be called from within OpenACC regions without any issue, as opposed to
         // Eigen::PartialPivLU.
-        X -= J.inverse() * F;
+        J.computeInverseWithCheck(J_inv, invertible);
+        if (invertible)
+            X -= J_inv * F;
+        else
+            return -1;
     }
     return -1;
 }
