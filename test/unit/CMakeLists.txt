@@ -38,7 +38,6 @@ add_executable(
   visitor/global_to_range.cpp
   visitor/implicit_argument.cpp
   visitor/inline.cpp
-  visitor/ispc_rename.cpp
   visitor/json.cpp
   visitor/kinetic_block.cpp
   visitor/localize.cpp
@@ -66,9 +65,8 @@ add_executable(testcrout crout/crout.cpp ${CROUT_SOLVER_SOURCE_FILES})
 add_executable(testfast_math fast_math/fast_math.cpp ${NEWTON_SOLVER_SOURCE_FILES})
 add_executable(testunitlexer units/lexer.cpp)
 add_executable(testunitparser units/parser.cpp)
-add_executable(
-  testcodegen codegen/main.cpp codegen/codegen_ispc.cpp codegen/codegen_helper.cpp
-              codegen/codegen_utils.cpp codegen/codegen_c_visitor.cpp codegen/transform.cpp)
+add_executable(testcodegen codegen/main.cpp codegen/codegen_helper.cpp codegen/codegen_utils.cpp
+                           codegen/codegen_c_visitor.cpp codegen/transform.cpp)
 
 target_link_libraries(testmodtoken lexer util)
 target_link_libraries(testlexer lexer util)
