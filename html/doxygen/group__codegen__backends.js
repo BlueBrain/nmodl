@@ -221,7 +221,6 @@ var group__codegen__backends =
       [ "process_shadow_update_statement", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a917c35d69ab6a67b4ccc7e3937249c6e", null ],
       [ "process_verbatim_text", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a173a3643283538a1fd8c83cc229dadfd", null ],
       [ "process_verbatim_token", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a271f98f0c422df96ce7667a45b3c5ad7", null ],
-      [ "ptr_type_qualifier", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ab105cbc0ecc135cb0e017b7903ab3226", null ],
       [ "range_variable_setup_required", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ab58c9e42f70be97a36e30689f7969dd0", null ],
       [ "read_ion_variable_name", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a92f41f6105576e33875bf0694959c026", null ],
       [ "register_mechanism_arguments", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#af45cf6bdf99efd192b67636916eaf081", null ],
