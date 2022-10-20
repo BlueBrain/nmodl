@@ -336,8 +336,7 @@ SCENARIO("Check NEURON globals are added to the instance struct on demand",
             auto const generated = get_instance_structure(nmodl_text);
             REQUIRE_THAT(generated, Contains("double* celsius{&coreneuron::celsius}"));
             REQUIRE_THAT(generated, Contains("double* pi{&coreneuron::pi}"));
-            REQUIRE_THAT(generated,
-                         Contains("int* secondorder{&coreneuron::secondorder}"));
+            REQUIRE_THAT(generated, Contains("int* secondorder{&coreneuron::secondorder}"));
         }
     }
     GIVEN("A MOD file that implicitly uses global variables") {
