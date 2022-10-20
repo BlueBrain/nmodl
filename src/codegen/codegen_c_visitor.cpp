@@ -1108,7 +1108,8 @@ void CodegenCVisitor::print_net_init_acc_serial_annotation_block_end() {
  *      for(int id = 0; id < nodecount; id++) {
  * \endcode
  */
-void CodegenCVisitor::print_channel_iteration_block_parallel_hint(BlockType /* type */) {
+void CodegenCVisitor::print_channel_iteration_block_parallel_hint(BlockType /* type */,
+                                                                  bool /* error_checking */) {
     printer->add_line("#pragma ivdep");
     printer->add_line("#pragma omp simd");
 }
@@ -3469,7 +3470,12 @@ void CodegenCVisitor::print_nrn_init(bool skip_init_check) {
         print_dt_update_to_device();
     }
 
-    print_channel_iteration_block_parallel_hint(BlockType::Initial);
+    if (info.eigen_newton_solver_exist) {
+        printer->add_line("int solver_error = 0;");
+        print_channel_iteration_block_parallel_hint(BlockType::Initial, true);
+    } else {
+        print_channel_iteration_block_parallel_hint(BlockType::Initial);
+    }
     printer->start_block("for (int id = 0; id < nodecount; id++)");
 
     if (info.net_receive_node != nullptr) {
@@ -3479,6 +3485,10 @@ void CodegenCVisitor::print_nrn_init(bool skip_init_check) {
     print_initial_block(info.initial_node);
     printer->end_block(1);
     print_shadow_reduction_statements();
+
+    if (info.eigen_newton_solver_exist)
+        printer->add_line(
+            "if (solver_error > 0) throw std::runtime_error(\"Newton solver did not converge!\");");
 
     if (!info.changed_dt.empty()) {
         printer->fmt_line("{} = _save_prev_dt;", get_variable_name(naming::NTHREAD_DT_VARIABLE));
@@ -4298,9 +4308,14 @@ void CodegenCVisitor::print_nrn_state() {
     printer->add_newline(2);
     printer->add_line("/** update state */");
     print_global_function_common_code(BlockType::State);
-    print_channel_iteration_block_parallel_hint(BlockType::State);
+    if (info.eigen_newton_solver_exist || info.eigen_linear_solver_exist) {
+        printer->add_line("int solver_error = 0;");
+        print_channel_iteration_block_parallel_hint(BlockType::State, true);
+    } else {
+        print_channel_iteration_block_parallel_hint(BlockType::State);
+    }
     printer->start_block("for (int id = 0; id < nodecount; id++)");
-
+    
     printer->add_line("int node_id = node_index[id];");
     printer->add_line("double v = voltage[node_id];");
     print_v_unused();
@@ -4342,7 +4357,7 @@ void CodegenCVisitor::print_nrn_state() {
     print_kernel_data_present_annotation_block_end();
 
     if (info.eigen_newton_solver_exist)
-        printer->add_line("if (solver_error > 0) throw std::runtime_error(\"Newton solver does not converge!\");");
+        printer->add_line("if (solver_error > 0) throw std::runtime_error(\"Newton solver did not converge!\");");
     if (info.eigen_linear_solver_exist)
         printer->add_line("if (solver_error > 0) throw std::runtime_error(\"Singular matrices (Crout/Inverse)!\");");
 
