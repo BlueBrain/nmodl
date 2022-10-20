@@ -381,9 +381,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a0914507317c00aaa53d6dad515f71a40"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_visitor.html#a0914507317c00aaa53d6dad515f71a40">visit_param_assign</a> (<a class="el" href="classnmodl_1_1ast_1_1_param_assign.html">ast::ParamAssign</a> &amp;node)=0</td></tr>
 <tr class="memdesc:a0914507317c00aaa53d6dad515f71a40"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_param_assign.html" title="TODO.">ast::ParamAssign</a>  <a href="classnmodl_1_1visitor_1_1_visitor.html#a0914507317c00aaa53d6dad515f71a40">More...</a><br /></td></tr>
 <tr class="separator:a0914507317c00aaa53d6dad515f71a40"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a116821bf4e2d7153de096af685048240"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_visitor.html#a116821bf4e2d7153de096af685048240">visit_independent_definition</a> (<a class="el" href="classnmodl_1_1ast_1_1_independent_definition.html">ast::IndependentDefinition</a> &amp;node)=0</td></tr>
-<tr class="memdesc:a116821bf4e2d7153de096af685048240"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_independent_definition.html" title="TODO.">ast::IndependentDefinition</a>  <a href="classnmodl_1_1visitor_1_1_visitor.html#a116821bf4e2d7153de096af685048240">More...</a><br /></td></tr>
-<tr class="separator:a116821bf4e2d7153de096af685048240"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa62b478cfaa6377d6b1cb9a88ff65d3"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_visitor.html#afa62b478cfaa6377d6b1cb9a88ff65d3">visit_assigned_definition</a> (<a class="el" href="classnmodl_1_1ast_1_1_assigned_definition.html">ast::AssignedDefinition</a> &amp;node)=0</td></tr>
 <tr class="memdesc:afa62b478cfaa6377d6b1cb9a88ff65d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_assigned_definition.html" title="Represents a statement in ASSIGNED or STATE block.">ast::AssignedDefinition</a>  <a href="classnmodl_1_1visitor_1_1_visitor.html#afa62b478cfaa6377d6b1cb9a88ff65d3">More...</a><br /></td></tr>
 <tr class="separator:afa62b478cfaa6377d6b1cb9a88ff65d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -651,7 +648,7 @@ Public Member Functions</h2></td></tr>
 
 <p>visit node of type <a class="el" href="classnmodl_1_1ast_1_1_assigned_definition.html" title="Represents a statement in ASSIGNED or STATE block.">ast::AssignedDefinition</a> </p>
 
-<p>Implemented in <a class="el" href="classnmodl_1_1visitor_1_1_ast_visitor.html#a6e77431fa65ed0469da89d839edb817c">nmodl::visitor::AstVisitor</a>, and <a class="el" href="classnmodl_1_1visitor_1_1_symtab_visitor.html#ae7429101cdea1b52019a0632822d9b6a">nmodl::visitor::SymtabVisitor</a>.</p>
+<p>Implemented in <a class="el" href="classnmodl_1_1visitor_1_1_symtab_visitor.html#ae7429101cdea1b52019a0632822d9b6a">nmodl::visitor::SymtabVisitor</a>, and <a class="el" href="classnmodl_1_1visitor_1_1_ast_visitor.html#a6e77431fa65ed0469da89d839edb817c">nmodl::visitor::AstVisitor</a>.</p>
 
 </div>
 </div>
@@ -2122,36 +2119,6 @@ Public Member Functions</h2></td></tr>
 <p>visit node of type <a class="el" href="classnmodl_1_1ast_1_1_independent_block.html" title="Represents a INDEPENDENT block in the NMODL.">ast::IndependentBlock</a> </p>
 
 <p>Implemented in <a class="el" href="classnmodl_1_1visitor_1_1_symtab_visitor.html#a311f6ab053e1103bd9ed6bacf3fea802">nmodl::visitor::SymtabVisitor</a>, and <a class="el" href="classnmodl_1_1visitor_1_1_ast_visitor.html#a00fa6a48372cb567007c32b1beb900ad">nmodl::visitor::AstVisitor</a>.</p>
-
-</div>
-</div>
-<a id="a116821bf4e2d7153de096af685048240"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a116821bf4e2d7153de096af685048240">&#9670;&nbsp;</a></span>visit_independent_definition()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void nmodl::visitor::Visitor::visit_independent_definition </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classnmodl_1_1ast_1_1_independent_definition.html">ast::IndependentDefinition</a> &amp;&#160;</td>
-          <td class="paramname"><em>node</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>visit node of type <a class="el" href="classnmodl_1_1ast_1_1_independent_definition.html" title="TODO.">ast::IndependentDefinition</a> </p>
-
-<p>Implemented in <a class="el" href="classnmodl_1_1visitor_1_1_ast_visitor.html#a969a4bd1c482d76045bdb124ff22a765">nmodl::visitor::AstVisitor</a>.</p>
 
 </div>
 </div>

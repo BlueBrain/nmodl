@@ -4,6 +4,7 @@ var classnmodl_1_1visitor_1_1_semantic_analysis_visitor =
     [ "check", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a59bf1db427b5229d53adc6a18c15b2a0", null ],
     [ "visit_destructor_block", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#aa1a426b1539112feb8160914733013ab", null ],
     [ "visit_function_block", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a0c3a7f34c86536de970e29b23d14092e", null ],
+    [ "visit_independent_block", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#aa00f48a7ee8cb274e0483746c60fd169", null ],
     [ "visit_procedure_block", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a3e7dc3e1ddd25ecc1ec131ad5958de93", null ],
     [ "visit_table_statement", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a973d5616f15e4048df98c1802269e9d3", null ],
     [ "check_fail", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a3bf4750e17d33e3a0b3168abbeca1b06", null ],

@@ -53,7 +53,6 @@ var classnmodl_1_1visitor_1_1_const_ast_visitor =
     [ "visit_if_statement", "classnmodl_1_1visitor_1_1_const_ast_visitor.html#a5776a06213333888d7a95655b05d2c66", null ],
     [ "visit_include", "classnmodl_1_1visitor_1_1_const_ast_visitor.html#a7bbd6210964d015cfc0605dbd729018a", null ],
     [ "visit_independent_block", "classnmodl_1_1visitor_1_1_const_ast_visitor.html#a469b803f7257b37e07e68e568e93af37", null ],
-    [ "visit_independent_definition", "classnmodl_1_1visitor_1_1_const_ast_visitor.html#a26c76dbcd5229a906a2abc7ddf483f5c", null ],
     [ "visit_indexed_name", "classnmodl_1_1visitor_1_1_const_ast_visitor.html#ac15cccbe5525a4980f50fcdba5e1f2c9", null ],
     [ "visit_initial_block", "classnmodl_1_1visitor_1_1_const_ast_visitor.html#ac0208fde0a67aebef283a183d3ce5ec2", null ],
     [ "visit_integer", "classnmodl_1_1visitor_1_1_const_ast_visitor.html#a85adf7c4d573c37a02e6a1885b7ba74b", null ],

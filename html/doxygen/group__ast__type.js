@@ -80,7 +80,6 @@ var group__ast__type =
       [ "DEFINE", "group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a5335d3381381fc5e5c8a2ef39d82cc53", null ],
       [ "INCLUDE", "group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a04ff6a9583ba9957ebe1128d0f988ad8", null ],
       [ "PARAM_ASSIGN", "group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a42cec2662d40b5ec92cc7d89c1f60a23", null ],
-      [ "INDEPENDENT_DEFINITION", "group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a5fd44ecec0840ff4874b87cb418dd593", null ],
       [ "ASSIGNED_DEFINITION", "group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a2a8d65501d801cbcf8faec684d2adbfe", null ],
       [ "CONDUCTANCE_HINT", "group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a7562920021e6c8aae8f611595d816805", null ],
       [ "EXPRESSION_STATEMENT", "group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033ab5dad3ab8a03327323c5bf7d2a7f4974", null ],

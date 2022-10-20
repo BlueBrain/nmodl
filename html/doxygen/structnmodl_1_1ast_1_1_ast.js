@@ -69,7 +69,6 @@ var structnmodl_1_1ast_1_1_ast =
     [ "is_if_statement", "group__ast__class.html#gaa7d7dc200bbee1fe9619323965a1715e", null ],
     [ "is_include", "group__ast__class.html#gad1f90104022d3c27fc1111d3d75a7057", null ],
     [ "is_independent_block", "group__ast__class.html#ga5eed5c6969860fdf373a7b23dcf0653b", null ],
-    [ "is_independent_definition", "group__ast__class.html#ga95819e49b7ff19e2a774883e5027835e", null ],
     [ "is_indexed_name", "group__ast__class.html#ga2eec2446794afeca55a7dbc822fd99ba", null ],
     [ "is_initial_block", "group__ast__class.html#ga9313a4af4b7e130f1ff85aa1e11882ab", null ],
     [ "is_integer", "group__ast__class.html#ga3f92f72529d03053ab51c41b38a29897", null ],

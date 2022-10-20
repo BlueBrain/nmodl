@@ -53,7 +53,6 @@ var group__ast__vec__type =
     [ "IfStatementVector", "group__ast__vec__type.html#ga15b591eed6324bf1ef786979e4429e06", null ],
     [ "IncludeVector", "group__ast__vec__type.html#ga5a3b10c7eb91d14472362b663f4b258a", null ],
     [ "IndependentBlockVector", "group__ast__vec__type.html#gaf3044a8c75bacbf908cc7824784b81d4", null ],
-    [ "IndependentDefinitionVector", "group__ast__vec__type.html#ga8b4f46b4020ebd4effbd23a08e48e25f", null ],
     [ "IndexedNameVector", "group__ast__vec__type.html#ga7ebcaff27ede4920ff821a373ce2255f", null ],
     [ "InitialBlockVector", "group__ast__vec__type.html#gaa02a71a4c45b85548eff30bca72dae7a", null ],
     [ "IntegerVector", "group__ast__vec__type.html#gaee9df0cc345a718a0e8bf467163e9299", null ],

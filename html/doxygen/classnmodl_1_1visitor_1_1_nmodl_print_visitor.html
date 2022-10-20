@@ -104,8 +104,9 @@ $(document).ready(function(){initNavTree('classnmodl_1_1visitor_1_1_nmodl_print_
  <a href="classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#details">More...</a></p>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Visitor for printing AST back to NMODL </p>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000065">Todo:</a></b></dt><dd>Note that AstNodeType::INDEPENDENT_BLOCK is now trimmed-down in the AST. So if we need to make provide something like <code>nmodl-format</code> then we should exclude this node type i.e. add that in the exclude_types. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8hpp_source.html#l00036">36</a> of file <a class="el" href="nmodl__visitor_8hpp_source.html">nmodl_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8hpp_source.html#l00040">40</a> of file <a class="el" href="nmodl__visitor_8hpp_source.html">nmodl_visitor.hpp</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="nmodl__visitor_8hpp_source.html">nmodl_visitor.hpp</a>&gt;</code></p>
 <div class="dynheader">
@@ -365,9 +366,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aff9ebbd61170eed9e901ca3c87b0b037"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#aff9ebbd61170eed9e901ca3c87b0b037">visit_param_assign</a> (const <a class="el" href="classnmodl_1_1ast_1_1_param_assign.html">ast::ParamAssign</a> &amp;node) override</td></tr>
 <tr class="memdesc:aff9ebbd61170eed9e901ca3c87b0b037"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_param_assign.html" title="TODO.">ast::ParamAssign</a>  <a href="classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#aff9ebbd61170eed9e901ca3c87b0b037">More...</a><br /></td></tr>
 <tr class="separator:aff9ebbd61170eed9e901ca3c87b0b037"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a25a56a41f87805d3791b9cc6bf1e0c38"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#a25a56a41f87805d3791b9cc6bf1e0c38">visit_independent_definition</a> (const <a class="el" href="classnmodl_1_1ast_1_1_independent_definition.html">ast::IndependentDefinition</a> &amp;node) override</td></tr>
-<tr class="memdesc:a25a56a41f87805d3791b9cc6bf1e0c38"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_independent_definition.html" title="TODO.">ast::IndependentDefinition</a>  <a href="classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#a25a56a41f87805d3791b9cc6bf1e0c38">More...</a><br /></td></tr>
-<tr class="separator:a25a56a41f87805d3791b9cc6bf1e0c38"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9f1c846ebcaaeb9cd39e1e972709afed"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#a9f1c846ebcaaeb9cd39e1e972709afed">visit_assigned_definition</a> (const <a class="el" href="classnmodl_1_1ast_1_1_assigned_definition.html">ast::AssignedDefinition</a> &amp;node) override</td></tr>
 <tr class="memdesc:a9f1c846ebcaaeb9cd39e1e972709afed"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_assigned_definition.html" title="Represents a statement in ASSIGNED or STATE block.">ast::AssignedDefinition</a>  <a href="classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#a9f1c846ebcaaeb9cd39e1e972709afed">More...</a><br /></td></tr>
 <tr class="separator:a9f1c846ebcaaeb9cd39e1e972709afed"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -537,7 +535,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8hpp_source.html#l00049">49</a> of file <a class="el" href="nmodl__visitor_8hpp_source.html">nmodl_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8hpp_source.html#l00053">53</a> of file <a class="el" href="nmodl__visitor_8hpp_source.html">nmodl_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -565,7 +563,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8hpp_source.html#l00052">52</a> of file <a class="el" href="nmodl__visitor_8hpp_source.html">nmodl_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8hpp_source.html#l00056">56</a> of file <a class="el" href="nmodl__visitor_8hpp_source.html">nmodl_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -593,7 +591,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8hpp_source.html#l00055">55</a> of file <a class="el" href="nmodl__visitor_8hpp_source.html">nmodl_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8hpp_source.html#l00059">59</a> of file <a class="el" href="nmodl__visitor_8hpp_source.html">nmodl_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -631,7 +629,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8hpp_source.html#l00058">58</a> of file <a class="el" href="nmodl__visitor_8hpp_source.html">nmodl_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8hpp_source.html#l00062">62</a> of file <a class="el" href="nmodl__visitor_8hpp_source.html">nmodl_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -662,7 +660,7 @@ Private Attributes</h2></td></tr>
 
 <p>check if node is to be excluded while printing </p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8hpp_source.html#l00044">44</a> of file <a class="el" href="nmodl__visitor_8hpp_source.html">nmodl_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8hpp_source.html#l00048">48</a> of file <a class="el" href="nmodl__visitor_8hpp_source.html">nmodl_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -790,7 +788,7 @@ Private Attributes</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#aebf50e1a214f7b61daf6ca6ff3c9b7e2">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01268">1268</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01226">1226</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -886,7 +884,7 @@ Private Attributes</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#af950e287ccb7040555174a5350cc920b">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01768">1768</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01726">1726</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1078,7 +1076,7 @@ Private Attributes</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a1380c9108d1a5272e6c160e625329640">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01825">1825</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01783">1783</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1174,7 +1172,7 @@ Private Attributes</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a6460900d8bbe6fce3fb9bb79021b9cfc">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01515">1515</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01473">1473</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1206,7 +1204,7 @@ Private Attributes</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#acf76972ce331b959012b13022b10c128">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01317">1317</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01275">1275</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1238,7 +1236,7 @@ Private Attributes</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a7a34f9735dd7a346ba731e13ff70102a">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01498">1498</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01456">1456</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1302,7 +1300,7 @@ Private Attributes</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#aac015c0cd4e4e6a83da62efda0fbab94">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01617">1617</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01575">1575</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1462,7 +1460,7 @@ Private Attributes</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#afab4e50b8b3fa41bc61d8269d4de0997">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01967">1967</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01925">1925</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1654,7 +1652,7 @@ Private Attributes</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a823773ac45f20e28d2400f7b16f3adca">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01917">1917</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01875">1875</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1686,7 +1684,7 @@ Private Attributes</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#aa237a490b65cf3077675dfd495ebd253">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01873">1873</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01831">1831</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1750,7 +1748,7 @@ Private Attributes</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a394c39dc8ba58246b2fb19054dcd81b8">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01720">1720</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01678">1678</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1848,7 +1846,7 @@ template&lt;typename T &gt; </div>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#ad8a421a115006daaca7f106729b19c71">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01435">1435</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01393">1393</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1880,7 +1878,7 @@ template&lt;typename T &gt; </div>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a884cf5c75e98634b5e07126c6c7a52f5">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01454">1454</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01412">1412</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1944,7 +1942,7 @@ template&lt;typename T &gt; </div>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a83376df6e831c9b7da182a1c66c2236c">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01335">1335</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01293">1293</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2008,7 +2006,7 @@ template&lt;typename T &gt; </div>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#aae5c9ed5c58f3eab108acd06d7dd4f6e">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01780">1780</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01738">1738</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2136,7 +2134,7 @@ template&lt;typename T &gt; </div>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#aaa7f33b4069699375ee9e48fd72ad5c0">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01358">1358</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01316">1316</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2264,7 +2262,7 @@ template&lt;typename T &gt; </div>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#aeff095024f8d0785f5502a32eb92abf9">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01744">1744</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01702">1702</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2360,7 +2358,7 @@ template&lt;typename T &gt; </div>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a33738049b35bf18fa9b3939de2b563bb">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01408">1408</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01366">1366</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2425,38 +2423,6 @@ template&lt;typename T &gt; </div>
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a026b14614b86e31e6336bf539a413a9c">nmodl::visitor::ConstVisitor</a>.</p>
 
 <p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l00366">366</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
-
-</div>
-</div>
-<a id="a25a56a41f87805d3791b9cc6bf1e0c38"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a25a56a41f87805d3791b9cc6bf1e0c38">&#9670;&nbsp;</a></span>visit_independent_definition()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void nmodl::visitor::NmodlPrintVisitor::visit_independent_definition </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classnmodl_1_1ast_1_1_independent_definition.html">ast::IndependentDefinition</a> &amp;&#160;</td>
-          <td class="paramname"><em>node</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>visit node of type <a class="el" href="classnmodl_1_1ast_1_1_independent_definition.html" title="TODO.">ast::IndependentDefinition</a> </p>
-
-<p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#aa7167e7a671807f66a20a22fdde031e3">nmodl::visitor::ConstVisitor</a>.</p>
-
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01226">1226</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2616,7 +2582,7 @@ template&lt;typename T &gt; </div>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a9fba21fbcc2ce8873981281de97bb576">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01601">1601</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01559">1559</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2712,7 +2678,7 @@ template&lt;typename T &gt; </div>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a6af6617aaf3c4f0aa69ef893993e0ed9">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01814">1814</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01772">1772</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2840,7 +2806,7 @@ template&lt;typename T &gt; </div>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#ac205b9f88be3a81212a67e6e35e4d3d7">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01542">1542</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01500">1500</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2904,7 +2870,7 @@ template&lt;typename T &gt; </div>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#aadd73cb072a163c2197f102df77efada">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01480">1480</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01438">1438</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2936,7 +2902,7 @@ template&lt;typename T &gt; </div>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a76bf1afef51486c5acd0bb3086b930e1">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01489">1489</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01447">1447</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3160,7 +3126,7 @@ template&lt;typename T &gt; </div>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#af8c131e187552f7a0352ad7915f1cd88">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01708">1708</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01666">1666</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3224,7 +3190,7 @@ template&lt;typename T &gt; </div>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#ab5e4bacae78b1ebdfc3f849cf6474c6c">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01861">1861</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01819">1819</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3320,7 +3286,7 @@ template&lt;typename T &gt; </div>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#af3f434dcaf7a14f192bb5088818c128d">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01838">1838</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01796">1796</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3448,7 +3414,7 @@ template&lt;typename T &gt; </div>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#af8e2092e4642484e99e85436b6aa9ffb">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01756">1756</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01714">1714</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3576,7 +3542,7 @@ template&lt;typename T &gt; </div>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a97971a8961838095ed18d4ee389470d0">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01850">1850</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01808">1808</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3608,7 +3574,7 @@ template&lt;typename T &gt; </div>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a119508c14f86e906ef4da073b3a2ae1c">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01346">1346</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01304">1304</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3640,7 +3606,7 @@ template&lt;typename T &gt; </div>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a3dfb17955ecece7e3def3e9998d2f512">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01732">1732</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01690">1690</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3768,7 +3734,7 @@ template&lt;typename T &gt; </div>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#ae1acc09ddd54178588aa6c43b26bdf8b">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01569">1569</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01527">1527</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3832,7 +3798,7 @@ template&lt;typename T &gt; </div>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a62fc9a812bba862a3ec56eac5ceb2d38">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01978">1978</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01936">1936</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4024,7 +3990,7 @@ template&lt;typename T &gt; </div>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#aeabf318d8bd10dda603d02b3ac16e842">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01658">1658</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01616">1616</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4056,7 +4022,7 @@ template&lt;typename T &gt; </div>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a1a2f57a9e51cfb52b4d454e58b18ea79">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01628">1628</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01586">1586</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4088,7 +4054,7 @@ template&lt;typename T &gt; </div>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a13e8a4e447d9a562bcac8e7896f50014">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01792">1792</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01750">1750</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4312,7 +4278,7 @@ template&lt;typename T &gt; </div>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a00f4d360a1345e059f1e9e09a8d4f4a6">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01992">1992</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01950">1950</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4344,7 +4310,7 @@ template&lt;typename T &gt; </div>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a19e1be471cd8b595534493b27ac3cc74">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01673">1673</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01631">1631</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4440,7 +4406,7 @@ template&lt;typename T &gt; </div>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a096625c78ed685a7ee6233a13b1793a3">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01801">1801</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01759">1759</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4504,7 +4470,7 @@ template&lt;typename T &gt; </div>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a88dbedea2307312541fe8475f054f57a">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01468">1468</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01426">1426</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4536,7 +4502,7 @@ template&lt;typename T &gt; </div>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a10bbebf400ebd90e40e72a1815b11db0">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01389">1389</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01347">1347</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4568,7 +4534,7 @@ template&lt;typename T &gt; </div>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a4db75b11c17eb4e53a4492bd3625dcba">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01956">1956</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01914">1914</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4627,7 +4593,7 @@ template&lt;typename T &gt; </div>
 
 <p>node types to exclude while printing </p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8hpp_source.html#l00041">41</a> of file <a class="el" href="nmodl__visitor_8hpp_source.html">nmodl_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8hpp_source.html#l00045">45</a> of file <a class="el" href="nmodl__visitor_8hpp_source.html">nmodl_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -4651,7 +4617,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8hpp_source.html#l00038">38</a> of file <a class="el" href="nmodl__visitor_8hpp_source.html">nmodl_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8hpp_source.html#l00042">42</a> of file <a class="el" href="nmodl__visitor_8hpp_source.html">nmodl_visitor.hpp</a>.</p>
 
 </div>
 </div>

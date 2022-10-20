@@ -54,7 +54,6 @@ var namespacenmodl_1_1ast =
     [ "IfStatement", "classnmodl_1_1ast_1_1_if_statement.html", "classnmodl_1_1ast_1_1_if_statement" ],
     [ "Include", "classnmodl_1_1ast_1_1_include.html", "classnmodl_1_1ast_1_1_include" ],
     [ "IndependentBlock", "classnmodl_1_1ast_1_1_independent_block.html", "classnmodl_1_1ast_1_1_independent_block" ],
-    [ "IndependentDefinition", "classnmodl_1_1ast_1_1_independent_definition.html", "classnmodl_1_1ast_1_1_independent_definition" ],
     [ "IndexedName", "classnmodl_1_1ast_1_1_indexed_name.html", "classnmodl_1_1ast_1_1_indexed_name" ],
     [ "InitialBlock", "classnmodl_1_1ast_1_1_initial_block.html", "classnmodl_1_1ast_1_1_initial_block" ],
     [ "Integer", "classnmodl_1_1ast_1_1_integer.html", "classnmodl_1_1ast_1_1_integer" ],

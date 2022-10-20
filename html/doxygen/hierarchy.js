@@ -141,7 +141,6 @@ var hierarchy =
             [ "nmodl::ast::Global", "classnmodl_1_1ast_1_1_global.html", null ],
             [ "nmodl::ast::IfStatement", "classnmodl_1_1ast_1_1_if_statement.html", null ],
             [ "nmodl::ast::Include", "classnmodl_1_1ast_1_1_include.html", null ],
-            [ "nmodl::ast::IndependentDefinition", "classnmodl_1_1ast_1_1_independent_definition.html", null ],
             [ "nmodl::ast::LagStatement", "classnmodl_1_1ast_1_1_lag_statement.html", null ],
             [ "nmodl::ast::LineComment", "classnmodl_1_1ast_1_1_line_comment.html", null ],
             [ "nmodl::ast::LocalListStatement", "classnmodl_1_1ast_1_1_local_list_statement.html", null ],

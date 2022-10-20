@@ -257,6 +257,8 @@ $(document).ready(function(){initNavTree('todo.html',''); initResizable(); });
 <li>Currently we are renaming variables even if there is no inlining candidates. In this case ideally we should not rename.  </li>
 </ul>
 </dd>
+<dt>Class <a class="el" href="classnmodl_1_1visitor_1_1_nmodl_print_visitor.html">nmodl::visitor::NmodlPrintVisitor</a>  </dt>
+<dd><a class="anchor" id="_todo000065"></a>Note that AstNodeType::INDEPENDENT_BLOCK is now trimmed-down in the AST. So if we need to make provide something like <code>nmodl-format</code> then we should exclude this node type i.e. add that in the exclude_types.  </dd>
 <dt>Class <a class="el" href="classnmodl_1_1visitor_1_1_perf_visitor.html">nmodl::visitor::PerfVisitor</a>  </dt>
 <dd><a class="anchor" id="_todo000055"></a><ul>
 <li>To measure the performance of statements like if, elseif and else, we have to find maximum performance from if,elseif,else and then use it to calculate total performance. In the current implementation we are doing sum of all blocks. We need to override IfStatement (which has all sub-blocks) and get maximum performance of all statements recursively. </li>

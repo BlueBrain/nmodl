@@ -57,7 +57,6 @@ var dir_78254c2889ae9e6fc42754872dbb7646 =
     [ "if_statement.hpp", "if__statement_8hpp.html", null ],
     [ "include.hpp", "include_8hpp.html", null ],
     [ "independent_block.hpp", "independent__block_8hpp.html", null ],
-    [ "independent_definition.hpp", "independent__definition_8hpp.html", null ],
     [ "indexed_name.hpp", "indexed__name_8hpp.html", null ],
     [ "initial_block.hpp", "initial__block_8hpp.html", null ],
     [ "integer.hpp", "integer_8hpp.html", null ],
