@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['kinf_5586',['KINF',['../modl_8h.html#aa9461dc2be3a692011544d7b6017b0f2',1,'modl.h']]]
+  ['linf_5584',['LINF',['../modl_8h.html#a3fb5b8d5f980b6c3d91b14799de5e2fc',1,'modl.h']]]
 ];

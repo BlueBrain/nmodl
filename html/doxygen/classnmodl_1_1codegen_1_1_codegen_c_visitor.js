@@ -79,7 +79,7 @@ var classnmodl_1_1codegen_1_1_codegen_c_visitor =
     [ "print_backend_namespace_start", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#af37a67b0589225a65c93c0d2aef92def", null ],
     [ "print_backend_namespace_stop", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ab0ed183f79b0847816603256c0e49734", null ],
     [ "print_before_after_block", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ad990203fd5ab0cb1aca9b548d5fbf092", null ],
-    [ "print_channel_iteration_block_parallel_hint", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ac154c0c5ba5e34a53504ae6e95574f33", null ],
+    [ "print_channel_iteration_block_parallel_hint", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a22c6884e676b5ab26cc5558a505e849e", null ],
     [ "print_check_table_thread_function", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ac959bf153ca7a5b0626168dc695b8925", null ],
     [ "print_codegen_routines", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a91a842eac30e01938776331e55d05f6e", null ],
     [ "print_common_getters", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a241af0c7b8834cb59627a46dbfbb2bd3", null ],
