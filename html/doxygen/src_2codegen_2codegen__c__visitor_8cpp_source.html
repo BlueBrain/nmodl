@@ -4439,12 +4439,12 @@ $(document).ready(function(){initNavTree('src_2codegen_2codegen__c__visitor_8cpp
 <div class="line"><a name="l04343"></a><span class="lineno"> 4343</span>&#160;        printer-&gt;end_block(1);</div>
 <div class="line"><a name="l04344"></a><span class="lineno"> 4344</span>&#160;    }</div>
 <div class="line"><a name="l04345"></a><span class="lineno"> 4345</span>&#160; </div>
-<div class="line"><a name="l04346"></a><span class="lineno"> 4346</span>&#160;    print_kernel_data_present_annotation_block_end();</div>
-<div class="line"><a name="l04347"></a><span class="lineno"> 4347</span>&#160; </div>
-<div class="line"><a name="l04348"></a><span class="lineno"> 4348</span>&#160;    <span class="keywordflow">if</span> (info.eigen_newton_solver_exist)</div>
-<div class="line"><a name="l04349"></a><span class="lineno"> 4349</span>&#160;        printer-&gt;add_line(<span class="stringliteral">&quot;if (solver_error &gt; 0) throw std::runtime_error(\&quot;Newton solver did not converge!\&quot;);&quot;</span>);</div>
-<div class="line"><a name="l04350"></a><span class="lineno"> 4350</span>&#160;    <span class="keywordflow">if</span> (info.eigen_linear_solver_exist)</div>
-<div class="line"><a name="l04351"></a><span class="lineno"> 4351</span>&#160;        printer-&gt;add_line(<span class="stringliteral">&quot;if (solver_error &gt; 0) throw std::runtime_error(\&quot;Singular matrices (Crout/Inverse)!\&quot;);&quot;</span>);</div>
+<div class="line"><a name="l04346"></a><span class="lineno"> 4346</span>&#160;    <span class="keywordflow">if</span> (info.eigen_newton_solver_exist)</div>
+<div class="line"><a name="l04347"></a><span class="lineno"> 4347</span>&#160;        printer-&gt;add_line(<span class="stringliteral">&quot;if (solver_error &gt; 0) throw std::runtime_error(\&quot;Newton solver did not converge!\&quot;);&quot;</span>);</div>
+<div class="line"><a name="l04348"></a><span class="lineno"> 4348</span>&#160;    <span class="keywordflow">if</span> (info.eigen_linear_solver_exist)</div>
+<div class="line"><a name="l04349"></a><span class="lineno"> 4349</span>&#160;        printer-&gt;add_line(<span class="stringliteral">&quot;if (solver_error &gt; 0) throw std::runtime_error(\&quot;Singular matrices (Crout/Inverse)!\&quot;);&quot;</span>);</div>
+<div class="line"><a name="l04350"></a><span class="lineno"> 4350</span>&#160; </div>
+<div class="line"><a name="l04351"></a><span class="lineno"> 4351</span>&#160;    print_kernel_data_present_annotation_block_end();</div>
 <div class="line"><a name="l04352"></a><span class="lineno"> 4352</span>&#160; </div>
 <div class="line"><a name="l04353"></a><span class="lineno"> 4353</span>&#160;    printer-&gt;end_block(1);</div>
 <div class="line"><a name="l04354"></a><span class="lineno"> 4354</span>&#160;    codegen = <span class="keyword">false</span>;</div>
