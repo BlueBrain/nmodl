@@ -1902,10 +1902,12 @@ void CodegenCVisitor::print_eigen_linear_solver(const std::string& float_type, i
 
         // pivot vector
         printer->fmt_line("Eigen::Matrix<int, {}, 1> pivot;", N);
+        printer->fmt_line("Eigen::Matrix<{0}, {1}, 1> rowmax;", float_type, N);
 
         // In-place LU-Decomposition (Crout Algo) : Jm is replaced by its LU-decomposition
         printer->fmt_line(
-            "if (nmodl::crout::Crout<{0}>({1}, nmodl_eigen_jm.data(), pivot.data()) < 0) "
+            "if (nmodl::crout::Crout<{0}>({1}, nmodl_eigen_jm.data(), pivot.data(), rowmax.data()) "
+            "< 0) "
             "solver_error += 1;",
             float_type,
             N);
