@@ -12,7 +12,7 @@
  *
  * \file
  * \brief Implementation of Crout matrix decomposition (LU decomposition) followed by
- * Forward/Backward substitution
+ * Forward/Backward substitution: Implementation details : (Legacy code) nrn / scopmath / crout.c
  */
 
 #include <Eigen/Core>
