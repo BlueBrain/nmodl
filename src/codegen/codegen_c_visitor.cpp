@@ -3477,9 +3477,11 @@ void CodegenCVisitor::print_nrn_init(bool skip_init_check) {
     printer->end_block(1);
     print_shadow_reduction_statements();
 
-    if (info.eigen_newton_solver_exist)
+    if (info.eigen_newton_solver_exist) {
+        print_device_stream_wait();
         printer->add_line(
             "if (solver_error > 0) throw std::runtime_error(\"Newton solver did not converge!\");");
+    }
 
     if (!info.changed_dt.empty()) {
         printer->fmt_line("{} = _save_prev_dt;", get_variable_name(naming::NTHREAD_DT_VARIABLE));
@@ -4345,10 +4347,14 @@ void CodegenCVisitor::print_nrn_state() {
         printer->end_block(1);
     }
 
-    if (info.eigen_newton_solver_exist)
+    if (info.eigen_newton_solver_exist){
+        print_device_stream_wait();
         printer->add_line("if (solver_error > 0) throw std::runtime_error(\"Newton solver did not converge!\");");
-    if (info.eigen_linear_solver_exist)
+    }
+    if (info.eigen_linear_solver_exist){
+        print_device_stream_wait();
         printer->add_line("if (solver_error > 0) throw std::runtime_error(\"Singular matrices (Crout/Inverse)!\");");
+    }
 
     print_kernel_data_present_annotation_block_end();
 
