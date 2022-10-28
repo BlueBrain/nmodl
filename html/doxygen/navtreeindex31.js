@@ -1,5 +1,7 @@
 var NAVTREEINDEX31 =
 {
+"structnmodl_1_1parser_1_1diffeq_1_1_term.html#ad17c7a60246ba77aa03f90dc86577720":[3,0,0,3,0,1,3],
+"structnmodl_1_1parser_1_1diffeq_1_1_term.html#ad403c153ea9f2cd93d81290ca7e54e74":[3,0,0,3,0,1,4],
 "structnmodl_1_1parser_1_1diffeq_1_1_term.html#ad5f66bca40e51a0f57e9cc88e81578c9":[3,0,0,3,0,1,6],
 "structnmodl_1_1parser_1_1diffeq_1_1_term.html#ae1facd3a8983e0dad81ea7003bde7b03":[3,0,0,3,0,1,5],
 "structnmodl_1_1parser_1_1diffeq_1_1_term.html#af6ed229692db9a83f4183aac3d830ee4":[3,0,0,3,0,1,9],
@@ -247,7 +249,5 @@ var NAVTREEINDEX31 =
 "sympy__conductance__visitor_8hpp.html":[4,0,1,11,39],
 "sympy__conductance__visitor_8hpp_source.html":[4,0,1,11,39],
 "sympy__replace__solutions__visitor_8cpp.html":[4,0,1,11,40],
-"sympy__replace__solutions__visitor_8cpp_source.html":[4,0,1,11,40],
-"sympy__replace__solutions__visitor_8hpp.html":[4,0,1,11,41],
-"sympy__replace__solutions__visitor_8hpp_source.html":[4,0,1,11,41]
+"sympy__replace__solutions__visitor_8cpp_source.html":[4,0,1,11,40]
 };

@@ -10,7 +10,7 @@ var indexSectionsWithContent =
   7: "abdmnrstuv",
   8: "abcdefgiklmnoprstuvw",
   9: "o",
-  10: "cdeklny",
+  10: "bcdeklny",
   11: "aclpstuv",
   12: "dt"
 };
