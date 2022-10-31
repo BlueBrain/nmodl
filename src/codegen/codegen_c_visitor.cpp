@@ -1740,11 +1740,15 @@ void CodegenCVisitor::print_function_tables(const ast::FunctionTableBlock& node)
     for (size_t i = 0; i < p.size(); ++i) {
         printer->fmt_line("_arg[{}] = {};", i, p[i]->get_node_name());
     }
-    printer->fmt_line("return hoc_func_table({}, {}, _arg);", get_variable_name(std::string("_ptable_" + name), true), p.size());
+    printer->fmt_line("return hoc_func_table({}, {}, _arg);",
+                      get_variable_name(std::string("_ptable_" + name), true),
+                      p.size());
     printer->end_block(1);
 
     printer->fmt_start_block("double table_{}()", method_name(name));
-    printer->fmt_line("hoc_spec_table(&{}, {});", get_variable_name(std::string("_ptable_" + name)), p.size());
+    printer->fmt_line("hoc_spec_table(&{}, {});",
+                      get_variable_name(std::string("_ptable_" + name)),
+                      p.size());
     printer->add_line("return 0;");
     printer->end_block(1);
 }
