@@ -1733,9 +1733,13 @@ void CodegenCVisitor::print_function(const ast::FunctionBlock& node) {
 
 void CodegenCVisitor::print_function_tables(const ast::FunctionTableBlock& node) {
     auto name = node.get_node_name();
-    print_function_declaration(node, name);
-    printer->start_block();
     const auto& p = node.get_parameters();
+    auto params = internal_method_parameters();
+    for (const auto& i: p) {
+        params.emplace_back("", "double", "", i->get_node_name());
+    }
+    printer->fmt_line("double {}({})", method_name(name), get_parameter_str(params));
+    printer->start_block();
     printer->fmt_line("double _arg[{}];", p.size());
     for (size_t i = 0; i < p.size(); ++i) {
         printer->fmt_line("_arg[{}] = {};", i, p[i]->get_node_name());

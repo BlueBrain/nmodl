@@ -422,3 +422,22 @@ SCENARIO("Check code generation for TABLE statements", "[codegen][array_variable
         }
     }
 }
+
+SCENARIO("Check code generation for FUNCTION_TABLE block", "[codegen][function_table]") {
+    GIVEN("A MOD file with Function table block") {
+        std::string const nmodl_text = R"(
+            NEURON { SUFFIX glia }
+            FUNCTION_TABLE ttt(l (mV))
+            FUNCTION_TABLE uuu(l, k)
+        )";
+        THEN("Code should be generated correctly") {
+            auto const generated = get_cpp_code(nmodl_text);
+            REQUIRE_THAT(generated, Contains("double ttt_glia("));
+            REQUIRE_THAT(generated, Contains("double table_ttt_glia("));
+            REQUIRE_THAT(generated, Contains("hoc_spec_table(&inst->global->_ptable_ttt, 1"));
+            REQUIRE_THAT(generated, Contains("double uuu_glia("));
+            REQUIRE_THAT(generated, Contains("double table_uuu_glia("));
+            REQUIRE_THAT(generated, Contains("hoc_func_table(inst->global->_ptable_uuu, 2"));
+        }
+    }
+}
