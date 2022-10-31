@@ -1804,6 +1804,13 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
+     * Print NMODL function_table in target backend code
+     * \param node
+     */
+    void print_function_tables(const ast::FunctionTableBlock& node);
+
+
+    /**
      * Print NMODL procedure in target backend code
      * \param node
      */

@@ -29,6 +29,7 @@
  * 3. A TABLE statement in functions cannot have name list, and should have one in procedures.
  * 4. Check if ion variables from a `USEION` statement are not declared in `CONSTANT` block.
  * 5. Check if an independent variable is not 't'.
+ * 6. Check than function table got at least one argument.
  */
 #include "ast/ast.hpp"
 #include "visitors/ast_visitor.hpp"
@@ -63,6 +64,9 @@ class SemanticAnalysisVisitor: public ConstAstVisitor {
 
     /// Visit independent block and check if one of the variable is not t
     void visit_independent_block(const ast::IndependentBlock& node) override;
+
+    /// Visit function table to check that number of args > 0
+    void visit_function_table_block(const ast::FunctionTableBlock& node) override;
 
   public:
     SemanticAnalysisVisitor() = default;
