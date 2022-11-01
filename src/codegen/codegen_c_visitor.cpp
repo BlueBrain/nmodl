@@ -1753,7 +1753,7 @@ void CodegenCVisitor::print_function_tables(const ast::FunctionTableBlock& node)
     printer->fmt_line("hoc_spec_table(&{}, {});",
                       get_variable_name(std::string("_ptable_" + name)),
                       p.size());
-    printer->add_line("return 0;");
+    printer->add_line("return 0.;");
     printer->end_block(1);
 }
 
