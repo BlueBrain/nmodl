@@ -1210,8 +1210,12 @@ void CodegenCVisitor::print_memory_allocation_routine() const {
     printer->add_newline(2);
     auto args = "size_t num, size_t size, size_t alignment = 16";
     printer->fmt_start_block("static inline void* mem_alloc({})", args);
-    printer->add_line("void* ptr;");
-    printer->add_line("posix_memalign(&ptr, alignment, num*size);");
+    printer->add_line("size_t fill = 0;");
+    printer->start_block("if (num % alignment != 0)");
+    printer->add_line("size_t multiple = num / alignment;");
+    printer->add_line("fill = alignment * (multiple + 1) - num;");
+    printer->end_block(1);
+    printer->add_line("void* ptr = aligned_alloc(alignment, num*size + fill);");
     printer->add_line("memset(ptr, 0, size);");
     printer->add_line("return ptr;");
     printer->end_block(1);
@@ -2468,11 +2472,11 @@ void CodegenCVisitor::print_backend_info() {
 
 void CodegenCVisitor::print_standard_includes() {
     printer->add_newline();
-    printer->add_line("#include <math.h>");
-    printer->add_line("#include \"nmodl/fast_math.hpp\" // extend math with some useful functions");
-    printer->add_line("#include <stdio.h>");
     printer->add_line("#include <stdlib.h>");
+    printer->add_line("#include <math.h>");
+    printer->add_line("#include <stdio.h>");
     printer->add_line("#include <string.h>");
+    printer->add_line("#include \"nmodl/fast_math.hpp\" // extend math with some useful functions");
 }
 
 
