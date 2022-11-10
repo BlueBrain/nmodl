@@ -271,7 +271,7 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
     codegen::CodegenInfo info;
 
     /**
-     * Code printer object for target (C, CUDA, ispc, ...)
+     * Code printer object for target (C)
      */
     std::shared_ptr<CodePrinter> target_printer;
 
@@ -879,21 +879,11 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
-     * The used pointer qualifier.
-     *
-     * For C code generation this is \c \_\_restrict\_\_ to ensure that the compiler is aware of
-     * the fact that we are working only with non-overlapping memory regions
-     * \return \c \_\_restrict\_\_
-     */
-    virtual std::string ptr_type_qualifier();
-
-    /**
      * The used global type qualifier
      *
      * For C code generation this is empty
      * \return ""
      *
-     * For ispc
      * \return "uniform "
      */
     virtual std::string global_var_struct_type_qualifier();
@@ -908,8 +898,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
     /**
      * Print static assertions about the global variable struct.
-     *
-     * For ISPC this has to be disabled.
      */
     virtual void print_global_var_struct_assertions() const;
 
@@ -1267,18 +1255,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
-     * Print block start for tiling on channel iteration
-     */
-    virtual void print_channel_iteration_tiling_block_begin(BlockType type);
-
-
-    /**
-     * Print block end for tiling on channel iteration
-     */
-    virtual void print_channel_iteration_tiling_block_end();
-
-
-    /**
      * Print pragma annotations for channel iterations
      *
      * This can be overriden by backends to provide additonal annotations or pragmas to enable
@@ -1316,19 +1292,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * Print accelerator kernels end annotation for net_init kernel
      */
     virtual void print_net_init_acc_serial_annotation_block_end();
-
-
-    /**
-     * Print backend specific channel instance iteration block start
-     * \param type The block type in which we currently are
-     */
-    virtual void print_channel_iteration_block_begin(BlockType type);
-
-
-    /**
-     * Print backend specific channel instance iteration block end
-     */
-    virtual void print_channel_iteration_block_end();
 
 
     /**
@@ -1476,20 +1439,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * Print pragma annotation for increase and capture of variable in automatic way
      */
     virtual void print_device_atomic_capture_annotation() const;
-
-    /**
-     * Print block / loop for statement requiring reduction
-     *
-     */
-    virtual void print_shadow_reduction_block_begin();
-
-
-    /**
-     * Print end of block / loop for statement requiring reduction
-     *
-     */
-    virtual void print_shadow_reduction_block_end();
-
 
     /**
      * Print atomic update pragma for reduction statements

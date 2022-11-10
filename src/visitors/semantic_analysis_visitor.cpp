@@ -1,7 +1,9 @@
 #include "visitors/semantic_analysis_visitor.hpp"
 #include "ast/function_block.hpp"
+#include "ast/independent_block.hpp"
 #include "ast/procedure_block.hpp"
 #include "ast/program.hpp"
+#include "ast/string.hpp"
 #include "ast/suffix.hpp"
 #include "ast/table_statement.hpp"
 #include "symtab/symbol_properties.hpp"
@@ -101,8 +103,21 @@ void SemanticAnalysisVisitor::visit_destructor_block(const ast::DestructorBlock&
     /// -->
 }
 
-void SemanticAnalysisVisitor::visit_protect_statement(const ast::ProtectStatement& /* node */) {
+void SemanticAnalysisVisitor::visit_independent_block(const ast::IndependentBlock& node) {
     /// <-- This code is for check 5
+    for (const auto& n: node.get_variables()) {
+        if (n->get_value()->get_value() != "t") {
+            logger->warn(
+                "SemanticAnalysisVisitor :: '{}' cannot be used as an independent variable, only "
+                "'t' is allowed.",
+                n->get_value()->get_value());
+        }
+    }
+    /// -->
+}
+
+void SemanticAnalysisVisitor::visit_protect_statement(const ast::ProtectStatement& /* node */) {
+    /// <-- This code is for check 6
     if (in_mutex) {
         logger->warn("SemanticAnalysisVisitor :: Find a PROTECT inside a already locked part.");
     }
@@ -110,7 +125,7 @@ void SemanticAnalysisVisitor::visit_protect_statement(const ast::ProtectStatemen
 }
 
 void SemanticAnalysisVisitor::visit_mutex_lock(const ast::MutexLock& /* node */) {
-    /// <-- This code is for check 5
+    /// <-- This code is for check 6
     if (in_mutex) {
         logger->warn("SemanticAnalysisVisitor :: Found a MUTEXLOCK inside an already locked part.");
     }
@@ -119,7 +134,7 @@ void SemanticAnalysisVisitor::visit_mutex_lock(const ast::MutexLock& /* node */)
 }
 
 void SemanticAnalysisVisitor::visit_mutex_unlock(const ast::MutexUnlock& /* node */) {
-    /// <-- This code is for check 5
+    /// <-- This code is for check 6
     if (!in_mutex) {
         logger->warn("SemanticAnalysisVisitor :: Found a MUTEXUNLOCK outside a locked part.");
     }

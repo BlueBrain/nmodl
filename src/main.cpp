@@ -14,8 +14,6 @@
 #include "codegen/codegen_acc_visitor.hpp"
 #include "codegen/codegen_c_visitor.hpp"
 #include "codegen/codegen_compatibility_visitor.hpp"
-#include "codegen/codegen_cuda_visitor.hpp"
-#include "codegen/codegen_ispc_visitor.hpp"
 #include "codegen/codegen_transform_visitor.hpp"
 #include "config/config.h"
 #include "parser/nmodl_driver.hpp"
@@ -29,7 +27,6 @@
 #include "visitors/implicit_argument_visitor.hpp"
 #include "visitors/indexedname_visitor.hpp"
 #include "visitors/inline_visitor.hpp"
-#include "visitors/ispc_rename_visitor.hpp"
 #include "visitors/json_visitor.hpp"
 #include "visitors/kinetic_block_visitor.hpp"
 #include "visitors/local_to_assigned_visitor.hpp"
@@ -73,14 +70,8 @@ int main(int argc, const char* argv[]) {
     /// true if serial c code to be generated
     bool c_backend(true);
 
-    /// true if ispc code to be generated
-    bool ispc_backend(false);
-
     /// true if c code with openacc to be generated
     bool oacc_backend(false);
-
-    /// true if cuda code to be generated
-    bool cuda_backend(false);
 
     /// true if sympy should be used for solving ODEs analytically
     bool sympy_analytic(false);
@@ -185,22 +176,12 @@ int main(int argc, const char* argv[]) {
     auto host_opt = app.add_subcommand("host", "HOST/CPU code backends")->ignore_case();
     host_opt->add_flag("--c", c_backend, fmt::format("C/C++ backend ({})", c_backend))
         ->ignore_case();
-    host_opt
-        ->add_flag("--ispc",
-                   ispc_backend,
-                   fmt::format("C/C++ backend with ISPC ({})", ispc_backend))
-        ->ignore_case();
 
     auto acc_opt = app.add_subcommand("acc", "Accelerator code backends")->ignore_case();
     acc_opt
         ->add_flag("--oacc",
                    oacc_backend,
                    fmt::format("C/C++ backend with OpenACC ({})", oacc_backend))
-        ->ignore_case();
-    acc_opt
-        ->add_flag("--cuda",
-                   cuda_backend,
-                   fmt::format("C/C++ backend with CUDA ({})", cuda_backend))
         ->ignore_case();
 
     // clang-format off
@@ -280,11 +261,6 @@ int main(int argc, const char* argv[]) {
 
     CLI11_PARSE(app, argc, argv);
 
-    // if any of the other backends is used we force the C backend to be off.
-    if (ispc_backend) {
-        c_backend = false;
-    }
-
     utils::make_path(output_dir);
     utils::make_path(scratch_dir);
 
@@ -348,14 +324,6 @@ int main(int argc, const char* argv[]) {
             logger->info("Running CVode to cnexp visitor");
             AfterCVodeToCnexpVisitor().visit_program(*ast);
             ast_to_nmodl(*ast, filepath("after_cvode_to_cnexp"));
-        }
-
-        /// Rename variables that match ISPC compiler double constants
-        if (ispc_backend) {
-            logger->info("Running ISPC variables rename visitor");
-            IspcRenameVisitor(ast).visit_program(*ast);
-            SymtabVisitor(update_symtab).visit_program(*ast);
-            ast_to_nmodl(*ast, filepath("ispc_double_rename"));
         }
 
         /// GLOBAL to RANGE rename visitor
@@ -549,16 +517,7 @@ int main(int argc, const char* argv[]) {
         }
 
         {
-            if (ispc_backend) {
-                logger->info("Running ISPC backend code generator");
-                CodegenIspcVisitor visitor(modfile,
-                                           output_dir,
-                                           data_type,
-                                           optimize_ionvar_copies_codegen);
-                visitor.visit_program(*ast);
-            }
-
-            else if (oacc_backend) {
+            if (oacc_backend) {
                 logger->info("Running OpenACC backend code generator");
                 CodegenAccVisitor visitor(modfile,
                                           output_dir,
@@ -573,15 +532,6 @@ int main(int argc, const char* argv[]) {
                                         output_dir,
                                         data_type,
                                         optimize_ionvar_copies_codegen);
-                visitor.visit_program(*ast);
-            }
-
-            if (cuda_backend) {
-                logger->info("Running CUDA backend code generator");
-                CodegenCudaVisitor visitor(modfile,
-                                           output_dir,
-                                           data_type,
-                                           optimize_ionvar_copies_codegen);
                 visitor.visit_program(*ast);
             }
         }

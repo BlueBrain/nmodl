@@ -28,7 +28,8 @@
  * 2. Check that destructor blocks are only inside mod file that are point_process.
  * 3. A TABLE statement in functions cannot have name list, and should have one in procedures.
  * 4. Check if ion variables from a `USEION` statement are not declared in `CONSTANT` block.
- * 5. Check that mutex are not badly use
+ * 5. Check if an independent variable is not 't'.
+ * 6. Check that mutex are not badly use
  */
 #include "ast/ast.hpp"
 #include "visitors/ast_visitor.hpp"
@@ -62,6 +63,9 @@ class SemanticAnalysisVisitor: public ConstAstVisitor {
 
     /// Visit destructor and check that the file is of type POINT_PROCESS or ARTIFICIAL_CELL
     void visit_destructor_block(const ast::DestructorBlock& node) override;
+
+    /// Visit independent block and check if one of the variable is not t
+    void visit_independent_block(const ast::IndependentBlock& node) override;
 
     /// Look if protect is inside a locked block
     void visit_protect_statement(const ast::ProtectStatement& node) override;

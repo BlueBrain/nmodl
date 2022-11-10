@@ -71,15 +71,6 @@ void CodegenAccVisitor::print_backend_includes() {
         printer->add_line("#include <coreneuron/utils/offload.hpp>");
         printer->add_line("#include <cuda_runtime_api.h>");
     }
-
-    if (info.eigen_linear_solver_exist && std::accumulate(info.state_vars.begin(),
-                                                          info.state_vars.end(),
-                                                          0,
-                                                          [](int l, const SymbolType& variable) {
-                                                              return l += variable->get_length();
-                                                          }) > 4) {
-        printer->add_line("#include <partial_piv_lu/partial_piv_lu.h>");
-    }
 }
 
 
@@ -117,7 +108,7 @@ void CodegenAccVisitor::print_memory_allocation_routine() const {
  * @todo : we need to implement proper error handling mechanism to propogate errors
  *         from GPU to CPU. For example, error code can be returned like original
  *         neuron implementation. For now we use `assert(0==1)` pattern which is
- *         used for OpenACC/CUDA.
+ *         used for OpenACC.
  */
 void CodegenAccVisitor::print_abort_routine() const {
     printer->add_newline(2);
@@ -129,14 +120,6 @@ void CodegenAccVisitor::print_abort_routine() const {
 
 void CodegenAccVisitor::print_net_send_buffering_grow() {
     // can not grow buffer during gpu execution
-}
-
-void CodegenAccVisitor::print_eigen_linear_solver(const std::string& /* float_type */, int N) {
-    if (N <= 4) {
-        printer->add_line("nmodl_eigen_xm = nmodl_eigen_jm.inverse()*nmodl_eigen_fm;");
-    } else {
-        printer->fmt_line("nmodl_eigen_xm = partialPivLu<{}>nmodl_eigen_jm, nmodl_eigen_fm);", N);
-    }
 }
 
 /**

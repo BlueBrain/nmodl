@@ -183,29 +183,10 @@ The NMODL Framework provides rich model introspection and analysis capabilities 
 
 To understand how you can write your own introspection and analysis tool, see [this tutorial](docs/notebooks/nmodl-python-tutorial.ipynb).
 
-Once analysis and optimization passes are performed, the NMODL Framework can generate optimised code for modern compute architectures including CPUs (Intel, AMD, ARM) and GPUs (NVIDIA, AMD) platforms. For example, C++, OpenACC, OpenMP, CUDA and ISPC  backends are implemented and one can choose these backends on command line as:
+Once analysis and optimization passes are performed, the NMODL Framework can generate optimised code for modern compute architectures including CPUs (Intel, AMD, ARM) and GPUs (NVIDIA, AMD) platforms. For example, C++, OpenACC and OpenMP backends are implemented and one can choose these backends on command line as:
 
 ```
-$ nmodl expsyn.mod host --ispc acc --cuda sympy --analytic
-```
-
-Here is an example of generated [ISPC](https://ispc.github.io/) kernel for DERIVATIVE block :
-
-```c++
-export void nrn_state_ExpSyn(uniform ExpSyn_Instance* uniform inst, uniform NrnThread* uniform nt ...) {
-    uniform int nodecount = ml->nodecount;
-    const int* uniform node_index = ml->nodeindices;
-    const double* uniform voltage = nt->actual_v;
-
-    int uniform start = 0;
-    int uniform end = nodecount;
-
-    foreach (id = start ... end) {
-        int node_id = node_index[id];
-        double v = voltage[node_id];
-        inst->g[id] = inst->g[id] * vexp( -nt->dt / inst->tau[id]);
-    }
-}
+$ nmodl expsyn.mod sympy --analytic
 ```
 
 To know more about code generation backends, [see here](https://bluebrain.github.io/nmodl/html/doxygen/group__codegen__backends.html). NMODL Framework provides number of options (for code generation, optimization passes and ODE solver) which can be listed as:
@@ -232,13 +213,11 @@ host
   HOST/CPU code backends
   Options:
     --c                                   C/C++ backend (true)
-    --ispc                                C/C++ backend with ISPC (false)
 
 acc
   Accelerator code backends
   Options:
     --oacc                                C/C++ backend with OpenACC (false)
-    --cuda                                C/C++ backend with CUDA (false)
 
 sympy
   SymPy based analysis and optimizations
