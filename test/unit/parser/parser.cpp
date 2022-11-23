@@ -161,7 +161,8 @@ SCENARIO("NMODL parser running number of invalid NMODL constructs") {
 
 SCENARIO("Check that the parser doesn't crash when passing invalid INCLUDE constructs") {
     GIVEN("An empty filename") {
-        REQUIRE_THROWS_WITH(is_valid_construct("INCLUDE \"\""), Catch::Matchers::ContainsSubstring("empty filename"));
+        REQUIRE_THROWS_WITH(is_valid_construct("INCLUDE \"\""),
+                            Catch::Matchers::ContainsSubstring("empty filename"));
     }
 
     GIVEN("An missing included file") {

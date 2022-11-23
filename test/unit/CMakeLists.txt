@@ -71,33 +71,33 @@ add_executable(testcodegen codegen/main.cpp codegen/codegen_helper.cpp codegen/c
 target_link_libraries(testmodtoken PRIVATE lexer util)
 target_link_libraries(testlexer PRIVATE lexer util)
 target_link_libraries(
-  testparser PRIVATE
-  visitor
-  symtab
-  lexer
-  util
-  test_util
-  printer
-  ${NMODL_WRAPPER_LIBS})
+  testparser
+  PRIVATE visitor
+          symtab
+          lexer
+          util
+          test_util
+          printer
+          ${NMODL_WRAPPER_LIBS})
 target_link_libraries(
-  testvisitor PRIVATE
-  visitor
-  symtab
-  lexer
-  util
-  test_util
-  printer
-  ${NMODL_WRAPPER_LIBS})
+  testvisitor
+  PRIVATE visitor
+          symtab
+          lexer
+          util
+          test_util
+          printer
+          ${NMODL_WRAPPER_LIBS})
 target_link_libraries(
-  testcodegen PRIVATE
-  codegen
-  visitor
-  symtab
-  lexer
-  util
-  test_util
-  printer
-  ${NMODL_WRAPPER_LIBS})
+  testcodegen
+  PRIVATE codegen
+          visitor
+          symtab
+          lexer
+          util
+          test_util
+          printer
+          ${NMODL_WRAPPER_LIBS})
 target_link_libraries(testprinter PRIVATE printer util)
 target_link_libraries(testsymtab PRIVATE symtab lexer util)
 target_link_libraries(testunitlexer PRIVATE lexer util)

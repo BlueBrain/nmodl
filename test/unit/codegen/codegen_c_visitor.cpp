@@ -337,7 +337,8 @@ SCENARIO("Check NEURON globals are added to the instance struct on demand",
             auto const generated = get_instance_structure(nmodl_text);
             REQUIRE_THAT(generated, ContainsSubstring("double* celsius{&coreneuron::celsius}"));
             REQUIRE_THAT(generated, ContainsSubstring("double* pi{&coreneuron::pi}"));
-            REQUIRE_THAT(generated, ContainsSubstring("int* secondorder{&coreneuron::secondorder}"));
+            REQUIRE_THAT(generated,
+                         ContainsSubstring("int* secondorder{&coreneuron::secondorder}"));
         }
     }
     GIVEN("A MOD file that implicitly uses global variables") {
@@ -410,16 +411,22 @@ SCENARIO("Check code generation for TABLE statements", "[codegen][array_variable
             REQUIRE_THAT(generated, ContainsSubstring("double t_inf[2][201]{};"));
             REQUIRE_THAT(generated, ContainsSubstring("double t_tau[201]{};"));
 
-            REQUIRE_THAT(generated, ContainsSubstring("inst->global->t_inf[0][i] = (inst->inf+id*2)[0];"));
-            REQUIRE_THAT(generated, ContainsSubstring("inst->global->t_inf[1][i] = (inst->inf+id*2)[1];"));
-            REQUIRE_THAT(generated, ContainsSubstring("inst->global->t_tau[i] = inst->global->tau;"));
+            REQUIRE_THAT(generated,
+                         ContainsSubstring("inst->global->t_inf[0][i] = (inst->inf+id*2)[0];"));
+            REQUIRE_THAT(generated,
+                         ContainsSubstring("inst->global->t_inf[1][i] = (inst->inf+id*2)[1];"));
+            REQUIRE_THAT(generated,
+                         ContainsSubstring("inst->global->t_tau[i] = inst->global->tau;"));
 
             REQUIRE_THAT(generated,
                          ContainsSubstring("(inst->inf+id*2)[0] = inst->global->t_inf[0][index];"));
 
-            REQUIRE_THAT(generated, ContainsSubstring("(inst->inf+id*2)[0] = inst->global->t_inf[0][i]"));
-            REQUIRE_THAT(generated, ContainsSubstring("(inst->inf+id*2)[1] = inst->global->t_inf[1][i]"));
-            REQUIRE_THAT(generated, ContainsSubstring("inst->global->tau = inst->global->t_tau[i]"));
+            REQUIRE_THAT(generated,
+                         ContainsSubstring("(inst->inf+id*2)[0] = inst->global->t_inf[0][i]"));
+            REQUIRE_THAT(generated,
+                         ContainsSubstring("(inst->inf+id*2)[1] = inst->global->t_inf[1][i]"));
+            REQUIRE_THAT(generated,
+                         ContainsSubstring("inst->global->tau = inst->global->t_tau[i]"));
         }
     }
 }

@@ -153,7 +153,8 @@ SCENARIO("Symbol table generation with Perf stat visitor", "[visitor][performanc
         WHEN("Perf visitor pass runs before symtab visitor") {
             PerfVisitor v;
             THEN("exception is thrown") {
-                REQUIRE_THROWS_WITH(v.visit_program(*ast), Catch::Matchers::ContainsSubstring("table not setup"));
+                REQUIRE_THROWS_WITH(v.visit_program(*ast),
+                                    Catch::Matchers::ContainsSubstring("table not setup"));
             }
         }
     }
