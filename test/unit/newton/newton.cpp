@@ -5,11 +5,10 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
-#define CATCH_CONFIG_MAIN
-
 #include "nmodl.hpp"
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_test_macros.hpp>
+#include <catch2/catch_approx.hpp>
 
 #include <cmath>
 
@@ -36,7 +35,7 @@ SCENARIO("Non-linear system to solve with Newton Numerical Diff Solver", "[numer
             CAPTURE(iter_newton);
             CAPTURE(X);
             REQUIRE(iter_newton > 0);
-            REQUIRE(X[0] == Approx(1.0));
+            REQUIRE(X[0] == Catch::Approx(1.0));
             REQUIRE(F.norm() < max_error_norm);
         }
     }
@@ -57,7 +56,7 @@ SCENARIO("Non-linear system to solve with Newton Numerical Diff Solver", "[numer
             CAPTURE(iter_newton);
             CAPTURE(X);
             REQUIRE(iter_newton > 0);
-            REQUIRE(X[0] == Approx(2.19943987001206));
+            REQUIRE(X[0] == Catch::Approx(2.19943987001206));
             REQUIRE(F.norm() < max_error_norm);
         }
     }
@@ -224,7 +223,7 @@ SCENARIO("Non-linear system to solve with Newton Solver", "[analytic][solver]") 
             CAPTURE(iter_newton);
             CAPTURE(X);
             REQUIRE(iter_newton > 0);
-            REQUIRE(X[0] == Approx(1.0));
+            REQUIRE(X[0] == Catch::Approx(1.0));
             REQUIRE(F.norm() < max_error_norm);
         }
     }
@@ -248,7 +247,7 @@ SCENARIO("Non-linear system to solve with Newton Solver", "[analytic][solver]") 
             CAPTURE(iter_newton);
             CAPTURE(X);
             REQUIRE(iter_newton > 0);
-            REQUIRE(X[0] == Approx(2.19943987001206));
+            REQUIRE(X[0] == Catch::Approx(2.19943987001206));
             REQUIRE(F.norm() < max_error_norm);
         }
     }

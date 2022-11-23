@@ -68,10 +68,10 @@ add_executable(testunitparser units/parser.cpp)
 add_executable(testcodegen codegen/main.cpp codegen/codegen_helper.cpp codegen/codegen_utils.cpp
                            codegen/codegen_c_visitor.cpp codegen/transform.cpp)
 
-target_link_libraries(testmodtoken lexer util)
-target_link_libraries(testlexer lexer util)
+target_link_libraries(testmodtoken PRIVATE lexer util)
+target_link_libraries(testlexer PRIVATE lexer util)
 target_link_libraries(
-  testparser
+  testparser PRIVATE
   visitor
   symtab
   lexer
@@ -80,7 +80,7 @@ target_link_libraries(
   printer
   ${NMODL_WRAPPER_LIBS})
 target_link_libraries(
-  testvisitor
+  testvisitor PRIVATE
   visitor
   symtab
   lexer
@@ -89,7 +89,7 @@ target_link_libraries(
   printer
   ${NMODL_WRAPPER_LIBS})
 target_link_libraries(
-  testcodegen
+  testcodegen PRIVATE
   codegen
   visitor
   symtab
@@ -98,10 +98,10 @@ target_link_libraries(
   test_util
   printer
   ${NMODL_WRAPPER_LIBS})
-target_link_libraries(testprinter printer util)
-target_link_libraries(testsymtab symtab lexer util)
-target_link_libraries(testunitlexer lexer util)
-target_link_libraries(testunitparser lexer test_util config)
+target_link_libraries(testprinter PRIVATE printer util)
+target_link_libraries(testsymtab PRIVATE symtab lexer util)
+target_link_libraries(testunitlexer PRIVATE lexer util)
+target_link_libraries(testunitparser PRIVATE lexer test_util config)
 
 # =============================================================================
 # Use catch_discover instead of add_test for granular test result reporting.
@@ -113,6 +113,22 @@ if(NOT LINK_AGAINST_PYTHON)
   list(APPEND testvisitor_env
        "NMODL_WRAPLIB=${PROJECT_BINARY_DIR}/lib/nmodl/libpywrapper${CMAKE_SHARED_LIBRARY_SUFFIX}")
 endif()
+
+# Without main from Catch2
+target_link_libraries(testcodegen PRIVATE Catch2::Catch2)
+target_link_libraries(testvisitor PRIVATE Catch2::Catch2)
+
+# With main from Catch2
+target_link_libraries(testmodtoken PRIVATE Catch2::Catch2WithMain)
+target_link_libraries(testlexer PRIVATE Catch2::Catch2WithMain)
+target_link_libraries(testparser PRIVATE Catch2::Catch2WithMain)
+target_link_libraries(testprinter PRIVATE Catch2::Catch2WithMain)
+target_link_libraries(testsymtab PRIVATE Catch2::Catch2WithMain)
+target_link_libraries(testnewton PRIVATE Catch2::Catch2WithMain)
+target_link_libraries(testcrout PRIVATE Catch2::Catch2WithMain)
+target_link_libraries(testfast_math PRIVATE Catch2::Catch2WithMain)
+target_link_libraries(testunitlexer PRIVATE Catch2::Catch2WithMain)
+target_link_libraries(testunitparser PRIVATE Catch2::Catch2WithMain)
 
 foreach(
   test_name
@@ -129,7 +145,6 @@ foreach(
   testunitlexer
   testunitparser)
 
-  target_link_libraries(${test_name} Catch2::Catch2)
   cpp_cc_configure_sanitizers(TARGET ${test_name})
   set(env ${test_env})
   list(APPEND env ${${test_name}_env})

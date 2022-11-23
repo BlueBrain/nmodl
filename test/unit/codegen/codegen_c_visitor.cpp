@@ -5,7 +5,8 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_test_macros.hpp>
+#include <catch2/matchers/catch_matchers_string.hpp>
 
 #include "ast/program.hpp"
 #include "codegen/codegen_c_visitor.hpp"
@@ -20,7 +21,7 @@
 #include "visitors/sympy_solver_visitor.hpp"
 #include "visitors/symtab_visitor.hpp"
 
-using Catch::Matchers::Contains;  // ContainsSubstring in newer Catch2
+using Catch::Matchers::ContainsSubstring;
 
 using namespace nmodl;
 using namespace visitor;
@@ -124,7 +125,7 @@ SCENARIO("Check instance variable definition order", "[codegen][var_order]") {
             )";
             auto const expected = reindent_text(generated_code);
             auto const result = get_instance_var_setup_function(nmodl_text);
-            REQUIRE_THAT(result, Contains(expected));
+            REQUIRE_THAT(result, ContainsSubstring(expected));
         }
     }
 
@@ -173,7 +174,7 @@ SCENARIO("Check instance variable definition order", "[codegen][var_order]") {
 
             auto const expected = reindent_text(generated_code);
             auto const result = get_instance_var_setup_function(nmodl_text);
-            REQUIRE_THAT(result, Contains(expected));
+            REQUIRE_THAT(result, ContainsSubstring(expected));
         }
     }
 
@@ -258,7 +259,7 @@ SCENARIO("Check instance variable definition order", "[codegen][var_order]") {
 
             auto const expected = reindent_text(generated_code);
             auto const result = get_instance_var_setup_function(nmodl_text);
-            REQUIRE_THAT(result, Contains(expected));
+            REQUIRE_THAT(result, ContainsSubstring(expected));
         }
     }
 }
@@ -334,9 +335,9 @@ SCENARIO("Check NEURON globals are added to the instance struct on demand",
         )";
         THEN("The instance struct should contain these variables") {
             auto const generated = get_instance_structure(nmodl_text);
-            REQUIRE_THAT(generated, Contains("double* celsius{&coreneuron::celsius}"));
-            REQUIRE_THAT(generated, Contains("double* pi{&coreneuron::pi}"));
-            REQUIRE_THAT(generated, Contains("int* secondorder{&coreneuron::secondorder}"));
+            REQUIRE_THAT(generated, ContainsSubstring("double* celsius{&coreneuron::celsius}"));
+            REQUIRE_THAT(generated, ContainsSubstring("double* pi{&coreneuron::pi}"));
+            REQUIRE_THAT(generated, ContainsSubstring("int* secondorder{&coreneuron::secondorder}"));
         }
     }
     GIVEN("A MOD file that implicitly uses global variables") {
@@ -351,7 +352,7 @@ SCENARIO("Check NEURON globals are added to the instance struct on demand",
         )";
         THEN("The instance struct should contain celsius for the implicit 5th argument") {
             auto const generated = get_instance_structure(nmodl_text);
-            REQUIRE_THAT(generated, Contains("celsius"));
+            REQUIRE_THAT(generated, ContainsSubstring("celsius"));
         }
     }
     GIVEN("A MOD file that does not touch celsius, secondorder or pi") {
@@ -362,9 +363,9 @@ SCENARIO("Check NEURON globals are added to the instance struct on demand",
         )";
         THEN("The instance struct should not contain those variables") {
             auto const generated = get_instance_structure(nmodl_text);
-            REQUIRE_THAT(generated, !Contains("celsius"));
-            REQUIRE_THAT(generated, !Contains("pi"));
-            REQUIRE_THAT(generated, !Contains("secondorder"));
+            REQUIRE_THAT(generated, !ContainsSubstring("celsius"));
+            REQUIRE_THAT(generated, !ContainsSubstring("pi"));
+            REQUIRE_THAT(generated, !ContainsSubstring("secondorder"));
         }
     }
 }
@@ -406,19 +407,19 @@ SCENARIO("Check code generation for TABLE statements", "[codegen][array_variable
         )";
         THEN("Array and global variables should be correctly generated") {
             auto const generated = get_cpp_code(nmodl_text);
-            REQUIRE_THAT(generated, Contains("double t_inf[2][201]{};"));
-            REQUIRE_THAT(generated, Contains("double t_tau[201]{};"));
+            REQUIRE_THAT(generated, ContainsSubstring("double t_inf[2][201]{};"));
+            REQUIRE_THAT(generated, ContainsSubstring("double t_tau[201]{};"));
 
-            REQUIRE_THAT(generated, Contains("inst->global->t_inf[0][i] = (inst->inf+id*2)[0];"));
-            REQUIRE_THAT(generated, Contains("inst->global->t_inf[1][i] = (inst->inf+id*2)[1];"));
-            REQUIRE_THAT(generated, Contains("inst->global->t_tau[i] = inst->global->tau;"));
+            REQUIRE_THAT(generated, ContainsSubstring("inst->global->t_inf[0][i] = (inst->inf+id*2)[0];"));
+            REQUIRE_THAT(generated, ContainsSubstring("inst->global->t_inf[1][i] = (inst->inf+id*2)[1];"));
+            REQUIRE_THAT(generated, ContainsSubstring("inst->global->t_tau[i] = inst->global->tau;"));
 
             REQUIRE_THAT(generated,
-                         Contains("(inst->inf+id*2)[0] = inst->global->t_inf[0][index];"));
+                         ContainsSubstring("(inst->inf+id*2)[0] = inst->global->t_inf[0][index];"));
 
-            REQUIRE_THAT(generated, Contains("(inst->inf+id*2)[0] = inst->global->t_inf[0][i]"));
-            REQUIRE_THAT(generated, Contains("(inst->inf+id*2)[1] = inst->global->t_inf[1][i]"));
-            REQUIRE_THAT(generated, Contains("inst->global->tau = inst->global->t_tau[i]"));
+            REQUIRE_THAT(generated, ContainsSubstring("(inst->inf+id*2)[0] = inst->global->t_inf[0][i]"));
+            REQUIRE_THAT(generated, ContainsSubstring("(inst->inf+id*2)[1] = inst->global->t_inf[1][i]"));
+            REQUIRE_THAT(generated, ContainsSubstring("inst->global->tau = inst->global->t_tau[i]"));
         }
     }
 }

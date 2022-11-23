@@ -103,7 +103,7 @@ cpp_cc_git_submodule(catch2 BUILD PACKAGE Catch2 REQUIRED)
 if(NMODL_3RDPARTY_USE_CATCH2)
   # If we're using the submodule then make sure the Catch.cmake helper can be found. In newer
   # versions of Catch2, and with hpc-coding-conventions#130, this should just work...
-  list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/ext/catch2/contrib")
+  list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/ext/catch2/extras")
 endif()
 include(Catch)
 # If we're being built as a submodule of CoreNEURON then CoreNEURON may have already found/loaded a
