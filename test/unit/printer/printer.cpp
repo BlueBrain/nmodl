@@ -5,6 +5,7 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
+#include <sstream>
 #include <string>
 
 #include <catch2/catch_test_macros.hpp>
