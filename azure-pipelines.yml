@@ -6,7 +6,7 @@ variables:
   #- ReleaseWheelBuild: False
   #- UploadWheel: False
   buildWheel: ${{ or(in(variables['Build.Reason'], 'Schedule'), in(variables['Build.Reason'], 'Manual')) }}
-  MACOSX_DEPLOYMENT_TARGET: 10.14
+  MACOSX_DEPLOYMENT_TARGET: 10.15
 
 # Nightly build master for pypi upload
 schedules:
