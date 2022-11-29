@@ -77,14 +77,8 @@ jobs:
           lcov --list coverage.info
         env:
           CCACHE_DIR: ${{runner.workspace}}/ccache
-      - name: Upload Coverage
-        run: |
-          # Download codecov script and perform integrity checks
-          curl https://keybase.io/codecovsecurity/pgp_keys.asc | gpg --import # One-time step 
-          curl -Os https://uploader.codecov.io/latest/linux/codecov 
-          curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM 
-          curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM.sig 
-          gpg --verify codecov.SHA256SUM.sig codecov.SHA256SUM 
-          shasum -a 256 -c codecov.SHA256SUM 
-          chmod +x codecov 
-          ./codecov -f build/coverage.info
+      - uses: codecov/codecov-action@v3
+        with:
+          files: ./build/coverage.info
+          fail_ci_if_error: true
+          verbose: true
