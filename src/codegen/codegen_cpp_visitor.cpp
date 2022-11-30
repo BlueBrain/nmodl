@@ -1940,16 +1940,15 @@ std::string CodegenCVisitor::internal_method_arguments() {
 CodegenCVisitor::ParamVector CodegenCVisitor::internal_method_parameters() {
     auto params = ParamVector();
     params.emplace_back("", "int", "", "id");
-    params.emplace_back("int", "", "pnodecount");
-    params.emplace_back(fmt::format("{}*", instance_struct()),
-                        "inst");
+    params.emplace_back("", "int", "", "pnodecount");
+    params.emplace_back("", fmt::format("{}*", instance_struct()), "", "inst");
     if (ion_variable_struct_required()) {
         params.emplace_back("", "IonCurVar&", "", "ionvar");
     }
     params.emplace_back("", "double*", "", "data");
     params.emplace_back("const ", "Datum*", "", "indexes");
-    params.emplace_back("ThreadDatum*", "", "thread");
-    params.emplace_back("NrnThread*", "nt");
+    params.emplace_back("", "ThreadDatum*", "", "thread");
+    params.emplace_back("", "NrnThread*", "", "nt");
     params.emplace_back("", "double", "", "v");
     return params;
 }
@@ -4065,10 +4064,10 @@ void CodegenCVisitor::print_net_receive_kernel() {
         name = method_name("net_receive_kernel");
         params.emplace_back("", "double", "", "t");
         params.emplace_back("", "Point_process*", "", "pnt");
-        params.emplace_back(fmt::format("{}*", instance_struct()),
-                            "inst");
-        params.emplace_back("NrnThread*", "nt");
-        params.emplace_back("Memb_list*", "ml");
+        params.emplace_back("", fmt::format("{}*", instance_struct()),
+                            "", "inst");
+        params.emplace_back("", "NrnThread*", "", "nt");
+        params.emplace_back("", "Memb_list*", "", "ml");
         params.emplace_back("", "int", "", "weight_index");
         params.emplace_back("", "double", "", "flag");
     } else {
