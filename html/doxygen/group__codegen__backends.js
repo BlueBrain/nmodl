@@ -33,6 +33,20 @@ var group__codegen__backends =
       [ "print_nrn_cur_matrix_shadow_update", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a645c96bca7fc93af0c4e1898ec06f02e", null ],
       [ "print_rhs_d_shadow_variables", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#ab2b1180f70d5559ced0633638dd14b5a", null ]
     ] ],
+    [ "CodegenCompatibilityVisitor", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html", [
+      [ "FunctionPointer", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#aba29f796233489a8cb5879a8c2ca5641", null ],
+      [ "CodegenCompatibilityVisitor", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#ad8ab18c3c2e7c9822ec33a63900ec13e", null ],
+      [ "find_unhandled_ast_nodes", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#ac24f85e374d5c089b019b0d36e7d207c", null ],
+      [ "return_error_global_var", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#afa10d176b1cf5811533427ffd46aefb7", null ],
+      [ "return_error_if_no_bbcore_read_write", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#af32b7093b469e83dfd029bffebdf97a0", null ],
+      [ "return_error_if_solve_method_is_unhandled", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#abdb4773e01ea26ccff60027d5ad27717", null ],
+      [ "return_error_param_var", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#ad20edb1334e67d851528bf1840e2302c", null ],
+      [ "return_error_with_name", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a9330dcc15a93adfd9e7950556e15af9e", null ],
+      [ "return_error_without_name", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#aff329972edc880f9b3fe7c85ce2c5df2", null ],
+      [ "handled_solvers", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#ab91d26dcf9a01cf7ca02cd70d8fc7e9a", null ],
+      [ "unhandled_ast_nodes", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a69954a85b9e1a0f90301d63dc1060c5c", null ],
+      [ "unhandled_ast_types_func", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a320efdb261998e4ce6e10003010a39a4", null ]
+    ] ],
     [ "CodegenCVisitor", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html", [
       [ "ParamVector", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a983129af96f5841838db04817dc08dd9", null ],
       [ "SymbolType", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a84bb623825207181bd987df2a2863ac7", null ],
@@ -283,20 +297,6 @@ var group__codegen__backends =
       [ "shadow_statements", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a694af3605487ed4f30a301c8cb784c07", null ],
       [ "target_printer", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ac37d5497e77a6f324b4842d94576ff8e", null ],
       [ "wrapper_printer", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ac8c8818418756423c0b81a1a4b76ce54", null ]
-    ] ],
-    [ "CodegenCompatibilityVisitor", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html", [
-      [ "FunctionPointer", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#aba29f796233489a8cb5879a8c2ca5641", null ],
-      [ "CodegenCompatibilityVisitor", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#ad8ab18c3c2e7c9822ec33a63900ec13e", null ],
-      [ "find_unhandled_ast_nodes", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#ac24f85e374d5c089b019b0d36e7d207c", null ],
-      [ "return_error_global_var", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#afa10d176b1cf5811533427ffd46aefb7", null ],
-      [ "return_error_if_no_bbcore_read_write", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#af32b7093b469e83dfd029bffebdf97a0", null ],
-      [ "return_error_if_solve_method_is_unhandled", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#abdb4773e01ea26ccff60027d5ad27717", null ],
-      [ "return_error_param_var", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#ad20edb1334e67d851528bf1840e2302c", null ],
-      [ "return_error_with_name", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a9330dcc15a93adfd9e7950556e15af9e", null ],
-      [ "return_error_without_name", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#aff329972edc880f9b3fe7c85ce2c5df2", null ],
-      [ "handled_solvers", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#ab91d26dcf9a01cf7ca02cd70d8fc7e9a", null ],
-      [ "unhandled_ast_nodes", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a69954a85b9e1a0f90301d63dc1060c5c", null ],
-      [ "unhandled_ast_types_func", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a320efdb261998e4ce6e10003010a39a4", null ]
     ] ],
     [ "has_parameter_of_name", "group__codegen__backends.html#ga4999b23d646ccd6a79c07207369183bb", null ],
     [ "print_function_declaration", "group__codegen__backends.html#ga6d44bd1e268f523ac1297aa82cbd81ef", null ],

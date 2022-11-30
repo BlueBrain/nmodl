@@ -46,7 +46,7 @@ var searchData=
   ['count_5fleading_5fspaces_3329',['count_leading_spaces',['../namespacenmodl_1_1test__utils.html#a1284118f6267a554f747425e45e9597d',1,'nmodl::test_utils']]],
   ['count_5fvariables_3330',['count_variables',['../classnmodl_1_1visitor_1_1_perf_visitor.html#afa4b4623c055eeb4600ffe13c7da6e77',1,'nmodl::visitor::PerfVisitor']]],
   ['create_5fads_5fexecutor_5ffunc_3331',['create_ads_executor_func',['../namespacenmodl_1_1pybind__wrappers.html#abceefdf9a4264975ee96e35ff67ae490',1,'nmodl::pybind_wrappers']]],
-  ['create_5fc_5fvisitor_3332',['create_c_visitor',['../test_2unit_2codegen_2codegen__c__visitor_8cpp.html#ad5868eeaa048f3a22739a790a9a2016c',1,'codegen_c_visitor.cpp']]],
+  ['create_5fc_5fvisitor_3332',['create_c_visitor',['../test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#ad5868eeaa048f3a22739a790a9a2016c',1,'codegen_cpp_visitor.cpp']]],
   ['create_5fdes_5fexecutor_5ffunc_3333',['create_des_executor_func',['../namespacenmodl_1_1pybind__wrappers.html#a7d3a0df669e6bf6a4215f754e6dda06d',1,'nmodl::pybind_wrappers']]],
   ['create_5fexpr_3334',['create_expr',['../namespacenmodl_1_1visitor.html#aee96ed86397883848d9b56714492e13c',1,'nmodl::visitor']]],
   ['create_5fnsls_5fexecutor_5ffunc_3335',['create_nsls_executor_func',['../namespacenmodl_1_1pybind__wrappers.html#a58ed1be3796a8469036f83f870e71f1d',1,'nmodl::pybind_wrappers']]],
