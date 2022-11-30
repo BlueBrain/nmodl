@@ -12,7 +12,7 @@
 
 #include "ast/program.hpp"
 #include "codegen/codegen_acc_visitor.hpp"
-#include "codegen/codegen_c_visitor.hpp"
+#include "codegen/codegen_cpp_visitor.hpp"
 #include "codegen/codegen_compatibility_visitor.hpp"
 #include "codegen/codegen_transform_visitor.hpp"
 #include "config/config.h"
