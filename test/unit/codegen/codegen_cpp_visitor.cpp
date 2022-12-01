@@ -422,3 +422,60 @@ SCENARIO("Check code generation for TABLE statements", "[codegen][array_variable
         }
     }
 }
+
+SCENARIO("Check that BEFORE/AFTER block are well generated", "[codegen][before/after]") {
+    GIVEN("A mod file full of BEFORE/AFTER of all kinds") {
+        std::string const nmodl_text = R"(
+            NEURON {
+                SUFFIX ba1
+            }
+            BEFORE BREAKPOINT {}
+            BREAKPOINT {}
+            AFTER BREAKPOINT {}
+            BEFORE SOLVE {}
+            AFTER SOLVE {}
+            BEFORE INITIAL {}
+            INITIAL {}
+            AFTER INITIAL {}
+            BEFORE STEP {}
+            AFTER STEP {}
+        )";
+        THEN("They should be well registered") {
+            auto const generated = get_cpp_code(nmodl_text);
+            // 11: BEFORE BREAKPOINT
+            REQUIRE_THAT(generated, Contains("hoc_reg_ba(mech_type, nrn_before_after_0_ba1, 11);"));
+            // 21: AFTER BREAKPOINT
+            REQUIRE_THAT(generated, Contains("hoc_reg_ba(mech_type, nrn_before_after_1_ba1, 21);"));
+            // 13: BEFORE SOLVE
+            REQUIRE_THAT(generated, Contains("hoc_reg_ba(mech_type, nrn_before_after_2_ba1, 12);"));
+            // 23: AFTER SOLVE
+            REQUIRE_THAT(generated, Contains("hoc_reg_ba(mech_type, nrn_before_after_3_ba1, 22);"));
+            // 11: BEFORE INITIAl
+            REQUIRE_THAT(generated, Contains("hoc_reg_ba(mech_type, nrn_before_after_4_ba1, 13);"));
+            // 21: AFTER INITIAL
+            REQUIRE_THAT(generated, Contains("hoc_reg_ba(mech_type, nrn_before_after_5_ba1, 23);"));
+            // 13: BEFORE STEP
+            REQUIRE_THAT(generated, Contains("hoc_reg_ba(mech_type, nrn_before_after_6_ba1, 14);"));
+            // 23: AFTER STEP
+            REQUIRE_THAT(generated, Contains("hoc_reg_ba(mech_type, nrn_before_after_7_ba1, 24);"));
+        }
+    }
+    GIVEN("A mod file with several time same BEFORE or AFTER block") {
+        std::string const nmodl_text = R"(
+            NEURON {
+                SUFFIX ba1
+            }
+            BEFORE STEP {}
+            AFTER STEP {}
+            BEFORE STEP {}
+            AFTER STEP {}
+        )";
+        THEN("They should be all registered") {
+            auto const generated = get_cpp_code(nmodl_text);
+            REQUIRE_THAT(generated, Contains("hoc_reg_ba(mech_type, nrn_before_after_0_ba1, 14);"));
+            REQUIRE_THAT(generated, Contains("hoc_reg_ba(mech_type, nrn_before_after_1_ba1, 24);"));
+            REQUIRE_THAT(generated, Contains("hoc_reg_ba(mech_type, nrn_before_after_2_ba1, 14);"));
+            REQUIRE_THAT(generated, Contains("hoc_reg_ba(mech_type, nrn_before_after_3_ba1, 24);"));
+        }
+    }
+}
