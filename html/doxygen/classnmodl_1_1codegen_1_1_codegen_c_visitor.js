@@ -68,8 +68,6 @@ var classnmodl_1_1codegen_1_1_codegen_c_visitor =
     [ "operator_for_d", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a94e406d072855765b97cdc70db455e8d", null ],
     [ "operator_for_rhs", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a6e4098f09ae4757a0385113a1f8063d0", null ],
     [ "optimize_ion_variable_copies", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a8f52df80d011c667a14a8fc5d383466f", null ],
-    [ "param_ptr_qualifier", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a20048a23b96bc613aa0f0229299a2a6b", null ],
-    [ "param_type_qualifier", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#acaa6b26cc200ceac225cc3ffe4b7ed83", null ],
     [ "position_of_float_var", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#aa956c52d80e062d98023d54808f0a0fe", null ],
     [ "position_of_int_var", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ad8dd814e58424aa06a384ff516362fc6", null ],
     [ "print_abort_routine", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#aa7e1b78449a428dfee7f3eb77a9cee4b", null ],
