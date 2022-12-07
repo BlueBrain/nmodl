@@ -273,10 +273,14 @@ SCENARIO("Check instance variable definition order", "[codegen][var_order]") {
                     inst->ion_ncai = nt->_data;
                     inst->ion_inca = nt->_data;
                     inst->ion_enca = nt->_data;
+                    inst->ion_ncao = nt->_data;
+                    inst->ion_nca_erev = nt->_data;
                     inst->style_nca = ml->pdata;
                     inst->ion_lcai = nt->_data;
                     inst->ion_ilca = nt->_data;
                     inst->ion_elca = nt->_data;
+                    inst->ion_lcao = nt->_data;
+                    inst->ion_lca_erev = nt->_data;
                     inst->style_lca = ml->pdata;
                 }
             )";
