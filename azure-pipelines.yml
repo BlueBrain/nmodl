@@ -6,7 +6,7 @@ variables:
   #- ReleaseWheelBuild: False
   #- UploadWheel: False
   buildWheel: ${{ or(in(variables['Build.Reason'], 'Schedule'), in(variables['Build.Reason'], 'Manual')) }}
-  MACOSX_DEPLOYMENT_TARGET: 10.14
+  MACOSX_DEPLOYMENT_TARGET: 10.15
 
 # Nightly build master for pypi upload
 schedules:
@@ -154,7 +154,7 @@ stages:
     - checkout: self
       submodules: True
     - script: |
-        brew install flex bison cmake python@3 gcc@8
+        brew install flex bison cmake python@3
         python3 -m pip install --upgrade pip setuptools
         python3 -m pip install --user 'Jinja2>=2.9.3' 'PyYAML>=3.13' pytest pytest-cov numpy 'sympy>=1.3'
       displayName: 'Install Dependencies'
@@ -179,8 +179,8 @@ stages:
     - script: |
         export PATH=$(pwd)/$CMAKE_PKG/bin:/home/vsts/.local/bin:$PATH
         export PATH=/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH;
-        export CC='gcc-8'
-        export CXX='g++-8'
+        export CC='gcc'
+        export CXX='g++'
         git clone${NEURON_BRANCH:+ --branch }${NEURON_BRANCH} --single-branch https://github.com/neuronsimulator/nrn.git
         if [[ -n "${CORENEURON_BRANCH}" ]]; then
           pushd nrn
