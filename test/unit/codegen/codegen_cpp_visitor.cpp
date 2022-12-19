@@ -423,8 +423,7 @@ SCENARIO("Check code generation for TABLE statements", "[codegen][array_variable
     }
 }
 
-SCENARIO("Check codegen for MUTEX and PROTECT",
-         "[codegen][mutex_protect]") {
+SCENARIO("Check codegen for MUTEX and PROTECT", "[codegen][mutex_protect]") {
     GIVEN("A mod file containing MUTEX & PROTECT") {
         std::string const nmodl_text = R"(
             NEURON {
@@ -448,7 +447,7 @@ SCENARIO("Check codegen for MUTEX and PROTECT",
                 inst->tmp[id] = 11.0;
                 }
                 #pragma omp critical TEST {inst->tmp[id] = 12.0;})";
-        REQUIRE_THAT(generated, Contains(expected_code));
+            REQUIRE_THAT(generated, Contains(expected_code));
         }
     }
 }
