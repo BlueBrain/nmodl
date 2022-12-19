@@ -319,18 +319,18 @@ void CodegenCVisitor::visit_update_dt(const ast::UpdateDt& node) {
 }
 
 void CodegenCVisitor::visit_protect_statement(const ast::ProtectStatement& node) {
-    printer->fmt_text("#pragma omp critical {} {{", info.mod_suffix);
+    printer->fmt_start_block("#pragma omp critical {}", info.mod_suffix);
     node.get_expression()->accept(*this);
     printer->add_text(";");
-    printer->add_text("}");
+    printer->end_block(1);
 }
 
 void CodegenCVisitor::visit_mutex_lock(const ast::MutexLock& node) {
-    printer->fmt_text("#pragma omp critical {} {{", info.mod_suffix);
+    printer->fmt_start_block("#pragma omp critical {}", info.mod_suffix);
 }
 
 void CodegenCVisitor::visit_mutex_unlock(const ast::MutexUnlock& node) {
-    printer->add_text("}");
+    printer->end_block(1);
 }
 
 /****************************************************************************************/
@@ -2164,6 +2164,7 @@ void CodegenCVisitor::print_nmodl_constants() {
         }
     }
 }
+
 
 void CodegenCVisitor::print_first_pointer_var_index_getter() {
     printer->add_newline(2);
@@ -4362,6 +4363,7 @@ void CodegenCVisitor::print_nrn_current(const BreakpointBlock& node) {
     printer->add_line("return current;");
     printer->end_block(1);
 }
+
 
 void CodegenCVisitor::print_nrn_cur_conductance_kernel(const BreakpointBlock& node) {
     const auto& block = node.get_statement_block();

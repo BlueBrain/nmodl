@@ -943,6 +943,7 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      */
     virtual void print_nmodl_constants();
 
+
     /**
      * Print top file header printed in generated code
      */
