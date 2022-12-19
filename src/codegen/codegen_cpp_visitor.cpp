@@ -320,8 +320,10 @@ void CodegenCVisitor::visit_update_dt(const ast::UpdateDt& node) {
 
 void CodegenCVisitor::visit_protect_statement(const ast::ProtectStatement& node) {
     printer->fmt_start_block("#pragma omp critical {}", info.mod_suffix);
+    printer->add_indent();
     node.get_expression()->accept(*this);
     printer->add_text(";");
+    printer->add_newline();
     printer->end_block(1);
 }
 
@@ -1304,14 +1306,16 @@ void CodegenCVisitor::print_statement_block(const ast::StatementBlock& node,
             continue;
         }
         /// not necessary to add indent for verbatim block (pretty-printing)
-        if (!statement->is_verbatim()) {
+        if (!statement->is_verbatim() && !statement->is_mutex_lock() && !statement->is_mutex_unlock() && !statement->is_protect_statement()) {
             printer->add_indent();
         }
         statement->accept(*this);
         if (need_semicolon(statement.get())) {
             printer->add_text(";");
         }
-        printer->add_newline();
+        if (!statement->is_mutex_lock() && !statement->is_mutex_unlock()) {
+            printer->add_newline();
+        }
     }
 
     if (close_brace) {

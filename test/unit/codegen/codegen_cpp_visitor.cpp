@@ -444,9 +444,11 @@ SCENARIO("Check codegen for MUTEX and PROTECT", "[codegen][mutex_protect]") {
         THEN("Code with OpenMP critical sections is generated") {
             auto const generated = get_cpp_code(nmodl_text);
             std::string expected_code = R"(#pragma omp critical TEST {
-                inst->tmp[id] = 11.0;
+                    inst->tmp[id] = 11.0;
                 }
-                #pragma omp critical TEST {inst->tmp[id] = 12.0;})";
+                #pragma omp critical TEST {
+                    inst->tmp[id] = 12.0;
+                })";
             REQUIRE_THAT(generated, Contains(expected_code));
         }
     }
