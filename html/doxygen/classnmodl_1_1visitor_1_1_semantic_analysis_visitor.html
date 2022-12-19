@@ -101,7 +101,7 @@ $(document).ready(function(){initNavTree('classnmodl_1_1visitor_1_1_semantic_ana
 <div class="contents">
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00039">39</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00040">40</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>&gt;</code></p>
 <div class="dynheader">
@@ -117,8 +117,8 @@ Inheritance diagram for nmodl::visitor::SemanticAnalysisVisitor:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a7f7eba44f9fe830c3ba2e52d789082ca"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a7f7eba44f9fe830c3ba2e52d789082ca">SemanticAnalysisVisitor</a> ()=default</td></tr>
-<tr class="separator:a7f7eba44f9fe830c3ba2e52d789082ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f9e6ba1c7d7e94a689ad6f72d205fa4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a4f9e6ba1c7d7e94a689ad6f72d205fa4">SemanticAnalysisVisitor</a> (bool <a class="el" href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a11831b74b8026d3622691117cd4aa653">accel_backend</a>=false)</td></tr>
+<tr class="separator:a4f9e6ba1c7d7e94a689ad6f72d205fa4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a59bf1db427b5229d53adc6a18c15b2a0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a59bf1db427b5229d53adc6a18c15b2a0">check</a> (const <a class="el" href="classnmodl_1_1ast_1_1_program.html">ast::Program</a> &amp;node)</td></tr>
 <tr class="separator:a59bf1db427b5229d53adc6a18c15b2a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classnmodl_1_1visitor_1_1_const_ast_visitor"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classnmodl_1_1visitor_1_1_const_ast_visitor')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classnmodl_1_1visitor_1_1_const_ast_visitor.html">nmodl::visitor::ConstAstVisitor</a></td></tr>
@@ -503,11 +503,23 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:aa00f48a7ee8cb274e0483746c60fd169"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#aa00f48a7ee8cb274e0483746c60fd169">visit_independent_block</a> (const <a class="el" href="classnmodl_1_1ast_1_1_independent_block.html">ast::IndependentBlock</a> &amp;node) override</td></tr>
 <tr class="memdesc:aa00f48a7ee8cb274e0483746c60fd169"><td class="mdescLeft">&#160;</td><td class="mdescRight">Visit independent block and check if one of the variable is not t.  <a href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#aa00f48a7ee8cb274e0483746c60fd169">More...</a><br /></td></tr>
 <tr class="separator:aa00f48a7ee8cb274e0483746c60fd169"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abccc76a4e2c96cf0423de556db989dcd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#abccc76a4e2c96cf0423de556db989dcd">visit_protect_statement</a> (const <a class="el" href="classnmodl_1_1ast_1_1_protect_statement.html">ast::ProtectStatement</a> &amp;node) override</td></tr>
+<tr class="memdesc:abccc76a4e2c96cf0423de556db989dcd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Look if protect is inside a locked block.  <a href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#abccc76a4e2c96cf0423de556db989dcd">More...</a><br /></td></tr>
+<tr class="separator:abccc76a4e2c96cf0423de556db989dcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a94aeed10aff540ab0e93aea494023c4e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a94aeed10aff540ab0e93aea494023c4e">visit_mutex_lock</a> (const <a class="el" href="classnmodl_1_1ast_1_1_mutex_lock.html">ast::MutexLock</a> &amp;node) override</td></tr>
+<tr class="memdesc:a94aeed10aff540ab0e93aea494023c4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Look if MUTEXLOCK is inside a locked block.  <a href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a94aeed10aff540ab0e93aea494023c4e">More...</a><br /></td></tr>
+<tr class="separator:a94aeed10aff540ab0e93aea494023c4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a514e0383369183f0cf17bb3227703941"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a514e0383369183f0cf17bb3227703941">visit_mutex_unlock</a> (const <a class="el" href="classnmodl_1_1ast_1_1_mutex_unlock.html">ast::MutexUnlock</a> &amp;node) override</td></tr>
+<tr class="memdesc:a514e0383369183f0cf17bb3227703941"><td class="mdescLeft">&#160;</td><td class="mdescRight">Look if MUTEXUNLOCK is outside a locked block.  <a href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a514e0383369183f0cf17bb3227703941">More...</a><br /></td></tr>
+<tr class="separator:a514e0383369183f0cf17bb3227703941"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a3bf4750e17d33e3a0b3168abbeca1b06"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a3bf4750e17d33e3a0b3168abbeca1b06">check_fail</a> = false</td></tr>
 <tr class="separator:a3bf4750e17d33e3a0b3168abbeca1b06"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11831b74b8026d3622691117cd4aa653"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a11831b74b8026d3622691117cd4aa653">accel_backend</a> = false</td></tr>
+<tr class="memdesc:a11831b74b8026d3622691117cd4aa653"><td class="mdescLeft">&#160;</td><td class="mdescRight">true if accelerator backend is used for code generation  <a href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a11831b74b8026d3622691117cd4aa653">More...</a><br /></td></tr>
+<tr class="separator:a11831b74b8026d3622691117cd4aa653"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abae9b5d11d661e22303535cb79de1398"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#abae9b5d11d661e22303535cb79de1398">one_arg_in_procedure_function</a> = false</td></tr>
 <tr class="memdesc:abae9b5d11d661e22303535cb79de1398"><td class="mdescLeft">&#160;</td><td class="mdescRight">true if the procedure or the function contains only one argument  <a href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#abae9b5d11d661e22303535cb79de1398">More...</a><br /></td></tr>
 <tr class="separator:abae9b5d11d661e22303535cb79de1398"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -520,10 +532,13 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:aa64fa814c90e3dac938c7378e2acc330"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#aa64fa814c90e3dac938c7378e2acc330">is_point_process</a> = false</td></tr>
 <tr class="memdesc:aa64fa814c90e3dac938c7378e2acc330"><td class="mdescLeft">&#160;</td><td class="mdescRight">true if the mod file is of type point process  <a href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#aa64fa814c90e3dac938c7378e2acc330">More...</a><br /></td></tr>
 <tr class="separator:aa64fa814c90e3dac938c7378e2acc330"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86238199d0bf7d316910b4d279109844"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a86238199d0bf7d316910b4d279109844">in_mutex</a> = false</td></tr>
+<tr class="memdesc:a86238199d0bf7d316910b4d279109844"><td class="mdescLeft">&#160;</td><td class="mdescRight">true if we are inside a mutex locked part  <a href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a86238199d0bf7d316910b4d279109844">More...</a><br /></td></tr>
+<tr class="separator:a86238199d0bf7d316910b4d279109844"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a7f7eba44f9fe830c3ba2e52d789082ca"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7f7eba44f9fe830c3ba2e52d789082ca">&#9670;&nbsp;</a></span>SemanticAnalysisVisitor()</h2>
+<a id="a4f9e6ba1c7d7e94a689ad6f72d205fa4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f9e6ba1c7d7e94a689ad6f72d205fa4">&#9670;&nbsp;</a></span>SemanticAnalysisVisitor()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -534,16 +549,19 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">nmodl::visitor::SemanticAnalysisVisitor::SemanticAnalysisVisitor </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>accel_backend</em> = <code>false</code></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">default</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00082">82</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -675,6 +693,74 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a94aeed10aff540ab0e93aea494023c4e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a94aeed10aff540ab0e93aea494023c4e">&#9670;&nbsp;</a></span>visit_mutex_lock()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SemanticAnalysisVisitor::visit_mutex_lock </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classnmodl_1_1ast_1_1_mutex_lock.html">ast::MutexLock</a> &amp;&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">private</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Look if MUTEXLOCK is inside a locked block. </p>
+<p>&lt;&ndash; This code is for check 6</p>
+<p>--&gt;</p>
+
+<p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#aadd73cb072a163c2197f102df77efada">nmodl::visitor::ConstVisitor</a>.</p>
+
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8cpp_source.html#l00130">130</a> of file <a class="el" href="semantic__analysis__visitor_8cpp_source.html">semantic_analysis_visitor.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a514e0383369183f0cf17bb3227703941"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a514e0383369183f0cf17bb3227703941">&#9670;&nbsp;</a></span>visit_mutex_unlock()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SemanticAnalysisVisitor::visit_mutex_unlock </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classnmodl_1_1ast_1_1_mutex_unlock.html">ast::MutexUnlock</a> &amp;&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">private</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Look if MUTEXUNLOCK is outside a locked block. </p>
+<p>&lt;&ndash; This code is for check 6</p>
+<p>--&gt;</p>
+
+<p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a76bf1afef51486c5acd0bb3086b930e1">nmodl::visitor::ConstVisitor</a>.</p>
+
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8cpp_source.html#l00142">142</a> of file <a class="el" href="semantic__analysis__visitor_8cpp_source.html">semantic_analysis_visitor.cpp</a>.</p>
+
+</div>
+</div>
 <a id="a3e7dc3e1ddd25ecc1ec131ad5958de93"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3e7dc3e1ddd25ecc1ec131ad5958de93">&#9670;&nbsp;</a></span>visit_procedure_block()</h2>
 
@@ -706,6 +792,40 @@ Private Attributes</h2></td></tr>
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#aa720b8d776da0a450f2a2007a1443a08">nmodl::visitor::ConstVisitor</a>.</p>
 
 <p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8cpp_source.html#l00054">54</a> of file <a class="el" href="semantic__analysis__visitor_8cpp_source.html">semantic_analysis_visitor.cpp</a>.</p>
+
+</div>
+</div>
+<a id="abccc76a4e2c96cf0423de556db989dcd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abccc76a4e2c96cf0423de556db989dcd">&#9670;&nbsp;</a></span>visit_protect_statement()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SemanticAnalysisVisitor::visit_protect_statement </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classnmodl_1_1ast_1_1_protect_statement.html">ast::ProtectStatement</a> &amp;&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">private</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Look if protect is inside a locked block. </p>
+<p>&lt;&ndash; This code is for check 6</p>
+<p>--&gt;</p>
+
+<p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a119508c14f86e906ef4da073b3a2ae1c">nmodl::visitor::ConstVisitor</a>.</p>
+
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8cpp_source.html#l00119">119</a> of file <a class="el" href="semantic__analysis__visitor_8cpp_source.html">semantic_analysis_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -745,6 +865,32 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a11831b74b8026d3622691117cd4aa653"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a11831b74b8026d3622691117cd4aa653">&#9670;&nbsp;</a></span>accel_backend</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool nmodl::visitor::SemanticAnalysisVisitor::accel_backend = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>true if accelerator backend is used for code generation </p>
+
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00045">45</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a3bf4750e17d33e3a0b3168abbeca1b06"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3bf4750e17d33e3a0b3168abbeca1b06">&#9670;&nbsp;</a></span>check_fail</h2>
 
@@ -765,7 +911,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00041">41</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00042">42</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -791,7 +937,33 @@ Private Attributes</h2></td></tr>
 
 <p>true if we are in a function block </p>
 
-<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00048">48</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00051">51</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a86238199d0bf7d316910b4d279109844"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a86238199d0bf7d316910b4d279109844">&#9670;&nbsp;</a></span>in_mutex</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool nmodl::visitor::SemanticAnalysisVisitor::in_mutex = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>true if we are inside a mutex locked part </p>
+
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00055">55</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -817,7 +989,7 @@ Private Attributes</h2></td></tr>
 
 <p>true if we are in a procedure block </p>
 
-<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00046">46</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00049">49</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -843,7 +1015,7 @@ Private Attributes</h2></td></tr>
 
 <p>true if the mod file is of type point process </p>
 
-<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00050">50</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00053">53</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -869,7 +1041,7 @@ Private Attributes</h2></td></tr>
 
 <p>true if the procedure or the function contains only one argument </p>
 
-<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00044">44</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00047">47</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
 
 </div>
 </div>
