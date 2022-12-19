@@ -1306,7 +1306,8 @@ void CodegenCVisitor::print_statement_block(const ast::StatementBlock& node,
             continue;
         }
         /// not necessary to add indent for verbatim block (pretty-printing)
-        if (!statement->is_verbatim() && !statement->is_mutex_lock() && !statement->is_mutex_unlock() && !statement->is_protect_statement()) {
+        if (!statement->is_verbatim() && !statement->is_mutex_lock() &&
+            !statement->is_mutex_unlock() && !statement->is_protect_statement()) {
             printer->add_indent();
         }
         statement->accept(*this);
