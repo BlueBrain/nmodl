@@ -319,21 +319,18 @@ void CodegenCVisitor::visit_update_dt(const ast::UpdateDt& node) {
 }
 
 void CodegenCVisitor::visit_protect_statement(const ast::ProtectStatement& node) {
-    printer->start_block();
-    printer->add_line("const std::lock_guard<std::mutex> lock(nmodlmutex);");
-    printer->add_indent();
+    printer->fmt_text("#pragma omp critical {} {{", info.mod_suffix);
     node.get_expression()->accept(*this);
     printer->add_text(";");
-    printer->add_newline(1);
-    printer->end_block(1);
+    printer->add_text("}");
 }
 
 void CodegenCVisitor::visit_mutex_lock(const ast::MutexLock& node) {
-    printer->add_text("nmodlmutex->lock();");
+    printer->fmt_text("#pragma omp critical {} {{", info.mod_suffix);
 }
 
 void CodegenCVisitor::visit_mutex_unlock(const ast::MutexUnlock& node) {
-    printer->add_text("nmodlmutex->unlock();");
+    printer->add_text("}");
 }
 
 /****************************************************************************************/
@@ -2168,14 +2165,6 @@ void CodegenCVisitor::print_nmodl_constants() {
     }
 }
 
-void CodegenCVisitor::print_mutex_decl() {
-    if (!info.mutex_used) {
-        return;
-    }
-
-    printer->add_line("std::unique_ptr<std::mutex> nmodlmutex;", 2);
-}
-
 void CodegenCVisitor::print_first_pointer_var_index_getter() {
     printer->add_newline(2);
     print_device_method_annotation();
@@ -2488,11 +2477,6 @@ void CodegenCVisitor::print_standard_includes() {
     printer->add_line("#include <stdio.h>");
     printer->add_line("#include <stdlib.h>");
     printer->add_line("#include <string.h>");
-
-    if (info.mutex_used) {
-        printer->add_line("#include <mutex>");
-        printer->add_line("#include <memory>");
-    }
 }
 
 
@@ -4640,7 +4624,6 @@ void CodegenCVisitor::print_codegen_routines() {
     print_headers_include();
     print_namespace_begin();
     print_nmodl_constants();
-    print_mutex_decl();
     print_prcellstate_macros();
     print_mechanism_info();
     print_data_structures(true);

@@ -41,6 +41,8 @@ class SemanticAnalysisVisitor: public ConstAstVisitor {
   private:
     bool check_fail = false;
 
+    /// true if accelerator backend is used for code generation
+    bool accel_backend = false;
     /// true if the procedure or the function contains only one argument
     bool one_arg_in_procedure_function = false;
     /// true if we are in a procedure block
@@ -77,8 +79,8 @@ class SemanticAnalysisVisitor: public ConstAstVisitor {
     void visit_mutex_unlock(const ast::MutexUnlock& node) override;
 
   public:
-    SemanticAnalysisVisitor() = default;
-
+    SemanticAnalysisVisitor(bool accel_backend = false)
+        : accel_backend(accel_backend) {}
     bool check(const ast::Program& node);
 };
 

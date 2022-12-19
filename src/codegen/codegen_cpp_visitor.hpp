@@ -944,11 +944,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
     virtual void print_nmodl_constants();
 
     /**
-     * Print the declaration of the mutex if mutex used
-     */
-    virtual void print_mutex_decl();
-
-    /**
      * Print top file header printed in generated code
      */
     void print_backend_info();

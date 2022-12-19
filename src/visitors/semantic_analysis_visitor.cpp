@@ -118,6 +118,9 @@ void SemanticAnalysisVisitor::visit_independent_block(const ast::IndependentBloc
 
 void SemanticAnalysisVisitor::visit_protect_statement(const ast::ProtectStatement& /* node */) {
     /// <-- This code is for check 6
+    if (accel_backend) {
+        logger->error("PROTECT statement is not supported with GPU execution");
+    }
     if (in_mutex) {
         logger->warn("SemanticAnalysisVisitor :: Find a PROTECT inside a already locked part.");
     }
@@ -126,6 +129,9 @@ void SemanticAnalysisVisitor::visit_protect_statement(const ast::ProtectStatemen
 
 void SemanticAnalysisVisitor::visit_mutex_lock(const ast::MutexLock& /* node */) {
     /// <-- This code is for check 6
+    if (accel_backend) {
+        logger->error("MUTEXLOCK statement is not supported with GPU execution");
+    }
     if (in_mutex) {
         logger->warn("SemanticAnalysisVisitor :: Found a MUTEXLOCK inside an already locked part.");
     }
@@ -135,6 +141,9 @@ void SemanticAnalysisVisitor::visit_mutex_lock(const ast::MutexLock& /* node */)
 
 void SemanticAnalysisVisitor::visit_mutex_unlock(const ast::MutexUnlock& /* node */) {
     /// <-- This code is for check 6
+    if (accel_backend) {
+        logger->error("MUTEXUNLOCK statement is not supported with GPU execution");
+    }
     if (!in_mutex) {
         logger->warn("SemanticAnalysisVisitor :: Found a MUTEXUNLOCK outside a locked part.");
     }

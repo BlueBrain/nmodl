@@ -400,9 +400,6 @@ struct CodegenInfo {
     /// if given variable is a ionic concentration
     bool is_ionic_conc(const std::string& name) const;
 
-    /// MUTEXLOCK / MUTEXUNLOCK / PROTECT found
-    bool mutex_used = false;
-
     /// if watch statements are used
     bool is_watch_used() const noexcept {
         return watch_count > 0;
