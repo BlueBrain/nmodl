@@ -187,8 +187,10 @@ class Benchmark:
 
         external_lib_path = self._get_external_lib_path(cpp_file, compiler, architecture, flags)
         intel_lib_dir = os.path.dirname(self.compiler_config.svml_lib)
-        if architecture != "nvptx64":
+        if architecture != "nvptx64" and ("svml" in flags or "SVML" in flags):
             bash_command = [compiler_cmd] + flags.split(" ") + ["./"+str(sed_replaced_cpp_file), "-fpic", "-shared", "-o {}".format(external_lib_path), "-Wl,-rpath,{}".format(intel_lib_dir), "-L{}".format(intel_lib_dir), "-lsvml"]
+        elif architecture != "nvptx64":
+            bash_command = [compiler_cmd] + flags.split(" ") + ["./"+str(sed_replaced_cpp_file), "-fpic", "-shared", "-o {}".format(external_lib_path), "-Wl,-rpath,{}".format(intel_lib_dir)]
         else:
             bash_command = [compiler_cmd] + flags.split(" ") + ["./"+str(sed_replaced_cpp_file), "-fPIC", "-shared", "-o {}".format(external_lib_path), "-acc", "-nomp", "-gpu=cc70"]
         if "-fopenmp" in flags:
