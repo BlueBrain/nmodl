@@ -423,8 +423,7 @@ def plot_cpu_results():
     # newly collected data
     hh_expsyn_cpu_results = load_pickle_result_file(
         [
-            "./hh_expsyn_cpu/hh_expsyn_mavx512f.pickle",
-            "./hh_expsyn_cpu/hh_expsyn_nvhpc_cpu.pickle",
+            "./hh_expsyn_cpu/benchmark_results.pickle"
         ],
         {},
     )
@@ -481,8 +480,7 @@ def plot_gpu_results():
     # newly collected
     hh_expsyn_gpu_results = load_pickle_result_file(
         [
-            "./hh_expsyn_gpu/hh_gpu_20mil_1024x128.pickle",
-            "./hh_expsyn_gpu/expsyn_gpu_100mil_1024x128.pickle",
+            "./hh_expsyn_gpu/benchmark_results.pickle"
         ],
         {},
     )
