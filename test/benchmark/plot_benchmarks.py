@@ -42,9 +42,11 @@ def generate_graph_pandas_combined_relative_log(
     xaxis_label=None,
     plot_size=(12, 6),
     baseline_name="intel_svml",
+    reference=False,
 ):
     os.makedirs(output_dir, exist_ok=True)
     compiler_flags = json.loads(compilers_comparison_config)
+    ref_title_str = reference ? " (reference)" : ""
     fig, axes = plt.subplots(1, 3, squeeze=False, figsize=plot_size)
     ax_index = 0
     for modname in results:
@@ -167,7 +169,7 @@ def generate_graph_pandas_combined_relative_log(
             axes[0, ax_index].axhline(1.0, ls="--", color="black")
             axes[0, ax_index].xaxis.label.set_visible(False)
             axes[0, ax_index].yaxis.label.set_visible(False)
-            axes[0, ax_index].set_title("nrn_state_{}".format(modname))
+            axes[0, ax_index].set_title(f"nrn_state_{modname}{ref_title_str}")
             axes[0, ax_index].get_legend().remove()
             if xaxis_label is not None:
                 axes[0, ax_index].get_xaxis().set_visible(False)
@@ -194,7 +196,7 @@ def generate_graph_pandas_combined_relative_log(
         axes[0, ax_index].set_yticks([0.125, 0.25, 0.5, 1, 2], [0.125, 0.25, 0.5, 1, 2])
         axes[0, ax_index].xaxis.label.set_visible(False)
         axes[0, ax_index].yaxis.label.set_visible(False)
-        axes[0, ax_index].set_title("nrn_cur_{}".format(modname))
+        axes[0, ax_index].set_title(f"nrn_cur_{modname}{ref_title_str}")
         axes[0, ax_index].get_legend().remove()
         if xaxis_label is not None:
             axes[0, ax_index].get_xaxis().set_visible(False)
@@ -232,9 +234,11 @@ def generate_graph_pandas_combined_relative_gpu_log(
     xaxis_label=None,
     plot_size=(12, 6),
     baseline_name="intel_svml",
+    reference=False,
 ):
     os.makedirs(output_dir, exist_ok=True)
     compiler_flags = json.loads(compilers_comparison_config)
+    ref_title_str = reference ? " (reference)" : ""
     fig, axes = plt.subplots(1, 1, squeeze=False, figsize=plot_size)
     ax = axes[0, 0]
     bar_data_gpu_panda = {}
@@ -330,6 +334,7 @@ def generate_graph_pandas_combined_relative_gpu_log(
     ax.set_yscale("symlog", base=2, linthresh=0.015)
     ax.set_ylim(0.5, 2)
     ax.set_yticks([0.5, 1, 2], [0.5, 1, 2])
+    ax.set_title(f"GPU benchmarks{ref_title_str}")
     plt.ylabel("Speedup relative to {}".format(baseline_name))
     plt.legend(loc="upper right")
     if print_values:
@@ -397,10 +402,29 @@ def plot_cpu_results():
       }
     }
     """
+    # reference
+    hh_expsyn_cpu_reference = load_pickle_result_file(
+        [
+            "./reference_data/hh_expsyn_mavx512f.pickle",
+            "./reference_data/hh_expsyn_nvhpc_cpu.pickle",
+        ],
+        {},
+    )
+    json_object = json.dumps(hh_expsyn_cpu_results, indent=4)
+    generate_graph_pandas_combined_relative_log(
+        hh_expsyn_cpu_reference,
+        compilers_comparison_config,
+        "reference_hh_expsyn_cpu_relative_log",
+        "graphs_output_pandas",
+        False,
+        xaxis_label="skylake-avx512 Target Microarchitecture",
+        plot_size=(10, 3.5),
+    )
+    # newly collected data
     hh_expsyn_cpu_results = load_pickle_result_file(
         [
-            "./plot_data/hh_expsyn_mavx512f.pickle",
-            "./plot_data/hh_expsyn_nvhpc_cpu.pickle",
+            "./hh_expsyn_cpu/hh_expsyn_mavx512f.pickle",
+            "./hh_expsyn_cpu/hh_expsyn_nvhpc_cpu.pickle",
         ],
         {},
     )
@@ -433,16 +457,38 @@ def plot_gpu_results():
       }
     }
     """
-    hh_expsyn_gpu_1024x128 = load_pickle_result_file(
+    # reference
+    hh_expsyn_gpu_reference = load_pickle_result_file(
         [
-            "./plot_data/hh_gpu_20mil_1024x128.pickle",
-            "./plot_data/expsyn_gpu_100mil_1024x128.pickle",
+            "./reference_data/hh_gpu_20mil_1024x128.pickle",
+            "./reference_data/expsyn_gpu_100mil_1024x128.pickle",
         ],
         {},
     )
 
     generate_graph_pandas_combined_relative_gpu_log(
-        hh_expsyn_gpu_1024x128,
+        hh_expsyn_gpu_reference,
+        compilers_comparison_config,
+        "reference_hh_expsyn_gpu_relative_one_plot_log",
+        "graphs_output_pandas",
+        xaxis_label="NVPTX64 Architecture",
+        print_values=False,
+        plot_size=(4, 3),
+        baseline_name="nvhpc",
+        reference=True,
+    )
+    
+    # newly collected
+    hh_expsyn_gpu_results = load_pickle_result_file(
+        [
+            "./hh_expsyn_gpu/hh_gpu_20mil_1024x128.pickle",
+            "./hh_expsyn_gpu/expsyn_gpu_100mil_1024x128.pickle",
+        ],
+        {},
+    )
+
+    generate_graph_pandas_combined_relative_gpu_log(
+        hh_expsyn_gpu_results,
         compilers_comparison_config,
         "hh_expsyn_gpu_relative_one_plot_log",
         "graphs_output_pandas",
@@ -450,6 +496,7 @@ def plot_gpu_results():
         print_values=False,
         plot_size=(4, 3),
         baseline_name="nvhpc",
+        reference=False,
     )
 
 
