@@ -94,3 +94,6 @@ cmake .. \
   -DCMAKE_CUDA_COMPILER=/opt/nvidia/hpc_sdk/Linux_x86_64/22.11/cuda/11.8/bin/nvcc \
   -DCMAKE_INSTALL_PREFIX=./install && \
 cmake --build . --target install
+
+# Install python packages needed for plotting results
+RUN pip install seaborn

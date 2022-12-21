@@ -71,19 +71,6 @@ RUN git clone --recursive -b magkanar/python_benchmark https://github.com/BlueBr
 # Setup Intel compiler specific variables to the environment
 RUN echo ". /opt/intel/oneapi/setvars.sh" >> $HOME/.bashrc
 
-# Install NMODL with GPU enabled (needs separate Docker file with NVIDIA runtime enabled)
-# RUN cd nmodl && \
-# mkdir build && \
-# cd build && \
-# cmake .. \
-#   -DCMAKE_CXX_COMPILER=$(which clang++-13) \
-#   -DNMODL_ENABLE_LLVM=ON \
-#   -DNMODL_ENABLE_LLVM_GPU=ON \
-#   -DNMODL_ENABLE_LLVM_CUDA=ON \
-#   -DCMAKE_CUDA_COMPILER=/opt/nvidia/hpc_sdk/Linux_x86_64/22.11/cuda/11.8/bin/nvcc \
-#   -DCMAKE_INSTALL_PREFIX=./install && \
-# cmake --build . --target install --parallel 10
-
 # Install NMODL for CPU benchmarking
 RUN cd nmodl && \
 mkdir build && \
@@ -93,3 +80,6 @@ cmake .. \
   -DNMODL_ENABLE_LLVM=ON \
   -DCMAKE_INSTALL_PREFIX=./install && \
 cmake --build . --target install
+
+# Install python packages needed for plotting results
+RUN pip install seaborn
