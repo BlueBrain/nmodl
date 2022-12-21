@@ -101,7 +101,7 @@ $(document).ready(function(){initNavTree('classnmodl_1_1visitor_1_1_semantic_ana
 <div class="contents">
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00040">40</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00041">41</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>&gt;</code></p>
 <div class="dynheader">
@@ -503,6 +503,9 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:aa00f48a7ee8cb274e0483746c60fd169"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#aa00f48a7ee8cb274e0483746c60fd169">visit_independent_block</a> (const <a class="el" href="classnmodl_1_1ast_1_1_independent_block.html">ast::IndependentBlock</a> &amp;node) override</td></tr>
 <tr class="memdesc:aa00f48a7ee8cb274e0483746c60fd169"><td class="mdescLeft">&#160;</td><td class="mdescRight">Visit independent block and check if one of the variable is not t.  <a href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#aa00f48a7ee8cb274e0483746c60fd169">More...</a><br /></td></tr>
 <tr class="separator:aa00f48a7ee8cb274e0483746c60fd169"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5fed0adbb5579bb30113f0eb56139b35"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a5fed0adbb5579bb30113f0eb56139b35">visit_function_table_block</a> (const <a class="el" href="classnmodl_1_1ast_1_1_function_table_block.html">ast::FunctionTableBlock</a> &amp;node) override</td></tr>
+<tr class="memdesc:a5fed0adbb5579bb30113f0eb56139b35"><td class="mdescLeft">&#160;</td><td class="mdescRight">Visit function table to check that number of args &gt; 0.  <a href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a5fed0adbb5579bb30113f0eb56139b35">More...</a><br /></td></tr>
+<tr class="separator:a5fed0adbb5579bb30113f0eb56139b35"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abccc76a4e2c96cf0423de556db989dcd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#abccc76a4e2c96cf0423de556db989dcd">visit_protect_statement</a> (const <a class="el" href="classnmodl_1_1ast_1_1_protect_statement.html">ast::ProtectStatement</a> &amp;node) override</td></tr>
 <tr class="memdesc:abccc76a4e2c96cf0423de556db989dcd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Look if protect is inside a locked block.  <a href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#abccc76a4e2c96cf0423de556db989dcd">More...</a><br /></td></tr>
 <tr class="separator:abccc76a4e2c96cf0423de556db989dcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -561,7 +564,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00082">82</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00086">86</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -587,7 +590,7 @@ Private Attributes</h2></td></tr>
 <p>make sure ion variables aren't redefined in a <code>CONSTANT</code> block.</p>
 <p>--&gt;</p>
 
-<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8cpp_source.html#l00016">16</a> of file <a class="el" href="semantic__analysis__visitor_8cpp_source.html">semantic_analysis_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8cpp_source.html#l00017">17</a> of file <a class="el" href="semantic__analysis__visitor_8cpp_source.html">semantic_analysis_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -621,7 +624,7 @@ Private Attributes</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#ae24208dec1498925f2e858bc3f57d327">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8cpp_source.html#l00095">95</a> of file <a class="el" href="semantic__analysis__visitor_8cpp_source.html">semantic_analysis_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8cpp_source.html#l00096">96</a> of file <a class="el" href="semantic__analysis__visitor_8cpp_source.html">semantic_analysis_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -655,7 +658,41 @@ Private Attributes</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a6869926692e8976bcea7682751efba18">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8cpp_source.html#l00063">63</a> of file <a class="el" href="semantic__analysis__visitor_8cpp_source.html">semantic_analysis_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8cpp_source.html#l00064">64</a> of file <a class="el" href="semantic__analysis__visitor_8cpp_source.html">semantic_analysis_visitor.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a5fed0adbb5579bb30113f0eb56139b35"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5fed0adbb5579bb30113f0eb56139b35">&#9670;&nbsp;</a></span>visit_function_table_block()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SemanticAnalysisVisitor::visit_function_table_block </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classnmodl_1_1ast_1_1_function_table_block.html">ast::FunctionTableBlock</a> &amp;&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">private</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Visit function table to check that number of args &gt; 0. </p>
+<p>&lt;&ndash; This code is for check 7</p>
+<p>--&gt;</p>
+
+<p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a6033ecb9862efa8df86eba7eec538f77">nmodl::visitor::ConstVisitor</a>.</p>
+
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8cpp_source.html#l00120">120</a> of file <a class="el" href="semantic__analysis__visitor_8cpp_source.html">semantic_analysis_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -689,7 +726,7 @@ Private Attributes</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a026b14614b86e31e6336bf539a413a9c">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8cpp_source.html#l00106">106</a> of file <a class="el" href="semantic__analysis__visitor_8cpp_source.html">semantic_analysis_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8cpp_source.html#l00107">107</a> of file <a class="el" href="semantic__analysis__visitor_8cpp_source.html">semantic_analysis_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -723,7 +760,7 @@ Private Attributes</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#aadd73cb072a163c2197f102df77efada">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8cpp_source.html#l00130">130</a> of file <a class="el" href="semantic__analysis__visitor_8cpp_source.html">semantic_analysis_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8cpp_source.html#l00142">142</a> of file <a class="el" href="semantic__analysis__visitor_8cpp_source.html">semantic_analysis_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -757,7 +794,7 @@ Private Attributes</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a76bf1afef51486c5acd0bb3086b930e1">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8cpp_source.html#l00142">142</a> of file <a class="el" href="semantic__analysis__visitor_8cpp_source.html">semantic_analysis_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8cpp_source.html#l00154">154</a> of file <a class="el" href="semantic__analysis__visitor_8cpp_source.html">semantic_analysis_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -791,7 +828,7 @@ Private Attributes</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#aa720b8d776da0a450f2a2007a1443a08">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8cpp_source.html#l00054">54</a> of file <a class="el" href="semantic__analysis__visitor_8cpp_source.html">semantic_analysis_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8cpp_source.html#l00055">55</a> of file <a class="el" href="semantic__analysis__visitor_8cpp_source.html">semantic_analysis_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -825,7 +862,7 @@ Private Attributes</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a119508c14f86e906ef4da073b3a2ae1c">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8cpp_source.html#l00119">119</a> of file <a class="el" href="semantic__analysis__visitor_8cpp_source.html">semantic_analysis_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8cpp_source.html#l00131">131</a> of file <a class="el" href="semantic__analysis__visitor_8cpp_source.html">semantic_analysis_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -860,7 +897,7 @@ Private Attributes</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a1a2f57a9e51cfb52b4d454e58b18ea79">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8cpp_source.html#l00072">72</a> of file <a class="el" href="semantic__analysis__visitor_8cpp_source.html">semantic_analysis_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8cpp_source.html#l00073">73</a> of file <a class="el" href="semantic__analysis__visitor_8cpp_source.html">semantic_analysis_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -887,7 +924,7 @@ Private Attributes</h2></td></tr>
 
 <p>true if accelerator backend is used for code generation </p>
 
-<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00045">45</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00046">46</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -911,7 +948,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00042">42</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00043">43</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -937,7 +974,7 @@ Private Attributes</h2></td></tr>
 
 <p>true if we are in a function block </p>
 
-<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00051">51</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00052">52</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -963,7 +1000,7 @@ Private Attributes</h2></td></tr>
 
 <p>true if we are inside a mutex locked part </p>
 
-<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00055">55</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00056">56</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -989,7 +1026,7 @@ Private Attributes</h2></td></tr>
 
 <p>true if we are in a procedure block </p>
 
-<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00049">49</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00050">50</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1015,7 +1052,7 @@ Private Attributes</h2></td></tr>
 
 <p>true if the mod file is of type point process </p>
 
-<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00053">53</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00054">54</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1041,7 +1078,7 @@ Private Attributes</h2></td></tr>
 
 <p>true if the procedure or the function contains only one argument </p>
 
-<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00047">47</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="semantic__analysis__visitor_8hpp_source.html#l00048">48</a> of file <a class="el" href="semantic__analysis__visitor_8hpp_source.html">semantic_analysis_visitor.hpp</a>.</p>
 
 </div>
 </div>

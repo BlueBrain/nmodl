@@ -242,6 +242,25 @@ $(document).ready(function(){initNavTree('semantic__analysis_8cpp_source.html','
 <div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;        }</div>
 <div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;    }</div>
 <div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;}</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160; </div>
+<div class="line"><a name="l00150"></a><span class="lineno"><a class="line" href="semantic__analysis_8cpp.html#a4d1b8ed7427d3a06cfa4d1ebeb56ecb0">  150</a></span>&#160;<a class="code" href="semantic__analysis_8cpp.html#aee0bd47b9ed7e5d067451085fc583edf">SCENARIO</a>(<span class="stringliteral">&quot;FUNCTION_TABLE block&quot;</span>, <span class="stringliteral">&quot;[visitor][semantic_analysis]&quot;</span>) {</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;    GIVEN(<span class="stringliteral">&quot;A mod file with FUNCTION_TABLE without argument&quot;</span>) {</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        std::string nmodl_text = R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;<span class="stringliteral">            FUNCTION_TABLE ttt()</span></div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;<span class="stringliteral">        )&quot;;</span></div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;<span class="stringliteral">        THEN(</span><span class="stringliteral">&quot;Semantic analysis should fail&quot;</span>) {</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;            REQUIRE(<a class="code" href="semantic__analysis_8cpp.html#a9fde5e10dcf117bedb1539da0d50d4ac">run_semantic_analysis_visitor</a>(nmodl_text));</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;        }</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;    }</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;    GIVEN(<span class="stringliteral">&quot;A mod file with FUNCTION_TABLE with at least one argument&quot;</span>) {</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;        std::string nmodl_text = R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;<span class="stringliteral">            FUNCTION_TABLE ttt(w (mV))</span></div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;<span class="stringliteral">        )&quot;;</span></div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;<span class="stringliteral">        THEN(</span><span class="stringliteral">&quot;Semantic analysis should success&quot;</span>) {</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;            REQUIRE_FALSE(<a class="code" href="semantic__analysis_8cpp.html#a9fde5e10dcf117bedb1539da0d50d4ac">run_semantic_analysis_visitor</a>(nmodl_text));</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;        }</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;    }</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="atest__utils_8hpp_html"><div class="ttname"><a href="test__utils_8hpp.html">test_utils.hpp</a></div></div>

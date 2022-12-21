@@ -36,6 +36,7 @@ var structnmodl_1_1codegen_1_1_codegen_info =
     [ "factor_definitions", "structnmodl_1_1codegen_1_1_codegen_info.html#a0b748c255d71e05ce2c33fa12fa958bd", null ],
     [ "first_pointer_var_index", "structnmodl_1_1codegen_1_1_codegen_info.html#aac10ea818f33243b73521ae7c557815f", null ],
     [ "for_netcon_used", "structnmodl_1_1codegen_1_1_codegen_info.html#ae05c57438cf033efef981b2de6c34ed8", null ],
+    [ "function_tables", "structnmodl_1_1codegen_1_1_codegen_info.html#a26115f91f849147e8b2eb91481b20cdc", null ],
     [ "functions", "structnmodl_1_1codegen_1_1_codegen_info.html#aa516bfc1058bdddd366473cd87970b59", null ],
     [ "functions_with_table", "structnmodl_1_1codegen_1_1_codegen_info.html#a9246fe1c2f29c711726afe73fcff0227", null ],
     [ "global_variables", "structnmodl_1_1codegen_1_1_codegen_info.html#a41dec4bc8295bae5fd9f216e2877d478", null ],

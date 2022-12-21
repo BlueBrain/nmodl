@@ -99,6 +99,7 @@ var classnmodl_1_1codegen_1_1_codegen_c_visitor =
     [ "print_function_or_procedure", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#adffa4b8cd05522d03e3c751d000652e7", null ],
     [ "print_function_procedure_helper", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#aa4b761915ecf8cfa8ed114f92772209a", null ],
     [ "print_function_prototypes", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a284c43a53d81e6e4ab74bf991bd73b38", null ],
+    [ "print_function_tables", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a77d336ab83f6befa825bc967469d36c8", null ],
     [ "print_g_unused", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ae6a1469131dc77b1cf1669e0a1958ddf", null ],
     [ "print_get_memb_list", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#aec13fd9aec57bcd9f9845c5171cfa366", null ],
     [ "print_global_function_common_code", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a17c2ec33e25d7c7c19ef8c8429936a0b", null ],

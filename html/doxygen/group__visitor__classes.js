@@ -275,6 +275,7 @@ var group__visitor__classes =
       [ "check", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a59bf1db427b5229d53adc6a18c15b2a0", null ],
       [ "visit_destructor_block", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#aa1a426b1539112feb8160914733013ab", null ],
       [ "visit_function_block", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a0c3a7f34c86536de970e29b23d14092e", null ],
+      [ "visit_function_table_block", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a5fed0adbb5579bb30113f0eb56139b35", null ],
       [ "visit_independent_block", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#aa00f48a7ee8cb274e0483746c60fd169", null ],
       [ "visit_mutex_lock", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a94aeed10aff540ab0e93aea494023c4e", null ],
       [ "visit_mutex_unlock", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a514e0383369183f0cf17bb3227703941", null ],
