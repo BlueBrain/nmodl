@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Driver for nmodl-llvm benchmarking
+# Driver for MOD2IR (CPU-only) benchmarking
 #
 
 set -e

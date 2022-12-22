@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Driver for nmodl-llvm benchmarking
+# Driver for MODIR benchmarking
 #
 
 set -e
