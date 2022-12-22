@@ -410,7 +410,7 @@ def plot_cpu_results():
         ],
         {},
     )
-    json_object = json.dumps(hh_expsyn_cpu_results, indent=4)
+    json_object = json.dumps(hh_expsyn_cpu_reference, indent=4)
     generate_graph_pandas_combined_relative_log(
         hh_expsyn_cpu_reference,
         compilers_comparison_config,
