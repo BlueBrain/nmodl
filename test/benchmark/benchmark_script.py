@@ -198,6 +198,8 @@ class Benchmark:
                 bash_command.append("-Wl,-rpath,{}".format("/".join(self.compiler_config.gcc_exe.split("/")[0:-2]+["lib64"])))
             elif compiler == "clang":
                 bash_command.append("-Wl,-rpath,{}".format("/".join(self.compiler_config.clang_exe.split("/")[0:-2]+["lib"])))
+        if compiler == "gcc" or compiler == "clang":
+            bash_command.append("-save-temps=obj")
         print("Executing command: {}".format(' '.join(bash_command)))
         result = subprocess.run(" ".join(bash_command), capture_output=True, text=True, shell=True, env=os.environ.copy())
         print("stdout:", result.stdout)
