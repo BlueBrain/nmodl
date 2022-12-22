@@ -35,7 +35,7 @@ reproducing our benchmark results we recommend using a workstation (or cloud ins
 Skylake (or newer) CPU and an NVIDIA Volta V100 (or newer) GPU. All benchmark runs are single-core
 and have relatively low memory-requirement. For building the Docker image (and more specifically the
 NMODL Framework) we, however, recommend a system with plenty of cores and at least 32GB of RAM
-available and 40 GB of disk space.
+available and 20 GB of disk space.
 
 ### Software requisites
 
