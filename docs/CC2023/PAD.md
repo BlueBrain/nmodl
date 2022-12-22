@@ -69,7 +69,7 @@ To do the above we need to execute the following two scripts inside the docker i
 ```
 cd nmodl/test/benchmark  # Enter the directory where the scripts are inside the docker image
 bash run_benchmark_script_cpu_gpu.sh  # Runs all the benchmarks on CPU and GPU
-python plot_benchmarks_cpu_gpu.py  # Generate the plots based on the outputs of the previous script
+python3 plot_benchmarks_cpu_gpu.py  # Generate the plots based on the outputs of the previous script
 cp -r graphs_output_pandas /opt/mount  # Copy the graphs from the docker image to your environment
 ```
 Executing `run_benchmark_script_dockerfile.sh` will generate two pickle files that include the results
@@ -91,7 +91,7 @@ Then inside the docker terminal:
 ```
 cd nmodl/test/benchmark  # Enter the directory where the scripts are inside the docker image
 bash run_benchmark_script_cpu_only.sh  # Runs all the benchmarks on CPU
-python plot_benchmarks_cpu_only.py  # Generate the plots based on the outputs of the previous script
+python3 plot_benchmarks_cpu_only.py  # Generate the plots based on the outputs of the previous script
 cp -r graphs_output_pandas /opt/mount  # Copy the graphs from the docker image to your environment
 ```
 By executing `run_benchmark_script_cpu_only.sh` there will be only `hh_expsyn_cpu/benchmark_results.pickle`
@@ -102,4 +102,4 @@ generated containing the CPU results.
 
 The expected time for building the docker image is around 10 minutes using a modern multicore system
 with a stable internet connection.
-The expected runtime of the benchmarks is around 3 hours.
+The expected runtime of the benchmarks is around 4 hours.
