@@ -223,6 +223,8 @@ stages:
             python.version: '3.9'
           Python310:
             python.version: '3.10'
+          Python311:
+            python.version: '3.11'
         ${{ if eq(variables.buildWheel, False) }}:
           Python39:
             python.version: '3.9'
@@ -280,7 +282,10 @@ stages:
             python.version: '3.10'
             python.org.version: '3.10.5'
             python.installer.name: 'macos11.pkg'
-
+          Python311:
+            python.version: '3.11'
+            python.org.version: '3.11.1'
+            python.installer.name: 'macos11.pkg'
         ${{ if eq(variables.buildWheel, False) }}:
           Python39:
             python.version: '3.9'
