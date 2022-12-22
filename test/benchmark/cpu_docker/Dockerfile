@@ -4,7 +4,7 @@ RUN su -
 
 RUN apt update
 
-RUN apt install -y wget gpg
+RUN apt install -y wget gpg vim
 
 RUN apt install -y build-essential
 
