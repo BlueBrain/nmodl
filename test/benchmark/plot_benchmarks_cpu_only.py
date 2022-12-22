@@ -46,7 +46,7 @@ def generate_graph_pandas_combined_relative_log(
 ):
     os.makedirs(output_dir, exist_ok=True)
     compiler_flags = json.loads(compilers_comparison_config)
-    ref_title_str = reference ? " (reference)" : ""
+    ref_title_str = " (reference)" if reference else ""
     fig, axes = plt.subplots(1, 3, squeeze=False, figsize=plot_size)
     ax_index = 0
     for modname in results:
@@ -284,7 +284,7 @@ def plot_cpu_results():
         ],
         {},
     )
-    json_object = json.dumps(hh_expsyn_cpu_results, indent=4)
+    json_object = json.dumps(hh_expsyn_cpu_reference, indent=4)
     generate_graph_pandas_combined_relative_log(
         hh_expsyn_cpu_reference,
         compilers_comparison_config,

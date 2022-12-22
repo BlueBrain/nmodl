@@ -46,7 +46,7 @@ def generate_graph_pandas_combined_relative_log(
 ):
     os.makedirs(output_dir, exist_ok=True)
     compiler_flags = json.loads(compilers_comparison_config)
-    ref_title_str = reference ? " (reference)" : ""
+    ref_title_str = " (reference)" if reference else ""
     fig, axes = plt.subplots(1, 3, squeeze=False, figsize=plot_size)
     ax_index = 0
     for modname in results:
@@ -238,7 +238,7 @@ def generate_graph_pandas_combined_relative_gpu_log(
 ):
     os.makedirs(output_dir, exist_ok=True)
     compiler_flags = json.loads(compilers_comparison_config)
-    ref_title_str = reference ? " (reference)" : ""
+    ref_title_str = " (reference)" if reference else ""
     fig, axes = plt.subplots(1, 1, squeeze=False, figsize=plot_size)
     ax = axes[0, 0]
     bar_data_gpu_panda = {}
