@@ -1,14 +1,3 @@
-# To execute this:
-# 1. distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \
-#      && curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
-#      && curl -s -L https://nvidia.github.io/libnvidia-container/$distribution/libnvidia-container.list | \
-#            sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
-#            sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
-# 2. sudo apt-get update
-# 3. sudo apt-get install -y nvidia-docker2
-# 4. sudo systemctl restart docker
-# 5. sudo docker run -it --gpus all nmodl_benchmark:0.1-gpu
-
 FROM nvidia/cuda:11.8.0-base-ubuntu22.04
 
 RUN su -
