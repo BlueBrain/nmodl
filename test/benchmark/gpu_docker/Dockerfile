@@ -20,7 +20,7 @@ RUN echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https:/
 RUN apt update
 
 # Install only Intel Compiler Classic and DPC++ compilers
-RUN apt install -y intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic
+RUN apt install -y intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic-2021.4.0
 
 # Install sleef library 3.5.1
 RUN apt install -y libsleef3
@@ -37,29 +37,27 @@ chmod +x llvm.sh && \
 # Install libomp for LLVM 13
 RUN apt install -y libomp-13-dev
 
-# Install NVHPC 22.11
-RUN wget https://developer.download.nvidia.com/hpc-sdk/22.11/nvhpc_2022_2211_Linux_x86_64_cuda_11.8.tar.gz && \
-tar xpzf nvhpc_2022_2211_Linux_x86_64_cuda_11.8.tar.gz && \
-nvhpc_2022_2211_Linux_x86_64_cuda_11.8/install
-
-# Clear unnecessary files
-RUN rm -rf nvhpc_2022_2211_Linux_x86_64_cuda_11.8.tar.gz nvhpc_2022_2211_Linux_x86_64_cuda_11.8
+# Install NVHPC 22.3
+RUN wget https://developer.download.nvidia.com/hpc-sdk/22.3/nvhpc_2022_223_Linux_x86_64_cuda_11.6.tar.gz && \
+tar xpzf nvhpc_2022_223_Linux_x86_64_cuda_11.6.tar.gz && \
+nvhpc_2022_223_Linux_x86_64_cuda_11.6/install && \
+rm -rf nvhpc_2022_223_Linux_x86_64_cuda_11.6.tar.gz nvhpc_2022_223_Linux_x86_64_cuda_11.6
 
 # Needed to run makelocalrc
 RUN apt install -y gfortran
 
 # Run makelocalrc to set up nvc++, nvc
-RUN /opt/nvidia/hpc_sdk/Linux_x86_64/22.11/compilers/bin/makelocalrc /opt/nvidia/hpc_sdk/Linux_x86_64/22.11/compilers/bin -v -x /opt/nvidia/hpc_sdk/Linux_x86_64/22.11/compilers/bin
+RUN /opt/nvidia/hpc_sdk/Linux_x86_64/22.3/compilers/bin/makelocalrc /opt/nvidia/hpc_sdk/Linux_x86_64/22.3/compilers/bin -v -x /opt/nvidia/hpc_sdk/Linux_x86_64/22.3/compilers/bin
 
 # Set up necessary environment variables to pass to the benchmark script
-ENV svml_lib=/opt/intel/oneapi/compiler/2023.0.0/linux/compiler/lib/intel64_lin/libsvml.so
-ENV intel_exe=/opt/intel/oneapi/compiler/2023.0.0/linux/bin/intel64/icpc
+ENV svml_lib=/opt/intel/oneapi/compiler/2021.4.0/linux/compiler/lib/intel64_lin/libsvml.so
+ENV intel_exe=/opt/intel/oneapi/compiler/2021.4.0/linux/bin/intel64/icpc
 ENV sleef_lib=/lib/x86_64-linux-gnu/libsleefgnuabi.so.3.5
 ENV clang_exe=/usr/bin/clang++-13
 ENV llc_exe=/usr/bin/llc-13
 ENV gcc_exe=/usr/bin/g++
-ENV nvhpc_exe=/opt/nvidia/hpc_sdk/Linux_x86_64/22.11/compilers/bin/nvc++
-ENV libdevice_lib=/opt/nvidia/hpc_sdk/Linux_x86_64/22.11/cuda/11.8/nvvm/libdevice/libdevice.10.bc
+ENV nvhpc_exe=/opt/nvidia/hpc_sdk/Linux_x86_64/22.3/compilers/bin/nvc++
+ENV libdevice_lib=/opt/nvidia/hpc_sdk/Linux_x86_64/22.3/cuda/11.6/nvvm/libdevice/libdevice.10.bc
 
 # Install prerequisites necessary to build NMODL
 RUN apt install -y git cmake flex bison python3-pip
@@ -80,9 +78,9 @@ cmake .. \
   -DNMODL_ENABLE_LLVM=ON \
   -DNMODL_ENABLE_LLVM_GPU=ON \
   -DNMODL_ENABLE_LLVM_CUDA=ON \
-  -DCMAKE_CUDA_COMPILER=/opt/nvidia/hpc_sdk/Linux_x86_64/22.11/cuda/11.8/bin/nvcc \
+  -DCMAKE_CUDA_COMPILER=/opt/nvidia/hpc_sdk/Linux_x86_64/22.3/cuda/11.6/bin/nvcc \
   -DCMAKE_INSTALL_PREFIX=./install && \
-cmake --build . --target install
+cmake --build . --target install --parallel
 
 # Install python packages needed for plotting results
 RUN pip install seaborn
