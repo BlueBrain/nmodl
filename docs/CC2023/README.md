@@ -22,8 +22,7 @@ To build the image and be able to execute the benchmarks on CPU and GPU:
 ```
 cd test/benchnark/gpu_docker  # Enter the directory that contains the Dockerfile
 bash install_gpu_docker_env.sh  # Installs docker and NVIDIA docker runtime (needs sudo permission)
-docker build nmodl-benchmark:gpu .  # Build docker image (~36GB)
-docker run -it -v $PWD:/opt/mount --gpus all nmodl-benchmark:gpu  # Execute docker image
+docker run -it -v $PWD:/opt/mount --gpus all bluebrain/nmodl:mod2ir-gpu-benchmark # Execute docker image (~36GB)
 ```
 
 After building and launching the docker file we can now execute the benchmarks and generate the same
@@ -51,8 +50,7 @@ To build this you need to:
 
 ```
 cd test/benchnark/cpu_docker  # Enter the directory that contains the Dockerfile
-docker build nmodl-benchmark:cpu .  # Build docker image (~36GB)
-docker run -it -v $PWD:/opt/mount nmodl-benchmark:cpu  # Execute docker image
+docker run -it -v $PWD:/opt/mount bluebrain/nmodl:mod2ir-cpu-benchmark # Execute docker image (~36GB)
 ```
 
 Then inside the docker shell:
