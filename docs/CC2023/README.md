@@ -65,3 +65,10 @@ cp -r graphs_output_pandas /opt/mount  # Copy the graphs from the docker image t
 By executing `run_benchmark_script_cpu_only.sh` there will be only `hh_expsyn_cpu/benchmark_results.pickle`
 generated containing the CPU results.
 
+
+## Notes
+
+1. Acceleration results with `GCC` compiler might be better in the docker container than the paper
+   due to the newer OS we're using in the Dockerfile. Latest Ubuntu versions come with GLIBC 2.3x that
+   includes `libmvec` which provides vectorized implementations to the `GCC` compiler enabling the
+   vectorization of the kernels even without providing the `SVML` library to `GCC`.

@@ -20,7 +20,7 @@ RUN echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https:/
 RUN apt update
 
 # Install only Intel Compiler Classic and DPC++ compilers
-RUN apt install -y intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic-2021.4.0
+RUN apt install -y intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic-2022.2.1
 
 # Install sleef library 3.5.1
 RUN apt install -y libsleef3
@@ -50,8 +50,8 @@ RUN apt install -y gfortran
 RUN /opt/nvidia/hpc_sdk/Linux_x86_64/22.3/compilers/bin/makelocalrc /opt/nvidia/hpc_sdk/Linux_x86_64/22.3/compilers/bin -v -x /opt/nvidia/hpc_sdk/Linux_x86_64/22.3/compilers/bin
 
 # Set up necessary environment variables to pass to the benchmark script
-ENV svml_lib=/opt/intel/oneapi/compiler/2021.4.0/linux/compiler/lib/intel64_lin/libsvml.so
-ENV intel_exe=/opt/intel/oneapi/compiler/2021.4.0/linux/bin/intel64/icpc
+ENV svml_lib=/opt/intel/oneapi/compiler/2022.2.1/linux/compiler/lib/intel64_lin/libsvml.so
+ENV intel_exe=/opt/intel/oneapi/compiler/2022.2.1/linux/bin/intel64/icpc
 ENV sleef_lib=/lib/x86_64-linux-gnu/libsleefgnuabi.so.3.5
 ENV clang_exe=/usr/bin/clang++-13
 ENV llc_exe=/usr/bin/llc-13
