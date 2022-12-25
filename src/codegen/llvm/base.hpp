@@ -65,10 +65,9 @@ class BaseBuilder {
     /// TODO: change this when we have other builders. 
     Platform platform;
 
-    std::string kernel_id;
-
     bool vectorize;
 
+    /// Mask to predicate generated IR. Unless the IR is vectorzied, this is kept as a nullptr.
     llvm::Value* mask;
 
     /// Fast math flags for floating-point IR instructions.
@@ -81,7 +80,6 @@ class BaseBuilder {
         , current_function(nullptr)
         , alloca_ip(nullptr)
         , platform(platform)
-        , kernel_id(naming::INDUCTION_VAR)
         , mask(nullptr)
         , vectorize(false) {
         if (!fast_math_flags.empty())
@@ -198,18 +196,33 @@ class BaseBuilder {
     /// Creates LLVM IR alloca instruction for an array.
     llvm::Value* create_array_alloca(const std::string& name, llvm::Type* element_type, int num_elements);
 
+    /// Creates LLVM IR instruction for the given binary operator (+, -).
+    llvm::Value* create_atomic_op(llvm::Value* ptr, llvm::Value* update, ast::BinaryOp op);
+
+    /// Creates LLVM IR global string value.
+    llvm::Value* create_global_string(const ast::String& node);
+
     /// Creates LLVM IR inbounds GEP instruction for the given name and returns the calculated address.
     llvm::Value* create_inbounds_gep(const std::string& variable_name, llvm::Value* index);
 
     /// Creates LLVM IR inbounds GEP instruction for the given variable and index. Returns calculated address.
     llvm::Value* create_inbounds_gep(llvm::Value* variable, llvm::Value* index);
 
-    /// Creates LLVM IR global string value.
-    llvm::Value* create_global_string(const ast::String& node);
+    /// Creates LLVM IR to load the value specified by its name and returns it.
+    llvm::Value* create_load_direct(const std::string& name, bool masked = false);
+
+    /// Creates LLVM IR to load the value from the pointer and returns it.
+    llvm::Value* create_load_direct(llvm::Value* ptr, bool masked = false);
 
     /// Creates LLVM IR to get the address of the struct's value at given offset. Returns the
     /// calculated address.
     llvm::Value* create_struct_field_ptr(llvm::Value* struct_variable, int offset);
+
+    /// Creates LLVM IR to store the value to the location specified by the name.
+    void create_store_direct(const std::string& name, llvm::Value* value, bool masked = false);
+
+    /// Creates LLVM IR to store the value to the location specified by the pointer.
+    void create_store_direct(llvm::Value* ptr, llvm::Value* value, bool masked = false);
 
     /// Extracts binary operator (+ or -) from atomic update (+= or =-).
     ast::BinaryOp into_atomic_op(ast::BinaryOp op);
@@ -248,6 +261,29 @@ class BaseBuilder {
     /// Generates LLVM IR for floating-point constants.
     virtual void generate_fp_constant(const std::string& value);
 
+    /// Generates LLVM IR return instructions.
+    virtual void generate_return(llvm::Value* return_value = nullptr);
+
+    /// Generates IR to replicate the value if vectorizing the code.
+    virtual void generate_broadcast(llvm::Value* value);
+
+    /*************************************************************************/
+    /*                       Virtual helper methods                          */
+    /*************************************************************************/
+
+    /// Sets the value to be the mask for vector code generation. If the builder
+    /// does not emit vector code, throws an error.
+    virtual void set_mask(llvm::Value* mask);
+
+    /// Clears the mask for vector code generation. If the builder does not emit
+    /// vector code, throws an error.
+    virtual void unset_mask();
+
+
+
+
+
+
 
 
 
@@ -267,50 +303,10 @@ class BaseBuilder {
         vectorize = true;
     }
 
-    /// Sets the value to be the mask for vector code generation.
-    void set_mask(llvm::Value* value) {
-        mask = value;
-    }
 
-    /// Clears the mask for vector code generation.
-    void clear_mask() {
-        mask = nullptr;
-    }
 
-    /// Indicates whether the vectorized IR is predicated.
-    bool generates_predicated_ir() {
-        return vectorize && mask;
-    }
 
-    /// Generates LLVM IR for the given atomic operator.
-    void create_atomic_op(llvm::Value* ptr, llvm::Value* update, ast::BinaryOp op);
 
-    /// Generates LLVM IR to load the value specified by its name and returns it.
-    llvm::Value* create_load(const std::string& name, bool masked = false);
-
-    /// Generates LLVM IR to load the value from the pointer and returns it.
-    llvm::Value* create_load(llvm::Value* ptr, bool masked = false);
-
-    /// Generates LLVM IR to load the element at the specified index from the given array name and
-    /// returns it.
-    llvm::Value* create_load_from_array(const std::string& name, llvm::Value* index);
-
-    /// Generates LLVM IR to store the value to the location specified by the name.
-    void create_store(const std::string& name, llvm::Value* value, bool masked = false);
-
-    /// Generates LLVM IR to store the value to the location specified by the pointer.
-    void create_store(llvm::Value* ptr, llvm::Value* value, bool masked = false);
-
-    /// Generates LLVM IR to store the value to the array element, where array is specified by the
-    /// name.
-    void create_store_to_array(const std::string& name, llvm::Value* index, llvm::Value* value);
-
-    /// Generates LLVM IR return instructions.
-    void create_return(llvm::Value* return_value = nullptr);
-
-    /// Generates IR for allocating a scalar or vector variable.
-    void create_scalar_or_vector_alloca(const std::string& name,
-                                        llvm::Type* element_or_scalar_type);
 
     /// Creates an expression of the form: blockDim.x * gridDim.x
     void create_grid_stride();
@@ -327,9 +323,6 @@ class BaseBuilder {
                                              llvm::Value* id_value,
                                              llvm::Value* array,
                                              llvm::Value* maybe_value_to_store = nullptr);
-
-    /// Generates IR to replicate the value if vectorizing the code.
-    void maybe_replicate_value(llvm::Value* value);
 
     /// Creates a vector splat of starting addresses of the given member.
     llvm::Value* create_member_addresses(llvm::Value* member_ptr);

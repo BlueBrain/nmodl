@@ -257,6 +257,17 @@ llvm::Value* BaseBuilder::create_array_alloca(const std::string& name,
     return create_alloca(name, array_type);
 }
 
+llvm::Value* BaseBuilder::create_atomic_op(llvm::Value* ptr, llvm::Value* update, ast::BinaryOp op) {
+    if (op == ast::BinaryOp::BOP_SUBTRACTION) {
+        update = builder.CreateFNeg(update);
+    }
+    builder.CreateAtomicRMW(llvm::AtomicRMWInst::FAdd,
+                            ptr,
+                            update,
+                            llvm::MaybeAlign(),
+                            llvm::AtomicOrdering::SequentiallyConsistent);
+}
+
 llvm::Value* BaseBuilder::create_global_string(const ast::String& node) {
     return builder.CreateGlobalStringPtr(node.get_value());
 }
@@ -274,6 +285,32 @@ llvm::Value* BaseBuilder::create_inbounds_gep(llvm::Value* variable, llvm::Value
     ValueVector indices{index};
     llvm::Type* variable_type = variable->getType()->getPointerElementType();
     return builder.CreateInBoundsGEP(variable_type, variable, indices);
+}
+
+llvm::Value* BaseBuilder::create_load_direct(const std::string& name, bool masked) {
+    llvm::Value* ptr = lookup_value(name);
+    llvm::Type* loaded_type = ptr->getType()->getPointerElementType();
+
+    // Check if the generated IR is vectorized and masked.
+    if (masked) {
+        builder.CreateMaskedLoad(loaded_type, ptr, llvm::Align(), mask);
+    }
+    llvm::Value* loaded = builder.CreateLoad(loaded_type, ptr);
+    value_stack.push_back(loaded);
+    return loaded;
+}
+
+llvm::Value* BaseBuilder::create_load_direct(llvm::Value* ptr, bool masked) {
+    llvm::Type* loaded_type = ptr->getType()->getPointerElementType();
+
+    // Check if the generated IR is vectorized and masked.
+    if (masked) {
+        builder.CreateMaskedLoad(loaded_type, ptr, llvm::Align(), mask);
+    }
+
+    llvm::Value* loaded = builder.CreateLoad(loaded_type, ptr);
+    value_stack.push_back(loaded);
+    return loaded;
 }
 
 llvm::Value* BaseBuilder::create_struct_field_ptr(llvm::Value* struct_variable, int offset) {
@@ -294,6 +331,26 @@ ast::BinaryOp BaseBuilder::into_atomic_op(ast::BinaryOp op) {
     default:
         throw std::runtime_error("Error: only atomic addition and subtraction is supported\n");
     }
+}
+
+void BaseBuilder::create_store_direct(const std::string& name, llvm::Value* value, bool masked) {
+    llvm::Value* ptr = lookup_value(name);
+
+    // Check if the generated IR is vectorized and masked.
+    if (masked) {
+        builder.CreateMaskedStore(value, ptr, llvm::Align(), mask);
+        return;
+    }
+    builder.CreateStore(value, ptr);
+}
+
+void BaseBuilder::create_store_direct(llvm::Value* ptr, llvm::Value* value, bool masked) {
+    // Check if the generated IR is vectorized and masked.
+    if (masked) {
+        builder.CreateMaskedStore(value, ptr, llvm::Align(), mask);
+        return;
+    }
+    builder.CreateStore(value, ptr);
 }
 
 llvm::Value* BaseBuilder::into_index(llvm::Value* value) {
@@ -406,6 +463,7 @@ void BaseBuilder::generate_unary_op(llvm::Value* value, ast::UnaryOp op) {
 }
 
 void BaseBuilder::generate_boolean_constant(int value) {
+    // TODO: split 3 cases into 3 builders.
     if (platform.is_gpu()) {
         value_stack.push_back(scalar_constant<llvm::ConstantInt>(get_boolean_type(), value));
     } else if (platform.is_cpu_with_simd()) {
@@ -420,6 +478,7 @@ void BaseBuilder::generate_boolean_constant(int value) {
 }
 
 void BaseBuilder::generate_i32_constant(int value) {
+    // TODO: split 3 cases into 3 builders.
     if (platform.is_gpu()) {
         value_stack.push_back(scalar_constant<llvm::ConstantInt>(get_i32_type(), value));
     } else if (platform.is_cpu_with_simd()) {
@@ -434,6 +493,7 @@ void BaseBuilder::generate_i32_constant(int value) {
 }
 
 void BaseBuilder::generate_fp_constant(const std::string& value) {
+    // TODO: split 3 cases into 3 builders.
     if (platform.is_gpu()) {
         value_stack.push_back(scalar_constant<llvm::ConstantFP>(get_fp_type(), value));
     } else if (platform.is_cpu_with_simd()) {
@@ -447,24 +507,65 @@ void BaseBuilder::generate_fp_constant(const std::string& value) {
     }
 }
 
+void BaseBuilder::generate_return(llvm::Value* return_value) {
+    if (return_value)
+        builder.CreateRet(return_value);
+    else
+        builder.CreateRetVoid();
+}
 
+void BaseBuilder::generate_broadcast(llvm::Value* value) {
+    // TODO: split 3 cases into 3 builders.
+    if (platform.is_gpu()) {
+        value_stack.push_back(value);
+    } else if (platform.is_cpu_with_simd()) {
+        if (!vectorize || value->getType()->isVectorTy()) {
+            value_stack.push_back(value);
+        } else {
+            // Otherwise, we generate vectorized code inside the loop, so replicate the value to form a
+            // vector.
+            int vector_width = platform.get_instruction_width();
+            llvm::Value* vector_value = builder.CreateVectorSplat(vector_width, value);
+            value_stack.push_back(vector_value);
+        }
+    } else {
+        value_stack.push_back(value);
+    }
+}
 
+/****************************************************************************************/
+/*                             Helper virtual functions                                 */
+/****************************************************************************************/
+
+void BaseBuilder::set_mask(llvm::Value* value) {
+    // TODO: split 3 cases into 3 builders.
+    if (platform.is_gpu()) {
+        throw std::runtime_error("Error: cannot set mask in GPUBuilder\n");
+    } else if (platform.is_cpu_with_simd()) {
+        mask = value;
+    } else {
+        throw std::runtime_error("Error: cannot set mask in BaseBuilder\n");
+    }
+}
+
+void BaseBuilder::unset_mask() {
+    // TODO: split 3 cases into 3 builders.
+    if (platform.is_gpu()) {
+        throw std::runtime_error("Error: cannot unset mask in GPUBuilder\n");
+    } else if (platform.is_cpu_with_simd()) {
+        mask = nullptr;
+    } else {
+        throw std::runtime_error("Error: cannot unset mask in BaseBuilder\n");
+    }
+    
+}
 
 
 // TODO: delet all
 
 
 
-void BaseBuilder::create_atomic_op(llvm::Value* ptr, llvm::Value* update, ast::BinaryOp op) {
-    if (op == ast::BinaryOp::BOP_SUBTRACTION) {
-        update = builder.CreateFNeg(update);
-    }
-    builder.CreateAtomicRMW(llvm::AtomicRMWInst::FAdd,
-                            ptr,
-                            update,
-                            llvm::MaybeAlign(),
-                            llvm::AtomicOrdering::SequentiallyConsistent);
-}
+
 
 llvm::Value* BaseBuilder::create_member_addresses(llvm::Value* member_ptr) {
     llvm::Module* m = builder.GetInsertBlock()->getParent()->getParent();
@@ -530,8 +631,8 @@ llvm::Value* BaseBuilder::create_atomic_loop(llvm::Value* ptrs_arr,
     // Get the pointer to the current value, the value itself and the update.b
     llvm::Value* gep =
         builder.CreateGEP(ptrs_arr->getType()->getPointerElementType(), ptrs_arr, {zero, index});
-    llvm::Value* ptr = create_load(gep);
-    llvm::Value* source = create_load(ptr);
+    llvm::Value* ptr = create_load_direct(gep);
+    llvm::Value* source = create_load_direct(ptr);
     llvm::Value* update = builder.CreateExtractElement(rhs, index);
 
     // Perform the update and store the result back.
@@ -539,90 +640,10 @@ llvm::Value* BaseBuilder::create_atomic_loop(llvm::Value* ptrs_arr,
     //     *ptr = source + update
     generate_binary_op(source, update, op);
     llvm::Value* result = pop_last_value();
-    create_store(ptr, result);
+    create_store_direct(ptr, result);
 
     // Return condition to break out of atomic update loop.
     return builder.CreateICmpEQ(new_mask, zero);
-}
-
-llvm::Value* BaseBuilder::create_load(const std::string& name, bool masked) {
-    llvm::Value* ptr = lookup_value(name);
-    llvm::Type* loaded_type = ptr->getType()->getPointerElementType();
-
-    // Check if the generated IR is vectorized and masked.
-    if (masked) {
-        builder.CreateMaskedLoad(loaded_type, ptr, llvm::Align(), mask);
-    }
-    llvm::Value* loaded = builder.CreateLoad(loaded_type, ptr);
-    value_stack.push_back(loaded);
-    return loaded;
-}
-
-llvm::Value* BaseBuilder::create_load(llvm::Value* ptr, bool masked) {
-    llvm::Type* loaded_type = ptr->getType()->getPointerElementType();
-
-    // Check if the generated IR is vectorized and masked.
-    if (masked) {
-        builder.CreateMaskedLoad(loaded_type, ptr, llvm::Align(), mask);
-    }
-
-    llvm::Value* loaded = builder.CreateLoad(loaded_type, ptr);
-    value_stack.push_back(loaded);
-    return loaded;
-}
-
-llvm::Value* BaseBuilder::create_load_from_array(const std::string& name, llvm::Value* index) {
-    llvm::Value* element_ptr = create_inbounds_gep(name, index);
-    return create_load(element_ptr);
-}
-
-void BaseBuilder::create_store(const std::string& name, llvm::Value* value, bool masked) {
-    llvm::Value* ptr = lookup_value(name);
-
-    // Check if the generated IR is vectorized and masked.
-    if (masked) {
-        builder.CreateMaskedStore(value, ptr, llvm::Align(), mask);
-        return;
-    }
-    builder.CreateStore(value, ptr);
-}
-
-void BaseBuilder::create_store(llvm::Value* ptr, llvm::Value* value, bool masked) {
-    // Check if the generated IR is vectorized and masked.
-    if (masked) {
-        builder.CreateMaskedStore(value, ptr, llvm::Align(), mask);
-        return;
-    }
-    builder.CreateStore(value, ptr);
-}
-
-void BaseBuilder::create_store_to_array(const std::string& name,
-                                      llvm::Value* index,
-                                      llvm::Value* value) {
-    llvm::Value* element_ptr = create_inbounds_gep(name, index);
-    create_store(element_ptr, value);
-}
-
-void BaseBuilder::create_return(llvm::Value* return_value) {
-    if (return_value)
-        builder.CreateRet(return_value);
-    else
-        builder.CreateRetVoid();
-}
-
-void BaseBuilder::create_scalar_or_vector_alloca(const std::string& name,
-                                               llvm::Type* element_or_scalar_type) {
-    // Even if generating vectorised code, some variables still need to be scalar. Particularly, the
-    // induction variable "id" and remainder loop variables (that start with "epilogue" prefix).
-    llvm::Type* type;
-    if (platform.is_cpu_with_simd() && vectorize && name != kernel_id &&
-        name.rfind("epilogue", 0)) {
-        int vector_width = platform.get_instruction_width();
-        type = llvm::FixedVectorType::get(element_or_scalar_type, vector_width);
-    } else {
-        type = element_or_scalar_type;
-    }
-    create_alloca(name, type);
 }
 
 void BaseBuilder::invert_mask() {
@@ -649,7 +670,7 @@ llvm::Value* BaseBuilder::load_to_or_store_from_array(const std::string& id_name
     // If the vector code is generated, we need to distinguish between two cases. If the array is
     // indexed indirectly (i.e. not by an induction variable `kernel_id`), create gather/scatter
     // instructions.
-    if (id_name != kernel_id && generating_vector_ir) {
+    if (id_name != naming::INDUCTION_VAR && generating_vector_ir) {
         if (maybe_value_to_store) {
             return builder.CreateMaskedScatter(maybe_value_to_store,
                                                element_ptr,
@@ -681,23 +702,10 @@ llvm::Value* BaseBuilder::load_to_or_store_from_array(const std::string& id_name
     }
 
     if (maybe_value_to_store) {
-        create_store(ptr, maybe_value_to_store, /*masked=*/mask && generating_vector_ir);
+        create_store_direct(ptr, maybe_value_to_store, /*masked=*/mask && generating_vector_ir);
         return nullptr;
     } else {
-        return create_load(ptr, /*masked=*/mask && generating_vector_ir);
-    }
-}
-
-void BaseBuilder::maybe_replicate_value(llvm::Value* value) {
-    // If the value should not be vectorised, or it is already a vector, add it to the stack.
-    if (!vectorize || !platform.is_cpu_with_simd() || value->getType()->isVectorTy()) {
-        value_stack.push_back(value);
-    } else {
-        // Otherwise, we generate vectorized code inside the loop, so replicate the value to form a
-        // vector.
-        int vector_width = platform.get_instruction_width();
-        llvm::Value* vector_value = builder.CreateVectorSplat(vector_width, value);
-        value_stack.push_back(vector_value);
+        return create_load_direct(ptr, /*masked=*/mask && generating_vector_ir);
     }
 }
 
