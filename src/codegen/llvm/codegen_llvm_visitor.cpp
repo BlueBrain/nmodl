@@ -262,36 +262,6 @@ int CodegenLLVMVisitor::get_num_elements(const ast::IndexedName& node) {
     return static_cast<int>(*macro->get_value());
 }
 
-/**
- * Currently, functions are identified as compute kernels if they satisfy the following:
- *   1. They have a void return type
- *   2. They have a single argument
- *   3. The argument is a struct type pointer
- * This is not robust, and hence it would be better to find what functions are kernels on the NMODL
- * AST side (e.g. via a flag, or via names list).
- *
- * \todo identify kernels on NMODL AST side.
- */
-bool CodegenLLVMVisitor::is_kernel_function(const std::string& function_name) {
-    llvm::Function* function = module->getFunction(function_name);
-    if (!function)
-        throw std::runtime_error("Error: function " + function_name + " does not exist\n");
-
-    // By convention, only kernel functions have a return type of void and single argument. The
-    // number of arguments check is needed to avoid LLVM void intrinsics to be considered as
-    // kernels.
-    if (!function->getReturnType()->isVoidTy() || !llvm::hasSingleElement(function->args()))
-        return false;
-
-    // Kernel's argument is a pointer to the instance struct type.
-    llvm::Type* arg_type = function->getArg(0)->getType();
-    if (auto pointer_type = llvm::dyn_cast<llvm::PointerType>(arg_type)) {
-        if (pointer_type->getElementType()->isStructTy())
-            return true;
-    }
-    return false;
-}
-
 llvm::Value* CodegenLLVMVisitor::read_from_or_write_to_instance(const ast::CodegenInstanceVar& node,
                                                                 llvm::Value* maybe_value_to_store) {
     const auto& instance_name = node.get_instance_var()->get_node_name();

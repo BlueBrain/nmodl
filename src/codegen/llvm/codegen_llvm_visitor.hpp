@@ -346,9 +346,6 @@ class CodegenLLVMVisitor: public CodegenCVisitor {
     /// Returns the number of elements in the array specified by the IndexedName AST node.
     int get_num_elements(const ast::IndexedName& node);
 
-    /// Returns whether the function is an NMODL compute kernel.
-    bool is_kernel_function(const std::string& function_name);
-
     /// If the value to store is specified, writes it to the instance. Otherwise, returns the
     /// instance variable.
     llvm::Value* read_from_or_write_to_instance(const ast::CodegenInstanceVar& node,
