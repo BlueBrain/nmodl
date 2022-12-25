@@ -21,7 +21,7 @@
 #include "codegen/codegen_c_visitor.hpp"
 #include "codegen/llvm/codegen_llvm_helper_visitor.hpp"
 #include "codegen/llvm/llvm_debug_builder.hpp"
-#include "codegen/llvm/llvm_ir_builder.hpp"
+#include "codegen/llvm/base.hpp"
 #include "symtab/symbol_table.hpp"
 #include "visitors/ast_visitor.hpp"
 
@@ -66,7 +66,7 @@ class CodegenLLVMVisitor: public CodegenCVisitor {
     std::unique_ptr<llvm::Module> module = std::make_unique<llvm::Module>(mod_filename, *context);
 
     /// LLVM IR builder.
-    IRBuilder ir_builder;
+    BaseBuilder ir_builder;
 
     /// Debug information builder.
     DebugBuilder debug_builder;

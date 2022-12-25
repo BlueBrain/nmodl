@@ -33,7 +33,7 @@ void replace_with_lib_functions(codegen::Platform& platform, llvm::Module& modul
 
 /// Annotates LLVM module with appropriate metadata.
 /// TODO: this function and replace_with_lib_functions will be chnaged
-/// oncePlatform evolves into PlatformConfig which would be responsible
+/// once Platform evolves into PlatformConfig which would be responsible
 /// for platform-dependent pass initialisation.
 void annotate(codegen::Platform& platform, llvm::Module& module);
 
