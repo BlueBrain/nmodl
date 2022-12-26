@@ -244,6 +244,7 @@ class Benchmark:
             cfg.shared_lib_paths = [self.compiler_config.libdevice_lib]
             cfg.llvm_gpu_name = "nvptx64"
             cfg.llvm_gpu_target_architecture = gpu_target_architecture
+            cfg.llvm_no_debug = True
         cfg.output_dir = str((Path(self.benchmark_config.output_directory)
             / modname
             / compiler
@@ -279,6 +280,7 @@ class Benchmark:
         else:
             cfg.llvm_gpu_name = "nvptx64"
             cfg.llvm_gpu_target_architecture = gpu_target_architecture
+            cfg.llvm_no_debug = True
         if architecture == "skylake-avx512":
             cfg.llvm_vector_width = 8
         elif architecture == "broadwell":
