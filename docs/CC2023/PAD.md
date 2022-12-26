@@ -18,7 +18,7 @@ MOD2IR is implemented as a code generation backend inside the NMODL Framework an
 use of the LLVM IR and compilation passes. Most of the relevant code of the described work can be
 found [here](https://github.com/BlueBrain/nmodl/tree/llvm/src/codegen/llvm) and
 [here](https://github.com/BlueBrain/nmodl/tree/llvm/test/benchmark). The intructions to reproduce
-the results can be found [here](https://github.com/BlueBrain/nmodl/blob/3365551b332829699c1af3bea3c0fbe820a30800/docs/CC2023/README.md). 
+the results can be found [here](https://github.com/BlueBrain/nmodl/blob/llvm/docs/CC2023/README.md).
 
 ### Badge
 
