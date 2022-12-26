@@ -320,8 +320,7 @@ llvm::Value* CodegenLLVMVisitor::read_variable(const ast::VarName& node) {
     const auto& identifier = node.get_name();
 
     if (identifier->is_name()) {
-        // TODO: fix encapsulation!
-        bool masked = ir_builder.vectorize && ir_builder.mask;
+        bool masked = ir_builder.generating_masked_vector_ir();
         return ir_builder.create_load_direct(node.get_node_name(), masked);
     }
 
@@ -424,7 +423,7 @@ void CodegenLLVMVisitor::visit_codegen_atomic_statement(const ast::CodegenAtomic
 
     // For non-SIMD CPUs (or any scalar code on SIMD CPUs), updates don't have to be atomic at all!
     const bool non_SIMD_cpu = platform.is_cpu() && !platform.is_cpu_with_simd();
-    if (non_SIMD_cpu || (platform.is_cpu_with_simd() && !ir_builder.vectorizing())) {
+    if (non_SIMD_cpu || (platform.is_cpu_with_simd() && !ir_builder.generating_vector_ir())) {
         llvm::Value* lhs = accept_and_get(node.get_lhs());
         ir_builder.generate_binary_op(lhs, rhs, op);
         llvm::Value* result = ir_builder.pop_last_value();
@@ -573,7 +572,7 @@ void CodegenLLVMVisitor::visit_codegen_atomic_statement(const ast::CodegenAtomic
 //  +---------------------------+
 void CodegenLLVMVisitor::visit_codegen_for_statement(const ast::CodegenForStatement& node) {
     // Condition and increment blocks must be scalar.
-    ir_builder.generate_scalar_ir();
+    ir_builder.stop_generating_ir_for_compute();
 
     // Get the current and the next blocks within the function.
     llvm::BasicBlock* curr_block = ir_builder.get_current_block();
@@ -604,12 +603,12 @@ void CodegenLLVMVisitor::visit_codegen_for_statement(const ast::CodegenForStatem
 
     // If not processing remainder of the loop, start vectorization.
     if (platform.is_cpu_with_simd() && main_loop_initialization)
-        ir_builder.generate_vector_ir();
+        ir_builder.start_generating_ir_for_compute();
 
     // Generate code for the loop body and create the basic block for the increment.
     const auto& statement_block = node.get_statement_block();
     statement_block->accept(*this);
-    ir_builder.generate_scalar_ir();
+    ir_builder.stop_generating_ir_for_compute();
     ir_builder.generate_br_and_set_insertion_point(for_inc);
 
     // Process the increment.
@@ -655,15 +654,9 @@ void CodegenLLVMVisitor::visit_codegen_function(const ast::CodegenFunction& node
     // vectorization. If this is the case, the return statement is handled in a
     // separate visitor.
     if (node.get_is_kernel()) {
-        if (platform.is_cpu_with_simd()) {
-            ir_builder.generate_vector_ir();
-            block->accept(*this);
-            ir_builder.generate_scalar_ir();
-        } else if (platform.is_gpu()) {
-            block->accept(*this);
-        } else {  // scalar
-            block->accept(*this);
-        }
+        ir_builder.start_generating_ir_for_compute();
+        block->accept(*this);
+        ir_builder.stop_generating_ir_for_compute();
     } else {
         block->accept(*this);
     }
@@ -711,7 +704,7 @@ void CodegenLLVMVisitor::visit_codegen_var_list_statement(
             ir_builder.create_array_alloca(name, scalar_type, length);
         } else if (identifier->is_name()) {
             llvm::Type* type;
-            if (platform.is_cpu_with_simd() && ir_builder.vectorizing() && name != naming::INDUCTION_VAR &&
+            if (platform.is_cpu_with_simd() && ir_builder.generating_vector_ir() && name != naming::INDUCTION_VAR &&
                 name.rfind("epilogue", 0)) {
                 type = llvm::FixedVectorType::get(scalar_type, platform.get_instruction_width());
             } else {
@@ -753,7 +746,7 @@ void CodegenLLVMVisitor::visit_function_call(const ast::FunctionCall& node) {
 
 void CodegenLLVMVisitor::visit_if_statement(const ast::IfStatement& node) {
     // If vectorizing the compute kernel with control flow, process it separately.
-    if (platform.is_cpu_with_simd() && ir_builder.vectorizing()) {
+    if (platform.is_cpu_with_simd() && ir_builder.generating_vector_ir()) {
         create_vectorized_control_flow_block(node);
         return;
     }

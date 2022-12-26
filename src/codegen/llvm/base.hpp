@@ -279,34 +279,23 @@ class BaseBuilder {
     /// vector code, throws an error.
     virtual void unset_mask();
 
+    /// Explicitly forces the builder to produce IR for compute parts. For
+    /// example, this includes vectorizing the code in the FOR loop.
+    virtual void start_generating_ir_for_compute();
 
+    /// Explicitly forces the builder to produce IR for non-compute parts.
+    virtual void stop_generating_ir_for_compute();
 
+    /// Indicates whether the builder generates vector LLVM IR.
+    virtual bool generating_vector_ir();
 
+    /// Indicates whether the builder generates predicated vector LLVM IR.
+    virtual bool generating_masked_vector_ir();
 
+    /// Inverts the mask for vector code generation by xoring it.
+    virtual void invert_mask();
 
-
-
-
-
-    /// Explicitly sets the builder to produce scalar IR.
-    void generate_scalar_ir() {
-        vectorize = false;
-    }
-
-    /// Indicates whether the builder generates vectorized IR.
-    bool vectorizing() {
-        return vectorize;
-    }
-
-    /// Explicitly sets the builder to produce vectorized IR.
-    void generate_vector_ir() {
-        vectorize = true;
-    }
-
-
-
-
-
+    // TODO: These two methods are native for GPUBuilder!
 
     /// Creates an expression of the form: blockDim.x * gridDim.x
     void create_grid_stride();
@@ -314,15 +303,14 @@ class BaseBuilder {
     /// Creates an expression of the form: blockIdx.x * blockDim.x + threadIdx.x
     void create_thread_id();
 
-    /// Inverts the mask for vector code generation by xoring it.
-    void invert_mask();
-
     /// Generates IR that loads the elements of the array even during vectorization. If the value is
     /// specified, then it is stored to the array at the given index.
     llvm::Value* load_to_or_store_from_array(const std::string& id_name,
                                              llvm::Value* id_value,
                                              llvm::Value* array,
                                              llvm::Value* maybe_value_to_store = nullptr);
+
+    // TODO: These three methods are native for SIMDBuilder!
 
     /// Creates a vector splat of starting addresses of the given member.
     llvm::Value* create_member_addresses(llvm::Value* member_ptr);

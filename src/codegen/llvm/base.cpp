@@ -557,11 +557,70 @@ void BaseBuilder::unset_mask() {
     } else {
         throw std::runtime_error("Error: cannot unset mask in BaseBuilder\n");
     }
-    
+}
+
+void BaseBuilder::start_generating_ir_for_compute() {
+    // TODO: split 3 cases into 3 builders.
+    if (platform.is_gpu()) {
+        // Do nothing.
+    } else if (platform.is_cpu_with_simd()) {
+        vectorize = true;
+    } else {
+        // Do nothing.
+    }
+}
+
+void BaseBuilder::stop_generating_ir_for_compute() {
+    // TODO: split 3 cases into 3 builders.
+    if (platform.is_gpu()) {
+        // Do nothing.
+    } else if (platform.is_cpu_with_simd()) {
+        vectorize = false;
+    } else {
+        // Do nothing.
+    }
+}
+
+bool BaseBuilder::generating_vector_ir() {
+    // TODO: split 3 cases into 3 builders.
+    if (platform.is_gpu()) {
+        return false;
+    } else if (platform.is_cpu_with_simd()) {
+        return vectorize;
+    } else {
+        return false;
+    }
+}
+
+bool BaseBuilder::generating_masked_vector_ir() {
+    // TODO: split 3 cases into 3 builders.
+    if (platform.is_gpu()) {
+        return false;
+    } else if (platform.is_cpu_with_simd()) {
+        return vectorize && mask;
+    } else {
+        return false;
+    }
+}
+
+void BaseBuilder::invert_mask() {
+    // TODO: split 3 cases into 3 builders.
+    if (platform.is_gpu()) {
+        throw std::runtime_error("Error: cannot invert mask in GPUBuilder\n");
+    } else if (platform.is_cpu_with_simd()) {
+        if (!mask)
+            throw std::runtime_error("Error: mask is not set\n");
+
+        // Create the vector with all `true` values.
+        generate_boolean_constant(1);
+        llvm::Value* one = pop_last_value();
+        mask = builder.CreateXor(mask, one);
+    } else {
+        throw std::runtime_error("Error: cannot invert mask in BaseBuilder\n");
+    }
 }
 
 
-// TODO: delet all
 
 
 
@@ -644,17 +703,6 @@ llvm::Value* BaseBuilder::create_atomic_loop(llvm::Value* ptrs_arr,
 
     // Return condition to break out of atomic update loop.
     return builder.CreateICmpEQ(new_mask, zero);
-}
-
-void BaseBuilder::invert_mask() {
-    if (!mask)
-        throw std::runtime_error("Error: mask is not set\n");
-
-    // Create the vector with all `true` values.
-    generate_boolean_constant(1);
-    llvm::Value* one = pop_last_value();
-
-    mask = builder.CreateXor(mask, one);
 }
 
 llvm::Value* BaseBuilder::load_to_or_store_from_array(const std::string& id_name,
