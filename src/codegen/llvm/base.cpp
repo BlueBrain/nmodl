@@ -268,6 +268,10 @@ llvm::Value* BaseBuilder::create_atomic_op(llvm::Value* ptr, llvm::Value* update
                             llvm::AtomicOrdering::SequentiallyConsistent);
 }
 
+llvm::Value* BaseBuilder::create_bitcast(llvm::Value* value, llvm::Type* type) {
+    return builder.CreateBitCast(value, type);
+}
+
 llvm::Value* BaseBuilder::create_global_string(const ast::String& node) {
     return builder.CreateGlobalStringPtr(node.get_value());
 }
@@ -619,12 +623,6 @@ void BaseBuilder::invert_mask() {
         throw std::runtime_error("Error: cannot invert mask in BaseBuilder\n");
     }
 }
-
-
-
-
-
-
 
 llvm::Value* BaseBuilder::create_member_addresses(llvm::Value* member_ptr) {
     llvm::Module* m = builder.GetInsertBlock()->getParent()->getParent();

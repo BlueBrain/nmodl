@@ -47,8 +47,7 @@ namespace codegen {
  * by default.
  */
 class BaseBuilder {
-  // TODO: fix encapsulation!
-  public:
+  protected:
     /// Underlying LLVM IR builder.
     llvm::IRBuilder<> builder;
 
@@ -73,6 +72,7 @@ class BaseBuilder {
     /// Fast math flags for floating-point IR instructions.
     std::vector<std::string> fast_math_flags;
 
+  public:
     BaseBuilder(llvm::LLVMContext& context,
                 Platform& platform,
                 std::vector<std::string> fast_math_flags = {})
@@ -199,6 +199,9 @@ class BaseBuilder {
     /// Creates LLVM IR instruction for the given binary operator (+, -).
     llvm::Value* create_atomic_op(llvm::Value* ptr, llvm::Value* update, ast::BinaryOp op);
 
+    /// Creates LLVM IR bitcast instruction.
+    llvm::Value* create_bitcast(llvm::Value* value, llvm::Type* type);
+
     /// Creates LLVM IR global string value.
     llvm::Value* create_global_string(const ast::String& node);
 
@@ -311,7 +314,6 @@ class BaseBuilder {
                                              llvm::Value* maybe_value_to_store = nullptr);
 
     // TODO: These three methods are native for SIMDBuilder!
-
     /// Creates a vector splat of starting addresses of the given member.
     llvm::Value* create_member_addresses(llvm::Value* member_ptr);
 

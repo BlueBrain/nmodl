@@ -509,7 +509,7 @@ void CodegenLLVMVisitor::visit_codegen_atomic_statement(const ast::CodegenAtomic
 
         llvm::Value* ptrs_vec = ir_builder.create_alloca(/*name=*/"ptrs", vi64_type);
         llvm::Value* ptrs_arr =
-            ir_builder.builder.CreateBitCast(ptrs_vec,
+            ir_builder.create_bitcast(ptrs_vec,
                                       llvm::PointerType::get(array_type, /*AddressSpace=*/0));
 
         // Step 3: Calculate offsets of the values in the member by:
