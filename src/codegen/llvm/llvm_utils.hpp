@@ -31,6 +31,12 @@ std::string get_module_ptx(llvm::TargetMachine& tm, llvm::Module& module);
 /// Replaces calls to LLVM intrinsics with appropriate library calls.
 void replace_with_lib_functions(codegen::Platform& platform, llvm::Module& module);
 
+/// Annotates LLVM module with appropriate metadata.
+/// TODO: this function and replace_with_lib_functions will be chnaged
+/// oncePlatform evolves into PlatformConfig which would be responsible
+/// for platform-dependent pass initialisation.
+void annotate(codegen::Platform& platform, llvm::Module& module);
+
 /// Optimises the given LLVM IR module for NVPTX targets.
 void optimise_module_for_nvptx(const codegen::Platform& platform,
                                llvm::Module& module,

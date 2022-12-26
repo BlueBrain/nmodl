@@ -205,7 +205,13 @@ class JitDriver {
         // configuration and execute the mechanisms' functions multiple times
         auto new_node = std::make_shared<nmodl::ast::Program>(*node);
         cg_driver.prepare_mod(new_node, modname);
-        nmodl::codegen::CodegenLLVMVisitor visitor(modname, cfg.output_dir, platform, 0);
+        nmodl::codegen::CodegenLLVMVisitor visitor(modname,
+                                                   cfg.output_dir,
+                                                   platform,
+                                                   0,
+                                                   !cfg.llvm_no_debug,
+                                                   cfg.llvm_fast_math_flags,
+                                                   true);
         visitor.visit_program(*new_node);
         const GPUExecutionParameters gpu_execution_parameters{cuda_grid_dim_x, cuda_block_dim_x};
         nmodl::benchmark::LLVMBenchmark benchmark(visitor,

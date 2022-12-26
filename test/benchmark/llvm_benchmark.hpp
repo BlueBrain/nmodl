@@ -127,15 +127,10 @@ class LLVMBenchmark {
         , external_kernel_library(external_kernel_library)
         , gpu_execution_parameters(gpu_exec_params) {}
 
-    /// Runs the benchmark.
+    /// Runs the main body of the benchmark, executing the compute kernels.
     BenchmarkResults run();
 
   private:
-    /// Visits the AST to construct the LLVM IR module.
-    void generate_llvm();
-
-    /// Runs the main body of the benchmark, executing the compute kernels.
-    BenchmarkResults run_benchmark();
 
     /// Sets the log output stream (file or console).
     void set_log_output();
