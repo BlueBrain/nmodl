@@ -4,14 +4,14 @@
 set(LLVM_CODEGEN_SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/annotation.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/annotation.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/base.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/base.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/codegen_llvm_visitor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/codegen_llvm_visitor.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/codegen_llvm_helper_visitor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/codegen_llvm_helper_visitor.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/llvm_debug_builder.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/llvm_debug_builder.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/llvm_ir_builder.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/llvm_ir_builder.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/llvm_utils.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/llvm_utils.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/replace_with_lib_functions.cpp

@@ -21,7 +21,7 @@
 #include "codegen/codegen_c_visitor.hpp"
 #include "codegen/llvm/codegen_llvm_helper_visitor.hpp"
 #include "codegen/llvm/llvm_debug_builder.hpp"
-#include "codegen/llvm/base.hpp"
+#include "codegen/llvm/llvm_ir_builder.hpp"
 #include "symtab/symbol_table.hpp"
 #include "visitors/ast_visitor.hpp"
 

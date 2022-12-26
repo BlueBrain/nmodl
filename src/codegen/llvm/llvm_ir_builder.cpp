@@ -5,7 +5,7 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
-#include "codegen/llvm/base.hpp"
+#include "codegen/llvm/llvm_ir_builder.hpp"
 
 #include "llvm/ADT/StringSwitch.h"
 #include "llvm/IR/Function.h"
