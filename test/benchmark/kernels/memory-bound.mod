@@ -1,5 +1,5 @@
 NEURON {
-    SUFFIX hh
+    SUFFIX memory_bound
     NONSPECIFIC_CURRENT il
     RANGE x, minf, mtau, gl, el
     USEION na WRITE nai

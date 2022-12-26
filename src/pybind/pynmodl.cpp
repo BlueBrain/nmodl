@@ -188,10 +188,11 @@ class JitDriver {
     }
 
 
-    benchmark::BenchmarkResults run(std::shared_ptr<nmodl::ast::Program> node,
+    benchmark::BenchmarkResults run(const std::shared_ptr<const nmodl::ast::Program> node,
                                     std::string& modname,
                                     int num_experiments,
                                     int instance_size,
+                                    std::string& external_kernel_library,
                                     int cuda_grid_dim_x,
                                     int cuda_block_dim_x) {
         // New directory is needed to be created otherwise the directory cannot be created
@@ -199,9 +200,13 @@ class JitDriver {
         if (cfg.nmodl_ast || cfg.json_ast || cfg.json_perfstat) {
             utils::make_path(cfg.scratch_dir);
         }
-        cg_driver.prepare_mod(node, modname);
+        utils::make_path(cfg.output_dir);
+        // Make copy of node to be able to run the visitors according to any changes in the
+        // configuration and execute the mechanisms' functions multiple times
+        auto new_node = std::make_shared<nmodl::ast::Program>(*node);
+        cg_driver.prepare_mod(new_node, modname);
         nmodl::codegen::CodegenLLVMVisitor visitor(modname, cfg.output_dir, platform, 0);
-        visitor.visit_program(*node);
+        visitor.visit_program(*new_node);
         const GPUExecutionParameters gpu_execution_parameters{cuda_grid_dim_x, cuda_block_dim_x};
         nmodl::benchmark::LLVMBenchmark benchmark(visitor,
                                                   modname,
@@ -212,7 +217,7 @@ class JitDriver {
                                                   platform,
                                                   cfg.llvm_opt_level_ir,
                                                   cfg.llvm_opt_level_codegen,
-                                                  false,
+                                                  external_kernel_library,
                                                   gpu_execution_parameters);
         return benchmark.run();
     }
@@ -308,8 +313,9 @@ PYBIND11_MODULE(_nmodl, m_nmodl) {
              &nmodl::JitDriver::run,
              "node"_a,
              "modname"_a,
-             "num_experiments"_a,
              "instance_size"_a,
+             "num_experiments"_a = 1,
+             "external_kernel_library"_a = "",
              "cuda_grid_dim_x"_a = 1,
              "cuda_block_dim_x"_a = 1);
 #else

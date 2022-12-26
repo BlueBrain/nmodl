@@ -1,10 +1,10 @@
 #include <cmath>
 
-struct hh_Instance  {
-    double* __restrict__ gnabar;
-    double* __restrict__ gkbar;
-    double* __restrict__ gl;
-    double* __restrict__ el;
+struct hh_Instance {
+    const double* __restrict__ gnabar;
+    const double* __restrict__ gkbar;
+    const double* __restrict__ gl;
+    const double* __restrict__ el;
     double* __restrict__ gna;
     double* __restrict__ gk;
     double* __restrict__ il;
@@ -26,10 +26,10 @@ struct hh_Instance  {
     double* __restrict__ ik;
     double* __restrict__ v_unused;
     double* __restrict__ g_unused;
-    double* __restrict__ ion_ena;
+    const double* __restrict__ ion_ena;
     double* __restrict__ ion_ina;
     double* __restrict__ ion_dinadv;
-    double* __restrict__ ion_ek;
+    const double* __restrict__ ion_ek;
     double* __restrict__ ion_ik;
     double* __restrict__ ion_dikdv;
     int* __restrict__ ion_ena_index;
@@ -40,6 +40,10 @@ struct hh_Instance  {
     int* __restrict__ ion_dikdv_index;
     double* __restrict__ voltage;
     int* __restrict__ node_index;
+    double* __restrict__ vec_rhs;
+    double* __restrict__ vec_d;
+    double* __restrict__ _shadow_rhs;
+    double* __restrict__ _shadow_d;
     double t;
     double dt;
     double celsius;
@@ -47,13 +51,71 @@ struct hh_Instance  {
     int node_count;
 };
 
-void nrn_state_hh_ext(void* __restrict__ mech){
+void nrn_cur_ext(void* __restrict__ mech) {
+    auto inst = static_cast<hh_Instance*>(mech);
+    int id;
+    int node_id, ena_id, ek_id, ion_dinadv_id, ion_dikdv_id, ion_ina_id, ion_ik_id;
+    double v, g, rhs, v_org, current, dina, dik;
+
+    #pragma ivdep
+    for (id = 0; id < inst->node_count; id++) {
+        node_id = inst->node_index[id];
+        ena_id = inst->ion_ena_index[id];
+        ek_id = inst->ion_ek_index[id];
+        ion_dinadv_id = inst->ion_dinadv_index[id];
+        ion_dikdv_id = inst->ion_dikdv_index[id];
+        ion_ina_id = inst->ion_ina_index[id];
+        ion_ik_id = inst->ion_ik_index[id];
+        v = inst->voltage[node_id];
+        inst->ena[id] = inst->ion_ena[ena_id];
+        inst->ek[id] = inst->ion_ek[ek_id];
+        v_org = v;
+        v = v + 0.001;
+        {
+            current = 0.0;
+            inst->gna[id] = inst->gnabar[id] * inst->m[id] * inst->m[id] * inst->m[id] * inst->h[id];
+            inst->ina[id] = inst->gna[id] * (v - inst->ena[id]);
+            inst->gk[id] = inst->gkbar[id] * inst->n[id] * inst->n[id] * inst->n[id] * inst->n[id];
+            inst->ik[id] = inst->gk[id] * (v - inst->ek[id]);
+            inst->il[id] = inst->gl[id] * (v - inst->el[id]);
+            current += inst->il[id];
+            current += inst->ina[id];
+            current += inst->ik[id];
+            g = current;
+        }
+        dina = inst->ina[id];
+        dik = inst->ik[id];
+        v = v_org;
+        {
+            current = 0.0;
+            inst->gna[id] = inst->gnabar[id] * inst->m[id] * inst->m[id] * inst->m[id] * inst->h[id];
+            inst->ina[id] = inst->gna[id] * (v - inst->ena[id]);
+            inst->gk[id] = inst->gkbar[id] * inst->n[id] * inst->n[id] * inst->n[id] * inst->n[id];
+            inst->ik[id] = inst->gk[id] * (v - inst->ek[id]);
+            inst->il[id] = inst->gl[id] * (v - inst->el[id]);
+            current += inst->il[id];
+            current += inst->ina[id];
+            current += inst->ik[id];
+            rhs = current;
+        }
+        g = (g-rhs)/0.001;
+        inst->ion_dinadv[ion_dinadv_id] += (dina-inst->ina[id])/0.001;
+        inst->ion_dikdv[ion_dikdv_id] += (dik-inst->ik[id])/0.001;
+        inst->ion_ina[ion_ina_id] += inst->ina[id];
+        inst->ion_ik[ion_ik_id] += inst->ik[id];
+        inst->vec_rhs[node_id] -= rhs;
+        inst->vec_d[node_id] += g;
+    }
+}
+
+void nrn_state_ext(void* __restrict__ mech) {
     auto inst = static_cast<hh_Instance*>(mech);
     int id;
     int node_id, ena_id, ek_id;
     double v;
-    #pragma omp simd
-    for(id = 0; id<inst->node_count; ++id) {
+
+    #pragma ivdep
+    for (id = 0; id < inst->node_count; ++id) {
         node_id = inst->node_index[id];
         ena_id = inst->ion_ena_index[id];
         ek_id = inst->ion_ek_index[id];
@@ -61,24 +123,47 @@ void nrn_state_hh_ext(void* __restrict__ mech){
         inst->ena[id] = inst->ion_ena[ena_id];
         inst->ek[id] = inst->ion_ek[ek_id];
         {
-            double alpha, beta, sum, q10, vtrap_in_0, v_in_1;
+            double alpha, beta, sum, q10, vtrap_in_0, vtrap_in_1, v_in_1;
             v_in_1 = v;
-            q10 = 3*((inst->celsius-6.3)/10);
-            alpha = .07*exp(-(v_in_1+65)/20);
-            beta = 1/(exp(-(v_in_1+35)/10)+1);
-            sum = alpha+beta;
-            inst->htau[id] = 1/(q10*sum);
-            inst->hinf[id] = alpha/sum;
+            q10 = pow(3.0, ((inst->celsius - 6.3) / 10.0));
             {
                 double x_in_0, y_in_0;
-                x_in_0 = alpha;
-                y_in_0 = alpha;
-                vtrap_in_0 = y_in_0*(1-x_in_0/y_in_0/2);
+                x_in_0 =  -(v_in_1 + 40.0);
+                y_in_0 = 10.0;
+                if (fabs(x_in_0 / y_in_0) < 1e-6) {
+                    vtrap_in_0 = y_in_0 * (1.0 - x_in_0 / y_in_0 / 2.0);
+                } else {
+                    vtrap_in_0 = x_in_0 / (exp(x_in_0 / y_in_0) - 1.0);
+                }
             }
-            inst->hinf[id] = vtrap_in_0;
+            alpha = .1 * vtrap_in_0;
+            beta = 4.0 * exp( -(v_in_1 + 65.0) / 18.0);
+            sum = alpha + beta;
+            inst->mtau[id] = 1.0 / (q10 * sum);
+            inst->minf[id] = alpha / sum;
+            alpha = .07 * exp( -(v_in_1 + 65.0) / 20.0);
+            beta = 1.0 / (exp( -(v_in_1 + 35.0) / 10.0) + 1.0);
+            sum = alpha + beta;
+            inst->htau[id] = 1.0 / (q10 * sum);
+            inst->hinf[id] = alpha / sum;
+            {
+                double x_in_1, y_in_1;
+                x_in_1 =  -(v_in_1 + 55.0);
+                y_in_1 = 10.0;
+                if (fabs(x_in_1 / y_in_1) < 1e-6) {
+                    vtrap_in_1 = y_in_1 * (1.0 - x_in_1 / y_in_1 / 2.0);
+                } else {
+                    vtrap_in_1 = x_in_1 / (exp(x_in_1 / y_in_1) - 1.0);
+                }
+            }
+            alpha = .01 * vtrap_in_1;
+            beta = .125 * exp( -(v_in_1 + 65.0) / 80.0);
+            sum = alpha + beta;
+            inst->ntau[id] = 1.0 / (q10 * sum);
+            inst->ninf[id] = alpha / sum;
         }
-        inst->m[id] = inst->m[id]+(1.0-exp(inst->dt*((((-1.0)))/inst->mtau[id])))*(-(((inst->minf[id]))/inst->mtau[id])/((((-1.0)))/inst->mtau[id])-inst->m[id]);
-        inst->h[id] = inst->h[id]+(1.0-exp(inst->dt*((((-1.0)))/inst->htau[id])))*(-(((inst->hinf[id]))/inst->htau[id])/((((-1.0)))/inst->htau[id])-inst->h[id]);
-        inst->n[id] = inst->n[id]+(1.0-exp(inst->dt*((((-1.0)))/inst->ntau[id])))*(-(((inst->ninf[id]))/inst->ntau[id])/((((-1.0)))/inst->ntau[id])-inst->n[id]);
+        inst->m[id] = inst->m[id] + (1.0 - exp(inst->dt * (((( -1.0))) / inst->mtau[id]))) * ( -(((inst->minf[id])) / inst->mtau[id]) / (((( -1.0))) / inst->mtau[id]) - inst->m[id]);
+        inst->h[id] = inst->h[id] + (1.0 - exp(inst->dt * (((( -1.0))) / inst->htau[id]))) * ( -(((inst->hinf[id])) / inst->htau[id]) / (((( -1.0))) / inst->htau[id]) - inst->h[id]);
+        inst->n[id] = inst->n[id] + (1.0 - exp(inst->dt * (((( -1.0))) / inst->ntau[id]))) * ( -(((inst->ninf[id])) / inst->ntau[id]) / (((( -1.0))) / inst->ntau[id]) - inst->n[id]);
     }
 }

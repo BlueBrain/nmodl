@@ -23,6 +23,17 @@
 namespace nmodl {
 namespace runner {
 
+CUDADriver::~CUDADriver() {
+    if (cudaModule) {
+        CUresult err = cuModuleUnload(cudaModule);
+        checkCudaErrors(err);
+    }
+    if (context) {
+        CUresult err = cuCtxDestroy(context);
+        checkCudaErrors(err);
+    }
+}
+
 void CUDADriver::checkCudaErrors(CUresult err) {
     if (err != CUDA_SUCCESS) {
         const char* ret = NULL;

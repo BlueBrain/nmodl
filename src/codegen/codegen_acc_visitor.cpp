@@ -57,7 +57,7 @@ void CodegenAccVisitor::print_channel_iteration_block_parallel_hint(BlockType ty
 
 
 void CodegenAccVisitor::print_atomic_reduction_pragma() {
-    if (!info.artificial_cell) {
+    if (info.point_process) {
         printer->add_line("nrn_pragma_acc(atomic update)");
         printer->add_line("nrn_pragma_omp(atomic update)");
     }

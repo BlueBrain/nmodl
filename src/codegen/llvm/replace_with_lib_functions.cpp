@@ -28,7 +28,7 @@ bool ReplaceMathFunctions::runOnModule(Module& module) {
 
     // If the platform supports SIMD, replace math intrinsics with library
     // functions.
-    if (platform->is_cpu_with_simd()) {
+    if (platform->is_cpu()) {
         // First, get the target library information and add vectorizable functions for the
         // specified vector library.
         Triple triple(sys::getDefaultTargetTriple());

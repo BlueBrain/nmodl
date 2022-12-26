@@ -1,0 +1,64 @@
+{
+  "intel": {
+    "skylake-avx512": [
+      "-O2 -mavx512f -prec-div -fopenmp",
+      "-O2 -mavx512f -prec-div -fimf-use-svml -fopenmp"
+    ],
+    "broadwell": [
+      "-O2 -march=broadwell -mtune=broadwell -prec-div",
+      "-O2 -march=broadwell -mtune=broadwell -prec-div -fimf-use-svml"
+    ],
+    "nehalem": [
+      "-O2 -msse2 -prec-div",
+      "-O2 -msse2 -prec-div -fimf-use-svml"
+    ],
+    "default": [
+      "-O2 -prec-div",
+      "-O2 -prec-div -fimf-use-svml"
+    ]
+  },
+  "clang": {
+    "skylake-avx512": [
+      "-O3 -march=skylake-avx512 -mtune=skylake -ffast-math -fopenmp",
+      "-O3 -march=skylake-avx512 -mtune=skylake -ffast-math -fopenmp -fveclib=SVML"
+    ],
+    "broadwell": [
+      "-O3 -march=broadwell -mtune=broadwell -ffast-math -fopenmp",
+      "-O3 -march=broadwell -mtune=broadwell -ffast-math -fopenmp -fveclib=SVML"
+    ],
+    "nehalem": [
+      "-O3 -march=nehalem -mtune=nehalem -ffast-math -fopenmp",
+      "-O3 -march=nehalem -mtune=nehalem -ffast-math -fopenmp -fveclib=SVML"
+    ],
+    "default": [
+      "-O3 -ffast-math",
+      "-O3 -ffast-math -fopenmp -fveclib=SVML"
+    ]
+  },
+  "gcc": {
+    "skylake-avx512": [
+      "-O3 -march=skylake-avx512 -mtune=skylake -mavx512f -ffast-math -ftree-vectorize -fopenmp",
+      "-O3 -march=skylake-avx512 -mtune=skylake -mavx512f -ffast-math -ftree-vectorize -mveclibabi=svml -fopenmp"
+    ],
+    "broadwell": [
+      "-O3 -march=broadwell -mtune=broadwell -ffast-math -ftree-vectorize -fopenmp",
+      "-O3 -march=broadwell -mtune=broadwell -ffast-math -ftree-vectorize -mveclibabi=svml -fopenmp"
+    ],
+    "nehalem": [
+      "-O3 -march=nehalem -mtune=nehalem -ffast-math -ftree-vectorize -fopenmp",
+      "-O3 -march=nehalem -mtune=nehalem -ffast-math -ftree-vectorize -mveclibabi=svml -fopenmp"
+    ],
+    "default": [
+      "-O3 -ffast-math -ftree-vectorize",
+      "-O3 -ffast-math -ftree-vectorize -mveclibabi=svml -fopenmp"
+    ]
+  },
+  "nvhpc": {
+    "skylake-avx512": [
+      "-fast -O3 -mp=autopar -tp=skylake -Msafeptr=all -Minfo -Mvect=simd:512,gather -mavx512vbmi -mavx512vbmi2 -mavx512vl"
+    ],
+    "nvptx64": [
+      "-O3 -gpu=nordc,fastmath"
+    ]
+  }
+}

@@ -9,6 +9,10 @@
 
 #include "codegen_data_helper.hpp"
 
+#ifdef NMODL_LLVM_CUDA_BACKEND
+#include "test/benchmark/cuda_driver.hpp"
+#endif
+
 namespace nmodl {
 namespace codegen {
 
@@ -18,14 +22,33 @@ const double default_nthread_t_value = 100.0;
 const double default_celsius_value = 34.0;
 const int default_second_order_value = 0;
 
+#ifdef NMODL_LLVM_CUDA_BACKEND
+void checkCudaErrors(cudaError error) {
+    if (error != cudaSuccess) {
+        throw std::runtime_error(
+            fmt::format("CUDA Execution Error: {}\n", cudaGetErrorString(error)));
+    }
+}
+#endif
+
 // cleanup all members and struct base pointer
 CodegenInstanceData::~CodegenInstanceData() {
     // first free num_ptr_members members which are pointers
     for (size_t i = 0; i < num_ptr_members; i++) {
         free(members[i]);
+#ifdef NMODL_LLVM_CUDA_BACKEND
+        if (dev_base_ptr) {
+            checkCudaErrors(cudaFree(dev_members[i]));
+        }
+#endif
     }
     // and then pointer to container struct
     free(base_ptr);
+#ifdef NMODL_LLVM_CUDA_BACKEND
+    if (dev_base_ptr) {
+        checkCudaErrors(cudaFree(dev_base_ptr));
+    }
+#endif
 }
 
 /**
@@ -145,12 +168,12 @@ CodegenInstanceData CodegenDataHelper::create_data(size_t num_elements, size_t s
     }
 
 
-    int cnt{};
-    for (auto& var: variables) {
-        // printout vars
-        std::cout << cnt++ << ":\t" << to_string(var->get_type()->get_type()) << '\t'
-                  << var->get_is_pointer() << '\t' << var->get_name()->get_node_name() << '\n';
-    }
+    // int cnt{};
+    // for (auto& var: variables) {
+    //     // printout vars
+    //     std::cout << cnt++ << ":\t" << to_string(var->get_type()->get_type()) << '\t'
+    //               << var->get_is_pointer() << '\t' << var->get_name()->get_node_name() << '\n';
+    // }
 
 
     // we are now switching from pointer type to next member type (e.g. double)
@@ -207,6 +230,64 @@ CodegenInstanceData CodegenDataHelper::create_data(size_t num_elements, size_t s
 
     return data;
 }
+
+#ifdef NMODL_LLVM_CUDA_BACKEND
+void CodegenInstanceData::copy_instance_data_gpu() {
+    const auto ptr_vars_size = num_ptr_members * sizeof(double*);
+    auto scalar_vars_size = 0;
+    const auto num_scalar_vars = members.size() - num_ptr_members;
+    for (int i = 0; i < num_scalar_vars; i++) {
+        scalar_vars_size += members_size[i + num_ptr_members];
+    }
+    checkCudaErrors(cudaMalloc(&dev_base_ptr, ptr_vars_size + scalar_vars_size));
+    for (auto i = 0; i < num_ptr_members; i++) {
+        // Allocate a vector with the correct size
+        void* dev_member_ptr;
+        auto size_of_var = members_size[i];
+        checkCudaErrors(cudaMalloc(&dev_member_ptr, size_of_var * num_elements));
+        checkCudaErrors(cudaMemcpy(dev_member_ptr,
+                                   members[i],
+                                   size_of_var * num_elements,
+                                   cudaMemcpyHostToDevice));
+        // Copy the pointer addresses to the struct
+        auto offseted_place = (char*) dev_base_ptr + offsets[i];
+        checkCudaErrors(
+            cudaMemcpy(offseted_place, &dev_member_ptr, sizeof(double*), cudaMemcpyHostToDevice));
+        dev_members.push_back(dev_member_ptr);
+    }
+    // memcpy the scalar values
+    auto offseted_place_dev = (char*) dev_base_ptr + offsets[num_ptr_members];
+    auto offseted_place_host = (char*) (base_ptr) + offsets[num_ptr_members];
+    checkCudaErrors(cudaMemcpy(
+        offseted_place_dev, offseted_place_host, scalar_vars_size, cudaMemcpyHostToDevice));
+}
+
+void CodegenInstanceData::copy_instance_data_host() {
+    const auto ptr_vars_size = num_ptr_members * sizeof(double*);
+    auto scalar_vars_size = 0;
+    const auto num_scalar_vars = members.size() - num_ptr_members;
+    for (int i = 0; i < num_scalar_vars; i++) {
+        scalar_vars_size += members_size[i + num_ptr_members];
+    }
+    const auto host_base_ptr = base_ptr;
+    for (auto i = 0; i < num_ptr_members; i++) {
+        auto size_of_var = members_size[i];
+        void* offset_dev_ptr = (char*) dev_base_ptr + offsets[i];
+        void* gpu_offset_addr;
+        checkCudaErrors(
+            cudaMemcpy(&gpu_offset_addr, offset_dev_ptr, sizeof(double*), cudaMemcpyDeviceToHost));
+        checkCudaErrors(cudaMemcpy(members[i],
+                                   gpu_offset_addr,
+                                   size_of_var * num_elements,
+                                   cudaMemcpyDeviceToHost));
+    }
+    // memcpy the scalar values
+    void* offseted_place_dev = (char*) dev_base_ptr + offsets[num_ptr_members];
+    void* offseted_place_host = (char*) (base_ptr) + offsets[num_ptr_members];
+    checkCudaErrors(cudaMemcpy(
+        offseted_place_host, offseted_place_dev, scalar_vars_size, cudaMemcpyDeviceToHost));
+}
+#endif
 
 }  // namespace codegen
 }  // namespace nmodl
