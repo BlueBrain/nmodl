@@ -20,7 +20,8 @@ The image that targets both CPU and GPU can be found in `test/benchmark/gpu_dock
 To launch the Docker image you can execute the following:
 
 ```
-cd test/benchnark/gpu_docker  # Enter the directory that contains the Dockerfile
+git clone -b llvm https://github.com/BlueBrain/nmodl.git
+cd nmodl/test/benchnark/gpu_docker  # Enter the directory that contains the Dockerfile
 bash install_gpu_docker_env.sh  # Installs docker and NVIDIA docker runtime (needs sudo permission)
 docker run -it -v $PWD:/opt/mount --gpus all bluebrain/nmodl:mod2ir-gpu-benchmark # Execute docker image (~16GB)
 ```
