@@ -21,7 +21,7 @@ To launch the Docker image you can execute the following:
 
 ```
 git clone -b llvm https://github.com/BlueBrain/nmodl.git
-cd nmodl/test/benchnark/gpu_docker  # Enter the directory that contains the Dockerfile
+cd nmodl/test/benchnark/gpu_docker  # Enter the directory that contains the Dockerfile (based on Ubuntu 22.04 but with small changes in should be supported by any Ubuntu version or other linux distributions)
 bash install_gpu_docker_env.sh  # Installs docker and NVIDIA docker runtime (needs sudo permission)
 docker run -it -v $PWD:/opt/mount --gpus all bluebrain/nmodl:mod2ir-gpu-benchmark # Execute docker image (~16GB)
 ```
