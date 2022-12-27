@@ -32,11 +32,11 @@ qualitiatively the same as the ones we have presented.
 ### Hardware requisites
 
 The provided artifact can in theory be run on any x86 hardware platform. For the prupose of closely
-reproducing our benchmark results we recommend using a workstation (or cloud instance) with Intel Xeon
-Skylake (or newer) CPU and an NVIDIA Volta V100 (or newer) GPU. All benchmark runs are single-core
-and have relatively low memory-requirement. For building the Docker image (and more specifically the
-NMODL Framework) we, however, recommend a system with plenty of cores and at least 32GB of RAM
-available and 20 GB of disk space.
+reproducing our benchmark results it is required a workstation (or cloud instance) with Intel Xeon
+Skylake (or newer) CPU that supports AVX-512 instructions and an NVIDIA Volta V100 (or newer) GPU.
+All benchmark runs are single-core and have relatively low memory-requirement. For building or running
+the Docker image (and more specifically the NMODL Framework) we, however, recommend a system with plenty
+of cores, at least 32GB of RAM available and 20 GB of disk space.
 
 ### Software requisites
 
@@ -46,6 +46,6 @@ reproduced, an up-to-date CUDA (11.0 or newer) should be present.
 
 ### Expectations
 
-We expect that all setup and benchmarks can be completed within one working day. The expected time for building
-the docker image is around 10 minutes using a modern multicore system with a stable internet connection.
-The expected runtime of the benchmarks is around 4 hours.
+We expect that all setup and benchmarks can be completed within one working day. The expected time for
+building or pulling the docker image is around 10 minutes using a modern multicore system with a stable
+internet connection. The expected runtime of the benchmarks is around 5 hours.
