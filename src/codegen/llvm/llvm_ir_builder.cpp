@@ -261,11 +261,11 @@ llvm::Value* BaseBuilder::create_atomic_op(llvm::Value* ptr, llvm::Value* update
     if (op == ast::BinaryOp::BOP_SUBTRACTION) {
         update = builder.CreateFNeg(update);
     }
-    builder.CreateAtomicRMW(llvm::AtomicRMWInst::FAdd,
-                            ptr,
-                            update,
-                            llvm::MaybeAlign(),
-                            llvm::AtomicOrdering::SequentiallyConsistent);
+    return builder.CreateAtomicRMW(llvm::AtomicRMWInst::FAdd,
+                                   ptr,
+                                   update,
+                                   llvm::MaybeAlign(),
+                                   llvm::AtomicOrdering::SequentiallyConsistent);
 }
 
 llvm::Value* BaseBuilder::create_bitcast(llvm::Value* value, llvm::Type* type) {
