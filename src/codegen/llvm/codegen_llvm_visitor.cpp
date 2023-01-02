@@ -76,7 +76,7 @@ void CodegenLLVMVisitor::create_external_function_call(const std::string& name,
         argument_types.push_back(type);
         argument_values.push_back(value);
     }
-    ir_builder.create_intrinsic(name, argument_values, argument_types);
+    ir_builder.generate_intrinsic(name, argument_values, argument_types);
 }
 
 void CodegenLLVMVisitor::create_function_call(llvm::Function* func,
@@ -91,7 +91,7 @@ void CodegenLLVMVisitor::create_function_call(llvm::Function* func,
     ValueVector argument_values;
     argument_values.reserve(arguments.size());
     create_function_call_arguments(arguments, argument_values);
-    ir_builder.create_function_call(func, argument_values);
+    ir_builder.generate_function_call(func, argument_values);
 }
 
 void CodegenLLVMVisitor::create_function_call_arguments(const ast::ExpressionVector& arguments,
@@ -161,7 +161,7 @@ void CodegenLLVMVisitor::create_printf_call(const ast::ExpressionVector& argumen
     ValueVector argument_values;
     argument_values.reserve(arguments.size());
     create_function_call_arguments(arguments, argument_values);
-    ir_builder.create_function_call(printf, argument_values, /*use_result=*/false);
+    ir_builder.generate_function_call(printf, argument_values, /*use_result=*/false);
 }
 
 void CodegenLLVMVisitor::create_vectorized_control_flow_block(const ast::IfStatement& node) {
@@ -182,7 +182,7 @@ void CodegenLLVMVisitor::create_vectorized_control_flow_block(const ast::IfState
     }
 
     // Clear the mask value.
-    ir_builder.clear_mask();
+    ir_builder.unset_mask();
 }
 
 void CodegenLLVMVisitor::find_kernel_names(std::vector<std::string>& container) {
@@ -216,9 +216,9 @@ llvm::Type* CodegenLLVMVisitor::get_codegen_var_type(const ast::CodegenVarType& 
 llvm::Value* CodegenLLVMVisitor::get_index(const ast::IndexedName& node) {
     // In NMODL, the index is either an integer expression or a named constant, such as "id".
     llvm::Value* index_value = node.get_length()->is_name()
-                                   ? ir_builder.create_load(node.get_length()->get_node_name())
+                                   ? ir_builder.create_load_direct(node.get_length()->get_node_name())
                                    : accept_and_get(node.get_length());
-    return ir_builder.create_index(index_value);
+    return ir_builder.into_index(index_value);
 }
 
 llvm::Type* CodegenLLVMVisitor::get_instance_struct_type() {
@@ -262,36 +262,6 @@ int CodegenLLVMVisitor::get_num_elements(const ast::IndexedName& node) {
     return static_cast<int>(*macro->get_value());
 }
 
-/**
- * Currently, functions are identified as compute kernels if they satisfy the following:
- *   1. They have a void return type
- *   2. They have a single argument
- *   3. The argument is a struct type pointer
- * This is not robust, and hence it would be better to find what functions are kernels on the NMODL
- * AST side (e.g. via a flag, or via names list).
- *
- * \todo identify kernels on NMODL AST side.
- */
-bool CodegenLLVMVisitor::is_kernel_function(const std::string& function_name) {
-    llvm::Function* function = module->getFunction(function_name);
-    if (!function)
-        throw std::runtime_error("Error: function " + function_name + " does not exist\n");
-
-    // By convention, only kernel functions have a return type of void and single argument. The
-    // number of arguments check is needed to avoid LLVM void intrinsics to be considered as
-    // kernels.
-    if (!function->getReturnType()->isVoidTy() || !llvm::hasSingleElement(function->args()))
-        return false;
-
-    // Kernel's argument is a pointer to the instance struct type.
-    llvm::Type* arg_type = function->getArg(0)->getType();
-    if (auto pointer_type = llvm::dyn_cast<llvm::PointerType>(arg_type)) {
-        if (pointer_type->getElementType()->isStructTy())
-            return true;
-    }
-    return false;
-}
-
 llvm::Value* CodegenLLVMVisitor::read_from_or_write_to_instance(const ast::CodegenInstanceVar& node,
                                                                 llvm::Value* maybe_value_to_store) {
     const auto& instance_name = node.get_instance_var()->get_node_name();
@@ -303,21 +273,21 @@ llvm::Value* CodegenLLVMVisitor::read_from_or_write_to_instance(const ast::Codeg
                                  " is not a member of the instance variable\n");
 
     // Load the instance struct by its name.
-    llvm::Value* instance_ptr = ir_builder.create_load(instance_name);
+    llvm::Value* instance_ptr = ir_builder.create_load_direct(instance_name);
 
     // Get the pointer to the specified member.
     int member_index = instance_var_helper.get_variable_index(member_name);
-    llvm::Value* member_ptr = ir_builder.get_struct_member_ptr(instance_ptr, member_index);
+    llvm::Value* member_ptr = ir_builder.create_struct_field_ptr(instance_ptr, member_index);
 
     // Check if the member is scalar. Load the value or store to it straight away. Otherwise, we
     // need some extra handling.
     auto codegen_var_with_type = instance_var_helper.get_variable(member_name);
     if (!codegen_var_with_type->get_is_pointer()) {
         if (maybe_value_to_store) {
-            ir_builder.create_store(member_ptr, maybe_value_to_store);
+            ir_builder.create_store_direct(member_ptr, maybe_value_to_store);
             return nullptr;
         } else {
-            return ir_builder.create_load(member_ptr);
+            return ir_builder.create_load_direct(member_ptr);
         }
     }
 
@@ -337,7 +307,7 @@ llvm::Value* CodegenLLVMVisitor::read_from_or_write_to_instance(const ast::Codeg
     const std::string id = member_indexed_name->get_length()->get_node_name();
 
     // Load the member of the instance struct.
-    llvm::Value* instance_member = ir_builder.create_load(member_ptr);
+    llvm::Value* instance_member = ir_builder.create_load_direct(member_ptr);
 
     // Create a pointer to the specified element of the struct member.
     return ir_builder.load_to_or_store_from_array(id,
@@ -350,14 +320,15 @@ llvm::Value* CodegenLLVMVisitor::read_variable(const ast::VarName& node) {
     const auto& identifier = node.get_name();
 
     if (identifier->is_name()) {
-        return ir_builder.create_load(node.get_node_name(),
-                                      /*masked=*/ir_builder.generates_predicated_ir());
+        bool masked = ir_builder.generating_masked_vector_ir();
+        return ir_builder.create_load_direct(node.get_node_name(), masked);
     }
 
     if (identifier->is_indexed_name()) {
         const auto& indexed_name = std::dynamic_pointer_cast<ast::IndexedName>(identifier);
         llvm::Value* index = get_index(*indexed_name);
-        return ir_builder.create_load_from_array(node.get_node_name(), index);
+        llvm::Value* element_ptr = ir_builder.create_inbounds_gep(node.get_node_name(), index);
+        return ir_builder.create_load_direct(element_ptr);
     }
 
     if (identifier->is_codegen_instance_var()) {
@@ -378,13 +349,14 @@ void CodegenLLVMVisitor::write_to_variable(const ast::VarName& node, llvm::Value
     }
 
     if (identifier->is_name()) {
-        ir_builder.create_store(node.get_node_name(), value);
+        ir_builder.create_store_direct(node.get_node_name(), value);
     }
 
     if (identifier->is_indexed_name()) {
         const auto& indexed_name = std::dynamic_pointer_cast<ast::IndexedName>(identifier);
         llvm::Value* index = get_index(*indexed_name);
-        ir_builder.create_store_to_array(node.get_node_name(), index, value);
+        llvm::Value* element_ptr = ir_builder.create_inbounds_gep(node.get_node_name(), index);
+        ir_builder.create_store_direct(element_ptr, value);
     }
 
     if (identifier->is_codegen_instance_var()) {
@@ -414,7 +386,7 @@ void CodegenLLVMVisitor::visit_binary_expression(const ast::BinaryExpression& no
     }
 
     llvm::Value* lhs = accept_and_get(node.get_lhs());
-    ir_builder.create_binary_op(lhs, rhs, op);
+    ir_builder.generate_binary_op(lhs, rhs, op);
 }
 
 void CodegenLLVMVisitor::visit_statement_block(const ast::StatementBlock& node) {
@@ -426,7 +398,7 @@ void CodegenLLVMVisitor::visit_statement_block(const ast::StatementBlock& node) 
 }
 
 void CodegenLLVMVisitor::visit_boolean(const ast::Boolean& node) {
-    ir_builder.create_boolean_constant(node.get_value());
+    ir_builder.generate_boolean_constant(node.get_value());
 }
 
 void CodegenLLVMVisitor::visit_codegen_atomic_statement(const ast::CodegenAtomicStatement& node) {
@@ -445,15 +417,15 @@ void CodegenLLVMVisitor::visit_codegen_atomic_statement(const ast::CodegenAtomic
         write_to_variable(*var, rhs);
         return;
     }
-    ast::BinaryOp op = ir_builder.extract_atomic_op(atomic_op);
+    ast::BinaryOp op = ir_builder.into_atomic_op(atomic_op);
 
     // For different platforms, we handle atomic updates differently!
 
     // For non-SIMD CPUs (or any scalar code on SIMD CPUs), updates don't have to be atomic at all!
     const bool non_SIMD_cpu = platform.is_cpu() && !platform.is_cpu_with_simd();
-    if (non_SIMD_cpu || (platform.is_cpu_with_simd() && !ir_builder.vectorizing())) {
+    if (non_SIMD_cpu || (platform.is_cpu_with_simd() && !ir_builder.generating_vector_ir())) {
         llvm::Value* lhs = accept_and_get(node.get_lhs());
-        ir_builder.create_binary_op(lhs, rhs, op);
+        ir_builder.generate_binary_op(lhs, rhs, op);
         llvm::Value* result = ir_builder.pop_last_value();
 
         write_to_variable(*var, result);
@@ -492,10 +464,10 @@ void CodegenLLVMVisitor::visit_codegen_atomic_statement(const ast::CodegenAtomic
         throw std::runtime_error("Error: " + member_name + " must be indexed with a variable!");
 
     // First, load the pointer variable from instance struct and process its index.
-    llvm::Value* instance_ptr = ir_builder.create_load(instance_name);
+    llvm::Value* instance_ptr = ir_builder.create_load_direct(instance_name);
     const int member_index = instance_var_helper.get_variable_index(member_name);
-    llvm::Value* member_ptr = ir_builder.get_struct_member_ptr(instance_ptr, member_index);
-    llvm::Value* instance_member = ir_builder.create_load(member_ptr);
+    llvm::Value* member_ptr = ir_builder.create_struct_field_ptr(instance_ptr, member_index);
+    llvm::Value* instance_member = ir_builder.create_load_direct(member_ptr);
     llvm::Value* i64_index = get_index(*member_indexed_name);
 
     // For GPUs, we just need to create atomic add/subtract.
@@ -544,7 +516,7 @@ void CodegenLLVMVisitor::visit_codegen_atomic_statement(const ast::CodegenAtomic
         //     offset = start + (index * sizeof(fp_type))
         // Store this vector to a temporary for later reuse.
         llvm::Value* offsets = ir_builder.create_member_offsets(start, i64_index);
-        ir_builder.create_store(ptrs_vec, offsets);
+        ir_builder.create_store_direct(ptrs_vec, offsets);
 
         // Step 4: Create a new block that  will be used for atomic code generation.
         llvm::BasicBlock* body_bb = ir_builder.get_current_block();
@@ -554,7 +526,7 @@ void CodegenLLVMVisitor::visit_codegen_atomic_statement(const ast::CodegenAtomic
             llvm::BasicBlock::Create(*context, /*Name=*/"atomic.update", func, cond_bb);
         llvm::BasicBlock* remaining_body_bb =
             llvm::BasicBlock::Create(*context, /*Name=*/"for.body.remaining", func, cond_bb);
-        ir_builder.create_br_and_set_insertion_point(atomic_bb);
+        ir_builder.generate_br_and_set_insertion_point(atomic_bb);
 
         // Step 5: Generate code for the atomic update: go through each element in the vector
         // performing the computation.
@@ -600,7 +572,7 @@ void CodegenLLVMVisitor::visit_codegen_atomic_statement(const ast::CodegenAtomic
 //  +---------------------------+
 void CodegenLLVMVisitor::visit_codegen_for_statement(const ast::CodegenForStatement& node) {
     // Condition and increment blocks must be scalar.
-    ir_builder.generate_scalar_ir();
+    ir_builder.stop_generating_ir_for_compute();
 
     // Get the current and the next blocks within the function.
     llvm::BasicBlock* curr_block = ir_builder.get_current_block();
@@ -622,7 +594,7 @@ void CodegenLLVMVisitor::visit_codegen_for_statement(const ast::CodegenForStatem
         main_loop_initialization->accept(*this);
 
     // Branch to condition basic block and insert condition code there.
-    ir_builder.create_br_and_set_insertion_point(for_cond);
+    ir_builder.generate_br_and_set_insertion_point(for_cond);
 
     // Extract the condition to decide whether to branch to the loop body or loop exit.
     llvm::Value* cond = accept_and_get(node.get_condition());
@@ -631,19 +603,19 @@ void CodegenLLVMVisitor::visit_codegen_for_statement(const ast::CodegenForStatem
 
     // If not processing remainder of the loop, start vectorization.
     if (platform.is_cpu_with_simd() && main_loop_initialization)
-        ir_builder.generate_vector_ir();
+        ir_builder.start_generating_ir_for_compute();
 
     // Generate code for the loop body and create the basic block for the increment.
     const auto& statement_block = node.get_statement_block();
     statement_block->accept(*this);
-    ir_builder.generate_scalar_ir();
-    ir_builder.create_br_and_set_insertion_point(for_inc);
+    ir_builder.stop_generating_ir_for_compute();
+    ir_builder.generate_br_and_set_insertion_point(for_inc);
 
     // Process the increment.
     node.get_increment()->accept(*this);
 
     // Create a branch to condition block, then generate exit code out of the loop.
-    ir_builder.create_br(for_cond);
+    ir_builder.generate_br(for_cond);
     ir_builder.set_insertion_point(exit);
 }
 
@@ -682,15 +654,9 @@ void CodegenLLVMVisitor::visit_codegen_function(const ast::CodegenFunction& node
     // vectorization. If this is the case, the return statement is handled in a
     // separate visitor.
     if (node.get_is_kernel()) {
-        if (platform.is_cpu_with_simd()) {
-            ir_builder.generate_vector_ir();
-            block->accept(*this);
-            ir_builder.generate_scalar_ir();
-        } else if (platform.is_gpu()) {
-            block->accept(*this);
-        } else {  // scalar
-            block->accept(*this);
-        }
+        ir_builder.start_generating_ir_for_compute();
+        block->accept(*this);
+        ir_builder.stop_generating_ir_for_compute();
     } else {
         block->accept(*this);
     }
@@ -699,11 +665,11 @@ void CodegenLLVMVisitor::visit_codegen_function(const ast::CodegenFunction& node
     // `CodegenReturnVar` node. Also, set the necessary attributes.
     if (node.get_is_kernel()) {
         custom::Annotator::add_nmodl_compute_kernel_annotation(*func);
-        ir_builder.create_return();
+        ir_builder.generate_return();
     }
 
     // Clear local values stack and remove the pointer to the local symbol table.
-    ir_builder.clear_function();
+    ir_builder.unset_function();
 }
 
 void CodegenLLVMVisitor::visit_codegen_grid_stride(const ast::CodegenGridStride& node) {
@@ -715,8 +681,8 @@ void CodegenLLVMVisitor::visit_codegen_return_statement(const ast::CodegenReturn
         throw std::runtime_error("Error: CodegenReturnStatement must contain a name node\n");
 
     std::string ret = "ret_" + ir_builder.get_current_function_name();
-    llvm::Value* ret_value = ir_builder.create_load(ret);
-    ir_builder.create_return(ret_value);
+    llvm::Value* ret_value = ir_builder.create_load_direct(ret);
+    ir_builder.generate_return(ret_value);
 }
 
 void CodegenLLVMVisitor::visit_codegen_thread_id(const ast::CodegenThreadId& node) {
@@ -737,7 +703,14 @@ void CodegenLLVMVisitor::visit_codegen_var_list_statement(
             int length = get_num_elements(*indexed_name);
             ir_builder.create_array_alloca(name, scalar_type, length);
         } else if (identifier->is_name()) {
-            ir_builder.create_scalar_or_vector_alloca(name, scalar_type);
+            llvm::Type* type;
+            if (platform.is_cpu_with_simd() && ir_builder.generating_vector_ir() && name != naming::INDUCTION_VAR &&
+                name.rfind("epilogue", 0)) {
+                type = llvm::FixedVectorType::get(scalar_type, platform.get_instruction_width());
+            } else {
+                type = scalar_type;
+            }
+            ir_builder.create_alloca(name, type);
         } else {
             throw std::runtime_error("Error: unsupported local variable type\n");
         }
@@ -745,11 +718,11 @@ void CodegenLLVMVisitor::visit_codegen_var_list_statement(
 }
 
 void CodegenLLVMVisitor::visit_double(const ast::Double& node) {
-    ir_builder.create_fp_constant(node.get_value());
+    ir_builder.generate_fp_constant(node.get_value());
 }
 
 void CodegenLLVMVisitor::visit_float(const ast::Float& node) {
-    ir_builder.create_fp_constant(node.get_value());
+    ir_builder.generate_fp_constant(node.get_value());
 }
 
 void CodegenLLVMVisitor::visit_function_block(const ast::FunctionBlock& node) {
@@ -773,7 +746,7 @@ void CodegenLLVMVisitor::visit_function_call(const ast::FunctionCall& node) {
 
 void CodegenLLVMVisitor::visit_if_statement(const ast::IfStatement& node) {
     // If vectorizing the compute kernel with control flow, process it separately.
-    if (platform.is_cpu_with_simd() && ir_builder.vectorizing()) {
+    if (platform.is_cpu_with_simd() && ir_builder.generating_vector_ir()) {
         create_vectorized_control_flow_block(node);
         return;
     }
@@ -793,7 +766,7 @@ void CodegenLLVMVisitor::visit_if_statement(const ast::IfStatement& node) {
     // Process the true block.
     ir_builder.set_insertion_point(true_block);
     node.get_statement_block()->accept(*this);
-    ir_builder.create_br(merge_block);
+    ir_builder.generate_br(merge_block);
 
     // Save the merge block and proceed with codegen for `else if` statements.
     llvm::BasicBlock* exit = merge_block;
@@ -814,12 +787,12 @@ void CodegenLLVMVisitor::visit_if_statement(const ast::IfStatement& node) {
         llvm::BasicBlock* tmp = merge_block;
         merge_block = llvm::BasicBlock::Create(*context, /*Name=*/"", func, merge_block);
         ir_builder.set_insertion_point(merge_block);
-        ir_builder.create_br(tmp);
+        ir_builder.generate_br(tmp);
 
         // Process true block.
         ir_builder.set_insertion_point(true_block);
         else_if->get_statement_block()->accept(*this);
-        ir_builder.create_br(merge_block);
+        ir_builder.generate_br(merge_block);
         curr_block = else_block;
     }
 
@@ -830,7 +803,7 @@ void CodegenLLVMVisitor::visit_if_statement(const ast::IfStatement& node) {
         else_block = llvm::BasicBlock::Create(*context, /*Name=*/"", func, merge_block);
         ir_builder.set_insertion_point(else_block);
         elses->get_statement_block()->accept(*this);
-        ir_builder.create_br(merge_block);
+        ir_builder.generate_br(merge_block);
     } else {
         else_block = merge_block;
     }
@@ -840,7 +813,7 @@ void CodegenLLVMVisitor::visit_if_statement(const ast::IfStatement& node) {
 }
 
 void CodegenLLVMVisitor::visit_integer(const ast::Integer& node) {
-    ir_builder.create_i32_constant(node.get_value());
+    ir_builder.generate_i32_constant(node.get_value());
 }
 
 void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
@@ -852,10 +825,6 @@ void CodegenLLVMVisitor::visit_program(const ast::Program& node) {
     const auto& functions = v.get_codegen_functions(node);
     instance_var_helper = v.get_instance_var_helper();
     program_symtab = node.get_symbol_table();
-    std::string kernel_id = v.get_kernel_id();
-
-    // Initialize the builder for this NMODL program.
-    ir_builder.initialize(*program_symtab, kernel_id);
 
     // Create compile unit if adding debug information to the module.
     if (add_debug_information) {
@@ -1157,12 +1126,12 @@ void CodegenLLVMVisitor::visit_procedure_block(const ast::ProcedureBlock& node) 
 void CodegenLLVMVisitor::visit_unary_expression(const ast::UnaryExpression& node) {
     ast::UnaryOp op = node.get_op().get_value();
     llvm::Value* value = accept_and_get(node.get_expression());
-    ir_builder.create_unary_op(value, op);
+    ir_builder.generate_unary_op(value, op);
 }
 
 void CodegenLLVMVisitor::visit_var_name(const ast::VarName& node) {
     llvm::Value* value = read_variable(node);
-    ir_builder.maybe_replicate_value(value);
+    ir_builder.generate_broadcast(value);
 }
 
 void CodegenLLVMVisitor::visit_while_statement(const ast::WhileStatement& node) {
@@ -1176,7 +1145,7 @@ void CodegenLLVMVisitor::visit_while_statement(const ast::WhileStatement& node) 
     llvm::BasicBlock* body = llvm::BasicBlock::Create(*context, /*Name=*/"", func, next);
     llvm::BasicBlock* exit = llvm::BasicBlock::Create(*context, /*Name=*/"", func, next);
 
-    ir_builder.create_br_and_set_insertion_point(header);
+    ir_builder.generate_br_and_set_insertion_point(header);
 
 
     // Generate code for condition and create branch to the body block.
@@ -1185,7 +1154,7 @@ void CodegenLLVMVisitor::visit_while_statement(const ast::WhileStatement& node) 
 
     ir_builder.set_insertion_point(body);
     node.get_statement_block()->accept(*this);
-    ir_builder.create_br(header);
+    ir_builder.generate_br(header);
 
     ir_builder.set_insertion_point(exit);
 }

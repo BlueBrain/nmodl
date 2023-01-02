@@ -66,7 +66,7 @@ class CodegenLLVMVisitor: public CodegenCVisitor {
     std::unique_ptr<llvm::Module> module = std::make_unique<llvm::Module>(mod_filename, *context);
 
     /// LLVM IR builder.
-    IRBuilder ir_builder;
+    BaseBuilder ir_builder;
 
     /// Debug information builder.
     DebugBuilder debug_builder;
@@ -345,9 +345,6 @@ class CodegenLLVMVisitor: public CodegenCVisitor {
 
     /// Returns the number of elements in the array specified by the IndexedName AST node.
     int get_num_elements(const ast::IndexedName& node);
-
-    /// Returns whether the function is an NMODL compute kernel.
-    bool is_kernel_function(const std::string& function_name);
 
     /// If the value to store is specified, writes it to the instance. Otherwise, returns the
     /// instance variable.

@@ -143,10 +143,6 @@ class CodegenLLVMHelperVisitor: public visitor::AstVisitor {
         return instance_var_helper;
     }
 
-    std::string get_kernel_id() {
-        return naming::INDUCTION_VAR;
-    }
-
     /// run visitor and return code generation functions
     CodegenFunctionVector get_codegen_functions(const ast::Program& node);
 
