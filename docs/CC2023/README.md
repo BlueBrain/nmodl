@@ -1,7 +1,26 @@
 
 # MOD2IR: High-Performance Code Generation for a Biophysically Detailed Neuronal Simulation DSL
 
-Please refer to the PAD.md file for an overview and necessary prerequisites.
+## Artifact Description
+
+MOD2IR is implemented as a code generation backend inside the NMODL Framework and it makes heavy
+use of the LLVM IR and compilation passes. Most of the relevant code of the described work can be
+found [here](https://github.com/BlueBrain/nmodl/tree/llvm/src/codegen/llvm) and
+[here](https://github.com/BlueBrain/nmodl/tree/llvm/test/benchmark).
+
+### Hardware Requirements
+
+The provided artifact can in theory be run on any x86 hardware platform. For the purpose of closely
+reproducing our benchmark results it is required a workstation (or cloud instance) with Intel Xeon
+Skylake (or newer) CPU that supports AVX-512 instructions and an NVIDIA Volta V100 (or newer) GPU.
+All benchmark runs are single-core and have relatively low memory-requirement. For building or running
+the Docker image (and more specifically the NMODL Framework) we, however, recommend a system with plenty
+of cores, at least 32GB of RAM available and 20 GB of disk space.
+
+### Software Requirements
+
+Any reasonably up-to-date Linux system with Docker should be sufficient. If GPU results are to be
+reproduced, an up-to-date CUDA (11.0 or newer) should be present.
 
 ## Benchmarking Instructions
 
@@ -21,7 +40,7 @@ To launch the Docker image you can execute the following:
 
 ```
 git clone -b llvm https://github.com/BlueBrain/nmodl.git
-cd nmodl/test/benchnark/gpu_docker  # Enter the directory that contains the Dockerfile (based on Ubuntu 22.04 but with small changes in should be supported by any Ubuntu version or other linux distributions)
+cd nmodl/test/benchmark/gpu_docker  # Enter the directory that contains the Dockerfile (based on Ubuntu 22.04 but with small changes in should be supported by any Ubuntu version or other linux distributions)
 bash install_gpu_docker_env.sh  # Installs docker and NVIDIA docker runtime (needs sudo permission)
 docker run -it -v $PWD:/opt/mount --gpus all bluebrain/nmodl:mod2ir-gpu-benchmark # Execute docker image (~16GB)
 ```
@@ -50,7 +69,6 @@ CPU only container.
 To do this you need to:
 
 ```
-cd test/benchnark/cpu_docker  # Enter the directory that contains the Dockerfile
 docker run -it -v $PWD:/opt/mount bluebrain/nmodl:mod2ir-cpu-benchmark # Execute docker image (~16GB)
 ```
 
