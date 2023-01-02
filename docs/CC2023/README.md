@@ -87,7 +87,8 @@ generated containing the CPU results.
 
 ## Notes
 
-1. Acceleration results with `GCC` compiler might be better in the docker container than the paper
-   due to the newer OS we're using in the Dockerfile. Latest Ubuntu versions come with GLIBC 2.3x that
-   includes `libmvec` which provides vectorized implementations to the `GCC` compiler enabling the
-   vectorization of the kernels even without providing the `SVML` library to `GCC`.
+1. Acceleration results with `GCC` and `NVHPC` compilers might be better in the docker container than
+   the paper due to the newer OS we're using in the Dockerfile. Latest Ubuntu versions come with
+   GLIBC 2.3x that includes `libmvec` which provides vectorized implementations to the `GCC` and
+   `NVHPC` compilers (which is using `GCC` as the base compiler) enabling the vectorization of the
+   kernels even without providing the `SVML` library to `GCC`.
