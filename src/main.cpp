@@ -66,6 +66,9 @@ int main(int argc, const char* argv[]) {
     /// the number of repeated experiments for the benchmarking
     int num_experiments = 100;
 
+    /// benchmark external kernel with JIT
+    std::string external_kernel_library;
+
     /// X dimension of grid in blocks for GPU execution
     int llvm_cuda_grid_dim_x = 1;
 
@@ -268,6 +271,9 @@ int main(int argc, const char* argv[]) {
     benchmark_opt->add_option("--repeat",
                               num_experiments,
                               fmt::format("Number of experiments for benchmarking ({})", num_experiments))->ignore_case();
+    benchmark_opt->add_option("--external",
+                              external_kernel_library,
+                              fmt::format("Benchmark external kernels from shared library({})", external_kernel_library))->ignore_case()->check(CLI::ExistingFile);
     benchmark_opt->add_option("--grid-dim-x",
                               llvm_cuda_grid_dim_x,
                               fmt::format("Grid dimension X ({})", llvm_cuda_grid_dim_x))->ignore_case();
@@ -447,6 +453,7 @@ int main(int argc, const char* argv[]) {
                                                        platform,
                                                        cfg.llvm_opt_level_ir,
                                                        cfg.llvm_opt_level_codegen,
+                                                       external_kernel_library,
                                                        gpu_execution_parameters);
                     benchmark.run();
                 }

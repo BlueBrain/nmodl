@@ -82,7 +82,7 @@ add_compile_options(${NMODL_COMPILER_WARNING_SUPPRESSIONS})
 # =============================================================================
 project(
   NMODL
-  VERSION ${NMODL_GIT_LAST_TAG}
+  VERSION "1.0"
   LANGUAGES CXX)
 
 # =============================================================================

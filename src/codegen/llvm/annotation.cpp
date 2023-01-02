@@ -59,7 +59,10 @@ void DefaultCPUAnnotator::annotate(llvm::Function& function) const {
     function.addParamAttr(0, llvm::Attribute::ReadOnly);
 }
 
-void CUDAAnnotator::annotate(llvm::Function& function) const {    
+void CUDAAnnotator::annotate(llvm::Function& function) const {
+    // Add the `noalias` attribute similarly to the DefaultCPUAnnotator
+    function.addParamAttr(0, llvm::Attribute::NoAlias);
+
     llvm::LLVMContext& context = function.getContext();
     llvm::Module* m = function.getParent();
 

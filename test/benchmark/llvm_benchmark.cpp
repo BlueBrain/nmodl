@@ -7,6 +7,7 @@
 
 #include <chrono>
 #include <cmath>
+#include <dlfcn.h>
 #include <numeric>
 
 #include "llvm_benchmark.hpp"
@@ -14,11 +15,8 @@
 #include "utils/logger.hpp"
 #include "llvm/Support/Host.h"
 
+#include "ext_kernel.hpp"
 #include "test/unit/codegen/codegen_data_helper.hpp"
-
-#ifdef NMODL_LLVM_CUDA_BACKEND
-#include "test/benchmark/cuda_driver.hpp"
-#endif
 
 namespace nmodl {
 namespace benchmark {
@@ -45,30 +43,64 @@ BenchmarkResults LLVMBenchmark::run() {
 
     std::unique_ptr<llvm::Module> m = llvm_visitor.get_module();
 
-    // Create the benchmark runner and initialize it.
+    if (external_kernel_library.empty()) {
+        // Create the benchmark runner and initialize it.
 #ifdef NMODL_LLVM_CUDA_BACKEND
-    if (platform.is_CUDA_gpu()) {
-        std::string filename = "cuda_" + mod_filename;
-        cuda_runner = std::make_unique<runner::BenchmarkGPURunner>(
-            std::move(m), filename, output_dir, shared_libs, opt_level_ir, opt_level_codegen);
-        cuda_runner->initialize_driver(platform);
-    } else {
+        if (platform.is_CUDA_gpu()) {
+            std::string filename = "cuda_" + mod_filename;
+            cuda_runner = std::make_unique<runner::BenchmarkGPURunner>(
+                std::move(m), filename, output_dir, shared_libs, opt_level_ir, opt_level_codegen);
+            cuda_runner->initialize_driver(platform);
+        } else {
 #endif
-        std::string filename = "v" + std::to_string(llvm_visitor.get_vector_width()) + "_" +
-                               mod_filename;
-        cpu_runner = std::make_unique<runner::BenchmarkRunner>(std::move(m),
-                                                               filename,
-                                                               output_dir,
-                                                               backend_name,
-                                                               shared_libs,
-                                                               opt_level_ir,
-                                                               opt_level_codegen);
-        cpu_runner->initialize_driver();
+            std::string filename = "v" + std::to_string(llvm_visitor.get_vector_width()) + "_" +
+                                mod_filename;
+            cpu_runner = std::make_unique<runner::BenchmarkRunner>(std::move(m),
+                                                                filename,
+                                                                output_dir,
+                                                                backend_name,
+                                                                shared_libs,
+                                                                opt_level_ir,
+                                                                opt_level_codegen);
+            cpu_runner->initialize_driver();
 #ifdef NMODL_LLVM_CUDA_BACKEND
+        }
+#endif
     }
-#endif
 
     BenchmarkResults results{};
+
+    // Kernel functions pointers from the external shared library loaded
+    std::unordered_map<std::string, void (*)(void* __restrict__)> kernel_functions;
+    void* external_kernel_lib_handle = nullptr;
+    if (!external_kernel_library.empty()) {
+        // benchmark external kernel
+        logger->info("Benchmarking external kernels");
+        kernel_names = {"nrn_cur_ext", "nrn_state_ext"};
+        std::unordered_map<std::string, std::string> kernel_names_map = {
+            {"nrn_cur_ext", "_Z11nrn_cur_extPv"},
+            {"nrn_state_ext", "_Z13nrn_state_extPv"}
+        };
+        // Dlopen the shared library
+        logger->info("Loading external kernel library: {}", external_kernel_library);
+        external_kernel_lib_handle = dlopen(external_kernel_library.c_str(), RTLD_LAZY);
+        if (!external_kernel_lib_handle) {
+            logger->error("Cannot open shared library: {}", dlerror());
+            exit(EXIT_FAILURE);
+        }
+        // Get the function pointers
+        for (auto& kernel_name: kernel_names) {
+            auto func_ptr = dlsym(external_kernel_lib_handle, kernel_names_map[kernel_name].c_str());
+            if (!func_ptr) {
+                logger->error("Cannot find function {} in shared library {}",
+                              kernel_name,
+                              external_kernel_library);
+                exit(EXIT_FAILURE);
+            }
+            kernel_functions[kernel_name] = reinterpret_cast<void (*)(void* __restrict__)>(
+                func_ptr);
+        }
+    }
     // Benchmark every kernel.
     for (const auto& kernel_name: kernel_names) {
         // For every kernel run the benchmark `num_experiments` times and collect runtimes.
@@ -76,7 +108,11 @@ BenchmarkResults LLVMBenchmark::run() {
         for (int i = 0; i < num_experiments; ++i) {
             // Initialise the data.
             auto instance_data = codegen_data.create_data(instance_size, /*seed=*/1);
-
+#ifdef NMODL_LLVM_CUDA_BACKEND
+            if (platform.is_CUDA_gpu()) {
+                instance_data.copy_instance_data_gpu();
+            }
+#endif
             // Log instance size once.
             if (i == 0) {
                 double size_mbs = instance_data.num_bytes / (1024.0 * 1024.0);
@@ -84,24 +120,44 @@ BenchmarkResults LLVMBenchmark::run() {
             }
 
             // Record the execution time of the kernel.
-            auto start = std::chrono::steady_clock::now();
+            std::chrono::steady_clock::time_point start, end;
+            if (!external_kernel_library.empty()) {
+                if (platform.is_CUDA_gpu()) {
+                    start = std::chrono::steady_clock::now();
+                    kernel_functions[kernel_name](instance_data.dev_base_ptr);
+                    end = std::chrono::steady_clock::now();
+                } else {
+                    start = std::chrono::steady_clock::now();
+                    kernel_functions[kernel_name](instance_data.base_ptr);
+                    end = std::chrono::steady_clock::now();
+                }
+            } else {
+#ifdef NMODL_LLVM_CUDA_BACKEND
+                if (platform.is_CUDA_gpu()) {
+                    start = std::chrono::steady_clock::now();
+                    cuda_runner->run_with_argument<void*>(kernel_name,
+                                                          instance_data.dev_base_ptr,
+                                                          gpu_execution_parameters);
+                    end = std::chrono::steady_clock::now();
+                } else {
+#endif
+                    start = std::chrono::steady_clock::now();
+                    cpu_runner->run_with_argument<int, void*>(kernel_name, instance_data.base_ptr);
+                    end = std::chrono::steady_clock::now();
+#ifdef NMODL_LLVM_CUDA_BACKEND
+                }
+#endif
+            }
+            std::chrono::duration<double> diff = end - start;
 #ifdef NMODL_LLVM_CUDA_BACKEND
             if (platform.is_CUDA_gpu()) {
-                cuda_runner->run_with_argument<void*>(kernel_name,
-                                                      instance_data.base_ptr,
-                                                      gpu_execution_parameters);
-            } else {
-#endif
-                cpu_runner->run_with_argument<int, void*>(kernel_name, instance_data.base_ptr);
-#ifdef NMODL_LLVM_CUDA_BACKEND
+                instance_data.copy_instance_data_host();
             }
 #endif
-            auto end = std::chrono::steady_clock::now();
-            std::chrono::duration<double> diff = end - start;
-
             // Log the time taken for each run.
             logger->debug("Experiment {} compute time = {:.6f} sec", i, diff.count());
 
+            // Update statistics.
             times[i] = diff.count();
         }
         // Calculate statistics
@@ -122,6 +178,10 @@ BenchmarkResults LLVMBenchmark::run() {
         logger->info("Minimum compute time = {:.6f}", time_min);
         logger->info("Maximum compute time = {:.6f}\n", time_max);
         results[kernel_name] = {time_mean, time_stdev, time_min, time_max};
+    }
+    // Close handle of shared library in case it was dlopened.
+    if (external_kernel_lib_handle) {
+        dlclose(external_kernel_lib_handle);
     }
     return results;
 }

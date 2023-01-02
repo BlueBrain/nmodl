@@ -32,11 +32,18 @@ struct CodegenInstanceData {
     /// to instance struct at run time
     void* base_ptr = nullptr;
 
+    /// base pointer on the device which can be type casted
+    /// to instance struct at run time
+    void* dev_base_ptr = nullptr;
+
     /// length of each member of pointer type
     size_t num_elements = 0;
 
     /// number of pointer members
     size_t num_ptr_members = 0;
+
+    /// size of member type. If member is ptr size of elements of the vector
+    std::vector<size_t> members_size;
 
     /// offset relative to base_ptr to locate
     /// each member variable in instance struct
@@ -46,8 +53,18 @@ struct CodegenInstanceData {
     /// i.e. *(base_ptr + offsets[0]) will be members[0]
     std::vector<void*> members;
 
+    /// pointer to array allocated for each member variable on the device
+    /// i.e. *(dev_base_ptr + offsets[0]) will be dev_members[0]
+    std::vector<void*> dev_members;
+
     /// size in bytes
     size_t num_bytes = 0;
+
+    /// copy instance data to device
+    void copy_instance_data_gpu();
+
+    /// copy instance data to host
+    void copy_instance_data_host();
 
     // cleanup all memory allocated for type and member variables
     ~CodegenInstanceData();

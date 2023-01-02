@@ -69,6 +69,9 @@ class LLVMBenchmark {
     /// Optimisation level for machine code generation.
     int opt_level_codegen;
 
+    /// Benchmark external kernel
+    std::string external_kernel_library;
+
     /// Filestream for dumping logs to the file.
     std::ofstream ofs;
 
@@ -89,7 +92,8 @@ class LLVMBenchmark {
                   int instance_size,
                   const Platform& platform,
                   int opt_level_ir,
-                  int opt_level_codegen)
+                  int opt_level_codegen,
+                  std::string external_kernel_library)
         : llvm_visitor(llvm_visitor)
         , mod_filename(mod_filename)
         , output_dir(output_dir)
@@ -98,7 +102,8 @@ class LLVMBenchmark {
         , instance_size(instance_size)
         , platform(platform)
         , opt_level_ir(opt_level_ir)
-        , opt_level_codegen(opt_level_codegen) {}
+        , opt_level_codegen(opt_level_codegen)
+        , external_kernel_library(external_kernel_library) {}
     LLVMBenchmark(codegen::CodegenLLVMVisitor& llvm_visitor,
                   const std::string& mod_filename,
                   const std::string& output_dir,
@@ -108,6 +113,7 @@ class LLVMBenchmark {
                   const Platform& platform,
                   int opt_level_ir,
                   int opt_level_codegen,
+                  std::string external_kernel_library,
                   const GPUExecutionParameters& gpu_exec_params)
         : llvm_visitor(llvm_visitor)
         , mod_filename(mod_filename)
@@ -118,6 +124,7 @@ class LLVMBenchmark {
         , platform(platform)
         , opt_level_ir(opt_level_ir)
         , opt_level_codegen(opt_level_codegen)
+        , external_kernel_library(external_kernel_library)
         , gpu_execution_parameters(gpu_exec_params) {}
 
     /// Runs the main body of the benchmark, executing the compute kernels.
