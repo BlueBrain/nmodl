@@ -211,7 +211,7 @@ class JitDriver {
                                                    0,
                                                    !cfg.llvm_no_debug,
                                                    cfg.llvm_fast_math_flags,
-                                                   true);
+                                                   false);
         visitor.visit_program(*new_node);
         const GPUExecutionParameters gpu_execution_parameters{cuda_grid_dim_x, cuda_block_dim_x};
         nmodl::benchmark::LLVMBenchmark benchmark(visitor,

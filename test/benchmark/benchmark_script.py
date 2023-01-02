@@ -274,7 +274,8 @@ class Benchmark:
         cfg.llvm_ir = True
         cfg.llvm_opt_level_ir = 3
         cfg.llvm_math_library = math_lib
-        cfg.llvm_fast_math_flags = fast_math_flags
+        if fast_math_flags is not None:
+            cfg.llvm_fast_math_flags = fast_math_flags
         if architecture != "nvptx64":
             cfg.llvm_cpu_name = architecture
         else:
@@ -388,7 +389,7 @@ class Benchmark:
                                 fast_math_flags = self.benchmark_config.llvm_fast_math_flags
                                 fast_math_name = "nnancontractafn"
                             else:
-                                fast_math_flags = [""]
+                                fast_math_flags = None
                                 fast_math_name = "nonfastmath"
                             if architecture != "nvptx64":
                                 for math_lib in self.benchmark_config.math_libraries:
