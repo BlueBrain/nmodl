@@ -296,10 +296,12 @@ llvm::Value* BaseBuilder::create_load_direct(const std::string& name, bool maske
     llvm::Type* loaded_type = ptr->getType()->getPointerElementType();
 
     // Check if the generated IR is vectorized and masked.
+    llvm::Value* loaded;
     if (masked) {
-        builder.CreateMaskedLoad(loaded_type, ptr, llvm::Align(), mask);
+        loaded = builder.CreateMaskedLoad(loaded_type, ptr, llvm::Align(), mask);
+    } else {
+        loaded = builder.CreateLoad(loaded_type, ptr);
     }
-    llvm::Value* loaded = builder.CreateLoad(loaded_type, ptr);
     value_stack.push_back(loaded);
     return loaded;
 }
@@ -308,11 +310,12 @@ llvm::Value* BaseBuilder::create_load_direct(llvm::Value* ptr, bool masked) {
     llvm::Type* loaded_type = ptr->getType()->getPointerElementType();
 
     // Check if the generated IR is vectorized and masked.
+    llvm::Value* loaded;
     if (masked) {
-        builder.CreateMaskedLoad(loaded_type, ptr, llvm::Align(), mask);
+        loaded = builder.CreateMaskedLoad(loaded_type, ptr, llvm::Align(), mask);
+    } else {
+        loaded = builder.CreateLoad(loaded_type, ptr);
     }
-
-    llvm::Value* loaded = builder.CreateLoad(loaded_type, ptr);
     value_stack.push_back(loaded);
     return loaded;
 }
