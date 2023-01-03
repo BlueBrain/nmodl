@@ -19,7 +19,7 @@ of cores, at least 32GB of RAM available and 20 GB of disk space.
 
 ### Software Requirements
 
-Any reasonably up-to-date Linux system with Docker should be sufficient. If GPU results are to be
+Any reasonably up-to-date Linux system with Docker should be sufficient (we recommend Ubuntu 22.04). If GPU results are to be
 reproduced, an up-to-date CUDA (11.0 or newer) should be present.
 
 ## Benchmarking Instructions

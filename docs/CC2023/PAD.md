@@ -22,7 +22,7 @@ The provided artifact can in theory be run on any x86 hardware platform. For the
 
 ### Software requisites
 
-Any reasonably up-to-date Linux system with Docker should be sufficient. If GPU results are to be reproduced, an up-to-date CUDA (11.0 or newer) should be present.
+Any reasonably up-to-date Linux system with Docker should be sufficient (we recommend Ubuntu 22.04). If GPU results are to be reproduced, an up-to-date CUDA (11.0 or newer) should be present.
 
 
 ### Expectations
