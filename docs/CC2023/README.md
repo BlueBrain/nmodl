@@ -19,7 +19,7 @@ of cores, at least 32GB of RAM available and 20 GB of disk space.
 
 ### Software Requirements
 
-Any reasonably up-to-date Linux system with Docker should be sufficient. If GPU results are to be
+Any reasonably up-to-date Linux system with Docker should be sufficient (we recommend Ubuntu 22.04). If GPU results are to be
 reproduced, an up-to-date CUDA (11.0 or newer) should be present.
 
 ## Benchmarking Instructions
@@ -39,8 +39,8 @@ The image that targets both CPU and GPU can be found in `test/benchmark/gpu_dock
 To launch the Docker image you can execute the following:
 
 ```
-git clone -b llvm https://github.com/BlueBrain/nmodl.git
-cd nmodl/test/benchmark/gpu_docker  # Enter the directory that contains the NVIDIA docker runtime installation script
+git clone -b mod2ir-CC2023 --depth 1 https://github.com/BlueBrain/nmodl.git
+cd nmodl/test/benchmark  # Enter the directory that contains the NVIDIA docker runtime installation script
 bash install_gpu_docker_env.sh  # Installs docker and NVIDIA docker runtime (needs sudo permission and is based on Ubuntu 22.04 but with small changes in should be supported by any Ubuntu version or other linux distributions)
 docker run -it -v $PWD:/opt/mount --gpus all bluebrain/nmodl:mod2ir-gpu-benchmark # Execute docker image (~16GB)
 ```

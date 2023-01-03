@@ -64,7 +64,7 @@ RUN apt install -y git cmake flex bison python3-pip
 RUN pip install Jinja2 PyYAML sympy pytest
 
 # Clone NMODL branch for benchmarking LLVM
-RUN git clone --recursive -b llvm https://github.com/BlueBrain/nmodl.git
+RUN git clone --recursive --branch mod2ir-CC23 --depth 1 https://github.com/BlueBrain/nmodl.git
 
 # Setup Intel compiler specific variables to the environment
 RUN echo ". /opt/intel/oneapi/setvars.sh" >> $HOME/.bashrc
