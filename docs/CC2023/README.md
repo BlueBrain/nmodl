@@ -33,7 +33,7 @@ applications on NVIDIA GPUs there are some extra steps needed. For this reason w
 different `Dockerfile`s, one that takes care of both the CPU and GPU benchmarks and one for CPU only
 execution if there is no NVIDIA GPU available in the test system.
 
-The original instructions (markdown file) with the executable script snippets can be found [here](https://github.com/BlueBrain/nmodl/blob/a65b15ca3edf9f069adb83bb78b9611d58b15a58/docs/CC2023/README.md).
+The original instructions (markdown file) with the executable script snippets can be found [here](https://github.com/BlueBrain/nmodl/blob/a0c84f9d12b560bd7cddc2e74121027aac02cbe7/docs/CC2023/README.md).
 
 ### CPU and GPU docker image
 
