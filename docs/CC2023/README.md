@@ -48,7 +48,7 @@ git clone -b mod2ir-CC2023 --depth 1 \
 cd nmodl/test/benchmark
 # Installs docker and NVIDIA docker runtime (needs sudo
 # permission and is based on Ubuntu 22.04 but with small
-# changes in should be supported by any Ubuntu version
+# changes it should be supported by any Ubuntu version
 # or other linux distributions)
 bash install_gpu_docker_env.sh
 # Execute docker image (~16GB)
@@ -110,8 +110,4 @@ generated containing the CPU results.
 
 ## Notes
 
-1. Acceleration results with `GCC` and `NVHPC` compilers might be better in the docker container than
-   the paper due to the newer OS we're using in the Dockerfile. Latest Ubuntu versions come with
-   GLIBC 2.3x that includes `libmvec` which provides vectorized implementations to the `GCC` and
-   `NVHPC` compilers (which is using `GCC` as the base compiler) enabling the vectorization of the
-   kernels even without providing the `SVML` library to `GCC`.
+1. The benchmark results with `GCC` and `NVHPC` compilers might be better in the docker container than the presented manuscript due to the newer OS we’re using in the Dockerfile. The current Ubuntu versions come with GLIBC 2.3x, which includes `libmvec` providing vectorized implementations for some mathematical functions and which is used by the `GCC` and `NVHPC` compilers. This results in much more vectorization use in the benchmark kernels even without providing the SVML library to `GCC` (or `NVHPC`).
