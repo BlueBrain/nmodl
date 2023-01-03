@@ -33,16 +33,27 @@ applications on NVIDIA GPUs there are some extra steps needed. For this reason w
 different `Dockerfile`s, one that takes care of both the CPU and GPU benchmarks and one for CPU only
 execution if there is no NVIDIA GPU available in the test system.
 
+The original instructions (markdown file) with the executable script snippets can be found [here](https://github.com/BlueBrain/nmodl/blob/a65b15ca3edf9f069adb83bb78b9611d58b15a58/docs/CC2023/README.md).
+
 ### CPU and GPU docker image
 
 The image that targets both CPU and GPU can be found in `test/benchmark/gpu_docker/Dockerfile`.
 To launch the Docker image you can execute the following:
 
 ```
-git clone -b mod2ir-CC2023 --depth 1 https://github.com/BlueBrain/nmodl.git
-cd nmodl/test/benchmark  # Enter the directory that contains the NVIDIA docker runtime installation script
-bash install_gpu_docker_env.sh  # Installs docker and NVIDIA docker runtime (needs sudo permission and is based on Ubuntu 22.04 but with small changes in should be supported by any Ubuntu version or other linux distributions)
-docker run -it -v $PWD:/opt/mount --gpus all bluebrain/nmodl:mod2ir-gpu-benchmark # Execute docker image (~16GB)
+git clone -b mod2ir-CC2023 --depth 1 \
+   https://github.com/BlueBrain/nmodl.git
+# Enter the directory that contains the NVIDIA docker
+# runtime installation script
+cd nmodl/test/benchmark
+# Installs docker and NVIDIA docker runtime (needs sudo
+# permission and is based on Ubuntu 22.04 but with small
+# changes it should be supported by any Ubuntu version
+# or other linux distributions)
+bash install_gpu_docker_env.sh
+# Execute docker image (~16GB)
+docker run -it -v $PWD:/opt/mount --gpus \
+   all bluebrain/nmodl:mod2ir-gpu-benchmark
 ```
 
 After building and launching the docker file we can now execute the benchmarks and generate the same
@@ -50,10 +61,15 @@ plots as the ones we included in the paper with the new results along the refere
 To do this we need to execute the following two scripts inside the docker image environment:
 
 ```
-cd nmodl/test/benchmark  # Enter the directory where the scripts are inside the docker image
-bash run_benchmark_script_cpu_gpu.sh  # Runs all the benchmarks on CPU and GPU
-python3 plot_benchmarks_cpu_gpu.py  # Generate the plots based on the outputs of the previous script
-cp -r graphs_output_pandas /opt/mount  # Copy the graphs from the docker image to your environment
+# Enter the directory where the scripts are inside the docker
+# image
+cd nmodl/test/benchmark
+# Runs all the benchmarks on CPU and GPU
+bash run_benchmark_script_cpu_gpu.sh
+# Generate the plots based on the outputs of the previous script
+python3 plot_benchmarks_cpu_gpu.py
+# Copy the graphs from the docker image to your environment
+cp -r graphs_output_pandas /opt/mount
 ```
 
 Executing `run_benchmark_script_dockerfile.sh` will generate two pickle files that include the results
@@ -69,16 +85,23 @@ CPU only container.
 To do this you need to:
 
 ```
-docker run -it -v $PWD:/opt/mount bluebrain/nmodl:mod2ir-cpu-benchmark # Execute docker image (~16GB)
+# Execute docker image (~16GB)
+docker run -it -v $PWD:/opt/mount \
+   bluebrain/nmodl:mod2ir-cpu-benchmark
 ```
 
 Then inside the docker shell:
 
 ```
-cd nmodl/test/benchmark  # Enter the directory where the scripts are inside the docker image
-bash run_benchmark_script_cpu_only.sh  # Runs all the benchmarks on CPU
-python3 plot_benchmarks_cpu_only.py  # Generate the plots based on the outputs of the previous script
-cp -r graphs_output_pandas /opt/mount  # Copy the graphs from the docker image to your environment
+# Enter the directory where the scripts are inside the docker
+# image
+cd nmodl/test/benchmark
+# Runs all the benchmarks on CPU
+bash run_benchmark_script_cpu_only.sh
+# Generate the plots based on the outputs of the previous script
+python3 plot_benchmarks_cpu_only.py
+# Copy the graphs from the docker image to your environment
+cp -r graphs_output_pandas /opt/mount
 ```
 
 By executing `run_benchmark_script_cpu_only.sh` there will be only `hh_expsyn_cpu/benchmark_results.pickle`
@@ -87,8 +110,4 @@ generated containing the CPU results.
 
 ## Notes
 
-1. Acceleration results with `GCC` and `NVHPC` compilers might be better in the docker container than
-   the paper due to the newer OS we're using in the Dockerfile. Latest Ubuntu versions come with
-   GLIBC 2.3x that includes `libmvec` which provides vectorized implementations to the `GCC` and
-   `NVHPC` compilers (which is using `GCC` as the base compiler) enabling the vectorization of the
-   kernels even without providing the `SVML` library to `GCC`.
+1. The benchmark results with `GCC` and `NVHPC` compilers might be better in the docker container than the presented manuscript due to the newer OS we’re using in the Dockerfile. The current Ubuntu versions come with GLIBC 2.3x, which includes `libmvec` providing vectorized implementations for some mathematical functions and which is used by the `GCC` and `NVHPC` compilers. This results in much more vectorization use in the benchmark kernels even without providing the SVML library to `GCC` (or `NVHPC`).
