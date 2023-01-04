@@ -420,27 +420,27 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import nmodl.dsl as nmodl
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">nmodl.dsl</span> <span class="k">as</span> <span class="nn">nmodl</span>
 
 
-def run_sympy_solver(mod_string, cse=False):
-    # parse NMDOL file (supplied as a string) into AST
-    driver = nmodl.NmodlDriver()
-    AST = driver.parse_string(mod_string)
-    # run SymtabVisitor to generate Symbol Table
-    nmodl.symtab.SymtabVisitor().visit_program(AST)
-    # constant folding, inlining &amp; local variable renaming passes
-    nmodl.visitor.ConstantFolderVisitor().visit_program(AST)
-    nmodl.visitor.InlineVisitor().visit_program(AST)
-    nmodl.visitor.LocalVarRenameVisitor().visit_program(AST)
-    # run SympySolver visitor
-    nmodl.visitor.SympySolverVisitor().visit_program(AST)
-    # return contents of new DERIVATIVE block as list of strings
-    return nmodl.to_nmodl(
-        nmodl.visitor.AstLookupVisitor().lookup(
-            AST, nmodl.ast.AstNodeType.DERIVATIVE_BLOCK
-        )[0]
-    )
+<span class="k">def</span> <span class="nf">run_sympy_solver</span><span class="p">(</span><span class="n">mod_string</span><span class="p">,</span> <span class="n">cse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="c1"># parse NMDOL file (supplied as a string) into AST</span>
+    <span class="n">driver</span> <span class="o">=</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">NmodlDriver</span><span class="p">()</span>
+    <span class="n">AST</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">parse_string</span><span class="p">(</span><span class="n">mod_string</span><span class="p">)</span>
+    <span class="c1"># run SymtabVisitor to generate Symbol Table</span>
+    <span class="n">nmodl</span><span class="o">.</span><span class="n">symtab</span><span class="o">.</span><span class="n">SymtabVisitor</span><span class="p">()</span><span class="o">.</span><span class="n">visit_program</span><span class="p">(</span><span class="n">AST</span><span class="p">)</span>
+    <span class="c1"># constant folding, inlining &amp; local variable renaming passes</span>
+    <span class="n">nmodl</span><span class="o">.</span><span class="n">visitor</span><span class="o">.</span><span class="n">ConstantFolderVisitor</span><span class="p">()</span><span class="o">.</span><span class="n">visit_program</span><span class="p">(</span><span class="n">AST</span><span class="p">)</span>
+    <span class="n">nmodl</span><span class="o">.</span><span class="n">visitor</span><span class="o">.</span><span class="n">InlineVisitor</span><span class="p">()</span><span class="o">.</span><span class="n">visit_program</span><span class="p">(</span><span class="n">AST</span><span class="p">)</span>
+    <span class="n">nmodl</span><span class="o">.</span><span class="n">visitor</span><span class="o">.</span><span class="n">LocalVarRenameVisitor</span><span class="p">()</span><span class="o">.</span><span class="n">visit_program</span><span class="p">(</span><span class="n">AST</span><span class="p">)</span>
+    <span class="c1"># run SympySolver visitor</span>
+    <span class="n">nmodl</span><span class="o">.</span><span class="n">visitor</span><span class="o">.</span><span class="n">SympySolverVisitor</span><span class="p">()</span><span class="o">.</span><span class="n">visit_program</span><span class="p">(</span><span class="n">AST</span><span class="p">)</span>
+    <span class="c1"># return contents of new DERIVATIVE block as list of strings</span>
+    <span class="k">return</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">to_nmodl</span><span class="p">(</span>
+        <span class="n">nmodl</span><span class="o">.</span><span class="n">visitor</span><span class="o">.</span><span class="n">AstLookupVisitor</span><span class="p">()</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span>
+            <span class="n">AST</span><span class="p">,</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">ast</span><span class="o">.</span><span class="n">AstNodeType</span><span class="o">.</span><span class="n">DERIVATIVE_BLOCK</span>
+        <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -451,19 +451,19 @@ def run_sympy_solver(mod_string, cse=False):
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>ex1 = &quot;&quot;&quot;
-BREAKPOINT {
-    SOLVE states METHOD sparse
-}
-STATE {
-    mc m
-}
-DERIVATIVE states {
-    mc&#39; = -a*mc + b*m
-    m&#39; = a*mc - b*m
-}
-&quot;&quot;&quot;
-print(run_sympy_solver(ex1, cse=True))
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ex1</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">BREAKPOINT {</span>
+<span class="s2">    SOLVE states METHOD sparse</span>
+<span class="s2">}</span>
+<span class="s2">STATE {</span>
+<span class="s2">    mc m</span>
+<span class="s2">}</span>
+<span class="s2">DERIVATIVE states {</span>
+<span class="s2">    mc&#39; = -a*mc + b*m</span>
+<span class="s2">    m&#39; = a*mc - b*m</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">run_sympy_solver</span><span class="p">(</span><span class="n">ex1</span><span class="p">,</span> <span class="n">cse</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -504,24 +504,24 @@ DERIVATIVE states {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>ex2 = &quot;&quot;&quot;
-STATE {
-    c1 o1 o2 p0 p1
-}
-BREAKPOINT  {
-    SOLVE ihkin METHOD sparse
-}
-DERIVATIVE ihkin {
-    LOCAL alpha, beta, k3p, k4, k1ca, k2
-    evaluate_fct(v, cai)
-    c1&#39; = (-1*(alpha*c1-beta*o1))
-    o1&#39; = (1*(alpha*c1-beta*o1))+(-1*(k3p*o1-k4*o2))
-    o2&#39; = (1*(k3p*o1-k4*o2))
-    p0&#39; = (-1*(k1ca*p0-k2*p1))
-    p1&#39; = (1*(k1ca*p0-k2*p1))
-}
-&quot;&quot;&quot;
-print(run_sympy_solver(ex2))
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ex2</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">STATE {</span>
+<span class="s2">    c1 o1 o2 p0 p1</span>
+<span class="s2">}</span>
+<span class="s2">BREAKPOINT  {</span>
+<span class="s2">    SOLVE ihkin METHOD sparse</span>
+<span class="s2">}</span>
+<span class="s2">DERIVATIVE ihkin {</span>
+<span class="s2">    LOCAL alpha, beta, k3p, k4, k1ca, k2</span>
+<span class="s2">    evaluate_fct(v, cai)</span>
+<span class="s2">    c1&#39; = (-1*(alpha*c1-beta*o1))</span>
+<span class="s2">    o1&#39; = (1*(alpha*c1-beta*o1))+(-1*(k3p*o1-k4*o2))</span>
+<span class="s2">    o2&#39; = (1*(k3p*o1-k4*o2))</span>
+<span class="s2">    p0&#39; = (-1*(k1ca*p0-k2*p1))</span>
+<span class="s2">    p1&#39; = (1*(k1ca*p0-k2*p1))</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">run_sympy_solver</span><span class="p">(</span><span class="n">ex2</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>

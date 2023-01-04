@@ -153,7 +153,7 @@
 
 
 <span class="k">def</span> <span class="nf">_var_to_sympy</span><span class="p">(</span><span class="n">var_str</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Return sympy variable from string representing variable</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return sympy variable from string representing variable</span>
 
 <span class="sd">    If string contains &quot;[&quot; it is assumed to be an array variable</span>
 <span class="sd">    of the form &quot;variable_name[N]&quot;, where N is the size of the array</span>
@@ -176,7 +176,7 @@
 
 
 <span class="k">def</span> <span class="nf">_sympify_diff_eq</span><span class="p">(</span><span class="n">diff_string</span><span class="p">,</span> <span class="nb">vars</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Parse differential equation into sympy expression</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse differential equation into sympy expression</span>
 
 <span class="sd">    Given eq_string of the form &quot;x&#39; = df/dx&quot;, return sympy</span>
 <span class="sd">    objects representing x and df/dx</span>
@@ -210,7 +210,7 @@
 
 
 <span class="k">def</span> <span class="nf">_sympify_eqs</span><span class="p">(</span><span class="n">eq_strings</span><span class="p">,</span> <span class="n">state_vars</span><span class="p">,</span> <span class="nb">vars</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Parse equations into sympy expressions</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse equations into sympy expressions</span>
 
 <span class="sd">    Given lists of strings containing equations, state variables,</span>
 <span class="sd">    and constants, it parses the equations into sympy expressions.</span>
@@ -248,7 +248,7 @@
     <span class="k">return</span> <span class="n">eqs</span><span class="p">,</span> <span class="n">sympy_state_vars</span><span class="p">,</span> <span class="n">sympy_vars</span>
 
 <span class="k">def</span> <span class="nf">_interweave_eqs</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">J</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Interweave F and J equations so that they are printed in code</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Interweave F and J equations so that they are printed in code</span>
 <span class="sd">    rowwise from the equation J x = F. For example:</span>
 
 <span class="sd">    F = [F_0,</span>
@@ -303,7 +303,7 @@
 
 
 <div class="viewcode-block" id="solve_lin_system"><a class="viewcode-back" href="../../nmodl.html#nmodl.ode.solve_lin_system">[docs]</a><span class="k">def</span> <span class="nf">solve_lin_system</span><span class="p">(</span><span class="n">eq_strings</span><span class="p">,</span> <span class="nb">vars</span><span class="p">,</span> <span class="n">constants</span><span class="p">,</span> <span class="n">function_calls</span><span class="p">,</span> <span class="n">tmp_unique_prefix</span><span class="p">,</span> <span class="n">small_system</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">do_cse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Solve linear system of equations, return solution as C code.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Solve linear system of equations, return solution as C code.</span>
 
 <span class="sd">    If system is small (small_system=True, typically N&lt;=3):</span>
 <span class="sd">      - solve analytically by gaussian elimination</span>
@@ -352,10 +352,10 @@
             <span class="p">)</span>
             <span class="k">for</span> <span class="n">var</span><span class="p">,</span> <span class="n">expr</span> <span class="ow">in</span> <span class="n">sub_exprs</span><span class="p">:</span>
                 <span class="n">new_local_vars</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">var</span><span class="p">))</span>
-                <span class="n">code</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="n">evalf</span><span class="p">(),</span> <span class="n">user_functions</span><span class="o">=</span><span class="n">custom_fcts</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">code</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="n">evalf</span><span class="p">(),</span><span class="w"> </span><span class="n">user_functions</span><span class="o">=</span><span class="n">custom_fcts</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="n">solution_vector</span> <span class="o">=</span> <span class="n">simplified_solution_vector</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">for</span> <span class="n">var</span><span class="p">,</span> <span class="n">expr</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">state_vars</span><span class="p">,</span> <span class="n">solution_vector</span><span class="p">):</span>
-            <span class="n">code</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">var</span><span class="p">)</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="n">evalf</span><span class="p">(),</span> <span class="n">contract</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">user_functions</span><span class="o">=</span><span class="n">custom_fcts</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">code</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">var</span><span class="p">)</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="n">evalf</span><span class="p">(),</span><span class="w"> </span><span class="n">contract</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="w"> </span><span class="n">user_functions</span><span class="o">=</span><span class="n">custom_fcts</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># large linear system: construct and return matrix J, vector F such that</span>
         <span class="c1"># J X = F is the linear system to be solved for X by e.g. LU factorization</span>
@@ -364,13 +364,13 @@
         <span class="c1"># construct vector F</span>
         <span class="n">vecFcode</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">expr</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">vecF</span><span class="p">):</span>
-            <span class="n">vecFcode</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;F[</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">] = </span><span class="si">{</span><span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="n">simplify</span><span class="p">()</span><span class="o">.</span><span class="n">evalf</span><span class="p">(),</span> <span class="n">user_functions</span><span class="o">=</span><span class="n">custom_fcts</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">vecFcode</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;F[</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">] = </span><span class="si">{</span><span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="n">simplify</span><span class="p">()</span><span class="o">.</span><span class="n">evalf</span><span class="p">(),</span><span class="w"> </span><span class="n">user_functions</span><span class="o">=</span><span class="n">custom_fcts</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="c1"># construct matrix J</span>
         <span class="n">vecJcode</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">expr</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">matJ</span><span class="p">):</span>
             <span class="c1"># todo: fix indexing to be ascending order</span>
             <span class="n">flat_index</span> <span class="o">=</span> <span class="n">matJ</span><span class="o">.</span><span class="n">rows</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span> <span class="o">%</span> <span class="n">matJ</span><span class="o">.</span><span class="n">rows</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">i</span> <span class="o">//</span> <span class="n">matJ</span><span class="o">.</span><span class="n">rows</span><span class="p">)</span>
-            <span class="n">vecJcode</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;J[</span><span class="si">{</span><span class="n">flat_index</span><span class="si">}</span><span class="s2">] = </span><span class="si">{</span><span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="n">simplify</span><span class="p">()</span><span class="o">.</span><span class="n">evalf</span><span class="p">(),</span> <span class="n">user_functions</span><span class="o">=</span><span class="n">custom_fcts</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">vecJcode</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;J[</span><span class="si">{</span><span class="n">flat_index</span><span class="si">}</span><span class="s2">] = </span><span class="si">{</span><span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="n">simplify</span><span class="p">()</span><span class="o">.</span><span class="n">evalf</span><span class="p">(),</span><span class="w"> </span><span class="n">user_functions</span><span class="o">=</span><span class="n">custom_fcts</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="c1"># interweave</span>
         <span class="n">code</span> <span class="o">=</span> <span class="n">_interweave_eqs</span><span class="p">(</span><span class="n">vecFcode</span><span class="p">,</span> <span class="n">vecJcode</span><span class="p">)</span>
 
@@ -380,7 +380,7 @@
 
 
 <div class="viewcode-block" id="solve_non_lin_system"><a class="viewcode-back" href="../../nmodl.html#nmodl.ode.solve_non_lin_system">[docs]</a><span class="k">def</span> <span class="nf">solve_non_lin_system</span><span class="p">(</span><span class="n">eq_strings</span><span class="p">,</span> <span class="nb">vars</span><span class="p">,</span> <span class="n">constants</span><span class="p">,</span> <span class="n">function_calls</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Solve non-linear system of equations, return solution as C code.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Solve non-linear system of equations, return solution as C code.</span>
 
 <span class="sd">      - returns a vector F, and its Jacobian J, both in terms of X</span>
 <span class="sd">      - where F(X) = 0 is the implicit equation to solve for X</span>
@@ -407,13 +407,13 @@
 
     <span class="n">vecFcode</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">eq</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">eqs</span><span class="p">):</span>
-        <span class="n">vecFcode</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;F[</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">] = </span><span class="si">{</span><span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">eq</span><span class="o">.</span><span class="n">simplify</span><span class="p">()</span><span class="o">.</span><span class="n">subs</span><span class="p">(</span><span class="n">X_vec_map</span><span class="p">)</span><span class="o">.</span><span class="n">evalf</span><span class="p">(),</span> <span class="n">user_functions</span><span class="o">=</span><span class="n">custom_fcts</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">vecFcode</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;F[</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">] = </span><span class="si">{</span><span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">eq</span><span class="o">.</span><span class="n">simplify</span><span class="p">()</span><span class="o">.</span><span class="n">subs</span><span class="p">(</span><span class="n">X_vec_map</span><span class="p">)</span><span class="o">.</span><span class="n">evalf</span><span class="p">(),</span><span class="w"> </span><span class="n">user_functions</span><span class="o">=</span><span class="n">custom_fcts</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="n">vecJcode</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">jac</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">jacobian</span><span class="p">):</span>
         <span class="c1"># todo: fix indexing to be ascending order</span>
         <span class="n">flat_index</span> <span class="o">=</span> <span class="n">jacobian</span><span class="o">.</span><span class="n">rows</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span> <span class="o">%</span> <span class="n">jacobian</span><span class="o">.</span><span class="n">rows</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">i</span> <span class="o">//</span> <span class="n">jacobian</span><span class="o">.</span><span class="n">rows</span><span class="p">)</span>
         <span class="n">vecJcode</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;J[</span><span class="si">{</span><span class="n">flat_index</span><span class="si">}</span><span class="s2">] = </span><span class="si">{</span><span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">jac</span><span class="o">.</span><span class="n">simplify</span><span class="p">()</span><span class="o">.</span><span class="n">subs</span><span class="p">(</span><span class="n">X_vec_map</span><span class="p">)</span><span class="o">.</span><span class="n">evalf</span><span class="p">(),</span> <span class="n">user_functions</span><span class="o">=</span><span class="n">custom_fcts</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;J[</span><span class="si">{</span><span class="n">flat_index</span><span class="si">}</span><span class="s2">] = </span><span class="si">{</span><span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">jac</span><span class="o">.</span><span class="n">simplify</span><span class="p">()</span><span class="o">.</span><span class="n">subs</span><span class="p">(</span><span class="n">X_vec_map</span><span class="p">)</span><span class="o">.</span><span class="n">evalf</span><span class="p">(),</span><span class="w"> </span><span class="n">user_functions</span><span class="o">=</span><span class="n">custom_fcts</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="p">)</span>
     <span class="c1"># interweave</span>
     <span class="n">code</span> <span class="o">=</span> <span class="n">_interweave_eqs</span><span class="p">(</span><span class="n">vecFcode</span><span class="p">,</span> <span class="n">vecJcode</span><span class="p">)</span>
@@ -424,7 +424,7 @@
 
 
 <div class="viewcode-block" id="integrate2c"><a class="viewcode-back" href="../../nmodl.html#nmodl.ode.integrate2c">[docs]</a><span class="k">def</span> <span class="nf">integrate2c</span><span class="p">(</span><span class="n">diff_string</span><span class="p">,</span> <span class="n">dt_var</span><span class="p">,</span> <span class="nb">vars</span><span class="p">,</span> <span class="n">use_pade_approx</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Analytically integrate supplied derivative, return solution as C code.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Analytically integrate supplied derivative, return solution as C code.</span>
 
 <span class="sd">    Given a differential equation of the form x&#39; = f(x), the value of</span>
 <span class="sd">    x at time t+dt is found in terms of the value of x at time t:</span>
@@ -531,7 +531,7 @@
 
 
 <div class="viewcode-block" id="forwards_euler2c"><a class="viewcode-back" href="../../nmodl.html#nmodl.ode.forwards_euler2c">[docs]</a><span class="k">def</span> <span class="nf">forwards_euler2c</span><span class="p">(</span><span class="n">diff_string</span><span class="p">,</span> <span class="n">dt_var</span><span class="p">,</span> <span class="nb">vars</span><span class="p">,</span> <span class="n">function_calls</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Return forwards euler solution of diff_string as C code.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return forwards euler solution of diff_string as C code.</span>
 
 <span class="sd">    Derivative should be of the form &quot;x&#39; = f(x)&quot;,</span>
 <span class="sd">    and vars should contain the set of all the variables</span>
@@ -555,11 +555,11 @@
 
     <span class="n">custom_fcts</span> <span class="o">=</span> <span class="n">_get_custom_functions</span><span class="p">(</span><span class="n">function_calls</span><span class="p">)</span>
     <span class="c1"># return result as C code in NEURON format</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">solution</span><span class="p">,</span> <span class="n">user_functions</span><span class="o">=</span><span class="n">custom_fcts</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span></div>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">solution</span><span class="p">,</span><span class="w"> </span><span class="n">user_functions</span><span class="o">=</span><span class="n">custom_fcts</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span></div>
 
 
 <div class="viewcode-block" id="differentiate2c"><a class="viewcode-back" href="../../nmodl.html#nmodl.ode.differentiate2c">[docs]</a><span class="k">def</span> <span class="nf">differentiate2c</span><span class="p">(</span><span class="n">expression</span><span class="p">,</span> <span class="n">dependent_var</span><span class="p">,</span> <span class="nb">vars</span><span class="p">,</span> <span class="n">prev_expressions</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Analytically differentiate supplied expression, return solution as C code.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Analytically differentiate supplied expression, return solution as C code.</span>
 
 <span class="sd">    Expression should be of the form &quot;f(x)&quot;, where &quot;x&quot; is</span>
 <span class="sd">    the dependent variable, and the function returns df(x)/dx</span>

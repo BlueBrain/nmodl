@@ -466,27 +466,27 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import nmodl.dsl as nmodl
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">nmodl.dsl</span> <span class="k">as</span> <span class="nn">nmodl</span>
 
 
-def run_sympy_solver(mod_string, pade=False):
-    # parse NMDOL file (supplied as a string) into AST
-    driver = nmodl.NmodlDriver()
-    AST = driver.parse_string(mod_string)
-    # run SymtabVisitor to generate Symbol Table
-    nmodl.symtab.SymtabVisitor().visit_program(AST)
-    # constant folding, inlining &amp; local variable renaming passes
-    nmodl.visitor.ConstantFolderVisitor().visit_program(AST)
-    nmodl.visitor.InlineVisitor().visit_program(AST)
-    nmodl.visitor.LocalVarRenameVisitor().visit_program(AST)
-    # run SympySolver visitor
-    nmodl.visitor.SympySolverVisitor(use_pade_approx=pade).visit_program(AST)
-    # return contents of new DERIVATIVE block as list of strings
-    return nmodl.to_nmodl(
-        nmodl.visitor.AstLookupVisitor().lookup(
-            AST, nmodl.ast.AstNodeType.DERIVATIVE_BLOCK
-        )[0]
-    ).splitlines()[1:-1]
+<span class="k">def</span> <span class="nf">run_sympy_solver</span><span class="p">(</span><span class="n">mod_string</span><span class="p">,</span> <span class="n">pade</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="c1"># parse NMDOL file (supplied as a string) into AST</span>
+    <span class="n">driver</span> <span class="o">=</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">NmodlDriver</span><span class="p">()</span>
+    <span class="n">AST</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">parse_string</span><span class="p">(</span><span class="n">mod_string</span><span class="p">)</span>
+    <span class="c1"># run SymtabVisitor to generate Symbol Table</span>
+    <span class="n">nmodl</span><span class="o">.</span><span class="n">symtab</span><span class="o">.</span><span class="n">SymtabVisitor</span><span class="p">()</span><span class="o">.</span><span class="n">visit_program</span><span class="p">(</span><span class="n">AST</span><span class="p">)</span>
+    <span class="c1"># constant folding, inlining &amp; local variable renaming passes</span>
+    <span class="n">nmodl</span><span class="o">.</span><span class="n">visitor</span><span class="o">.</span><span class="n">ConstantFolderVisitor</span><span class="p">()</span><span class="o">.</span><span class="n">visit_program</span><span class="p">(</span><span class="n">AST</span><span class="p">)</span>
+    <span class="n">nmodl</span><span class="o">.</span><span class="n">visitor</span><span class="o">.</span><span class="n">InlineVisitor</span><span class="p">()</span><span class="o">.</span><span class="n">visit_program</span><span class="p">(</span><span class="n">AST</span><span class="p">)</span>
+    <span class="n">nmodl</span><span class="o">.</span><span class="n">visitor</span><span class="o">.</span><span class="n">LocalVarRenameVisitor</span><span class="p">()</span><span class="o">.</span><span class="n">visit_program</span><span class="p">(</span><span class="n">AST</span><span class="p">)</span>
+    <span class="c1"># run SympySolver visitor</span>
+    <span class="n">nmodl</span><span class="o">.</span><span class="n">visitor</span><span class="o">.</span><span class="n">SympySolverVisitor</span><span class="p">(</span><span class="n">use_pade_approx</span><span class="o">=</span><span class="n">pade</span><span class="p">)</span><span class="o">.</span><span class="n">visit_program</span><span class="p">(</span><span class="n">AST</span><span class="p">)</span>
+    <span class="c1"># return contents of new DERIVATIVE block as list of strings</span>
+    <span class="k">return</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">to_nmodl</span><span class="p">(</span>
+        <span class="n">nmodl</span><span class="o">.</span><span class="n">visitor</span><span class="o">.</span><span class="n">AstLookupVisitor</span><span class="p">()</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span>
+            <span class="n">AST</span><span class="p">,</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">ast</span><span class="o">.</span><span class="n">AstNodeType</span><span class="o">.</span><span class="n">DERIVATIVE_BLOCK</span>
+        <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -497,16 +497,16 @@ def run_sympy_solver(mod_string, pade=False):
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>ex1 = &quot;&quot;&quot;
-BREAKPOINT {
-    SOLVE states METHOD cnexp
-}
-DERIVATIVE states {
-    m&#39; = 4
-}
-&quot;&quot;&quot;
-print(&quot;exact solution:\t&quot;, run_sympy_solver(ex1, pade=False)[0])
-print(&quot;pade approx:\t&quot;, run_sympy_solver(ex1, pade=True)[0])
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ex1</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">BREAKPOINT {</span>
+<span class="s2">    SOLVE states METHOD cnexp</span>
+<span class="s2">}</span>
+<span class="s2">DERIVATIVE states {</span>
+<span class="s2">    m&#39; = 4</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;exact solution:</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">run_sympy_solver</span><span class="p">(</span><span class="n">ex1</span><span class="p">,</span> <span class="n">pade</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;pade approx:</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">run_sympy_solver</span><span class="p">(</span><span class="n">ex1</span><span class="p">,</span> <span class="n">pade</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -527,16 +527,16 @@ pade approx:         m = 4.0*dt+m
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>ex2 = &quot;&quot;&quot;
-BREAKPOINT {
-    SOLVE states METHOD cnexp
-}
-DERIVATIVE states {
-    m&#39; = a*m
-}
-&quot;&quot;&quot;
-print(&quot;exact solution:\t&quot;, run_sympy_solver(ex2, pade=False)[0])
-print(&quot;pade approx:\t&quot;, run_sympy_solver(ex2, pade=True)[0])
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ex2</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">BREAKPOINT {</span>
+<span class="s2">    SOLVE states METHOD cnexp</span>
+<span class="s2">}</span>
+<span class="s2">DERIVATIVE states {</span>
+<span class="s2">    m&#39; = a*m</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;exact solution:</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">run_sympy_solver</span><span class="p">(</span><span class="n">ex2</span><span class="p">,</span> <span class="n">pade</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;pade approx:</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">run_sympy_solver</span><span class="p">(</span><span class="n">ex2</span><span class="p">,</span> <span class="n">pade</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -557,16 +557,16 @@ pade approx:         m = m*(-a*dt-2.0)/(a*dt-2.0)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>ex3 = &quot;&quot;&quot;
-BREAKPOINT {
-    SOLVE states METHOD cnexp
-}
-DERIVATIVE states {
-    m&#39; = (minf-m)/mtau
-}
-&quot;&quot;&quot;
-print(&quot;exact solution:\t&quot;, run_sympy_solver(ex3, pade=False)[0])
-print(&quot;pade approx:\t&quot;, run_sympy_solver(ex3, pade=True)[0])
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ex3</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">BREAKPOINT {</span>
+<span class="s2">    SOLVE states METHOD cnexp</span>
+<span class="s2">}</span>
+<span class="s2">DERIVATIVE states {</span>
+<span class="s2">    m&#39; = (minf-m)/mtau</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;exact solution:</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">run_sympy_solver</span><span class="p">(</span><span class="n">ex3</span><span class="p">,</span> <span class="n">pade</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;pade approx:</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">run_sympy_solver</span><span class="p">(</span><span class="n">ex3</span><span class="p">,</span> <span class="n">pade</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -587,16 +587,16 @@ pade approx:         m = (-dt*m+2.0*dt*minf+2.0*m*mtau)/(dt+2.0*mtau)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>ex4 = &quot;&quot;&quot;
-BREAKPOINT {
-    SOLVE states METHOD cnexp
-}
-DERIVATIVE states {
-    m&#39; = (minf-m)/mtau - m/mtau - 2*minf/mtau + 3*m/mtau
-}
-&quot;&quot;&quot;
-print(&quot;exact solution:\t&quot;, run_sympy_solver(ex4, pade=False)[0])
-print(&quot;pade approx:\t&quot;, run_sympy_solver(ex4, pade=True)[0])
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ex4</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">BREAKPOINT {</span>
+<span class="s2">    SOLVE states METHOD cnexp</span>
+<span class="s2">}</span>
+<span class="s2">DERIVATIVE states {</span>
+<span class="s2">    m&#39; = (minf-m)/mtau - m/mtau - 2*minf/mtau + 3*m/mtau</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;exact solution:</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">run_sympy_solver</span><span class="p">(</span><span class="n">ex4</span><span class="p">,</span> <span class="n">pade</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;pade approx:</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">run_sympy_solver</span><span class="p">(</span><span class="n">ex4</span><span class="p">,</span> <span class="n">pade</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -617,16 +617,16 @@ pade approx:         m = (-dt*m+2.0*dt*minf-2.0*m*mtau)/(dt-2.0*mtau)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>ex5 = &quot;&quot;&quot;
-BREAKPOINT {
-    SOLVE states METHOD cnexp
-}
-DERIVATIVE states {
-    m&#39; = m^3
-}
-&quot;&quot;&quot;
-print(&quot;exact solution:\t&quot;, run_sympy_solver(ex5, pade=False)[0])
-print(&quot;pade approx:\t&quot;, run_sympy_solver(ex5, pade=True)[0])
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ex5</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">BREAKPOINT {</span>
+<span class="s2">    SOLVE states METHOD cnexp</span>
+<span class="s2">}</span>
+<span class="s2">DERIVATIVE states {</span>
+<span class="s2">    m&#39; = m^3</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;exact solution:</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">run_sympy_solver</span><span class="p">(</span><span class="n">ex5</span><span class="p">,</span> <span class="n">pade</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;pade approx:</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">run_sympy_solver</span><span class="p">(</span><span class="n">ex5</span><span class="p">,</span> <span class="n">pade</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -647,16 +647,16 @@ pade approx:         m = m*(dt*pow(m, 2)-2.0)/(3.0*dt*pow(m, 2)-2.0)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>ex6 = &quot;&quot;&quot;
-BREAKPOINT {
-    SOLVE states METHOD cnexp
-}
-DERIVATIVE states {
-    m&#39; = exp(m)^2
-}
-&quot;&quot;&quot;
-print(&quot;exact solution:\t&quot;, run_sympy_solver(ex6, pade=False)[0])
-print(&quot;pade approx:\t&quot;, run_sympy_solver(ex6, pade=True)[0])
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ex6</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">BREAKPOINT {</span>
+<span class="s2">    SOLVE states METHOD cnexp</span>
+<span class="s2">}</span>
+<span class="s2">DERIVATIVE states {</span>
+<span class="s2">    m&#39; = exp(m)^2</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;exact solution:</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">run_sympy_solver</span><span class="p">(</span><span class="n">ex6</span><span class="p">,</span> <span class="n">pade</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;pade approx:</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">run_sympy_solver</span><span class="p">(</span><span class="n">ex6</span><span class="p">,</span> <span class="n">pade</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>

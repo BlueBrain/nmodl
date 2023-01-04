@@ -416,7 +416,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import nmodl.dsl as nmodl
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">nmodl.dsl</span> <span class="k">as</span> <span class="nn">nmodl</span>
 </pre></div>
 </div>
 </div>
@@ -425,50 +425,50 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>channel = &quot;&quot;&quot;
-NEURON  {
-    SUFFIX CaDynamics
-    USEION ca READ ica WRITE cai
-    RANGE decay, gamma, minCai, depth
-}
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">channel</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">NEURON  {</span>
+<span class="s2">    SUFFIX CaDynamics</span>
+<span class="s2">    USEION ca READ ica WRITE cai</span>
+<span class="s2">    RANGE decay, gamma, minCai, depth</span>
+<span class="s2">}</span>
 
-UNITS   {
-    (mV) = (millivolt)
-    (mA) = (milliamp)
-    FARADAY = (faraday) (coulombs)
-    (molar) = (1/liter)
-    (mM) = (millimolar)
-    (um)    = (micron)
-}
+<span class="s2">UNITS   {</span>
+<span class="s2">    (mV) = (millivolt)</span>
+<span class="s2">    (mA) = (milliamp)</span>
+<span class="s2">    FARADAY = (faraday) (coulombs)</span>
+<span class="s2">    (molar) = (1/liter)</span>
+<span class="s2">    (mM) = (millimolar)</span>
+<span class="s2">    (um)    = (micron)</span>
+<span class="s2">}</span>
 
-PARAMETER   {
-    gamma = 0.05 : percent of free calcium (not buffered)
-    decay = 80 (ms) : rate of removal of calcium
-    depth = 0.1 (um) : depth of shell
-    minCai = 1e-4 (mM)
-}
+<span class="s2">PARAMETER   {</span>
+<span class="s2">    gamma = 0.05 : percent of free calcium (not buffered)</span>
+<span class="s2">    decay = 80 (ms) : rate of removal of calcium</span>
+<span class="s2">    depth = 0.1 (um) : depth of shell</span>
+<span class="s2">    minCai = 1e-4 (mM)</span>
+<span class="s2">}</span>
 
-ASSIGNED    {ica (mA/cm2)}
+<span class="s2">ASSIGNED    {ica (mA/cm2)}</span>
 
-INITIAL {
-    cai = minCai
-}
+<span class="s2">INITIAL {</span>
+<span class="s2">    cai = minCai</span>
+<span class="s2">}</span>
 
-STATE   {
-    cai (mM)
-}
+<span class="s2">STATE   {</span>
+<span class="s2">    cai (mM)</span>
+<span class="s2">}</span>
 
-BREAKPOINT  { SOLVE states METHOD cnexp }
+<span class="s2">BREAKPOINT  { SOLVE states METHOD cnexp }</span>
 
-DERIVATIVE states   {
-    cai&#39; = -(10000)*(ica*gamma/(2*FARADAY*depth)) - (cai - minCai)/decay
-}
+<span class="s2">DERIVATIVE states   {</span>
+<span class="s2">    cai&#39; = -(10000)*(ica*gamma/(2*FARADAY*depth)) - (cai - minCai)/decay</span>
+<span class="s2">}</span>
 
-FUNCTION foo() {
-    LOCAL temp
-    foo = 1.0 + gamma
-}
-&quot;&quot;&quot;
+<span class="s2">FUNCTION foo() {</span>
+<span class="s2">    LOCAL temp</span>
+<span class="s2">    foo = 1.0 + gamma</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -477,8 +477,8 @@ FUNCTION foo() {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>driver = nmodl.NmodlDriver()
-modast = driver.parse_string(channel)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">driver</span> <span class="o">=</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">NmodlDriver</span><span class="p">()</span>
+<span class="n">modast</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">parse_string</span><span class="p">(</span><span class="n">channel</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -488,7 +488,7 @@ modast = driver.parse_string(channel)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(&quot;%.200s&quot; % modast)  # only first 200 characters
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%.200s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">modast</span><span class="p">)</span>  <span class="c1"># only first 200 characters</span>
 </pre></div>
 </div>
 </div>
@@ -521,9 +521,9 @@ UNITS {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from nmodl import ast, visitor
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nmodl</span> <span class="kn">import</span> <span class="n">ast</span><span class="p">,</span> <span class="n">visitor</span>
 
-lookup_visitor = visitor.AstLookupVisitor()
+<span class="n">lookup_visitor</span> <span class="o">=</span> <span class="n">visitor</span><span class="o">.</span><span class="n">AstLookupVisitor</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -532,9 +532,9 @@ lookup_visitor = visitor.AstLookupVisitor()
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>states = lookup_visitor.lookup(modast, ast.AstNodeType.STATE_BLOCK)
-for state in states:
-    print(nmodl.to_nmodl(state))
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">states</span> <span class="o">=</span> <span class="n">lookup_visitor</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="n">modast</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AstNodeType</span><span class="o">.</span><span class="n">STATE_BLOCK</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">states</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">nmodl</span><span class="o">.</span><span class="n">to_nmodl</span><span class="p">(</span><span class="n">state</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -554,39 +554,39 @@ STATE {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>odes = lookup_visitor.lookup(modast, ast.AstNodeType.DIFF_EQ_EXPRESSION)
-primes = lookup_visitor.lookup(modast, ast.AstNodeType.PRIME_NAME)
-range_vars = lookup_visitor.lookup(modast, ast.AstNodeType.RANGE_VAR)
-parameters = lookup_visitor.lookup(modast, ast.AstNodeType.PARAM_ASSIGN)
-units = lookup_visitor.lookup(modast, ast.AstNodeType.UNIT)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">odes</span> <span class="o">=</span> <span class="n">lookup_visitor</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="n">modast</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AstNodeType</span><span class="o">.</span><span class="n">DIFF_EQ_EXPRESSION</span><span class="p">)</span>
+<span class="n">primes</span> <span class="o">=</span> <span class="n">lookup_visitor</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="n">modast</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AstNodeType</span><span class="o">.</span><span class="n">PRIME_NAME</span><span class="p">)</span>
+<span class="n">range_vars</span> <span class="o">=</span> <span class="n">lookup_visitor</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="n">modast</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AstNodeType</span><span class="o">.</span><span class="n">RANGE_VAR</span><span class="p">)</span>
+<span class="n">parameters</span> <span class="o">=</span> <span class="n">lookup_visitor</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="n">modast</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AstNodeType</span><span class="o">.</span><span class="n">PARAM_ASSIGN</span><span class="p">)</span>
+<span class="n">units</span> <span class="o">=</span> <span class="n">lookup_visitor</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="n">modast</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AstNodeType</span><span class="o">.</span><span class="n">UNIT</span><span class="p">)</span>
 
-if odes:
-    print(&quot;%d differential equation(s) exist : &quot; % len(odes))
-    for ode in odes:
-        print(&quot;\t %s &quot; % nmodl.to_nmodl(ode))
+<span class="k">if</span> <span class="n">odes</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2"> differential equation(s) exist : &quot;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">odes</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">ode</span> <span class="ow">in</span> <span class="n">odes</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">to_nmodl</span><span class="p">(</span><span class="n">ode</span><span class="p">))</span>
 
-if primes:
-    print(&quot;%d prime variables exist :&quot; % len(primes), end=&quot;&quot;)
-    for prime in primes:
-        print(&quot; %s&quot; % nmodl.to_nmodl(prime), end=&quot;&quot;)
-    print()
+<span class="k">if</span> <span class="n">primes</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2"> prime variables exist :&quot;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">primes</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">prime</span> <span class="ow">in</span> <span class="n">primes</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">to_nmodl</span><span class="p">(</span><span class="n">prime</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">()</span>
 
-if range_vars:
-    print(&quot;%d range variables exist :&quot; % len(range_vars), end=&quot;&quot;)
-    for range_var in range_vars:
-        print(&quot; %s&quot; % nmodl.to_nmodl(range_var), end=&quot;&quot;)
-    print()
+<span class="k">if</span> <span class="n">range_vars</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2"> range variables exist :&quot;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">range_vars</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">range_var</span> <span class="ow">in</span> <span class="n">range_vars</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">to_nmodl</span><span class="p">(</span><span class="n">range_var</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">()</span>
 
-if parameters:
-    print(&quot;%d parameter variables exist :&quot; % len(parameters), end=&quot;&quot;)
-    for range_var in range_vars:
-        print(&quot; %s&quot; % nmodl.to_nmodl(range_var), end=&quot;&quot;)
-    print()
+<span class="k">if</span> <span class="n">parameters</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2"> parameter variables exist :&quot;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">parameters</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">range_var</span> <span class="ow">in</span> <span class="n">range_vars</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">to_nmodl</span><span class="p">(</span><span class="n">range_var</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">()</span>
 
-if units:
-    print(&quot;%d units uses :&quot; % len(units), end=&quot;&quot;)
-    for unit in units:
-        print(&quot; %s&quot; % nmodl.to_nmodl(unit), end=&quot;&quot;)
+<span class="k">if</span> <span class="n">units</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2"> units uses :&quot;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">units</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="n">units</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">to_nmodl</span><span class="p">(</span><span class="n">unit</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -608,18 +608,18 @@ if units:
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>functions = lookup_visitor.lookup(modast, ast.AstNodeType.FUNCTION_BLOCK)
-function = functions[0]  # first function
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">functions</span> <span class="o">=</span> <span class="n">lookup_visitor</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="n">modast</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AstNodeType</span><span class="o">.</span><span class="n">FUNCTION_BLOCK</span><span class="p">)</span>
+<span class="n">function</span> <span class="o">=</span> <span class="n">functions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># first function</span>
 
-# expression statements include assignments
-new_lookup_visitor = visitor.AstLookupVisitor(ast.AstNodeType.EXPRESSION_STATEMENT)
+<span class="c1"># expression statements include assignments</span>
+<span class="n">new_lookup_visitor</span> <span class="o">=</span> <span class="n">visitor</span><span class="o">.</span><span class="n">AstLookupVisitor</span><span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">AstNodeType</span><span class="o">.</span><span class="n">EXPRESSION_STATEMENT</span><span class="p">)</span>
 
-# using accept method of node we can visit it
-function.accept(new_lookup_visitor)
-statements = new_lookup_visitor.get_nodes()
+<span class="c1"># using accept method of node we can visit it</span>
+<span class="n">function</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="n">new_lookup_visitor</span><span class="p">)</span>
+<span class="n">statements</span> <span class="o">=</span> <span class="n">new_lookup_visitor</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">()</span>
 
-for statement in statements:
-    print(nmodl.to_nmodl(statement))
+<span class="k">for</span> <span class="n">statement</span> <span class="ow">in</span> <span class="n">statements</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">nmodl</span><span class="o">.</span><span class="n">to_nmodl</span><span class="p">(</span><span class="n">statement</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -640,9 +640,9 @@ foo = 1.0+gamma
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from nmodl import symtab
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nmodl</span> <span class="kn">import</span> <span class="n">symtab</span>
 
-symv = symtab.SymtabVisitor()
+<span class="n">symv</span> <span class="o">=</span> <span class="n">symtab</span><span class="o">.</span><span class="n">SymtabVisitor</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -651,11 +651,11 @@ symv = symtab.SymtabVisitor()
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>symv.visit_program(modast)
-table = modast.get_symbol_table()
-table_s = str(table)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">symv</span><span class="o">.</span><span class="n">visit_program</span><span class="p">(</span><span class="n">modast</span><span class="p">)</span>
+<span class="n">table</span> <span class="o">=</span> <span class="n">modast</span><span class="o">.</span><span class="n">get_symbol_table</span><span class="p">()</span>
+<span class="n">table_s</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
 
-print(table_s)
+<span class="nb">print</span><span class="p">(</span><span class="n">table_s</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -706,8 +706,8 @@ print(table_s)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cai = table.lookup(&quot;cai&quot;)
-print(cai)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cai</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="s2">&quot;cai&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cai</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -725,9 +725,9 @@ cai [Properties : prime_name assigned_definition write_ion state_var]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>range_vars = table.get_variables_with_properties(symtab.NmodlType.range_var)
-for var in range_vars:
-    print(var)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">range_vars</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">get_variables_with_properties</span><span class="p">(</span><span class="n">symtab</span><span class="o">.</span><span class="n">NmodlType</span><span class="o">.</span><span class="n">range_var</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">range_vars</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -747,11 +747,11 @@ depth [Properties : range parameter]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>ions_var = table.get_variables_with_properties(
-    symtab.NmodlType.read_ion_var | symtab.NmodlType.write_ion_var, False
-)
-for var in ions_var:
-    print(var)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ions_var</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">get_variables_with_properties</span><span class="p">(</span>
+    <span class="n">symtab</span><span class="o">.</span><span class="n">NmodlType</span><span class="o">.</span><span class="n">read_ion_var</span> <span class="o">|</span> <span class="n">symtab</span><span class="o">.</span><span class="n">NmodlType</span><span class="o">.</span><span class="n">write_ion_var</span><span class="p">,</span> <span class="kc">False</span>
+<span class="p">)</span>
+<span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">ions_var</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -772,16 +772,16 @@ cai [Properties : prime_name assigned_definition write_ion state_var]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from nmodl import ast, visitor
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nmodl</span> <span class="kn">import</span> <span class="n">ast</span><span class="p">,</span> <span class="n">visitor</span>
 
 
-class DoubleVisitor(visitor.AstVisitor):
-    def visit_double(self, node):
-        print(node.eval())  # or, can use nmodl.to_nmodl(node)
+<span class="k">class</span> <span class="nc">DoubleVisitor</span><span class="p">(</span><span class="n">visitor</span><span class="o">.</span><span class="n">AstVisitor</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">visit_double</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">eval</span><span class="p">())</span>  <span class="c1"># or, can use nmodl.to_nmodl(node)</span>
 
 
-d_visitor = DoubleVisitor()
-modast.accept(d_visitor)
+<span class="n">d_visitor</span> <span class="o">=</span> <span class="n">DoubleVisitor</span><span class="p">()</span>
+<span class="n">modast</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="n">d_visitor</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -805,31 +805,31 @@ modast.accept(d_visitor)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>class ParameterVisitor(visitor.AstVisitor):
-    def __init__(self):
-        visitor.AstVisitor.__init__(self)
-        self.in_parameter = False
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ParameterVisitor</span><span class="p">(</span><span class="n">visitor</span><span class="o">.</span><span class="n">AstVisitor</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">visitor</span><span class="o">.</span><span class="n">AstVisitor</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_parameter</span> <span class="o">=</span> <span class="kc">False</span>
 
-    def visit_param_block(self, node):
-        self.in_parameter = True
-        node.visit_children(self)
-        self.in_parameter = False
+    <span class="k">def</span> <span class="nf">visit_param_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_parameter</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">node</span><span class="o">.</span><span class="n">visit_children</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_parameter</span> <span class="o">=</span> <span class="kc">False</span>
 
-    def visit_name(self, node):
-        if self.in_parameter:
-            print(nmodl.to_nmodl(node))
+    <span class="k">def</span> <span class="nf">visit_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_parameter</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">nmodl</span><span class="o">.</span><span class="n">to_nmodl</span><span class="p">(</span><span class="n">node</span><span class="p">))</span>
 
-    def visit_double(self, node):
-        if self.in_parameter:
-            print(node.eval())
+    <span class="k">def</span> <span class="nf">visit_double</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_parameter</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">eval</span><span class="p">())</span>
 
-    def visit_integer(self, node):
-        if self.in_parameter:
-            print(node.eval())
+    <span class="k">def</span> <span class="nf">visit_integer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_parameter</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">eval</span><span class="p">())</span>
 
 
-param_visitor = ParameterVisitor()
-modast.accept(param_visitor)
+<span class="n">param_visitor</span> <span class="o">=</span> <span class="n">ParameterVisitor</span><span class="p">()</span>
+<span class="n">modast</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="n">param_visitor</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -857,19 +857,19 @@ minCai
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mfunc_src = &quot;&quot;&quot;FUNCTION myfunc(x, y) {
-     if (x &lt; y) {
-          myfunc = x + y
-     } else {
-          myfunc = y
-     }
-}
-&quot;&quot;&quot;
-import nmodl.dsl as nmodl
-from nmodl.dsl import ast
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mfunc_src</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;FUNCTION myfunc(x, y) {</span>
+<span class="s2">     if (x &lt; y) {</span>
+<span class="s2">          myfunc = x + y</span>
+<span class="s2">     } else {</span>
+<span class="s2">          myfunc = y</span>
+<span class="s2">     }</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">nmodl.dsl</span> <span class="k">as</span> <span class="nn">nmodl</span>
+<span class="kn">from</span> <span class="nn">nmodl.dsl</span> <span class="kn">import</span> <span class="n">ast</span>
 
-driver = nmodl.NmodlDriver()
-mfunc_ast = driver.parse_string(mfunc_src)
+<span class="n">driver</span> <span class="o">=</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">NmodlDriver</span><span class="p">()</span>
+<span class="n">mfunc_ast</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">parse_string</span><span class="p">(</span><span class="n">mfunc_src</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -877,82 +877,82 @@ mfunc_ast = driver.parse_string(mfunc_src)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from nmodl.dsl import ast, visitor
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nmodl.dsl</span> <span class="kn">import</span> <span class="n">ast</span><span class="p">,</span> <span class="n">visitor</span>
 
 
-class PyGenerator(visitor.AstVisitor):
-    def __init__(self):
-        visitor.AstVisitor.__init__(self)
-        self.pycode = &quot;&quot;
-        self.indent = 0
-        self.func_name = &quot;&quot;
+<span class="k">class</span> <span class="nc">PyGenerator</span><span class="p">(</span><span class="n">visitor</span><span class="o">.</span><span class="n">AstVisitor</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">visitor</span><span class="o">.</span><span class="n">AstVisitor</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pycode</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">indent</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">func_name</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
-    def visit_function_block(self, node):
-        params = []
-        self.func_name = node.get_node_name()
-        for p in node.parameters:
-            params.append(p.get_node_name())
-        params_str = &quot;, &quot;.join(params)
-        self.pycode += f&quot;def {node.get_node_name()}({params_str}):\n&quot;
-        node.visit_children(self)
+    <span class="k">def</span> <span class="nf">visit_function_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">func_name</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">get_node_name</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">parameters</span><span class="p">:</span>
+            <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">get_node_name</span><span class="p">())</span>
+        <span class="n">params_str</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pycode</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;def </span><span class="si">{</span><span class="n">node</span><span class="o">.</span><span class="n">get_node_name</span><span class="p">()</span><span class="si">}</span><span class="s2">(</span><span class="si">{</span><span class="n">params_str</span><span class="si">}</span><span class="s2">):</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">node</span><span class="o">.</span><span class="n">visit_children</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
-    def visit_statement_block(self, node):
-        self.indent += 1
-        node.visit_children(self)
-        self.indent -= 1
+    <span class="k">def</span> <span class="nf">visit_statement_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">indent</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">node</span><span class="o">.</span><span class="n">visit_children</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">indent</span> <span class="o">-=</span> <span class="mi">1</span>
 
-    def visit_expression_statement(self, node):
-        self.pycode += &quot; &quot; * 4 * self.indent
-        expr = node.expression
-        if type(expr) is ast.BinaryExpression and expr.op.eval() == &quot;=&quot;:
-            rhs = expr.rhs
-            lhsn = expr.lhs.name.get_node_name()
-            if lhsn == self.func_name:
-                self.pycode += &quot;return &quot;
-                rhs.accept(self)
-            else:
-                node.visit_children(self)
-        else:
-            node.visit_children(self)
-        self.pycode += &quot;\n&quot;
+    <span class="k">def</span> <span class="nf">visit_expression_statement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pycode</span> <span class="o">+=</span> <span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">indent</span>
+        <span class="n">expr</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">expression</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span> <span class="ow">is</span> <span class="n">ast</span><span class="o">.</span><span class="n">BinaryExpression</span> <span class="ow">and</span> <span class="n">expr</span><span class="o">.</span><span class="n">op</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;=&quot;</span><span class="p">:</span>
+            <span class="n">rhs</span> <span class="o">=</span> <span class="n">expr</span><span class="o">.</span><span class="n">rhs</span>
+            <span class="n">lhsn</span> <span class="o">=</span> <span class="n">expr</span><span class="o">.</span><span class="n">lhs</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">get_node_name</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">lhsn</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">func_name</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">pycode</span> <span class="o">+=</span> <span class="s2">&quot;return &quot;</span>
+                <span class="n">rhs</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">node</span><span class="o">.</span><span class="n">visit_children</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">node</span><span class="o">.</span><span class="n">visit_children</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pycode</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
 
-    def visit_if_statement(self, node):
-        self.pycode += &quot; &quot; * 4 * self.indent + &quot;if &quot;
-        node.condition.accept(self)
-        self.pycode += &quot;:\n&quot;
-        node.get_statement_block().accept(self)
-        for n in node.elseifs:
-            n.accept(self)
-        if node.elses:
-            node.elses.accept(self)
+    <span class="k">def</span> <span class="nf">visit_if_statement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pycode</span> <span class="o">+=</span> <span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">indent</span> <span class="o">+</span> <span class="s2">&quot;if &quot;</span>
+        <span class="n">node</span><span class="o">.</span><span class="n">condition</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pycode</span> <span class="o">+=</span> <span class="s2">&quot;:</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">node</span><span class="o">.</span><span class="n">get_statement_block</span><span class="p">()</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">elseifs</span><span class="p">:</span>
+            <span class="n">n</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">elses</span><span class="p">:</span>
+            <span class="n">node</span><span class="o">.</span><span class="n">elses</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
-    def visit_else_statement(self, node):
-        self.pycode += &quot; &quot; * 4 * self.indent + &quot;else:\n&quot;
-        node.get_statement_block().accept(self)
+    <span class="k">def</span> <span class="nf">visit_else_statement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pycode</span> <span class="o">+=</span> <span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">indent</span> <span class="o">+</span> <span class="s2">&quot;else:</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">node</span><span class="o">.</span><span class="n">get_statement_block</span><span class="p">()</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
-    def visit_binary_expression(self, node):
-        lhs = node.lhs
-        rhs = node.rhs
-        op = node.op.eval()
-        if op == &quot;^&quot;:
-            self.pycode += &quot;pow(&quot;
-            lhs.accept(self)
-            self.pycode += &quot;, &quot;
-            rhs.accept(self)
-            self.pycode += &quot;)&quot;
-        else:
-            lhs.accept(self)
-            self.pycode += f&quot; {op} &quot;
-            rhs.accept(self)
+    <span class="k">def</span> <span class="nf">visit_binary_expression</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="n">lhs</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">lhs</span>
+        <span class="n">rhs</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">rhs</span>
+        <span class="n">op</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">op</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">op</span> <span class="o">==</span> <span class="s2">&quot;^&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pycode</span> <span class="o">+=</span> <span class="s2">&quot;pow(&quot;</span>
+            <span class="n">lhs</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pycode</span> <span class="o">+=</span> <span class="s2">&quot;, &quot;</span>
+            <span class="n">rhs</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pycode</span> <span class="o">+=</span> <span class="s2">&quot;)&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">lhs</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pycode</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">op</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="n">rhs</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
-    def visit_var_name(self, node):
-        self.pycode += node.name.get_node_name()
+    <span class="k">def</span> <span class="nf">visit_var_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pycode</span> <span class="o">+=</span> <span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">get_node_name</span><span class="p">()</span>
 
-    def visit_integer(self, node):
-        self.pycode += nmod.to_nmodl(node)
+    <span class="k">def</span> <span class="nf">visit_integer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pycode</span> <span class="o">+=</span> <span class="n">nmod</span><span class="o">.</span><span class="n">to_nmodl</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
 
-    def visit_double(self, node):
-        self.pycode += nmodl.to_nmodl(node)
+    <span class="k">def</span> <span class="nf">visit_double</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pycode</span> <span class="o">+=</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">to_nmodl</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -960,9 +960,9 @@ class PyGenerator(visitor.AstVisitor):
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pygen = PyGenerator()
-pygen.visit_program(mfunc_ast)
-print(pygen.pycode)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pygen</span> <span class="o">=</span> <span class="n">PyGenerator</span><span class="p">()</span>
+<span class="n">pygen</span><span class="o">.</span><span class="n">visit_program</span><span class="p">(</span><span class="n">mfunc_ast</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">pygen</span><span class="o">.</span><span class="n">pycode</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -987,35 +987,35 @@ def myfunc(x, y):
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import nmodl.dsl as nmodl
-from nmodl.dsl import ast, visitor
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">nmodl.dsl</span> <span class="k">as</span> <span class="nn">nmodl</span>
+<span class="kn">from</span> <span class="nn">nmodl.dsl</span> <span class="kn">import</span> <span class="n">ast</span><span class="p">,</span> <span class="n">visitor</span>
 
-driver = nmodl.NmodlDriver()
-mod_string = &quot;&quot;&quot;
-NEURON {
-        SUFFIX hx
-        REPRESENTS NCIT:C17145   : sodium channel
-        REPRESENTS NCIT:C17008   : potassium channel
-        USEION na READ ena WRITE ina REPRESENTS CHEBI:29101
-        USEION ca READ eca WRITE ina
-        RANGE gnabar, gkbar, gl, el, gna, gk
-}
-&quot;&quot;&quot;
-modast = driver.parse_string(mod_string)
+<span class="n">driver</span> <span class="o">=</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">NmodlDriver</span><span class="p">()</span>
+<span class="n">mod_string</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">NEURON {</span>
+<span class="s2">        SUFFIX hx</span>
+<span class="s2">        REPRESENTS NCIT:C17145   : sodium channel</span>
+<span class="s2">        REPRESENTS NCIT:C17008   : potassium channel</span>
+<span class="s2">        USEION na READ ena WRITE ina REPRESENTS CHEBI:29101</span>
+<span class="s2">        USEION ca READ eca WRITE ina</span>
+<span class="s2">        RANGE gnabar, gkbar, gl, el, gna, gk</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="n">modast</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">parse_string</span><span class="p">(</span><span class="n">mod_string</span><span class="p">)</span>
 
-lookup_visitor = visitor.AstLookupVisitor()
+<span class="n">lookup_visitor</span> <span class="o">=</span> <span class="n">visitor</span><span class="o">.</span><span class="n">AstLookupVisitor</span><span class="p">()</span>
 
-ont_statements = lookup_visitor.lookup(modast, ast.AstNodeType.ONTOLOGY_STATEMENT)
-ions = lookup_visitor.lookup(modast, ast.AstNodeType.USEION)
+<span class="n">ont_statements</span> <span class="o">=</span> <span class="n">lookup_visitor</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="n">modast</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AstNodeType</span><span class="o">.</span><span class="n">ONTOLOGY_STATEMENT</span><span class="p">)</span>
+<span class="n">ions</span> <span class="o">=</span> <span class="n">lookup_visitor</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="n">modast</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AstNodeType</span><span class="o">.</span><span class="n">USEION</span><span class="p">)</span>
 
-for statement in ont_statements:
-    print(
-        &quot; %s (%s)&quot; % (nmodl.to_nmodl(statement), nmodl.to_nmodl(statement.ontology_id))
-    )
+<span class="k">for</span> <span class="n">statement</span> <span class="ow">in</span> <span class="n">ont_statements</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="s2">&quot; </span><span class="si">%s</span><span class="s2"> (</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">nmodl</span><span class="o">.</span><span class="n">to_nmodl</span><span class="p">(</span><span class="n">statement</span><span class="p">),</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">to_nmodl</span><span class="p">(</span><span class="n">statement</span><span class="o">.</span><span class="n">ontology_id</span><span class="p">))</span>
+    <span class="p">)</span>
 
-for ion in ions:
-    o_id = nmodl.to_nmodl(ion.ontology_id) if ion.ontology_id else &quot;&quot;
-    print(&quot; %s (%s)&quot; % (nmodl.to_nmodl(ion), o_id))
+<span class="k">for</span> <span class="n">ion</span> <span class="ow">in</span> <span class="n">ions</span><span class="p">:</span>
+    <span class="n">o_id</span> <span class="o">=</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">to_nmodl</span><span class="p">(</span><span class="n">ion</span><span class="o">.</span><span class="n">ontology_id</span><span class="p">)</span> <span class="k">if</span> <span class="n">ion</span><span class="o">.</span><span class="n">ontology_id</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; </span><span class="si">%s</span><span class="s2"> (</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">nmodl</span><span class="o">.</span><span class="n">to_nmodl</span><span class="p">(</span><span class="n">ion</span><span class="p">),</span> <span class="n">o_id</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>

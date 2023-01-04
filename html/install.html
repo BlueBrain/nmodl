@@ -152,8 +152,8 @@
 <h2>Cloning Source<a class="headerlink" href="#cloning-source" title="Permalink to this headline"></a></h2>
 <p>The NMODL Framework is maintained on github. The best way to get the sources is to simply clone the repository.</p>
 <p><strong>Note</strong>: This project uses git submodules which must be cloned along with the repository itself:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>git clone --recursive https://github.com/BlueBrain/nmodl.git
-<span class="nb">cd</span> nmodl
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>--recursive<span class="w"> </span>https://github.com/BlueBrain/nmodl.git
+<span class="nb">cd</span><span class="w"> </span>nmodl
 </pre></div>
 </div>
 </section>
@@ -171,30 +171,30 @@
 <h3>On OS X<a class="headerlink" href="#on-os-x" title="Permalink to this headline"></a></h3>
 <p>Typically the versions of bison and flex provided by the system are outdated and not compatible with our requirements.
 To get recent version of all dependencies we recommend using <a class="reference external" href="https://brew.sh/">homebrew</a>:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>brew install flex bison cmake python3
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>brew<span class="w"> </span>install<span class="w"> </span>flex<span class="w"> </span>bison<span class="w"> </span>cmake<span class="w"> </span>python3
 </pre></div>
 </div>
 <p>The necessary Python packages can then easily be added using the pip3 command.</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip3 install Jinja2 PyYAML pytest sympy
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip3<span class="w"> </span>install<span class="w"> </span>Jinja2<span class="w"> </span>PyYAML<span class="w"> </span>pytest<span class="w"> </span>sympy
 </pre></div>
 </div>
 <p>Make sure to have latest flex/bison in $PATH :</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span>/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:/usr/local/bin/:<span class="nv">$PATH</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span>/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:/usr/local/bin/:<span class="nv">$PATH</span>
 </pre></div>
 </div>
 <p>On Apple M1, corresponding brew paths are under <code class="docutils literal notranslate"><span class="pre">/opt/homebrew/opt/</span></code>:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span>/opt/homebrew/opt/flex/bin:/opt/homebrew/opt/bison/bin:<span class="nv">$PATH</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span>/opt/homebrew/opt/flex/bin:/opt/homebrew/opt/bison/bin:<span class="nv">$PATH</span>
 </pre></div>
 </div>
 </section>
 <section id="on-ubuntu">
 <h3>On Ubuntu<a class="headerlink" href="#on-ubuntu" title="Permalink to this headline"></a></h3>
 <p>On Ubuntu (&gt;=18.04) flex/bison versions are recent enough and are installed along with the system toolchain:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>apt-get install flex bison gcc python3 python3-pip
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>apt-get<span class="w"> </span>install<span class="w"> </span>flex<span class="w"> </span>bison<span class="w"> </span>gcc<span class="w"> </span>python3<span class="w"> </span>python3-pip
 </pre></div>
 </div>
 <p>The Python dependencies are installed using:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip3 install Jinja2 PyYAML pytest sympy
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip3<span class="w"> </span>install<span class="w"> </span>Jinja2<span class="w"> </span>PyYAML<span class="w"> </span>pytest<span class="w"> </span>sympy
 </pre></div>
 </div>
 </section>
@@ -204,22 +204,22 @@ To get recent version of all dependencies we recommend using <a class="reference
 <section id="using-cmake">
 <h3>Using CMake<a class="headerlink" href="#using-cmake" title="Permalink to this headline"></a></h3>
 <p>Once all dependencies are in place, build project as:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mkdir -p nmodl/build
-<span class="nb">cd</span> nmodl/build
-cmake .. -DCMAKE_INSTALL_PREFIX<span class="o">=</span><span class="nv">$HOME</span>/nmodl
-make -j <span class="o">&amp;&amp;</span> make install
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>-p<span class="w"> </span>nmodl/build
+<span class="nb">cd</span><span class="w"> </span>nmodl/build
+cmake<span class="w"> </span>..<span class="w"> </span>-DCMAKE_INSTALL_PREFIX<span class="o">=</span><span class="nv">$HOME</span>/nmodl
+make<span class="w"> </span>-j<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>make<span class="w"> </span>install
 </pre></div>
 </div>
 <p>And set PYTHONPATH as:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">PYTHONPATH</span><span class="o">=</span><span class="nv">$HOME</span>/nmodl/lib:<span class="nv">$PYTHONPATH</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PYTHONPATH</span><span class="o">=</span><span class="nv">$HOME</span>/nmodl/lib:<span class="nv">$PYTHONPATH</span>
 </pre></div>
 </div>
 <section id="flex-bison-paths">
 <h4>Flex / Bison Paths<a class="headerlink" href="#flex-bison-paths" title="Permalink to this headline"></a></h4>
 <p>If flex / bison are not in your default $PATH, you can provide the path to cmake as:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>cmake .. -DFLEX_EXECUTABLE<span class="o">=</span>/usr/local/opt/flex/bin/flex <span class="se">\</span>
-         -DBISON_EXECUTABLE<span class="o">=</span>/usr/local/opt/bison/bin/bison <span class="se">\</span>
-         -DCMAKE_INSTALL_PREFIX<span class="o">=</span><span class="nv">$HOME</span>/nmodl
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>..<span class="w"> </span>-DFLEX_EXECUTABLE<span class="o">=</span>/usr/local/opt/flex/bin/flex<span class="w"> </span><span class="se">\</span>
+<span class="w">         </span>-DBISON_EXECUTABLE<span class="o">=</span>/usr/local/opt/bison/bin/bison<span class="w"> </span><span class="se">\</span>
+<span class="w">         </span>-DCMAKE_INSTALL_PREFIX<span class="o">=</span><span class="nv">$HOME</span>/nmodl
 </pre></div>
 </div>
 </section>
@@ -228,7 +228,7 @@ make -j <span class="o">&amp;&amp;</span> make install
 <h3>Using Python setuptools<a class="headerlink" href="#using-python-setuptools" title="Permalink to this headline"></a></h3>
 <p>If you are mainly interested in the NMODL Framework parsing and analysis tools and wish to use them from Python, we
 recommend building and installing using Python.</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip3 install --user .
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip3<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>.
 </pre></div>
 </div>
 <p>This should build the NMODL framework and install it into your pip user <code class="docutils literal notranslate"><span class="pre">site-packages</span></code> folder such that it becomes
@@ -248,13 +248,13 @@ be present:</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">NMODL_PYLIB</span></code>: This variable should point to the libpython shared-object (or dylib) file. On macos this could be
 for example:</p></li>
 </ul>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">NMODL_PYLIB</span><span class="o">=</span>/usr/local/Cellar/python/3.7.7/Frameworks/Python.framework/Versions/3.7/Python
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">NMODL_PYLIB</span><span class="o">=</span>/usr/local/Cellar/python/3.7.7/Frameworks/Python.framework/Versions/3.7/Python
 </pre></div>
 </div>
 <ul class="simple">
 <li><p>‘NMODL_WRAPLIB’: This variable should point to the <code class="docutils literal notranslate"><span class="pre">libpywrapper.so</span></code> built as part of NMODL, for example:</p></li>
 </ul>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">NMODL_WRAPLIB</span><span class="o">=</span>/opt/nmodl/lib/libpywrapper.so
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">NMODL_WRAPLIB</span><span class="o">=</span>/opt/nmodl/lib/libpywrapper.so
 </pre></div>
 </div>
 <p><strong>Note</strong>: In order for all unit tests to function correctly when building without linking against libpython we must
@@ -264,26 +264,26 @@ set <code class="docutils literal notranslate"><span class="pre">NMODL_PYLIB</sp
 <section id="testing-the-installed-module">
 <h2>Testing the Installed Module<a class="headerlink" href="#testing-the-installed-module" title="Permalink to this headline"></a></h2>
 <p>If you have installed the NMODL Framework using CMake, you can now run tests from the build directory as:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ make <span class="nb">test</span>
-Running tests...
-Test project /Users/kumbhar/workarena/repos/bbp/incubator/nocmodl/cmake-build-debug
-      Start  <span class="m">1</span>: testmodtoken/NMODL Lexer returning valid ModToken object
- <span class="m">1</span>/60 Test  <span class="c1">#1: testmodtoken/NMODL Lexer returning valid ModToken object ...................................   Passed    0.01 sec</span>
-      Start  <span class="m">2</span>: testlexer/NMODL Lexer returning valid token types
- <span class="m">2</span>/60 Test  <span class="c1">#2: testlexer/NMODL Lexer returning valid token types ..........................................   Passed    0.00 sec</span>
-      Start  <span class="m">3</span>: testparser/Scenario: NMODL can define macros using DEFINE keyword
- <span class="m">3</span>/60 Test  <span class="c1">#3: testparser/Scenario: NMODL can define macros using DEFINE keyword ..........................   Passed    0.01 sec</span>
-      Start  <span class="m">4</span>: testparser/Scenario: Macros can be used anywhere <span class="k">in</span> the mod file
- <span class="m">4</span>/60 Test  <span class="c1">#4: testparser/Scenario: Macros can be used anywhere in the mod file ...........................   Passed    0.01 sec</span>
-      Start  <span class="m">5</span>: testparser/Scenario: NMODL parser accepts empty unit specification
- <span class="m">5</span>/60 Test  <span class="c1">#5: testparser/Scenario: NMODL parser accepts empty unit specification .........................   Passed    0.01 sec</span>
-      Start  <span class="m">6</span>: testparser/Scenario: NMODL parser running number of valid NMODL constructs
- <span class="m">6</span>/60 Test  <span class="c1">#6: testparser/Scenario: NMODL parser running number of valid NMODL constructs .................   Passed    0.04 sec</span>
-      Start  <span class="m">7</span>: testparser/Scenario: NMODL parser running number of invalid NMODL constructs
- <span class="m">7</span>/60 Test  <span class="c1">#7: testparser/Scenario: NMODL parser running number of invalid NMODL constructs ...............   Passed    0.01 sec</span>
-      Start  <span class="m">8</span>: testparser/Scenario: Legacy differential equation solver from NEURON solve number of ODE
- <span class="m">8</span>/60 Test  <span class="c1">#8: testparser/Scenario: Legacy differential equation solver from NEURON solve number of ODE ...   Passed    0.00 sec</span>
- ...
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>make<span class="w"> </span><span class="nb">test</span>
+Running<span class="w"> </span>tests...
+Test<span class="w"> </span>project<span class="w"> </span>/Users/kumbhar/workarena/repos/bbp/incubator/nocmodl/cmake-build-debug
+<span class="w">      </span>Start<span class="w">  </span><span class="m">1</span>:<span class="w"> </span>testmodtoken/NMODL<span class="w"> </span>Lexer<span class="w"> </span>returning<span class="w"> </span>valid<span class="w"> </span>ModToken<span class="w"> </span>object
+<span class="w"> </span><span class="m">1</span>/60<span class="w"> </span>Test<span class="w">  </span><span class="c1">#1: testmodtoken/NMODL Lexer returning valid ModToken object ...................................   Passed    0.01 sec</span>
+<span class="w">      </span>Start<span class="w">  </span><span class="m">2</span>:<span class="w"> </span>testlexer/NMODL<span class="w"> </span>Lexer<span class="w"> </span>returning<span class="w"> </span>valid<span class="w"> </span>token<span class="w"> </span>types
+<span class="w"> </span><span class="m">2</span>/60<span class="w"> </span>Test<span class="w">  </span><span class="c1">#2: testlexer/NMODL Lexer returning valid token types ..........................................   Passed    0.00 sec</span>
+<span class="w">      </span>Start<span class="w">  </span><span class="m">3</span>:<span class="w"> </span>testparser/Scenario:<span class="w"> </span>NMODL<span class="w"> </span>can<span class="w"> </span>define<span class="w"> </span>macros<span class="w"> </span>using<span class="w"> </span>DEFINE<span class="w"> </span>keyword
+<span class="w"> </span><span class="m">3</span>/60<span class="w"> </span>Test<span class="w">  </span><span class="c1">#3: testparser/Scenario: NMODL can define macros using DEFINE keyword ..........................   Passed    0.01 sec</span>
+<span class="w">      </span>Start<span class="w">  </span><span class="m">4</span>:<span class="w"> </span>testparser/Scenario:<span class="w"> </span>Macros<span class="w"> </span>can<span class="w"> </span>be<span class="w"> </span>used<span class="w"> </span>anywhere<span class="w"> </span><span class="k">in</span><span class="w"> </span>the<span class="w"> </span>mod<span class="w"> </span>file
+<span class="w"> </span><span class="m">4</span>/60<span class="w"> </span>Test<span class="w">  </span><span class="c1">#4: testparser/Scenario: Macros can be used anywhere in the mod file ...........................   Passed    0.01 sec</span>
+<span class="w">      </span>Start<span class="w">  </span><span class="m">5</span>:<span class="w"> </span>testparser/Scenario:<span class="w"> </span>NMODL<span class="w"> </span>parser<span class="w"> </span>accepts<span class="w"> </span>empty<span class="w"> </span>unit<span class="w"> </span>specification
+<span class="w"> </span><span class="m">5</span>/60<span class="w"> </span>Test<span class="w">  </span><span class="c1">#5: testparser/Scenario: NMODL parser accepts empty unit specification .........................   Passed    0.01 sec</span>
+<span class="w">      </span>Start<span class="w">  </span><span class="m">6</span>:<span class="w"> </span>testparser/Scenario:<span class="w"> </span>NMODL<span class="w"> </span>parser<span class="w"> </span>running<span class="w"> </span>number<span class="w"> </span>of<span class="w"> </span>valid<span class="w"> </span>NMODL<span class="w"> </span>constructs
+<span class="w"> </span><span class="m">6</span>/60<span class="w"> </span>Test<span class="w">  </span><span class="c1">#6: testparser/Scenario: NMODL parser running number of valid NMODL constructs .................   Passed    0.04 sec</span>
+<span class="w">      </span>Start<span class="w">  </span><span class="m">7</span>:<span class="w"> </span>testparser/Scenario:<span class="w"> </span>NMODL<span class="w"> </span>parser<span class="w"> </span>running<span class="w"> </span>number<span class="w"> </span>of<span class="w"> </span>invalid<span class="w"> </span>NMODL<span class="w"> </span>constructs
+<span class="w"> </span><span class="m">7</span>/60<span class="w"> </span>Test<span class="w">  </span><span class="c1">#7: testparser/Scenario: NMODL parser running number of invalid NMODL constructs ...............   Passed    0.01 sec</span>
+<span class="w">      </span>Start<span class="w">  </span><span class="m">8</span>:<span class="w"> </span>testparser/Scenario:<span class="w"> </span>Legacy<span class="w"> </span>differential<span class="w"> </span>equation<span class="w"> </span>solver<span class="w"> </span>from<span class="w"> </span>NEURON<span class="w"> </span>solve<span class="w"> </span>number<span class="w"> </span>of<span class="w"> </span>ODE
+<span class="w"> </span><span class="m">8</span>/60<span class="w"> </span>Test<span class="w">  </span><span class="c1">#8: testparser/Scenario: Legacy differential equation solver from NEURON solve number of ODE ...   Passed    0.00 sec</span>
+<span class="w"> </span>...
 </pre></div>
 </div>
 <p>To test the NMODL Framework python bindings, you can try a minimal example in your Python 3 interpeter as follows:</p>
@@ -305,7 +305,7 @@ Test project /Users/kumbhar/workarena/repos/bbp/incubator/nocmodl/cmake-build-de
 <p>In order to build the documentation you must have additionally <code class="docutils literal notranslate"><span class="pre">pandoc</span></code> installed. Use your
 system’s package manager to do this (e.g. <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">pandoc</span></code>).</p>
 <p>You can build the entire documentation simply by using sphinx from <code class="docutils literal notranslate"><span class="pre">setup.py</span></code>:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python3 setup.py build_ext --inplace docs -G <span class="s2">&quot;Unix Makefiles&quot;</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>setup.py<span class="w"> </span>build_ext<span class="w"> </span>--inplace<span class="w"> </span>docs<span class="w"> </span>-G<span class="w"> </span><span class="s2">&quot;Unix Makefiles&quot;</span>
 </pre></div>
 </div>
 </section>

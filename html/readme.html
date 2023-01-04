@@ -214,8 +214,8 @@ Python 3.6.8 (default, Apr  8 2019, 18:17:52)
 </pre></div>
 </div>
 <p>To try Jupyter notebooks you can download docker compose file and run it as:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>wget <span class="s2">&quot;https://raw.githubusercontent.com/BlueBrain/nmodl/master/docker/docker-compose.yml&quot;</span>
-<span class="nv">DUID</span><span class="o">=</span><span class="k">$(</span>id -u<span class="k">)</span> <span class="nv">DGID</span><span class="o">=</span><span class="k">$(</span>id -g<span class="k">)</span> <span class="nv">HOSTNAME</span><span class="o">=</span><span class="k">$(</span>hostname<span class="k">)</span> docker-compose up
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>wget<span class="w"> </span><span class="s2">&quot;https://raw.githubusercontent.com/BlueBrain/nmodl/master/docker/docker-compose.yml&quot;</span>
+<span class="nv">DUID</span><span class="o">=</span><span class="k">$(</span>id<span class="w"> </span>-u<span class="k">)</span><span class="w"> </span><span class="nv">DGID</span><span class="o">=</span><span class="k">$(</span>id<span class="w"> </span>-g<span class="k">)</span><span class="w"> </span><span class="nv">HOSTNAME</span><span class="o">=</span><span class="k">$(</span>hostname<span class="k">)</span><span class="w"> </span>docker-compose<span class="w"> </span>up
 </pre></div>
 </div>
 <p>If all goes well you should see at the end status messages similar to these:</p>

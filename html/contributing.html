@@ -184,7 +184,7 @@ discussion might inform you of workarounds readily available.</p>
 <ul>
 <li><p>Make a <a class="reference external" href="https://guides.github.com/activities/forking/">fork</a> of this repository.</p></li>
 <li><p>Make your changes in your fork, in a new git branch:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git checkout -b my-fix-branch master
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </span>my-fix-branch<span class="w"> </span>master
 </pre></div>
 </div>
 </li>
@@ -201,12 +201,12 @@ The formatting utility can also be used directly:</p>
 </li>
 <li><p>Run the full test suite, and ensure that all tests pass.</p></li>
 <li><p>Commit your changes using a descriptive commit message.</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git commit -a
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>commit<span class="w"> </span>-a
 </pre></div>
 </div>
 </li>
 <li><p>Push your branch to GitHub:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git push origin my-fix-branch
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>my-fix-branch
 </pre></div>
 </div>
 </li>
@@ -216,8 +216,8 @@ The formatting utility can also be used directly:</p>
 <li><p>Make the required updates.</p></li>
 <li><p>Re-run the test suites to ensure tests are still passing.</p></li>
 <li><p>Rebase your branch and force push to your GitHub repository (this will update your Pull Request):</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span> git rebase master -i
- git push -f
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="w"> </span>git<span class="w"> </span>rebase<span class="w"> </span>master<span class="w"> </span>-i
+<span class="w"> </span>git<span class="w"> </span>push<span class="w"> </span>-f
 </pre></div>
 </div>
 </li>
@@ -231,22 +231,22 @@ The formatting utility can also be used directly:</p>
 repository:</p>
 <ul>
 <li><p>Delete the remote branch on GitHub either through the GitHub web UI or your local shell as follows:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git push origin --delete my-fix-branch
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>--delete<span class="w"> </span>my-fix-branch
 </pre></div>
 </div>
 </li>
 <li><p>Check out the master branch:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git checkout master -f
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>master<span class="w"> </span>-f
 </pre></div>
 </div>
 </li>
 <li><p>Delete the local branch:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git branch -D my-fix-branch
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>branch<span class="w"> </span>-D<span class="w"> </span>my-fix-branch
 </pre></div>
 </div>
 </li>
 <li><p>Update your master with the latest upstream version:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git pull --ff upstream master
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>pull<span class="w"> </span>--ff<span class="w"> </span>upstream<span class="w"> </span>master
 </pre></div>
 </div>
 </li>
