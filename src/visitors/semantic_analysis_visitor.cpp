@@ -1,5 +1,6 @@
 #include "visitors/semantic_analysis_visitor.hpp"
 #include "ast/function_block.hpp"
+#include "ast/function_table_block.hpp"
 #include "ast/independent_block.hpp"
 #include "ast/procedure_block.hpp"
 #include "ast/program.hpp"
@@ -113,6 +114,52 @@ void SemanticAnalysisVisitor::visit_independent_block(const ast::IndependentBloc
                 n->get_value()->get_value());
         }
     }
+    /// -->
+}
+
+void SemanticAnalysisVisitor::visit_function_table_block(const ast::FunctionTableBlock& node) {
+    /// <-- This code is for check 7
+    if (node.get_parameters().size() < 1) {
+        logger->critical(
+            "SemanticAnalysisVisitor :: Function table '{}' must have one or more arguments.",
+            node.get_node_name());
+        check_fail = true;
+    }
+    /// -->
+}
+
+void SemanticAnalysisVisitor::visit_protect_statement(const ast::ProtectStatement& /* node */) {
+    /// <-- This code is for check 6
+    if (accel_backend) {
+        logger->error("PROTECT statement is not supported with GPU execution");
+    }
+    if (in_mutex) {
+        logger->warn("SemanticAnalysisVisitor :: Find a PROTECT inside a already locked part.");
+    }
+    /// -->
+}
+
+void SemanticAnalysisVisitor::visit_mutex_lock(const ast::MutexLock& /* node */) {
+    /// <-- This code is for check 6
+    if (accel_backend) {
+        logger->error("MUTEXLOCK statement is not supported with GPU execution");
+    }
+    if (in_mutex) {
+        logger->warn("SemanticAnalysisVisitor :: Found a MUTEXLOCK inside an already locked part.");
+    }
+    in_mutex = true;
+    /// -->
+}
+
+void SemanticAnalysisVisitor::visit_mutex_unlock(const ast::MutexUnlock& /* node */) {
+    /// <-- This code is for check 6
+    if (accel_backend) {
+        logger->error("MUTEXUNLOCK statement is not supported with GPU execution");
+    }
+    if (!in_mutex) {
+        logger->warn("SemanticAnalysisVisitor :: Found a MUTEXUNLOCK outside a locked part.");
+    }
+    in_mutex = false;
     /// -->
 }
 

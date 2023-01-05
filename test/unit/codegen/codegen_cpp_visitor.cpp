@@ -455,3 +455,53 @@ SCENARIO("Check CONSTANT variables are added to global variable structure",
         }
     }
 }
+
+SCENARIO("Check code generation for FUNCTION_TABLE block", "[codegen][function_table]") {
+    GIVEN("A MOD file with Function table block") {
+        std::string const nmodl_text = R"(
+            NEURON { SUFFIX glia }
+            FUNCTION_TABLE ttt(l (mV))
+            FUNCTION_TABLE uuu(l, k)
+        )";
+        THEN("Code should be generated correctly") {
+            auto const generated = get_cpp_code(nmodl_text);
+            REQUIRE_THAT(generated, Contains("double ttt_glia("));
+            REQUIRE_THAT(generated, Contains("double table_ttt_glia("));
+            REQUIRE_THAT(generated, Contains("hoc_spec_table(&inst->global->_ptable_ttt, 1"));
+            REQUIRE_THAT(generated, Contains("double uuu_glia("));
+            REQUIRE_THAT(generated, Contains("double table_uuu_glia("));
+            REQUIRE_THAT(generated, Contains("hoc_func_table(inst->global->_ptable_uuu, 2"));
+        }
+    }
+}
+
+SCENARIO("Check codegen for MUTEX and PROTECT", "[codegen][mutex_protect]") {
+    GIVEN("A mod file containing MUTEX & PROTECT") {
+        std::string const nmodl_text = R"(
+            NEURON {
+                SUFFIX TEST
+                RANGE tmp
+            }
+            PARAMETER {
+                tmp = 10
+            }
+            INITIAL {
+                MUTEXLOCK
+                tmp = 11
+                MUTEXUNLOCK
+                PROTECT tmp = 12
+            }
+        )";
+
+        THEN("Code with OpenMP critical sections is generated") {
+            auto const generated = get_cpp_code(nmodl_text);
+            std::string expected_code = R"(#pragma omp critical TEST {
+                    inst->tmp[id] = 11.0;
+                }
+                #pragma omp critical TEST {
+                    inst->tmp[id] = 12.0;
+                })";
+            REQUIRE_THAT(generated, Contains(expected_code));
+        }
+    }
+}

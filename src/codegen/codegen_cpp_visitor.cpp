@@ -318,6 +318,23 @@ void CodegenCVisitor::visit_update_dt(const ast::UpdateDt& node) {
     // dt change statement should be pulled outside already
 }
 
+void CodegenCVisitor::visit_protect_statement(const ast::ProtectStatement& node) {
+    printer->fmt_start_block("#pragma omp critical {}", info.mod_suffix);
+    printer->add_indent();
+    node.get_expression()->accept(*this);
+    printer->add_text(";");
+    printer->add_newline();
+    printer->end_block(1);
+}
+
+void CodegenCVisitor::visit_mutex_lock(const ast::MutexLock& node) {
+    printer->fmt_start_block("#pragma omp critical {}", info.mod_suffix);
+}
+
+void CodegenCVisitor::visit_mutex_unlock(const ast::MutexUnlock& node) {
+    printer->end_block(1);
+}
+
 /****************************************************************************************/
 /*                               Common helper routines                                 */
 /****************************************************************************************/
@@ -475,7 +492,10 @@ bool CodegenCVisitor::need_semicolon(Statement* node) {
         || node->is_verbatim()
         || node->is_from_statement()
         || node->is_conductance_hint()
-        || node->is_while_statement()) {
+        || node->is_while_statement()
+        || node->is_protect_statement()
+        || node->is_mutex_lock()
+        || node->is_mutex_unlock()) {
         return false;
     }
     if (node->is_expression_statement()) {
@@ -1286,14 +1306,17 @@ void CodegenCVisitor::print_statement_block(const ast::StatementBlock& node,
             continue;
         }
         /// not necessary to add indent for verbatim block (pretty-printing)
-        if (!statement->is_verbatim()) {
+        if (!statement->is_verbatim() && !statement->is_mutex_lock() &&
+            !statement->is_mutex_unlock() && !statement->is_protect_statement()) {
             printer->add_indent();
         }
         statement->accept(*this);
         if (need_semicolon(statement.get())) {
             printer->add_text(";");
         }
-        printer->add_newline();
+        if (!statement->is_mutex_lock() && !statement->is_mutex_unlock()) {
+            printer->add_newline();
+        }
     }
 
     if (close_brace) {
@@ -1728,6 +1751,33 @@ void CodegenCVisitor::print_function(const ast::FunctionBlock& node) {
     block->accept(v);
 
     print_function_procedure_helper(node);
+}
+
+
+void CodegenCVisitor::print_function_tables(const ast::FunctionTableBlock& node) {
+    auto name = node.get_node_name();
+    const auto& p = node.get_parameters();
+    auto params = internal_method_parameters();
+    for (const auto& i: p) {
+        params.emplace_back("", "double", "", i->get_node_name());
+    }
+    printer->fmt_line("double {}({})", method_name(name), get_parameter_str(params));
+    printer->start_block();
+    printer->fmt_line("double _arg[{}];", p.size());
+    for (size_t i = 0; i < p.size(); ++i) {
+        printer->fmt_line("_arg[{}] = {};", i, p[i]->get_node_name());
+    }
+    printer->fmt_line("return hoc_func_table({}, {}, _arg);",
+                      get_variable_name(std::string("_ptable_" + name), true),
+                      p.size());
+    printer->end_block(1);
+
+    printer->fmt_start_block("double table_{}()", method_name(name));
+    printer->fmt_line("hoc_spec_table(&{}, {});",
+                      get_variable_name(std::string("_ptable_" + name)),
+                      p.size());
+    printer->add_line("return 0.;");
+    printer->end_block(1);
 }
 
 /**
@@ -2689,6 +2739,11 @@ void CodegenCVisitor::print_mechanism_global_var_structure(bool print_initialise
             }
             codegen_global_variables.push_back(make_symbol(name));
         }
+    }
+
+    for (const auto& f: info.function_tables) {
+        printer->fmt_line("void* _ptable_{}{{}};", f->get_node_name());
+        codegen_global_variables.push_back(make_symbol("_ptable_" + f->get_node_name()));
     }
 
     if (info.vectorize && info.thread_data_index) {
@@ -4581,6 +4636,9 @@ void CodegenCVisitor::print_compute_functions() {
     }
     for (const auto& function: info.functions) {
         print_function(*function);
+    }
+    for (const auto& function: info.function_tables) {
+        print_function_tables(*function);
     }
     for (size_t i = 0; i < info.before_after_blocks.size(); i++) {
         print_before_after_block(info.before_after_blocks[i], i);
