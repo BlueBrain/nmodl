@@ -519,55 +519,88 @@ $(document).ready(function(){initNavTree('test_2unit_2codegen_2codegen__cpp__vis
 <div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;    }</div>
 <div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;}</div>
 <div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160; </div>
-<div class="line"><a name="l00426"></a><span class="lineno"><a class="line" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#a41044133b4ee2b429529cfbc7b33dcc3">  426</a></span>&#160;<a class="code" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#a9c45dd7626fd81cd01383b4f8dc4e604">SCENARIO</a>(<span class="stringliteral">&quot;Check code generation for FUNCTION_TABLE block&quot;</span>, <span class="stringliteral">&quot;[codegen][function_table]&quot;</span>) {</div>
-<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;    GIVEN(<span class="stringliteral">&quot;A MOD file with Function table block&quot;</span>) {</div>
-<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;        std::string <span class="keyword">const</span> nmodl_text = R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;<span class="stringliteral">            NEURON { SUFFIX glia }</span></div>
-<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;<span class="stringliteral">            FUNCTION_TABLE ttt(l (mV))</span></div>
-<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;<span class="stringliteral">            FUNCTION_TABLE uuu(l, k)</span></div>
-<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;<span class="stringliteral">        )&quot;;</span></div>
-<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;<span class="stringliteral">        THEN(</span><span class="stringliteral">&quot;Code should be generated correctly&quot;</span>) {</div>
-<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;            <span class="keyword">auto</span> <span class="keyword">const</span> generated = <a class="code" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#ab7518722cbffea33018ffc7c653e1f87">get_cpp_code</a>(nmodl_text);</div>
-<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;            REQUIRE_THAT(generated, Contains(<span class="stringliteral">&quot;double ttt_glia(&quot;</span>));</div>
-<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;            REQUIRE_THAT(generated, Contains(<span class="stringliteral">&quot;double table_ttt_glia(&quot;</span>));</div>
-<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;            REQUIRE_THAT(generated, Contains(<span class="stringliteral">&quot;hoc_spec_table(&amp;inst-&gt;global-&gt;_ptable_ttt, 1&quot;</span>));</div>
-<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;            REQUIRE_THAT(generated, Contains(<span class="stringliteral">&quot;double uuu_glia(&quot;</span>));</div>
-<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;            REQUIRE_THAT(generated, Contains(<span class="stringliteral">&quot;double table_uuu_glia(&quot;</span>));</div>
-<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;            REQUIRE_THAT(generated, Contains(<span class="stringliteral">&quot;hoc_func_table(inst-&gt;global-&gt;_ptable_uuu, 2&quot;</span>));</div>
-<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;        }</div>
-<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;    }</div>
-<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;}</div>
-<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160; </div>
-<div class="line"><a name="l00445"></a><span class="lineno"><a class="line" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#a8bc03b91fe00cb27d1cb6d6f8bdfbb88">  445</a></span>&#160;<a class="code" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#a9c45dd7626fd81cd01383b4f8dc4e604">SCENARIO</a>(<span class="stringliteral">&quot;Check codegen for MUTEX and PROTECT&quot;</span>, <span class="stringliteral">&quot;[codegen][mutex_protect]&quot;</span>) {</div>
-<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;    GIVEN(<span class="stringliteral">&quot;A mod file containing MUTEX &amp; PROTECT&quot;</span>) {</div>
-<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;        std::string <span class="keyword">const</span> nmodl_text = R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;<span class="stringliteral">            NEURON {</span></div>
-<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;<span class="stringliteral">                SUFFIX TEST</span></div>
-<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;<span class="stringliteral">                RANGE tmp</span></div>
-<div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160;<span class="stringliteral">            }</span></div>
-<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160;<span class="stringliteral">            PARAMETER {</span></div>
-<div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;<span class="stringliteral">                tmp = 10</span></div>
-<div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160;<span class="stringliteral">            }</span></div>
-<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;<span class="stringliteral">            INITIAL {</span></div>
-<div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;<span class="stringliteral">                MUTEXLOCK</span></div>
-<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;<span class="stringliteral">                tmp = 11</span></div>
-<div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;<span class="stringliteral">                MUTEXUNLOCK</span></div>
-<div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;<span class="stringliteral">                PROTECT tmp = 12</span></div>
-<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;<span class="stringliteral">            }</span></div>
-<div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160;<span class="stringliteral">        )&quot;;</span></div>
-<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;<span class="stringliteral">        THEN(</span><span class="stringliteral">&quot;Code with OpenMP critical sections is generated&quot;</span>) {</div>
-<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;            <span class="keyword">auto</span> <span class="keyword">const</span> generated = <a class="code" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#ab7518722cbffea33018ffc7c653e1f87">get_cpp_code</a>(nmodl_text);</div>
-<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;            std::string expected_code = R<span class="stringliteral">&quot;(#pragma omp critical TEST {</span></div>
-<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;<span class="stringliteral">                    inst-&gt;tmp[id] = 11.0;</span></div>
-<div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;<span class="stringliteral">                }</span></div>
-<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;<span class="stringliteral">                #pragma omp critical TEST {</span></div>
-<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;<span class="stringliteral">                    inst-&gt;tmp[id] = 12.0;</span></div>
-<div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;<span class="stringliteral">                })&quot;;</span></div>
-<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated, Contains(expected_code));</span></div>
-<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;<span class="stringliteral">        }</span></div>
-<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;<span class="stringliteral">    }</span></div>
-<div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;<span class="stringliteral">}</span></div>
+<div class="line"><a name="l00426"></a><span class="lineno"><a class="line" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#a028149b179639277076e830bbc3bbcbf">  426</a></span>&#160;<a class="code" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#a9c45dd7626fd81cd01383b4f8dc4e604">SCENARIO</a>(<span class="stringliteral">&quot;Check CONSTANT variables are added to global variable structure&quot;</span>,</div>
+<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;         <span class="stringliteral">&quot;[codegen][global_variables]&quot;</span>) {</div>
+<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;    GIVEN(<span class="stringliteral">&quot;A MOD file that use CONSTANT variables&quot;</span>) {</div>
+<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;        std::string <span class="keyword">const</span> nmodl_text = R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;<span class="stringliteral">            NEURON {</span></div>
+<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;<span class="stringliteral">                SUFFIX CONST</span></div>
+<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;<span class="stringliteral">                GLOBAL zGateS1</span></div>
+<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;<span class="stringliteral">            }</span></div>
+<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;<span class="stringliteral">            PARAMETER {</span></div>
+<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;<span class="stringliteral">                zGateS1 = 1.2 (1)</span></div>
+<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;<span class="stringliteral">            }</span></div>
+<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;<span class="stringliteral">            CONSTANT {</span></div>
+<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;<span class="stringliteral">                e0 = 1.60217646e-19 (coulombs)</span></div>
+<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;<span class="stringliteral">                kB = 1.3806505e-23 (joule/kelvin)</span></div>
+<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;<span class="stringliteral">                q10Fluo = 1.67 (1)</span></div>
+<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;<span class="stringliteral">            }</span></div>
+<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;<span class="stringliteral">        )&quot;;</span></div>
+<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;<span class="stringliteral">        THEN(</span><span class="stringliteral">&quot;The global struct should contain these variables&quot;</span>) {</div>
+<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;            <span class="keyword">auto</span> <span class="keyword">const</span> generated = <a class="code" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#ab7518722cbffea33018ffc7c653e1f87">get_cpp_code</a>(nmodl_text);</div>
+<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;            std::string expected_code = R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;<span class="stringliteral">    struct CONST_Store {</span></div>
+<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;<span class="stringliteral">        int reset{};</span></div>
+<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;<span class="stringliteral">        int mech_type{};</span></div>
+<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;<span class="stringliteral">        double zGateS1{1.2};</span></div>
+<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;<span class="stringliteral">        double e0{1.60218e-19};</span></div>
+<div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160;<span class="stringliteral">        double kB{1.38065e-23};</span></div>
+<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160;<span class="stringliteral">        double q10Fluo{1.67};</span></div>
+<div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;<span class="stringliteral">    };)&quot;;</span></div>
+<div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated, Contains(<a class="code" href="namespacenmodl_1_1test__utils.html#af64fc17c60e5c8a5b8114147591aec3d">reindent_text</a>(<a class="code" href="group__utils.html#gac81ecc7fd7ebc9bb31e8c47a277f15ab">stringutils::trim</a>(expected_code))));</span></div>
+<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;<span class="stringliteral">    }</span></div>
+<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;<span class="stringliteral">}</span></div>
+<div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00459"></a><span class="lineno"><a class="line" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#a41044133b4ee2b429529cfbc7b33dcc3">  459</a></span>&#160;<span class="stringliteral"><a class="code" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#a9c45dd7626fd81cd01383b4f8dc4e604">SCENARIO</a>(</span><span class="stringliteral">&quot;Check code generation for FUNCTION_TABLE block&quot;</span>, <span class="stringliteral">&quot;[codegen][function_table]&quot;</span>) {</div>
+<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;    GIVEN(<span class="stringliteral">&quot;A MOD file with Function table block&quot;</span>) {</div>
+<div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160;        std::string <span class="keyword">const</span> nmodl_text = R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;<span class="stringliteral">            NEURON { SUFFIX glia }</span></div>
+<div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;<span class="stringliteral">            FUNCTION_TABLE ttt(l (mV))</span></div>
+<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;<span class="stringliteral">            FUNCTION_TABLE uuu(l, k)</span></div>
+<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;<span class="stringliteral">        )&quot;;</span></div>
+<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;<span class="stringliteral">        THEN(</span><span class="stringliteral">&quot;Code should be generated correctly&quot;</span>) {</div>
+<div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;            <span class="keyword">auto</span> <span class="keyword">const</span> generated = <a class="code" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#ab7518722cbffea33018ffc7c653e1f87">get_cpp_code</a>(nmodl_text);</div>
+<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;            REQUIRE_THAT(generated, Contains(<span class="stringliteral">&quot;double ttt_glia(&quot;</span>));</div>
+<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;            REQUIRE_THAT(generated, Contains(<span class="stringliteral">&quot;double table_ttt_glia(&quot;</span>));</div>
+<div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;            REQUIRE_THAT(generated, Contains(<span class="stringliteral">&quot;hoc_spec_table(&amp;inst-&gt;global-&gt;_ptable_ttt, 1&quot;</span>));</div>
+<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;            REQUIRE_THAT(generated, Contains(<span class="stringliteral">&quot;double uuu_glia(&quot;</span>));</div>
+<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;            REQUIRE_THAT(generated, Contains(<span class="stringliteral">&quot;double table_uuu_glia(&quot;</span>));</div>
+<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;            REQUIRE_THAT(generated, Contains(<span class="stringliteral">&quot;hoc_func_table(inst-&gt;global-&gt;_ptable_uuu, 2&quot;</span>));</div>
+<div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;        }</div>
+<div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;    }</div>
+<div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160;}</div>
+<div class="line"><a name="l00477"></a><span class="lineno">  477</span>&#160; </div>
+<div class="line"><a name="l00478"></a><span class="lineno"><a class="line" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#a8bc03b91fe00cb27d1cb6d6f8bdfbb88">  478</a></span>&#160;<a class="code" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#a9c45dd7626fd81cd01383b4f8dc4e604">SCENARIO</a>(<span class="stringliteral">&quot;Check codegen for MUTEX and PROTECT&quot;</span>, <span class="stringliteral">&quot;[codegen][mutex_protect]&quot;</span>) {</div>
+<div class="line"><a name="l00479"></a><span class="lineno">  479</span>&#160;    GIVEN(<span class="stringliteral">&quot;A mod file containing MUTEX &amp; PROTECT&quot;</span>) {</div>
+<div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160;        std::string <span class="keyword">const</span> nmodl_text = R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00481"></a><span class="lineno">  481</span>&#160;<span class="stringliteral">            NEURON {</span></div>
+<div class="line"><a name="l00482"></a><span class="lineno">  482</span>&#160;<span class="stringliteral">                SUFFIX TEST</span></div>
+<div class="line"><a name="l00483"></a><span class="lineno">  483</span>&#160;<span class="stringliteral">                RANGE tmp</span></div>
+<div class="line"><a name="l00484"></a><span class="lineno">  484</span>&#160;<span class="stringliteral">            }</span></div>
+<div class="line"><a name="l00485"></a><span class="lineno">  485</span>&#160;<span class="stringliteral">            PARAMETER {</span></div>
+<div class="line"><a name="l00486"></a><span class="lineno">  486</span>&#160;<span class="stringliteral">                tmp = 10</span></div>
+<div class="line"><a name="l00487"></a><span class="lineno">  487</span>&#160;<span class="stringliteral">            }</span></div>
+<div class="line"><a name="l00488"></a><span class="lineno">  488</span>&#160;<span class="stringliteral">            INITIAL {</span></div>
+<div class="line"><a name="l00489"></a><span class="lineno">  489</span>&#160;<span class="stringliteral">                MUTEXLOCK</span></div>
+<div class="line"><a name="l00490"></a><span class="lineno">  490</span>&#160;<span class="stringliteral">                tmp = 11</span></div>
+<div class="line"><a name="l00491"></a><span class="lineno">  491</span>&#160;<span class="stringliteral">                MUTEXUNLOCK</span></div>
+<div class="line"><a name="l00492"></a><span class="lineno">  492</span>&#160;<span class="stringliteral">                PROTECT tmp = 12</span></div>
+<div class="line"><a name="l00493"></a><span class="lineno">  493</span>&#160;<span class="stringliteral">            }</span></div>
+<div class="line"><a name="l00494"></a><span class="lineno">  494</span>&#160;<span class="stringliteral">        )&quot;;</span></div>
+<div class="line"><a name="l00495"></a><span class="lineno">  495</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00496"></a><span class="lineno">  496</span>&#160;<span class="stringliteral">        THEN(</span><span class="stringliteral">&quot;Code with OpenMP critical sections is generated&quot;</span>) {</div>
+<div class="line"><a name="l00497"></a><span class="lineno">  497</span>&#160;            <span class="keyword">auto</span> <span class="keyword">const</span> generated = <a class="code" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#ab7518722cbffea33018ffc7c653e1f87">get_cpp_code</a>(nmodl_text);</div>
+<div class="line"><a name="l00498"></a><span class="lineno">  498</span>&#160;            std::string expected_code = R<span class="stringliteral">&quot;(#pragma omp critical TEST {</span></div>
+<div class="line"><a name="l00499"></a><span class="lineno">  499</span>&#160;<span class="stringliteral">                    inst-&gt;tmp[id] = 11.0;</span></div>
+<div class="line"><a name="l00500"></a><span class="lineno">  500</span>&#160;<span class="stringliteral">                }</span></div>
+<div class="line"><a name="l00501"></a><span class="lineno">  501</span>&#160;<span class="stringliteral">                #pragma omp critical TEST {</span></div>
+<div class="line"><a name="l00502"></a><span class="lineno">  502</span>&#160;<span class="stringliteral">                    inst-&gt;tmp[id] = 12.0;</span></div>
+<div class="line"><a name="l00503"></a><span class="lineno">  503</span>&#160;<span class="stringliteral">                })&quot;;</span></div>
+<div class="line"><a name="l00504"></a><span class="lineno">  504</span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated, Contains(expected_code));</span></div>
+<div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;<span class="stringliteral">    }</span></div>
+<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;<span class="stringliteral">}</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="atest__utils_8hpp_html"><div class="ttname"><a href="test__utils_8hpp.html">test_utils.hpp</a></div></div>
@@ -581,6 +614,7 @@ $(document).ready(function(){initNavTree('test_2unit_2codegen_2codegen__cpp__vis
 <div class="ttc" id="acodegen__cpp__visitor_8hpp_html"><div class="ttname"><a href="codegen__cpp__visitor_8hpp.html">codegen_cpp_visitor.hpp</a></div><div class="ttdoc">Visitor for printing C code compatible with legacy api of CoreNEURON</div></div>
 <div class="ttc" id="aprogram_8hpp_html"><div class="ttname"><a href="program_8hpp.html">program.hpp</a></div><div class="ttdoc">Auto generated AST classes declaration.</div></div>
 <div class="ttc" id="anamespacenmodl_1_1test__utils_html_af64fc17c60e5c8a5b8114147591aec3d"><div class="ttname"><a href="namespacenmodl_1_1test__utils.html#af64fc17c60e5c8a5b8114147591aec3d">nmodl::test_utils::reindent_text</a></div><div class="ttdeci">std::string reindent_text(const std::string &amp;text)</div><div class="ttdoc">Reindent nmodl text for text-to-text comparison.</div><div class="ttdef"><b>Definition:</b> <a href="test__utils_8cpp_source.html#l00062">test_utils.cpp:62</a></div></div>
+<div class="ttc" id="agroup__utils_html_gac81ecc7fd7ebc9bb31e8c47a277f15ab"><div class="ttname"><a href="group__utils.html#gac81ecc7fd7ebc9bb31e8c47a277f15ab">nmodl::stringutils::trim</a></div><div class="ttdeci">static std::string &amp; trim(std::string &amp;s)</div><div class="ttdoc">Trim from both ends.</div><div class="ttdef"><b>Definition:</b> <a href="string__utils_8hpp_source.html#l00051">string_utils.hpp:51</a></div></div>
 <div class="ttc" id="atest_2unit_2codegen_2codegen__cpp__visitor_8cpp_html_aad099bc716a26661997af855020e2dc4"><div class="ttname"><a href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#aad099bc716a26661997af855020e2dc4">get_instance_var_setup_function</a></div><div class="ttdeci">std::string get_instance_var_setup_function(std::string &amp;nmodl_text)</div><div class="ttdoc">print instance structure for testing purpose</div><div class="ttdef"><b>Definition:</b> <a href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html#l00051">codegen_cpp_visitor.cpp:51</a></div></div>
 <div class="ttc" id="atest_2unit_2codegen_2codegen__cpp__visitor_8cpp_html_ab7518722cbffea33018ffc7c653e1f87"><div class="ttname"><a href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#ab7518722cbffea33018ffc7c653e1f87">get_cpp_code</a></div><div class="ttdeci">std::string get_cpp_code(const std::string &amp;nmodl_text)</div><div class="ttdoc">print entire code</div><div class="ttdef"><b>Definition:</b> <a href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html#l00060">codegen_cpp_visitor.cpp:60</a></div></div>
 <div class="ttc" id="aclassnmodl_1_1parser_1_1_nmodl_driver_html_a1d8d4a11126fc6e8e79f8422f7b4532c"><div class="ttname"><a href="classnmodl_1_1parser_1_1_nmodl_driver.html#a1d8d4a11126fc6e8e79f8422f7b4532c">nmodl::parser::NmodlDriver::parse_string</a></div><div class="ttdeci">std::shared_ptr&lt; ast::Program &gt; parse_string(const std::string &amp;input)</div><div class="ttdoc">parser nmodl provided as string (used for testing)</div><div class="ttdef"><b>Definition:</b> <a href="nmodl__driver_8cpp_source.html#l00086">nmodl_driver.cpp:86</a></div></div>

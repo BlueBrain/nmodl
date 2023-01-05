@@ -200,7 +200,7 @@ Variables</h2></td></tr>
     }
 </pre><p>We convert above paragraph to:</p>
 <p>NEURON { RANGE x }</p>
-<p>i.e. we get first non-empty line and count number of leading whitespaces (X). Then for every sub-sequent line, we remove first X characters (assuing those all are whitespaces). This is done because when ast is transformed back to nmodl, the nmodl output is without "extra" whitespaces in the provided input. </p>
+<p>i.e. we get first non-empty line and count number of leading whitespaces (X). Then for every sub-sequent line, we remove first X characters (assuming those all are whitespaces). This is done because when ast is transformed back to nmodl, the nmodl output is without "extra" whitespaces in the provided input. </p>
 <p>count whitespaces for first non-empty line only</p>
 <p>make sure we don't remove non whitespaces characters</p>
 <p>discard empty lines at very beginning</p>
