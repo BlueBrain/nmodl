@@ -451,7 +451,7 @@ SCENARIO("Check that BEFORE/AFTER block are well generated", "[codegen][before/a
             REQUIRE_THAT(generated, Contains("hoc_reg_ba(mech_type, nrn_before_after_4_ba1, 14);"));
         }
     }
-    
+
     GIVEN("A mod file with several time same BEFORE or AFTER block") {
         std::string const nmodl_text = R"(
             NEURON {
