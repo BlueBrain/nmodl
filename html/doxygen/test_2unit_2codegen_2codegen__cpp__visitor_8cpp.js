@@ -10,5 +10,6 @@ var test_2unit_2codegen_2codegen__cpp__visitor_8cpp =
     [ "SCENARIO", "test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#a028149b179639277076e830bbc3bbcbf", null ],
     [ "SCENARIO", "test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#a9c45dd7626fd81cd01383b4f8dc4e604", null ],
     [ "SCENARIO", "test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#a67c4def89805f51294ffa34f183d488c", null ],
-    [ "SCENARIO", "test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#a3642952acebad0f06c31a9b2bf3ea034", null ]
+    [ "SCENARIO", "test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#a3642952acebad0f06c31a9b2bf3ea034", null ],
+    [ "SCENARIO", "test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#a5be92eacd59631e9c775a06973d2dd56", null ]
 ];
