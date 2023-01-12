@@ -454,7 +454,8 @@ SCENARIO("Check that BEFORE/AFTER block are well generated", "[codegen][before/a
             auto const generated = get_cpp_code(nmodl_text);
             // 11: BEFORE BREAKPOINT
             {
-                REQUIRE_THAT(generated, Contains("hoc_reg_ba(mech_type, nrn_before_after_0_ba1, 11);"));
+                REQUIRE_THAT(generated,
+                             Contains("hoc_reg_ba(mech_type, nrn_before_after_0_ba1, 11);"));
                 std::string generated_code = R"(
         #pragma ivdep
         #pragma omp simd
@@ -474,7 +475,8 @@ SCENARIO("Check that BEFORE/AFTER block are well generated", "[codegen][before/a
             }
             // 23: AFTER SOLVE
             {
-                REQUIRE_THAT(generated, Contains("hoc_reg_ba(mech_type, nrn_before_after_1_ba1, 22);"));
+                REQUIRE_THAT(generated,
+                             Contains("hoc_reg_ba(mech_type, nrn_before_after_1_ba1, 22);"));
                 std::string generated_code = R"(
         #pragma ivdep
         #pragma omp simd
@@ -494,7 +496,8 @@ SCENARIO("Check that BEFORE/AFTER block are well generated", "[codegen][before/a
             }
             // 11: BEFORE INITIAL
             {
-                REQUIRE_THAT(generated, Contains("hoc_reg_ba(mech_type, nrn_before_after_2_ba1, 13);"));
+                REQUIRE_THAT(generated,
+                             Contains("hoc_reg_ba(mech_type, nrn_before_after_2_ba1, 13);"));
                 std::string generated_code = R"(
         #pragma ivdep
         #pragma omp simd
@@ -514,7 +517,8 @@ SCENARIO("Check that BEFORE/AFTER block are well generated", "[codegen][before/a
             }
             // 21: AFTER INITIAL
             {
-                REQUIRE_THAT(generated, Contains("hoc_reg_ba(mech_type, nrn_before_after_3_ba1, 23);"));
+                REQUIRE_THAT(generated,
+                             Contains("hoc_reg_ba(mech_type, nrn_before_after_3_ba1, 23);"));
                 std::string generated_code = R"(
         #pragma ivdep
         #pragma omp simd
@@ -534,7 +538,8 @@ SCENARIO("Check that BEFORE/AFTER block are well generated", "[codegen][before/a
             }
             // 13: BEFORE STEP
             {
-                REQUIRE_THAT(generated, Contains("hoc_reg_ba(mech_type, nrn_before_after_4_ba1, 14);"));
+                REQUIRE_THAT(generated,
+                             Contains("hoc_reg_ba(mech_type, nrn_before_after_4_ba1, 14);"));
                 std::string generated_code = R"(
         #pragma ivdep
         #pragma omp simd
