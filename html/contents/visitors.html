@@ -14,7 +14,9 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -132,11 +134,11 @@
 }
 </style>
 <section id="visitors">
-<h1>Visitors<a class="headerlink" href="#visitors" title="Permalink to this headline"></a></h1>
+<h1>Visitors<a class="headerlink" href="#visitors" title="Permalink to this heading"></a></h1>
 <p>One of the strengths of the NMODL python interface is access to inbuilt Visitors.
 One can perform different queries and analysis on AST using different visitors. Let us start with examples of inbuilt visitors.</p>
 <section id="parsing-model-and-constructing-ast">
-<h2>Parsing Model and constructing AST<a class="headerlink" href="#parsing-model-and-constructing-ast" title="Permalink to this headline"></a></h2>
+<h2>Parsing Model and constructing AST<a class="headerlink" href="#parsing-model-and-constructing-ast" title="Permalink to this heading"></a></h2>
 <p>Once the NMODL is setup properly we should be able to import nmodl module and create the channel:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">nmodl.dsl</span> <span class="k">as</span> <span class="nn">nmodl</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">channel</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
@@ -201,9 +203,9 @@ Otherwise it returns <code class="xref py py-class docutils literal notranslate"
 </div>
 </section>
 <section id="querying-ast-objects-with-visitors">
-<h2>Querying AST objects with Visitors<a class="headerlink" href="#querying-ast-objects-with-visitors" title="Permalink to this headline"></a></h2>
+<h2>Querying AST objects with Visitors<a class="headerlink" href="#querying-ast-objects-with-visitors" title="Permalink to this heading"></a></h2>
 <section id="lookup-visitor">
-<h3>Lookup Visitor<a class="headerlink" href="#lookup-visitor" title="Permalink to this headline"></a></h3>
+<h3>Lookup Visitor<a class="headerlink" href="#lookup-visitor" title="Permalink to this heading"></a></h3>
 <p>As name suggest, lookup visitor allows to search different NMODL constructs in the AST. The <cite>visitor</cite> module provides access to inbuilt visitors. In order to use this visitor, we create an object of <code class="xref py py-class docutils literal notranslate"><span class="pre">nmodl.visitor.AstLookupVisitor</span></code>:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nmodl.dsl</span> <span class="kn">import</span> <span class="n">visitor</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nmodl.dsl</span> <span class="kn">import</span> <span class="n">ast</span>
@@ -221,7 +223,7 @@ Otherwise it returns <code class="xref py py-class docutils literal notranslate"
 </div>
 </section>
 <section id="symbol-table-visitor">
-<h3>Symbol Table Visitor<a class="headerlink" href="#symbol-table-visitor" title="Permalink to this headline"></a></h3>
+<h3>Symbol Table Visitor<a class="headerlink" href="#symbol-table-visitor" title="Permalink to this heading"></a></h3>
 <p>Symbol table visitor is used to find out all variables and their usage in mod file. To use this, just create a visitor object as:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nmodl.dsl</span> <span class="kn">import</span> <span class="n">symtab</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">symv</span> <span class="o">=</span> <span class="n">symtab</span><span class="o">.</span><span class="n">SymtabVisitor</span><span class="p">()</span>
@@ -241,7 +243,7 @@ Otherwise it returns <code class="xref py py-class docutils literal notranslate"
 </div>
 </section>
 <section id="custom-ast-visitor">
-<h3>Custom AST Visitor<a class="headerlink" href="#custom-ast-visitor" title="Permalink to this headline"></a></h3>
+<h3>Custom AST Visitor<a class="headerlink" href="#custom-ast-visitor" title="Permalink to this heading"></a></h3>
 <p>If predefined visitors are limited, we can implement new visitor using <code class="xref py py-class docutils literal notranslate"><span class="pre">nmodl.visitor.AstVisitor</span></code> interface. Let us say we want to implement a visitor that prints every floating point numbers in MOD file. Here is how it can be done:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nmodl.dsl</span> <span class="kn">import</span> <span class="n">ast</span><span class="p">,</span> <span class="n">visitor</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">DoubleVisitor</span><span class="p">(</span><span class="n">visitor</span><span class="o">.</span><span class="n">AstVisitor</span><span class="p">):</span>

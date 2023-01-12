@@ -14,7 +14,9 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -127,14 +129,41 @@
 }
 </style>
 <section id="python-package">
-<h1>Python package<a class="headerlink" href="#python-package" title="Permalink to this headline"></a></h1>
+<h1>Python package<a class="headerlink" href="#python-package" title="Permalink to this heading"></a></h1>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="nmodl.html">Module contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nmodl.html">Module contents</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="nmodl.html#nmodl.NmodlDriver"><code class="docutils literal notranslate"><span class="pre">NmodlDriver</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nmodl.html#nmodl.NmodlDriver.get_ast"><code class="docutils literal notranslate"><span class="pre">NmodlDriver.get_ast()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nmodl.html#nmodl.NmodlDriver.parse_file"><code class="docutils literal notranslate"><span class="pre">NmodlDriver.parse_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nmodl.html#nmodl.NmodlDriver.parse_stream"><code class="docutils literal notranslate"><span class="pre">NmodlDriver.parse_stream()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nmodl.html#nmodl.NmodlDriver.parse_string"><code class="docutils literal notranslate"><span class="pre">NmodlDriver.parse_string()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nmodl.html#nmodl.to_json"><code class="docutils literal notranslate"><span class="pre">to_json()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="nmodl.html#nmodl.to_nmodl"><code class="docutils literal notranslate"><span class="pre">to_nmodl()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="nmodl.html#submodules">Submodules</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="nmodl.html#module-nmodl.ast">nmodl.ast module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="nmodl.html#module-nmodl.dsl">nmodl.dsl module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="nmodl.html#module-nmodl.ode">nmodl.ode module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nmodl.html#module-nmodl.ast">nmodl.ast module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nmodl.html#nmodl.ast.view"><code class="docutils literal notranslate"><span class="pre">view()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nmodl.html#module-nmodl.dsl">nmodl.dsl module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nmodl.html#nmodl.dsl.list_examples"><code class="docutils literal notranslate"><span class="pre">list_examples()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nmodl.html#nmodl.dsl.load_example"><code class="docutils literal notranslate"><span class="pre">load_example()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nmodl.html#module-nmodl.ode">nmodl.ode module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nmodl.html#nmodl.ode.differentiate2c"><code class="docutils literal notranslate"><span class="pre">differentiate2c()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nmodl.html#nmodl.ode.forwards_euler2c"><code class="docutils literal notranslate"><span class="pre">forwards_euler2c()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nmodl.html#nmodl.ode.integrate2c"><code class="docutils literal notranslate"><span class="pre">integrate2c()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nmodl.html#nmodl.ode.search_and_replace_protected_functions_from_sympy"><code class="docutils literal notranslate"><span class="pre">search_and_replace_protected_functions_from_sympy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nmodl.html#nmodl.ode.search_and_replace_protected_functions_to_sympy"><code class="docutils literal notranslate"><span class="pre">search_and_replace_protected_functions_to_sympy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nmodl.html#nmodl.ode.solve_lin_system"><code class="docutils literal notranslate"><span class="pre">solve_lin_system()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nmodl.html#nmodl.ode.solve_non_lin_system"><code class="docutils literal notranslate"><span class="pre">solve_non_lin_system()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="nmodl.html#module-nmodl.symtab">nmodl.symtab module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nmodl.html#module-nmodl.visitor">nmodl.visitor module</a></li>
 </ul>

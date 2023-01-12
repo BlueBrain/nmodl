@@ -14,7 +14,9 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -71,11 +73,38 @@
 <p class="caption" role="heading"><span class="caption-text">Reference:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">Python package</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Module contents</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#nmodl.NmodlDriver"><code class="docutils literal notranslate"><span class="pre">NmodlDriver</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#nmodl.NmodlDriver.get_ast"><code class="docutils literal notranslate"><span class="pre">NmodlDriver.get_ast()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nmodl.NmodlDriver.parse_file"><code class="docutils literal notranslate"><span class="pre">NmodlDriver.parse_file()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nmodl.NmodlDriver.parse_stream"><code class="docutils literal notranslate"><span class="pre">NmodlDriver.parse_stream()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nmodl.NmodlDriver.parse_string"><code class="docutils literal notranslate"><span class="pre">NmodlDriver.parse_string()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#nmodl.to_json"><code class="docutils literal notranslate"><span class="pre">to_json()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#nmodl.to_nmodl"><code class="docutils literal notranslate"><span class="pre">to_nmodl()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#module-nmodl.ast">nmodl.ast module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-nmodl.dsl">nmodl.dsl module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-nmodl.ode">nmodl.ode module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-nmodl.ast">nmodl.ast module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#nmodl.ast.view"><code class="docutils literal notranslate"><span class="pre">view()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-nmodl.dsl">nmodl.dsl module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#nmodl.dsl.list_examples"><code class="docutils literal notranslate"><span class="pre">list_examples()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nmodl.dsl.load_example"><code class="docutils literal notranslate"><span class="pre">load_example()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-nmodl.ode">nmodl.ode module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#nmodl.ode.differentiate2c"><code class="docutils literal notranslate"><span class="pre">differentiate2c()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nmodl.ode.forwards_euler2c"><code class="docutils literal notranslate"><span class="pre">forwards_euler2c()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nmodl.ode.integrate2c"><code class="docutils literal notranslate"><span class="pre">integrate2c()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nmodl.ode.search_and_replace_protected_functions_from_sympy"><code class="docutils literal notranslate"><span class="pre">search_and_replace_protected_functions_from_sympy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nmodl.ode.search_and_replace_protected_functions_to_sympy"><code class="docutils literal notranslate"><span class="pre">search_and_replace_protected_functions_to_sympy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nmodl.ode.solve_lin_system"><code class="docutils literal notranslate"><span class="pre">solve_lin_system()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nmodl.ode.solve_non_lin_system"><code class="docutils literal notranslate"><span class="pre">solve_non_lin_system()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#module-nmodl.symtab">nmodl.symtab module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-nmodl.visitor">nmodl.visitor module</a></li>
 </ul>
@@ -135,11 +164,11 @@
 }
 </style>
 <section id="module-nmodl">
-<span id="module-contents"></span><h1>Module contents<a class="headerlink" href="#module-nmodl" title="Permalink to this headline"></a></h1>
+<span id="module-contents"></span><h1>Module contents<a class="headerlink" href="#module-nmodl" title="Permalink to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="nmodl.NmodlDriver">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">nmodl.</span></span><span class="sig-name descname"><span class="pre">NmodlDriver</span></span><a class="headerlink" href="#nmodl.NmodlDriver" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">nmodl._nmodl.nmodl::parser::NmodlDriver</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">nmodl::parser::NmodlDriver</span></code></p>
 <p>This is the NmodlDriver class documentation</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="nmodl.NmodlDriver.get_ast">
@@ -242,7 +271,7 @@
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>node</strong> (<em>AST</em>) – AST node</p></li>
-<li><p><strong>excludeTypes</strong> (<em>set of AstNodeType</em>) – Excluded node types</p></li>
+<li><p><strong>excludeTypes</strong> (<em>set</em><em> of </em><em>AstNodeType</em>) – Excluded node types</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -261,9 +290,9 @@
 
 </section>
 <section id="submodules">
-<h1>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline"></a></h1>
+<h1>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h1>
 <section id="module-nmodl.ast">
-<span id="nmodl-ast-module"></span><h2>nmodl.ast module<a class="headerlink" href="#module-nmodl.ast" title="Permalink to this headline"></a></h2>
+<span id="nmodl-ast-module"></span><h2>nmodl.ast module<a class="headerlink" href="#module-nmodl.ast" title="Permalink to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="nmodl.ast.view">
 <span class="sig-prename descclassname"><span class="pre">nmodl.ast.</span></span><span class="sig-name descname"><span class="pre">view</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nmodl_ast</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nmodl/ast.html#view"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nmodl.ast.view" title="Permalink to this definition"></a></dt>
@@ -283,7 +312,7 @@ using d3.js.</p>
 
 </section>
 <section id="module-nmodl.dsl">
-<span id="nmodl-dsl-module"></span><h2>nmodl.dsl module<a class="headerlink" href="#module-nmodl.dsl" title="Permalink to this headline"></a></h2>
+<span id="nmodl-dsl-module"></span><h2>nmodl.dsl module<a class="headerlink" href="#module-nmodl.dsl" title="Permalink to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="nmodl.dsl.list_examples">
 <span class="sig-prename descclassname"><span class="pre">nmodl.dsl.</span></span><span class="sig-name descname"><span class="pre">list_examples</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nmodl/dsl.html#list_examples"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nmodl.dsl.list_examples" title="Permalink to this definition"></a></dt>
@@ -315,7 +344,7 @@ file.</p>
 
 </section>
 <section id="module-nmodl.ode">
-<span id="nmodl-ode-module"></span><h2>nmodl.ode module<a class="headerlink" href="#module-nmodl.ode" title="Permalink to this headline"></a></h2>
+<span id="nmodl-ode-module"></span><h2>nmodl.ode module<a class="headerlink" href="#module-nmodl.ode" title="Permalink to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="nmodl.ode.differentiate2c">
 <span class="sig-prename descclassname"><span class="pre">nmodl.ode.</span></span><span class="sig-name descname"><span class="pre">differentiate2c</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expression</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dependent_var</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vars</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prev_expressions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nmodl/ode.html#differentiate2c"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nmodl.ode.differentiate2c" title="Permalink to this definition"></a></dt>
@@ -494,10 +523,10 @@ vars: list of strings containing new local variables</p>
 
 </section>
 <section id="module-nmodl.symtab">
-<span id="nmodl-symtab-module"></span><h2>nmodl.symtab module<a class="headerlink" href="#module-nmodl.symtab" title="Permalink to this headline"></a></h2>
+<span id="nmodl-symtab-module"></span><h2>nmodl.symtab module<a class="headerlink" href="#module-nmodl.symtab" title="Permalink to this heading"></a></h2>
 </section>
 <section id="module-nmodl.visitor">
-<span id="nmodl-visitor-module"></span><h2>nmodl.visitor module<a class="headerlink" href="#module-nmodl.visitor" title="Permalink to this headline"></a></h2>
+<span id="nmodl-visitor-module"></span><h2>nmodl.visitor module<a class="headerlink" href="#module-nmodl.visitor" title="Permalink to this heading"></a></h2>
 </section>
 </section>
 

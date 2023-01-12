@@ -14,7 +14,9 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -382,23 +384,23 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <section id="NMODL-NONLINEAR-solver">
-<h1>NMODL NONLINEAR solver<a class="headerlink" href="#NMODL-NONLINEAR-solver" title="Permalink to this headline"></a></h1>
+<h1>NMODL NONLINEAR solver<a class="headerlink" href="#NMODL-NONLINEAR-solver" title="Permalink to this heading"></a></h1>
 <p><code class="docutils literal notranslate"><span class="pre">NONLINEAR</span></code> blocks contain a set of non-linear simultaneous equations. They can be directly specified by the user in the MOD file, or more commonly can be constructed from <code class="docutils literal notranslate"><span class="pre">KINETIC</span></code> or <code class="docutils literal notranslate"><span class="pre">DERIVATIVE</span></code> blocks by the <code class="docutils literal notranslate"><span class="pre">KineticBlock</span></code> and <code class="docutils literal notranslate"><span class="pre">SympySolver</span></code> visitors.</p>
 <p>These equations are rewritten in the form</p>
 <div class="math">
-<p><img src="../_images/math/000834cee968a8793c558057ea0d9fd5a0f8bb1e.png" alt="F(X) = 0,"/></p>
-</div><p>where <img class="math" src="../_images/math/ed38fa24f1c94891bd312012aab3f6673be3eb83.png" alt="X"/> is a vector containing the state variables involved in the equations, and this equation is then solved at runtime using <a class="reference external" href="https://en.wikipedia.org/wiki/Newton%27s_method#k_variables,_k_functions">Newton’s method</a></p>
-<p>This is an iterative method: given an approximate solution <img class="math" src="../_images/math/cfa7c7f6a850c968cb6370a06632b28be0478e49.png" alt="X^{(n)}"/>, a better approximation is given by</p>
+<p><img src="_images/math/000834cee968a8793c558057ea0d9fd5a0f8bb1e.png" alt="F(X) = 0,"/></p>
+</div><p>where <img class="math" src="_images/math/ed38fa24f1c94891bd312012aab3f6673be3eb83.png" alt="X"/> is a vector containing the state variables involved in the equations, and this equation is then solved at runtime using <a class="reference external" href="https://en.wikipedia.org/wiki/Newton%27s_method#k_variables,_k_functions">Newton’s method</a></p>
+<p>This is an iterative method: given an approximate solution <img class="math" src="_images/math/cfa7c7f6a850c968cb6370a06632b28be0478e49.png" alt="X^{(n)}"/>, a better approximation is given by</p>
 <div class="math">
-<p><img src="../_images/math/d7bfbc519739caa4000592cf22023dffbc9c00ea.png" alt="X^{(n+1)} = X^{(n)} - J(X^{(n)})^{-1} F(X^{(n)})"/></p>
-</div><p>where <img class="math" src="../_images/math/14119b5039049b18912e6aac13169bc0b1322e4f.png" alt="J(X) = \frac{\partial F(X)_i}{\partial X_j}"/> is the Jacobian of <img class="math" src="../_images/math/df00656702b70b4b6f7ffbf6a9aa9a334bab1914.png" alt="F"/>.</p>
+<p><img src="_images/math/d7bfbc519739caa4000592cf22023dffbc9c00ea.png" alt="X^{(n+1)} = X^{(n)} - J(X^{(n)})^{-1} F(X^{(n)})"/></p>
+</div><p>where <img class="math" src="_images/math/14119b5039049b18912e6aac13169bc0b1322e4f.png" alt="J(X) = \frac{\partial F(X)_i}{\partial X_j}"/> is the Jacobian of <img class="math" src="_images/math/df00656702b70b4b6f7ffbf6a9aa9a334bab1914.png" alt="F"/>.</p>
 <section id="Newton-solver">
-<h2>Newton solver<a class="headerlink" href="#Newton-solver" title="Permalink to this headline"></a></h2>
-<p><img class="math" src="../_images/math/df00656702b70b4b6f7ffbf6a9aa9a334bab1914.png" alt="F"/> and <img class="math" src="../_images/math/32c06f8c59d4bd3d13eedea7765a8a74a11f2383.png" alt="J"/> are constructed by the <a class="reference external" href="https://github.com/BlueBrain/nmodl/blob/master/nmodl/ode.py#L209">solve_non_lin_system</a> python routine which uses SymPy to analytically differentiate <img class="math" src="../_images/math/df00656702b70b4b6f7ffbf6a9aa9a334bab1914.png" alt="F"/> to find the exact Jacobian at compile time. The initial approximate solution <img class="math" src="../_images/math/991807dfa2ae9914c3a50050b40f1a852206f92d.png" alt="X_0"/> is chosen to simply be the current values of the state variables: as long as <img class="math" src="../_images/math/a679bbf1184a6019c0b0085a592d1c7fc64335cf.png" alt="dt"/> is not too large the solution at <img class="math" src="../_images/math/9151ed16b82bab45c35665dd462c8dcd0ea82cfd.png" alt="t+dt"/> should not lie too far away.</p>
+<h2>Newton solver<a class="headerlink" href="#Newton-solver" title="Permalink to this heading"></a></h2>
+<p><img class="math" src="_images/math/df00656702b70b4b6f7ffbf6a9aa9a334bab1914.png" alt="F"/> and <img class="math" src="_images/math/32c06f8c59d4bd3d13eedea7765a8a74a11f2383.png" alt="J"/> are constructed by the <a class="reference external" href="https://github.com/BlueBrain/nmodl/blob/master/nmodl/ode.py#L209">solve_non_lin_system</a> python routine which uses SymPy to analytically differentiate <img class="math" src="_images/math/df00656702b70b4b6f7ffbf6a9aa9a334bab1914.png" alt="F"/> to find the exact Jacobian at compile time. The initial approximate solution <img class="math" src="_images/math/991807dfa2ae9914c3a50050b40f1a852206f92d.png" alt="X_0"/> is chosen to simply be the current values of the state variables: as long as <img class="math" src="_images/math/a679bbf1184a6019c0b0085a592d1c7fc64335cf.png" alt="dt"/> is not too large the solution at <img class="math" src="_images/math/9151ed16b82bab45c35665dd462c8dcd0ea82cfd.png" alt="t+dt"/> should not lie too far away.</p>
 <p>The iterative Newton solver is called <code class="docutils literal notranslate"><span class="pre">newton_solver</span></code> and is implemented in <a class="reference external" href="https://github.com/BlueBrain/nmodl/blob/master/src/solver/newton/newton.hpp#L33">src/solver/newton</a> using the Eigen header-only matrix algebra library. Unit tests are available in <a class="reference external" href="https://github.com/BlueBrain/nmodl/blob/master/test/newton/newton.cpp">test/newton/newton.cpp</a> with the tags “<code class="docutils literal notranslate"><span class="pre">[analytic][solver]</span></code>”.</p>
 </section>
 <section id="Fall-back-solver">
-<h2>Fall-back solver<a class="headerlink" href="#Fall-back-solver" title="Permalink to this headline"></a></h2>
+<h2>Fall-back solver<a class="headerlink" href="#Fall-back-solver" title="Permalink to this heading"></a></h2>
 <p>A fall-back solution if the analytic Jacobian is not available (for example if the equations use some custom neuron function calls that SymPy doesn’t know how to differentiate, or if <code class="docutils literal notranslate"><span class="pre">VERBATIM</span></code> blocks are used within the <code class="docutils literal notranslate"><span class="pre">NONLINEAR</span></code> block) is to use the <code class="docutils literal notranslate"><span class="pre">newton_numerical_diff_solver</span></code> variant of this solver that uses a finite difference approximation to estimate the Jacobian numerically.</p>
 <p>This solver is also implemented in <a class="reference external" href="https://github.com/BlueBrain/nmodl/blob/master/src/solver/newton/newton.hpp#L33">src/solver/newton</a>, with Unit tests in <a class="reference external" href="https://github.com/BlueBrain/nmodl/blob/master/test/newton/newton.cpp">test/newton/newton.cpp</a> with the tags “<code class="docutils literal notranslate"><span class="pre">[numerical][solver]</span></code>”.</p>
 <p><strong>NB: this solver is implemented, but the visitor to set up the solve is not yet implemented</strong></p>

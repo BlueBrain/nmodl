@@ -14,7 +14,9 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -123,10 +125,10 @@
 }
 </style>
 <section id="NMODL-LINEAR-solver">
-<h1>NMODL LINEAR solver<a class="headerlink" href="#NMODL-LINEAR-solver" title="Permalink to this headline"></a></h1>
+<h1>NMODL LINEAR solver<a class="headerlink" href="#NMODL-LINEAR-solver" title="Permalink to this heading"></a></h1>
 <p><code class="docutils literal notranslate"><span class="pre">LINEAR</span></code> blocks contain a set of simultaneous equations.</p>
 <p>These are solved by <code class="docutils literal notranslate"><span class="pre">solve_lin_system</span></code> from <a class="reference external" href="https://github.com/BlueBrain/nmodl/blob/master/nmodl/ode.py#L143">nmodl/ode.py</a>.</p>
-<p>If the system is sufficiently small (by default <img class="math" src="../_images/math/ff59aacf8611011714123db6c3b8a59c6d943a19.png" alt="N\leq3"/>), then Gaussian elimination is used to directly construct the solution at compile time using SymPy to do the symbolic Gaussian elimination. Optionally Common Subexpression Elimination (CSE) can also be performed.</p>
+<p>If the system is sufficiently small (by default <img class="math" src="_images/math/ff59aacf8611011714123db6c3b8a59c6d943a19.png" alt="N\leq3"/>), then Gaussian elimination is used to directly construct the solution at compile time using SymPy to do the symbolic Gaussian elimination. Optionally Common Subexpression Elimination (CSE) can also be performed.</p>
 <p>For larger matrices it may not be numerically safe to solve them at compile time by Gaussian elimination, so instead the matrix equation is constructed and then solved at run time by LU factorization with partial pivoting (for more, see Crout solver in <code class="docutils literal notranslate"><span class="pre">src/solver/crout</span></code> and <code class="docutils literal notranslate"><span class="pre">test/unit/crout</span></code>).</p>
 </section>
 

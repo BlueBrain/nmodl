@@ -14,7 +14,9 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -387,13 +389,13 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <section id="NMODL-SympySolver---sparse">
-<h1>NMODL SympySolver - sparse<a class="headerlink" href="#NMODL-SympySolver---sparse" title="Permalink to this headline"></a></h1>
+<h1>NMODL SympySolver - sparse<a class="headerlink" href="#NMODL-SympySolver---sparse" title="Permalink to this heading"></a></h1>
 <p>This notebook describes the implementation of the <code class="docutils literal notranslate"><span class="pre">sparse</span></code> part of the <code class="docutils literal notranslate"><span class="pre">SympySolverVisitor</span></code>, which solves the systems of ODEs defined in <code class="docutils literal notranslate"><span class="pre">DERIVATIVE</span></code> blocks when these ODEs are <em>linear</em> and <em>coupled</em>.</p>
 <p>For a higher level overview of the approach to solving ODEs in NMODL, please see the <a class="reference internal" href="nmodl-odes-overview.html"><span class="doc">nmodl-odes-overview</span></a> notebook.</p>
 <p>For a more general tutorial on using the NMODL python interface, please see the <a class="reference internal" href="nmodl-python-tutorial.html"><span class="doc">tutorial notebook</span></a>.</p>
 <hr class="docutils" />
 <section id="Implementation">
-<h2>Implementation<a class="headerlink" href="#Implementation" title="Permalink to this headline"></a></h2>
+<h2>Implementation<a class="headerlink" href="#Implementation" title="Permalink to this heading"></a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">SympySolverVisitor</span></code> for solver method <code class="docutils literal notranslate"><span class="pre">sparse</span></code> does the following:</p>
 <ul class="simple">
 <li><p>Construct the implicit Euler equations to convert the sysytem of ODEs to a <code class="docutils literal notranslate"><span class="pre">LINEAR</span></code> block</p></li>
@@ -402,11 +404,11 @@ div.rendered_html tbody tr:hover {
 </section>
 <hr class="docutils" />
 <section id="Implementation-Tests">
-<h2>Implementation Tests<a class="headerlink" href="#Implementation-Tests" title="Permalink to this headline"></a></h2>
+<h2>Implementation Tests<a class="headerlink" href="#Implementation-Tests" title="Permalink to this heading"></a></h2>
 <p>The unit tests may be helpful to understand what these functions are doing - <code class="docutils literal notranslate"><span class="pre">SympySolverVisitor</span></code> tests are located in <a class="reference external" href="https://github.com/BlueBrain/nmodl/blob/master/test/visitor/sympy_solver.cpp">test/visitor/sympy_solver.cpp</a>, and tests using the <code class="docutils literal notranslate"><span class="pre">sparse</span></code> solver method have the tag “<code class="docutils literal notranslate"><span class="pre">[sparse]</span></code>”</p>
 </section>
 <section id="Examples">
-<h2>Examples<a class="headerlink" href="#Examples" title="Permalink to this headline"></a></h2>
+<h2>Examples<a class="headerlink" href="#Examples" title="Permalink to this heading"></a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
@@ -445,7 +447,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <section id="Ex.-1">
-<h3>Ex. 1<a class="headerlink" href="#Ex.-1" title="Permalink to this headline"></a></h3>
+<h3>Ex. 1<a class="headerlink" href="#Ex.-1" title="Permalink to this heading"></a></h3>
 <p>2 coupled linear ODEs</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
@@ -498,7 +500,7 @@ DERIVATIVE states {
 </div>
 </section>
 <section id="Ex.-2">
-<h3>Ex. 2<a class="headerlink" href="#Ex.-2" title="Permalink to this headline"></a></h3>
+<h3>Ex. 2<a class="headerlink" href="#Ex.-2" title="Permalink to this heading"></a></h3>
 <p>5 coupled linear ODEs</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:

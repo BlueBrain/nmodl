@@ -14,7 +14,9 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -384,7 +386,7 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <section id="NMODL-integration-of-ODEs">
-<h1>NMODL integration of ODEs<a class="headerlink" href="#NMODL-integration-of-ODEs" title="Permalink to this headline"></a></h1>
+<h1>NMODL integration of ODEs<a class="headerlink" href="#NMODL-integration-of-ODEs" title="Permalink to this heading"></a></h1>
 <p>This is an overview of - the different ways a user can specify the equations that define the system they want to simulate in the MOD file - how these equations can be related to each other - how these equations are solved in NMODL</p>
 <hr class="docutils" />
 <p>The user can specify information about the system in a variety of ways: - A high level way to describe a system is to specify a Mass Action Kinetic scheme of reaction equations in a <code class="docutils literal notranslate"><span class="pre">KINETIC</span></code> block - Alternatively a system of ODEs can be specified in a <code class="docutils literal notranslate"><span class="pre">DERIVATIVE</span></code> block (any kinetic scheme can also be written as a system of ODEs) - Finally a system of linear/non-linear algebraic equations can be specified in a <code class="docutils literal notranslate"><span class="pre">LINEAR</span></code>/<code class="docutils literal notranslate"><span class="pre">NONLINEAR</span></code> block (a numerical integration scheme, such as backwards
@@ -393,7 +395,7 @@ Euler, transforms a system of ODEs into a system of linear or non-linear equatio
 <p>After these transformations we are left with only <code class="docutils literal notranslate"><span class="pre">LINEAR</span></code>/<code class="docutils literal notranslate"><span class="pre">NONLINEAR</span></code> blocks that are then solved numerically (by Gaussian Elimination, LU factorization or Newton iteration)</p>
 <hr class="docutils" />
 <section id="KINETIC-block">
-<h2><code class="docutils literal notranslate"><span class="pre">KINETIC</span></code> block<a class="headerlink" href="#KINETIC-block" title="Permalink to this headline"></a></h2>
+<h2><code class="docutils literal notranslate"><span class="pre">KINETIC</span></code> block<a class="headerlink" href="#KINETIC-block" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>Mass Action kinetics: a set of reaction equations with associated reaction rates</p></li>
 <li><p>converted to a <code class="docutils literal notranslate"><span class="pre">DERIVATIVE</span></code> blocking containing an equivalent system of ODEs using the law of Mass Action</p></li>
@@ -402,7 +404,7 @@ Euler, transforms a system of ODEs into a system of linear or non-linear equatio
 </section>
 <hr class="docutils" />
 <section id="DERIVATIVE-block">
-<h2><code class="docutils literal notranslate"><span class="pre">DERIVATIVE</span></code> block<a class="headerlink" href="#DERIVATIVE-block" title="Permalink to this headline"></a></h2>
+<h2><code class="docutils literal notranslate"><span class="pre">DERIVATIVE</span></code> block<a class="headerlink" href="#DERIVATIVE-block" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>system of ODEs &amp; associated solve method: <code class="docutils literal notranslate"><span class="pre">cnexp</span></code>, <code class="docutils literal notranslate"><span class="pre">sparse</span></code>, <code class="docutils literal notranslate"><span class="pre">derivimplicit</span></code> or <code class="docutils literal notranslate"><span class="pre">euler</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">cnexp</span></code></p>
@@ -415,29 +417,29 @@ Euler, transforms a system of ODEs into a system of linear or non-linear equatio
 <li><p><code class="docutils literal notranslate"><span class="pre">sparse</span></code></p>
 <ul>
 <li><p>applicable if ODEs are linear &amp; coupled</p></li>
-<li><p>backwards Euler numerical integration scheme: <img class="math" src="../_images/math/a401297e45d1755fc7e05242249de35e748e03d4.png" alt="f(t+\Delta t) = f(t) + dt f'(t+ \Delta t)"/></p></li>
+<li><p>backwards Euler numerical integration scheme: <img class="math" src="_images/math/a401297e45d1755fc7e05242249de35e748e03d4.png" alt="f(t+\Delta t) = f(t) + dt f'(t+ \Delta t)"/></p></li>
 <li><p>results in a linear algebraic system to solve</p></li>
 <li><p>numerically stable</p></li>
-<li><p><img class="math" src="../_images/math/f12a6514b4961252a43fb2c49b7421cea1a74272.png" alt="\mathcal{O}(\Delta t)"/> integration error</p></li>
+<li><p><img class="math" src="_images/math/f12a6514b4961252a43fb2c49b7421cea1a74272.png" alt="\mathcal{O}(\Delta t)"/> integration error</p></li>
 <li><p>see the <a class="reference internal" href="nmodl-sympy-solver-sparse.html"><span class="doc">nmodl-sympy-solver-sparse</span></a> notebook for more details</p></li>
 </ul>
 </li>
 <li><p><code class="docutils literal notranslate"><span class="pre">derivimplcit</span></code></p>
 <ul>
 <li><p>always applicable</p></li>
-<li><p>backwards Euler numerical integration scheme: <img class="math" src="../_images/math/a401297e45d1755fc7e05242249de35e748e03d4.png" alt="f(t+\Delta t) = f(t) + dt f'(t+ \Delta t)"/></p></li>
+<li><p>backwards Euler numerical integration scheme: <img class="math" src="_images/math/a401297e45d1755fc7e05242249de35e748e03d4.png" alt="f(t+\Delta t) = f(t) + dt f'(t+ \Delta t)"/></p></li>
 <li><p>results in a non-linear algebraic system to solve</p></li>
 <li><p>numerically stable</p></li>
-<li><p><img class="math" src="../_images/math/f12a6514b4961252a43fb2c49b7421cea1a74272.png" alt="\mathcal{O}(\Delta t)"/> integration error</p></li>
+<li><p><img class="math" src="_images/math/f12a6514b4961252a43fb2c49b7421cea1a74272.png" alt="\mathcal{O}(\Delta t)"/> integration error</p></li>
 <li><p>see the <a class="reference internal" href="nmodl-sympy-solver-derivimplicit.html"><span class="doc">nmodl-sympy-solver-sparse</span></a> notebook for more details</p></li>
 </ul>
 </li>
 <li><p><code class="docutils literal notranslate"><span class="pre">euler</span></code></p>
 <ul>
 <li><p>always applicable</p></li>
-<li><p>forwards Euler numerical integration scheme: <img class="math" src="../_images/math/fd0185768cf776f68c109accbf6d8b61701041cc.png" alt="f(t+\Delta t) = f(t) + \Delta t f'(t)"/></p></li>
+<li><p>forwards Euler numerical integration scheme: <img class="math" src="_images/math/fd0185768cf776f68c109accbf6d8b61701041cc.png" alt="f(t+\Delta t) = f(t) + \Delta t f'(t)"/></p></li>
 <li><p>numerically unstable</p></li>
-<li><p><img class="math" src="../_images/math/f12a6514b4961252a43fb2c49b7421cea1a74272.png" alt="\mathcal{O}(\Delta t)"/> integration error</p></li>
+<li><p><img class="math" src="_images/math/f12a6514b4961252a43fb2c49b7421cea1a74272.png" alt="\mathcal{O}(\Delta t)"/> integration error</p></li>
 <li><p>not recommended due to instability of scheme</p></li>
 </ul>
 </li>
@@ -445,10 +447,10 @@ Euler, transforms a system of ODEs into a system of linear or non-linear equatio
 </section>
 <hr class="docutils" />
 <section id="LINEAR-block">
-<h2><code class="docutils literal notranslate"><span class="pre">LINEAR</span></code> block<a class="headerlink" href="#LINEAR-block" title="Permalink to this headline"></a></h2>
+<h2><code class="docutils literal notranslate"><span class="pre">LINEAR</span></code> block<a class="headerlink" href="#LINEAR-block" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>system of linear algebraic equations</p></li>
-<li><p>for small systems (<img class="math" src="../_images/math/e664701bd5a097101c7d099cdaaf7b571c864e45.png" alt="N&lt;=3"/>)</p>
+<li><p>for small systems (<img class="math" src="_images/math/e664701bd5a097101c7d099cdaaf7b571c864e45.png" alt="N&lt;=3"/>)</p>
 <ul>
 <li><p>solve at compile time by Gaussian elimination</p></li>
 </ul>
@@ -463,14 +465,14 @@ Euler, transforms a system of ODEs into a system of linear or non-linear equatio
 </section>
 <hr class="docutils" />
 <section id="NONLINEAR-block">
-<h2><code class="docutils literal notranslate"><span class="pre">NONLINEAR</span></code> block<a class="headerlink" href="#NONLINEAR-block" title="Permalink to this headline"></a></h2>
+<h2><code class="docutils literal notranslate"><span class="pre">NONLINEAR</span></code> block<a class="headerlink" href="#NONLINEAR-block" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>system of non-linear algebraic equations</p></li>
 <li><p>solve by Newton iteration</p>
 <ul>
-<li><p>construct <img class="math" src="../_images/math/e51ff30b3231dd3d8d85e9eaa6afce1fd95eb79d.png" alt="F(X)"/>, with Jacobian <img class="math" src="../_images/math/4968aa0458a2629385c87348f6e4f3a4459cb9b5.png" alt="J(X)=\frac{\partial F_i}{\partial X_j}"/></p></li>
-<li><p>such that desired solution <img class="math" src="../_images/math/99fae140d4794fc8ca645dc9392d01f6bea8a154.png" alt="X^*"/> satisfies condition <img class="math" src="../_images/math/fbe07f7aa9e40df468a9ba0e2434f7ff86e557a1.png" alt="F(X^*) = 0"/></p></li>
-<li><p>iterative solution given by <img class="math" src="../_images/math/bd0250b654637c48042240e4531ad8487c56dec6.png" alt="X_{n+1} = X_n + J(X_n)^{-1} F(X_n)"/></p></li>
+<li><p>construct <img class="math" src="_images/math/e51ff30b3231dd3d8d85e9eaa6afce1fd95eb79d.png" alt="F(X)"/>, with Jacobian <img class="math" src="_images/math/4968aa0458a2629385c87348f6e4f3a4459cb9b5.png" alt="J(X)=\frac{\partial F_i}{\partial X_j}"/></p></li>
+<li><p>such that desired solution <img class="math" src="_images/math/99fae140d4794fc8ca645dc9392d01f6bea8a154.png" alt="X^*"/> satisfies condition <img class="math" src="_images/math/fbe07f7aa9e40df468a9ba0e2434f7ff86e557a1.png" alt="F(X^*) = 0"/></p></li>
+<li><p>iterative solution given by <img class="math" src="_images/math/bd0250b654637c48042240e4531ad8487c56dec6.png" alt="X_{n+1} = X_n + J(X_n)^{-1} F(X_n)"/></p></li>
 </ul>
 </li>
 <li><p>see the <a class="reference internal" href="nmodl-nonlinear-solver.html"><span class="doc">nmodl-nonlinear-solver</span></a> notebook for more details ***</p></li>

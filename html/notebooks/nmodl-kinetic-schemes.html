@@ -14,7 +14,9 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -394,51 +396,51 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <section id="NMODL-Kinetic-Scheme">
-<h1>NMODL Kinetic Scheme<a class="headerlink" href="#NMODL-Kinetic-Scheme" title="Permalink to this headline"></a></h1>
+<h1>NMODL Kinetic Scheme<a class="headerlink" href="#NMODL-Kinetic-Scheme" title="Permalink to this heading"></a></h1>
 <p>This notebook describes the reaction kinetics &amp; mass action laws that apply within <code class="docutils literal notranslate"><span class="pre">KINETIC</span></code> blocks, and the implementation of the <code class="docutils literal notranslate"><span class="pre">KineticBlockVisitor</span></code> in NMODL which transforms <code class="docutils literal notranslate"><span class="pre">KINETIC</span></code> blocks into <code class="docutils literal notranslate"><span class="pre">DERIVATIVE</span></code> blocks containing an equivalent system of ODEs.</p>
 <p>For a higher level overview of the approach to solving ODEs in NMODL, please see the <a class="reference internal" href="nmodl-odes-overview.html"><span class="doc">nmodl-odes-overview</span></a> notebook.</p>
 <p>For a more general tutorial on using the NMODL python interface, please see the <a class="reference internal" href="nmodl-python-tutorial.html"><span class="doc">tutorial notebook</span></a>.</p>
 <hr class="docutils" />
 <section id="Reaction-Kinetics">
-<h2>Reaction Kinetics<a class="headerlink" href="#Reaction-Kinetics" title="Permalink to this headline"></a></h2>
+<h2>Reaction Kinetics<a class="headerlink" href="#Reaction-Kinetics" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p>We consider a set of reaction species <img class="math" src="../_images/math/7897dc8f542a8255a10ef6d51e0b83b2c62d9107.png" alt="A_j"/>, with corresponding Molar concentrations <img class="math" src="../_images/math/694e50504c55bd9398472d7eb9c44e64b1120865.png" alt="Y_j"/></p></li>
+<li><p>We consider a set of reaction species <img class="math" src="_images/math/7897dc8f542a8255a10ef6d51e0b83b2c62d9107.png" alt="A_j"/>, with corresponding Molar concentrations <img class="math" src="_images/math/694e50504c55bd9398472d7eb9c44e64b1120865.png" alt="Y_j"/></p></li>
 <li><p>They react according to a set of reaction equations:</p></li>
 </ul>
 <div class="math">
-<p><img src="../_images/math/37ca3017e19b0fc382a0a37f6857fdfdbcd16aa1.png" alt="\sum_j \nu_{ij}^L A_j \overset{k_i}{\rightarrow} \sum_j \nu_{ij}^R A_j"/></p>
-</div><p>where - <img class="math" src="../_images/math/10394fb9a1e2539ad64521b5d93d822aa0775a36.png" alt="k_i"/> is the rate coefficient - <img class="math" src="../_images/math/1256865f5326c3c08c8fbb635869ca4fff131d92.png" alt="\nu_{ij}^L"/>, <img class="math" src="../_images/math/b9ec24c1aa64852e54b5df0da279e43328f4f10c.png" alt="\nu_{ij}^R"/> are stoichiometric coefficients - must be positive integers (including zero)</p>
+<p><img src="_images/math/37ca3017e19b0fc382a0a37f6857fdfdbcd16aa1.png" alt="\sum_j \nu_{ij}^L A_j \overset{k_i}{\rightarrow} \sum_j \nu_{ij}^R A_j"/></p>
+</div><p>where - <img class="math" src="_images/math/10394fb9a1e2539ad64521b5d93d822aa0775a36.png" alt="k_i"/> is the rate coefficient - <img class="math" src="_images/math/1256865f5326c3c08c8fbb635869ca4fff131d92.png" alt="\nu_{ij}^L"/>, <img class="math" src="_images/math/b9ec24c1aa64852e54b5df0da279e43328f4f10c.png" alt="\nu_{ij}^R"/> are stoichiometric coefficients - must be positive integers (including zero)</p>
 </section>
 <section id="Law-of-Mass-Action">
-<h2>Law of Mass Action<a class="headerlink" href="#Law-of-Mass-Action" title="Permalink to this headline"></a></h2>
+<h2>Law of Mass Action<a class="headerlink" href="#Law-of-Mass-Action" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>This allows us to convert these reaction equations to a set of ODEs</p></li>
 </ul>
 <div class="math">
-<p><img src="../_images/math/5639bb80502e3cb7f2199a490b1a7e4b2bcfe8e6.png" alt="\frac{dY_j}{dt} = \sum_i \Delta \nu_{ij} r_i"/></p>
-</div><p>where <img class="math" src="../_images/math/c68eefc0329741b6a3c7083e098a58f1066e42a3.png" alt="\Delta \nu_{ij} = \nu_{ij}^R - \nu_{ij}^L"/>, and</p>
+<p><img src="_images/math/5639bb80502e3cb7f2199a490b1a7e4b2bcfe8e6.png" alt="\frac{dY_j}{dt} = \sum_i \Delta \nu_{ij} r_i"/></p>
+</div><p>where <img class="math" src="_images/math/c68eefc0329741b6a3c7083e098a58f1066e42a3.png" alt="\Delta \nu_{ij} = \nu_{ij}^R - \nu_{ij}^L"/>, and</p>
 <div class="math">
-<p><img src="../_images/math/545ad59c0da12ec96d61163022208ec422fd391f.png" alt="r_i = k_i \prod_j Y_j^{\nu_{ij}^R}"/></p>
+<p><img src="_images/math/545ad59c0da12ec96d61163022208ec422fd391f.png" alt="r_i = k_i \prod_j Y_j^{\nu_{ij}^R}"/></p>
 </div></section>
 <section id="KINETIC-block-format">
-<h2>KINETIC block format<a class="headerlink" href="#KINETIC-block-format" title="Permalink to this headline"></a></h2>
+<h2>KINETIC block format<a class="headerlink" href="#KINETIC-block-format" title="Permalink to this heading"></a></h2>
 <p>A reaction equation is specifed in the mod file as</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>~ A0 + 3A1 + 2A2 + ... &lt;-&gt; 2A0 + A1 + ... (kf, kb)
 </pre></div>
 </div>
-<p>where - <code class="docutils literal notranslate"><span class="pre">A0</span></code> etc are the species <img class="math" src="../_images/math/7897dc8f542a8255a10ef6d51e0b83b2c62d9107.png" alt="A_j"/> - the integer preceeding a species (with or without a space) is the corresponding stochiometric coefficient <img class="math" src="../_images/math/6a65ddb6549c895a837dc881c6fe1aa6c626c1b9.png" alt="\nu_{ij}"/> (implicitly 1 if not specified) - <code class="docutils literal notranslate"><span class="pre">kf</span></code> is the forwards reaction rate <img class="math" src="../_images/math/7c43e1b2e4b9a4e788e52c98d9a8d50faa58d971.png" alt="k^{(f)}_j"/> - <code class="docutils literal notranslate"><span class="pre">kb</span></code> is the backwards reaction rate <img class="math" src="../_images/math/5d33f50f070c0d51adc52a0e369662d131ad9601.png" alt="k^{(b)}_j"/>, i.e. the reaction rate for the same reaction with the LHS and RHS exchanged *** We can convert these statements to a system of ODEs using the law of Mass Action:</p>
+<p>where - <code class="docutils literal notranslate"><span class="pre">A0</span></code> etc are the species <img class="math" src="_images/math/7897dc8f542a8255a10ef6d51e0b83b2c62d9107.png" alt="A_j"/> - the integer preceeding a species (with or without a space) is the corresponding stochiometric coefficient <img class="math" src="_images/math/6a65ddb6549c895a837dc881c6fe1aa6c626c1b9.png" alt="\nu_{ij}"/> (implicitly 1 if not specified) - <code class="docutils literal notranslate"><span class="pre">kf</span></code> is the forwards reaction rate <img class="math" src="_images/math/7c43e1b2e4b9a4e788e52c98d9a8d50faa58d971.png" alt="k^{(f)}_j"/> - <code class="docutils literal notranslate"><span class="pre">kb</span></code> is the backwards reaction rate <img class="math" src="_images/math/5d33f50f070c0d51adc52a0e369662d131ad9601.png" alt="k^{(b)}_j"/>, i.e. the reaction rate for the same reaction with the LHS and RHS exchanged *** We can convert these statements to a system of ODEs using the law of Mass Action:</p>
 <div class="math">
-<p><img src="../_images/math/0566e68083ea6ed9980aa57e68db5abacd1d8466.png" alt="\frac{dY_j}{dt} = \sum_i \Delta \nu_{ij} (r^{(f)}_i - r^{(b)}_i)"/></p>
-</div><p>where <img class="math" src="../_images/math/c68eefc0329741b6a3c7083e098a58f1066e42a3.png" alt="\Delta \nu_{ij} = \nu_{ij}^R - \nu_{ij}^L"/>, and</p>
+<p><img src="_images/math/0566e68083ea6ed9980aa57e68db5abacd1d8466.png" alt="\frac{dY_j}{dt} = \sum_i \Delta \nu_{ij} (r^{(f)}_i - r^{(b)}_i)"/></p>
+</div><p>where <img class="math" src="_images/math/c68eefc0329741b6a3c7083e098a58f1066e42a3.png" alt="\Delta \nu_{ij} = \nu_{ij}^R - \nu_{ij}^L"/>, and</p>
 <div class="math">
-<p><img src="../_images/math/4285f319908811b271d3f3b633089c6ba030de44.png" alt="\begin{aligned}
+<p><img src="_images/math/4285f319908811b271d3f3b633089c6ba030de44.png" alt="\begin{aligned}
 r^{(f)}_i &amp;= k^{(f)}_i \prod_j Y_j^{\nu_{ij}^{L}} \\
 r^{(b)}_i &amp;= k^{(b)}_i \prod_j Y_j^{\nu_{ij}^{R}}
 \end{aligned}"/></p>
 </div><p>***</p>
 </section>
 <section id="Other-types-of-reaction-statement">
-<h2>Other types of reaction statement<a class="headerlink" href="#Other-types-of-reaction-statement" title="Permalink to this headline"></a></h2>
+<h2>Other types of reaction statement<a class="headerlink" href="#Other-types-of-reaction-statement" title="Permalink to this heading"></a></h2>
 <p>There is also have a reaction statement of the form</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>~ h &lt;&lt; (a)
 </pre></div>
@@ -446,7 +448,7 @@ r^{(b)}_i &amp;= k^{(b)}_i \prod_j Y_j^{\nu_{ij}^{R}}
 <p>where the LHS must be a state variable, and the RHS is an expression inside parentheses.</p>
 <p>The meaning of this statement is to add <code class="docutils literal notranslate"><span class="pre">a</span></code> to the differential equation for <code class="docutils literal notranslate"><span class="pre">h</span></code>, i.e.</p>
 <div class="math">
-<p><img src="../_images/math/143a203a45b594a7c6efeea1226aaa08e02d4745.png" alt="\frac{dh}{dt} += a"/></p>
+<p><img src="_images/math/143a203a45b594a7c6efeea1226aaa08e02d4745.png" alt="\frac{dh}{dt} += a"/></p>
 </div><p>*** Finally there is a statement of the form</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>~ x + 2y + ... -&gt; (a)
 </pre></div>
@@ -459,19 +461,19 @@ r^{(b)}_i &amp;= k^{(b)}_i \prod_j Y_j^{\nu_{ij}^{R}}
 <hr class="docutils" />
 </section>
 <section id="f_flux-/-b_flux-variables">
-<h2>f_flux / b_flux variables<a class="headerlink" href="#f_flux-/-b_flux-variables" title="Permalink to this headline"></a></h2>
-<p>Within the <code class="docutils literal notranslate"><span class="pre">KINETIC</span></code> block in the MOD file, the user can make use of the <code class="docutils literal notranslate"><span class="pre">f_flux</span></code> and <code class="docutils literal notranslate"><span class="pre">b_flux</span></code> variables, which refer to the forwards <img class="math" src="../_images/math/0a937a53a56d05f2bf7c797f789b8a8433e4f9f2.png" alt="r^{(f)}"/> and backwards <img class="math" src="../_images/math/f65a6a5bdf41ee3f8d4fdccb7f52efd7a065970e.png" alt="r^{(b)}"/> fluxes of the preceeding reaction statement.</p>
+<h2>f_flux / b_flux variables<a class="headerlink" href="#f_flux-/-b_flux-variables" title="Permalink to this heading"></a></h2>
+<p>Within the <code class="docutils literal notranslate"><span class="pre">KINETIC</span></code> block in the MOD file, the user can make use of the <code class="docutils literal notranslate"><span class="pre">f_flux</span></code> and <code class="docutils literal notranslate"><span class="pre">b_flux</span></code> variables, which refer to the forwards <img class="math" src="_images/math/0a937a53a56d05f2bf7c797f789b8a8433e4f9f2.png" alt="r^{(f)}"/> and backwards <img class="math" src="_images/math/f65a6a5bdf41ee3f8d4fdccb7f52efd7a065970e.png" alt="r^{(b)}"/> fluxes of the preceeding reaction statement.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">KineticBlockVisitor</span></code> substitutes the current expression for these fluxes for these variables within the <code class="docutils literal notranslate"><span class="pre">KINETIC</span></code> block.</p>
 <p>If these variables are referenced before a reaction statement then they are assumed to be zero.</p>
 <hr class="docutils" />
 </section>
 <section id="[TODO]-CONSERVE">
-<h2>[TODO] CONSERVE<a class="headerlink" href="#[TODO]-CONSERVE" title="Permalink to this headline"></a></h2>
+<h2>[TODO] CONSERVE<a class="headerlink" href="#[TODO]-CONSERVE" title="Permalink to this heading"></a></h2>
 <p>Converse statement allows specification of a conservation law, e.g.</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>CONSERVE h + m + z = 1
 </pre></div>
 </div>
-<p>In NEURON, the ODE for the last state variable on the rhs of this expression is replaced with this algebraic expression, so in this case instead of replacing <img class="math" src="../_images/math/8b132a447d8fc498ff17758b80c74cbfe5fb14e2.png" alt="z' = ..."/> with the forwards or backwards Euler equation, it would be replaced with <img class="math" src="../_images/math/b5b972c912e4a254716e554d44b91172cd18cdf0.png" alt="z = 1 - h - m"/></p>
+<p>In NEURON, the ODE for the last state variable on the rhs of this expression is replaced with this algebraic expression, so in this case instead of replacing <img class="math" src="_images/math/8b132a447d8fc498ff17758b80c74cbfe5fb14e2.png" alt="z' = ..."/> with the forwards or backwards Euler equation, it would be replaced with <img class="math" src="_images/math/b5b972c912e4a254716e554d44b91172cd18cdf0.png" alt="z = 1 - h - m"/></p>
 <p>In order to be consistent with NEURON, in particular the way <code class="docutils literal notranslate"><span class="pre">STEADYSTATE</span></code> is implemented, we should do this in the same way. *** #### Implementation Tests</p>
 <ul class="simple">
 <li><p>The unit tests may be helpful to understand what these functions are doing</p></li>
@@ -479,7 +481,7 @@ r^{(b)}_i &amp;= k^{(b)}_i \prod_j Y_j^{\nu_{ij}^{R}}
 </ul>
 </section>
 <section id="Examples">
-<h2>Examples<a class="headerlink" href="#Examples" title="Permalink to this headline"></a></h2>
+<h2>Examples<a class="headerlink" href="#Examples" title="Permalink to this heading"></a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
@@ -518,15 +520,15 @@ r^{(b)}_i &amp;= k^{(b)}_i \prod_j Y_j^{\nu_{ij}^{R}}
 </div>
 </div>
 <section id="Ex.-1">
-<h3>Ex. 1<a class="headerlink" href="#Ex.-1" title="Permalink to this headline"></a></h3>
+<h3>Ex. 1<a class="headerlink" href="#Ex.-1" title="Permalink to this heading"></a></h3>
 <p>Given the following KINETIC statement</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>~ h &lt;-&gt; m (a,b)
 </pre></div>
 </div>
-<p>We have 2 state variables, and 1 reaction statement, so - <img class="math" src="../_images/math/c5111b6a0d11f04e94c6d082373c94544d894d31.png" alt="i = \{0\}"/> - <img class="math" src="../_images/math/ca6d16973a72e48d8878ab2b918fb08c5b8b5a93.png" alt="j = \{0, 1\}"/></p>
-<p>i.e.  - the state vector <img class="math" src="../_images/math/7daf0d4815e763eb90f0d5f1dc406f668c1e21db.png" alt="Y"/> has 2 elements</p>
+<p>We have 2 state variables, and 1 reaction statement, so - <img class="math" src="_images/math/c5111b6a0d11f04e94c6d082373c94544d894d31.png" alt="i = \{0\}"/> - <img class="math" src="_images/math/ca6d16973a72e48d8878ab2b918fb08c5b8b5a93.png" alt="j = \{0, 1\}"/></p>
+<p>i.e.  - the state vector <img class="math" src="_images/math/7daf0d4815e763eb90f0d5f1dc406f668c1e21db.png" alt="Y"/> has 2 elements</p>
 <div class="math">
-<p><img src="../_images/math/85abd7550225ea64e3332e320d0e1cacbefd5c01.png" alt="Y = \left(
+<p><img src="_images/math/85abd7550225ea64e3332e320d0e1cacbefd5c01.png" alt="Y = \left(
 \begin{aligned}
 h \\
 m
@@ -536,13 +538,13 @@ m
 <li><p>the stoichiometric coefficients are 1x2 matrices</p></li>
 </ul>
 <div class="math">
-<p><img src="../_images/math/1d70dc22192943ca2620c1c2ca0f30dcbca82c90.png" alt="\nu^L = \left(
+<p><img src="_images/math/1d70dc22192943ca2620c1c2ca0f30dcbca82c90.png" alt="\nu^L = \left(
 \begin{aligned}
 1 &amp;&amp; 0
 \end{aligned}
 \right)"/></p>
 </div><div class="math">
-<p><img src="../_images/math/909025780e38b3de7856afddcfa686df79b134ec.png" alt="\nu^R = \left(
+<p><img src="_images/math/909025780e38b3de7856afddcfa686df79b134ec.png" alt="\nu^R = \left(
 \begin{aligned}
 0 &amp;&amp; 1
 \end{aligned}
@@ -551,17 +553,17 @@ m
 <li><p>the rate vectors contain 1 element:</p></li>
 </ul>
 <div class="math">
-<p><img src="../_images/math/b9661fdf81766efdaf34f6a92ce35f10e765c583.png" alt="k^{(f)} = a"/></p>
+<p><img src="_images/math/b9661fdf81766efdaf34f6a92ce35f10e765c583.png" alt="k^{(f)} = a"/></p>
 </div><div class="math">
-<p><img src="../_images/math/6104fd80272862fd63e16fa6c99b4269bec42b3e.png" alt="k^{(b)} = b"/></p>
+<p><img src="_images/math/6104fd80272862fd63e16fa6c99b4269bec42b3e.png" alt="k^{(b)} = b"/></p>
 </div><p>Using these we can construct the forwards and blackwards fluxes:</p>
 <div class="math">
-<p><img src="../_images/math/6174a73d2a4005899a4d557addf5082e90513aa0.png" alt="r^{(f)} = a h"/></p>
+<p><img src="_images/math/6174a73d2a4005899a4d557addf5082e90513aa0.png" alt="r^{(f)} = a h"/></p>
 </div><div class="math">
-<p><img src="../_images/math/ed8e88f746e5ed5af308076768a20ce53744cff3.png" alt="r^{(b)} = b m"/></p>
+<p><img src="_images/math/ed8e88f746e5ed5af308076768a20ce53744cff3.png" alt="r^{(b)} = b m"/></p>
 </div><p>and finally we find the ODEs in matrix form:</p>
 <div class="math">
-<p><img src="../_images/math/2de93f2ea0293210d23ea33bafea274b9669c1bd.png" alt="\frac{dY}{dt} =
+<p><img src="_images/math/2de93f2ea0293210d23ea33bafea274b9669c1bd.png" alt="\frac{dY}{dt} =
 \left(
 \begin{aligned}
 -1 &amp;&amp; 1
@@ -570,7 +572,7 @@ m
 (ah - bm)"/></p>
 </div><p>which in terms of the state variables can be written:</p>
 <div class="math">
-<p><img src="../_images/math/b2b36a4271e219b86916babb67bfe5e5dbe519b2.png" alt="\begin{aligned}
+<p><img src="_images/math/b2b36a4271e219b86916babb67bfe5e5dbe519b2.png" alt="\begin{aligned}
 \frac{dh}{dt} &amp;= bm - ah \\
 \frac{dm}{dt} &amp;= ah - bm
 \end{aligned}"/></p>
@@ -603,7 +605,7 @@ DERIVATIVE kin {
 </div>
 </section>
 <section id="Ex.-2">
-<h3>Ex. 2<a class="headerlink" href="#Ex.-2" title="Permalink to this headline"></a></h3>
+<h3>Ex. 2<a class="headerlink" href="#Ex.-2" title="Permalink to this heading"></a></h3>
 <p>Annihilation reaction statement</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
@@ -633,7 +635,7 @@ DERIVATIVE kin {
 </div>
 </section>
 <section id="Ex.-3">
-<h3>Ex. 3<a class="headerlink" href="#Ex.-3" title="Permalink to this headline"></a></h3>
+<h3>Ex. 3<a class="headerlink" href="#Ex.-3" title="Permalink to this heading"></a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">&lt;&lt;</span></code> reaction statement</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
@@ -663,7 +665,7 @@ DERIVATIVE kin {
 </div>
 </section>
 <section id="Ex.-4">
-<h3>Ex. 4<a class="headerlink" href="#Ex.-4" title="Permalink to this headline"></a></h3>
+<h3>Ex. 4<a class="headerlink" href="#Ex.-4" title="Permalink to this heading"></a></h3>
 <p>Annihilation &amp; <code class="docutils literal notranslate"><span class="pre">&lt;&lt;</span></code> reaction statement for the same state variable</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
@@ -694,7 +696,7 @@ DERIVATIVE kin {
 </div>
 </section>
 <section id="Ex.-5">
-<h3>Ex. 5<a class="headerlink" href="#Ex.-5" title="Permalink to this headline"></a></h3>
+<h3>Ex. 5<a class="headerlink" href="#Ex.-5" title="Permalink to this heading"></a></h3>
 <p>Reaction statements and use of <code class="docutils literal notranslate"><span class="pre">f_flux</span></code>, <code class="docutils literal notranslate"><span class="pre">b_flux</span></code> variables</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:

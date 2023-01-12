@@ -14,7 +14,9 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -141,7 +143,7 @@
 }
 </style>
 <section id="contributing-to-the-nmodl-framework">
-<h1>Contributing to the NMODL Framework<a class="headerlink" href="#contributing-to-the-nmodl-framework" title="Permalink to this headline"></a></h1>
+<h1>Contributing to the NMODL Framework<a class="headerlink" href="#contributing-to-the-nmodl-framework" title="Permalink to this heading"></a></h1>
 <p>We would love for you to contribute to the NMODL Framework and help make it better than it is today. As a
 contributor, here are the guidelines we would like you to follow:</p>
 <ul class="simple">
@@ -152,15 +154,15 @@ contributor, here are the guidelines we would like you to follow:</p>
 <li><p><span class="xref myst">Development Conventions</span></p></li>
 </ul>
 <section id="a-name-question-a-got-a-question">
-<h2><a name="question"></a> Got a Question?<a class="headerlink" href="#a-name-question-a-got-a-question" title="Permalink to this headline"></a></h2>
+<h2><a name="question"></a> Got a Question?<a class="headerlink" href="#a-name-question-a-got-a-question" title="Permalink to this heading"></a></h2>
 <p>Please do not hesitate to raise an issue on <a class="reference external" href="https://github.com/BlueBrain/nmodl">github project page</a>.</p>
 </section>
 <section id="a-name-issue-a-found-a-bug">
-<h2><a name="issue"></a> Found a Bug?<a class="headerlink" href="#a-name-issue-a-found-a-bug" title="Permalink to this headline"></a></h2>
+<h2><a name="issue"></a> Found a Bug?<a class="headerlink" href="#a-name-issue-a-found-a-bug" title="Permalink to this heading"></a></h2>
 <p>If you find a bug in the source code, you can help us by <span class="xref myst">submitting an issue</span> to our <a class="reference external" href="https://github.com/BlueBrain/nmodl">GitHub Repository</a>. Even better, you can <span class="xref myst">submit a Pull Request</span> with a fix.</p>
 </section>
 <section id="a-name-feature-a-missing-a-feature">
-<h2><a name="feature"></a> Missing a Feature?<a class="headerlink" href="#a-name-feature-a-missing-a-feature" title="Permalink to this headline"></a></h2>
+<h2><a name="feature"></a> Missing a Feature?<a class="headerlink" href="#a-name-feature-a-missing-a-feature" title="Permalink to this heading"></a></h2>
 <p>You can <em>request</em> a new feature by <span class="xref myst">submitting an issue</span> to our GitHub Repository. If you would like to <em>implement</em> a new feature, please submit an issue with a proposal for your work first, to be sure that we can use it.</p>
 <p>Please consider what kind of change it is:</p>
 <ul class="simple">
@@ -171,15 +173,15 @@ and help you to craft the change so that it is successfully accepted into the pr
 </ul>
 </section>
 <section id="a-name-submit-a-submission-guidelines">
-<h2><a name="submit"></a> Submission Guidelines<a class="headerlink" href="#a-name-submit-a-submission-guidelines" title="Permalink to this headline"></a></h2>
+<h2><a name="submit"></a> Submission Guidelines<a class="headerlink" href="#a-name-submit-a-submission-guidelines" title="Permalink to this heading"></a></h2>
 <section id="a-name-submit-issue-a-submitting-an-issue">
-<h3><a name="submit-issue"></a> Submitting an Issue<a class="headerlink" href="#a-name-submit-issue-a-submitting-an-issue" title="Permalink to this headline"></a></h3>
+<h3><a name="submit-issue"></a> Submitting an Issue<a class="headerlink" href="#a-name-submit-issue-a-submitting-an-issue" title="Permalink to this heading"></a></h3>
 <p>Before you submit an issue, please search the issue tracker, maybe an issue for your problem already exists and the
 discussion might inform you of workarounds readily available.</p>
 <p>We want to fix all the issues as soon as possible, but before fixing a bug we need to reproduce and confirm it. In order to reproduce bugs we will need as much information as possible, and preferably a sample MOD file or Python example.</p>
 </section>
 <section id="a-name-submit-pr-a-submitting-a-pull-request-pr">
-<h3><a name="submit-pr"></a> Submitting a Pull Request (PR)<a class="headerlink" href="#a-name-submit-pr-a-submitting-a-pull-request-pr" title="Permalink to this headline"></a></h3>
+<h3><a name="submit-pr"></a> Submitting a Pull Request (PR)<a class="headerlink" href="#a-name-submit-pr-a-submitting-a-pull-request-pr" title="Permalink to this heading"></a></h3>
 <p>When you wish to contribute to the code base, please consider the following guidelines:</p>
 <ul>
 <li><p>Make a <a class="reference external" href="https://guides.github.com/activities/forking/">fork</a> of this repository.</p></li>
@@ -226,7 +228,7 @@ The formatting utility can also be used directly:</p>
 </ul>
 <p>That’s it! Thank you for your contribution!</p>
 <section id="after-your-pull-request-is-merged">
-<h4>After your pull request is merged<a class="headerlink" href="#after-your-pull-request-is-merged" title="Permalink to this headline"></a></h4>
+<h4>After your pull request is merged<a class="headerlink" href="#after-your-pull-request-is-merged" title="Permalink to this heading"></a></h4>
 <p>After your pull request is merged, you can safely delete your branch and pull the changes from the main (upstream)
 repository:</p>
 <ul>
@@ -255,7 +257,7 @@ repository:</p>
 </section>
 </section>
 <section id="a-name-devconv-a-development-conventions">
-<h2><a name="devconv"></a> Development Conventions<a class="headerlink" href="#a-name-devconv-a-development-conventions" title="Permalink to this headline"></a></h2>
+<h2><a name="devconv"></a> Development Conventions<a class="headerlink" href="#a-name-devconv-a-development-conventions" title="Permalink to this heading"></a></h2>
 <p>If you are developing NMODL, make sure to enable both <code class="docutils literal notranslate"><span class="pre">NMODL_FORMATTING</span></code> and <code class="docutils literal notranslate"><span class="pre">NMODL_PRECOMMIT</span></code>
 CMake variables to ensure that your contributions follow the coding conventions of this project:</p>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span>cmake -DNMODL_FORMATTING:BOOL=ON -DNMODL_PRECOMMIT:BOOL=ON &lt;path&gt;
@@ -278,7 +280,7 @@ to <a class="reference external" href="http://apt.llvm.org/">LLVM apt page</a>. 
 <code class="docutils literal notranslate"><span class="pre">brew</span> <span class="pre">install</span> <span class="pre">llvm</span></code>.
 <em>cmake-format</em> and <em>pre-commit</em> utilities can be installed with <em>pip</em>.</p>
 <section id="validate-the-python-package">
-<h3>Validate the Python package<a class="headerlink" href="#validate-the-python-package" title="Permalink to this headline"></a></h3>
+<h3>Validate the Python package<a class="headerlink" href="#validate-the-python-package" title="Permalink to this heading"></a></h3>
 <p>You may run the Python test-suites if your contribution has an impact
 on the Python API:</p>
 <ol class="arabic simple">
@@ -291,7 +293,7 @@ on the Python API:</p>
 </ol>
 </section>
 <section id="memory-leaks-and-clang-tidy">
-<h3>Memory Leaks and clang-tidy<a class="headerlink" href="#memory-leaks-and-clang-tidy" title="Permalink to this headline"></a></h3>
+<h3>Memory Leaks and clang-tidy<a class="headerlink" href="#memory-leaks-and-clang-tidy" title="Permalink to this heading"></a></h3>
 <p>If you want to test for memory leaks, do :</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">valgrind</span> <span class="o">--</span><span class="n">leak</span><span class="o">-</span><span class="n">check</span><span class="o">=</span><span class="n">full</span> <span class="o">--</span><span class="n">track</span><span class="o">-</span><span class="n">origins</span><span class="o">=</span><span class="n">yes</span>  <span class="o">./</span><span class="nb">bin</span><span class="o">/</span><span class="n">nmodl_lexer</span>
 </pre></div>
