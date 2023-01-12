@@ -429,26 +429,129 @@ SCENARIO("Check that BEFORE/AFTER block are well generated", "[codegen][before/a
             NEURON {
                 SUFFIX ba1
             }
-            BEFORE BREAKPOINT {}
-            BREAKPOINT {}
-            AFTER SOLVE {}
-            BEFORE INITIAL {}
-            INITIAL {}
-            AFTER INITIAL {}
-            BEFORE STEP {}
+            BEFORE BREAKPOINT {
+                init_before_breakpoint()
+                inc = 0
+            }
+            AFTER SOLVE {
+                init_after_solve()
+                inc = 0
+            }
+            BEFORE INITIAL {
+                init_before_initial()
+                inc = 0
+            }
+            AFTER INITIAL {
+                init_after_initial()
+                inc = 0
+            }
+            BEFORE STEP {
+                init_before_step()
+                inc = 0
+            }
         )";
         THEN("They should be well registered") {
             auto const generated = get_cpp_code(nmodl_text);
             // 11: BEFORE BREAKPOINT
-            REQUIRE_THAT(generated, Contains("hoc_reg_ba(mech_type, nrn_before_after_0_ba1, 11);"));
+            {
+                REQUIRE_THAT(generated, Contains("hoc_reg_ba(mech_type, nrn_before_after_0_ba1, 11);"));
+                std::string generated_code = R"(
+        #pragma ivdep
+        #pragma omp simd
+        for (int id = 0; id < nodecount; id++) {
+            int node_id = node_index[id];
+            double v = voltage[node_id];
+            #if NRN_PRCELLSTATE
+            inst->v_unused[id] = v;
+            #endif
+            {
+                init_before_breakpoint();
+                inc = 0.0;
+            }
+        })";
+                auto const expected = generated_code;
+                REQUIRE_THAT(generated, Contains(expected));
+            }
             // 23: AFTER SOLVE
-            REQUIRE_THAT(generated, Contains("hoc_reg_ba(mech_type, nrn_before_after_1_ba1, 22);"));
-            // 11: BEFORE INITIAl
-            REQUIRE_THAT(generated, Contains("hoc_reg_ba(mech_type, nrn_before_after_2_ba1, 13);"));
+            {
+                REQUIRE_THAT(generated, Contains("hoc_reg_ba(mech_type, nrn_before_after_1_ba1, 22);"));
+                std::string generated_code = R"(
+        #pragma ivdep
+        #pragma omp simd
+        for (int id = 0; id < nodecount; id++) {
+            int node_id = node_index[id];
+            double v = voltage[node_id];
+            #if NRN_PRCELLSTATE
+            inst->v_unused[id] = v;
+            #endif
+            {
+                init_after_solve();
+                inc = 0.0;
+            }
+        })";
+                auto const expected = generated_code;
+                REQUIRE_THAT(generated, Contains(expected));
+            }
+            // 11: BEFORE INITIAL
+            {
+                REQUIRE_THAT(generated, Contains("hoc_reg_ba(mech_type, nrn_before_after_2_ba1, 13);"));
+                std::string generated_code = R"(
+        #pragma ivdep
+        #pragma omp simd
+        for (int id = 0; id < nodecount; id++) {
+            int node_id = node_index[id];
+            double v = voltage[node_id];
+            #if NRN_PRCELLSTATE
+            inst->v_unused[id] = v;
+            #endif
+            {
+                init_before_initial();
+                inc = 0.0;
+            }
+        })";
+                auto const expected = generated_code;
+                REQUIRE_THAT(generated, Contains(expected));
+            }
             // 21: AFTER INITIAL
-            REQUIRE_THAT(generated, Contains("hoc_reg_ba(mech_type, nrn_before_after_3_ba1, 23);"));
+            {
+                REQUIRE_THAT(generated, Contains("hoc_reg_ba(mech_type, nrn_before_after_3_ba1, 23);"));
+                std::string generated_code = R"(
+        #pragma ivdep
+        #pragma omp simd
+        for (int id = 0; id < nodecount; id++) {
+            int node_id = node_index[id];
+            double v = voltage[node_id];
+            #if NRN_PRCELLSTATE
+            inst->v_unused[id] = v;
+            #endif
+            {
+                init_after_initial();
+                inc = 0.0;
+            }
+        })";
+                auto const expected = generated_code;
+                REQUIRE_THAT(generated, Contains(expected));
+            }
             // 13: BEFORE STEP
-            REQUIRE_THAT(generated, Contains("hoc_reg_ba(mech_type, nrn_before_after_4_ba1, 14);"));
+            {
+                REQUIRE_THAT(generated, Contains("hoc_reg_ba(mech_type, nrn_before_after_4_ba1, 14);"));
+                std::string generated_code = R"(
+        #pragma ivdep
+        #pragma omp simd
+        for (int id = 0; id < nodecount; id++) {
+            int node_id = node_index[id];
+            double v = voltage[node_id];
+            #if NRN_PRCELLSTATE
+            inst->v_unused[id] = v;
+            #endif
+            {
+                init_before_step();
+                inc = 0.0;
+            }
+        })";
+                auto const expected = generated_code;
+                REQUIRE_THAT(generated, Contains(expected));
+            }
         }
     }
 
