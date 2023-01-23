@@ -138,7 +138,7 @@ setup(
         "nbconvert",
         "nbsphinx>=0.3.2",
         "pytest>=3.7.2",
-        "sphinxcontrib-applehelp<1.0.3",
+        "sphinxcontrib-applehelp",
         "sphinx<6",
         "sphinx-rtd-theme",
     ]
