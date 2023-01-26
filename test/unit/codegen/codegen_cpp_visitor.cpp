@@ -431,7 +431,7 @@ SCENARIO("Check that BEFORE/AFTER block are well generated", "[codegen][before/a
             }
             BEFORE BREAKPOINT {
                 init_before_breakpoint()
-                inc = 0
+                PROTECT inc = inc + 1
             }
             AFTER SOLVE {
                 init_after_solve()
@@ -456,7 +456,9 @@ SCENARIO("Check that BEFORE/AFTER block are well generated", "[codegen][before/a
             {
                 REQUIRE_THAT(generated,
                              Contains("hoc_reg_ba(mech_type, nrn_before_after_0_ba1, 11);"));
+                // in case of PROTECT, there should be simd pragma but not ivdep
                 std::string generated_code = R"(
+
         #pragma omp simd
         for (int id = 0; id < nodecount; id++) {
             int node_id = node_index[id];
@@ -466,7 +468,8 @@ SCENARIO("Check that BEFORE/AFTER block are well generated", "[codegen][before/a
             #endif
             {
                 init_before_breakpoint();
-                inc = 0.0;
+                #pragma omp atomic update
+                inc = inc + 1.0;
             }
         })";
                 auto const expected = generated_code;
@@ -477,6 +480,7 @@ SCENARIO("Check that BEFORE/AFTER block are well generated", "[codegen][before/a
                 REQUIRE_THAT(generated,
                              Contains("hoc_reg_ba(mech_type, nrn_before_after_1_ba1, 22);"));
                 std::string generated_code = R"(
+        #pragma ivdep
         #pragma omp simd
         for (int id = 0; id < nodecount; id++) {
             int node_id = node_index[id];
@@ -497,6 +501,7 @@ SCENARIO("Check that BEFORE/AFTER block are well generated", "[codegen][before/a
                 REQUIRE_THAT(generated,
                              Contains("hoc_reg_ba(mech_type, nrn_before_after_2_ba1, 13);"));
                 std::string generated_code = R"(
+        #pragma ivdep
         #pragma omp simd
         for (int id = 0; id < nodecount; id++) {
             int node_id = node_index[id];
@@ -517,6 +522,7 @@ SCENARIO("Check that BEFORE/AFTER block are well generated", "[codegen][before/a
                 REQUIRE_THAT(generated,
                              Contains("hoc_reg_ba(mech_type, nrn_before_after_3_ba1, 23);"));
                 std::string generated_code = R"(
+        #pragma ivdep
         #pragma omp simd
         for (int id = 0; id < nodecount; id++) {
             int node_id = node_index[id];
@@ -537,6 +543,7 @@ SCENARIO("Check that BEFORE/AFTER block are well generated", "[codegen][before/a
                 REQUIRE_THAT(generated,
                              Contains("hoc_reg_ba(mech_type, nrn_before_after_4_ba1, 14);"));
                 std::string generated_code = R"(
+        #pragma ivdep
         #pragma omp simd
         for (int id = 0; id < nodecount; id++) {
             int node_id = node_index[id];
@@ -632,10 +639,11 @@ SCENARIO("Check codegen for MUTEX and PROTECT", "[codegen][mutex_protect]") {
         std::string const nmodl_text = R"(
             NEURON {
                 SUFFIX TEST
-                RANGE tmp
+                RANGE tmp, foo
             }
             PARAMETER {
                 tmp = 10
+                foo = 20
             }
             INITIAL {
                 MUTEXLOCK
@@ -643,17 +651,27 @@ SCENARIO("Check codegen for MUTEX and PROTECT", "[codegen][mutex_protect]") {
                 MUTEXUNLOCK
                 PROTECT tmp = 12
             }
+            PROCEDURE bar() {
+                PROTECT foo = 21
+            }
         )";
 
         THEN("Code with OpenMP critical sections is generated") {
             auto const generated = get_cpp_code(nmodl_text);
-            std::string expected_code = R"(#pragma omp critical (TEST)
+            // critical section for the mutex block
+            std::string expected_code_initial = R"(#pragma omp critical (TEST)
                 {
                     inst->tmp[id] = 11.0;
                 }
                 #pragma omp atomic update
                 inst->tmp[id] = 12.0;)";
-            REQUIRE_THAT(generated, Contains(expected_code));
+
+            // atomic update for the PROTECT construct
+            std::string expected_code_proc = R"(#pragma omp atomic update
+        inst->foo[id] = 21.0;)";
+
+            REQUIRE_THAT(generated, Contains(expected_code_initial));
+            REQUIRE_THAT(generated, Contains(expected_code_proc));
         }
     }
 }

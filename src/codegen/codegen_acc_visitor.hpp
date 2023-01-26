@@ -38,11 +38,12 @@ class CodegenAccVisitor: public CodegenCVisitor {
 
 
     /// ivdep like annotation for channel iterations
-    void print_channel_iteration_block_parallel_hint(BlockType type) override;
+    void print_channel_iteration_block_parallel_hint(BlockType type,
+                                                     const ast::Block* block) override;
 
 
     /// atomic update pragma for reduction statements
-    void print_atomic_reduction_pragma() override;
+    void print_atomic_reduction_pragma(bool skip = false) override;
 
 
     /// memory allocation routine

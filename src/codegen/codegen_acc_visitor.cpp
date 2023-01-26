@@ -31,7 +31,8 @@ namespace codegen {
  *      for(int id=0; id<nodecount; id++) {
  *
  */
-void CodegenAccVisitor::print_channel_iteration_block_parallel_hint(BlockType type) {
+void CodegenAccVisitor::print_channel_iteration_block_parallel_hint(BlockType type,
+                                                                    const ast::Block* block) {
     if (info.artificial_cell) {
         return;
     }
@@ -54,9 +55,11 @@ void CodegenAccVisitor::print_channel_iteration_block_parallel_hint(BlockType ty
 }
 
 
-void CodegenAccVisitor::print_atomic_reduction_pragma() {
-    printer->add_line("nrn_pragma_acc(atomic update)");
-    printer->add_line("nrn_pragma_omp(atomic update)");
+void CodegenAccVisitor::print_atomic_reduction_pragma(bool skip) {
+    if (!skip) {
+        printer->add_line("nrn_pragma_acc(atomic update)");
+        printer->add_line("nrn_pragma_omp(atomic update)");
+    }
 }
 
 

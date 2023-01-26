@@ -1243,7 +1243,8 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      *
      * \param type The block type
      */
-    virtual void print_channel_iteration_block_parallel_hint(BlockType type);
+    virtual void print_channel_iteration_block_parallel_hint(BlockType type,
+                                                             const ast::Block* block);
 
 
     /**
@@ -1419,8 +1420,9 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
     /**
      * Print atomic update pragma for reduction statements
      *
+     * \param skip If true, skip printing Atomic reduction related pragma
      */
-    virtual void print_atomic_reduction_pragma();
+    virtual void print_atomic_reduction_pragma(bool skip = false);
 
 
     /**
