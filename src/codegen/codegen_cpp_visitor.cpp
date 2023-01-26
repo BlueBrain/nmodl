@@ -319,16 +319,16 @@ void CodegenCVisitor::visit_update_dt(const ast::UpdateDt& node) {
 }
 
 void CodegenCVisitor::visit_protect_statement(const ast::ProtectStatement& node) {
-    printer->fmt_start_block("#pragma omp critical {}", info.mod_suffix);
+    printer->add_line("#pragma omp atomic update");
     printer->add_indent();
     node.get_expression()->accept(*this);
     printer->add_text(";");
-    printer->add_newline();
-    printer->end_block(1);
 }
 
 void CodegenCVisitor::visit_mutex_lock(const ast::MutexLock& node) {
-    printer->fmt_start_block("#pragma omp critical {}", info.mod_suffix);
+    printer->fmt_line("#pragma omp critical ({})", info.mod_suffix);
+    printer->add_indent();
+    printer->start_block();
 }
 
 void CodegenCVisitor::visit_mutex_unlock(const ast::MutexUnlock& node) {
@@ -1121,7 +1121,7 @@ void CodegenCVisitor::print_net_init_acc_serial_annotation_block_end() {
  * for parallelization. For example:
  *
  * \code
- *      #pragma ivdep
+ *      #pragma omp simd
  *      for(int id = 0; id < nodecount; id++) {
  *
  *      #pragma acc parallel loop
@@ -1129,7 +1129,6 @@ void CodegenCVisitor::print_net_init_acc_serial_annotation_block_end() {
  * \endcode
  */
 void CodegenCVisitor::print_channel_iteration_block_parallel_hint(BlockType /* type */) {
-    printer->add_line("#pragma ivdep");
     printer->add_line("#pragma omp simd");
 }
 

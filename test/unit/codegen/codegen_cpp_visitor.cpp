@@ -457,7 +457,6 @@ SCENARIO("Check that BEFORE/AFTER block are well generated", "[codegen][before/a
                 REQUIRE_THAT(generated,
                              Contains("hoc_reg_ba(mech_type, nrn_before_after_0_ba1, 11);"));
                 std::string generated_code = R"(
-        #pragma ivdep
         #pragma omp simd
         for (int id = 0; id < nodecount; id++) {
             int node_id = node_index[id];
@@ -478,7 +477,6 @@ SCENARIO("Check that BEFORE/AFTER block are well generated", "[codegen][before/a
                 REQUIRE_THAT(generated,
                              Contains("hoc_reg_ba(mech_type, nrn_before_after_1_ba1, 22);"));
                 std::string generated_code = R"(
-        #pragma ivdep
         #pragma omp simd
         for (int id = 0; id < nodecount; id++) {
             int node_id = node_index[id];
@@ -499,7 +497,6 @@ SCENARIO("Check that BEFORE/AFTER block are well generated", "[codegen][before/a
                 REQUIRE_THAT(generated,
                              Contains("hoc_reg_ba(mech_type, nrn_before_after_2_ba1, 13);"));
                 std::string generated_code = R"(
-        #pragma ivdep
         #pragma omp simd
         for (int id = 0; id < nodecount; id++) {
             int node_id = node_index[id];
@@ -520,7 +517,6 @@ SCENARIO("Check that BEFORE/AFTER block are well generated", "[codegen][before/a
                 REQUIRE_THAT(generated,
                              Contains("hoc_reg_ba(mech_type, nrn_before_after_3_ba1, 23);"));
                 std::string generated_code = R"(
-        #pragma ivdep
         #pragma omp simd
         for (int id = 0; id < nodecount; id++) {
             int node_id = node_index[id];
@@ -541,7 +537,6 @@ SCENARIO("Check that BEFORE/AFTER block are well generated", "[codegen][before/a
                 REQUIRE_THAT(generated,
                              Contains("hoc_reg_ba(mech_type, nrn_before_after_4_ba1, 14);"));
                 std::string generated_code = R"(
-        #pragma ivdep
         #pragma omp simd
         for (int id = 0; id < nodecount; id++) {
             int node_id = node_index[id];
@@ -652,12 +647,12 @@ SCENARIO("Check codegen for MUTEX and PROTECT", "[codegen][mutex_protect]") {
 
         THEN("Code with OpenMP critical sections is generated") {
             auto const generated = get_cpp_code(nmodl_text);
-            std::string expected_code = R"(#pragma omp critical TEST {
+            std::string expected_code = R"(#pragma omp critical (TEST)
+                {
                     inst->tmp[id] = 11.0;
                 }
-                #pragma omp critical TEST {
-                    inst->tmp[id] = 12.0;
-                })";
+                #pragma omp atomic update
+                inst->tmp[id] = 12.0;)";
             REQUIRE_THAT(generated, Contains(expected_code));
         }
     }

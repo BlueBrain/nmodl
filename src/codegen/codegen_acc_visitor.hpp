@@ -127,6 +127,9 @@ class CodegenAccVisitor: public CodegenCVisitor {
 
     void print_net_send_buffering_grow() override;
 
+    // protect statement as atomic update on device
+    void visit_protect_statement(const ast::ProtectStatement& node) override;
+
 
   public:
     CodegenAccVisitor(const std::string& mod_file,

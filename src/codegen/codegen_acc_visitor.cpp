@@ -9,6 +9,7 @@
 
 #include "ast/eigen_linear_solver_block.hpp"
 #include "ast/integer.hpp"
+#include "ast/protect_statement.hpp"
 
 
 namespace nmodl {
@@ -353,6 +354,13 @@ void CodegenAccVisitor::print_net_send_buf_count_update_to_device() const {
 void CodegenAccVisitor::print_dt_update_to_device() const {
     printer->fmt_line("#pragma acc update device({}) if (nt->compute_gpu)",
                       get_variable_name(naming::NTHREAD_DT_VARIABLE));
+}
+
+void CodegenAccVisitor::visit_protect_statement(const ast::ProtectStatement& node) {
+    print_atomic_reduction_pragma();
+    printer->add_indent();
+    node.get_expression()->accept(*this);
+    printer->add_text(";");
 }
 
 }  // namespace codegen
