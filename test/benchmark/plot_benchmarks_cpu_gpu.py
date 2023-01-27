@@ -7,6 +7,10 @@ import pandas as pd
 import pickle
 import seaborn as sns
 
+# Avoid Type 3 fonts
+import matplotlib
+matplotlib.rcParams['pdf.fonttype'] = 42
+matplotlib.rcParams['ps.fonttype'] = 42
 
 def _get_flags_string(flags):
     return flags.replace(" ", "_").replace('-','').replace('=','_')
@@ -334,7 +338,6 @@ def generate_graph_pandas_combined_relative_gpu_log(
     ax.set_yscale("symlog", base=2, linthresh=0.015)
     ax.set_ylim(0.5, 2)
     ax.set_yticks([0.5, 1, 2], [0.5, 1, 2])
-    ax.set_title(f"GPU benchmarks{ref_title_str}")
     plt.ylabel("Speedup relative to {}".format(baseline_name))
     plt.legend(loc="upper right")
     if print_values:
@@ -418,7 +421,7 @@ def plot_cpu_results():
         "graphs_output_pandas",
         False,
         xaxis_label="skylake-avx512 Target Microarchitecture",
-        plot_size=(10, 3.5),
+        plot_size=(13, 3.5),
     )
     # newly collected data
     hh_expsyn_cpu_results = load_pickle_result_file(
@@ -435,7 +438,7 @@ def plot_cpu_results():
         "graphs_output_pandas",
         False,
         xaxis_label="skylake-avx512 Target Microarchitecture",
-        plot_size=(10, 3.5),
+        plot_size=(13, 3.5),
     )
 
 
