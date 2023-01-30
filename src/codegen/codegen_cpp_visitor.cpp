@@ -1147,9 +1147,17 @@ void CodegenCVisitor::print_channel_iteration_block_parallel_hint(BlockType /* t
     }
     // for openmp simd, we assume OpenMP is enabled and hence
     // openmp atomic reductions will handle PROTECT statements.
+    // note that nesting other openmp pragmas like "omp critical" is
+    // an error (e.g. with gcc) and hence check that as well.
     // TODO: Note that if user is explicitly providing flags to disable
     // OpenMP but enable OpenMP SIMD (only) then we can't do much in this case.
-    printer->add_line("#pragma omp simd");
+    auto has_mutex_node = std::find_if(nodes.cbegin(), nodes.cend(), [&](const auto& n) {
+        return n->get_node_type() == ast::AstNodeType::MUTEX_LOCK ||
+               n->get_node_type() == ast::AstNodeType::MUTEX_UNLOCK;
+    });
+    if (has_mutex_node == nodes.cend()) {
+        printer->add_line("#pragma omp simd");
+    }
 }
 
 

@@ -78,5 +78,5 @@ PROCEDURE test_table_p(br) {
 
 INITIAL {
     var_init(var)
-    PROTECT ca = cainf + 1
+    PROTECT ca = ca + 1
 }
