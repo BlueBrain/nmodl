@@ -1133,8 +1133,11 @@ void CodegenCVisitor::print_net_init_acc_serial_annotation_block_end() {
 void CodegenCVisitor::print_channel_iteration_block_parallel_hint(BlockType /* type */,
                                                                   const ast::Block* block) {
     // ivdep allows SIMD parallelisation of a block/loop but doesn't provide
-    // a standard mechanism for atomics. So, emit ivdep type of pragma only
-    // when no MUTEXLOCK/MUTEXUNLOCK/PROTECT statements are used in a given block.
+    // a standard mechanism for atomics. Also, even with openmp 5.0, openmp
+    // atomics do not enable vectorisation under "omp simd" (gives compiler
+    // error with gcc < 9 if atomic and simd pragmas are nested). So, emit
+    // ivdep/simd pragma when no MUTEXLOCK/MUTEXUNLOCK/PROTECT statements
+    // are used in the given block.
     std::vector<std::shared_ptr<const ast::Ast>> nodes;
     if (block) {
         nodes = collect_nodes(*block,
@@ -1144,18 +1147,6 @@ void CodegenCVisitor::print_channel_iteration_block_parallel_hint(BlockType /* t
     }
     if (nodes.empty()) {
         printer->add_line("#pragma ivdep");
-    }
-    // for openmp simd, we assume OpenMP is enabled and hence
-    // openmp atomic reductions will handle PROTECT statements.
-    // note that nesting other openmp pragmas like "omp critical" is
-    // an error (e.g. with gcc) and hence check that as well.
-    // TODO: Note that if user is explicitly providing flags to disable
-    // OpenMP but enable OpenMP SIMD (only) then we can't do much in this case.
-    auto has_mutex_node = std::find_if(nodes.cbegin(), nodes.cend(), [&](const auto& n) {
-        return n->get_node_type() == ast::AstNodeType::MUTEX_LOCK ||
-               n->get_node_type() == ast::AstNodeType::MUTEX_UNLOCK;
-    });
-    if (has_mutex_node == nodes.cend()) {
         printer->add_line("#pragma omp simd");
     }
 }

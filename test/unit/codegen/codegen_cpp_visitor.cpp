@@ -434,8 +434,10 @@ SCENARIO("Check that BEFORE/AFTER block are well generated", "[codegen][before/a
                 PROTECT inc = inc + 1
             }
             AFTER SOLVE {
+                MUTEXLOCK
                 init_after_solve()
                 inc = 0
+                MUTEXUNLOCK
             }
             BEFORE INITIAL {
                 init_before_initial()
@@ -456,10 +458,9 @@ SCENARIO("Check that BEFORE/AFTER block are well generated", "[codegen][before/a
             {
                 REQUIRE_THAT(generated,
                              Contains("hoc_reg_ba(mech_type, nrn_before_after_0_ba1, 11);"));
-                // in case of PROTECT, there should be simd pragma but not ivdep
+                // in case of PROTECT, there should not be simd or ivdep pragma
                 std::string generated_code = R"(
 
-        #pragma omp simd
         for (int id = 0; id < nodecount; id++) {
             int node_id = node_index[id];
             double v = voltage[node_id];
@@ -479,9 +480,9 @@ SCENARIO("Check that BEFORE/AFTER block are well generated", "[codegen][before/a
             {
                 REQUIRE_THAT(generated,
                              Contains("hoc_reg_ba(mech_type, nrn_before_after_1_ba1, 22);"));
+                // in case of MUTEXLOCK/MUTEXUNLOCK, there should not be simd or ivdep pragma
                 std::string generated_code = R"(
-        #pragma ivdep
-        #pragma omp simd
+
         for (int id = 0; id < nodecount; id++) {
             int node_id = node_index[id];
             double v = voltage[node_id];
@@ -489,8 +490,11 @@ SCENARIO("Check that BEFORE/AFTER block are well generated", "[codegen][before/a
             inst->v_unused[id] = v;
             #endif
             {
-                init_after_solve();
-                inc = 0.0;
+                #pragma omp critical (ba1)
+                {
+                    init_after_solve();
+                    inc = 0.0;
+                }
             }
         })";
                 auto const expected = generated_code;
