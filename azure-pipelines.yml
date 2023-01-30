@@ -81,9 +81,9 @@ stages:
         sudo apt-add-repository -y ppa:deadsnakes/ppa
         sudo apt-get update
         sudo apt-get install -y g++-8 flex bison libfl-dev cython libx11-dev libxcomposite-dev libncurses-dev mpich
-        sudo apt-get install -y python3.7 python3.7-dev python3.7-venv ninja-build
-        python3.7 -m pip install --upgrade pip setuptools
-        python3.7 -m pip install --user 'Jinja2>=2.9.3' 'PyYAML>=3.13' pytest pytest-cov 'sympy>=1.3,<1.6' numpy
+        sudo apt-get install -y python3.8 python3.8-dev python3.8-venv ninja-build
+        python3.8 -m pip install --upgrade pip setuptools
+        python3.8 -m pip install --user 'Jinja2>=2.9.3' 'PyYAML>=3.13' pytest pytest-cov 'sympy>=1.3,<1.6' numpy
         # we manually get version 3.15.0 to make sure that changes in the cmake
         # files do not require unsupported versions of cmake in our package.
         wget --quiet --output-document=- "https://github.com/Kitware/CMake/releases/download/$CMAKE_VER/$CMAKE_PKG.tar.gz" | tar xzpf -
@@ -108,7 +108,7 @@ stages:
         mkdir -p $(Build.Repository.LocalPath)/build
         cd $(Build.Repository.LocalPath)/build
         cmake --version
-        cmake .. -DPYTHON_EXECUTABLE=$(which python3.7) -DCMAKE_INSTALL_PREFIX=$HOME/nmodl -DCMAKE_BUILD_TYPE=Release -DNMODL_ENABLE_LLVM=ON -DLLVM_DIR=/usr/lib/llvm-13/share/llvm/cmake/
+        cmake .. -DPYTHON_EXECUTABLE=$(which python3.8) -DCMAKE_INSTALL_PREFIX=$HOME/nmodl -DCMAKE_BUILD_TYPE=Release -DNMODL_ENABLE_LLVM=ON -DLLVM_DIR=/usr/lib/llvm-13/share/llvm/cmake/
         make -j 2
         if [ $? -ne 0 ]
         then
@@ -135,7 +135,7 @@ stages:
         mkdir nrn/build
         cd nrn/build
         cmake --version
-        cmake .. -DNRN_ENABLE_CORENEURON=ON -DNRN_ENABLE_INTERVIEWS=OFF -DNRN_ENABLE_RX3D=OFF -DNRN_ENABLE_MPI=ON -DNRN_ENABLE_TESTS=ON -DCORENRN_ENABLE_NMODL=ON -DCORENRN_NMODL_DIR=$HOME/nmodl -Dnmodl_PYTHONPATH=$HOME/nmodl/lib -DPYTHON_EXECUTABLE=$(which python3.7) -DCORENRN_NMODL_FLAGS="sympy --analytic"
+        cmake .. -DNRN_ENABLE_CORENEURON=ON -DNRN_ENABLE_INTERVIEWS=OFF -DNRN_ENABLE_RX3D=OFF -DNRN_ENABLE_MPI=ON -DNRN_ENABLE_TESTS=ON -DCORENRN_ENABLE_NMODL=ON -DCORENRN_NMODL_DIR=$HOME/nmodl -Dnmodl_PYTHONPATH=$HOME/nmodl/lib -DPYTHON_EXECUTABLE=$(which python3.8) -DCORENRN_NMODL_FLAGS="sympy --analytic"
         make -j 2
         if [ $? -ne 0 ]
         then
@@ -159,7 +159,7 @@ stages:
         mkdir CoreNeuron/build_ispc
         cd CoreNeuron/build_ispc
         cmake --version
-        cmake .. -DCORENRN_ENABLE_MPI=OFF -DCORENRN_ENABLE_NMODL=ON -DCORENRN_NMODL_DIR=$HOME/nmodl -DPYTHON_EXECUTABLE=$(which python3.7) -DCORENRN_NMODL_FLAGS="sympy --analytic" -DCORENRN_ENABLE_ISPC=ON -DCMAKE_ISPC_COMPILER=$(Build.Repository.LocalPath)/$CMAKE_PKG/ispc/bin/ispc
+        cmake .. -DCORENRN_ENABLE_MPI=OFF -DCORENRN_ENABLE_NMODL=ON -DCORENRN_NMODL_DIR=$HOME/nmodl -DPYTHON_EXECUTABLE=$(which python3.8) -DCORENRN_NMODL_FLAGS="sympy --analytic" -DCORENRN_ENABLE_ISPC=ON -DCMAKE_ISPC_COMPILER=$(Build.Repository.LocalPath)/$CMAKE_PKG/ispc/bin/ispc
         make -j 2
         if [ $? -ne 0 ]
         then
