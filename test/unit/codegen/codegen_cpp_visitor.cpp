@@ -649,10 +649,10 @@ SCENARIO("Check codegen for MUTEX and PROTECT", "[codegen][mutex_protect]") {
                 MUTEXLOCK
                 tmp = 11
                 MUTEXUNLOCK
-                PROTECT tmp = 12
+                PROTECT tmp = tmp / 2.5
             }
             PROCEDURE bar() {
-                PROTECT foo = 21
+                PROTECT foo = foo - 21
             }
         )";
 
@@ -664,11 +664,11 @@ SCENARIO("Check codegen for MUTEX and PROTECT", "[codegen][mutex_protect]") {
                     inst->tmp[id] = 11.0;
                 }
                 #pragma omp atomic update
-                inst->tmp[id] = 12.0;)";
+                inst->tmp[id] = inst->tmp[id] / 2.5;)";
 
             // atomic update for the PROTECT construct
             std::string expected_code_proc = R"(#pragma omp atomic update
-        inst->foo[id] = 21.0;)";
+        inst->foo[id] = inst->foo[id] - 21.0;)";
 
             REQUIRE_THAT(generated, Contains(expected_code_initial));
             REQUIRE_THAT(generated, Contains(expected_code_proc));
