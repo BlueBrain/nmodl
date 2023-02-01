@@ -214,17 +214,17 @@ void CodegenCVisitor::visit_from_statement(const ast::FromStatement& node) {
     const auto& to = node.get_to();
     const auto& inc = node.get_increment();
     const auto& block = node.get_statement_block();
-    printer->fmt_text("for(int {}=", name);
+    printer->fmt_text("for (int {} = ", name);
     from->accept(*this);
-    printer->fmt_text("; {}<=", name);
+    printer->fmt_text("; {} <= ", name);
     to->accept(*this);
     if (inc) {
-        printer->fmt_text("; {}+=", name);
+        printer->fmt_text("; {} += ", name);
         inc->accept(*this);
     } else {
         printer->fmt_text("; {}++", name);
     }
-    printer->add_text(")");
+    printer->add_text(") ");
     block->accept(*this);
 }
 

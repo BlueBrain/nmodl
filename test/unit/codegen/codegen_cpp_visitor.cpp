@@ -632,6 +632,70 @@ SCENARIO("Check code generation for FUNCTION_TABLE block", "[codegen][function_t
     }
 }
 
+SCENARIO("Check that loops are well generated", "[codegen][loops]") {
+    GIVEN("A mod file containing for/while/if/else/FROM") {
+        std::string const nmodl_text = R"(
+            PROCEDURE foo() {
+                LOCAL a, b
+                if (a == 1) {
+                    b = 5
+                } else if (a == 2) {
+                    b = 6
+                } else {
+                    b = 7 ^ 2
+                }
+
+                while (b > 0) {
+                    b = b - 1
+                }
+                FROM a = 1 TO 10 BY 2 {
+                    b = b + 1
+                }
+            })";
+
+        THEN("Correct code is generated") {
+            auto const generated = get_cpp_code(nmodl_text);
+            std::string expected_code = R"(double a, b;
+        if (a == 1.0) {
+            b = 5.0;
+        } else if (a == 2.0) {
+            b = 6.0;
+        } else {
+            b = pow(7.0, 2.0);
+        }
+        while (b > 0.0) {
+            b = b - 1.0;
+        }
+        for (int a = 1; a <= 10; a += 2) {
+            b = b + 1.0;
+        })";
+            REQUIRE_THAT(generated, Contains(expected_code));
+        }
+    }
+}
+
+
+SCENARIO("Check that top verbatim blocks are well generated", "[codegen][top verbatim block]") {
+    GIVEN("A mod file containing top verbatim block") {
+        std::string const nmodl_text = R"(
+            VERBATIM
+            // This is a top verbatim block
+            double a = 2.;
+            ENDVERBATIM
+        )";
+
+        THEN("Correct code is generated") {
+            auto const generated = get_cpp_code(nmodl_text);
+            std::string expected_code = R"(using namespace coreneuron;
+
+
+            double a = 2.;)";
+            REQUIRE_THAT(generated, Contains(expected_code));
+        }
+    }
+}
+
+
 SCENARIO("Check codegen for MUTEX and PROTECT", "[codegen][mutex_protect]") {
     GIVEN("A mod file containing MUTEX & PROTECT") {
         std::string const nmodl_text = R"(
