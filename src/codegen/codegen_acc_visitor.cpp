@@ -55,11 +55,9 @@ void CodegenAccVisitor::print_channel_iteration_block_parallel_hint(BlockType ty
 }
 
 
-void CodegenAccVisitor::print_atomic_reduction_pragma(bool skip) {
-    if (!skip) {
-        printer->add_line("nrn_pragma_acc(atomic update)");
-        printer->add_line("nrn_pragma_omp(atomic update)");
-    }
+void CodegenAccVisitor::print_atomic_reduction_pragma() {
+    printer->add_line("nrn_pragma_acc(atomic update)");
+    printer->add_line("nrn_pragma_omp(atomic update)");
 }
 
 
@@ -357,13 +355,6 @@ void CodegenAccVisitor::print_net_send_buf_count_update_to_device() const {
 void CodegenAccVisitor::print_dt_update_to_device() const {
     printer->fmt_line("#pragma acc update device({}) if (nt->compute_gpu)",
                       get_variable_name(naming::NTHREAD_DT_VARIABLE));
-}
-
-void CodegenAccVisitor::visit_protect_statement(const ast::ProtectStatement& node) {
-    print_atomic_reduction_pragma();
-    printer->add_indent();
-    node.get_expression()->accept(*this);
-    printer->add_text(";");
 }
 
 }  // namespace codegen

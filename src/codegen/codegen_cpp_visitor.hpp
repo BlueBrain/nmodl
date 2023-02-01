@@ -1419,10 +1419,8 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
     /**
      * Print atomic update pragma for reduction statements
-     *
-     * \param skip If true, skip printing Atomic reduction related pragma
      */
-    virtual void print_atomic_reduction_pragma(bool skip = false);
+    virtual void print_atomic_reduction_pragma();
 
 
     /**

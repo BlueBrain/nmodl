@@ -43,7 +43,7 @@ class CodegenAccVisitor: public CodegenCVisitor {
 
 
     /// atomic update pragma for reduction statements
-    void print_atomic_reduction_pragma(bool skip = false) override;
+    void print_atomic_reduction_pragma() override;
 
 
     /// memory allocation routine
@@ -127,9 +127,6 @@ class CodegenAccVisitor: public CodegenCVisitor {
     void print_device_atomic_capture_annotation() const override;
 
     void print_net_send_buffering_grow() override;
-
-    // protect statement as atomic update on device
-    void visit_protect_statement(const ast::ProtectStatement& node) override;
 
 
   public:

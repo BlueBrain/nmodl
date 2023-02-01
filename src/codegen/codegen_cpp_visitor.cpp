@@ -319,9 +319,7 @@ void CodegenCVisitor::visit_update_dt(const ast::UpdateDt& node) {
 }
 
 void CodegenCVisitor::visit_protect_statement(const ast::ProtectStatement& node) {
-    // protect statement must have atomic update pragma
-    // hence make sure to not skip printing it on cpu as well
-    print_atomic_reduction_pragma(false);
+    print_atomic_reduction_pragma();
     printer->add_indent();
     node.get_expression()->accept(*this);
     printer->add_text(";");
@@ -1172,9 +1170,7 @@ void CodegenCVisitor::print_nrn_cur_matrix_shadow_update() {
     } else {
         auto rhs_op = operator_for_rhs();
         auto d_op = operator_for_d();
-        print_atomic_reduction_pragma(true);
         printer->fmt_line("vec_rhs[node_id] {} rhs;", rhs_op);
-        print_atomic_reduction_pragma(true);
         printer->fmt_line("vec_d[node_id] {} g;", d_op);
     }
 }
@@ -1185,26 +1181,19 @@ void CodegenCVisitor::print_nrn_cur_matrix_shadow_reduction() {
     auto d_op = operator_for_d();
     if (info.point_process) {
         printer->add_line("int node_id = node_index[id];");
-        print_atomic_reduction_pragma(true);
         printer->fmt_line("vec_rhs[node_id] {} shadow_rhs[id];", rhs_op);
-        print_atomic_reduction_pragma(true);
         printer->fmt_line("vec_d[node_id] {} shadow_d[id];", d_op);
     }
 }
 
 
 /**
- * CPU/CPP backend has calls to print_atomic_reduction_pragma()
- * at multiple places so that accelerator backends can emit necessary atomic pragma.
  * In the current implementation of CPU/CPP backend we need to emit atomic pragma
  * only with PROTECT construct (atomic rduction requirement for other cases on CPU
- * is handled via separate shadow vectors). Hence, bool param to skip emiting atomic.
+ * is handled via separate shadow vectors).
  */
-void CodegenCVisitor::print_atomic_reduction_pragma(bool skip) {
-    // in case of cpu execution, atomics are supported via openmp
-    if (!skip) {
-        printer->add_line("#pragma omp atomic update");
-    }
+void CodegenCVisitor::print_atomic_reduction_pragma() {
+    printer->add_line("#pragma omp atomic update");
 }
 
 
@@ -4545,9 +4534,7 @@ void CodegenCVisitor::print_fast_imem_calculation() {
         printer->start_block("for (int id = 0; id < nodecount; id++)");
         printer->add_line("int node_id = node_index[id];");
     }
-    print_atomic_reduction_pragma(true);
     printer->fmt_line("nt->nrn_fast_imem->nrn_sav_rhs[node_id] {} {};", rhs_op, rhs);
-    print_atomic_reduction_pragma(true);
     printer->fmt_line("nt->nrn_fast_imem->nrn_sav_d[node_id] {} {};", d_op, d);
     if (nrn_cur_reduction_loop_required()) {
         printer->end_block(1);
