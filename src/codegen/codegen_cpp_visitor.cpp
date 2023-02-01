@@ -1180,17 +1180,6 @@ void CodegenCVisitor::print_atomic_reduction_pragma() {
 }
 
 
-void CodegenCVisitor::print_shadow_reduction_statements() {
-    for (const auto& statement: shadow_statements) {
-        print_atomic_reduction_pragma();
-        auto lhs = get_variable_name(statement.lhs);
-        auto rhs = get_variable_name(shadow_varname(statement.lhs));
-        printer->fmt_line("{} {} {};", lhs, statement.op, rhs);
-    }
-    shadow_statements.clear();
-}
-
-
 void CodegenCVisitor::print_device_method_annotation() {
     // backend specific, nothing for cpu
 }
@@ -3512,7 +3501,6 @@ void CodegenCVisitor::print_nrn_init(bool skip_init_check) {
 
     print_initial_block(info.initial_node);
     printer->end_block(1);
-    print_shadow_reduction_statements();
 
     if (!info.changed_dt.empty()) {
         printer->fmt_line("{} = _save_prev_dt;", get_variable_name(naming::NTHREAD_DT_VARIABLE));
@@ -4365,11 +4353,6 @@ void CodegenCVisitor::print_nrn_state() {
         printer->add_line(text);
     }
     printer->end_block(1);
-    if (!shadow_statements.empty()) {
-        printer->start_block("for (int id = 0; id < nodecount; id++)");
-        print_shadow_reduction_statements();
-        printer->end_block(1);
-    }
 
     print_kernel_data_present_annotation_block_end();
 
@@ -4563,7 +4546,6 @@ void CodegenCVisitor::print_nrn_cur() {
     if (nrn_cur_reduction_loop_required()) {
         printer->start_block("for (int id = 0; id < nodecount; id++)");
         print_nrn_cur_matrix_shadow_reduction();
-        print_shadow_reduction_statements();
         printer->end_block(1);
         print_fast_imem_calculation();
     }

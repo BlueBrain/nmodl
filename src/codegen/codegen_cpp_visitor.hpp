@@ -286,12 +286,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
     std::shared_ptr<CodePrinter> printer;
 
     /**
-     * List of shadow statements in the current block
-     */
-    std::vector<ShadowUseStatement> shadow_statements;
-
-
-    /**
      * Return Nmodl language version
      * \return A version
      */
