@@ -1,6 +1,5 @@
 var NAVTREEINDEX30 =
 {
-"pyembed_8hpp.html#abe2d9f4785eaea27bd73ca43cb7fe0fa":[4,0,1,6,2,16],
 "pyembed_8hpp.html#ac4ea0abb309107f5892d21659bfe6688":[4,0,1,6,2,13],
 "pyembed_8hpp.html#af6e056b4a596934da9912ec1803d1085":[4,0,1,6,2,10],
 "pyembed_8hpp_source.html":[4,0,1,6,2],
@@ -249,5 +248,6 @@ var NAVTREEINDEX30 =
 "structnmodl_1_1codegen_1_1_index_variable_info.html#a7ac534f1402c40d941c8a0484c5cb28f":[1,1,0,0,0],
 "structnmodl_1_1codegen_1_1_index_variable_info.html#a7ce67bd16a0c2fbad6ca3d7c8c9ca916":[1,1,0,0,1],
 "structnmodl_1_1codegen_1_1_index_variable_info.html#aa758ad489a95368096dc249c6ab3ee8b":[1,1,0,0,5],
-"structnmodl_1_1codegen_1_1_index_variable_info.html#ae058f1f24bfc26439774ee98ec7ecd60":[1,1,0,0,4]
+"structnmodl_1_1codegen_1_1_index_variable_info.html#ae058f1f24bfc26439774ee98ec7ecd60":[1,1,0,0,4],
+"structnmodl_1_1codegen_1_1_ion.html":[1,1,0,4]
 };

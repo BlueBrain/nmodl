@@ -7,7 +7,7 @@ var classnmodl_1_1codegen_1_1_codegen_acc_visitor =
     [ "print_abort_routine", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a0afbe91263bad633cba874fd9c7b5af6", null ],
     [ "print_atomic_reduction_pragma", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#af3e32e5cec32f5b55fa81a654bc4afef", null ],
     [ "print_backend_includes", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a2a52b48b11fbf0757fb037d7e579daf3", null ],
-    [ "print_channel_iteration_block_parallel_hint", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a607b38ab6c54cc6dce98bf0ab86235e1", null ],
+    [ "print_channel_iteration_block_parallel_hint", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a0d8527584a257a10b5685356bea2911d", null ],
     [ "print_deriv_advance_flag_transfer_to_device", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#abf9de5982b1d8f6fb492e668183c2ee1", null ],
     [ "print_device_atomic_capture_annotation", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#ad3cf0f9dd9a34da7d16712815c805576", null ],
     [ "print_device_stream_wait", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#ae69707b056c2db2a8c209b7e8cc97bf4", null ],
