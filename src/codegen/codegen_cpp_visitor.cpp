@@ -3467,7 +3467,7 @@ void CodegenCVisitor::print_global_function_common_code(BlockType type,
         printer->add_line("setup_instance(nt, ml);");
     }
     printer->fmt_line("auto* const inst = static_cast<{}*>(ml->instance);", instance_struct());
-    if (info.eigen_newton_solver_exist) {
+    if (info.eigen_newton_solver_exist && type == BlockType::State) {
         const auto eigen_newton_solver_blocks = collect_nodes(*info.nrn_state_block, {ast::AstNodeType::EIGEN_NEWTON_SOLVER_BLOCK});
         auto first_eigen_newton_solver_block = std::static_pointer_cast<const ast::EigenNewtonSolverBlock>(eigen_newton_solver_blocks[0]);
         print_functor_declaration(*first_eigen_newton_solver_block);
