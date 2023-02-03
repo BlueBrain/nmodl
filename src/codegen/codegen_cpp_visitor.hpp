@@ -1838,6 +1838,8 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      */
     void print_instance_variable_setup();
 
+    void print_functor_declaration(const ast::EigenNewtonSolverBlock& node);
+
     void visit_binary_expression(const ast::BinaryExpression& node) override;
     void visit_binary_operator(const ast::BinaryOperator& node) override;
     void visit_boolean(const ast::Boolean& node) override;

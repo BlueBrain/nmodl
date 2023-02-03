@@ -1835,19 +1835,12 @@ bool is_functor_const(const ast::StatementBlock& variable_block,
     return is_functor_const;
 }
 
-void CodegenCVisitor::visit_eigen_newton_solver_block(const ast::EigenNewtonSolverBlock& node) {
-    // solution vector to store copy of state vars for Newton solver
-    printer->add_newline();
-
-    auto float_type = default_float_data_type();
-    int N = node.get_n_state_vars()->get_value();
-    printer->fmt_line("Eigen::Matrix<{}, {}, 1> nmodl_eigen_xm;", float_type, N);
-    printer->fmt_line("{}* nmodl_eigen_x = nmodl_eigen_xm.data();", float_type);
-
-    print_statement_block(*node.get_setup_x_block(), false, false);
-
+void CodegenCVisitor::print_functor_declaration(const ast::EigenNewtonSolverBlock& node) {
     // functor that evaluates F(X) and J(X) for
     // Newton solver
+    auto float_type = default_float_data_type();
+    int N = node.get_n_state_vars()->get_value();
+
     printer->start_block("struct functor");
     printer->add_line("NrnThread* nt;");
     printer->fmt_line("{0}* inst;", instance_struct());
@@ -1901,6 +1894,18 @@ void CodegenCVisitor::visit_eigen_newton_solver_block(const ast::EigenNewtonSolv
     printer->end_block(1);
 
     printer->end_block(";");
+}
+
+void CodegenCVisitor::visit_eigen_newton_solver_block(const ast::EigenNewtonSolverBlock& node) {
+    // solution vector to store copy of state vars for Newton solver
+    printer->add_newline();
+
+    auto float_type = default_float_data_type();
+    int N = node.get_n_state_vars()->get_value();
+    printer->fmt_line("Eigen::Matrix<{}, {}, 1> nmodl_eigen_xm;", float_type, N);
+    printer->fmt_line("{}* nmodl_eigen_x = nmodl_eigen_xm.data();", float_type);
+
+    print_statement_block(*node.get_setup_x_block(), false, false);
 
     // call newton solver with functor and X matrix that contains state vars
     printer->add_line("// call newton solver");
@@ -3462,6 +3467,11 @@ void CodegenCVisitor::print_global_function_common_code(BlockType type,
         printer->add_line("setup_instance(nt, ml);");
     }
     printer->fmt_line("auto* const inst = static_cast<{}*>(ml->instance);", instance_struct());
+    if (info.eigen_newton_solver_exist) {
+        const auto eigen_newton_solver_blocks = collect_nodes(*info.nrn_state_block, {ast::AstNodeType::EIGEN_NEWTON_SOLVER_BLOCK});
+        auto first_eigen_newton_solver_block = std::static_pointer_cast<const ast::EigenNewtonSolverBlock>(eigen_newton_solver_blocks[0]);
+        print_functor_declaration(*first_eigen_newton_solver_block);
+    }
     printer->add_newline(1);
 }
 
