@@ -684,9 +684,15 @@ SCENARIO("Check that loops are well generated", "[codegen][loops]") {
 SCENARIO("Check that top verbatim blocks are well generated", "[codegen][top verbatim block]") {
     GIVEN("A mod file containing top verbatim block") {
         std::string const nmodl_text = R"(
+            PROCEDURE foo(nt) {
+            }
             VERBATIM
             // This is a top verbatim block
             double a = 2.;
+            // This procedure should be replaced
+            foo(_nt);
+            _tqitem;
+            _STRIDE;
             ENDVERBATIM
         )";
 
@@ -695,7 +701,10 @@ SCENARIO("Check that top verbatim blocks are well generated", "[codegen][top ver
             std::string expected_code = R"(using namespace coreneuron;
 
 
-            double a = 2.;)";
+            double a = 2.;
+            foo_(nt);
+            &tqitem;
+            pnodecount+id;)";
             REQUIRE_THAT(generated, Contains(expected_code));
         }
     }
