@@ -4038,13 +4038,12 @@ void CodegenCVisitor::print_net_receive_buffering(bool need_mech_inst) {
         print_send_event_move();
     }
 
-    printer->add_newline();
     print_kernel_data_present_annotation_block_end();
     printer->end_block(1);
 }
 
 void CodegenCVisitor::print_net_send_buffering_grow() {
-    printer->start_block("if(i >= nsb->_size)");
+    printer->start_block("if (i >= nsb->_size)");
     printer->add_line("nsb->grow();");
     printer->end_block(1);
 }
@@ -4059,12 +4058,12 @@ void CodegenCVisitor::print_net_send_buffering() {
     auto args =
         "NetSendBuffer_t* nsb, int type, int vdata_index, "
         "int weight_index, int point_index, double t, double flag";
-    printer->fmt_start_block("static inline void net_send_buffering({}) ", args);
+    printer->fmt_start_block("static inline void net_send_buffering({})", args);
     printer->add_line("int i = 0;");
     print_device_atomic_capture_annotation();
     printer->add_line("i = nsb->_cnt++;");
     print_net_send_buffering_grow();
-    printer->start_block("if(i < nsb->_size)");
+    printer->start_block("if (i < nsb->_size)");
     printer->add_line("nsb->_sendtype[i] = type;");
     printer->add_line("nsb->_vdata_index[i] = vdata_index;");
     printer->add_line("nsb->_weight_index[i] = weight_index;");
@@ -4144,7 +4143,7 @@ void CodegenCVisitor::print_net_receive_kernel() {
     }
 
     printer->add_newline(2);
-    printer->fmt_start_block("static inline void {}({}) ", name, get_parameter_str(params));
+    printer->fmt_start_block("static inline void {}({})", name, get_parameter_str(params));
     print_net_receive_common_code(*node, info.artificial_cell);
     if (info.artificial_cell) {
         printer->add_line("double t = nt->_t;");
@@ -4187,7 +4186,7 @@ void CodegenCVisitor::print_net_receive() {
         params.emplace_back("", "int", "", "weight_index");
         params.emplace_back("", "double", "", "flag");
         printer->add_newline(2);
-        printer->fmt_start_block("static void {}({}) ", name, get_parameter_str(params));
+        printer->fmt_start_block("static void {}({})", name, get_parameter_str(params));
         printer->add_line("NrnThread* nt = nrn_threads + pnt->_tid;");
         printer->add_line("Memb_list* ml = get_memb_list(nt);");
         printer->add_line("NetReceiveBuffer_t* nrb = ml->_net_receive_buffer;");

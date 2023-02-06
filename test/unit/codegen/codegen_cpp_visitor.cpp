@@ -726,8 +726,100 @@ SCENARIO("Check that codegen generate event functions well", "[codegen][net_even
 
         THEN("Correct code is generated") {
             auto const generated = get_cpp_code(nmodl_text);
-            std::string expected_code = R"(using namespace corene")";
-            REQUIRE_THAT(generated, Contains(expected_code));
+            std::string net_send_expected_code = R"(static inline void net_send_buffering(NetSendBuffer_t* nsb, int type, int vdata_index, int weight_index, int point_index, double t, double flag) {
+        int i = 0;
+        i = nsb->_cnt++;
+        if (i >= nsb->_size) {
+            nsb->grow();
+        }
+        if (i < nsb->_size) {
+            nsb->_sendtype[i] = type;
+            nsb->_vdata_index[i] = vdata_index;
+            nsb->_weight_index[i] = weight_index;
+            nsb->_pnt_index[i] = point_index;
+            nsb->_nsb_t[i] = t;
+            nsb->_nsb_flag[i] = flag;
+        }
+    })";
+            REQUIRE_THAT(generated, Contains(net_send_expected_code));
+            std::string net_receive_kernel_expected_code = R"(static inline void net_receive_kernel_(double t, Point_process* pnt, _Instance* inst, NrnThread* nt, Memb_list* ml, int weight_index, double flag) {
+        int tid = pnt->_tid;
+        int id = pnt->_i_instance;
+        double v = 0;
+        int nodecount = ml->nodecount;
+        int pnodecount = ml->_nodecount_padded;
+        double* data = ml->data;
+        double* weights = nt->weights;
+        Datum* indexes = ml->pdata;
+        ThreadDatum* thread = ml->_thread;
+
+        inst->tsave[id] = t;
+        {
+            if (flag == 0.0) {
+                net_send_buffering(ml->_net_send_buffer, 1, -1, -1, point_process, t, 0.0);
+                net_send_buffering(ml->_net_send_buffer, 2, inst->tqitem[0*pnodecount+id], -1, point_process, t + 1.0, 0.0);
+            } else {
+                net_send_buffering(ml->_net_send_buffer, 0, inst->tqitem[0*pnodecount+id], weight_index, point_process, t+1.0, 1.0);
+            }
+        }
+    })";
+            REQUIRE_THAT(generated, Contains(net_receive_kernel_expected_code));
+            std::string net_receive_expected_code = R"(static void net_receive_(Point_process* pnt, int weight_index, double flag) {
+        NrnThread* nt = nrn_threads + pnt->_tid;
+        Memb_list* ml = get_memb_list(nt);
+        NetReceiveBuffer_t* nrb = ml->_net_receive_buffer;
+        if (nrb->_cnt >= nrb->_size) {
+            realloc_net_receive_buffer(nt, ml);
+        }
+        int id = nrb->_cnt;
+        nrb->_pnt_index[id] = pnt-nt->pntprocs;
+        nrb->_weight_index[id] = weight_index;
+        nrb->_nrb_t[id] = nt->_t;
+        nrb->_nrb_flag[id] = flag;
+        nrb->_cnt++;
+    })";
+            REQUIRE_THAT(generated, Contains(net_receive_expected_code));
+            std::string net_buf_receive_expected_code = R"(void net_buf_receive_(NrnThread* nt) {
+        Memb_list* ml = get_memb_list(nt);
+        if (!ml) {
+            return;
+        }
+
+        NetReceiveBuffer_t* nrb = ml->_net_receive_buffer;
+        auto* const inst = static_cast<_Instance*>(ml->instance);
+        int count = nrb->_displ_cnt;
+        #pragma ivdep
+        #pragma omp simd
+        for (int i = 0; i < count; i++) {
+            int start = nrb->_displ[i];
+            int end = nrb->_displ[i+1];
+            for (int j = start; j < end; j++) {
+                int index = nrb->_nrb_index[j];
+                int offset = nrb->_pnt_index[index];
+                double t = nrb->_nrb_t[index];
+                int weight_index = nrb->_weight_index[index];
+                double flag = nrb->_nrb_flag[index];
+                Point_process* point_process = nt->pntprocs + offset;
+                net_receive_kernel_(t, point_process, inst, nt, ml, weight_index, flag);
+            }
+        }
+        nrb->_displ_cnt = 0;
+        nrb->_cnt = 0;
+
+        NetSendBuffer_t* nsb = ml->_net_send_buffer;
+        for (int i=0; i < nsb->_cnt; i++) {
+            int type = nsb->_sendtype[i];
+            int tid = nt->id;
+            double t = nsb->_nsb_t[i];
+            double flag = nsb->_nsb_flag[i];
+            int vdata_index = nsb->_vdata_index[i];
+            int weight_index = nsb->_weight_index[i];
+            int point_index = nsb->_pnt_index[i];
+            net_sem_from_gpu(type, vdata_index, weight_index, tid, point_index, t, flag);
+        }
+        nsb->_cnt = 0;
+    })";
+            REQUIRE_THAT(generated, Contains(net_buf_receive_expected_code));
         }
     }
 }
