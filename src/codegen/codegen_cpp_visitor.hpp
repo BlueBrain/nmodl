@@ -1838,7 +1838,21 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      */
     void print_instance_variable_setup();
 
-    void print_functor_declaration(const ast::EigenNewtonSolverBlock& node);
+    /**
+     * Go through the map of \c EigenNewtonSolverBlock s and their corresponding functor names
+     * and print the functor definitions before the definitions of the functions of the generated
+     * file
+     *
+     */
+    void print_functors_definitions();
+
+    /**
+     * @brief Based on the \c EigenNewtonSolverBlock passed print the definition needed for its
+     * functor
+     *
+     * @param node \c EigenNewtonSolverBlock for which to print the functor
+     */
+    void print_functor_definition(const ast::EigenNewtonSolverBlock& node);
 
     void visit_binary_expression(const ast::BinaryExpression& node) override;
     void visit_binary_operator(const ast::BinaryOperator& node) override;

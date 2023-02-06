@@ -1835,13 +1835,14 @@ bool is_functor_const(const ast::StatementBlock& variable_block,
     return is_functor_const;
 }
 
-void CodegenCVisitor::print_functor_declaration(const ast::EigenNewtonSolverBlock& node) {
+void CodegenCVisitor::print_functor_definition(const ast::EigenNewtonSolverBlock& node) {
     // functor that evaluates F(X) and J(X) for
     // Newton solver
     auto float_type = default_float_data_type();
     int N = node.get_n_state_vars()->get_value();
 
-    printer->start_block("struct functor");
+    const auto functor_name = info.functor_names[&node];
+    printer->fmt_start_block("struct {0}", functor_name);
     printer->add_line("NrnThread* nt;");
     printer->fmt_line("{0}* inst;", instance_struct());
     printer->add_line("int id, pnodecount;");
@@ -1862,12 +1863,12 @@ void CodegenCVisitor::print_functor_declaration(const ast::EigenNewtonSolverBloc
     printer->end_block(2);
 
     printer->fmt_line(
-        "functor(NrnThread* nt, {}* inst, int id, int pnodecount, double v, Datum* indexes, "
+        "{0}(NrnThread* nt, {1}* inst, int id, int pnodecount, double v, Datum* indexes, "
         "double* data, ThreadDatum* thread) : "
         "nt{{nt}}, inst{{inst}}, id{{id}}, pnodecount{{pnodecount}}, v{{v}}, indexes{{indexes}}, "
         "data{{data}}, thread{{thread}} "
         "{{}}",
-        instance_struct());
+        functor_name, instance_struct());
 
     printer->add_indent();
 
@@ -1909,8 +1910,8 @@ void CodegenCVisitor::visit_eigen_newton_solver_block(const ast::EigenNewtonSolv
 
     // call newton solver with functor and X matrix that contains state vars
     printer->add_line("// call newton solver");
-    printer->add_line(
-        "functor newton_functor(nt, inst, id, pnodecount, v, indexes, data, thread);");
+    printer->fmt_line(
+        "{} newton_functor(nt, inst, id, pnodecount, v, indexes, data, thread);", info.functor_names[&node]);
     printer->add_line("newton_functor.initialize();");
     printer->add_line(
         "int newton_iterations = nmodl::newton::newton_solver(nmodl_eigen_xm, newton_functor);");
@@ -3467,11 +3468,6 @@ void CodegenCVisitor::print_global_function_common_code(BlockType type,
         printer->add_line("setup_instance(nt, ml);");
     }
     printer->fmt_line("auto* const inst = static_cast<{}*>(ml->instance);", instance_struct());
-    if (info.eigen_newton_solver_exist && type == BlockType::State) {
-        const auto eigen_newton_solver_blocks = collect_nodes(*info.nrn_state_block, {ast::AstNodeType::EIGEN_NEWTON_SOLVER_BLOCK});
-        auto first_eigen_newton_solver_block = std::static_pointer_cast<const ast::EigenNewtonSolverBlock>(eigen_newton_solver_blocks[0]);
-        print_functor_declaration(*first_eigen_newton_solver_block);
-    }
     printer->add_newline(1);
 }
 
@@ -3630,6 +3626,14 @@ void CodegenCVisitor::print_nrn_destructor() {
     }
     printer->add_line("#endif");
     printer->end_block(1);
+}
+
+
+void CodegenCVisitor::print_functors_definitions() {
+    for (const auto& functor_name : info.functor_names) {
+        printer->add_newline(2);
+        print_functor_definition(*functor_name.first);
+    }
 }
 
 
@@ -4691,6 +4695,7 @@ void CodegenCVisitor::print_codegen_routines() {
     print_nrn_alloc();
     print_nrn_constructor();
     print_nrn_destructor();
+    print_functors_definitions();
     print_compute_functions();
     print_check_table_thread_function();
     print_mechanism_register();
