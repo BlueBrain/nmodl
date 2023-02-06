@@ -8,15 +8,15 @@
 #include <catch2/catch.hpp>
 
 #include "ast/program.hpp"
+#include "codegen/codegen_cpp_visitor.hpp"
 #include "parser/nmodl_driver.hpp"
 #include "test/unit/utils/test_utils.hpp"
 #include "visitors/checkparent_visitor.hpp"
-#include "codegen/codegen_cpp_visitor.hpp"
 #include "visitors/constant_folder_visitor.hpp"
 #include "visitors/inline_visitor.hpp"
-#include "visitors/neuron_solve_visitor.hpp"
 #include "visitors/kinetic_block_visitor.hpp"
 #include "visitors/loop_unroll_visitor.hpp"
+#include "visitors/neuron_solve_visitor.hpp"
 #include "visitors/nmodl_visitor.hpp"
 #include "visitors/solve_block_visitor.hpp"
 #include "visitors/sympy_solver_visitor.hpp"
@@ -2416,9 +2416,12 @@ SCENARIO("Code generation for EigenNewtonSolver", "[visitor][solver][sympy][deri
         }
     };)";
             // Expected functor usages
-            std::string expected_functor_cacum_0_usage = R"(functor_cacum_0 newton_functor(nt, inst, id, pnodecount, v, indexes, data, thread);)";
-            std::string expected_functor_cacum_1_usage = R"(functor_cacum_1 newton_functor(nt, inst, id, pnodecount, v, indexes, data, thread);)";
-            std::string expected_functor_cacum_2_usage = R"(functor_cacum_2 newton_functor(nt, inst, id, pnodecount, v, indexes, data, thread);)";
+            std::string expected_functor_cacum_0_usage =
+                R"(functor_cacum_0 newton_functor(nt, inst, id, pnodecount, v, indexes, data, thread);)";
+            std::string expected_functor_cacum_1_usage =
+                R"(functor_cacum_1 newton_functor(nt, inst, id, pnodecount, v, indexes, data, thread);)";
+            std::string expected_functor_cacum_2_usage =
+                R"(functor_cacum_2 newton_functor(nt, inst, id, pnodecount, v, indexes, data, thread);)";
 
             REQUIRE_THAT(generated, Contains(expected_functor_cacum_0_definition));
             REQUIRE_THAT(generated, Contains(expected_functor_cacum_1_definition));

@@ -1868,7 +1868,8 @@ void CodegenCVisitor::print_functor_definition(const ast::EigenNewtonSolverBlock
         "nt{{nt}}, inst{{inst}}, id{{id}}, pnodecount{{pnodecount}}, v{{v}}, indexes{{indexes}}, "
         "data{{data}}, thread{{thread}} "
         "{{}}",
-        functor_name, instance_struct());
+        functor_name,
+        instance_struct());
 
     printer->add_indent();
 
@@ -1910,8 +1911,8 @@ void CodegenCVisitor::visit_eigen_newton_solver_block(const ast::EigenNewtonSolv
 
     // call newton solver with functor and X matrix that contains state vars
     printer->add_line("// call newton solver");
-    printer->fmt_line(
-        "{} newton_functor(nt, inst, id, pnodecount, v, indexes, data, thread);", info.functor_names[&node]);
+    printer->fmt_line("{} newton_functor(nt, inst, id, pnodecount, v, indexes, data, thread);",
+                      info.functor_names[&node]);
     printer->add_line("newton_functor.initialize();");
     printer->add_line(
         "int newton_iterations = nmodl::newton::newton_solver(nmodl_eigen_xm, newton_functor);");
@@ -3630,7 +3631,7 @@ void CodegenCVisitor::print_nrn_destructor() {
 
 
 void CodegenCVisitor::print_functors_definitions() {
-    for (const auto& functor_name : info.functor_names) {
+    for (const auto& functor_name: info.functor_names) {
         printer->add_newline(2);
         print_functor_definition(*functor_name.first);
     }
