@@ -822,16 +822,16 @@ SCENARIO("Check that codegen generate event functions well", "[codegen][net_even
             REQUIRE_THAT(generated, Contains(net_buf_receive_expected_code));
         }
     }
-    // GIVEN("A mod file with a net_move outside NET_RECEIVE") {
-    //     std::string const nmodl_text = R"(
-    //         PROCEDURE foo() {
-    //             net_move(t+1)
-    //         }
-    //     )";
-    //     THEN("It should throw") {
-    //         REQUIRE_THROWS(get_cpp_code(nmodl_text));
-    //     }
-    // }
+    GIVEN("A mod file with a net_move outside NET_RECEIVE") {
+        std::string const nmodl_text = R"(
+            PROCEDURE foo() {
+                net_move(t+1)
+            }
+        )";
+        THEN("It should throw") {
+            REQUIRE_THROWS(get_cpp_code(nmodl_text));
+        }
+    }
 }
 
 

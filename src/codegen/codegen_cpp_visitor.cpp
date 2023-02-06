@@ -3844,8 +3844,7 @@ void CodegenCVisitor::print_net_send_call(const FunctionCall& node) {
 
 void CodegenCVisitor::print_net_move_call(const FunctionCall& node) {
     if (!printing_net_receive) {
-        std::cout << "Error : net_move only allowed in NET_RECEIVE block" << std::endl;
-        abort();
+        throw std::runtime_error("Error : net_move only allowed in NET_RECEIVE block");
     }
 
     auto const& arguments = node.get_arguments();
