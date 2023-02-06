@@ -711,6 +711,28 @@ SCENARIO("Check that top verbatim blocks are well generated", "[codegen][top ver
 }
 
 
+SCENARIO("Check that codegen generate event functions well", "[codegen][net_events]") {
+    GIVEN("A mod file with events") {
+        std::string const nmodl_text = R"(
+            NET_RECEIVE(w) {
+                if (flag == 0) {
+                    net_event(t)
+                    net_move(t+1)
+                } else {
+                    net_send(1, 1)
+                }
+            }
+        )";
+
+        THEN("Correct code is generated") {
+            auto const generated = get_cpp_code(nmodl_text);
+            std::string expected_code = R"(using namespace corene")";
+            REQUIRE_THAT(generated, Contains(expected_code));
+        }
+    }
+}
+
+
 SCENARIO("Check codegen for MUTEX and PROTECT", "[codegen][mutex_protect]") {
     GIVEN("A mod file containing MUTEX & PROTECT") {
         std::string const nmodl_text = R"(
