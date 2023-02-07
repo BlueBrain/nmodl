@@ -41,7 +41,7 @@ BREAKPOINT {
 }
 
 PROCEDURE extra_solve() {
-    SOLVE integrate
+    SOLVE integrate METHOD derivimplicit
 }
 
 DERIVATIVE integrate {
