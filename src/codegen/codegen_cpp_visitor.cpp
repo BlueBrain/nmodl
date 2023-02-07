@@ -1847,7 +1847,7 @@ void CodegenCVisitor::print_functor_definition(const ast::EigenNewtonSolverBlock
     printer->fmt_line("{0}* inst;", instance_struct());
     printer->add_line("int id, pnodecount;");
     printer->add_line("double v;");
-    printer->add_line("Datum* indexes;");
+    printer->add_line("const Datum* indexes;");
     printer->add_line("double* data;");
     printer->add_line("ThreadDatum* thread;");
 
@@ -1863,7 +1863,7 @@ void CodegenCVisitor::print_functor_definition(const ast::EigenNewtonSolverBlock
     printer->end_block(2);
 
     printer->fmt_line(
-        "{0}(NrnThread* nt, {1}* inst, int id, int pnodecount, double v, Datum* indexes, "
+        "{0}(NrnThread* nt, {1}* inst, int id, int pnodecount, double v, const Datum* indexes, "
         "double* data, ThreadDatum* thread) : "
         "nt{{nt}}, inst{{inst}}, id{{id}}, pnodecount{{pnodecount}}, v{{v}}, indexes{{indexes}}, "
         "data{{data}}, thread{{thread}} "

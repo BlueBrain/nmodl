@@ -40,10 +40,10 @@ BREAKPOINT {
 	SOLVE integrate METHOD derivimplicit
 }
 
-DERIVATIVE integrate {
-	cai' = -ica/depth/F/2 * (1e7) + (cai0 - cai)/tau
-}
-
 PROCEDURE extra_solve() {
     SOLVE integrate
+}
+
+DERIVATIVE integrate {
+	cai' = -ica/depth/F/2 * (1e7) + (cai0 - cai)/tau
 }
