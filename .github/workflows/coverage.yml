@@ -39,14 +39,14 @@ jobs:
         uses: actions/setup-python@v3
         with:
           python-version: ${{ env.PYTHON_VERSION }}
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 2    
       - name: Install Python3 dependencies
         working-directory: ${{runner.workspace}}/nmodl
         run: |
           pip3 install -U pip setuptools scikit-build
           pip3 install --user -r requirements.txt
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 2
       - name: Restore compiler cache
         uses: actions/cache@v3
         with:
