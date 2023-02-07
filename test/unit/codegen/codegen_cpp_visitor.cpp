@@ -838,6 +838,61 @@ SCENARIO("Check that codegen generate event functions well", "[codegen][net_even
 }
 
 
+SCENARIO("Some tests on derivimplicit", "[codegen][derivimplicit_solver]") {
+    GIVEN("A mod file with derivimplicit") {
+        std::string const nmodl_text = R"(
+            STATE {
+                m
+            }
+            BREAKPOINT {
+                SOLVE state METHOD derivimplicit
+            }
+            DERIVATIVE state {
+               m' = 2 * m
+            }
+        )";
+        THEN("Correct code is generated") {
+            auto const generated = get_cpp_code(nmodl_text);
+            std::string newton_state_expected_code = R"(namespace {
+        struct _newton_state_ {
+            int operator()(int id, int pnodecount, double* data, Datum* indexes, ThreadDatum* thread, NrnThread* nt, Memb_list* ml, double v) const {
+                auto* const inst = static_cast<_Instance*>(ml->instance);
+                double* savstate1 = static_cast<double*>(thread[dith1()].pval);
+                auto const& slist1 = inst->global->slist1;
+                auto const& dlist1 = inst->global->dlist1;
+                double* dlist2 = static_cast<double*>(thread[dith1()].pval) + (1*pnodecount);
+                inst->Dm[id] = 2.0 * inst->m[id];
+                int counter = -1;
+                for (int i=0; i<1; i++) {
+                    if (*deriv1_advance(thread)) {
+                        dlist2[(++counter)*pnodecount+id] = data[dlist1[i]*pnodecount+id]-(data[slist1[i]*pnodecount+id]-savstate1[i*pnodecount+id])/nt->_dt;
+                    } else {
+                        dlist2[(++counter)*pnodecount+id] = data[slist1[i]*pnodecount+id]-savstate1[i*pnodecount+id];
+                    }
+                }
+                return 0;
+            }
+        };
+    })";
+            REQUIRE_THAT(generated, Contains(newton_state_expected_code));
+            std::string state_expected_code = R"(int state_(int id, int pnodecount, double* data, Datum* indexes, ThreadDatum* thread, NrnThread* nt, Memb_list* ml, double v) {
+        auto* const inst = static_cast<_Instance*>(ml->instance);
+        double* savstate1 = (double*) thread[dith1()].pval;
+        auto const& slist1 = inst->global->slist1;
+        auto& slist2 = inst->global->slist2;
+        double* dlist2 = static_cast<double*>(thread[dith1()].pval) + (1*pnodecount);
+        for (int i=0; i<1; i++) {
+            savstate1[i*pnodecount+id] = data[slist1[i]*pnodecount+id];
+        }
+        int reset = nrn_newton_thread(static_cast<NewtonSpace*>(*newtonspace1(thread)), 1, slist2, _newton_state_{}, dlist2, id, pnodecount, data, indexes, thread, nt, ml, v);
+        return reset;
+    })";
+            REQUIRE_THAT(generated, Contains(state_expected_code));
+        }
+    }
+}
+
+
 SCENARIO("Check codegen for MUTEX and PROTECT", "[codegen][mutex_protect]") {
     GIVEN("A mod file containing MUTEX & PROTECT") {
         std::string const nmodl_text = R"(
