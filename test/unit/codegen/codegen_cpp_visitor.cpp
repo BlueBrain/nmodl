@@ -726,7 +726,8 @@ SCENARIO("Check that codegen generate event functions well", "[codegen][net_even
 
         THEN("Correct code is generated") {
             auto const generated = get_cpp_code(nmodl_text);
-            std::string net_send_expected_code = R"(static inline void net_send_buffering(NetSendBuffer_t* nsb, int type, int vdata_index, int weight_index, int point_index, double t, double flag) {
+            std::string net_send_expected_code =
+                R"(static inline void net_send_buffering(NetSendBuffer_t* nsb, int type, int vdata_index, int weight_index, int point_index, double t, double flag) {
         int i = 0;
         i = nsb->_cnt++;
         if (i >= nsb->_size) {
@@ -742,7 +743,8 @@ SCENARIO("Check that codegen generate event functions well", "[codegen][net_even
         }
     })";
             REQUIRE_THAT(generated, Contains(net_send_expected_code));
-            std::string net_receive_kernel_expected_code = R"(static inline void net_receive_kernel_(double t, Point_process* pnt, _Instance* inst, NrnThread* nt, Memb_list* ml, int weight_index, double flag) {
+            std::string net_receive_kernel_expected_code =
+                R"(static inline void net_receive_kernel_(double t, Point_process* pnt, _Instance* inst, NrnThread* nt, Memb_list* ml, int weight_index, double flag) {
         int tid = pnt->_tid;
         int id = pnt->_i_instance;
         double v = 0;
@@ -764,7 +766,8 @@ SCENARIO("Check that codegen generate event functions well", "[codegen][net_even
         }
     })";
             REQUIRE_THAT(generated, Contains(net_receive_kernel_expected_code));
-            std::string net_receive_expected_code = R"(static void net_receive_(Point_process* pnt, int weight_index, double flag) {
+            std::string net_receive_expected_code =
+                R"(static void net_receive_(Point_process* pnt, int weight_index, double flag) {
         NrnThread* nt = nrn_threads + pnt->_tid;
         Memb_list* ml = get_memb_list(nt);
         NetReceiveBuffer_t* nrb = ml->_net_receive_buffer;
