@@ -52,9 +52,10 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
        
       - name: Install Python3 dependencies
+        working-directory: ${{runner.workspace}}/nmodl
         run: |
-          pip3 install -U pip setuptools scikit-build Jinja2 PyYAML pytest \
-            sympy
+          pip3 install -U pip setuptools scikit-build
+          pip3 install --user -r requirements.txt
           
       - uses: actions/checkout@v3
         
