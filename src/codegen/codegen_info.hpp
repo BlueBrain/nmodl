@@ -14,6 +14,7 @@
 
 #include <string>
 #include <unordered_set>
+#include <unordered_map>
 
 #include "ast/ast.hpp"
 #include "symtab/symbol_table.hpp"
