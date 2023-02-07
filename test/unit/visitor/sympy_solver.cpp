@@ -2338,8 +2338,8 @@ SCENARIO("Code generation for EigenNewtonSolver", "[visitor][solver][sympy][deri
             auto const generated = get_cpp_code(nmodl_text);
 
             // Expected functor definitions
-            std::string expected_functor_cacum_0_definition = 
-        R"(struct functor_cacum_0 {
+            std::string expected_functor_cacum_0_definition =
+                R"(struct functor_cacum_0 {
         NrnThread* nt;
         cacum_Instance* inst;
         int id, pnodecount;
@@ -2365,8 +2365,8 @@ SCENARIO("Code generation for EigenNewtonSolver", "[visitor][solver][sympy][deri
         void finalize() {
         }
     };)";
-            std::string expected_functor_cacum_1_definition = 
-        R"(struct functor_cacum_1 {
+            std::string expected_functor_cacum_1_definition =
+                R"(struct functor_cacum_1 {
         NrnThread* nt;
         cacum_Instance* inst;
         int id, pnodecount;
@@ -2392,8 +2392,8 @@ SCENARIO("Code generation for EigenNewtonSolver", "[visitor][solver][sympy][deri
         void finalize() {
         }
     };)";
-            std::string expected_functor_cacum_2_definition = 
-        R"(struct functor_cacum_2 {
+            std::string expected_functor_cacum_2_definition =
+                R"(struct functor_cacum_2 {
         NrnThread* nt;
         cacum_Instance* inst;
         int id, pnodecount;
