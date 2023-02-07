@@ -88,7 +88,7 @@ stages:
         sudo apt-get install -y g++-8 flex bison libfl-dev cython libx11-dev libxcomposite-dev libncurses-dev mpich
         sudo apt-get install -y python3.8 python3.8-dev python3.8-venv ninja-build
         python3.8 -m pip install --upgrade pip setuptools
-        python3.8 -m pip install --user 'Jinja2>=2.9.3' 'PyYAML>=3.13' pytest pytest-cov 'sympy>=1.3' numpy
+        python3.8 -m pip install --user $(Build.Repository.LocalPath)/requirements.txt
         # we manually get version 3.15.0 to make sure that changes in the cmake
         # files do not require unsupported versions of cmake in our package.
         wget --quiet --output-document=- "https://github.com/Kitware/CMake/releases/download/$CMAKE_VER/$CMAKE_PKG.tar.gz" | tar xzpf -
@@ -156,7 +156,7 @@ stages:
     - script: |
         brew install flex bison cmake python@3
         python3 -m pip install --upgrade pip setuptools
-        python3 -m pip install --user 'Jinja2>=2.9.3' 'PyYAML>=3.13' pytest pytest-cov numpy 'sympy>=1.3'
+        python3 -m pip install --user $(Build.Repository.LocalPath)/requirements.txt
       displayName: 'Install Dependencies'
     - script: |
         export PATH=/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH;
