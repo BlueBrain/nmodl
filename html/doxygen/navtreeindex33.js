@@ -1,9 +1,5 @@
 var NAVTREEINDEX33 =
 {
-"visitor__utils_8hpp.html#a60f3383905bcc82c616483bc5c9f8c21":[4,0,1,11,54,20],
-"visitor__utils_8hpp.html#a63b20bd823506ecccb7c2c79d5b153f2":[4,0,1,11,54,12],
-"visitor__utils_8hpp.html#a65f5a4e348e6aae405a2087dc9b003cb":[4,0,1,11,54,10],
-"visitor__utils_8hpp.html#a7325073601188222dceeccce9327f90c":[4,0,1,11,54,9],
 "visitor__utils_8hpp.html#a7ceabe160b2e9cce30f64b4d8722b74c":[4,0,1,11,54,3],
 "visitor__utils_8hpp.html#a7fe096bb1d995226f2875d6cbc2ece0e":[4,0,1,11,54,18],
 "visitor__utils_8hpp.html#a915d3d903063dc349ce6906282e02b82":[4,0,1,11,54,4],
