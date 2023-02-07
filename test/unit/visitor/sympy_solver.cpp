@@ -2280,7 +2280,8 @@ std::string get_cpp_code(const std::string& nmodl_text) {
     std::stringstream ss;
     auto cvisitor = create_c_visitor(ast, nmodl_text, ss);
     cvisitor->visit_program(*ast);
-    return reindent_text(ss.str());
+    auto generated_string = ss.str();
+    return reindent_text(generated_string);
 }
 
 SCENARIO("Code generation for EigenNewtonSolver", "[visitor][solver][sympy][derivimplicit]") {
@@ -2337,7 +2338,8 @@ SCENARIO("Code generation for EigenNewtonSolver", "[visitor][solver][sympy][deri
             auto const generated = get_cpp_code(nmodl_text);
 
             // Expected functor definitions
-            std::string expected_functor_cacum_0_definition = R"(struct functor_cacum_0 {
+            std::string expected_functor_cacum_0_definition = 
+        R"(struct functor_cacum_0 {
         NrnThread* nt;
         cacum_Instance* inst;
         int id, pnodecount;
@@ -2357,13 +2359,14 @@ SCENARIO("Code generation for EigenNewtonSolver", "[visitor][solver][sympy][deri
             double* nmodl_eigen_j = nmodl_eigen_jm.data();
             double* nmodl_eigen_f = nmodl_eigen_fm.data();
             nmodl_eigen_f[static_cast<int>(0)] =  -nmodl_eigen_x[static_cast<int>(0)] * nt->_dt / inst->tau[id] - nmodl_eigen_x[static_cast<int>(0)] + inst->cai0[id] * nt->_dt / inst->tau[id] + old_cai - 5000000.0 * nt->_dt * inst->ica[id] / (F * inst->depth[id]);
-            nmodl_eigen_j[static_cast<int>(0)] = ( -nt->_dt - inst->tau[id]) / inst->tau[id];
+            nmodl_eigen_j[static_cast<int>(0)] =  -(nt->_dt + inst->tau[id]) / inst->tau[id];
         }
 
         void finalize() {
         }
     };)";
-            std::string expected_functor_cacum_1_definition = R"(struct functor_cacum_1 {
+            std::string expected_functor_cacum_1_definition = 
+        R"(struct functor_cacum_1 {
         NrnThread* nt;
         cacum_Instance* inst;
         int id, pnodecount;
@@ -2383,13 +2386,14 @@ SCENARIO("Code generation for EigenNewtonSolver", "[visitor][solver][sympy][deri
             double* nmodl_eigen_j = nmodl_eigen_jm.data();
             double* nmodl_eigen_f = nmodl_eigen_fm.data();
             nmodl_eigen_f[static_cast<int>(0)] =  -nmodl_eigen_x[static_cast<int>(0)] * nt->_dt / inst->tau[id] - nmodl_eigen_x[static_cast<int>(0)] + inst->cai0[id] * nt->_dt / inst->tau[id] + old_cai - 5000000.0 * nt->_dt * inst->ica[id] / (F * inst->depth[id]);
-            nmodl_eigen_j[static_cast<int>(0)] = ( -nt->_dt - inst->tau[id]) / inst->tau[id];
+            nmodl_eigen_j[static_cast<int>(0)] =  -(nt->_dt + inst->tau[id]) / inst->tau[id];
         }
 
         void finalize() {
         }
     };)";
-            std::string expected_functor_cacum_2_definition = R"(struct functor_cacum_2 {
+            std::string expected_functor_cacum_2_definition = 
+        R"(struct functor_cacum_2 {
         NrnThread* nt;
         cacum_Instance* inst;
         int id, pnodecount;
@@ -2409,7 +2413,7 @@ SCENARIO("Code generation for EigenNewtonSolver", "[visitor][solver][sympy][deri
             double* nmodl_eigen_j = nmodl_eigen_jm.data();
             double* nmodl_eigen_f = nmodl_eigen_fm.data();
             nmodl_eigen_f[static_cast<int>(0)] =  -nmodl_eigen_x[static_cast<int>(0)] * nt->_dt / inst->tau[id] - nmodl_eigen_x[static_cast<int>(0)] + inst->cai0[id] * nt->_dt / inst->tau[id] + old_cai - 5000000.0 * nt->_dt * inst->ica[id] / (F * inst->depth[id]);
-            nmodl_eigen_j[static_cast<int>(0)] = ( -nt->_dt - inst->tau[id]) / inst->tau[id];
+            nmodl_eigen_j[static_cast<int>(0)] =  -(nt->_dt + inst->tau[id]) / inst->tau[id];
         }
 
         void finalize() {
