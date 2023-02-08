@@ -875,7 +875,8 @@ SCENARIO("Check that codegen generate event functions well", "[codegen][net_even
         )";
         THEN("New code is generated for for_netcons") {
             auto const generated = get_cpp_code(nmodl_text);
-            std::string net_receive_kernel_expected_code = R"(static inline void net_receive_kernel_(double t, Point_process* pnt, _Instance* inst, NrnThread* nt, Memb_list* ml, int weight_index, double flag) {
+            std::string net_receive_kernel_expected_code =
+                R"(static inline void net_receive_kernel_(double t, Point_process* pnt, _Instance* inst, NrnThread* nt, Memb_list* ml, int weight_index, double flag) {
         int tid = pnt->_tid;
         int id = pnt->_i_instance;
         double v = 0;
