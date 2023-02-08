@@ -865,6 +865,45 @@ SCENARIO("Check that codegen generate event functions well", "[codegen][net_even
             REQUIRE_THAT(generated, Contains(expected_code));
         }
     }
+    GIVEN("A mod file with FOR_NETCONS") {
+        std::string const nmodl_text = R"(
+            NET_RECEIVE(w) {
+                FOR_NETCONS(v) {
+                    b = 2
+                }
+            }
+        )";
+        THEN("New code is generated for for_netcons") {
+            auto const generated = get_cpp_code(nmodl_text);
+            std::string net_receive_kernel_expected_code = R"(static inline void net_receive_kernel_(double t, Point_process* pnt, _Instance* inst, NrnThread* nt, Memb_list* ml, int weight_index, double flag) {
+        int tid = pnt->_tid;
+        int id = pnt->_i_instance;
+        double v = 0;
+        int nodecount = ml->nodecount;
+        int pnodecount = ml->_nodecount_padded;
+        double* data = ml->data;
+        double* weights = nt->weights;
+        Datum* indexes = ml->pdata;
+        ThreadDatum* thread = ml->_thread;
+
+        int node_id = ml->nodeindices[id];
+        v = nt->_actual_v[node_id];
+        inst->tsave[id] = t;
+        {
+            const size_t offset = 0*pnodecount + id;
+            const size_t for_netcon_start = nt->_fornetcon_perm_indices[indexes[offset]];
+            const size_t for_netcon_end = nt->_fornetcon_perm_indices[indexes[offset] + 1];
+            for (auto i = for_netcon_start; i < for_netcon_end; ++i) {
+                b = 2.0;
+            }
+
+        }
+    })";
+            REQUIRE_THAT(generated, Contains(net_receive_kernel_expected_code));
+            std::string registration_expected_code = "add_nrn_fornetcons(mech_type, 0);";
+            REQUIRE_THAT(generated, Contains(registration_expected_code));
+        }
+    }
     GIVEN("A mod file with a net_move outside NET_RECEIVE") {
         std::string const nmodl_text = R"(
             PROCEDURE foo() {
