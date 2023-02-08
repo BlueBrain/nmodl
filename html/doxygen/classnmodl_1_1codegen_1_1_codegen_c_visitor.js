@@ -98,6 +98,8 @@ var classnmodl_1_1codegen_1_1_codegen_c_visitor =
     [ "print_function_procedure_helper", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#aa4b761915ecf8cfa8ed114f92772209a", null ],
     [ "print_function_prototypes", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a284c43a53d81e6e4ab74bf991bd73b38", null ],
     [ "print_function_tables", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a77d336ab83f6befa825bc967469d36c8", null ],
+    [ "print_functor_definition", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ae92eeab4035fc7cb57abf03e933524a5", null ],
+    [ "print_functors_definitions", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#aed4de4c8266bac88f2bc17b72165474b", null ],
     [ "print_g_unused", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ae6a1469131dc77b1cf1669e0a1958ddf", null ],
     [ "print_get_memb_list", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#aec13fd9aec57bcd9f9845c5171cfa366", null ],
     [ "print_global_function_common_code", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a17c2ec33e25d7c7c19ef8c8429936a0b", null ],

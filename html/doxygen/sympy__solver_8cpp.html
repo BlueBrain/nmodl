@@ -98,13 +98,17 @@ $(document).ready(function(){initNavTree('sympy__solver_8cpp.html',''); initResi
 <div class="contents">
 <div class="textblock"><code>#include &lt;catch2/catch.hpp&gt;</code><br />
 <code>#include &quot;<a class="el" href="program_8hpp_source.html">ast/program.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="codegen__cpp__visitor_8hpp_source.html">codegen/codegen_cpp_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="nmodl__driver_8hpp_source.html">parser/nmodl_driver.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="test__utils_8hpp_source.html">test/unit/utils/test_utils.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="checkparent__visitor_8hpp_source.html">visitors/checkparent_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="constant__folder__visitor_8hpp_source.html">visitors/constant_folder_visitor.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="inline__visitor_8hpp_source.html">visitors/inline_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="kinetic__block__visitor_8hpp_source.html">visitors/kinetic_block_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="loop__unroll__visitor_8hpp_source.html">visitors/loop_unroll_visitor.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="neuron__solve__visitor_8hpp_source.html">visitors/neuron_solve_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="nmodl__visitor_8hpp_source.html">visitors/nmodl_visitor.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="solve__block__visitor_8hpp_source.html">visitors/solve_block_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="sympy__solver__visitor_8hpp_source.html">visitors/sympy_solver_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="symtab__visitor_8hpp_source.html">visitors/symtab_visitor.hpp</a>&quot;</code><br />
 </div>
@@ -137,6 +141,14 @@ Functions</h2></td></tr>
 <tr class="separator:ad0a8c62865eb9c04790005b44712337a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4cc55329ade0a3cd5001f8915c5897b3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sympy__solver_8cpp.html#a4cc55329ade0a3cd5001f8915c5897b3">SCENARIO</a> (&quot;Solve KINETIC block using SympySolver Visitor&quot;, &quot;[visitor][solver][sympy][kinetic]&quot;)</td></tr>
 <tr class="separator:a4cc55329ade0a3cd5001f8915c5897b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac359815a642ad4590253794900d72a5d"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; CodegenCVisitor &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sympy__solver_8cpp.html#ac359815a642ad4590253794900d72a5d">create_c_visitor</a> (const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_program.html">ast::Program</a> &gt; &amp;ast, const std::string &amp;, std::stringstream &amp;ss, bool inline_visitor=true, bool pade=false, bool cse=false)</td></tr>
+<tr class="memdesc:ac359815a642ad4590253794900d72a5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper for creating C codegen visitor.  <a href="sympy__solver_8cpp.html#ac359815a642ad4590253794900d72a5d">More...</a><br /></td></tr>
+<tr class="separator:ac359815a642ad4590253794900d72a5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab7518722cbffea33018ffc7c653e1f87"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sympy__solver_8cpp.html#ab7518722cbffea33018ffc7c653e1f87">get_cpp_code</a> (const std::string &amp;nmodl_text)</td></tr>
+<tr class="memdesc:ab7518722cbffea33018ffc7c653e1f87"><td class="mdescLeft">&#160;</td><td class="mdescRight">print entire code  <a href="sympy__solver_8cpp.html#ab7518722cbffea33018ffc7c653e1f87">More...</a><br /></td></tr>
+<tr class="separator:ab7518722cbffea33018ffc7c653e1f87"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2cb1c89431e2ab2d00ac67382f3fa49b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sympy__solver_8cpp.html#a2cb1c89431e2ab2d00ac67382f3fa49b">SCENARIO</a> (&quot;Code generation for EigenNewtonSolver&quot;, &quot;[visitor][solver][sympy][derivimplicit]&quot;)</td></tr>
+<tr class="separator:a2cb1c89431e2ab2d00ac67382f3fa49b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="a8dc22e44bd661fd27f684c3d48d0f407"></a>
@@ -155,7 +167,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l00239">239</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l00248">248</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
 
 </div>
 </div>
@@ -206,7 +218,88 @@ Functions</h2></td></tr>
 <p><code>require_fail</code> requires that the equations are different. Used only for unit-test this function</p>
 <dl class="section warning"><dt>Warning</dt><dd>do not use this method when there are tmp variables not in the form: tmp_&lt;number&gt; </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l00116">116</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l00125">125</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ac359815a642ad4590253794900d72a5d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac359815a642ad4590253794900d72a5d">&#9670;&nbsp;</a></span>create_c_visitor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt;CodegenCVisitor&gt; create_c_visitor </td>
+          <td>(</td>
+          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_program.html">ast::Program</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>ast</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::stringstream &amp;&#160;</td>
+          <td class="paramname"><em>ss</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>inline_visitor</em> = <code>true</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>pade</em> = <code>false</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>cse</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Helper for creating C codegen visitor. </p>
+<p>construct symbol table</p>
+<p>run all necessary pass</p>
+<p>create C code generation visitor</p>
+
+<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l02238">2238</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ab7518722cbffea33018ffc7c653e1f87"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab7518722cbffea33018ffc7c653e1f87">&#9670;&nbsp;</a></span>get_cpp_code()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string get_cpp_code </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>nmodl_text</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>print entire code </p>
+
+<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l02278">2278</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
 
 </div>
 </div>
@@ -226,7 +319,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l00075">75</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l00084">84</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
 
 </div>
 </div>
@@ -274,7 +367,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l00035">35</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l00044">44</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
 
 </div>
 </div>
@@ -294,12 +387,12 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l00221">221</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l00230">230</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
 
 </div>
 </div>
 <a id="adf4f2d9c31ad28c000d133b25203a4bc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adf4f2d9c31ad28c000d133b25203a4bc">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[1/7]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#adf4f2d9c31ad28c000d133b25203a4bc">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[1/8]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -324,12 +417,12 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l00245">245</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l00254">254</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
 
 </div>
 </div>
 <a id="aedb4d3efe01895c8268a61e240f1eccd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aedb4d3efe01895c8268a61e240f1eccd">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[2/7]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aedb4d3efe01895c8268a61e240f1eccd">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[2/8]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -354,12 +447,42 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l00318">318</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l00327">327</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a2cb1c89431e2ab2d00ac67382f3fa49b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2cb1c89431e2ab2d00ac67382f3fa49b">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[3/8]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">SCENARIO </td>
+          <td>(</td>
+          <td class="paramtype">&quot;Code generation for EigenNewtonSolver&quot;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&quot;&quot;&#160;</td>
+          <td class="paramname">[visitor][solver][sympy][derivimplicit]&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l02287">2287</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
 
 </div>
 </div>
 <a id="a13432bbd1f365457048e8ecff5a395d5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a13432bbd1f365457048e8ecff5a395d5">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[3/7]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a13432bbd1f365457048e8ecff5a395d5">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[4/8]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -384,12 +507,12 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l01516">1516</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l01525">1525</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
 
 </div>
 </div>
 <a id="a4cc55329ade0a3cd5001f8915c5897b3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4cc55329ade0a3cd5001f8915c5897b3">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[4/7]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a4cc55329ade0a3cd5001f8915c5897b3">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[5/8]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -414,12 +537,12 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l02132">2132</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l02141">2141</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
 
 </div>
 </div>
 <a id="ad0a8c62865eb9c04790005b44712337a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad0a8c62865eb9c04790005b44712337a">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[5/7]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ad0a8c62865eb9c04790005b44712337a">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[6/8]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -444,12 +567,12 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l02057">2057</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l02066">2066</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
 
 </div>
 </div>
 <a id="a6b6e1c52496cd281dedfb64cebc4bbf8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6b6e1c52496cd281dedfb64cebc4bbf8">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[6/7]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b6e1c52496cd281dedfb64cebc4bbf8">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[7/8]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -476,12 +599,12 @@ Functions</h2></td></tr>
 <p>sympy 1.9 able to solve ode but not older versions</p>
 <p>sympy 1.4 able to solve ode but not older versions</p>
 
-<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l00361">361</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l00370">370</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
 
 </div>
 </div>
 <a id="ac8a01877e82f0eeb4398f0d3d10a1197"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac8a01877e82f0eeb4398f0d3d10a1197">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[7/7]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ac8a01877e82f0eeb4398f0d3d10a1197">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[8/8]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -508,7 +631,7 @@ Functions</h2></td></tr>
 <p>new derivative block with EigenNewtonSolverBlock node</p>
 <p>EigenNewtonSolverBlock in each derivative block</p>
 
-<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l00611">611</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l00620">620</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
 
 </div>
 </div>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Module contents &mdash; NMODL 0.0 documentation</title>
@@ -30,14 +30,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> NMODL
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            NMODL
           </a>
               <div class="version">
                 0.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -127,7 +131,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="modules.html">Python package</a></li>
       <li class="breadcrumb-item active">Module contents</li>
       <li class="wy-breadcrumbs-aside">
@@ -175,7 +179,7 @@
 <span class="sig-name descname"><span class="pre">get_ast</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self:</span> <span class="pre">nmodl._nmodl.nmodl::parser::NmodlDriver</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">nmodl::ast::Program</span></span></span><a class="headerlink" href="#nmodl.NmodlDriver.get_ast" title="Permalink to this definition"></a></dt>
 <dd><p>Get ast</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Instance of <code class="xref py py-class docutils literal notranslate"><span class="pre">Program</span></code></p>
 </dd>
 </dl>
@@ -186,13 +190,13 @@
 <span class="sig-name descname"><span class="pre">parse_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#nmodl.NmodlDriver" title="nmodl._nmodl.NmodlDriver"><span class="pre">nmodl._nmodl.NmodlDriver</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">nmodl::ast::Program</span></span></span><a class="headerlink" href="#nmodl.NmodlDriver.parse_file" title="Permalink to this definition"></a></dt>
 <dd><p>Parse NMODL provided as a file</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – name of the C file</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>ast root node if success, throws an exception otherwise</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>AST</p>
 </dd>
 </dl>
@@ -203,13 +207,13 @@
 <span class="sig-name descname"><span class="pre">parse_stream</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self:</span> <span class="pre">nmodl._nmodl.NmodlDriver</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in:</span> <span class="pre">object</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">nmodl::ast::Program</span></span></span><a class="headerlink" href="#nmodl.NmodlDriver.parse_stream" title="Permalink to this definition"></a></dt>
 <dd><p>Parse NMODL file provided as istream</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>in</strong> (<em>file</em>) – ifstream object</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>ast root node if success, throws an exception otherwise</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>AST</p>
 </dd>
 </dl>
@@ -220,13 +224,13 @@
 <span class="sig-name descname"><span class="pre">parse_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#nmodl.NmodlDriver" title="nmodl._nmodl.NmodlDriver"><span class="pre">nmodl._nmodl.NmodlDriver</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">input</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">nmodl::ast::Program</span></span></span><a class="headerlink" href="#nmodl.NmodlDriver.parse_string" title="Permalink to this definition"></a></dt>
 <dd><p>Parse NMODL provided as a string</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>input</strong> (<em>str</em>) – C code as string</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>ast root node if success, throws an exception otherwise</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>AST</p>
 </dd>
 </dl>
@@ -242,17 +246,17 @@
 <span class="sig-prename descclassname"><span class="pre">nmodl.</span></span><span class="sig-name descname"><span class="pre">to_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node:</span> <span class="pre">nmodl::ast::Ast</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compact:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expand:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_nmodl:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#nmodl.to_json" title="Permalink to this definition"></a></dt>
 <dd><p>Given AST node, return the JSON string representation</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>node</strong> (<em>AST</em>) – AST node</p></li>
 <li><p><strong>compact</strong> (<em>bool</em>) – Compact node</p></li>
 <li><p><strong>expand</strong> (<em>bool</em>) – Expand node</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>JSON string representation</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 </dl>
@@ -268,16 +272,16 @@
 <span class="sig-prename descclassname"><span class="pre">nmodl.</span></span><span class="sig-name descname"><span class="pre">to_nmodl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node:</span> <span class="pre">nmodl::ast::Ast</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_types:</span> <span class="pre">Set[nmodl::ast::AstNodeType]</span> <span class="pre">=</span> <span class="pre">set()</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#nmodl.to_nmodl" title="Permalink to this definition"></a></dt>
 <dd><p>Given AST node, return the NMODL string representation</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>node</strong> (<em>AST</em>) – AST node</p></li>
 <li><p><strong>excludeTypes</strong> (<em>set</em><em> of </em><em>AstNodeType</em>) – Excluded node types</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>NMODL string representation</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 </dl>
@@ -301,10 +305,10 @@
 form and it can be visualized using AST viewer implemented
 using d3.js.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>nmodl_ast</strong> – AST object of nmodl file or string</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>None</p>
 </dd>
 </dl>
@@ -319,7 +323,7 @@ using d3.js.</p>
 <dd><p>Returns a list of examples available</p>
 <p>The NMODL Framework provides a few examples for testing</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>List of available examples</p>
 </dd>
 </dl>
@@ -333,10 +337,10 @@ using d3.js.</p>
 using <cite>list_examples()</cite>. This function then returns the NMODL code of the requested example
 file.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>example</strong> – Filename of an example as provided by <cite>list_examples()</cite></p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>List of available examples</p>
 </dd>
 </dl>
@@ -364,7 +368,7 @@ the prev_expressions, then it is simplified to this expression.</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">differentiate2c</span> <span class="pre">(&quot;cos(y)</span> <span class="pre">+</span> <span class="pre">b*y**2&quot;,</span> <span class="pre">&quot;y&quot;,</span> <span class="pre">{&quot;a&quot;,&quot;b&quot;})</span> <span class="pre">==</span> <span class="pre">&quot;Dy</span> <span class="pre">=</span> <span class="pre">2*b*y</span> <span class="pre">-</span> <span class="pre">sin(y)&quot;</span></code></p></li>
 </ul>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>expression</strong> – expression to be differentiated e.g. “a*x + b”</p></li>
 <li><p><strong>dependent_var</strong> – dependent variable, e.g. “x”</p></li>
@@ -373,7 +377,7 @@ the prev_expressions, then it is simplified to this expression.</p>
 to evaluate &amp; substitute, e.g. [“b = x + c”, “a = 12*b”]</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>string containing analytic derivative of expression (including any substitutions
 of variables from supplied prev_expressions) w.r.t. dependent_var as C code.</p>
 </dd>
@@ -390,7 +394,7 @@ referenced by f(x), for example:
 -forwards_euler2c(“x’ = a*x”, [“a”,”x”])
 -forwards_euler2c(“x’ = a + b*x - sin(3.2)”, {“x”,”a”,”b”})</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>diff_string</strong> – Derivative to be integrated e.g. “x’ = a*x”</p></li>
 <li><p><strong>dt_var</strong> – name of timestep dt variable in NEURON</p></li>
@@ -398,7 +402,7 @@ referenced by f(x), for example:
 <li><p><strong>function_calls</strong> – set of function calls used in the ODE</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>String containing forwards Euler timestep as C code</p>
 </dd>
 </dl>
@@ -424,7 +428,7 @@ referenced by f(x), for example:</p>
 and the (1,1) Pade approximant to the solution returned.
 This approximate solution is correct to second order in dt.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>diff_string</strong> – Derivative to be integrated e.g. “x’ = a*x + b”</p></li>
 <li><p><strong>t_var</strong> – name of time variable t in NEURON</p></li>
@@ -435,10 +439,10 @@ if True, return (1,1) Pade approx to solution
 correct to second order in dt_var</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>string containing analytic integral of derivative as C code</p>
 </dd>
-<dt class="field-odd">Raises</dt>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>NotImplementedError</strong> – if the ODE is too hard, or if it fails to solve it.</p>
 </dd>
 </dl>
@@ -472,7 +476,7 @@ correct to second order in dt_var</p></li>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>eqs</strong> – list of equations e.g. [“x + y = a”, “y = 3 + b”]</p></li>
 <li><p><strong>vars</strong> – list of variables to solve for, e.g. [“x”, “y”]</p></li>
@@ -485,11 +489,11 @@ otherwise return matrix system to be solved</p></li>
 <li><p><strong>do_cse</strong> – if True, do Common Subexpression Elimination</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>list of strings containing assignment statements
 vars: list of strings containing new local variables</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>code</p>
 </dd>
 </dl>
@@ -507,7 +511,7 @@ vars: list of strings containing new local variables</p>
 </ul>
 </div></blockquote>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>eqs</strong> – list of equations e.g. [“x + y = a”, “y = 3 + b”]</p></li>
 <li><p><strong>vars</strong> – list of variables to solve for, e.g. [“x”, “y”]</p></li>
@@ -515,7 +519,7 @@ vars: list of strings containing new local variables</p>
 <li><p><strong>function_calls</strong> – set of function calls used in the ODE</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>List of strings containing assignment statements</p>
 </dd>
 </dl>

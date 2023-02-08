@@ -130,6 +130,7 @@ var group__codegen__details =
       [ "function_tables", "structnmodl_1_1codegen_1_1_codegen_info.html#a26115f91f849147e8b2eb91481b20cdc", null ],
       [ "functions", "structnmodl_1_1codegen_1_1_codegen_info.html#aa516bfc1058bdddd366473cd87970b59", null ],
       [ "functions_with_table", "structnmodl_1_1codegen_1_1_codegen_info.html#a9246fe1c2f29c711726afe73fcff0227", null ],
+      [ "functor_names", "structnmodl_1_1codegen_1_1_codegen_info.html#a378d2338ae6a2a5c665d640c7c8336cd", null ],
       [ "global_variables", "structnmodl_1_1codegen_1_1_codegen_info.html#a41dec4bc8295bae5fd9f216e2877d478", null ],
       [ "initial_node", "structnmodl_1_1codegen_1_1_codegen_info.html#afbd7bbb54c12a07fce90d62325799810", null ],
       [ "ions", "structnmodl_1_1codegen_1_1_codegen_info.html#a92c83194913f5a2766c912b3ed8ba55e", null ],
