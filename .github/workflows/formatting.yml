@@ -1,0 +1,21 @@
+name: Check formatting
+
+concurrency: 
+  group: ${{ github.workflow }}#${{ github.ref }}
+  cancel-in-progress: true  
+
+on:
+  pull_request:
+    branches:
+      - master
+      - release/**
+
+jobs:
+  all:
+    name: C/C++, CMake and Python
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: Check formatting
+        working-directory: ${{runner.workspace}}/nmodl
+        run: cmake/hpc-coding-conventions/bin/format -v --dry-run

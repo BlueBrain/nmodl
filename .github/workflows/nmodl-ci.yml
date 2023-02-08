@@ -117,13 +117,6 @@ jobs:
         env:
           INSTALL_DIR: ${{ runner.workspace }}/install
 
-      - name: Formatting
-        shell: bash
-        working-directory: ${{runner.workspace}}/nmodl
-        run:  |
-          echo "------- Check formatting -------"
-          cmake/hpc-coding-conventions/bin/format -v --dry-run
-
       - name: Dump config dictionary
         run: |
           cat << EOF > matrix.json
