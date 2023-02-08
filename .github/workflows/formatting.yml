@@ -16,6 +16,9 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
+      - name: Update submodule
+        working-directory: ${{runner.workspace}}/nmodl
+        run: git submodule update --init cmake/hpc-coding-conventions
       - name: Check formatting
         working-directory: ${{runner.workspace}}/nmodl
         run: cmake/hpc-coding-conventions/bin/format -v --dry-run
