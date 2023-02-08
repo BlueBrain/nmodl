@@ -421,6 +421,24 @@ SCENARIO("Check code generation for TABLE statements", "[codegen][array_variable
             REQUIRE_THAT(generated, Contains("inst->global->tau = inst->global->t_tau[i]"));
         }
     }
+    GIVEN("A MOD file with two table statements") {
+        std::string const nmodl_text = R"(
+            NEURON {
+                RANGE inf, tau
+            }
+            PROCEDURE foo(v) {
+                TABLE inf FROM 1 TO 3 WITH 100
+                FROM i=0 TO 1 {
+                }
+                TABLE tau FROM 1 TO 3 WITH 100
+                FROM i=0 TO 1 {
+                }
+            }
+        )";
+        THEN("It should throw") {
+            REQUIRE_THROWS(get_cpp_code(nmodl_text));
+        }
+    }
 }
 
 SCENARIO("Check that BEFORE/AFTER block are well generated", "[codegen][before/after]") {
