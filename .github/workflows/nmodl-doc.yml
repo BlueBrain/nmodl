@@ -50,14 +50,15 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: ${{ env.PYTHON_VERSION }}
-       
-      - name: Install Python3 dependencies
-        run: |
-          pip3 install -U pip setuptools scikit-build Jinja2 PyYAML pytest \
-            sympy
-          
+
       - uses: actions/checkout@v3
-        
+
+      - name: Install Python3 dependencies
+        working-directory: ${{runner.workspace}}/nmodl
+        run: |
+          pip3 install -U pip setuptools scikit-build
+          pip3 install --user -r requirements.txt
+
       # This step will set up an SSH connection on tmate.io for live debugging.
       # To trigger it, simply add 'live-debug-docs' to your last pushed commit message.
       - name: live debug session on failure
