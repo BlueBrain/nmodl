@@ -915,7 +915,8 @@ SCENARIO("Some tests on derivimplicit", "[codegen][derivimplicit_solver]") {
         };
     })";
             REQUIRE_THAT(generated, Contains(newton_state_expected_code));
-            std::string state_expected_code = R"(int state_(int id, int pnodecount, double* data, Datum* indexes, ThreadDatum* thread, NrnThread* nt, Memb_list* ml, double v) {
+            std::string state_expected_code =
+                R"(int state_(int id, int pnodecount, double* data, Datum* indexes, ThreadDatum* thread, NrnThread* nt, Memb_list* ml, double v) {
         auto* const inst = static_cast<_Instance*>(ml->instance);
         double* savstate1 = (double*) thread[dith1()].pval;
         auto const& slist1 = inst->global->slist1;
