@@ -2932,7 +2932,7 @@ static size_t get_register_type_for_ba_block(const ast::Block* block) {
 void CodegenCVisitor::print_mechanism_register() {
     printer->add_newline(2);
     printer->add_line("/** register channel with the simulator */");
-    printer->fmt_start_block("void _{}_reg() ", info.mod_file);
+    printer->fmt_start_block("void _{}_reg()", info.mod_file);
 
     // type related information
     auto suffix = add_escape_quote(info.mod_suffix);
@@ -3626,7 +3626,7 @@ void CodegenCVisitor::print_nrn_destructor() {
 void CodegenCVisitor::print_nrn_alloc() {
     printer->add_newline(2);
     auto method = method_name(naming::NRN_ALLOC_METHOD);
-    printer->fmt_start_block("static void {}(double* data, Datum* indexes, int type) ", method);
+    printer->fmt_start_block("static void {}(double* data, Datum* indexes, int type)", method);
     printer->add_line("// do nothing");
     printer->end_block(1);
 }
@@ -3935,7 +3935,7 @@ void CodegenCVisitor::print_net_init() {
     auto args = "Point_process* pnt, int weight_index, double flag";
     printer->add_newline(2);
     printer->add_line("/** initialize block for net receive */");
-    printer->fmt_start_block("static void net_init({}) ", args);
+    printer->fmt_start_block("static void net_init({})", args);
     auto block = node->get_statement_block().get();
     if (block->get_statements().empty()) {
         printer->add_line("// do nothing");

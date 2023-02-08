@@ -715,6 +715,7 @@ SCENARIO("Check that codegen generate event functions well", "[codegen][net_even
     GIVEN("A mod file with events") {
         std::string const nmodl_text = R"(
             NET_RECEIVE(w) {
+                INITIAL {}
                 if (flag == 0) {
                     net_event(t)
                     net_move(t+1)
@@ -820,6 +821,42 @@ SCENARIO("Check that codegen generate event functions well", "[codegen][net_even
         nsb->_cnt = 0;
     })";
             REQUIRE_THAT(generated, Contains(net_buf_receive_expected_code));
+            std::string net_init_expected_code = R"(static void net_init(Point_process* pnt, int weight_index, double flag) {
+        // do nothing
+    })";
+            REQUIRE_THAT(generated, Contains(net_init_expected_code));
+            std::string set_pnt_receive_expected_code = "set_pnt_receive(mech_type, net_receive_, net_init, num_net_receive_args());";
+            REQUIRE_THAT(generated, Contains(set_pnt_receive_expected_code));
+        }
+    }
+    GIVEN("A mod file with an INITIAL inside NET_RECEIVE") {
+        std::string const nmodl_text = R"(
+            NET_RECEIVE(w) {
+                INITIAL {
+                    a = 1
+                }
+            }
+        )";
+        THEN("It should generate a net_init") {
+            auto const generated = get_cpp_code(nmodl_text);
+            std::string expected_code = R"(static void net_init(Point_process* pnt, int weight_index, double flag) {
+        int tid = pnt->_tid;
+        int id = pnt->_i_instance;
+        double v = 0;
+        NrnThread* nt = nrn_threads + tid;
+        Memb_list* ml = nt->_ml_list[pnt->_type];
+        int nodecount = ml->nodecount;
+        int pnodecount = ml->_nodecount_padded;
+        double* data = ml->data;
+        double* weights = nt->weights;
+        Datum* indexes = ml->pdata;
+        ThreadDatum* thread = ml->_thread;
+        auto* const inst = static_cast<_Instance*>(ml->instance);
+
+        a = 1.0;
+        auto& nsb = ml->_net_send_buffer;
+    })";
+            REQUIRE_THAT(generated, Contains(expected_code));
         }
     }
     GIVEN("A mod file with a net_move outside NET_RECEIVE") {
