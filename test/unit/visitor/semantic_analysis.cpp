@@ -165,3 +165,34 @@ SCENARIO("FUNCTION_TABLE block", "[visitor][semantic_analysis]") {
         }
     }
 }
+
+SCENARIO("UNITS block", "[visitor][semantic_analysis]") {
+    GIVEN("A mod file with UNITS empty") {
+        std::string nmodl_text = R"(
+            UNITS {}
+        )";
+        THEN("Semantic analysis should success") {
+            REQUIRE_FALSE(run_semantic_analysis_visitor(nmodl_text));
+        }
+    }
+    GIVEN("A mod file with UNITS with space as name") {
+        std::string nmodl_text = R"(
+            UNITS {
+                ( ) = (millivolt)
+            }
+        )";
+        THEN("Semantic analysis should success") {
+            REQUIRE_FALSE(run_semantic_analysis_visitor(nmodl_text));
+        }
+    }
+    GIVEN("A mod file with UNITS with no name") {
+        std::string nmodl_text = R"(
+            UNITS {
+                () = (millivolt)
+            }
+        )";
+        THEN("Semantic analysis should fail") {
+            REQUIRE(run_semantic_analysis_visitor(nmodl_text));
+        }
+    }
+}
