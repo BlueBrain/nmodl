@@ -20,6 +20,7 @@
 #include <iostream>
 #include <memory>
 #include <sstream>
+#include <string_view>
 
 namespace nmodl {
 /// implementation of various printers
@@ -81,9 +82,16 @@ class CodePrinter {
         add_line(fmt::format(std::forward<Args>(args)...));
     }
 
+    /// fmt_start_block(args...) is just shorthand for start_block(fmt::format(args...))
     template <typename... Args>
     void fmt_start_block(Args&&... args) {
         start_block(fmt::format(std::forward<Args>(args)...));
+    }
+
+    /// fmt_text(args...) is just shorthand for add_text(fmt::format(args...))
+    template <typename... Args>
+    void fmt_text(Args&&... args) {
+        add_text(fmt::format(std::forward<Args>(args)...));
     }
 
     void add_multi_line(const std::string&);
@@ -100,6 +108,9 @@ class CodePrinter {
 
     /// end of current block scope (i.e. end with "}")
     void end_block(int num_newlines = 0);
+
+    /// end a block with `suffix` before the newline(s) (i.e. [indent]}[suffix]\n*num_newlines)
+    void end_block(std::string_view suffix, std::size_t num_newlines = 1);
 
     int indent_spaces() {
         return NUM_SPACES * indent_level;

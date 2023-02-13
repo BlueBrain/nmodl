@@ -8,6 +8,7 @@
 #include "visitors/solve_block_visitor.hpp"
 
 #include <cassert>
+#include <fmt/format.h>
 
 #include "ast/all.hpp"
 #include "codegen/codegen_naming.hpp"
@@ -42,8 +43,11 @@ ast::SolutionExpression* SolveBlockVisitor::create_solution_expression(
     /// find out the block that is going to solved
     const auto& block_name = solve_block.get_block_name()->get_node_name();
     const auto& solve_node_symbol = symtab->lookup(block_name);
-    assert(solve_node_symbol != nullptr);
-    auto node_to_solve = solve_node_symbol->get_node();
+    if (solve_node_symbol == nullptr) {
+        throw std::runtime_error(
+            fmt::format("SolveBlockVisitor :: cannot find the block '{}' to solve it", block_name));
+    }
+    auto node_to_solve = solve_node_symbol->get_nodes().front();
 
     /// in case of derivimplicit method if neuron solver is used (i.e. not sympy) then
     /// the solution is not in place but we have to create a callback to newton solver

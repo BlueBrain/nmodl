@@ -24,10 +24,8 @@ The following symbols are used in the document to descrive the status :
 |SOLVE | ✅ |
 |USING | ✅ |
 |WITH | ✅ |
-|STEPPED | ✅ |
 |DISCRETE | ✅ |
 |FROM | ✅ |
-|FORALL | ✅ |
 |TO | ✅ |
 |BY | ✅ |
 |WHILE | ✅ |
@@ -35,23 +33,17 @@ The following symbols are used in the document to descrive the status :
 |ELSE | ✅ |
 |START | ✅ |
 |STEP | ✅ |
-|SENS | ✅ |
 |SOLVEFOR | ✅ |
 |PROCEDURE | ✅ |
-|PARTIAL | ✅ |
 |DEFINE | ✅ |
-|IFERROR | ✅ |
 |PARAMETER | ✅ |
 |EQUATION | ✅ |
-|TERMINAL | ✅ |
 |LINEAR | ✅ |
 |NONLINEAR | ✅ |
 |FUNCTION | ✅ |
 |LOCAL | ✅ |
 | ~ | ✅ |
 |~+ | ❓ |
-|PUTQ | ✅ |
-|GETQ | ✅ |
 |TABLE | ✅ |
 |DEPEND | ✅ |
 |BREAKPOINT | ✅ |
@@ -69,15 +61,9 @@ The following symbols are used in the document to descrive the status :
 | != | ✅ |
 | ! | ✅ |
 | \>= | ✅ |
-|PLOT | ✅ |
 |VS | ✅ |
 |LAG | ✅ |
-|RESET | ✅ |
-|MATCH | ✅ |
-|MODEL_LEVEL | ✅ |
 |SWEEP | ✅ |
-|FIRST | ✅ |
-|LAST | ✅ |
 |KINETIC | ✅ |
 |CONSERVE | ✅ |
 |REACTION | ✅ |
@@ -94,7 +80,6 @@ The following symbols are used in the document to descrive the status :
 |USEION | ✅ |
 |THREADSAFE | ✅ |
 |GLOBAL | ✅ |
-|SECTION | ✅ |
 |RANGE | ✅ |
 |POINTER | ✅ |
 |BBCOREPOINTER | ✅ |

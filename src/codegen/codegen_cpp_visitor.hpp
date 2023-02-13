@@ -21,6 +21,7 @@
 #include <numeric>
 #include <ostream>
 #include <string>
+#include <string_view>
 #include <utility>
 
 #include "codegen/codegen_info.hpp"
@@ -235,11 +236,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
     std::vector<SymbolType> codegen_global_variables;
 
     /**
-     * All ion variables that could be possibly written
-     */
-    std::vector<SymbolType> codegen_shadow_variables;
-
-    /**
      * \c true if currently net_receive block being printed
      */
     bool printing_net_receive = false;
@@ -270,7 +266,7 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
     codegen::CodegenInfo info;
 
     /**
-     * Code printer object for target (C, CUDA, ispc, ...)
+     * Code printer object for target (C)
      */
     std::shared_ptr<CodePrinter> target_printer;
 
@@ -283,12 +279,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * Pointer to active code printer
      */
     std::shared_ptr<CodePrinter> printer;
-
-    /**
-     * List of shadow statements in the current block
-     */
-    std::vector<ShadowUseStatement> shadow_statements;
-
 
     /**
      * Return Nmodl language version
@@ -394,10 +384,18 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
-     * Name of structure that wraps range variables
+     * Name of structure that wraps global variables
      */
     std::string global_struct() const {
         return fmt::format("{}_Store", info.mod_suffix);
+    }
+
+
+    /**
+     * Name of the (host-only) global instance of `global_struct`
+     */
+    std::string global_struct_instance() const {
+        return info.mod_suffix + "_global";
     }
 
 
@@ -408,16 +406,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      */
     std::string method_name(const std::string& name) const {
         return name + "_" + info.mod_suffix;
-    }
-
-
-    /**
-     * Constructs a shadow variable name
-     * \param name The name of the variable
-     * \return     The name of the variable prefixed with \c shadow_
-     */
-    std::string shadow_varname(const std::string& name) const {
-        return "shadow_" + name;
     }
 
 
@@ -501,7 +489,7 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * \param node The AST Statement node to check
      * \return     \c true if this Statement is to be skipped
      */
-    bool statement_to_skip(const ast::Statement& node) const;
+    static bool statement_to_skip(const ast::Statement& node);
 
 
     /**
@@ -509,7 +497,7 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * \param node The AST Statement node to check
      * \return     \c true if this Statement requires a semicolon
      */
-    bool need_semicolon(ast::Statement* node) const;
+    static bool need_semicolon(ast::Statement* node);
 
 
     /**
@@ -614,17 +602,11 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
     /**
      * Determine the variable name for a global variable given its symbol
      * \param symbol The symbol of a variable for which we want to obtain its name
+     * \param use_instance Should the variable be accessed via the (host-only)
+     * global variable or the instance-specific copy (also available on GPU).
      * \return       The C string representing the access to the global variable
      */
-    std::string global_variable_name(const SymbolType& symbol) const;
-
-
-    /**
-     * Determine the variable name for a shadow variable given its symbol
-     * \param symbol The symbol of a variable for which we want to obtain its name
-     * \return       The C string representing the access to the shadow variable
-     */
-    std::string ion_shadow_variable_name(const SymbolType& symbol) const;
+    std::string global_variable_name(const SymbolType& symbol, bool use_instance = true) const;
 
 
     /**
@@ -668,13 +650,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
-     * Determine all ion write variables that require shadow vectors during code generation
-     * \return A \c vector of ion variables
-     */
-    std::vector<SymbolType> get_shadow_variables();
-
-
-    /**
      * Print the items in a vector as a list
      *
      * This function prints a given vector of elements as a list with given separator onto the
@@ -699,7 +674,7 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * \param params The parameters that should be concatenated into the function parameter
      * declaration \return The string representing the declaration of function parameters
      */
-    std::string get_parameter_str(const ParamVector& params);
+    static std::string get_parameter_str(const ParamVector& params);
 
 
     /**
@@ -729,7 +704,7 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * \param text The verbatim code to be processed
      * \return     The code with all variables renamed as needed
      */
-    std::string process_verbatim_text(std::string text);
+    std::string process_verbatim_text(std::string const& text);
 
 
     /**
@@ -778,7 +753,7 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * \param name The ion variable name
      * \return     The ion read variable name
      */
-    std::pair<std::string, std::string> read_ion_variable_name(const std::string& name) const;
+    static std::pair<std::string, std::string> read_ion_variable_name(const std::string& name);
 
 
     /**
@@ -786,7 +761,7 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * \param name The ion variable name
      * \return     The ion write variable name
      */
-    std::pair<std::string, std::string> write_ion_variable_name(const std::string& name) const;
+    static std::pair<std::string, std::string> write_ion_variable_name(const std::string& name);
 
 
     /**
@@ -819,7 +794,7 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * Arguments for external functions called from generated code
      * \return A string representing the arguments passed to an external function
      */
-    std::string external_method_arguments() const;
+    static std::string external_method_arguments();
 
 
     /**
@@ -831,7 +806,7 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * \param table
      * \return      A string representing the parameters of the function
      */
-    std::string external_method_parameters(bool table = false) const;
+    static std::string external_method_parameters(bool table = false);
 
 
     /**
@@ -868,21 +843,11 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
-     * The used pointer qualifier.
-     *
-     * For C code generation this is \c \_\_restrict\_\_ to ensure that the compiler is aware of
-     * the fact that we are working only with non-overlapping memory regions
-     * \return \c \_\_restrict\_\_
-     */
-    virtual std::string ptr_type_qualifier();
-
-    /**
      * The used global type qualifier
      *
      * For C code generation this is empty
      * \return ""
      *
-     * For ispc
      * \return "uniform "
      */
     virtual std::string global_var_struct_type_qualifier();
@@ -896,25 +861,9 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
     virtual void print_global_var_struct_decl();
 
     /**
-     * The used parameter type qualifier
-     * \return an empty string
+     * Print static assertions about the global variable struct.
      */
-    virtual std::string param_type_qualifier();
-
-
-    /**
-     * The used parameter pointer type qualifier
-     * \return an empty string
-     */
-    virtual std::string param_ptr_qualifier();
-
-
-    /**
-     * Returns the \c const keyword
-     * \return  \c const
-     */
-    virtual std::string k_const();
-
+    virtual void print_global_var_struct_assertions() const;
 
     /**
      * Prints the start of the \c coreneuron namespace
@@ -1014,6 +963,12 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      */
     virtual bool is_constant_variable(const std::string& name) const;
 
+    /**
+     * Check if the given name exist in the symbol
+     * \return \c return a tuple <true, array_length> if variable
+     *            is an array otherwise <false, 0>
+     */
+    std::tuple<bool, int> check_if_var_is_array(const std::string& name);
 
     /**
      * Print declaration of macro NRN_PRCELLSTATE for debugging
@@ -1029,8 +984,11 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
     /**
      * Print the structure that wraps all global variables used in the NMODL
+     *
+     * @param print_initialisers Whether to include default values in the struct
+     *                           definition (true: int foo{42}; false: int foo;)
      */
-    void print_mechanism_global_var_structure();
+    void print_mechanism_global_var_structure(bool print_initialisers);
 
 
     /**
@@ -1066,9 +1024,39 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
-     * Print the code to copy instance variable to device
+     * Print declarations of the functions used by \ref
+     * print_instance_struct_copy_to_device and \ref
+     * print_instance_struct_delete_from_device.
      */
-    virtual void print_instance_variable_transfer_to_device() const;
+    virtual void print_instance_struct_transfer_routine_declarations() {}
+
+    /**
+     * Print the definitions of the functions used by \ref
+     * print_instance_struct_copy_to_device and \ref
+     * print_instance_struct_delete_from_device. Declarations of these functions
+     * are printed by \ref print_instance_struct_transfer_routine_declarations.
+     *
+     * This updates the (pointer) member variables in the device copy of the
+     * instance struct to contain device pointers, which is why you must pass a
+     * list of names of those member variables.
+     *
+     * \param ptr_members List of instance struct member names.
+     */
+    virtual void print_instance_struct_transfer_routines(
+        std::vector<std::string> const& /* ptr_members */) {}
+
+
+    /**
+     * Transfer the instance struct to the device. This calls a function
+     * declared by \ref print_instance_struct_transfer_routine_declarations.
+     */
+    virtual void print_instance_struct_copy_to_device() {}
+
+    /**
+     * Delete the instance struct from the device. This calls a function
+     * declared by \ref print_instance_struct_transfer_routine_declarations.
+     */
+    virtual void print_instance_struct_delete_from_device() {}
 
 
     /**
@@ -1154,31 +1142,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
-     * Print the setup method that initializes all global variables
-     *
-     */
-    void print_global_variable_setup();
-
-
-    /**
-     * Print the pragma annotation needed before a global variable that must be
-     * created on the device. This always comes before a matching call to
-     * print_global_variable_device_create_annotation_post.
-     *
-     * \note This is not used for the C backend
-     */
-    virtual void print_global_variable_device_create_annotation_pre();
-
-    /**
-     * Print the pragma annotation needed after a global variables that must be
-     * created on the device. This always comes after a matching call to
-     * print_global_variable_device_create_annotation_pre.
-     *
-     * \note This is not used for the C backend
-     */
-    virtual void print_global_variable_device_create_annotation_post();
-
-    /**
      * Print the pragma annotation to update global variables from host to the device
      *
      * \note This is not used for the C backend
@@ -1238,18 +1201,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
-     * Print block start for tiling on channel iteration
-     */
-    virtual void print_channel_iteration_tiling_block_begin(BlockType type);
-
-
-    /**
-     * Print block end for tiling on channel iteration
-     */
-    virtual void print_channel_iteration_tiling_block_end();
-
-
-    /**
      * Print pragma annotations for channel iterations
      *
      * This can be overriden by backends to provide additonal annotations or pragmas to enable
@@ -1262,7 +1213,8 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      *
      * \param type The block type
      */
-    virtual void print_channel_iteration_block_parallel_hint(BlockType type);
+    virtual void print_channel_iteration_block_parallel_hint(BlockType type,
+                                                             const ast::Block* block);
 
 
     /**
@@ -1287,19 +1239,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * Print accelerator kernels end annotation for net_init kernel
      */
     virtual void print_net_init_acc_serial_annotation_block_end();
-
-
-    /**
-     * Print backend specific channel instance iteration block start
-     * \param type The block type in which we currently are
-     */
-    virtual void print_channel_iteration_block_begin(BlockType type);
-
-
-    /**
-     * Print backend specific channel instance iteration block end
-     */
-    virtual void print_channel_iteration_block_end();
 
 
     /**
@@ -1449,22 +1388,7 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
     virtual void print_device_atomic_capture_annotation() const;
 
     /**
-     * Print block / loop for statement requiring reduction
-     *
-     */
-    virtual void print_shadow_reduction_block_begin();
-
-
-    /**
-     * Print end of block / loop for statement requiring reduction
-     *
-     */
-    virtual void print_shadow_reduction_block_end();
-
-
-    /**
      * Print atomic update pragma for reduction statements
-     *
      */
     virtual void print_atomic_reduction_pragma();
 
@@ -1613,9 +1537,9 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
     /**
      * Print all classes
-     *
+     * @param print_initialisers Whether to include default values.
      */
-    void print_data_structures();
+    void print_data_structures(bool print_initialisers);
 
 
     /**
@@ -1648,13 +1572,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * Print entry point to code generation for wrappers
      */
     virtual void print_wrapper_routines();
-
-
-    /**
-     * Get device variable pointer for corresponding host variable
-     */
-    virtual std::string get_variable_device_pointer(const std::string& variable,
-                                                    const std::string& type) const;
 
 
     CodegenCVisitor(const std::string& mod_filename,
@@ -1837,6 +1754,13 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
+     * Print NMODL function_table in target backend code
+     * \param node
+     */
+    void print_function_tables(const ast::FunctionTableBlock& node);
+
+
+    /**
      * Print NMODL procedure in target backend code
      * \param node
      */
@@ -1873,13 +1797,32 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
     /**
      * Print the structure that wraps all range and int variables required for the NMODL
+     *
+     * @param print_initialisers Whether or not default values for variables
+     *                           be included in the struct declaration.
      */
-    void print_mechanism_range_var_structure();
+    void print_mechanism_range_var_structure(bool print_initialisers);
 
     /**
      * Print the function that initialize instance structure
      */
     void print_instance_variable_setup();
+
+    /**
+     * Go through the map of \c EigenNewtonSolverBlock s and their corresponding functor names
+     * and print the functor definitions before the definitions of the functions of the generated
+     * file
+     *
+     */
+    void print_functors_definitions();
+
+    /**
+     * @brief Based on the \c EigenNewtonSolverBlock passed print the definition needed for its
+     * functor
+     *
+     * @param node \c EigenNewtonSolverBlock for which to print the functor
+     */
+    void print_functor_definition(const ast::EigenNewtonSolverBlock& node);
 
     void visit_binary_expression(const ast::BinaryExpression& node) override;
     void visit_binary_operator(const ast::BinaryOperator& node) override;
@@ -1913,6 +1856,9 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
     void visit_derivimplicit_callback(const ast::DerivimplicitCallback& node) override;
     void visit_for_netcon(const ast::ForNetcon& node) override;
     void visit_update_dt(const ast::UpdateDt& node) override;
+    void visit_protect_statement(const ast::ProtectStatement& node) override;
+    void visit_mutex_lock(const ast::MutexLock& node) override;
+    void visit_mutex_unlock(const ast::MutexUnlock& node) override;
 };
 
 
@@ -1976,8 +1922,10 @@ void CodegenCVisitor::print_function_declaration(const T& node, const std::strin
 
     print_device_method_annotation();
     printer->add_indent();
-    printer->add_text(fmt::format(
-        "inline {} {}({})", return_type, method_name(name), get_parameter_str(internal_params)));
+    printer->fmt_text("inline {} {}({})",
+                      return_type,
+                      method_name(name),
+                      get_parameter_str(internal_params));
 
     enable_variable_name_lookup = true;
 }

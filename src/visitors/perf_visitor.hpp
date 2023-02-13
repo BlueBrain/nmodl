@@ -133,11 +133,11 @@ class PerfVisitor: public ConstAstVisitor {
 
     void update_memory_ops(const std::string& name);
 
-    bool symbol_to_skip(const std::shared_ptr<symtab::Symbol>& symbol);
+    bool symbol_to_skip(const std::shared_ptr<symtab::Symbol>& symbol) const;
 
-    bool is_local_variable(const std::shared_ptr<symtab::Symbol>& symbol) const;
+    static bool is_local_variable(const std::shared_ptr<symtab::Symbol>& symbol);
 
-    bool is_constant_variable(const std::shared_ptr<symtab::Symbol>& symbol) const;
+    static bool is_constant_variable(const std::shared_ptr<symtab::Symbol>& symbol);
 
     void count_variables();
 
@@ -198,8 +198,6 @@ class PerfVisitor: public ConstAstVisitor {
 
     void visit_program(const ast::Program& node) override;
 
-    void visit_plot_block(const ast::PlotBlock& node) override;
-
     /// skip initial block under net_receive block
     void visit_initial_block(const ast::InitialBlock& node) override;
 
@@ -215,8 +213,6 @@ class PerfVisitor: public ConstAstVisitor {
 
     void visit_discrete_block(const ast::DiscreteBlock& node) override;
 
-    void visit_partial_block(const ast::PartialBlock& node) override;
-
     void visit_function_table_block(const ast::FunctionTableBlock& node) override;
 
     void visit_function_block(const ast::FunctionBlock& node) override;
@@ -227,8 +223,6 @@ class PerfVisitor: public ConstAstVisitor {
 
     void visit_breakpoint_block(const ast::BreakpointBlock& node) override;
 
-    void visit_terminal_block(const ast::TerminalBlock& node) override;
-
     void visit_before_block(const ast::BeforeBlock& node) override;
 
     void visit_after_block(const ast::AfterBlock& node) override;
@@ -238,8 +232,6 @@ class PerfVisitor: public ConstAstVisitor {
     void visit_for_netcon(const ast::ForNetcon& node) override;
 
     void visit_kinetic_block(const ast::KineticBlock& node) override;
-
-    void visit_match_block(const ast::MatchBlock& node) override;
 
     /// certain constructs needs to be excluded from usage counting
     /// and hence need to provide empty implementations

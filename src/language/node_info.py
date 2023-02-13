@@ -25,8 +25,6 @@ INTEGRAL_TYPES = {"short",
                   "BinaryOp",
                   "UnaryOp",
                   "ReactionOp",
-                  "FirstLastType",
-                  "QueueType",
                   "BAType",
                   "UnitStateType",
                   }
@@ -37,8 +35,6 @@ BASE_TYPES = {"std::string" } | INTEGRAL_TYPES
 ENUM_BASE_TYPES = {"BinaryOp",
                    "UnaryOp",
                    "ReactionOp",
-                   "FirstLastType",
-                   "QueueType",
                    "BAType",
                    "UnitStateType",
                    }
@@ -54,8 +50,6 @@ DATA_TYPES = {"Boolean": "bool",
               "ReactionOperator": "ReactionOp",
               "UnitState": "UnitStateType",
               "BABlockType": "BAType",
-              "QueueExpressionType": "QueueType",
-              "FirstLastTypeIndex": "FirstLastType",
               }
 
 # nodes which will go into symbol table
@@ -71,7 +65,6 @@ SYMBOL_VAR_TYPES = {"LocalVar",
                     "WriteIonVar",
                     "NonspecificCurVar",
                     "ElectrodeCurVar",
-                    "SectionVar",
                     "GlobalVar",
                     "PointerVar",
                     "BbcorePointerVar",
@@ -90,7 +83,6 @@ SYMBOL_BLOCK_TYPES = {"FunctionBlock",
                       "LinearBlock",
                       "NonLinearBlock",
                       "DiscreteBlock",
-                      "PartialBlock",
                       "KineticBlock",
                       "FunctionTableBlock"
                       }
@@ -113,11 +105,9 @@ GLOBAL_BLOCKS = {"NeuronBlock",
 # when translating back to nmodl, we need print each statement
 # to new line. Those nodes are are used from this list.
 STATEMENT_TYPES = {"Statement",
-                   "IndependentDefinition",
                    "AssignedDefinition",
                    "ParamAssign",
                    "ConstantStatement",
-                   "Stepped",
                    }
 
 # data types which have token as an argument to the constructor

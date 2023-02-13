@@ -6,6 +6,7 @@ variables:
   #- ReleaseWheelBuild: False
   #- UploadWheel: False
   buildWheel: ${{ or(in(variables['Build.Reason'], 'Schedule'), in(variables['Build.Reason'], 'Manual')) }}
+  MACOSX_DEPLOYMENT_TARGET: 10.15
 
 # Nightly build master for pypi upload
 schedules:
@@ -14,6 +15,10 @@ schedules:
     include:
     - master
   always: True
+
+# Auto cancel old PR builds
+pr:
+  autoCancel: true
 
 # Trigger build for certain branches only
 trigger:
@@ -69,10 +74,10 @@ stages:
     NEURON_BRANCH: $[stageDependencies.fetch_config.github.outputs['prdesc.NEURON_BRANCH']]
     CORENEURON_BRANCH: $[stageDependencies.fetch_config.github.outputs['prdesc.CORENEURON_BRANCH']]
   jobs:
-  - job: 'ubuntu1804'
+  - job: 'ubuntu2004'
     pool:
-      vmImage: 'ubuntu-18.04'
-    displayName: 'Ubuntu (18.04), GCC 8.4'
+      vmImage: 'ubuntu-20.04'
+    displayName: 'Ubuntu (20.04), GCC 8.4'
     steps:
     - checkout: self
       submodules: False
@@ -81,19 +86,12 @@ stages:
         sudo apt-add-repository -y ppa:deadsnakes/ppa
         sudo apt-get update
         sudo apt-get install -y g++-8 flex bison libfl-dev cython libx11-dev libxcomposite-dev libncurses-dev mpich
-        sudo apt-get install -y python3.7 python3.7-dev python3.7-venv ninja-build
-        python3.7 -m pip install --upgrade pip setuptools
-        python3.7 -m pip install --user 'Jinja2>=2.9.3' 'PyYAML>=3.13' pytest pytest-cov 'sympy>=1.3' numpy
+        sudo apt-get install -y python3.8 python3.8-dev python3.8-venv ninja-build
+        python3.8 -m pip install --upgrade pip setuptools
+        python3.8 -m pip install --user -r $(Build.Repository.LocalPath)/requirements.txt
         # we manually get version 3.15.0 to make sure that changes in the cmake
         # files do not require unsupported versions of cmake in our package.
         wget --quiet --output-document=- "https://github.com/Kitware/CMake/releases/download/$CMAKE_VER/$CMAKE_PKG.tar.gz" | tar xzpf -
-        # install ISPC compiler for integration testing
-        ispc_version="v1.12.0";
-        url_os="linux";
-        ispc_version_suffix="b";
-        url="https://github.com/ispc/ispc/releases/download/${ispc_version}/ispc-${ispc_version}${ispc_version_suffix}-${url_os}.tar.gz";
-        mkdir $(pwd)/$CMAKE_PKG/ispc
-        wget --quiet --output-document=- $url | tar -xvzf - -C $(pwd)/$CMAKE_PKG/ispc --strip 1;
       env:
         CMAKE_VER: 'v3.15.0'
         CMAKE_PKG: 'cmake-3.15.0-Linux-x86_64'
@@ -104,7 +102,7 @@ stages:
         mkdir -p $(Build.Repository.LocalPath)/build
         cd $(Build.Repository.LocalPath)/build
         cmake --version
-        cmake .. -DPYTHON_EXECUTABLE=$(which python3.7) -DCMAKE_INSTALL_PREFIX=$HOME/nmodl -DCMAKE_BUILD_TYPE=Release
+        cmake .. -DPYTHON_EXECUTABLE=$(which python3.8) -DCMAKE_INSTALL_PREFIX=$HOME/nmodl -DCMAKE_BUILD_TYPE=Release
         make -j 2
         if [ $? -ne 0 ]
         then
@@ -131,7 +129,7 @@ stages:
         mkdir nrn/build
         cd nrn/build
         cmake --version
-        cmake .. -DNRN_ENABLE_CORENEURON=ON -DNRN_ENABLE_INTERVIEWS=OFF -DNRN_ENABLE_RX3D=OFF -DNRN_ENABLE_MPI=ON -DNRN_ENABLE_TESTS=ON -DCORENRN_ENABLE_NMODL=ON -DCORENRN_NMODL_DIR=$HOME/nmodl -Dnmodl_PYTHONPATH=$HOME/nmodl/lib -DPYTHON_EXECUTABLE=$(which python3.7) -DCORENRN_NMODL_FLAGS="sympy --analytic"
+        cmake .. -DNRN_ENABLE_CORENEURON=ON -DNRN_ENABLE_INTERVIEWS=OFF -DNRN_ENABLE_RX3D=OFF -DNRN_ENABLE_MPI=ON -DNRN_ENABLE_TESTS=ON -DCORENRN_ENABLE_NMODL=ON -DCORENRN_NMODL_DIR=$HOME/nmodl -Dnmodl_PYTHONPATH=$HOME/nmodl/lib -DPYTHON_EXECUTABLE=$(which python3.8) -DCORENRN_NMODL_FLAGS="sympy --analytic"
         make -j 2
         if [ $? -ne 0 ]
         then
@@ -148,40 +146,17 @@ stages:
         CMAKE_PKG: 'cmake-3.15.0-Linux-x86_64'
         SHELL: 'bash'
       displayName: 'Build Neuron and Run Integration Tests'
-    - script: |
-        export PATH=$(pwd)/$CMAKE_PKG/bin:/home/vsts/.local/bin:$PATH
-        export CXX='g++-8'
-        git clone${CORENEURON_BRANCH:+ --branch }${CORENEURON_BRANCH} https://github.com/BlueBrain/CoreNeuron.git
-        mkdir CoreNeuron/build_ispc
-        cd CoreNeuron/build_ispc
-        cmake --version
-        cmake .. -DCORENRN_ENABLE_MPI=OFF -DCORENRN_ENABLE_NMODL=ON -DCORENRN_NMODL_DIR=$HOME/nmodl -DPYTHON_EXECUTABLE=$(which python3.7) -DCORENRN_NMODL_FLAGS="sympy --analytic" -DCORENRN_ENABLE_ISPC=ON -DCMAKE_ISPC_COMPILER=$(Build.Repository.LocalPath)/$CMAKE_PKG/ispc/bin/ispc
-        make -j 2
-        if [ $? -ne 0 ]
-        then
-          make VERBOSE=1
-          exit 1
-        fi
-        ctest --output-on-failure
-        if [ $? -ne 0 ]
-        then
-          exit 1
-        fi
-        ./bin/nrnivmodl-core $(Build.Repository.LocalPath)/test/integration/mod
-      env:
-        CMAKE_PKG: 'cmake-3.15.0-Linux-x86_64'
-      displayName: 'Build CoreNEURON and Run Integration Tests with ISPC compiler'
-  - job: 'osx1015'
+  - job: 'osx11'
     pool:
-      vmImage: 'macOS-10.15'
-    displayName: 'MacOS (10.15), AppleClang 12.0'
+      vmImage: 'macOS-11'
+    displayName: 'MacOS (11), AppleClang 12.0'
     steps:
     - checkout: self
       submodules: True
     - script: |
-        brew install flex bison cmake python@3 gcc@8
+        brew install flex bison cmake python@3
         python3 -m pip install --upgrade pip setuptools
-        python3 -m pip install --user 'Jinja2>=2.9.3' 'PyYAML>=3.13' pytest pytest-cov numpy 'sympy>=1.3'
+        python3 -m pip install --user -r $(Build.Repository.LocalPath)/requirements.txt
       displayName: 'Install Dependencies'
     - script: |
         export PATH=/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH;
@@ -203,8 +178,9 @@ stages:
       displayName: 'Build and Run Tests'
     - script: |
         export PATH=$(pwd)/$CMAKE_PKG/bin:/home/vsts/.local/bin:$PATH
-        export CC='gcc-8'
-        export CXX='g++-8'
+        export PATH=/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH;
+        export CC='gcc'
+        export CXX='g++'
         git clone${NEURON_BRANCH:+ --branch }${NEURON_BRANCH} --single-branch https://github.com/neuronsimulator/nrn.git
         if [[ -n "${CORENEURON_BRANCH}" ]]; then
           pushd nrn
@@ -216,7 +192,7 @@ stages:
         mkdir nrn/build
         cd nrn/build
         cmake --version
-        cmake .. -DNRN_ENABLE_CORENEURON=ON -DNRN_ENABLE_INTERVIEWS=OFF -DNRN_ENABLE_RX3D=OFF -DNRN_ENABLE_BINARY_SPECIAL=ON -DNRN_ENABLE_MPI=OFF -DNRN_ENABLE_TESTS=ON -DCORENRN_ENABLE_MPI=OFF -DCORENRN_ENABLE_NMODL=ON -DCORENRN_NMODL_DIR=$HOME/nmodl -Dnmodl_PYTHONPATH=$HOME/nmodl/lib -DPYTHON_EXECUTABLE=$(which python3) -DCORENRN_NMODL_FLAGS="sympy --analytic"
+        cmake .. -DNRN_ENABLE_CORENEURON=ON -DNRN_ENABLE_INTERVIEWS=OFF -DNRN_ENABLE_RX3D=OFF -DNRN_ENABLE_MPI=OFF -DNRN_ENABLE_TESTS=ON -DCORENRN_ENABLE_MPI=OFF -DCORENRN_ENABLE_NMODL=ON -DCORENRN_NMODL_DIR=$HOME/nmodl -Dnmodl_PYTHONPATH=$HOME/nmodl/lib -DPYTHON_EXECUTABLE=$(which python3) -DCORENRN_NMODL_FLAGS="sympy --analytic"
         make -j 2
         if [ $? -ne 0 ]
         then
@@ -235,21 +211,23 @@ stages:
   - job: 'manylinux_wheels'
     timeoutInMinutes: 45
     pool:
-      vmImage: 'ubuntu-18.04'
+      vmImage: 'ubuntu-20.04'
     strategy:
       matrix:
         ${{ if eq(variables.buildWheel, True) }}:
-          Python36:
-            python.version: '3.6'
           Python37:
             python.version: '3.7'
           Python38:
             python.version: '3.8'
           Python39:
             python.version: '3.9'
+          Python310:
+            python.version: '3.10'
+          Python311:
+            python.version: '3.11'
         ${{ if eq(variables.buildWheel, False) }}:
-          Python39:
-            python.version: '3.9'
+          Python311:
+            python.version: '3.11'
     steps:
     - checkout: self
       submodules: True
@@ -284,26 +262,35 @@ stages:
   - job: 'macos_wheels'
     timeoutInMinutes: 45
     pool:
-      vmImage: 'macOS-10.15'
+      vmImage: 'macOS-11'
     strategy:
       matrix:
         ${{ if eq(variables.buildWheel, True) }}:
-          Python36:
-            python.version: '3.6'
-            python.org.version: '3.6.8'
           Python37:
             python.version: '3.7'
-            python.org.version: '3.7.7'
+            python.org.version: '3.7.9'
+            python.installer.name: 'macosx10.9.pkg'
           Python38:
             python.version: '3.8'
-            python.org.version: '3.8.2'
+            python.org.version: '3.8.10'
+            python.installer.name: 'macosx10.9.pkg'
           Python39:
             python.version: '3.9'
-            python.org.version: '3.9.0'
+            python.org.version: '3.9.13'
+            python.installer.name: 'macosx10.9.pkg'
+          Python310:
+            python.version: '3.10'
+            python.org.version: '3.10.5'
+            python.installer.name: 'macos11.pkg'
+          Python311:
+            python.version: '3.11'
+            python.org.version: '3.11.1'
+            python.installer.name: 'macos11.pkg'
         ${{ if eq(variables.buildWheel, False) }}:
-          Python39:
-            python.version: '3.9'
-            python.org.version: '3.9.0'
+          Python311:
+            python.version: '3.11'
+            python.org.version: '3.11.1'
+            python.installer.name: 'macos11.pkg'
     steps:
     - checkout: self
       submodules: True
@@ -314,14 +301,13 @@ stages:
       condition: succeeded()
       displayName: 'Install Dependencies'
     - script: |
-        installer=python-$(python.org.version)-macosx10.9.pkg
+        installer=python-$(python.org.version)-$(python.installer.name)
         url=https://www.python.org/ftp/python/$(python.org.version)/$installer
         curl $url -o $installer
         sudo installer -pkg $installer -target /
       condition: succeeded()
       displayName: 'Install Python from python.org'
     - script: |
-        export MACOSX_DEPLOYMENT_TARGET=10.9
         export PATH=/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH
         export SDKROOT=$(xcrun --sdk macosx --show-sdk-path)
         if [[ "$(RELEASEWHEELBUILD)" != "True" ]]; then

@@ -49,14 +49,14 @@ TEST_CASE("NMODL Lexer returning valid ModToken object", "[token][modtoken]") {
             std::stringstream ss;
             symbol_type("text", value);
             ss << *(value.get_token());
-            REQUIRE(ss.str() == "           text at [1.1-4] type 357");
+            REQUIRE(ss.str() == "           text at [1.1-4] type 342");
         }
 
         {
             std::stringstream ss;
             symbol_type("  some_text", value);
             ss << *(value.get_token());
-            REQUIRE(ss.str() == "      some_text at [1.3-11] type 357");
+            REQUIRE(ss.str() == "      some_text at [1.3-11] type 342");
         }
     }
 
@@ -66,7 +66,7 @@ TEST_CASE("NMODL Lexer returning valid ModToken object", "[token][modtoken]") {
             std::stringstream ss;
             symbol_type("h'' = ", value);
             ss << *(value.get_token());
-            REQUIRE(ss.str() == "            h'' at [1.1-3] type 364");
+            REQUIRE(ss.str() == "            h'' at [1.1-3] type 349");
             REQUIRE(value.get_order()->eval() == 2);
         }
     }
@@ -78,6 +78,7 @@ TEST_CASE("Addition of two ModToken objects", "[token][modtoken]") {
         {
             std::stringstream ss;
 
+            // NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)
             nmodl::parser::position adder1_begin(nullptr, 1, 1);
             nmodl::parser::position adder1_end(nullptr, 1, 5);
             LocationType adder1_location(adder1_begin, adder1_end);
@@ -85,6 +86,7 @@ TEST_CASE("Addition of two ModToken objects", "[token][modtoken]") {
 
             nmodl::parser::position adder2_begin(nullptr, 2, 1);
             nmodl::parser::position adder2_end(nullptr, 2, 5);
+            // NOLINTEND(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)
             LocationType adder2_location(adder2_begin, adder2_end);
             ModToken adder2("text", 2, adder2_location);
 

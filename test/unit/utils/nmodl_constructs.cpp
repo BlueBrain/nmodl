@@ -60,7 +60,7 @@ namespace test_utils {
  * provided with the expected nmodl.
  */
 
-std::map<std::string, NmodlTestCase> nmodl_invalid_constructs{
+std::map<std::string, NmodlTestCase> const nmodl_invalid_constructs{
     // clang-format off
     {
         "title_1",
@@ -99,14 +99,6 @@ std::map<std::string, NmodlTestCase> nmodl_invalid_constructs{
         {
             "Incomplete macro definition without value",
             "DEFINE NSTEP"
-        }
-    },
-
-    {
-        "model_level_1",
-        {
-            "Model level without any block",
-            "MODEL_LEVEL 2"
         }
     },
 
@@ -186,7 +178,7 @@ std::map<std::string, NmodlTestCase> nmodl_invalid_constructs{
     // clang-format on
 };
 
-std::map<std::string, NmodlTestCase> nmodl_valid_constructs{
+std::map<std::string, NmodlTestCase> const nmodl_valid_constructs{
     // clang-format off
     {
         "title_1",
@@ -278,15 +270,6 @@ std::map<std::string, NmodlTestCase> nmodl_valid_constructs{
             )"
         }
     },
-/** \todo : MODEL_LEVEL is not handled in parser as it's deprecated
-    {
-        "model_level_1",
-        {
-            "Model level followed by block",
-            "MODEL_LEVEL 2 NEURON {}"
-        }
-    },
-*/
 
     {
         "verbatim_block_1",
@@ -440,20 +423,6 @@ std::map<std::string, NmodlTestCase> nmodl_valid_constructs{
     },
 
     {
-        "step_block_1",
-        {
-            "STEP block with all statement types",
-            R"(
-                STEPPED {
-                    tau_r_AMPA = 1, -2
-                    tau_d_AMPA = 1.1, -2.1
-                    tau_r_NMDA = 1, 2.1, 3 (mV)
-                }
-            )"
-        }
-    },
-
-    {
         "independent_block_1",
         {
             "INDEPENDENT block with all statement types",
@@ -462,6 +431,10 @@ std::map<std::string, NmodlTestCase> nmodl_valid_constructs{
                     t FROM 0 TO 1 WITH 1 (ms)
                     SWEEP u FROM 0 TO 1 WITH 1 (ms)
                 }
+            )",
+            R"(
+                INDEPENDENT {
+                t u}
             )"
         }
     },
@@ -588,37 +561,6 @@ std::map<std::string, NmodlTestCase> nmodl_valid_constructs{
     },
 
     {
-        "plot_declare_1",
-        {
-            "PLOT declaration with single variables",
-            R"(
-                PLOT x VS y
-            )"
-        }
-    },
-
-    {
-        "plot_declare_2",
-        {
-            "PLOT declaration with multiple variables",
-            R"(
-                PLOT x, y, z VS a
-            )"
-        }
-    },
-
-    {
-        "plot_declare_3",
-        {
-            "PLOT declaration with indexed variables",
-            R"(
-                PLOT x[1], y[2], z VS a[1]
-            )"
-        }
-    },
-
-
-    {
         "statement_list_1",
         {
             "Empty statement list",
@@ -665,21 +607,6 @@ std::map<std::string, NmodlTestCase> nmodl_valid_constructs{
                     LOCAL a, b
                     FROM i = (0+0) TO (1+b) BY X {
                         tau[i] = 1
-                    }
-                }
-            )"
-        }
-    },
-
-    {
-        "forall_statement_1",
-        {
-            "FORALL statement",
-            R"(
-                INITIAL {
-                    FORALL some_name {
-                        a = 1
-                        tau = 2.1
                     }
                 }
             )"
@@ -839,20 +766,6 @@ std::map<std::string, NmodlTestCase> nmodl_valid_constructs{
     },
 
     {
-        "solve_block_3",
-        {
-            "Solve statement with iferror block",
-            R"(
-                BREAKPOINT {
-                    SOLVE states METHOD cnexp IFERROR {
-                        a = 1
-                    }
-                }
-            )"
-        }
-    },
-
-    {
         "solve_block_equation_1",
         {
             "Solve statement without method using EQUATION, generating BREAKPOINT",
@@ -891,17 +804,19 @@ std::map<std::string, NmodlTestCase> nmodl_valid_constructs{
     {
         "solve_block_equation_3",
         {
-            "Solve statement with iferror block using EQUATION, generating BREAKPOINT",
+            "Solve statement using EQUATION, generating BREAKPOINT",
             R"(
                 EQUATION {
-                    SOLVE states METHOD cnexp IFERROR {
+                    SOLVE states METHOD cnexp
+                    {
                         a = 1
                     }
                 }
             )",
             R"(
                 BREAKPOINT {
-                    SOLVE states METHOD cnexp IFERROR {
+                    SOLVE states METHOD cnexp
+                    {
                         a = 1
                     }
                 }
@@ -928,18 +843,6 @@ std::map<std::string, NmodlTestCase> nmodl_valid_constructs{
             R"(
                 BREAKPOINT {
                     CONDUCTANCE gIm USEION k
-                }
-            )"
-        }
-    },
-
-    {
-        "sens_1",
-        {
-            "SENS statement",
-            R"(
-                BREAKPOINT {
-                    SENS a, b
                 }
             )"
         }
@@ -1011,59 +914,6 @@ std::map<std::string, NmodlTestCase> nmodl_valid_constructs{
                 PROCEDURE lates() {
                     LAG ina BY tau
                     neo = lag_ina_tau
-                }
-            )"
-        }
-    },
-
-    {
-        "queue_statement_1",
-        {
-            "PUTQ and GETQ statement",
-            R"(
-                PROCEDURE lates() {
-                    PUTQ one_name
-                    GETQ another_name
-                }
-            )"
-        }
-    },
-
-    {
-        "reset_statement_1",
-        {
-            "RESET statement",
-            R"(
-                PROCEDURE lates() {
-                    RESET
-                }
-            )"
-        }
-    },
-
-    {
-        "match_block_1",
-        {
-            "MATCH block",
-            R"(
-                PROCEDURE lates() {
-                    MATCH { name1 }
-                    MATCH { name1 name2 }
-                    MATCH { name1[INDEX](expr1+expr2) = (expr3+expr4) }
-                }
-            )"
-        }
-    },
-
-    {
-        "partial_block_partial_equation_1",
-        {
-            "PARTIAL block and partial equation statements",
-            R"(
-                PARTIAL some_name {
-                    ~ a' = a*DEL2(b)+c
-                    ~ DEL abc[FIRST] = (a*b/c)
-                    ~ abc[LAST] = (a*b/c)
                 }
             )"
         }
@@ -1240,20 +1090,6 @@ std::map<std::string, NmodlTestCase> nmodl_valid_constructs{
     },
 
     {
-        "function_call_1",
-        {
-            "FUNCTION call",
-            R"(
-                TERMINAL {
-                    a = fun1()
-                    b = fun2(a, 2)
-                    fun3()
-                }
-            )"
-        }
-    },
-
-    {
         "kinetic_block_1",
         {
             "KINETIC block taken from mod file",
@@ -1279,7 +1115,7 @@ std::map<std::string, NmodlTestCase> nmodl_valid_constructs{
             R"(
                 NEURON {
                     THREADSAFE
-                    THREADSAFE a, b
+                    THREADSAFE
                 }
             )"
         }
@@ -1456,17 +1292,6 @@ std::map<std::string, NmodlTestCase> nmodl_valid_constructs{
         }
     },
     {
-        "section_test",
-        {
-            "Section token test",
-            R"(
-                NEURON {
-                    SECTION a, b
-                }
-            )"
-        }
-    },
-    {
         "empty_unit_declaration",
         {
             "Declaration with empty units",
@@ -1480,7 +1305,7 @@ std::map<std::string, NmodlTestCase> nmodl_valid_constructs{
 };
 
 
-std::vector<DiffEqTestCase> diff_eq_constructs{
+std::vector<DiffEqTestCase> const diff_eq_constructs{
     // clang-format off
 
         /// differential equations from BlueBrain mod files including latest V6 branch

@@ -73,7 +73,8 @@ class CodegenHelperVisitor: public visitor::ConstAstVisitor {
     void find_table_variables();
     void find_range_variables();
     void find_non_range_variables();
-    void sort_with_mod2c_symbol_order(std::vector<SymbolType>& symbols) const;
+    void find_neuron_global_variables();
+    static void sort_with_mod2c_symbol_order(std::vector<SymbolType>& symbols);
 
   public:
     CodegenHelperVisitor() = default;
@@ -88,6 +89,7 @@ class CodegenHelperVisitor: public visitor::ConstAstVisitor {
     void visit_conductance_hint(const ast::ConductanceHint& node) override;
     void visit_procedure_block(const ast::ProcedureBlock& node) override;
     void visit_function_block(const ast::FunctionBlock& node) override;
+    void visit_function_table_block(const ast::FunctionTableBlock& node) override;
     void visit_eigen_newton_solver_block(const ast::EigenNewtonSolverBlock& node) override;
     void visit_eigen_linear_solver_block(const ast::EigenLinearSolverBlock& node) override;
     void visit_statement_block(const ast::StatementBlock& node) override;
@@ -109,7 +111,6 @@ class CodegenHelperVisitor: public visitor::ConstAstVisitor {
     void visit_linear_block(const ast::LinearBlock& node) override;
     void visit_non_linear_block(const ast::NonLinearBlock& node) override;
     void visit_discrete_block(const ast::DiscreteBlock& node) override;
-    void visit_partial_block(const ast::PartialBlock& node) override;
     void visit_update_dt(const ast::UpdateDt& node) override;
     void visit_verbatim(const ast::Verbatim& node) override;
     void visit_before_block(const ast::BeforeBlock& node) override;

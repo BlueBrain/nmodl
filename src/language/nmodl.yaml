@@ -372,14 +372,6 @@
                                   type: Name
                                   node_name: true
 
-                        - SectionVar:
-                            brief: "TODO"
-                            members:
-                              - name:
-                                  brief: "TODO"
-                                  type: Name
-                                  node_name: true
-
                         - RangeVar:
                             brief: "TODO"
                             members:
@@ -422,14 +414,6 @@
                                   type: Name
                                   node_name: true
 
-                        - ThreadsafeVar:
-                            brief: "TODO"
-                            members:
-                              - name:
-                                  brief: "TODO"
-                                  type: Name
-                                  node_name: true
-
                   - Block:
                       brief: "Base class for all block scoped nodes"
                       description: |
@@ -463,33 +447,14 @@
 
                                     All parameters are stored in the ast::ParamBlock::statements as vector.
 
-                        - StepBlock:
-                            nmodl: "STEPPED "
-                            members:
-                              - statements:
-                                  brief: "Vector of statements"
-                                  type: Stepped
-                                  vector: true
-                            brief: "Represents a `STEPPED` block in the NMODL"
-                            description: |
-                                    `STEPPED` has following form in the NMODL specification :
-
-                                    \code{.mod}
-                                        STEPPED {
-                                            name1 = number1 (mM)
-                                            name2 = number2, number3
-                                        }
-                                    \endcode
-
-                                    \todo Check ModelDB and other databse for example of channel.
-
                         - IndependentBlock:
                             nmodl: "INDEPENDENT "
                             members:
-                              - definitions:
-                                  brief: "TODO"
-                                  type: IndependentDefinition
+                              - variables:
+                                  brief: "List of variable that should be independent"
+                                  type: Name
                                   vector: true
+                                  separator: " "
                             brief: "Represents a `INDEPENDENT` block in the NMODL"
                             description: |
                                     `INDEPENDENT` has following form in the NMODL specification :
@@ -548,22 +513,6 @@
 
                                     Note that the state variable specification has form of ast::AssignedDefinition and
                                     hence can have associated unit specification.
-
-                        - PlotBlock:
-                            members:
-                              - plot:
-                                  brief: "Vector of plot variables"
-                                  type: PlotDeclaration
-                            brief: "Represents a `PLOT` statement in the NMODL"
-                            description: |
-                                  `PLOT` construct doesn't have block scope but it's standalone, global scoped
-                                  statement of the form:
-
-                                    \code{.mod}
-                                        PLOT name1, index_var2 VS name3
-                                    \endcode
-
-                                    \todo Check ModelDB and other databse for example of channel.
 
                         - InitialBlock:
                             nmodl: "INITIAL "
@@ -765,20 +714,6 @@
                                   type: StatementBlock
                                   getter: {override: true}
 
-                        - PartialBlock:
-                            brief: "TODO"
-                            nmodl: "PARTIAL "
-                            members:
-                              - name:
-                                  brief: "Name of the partial block"
-                                  type: Name
-                                  node_name: true
-                                  suffix: {value: " "}
-                              - statement_block:
-                                  brief: "Block with statements vector"
-                                  type: StatementBlock
-                                  getter: {override: true}
-
                         - FunctionTableBlock:
                             brief: "TODO"
                             nmodl: "FUNCTION_TABLE "
@@ -888,11 +823,6 @@
                                   type: Name
                                   optional: true
                                   prefix: {value: " STEADYSTATE "}
-                              - ifsolerr:
-                                  brief: "Block to be executed on error"
-                                  type: StatementBlock
-                                  optional: true
-                                  prefix: {value: " IFERROR "}
 
                         - BreakpointBlock:
                             nmodl: "BREAKPOINT "
@@ -904,7 +834,7 @@
                             brief: "Represents a `BREAKPOINT` block in NMODL"
                             description: |
                                         The `BREAKPOINT` block is used to update current and conductance.
-                                        at each time step. Here is an example of `BEFORE` :
+                                        at each time step. Here is an example of `BREAKPOINT` :
 
                                         \code{.mod}
                                             BREAKPOINT {
@@ -918,15 +848,6 @@
                                         \endcode
 
                                         \sa ast::DerivativeBlock ast::InitialBlock
-
-                        - TerminalBlock:
-                            brief: "TODO"
-                            nmodl: "TERMINAL "
-                            members:
-                              - statement_block:
-                                  brief: "Block with statements vector"
-                                  type: StatementBlock
-                                  getter: {override: true}
 
                         - BeforeBlock:
                             nmodl: "BEFORE "
@@ -1008,18 +929,6 @@
                                   brief: "Block with statements vector"
                                   type: StatementBlock
                                   getter: {override: true}
-
-                        - MatchBlock:
-                            brief: "TODO"
-                            nmodl: MATCH
-                            members:
-                              - matchs:
-                                  brief: "Vector of match statements"
-                                  type: Match
-                                  vector: true
-                                  separator: " "
-                                  prefix: {value: " { "}
-                                  suffix: {value: " }"}
 
                         - UnitBlock:
                             brief: "TODO"
@@ -1132,19 +1041,6 @@
                             brief: "TODO"
                             type: Number
                             suffix: {value: ">"}
-
-                  - PlotVar:
-                      brief: "TODO"
-                      members:
-                        - name:
-                            brief: "TODO"
-                            type: Identifier
-                        - index:
-                            brief: "TODO"
-                            type: Integer
-                            optional: true
-                            prefix: {value: "["}
-                            suffix: {value: "]"}
 
                   - ConstantVar:
                       members:
@@ -1276,13 +1172,6 @@
                             prefix: {value: "(", force: true}
                             suffix: {value: ")", force: true}
 
-                  - FirstLastTypeIndex:
-                      brief: "TODO"
-                      members:
-                        - value:
-                            brief: "TODO"
-                            type: FirstLastType
-
                   - Watch:
                       brief: "TODO"
                       members:
@@ -1296,22 +1185,6 @@
                             type: Expression
                             prefix: {value: " "}
 
-                  - QueueExpressionType:
-                      brief: "TODO"
-                      members:
-                        - value:
-                            brief: "TODO"
-                            type: QueueType
-                  - Match:
-                      brief: "TODO"
-                      members:
-                        - name:
-                            brief: "TODO"
-                            type: Identifier
-                        - expression:
-                            brief: "TODO"
-                            type: Expression
-                            optional: true
                   - BABlockType:
                       members:
                         - value:
@@ -1450,58 +1323,6 @@
                             optional: true
                             prefix: {value: " "}
 
-                  - Stepped:
-                      brief: "TODO"
-                      members:
-                        - name:
-                            brief: "TODO"
-                            type: Name
-                        - values:
-                            brief: "TODO"
-                            type: Number
-                            vector: true
-                            prefix: {value: " = "}
-                            separator: ", "
-                        - unit:
-                            brief: "TODO"
-                            type: Unit
-                            optional: true
-                            prefix: {value: " "}
-
-                  - IndependentDefinition:
-                      brief: "TODO"
-                      members:
-                        - sweep:
-                            brief: "TODO"
-                            type: Boolean
-                            optional: true
-                            nmodl: "SWEEP "
-                        - name:
-                            brief: "TODO"
-                            type: Name
-                        - from:
-                            brief: "TODO"
-                            type: Number
-                            prefix: {value: " FROM "}
-                        - to:
-                            brief: "TODO"
-                            type: Number
-                            prefix: {value: " TO "}
-                        - with:
-                            brief: "TODO"
-                            type: Integer
-                            prefix: {value: " WITH "}
-                        - start:
-                            brief: "TODO"
-                            type: Number
-                            prefix: {value: " START "}
-                            optional: true
-                        - unit:
-                            brief: "TODO"
-                            type: Unit
-                            optional: true
-                            prefix: {value: " "}
-
                   - AssignedDefinition:
                       members:
                         - name:
@@ -1541,20 +1362,6 @@
                             suffix: {value: ">"}
                             optional: true
                       brief: "Represents a statement in `ASSIGNED` or `STATE` block"
-
-                  - PlotDeclaration:
-                      brief: "TODO"
-                      nmodl: "PLOT "
-                      members:
-                        - variables:
-                            brief: "TODO"
-                            type: PlotVar
-                            vector: true
-                            separator: ", "
-                        - name:
-                            brief: "TODO"
-                            type: PlotVar
-                            prefix: {value: " VS "}
 
                   - ConductanceHint:
                       nmodl: "CONDUCTANCE "
@@ -1620,19 +1427,6 @@
                             type: StatementBlock
                             getter: {override: true}
 
-                  - ForAllStatement:
-                      brief: "TODO"
-                      nmodl: "FORALL "
-                      members:
-                        - name:
-                            brief: "TODO"
-                            type: Name
-                            suffix: {value: " "}
-                        - statement_block:
-                            brief: "TODO"
-                            type: StatementBlock
-                            getter: {override: true}
-
                   - WhileStatement:
                       brief: "TODO"
                       nmodl: "WHILE "
@@ -1692,67 +1486,6 @@
                             type: StatementBlock
                             getter: {override: true}
 
-                  - PartialEquation:
-                      brief: "TODO"
-                      members:
-                        - prime:
-                            brief: "TODO"
-                            type: PrimeName
-                        - name1:
-                            brief: "TODO"
-                            type: Name
-                        - name2:
-                            brief: "TODO"
-                            type: Name
-                        - name3:
-                            brief: "TODO"
-                            type: Name
-
-                  - PartialBoundary:
-                      brief: "TODO"
-                      nmodl: "~ "
-                      members:
-                        - del:
-                            brief: "TODO"
-                            type: Name
-                            optional: true
-                            suffix: {value: " "}
-                        - name:
-                            brief: "TODO"
-                            type: Identifier
-                        - index:
-                            brief: "TODO"
-                            type: FirstLastTypeIndex
-                            optional: true
-                            prefix: {value: "["}
-                            suffix: {value: "]"}
-                        - expression:
-                            brief: "TODO"
-                            type: Expression
-                            optional: true
-                            prefix: {value: " = "}
-                        - name1:
-                            brief: "TODO"
-                            type: Name
-                            optional: true
-                            prefix: {value: " = "}
-                            suffix: {value: "*"}
-                        - del2:
-                            brief: "TODO"
-                            type: Name
-                            optional: true
-                            suffix: {value: "("}
-                        - name2:
-                            brief: "TODO"
-                            type: Name
-                            optional: true
-                            suffix: {value: ")"}
-                        - name3:
-                            brief: "TODO"
-                            type: Name
-                            optional: true
-                            prefix: {value: "+"}
-
                   - WatchStatement:
                       nmodl: "WATCH "
                       members:
@@ -1771,20 +1504,6 @@
                   - MutexUnlock:
                       nmodl: MUTEXUNLOCK
                       brief: "Represent MUTEXUNLOCK statement in NMODL"
-
-                  - Reset:
-                      nmodl: RESET
-                      brief: "Represent RESET statement in NMODL"
-
-                  - Sens:
-                      nmodl: "SENS "
-                      members:
-                        - variables:
-                            brief: "TODO"
-                            type: VarName
-                            vector: true
-                            separator: ", "
-                      brief: "Represent SENS statement in NMODL"
 
                   - Conserve:
                       nmodl: CONSERVE
@@ -1892,17 +1611,6 @@
                                     }
                                 \endcode
 
-                  - QueueStatement:
-                      members:
-                        - qtype:
-                            brief: "queue type (put/get)"
-                            type: QueueExpressionType
-                        - name:
-                            brief: "Name of the variable"
-                            type: Identifier
-                            prefix: {value: " "}
-                      brief: "Represent queue statement in NMODL"
-
                   - ConstantStatement:
                       members:
                         - constant:
@@ -2003,16 +1711,6 @@
                             separator: ", "
                       brief: "Represents ELECTRODE_CURRENT variables statement in NMODL"
 
-                  - Section:
-                      nmodl: "SECTION "
-                      members:
-                        - sections:
-                            brief: "Vector of section variables"
-                            type: SectionVar
-                            vector: true
-                            separator: ", "
-                      brief: "Represents SECTION variables statement in NMODL"
-
                   - Range:
                       nmodl: "RANGE "
                       members:
@@ -2076,13 +1774,6 @@
 
                   - ThreadSafe:
                       nmodl: THREADSAFE
-                      members:
-                        - variables:
-                            brief: "Vector of thread safe variables"
-                            type: ThreadsafeVar
-                            vector: true
-                            separator: ", "
-                            prefix: {value: " "}
                       brief: "Represents THREADSAFE statement in NMODL"
 
                   - Verbatim:

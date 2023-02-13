@@ -96,7 +96,8 @@ SymbolType prime_symbol(std::string text, PositionType& pos) {
     stringutils::remove_character(text, '\'');
 
     auto prime_name = new ast::String(text);
-    auto prime_order = new ast::Integer(order, nullptr);
+    assert(order <= std::numeric_limits<int>::max());
+    auto prime_order = new ast::Integer(static_cast<int>(order), nullptr);
     ast::PrimeName value(prime_name, prime_order);
     value.set_token(token);
     return Parser::make_PRIME(value, pos);
@@ -182,26 +183,18 @@ SymbolType token_symbol(const std::string& key, PositionType& pos, TokenType typ
         return Parser::make_EQUATION(token, pos);
     case Token::EXTERNAL:
         return Parser::make_EXTERNAL(token, pos);
-    case Token::FIRST:
-        return Parser::make_FIRST(token, pos);
     case Token::FOR_NETCONS:
         return Parser::make_FOR_NETCONS(token, pos);
-    case Token::FORALL1:
-        return Parser::make_FORALL1(token, pos);
     case Token::FROM:
         return Parser::make_FROM(token, pos);
     case Token::FUNCTION1:
         return Parser::make_FUNCTION1(token, pos);
     case Token::FUNCTION_TABLE:
         return Parser::make_FUNCTION_TABLE(token, pos);
-    case Token::GETQ:
-        return Parser::make_GETQ(token, pos);
     case Token::GLOBAL:
         return Parser::make_GLOBAL(token, pos);
     case Token::IF:
         return Parser::make_IF(token, pos);
-    case Token::IFERROR:
-        return Parser::make_IFERROR(token, pos);
     case Token::INCLUDE1:
         return Parser::make_INCLUDE1(token, pos);
     case Token::INDEPENDENT:
@@ -212,20 +205,14 @@ SymbolType token_symbol(const std::string& key, PositionType& pos, TokenType typ
         return Parser::make_KINETIC(token, pos);
     case Token::LAG:
         return Parser::make_LAG(token, pos);
-    case Token::LAST:
-        return Parser::make_LAST(token, pos);
     case Token::LINEAR:
         return Parser::make_LINEAR(token, pos);
     case Token::LOCAL:
         return Parser::make_LOCAL(token, pos);
     case Token::LONGDIFUS:
         return Parser::make_LONGDIFUS(token, pos);
-    case Token::MATCH:
-        return Parser::make_MATCH(token, pos);
     case Token::MODEL:
         return Parser::make_MODEL(token, pos);
-    case Token::MODEL_LEVEL:
-        return Parser::make_MODEL_LEVEL(token, pos);
     case Token::NETRECEIVE:
         return Parser::make_NETRECEIVE(token, pos);
     case Token::NEURON:
@@ -240,28 +227,16 @@ SymbolType token_symbol(const std::string& key, PositionType& pos, TokenType typ
         return Parser::make_NRNMUTEXUNLOCK(token, pos);
     case Token::PARAMETER:
         return Parser::make_PARAMETER(token, pos);
-    case Token::PARTIAL:
-        return Parser::make_PARTIAL(token, pos);
-    case Token::PLOT:
-        return Parser::make_PLOT(token, pos);
     case Token::POINTER:
         return Parser::make_POINTER(token, pos);
     case Token::PROCEDURE:
         return Parser::make_PROCEDURE(token, pos);
     case Token::PROTECT:
         return Parser::make_PROTECT(token, pos);
-    case Token::PUTQ:
-        return Parser::make_PUTQ(token, pos);
     case Token::RANGE:
         return Parser::make_RANGE(token, pos);
     case Token::READ:
         return Parser::make_READ(token, pos);
-    case Token::RESET:
-        return Parser::make_RESET(token, pos);
-    case Token::SECTION:
-        return Parser::make_SECTION(token, pos);
-    case Token::SENS:
-        return Parser::make_SENS(token, pos);
     case Token::SOLVE:
         return Parser::make_SOLVE(token, pos);
     case Token::SOLVEFOR:
@@ -274,14 +249,10 @@ SymbolType token_symbol(const std::string& key, PositionType& pos, TokenType typ
         return Parser::make_STEADYSTATE(token, pos);
     case Token::STEP:
         return Parser::make_STEP(token, pos);
-    case Token::STEPPED:
-        return Parser::make_STEPPED(token, pos);
     case Token::SWEEP:
         return Parser::make_SWEEP(token, pos);
     case Token::TABLE:
         return Parser::make_TABLE(token, pos);
-    case Token::TERMINAL:
-        return Parser::make_TERMINAL(token, pos);
     case Token::THREADSAFE:
         return Parser::make_THREADSAFE(token, pos);
     case Token::TO:
@@ -312,8 +283,6 @@ SymbolType token_symbol(const std::string& key, PositionType& pos, TokenType typ
         return Parser::make_NONLIN1(token, pos);
     case Token::LIN1:
         return Parser::make_LIN1(token, pos);
-    case Token::TILDE:
-        return Parser::make_TILDE(token, pos);
     case Token::REACTION:
         return Parser::make_REACTION(token, pos);
     case Token::GT:

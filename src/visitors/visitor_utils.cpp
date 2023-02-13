@@ -175,9 +175,8 @@ std::set<std::string> get_global_vars(const Program& node) {
                              NmodlType::prime_name | NmodlType::assigned_definition |
                              NmodlType::read_ion_var | NmodlType::write_ion_var |
                              NmodlType::nonspecific_cur_var | NmodlType::electrode_cur_var |
-                             NmodlType::section_var | NmodlType::constant_var |
-                             NmodlType::extern_neuron_variable | NmodlType::state_var |
-                             NmodlType::factor_def;
+                             NmodlType::constant_var | NmodlType::extern_neuron_variable |
+                             NmodlType::state_var | NmodlType::factor_def;
         for (const auto& globalvar: symtab->get_variables_with_properties(property)) {
             std::string var_name = globalvar->get_name();
             if (globalvar->is_array()) {
@@ -217,13 +216,11 @@ std::vector<std::shared_ptr<ast::Ast>> collect_nodes(ast::Ast& node,
 
 bool sparse_solver_exists(const ast::Ast& node) {
     const auto solve_blocks = collect_nodes(node, {ast::AstNodeType::SOLVE_BLOCK});
-    for (const auto& solve_block: solve_blocks) {
-        const auto& method = dynamic_cast<const ast::SolveBlock*>(solve_block.get())->get_method();
-        if (method && method->get_node_name() == "sparse") {
-            return true;
-        }
-    }
-    return false;
+    return std::any_of(solve_blocks.begin(), solve_blocks.end(), [](auto const& solve_block) {
+        assert(solve_block);
+        const auto& method = dynamic_cast<ast::SolveBlock const&>(*solve_block).get_method();
+        return method && method->get_node_name() == "sparse";
+    });
 }
 
 std::string to_nmodl(const ast::Ast& node, const std::set<ast::AstNodeType>& exclude_types) {

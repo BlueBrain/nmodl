@@ -100,29 +100,22 @@
 %token  <ModToken>              ELSE
 %token  <ModToken>              EQUATION
 %token  <ModToken>              EXTERNAL
-%token  <ModToken>              FIRST
-%token  <ModToken>              FORALL1
 %token  <ModToken>              FOR_NETCONS
 %token  <ModToken>              FROM
 %token  <ModToken>              FUNCTION1
 %token  <ModToken>              FUNCTION_TABLE
-%token  <ModToken>              GETQ
 %token  <ModToken>              GLOBAL
 %token  <ModToken>              IF
-%token  <ModToken>              IFERROR
 %token  <ModToken>              INCLUDE1
 %token  <ModToken>              INDEPENDENT
 %token  <ModToken>              INITIAL1
 %token  <ModToken>              KINETIC
 %token  <ModToken>              LAG
-%token  <ModToken>              LAST
 %token  <ModToken>              LIN1
 %token  <ModToken>              LINEAR
 %token  <ModToken>              LOCAL
 %token  <ModToken>              LONGDIFUS
-%token  <ModToken>              MATCH
 %token  <ModToken>              MODEL
-%token  <ModToken>              MODEL_LEVEL
 %token  <ModToken>              NETRECEIVE
 %token  <ModToken>              NEURON
 %token  <ModToken>              NONLIN1
@@ -131,29 +124,21 @@
 %token  <ModToken>              NRNMUTEXLOCK
 %token  <ModToken>              NRNMUTEXUNLOCK
 %token  <ModToken>              PARAMETER
-%token  <ModToken>              PARTIAL
-%token  <ModToken>              PLOT
 %token  <ModToken>              POINTER
 %token  <ModToken>              PROCEDURE
 %token  <ModToken>              PROTECT
-%token  <ModToken>              PUTQ
 %token  <ModToken>              RANGE
 %token  <ModToken>              REACT1
 %token  <ModToken>              REACTION
 %token  <ModToken>              READ
-%token  <ModToken>              RESET
-%token  <ModToken>              SECTION
-%token  <ModToken>              SENS
 %token  <ModToken>              SOLVE
 %token  <ModToken>              SOLVEFOR
 %token  <ModToken>              START1
 %token  <ModToken>              STATE
 %token  <ModToken>              STEADYSTATE
 %token  <ModToken>              STEP
-%token  <ModToken>              STEPPED
 %token  <ModToken>              SWEEP
 %token  <ModToken>              TABLE
-%token  <ModToken>              TERMINAL
 %token  <ModToken>              THREADSAFE
 %token  <ModToken>              TO
 %token  <ModToken>              UNITS
@@ -239,7 +224,6 @@
 
 %type   <ast::Model*>                       model
 %type   <ast::Unit*>                        units
-%type   <ast::Integer*>                     optional_index
 %type   <ast::Unit*>                        unit
 %type   <ast::Block*>                       procedure
 %type   <ast::Limits*>                      limits
@@ -249,7 +233,6 @@
 %type   <ast::Expression*>                  term
 %type   <ast::Expression*>                  left_linear_expression
 %type   <ast::Expression*>                  linear_expression
-%type   <ast::NumberVector>                 number_list
 %type   <ast::Expression*>                  expression
 %type   <ast::Expression*>                  watch_expression
 %type   <ast::Statement*>                   statement_type1
@@ -259,7 +242,6 @@
 %type   <ast::LocalVarVector>               local_var_list
 %type   <ast::ExpressionVector>             expression_list
 %type   <ast::Define*>                      define
-%type   <ast::QueueStatement*>              queue_statement
 %type   <ast::Expression*>                  assignment
 %type   <ast::FromStatement*>               from_statement
 %type   <ast::WhileStatement*>              while_statement
@@ -267,34 +249,21 @@
 %type   <ast::ElseIfStatementVector>        optional_else_if
 %type   <ast::ElseStatement*>               optional_else
 %type   <ast::WrappedExpression*>           function_call
-%type   <ast::StatementBlock*>              if_solution_error
 %type   <ast::Expression*>                  optional_increment
 %type   <ast::Number*>                      optional_start
-%type   <ast::VarNameVector>                sens_list
-%type   <ast::Sens*>                        sens
 %type   <ast::LagStatement*>                lag_statement
-%type   <ast::ForAllStatement*>             forall_statement
 %type   <ast::ParamAssign*>                 parameter_assignment
-%type   <ast::Stepped*>                     stepped_statement
-%type   <ast::IndependentDefinition*>       independent_definition
+%type   <ast::Name*>                        independent_definition
 %type   <ast::AssignedDefinition*>          dependent_definition
 %type   <ast::Block*>                       declare
 %type   <ast::ParamAssignVector>            parameter_block_body
-%type   <ast::IndependentDefinitionVector>  independent_block_body
+%type   <ast::NameVector>                   independent_block_body
 %type   <ast::AssignedDefinitionVector>     dependent_block_body
-%type   <ast::SteppedVector>                step_block_body
 %type   <ast::WatchStatement*>              watch_statement
 %type   <ast::BinaryOperator>               watch_direction
 %type   <ast::Watch*>                       watch
 %type   <ast::ForNetcon*>                   for_netcon
-%type   <ast::PlotDeclaration*>             plot_declaration
-%type   <ast::PlotVarVector>                plot_variable_list
 %type   <ast::ConstantStatementVector>      constant_statement
-%type   <ast::MatchVector>                  match_list
-%type   <ast::Match*>                       match
-%type   <ast::Identifier*>                  match_name
-%type   <ast::PartialBoundary*>             partial_equation
-%type   <ast::FirstLastTypeIndex*>          first_last
 %type   <ast::ReactionStatement*>           reaction_statement
 %type   <ast::Conserve*>                    conserve
 %type   <ast::Expression*>                  react
@@ -321,14 +290,11 @@
 %type   <ast::String*>                      ontology
 %type   <ast::NonspecificCurVarVector>      nonspecific_var_list
 %type   <ast::ElectrodeCurVarVector>        electrode_current_var_list
-%type   <ast::SectionVarVector>             section_var_list
 %type   <ast::RangeVarVector>               range_var_list
 %type   <ast::GlobalVarVector>              global_var_list
 %type   <ast::PointerVarVector>             pointer_var_list
 %type   <ast::BbcorePointerVarVector>       bbcore_pointer_var_list
 %type   <ast::ExternVarVector>              external_var_list
-%type   <ast::ThreadsafeVarVector>          optional_threadsafe_var_list
-%type   <ast::ThreadsafeVarVector>          threadsafe_var_list
 %type   <ast::Valence*>                     valence
 %type   <ast::ExpressionStatement*>         initial_statement
 %type   <ast::ConductanceHint*>             conductance
@@ -349,17 +315,13 @@
 %type   <ast::InitialBlock*>                initial_block
 %type   <ast::KineticBlock*>                kinetic_block
 %type   <ast::LinearBlock*>                 linear_block
-%type   <ast::MatchBlock*>                  match_block
 %type   <ast::NetReceiveBlock*>             net_receive_block
 %type   <ast::NeuronBlock*>                 neuron_block
 %type   <ast::NonLinearBlock*>              non_linear_block
 %type   <ast::ParamBlock*>                  parameter_block
-%type   <ast::PartialBlock*>                partial_block
 %type   <ast::ProcedureBlock*>              procedure_block
 %type   <ast::SolveBlock*>                  solve_block
 %type   <ast::StateBlock*>                  state_block
-%type   <ast::StepBlock*>                   step_block
-%type   <ast::TerminalBlock*>               terminal_block
 %type   <ast::UnitBlock*>                   unit_block
 
 %type   <ast::Integer*>                     INTEGER_PTR
@@ -461,13 +423,6 @@ all             :   {
                         $1->emplace_back_node($2);
                         $$ = $1;
                     }
-                |   all MODEL_LEVEL INTEGER_PTR declare
-                    {
-                        /** todo This is discussed with Michael Hines. Model level was inserted
-                         * by merge program which is no longer exist. This was to avoid the name
-                         * collision in case of include. Idea was to have some kind of namespace!
-                         */
-                    }
                 |   all procedure
                     {
                         $1->emplace_back_node($2);
@@ -544,14 +499,6 @@ declare         :   parameter_block
                 |   state_block
                     {
                         $$ = $1;
-                    }
-                |   step_block
-                    {
-                        $$ = $1;
-                    }
-                |   plot_declaration
-                    {
-                        $$ = new ast::PlotBlock($1);
                     }
                 |   neuron_block
                     {
@@ -646,45 +593,6 @@ limits          :   {
                 ;
 
 
-step_block      :   STEPPED "{" step_block_body "}"
-                    {
-                        $$ = new ast::StepBlock($3);
-                    }
-                ;
-
-
-step_block_body :   {
-                        $$ = ast::SteppedVector();
-                    }
-                |   step_block_body stepped_statement
-                    {
-                            $1.emplace_back($2);
-                            $$ = $1;
-                    }
-                ;
-
-
-stepped_statement : NAME_PTR "=" number_list units
-                    {
-                        $$ = new ast::Stepped($1, $3, $4);
-                    }
-                ;
-
-
-number_list     :   number "," number
-                    {
-                        $$ = ast::NumberVector();
-                        $$.emplace_back($1);
-                        $$.emplace_back($3);
-                    }
-                |   number_list "," number
-                    {
-                        $1.emplace_back($3);
-                        $$ = $1;
-                    }
-                ;
-
-
 name            :   Name
                     {
                         $$ = $1;
@@ -746,18 +654,18 @@ double          :   REAL
                 ;
 
 
+/** We still parse INDEPENDENT block but we do nothing with it, except checking that the
+    variable is `t` later. */
 independent_block : INDEPENDENT "{" independent_block_body "}"
                     {
                         $$ = new ast::IndependentBlock($3);
-                        ModToken block_token = $1 + $4;
-                        $$->set_token(block_token);
                     }
                 ;
 
 
 independent_block_body :
                     {
-                        $$ = ast::IndependentDefinitionVector();
+                        $$ = ast::NameVector();
                     }
                 |   independent_block_body independent_definition
                     {
@@ -767,7 +675,6 @@ independent_block_body :
                 |   independent_block_body SWEEP independent_definition
                     {
                         $1.emplace_back($3);
-                        $3->set_sweep(std::make_shared<ast::Boolean>(1));
                         $$ = $1;
                     }
                 ;
@@ -775,7 +682,7 @@ independent_block_body :
 
 independent_definition :  NAME_PTR FROM number TO number withby integer optional_start units
                     {
-                        $$ = new ast::IndependentDefinition(NULL, $1, $3, $5, $7, $8, $9);
+                        $$ = $1;
                     }
                 |   error
                     {
@@ -859,43 +766,6 @@ state_block     :   STATE  "{" dependent_block_body "}"
                 ;
 
 
-plot_declaration :  PLOT plot_variable_list VS name optional_index
-                    {
-                        $$ = new ast::PlotDeclaration($2, new ast::PlotVar($4,$5));
-                    }
-                |   PLOT error
-                    {
-                        error(scanner.loc, "plot_declaration");
-                    }
-                ;
-
-
-plot_variable_list : name optional_index
-                    {
-                        $$ = ast::PlotVarVector();
-                        auto variable = new ast::PlotVar($1, $2);
-                        $$.emplace_back(variable);
-                    }
-                |   plot_variable_list "," name optional_index
-                    {
-                        $$ = $1;
-                        auto variable = new ast::PlotVar($3, $4);
-                        $$.emplace_back(variable);
-                    }
-                ;
-
-
-optional_index  :
-                    {
-                        $$ = nullptr;
-                    }
-                |   "[" INTEGER_PTR "]"
-                    {
-                        $$ = $2;
-                    }
-                ;
-
-
 procedure       :   initial_block
                     {
                         $$ = $1;
@@ -928,15 +798,7 @@ procedure       :   initial_block
                     {
                         $$ = $1;
                     }
-                |   terminal_block
-                    {
-                        $$ = $1;
-                    }
                 |   discrete_block
-                    {
-                        $$ = $1;
-                    }
-                |   partial_block
                     {
                         $$ = $1;
                     }
@@ -1097,10 +959,6 @@ statement_type1 :   from_statement
                     {
                         $$ = $1;
                     }
-                |   forall_statement
-                    {
-                        $$ = $1;
-                    }
                 |   while_statement
                     {
                         $$ = $1;
@@ -1129,10 +987,6 @@ statement_type1 :   from_statement
                     {   auto text = parse_with_verbatim_parser($1);
                         $$ = new ast::BlockComment(new ast::String(text));
                     }
-                |   sens
-                    {
-                        $$ = $1;
-                    }
                 |   compartment
                     {
                         $$ = $1;
@@ -1146,22 +1000,6 @@ statement_type1 :   from_statement
                         $$ = $1;
                     }
                 |   lag_statement
-                    {
-                        $$ = $1;
-                    }
-                |   queue_statement
-                    {
-                        $$ = $1;
-                    }
-                |   RESET
-                    {
-                        $$ = new ast::Reset();
-                    }
-                |   match_block
-                    {
-                        $$ = new ast::ExpressionStatement($1);
-                    }
-                |   partial_equation
                     {
                         $$ = $1;
                     }
@@ -1543,17 +1381,6 @@ optional_increment :
                 ;
 
 
-forall_statement :  FORALL1 NAME_PTR statement_list "}"
-                    {
-                        $$ = new ast::ForAllStatement($2, $3);
-                    }
-                |   FORALL1 error
-                    {
-                        error(scanner.loc, "forall_statement");
-                    }
-                ;
-
-
 while_statement :   WHILE "(" expression ")" statement_list "}"
                     {
                         $$ = new ast::WhileStatement($3, $5);
@@ -1618,45 +1445,6 @@ discrete_block  :   DISCRETE NAME_PTR statement_list "}"
                         $$ = new ast::DiscreteBlock($2, $3);
                         ModToken block_token = $1 + $4;
                         $$->set_token(block_token);
-                    }
-                ;
-
-
-partial_block   :   PARTIAL NAME_PTR statement_list "}"
-                    {
-                        $$ = new ast::PartialBlock($2, $3);
-                        ModToken block_token = $1 + $4;
-                        $$->set_token(block_token);
-                    }
-                |   PARTIAL error
-                    {
-                        error(scanner.loc, "partial_block");
-                    }
-                ;
-
-
-partial_equation :  "~" PRIME "=" NAME_PTR "*" DEL2 "(" NAME_PTR ")" "+" NAME_PTR
-                    {
-                        $$ = new ast::PartialBoundary(NULL, $2.clone(), NULL, NULL, $4, $6.clone(), $8, $11);
-                    }
-                |   "~" DEL NAME_PTR "[" first_last "]" "=" expression
-                    {
-                        $$ = new ast::PartialBoundary($2.clone(), $3, $5, $8, NULL, NULL, NULL, NULL);
-                    }
-                |   "~" NAME_PTR "[" first_last "]" "=" expression
-                    {
-                        $$ = new ast::PartialBoundary(NULL, $2, $4, $7, NULL, NULL, NULL, NULL);
-                    }
-                ;
-
-
-first_last      :   FIRST
-                    {
-                        $$ = new ast::FirstLastTypeIndex(ast::PEQ_FIRST);
-                    }
-                |   LAST
-                    {
-                        $$ = new ast::FirstLastTypeIndex(ast::PEQ_LAST);
                     }
                 ;
 
@@ -1728,36 +1516,25 @@ initial_statement : INITIAL1 statement_list "}"
                 ;
 
 
-solve_block     :   SOLVE NAME_PTR if_solution_error
+solve_block     :   SOLVE NAME_PTR
                     {
-                        $$ = new ast::SolveBlock($2, NULL, NULL, $3);
+                        $$ = new ast::SolveBlock($2, NULL, NULL);
                         $$->set_token(*($2->get_token()));
                     }
-                |   SOLVE NAME_PTR USING METHOD if_solution_error
+                |   SOLVE NAME_PTR USING METHOD
                     {
-                        $$ = new ast::SolveBlock($2, $4.clone(), NULL, $5);
+                        $$ = new ast::SolveBlock($2, $4.clone(), NULL);
                         $$->set_token(*($2->get_token()));
                     }
                 |
-                    SOLVE NAME_PTR STEADYSTATE METHOD if_solution_error
+                    SOLVE NAME_PTR STEADYSTATE METHOD
                     {
-                        $$ = new ast::SolveBlock($2, NULL, $4.clone(), $5);
+                        $$ = new ast::SolveBlock($2, NULL, $4.clone());
                         $$->set_token(*($2->get_token()));
                     }
                 |   SOLVE error
                     {
                         error(scanner.loc, "solve_block");
-                    }
-                ;
-
-
-if_solution_error :
-                    {
-                        $$ = nullptr;
-                    }
-                |   IFERROR statement_list "}"
-                    {
-                        $$ = $2;
                     }
                 ;
 
@@ -1793,15 +1570,6 @@ solvefor        :   SOLVEFOR NAME_PTR
 breakpoint_block :  BREAKPOINT statement_list "}"
                     {
                         $$ = new ast::BreakpointBlock($2);
-                    }
-                ;
-
-
-terminal_block  :   TERMINAL statement_list "}"
-                    {
-                        $$ = new ast::TerminalBlock($2);
-                        ModToken block_token = $1 + $3;
-                        $$->set_token(block_token);
                     }
                 ;
 
@@ -1929,30 +1697,6 @@ watch_expression :  variable_name
                 ;
 
 
-sens            :   SENS sens_list
-                    {
-                        $$ = new ast::Sens($2);
-                    }
-                |   SENS error
-                    {
-                        error(scanner.loc, "sens");
-                    }
-                ;
-
-
-sens_list       :   variable_name
-                    {
-                        $$ = ast::VarNameVector();
-                        $$.emplace_back($1);
-                    }
-                |   sens_list "," variable_name
-                    {
-                        $1.emplace_back($3);
-                        $$ = $1;
-                    }
-                ;
-
-
 conserve        :   CONSERVE react "=" expression
                     {
                         $$ = new ast::Conserve($2, $4);
@@ -2059,69 +1803,6 @@ lag_statement   :   LAG name BY NAME_PTR
                 |   LAG error
                     {
                         error(scanner.loc, "lag_statement");
-                    }
-                ;
-
-
-queue_statement :   PUTQ name
-                    {
-                        $$ = new ast::QueueStatement(new ast::QueueExpressionType(ast::PUT_QUEUE), $2);
-                    }
-                |   GETQ name
-                    {
-                        $$ = new ast::QueueStatement(new ast::QueueExpressionType(ast::GET_QUEUE), $2);
-                    }
-                ;
-
-
-match_block     :   MATCH "{" match_list "}"
-                    {
-                        $$ = new ast::MatchBlock($3);
-                        ModToken block_token = $1 + $4;
-                        $$->set_token(block_token);
-                    }
-                ;
-
-
-match_list      :   match
-                    {
-                        $$ = ast::MatchVector();
-                        $$.emplace_back($1);
-                    }
-                |   match_list match
-                    {
-                        $1.emplace_back($2);
-                        $$ = $1;
-                    }
-                ;
-
-
-match           :   name
-                    {
-                        $$ = new ast::Match($1, NULL);
-                    }
-                |   match_name "(" expression ")" "=" expression
-                    {
-                        auto op = ast::BinaryOperator(ast::BOP_ASSIGN);
-                        auto lhs = new ast::ParenExpression($3);
-                        auto rhs = $6;
-                        auto expression = new ast::BinaryExpression(lhs, op, rhs);
-                        $$ = new ast::Match($1, expression);
-                    }
-                |   error
-                    {
-                        error(scanner.loc, "match ");
-                    }
-                ;
-
-
-match_name      :   name
-                    {
-                        $$ = $1;
-                    }
-                |   name "[" NAME_PTR "]"
-                    {
-                        $$ = new ast::IndexedName($1, $3);
                     }
                 ;
 
@@ -2286,11 +1967,6 @@ neuron_statement :
                         $1.emplace_back(new ast::ElectrodeCurrent($3));
                         $$ = $1;
                     }
-                |   neuron_statement SECTION section_var_list
-                    {
-                        $1.emplace_back(new ast::Section($3));
-                        $$ = $1;
-                    }
                 |   neuron_statement RANGE range_var_list
                     {
                         $1.emplace_back(new ast::Range($3));
@@ -2316,9 +1992,9 @@ neuron_statement :
                         $1.emplace_back(new ast::External($3));
                         $$ = $1;
                     }
-                |   neuron_statement THREADSAFE optional_threadsafe_var_list
+                |   neuron_statement THREADSAFE
                     {
-                        $1.emplace_back(new ast::ThreadSafe($3));
+                        $1.emplace_back(new ast::ThreadSafe());
                         $$ = $1;
                     }
                 |   neuron_statement REPRESENTS ONTOLOGY_ID
@@ -2443,23 +2119,6 @@ electrode_current_var_list : NAME_PTR
                 ;
 
 
-section_var_list :  NAME_PTR
-                    {
-                        $$ = ast::SectionVarVector();
-                        $$.emplace_back(new ast::SectionVar($1));
-                    }
-                |   section_var_list "," NAME_PTR
-                    {
-                        $1.emplace_back(new ast::SectionVar($3));
-                        $$ = $1;
-                    }
-                |   error
-                    {
-                        error(scanner.loc, "section_var_list");
-                    }
-                ;
-
-
 range_var_list  :   NAME_PTR
                     {
                         $$ = ast::RangeVarVector();
@@ -2552,29 +2211,6 @@ external_var_list : NAME_PTR
                     }
                 ;
 
-
-optional_threadsafe_var_list :
-                    {
-                        $$ = ast::ThreadsafeVarVector();
-                    }
-                |   threadsafe_var_list
-                    {
-                        $$ = $1;
-                    }
-                ;
-
-
-threadsafe_var_list : NAME_PTR
-                    {
-                        $$ = ast::ThreadsafeVarVector();
-                        $$.emplace_back(new ast::ThreadsafeVar($1));
-                    }
-                |   threadsafe_var_list "," NAME_PTR
-                    {
-                        $1.emplace_back(new ast::ThreadsafeVar($3));
-                        $$ = $1;
-                    }
-                ;
 
  INTEGER_PTR    :   INTEGER
                     {

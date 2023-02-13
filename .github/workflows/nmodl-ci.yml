@@ -32,8 +32,6 @@ jobs:
               flag_warnings: ON
               os: ubuntu-22.04
           - config:
-              os: macos-10.15
-          - config:
               os: macos-11
           # TODO: might be interesting to add the thread sanitizer too
           - config:
@@ -55,7 +53,7 @@ jobs:
       - name: Install homebrew packages
         if: startsWith(matrix.config.os, 'macOS')
         run: |
-          brew install ccache coreutils bison boost clang-format flex ninja
+          brew install ccache coreutils bison boost flex ninja
           echo /usr/local/opt/flex/bin:/usr/local/opt/bison/bin >> $GITHUB_PATH
           # Taken from https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners#supported-runners-and-hardware-resources
           echo CMAKE_BUILD_PARALLEL_LEVEL=3 >> $GITHUB_ENV
@@ -74,12 +72,13 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
-      - name: Install Python3 dependencies
-        run: |
-          python3 -m pip install -U pip setuptools scikit-build Jinja2 PyYAML \
-            pytest sympy 'cmake-format==0.6.13'
-
       - uses: actions/checkout@v3
+
+      - name: Install Python3 dependencies
+        working-directory: ${{runner.workspace}}/nmodl
+        run: |
+          python3 -m pip install -U pip setuptools
+          python3 -m pip install --user -r requirements.txt
 
       - name: Register compiler warning problem matcher
         if: ${{matrix.config.flag_warnings == 'ON'}}
@@ -97,8 +96,7 @@ jobs:
           mkdir build && pushd build
           cmake_args=(-G Ninja
                       -DPYTHON_EXECUTABLE=$(which python3) \
-                      -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR \
-                      -DNMODL_FORMATTING:BOOL=ON)
+                      -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR)
           if [[ -n "${{matrix.config.flag_warnings}}" ]]; then
             cmake_args+=(-DNMODL_EXTRA_CXX_FLAGS="-Wall \
                           -Wno-reorder \
@@ -119,16 +117,6 @@ jobs:
           cmake .. "${cmake_args[@]}"
         env:
           INSTALL_DIR: ${{ runner.workspace }}/install
-
-      - name: Formatting
-        shell: bash
-        working-directory: ${{runner.workspace}}/nmodl/build
-        run:  |
-          echo "------- Check formatting -------"
-          status=0 # Check both clang and cmake formatting before exiting.
-          if ! cmake --build . --target check-cmake-format; then status=1; fi
-          if ! cmake --build . --target check-clang-format; then status=1; fi
-          exit ${status}
 
       - name: Dump config dictionary
         run: |

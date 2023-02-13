@@ -8,6 +8,7 @@
 #include "visitors/inline_visitor.hpp"
 
 #include "ast/all.hpp"
+#include "ast/ast_decl.hpp"
 #include "parser/c11_driver.hpp"
 #include "utils/logger.hpp"
 #include "visitors/local_var_rename_visitor.hpp"
@@ -20,7 +21,7 @@ namespace visitor {
 
 using namespace ast;
 
-bool InlineVisitor::can_inline_block(const StatementBlock& block) const {
+bool InlineVisitor::can_inline_block(const StatementBlock& block) {
     bool to_inline = true;
     const auto& statements = block.get_statements();
     for (const auto& statement: statements) {
@@ -32,7 +33,8 @@ bool InlineVisitor::can_inline_block(const StatementBlock& block) const {
         // verbatim blocks with return statement are not safe to inline
         // especially for net_receive block
         if (statement->is_verbatim()) {
-            const auto node = static_cast<const Verbatim*>(statement.get());
+            const auto node = dynamic_cast<const Verbatim*>(statement.get());
+            assert(node);
             auto text = node->get_statement()->eval();
             parser::CDriver driver;
             driver.scan_string(text);
@@ -67,10 +69,12 @@ bool InlineVisitor::can_replace_statement(const std::shared_ptr<Statement>& stat
     }
 
     bool to_replace = false;
-    auto es = static_cast<ExpressionStatement*>(statement.get());
+    auto es = dynamic_cast<ExpressionStatement*>(statement.get());
+    assert(es);
     auto e = es->get_expression();
     if (e->is_wrapped_expression()) {
-        auto wrapped_expression = static_cast<WrappedExpression*>(e.get());
+        auto wrapped_expression = dynamic_cast<WrappedExpression*>(e.get());
+        assert(wrapped_expression);
         if (wrapped_expression->get_expression()->is_function_call()) {
             // if caller is external function (i.e. neuron function) don't replace it
             const auto& function_call = std::static_pointer_cast<FunctionCall>(
@@ -113,7 +117,9 @@ void InlineVisitor::inline_arguments(StatementBlock& inlined_block,
         /// create assignment statement and insert after the local variables
         auto expression = new BinaryExpression(lhs, BinaryOperator(ast::BOP_ASSIGN), rhs);
         auto statement = std::make_shared<ExpressionStatement>(expression);
-        inlined_block.insert_statement(statements.begin() + counter + 1, statement);
+        inlined_block.insert_statement(statements.begin() +
+                                           static_cast<std::ptrdiff_t>(counter + 1ul),
+                                       statement);
         counter++;
     }
 }
@@ -144,7 +150,7 @@ bool InlineVisitor::inline_function_call(ast::Block& callee,
 
     /// need to add local variable for function calls or for procedure call if it is part of
     /// expression (standalone procedure calls don't need return statement)
-    if (callee.is_function_block() || to_replace == false) {
+    if (callee.is_function_block() || !to_replace) {
         /// create new variable which will be used for returning value from inlined block
         auto name = new ast::Name(new ast::String(new_varname));
         ModToken tok;
@@ -159,7 +165,8 @@ bool InlineVisitor::inline_function_call(ast::Block& callee,
     }
 
     /// get a copy of function/procedure body
-    auto inlined_block = callee.get_statement_block()->clone();
+    auto inlined_block = std::unique_ptr<ast::StatementBlock>(
+        callee.get_statement_block()->clone());
 
     /// function definition has function name as return value. we have to rename
     /// it with new variable name
@@ -173,11 +180,11 @@ bool InlineVisitor::inline_function_call(ast::Block& callee,
     inline_arguments(*inlined_block, callee.get_parameters(), caller_arguments);
 
     /// to return value from procedure we have to add new variable
-    if (callee.is_procedure_block() && to_replace == false) {
+    if (callee.is_procedure_block() && !to_replace) {
         add_return_variable(*inlined_block, new_varname);
     }
 
-    auto statement = new ast::ExpressionStatement(inlined_block);
+    auto statement = new ast::ExpressionStatement(std::move(inlined_block));
 
     if (to_replace) {
         replaced_statements[caller_statement] = statement;
@@ -204,23 +211,21 @@ void InlineVisitor::visit_function_call(FunctionCall& node) {
         return;
     }
 
-    auto function_definition = symbol->get_node();
-    if (function_definition == nullptr) {
+    auto nodes = symbol->get_nodes_by_type(
+        {AstNodeType::FUNCTION_BLOCK, AstNodeType::PROCEDURE_BLOCK});
+    if (nodes.empty()) {
         throw std::runtime_error("symbol table doesn't have ast node for " + function_name);
     }
+    auto f_block = nodes.front();
 
     /// first inline called function
-    function_definition->visit_children(*this);
+    f_block->visit_children(*this);
 
     bool inlined = false;
 
-    if (function_definition->is_procedure_block()) {
-        auto proc = (ProcedureBlock*) function_definition;
-        inlined = inline_function_call(*proc, node, *caller_block);
-    } else if (function_definition->is_function_block()) {
-        auto func = (FunctionBlock*) function_definition;
-        inlined = inline_function_call(*func, node, *caller_block);
-    }
+    auto block = dynamic_cast<ast::Block*>(f_block);
+    assert(block);
+    inlined = inline_function_call(*block, node, *caller_block);
 
     if (inlined) {
         symbol->mark_inlined();
@@ -303,9 +308,12 @@ void InlineVisitor::visit_wrapped_expression(WrappedExpression& node) {
     const auto& e = node.get_expression();
     if (e->is_function_call()) {
         auto expression = dynamic_cast<FunctionCall*>(e.get());
+        // if node is inlined, replace it with corresponding variable name
+        // and remove entry from the bookkeeping map
         if (replaced_fun_calls.find(expression) != replaced_fun_calls.end()) {
             auto var = replaced_fun_calls[expression];
             node.set_expression(std::make_shared<Name>(new String(var)));
+            replaced_fun_calls.erase(expression);
         }
     }
 }

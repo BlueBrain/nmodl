@@ -22,7 +22,7 @@ To build the project from source, a modern C++ compiler with C++14 support is ne
 - flex (>=2.6)
 - bison (>=3.0)
 - CMake (>=3.15)
-- Python (>=3.6)
+- Python (>=3.7)
 - Python packages : jinja2 (>=2.10), pyyaml (>=3.13), pytest (>=4.0.0), sympy (>=1.3), textwrap
 
 ### On OS X
@@ -37,7 +37,7 @@ brew install flex bison cmake python3
 The necessary Python packages can then easily be added using the pip3 command.
 
 ```sh
-pip3 install Jinja2 PyYAML pytest sympy
+pip3 install --user -r requirements.txt
 ```
 
 Make sure to have latest flex/bison in $PATH :
@@ -63,7 +63,7 @@ apt-get install flex bison gcc python3 python3-pip
 The Python dependencies are installed using:
 
 ```sh
-pip3 install Jinja2 PyYAML pytest sympy
+pip3 install --user -r requirements.txt
 ```
 
 ## Build Project

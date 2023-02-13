@@ -44,7 +44,7 @@ using symtab::syminfo::Status;
  * Note that variables in double array do not need this transformation
  * and it seems like they should just follow definition order.
  */
-void CodegenHelperVisitor::sort_with_mod2c_symbol_order(std::vector<SymbolType>& symbols) const {
+void CodegenHelperVisitor::sort_with_mod2c_symbol_order(std::vector<SymbolType>& symbols) {
     /// first sort by global id to get in reverse order
     std::sort(symbols.begin(),
               symbols.end(),
@@ -64,6 +64,7 @@ void CodegenHelperVisitor::sort_with_mod2c_symbol_order(std::vector<SymbolType>&
 /**
  * Find all ions used in mod file
  */
+// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 void CodegenHelperVisitor::find_ion_variables(const ast::Program& node) {
     // collect all use ion statements
     const auto& ion_nodes = collect_nodes(node, {AstNodeType::USEION});
@@ -256,7 +257,7 @@ void CodegenHelperVisitor::find_non_range_variables() {
 
     /// find number of prime variables and total size
     auto primes = psymtab->get_variables_with_properties(NmodlType::prime_name);
-    info.num_primes = primes.size();
+    info.num_primes = static_cast<int>(primes.size());
     for (auto& variable: primes) {
         info.primes_size += variable->get_length();
     }
@@ -460,6 +461,19 @@ void CodegenHelperVisitor::find_table_variables() {
     info.table_assigned_variables = psymtab->get_variables_with_properties(property);
 }
 
+void CodegenHelperVisitor::find_neuron_global_variables() {
+    // TODO: it would be nicer not to have this hardcoded list
+    using pair = std::pair<const char*, const char*>;
+    for (auto [var, type]: {pair{naming::CELSIUS_VARIABLE, "double"},
+                            pair{"secondorder", "int"},
+                            pair{"pi", "double"}}) {
+        auto sym = psymtab->lookup(var);
+        if (sym && (sym->get_read_count() || sym->get_write_count())) {
+            info.neuron_global_variables.emplace_back(std::move(sym), type);
+        }
+    }
+}
+
 
 void CodegenHelperVisitor::visit_suffix(const Suffix& node) {
     const auto& type = node.get_type()->get_node_name();
@@ -474,7 +488,7 @@ void CodegenHelperVisitor::visit_suffix(const Suffix& node) {
 }
 
 
-void CodegenHelperVisitor::visit_electrode_current(const ElectrodeCurrent& node) {
+void CodegenHelperVisitor::visit_electrode_current(const ElectrodeCurrent& /* node */) {
     info.electrode_current = true;
 }
 
@@ -504,7 +518,7 @@ void CodegenHelperVisitor::visit_destructor_block(const DestructorBlock& node) {
 void CodegenHelperVisitor::visit_net_receive_block(const NetReceiveBlock& node) {
     under_net_receive_block = true;
     info.net_receive_node = &node;
-    info.num_net_receive_parameters = node.get_parameters().size();
+    info.num_net_receive_parameters = static_cast<int>(node.get_parameters().size());
     node.visit_children(*this);
     under_net_receive_block = false;
 }
@@ -555,9 +569,21 @@ void CodegenHelperVisitor::visit_function_block(const ast::FunctionBlock& node) 
 }
 
 
+void CodegenHelperVisitor::visit_function_table_block(const ast::FunctionTableBlock& node) {
+    info.function_tables.push_back(&node);
+}
+
+
 void CodegenHelperVisitor::visit_eigen_newton_solver_block(
     const ast::EigenNewtonSolverBlock& node) {
     info.eigen_newton_solver_exist = true;
+    // Avoid extra declaration for `functor` corresponding to the DERIVATIVE block which is not
+    // printed to the generated CPP file
+    if (!under_derivative_block) {
+        const auto new_unique_functor_name = "functor_" + info.mod_suffix + "_" +
+                                             std::to_string(info.functor_names.size());
+        info.functor_names[&node] = new_unique_functor_name;
+    }
     node.visit_children(*this);
 }
 
@@ -655,12 +681,12 @@ void CodegenHelperVisitor::visit_binary_expression(const BinaryExpression& node)
 }
 
 
-void CodegenHelperVisitor::visit_bbcore_pointer(const BbcorePointer& node) {
+void CodegenHelperVisitor::visit_bbcore_pointer(const BbcorePointer& /* node */) {
     info.bbcore_pointer_used = true;
 }
 
 
-void CodegenHelperVisitor::visit_watch(const ast::Watch& node) {
+void CodegenHelperVisitor::visit_watch(const ast::Watch& /* node */) {
     info.watch_count++;
 }
 
@@ -671,12 +697,12 @@ void CodegenHelperVisitor::visit_watch_statement(const ast::WatchStatement& node
 }
 
 
-void CodegenHelperVisitor::visit_for_netcon(const ast::ForNetcon& node) {
+void CodegenHelperVisitor::visit_for_netcon(const ast::ForNetcon& /* node */) {
     info.for_netcon_used = true;
 }
 
 
-void CodegenHelperVisitor::visit_table_statement(const ast::TableStatement& node) {
+void CodegenHelperVisitor::visit_table_statement(const ast::TableStatement& /* node */) {
     info.table_count++;
     table_statement_used = true;
 }
@@ -696,6 +722,7 @@ void CodegenHelperVisitor::visit_program(const ast::Program& node) {
     find_range_variables();
     find_non_range_variables();
     find_table_variables();
+    find_neuron_global_variables();
 }
 
 
@@ -704,19 +731,15 @@ CodegenInfo CodegenHelperVisitor::analyze(const ast::Program& node) {
     return info;
 }
 
-void CodegenHelperVisitor::visit_linear_block(const ast::LinearBlock& node) {
+void CodegenHelperVisitor::visit_linear_block(const ast::LinearBlock& /* node */) {
     info.vectorize = false;
 }
 
-void CodegenHelperVisitor::visit_non_linear_block(const ast::NonLinearBlock& node) {
+void CodegenHelperVisitor::visit_non_linear_block(const ast::NonLinearBlock& /* node */) {
     info.vectorize = false;
 }
 
-void CodegenHelperVisitor::visit_discrete_block(const ast::DiscreteBlock& node) {
-    info.vectorize = false;
-}
-
-void CodegenHelperVisitor::visit_partial_block(const ast::PartialBlock& node) {
+void CodegenHelperVisitor::visit_discrete_block(const ast::DiscreteBlock& /* node */) {
     info.vectorize = false;
 }
 

@@ -7,14 +7,17 @@
 
 #include "utils/string_utils.hpp"
 
+#include <cassert>
+
 namespace nmodl {
 namespace test_utils {
 
 int count_leading_spaces(std::string text) {
-    int length = text.size();
+    auto const length = text.size();
     nmodl::stringutils::ltrim(text);
-    int num_whitespaces = length - text.size();
-    return num_whitespaces;
+    auto const num_whitespaces = length - text.size();
+    assert(num_whitespaces <= std::numeric_limits<int>::max());
+    return static_cast<int>(num_whitespaces);
 }
 
 /// check if string has only whitespaces
@@ -41,7 +44,7 @@ NEURON {
 }
 
  * i.e. we get first non-empty line and count number of leading whitespaces (X).
- * Then for every sub-sequent line, we remove first X characters (assuing those
+ * Then for every sub-sequent line, we remove first X characters (assuming those
  * all are whitespaces). This is done because when ast is transformed back to
  * nmodl, the nmodl output is without "extra" whitespaces in the provided input.
  */

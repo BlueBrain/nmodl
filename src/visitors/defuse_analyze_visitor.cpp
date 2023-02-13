@@ -284,7 +284,7 @@ void DefUseAnalyzeVisitor::visit_if_statement(const ast::IfStatement& node) {
  * \todo One simple way would be to look for p_name in the string
  *        of verbatim block to find the variable usage.
  */
-void DefUseAnalyzeVisitor::visit_verbatim(const ast::Verbatim& node) {
+void DefUseAnalyzeVisitor::visit_verbatim(const ast::Verbatim& /* node */) {
     if (!ignore_verbatim) {
         current_chain->push_back(DUInstance(DUState::U, current_binary_expression));
     }
@@ -303,10 +303,6 @@ void DefUseAnalyzeVisitor::visit_non_lin_equation(const ast::NonLinEquation& nod
 }
 
 void DefUseAnalyzeVisitor::visit_lin_equation(const ast::LinEquation& node) {
-    visit_unsupported_node(node);
-}
-
-void DefUseAnalyzeVisitor::visit_partial_boundary(const ast::PartialBoundary& node) {
     visit_unsupported_node(node);
 }
 

@@ -217,8 +217,7 @@ SCENARIO("Check parents in valid NMODL constructs") {
 //=============================================================================
 
 std::string solve_construct(const std::string& equation, std::string method) {
-    nmodl::parser::DiffeqDriver driver;
-    auto solution = driver.solve(equation, std::move(method));
+    auto solution = nmodl::parser::DiffeqDriver::solve(equation, std::move(method));
     return solution;
 }
 
@@ -268,6 +267,6 @@ SCENARIO("Check if a NEURON block is parsed with correct location info in its to
         )";
         parse_neuron_block_string(reindent_text(neuron_block), value);
         ss << value;
-        REQUIRE(ss.str() == "         NEURON at [1.1-5.1] type 303");
+        REQUIRE(ss.str() == "         NEURON at [1.1-5.1] type 296");
     }
 }

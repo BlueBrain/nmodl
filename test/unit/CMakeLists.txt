@@ -36,8 +36,8 @@ add_executable(
   visitor/constant_folder.cpp
   visitor/defuse_analyze.cpp
   visitor/global_to_range.cpp
+  visitor/implicit_argument.cpp
   visitor/inline.cpp
-  visitor/ispc_rename.cpp
   visitor/json.cpp
   visitor/kinetic_block.cpp
   visitor/localize.cpp
@@ -61,11 +61,12 @@ add_executable(
 add_executable(testprinter printer/printer.cpp)
 add_executable(testsymtab symtab/symbol_table.cpp)
 add_executable(testnewton newton/newton.cpp ${NEWTON_SOLVER_SOURCE_FILES})
+add_executable(testcrout crout/crout.cpp ${CROUT_SOLVER_SOURCE_FILES})
 add_executable(testfast_math fast_math/fast_math.cpp ${NEWTON_SOLVER_SOURCE_FILES})
 add_executable(testunitlexer units/lexer.cpp)
 add_executable(testunitparser units/parser.cpp)
-add_executable(testcodegen codegen/main.cpp codegen/codegen_ispc.cpp codegen/codegen_helper.cpp
-                           codegen/codegen_utils.cpp codegen/codegen_c_visitor.cpp)
+add_executable(testcodegen codegen/main.cpp codegen/codegen_helper.cpp codegen/codegen_utils.cpp
+                           codegen/codegen_cpp_visitor.cpp codegen/transform.cpp)
 
 target_link_libraries(testmodtoken lexer util)
 target_link_libraries(testlexer lexer util)
@@ -86,6 +87,7 @@ target_link_libraries(
   util
   test_util
   printer
+  codegen
   ${NMODL_WRAPPER_LIBS})
 target_link_libraries(
   testcodegen
@@ -123,6 +125,7 @@ foreach(
   testprinter
   testsymtab
   testnewton
+  testcrout
   testfast_math
   testunitlexer
   testunitparser)

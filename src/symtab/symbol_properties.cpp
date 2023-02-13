@@ -17,6 +17,7 @@ namespace symtab {
 namespace syminfo {
 
 
+// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 std::vector<std::string> to_string_vector(const NmodlType& obj) {
     std::vector<std::string> properties;
 
@@ -78,10 +79,6 @@ std::vector<std::string> to_string_vector(const NmodlType& obj) {
         properties.emplace_back("electrode_cur");
     }
 
-    if (has_property(obj, NmodlType::section_var)) {
-        properties.emplace_back("section");
-    }
-
     if (has_property(obj, NmodlType::argument)) {
         properties.emplace_back("argument");
     }
@@ -116,10 +113,6 @@ std::vector<std::string> to_string_vector(const NmodlType& obj) {
 
     if (has_property(obj, NmodlType::constant_var)) {
         properties.emplace_back("constant");
-    }
-
-    if (has_property(obj, NmodlType::partial_block)) {
-        properties.emplace_back("partial_block");
     }
 
     if (has_property(obj, NmodlType::kinetic_block)) {

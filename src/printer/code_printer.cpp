@@ -33,9 +33,9 @@ void CodePrinter::start_block() {
     indent_level++;
 }
 
-void CodePrinter::start_block(std::string&& text) {
+void CodePrinter::start_block(std::string&& expression) {
     add_indent();
-    *result << text << " {";
+    *result << expression << " {";
     add_newline();
     indent_level++;
 }
@@ -79,6 +79,12 @@ void CodePrinter::end_block(int num_newlines) {
     indent_level--;
     add_indent();
     *result << "}";
+    add_newline(num_newlines);
+}
+
+void CodePrinter::end_block(std::string_view suffix, std::size_t num_newlines) {
+    end_block(0);
+    *result << suffix;
     add_newline(num_newlines);
 }
 

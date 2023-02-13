@@ -91,9 +91,7 @@ set(AST_GENERATED_SOURCES
     ${PROJECT_BINARY_DIR}/src/ast/extern_var.hpp
     ${PROJECT_BINARY_DIR}/src/ast/external.hpp
     ${PROJECT_BINARY_DIR}/src/ast/factor_def.hpp
-    ${PROJECT_BINARY_DIR}/src/ast/first_last_type_index.hpp
     ${PROJECT_BINARY_DIR}/src/ast/float.hpp
-    ${PROJECT_BINARY_DIR}/src/ast/for_all_statement.hpp
     ${PROJECT_BINARY_DIR}/src/ast/for_netcon.hpp
     ${PROJECT_BINARY_DIR}/src/ast/from_statement.hpp
     ${PROJECT_BINARY_DIR}/src/ast/function_block.hpp
@@ -105,7 +103,6 @@ set(AST_GENERATED_SOURCES
     ${PROJECT_BINARY_DIR}/src/ast/if_statement.hpp
     ${PROJECT_BINARY_DIR}/src/ast/include.hpp
     ${PROJECT_BINARY_DIR}/src/ast/independent_block.hpp
-    ${PROJECT_BINARY_DIR}/src/ast/independent_definition.hpp
     ${PROJECT_BINARY_DIR}/src/ast/indexed_name.hpp
     ${PROJECT_BINARY_DIR}/src/ast/initial_block.hpp
     ${PROJECT_BINARY_DIR}/src/ast/integer.hpp
@@ -118,8 +115,6 @@ set(AST_GENERATED_SOURCES
     ${PROJECT_BINARY_DIR}/src/ast/local_list_statement.hpp
     ${PROJECT_BINARY_DIR}/src/ast/local_var.hpp
     ${PROJECT_BINARY_DIR}/src/ast/lon_difuse.hpp
-    ${PROJECT_BINARY_DIR}/src/ast/match.hpp
-    ${PROJECT_BINARY_DIR}/src/ast/match_block.hpp
     ${PROJECT_BINARY_DIR}/src/ast/model.hpp
     ${PROJECT_BINARY_DIR}/src/ast/mutex_lock.hpp
     ${PROJECT_BINARY_DIR}/src/ast/mutex_unlock.hpp
@@ -138,43 +133,27 @@ set(AST_GENERATED_SOURCES
     ${PROJECT_BINARY_DIR}/src/ast/param_assign.hpp
     ${PROJECT_BINARY_DIR}/src/ast/param_block.hpp
     ${PROJECT_BINARY_DIR}/src/ast/paren_expression.hpp
-    ${PROJECT_BINARY_DIR}/src/ast/partial_block.hpp
-    ${PROJECT_BINARY_DIR}/src/ast/partial_boundary.hpp
-    ${PROJECT_BINARY_DIR}/src/ast/partial_equation.hpp
-    ${PROJECT_BINARY_DIR}/src/ast/plot_block.hpp
-    ${PROJECT_BINARY_DIR}/src/ast/plot_declaration.hpp
-    ${PROJECT_BINARY_DIR}/src/ast/plot_var.hpp
     ${PROJECT_BINARY_DIR}/src/ast/pointer.hpp
     ${PROJECT_BINARY_DIR}/src/ast/pointer_var.hpp
     ${PROJECT_BINARY_DIR}/src/ast/prime_name.hpp
     ${PROJECT_BINARY_DIR}/src/ast/procedure_block.hpp
     ${PROJECT_BINARY_DIR}/src/ast/program.hpp
     ${PROJECT_BINARY_DIR}/src/ast/protect_statement.hpp
-    ${PROJECT_BINARY_DIR}/src/ast/queue_expression_type.hpp
-    ${PROJECT_BINARY_DIR}/src/ast/queue_statement.hpp
     ${PROJECT_BINARY_DIR}/src/ast/range.hpp
     ${PROJECT_BINARY_DIR}/src/ast/range_var.hpp
     ${PROJECT_BINARY_DIR}/src/ast/react_var_name.hpp
     ${PROJECT_BINARY_DIR}/src/ast/reaction_operator.hpp
     ${PROJECT_BINARY_DIR}/src/ast/reaction_statement.hpp
     ${PROJECT_BINARY_DIR}/src/ast/read_ion_var.hpp
-    ${PROJECT_BINARY_DIR}/src/ast/reset.hpp
-    ${PROJECT_BINARY_DIR}/src/ast/section.hpp
-    ${PROJECT_BINARY_DIR}/src/ast/section_var.hpp
-    ${PROJECT_BINARY_DIR}/src/ast/sens.hpp
     ${PROJECT_BINARY_DIR}/src/ast/solution_expression.hpp
     ${PROJECT_BINARY_DIR}/src/ast/solve_block.hpp
     ${PROJECT_BINARY_DIR}/src/ast/state_block.hpp
     ${PROJECT_BINARY_DIR}/src/ast/statement.hpp
     ${PROJECT_BINARY_DIR}/src/ast/statement_block.hpp
-    ${PROJECT_BINARY_DIR}/src/ast/step_block.hpp
-    ${PROJECT_BINARY_DIR}/src/ast/stepped.hpp
     ${PROJECT_BINARY_DIR}/src/ast/string.hpp
     ${PROJECT_BINARY_DIR}/src/ast/suffix.hpp
     ${PROJECT_BINARY_DIR}/src/ast/table_statement.hpp
-    ${PROJECT_BINARY_DIR}/src/ast/terminal_block.hpp
     ${PROJECT_BINARY_DIR}/src/ast/thread_safe.hpp
-    ${PROJECT_BINARY_DIR}/src/ast/threadsafe_var.hpp
     ${PROJECT_BINARY_DIR}/src/ast/unary_expression.hpp
     ${PROJECT_BINARY_DIR}/src/ast/unary_operator.hpp
     ${PROJECT_BINARY_DIR}/src/ast/unit.hpp

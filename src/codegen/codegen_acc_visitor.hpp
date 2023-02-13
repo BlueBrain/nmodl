@@ -12,7 +12,7 @@
  * \brief \copybrief nmodl::codegen::CodegenAccVisitor
  */
 
-#include "codegen/codegen_c_visitor.hpp"
+#include "codegen/codegen_cpp_visitor.hpp"
 
 
 namespace nmodl {
@@ -38,7 +38,8 @@ class CodegenAccVisitor: public CodegenCVisitor {
 
 
     /// ivdep like annotation for channel iterations
-    void print_channel_iteration_block_parallel_hint(BlockType type) override;
+    void print_channel_iteration_block_parallel_hint(BlockType type,
+                                                     const ast::Block* block) override;
 
 
     /// atomic update pragma for reduction statements
@@ -86,19 +87,23 @@ class CodegenAccVisitor: public CodegenCVisitor {
     /// if reduction block in nrn_cur required
     bool nrn_cur_reduction_loop_required() override;
 
-
-    /// create global variable on the device
-    void print_global_variable_device_create_annotation_pre() override;
-    void print_global_variable_device_create_annotation_post() override;
-
     /// update global variable from host to the device
     void print_global_variable_device_update_annotation() override;
 
     /// transfer newtonspace structure to device
     void print_newtonspace_transfer_to_device() const override;
 
-    // update instance variable object pointer on the gpu device
-    void print_instance_variable_transfer_to_device() const override;
+    /// declare helper functions for copying the instance struct to the device
+    void print_instance_struct_transfer_routine_declarations() override;
+
+    /// define helper functions for copying the instance struct to the device
+    void print_instance_struct_transfer_routines(std::vector<std::string> const&) override;
+
+    /// call helper function for copying the instance struct to the device
+    void print_instance_struct_copy_to_device() override;
+
+    /// call helper function that deletes the instance struct from the device
+    void print_instance_struct_delete_from_device() override;
 
     // update derivimplicit advance flag on the gpu device
     void print_deriv_advance_flag_transfer_to_device() const override;
@@ -121,14 +126,7 @@ class CodegenAccVisitor: public CodegenCVisitor {
     // print atomic capture pragma
     void print_device_atomic_capture_annotation() const override;
 
-    std::string get_variable_device_pointer(const std::string& variable,
-                                            const std::string& type) const override;
-
-
     void print_net_send_buffering_grow() override;
-
-
-    void print_eigen_linear_solver(const std::string& float_type, int N) override;
 
 
   public:
