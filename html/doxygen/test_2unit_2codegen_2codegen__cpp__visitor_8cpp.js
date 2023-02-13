@@ -11,5 +11,9 @@ var test_2unit_2codegen_2codegen__cpp__visitor_8cpp =
     [ "SCENARIO", "test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#a9c45dd7626fd81cd01383b4f8dc4e604", null ],
     [ "SCENARIO", "test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#a67c4def89805f51294ffa34f183d488c", null ],
     [ "SCENARIO", "test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#a3642952acebad0f06c31a9b2bf3ea034", null ],
-    [ "SCENARIO", "test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#a5be92eacd59631e9c775a06973d2dd56", null ]
+    [ "SCENARIO", "test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#a5be92eacd59631e9c775a06973d2dd56", null ],
+    [ "SCENARIO", "test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#ab0be83be74ced6a50e4809fad44d1957", null ],
+    [ "SCENARIO", "test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#a83b1f51474284071bc0c5bd83215e812", null ],
+    [ "SCENARIO", "test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#adf754ac0d7adbfc2dfecde3934d883a4", null ],
+    [ "SCENARIO", "test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#a19d341c4aa22180fcabbc001addc5b17", null ]
 ];
