@@ -168,8 +168,8 @@ void SemanticAnalysisVisitor::visit_unit(const ast::Unit& node) {
     /// <-- This code is for check 8
     if (node.get_name()->get_value().empty()) {
         logger->error("SemanticAnalysisVisitor:: An unit cannot be created without name.");
+        check_fail = true;
     }
-    check_fail = true;
 }
 
 }  // namespace visitor
