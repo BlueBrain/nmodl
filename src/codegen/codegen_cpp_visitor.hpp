@@ -417,14 +417,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
-     * Checks if the given variable name belongs to a state variable
-     * \param name The variable name
-     * \return     \c true if the variable is a state variable
-     */
-    bool state_variable(const std::string& name) const;
-
-
-    /**
      * Check if net receive/send buffering kernels required
      */
     bool net_receive_buffering_required() const noexcept;

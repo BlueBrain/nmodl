@@ -422,19 +422,6 @@ bool CodegenCVisitor::range_variable_setup_required() const noexcept {
 }
 
 
-bool CodegenCVisitor::state_variable(const std::string& name) const {
-    // clang-format off
-    auto result = std::find_if(info.state_vars.begin(),
-                               info.state_vars.end(),
-                               [&name](const SymbolType& sym) {
-                                   return name == sym->get_name();
-                               }
-    );
-    // clang-format on
-    return result != info.state_vars.end();
-}
-
-
 int CodegenCVisitor::position_of_float_var(const std::string& name) const {
     int index = 0;
     for (const auto& var: codegen_float_variables) {
