@@ -602,9 +602,6 @@ int CodegenCVisitor::int_variables_size() const {
  * method return statements as vector. As different code backends could have
  * different variable names, we rely on backend-specific read_ion_variable_name
  * and write_ion_variable_name method which will be overloaded.
- *
- * \todo After looking into mod2c and neuron implementation, it seems like
- * Ode block type is not used (?). Need to look into implementation details.
  */
 std::vector<std::string> CodegenCVisitor::ion_read_statements(BlockType type) {
     if (optimize_ion_variable_copies()) {
@@ -614,18 +611,12 @@ std::vector<std::string> CodegenCVisitor::ion_read_statements(BlockType type) {
     for (const auto& ion: info.ions) {
         auto name = ion.name;
         for (const auto& var: ion.reads) {
-            if (type == BlockType::Ode && ion.is_ionic_conc(var) && state_variable(var)) {
-                continue;
-            }
             auto variable_names = read_ion_variable_name(var);
             auto first = get_variable_name(variable_names.first);
             auto second = get_variable_name(variable_names.second);
             statements.push_back(fmt::format("{} = {};", first, second));
         }
         for (const auto& var: ion.writes) {
-            if (type == BlockType::Ode && ion.is_ionic_conc(var) && state_variable(var)) {
-                continue;
-            }
             if (ion.is_ionic_conc(var)) {
                 auto variables = read_ion_variable_name(var);
                 auto first = get_variable_name(variables.first);
@@ -642,9 +633,6 @@ std::vector<std::string> CodegenCVisitor::ion_read_statements_optimized(BlockTyp
     std::vector<std::string> statements;
     for (const auto& ion: info.ions) {
         for (const auto& var: ion.writes) {
-            if (type == BlockType::Ode && ion.is_ionic_conc(var) && state_variable(var)) {
-                continue;
-            }
             if (ion.is_ionic_conc(var)) {
                 auto variables = read_ion_variable_name(var);
                 auto first = "ionvar." + variables.first;

@@ -66,9 +66,6 @@ enum BlockType {
     /// breakpoint block
     Equation,
 
-    /// ode_* routines block (not used)
-    Ode,
-
     /// derivative block
     State,
 
