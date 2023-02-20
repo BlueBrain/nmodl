@@ -1770,7 +1770,7 @@
                             type: ExternVar
                             vector: true
                             separator: ", "
-                      brief: "Represents EXTERNAL statement in NMODL"
+                      brief: "This feature is DEPRECATED. Represents EXTERNAL statement in NMODL"
 
                   - ThreadSafe:
                       nmodl: THREADSAFE

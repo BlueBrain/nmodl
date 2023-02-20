@@ -25,7 +25,8 @@ const std::map<ast::AstNodeType, CodegenCompatibilityVisitor::FunctionPointer>
          {AstNodeType::GLOBAL_VAR, &CodegenCompatibilityVisitor::return_error_global_var},
          {AstNodeType::PARAM_ASSIGN, &CodegenCompatibilityVisitor::return_error_param_var},
          {AstNodeType::BBCORE_POINTER_VAR,
-          &CodegenCompatibilityVisitor::return_error_if_no_bbcore_read_write}});
+          &CodegenCompatibilityVisitor::return_error_if_no_bbcore_read_write},
+         {AstNodeType::EXTERNAL, &CodegenCompatibilityVisitor::return_error_with_name<External>}});
 
 
 std::string CodegenCompatibilityVisitor::return_error_if_solve_method_is_unhandled(
