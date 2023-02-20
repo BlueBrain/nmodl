@@ -347,8 +347,10 @@ void CodegenAccVisitor::print_net_send_buf_update_to_host() const {
 
 
 void CodegenAccVisitor::print_net_send_buf_count_update_to_device() const {
-    printer->add_line("nrn_pragma_acc(update device(nsb->_cnt) if(nt->compute_gpu))");
-    printer->add_line("nrn_pragma_omp(target update to(nsb->_cnt) if(nt->compute_gpu))");
+    printer->start_block("if (nt->compute_gpu)");
+    printer->add_line("nrn_pragma_acc(update device(nsb->_cnt))");
+    printer->add_line("nrn_pragma_omp(target update to(nsb->_cnt))");
+    printer->end_block(1);
 }
 
 
