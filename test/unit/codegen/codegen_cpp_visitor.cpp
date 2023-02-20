@@ -746,7 +746,7 @@ SCENARIO("Check that codegen generate event functions well", "[codegen][net_even
         THEN("Correct code is generated") {
             auto const generated = get_cpp_code(nmodl_text);
             std::string net_send_expected_code =
-                R"(static inline void net_send_buffering(NetSendBuffer_t* nsb, int type, int vdata_index, int weight_index, int point_index, double t, double flag) {
+                R"(static inline void net_send_buffering(const NrnThread* nt, NetSendBuffer_t* nsb, int type, int vdata_index, int weight_index, int point_index, double t, double flag) {
         int i = 0;
         i = nsb->_cnt++;
         if (i >= nsb->_size) {
@@ -777,10 +777,10 @@ SCENARIO("Check that codegen generate event functions well", "[codegen][net_even
         inst->tsave[id] = t;
         {
             if (flag == 0.0) {
-                net_send_buffering(ml->_net_send_buffer, 1, -1, -1, point_process, t, 0.0);
-                net_send_buffering(ml->_net_send_buffer, 2, inst->tqitem[0*pnodecount+id], -1, point_process, t + 1.0, 0.0);
+                net_send_buffering(nt, ml->_net_send_buffer, 1, -1, -1, point_process, t, 0.0);
+                net_send_buffering(nt, ml->_net_send_buffer, 2, inst->tqitem[0*pnodecount+id], -1, point_process, t + 1.0, 0.0);
             } else {
-                net_send_buffering(ml->_net_send_buffer, 0, inst->tqitem[0*pnodecount+id], weight_index, point_process, t+1.0, 1.0);
+                net_send_buffering(nt, ml->_net_send_buffer, 0, inst->tqitem[0*pnodecount+id], weight_index, point_process, t+1.0, 1.0);
             }
         }
     })";

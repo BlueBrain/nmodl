@@ -4018,6 +4018,10 @@ void CodegenCVisitor::print_net_receive_buffering(bool need_mech_inst) {
     printer->end_block(1);
 }
 
+void CodegenCVisitor::print_net_send_buffering_cnt_update() const {
+    printer->add_line("i = nsb->_cnt++;");
+}
+
 void CodegenCVisitor::print_net_send_buffering_grow() {
     printer->start_block("if (i >= nsb->_size)");
     printer->add_line("nsb->grow();");
@@ -4036,13 +4040,7 @@ void CodegenCVisitor::print_net_send_buffering() {
         "int weight_index, int point_index, double t, double flag";
     printer->fmt_start_block("static inline void net_send_buffering({})", args);
     printer->add_line("int i = 0;");
-    printer->fmt_start_block("if (nt->compute_gpu)");
-    print_device_atomic_capture_annotation();
-    printer->add_line("i = nsb->_cnt++;");
-    printer->decrease_indent();
-    printer->start_block("} else");
-    printer->add_line("i = nsb->_cnt++;");
-    printer->end_block(1);
+    print_net_send_buffering_cnt_update();
     print_net_send_buffering_grow();
     printer->start_block("if (i < nsb->_size)");
     printer->add_line("nsb->_sendtype[i] = type;");

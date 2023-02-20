@@ -120,6 +120,16 @@ void CodegenAccVisitor::print_abort_routine() const {
     printer->end_block(1);
 }
 
+void CodegenAccVisitor::print_net_send_buffering_cnt_update() const {
+    printer->fmt_start_block("if (nt->compute_gpu)");
+    print_device_atomic_capture_annotation();
+    printer->add_line("i = nsb->_cnt++;");
+    printer->decrease_indent();
+    printer->start_block("} else");
+    printer->add_line("i = nsb->_cnt++;");
+    printer->end_block(1);
+}
+
 void CodegenAccVisitor::print_net_send_buffering_grow() {
     // can not grow buffer during gpu execution
 }
