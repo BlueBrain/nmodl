@@ -80,12 +80,12 @@ SCENARIO("Uncompatible constructs should failed", "[codegen][compatibility_visit
             NEURON {
                 BBCOREPOINTER rng
             }
-         )";
+        )";
 
-         THEN("should failed") {
-             bool failed = runCompatibilityVisitor(nmodl_text);
-             REQUIRE(failed);
-         }
+        THEN("should failed") {
+            bool failed = runCompatibilityVisitor(nmodl_text);
+            REQUIRE(failed);
+        }
     }
     GIVEN("A mod file with BBCOREPOINTER without bbcore_write") {
         std::string const nmodl_text = R"(
@@ -97,12 +97,12 @@ SCENARIO("Uncompatible constructs should failed", "[codegen][compatibility_visit
             static void bbcore_read(double* x, int* d, int* xx, int* offset, _threadargsproto_) {
             }
             ENDVERBATIM
-         )";
+        )";
 
-         THEN("should failed") {
-             bool failed = runCompatibilityVisitor(nmodl_text);
-             REQUIRE(failed);
-         }
+        THEN("should failed") {
+            bool failed = runCompatibilityVisitor(nmodl_text);
+            REQUIRE(failed);
+        }
     }
     GIVEN("A mod file with BBCOREPOINTER without bbcore_read") {
         std::string const nmodl_text = R"(
@@ -114,12 +114,12 @@ SCENARIO("Uncompatible constructs should failed", "[codegen][compatibility_visit
             static void bbcore_write(double* x, int* d, int* xx, int* offset, _threadargsproto_) {
             }
             ENDVERBATIM
-         )";
+        )";
 
-         THEN("should failed") {
-             bool failed = runCompatibilityVisitor(nmodl_text);
-             REQUIRE(failed);
-         }
+        THEN("should failed") {
+            bool failed = runCompatibilityVisitor(nmodl_text);
+            REQUIRE(failed);
+        }
     }
     GIVEN("A mod file with BBCOREPOINTER with bbcore_read / bbcore_write") {
         std::string const nmodl_text = R"(
@@ -133,11 +133,11 @@ SCENARIO("Uncompatible constructs should failed", "[codegen][compatibility_visit
             static void bbcore_write(double* x, int* d, int* xx, int* offset, _threadargsproto_) {
             }
             ENDVERBATIM
-         )";
+        )";
 
-         THEN("should succeed") {
-             bool failed = runCompatibilityVisitor(nmodl_text);
-             REQUIRE(!failed);
-         }
+        THEN("should succeed") {
+            bool failed = runCompatibilityVisitor(nmodl_text);
+            REQUIRE(!failed);
+        }
     }
 }
