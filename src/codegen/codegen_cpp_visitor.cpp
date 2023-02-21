@@ -3714,7 +3714,10 @@ void CodegenCVisitor::print_watch_check() {
         printer->add_indent();
         printer->add_text("net_send_buffering(");
         auto t = get_variable_name("t");
-        printer->fmt_text("nt, ml->_net_send_buffer, 0, {}, -1, {}, {}+0.0, ", tqitem, point_process, t);
+        printer->fmt_text("nt, ml->_net_send_buffer, 0, {}, -1, {}, {}+0.0, ",
+                          tqitem,
+                          point_process,
+                          t);
         watch->get_value()->accept(*this);
         printer->add_text(");");
         printer->add_newline();
