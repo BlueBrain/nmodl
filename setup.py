@@ -113,13 +113,18 @@ package_name = "NMODL"
 if "NMODL_NIGHTLY_TAG" in os.environ:
     package_name += os.environ["NMODL_NIGHTLY_TAG"]
 
+# Parse long description from README.md
+with open('README.md', 'r', encoding='utf-8') as f:
+    long_description = f.read()
+
 setup(
     name=package_name,
     version=__version__,
     author="Blue Brain Project",
     author_email="bbp-ou-hpc@groupes.epfl.ch",
     description="NEURON Modeling Language Source-to-Source Compiler Framework",
-    long_description="",
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     packages=["nmodl"],
     scripts=["pywheel/shim/nmodl", "pywheel/shim/find_libpython.py"],
     include_package_data=True,
@@ -138,7 +143,9 @@ setup(
         "nbconvert",
         "nbsphinx>=0.3.2",
         "pytest>=3.7.2",
-        "sphinx<5", # myst_parser requires <5 and pip falls over
+        "sphinxcontrib-applehelp<1.0.3",
+        "sphinxcontrib-htmlhelp<=2.0.0",
+        "sphinx<6",
         "sphinx-rtd-theme",
     ]
     + install_requirements,

@@ -12,8 +12,8 @@
 
 #include "ast/program.hpp"
 #include "codegen/codegen_acc_visitor.hpp"
-#include "codegen/codegen_c_visitor.hpp"
 #include "codegen/codegen_compatibility_visitor.hpp"
+#include "codegen/codegen_cpp_visitor.hpp"
 #include "codegen/codegen_transform_visitor.hpp"
 #include "config/config.h"
 #include "parser/nmodl_driver.hpp"
@@ -314,7 +314,7 @@ int main(int argc, const char* argv[]) {
         /// Check some rules that ast should follow
         {
             logger->info("Running semantic analysis visitor");
-            if (SemanticAnalysisVisitor().check(*ast)) {
+            if (SemanticAnalysisVisitor(oacc_backend).check(*ast)) {
                 return 1;
             }
         }

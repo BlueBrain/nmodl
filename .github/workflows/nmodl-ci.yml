@@ -68,16 +68,17 @@ jobs:
         shell: bash
 
       - name: Set up Python3
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
-      - name: Install Python3 dependencies
-        run: |
-          python3 -m pip install -U pip setuptools scikit-build Jinja2 PyYAML \
-            pytest sympy
-
       - uses: actions/checkout@v3
+
+      - name: Install Python3 dependencies
+        working-directory: ${{runner.workspace}}/nmodl
+        run: |
+          python3 -m pip install -U pip setuptools
+          python3 -m pip install --user -r requirements.txt
 
       - name: Register compiler warning problem matcher
         if: ${{matrix.config.flag_warnings == 'ON'}}
@@ -116,13 +117,6 @@ jobs:
           cmake .. "${cmake_args[@]}"
         env:
           INSTALL_DIR: ${{ runner.workspace }}/install
-
-      - name: Formatting
-        shell: bash
-        working-directory: ${{runner.workspace}}/nmodl
-        run:  |
-          echo "------- Check formatting -------"
-          cmake/hpc-coding-conventions/bin/format -v --dry-run
 
       - name: Dump config dictionary
         run: |

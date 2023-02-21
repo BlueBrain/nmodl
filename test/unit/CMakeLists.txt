@@ -66,7 +66,7 @@ add_executable(testfast_math fast_math/fast_math.cpp ${NEWTON_SOLVER_SOURCE_FILE
 add_executable(testunitlexer units/lexer.cpp)
 add_executable(testunitparser units/parser.cpp)
 add_executable(testcodegen codegen/main.cpp codegen/codegen_helper.cpp codegen/codegen_utils.cpp
-                           codegen/codegen_c_visitor.cpp codegen/transform.cpp)
+                           codegen/codegen_cpp_visitor.cpp codegen/transform.cpp)
 
 target_link_libraries(testmodtoken PRIVATE lexer util)
 target_link_libraries(testlexer PRIVATE lexer util)
@@ -87,6 +87,7 @@ target_link_libraries(
           util
           test_util
           printer
+          codegen
           ${NMODL_WRAPPER_LIBS})
 target_link_libraries(
   testcodegen

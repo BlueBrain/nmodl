@@ -12,7 +12,7 @@
  * \brief \copybrief nmodl::codegen::CodegenAccVisitor
  */
 
-#include "codegen/codegen_c_visitor.hpp"
+#include "codegen/codegen_cpp_visitor.hpp"
 
 
 namespace nmodl {
@@ -38,7 +38,8 @@ class CodegenAccVisitor: public CodegenCVisitor {
 
 
     /// ivdep like annotation for channel iterations
-    void print_channel_iteration_block_parallel_hint(BlockType type) override;
+    void print_channel_iteration_block_parallel_hint(BlockType type,
+                                                     const ast::Block* block) override;
 
 
     /// atomic update pragma for reduction statements

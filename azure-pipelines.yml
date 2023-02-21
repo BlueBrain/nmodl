@@ -6,7 +6,7 @@ variables:
   #- ReleaseWheelBuild: False
   #- UploadWheel: False
   buildWheel: ${{ or(in(variables['Build.Reason'], 'Schedule'), in(variables['Build.Reason'], 'Manual')) }}
-  MACOSX_DEPLOYMENT_TARGET: 10.14
+  MACOSX_DEPLOYMENT_TARGET: 10.15
 
 # Nightly build master for pypi upload
 schedules:
@@ -86,9 +86,9 @@ stages:
         sudo apt-add-repository -y ppa:deadsnakes/ppa
         sudo apt-get update
         sudo apt-get install -y g++-8 flex bison libfl-dev cython libx11-dev libxcomposite-dev libncurses-dev mpich
-        sudo apt-get install -y python3.7 python3.7-dev python3.7-venv ninja-build
-        python3.7 -m pip install --upgrade pip setuptools
-        python3.7 -m pip install --user 'Jinja2>=2.9.3' 'PyYAML>=3.13' pytest pytest-cov 'sympy>=1.3' numpy
+        sudo apt-get install -y python3.8 python3.8-dev python3.8-venv ninja-build
+        python3.8 -m pip install --upgrade pip setuptools
+        python3.8 -m pip install --user -r $(Build.Repository.LocalPath)/requirements.txt
         # we manually get version 3.15.0 to make sure that changes in the cmake
         # files do not require unsupported versions of cmake in our package.
         wget --quiet --output-document=- "https://github.com/Kitware/CMake/releases/download/$CMAKE_VER/$CMAKE_PKG.tar.gz" | tar xzpf -
@@ -102,7 +102,7 @@ stages:
         mkdir -p $(Build.Repository.LocalPath)/build
         cd $(Build.Repository.LocalPath)/build
         cmake --version
-        cmake .. -DPYTHON_EXECUTABLE=$(which python3.7) -DCMAKE_INSTALL_PREFIX=$HOME/nmodl -DCMAKE_BUILD_TYPE=Release
+        cmake .. -DPYTHON_EXECUTABLE=$(which python3.8) -DCMAKE_INSTALL_PREFIX=$HOME/nmodl -DCMAKE_BUILD_TYPE=Release
         make -j 2
         if [ $? -ne 0 ]
         then
@@ -129,7 +129,7 @@ stages:
         mkdir nrn/build
         cd nrn/build
         cmake --version
-        cmake .. -DNRN_ENABLE_CORENEURON=ON -DNRN_ENABLE_INTERVIEWS=OFF -DNRN_ENABLE_RX3D=OFF -DNRN_ENABLE_MPI=ON -DNRN_ENABLE_TESTS=ON -DCORENRN_ENABLE_NMODL=ON -DCORENRN_NMODL_DIR=$HOME/nmodl -Dnmodl_PYTHONPATH=$HOME/nmodl/lib -DPYTHON_EXECUTABLE=$(which python3.7) -DCORENRN_NMODL_FLAGS="sympy --analytic"
+        cmake .. -DNRN_ENABLE_CORENEURON=ON -DNRN_ENABLE_INTERVIEWS=OFF -DNRN_ENABLE_RX3D=OFF -DNRN_ENABLE_MPI=ON -DNRN_ENABLE_TESTS=ON -DCORENRN_ENABLE_NMODL=ON -DCORENRN_NMODL_DIR=$HOME/nmodl -Dnmodl_PYTHONPATH=$HOME/nmodl/lib -DPYTHON_EXECUTABLE=$(which python3.8) -DCORENRN_NMODL_FLAGS="sympy --analytic"
         make -j 2
         if [ $? -ne 0 ]
         then
@@ -154,9 +154,9 @@ stages:
     - checkout: self
       submodules: True
     - script: |
-        brew install flex bison cmake python@3 gcc@8
+        brew install flex bison cmake python@3
         python3 -m pip install --upgrade pip setuptools
-        python3 -m pip install --user 'Jinja2>=2.9.3' 'PyYAML>=3.13' pytest pytest-cov numpy 'sympy>=1.3'
+        python3 -m pip install --user -r $(Build.Repository.LocalPath)/requirements.txt
       displayName: 'Install Dependencies'
     - script: |
         export PATH=/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH;
@@ -179,8 +179,8 @@ stages:
     - script: |
         export PATH=$(pwd)/$CMAKE_PKG/bin:/home/vsts/.local/bin:$PATH
         export PATH=/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH;
-        export CC='gcc-8'
-        export CXX='g++-8'
+        export CC='gcc'
+        export CXX='g++'
         git clone${NEURON_BRANCH:+ --branch }${NEURON_BRANCH} --single-branch https://github.com/neuronsimulator/nrn.git
         if [[ -n "${CORENEURON_BRANCH}" ]]; then
           pushd nrn
@@ -223,9 +223,11 @@ stages:
             python.version: '3.9'
           Python310:
             python.version: '3.10'
+          Python311:
+            python.version: '3.11'
         ${{ if eq(variables.buildWheel, False) }}:
-          Python39:
-            python.version: '3.9'
+          Python311:
+            python.version: '3.11'
     steps:
     - checkout: self
       submodules: True
@@ -280,12 +282,15 @@ stages:
             python.version: '3.10'
             python.org.version: '3.10.5'
             python.installer.name: 'macos11.pkg'
-
+          Python311:
+            python.version: '3.11'
+            python.org.version: '3.11.1'
+            python.installer.name: 'macos11.pkg'
         ${{ if eq(variables.buildWheel, False) }}:
-          Python39:
-            python.version: '3.9'
-            python.org.version: '3.9.13'
-            python.installer.name: 'macosx10.9.pkg'
+          Python311:
+            python.version: '3.11'
+            python.org.version: '3.11.1'
+            python.installer.name: 'macos11.pkg'
     steps:
     - checkout: self
       submodules: True

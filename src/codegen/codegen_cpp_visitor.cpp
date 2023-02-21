@@ -5,7 +5,7 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
-#include "codegen/codegen_c_visitor.hpp"
+#include "codegen/codegen_cpp_visitor.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -214,17 +214,17 @@ void CodegenCVisitor::visit_from_statement(const ast::FromStatement& node) {
     const auto& to = node.get_to();
     const auto& inc = node.get_increment();
     const auto& block = node.get_statement_block();
-    printer->fmt_text("for(int {}=", name);
+    printer->fmt_text("for (int {} = ", name);
     from->accept(*this);
-    printer->fmt_text("; {}<=", name);
+    printer->fmt_text("; {} <= ", name);
     to->accept(*this);
     if (inc) {
-        printer->fmt_text("; {}+=", name);
+        printer->fmt_text("; {} += ", name);
         inc->accept(*this);
     } else {
         printer->fmt_text("; {}++", name);
     }
-    printer->add_text(")");
+    printer->add_text(") ");
     block->accept(*this);
 }
 
@@ -316,6 +316,23 @@ void CodegenCVisitor::visit_verbatim(const Verbatim& node) {
 
 void CodegenCVisitor::visit_update_dt(const ast::UpdateDt& node) {
     // dt change statement should be pulled outside already
+}
+
+void CodegenCVisitor::visit_protect_statement(const ast::ProtectStatement& node) {
+    print_atomic_reduction_pragma();
+    printer->add_indent();
+    node.get_expression()->accept(*this);
+    printer->add_text(";");
+}
+
+void CodegenCVisitor::visit_mutex_lock(const ast::MutexLock& node) {
+    printer->fmt_line("#pragma omp critical ({})", info.mod_suffix);
+    printer->add_indent();
+    printer->start_block();
+}
+
+void CodegenCVisitor::visit_mutex_unlock(const ast::MutexUnlock& node) {
+    printer->end_block(1);
 }
 
 /****************************************************************************************/
@@ -475,7 +492,10 @@ bool CodegenCVisitor::need_semicolon(Statement* node) {
         || node->is_verbatim()
         || node->is_from_statement()
         || node->is_conductance_hint()
-        || node->is_while_statement()) {
+        || node->is_while_statement()
+        || node->is_protect_statement()
+        || node->is_mutex_lock()
+        || node->is_mutex_unlock()) {
         return false;
     }
     if (node->is_expression_statement()) {
@@ -992,31 +1012,6 @@ std::vector<IndexVariableInfo> CodegenCVisitor::get_int_variables() {
 }
 
 
-/**
- * \details When we enable fine level parallelism at channel level, we have do updates
- * to ion variables in atomic way. As cpus don't have atomic instructions in
- * simd loop, we have to use shadow vectors for every ion variables. Here
- * we return list of all such variables.
- *
- * \todo If conductances are specified, we don't need all below variables
- */
-std::vector<SymbolType> CodegenCVisitor::get_shadow_variables() {
-    std::vector<SymbolType> variables;
-    for (const auto& ion: info.ions) {
-        for (const auto& var: ion.writes) {
-            variables.push_back({make_symbol(shadow_varname(naming::ION_VARNAME_PREFIX + var))});
-            if (ion.is_ionic_current(var)) {
-                variables.push_back({make_symbol(shadow_varname(
-                    std::string(naming::ION_VARNAME_PREFIX) + "di" + ion.name + "dv"))});
-            }
-        }
-    }
-    variables.push_back({make_symbol("ml_rhs")});
-    variables.push_back({make_symbol("ml_d")});
-    return variables;
-}
-
-
 /****************************************************************************************/
 /*                      Routines must be overloaded in backend                          */
 /****************************************************************************************/
@@ -1101,16 +1096,32 @@ void CodegenCVisitor::print_net_init_acc_serial_annotation_block_end() {
  * for parallelization. For example:
  *
  * \code
- *      #pragma ivdep
+ *      #pragma omp simd
  *      for(int id = 0; id < nodecount; id++) {
  *
  *      #pragma acc parallel loop
  *      for(int id = 0; id < nodecount; id++) {
  * \endcode
  */
-void CodegenCVisitor::print_channel_iteration_block_parallel_hint(BlockType /* type */) {
-    printer->add_line("#pragma ivdep");
-    printer->add_line("#pragma omp simd");
+void CodegenCVisitor::print_channel_iteration_block_parallel_hint(BlockType /* type */,
+                                                                  const ast::Block* block) {
+    // ivdep allows SIMD parallelisation of a block/loop but doesn't provide
+    // a standard mechanism for atomics. Also, even with openmp 5.0, openmp
+    // atomics do not enable vectorisation under "omp simd" (gives compiler
+    // error with gcc < 9 if atomic and simd pragmas are nested). So, emit
+    // ivdep/simd pragma when no MUTEXLOCK/MUTEXUNLOCK/PROTECT statements
+    // are used in the given block.
+    std::vector<std::shared_ptr<const ast::Ast>> nodes;
+    if (block) {
+        nodes = collect_nodes(*block,
+                              {ast::AstNodeType::PROTECT_STATEMENT,
+                               ast::AstNodeType::MUTEX_LOCK,
+                               ast::AstNodeType::MUTEX_UNLOCK});
+    }
+    if (nodes.empty()) {
+        printer->add_line("#pragma ivdep");
+        printer->add_line("#pragma omp simd");
+    }
 }
 
 
@@ -1134,9 +1145,7 @@ void CodegenCVisitor::print_nrn_cur_matrix_shadow_update() {
     } else {
         auto rhs_op = operator_for_rhs();
         auto d_op = operator_for_d();
-        print_atomic_reduction_pragma();
         printer->fmt_line("vec_rhs[node_id] {} rhs;", rhs_op);
-        print_atomic_reduction_pragma();
         printer->fmt_line("vec_d[node_id] {} g;", d_op);
     }
 }
@@ -1147,27 +1156,19 @@ void CodegenCVisitor::print_nrn_cur_matrix_shadow_reduction() {
     auto d_op = operator_for_d();
     if (info.point_process) {
         printer->add_line("int node_id = node_index[id];");
-        print_atomic_reduction_pragma();
         printer->fmt_line("vec_rhs[node_id] {} shadow_rhs[id];", rhs_op);
-        print_atomic_reduction_pragma();
         printer->fmt_line("vec_d[node_id] {} shadow_d[id];", d_op);
     }
 }
 
 
+/**
+ * In the current implementation of CPU/CPP backend we need to emit atomic pragma
+ * only with PROTECT construct (atomic rduction requirement for other cases on CPU
+ * is handled via separate shadow vectors).
+ */
 void CodegenCVisitor::print_atomic_reduction_pragma() {
-    // backend specific, do nothing
-}
-
-
-void CodegenCVisitor::print_shadow_reduction_statements() {
-    for (const auto& statement: shadow_statements) {
-        print_atomic_reduction_pragma();
-        auto lhs = get_variable_name(statement.lhs);
-        auto rhs = get_variable_name(shadow_varname(statement.lhs));
-        printer->fmt_line("{} {} {};", lhs, statement.op, rhs);
-    }
-    shadow_statements.clear();
+    printer->add_line("#pragma omp atomic update");
 }
 
 
@@ -1286,14 +1287,17 @@ void CodegenCVisitor::print_statement_block(const ast::StatementBlock& node,
             continue;
         }
         /// not necessary to add indent for verbatim block (pretty-printing)
-        if (!statement->is_verbatim()) {
+        if (!statement->is_verbatim() && !statement->is_mutex_lock() &&
+            !statement->is_mutex_unlock() && !statement->is_protect_statement()) {
             printer->add_indent();
         }
         statement->accept(*this);
         if (need_semicolon(statement.get())) {
             printer->add_text(";");
         }
-        printer->add_newline();
+        if (!statement->is_mutex_lock() && !statement->is_mutex_unlock()) {
+            printer->add_newline();
+        }
     }
 
     if (close_brace) {
@@ -1730,6 +1734,33 @@ void CodegenCVisitor::print_function(const ast::FunctionBlock& node) {
     print_function_procedure_helper(node);
 }
 
+
+void CodegenCVisitor::print_function_tables(const ast::FunctionTableBlock& node) {
+    auto name = node.get_node_name();
+    const auto& p = node.get_parameters();
+    auto params = internal_method_parameters();
+    for (const auto& i: p) {
+        params.emplace_back("", "double", "", i->get_node_name());
+    }
+    printer->fmt_line("double {}({})", method_name(name), get_parameter_str(params));
+    printer->start_block();
+    printer->fmt_line("double _arg[{}];", p.size());
+    for (size_t i = 0; i < p.size(); ++i) {
+        printer->fmt_line("_arg[{}] = {};", i, p[i]->get_node_name());
+    }
+    printer->fmt_line("return hoc_func_table({}, {}, _arg);",
+                      get_variable_name(std::string("_ptable_" + name), true),
+                      p.size());
+    printer->end_block(1);
+
+    printer->fmt_start_block("double table_{}()", method_name(name));
+    printer->fmt_line("hoc_spec_table(&{}, {});",
+                      get_variable_name(std::string("_ptable_" + name)),
+                      p.size());
+    printer->add_line("return 0.;");
+    printer->end_block(1);
+}
+
 /**
  * @brief Checks whether the functor_block generated by sympy solver modifies any variable outside
  * its scope. If it does then return false, so that the operator() of the struct functor of the
@@ -1779,25 +1810,19 @@ bool is_functor_const(const ast::StatementBlock& variable_block,
     return is_functor_const;
 }
 
-void CodegenCVisitor::visit_eigen_newton_solver_block(const ast::EigenNewtonSolverBlock& node) {
-    // solution vector to store copy of state vars for Newton solver
-    printer->add_newline();
-
-    auto float_type = default_float_data_type();
-    int N = node.get_n_state_vars()->get_value();
-    printer->fmt_line("Eigen::Matrix<{}, {}, 1> nmodl_eigen_xm;", float_type, N);
-    printer->fmt_line("{}* nmodl_eigen_x = nmodl_eigen_xm.data();", float_type);
-
-    print_statement_block(*node.get_setup_x_block(), false, false);
-
+void CodegenCVisitor::print_functor_definition(const ast::EigenNewtonSolverBlock& node) {
     // functor that evaluates F(X) and J(X) for
     // Newton solver
-    printer->start_block("struct functor");
+    auto float_type = default_float_data_type();
+    int N = node.get_n_state_vars()->get_value();
+
+    const auto functor_name = info.functor_names[&node];
+    printer->fmt_start_block("struct {0}", functor_name);
     printer->add_line("NrnThread* nt;");
     printer->fmt_line("{0}* inst;", instance_struct());
     printer->add_line("int id, pnodecount;");
     printer->add_line("double v;");
-    printer->add_line("Datum* indexes;");
+    printer->add_line("const Datum* indexes;");
     printer->add_line("double* data;");
     printer->add_line("ThreadDatum* thread;");
 
@@ -1813,11 +1838,12 @@ void CodegenCVisitor::visit_eigen_newton_solver_block(const ast::EigenNewtonSolv
     printer->end_block(2);
 
     printer->fmt_line(
-        "functor(NrnThread* nt, {}* inst, int id, int pnodecount, double v, Datum* indexes, "
+        "{0}(NrnThread* nt, {1}* inst, int id, int pnodecount, double v, const Datum* indexes, "
         "double* data, ThreadDatum* thread) : "
         "nt{{nt}}, inst{{inst}}, id{{id}}, pnodecount{{pnodecount}}, v{{v}}, indexes{{indexes}}, "
         "data{{data}}, thread{{thread}} "
         "{{}}",
+        functor_name,
         instance_struct());
 
     printer->add_indent();
@@ -1845,11 +1871,23 @@ void CodegenCVisitor::visit_eigen_newton_solver_block(const ast::EigenNewtonSolv
     printer->end_block(1);
 
     printer->end_block(";");
+}
+
+void CodegenCVisitor::visit_eigen_newton_solver_block(const ast::EigenNewtonSolverBlock& node) {
+    // solution vector to store copy of state vars for Newton solver
+    printer->add_newline();
+
+    auto float_type = default_float_data_type();
+    int N = node.get_n_state_vars()->get_value();
+    printer->fmt_line("Eigen::Matrix<{}, {}, 1> nmodl_eigen_xm;", float_type, N);
+    printer->fmt_line("{}* nmodl_eigen_x = nmodl_eigen_xm.data();", float_type);
+
+    print_statement_block(*node.get_setup_x_block(), false, false);
 
     // call newton solver with functor and X matrix that contains state vars
     printer->add_line("// call newton solver");
-    printer->add_line(
-        "functor newton_functor(nt, inst, id, pnodecount, v, indexes, data, thread);");
+    printer->fmt_line("{} newton_functor(nt, inst, id, pnodecount, v, indexes, data, thread);",
+                      info.functor_names[&node]);
     printer->add_line("newton_functor.initialize();");
     printer->add_line(
         "int newton_iterations = nmodl::newton::newton_solver(nmodl_eigen_xm, newton_functor);");
@@ -1934,34 +1972,21 @@ std::string CodegenCVisitor::internal_method_arguments() {
 }
 
 
-std::string CodegenCVisitor::param_type_qualifier() {
-    return "";
-}
-
-
-std::string CodegenCVisitor::param_ptr_qualifier() {
-    return "";
-}
-
-
 /**
  * @todo: figure out how to correctly handle qualifiers
  */
 CodegenCVisitor::ParamVector CodegenCVisitor::internal_method_parameters() {
     auto params = ParamVector();
     params.emplace_back("", "int", "", "id");
-    params.emplace_back(param_type_qualifier(), "int", "", "pnodecount");
-    params.emplace_back(param_type_qualifier(),
-                        fmt::format("{}*", instance_struct()),
-                        param_ptr_qualifier(),
-                        "inst");
+    params.emplace_back("", "int", "", "pnodecount");
+    params.emplace_back("", fmt::format("{}*", instance_struct()), "", "inst");
     if (ion_variable_struct_required()) {
         params.emplace_back("", "IonCurVar&", "", "ionvar");
     }
     params.emplace_back("", "double*", "", "data");
     params.emplace_back("const ", "Datum*", "", "indexes");
-    params.emplace_back(param_type_qualifier(), "ThreadDatum*", "", "thread");
-    params.emplace_back(param_type_qualifier(), "NrnThread*", param_ptr_qualifier(), "nt");
+    params.emplace_back("", "ThreadDatum*", "", "thread");
+    params.emplace_back("", "NrnThread*", "", "nt");
     params.emplace_back("", "double", "", "v");
     return params;
 }
@@ -2345,11 +2370,6 @@ std::string CodegenCVisitor::global_variable_name(const SymbolType& symbol,
 }
 
 
-std::string CodegenCVisitor::ion_shadow_variable_name(const SymbolType& symbol) {
-    return fmt::format("inst->{}[id]", symbol->get_name());
-}
-
-
 std::string CodegenCVisitor::update_if_ion_variable_name(const std::string& name) const {
     std::string result(name);
     if (ion_variable_struct_required()) {
@@ -2401,14 +2421,6 @@ std::string CodegenCVisitor::get_variable_name(const std::string& name, bool use
                           symbol_comparator);
     if (g != codegen_global_variables.end()) {
         return global_variable_name(*g, use_instance);
-    }
-
-    // shadow variable
-    auto s = std::find_if(codegen_shadow_variables.begin(),
-                          codegen_shadow_variables.end(),
-                          symbol_comparator);
-    if (s != codegen_shadow_variables.end()) {
-        return ion_shadow_variable_name(*s);
     }
 
     if (varname == naming::NTHREAD_DT_VARIABLE) {
@@ -2704,6 +2716,11 @@ void CodegenCVisitor::print_mechanism_global_var_structure(bool print_initialise
         }
     }
 
+    for (const auto& f: info.function_tables) {
+        printer->fmt_line("void* _ptable_{}{{}};", f->get_node_name());
+        codegen_global_variables.push_back(make_symbol("_ptable_" + f->get_node_name()));
+    }
+
     if (info.vectorize && info.thread_data_index) {
         printer->fmt_line("{}ThreadDatum ext_call_thread[{}]{};",
                           qualifier,
@@ -2884,7 +2901,7 @@ static size_t get_register_type_for_ba_block(const ast::Block* block) {
 void CodegenCVisitor::print_mechanism_register() {
     printer->add_newline(2);
     printer->add_line("/** register channel with the simulator */");
-    printer->fmt_start_block("void _{}_reg() ", info.mod_file);
+    printer->fmt_start_block("void _{}_reg()", info.mod_file);
 
     // type related information
     auto suffix = add_escape_quote(info.mod_suffix);
@@ -3461,7 +3478,7 @@ void CodegenCVisitor::print_nrn_init(bool skip_init_check) {
         print_dt_update_to_device();
     }
 
-    print_channel_iteration_block_parallel_hint(BlockType::Initial);
+    print_channel_iteration_block_parallel_hint(BlockType::Initial, info.initial_node);
     printer->start_block("for (int id = 0; id < nodecount; id++)");
 
     if (info.net_receive_node != nullptr) {
@@ -3470,7 +3487,6 @@ void CodegenCVisitor::print_nrn_init(bool skip_init_check) {
 
     print_initial_block(info.initial_node);
     printer->end_block(1);
-    print_shadow_reduction_statements();
 
     if (!info.changed_dt.empty()) {
         printer->fmt_line("{} = _save_prev_dt;", get_variable_name(naming::NTHREAD_DT_VARIABLE));
@@ -3519,7 +3535,7 @@ void CodegenCVisitor::print_before_after_block(const ast::Block* node, size_t bl
     printer->fmt_line("/** {} of block type {} # {} */", ba_type, ba_block_type, block_id);
     print_global_function_common_code(BlockType::BeforeAfter, function_name);
 
-    print_channel_iteration_block_parallel_hint(BlockType::BeforeAfter);
+    print_channel_iteration_block_parallel_hint(BlockType::BeforeAfter, node);
     printer->start_block("for (int id = 0; id < nodecount; id++)");
 
     printer->add_line("int node_id = node_index[id];");
@@ -3576,10 +3592,18 @@ void CodegenCVisitor::print_nrn_destructor() {
 }
 
 
+void CodegenCVisitor::print_functors_definitions() {
+    for (const auto& functor_name: info.functor_names) {
+        printer->add_newline(2);
+        print_functor_definition(*functor_name.first);
+    }
+}
+
+
 void CodegenCVisitor::print_nrn_alloc() {
     printer->add_newline(2);
     auto method = method_name(naming::NRN_ALLOC_METHOD);
-    printer->fmt_start_block("static void {}(double* data, Datum* indexes, int type) ", method);
+    printer->fmt_start_block("static void {}(double* data, Datum* indexes, int type)", method);
     printer->add_line("// do nothing");
     printer->end_block(1);
 }
@@ -3646,7 +3670,13 @@ void CodegenCVisitor::print_watch_check() {
     printer->add_newline(2);
     printer->add_line("/** routine to check watch activation */");
     print_global_function_common_code(BlockType::Watch);
-    print_channel_iteration_block_parallel_hint(BlockType::Watch);
+
+    // WATCH statements appears in NET_RECEIVE block and while printing
+    // net_receive function we already check if it contains any MUTEX/PROTECT
+    // constructs. As WATCH is not a top level block but list of statements,
+    // we don't need to have ivdep pragma related check
+    print_channel_iteration_block_parallel_hint(BlockType::Watch, nullptr);
+
     printer->start_block("for (int id = 0; id < nodecount; id++)");
 
     if (info.is_voltage_used_by_watch_statements()) {
@@ -3725,8 +3755,8 @@ void CodegenCVisitor::print_net_receive_common_code(const Block& node, bool need
         print_kernel_data_present_annotation_block_begin();
     }
 
-    printer->fmt_line("{}int nodecount = ml->nodecount;", param_type_qualifier());
-    printer->fmt_line("{}int pnodecount = ml->_nodecount_padded;", param_type_qualifier());
+    printer->add_line("int nodecount = ml->nodecount;");
+    printer->add_line("int pnodecount = ml->_nodecount_padded;");
     printer->add_line("double* data = ml->data;");
     printer->add_line("double* weights = nt->weights;");
     printer->add_line("Datum* indexes = ml->pdata;");
@@ -3791,8 +3821,7 @@ void CodegenCVisitor::print_net_send_call(const FunctionCall& node) {
 
 void CodegenCVisitor::print_net_move_call(const FunctionCall& node) {
     if (!printing_net_receive) {
-        std::cout << "Error : net_move only allowed in NET_RECEIVE block" << std::endl;
-        abort();
+        throw std::runtime_error("Error : net_move only allowed in NET_RECEIVE block");
     }
 
     auto const& arguments = node.get_arguments();
@@ -3883,7 +3912,7 @@ void CodegenCVisitor::print_net_init() {
     auto args = "Point_process* pnt, int weight_index, double flag";
     printer->add_newline(2);
     printer->add_line("/** initialize block for net receive */");
-    printer->fmt_start_block("static void net_init({}) ", args);
+    printer->fmt_start_block("static void net_init({})", args);
     auto block = node->get_statement_block().get();
     if (block->get_statements().empty()) {
         printer->add_line("// do nothing");
@@ -3936,7 +3965,7 @@ void CodegenCVisitor::print_get_memb_list() {
 
 void CodegenCVisitor::print_net_receive_loop_begin() {
     printer->add_line("int count = nrb->_displ_cnt;");
-    print_channel_iteration_block_parallel_hint(BlockType::NetReceive);
+    print_channel_iteration_block_parallel_hint(BlockType::NetReceive, info.net_receive_node);
     printer->start_block("for (int i = 0; i < count; i++)");
 }
 
@@ -3985,13 +4014,12 @@ void CodegenCVisitor::print_net_receive_buffering(bool need_mech_inst) {
         print_send_event_move();
     }
 
-    printer->add_newline();
     print_kernel_data_present_annotation_block_end();
     printer->end_block(1);
 }
 
 void CodegenCVisitor::print_net_send_buffering_grow() {
-    printer->start_block("if(i >= nsb->_size)");
+    printer->start_block("if (i >= nsb->_size)");
     printer->add_line("nsb->grow();");
     printer->end_block(1);
 }
@@ -4006,12 +4034,12 @@ void CodegenCVisitor::print_net_send_buffering() {
     auto args =
         "NetSendBuffer_t* nsb, int type, int vdata_index, "
         "int weight_index, int point_index, double t, double flag";
-    printer->fmt_start_block("static inline void net_send_buffering({}) ", args);
+    printer->fmt_start_block("static inline void net_send_buffering({})", args);
     printer->add_line("int i = 0;");
     print_device_atomic_capture_annotation();
     printer->add_line("i = nsb->_cnt++;");
     print_net_send_buffering_grow();
-    printer->start_block("if(i < nsb->_size)");
+    printer->start_block("if (i < nsb->_size)");
     printer->add_line("nsb->_sendtype[i] = type;");
     printer->add_line("nsb->_vdata_index[i] = vdata_index;");
     printer->add_line("nsb->_weight_index[i] = weight_index;");
@@ -4077,12 +4105,10 @@ void CodegenCVisitor::print_net_receive_kernel() {
         name = method_name("net_receive_kernel");
         params.emplace_back("", "double", "", "t");
         params.emplace_back("", "Point_process*", "", "pnt");
-        params.emplace_back(param_type_qualifier(),
-                            fmt::format("{}*", instance_struct()),
-                            param_ptr_qualifier(),
-                            "inst");
-        params.emplace_back(param_type_qualifier(), "NrnThread*", param_ptr_qualifier(), "nt");
-        params.emplace_back(param_type_qualifier(), "Memb_list*", param_ptr_qualifier(), "ml");
+        params.emplace_back("", fmt::format("{}*", instance_struct()),
+                            "", "inst");
+        params.emplace_back("", "NrnThread*", "", "nt");
+        params.emplace_back("", "Memb_list*", "", "ml");
         params.emplace_back("", "int", "", "weight_index");
         params.emplace_back("", "double", "", "flag");
     } else {
@@ -4093,7 +4119,7 @@ void CodegenCVisitor::print_net_receive_kernel() {
     }
 
     printer->add_newline(2);
-    printer->fmt_start_block("static inline void {}({}) ", name, get_parameter_str(params));
+    printer->fmt_start_block("static inline void {}({})", name, get_parameter_str(params));
     print_net_receive_common_code(*node, info.artificial_cell);
     if (info.artificial_cell) {
         printer->add_line("double t = nt->_t;");
@@ -4136,7 +4162,7 @@ void CodegenCVisitor::print_net_receive() {
         params.emplace_back("", "int", "", "weight_index");
         params.emplace_back("", "double", "", "flag");
         printer->add_newline(2);
-        printer->fmt_start_block("static void {}({}) ", name, get_parameter_str(params));
+        printer->fmt_start_block("static void {}({})", name, get_parameter_str(params));
         printer->add_line("NrnThread* nt = nrn_threads + pnt->_tid;");
         printer->add_line("Memb_list* ml = get_memb_list(nt);");
         printer->add_line("NetReceiveBuffer_t* nrb = ml->_net_receive_buffer;");
@@ -4290,7 +4316,7 @@ void CodegenCVisitor::print_nrn_state() {
     printer->add_newline(2);
     printer->add_line("/** update state */");
     print_global_function_common_code(BlockType::State);
-    print_channel_iteration_block_parallel_hint(BlockType::State);
+    print_channel_iteration_block_parallel_hint(BlockType::State, info.nrn_state_block);
     printer->start_block("for (int id = 0; id < nodecount; id++)");
     
     printer->add_line("int node_id = node_index[id];");
@@ -4325,11 +4351,6 @@ void CodegenCVisitor::print_nrn_state() {
         printer->add_line(text);
     }
     printer->end_block(1);
-    if (!shadow_statements.empty()) {
-        printer->start_block("for (int id = 0; id < nodecount; id++)");
-        print_shadow_reduction_statements();
-        printer->end_block(1);
-    }
 
     print_kernel_data_present_annotation_block_end();
 
@@ -4488,9 +4509,7 @@ void CodegenCVisitor::print_fast_imem_calculation() {
         printer->start_block("for (int id = 0; id < nodecount; id++)");
         printer->add_line("int node_id = node_index[id];");
     }
-    print_atomic_reduction_pragma();
     printer->fmt_line("nt->nrn_fast_imem->nrn_sav_rhs[node_id] {} {};", rhs_op, rhs);
-    print_atomic_reduction_pragma();
     printer->fmt_line("nt->nrn_fast_imem->nrn_sav_d[node_id] {} {};", d_op, d);
     if (nrn_cur_reduction_loop_required()) {
         printer->end_block(1);
@@ -4511,7 +4530,7 @@ void CodegenCVisitor::print_nrn_cur() {
     printer->add_newline(2);
     printer->add_line("/** update current */");
     print_global_function_common_code(BlockType::Equation);
-    print_channel_iteration_block_parallel_hint(BlockType::Equation);
+    print_channel_iteration_block_parallel_hint(BlockType::Equation, info.breakpoint_node);
     printer->start_block("for (int id = 0; id < nodecount; id++)");
     print_nrn_cur_kernel(*info.breakpoint_node);
     print_nrn_cur_matrix_shadow_update();
@@ -4523,7 +4542,6 @@ void CodegenCVisitor::print_nrn_cur() {
     if (nrn_cur_reduction_loop_required()) {
         printer->start_block("for (int id = 0; id < nodecount; id++)");
         print_nrn_cur_matrix_shadow_reduction();
-        print_shadow_reduction_statements();
         printer->end_block(1);
         print_fast_imem_calculation();
     }
@@ -4597,6 +4615,9 @@ void CodegenCVisitor::print_compute_functions() {
     for (const auto& function: info.functions) {
         print_function(*function);
     }
+    for (const auto& function: info.function_tables) {
+        print_function_tables(*function);
+    }
     for (size_t i = 0; i < info.before_after_blocks.size(); i++) {
         print_before_after_block(info.before_after_blocks[i], i);
     }
@@ -4635,6 +4656,7 @@ void CodegenCVisitor::print_codegen_routines() {
     print_nrn_alloc();
     print_nrn_constructor();
     print_nrn_destructor();
+    print_functors_definitions();
     print_compute_functions();
     print_check_table_thread_function();
     print_mechanism_register();
@@ -4666,7 +4688,6 @@ void CodegenCVisitor::setup(const Program& node) {
 
     codegen_float_variables = get_float_variables();
     codegen_int_variables = get_int_variables();
-    codegen_shadow_variables = get_shadow_variables();
 
     update_index_semantics();
     rename_function_arguments();

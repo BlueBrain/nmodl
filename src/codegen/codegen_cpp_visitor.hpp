@@ -236,11 +236,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
     std::vector<SymbolType> codegen_global_variables;
 
     /**
-     * All ion variables that could be possibly written
-     */
-    std::vector<SymbolType> codegen_shadow_variables;
-
-    /**
      * \c true if currently net_receive block being printed
      */
     bool printing_net_receive = false;
@@ -284,12 +279,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * Pointer to active code printer
      */
     std::shared_ptr<CodePrinter> printer;
-
-    /**
-     * List of shadow statements in the current block
-     */
-    std::vector<ShadowUseStatement> shadow_statements;
-
 
     /**
      * Return Nmodl language version
@@ -417,16 +406,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      */
     std::string method_name(const std::string& name) const {
         return name + "_" + info.mod_suffix;
-    }
-
-
-    /**
-     * Constructs a shadow variable name
-     * \param name The name of the variable
-     * \return     The name of the variable prefixed with \c shadow_
-     */
-    std::string shadow_varname(const std::string& name) const {
-        return "shadow_" + name;
     }
 
 
@@ -631,14 +610,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
-     * Determine the variable name for a shadow variable given its symbol
-     * \param symbol The symbol of a variable for which we want to obtain its name
-     * \return       The C string representing the access to the shadow variable
-     */
-    static std::string ion_shadow_variable_name(const SymbolType& symbol);
-
-
-    /**
      * Determine variable name in the structure of mechanism properties
      *
      * \param name         Variable name that is being printed
@@ -676,13 +647,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * \return A \c vector of \c int variables
      */
     std::vector<IndexVariableInfo> get_int_variables();
-
-
-    /**
-     * Determine all ion write variables that require shadow vectors during code generation
-     * \return A \c vector of ion variables
-     */
-    std::vector<SymbolType> get_shadow_variables();
 
 
     /**
@@ -900,20 +864,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * Print static assertions about the global variable struct.
      */
     virtual void print_global_var_struct_assertions() const;
-
-    /**
-     * The used parameter type qualifier
-     * \return an empty string
-     */
-    virtual std::string param_type_qualifier();
-
-
-    /**
-     * The used parameter pointer type qualifier
-     * \return an empty string
-     */
-    virtual std::string param_ptr_qualifier();
-
 
     /**
      * Prints the start of the \c coreneuron namespace
@@ -1263,7 +1213,8 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      *
      * \param type The block type
      */
-    virtual void print_channel_iteration_block_parallel_hint(BlockType type);
+    virtual void print_channel_iteration_block_parallel_hint(BlockType type,
+                                                             const ast::Block* block);
 
 
     /**
@@ -1438,7 +1389,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
     /**
      * Print atomic update pragma for reduction statements
-     *
      */
     virtual void print_atomic_reduction_pragma();
 
@@ -1804,6 +1754,13 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
 
 
     /**
+     * Print NMODL function_table in target backend code
+     * \param node
+     */
+    void print_function_tables(const ast::FunctionTableBlock& node);
+
+
+    /**
      * Print NMODL procedure in target backend code
      * \param node
      */
@@ -1851,6 +1808,22 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      */
     void print_instance_variable_setup();
 
+    /**
+     * Go through the map of \c EigenNewtonSolverBlock s and their corresponding functor names
+     * and print the functor definitions before the definitions of the functions of the generated
+     * file
+     *
+     */
+    void print_functors_definitions();
+
+    /**
+     * @brief Based on the \c EigenNewtonSolverBlock passed print the definition needed for its
+     * functor
+     *
+     * @param node \c EigenNewtonSolverBlock for which to print the functor
+     */
+    void print_functor_definition(const ast::EigenNewtonSolverBlock& node);
+
     void visit_binary_expression(const ast::BinaryExpression& node) override;
     void visit_binary_operator(const ast::BinaryOperator& node) override;
     void visit_boolean(const ast::Boolean& node) override;
@@ -1883,6 +1856,9 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
     void visit_derivimplicit_callback(const ast::DerivimplicitCallback& node) override;
     void visit_for_netcon(const ast::ForNetcon& node) override;
     void visit_update_dt(const ast::UpdateDt& node) override;
+    void visit_protect_statement(const ast::ProtectStatement& node) override;
+    void visit_mutex_lock(const ast::MutexLock& node) override;
+    void visit_mutex_unlock(const ast::MutexUnlock& node) override;
 };
 
 
