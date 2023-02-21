@@ -68,41 +68,41 @@ add_executable(testunitparser units/parser.cpp)
 add_executable(testcodegen codegen/main.cpp codegen/codegen_helper.cpp codegen/codegen_utils.cpp
                            codegen/codegen_cpp_visitor.cpp codegen/transform.cpp)
 
-target_link_libraries(testmodtoken PRIVATE lexer util)
-target_link_libraries(testlexer PRIVATE lexer util)
+target_link_libraries(testmodtoken lexer util)
+target_link_libraries(testlexer lexer util)
 target_link_libraries(
   testparser
-  PRIVATE visitor
-          symtab
-          lexer
-          util
-          test_util
-          printer
-          ${NMODL_WRAPPER_LIBS})
+  visitor
+  symtab
+  lexer
+  util
+  test_util
+  printer
+  ${NMODL_WRAPPER_LIBS})
 target_link_libraries(
   testvisitor
-  PRIVATE visitor
-          symtab
-          lexer
-          util
-          test_util
-          printer
-          codegen
-          ${NMODL_WRAPPER_LIBS})
+  visitor
+  symtab
+  lexer
+  util
+  test_util
+  printer
+  codegen
+  ${NMODL_WRAPPER_LIBS})
 target_link_libraries(
   testcodegen
-  PRIVATE codegen
-          visitor
-          symtab
-          lexer
-          util
-          test_util
-          printer
-          ${NMODL_WRAPPER_LIBS})
-target_link_libraries(testprinter PRIVATE printer util)
-target_link_libraries(testsymtab PRIVATE symtab lexer util)
-target_link_libraries(testunitlexer PRIVATE lexer util)
-target_link_libraries(testunitparser PRIVATE lexer test_util config)
+  codegen
+  visitor
+  symtab
+  lexer
+  util
+  test_util
+  printer
+  ${NMODL_WRAPPER_LIBS})
+target_link_libraries(testprinter printer util)
+target_link_libraries(testsymtab symtab lexer util)
+target_link_libraries(testunitlexer lexer util)
+target_link_libraries(testunitparser lexer test_util config)
 
 # =============================================================================
 # Use catch_discover instead of add_test for granular test result reporting.
