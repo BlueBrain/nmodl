@@ -71,11 +71,10 @@ jobs:
           ccache -s
           cmake --build .
           ccache -s
-          (cd ..;  lcov --capture  --initial --directory . --no-external --output-file build/coverage-base.info)
+          (cd ..;  lcov --capture  --initial --directory . --no-external --output-file build/coverage-base.info --exclude "*/ext/*")
           ctest --output-on-failure
-          (cd ..; lcov --capture  --directory . --no-external --output-file build/coverage-run.info)
-          lcov --add-tracefile coverage-base.info --add-tracefile coverage-run.info --output-file coverage-full.info
-          lcov --remove coverage-full.info --output-file coverage.info "*/ext/*"
+          (cd ..; lcov --capture  --directory . --no-external --output-file build/coverage-run.info --exclude "*/ext/*")
+          lcov --add-tracefile coverage-base.info --add-tracefile coverage-run.info --output-file coverage.info
           lcov --list coverage.info
         env:
           CCACHE_DIR: ${{runner.workspace}}/ccache
