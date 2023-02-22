@@ -98,6 +98,7 @@ $(document).ready(function(){initNavTree('test_2unit_2codegen_2codegen__cpp__vis
 <div class="contents">
 <div class="textblock"><code>#include &lt;catch2/catch.hpp&gt;</code><br />
 <code>#include &quot;<a class="el" href="program_8hpp_source.html">ast/program.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="codegen__acc__visitor_8hpp_source.html">codegen/codegen_acc_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="codegen__cpp__visitor_8hpp_source.html">codegen/codegen_cpp_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="codegen__helper__visitor_8hpp_source.html">codegen/codegen_helper_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="nmodl__driver_8hpp_source.html">parser/nmodl_driver.hpp</a>&quot;</code><br />
@@ -117,12 +118,15 @@ Functions</h2></td></tr>
 <tr class="memitem:ad5868eeaa048f3a22739a790a9a2016c"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; CodegenCVisitor &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#ad5868eeaa048f3a22739a790a9a2016c">create_c_visitor</a> (const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_program.html">ast::Program</a> &gt; &amp;ast, const std::string &amp;, std::stringstream &amp;ss)</td></tr>
 <tr class="memdesc:ad5868eeaa048f3a22739a790a9a2016c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper for creating C codegen visitor.  <a href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#ad5868eeaa048f3a22739a790a9a2016c">More...</a><br /></td></tr>
 <tr class="separator:ad5868eeaa048f3a22739a790a9a2016c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6b03395b7f6ae595a2c4b3fecc67a56"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; CodegenAccVisitor &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#ad6b03395b7f6ae595a2c4b3fecc67a56">create_acc_visitor</a> (const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_program.html">ast::Program</a> &gt; &amp;ast, const std::string &amp;, std::stringstream &amp;ss)</td></tr>
+<tr class="memdesc:ad6b03395b7f6ae595a2c4b3fecc67a56"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper for creating OpenACC codegen visitor.  <a href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#ad6b03395b7f6ae595a2c4b3fecc67a56">More...</a><br /></td></tr>
+<tr class="separator:ad6b03395b7f6ae595a2c4b3fecc67a56"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aad099bc716a26661997af855020e2dc4"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#aad099bc716a26661997af855020e2dc4">get_instance_var_setup_function</a> (std::string &amp;nmodl_text)</td></tr>
 <tr class="memdesc:aad099bc716a26661997af855020e2dc4"><td class="mdescLeft">&#160;</td><td class="mdescRight">print instance structure for testing purpose  <a href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#aad099bc716a26661997af855020e2dc4">More...</a><br /></td></tr>
 <tr class="separator:aad099bc716a26661997af855020e2dc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab7518722cbffea33018ffc7c653e1f87"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#ab7518722cbffea33018ffc7c653e1f87">get_cpp_code</a> (const std::string &amp;nmodl_text)</td></tr>
-<tr class="memdesc:ab7518722cbffea33018ffc7c653e1f87"><td class="mdescLeft">&#160;</td><td class="mdescRight">print entire code  <a href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#ab7518722cbffea33018ffc7c653e1f87">More...</a><br /></td></tr>
-<tr class="separator:ab7518722cbffea33018ffc7c653e1f87"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d48a7370b11cdab6d1f8a81232554da"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#a6d48a7370b11cdab6d1f8a81232554da">get_cpp_code</a> (const std::string &amp;nmodl_text, const bool generate_gpu_code=false)</td></tr>
+<tr class="memdesc:a6d48a7370b11cdab6d1f8a81232554da"><td class="mdescLeft">&#160;</td><td class="mdescRight">print entire code  <a href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#a6d48a7370b11cdab6d1f8a81232554da">More...</a><br /></td></tr>
+<tr class="separator:a6d48a7370b11cdab6d1f8a81232554da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9c45dd7626fd81cd01383b4f8dc4e604"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#a9c45dd7626fd81cd01383b4f8dc4e604">SCENARIO</a> (&quot;Check instance variable definition order&quot;, &quot;[codegen][var_order]&quot;)</td></tr>
 <tr class="separator:a9c45dd7626fd81cd01383b4f8dc4e604"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab6505bf89fc4573d824bb53a5f591c9e"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#ab6505bf89fc4573d824bb53a5f591c9e">get_instance_structure</a> (std::string nmodl_text)</td></tr>
@@ -151,6 +155,47 @@ Functions</h2></td></tr>
 <tr class="separator:a8bc03b91fe00cb27d1cb6d6f8bdfbb88"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="ad6b03395b7f6ae595a2c4b3fecc67a56"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad6b03395b7f6ae595a2c4b3fecc67a56">&#9670;&nbsp;</a></span>create_acc_visitor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt;CodegenAccVisitor&gt; create_acc_visitor </td>
+          <td>(</td>
+          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_program.html">ast::Program</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>ast</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::stringstream &amp;&#160;</td>
+          <td class="paramname"><em>ss</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Helper for creating OpenACC codegen visitor. </p>
+<p>construct symbol table</p>
+<p>run all necessary pass</p>
+<p>create C code generation visitor</p>
+
+<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html#l00052">52</a> of file <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
+
+</div>
+</div>
 <a id="ad5868eeaa048f3a22739a790a9a2016c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad5868eeaa048f3a22739a790a9a2016c">&#9670;&nbsp;</a></span>create_c_visitor()</h2>
 
@@ -188,12 +233,12 @@ Functions</h2></td></tr>
 <p>run all necessary pass</p>
 <p>create C code generation visitor</p>
 
-<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html#l00033">33</a> of file <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html#l00034">34</a> of file <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
-<a id="ab7518722cbffea33018ffc7c653e1f87"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab7518722cbffea33018ffc7c653e1f87">&#9670;&nbsp;</a></span>get_cpp_code()</h2>
+<a id="a6d48a7370b11cdab6d1f8a81232554da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d48a7370b11cdab6d1f8a81232554da">&#9670;&nbsp;</a></span>get_cpp_code()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -202,15 +247,25 @@ Functions</h2></td></tr>
           <td class="memname">std::string get_cpp_code </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>nmodl_text</em></td><td>)</td>
+          <td class="paramname"><em>nmodl_text</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>generate_gpu_code</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>print entire code </p>
 
-<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html#l00060">60</a> of file <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html#l00079">79</a> of file <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -230,7 +285,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html#l00266">266</a> of file <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html#l00290">290</a> of file <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -252,7 +307,7 @@ Functions</h2></td></tr>
 
 <p>print instance structure for testing purpose </p>
 
-<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html#l00051">51</a> of file <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html#l00070">70</a> of file <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -282,7 +337,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html#l00640">640</a> of file <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html#l00664">664</a> of file <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -312,7 +367,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html#l00372">372</a> of file <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html#l00396">396</a> of file <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -342,7 +397,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html#l00896">896</a> of file <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html#l00924">924</a> of file <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -372,7 +427,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html#l00607">607</a> of file <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html#l00631">631</a> of file <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -402,7 +457,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html#l00068">68</a> of file <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html#l00092">92</a> of file <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -432,7 +487,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html#l00323">323</a> of file <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html#l00347">347</a> of file <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -462,7 +517,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html#l00284">284</a> of file <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html#l00308">308</a> of file <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -492,7 +547,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html#l00444">444</a> of file <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html#l00468">468</a> of file <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -522,7 +577,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html#l00732">732</a> of file <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html#l00756">756</a> of file <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -552,7 +607,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html#l00659">659</a> of file <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html#l00683">683</a> of file <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -582,7 +637,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html#l00702">702</a> of file <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html#l00726">726</a> of file <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -612,7 +667,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html#l00851">851</a> of file <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html#l00879">879</a> of file <a class="el" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>

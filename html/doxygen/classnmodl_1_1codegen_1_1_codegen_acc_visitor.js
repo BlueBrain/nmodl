@@ -26,6 +26,7 @@ var classnmodl_1_1codegen_1_1_codegen_acc_visitor =
     [ "print_net_send_buf_count_update_to_device", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a4695bcf11295255ed5827ea2bad81fdf", null ],
     [ "print_net_send_buf_count_update_to_host", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a4977b3b4e02425431c95412ffdad10ed", null ],
     [ "print_net_send_buf_update_to_host", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a6c88ece1cdc90d7d3e3c4932b69d903a", null ],
+    [ "print_net_send_buffering_cnt_update", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a5c597e0695363715c394aa20e9be86c8", null ],
     [ "print_net_send_buffering_grow", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a7b0b928aacf93947a478e2c37ba2f551", null ],
     [ "print_newtonspace_transfer_to_device", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a621a8824135ca3ca077dee6917e30943", null ],
     [ "print_nrn_cur_matrix_shadow_reduction", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a6a6d2369a69a4de0bda555ffe52c946e", null ],

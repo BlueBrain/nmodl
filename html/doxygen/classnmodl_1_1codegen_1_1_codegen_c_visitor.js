@@ -147,6 +147,7 @@ var classnmodl_1_1codegen_1_1_codegen_c_visitor =
     [ "print_net_send_buf_count_update_to_host", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a9a755cf039492f8d0cdc386058d32d59", null ],
     [ "print_net_send_buf_update_to_host", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a14fe83aa07abd33a97f19f1ce99cd2a7", null ],
     [ "print_net_send_buffering", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a60c4150e54efc2741cfd5dfcdeae4a0b", null ],
+    [ "print_net_send_buffering_cnt_update", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#af1b1d0057636c1ff5c700bf5014eee8f", null ],
     [ "print_net_send_buffering_grow", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a00b98cabff21c58ac504f42defa9c77f", null ],
     [ "print_net_send_call", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ae13c63713424c5fc3d06cde8c2a41455", null ],
     [ "print_newtonspace_transfer_to_device", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a6b77c570750599f4ab0850859cd94e04", null ],
