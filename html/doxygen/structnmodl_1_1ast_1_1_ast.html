@@ -104,7 +104,7 @@ $(document).ready(function(){initNavTree('structnmodl_1_1ast_1_1_ast.html',''); 
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Base class for all Abstract Syntax Tree node types. </p>
 <p>Every node in the Abstract Syntax Tree is inherited from base class <a class="el" href="structnmodl_1_1ast_1_1_ast.html" title="Base class for all Abstract Syntax Tree node types.">ast::Ast</a>. This class provides base properties and pure virtual functions that must be implemented by base classes. We inherit from std::enable_shared_from_this to get a <code>shared_ptr</code> from <code>this</code> pointer.</p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000062">Todo:</a></b></dt><dd>With the <a class="el" href="classnmodl_1_1ast_1_1_node.html" title="Base class for all AST node.">ast::Node</a> as another top level node, this can be removed in the future. </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000061">Todo:</a></b></dt><dd>With the <a class="el" href="classnmodl_1_1ast_1_1_node.html" title="Base class for all AST node.">ast::Node</a> as another top level node, this can be removed in the future. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="ast_8hpp_source.html#l00070">70</a> of file <a class="el" href="ast_8hpp_source.html">ast.hpp</a>.</p>
 </div>
@@ -159,7 +159,7 @@ Inheritance diagram for nmodl::ast::Ast:</div>
 <area href="classnmodl_1_1ast_1_1_else_if_statement.html" title="TODO." alt="nmodl::ast::ElseIfStatement" shape="rect" coords="684,728,902,752"/>
 <area href="classnmodl_1_1ast_1_1_else_statement.html" title="TODO." alt="nmodl::ast::ElseStatement" shape="rect" coords="684,784,902,808"/>
 <area href="classnmodl_1_1ast_1_1_expression_statement.html" title="TODO." alt="nmodl::ast::ExpressionStatement" shape="rect" coords="684,840,902,864"/>
-<area href="classnmodl_1_1ast_1_1_external.html" title="Represents EXTERNAL statement in NMODL." alt="nmodl::ast::External" shape="rect" coords="684,896,902,920"/>
+<area href="classnmodl_1_1ast_1_1_external.html" title="This construct is deprecated and no longer supported in the NMODL." alt="nmodl::ast::External" shape="rect" coords="684,896,902,920"/>
 <area href="classnmodl_1_1ast_1_1_from_statement.html" title="TODO." alt="nmodl::ast::FromStatement" shape="rect" coords="684,952,902,976"/>
 <area href="classnmodl_1_1ast_1_1_global.html" title="Represents GLOBAL statement in NMODL." alt="nmodl::ast::Global" shape="rect" coords="684,1008,902,1032"/>
 <area href="classnmodl_1_1ast_1_1_if_statement.html" title="TODO." alt="nmodl::ast::IfStatement" shape="rect" coords="684,1064,902,1088"/>
@@ -520,7 +520,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:gaf9abed7526427801c191fbaa4fae2e94"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_bbcore_pointer.html" title="Represents BBCOREPOINTER statement in NMODL.">ast::BbcorePointer</a>.  <a href="group__ast__class.html#gaf9abed7526427801c191fbaa4fae2e94">More...</a><br /></td></tr>
 <tr class="separator:gaf9abed7526427801c191fbaa4fae2e94"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga095f0dc46ba2b1463daf409e116b2cea"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ast__class.html#ga095f0dc46ba2b1463daf409e116b2cea">is_external</a> () const noexcept</td></tr>
-<tr class="memdesc:ga095f0dc46ba2b1463daf409e116b2cea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_external.html" title="Represents EXTERNAL statement in NMODL.">ast::External</a>.  <a href="group__ast__class.html#ga095f0dc46ba2b1463daf409e116b2cea">More...</a><br /></td></tr>
+<tr class="memdesc:ga095f0dc46ba2b1463daf409e116b2cea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_external.html" title="This construct is deprecated and no longer supported in the NMODL.">ast::External</a>.  <a href="group__ast__class.html#ga095f0dc46ba2b1463daf409e116b2cea">More...</a><br /></td></tr>
 <tr class="separator:ga095f0dc46ba2b1463daf409e116b2cea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaed858f15cec95707094262eff7f96003"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ast__class.html#gaed858f15cec95707094262eff7f96003">is_thread_safe</a> () const noexcept</td></tr>
 <tr class="memdesc:gaed858f15cec95707094262eff7f96003"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_thread_safe.html" title="Represents THREADSAFE statement in NMODL.">ast::ThreadSafe</a>.  <a href="group__ast__class.html#gaed858f15cec95707094262eff7f96003">More...</a><br /></td></tr>

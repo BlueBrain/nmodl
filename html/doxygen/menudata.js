@@ -123,7 +123,6 @@ var menudata={children:[
 {text:"l",url:"namespacemembers_eval.html#index_l"},
 {text:"m",url:"namespacemembers_eval.html#index_m"},
 {text:"n",url:"namespacemembers_eval.html#index_n"},
-{text:"o",url:"namespacemembers_eval.html#index_o"},
 {text:"s",url:"namespacemembers_eval.html#index_s"},
 {text:"u",url:"namespacemembers_eval.html#index_u"},
 {text:"w",url:"namespacemembers_eval.html#index_w"}]}]}]},

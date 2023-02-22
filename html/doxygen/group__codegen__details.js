@@ -188,7 +188,6 @@ var group__codegen__details =
       [ "Constructor", "group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba2720cc542e6d281f618eb1f62a064ce7", null ],
       [ "Destructor", "group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba34adbfda9463c1ef5da22364fbde7f4e", null ],
       [ "Equation", "group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba2aa5276df68f4ed49798a132d36cc3d3", null ],
-      [ "Ode", "group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba5a91e867e7802e6c6c6f627024768d21", null ],
       [ "State", "group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba1f27f7d1e85f8d0915e4ab7e9f6e8e11", null ],
       [ "Watch", "group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbbaac20fc604795fbf01428e955d6d0f492", null ],
       [ "NetReceive", "group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbbaaf126b23c756faf77bb3ffbd9a34fc57", null ],

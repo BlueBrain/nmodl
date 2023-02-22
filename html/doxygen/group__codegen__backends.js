@@ -242,7 +242,6 @@ var group__codegen__backends =
       [ "replace_if_verbatim_variable", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ac2808638608d11d16bde9a142f2cc4b0", null ],
       [ "set_codegen_global_variables", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a1f96a58ce4826be15902d1feeec210f6", null ],
       [ "setup", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a002e7dd747f1b0fda238df41b6fa95a8", null ],
-      [ "state_variable", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#aa0e5d77285b209a938e6837aaaa9491e", null ],
       [ "statement_to_skip", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a138444d8e8b5c025d987bb4515f82d2b", null ],
       [ "update_if_ion_variable_name", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#acf15c11a374f3fda2f7fa0974d2b742a", null ],
       [ "update_index_semantics", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a5a2ac48f7e99265a0f06490fc16c2dff", null ],

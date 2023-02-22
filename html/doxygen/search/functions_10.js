@@ -68,5 +68,6 @@ var searchData=
   ['run_5fvar_5frename_5fvisitor_4159',['run_var_rename_visitor',['../rename_8cpp.html#a0051fdf5a5eed7bf296760591b580402',1,'rename.cpp']]],
   ['run_5fvar_5fusage_5fvisitor_4160',['run_var_usage_visitor',['../var__usage_8cpp.html#ab2c5538fecec788ffd560fce9bfd8ca6',1,'var_usage.cpp']]],
   ['run_5fverbatim_5fvisitor_4161',['run_verbatim_visitor',['../verbatim_8cpp.html#ac4190e972acac5e76211583970bf3ebf',1,'verbatim.cpp']]],
-  ['run_5fvisitor_5fpasses_4162',['run_visitor_passes',['../misc_8cpp.html#a9f62deb1d160e64c58f491dc2b5469d6',1,'misc.cpp']]]
+  ['run_5fvisitor_5fpasses_4162',['run_visitor_passes',['../misc_8cpp.html#a9f62deb1d160e64c58f491dc2b5469d6',1,'misc.cpp']]],
+  ['runcompatibilityvisitor_4163',['runCompatibilityVisitor',['../test_2unit_2codegen_2codegen__compatibility__visitor_8cpp.html#acac17ea49dd354cd90ee0628aa72467d',1,'codegen_compatibility_visitor.cpp']]]
 ];

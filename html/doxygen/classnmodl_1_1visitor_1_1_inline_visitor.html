@@ -162,7 +162,7 @@ $(document).ready(function(){initNavTree('classnmodl_1_1visitor_1_1_inline_visit
 <li>Local statement gets added to callee block (if doesn't exist)</li>
 <li>Procedure body gets appended with extra assignment statement with variable used for returning value.</li>
 </ul>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000048">Todo:</a></b></dt><dd><ul>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000047">Todo:</a></b></dt><dd><ul>
 <li>Recursive function calls are not supported and need to add checks to avoid stack explosion</li>
 <li>Currently we rename variables more than necessary, this could be improved [low priority]</li>
 <li>Function calls as part of an argument of function call itself are not completely inlined [low priority]</li>
@@ -521,7 +521,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:afa6ee27bbcfe8d2e73c4a26292996c79 inherit pub_methods_classnmodl_1_1visitor_1_1_ast_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_bbcore_pointer.html" title="Represents BBCOREPOINTER statement in NMODL.">ast::BbcorePointer</a>  <a href="classnmodl_1_1visitor_1_1_ast_visitor.html#afa6ee27bbcfe8d2e73c4a26292996c79">More...</a><br /></td></tr>
 <tr class="separator:afa6ee27bbcfe8d2e73c4a26292996c79 inherit pub_methods_classnmodl_1_1visitor_1_1_ast_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6792b0b7c194e875aeb897f3c1f9a78b inherit pub_methods_classnmodl_1_1visitor_1_1_ast_visitor"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_ast_visitor.html#a6792b0b7c194e875aeb897f3c1f9a78b">visit_external</a> (<a class="el" href="classnmodl_1_1ast_1_1_external.html">ast::External</a> &amp;node) override</td></tr>
-<tr class="memdesc:a6792b0b7c194e875aeb897f3c1f9a78b inherit pub_methods_classnmodl_1_1visitor_1_1_ast_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_external.html" title="Represents EXTERNAL statement in NMODL.">ast::External</a>  <a href="classnmodl_1_1visitor_1_1_ast_visitor.html#a6792b0b7c194e875aeb897f3c1f9a78b">More...</a><br /></td></tr>
+<tr class="memdesc:a6792b0b7c194e875aeb897f3c1f9a78b inherit pub_methods_classnmodl_1_1visitor_1_1_ast_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_external.html" title="This construct is deprecated and no longer supported in the NMODL.">ast::External</a>  <a href="classnmodl_1_1visitor_1_1_ast_visitor.html#a6792b0b7c194e875aeb897f3c1f9a78b">More...</a><br /></td></tr>
 <tr class="separator:a6792b0b7c194e875aeb897f3c1f9a78b inherit pub_methods_classnmodl_1_1visitor_1_1_ast_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a85c3e08349f626e3e8bcb80bf9db8464 inherit pub_methods_classnmodl_1_1visitor_1_1_ast_visitor"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_ast_visitor.html#a85c3e08349f626e3e8bcb80bf9db8464">visit_thread_safe</a> (<a class="el" href="classnmodl_1_1ast_1_1_thread_safe.html">ast::ThreadSafe</a> &amp;node) override</td></tr>
 <tr class="memdesc:a85c3e08349f626e3e8bcb80bf9db8464 inherit pub_methods_classnmodl_1_1visitor_1_1_ast_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_thread_safe.html" title="Represents THREADSAFE statement in NMODL.">ast::ThreadSafe</a>  <a href="classnmodl_1_1visitor_1_1_ast_visitor.html#a85c3e08349f626e3e8bcb80bf9db8464">More...</a><br /></td></tr>
@@ -746,7 +746,7 @@ Private Attributes</h2></td></tr>
 <li>if expression is wrapped expression</li>
 <li>if wrapped expression is a function call</li>
 </ul>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000046">Todo:</a></b></dt><dd>Add method to ast itself to simplify this implementation </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000045">Todo:</a></b></dt><dd>Add method to ast itself to simplify this implementation </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="inline__visitor_8cpp_source.html#l00076">76</a> of file <a class="el" href="inline__visitor_8cpp_source.html">inline_visitor.cpp</a>.</p>
 
@@ -859,7 +859,7 @@ Private Attributes</h2></td></tr>
 <p>each block should already have local statement</p>
 <p>get a copy of function/procedure body</p>
 <p>function definition has function name as return value. we have to rename it with new variable name</p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000047">Todo:</a></b></dt><dd>Have to re-run symtab visitor pass to update symbol table </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000046">Todo:</a></b></dt><dd>Have to re-run symtab visitor pass to update symbol table </dd></dl>
 <p>each argument is added as new assignment statement</p>
 <p>to return value from procedure we have to add new variable</p>
 <p>variable name which will replace the function call that we just inlined</p>
