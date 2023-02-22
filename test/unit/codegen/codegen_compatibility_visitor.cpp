@@ -146,7 +146,7 @@ SCENARIO("Uncompatible constructs should failed", "[codegen][compatibility_visit
                 SOLVE state METHOD runge
             }
         )";
-        
+
         THEN("should failed") {
             bool failed = runCompatibilityVisitor(nmodl_text);
             REQUIRE(failed);
