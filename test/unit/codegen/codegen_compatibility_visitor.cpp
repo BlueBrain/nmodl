@@ -140,6 +140,18 @@ SCENARIO("Uncompatible constructs should failed", "[codegen][compatibility_visit
             REQUIRE(!failed);
         }
     }
+    GIVEN("A mod file with a no SOLVE method") {
+        std::string const nmodl_text = R"(
+            BREAKPOINT {
+                SOLVE state
+            }
+        )";
+
+        THEN("should succeed") {
+            bool failed = runCompatibilityVisitor(nmodl_text);
+            REQUIRE(!failed);
+        }
+    }
     GIVEN("A mod file with a invalid SOLVE method") {
         std::string const nmodl_text = R"(
             BREAKPOINT {
