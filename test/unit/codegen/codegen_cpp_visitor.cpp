@@ -499,7 +499,8 @@ SCENARIO("Check that BEFORE/AFTER block are well generated", "[codegen][before/a
             // BEFORE BREAKPOINT
             {
                 REQUIRE_THAT(generated,
-                             Contains("hoc_reg_ba(mech_type, nrn_before_after_0_ba1, BAType::Before + BAType::Breakpoint);"));
+                             Contains("hoc_reg_ba(mech_type, nrn_before_after_0_ba1, "
+                                      "BAType::Before + BAType::Breakpoint);"));
                 // in case of PROTECT, there should not be simd or ivdep pragma
                 std::string generated_code = R"(
 
@@ -521,7 +522,8 @@ SCENARIO("Check that BEFORE/AFTER block are well generated", "[codegen][before/a
             // AFTER SOLVE
             {
                 REQUIRE_THAT(generated,
-                             Contains("hoc_reg_ba(mech_type, nrn_before_after_1_ba1, BAType::After + BAType::Solve);"));
+                             Contains("hoc_reg_ba(mech_type, nrn_before_after_1_ba1, BAType::After "
+                                      "+ BAType::Solve);"));
                 // in case of MUTEXLOCK/MUTEXUNLOCK, there should not be simd or ivdep pragma
                 std::string generated_code = R"(
 
@@ -545,7 +547,8 @@ SCENARIO("Check that BEFORE/AFTER block are well generated", "[codegen][before/a
             // BEFORE INITIAL
             {
                 REQUIRE_THAT(generated,
-                             Contains("hoc_reg_ba(mech_type, nrn_before_after_2_ba1, BAType::Before + BAType::Initial);"));
+                             Contains("hoc_reg_ba(mech_type, nrn_before_after_2_ba1, "
+                                      "BAType::Before + BAType::Initial);"));
                 std::string generated_code = R"(
         #pragma ivdep
         #pragma omp simd
@@ -566,7 +569,8 @@ SCENARIO("Check that BEFORE/AFTER block are well generated", "[codegen][before/a
             // AFTER INITIAL
             {
                 REQUIRE_THAT(generated,
-                             Contains("hoc_reg_ba(mech_type, nrn_before_after_3_ba1, BAType::After + BAType::Initial);"));
+                             Contains("hoc_reg_ba(mech_type, nrn_before_after_3_ba1, BAType::After "
+                                      "+ BAType::Initial);"));
                 std::string generated_code = R"(
         #pragma ivdep
         #pragma omp simd
@@ -587,7 +591,8 @@ SCENARIO("Check that BEFORE/AFTER block are well generated", "[codegen][before/a
             // BEFORE STEP
             {
                 REQUIRE_THAT(generated,
-                             Contains("hoc_reg_ba(mech_type, nrn_before_after_4_ba1, BAType::Before + BAType::Step);"));
+                             Contains("hoc_reg_ba(mech_type, nrn_before_after_4_ba1, "
+                                      "BAType::Before + BAType::Step);"));
                 std::string generated_code = R"(
         #pragma ivdep
         #pragma omp simd
@@ -620,10 +625,18 @@ SCENARIO("Check that BEFORE/AFTER block are well generated", "[codegen][before/a
         )";
         THEN("They should be all registered") {
             auto const generated = get_cpp_code(nmodl_text);
-            REQUIRE_THAT(generated, Contains("hoc_reg_ba(mech_type, nrn_before_after_0_ba1, BAType::Before + BAType::Step);"));
-            REQUIRE_THAT(generated, Contains("hoc_reg_ba(mech_type, nrn_before_after_1_ba1, BAType::After + BAType::Solve);"));
-            REQUIRE_THAT(generated, Contains("hoc_reg_ba(mech_type, nrn_before_after_2_ba1, BAType::Before + BAType::Step);"));
-            REQUIRE_THAT(generated, Contains("hoc_reg_ba(mech_type, nrn_before_after_3_ba1, BAType::After + BAType::Solve);"));
+            REQUIRE_THAT(generated,
+                         Contains("hoc_reg_ba(mech_type, nrn_before_after_0_ba1, BAType::Before + "
+                                  "BAType::Step);"));
+            REQUIRE_THAT(generated,
+                         Contains("hoc_reg_ba(mech_type, nrn_before_after_1_ba1, BAType::After + "
+                                  "BAType::Solve);"));
+            REQUIRE_THAT(generated,
+                         Contains("hoc_reg_ba(mech_type, nrn_before_after_2_ba1, BAType::Before + "
+                                  "BAType::Step);"));
+            REQUIRE_THAT(generated,
+                         Contains("hoc_reg_ba(mech_type, nrn_before_after_3_ba1, BAType::After + "
+                                  "BAType::Solve);"));
         }
     }
 }
