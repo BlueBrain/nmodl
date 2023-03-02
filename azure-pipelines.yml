@@ -72,7 +72,6 @@ stages:
   dependsOn: fetch_config
   variables:
     NEURON_BRANCH: $[stageDependencies.fetch_config.github.outputs['prdesc.NEURON_BRANCH']]
-    CORENEURON_BRANCH: $[stageDependencies.fetch_config.github.outputs['prdesc.CORENEURON_BRANCH']]
   jobs:
   - job: 'ubuntu2004'
     pool:
@@ -119,13 +118,6 @@ stages:
         export CC='gcc-8'
         export CXX='g++-8'
         git clone${NEURON_BRANCH:+ --branch }${NEURON_BRANCH} --single-branch https://github.com/neuronsimulator/nrn.git
-        if [[ -n "${CORENEURON_BRANCH}" ]]; then
-          pushd nrn
-          git submodule update --init external/coreneuron
-          cd external/coreneuron
-          git checkout ${CORENEURON_BRANCH}
-          popd
-        fi
         mkdir nrn/build
         cd nrn/build
         cmake --version
@@ -182,13 +174,6 @@ stages:
         export CC='gcc'
         export CXX='g++'
         git clone${NEURON_BRANCH:+ --branch }${NEURON_BRANCH} --single-branch https://github.com/neuronsimulator/nrn.git
-        if [[ -n "${CORENEURON_BRANCH}" ]]; then
-          pushd nrn
-          git submodule update --init external/coreneuron
-          cd external/coreneuron
-          git checkout ${CORENEURON_BRANCH}
-          popd
-        fi
         mkdir nrn/build
         cd nrn/build
         cmake --version
