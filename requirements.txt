@@ -2,5 +2,5 @@ Jinja2>=2.9.3
 PyYAML>=3.13
 pytest
 pytest-cov
-sympy==1.9
+sympy
 numpy
