@@ -2455,83 +2455,68 @@ $(document).ready(function(){initNavTree('sympy__solver_8cpp_source.html',''); i
 <div class="line"><a name="l02359"></a><span class="lineno"> 2359</span>&#160;<span class="stringliteral">            double* nmodl_eigen_j = nmodl_eigen_jm.data();</span></div>
 <div class="line"><a name="l02360"></a><span class="lineno"> 2360</span>&#160;<span class="stringliteral">            double* nmodl_eigen_f = nmodl_eigen_fm.data();</span></div>
 <div class="line"><a name="l02361"></a><span class="lineno"> 2361</span>&#160;<span class="stringliteral">            nmodl_eigen_f[static_cast&lt;int&gt;(0)] =  -nmodl_eigen_x[static_cast&lt;int&gt;(0)] * nt-&gt;_dt / inst-&gt;tau[id] - nmodl_eigen_x[static_cast&lt;int&gt;(0)] + inst-&gt;cai0[id] * nt-&gt;_dt / inst-&gt;tau[id] + old_cai - 5000000.0 * nt-&gt;_dt * inst-&gt;ica[id] / (F * inst-&gt;depth[id]);</span></div>
-<div class="line"><a name="l02362"></a><span class="lineno"> 2362</span>&#160;<span class="stringliteral">            nmodl_eigen_j[static_cast&lt;int&gt;(0)] =  -(nt-&gt;_dt + inst-&gt;tau[id]) / inst-&gt;tau[id];</span></div>
-<div class="line"><a name="l02363"></a><span class="lineno"> 2363</span>&#160;<span class="stringliteral">        }</span></div>
-<div class="line"><a name="l02364"></a><span class="lineno"> 2364</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l02365"></a><span class="lineno"> 2365</span>&#160;<span class="stringliteral">        void finalize() {</span></div>
-<div class="line"><a name="l02366"></a><span class="lineno"> 2366</span>&#160;<span class="stringliteral">        }</span></div>
-<div class="line"><a name="l02367"></a><span class="lineno"> 2367</span>&#160;<span class="stringliteral">    };)&quot;;</span></div>
-<div class="line"><a name="l02368"></a><span class="lineno"> 2368</span>&#160;<span class="stringliteral">            std::string expected_functor_cacum_1_definition =</span></div>
-<div class="line"><a name="l02369"></a><span class="lineno"> 2369</span>&#160;<span class="stringliteral">                R</span><span class="stringliteral">&quot;(struct functor_cacum_1 {</span></div>
-<div class="line"><a name="l02370"></a><span class="lineno"> 2370</span>&#160;<span class="stringliteral">        NrnThread* nt;</span></div>
-<div class="line"><a name="l02371"></a><span class="lineno"> 2371</span>&#160;<span class="stringliteral">        cacum_Instance* inst;</span></div>
-<div class="line"><a name="l02372"></a><span class="lineno"> 2372</span>&#160;<span class="stringliteral">        int id, pnodecount;</span></div>
-<div class="line"><a name="l02373"></a><span class="lineno"> 2373</span>&#160;<span class="stringliteral">        double v;</span></div>
-<div class="line"><a name="l02374"></a><span class="lineno"> 2374</span>&#160;<span class="stringliteral">        const Datum* indexes;</span></div>
-<div class="line"><a name="l02375"></a><span class="lineno"> 2375</span>&#160;<span class="stringliteral">        double* data;</span></div>
-<div class="line"><a name="l02376"></a><span class="lineno"> 2376</span>&#160;<span class="stringliteral">        ThreadDatum* thread;</span></div>
-<div class="line"><a name="l02377"></a><span class="lineno"> 2377</span>&#160;<span class="stringliteral">        double old_cai;</span></div>
-<div class="line"><a name="l02378"></a><span class="lineno"> 2378</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l02379"></a><span class="lineno"> 2379</span>&#160;<span class="stringliteral">        void initialize() {</span></div>
-<div class="line"><a name="l02380"></a><span class="lineno"> 2380</span>&#160;<span class="stringliteral">            old_cai = inst-&gt;cai[id];</span></div>
-<div class="line"><a name="l02381"></a><span class="lineno"> 2381</span>&#160;<span class="stringliteral">        }</span></div>
-<div class="line"><a name="l02382"></a><span class="lineno"> 2382</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l02383"></a><span class="lineno"> 2383</span>&#160;<span class="stringliteral">        functor_cacum_1(NrnThread* nt, cacum_Instance* inst, int id, int pnodecount, double v, const Datum* indexes, double* data, ThreadDatum* thread) : nt{nt}, inst{inst}, id{id}, pnodecount{pnodecount}, v{v}, indexes{indexes}, data{data}, thread{thread} {}</span></div>
-<div class="line"><a name="l02384"></a><span class="lineno"> 2384</span>&#160;<span class="stringliteral">        void operator()(const Eigen::Matrix&lt;double, 1, 1&gt;&amp; nmodl_eigen_xm, Eigen::Matrix&lt;double, 1, 1&gt;&amp; nmodl_eigen_fm, Eigen::Matrix&lt;double, 1, 1&gt;&amp; nmodl_eigen_jm) const {</span></div>
-<div class="line"><a name="l02385"></a><span class="lineno"> 2385</span>&#160;<span class="stringliteral">            const double* nmodl_eigen_x = nmodl_eigen_xm.data();</span></div>
-<div class="line"><a name="l02386"></a><span class="lineno"> 2386</span>&#160;<span class="stringliteral">            double* nmodl_eigen_j = nmodl_eigen_jm.data();</span></div>
-<div class="line"><a name="l02387"></a><span class="lineno"> 2387</span>&#160;<span class="stringliteral">            double* nmodl_eigen_f = nmodl_eigen_fm.data();</span></div>
-<div class="line"><a name="l02388"></a><span class="lineno"> 2388</span>&#160;<span class="stringliteral">            nmodl_eigen_f[static_cast&lt;int&gt;(0)] =  -nmodl_eigen_x[static_cast&lt;int&gt;(0)] * nt-&gt;_dt / inst-&gt;tau[id] - nmodl_eigen_x[static_cast&lt;int&gt;(0)] + inst-&gt;cai0[id] * nt-&gt;_dt / inst-&gt;tau[id] + old_cai - 5000000.0 * nt-&gt;_dt * inst-&gt;ica[id] / (F * inst-&gt;depth[id]);</span></div>
-<div class="line"><a name="l02389"></a><span class="lineno"> 2389</span>&#160;<span class="stringliteral">            nmodl_eigen_j[static_cast&lt;int&gt;(0)] =  -(nt-&gt;_dt + inst-&gt;tau[id]) / inst-&gt;tau[id];</span></div>
-<div class="line"><a name="l02390"></a><span class="lineno"> 2390</span>&#160;<span class="stringliteral">        }</span></div>
-<div class="line"><a name="l02391"></a><span class="lineno"> 2391</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l02392"></a><span class="lineno"> 2392</span>&#160;<span class="stringliteral">        void finalize() {</span></div>
-<div class="line"><a name="l02393"></a><span class="lineno"> 2393</span>&#160;<span class="stringliteral">        }</span></div>
-<div class="line"><a name="l02394"></a><span class="lineno"> 2394</span>&#160;<span class="stringliteral">    };)&quot;;</span></div>
-<div class="line"><a name="l02395"></a><span class="lineno"> 2395</span>&#160;<span class="stringliteral">            std::string expected_functor_cacum_2_definition =</span></div>
-<div class="line"><a name="l02396"></a><span class="lineno"> 2396</span>&#160;<span class="stringliteral">                R</span><span class="stringliteral">&quot;(struct functor_cacum_2 {</span></div>
-<div class="line"><a name="l02397"></a><span class="lineno"> 2397</span>&#160;<span class="stringliteral">        NrnThread* nt;</span></div>
-<div class="line"><a name="l02398"></a><span class="lineno"> 2398</span>&#160;<span class="stringliteral">        cacum_Instance* inst;</span></div>
-<div class="line"><a name="l02399"></a><span class="lineno"> 2399</span>&#160;<span class="stringliteral">        int id, pnodecount;</span></div>
-<div class="line"><a name="l02400"></a><span class="lineno"> 2400</span>&#160;<span class="stringliteral">        double v;</span></div>
-<div class="line"><a name="l02401"></a><span class="lineno"> 2401</span>&#160;<span class="stringliteral">        const Datum* indexes;</span></div>
-<div class="line"><a name="l02402"></a><span class="lineno"> 2402</span>&#160;<span class="stringliteral">        double* data;</span></div>
-<div class="line"><a name="l02403"></a><span class="lineno"> 2403</span>&#160;<span class="stringliteral">        ThreadDatum* thread;</span></div>
-<div class="line"><a name="l02404"></a><span class="lineno"> 2404</span>&#160;<span class="stringliteral">        double old_cai;</span></div>
-<div class="line"><a name="l02405"></a><span class="lineno"> 2405</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l02406"></a><span class="lineno"> 2406</span>&#160;<span class="stringliteral">        void initialize() {</span></div>
-<div class="line"><a name="l02407"></a><span class="lineno"> 2407</span>&#160;<span class="stringliteral">            old_cai = inst-&gt;cai[id];</span></div>
-<div class="line"><a name="l02408"></a><span class="lineno"> 2408</span>&#160;<span class="stringliteral">        }</span></div>
-<div class="line"><a name="l02409"></a><span class="lineno"> 2409</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l02410"></a><span class="lineno"> 2410</span>&#160;<span class="stringliteral">        functor_cacum_2(NrnThread* nt, cacum_Instance* inst, int id, int pnodecount, double v, const Datum* indexes, double* data, ThreadDatum* thread) : nt{nt}, inst{inst}, id{id}, pnodecount{pnodecount}, v{v}, indexes{indexes}, data{data}, thread{thread} {}</span></div>
-<div class="line"><a name="l02411"></a><span class="lineno"> 2411</span>&#160;<span class="stringliteral">        void operator()(const Eigen::Matrix&lt;double, 1, 1&gt;&amp; nmodl_eigen_xm, Eigen::Matrix&lt;double, 1, 1&gt;&amp; nmodl_eigen_fm, Eigen::Matrix&lt;double, 1, 1&gt;&amp; nmodl_eigen_jm) const {</span></div>
-<div class="line"><a name="l02412"></a><span class="lineno"> 2412</span>&#160;<span class="stringliteral">            const double* nmodl_eigen_x = nmodl_eigen_xm.data();</span></div>
-<div class="line"><a name="l02413"></a><span class="lineno"> 2413</span>&#160;<span class="stringliteral">            double* nmodl_eigen_j = nmodl_eigen_jm.data();</span></div>
-<div class="line"><a name="l02414"></a><span class="lineno"> 2414</span>&#160;<span class="stringliteral">            double* nmodl_eigen_f = nmodl_eigen_fm.data();</span></div>
-<div class="line"><a name="l02415"></a><span class="lineno"> 2415</span>&#160;<span class="stringliteral">            nmodl_eigen_f[static_cast&lt;int&gt;(0)] =  -nmodl_eigen_x[static_cast&lt;int&gt;(0)] * nt-&gt;_dt / inst-&gt;tau[id] - nmodl_eigen_x[static_cast&lt;int&gt;(0)] + inst-&gt;cai0[id] * nt-&gt;_dt / inst-&gt;tau[id] + old_cai - 5000000.0 * nt-&gt;_dt * inst-&gt;ica[id] / (F * inst-&gt;depth[id]);</span></div>
-<div class="line"><a name="l02416"></a><span class="lineno"> 2416</span>&#160;<span class="stringliteral">            nmodl_eigen_j[static_cast&lt;int&gt;(0)] =  -(nt-&gt;_dt + inst-&gt;tau[id]) / inst-&gt;tau[id];</span></div>
-<div class="line"><a name="l02417"></a><span class="lineno"> 2417</span>&#160;<span class="stringliteral">        }</span></div>
-<div class="line"><a name="l02418"></a><span class="lineno"> 2418</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l02419"></a><span class="lineno"> 2419</span>&#160;<span class="stringliteral">        void finalize() {</span></div>
-<div class="line"><a name="l02420"></a><span class="lineno"> 2420</span>&#160;<span class="stringliteral">        }</span></div>
-<div class="line"><a name="l02421"></a><span class="lineno"> 2421</span>&#160;<span class="stringliteral">    };)&quot;;</span></div>
-<div class="line"><a name="l02422"></a><span class="lineno"> 2422</span>&#160;<span class="stringliteral">            </span><span class="comment">// Expected functor usages</span></div>
-<div class="line"><a name="l02423"></a><span class="lineno"> 2423</span>&#160;            std::string expected_functor_cacum_0_usage =</div>
-<div class="line"><a name="l02424"></a><span class="lineno"> 2424</span>&#160;                R<span class="stringliteral">&quot;(functor_cacum_0 newton_functor(nt, inst, id, pnodecount, v, indexes, data, thread);)&quot;;</span></div>
-<div class="line"><a name="l02425"></a><span class="lineno"> 2425</span>&#160;<span class="stringliteral">            std::string expected_functor_cacum_1_usage =</span></div>
-<div class="line"><a name="l02426"></a><span class="lineno"> 2426</span>&#160;<span class="stringliteral">                R</span><span class="stringliteral">&quot;(functor_cacum_1 newton_functor(nt, inst, id, pnodecount, v, indexes, data, thread);)&quot;;</span></div>
-<div class="line"><a name="l02427"></a><span class="lineno"> 2427</span>&#160;<span class="stringliteral">            std::string expected_functor_cacum_2_usage =</span></div>
-<div class="line"><a name="l02428"></a><span class="lineno"> 2428</span>&#160;<span class="stringliteral">                R</span><span class="stringliteral">&quot;(functor_cacum_2 newton_functor(nt, inst, id, pnodecount, v, indexes, data, thread);)&quot;;</span></div>
-<div class="line"><a name="l02429"></a><span class="lineno"> 2429</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l02430"></a><span class="lineno"> 2430</span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated, Contains(expected_functor_cacum_0_definition));</span></div>
-<div class="line"><a name="l02431"></a><span class="lineno"> 2431</span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated, Contains(expected_functor_cacum_1_definition));</span></div>
-<div class="line"><a name="l02432"></a><span class="lineno"> 2432</span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated, Contains(expected_functor_cacum_2_definition));</span></div>
-<div class="line"><a name="l02433"></a><span class="lineno"> 2433</span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated, Contains(expected_functor_cacum_0_usage));</span></div>
-<div class="line"><a name="l02434"></a><span class="lineno"> 2434</span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated, Contains(expected_functor_cacum_1_usage));</span></div>
-<div class="line"><a name="l02435"></a><span class="lineno"> 2435</span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated, Contains(expected_functor_cacum_2_usage));</span></div>
-<div class="line"><a name="l02436"></a><span class="lineno"> 2436</span>&#160;<span class="stringliteral">        }</span></div>
-<div class="line"><a name="l02437"></a><span class="lineno"> 2437</span>&#160;<span class="stringliteral">    }</span></div>
-<div class="line"><a name="l02438"></a><span class="lineno"> 2438</span>&#160;<span class="stringliteral">}</span></div>
+<div class="line"><a name="l02362"></a><span class="lineno"> 2362</span>&#160;<span class="stringliteral">            nmodl_eigen_j[static_cast&lt;int&gt;(0)] =)&quot;;</span></div>
+<div class="line"><a name="l02363"></a><span class="lineno"> 2363</span>&#160;<span class="stringliteral">            std::string expected_functor_cacum_1_definition =</span></div>
+<div class="line"><a name="l02364"></a><span class="lineno"> 2364</span>&#160;<span class="stringliteral">                R</span><span class="stringliteral">&quot;(struct functor_cacum_1 {</span></div>
+<div class="line"><a name="l02365"></a><span class="lineno"> 2365</span>&#160;<span class="stringliteral">        NrnThread* nt;</span></div>
+<div class="line"><a name="l02366"></a><span class="lineno"> 2366</span>&#160;<span class="stringliteral">        cacum_Instance* inst;</span></div>
+<div class="line"><a name="l02367"></a><span class="lineno"> 2367</span>&#160;<span class="stringliteral">        int id, pnodecount;</span></div>
+<div class="line"><a name="l02368"></a><span class="lineno"> 2368</span>&#160;<span class="stringliteral">        double v;</span></div>
+<div class="line"><a name="l02369"></a><span class="lineno"> 2369</span>&#160;<span class="stringliteral">        const Datum* indexes;</span></div>
+<div class="line"><a name="l02370"></a><span class="lineno"> 2370</span>&#160;<span class="stringliteral">        double* data;</span></div>
+<div class="line"><a name="l02371"></a><span class="lineno"> 2371</span>&#160;<span class="stringliteral">        ThreadDatum* thread;</span></div>
+<div class="line"><a name="l02372"></a><span class="lineno"> 2372</span>&#160;<span class="stringliteral">        double old_cai;</span></div>
+<div class="line"><a name="l02373"></a><span class="lineno"> 2373</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l02374"></a><span class="lineno"> 2374</span>&#160;<span class="stringliteral">        void initialize() {</span></div>
+<div class="line"><a name="l02375"></a><span class="lineno"> 2375</span>&#160;<span class="stringliteral">            old_cai = inst-&gt;cai[id];</span></div>
+<div class="line"><a name="l02376"></a><span class="lineno"> 2376</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l02377"></a><span class="lineno"> 2377</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l02378"></a><span class="lineno"> 2378</span>&#160;<span class="stringliteral">        functor_cacum_1(NrnThread* nt, cacum_Instance* inst, int id, int pnodecount, double v, const Datum* indexes, double* data, ThreadDatum* thread) : nt{nt}, inst{inst}, id{id}, pnodecount{pnodecount}, v{v}, indexes{indexes}, data{data}, thread{thread} {}</span></div>
+<div class="line"><a name="l02379"></a><span class="lineno"> 2379</span>&#160;<span class="stringliteral">        void operator()(const Eigen::Matrix&lt;double, 1, 1&gt;&amp; nmodl_eigen_xm, Eigen::Matrix&lt;double, 1, 1&gt;&amp; nmodl_eigen_fm, Eigen::Matrix&lt;double, 1, 1&gt;&amp; nmodl_eigen_jm) const {</span></div>
+<div class="line"><a name="l02380"></a><span class="lineno"> 2380</span>&#160;<span class="stringliteral">            const double* nmodl_eigen_x = nmodl_eigen_xm.data();</span></div>
+<div class="line"><a name="l02381"></a><span class="lineno"> 2381</span>&#160;<span class="stringliteral">            double* nmodl_eigen_j = nmodl_eigen_jm.data();</span></div>
+<div class="line"><a name="l02382"></a><span class="lineno"> 2382</span>&#160;<span class="stringliteral">            double* nmodl_eigen_f = nmodl_eigen_fm.data();</span></div>
+<div class="line"><a name="l02383"></a><span class="lineno"> 2383</span>&#160;<span class="stringliteral">            nmodl_eigen_f[static_cast&lt;int&gt;(0)] =  -nmodl_eigen_x[static_cast&lt;int&gt;(0)] * nt-&gt;_dt / inst-&gt;tau[id] - nmodl_eigen_x[static_cast&lt;int&gt;(0)] + inst-&gt;cai0[id] * nt-&gt;_dt / inst-&gt;tau[id] + old_cai - 5000000.0 * nt-&gt;_dt * inst-&gt;ica[id] / (F * inst-&gt;depth[id]);</span></div>
+<div class="line"><a name="l02384"></a><span class="lineno"> 2384</span>&#160;<span class="stringliteral">            nmodl_eigen_j[static_cast&lt;int&gt;(0)] =)&quot;;</span></div>
+<div class="line"><a name="l02385"></a><span class="lineno"> 2385</span>&#160;<span class="stringliteral">            std::string expected_functor_cacum_2_definition =</span></div>
+<div class="line"><a name="l02386"></a><span class="lineno"> 2386</span>&#160;<span class="stringliteral">                R</span><span class="stringliteral">&quot;(struct functor_cacum_2 {</span></div>
+<div class="line"><a name="l02387"></a><span class="lineno"> 2387</span>&#160;<span class="stringliteral">        NrnThread* nt;</span></div>
+<div class="line"><a name="l02388"></a><span class="lineno"> 2388</span>&#160;<span class="stringliteral">        cacum_Instance* inst;</span></div>
+<div class="line"><a name="l02389"></a><span class="lineno"> 2389</span>&#160;<span class="stringliteral">        int id, pnodecount;</span></div>
+<div class="line"><a name="l02390"></a><span class="lineno"> 2390</span>&#160;<span class="stringliteral">        double v;</span></div>
+<div class="line"><a name="l02391"></a><span class="lineno"> 2391</span>&#160;<span class="stringliteral">        const Datum* indexes;</span></div>
+<div class="line"><a name="l02392"></a><span class="lineno"> 2392</span>&#160;<span class="stringliteral">        double* data;</span></div>
+<div class="line"><a name="l02393"></a><span class="lineno"> 2393</span>&#160;<span class="stringliteral">        ThreadDatum* thread;</span></div>
+<div class="line"><a name="l02394"></a><span class="lineno"> 2394</span>&#160;<span class="stringliteral">        double old_cai;</span></div>
+<div class="line"><a name="l02395"></a><span class="lineno"> 2395</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l02396"></a><span class="lineno"> 2396</span>&#160;<span class="stringliteral">        void initialize() {</span></div>
+<div class="line"><a name="l02397"></a><span class="lineno"> 2397</span>&#160;<span class="stringliteral">            old_cai = inst-&gt;cai[id];</span></div>
+<div class="line"><a name="l02398"></a><span class="lineno"> 2398</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l02399"></a><span class="lineno"> 2399</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l02400"></a><span class="lineno"> 2400</span>&#160;<span class="stringliteral">        functor_cacum_2(NrnThread* nt, cacum_Instance* inst, int id, int pnodecount, double v, const Datum* indexes, double* data, ThreadDatum* thread) : nt{nt}, inst{inst}, id{id}, pnodecount{pnodecount}, v{v}, indexes{indexes}, data{data}, thread{thread} {}</span></div>
+<div class="line"><a name="l02401"></a><span class="lineno"> 2401</span>&#160;<span class="stringliteral">        void operator()(const Eigen::Matrix&lt;double, 1, 1&gt;&amp; nmodl_eigen_xm, Eigen::Matrix&lt;double, 1, 1&gt;&amp; nmodl_eigen_fm, Eigen::Matrix&lt;double, 1, 1&gt;&amp; nmodl_eigen_jm) const {</span></div>
+<div class="line"><a name="l02402"></a><span class="lineno"> 2402</span>&#160;<span class="stringliteral">            const double* nmodl_eigen_x = nmodl_eigen_xm.data();</span></div>
+<div class="line"><a name="l02403"></a><span class="lineno"> 2403</span>&#160;<span class="stringliteral">            double* nmodl_eigen_j = nmodl_eigen_jm.data();</span></div>
+<div class="line"><a name="l02404"></a><span class="lineno"> 2404</span>&#160;<span class="stringliteral">            double* nmodl_eigen_f = nmodl_eigen_fm.data();</span></div>
+<div class="line"><a name="l02405"></a><span class="lineno"> 2405</span>&#160;<span class="stringliteral">            nmodl_eigen_f[static_cast&lt;int&gt;(0)] =  -nmodl_eigen_x[static_cast&lt;int&gt;(0)] * nt-&gt;_dt / inst-&gt;tau[id] - nmodl_eigen_x[static_cast&lt;int&gt;(0)] + inst-&gt;cai0[id] * nt-&gt;_dt / inst-&gt;tau[id] + old_cai - 5000000.0 * nt-&gt;_dt * inst-&gt;ica[id] / (F * inst-&gt;depth[id]);</span></div>
+<div class="line"><a name="l02406"></a><span class="lineno"> 2406</span>&#160;<span class="stringliteral">            nmodl_eigen_j[static_cast&lt;int&gt;(0)] =)&quot;;</span></div>
+<div class="line"><a name="l02407"></a><span class="lineno"> 2407</span>&#160;<span class="stringliteral">            </span><span class="comment">// Expected functor usages</span></div>
+<div class="line"><a name="l02408"></a><span class="lineno"> 2408</span>&#160;            std::string expected_functor_cacum_0_usage =</div>
+<div class="line"><a name="l02409"></a><span class="lineno"> 2409</span>&#160;                R<span class="stringliteral">&quot;(functor_cacum_0 newton_functor(nt, inst, id, pnodecount, v, indexes, data, thread);)&quot;;</span></div>
+<div class="line"><a name="l02410"></a><span class="lineno"> 2410</span>&#160;<span class="stringliteral">            std::string expected_functor_cacum_1_usage =</span></div>
+<div class="line"><a name="l02411"></a><span class="lineno"> 2411</span>&#160;<span class="stringliteral">                R</span><span class="stringliteral">&quot;(functor_cacum_1 newton_functor(nt, inst, id, pnodecount, v, indexes, data, thread);)&quot;;</span></div>
+<div class="line"><a name="l02412"></a><span class="lineno"> 2412</span>&#160;<span class="stringliteral">            std::string expected_functor_cacum_2_usage =</span></div>
+<div class="line"><a name="l02413"></a><span class="lineno"> 2413</span>&#160;<span class="stringliteral">                R</span><span class="stringliteral">&quot;(functor_cacum_2 newton_functor(nt, inst, id, pnodecount, v, indexes, data, thread);)&quot;;</span></div>
+<div class="line"><a name="l02414"></a><span class="lineno"> 2414</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l02415"></a><span class="lineno"> 2415</span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated, Contains(expected_functor_cacum_0_definition));</span></div>
+<div class="line"><a name="l02416"></a><span class="lineno"> 2416</span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated, Contains(expected_functor_cacum_1_definition));</span></div>
+<div class="line"><a name="l02417"></a><span class="lineno"> 2417</span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated, Contains(expected_functor_cacum_2_definition));</span></div>
+<div class="line"><a name="l02418"></a><span class="lineno"> 2418</span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated, Contains(expected_functor_cacum_0_usage));</span></div>
+<div class="line"><a name="l02419"></a><span class="lineno"> 2419</span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated, Contains(expected_functor_cacum_1_usage));</span></div>
+<div class="line"><a name="l02420"></a><span class="lineno"> 2420</span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated, Contains(expected_functor_cacum_2_usage));</span></div>
+<div class="line"><a name="l02421"></a><span class="lineno"> 2421</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l02422"></a><span class="lineno"> 2422</span>&#160;<span class="stringliteral">    }</span></div>
+<div class="line"><a name="l02423"></a><span class="lineno"> 2423</span>&#160;<span class="stringliteral">}</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="atest__utils_8hpp_html"><div class="ttname"><a href="test__utils_8hpp.html">test_utils.hpp</a></div></div>
