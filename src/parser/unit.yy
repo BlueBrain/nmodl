@@ -75,7 +75,7 @@
 %type <std::shared_ptr<nmodl::units::Unit>>          nominator
 %type <std::shared_ptr<nmodl::units::Unit>>          item
 %type <std::shared_ptr<nmodl::units::Prefix>>        prefix
-%type <std::shared_ptr<nmodl::units::UnitTable>>     table_insertion
+%type <std::shared_ptr<nmodl::units::UnitTable>>     table_insertion table_insertion_first
 
 %{
     #include "lexer/unit_lexer.hpp"
@@ -99,7 +99,21 @@
 
 unit_table
     : END
-    | table_insertion END
+    | table_insertion_first END
+
+table_insertion_first
+    : table_insertion item  {
+        $1->insert($2);
+        $$ = $1;
+      }
+    | table_insertion prefix  {
+        $1->insert_prefix($2);
+        $$ = $1;
+      }
+    | table_insertion no_insert {
+        $$ = $1;
+      }
+    ;
 
 table_insertion
     : {
