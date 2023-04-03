@@ -2149,9 +2149,7 @@ void CodegenCVisitor::print_nmodl_constants() {
         printer->add_line("/** constants used in nmodl from UNITS */");
         for (const auto& it: info.factor_definitions) {
             const std::string format_string = "static const double {} = {};";
-            printer->fmt_line(format_string,
-                              it->get_node_name(),
-                              it->get_value()->get_value());
+            printer->fmt_line(format_string, it->get_node_name(), it->get_value()->get_value());
         }
     }
 }
