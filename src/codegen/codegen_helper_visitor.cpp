@@ -542,6 +542,12 @@ void CodegenHelperVisitor::visit_breakpoint_block(const BreakpointBlock& node) {
     under_breakpoint_block = false;
 }
 
+void CodegenHelperVisitor::visit_solve_block(const ast::SolveBlock& node) {
+    if (under_breakpoint_block) {
+        info.breakpoint_with_solve = true;
+    }
+    node.visit_children(*this);
+}
 
 void CodegenHelperVisitor::visit_nrn_state_block(const ast::NrnStateBlock& node) {
     info.nrn_state_block = &node;

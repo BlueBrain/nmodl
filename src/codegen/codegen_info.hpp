@@ -252,6 +252,9 @@ struct CodegenInfo {
     /// derivative block
     const ast::BreakpointBlock* breakpoint_node = nullptr;
 
+    /// to know if the breakpoint block got a solve block
+    bool breakpoint_with_solve = false;
+
     /// nrn_state block
     const ast::NrnStateBlock* nrn_state_block = nullptr;
 

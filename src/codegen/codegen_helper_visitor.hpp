@@ -97,6 +97,7 @@ class CodegenHelperVisitor: public visitor::ConstAstVisitor {
     void visit_constructor_block(const ast::ConstructorBlock& node) override;
     void visit_destructor_block(const ast::DestructorBlock& node) override;
     void visit_breakpoint_block(const ast::BreakpointBlock& node) override;
+    void visit_solve_block(const ast::SolveBlock& node) override;
     void visit_derivative_block(const ast::DerivativeBlock& node) override;
     void visit_derivimplicit_callback(const ast::DerivimplicitCallback& node) override;
     void visit_net_receive_block(const ast::NetReceiveBlock& node) override;
