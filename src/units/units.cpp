@@ -17,8 +17,8 @@
 #include <string>
 #include <vector>
 
-#include <fmt/format.h>
 #include "units.hpp"
+#include <fmt/format.h>
 
 /**
  * \file
@@ -347,8 +347,8 @@ void UnitTable::print_units_sorted(std::ostream& units_details) const {
                                                                                table.end());
     std::sort(sorted_elements.begin(), sorted_elements.end());
     for (const auto& it: sorted_elements) {
-        units_details << std::fixed << std::setprecision(output_precision) << it.first << ' '
-                      << it.second->get_factor() << ':';
+        units_details << fmt::format(
+            "{0} {1:.{2}f}:", it.first, it.second->get_factor(), output_precision);
         for (const auto& dims: it.second->get_dimensions()) {
             units_details << ' ' << dims;
         }
