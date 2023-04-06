@@ -111,39 +111,14 @@ void Unit::add_fraction(const std::string& fraction_string) {
     unit_factor = nom / denom;
 }
 
+// Number as 1.61022-19 are valid, so check if e is present and add it if needed
 double Unit::parse_double(std::string double_string) {
-    long double d_number{};
-    double d_magnitude{};
-    std::string s_number;
-    std::string s_magnitude;
-    std::string::const_iterator it;
-    // if double is positive sign = 1 else sign = -1
-    // to be able to be multiplied by the d_number
-    int sign = 1;
-    if (double_string.front() == '-') {
-        sign = -1;
-        double_string.erase(double_string.begin());
+    auto pos = double_string.find_first_of("+-", 1);  // start at 1 pos, because we don't care with
+                                                      // the front sign
+    if (pos != std::string::npos && double_string.find_last_of("eE", pos) == std::string::npos) {
+        double_string.insert(pos, "e");
     }
-    // if *it reached an exponent related char, then the whole double number is read
-    for (it = double_string.begin();
-         it != double_string.end() && *it != 'e' && *it != '+' && *it != '-';
-         ++it) {
-        s_number.push_back(*it);
-    }
-    // then read the magnitude of the double number
-    for (auto itm = it; itm != double_string.end(); ++itm) {
-        if (*itm != 'e') {
-            s_magnitude.push_back(*itm);
-        }
-    }
-    d_number = std::stold(s_number);
-    if (s_magnitude.empty()) {
-        d_magnitude = 0.0;
-    } else {
-        d_magnitude = std::stod(s_magnitude);
-    }
-    // NOLINTNEXTLINE(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)
-    return static_cast<double>(d_number * powl(10.0, d_magnitude) * sign);
+    return std::stod(double_string);
 }
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
