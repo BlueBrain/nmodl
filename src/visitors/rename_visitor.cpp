@@ -53,7 +53,10 @@ void RenameVisitor::visit_name(const ast::Name& node) {
         std::string token_string = node.get_token() != nullptr
                                        ? " at " + node.get_token()->position()
                                        : "";
-        logger->debug("RenameVisitor :: Renaming variable {}{} to {}", name, token_string, new_name);
+        logger->debug("RenameVisitor :: Renaming variable {}{} to {}",
+                      name,
+                      token_string,
+                      new_name);
     }
 }
 
@@ -89,8 +92,8 @@ void RenameVisitor::visit_verbatim(const ast::Verbatim& node) {
             const std::string& new_name = new_name_generator(token);
             result << new_name;
             logger->debug("RenameVisitor :: Renaming variable {} in VERBATIM block to {}",
-                         token,
-                         new_name);
+                          token,
+                          new_name);
         } else {
             result << token;
         }
