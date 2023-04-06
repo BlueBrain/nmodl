@@ -17,6 +17,7 @@
 #include <string>
 #include <vector>
 
+#include <fmt/format.h>
 #include "units.hpp"
 
 /**
@@ -318,8 +319,7 @@ void UnitTable::insert_prefix(const std::shared_ptr<Prefix>& prfx) {
 
 void UnitTable::print_units() const {
     for (const auto& it: table) {
-        std::cout << std::fixed << std::setprecision(output_precision) << it.first << ' '
-                  << it.second->get_factor() << ':';
+        std::cout << fmt::format("{} {:g}:", it.first, it.second->get_factor());
         for (const auto& dims: it.second->get_dimensions()) {
             std::cout << ' ' << dims;
         }
