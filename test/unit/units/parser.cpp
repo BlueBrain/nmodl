@@ -125,6 +125,16 @@ SCENARIO("Unit parser accepting valid units definition", "[unit][parser]") {
                 REQUIRE(is_valid_construct("dipotre\t\t\t/m\n"));
             }
         }
+        WHEN("Nominator is unknown") {
+            THEN("it throws") {
+                REQUIRE_THROWS(parse_string("foo 1 pew/m\n"));
+            }
+        }
+        WHEN("Denominator is unknown") {
+            THEN("it throws") {
+                REQUIRE_THROWS(parse_string("foo 1 m/pew\n"));
+            }
+        }
     }
     GIVEN("A double number and some units") {
         WHEN("Double number is multiplied by a power of 10 with division of multiple units") {
