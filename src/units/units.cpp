@@ -112,7 +112,13 @@ void Unit::add_fraction(const std::string& fraction_string) {
     unit_factor = nom / denom;
 }
 
-// Number as 1.61022-19 are valid, so check if e is present and add it if needed
+/**
+ * Double numbers in the \c nrnunits.lib file are defined in the form [.0-9]+[-+][0-9]+
+ * To make sure they are parsed in the correct way and similarly to the NEURON parser
+ * we convert this string to a string compliant to scientific notation to be able to be parsed
+ * from std::stod(). To do that we have to add an `e` in case there is `-+` in the number
+ *string if it doesn't exist.
+ */
 double Unit::parse_double(std::string double_string) {
     auto pos = double_string.find_first_of("+-", 1);  // start at 1 pos, because we don't care with
                                                       // the front sign
