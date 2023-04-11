@@ -186,9 +186,8 @@ void UnitTable::calc_nominator_dims(const std::shared_ptr<Unit>& unit, std::stri
     // if the nominator is still not found in the table then output error
     // else multiply its factor to the unit factor and calculate unit's dimensions
     if (nominator == table.end()) {
-        std::stringstream ss;
-        ss << "Unit " << nominator_name << " not defined!" << std::endl;
-        throw std::runtime_error(ss.str());
+        std::string ss = fmt::format("Unit {} not defined!", nominator_name);
+        throw std::runtime_error(ss);
     } else {
         for (int i = 0; i < nominator_power; i++) {
             unit->mul_factor(nominator_prefix_factor * nominator->second->get_factor());
@@ -214,15 +213,15 @@ void UnitTable::calc_denominator_dims(const std::shared_ptr<Unit>& unit,
 
     // if the denominator_name is not in the table, check if there are any prefixes or power
     if (denominator == table.end()) {
-        int changed_denominator_name = 1;
+        bool changed_denominator_name = true;
 
         while (changed_denominator_name) {
-            changed_denominator_name = 0;
+            changed_denominator_name = false;
             for (const auto& it: prefixes) {
                 auto res =
                     std::mismatch(it.first.begin(), it.first.end(), denominator_name.begin());
                 if (res.first == it.first.end()) {
-                    changed_denominator_name = 1;
+                    changed_denominator_name = true;
                     denominator_prefix_factor *= it.second;
                     denominator_name.erase(denominator_name.begin(),
                                            denominator_name.begin() +
@@ -261,9 +260,8 @@ void UnitTable::calc_denominator_dims(const std::shared_ptr<Unit>& unit,
     }
 
     if (denominator == table.end()) {
-        std::stringstream ss;
-        ss << "Unit " << denominator_name << " not defined!" << std::endl;
-        throw std::runtime_error(ss.str());
+        std::string ss = fmt::format("Unit {} not defined!", denominator_name);
+        throw std::runtime_error(ss);
     } else {
         for (int i = 0; i < denominator_power; i++) {
             unit->mul_factor(1.0 / (denominator_prefix_factor * denominator->second->get_factor()));
@@ -317,51 +315,25 @@ void UnitTable::insert_prefix(const std::shared_ptr<Prefix>& prfx) {
     prefixes.insert({prfx->get_name(), prfx->get_factor()});
 }
 
-void UnitTable::print_units() const {
-    for (const auto& it: table) {
-        std::cout << fmt::format("{} {:g}:", it.first, it.second->get_factor());
-        for (const auto& dims: it.second->get_dimensions()) {
-            std::cout << ' ' << dims;
-        }
-        std::cout << '\n';
-    }
-}
-
-void UnitTable::print_base_units() const {
-    int first_print = 1;
-    for (const auto& it: base_units_names) {
-        if (!it.empty()) {
-            if (first_print) {
-                first_print = 0;
-                std::cout << it;
-            } else {
-                std::cout << ' ' << it;
-            }
-        }
-    }
-    std::cout << '\n';
-}
-
 void UnitTable::print_units_sorted(std::ostream& units_details) const {
     std::vector<std::pair<std::string, std::shared_ptr<Unit>>> sorted_elements(table.begin(),
                                                                                table.end());
     std::sort(sorted_elements.begin(), sorted_elements.end());
     for (const auto& it: sorted_elements) {
-        units_details << fmt::format(
-            "{0} {1:.{2}f}:", it.first, it.second->get_factor(), output_precision);
-        for (const auto& dims: it.second->get_dimensions()) {
-            units_details << ' ' << dims;
-        }
-        units_details << '\n';
+        units_details << fmt::format("{} {:.{}f}: {}\n",
+                                     it.first,
+                                     it.second->get_factor(),
+                                     output_precision,
+                                     fmt::join(it.second->get_dimensions(), " "));
     }
 }
 
 void UnitTable::print_base_units(std::ostream& base_units_details) const {
-    int first_print = 1;
+    bool first_print = true;
     for (const auto& it: base_units_names) {
         if (!it.empty()) {
             if (first_print) {
-                first_print = 0;
+                first_print = false;
                 base_units_details << it;
             } else {
                 base_units_details << ' ' << it;

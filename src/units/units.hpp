@@ -276,15 +276,9 @@ class UnitTable {
     }
 
     /// Print the details of the units that are stored in the UnitTable
-    void print_units() const;
-
-    /// Print the details of the units that are stored in the UnitTable
     /// to the output stream units_details in ascending order to be printed
     /// in tests in specific order
     void print_units_sorted(std::ostream& units_details) const;
-
-    /// Print the base units that are stored in the UnitTable
-    void print_base_units() const;
 
     /// Print the base units that are stored in the UnitTable to the
     /// output stream base_units_details
