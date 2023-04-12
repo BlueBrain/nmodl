@@ -164,10 +164,10 @@ nominator
         newunit->add_nominator_double($1);
         $$ = newunit;
       }
-    | FRACTION units_nom {
+    | DOUBLE FRACTION DOUBLE units_nom {
         auto newunit = std::make_shared<nmodl::units::Unit>();
-        newunit->add_nominator_unit($2);
-        newunit->add_fraction($1);
+        newunit->add_nominator_unit($4);
+        newunit->add_fraction($1, $3);
         $$ = newunit;
       }
     ;

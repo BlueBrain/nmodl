@@ -143,7 +143,7 @@ class Unit {
     void mul_factor(double double_factor);
 
     /// Parse a fraction given as string and store the result to the factor of the Unit
-    void add_fraction(const std::string& fraction_string);
+    void add_fraction(const std::string& nominator, const std::string& denominator);
 
     /// Parse a double number given as string. The double can be positive or negative and
     /// have all kinds of representations

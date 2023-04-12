@@ -94,21 +94,9 @@ void Unit::mul_factor(const double double_factor) {
     unit_factor *= double_factor;
 }
 
-void Unit::add_fraction(const std::string& fraction_string) {
-    double nom{}, denom{};
-    std::string nominator;
-    std::string denominator;
-    std::string::const_iterator it;
-    for (it = fraction_string.begin(); it != fraction_string.end() && *it != '|'; ++it) {
-        nominator.push_back(*it);
-    }
-    // pass "|" char
-    ++it;
-    for (auto itm = it; itm != fraction_string.end(); ++itm) {
-        denominator.push_back(*itm);
-    }
-    nom = parse_double(nominator);
-    denom = parse_double(denominator);
+void Unit::add_fraction(const std::string& nominator, const std::string& denominator) {
+    double nom = parse_double(nominator);
+    double denom = parse_double(denominator);
     unit_factor = nom / denom;
 }
 
