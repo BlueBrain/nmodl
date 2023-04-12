@@ -16,7 +16,7 @@ var searchData=
   ['add_5felement_13',['add_element',['../classnmodl_1_1printer_1_1_n_m_o_d_l_printer.html#aa3282a37a3133a9e9dc21aa1165ca6d4',1,'nmodl::printer::NMODLPrinter']]],
   ['add_5fescape_5fquote_14',['add_escape_quote',['../classnmodl_1_1codegen_1_1_codegen_c_visitor.html#abc0ea67b5c324c83fafb0ab3678d6d21',1,'nmodl::codegen::CodegenCVisitor']]],
   ['add_5fexternal_5fsymbols_15',['add_external_symbols',['../namespacenmodl_1_1visitor.html#ad0996f89363fa0089656b1079bd0fd26',1,'nmodl::visitor']]],
-  ['add_5ffraction_16',['add_fraction',['../classnmodl_1_1units_1_1_unit.html#ac7bf4a54c1f6633baf99afe9caa6fdcf',1,'nmodl::units::Unit']]],
+  ['add_5ffraction_16',['add_fraction',['../classnmodl_1_1units_1_1_unit.html#a8a46298117df274c99b31c97ddb34358',1,'nmodl::units::Unit']]],
   ['add_5findent_17',['add_indent',['../classnmodl_1_1printer_1_1_code_printer.html#a6cf3be260bf6c535813321ba66ee5fa1',1,'nmodl::printer::CodePrinter::add_indent()'],['../classnmodl_1_1printer_1_1_n_m_o_d_l_printer.html#a6f822c0799fe77a27c248ee5cd72b5be',1,'nmodl::printer::NMODLPrinter::add_indent()']]],
   ['add_5fline_18',['add_line',['../classnmodl_1_1printer_1_1_code_printer.html#a9542ac3238e0d6d38538f63abdc8410f',1,'nmodl::printer::CodePrinter']]],
   ['add_5flocal_5fstatement_19',['add_local_statement',['../namespacenmodl_1_1visitor.html#aab8fd730b218414affb4b93f13ea59bd',1,'nmodl::visitor']]],

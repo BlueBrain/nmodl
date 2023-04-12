@@ -1,7 +1,5 @@
 var NAVTREEINDEX33 =
 {
-"visitor__utils_8cpp.html#ae59f52180eceecfe49a5f180360b6895":[4,0,1,11,53,2],
-"visitor__utils_8cpp.html#aff0836bad8bc5b832bf1ad6cc4fee27a":[4,0,1,11,53,8],
 "visitor__utils_8cpp_source.html":[4,0,1,11,53],
 "visitor__utils_8hpp.html":[4,0,1,11,54],
 "visitor__utils_8hpp.html#a0d49270a6c751e2e1a0e2c2db0012e4d":[4,0,1,11,54,6],

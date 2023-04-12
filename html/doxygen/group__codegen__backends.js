@@ -292,6 +292,7 @@ var group__codegen__backends =
       [ "mod_filename", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ac43358c931aff1bf690c24ed82ae7d2c", null ],
       [ "optimize_ionvar_copies", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a4f326e90973fc971f85169fd5e79ece1", null ],
       [ "printer", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ab5d898ed4b2da92075a0624c03b010c3", null ],
+      [ "printing_net_init", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a12d575f2bfd7a95d5ec4978b8b048601", null ],
       [ "printing_net_receive", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a89433e157b33a409ce0553984ff7130d", null ],
       [ "printing_top_verbatim_blocks", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ae1e84844d6e311c33dcddb1b5bb7823f", null ],
       [ "program_symtab", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html#aa9f1fe87f6b2ede0883ce0a5f9771e80", null ],

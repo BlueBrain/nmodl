@@ -7,7 +7,7 @@ var classnmodl_1_1units_1_1_unit =
     [ "add_denominator_dims", "classnmodl_1_1units_1_1_unit.html#a275364244dc0f57822073cad9df33884", null ],
     [ "add_denominator_unit", "classnmodl_1_1units_1_1_unit.html#aa53fde115e36b35ffd6a72a914d8d545", null ],
     [ "add_denominator_unit", "classnmodl_1_1units_1_1_unit.html#abb6f1a315c651f9b6e525ec94bfdebce", null ],
-    [ "add_fraction", "classnmodl_1_1units_1_1_unit.html#ac7bf4a54c1f6633baf99afe9caa6fdcf", null ],
+    [ "add_fraction", "classnmodl_1_1units_1_1_unit.html#a8a46298117df274c99b31c97ddb34358", null ],
     [ "add_nominator_dims", "classnmodl_1_1units_1_1_unit.html#a68fb30ffb73b5faa43079407a67bae45", null ],
     [ "add_nominator_double", "classnmodl_1_1units_1_1_unit.html#a61c3fda4127c9511d46ceaa3bc02d100", null ],
     [ "add_nominator_unit", "classnmodl_1_1units_1_1_unit.html#a5a90aef7f3a9f8e3772626b8713f174e", null ],
