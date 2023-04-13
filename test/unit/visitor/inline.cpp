@@ -21,8 +21,8 @@ using namespace visitor;
 using namespace test;
 using namespace test_utils;
 
-using nmodl::parser::NmodlDriver;
 using Catch::Matchers::Equals;
+using nmodl::parser::NmodlDriver;
 
 //=============================================================================
 // Procedure/Function inlining tests
