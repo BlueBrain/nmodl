@@ -686,7 +686,7 @@ SCENARIO("Trying to inline a function with VERBATIM block") {
     }
     GIVEN("A VERBATIM block with a return value") {
         std::string nmodl_text = R"(
-            PROCEDURE verb_1()
+            PROCEDURE verb_1() {
                 VERBATIM
                     return pow(1,2);
                 ENDVERBATIM
