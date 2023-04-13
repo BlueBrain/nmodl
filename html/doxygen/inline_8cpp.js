@@ -12,5 +12,6 @@ var inline_8cpp =
     [ "SCENARIO", "inline_8cpp.html#a0831d4ba96571ecff018269a7fa66ef2", null ],
     [ "SCENARIO", "inline_8cpp.html#a52324e7e06cd6dd851df5ead64965492", null ],
     [ "SCENARIO", "inline_8cpp.html#a6e35f65127602a73e7f445afa288412c", null ],
-    [ "SCENARIO", "inline_8cpp.html#a3670b9ac5846d89ef252a43beca8c05c", null ]
+    [ "SCENARIO", "inline_8cpp.html#a3670b9ac5846d89ef252a43beca8c05c", null ],
+    [ "SCENARIO", "inline_8cpp.html#abd80adb5fcab8ab0066707141577c06d", null ]
 ];
