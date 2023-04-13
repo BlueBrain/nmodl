@@ -59,7 +59,7 @@ SCENARIO("Inlining of external procedure calls", "[visitor][inline]") {
         THEN("nothing gets inlined") {
             std::string input = reindent_text(nmodl_text);
             auto result = run_inline_visitor(input);
-            REQUIRE_THAT(result, Equals(input));
+            REQUIRE(result == input);
         }
     }
 }
@@ -93,7 +93,7 @@ SCENARIO("Inlining of function call as argument in external function", "[visitor
             std::string input = reindent_text(input_nmodl);
             auto expected_result = reindent_text(output_nmodl);
             auto result = run_inline_visitor(input);
-            REQUIRE_THAT(result, Equals(expected_result));
+            REQUIRE(result == expected_result);
         }
     }
 }
@@ -131,7 +131,7 @@ SCENARIO("Inlining of simple, one level procedure call", "[visitor][inline]") {
             std::string input = reindent_text(input_nmodl);
             auto expected_result = reindent_text(output_nmodl);
             auto result = run_inline_visitor(input);
-            REQUIRE_THAT(result, Equals(expected_result));
+            REQUIRE(result == expected_result);
         }
     }
 }
@@ -199,7 +199,7 @@ SCENARIO("Inlining of nested procedure call", "[visitor][inline]") {
             std::string input = reindent_text(input_nmodl);
             auto expected_result = reindent_text(output_nmodl);
             auto result = run_inline_visitor(input);
-            REQUIRE_THAT(result, Equals(expected_result));
+            REQUIRE(result == expected_result);
         }
     }
 }
@@ -240,7 +240,7 @@ SCENARIO("Inline function call in procedure", "[visitor][inline]") {
             std::string input = reindent_text(input_nmodl);
             auto expected_result = reindent_text(output_nmodl);
             auto result = run_inline_visitor(input);
-            REQUIRE_THAT(result, Equals(expected_result));
+            REQUIRE(result == expected_result);
         }
     }
 }
@@ -283,7 +283,7 @@ SCENARIO("Inling function call within conditional statement", "[visitor][inline]
             std::string input = reindent_text(input_nmodl);
             auto expected_result = reindent_text(output_nmodl);
             auto result = run_inline_visitor(input);
-            REQUIRE_THAT(result, Equals(expected_result));
+            REQUIRE(result == expected_result);
         }
     }
 }
@@ -325,7 +325,7 @@ SCENARIO("Inline multiple function calls in same statement", "[visitor][inline]"
             std::string input = reindent_text(input_nmodl);
             auto expected_result = reindent_text(output_nmodl);
             auto result = run_inline_visitor(input);
-            REQUIRE_THAT(result, Equals(expected_result));
+            REQUIRE(result == expected_result);
         }
     }
 
@@ -365,7 +365,7 @@ SCENARIO("Inline multiple function calls in same statement", "[visitor][inline]"
             std::string input = reindent_text(input_nmodl);
             auto expected_result = reindent_text(output_nmodl);
             auto result = run_inline_visitor(input);
-            REQUIRE_THAT(result, Equals(expected_result));
+            REQUIRE(result == expected_result);
         }
     }
 }
@@ -443,7 +443,7 @@ SCENARIO("Inline nested function calls withing arguments", "[visitor][inline]") 
             std::string input = reindent_text(input_nmodl);
             auto expected_result = reindent_text(output_nmodl);
             auto result = run_inline_visitor(input);
-            REQUIRE_THAT(result, Equals(expected_result));
+            REQUIRE(result == expected_result);
         }
     }
 }
@@ -480,7 +480,7 @@ SCENARIO("Inline function call in non-binary expression", "[visitor][inline]") {
             std::string input = reindent_text(input_nmodl);
             auto expected_result = reindent_text(output_nmodl);
             auto result = run_inline_visitor(input);
-            REQUIRE_THAT(result, Equals(expected_result));
+            REQUIRE(result == expected_result);
         }
     }
 
@@ -519,7 +519,7 @@ SCENARIO("Inline function call in non-binary expression", "[visitor][inline]") {
             std::string input = reindent_text(input_nmodl);
             auto expected_result = reindent_text(output_nmodl);
             auto result = run_inline_visitor(input);
-            REQUIRE_THAT(result, Equals(expected_result));
+            REQUIRE(result == expected_result);
         }
     }
 }
@@ -556,7 +556,7 @@ SCENARIO("Inline function call as standalone expression", "[visitor][inline]") {
             std::string input = reindent_text(input_nmodl);
             auto expected_result = reindent_text(output_nmodl);
             auto result = run_inline_visitor(input);
-            REQUIRE_THAT(result, Equals(expected_result));
+            REQUIRE(result == expected_result);
         }
     }
 }
@@ -593,7 +593,7 @@ SCENARIO("Inline procedure call as standalone statement as well as part of expre
             std::string input = reindent_text(input_nmodl);
             auto expected_result = reindent_text(output_nmodl);
             auto result = run_inline_visitor(input);
-            REQUIRE_THAT(result, Equals(expected_result));
+            REQUIRE(result == expected_result);
         }
     }
 }
@@ -643,7 +643,7 @@ SCENARIO("Inlining pass handles local-global name conflict", "[visitor][inline]"
             std::string input = reindent_text(input_nmodl);
             auto expected_result = reindent_text(output_nmodl);
             auto result = run_inline_visitor(input);
-            REQUIRE_THAT(result, Equals(expected_result));
+            REQUIRE(result == expected_result);
         }
     }
 }
@@ -681,7 +681,7 @@ SCENARIO("Trying to inline a function with VERBATIM block") {
             std::string input = reindent_text(input_nmodl);
             auto expected_result = reindent_text(output_nmodl);
             auto result = run_inline_visitor(input);
-            REQUIRE_THAT(expected_result, Equals(result));
+            REQUIRE(expected_result == result);
         }
     }
     GIVEN("A VERBATIM block with a return value") {
@@ -700,7 +700,7 @@ SCENARIO("Trying to inline a function with VERBATIM block") {
         THEN("It is not inlined") {
             std::string input = reindent_text(nmodl_text);
             auto result = run_inline_visitor(input);
-            REQUIRE_THAT(result, Equals(input));
+            REQUIRE(result == input);
         }
     }
 }
