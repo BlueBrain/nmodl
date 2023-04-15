@@ -25,23 +25,6 @@
 namespace nmodl {
 namespace utils {
 
-TempFile::TempFile(std::string path)
-    : path_(std::move(path)) {
-    std::ofstream output(path_);
-}
-
-TempFile::TempFile(std::string path, const std::string& content)
-    : path_(std::move(path)) {
-    std::ofstream output(path_);
-    output << content;
-}
-
-TempFile::~TempFile() {
-    if (remove(path_.c_str()) != 0) {
-        perror("Cannot delete temporary file");
-    }
-}
-
 std::string generate_random_string(const int len, UseNumbersInString use_numbers) {
     std::string s(len, 0);
     constexpr std::size_t number_of_numbers{10};

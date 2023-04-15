@@ -41,32 +41,12 @@ bool is_last(Iter iter, const Cont& cont) {
 }
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-/// The character used by the operating system to separate pathname components
-static constexpr char pathsep{'\\'};
 /// The character conventionally used by the operating system to separate search path components
 static constexpr char envpathsep{';'};
-/// Maximum size of a directory path
-static constexpr int max_path_len{_MAX_DIR};
 #else
-/// The character used by the operating system to separate pathname components
-static constexpr char pathsep{'/'};
 /// The character conventionally used by the operating system to separate search path components
 static constexpr char envpathsep{':'};
-/// Maximum size of a directory path
-static constexpr int max_path_len{MAXPATHLEN};
 #endif
-
-/**
- * \brief Create an empty file which is then removed when the C++ object is destructed
- */
-struct TempFile {
-    explicit TempFile(std::string path);
-    TempFile(std::string path, const std::string& content);
-    ~TempFile();
-
-  private:
-    std::string path_;
-};
 
 /// Enum to wrap bool variable to select if random string
 /// should have numbers or not

@@ -12,5 +12,17 @@ namespace test_utils {
 
 std::string reindent_text(const std::string& text);
 
+/**
+ * \brief Create an empty file which is then removed when the C++ object is destructed
+ */
+struct TempFile {
+    explicit TempFile(std::string path);
+    TempFile(std::string path, const std::string& content);
+    ~TempFile();
+
+  private:
+    std::string path_;
+};
+
 }  // namespace test_utils
 }  // namespace nmodl

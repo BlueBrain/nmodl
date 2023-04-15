@@ -81,20 +81,20 @@ std::shared_ptr<ast::Program> NmodlDriver::parse_string(const std::string& input
     return astRoot;
 }
 
-std::shared_ptr<ast::Include> NmodlDriver::parse_include(const std::string& name,
+std::shared_ptr<ast::Include> NmodlDriver::parse_include(const fs::path& name,
                                                          const location& loc) {
     if (name.empty()) {
         parse_error(loc, "empty filename");
     }
 
     // Try to find directory containing the file to import
-    const auto directory_path = library.find_file(name);
+    const auto directory_path = fs::path{library.find_file(name)};
 
     // Complete path of file (directory + filename).
-    std::string absolute_path = name;
+    auto absolute_path = name;
 
     if (!directory_path.empty()) {
-        absolute_path = directory_path + std::string(1, utils::pathsep) + name;
+        absolute_path = directory_path / name;
     }
 
     // Detect recursive inclusion.
@@ -115,7 +115,7 @@ std::shared_ptr<ast::Include> NmodlDriver::parse_include(const std::string& name
 
     program.swap(astRoot);
     auto filename_node = std::shared_ptr<ast::String>(
-        new ast::String(std::string(1, '"') + name + std::string(1, '"')));
+        new ast::String(fmt::format("\"{}\"", name.string())));
     return std::shared_ptr<ast::Include>(new ast::Include(filename_node, program->get_blocks()));
 }
 
