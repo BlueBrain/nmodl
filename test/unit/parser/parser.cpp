@@ -167,7 +167,7 @@ SCENARIO("Check that the parser doesn't crash when passing invalid INCLUDE const
 
     GIVEN("An missing included file") {
         REQUIRE_THROWS_WITH(is_valid_construct("INCLUDE \"unknown.file\""),
-                            Catch::Contains("can not open file : unknown.file"));
+                            Catch::Contains("can not open file : \"unknown.file\""));
     }
 
     GIVEN("An invalid included file") {
