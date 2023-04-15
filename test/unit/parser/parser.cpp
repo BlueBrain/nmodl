@@ -134,7 +134,8 @@ SCENARIO("NMODL parser accepts empty unit specification") {
 }
 
 SCENARIO("NMODL parser running number of valid NMODL constructs") {
-    nmodl::test_utils::TempFile unit("Unit.inc", nmodl_valid_constructs.at("unit_statement_1").input);
+    nmodl::test_utils::TempFile unit("Unit.inc",
+                                     nmodl_valid_constructs.at("unit_statement_1").input);
     for (const auto& construct: nmodl_valid_constructs) {
         auto test_case = construct.second;
         GIVEN(test_case.name) {
@@ -199,7 +200,8 @@ SCENARIO("NEURON block can add CURIE information", "[parser][represents]") {
 
 SCENARIO("Check parents in valid NMODL constructs") {
     nmodl::parser::NmodlDriver driver;
-    nmodl::test_utils::TempFile unit("Unit.inc", nmodl_valid_constructs.at("unit_statement_1").input);
+    nmodl::test_utils::TempFile unit("Unit.inc",
+                                     nmodl_valid_constructs.at("unit_statement_1").input);
     for (const auto& construct: nmodl_valid_constructs) {
         // parse the string and get the ast
         const auto ast = driver.parse_string(construct.second.input);

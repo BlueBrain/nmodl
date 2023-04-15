@@ -5,8 +5,8 @@
  * Lesser General Public License. See top-level LICENSE file for details.
  *************************************************************************/
 
-#include "utils/string_utils.hpp"
 #include "test_utils.hpp"
+#include "utils/string_utils.hpp"
 
 #include <cassert>
 #include <fstream>

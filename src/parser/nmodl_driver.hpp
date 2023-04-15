@@ -114,7 +114,8 @@ class NmodlDriver {
     std::shared_ptr<ast::Program> parse_file(const std::filesystem::path& filename,
                                              const location* loc = nullptr);
     //// parse file specified in nmodl include directive
-    std::shared_ptr<ast::Include> parse_include(const std::filesystem::path& filename, const location& loc);
+    std::shared_ptr<ast::Include> parse_include(const std::filesystem::path& filename,
+                                                const location& loc);
 
     void set_verbose(bool b) {
         verbose = b;
