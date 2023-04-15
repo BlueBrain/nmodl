@@ -8,11 +8,14 @@
 #include "file_library.hpp"
 
 #include <cassert>
+#include <filesystem>
 #include <sys/param.h>
 #include <unistd.h>
 
 #include "utils/common_utils.hpp"
 #include "utils/string_utils.hpp"
+
+namespace fs = std::filesystem;
 
 namespace nmodl {
 
@@ -24,7 +27,7 @@ FileLibrary FileLibrary::default_instance() {
     return library;
 }
 
-void FileLibrary::append_dir(const std::string& path) {
+void FileLibrary::append_dir(const fs::path& path) {
     paths_.insert(paths_.begin(), path);
 }
 
@@ -39,29 +42,32 @@ void FileLibrary::append_env_var(const std::string& env_var) {
     }
 }
 
-void FileLibrary::push_current_directory(const std::string& path) {
+void FileLibrary::push_current_directory(const fs::path& path) {
     paths_.push_back(path);
 }
 
 void FileLibrary::push_cwd() {
-    push_current_directory(utils::cwd());
+    push_current_directory(fs::current_path());
 }
 
 void FileLibrary::pop_current_directory() {
     assert(!paths_.empty());
-    paths_.erase(--paths_.end());
+    if (paths_.empty()) {
+        return;
+    }
+    paths_.pop_back();
 }
 
-std::string FileLibrary::find_file(const std::string& file) {
-    if (utils::file_is_abs(file)) {
-        if (utils::file_exists(file)) {
+std::string FileLibrary::find_file(const fs::path& file) {
+    if (file.is_absolute()) {
+        if (fs::exists(file)) {
             return "";
         }
     }
     for (auto paths_it = paths_.rbegin(); paths_it != paths_.rend(); ++paths_it) {
-        auto file_abs = *paths_it + utils::pathsep + file;
-        if (utils::file_exists(file_abs)) {
-            return *paths_it;
+        auto file_abs = *paths_it / file;
+        if (fs::exists(file_abs)) {
+            return paths_it->string();
         }
     }
     return "";
