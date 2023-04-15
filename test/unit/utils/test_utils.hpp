@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include <string>
+
 namespace nmodl {
 namespace test_utils {
 
