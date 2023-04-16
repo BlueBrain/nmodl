@@ -66,9 +66,9 @@ std::shared_ptr<ast::Program> NmodlDriver::parse_file(const fs::path& filename,
         }
     }
 
-    open_files.emplace(absolute_path, loc);
+    open_files.emplace(absolute_path.string(), loc);
     parse_stream(in);
-    open_files.erase(absolute_path);
+    open_files.erase(absolute_path.string());
     library.pop_current_directory();
     stream_name = current_stream_name;
 
@@ -98,7 +98,7 @@ std::shared_ptr<ast::Include> NmodlDriver::parse_include(const fs::path& name,
     }
 
     // Detect recursive inclusion.
-    auto already_included = open_files.find(absolute_path);
+    auto already_included = open_files.find(absolute_path.string());
     if (already_included != open_files.end()) {
         std::ostringstream oss;
         oss << name << ": recursive inclusion.\n";

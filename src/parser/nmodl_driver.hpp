@@ -82,7 +82,7 @@ class NmodlDriver {
 
     /// The list of open files, and the location of the request.
     /// \a nullptr is pushed as location for the top NMODL file
-    std::unordered_map<std::filesystem::path, const location*> open_files;
+    std::unordered_map<std::string, const location*> open_files;
 
   public:
     /// file or input stream name (used by scanner for position), see todo
