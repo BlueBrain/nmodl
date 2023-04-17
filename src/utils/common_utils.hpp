@@ -84,18 +84,6 @@ bool file_is_abs(const std::string& path);
 /// get current working directory
 std::string cwd();
 
-/**
- * \brief Create an empty file which is then removed when the C++ object is destructed
- */
-struct TempFile {
-    explicit TempFile(std::string path);
-    TempFile(std::string path, const std::string& content);
-    ~TempFile();
-
-  private:
-    std::string path_;
-};
-
 /// Enum to wrap bool variable to select if random string
 /// should have numbers or not
 enum UseNumbersInString : bool { WithNumbers = true, WithoutNumbers = false };
