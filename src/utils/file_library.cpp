@@ -27,16 +27,12 @@ FileLibrary FileLibrary::default_instance() {
     return library;
 }
 
-void FileLibrary::append_dir(const fs::path& path) {
-    paths_.insert(paths_.begin(), path);
-}
-
 void FileLibrary::append_env_var(const std::string& env_var) {
     const auto value = getenv(env_var.c_str());
     if (value != nullptr) {
         for (const auto& path: stringutils::split_string(value, utils::envpathsep)) {
             if (!path.empty()) {
-                append_dir(path);
+                paths_.insert(paths_.begin(), path);
             }
         }
     }
@@ -52,17 +48,14 @@ void FileLibrary::push_cwd() {
 
 void FileLibrary::pop_current_directory() {
     assert(!paths_.empty());
-    if (paths_.empty()) {
-        return;
+    if (!paths_.empty()) {
+        paths_.pop_back();
     }
-    paths_.pop_back();
 }
 
 std::string FileLibrary::find_file(const fs::path& file) {
-    if (file.is_absolute()) {
-        if (fs::exists(file)) {
-            return "";
-        }
+    if (file.is_absolute() && fs::exists(file)) {
+        return "";
     }
     for (auto paths_it = paths_.rbegin(); paths_it != paths_.rend(); ++paths_it) {
         auto file_abs = *paths_it / file;

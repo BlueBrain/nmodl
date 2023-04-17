@@ -42,7 +42,6 @@ class FileLibrary {
      * \name Managing inclusion paths.
      * \{
      */
-    void append_dir(const std::filesystem::path& path);
     void append_env_var(const std::string& env_var);
     /** \} */
 

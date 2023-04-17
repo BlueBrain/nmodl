@@ -82,11 +82,6 @@ std::string reindent_text(const std::string& text) {
     return indented_text;
 }
 
-TempFile::TempFile(std::string path)
-    : path_(std::move(path)) {
-    std::ofstream output(path_);
-}
-
 TempFile::TempFile(std::string path, const std::string& content)
     : path_(std::move(path)) {
     std::ofstream output(path_);
