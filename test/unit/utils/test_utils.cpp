@@ -10,8 +10,8 @@
 #include "utils/string_utils.hpp"
 
 #include <cassert>
-#include <fstream>
 #include <filesystem>
+#include <fstream>
 
 namespace fs = std::filesystem;
 
