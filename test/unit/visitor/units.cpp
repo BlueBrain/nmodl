@@ -25,10 +25,6 @@ using namespace test_utils;
 
 using nmodl::parser::NmodlDriver;
 
-namespace {
-constexpr std::size_t output_precision{8};
-}
-
 //=============================================================================
 // Unit visitor tests
 //=============================================================================
@@ -83,7 +79,7 @@ std::string get_unit_definitions(const ast::Program& ast, const units::UnitTable
         auto unit_name = unit_def->get_node_name();
         unit_name.erase(remove_if(unit_name.begin(), unit_name.end(), isspace), unit_name.end());
         auto unit = unit_table.get_unit(unit_name);
-        ss << fmt::format("{} {:.{}f}:", unit_name, unit->get_factor(), output_precision);
+        ss << fmt::format("{} {:g}:", unit_name, unit->get_factor());
         // Dimensions of the unit are printed to check that the units are successfully
         // parsed to the units::UnitTable
         int dimension_id = 0;
@@ -184,30 +180,30 @@ SCENARIO("Parse UNITS block of mod files using Units Visitor", "[visitor][units]
         )";
 
         static const std::string unit_definitions = R"(
-        nA 0.00000000: sec-1 coul1
-        mA 0.00100000: sec-1 coul1
-        mV 0.00100000: m2 kg1 sec-2 coul-1
-        uS 0.00000100: m-2 kg-1 sec1 coul2
-        nS 0.00000000: m-2 kg-1 sec1 coul2
-        pS 0.00000000: m-2 kg-1 sec1 coul2
-        umho 0.00000100: m-2 kg-1 sec1 coul2
-        um 0.00000100: m1
-        mM 1.00000000: m-3
-        uM 0.00100000: m-3
-        msM 0.00100000: m-3 sec1
-        fAm 0.00000000: m1 sec-1 coul1
-        newmol 1.00000000: constant
-        M 1000.00000000: m-3
-        uM1 0.00100000: m-3
-        mA/cm2 0.00001000: m-2 sec-1 coul1
-        molar 1000.00000000: m-3
-        S 1.00000000: m-2 kg-1 sec1 coul2
-        mse-1 1000.00000000: sec-1
-        um3 0.00100000: m3
-        molar1 1000.00000000: m-3
-        newdegK 1.00000000: K1
-        myR 8.00000000: m2 kg1 sec-2 K-1
-        mymole 600000000000000016777216.00000000: constant
+        nA 1e-09: sec-1 coul1
+        mA 0.001: sec-1 coul1
+        mV 0.001: m2 kg1 sec-2 coul-1
+        uS 1e-06: m-2 kg-1 sec1 coul2
+        nS 1e-09: m-2 kg-1 sec1 coul2
+        pS 1e-12: m-2 kg-1 sec1 coul2
+        umho 1e-06: m-2 kg-1 sec1 coul2
+        um 1e-06: m1
+        mM 1: m-3
+        uM 0.001: m-3
+        msM 0.001: m-3 sec1
+        fAm 1e-15: m1 sec-1 coul1
+        newmol 1: constant
+        M 1000: m-3
+        uM1 0.001: m-3
+        mA/cm2 1e-05: m-2 sec-1 coul1
+        molar 1000: m-3
+        S 1: m-2 kg-1 sec1 coul2
+        mse-1 1000: sec-1
+        um3 0.001: m3
+        molar1 1000: m-3
+        newdegK 1: K1
+        myR 8: m2 kg1 sec-2 K-1
+        mymole 6e+23: constant
         )";
 
         static const std::string factor_definitions = R"(
