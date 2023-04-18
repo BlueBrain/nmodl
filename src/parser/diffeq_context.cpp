@@ -140,7 +140,7 @@ std::string DiffEqContext::get_cnexp_solution() const {
  * Return solution for euler method
  */
 std::string DiffEqContext::get_euler_solution() const {
-    return state + " = " + state + "+dt*(" + rhs + ")";
+    return "D" + state + " = " + rhs;
 }
 
 
