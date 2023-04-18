@@ -1,11 +1,5 @@
 var group__utils =
 [
-    [ "TempFile", "structnmodl_1_1utils_1_1_temp_file.html", [
-      [ "TempFile", "structnmodl_1_1utils_1_1_temp_file.html#ab388b84085f8b3b364d8cf2f7cbd2381", null ],
-      [ "TempFile", "structnmodl_1_1utils_1_1_temp_file.html#aac3f58124aaa4662afad83560d7a9972", null ],
-      [ "~TempFile", "structnmodl_1_1utils_1_1_temp_file.html#aaf87277dec1d449a3a67b44e122f0d81", null ],
-      [ "path_", "structnmodl_1_1utils_1_1_temp_file.html#a2ab69e65ad64f478c35c095a162f72a9", null ]
-    ] ],
     [ "SingletonRandomString", "classnmodl_1_1utils_1_1_singleton_random_string.html", [
       [ "SingletonRandomString", "classnmodl_1_1utils_1_1_singleton_random_string.html#addba2a0ea13aed19f405cde2f88be32a", null ],
       [ "SingletonRandomString", "classnmodl_1_1utils_1_1_singleton_random_string.html#a8636f8bfba5add1a513d1ce337986a6f", null ],
@@ -74,25 +68,16 @@ var group__utils =
       [ "WithoutNumbers", "group__utils.html#ggabf78118141123c84917fbafa57c97b5ba48e615461371f586c42c6251440932f5", null ]
     ] ],
     [ "align_text", "group__utils.html#ga78e376180e14a209189043cab5e1d642", null ],
-    [ "base_name", "group__utils.html#ga017f5831612ab7572cd32c502eefdb99", null ],
-    [ "cwd", "group__utils.html#gad81eb6544afc49b12e0c95a0b291abd6", null ],
     [ "escape_quotes", "group__utils.html#ga45a5f9ecc1a019f6657d3e43bde9717d", null ],
-    [ "file_exists", "group__utils.html#gaab301e6d4341baac318c659b676e00d8", null ],
-    [ "file_is_abs", "group__utils.html#ga9010bf0e84d33e76e68b4cf164eabc38", null ],
     [ "generate_random_string", "group__utils.html#ga9413d5b6162f1e722b6d6b59c3cc5f56", null ],
-    [ "is_dir_exist", "group__utils.html#ga815dcc2aeab512e4cab531885867b9a5", null ],
     [ "is_last", "group__utils.html#ga08a8b444018d46999224618bb102b3e5", null ],
     [ "ltrim", "group__utils.html#ga2f4214fa0384130e0705f58ec9461b62", null ],
-    [ "make_path", "group__utils.html#ga96ab878e935b155f1e433ff4e08851d8", null ],
     [ "remove_character", "group__utils.html#gaa513b048823060be6e9c01f371d6e12c", null ],
-    [ "remove_extension", "group__utils.html#ga0e79e8b381239ad31ae26ee1b3b35801", null ],
     [ "rtrim", "group__utils.html#ga5ec898f06a934e7611fcd653e34da8aa", null ],
     [ "split_string", "group__utils.html#gab27701783c8231e8a759a2ce717dfc8b", null ],
     [ "to_string", "group__utils.html#gadedfb99b5da8fe0c5995b5e881875d45", null ],
     [ "tolower", "group__utils.html#ga3017224947f434861612e4f82e7bd322", null ],
     [ "trim", "group__utils.html#gac81ecc7fd7ebc9bb31e8c47a277f15ab", null ],
     [ "trim_newline", "group__utils.html#ga60bba822b99a93deb3441f0beac7c8cb", null ],
-    [ "envpathsep", "group__utils.html#ga8d5ced6d74954f098720a06f96d69899", null ],
-    [ "max_path_len", "group__utils.html#ga1618470834a516c4759335c204edf1a1", null ],
-    [ "pathsep", "group__utils.html#ga42086e9229a551bb8f1d9d0b5d18c54b", null ]
+    [ "envpathsep", "group__utils.html#ga8d5ced6d74954f098720a06f96d69899", null ]
 ];

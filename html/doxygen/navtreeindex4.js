@@ -1,6 +1,5 @@
 var NAVTREEINDEX4 =
 {
-"classnmodl_1_1ast_1_1_define.html#ad009dd3b159508fad37f5241798f6740":[1,0,1,23,9],
 "classnmodl_1_1ast_1_1_define.html#ad129f6969510e0b5cd968a6e1bb5fd70":[1,0,1,23,17],
 "classnmodl_1_1ast_1_1_define.html#ad4c6d62eb31386e7143d7cef296d0dc5":[1,0,1,23,27],
 "classnmodl_1_1ast_1_1_define.html#ae864a13c3a31a4009fc795e6a025c2bc":[1,0,1,23,11],
@@ -249,5 +248,6 @@ var NAVTREEINDEX4 =
 "classnmodl_1_1ast_1_1_eigen_newton_solver_block.html#a0609788d20c0d75fe89cceb2c8a1861c":[1,0,1,32,28],
 "classnmodl_1_1ast_1_1_eigen_newton_solver_block.html#a0bccbb1589fd1234db8223bf46207b38":[1,0,1,32,35],
 "classnmodl_1_1ast_1_1_eigen_newton_solver_block.html#a0e2de428ebcbf1b8697b40364a95106f":[1,0,1,32,13],
-"classnmodl_1_1ast_1_1_eigen_newton_solver_block.html#a0e77c9383c6809139ba6b52d9169fbf5":[1,0,1,32,20]
+"classnmodl_1_1ast_1_1_eigen_newton_solver_block.html#a0e77c9383c6809139ba6b52d9169fbf5":[1,0,1,32,20],
+"classnmodl_1_1ast_1_1_eigen_newton_solver_block.html#a156f34013c5553eb3dfe47161e536bac":[1,0,1,32,45]
 };

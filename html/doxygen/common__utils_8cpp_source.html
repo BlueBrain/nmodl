@@ -121,116 +121,32 @@ $(document).ready(function(){initNavTree('common__utils_8cpp_source.html',''); i
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacenmodl.html">nmodl</a> {</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keyword">namespace </span>utils {</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="group__utils.html#ga815dcc2aeab512e4cab531885867b9a5">is_dir_exist</a>(<span class="keyword">const</span> std::string&amp; path) {</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <span class="keyword">struct </span>stat info {};</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="keywordflow">if</span> (stat(path.c_str(), &amp;info) != 0) {</div>
-<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="namespacenmodl_1_1utils.html">   31</a></span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    }</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="keywordflow">return</span> (info.st_mode &amp; S_IFDIR) != 0;</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;}</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="group__utils.html#gaab301e6d4341baac318c659b676e00d8">file_exists</a>(<span class="keyword">const</span> std::string&amp; path) {</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="keyword">struct </span>stat info {};</div>
-<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="group__utils.html#ga815dcc2aeab512e4cab531885867b9a5">   38</a></span>&#160;    <span class="keywordflow">return</span> stat(path.c_str(), &amp;info) == 0;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;}</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="group__utils.html#ga9010bf0e84d33e76e68b4cf164eabc38">file_is_abs</a>(<span class="keyword">const</span> std::string&amp; path) {</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="preprocessor">#ifdef IS_WINDOWS</span></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keywordflow">return</span> path.find(<span class="stringliteral">&quot;:\\&quot;</span>) != std::string::npos;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keywordflow">return</span> path.find(<a class="code" href="group__utils.html#ga42086e9229a551bb8f1d9d0b5d18c54b">pathsep</a>) == 0;</div>
-<div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="group__utils.html#gaab301e6d4341baac318c659b676e00d8">   46</a></span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;}</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;std::string <a class="code" href="group__utils.html#gad81eb6544afc49b12e0c95a0b291abd6">cwd</a>() {</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    std::array&lt;char, MAXPATHLEN + 1&gt; <a class="code" href="group__utils.html#gad81eb6544afc49b12e0c95a0b291abd6">cwd</a>{};</div>
-<div class="line"><a name="l00051"></a><span class="lineno"><a class="line" href="group__utils.html#ga9010bf0e84d33e76e68b4cf164eabc38">   51</a></span>&#160;    <span class="keywordflow">if</span> (<span class="keyword">nullptr</span> == getcwd(<a class="code" href="group__utils.html#gad81eb6544afc49b12e0c95a0b291abd6">cwd</a>.data(), MAXPATHLEN + 1)) {</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;working directory name too long&quot;</span>);</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    }</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keywordflow">return</span> {<a class="code" href="group__utils.html#gad81eb6544afc49b12e0c95a0b291abd6">cwd</a>.data()};</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;}</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="group__utils.html#ga96ab878e935b155f1e433ff4e08851d8">make_path</a>(<span class="keyword">const</span> std::string&amp; path) {</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    mode_t mode = 0755;  <span class="comment">// NOLINT(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)</span></div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keywordtype">int</span> ret = mkdir(path.c_str(), mode);</div>
-<div class="line"><a name="l00059"></a><span class="lineno"><a class="line" href="group__utils.html#gad81eb6544afc49b12e0c95a0b291abd6">   59</a></span>&#160;    <span class="keywordflow">if</span> (ret == 0) {</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    }</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keywordflow">switch</span> (errno) {</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keywordflow">case</span> ENOENT:</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <span class="comment">// parent didn&#39;t exist, try to create it</span></div>
-<div class="line"><a name="l00066"></a><span class="lineno"><a class="line" href="group__utils.html#ga96ab878e935b155f1e433ff4e08851d8">   66</a></span>&#160;        {</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;            <span class="keyword">auto</span> <span class="keyword">const</span> pos = path.find_last_of(<span class="charliteral">&#39;/&#39;</span>);</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;            <span class="keywordflow">if</span> (pos == std::string::npos) {</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;            }</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;            <span class="keywordflow">if</span> (!<a class="code" href="group__utils.html#ga96ab878e935b155f1e433ff4e08851d8">make_path</a>(path.substr(0, pos))) {</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;            }</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        }</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        <span class="comment">// now, try to create again</span></div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        <span class="keywordflow">return</span> 0 == mkdir(path.c_str(), mode);</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keywordflow">case</span> EEXIST:</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        <span class="comment">// done!</span></div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="group__utils.html#ga815dcc2aeab512e4cab531885867b9a5">is_dir_exist</a>(path);</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <span class="keywordflow">default</span>:</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <span class="keyword">auto</span> msg = <span class="stringliteral">&quot;Can not create directory &quot;</span> + path;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        <span class="keywordflow">throw</span> std::runtime_error(msg);</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    }</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;}</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<a class="code" href="structnmodl_1_1utils_1_1_temp_file.html#ab388b84085f8b3b364d8cf2f7cbd2381">TempFile::TempFile</a>(std::string path)</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    : path_(std::move(path)) {</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    std::ofstream output(path_);</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;}</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; </div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;TempFile::TempFile(std::string path, <span class="keyword">const</span> std::string&amp; content)</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    : path_(std::move(path)) {</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    std::ofstream output(path_);</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    output &lt;&lt; content;</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;}</div>
-<div class="line"><a name="l00098"></a><span class="lineno"><a class="line" href="structnmodl_1_1utils_1_1_temp_file.html#ab388b84085f8b3b364d8cf2f7cbd2381">   98</a></span>&#160; </div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;TempFile::~TempFile() {</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    <span class="keywordflow">if</span> (remove(path_.c_str()) != 0) {</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        perror(<span class="stringliteral">&quot;Cannot delete temporary file&quot;</span>);</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    }</div>
-<div class="line"><a name="l00103"></a><span class="lineno"><a class="line" href="structnmodl_1_1utils_1_1_temp_file.html#aac3f58124aaa4662afad83560d7a9972">  103</a></span>&#160;}</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160; </div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;std::string <a class="code" href="group__utils.html#ga9413d5b6162f1e722b6d6b59c3cc5f56">generate_random_string</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> len, <a class="code" href="group__utils.html#gabf78118141123c84917fbafa57c97b5b">UseNumbersInString</a> use_numbers) {</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    std::string s(len, 0);</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    constexpr std::size_t number_of_numbers{10};</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    constexpr std::string_view alphanum{</div>
-<div class="line"><a name="l00109"></a><span class="lineno"><a class="line" href="structnmodl_1_1utils_1_1_temp_file.html#aaf87277dec1d449a3a67b44e122f0d81">  109</a></span>&#160;        <span class="stringliteral">&quot;0123456789&quot;</span></div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        <span class="stringliteral">&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZ&quot;</span></div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        <span class="stringliteral">&quot;abcdefghijklmnopqrstuvwxyz&quot;</span>};</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    std::random_device dev;</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    std::mt19937 rng(dev());</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    std::uniform_int_distribution&lt;std::mt19937::result_type&gt; dist(use_numbers ? 0</div>
-<div class="line"><a name="l00115"></a><span class="lineno"><a class="line" href="group__utils.html#ga9413d5b6162f1e722b6d6b59c3cc5f56">  115</a></span>&#160;                                                                              : number_of_numbers,</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;                                                                  alphanum.size() - 1);</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; len; ++i) {</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;        s[i] = alphanum[dist(rng)];</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    }</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    <span class="keywordflow">return</span> s;</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;}</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160; </div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;}  <span class="comment">// namespace utils</span></div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;}  <span class="comment">// namespace nmodl</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;std::string <a class="code" href="group__utils.html#ga9413d5b6162f1e722b6d6b59c3cc5f56">generate_random_string</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> len, <a class="code" href="group__utils.html#gabf78118141123c84917fbafa57c97b5b">UseNumbersInString</a> use_numbers) {</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    std::string s(len, 0);</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    constexpr std::size_t number_of_numbers{10};</div>
+<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="namespacenmodl_1_1utils.html">   31</a></span>&#160;    constexpr std::string_view alphanum{</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <span class="stringliteral">&quot;0123456789&quot;</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        <span class="stringliteral">&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZ&quot;</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <span class="stringliteral">&quot;abcdefghijklmnopqrstuvwxyz&quot;</span>};</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    std::random_device dev;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    std::mt19937 rng(dev());</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    std::uniform_int_distribution&lt;std::mt19937::result_type&gt; dist(use_numbers ? 0</div>
+<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="group__utils.html#ga9413d5b6162f1e722b6d6b59c3cc5f56">   38</a></span>&#160;                                                                              : number_of_numbers,</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;                                                                  alphanum.size() - 1);</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; len; ++i) {</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        s[i] = alphanum[dist(rng)];</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    }</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keywordflow">return</span> s;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;}</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;}  <span class="comment">// namespace utils</span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;}  <span class="comment">// namespace nmodl</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="astructnmodl_1_1utils_1_1_temp_file_html_ab388b84085f8b3b364d8cf2f7cbd2381"><div class="ttname"><a href="structnmodl_1_1utils_1_1_temp_file.html#ab388b84085f8b3b364d8cf2f7cbd2381">nmodl::utils::TempFile::TempFile</a></div><div class="ttdeci">TempFile(std::string path)</div><div class="ttdef"><b>Definition:</b> <a href="common__utils_8cpp_source.html#l00098">common_utils.cpp:98</a></div></div>
 <div class="ttc" id="anamespacenmodl_html"><div class="ttname"><a href="namespacenmodl.html">nmodl</a></div><div class="ttdoc">encapsulates everything related to NMODL code generation framework</div><div class="ttdef"><b>Definition:</b> <a href="ast__common_8hpp_source.html#l00026">ast_common.hpp:26</a></div></div>
-<div class="ttc" id="agroup__utils_html_gabf78118141123c84917fbafa57c97b5b"><div class="ttname"><a href="group__utils.html#gabf78118141123c84917fbafa57c97b5b">nmodl::utils::UseNumbersInString</a></div><div class="ttdeci">UseNumbersInString</div><div class="ttdoc">Enum to wrap bool variable to select if random string should have numbers or not.</div><div class="ttdef"><b>Definition:</b> <a href="common__utils_8hpp_source.html#l00101">common_utils.hpp:101</a></div></div>
-<div class="ttc" id="agroup__utils_html_ga42086e9229a551bb8f1d9d0b5d18c54b"><div class="ttname"><a href="group__utils.html#ga42086e9229a551bb8f1d9d0b5d18c54b">nmodl::utils::pathsep</a></div><div class="ttdeci">static constexpr char pathsep</div><div class="ttdoc">The character used by the operating system to separate pathname components.</div><div class="ttdef"><b>Definition:</b> <a href="common__utils_8hpp_source.html#l00065">common_utils.hpp:65</a></div></div>
-<div class="ttc" id="agroup__utils_html_ga9010bf0e84d33e76e68b4cf164eabc38"><div class="ttname"><a href="group__utils.html#ga9010bf0e84d33e76e68b4cf164eabc38">nmodl::utils::file_is_abs</a></div><div class="ttdeci">bool file_is_abs(const std::string &amp;path)</div><div class="ttdoc">Check if specified file path is absolute.</div><div class="ttdef"><b>Definition:</b> <a href="common__utils_8cpp_source.html#l00051">common_utils.cpp:51</a></div></div>
-<div class="ttc" id="agroup__utils_html_gad81eb6544afc49b12e0c95a0b291abd6"><div class="ttname"><a href="group__utils.html#gad81eb6544afc49b12e0c95a0b291abd6">nmodl::utils::cwd</a></div><div class="ttdeci">std::string cwd()</div><div class="ttdoc">get current working directory</div><div class="ttdef"><b>Definition:</b> <a href="common__utils_8cpp_source.html#l00059">common_utils.cpp:59</a></div></div>
-<div class="ttc" id="agroup__utils_html_ga96ab878e935b155f1e433ff4e08851d8"><div class="ttname"><a href="group__utils.html#ga96ab878e935b155f1e433ff4e08851d8">nmodl::utils::make_path</a></div><div class="ttdeci">bool make_path(const std::string &amp;path)</div><div class="ttdoc">Given directory path, create sub-directories.</div><div class="ttdef"><b>Definition:</b> <a href="common__utils_8cpp_source.html#l00066">common_utils.cpp:66</a></div></div>
-<div class="ttc" id="agroup__utils_html_ga815dcc2aeab512e4cab531885867b9a5"><div class="ttname"><a href="group__utils.html#ga815dcc2aeab512e4cab531885867b9a5">nmodl::utils::is_dir_exist</a></div><div class="ttdeci">bool is_dir_exist(const std::string &amp;path)</div><div class="ttdoc">Check if directory with given path exists.</div><div class="ttdef"><b>Definition:</b> <a href="common__utils_8cpp_source.html#l00038">common_utils.cpp:38</a></div></div>
-<div class="ttc" id="agroup__utils_html_gaab301e6d4341baac318c659b676e00d8"><div class="ttname"><a href="group__utils.html#gaab301e6d4341baac318c659b676e00d8">nmodl::utils::file_exists</a></div><div class="ttdeci">bool file_exists(const std::string &amp;path)</div><div class="ttdoc">Check if specified file path exists.</div><div class="ttdef"><b>Definition:</b> <a href="common__utils_8cpp_source.html#l00046">common_utils.cpp:46</a></div></div>
+<div class="ttc" id="agroup__utils_html_gabf78118141123c84917fbafa57c97b5b"><div class="ttname"><a href="group__utils.html#gabf78118141123c84917fbafa57c97b5b">nmodl::utils::UseNumbersInString</a></div><div class="ttdeci">UseNumbersInString</div><div class="ttdoc">Enum to wrap bool variable to select if random string should have numbers or not.</div><div class="ttdef"><b>Definition:</b> <a href="common__utils_8hpp_source.html#l00053">common_utils.hpp:53</a></div></div>
 <div class="ttc" id="acommon__utils_8hpp_html"><div class="ttname"><a href="common__utils_8hpp.html">common_utils.hpp</a></div><div class="ttdoc">Common utility functions for file/dir manipulation.</div></div>
-<div class="ttc" id="agroup__utils_html_ga9413d5b6162f1e722b6d6b59c3cc5f56"><div class="ttname"><a href="group__utils.html#ga9413d5b6162f1e722b6d6b59c3cc5f56">nmodl::utils::generate_random_string</a></div><div class="ttdeci">std::string generate_random_string(const int len, UseNumbersInString use_numbers)</div><div class="ttdoc">Generate random std::string of length len based on a uniform distribution.</div><div class="ttdef"><b>Definition:</b> <a href="common__utils_8cpp_source.html#l00115">common_utils.cpp:115</a></div></div>
+<div class="ttc" id="agroup__utils_html_ga9413d5b6162f1e722b6d6b59c3cc5f56"><div class="ttname"><a href="group__utils.html#ga9413d5b6162f1e722b6d6b59c3cc5f56">nmodl::utils::generate_random_string</a></div><div class="ttdeci">std::string generate_random_string(const int len, UseNumbersInString use_numbers)</div><div class="ttdoc">Generate random std::string of length len based on a uniform distribution.</div><div class="ttdef"><b>Definition:</b> <a href="common__utils_8cpp_source.html#l00038">common_utils.cpp:38</a></div></div>
 <!-- HTML footer for doxygen 1.8.15-->
 <!-- start footer part -->
 <div id="nav-path" class="navpath">
