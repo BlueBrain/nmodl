@@ -33,7 +33,8 @@ constexpr std::size_t output_precision{8};
 // Unit visitor tests
 //=============================================================================
 
-std::tuple<std::shared_ptr<ast::Program>, std::shared_ptr<units::UnitTable>> run_units_visitor(const std::string& text) {
+std::tuple<std::shared_ptr<ast::Program>, std::shared_ptr<units::UnitTable>> run_units_visitor(
+    const std::string& text) {
     NmodlDriver driver;
     driver.parse_string(text);
     const auto& ast = driver.get_ast();
@@ -58,7 +59,7 @@ std::tuple<std::shared_ptr<ast::Program>, std::shared_ptr<units::UnitTable>> run
 
 /**
  * @brief Returns all the \c UnitDef s of the \c ast::Program
- * 
+ *
  * Visit AST to find all the ast::UnitDef nodes to print their
  * unit names, factors and dimensions as they are calculated in
  * the units::UnitTable
@@ -82,10 +83,7 @@ std::string get_unit_definitions(const ast::Program& ast, const units::UnitTable
         auto unit_name = unit_def->get_node_name();
         unit_name.erase(remove_if(unit_name.begin(), unit_name.end(), isspace), unit_name.end());
         auto unit = unit_table.get_unit(unit_name);
-        ss << fmt::format("{} {:.{}f}:",
-                          unit_name,
-                          unit->get_factor(),
-                          output_precision);
+        ss << fmt::format("{} {:.{}f}:", unit_name, unit->get_factor(), output_precision);
         // Dimensions of the unit are printed to check that the units are successfully
         // parsed to the units::UnitTable
         int dimension_id = 0;
@@ -107,15 +105,15 @@ std::string get_unit_definitions(const ast::Program& ast, const units::UnitTable
 
 /**
  * @brief Returns all the \c FactorDef s of the \c ast::Program
- * 
+ *
  * Visit AST to find all the ast::FactorDef nodes to print their
- * unit names and factors as they are calculated to be printed 
+ * unit names and factors as they are calculated to be printed
  * to the generated .cpp file
  * The \c FactorDef s are printed in the format:
  * \code
  * <unit_name> <unit_value>
  * \endcode
- * 
+ *
  * @arg ast \c ast::Program to look for \c FactorDef s
  *
  * @return std::string Factor definitions
@@ -176,7 +174,7 @@ SCENARIO("Parse UNITS block of mod files using Units Visitor", "[visitor][units]
                 toyfuzz = (1) (volt)
                 numbertwo = 2 (1)
                 oldJ = (R-mole) (1) : compute oldJ based on the value of R which is registered in the UnitTable
-	            R = 8 (joule/degC) : define a new value for R that should be visible only in the mod file
+                R = 8 (joule/degC) : define a new value for R that should be visible only in the mod file
                 J = (R-mole) (1) : recalculate J. It's value should be the same as oldJ because R shouldn't change in the UnitTable
                 (myR) = (8 joule/degC) : Define my own R and mole and compute myRnew and myJ based on them
                 (mymole) = (6+23)

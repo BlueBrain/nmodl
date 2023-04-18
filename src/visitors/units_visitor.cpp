@@ -83,21 +83,7 @@ void UnitsVisitor::visit_unit_def(ast::UnitDef& node) {
 void UnitsVisitor::visit_factor_def(ast::FactorDef& node) {
     std::ostringstream ss;
     const auto node_has_value_defined_in_modfile = node.get_value() != nullptr;
-    if (node_has_value_defined_in_modfile) {
-        /*
-         * In nrnunits.lib file "1" is defined as "fuzz", so
-         * there must be a conversion to be able to parse "1" as unit
-         */
-        if (node.get_unit1()->get_node_name() == "1") {
-            ss << node.get_node_name() << "\t" << node.get_value()->eval() << " ";
-            ss << UNIT_FUZZ;
-        } else {
-            ss << node.get_node_name() << "\t" << node.get_value()->eval() << " ";
-            ss << node.get_unit1()->get_node_name();
-        }
-        // Parse the generated string for the defined unit using the units::UnitParser
-        units_driver.parse_string(ss.str());
-    } else {
+    if (!node_has_value_defined_in_modfile) {
         std::ostringstream ss_unit1, ss_unit2;
         std::string unit1_name, unit2_name;
         /*
