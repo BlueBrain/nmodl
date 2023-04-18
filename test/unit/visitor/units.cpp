@@ -146,7 +146,7 @@ SCENARIO("Parse UNITS block of mod files using Units Visitor", "[visitor][units]
                 (uM)    = (micro/liter)
                 (msM) = (ms mM)
                 (fAm) = (femto amp meter)
-                (mol) = (1)
+                (newmol) = (1)
                 (M) = (1/liter)
                 (uM1) = (micro M)
                 (mA/cm2) = (nanoamp/cm2)
@@ -155,7 +155,7 @@ SCENARIO("Parse UNITS block of mod files using Units Visitor", "[visitor][units]
                 (mse-1) = (1/millisec)
                 (um3) = (liter/1e15)
                 (molar1) = (/liter)
-                (degK) = (degC)
+                (newdegK) = (degC)
                 FARADAY1 = (faraday) (coulomb)
                 FARADAY2 = (faraday) (kilocoulombs)
                 FARADAY3 = (faraday) (10000 coulomb)
@@ -196,7 +196,7 @@ SCENARIO("Parse UNITS block of mod files using Units Visitor", "[visitor][units]
         uM 0.00100000: m-3
         msM 0.00100000: m-3 sec1
         fAm 0.00000000: m1 sec-1 coul1
-        mol 1.00000000: constant
+        newmol 1.00000000: constant
         M 1000.00000000: m-3
         uM1 0.00100000: m-3
         mA/cm2 0.00001000: m-2 sec-1 coul1
@@ -205,7 +205,7 @@ SCENARIO("Parse UNITS block of mod files using Units Visitor", "[visitor][units]
         mse-1 1000.00000000: sec-1
         um3 0.00100000: m3
         molar1 1000.00000000: m-3
-        degK 1.00000000: K1
+        newdegK 1.00000000: K1
         myR 8.00000000: m2 kg1 sec-2 K-1
         mymole 600000000000000016777216.00000000: constant
         )";
@@ -246,6 +246,17 @@ SCENARIO("Parse UNITS block of mod files using Units Visitor", "[visitor][units]
             auto reindented_result_factor_definitions = reindent_text(generated_factor_definitions);
             REQUIRE(reindented_result_unit_definitions == expected_result_unit_definitions);
             REQUIRE(reindented_result_factor_definitions == expected_result_factor_definitions);
+        }
+    }
+    GIVEN("UNITS block with Unit definition which is already defined") {
+        static const std::string nmodl_text = R"(
+            UNITS {
+                (R) = (8 joule/degC)
+            }
+        )";
+        THEN("Throw redefinition exception") {
+            const std::string input(reindent_text(nmodl_text));
+            REQUIRE_THROWS(run_units_visitor(input));
         }
     }
 }
