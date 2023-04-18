@@ -193,7 +193,7 @@ SCENARIO("Unit parser accepting dependent/nested units definition", "[unit][pars
                 )";
                 std::string parsed_units = parse_string(reindent_text(units_definitions));
                 REQUIRE_THAT(parsed_units, Contains("mV 0.001: 2 1 -2 -1 0 0 0 0 0 0"));
-                REQUIRE_THAT(parsed_units, Contains("mM 0.9999999999999998: -3 0 0 0 0 0 0 0 0 0"));
+                REQUIRE_THAT(parsed_units, Contains("mM 1: -3 0 0 0 0 0 0 0 0 0"));
                 REQUIRE_THAT(parsed_units, Contains("mA 0.001: 0 0 -1 1 0 0 0 0 0 0"));
                 REQUIRE_THAT(parsed_units, Contains("KTOMV 8.53e-05: 2 1 -2 -1 0 0 0 0 0 -1"));
                 REQUIRE_THAT(parsed_units, Contains("B 26: -1 0 0 -1 0 0 0 0 0 0"));
@@ -202,7 +202,7 @@ SCENARIO("Unit parser accepting dependent/nested units definition", "[unit][pars
                 REQUIRE_THAT(parsed_units, Contains("dummy3 0.025: -2 0 0 0 0 0 0 0 0 0"));
                 REQUIRE_THAT(parsed_units, Contains("dummy4 -0.025: -2 0 0 0 0 0 0 0 0 0"));
                 REQUIRE_THAT(parsed_units, Contains("dummy5 0.025: 0 0 0 0 0 0 0 0 0 0"));
-                REQUIRE_THAT(parsed_units, Contains("R 8.31446261815324: 2 1 -2 0 0 0 0 0 0 -1"));
+                REQUIRE_THAT(parsed_units, Contains("R 8.31446: 2 1 -2 0 0 0 0 0 0 -1"));
                 REQUIRE_THAT(parsed_units, Contains("R1 8.314: 2 1 -2 0 0 0 0 0 0 -1"));
                 REQUIRE_THAT(parsed_units, Contains("R2 8.314: 2 1 -2 0 0 0 0 0 0 -1"));
                 REQUIRE_THAT(parsed_units, Contains("m kg sec coul candela dollar bit erlang K"));
