@@ -80,7 +80,8 @@ void NeuronSolveVisitor::visit_binary_expression(ast::BinaryExpression& node) {
             {
                 std::string solution = parser::DiffeqDriver::solve(equation, solve_method);
                 auto statement = create_statement(solution);
-                auto expr_statement = std::dynamic_pointer_cast<ast::ExpressionStatement>(statement);
+                auto expr_statement = std::dynamic_pointer_cast<ast::ExpressionStatement>(
+                    statement);
                 const auto bin_expr = std::dynamic_pointer_cast<const ast::BinaryExpression>(
                     expr_statement->get_expression());
                 node.set_lhs(std::shared_ptr<ast::Expression>(bin_expr->get_lhs()->clone()));
