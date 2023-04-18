@@ -3,3 +3,4 @@ unsigned-integer-overflow:nmodl::fast_math::vexp(double)
 unsigned-integer-overflow:nmodl::fast_math::vexpm1(double)
 unsigned-integer-overflow:std::mersenne_twister_engine
 unsigned-integer-overflow:fmt::v9::detail::make_write_int_arg
+unsigned-integer-overflow:fmt::v9::detail:format_dragon
