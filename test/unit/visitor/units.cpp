@@ -159,7 +159,7 @@ SCENARIO("Parse UNITS block of mod files using Units Visitor", "[visitor][units]
                 FARADAY1 = (faraday) (coulomb)
                 FARADAY2 = (faraday) (kilocoulombs)
                 FARADAY3 = (faraday) (10000 coulomb)
-                PI      = (pi)      (1)
+                pi      = (pi)      (1)
                 R1       = (k-mole)  (joule/degC)
                 R2 = 8.314 (volt-coul/degC)
                 R3 = (mole k) (mV-coulomb/degC)
@@ -214,7 +214,7 @@ SCENARIO("Parse UNITS block of mod files using Units Visitor", "[visitor][units]
         FARADAY1 0x1.78e555060882cp+16
         FARADAY2 0x1.81f0fae775425p+6
         FARADAY3 0x1.34c0c8b92a9b7p+3
-        PI 0x1.921fb54442d18p+1
+        pi 0x1.921fb54442d18p+1
         R1 0x1.0a1013e8990bep+3
         R2 8.314
         R3 0x1.03d3b37125759p+13

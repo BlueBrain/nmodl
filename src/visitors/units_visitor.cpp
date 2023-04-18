@@ -81,7 +81,6 @@ void UnitsVisitor::visit_unit_def(ast::UnitDef& node) {
  * care of all the units calculations.
  */
 void UnitsVisitor::visit_factor_def(ast::FactorDef& node) {
-    std::ostringstream ss;
     const auto node_has_value_defined_in_modfile = node.get_value() != nullptr;
     if (!node_has_value_defined_in_modfile) {
         std::ostringstream ss_unit1, ss_unit2;
@@ -112,10 +111,6 @@ void UnitsVisitor::visit_factor_def(ast::FactorDef& node) {
          */
         ss_unit2 << node.get_node_name() << "_unit2\t" << unit2_name;
         units_driver.parse_string(ss_unit2.str());
-
-        // Parse the generated string for the defined unit using the units::UnitParser
-        ss << node.get_node_name() << "\t" << unit1_name;
-        units_driver.parse_string(ss.str());
 
         /**
          * \note If the ast::FactorDef was made by using two units (second case),
