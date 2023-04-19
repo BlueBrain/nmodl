@@ -1159,3 +1159,43 @@ SCENARIO("Check codegen for MUTEX and PROTECT", "[codegen][mutex_protect]") {
         }
     }
 }
+
+SCENARIO("nrn_state should not be always written", "[codegen][nrn_state]") {
+    GIVEN("An empty mod file") {
+        std::string const nmodl_text = R"(
+            NEURON {
+            }
+        )";
+        THEN("nrn_state should be generated") {
+            auto const generated = get_cpp_code(nmodl_text);
+            std::string expected_code = R"(void nrn_state_(NrnThread* nt, Memb_list* ml, int type) {)";
+            REQUIRE_THAT(generated, Contains(expected_code));
+        }
+    }
+    GIVEN("A mod file with a SOLVE inside a BREAKPOINT") {
+        std::string const nmodl_text = R"(
+            BREAKPOINT {
+                SOLVE state METHOD cnexp
+            }
+            DERIVATIVE state {
+            }
+        )";
+        THEN("nrn_state should be generated") {
+            auto const generated = get_cpp_code(nmodl_text);
+            std::string expected_code = R"(void nrn_state_(NrnThread* nt, Memb_list* ml, int type) {)";
+            REQUIRE_THAT(generated, Contains(expected_code));
+        }
+    }
+    GIVEN("A mod file with a SOLVE inside a BREAKPOINT") {
+        std::string const nmodl_text = R"(
+            STATE {
+                pump (mol/cm2) <1.e-3>
+            }
+        )";
+        THEN("nrn_state should be generated") {
+            auto const generated = get_cpp_code(nmodl_text);
+            std::string expected_code = R"(void nrn_state_(NrnThread* nt, Memb_list* ml, int type) {)";
+            REQUIRE_THAT(generated, Contains(expected_code));
+        }
+    }
+}
