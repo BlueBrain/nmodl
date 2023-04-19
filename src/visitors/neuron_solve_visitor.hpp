@@ -59,7 +59,7 @@ class NeuronSolveVisitor: public AstVisitor {
     /// the derivative name currently being visited
     std::string derivative_block_name;
 
-    std::vector<std::shared_ptr<ast::Statement>> euler_values_computation;
+    std::vector<std::shared_ptr<ast::Statement>> euler_solution_expressions;
 
   public:
     NeuronSolveVisitor() = default;

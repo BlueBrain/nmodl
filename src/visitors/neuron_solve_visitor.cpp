@@ -33,7 +33,7 @@ void NeuronSolveVisitor::visit_derivative_block(ast::DerivativeBlock& node) {
     derivative_block = false;
     if (solve_blocks[derivative_block_name] == codegen::naming::EULER_METHOD) {
         auto& statement_block = node.get_statement_block();
-        for (auto& e: euler_values_computation) {
+        for (auto& e: euler_solution_expressions) {
             statement_block->emplace_back_statement(e);
         }
     }
@@ -93,7 +93,7 @@ void NeuronSolveVisitor::visit_binary_expression(ast::BinaryExpression& node) {
             {
                 std::string n = name->get_node_name();
                 auto statement = create_statement(fmt::format("{} = {} + dt * D{}", n, n, n));
-                euler_values_computation.emplace_back(statement);
+                euler_solution_expressions.emplace_back(statement);
             }
         } else if (solve_method == codegen::naming::DERIVIMPLICIT_METHOD) {
             auto varname = "D" + name->get_node_name();
