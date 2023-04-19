@@ -1,5 +1,6 @@
 var NAVTREEINDEX24 =
 {
+"conductance__hint_8hpp.html":[4,0,0,0,0,0,0,20],
 "conductance__hint_8hpp_source.html":[4,0,0,0,0,0,0,20],
 "config_8h.html":[4,0,1,2,0],
 "config_8h_source.html":[4,0,1,2,0],
@@ -245,9 +246,8 @@ var NAVTREEINDEX24 =
 "function__call_8hpp_source.html":[4,0,0,0,0,0,0,49],
 "function__table__block_8hpp.html":[4,0,0,0,0,0,0,50],
 "function__table__block_8hpp_source.html":[4,0,0,0,0,0,0,50],
-"functions.html":[3,3,0],
 "functions.html":[3,3,0,0],
+"functions.html":[3,3,0],
 "functions_b.html":[3,3,0,1],
-"functions_c.html":[3,3,0,2],
-"functions_d.html":[3,3,0,3]
+"functions_c.html":[3,3,0,2]
 };

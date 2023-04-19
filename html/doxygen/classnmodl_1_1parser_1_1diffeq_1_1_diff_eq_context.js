@@ -7,7 +7,7 @@ var classnmodl_1_1parser_1_1diffeq_1_1_diff_eq_context =
     [ "get_cnexp_solution", "classnmodl_1_1parser_1_1diffeq_1_1_diff_eq_context.html#ad3bb5bd06ff94e697110d7305c153bc9", null ],
     [ "get_cvode_linear_diffeq", "classnmodl_1_1parser_1_1diffeq_1_1_diff_eq_context.html#a9403ad70bd5e5db162670117fd904b3b", null ],
     [ "get_cvode_nonlinear_diffeq", "classnmodl_1_1parser_1_1diffeq_1_1_diff_eq_context.html#a18e44be4778505e7715cc6af24ccf5e4", null ],
-    [ "get_euler_solution", "classnmodl_1_1parser_1_1diffeq_1_1_diff_eq_context.html#ae6af98a0f61b452d4fb2b7b6c08e9e04", null ],
+    [ "get_euler_derivate", "classnmodl_1_1parser_1_1diffeq_1_1_diff_eq_context.html#a18496c9881014e20cba6477cef89c89e", null ],
     [ "get_expr_for_nonlinear", "classnmodl_1_1parser_1_1diffeq_1_1_diff_eq_context.html#a92f7bdeedb0c276227253254a5202d51", null ],
     [ "get_non_cnexp_solution", "classnmodl_1_1parser_1_1diffeq_1_1_diff_eq_context.html#a715888f745d4f274ba5b93e70f6afb81", null ],
     [ "get_solution", "classnmodl_1_1parser_1_1diffeq_1_1_diff_eq_context.html#a8c0e2e1e95d94888911b16a94c5c1421", null ],
