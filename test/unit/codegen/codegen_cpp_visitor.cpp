@@ -941,6 +941,39 @@ SCENARIO("Check that codegen generate event functions well", "[codegen][net_even
             REQUIRE_THAT(generated, Contains(expected_code));
         }
     }
+
+    GIVEN("A mod file with an INITIAL with net_send() inside NET_RECEIVE") {
+        std::string const nmodl_text = R"(
+            NET_RECEIVE(w) {
+                INITIAL {
+                    net_send(5, 1)
+                }
+            }
+        )";
+        THEN("It should generate a net_send_buffering with weight_index as parameter variable") {
+            auto const generated = get_cpp_code(nmodl_text);
+            std::string expected_code(
+                "net_send_buffering(nt, ml->_net_send_buffer, 0, inst->tqitem[0*pnodecount+id], "
+                "weight_index, point_process, nt->_t+5.0, 1.0);");
+            REQUIRE_THAT(generated, Contains(expected_code));
+        }
+    }
+
+    GIVEN("A mod file with a top level INITIAL block with net_send()") {
+        std::string const nmodl_text = R"(
+            INITIAL {
+                net_send(5, 1)
+            }
+        )";
+        THEN("It should generate a net_send_buffering with weight_index parameter as 0") {
+            auto const generated = get_cpp_code(nmodl_text);
+            std::string expected_code(
+                "net_send_buffering(nt, ml->_net_send_buffer, 0, inst->tqitem[0*pnodecount+id], 0, "
+                "point_process, nt->_t+5.0, 1.0);");
+            REQUIRE_THAT(generated, Contains(expected_code));
+        }
+    }
+
     GIVEN("A mod file with FOR_NETCONS") {
         std::string const nmodl_text = R"(
             NET_RECEIVE(w) {
@@ -1045,6 +1078,41 @@ SCENARIO("Some tests on derivimplicit", "[codegen][derivimplicit_solver]") {
         return reset;
     })";
             REQUIRE_THAT(generated, Contains(state_expected_code));
+        }
+    }
+}
+
+
+SCENARIO("Some tests on euler solver", "[codegen][euler_solver]") {
+    GIVEN("A mod file with euler") {
+        std::string const nmodl_text = R"(
+            NEURON {
+                RANGE inf
+            }
+            INITIAL {
+                inf = 2
+            }
+            STATE {
+                n
+                m
+            }
+            BREAKPOINT {
+                SOLVE state METHOD euler
+            }
+            DERIVATIVE state {
+               m' = 2 * m
+               inf = inf * 3
+               n' = (2 + m - inf) * n
+            }
+        )";
+        THEN("Correct code is generated") {
+            auto const generated = get_cpp_code(nmodl_text);
+            std::string nrn_state_expected_code = R"(inst->Dm[id] = 2.0 * inst->m[id];
+            inf = inf * 3.0;
+            inst->Dn[id] = (2.0 + inst->m[id] - inf) * inst->n[id];
+            inst->m[id] = inst->m[id] + nt->_dt * inst->Dm[id];
+            inst->n[id] = inst->n[id] + nt->_dt * inst->Dn[id];)";
+            REQUIRE_THAT(generated, Contains(nrn_state_expected_code));
         }
     }
 }

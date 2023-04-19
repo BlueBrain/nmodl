@@ -2148,14 +2148,8 @@ void CodegenCVisitor::print_nmodl_constants() {
         printer->add_newline(2);
         printer->add_line("/** constants used in nmodl from UNITS */");
         for (const auto& it: info.factor_definitions) {
-#ifdef USE_LEGACY_UNITS
-            const std::string format_string = "static const double {} = {:g};";
-#else
-            const std::string format_string = "static const double {} = {:.18g};";
-#endif
-            printer->fmt_line(format_string,
-                              it->get_node_name(),
-                              stod(it->get_value()->get_value()));
+            const std::string format_string = "static const double {} = {};";
+            printer->fmt_line(format_string, it->get_node_name(), it->get_value()->get_value());
         }
     }
 }
@@ -3771,8 +3765,9 @@ void CodegenCVisitor::print_net_send_call(const FunctionCall& node) {
     std::string weight_index = "weight_index";
     std::string pnt = "pnt";
 
-    // for non-net_receieve functions i.e. initial block, the weight_index argument is 0.
-    if (!printing_net_receive) {
+    // for functions not generated from NET_RECEIVE blocks (i.e. top level INITIAL block)
+    // the weight_index argument is 0.
+    if (!printing_net_receive && !printing_net_init) {
         weight_index = "0";
         auto var = get_variable_name("point_process");
         if (info.artificial_cell) {
@@ -3797,7 +3792,7 @@ void CodegenCVisitor::print_net_send_call(const FunctionCall& node) {
 
 
 void CodegenCVisitor::print_net_move_call(const FunctionCall& node) {
-    if (!printing_net_receive) {
+    if (!printing_net_receive && !printing_net_init) {
         throw std::runtime_error("Error : net_move only allowed in NET_RECEIVE block");
     }
 
@@ -3886,6 +3881,7 @@ void CodegenCVisitor::print_net_init() {
     rename_net_receive_arguments(*info.net_receive_node, *node);
 
     codegen = true;
+    printing_net_init = true;
     auto args = "Point_process* pnt, int weight_index, double flag";
     printer->add_newline(2);
     printer->add_line("/** initialize block for net receive */");
@@ -3905,6 +3901,7 @@ void CodegenCVisitor::print_net_init() {
     }
     printer->end_block(1);
     codegen = false;
+    printing_net_init = false;
 }
 
 

@@ -81,23 +81,8 @@ void UnitsVisitor::visit_unit_def(ast::UnitDef& node) {
  * care of all the units calculations.
  */
 void UnitsVisitor::visit_factor_def(ast::FactorDef& node) {
-    std::ostringstream ss;
     const auto node_has_value_defined_in_modfile = node.get_value() != nullptr;
-    if (node_has_value_defined_in_modfile) {
-        /*
-         * In nrnunits.lib file "1" is defined as "fuzz", so
-         * there must be a conversion to be able to parse "1" as unit
-         */
-        if (node.get_unit1()->get_node_name() == "1") {
-            ss << node.get_node_name() << "\t" << node.get_value()->eval() << " ";
-            ss << UNIT_FUZZ;
-        } else {
-            ss << node.get_node_name() << "\t" << node.get_value()->eval() << " ";
-            ss << node.get_unit1()->get_node_name();
-        }
-        // Parse the generated string for the defined unit using the units::UnitParser
-        units_driver.parse_string(ss.str());
-    } else {
+    if (!node_has_value_defined_in_modfile) {
         std::ostringstream ss_unit1, ss_unit2;
         std::string unit1_name, unit2_name;
         /*
@@ -127,10 +112,6 @@ void UnitsVisitor::visit_factor_def(ast::FactorDef& node) {
         ss_unit2 << node.get_node_name() << "_unit2\t" << unit2_name;
         units_driver.parse_string(ss_unit2.str());
 
-        // Parse the generated string for the defined unit using the units::UnitParser
-        ss << node.get_node_name() << "\t" << unit1_name;
-        units_driver.parse_string(ss.str());
-
         /**
          * \note If the ast::FactorDef was made by using two units (second case),
          * the factors of both of them must be calculated based on the
@@ -151,7 +132,7 @@ void UnitsVisitor::visit_factor_def(ast::FactorDef& node) {
 #ifdef USE_LEGACY_UNITS
         auto unit_factor = stringutils::to_string(unit1_factor / unit2_factor, "{:g}");
 #else
-        auto unit_factor = stringutils::to_string(unit1_factor / unit2_factor, "{:.18g}");
+        auto unit_factor = stringutils::to_string(unit1_factor / unit2_factor, "{:a}");
 #endif
 
         auto double_value_ptr = std::make_shared<ast::Double>(ast::Double(unit_factor));
