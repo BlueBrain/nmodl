@@ -97,7 +97,7 @@ var NAVTREEINDEX =
 "rename__visitor_8hpp.html",
 "structnmodl_1_1pybind__wrappers_1_1_analytic_diff_executor.html#a4168207a190f4a3f1b550c5872636a2c",
 "sympy__solver_8cpp.html#a8f0ff0be2e8dad02c17647d3f39c1baf",
-"wrapper_8cpp.html#a0f744a1f99eff5cbcc9b64fb24a9eadf"
+"wrapped__expression_8hpp_source.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

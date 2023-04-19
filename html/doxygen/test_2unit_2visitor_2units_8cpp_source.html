@@ -102,232 +102,285 @@ $(document).ready(function(){initNavTree('test_2unit_2visitor_2units_8cpp_source
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment"> *************************************************************************/</span></div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;catch2/catch.hpp&gt;</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="double_8hpp.html">ast/double.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="factor__def_8hpp.html">ast/factor_def.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="program_8hpp.html">ast/program.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="nmodl__driver_8hpp.html">parser/nmodl_driver.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="config_8h.html">src/config/config.h</a>&quot;</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="nmodl__constructs_8hpp.html">test/unit/utils/nmodl_constructs.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="test__utils_8hpp.html">test/unit/utils/test_utils.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="checkparent__visitor_8hpp.html">visitors/checkparent_visitor.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="units__visitor_8hpp.html">visitors/units_visitor.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keyword">using namespace </span><a class="code" href="namespacenmodl.html">nmodl</a>;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keyword">using namespace </span>visitor;</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">using namespace </span>test;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keyword">using namespace </span>test_utils;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keyword">using</span> <a class="code" href="classnmodl_1_1parser_1_1_nmodl_driver.html">nmodl::parser::NmodlDriver</a>;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keyword">namespace </span>{</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;constexpr std::size_t output_precision{8};</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;}</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="comment">//=============================================================================</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="comment">// Unit visitor tests</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="comment">//=============================================================================</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
-<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="test_2unit_2visitor_2units_8cpp.html#a10156cf5ce3a8c1f791c01fbbf47adb5">   35</a></span>&#160;std::string <a class="code" href="test_2unit_2visitor_2units_8cpp.html#a10156cf5ce3a8c1f791c01fbbf47adb5">run_units_visitor</a>(<span class="keyword">const</span> std::string&amp; text) {</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <a class="code" href="classnmodl_1_1parser_1_1_nmodl_driver.html">NmodlDriver</a> <a class="code" href="units_2parser_8cpp.html#adb772fffa624f2b39f88e66cafd5b05a">driver</a>;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <a class="code" href="units_2parser_8cpp.html#adb772fffa624f2b39f88e66cafd5b05a">driver</a>.<a class="code" href="group__units.html#ga53666d277469c1f00a3b0fd26a094178">parse_string</a>(text);</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; ast = <a class="code" href="units_2parser_8cpp.html#adb772fffa624f2b39f88e66cafd5b05a">driver</a>.get_ast();</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="comment">// Parse nrnunits.lib file and the UNITS block of the mod file</span></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="keyword">const</span> std::string units_lib_path(<a class="code" href="structnmodl_1_1_nrn_units_lib.html#a35b39a048f9504008e6b2c4b36f99dbd">NrnUnitsLib::get_path</a>());</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    UnitsVisitor units_visitor = UnitsVisitor(units_lib_path);</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;fmt/format.h&gt;</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="double_8hpp.html">ast/double.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="factor__def_8hpp.html">ast/factor_def.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="program_8hpp.html">ast/program.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="nmodl__driver_8hpp.html">parser/nmodl_driver.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="config_8h.html">src/config/config.h</a>&quot;</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="nmodl__constructs_8hpp.html">test/unit/utils/nmodl_constructs.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="test__utils_8hpp.html">test/unit/utils/test_utils.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="checkparent__visitor_8hpp.html">visitors/checkparent_visitor.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="units__visitor_8hpp.html">visitors/units_visitor.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keyword">using namespace </span><a class="code" href="namespacenmodl.html">nmodl</a>;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">using namespace </span>visitor;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keyword">using namespace </span>test;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">using namespace </span>test_utils;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keyword">using</span> <a class="code" href="classnmodl_1_1parser_1_1_nmodl_driver.html">nmodl::parser::NmodlDriver</a>;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="comment">//=============================================================================</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="comment">// Unit visitor tests</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="comment">//=============================================================================</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
+<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="test_2unit_2visitor_2units_8cpp.html#a4169acd2c0c4326d0eed5a086e328364">   32</a></span>&#160;std::tuple&lt;std::shared_ptr&lt;ast::Program&gt;, std::shared_ptr&lt;units::UnitTable&gt;&gt; <a class="code" href="test_2unit_2visitor_2units_8cpp.html#a4169acd2c0c4326d0eed5a086e328364">run_units_visitor</a>(</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="keyword">const</span> std::string&amp; text) {</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <a class="code" href="classnmodl_1_1parser_1_1_nmodl_driver.html">NmodlDriver</a> <a class="code" href="units_2parser_8cpp.html#adb772fffa624f2b39f88e66cafd5b05a">driver</a>;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <a class="code" href="units_2parser_8cpp.html#adb772fffa624f2b39f88e66cafd5b05a">driver</a>.<a class="code" href="group__units.html#ga53666d277469c1f00a3b0fd26a094178">parse_string</a>(text);</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; ast = <a class="code" href="units_2parser_8cpp.html#adb772fffa624f2b39f88e66cafd5b05a">driver</a>.get_ast();</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="comment">// Parse nrnunits.lib file and the UNITS block of the mod file</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keyword">const</span> std::string units_lib_path(<a class="code" href="structnmodl_1_1_nrn_units_lib.html#a35b39a048f9504008e6b2c4b36f99dbd">NrnUnitsLib::get_path</a>());</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    UnitsVisitor units_visitor = UnitsVisitor(units_lib_path);</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    units_visitor.visit_program(*ast);</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    units_visitor.visit_program(*ast);</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="comment">// Keep the UnitTable created from parsing unit file and UNITS</span></div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="comment">// block of the mod file</span></div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <a class="code" href="classnmodl_1_1parser_1_1_unit_driver.html">parser::UnitDriver</a> units_driver = units_visitor.get_unit_driver();</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    std::shared_ptr&lt;units::UnitTable&gt; unit_table = units_driver.<a class="code" href="group__units.html#ga330f86b461ce0320cd23e935b710be05">table</a>;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    std::stringstream ss;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="comment">// Visit AST to find all the ast::UnitDef nodes to print their</span></div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="comment">// unit names, factors and dimensions as they are calculated in</span></div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="comment">// the units::UnitTable</span></div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; unit_defs = <a class="code" href="namespacenmodl.html#a0d49270a6c751e2e1a0e2c2db0012e4d">collect_nodes</a>(*ast, {<a class="code" href="group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a0388f8b1db741cd87766daf89bff5a7e">ast::AstNodeType::UNIT_DEF</a>});</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; unit_def: unit_defs) {</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <span class="keyword">auto</span> unit_name = unit_def-&gt;get_node_name();</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        unit_name.erase(remove_if(unit_name.begin(), unit_name.end(), isspace), unit_name.end());</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <span class="keyword">auto</span> unit = units_driver.<a class="code" href="group__units.html#ga330f86b461ce0320cd23e935b710be05">table</a>-&gt;get_unit(unit_name);</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        ss &lt;&lt; std::fixed &lt;&lt; std::setprecision(output_precision) &lt;&lt; unit-&gt;get_name() &lt;&lt; <span class="charliteral">&#39; &#39;</span></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;           &lt;&lt; unit-&gt;get_factor() &lt;&lt; <span class="charliteral">&#39;:&#39;</span>;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <span class="comment">// Dimensions of the unit are printed to check that the units are successfully</span></div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <span class="comment">// parsed to the units::UnitTable</span></div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <span class="keywordtype">int</span> dimension_id = 0;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <span class="keyword">auto</span> constant = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; dimension: unit-&gt;get_dimensions()) {</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;            <span class="keywordflow">if</span> (dimension != 0) {</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;                constant = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;                ss &lt;&lt; <span class="charliteral">&#39; &#39;</span> &lt;&lt; units_driver.<a class="code" href="group__units.html#ga330f86b461ce0320cd23e935b710be05">table</a>-&gt;get_base_unit_name(dimension_id) &lt;&lt; dimension;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;            }</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;            dimension_id++;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        }</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        <span class="keywordflow">if</span> (constant) {</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;            ss &lt;&lt; <span class="stringliteral">&quot; constant&quot;</span>;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        }</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        ss &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    }</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="comment">// Visit AST to find all the ast::FactorDef nodes to print their</span></div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <span class="comment">// unit names, factors and dimensions as they are calculated to</span></div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="comment">// be printed to the produced .cpp file</span></div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; factor_defs = <a class="code" href="namespacenmodl.html#a0d49270a6c751e2e1a0e2c2db0012e4d">collect_nodes</a>(*ast, {<a class="code" href="group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a9143f3113407701188b8f7d6cc051124">ast::AstNodeType::FACTOR_DEF</a>});</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; factor_def: factor_defs) {</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        <span class="keyword">auto</span> unit = units_driver.<a class="code" href="group__units.html#ga330f86b461ce0320cd23e935b710be05">table</a>-&gt;get_unit(factor_def-&gt;get_node_name());</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        ss &lt;&lt; std::fixed &lt;&lt; std::setprecision(output_precision) &lt;&lt; unit-&gt;get_name() &lt;&lt; <span class="charliteral">&#39; &#39;</span>;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        <span class="keyword">auto</span> factor_def_class = std::dynamic_pointer_cast&lt;const nmodl::ast::FactorDef&gt;(factor_def);</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        ss &lt;&lt; factor_def_class-&gt;get_value()-&gt;eval() &lt;&lt; <span class="charliteral">&#39;:&#39;</span>;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        <span class="comment">// Dimensions of the unit are printed to check that the units are successfully</span></div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        <span class="comment">// parsed to the units::UnitTable</span></div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        <span class="keywordtype">int</span> dimension_id = 0;</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        <span class="keyword">auto</span> constant = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; dimension: unit-&gt;get_dimensions()) {</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;            <span class="keywordflow">if</span> (dimension != 0) {</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;                constant = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;                ss &lt;&lt; <span class="charliteral">&#39; &#39;</span> &lt;&lt; units_driver.<a class="code" href="group__units.html#ga330f86b461ce0320cd23e935b710be05">table</a>-&gt;get_base_unit_name(dimension_id);</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;                ss &lt;&lt; dimension;</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;            }</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;            dimension_id++;</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        }</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        <span class="keywordflow">if</span> (constant) {</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;            ss &lt;&lt; <span class="stringliteral">&quot; constant&quot;</span>;</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        }</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        ss &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    }</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160; </div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <span class="comment">// check that, after visitor rearrangement, parents are still up-to-date</span></div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    CheckParentVisitor().check_ast(*ast);</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160; </div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    <span class="keywordflow">return</span> ss.str();</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;}</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160; </div>
-<div class="line"><a name="l00115"></a><span class="lineno"><a class="line" href="test_2unit_2visitor_2units_8cpp.html#a25573ab5a28ab4f615c1e7ec51ed58b7">  115</a></span>&#160;<a class="code" href="test_2unit_2visitor_2units_8cpp.html#a25573ab5a28ab4f615c1e7ec51ed58b7">SCENARIO</a>(<span class="stringliteral">&quot;Parse UNITS block of mod files using Units Visitor&quot;</span>, <span class="stringliteral">&quot;[visitor][units]&quot;</span>) {</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    GIVEN(<span class="stringliteral">&quot;UNITS block with different cases of units definitions&quot;</span>) {</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> std::string nmodl_text = R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;<span class="stringliteral">            UNITS {</span></div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;<span class="stringliteral">                (nA)    = (nanoamp)</span></div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<span class="stringliteral">                (mA)    = (milliamp)</span></div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="stringliteral">                (mV)    = (millivolt)</span></div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;<span class="stringliteral">                (uS)    = (microsiemens)</span></div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;<span class="stringliteral">                (nS)    = (nanosiemens)</span></div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;<span class="stringliteral">                (pS)    = (picosiemens)</span></div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;<span class="stringliteral">                (umho)  = (micromho)</span></div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;<span class="stringliteral">                (um)    = (micrometers)</span></div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;<span class="stringliteral">                (mM)    = (milli/liter)</span></div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;<span class="stringliteral">                (uM)    = (micro/liter)</span></div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;<span class="stringliteral">                (msM) = (ms mM)</span></div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;<span class="stringliteral">                (fAm) = (femto amp meter)</span></div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;<span class="stringliteral">                (mol) = (1)</span></div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;<span class="stringliteral">                (M) = (1/liter)</span></div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;<span class="stringliteral">                (uM1) = (micro M)</span></div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;<span class="stringliteral">                (mA/cm2) = (nanoamp/cm2)</span></div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;<span class="stringliteral">                (molar) = (1 / liter)</span></div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;<span class="stringliteral">                (S ) = (siemens)</span></div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;<span class="stringliteral">                (mse-1) = (1/millisec)</span></div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;<span class="stringliteral">                (um3) = (liter/1e15)</span></div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;<span class="stringliteral">                (molar1) = (/liter)</span></div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;<span class="stringliteral">                (degK) = (degC)</span></div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;<span class="stringliteral">                FARADAY1 = (faraday) (coulomb)</span></div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;<span class="stringliteral">                FARADAY2 = (faraday) (kilocoulombs)</span></div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;<span class="stringliteral">                FARADAY3 = (faraday) (10000 coulomb)</span></div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;<span class="stringliteral">                PI      = (pi)      (1)</span></div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;<span class="stringliteral">                R1       = (k-mole)  (joule/degC)</span></div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;<span class="stringliteral">                R2 = 8.314 (volt-coul/degC)</span></div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;<span class="stringliteral">                R3 = (mole k) (mV-coulomb/degC)</span></div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;<span class="stringliteral">                R4 = 8.314 (volt-coul/degK)</span></div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;<span class="stringliteral">                R5 = 8.314500000000001 (volt coul/kelvin)</span></div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;<span class="stringliteral">                dummy1  = 123.45    (m 1/sec2)</span></div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;<span class="stringliteral">                dummy2  = 123.45e3  (millimeters/sec2)</span></div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;<span class="stringliteral">                dummy3  = 12345e-2  (m/sec2)</span></div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;<span class="stringliteral">                KTOMV = 0.0853 (mV/degC)</span></div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;<span class="stringliteral">                B = 0.26 (mM-cm2/mA-ms)</span></div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;<span class="stringliteral">                TEMP = 25 (degC)</span></div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;<span class="stringliteral">                toyfuzz = (1) (volt)</span></div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;<span class="stringliteral">                numbertwo = 2 (1)</span></div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;<span class="stringliteral">            }</span></div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;<span class="stringliteral">        )&quot;;</span></div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;<span class="stringliteral">        </span><span class="keyword">static</span> <span class="keyword">const</span> std::string output_nmodl = R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;<span class="stringliteral">        nA 0.00000000: sec-1 coul1</span></div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;<span class="stringliteral">        mA 0.00100000: sec-1 coul1</span></div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;<span class="stringliteral">        mV 0.00100000: m2 kg1 sec-2 coul-1</span></div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;<span class="stringliteral">        uS 0.00000100: m-2 kg-1 sec1 coul2</span></div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;<span class="stringliteral">        nS 0.00000000: m-2 kg-1 sec1 coul2</span></div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;<span class="stringliteral">        pS 0.00000000: m-2 kg-1 sec1 coul2</span></div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;<span class="stringliteral">        umho 0.00000100: m-2 kg-1 sec1 coul2</span></div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;<span class="stringliteral">        um 0.00000100: m1</span></div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;<span class="stringliteral">        mM 1.00000000: m-3</span></div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;<span class="stringliteral">        uM 0.00100000: m-3</span></div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;<span class="stringliteral">        msM 0.00100000: m-3 sec1</span></div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;<span class="stringliteral">        fAm 0.00000000: m1 sec-1 coul1</span></div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;<span class="stringliteral">        mol 1.00000000: constant</span></div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;<span class="stringliteral">        M 1000.00000000: m-3</span></div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;<span class="stringliteral">        uM1 0.00100000: m-3</span></div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;<span class="stringliteral">        mA/cm2 0.00001000: m-2 sec-1 coul1</span></div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;<span class="stringliteral">        molar 1000.00000000: m-3</span></div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;<span class="stringliteral">        S 1.00000000: m-2 kg-1 sec1 coul2</span></div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;<span class="stringliteral">        mse-1 1000.00000000: sec-1</span></div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;<span class="stringliteral">        um3 0.00100000: m3</span></div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;<span class="stringliteral">        molar1 1000.00000000: m-3</span></div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;<span class="stringliteral">        degK 1.00000000: K1</span></div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;<span class="stringliteral">        FARADAY1 0x1.78e555060882cp+16: coul1</span></div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;<span class="stringliteral">        FARADAY2 0x1.81f0fae775425p+6: coul1</span></div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;<span class="stringliteral">        FARADAY3 0x1.34c0c8b92a9b7p+3: coul1</span></div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;<span class="stringliteral">        PI 0x1.921fb54442d18p+1: constant</span></div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;<span class="stringliteral">        R1 0x1.0a1013e8990bep+3: m2 kg1 sec-2 K-1</span></div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;<span class="stringliteral">        R2 8.314: m2 kg1 sec-2 K-1</span></div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;<span class="stringliteral">        R3 0x1.03d3b37125759p+13: m2 kg1 sec-2 K-1</span></div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;<span class="stringliteral">        R4 8.314: m2 kg1 sec-2 K-1</span></div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;<span class="stringliteral">        R5 8.314500000000001: m2 kg1 sec-2 K-1</span></div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;<span class="stringliteral">        dummy1 123.45: m1 sec-2</span></div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;<span class="stringliteral">        dummy2 123.45e3: m1 sec-2</span></div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;<span class="stringliteral">        dummy3 12345e-2: m1 sec-2</span></div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;<span class="stringliteral">        KTOMV 0.0853: m2 kg1 sec-2 coul-1 K-1</span></div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;<span class="stringliteral">        B 0.26: m-1 coul-1</span></div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;<span class="stringliteral">        TEMP 25: K1</span></div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;<span class="stringliteral">        toyfuzz 1: constant</span></div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;<span class="stringliteral">        numbertwo 2: constant</span></div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;<span class="stringliteral">        )&quot;;</span></div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;<span class="stringliteral">        THEN(</span><span class="stringliteral">&quot;Print the units that were added&quot;</span>) {</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;            <span class="keyword">const</span> std::string input(<a class="code" href="namespacenmodl_1_1test__utils.html#af64fc17c60e5c8a5b8114147591aec3d">reindent_text</a>(nmodl_text));</div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;            <span class="keyword">auto</span> expected_result = <a class="code" href="namespacenmodl_1_1test__utils.html#af64fc17c60e5c8a5b8114147591aec3d">reindent_text</a>(output_nmodl);</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;            <span class="keyword">auto</span> result = <a class="code" href="test_2unit_2visitor_2units_8cpp.html#a10156cf5ce3a8c1f791c01fbbf47adb5">run_units_visitor</a>(input);</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;            <span class="keyword">auto</span> reindented_result = <a class="code" href="namespacenmodl_1_1test__utils.html#af64fc17c60e5c8a5b8114147591aec3d">reindent_text</a>(result);</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;            REQUIRE(reindented_result == expected_result);</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;        }</div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;    }</div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;}</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="comment">// Keep the UnitTable created from parsing unit file and UNITS</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="comment">// block of the mod file</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <a class="code" href="classnmodl_1_1parser_1_1_unit_driver.html">parser::UnitDriver</a> units_driver = units_visitor.get_unit_driver();</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    std::shared_ptr&lt;units::UnitTable&gt; unit_table = units_driver.<a class="code" href="group__units.html#ga330f86b461ce0320cd23e935b710be05">table</a>;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="comment">// check that, after visitor rearrangement, parents are still up-to-date</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    CheckParentVisitor().check_ast(*ast);</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keywordflow">return</span> {ast, unit_table};</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;}</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="comment">/**</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="comment"> * @brief Returns all the \c UnitDef s of the \c ast::Program</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="comment"> * Visit AST to find all the ast::UnitDef nodes to print their</span></div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="comment"> * unit names, factors and dimensions as they are calculated in</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="comment"> * the units::UnitTable</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="comment"> * The \c UnitDef s are printed in the format:</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="comment"> * \code</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="comment"> * &lt;unit_name&gt; &lt;unit_value&gt;: &lt;dimensions&gt;</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="comment"> * \endcode</span></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="comment"> * If the unit is constant then instead of the dimensions we print \c constant</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="comment"> * @arg ast \c ast::Program to look for \c UnitDef s</span></div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="comment"> * @arg unit_table \c units::UnitTable to look for the definitions of the units</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="comment"> * @return std::string Unit definitions</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="comment"> */</span></div>
+<div class="line"><a name="l00074"></a><span class="lineno"><a class="line" href="test_2unit_2visitor_2units_8cpp.html#ad42f8f78a619ac44c74267b35a439e61">   74</a></span>&#160;std::string <a class="code" href="test_2unit_2visitor_2units_8cpp.html#ad42f8f78a619ac44c74267b35a439e61">get_unit_definitions</a>(<span class="keyword">const</span> <a class="code" href="classnmodl_1_1ast_1_1_program.html">ast::Program</a>&amp; ast, <span class="keyword">const</span> <a class="code" href="classnmodl_1_1units_1_1_unit_table.html">units::UnitTable</a>&amp; unit_table) {</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    std::stringstream ss;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; unit_defs = <a class="code" href="namespacenmodl.html#a0d49270a6c751e2e1a0e2c2db0012e4d">collect_nodes</a>(ast, {<a class="code" href="group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a0388f8b1db741cd87766daf89bff5a7e">ast::AstNodeType::UNIT_DEF</a>});</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; unit_def: unit_defs) {</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        <span class="keyword">auto</span> unit_name = unit_def-&gt;get_node_name();</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        unit_name.erase(remove_if(unit_name.begin(), unit_name.end(), isspace), unit_name.end());</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        <span class="keyword">auto</span> unit = unit_table.<a class="code" href="classnmodl_1_1units_1_1_unit_table.html#ab61b83a7b7a6aef4010396248592f09c">get_unit</a>(unit_name);</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        ss &lt;&lt; fmt::format(<span class="stringliteral">&quot;{} {:g}:&quot;</span>, unit_name, unit-&gt;get_factor());</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <span class="comment">// Dimensions of the unit are printed to check that the units are successfully</span></div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        <span class="comment">// parsed to the units::UnitTable</span></div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        <span class="keywordtype">int</span> dimension_id = 0;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        <span class="keyword">auto</span> constant = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; dimension: unit-&gt;get_dimensions()) {</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;            <span class="keywordflow">if</span> (dimension != 0) {</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;                constant = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;                ss &lt;&lt; <span class="charliteral">&#39; &#39;</span> &lt;&lt; unit_table.<a class="code" href="classnmodl_1_1units_1_1_unit_table.html#a62d5b0785e6224ce17f67385d8431177">get_base_unit_name</a>(dimension_id) &lt;&lt; dimension;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;            }</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;            dimension_id++;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        }</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        <span class="keywordflow">if</span> (constant) {</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;            ss &lt;&lt; <span class="stringliteral">&quot; constant&quot;</span>;</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        }</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        ss &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    }</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <span class="keywordflow">return</span> ss.str();</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;}</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;<span class="comment">/**</span></div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;<span class="comment"> * @brief Returns all the \c FactorDef s of the \c ast::Program</span></div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;<span class="comment"> * Visit AST to find all the ast::FactorDef nodes to print their</span></div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="comment"> * unit names and factors as they are calculated to be printed</span></div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="comment"> * to the generated .cpp file</span></div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="comment"> * The \c FactorDef s are printed in the format:</span></div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;<span class="comment"> * \code</span></div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;<span class="comment"> * &lt;unit_name&gt; &lt;unit_value&gt;</span></div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;<span class="comment"> * \endcode</span></div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;<span class="comment"> * @arg ast \c ast::Program to look for \c FactorDef s</span></div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="comment"> * @return std::string Factor definitions</span></div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="comment"> */</span></div>
+<div class="line"><a name="l00117"></a><span class="lineno"><a class="line" href="test_2unit_2visitor_2units_8cpp.html#ae7e614844b7837d5a583477a4f217d06">  117</a></span>&#160;std::string <a class="code" href="test_2unit_2visitor_2units_8cpp.html#ae7e614844b7837d5a583477a4f217d06">get_factor_definitions</a>(<span class="keyword">const</span> <a class="code" href="classnmodl_1_1ast_1_1_program.html">ast::Program</a>&amp; ast) {</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    std::stringstream ss;</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; factor_defs = <a class="code" href="namespacenmodl.html#a0d49270a6c751e2e1a0e2c2db0012e4d">collect_nodes</a>(ast, {<a class="code" href="group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a9143f3113407701188b8f7d6cc051124">ast::AstNodeType::FACTOR_DEF</a>});</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; factor_def: factor_defs) {</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;        <span class="keyword">const</span> <span class="keyword">auto</span>&amp; factor_def_cast = std::dynamic_pointer_cast&lt;const ast::FactorDef&gt;(factor_def);</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        ss &lt;&lt; fmt::format(<span class="stringliteral">&quot;{} {}\n&quot;</span>,</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;                          factor_def_cast-&gt;get_node_name(),</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;                          factor_def_cast-&gt;get_value()-&gt;get_value());</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    }</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    <span class="keywordflow">return</span> ss.str();</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;}</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160; </div>
+<div class="line"><a name="l00129"></a><span class="lineno"><a class="line" href="test_2unit_2visitor_2units_8cpp.html#a25573ab5a28ab4f615c1e7ec51ed58b7">  129</a></span>&#160;<a class="code" href="test_2unit_2visitor_2units_8cpp.html#a25573ab5a28ab4f615c1e7ec51ed58b7">SCENARIO</a>(<span class="stringliteral">&quot;Parse UNITS block of mod files using Units Visitor&quot;</span>, <span class="stringliteral">&quot;[visitor][units]&quot;</span>) {</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;    GIVEN(<span class="stringliteral">&quot;UNITS block with different cases of UNITS definitions&quot;</span>) {</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> std::string nmodl_text = R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;<span class="stringliteral">            UNITS {</span></div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;<span class="stringliteral">                (nA)    = (nanoamp)</span></div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;<span class="stringliteral">                (mA)    = (milliamp)</span></div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;<span class="stringliteral">                (mV)    = (millivolt)</span></div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;<span class="stringliteral">                (uS)    = (microsiemens)</span></div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;<span class="stringliteral">                (nS)    = (nanosiemens)</span></div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;<span class="stringliteral">                (pS)    = (picosiemens)</span></div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;<span class="stringliteral">                (umho)  = (micromho)</span></div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;<span class="stringliteral">                (um)    = (micrometers)</span></div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;<span class="stringliteral">                (mM)    = (milli/liter)</span></div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;<span class="stringliteral">                (uM)    = (micro/liter)</span></div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;<span class="stringliteral">                (msM) = (ms mM)</span></div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;<span class="stringliteral">                (fAm) = (femto amp meter)</span></div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;<span class="stringliteral">                (newmol) = (1)</span></div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;<span class="stringliteral">                (M) = (1/liter)</span></div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;<span class="stringliteral">                (uM1) = (micro M)</span></div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;<span class="stringliteral">                (mA/cm2) = (nanoamp/cm2)</span></div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;<span class="stringliteral">                (molar) = (1 / liter)</span></div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;<span class="stringliteral">                (S ) = (siemens)</span></div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;<span class="stringliteral">                (mse-1) = (1/millisec)</span></div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;<span class="stringliteral">                (um3) = (liter/1e15)</span></div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;<span class="stringliteral">                (molar1) = (/liter)</span></div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;<span class="stringliteral">                (newdegK) = (degC)</span></div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;<span class="stringliteral">                FARADAY1 = (faraday) (coulomb)</span></div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;<span class="stringliteral">                FARADAY2 = (faraday) (kilocoulombs)</span></div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;<span class="stringliteral">                FARADAY3 = (faraday) (10000 coulomb)</span></div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;<span class="stringliteral">                pi      = (pi)      (1)</span></div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;<span class="stringliteral">                R1       = (k-mole)  (joule/degC)</span></div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;<span class="stringliteral">                R2 = 8.314 (volt-coul/degC)</span></div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;<span class="stringliteral">                R3 = (mole k) (mV-coulomb/degC)</span></div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;<span class="stringliteral">                R4 = 8.314 (volt-coul/degK)</span></div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;<span class="stringliteral">                R5 = 8.314500000000001 (volt coul/kelvin)</span></div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;<span class="stringliteral">                dummy1  = 123.45    (m 1/sec2)</span></div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;<span class="stringliteral">                dummy2  = 123.45e3  (millimeters/sec2)</span></div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;<span class="stringliteral">                dummy3  = 12345e-2  (m/sec2)</span></div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;<span class="stringliteral">                KTOMV = 0.0853 (mV/degC)</span></div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;<span class="stringliteral">                B = 0.26 (mM-cm2/mA-ms)</span></div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;<span class="stringliteral">                TEMP = 25 (degC)</span></div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;<span class="stringliteral">                toyfuzz = (1) (volt)</span></div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;<span class="stringliteral">                numbertwo = 2 (1)</span></div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;<span class="stringliteral">                oldJ = (R-mole) (1) : compute oldJ based on the value of R which is registered in the UnitTable</span></div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;<span class="stringliteral">                R = 8 (joule/degC) : define a new value for R that should be visible only in the mod file</span></div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;<span class="stringliteral">                J = (R-mole) (1) : recalculate J. It&#39;s value should be the same as oldJ because R shouldn&#39;t change in the UnitTable</span></div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;<span class="stringliteral">                (myR) = (8 joule/degC) : Define my own R and mole and compute myRnew and myJ based on them</span></div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;<span class="stringliteral">                (mymole) = (6+23)</span></div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;<span class="stringliteral">                myRnew = (myR) (1)</span></div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;<span class="stringliteral">                myJ = (myR-mymole) (1) </span></div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;<span class="stringliteral">            }</span></div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;<span class="stringliteral">        )&quot;;</span></div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;<span class="stringliteral">        </span><span class="keyword">static</span> <span class="keyword">const</span> std::string unit_definitions = R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;<span class="stringliteral">        nA 1e-09: sec-1 coul1</span></div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;<span class="stringliteral">        mA 0.001: sec-1 coul1</span></div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;<span class="stringliteral">        mV 0.001: m2 kg1 sec-2 coul-1</span></div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;<span class="stringliteral">        uS 1e-06: m-2 kg-1 sec1 coul2</span></div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;<span class="stringliteral">        nS 1e-09: m-2 kg-1 sec1 coul2</span></div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;<span class="stringliteral">        pS 1e-12: m-2 kg-1 sec1 coul2</span></div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;<span class="stringliteral">        umho 1e-06: m-2 kg-1 sec1 coul2</span></div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;<span class="stringliteral">        um 1e-06: m1</span></div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;<span class="stringliteral">        mM 1: m-3</span></div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;<span class="stringliteral">        uM 0.001: m-3</span></div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;<span class="stringliteral">        msM 0.001: m-3 sec1</span></div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;<span class="stringliteral">        fAm 1e-15: m1 sec-1 coul1</span></div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;<span class="stringliteral">        newmol 1: constant</span></div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;<span class="stringliteral">        M 1000: m-3</span></div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;<span class="stringliteral">        uM1 0.001: m-3</span></div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;<span class="stringliteral">        mA/cm2 1e-05: m-2 sec-1 coul1</span></div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;<span class="stringliteral">        molar 1000: m-3</span></div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;<span class="stringliteral">        S 1: m-2 kg-1 sec1 coul2</span></div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;<span class="stringliteral">        mse-1 1000: sec-1</span></div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;<span class="stringliteral">        um3 0.001: m3</span></div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;<span class="stringliteral">        molar1 1000: m-3</span></div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;<span class="stringliteral">        newdegK 1: K1</span></div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;<span class="stringliteral">        myR 8: m2 kg1 sec-2 K-1</span></div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;<span class="stringliteral">        mymole 6e+23: constant</span></div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;<span class="stringliteral">        )&quot;;</span></div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;<span class="stringliteral">        </span><span class="keyword">static</span> <span class="keyword">const</span> std::string factor_definitions = R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;<span class="stringliteral">        FARADAY1 0x1.78e555060882cp+16</span></div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;<span class="stringliteral">        FARADAY2 0x1.81f0fae775425p+6</span></div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;<span class="stringliteral">        FARADAY3 0x1.34c0c8b92a9b7p+3</span></div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;<span class="stringliteral">        pi 0x1.921fb54442d18p+1</span></div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;<span class="stringliteral">        R1 0x1.0a1013e8990bep+3</span></div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;<span class="stringliteral">        R2 8.314</span></div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;<span class="stringliteral">        R3 0x1.03d3b37125759p+13</span></div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;<span class="stringliteral">        R4 8.314</span></div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;<span class="stringliteral">        R5 8.314500000000001</span></div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;<span class="stringliteral">        dummy1 123.45</span></div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;<span class="stringliteral">        dummy2 123.45e3</span></div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;<span class="stringliteral">        dummy3 12345e-2</span></div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;<span class="stringliteral">        KTOMV 0.0853</span></div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;<span class="stringliteral">        B 0.26</span></div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;<span class="stringliteral">        TEMP 25</span></div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;<span class="stringliteral">        toyfuzz 1</span></div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;<span class="stringliteral">        numbertwo 2</span></div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;<span class="stringliteral">        oldJ 0x1.0912acba81b67p+82</span></div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;<span class="stringliteral">        R 8</span></div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;<span class="stringliteral">        J 0x1.0912acba81b67p+82</span></div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;<span class="stringliteral">        myRnew 8</span></div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;<span class="stringliteral">        myJ 0x1.fc3842bd1f072p+81</span></div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;<span class="stringliteral">        )&quot;;</span></div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;<span class="stringliteral">        THEN(</span><span class="stringliteral">&quot;Print the units that were added&quot;</span>) {</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;            <span class="keyword">const</span> std::string input(<a class="code" href="namespacenmodl_1_1test__utils.html#af64fc17c60e5c8a5b8114147591aec3d">reindent_text</a>(nmodl_text));</div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;            <span class="keyword">auto</span> expected_result_unit_definitions = <a class="code" href="namespacenmodl_1_1test__utils.html#af64fc17c60e5c8a5b8114147591aec3d">reindent_text</a>(unit_definitions);</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;            <span class="keyword">auto</span> expected_result_factor_definitions = <a class="code" href="namespacenmodl_1_1test__utils.html#af64fc17c60e5c8a5b8114147591aec3d">reindent_text</a>(factor_definitions);</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;            <span class="keyword">const</span> <span class="keyword">auto</span>&amp; [ast, unit_table] = <a class="code" href="test_2unit_2visitor_2units_8cpp.html#a4169acd2c0c4326d0eed5a086e328364">run_units_visitor</a>(input);</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;            <span class="keyword">const</span> <span class="keyword">auto</span>&amp; generated_unit_definitions = <a class="code" href="test_2unit_2visitor_2units_8cpp.html#ad42f8f78a619ac44c74267b35a439e61">get_unit_definitions</a>(*ast, *unit_table);</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;            <span class="keyword">const</span> <span class="keyword">auto</span>&amp; generated_factor_definitions = <a class="code" href="test_2unit_2visitor_2units_8cpp.html#ae7e614844b7837d5a583477a4f217d06">get_factor_definitions</a>(*ast);</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;            <span class="keyword">auto</span> reindented_result_unit_definitions = <a class="code" href="namespacenmodl_1_1test__utils.html#af64fc17c60e5c8a5b8114147591aec3d">reindent_text</a>(generated_unit_definitions);</div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;            <span class="keyword">auto</span> reindented_result_factor_definitions = <a class="code" href="namespacenmodl_1_1test__utils.html#af64fc17c60e5c8a5b8114147591aec3d">reindent_text</a>(generated_factor_definitions);</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;            REQUIRE(reindented_result_unit_definitions == expected_result_unit_definitions);</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;            REQUIRE(reindented_result_factor_definitions == expected_result_factor_definitions);</div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;        }</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;    }</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;    GIVEN(<span class="stringliteral">&quot;UNITS block with Unit definition which is already defined&quot;</span>) {</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> std::string nmodl_text = R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;<span class="stringliteral">            UNITS {</span></div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;<span class="stringliteral">                (R) = (8 joule/degC)</span></div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;<span class="stringliteral">            }</span></div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;<span class="stringliteral">        )&quot;;</span></div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;<span class="stringliteral">        THEN(</span><span class="stringliteral">&quot;Throw redefinition exception&quot;</span>) {</div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;            <span class="keyword">const</span> std::string input(<a class="code" href="namespacenmodl_1_1test__utils.html#af64fc17c60e5c8a5b8114147591aec3d">reindent_text</a>(nmodl_text));</div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;            REQUIRE_THROWS(<a class="code" href="test_2unit_2visitor_2units_8cpp.html#a4169acd2c0c4326d0eed5a086e328364">run_units_visitor</a>(input));</div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;        }</div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;    }</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="agroup__units_html_ga330f86b461ce0320cd23e935b710be05"><div class="ttname"><a href="group__units.html#ga330f86b461ce0320cd23e935b710be05">nmodl::parser::UnitDriver::table</a></div><div class="ttdeci">std::shared_ptr&lt; nmodl::units::UnitTable &gt; table</div><div class="ttdoc">shared pointer to the UnitTable that stores all the unit definitions</div><div class="ttdef"><b>Definition:</b> <a href="unit__driver_8hpp_source.html#l00062">unit_driver.hpp:62</a></div></div>
 <div class="ttc" id="atest__utils_8hpp_html"><div class="ttname"><a href="test__utils_8hpp.html">test_utils.hpp</a></div></div>
 <div class="ttc" id="aclassnmodl_1_1parser_1_1_nmodl_driver_html"><div class="ttname"><a href="classnmodl_1_1parser_1_1_nmodl_driver.html">nmodl::parser::NmodlDriver</a></div><div class="ttdoc">Class that binds all pieces together for parsing nmodl file.</div><div class="ttdef"><b>Definition:</b> <a href="nmodl__driver_8hpp_source.html#l00063">nmodl_driver.hpp:63</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1units_1_1_unit_table_html_a62d5b0785e6224ce17f67385d8431177"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit_table.html#a62d5b0785e6224ce17f67385d8431177">nmodl::units::UnitTable::get_base_unit_name</a></div><div class="ttdeci">const std::string &amp; get_base_unit_name(int id) const noexcept</div><div class="ttdoc">Get base unit name based on the ID number of the dimension.</div><div class="ttdef"><b>Definition:</b> <a href="units_8hpp_source.html#l00288">units.hpp:288</a></div></div>
 <div class="ttc" id="anamespacenmodl_html"><div class="ttname"><a href="namespacenmodl.html">nmodl</a></div><div class="ttdoc">encapsulates everything related to NMODL code generation framework</div><div class="ttdef"><b>Definition:</b> <a href="ast__common_8hpp_source.html#l00026">ast_common.hpp:26</a></div></div>
-<div class="ttc" id="atest_2unit_2visitor_2units_8cpp_html_a10156cf5ce3a8c1f791c01fbbf47adb5"><div class="ttname"><a href="test_2unit_2visitor_2units_8cpp.html#a10156cf5ce3a8c1f791c01fbbf47adb5">run_units_visitor</a></div><div class="ttdeci">std::string run_units_visitor(const std::string &amp;text)</div><div class="ttdef"><b>Definition:</b> <a href="test_2unit_2visitor_2units_8cpp_source.html#l00035">units.cpp:35</a></div></div>
-<div class="ttc" id="atest_2unit_2visitor_2units_8cpp_html_a25573ab5a28ab4f615c1e7ec51ed58b7"><div class="ttname"><a href="test_2unit_2visitor_2units_8cpp.html#a25573ab5a28ab4f615c1e7ec51ed58b7">SCENARIO</a></div><div class="ttdeci">SCENARIO(&quot;Parse UNITS block of mod files using Units Visitor&quot;, &quot;[visitor][units]&quot;)</div><div class="ttdef"><b>Definition:</b> <a href="test_2unit_2visitor_2units_8cpp_source.html#l00115">units.cpp:115</a></div></div>
+<div class="ttc" id="atest_2unit_2visitor_2units_8cpp_html_ae7e614844b7837d5a583477a4f217d06"><div class="ttname"><a href="test_2unit_2visitor_2units_8cpp.html#ae7e614844b7837d5a583477a4f217d06">get_factor_definitions</a></div><div class="ttdeci">std::string get_factor_definitions(const ast::Program &amp;ast)</div><div class="ttdoc">Returns all the FactorDef s of the ast::Program.</div><div class="ttdef"><b>Definition:</b> <a href="test_2unit_2visitor_2units_8cpp_source.html#l00117">units.cpp:117</a></div></div>
+<div class="ttc" id="atest_2unit_2visitor_2units_8cpp_html_a25573ab5a28ab4f615c1e7ec51ed58b7"><div class="ttname"><a href="test_2unit_2visitor_2units_8cpp.html#a25573ab5a28ab4f615c1e7ec51ed58b7">SCENARIO</a></div><div class="ttdeci">SCENARIO(&quot;Parse UNITS block of mod files using Units Visitor&quot;, &quot;[visitor][units]&quot;)</div><div class="ttdef"><b>Definition:</b> <a href="test_2unit_2visitor_2units_8cpp_source.html#l00129">units.cpp:129</a></div></div>
 <div class="ttc" id="aprogram_8hpp_html"><div class="ttname"><a href="program_8hpp.html">program.hpp</a></div><div class="ttdoc">Auto generated AST classes declaration.</div></div>
 <div class="ttc" id="aunits_2parser_8cpp_html_adb772fffa624f2b39f88e66cafd5b05a"><div class="ttname"><a href="units_2parser_8cpp.html#adb772fffa624f2b39f88e66cafd5b05a">driver</a></div><div class="ttdeci">nmodl::parser::UnitDriver driver</div><div class="ttdef"><b>Definition:</b> <a href="units_2parser_8cpp_source.html#l00029">parser.cpp:29</a></div></div>
 <div class="ttc" id="agroup__ast__type_html_ggac392e49849e60c05e42ea02c7b445033a0388f8b1db741cd87766daf89bff5a7e"><div class="ttname"><a href="group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a0388f8b1db741cd87766daf89bff5a7e">nmodl::ast::AstNodeType::UNIT_DEF</a></div><div class="ttdeci">@ UNIT_DEF</div><div class="ttdoc">type of ast::UnitDef</div></div>
 <div class="ttc" id="agroup__units_html_ga53666d277469c1f00a3b0fd26a094178"><div class="ttname"><a href="group__units.html#ga53666d277469c1f00a3b0fd26a094178">nmodl::parser::UnitDriver::parse_string</a></div><div class="ttdeci">bool parse_string(const std::string &amp;input)</div><div class="ttdoc">parser Units provided as string (used for testing)</div><div class="ttdef"><b>Definition:</b> <a href="unit__driver_8cpp_source.html#l00050">unit_driver.cpp:50</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1units_1_1_unit_table_html_ab61b83a7b7a6aef4010396248592f09c"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit_table.html#ab61b83a7b7a6aef4010396248592f09c">nmodl::units::UnitTable::get_unit</a></div><div class="ttdeci">const std::shared_ptr&lt; Unit &gt; &amp; get_unit(const std::string &amp;unit_name) const</div><div class="ttdoc">Get the unit_name of the UnitTable's table.</div><div class="ttdef"><b>Definition:</b> <a href="units_8hpp_source.html#l00274">units.hpp:274</a></div></div>
 <div class="ttc" id="anamespacenmodl_1_1test__utils_html_af64fc17c60e5c8a5b8114147591aec3d"><div class="ttname"><a href="namespacenmodl_1_1test__utils.html#af64fc17c60e5c8a5b8114147591aec3d">nmodl::test_utils::reindent_text</a></div><div class="ttdeci">std::string reindent_text(const std::string &amp;text)</div><div class="ttdoc">Reindent nmodl text for text-to-text comparison.</div><div class="ttdef"><b>Definition:</b> <a href="test__utils_8cpp_source.html#l00068">test_utils.cpp:68</a></div></div>
 <div class="ttc" id="aunits__visitor_8hpp_html"><div class="ttname"><a href="units__visitor_8hpp.html">units_visitor.hpp</a></div><div class="ttdoc">Visitor for Units blocks of AST.</div></div>
 <div class="ttc" id="anamespacenmodl_html_a0d49270a6c751e2e1a0e2c2db0012e4d"><div class="ttname"><a href="namespacenmodl.html#a0d49270a6c751e2e1a0e2c2db0012e4d">nmodl::collect_nodes</a></div><div class="ttdeci">std::vector&lt; std::shared_ptr&lt; const ast::Ast &gt; &gt; collect_nodes(const ast::Ast &amp;node, const std::vector&lt; ast::AstNodeType &gt; &amp;types)</div><div class="ttdoc">traverse node recursively and collect nodes of given types</div><div class="ttdef"><b>Definition:</b> <a href="visitor__utils_8cpp_source.html#l00209">visitor_utils.cpp:209</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1units_1_1_unit_table_html"><div class="ttname"><a href="classnmodl_1_1units_1_1_unit_table.html">nmodl::units::UnitTable</a></div><div class="ttdoc">Class that stores all the units, prefixes and names of base units used.</div><div class="ttdef"><b>Definition:</b> <a href="units_8hpp_source.html#l00240">units.hpp:240</a></div></div>
 <div class="ttc" id="agroup__ast__type_html_ggac392e49849e60c05e42ea02c7b445033a9143f3113407701188b8f7d6cc051124"><div class="ttname"><a href="group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a9143f3113407701188b8f7d6cc051124">nmodl::ast::AstNodeType::FACTOR_DEF</a></div><div class="ttdeci">@ FACTOR_DEF</div><div class="ttdoc">type of ast::FactorDef</div></div>
 <div class="ttc" id="afactor__def_8hpp_html"><div class="ttname"><a href="factor__def_8hpp.html">factor_def.hpp</a></div><div class="ttdoc">Auto generated AST classes declaration.</div></div>
 <div class="ttc" id="acheckparent__visitor_8hpp_html"><div class="ttname"><a href="checkparent__visitor_8hpp.html">checkparent_visitor.hpp</a></div><div class="ttdoc">Visitor for checking parents of ast nodes</div></div>
 <div class="ttc" id="anmodl__driver_8hpp_html"><div class="ttname"><a href="nmodl__driver_8hpp.html">nmodl_driver.hpp</a></div></div>
 <div class="ttc" id="aconfig_8h_html"><div class="ttname"><a href="config_8h.html">config.h</a></div><div class="ttdoc">Version information and units file path.</div></div>
 <div class="ttc" id="adouble_8hpp_html"><div class="ttname"><a href="double_8hpp.html">double.hpp</a></div><div class="ttdoc">Auto generated AST classes declaration.</div></div>
+<div class="ttc" id="atest_2unit_2visitor_2units_8cpp_html_ad42f8f78a619ac44c74267b35a439e61"><div class="ttname"><a href="test_2unit_2visitor_2units_8cpp.html#ad42f8f78a619ac44c74267b35a439e61">get_unit_definitions</a></div><div class="ttdeci">std::string get_unit_definitions(const ast::Program &amp;ast, const units::UnitTable &amp;unit_table)</div><div class="ttdoc">Returns all the UnitDef s of the ast::Program.</div><div class="ttdef"><b>Definition:</b> <a href="test_2unit_2visitor_2units_8cpp_source.html#l00074">units.cpp:74</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1ast_1_1_program_html"><div class="ttname"><a href="classnmodl_1_1ast_1_1_program.html">nmodl::ast::Program</a></div><div class="ttdoc">Represents top level AST node for whole NMODL input.</div><div class="ttdef"><b>Definition:</b> <a href="program_8hpp_source.html#l00042">program.hpp:42</a></div></div>
 <div class="ttc" id="aclassnmodl_1_1parser_1_1_unit_driver_html"><div class="ttname"><a href="classnmodl_1_1parser_1_1_unit_driver.html">nmodl::parser::UnitDriver</a></div><div class="ttdoc">Class that binds all pieces together for parsing C units.</div><div class="ttdef"><b>Definition:</b> <a href="unit__driver_8hpp_source.html#l00049">unit_driver.hpp:49</a></div></div>
 <div class="ttc" id="anmodl__constructs_8hpp_html"><div class="ttname"><a href="nmodl__constructs_8hpp.html">nmodl_constructs.hpp</a></div></div>
+<div class="ttc" id="atest_2unit_2visitor_2units_8cpp_html_a4169acd2c0c4326d0eed5a086e328364"><div class="ttname"><a href="test_2unit_2visitor_2units_8cpp.html#a4169acd2c0c4326d0eed5a086e328364">run_units_visitor</a></div><div class="ttdeci">std::tuple&lt; std::shared_ptr&lt; ast::Program &gt;, std::shared_ptr&lt; units::UnitTable &gt; &gt; run_units_visitor(const std::string &amp;text)</div><div class="ttdef"><b>Definition:</b> <a href="test_2unit_2visitor_2units_8cpp_source.html#l00032">units.cpp:32</a></div></div>
 <div class="ttc" id="astructnmodl_1_1_nrn_units_lib_html_a35b39a048f9504008e6b2c4b36f99dbd"><div class="ttname"><a href="structnmodl_1_1_nrn_units_lib.html#a35b39a048f9504008e6b2c4b36f99dbd">nmodl::NrnUnitsLib::get_path</a></div><div class="ttdeci">static std::string get_path()</div><div class="ttdoc">Return path of units database file.</div><div class="ttdef"><b>Definition:</b> <a href="config_8h_source.html#l00054">config.h:54</a></div></div>
 <!-- HTML footer for doxygen 1.8.15-->
 <!-- start footer part -->

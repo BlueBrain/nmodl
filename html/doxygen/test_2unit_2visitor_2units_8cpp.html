@@ -97,6 +97,7 @@ $(document).ready(function(){initNavTree('test_2unit_2visitor_2units_8cpp.html',
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &lt;catch2/catch.hpp&gt;</code><br />
+<code>#include &lt;fmt/format.h&gt;</code><br />
 <code>#include &quot;<a class="el" href="double_8hpp_source.html">ast/double.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="factor__def_8hpp_source.html">ast/factor_def.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="program_8hpp_source.html">ast/program.hpp</a>&quot;</code><br />
@@ -111,20 +112,92 @@ $(document).ready(function(){initNavTree('test_2unit_2visitor_2units_8cpp.html',
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a10156cf5ce3a8c1f791c01fbbf47adb5"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test_2unit_2visitor_2units_8cpp.html#a10156cf5ce3a8c1f791c01fbbf47adb5">run_units_visitor</a> (const std::string &amp;text)</td></tr>
-<tr class="separator:a10156cf5ce3a8c1f791c01fbbf47adb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4169acd2c0c4326d0eed5a086e328364"><td class="memItemLeft" align="right" valign="top">std::tuple&lt; std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_program.html">ast::Program</a> &gt;, std::shared_ptr&lt; <a class="el" href="classnmodl_1_1units_1_1_unit_table.html">units::UnitTable</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test_2unit_2visitor_2units_8cpp.html#a4169acd2c0c4326d0eed5a086e328364">run_units_visitor</a> (const std::string &amp;text)</td></tr>
+<tr class="separator:a4169acd2c0c4326d0eed5a086e328364"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad42f8f78a619ac44c74267b35a439e61"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test_2unit_2visitor_2units_8cpp.html#ad42f8f78a619ac44c74267b35a439e61">get_unit_definitions</a> (const <a class="el" href="classnmodl_1_1ast_1_1_program.html">ast::Program</a> &amp;ast, const <a class="el" href="classnmodl_1_1units_1_1_unit_table.html">units::UnitTable</a> &amp;unit_table)</td></tr>
+<tr class="memdesc:ad42f8f78a619ac44c74267b35a439e61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns all the <code>UnitDef</code> s of the <code>ast::Program</code>.  <a href="test_2unit_2visitor_2units_8cpp.html#ad42f8f78a619ac44c74267b35a439e61">More...</a><br /></td></tr>
+<tr class="separator:ad42f8f78a619ac44c74267b35a439e61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae7e614844b7837d5a583477a4f217d06"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test_2unit_2visitor_2units_8cpp.html#ae7e614844b7837d5a583477a4f217d06">get_factor_definitions</a> (const <a class="el" href="classnmodl_1_1ast_1_1_program.html">ast::Program</a> &amp;ast)</td></tr>
+<tr class="memdesc:ae7e614844b7837d5a583477a4f217d06"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns all the <code>FactorDef</code> s of the <code>ast::Program</code>.  <a href="test_2unit_2visitor_2units_8cpp.html#ae7e614844b7837d5a583477a4f217d06">More...</a><br /></td></tr>
+<tr class="separator:ae7e614844b7837d5a583477a4f217d06"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a25573ab5a28ab4f615c1e7ec51ed58b7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test_2unit_2visitor_2units_8cpp.html#a25573ab5a28ab4f615c1e7ec51ed58b7">SCENARIO</a> (&quot;Parse UNITS block of mod files using Units Visitor&quot;, &quot;[visitor][units]&quot;)</td></tr>
 <tr class="separator:a25573ab5a28ab4f615c1e7ec51ed58b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="a10156cf5ce3a8c1f791c01fbbf47adb5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a10156cf5ce3a8c1f791c01fbbf47adb5">&#9670;&nbsp;</a></span>run_units_visitor()</h2>
+<a id="ae7e614844b7837d5a583477a4f217d06"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae7e614844b7837d5a583477a4f217d06">&#9670;&nbsp;</a></span>get_factor_definitions()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::string run_units_visitor </td>
+          <td class="memname">std::string get_factor_definitions </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classnmodl_1_1ast_1_1_program.html">ast::Program</a> &amp;&#160;</td>
+          <td class="paramname"><em>ast</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns all the <code>FactorDef</code> s of the <code>ast::Program</code>. </p>
+<p>Visit AST to find all the ast::FactorDef nodes to print their unit names and factors as they are calculated to be printed to the generated .cpp file The <code>FactorDef</code> s are printed in the format: </p><div class="fragment"><div class="line">&lt;unit_name&gt; &lt;unit_value&gt;</div>
+</div><!-- fragment --><ul>
+<li>ast <code>ast::Program</code> to look for <code>FactorDef</code> s</li>
+</ul>
+<dl class="section return"><dt>Returns</dt><dd>std::string Factor definitions </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="test_2unit_2visitor_2units_8cpp_source.html#l00117">117</a> of file <a class="el" href="test_2unit_2visitor_2units_8cpp_source.html">units.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ad42f8f78a619ac44c74267b35a439e61"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad42f8f78a619ac44c74267b35a439e61">&#9670;&nbsp;</a></span>get_unit_definitions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string get_unit_definitions </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classnmodl_1_1ast_1_1_program.html">ast::Program</a> &amp;&#160;</td>
+          <td class="paramname"><em>ast</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classnmodl_1_1units_1_1_unit_table.html">units::UnitTable</a> &amp;&#160;</td>
+          <td class="paramname"><em>unit_table</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns all the <code>UnitDef</code> s of the <code>ast::Program</code>. </p>
+<p>Visit AST to find all the ast::UnitDef nodes to print their unit names, factors and dimensions as they are calculated in the units::UnitTable The <code>UnitDef</code> s are printed in the format: </p><div class="fragment"><div class="line">&lt;unit_name&gt; &lt;unit_value&gt;: &lt;dimensions&gt;</div>
+</div><!-- fragment --><p>If the unit is constant then instead of the dimensions we print <code>constant</code> </p>
+<ul>
+<li>ast <code>ast::Program</code> to look for <code>UnitDef</code> s </li>
+<li>unit_table <code>units::UnitTable</code> to look for the definitions of the units</li>
+</ul>
+<dl class="section return"><dt>Returns</dt><dd>std::string Unit definitions </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="test_2unit_2visitor_2units_8cpp_source.html#l00074">74</a> of file <a class="el" href="test_2unit_2visitor_2units_8cpp_source.html">units.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a4169acd2c0c4326d0eed5a086e328364"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4169acd2c0c4326d0eed5a086e328364">&#9670;&nbsp;</a></span>run_units_visitor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::tuple&lt;std::shared_ptr&lt;<a class="el" href="classnmodl_1_1ast_1_1_program.html">ast::Program</a>&gt;, std::shared_ptr&lt;<a class="el" href="classnmodl_1_1units_1_1_unit_table.html">units::UnitTable</a>&gt; &gt; run_units_visitor </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>text</em></td><td>)</td>
@@ -133,7 +206,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test_2unit_2visitor_2units_8cpp_source.html#l00035">35</a> of file <a class="el" href="test_2unit_2visitor_2units_8cpp_source.html">units.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2unit_2visitor_2units_8cpp_source.html#l00032">32</a> of file <a class="el" href="test_2unit_2visitor_2units_8cpp_source.html">units.cpp</a>.</p>
 
 </div>
 </div>
@@ -163,7 +236,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test_2unit_2visitor_2units_8cpp_source.html#l00115">115</a> of file <a class="el" href="test_2unit_2visitor_2units_8cpp_source.html">units.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2unit_2visitor_2units_8cpp_source.html#l00129">129</a> of file <a class="el" href="test_2unit_2visitor_2units_8cpp_source.html">units.cpp</a>.</p>
 
 </div>
 </div>
