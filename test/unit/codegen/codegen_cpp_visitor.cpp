@@ -1168,7 +1168,8 @@ SCENARIO("nrn_state should not be always written", "[codegen][nrn_state]") {
         )";
         THEN("nrn_state should be generated") {
             auto const generated = get_cpp_code(nmodl_text);
-            std::string expected_code = R"(void nrn_state_(NrnThread* nt, Memb_list* ml, int type) {)";
+            std::string expected_code =
+                R"(void nrn_state_(NrnThread* nt, Memb_list* ml, int type) {)";
             REQUIRE_THAT(generated, Contains(expected_code));
         }
     }
@@ -1182,7 +1183,8 @@ SCENARIO("nrn_state should not be always written", "[codegen][nrn_state]") {
         )";
         THEN("nrn_state should be generated") {
             auto const generated = get_cpp_code(nmodl_text);
-            std::string expected_code = R"(void nrn_state_(NrnThread* nt, Memb_list* ml, int type) {)";
+            std::string expected_code =
+                R"(void nrn_state_(NrnThread* nt, Memb_list* ml, int type) {)";
             REQUIRE_THAT(generated, Contains(expected_code));
         }
     }
@@ -1194,7 +1196,8 @@ SCENARIO("nrn_state should not be always written", "[codegen][nrn_state]") {
         )";
         THEN("nrn_state should be generated") {
             auto const generated = get_cpp_code(nmodl_text);
-            std::string expected_code = R"(void nrn_state_(NrnThread* nt, Memb_list* ml, int type) {)";
+            std::string expected_code =
+                R"(void nrn_state_(NrnThread* nt, Memb_list* ml, int type) {)";
             REQUIRE_THAT(generated, Contains(expected_code));
         }
     }
