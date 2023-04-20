@@ -3562,10 +3562,12 @@ void CodegenCVisitor::print_nrn_destructor() {
 
 
 void CodegenCVisitor::print_functors_definitions() {
+    codegen = true;
     for (const auto& functor_name: info.functor_names) {
         printer->add_newline(2);
         print_functor_definition(*functor_name.first);
     }
+    codegen = false;
 }
 
 
