@@ -38,6 +38,20 @@ trigger cvf:
     # Tell CVF to use the same commits/branches as NMODL.
     SPACK_ENV_FILE_URL: $SPACK_SETUP_COMMIT_MAPPING_URL
 
+simulation_stack:
+  stage: .pre
+  # Take advantage of GitHub PR description parsing in the spack_setup job.
+  needs: [spack_setup]
+  trigger:
+    branch: $BLUECONFIGS_BRANCH
+    project: hpc/sim/blueconfigs
+    # NEURON CI status depends on the BlueConfigs CI status.
+    strategy: depend
+  variables:
+    GITLAB_PIPELINES_BRANCH: $GITLAB_PIPELINES_BRANCH
+    SPACK_ENV_FILE_URL: $SPACK_SETUP_COMMIT_MAPPING_URL
+    NMODL_RUN: "true"
+
 .spack_nmodl:
   variables:
     SPACK_PACKAGE: nmodl
