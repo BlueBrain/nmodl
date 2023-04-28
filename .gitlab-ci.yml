@@ -70,7 +70,8 @@ spack_setup:
     # Enable fetching GitHub PR descriptions and parsing them to find out what
     # branches to build of other projects.
     PARSE_GITHUB_PR_DESCRIPTIONS: "true"
-    SPACK_SETUP_IGNORE_PACKAGE_VARIABLES: CVF
+    # Ignore CVF ang BLUECONFIGS branches since those don't have a spack package
+    SPACK_SETUP_IGNORE_PACKAGE_VARIABLES: "CVF BLUECONFIGS"
 
 build:intel:
   extends:
