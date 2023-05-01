@@ -6,10 +6,10 @@ set -xe
 # Note: It should be invoked from nmodl directory
 #
 # PREREQUESITES:
-#  - cmake (>=3.3)
-#  - flex
-#  - bison
-#  - python >= 3.6
+#  - cmake (>=3.15)
+#  - flex (>= 2.6)
+#  - bison (>=3.0)
+#  - python (>=3.8)
 #  - C/C++ compiler
 
 if [ ! -f setup.py ]; then
@@ -22,7 +22,7 @@ setup_venv() {
     local py_ver=$("$py_bin" -c "import sys; print('%d%d' % tuple(sys.version_info)[:2])")
     local venv_dir="nmodl_build_venv$py_ver"
 
-    if [ "$py_ver" -lt 36 ]; then
+    if [ "$py_ver" -lt 37 ]; then
         echo "[SKIP] Python $py_ver not supported"
         skip=1
         return 0
@@ -34,9 +34,9 @@ setup_venv() {
 
     # pep425tags are not available anymore from 0.35
     # temporary workaround until we get smtg stable
-    if ! pip install -U pip setuptools "wheel<0.35"; then
+    if ! pip install --upgrade pip setuptools "wheel<0.35"; then
         curl https://bootstrap.pypa.io/get-pip.py | python
-        pip install -U setuptools "wheel<0.35"
+        pip install --upgrade setuptools "wheel<0.35"
     fi
 }
 
@@ -57,13 +57,8 @@ build_wheel_linux() {
     git config --global --add safe.directory "*"
     python setup.py bdist_wheel
 
-    if [ "$TRAVIS" = true ] ; then
-        echo " - Skipping repair on Travis..."
-        mkdir wheelhouse && cp dist/*.whl wheelhouse/
-    else
-        echo " - Repairing..."
-        auditwheel repair dist/*.whl
-    fi
+    echo " - Repairing..."
+    auditwheel repair dist/*.whl
 
     deactivate
 }
@@ -76,7 +71,7 @@ build_wheel_osx() {
     (( $skip )) && return 0
 
     echo " - Installing build requirements"
-    pip install -U delocate scikit-build -r packaging/build_requirements.txt
+    pip install --upgrade delocate scikit-build -r packaging/build_requirements.txt
 
     echo " - Building..."
     rm -rf dist _skbuild
@@ -93,7 +88,7 @@ platform=$1
 
 # python version for which wheel to be built; 3* (default) means all python 3 versions
 python_wheel_version=3*
-if [ ! -z "$2" ]; then
+if [ "$2" ]; then
   python_wheel_version=$2
 fi
 
@@ -114,17 +109,8 @@ case "$1" in
     done
     ;;
 
-  travis)
-    if [ "$TRAVIS_OS_NAME" == "osx" ]; then
-        build_wheel_osx $(which python3)
-    else
-        build_wheel_linux $(which python3)
-    fi
-    ls wheelhouse/
-    ;;
-
   *)
-    echo "Usage: $(basename $0) <linux|osx|travis> [version]"
+    echo "Usage: $(basename $0) <linux|osx> [version]"
     exit 1
     ;;
 
