@@ -1,0 +1,86 @@
+name: Coverage
+
+concurrency:
+  group: ${{ github.workflow }}#${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  push:
+    branches: 
+      - master
+      - live-debug*
+      - release/**
+  pull_request:
+    branches:
+      - master
+      - release/**
+
+env:
+  CMAKE_BUILD_PARALLEL_LEVEL: 3
+  CTEST_PARALLEL_LEVEL: 1
+  DESIRED_CMAKE_VERSION: 3.15.0
+  PYTHON_VERSION: 3.8
+
+jobs:
+  coverage:
+    runs-on: ubuntu-20.04
+    name: "Coverage Test"
+    steps:
+      - name: Setup cmake
+        uses: jwlawson/actions-setup-cmake@v1
+        with:
+          cmake-version: ${{ env.DESIRED_CMAKE_VERSION }}
+      - name: Install packages
+        run: |
+          sudo apt-get install bison ccache flex lcov libfl-dev ninja-build \
+            python3-dev python3-pip
+        shell: bash
+      - name: Set up Python3
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 2    
+      - name: Install Python3 dependencies
+        working-directory: ${{runner.workspace}}/nmodl
+        run: |
+          pip3 install -U pip setuptools scikit-build
+          pip3 install --user -r requirements.txt
+      - name: Restore compiler cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ${{runner.workspace}}/ccache
+          key: cov-${{github.ref}}-${{github.sha}}
+          restore-keys: |
+            cov-${{github.ref}}-
+            cov-
+      - name: Build and Test for Coverage
+        id: codecov
+        shell: bash
+        working-directory: ${{runner.workspace}}/nmodl
+        run:  |
+          mkdir build && cd build
+          cmake .. -G Ninja \
+            -DPYTHON_EXECUTABLE=$(which python3) \
+            -DCMAKE_BUILD_TYPE=Debug \
+            -DCMAKE_CXX_FLAGS="-coverage" \
+            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+          ccache -z
+          ccache -s
+          cmake --build .
+          ccache -s
+          (cd ..;  lcov --capture  --initial --directory . --no-external --output-file build/coverage-base.info --exclude "*/ext/*")
+          ctest --output-on-failure
+          (cd ..; lcov --capture  --directory . --no-external --output-file build/coverage-run.info --exclude "*/ext/*")
+          lcov --add-tracefile coverage-base.info --add-tracefile coverage-run.info --output-file coverage.info
+          lcov --list coverage.info
+        env:
+          CCACHE_DIR: ${{runner.workspace}}/ccache
+      - uses: codecov/codecov-action@v3
+        with:
+          files: ./build/coverage.info
+          fail_ci_if_error: true
+          verbose: true
+          token: ${{ secrets.CODECOV_TOKEN }}
