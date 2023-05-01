@@ -200,8 +200,6 @@ stages:
     strategy:
       matrix:
         ${{ if eq(variables.buildWheel, True) }}:
-          Python37:
-            python.version: '3.7'
           Python38:
             python.version: '3.8'
           Python39:
@@ -251,10 +249,6 @@ stages:
     strategy:
       matrix:
         ${{ if eq(variables.buildWheel, True) }}:
-          Python37:
-            python.version: '3.7'
-            python.org.version: '3.7.9'
-            python.installer.name: 'macosx10.9.pkg'
           Python38:
             python.version: '3.8'
             python.org.version: '3.8.10'
