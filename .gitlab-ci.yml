@@ -53,7 +53,6 @@ simulation_stack:
   variables:
     SPACK_ENV_FILE_URL: $SPACK_SETUP_COMMIT_MAPPING_URL
     NMODL_RUN: "true"
-    SPACK_SETUP_IGNORE_PACKAGE_VARIABLES: "CVF BLUECONFIGS"
 
 .spack_nmodl:
   variables:
