@@ -64,10 +64,11 @@ spack_setup:
   extends: .spack_setup_ccache
   script:
     - !reference [.spack_setup_ccache, script]
-    # Setting CVF_BRANCH in the PR description will cause it to be set in the
-    # environment of this job, but because we put CVF in
-    # SPACK_SETUP_IGNORE_PACKAGE_VARIABLES then nothing will be done with it.
+    # Setting {CVF, BLUECONFIGS}_BRANCH in the PR description will cause them to
+    # be set in the environment of this job, but because we put CVF and BLUECONFIGS
+    # in SPACK_SETUP_IGNORE_PACKAGE_VARIABLES then nothing will be done with it.
     - echo "CVF_BRANCH=${CVF_BRANCH}" >> spack_clone_variables.env
+    - echo "BLUECONFIGS_BRANCH=${BLUECONFIGS_BRANCH}" >> spack_clone_variables.env
   variables:
     NMODL_COMMIT: ${CI_COMMIT_SHA}
     # Enable fetching GitHub PR descriptions and parsing them to find out what
