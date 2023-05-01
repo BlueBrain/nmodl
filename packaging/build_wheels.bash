@@ -9,7 +9,7 @@ set -xe
 #  - cmake (>=3.15)
 #  - flex (>= 2.6)
 #  - bison (>=3.0)
-#  - python (>=3.7)
+#  - python (>=3.8)
 #  - C/C++ compiler
 
 if [ ! -f setup.py ]; then
