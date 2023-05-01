@@ -20,26 +20,26 @@ variables:
     description: Extra path component used when finding deployed software. Set to something like `pulls/1497` use software built for https://github.com/BlueBrain/spack/pull/1497. You probably want to set SPACK_BRANCH to the branch used in the relevant PR if you set this.
     value: ''
 
-# trigger cvf:
-#   # Stop the globally-defined CVF_BRANCH above from being set in the child pipeline
-#   inherit:
-#     variables: false
-#   needs: [spack_setup] # for SPACK_SETUP_COMMIT_MAPPING_URL
-#   stage: .pre
-#   rules:
-#     # Don't run on PRs targeting the LLVM development branch
-#     - if: '$CI_EXTERNAL_PULL_REQUEST_TARGET_BRANCH_NAME == "llvm"'
-#       when: never
-#     # Otherwise always run this
-#     - when: always
-#   trigger:
-#     branch: ${CVF_BRANCH}
-#     project: hpc/cvf
-#     # Make the NMODL CI status depend on the CVF CI status
-#     strategy: depend
-#   variables:
-#     # Tell CVF to use the same commits/branches as NMODL.
-#     SPACK_ENV_FILE_URL: $SPACK_SETUP_COMMIT_MAPPING_URL
+trigger cvf:
+  # Stop the globally-defined CVF_BRANCH above from being set in the child pipeline
+  inherit:
+    variables: false
+  needs: [spack_setup] # for SPACK_SETUP_COMMIT_MAPPING_URL
+  stage: .pre
+  rules:
+    # Don't run on PRs targeting the LLVM development branch
+    - if: '$CI_EXTERNAL_PULL_REQUEST_TARGET_BRANCH_NAME == "llvm"'
+      when: never
+    # Otherwise always run this
+    - when: always
+  trigger:
+    branch: ${CVF_BRANCH}
+    project: hpc/cvf
+    # Make the NMODL CI status depend on the CVF CI status
+    strategy: depend
+  variables:
+    # Tell CVF to use the same commits/branches as NMODL.
+    SPACK_ENV_FILE_URL: $SPACK_SETUP_COMMIT_MAPPING_URL
 
 simulation_stack:
   stage: .pre
@@ -76,34 +76,34 @@ spack_setup:
     # Ignore CVF ang BLUECONFIGS branches since those don't have a spack package
     SPACK_SETUP_IGNORE_PACKAGE_VARIABLES: "CVF BLUECONFIGS"
 
-# build:intel:
-#   extends:
-#     - .spack_build
-#     - .spack_nmodl
-#   variables:
-#     SPACK_PACKAGE_COMPILER: intel
+build:intel:
+  extends:
+    - .spack_build
+    - .spack_nmodl
+  variables:
+    SPACK_PACKAGE_COMPILER: intel
 
-# build:nvhpc:
-#   extends:
-#     - .spack_build
-#     - .spack_nmodl
-#   variables:
-#     SPACK_PACKAGE_COMPILER: nvhpc
-#     SPACK_PACKAGE_DEPENDENCIES: ^bison%gcc^flex%gcc^py-jinja2%gcc^py-sympy%gcc^py-pyyaml%gcc
+build:nvhpc:
+  extends:
+    - .spack_build
+    - .spack_nmodl
+  variables:
+    SPACK_PACKAGE_COMPILER: nvhpc
+    SPACK_PACKAGE_DEPENDENCIES: ^bison%gcc^flex%gcc^py-jinja2%gcc^py-sympy%gcc^py-pyyaml%gcc
 
-# .nmodl_tests:
-#   variables:
-#     # https://github.com/BlueBrain/nmodl/issues/737
-#     bb5_ntasks: 1
+.nmodl_tests:
+  variables:
+    # https://github.com/BlueBrain/nmodl/issues/737
+    bb5_ntasks: 1
 
-# test:intel:
-#   extends:
-#     - .ctest
-#     - .nmodl_tests
-#   needs: ["build:intel"]
+test:intel:
+  extends:
+    - .ctest
+    - .nmodl_tests
+  needs: ["build:intel"]
 
-# test:nvhpc:
-#   extends:
-#     - .ctest
-#     - .nmodl_tests
-#   needs: ["build:nvhpc"]
+test:nvhpc:
+  extends:
+    - .ctest
+    - .nmodl_tests
+  needs: ["build:nvhpc"]
