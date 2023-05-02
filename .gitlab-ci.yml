@@ -16,6 +16,12 @@ variables:
   BLUECONFIGS_BRANCH:
     description: Branch of blueconfigs to trigger the simulation stack pipeline from
     value: main
+  NEURON_BRANCH:
+    description: Branch of neuron to build BlueBrain models against in the simulation stack pipeline (NEURON_COMMIT and NEURON_TAG also possible)
+    value: master
+  LIBSONATA_REPORT_BRANCH:
+    description: Branch of libsonata-report to build BlueBrain models against in the simulation stack pipeline (LIBSONATA_REPORT_COMMIT and LIBSONATA_REPORT_TAG also possible)
+    value: master
   SPACK_DEPLOYMENT_SUFFIX:
     description: Extra path component used when finding deployed software. Set to something like `pulls/1497` use software built for https://github.com/BlueBrain/spack/pull/1497. You probably want to set SPACK_BRANCH to the branch used in the relevant PR if you set this.
     value: ''
