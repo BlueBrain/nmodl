@@ -215,7 +215,7 @@ SCENARIO("Check instance variable definition order", "[codegen][var_order]") {
               USEION nca READ ncai, inca, enca WRITE enca, ncai VALENCE 2
               USEION lca READ lcai, ilca, elca WRITE elca, lcai VALENCE 2
               USEION k WRITE ko
-              RANGE caiinf, catau, cai, ncai, lcai, eca, elca, enca, g
+              RANGE caiinf, catau, cai, ncai, lcai, eca, elca, enca, g, ko
             }
             UNITS {
               FARADAY = 96520(coul)
@@ -237,6 +237,7 @@ SCENARIO("Check instance variable definition order", "[codegen][var_order]") {
               elca(mV)
               eca(mV)
               g(S/cm2)
+              ko(mA / cm2)
             }
             STATE {
               ncai(mM)
