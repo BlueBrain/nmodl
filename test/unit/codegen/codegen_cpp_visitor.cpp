@@ -214,6 +214,7 @@ SCENARIO("Check instance variable definition order", "[codegen][var_order]") {
               SUFFIX ccanl
               USEION nca READ ncai, inca, enca WRITE enca, ncai VALENCE 2
               USEION lca READ lcai, ilca, elca WRITE elca, lcai VALENCE 2
+              USEION k WRITE ko
               RANGE caiinf, catau, cai, ncai, lcai, eca, elca, enca, g
             }
             UNITS {
@@ -261,15 +262,16 @@ SCENARIO("Check instance variable definition order", "[codegen][var_order]") {
                     inst->cai = ml->data+2*pnodecount;
                     inst->eca = ml->data+3*pnodecount;
                     inst->g = ml->data+4*pnodecount;
-                    inst->ica = ml->data+5*pnodecount;
-                    inst->inca = ml->data+6*pnodecount;
-                    inst->ilca = ml->data+7*pnodecount;
-                    inst->enca = ml->data+8*pnodecount;
-                    inst->elca = ml->data+9*pnodecount;
-                    inst->ncai = ml->data+10*pnodecount;
-                    inst->Dncai = ml->data+11*pnodecount;
-                    inst->lcai = ml->data+12*pnodecount;
-                    inst->Dlcai = ml->data+13*pnodecount;
+                    inst->ko = ml->data+5*pnodecount;
+                    inst->ica = ml->data+6*pnodecount;
+                    inst->inca = ml->data+7*pnodecount;
+                    inst->ilca = ml->data+8*pnodecount;
+                    inst->enca = ml->data+9*pnodecount;
+                    inst->elca = ml->data+10*pnodecount;
+                    inst->ncai = ml->data+11*pnodecount;
+                    inst->Dncai = ml->data+12*pnodecount;
+                    inst->lcai = ml->data+13*pnodecount;
+                    inst->Dlcai = ml->data+14*pnodecount;
                     inst->ion_ncai = nt->_data;
                     inst->ion_inca = nt->_data;
                     inst->ion_enca = nt->_data;
@@ -282,6 +284,10 @@ SCENARIO("Check instance variable definition order", "[codegen][var_order]") {
                     inst->ion_lcao = nt->_data;
                     inst->ion_lca_erev = nt->_data;
                     inst->style_lca = ml->pdata;
+                    inst->ion_ki = nt->_data;
+                    inst->ion_ko = nt->_data;
+                    inst->ion_k_erev = nt->_data;
+                    inst->style_k = ml->pdata;
                 }
             )";
 
