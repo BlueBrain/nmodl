@@ -9,9 +9,9 @@
 #include <dlfcn.h>
 #include <filesystem>
 
+#include "config/config.h"
 #include "pybind/pyembed.hpp"
 #include "utils/logger.hpp"
-#include "config/config.h"
 
 namespace fs = std::filesystem;
 
@@ -52,7 +52,8 @@ void EmbeddedPythonLoader::load_libraries() {
         path.concat(CMakeInfo::SHARED_LIBRARY_SUFFIX);
         if (!fs::exists(path)) {
             logger->critical(
-                "NMODLHOME or NMODL_WRAPLIB environment variable must be set to load the pybind wrapper library");
+                "NMODLHOME or NMODL_WRAPLIB environment variable must be set to load the pybind "
+                "wrapper library");
             throw std::runtime_error("NMODLHOME or NMODL_WRAPLIB not set");
         }
         pybind_wraplib_env = path;
