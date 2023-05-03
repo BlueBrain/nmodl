@@ -45,16 +45,13 @@ void EmbeddedPythonLoader::load_libraries() {
         logger->critical(errstr);
         throw std::runtime_error("Failed to dlopen");
     }
-    auto pybind_wraplib_env = fs::path(std::getenv("NMODL_WRAPLIB"));
+    auto pybind_wraplib_env = fs::path(std::getenv("NMODLHOME")) / "lib" / "libpywrapper";
+    pybind_wraplib_env.concat(CMakeInfo::SHARED_LIBRARY_SUFFIX);
     if (!fs::exists(pybind_wraplib_env)) {
-        pybind_wraplib_env = fs::path(std::getenv("NMODLHOME")) / "lib" / "libpywrapper";
-        pybind_wraplib_env.concat(CMakeInfo::SHARED_LIBRARY_SUFFIX);
-        if (!fs::exists(pybind_wraplib_env)) {
-            logger->critical(
-                "NMODLHOME or NMODL_WRAPLIB environment variable must be set to load the pybind "
-                "wrapper library");
-            throw std::runtime_error("NMODLHOME or NMODL_WRAPLIB not set");
-        }
+        logger->critical(
+            "NMODLHOME environment variable must be set to load the pybind "
+            "wrapper library");
+        throw std::runtime_error("NMODLHOME not set");
     }
     pybind_wrapper_handle = dlopen(pybind_wraplib_env.c_str(), dlopen_opts);
     if (!pybind_wrapper_handle) {
