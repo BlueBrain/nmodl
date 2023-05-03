@@ -91,7 +91,7 @@ build:intel:
     - .spack_build
     - .spack_nmodl
   variables:
-    SPACK_PACKAGE_COMPILER: intel
+    SPACK_PACKAGE_COMPILER: oneapi
 
 build:nvhpc:
   extends:
