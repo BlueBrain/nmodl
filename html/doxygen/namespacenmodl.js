@@ -11,6 +11,7 @@ var namespacenmodl =
     [ "units", "namespacenmodl_1_1units.html", "namespacenmodl_1_1units" ],
     [ "utils", "namespacenmodl_1_1utils.html", "namespacenmodl_1_1utils" ],
     [ "visitor", "namespacenmodl_1_1visitor.html", "namespacenmodl_1_1visitor" ],
+    [ "CMakeInfo", "structnmodl_1_1_c_make_info.html", "structnmodl_1_1_c_make_info" ],
     [ "CodegenTransformVisitor", "classnmodl_1_1_codegen_transform_visitor.html", "classnmodl_1_1_codegen_transform_visitor" ],
     [ "FileLibrary", "classnmodl_1_1_file_library.html", "classnmodl_1_1_file_library" ],
     [ "Logger", "structnmodl_1_1_logger.html", "structnmodl_1_1_logger" ],

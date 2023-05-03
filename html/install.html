@@ -233,12 +233,6 @@ for example:</p></li>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">NMODL_PYLIB</span><span class="o">=</span>/usr/local/Cellar/python/3.7.7/Frameworks/Python.framework/Versions/3.7/Python
 </pre></div>
 </div>
-<ul class="simple">
-<li><p>‘NMODL_WRAPLIB’: This variable should point to the <code class="docutils literal notranslate"><span class="pre">libpywrapper.so</span></code> built as part of NMODL, for example:</p></li>
-</ul>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">NMODL_WRAPLIB</span><span class="o">=</span>/opt/nmodl/lib/libpywrapper.so
-</pre></div>
-</div>
 <p><strong>Note</strong>: In order for all unit tests to function correctly when building without linking against libpython we must
 set <code class="docutils literal notranslate"><span class="pre">NMODL_PYLIB</span></code> before running cmake!</p>
 </section>

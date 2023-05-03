@@ -6,6 +6,7 @@ var hierarchy =
       [ "nmodl::parser::CLexer", "classnmodl_1_1parser_1_1_c_lexer.html", null ]
     ] ],
     [ "ClassInfo< T >", "struct_class_info.html", null ],
+    [ "nmodl::CMakeInfo", "structnmodl_1_1_c_make_info.html", null ],
     [ "nmodl::codegen::CodegenInfo", "structnmodl_1_1codegen_1_1_codegen_info.html", null ],
     [ "nmodl::printer::CodePrinter", "classnmodl_1_1printer_1_1_code_printer.html", null ],
     [ "nmodl::codegen::Conductance", "structnmodl_1_1codegen_1_1_conductance.html", null ],
