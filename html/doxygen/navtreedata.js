@@ -89,15 +89,14 @@ var NAVTREEINDEX =
 "classnmodl_1_1visitor_1_1_sympy_solver_visitor.html#a4451d274fc258886521f6ee71b7975b3",
 "classnmodl_1_1visitor_1_1_visitor.html#aebe5ddd198b6d60fbaf17167a4c8cb7e",
 "conductance__hint_8hpp.html",
-"functions_d.html",
-"group__ast__class.html#ga948ddb22b25c884d62ab0df93dfe431a",
-"group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033aa54950e77e3f2112d93dd6757ddade8d",
-"group__units.html#gacf73317c537bff91a6631c0c4f4cded0",
-"namespacenmodl_1_1codegen_1_1utils.html",
-"rename__visitor_8cpp_source.html",
-"structnmodl_1_1pybind__wrappers_1_1_analytic_diff_executor.html",
-"sympy__solver_8cpp.html#a4cc55329ade0a3cd5001f8915c5897b3",
-"watch__statement_8hpp_source.html"
+"functions_vars_d.html",
+"group__ast__class.html#gabdc81c1d11f50f067df4cf0d7746f110",
+"group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033aff966244af53a3565364ba77475c10e1",
+"indexed__name_8hpp.html",
+"newton_8hpp.html#ga45a40394b3d577b79cde4e94e79cbcc0",
+"src_2symtab_2symbol__table_8cpp_source.html",
+"structnmodl_1_1test__utils_1_1_diff_eq_test_case.html#a6372c1acc7a6d86e101f4c13c0ba9230",
+"test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#ab0be83be74ced6a50e4809fad44d1957"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

@@ -14,6 +14,5 @@ var dir_7cf1b5e32c0ccac638cac1ebc38d93b6 =
     [ "codegen_transform_visitor.cpp", "codegen__transform__visitor_8cpp.html", null ],
     [ "codegen_transform_visitor.hpp", "codegen__transform__visitor_8hpp.html", null ],
     [ "codegen_utils.cpp", "src_2codegen_2codegen__utils_8cpp.html", "src_2codegen_2codegen__utils_8cpp" ],
-    [ "codegen_utils.hpp", "codegen__utils_8hpp.html", "codegen__utils_8hpp" ],
-    [ "fast_math.hpp", "fast__math_8hpp.html", "fast__math_8hpp" ]
+    [ "codegen_utils.hpp", "codegen__utils_8hpp.html", "codegen__utils_8hpp" ]
 ];
