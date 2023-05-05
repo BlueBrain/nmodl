@@ -4,3 +4,4 @@ pytest
 pytest-cov
 sympy
 numpy
+find_libpython
