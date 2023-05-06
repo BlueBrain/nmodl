@@ -32,12 +32,11 @@ setup_venv() {
     "$py_bin" -m venv "$venv_dir"
     . "$venv_dir/bin/activate"
 
-    # pep425tags are not available anymore from 0.35
-    # temporary workaround until we get smtg stable
-    if ! pip install --upgrade pip setuptools "wheel<0.35"; then
+    if ! pip install --upgrade pip setuptools wheel; then
         curl https://bootstrap.pypa.io/get-pip.py | python
-        pip install --upgrade setuptools "wheel<0.35"
+        pip install --upgrade setuptools wheel
     fi
+
 }
 
 
