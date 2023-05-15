@@ -2361,12 +2361,7 @@ SCENARIO("Code generation for EigenNewtonSolver", "[visitor][solver][sympy][deri
             double* nmodl_eigen_j = nmodl_eigen_jm.data();
             double* nmodl_eigen_f = nmodl_eigen_fm.data();
             nmodl_eigen_f[static_cast<int>(0)] =  -nmodl_eigen_x[static_cast<int>(0)] * nt->_dt / inst->tau[id] - nmodl_eigen_x[static_cast<int>(0)] + inst->cai0[id] * nt->_dt / inst->tau[id] + old_cai - 5000000.0 * nt->_dt * inst->ica[id] / (F * inst->depth[id]);
-            nmodl_eigen_j[static_cast<int>(0)] =  -(nt->_dt + inst->tau[id]) / inst->tau[id];
-        }
-
-        void finalize() {
-        }
-    };)";
+            nmodl_eigen_j[static_cast<int>(0)] =)";
             std::string expected_functor_cacum_1_definition =
                 R"(struct functor_cacum_1 {
         NrnThread* nt;
@@ -2388,12 +2383,7 @@ SCENARIO("Code generation for EigenNewtonSolver", "[visitor][solver][sympy][deri
             double* nmodl_eigen_j = nmodl_eigen_jm.data();
             double* nmodl_eigen_f = nmodl_eigen_fm.data();
             nmodl_eigen_f[static_cast<int>(0)] =  -nmodl_eigen_x[static_cast<int>(0)] * nt->_dt / inst->tau[id] - nmodl_eigen_x[static_cast<int>(0)] + inst->cai0[id] * nt->_dt / inst->tau[id] + old_cai - 5000000.0 * nt->_dt * inst->ica[id] / (F * inst->depth[id]);
-            nmodl_eigen_j[static_cast<int>(0)] =  -(nt->_dt + inst->tau[id]) / inst->tau[id];
-        }
-
-        void finalize() {
-        }
-    };)";
+            nmodl_eigen_j[static_cast<int>(0)] =)";
             std::string expected_functor_cacum_2_definition =
                 R"(struct functor_cacum_2 {
         NrnThread* nt;
@@ -2415,12 +2405,7 @@ SCENARIO("Code generation for EigenNewtonSolver", "[visitor][solver][sympy][deri
             double* nmodl_eigen_j = nmodl_eigen_jm.data();
             double* nmodl_eigen_f = nmodl_eigen_fm.data();
             nmodl_eigen_f[static_cast<int>(0)] =  -nmodl_eigen_x[static_cast<int>(0)] * nt->_dt / inst->tau[id] - nmodl_eigen_x[static_cast<int>(0)] + inst->cai0[id] * nt->_dt / inst->tau[id] + old_cai - 5000000.0 * nt->_dt * inst->ica[id] / (F * inst->depth[id]);
-            nmodl_eigen_j[static_cast<int>(0)] =  -(nt->_dt + inst->tau[id]) / inst->tau[id];
-        }
-
-        void finalize() {
-        }
-    };)";
+            nmodl_eigen_j[static_cast<int>(0)] =)";
             // Expected functor usages
             std::string expected_functor_cacum_0_usage =
                 R"(functor_cacum_0 newton_functor(nt, inst, id, pnodecount, v, indexes, data, thread);)";

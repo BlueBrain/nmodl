@@ -17,6 +17,7 @@ include_directories(${NMODL_PROJECT_SOURCE_DIR}/ext/eigen)
 # Common input data library
 # =============================================================================
 add_library(test_util STATIC utils/nmodl_constructs.cpp utils/test_utils.cpp)
+target_link_libraries(test_util PUBLIC spdlog::spdlog_header_only)
 
 # =============================================================================
 # Common input data library
@@ -62,11 +63,12 @@ add_executable(testprinter printer/printer.cpp)
 add_executable(testsymtab symtab/symbol_table.cpp)
 add_executable(testnewton newton/newton.cpp ${NEWTON_SOLVER_SOURCE_FILES})
 add_executable(testcrout crout/crout.cpp ${CROUT_SOLVER_SOURCE_FILES})
-add_executable(testfast_math fast_math/fast_math.cpp ${NEWTON_SOLVER_SOURCE_FILES})
 add_executable(testunitlexer units/lexer.cpp)
 add_executable(testunitparser units/parser.cpp)
-add_executable(testcodegen codegen/main.cpp codegen/codegen_helper.cpp codegen/codegen_utils.cpp
-                           codegen/codegen_cpp_visitor.cpp codegen/transform.cpp)
+add_executable(
+  testcodegen
+  codegen/main.cpp codegen/codegen_helper.cpp codegen/codegen_utils.cpp
+  codegen/codegen_cpp_visitor.cpp codegen/transform.cpp codegen/codegen_compatibility_visitor.cpp)
 
 target_link_libraries(testmodtoken PRIVATE lexer util)
 target_link_libraries(testlexer PRIVATE lexer util)
@@ -111,8 +113,6 @@ set(test_env ${NMODL_SANITIZER_ENABLE_ENVIRONMENT})
 set(testvisitor_env "PYTHONPATH=${PROJECT_BINARY_DIR}/lib:$ENV{PYTHONPATH}")
 if(NOT LINK_AGAINST_PYTHON)
   list(APPEND testvisitor_env "NMODL_PYLIB=$ENV{NMODL_PYLIB}")
-  list(APPEND testvisitor_env
-       "NMODL_WRAPLIB=${PROJECT_BINARY_DIR}/lib/nmodl/libpywrapper${CMAKE_SHARED_LIBRARY_SUFFIX}")
 endif()
 
 # Without main from Catch2
@@ -127,7 +127,6 @@ target_link_libraries(testprinter PRIVATE Catch2::Catch2WithMain)
 target_link_libraries(testsymtab PRIVATE Catch2::Catch2WithMain)
 target_link_libraries(testnewton PRIVATE Catch2::Catch2WithMain)
 target_link_libraries(testcrout PRIVATE Catch2::Catch2WithMain)
-target_link_libraries(testfast_math PRIVATE Catch2::Catch2WithMain)
 target_link_libraries(testunitlexer PRIVATE Catch2::Catch2WithMain)
 target_link_libraries(testunitparser PRIVATE Catch2::Catch2WithMain)
 
@@ -142,7 +141,6 @@ foreach(
   testsymtab
   testnewton
   testcrout
-  testfast_math
   testunitlexer
   testunitparser)
 

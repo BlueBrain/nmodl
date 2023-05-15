@@ -66,9 +66,6 @@ enum BlockType {
     /// breakpoint block
     Equation,
 
-    /// ode_* routines block (not used)
-    Ode,
-
     /// derivative block
     State,
 
@@ -239,6 +236,12 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * \c true if currently net_receive block being printed
      */
     bool printing_net_receive = false;
+
+    /**
+     * \c true if currently initial block of net_receive being printed
+     */
+    bool printing_net_init = false;
+
 
     /**
      * \c true if currently printing top level verbatim blocks
@@ -417,14 +420,6 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
     SymbolType make_symbol(const std::string& name) const {
         return std::make_shared<symtab::Symbol>(name, ModToken());
     }
-
-
-    /**
-     * Checks if the given variable name belongs to a state variable
-     * \param name The variable name
-     * \return     \c true if the variable is a state variable
-     */
-    bool state_variable(const std::string& name) const;
 
 
     /**
@@ -1313,6 +1308,14 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * code
      */
     void print_net_receive_common_code(const ast::Block& node, bool need_mech_inst = true);
+
+
+    /**
+     * Print the code related to the update of NetSendBuffer_t cnt. For GPU this needs to be done
+     * with atomic operation, on CPU it's not needed.
+     *
+     */
+    virtual void print_net_send_buffering_cnt_update() const;
 
 
     /**

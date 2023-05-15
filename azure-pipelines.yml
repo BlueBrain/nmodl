@@ -72,12 +72,11 @@ stages:
   dependsOn: fetch_config
   variables:
     NEURON_BRANCH: $[stageDependencies.fetch_config.github.outputs['prdesc.NEURON_BRANCH']]
-    CORENEURON_BRANCH: $[stageDependencies.fetch_config.github.outputs['prdesc.CORENEURON_BRANCH']]
   jobs:
   - job: 'ubuntu2004'
     pool:
       vmImage: 'ubuntu-20.04'
-    displayName: 'Ubuntu (20.04), GCC 8.4'
+    displayName: 'Ubuntu (20.04), GCC 9.4'
     steps:
     - checkout: self
       submodules: False
@@ -85,7 +84,7 @@ stages:
         sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
         sudo apt-add-repository -y ppa:deadsnakes/ppa
         sudo apt-get update
-        sudo apt-get install -y g++-8 flex bison libfl-dev cython libx11-dev libxcomposite-dev libncurses-dev mpich
+        sudo apt-get install -y g++-9 flex bison libfl-dev cython libx11-dev libxcomposite-dev libncurses-dev mpich
         sudo apt-get install -y python3.8 python3.8-dev python3.8-venv ninja-build
         python3.8 -m pip install --upgrade pip setuptools
         python3.8 -m pip install --user -r $(Build.Repository.LocalPath)/requirements.txt
@@ -98,7 +97,7 @@ stages:
       displayName: 'Install Dependencies'
     - script: |
         export PATH=$(pwd)/$CMAKE_PKG/bin:/home/vsts/.local/bin:$PATH
-        export CXX='g++-8'
+        export CXX='g++-9'
         mkdir -p $(Build.Repository.LocalPath)/build
         cd $(Build.Repository.LocalPath)/build
         cmake --version
@@ -116,16 +115,9 @@ stages:
       displayName: 'Build and Run Unit Tests'
     - script: |
         export PATH=$(pwd)/$CMAKE_PKG/bin:/home/vsts/.local/bin:$PATH
-        export CC='gcc-8'
-        export CXX='g++-8'
+        export CC='gcc-9'
+        export CXX='g++-9'
         git clone${NEURON_BRANCH:+ --branch }${NEURON_BRANCH} --single-branch https://github.com/neuronsimulator/nrn.git
-        if [[ -n "${CORENEURON_BRANCH}" ]]; then
-          pushd nrn
-          git submodule update --init external/coreneuron
-          cd external/coreneuron
-          git checkout ${CORENEURON_BRANCH}
-          popd
-        fi
         mkdir nrn/build
         cd nrn/build
         cmake --version
@@ -182,13 +174,6 @@ stages:
         export CC='gcc'
         export CXX='g++'
         git clone${NEURON_BRANCH:+ --branch }${NEURON_BRANCH} --single-branch https://github.com/neuronsimulator/nrn.git
-        if [[ -n "${CORENEURON_BRANCH}" ]]; then
-          pushd nrn
-          git submodule update --init external/coreneuron
-          cd external/coreneuron
-          git checkout ${CORENEURON_BRANCH}
-          popd
-        fi
         mkdir nrn/build
         cd nrn/build
         cmake --version
@@ -215,8 +200,6 @@ stages:
     strategy:
       matrix:
         ${{ if eq(variables.buildWheel, True) }}:
-          Python37:
-            python.version: '3.7'
           Python38:
             python.version: '3.8'
           Python39:
@@ -266,10 +249,6 @@ stages:
     strategy:
       matrix:
         ${{ if eq(variables.buildWheel, True) }}:
-          Python37:
-            python.version: '3.7'
-            python.org.version: '3.7.9'
-            python.installer.name: 'macosx10.9.pkg'
           Python38:
             python.version: '3.8'
             python.org.version: '3.8.10'

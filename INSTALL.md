@@ -22,7 +22,7 @@ To build the project from source, a modern C++ compiler with C++14 support is ne
 - flex (>=2.6)
 - bison (>=3.0)
 - CMake (>=3.15)
-- Python (>=3.7)
+- Python (>=3.8)
 - Python packages : jinja2 (>=2.10), pyyaml (>=3.13), pytest (>=4.0.0), sympy (>=1.3), textwrap
 
 ### On OS X
@@ -124,10 +124,6 @@ for example:
 ````sh
 export NMODL_PYLIB=/usr/local/Cellar/python/3.7.7/Frameworks/Python.framework/Versions/3.7/Python
 ````
-* 'NMODL_WRAPLIB': This variable should point to the `libpywrapper.so` built as part of NMODL, for example:
-```sh
-export NMODL_WRAPLIB=/opt/nmodl/lib/libpywrapper.so
-```
 
 **Note**: In order for all unit tests to function correctly when building without linking against libpython we must
 set `NMODL_PYLIB` before running cmake!

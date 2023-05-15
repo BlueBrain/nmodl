@@ -422,19 +422,6 @@ bool CodegenCVisitor::range_variable_setup_required() const noexcept {
 }
 
 
-bool CodegenCVisitor::state_variable(const std::string& name) const {
-    // clang-format off
-    auto result = std::find_if(info.state_vars.begin(),
-                               info.state_vars.end(),
-                               [&name](const SymbolType& sym) {
-                                   return name == sym->get_name();
-                               }
-    );
-    // clang-format on
-    return result != info.state_vars.end();
-}
-
-
 int CodegenCVisitor::position_of_float_var(const std::string& name) const {
     int index = 0;
     for (const auto& var: codegen_float_variables) {
@@ -602,9 +589,6 @@ int CodegenCVisitor::int_variables_size() const {
  * method return statements as vector. As different code backends could have
  * different variable names, we rely on backend-specific read_ion_variable_name
  * and write_ion_variable_name method which will be overloaded.
- *
- * \todo After looking into mod2c and neuron implementation, it seems like
- * Ode block type is not used (?). Need to look into implementation details.
  */
 std::vector<std::string> CodegenCVisitor::ion_read_statements(BlockType type) {
     if (optimize_ion_variable_copies()) {
@@ -614,18 +598,12 @@ std::vector<std::string> CodegenCVisitor::ion_read_statements(BlockType type) {
     for (const auto& ion: info.ions) {
         auto name = ion.name;
         for (const auto& var: ion.reads) {
-            if (type == BlockType::Ode && ion.is_ionic_conc(var) && state_variable(var)) {
-                continue;
-            }
             auto variable_names = read_ion_variable_name(var);
             auto first = get_variable_name(variable_names.first);
             auto second = get_variable_name(variable_names.second);
             statements.push_back(fmt::format("{} = {};", first, second));
         }
         for (const auto& var: ion.writes) {
-            if (type == BlockType::Ode && ion.is_ionic_conc(var) && state_variable(var)) {
-                continue;
-            }
             if (ion.is_ionic_conc(var)) {
                 auto variables = read_ion_variable_name(var);
                 auto first = get_variable_name(variables.first);
@@ -642,9 +620,6 @@ std::vector<std::string> CodegenCVisitor::ion_read_statements_optimized(BlockTyp
     std::vector<std::string> statements;
     for (const auto& ion: info.ions) {
         for (const auto& var: ion.writes) {
-            if (type == BlockType::Ode && ion.is_ionic_conc(var) && state_variable(var)) {
-                continue;
-            }
             if (ion.is_ionic_conc(var)) {
                 auto variables = read_ion_variable_name(var);
                 auto first = "ionvar." + variables.first;
@@ -2173,14 +2148,8 @@ void CodegenCVisitor::print_nmodl_constants() {
         printer->add_newline(2);
         printer->add_line("/** constants used in nmodl from UNITS */");
         for (const auto& it: info.factor_definitions) {
-#ifdef USE_LEGACY_UNITS
-            const std::string format_string = "static const double {} = {:g};";
-#else
-            const std::string format_string = "static const double {} = {:.18g};";
-#endif
-            printer->fmt_line(format_string,
-                              it->get_node_name(),
-                              stod(it->get_value()->get_value()));
+            const std::string format_string = "static const double {} = {};";
+            printer->fmt_line(format_string, it->get_node_name(), it->get_value()->get_value());
         }
     }
 }
@@ -2481,7 +2450,6 @@ void CodegenCVisitor::print_backend_info() {
 void CodegenCVisitor::print_standard_includes() {
     printer->add_newline();
     printer->add_line("#include <math.h>");
-    printer->add_line("#include \"nmodl/fast_math.hpp\" // extend math with some useful functions");
     printer->add_line("#include <stdio.h>");
     printer->add_line("#include <stdlib.h>");
     printer->add_line("#include <string.h>");
@@ -2848,18 +2816,18 @@ void CodegenCVisitor::print_global_variables_for_hoc() {
  * STEP, the registration type (as an integer) is calculated.
  * These values are then interpreted by CoreNEURON internally.
  */
-static size_t get_register_type_for_ba_block(const ast::Block* block) {
-    size_t register_type = 0;
+static std::string get_register_type_for_ba_block(const ast::Block* block) {
+    std::string register_type{};
     BAType ba_type{};
     /// before block have value 10 and after block 20
     if (block->is_before_block()) {
         // NOLINTNEXTLINE(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)
-        register_type = 10;
+        register_type = "BAType::Before";
         ba_type =
             dynamic_cast<const ast::BeforeBlock*>(block)->get_bablock()->get_type()->get_value();
     } else {
         // NOLINTNEXTLINE(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)
-        register_type = 20;
+        register_type = "BAType::After";
         ba_type =
             dynamic_cast<const ast::AfterBlock*>(block)->get_bablock()->get_type()->get_value();
     }
@@ -2867,13 +2835,13 @@ static size_t get_register_type_for_ba_block(const ast::Block* block) {
     /// associated blocks have different values (1 to 4) based on type.
     /// These values are based on neuron/coreneuron implementation details.
     if (ba_type == BATYPE_BREAKPOINT) {
-        register_type += 1;
+        register_type += " + BAType::Breakpoint";
     } else if (ba_type == BATYPE_SOLVE) {
-        register_type += 2;
+        register_type += " + BAType::Solve";
     } else if (ba_type == BATYPE_INITIAL) {
-        register_type += 3;
+        register_type += " + BAType::Initial";
     } else if (ba_type == BATYPE_STEP) {
-        register_type += 4;
+        register_type += " + BAType::Step";
     } else {
         throw std::runtime_error("Unhandled Before/After type encountered during code generation");
     }
@@ -3029,7 +2997,7 @@ void CodegenCVisitor::print_mechanism_register() {
     for (size_t i = 0; i < info.before_after_blocks.size(); i++) {
         // register type and associated function name for the block
         const auto& block = info.before_after_blocks[i];
-        size_t register_type = get_register_type_for_ba_block(block);
+        std::string register_type = get_register_type_for_ba_block(block);
         std::string function_name = method_name(fmt::format("nrn_before_after_{}", i));
         printer->fmt_line("hoc_reg_ba(mech_type, {}, {});", function_name, register_type);
     }
@@ -3593,10 +3561,12 @@ void CodegenCVisitor::print_nrn_destructor() {
 
 
 void CodegenCVisitor::print_functors_definitions() {
+    codegen = true;
     for (const auto& functor_name: info.functor_names) {
         printer->add_newline(2);
         print_functor_definition(*functor_name.first);
     }
+    codegen = false;
 }
 
 
@@ -3714,8 +3684,10 @@ void CodegenCVisitor::print_watch_check() {
         printer->add_indent();
         printer->add_text("net_send_buffering(");
         auto t = get_variable_name("t");
-        printer->add_text(
-            fmt::format("ml->_net_send_buffer, 0, {}, -1, {}, {}+0.0, ", tqitem, point_process, t));
+        printer->fmt_text("nt, ml->_net_send_buffer, 0, {}, -1, {}, {}+0.0, ",
+                          tqitem,
+                          point_process,
+                          t);
         watch->get_value()->accept(*this);
         printer->add_text(");");
         printer->add_newline();
@@ -3794,8 +3766,9 @@ void CodegenCVisitor::print_net_send_call(const FunctionCall& node) {
     std::string weight_index = "weight_index";
     std::string pnt = "pnt";
 
-    // for non-net_receieve functions i.e. initial block, the weight_index argument is 0.
-    if (!printing_net_receive) {
+    // for functions not generated from NET_RECEIVE blocks (i.e. top level INITIAL block)
+    // the weight_index argument is 0.
+    if (!printing_net_receive && !printing_net_init) {
         weight_index = "0";
         auto var = get_variable_name("point_process");
         if (info.artificial_cell) {
@@ -3811,7 +3784,7 @@ void CodegenCVisitor::print_net_send_call(const FunctionCall& node) {
         auto point_process = get_variable_name("point_process");
         std::string t = get_variable_name("t");
         printer->add_text("net_send_buffering(");
-        printer->fmt_text("ml->_net_send_buffer, 0, {}, {}, {}, {}+", tqitem, weight_index, point_process, t);
+        printer->fmt_text("nt, ml->_net_send_buffer, 0, {}, {}, {}, {}+", tqitem, weight_index, point_process, t);
     }
     // clang-format off
     print_vector_elements(arguments, ", ");
@@ -3820,7 +3793,7 @@ void CodegenCVisitor::print_net_send_call(const FunctionCall& node) {
 
 
 void CodegenCVisitor::print_net_move_call(const FunctionCall& node) {
-    if (!printing_net_receive) {
+    if (!printing_net_receive && !printing_net_init) {
         throw std::runtime_error("Error : net_move only allowed in NET_RECEIVE block");
     }
 
@@ -3839,7 +3812,7 @@ void CodegenCVisitor::print_net_move_call(const FunctionCall& node) {
         auto point_process = get_variable_name("point_process");
         std::string t = get_variable_name("t");
         printer->add_text("net_send_buffering(");
-        printer->fmt_text("ml->_net_send_buffer, 2, {}, {}, {}, ", tqitem, weight_index, point_process);
+        printer->fmt_text("nt, ml->_net_send_buffer, 2, {}, {}, {}, ", tqitem, weight_index, point_process);
         print_vector_elements(arguments, ", ");
         printer->add_text(", 0.0");
         printer->add_text(")");
@@ -3855,7 +3828,7 @@ void CodegenCVisitor::print_net_event_call(const FunctionCall& node) {
     } else {
         auto point_process = get_variable_name("point_process");
         printer->add_text("net_send_buffering(");
-        printer->fmt_text("ml->_net_send_buffer, 1, -1, -1, {}, ", point_process);
+        printer->fmt_text("nt, ml->_net_send_buffer, 1, -1, -1, {}, ", point_process);
         print_vector_elements(arguments, ", ");
         printer->add_text(", 0.0");
     }
@@ -3909,6 +3882,7 @@ void CodegenCVisitor::print_net_init() {
     rename_net_receive_arguments(*info.net_receive_node, *node);
 
     codegen = true;
+    printing_net_init = true;
     auto args = "Point_process* pnt, int weight_index, double flag";
     printer->add_newline(2);
     printer->add_line("/** initialize block for net receive */");
@@ -3928,6 +3902,7 @@ void CodegenCVisitor::print_net_init() {
     }
     printer->end_block(1);
     codegen = false;
+    printing_net_init = false;
 }
 
 
@@ -4018,6 +3993,10 @@ void CodegenCVisitor::print_net_receive_buffering(bool need_mech_inst) {
     printer->end_block(1);
 }
 
+void CodegenCVisitor::print_net_send_buffering_cnt_update() const {
+    printer->add_line("i = nsb->_cnt++;");
+}
+
 void CodegenCVisitor::print_net_send_buffering_grow() {
     printer->start_block("if (i >= nsb->_size)");
     printer->add_line("nsb->grow();");
@@ -4032,12 +4011,11 @@ void CodegenCVisitor::print_net_send_buffering() {
     printer->add_newline(2);
     print_device_method_annotation();
     auto args =
-        "NetSendBuffer_t* nsb, int type, int vdata_index, "
+        "const NrnThread* nt, NetSendBuffer_t* nsb, int type, int vdata_index, "
         "int weight_index, int point_index, double t, double flag";
     printer->fmt_start_block("static inline void net_send_buffering({})", args);
     printer->add_line("int i = 0;");
-    print_device_atomic_capture_annotation();
-    printer->add_line("i = nsb->_cnt++;");
+    print_net_send_buffering_cnt_update();
     print_net_send_buffering_grow();
     printer->start_block("if (i < nsb->_size)");
     printer->add_line("nsb->_sendtype[i] = type;");
@@ -4608,7 +4586,6 @@ void CodegenCVisitor::print_g_unused() const {
 
 void CodegenCVisitor::print_compute_functions() {
     print_top_verbatim_blocks();
-    print_function_prototypes();
     for (const auto& procedure: info.procedures) {
         print_procedure(*procedure);
     }
@@ -4656,6 +4633,7 @@ void CodegenCVisitor::print_codegen_routines() {
     print_nrn_alloc();
     print_nrn_constructor();
     print_nrn_destructor();
+    print_function_prototypes();
     print_functors_definitions();
     print_compute_functions();
     print_check_table_thread_function();
