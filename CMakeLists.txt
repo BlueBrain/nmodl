@@ -22,6 +22,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
 # =============================================================================
 option(NMODL_ENABLE_PYTHON_BINDINGS "Enable pybind11 based python bindings" ON)
 option(NMODL_ENABLE_LEGACY_UNITS "Use original faraday, R, etc. instead of 2019 nist constants" OFF)
+option(NMODL_ENABLE_TESTS "Enable build of tests" ON)
 if(NMODL_ENABLE_LEGACY_UNITS)
   add_definitions(-DUSE_LEGACY_UNITS)
 endif()
@@ -205,7 +206,7 @@ set(MEMORYCHECK_COMMAND_OPTIONS
                                  --track-origins=yes \
                                  --show-possibly-lost=no")
 # do not enable tests if nmodl is used as submodule
-if(NOT NMODL_AS_SUBPROJECT)
+if(NOT NMODL_AS_SUBPROJECT AND NMODL_ENABLE_TESTS)
   include(CTest)
   add_subdirectory(test/unit)
   add_subdirectory(test/integration)
