@@ -88,7 +88,7 @@ jobs:
           cd _skbuild/linux-x86_64-3.8/setuptools/sphinx;
           rm -rf doctest doctrees && touch .nojekyll;
           echo "<meta http-equiv=\"refresh\" content=\"0; url=./html/index.html\" />" > index.html;
-          echo ::set-output name=status::done
+          echo "status=done" >> $GITHUB_OUTPUT
         env:
           CCACHE_DIR: ${{runner.workspace}}/ccache
           
