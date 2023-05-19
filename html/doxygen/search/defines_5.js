@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['linf_5499',['LINF',['../modl_8h.html#a3fb5b8d5f980b6c3d91b14799de5e2fc',1,'modl.h']]]
+  ['nlinf_5496',['NLINF',['../modl_8h.html#af41b52becd124ffeffcafeddbdc1041c',1,'modl.h']]]
 ];

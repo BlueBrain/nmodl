@@ -91,7 +91,6 @@ $(document).ready(function(){initNavTree('parser_2parser_8cpp.html',''); initRes
 
 <div class="header">
   <div class="summary">
-<a href="#define-members">Macros</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">parser.cpp File Reference</div>  </div>
@@ -99,7 +98,8 @@ $(document).ready(function(){initNavTree('parser_2parser_8cpp.html',''); initRes
 <div class="contents">
 <div class="textblock"><code>#include &lt;string&gt;</code><br />
 <code>#include &lt;utility&gt;</code><br />
-<code>#include &lt;catch2/catch.hpp&gt;</code><br />
+<code>#include &lt;catch2/catch_test_macros.hpp&gt;</code><br />
+<code>#include &lt;catch2/matchers/catch_matchers_string.hpp&gt;</code><br />
 <code>#include &quot;<a class="el" href="program_8hpp_source.html">ast/program.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="modtoken_8hpp_source.html">lexer/modtoken.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="diffeq__driver_8hpp_source.html">parser/diffeq_driver.hpp</a>&quot;</code><br />
@@ -112,17 +112,12 @@ $(document).ready(function(){initNavTree('parser_2parser_8cpp.html',''); initRes
 </div>
 <p><a href="parser_2parser_8cpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
-Macros</h2></td></tr>
-<tr class="memitem:a656eb5868e824d59f489f910db438420"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="parser_2parser_8cpp.html#a656eb5868e824d59f489f910db438420">CATCH_CONFIG_MAIN</a></td></tr>
-<tr class="separator:a656eb5868e824d59f489f910db438420"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:ab8f5d9e0e195c3833834465f29dc25d3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="parser_2parser_8cpp.html#ab8f5d9e0e195c3833834465f29dc25d3">is_valid_construct</a> (const std::string &amp;construct)</td></tr>
 <tr class="separator:ab8f5d9e0e195c3833834465f29dc25d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a429fa5cda167dbaff59477586d3fec82"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="parser_2parser_8cpp.html#a429fa5cda167dbaff59477586d3fec82">SCENARIO</a> (&quot;NMODL can accept \\r as return char for one line comment&quot;, &quot;[parser]&quot;)</td></tr>
-<tr class="separator:a429fa5cda167dbaff59477586d3fec82"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6cf8f396b15424aca1caa406a0e99cf"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="parser_2parser_8cpp.html#ae6cf8f396b15424aca1caa406a0e99cf">SCENARIO</a> (&quot;NMODL can accept CR as return char for one line comment&quot;, &quot;[parser]&quot;)</td></tr>
+<tr class="separator:ae6cf8f396b15424aca1caa406a0e99cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6a826251ccc7325a9ae6198fca0a02f8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="parser_2parser_8cpp.html#a6a826251ccc7325a9ae6198fca0a02f8">SCENARIO</a> (&quot;NMODL can define macros using DEFINE keyword&quot;, &quot;[parser]&quot;)</td></tr>
 <tr class="separator:a6a826251ccc7325a9ae6198fca0a02f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8b501fbabfd46e7fc1fe7a45c67bebdb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="parser_2parser_8cpp.html#a8b501fbabfd46e7fc1fe7a45c67bebdb">SCENARIO</a> (&quot;Macros can be used anywhere in the mod file&quot;)</td></tr>
@@ -148,23 +143,6 @@ Functions</h2></td></tr>
 <tr class="memitem:ad884ac1495903580a95f88fe74984f24"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="parser_2parser_8cpp.html#ad884ac1495903580a95f88fe74984f24">SCENARIO</a> (&quot;Check if a NEURON block is parsed with correct location info in its token&quot;)</td></tr>
 <tr class="separator:ad884ac1495903580a95f88fe74984f24"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Macro Definition Documentation</h2>
-<a id="a656eb5868e824d59f489f910db438420"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a656eb5868e824d59f489f910db438420">&#9670;&nbsp;</a></span>CATCH_CONFIG_MAIN</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define CATCH_CONFIG_MAIN</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="parser_2parser_8cpp_source.html#l00008">8</a> of file <a class="el" href="parser_2parser_8cpp_source.html">parser.cpp</a>.</p>
-
-</div>
-</div>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="ab8f5d9e0e195c3833834465f29dc25d3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab8f5d9e0e195c3833834465f29dc25d3">&#9670;&nbsp;</a></span>is_valid_construct()</h2>
@@ -182,7 +160,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="parser_2parser_8cpp_source.html#l00031">31</a> of file <a class="el" href="parser_2parser_8cpp_source.html">parser.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="parser_2parser_8cpp_source.html#l00030">30</a> of file <a class="el" href="parser_2parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -212,7 +190,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="parser_2parser_8cpp_source.html#l00245">245</a> of file <a class="el" href="parser_2parser_8cpp_source.html">parser.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="parser_2parser_8cpp_source.html#l00246">246</a> of file <a class="el" href="parser_2parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -232,7 +210,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="parser_2parser_8cpp_source.html#l00255">255</a> of file <a class="el" href="parser_2parser_8cpp_source.html">parser.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="parser_2parser_8cpp_source.html#l00256">256</a> of file <a class="el" href="parser_2parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -252,7 +230,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="parser_2parser_8cpp_source.html#l00199">199</a> of file <a class="el" href="parser_2parser_8cpp_source.html">parser.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="parser_2parser_8cpp_source.html#l00200">200</a> of file <a class="el" href="parser_2parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -272,7 +250,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="parser_2parser_8cpp_source.html#l00163">163</a> of file <a class="el" href="parser_2parser_8cpp_source.html">parser.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="parser_2parser_8cpp_source.html#l00162">162</a> of file <a class="el" href="parser_2parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -292,7 +270,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="parser_2parser_8cpp_source.html#l00223">223</a> of file <a class="el" href="parser_2parser_8cpp_source.html">parser.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="parser_2parser_8cpp_source.html#l00224">224</a> of file <a class="el" href="parser_2parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -312,7 +290,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="parser_2parser_8cpp_source.html#l00109">109</a> of file <a class="el" href="parser_2parser_8cpp_source.html">parser.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="parser_2parser_8cpp_source.html#l00108">108</a> of file <a class="el" href="parser_2parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -342,12 +320,12 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="parser_2parser_8cpp_source.html#l00180">180</a> of file <a class="el" href="parser_2parser_8cpp_source.html">parser.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="parser_2parser_8cpp_source.html#l00181">181</a> of file <a class="el" href="parser_2parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
-<a id="a429fa5cda167dbaff59477586d3fec82"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a429fa5cda167dbaff59477586d3fec82">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[7/11]</span></h2>
+<a id="ae6cf8f396b15424aca1caa406a0e99cf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae6cf8f396b15424aca1caa406a0e99cf">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[7/11]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -355,7 +333,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">SCENARIO </td>
           <td>(</td>
-          <td class="paramtype">&quot;NMODL can accept \\r as return char for one line comment&quot;&#160;</td>
+          <td class="paramtype">&quot;NMODL can accept CR as return char for one line comment&quot;&#160;</td>
           <td class="paramname">, </td>
         </tr>
         <tr>
@@ -372,7 +350,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="parser_2parser_8cpp_source.html#l00037">37</a> of file <a class="el" href="parser_2parser_8cpp_source.html">parser.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="parser_2parser_8cpp_source.html#l00036">36</a> of file <a class="el" href="parser_2parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -402,7 +380,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="parser_2parser_8cpp_source.html#l00049">49</a> of file <a class="el" href="parser_2parser_8cpp_source.html">parser.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="parser_2parser_8cpp_source.html#l00048">48</a> of file <a class="el" href="parser_2parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -422,7 +400,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="parser_2parser_8cpp_source.html#l00123">123</a> of file <a class="el" href="parser_2parser_8cpp_source.html">parser.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="parser_2parser_8cpp_source.html#l00122">122</a> of file <a class="el" href="parser_2parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -442,7 +420,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="parser_2parser_8cpp_source.html#l00148">148</a> of file <a class="el" href="parser_2parser_8cpp_source.html">parser.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="parser_2parser_8cpp_source.html#l00147">147</a> of file <a class="el" href="parser_2parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -462,7 +440,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="parser_2parser_8cpp_source.html#l00136">136</a> of file <a class="el" href="parser_2parser_8cpp_source.html">parser.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="parser_2parser_8cpp_source.html#l00135">135</a> of file <a class="el" href="parser_2parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>
@@ -492,7 +470,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="parser_2parser_8cpp_source.html#l00218">218</a> of file <a class="el" href="parser_2parser_8cpp_source.html">parser.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="parser_2parser_8cpp_source.html#l00219">219</a> of file <a class="el" href="parser_2parser_8cpp_source.html">parser.cpp</a>.</p>
 
 </div>
 </div>

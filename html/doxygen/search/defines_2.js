@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['derf_5495',['DERF',['../modl_8h.html#a03f3d7e17b9331f1e64621b43b411fc4',1,'modl.h']]]
+  ['eigen_5fdefault_5fdense_5findex_5ftype_5492',['EIGEN_DEFAULT_DENSE_INDEX_TYPE',['../nmodl_8hpp.html#a23fafe2bd4e27ecadab4deb95691bcf4',1,'nmodl.hpp']]],
+  ['eigen_5fdont_5fparallelize_5493',['EIGEN_DONT_PARALLELIZE',['../nmodl_8hpp.html#a78868c5bb48a430b0cf4247122dbc73b',1,'nmodl.hpp']]]
 ];
