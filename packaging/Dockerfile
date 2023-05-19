@@ -35,7 +35,7 @@ RUN curl -L -o bison-3.7.3.tar.gz https://ftp.gnu.org/gnu/bison/bison-3.7.3.tar.
     && cd .. \
     && rm -rf bison-3.7.3.tar.gz bison-3.7.3
 
-ENV PATH /nmodlwheel/flex/bin:/nmodlwheel/bison/bin:/nmodlwheel/cmake/bin:$PATH
+ENV PATH /nmodlwheel/flex/bin:/nmodlwheel/bison/bin:$PATH
 
 # Copy Dockerfile for reference
 COPY Dockerfile .
