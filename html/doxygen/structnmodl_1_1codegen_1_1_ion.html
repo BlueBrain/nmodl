@@ -145,6 +145,9 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:ad3b1eb176f8e00671fb36cc625ad0f49"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnmodl_1_1codegen_1_1_ion.html#ad3b1eb176f8e00671fb36cc625ad0f49">reads</a></td></tr>
 <tr class="memdesc:ad3b1eb176f8e00671fb36cc625ad0f49"><td class="mdescLeft">&#160;</td><td class="mdescRight">ion variables that are being read  <a href="structnmodl_1_1codegen_1_1_ion.html#ad3b1eb176f8e00671fb36cc625ad0f49">More...</a><br /></td></tr>
 <tr class="separator:ad3b1eb176f8e00671fb36cc625ad0f49"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66dcccb8c192e3288d56c75dc5f7853e"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnmodl_1_1codegen_1_1_ion.html#a66dcccb8c192e3288d56c75dc5f7853e">implicit_reads</a></td></tr>
+<tr class="memdesc:a66dcccb8c192e3288d56c75dc5f7853e"><td class="mdescLeft">&#160;</td><td class="mdescRight">ion variables that are being implicitly read  <a href="structnmodl_1_1codegen_1_1_ion.html#a66dcccb8c192e3288d56c75dc5f7853e">More...</a><br /></td></tr>
+<tr class="separator:a66dcccb8c192e3288d56c75dc5f7853e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae116633adc4f16ce78feae5b4d2f8a12"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnmodl_1_1codegen_1_1_ion.html#ae116633adc4f16ce78feae5b4d2f8a12">writes</a></td></tr>
 <tr class="memdesc:ae116633adc4f16ce78feae5b4d2f8a12"><td class="mdescLeft">&#160;</td><td class="mdescRight">ion variables that are being written  <a href="structnmodl_1_1codegen_1_1_ion.html#ae116633adc4f16ce78feae5b4d2f8a12">More...</a><br /></td></tr>
 <tr class="separator:ae116633adc4f16ce78feae5b4d2f8a12"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -202,7 +205,7 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00062">62</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00065">65</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
 
 </div>
 </div>
@@ -233,7 +236,7 @@ Public Attributes</h2></td></tr>
 
 <p>for a given ion, return different variable names/properties like internal/external concentration, reversial potential, ionic current etc. </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00111">111</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00114">114</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
 
 </div>
 </div>
@@ -264,7 +267,7 @@ Public Attributes</h2></td></tr>
 <p>Check if variable name is external cell concentration. </p>
 <p>This is equivalent of IONOUT flag in mod2c. </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00090">90</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00093">93</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
 
 </div>
 </div>
@@ -295,7 +298,7 @@ Public Attributes</h2></td></tr>
 <p>Check if variable name is internal cell concentration. </p>
 <p>This is equivalent of IONIN flag in mod2c. </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00081">81</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00084">84</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
 
 </div>
 </div>
@@ -325,7 +328,7 @@ Public Attributes</h2></td></tr>
 
 <p>check if it is either internal or external concentration </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00104">104</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00107">107</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
 
 </div>
 </div>
@@ -356,7 +359,7 @@ Public Attributes</h2></td></tr>
 <p>Check if variable name is a ionic current. </p>
 <p>This is equivalent of IONCUR flag in mod2c. If it is read variable then also get NRNCURIN flag. If it is write variables then also get NRNCUROUT flag. </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00072">72</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00075">75</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
 
 </div>
 </div>
@@ -387,11 +390,29 @@ Public Attributes</h2></td></tr>
 <p>Check if variable name is reveral potential. </p>
 <p>This is equivalent of IONEREV flag in mod2c. </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00099">99</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00102">102</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a66dcccb8c192e3288d56c75dc5f7853e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a66dcccb8c192e3288d56c75dc5f7853e">&#9670;&nbsp;</a></span>implicit_reads</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::string&gt; nmodl::codegen::Ion::implicit_reads</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>ion variables that are being implicitly read </p>
+
+<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00055">55</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a1ef3560064c6ec5b850f6e9f2b345190"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1ef3560064c6ec5b850f6e9f2b345190">&#9670;&nbsp;</a></span>name</h2>
 
@@ -424,7 +445,7 @@ Public Attributes</h2></td></tr>
 
 <p>if style semantic needed </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00058">58</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00061">61</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
 
 </div>
 </div>
@@ -460,7 +481,7 @@ Public Attributes</h2></td></tr>
 
 <p>ion variables that are being written </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00055">55</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00058">58</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
 
 </div>
 </div>

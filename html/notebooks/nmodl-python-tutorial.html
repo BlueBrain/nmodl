@@ -148,7 +148,7 @@
 </pre></div>
 </div>
 </div>
-<p>If you see any issues, check the <a class="reference external" href="#installation">installation section</a>. Lets take an example of a channel <code class="docutils literal notranslate"><span class="pre">CaDynamics</span></code> :</p>
+<p>If you see any issues, check the installation section. Lets take an example of a channel <code class="docutils literal notranslate"><span class="pre">CaDynamics</span></code> :</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
@@ -255,7 +255,7 @@ UNITS {
 </pre></div>
 </div>
 </div>
-<p>Assuming we have created AST object (as shown <a class="reference external" href="#create-ast">here</a>), we can search for any NMODL construct in the AST using AstLookupVisitor. For example, to find out <code class="docutils literal notranslate"><span class="pre">STATE</span></code> block in the mod file, we can simply do:</p>
+<p>Assuming we have created AST object (as shown here), we can search for any NMODL construct in the AST using AstLookupVisitor. For example, to find out <code class="docutils literal notranslate"><span class="pre">STATE</span></code> block in the mod file, we can simply do:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
@@ -359,7 +359,7 @@ STATE {
 foo = 1.0+gamma
 </pre></div></div>
 </div>
-<p>Every AST node provides <code class="docutils literal notranslate"><span class="pre">accept</span></code> method that takes visitor object as parameter. In above example, we used <code class="docutils literal notranslate"><span class="pre">accept</span></code> method of <code class="docutils literal notranslate"><span class="pre">FunctionBock</span></code> node. This allows to run a given visitor on a specific node. <code class="docutils literal notranslate"><span class="pre">AstLookupVisitor</span></code> provides <code class="docutils literal notranslate"><span class="pre">get_nodes()</span></code> method that can be used to retrive the result of visitor. List of all <code class="docutils literal notranslate"><span class="pre">AstNodeType</span></code> can be found <a class="reference external" href="####">here (todo)</a>.</p>
+<p>Every AST node provides <code class="docutils literal notranslate"><span class="pre">accept</span></code> method that takes visitor object as parameter. In above example, we used <code class="docutils literal notranslate"><span class="pre">accept</span></code> method of <code class="docutils literal notranslate"><span class="pre">FunctionBock</span></code> node. This allows to run a given visitor on a specific node. <code class="docutils literal notranslate"><span class="pre">AstLookupVisitor</span></code> provides <code class="docutils literal notranslate"><span class="pre">get_nodes()</span></code> method that can be used to retrive the result of visitor. List of all <code class="docutils literal notranslate"><span class="pre">AstNodeType</span></code> can be found here (todo).</p>
 </section>
 <section id="Symbol-Table-Visitor">
 <h3>Symbol Table Visitor<a class="headerlink" href="#Symbol-Table-Visitor" title="Permalink to this heading"></a></h3>
