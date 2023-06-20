@@ -117,7 +117,7 @@ setup(
         "jinja2>=2.9.3",
         "jupyter-client",
         "jupyter",
-        "myst_parser",
+        "myst_parser==1.0.0",
         "mistune<3",  # prevents a version conflict with nbconvert
         "nbconvert",
         "nbsphinx>=0.3.2",
