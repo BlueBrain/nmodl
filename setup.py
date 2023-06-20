@@ -124,6 +124,7 @@ setup(
         "pytest>=3.7.2",
         "sphinxcontrib-applehelp<1.0.3", # After this version it needs a toml file to work, no more setup.py
         "sphinxcontrib-htmlhelp<=2.0.0", # After this version it needs a toml file to work, no more setup.py
+        "sphinxcontrib-jquery", # sphinx-rtd-theme forgot to include it
         "sphinx<7",  # myst_parser 2.0.0 only support sphinx >=6 <=7, sphinx_rtd_theme 1.2.2 is still on sphinx < 7
         "sphinx-rtd-theme",
     ]
