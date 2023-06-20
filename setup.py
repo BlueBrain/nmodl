@@ -118,11 +118,11 @@ setup(
         "jupyter-client",
         "jupyter",
         "myst_parser",
-        "mistune<3",  # prevents a version conflict with nbconvert
+        "mistune",
         "nbconvert",
         "nbsphinx>=0.3.2",
         "pytest>=3.7.2",
-        "sphinxcontrib-applehelp",
+        "sphinxcontrib-applehelp<1.0.3", # After this version it needs a toml file to work, no more setup.py
         "sphinxcontrib-htmlhelp",
         "sphinx<7",  # myst_parser 2.0.0 only support sphinx >=6 <=7, sphinx_rtd_theme 1.2.2 is still on sphinx < 7
         "sphinx-rtd-theme",
