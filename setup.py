@@ -124,7 +124,7 @@ setup(
         "pytest>=3.7.2",
         "sphinxcontrib-applehelp",
         "sphinxcontrib-htmlhelp",
-        "sphinx<=7",  # myst_parser 2.0.0 only support sphinx >=6 <=7
+        "sphinx<7",  # myst_parser 2.0.0 only support sphinx >=6 <=7, sphinx_rtd_theme 1.2.2 is still on sphinx < 7
         "sphinx-rtd-theme",
     ]
     + install_requirements,
