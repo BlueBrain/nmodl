@@ -45,7 +45,7 @@ subprocess.call('doxygen Doxyfile', shell=True)
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    "myst_parser==1.0.0",
+    "myst_parser",
     "nbsphinx",
     "sphinx.ext.autodoc",
     "sphinx.ext.coverage",

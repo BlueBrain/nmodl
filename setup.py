@@ -117,14 +117,14 @@ setup(
         "jinja2>=2.9.3",
         "jupyter-client",
         "jupyter",
-        "myst_parser==1.0.0",
+        "myst_parser",
         "mistune<3",  # prevents a version conflict with nbconvert
         "nbconvert",
         "nbsphinx>=0.3.2",
         "pytest>=3.7.2",
-        "sphinxcontrib-applehelp<1.0.3",
-        "sphinxcontrib-htmlhelp<=2.0.0",
-        "sphinx<6",
+        "sphinxcontrib-applehelp",
+        "sphinxcontrib-htmlhelp",
+        "sphinx<=7",  # myst_parser 2.0.0 only support sphinx >=6 <=7
         "sphinx-rtd-theme",
     ]
     + install_requirements,
