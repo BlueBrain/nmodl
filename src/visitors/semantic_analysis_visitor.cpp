@@ -1,15 +1,9 @@
-#include "visitors/semantic_analysis_visitor.hpp"
-#include "ast/function_block.hpp"
-#include "ast/function_table_block.hpp"
-#include "ast/independent_block.hpp"
-#include "ast/procedure_block.hpp"
-#include "ast/program.hpp"
-#include "ast/string.hpp"
-#include "ast/suffix.hpp"
-#include "ast/table_statement.hpp"
-#include "symtab/symbol_properties.hpp"
-#include "utils/logger.hpp"
-#include "visitors/visitor_utils.hpp"
+/*
+ * Copyright 2023 Blue Brain Project, EPFL.
+ * See the top-level LICENSE file for details.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 namespace nmodl {
 namespace visitor {
