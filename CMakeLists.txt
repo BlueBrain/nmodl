@@ -110,7 +110,7 @@ cpp_cc_git_submodule(eigen)
 # We could have fmt incoming from NEURON
 if(NOT TARGET fmt)
   cpp_cc_git_submodule(fmt BUILD PACKAGE fmt REQUIRED)
-endif()  
+endif()
 # If we're building from the submodule, make sure we pass -fPIC so that we can link the code into a
 # shared library later.
 if(NMODL_3RDPARTY_USE_FMT)
