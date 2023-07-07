@@ -94,54 +94,55 @@ $(document).ready(function(){initNavTree('implicit__argument__visitor_8hpp_sourc
 <div class="title">implicit_argument_visitor.hpp</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="implicit__argument__visitor_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*************************************************************************</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment"> * Copyright (C) 2022 Blue Brain Project</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"> * This file is part of NMODL distributed under the terms of the GNU</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"> * Lesser General Public License. See top-level LICENSE file for details.</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment"> *************************************************************************/</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#pragma once</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">/**</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment"> * \file</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment"> * \brief \copybrief nmodl::visitor::ImplicitArgumentVisitor</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="ast__visitor_8hpp.html">visitors/ast_visitor.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
+<a href="implicit__argument__visitor_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment"> * Copyright 2023 Blue Brain Project, EPFL.</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"> * See the top-level LICENSE file for details.</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"> * SPDX-License-Identifier: Apache-2.0</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment"> */</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">/**</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment"> * \file</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment"> * \brief \copybrief nmodl::visitor::ImplicitArgumentVisitor</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment"> */</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="ast__visitor_8hpp.html">visitors/ast_visitor.hpp</a>&quot;</span></div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacenmodl.html">nmodl</a> {</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="keyword">namespace </span>visitor {</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">/**</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment"> * \addtogroup visitor_classes</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment"> * \{</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="comment">/**</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="comment"> * \class ImplicitArgumentVisitor</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="comment"> * \brief %Visitor for adding implicit arguments to [Core]NEURON functions.</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="comment"> * This visitor is used to add implicit arguments to functions (nrn_ghk, ...)</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="comment"> * that have historially been used in MOD files with &quot;fewer&quot; arguments and</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="comment"> * relied on global state, but which now need &quot;more&quot; arguments to be passed so</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="comment"> * that they can be pure functions.</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="structnmodl_1_1visitor_1_1_implicit_argument_visitor.html">   34</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structnmodl_1_1visitor_1_1_implicit_argument_visitor.html">ImplicitArgumentVisitor</a>: <span class="keyword">public</span> <a class="code" href="classnmodl_1_1visitor_1_1_ast_visitor.html">AstVisitor</a> {</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="structnmodl_1_1visitor_1_1_implicit_argument_visitor.html#a446f7946fecb49b14dece70c57355bb6">visit_function_call</a>(<a class="code" href="classnmodl_1_1ast_1_1_function_call.html">ast::FunctionCall</a>&amp; node) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;};</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="comment">/** \} */</span>  <span class="comment">// end of visitor_classes</span></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;}  <span class="comment">// namespace visitor</span></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;}  <span class="comment">// namespace nmodl</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacenmodl.html">nmodl</a> {</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keyword">namespace </span>visitor {</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">/**</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment"> * \addtogroup visitor_classes</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment"> * \{</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment"> */</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="comment">/**</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="comment"> * \class ImplicitArgumentVisitor</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="comment"> * \brief %Visitor for adding implicit arguments to [Core]NEURON functions.</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="comment"> * This visitor is used to add implicit arguments to functions (nrn_ghk, ...)</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="comment"> * that have historially been used in MOD files with &quot;fewer&quot; arguments and</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="comment"> * relied on global state, but which now need &quot;more&quot; arguments to be passed so</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="comment"> * that they can be pure functions.</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="comment"> */</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="structnmodl_1_1visitor_1_1_implicit_argument_visitor.html">   35</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structnmodl_1_1visitor_1_1_implicit_argument_visitor.html">ImplicitArgumentVisitor</a>: <span class="keyword">public</span> <a class="code" href="classnmodl_1_1visitor_1_1_ast_visitor.html">AstVisitor</a> {</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="structnmodl_1_1visitor_1_1_implicit_argument_visitor.html#a446f7946fecb49b14dece70c57355bb6">visit_function_call</a>(<a class="code" href="classnmodl_1_1ast_1_1_function_call.html">ast::FunctionCall</a>&amp; node) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;};</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="comment">/** \} */</span>  <span class="comment">// end of visitor_classes</span></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;}  <span class="comment">// namespace visitor</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;}  <span class="comment">// namespace nmodl</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="anamespacenmodl_html"><div class="ttname"><a href="namespacenmodl.html">nmodl</a></div><div class="ttdoc">encapsulates everything related to NMODL code generation framework</div><div class="ttdef"><b>Definition:</b> <a href="ast__common_8hpp_source.html#l00026">ast_common.hpp:26</a></div></div>
 <div class="ttc" id="aclassnmodl_1_1ast_1_1_function_call_html"><div class="ttname"><a href="classnmodl_1_1ast_1_1_function_call.html">nmodl::ast::FunctionCall</a></div><div class="ttdoc">TODO.</div><div class="ttdef"><b>Definition:</b> <a href="function__call_8hpp_source.html#l00041">function_call.hpp:41</a></div></div>
 <div class="ttc" id="aclassnmodl_1_1visitor_1_1_ast_visitor_html"><div class="ttname"><a href="classnmodl_1_1visitor_1_1_ast_visitor.html">nmodl::visitor::AstVisitor</a></div><div class="ttdoc">Concrete visitor for all AST classes.</div><div class="ttdef"><b>Definition:</b> <a href="ast__visitor_8hpp_source.html#l00037">ast_visitor.hpp:37</a></div></div>
-<div class="ttc" id="astructnmodl_1_1visitor_1_1_implicit_argument_visitor_html_a446f7946fecb49b14dece70c57355bb6"><div class="ttname"><a href="structnmodl_1_1visitor_1_1_implicit_argument_visitor.html#a446f7946fecb49b14dece70c57355bb6">nmodl::visitor::ImplicitArgumentVisitor::visit_function_call</a></div><div class="ttdeci">void visit_function_call(ast::FunctionCall &amp;node) override</div><div class="ttdoc">visit node of type ast::FunctionCall</div><div class="ttdef"><b>Definition:</b> <a href="implicit__argument__visitor_8cpp_source.html#l00027">implicit_argument_visitor.cpp:27</a></div></div>
-<div class="ttc" id="astructnmodl_1_1visitor_1_1_implicit_argument_visitor_html"><div class="ttname"><a href="structnmodl_1_1visitor_1_1_implicit_argument_visitor.html">nmodl::visitor::ImplicitArgumentVisitor</a></div><div class="ttdoc">Visitor for adding implicit arguments to [Core]NEURON functions.</div><div class="ttdef"><b>Definition:</b> <a href="implicit__argument__visitor_8hpp_source.html#l00034">implicit_argument_visitor.hpp:34</a></div></div>
+<div class="ttc" id="astructnmodl_1_1visitor_1_1_implicit_argument_visitor_html_a446f7946fecb49b14dece70c57355bb6"><div class="ttname"><a href="structnmodl_1_1visitor_1_1_implicit_argument_visitor.html#a446f7946fecb49b14dece70c57355bb6">nmodl::visitor::ImplicitArgumentVisitor::visit_function_call</a></div><div class="ttdeci">void visit_function_call(ast::FunctionCall &amp;node) override</div><div class="ttdoc">visit node of type ast::FunctionCall</div><div class="ttdef"><b>Definition:</b> <a href="implicit__argument__visitor_8cpp_source.html#l00018">implicit_argument_visitor.cpp:18</a></div></div>
+<div class="ttc" id="astructnmodl_1_1visitor_1_1_implicit_argument_visitor_html"><div class="ttname"><a href="structnmodl_1_1visitor_1_1_implicit_argument_visitor.html">nmodl::visitor::ImplicitArgumentVisitor</a></div><div class="ttdoc">Visitor for adding implicit arguments to [Core]NEURON functions.</div><div class="ttdef"><b>Definition:</b> <a href="implicit__argument__visitor_8hpp_source.html#l00035">implicit_argument_visitor.hpp:35</a></div></div>
 <div class="ttc" id="aast__visitor_8hpp_html"><div class="ttname"><a href="ast__visitor_8hpp.html">ast_visitor.hpp</a></div><div class="ttdoc">Concrete visitor for all AST classes.</div></div>
 <!-- HTML footer for doxygen 1.8.15-->
 <!-- start footer part -->

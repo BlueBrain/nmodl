@@ -94,12 +94,12 @@ $(document).ready(function(){initNavTree('symbol_8cpp_source.html',''); initResi
 <div class="title">symbol.cpp</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="symbol_8cpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*************************************************************************</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment"> * Copyright (C) 2018-2022 Blue Brain Project</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"> * This file is part of NMODL distributed under the terms of the GNU</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"> * Lesser General Public License. See top-level LICENSE file for details.</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment"> *************************************************************************/</span></div>
+<a href="symbol_8cpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment"> * Copyright 2023 Blue Brain Project, EPFL.</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"> * See the top-level LICENSE file for details.</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"> * SPDX-License-Identifier: Apache-2.0</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment"> */</span></div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="symbol_8hpp.html">symtab/symbol.hpp</a>&quot;</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="logger_8hpp.html">utils/logger.hpp</a>&quot;</span></div>
@@ -112,7 +112,7 @@ $(document).ready(function(){initNavTree('symbol_8cpp_source.html',''); initResi
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keyword">using</span> <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#a7d0b8aa765db0de7491021b4d403b6e2">syminfo::Status</a>;</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#ae738a996fec11f79cac046b4116e4150">Symbol::is_variable</a>() const noexcept {</div>
+<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="classnmodl_1_1symtab_1_1_symbol.html#ae738a996fec11f79cac046b4116e4150">   19</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#ae738a996fec11f79cac046b4116e4150">Symbol::is_variable</a>() const noexcept {</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    <span class="comment">// if symbol has one of the following property then it</span></div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    <span class="comment">// is considered as variable in the NMODL</span></div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    <span class="comment">// clang-format off</span></div>
@@ -122,7 +122,7 @@ $(document).ready(function(){initNavTree('symbol_8cpp_source.html',''); initResi
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;                                    | NmodlType::param_assign</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;                                    | NmodlType::pointer_var</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;                                    | NmodlType::bbcore_pointer_var</div>
-<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="classnmodl_1_1symtab_1_1_symbol.html#ae738a996fec11f79cac046b4116e4150">   29</a></span>&#160;                                    | NmodlType::extern_var</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;                                    | NmodlType::extern_var</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;                                    | NmodlType::assigned_definition</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;                                    | NmodlType::read_ion_var</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;                                    | NmodlType::write_ion_var</div>
@@ -134,7 +134,7 @@ $(document).ready(function(){initNavTree('symbol_8cpp_source.html',''); initResi
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#abe8a6c9be626c83b2a50860c7ebc10cc">has_any_property</a>(var_properties);</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;}</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;std::string <a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#a3a8c66684fa98bbd571779a2cf1b90a4">Symbol::to_string</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="classnmodl_1_1symtab_1_1_symbol.html#a3a8c66684fa98bbd571779a2cf1b90a4">   41</a></span>&#160;std::string <a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#a3a8c66684fa98bbd571779a2cf1b90a4">Symbol::to_string</a>()<span class="keyword"> const </span>{</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    std::string s(<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#af1cef0edf64601c1080a348ec4e8951c">name</a>);</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#a03950ba814ced23a815fe41dc8336cfe">properties</a> != NmodlType::empty) {</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        s += fmt::format(<span class="stringliteral">&quot; [Properties : {}]&quot;</span>, <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#a9615978047cc9d7b43df2f549f2baffe">syminfo::to_string</a>(<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#a03950ba814ced23a815fe41dc8336cfe">properties</a>));</div>
@@ -144,8 +144,8 @@ $(document).ready(function(){initNavTree('symbol_8cpp_source.html',''); initResi
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    }</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keywordflow">return</span> s;</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;}</div>
-<div class="line"><a name="l00051"></a><span class="lineno"><a class="line" href="classnmodl_1_1symtab_1_1_symbol.html#a3a8c66684fa98bbd571779a2cf1b90a4">   51</a></span>&#160; </div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;std::vector&lt;ast::Ast*&gt; <a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#a72c69b92fd0cf748e9bbb8148a02e416">Symbol::get_nodes_by_type</a>(</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
+<div class="line"><a name="l00052"></a><span class="lineno"><a class="line" href="classnmodl_1_1symtab_1_1_symbol.html#a72c69b92fd0cf748e9bbb8148a02e416">   52</a></span>&#160;std::vector&lt;ast::Ast*&gt; <a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#a72c69b92fd0cf748e9bbb8148a02e416">Symbol::get_nodes_by_type</a>(</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    std::initializer_list&lt;ast::AstNodeType&gt; l) <span class="keyword">const</span> noexcept {</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    std::vector&lt;ast::Ast*&gt; _nodes;</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; n: nodes) {</div>
@@ -155,7 +155,7 @@ $(document).ready(function(){initNavTree('symbol_8cpp_source.html',''); initResi
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;                <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;            }</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        }</div>
-<div class="line"><a name="l00062"></a><span class="lineno"><a class="line" href="classnmodl_1_1symtab_1_1_symbol.html#a72c69b92fd0cf748e9bbb8148a02e416">   62</a></span>&#160;    }</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    }</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keywordflow">return</span> _nodes;</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;}</div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
@@ -173,10 +173,10 @@ $(document).ready(function(){initNavTree('symbol_8cpp_source.html',''); initResi
 <div class="ttc" id="aclassnmodl_1_1symtab_1_1_symbol_html_af1cef0edf64601c1080a348ec4e8951c"><div class="ttname"><a href="classnmodl_1_1symtab_1_1_symbol.html#af1cef0edf64601c1080a348ec4e8951c">nmodl::symtab::Symbol::name</a></div><div class="ttdeci">std::string name</div><div class="ttdoc">name of the symbol</div><div class="ttdef"><b>Definition:</b> <a href="symbol_8hpp_source.html#l00057">symbol.hpp:57</a></div></div>
 <div class="ttc" id="anamespacenmodl_1_1symtab_1_1syminfo_html_ad9b6b8559b36d0a500ef5110badcc4db"><div class="ttname"><a href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4db">nmodl::symtab::syminfo::NmodlType</a></div><div class="ttdeci">NmodlType</div><div class="ttdoc">NMODL variable properties.</div><div class="ttdef"><b>Definition:</b> <a href="symbol__properties_8hpp_source.html#l00116">symbol_properties.hpp:116</a></div></div>
 <div class="ttc" id="alogger_8hpp_html"><div class="ttname"><a href="logger_8hpp.html">logger.hpp</a></div><div class="ttdoc">Implement logger based on spdlog library.</div></div>
-<div class="ttc" id="aclassnmodl_1_1symtab_1_1_symbol_html_a72c69b92fd0cf748e9bbb8148a02e416"><div class="ttname"><a href="classnmodl_1_1symtab_1_1_symbol.html#a72c69b92fd0cf748e9bbb8148a02e416">nmodl::symtab::Symbol::get_nodes_by_type</a></div><div class="ttdeci">std::vector&lt; ast::Ast * &gt; get_nodes_by_type(std::initializer_list&lt; ast::AstNodeType &gt; l) const noexcept</div><div class="ttdef"><b>Definition:</b> <a href="symbol_8cpp_source.html#l00062">symbol.cpp:62</a></div></div>
-<div class="ttc" id="aclassnmodl_1_1symtab_1_1_symbol_html_ae738a996fec11f79cac046b4116e4150"><div class="ttname"><a href="classnmodl_1_1symtab_1_1_symbol.html#ae738a996fec11f79cac046b4116e4150">nmodl::symtab::Symbol::is_variable</a></div><div class="ttdeci">bool is_variable() const noexcept</div><div class="ttdoc">check if symbol is a variable in nmodl</div><div class="ttdef"><b>Definition:</b> <a href="symbol_8cpp_source.html#l00029">symbol.cpp:29</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1symtab_1_1_symbol_html_a72c69b92fd0cf748e9bbb8148a02e416"><div class="ttname"><a href="classnmodl_1_1symtab_1_1_symbol.html#a72c69b92fd0cf748e9bbb8148a02e416">nmodl::symtab::Symbol::get_nodes_by_type</a></div><div class="ttdeci">std::vector&lt; ast::Ast * &gt; get_nodes_by_type(std::initializer_list&lt; ast::AstNodeType &gt; l) const noexcept</div><div class="ttdef"><b>Definition:</b> <a href="symbol_8cpp_source.html#l00052">symbol.cpp:52</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1symtab_1_1_symbol_html_ae738a996fec11f79cac046b4116e4150"><div class="ttname"><a href="classnmodl_1_1symtab_1_1_symbol.html#ae738a996fec11f79cac046b4116e4150">nmodl::symtab::Symbol::is_variable</a></div><div class="ttdeci">bool is_variable() const noexcept</div><div class="ttdoc">check if symbol is a variable in nmodl</div><div class="ttdef"><b>Definition:</b> <a href="symbol_8cpp_source.html#l00019">symbol.cpp:19</a></div></div>
 <div class="ttc" id="aclassnmodl_1_1symtab_1_1_symbol_html_a03950ba814ced23a815fe41dc8336cfe"><div class="ttname"><a href="classnmodl_1_1symtab_1_1_symbol.html#a03950ba814ced23a815fe41dc8336cfe">nmodl::symtab::Symbol::properties</a></div><div class="ttdeci">syminfo::NmodlType properties</div><div class="ttdoc">properties of symbol as a result of usage across whole mod file</div><div class="ttdef"><b>Definition:</b> <a href="symbol_8hpp_source.html#l00073">symbol.hpp:73</a></div></div>
-<div class="ttc" id="aclassnmodl_1_1symtab_1_1_symbol_html_a3a8c66684fa98bbd571779a2cf1b90a4"><div class="ttname"><a href="classnmodl_1_1symtab_1_1_symbol.html#a3a8c66684fa98bbd571779a2cf1b90a4">nmodl::symtab::Symbol::to_string</a></div><div class="ttdeci">std::string to_string() const</div><div class="ttdef"><b>Definition:</b> <a href="symbol_8cpp_source.html#l00051">symbol.cpp:51</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1symtab_1_1_symbol_html_a3a8c66684fa98bbd571779a2cf1b90a4"><div class="ttname"><a href="classnmodl_1_1symtab_1_1_symbol.html#a3a8c66684fa98bbd571779a2cf1b90a4">nmodl::symtab::Symbol::to_string</a></div><div class="ttdeci">std::string to_string() const</div><div class="ttdef"><b>Definition:</b> <a href="symbol_8cpp_source.html#l00041">symbol.cpp:41</a></div></div>
 <!-- HTML footer for doxygen 1.8.15-->
 <!-- start footer part -->
 <div id="nav-path" class="navpath">

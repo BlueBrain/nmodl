@@ -94,12 +94,12 @@ $(document).ready(function(){initNavTree('table__data_8cpp_source.html',''); ini
 <div class="title">table_data.cpp</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="table__data_8cpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*************************************************************************</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment"> * Copyright (C) 2018-2022 Blue Brain Project</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"> * This file is part of NMODL distributed under the terms of the GNU</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"> * Lesser General Public License. See top-level LICENSE file for details.</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment"> *************************************************************************/</span></div>
+<a href="table__data_8cpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment"> * Copyright 2023 Blue Brain Project, EPFL.</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"> * See the top-level LICENSE file for details.</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"> * SPDX-License-Identifier: Apache-2.0</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment"> */</span></div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;cassert&gt;</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;iostream&gt;</span></div>
@@ -125,7 +125,7 @@ $(document).ready(function(){initNavTree('table__data_8cpp_source.html',''); ini
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="comment"> *   ----------------------------------------------------------------------------------------</span></div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="comment"> */</span></div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keywordtype">void</span> <a class="code" href="structnmodl_1_1utils_1_1_table_data.html#a62d93ed24adbe07a9f72ec732e176018">TableData::print</a>(std::ostream&amp; stream, <span class="keywordtype">int</span> indent)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="structnmodl_1_1utils_1_1_table_data.html#a407094b179280fe0fb5bdbae67155ed4">   32</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="structnmodl_1_1utils_1_1_table_data.html#a62d93ed24adbe07a9f72ec732e176018">TableData::print</a>(std::ostream&amp; stream, <span class="keywordtype">int</span> indent)<span class="keyword"> const </span>{</div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    constexpr std::size_t PADDING{1};</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="comment"></span> </div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="comment">    /// not necessary to print empty table</span></div>
@@ -135,7 +135,7 @@ $(document).ready(function(){initNavTree('table__data_8cpp_source.html',''); ini
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="comment"></span> </div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="comment">    /// based on indentation level, spaces to prefix</span></div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="comment"></span>    assert(indent &gt;= 0);</div>
-<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="structnmodl_1_1utils_1_1_table_data.html#a407094b179280fe0fb5bdbae67155ed4">   42</a></span>&#160;    <span class="keyword">auto</span> gutter = std::string(<span class="keyword">static_cast&lt;</span>std::size_t<span class="keyword">&gt;</span>(indent) * 4, <span class="charliteral">&#39; &#39;</span>);</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keyword">auto</span> gutter = std::string(<span class="keyword">static_cast&lt;</span>std::size_t<span class="keyword">&gt;</span>(indent) * 4, <span class="charliteral">&#39; &#39;</span>);</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keyword">auto</span> <span class="keyword">const</span> ncolumns = <a class="code" href="structnmodl_1_1utils_1_1_table_data.html#a5d52acd4ad1f650e788e5d3b10ff47d7">headers</a>.size();</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    std::vector&lt;std::size_t&gt; col_width(ncolumns);</div>
@@ -220,7 +220,7 @@ $(document).ready(function(){initNavTree('table__data_8cpp_source.html',''); ini
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;<span class="comment"></span>    stream &lt;&lt; <span class="charliteral">&#39;\n&#39;</span> &lt;&lt; gutter &lt;&lt; separator_line &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;}</div>
 <div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160; </div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;<span class="keywordtype">void</span> <a class="code" href="structnmodl_1_1utils_1_1_table_data.html#a62d93ed24adbe07a9f72ec732e176018">TableData::print</a>(<span class="keywordtype">int</span> indent)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00127"></a><span class="lineno"><a class="line" href="structnmodl_1_1utils_1_1_table_data.html#a62d93ed24adbe07a9f72ec732e176018">  127</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="structnmodl_1_1utils_1_1_table_data.html#a62d93ed24adbe07a9f72ec732e176018">TableData::print</a>(<span class="keywordtype">int</span> indent)<span class="keyword"> const </span>{</div>
 <div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;    <a class="code" href="structnmodl_1_1utils_1_1_table_data.html#a62d93ed24adbe07a9f72ec732e176018">print</a>(std::cout, indent);</div>
 <div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;}</div>
 <div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160; </div>
@@ -236,7 +236,7 @@ $(document).ready(function(){initNavTree('table__data_8cpp_source.html',''); ini
 <div class="ttc" id="agroup__utils_html_gga45f97a3d578ade6b9b49b1a92ec688a6aadb115059e28d960fa8badfac5516667"><div class="ttname"><a href="group__utils.html#gga45f97a3d578ade6b9b49b1a92ec688a6aadb115059e28d960fa8badfac5516667">nmodl::stringutils::text_alignment::center</a></div><div class="ttdeci">@ center</div></div>
 <div class="ttc" id="atable__data_8hpp_html"><div class="ttname"><a href="table__data_8hpp.html">table_data.hpp</a></div><div class="ttdoc">Implement generic table data structure.</div></div>
 <div class="ttc" id="astructnmodl_1_1utils_1_1_table_data_html_a5d52acd4ad1f650e788e5d3b10ff47d7"><div class="ttname"><a href="structnmodl_1_1utils_1_1_table_data.html#a5d52acd4ad1f650e788e5d3b10ff47d7">nmodl::utils::TableData::headers</a></div><div class="ttdeci">TableRowType headers</div><div class="ttdoc">top header/keys</div><div class="ttdef"><b>Definition:</b> <a href="table__data_8hpp_source.html#l00043">table_data.hpp:43</a></div></div>
-<div class="ttc" id="astructnmodl_1_1utils_1_1_table_data_html_a62d93ed24adbe07a9f72ec732e176018"><div class="ttname"><a href="structnmodl_1_1utils_1_1_table_data.html#a62d93ed24adbe07a9f72ec732e176018">nmodl::utils::TableData::print</a></div><div class="ttdeci">void print(int indent=0) const</div><div class="ttdef"><b>Definition:</b> <a href="table__data_8cpp_source.html#l00137">table_data.cpp:137</a></div></div>
+<div class="ttc" id="astructnmodl_1_1utils_1_1_table_data_html_a62d93ed24adbe07a9f72ec732e176018"><div class="ttname"><a href="structnmodl_1_1utils_1_1_table_data.html#a62d93ed24adbe07a9f72ec732e176018">nmodl::utils::TableData::print</a></div><div class="ttdeci">void print(int indent=0) const</div><div class="ttdef"><b>Definition:</b> <a href="table__data_8cpp_source.html#l00127">table_data.cpp:127</a></div></div>
 <div class="ttc" id="agroup__utils_html_ga78e376180e14a209189043cab5e1d642"><div class="ttname"><a href="group__utils.html#ga78e376180e14a209189043cab5e1d642">nmodl::stringutils::align_text</a></div><div class="ttdeci">static std::string align_text(std::string text, int width, text_alignment type)</div><div class="ttdoc">Left/Right/Center-aligns string within a field of width &quot;width&quot;.</div><div class="ttdef"><b>Definition:</b> <a href="string__utils_8hpp_source.html#l00098">string_utils.hpp:98</a></div></div>
 <!-- HTML footer for doxygen 1.8.15-->
 <!-- start footer part -->
