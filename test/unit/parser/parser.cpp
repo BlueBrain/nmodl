@@ -1,16 +1,15 @@
-/*************************************************************************
- * Copyright (C) 2018-2022 Blue Brain Project
+/*
+ * Copyright 2023 Blue Brain Project, EPFL.
+ * See the top-level LICENSE file for details.
  *
- * This file is part of NMODL distributed under the terms of the GNU
- * Lesser General Public License. See top-level LICENSE file for details.
- *************************************************************************/
-
-#define CATCH_CONFIG_MAIN
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 #include <string>
 #include <utility>
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_test_macros.hpp>
+#include <catch2/matchers/catch_matchers_string.hpp>
 
 #include "ast/program.hpp"
 #include "lexer/modtoken.hpp"
@@ -34,8 +33,8 @@ bool is_valid_construct(const std::string& construct) {
 }
 
 
-SCENARIO("NMODL can accept \\r as return char for one line comment", "[parser]") {
-    GIVEN("A comment defined with \\r as return char") {
+SCENARIO("NMODL can accept CR as return char for one line comment", "[parser]") {
+    GIVEN("A comment defined with CR as return char") {
         WHEN("parsing") {
             THEN("success") {
                 REQUIRE(is_valid_construct(R"(: see you next line
@@ -64,7 +63,7 @@ SCENARIO("NMODL can define macros using DEFINE keyword", "[parser]") {
         WHEN("DEFINE SIX 6 DEFINE NSTEP SIX") {
             THEN("parser throws an error") {
                 REQUIRE_THROWS_WITH(is_valid_construct("DEFINE SIX 6 DEFINE NSTEP SIX"),
-                                    Catch::Contains("unexpected INVALID_TOKEN"));
+                                    Catch::Matchers::ContainsSubstring("unexpected INVALID_TOKEN"));
             }
         }
     }
@@ -73,7 +72,7 @@ SCENARIO("NMODL can define macros using DEFINE keyword", "[parser]") {
         WHEN("DEFINE NSTEP 6.0") {
             THEN("parser throws an exception") {
                 REQUIRE_THROWS_WITH(is_valid_construct("DEFINE NSTEP 6.0"),
-                                    Catch::Contains("unexpected REAL"));
+                                    Catch::Matchers::ContainsSubstring("unexpected REAL"));
             }
         }
     }
@@ -82,7 +81,7 @@ SCENARIO("NMODL can define macros using DEFINE keyword", "[parser]") {
         WHEN("DEFINE NSTEP") {
             THEN("parser throws an exception") {
                 REQUIRE_THROWS_WITH(is_valid_construct("DEFINE NSTEP"),
-                                    Catch::Contains("expecting INTEGER"));
+                                    Catch::Matchers::ContainsSubstring("expecting INTEGER"));
             }
         }
     }
@@ -91,7 +90,7 @@ SCENARIO("NMODL can define macros using DEFINE keyword", "[parser]") {
         WHEN("DEFINE NSTEP SIX") {
             THEN("parser throws an exception") {
                 REQUIRE_THROWS_WITH(is_valid_construct("DEFINE NSTEP SIX"),
-                                    Catch::Contains("expecting INTEGER"));
+                                    Catch::Matchers::ContainsSubstring("expecting INTEGER"));
             }
         }
     }
@@ -100,7 +99,7 @@ SCENARIO("NMODL can define macros using DEFINE keyword", "[parser]") {
         WHEN("DEFINE 6") {
             THEN("parser throws an exception") {
                 REQUIRE_THROWS_WITH(is_valid_construct("DEFINE 6"),
-                                    Catch::Contains("expecting NAME"));
+                                    Catch::Matchers::ContainsSubstring("expecting NAME"));
             }
         }
     }
@@ -134,7 +133,7 @@ SCENARIO("NMODL parser accepts empty unit specification") {
 }
 
 SCENARIO("NMODL parser running number of valid NMODL constructs") {
-    nmodl::utils::TempFile unit("Unit.inc", nmodl_valid_constructs.at("unit_statement_1").input);
+    TempFile unit("Unit.inc", nmodl_valid_constructs.at("unit_statement_1").input);
     for (const auto& construct: nmodl_valid_constructs) {
         auto test_case = construct.second;
         GIVEN(test_case.name) {
@@ -162,19 +161,20 @@ SCENARIO("NMODL parser running number of invalid NMODL constructs") {
 
 SCENARIO("Check that the parser doesn't crash when passing invalid INCLUDE constructs") {
     GIVEN("An empty filename") {
-        REQUIRE_THROWS_WITH(is_valid_construct("INCLUDE \"\""), Catch::Contains("empty filename"));
+        REQUIRE_THROWS_WITH(is_valid_construct("INCLUDE \"\""),
+                            Catch::Matchers::ContainsSubstring("empty filename"));
     }
 
     GIVEN("An missing included file") {
         REQUIRE_THROWS_WITH(is_valid_construct("INCLUDE \"unknown.file\""),
-                            Catch::Contains("can not open file : unknown.file"));
+                            Catch::Matchers::ContainsSubstring(
+                                "can not open file : \"unknown.file\""));
     }
 
     GIVEN("An invalid included file") {
-        nmodl::utils::TempFile included("included.file",
-                                        nmodl_invalid_constructs.at("title_1").input);
+        TempFile included("included.file", nmodl_invalid_constructs.at("title_1").input);
         REQUIRE_THROWS_WITH(is_valid_construct("INCLUDE \"included.file\""),
-                            Catch::Contains("unexpected End of file"));
+                            Catch::Matchers::ContainsSubstring("unexpected End of file"));
     }
 }
 
@@ -189,9 +189,9 @@ SCENARIO("NEURON block can add CURIE information", "[parser][represents]") {
     GIVEN("Incomplete CURIE information statement") {
         THEN("parser throws an error") {
             REQUIRE_THROWS_WITH(is_valid_construct("NEURON { REPRESENTS }"),
-                                Catch::Contains("Lexer Error"));
+                                Catch::Matchers::ContainsSubstring("Lexer Error"));
             REQUIRE_THROWS_WITH(is_valid_construct("NEURON { REPRESENTS NCIT}"),
-                                Catch::Contains("Lexer Error"));
+                                Catch::Matchers::ContainsSubstring("Lexer Error"));
         }
     }
 }
@@ -199,7 +199,7 @@ SCENARIO("NEURON block can add CURIE information", "[parser][represents]") {
 
 SCENARIO("Check parents in valid NMODL constructs") {
     nmodl::parser::NmodlDriver driver;
-    nmodl::utils::TempFile unit("Unit.inc", nmodl_valid_constructs.at("unit_statement_1").input);
+    TempFile unit("Unit.inc", nmodl_valid_constructs.at("unit_statement_1").input);
     for (const auto& construct: nmodl_valid_constructs) {
         // parse the string and get the ast
         const auto ast = driver.parse_string(construct.second.input);

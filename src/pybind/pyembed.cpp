@@ -1,15 +1,19 @@
-/*************************************************************************
- * Copyright (C) 2018-2022 Blue Brain Project
+/*
+ * Copyright 2023 Blue Brain Project, EPFL.
+ * See the top-level LICENSE file for details.
  *
- * This file is part of NMODL distributed under the terms of the GNU
- * Lesser General Public License. See top-level LICENSE file for details.
- *************************************************************************/
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 #include <cstdlib>
 #include <dlfcn.h>
+#include <filesystem>
 
+#include "config/config.h"
 #include "pybind/pyembed.hpp"
 #include "utils/logger.hpp"
+
+namespace fs = std::filesystem;
 
 namespace nmodl {
 
@@ -41,16 +45,21 @@ void EmbeddedPythonLoader::load_libraries() {
         logger->critical(errstr);
         throw std::runtime_error("Failed to dlopen");
     }
-    const auto pybind_wraplib_env = std::getenv("NMODL_WRAPLIB");
-    if (!pybind_wraplib_env) {
-        logger->critical(
-            "NMODL_WRAPLIB environment variable must be set to load the pybind wrapper library");
-        throw std::runtime_error("NMODL_WRAPLIB not set");
+    if (std::getenv("NMODLHOME") == nullptr) {
+        logger->critical("NMODLHOME environment variable must be set to load embedded python");
+        throw std::runtime_error("NMODLHOME not set");
     }
-    pybind_wrapper_handle = dlopen(pybind_wraplib_env, dlopen_opts);
+    auto pybind_wraplib_env = fs::path(std::getenv("NMODLHOME")) / "lib" / "libpywrapper";
+    pybind_wraplib_env.concat(CMakeInfo::SHARED_LIBRARY_SUFFIX);
+    if (!fs::exists(pybind_wraplib_env)) {
+        logger->critical("NMODLHOME doesn't contain libpywrapper{} library",
+                         CMakeInfo::SHARED_LIBRARY_SUFFIX);
+        throw std::runtime_error("NMODLHOME doesn't have lib/libpywrapper library");
+    }
+    pybind_wrapper_handle = dlopen(pybind_wraplib_env.c_str(), dlopen_opts);
     if (!pybind_wrapper_handle) {
         const auto errstr = dlerror();
-        logger->critical("Tried but failed to load {}", pybind_wraplib_env);
+        logger->critical("Tried but failed to load {}", pybind_wraplib_env.string());
         logger->critical(errstr);
         throw std::runtime_error("Failed to dlopen");
     }

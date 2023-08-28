@@ -1,11 +1,12 @@
-/*************************************************************************
- * Copyright (C) 2018-2022 Blue Brain Project
+/*
+ * Copyright 2023 Blue Brain Project, EPFL.
+ * See the top-level LICENSE file for details.
  *
- * This file is part of NMODL distributed under the terms of the GNU
- * Lesser General Public License. See top-level LICENSE file for details.
- *************************************************************************/
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_test_macros.hpp>
+#include <catch2/matchers/catch_matchers_string.hpp>
 
 #include "ast/program.hpp"
 #include "parser/nmodl_driver.hpp"
@@ -152,7 +153,8 @@ SCENARIO("Symbol table generation with Perf stat visitor", "[visitor][performanc
         WHEN("Perf visitor pass runs before symtab visitor") {
             PerfVisitor v;
             THEN("exception is thrown") {
-                REQUIRE_THROWS_WITH(v.visit_program(*ast), Catch::Contains("table not setup"));
+                REQUIRE_THROWS_WITH(v.visit_program(*ast),
+                                    Catch::Matchers::ContainsSubstring("table not setup"));
             }
         }
     }

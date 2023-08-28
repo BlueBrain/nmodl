@@ -137,12 +137,13 @@ jobs:
             ${{hashfiles('matrix.json')}}-${{github.ref}}-
             ${{hashfiles('matrix.json')}}-
 
-      - name: Build, Test and Install
+      - name: Build
         shell: bash
         working-directory: ${{runner.workspace}}/nmodl/build
         env:
           CCACHE_BASEDIR: ${{runner.workspace}}/nmodl
           CCACHE_DIR: ${{runner.workspace}}/ccache
+          PYTHONMALLOC: malloc
         run:  |
           if ccache --version | grep -E '^ccache version 4\.(4|4\.1)$'
           then
@@ -156,11 +157,17 @@ jobs:
           ccache -vs 2>/dev/null || ccache -s
           cmake --build .
           ccache -vs 2>/dev/null || ccache -s
-
-          echo "------- Testing -------"
+      - name: Test
+        shell: bash
+        working-directory: ${{runner.workspace}}/nmodl/build
+        env:
+          PYTHONMALLOC: malloc
+        run:  |
           ctest --output-on-failure -T Test
-
-          echo "------- Installing -------"
+      - name: Install
+        shell: bash
+        working-directory: ${{runner.workspace}}/nmodl/build
+        run:  |
           cmake --build . --target install
 
       - uses: actions/upload-artifact@v3

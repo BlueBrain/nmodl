@@ -1,9 +1,9 @@
-/*************************************************************************
- * Copyright (C) 2018-2022 Blue Brain Project
+/*
+ * Copyright 2023 Blue Brain Project, EPFL.
+ * See the top-level LICENSE file for details.
  *
- * This file is part of NMODL distributed under the terms of the GNU
- * Lesser General Public License. See top-level LICENSE file for details.
- *************************************************************************/
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 #pragma once
 
@@ -12,6 +12,7 @@
  * \brief Parser implementations
  */
 
+#include <filesystem>
 #include <string>
 #include <unordered_map>
 
@@ -110,10 +111,11 @@ class NmodlDriver {
      * \param loc optional location when \a filename is dictated
      * by an `INCLUDE` NMODL directive.
      */
-    std::shared_ptr<ast::Program> parse_file(const std::string& filename,
+    std::shared_ptr<ast::Program> parse_file(const std::filesystem::path& filename,
                                              const location* loc = nullptr);
     //// parse file specified in nmodl include directive
-    std::shared_ptr<ast::Include> parse_include(const std::string& filename, const location& loc);
+    std::shared_ptr<ast::Include> parse_include(const std::filesystem::path& filename,
+                                                const location& loc);
 
     void set_verbose(bool b) {
         verbose = b;

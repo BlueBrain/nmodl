@@ -1,11 +1,11 @@
-/*************************************************************************
- * Copyright (C) 2018-2022 Blue Brain Project
+/*
+ * Copyright 2023 Blue Brain Project, EPFL.
+ * See the top-level LICENSE file for details.
  *
- * This file is part of NMODL distributed under the terms of the GNU
- * Lesser General Public License. See top-level LICENSE file for details.
- *************************************************************************/
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_test_macros.hpp>
 
 #include "ast/program.hpp"
 #include "parser/nmodl_driver.hpp"
@@ -41,7 +41,7 @@ std::string run_nmodl_visitor(const std::string& text) {
 }
 
 SCENARIO("Convert AST back to NMODL form", "[visitor][nmodl]") {
-    nmodl::utils::TempFile unit("Unit.inc", nmodl_valid_constructs.at("unit_statement_1").input);
+    TempFile unit("Unit.inc", nmodl_valid_constructs.at("unit_statement_1").input);
     for (const auto& construct: nmodl_valid_constructs) {
         auto test_case = construct.second;
         const std::string& input_nmodl_text = reindent_text(test_case.input);

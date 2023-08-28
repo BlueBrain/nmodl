@@ -56,8 +56,7 @@ jobs:
           restore-keys: |
             cov-${{github.ref}}-
             cov-
-      - name: Build and Test for Coverage
-        id: codecov
+      - name: Build for Coverage
         shell: bash
         working-directory: ${{runner.workspace}}/nmodl
         run:  |
@@ -71,13 +70,18 @@ jobs:
           ccache -s
           cmake --build .
           ccache -s
-          (cd ..;  lcov --capture  --initial --directory . --no-external --output-file build/coverage-base.info --exclude "*/ext/*")
-          ctest --output-on-failure
-          (cd ..; lcov --capture  --directory . --no-external --output-file build/coverage-run.info --exclude "*/ext/*")
-          lcov --add-tracefile coverage-base.info --add-tracefile coverage-run.info --output-file coverage.info
-          lcov --list coverage.info
         env:
           CCACHE_DIR: ${{runner.workspace}}/ccache
+      - name: Test for Coverage
+        id: codecov
+        shell: bash
+        working-directory: ${{runner.workspace}}/nmodl
+        run:  |
+          lcov --capture  --initial --directory . --no-external --output-file build/coverage-base.info --exclude "*/ext/*"
+          (cd build; ctest --output-on-failure)
+          lcov --capture  --directory . --no-external --output-file build/coverage-run.info --exclude "*/ext/*"
+          (cd build; lcov --add-tracefile coverage-base.info --add-tracefile coverage-run.info --output-file coverage.info)
+          (cd build; lcov --list coverage.info)
       - uses: codecov/codecov-action@v3
         with:
           files: ./build/coverage.info

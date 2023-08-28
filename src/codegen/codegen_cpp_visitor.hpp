@@ -1,9 +1,9 @@
-/*************************************************************************
- * Copyright (C) 2018-2022 Blue Brain Project
+/*
+ * Copyright 2023 Blue Brain Project, EPFL.
+ * See the top-level LICENSE file for details.
  *
- * This file is part of NMODL distributed under the terms of the GNU
- * Lesser General Public License. See top-level LICENSE file for details.
- *************************************************************************/
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 #pragma once
 
@@ -236,6 +236,12 @@ class CodegenCVisitor: public visitor::ConstAstVisitor {
      * \c true if currently net_receive block being printed
      */
     bool printing_net_receive = false;
+
+    /**
+     * \c true if currently initial block of net_receive being printed
+     */
+    bool printing_net_init = false;
+
 
     /**
      * \c true if currently printing top level verbatim blocks

@@ -1,9 +1,9 @@
-/*************************************************************************
- * Copyright (C) 2018-2022 Blue Brain Project
+/*
+ * Copyright 2023 Blue Brain Project, EPFL.
+ * See the top-level LICENSE file for details.
  *
- * This file is part of NMODL distributed under the terms of the GNU
- * Lesser General Public License. See top-level LICENSE file for details.
- *************************************************************************/
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 #pragma once
 
@@ -81,8 +81,8 @@ class DiffEqContext {
     /// return solution for cnexp method
     std::string get_cnexp_solution() const;
 
-    /// return solution for euler method
-    std::string get_euler_solution() const;
+    /// return only the derivate for euler method
+    std::string get_euler_derivate() const;
 
     /// return solution for non-cnexp method
     std::string get_non_cnexp_solution() const;

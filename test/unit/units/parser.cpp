@@ -1,16 +1,15 @@
-/*************************************************************************
- * Copyright (C) 2018-2022 Blue Brain Project
+/*
+ * Copyright 2023 Blue Brain Project, EPFL.
+ * See the top-level LICENSE file for details.
  *
- * This file is part of NMODL distributed under the terms of the GNU
- * Lesser General Public License. See top-level LICENSE file for details.
- *************************************************************************/
-
-#define CATCH_CONFIG_MAIN
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 #include <string>
 #include <utility>
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_test_macros.hpp>
+#include <catch2/matchers/catch_matchers_string.hpp>
 
 #include "config/config.h"
 #include "parser/diffeq_driver.hpp"
@@ -22,6 +21,7 @@
 //=============================================================================
 
 using namespace nmodl::test_utils;
+using Catch::Matchers::ContainsSubstring;
 
 // Driver is defined as global to store all the units inserted to it and to be
 // able to define complex units based on base units
@@ -39,10 +39,6 @@ std::string parse_string(const std::string& unit_definition) {
     correctness_driver.table->print_units_sorted(ss);
     correctness_driver.table->print_base_units(ss);
     return ss.str();
-}
-
-bool is_substring(const std::string& str1, const std::string& str2) {
-    return str1.find(str2) != std::string::npos;
 }
 
 SCENARIO("Unit parser accepting valid units definition", "[unit][parser]") {
@@ -125,6 +121,16 @@ SCENARIO("Unit parser accepting valid units definition", "[unit][parser]") {
                 REQUIRE(is_valid_construct("dipotre\t\t\t/m\n"));
             }
         }
+        WHEN("Nominator is unknown") {
+            THEN("it throws") {
+                REQUIRE_THROWS(parse_string("foo 1 pew/m\n"));
+            }
+        }
+        WHEN("Denominator is unknown") {
+            THEN("it throws") {
+                REQUIRE_THROWS(parse_string("foo 1 m/pew\n"));
+            }
+        }
     }
     GIVEN("A double number and some units") {
         WHEN("Double number is multiplied by a power of 10 with division of multiple units") {
@@ -135,6 +141,19 @@ SCENARIO("Unit parser accepting valid units definition", "[unit][parser]") {
         WHEN("Double number is writen like .9") {
             THEN("parser accepts without an error") {
                 REQUIRE(is_valid_construct("grade\t\t\t.9 degree\n"));
+            }
+        }
+        WHEN("A 's' is added") {
+            THEN("parser remove it to find the units") {
+                REQUIRE_NOTHROW(parse_string("pew 1 m\nfoo 2 pews\n"));
+                REQUIRE_NOTHROW(parse_string("pew 1 m\nfoo 2 /pews\n"));
+            }
+        }
+        WHEN("No unit but only a prefix factor") {
+            THEN("parser multiply the number by the factor") {
+                std::string parsed_unit{};
+                REQUIRE_NOTHROW(parsed_unit = parse_string("pew 1 1/milli"));
+                REQUIRE_THAT(parsed_unit, ContainsSubstring("pew 0.001: 0 0 0 0 0 0 0 0 0 0"));
             }
         }
     }
@@ -167,25 +186,29 @@ SCENARIO("Unit parser accepting dependent/nested units definition", "[unit][pars
                 dummy3  25-3  / m2
                 dummy4  -0.025 /m2
                 dummy5  2.5 %
-                R       k-mole
+                newR       k-mole
                 R1      8.314 volt-coul/degC
                 R2      8314 mV-coul/degC
                 )";
                 std::string parsed_units = parse_string(reindent_text(units_definitions));
-                REQUIRE(is_substring(parsed_units, "mV 0.00100000: 2 1 -2 -1 0 0 0 0 0 0"));
-                REQUIRE(is_substring(parsed_units, "mM 1.00000000: -3 0 0 0 0 0 0 0 0 0"));
-                REQUIRE(is_substring(parsed_units, "mA 0.00100000: 0 0 -1 1 0 0 0 0 0 0"));
-                REQUIRE(is_substring(parsed_units, "KTOMV 0.00008530: 2 1 -2 -1 0 0 0 0 0 -1"));
-                REQUIRE(is_substring(parsed_units, "B 26.00000000: -1 0 0 -1 0 0 0 0 0 0"));
-                REQUIRE(is_substring(parsed_units, "dummy1 0.02500000: -2 0 0 0 0 0 0 0 0 0"));
-                REQUIRE(is_substring(parsed_units, "dummy2 0.02500000: -2 0 0 0 0 0 0 0 0 0"));
-                REQUIRE(is_substring(parsed_units, "dummy3 0.02500000: -2 0 0 0 0 0 0 0 0 0"));
-                REQUIRE(is_substring(parsed_units, "dummy4 -0.02500000: -2 0 0 0 0 0 0 0 0 0"));
-                REQUIRE(is_substring(parsed_units, "dummy5 0.02500000: 0 0 0 0 0 0 0 0 0 0"));
-                REQUIRE(is_substring(parsed_units, "R 8.31446262: 2 1 -2 0 0 0 0 0 0 -1"));
-                REQUIRE(is_substring(parsed_units, "R1 8.31400000: 2 1 -2 0 0 0 0 0 0 -1"));
-                REQUIRE(is_substring(parsed_units, "R2 8.31400000: 2 1 -2 0 0 0 0 0 0 -1"));
-                REQUIRE(is_substring(parsed_units, "m kg sec coul candela dollar bit erlang K"));
+                REQUIRE_THAT(parsed_units, ContainsSubstring("mV 0.001: 2 1 -2 -1 0 0 0 0 0 0"));
+                REQUIRE_THAT(parsed_units, ContainsSubstring("mM 1: -3 0 0 0 0 0 0 0 0 0"));
+                REQUIRE_THAT(parsed_units, ContainsSubstring("mA 0.001: 0 0 -1 1 0 0 0 0 0 0"));
+                REQUIRE_THAT(parsed_units,
+                             ContainsSubstring("KTOMV 8.53e-05: 2 1 -2 -1 0 0 0 0 0 -1"));
+                REQUIRE_THAT(parsed_units, ContainsSubstring("B 26: -1 0 0 -1 0 0 0 0 0 0"));
+                REQUIRE_THAT(parsed_units, ContainsSubstring("dummy1 0.025: -2 0 0 0 0 0 0 0 0 0"));
+                REQUIRE_THAT(parsed_units, ContainsSubstring("dummy2 0.025: -2 0 0 0 0 0 0 0 0 0"));
+                REQUIRE_THAT(parsed_units, ContainsSubstring("dummy3 0.025: -2 0 0 0 0 0 0 0 0 0"));
+                REQUIRE_THAT(parsed_units,
+                             ContainsSubstring("dummy4 -0.025: -2 0 0 0 0 0 0 0 0 0"));
+                REQUIRE_THAT(parsed_units, ContainsSubstring("dummy5 0.025: 0 0 0 0 0 0 0 0 0 0"));
+                REQUIRE_THAT(parsed_units,
+                             ContainsSubstring("newR 8.31446: 2 1 -2 0 0 0 0 0 0 -1"));
+                REQUIRE_THAT(parsed_units, ContainsSubstring("R1 8.314: 2 1 -2 0 0 0 0 0 0 -1"));
+                REQUIRE_THAT(parsed_units, ContainsSubstring("R2 8.314: 2 1 -2 0 0 0 0 0 0 -1"));
+                REQUIRE_THAT(parsed_units,
+                             ContainsSubstring("m kg sec coul candela dollar bit erlang K"));
             }
         }
     }

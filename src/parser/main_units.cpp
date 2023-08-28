@@ -1,9 +1,9 @@
-/*************************************************************************
- * Copyright (C) 2018-2022 Blue Brain Project
+/*
+ * Copyright 2023 Blue Brain Project, EPFL.
+ * See the top-level LICENSE file for details.
  *
- * This file is part of NMODL distributed under the terms of the GNU
- * Lesser General Public License. See top-level LICENSE file for details.
- *************************************************************************/
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 #include <fstream>
 
@@ -43,6 +43,7 @@ int main(int argc, const char* argv[]) {
 
         // just call parser method
         driver.parse_stream(file);
+        driver.table->print_units_sorted(std::cout);
     }
 
     return 0;

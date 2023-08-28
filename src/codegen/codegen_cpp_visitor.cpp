@@ -1,9 +1,9 @@
-/*************************************************************************
- * Copyright (C) 2018-2022 Blue Brain Project
+/*
+ * Copyright 2023 Blue Brain Project, EPFL.
+ * See the top-level LICENSE file for details.
  *
- * This file is part of NMODL distributed under the terms of the GNU
- * Lesser General Public License. See top-level LICENSE file for details.
- *************************************************************************/
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 #include "codegen/codegen_cpp_visitor.hpp"
 
@@ -598,6 +598,10 @@ std::vector<std::string> CodegenCVisitor::ion_read_statements(BlockType type) {
     for (const auto& ion: info.ions) {
         auto name = ion.name;
         for (const auto& var: ion.reads) {
+            auto const iter = std::find(ion.implicit_reads.begin(), ion.implicit_reads.end(), var);
+            if (iter != ion.implicit_reads.end()) {
+                continue;
+            }
             auto variable_names = read_ion_variable_name(var);
             auto first = get_variable_name(variable_names.first);
             auto second = get_variable_name(variable_names.second);
@@ -776,6 +780,7 @@ void CodegenCVisitor::update_index_semantics() {
             }
         }
         if (ion.need_style) {
+            info.semantics.emplace_back(index++, fmt::format("{}_ion", ion.name), 1);
             info.semantics.emplace_back(index++, fmt::format("#{}_ion", ion.name), 1);
         }
     }
@@ -900,11 +905,28 @@ std::vector<IndexVariableInfo> CodegenCVisitor::get_int_variables() {
         }
     }
 
-    for (const auto& ion: info.ions) {
+    for (auto& ion: info.ions) {
         bool need_style = false;
         std::unordered_map<std::string, int> ion_vars;  // used to keep track of the variables to
                                                         // not have doubles between read/write. Same
                                                         // name variables are allowed
+        // See if we need to add extra readion statements to match NEURON with SoA data
+        auto const has_var = [&ion](const char* suffix) -> bool {
+            auto const pred = [name = ion.name + suffix](auto const& x) { return x == name; };
+            return std::any_of(ion.reads.begin(), ion.reads.end(), pred) ||
+                   std::any_of(ion.writes.begin(), ion.writes.end(), pred);
+        };
+        auto const add_implicit_read = [&ion](const char* suffix) {
+            auto name = ion.name + suffix;
+            ion.reads.push_back(name);
+            ion.implicit_reads.push_back(std::move(name));
+        };
+        bool const have_ionin{has_var("i")}, have_ionout{has_var("o")};
+        if (have_ionin && !have_ionout) {
+            add_implicit_read("o");
+        } else if (have_ionout && !have_ionin) {
+            add_implicit_read("i");
+        }
         for (const auto& var: ion.reads) {
             const std::string name = naming::ION_VARNAME_PREFIX + var;
             variables.emplace_back(make_symbol(name));
@@ -939,6 +961,7 @@ std::vector<IndexVariableInfo> CodegenCVisitor::get_int_variables() {
         }
 
         if (need_style) {
+            variables.emplace_back(make_symbol(naming::ION_VARNAME_PREFIX + ion.name + "_erev"));
             variables.emplace_back(make_symbol("style_" + ion.name), false, true);
             variables.back().is_constant = true;
         }
@@ -2148,14 +2171,8 @@ void CodegenCVisitor::print_nmodl_constants() {
         printer->add_newline(2);
         printer->add_line("/** constants used in nmodl from UNITS */");
         for (const auto& it: info.factor_definitions) {
-#ifdef USE_LEGACY_UNITS
-            const std::string format_string = "static const double {} = {:g};";
-#else
-            const std::string format_string = "static const double {} = {:.18g};";
-#endif
-            printer->fmt_line(format_string,
-                              it->get_node_name(),
-                              stod(it->get_value()->get_value()));
+            const std::string format_string = "static const double {} = {};";
+            printer->fmt_line(format_string, it->get_node_name(), it->get_value()->get_value());
         }
     }
 }
@@ -2456,7 +2473,6 @@ void CodegenCVisitor::print_backend_info() {
 void CodegenCVisitor::print_standard_includes() {
     printer->add_newline();
     printer->add_line("#include <math.h>");
-    printer->add_line("#include \"nmodl/fast_math.hpp\" // extend math with some useful functions");
     printer->add_line("#include <stdio.h>");
     printer->add_line("#include <stdlib.h>");
     printer->add_line("#include <string.h>");
@@ -3773,8 +3789,9 @@ void CodegenCVisitor::print_net_send_call(const FunctionCall& node) {
     std::string weight_index = "weight_index";
     std::string pnt = "pnt";
 
-    // for non-net_receieve functions i.e. initial block, the weight_index argument is 0.
-    if (!printing_net_receive) {
+    // for functions not generated from NET_RECEIVE blocks (i.e. top level INITIAL block)
+    // the weight_index argument is 0.
+    if (!printing_net_receive && !printing_net_init) {
         weight_index = "0";
         auto var = get_variable_name("point_process");
         if (info.artificial_cell) {
@@ -3799,7 +3816,7 @@ void CodegenCVisitor::print_net_send_call(const FunctionCall& node) {
 
 
 void CodegenCVisitor::print_net_move_call(const FunctionCall& node) {
-    if (!printing_net_receive) {
+    if (!printing_net_receive && !printing_net_init) {
         throw std::runtime_error("Error : net_move only allowed in NET_RECEIVE block");
     }
 
@@ -3888,6 +3905,7 @@ void CodegenCVisitor::print_net_init() {
     rename_net_receive_arguments(*info.net_receive_node, *node);
 
     codegen = true;
+    printing_net_init = true;
     auto args = "Point_process* pnt, int weight_index, double flag";
     printer->add_newline(2);
     printer->add_line("/** initialize block for net receive */");
@@ -3907,6 +3925,7 @@ void CodegenCVisitor::print_net_init() {
     }
     printer->end_block(1);
     codegen = false;
+    printing_net_init = false;
 }
 
 
@@ -4300,7 +4319,7 @@ void CodegenCVisitor::print_nrn_state() {
     print_global_function_common_code(BlockType::State);
     print_channel_iteration_block_parallel_hint(BlockType::State, info.nrn_state_block);
     printer->start_block("for (int id = 0; id < nodecount; id++)");
-    
+
     printer->add_line("int node_id = node_index[id];");
     printer->add_line("double v = voltage[node_id];");
     print_v_unused();
@@ -4590,8 +4609,6 @@ void CodegenCVisitor::print_g_unused() const {
 
 void CodegenCVisitor::print_compute_functions() {
     print_top_verbatim_blocks();
-    print_function_prototypes();
-    print_functors_definitions();
     for (const auto& procedure: info.procedures) {
         print_procedure(*procedure);
     }
@@ -4639,6 +4656,8 @@ void CodegenCVisitor::print_codegen_routines() {
     print_nrn_alloc();
     print_nrn_constructor();
     print_nrn_destructor();
+    print_function_prototypes();
+    print_functors_definitions();
     print_compute_functions();
     print_check_table_thread_function();
     print_mechanism_register();

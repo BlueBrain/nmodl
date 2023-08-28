@@ -1,9 +1,10 @@
-/*************************************************************************
- * Copyright (C) 2022 Blue Brain Project
+/*
+ * Copyright 2023 Blue Brain Project, EPFL.
+ * See the top-level LICENSE file for details.
  *
- * This file is part of NMODL distributed under the terms of the GNU
- * Lesser General Public License. See top-level LICENSE file for details.
- *************************************************************************/
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 #include "parser/nmodl_driver.hpp"
 #include "test/unit/utils/test_utils.hpp"
 #include "visitors/implicit_argument_visitor.hpp"
@@ -11,12 +12,13 @@
 #include "visitors/symtab_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_test_macros.hpp>
+#include <catch2/matchers/catch_matchers_string.hpp>
 
 using namespace nmodl;
 using nmodl::test_utils::reindent_text;
 
-using Catch::Matchers::Contains;  // ContainsSubstring in newer Catch2
+using Catch::Matchers::ContainsSubstring;  // ContainsSubstring in newer Catch2
 
 //=============================================================================
 // Implicit visitor tests
@@ -46,15 +48,15 @@ SCENARIO("Check insertion of implicit arguments", "[codegen][implicit_arguments]
         )";
         auto const modified_nmodl = generate_mod_after_implicit_argument_visitor(nmodl_text);
         THEN("at_time should have nt as its first argument") {
-            REQUIRE_THAT(modified_nmodl, Contains("at_time(nt, foo)"));
-            REQUIRE_THAT(modified_nmodl, Contains("at_time(nt, a+b)"));
-            REQUIRE_THAT(modified_nmodl, Contains("at_time(nt, flop)"));
+            REQUIRE_THAT(modified_nmodl, ContainsSubstring("at_time(nt, foo)"));
+            REQUIRE_THAT(modified_nmodl, ContainsSubstring("at_time(nt, a+b)"));
+            REQUIRE_THAT(modified_nmodl, ContainsSubstring("at_time(nt, flop)"));
         }
         THEN("nrn_ghk should have a temperature as its last argument") {
             REQUIRE_THAT(modified_nmodl,
-                         Contains("nrn_ghk(-50(mV), .001(mM), 10(mM), 2, celsius)"));
+                         ContainsSubstring("nrn_ghk(-50(mV), .001(mM), 10(mM), 2, celsius)"));
             REQUIRE_THAT(modified_nmodl,
-                         Contains("nrn_ghk(-50(mV), .001(mM), 10(mM), 2, -273.15)"));
+                         ContainsSubstring("nrn_ghk(-50(mV), .001(mM), 10(mM), 2, -273.15)"));
         }
     }
 }

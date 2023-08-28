@@ -1,9 +1,7 @@
-# ***********************************************************************
-# Copyright (C) 2018-2022 Blue Brain Project
+# Copyright 2023 Blue Brain Project, EPFL.
+# See the top-level LICENSE file for details.
 #
-# This file is part of NMODL distributed under the terms of the GNU
-# Lesser General Public License. See top-level LICENSE file for details.
-# ***********************************************************************
+# SPDX-License-Identifier: Apache-2.0
 
 import inspect
 import os
@@ -19,7 +17,7 @@ Please create a softlink with the binary name to be called.
 """
 import stat
 from pkg_resources import working_set
-from pywheel.shim.find_libpython import find_libpython
+from find_libpython import find_libpython
 
 
 # Main source of the version. Dont rename, used by Cmake
@@ -75,38 +73,17 @@ class Docs(Command):
         self.run_command("buildhtml")
 
 
-def _config_exe(exe_name):
-    """Sets the environment to run the real executable (returned)"""
-
-    package_name = "nmodl"
-
-    assert (
-        package_name in working_set.by_key
-    ), "NMODL package not found! Verify PYTHONPATH"
-    NMODL_PREFIX = os.path.join(working_set.by_key[package_name].location, "nmodl")
-    NMODL_PREFIX_DATA = os.path.join(NMODL_PREFIX, ".data")
-    if sys.platform == "darwin":
-        os.environ["NMODL_WRAPLIB"] = os.path.join(
-            NMODL_PREFIX_DATA, "libpywrapper.dylib"
-        )
-    else:
-        os.environ["NMODL_WRAPLIB"] = os.path.join(NMODL_PREFIX_DATA, "libpywrapper.so")
-
-    # find libpython*.so in the system
-    os.environ["NMODL_PYLIB"] = find_libpython()
-
-    return os.path.join(NMODL_PREFIX_DATA, exe_name)
-
-
 install_requirements = [
     "PyYAML>=3.13",
     "sympy>=1.3",
+    "find_libpython"
 ]
 
 
 cmake_args = ["-DPYTHON_EXECUTABLE=" + sys.executable]
 if "bdist_wheel" in sys.argv:
     cmake_args.append("-DLINK_AGAINST_PYTHON=FALSE")
+    cmake_args.append("-DNMODL_ENABLE_TESTS=FALSE")
 
 # For CI, we want to build separate wheel
 package_name = "NMODL"
@@ -126,7 +103,7 @@ setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
     packages=["nmodl"],
-    scripts=["pywheel/shim/nmodl", "pywheel/shim/find_libpython.py"],
+    scripts=["pywheel/shim/nmodl"],
     include_package_data=True,
     cmake_minimum_required_version="3.15.0",
     cmake_args=cmake_args,
@@ -134,19 +111,22 @@ setup(
         docs=Docs, doctest=get_sphinx_command, buildhtml=get_sphinx_command,
     ),
     zip_safe=False,
+    # myst_parser 2.0.0 want sphinx >= 6 but it leads to incompatibily with sphinxcontrib-applehelp and 
+    # sphinxcontrib-htmlhelp that want PEP-517 support instead of setup.py (name clash with '-' and '.')
+    # So we pin low versions of packages
     setup_requires=[
         "jinja2>=2.9.3",
         "jupyter-client",
         "jupyter",
-        "myst_parser",
-        "mistune<3",  # prevents a version conflict with nbconvert
+        "myst_parser<2.0.0",
+        "mistune<3",
         "nbconvert",
         "nbsphinx>=0.3.2",
         "pytest>=3.7.2",
-        "sphinxcontrib-applehelp<1.0.3",
-        "sphinxcontrib-htmlhelp<=2.0.0",
+        "sphinxcontrib-applehelp<1.0.3", # After this version it needs a toml file to work, no more setup.py
+        "sphinxcontrib-htmlhelp<=2.0.0", # After this version it needs a toml file to work, no more setup.py
         "sphinx<6",
-        "sphinx-rtd-theme",
+        "sphinx-rtd-theme", # needs sphinx < 7
     ]
     + install_requirements,
     install_requires=install_requirements,

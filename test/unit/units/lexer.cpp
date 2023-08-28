@@ -1,15 +1,13 @@
-/*************************************************************************
- * Copyright (C) 2018-2022 Blue Brain Project
+/*
+ * Copyright 2023 Blue Brain Project, EPFL.
+ * See the top-level LICENSE file for details.
  *
- * This file is part of NMODL distributed under the terms of the GNU
- * Lesser General Public License. See top-level LICENSE file for details.
- *************************************************************************/
-
-#define CATCH_CONFIG_MAIN
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 #include <string>
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_test_macros.hpp>
 
 #include "lexer/unit_lexer.hpp"
 #include "parser/unit_driver.hpp"
@@ -46,10 +44,9 @@ TEST_CASE("Unit Lexer tests for valid tokens", "[lexer][unit]") {
         REQUIRE(check_token_type("1", Token::DOUBLE));
         REQUIRE(check_token_type("-1.324e+10", Token::DOUBLE));
         REQUIRE(check_token_type("1-1", Token::DOUBLE));
-        REQUIRE(check_token_type("1|100", Token::FRACTION));
+        REQUIRE(check_token_type("|", Token::FRACTION));
         REQUIRE(check_token_type(".03", Token::DOUBLE));
         REQUIRE(check_token_type("12345e-2", Token::DOUBLE));
-        REQUIRE(check_token_type("1|8.988e9", Token::FRACTION));
     }
 
     SECTION("Tests for units") {
