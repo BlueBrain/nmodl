@@ -493,7 +493,7 @@ $(document).ready(function(){initNavTree('kinetic__block__visitor_8cpp_source.ht
 <div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;            }</div>
 <div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;        }</div>
 <div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;        <span class="comment">// divide by COMPARTMENT factor if present</span></div>
-<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;        <span class="keywordflow">if</span> (!<a class="code" href="classnmodl_1_1visitor_1_1_kinetic_block_visitor.html#a72550d8a5a75013331226a988041e95d">compartment_factors</a>[j].empty()) {</div>
+<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;        <span class="keywordflow">if</span> (!<a class="code" href="classnmodl_1_1visitor_1_1_kinetic_block_visitor.html#a72550d8a5a75013331226a988041e95d">compartment_factors</a>[j].empty() &amp;&amp; !ode_rhs.empty()) {</div>
 <div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;            ode_rhs = fmt::format(<span class="stringliteral">&quot;({})/({})&quot;</span>, ode_rhs, <a class="code" href="classnmodl_1_1visitor_1_1_kinetic_block_visitor.html#a72550d8a5a75013331226a988041e95d">compartment_factors</a>[j]);</div>
 <div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;        }</div>
 <div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;        <span class="comment">// if rhs of ODE is not empty, add to list of ODEs</span></div>
