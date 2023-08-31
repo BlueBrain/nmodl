@@ -1102,7 +1102,7 @@ void CodegenCppVisitor::print_net_init_acc_serial_annotation_block_end() {
  * \endcode
  */
 void CodegenCppVisitor::print_channel_iteration_block_parallel_hint(BlockType /* type */,
-                                                                  const ast::Block* block) {
+                                                                    const ast::Block* block) {
     // ivdep allows SIMD parallelisation of a block/loop but doesn't provide
     // a standard mechanism for atomics. Also, even with openmp 5.0, openmp
     // atomics do not enable vectorisation under "omp simd" (gives compiler
@@ -1273,8 +1273,8 @@ void CodegenCppVisitor::visit_watch_statement(const ast::WatchStatement& /* node
 
 
 void CodegenCppVisitor::print_statement_block(const ast::StatementBlock& node,
-                                            bool open_brace,
-                                            bool close_brace) {
+                                              bool open_brace,
+                                              bool close_brace) {
     if (open_brace) {
         printer->start_block();
     }
@@ -1671,7 +1671,8 @@ void CodegenCppVisitor::print_check_table_thread_function() {
 }
 
 
-void CodegenCppVisitor::print_function_or_procedure(const ast::Block& node, const std::string& name) {
+void CodegenCppVisitor::print_function_or_procedure(const ast::Block& node,
+                                                    const std::string& name) {
     printer->add_newline(2);
     print_function_declaration(node, name);
     printer->add_text(" ");
@@ -2115,8 +2116,8 @@ std::pair<std::string, std::string> CodegenCppVisitor::write_ion_variable_name(
 
 
 std::string CodegenCppVisitor::conc_write_statement(const std::string& ion_name,
-                                                  const std::string& concentration,
-                                                  int index) {
+                                                    const std::string& concentration,
+                                                    int index) {
     auto conc_var_name = get_variable_name(naming::ION_VARNAME_PREFIX + concentration);
     auto style_var_name = get_variable_name("style_" + ion_name);
     return fmt::format(
@@ -2143,7 +2144,7 @@ std::string CodegenCppVisitor::conc_write_statement(const std::string& ion_name,
  * to queue that will be used in reduction queue.
  */
 std::string CodegenCppVisitor::process_shadow_update_statement(const ShadowUseStatement& statement,
-                                                             BlockType /* type */) {
+                                                               BlockType /* type */) {
     // when there is no operator or rhs then that statement doesn't need shadow update
     if (statement.op.empty() && statement.rhs.empty()) {
         auto text = statement.lhs + ";";
@@ -2307,7 +2308,7 @@ void CodegenCppVisitor::print_thread_getters() {
 
 
 std::string CodegenCppVisitor::float_variable_name(const SymbolType& symbol,
-                                                 bool use_instance) const {
+                                                   bool use_instance) const {
     auto name = symbol->get_name();
     auto dimension = symbol->get_length();
     auto position = position_of_float_var(name);
@@ -2327,8 +2328,8 @@ std::string CodegenCppVisitor::float_variable_name(const SymbolType& symbol,
 
 
 std::string CodegenCppVisitor::int_variable_name(const IndexVariableInfo& symbol,
-                                               const std::string& name,
-                                               bool use_instance) const {
+                                                 const std::string& name,
+                                                 bool use_instance) const {
     auto position = position_of_int_var(name);
     // clang-format off
     if (symbol.is_index) {
@@ -2353,7 +2354,7 @@ std::string CodegenCppVisitor::int_variable_name(const IndexVariableInfo& symbol
 
 
 std::string CodegenCppVisitor::global_variable_name(const SymbolType& symbol,
-                                                  bool use_instance) const {
+                                                    bool use_instance) const {
     if (use_instance) {
         return fmt::format("inst->{}->{}", naming::INST_GLOBAL_MEMBER, symbol->get_name());
     } else {
@@ -3378,7 +3379,7 @@ void CodegenCppVisitor::print_initial_block(const InitialBlock* node) {
 
 
 void CodegenCppVisitor::print_global_function_common_code(BlockType type,
-                                                        const std::string& function_name) {
+                                                          const std::string& function_name) {
     std::string method;
     if (function_name.empty()) {
         method = compute_method_name(type);

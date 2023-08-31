@@ -1578,11 +1578,11 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
 
 
     CodegenCppVisitor(const std::string& mod_filename,
-                    const std::string& output_dir,
-                    const std::string& float_type,
-                    const bool optimize_ionvar_copies,
-                    const std::string& extension,
-                    const std::string& wrapper_ext)
+                      const std::string& output_dir,
+                      const std::string& float_type,
+                      const bool optimize_ionvar_copies,
+                      const std::string& extension,
+                      const std::string& wrapper_ext)
         : target_printer(new CodePrinter(output_dir + "/" + mod_filename + extension))
         , wrapper_printer(new CodePrinter(output_dir + "/" + mod_filename + wrapper_ext))
         , printer(target_printer)
@@ -1591,11 +1591,11 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
         , optimize_ionvar_copies(optimize_ionvar_copies) {}
 
     CodegenCppVisitor(const std::string& mod_filename,
-                    std::ostream& stream,
-                    const std::string& float_type,
-                    const bool optimize_ionvar_copies,
-                    const std::string& extension,
-                    const std::string& wrapper_ext)
+                      std::ostream& stream,
+                      const std::string& float_type,
+                      const bool optimize_ionvar_copies,
+                      const std::string& extension,
+                      const std::string& wrapper_ext)
         : target_printer(new CodePrinter(stream))
         , wrapper_printer(new CodePrinter(stream))
         , printer(target_printer)
@@ -1623,10 +1623,10 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * \param extension    The file extension to use. This defaults to \c .cpp .
      */
     CodegenCppVisitor(const std::string& mod_filename,
-                    const std::string& output_dir,
-                    std::string float_type,
-                    const bool optimize_ionvar_copies,
-                    const std::string& extension = ".cpp")
+                      const std::string& output_dir,
+                      std::string float_type,
+                      const bool optimize_ionvar_copies,
+                      const std::string& extension = ".cpp")
         : target_printer(new CodePrinter(output_dir + "/" + mod_filename + extension))
         , printer(target_printer)
         , mod_filename(mod_filename)
@@ -1650,9 +1650,9 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      *                     as-is in the target code. This defaults to \c double.
      */
     CodegenCppVisitor(const std::string& mod_filename,
-                    std::ostream& stream,
-                    const std::string& float_type,
-                    const bool optimize_ionvar_copies)
+                      std::ostream& stream,
+                      const std::string& float_type,
+                      const bool optimize_ionvar_copies)
         : target_printer(new CodePrinter(stream))
         , printer(target_printer)
         , mod_filename(mod_filename)
@@ -1678,9 +1678,9 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      *                       generation
      */
     CodegenCppVisitor(std::string mod_filename,
-                    std::string float_type,
-                    const bool optimize_ionvar_copies,
-                    std::shared_ptr<CodePrinter>& target_printer)
+                      std::string float_type,
+                      const bool optimize_ionvar_copies,
+                      std::shared_ptr<CodePrinter>& target_printer)
         : target_printer(target_printer)
         , printer(target_printer)
         , mod_filename(mod_filename)
@@ -1867,8 +1867,8 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
 
 template <typename T>
 void CodegenCppVisitor::print_vector_elements(const std::vector<T>& elements,
-                                            const std::string& separator,
-                                            const std::string& prefix) {
+                                              const std::string& separator,
+                                              const std::string& prefix) {
     for (auto iter = elements.begin(); iter != elements.end(); iter++) {
         printer->add_text(prefix);
         (*iter)->accept(*this);

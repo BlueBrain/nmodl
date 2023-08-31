@@ -33,8 +33,8 @@ using nmodl::test_utils::reindent_text;
 
 /// Helper for creating C codegen visitor
 std::shared_ptr<CodegenCppVisitor> create_c_visitor(const std::shared_ptr<ast::Program>& ast,
-                                                  const std::string& /* text */,
-                                                  std::stringstream& ss) {
+                                                    const std::string& /* text */,
+                                                    std::stringstream& ss) {
     /// construct symbol table
     SymtabVisitor().visit_program(*ast);
 
