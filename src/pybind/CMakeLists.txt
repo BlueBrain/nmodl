@@ -63,12 +63,6 @@ if(NMODL_ENABLE_PYTHON_BINDINGS)
   if(LINK_AGAINST_PYTHON)
     target_link_libraries(_nmodl PRIVATE pywrapper)
   endif()
-
-  add_custom_command(
-    OUTPUT ${PROJECT_BINARY_DIR}/lib/nmodl
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:_nmodl> ${PROJECT_BINARY_DIR}/nmodl
-    DEPENDS ${NMODL_PYTHON_FILES_IN} _nmodl
-    COMMENT "-- COPYING NMODL PYTHON MODULE --")
 endif()
 
 # =============================================================================
