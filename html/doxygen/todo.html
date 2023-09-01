@@ -105,33 +105,33 @@ $(document).ready(function(){initNavTree('todo.html',''); initResizable(); });
 <dd><a class="anchor" id="_todo000001"></a>: we need to implement proper error handling mechanism to propogate errors from GPU to CPU. For example, error code can be returned like original neuron implementation. For now we use <code>assert(0==1)</code> pattern which is used for OpenACC.  </dd>
 <dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a532e903a7bb7f8c3dfeac467f53e111d">nmodl::codegen::CodegenAccVisitor::print_net_init_acc_serial_annotation_block_begin</a>  () override</dt>
 <dd><a class="anchor" id="_todo000002"></a>: With the current code structure for NMODL and MOD2C, we use <code>serial</code> construct to launch serial kernels. This is during initialization but still inefficient. This should be improved when we drop MOD2C.  </dd>
-<dt>Class <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html">nmodl::codegen::CodegenCVisitor</a>  </dt>
+<dt>Class <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html">nmodl::codegen::CodegenCppVisitor</a>  </dt>
 <dd><a class="anchor" id="_todo000014"></a><ul>
 <li>Handle define statement (i.e. macros)</li>
 <li>If there is a return statement in the verbatim block of inlined function then it will be error. Need better error checking. For example, see netstim.mod where we have removed return from verbatim block.  </li>
 </ul>
 </dd>
-<dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a9a8bf6fbd963e10396c0915e792aaec2">nmodl::codegen::CodegenCVisitor::codegen_global_variables</a>  </dt>
+<dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a2a1e5337a20e3f1dad1d1dfbb89fbb1b">nmodl::codegen::CodegenCppVisitor::codegen_global_variables</a>  </dt>
 <dd><a class="anchor" id="_todo000015"></a>: this has become different than <a class="el" href="structnmodl_1_1codegen_1_1_codegen_info.html" title="Represent information collected from AST for code generation.">CodegenInfo</a>  </dd>
-<dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a663d2f8fd8896237c2fe4e2129c2d41c">nmodl::codegen::CodegenCVisitor::internal_method_parameters</a>  ()</dt>
+<dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a694e89a1a5859b0aa43061a36a44e85f">nmodl::codegen::CodegenCppVisitor::internal_method_parameters</a>  ()</dt>
 <dd><a class="anchor" id="_todo000006"></a>: figure out how to correctly handle qualifiers  </dd>
-<dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a2c1de208a3367e4c4d5f64539ec0266d">nmodl::codegen::CodegenCVisitor::ion_write_statements</a>  (BlockType type)</dt>
+<dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a2e2dd82a055dd830e8efc7f1dce03924">nmodl::codegen::CodegenCppVisitor::ion_write_statements</a>  (BlockType type)</dt>
 <dd><a class="anchor" id="_todo000004"></a>Unhandled case in neuron implementation  </dd>
-<dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a737b67ce688bf96673476412b7b9c700">nmodl::codegen::CodegenCVisitor::print_derivimplicit_kernel</a>  (<a class="el" href="classnmodl_1_1ast_1_1_block.html" title="Base class for all block scoped nodes.">ast::Block</a> *block)</dt>
+<dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aa6f15f353f13e24d098db0ba6dbedeb8">nmodl::codegen::CodegenCppVisitor::print_derivimplicit_kernel</a>  (<a class="el" href="classnmodl_1_1ast_1_1_block.html" title="Base class for all block scoped nodes.">ast::Block</a> *block)</dt>
 <dd><a class="anchor" id="_todo000011"></a>Data is not derived. </dd>
-<dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a70f1e7264b4d6c34f360bf1090f02762">nmodl::codegen::CodegenCVisitor::print_nrn_state</a>  ()</dt>
+<dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aa2c90a000de6b21866c1a667c29e3210">nmodl::codegen::CodegenCppVisitor::print_nrn_state</a>  ()</dt>
 <dd><a class="anchor" id="_todo000012"></a>Eigen solver node also emits IonCurVar variable in the functor but that shouldn't update ions in derivative block  </dd>
-<dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a15b0fe5be3be21ef57230f75179d1668">nmodl::codegen::CodegenCVisitor::print_watch_activate</a>  ()</dt>
+<dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a89a6745455933a1dc6a9e792d2727b3a">nmodl::codegen::CodegenCppVisitor::print_watch_activate</a>  ()</dt>
 <dd><p class="startdd"><a class="anchor" id="_todo000008"></a>Number of watch could be more than number of statements according to grammar.</p>
 <p class="enddd"><a class="anchor" id="_todo000009"></a>Similar to neuron/coreneuron we are using first watch and ignoring rest.  </p>
 </dd>
-<dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ad88e5cd8f4605308d18e0fa9dd8c135d">nmodl::codegen::CodegenCVisitor::print_watch_check</a>  ()</dt>
+<dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a61777f8bad11d00afa7917561b102882">nmodl::codegen::CodegenCppVisitor::print_watch_check</a>  ()</dt>
 <dd><a class="anchor" id="_todo000010"></a>Similar to print_watch_activate, we are using only first watch. </dd>
-<dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a173a3643283538a1fd8c83cc229dadfd">nmodl::codegen::CodegenCVisitor::process_verbatim_text</a>  (std::string const &amp;text)</dt>
+<dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a6c21fe2f09c7911acadbbfa9a71dfabe">nmodl::codegen::CodegenCppVisitor::process_verbatim_text</a>  (std::string const &amp;text)</dt>
 <dd><a class="anchor" id="_todo000007"></a>: this is still ad-hoc and requires re-implementation to handle it more elegantly.  </dd>
-<dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a649ccf2ba93cc50a6dc86450e7ca064c">nmodl::codegen::CodegenCVisitor::rename_function_arguments</a>  ()</dt>
+<dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aef331b9ddcbd761f3aea6b457f83e88e">nmodl::codegen::CodegenCppVisitor::rename_function_arguments</a>  ()</dt>
 <dd><a class="anchor" id="_todo000005"></a>Issue with verbatim renaming. </dd>
-<dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a17a43644435290b1a799b97571ff45a8">nmodl::codegen::CodegenCVisitor::visit_var_name</a>  (const <a class="el" href="classnmodl_1_1ast_1_1_var_name.html" title="Represents a variable.">ast::VarName</a> &amp;node) override</dt>
+<dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a4f2304d508e3d9645581004c676d94ca">nmodl::codegen::CodegenCppVisitor::visit_var_name</a>  (const <a class="el" href="classnmodl_1_1ast_1_1_var_name.html" title="Represents a variable.">ast::VarName</a> &amp;node) override</dt>
 <dd><a class="anchor" id="_todo000003"></a>: Validate how @ is being handled in neuron implementation  </dd>
 <dt>Class <a class="el" href="classnmodl_1_1codegen_1_1_codegen_helper_visitor.html">nmodl::codegen::CodegenHelperVisitor</a>  </dt>
 <dd><a class="anchor" id="_todo000018"></a><ul>

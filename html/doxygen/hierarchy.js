@@ -12,7 +12,7 @@ var hierarchy =
     [ "nmodl::codegen::Conductance", "structnmodl_1_1codegen_1_1_conductance.html", null ],
     [ "nmodl::visitor::ConstVisitor", "classnmodl_1_1visitor_1_1_const_visitor.html", [
       [ "nmodl::visitor::ConstAstVisitor", "classnmodl_1_1visitor_1_1_const_ast_visitor.html", [
-        [ "nmodl::codegen::CodegenCVisitor", "classnmodl_1_1codegen_1_1_codegen_c_visitor.html", [
+        [ "nmodl::codegen::CodegenCppVisitor", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html", [
           [ "nmodl::codegen::CodegenAccVisitor", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html", null ]
         ] ],
         [ "nmodl::codegen::CodegenHelperVisitor", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html", null ],

@@ -7,7 +7,7 @@ var searchData=
   ['cmakeinfo_2654',['CMakeInfo',['../structnmodl_1_1_c_make_info.html',1,'nmodl']]],
   ['codegenaccvisitor_2655',['CodegenAccVisitor',['../classnmodl_1_1codegen_1_1_codegen_acc_visitor.html',1,'nmodl::codegen']]],
   ['codegencompatibilityvisitor_2656',['CodegenCompatibilityVisitor',['../classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html',1,'nmodl::codegen']]],
-  ['codegencvisitor_2657',['CodegenCVisitor',['../classnmodl_1_1codegen_1_1_codegen_c_visitor.html',1,'nmodl::codegen']]],
+  ['codegencppvisitor_2657',['CodegenCppVisitor',['../classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html',1,'nmodl::codegen']]],
   ['codegenhelpervisitor_2658',['CodegenHelperVisitor',['../classnmodl_1_1codegen_1_1_codegen_helper_visitor.html',1,'nmodl::codegen']]],
   ['codegeninfo_2659',['CodegenInfo',['../structnmodl_1_1codegen_1_1_codegen_info.html',1,'nmodl::codegen']]],
   ['codegentransformvisitor_2660',['CodegenTransformVisitor',['../classnmodl_1_1_codegen_transform_visitor.html',1,'nmodl']]],

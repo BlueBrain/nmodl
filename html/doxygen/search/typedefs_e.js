@@ -2,7 +2,7 @@ var searchData=
 [
   ['paramassignvector_5218',['ParamAssignVector',['../group__ast__vec__type.html#gafcc546a62f421c8e564b41cab9c083a1',1,'nmodl::ast']]],
   ['paramblockvector_5219',['ParamBlockVector',['../group__ast__vec__type.html#ga397657e98a820bffa2a7d77756970c0d',1,'nmodl::ast']]],
-  ['paramvector_5220',['ParamVector',['../classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a983129af96f5841838db04817dc08dd9',1,'nmodl::codegen::CodegenCVisitor']]],
+  ['paramvector_5220',['ParamVector',['../classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a73d001ad3c271c56d89e09e2cebfceb3',1,'nmodl::codegen::CodegenCppVisitor']]],
   ['parenexpressionvector_5221',['ParenExpressionVector',['../group__ast__vec__type.html#gac789143d4c4151f475b944319d108447',1,'nmodl::ast']]],
   ['parser_5222',['Parser',['../namespacenmodl.html#afd3bfb775fca5f96fae93f7f4650560d',1,'nmodl']]],
   ['pointervarvector_5223',['PointerVarVector',['../group__ast__vec__type.html#gace13f87d6d747e92c366e3c8021e1e17',1,'nmodl::ast']]],

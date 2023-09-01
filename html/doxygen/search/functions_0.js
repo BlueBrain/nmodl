@@ -9,7 +9,7 @@ var searchData=
   ['add_5fdenominator_5fdims_3180',['add_denominator_dims',['../classnmodl_1_1units_1_1_unit.html#a275364244dc0f57822073cad9df33884',1,'nmodl::units::Unit']]],
   ['add_5fdenominator_5funit_3181',['add_denominator_unit',['../classnmodl_1_1units_1_1_unit.html#abb6f1a315c651f9b6e525ec94bfdebce',1,'nmodl::units::Unit::add_denominator_unit(const std::string &amp;denom)'],['../classnmodl_1_1units_1_1_unit.html#aa53fde115e36b35ffd6a72a914d8d545',1,'nmodl::units::Unit::add_denominator_unit(const std::shared_ptr&lt; std::vector&lt; std::string &gt;&gt; &amp;denom)']]],
   ['add_5felement_3182',['add_element',['../classnmodl_1_1printer_1_1_n_m_o_d_l_printer.html#aa3282a37a3133a9e9dc21aa1165ca6d4',1,'nmodl::printer::NMODLPrinter']]],
-  ['add_5fescape_5fquote_3183',['add_escape_quote',['../classnmodl_1_1codegen_1_1_codegen_c_visitor.html#abc0ea67b5c324c83fafb0ab3678d6d21',1,'nmodl::codegen::CodegenCVisitor']]],
+  ['add_5fescape_5fquote_3183',['add_escape_quote',['../classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aeeacd28215827d6b0cd23cf59e5fc0c2',1,'nmodl::codegen::CodegenCppVisitor']]],
   ['add_5fexternal_5fsymbols_3184',['add_external_symbols',['../namespacenmodl_1_1visitor.html#ad0996f89363fa0089656b1079bd0fd26',1,'nmodl::visitor']]],
   ['add_5ffraction_3185',['add_fraction',['../classnmodl_1_1units_1_1_unit.html#a8a46298117df274c99b31c97ddb34358',1,'nmodl::units::Unit']]],
   ['add_5findent_3186',['add_indent',['../classnmodl_1_1printer_1_1_code_printer.html#a6cf3be260bf6c535813321ba66ee5fa1',1,'nmodl::printer::CodePrinter::add_indent()'],['../classnmodl_1_1printer_1_1_n_m_o_d_l_printer.html#a6f822c0799fe77a27c248ee5cd72b5be',1,'nmodl::printer::NMODLPrinter::add_indent()']]],

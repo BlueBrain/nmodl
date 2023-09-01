@@ -99,12 +99,12 @@ $(document).ready(function(){initNavTree('namespacenmodl_1_1codegen_1_1utils.htm
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ad7f64bb2383682a662311a40a6a96a25"><td class="memItemLeft" align="right" valign="top">template&lt;&gt; </td></tr>
-<tr class="memitem:ad7f64bb2383682a662311a40a6a96a25"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1codegen_1_1utils.html#ad7f64bb2383682a662311a40a6a96a25">format_double_string&lt; CodegenCVisitor &gt;</a> (const std::string &amp;s_value)</td></tr>
-<tr class="separator:ad7f64bb2383682a662311a40a6a96a25"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8a05545df87abde7bd9c140c1c4d5d42"><td class="memItemLeft" align="right" valign="top">template&lt;&gt; </td></tr>
-<tr class="memitem:a8a05545df87abde7bd9c140c1c4d5d42"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1codegen_1_1utils.html#a8a05545df87abde7bd9c140c1c4d5d42">format_float_string&lt; CodegenCVisitor &gt;</a> (const std::string &amp;s_value)</td></tr>
-<tr class="separator:a8a05545df87abde7bd9c140c1c4d5d42"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c53d38eff00d585dd8199d5aaa2ac77"><td class="memItemLeft" align="right" valign="top">template&lt;&gt; </td></tr>
+<tr class="memitem:a0c53d38eff00d585dd8199d5aaa2ac77"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1codegen_1_1utils.html#a0c53d38eff00d585dd8199d5aaa2ac77">format_double_string&lt; CodegenCppVisitor &gt;</a> (const std::string &amp;s_value)</td></tr>
+<tr class="separator:a0c53d38eff00d585dd8199d5aaa2ac77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03553f15cecb4c252743c32bd6629513"><td class="memItemLeft" align="right" valign="top">template&lt;&gt; </td></tr>
+<tr class="memitem:a03553f15cecb4c252743c32bd6629513"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1codegen_1_1utils.html#a03553f15cecb4c252743c32bd6629513">format_float_string&lt; CodegenCppVisitor &gt;</a> (const std::string &amp;s_value)</td></tr>
+<tr class="separator:a03553f15cecb4c252743c32bd6629513"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa632f88f428f21e6befeab48d9401997"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:aa632f88f428f21e6befeab48d9401997"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1codegen_1_1utils.html#aa632f88f428f21e6befeab48d9401997">format_double_string</a> (const std::string &amp;s_value)</td></tr>
 <tr class="memdesc:aa632f88f428f21e6befeab48d9401997"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handles the double constants format being printed in the generated code.  <a href="namespacenmodl_1_1codegen_1_1utils.html#aa632f88f428f21e6befeab48d9401997">More...</a><br /></td></tr>
@@ -134,7 +134,7 @@ template&lt;typename T &gt; </div>
 </div><div class="memdoc">
 
 <p>Handles the double constants format being printed in the generated code. </p>
-<p>It takes care of printing the values with the correct floating point precision for each backend, similar to mod2c and Neuron. This function can be called using as template <code><a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html" title="Visitor for printing C code compatible with legacy api of CoreNEURON">CodegenCVisitor</a></code></p>
+<p>It takes care of printing the values with the correct floating point precision for each backend, similar to mod2c and Neuron. This function can be called using as template <code><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html" title="Visitor for printing C code compatible with legacy api of CoreNEURON">CodegenCppVisitor</a></code></p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">s_value</td><td>The double constant as string </td></tr>
@@ -145,8 +145,8 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="ad7f64bb2383682a662311a40a6a96a25"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad7f64bb2383682a662311a40a6a96a25">&#9670;&nbsp;</a></span>format_double_string&lt; CodegenCVisitor &gt;()</h2>
+<a id="a0c53d38eff00d585dd8199d5aaa2ac77"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c53d38eff00d585dd8199d5aaa2ac77">&#9670;&nbsp;</a></span>format_double_string&lt; CodegenCppVisitor &gt;()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -154,7 +154,7 @@ template&lt;typename T &gt; </div>
 template&lt;&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">std::string <a class="el" href="namespacenmodl_1_1codegen_1_1utils.html#aa632f88f428f21e6befeab48d9401997">nmodl::codegen::utils::format_double_string</a>&lt; <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html">CodegenCVisitor</a> &gt; </td>
+          <td class="memname">std::string <a class="el" href="namespacenmodl_1_1codegen_1_1utils.html#aa632f88f428f21e6befeab48d9401997">nmodl::codegen::utils::format_double_string</a>&lt; <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html">CodegenCppVisitor</a> &gt; </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>s_value</em></td><td>)</td>
@@ -187,7 +187,7 @@ template&lt;typename T &gt; </div>
 </div><div class="memdoc">
 
 <p>Handles the float constants format being printed in the generated code. </p>
-<p>It takes care of printing the values with the correct floating point precision for each backend, similar to mod2c and Neuron. This function can be called using as template <code><a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html" title="Visitor for printing C code compatible with legacy api of CoreNEURON">CodegenCVisitor</a></code></p>
+<p>It takes care of printing the values with the correct floating point precision for each backend, similar to mod2c and Neuron. This function can be called using as template <code><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html" title="Visitor for printing C code compatible with legacy api of CoreNEURON">CodegenCppVisitor</a></code></p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">s_value</td><td>The double constant as string </td></tr>
@@ -198,8 +198,8 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="a8a05545df87abde7bd9c140c1c4d5d42"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8a05545df87abde7bd9c140c1c4d5d42">&#9670;&nbsp;</a></span>format_float_string&lt; CodegenCVisitor &gt;()</h2>
+<a id="a03553f15cecb4c252743c32bd6629513"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a03553f15cecb4c252743c32bd6629513">&#9670;&nbsp;</a></span>format_float_string&lt; CodegenCppVisitor &gt;()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -207,7 +207,7 @@ template&lt;typename T &gt; </div>
 template&lt;&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">std::string <a class="el" href="namespacenmodl_1_1codegen_1_1utils.html#af37aaecb81df71fda4c68e0da90baee8">nmodl::codegen::utils::format_float_string</a>&lt; <a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html">CodegenCVisitor</a> &gt; </td>
+          <td class="memname">std::string <a class="el" href="namespacenmodl_1_1codegen_1_1utils.html#af37aaecb81df71fda4c68e0da90baee8">nmodl::codegen::utils::format_float_string</a>&lt; <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html">CodegenCppVisitor</a> &gt; </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>s_value</em></td><td>)</td>

@@ -7,7 +7,7 @@ var searchData=
   ['elseifs_4691',['elseifs',['../classnmodl_1_1ast_1_1_if_statement.html#aa58f01210807ac043f498477e65c0019',1,'nmodl::ast::IfStatement']]],
   ['elses_4692',['elses',['../classnmodl_1_1ast_1_1_if_statement.html#a3cd23093b3c359fe719c74846c21cc99',1,'nmodl::ast::IfStatement']]],
   ['embed_5fnmodl_4693',['embed_nmodl',['../classnmodl_1_1visitor_1_1_j_s_o_n_visitor.html#aca3f08cb57a35253b379c7d86231abd2',1,'nmodl::visitor::JSONVisitor']]],
-  ['enable_5fvariable_5fname_5flookup_4694',['enable_variable_name_lookup',['../classnmodl_1_1codegen_1_1_codegen_c_visitor.html#a6c4cac6981f58052afa61ce956441969',1,'nmodl::codegen::CodegenCVisitor']]],
+  ['enable_5fvariable_5fname_5flookup_4694',['enable_variable_name_lookup',['../classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a52c4e7589ecefee4dbbff1286344499e',1,'nmodl::codegen::CodegenCppVisitor']]],
   ['enum_5fconstants_4695',['enum_constants',['../classnmodl_1_1parser_1_1_c_driver.html#aa747eb87252393cf95fadd780b430cc5',1,'nmodl::parser::CDriver']]],
   ['envpathsep_4696',['envpathsep',['../group__utils.html#ga8d5ced6d74954f098720a06f96d69899',1,'nmodl::utils']]],
   ['eps_4697',['EPS',['../group__solver.html#ga0b8788299c392976f3159910e0af2e9c',1,'nmodl::newton']]],

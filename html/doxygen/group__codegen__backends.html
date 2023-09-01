@@ -111,8 +111,8 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html">nmodl::codegen::CodegenCompatibilityVisitor</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Visitor for printing compatibility issues of the mod file  <a href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html">nmodl::codegen::CodegenCVisitor</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Visitor for printing C code compatible with legacy api of CoreNEURON  <a href="classnmodl_1_1codegen_1_1_codegen_c_visitor.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html">nmodl::codegen::CodegenCppVisitor</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Visitor for printing C code compatible with legacy api of CoreNEURON  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
@@ -121,14 +121,14 @@ Functions</h2></td></tr>
 <tr class="memitem:ga4999b23d646ccd6a79c07207369183bb"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__codegen__backends.html#ga4999b23d646ccd6a79c07207369183bb">nmodl::codegen::has_parameter_of_name</a> (const T &amp;node, const std::string &amp;name)</td></tr>
 <tr class="memdesc:ga4999b23d646ccd6a79c07207369183bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if function or procedure node has parameter with given name.  <a href="group__codegen__backends.html#ga4999b23d646ccd6a79c07207369183bb">More...</a><br /></td></tr>
 <tr class="separator:ga4999b23d646ccd6a79c07207369183bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gadb028516fa28f242953fe8c4a974d5bd"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:gadb028516fa28f242953fe8c4a974d5bd"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__codegen__backends.html#gadb028516fa28f242953fe8c4a974d5bd">nmodl::codegen::CodegenCVisitor::print_vector_elements</a> (const std::vector&lt; T &gt; &amp;elements, const std::string &amp;separator, const std::string &amp;prefix=&quot;&quot;)</td></tr>
-<tr class="memdesc:gadb028516fa28f242953fe8c4a974d5bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the items in a vector as a list.  <a href="group__codegen__backends.html#gadb028516fa28f242953fe8c4a974d5bd">More...</a><br /></td></tr>
-<tr class="separator:gadb028516fa28f242953fe8c4a974d5bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga6d44bd1e268f523ac1297aa82cbd81ef"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:ga6d44bd1e268f523ac1297aa82cbd81ef"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__codegen__backends.html#ga6d44bd1e268f523ac1297aa82cbd81ef">nmodl::codegen::CodegenCVisitor::print_function_declaration</a> (const T &amp;node, const std::string &amp;name)</td></tr>
-<tr class="memdesc:ga6d44bd1e268f523ac1297aa82cbd81ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print prototype declarations of functions or procedures.  <a href="group__codegen__backends.html#ga6d44bd1e268f523ac1297aa82cbd81ef">More...</a><br /></td></tr>
-<tr class="separator:ga6d44bd1e268f523ac1297aa82cbd81ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga743bcd56c5822a14381fd87fe586ed6c"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ga743bcd56c5822a14381fd87fe586ed6c"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__codegen__backends.html#ga743bcd56c5822a14381fd87fe586ed6c">nmodl::codegen::CodegenCppVisitor::print_vector_elements</a> (const std::vector&lt; T &gt; &amp;elements, const std::string &amp;separator, const std::string &amp;prefix=&quot;&quot;)</td></tr>
+<tr class="memdesc:ga743bcd56c5822a14381fd87fe586ed6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the items in a vector as a list.  <a href="group__codegen__backends.html#ga743bcd56c5822a14381fd87fe586ed6c">More...</a><br /></td></tr>
+<tr class="separator:ga743bcd56c5822a14381fd87fe586ed6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac82b533ad70154d8636a533e82c3bb18"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:gac82b533ad70154d8636a533e82c3bb18"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__codegen__backends.html#gac82b533ad70154d8636a533e82c3bb18">nmodl::codegen::CodegenCppVisitor::print_function_declaration</a> (const T &amp;node, const std::string &amp;name)</td></tr>
+<tr class="memdesc:gac82b533ad70154d8636a533e82c3bb18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print prototype declarations of functions or procedures.  <a href="group__codegen__backends.html#gac82b533ad70154d8636a533e82c3bb18">More...</a><br /></td></tr>
+<tr class="separator:gac82b533ad70154d8636a533e82c3bb18"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="ga4999b23d646ccd6a79c07207369183bb"></a>
@@ -179,8 +179,8 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="ga6d44bd1e268f523ac1297aa82cbd81ef"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga6d44bd1e268f523ac1297aa82cbd81ef">&#9670;&nbsp;</a></span>print_function_declaration()</h2>
+<a id="gac82b533ad70154d8636a533e82c3bb18"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gac82b533ad70154d8636a533e82c3bb18">&#9670;&nbsp;</a></span>print_function_declaration()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -191,7 +191,7 @@ template&lt;typename T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void nmodl::codegen::CodegenCVisitor::print_function_declaration </td>
+          <td class="memname">void nmodl::codegen::CodegenCppVisitor::print_function_declaration </td>
           <td>(</td>
           <td class="paramtype">const T &amp;&#160;</td>
           <td class="paramname"><em>node</em>, </td>
@@ -235,8 +235,8 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="gadb028516fa28f242953fe8c4a974d5bd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gadb028516fa28f242953fe8c4a974d5bd">&#9670;&nbsp;</a></span>print_vector_elements()</h2>
+<a id="ga743bcd56c5822a14381fd87fe586ed6c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga743bcd56c5822a14381fd87fe586ed6c">&#9670;&nbsp;</a></span>print_vector_elements()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -247,7 +247,7 @@ template&lt;typename T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void nmodl::codegen::CodegenCVisitor::print_vector_elements </td>
+          <td class="memname">void nmodl::codegen::CodegenCppVisitor::print_vector_elements </td>
           <td>(</td>
           <td class="paramtype">const std::vector&lt; T &gt; &amp;&#160;</td>
           <td class="paramname"><em>elements</em>, </td>

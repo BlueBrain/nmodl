@@ -8,7 +8,7 @@ var searchData=
   ['table_5fstatement_5fvariables_5031',['table_statement_variables',['../structnmodl_1_1codegen_1_1_codegen_info.html#a91beaa484a3ecdbc9e3c3c5b8fb30381',1,'nmodl::codegen::CodegenInfo']]],
   ['table_5fvars_5032',['table_vars',['../classnmodl_1_1ast_1_1_table_statement.html#a7a558daf9153f0da122c196c37b31c5e',1,'nmodl::ast::TableStatement']]],
   ['tags_5033',['tags',['../structnmodl_1_1visitor_1_1_sympy_replace_solutions_visitor_1_1_statement_dispenser.html#a339df55062d48066d60e5f8763705f72',1,'nmodl::visitor::SympyReplaceSolutionsVisitor::StatementDispenser']]],
-  ['target_5fprinter_5034',['target_printer',['../classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ac37d5497e77a6f324b4842d94576ff8e',1,'nmodl::codegen::CodegenCVisitor']]],
+  ['target_5fprinter_5034',['target_printer',['../classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a91a3da407079d6bf69eb004f3f7fdf38',1,'nmodl::codegen::CodegenCppVisitor']]],
   ['thread_5fargs_5035',['THREAD_ARGS',['../namespacenmodl_1_1codegen_1_1naming.html#a30bcd393b84cd89c6251460be772be41',1,'nmodl::codegen::naming']]],
   ['thread_5fargs_5fproto_5036',['THREAD_ARGS_PROTO',['../namespacenmodl_1_1codegen_1_1naming.html#a17075cdc0d5eb824684e8a23b586715c',1,'nmodl::codegen::naming']]],
   ['thread_5fcallback_5fregister_5037',['thread_callback_register',['../structnmodl_1_1codegen_1_1_codegen_info.html#a5593ea6c3082c5cbf033c3a8a54aa6fd',1,'nmodl::codegen::CodegenInfo']]],

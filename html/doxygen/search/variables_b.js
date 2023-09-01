@@ -9,7 +9,7 @@ var searchData=
   ['methods_4807',['methods',['../namespacenmodl_1_1details.html#a4f8e77160ea60cb0cd045106de94bf92',1,'nmodl::details']]],
   ['min_4808',['min',['../classnmodl_1_1ast_1_1_limits.html#aca4d11389af3c95f95b1fa1c02012555',1,'nmodl::ast::Limits::min()'],['../classnmodl_1_1ast_1_1_number_range.html#a70cd3c64895c6759ed237b9102b88e78',1,'nmodl::ast::NumberRange::min()']]],
   ['mod_5ffile_4809',['mod_file',['../structnmodl_1_1codegen_1_1_codegen_info.html#a713fd3d8497c602e733e755ffaffacac',1,'nmodl::codegen::CodegenInfo']]],
-  ['mod_5ffilename_4810',['mod_filename',['../classnmodl_1_1codegen_1_1_codegen_c_visitor.html#ac43358c931aff1bf690c24ed82ae7d2c',1,'nmodl::codegen::CodegenCVisitor']]],
+  ['mod_5ffilename_4810',['mod_filename',['../classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a52cb50316afdcb5899663c98aa47c0de',1,'nmodl::codegen::CodegenCppVisitor']]],
   ['mod_5fsuffix_4811',['mod_suffix',['../structnmodl_1_1codegen_1_1_codegen_info.html#ad173d2b9f305f30ca7c87f71ff2b28eb',1,'nmodl::codegen::CodegenInfo']]],
   ['model_5fsymtab_4812',['model_symtab',['../classnmodl_1_1ast_1_1_program.html#a429dce2546c419b364059a634f7bafe4',1,'nmodl::ast::Program']]],
   ['modfile_5fbflux_4813',['modfile_bflux',['../classnmodl_1_1visitor_1_1_kinetic_block_visitor.html#a31027b8b16c3d7e150979a499e387aa4',1,'nmodl::visitor::KineticBlockVisitor']]],

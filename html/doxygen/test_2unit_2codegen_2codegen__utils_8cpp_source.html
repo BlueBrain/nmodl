@@ -117,7 +117,7 @@ $(document).ready(function(){initNavTree('test_2unit_2codegen_2codegen__utils_8c
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        std::string double_constant = <span class="stringliteral">&quot;0.012345678901234567&quot;</span>;</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        THEN(<span class="stringliteral">&quot;Codegen C Visitor prints double with same precision&quot;</span>) {</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;            <span class="keyword">auto</span> nmodl_constant_result = <a class="code" href="namespacenmodl_1_1codegen_1_1utils.html#ad7f64bb2383682a662311a40a6a96a25">codegen::utils::format_double_string&lt;CodegenCVisitor&gt;</a>(</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;            <span class="keyword">auto</span> nmodl_constant_result = <a class="code" href="namespacenmodl_1_1codegen_1_1utils.html#a0c53d38eff00d585dd8199d5aaa2ac77">codegen::utils::format_double_string&lt;CodegenCppVisitor&gt;</a>(</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;                double_constant);</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;            REQUIRE(nmodl_constant_result == double_constant);</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        }</div>
@@ -129,7 +129,7 @@ $(document).ready(function(){initNavTree('test_2unit_2codegen_2codegen__utils_8c
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        std::string codegen_output = <span class="stringliteral">&quot;1.0&quot;</span>;</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        THEN(<span class="stringliteral">&quot;Codegen C Visitor prints integer as double number&quot;</span>) {</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;            <span class="keyword">auto</span> nmodl_constant_result = <a class="code" href="namespacenmodl_1_1codegen_1_1utils.html#ad7f64bb2383682a662311a40a6a96a25">codegen::utils::format_double_string&lt;CodegenCVisitor&gt;</a>(</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;            <span class="keyword">auto</span> nmodl_constant_result = <a class="code" href="namespacenmodl_1_1codegen_1_1utils.html#a0c53d38eff00d585dd8199d5aaa2ac77">codegen::utils::format_double_string&lt;CodegenCppVisitor&gt;</a>(</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;                double_constant);</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;            REQUIRE(nmodl_constant_result == codegen_output);</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        }</div>
@@ -140,7 +140,7 @@ $(document).ready(function(){initNavTree('test_2unit_2codegen_2codegen__utils_8c
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        THEN(<span class="stringliteral">&quot;Codegen C Visitor prints doubles with scientific notation&quot;</span>) {</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; test: tests) {</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;                REQUIRE(<a class="code" href="namespacenmodl_1_1codegen_1_1utils.html#ad7f64bb2383682a662311a40a6a96a25">codegen::utils::format_double_string&lt;CodegenCVisitor&gt;</a>(test.first) ==</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;                REQUIRE(<a class="code" href="namespacenmodl_1_1codegen_1_1utils.html#a0c53d38eff00d585dd8199d5aaa2ac77">codegen::utils::format_double_string&lt;CodegenCppVisitor&gt;</a>(test.first) ==</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;                        test.second);</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;            }</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        }</div>
@@ -150,7 +150,7 @@ $(document).ready(function(){initNavTree('test_2unit_2codegen_2codegen__utils_8c
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        std::string float_constant = <span class="stringliteral">&quot;0.01234567&quot;</span>;</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        THEN(<span class="stringliteral">&quot;Codegen C Visitor prints float with same precision&quot;</span>) {</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;            <span class="keyword">auto</span> nmodl_constant_result = <a class="code" href="namespacenmodl_1_1codegen_1_1utils.html#a8a05545df87abde7bd9c140c1c4d5d42">codegen::utils::format_float_string&lt;CodegenCVisitor&gt;</a>(</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;            <span class="keyword">auto</span> nmodl_constant_result = <a class="code" href="namespacenmodl_1_1codegen_1_1utils.html#a03553f15cecb4c252743c32bd6629513">codegen::utils::format_float_string&lt;CodegenCppVisitor&gt;</a>(</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;                float_constant);</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;            REQUIRE(nmodl_constant_result == float_constant);</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        }</div>
@@ -162,7 +162,7 @@ $(document).ready(function(){initNavTree('test_2unit_2codegen_2codegen__utils_8c
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        std::string codegen_output = <span class="stringliteral">&quot;1.0&quot;</span>;</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        THEN(<span class="stringliteral">&quot;Codegen C Visitor prints integer as double number&quot;</span>) {</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;            <span class="keyword">auto</span> nmodl_constant_result = <a class="code" href="namespacenmodl_1_1codegen_1_1utils.html#a8a05545df87abde7bd9c140c1c4d5d42">codegen::utils::format_float_string&lt;CodegenCVisitor&gt;</a>(</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;            <span class="keyword">auto</span> nmodl_constant_result = <a class="code" href="namespacenmodl_1_1codegen_1_1utils.html#a03553f15cecb4c252743c32bd6629513">codegen::utils::format_float_string&lt;CodegenCppVisitor&gt;</a>(</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;                float_constant);</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;            REQUIRE(nmodl_constant_result == codegen_output);</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        }</div>
@@ -173,7 +173,7 @@ $(document).ready(function(){initNavTree('test_2unit_2codegen_2codegen__utils_8c
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        THEN(<span class="stringliteral">&quot;Codegen C Visitor prints doubles with scientific notation&quot;</span>) {</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; test: tests) {</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;                REQUIRE(<a class="code" href="namespacenmodl_1_1codegen_1_1utils.html#a8a05545df87abde7bd9c140c1c4d5d42">codegen::utils::format_float_string&lt;CodegenCVisitor&gt;</a>(test.first) ==</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;                REQUIRE(<a class="code" href="namespacenmodl_1_1codegen_1_1utils.html#a03553f15cecb4c252743c32bd6629513">codegen::utils::format_float_string&lt;CodegenCppVisitor&gt;</a>(test.first) ==</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;                        test.second);</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;            }</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        }</div>
@@ -181,13 +181,13 @@ $(document).ready(function(){initNavTree('test_2unit_2codegen_2codegen__utils_8c
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="anamespacenmodl_1_1codegen_1_1utils_html_ad7f64bb2383682a662311a40a6a96a25"><div class="ttname"><a href="namespacenmodl_1_1codegen_1_1utils.html#ad7f64bb2383682a662311a40a6a96a25">nmodl::codegen::utils::format_double_string&lt; CodegenCVisitor &gt;</a></div><div class="ttdeci">std::string format_double_string&lt; CodegenCVisitor &gt;(const std::string &amp;s_value)</div><div class="ttdef"><b>Definition:</b> <a href="src_2codegen_2codegen__utils_8cpp_source.html#l00024">codegen_utils.cpp:24</a></div></div>
+<div class="ttc" id="anamespacenmodl_1_1codegen_1_1utils_html_a0c53d38eff00d585dd8199d5aaa2ac77"><div class="ttname"><a href="namespacenmodl_1_1codegen_1_1utils.html#a0c53d38eff00d585dd8199d5aaa2ac77">nmodl::codegen::utils::format_double_string&lt; CodegenCppVisitor &gt;</a></div><div class="ttdeci">std::string format_double_string&lt; CodegenCppVisitor &gt;(const std::string &amp;s_value)</div><div class="ttdef"><b>Definition:</b> <a href="src_2codegen_2codegen__utils_8cpp_source.html#l00024">codegen_utils.cpp:24</a></div></div>
 <div class="ttc" id="anamespacenmodl_html"><div class="ttname"><a href="namespacenmodl.html">nmodl</a></div><div class="ttdoc">encapsulates everything related to NMODL code generation framework</div><div class="ttdef"><b>Definition:</b> <a href="ast__common_8hpp_source.html#l00026">ast_common.hpp:26</a></div></div>
+<div class="ttc" id="anamespacenmodl_1_1codegen_1_1utils_html_a03553f15cecb4c252743c32bd6629513"><div class="ttname"><a href="namespacenmodl_1_1codegen_1_1utils.html#a03553f15cecb4c252743c32bd6629513">nmodl::codegen::utils::format_float_string&lt; CodegenCppVisitor &gt;</a></div><div class="ttdeci">std::string format_float_string&lt; CodegenCppVisitor &gt;(const std::string &amp;s_value)</div><div class="ttdef"><b>Definition:</b> <a href="src_2codegen_2codegen__utils_8cpp_source.html#l00034">codegen_utils.cpp:34</a></div></div>
 <div class="ttc" id="acodegen__cpp__visitor_8hpp_html"><div class="ttname"><a href="codegen__cpp__visitor_8hpp.html">codegen_cpp_visitor.hpp</a></div><div class="ttdoc">Visitor for printing C code compatible with legacy api of CoreNEURON</div></div>
 <div class="ttc" id="atest_2unit_2codegen_2codegen__utils_8cpp_html_aa8b1cde8cb086bc78a1a9b13ccf40419"><div class="ttname"><a href="test_2unit_2codegen_2codegen__utils_8cpp.html#aa8b1cde8cb086bc78a1a9b13ccf40419">SCENARIO</a></div><div class="ttdeci">SCENARIO(&quot;C codegen utility functions&quot;, &quot;[codegen][util][c]&quot;)</div><div class="ttdef"><b>Definition:</b> <a href="test_2unit_2codegen_2codegen__utils_8cpp_source.html#l00019">codegen_utils.cpp:19</a></div></div>
 <div class="ttc" id="atest_2unit_2codegen_2codegen__utils_8cpp_html_a9555a38d0c166b71c499821782550e65"><div class="ttname"><a href="test_2unit_2codegen_2codegen__utils_8cpp.html#a9555a38d0c166b71c499821782550e65">input_result_map</a></div><div class="ttdeci">std::unordered_map&lt; std::string, std::string &gt; input_result_map</div><div class="ttdef"><b>Definition:</b> <a href="test_2unit_2codegen_2codegen__utils_8cpp_source.html#l00017">codegen_utils.cpp:17</a></div></div>
 <div class="ttc" id="acodegen__utils_8hpp_html"><div class="ttname"><a href="codegen__utils_8hpp.html">codegen_utils.hpp</a></div><div class="ttdoc">Implement utility functions for codegen visitors.</div></div>
-<div class="ttc" id="anamespacenmodl_1_1codegen_1_1utils_html_a8a05545df87abde7bd9c140c1c4d5d42"><div class="ttname"><a href="namespacenmodl_1_1codegen_1_1utils.html#a8a05545df87abde7bd9c140c1c4d5d42">nmodl::codegen::utils::format_float_string&lt; CodegenCVisitor &gt;</a></div><div class="ttdeci">std::string format_float_string&lt; CodegenCVisitor &gt;(const std::string &amp;s_value)</div><div class="ttdef"><b>Definition:</b> <a href="src_2codegen_2codegen__utils_8cpp_source.html#l00034">codegen_utils.cpp:34</a></div></div>
 <!-- HTML footer for doxygen 1.8.15-->
 <!-- start footer part -->
 <div id="nav-path" class="navpath">
