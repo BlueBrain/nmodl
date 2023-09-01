@@ -5,3 +5,4 @@ pytest-cov
 sympy
 numpy
 find_libpython
+scikit-build
