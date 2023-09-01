@@ -658,6 +658,11 @@ minCai
         <span class="bp">self</span><span class="o">.</span><span class="n">pycode</span> <span class="o">+=</span> <span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">indent</span> <span class="o">+</span> <span class="s2">&quot;else:</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="n">node</span><span class="o">.</span><span class="n">get_statement_block</span><span class="p">()</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
+    <span class="k">def</span> <span class="nf">visit_wrapped_expression</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pycode</span> <span class="o">+=</span> <span class="s2">&quot;(&quot;</span>
+        <span class="n">node</span><span class="o">.</span><span class="n">visit_children</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pycode</span> <span class="o">+=</span> <span class="s2">&quot;)&quot;</span>
+
     <span class="k">def</span> <span class="nf">visit_binary_expression</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
         <span class="n">lhs</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">lhs</span>
         <span class="n">rhs</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">rhs</span>
@@ -677,7 +682,7 @@ minCai
         <span class="bp">self</span><span class="o">.</span><span class="n">pycode</span> <span class="o">+=</span> <span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">get_node_name</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">visit_integer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pycode</span> <span class="o">+=</span> <span class="n">nmod</span><span class="o">.</span><span class="n">to_nmodl</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pycode</span> <span class="o">+=</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">to_nmodl</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">visit_double</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pycode</span> <span class="o">+=</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">to_nmodl</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
@@ -701,7 +706,7 @@ minCai
 <div class="highlight"><pre>
 def myfunc(x, y):
     if x &lt; y:
-        return x + y
+        return (x + y)
     else:
         return y
 
