@@ -665,8 +665,8 @@ $(document).ready(function(){initNavTree('test_2unit_2codegen_2codegen__cpp__vis
 <div class="line"><a name="l00569"></a><span class="lineno">  569</span>&#160;                             ContainsSubstring(<span class="stringliteral">&quot;hoc_reg_ba(mech_type, nrn_before_after_2_ba1, &quot;</span></div>
 <div class="line"><a name="l00570"></a><span class="lineno">  570</span>&#160;                                               <span class="stringliteral">&quot;BAType::Before + BAType::Initial);&quot;</span>));</div>
 <div class="line"><a name="l00571"></a><span class="lineno">  571</span>&#160;                std::string generated_code = R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00572"></a><span class="lineno">  572</span>&#160;<span class="stringliteral">        #pragma ivdep</span></div>
-<div class="line"><a name="l00573"></a><span class="lineno">  573</span>&#160;<span class="stringliteral">        #pragma omp simd</span></div>
+<div class="line"><a name="l00572"></a><span class="lineno">  572</span>&#160;<span class="stringliteral">        #pragma omp simd</span></div>
+<div class="line"><a name="l00573"></a><span class="lineno">  573</span>&#160;<span class="stringliteral">        #pragma ivdep</span></div>
 <div class="line"><a name="l00574"></a><span class="lineno">  574</span>&#160;<span class="stringliteral">        for (int id = 0; id &lt; nodecount; id++) {</span></div>
 <div class="line"><a name="l00575"></a><span class="lineno">  575</span>&#160;<span class="stringliteral">            int node_id = node_index[id];</span></div>
 <div class="line"><a name="l00576"></a><span class="lineno">  576</span>&#160;<span class="stringliteral">            double v = voltage[node_id];</span></div>
@@ -687,8 +687,8 @@ $(document).ready(function(){initNavTree('test_2unit_2codegen_2codegen__cpp__vis
 <div class="line"><a name="l00591"></a><span class="lineno">  591</span>&#160;                             ContainsSubstring(<span class="stringliteral">&quot;hoc_reg_ba(mech_type, nrn_before_after_3_ba1, &quot;</span></div>
 <div class="line"><a name="l00592"></a><span class="lineno">  592</span>&#160;                                               <span class="stringliteral">&quot;BAType::After + BAType::Initial);&quot;</span>));</div>
 <div class="line"><a name="l00593"></a><span class="lineno">  593</span>&#160;                std::string generated_code = R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00594"></a><span class="lineno">  594</span>&#160;<span class="stringliteral">        #pragma ivdep</span></div>
-<div class="line"><a name="l00595"></a><span class="lineno">  595</span>&#160;<span class="stringliteral">        #pragma omp simd</span></div>
+<div class="line"><a name="l00594"></a><span class="lineno">  594</span>&#160;<span class="stringliteral">        #pragma omp simd</span></div>
+<div class="line"><a name="l00595"></a><span class="lineno">  595</span>&#160;<span class="stringliteral">        #pragma ivdep</span></div>
 <div class="line"><a name="l00596"></a><span class="lineno">  596</span>&#160;<span class="stringliteral">        for (int id = 0; id &lt; nodecount; id++) {</span></div>
 <div class="line"><a name="l00597"></a><span class="lineno">  597</span>&#160;<span class="stringliteral">            int node_id = node_index[id];</span></div>
 <div class="line"><a name="l00598"></a><span class="lineno">  598</span>&#160;<span class="stringliteral">            double v = voltage[node_id];</span></div>
@@ -709,8 +709,8 @@ $(document).ready(function(){initNavTree('test_2unit_2codegen_2codegen__cpp__vis
 <div class="line"><a name="l00613"></a><span class="lineno">  613</span>&#160;                             ContainsSubstring(<span class="stringliteral">&quot;hoc_reg_ba(mech_type, nrn_before_after_4_ba1, &quot;</span></div>
 <div class="line"><a name="l00614"></a><span class="lineno">  614</span>&#160;                                               <span class="stringliteral">&quot;BAType::Before + BAType::Step);&quot;</span>));</div>
 <div class="line"><a name="l00615"></a><span class="lineno">  615</span>&#160;                std::string generated_code = R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00616"></a><span class="lineno">  616</span>&#160;<span class="stringliteral">        #pragma ivdep</span></div>
-<div class="line"><a name="l00617"></a><span class="lineno">  617</span>&#160;<span class="stringliteral">        #pragma omp simd</span></div>
+<div class="line"><a name="l00616"></a><span class="lineno">  616</span>&#160;<span class="stringliteral">        #pragma omp simd</span></div>
+<div class="line"><a name="l00617"></a><span class="lineno">  617</span>&#160;<span class="stringliteral">        #pragma ivdep</span></div>
 <div class="line"><a name="l00618"></a><span class="lineno">  618</span>&#160;<span class="stringliteral">        for (int id = 0; id &lt; nodecount; id++) {</span></div>
 <div class="line"><a name="l00619"></a><span class="lineno">  619</span>&#160;<span class="stringliteral">            int node_id = node_index[id];</span></div>
 <div class="line"><a name="l00620"></a><span class="lineno">  620</span>&#160;<span class="stringliteral">            double v = voltage[node_id];</span></div>
@@ -986,8 +986,8 @@ $(document).ready(function(){initNavTree('test_2unit_2codegen_2codegen__cpp__vis
 <div class="line"><a name="l00890"></a><span class="lineno">  890</span>&#160;<span class="stringliteral">        NetReceiveBuffer_t* nrb = ml-&gt;_net_receive_buffer;</span></div>
 <div class="line"><a name="l00891"></a><span class="lineno">  891</span>&#160;<span class="stringliteral">        auto* const inst = static_cast&lt;_Instance*&gt;(ml-&gt;instance);</span></div>
 <div class="line"><a name="l00892"></a><span class="lineno">  892</span>&#160;<span class="stringliteral">        int count = nrb-&gt;_displ_cnt;</span></div>
-<div class="line"><a name="l00893"></a><span class="lineno">  893</span>&#160;<span class="stringliteral">        #pragma ivdep</span></div>
-<div class="line"><a name="l00894"></a><span class="lineno">  894</span>&#160;<span class="stringliteral">        #pragma omp simd</span></div>
+<div class="line"><a name="l00893"></a><span class="lineno">  893</span>&#160;<span class="stringliteral">        #pragma omp simd</span></div>
+<div class="line"><a name="l00894"></a><span class="lineno">  894</span>&#160;<span class="stringliteral">        #pragma ivdep</span></div>
 <div class="line"><a name="l00895"></a><span class="lineno">  895</span>&#160;<span class="stringliteral">        for (int i = 0; i &lt; count; i++) {</span></div>
 <div class="line"><a name="l00896"></a><span class="lineno">  896</span>&#160;<span class="stringliteral">            int start = nrb-&gt;_displ[i];</span></div>
 <div class="line"><a name="l00897"></a><span class="lineno">  897</span>&#160;<span class="stringliteral">            int end = nrb-&gt;_displ[i+1];</span></div>
