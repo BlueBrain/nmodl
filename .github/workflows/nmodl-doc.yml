@@ -56,7 +56,7 @@ jobs:
       - name: Install Python3 dependencies
         working-directory: ${{runner.workspace}}/nmodl
         run: |
-          pip3 install -U pip setuptools scikit-build
+          pip3 install -U pip setuptools
           pip3 install --user -r requirements.txt
 
       # This step will set up an SSH connection on tmate.io for live debugging.
