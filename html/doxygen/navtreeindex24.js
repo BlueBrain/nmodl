@@ -1,5 +1,7 @@
 var NAVTREEINDEX24 =
 {
+"conductance__hint_8hpp.html":[4,0,0,0,0,0,0,20],
+"conductance__hint_8hpp_source.html":[4,0,0,0,0,0,0,20],
 "config_8h.html":[4,0,1,2,0],
 "config_8h_source.html":[4,0,1,2,0],
 "conserve_8hpp.html":[4,0,0,0,0,0,0,21],
@@ -202,8 +204,8 @@ var NAVTREEINDEX24 =
 "functions_e.html":[3,3,0,4],
 "functions_enum.html":[3,3,4],
 "functions_f.html":[3,3,0,5],
-"functions_func.html":[3,3,1],
 "functions_func.html":[3,3,1,0],
+"functions_func.html":[3,3,1],
 "functions_func_b.html":[3,3,1,1],
 "functions_func_c.html":[3,3,1,2],
 "functions_func_d.html":[3,3,1,3],
@@ -243,11 +245,9 @@ var NAVTREEINDEX24 =
 "functions_type.html":[3,3,3],
 "functions_u.html":[3,3,0,19],
 "functions_v.html":[3,3,0,20],
-"functions_vars.html":[3,3,2],
 "functions_vars.html":[3,3,2,0],
+"functions_vars.html":[3,3,2],
 "functions_vars_b.html":[3,3,2,1],
 "functions_vars_c.html":[3,3,2,2],
-"functions_vars_d.html":[3,3,2,3],
-"functions_vars_e.html":[3,3,2,4],
-"functions_vars_f.html":[3,3,2,5]
+"functions_vars_d.html":[3,3,2,3]
 };
