@@ -1,13 +1,13 @@
 var classnmodl_1_1ast_1_1_pointer_var =
 [
     [ "PointerVar", "classnmodl_1_1ast_1_1_pointer_var.html#a9049bb048da03180e53b87ec3166b47b", null ],
-    [ "PointerVar", "classnmodl_1_1ast_1_1_pointer_var.html#a02244fc0f4154481ff949b5be79dab14", null ],
+    [ "PointerVar", "classnmodl_1_1ast_1_1_pointer_var.html#a3c3e3638605dc16b9295bac2aba929bf", null ],
     [ "PointerVar", "classnmodl_1_1ast_1_1_pointer_var.html#af4d7aa171d1f019e6c204d07df228b62", null ],
     [ "~PointerVar", "classnmodl_1_1ast_1_1_pointer_var.html#a8741f2ed1e64d6a563a5dfa3f0955c1c", null ],
     [ "accept", "classnmodl_1_1ast_1_1_pointer_var.html#a8b6aeb376a7a5509d31abc5e245a5fc7", null ],
     [ "accept", "classnmodl_1_1ast_1_1_pointer_var.html#aace59e7e4f3a30ee2ddbf943e4ff5eaf", null ],
     [ "clone", "classnmodl_1_1ast_1_1_pointer_var.html#a28fa1ae58a28bd280c3258c21e5d57fc", null ],
-    [ "get_name", "classnmodl_1_1ast_1_1_pointer_var.html#a8a458fb976913f298b00c3773a961e44", null ],
+    [ "get_name", "classnmodl_1_1ast_1_1_pointer_var.html#a0b747fc94b6f6bf7d30900ddc85d7158", null ],
     [ "get_node_name", "classnmodl_1_1ast_1_1_pointer_var.html#ae978e79bd5ae567030a180d5c198b082", null ],
     [ "get_node_type", "classnmodl_1_1ast_1_1_pointer_var.html#a7438b6d7acfccc89bb0c2b831b3c8cc8", null ],
     [ "get_node_type_name", "classnmodl_1_1ast_1_1_pointer_var.html#a677e3528639e3ae0f911400dfa52fa71", null ],

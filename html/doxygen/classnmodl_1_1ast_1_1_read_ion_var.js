@@ -1,13 +1,13 @@
 var classnmodl_1_1ast_1_1_read_ion_var =
 [
     [ "ReadIonVar", "classnmodl_1_1ast_1_1_read_ion_var.html#a735f451dc9cd10d422b0ce3c011ed963", null ],
-    [ "ReadIonVar", "classnmodl_1_1ast_1_1_read_ion_var.html#a8ad4ee57f5bfadfe3805205db43b82e8", null ],
+    [ "ReadIonVar", "classnmodl_1_1ast_1_1_read_ion_var.html#aeb8a5eff809f8ab24863e86c5f543d50", null ],
     [ "ReadIonVar", "classnmodl_1_1ast_1_1_read_ion_var.html#a321d2b8a0d3a6bb8f7579e2f27f1aec9", null ],
     [ "~ReadIonVar", "classnmodl_1_1ast_1_1_read_ion_var.html#af7eca28de23c8e300d6c212ea5ea69eb", null ],
     [ "accept", "classnmodl_1_1ast_1_1_read_ion_var.html#aed1e911031d9a9d0debc9cd4133a3974", null ],
     [ "accept", "classnmodl_1_1ast_1_1_read_ion_var.html#a1fcf33ec1e156e109e39156d61566590", null ],
     [ "clone", "classnmodl_1_1ast_1_1_read_ion_var.html#abe6d6c70da188dcb467109beaddba45e", null ],
-    [ "get_name", "classnmodl_1_1ast_1_1_read_ion_var.html#ab91f6ed4179739a894374ea6490a2900", null ],
+    [ "get_name", "classnmodl_1_1ast_1_1_read_ion_var.html#a2f55d5b6b9c54114f3e4011bf8bf1b46", null ],
     [ "get_node_name", "classnmodl_1_1ast_1_1_read_ion_var.html#aadea017df1cb24cdadc66bfe079da243", null ],
     [ "get_node_type", "classnmodl_1_1ast_1_1_read_ion_var.html#ad42da1e074494913e797bf08c6029173", null ],
     [ "get_node_type_name", "classnmodl_1_1ast_1_1_read_ion_var.html#a63380a5f444e1d2f60ea9c86d0fb5fd5", null ],

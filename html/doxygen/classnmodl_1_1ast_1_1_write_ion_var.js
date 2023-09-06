@@ -1,13 +1,13 @@
 var classnmodl_1_1ast_1_1_write_ion_var =
 [
     [ "WriteIonVar", "classnmodl_1_1ast_1_1_write_ion_var.html#a0d00c26daa8658ee7f7fca0a79fcd087", null ],
-    [ "WriteIonVar", "classnmodl_1_1ast_1_1_write_ion_var.html#af623c9972ee57bada496c3cf8de18814", null ],
+    [ "WriteIonVar", "classnmodl_1_1ast_1_1_write_ion_var.html#a253097f550e67e805eeadb3119b9497d", null ],
     [ "WriteIonVar", "classnmodl_1_1ast_1_1_write_ion_var.html#aeaf6de86af2f842ff7ad994b820cae01", null ],
     [ "~WriteIonVar", "classnmodl_1_1ast_1_1_write_ion_var.html#ad49f0824f2b0e2ebc24fa33608dd7600", null ],
     [ "accept", "classnmodl_1_1ast_1_1_write_ion_var.html#a08665b0f826789b2747c2db19c4bf0a5", null ],
     [ "accept", "classnmodl_1_1ast_1_1_write_ion_var.html#a37679971b2523c50de70624c9b076d8d", null ],
     [ "clone", "classnmodl_1_1ast_1_1_write_ion_var.html#a14a8d9f3fc94cf332e8f9009294e9875", null ],
-    [ "get_name", "classnmodl_1_1ast_1_1_write_ion_var.html#acdc333877a054d9d5349b5ca76f38c03", null ],
+    [ "get_name", "classnmodl_1_1ast_1_1_write_ion_var.html#a943895729b795aaa2775d8826aff8046", null ],
     [ "get_node_name", "classnmodl_1_1ast_1_1_write_ion_var.html#a45b7fc3727aa649175f9f07d6ea1c8e0", null ],
     [ "get_node_type", "classnmodl_1_1ast_1_1_write_ion_var.html#a05e234e18e3fa3cedc851dadab3bae8f", null ],
     [ "get_node_type_name", "classnmodl_1_1ast_1_1_write_ion_var.html#ae209c2a88346976deceb532178286fd0", null ],

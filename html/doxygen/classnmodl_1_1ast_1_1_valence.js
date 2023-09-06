@@ -1,7 +1,7 @@
 var classnmodl_1_1ast_1_1_valence =
 [
     [ "Valence", "classnmodl_1_1ast_1_1_valence.html#acbd1671653f567543a9e225643a0cc89", null ],
-    [ "Valence", "classnmodl_1_1ast_1_1_valence.html#adc67c4796ae1d0370f63268181014c22", null ],
+    [ "Valence", "classnmodl_1_1ast_1_1_valence.html#afb67d26bb621d2788662c5d0d4044181", null ],
     [ "Valence", "classnmodl_1_1ast_1_1_valence.html#af9c9657b95a55238325b4b9cce302099", null ],
     [ "~Valence", "classnmodl_1_1ast_1_1_valence.html#aa45adcef86980a77fc536a5f58bd5d14", null ],
     [ "accept", "classnmodl_1_1ast_1_1_valence.html#a58aa2b3c770a887ff8e3002ea57a82b5", null ],
@@ -12,8 +12,8 @@ var classnmodl_1_1ast_1_1_valence =
     [ "get_shared_ptr", "classnmodl_1_1ast_1_1_valence.html#acfa3985c058d6f68320a4c4b33739b80", null ],
     [ "get_shared_ptr", "classnmodl_1_1ast_1_1_valence.html#af766a93bc9bda62889f5b346e272c2ae", null ],
     [ "get_token", "classnmodl_1_1ast_1_1_valence.html#aae1df52edd627895847307bcb20d3400", null ],
-    [ "get_type", "classnmodl_1_1ast_1_1_valence.html#a0e3810d48e416fae9dac2bb7c645e1c5", null ],
-    [ "get_value", "classnmodl_1_1ast_1_1_valence.html#a27b541abc093b5833eaf96c6b7db625b", null ],
+    [ "get_type", "classnmodl_1_1ast_1_1_valence.html#a08dea8ca16ee1393dcc2cd761aba3ab3", null ],
+    [ "get_value", "classnmodl_1_1ast_1_1_valence.html#a322b2be5e9044a76bc66a5182a706d6e", null ],
     [ "is_valence", "classnmodl_1_1ast_1_1_valence.html#a73a31b24df312260cad060fe20b23129", null ],
     [ "set_parent_in_children", "classnmodl_1_1ast_1_1_valence.html#a8d8cc21bef88abc25c8c0359ebeaf8d2", null ],
     [ "set_token", "classnmodl_1_1ast_1_1_valence.html#a0bffbee50d480517cb6260db0d166d36", null ],

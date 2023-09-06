@@ -10,7 +10,7 @@ var classnmodl_1_1visitor_1_1_sympy_replace_solutions_visitor =
     [ "SympyReplaceSolutionsVisitor", "classnmodl_1_1visitor_1_1_sympy_replace_solutions_visitor.html#a354b8a8019267e8f94f9acf9fd95afdc", null ],
     [ "replaced_statements_begin", "classnmodl_1_1visitor_1_1_sympy_replace_solutions_visitor.html#a63502ec42fb5f500a6af3c39c0b77fd1", null ],
     [ "replaced_statements_end", "classnmodl_1_1visitor_1_1_sympy_replace_solutions_visitor.html#aeb334753f7b2306ff78ab2d887257b21", null ],
-    [ "try_replace_tagged_statement", "classnmodl_1_1visitor_1_1_sympy_replace_solutions_visitor.html#a2ec9f822cfb924898d45252f24a33ab8", null ],
+    [ "try_replace_tagged_statement", "classnmodl_1_1visitor_1_1_sympy_replace_solutions_visitor.html#a2db62f43200dbf8903098236fa25468a", null ],
     [ "visit_binary_expression", "classnmodl_1_1visitor_1_1_sympy_replace_solutions_visitor.html#a85681fc42cfa83ed5436d82d7548c323", null ],
     [ "visit_diff_eq_expression", "classnmodl_1_1visitor_1_1_sympy_replace_solutions_visitor.html#a4ac639bdc2106e8617dc6d0217532eed", null ],
     [ "visit_lin_equation", "classnmodl_1_1visitor_1_1_sympy_replace_solutions_visitor.html#ad9b0a42e62af2589b4ab82055f529d36", null ],

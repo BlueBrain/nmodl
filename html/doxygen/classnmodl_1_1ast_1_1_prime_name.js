@@ -1,7 +1,7 @@
 var classnmodl_1_1ast_1_1_prime_name =
 [
     [ "PrimeName", "classnmodl_1_1ast_1_1_prime_name.html#a8ecdb7e25ec671b976b7825e7249d44b", null ],
-    [ "PrimeName", "classnmodl_1_1ast_1_1_prime_name.html#a75d9e8a65fb57a5ecaef2126af763ed3", null ],
+    [ "PrimeName", "classnmodl_1_1ast_1_1_prime_name.html#a1a16a5c38df6e5faa9f3b4a578c1fefc", null ],
     [ "PrimeName", "classnmodl_1_1ast_1_1_prime_name.html#a300b83cc9e662d8055d4dc5561e20b94", null ],
     [ "PrimeName", "classnmodl_1_1ast_1_1_prime_name.html#a27ece66502c17fbc5b9c0737e0e07906", null ],
     [ "~PrimeName", "classnmodl_1_1ast_1_1_prime_name.html#a6ada0214158421b42c6816436124885d", null ],
@@ -11,11 +11,11 @@ var classnmodl_1_1ast_1_1_prime_name =
     [ "get_node_name", "classnmodl_1_1ast_1_1_prime_name.html#aa025a041f5f8ce77572252f1befbb035", null ],
     [ "get_node_type", "classnmodl_1_1ast_1_1_prime_name.html#a546ef7779d482797d972f1ce0a91a656", null ],
     [ "get_node_type_name", "classnmodl_1_1ast_1_1_prime_name.html#a3802f55476405713ca9f84438e2bd38c", null ],
-    [ "get_order", "classnmodl_1_1ast_1_1_prime_name.html#a285c08411f4f797f6f59726f0d7b908a", null ],
+    [ "get_order", "classnmodl_1_1ast_1_1_prime_name.html#aeee97bce1b66b3e24267d8fe47b38607", null ],
     [ "get_shared_ptr", "classnmodl_1_1ast_1_1_prime_name.html#a73f9f0456879aec5970d7f3beb6e6731", null ],
     [ "get_shared_ptr", "classnmodl_1_1ast_1_1_prime_name.html#a3fca3bfbbe0a24fa65f1df6e21c481a5", null ],
     [ "get_token", "classnmodl_1_1ast_1_1_prime_name.html#ae2660b8c818a9a277c1041ba40f8f597", null ],
-    [ "get_value", "classnmodl_1_1ast_1_1_prime_name.html#a53e173abd57147444a8ae542e37069dd", null ],
+    [ "get_value", "classnmodl_1_1ast_1_1_prime_name.html#a07b1f2e0eb75a2d0bdcd4850ac186f5b", null ],
     [ "is_prime_name", "classnmodl_1_1ast_1_1_prime_name.html#a68174abf235029484bb5bd6278c8c911", null ],
     [ "set_order", "classnmodl_1_1ast_1_1_prime_name.html#ac884cb906400674f53ab45f688f287d5", null ],
     [ "set_order", "classnmodl_1_1ast_1_1_prime_name.html#a2da73f8b87cf671948c16cb9981a2584", null ],
