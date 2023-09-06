@@ -1,7 +1,5 @@
 var NAVTREEINDEX23 =
 {
-"classnmodl_1_1visitor_1_1_visitor.html#aebe5ddd198b6d60fbaf17167a4c8cb7e":[1,8,0,32,61],
-"classnmodl_1_1visitor_1_1_visitor.html#aecd2c5dceb539ce7e095b7da08b9cb2b":[1,8,0,32,9],
 "classnmodl_1_1visitor_1_1_visitor.html#af0ba366746ab7f85e4de936ea14b2bd4":[1,8,0,32,29],
 "classnmodl_1_1visitor_1_1_visitor.html#af104440315217091807014fed84cb6d6":[1,8,0,32,7],
 "classnmodl_1_1visitor_1_1_visitor.html#af80f0ed0c3f251a58dcb86c822297bd8":[1,8,0,32,41],
@@ -249,5 +247,7 @@ var NAVTREEINDEX23 =
 "common__utils_8hpp.html#ggabf78118141123c84917fbafa57c97b5ba6d494c0b7b8c95f1ca055e1afd307200":[4,0,1,10,1,0,0],
 "common__utils_8hpp_source.html":[4,0,1,10,1],
 "compartment_8hpp.html":[4,0,0,0,0,0,0,19],
-"compartment_8hpp_source.html":[4,0,0,0,0,0,0,19]
+"compartment_8hpp_source.html":[4,0,0,0,0,0,0,19],
+"conductance__hint_8hpp.html":[4,0,0,0,0,0,0,20],
+"conductance__hint_8hpp_source.html":[4,0,0,0,0,0,0,20]
 };
