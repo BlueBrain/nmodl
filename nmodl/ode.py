@@ -315,6 +315,7 @@ def solve_non_lin_system(eq_strings, vars, constants, function_calls):
     vecJcode = []
     for i, j in itertools.product(range(jacobian.rows), range(jacobian.cols)):
         flat_index = i + jacobian.rows * j
+        flat_index = i*jacobian.cols + j
 
         rhs = sp.ccode(jacobian[i,j].simplify().subs(X_vec_map).evalf(), user_functions=custom_fcts)
         vecJcode.append(f"J[{flat_index}] = {rhs}")
