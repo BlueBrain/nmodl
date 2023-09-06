@@ -60,7 +60,7 @@ EIGEN_DEVICE_FUNC int newton_solver(Eigen::Matrix<double, N, 1>& X,
     // Vector to store result of function F(X):
     Eigen::Matrix<double, N, 1> F;
     // Matrix to store jacobian of F(X):
-    Eigen::Matrix<double, N, N> J;
+    Eigen::Matrix<double, N, N, Eigen::RowMajor> J;
     // Solver iteration count:
     int iter = -1;
     while (++iter < max_iter) {
@@ -72,12 +72,6 @@ EIGEN_DEVICE_FUNC int newton_solver(Eigen::Matrix<double, N, 1>& X,
             // we have converged: return iteration count
             return iter;
         }
-        // In Eigen the default storage order is ColMajor.
-        // Crout's implementation requires matrices stored in RowMajor order (C-style arrays).
-        // Therefore, the transposeInPlace is critical such that the data() method to give the rows
-        // instead of the columns.
-        if (!J.IsRowMajor)
-            J.transposeInPlace();
         Eigen::Matrix<int, N, 1> pivot;
         Eigen::Matrix<double, N, 1> rowmax;
         // Check if J is singular
@@ -184,7 +178,7 @@ EIGEN_DEVICE_FUNC int newton_solver_small_N(Eigen::Matrix<double, N, 1>& X,
                                             int max_iter) {
     bool invertible;
     Eigen::Matrix<double, N, 1> F;
-    Eigen::Matrix<double, N, N> J, J_inv;
+    Eigen::Matrix<double, N, N, Eigen::RowMajor> J, J_inv;
     int iter = -1;
     while (++iter < max_iter) {
         functor(X, F, J);

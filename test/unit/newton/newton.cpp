@@ -206,7 +206,7 @@ SCENARIO("Non-linear system to solve with Newton Solver", "[analytic][solver]") 
         struct functor {
             void operator()(const Eigen::Matrix<double, 1, 1>& X,
                             Eigen::Matrix<double, 1, 1>& F,
-                            Eigen::Matrix<double, 1, 1>& J) const {
+                            Eigen::Matrix<double, 1, 1, Eigen::RowMajor>& J) const {
                 // Function F(X) to find F(X)=0 solution
                 F[0] = -3.0 * X[0] + 3.0;
                 // Jacobian of F(X), i.e. the matrix dF(X)_i/dX_j
@@ -215,7 +215,7 @@ SCENARIO("Non-linear system to solve with Newton Solver", "[analytic][solver]") 
         };
         Eigen::Matrix<double, 1, 1> X{22.2536};
         Eigen::Matrix<double, 1, 1> F;
-        Eigen::Matrix<double, 1, 1> J;
+        Eigen::Matrix<double, 1, 1, Eigen::RowMajor> J;
         functor fn;
         int iter_newton = newton::newton_solver(X, fn);
         fn(X, F, J);
@@ -232,14 +232,14 @@ SCENARIO("Non-linear system to solve with Newton Solver", "[analytic][solver]") 
         struct functor {
             void operator()(const Eigen::Matrix<double, 1, 1>& X,
                             Eigen::Matrix<double, 1, 1>& F,
-                            Eigen::Matrix<double, 1, 1>& J) const {
+                            Eigen::Matrix<double, 1, 1, Eigen::RowMajor>& J) const {
                 F[0] = -3.0 * X[0] + std::sin(X[0]) + std::log(X[0] * X[0] + 11.435243) + 3.0;
                 J(0, 0) = -3.0 + std::cos(X[0]) + 2.0 * X[0] / (X[0] * X[0] + 11.435243);
             }
         };
         Eigen::Matrix<double, 1, 1> X{-0.21421};
         Eigen::Matrix<double, 1, 1> F;
-        Eigen::Matrix<double, 1, 1> J;
+        Eigen::Matrix<double, 1, 1, Eigen::RowMajor> J;
         functor fn;
         int iter_newton = newton::newton_solver(X, fn);
         fn(X, F, J);
@@ -256,7 +256,7 @@ SCENARIO("Non-linear system to solve with Newton Solver", "[analytic][solver]") 
         struct functor {
             void operator()(const Eigen::Matrix<double, 2, 1>& X,
                             Eigen::Matrix<double, 2, 1>& F,
-                            Eigen::Matrix<double, 2, 2>& J) const {
+                            Eigen::Matrix<double, 2, 2, Eigen::RowMajor>& J) const {
                 F[0] = -3.0 * X[0] * X[1] + X[0] + 2.0 * X[1] - 1.0;
                 F[1] = 4.0 * X[0] - 0.29999999999999999 * std::pow(X[1], 2) + X[1] + 0.4;
                 J(0, 0) = -3.0 * X[1] + 1.0;
@@ -267,7 +267,7 @@ SCENARIO("Non-linear system to solve with Newton Solver", "[analytic][solver]") 
         };
         Eigen::Matrix<double, 2, 1> X{0.2, 0.4};
         Eigen::Matrix<double, 2, 1> F;
-        Eigen::Matrix<double, 2, 2> J;
+        Eigen::Matrix<double, 2, 2, Eigen::RowMajor> J;
         functor fn;
         int iter_newton = newton::newton_solver(X, fn);
         fn(X, F, J);
@@ -292,7 +292,7 @@ SCENARIO("Non-linear system to solve with Newton Solver", "[analytic][solver]") 
             double z = 0.99;
             void operator()(const Eigen::Matrix<double, 3, 1>& X,
                             Eigen::Matrix<double, 3, 1>& F,
-                            Eigen::Matrix<double, 3, 3>& J) const {
+                            Eigen::Matrix<double, 3, 3, Eigen::RowMajor>& J) const {
                 F(0) = -(-_x_old - dt * (a * std::pow(X[0], 2) + X[1]) + X[0]);
                 F(1) = -(_y_old - dt * (a * X[0] + b * X[1] + d) + X[1]);
                 F(2) = -(_z_old - dt * (e * z - 3.0 * X[0] + 2.0 * X[1]) + X[2]);
@@ -309,7 +309,7 @@ SCENARIO("Non-linear system to solve with Newton Solver", "[analytic][solver]") 
         };
         Eigen::Matrix<double, 3, 1> X{0.21231, 0.4435, -0.11537};
         Eigen::Matrix<double, 3, 1> F;
-        Eigen::Matrix<double, 3, 3> J;
+        Eigen::Matrix<double, 3, 3, Eigen::RowMajor> J;
         functor fn;
         int iter_newton = newton::newton_solver(X, fn);
         fn(X, F, J);
@@ -330,7 +330,7 @@ SCENARIO("Non-linear system to solve with Newton Solver", "[analytic][solver]") 
             double dt = 0.2;
             void operator()(const Eigen::Matrix<double, 4, 1>& X,
                             Eigen::Matrix<double, 4, 1>& F,
-                            Eigen::Matrix<double, 4, 4>& J) const {
+                            Eigen::Matrix<double, 4, 4, Eigen::RowMajor>& J) const {
                 F[0] = -(-3.0 * X[0] * X[2] * dt + X[0] - X0_old + 2.0 * dt / X[1]);
                 F[1] = -(X[1] - X1_old + dt * (4.0 * X[0] - 6.2 * X[1] + X[3]));
                 F[2] = -((X[2] * (X[2] - X2_old) - dt * (X[2] * (-1.2 * X[1] + 3.0) + 0.3)) / X[2]);
@@ -355,7 +355,7 @@ SCENARIO("Non-linear system to solve with Newton Solver", "[analytic][solver]") 
         };
         Eigen::Matrix<double, 4, 1> X{0.21231, 0.4435, -0.11537, -0.8124312};
         Eigen::Matrix<double, 4, 1> F;
-        Eigen::Matrix<double, 4, 4> J;
+        Eigen::Matrix<double, 4, 4, Eigen::RowMajor> J;
         functor fn;
         int iter_newton = newton::newton_solver(X, fn);
         fn(X, F, J);
@@ -371,7 +371,7 @@ SCENARIO("Non-linear system to solve with Newton Solver", "[analytic][solver]") 
         struct functor {
             void operator()(const Eigen::Matrix<double, 5, 1>& X,
                             Eigen::Matrix<double, 5, 1>& F,
-                            Eigen::Matrix<double, 5, 5>& J) const {
+                            Eigen::Matrix<double, 5, 5, Eigen::RowMajor>& J) const {
                 F[0] = -3.0 * X[0] * X[2] + X[0] + 2.0 / X[1];
                 F[1] = 4.0 * X[0] - 5.2 * X[1] + X[3];
                 F[2] = 1.2 * X[1] + X[2] - 3.0 - 0.3 / X[2];
@@ -409,7 +409,7 @@ SCENARIO("Non-linear system to solve with Newton Solver", "[analytic][solver]") 
         Eigen::Matrix<double, 5, 1> X;
         X << 8.234, -245.46, 123.123, 0.8343, 5.555;
         Eigen::Matrix<double, 5, 1> F;
-        Eigen::Matrix<double, 5, 5> J;
+        Eigen::Matrix<double, 5, 5, Eigen::RowMajor> J;
         functor fn;
         int iter_newton = newton::newton_solver(X, fn);
         fn(X, F, J);
@@ -425,7 +425,7 @@ SCENARIO("Non-linear system to solve with Newton Solver", "[analytic][solver]") 
         struct functor {
             void operator()(const Eigen::Matrix<double, 10, 1>& X,
                             Eigen::Matrix<double, 10, 1>& F,
-                            Eigen::Matrix<double, 10, 10>& J) const {
+                            Eigen::Matrix<double, 10, 10, Eigen::RowMajor>& J) const {
                 F[0] = -3.0 * X[0] * X[1] + X[0] + 2.0 * X[1];
                 F[1] = 4.0 * X[0] - 0.29999999999999999 * std::pow(X[1], 2) + X[1];
                 F[2] = 2.0 * X[1] + X[2] + 2.0 * X[3] * X[5] * X[7] - 3.0 * X[4] * X[8] - X[5];
@@ -545,7 +545,7 @@ SCENARIO("Non-linear system to solve with Newton Solver", "[analytic][solver]") 
         Eigen::Matrix<double, 10, 1> X;
         X << 8.234, -5.46, 1.123, 0.8343, 5.555, 18.234, -2.46, 0.123, 10.8343, -4.685;
         Eigen::Matrix<double, 10, 1> F;
-        Eigen::Matrix<double, 10, 10> J;
+        Eigen::Matrix<double, 10, 10, Eigen::RowMajor> J;
         functor fn;
         int iter_newton = newton::newton_solver(X, fn);
         fn(X, F, J);

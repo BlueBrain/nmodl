@@ -1853,7 +1853,7 @@ void CodegenCppVisitor::print_functor_definition(const ast::EigenNewtonSolverBlo
     printer->fmt_text(
         "void operator()(const Eigen::Matrix<{0}, {1}, 1>& nmodl_eigen_xm, Eigen::Matrix<{0}, {1}, "
         "1>& nmodl_eigen_fm, "
-        "Eigen::Matrix<{0}, {1}, {1}>& nmodl_eigen_jm) {2}",
+        "Eigen::Matrix<{0}, {1}, {1}, Eigen::RowMajor>& nmodl_eigen_jm) {2}",
         float_type,
         N,
         is_functor_const(variable_block, functor_block) ? "const " : "");
