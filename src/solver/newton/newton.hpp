@@ -16,6 +16,7 @@
  */
 
 #include <crout/crout.hpp>
+#include <dolittle/dolittle.hpp>
 
 #include <Eigen/Dense>
 #include <Eigen/LU>
@@ -72,13 +73,14 @@ EIGEN_DEVICE_FUNC int newton_solver(Eigen::Matrix<double, N, 1>& X,
             // we have converged: return iteration count
             return iter;
         }
+
         Eigen::Matrix<int, N, 1> pivot;
-        Eigen::Matrix<double, N, 1> rowmax;
+
         // Check if J is singular
-        if (nmodl::crout::Crout<double>(N, J.data(), pivot.data(), rowmax.data()) < 0)
+        if (nmodl::dolittle::decompose(N, J.data(), pivot.data()) < 0)
             return -1;
         Eigen::Matrix<double, N, 1> X_solve;
-        nmodl::crout::solveCrout<double>(N, J.data(), F.data(), X_solve.data(), pivot.data());
+        nmodl::dolittle::solve(N, J.data(), F.data(), X_solve.data(), pivot.data());
         X -= X_solve;
     }
     // If we fail to converge after max_iter iterations, return -1
