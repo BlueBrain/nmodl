@@ -48,7 +48,7 @@ var searchData=
   ['afterblock_45',['AfterBlock',['../classnmodl_1_1ast_1_1_after_block.html',1,'nmodl::ast::AfterBlock'],['../classnmodl_1_1ast_1_1_after_block.html#ab21d1ca253744f52cd058f72b063780a',1,'nmodl::ast::AfterBlock::AfterBlock(BABlock *bablock)'],['../classnmodl_1_1ast_1_1_after_block.html#ad63cb3941c52dc545cfcd35fbbcf7745',1,'nmodl::ast::AfterBlock::AfterBlock(std::shared_ptr&lt; BABlock &gt; bablock)'],['../classnmodl_1_1ast_1_1_after_block.html#ac2c9d62ad6a942809d63c13fea52f005',1,'nmodl::ast::AfterBlock::AfterBlock(const AfterBlock &amp;obj)']]],
   ['afterblockvector_46',['AfterBlockVector',['../group__ast__vec__type.html#ga53a2115c1472b19d969777e1aa44bba8',1,'nmodl::ast']]],
   ['aftercvodetocnexpvisitor_47',['AfterCVodeToCnexpVisitor',['../classnmodl_1_1visitor_1_1_after_c_vode_to_cnexp_visitor.html',1,'nmodl::visitor::AfterCVodeToCnexpVisitor'],['../classnmodl_1_1visitor_1_1_after_c_vode_to_cnexp_visitor.html#ae828f5954507fd77f9a7211948aad4da',1,'nmodl::visitor::AfterCVodeToCnexpVisitor::AfterCVodeToCnexpVisitor()']]],
-  ['align_5ftext_48',['align_text',['../group__utils.html#ga78e376180e14a209189043cab5e1d642',1,'nmodl::stringutils']]],
+  ['align_5ftext_48',['align_text',['../group__utils.html#ga287cad41afb0bf66e8767af03a681894',1,'nmodl::stringutils']]],
   ['alignments_49',['alignments',['../structnmodl_1_1utils_1_1_table_data.html#a9d63777ef2cd60ca65cade107b1d48cc',1,'nmodl::utils::TableData']]],
   ['all_2ehpp_50',['all.hpp',['../all_8hpp.html',1,'']]],
   ['all_5fstate_5fvars_51',['all_state_vars',['../classnmodl_1_1visitor_1_1_sympy_solver_visitor.html#a00934954d78c753e1252def6f9fd1525',1,'nmodl::visitor::SympySolverVisitor']]],

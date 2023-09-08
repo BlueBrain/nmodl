@@ -1,11 +1,11 @@
 var classnmodl_1_1visitor_1_1_rename_visitor =
 [
     [ "RenameVisitor", "classnmodl_1_1visitor_1_1_rename_visitor.html#a7464d5260bae3a4b12293e653b6c8b0c", null ],
-    [ "RenameVisitor", "classnmodl_1_1visitor_1_1_rename_visitor.html#a931f167c156050d9be06d31abfb9b318", null ],
-    [ "RenameVisitor", "classnmodl_1_1visitor_1_1_rename_visitor.html#a06dc1e1874ada8cceb7af219461a739d", null ],
+    [ "RenameVisitor", "classnmodl_1_1visitor_1_1_rename_visitor.html#a7e4e0d9d78ffa63cb3e6ae5ab3edbb3d", null ],
+    [ "RenameVisitor", "classnmodl_1_1visitor_1_1_rename_visitor.html#ac682615da0d9bb5458008aed80aa5798", null ],
     [ "enable_verbatim", "classnmodl_1_1visitor_1_1_rename_visitor.html#a5544f44b9ed62af8c066cc4f368beac9", null ],
     [ "new_name_generator", "classnmodl_1_1visitor_1_1_rename_visitor.html#a9dcd6d4fa109972c29e256ffcce76bc4", null ],
-    [ "set", "classnmodl_1_1visitor_1_1_rename_visitor.html#a7fc1de401e9ecb1fa8c541acc345d656", null ],
+    [ "set", "classnmodl_1_1visitor_1_1_rename_visitor.html#ad8cb272ee830b79420fe2c12eb584df3", null ],
     [ "visit_name", "classnmodl_1_1visitor_1_1_rename_visitor.html#a836401a8ced9b26b3fb932d32c0395fd", null ],
     [ "visit_prime_name", "classnmodl_1_1visitor_1_1_rename_visitor.html#a632e80145899fe9dc91136e96190f88e", null ],
     [ "visit_verbatim", "classnmodl_1_1visitor_1_1_rename_visitor.html#a2ba38c22e18866da7f99e802783c2ddf", null ],

@@ -368,19 +368,22 @@ $(document).ready(function(){initNavTree('symbol__properties_8hpp_source.html','
 <div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160; </div>
 <div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
 <div class="line"><a name="l00274"></a><span class="lineno"><a class="line" href="namespacenmodl_1_1symtab_1_1syminfo.html#a9615978047cc9d7b43df2f549f2baffe">  274</a></span>&#160;std::string <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#a9615978047cc9d7b43df2f549f2baffe">to_string</a>(<span class="keyword">const</span> T&amp; obj) {</div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;    <span class="keyword">auto</span> elements = <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#aff22d645565e406f065432295d3f8d3c">to_string_vector</a>(obj);</div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;    std::string text;</div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; element: elements) {</div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;        text += element + <span class="stringliteral">&quot; &quot;</span>;</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;    }</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;    <span class="comment">// remove extra whitespace at the end</span></div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;    <a class="code" href="group__utils.html#gac81ecc7fd7ebc9bb31e8c47a277f15ab">stringutils::trim</a>(text);</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;    <span class="keywordflow">return</span> text;</div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;}</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160; </div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;}  <span class="comment">// namespace syminfo</span></div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;}  <span class="comment">// namespace symtab</span></div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;}  <span class="comment">// namespace nmodl</span></div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;    std::string text;</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;    <span class="keywordtype">bool</span> is_first{<span class="keyword">true</span>};</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; element: <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#aff22d645565e406f065432295d3f8d3c">to_string_vector</a>(obj)) {</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;        <span class="keywordflow">if</span> (is_first) {</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;            text += element;</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;            is_first = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;        } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;            text += <span class="stringliteral">&quot; &quot;</span> + element;</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;        }</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;    }</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;    <span class="keywordflow">return</span> text;</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;}</div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160; </div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;}  <span class="comment">// namespace syminfo</span></div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;}  <span class="comment">// namespace symtab</span></div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;}  <span class="comment">// namespace nmodl</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="anamespacenmodl_1_1symtab_1_1syminfo_html_aea29d30826449246e0487ccc538d3a2a"><div class="ttname"><a href="namespacenmodl_1_1symtab_1_1syminfo.html#aea29d30826449246e0487ccc538d3a2a">nmodl::symtab::syminfo::has_status</a></div><div class="ttdeci">bool has_status(const Status &amp;obj, Status state)</div><div class="ttdoc">check if any status is set</div><div class="ttdef"><b>Definition:</b> <a href="symbol__properties_8hpp_source.html#l00260">symbol_properties.hpp:260</a></div></div>
@@ -429,7 +432,6 @@ $(document).ready(function(){initNavTree('symbol__properties_8hpp_source.html','
 <div class="ttc" id="anamespacenmodl_1_1symtab_1_1syminfo_html_ad9b6b8559b36d0a500ef5110badcc4dbaa2e4822a98337283e39f7b60acf85ec9"><div class="ttname"><a href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbaa2e4822a98337283e39f7b60acf85ec9">nmodl::symtab::syminfo::NmodlType::empty</a></div><div class="ttdeci">@ empty</div></div>
 <div class="ttc" id="anamespacenmodl_1_1symtab_1_1syminfo_html_a3024cbfc3a7ebf7dd349303e70d82d4d"><div class="ttname"><a href="namespacenmodl_1_1symtab_1_1syminfo.html#a3024cbfc3a7ebf7dd349303e70d82d4d">nmodl::symtab::syminfo::Access</a></div><div class="ttdeci">Access</div><div class="ttdoc">variable usage within a mod file</div><div class="ttdef"><b>Definition:</b> <a href="symbol__properties_8hpp_source.html#l00089">symbol_properties.hpp:89</a></div></div>
 <div class="ttc" id="anamespacenmodl_1_1symtab_1_1syminfo_html_ad9b6b8559b36d0a500ef5110badcc4dbacb1e09d4f29a44bf586491796c2373e5"><div class="ttname"><a href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbacb1e09d4f29a44bf586491796c2373e5">nmodl::symtab::syminfo::NmodlType::assigned_definition</a></div><div class="ttdeci">@ assigned_definition</div><div class="ttdoc">Assigned Definition.</div></div>
-<div class="ttc" id="agroup__utils_html_gac81ecc7fd7ebc9bb31e8c47a277f15ab"><div class="ttname"><a href="group__utils.html#gac81ecc7fd7ebc9bb31e8c47a277f15ab">nmodl::stringutils::trim</a></div><div class="ttdeci">static std::string &amp; trim(std::string &amp;s)</div><div class="ttdoc">Trim from both ends.</div><div class="ttdef"><b>Definition:</b> <a href="string__utils_8hpp_source.html#l00051">string_utils.hpp:51</a></div></div>
 <div class="ttc" id="anamespacenmodl_1_1symtab_1_1syminfo_html_ad9b6b8559b36d0a500ef5110badcc4dbac89e419cdec37c6436386d0ccee1096a"><div class="ttname"><a href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbac89e419cdec37c6436386d0ccee1096a">nmodl::symtab::syminfo::NmodlType::param_assign</a></div><div class="ttdeci">@ param_assign</div><div class="ttdoc">Parameter Variable.</div></div>
 <div class="ttc" id="anamespacenmodl_1_1symtab_1_1syminfo_html_ad9b6b8559b36d0a500ef5110badcc4db"><div class="ttname"><a href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4db">nmodl::symtab::syminfo::NmodlType</a></div><div class="ttdeci">NmodlType</div><div class="ttdoc">NMODL variable properties.</div><div class="ttdef"><b>Definition:</b> <a href="symbol__properties_8hpp_source.html#l00116">symbol_properties.hpp:116</a></div></div>
 <div class="ttc" id="anamespacenmodl_1_1symtab_1_1syminfo_html_ad9b6b8559b36d0a500ef5110badcc4dbab42b3dbb719197d22c748fc74ac64ba4"><div class="ttname"><a href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbab42b3dbb719197d22c748fc74ac64ba4">nmodl::symtab::syminfo::NmodlType::pointer_var</a></div><div class="ttdeci">@ pointer_var</div><div class="ttdoc">Pointer Type.</div></div>

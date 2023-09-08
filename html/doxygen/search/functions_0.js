@@ -33,7 +33,7 @@ var searchData=
   ['add_5funit_3204',['add_unit',['../classnmodl_1_1units_1_1_unit.html#a9b45dd9b5497136c54bd15236f834948',1,'nmodl::units::Unit']]],
   ['afterblock_3205',['AfterBlock',['../classnmodl_1_1ast_1_1_after_block.html#ab21d1ca253744f52cd058f72b063780a',1,'nmodl::ast::AfterBlock::AfterBlock(BABlock *bablock)'],['../classnmodl_1_1ast_1_1_after_block.html#ad63cb3941c52dc545cfcd35fbbcf7745',1,'nmodl::ast::AfterBlock::AfterBlock(std::shared_ptr&lt; BABlock &gt; bablock)'],['../classnmodl_1_1ast_1_1_after_block.html#ac2c9d62ad6a942809d63c13fea52f005',1,'nmodl::ast::AfterBlock::AfterBlock(const AfterBlock &amp;obj)']]],
   ['aftercvodetocnexpvisitor_3206',['AfterCVodeToCnexpVisitor',['../classnmodl_1_1visitor_1_1_after_c_vode_to_cnexp_visitor.html#ae828f5954507fd77f9a7211948aad4da',1,'nmodl::visitor::AfterCVodeToCnexpVisitor']]],
-  ['align_5ftext_3207',['align_text',['../group__utils.html#ga78e376180e14a209189043cab5e1d642',1,'nmodl::stringutils']]],
+  ['align_5ftext_3207',['align_text',['../group__utils.html#ga287cad41afb0bf66e8767af03a681894',1,'nmodl::stringutils']]],
   ['all_5ftokens_3208',['all_tokens',['../classnmodl_1_1parser_1_1_c_driver.html#ab0ca792bae4bbb0022bea35e1bbf9a14',1,'nmodl::parser::CDriver']]],
   ['allclose_3209',['allclose',['../crout_8cpp.html#ac5601d4b865aa3682970b046e17e0ac3',1,'crout.cpp']]],
   ['analyze_3210',['analyze',['../classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#aa0e74f461212bcc312cd413641e54c29',1,'nmodl::codegen::CodegenHelperVisitor::analyze()'],['../classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html#a4bc9f2651cc735631bd96cb51002b027',1,'nmodl::visitor::DefUseAnalyzeVisitor::analyze()']]],
