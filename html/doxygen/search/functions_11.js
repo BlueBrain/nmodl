@@ -111,7 +111,7 @@ var searchData=
   ['solve_5fnon_5flinear_5fsystem_4206',['solve_non_linear_system',['../classnmodl_1_1visitor_1_1_sympy_solver_visitor.html#aa172eabd45127fe5657177ab5b425b13',1,'nmodl::visitor::SympySolverVisitor']]],
   ['solveblock_4207',['SolveBlock',['../classnmodl_1_1ast_1_1_solve_block.html#ac66449a1a4c98382e3b0ba59d7c68f88',1,'nmodl::ast::SolveBlock::SolveBlock(Name *block_name, Name *method, Name *steadystate)'],['../classnmodl_1_1ast_1_1_solve_block.html#a2e78552c3cde266695ba29c37a7066d7',1,'nmodl::ast::SolveBlock::SolveBlock(std::shared_ptr&lt; Name &gt; block_name, std::shared_ptr&lt; Name &gt; method, std::shared_ptr&lt; Name &gt; steadystate)'],['../classnmodl_1_1ast_1_1_solve_block.html#a32e036c6f9b84a32dfcaf2ed9d74b8fd',1,'nmodl::ast::SolveBlock::SolveBlock(const SolveBlock &amp;obj)']]],
   ['solveblockvisitor_4208',['SolveBlockVisitor',['../classnmodl_1_1visitor_1_1_solve_block_visitor.html#a04cbc7d148a0e6a768d06c9c23d91223',1,'nmodl::visitor::SolveBlockVisitor']]],
-  ['solvecrout_4209',['solveCrout',['../namespacenmodl_1_1crout.html#af680de6cc37fa24c4141a8b5e2c8e489',1,'nmodl::crout']]],
+  ['solvecrout_4209',['solveCrout',['../namespacenmodl_1_1crout.html#aecb1fc263eeee0d15491c8298afae290',1,'nmodl::crout']]],
   ['sort_5fwith_5fmod2c_5fsymbol_5forder_4210',['sort_with_mod2c_symbol_order',['../classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a00a403d7992d9e11cf278ced1e4e2896',1,'nmodl::codegen::CodegenHelperVisitor']]],
   ['sparse_5fsolver_5fexists_4211',['sparse_solver_exists',['../namespacenmodl.html#a21160c42746b7846b552e45572d8e083',1,'nmodl']]],
   ['split_5fstring_4212',['split_string',['../group__utils.html#gab27701783c8231e8a759a2ce717dfc8b',1,'nmodl::stringutils']]],
