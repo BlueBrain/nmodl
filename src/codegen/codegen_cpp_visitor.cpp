@@ -2150,7 +2150,7 @@ void CodegenCppVisitor::print_num_variable_getter() {
     printer->add_newline(2);
     print_device_method_annotation();
     printer->start_block("static inline int int_variables_size()");
-    printer->fmt_line("return {};", codegen_int_variables.size());
+    printer->fmt_line("return {};", info.semantics.size());
     printer->end_block(1);
 }
 
