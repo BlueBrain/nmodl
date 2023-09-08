@@ -60,8 +60,8 @@ enum class text_alignment { left, right, center };
  * \param text the string to manipulate
  * \return a copy of the given string with both leading and trailing ASCII space characters removed
  */
-[[nodiscard]] static inline std::string trim(const std::string& text) {
-    return ltrim(rtrim(text));
+[[nodiscard]] static inline std::string trim(std::string text) {
+    return ltrim(rtrim(std::move(text)));
 }
 
 /**
@@ -80,8 +80,8 @@ enum class text_alignment { left, right, center };
  * \param text the string to manipulate
  * \return a copy of the given string with all occurrences of the ASCII newline character removed
  */
-[[nodiscard]] static inline std::string trim_newline(const std::string& text) {
-    return remove_character(text, '\n');
+[[nodiscard]] static inline std::string trim_newline(std::string text) {
+    return remove_character(std::move(text), '\n');
 }
 
 /**
