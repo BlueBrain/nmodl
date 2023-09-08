@@ -127,10 +127,10 @@ struct IndexVariableInfo {
     /// if the variable is qualified as constant (this is property of IndexVariable)
     bool is_constant = false;
 
-    IndexVariableInfo(std::shared_ptr<symtab::Symbol> symbol,
-                      bool is_vdata = false,
-                      bool is_index = false,
-                      bool is_integer = false)
+    explicit IndexVariableInfo(std::shared_ptr<symtab::Symbol> symbol,
+                               bool is_vdata = false,
+                               bool is_index = false,
+                               bool is_integer = false)
         : symbol(std::move(symbol))
         , is_vdata(is_vdata)
         , is_index(is_index)
@@ -1677,8 +1677,8 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * \param target_printer A printer defined outside this visitor to be used for the code
      *                       generation
      */
-    CodegenCppVisitor(std::string mod_filename,
-                      std::string float_type,
+    CodegenCppVisitor(const std::string& mod_filename,
+                      const std::string& float_type,
                       const bool optimize_ionvar_copies,
                       std::shared_ptr<CodePrinter>& target_printer)
         : target_printer(target_printer)
@@ -1890,12 +1890,15 @@ void CodegenCppVisitor::print_vector_elements(const std::vector<T>& elements,
 template <typename T>
 bool has_parameter_of_name(const T& node, const std::string& name) {
     auto parameters = node->get_parameters();
-    for (const auto& parameter: parameters) {
-        if (parameter->get_node_name() == name) {
-            return true;
+    struct ParameterHasName {
+        const std::string paramater_name;
+        explicit ParameterHasName(const std::string& name)
+            : paramater_name(name) {}
+        bool operator()(const decltype(*parameters.begin()) arg) const {
+            return arg->get_node_name() == paramater_name;
         }
-    }
-    return false;
+    };
+    return std::any_of(parameters.begin(), parameters.end(), ParameterHasName(name));
 }
 
 
