@@ -504,6 +504,12 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
 
 
     /**
+     * Number of integer variables in the model
+     */
+    int int_variables_size() const;
+
+
+    /**
      * Determine the position in the data array for a given float variable
      * \param name The name of a float variable
      * \return     The position index in the data array

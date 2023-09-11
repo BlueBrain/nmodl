@@ -535,6 +535,12 @@ std::string CodegenCppVisitor::breakpoint_current(std::string current) const {
 }
 
 
+int CodegenCppVisitor::int_variables_size() const {
+    const auto count_semantics = [](int sum, const IndexSemantics& sem) { return sum += sem.size; };
+    return std::accumulate(info.semantics.begin(), info.semantics.end(), 0, count_semantics);
+}
+
+
 /**
  * \details Depending upon the block type, we have to print read/write ion variables
  * during code generation. Depending on block/procedure being printed, this
@@ -2150,7 +2156,7 @@ void CodegenCppVisitor::print_num_variable_getter() {
     printer->add_newline(2);
     print_device_method_annotation();
     printer->start_block("static inline int int_variables_size()");
-    printer->fmt_line("return {};", info.semantics.size());
+    printer->fmt_line("return {};", int_variables_size());
     printer->end_block(1);
 }
 
