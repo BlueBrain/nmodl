@@ -1583,8 +1583,9 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
                       const bool optimize_ionvar_copies,
                       const std::string& extension,
                       const std::string& wrapper_ext)
-        : target_printer(new CodePrinter(output_dir + "/" + mod_filename + extension))
-        , wrapper_printer(new CodePrinter(output_dir + "/" + mod_filename + wrapper_ext))
+        : target_printer(std::make_shared<CodePrinter>(output_dir + "/" + mod_filename + extension))
+        , wrapper_printer(
+              std::make_shared<CodePrinter>(output_dir + "/" + mod_filename + wrapper_ext))
         , printer(target_printer)
         , mod_filename(std::move(mod_filename))
         , float_type(std::move(float_type))
@@ -1596,8 +1597,8 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
                       const bool optimize_ionvar_copies,
                       const std::string& extension,
                       const std::string& wrapper_ext)
-        : target_printer(new CodePrinter(stream))
-        , wrapper_printer(new CodePrinter(stream))
+        : target_printer(std::make_shared<CodePrinter>(stream))
+        , wrapper_printer(std::make_shared<CodePrinter>(stream))
         , printer(target_printer)
         , mod_filename(std::move(mod_filename))
         , float_type(std::move(float_type))
@@ -1627,7 +1628,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
                       std::string float_type,
                       const bool optimize_ionvar_copies,
                       const std::string& extension = ".cpp")
-        : target_printer(new CodePrinter(output_dir + "/" + mod_filename + extension))
+        : target_printer(std::make_shared<CodePrinter>(output_dir + "/" + mod_filename + extension))
         , printer(target_printer)
         , mod_filename(std::move(mod_filename))
         , float_type(std::move(float_type))
@@ -1653,7 +1654,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
                       std::ostream& stream,
                       std::string float_type,
                       const bool optimize_ionvar_copies)
-        : target_printer(new CodePrinter(stream))
+        : target_printer(std::make_shared<CodePrinter>(stream))
         , printer(target_printer)
         , mod_filename(std::move(mod_filename))
         , float_type(std::move(float_type))
