@@ -1662,34 +1662,6 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
 
 
     /**
-     * \copybrief nmodl::codegen::CodegenCppVisitor
-     *
-     * This constructor instantiates an NMODL C code generator and allows writing generated code
-     * using an nmodl::printer::CodePrinter defined elsewhere.
-     *
-     * \note No code generation is performed at this stage. Since the code
-     * generator classes are all based on \c AstVisitor the AST must be visited using e.g. \c
-     * visit_program in order to generate the C code corresponding to the AST.
-     *
-     * \param mod_filename   The name of the model for which code should be generated.
-     *                       It is used for constructing an output filename.
-     * \param float_type     The float type to use in the generated code. The string will be used
-     *                       as-is in the target code. This defaults to \c double.
-     * \param target_printer A printer defined outside this visitor to be used for the code
-     *                       generation
-     */
-    CodegenCppVisitor(std::string mod_filename,
-                      std::string float_type,
-                      const bool optimize_ionvar_copies,
-                      std::shared_ptr<CodePrinter>& target_printer)
-        : target_printer(target_printer)
-        , printer(target_printer)
-        , mod_filename(std::move(mod_filename))
-        , float_type(std::move(float_type))
-        , optimize_ionvar_copies(optimize_ionvar_copies) {}
-
-
-    /**
      * Print the \c nrn\_init function definition
      * \param skip_init_check \c true if we want the generated code to execute the initialization
      *                        conditionally
