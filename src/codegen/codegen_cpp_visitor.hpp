@@ -269,7 +269,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     codegen::CodegenInfo info;
 
     /**
-     * Code printer object for target (C)
+     * Code printer object for target (C++)
      */
     std::shared_ptr<CodePrinter> target_printer;
 
@@ -1577,30 +1577,30 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     virtual void print_wrapper_routines();
 
 
-    CodegenCppVisitor(const std::string& mod_filename,
+    CodegenCppVisitor(std::string mod_filename,
                       const std::string& output_dir,
-                      const std::string& float_type,
+                      std::string float_type,
                       const bool optimize_ionvar_copies,
                       const std::string& extension,
                       const std::string& wrapper_ext)
         : target_printer(new CodePrinter(output_dir + "/" + mod_filename + extension))
         , wrapper_printer(new CodePrinter(output_dir + "/" + mod_filename + wrapper_ext))
         , printer(target_printer)
-        , mod_filename(mod_filename)
-        , float_type(float_type)
+        , mod_filename(std::move(mod_filename))
+        , float_type(std::move(float_type))
         , optimize_ionvar_copies(optimize_ionvar_copies) {}
 
-    CodegenCppVisitor(const std::string& mod_filename,
+    CodegenCppVisitor(std::string mod_filename,
                       std::ostream& stream,
-                      const std::string& float_type,
+                      std::string float_type,
                       const bool optimize_ionvar_copies,
                       const std::string& extension,
                       const std::string& wrapper_ext)
         : target_printer(new CodePrinter(stream))
         , wrapper_printer(new CodePrinter(stream))
         , printer(target_printer)
-        , mod_filename(mod_filename)
-        , float_type(float_type)
+        , mod_filename(std::move(mod_filename))
+        , float_type(std::move(float_type))
         , optimize_ionvar_copies(optimize_ionvar_copies) {}
 
 
@@ -1622,14 +1622,14 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      *                     as-is in the target code. This defaults to \c double.
      * \param extension    The file extension to use. This defaults to \c .cpp .
      */
-    CodegenCppVisitor(const std::string& mod_filename,
+    CodegenCppVisitor(std::string mod_filename,
                       const std::string& output_dir,
                       std::string float_type,
                       const bool optimize_ionvar_copies,
                       const std::string& extension = ".cpp")
         : target_printer(new CodePrinter(output_dir + "/" + mod_filename + extension))
         , printer(target_printer)
-        , mod_filename(mod_filename)
+        , mod_filename(std::move(mod_filename))
         , float_type(std::move(float_type))
         , optimize_ionvar_copies(optimize_ionvar_copies) {}
 
@@ -1649,14 +1649,14 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * \param float_type   The float type to use in the generated code. The string will be used
      *                     as-is in the target code. This defaults to \c double.
      */
-    CodegenCppVisitor(const std::string& mod_filename,
+    CodegenCppVisitor(std::string mod_filename,
                       std::ostream& stream,
-                      const std::string& float_type,
+                      std::string float_type,
                       const bool optimize_ionvar_copies)
         : target_printer(new CodePrinter(stream))
         , printer(target_printer)
-        , mod_filename(mod_filename)
-        , float_type(float_type)
+        , mod_filename(std::move(mod_filename))
+        , float_type(std::move(float_type))
         , optimize_ionvar_copies(optimize_ionvar_copies) {}
 
 
@@ -1677,14 +1677,14 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * \param target_printer A printer defined outside this visitor to be used for the code
      *                       generation
      */
-    CodegenCppVisitor(const std::string& mod_filename,
-                      const std::string& float_type,
+    CodegenCppVisitor(std::string mod_filename,
+                      std::string float_type,
                       const bool optimize_ionvar_copies,
                       std::shared_ptr<CodePrinter>& target_printer)
         : target_printer(target_printer)
         , printer(target_printer)
-        , mod_filename(mod_filename)
-        , float_type(float_type)
+        , mod_filename(std::move(mod_filename))
+        , float_type(std::move(float_type))
         , optimize_ionvar_copies(optimize_ionvar_copies) {}
 
 
