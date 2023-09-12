@@ -8,6 +8,7 @@
 #include "codegen/codegen_cpp_visitor.hpp"
 
 #include <algorithm>
+#include <chrono>
 #include <cmath>
 #include <ctime>
 #include <regex>
@@ -2412,10 +2413,9 @@ std::string CodegenCppVisitor::get_variable_name(const std::string& name, bool u
 
 
 void CodegenCppVisitor::print_backend_info() {
-    time_t tr{};
-    time(&tr);
-    char timeString[100];
-    std::strftime(timeString, std::size(timeString), "%A %c", std::localtime(&tr));
+    time_t current_time{};
+    time(&current_time);
+    std::string data_time_str{std::ctime(&current_time)};
     auto version = nmodl::Version::NMODL_VERSION + " [" + nmodl::Version::GIT_REVISION + "]";
 
     printer->add_line("/*********************************************************");
@@ -2424,7 +2424,7 @@ void CodegenCppVisitor::print_backend_info() {
     printer->fmt_line("NMODL Version   : {}", nmodl_version());
     printer->fmt_line("Vectorized      : {}", info.vectorize);
     printer->fmt_line("Threadsafe      : {}", info.thread_safe);
-    printer->fmt_line("Created         : {}", timeString);
+    printer->fmt_line("Created         : {}", stringutils::trim(data_time_str));
     printer->fmt_line("Backend         : {}", backend_name());
     printer->fmt_line("NMODL Compiler  : {}", version);
     printer->add_line("*********************************************************/");
