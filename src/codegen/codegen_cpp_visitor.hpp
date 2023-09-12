@@ -1890,15 +1890,11 @@ void CodegenCppVisitor::print_vector_elements(const std::vector<T>& elements,
 template <typename T>
 bool has_parameter_of_name(const T& node, const std::string& name) {
     auto parameters = node->get_parameters();
-    struct ParameterHasName {
-        const std::string paramater_name;
-        explicit ParameterHasName(const std::string& name)
-            : paramater_name(name) {}
-        bool operator()(const decltype(*parameters.begin()) arg) const {
-            return arg->get_node_name() == paramater_name;
-        }
-    };
-    return std::any_of(parameters.begin(), parameters.end(), ParameterHasName(name));
+    return std::any_of(parameters.begin(),
+                       parameters.end(),
+                       [&name](const decltype(*parameters.begin()) arg) {
+                           return arg->get_node_name() == name;
+                       });
 }
 
 
