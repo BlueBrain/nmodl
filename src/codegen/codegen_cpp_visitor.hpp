@@ -504,6 +504,12 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
 
 
     /**
+     * Number of float variables in the model
+     */
+    int float_variables_size() const;
+
+
+    /**
      * Number of integer variables in the model
      */
     int int_variables_size() const;

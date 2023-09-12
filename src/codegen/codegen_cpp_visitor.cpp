@@ -535,6 +535,11 @@ std::string CodegenCppVisitor::breakpoint_current(std::string current) const {
 }
 
 
+int CodegenCppVisitor::float_variables_size() const {
+    return codegen_float_variables.size();
+}
+
+
 int CodegenCppVisitor::int_variables_size() const {
     const auto count_semantics = [](int sum, const IndexSemantics& sem) { return sum += sem.size; };
     return std::accumulate(info.semantics.begin(), info.semantics.end(), 0, count_semantics);
@@ -2150,7 +2155,7 @@ void CodegenCppVisitor::print_num_variable_getter() {
     printer->add_newline(2);
     print_device_method_annotation();
     printer->start_block("static inline int float_variables_size()");
-    printer->fmt_line("return {};", codegen_float_variables.size());
+    printer->fmt_line("return {};", float_variables_size());
     printer->end_block(1);
 
     printer->add_newline(2);
