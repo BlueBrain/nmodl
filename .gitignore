@@ -42,6 +42,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+.vscode
 
 # HPC coding conventions
 .clang-format
