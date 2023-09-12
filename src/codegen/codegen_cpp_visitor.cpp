@@ -2868,18 +2868,18 @@ void CodegenCppVisitor::print_mechanism_register() {
     printer->add_line("_nrn_layout_reg(mech_type, 0);");  // 0 for SoA
 
     // register mechanism
-    auto args = register_mechanism_arguments();
-    auto nobjects = num_thread_objects();
+    const auto mech_arguments = register_mechanism_arguments();
+    const auto number_of_thread_objects = num_thread_objects();
     if (info.point_process) {
         printer->fmt_line("point_register_mech({}, {}, {}, {});",
-                          args,
+                          mech_arguments,
                           info.constructor_node ? method_name(naming::NRN_CONSTRUCTOR_METHOD)
                                                 : "nullptr",
                           info.destructor_node ? method_name(naming::NRN_DESTRUCTOR_METHOD)
                                                : "nullptr",
-                          nobjects);
+                          number_of_thread_objects);
     } else {
-        printer->fmt_line("register_mech({}, {});", args, nobjects);
+        printer->fmt_line("register_mech({}, {});", mech_arguments, number_of_thread_objects);
         if (info.constructor_node) {
             printer->fmt_line("register_constructor({});",
                               method_name(naming::NRN_CONSTRUCTOR_METHOD));
@@ -2930,9 +2930,9 @@ void CodegenCppVisitor::print_mechanism_register() {
 
     // register semantics for index variables
     for (auto& semantic: info.semantics) {
-        auto hoc_register_dparam_semantics_args =
+        auto args =
             fmt::format("mech_type, {}, {}", semantic.index, add_escape_quote(semantic.name));
-        printer->fmt_line("hoc_register_dparam_semantics({});", hoc_register_dparam_semantics_args);
+        printer->fmt_line("hoc_register_dparam_semantics({});", args);
     }
 
     if (info.is_watch_used()) {
