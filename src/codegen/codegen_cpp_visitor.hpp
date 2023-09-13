@@ -192,19 +192,39 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     using ParamVector = std::vector<std::tuple<std::string, std::string, std::string, std::string>>;
 
     /**
+     * Code printer object for target (C++)
+     */
+    std::shared_ptr<CodePrinter> target_printer;
+
+    /**
+     * Code printer object for wrappers
+     */
+    std::shared_ptr<CodePrinter> wrapper_printer;
+
+    /**
+     * Pointer to active code printer
+     */
+    std::shared_ptr<CodePrinter> printer;
+
+    /**
      * Name of mod file (without .mod suffix)
      */
     std::string mod_filename;
 
     /**
-     * Flag to indicate if visitor should print the visited nodes
+     * Data type of floating point variables
      */
-    bool codegen = false;
+    std::string float_type = codegen::naming::DEFAULT_FLOAT_TYPE;
 
     /**
      * Flag to indicate if visitor should avoid ion variable copies
      */
     bool optimize_ionvar_copies = true;
+
+    /**
+     * Flag to indicate if visitor should print the visited nodes
+     */
+    bool codegen = false;
 
     /**
      * Variable name should be converted to instance name (but not for function arguments)
@@ -259,29 +279,9 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     int current_watch_statement = 0;
 
     /**
-     * Data type of floating point variables
-     */
-    std::string float_type = codegen::naming::DEFAULT_FLOAT_TYPE;
-
-    /**
      * All ast information for code generation
      */
     codegen::CodegenInfo info;
-
-    /**
-     * Code printer object for target (C++)
-     */
-    std::shared_ptr<CodePrinter> target_printer;
-
-    /**
-     * Code printer object for wrappers
-     */
-    std::shared_ptr<CodePrinter> wrapper_printer;
-
-    /**
-     * Pointer to active code printer
-     */
-    std::shared_ptr<CodePrinter> printer;
 
     /**
      * Return Nmodl language version
