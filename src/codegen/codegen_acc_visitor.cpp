@@ -88,8 +88,7 @@ void CodegenAccVisitor::print_memory_allocation_routine() const {
         return;
     }
     printer->add_newline(2);
-    auto args = "size_t num, size_t size, size_t alignment = 16";
-    printer->fmt_push_block("static inline void* mem_alloc({})", args);
+    printer->push_block("static inline void* mem_alloc(size_t num, size_t size, size_t alignment = 16)");
     printer->add_multi_line(R"CODE(
         void* ptr;
         cudaMallocManaged(&ptr, num*size);

@@ -2491,7 +2491,7 @@ void CodegenCppVisitor::print_coreneuron_includes() {
  */
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 void CodegenCppVisitor::print_mechanism_global_var_structure(bool print_initializers) {
-    const auto value_initialise = print_initializers ? "{}" : "";
+    const auto value_initialize = print_initializers ? "{}" : "";
     const auto qualifier = global_var_struct_type_qualifier();
 
     auto float_type = default_float_data_type();
@@ -2501,12 +2501,12 @@ void CodegenCppVisitor::print_mechanism_global_var_structure(bool print_initiali
 
     for (const auto& ion: info.ions) {
         auto name = fmt::format("{}_type", ion.name);
-        printer->fmt_line("{}int {}{};", qualifier, name, value_initialise);
+        printer->fmt_line("{}int {}{};", qualifier, name, value_initialize);
         codegen_global_variables.push_back(make_symbol(name));
     }
 
     if (info.point_process) {
-        printer->fmt_line("{}int point_type{};", qualifier, value_initialise);
+        printer->fmt_line("{}int point_type{};", qualifier, value_initialize);
         codegen_global_variables.push_back(make_symbol("point_type"));
     }
 
@@ -2514,7 +2514,7 @@ void CodegenCppVisitor::print_mechanism_global_var_structure(bool print_initiali
         auto name = var->get_name() + "0";
         auto symbol = program_symtab->lookup(name);
         if (symbol == nullptr) {
-            printer->fmt_line("{}{} {}{};", qualifier, float_type, name, value_initialise);
+            printer->fmt_line("{}{} {}{};", qualifier, float_type, name, value_initialize);
             codegen_global_variables.push_back(make_symbol(name));
         }
     }
@@ -2545,7 +2545,7 @@ void CodegenCppVisitor::print_mechanism_global_var_structure(bool print_initiali
     }
 
     if (!info.thread_variables.empty()) {
-        printer->fmt_line("{}int thread_data_in_use{};", qualifier, value_initialise);
+        printer->fmt_line("{}int thread_data_in_use{};", qualifier, value_initialize);
         printer->fmt_line("{}{} thread_data[{}] /* TODO init thread_data */;",
                           qualifier,
                           float_type,
@@ -2557,10 +2557,10 @@ void CodegenCppVisitor::print_mechanism_global_var_structure(bool print_initiali
     }
 
     // TODO: remove this entirely?
-    printer->fmt_line("{}int reset{};", qualifier, value_initialise);
+    printer->fmt_line("{}int reset{};", qualifier, value_initialize);
     codegen_global_variables.push_back(make_symbol("reset"));
 
-    printer->fmt_line("{}int mech_type{};", qualifier, value_initialise);
+    printer->fmt_line("{}int mech_type{};", qualifier, value_initialize);
     codegen_global_variables.push_back(make_symbol("mech_type"));
 
     for (const auto& var: info.global_variables) {
@@ -2644,9 +2644,9 @@ void CodegenCppVisitor::print_mechanism_global_var_structure(bool print_initiali
         codegen_global_variables.push_back(make_symbol(naming::USE_TABLE_VARIABLE));
 
         for (const auto& block: info.functions_with_table) {
-            auto name = block->get_node_name();
-            printer->fmt_line("{}{} tmin_{}{};", qualifier, float_type, name, value_initialise);
-            printer->fmt_line("{}{} mfac_{}{};", qualifier, float_type, name, value_initialise);
+            const auto& name = block->get_node_name();
+            printer->fmt_line("{}{} tmin_{}{};", qualifier, float_type, name, value_initialize);
+            printer->fmt_line("{}{} mfac_{}{};", qualifier, float_type, name, value_initialize);
             codegen_global_variables.push_back(make_symbol("tmin_" + name));
             codegen_global_variables.push_back(make_symbol("mfac_" + name));
         }
@@ -2662,10 +2662,10 @@ void CodegenCppVisitor::print_mechanism_global_var_structure(bool print_initiali
                                   name,
                                   array_len,
                                   num_values,
-                                  value_initialise);
+                                  value_initialize);
             } else {
                 printer->fmt_line(
-                    "{}{} {}[{}]{};", qualifier, float_type, name, num_values, value_initialise);
+                        "{}{} {}[{}]{};", qualifier, float_type, name, num_values, value_initialize);
             }
             codegen_global_variables.push_back(make_symbol(name));
         }
@@ -2680,7 +2680,7 @@ void CodegenCppVisitor::print_mechanism_global_var_structure(bool print_initiali
         printer->fmt_line("{}ThreadDatum ext_call_thread[{}]{};",
                           qualifier,
                           info.thread_data_index,
-                          value_initialise);
+                          value_initialize);
         codegen_global_variables.push_back(make_symbol("ext_call_thread"));
     }
 
@@ -3058,7 +3058,7 @@ void CodegenCppVisitor::print_thread_memory_callbacks() {
 
 
 void CodegenCppVisitor::print_mechanism_range_var_structure(bool print_initializers) {
-    auto const value_initialise = print_initializers ? "{}" : "";
+    auto const value_initialize = print_initializers ? "{}" : "";
     auto int_type = default_int_data_type();
     printer->add_newline(2);
     printer->add_line("/** all mechanism instance variables and global variables */");
@@ -3073,20 +3073,20 @@ void CodegenCppVisitor::print_mechanism_range_var_structure(bool print_initializ
                                              : std::string{});
     }
     for (auto& var: codegen_float_variables) {
-        auto name = var->get_name();
+        const auto& name = var->get_name();
         auto type = get_range_var_float_type(var);
         auto qualifier = is_constant_variable(name) ? "const " : "";
-        printer->fmt_line("{}{}* {}{};", qualifier, type, name, value_initialise);
+        printer->fmt_line("{}{}* {}{};", qualifier, type, name, value_initialize);
     }
     for (auto& var: codegen_int_variables) {
-        auto name = var.symbol->get_name();
+        const auto& name = var.symbol->get_name();
         if (var.is_index || var.is_integer) {
             auto qualifier = var.is_constant ? "const " : "";
-            printer->fmt_line("{}{}* {}{};", qualifier, int_type, name, value_initialise);
+            printer->fmt_line("{}{}* {}{};", qualifier, int_type, name, value_initialize);
         } else {
             auto qualifier = var.is_constant ? "const " : "";
             auto type = var.is_vdata ? "void*" : default_float_data_type();
-            printer->fmt_line("{}{}* {}{};", qualifier, type, name, value_initialise);
+            printer->fmt_line("{}{}* {}{};", qualifier, type, name, value_initialize);
         }
     }
 
