@@ -100,7 +100,7 @@ void CodePrinter::pop_block() {
     add_newline(1);
 }
 
-void CodePrinter::pop_block_nl(int num_newlines) {
+void CodePrinter::pop_block_nl(std::size_t num_newlines) {
     indent_level--;
     add_indent();
     *result << '}';

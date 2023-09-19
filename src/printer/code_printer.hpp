@@ -119,7 +119,7 @@ class CodePrinter {
 
     /// same as \a pop_block but control the number of NL characters (0 or more) with \a
     /// num_newlines parameter
-    void pop_block_nl(int num_newlines = 0);
+    void pop_block_nl(std::size_t num_newlines = 0);
 
     /// end a block with `suffix` before the newline(s) (i.e. [indent]}[suffix]\n*num_newlines)
     void pop_block(const std::string_view& suffix, std::size_t num_newlines = 1);
