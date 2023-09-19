@@ -123,7 +123,7 @@ void CodegenAccVisitor::print_abort_routine() const {
 }
 
 void CodegenAccVisitor::print_net_send_buffering_cnt_update() const {
-    printer->fmt_push_block("if (nt->compute_gpu)");
+    printer->push_block("if (nt->compute_gpu)");
     print_device_atomic_capture_annotation();
     printer->add_line("i = nsb->_cnt++;");
     printer->chain_block("else");
