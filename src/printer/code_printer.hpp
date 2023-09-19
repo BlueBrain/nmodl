@@ -114,8 +114,12 @@ class CodePrinter {
         indent_level--;
     }
 
-    /// end of current block scope (i.e. end with "}")
-    void pop_block(int num_newlines = 0);
+    /// end of current block scope (i.e. end with "}") and adds one NL character
+    void pop_block();
+
+    /// same as \a pop_block but control the number of NL characters (0 or more) with \a
+    /// num_newlines parameter
+    void pop_block_nl(int num_newlines = 0);
 
     /// end a block with `suffix` before the newline(s) (i.e. [indent]}[suffix]\n*num_newlines)
     void pop_block(const std::string_view& suffix, std::size_t num_newlines = 1);

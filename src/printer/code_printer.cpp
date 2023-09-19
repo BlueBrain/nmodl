@@ -93,7 +93,14 @@ void CodePrinter::add_newline(std::size_t n) {
     }
 }
 
-void CodePrinter::pop_block(int num_newlines) {
+void CodePrinter::pop_block() {
+    indent_level--;
+    add_indent();
+    *result << '}';
+    add_newline(1);
+}
+
+void CodePrinter::pop_block_nl(int num_newlines) {
     indent_level--;
     add_indent();
     *result << '}';

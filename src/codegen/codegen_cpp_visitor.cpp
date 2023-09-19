@@ -329,7 +329,7 @@ void CodegenCppVisitor::visit_mutex_lock(const ast::MutexLock& node) {
 }
 
 void CodegenCppVisitor::visit_mutex_unlock(const ast::MutexUnlock& node) {
-    printer->pop_block(1);
+    printer->pop_block();
 }
 
 /****************************************************************************************/
@@ -1176,12 +1176,12 @@ void CodegenCppVisitor::print_memory_allocation_routine() const {
     printer->add_line("posix_memalign(&ptr, alignment, num*size);");
     printer->add_line("memset(ptr, 0, size);");
     printer->add_line("return ptr;");
-    printer->pop_block(1);
+    printer->pop_block();
 
     printer->add_newline(2);
     printer->push_block("static inline void mem_free(void* ptr)");
     printer->add_line("free(ptr);");
-    printer->pop_block(1);
+    printer->pop_block();
 }
 
 
@@ -1189,7 +1189,7 @@ void CodegenCppVisitor::print_abort_routine() const {
     printer->add_newline(2);
     printer->push_block("static inline void coreneuron_abort()");
     printer->add_line("abort();");
-    printer->pop_block(1);
+    printer->pop_block();
 }
 
 
@@ -1262,7 +1262,7 @@ void CodegenCppVisitor::print_statement_block(const ast::StatementBlock& node,
     }
 
     if (close_brace) {
-        printer->pop_block();
+        printer->pop_block_nl(0);
     }
 }
 
@@ -1425,7 +1425,7 @@ void CodegenCppVisitor::print_table_check_function(const Block& node) {
     {
         printer->fmt_push_block("if ({} == 0)", use_table_var);
         printer->add_line("return;");
-        printer->pop_block(1);
+        printer->pop_block();
 
         printer->add_line("static bool make_table = true;");
         for (const auto& variable: depend_variables) {
@@ -1437,7 +1437,7 @@ void CodegenCppVisitor::print_table_check_function(const Block& node) {
             const auto& instance_name = get_variable_name(var_name);
             printer->fmt_push_block("if (save_{} != {})", var_name, instance_name);
             printer->add_line("make_table = true;");
-            printer->pop_block(1);
+            printer->pop_block();
         }
 
         printer->push_block("if (make_table)");
@@ -1486,7 +1486,7 @@ void CodegenCppVisitor::print_table_check_function(const Block& node) {
                                   function,
                                   internal_method_arguments());
             }
-            printer->pop_block(1);
+            printer->pop_block();
 
             for (const auto& variable: depend_variables) {
                 auto var_name = variable->get_node_name();
@@ -1494,9 +1494,9 @@ void CodegenCppVisitor::print_table_check_function(const Block& node) {
                 printer->fmt_line("save_{} = {};", var_name, instance_name);
             }
         }
-        printer->pop_block(1);
+        printer->pop_block();
     }
-    printer->pop_block(1);
+    printer->pop_block();
 }
 
 
@@ -1528,7 +1528,7 @@ void CodegenCppVisitor::print_table_replacement_function(const ast::Block& node)
                               internal_method_arguments(),
                               params[0].get()->get_node_name());
         }
-        printer->pop_block(1);
+        printer->pop_block();
 
         printer->fmt_line("double xi = {} * ({} - {});",
                           mfac_name,
@@ -1551,7 +1551,7 @@ void CodegenCppVisitor::print_table_replacement_function(const ast::Block& node)
         } else {
             printer->add_line("return xi;");
         }
-        printer->pop_block(1);
+        printer->pop_block();
 
         printer->fmt_push_block("if (xi <= 0. || xi >= {}.)", with);
         printer->fmt_line("int index = (xi <= 0.) ? 0 : {};", with);
@@ -1575,7 +1575,7 @@ void CodegenCppVisitor::print_table_replacement_function(const ast::Block& node)
             auto table_name = get_variable_name("t_" + name);
             printer->fmt_line("return {}[index];", table_name);
         }
-        printer->pop_block(1);
+        printer->pop_block();
 
         printer->add_line("int i = int(xi);");
         printer->add_line("double theta = xi - double(i);");
@@ -1605,7 +1605,7 @@ void CodegenCppVisitor::print_table_replacement_function(const ast::Block& node)
             printer->fmt_line("return {0}[i] + theta * ({0}[i+1] - {0}[i]);", table_name);
         }
     }
-    printer->pop_block(1);
+    printer->pop_block();
 }
 
 
@@ -1629,7 +1629,7 @@ void CodegenCppVisitor::print_check_table_thread_function() {
         printer->fmt_line("{}({});", method_name_str, arguments);
     }
 
-    printer->pop_block(1);
+    printer->pop_block();
 }
 
 
@@ -1650,7 +1650,7 @@ void CodegenCppVisitor::print_function_or_procedure(const ast::Block& node,
 
     print_statement_block(*node.get_statement_block(), false, false);
     printer->fmt_line("return ret_{};", name);
-    printer->pop_block(1);
+    printer->pop_block();
 }
 
 
@@ -1712,14 +1712,14 @@ void CodegenCppVisitor::print_function_tables(const ast::FunctionTableBlock& nod
     printer->fmt_line("return hoc_func_table({}, {}, _arg);",
                       get_variable_name(std::string("_ptable_" + name), true),
                       p.size());
-    printer->pop_block(1);
+    printer->pop_block();
 
     printer->fmt_push_block("double table_{}()", method_name(name));
     printer->fmt_line("hoc_spec_table(&{}, {});",
                       get_variable_name(std::string("_ptable_" + name)),
                       p.size());
     printer->add_line("return 0.;");
-    printer->pop_block(1);
+    printer->pop_block();
 }
 
 /**
@@ -1793,7 +1793,8 @@ void CodegenCppVisitor::print_functor_definition(const ast::EigenNewtonSolverBlo
 
     printer->push_block("void initialize()");
     print_statement_block(*node.get_initialize_block(), false, false);
-    printer->pop_block(2);
+    printer->pop_block();
+    printer->add_newline();
 
     printer->fmt_line(
         "{0}(NrnThread* nt, {1}* inst, int id, int pnodecount, double v, const Datum* indexes, "
@@ -1821,12 +1822,13 @@ void CodegenCppVisitor::print_functor_definition(const ast::EigenNewtonSolverBlo
     printer->fmt_line("{}* nmodl_eigen_j = nmodl_eigen_jm.data();", float_type);
     printer->fmt_line("{}* nmodl_eigen_f = nmodl_eigen_fm.data();", float_type);
     print_statement_block(functor_block, false, false);
-    printer->pop_block(2);
+    printer->pop_block();
+    printer->add_newline();
 
     // assign newton solver results in matrix X to state vars
     printer->push_block("void finalize()");
     print_statement_block(*node.get_finalize_block(), false, false);
-    printer->pop_block(1);
+    printer->pop_block();
 
     printer->pop_block(";");
 }
@@ -2143,7 +2145,7 @@ void CodegenCppVisitor::print_first_pointer_var_index_getter() {
     print_device_method_annotation();
     printer->push_block("static inline int first_pointer_var_index()");
     printer->fmt_line("return {};", info.first_pointer_var_index);
-    printer->pop_block(1);
+    printer->pop_block();
 }
 
 
@@ -2152,13 +2154,13 @@ void CodegenCppVisitor::print_num_variable_getter() {
     print_device_method_annotation();
     printer->push_block("static inline int float_variables_size()");
     printer->fmt_line("return {};", float_variables_size());
-    printer->pop_block(1);
+    printer->pop_block();
 
     printer->add_newline(2);
     print_device_method_annotation();
     printer->push_block("static inline int int_variables_size()");
     printer->fmt_line("return {};", int_variables_size());
-    printer->pop_block(1);
+    printer->pop_block();
 }
 
 
@@ -2170,7 +2172,7 @@ void CodegenCppVisitor::print_net_receive_arg_size_getter() {
     print_device_method_annotation();
     printer->push_block("static inline int num_net_receive_args()");
     printer->fmt_line("return {};", info.num_net_receive_parameters);
-    printer->pop_block(1);
+    printer->pop_block();
 }
 
 
@@ -2180,7 +2182,7 @@ void CodegenCppVisitor::print_mech_type_getter() {
     printer->push_block("static inline int get_mech_type()");
     // false => get it from the host-only global struct, not the instance structure
     printer->fmt_line("return {};", get_variable_name("mech_type", false));
-    printer->pop_block(1);
+    printer->pop_block();
 }
 
 
@@ -2190,9 +2192,9 @@ void CodegenCppVisitor::print_memb_list_getter() {
     printer->push_block("static inline Memb_list* get_memb_list(NrnThread* nt)");
     printer->push_block("if (!nt->_ml_list)");
     printer->add_line("return nullptr;");
-    printer->pop_block(1);
+    printer->pop_block();
     printer->add_line("return nt->_ml_list[get_mech_type()];");
-    printer->pop_block(1);
+    printer->pop_block();
 }
 
 
@@ -2203,7 +2205,7 @@ void CodegenCppVisitor::print_namespace_start() {
 
 
 void CodegenCppVisitor::print_namespace_stop() {
-    printer->pop_block(1);
+    printer->pop_block();
 }
 
 
@@ -2231,15 +2233,17 @@ void CodegenCppVisitor::print_thread_getters() {
         printer->add_newline(1);
         printer->fmt_push_block("static inline int* deriv{}_advance(ThreadDatum* thread)", list);
         printer->fmt_line("return &(thread[{}].i);", tid);
-        printer->pop_block(2);
+        printer->pop_block();
+        printer->add_newline();
 
         printer->fmt_push_block("static inline int dith{}()", list);
         printer->fmt_line("return {};", tid+1);
-        printer->pop_block(2);
+        printer->pop_block();
+        printer->add_newline();
 
         printer->fmt_push_block("static inline void** newtonspace{}(ThreadDatum* thread)", list);
         printer->fmt_line("return &(thread[{}]._pvoid);", tid+2);
-        printer->pop_block(1);
+        printer->pop_block();
     }
 
     if (info.vectorize && !info.thread_variables.empty()) {
@@ -2247,7 +2251,7 @@ void CodegenCppVisitor::print_thread_getters() {
         printer->add_line("/** tid for thread variables */");
         printer->push_block("static inline int thread_var_tid()");
         printer->fmt_line("return {};", info.thread_var_thread_id);
-        printer->pop_block(1);
+        printer->pop_block();
     }
 
     if (info.vectorize && !info.top_local_variables.empty()) {
@@ -2255,7 +2259,7 @@ void CodegenCppVisitor::print_thread_getters() {
         printer->add_line("/** tid for top local tread variables */");
         printer->push_block("static inline int top_local_var_tid()");
         printer->fmt_line("return {};", info.top_local_thread_id);
-        printer->pop_block(1);
+        printer->pop_block();
     }
     // clang-format on
 }
@@ -2665,7 +2669,7 @@ void CodegenCppVisitor::print_mechanism_global_var_structure(bool print_initiali
                                   value_initialize);
             } else {
                 printer->fmt_line(
-                        "{}{} {}[{}]{};", qualifier, float_type, name, num_values, value_initialize);
+                    "{}{} {}[{}]{};", qualifier, float_type, name, num_values, value_initialize);
             }
             codegen_global_variables.push_back(make_symbol(name));
         }
@@ -2865,7 +2869,7 @@ void CodegenCppVisitor::print_mechanism_register() {
     printer->fmt_line("{} = mech_type;", get_variable_name("mech_type", false));
     printer->push_block("if (mech_type == -1)");
     printer->add_line("return;");
-    printer->pop_block(1);
+    printer->pop_block();
 
     printer->add_newline();
     printer->add_line("_nrn_layout_reg(mech_type, 0);");  // 0 for SoA
@@ -2991,7 +2995,7 @@ void CodegenCppVisitor::print_mechanism_register() {
 
     // register variables for hoc
     printer->add_line("hoc_register_var(hoc_scalar_double, hoc_vector_double, NULL);");
-    printer->pop_block(1);
+    printer->pop_block();
 }
 
 
@@ -3023,9 +3027,10 @@ void CodegenCppVisitor::print_thread_memory_callbacks() {
         printer->chain_block("else");
         printer->fmt_line("thread[thread_var_tid()].pval = {};", thread_data);
         printer->fmt_line("{} = 1;", thread_data_in_use);
-        printer->pop_block(1);
+        printer->pop_block();
     }
-    printer->pop_block(3);
+    printer->pop_block();
+    printer->add_newline(2);
 
 
     // thread_mem_cleanup callback
@@ -3051,9 +3056,9 @@ void CodegenCppVisitor::print_thread_memory_callbacks() {
         printer->fmt_line("{} = 0;", thread_data_in_use);
         printer->chain_block("else");
         printer->add_line("free(thread[thread_var_tid()].pval);");
-        printer->pop_block(1);
+        printer->pop_block();
     }
-    printer->pop_block(1);
+    printer->pop_block();
 }
 
 
@@ -3164,9 +3169,9 @@ void CodegenCppVisitor::print_setup_range_variable() {
     printer->fmt_line("{0}* data = ({0}*) mem_alloc(n, sizeof({0}));", type);
     printer->push_block("for(size_t i = 0; i < n; i++)");
     printer->add_line("data[i] = variable[i];");
-    printer->pop_block(1);
+    printer->pop_block();
     printer->add_line("return data;");
-    printer->pop_block(1);
+    printer->pop_block();
 }
 
 
@@ -3211,7 +3216,8 @@ void CodegenCppVisitor::print_instance_variable_setup() {
     printer->add_line("ml->instance = inst;");
     printer->fmt_line("ml->global_variables = inst->{};", naming::INST_GLOBAL_MEMBER);
     printer->fmt_line("ml->global_variables_size = sizeof({});", global_struct());
-    printer->pop_block(2);
+    printer->pop_block();
+    printer->add_newline();
 
     auto const cast_inst_and_assert_validity = [&]() {
         printer->fmt_line("auto* const inst = static_cast<{}*>(ml->instance);", instance_struct());
@@ -3239,7 +3245,8 @@ void CodegenCppVisitor::print_instance_variable_setup() {
         ml->global_variables = nullptr;
         ml->global_variables_size = 0;
     )CODE");
-    printer->pop_block(2);
+    printer->pop_block();
+    printer->add_newline();
 
 
     printer->add_line("/** initialize mechanism instance variables */");
@@ -3293,7 +3300,8 @@ void CodegenCppVisitor::print_instance_variable_setup() {
         ptr_members.push_back(std::move(name));
     }
     print_instance_struct_copy_to_device();
-    printer->pop_block(2);  // setup_instance
+    printer->pop_block();  // setup_instance
+    printer->add_newline();
 
     print_instance_struct_transfer_routines(ptr_members);
 }
@@ -3415,7 +3423,7 @@ void CodegenCppVisitor::print_nrn_init(bool skip_init_check) {
         printer->fmt_line("th.pval = vec;", list_num);
         printer->fmt_line("*ns = nrn_cons_newtonspace({}, pnodecount);", nequation);
         print_newtonspace_transfer_to_device();
-        printer->pop_block(1);
+        printer->pop_block();
         // clang-format on
     }
 
@@ -3445,14 +3453,14 @@ void CodegenCppVisitor::print_nrn_init(bool skip_init_check) {
     }
 
     print_initial_block(info.initial_node);
-    printer->pop_block(1);
+    printer->pop_block();
 
     if (!info.changed_dt.empty()) {
         printer->fmt_line("{} = _save_prev_dt;", get_variable_name(naming::NTHREAD_DT_VARIABLE));
         print_dt_update_to_device();
     }
 
-    printer->pop_block(1);
+    printer->pop_block();
 
     if (info.derivimplicit_used()) {
         printer->add_line("deriv_advance_flag = 1;");
@@ -3465,7 +3473,7 @@ void CodegenCppVisitor::print_nrn_init(bool skip_init_check) {
 
     print_kernel_data_present_annotation_block_end();
     if (skip_init_check) {
-        printer->pop_block(1);
+        printer->pop_block();
     }
     codegen = false;
 }
@@ -3520,8 +3528,8 @@ void CodegenCppVisitor::print_before_after_block(const ast::Block* node, size_t 
     }
 
     /// loop end including data annotation block
-    printer->pop_block(1);
-    printer->pop_block(1);
+    printer->pop_block();
+    printer->pop_block();
     print_kernel_data_present_annotation_block_end();
 
     codegen = false;
@@ -3535,7 +3543,7 @@ void CodegenCppVisitor::print_nrn_constructor() {
         print_statement_block(*block, false, false);
     }
     printer->add_line("#endif");
-    printer->pop_block(1);
+    printer->pop_block();
 }
 
 
@@ -3547,7 +3555,7 @@ void CodegenCppVisitor::print_nrn_destructor() {
         print_statement_block(*block, false, false);
     }
     printer->add_line("#endif");
-    printer->pop_block(1);
+    printer->pop_block();
 }
 
 
@@ -3566,7 +3574,7 @@ void CodegenCppVisitor::print_nrn_alloc() {
     auto method = method_name(naming::NRN_ALLOC_METHOD);
     printer->fmt_push_block("static void {}(double* data, Datum* indexes, int type)", method);
     printer->add_line("// do nothing");
-    printer->pop_block(1);
+    printer->pop_block();
 }
 
 /**
@@ -3594,7 +3602,7 @@ void CodegenCppVisitor::print_watch_activate() {
         printer->fmt_line("{} = 0;", name);
     }
     printer->add_line("watch_remove = true;");
-    printer->pop_block(1);
+    printer->pop_block();
 
     /**
      * \todo Similar to neuron/coreneuron we are using
@@ -3612,9 +3620,9 @@ void CodegenCppVisitor::print_watch_activate() {
         printer->add_text(");");
         printer->add_newline();
 
-        printer->pop_block(1);
+        printer->pop_block();
     }
-    printer->pop_block(1);
+    printer->pop_block();
     codegen = false;
 }
 
@@ -3682,7 +3690,7 @@ void CodegenCppVisitor::print_watch_check() {
         watch->get_value()->accept(*this);
         printer->add_text(");");
         printer->add_newline();
-        printer->pop_block(1);
+        printer->pop_block();
 
         printer->add_line(varname, " = 3;");
         // end block 3
@@ -3691,17 +3699,17 @@ void CodegenCppVisitor::print_watch_check() {
         printer->decrease_indent();
         printer->push_block("} else");
         printer->add_line(varname, " = 2;");
-        printer->pop_block(1);
+        printer->pop_block();
         // end block 3
 
-        printer->pop_block(1);
+        printer->pop_block();
         // end block 1
     }
 
-    printer->pop_block(1);
+    printer->pop_block();
     print_send_event_move();
     print_kernel_data_present_annotation_block_end();
-    printer->pop_block(1);
+    printer->pop_block();
     codegen = false;
 }
 
@@ -3895,7 +3903,7 @@ void CodegenCppVisitor::print_net_init() {
             print_net_send_buf_update_to_host();
         }
     }
-    printer->pop_block(1);
+    printer->pop_block();
     codegen = false;
     printing_net_init = false;
 }
@@ -3916,7 +3924,7 @@ void CodegenCppVisitor::print_send_event_move() {
         int point_index = nsb->_pnt_index[i];
         net_sem_from_gpu(type, vdata_index, weight_index, tid, point_index, t, flag);
     )CODE");
-    printer->pop_block(1);
+    printer->pop_block();
     printer->add_line("nsb->_cnt = 0;");
     print_net_send_buf_count_update_to_device();
 }
@@ -3931,7 +3939,8 @@ void CodegenCppVisitor::print_get_memb_list() {
     printer->add_line("Memb_list* ml = get_memb_list(nt);");
     printer->push_block("if (!ml)");
     printer->add_line("return;");
-    printer->pop_block(2);
+    printer->pop_block();
+    printer->add_newline();
 }
 
 
@@ -3943,7 +3952,7 @@ void CodegenCppVisitor::print_net_receive_loop_begin() {
 
 
 void CodegenCppVisitor::print_net_receive_loop_end() {
-    printer->pop_block(1);
+    printer->pop_block();
 }
 
 
@@ -3977,7 +3986,7 @@ void CodegenCppVisitor::print_net_receive_buffering(bool need_mech_inst) {
         Point_process* point_process = nt->pntprocs + offset;
     )CODE");
     printer->add_line(net_receive, "(t, point_process, inst, nt, ml, weight_index, flag);");
-    printer->pop_block(1);
+    printer->pop_block();
     print_net_receive_loop_end();
 
     print_device_stream_wait();
@@ -3989,7 +3998,7 @@ void CodegenCppVisitor::print_net_receive_buffering(bool need_mech_inst) {
     }
 
     print_kernel_data_present_annotation_block_end();
-    printer->pop_block(1);
+    printer->pop_block();
 }
 
 void CodegenCppVisitor::print_net_send_buffering_cnt_update() const {
@@ -3999,7 +4008,7 @@ void CodegenCppVisitor::print_net_send_buffering_cnt_update() const {
 void CodegenCppVisitor::print_net_send_buffering_grow() {
     printer->push_block("if (i >= nsb->_size)");
     printer->add_line("nsb->grow();");
-    printer->pop_block(1);
+    printer->pop_block();
 }
 
 void CodegenCppVisitor::print_net_send_buffering() {
@@ -4025,8 +4034,8 @@ void CodegenCppVisitor::print_net_send_buffering() {
          nsb->_nsb_t[i] = t;
          nsb->_nsb_flag[i] = flag;
     )CODE");
-    printer->pop_block(1);
-    printer->pop_block(1);
+    printer->pop_block();
+    printer->pop_block();
 }
 
 
@@ -4121,7 +4130,6 @@ void CodegenCppVisitor::print_net_receive_kernel() {
     node->get_statement_block()->accept(*this);
     printer->add_newline();
     printer->pop_block();
-    printer->add_newline();
 
     printing_net_receive = false;
     codegen = false;
@@ -4147,7 +4155,7 @@ void CodegenCppVisitor::print_net_receive() {
         printer->add_line("NetReceiveBuffer_t* nrb = ml->_net_receive_buffer;");
         printer->push_block("if (nrb->_cnt >= nrb->_size)");
         printer->add_line("realloc_net_receive_buffer(nt, ml);");
-        printer->pop_block(1);
+        printer->pop_block();
         printer->add_multi_line(R"CODE(
             int id = nrb->_cnt;
             nrb->_pnt_index[id] = pnt-nt->pntprocs;
@@ -4156,7 +4164,7 @@ void CodegenCppVisitor::print_net_receive() {
             nrb->_nrb_flag[id] = flag;
             nrb->_cnt++;
         )CODE");
-        printer->pop_block(1);
+        printer->pop_block();
     }
     printing_net_receive = false;
     codegen = false;
@@ -4227,12 +4235,13 @@ void CodegenCppVisitor::print_derivimplicit_kernel(const Block& block) {
                       list_num + 1,
                       stride,
                       list_num);
-    printer->pop_block(1);
-    printer->pop_block(1);
+    printer->pop_block();
+    printer->pop_block();
     printer->add_line("return 0;");
-    printer->pop_block(1);  // operator()
+    printer->pop_block();  // operator()
     printer->pop_block(";");   // struct
-    printer->pop_block(2);  // namespace
+    printer->pop_block();  // namespace
+    printer->add_newline();
     printer->fmt_push_block("int {}_{}({})", block_name, suffix, ext_params);
     printer->add_line(instance);
     printer->fmt_line("double* savstate{} = (double*) thread[dith{}()].pval;", list_num, list_num);
@@ -4241,7 +4250,7 @@ void CodegenCppVisitor::print_derivimplicit_kernel(const Block& block) {
     printer->add_line(dlist2);
     printer->fmt_push_block("for (int i=0; i<{}; i++)", info.num_primes);
     printer->fmt_line("savstate{}[i{}] = data[slist{}[i]{}];", list_num, stride, list_num, stride);
-    printer->pop_block(1);
+    printer->pop_block();
     printer->fmt_line(
         "int reset = nrn_newton_thread(static_cast<NewtonSpace*>(*newtonspace{}(thread)), {}, "
         "slist{}, _newton_{}_{}{{}}, dlist{}, {});",
@@ -4253,7 +4262,8 @@ void CodegenCppVisitor::print_derivimplicit_kernel(const Block& block) {
         list_num + 1,
         ext_args);
     printer->add_line("return reset;");
-    printer->pop_block(3);
+    printer->pop_block();
+    printer->add_newline(2);
 }
 
 
@@ -4331,11 +4341,11 @@ void CodegenCppVisitor::print_nrn_state() {
         const auto& text = process_shadow_update_statement(statement, BlockType::State);
         printer->add_line(text);
     }
-    printer->pop_block(1);
+    printer->pop_block();
 
     print_kernel_data_present_annotation_block_end();
 
-    printer->pop_block(1);
+    printer->pop_block();
     codegen = false;
 }
 
@@ -4360,7 +4370,7 @@ void CodegenCppVisitor::print_nrn_current(const BreakpointBlock& node) {
         printer->fmt_line("current += {};", name);
     }
     printer->add_line("return current;");
-    printer->pop_block(1);
+    printer->pop_block();
 }
 
 
@@ -4493,9 +4503,9 @@ void CodegenCppVisitor::print_fast_imem_calculation() {
     printer->fmt_line("nt->nrn_fast_imem->nrn_sav_rhs[node_id] {} {};", rhs_op, rhs);
     printer->fmt_line("nt->nrn_fast_imem->nrn_sav_d[node_id] {} {};", d_op, d);
     if (nrn_cur_reduction_loop_required()) {
-        printer->pop_block(1);
+        printer->pop_block();
     }
-    printer->pop_block(1);
+    printer->pop_block();
 }
 
 void CodegenCppVisitor::print_nrn_cur() {
@@ -4518,17 +4528,17 @@ void CodegenCppVisitor::print_nrn_cur() {
     if (!nrn_cur_reduction_loop_required()) {
         print_fast_imem_calculation();
     }
-    printer->pop_block(1);
+    printer->pop_block();
 
     if (nrn_cur_reduction_loop_required()) {
         printer->push_block("for (int id = 0; id < nodecount; id++)");
         print_nrn_cur_matrix_shadow_reduction();
-        printer->pop_block(1);
+        printer->pop_block();
         print_fast_imem_calculation();
     }
 
     print_kernel_data_present_annotation_block_end();
-    printer->pop_block(1);
+    printer->pop_block();
     codegen = false;
 }
 
