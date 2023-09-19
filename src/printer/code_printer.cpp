@@ -108,7 +108,7 @@ void CodePrinter::pop_block_nl(std::size_t num_newlines) {
 }
 
 void CodePrinter::pop_block(const std::string_view& suffix, std::size_t num_newlines) {
-    pop_block(0);
+    pop_block_nl(0);
     *result << suffix;
     add_newline(num_newlines);
 }
