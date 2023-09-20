@@ -40,7 +40,6 @@ using visitor::SymtabVisitor;
 using visitor::VarUsageVisitor;
 
 using symtab::syminfo::NmodlType;
-// using SymbolType = std::shared_ptr<symtab::Symbol>;
 
 /****************************************************************************************/
 /*                            Overloaded visitor routines                               */
