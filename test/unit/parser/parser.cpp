@@ -304,7 +304,7 @@ SCENARIO("NEURON block can add RANDOM variable", "[parser][random]") {
     GIVEN("Incomplete RANDOM variable declaration") {
         THEN("parser throws an error") {
             REQUIRE_THROWS_WITH(is_valid_construct("NEURON { RANDOM UNIFORM ur1, ur2 }"),
-                                Catch::Contains("Parser Error"));
+                                Catch::Matchers::ContainsSubstring("Parser Error"));
         }
     }
     GIVEN("Wrong number of parameters to the RANDOM distribution type") {
@@ -318,7 +318,7 @@ SCENARIO("NEURON block can add RANDOM variable", "[parser][random]") {
             auto ast = driver.parse_string(construct);
             REQUIRE_THROWS_WITH(nmodl::visitor::CheckRandomStatementVisitor().visit_program(
                                     static_cast<const nmodl::ast::Program&>(*ast)),
-                                Catch::Contains("Validation Error"));
+                                Catch::Matchers::ContainsSubstring("Validation Error"));
         }
     }
 }
