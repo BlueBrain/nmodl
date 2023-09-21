@@ -86,6 +86,7 @@ stages:
         sudo apt-get update
         sudo apt-get install -y g++-9 flex bison libfl-dev cython libx11-dev libxcomposite-dev libncurses-dev mpich
         sudo apt-get install -y python3.8 python3.8-dev python3.8-venv ninja-build
+        sudo apt-get remove -y python3-importlib-metadata
         python3.8 -m pip install --upgrade pip setuptools
         python3.8 -m pip install --user -r $(Build.Repository.LocalPath)/requirements.txt
         # we manually get version 3.15.0 to make sure that changes in the cmake
