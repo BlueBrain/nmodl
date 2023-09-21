@@ -1667,6 +1667,11 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
         , float_type(std::move(float_type))
         , optimize_ionvar_copies(optimize_ionvar_copies) {}
 
+    /**
+     * Main and only member function to call after creating an instance of this class.
+     * \param program the AST to translate to C++ code
+     */
+    void visit_program(const ast::Program& program) override;
 
     /**
      * Print the \c nrn\_init function definition
@@ -1825,7 +1830,6 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     void visit_name(const ast::Name& node) override;
     void visit_paren_expression(const ast::ParenExpression& node) override;
     void visit_prime_name(const ast::PrimeName& node) override;
-    void visit_program(const ast::Program& node) override;
     void visit_statement_block(const ast::StatementBlock& node) override;
     void visit_string(const ast::String& node) override;
     void visit_solution_expression(const ast::SolutionExpression& node) override;
