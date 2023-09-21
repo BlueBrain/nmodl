@@ -226,12 +226,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a9af54b8441672105dbcd6affec81b53a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2ba56eb05f35c3cb725ed79fd7870b17"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1symtab_1_1_symbol.html#a2ba56eb05f35c3cb725ed79fd7870b17">add_node</a> (<a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> *node) noexcept</td></tr>
 <tr class="separator:a2ba56eb05f35c3cb725ed79fd7870b17"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a447af4997a5d9b3a7eb4da83c56352e0"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1symtab_1_1_symbol.html#a447af4997a5d9b3a7eb4da83c56352e0">get_nodes</a> () const noexcept</td></tr>
-<tr class="separator:a447af4997a5d9b3a7eb4da83c56352e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e1fb9bffd5ccc617b9e621532391170"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; <a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1symtab_1_1_symbol.html#a8e1fb9bffd5ccc617b9e621532391170">get_nodes</a> () const noexcept</td></tr>
+<tr class="separator:a8e1fb9bffd5ccc617b9e621532391170"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a72c69b92fd0cf748e9bbb8148a02e416"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1symtab_1_1_symbol.html#a72c69b92fd0cf748e9bbb8148a02e416">get_nodes_by_type</a> (std::initializer_list&lt; <a class="el" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033">ast::AstNodeType</a> &gt; l) const noexcept</td></tr>
 <tr class="separator:a72c69b92fd0cf748e9bbb8148a02e416"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae9ac293727f7baee87c6caec5e98f2b9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classnmodl_1_1_mod_token.html">ModToken</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1symtab_1_1_symbol.html#ae9ac293727f7baee87c6caec5e98f2b9">get_token</a> () const noexcept</td></tr>
-<tr class="separator:ae9ac293727f7baee87c6caec5e98f2b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5de749d205928840dc44d8bbbc836f34"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classnmodl_1_1_mod_token.html">ModToken</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1symtab_1_1_symbol.html#a5de749d205928840dc44d8bbbc836f34">get_token</a> () const noexcept</td></tr>
+<tr class="separator:a5de749d205928840dc44d8bbbc836f34"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aed3936d8bcfd917296344671350205c4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1symtab_1_1_symbol.html#aed3936d8bcfd917296344671350205c4">get_read_count</a> () const noexcept</td></tr>
 <tr class="separator:aed3936d8bcfd917296344671350205c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0f882baa29269f9353924fb10c007d7e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1symtab_1_1_symbol.html#a0f882baa29269f9353924fb10c007d7e">get_write_count</a> () const noexcept</td></tr>
@@ -335,7 +335,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -690,8 +690,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a447af4997a5d9b3a7eb4da83c56352e0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a447af4997a5d9b3a7eb4da83c56352e0">&#9670;&nbsp;</a></span>get_nodes()</h2>
+<a id="a8e1fb9bffd5ccc617b9e621532391170"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8e1fb9bffd5ccc617b9e621532391170">&#9670;&nbsp;</a></span>get_nodes()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -700,7 +700,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt;<a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a>*&gt; nmodl::symtab::Symbol::get_nodes </td>
+          <td class="memname">const std::vector&lt;<a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a>*&gt;&amp; nmodl::symtab::Symbol::get_nodes </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -907,8 +907,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ae9ac293727f7baee87c6caec5e98f2b9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae9ac293727f7baee87c6caec5e98f2b9">&#9670;&nbsp;</a></span>get_token()</h2>
+<a id="a5de749d205928840dc44d8bbbc836f34"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5de749d205928840dc44d8bbbc836f34">&#9670;&nbsp;</a></span>get_token()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -917,7 +917,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classnmodl_1_1_mod_token.html">ModToken</a> nmodl::symtab::Symbol::get_token </td>
+          <td class="memname">const <a class="el" href="classnmodl_1_1_mod_token.html">ModToken</a>&amp; nmodl::symtab::Symbol::get_token </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>

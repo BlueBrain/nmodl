@@ -279,7 +279,7 @@ $(document).ready(function(){initNavTree('test_2unit_2symtab_2symbol__table_8cpp
 <div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;            THEN(<span class="stringliteral">&quot;table size increases&quot;</span>) {</div>
 <div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;                REQUIRE(table-&gt;symbol_count() == 1);</div>
 <div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;            }</div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;            THEN(<span class="stringliteral">&quot;lookup returns a inserted symbol&quot;</span>) {</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;            THEN(<span class="stringliteral">&quot;lookup returns an inserted symbol&quot;</span>) {</div>
 <div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;                REQUIRE(table-&gt;lookup(<span class="stringliteral">&quot;alpha&quot;</span>) != <span class="keyword">nullptr</span>);</div>
 <div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;                REQUIRE(table-&gt;lookup(<span class="stringliteral">&quot;beta&quot;</span>) == <span class="keyword">nullptr</span>);</div>
 <div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;            }</div>
@@ -324,215 +324,240 @@ $(document).ready(function(){initNavTree('test_2unit_2symtab_2symbol__table_8cpp
 <div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;                REQUIRE(next_table-&gt;lookup(<span class="stringliteral">&quot;alpha&quot;</span>) == <span class="keyword">nullptr</span>);</div>
 <div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;                REQUIRE(next_table-&gt;lookup_in_scope(<span class="stringliteral">&quot;alpha&quot;</span>) != <span class="keyword">nullptr</span>);</div>
 <div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;            }</div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;        }</div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;        WHEN(<span class="stringliteral">&quot;query for symbol with and without properties&quot;</span>) {</div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;            <span class="keyword">auto</span> symbol1 = std::make_shared&lt;Symbol&gt;(<span class="stringliteral">&quot;alpha&quot;</span>);</div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;            <span class="keyword">auto</span> symbol2 = std::make_shared&lt;Symbol&gt;(<span class="stringliteral">&quot;beta&quot;</span>);</div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;            <span class="keyword">auto</span> symbol3 = std::make_shared&lt;Symbol&gt;(<span class="stringliteral">&quot;gamma&quot;</span>);</div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;            <span class="keyword">auto</span> symbol4 = std::make_shared&lt;Symbol&gt;(<span class="stringliteral">&quot;delta&quot;</span>);</div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160; </div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;            symbol1-&gt;add_property(<a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbaa6ecefaab5c08acc8f2f69a8d98afe9e">NmodlType::range_var</a> | <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbac89e419cdec37c6436386d0ccee1096a">NmodlType::param_assign</a>);</div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;            symbol2-&gt;add_property(<a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbaa6ecefaab5c08acc8f2f69a8d98afe9e">NmodlType::range_var</a> | <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbac89e419cdec37c6436386d0ccee1096a">NmodlType::param_assign</a> |</div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;                                  <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dba52febc4c547f3ced7a564f2dc1e14972">NmodlType::state_var</a>);</div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;            symbol3-&gt;add_property(<a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbaa6ecefaab5c08acc8f2f69a8d98afe9e">NmodlType::range_var</a> | <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbacb1e09d4f29a44bf586491796c2373e5">NmodlType::assigned_definition</a> |</div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;                                  <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbab42b3dbb719197d22c748fc74ac64ba4">NmodlType::pointer_var</a>);</div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;            symbol4-&gt;add_property(<a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbaa6ecefaab5c08acc8f2f69a8d98afe9e">NmodlType::range_var</a>);</div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160; </div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;            table-&gt;insert(symbol1);</div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;            table-&gt;insert(symbol2);</div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;            table-&gt;insert(symbol3);</div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;            table-&gt;insert(symbol4);</div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160; </div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;            <span class="keyword">auto</span> result = table-&gt;get_variables_with_properties(<a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbaa6ecefaab5c08acc8f2f69a8d98afe9e">NmodlType::range_var</a>);</div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;            REQUIRE(result.size() == 4);</div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160; </div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;            result = table-&gt;get_variables_with_properties(<a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbaa6ecefaab5c08acc8f2f69a8d98afe9e">NmodlType::range_var</a> |</div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;                                                          <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbab42b3dbb719197d22c748fc74ac64ba4">NmodlType::pointer_var</a>);</div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;            REQUIRE(result.size() == 4);</div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160; </div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;            <span class="keyword">auto</span> with = <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbaa6ecefaab5c08acc8f2f69a8d98afe9e">NmodlType::range_var</a> | <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbac89e419cdec37c6436386d0ccee1096a">NmodlType::param_assign</a>;</div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;            <span class="keyword">auto</span> without = <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dba52febc4c547f3ced7a564f2dc1e14972">NmodlType::state_var</a> | <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbab42b3dbb719197d22c748fc74ac64ba4">NmodlType::pointer_var</a>;</div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;            result = table-&gt;get_variables(with, without);</div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;            REQUIRE(result.size() == 1);</div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;            REQUIRE(result[0]-&gt;get_name() == <span class="stringliteral">&quot;alpha&quot;</span>);</div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160; </div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160; </div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;            with = <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbaa6ecefaab5c08acc8f2f69a8d98afe9e">NmodlType::range_var</a>;</div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;            without = <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbac89e419cdec37c6436386d0ccee1096a">NmodlType::param_assign</a> | <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbacb1e09d4f29a44bf586491796c2373e5">NmodlType::assigned_definition</a>;</div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;            result = table-&gt;get_variables(with, without);</div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;            REQUIRE(result.size() == 1);</div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;            REQUIRE(result[0]-&gt;get_name() == <span class="stringliteral">&quot;delta&quot;</span>);</div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160; </div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;            with = <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbaa6ecefaab5c08acc8f2f69a8d98afe9e">NmodlType::range_var</a>;</div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;            without = <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbaa6ecefaab5c08acc8f2f69a8d98afe9e">NmodlType::range_var</a>;</div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;            result = table-&gt;get_variables(with, without);</div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;            REQUIRE(result.empty());</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;        }</div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;    }</div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;}</div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160; </div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;<span class="comment">//=============================================================================</span></div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;<span class="comment">// Model symbol table test</span></div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;<span class="comment">//=============================================================================</span></div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160; </div>
-<div class="line"><a name="l00282"></a><span class="lineno"><a class="line" href="test_2unit_2symtab_2symbol__table_8cpp.html#a780700b9cd74cc6da7faa0250d3e64d5">  282</a></span>&#160;<a class="code" href="test_2unit_2symtab_2symbol__table_8cpp.html#ab03122583d9875aaa2471ca4e456a441">SCENARIO</a>(<span class="stringliteral">&quot;Global symbol table (ModelSymbol) allows scope based operations&quot;</span>) {</div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;    GIVEN(<span class="stringliteral">&quot;A Model symbolTable&quot;</span>) {</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;        <a class="code" href="classnmodl_1_1symtab_1_1_model_symbol_table.html">ModelSymbolTable</a> mod_symtab;</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;            THEN(<span class="stringliteral">&quot;children can figure if it is in global scope or not&quot;</span>) {</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;                REQUIRE(next_table-&gt;global_scope() == table-&gt;global_scope());</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;            }</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;        }</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;        WHEN(<span class="stringliteral">&quot;pretty-printing a symbol table to a stream&quot;</span>) {</div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;            std::ostringstream oss;</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;            table-&gt;print(oss, 0);</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;            <span class="keyword">auto</span> text = oss.str();</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;            THEN(<span class="stringliteral">&quot;nothing is written when the table is empty&quot;</span>) {</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;                REQUIRE(text.empty());</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;            }</div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;            table-&gt;insert(symbol);</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;            table-&gt;print(oss, 0);</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;            text = oss.str();</div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;            THEN(<span class="stringliteral">&quot;the symbol present in the table can be found in the written string&quot;</span>) {</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;                REQUIRE(text.find(symbol-&gt;get_name()) != std::string::npos);</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;            }</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;        }</div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;        WHEN(<span class="stringliteral">&quot;creating a clone of symbol table&quot;</span>) {</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;            <span class="keyword">const</span> std::unique_ptr&lt;SymbolTable&gt; clone(table-&gt;clone());</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;            THEN(<span class="stringliteral">&quot;clone has the same name&quot;</span>) {</div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;                REQUIRE(clone-&gt;<a class="code" href="classnmodl_1_1symtab_1_1_symbol_table.html#a41a1acb0b3a5a65c3e761b10164b1fce">name</a>() == table-&gt;name());</div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;            }</div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;        }</div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;        WHEN(<span class="stringliteral">&quot;query for symbol with and without properties&quot;</span>) {</div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;            <span class="keyword">auto</span> symbol1 = std::make_shared&lt;Symbol&gt;(<span class="stringliteral">&quot;alpha&quot;</span>);</div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;            <span class="keyword">auto</span> symbol2 = std::make_shared&lt;Symbol&gt;(<span class="stringliteral">&quot;beta&quot;</span>);</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;            <span class="keyword">auto</span> symbol3 = std::make_shared&lt;Symbol&gt;(<span class="stringliteral">&quot;gamma&quot;</span>);</div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;            <span class="keyword">auto</span> symbol4 = std::make_shared&lt;Symbol&gt;(<span class="stringliteral">&quot;delta&quot;</span>);</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160; </div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;            symbol1-&gt;add_property(<a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbaa6ecefaab5c08acc8f2f69a8d98afe9e">NmodlType::range_var</a> | <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbac89e419cdec37c6436386d0ccee1096a">NmodlType::param_assign</a>);</div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;            symbol2-&gt;add_property(<a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbaa6ecefaab5c08acc8f2f69a8d98afe9e">NmodlType::range_var</a> | <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbac89e419cdec37c6436386d0ccee1096a">NmodlType::param_assign</a> |</div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;                                  <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dba52febc4c547f3ced7a564f2dc1e14972">NmodlType::state_var</a>);</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;            symbol3-&gt;add_property(<a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbaa6ecefaab5c08acc8f2f69a8d98afe9e">NmodlType::range_var</a> | <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbacb1e09d4f29a44bf586491796c2373e5">NmodlType::assigned_definition</a> |</div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;                                  <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbab42b3dbb719197d22c748fc74ac64ba4">NmodlType::pointer_var</a>);</div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;            symbol4-&gt;add_property(<a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbaa6ecefaab5c08acc8f2f69a8d98afe9e">NmodlType::range_var</a>);</div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160; </div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;            table-&gt;insert(symbol1);</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;            table-&gt;insert(symbol2);</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;            table-&gt;insert(symbol3);</div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;            table-&gt;insert(symbol4);</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160; </div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;            <span class="keyword">auto</span> result = table-&gt;get_variables_with_properties(<a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbaa6ecefaab5c08acc8f2f69a8d98afe9e">NmodlType::range_var</a>);</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;            REQUIRE(result.size() == 4);</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160; </div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;            result = table-&gt;get_variables_with_properties(<a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbaa6ecefaab5c08acc8f2f69a8d98afe9e">NmodlType::range_var</a> |</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;                                                          <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbab42b3dbb719197d22c748fc74ac64ba4">NmodlType::pointer_var</a>);</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;            REQUIRE(result.size() == 4);</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160; </div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;            <span class="keyword">auto</span> with = <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbaa6ecefaab5c08acc8f2f69a8d98afe9e">NmodlType::range_var</a> | <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbac89e419cdec37c6436386d0ccee1096a">NmodlType::param_assign</a>;</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;            <span class="keyword">auto</span> without = <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dba52febc4c547f3ced7a564f2dc1e14972">NmodlType::state_var</a> | <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbab42b3dbb719197d22c748fc74ac64ba4">NmodlType::pointer_var</a>;</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;            result = table-&gt;get_variables(with, without);</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;            REQUIRE(result.size() == 1);</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;            REQUIRE(result[0]-&gt;get_name() == <span class="stringliteral">&quot;alpha&quot;</span>);</div>
 <div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160; </div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;        <span class="keyword">auto</span> program = std::make_shared&lt;ast::Program&gt;();</div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;        <span class="keyword">auto</span> symbol1 = std::make_shared&lt;Symbol&gt;(<span class="stringliteral">&quot;alpha&quot;</span>);</div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;        <span class="keyword">auto</span> symbol2 = std::make_shared&lt;Symbol&gt;(<span class="stringliteral">&quot;alpha&quot;</span>);</div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;        <span class="keyword">auto</span> symbol3 = std::make_shared&lt;Symbol&gt;(<span class="stringliteral">&quot;alpha&quot;</span>);</div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160; </div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;        symbol1-&gt;add_property(<a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbac89e419cdec37c6436386d0ccee1096a">NmodlType::param_assign</a>);</div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;        symbol2-&gt;add_property(<a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbaa6ecefaab5c08acc8f2f69a8d98afe9e">NmodlType::range_var</a>);</div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;        symbol3-&gt;add_property(<a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbaa6ecefaab5c08acc8f2f69a8d98afe9e">NmodlType::range_var</a>);</div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160; </div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;        <a class="code" href="classnmodl_1_1symtab_1_1_symbol_table.html">SymbolTable</a>* old_symtab = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160; </div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;        WHEN(<span class="stringliteral">&quot;trying to exit scope without entering&quot;</span>) {</div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;            THEN(<span class="stringliteral">&quot;throws an exception&quot;</span>) {</div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;                REQUIRE_THROWS_WITH(mod_symtab.<a class="code" href="classnmodl_1_1symtab_1_1_model_symbol_table.html#a372d361b51ea1874dfc6c1960fa37cba">leave_scope</a>(),</div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;                                    Catch::Matchers::ContainsSubstring(<span class="stringliteral">&quot;without entering&quot;</span>));</div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;            }</div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;        }</div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;        WHEN(<span class="stringliteral">&quot;trying to enter scope without valid node&quot;</span>) {</div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;            THEN(<span class="stringliteral">&quot;throws an exception&quot;</span>) {</div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;                REQUIRE_THROWS_WITH(mod_symtab.<a class="code" href="classnmodl_1_1symtab_1_1_model_symbol_table.html#a577bccf27f675df97d8b54b44ff562d3">enter_scope</a>(<span class="stringliteral">&quot;scope&quot;</span>, <span class="keyword">nullptr</span>, <span class="keyword">true</span>, old_symtab),</div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;                                    Catch::Matchers::ContainsSubstring(<span class="stringliteral">&quot;empty node&quot;</span>));</div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;            }</div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;        }</div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;        WHEN(<span class="stringliteral">&quot;trying to insert without entering scope&quot;</span>) {</div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;            THEN(<span class="stringliteral">&quot;throws an exception&quot;</span>) {</div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;                <span class="keyword">auto</span> symbol = std::make_shared&lt;Symbol&gt;(<span class="stringliteral">&quot;alpha&quot;</span>);</div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;                REQUIRE_THROWS_WITH(mod_symtab.<a class="code" href="classnmodl_1_1symtab_1_1_model_symbol_table.html#a93834c009ecf4ee4b6d202b43711b170">insert</a>(symbol),</div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;                                    Catch::Matchers::ContainsSubstring(<span class="stringliteral">&quot;Can not insert&quot;</span>));</div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;            }</div>
-<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;        }</div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;        WHEN(<span class="stringliteral">&quot;enter scope multipel times&quot;</span>) {</div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;            <span class="keyword">auto</span> program1 = std::make_shared&lt;ast::Program&gt;();</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;            <span class="keyword">auto</span> program2 = std::make_shared&lt;ast::Program&gt;();</div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;            mod_symtab.<a class="code" href="classnmodl_1_1symtab_1_1_model_symbol_table.html#a577bccf27f675df97d8b54b44ff562d3">enter_scope</a>(<span class="stringliteral">&quot;scope1&quot;</span>, program1.get(), <span class="keyword">false</span>, old_symtab);</div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;            mod_symtab.<a class="code" href="classnmodl_1_1symtab_1_1_model_symbol_table.html#a577bccf27f675df97d8b54b44ff562d3">enter_scope</a>(<span class="stringliteral">&quot;scope2&quot;</span>, program2.get(), <span class="keyword">false</span>, old_symtab);</div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;            THEN(<span class="stringliteral">&quot;can leave scope multiple times&quot;</span>) {</div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;                mod_symtab.<a class="code" href="classnmodl_1_1symtab_1_1_model_symbol_table.html#a372d361b51ea1874dfc6c1960fa37cba">leave_scope</a>();</div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;                mod_symtab.<a class="code" href="classnmodl_1_1symtab_1_1_model_symbol_table.html#a372d361b51ea1874dfc6c1960fa37cba">leave_scope</a>();</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160; </div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;            with = <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbaa6ecefaab5c08acc8f2f69a8d98afe9e">NmodlType::range_var</a>;</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;            without = <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbac89e419cdec37c6436386d0ccee1096a">NmodlType::param_assign</a> | <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbacb1e09d4f29a44bf586491796c2373e5">NmodlType::assigned_definition</a>;</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;            result = table-&gt;get_variables(with, without);</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;            REQUIRE(result.size() == 1);</div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;            REQUIRE(result[0]-&gt;get_name() == <span class="stringliteral">&quot;delta&quot;</span>);</div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160; </div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;            with = <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbaa6ecefaab5c08acc8f2f69a8d98afe9e">NmodlType::range_var</a>;</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;            without = <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbaa6ecefaab5c08acc8f2f69a8d98afe9e">NmodlType::range_var</a>;</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;            result = table-&gt;get_variables(with, without);</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;            REQUIRE(result.empty());</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;        }</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;    }</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;}</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160; </div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;<span class="comment">//=============================================================================</span></div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;<span class="comment">// Model symbol table test</span></div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;<span class="comment">//=============================================================================</span></div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160; </div>
+<div class="line"><a name="l00305"></a><span class="lineno"><a class="line" href="test_2unit_2symtab_2symbol__table_8cpp.html#a780700b9cd74cc6da7faa0250d3e64d5">  305</a></span>&#160;<a class="code" href="test_2unit_2symtab_2symbol__table_8cpp.html#ab03122583d9875aaa2471ca4e456a441">SCENARIO</a>(<span class="stringliteral">&quot;Global symbol table (ModelSymbol) allows scope based operations&quot;</span>) {</div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;    GIVEN(<span class="stringliteral">&quot;A Model symbolTable&quot;</span>) {</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;        <a class="code" href="classnmodl_1_1symtab_1_1_model_symbol_table.html">ModelSymbolTable</a> mod_symtab;</div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160; </div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;        <span class="keyword">auto</span> program = std::make_shared&lt;ast::Program&gt;();</div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;        <span class="keyword">auto</span> symbol1 = std::make_shared&lt;Symbol&gt;(<span class="stringliteral">&quot;alpha&quot;</span>);</div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;        <span class="keyword">auto</span> symbol2 = std::make_shared&lt;Symbol&gt;(<span class="stringliteral">&quot;alpha&quot;</span>);</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;        <span class="keyword">auto</span> symbol3 = std::make_shared&lt;Symbol&gt;(<span class="stringliteral">&quot;alpha&quot;</span>);</div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160; </div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;        symbol1-&gt;add_property(<a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbac89e419cdec37c6436386d0ccee1096a">NmodlType::param_assign</a>);</div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;        symbol2-&gt;add_property(<a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbaa6ecefaab5c08acc8f2f69a8d98afe9e">NmodlType::range_var</a>);</div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;        symbol3-&gt;add_property(<a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbaa6ecefaab5c08acc8f2f69a8d98afe9e">NmodlType::range_var</a>);</div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160; </div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;        <a class="code" href="classnmodl_1_1symtab_1_1_symbol_table.html">SymbolTable</a>* old_symtab = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160; </div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;        WHEN(<span class="stringliteral">&quot;trying to exit scope without entering&quot;</span>) {</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;            THEN(<span class="stringliteral">&quot;throws an exception&quot;</span>) {</div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;                REQUIRE_THROWS_WITH(mod_symtab.<a class="code" href="classnmodl_1_1symtab_1_1_model_symbol_table.html#a372d361b51ea1874dfc6c1960fa37cba">leave_scope</a>(),</div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;                                    Catch::Matchers::ContainsSubstring(<span class="stringliteral">&quot;without entering&quot;</span>));</div>
 <div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;            }</div>
 <div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;        }</div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;        WHEN(<span class="stringliteral">&quot;added same symbol with different properties in global scope&quot;</span>) {</div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;            mod_symtab.<a class="code" href="classnmodl_1_1symtab_1_1_model_symbol_table.html#a577bccf27f675df97d8b54b44ff562d3">enter_scope</a>(<span class="stringliteral">&quot;scope&quot;</span>, program.get(), <span class="keyword">true</span>, old_symtab);</div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;            mod_symtab.<a class="code" href="classnmodl_1_1symtab_1_1_model_symbol_table.html#a93834c009ecf4ee4b6d202b43711b170">insert</a>(symbol1);</div>
-<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;            mod_symtab.<a class="code" href="classnmodl_1_1symtab_1_1_model_symbol_table.html#a93834c009ecf4ee4b6d202b43711b170">insert</a>(symbol2);</div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;            THEN(<span class="stringliteral">&quot;only one symbol gets added with combined properties&quot;</span>) {</div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;                <span class="keyword">auto</span> symbol = mod_symtab.<a class="code" href="classnmodl_1_1symtab_1_1_model_symbol_table.html#ac30452bf367fae12194d34c7c5980c63">lookup</a>(<span class="stringliteral">&quot;alpha&quot;</span>);</div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;                <span class="keyword">auto</span> properties = <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbac89e419cdec37c6436386d0ccee1096a">NmodlType::param_assign</a> | <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbaa6ecefaab5c08acc8f2f69a8d98afe9e">NmodlType::range_var</a>;</div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;                REQUIRE(symbol-&gt;get_properties() == properties);</div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;            }</div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;        }</div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;        WHEN(<span class="stringliteral">&quot;added same symbol with exisiting property&quot;</span>) {</div>
-<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;            mod_symtab.<a class="code" href="classnmodl_1_1symtab_1_1_model_symbol_table.html#a577bccf27f675df97d8b54b44ff562d3">enter_scope</a>(<span class="stringliteral">&quot;scope&quot;</span>, program.get(), <span class="keyword">true</span>, old_symtab);</div>
-<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;            mod_symtab.<a class="code" href="classnmodl_1_1symtab_1_1_model_symbol_table.html#a93834c009ecf4ee4b6d202b43711b170">insert</a>(symbol1);</div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;            mod_symtab.<a class="code" href="classnmodl_1_1symtab_1_1_model_symbol_table.html#a93834c009ecf4ee4b6d202b43711b170">insert</a>(symbol2);</div>
-<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;            THEN(<span class="stringliteral">&quot;throws an exception&quot;</span>) {</div>
-<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;                REQUIRE_THROWS_WITH(mod_symtab.<a class="code" href="classnmodl_1_1symtab_1_1_model_symbol_table.html#a93834c009ecf4ee4b6d202b43711b170">insert</a>(symbol3),</div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;                                    Catch::Matchers::ContainsSubstring(<span class="stringliteral">&quot;Re-declaration&quot;</span>));</div>
-<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;            }</div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;        }</div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;        WHEN(<span class="stringliteral">&quot;added same symbol in children scope&quot;</span>) {</div>
-<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;            mod_symtab.<a class="code" href="classnmodl_1_1symtab_1_1_model_symbol_table.html#a577bccf27f675df97d8b54b44ff562d3">enter_scope</a>(<span class="stringliteral">&quot;scope1&quot;</span>, program.get(), <span class="keyword">true</span>, old_symtab);</div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;            mod_symtab.<a class="code" href="classnmodl_1_1symtab_1_1_model_symbol_table.html#a93834c009ecf4ee4b6d202b43711b170">insert</a>(symbol2);</div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;            THEN(<span class="stringliteral">&quot;it&#39;s ok, just get overshadow warning&quot;</span>) {</div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;                mod_symtab.<a class="code" href="classnmodl_1_1symtab_1_1_model_symbol_table.html#a577bccf27f675df97d8b54b44ff562d3">enter_scope</a>(<span class="stringliteral">&quot;scope2&quot;</span>, program.get(), <span class="keyword">false</span>, old_symtab);</div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;                mod_symtab.<a class="code" href="classnmodl_1_1symtab_1_1_model_symbol_table.html#a93834c009ecf4ee4b6d202b43711b170">insert</a>(symbol3);<span class="comment"></span></div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;<span class="comment">                ///\todo : not sure how to capture std::cout</span></div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;<span class="comment"></span>            }</div>
-<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;        }</div>
-<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;    }</div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;}</div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160; </div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;<span class="comment">//=============================================================================</span></div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;<span class="comment">// Symbol class tests</span></div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;<span class="comment">//=============================================================================</span></div>
-<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160; </div>
-<div class="line"><a name="l00361"></a><span class="lineno"><a class="line" href="test_2unit_2symtab_2symbol__table_8cpp.html#a3412b512c3ebac30608514f7d19c5b18">  361</a></span>&#160;<a class="code" href="test_2unit_2symtab_2symbol__table_8cpp.html#ab03122583d9875aaa2471ca4e456a441">SCENARIO</a>(<span class="stringliteral">&quot;Symbol class allows manipulation&quot;</span>) {</div>
-<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;    GIVEN(<span class="stringliteral">&quot;A symbol can have several nodes&quot;</span>) {</div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;        <span class="keyword">auto</span> st = std::make_shared&lt;ast::String&gt;(<span class="stringliteral">&quot;node1&quot;</span>);</div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;        <span class="keyword">auto</span> fl = std::make_shared&lt;ast::Float&gt;(<span class="stringliteral">&quot;1.1&quot;</span>);</div>
-<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;        <a class="code" href="classnmodl_1_1symtab_1_1_symbol.html">Symbol</a> symbol1(<span class="stringliteral">&quot;alpha&quot;</span>);</div>
-<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;        symbol1.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#a2ba56eb05f35c3cb725ed79fd7870b17">add_node</a>(st.get());</div>
-<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;        symbol1.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#a2ba56eb05f35c3cb725ed79fd7870b17">add_node</a>(fl.get());</div>
-<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160; </div>
-<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;        <a class="code" href="classnmodl_1_1symtab_1_1_symbol.html">Symbol</a> symbol2(<span class="stringliteral">&quot;beta&quot;</span>);</div>
-<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160; </div>
-<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;        WHEN(<span class="stringliteral">&quot;trying to get name&quot;</span>) {</div>
-<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;            THEN(<span class="stringliteral">&quot;it works&quot;</span>) {</div>
-<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;                REQUIRE(symbol1.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#af1e14bcb57791f3a37d20a31a951f179">get_name</a>() == <span class="stringliteral">&quot;alpha&quot;</span>);</div>
-<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;                REQUIRE(symbol2.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#af1e14bcb57791f3a37d20a31a951f179">get_name</a>() == <span class="stringliteral">&quot;beta&quot;</span>);</div>
-<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;            }</div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;        WHEN(<span class="stringliteral">&quot;trying to enter scope without valid node&quot;</span>) {</div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;            THEN(<span class="stringliteral">&quot;throws an exception&quot;</span>) {</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;                REQUIRE_THROWS_WITH(mod_symtab.<a class="code" href="classnmodl_1_1symtab_1_1_model_symbol_table.html#a577bccf27f675df97d8b54b44ff562d3">enter_scope</a>(<span class="stringliteral">&quot;scope&quot;</span>, <span class="keyword">nullptr</span>, <span class="keyword">true</span>, old_symtab),</div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;                                    Catch::Matchers::ContainsSubstring(<span class="stringliteral">&quot;empty node&quot;</span>));</div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;            }</div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;        }</div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;        WHEN(<span class="stringliteral">&quot;trying to insert without entering scope&quot;</span>) {</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;            THEN(<span class="stringliteral">&quot;throws an exception&quot;</span>) {</div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;                <span class="keyword">auto</span> symbol = std::make_shared&lt;Symbol&gt;(<span class="stringliteral">&quot;alpha&quot;</span>);</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;                REQUIRE_THROWS_WITH(mod_symtab.<a class="code" href="classnmodl_1_1symtab_1_1_model_symbol_table.html#a93834c009ecf4ee4b6d202b43711b170">insert</a>(symbol),</div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;                                    Catch::Matchers::ContainsSubstring(<span class="stringliteral">&quot;Can not insert&quot;</span>));</div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;            }</div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;        }</div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;        WHEN(<span class="stringliteral">&quot;enter scope multiple times&quot;</span>) {</div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;            <span class="keyword">auto</span> program1 = std::make_shared&lt;ast::Program&gt;();</div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;            <span class="keyword">auto</span> program2 = std::make_shared&lt;ast::Program&gt;();</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;            mod_symtab.<a class="code" href="classnmodl_1_1symtab_1_1_model_symbol_table.html#a577bccf27f675df97d8b54b44ff562d3">enter_scope</a>(<span class="stringliteral">&quot;scope1&quot;</span>, program1.get(), <span class="keyword">false</span>, old_symtab);</div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;            mod_symtab.<a class="code" href="classnmodl_1_1symtab_1_1_model_symbol_table.html#a577bccf27f675df97d8b54b44ff562d3">enter_scope</a>(<span class="stringliteral">&quot;scope2&quot;</span>, program2.get(), <span class="keyword">false</span>, old_symtab);</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;            THEN(<span class="stringliteral">&quot;can leave scope multiple times&quot;</span>) {</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;                mod_symtab.<a class="code" href="classnmodl_1_1symtab_1_1_model_symbol_table.html#a372d361b51ea1874dfc6c1960fa37cba">leave_scope</a>();</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;                mod_symtab.<a class="code" href="classnmodl_1_1symtab_1_1_model_symbol_table.html#a372d361b51ea1874dfc6c1960fa37cba">leave_scope</a>();</div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;            }</div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;        }</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;        WHEN(<span class="stringliteral">&quot;added same symbol with different properties in global scope&quot;</span>) {</div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;            mod_symtab.<a class="code" href="classnmodl_1_1symtab_1_1_model_symbol_table.html#a577bccf27f675df97d8b54b44ff562d3">enter_scope</a>(<span class="stringliteral">&quot;scope&quot;</span>, program.get(), <span class="keyword">true</span>, old_symtab);</div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;            mod_symtab.<a class="code" href="classnmodl_1_1symtab_1_1_model_symbol_table.html#a93834c009ecf4ee4b6d202b43711b170">insert</a>(symbol1);</div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;            mod_symtab.<a class="code" href="classnmodl_1_1symtab_1_1_model_symbol_table.html#a93834c009ecf4ee4b6d202b43711b170">insert</a>(symbol2);</div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;            THEN(<span class="stringliteral">&quot;only one symbol gets added with combined properties&quot;</span>) {</div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;                <span class="keyword">auto</span> symbol = mod_symtab.<a class="code" href="classnmodl_1_1symtab_1_1_model_symbol_table.html#ac30452bf367fae12194d34c7c5980c63">lookup</a>(<span class="stringliteral">&quot;alpha&quot;</span>);</div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;                <span class="keyword">auto</span> properties = <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbac89e419cdec37c6436386d0ccee1096a">NmodlType::param_assign</a> | <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbaa6ecefaab5c08acc8f2f69a8d98afe9e">NmodlType::range_var</a>;</div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;                REQUIRE(symbol-&gt;get_properties() == properties);</div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;            }</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;        }</div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;        WHEN(<span class="stringliteral">&quot;added same symbol with existing property&quot;</span>) {</div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;            mod_symtab.<a class="code" href="classnmodl_1_1symtab_1_1_model_symbol_table.html#a577bccf27f675df97d8b54b44ff562d3">enter_scope</a>(<span class="stringliteral">&quot;scope&quot;</span>, program.get(), <span class="keyword">true</span>, old_symtab);</div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;            mod_symtab.<a class="code" href="classnmodl_1_1symtab_1_1_model_symbol_table.html#a93834c009ecf4ee4b6d202b43711b170">insert</a>(symbol1);</div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;            mod_symtab.<a class="code" href="classnmodl_1_1symtab_1_1_model_symbol_table.html#a93834c009ecf4ee4b6d202b43711b170">insert</a>(symbol2);</div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;            THEN(<span class="stringliteral">&quot;throws an exception&quot;</span>) {</div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;                REQUIRE_THROWS_WITH(mod_symtab.<a class="code" href="classnmodl_1_1symtab_1_1_model_symbol_table.html#a93834c009ecf4ee4b6d202b43711b170">insert</a>(symbol3),</div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;                                    Catch::Matchers::ContainsSubstring(<span class="stringliteral">&quot;Re-declaration&quot;</span>));</div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;            }</div>
+<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;        }</div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;        WHEN(<span class="stringliteral">&quot;added same symbol in children scope&quot;</span>) {</div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;            mod_symtab.<a class="code" href="classnmodl_1_1symtab_1_1_model_symbol_table.html#a577bccf27f675df97d8b54b44ff562d3">enter_scope</a>(<span class="stringliteral">&quot;scope1&quot;</span>, program.get(), <span class="keyword">true</span>, old_symtab);</div>
+<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;            mod_symtab.<a class="code" href="classnmodl_1_1symtab_1_1_model_symbol_table.html#a93834c009ecf4ee4b6d202b43711b170">insert</a>(symbol2);</div>
+<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;            THEN(<span class="stringliteral">&quot;it&#39;s ok, just get overshadow warning&quot;</span>) {</div>
+<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;                mod_symtab.<a class="code" href="classnmodl_1_1symtab_1_1_model_symbol_table.html#a577bccf27f675df97d8b54b44ff562d3">enter_scope</a>(<span class="stringliteral">&quot;scope2&quot;</span>, program.get(), <span class="keyword">false</span>, old_symtab);</div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;                mod_symtab.<a class="code" href="classnmodl_1_1symtab_1_1_model_symbol_table.html#a93834c009ecf4ee4b6d202b43711b170">insert</a>(symbol3);<span class="comment"></span></div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;<span class="comment">                ///\todo : not sure how to capture std::cout</span></div>
+<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;<span class="comment"></span>            }</div>
 <div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;        }</div>
-<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160; </div>
-<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;        WHEN(<span class="stringliteral">&quot;trying to get all nodes&quot;</span>) {</div>
-<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;            THEN(<span class="stringliteral">&quot;it works&quot;</span>) {</div>
-<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;                REQUIRE(symbol1.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#a447af4997a5d9b3a7eb4da83c56352e0">get_nodes</a>().size() == 2);</div>
-<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;                REQUIRE(symbol2.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#a447af4997a5d9b3a7eb4da83c56352e0">get_nodes</a>().empty());</div>
-<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;            }</div>
-<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;        }</div>
-<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160; </div>
-<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;        WHEN(<span class="stringliteral">&quot;trying to get specific node&quot;</span>) {</div>
-<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;            <span class="keyword">auto</span> nodes = symbol1.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#a72c69b92fd0cf748e9bbb8148a02e416">get_nodes_by_type</a>({<a class="code" href="group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a63b588d5559f64f89a416e656880b949">ast::AstNodeType::STRING</a>});</div>
-<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160; </div>
-<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;            THEN(<span class="stringliteral">&quot;it works&quot;</span>) {</div>
-<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;                REQUIRE(nodes.size() == 1);</div>
-<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;                REQUIRE(nodes.front()-&gt;is_string());</div>
-<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;                REQUIRE(symbol2.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#a72c69b92fd0cf748e9bbb8148a02e416">get_nodes_by_type</a>({ast::AstNodeType::STRING}).empty());</div>
-<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;            }</div>
-<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;        }</div>
-<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;        WHEN(<span class="stringliteral">&quot;read and write counters works&quot;</span>) {</div>
-<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;            symbol1.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#a7b59c5c239e4e88ba656626d5c6b448c">read</a>();</div>
-<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;            symbol1.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#a7b59c5c239e4e88ba656626d5c6b448c">read</a>();</div>
-<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;            symbol1.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#af97b6f069ec3b05a7f9a536a70f9fe06">write</a>();</div>
-<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160; </div>
-<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;            THEN(<span class="stringliteral">&quot;it works&quot;</span>) {</div>
-<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;                REQUIRE(symbol1.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#aed3936d8bcfd917296344671350205c4">get_read_count</a>() == 2);</div>
-<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;                REQUIRE(symbol1.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#a0f882baa29269f9353924fb10c007d7e">get_write_count</a>() == 1);</div>
-<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;                REQUIRE(symbol2.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#aed3936d8bcfd917296344671350205c4">get_read_count</a>() == 0);</div>
-<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;                REQUIRE(symbol2.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#a0f882baa29269f9353924fb10c007d7e">get_write_count</a>() == 0);</div>
-<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;            }</div>
-<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;        }</div>
-<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160; </div>
-<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;        WHEN(<span class="stringliteral">&quot;renaming a symbol&quot;</span>) {</div>
-<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;            symbol2.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#af58224e476acad1a9bb6cd4422d892df">set_name</a>(<span class="stringliteral">&quot;gamma&quot;</span>);</div>
-<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;            THEN(<span class="stringliteral">&quot;get_name return the new name&quot;</span>) {</div>
-<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;                REQUIRE(symbol2.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#af1e14bcb57791f3a37d20a31a951f179">get_name</a>() == <span class="stringliteral">&quot;gamma&quot;</span>);</div>
-<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;                REQUIRE(symbol2.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#afee63fb66dec6ce0e900f998806ca479">get_original_name</a>() == <span class="stringliteral">&quot;beta&quot;</span>);</div>
-<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;            }</div>
-<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;            symbol2.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#a56e920c659b09f718d97affc297d757c">set_original_name</a>(<span class="stringliteral">&quot;gamma&quot;</span>);</div>
-<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;            THEN(<span class="stringliteral">&quot;get_original_name return the new name&quot;</span>) {</div>
-<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;                REQUIRE(symbol2.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#afee63fb66dec6ce0e900f998806ca479">get_original_name</a>() == <span class="stringliteral">&quot;gamma&quot;</span>);</div>
-<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;            }</div>
-<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;        }</div>
-<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160; </div>
-<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;        WHEN(<span class="stringliteral">&quot;set as array&quot;</span>) {</div>
-<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;            symbol1.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#a3c837fa01afef2248021481203bc4b28">set_as_array</a>(15);</div>
-<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;            THEN(<span class="stringliteral">&quot;recognized as an array&quot;</span>) {</div>
-<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;                REQUIRE(symbol1.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#adc9ef666c3c362659b335e26dee79c03">get_length</a>() == 15);</div>
-<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;                REQUIRE(symbol1.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#a354834097a73cafb38c147c5ebdd8501">is_array</a>());</div>
-<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160; </div>
-<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;                REQUIRE(symbol2.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#adc9ef666c3c362659b335e26dee79c03">get_length</a>() == 1);</div>
-<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;                REQUIRE(!symbol2.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#a354834097a73cafb38c147c5ebdd8501">is_array</a>());</div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;    }</div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;}</div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160; </div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;<span class="comment">//=============================================================================</span></div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;<span class="comment">// Symbol class tests</span></div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;<span class="comment">//=============================================================================</span></div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160; </div>
+<div class="line"><a name="l00384"></a><span class="lineno"><a class="line" href="test_2unit_2symtab_2symbol__table_8cpp.html#a3412b512c3ebac30608514f7d19c5b18">  384</a></span>&#160;<a class="code" href="test_2unit_2symtab_2symbol__table_8cpp.html#ab03122583d9875aaa2471ca4e456a441">SCENARIO</a>(<span class="stringliteral">&quot;Symbol class allows manipulation&quot;</span>) {</div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;    GIVEN(<span class="stringliteral">&quot;A symbol can have several nodes&quot;</span>) {</div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;        <span class="keyword">auto</span> st = std::make_shared&lt;ast::String&gt;(<span class="stringliteral">&quot;node1&quot;</span>);</div>
+<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;        <span class="keyword">auto</span> fl = std::make_shared&lt;ast::Float&gt;(<span class="stringliteral">&quot;1.1&quot;</span>);</div>
+<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;        <a class="code" href="classnmodl_1_1symtab_1_1_symbol.html">Symbol</a> symbol1(<span class="stringliteral">&quot;alpha&quot;</span>);</div>
+<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;        symbol1.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#a2ba56eb05f35c3cb725ed79fd7870b17">add_node</a>(st.get());</div>
+<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;        symbol1.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#a2ba56eb05f35c3cb725ed79fd7870b17">add_node</a>(fl.get());</div>
+<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160; </div>
+<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;        <a class="code" href="classnmodl_1_1symtab_1_1_symbol.html">Symbol</a> symbol2(<span class="stringliteral">&quot;beta&quot;</span>);</div>
+<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160; </div>
+<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;        WHEN(<span class="stringliteral">&quot;trying to get name&quot;</span>) {</div>
+<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;            THEN(<span class="stringliteral">&quot;it works&quot;</span>) {</div>
+<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;                REQUIRE(symbol1.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#af1e14bcb57791f3a37d20a31a951f179">get_name</a>() == <span class="stringliteral">&quot;alpha&quot;</span>);</div>
+<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;                REQUIRE(symbol2.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#af1e14bcb57791f3a37d20a31a951f179">get_name</a>() == <span class="stringliteral">&quot;beta&quot;</span>);</div>
+<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;            }</div>
+<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;        }</div>
+<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160; </div>
+<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;        WHEN(<span class="stringliteral">&quot;trying to get all nodes&quot;</span>) {</div>
+<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;            THEN(<span class="stringliteral">&quot;it works&quot;</span>) {</div>
+<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;                REQUIRE(symbol1.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#a8e1fb9bffd5ccc617b9e621532391170">get_nodes</a>().size() == 2);</div>
+<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;                REQUIRE(symbol2.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#a8e1fb9bffd5ccc617b9e621532391170">get_nodes</a>().empty());</div>
+<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;            }</div>
+<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;        }</div>
+<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160; </div>
+<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;        WHEN(<span class="stringliteral">&quot;trying to get specific node&quot;</span>) {</div>
+<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;            <span class="keyword">auto</span> nodes = symbol1.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#a72c69b92fd0cf748e9bbb8148a02e416">get_nodes_by_type</a>({<a class="code" href="group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a63b588d5559f64f89a416e656880b949">ast::AstNodeType::STRING</a>});</div>
+<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160; </div>
+<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;            THEN(<span class="stringliteral">&quot;it works&quot;</span>) {</div>
+<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;                REQUIRE(nodes.size() == 1);</div>
+<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;                REQUIRE(nodes.front()-&gt;is_string());</div>
+<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;                REQUIRE(symbol2.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#a72c69b92fd0cf748e9bbb8148a02e416">get_nodes_by_type</a>({ast::AstNodeType::STRING}).empty());</div>
+<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;            }</div>
+<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;        }</div>
+<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;        WHEN(<span class="stringliteral">&quot;read and write counters works&quot;</span>) {</div>
+<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;            symbol1.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#a7b59c5c239e4e88ba656626d5c6b448c">read</a>();</div>
+<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;            symbol1.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#a7b59c5c239e4e88ba656626d5c6b448c">read</a>();</div>
+<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;            symbol1.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#af97b6f069ec3b05a7f9a536a70f9fe06">write</a>();</div>
+<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160; </div>
+<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;            THEN(<span class="stringliteral">&quot;it works&quot;</span>) {</div>
+<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;                REQUIRE(symbol1.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#aed3936d8bcfd917296344671350205c4">get_read_count</a>() == 2);</div>
+<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;                REQUIRE(symbol1.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#a0f882baa29269f9353924fb10c007d7e">get_write_count</a>() == 1);</div>
+<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;                REQUIRE(symbol2.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#aed3936d8bcfd917296344671350205c4">get_read_count</a>() == 0);</div>
+<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;                REQUIRE(symbol2.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#a0f882baa29269f9353924fb10c007d7e">get_write_count</a>() == 0);</div>
 <div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;            }</div>
 <div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;        }</div>
-<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;    }</div>
-<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;}</div>
+<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160; </div>
+<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;        WHEN(<span class="stringliteral">&quot;renaming a symbol&quot;</span>) {</div>
+<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;            symbol2.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#af58224e476acad1a9bb6cd4422d892df">set_name</a>(<span class="stringliteral">&quot;gamma&quot;</span>);</div>
+<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;            THEN(<span class="stringliteral">&quot;get_name return the new name&quot;</span>) {</div>
+<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;                REQUIRE(symbol2.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#af1e14bcb57791f3a37d20a31a951f179">get_name</a>() == <span class="stringliteral">&quot;gamma&quot;</span>);</div>
+<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;                REQUIRE(symbol2.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#afee63fb66dec6ce0e900f998806ca479">get_original_name</a>() == <span class="stringliteral">&quot;beta&quot;</span>);</div>
+<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;            }</div>
+<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;            symbol2.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#a56e920c659b09f718d97affc297d757c">set_original_name</a>(<span class="stringliteral">&quot;gamma&quot;</span>);</div>
+<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;            THEN(<span class="stringliteral">&quot;get_original_name return the new name&quot;</span>) {</div>
+<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;                REQUIRE(symbol2.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#afee63fb66dec6ce0e900f998806ca479">get_original_name</a>() == <span class="stringliteral">&quot;gamma&quot;</span>);</div>
+<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;            }</div>
+<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;        }</div>
+<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160; </div>
+<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;        WHEN(<span class="stringliteral">&quot;set as array&quot;</span>) {</div>
+<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;            symbol1.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#a3c837fa01afef2248021481203bc4b28">set_as_array</a>(15);</div>
+<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;            THEN(<span class="stringliteral">&quot;recognized as an array&quot;</span>) {</div>
+<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;                REQUIRE(symbol1.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#adc9ef666c3c362659b335e26dee79c03">get_length</a>() == 15);</div>
+<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;                REQUIRE(symbol1.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#a354834097a73cafb38c147c5ebdd8501">is_array</a>());</div>
+<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160; </div>
+<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;                REQUIRE(symbol2.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#adc9ef666c3c362659b335e26dee79c03">get_length</a>() == 1);</div>
+<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;                REQUIRE(!symbol2.<a class="code" href="classnmodl_1_1symtab_1_1_symbol.html#a354834097a73cafb38c147c5ebdd8501">is_array</a>());</div>
+<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;            }</div>
+<div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160;        }</div>
+<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160;    }</div>
+<div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aclassnmodl_1_1symtab_1_1_symbol_html_a3c837fa01afef2248021481203bc4b28"><div class="ttname"><a href="classnmodl_1_1symtab_1_1_symbol.html#a3c837fa01afef2248021481203bc4b28">nmodl::symtab::Symbol::set_as_array</a></div><div class="ttdeci">void set_as_array(int len) noexcept</div><div class="ttdef"><b>Definition:</b> <a href="symbol_8hpp_source.html#l00189">symbol.hpp:189</a></div></div>
 <div class="ttc" id="atest_2unit_2symtab_2symbol__table_8cpp_html_ab03122583d9875aaa2471ca4e456a441"><div class="ttname"><a href="test_2unit_2symtab_2symbol__table_8cpp.html#ab03122583d9875aaa2471ca4e456a441">SCENARIO</a></div><div class="ttdeci">SCENARIO(&quot;Symbol properties can be added and converted to string&quot;)</div><div class="ttdef"><b>Definition:</b> <a href="test_2unit_2symtab_2symbol__table_8cpp_source.html#l00028">symbol_table.cpp:28</a></div></div>
 <div class="ttc" id="anamespacenmodl_1_1symtab_1_1syminfo_html_ad9b6b8559b36d0a500ef5110badcc4dba7b0b4b63b7695c9d325544455f858b7c"><div class="ttname"><a href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dba7b0b4b63b7695c9d325544455f858b7c">nmodl::symtab::syminfo::NmodlType::write_ion_var</a></div><div class="ttdeci">@ write_ion_var</div><div class="ttdoc">Write Ion.</div></div>
+<div class="ttc" id="aclassnmodl_1_1symtab_1_1_symbol_html_a8e1fb9bffd5ccc617b9e621532391170"><div class="ttname"><a href="classnmodl_1_1symtab_1_1_symbol.html#a8e1fb9bffd5ccc617b9e621532391170">nmodl::symtab::Symbol::get_nodes</a></div><div class="ttdeci">const std::vector&lt; ast::Ast * &gt; &amp; get_nodes() const noexcept</div><div class="ttdef"><b>Definition:</b> <a href="symbol_8hpp_source.html#l00247">symbol.hpp:247</a></div></div>
 <div class="ttc" id="asymbol_8hpp_html"><div class="ttname"><a href="symbol_8hpp.html">symbol.hpp</a></div><div class="ttdoc">Implement class to represent a symbol in Symbol Table.</div></div>
 <div class="ttc" id="aclassnmodl_1_1symtab_1_1_symbol_html"><div class="ttname"><a href="classnmodl_1_1symtab_1_1_symbol.html">nmodl::symtab::Symbol</a></div><div class="ttdoc">Represent symbol in symbol table.</div><div class="ttdef"><b>Definition:</b> <a href="symbol_8hpp_source.html#l00055">symbol.hpp:55</a></div></div>
 <div class="ttc" id="aclassnmodl_1_1symtab_1_1_model_symbol_table_html_a93834c009ecf4ee4b6d202b43711b170"><div class="ttname"><a href="classnmodl_1_1symtab_1_1_model_symbol_table.html#a93834c009ecf4ee4b6d202b43711b170">nmodl::symtab::ModelSymbolTable::insert</a></div><div class="ttdeci">std::shared_ptr&lt; Symbol &gt; insert(const std::shared_ptr&lt; Symbol &gt; &amp;symbol)</div><div class="ttdoc">insert new symbol into current table</div><div class="ttdef"><b>Definition:</b> <a href="src_2symtab_2symbol__table_8cpp_source.html#l00286">symbol_table.cpp:286</a></div></div>
-<div class="ttc" id="anamespacenmodl_html"><div class="ttname"><a href="namespacenmodl.html">nmodl</a></div><div class="ttdoc">encapsulates everything related to NMODL code generation framework</div><div class="ttdef"><b>Definition:</b> <a href="ast__common_8hpp_source.html#l00026">ast_common.hpp:26</a></div></div>
+<div class="ttc" id="anamespacenmodl_html"><div class="ttname"><a href="namespacenmodl.html">nmodl</a></div><div class="ttdoc">encapsulates code generation backend implementations</div><div class="ttdef"><b>Definition:</b> <a href="ast__common_8hpp_source.html#l00026">ast_common.hpp:26</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1symtab_1_1_symbol_table_html_a41a1acb0b3a5a65c3e761b10164b1fce"><div class="ttname"><a href="classnmodl_1_1symtab_1_1_symbol_table.html#a41a1acb0b3a5a65c3e761b10164b1fce">nmodl::symtab::SymbolTable::name</a></div><div class="ttdeci">const std::string &amp; name() const noexcept</div><div class="ttdef"><b>Definition:</b> <a href="symbol__table_8hpp_source.html#l00170">symbol_table.hpp:170</a></div></div>
 <div class="ttc" id="asymbol__table_8hpp_html"><div class="ttname"><a href="symbol__table_8hpp.html">symbol_table.hpp</a></div><div class="ttdoc">Implement classes for representing symbol table at block and file scope.</div></div>
 <div class="ttc" id="anamespacenmodl_1_1symtab_1_1syminfo_html_ad9b6b8559b36d0a500ef5110badcc4dba49f13c39f16d983d769979df388840d8"><div class="ttname"><a href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dba49f13c39f16d983d769979df388840d8">nmodl::symtab::syminfo::NmodlType::to_solve</a></div><div class="ttdeci">@ to_solve</div><div class="ttdoc">need to solve : used in solve statement</div></div>
 <div class="ttc" id="anamespacenmodl_1_1symtab_1_1syminfo_html_ad9b6b8559b36d0a500ef5110badcc4dbaff8e22f8b3dbe1f8b52602184e4a637a"><div class="ttname"><a href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbaff8e22f8b3dbe1f8b52602184e4a637a">nmodl::symtab::syminfo::NmodlType::local_var</a></div><div class="ttdeci">@ local_var</div><div class="ttdoc">Local Variable.</div></div>
@@ -553,7 +578,6 @@ $(document).ready(function(){initNavTree('test_2unit_2symtab_2symbol__table_8cpp
 <div class="ttc" id="anamespacenmodl_1_1symtab_1_1syminfo_html_a9615978047cc9d7b43df2f549f2baffe"><div class="ttname"><a href="namespacenmodl_1_1symtab_1_1syminfo.html#a9615978047cc9d7b43df2f549f2baffe">nmodl::symtab::syminfo::to_string</a></div><div class="ttdeci">std::string to_string(const T &amp;obj)</div><div class="ttdef"><b>Definition:</b> <a href="symbol__properties_8hpp_source.html#l00274">symbol_properties.hpp:274</a></div></div>
 <div class="ttc" id="aclassnmodl_1_1symtab_1_1_symbol_html_a673c6c748bcacb0edc6ca4e5e8543f19"><div class="ttname"><a href="classnmodl_1_1symtab_1_1_symbol.html#a673c6c748bcacb0edc6ca4e5e8543f19">nmodl::symtab::Symbol::add_property</a></div><div class="ttdeci">void add_property(syminfo::NmodlType property) noexcept</div><div class="ttdoc">add new property to symbol</div><div class="ttdef"><b>Definition:</b> <a href="symbol_8hpp_source.html#l00314">symbol.hpp:314</a></div></div>
 <div class="ttc" id="agroup__ast__type_html_ggac392e49849e60c05e42ea02c7b445033a63b588d5559f64f89a416e656880b949"><div class="ttname"><a href="group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a63b588d5559f64f89a416e656880b949">nmodl::ast::AstNodeType::STRING</a></div><div class="ttdeci">@ STRING</div><div class="ttdoc">type of ast::String</div></div>
-<div class="ttc" id="aclassnmodl_1_1symtab_1_1_symbol_html_a447af4997a5d9b3a7eb4da83c56352e0"><div class="ttname"><a href="classnmodl_1_1symtab_1_1_symbol.html#a447af4997a5d9b3a7eb4da83c56352e0">nmodl::symtab::Symbol::get_nodes</a></div><div class="ttdeci">std::vector&lt; ast::Ast * &gt; get_nodes() const noexcept</div><div class="ttdef"><b>Definition:</b> <a href="symbol_8hpp_source.html#l00247">symbol.hpp:247</a></div></div>
 <div class="ttc" id="aclassnmodl_1_1symtab_1_1_model_symbol_table_html_ac30452bf367fae12194d34c7c5980c63"><div class="ttname"><a href="classnmodl_1_1symtab_1_1_model_symbol_table.html#ac30452bf367fae12194d34c7c5980c63">nmodl::symtab::ModelSymbolTable::lookup</a></div><div class="ttdeci">std::shared_ptr&lt; Symbol &gt; lookup(const std::string &amp;name)</div><div class="ttdoc">lookup for symbol into current as well as all parent tables</div><div class="ttdef"><b>Definition:</b> <a href="src_2symtab_2symbol__table_8cpp_source.html#l00173">symbol_table.cpp:173</a></div></div>
 <div class="ttc" id="anamespacenmodl_1_1symtab_1_1syminfo_html_ad9b6b8559b36d0a500ef5110badcc4dbaa2e4822a98337283e39f7b60acf85ec9"><div class="ttname"><a href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbaa2e4822a98337283e39f7b60acf85ec9">nmodl::symtab::syminfo::NmodlType::empty</a></div><div class="ttdeci">@ empty</div></div>
 <div class="ttc" id="aclassnmodl_1_1symtab_1_1_symbol_table_html"><div class="ttname"><a href="classnmodl_1_1symtab_1_1_symbol_table.html">nmodl::symtab::SymbolTable</a></div><div class="ttdoc">Represent symbol table for a NMODL block.</div><div class="ttdef"><b>Definition:</b> <a href="symbol__table_8hpp_source.html#l00057">symbol_table.hpp:57</a></div></div>

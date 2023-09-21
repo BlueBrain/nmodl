@@ -93,7 +93,6 @@ $(document).ready(function(){initNavTree('namespacenmodl_1_1codegen.html',''); i
   <div class="summary">
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#enum-members">Enumerations</a> &#124;
 <a href="#func-members">Functions</a> &#124;
 <a href="#var-members">Variables</a>  </div>
@@ -101,12 +100,7 @@ $(document).ready(function(){initNavTree('namespacenmodl_1_1codegen.html',''); i
 <div class="title">nmodl::codegen Namespace Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p>encapsulates code generation backend implementations  
-<a href="namespacenmodl_1_1codegen.html#details">More...</a></p>
-<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>encapsulates code generation backend implementations </p>
-</div><table class="memberdecls">
+<table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
 <tr class="memitem:namespacenmodl_1_1codegen_1_1naming"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1codegen_1_1naming.html">naming</a></td></tr>
@@ -148,25 +142,20 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents ion write statement during code generation.  <a href="structnmodl_1_1codegen_1_1_shadow_use_statement.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
-Typedefs</h2></td></tr>
-<tr class="memitem:a116af3668467bd43c2740658d7fd0612"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1codegen.html#a116af3668467bd43c2740658d7fd0612">SymbolType</a> = std::shared_ptr&lt; <a class="el" href="classnmodl_1_1symtab_1_1_symbol.html">symtab::Symbol</a> &gt;</td></tr>
-<tr class="separator:a116af3668467bd43c2740658d7fd0612"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
 <tr class="memitem:ga2d0a1f473f039b495e9cc349c3b57dbb"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__codegen__details.html#ga2d0a1f473f039b495e9cc349c3b57dbb">BlockType</a> { <br />
-&#160;&#160;<a class="el" href="group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba560a4dff90c58651347affffd44f7419">Initial</a>, 
-<a class="el" href="group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba2720cc542e6d281f618eb1f62a064ce7">Constructor</a>, 
-<a class="el" href="group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba34adbfda9463c1ef5da22364fbde7f4e">Destructor</a>, 
-<a class="el" href="group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba2aa5276df68f4ed49798a132d36cc3d3">Equation</a>, 
+&#160;&#160;<a class="el" href="group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba4f2a91e15af2631ff9424564b8a45fb2">BlockType::Initial</a>, 
+<a class="el" href="group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba678d0a4421b60dc59999ac02837496a6">BlockType::Constructor</a>, 
+<a class="el" href="group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba22a8ec108d963f279c6a6a95aa960a57">BlockType::Destructor</a>, 
+<a class="el" href="group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbbaaa8a105043d90127c760e67170853c2c">BlockType::Equation</a>, 
 <br />
-&#160;&#160;<a class="el" href="group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba1f27f7d1e85f8d0915e4ab7e9f6e8e11">State</a>, 
-<a class="el" href="group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbbaac20fc604795fbf01428e955d6d0f492">Watch</a>, 
-<a class="el" href="group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbbaaf126b23c756faf77bb3ffbd9a34fc57">NetReceive</a>, 
-<a class="el" href="group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbbacaae51ccb73153644b415fedb93a776e">BeforeAfter</a>, 
+&#160;&#160;<a class="el" href="group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba46a2a41cc6e552044816a2d04634545d">BlockType::State</a>, 
+<a class="el" href="group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbbaf20658650d987d31063b593c05980397">BlockType::Watch</a>, 
+<a class="el" href="group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba0d352ea25a80edac16b8f2597e2cc27a">BlockType::NetReceive</a>, 
+<a class="el" href="group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba6a8abec098e536813680364230f5a26b">BlockType::BeforeAfter</a>, 
 <br />
-&#160;&#160;<a class="el" href="group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba4618ace4464da4c213ec5e0df5e03fe8">BlockTypeEnd</a>
+&#160;&#160;<a class="el" href="group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbbae317e08b58d518ba2ecdc4ad07d6b108">BlockType::BlockTypeEnd</a>
 <br />
  }</td></tr>
 <tr class="memdesc:ga2d0a1f473f039b495e9cc349c3b57dbb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper to represent various block types.  <a href="group__codegen__details.html#ga2d0a1f473f039b495e9cc349c3b57dbb">More...</a><br /></td></tr>
@@ -202,23 +191,6 @@ Variables</h2></td></tr>
 <tr class="memitem:a7fe9cbd601e67e2d2726026c0008b16f"><td class="memItemLeft" align="right" valign="top">static const std::regex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1codegen.html#a7fe9cbd601e67e2d2726026c0008b16f">regex_special_chars</a> {R&quot;([-[\]{}()*+?.,\^$|#\s])&quot;}</td></tr>
 <tr class="separator:a7fe9cbd601e67e2d2726026c0008b16f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Typedef Documentation</h2>
-<a id="a116af3668467bd43c2740658d7fd0612"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a116af3668467bd43c2740658d7fd0612">&#9670;&nbsp;</a></span>SymbolType</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="namespacenmodl_1_1codegen.html#a116af3668467bd43c2740658d7fd0612">nmodl::codegen::SymbolType</a> = typedef std::shared_ptr&lt;<a class="el" href="classnmodl_1_1symtab_1_1_symbol.html">symtab::Symbol</a>&gt;</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__cpp__visitor_8cpp_source.html#l00044">44</a> of file <a class="el" href="src_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
-
-</div>
-</div>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="a82b56c421789e1584b7eadf3079d0d05"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a82b56c421789e1584b7eadf3079d0d05">&#9670;&nbsp;</a></span>get_register_type_for_ba_block()</h2>
@@ -249,7 +221,7 @@ Variables</h2></td></tr>
 <p>before block have value 10 and after block 20</p>
 <p>associated blocks have different values (1 to 4) based on type. These values are based on neuron/coreneuron implementation details.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__cpp__visitor_8cpp_source.html#l02803">2803</a> of file <a class="el" href="src_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__cpp__visitor_8cpp_source.html#l02809">2809</a> of file <a class="el" href="src_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -277,7 +249,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__cpp__visitor_8cpp_source.html#l01378">1378</a> of file <a class="el" href="src_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__cpp__visitor_8cpp_source.html#l01376">1376</a> of file <a class="el" href="src_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -318,7 +290,7 @@ Variables</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if operator() is const else False </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__cpp__visitor_8cpp_source.html#l01737">1737</a> of file <a class="el" href="src_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__cpp__visitor_8cpp_source.html#l01735">1735</a> of file <a class="el" href="src_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -368,7 +340,7 @@ Variables</h2></td></tr>
 <div class="line">(*R) = 1.0;</div>
 </div><!-- fragment --><p>So, the <code>R</code> in AST needs to be renamed with <code>(*R)</code>. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__cpp__visitor_8cpp_source.html#l03844">3844</a> of file <a class="el" href="src_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__cpp__visitor_8cpp_source.html#l03864">3864</a> of file <a class="el" href="src_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -393,7 +365,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__cpp__visitor_8cpp_source.html#l00052">52</a> of file <a class="el" href="src_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__cpp__visitor_8cpp_source.html#l00048">48</a> of file <a class="el" href="src_2codegen_2codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>

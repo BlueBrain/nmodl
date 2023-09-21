@@ -132,6 +132,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a18359d1914ead9e3f6ddfa77ea99bab3 inherit pub_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a18359d1914ead9e3f6ddfa77ea99bab3">CodegenCppVisitor</a> (std::string <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a52cb50316afdcb5899663c98aa47c0de">mod_filename</a>, std::ostream &amp;stream, std::string <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#acec9a90ac60967aeee0466003256855a">float_type</a>, const bool <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ac2029b16365753e1e337f82cda0e3350">optimize_ionvar_copies</a>)</td></tr>
 <tr class="memdesc:a18359d1914ead9e3f6ddfa77ea99bab3 inherit pub_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Visitor for printing C code compatible with legacy api of CoreNEURON  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a18359d1914ead9e3f6ddfa77ea99bab3">More...</a><br /></td></tr>
 <tr class="separator:a18359d1914ead9e3f6ddfa77ea99bab3 inherit pub_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a491e418920668f8fce331c65e8b48a02 inherit pub_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a491e418920668f8fce331c65e8b48a02">visit_program</a> (const <a class="el" href="classnmodl_1_1ast_1_1_program.html">ast::Program</a> &amp;program) override</td></tr>
+<tr class="memdesc:a491e418920668f8fce331c65e8b48a02 inherit pub_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Main and only member function to call after creating an instance of this class.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a491e418920668f8fce331c65e8b48a02">More...</a><br /></td></tr>
+<tr class="separator:a491e418920668f8fce331c65e8b48a02 inherit pub_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae58e75f27462b01663758bc5090fd78b inherit pub_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ae58e75f27462b01663758bc5090fd78b">print_nrn_init</a> (bool skip_init_check=true)</td></tr>
 <tr class="memdesc:ae58e75f27462b01663758bc5090fd78b inherit pub_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the <code>nrn_init</code> function definition.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ae58e75f27462b01663758bc5090fd78b">More...</a><br /></td></tr>
 <tr class="separator:ae58e75f27462b01663758bc5090fd78b inherit pub_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -171,15 +174,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ae333398890c61148ec60cb52c3d28c10 inherit pub_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ae333398890c61148ec60cb52c3d28c10">setup</a> (const <a class="el" href="classnmodl_1_1ast_1_1_program.html">ast::Program</a> &amp;node)</td></tr>
 <tr class="memdesc:ae333398890c61148ec60cb52c3d28c10 inherit pub_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup the target backend code generator.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ae333398890c61148ec60cb52c3d28c10">More...</a><br /></td></tr>
 <tr class="separator:ae333398890c61148ec60cb52c3d28c10 inherit pub_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9584e0e897c09d9f6a5553738709821a inherit pub_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a9584e0e897c09d9f6a5553738709821a">set_codegen_global_variables</a> (std::vector&lt; <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a84d8220dfbff2afda5d207b6d29f61f8">SymbolType</a> &gt; &amp;global_vars)</td></tr>
-<tr class="memdesc:a9584e0e897c09d9f6a5553738709821a inherit pub_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the global variables to be generated in target backend code.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a9584e0e897c09d9f6a5553738709821a">More...</a><br /></td></tr>
-<tr class="separator:a9584e0e897c09d9f6a5553738709821a inherit pub_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae121a245fa6abf110b674f217ecc413a inherit pub_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ae121a245fa6abf110b674f217ecc413a">set_codegen_global_variables</a> (const std::vector&lt; <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a84d8220dfbff2afda5d207b6d29f61f8">SymbolType</a> &gt; &amp;global_vars)</td></tr>
+<tr class="memdesc:ae121a245fa6abf110b674f217ecc413a inherit pub_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the global variables to be generated in target backend code.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ae121a245fa6abf110b674f217ecc413a">More...</a><br /></td></tr>
+<tr class="separator:ae121a245fa6abf110b674f217ecc413a inherit pub_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0baf3f039537db304dfc095c6bbd7a94 inherit pub_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a0baf3f039537db304dfc095c6bbd7a94">find_var_unique_name</a> (const std::string &amp;original_name) const</td></tr>
 <tr class="memdesc:a0baf3f039537db304dfc095c6bbd7a94 inherit pub_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find unique variable name defined in <a class="el" href="classnmodl_1_1utils_1_1_singleton_random_string.html" title="Singleton class for random strings.">nmodl::utils::SingletonRandomString</a> by the <a class="el" href="classnmodl_1_1visitor_1_1_sympy_solver_visitor.html" title="Visitor for systems of algebraic and differential equations">nmodl::visitor::SympySolverVisitor</a>.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a0baf3f039537db304dfc095c6bbd7a94">More...</a><br /></td></tr>
 <tr class="separator:a0baf3f039537db304dfc095c6bbd7a94 inherit pub_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac9c43e34aeb248e649b9e5a1ef98f216 inherit pub_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ac9c43e34aeb248e649b9e5a1ef98f216">print_mechanism_range_var_structure</a> (bool print_initialisers)</td></tr>
-<tr class="memdesc:ac9c43e34aeb248e649b9e5a1ef98f216 inherit pub_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the structure that wraps all range and int variables required for the NMODL.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ac9c43e34aeb248e649b9e5a1ef98f216">More...</a><br /></td></tr>
-<tr class="separator:ac9c43e34aeb248e649b9e5a1ef98f216 inherit pub_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae95f8d2d3d763e02f0174f25bc8fbac1 inherit pub_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ae95f8d2d3d763e02f0174f25bc8fbac1">print_mechanism_range_var_structure</a> (bool print_initializers)</td></tr>
+<tr class="memdesc:ae95f8d2d3d763e02f0174f25bc8fbac1 inherit pub_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the structure that wraps all range and int variables required for the NMODL.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ae95f8d2d3d763e02f0174f25bc8fbac1">More...</a><br /></td></tr>
+<tr class="separator:ae95f8d2d3d763e02f0174f25bc8fbac1 inherit pub_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac47be3057b507271bc554b9b9c02590f inherit pub_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ac47be3057b507271bc554b9b9c02590f">print_instance_variable_setup</a> ()</td></tr>
 <tr class="memdesc:ac47be3057b507271bc554b9b9c02590f inherit pub_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the function that initialize instance structure.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ac47be3057b507271bc554b9b9c02590f">More...</a><br /></td></tr>
 <tr class="separator:ac47be3057b507271bc554b9b9c02590f inherit pub_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -245,9 +248,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a0c937b0ca36a6489bbc6630db5df0cf5 inherit pub_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a0c937b0ca36a6489bbc6630db5df0cf5">visit_prime_name</a> (const <a class="el" href="classnmodl_1_1ast_1_1_prime_name.html">ast::PrimeName</a> &amp;node) override</td></tr>
 <tr class="memdesc:a0c937b0ca36a6489bbc6630db5df0cf5 inherit pub_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_prime_name.html" title="Represents a prime variable (for ODE)">ast::PrimeName</a>  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a0c937b0ca36a6489bbc6630db5df0cf5">More...</a><br /></td></tr>
 <tr class="separator:a0c937b0ca36a6489bbc6630db5df0cf5 inherit pub_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af820019c2a0e458bbb8b1fffc360e52c inherit pub_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#af820019c2a0e458bbb8b1fffc360e52c">visit_program</a> (const <a class="el" href="classnmodl_1_1ast_1_1_program.html">ast::Program</a> &amp;node) override</td></tr>
-<tr class="memdesc:af820019c2a0e458bbb8b1fffc360e52c inherit pub_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_program.html" title="Represents top level AST node for whole NMODL input.">ast::Program</a>  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#af820019c2a0e458bbb8b1fffc360e52c">More...</a><br /></td></tr>
-<tr class="separator:af820019c2a0e458bbb8b1fffc360e52c inherit pub_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8eb67dab884cc678e541ff5cc77b5e03 inherit pub_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a8eb67dab884cc678e541ff5cc77b5e03">visit_statement_block</a> (const <a class="el" href="classnmodl_1_1ast_1_1_statement_block.html">ast::StatementBlock</a> &amp;node) override</td></tr>
 <tr class="separator:a8eb67dab884cc678e541ff5cc77b5e03 inherit pub_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a502fd875dc95e68f905fe2070abaeff8 inherit pub_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a502fd875dc95e68f905fe2070abaeff8">visit_string</a> (const <a class="el" href="classnmodl_1_1ast_1_1_string.html">ast::String</a> &amp;node) override</td></tr>
@@ -712,9 +712,9 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a4cb9e164e869f63d499d5f4c84f66f90"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a4cb9e164e869f63d499d5f4c84f66f90">print_instance_struct_transfer_routine_declarations</a> () override</td></tr>
 <tr class="memdesc:a4cb9e164e869f63d499d5f4c84f66f90"><td class="mdescLeft">&#160;</td><td class="mdescRight">declare helper functions for copying the instance struct to the device  <a href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a4cb9e164e869f63d499d5f4c84f66f90">More...</a><br /></td></tr>
 <tr class="separator:a4cb9e164e869f63d499d5f4c84f66f90"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7a9fd5a45fccdcc754f30c9d8f2a1e0b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a7a9fd5a45fccdcc754f30c9d8f2a1e0b">print_instance_struct_transfer_routines</a> (std::vector&lt; std::string &gt; const &amp;) override</td></tr>
-<tr class="memdesc:a7a9fd5a45fccdcc754f30c9d8f2a1e0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">define helper functions for copying the instance struct to the device  <a href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a7a9fd5a45fccdcc754f30c9d8f2a1e0b">More...</a><br /></td></tr>
-<tr class="separator:a7a9fd5a45fccdcc754f30c9d8f2a1e0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29cd483e4b7f5819bfaf0db0180318e9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a29cd483e4b7f5819bfaf0db0180318e9">print_instance_struct_transfer_routines</a> (const std::vector&lt; std::string &gt; &amp;ptr_members) override</td></tr>
+<tr class="memdesc:a29cd483e4b7f5819bfaf0db0180318e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">define helper functions for copying the instance struct to the device  <a href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a29cd483e4b7f5819bfaf0db0180318e9">More...</a><br /></td></tr>
+<tr class="separator:a29cd483e4b7f5819bfaf0db0180318e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a69e320fadc7ed977df7f9c8a7b686e6f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a69e320fadc7ed977df7f9c8a7b686e6f">print_instance_struct_copy_to_device</a> () override</td></tr>
 <tr class="memdesc:a69e320fadc7ed977df7f9c8a7b686e6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">call helper function for copying the instance struct to the device  <a href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a69e320fadc7ed977df7f9c8a7b686e6f">More...</a><br /></td></tr>
 <tr class="separator:a69e320fadc7ed977df7f9c8a7b686e6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -722,31 +722,31 @@ Protected Member Functions</h2></td></tr>
 <tr class="memdesc:a791fea41ba7dc986ed211172d3558e2c"><td class="mdescLeft">&#160;</td><td class="mdescRight">call helper function that deletes the instance struct from the device  <a href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a791fea41ba7dc986ed211172d3558e2c">More...</a><br /></td></tr>
 <tr class="separator:a791fea41ba7dc986ed211172d3558e2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abf9de5982b1d8f6fb492e668183c2ee1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#abf9de5982b1d8f6fb492e668183c2ee1">print_deriv_advance_flag_transfer_to_device</a> () const override</td></tr>
-<tr class="memdesc:abf9de5982b1d8f6fb492e668183c2ee1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the code to copy derivative advance flag to device.  <a href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#abf9de5982b1d8f6fb492e668183c2ee1">More...</a><br /></td></tr>
+<tr class="memdesc:abf9de5982b1d8f6fb492e668183c2ee1"><td class="mdescLeft">&#160;</td><td class="mdescRight">update derivimplicit advance flag on the gpu device  <a href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#abf9de5982b1d8f6fb492e668183c2ee1">More...</a><br /></td></tr>
 <tr class="separator:abf9de5982b1d8f6fb492e668183c2ee1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4977b3b4e02425431c95412ffdad10ed"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a4977b3b4e02425431c95412ffdad10ed">print_net_send_buf_count_update_to_host</a> () const override</td></tr>
-<tr class="memdesc:a4977b3b4e02425431c95412ffdad10ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the code to update NetSendBuffer_t count from device to host.  <a href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a4977b3b4e02425431c95412ffdad10ed">More...</a><br /></td></tr>
+<tr class="memdesc:a4977b3b4e02425431c95412ffdad10ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">update NetSendBuffer_t count from device to host  <a href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a4977b3b4e02425431c95412ffdad10ed">More...</a><br /></td></tr>
 <tr class="separator:a4977b3b4e02425431c95412ffdad10ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6c88ece1cdc90d7d3e3c4932b69d903a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a6c88ece1cdc90d7d3e3c4932b69d903a">print_net_send_buf_update_to_host</a> () const override</td></tr>
-<tr class="memdesc:a6c88ece1cdc90d7d3e3c4932b69d903a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the code to update NetSendBuffer_t from device to host.  <a href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a6c88ece1cdc90d7d3e3c4932b69d903a">More...</a><br /></td></tr>
+<tr class="memdesc:a6c88ece1cdc90d7d3e3c4932b69d903a"><td class="mdescLeft">&#160;</td><td class="mdescRight">update NetSendBuffer_t from device to host  <a href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a6c88ece1cdc90d7d3e3c4932b69d903a">More...</a><br /></td></tr>
 <tr class="separator:a6c88ece1cdc90d7d3e3c4932b69d903a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4695bcf11295255ed5827ea2bad81fdf"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a4695bcf11295255ed5827ea2bad81fdf">print_net_send_buf_count_update_to_device</a> () const override</td></tr>
-<tr class="memdesc:a4695bcf11295255ed5827ea2bad81fdf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the code to update NetSendBuffer_t count from host to device.  <a href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a4695bcf11295255ed5827ea2bad81fdf">More...</a><br /></td></tr>
+<tr class="memdesc:a4695bcf11295255ed5827ea2bad81fdf"><td class="mdescLeft">&#160;</td><td class="mdescRight">update NetSendBuffer_t count from host to device  <a href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a4695bcf11295255ed5827ea2bad81fdf">More...</a><br /></td></tr>
 <tr class="separator:a4695bcf11295255ed5827ea2bad81fdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3881733a09e8cd01a1829c3c5a9a629f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a3881733a09e8cd01a1829c3c5a9a629f">print_dt_update_to_device</a> () const override</td></tr>
-<tr class="memdesc:a3881733a09e8cd01a1829c3c5a9a629f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the code to update dt from host to device.  <a href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a3881733a09e8cd01a1829c3c5a9a629f">More...</a><br /></td></tr>
+<tr class="memdesc:a3881733a09e8cd01a1829c3c5a9a629f"><td class="mdescLeft">&#160;</td><td class="mdescRight">update dt from host to device  <a href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a3881733a09e8cd01a1829c3c5a9a629f">More...</a><br /></td></tr>
 <tr class="separator:a3881733a09e8cd01a1829c3c5a9a629f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae69707b056c2db2a8c209b7e8cc97bf4"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#ae69707b056c2db2a8c209b7e8cc97bf4">print_device_stream_wait</a> () const override</td></tr>
 <tr class="memdesc:ae69707b056c2db2a8c209b7e8cc97bf4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the code to synchronise/wait on stream specific to NrnThread.  <a href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#ae69707b056c2db2a8c209b7e8cc97bf4">More...</a><br /></td></tr>
 <tr class="separator:ae69707b056c2db2a8c209b7e8cc97bf4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3cf0f9dd9a34da7d16712815c805576"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#ad3cf0f9dd9a34da7d16712815c805576">print_device_atomic_capture_annotation</a> () const override</td></tr>
-<tr class="memdesc:ad3cf0f9dd9a34da7d16712815c805576"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print pragma annotation for increase and capture of variable in automatic way.  <a href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#ad3cf0f9dd9a34da7d16712815c805576">More...</a><br /></td></tr>
+<tr class="memdesc:ad3cf0f9dd9a34da7d16712815c805576"><td class="mdescLeft">&#160;</td><td class="mdescRight">print atomic capture pragma  <a href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#ad3cf0f9dd9a34da7d16712815c805576">More...</a><br /></td></tr>
 <tr class="separator:ad3cf0f9dd9a34da7d16712815c805576"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5c597e0695363715c394aa20e9be86c8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a5c597e0695363715c394aa20e9be86c8">print_net_send_buffering_cnt_update</a> () const override</td></tr>
-<tr class="memdesc:a5c597e0695363715c394aa20e9be86c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the code related to the update of NetSendBuffer_t cnt.  <a href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a5c597e0695363715c394aa20e9be86c8">More...</a><br /></td></tr>
+<tr class="memdesc:a5c597e0695363715c394aa20e9be86c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">print atomic update of NetSendBuffer_t cnt  <a href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a5c597e0695363715c394aa20e9be86c8">More...</a><br /></td></tr>
 <tr class="separator:a5c597e0695363715c394aa20e9be86c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7b0b928aacf93947a478e2c37ba2f551"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a7b0b928aacf93947a478e2c37ba2f551">print_net_send_buffering_grow</a> () override</td></tr>
-<tr class="memdesc:a7b0b928aacf93947a478e2c37ba2f551"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print statement that grows NetSendBuffering_t structure if needed.  <a href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a7b0b928aacf93947a478e2c37ba2f551">More...</a><br /></td></tr>
+<tr class="memdesc:a7b0b928aacf93947a478e2c37ba2f551"><td class="mdescLeft">&#160;</td><td class="mdescRight">Replace default implementation by a no-op since the buffer cannot be grown up during gpu execution.  <a href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a7b0b928aacf93947a478e2c37ba2f551">More...</a><br /></td></tr>
 <tr class="separator:a7b0b928aacf93947a478e2c37ba2f551"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html">nmodl::codegen::CodegenCppVisitor</a></td></tr>
 <tr class="memitem:a6c0ac0823d48779ad3c84ee0bedf1e23 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a6c0ac0823d48779ad3c84ee0bedf1e23">nmodl_version</a> () const noexcept</td></tr>
@@ -755,24 +755,24 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:aeeacd28215827d6b0cd23cf59e5fc0c2 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aeeacd28215827d6b0cd23cf59e5fc0c2">add_escape_quote</a> (const std::string &amp;text) const</td></tr>
 <tr class="memdesc:aeeacd28215827d6b0cd23cf59e5fc0c2 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add quotes to string to be output.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aeeacd28215827d6b0cd23cf59e5fc0c2">More...</a><br /></td></tr>
 <tr class="separator:aeeacd28215827d6b0cd23cf59e5fc0c2 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae23402cb1b0727f879c370de80c5ec31 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ae23402cb1b0727f879c370de80c5ec31">operator_for_rhs</a> () const noexcept</td></tr>
-<tr class="memdesc:ae23402cb1b0727f879c370de80c5ec31 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Operator for rhs vector update (matrix update)  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ae23402cb1b0727f879c370de80c5ec31">More...</a><br /></td></tr>
-<tr class="separator:ae23402cb1b0727f879c370de80c5ec31 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2104be2251c8a0a961d926b688d78ee2 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a2104be2251c8a0a961d926b688d78ee2">operator_for_d</a> () const noexcept</td></tr>
-<tr class="memdesc:a2104be2251c8a0a961d926b688d78ee2 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Operator for diagonal vector update (matrix update)  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a2104be2251c8a0a961d926b688d78ee2">More...</a><br /></td></tr>
-<tr class="separator:a2104be2251c8a0a961d926b688d78ee2 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a91c615a3a59aa09eb5024a6413552d3e inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a91c615a3a59aa09eb5024a6413552d3e">local_var_type</a> () const noexcept</td></tr>
-<tr class="memdesc:a91c615a3a59aa09eb5024a6413552d3e inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Data type for the local variables.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a91c615a3a59aa09eb5024a6413552d3e">More...</a><br /></td></tr>
-<tr class="separator:a91c615a3a59aa09eb5024a6413552d3e inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa6c5ab4e1747590c8955225b4e73e899 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aa6c5ab4e1747590c8955225b4e73e899">default_float_data_type</a> () const noexcept</td></tr>
-<tr class="memdesc:aa6c5ab4e1747590c8955225b4e73e899 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default data type for floating point elements.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aa6c5ab4e1747590c8955225b4e73e899">More...</a><br /></td></tr>
-<tr class="separator:aa6c5ab4e1747590c8955225b4e73e899 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d260fcee2ad4a83b36fc26adad5934d inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a6d260fcee2ad4a83b36fc26adad5934d">operator_for_rhs</a> () const noexcept</td></tr>
+<tr class="memdesc:a6d260fcee2ad4a83b36fc26adad5934d inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Operator for rhs vector update (matrix update)  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a6d260fcee2ad4a83b36fc26adad5934d">More...</a><br /></td></tr>
+<tr class="separator:a6d260fcee2ad4a83b36fc26adad5934d inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d7cffd628c745f2e7614ffab48f4346 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a2d7cffd628c745f2e7614ffab48f4346">operator_for_d</a> () const noexcept</td></tr>
+<tr class="memdesc:a2d7cffd628c745f2e7614ffab48f4346 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Operator for diagonal vector update (matrix update)  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a2d7cffd628c745f2e7614ffab48f4346">More...</a><br /></td></tr>
+<tr class="separator:a2d7cffd628c745f2e7614ffab48f4346 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac03f9380fcd4421f95e56f37f0cd00c7 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ac03f9380fcd4421f95e56f37f0cd00c7">local_var_type</a> () const noexcept</td></tr>
+<tr class="memdesc:ac03f9380fcd4421f95e56f37f0cd00c7 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Data type for the local variables.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ac03f9380fcd4421f95e56f37f0cd00c7">More...</a><br /></td></tr>
+<tr class="separator:ac03f9380fcd4421f95e56f37f0cd00c7 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afba5ac1d4636d7ba57ac3fd7c7b5e2ba inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#afba5ac1d4636d7ba57ac3fd7c7b5e2ba">default_float_data_type</a> () const noexcept</td></tr>
+<tr class="memdesc:afba5ac1d4636d7ba57ac3fd7c7b5e2ba inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default data type for floating point elements.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#afba5ac1d4636d7ba57ac3fd7c7b5e2ba">More...</a><br /></td></tr>
+<tr class="separator:afba5ac1d4636d7ba57ac3fd7c7b5e2ba inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac9afb2932937099ff2a72314c9027a07 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ac9afb2932937099ff2a72314c9027a07">float_data_type</a> () const noexcept</td></tr>
 <tr class="memdesc:ac9afb2932937099ff2a72314c9027a07 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Data type for floating point elements specified on command line.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ac9afb2932937099ff2a72314c9027a07">More...</a><br /></td></tr>
 <tr class="separator:ac9afb2932937099ff2a72314c9027a07 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1cdfdf05885b5f92ba168807eba64bb1 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a1cdfdf05885b5f92ba168807eba64bb1">default_int_data_type</a> () const noexcept</td></tr>
-<tr class="memdesc:a1cdfdf05885b5f92ba168807eba64bb1 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default data type for integer (offset) elements.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a1cdfdf05885b5f92ba168807eba64bb1">More...</a><br /></td></tr>
-<tr class="separator:a1cdfdf05885b5f92ba168807eba64bb1 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a199a281ca182a40a40331fa29e45828a inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a199a281ca182a40a40331fa29e45828a">default_int_data_type</a> () const noexcept</td></tr>
+<tr class="memdesc:a199a281ca182a40a40331fa29e45828a inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default data type for integer (offset) elements.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a199a281ca182a40a40331fa29e45828a">More...</a><br /></td></tr>
+<tr class="separator:a199a281ca182a40a40331fa29e45828a inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2ecbf452d80ce4914271469183e2e31c inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a2ecbf452d80ce4914271469183e2e31c">is_net_send</a> (const std::string &amp;name) const noexcept</td></tr>
 <tr class="memdesc:a2ecbf452d80ce4914271469183e2e31c inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if given function name is <code>net_send</code>.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a2ecbf452d80ce4914271469183e2e31c">More...</a><br /></td></tr>
 <tr class="separator:a2ecbf452d80ce4914271469183e2e31c inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -866,9 +866,9 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:ae0d8d4e346e244c764911c0c64c2ac1c inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ae0d8d4e346e244c764911c0c64c2ac1c">update_index_semantics</a> ()</td></tr>
 <tr class="memdesc:ae0d8d4e346e244c764911c0c64c2ac1c inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">populate all index semantics needed for registration with coreneuron  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ae0d8d4e346e244c764911c0c64c2ac1c">More...</a><br /></td></tr>
 <tr class="separator:ae0d8d4e346e244c764911c0c64c2ac1c inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3cfe37a3c06666df733fa3a8be318f4d inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a84d8220dfbff2afda5d207b6d29f61f8">SymbolType</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a3cfe37a3c06666df733fa3a8be318f4d">get_float_variables</a> ()</td></tr>
-<tr class="memdesc:a3cfe37a3c06666df733fa3a8be318f4d inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine all <code>float</code> variables required during code generation.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a3cfe37a3c06666df733fa3a8be318f4d">More...</a><br /></td></tr>
-<tr class="separator:a3cfe37a3c06666df733fa3a8be318f4d inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a035e8d807028affb949365cac3c000c1 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a84d8220dfbff2afda5d207b6d29f61f8">SymbolType</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a035e8d807028affb949365cac3c000c1">get_float_variables</a> () const</td></tr>
+<tr class="memdesc:a035e8d807028affb949365cac3c000c1 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine all <code>float</code> variables required during code generation.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a035e8d807028affb949365cac3c000c1">More...</a><br /></td></tr>
+<tr class="separator:a035e8d807028affb949365cac3c000c1 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9fd66cb8986ef84feaa63fdd0f072e45 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structnmodl_1_1codegen_1_1_index_variable_info.html">IndexVariableInfo</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a9fd66cb8986ef84feaa63fdd0f072e45">get_int_variables</a> ()</td></tr>
 <tr class="memdesc:a9fd66cb8986ef84feaa63fdd0f072e45 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine all <code>int</code> variables required during code generation.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a9fd66cb8986ef84feaa63fdd0f072e45">More...</a><br /></td></tr>
 <tr class="separator:a9fd66cb8986ef84feaa63fdd0f072e45 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -891,12 +891,12 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:aef331b9ddcbd761f3aea6b457f83e88e inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aef331b9ddcbd761f3aea6b457f83e88e">rename_function_arguments</a> ()</td></tr>
 <tr class="memdesc:aef331b9ddcbd761f3aea6b457f83e88e inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rename function/procedure arguments that conflict with default arguments.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aef331b9ddcbd761f3aea6b457f83e88e">More...</a><br /></td></tr>
 <tr class="separator:aef331b9ddcbd761f3aea6b457f83e88e inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afa5aef8eab57ffd2c91da12fa7939281 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#afa5aef8eab57ffd2c91da12fa7939281">ion_read_statements</a> (<a class="el" href="group__codegen__details.html#ga2d0a1f473f039b495e9cc349c3b57dbb">BlockType</a> type)</td></tr>
-<tr class="memdesc:afa5aef8eab57ffd2c91da12fa7939281 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">For a given output block type, return statements for all read ion variables.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#afa5aef8eab57ffd2c91da12fa7939281">More...</a><br /></td></tr>
-<tr class="separator:afa5aef8eab57ffd2c91da12fa7939281 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abb1253baed57f4190f7782b4dbbd7a48 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#abb1253baed57f4190f7782b4dbbd7a48">ion_read_statements_optimized</a> (<a class="el" href="group__codegen__details.html#ga2d0a1f473f039b495e9cc349c3b57dbb">BlockType</a> type)</td></tr>
-<tr class="memdesc:abb1253baed57f4190f7782b4dbbd7a48 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">For a given output block type, return minimal statements for all read ion variables.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#abb1253baed57f4190f7782b4dbbd7a48">More...</a><br /></td></tr>
-<tr class="separator:abb1253baed57f4190f7782b4dbbd7a48 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d8c0140086b0f5284e1cf7c23632463 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a6d8c0140086b0f5284e1cf7c23632463">ion_read_statements</a> (<a class="el" href="group__codegen__details.html#ga2d0a1f473f039b495e9cc349c3b57dbb">BlockType</a> type) const</td></tr>
+<tr class="memdesc:a6d8c0140086b0f5284e1cf7c23632463 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">For a given output block type, return statements for all read ion variables.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a6d8c0140086b0f5284e1cf7c23632463">More...</a><br /></td></tr>
+<tr class="separator:a6d8c0140086b0f5284e1cf7c23632463 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26ad42be1c7c9a127b2d806d08e426a6 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a26ad42be1c7c9a127b2d806d08e426a6">ion_read_statements_optimized</a> (<a class="el" href="group__codegen__details.html#ga2d0a1f473f039b495e9cc349c3b57dbb">BlockType</a> type) const</td></tr>
+<tr class="memdesc:a26ad42be1c7c9a127b2d806d08e426a6 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">For a given output block type, return minimal statements for all read ion variables.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a26ad42be1c7c9a127b2d806d08e426a6">More...</a><br /></td></tr>
+<tr class="separator:a26ad42be1c7c9a127b2d806d08e426a6 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2e2dd82a055dd830e8efc7f1dce03924 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structnmodl_1_1codegen_1_1_shadow_use_statement.html">ShadowUseStatement</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a2e2dd82a055dd830e8efc7f1dce03924">ion_write_statements</a> (<a class="el" href="group__codegen__details.html#ga2d0a1f473f039b495e9cc349c3b57dbb">BlockType</a> type)</td></tr>
 <tr class="memdesc:a2e2dd82a055dd830e8efc7f1dce03924 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">For a given output block type, return statements for writing back ion variables.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a2e2dd82a055dd830e8efc7f1dce03924">More...</a><br /></td></tr>
 <tr class="separator:a2e2dd82a055dd830e8efc7f1dce03924 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -912,9 +912,9 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:aafd54617af490e9e333c2b343f0f5fec inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aafd54617af490e9e333c2b343f0f5fec">register_mechanism_arguments</a> () const</td></tr>
 <tr class="memdesc:aafd54617af490e9e333c2b343f0f5fec inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Arguments for register_mech or point_register_mech function.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aafd54617af490e9e333c2b343f0f5fec">More...</a><br /></td></tr>
 <tr class="separator:aafd54617af490e9e333c2b343f0f5fec inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7254b57589a1a4b141f882952a8599c6 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a7254b57589a1a4b141f882952a8599c6">nrn_thread_arguments</a> ()</td></tr>
-<tr class="memdesc:a7254b57589a1a4b141f882952a8599c6 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Arguments for "_threadargs_" macro in neuron implementation.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a7254b57589a1a4b141f882952a8599c6">More...</a><br /></td></tr>
-<tr class="separator:a7254b57589a1a4b141f882952a8599c6 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2b5655ab604037513b373294c09a323 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#af2b5655ab604037513b373294c09a323">nrn_thread_arguments</a> () const</td></tr>
+<tr class="memdesc:af2b5655ab604037513b373294c09a323 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Arguments for "_threadargs_" macro in neuron implementation.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#af2b5655ab604037513b373294c09a323">More...</a><br /></td></tr>
+<tr class="separator:af2b5655ab604037513b373294c09a323 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0a56617a7b51ff96f58775e898820d5a inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a0a56617a7b51ff96f58775e898820d5a">nrn_thread_internal_arguments</a> ()</td></tr>
 <tr class="memdesc:a0a56617a7b51ff96f58775e898820d5a inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Arguments for "_threadargs_" macro in neuron implementation.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a0a56617a7b51ff96f58775e898820d5a">More...</a><br /></td></tr>
 <tr class="separator:a0a56617a7b51ff96f58775e898820d5a inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -972,9 +972,9 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:ae0e48a2461354feaaa2a3077da1d02f6 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ae0e48a2461354feaaa2a3077da1d02f6">print_mechanism_info</a> ()</td></tr>
 <tr class="memdesc:ae0e48a2461354feaaa2a3077da1d02f6 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print backend code for byte array that has mechanism information (to be registered with coreneuron)  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ae0e48a2461354feaaa2a3077da1d02f6">More...</a><br /></td></tr>
 <tr class="separator:ae0e48a2461354feaaa2a3077da1d02f6 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9eb75ac47c906160cbdaafc30bd6b0f4 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a9eb75ac47c906160cbdaafc30bd6b0f4">print_mechanism_global_var_structure</a> (bool print_initialisers)</td></tr>
-<tr class="memdesc:a9eb75ac47c906160cbdaafc30bd6b0f4 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the structure that wraps all global variables used in the NMODL.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a9eb75ac47c906160cbdaafc30bd6b0f4">More...</a><br /></td></tr>
-<tr class="separator:a9eb75ac47c906160cbdaafc30bd6b0f4 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a17d420c8edbcac3d0cdd183aa483d571 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a17d420c8edbcac3d0cdd183aa483d571">print_mechanism_global_var_structure</a> (bool print_initializers)</td></tr>
+<tr class="memdesc:a17d420c8edbcac3d0cdd183aa483d571 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the structure that wraps all global variables used in the NMODL.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a17d420c8edbcac3d0cdd183aa483d571">More...</a><br /></td></tr>
+<tr class="separator:a17d420c8edbcac3d0cdd183aa483d571 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9ce57b05544fe5828320feefbeee752d inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a9ce57b05544fe5828320feefbeee752d">print_ion_var_structure</a> ()</td></tr>
 <tr class="memdesc:a9ce57b05544fe5828320feefbeee752d inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print structure of ion variables used for local copies.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a9ce57b05544fe5828320feefbeee752d">More...</a><br /></td></tr>
 <tr class="separator:a9ce57b05544fe5828320feefbeee752d inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1081,9 +1081,9 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:ac9acd88c5824f1067dd45f78f5e113be inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ac9acd88c5824f1067dd45f78f5e113be">print_net_receive</a> ()</td></tr>
 <tr class="memdesc:ac9acd88c5824f1067dd45f78f5e113be inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print <code>net_receive</code> function definition.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ac9acd88c5824f1067dd45f78f5e113be">More...</a><br /></td></tr>
 <tr class="separator:ac9acd88c5824f1067dd45f78f5e113be inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa6f15f353f13e24d098db0ba6dbedeb8 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aa6f15f353f13e24d098db0ba6dbedeb8">print_derivimplicit_kernel</a> (<a class="el" href="classnmodl_1_1ast_1_1_block.html">ast::Block</a> *block)</td></tr>
-<tr class="memdesc:aa6f15f353f13e24d098db0ba6dbedeb8 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print derivative kernel when <code>derivimplicit</code> method is used.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aa6f15f353f13e24d098db0ba6dbedeb8">More...</a><br /></td></tr>
-<tr class="separator:aa6f15f353f13e24d098db0ba6dbedeb8 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a623775545db96c3447e7df1a4313be38 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a623775545db96c3447e7df1a4313be38">print_derivimplicit_kernel</a> (const <a class="el" href="classnmodl_1_1ast_1_1_block.html">ast::Block</a> &amp;block)</td></tr>
+<tr class="memdesc:a623775545db96c3447e7df1a4313be38 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print derivative kernel when <code>derivimplicit</code> method is used.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a623775545db96c3447e7df1a4313be38">More...</a><br /></td></tr>
+<tr class="separator:a623775545db96c3447e7df1a4313be38 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa4607c0961a4e4db4cfb5ab97fffb6bf inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aa4607c0961a4e4db4cfb5ab97fffb6bf">print_shadow_reduction_statements</a> ()</td></tr>
 <tr class="memdesc:aa4607c0961a4e4db4cfb5ab97fffb6bf inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print all reduction statements.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aa4607c0961a4e4db4cfb5ab97fffb6bf">More...</a><br /></td></tr>
 <tr class="separator:aa4607c0961a4e4db4cfb5ab97fffb6bf inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1132,9 +1132,9 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a774a8b485ee3fea5c7c5d518bcf26a11 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a774a8b485ee3fea5c7c5d518bcf26a11">print_common_getters</a> ()</td></tr>
 <tr class="memdesc:a774a8b485ee3fea5c7c5d518bcf26a11 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print common getters.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a774a8b485ee3fea5c7c5d518bcf26a11">More...</a><br /></td></tr>
 <tr class="separator:a774a8b485ee3fea5c7c5d518bcf26a11 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6c6dd9938adadfe22596c06cbce5d20a inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a6c6dd9938adadfe22596c06cbce5d20a">print_data_structures</a> (bool print_initialisers)</td></tr>
-<tr class="memdesc:a6c6dd9938adadfe22596c06cbce5d20a inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print all classes.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a6c6dd9938adadfe22596c06cbce5d20a">More...</a><br /></td></tr>
-<tr class="separator:a6c6dd9938adadfe22596c06cbce5d20a inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a37eae7fb614ad90075e83048f53b1759 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a37eae7fb614ad90075e83048f53b1759">print_data_structures</a> (bool print_initializers)</td></tr>
+<tr class="memdesc:a37eae7fb614ad90075e83048f53b1759 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print all classes.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a37eae7fb614ad90075e83048f53b1759">More...</a><br /></td></tr>
+<tr class="separator:a37eae7fb614ad90075e83048f53b1759 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa9e4ffa21a686d7bdb9ffe08782cd5b0 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aa9e4ffa21a686d7bdb9ffe08782cd5b0">print_v_unused</a> () const</td></tr>
 <tr class="memdesc:aa9e4ffa21a686d7bdb9ffe08782cd5b0 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set v_unused (voltage) for NRN_PRCELLSTATE feature.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aa9e4ffa21a686d7bdb9ffe08782cd5b0">More...</a><br /></td></tr>
 <tr class="separator:aa9e4ffa21a686d7bdb9ffe08782cd5b0 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1151,9 +1151,11 @@ Protected Member Functions</h2></td></tr>
 <tr class="memdesc:a95880e46b7a8cb2feb90d2b1e646680d inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print entry point to code generation for wrappers.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a95880e46b7a8cb2feb90d2b1e646680d">More...</a><br /></td></tr>
 <tr class="separator:a95880e46b7a8cb2feb90d2b1e646680d inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae38df22c264ec3a7c7ef6c3d2744e285 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ae38df22c264ec3a7c7ef6c3d2744e285">CodegenCppVisitor</a> (std::string <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a52cb50316afdcb5899663c98aa47c0de">mod_filename</a>, const std::string &amp;output_dir, std::string <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#acec9a90ac60967aeee0466003256855a">float_type</a>, const bool <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ac2029b16365753e1e337f82cda0e3350">optimize_ionvar_copies</a>, const std::string &amp;extension, const std::string &amp;wrapper_ext)</td></tr>
+<tr class="memdesc:ae38df22c264ec3a7c7ef6c3d2744e285 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">This constructor is private, see the public section below to find how to create an instance of this class.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ae38df22c264ec3a7c7ef6c3d2744e285">More...</a><br /></td></tr>
 <tr class="separator:ae38df22c264ec3a7c7ef6c3d2744e285 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad9ad9686f8bc47cd57d5409a76eeeecc inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ad9ad9686f8bc47cd57d5409a76eeeecc">CodegenCppVisitor</a> (std::string <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a52cb50316afdcb5899663c98aa47c0de">mod_filename</a>, std::ostream &amp;stream, std::string <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#acec9a90ac60967aeee0466003256855a">float_type</a>, const bool <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ac2029b16365753e1e337f82cda0e3350">optimize_ionvar_copies</a>, const std::string &amp;extension, const std::string &amp;wrapper_ext)</td></tr>
-<tr class="separator:ad9ad9686f8bc47cd57d5409a76eeeecc inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac741704ddb4a7f5435336c4459f462a7 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ac741704ddb4a7f5435336c4459f462a7">CodegenCppVisitor</a> (std::string <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a52cb50316afdcb5899663c98aa47c0de">mod_filename</a>, std::ostream &amp;stream, std::string <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#acec9a90ac60967aeee0466003256855a">float_type</a>, const bool <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ac2029b16365753e1e337f82cda0e3350">optimize_ionvar_copies</a>, const std::string &amp;, const std::string &amp;)</td></tr>
+<tr class="memdesc:ac741704ddb4a7f5435336c4459f462a7 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">This constructor is private, see the public section below to find how to create an instance of this class.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ac741704ddb4a7f5435336c4459f462a7">More...</a><br /></td></tr>
+<tr class="separator:ac741704ddb4a7f5435336c4459f462a7 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -1167,9 +1169,9 @@ Additional Inherited Members</h2></td></tr>
 <tr class="memitem:a789dae2310c3496443a8a51c26cc8b71 inherit pro_static_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a789dae2310c3496443a8a51c26cc8b71">statement_to_skip</a> (const <a class="el" href="classnmodl_1_1ast_1_1_statement.html">ast::Statement</a> &amp;node)</td></tr>
 <tr class="memdesc:a789dae2310c3496443a8a51c26cc8b71 inherit pro_static_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if given statement should be skipped during code generation.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a789dae2310c3496443a8a51c26cc8b71">More...</a><br /></td></tr>
 <tr class="separator:a789dae2310c3496443a8a51c26cc8b71 inherit pro_static_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a927b019fb3e10ea6e24e1b1938fcce75 inherit pro_static_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a927b019fb3e10ea6e24e1b1938fcce75">need_semicolon</a> (<a class="el" href="classnmodl_1_1ast_1_1_statement.html">ast::Statement</a> *node)</td></tr>
-<tr class="memdesc:a927b019fb3e10ea6e24e1b1938fcce75 inherit pro_static_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if a semicolon is required at the end of given statement.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a927b019fb3e10ea6e24e1b1938fcce75">More...</a><br /></td></tr>
-<tr class="separator:a927b019fb3e10ea6e24e1b1938fcce75 inherit pro_static_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afdf8d3232526bf1978bb298755f42958 inherit pro_static_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#afdf8d3232526bf1978bb298755f42958">need_semicolon</a> (const <a class="el" href="classnmodl_1_1ast_1_1_statement.html">ast::Statement</a> &amp;node)</td></tr>
+<tr class="memdesc:afdf8d3232526bf1978bb298755f42958 inherit pro_static_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if a semicolon is required at the end of given statement.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#afdf8d3232526bf1978bb298755f42958">More...</a><br /></td></tr>
+<tr class="separator:afdf8d3232526bf1978bb298755f42958 inherit pro_static_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a50cbee5029c7f2bc22d697b7cd09f0cf inherit pro_static_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a50cbee5029c7f2bc22d697b7cd09f0cf">get_parameter_str</a> (const <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a73d001ad3c271c56d89e09e2cebfceb3">ParamVector</a> &amp;params)</td></tr>
 <tr class="memdesc:a50cbee5029c7f2bc22d697b7cd09f0cf inherit pro_static_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate the string representing the procedure parameter declaration.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a50cbee5029c7f2bc22d697b7cd09f0cf">More...</a><br /></td></tr>
 <tr class="separator:a50cbee5029c7f2bc22d697b7cd09f0cf inherit pro_static_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1179,12 +1181,12 @@ Additional Inherited Members</h2></td></tr>
 <tr class="memitem:a8c28e874826634125ad9b5f59511f445 inherit pro_static_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">static std::pair&lt; std::string, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a8c28e874826634125ad9b5f59511f445">write_ion_variable_name</a> (const std::string &amp;name)</td></tr>
 <tr class="memdesc:a8c28e874826634125ad9b5f59511f445 inherit pro_static_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return ion variable name and corresponding ion write variable name.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a8c28e874826634125ad9b5f59511f445">More...</a><br /></td></tr>
 <tr class="separator:a8c28e874826634125ad9b5f59511f445 inherit pro_static_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af3d574d7a4f30e4312b901105eb78cbc inherit pro_static_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#af3d574d7a4f30e4312b901105eb78cbc">external_method_arguments</a> ()</td></tr>
-<tr class="memdesc:af3d574d7a4f30e4312b901105eb78cbc inherit pro_static_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Arguments for external functions called from generated code.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#af3d574d7a4f30e4312b901105eb78cbc">More...</a><br /></td></tr>
-<tr class="separator:af3d574d7a4f30e4312b901105eb78cbc inherit pro_static_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab7f25d3b4563f7ce33f98155efb7c04e inherit pro_static_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ab7f25d3b4563f7ce33f98155efb7c04e">external_method_parameters</a> (bool table=false)</td></tr>
-<tr class="memdesc:ab7f25d3b4563f7ce33f98155efb7c04e inherit pro_static_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parameters for functions in generated code that are called back from external code.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ab7f25d3b4563f7ce33f98155efb7c04e">More...</a><br /></td></tr>
-<tr class="separator:ab7f25d3b4563f7ce33f98155efb7c04e inherit pro_static_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a871735b8c438ce6b39f3adec15eecdb9 inherit pro_static_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">static const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a871735b8c438ce6b39f3adec15eecdb9">external_method_arguments</a> () noexcept</td></tr>
+<tr class="memdesc:a871735b8c438ce6b39f3adec15eecdb9 inherit pro_static_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Arguments for external functions called from generated code.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a871735b8c438ce6b39f3adec15eecdb9">More...</a><br /></td></tr>
+<tr class="separator:a871735b8c438ce6b39f3adec15eecdb9 inherit pro_static_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7153efc954dd52d63de6cc39a331ca19 inherit pro_static_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">static const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a7153efc954dd52d63de6cc39a331ca19">external_method_parameters</a> (bool table=false) noexcept</td></tr>
+<tr class="memdesc:a7153efc954dd52d63de6cc39a331ca19 inherit pro_static_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parameters for functions in generated code that are called back from external code.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a7153efc954dd52d63de6cc39a331ca19">More...</a><br /></td></tr>
+<tr class="separator:a7153efc954dd52d63de6cc39a331ca19 inherit pro_static_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classnmodl_1_1codegen_1_1_codegen_cpp_visitor')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html">nmodl::codegen::CodegenCppVisitor</a></td></tr>
 <tr class="memitem:a91a3da407079d6bf69eb004f3f7fdf38 inherit pro_attribs_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classnmodl_1_1printer_1_1_code_printer.html">CodePrinter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a91a3da407079d6bf69eb004f3f7fdf38">target_printer</a></td></tr>
 <tr class="memdesc:a91a3da407079d6bf69eb004f3f7fdf38 inherit pro_attribs_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Code printer object for target (C++)  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a91a3da407079d6bf69eb004f3f7fdf38">More...</a><br /></td></tr>
@@ -1288,7 +1290,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8hpp_source.html#l00136">136</a> of file <a class="el" href="codegen__acc__visitor_8hpp_source.html">codegen_acc_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8hpp_source.html#l00139">139</a> of file <a class="el" href="codegen__acc__visitor_8hpp_source.html">codegen_acc_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1338,7 +1340,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8hpp_source.html#l00142">142</a> of file <a class="el" href="codegen__acc__visitor_8hpp_source.html">codegen_acc_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8hpp_source.html#l00145">145</a> of file <a class="el" href="codegen__acc__visitor_8hpp_source.html">codegen_acc_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1401,7 +1403,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a64b02f68b0838f076cba9c874679e075">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00233">233</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00235">235</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1435,7 +1437,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a28ec8c874af63f1e9c39ffbe661f915f">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00115">115</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00117">117</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1573,11 +1575,11 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Print the code to copy derivative advance flag to device. </p>
+<p>update derivimplicit advance flag on the gpu device </p>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a8da0f36eec74a7840df023694363502a">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00324">324</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00332">332</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1604,11 +1606,11 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Print pragma annotation for increase and capture of variable in automatic way. </p>
+<p>print atomic capture pragma </p>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#af5bd5c71996ada70ee264b35d9dbc94b">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00330">330</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00338">338</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1639,7 +1641,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a0f3934d8b25722bd0940a786556d5d4a">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00336">336</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00344">344</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1666,11 +1668,11 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Print the code to update dt from host to device. </p>
+<p>update dt from host to device </p>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aa21d86e9cea61c4435d860eafeead7e7">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00366">366</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00374">374</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1701,7 +1703,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ad2e7442a1b712da16fa0f08ed1dd6f94">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00194">194</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00196">196</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1732,7 +1734,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a511172cd4ca22bb166e69e77099946c9">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00238">238</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00240">240</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1763,7 +1765,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ad271be58ff9d7ee877270e11837f7b10">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00308">308</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00316">316</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1794,7 +1796,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a3ccece1e0642ac5e9db7662369ffaed0">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00316">316</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00324">324</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1825,12 +1827,12 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a2ba695c99f8eeb9174773570cb38b102">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00262">262</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00266">266</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
-<a id="a7a9fd5a45fccdcc754f30c9d8f2a1e0b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7a9fd5a45fccdcc754f30c9d8f2a1e0b">&#9670;&nbsp;</a></span>print_instance_struct_transfer_routines()</h2>
+<a id="a29cd483e4b7f5819bfaf0db0180318e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a29cd483e4b7f5819bfaf0db0180318e9">&#9670;&nbsp;</a></span>print_instance_struct_transfer_routines()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1841,7 +1843,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">void nmodl::codegen::CodegenAccVisitor::print_instance_struct_transfer_routines </td>
           <td>(</td>
-          <td class="paramtype">std::vector&lt; std::string &gt; const &amp;&#160;</td>
+          <td class="paramtype">const std::vector&lt; std::string &gt; &amp;&#160;</td>
           <td class="paramname"><em>ptr_members</em></td><td>)</td>
           <td></td>
         </tr>
@@ -1857,7 +1859,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a32c17c9dd4c128f62661e78eba62bd9f">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00274">274</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00278">278</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1896,7 +1898,7 @@ Additional Inherited Members</h2></td></tr>
 </div><!-- fragment --> 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a07abbcd5c271b78e5579704cb94e7dcb">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00150">150</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00152">152</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1928,7 +1930,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a43b6e0b87c37b631a953ea5bec4f776f">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00221">221</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00223">223</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1993,7 +1995,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#acbe2db4ff611e2d3800f975110ee3d86">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00167">167</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00169">169</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2024,7 +2026,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a60ec63157169453b8de330121620b9f9">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00175">175</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00177">177</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2051,11 +2053,11 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Print the code to update NetSendBuffer_t count from host to device. </p>
+<p>update NetSendBuffer_t count from host to device </p>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#af597c406537b804ac4b08a744705fc02">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00358">358</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00366">366</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2082,11 +2084,11 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Print the code to update NetSendBuffer_t count from device to host. </p>
+<p>update NetSendBuffer_t count from device to host </p>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#abcbf39acbcce09b1a8098ed1ad78dd22">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00343">343</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00351">351</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2113,11 +2115,11 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Print the code to update NetSendBuffer_t from device to host. </p>
+<p>update NetSendBuffer_t from device to host </p>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a84a5403d2424ee0cc3c9cf16bbe54c3f">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00349">349</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00357">357</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2144,12 +2146,11 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Print the code related to the update of NetSendBuffer_t cnt. </p>
-<p>For GPU this needs to be done with atomic operation, on CPU it's not needed. </p>
+<p>print atomic update of NetSendBuffer_t cnt </p>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aef4229b2d3a69d9a0d3f5701c769325a">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00123">123</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00125">125</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2176,12 +2177,11 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Print statement that grows NetSendBuffering_t structure if needed. </p>
-<p>This function should be overridden for backends that cannot dynamically reallocate the buffer </p>
+<p>Replace default implementation by a no-op since the buffer cannot be grown up during gpu execution. </p>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a131e4fef806cf19de6507e45bc3d733c">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00132">132</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00134">134</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2212,7 +2212,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a45ea4e2ecdbace07f5a779464e109fbb">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00248">248</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00250">250</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2243,7 +2243,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aa5ca31faa904700dff8ba6d92d161ef0">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00213">213</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00215">215</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2274,7 +2274,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ae49923c8565936b22e1aab3945356ee7">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00181">181</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00183">183</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2305,7 +2305,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a1cd379286ab2d9ded1e9b43f592b8242">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00228">228</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__acc__visitor_8cpp_source.html#l00230">230</a> of file <a class="el" href="codegen__acc__visitor_8cpp_source.html">codegen_acc_visitor.cpp</a>.</p>
 
 </div>
 </div>

@@ -94,7 +94,6 @@ $(document).ready(function(){initNavTree('classnmodl_1_1codegen_1_1_codegen_comp
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pri-types">Private Types</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
-<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -124,9 +123,9 @@ Inheritance diagram for nmodl::codegen::CodegenCompatibilityVisitor:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ac24f85e374d5c089b019b0d36e7d207c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#ac24f85e374d5c089b019b0d36e7d207c">find_unhandled_ast_nodes</a> (<a class="el" href="structnmodl_1_1ast_1_1_ast.html">Ast</a> &amp;node)</td></tr>
-<tr class="memdesc:ac24f85e374d5c089b019b0d36e7d207c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function that searches the <a class="el" href="structnmodl_1_1ast_1_1_ast.html" title="Base class for all Abstract Syntax Tree node types.">ast::Ast</a> for nodes that are incompatible with NMODL <code>C++</code> code generator.  <a href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#ac24f85e374d5c089b019b0d36e7d207c">More...</a><br /></td></tr>
-<tr class="separator:ac24f85e374d5c089b019b0d36e7d207c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8f4da257ecc161c61cabda2eee0cc3e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#af8f4da257ecc161c61cabda2eee0cc3e">find_unhandled_ast_nodes</a> (<a class="el" href="structnmodl_1_1ast_1_1_ast.html">Ast</a> &amp;node) const</td></tr>
+<tr class="memdesc:af8f4da257ecc161c61cabda2eee0cc3e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Search the <a class="el" href="structnmodl_1_1ast_1_1_ast.html" title="Base class for all Abstract Syntax Tree node types.">ast::Ast</a> for nodes that are incompatible with NMODL <code>C++</code> code generator.  <a href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#af8f4da257ecc161c61cabda2eee0cc3e">More...</a><br /></td></tr>
+<tr class="separator:af8f4da257ecc161c61cabda2eee0cc3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Ctor &amp; dtor</div></td></tr>
 <tr class="memitem:ad8ab18c3c2e7c9822ec33a63900ec13e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#ad8ab18c3c2e7c9822ec33a63900ec13e">CodegenCompatibilityVisitor</a> ()=default</td></tr>
 <tr class="memdesc:ad8ab18c3c2e7c9822ec33a63900ec13e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default <a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html" title="Visitor for printing compatibility issues of the mod file">CodegenCompatibilityVisitor</a> constructor.  <a href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#ad8ab18c3c2e7c9822ec33a63900ec13e">More...</a><br /></td></tr>
@@ -498,50 +497,44 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-types"></a>
 Private Types</h2></td></tr>
-<tr class="memitem:aba29f796233489a8cb5879a8c2ca5641"><td class="memItemLeft" align="right" valign="top">typedef std::string(CodegenCompatibilityVisitor::*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#aba29f796233489a8cb5879a8c2ca5641">FunctionPointer</a>) (<a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &amp;node, const std::shared_ptr&lt; <a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &gt; &amp;)</td></tr>
-<tr class="memdesc:aba29f796233489a8cb5879a8c2ca5641"><td class="mdescLeft">&#160;</td><td class="mdescRight">Typedef for defining FunctionPointer that points to the function needed to be called for every kind of error.  <a href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#aba29f796233489a8cb5879a8c2ca5641">More...</a><br /></td></tr>
-<tr class="separator:aba29f796233489a8cb5879a8c2ca5641"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89d6a29d1c4bbfbe0e0a462da6538600"><td class="memItemLeft" align="right" valign="top">typedef std::string(CodegenCompatibilityVisitor::*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a89d6a29d1c4bbfbe0e0a462da6538600">FunctionPointer</a>) (<a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &amp;node, const std::shared_ptr&lt; <a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &gt; &amp;) const</td></tr>
+<tr class="memdesc:a89d6a29d1c4bbfbe0e0a462da6538600"><td class="mdescLeft">&#160;</td><td class="mdescRight">Typedef for defining FunctionPointer that points to the function needed to be called for every kind of error.  <a href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a89d6a29d1c4bbfbe0e0a462da6538600">More...</a><br /></td></tr>
+<tr class="separator:a89d6a29d1c4bbfbe0e0a462da6538600"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:abdb4773e01ea26ccff60027d5ad27717"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#abdb4773e01ea26ccff60027d5ad27717">return_error_if_solve_method_is_unhandled</a> (<a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &amp;node, const std::shared_ptr&lt; <a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &gt; &amp;ast_node)</td></tr>
-<tr class="memdesc:abdb4773e01ea26ccff60027d5ad27717"><td class="mdescLeft">&#160;</td><td class="mdescRight">Takes as parameter an std::shared_ptr&lt;ast::Ast&gt;, searches if the method used for solving is supported and if it is not it returns a relative error message.  <a href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#abdb4773e01ea26ccff60027d5ad27717">More...</a><br /></td></tr>
-<tr class="separator:abdb4773e01ea26ccff60027d5ad27717"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9330dcc15a93adfd9e7950556e15af9e"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a9330dcc15a93adfd9e7950556e15af9e"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a9330dcc15a93adfd9e7950556e15af9e">return_error_with_name</a> (<a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &amp;node, const std::shared_ptr&lt; <a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &gt; &amp;ast_node)</td></tr>
-<tr class="memdesc:a9330dcc15a93adfd9e7950556e15af9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Takes as parameter an std::shared_ptr&lt;ast::Ast&gt; node and returns a relative error with the name, the type and the location of the unhandled statement.  <a href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a9330dcc15a93adfd9e7950556e15af9e">More...</a><br /></td></tr>
-<tr class="separator:a9330dcc15a93adfd9e7950556e15af9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aff329972edc880f9b3fe7c85ce2c5df2"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:aff329972edc880f9b3fe7c85ce2c5df2"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#aff329972edc880f9b3fe7c85ce2c5df2">return_error_without_name</a> (<a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &amp;node, const std::shared_ptr&lt; <a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &gt; &amp;ast_node)</td></tr>
-<tr class="memdesc:aff329972edc880f9b3fe7c85ce2c5df2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Takes as parameter an std::shared_ptr&lt;ast::Ast&gt; node and returns a relative error with the type and the location of the unhandled statement.  <a href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#aff329972edc880f9b3fe7c85ce2c5df2">More...</a><br /></td></tr>
-<tr class="separator:aff329972edc880f9b3fe7c85ce2c5df2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afa10d176b1cf5811533427ffd46aefb7"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#afa10d176b1cf5811533427ffd46aefb7">return_error_global_var</a> (<a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &amp;node, const std::shared_ptr&lt; <a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &gt; &amp;ast_node)</td></tr>
-<tr class="memdesc:afa10d176b1cf5811533427ffd46aefb7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Takes as parameter the <a class="el" href="structnmodl_1_1ast_1_1_ast.html" title="Base class for all Abstract Syntax Tree node types.">ast::Ast</a> to read the symbol table and an std::shared_ptr&lt;ast::Ast&gt; node and returns relative error if a variable that is writen in the mod file is defined as GLOBAL instead of RANGE.  <a href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#afa10d176b1cf5811533427ffd46aefb7">More...</a><br /></td></tr>
-<tr class="separator:afa10d176b1cf5811533427ffd46aefb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad20edb1334e67d851528bf1840e2302c"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#ad20edb1334e67d851528bf1840e2302c">return_error_param_var</a> (<a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &amp;node, const std::shared_ptr&lt; <a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &gt; &amp;ast_node)</td></tr>
-<tr class="separator:ad20edb1334e67d851528bf1840e2302c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af32b7093b469e83dfd029bffebdf97a0"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#af32b7093b469e83dfd029bffebdf97a0">return_error_if_no_bbcore_read_write</a> (<a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &amp;node, const std::shared_ptr&lt; <a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &gt; &amp;ast_node)</td></tr>
-<tr class="memdesc:af32b7093b469e83dfd029bffebdf97a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Takes as parameter the <a class="el" href="structnmodl_1_1ast_1_1_ast.html" title="Base class for all Abstract Syntax Tree node types.">ast::Ast</a> and checks if the functions "bbcore_read" and "bbcore_write" are defined in any of the <a class="el" href="structnmodl_1_1ast_1_1_ast.html" title="Base class for all Abstract Syntax Tree node types.">ast::Ast</a> VERBATIM blocks.  <a href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#af32b7093b469e83dfd029bffebdf97a0">More...</a><br /></td></tr>
-<tr class="separator:af32b7093b469e83dfd029bffebdf97a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
-Private Attributes</h2></td></tr>
-<tr class="memitem:ab91d26dcf9a01cf7ca02cd70d8fc7e9a"><td class="memItemLeft" align="right" valign="top">const std::set&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#ab91d26dcf9a01cf7ca02cd70d8fc7e9a">handled_solvers</a></td></tr>
-<tr class="memdesc:ab91d26dcf9a01cf7ca02cd70d8fc7e9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set of handled solvers by the NMODL <code>C++</code> code generator.  <a href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#ab91d26dcf9a01cf7ca02cd70d8fc7e9a">More...</a><br /></td></tr>
-<tr class="separator:ab91d26dcf9a01cf7ca02cd70d8fc7e9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a69954a85b9e1a0f90301d63dc1060c5c"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::shared_ptr&lt; <a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a69954a85b9e1a0f90301d63dc1060c5c">unhandled_ast_nodes</a></td></tr>
-<tr class="memdesc:a69954a85b9e1a0f90301d63dc1060c5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vector that stores all the <a class="el" href="classnmodl_1_1ast_1_1_node.html" title="Base class for all AST node.">ast::Node</a> that are unhandled by the NMODL <code>C++</code> code generator.  <a href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a69954a85b9e1a0f90301d63dc1060c5c">More...</a><br /></td></tr>
-<tr class="separator:a69954a85b9e1a0f90301d63dc1060c5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89229070129331827ec35ca5b6c737ba"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a89229070129331827ec35ca5b6c737ba">return_error_if_solve_method_is_unhandled</a> (<a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &amp;node, const std::shared_ptr&lt; <a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &gt; &amp;ast_node) const</td></tr>
+<tr class="memdesc:a89229070129331827ec35ca5b6c737ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Takes as parameter an std::shared_ptr&lt;ast::Ast&gt;, searches if the method used for solving is supported and if it is not it returns a relative error message.  <a href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a89229070129331827ec35ca5b6c737ba">More...</a><br /></td></tr>
+<tr class="separator:a89229070129331827ec35ca5b6c737ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac266dfa07ed7177cfb4460bd752f8bd0"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ac266dfa07ed7177cfb4460bd752f8bd0"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#ac266dfa07ed7177cfb4460bd752f8bd0">return_error_with_name</a> (<a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &amp;, const std::shared_ptr&lt; <a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &gt; &amp;ast_node) const</td></tr>
+<tr class="memdesc:ac266dfa07ed7177cfb4460bd752f8bd0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Takes as parameter an std::shared_ptr&lt;ast::Ast&gt; node and returns a relative error with the name, the type and the location of the unhandled statement.  <a href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#ac266dfa07ed7177cfb4460bd752f8bd0">More...</a><br /></td></tr>
+<tr class="separator:ac266dfa07ed7177cfb4460bd752f8bd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5baabaf8b2f0266a4ba5c1591b27a933"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a5baabaf8b2f0266a4ba5c1591b27a933"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a5baabaf8b2f0266a4ba5c1591b27a933">return_error_without_name</a> (<a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &amp;, const std::shared_ptr&lt; <a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &gt; &amp;ast_node) const</td></tr>
+<tr class="memdesc:a5baabaf8b2f0266a4ba5c1591b27a933"><td class="mdescLeft">&#160;</td><td class="mdescRight">Takes as parameter an std::shared_ptr&lt;ast::Ast&gt; node and returns a relative error with the type and the location of the unhandled statement.  <a href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a5baabaf8b2f0266a4ba5c1591b27a933">More...</a><br /></td></tr>
+<tr class="separator:a5baabaf8b2f0266a4ba5c1591b27a933"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad9d74c011314b9b4e4bea2b5848ad1fd"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#ad9d74c011314b9b4e4bea2b5848ad1fd">return_error_global_var</a> (<a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &amp;node, const std::shared_ptr&lt; <a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &gt; &amp;ast_node) const</td></tr>
+<tr class="memdesc:ad9d74c011314b9b4e4bea2b5848ad1fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Takes as parameter the <a class="el" href="structnmodl_1_1ast_1_1_ast.html" title="Base class for all Abstract Syntax Tree node types.">ast::Ast</a> to read the symbol table and an std::shared_ptr&lt;ast::Ast&gt; node and returns relative error if a variable that is writen in the mod file is defined as GLOBAL instead of RANGE.  <a href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#ad9d74c011314b9b4e4bea2b5848ad1fd">More...</a><br /></td></tr>
+<tr class="separator:ad9d74c011314b9b4e4bea2b5848ad1fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49496d6e9589f6b9db999f1dda07969c"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a49496d6e9589f6b9db999f1dda07969c">return_error_param_var</a> (<a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &amp;node, const std::shared_ptr&lt; <a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &gt; &amp;ast_node) const</td></tr>
+<tr class="separator:a49496d6e9589f6b9db999f1dda07969c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a651743cfea039bb30d5468c0ab209134"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a651743cfea039bb30d5468c0ab209134">return_error_if_no_bbcore_read_write</a> (<a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &amp;node, const std::shared_ptr&lt; <a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &gt; &amp;ast_node) const</td></tr>
+<tr class="memdesc:a651743cfea039bb30d5468c0ab209134"><td class="mdescLeft">&#160;</td><td class="mdescRight">Takes as parameter the <a class="el" href="structnmodl_1_1ast_1_1_ast.html" title="Base class for all Abstract Syntax Tree node types.">ast::Ast</a> and checks if the functions "bbcore_read" and "bbcore_write" are defined in any of the <a class="el" href="structnmodl_1_1ast_1_1_ast.html" title="Base class for all Abstract Syntax Tree node types.">ast::Ast</a> VERBATIM blocks.  <a href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a651743cfea039bb30d5468c0ab209134">More...</a><br /></td></tr>
+<tr class="separator:a651743cfea039bb30d5468c0ab209134"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
-<tr class="memitem:a320efdb261998e4ce6e10003010a39a4"><td class="memItemLeft" align="right" valign="top">static const std::map&lt; <a class="el" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033">ast::AstNodeType</a>, <a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#aba29f796233489a8cb5879a8c2ca5641">FunctionPointer</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a320efdb261998e4ce6e10003010a39a4">unhandled_ast_types_func</a></td></tr>
+<tr class="memitem:a320efdb261998e4ce6e10003010a39a4"><td class="memItemLeft" align="right" valign="top">static const std::map&lt; <a class="el" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033">ast::AstNodeType</a>, <a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a89d6a29d1c4bbfbe0e0a462da6538600">FunctionPointer</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a320efdb261998e4ce6e10003010a39a4">unhandled_ast_types_func</a></td></tr>
 <tr class="memdesc:a320efdb261998e4ce6e10003010a39a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">associated container to find the function needed to be called in for every <a class="el" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033" title="Enum type for every AST node type.">ast::AstNodeType</a> that is unsupported  <a href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a320efdb261998e4ce6e10003010a39a4">More...</a><br /></td></tr>
 <tr class="separator:a320efdb261998e4ce6e10003010a39a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab91d26dcf9a01cf7ca02cd70d8fc7e9a"><td class="memItemLeft" align="right" valign="top">static const std::set&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#ab91d26dcf9a01cf7ca02cd70d8fc7e9a">handled_solvers</a></td></tr>
+<tr class="memdesc:ab91d26dcf9a01cf7ca02cd70d8fc7e9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set of handled solvers by the NMODL <code>C++</code> code generator.  <a href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#ab91d26dcf9a01cf7ca02cd70d8fc7e9a">More...</a><br /></td></tr>
+<tr class="separator:ab91d26dcf9a01cf7ca02cd70d8fc7e9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="aba29f796233489a8cb5879a8c2ca5641"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aba29f796233489a8cb5879a8c2ca5641">&#9670;&nbsp;</a></span>FunctionPointer</h2>
+<a id="a89d6a29d1c4bbfbe0e0a462da6538600"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89d6a29d1c4bbfbe0e0a462da6538600">&#9670;&nbsp;</a></span>FunctionPointer</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -550,7 +543,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">typedef std::string(CodegenCompatibilityVisitor::* nmodl::codegen::CodegenCompatibilityVisitor::FunctionPointer) (<a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &amp;node, const std::shared_ptr&lt; <a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &gt; &amp;)</td>
+          <td class="memname">typedef std::string(CodegenCompatibilityVisitor::* nmodl::codegen::CodegenCompatibilityVisitor::FunctionPointer) (<a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &amp;node, const std::shared_ptr&lt; <a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &gt; &amp;) const</td>
         </tr>
       </table>
   </td>
@@ -595,8 +588,8 @@ Static Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ac24f85e374d5c089b019b0d36e7d207c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac24f85e374d5c089b019b0d36e7d207c">&#9670;&nbsp;</a></span>find_unhandled_ast_nodes()</h2>
+<a id="af8f4da257ecc161c61cabda2eee0cc3e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af8f4da257ecc161c61cabda2eee0cc3e">&#9670;&nbsp;</a></span>find_unhandled_ast_nodes()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -606,12 +599,12 @@ Static Private Attributes</h2></td></tr>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structnmodl_1_1ast_1_1_ast.html">Ast</a> &amp;&#160;</td>
           <td class="paramname"><em>node</em></td><td>)</td>
-          <td></td>
+          <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Function that searches the <a class="el" href="structnmodl_1_1ast_1_1_ast.html" title="Base class for all Abstract Syntax Tree node types.">ast::Ast</a> for nodes that are incompatible with NMODL <code>C++</code> code generator. </p>
+<p>Search the <a class="el" href="structnmodl_1_1ast_1_1_ast.html" title="Base class for all Abstract Syntax Tree node types.">ast::Ast</a> for nodes that are incompatible with NMODL <code>C++</code> code generator. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">node</td><td>Ast </td></tr>
@@ -625,8 +618,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="afa10d176b1cf5811533427ffd46aefb7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afa10d176b1cf5811533427ffd46aefb7">&#9670;&nbsp;</a></span>return_error_global_var()</h2>
+<a id="ad9d74c011314b9b4e4bea2b5848ad1fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad9d74c011314b9b4e4bea2b5848ad1fd">&#9670;&nbsp;</a></span>return_error_global_var()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -649,7 +642,7 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td>
+          <td></td><td> const</td>
         </tr>
       </table>
   </td>
@@ -673,8 +666,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="af32b7093b469e83dfd029bffebdf97a0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af32b7093b469e83dfd029bffebdf97a0">&#9670;&nbsp;</a></span>return_error_if_no_bbcore_read_write()</h2>
+<a id="a651743cfea039bb30d5468c0ab209134"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a651743cfea039bb30d5468c0ab209134">&#9670;&nbsp;</a></span>return_error_if_no_bbcore_read_write()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -697,7 +690,7 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td>
+          <td></td><td> const</td>
         </tr>
       </table>
   </td>
@@ -722,8 +715,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="abdb4773e01ea26ccff60027d5ad27717"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abdb4773e01ea26ccff60027d5ad27717">&#9670;&nbsp;</a></span>return_error_if_solve_method_is_unhandled()</h2>
+<a id="a89229070129331827ec35ca5b6c737ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89229070129331827ec35ca5b6c737ba">&#9670;&nbsp;</a></span>return_error_if_solve_method_is_unhandled()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -746,7 +739,7 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td>
+          <td></td><td> const</td>
         </tr>
       </table>
   </td>
@@ -770,8 +763,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ad20edb1334e67d851528bf1840e2302c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad20edb1334e67d851528bf1840e2302c">&#9670;&nbsp;</a></span>return_error_param_var()</h2>
+<a id="a49496d6e9589f6b9db999f1dda07969c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49496d6e9589f6b9db999f1dda07969c">&#9670;&nbsp;</a></span>return_error_param_var()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -794,7 +787,7 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td>
+          <td></td><td> const</td>
         </tr>
       </table>
   </td>
@@ -808,8 +801,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a9330dcc15a93adfd9e7950556e15af9e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9330dcc15a93adfd9e7950556e15af9e">&#9670;&nbsp;</a></span>return_error_with_name()</h2>
+<a id="ac266dfa07ed7177cfb4460bd752f8bd0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac266dfa07ed7177cfb4460bd752f8bd0">&#9670;&nbsp;</a></span>return_error_with_name()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -823,7 +816,7 @@ template&lt;typename T &gt; </div>
           <td class="memname">std::string nmodl::codegen::CodegenCompatibilityVisitor::return_error_with_name </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &amp;&#160;</td>
-          <td class="paramname"><em>node</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -834,7 +827,7 @@ template&lt;typename T &gt; </div>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td>
+          <td></td><td> const</td>
         </tr>
       </table>
   </td>
@@ -860,12 +853,12 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>std::string error </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="codegen__compatibility__visitor_8hpp_source.html#l00101">101</a> of file <a class="el" href="codegen__compatibility__visitor_8hpp_source.html">codegen_compatibility_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__compatibility__visitor_8hpp_source.html#l00097">97</a> of file <a class="el" href="codegen__compatibility__visitor_8hpp_source.html">codegen_compatibility_visitor.hpp</a>.</p>
 
 </div>
 </div>
-<a id="aff329972edc880f9b3fe7c85ce2c5df2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aff329972edc880f9b3fe7c85ce2c5df2">&#9670;&nbsp;</a></span>return_error_without_name()</h2>
+<a id="a5baabaf8b2f0266a4ba5c1591b27a933"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5baabaf8b2f0266a4ba5c1591b27a933">&#9670;&nbsp;</a></span>return_error_without_name()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -879,7 +872,7 @@ template&lt;typename T &gt; </div>
           <td class="memname">std::string nmodl::codegen::CodegenCompatibilityVisitor::return_error_without_name </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &amp;&#160;</td>
-          <td class="paramname"><em>node</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -890,7 +883,7 @@ template&lt;typename T &gt; </div>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td>
+          <td></td><td> const</td>
         </tr>
       </table>
   </td>
@@ -916,7 +909,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>std::string error </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="codegen__compatibility__visitor_8hpp_source.html#l00125">125</a> of file <a class="el" href="codegen__compatibility__visitor_8hpp_source.html">codegen_compatibility_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__compatibility__visitor_8hpp_source.html#l00122">122</a> of file <a class="el" href="codegen__compatibility__visitor_8hpp_source.html">codegen_compatibility_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -936,45 +929,19 @@ template&lt;typename T &gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">{<a class="code" href="namespacenmodl_1_1codegen_1_1naming.html#a2f9bd8ba3a4cd02ac98d5c34d53a9e10">codegen::naming::CNEXP_METHOD</a>,</div>
-<div class="line">                                                <a class="code" href="namespacenmodl_1_1codegen_1_1naming.html#a45c4407a1a1188869c16415f698f9fe7">codegen::naming::EULER_METHOD</a>,</div>
-<div class="line">                                                <a class="code" href="namespacenmodl_1_1codegen_1_1naming.html#a0045fd6f49fae28de5171e28a2502084">codegen::naming::DERIVIMPLICIT_METHOD</a>,</div>
-<div class="line">                                                <a class="code" href="namespacenmodl_1_1codegen_1_1naming.html#ab99ca442353e35fef1d26ce063842717">codegen::naming::SPARSE_METHOD</a>,</div>
-<div class="line">                                                <a class="code" href="namespacenmodl_1_1codegen_1_1naming.html#af4d57ffb65b91648cf586b72a8af0920">codegen::naming::AFTER_CVODE_METHOD</a>}</div>
+<div class="line">                                                              <a class="code" href="namespacenmodl_1_1codegen_1_1naming.html#a45c4407a1a1188869c16415f698f9fe7">codegen::naming::EULER_METHOD</a>,</div>
+<div class="line">                                                              <a class="code" href="namespacenmodl_1_1codegen_1_1naming.html#a0045fd6f49fae28de5171e28a2502084">codegen::naming::DERIVIMPLICIT_METHOD</a>,</div>
+<div class="line">                                                              <a class="code" href="namespacenmodl_1_1codegen_1_1naming.html#ab99ca442353e35fef1d26ce063842717">codegen::naming::SPARSE_METHOD</a>,</div>
+<div class="line">                                                              <a class="code" href="namespacenmodl_1_1codegen_1_1naming.html#af4d57ffb65b91648cf586b72a8af0920">codegen::naming::AFTER_CVODE_METHOD</a>}</div>
 </div><!-- fragment -->
 <p>Set of handled solvers by the NMODL <code>C++</code> code generator. </p>
 
 <p class="definition">Definition at line <a class="el" href="codegen__compatibility__visitor_8hpp_source.html#l00054">54</a> of file <a class="el" href="codegen__compatibility__visitor_8hpp_source.html">codegen_compatibility_visitor.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a69954a85b9e1a0f90301d63dc1060c5c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a69954a85b9e1a0f90301d63dc1060c5c">&#9670;&nbsp;</a></span>unhandled_ast_nodes</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt;std::shared_ptr&lt;<a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a>&gt; &gt; nmodl::codegen::CodegenCompatibilityVisitor::unhandled_ast_nodes</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Vector that stores all the <a class="el" href="classnmodl_1_1ast_1_1_node.html" title="Base class for all AST node.">ast::Node</a> that are unhandled by the NMODL <code>C++</code> code generator. </p>
-
-<p class="definition">Definition at line <a class="el" href="codegen__compatibility__visitor_8hpp_source.html#l00062">62</a> of file <a class="el" href="codegen__compatibility__visitor_8hpp_source.html">codegen_compatibility_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -988,7 +955,7 @@ template&lt;typename T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const std::map&lt; <a class="el" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033">ast::AstNodeType</a>, <a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#aba29f796233489a8cb5879a8c2ca5641">CodegenCompatibilityVisitor::FunctionPointer</a> &gt; nmodl::codegen::CodegenCompatibilityVisitor::unhandled_ast_types_func</td>
+          <td class="memname">const std::map&lt; <a class="el" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033">ast::AstNodeType</a>, <a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a89d6a29d1c4bbfbe0e0a462da6538600">CodegenCompatibilityVisitor::FunctionPointer</a> &gt; nmodl::codegen::CodegenCompatibilityVisitor::unhandled_ast_types_func</td>
         </tr>
       </table>
   </td>

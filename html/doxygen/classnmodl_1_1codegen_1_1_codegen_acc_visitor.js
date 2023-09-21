@@ -17,7 +17,7 @@ var classnmodl_1_1codegen_1_1_codegen_acc_visitor =
     [ "print_instance_struct_copy_to_device", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a69e320fadc7ed977df7f9c8a7b686e6f", null ],
     [ "print_instance_struct_delete_from_device", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a791fea41ba7dc986ed211172d3558e2c", null ],
     [ "print_instance_struct_transfer_routine_declarations", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a4cb9e164e869f63d499d5f4c84f66f90", null ],
-    [ "print_instance_struct_transfer_routines", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a7a9fd5a45fccdcc754f30c9d8f2a1e0b", null ],
+    [ "print_instance_struct_transfer_routines", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a29cd483e4b7f5819bfaf0db0180318e9", null ],
     [ "print_kernel_data_present_annotation_block_begin", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a00ab6b70ec3753d393abd3ccf383a313", null ],
     [ "print_kernel_data_present_annotation_block_end", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#acfa06ee31afd8591ab20911e53bbef8a", null ],
     [ "print_memory_allocation_routine", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#acc69070aadaba5d5749d249fd7390a31", null ],

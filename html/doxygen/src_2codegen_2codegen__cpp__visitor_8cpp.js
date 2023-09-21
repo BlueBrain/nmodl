@@ -1,6 +1,5 @@
 var src_2codegen_2codegen__cpp__visitor_8cpp =
 [
-    [ "SymbolType", "src_2codegen_2codegen__cpp__visitor_8cpp.html#a116af3668467bd43c2740658d7fd0612", null ],
     [ "get_register_type_for_ba_block", "src_2codegen_2codegen__cpp__visitor_8cpp.html#a82b56c421789e1584b7eadf3079d0d05", null ],
     [ "get_table_statement", "src_2codegen_2codegen__cpp__visitor_8cpp.html#a1faf2e296586215399717f9d519de218", null ],
     [ "is_functor_const", "src_2codegen_2codegen__cpp__visitor_8cpp.html#a926e0525c9ac662aed2b91e99bef2d37", null ],
