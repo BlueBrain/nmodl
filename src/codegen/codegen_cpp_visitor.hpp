@@ -599,8 +599,8 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      *
      * \param name         Variable name that is being printed
      * \param use_instance Should the variable be accessed via instance or data array
-     * \return             The C++ string representing the access to the variable in the neuron thread
-     * structure
+     * \return             The C++ string representing the access to the variable in the neuron
+     * thread structure
      */
     std::string get_variable_name(const std::string& name, bool use_instance = true) const;
 
