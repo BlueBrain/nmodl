@@ -25,7 +25,7 @@ namespace codegen {
 
 /**
  * \class CodegenAccVisitor
- * \brief %Visitor for printing C code with OpenACC backend
+ * \brief %Visitor for printing C++ code with OpenACC backend
  */
 class CodegenAccVisitor: public CodegenCppVisitor {
   protected:

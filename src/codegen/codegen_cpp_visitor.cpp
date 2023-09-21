@@ -1145,12 +1145,12 @@ void CodegenCppVisitor::print_global_method_annotation() {
 
 
 void CodegenCppVisitor::print_backend_namespace_start() {
-    // no separate namespace for C (cpu) backend
+    // no separate namespace for C++ (cpu) backend
 }
 
 
 void CodegenCppVisitor::print_backend_namespace_stop() {
-    // no separate namespace for C (cpu) backend
+    // no separate namespace for C++ (cpu) backend
 }
 
 
@@ -1160,7 +1160,7 @@ void CodegenCppVisitor::print_backend_includes() {
 
 
 std::string CodegenCppVisitor::backend_name() const {
-    return "C (api-compatibility)";
+    return "C++ (api-compatibility)";
 }
 
 
@@ -1893,7 +1893,7 @@ void CodegenCppVisitor::print_eigen_linear_solver(const std::string& float_type,
             "(Eigen::inverse)!\");");
     } else {
         // In Eigen the default storage order is ColMajor.
-        // Crout's implementation requires matrices stored in RowMajor order (C-style arrays).
+        // Crout's implementation requires matrices stored in RowMajor order (C++-style arrays).
         // Therefore, the transposeInPlace is critical such that the data() method to give the rows
         // instead of the columns.
         printer->add_line("if (!nmodl_eigen_jm.IsRowMajor) nmodl_eigen_jm.transposeInPlace();");
@@ -2473,7 +2473,7 @@ void CodegenCppVisitor::print_coreneuron_includes() {
 
 /**
  * \details Variables required for type of ion, type of point process etc. are
- * of static int type. For any backend type (C,C++), it's ok to have
+ * of static int type. For the C++ backend type, it's ok to have
  * these variables as file scoped static variables.
  *
  * Initial values of state variables (h0) are also defined as static
