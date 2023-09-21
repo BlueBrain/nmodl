@@ -1145,12 +1145,12 @@ void CodegenCppVisitor::print_global_method_annotation() {
 
 
 void CodegenCppVisitor::print_backend_namespace_start() {
-    // no separate namespace for C (cpu) backend
+    // no separate namespace for C++ (cpu) backend
 }
 
 
 void CodegenCppVisitor::print_backend_namespace_stop() {
-    // no separate namespace for C (cpu) backend
+    // no separate namespace for C++ (cpu) backend
 }
 
 
@@ -1160,7 +1160,7 @@ void CodegenCppVisitor::print_backend_includes() {
 
 
 std::string CodegenCppVisitor::backend_name() const {
-    return "C (api-compatibility)";
+    return "C++ (api-compatibility)";
 }
 
 
@@ -1965,7 +1965,7 @@ std::string CodegenCppVisitor::external_method_parameters(bool table) {
            "ThreadDatum* thread, NrnThread* nt, Memb_list* ml, double v";
 }
 
-
+// Probably we have to add more here for NEURON
 std::string CodegenCppVisitor::nrn_thread_arguments() {
     if (ion_variable_struct_required()) {
         return "id, pnodecount, ionvar, data, indexes, thread, nt, ml, v";
@@ -2019,6 +2019,7 @@ std::string CodegenCppVisitor::replace_if_verbatim_variable(std::string name) {
  * @todo : this is still ad-hoc and requires re-implementation to
  * handle it more elegantly.
  */
+// This will need changes for NEURON but should be more or less the same
 std::string CodegenCppVisitor::process_verbatim_text(std::string const& text) {
     parser::CDriver driver;
     driver.scan_string(text);
@@ -2339,7 +2340,7 @@ std::string CodegenCppVisitor::update_if_ion_variable_name(const std::string& na
     return result;
 }
 
-
+// This will need changes for NEURON but should be more or less the same
 std::string CodegenCppVisitor::get_variable_name(const std::string& name, bool use_instance) const {
     std::string varname = update_if_ion_variable_name(name);
 
@@ -2425,6 +2426,7 @@ void CodegenCppVisitor::print_backend_info() {
     printer->fmt_line("Vectorized      : {}", info.vectorize);
     printer->fmt_line("Threadsafe      : {}", info.thread_safe);
     printer->fmt_line("Created         : {}", stringutils::trim(data_time_str));
+    printer->fmt_line("Simulator       : {}", simulator_name());
     printer->fmt_line("Backend         : {}", backend_name());
     printer->fmt_line("NMODL Compiler  : {}", version);
     printer->add_line("*********************************************************/");
@@ -4625,11 +4627,6 @@ void CodegenCppVisitor::print_codegen_routines() {
 }
 
 
-void CodegenCppVisitor::print_wrapper_routines() {
-    // nothing to do
-}
-
-
 void CodegenCppVisitor::set_codegen_global_variables(std::vector<SymbolType>& global_vars) {
     codegen_global_variables = global_vars;
 }
@@ -4657,7 +4654,6 @@ void CodegenCppVisitor::setup(const Program& node) {
 void CodegenCppVisitor::visit_program(const Program& node) {
     setup(node);
     print_codegen_routines();
-    print_wrapper_routines();
 }
 
 }  // namespace codegen

@@ -589,7 +589,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * \return             The backend code string representing the access to the given variable
      * symbol
      */
-    std::string int_variable_name(const IndexVariableInfo& symbol,
+    virtual std::string int_variable_name(const IndexVariableInfo& symbol,
                                   const std::string& name,
                                   bool use_instance) const;
 
@@ -601,7 +601,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * global variable or the instance-specific copy (also available on GPU).
      * \return       The C string representing the access to the global variable
      */
-    std::string global_variable_name(const SymbolType& symbol, bool use_instance = true) const;
+    virtual std::string global_variable_name(const SymbolType& symbol, bool use_instance = true) const;
 
 
     /**
@@ -612,7 +612,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * \return             The C string representing the access to the variable in the neuron thread
      * structure
      */
-    std::string get_variable_name(const std::string& name, bool use_instance = true) const;
+    virtual std::string get_variable_name(const std::string& name, bool use_instance = true) const;
 
 
     /**
@@ -766,30 +766,30 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * \param index
      * \return              The string representing the function call
      */
-    std::string conc_write_statement(const std::string& ion_name,
+    virtual std::string conc_write_statement(const std::string& ion_name,
                                      const std::string& concentration,
-                                     int index);
+                                     int index) = 0;
 
 
     /**
      * Arguments for functions that are defined and used internally.
      * \return the method arguments
      */
-    std::string internal_method_arguments();
+    virtual std::string internal_method_arguments() = 0;
 
 
     /**
      * Parameters for internally defined functions
      * \return the method parameters
      */
-    ParamVector internal_method_parameters();
+    virtual ParamVector internal_method_parameters() = 0;
 
 
     /**
      * Arguments for external functions called from generated code
      * \return A string representing the arguments passed to an external function
      */
-    static std::string external_method_arguments();
+    virtual std::string external_method_arguments() = 0;
 
 
     /**
@@ -801,25 +801,25 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * \param table
      * \return      A string representing the parameters of the function
      */
-    static std::string external_method_parameters(bool table = false);
+    virtual std::string external_method_parameters(bool table = false) = 0;
 
 
     /**
      * Arguments for register_mech or point_register_mech function
      */
-    std::string register_mechanism_arguments() const;
+    virtual std::string register_mechanism_arguments() const = 0;
 
 
     /**
      * Arguments for "_threadargs_" macro in neuron implementation
      */
-    std::string nrn_thread_arguments();
+    virtual std::string nrn_thread_arguments() = 0;
 
 
     /**
      * Arguments for "_threadargs_" macro in neuron implementation
      */
-    std::string nrn_thread_internal_arguments();
+    virtual std::string nrn_thread_internal_arguments() = 0;
 
 
     /**
@@ -845,7 +845,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      *
      * \return "uniform "
      */
-    virtual std::string global_var_struct_type_qualifier();
+    virtual std::string global_var_struct_type_qualifier() = 0;
 
     /**
      * Instantiate global var instance
@@ -853,23 +853,23 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * For C code generation this is empty
      * \return ""
      */
-    virtual void print_global_var_struct_decl();
+    virtual void print_global_var_struct_decl() = 0;
 
     /**
      * Print static assertions about the global variable struct.
      */
-    virtual void print_global_var_struct_assertions() const;
+    virtual void print_global_var_struct_assertions() const = 0;
 
     /**
      * Prints the start of the \c coreneuron namespace
      */
-    void print_namespace_start();
+    virtual void print_namespace_start() = 0;
 
 
     /**
      * Prints the end of the \c coreneuron namespace
      */
-    void print_namespace_stop();
+    virtual void print_namespace_stop() = 0;
 
 
     /**
@@ -877,7 +877,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      *
      * For the C backend no additional namespace is required
      */
-    virtual void print_backend_namespace_start();
+    virtual void print_backend_namespace_start() = 0;
 
 
     /**
@@ -885,7 +885,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      *
      * For the C backend no additional namespace is required
      */
-    virtual void print_backend_namespace_stop();
+    virtual void print_backend_namespace_stop() = 0;
 
 
     /**
@@ -902,6 +902,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      */
     virtual void print_nmodl_constants();
 
+    virtual std::string CodegenCppVisitor::simulator_name() const = 0;
 
     /**
      * Print top file header printed in generated code
@@ -912,31 +913,32 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     /**
      * Print memory allocation routine
      */
-    virtual void print_memory_allocation_routine() const;
+    // Only for CoreNEURON
+    // void print_memory_allocation_routine() const = 0;
 
 
     /**
      * Print backend specific abort routine
      */
-    virtual void print_abort_routine() const;
+    virtual void print_abort_routine() const = 0;
 
 
     /**
      * Print standard C/C++ includes
      */
-    void print_standard_includes();
+    virtual void print_standard_includes() = 0;
 
 
     /**
      * Print includes from coreneuron
      */
-    void print_coreneuron_includes();
+    virtual void print_simulator_includes() = 0;
 
 
     /**
-     * Print backend specific includes (none needed for C backend)
+     * Print backend specific includes (none needed for C++ backend)
      */
-    virtual void print_backend_includes();
+    virtual void print_backend_includes() = 0;
 
 
     /**
@@ -948,7 +950,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     /**
      * Check if reduction block in \c nrn\_cur required
      */
-    virtual bool nrn_cur_reduction_loop_required();
+    virtual bool nrn_cur_reduction_loop_required() = 0;
 
 
     /**
@@ -973,6 +975,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     /**
      * Print backend code for byte array that has mechanism information (to be registered
      * with coreneuron)
+     * Same in NEURON and CoreNEURON
      */
     void print_mechanism_info();
 
@@ -983,12 +986,14 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * @param print_initialisers Whether to include default values in the struct
      *                           definition (true: int foo{42}; false: int foo;)
      */
+    // Should be the same between NEURON and CoreNEURON
     void print_mechanism_global_var_structure(bool print_initialisers);
 
 
     /**
      * Print structure of ion variables used for local copies
      */
+    // CoreNEURON related only for the moment I guess
     void print_ion_var_structure();
 
 
@@ -996,12 +1001,14 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * Print constructor of ion variables
      * \param members The ion variable names
      */
+    // CoreNEURON related only for the moment I guess
     virtual void print_ion_var_constructor(const std::vector<std::string>& members);
 
 
     /**
      * Print the ion variable struct
      */
+    // CoreNEURON related only for the moment I guess
     virtual void print_ion_variable();
 
 
@@ -1015,6 +1022,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     /**
      * Print the function that initialize range variable with different data type
      */
+    // CoreNEURON related only
     void print_setup_range_variable();
 
 
@@ -1023,6 +1031,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * print_instance_struct_copy_to_device and \ref
      * print_instance_struct_delete_from_device.
      */
+    // NEURON related only
     virtual void print_instance_struct_transfer_routine_declarations() {}
 
     /**
@@ -1037,6 +1046,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      *
      * \param ptr_members List of instance struct member names.
      */
+    // CoreNEURON only
     virtual void print_instance_struct_transfer_routines(
         std::vector<std::string> const& /* ptr_members */) {}
 
@@ -1045,45 +1055,53 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * Transfer the instance struct to the device. This calls a function
      * declared by \ref print_instance_struct_transfer_routine_declarations.
      */
+    // CoreNEURON only
     virtual void print_instance_struct_copy_to_device() {}
 
     /**
      * Delete the instance struct from the device. This calls a function
      * declared by \ref print_instance_struct_transfer_routine_declarations.
      */
+    // CoreNEURON only
     virtual void print_instance_struct_delete_from_device() {}
 
 
     /**
      * Print the code to copy derivative advance flag to device
      */
+    // CoreNEURON only
     virtual void print_deriv_advance_flag_transfer_to_device() const;
 
 
     /**
      * Print the code to update NetSendBuffer_t count from device to host
      */
+    // CoreNEURON only
     virtual void print_net_send_buf_count_update_to_host() const;
 
     /**
      * Print the code to update NetSendBuffer_t from device to host
      */
+    // CoreNEURON only
     virtual void print_net_send_buf_update_to_host() const;
 
 
     /**
      * Print the code to update NetSendBuffer_t count from host to device
      */
+    // CoreNEURON only
     virtual void print_net_send_buf_count_update_to_device() const;
 
     /**
      * Print the code to update dt from host to device
      */
+    // CoreNEURON only
     virtual void print_dt_update_to_device() const;
 
     /**
      * Print the code to synchronise/wait on stream specific to NrnThread
      */
+    // CoreNEURON only
     virtual void print_device_stream_wait() const;
 
 
@@ -1091,6 +1109,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * Print byte arrays that register scalar and vector variables for hoc interface
      *
      */
+    // Same for both NEURON and CoreNEURON
     void print_global_variables_for_hoc();
 
 
@@ -1098,13 +1117,15 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * Print the getter method for thread variables and ids
      *
      */
-    void print_thread_getters();
+    // CoreNEURON and NEURON different way to handle threads?
+    virtual void print_thread_getters() = 0;
 
 
     /**
      * Print the getter method for index position of first pointer variable
      *
      */
+    // CoreNEURON only I suppose
     void print_first_pointer_var_index_getter();
 
 
@@ -1112,6 +1133,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * Print the getter methods for float and integer variables count
      *
      */
+    // Same for both
     void print_num_variable_getter();
 
 
@@ -1119,6 +1141,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * Print the getter method for getting number of arguments for net_receive
      *
      */
+    // Same for both I suppose
     void print_net_receive_arg_size_getter();
 
 
@@ -1126,6 +1149,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * Print the getter method for returning membrane list from NrnThread
      *
      */
+    // Maybe different in both?
     void print_memb_list_getter();
 
 
@@ -1133,6 +1157,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * Print the getter method for returning mechtype
      *
      */
+    // Same for both
     void print_mech_type_getter();
 
 
@@ -1141,6 +1166,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      *
      * \note This is not used for the C backend
      */
+    // CoreNEURON only
     virtual void print_global_variable_device_update_annotation();
 
 
@@ -1148,6 +1174,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * Print the setup method for setting matrix shadow vectors
      *
      */
+    // CoreNEURON only I suppose
     virtual void print_rhs_d_shadow_variables();
 
 
@@ -1156,6 +1183,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      *
      * \note This is not used for the C backend
      */
+    // CoreNEURON only
     virtual void print_device_method_annotation();
 
 
@@ -1164,6 +1192,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      *
      * \note This is not used for the C backend
      */
+    // CoreNEURON only
     virtual void print_global_method_annotation();
 
 
@@ -1171,6 +1200,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * Print call to internal or external function
      * \param node The AST node representing a function call
      */
+    // I suppose it should be the same for both
     void print_function_call(const ast::FunctionCall& node);
 
 
@@ -1178,6 +1208,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * Print call to \c net\_send
      * \param node The AST node representing the function call
      */
+    // I suppose it should be the same for both
     void print_net_send_call(const ast::FunctionCall& node);
 
 
@@ -1185,6 +1216,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * Print call to net\_move
      * \param node The AST node representing the function call
      */
+    // I suppose it should be the same for both
     void print_net_move_call(const ast::FunctionCall& node);
 
 
@@ -1192,6 +1224,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * Print call to net\_event
      * \param node The AST node representing the function call
      */
+    // I suppose it should be the same for both
     void print_net_event_call(const ast::FunctionCall& node);
 
 
@@ -1208,6 +1241,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      *
      * \param type The block type
      */
+    // Should be the same in both
     virtual void print_channel_iteration_block_parallel_hint(BlockType type,
                                                              const ast::Block* block);
 
@@ -1215,37 +1249,43 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     /**
      * Print accelerator annotations indicating data presence on device
      */
+    // CoreNEURON only
     virtual void print_kernel_data_present_annotation_block_begin();
 
 
     /**
      * Print matching block end of accelerator annotations for data presence on device
      */
+    // CoreNEURON only
     virtual void print_kernel_data_present_annotation_block_end();
 
 
     /**
      * Print accelerator kernels begin annotation for net_init kernel
      */
+    // CoreNEURON only
     virtual void print_net_init_acc_serial_annotation_block_begin();
 
 
     /**
      * Print accelerator kernels end annotation for net_init kernel
      */
+    // CoreNEURON only
     virtual void print_net_init_acc_serial_annotation_block_end();
 
 
     /**
      * Print function and procedures prototype declaration
      */
+    // Same for both
     void print_function_prototypes();
 
 
     /**
      * Print check_table functions
      */
-    void print_check_table_thread_function();
+    // Different in both
+    virtual void print_check_table_thread_function() = 0;
 
 
     /**
@@ -1253,6 +1293,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * \param node the AST node representing the function or procedure in NMODL
      * \param name the name of the function or procedure
      */
+    // Should be the same apart from parameters
     void print_function_or_procedure(const ast::Block& node, const std::string& name);
 
 
@@ -1260,18 +1301,21 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * Common helper function to help printing function or procedure blocks
      * \param node the AST node representing the function or procedure in NMODL
      */
+    // Same
     void print_function_procedure_helper(const ast::Block& node);
 
     /**
      * Print thread related memory allocation and deallocation callbacks
      */
+    // CoreNEURON only? Maybe also needed for NEURON?
     void print_thread_memory_callbacks();
 
 
     /**
      * Print top level (global scope) verbatim blocks
      */
-    void print_top_verbatim_blocks();
+    // Bit different in both
+    virtual void print_top_verbatim_blocks() = 0;
 
 
     /**
@@ -1280,6 +1324,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * \param node The AST node representing the function or procedure block
      * \param name A user defined name for the function
      */
+    // Should be the same
     template <typename T>
     void print_function_declaration(const T& node, const std::string& name);
 
@@ -1291,13 +1336,13 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      *
      * \param node The AST Node representing a NMODL initial block
      */
-    void print_initial_block(const ast::InitialBlock* node);
+    virtual void print_initial_block(const ast::InitialBlock* node) = 0;
 
 
     /**
      * Print initial block in the net receive block
      */
-    void print_net_init();
+    virtual void print_net_init() = 0;
 
 
     /**
@@ -1307,7 +1352,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * \param need_mech_inst \c true if a local \c inst variable needs to be defined in generated
      * code
      */
-    void print_net_receive_common_code(const ast::Block& node, bool need_mech_inst = true);
+    virtual void print_net_receive_common_code(const ast::Block& node, bool need_mech_inst = true) = 0;
 
 
     /**
@@ -1315,14 +1360,14 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * with atomic operation, on CPU it's not needed.
      *
      */
-    virtual void print_net_send_buffering_cnt_update() const;
+    virtual void print_net_send_buffering_cnt_update() const = 0;
 
 
     /**
      * Print statement that grows NetSendBuffering_t structure if needed.
      * This function should be overridden for backends that cannot dynamically reallocate the buffer
      */
-    virtual void print_net_send_buffering_grow();
+    virtual void print_net_send_buffering_grow() = 0;
 
 
     /**
@@ -1331,44 +1376,44 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * This kernel is only needed for accelerator backends where \c net\_send needs to be executed
      * in two stages as the actual communication must be done in the host code.
      */
-    void print_net_send_buffering();
+    virtual void print_net_send_buffering() = 0;
 
 
     /**
      * Print send event move block used in net receive as well as watch
      */
-    void print_send_event_move();
+    virtual void print_send_event_move() = 0;
 
 
     /**
      * Generate the target backend code for the \c net\_receive\_buffering function delcaration
      * \return The target code string
      */
-    virtual std::string net_receive_buffering_declaration();
+    virtual std::string net_receive_buffering_declaration() = 0;
 
 
     /**
      * Print the target backend code for defining and checking a local \c Memb\_list variable
      */
-    virtual void print_get_memb_list();
+    virtual void print_get_memb_list() = 0;
 
 
     /**
      * Print the code for the main \c net\_receive loop
      */
-    virtual void print_net_receive_loop_begin();
+    virtual void print_net_receive_loop_begin() = 0;
 
 
     /**
      * Print the code for closing the main \c net\_receive loop
      */
-    virtual void print_net_receive_loop_end();
+    virtual void print_net_receive_loop_end() = 0;
 
 
     /**
      * Print \c net\_receive function definition
      */
-    void print_net_receive();
+    virtual void print_net_receive() = 0;
 
 
     /**
@@ -1376,31 +1421,26 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      *
      * \param block The corresponding AST node represening an NMODL \c derivimplicit block
      */
-    void print_derivimplicit_kernel(ast::Block* block);
+    virtual void print_derivimplicit_kernel(ast::Block* block) = 0;
 
 
     /**
      * Print code block to transfer newtonspace structure to device
      */
+    // CoreNEURON only
     virtual void print_newtonspace_transfer_to_device() const;
 
 
     /**
      * Print pragma annotation for increase and capture of variable in automatic way
      */
+    // CoreNEURON only
     virtual void print_device_atomic_capture_annotation() const;
 
     /**
      * Print atomic update pragma for reduction statements
      */
     virtual void print_atomic_reduction_pragma();
-
-
-    /**
-     * Print all reduction statements
-     *
-     */
-    void print_shadow_reduction_statements();
 
 
     /**
@@ -1413,6 +1453,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * \param type      The target backend code block type
      * \return          The generated target backend code
      */
+    // CoreNEURON only?
     std::string process_shadow_update_statement(const ShadowUseStatement& statement,
                                                 BlockType type);
 
@@ -1421,7 +1462,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * Print main body of nrn_cur function
      * \param node the AST node representing the NMODL breakpoint block
      */
-    void print_nrn_cur_kernel(const ast::BreakpointBlock& node);
+    virtual void print_nrn_cur_kernel(const ast::BreakpointBlock& node) = 0;
 
 
     /**
@@ -1432,7 +1473,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      *
      * \param node the AST node representing the NMODL breakpoint block
      */
-    void print_nrn_cur_conductance_kernel(const ast::BreakpointBlock& node);
+    virtual void print_nrn_cur_conductance_kernel(const ast::BreakpointBlock& node) = 0;
 
 
     /**
@@ -1441,7 +1482,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * If the NMODL \c conductance keyword is \b not used in the \c breakpoint block, then
      * CodegenCppVisitor::print_nrn_cur_kernel will use this printer
      */
-    void print_nrn_cur_non_conductance_kernel();
+    virtual void print_nrn_cur_non_conductance_kernel() = 0;
 
 
     /**
@@ -1450,41 +1491,28 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * \note nrn_cur_kernel will have two calls to nrn_current if no conductance keywords specified
      * \param node the AST node representing the NMODL breakpoint block
      */
-    void print_nrn_current(const ast::BreakpointBlock& node);
+    virtual void print_nrn_current(const ast::BreakpointBlock& node) = 0;
 
 
     /**
      * Print the update to matrix elements with/without shadow vectors
      *
      */
-    virtual void print_nrn_cur_matrix_shadow_update();
+    virtual void print_nrn_cur_matrix_shadow_update() = 0;
 
 
     /**
      * Print the reduction to matrix elements from shadow vectors
      *
      */
-    virtual void print_nrn_cur_matrix_shadow_reduction();
-
-
-    /**
-     * Print nrn_constructor function definition
-     *
-     */
-    void print_nrn_constructor();
-
-
-    /**
-     * Print nrn_destructor function definition
-     *
-     */
-    void print_nrn_destructor();
+    virtual void print_nrn_cur_matrix_shadow_reduction() = 0;
 
 
     /**
      * Print nrn_alloc function definition
      *
      */
+    // NEURON only
     void print_nrn_alloc();
 
 
@@ -1493,88 +1521,82 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * \param type The target backend code block type
      */
     virtual void print_global_function_common_code(BlockType type,
-                                                   const std::string& function_name = "");
+                                                   const std::string& function_name = "") = 0;
 
 
     /**
      * Print the mechanism registration function
      *
      */
-    void print_mechanism_register();
+    virtual void print_mechanism_register() = 0;
 
 
     /**
      * Print watch activate function
      *
      */
-    void print_watch_activate();
+    virtual void print_watch_activate() = 0;
 
 
     /**
      * Print all includes
      *
      */
-    virtual void print_headers_include();
+    virtual void print_headers_include() = 0;
 
 
     /**
      * Print start of namespaces
      *
      */
-    void print_namespace_begin();
+    virtual void print_namespace_begin() = 0;
 
 
     /**
      * Print end of namespaces
      *
      */
-    void print_namespace_end();
+    virtual void print_namespace_end() = 0;
 
 
     /**
      * Print common getters
      *
      */
-    void print_common_getters();
+    virtual void print_common_getters() = 0;
 
 
     /**
      * Print all classes
      * @param print_initialisers Whether to include default values.
      */
-    void print_data_structures(bool print_initialisers);
+    virtual void print_data_structures(bool print_initialisers) = 0;
 
 
     /**
      * Set v_unused (voltage) for NRN_PRCELLSTATE feature
      */
-    void print_v_unused() const;
+    virtual void print_v_unused() const = 0;
 
 
     /**
      * Set g_unused (conductance) for NRN_PRCELLSTATE feature
      */
-    void print_g_unused() const;
+    virtual void print_g_unused() const = 0;
 
 
     /**
      * Print all compute functions for every backend
      *
      */
-    virtual void print_compute_functions();
+    virtual void print_compute_functions() = 0;
 
 
     /**
      * Print entry point to code generation
      *
      */
-    virtual void print_codegen_routines();
-
-
-    /**
-     * Print entry point to code generation for wrappers
-     */
-    virtual void print_wrapper_routines();
+    virtual void print_codegen_routines() = 0;
 
 
     CodegenCppVisitor(std::string mod_filename,
@@ -1584,8 +1606,6 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
                       const std::string& extension,
                       const std::string& wrapper_ext)
         : target_printer(std::make_shared<CodePrinter>(output_dir + "/" + mod_filename + extension))
-        , wrapper_printer(
-              std::make_shared<CodePrinter>(output_dir + "/" + mod_filename + wrapper_ext))
         , printer(target_printer)
         , mod_filename(std::move(mod_filename))
         , float_type(std::move(float_type))
@@ -1598,7 +1618,6 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
                       const std::string& extension,
                       const std::string& wrapper_ext)
         : target_printer(std::make_shared<CodePrinter>(stream))
-        , wrapper_printer(std::make_shared<CodePrinter>(stream))
         , printer(target_printer)
         , mod_filename(std::move(mod_filename))
         , float_type(std::move(float_type))
@@ -1607,7 +1626,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
 
   public:
     /**
-     * \brief Constructs the C code generator visitor
+     * \brief Constructs the C++ code generator visitor
      *
      * This constructor instantiates an NMODL C code generator and allows writing generated code
      * directly to a file in \c [output_dir]/[mod_filename].[extension].
@@ -1666,24 +1685,24 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * \param skip_init_check \c true if we want the generated code to execute the initialization
      *                        conditionally
      */
-    void print_nrn_init(bool skip_init_check = true);
+    virtual void print_nrn_init(bool skip_init_check = true) = 0;
 
 
     /**
      * Print nrn_state / state update function definition
      */
-    void print_nrn_state();
+    virtual void print_nrn_state() = 0;
 
 
     /**
      * Print nrn_cur / current update function definition
      */
-    void print_nrn_cur();
+    virtual void print_nrn_cur() = 0;
 
     /**
      * Print fast membrane current calculation code
      */
-    virtual void print_fast_imem_calculation();
+    virtual void print_fast_imem_calculation() = 0;
 
 
     /**
@@ -1693,33 +1712,35 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * executed in two stages as the actual communication must be done in the host code. \param
      * need_mech_inst \c true if the generated code needs a local inst variable to be defined
      */
-    void print_net_receive_buffering(bool need_mech_inst = true);
+    virtual void print_net_receive_buffering(bool need_mech_inst = true) = 0;
 
 
     /**
      * Print \c net\_receive kernel function definition
      */
-    void print_net_receive_kernel();
+    virtual void print_net_receive_kernel() = 0;
 
 
     /**
      * Print watch activate function
      */
-    void print_watch_check();
+    virtual void print_watch_check() = 0;
 
 
     /**
      * Print \c check\_function() for functions or procedure using table
      * \param node The AST node representing a function or procedure block
      */
-    void print_table_check_function(const ast::Block& node);
+    // Probably different between NEURON and CoreNEURON but shouldn't be too different
+    virtual void print_table_check_function(const ast::Block& node) = 0;
 
 
     /**
      * Print replacement function for function or procedure using table
      * \param node The AST node representing a function or procedure block
      */
-    void print_table_replacement_function(const ast::Block& node);
+    // Probably different between NEURON and CoreNEURON but shouldn't be too different
+    virtual void print_table_replacement_function(const ast::Block& node) = 0;
 
 
     /**
@@ -1733,21 +1754,21 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * Print NMODL function_table in target backend code
      * \param node
      */
-    void print_function_tables(const ast::FunctionTableBlock& node);
+    virtual void print_function_tables(const ast::FunctionTableBlock& node) = 0;
 
 
     /**
      * Print NMODL procedure in target backend code
      * \param node
      */
-    virtual void print_procedure(const ast::ProcedureBlock& node);
+    virtual void print_procedure(const ast::ProcedureBlock& node) = 0;
 
     /**
      * Print NMODL before / after block in target backend code
      * @param node AST node of type before/after type being printed
      * @param block_id Index of the before/after block
      */
-    virtual void print_before_after_block(const ast::Block* node, size_t block_id);
+    virtual void print_before_after_block(const ast::Block* node, size_t block_id) = 0;
 
     /** Setup the target backend code generator
      *
@@ -1777,12 +1798,12 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * @param print_initialisers Whether or not default values for variables
      *                           be included in the struct declaration.
      */
-    void print_mechanism_range_var_structure(bool print_initialisers);
+    virtual void print_mechanism_range_var_structure(bool print_initialisers) = 0;
 
     /**
      * Print the function that initialize instance structure
      */
-    void print_instance_variable_setup();
+    virtual void print_instance_variable_setup() = 0;
 
     /**
      * Go through the map of \c EigenNewtonSolverBlock s and their corresponding functor names
