@@ -33,7 +33,7 @@ class CodegenAccVisitor: public CodegenCppVisitor {
     std::string backend_name() const override;
 
 
-    /// common includes : standard c/c++, coreneuron and backend specific
+    /// common includes : standard c++, coreneuron and backend specific
     void print_backend_includes() override;
 
 

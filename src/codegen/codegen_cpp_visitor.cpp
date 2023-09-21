@@ -696,7 +696,7 @@ bool CodegenCppVisitor::ion_variable_struct_required() const {
 /**
  * \details This can be override in the backend. For example, parameters can be constant
  * except in INITIAL block where they are set to 0. As initial block is/can be
- * executed on c/cpu backend, gpu backend can mark the parameter as constant.
+ * executed on c++/cpu backend, gpu backend can mark the parameter as constant.
  */
 bool CodegenCppVisitor::is_constant_variable(const std::string& name) const {
     auto symbol = program_symtab->lookup_in_scope(name);
