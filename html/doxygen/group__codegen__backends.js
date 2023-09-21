@@ -289,13 +289,11 @@ var group__codegen__backends =
       [ "internal_method_call_encountered", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ae2fa3994b15579d0752d740c279c2073", null ],
       [ "mod_filename", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a52cb50316afdcb5899663c98aa47c0de", null ],
       [ "optimize_ionvar_copies", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ac2029b16365753e1e337f82cda0e3350", null ],
-      [ "printer", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aebe9b92a17d257648c6d8b14aefd6f64", null ],
+      [ "printer", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aa2be06a920e2103ba838c308a2dcc57e", null ],
       [ "printing_net_init", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a629e1fff799f15735376832d9ed176a2", null ],
       [ "printing_net_receive", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#af55b2f46300b89a8458f17ab405eaa29", null ],
       [ "printing_top_verbatim_blocks", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a314e2615fb2851cf695a7b3adacef3e8", null ],
-      [ "program_symtab", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a380ec35a9c68ed3384489d17a385551a", null ],
-      [ "target_printer", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a91a3da407079d6bf69eb004f3f7fdf38", null ],
-      [ "wrapper_printer", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a050e447d161dc5f0ac35a6b15f200a7c", null ]
+      [ "program_symtab", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a380ec35a9c68ed3384489d17a385551a", null ]
     ] ],
     [ "has_parameter_of_name", "group__codegen__backends.html#ga4999b23d646ccd6a79c07207369183bb", null ],
     [ "print_function_declaration", "group__codegen__backends.html#gac82b533ad70154d8636a533e82c3bb18", null ],
