@@ -271,6 +271,11 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     int current_watch_statement = 0;
 
     /**
+     * Namespace of the generated code
+     */
+    std::string namespace_name = "";
+
+    /**
      * All ast information for code generation
      */
     codegen::CodegenInfo info;
@@ -534,7 +539,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     /**
      * Name of the code generation backend
      */
-    virtual std::string backend_name() const;
+    virtual std::string backend_name() const = 0;
 
 
     /**
@@ -542,7 +547,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * \param value The number to convert given as string as it is parsed by the modfile
      * \return      Its string representation
      */
-    virtual std::string format_double_string(const std::string& value);
+    virtual std::string format_double_string(const std::string& value) = 0;
 
 
     /**
@@ -550,7 +555,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * \param value The number to convert given as string as it is parsed by the modfile
      * \return      Its string representation
      */
-    virtual std::string format_float_string(const std::string& value);
+    virtual std::string format_float_string(const std::string& value) = 0;
 
 
     /**
@@ -565,7 +570,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * \return             The backend code string representing the access to the given variable
      * symbol
      */
-    std::string float_variable_name(const SymbolType& symbol, bool use_instance) const;
+    std::string float_variable_name(const SymbolType& symbol, bool use_instance) const = 0;
 
 
     /**
@@ -583,7 +588,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      */
     virtual std::string int_variable_name(const IndexVariableInfo& symbol,
                                   const std::string& name,
-                                  bool use_instance) const;
+                                  bool use_instance) const = 0;
 
 
     /**
@@ -593,7 +598,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * global variable or the instance-specific copy (also available on GPU).
      * \return       The C++ string representing the access to the global variable
      */
-    virtual std::string global_variable_name(const SymbolType& symbol, bool use_instance = true) const;
+    virtual std::string global_variable_name(const SymbolType& symbol, bool use_instance = true) const = 0;
 
 
     /**
@@ -604,7 +609,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * \return             The C++ string representing the access to the variable in the neuron
      * thread structure
      */
-    virtual std::string get_variable_name(const std::string& name, bool use_instance = true) const;
+    virtual std::string get_variable_name(const std::string& name, bool use_instance = true) const = 0;
 
 
     /**
@@ -827,7 +832,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * Return the name of main compute kernels
      * \param type A block type
      */
-    virtual std::string compute_method_name(BlockType type) const;
+    virtual std::string compute_method_name(BlockType type) const = 0;
 
 
     /**
@@ -854,15 +859,15 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     virtual void print_global_var_struct_assertions() const = 0;
 
     /**
-     * Prints the start of the \c coreneuron namespace
+     * Prints the start of the namespace
      */
-    virtual void print_namespace_start() = 0;
+    void print_namespace_start();
 
 
     /**
-     * Prints the end of the \c coreneuron namespace
+     * Prints the end of the namespace
      */
-    virtual void print_namespace_stop() = 0;
+    void print_namespace_stop();
 
 
     /**
@@ -893,7 +898,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * static const double R = 8.3145;
      * \endcode
      */
-    virtual void print_nmodl_constants();
+    void print_nmodl_constants();
 
     virtual std::string CodegenCppVisitor::simulator_name() const = 0;
 
@@ -951,7 +956,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * \param name The name of variable
      * \return \c true if it is constant
      */
-    virtual bool is_constant_variable(const std::string& name) const;
+    bool is_constant_variable(const std::string& name) const;
 
     /**
      * Check if the given name exist in the symbol
@@ -1024,7 +1029,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * print_instance_struct_copy_to_device and \ref
      * print_instance_struct_delete_from_device.
      */
-    // NEURON related only
+    // CoreNEURON related only
     virtual void print_instance_struct_transfer_routine_declarations() {}
 
     /**
@@ -1307,8 +1312,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     /**
      * Print top level (global scope) verbatim blocks
      */
-    // Bit different in both
-    virtual void print_top_verbatim_blocks() = 0;
+    void print_top_verbatim_blocks();
 
 
     /**
@@ -1499,14 +1503,6 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      *
      */
     virtual void print_nrn_cur_matrix_shadow_reduction() = 0;
-
-
-    /**
-     * Print nrn_alloc function definition
-     *
-     */
-    // NEURON only
-    void print_nrn_alloc();
 
 
     /**
