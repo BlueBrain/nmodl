@@ -41,6 +41,29 @@ using visitor::VarUsageVisitor;
 
 using symtab::syminfo::NmodlType;
 
+CodegenCppVisitor::CodegenCppVisitor(std::string mod_filename,
+                      const std::string& output_dir,
+                      std::string float_type,
+                      const bool optimize_ionvar_copies,
+                      const std::string& extension)
+        : printer(std::make_unique<CodePrinter>(output_dir + "/" + mod_filename + extension))
+        , mod_filename(std::move(mod_filename))
+        , float_type(std::move(float_type))
+        , optimize_ionvar_copies(optimize_ionvar_copies) {}
+
+/// This constructor is private, see the public section below to find how to create an instance
+/// of this class.
+CodegenCppVisitor::CodegenCppVisitor(std::string mod_filename,
+                std::ostream& stream,
+                std::string float_type,
+                const bool optimize_ionvar_copies)
+    : printer(std::make_unique<CodePrinter>(stream))
+    , mod_filename(std::move(mod_filename))
+    , float_type(std::move(float_type))
+    , optimize_ionvar_copies(optimize_ionvar_copies) {}
+
+CodegenCppVisitor::~CodegenCppVisitor() {};
+
 /****************************************************************************************/
 /*                            Overloaded visitor routines                               */
 /****************************************************************************************/
@@ -992,64 +1015,7 @@ std::string CodegenCppVisitor::get_parameter_str(const ParamVector& params) {
 }
 
 
-void CodegenCppVisitor::print_deriv_advance_flag_transfer_to_device() const {
-    // backend specific, do nothing
-}
 
-void CodegenCppVisitor::print_device_atomic_capture_annotation() const {
-    // backend specific, do nothing
-}
-
-void CodegenCppVisitor::print_net_send_buf_count_update_to_host() const {
-    // backend specific, do nothing
-}
-
-void CodegenCppVisitor::print_net_send_buf_update_to_host() const {
-    // backend specific, do nothing
-}
-
-void CodegenCppVisitor::print_net_send_buf_count_update_to_device() const {
-    // backend specific, do nothing
-}
-
-void CodegenCppVisitor::print_dt_update_to_device() const {
-    // backend specific, do nothing
-}
-
-void CodegenCppVisitor::print_device_stream_wait() const {
-    // backend specific, do nothing
-}
-
-/**
- * \details Each kernel such as \c nrn\_init, \c nrn\_state and \c nrn\_cur could be offloaded
- * to accelerator. In this case, at very top level, we print pragma
- * for data present. For example:
- *
- * \code{.cpp}
- *  void nrn_state(...) {
- *      #pragma acc data present (nt, ml...)
- *      {
- *
- *      }
- *  }
- *  \endcode
- */
-void CodegenCppVisitor::print_kernel_data_present_annotation_block_begin() {
-    // backend specific, do nothing
-}
-
-
-void CodegenCppVisitor::print_kernel_data_present_annotation_block_end() {
-    // backend specific, do nothing
-}
-
-void CodegenCppVisitor::print_net_init_acc_serial_annotation_block_begin() {
-    // backend specific, do nothing
-}
-
-void CodegenCppVisitor::print_net_init_acc_serial_annotation_block_end() {
-    // backend specific, do nothing
-}
 
 /**
  * \details Depending programming model and compiler, we print compiler hint
@@ -1085,12 +1051,7 @@ void CodegenCppVisitor::print_channel_iteration_block_parallel_hint(BlockType /*
 }
 
 
-void CodegenCppVisitor::print_rhs_d_shadow_variables() {
-    if (info.point_process) {
-        printer->fmt_line("double* shadow_rhs = nt->{};", naming::NTHREAD_RHS_SHADOW);
-        printer->fmt_line("double* shadow_d = nt->{};", naming::NTHREAD_D_SHADOW);
-    }
-}
+
 
 
 /**
@@ -1100,21 +1061,6 @@ void CodegenCppVisitor::print_rhs_d_shadow_variables() {
  */
 void CodegenCppVisitor::print_atomic_reduction_pragma() {
     printer->add_line("#pragma omp atomic update");
-}
-
-
-void CodegenCppVisitor::print_device_method_annotation() {
-    // backend specific, nothing for cpu
-}
-
-
-void CodegenCppVisitor::print_global_method_annotation() {
-    // backend specific, nothing for cpu
-}
-
-
-std::string CodegenCppVisitor::backend_name() const {
-    return "C++ (api-compatibility)";
 }
 
 
@@ -1706,13 +1652,7 @@ void CodegenCppVisitor::print_nmodl_constants() {
 }
 
 
-void CodegenCppVisitor::print_first_pointer_var_index_getter() {
-    printer->add_newline(2);
-    print_device_method_annotation();
-    printer->push_block("static inline int first_pointer_var_index()");
-    printer->fmt_line("return {};", info.first_pointer_var_index);
-    printer->pop_block();
-}
+
 
 
 void CodegenCppVisitor::print_num_variable_getter() {
@@ -1766,7 +1706,7 @@ void CodegenCppVisitor::print_memb_list_getter() {
 
 void CodegenCppVisitor::print_namespace_start() {
     printer->add_newline(2);
-    printer->push_fmt_block("namespace {}}", ../src/codegen/CMakeLists.txtnamespace_name);
+    printer->fmt_push_block("namespace {}", namespace_name);
 }
 
 
@@ -2255,50 +2195,6 @@ void CodegenCppVisitor::print_global_variables_for_hoc() {
     printer->add_line("};");
 }
 
-/**
- * Return registration type for a given BEFORE/AFTER block
- * /param block A BEFORE/AFTER block being registered
- *
- * Depending on a block type i.e. BEFORE or AFTER and also type
- * of it's associated block i.e. BREAKPOINT, INITIAL, SOLVE and
- * STEP, the registration type (as an integer) is calculated.
- * These values are then interpreted by CoreNEURON internally.
- */
-static std::string get_register_type_for_ba_block(const ast::Block* block) {
-    std::string register_type{};
-    BAType ba_type{};
-    /// before block have value 10 and after block 20
-    if (block->is_before_block()) {
-        // NOLINTNEXTLINE(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)
-        register_type = "BAType::Before";
-        ba_type =
-            dynamic_cast<const ast::BeforeBlock*>(block)->get_bablock()->get_type()->get_value();
-    } else {
-        // NOLINTNEXTLINE(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)
-        register_type = "BAType::After";
-        ba_type =
-            dynamic_cast<const ast::AfterBlock*>(block)->get_bablock()->get_type()->get_value();
-    }
-
-    /// associated blocks have different values (1 to 4) based on type.
-    /// These values are based on neuron/coreneuron implementation details.
-    if (ba_type == BATYPE_BREAKPOINT) {
-        register_type += " + BAType::Breakpoint";
-    } else if (ba_type == BATYPE_SOLVE) {
-        register_type += " + BAType::Solve";
-    } else if (ba_type == BATYPE_INITIAL) {
-        register_type += " + BAType::Initial";
-    } else if (ba_type == BATYPE_STEP) {
-        register_type += " + BAType::Step";
-    } else {
-        throw std::runtime_error("Unhandled Before/After type encountered during code generation");
-    }
-    return register_type;
-}
-
-
-
-
 
 void CodegenCppVisitor::print_thread_memory_callbacks() {
     if (!info.thread_callback_register) {
@@ -2363,80 +2259,6 @@ void CodegenCppVisitor::print_thread_memory_callbacks() {
 }
 
 
-
-
-
-void CodegenCppVisitor::print_ion_var_structure() {
-    if (!ion_variable_struct_required()) {
-        return;
-    }
-    printer->add_newline(2);
-    printer->add_line("/** ion write variables */");
-    printer->push_block("struct IonCurVar");
-
-    std::string float_type = default_float_data_type();
-    std::vector<std::string> members;
-
-    for (auto& ion: info.ions) {
-        for (auto& var: ion.writes) {
-            printer->fmt_line("{} {};", float_type, var);
-            members.push_back(var);
-        }
-    }
-    for (auto& var: info.currents) {
-        if (!info.is_ion_variable(var)) {
-            printer->fmt_line("{} {};", float_type, var);
-            members.push_back(var);
-        }
-    }
-
-    print_ion_var_constructor(members);
-
-    printer->pop_block(";");
-}
-
-
-void CodegenCppVisitor::print_ion_var_constructor(const std::vector<std::string>& members) {
-    // constructor
-    printer->add_newline();
-    printer->add_indent();
-    printer->add_text("IonCurVar() : ");
-    for (int i = 0; i < members.size(); i++) {
-        printer->fmt_text("{}(0)", members[i]);
-        if (i + 1 < members.size()) {
-            printer->add_text(", ");
-        }
-    }
-    printer->add_text(" {}");
-    printer->add_newline();
-}
-
-
-void CodegenCppVisitor::print_ion_variable() {
-    printer->add_line("IonCurVar ionvar;");
-}
-
-
-void CodegenCppVisitor::print_global_variable_device_update_annotation() {
-    // nothing for cpu
-}
-
-
-void CodegenCppVisitor::print_setup_range_variable() {
-    auto type = float_data_type();
-    printer->add_newline(2);
-    printer->add_line("/** allocate and setup array for range variable */");
-    printer->fmt_push_block("static inline {}* setup_range_variable(double* variable, int n)",
-                            type);
-    printer->fmt_line("{0}* data = ({0}*) mem_alloc(n, sizeof({0}));", type);
-    printer->push_block("for(size_t i = 0; i < n; i++)");
-    printer->add_line("data[i] = variable[i];");
-    printer->pop_block();
-    printer->add_line("return data;");
-    printer->pop_block();
-}
-
-
 /**
  * \details If floating point type like "float" is specified on command line then
  * we can't turn all variables to new type. This is because certain variables
@@ -2459,28 +2281,7 @@ std::string CodegenCppVisitor::get_range_var_float_type(const SymbolType& symbol
 }
 
 
-void CodegenCppVisitor::print_nrn_constructor() {
-    printer->add_newline(2);
-    print_global_function_common_code(BlockType::Constructor);
-    if (info.constructor_node != nullptr) {
-        const auto& block = info.constructor_node->get_statement_block();
-        print_statement_block(*block, false, false);
-    }
-    printer->add_line("#endif");
-    printer->pop_block();
-}
 
-
-void CodegenCppVisitor::print_nrn_destructor() {
-    printer->add_newline(2);
-    print_global_function_common_code(BlockType::Destructor);
-    if (info.destructor_node != nullptr) {
-        const auto& block = info.destructor_node->get_statement_block();
-        print_statement_block(*block, false, false);
-    }
-    printer->add_line("#endif");
-    printer->pop_block();
-}
 
 
 void CodegenCppVisitor::print_functors_definitions() {
@@ -2493,13 +2294,7 @@ void CodegenCppVisitor::print_functors_definitions() {
 }
 
 
-void CodegenCppVisitor::print_nrn_alloc() {
-    printer->add_newline(2);
-    auto method = method_name(naming::NRN_ALLOC_METHOD);
-    printer->fmt_push_block("static void {}(double* data, Datum* indexes, int type)", method);
-    printer->add_line("// do nothing");
-    printer->pop_block();
-}
+
 
 
 
@@ -2578,45 +2373,6 @@ void CodegenCppVisitor::print_net_event_call(const FunctionCall& node) {
     }
     printer->add_text(")");
 }
-
-/**
- * Rename arguments to NET_RECEIVE block with corresponding pointer variable
- *
- * Arguments to NET_RECEIVE block are packed and passed via weight vector. These
- * variables need to be replaced with corresponding pointer variable. For example,
- * if mod file is like
- *
- * \code{.mod}
- *      NET_RECEIVE (weight, R){
- *          INITIAL {
- *              R=1
- *          }
- *      }
- * \endcode
- *
- * then generated code for initial block should be:
- *
- * \code{.cpp}
- *      double* R = weights + weight_index + 0;
- *      (*R) = 1.0;
- * \endcode
- *
- * So, the `R` in AST needs to be renamed with `(*R)`.
- */
-static void rename_net_receive_arguments(const ast::NetReceiveBlock& net_receive_node, const ast::Node& node) {
-    const auto& parameters = net_receive_node.get_parameters();
-    for (auto& parameter: parameters) {
-        const auto& name = parameter->get_node_name();
-        auto var_used = VarUsageVisitor().variable_used(node, name);
-        if (var_used) {
-            RenameVisitor vr(name, "(*" + name + ")");
-            node.get_statement_block()->visit_children(vr);
-        }
-    }
-}
-
-
-
 
 
 void CodegenCppVisitor::visit_for_netcon(const ast::ForNetcon& node) {

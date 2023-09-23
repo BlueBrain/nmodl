@@ -547,7 +547,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * \param value The number to convert given as string as it is parsed by the modfile
      * \return      Its string representation
      */
-    virtual std::string format_double_string(const std::string& value) = 0;
+    std::string format_double_string(const std::string& value);
 
 
     /**
@@ -555,7 +555,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * \param value The number to convert given as string as it is parsed by the modfile
      * \return      Its string representation
      */
-    virtual std::string format_float_string(const std::string& value) = 0;
+    std::string format_float_string(const std::string& value);
 
 
     /**
@@ -570,7 +570,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * \return             The backend code string representing the access to the given variable
      * symbol
      */
-    std::string float_variable_name(const SymbolType& symbol, bool use_instance) const = 0;
+    virtual std::string float_variable_name(const SymbolType& symbol, bool use_instance) const = 0;
 
 
     /**
@@ -799,7 +799,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * \param table
      * \return      A string representing the parameters of the function
      */
-    virtual static const char* external_method_parameters(bool table = false) noexcept = 0;
+    virtual const char* external_method_parameters(bool table = false) noexcept = 0;
 
 
     /**
@@ -900,7 +900,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      */
     void print_nmodl_constants();
 
-    virtual std::string CodegenCppVisitor::simulator_name() const = 0;
+    virtual std::string simulator_name() const = 0;
 
     /**
      * Print top file header printed in generated code
@@ -992,7 +992,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * Print structure of ion variables used for local copies
      */
     // CoreNEURON related only for the moment I guess
-    void print_ion_var_structure();
+    virtual void print_ion_var_structure() {};
 
 
     /**
@@ -1000,14 +1000,14 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * \param members The ion variable names
      */
     // CoreNEURON related only for the moment I guess
-    virtual void print_ion_var_constructor(const std::vector<std::string>& members);
+    virtual void print_ion_var_constructor(const std::vector<std::string>& members) {};
 
 
     /**
      * Print the ion variable struct
      */
     // CoreNEURON related only for the moment I guess
-    virtual void print_ion_variable();
+    virtual void print_ion_variable() {};
 
 
     /**
@@ -1587,6 +1587,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      */
     virtual void print_codegen_routines() = 0;
 
+public:
 
     /// This constructor is private, see the public section below to find how to create an instance
     /// of this class.
@@ -1594,79 +1595,25 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
                       const std::string& output_dir,
                       std::string float_type,
                       const bool optimize_ionvar_copies,
-                      const std::string& extension,
-                      const std::string& wrapper_ext)
-        : printer(std::make_unique<CodePrinter>(output_dir + "/" + mod_filename + extension))
-        , mod_filename(std::move(mod_filename))
-        , float_type(std::move(float_type))
-        , optimize_ionvar_copies(optimize_ionvar_copies) {}
+                      const std::string& extension);
+        // : printer(std::make_unique<CodePrinter>(output_dir + "/" + mod_filename + extension))
+        // , mod_filename(std::move(mod_filename))
+        // , float_type(std::move(float_type))
+        // , optimize_ionvar_copies(optimize_ionvar_copies) {}
 
     /// This constructor is private, see the public section below to find how to create an instance
     /// of this class.
     CodegenCppVisitor(std::string mod_filename,
                       std::ostream& stream,
                       std::string float_type,
-                      const bool optimize_ionvar_copies,
-                      const std::string& /* extension */,
-                      const std::string& /* wrapper_ext */)
-        : printer(std::make_unique<CodePrinter>(stream))
-        , mod_filename(std::move(mod_filename))
-        , float_type(std::move(float_type))
-        , optimize_ionvar_copies(optimize_ionvar_copies) {}
+                      const bool optimize_ionvar_copies);
+        // : printer(std::make_unique<CodePrinter>(stream))
+        // , mod_filename(std::move(mod_filename))
+        // , float_type(std::move(float_type))
+        // , optimize_ionvar_copies(optimize_ionvar_copies) {}
 
-
-  public:
-    /**
-     * \brief Constructs the C++ code generator visitor
-     *
-     * This constructor instantiates an NMODL C++ code generator and allows writing generated code
-     * directly to a file in \c [output_dir]/[mod_filename].[extension].
-     *
-     * \note No code generation is performed at this stage. Since the code
-     * generator classes are all based on \c AstVisitor the AST must be visited using e.g. \c
-     * visit_program in order to generate the C++ code corresponding to the AST.
-     *
-     * \param mod_filename The name of the model for which code should be generated.
-     *                     It is used for constructing an output filename.
-     * \param output_dir   The directory where target C++ file should be generated.
-     * \param float_type   The float type to use in the generated code. The string will be used
-     *                     as-is in the target code. This defaults to \c double.
-     * \param extension    The file extension to use. This defaults to \c .cpp .
-     */
-    CodegenCppVisitor(std::string mod_filename,
-                      const std::string& output_dir,
-                      std::string float_type,
-                      const bool optimize_ionvar_copies,
-                      const std::string& extension = ".cpp")
-        : printer(std::make_unique<CodePrinter>(output_dir + "/" + mod_filename + extension))
-        , mod_filename(std::move(mod_filename))
-        , float_type(std::move(float_type))
-        , optimize_ionvar_copies(optimize_ionvar_copies) {}
-
-    /**
-     * \copybrief nmodl::codegen::CodegenCppVisitor
-     *
-     * This constructor instantiates an NMODL C++ code generator and allows writing generated code
-     * into an output stream.
-     *
-     * \note No code generation is performed at this stage. Since the code
-     * generator classes are all based on \c AstVisitor the AST must be visited using e.g. \c
-     * visit_program in order to generate the C++ code corresponding to the AST.
-     *
-     * \param mod_filename The name of the model for which code should be generated.
-     *                     It is used for constructing an output filename.
-     * \param stream       The output stream onto which to write the generated code
-     * \param float_type   The float type to use in the generated code. The string will be used
-     *                     as-is in the target code. This defaults to \c double.
-     */
-    CodegenCppVisitor(std::string mod_filename,
-                      std::ostream& stream,
-                      std::string float_type,
-                      const bool optimize_ionvar_copies)
-        : printer(std::make_unique<CodePrinter>(stream))
-        , mod_filename(std::move(mod_filename))
-        , float_type(std::move(float_type))
-        , optimize_ionvar_copies(optimize_ionvar_copies) {}
+    virtual ~CodegenCppVisitor() = 0;
+   
 
     /**
      * Main and only member function to call after creating an instance of this class.
@@ -1835,14 +1782,14 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     void visit_prime_name(const ast::PrimeName& node) override;
     void visit_statement_block(const ast::StatementBlock& node) override;
     void visit_string(const ast::String& node) override;
-    void visit_solution_expression(const ast::SolutionExpression& node) override;
+    // void visit_solution_expression(const ast::SolutionExpression& node) override;
     void visit_unary_operator(const ast::UnaryOperator& node) override;
     void visit_unit(const ast::Unit& node) override;
     void visit_var_name(const ast::VarName& node) override;
     void visit_verbatim(const ast::Verbatim& node) override;
     void visit_watch_statement(const ast::WatchStatement& node) override;
     void visit_while_statement(const ast::WhileStatement& node) override;
-    void visit_derivimplicit_callback(const ast::DerivimplicitCallback& node) override;
+    // void visit_derivimplicit_callback(const ast::DerivimplicitCallback& node) override;
     void visit_for_netcon(const ast::ForNetcon& node) override;
     void visit_update_dt(const ast::UpdateDt& node) override;
     void visit_protect_statement(const ast::ProtectStatement& node) override;

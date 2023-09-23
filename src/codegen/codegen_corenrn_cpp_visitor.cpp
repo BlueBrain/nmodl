@@ -7,10 +7,33 @@
 
 #include "codegen/codegen_corenrn_cpp_visitor.hpp"
 
+#include "ast/all.hpp"
+#include "codegen/codegen_helper_visitor.hpp"
+#include "codegen/codegen_naming.hpp"
+#include "codegen/codegen_utils.hpp"
+#include "config/config.h"
+#include "lexer/token_mapping.hpp"
+#include "parser/c11_driver.hpp"
+#include "utils/logger.hpp"
+#include "utils/string_utils.hpp"
+#include "visitors/defuse_analyze_visitor.hpp"
+#include "visitors/rename_visitor.hpp"
+#include "visitors/symtab_visitor.hpp"
+#include "visitors/var_usage_visitor.hpp"
+#include "visitors/visitor_utils.hpp"
+
 namespace nmodl {
 namespace codegen {
 
 using namespace ast;
+
+using visitor::DefUseAnalyzeVisitor;
+using visitor::DUState;
+using visitor::RenameVisitor;
+using visitor::SymtabVisitor;
+using visitor::VarUsageVisitor;
+
+using symtab::syminfo::NmodlType;
 
 std::string CodegenCorenrnCppVisitor::backend_name() const {
     return "C++ (api-compatibility)";
@@ -19,6 +42,78 @@ std::string CodegenCorenrnCppVisitor::backend_name() const {
 
 std::string CodegenCorenrnCppVisitor::simulator_name() const {
     return "CoreNEURON";
+}
+
+void CodegenCorenrnCppVisitor::print_deriv_advance_flag_transfer_to_device() const {
+    // backend specific, do nothing
+}
+
+void CodegenCorenrnCppVisitor::print_device_atomic_capture_annotation() const {
+    // backend specific, do nothing
+}
+
+void CodegenCorenrnCppVisitor::print_net_send_buf_count_update_to_host() const {
+    // backend specific, do nothing
+}
+
+void CodegenCorenrnCppVisitor::print_net_send_buf_update_to_host() const {
+    // backend specific, do nothing
+}
+
+void CodegenCorenrnCppVisitor::print_net_send_buf_count_update_to_device() const {
+    // backend specific, do nothing
+}
+
+void CodegenCorenrnCppVisitor::print_dt_update_to_device() const {
+    // backend specific, do nothing
+}
+
+void CodegenCorenrnCppVisitor::print_device_stream_wait() const {
+    // backend specific, do nothing
+}
+
+/**
+ * \details Each kernel such as \c nrn\_init, \c nrn\_state and \c nrn\_cur could be offloaded
+ * to accelerator. In this case, at very top level, we print pragma
+ * for data present. For example:
+ *
+ * \code{.cpp}
+ *  void nrn_state(...) {
+ *      #pragma acc data present (nt, ml...)
+ *      {
+ *
+ *      }
+ *  }
+ *  \endcode
+ */
+void CodegenCorenrnCppVisitor::print_kernel_data_present_annotation_block_begin() {
+    // backend specific, do nothing
+}
+
+
+void CodegenCorenrnCppVisitor::print_kernel_data_present_annotation_block_end() {
+    // backend specific, do nothing
+}
+
+void CodegenCorenrnCppVisitor::print_net_init_acc_serial_annotation_block_begin() {
+    // backend specific, do nothing
+}
+
+void CodegenCorenrnCppVisitor::print_net_init_acc_serial_annotation_block_end() {
+    // backend specific, do nothing
+}
+
+void CodegenCorenrnCppVisitor::print_device_method_annotation() {
+    // backend specific, nothing for cpu
+}
+
+void CodegenCorenrnCppVisitor::print_global_method_annotation() {
+    // backend specific, nothing for cpu
+}
+
+
+void CodegenCorenrnCppVisitor::print_global_variable_device_update_annotation() {
+    // nothing for cpu
 }
 
 
@@ -69,24 +164,6 @@ void CodegenCorenrnCppVisitor::print_simulator_includes() {
 void CodegenCorenrnCppVisitor::print_backend_includes() {
     // backend specific, nothing for cpu
 }
-
-/**
- * \details We can directly print value but if user specify value as integer then
- * then it gets printed as an integer. To avoid this, we use below wrapper.
- * If user has provided integer then it gets printed as 1.0 (similar to mod2c
- * and neuron where ".0" is appended). Otherwise we print double variables as
- * they are represented in the mod file by user. If the value is in scientific
- * representation (1e+20, 1E-15) then keep it as it is.
- */
-std::string CodegenCorenrnCppVisitor::format_double_string(const std::string& s_value) {
-    return utils::format_double_string<CodegenCorenrnCppVisitor>(s_value);
-}
-
-
-std::string CodegenCorenrnCppVisitor::format_float_string(const std::string& s_value) {
-    return utils::format_float_string<CodegenCorenrnCppVisitor>(s_value);
-}
-
 
 /****************************************************************************************/
 /*                         Routines for returning variable name                         */
@@ -528,6 +605,43 @@ void CodegenCorenrnCppVisitor::print_initial_block(const InitialBlock* node) {
     for (auto& statement: write_statements) {
         auto text = process_shadow_update_statement(statement, BlockType::Initial);
         printer->add_line(text);
+    }
+}
+
+
+/**
+ * Rename arguments to NET_RECEIVE block with corresponding pointer variable
+ *
+ * Arguments to NET_RECEIVE block are packed and passed via weight vector. These
+ * variables need to be replaced with corresponding pointer variable. For example,
+ * if mod file is like
+ *
+ * \code{.mod}
+ *      NET_RECEIVE (weight, R){
+ *          INITIAL {
+ *              R=1
+ *          }
+ *      }
+ * \endcode
+ *
+ * then generated code for initial block should be:
+ *
+ * \code{.cpp}
+ *      double* R = weights + weight_index + 0;
+ *      (*R) = 1.0;
+ * \endcode
+ *
+ * So, the `R` in AST needs to be renamed with `(*R)`.
+ */
+static void rename_net_receive_arguments(const ast::NetReceiveBlock& net_receive_node, const ast::Node& node) {
+    const auto& parameters = net_receive_node.get_parameters();
+    for (auto& parameter: parameters) {
+        const auto& name = parameter->get_node_name();
+        auto var_used = VarUsageVisitor().variable_used(node, name);
+        if (var_used) {
+            RenameVisitor vr(name, "(*" + name + ")");
+            node.get_statement_block()->visit_children(vr);
+        }
     }
 }
 
@@ -1142,23 +1256,6 @@ void CodegenCorenrnCppVisitor::print_fast_imem_calculation() {
     printer->pop_block();
 }
 
-void CodegenCorenrnCppVisitor::print_nrn_current(const BreakpointBlock& node) {
-    const auto& args = internal_method_parameters();
-    const auto& block = node.get_statement_block();
-    printer->add_newline(2);
-    print_device_method_annotation();
-            printer->fmt_push_block("inline double nrn_current_{}({})",
-                                    info.mod_suffix,
-                                    get_parameter_str(args));
-    printer->add_line("double current = 0.0;");
-    print_statement_block(*block, false, false);
-    for (auto& current: info.currents) {
-        const auto& name = get_variable_name(current);
-        printer->fmt_line("current += {};", name);
-    }
-    printer->add_line("return current;");
-    printer->pop_block();
-}
 
 void CodegenCorenrnCppVisitor::print_nrn_cur() {
     if (!nrn_cur_required()) {
@@ -1193,6 +1290,15 @@ void CodegenCorenrnCppVisitor::print_nrn_cur() {
     printer->pop_block();
     codegen = false;
 }
+
+
+void CodegenCorenrnCppVisitor::print_rhs_d_shadow_variables() {
+    if (info.point_process) {
+        printer->fmt_line("double* shadow_rhs = nt->{};", naming::NTHREAD_RHS_SHADOW);
+        printer->fmt_line("double* shadow_d = nt->{};", naming::NTHREAD_D_SHADOW);
+    }
+}
+
 
 void CodegenCorenrnCppVisitor::print_global_function_common_code(BlockType type,
                                                           const std::string& function_name) {
@@ -1243,6 +1349,49 @@ void CodegenCorenrnCppVisitor::print_global_function_common_code(BlockType type,
     printer->fmt_line("auto* const inst = static_cast<{}*>(ml->instance);", instance_struct());
     printer->add_newline(1);
 }
+
+
+/**
+ * Return registration type for a given BEFORE/AFTER block
+ * /param block A BEFORE/AFTER block being registered
+ *
+ * Depending on a block type i.e. BEFORE or AFTER and also type
+ * of it's associated block i.e. BREAKPOINT, INITIAL, SOLVE and
+ * STEP, the registration type (as an integer) is calculated.
+ * These values are then interpreted by CoreNEURON internally.
+ */
+static std::string get_register_type_for_ba_block(const ast::Block* block) {
+    std::string register_type{};
+    BAType ba_type{};
+    /// before block have value 10 and after block 20
+    if (block->is_before_block()) {
+        // NOLINTNEXTLINE(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)
+        register_type = "BAType::Before";
+        ba_type =
+            dynamic_cast<const ast::BeforeBlock*>(block)->get_bablock()->get_type()->get_value();
+    } else {
+        // NOLINTNEXTLINE(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)
+        register_type = "BAType::After";
+        ba_type =
+            dynamic_cast<const ast::AfterBlock*>(block)->get_bablock()->get_type()->get_value();
+    }
+
+    /// associated blocks have different values (1 to 4) based on type.
+    /// These values are based on neuron/coreneuron implementation details.
+    if (ba_type == BATYPE_BREAKPOINT) {
+        register_type += " + BAType::Breakpoint";
+    } else if (ba_type == BATYPE_SOLVE) {
+        register_type += " + BAType::Solve";
+    } else if (ba_type == BATYPE_INITIAL) {
+        register_type += " + BAType::Initial";
+    } else if (ba_type == BATYPE_STEP) {
+        register_type += " + BAType::Step";
+    } else {
+        throw std::runtime_error("Unhandled Before/After type encountered during code generation");
+    }
+    return register_type;
+}
+
 
 /**
  * \details Every mod file has register function to connect with the simulator.
@@ -1472,6 +1621,16 @@ void CodegenCorenrnCppVisitor::print_namespace_end() {
     print_namespace_stop();
 }
 
+
+void CodegenCorenrnCppVisitor::print_first_pointer_var_index_getter() {
+    printer->add_newline(2);
+    print_device_method_annotation();
+    printer->push_block("static inline int first_pointer_var_index()");
+    printer->fmt_line("return {};", info.first_pointer_var_index);
+    printer->pop_block();
+}
+
+
 void CodegenCorenrnCppVisitor::print_common_getters() {
     print_first_pointer_var_index_getter();
     print_net_receive_arg_size_getter();
@@ -1479,6 +1638,56 @@ void CodegenCorenrnCppVisitor::print_common_getters() {
     print_num_variable_getter();
     print_mech_type_getter();
     print_memb_list_getter();
+}
+
+
+void CodegenCorenrnCppVisitor::print_ion_var_structure() {
+    if (!ion_variable_struct_required()) {
+        return;
+    }
+    printer->add_newline(2);
+    printer->add_line("/** ion write variables */");
+    printer->push_block("struct IonCurVar");
+
+    std::string float_type = default_float_data_type();
+    std::vector<std::string> members;
+
+    for (auto& ion: info.ions) {
+        for (auto& var: ion.writes) {
+            printer->fmt_line("{} {};", float_type, var);
+            members.push_back(var);
+        }
+    }
+    for (auto& var: info.currents) {
+        if (!info.is_ion_variable(var)) {
+            printer->fmt_line("{} {};", float_type, var);
+            members.push_back(var);
+        }
+    }
+
+    print_ion_var_constructor(members);
+
+    printer->pop_block(";");
+}
+
+void CodegenCorenrnCppVisitor::print_ion_var_constructor(const std::vector<std::string>& members) {
+    // constructor
+    printer->add_newline();
+    printer->add_indent();
+    printer->add_text("IonCurVar() : ");
+    for (int i = 0; i < members.size(); i++) {
+        printer->fmt_text("{}(0)", members[i]);
+        if (i + 1 < members.size()) {
+            printer->add_text(", ");
+        }
+    }
+    printer->add_text(" {}");
+    printer->add_newline();
+}
+
+
+void CodegenCorenrnCppVisitor::print_ion_variable() {
+    printer->add_line("IonCurVar ionvar;");
 }
 
 void CodegenCorenrnCppVisitor::print_data_structures(bool print_initializers) {
@@ -1504,6 +1713,15 @@ void CodegenCorenrnCppVisitor::print_g_unused() const {
         inst->g_unused[id] = g;
         #endif
     )CODE");
+}
+
+
+void CodegenCorenrnCppVisitor::print_nrn_alloc() {
+    printer->add_newline(2);
+    auto method = method_name(naming::NRN_ALLOC_METHOD);
+    printer->fmt_push_block("static void {}(double* data, Datum* indexes, int type)", method);
+    printer->add_line("// do nothing");
+    printer->pop_block();
 }
 
 
@@ -1553,8 +1771,6 @@ void CodegenCorenrnCppVisitor::print_codegen_routines() {
     print_thread_memory_callbacks();
     print_instance_variable_setup();
     print_nrn_alloc();
-    print_nrn_constructor();
-    print_nrn_destructor();
     print_function_prototypes();
     print_functors_definitions();
     print_compute_functions();
@@ -1777,6 +1993,21 @@ void CodegenCorenrnCppVisitor::print_watch_check() {
     print_kernel_data_present_annotation_block_end();
     printer->pop_block();
     codegen = false;
+}
+
+
+static const TableStatement* get_table_statement(const ast::Block& node) {
+    // TableStatementVisitor v;
+
+    const auto& table_statements = collect_nodes(node, {AstNodeType::TABLE_STATEMENT});
+
+    if (table_statements.size() != 1) {
+        auto message = fmt::format("One table statement expected in {} found {}",
+                                   node.get_node_name(),
+                                   table_statements.size());
+        throw std::runtime_error(message);
+    }
+    return dynamic_cast<const TableStatement*>(table_statements.front().get());
 }
 
 
@@ -2111,6 +2342,22 @@ void CodegenCorenrnCppVisitor::print_mechanism_range_var_structure(bool print_in
                       print_initializers ? fmt::format("{{&{}}}", global_struct_instance())
                                          : std::string{});
     printer->pop_block(";");
+}
+
+
+
+void CodegenCorenrnCppVisitor::print_setup_range_variable() {
+    auto type = float_data_type();
+    printer->add_newline(2);
+    printer->add_line("/** allocate and setup array for range variable */");
+    printer->fmt_push_block("static inline {}* setup_range_variable(double* variable, int n)",
+                            type);
+    printer->fmt_line("{0}* data = ({0}*) mem_alloc(n, sizeof({0}));", type);
+    printer->push_block("for(size_t i = 0; i < n; i++)");
+    printer->add_line("data[i] = variable[i];");
+    printer->pop_block();
+    printer->add_line("return data;");
+    printer->pop_block();
 }
 
 

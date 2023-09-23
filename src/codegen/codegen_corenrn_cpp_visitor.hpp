@@ -32,7 +32,7 @@ namespace codegen {
  *    error checking. For example, see netstim.mod where we
  *    have removed return from verbatim block.
  */
-class CodegenCorenrnCppVisitor: public visitor::CodegenCppVisitor {
+class CodegenCorenrnCppVisitor: public CodegenCppVisitor {
   protected:
     /**
      * Name of the code generation backend
@@ -46,22 +46,37 @@ class CodegenCorenrnCppVisitor: public visitor::CodegenCppVisitor {
      */
     std::string namespace_name = "coreneuron";
 
+    /**
+     * Determine the name of a \c float variable given its symbol
+     *
+     * This function typically returns the accessor expression in backend code for the given symbol.
+     * Since the model variables are stored in data arrays and accessed by offset, this function
+     * will return the C++ string representing the array access at the correct offset
+     *
+     * \param symbol       The symbol of a variable for which we want to obtain its name
+     * \param use_instance Should the variable be accessed via instance or data array
+     * \return             The backend code string representing the access to the given variable
+     * symbol
+     */
+    std::string float_variable_name(const SymbolType& symbol, bool use_instance) const;
+
 
     /**
-     * Convert a given \c double value to its string representation
-     * \param value The number to convert given as string as it is parsed by the modfile
-     * \return      Its string representation
+     * Determine the name of an \c int variable given its symbol
+     *
+     * This function typically returns the accessor expression in backend code for the given symbol.
+     * Since the model variables are stored in data arrays and accessed by offset, this function
+     * will return the C++ string representing the array access at the correct offset
+     *
+     * \param symbol       The symbol of a variable for which we want to obtain its name
+     * \param name         The name of the index variable
+     * \param use_instance Should the variable be accessed via instance or data array
+     * \return             The backend code string representing the access to the given variable
+     * symbol
      */
-    std::string format_double_string(const std::string& value);
-
-
-    /**
-     * Convert a given \c float value to its string representation
-     * \param value The number to convert given as string as it is parsed by the modfile
-     * \return      Its string representation
-     */
-     std::string format_float_string(const std::string& value);
-
+    std::string int_variable_name(const IndexVariableInfo& symbol,
+                                  const std::string& name,
+                                  bool use_instance) const;
 
     /**
      * Determine the variable name for a global variable given its symbol
@@ -82,6 +97,18 @@ class CodegenCorenrnCppVisitor: public visitor::CodegenCppVisitor {
      * thread structure
      */
      std::string get_variable_name(const std::string& name, bool use_instance = true) const;
+
+
+    /**
+     * Generate Function call statement for nrn_wrote_conc
+     * \param ion_name      The name of the ion variable
+     * \param concentration The name of the concentration variable
+     * \param index
+     * \return              The string representing the function call
+     */
+    std::string conc_write_statement(const std::string& ion_name,
+                                     const std::string& concentration,
+                                     int index);
 
 
     /**
@@ -114,7 +141,7 @@ class CodegenCorenrnCppVisitor: public visitor::CodegenCppVisitor {
      * \param table
      * \return      A string representing the parameters of the function
      */
-     static const char* external_method_parameters(bool table = false) noexcept;
+     const char* external_method_parameters(bool table = false) noexcept;
 
 
     /**
@@ -165,17 +192,6 @@ class CodegenCorenrnCppVisitor: public visitor::CodegenCppVisitor {
      */
      void print_global_var_struct_assertions() const;
 
-    /**
-     * Prints the start of the \c coreneuron namespace
-     */
-     void print_namespace_start();
-
-
-    /**
-     * Prints the end of the \c coreneuron namespace
-     */
-     void print_namespace_stop();
-
 
     /**
      * Prints the start of namespace for the backend-specific code
@@ -191,9 +207,6 @@ class CodegenCorenrnCppVisitor: public visitor::CodegenCppVisitor {
      * For the C++ backend no additional namespace is required
      */
      void print_backend_namespace_stop();
-
-
-     std::string CodegenCppVisitor::simulator_name() const;
 
 
     /**
@@ -239,13 +252,6 @@ class CodegenCorenrnCppVisitor: public visitor::CodegenCppVisitor {
      */
     // Different in both
      void print_check_table_thread_function();
-
-
-    /**
-     * Print top level (global scope) verbatim blocks
-     */
-    // Bit different in both
-     void print_top_verbatim_blocks();
 
 
     /**
@@ -486,14 +492,14 @@ class CodegenCorenrnCppVisitor: public visitor::CodegenCppVisitor {
      * \param members The ion variable names
      */
     // CoreNEURON related only for the moment I guess
-    virtual void print_ion_var_constructor(const std::vector<std::string>& members);
+    void print_ion_var_constructor(const std::vector<std::string>& members);
 
 
     /**
      * Print the ion variable struct
      */
     // CoreNEURON related only for the moment I guess
-    virtual void print_ion_variable();
+    void print_ion_variable();
 
 
     /**
@@ -668,33 +674,18 @@ class CodegenCorenrnCppVisitor: public visitor::CodegenCppVisitor {
     virtual void print_device_atomic_capture_annotation() const;
 
 
-    /// This constructor is private, see the public section below to find how to create an instance
-    /// of this class.
-    CodegenCppVisitor(std::string mod_filename,
-                      const std::string& output_dir,
-                      std::string float_type,
-                      const bool optimize_ionvar_copies,
-                      const std::string& extension,
-                      const std::string& wrapper_ext)
-        : printer(std::make_unique<CodePrinter>(output_dir + "/" + mod_filename + extension))
-        , mod_filename(std::move(mod_filename))
-        , float_type(std::move(float_type))
-        , optimize_ionvar_copies(optimize_ionvar_copies) {}
+    /**
+     * Print common code for global functions like nrn_init, nrn_cur and nrn_state
+     * \param type The target backend code block type
+     */
+    void print_global_function_common_code(BlockType type,
+                                                   const std::string& function_name = "");
 
-    /// This constructor is private, see the public section below to find how to create an instance
-    /// of this class.
-    CodegenCppVisitor(std::string mod_filename,
-                      std::ostream& stream,
-                      std::string float_type,
-                      const bool optimize_ionvar_copies,
-                      const std::string& /* extension */,
-                      const std::string& /* wrapper_ext */)
-        : printer(std::make_unique<CodePrinter>(stream))
-        , mod_filename(std::move(mod_filename))
-        , float_type(std::move(float_type))
-        , optimize_ionvar_copies(optimize_ionvar_copies) {}
-
-
+    /**
+     * Print nrn_alloc function definition
+     *
+     */
+    void print_nrn_alloc();
   public:
     /**
      * \brief Constructs the C++ code generator visitor
@@ -713,15 +704,12 @@ class CodegenCorenrnCppVisitor: public visitor::CodegenCppVisitor {
      *                     as-is in the target code. This defaults to \c double.
      * \param extension    The file extension to use. This defaults to \c .cpp .
      */
-    CodegenCppVisitor(std::string mod_filename,
+    CodegenCorenrnCppVisitor(std::string mod_filename,
                       const std::string& output_dir,
                       std::string float_type,
                       const bool optimize_ionvar_copies,
                       const std::string& extension = ".cpp")
-        : printer(std::make_unique<CodePrinter>(output_dir + "/" + mod_filename + extension))
-        , mod_filename(std::move(mod_filename))
-        , float_type(std::move(float_type))
-        , optimize_ionvar_copies(optimize_ionvar_copies) {}
+        : CodegenCppVisitor(mod_filename, output_dir, float_type, optimize_ionvar_copies, extension) {}
 
     /**
      * \copybrief nmodl::codegen::CodegenCppVisitor
@@ -739,15 +727,13 @@ class CodegenCorenrnCppVisitor: public visitor::CodegenCppVisitor {
      * \param float_type   The float type to use in the generated code. The string will be used
      *                     as-is in the target code. This defaults to \c double.
      */
-    CodegenCppVisitor(std::string mod_filename,
+    CodegenCorenrnCppVisitor(std::string mod_filename,
                       std::ostream& stream,
                       std::string float_type,
                       const bool optimize_ionvar_copies)
-        : printer(std::make_unique<CodePrinter>(stream))
-        , mod_filename(std::move(mod_filename))
-        , float_type(std::move(float_type))
-        , optimize_ionvar_copies(optimize_ionvar_copies) {}
+        : CodegenCppVisitor(mod_filename, stream, float_type, optimize_ionvar_copies) {}
 
+    ~CodegenCorenrnCppVisitor() = default;
     /**
      * Print the \c nrn\_init function definition
      * \param skip_init_check \c true to generate code executing the initialization conditionally
@@ -843,6 +829,9 @@ class CodegenCorenrnCppVisitor: public visitor::CodegenCppVisitor {
      * Print the function that initialize instance structure
      */
      void print_instance_variable_setup();
+
+    void visit_derivimplicit_callback(const ast::DerivimplicitCallback& node) override;
+    void visit_solution_expression(const ast::SolutionExpression& node) override;
 
 };
 
