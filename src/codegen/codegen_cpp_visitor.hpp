@@ -199,7 +199,6 @@ protected:
      */
     bool optimize_ionvar_copies = true;
 
-public:
     /// This constructor is private, see the public section below to find how to create an instance
     /// of this class.
     CodegenCppVisitor(std::string mod_filename,
