@@ -25,7 +25,6 @@
 #include <utility>
 
 #include <codegen/codegen_cpp_visitor.hpp>
-#include <codegen/codegen_coreneuron_cpp_visitor.hpp>
 #include "codegen/codegen_info.hpp"
 #include "codegen/codegen_naming.hpp"
 #include "printer/code_printer.hpp"
@@ -133,10 +132,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      */
     int current_watch_statement = 0;
 
-    /**
-     * All ast information for code generation
-     */
-    codegen::CodegenInfo info;
 
     /**
      * Return Nmodl language version
@@ -395,6 +390,12 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
+     * Name of the simulator the code was generated for
+     */
+    std::string simulator_name() override;
+
+
+    /**
      * Name of the code generation backend
      */
     virtual std::string backend_name() const;
@@ -567,12 +568,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Rename function/procedure arguments that conflict with default arguments
-     */
-    void rename_function_arguments();
-
-
-    /**
      * For a given output block type, return statements for all read ion variables
      *
      * \param type The type of code block being generated
@@ -669,7 +664,7 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     /**
      * Arguments for "_threadargs_" macro in neuron implementation
      */
-    std::string nrn_thread_arguments() const;
+    std::string nrn_thread_arguments() const override;
 
 
     /**
@@ -1443,7 +1438,7 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      * \brief Constructs the C++ code generator visitor
      *
      * This constructor instantiates an NMODL C++ code generator and allows writing generated code
-     * directly to a file in \c [output_dir]/[mod_filename].[extension].
+     * directly to a file in \c [output_dir]/[mod_filename].cpp.
      *
      * \note No code generation is performed at this stage. Since the code
      * generator classes are all based on \c AstVisitor the AST must be visited using e.g. \c
@@ -1454,7 +1449,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      * \param output_dir   The directory where target C++ file should be generated.
      * \param float_type   The float type to use in the generated code. The string will be used
      *                     as-is in the target code. This defaults to \c double.
-     * \param extension    The file extension to use. This defaults to \c .cpp .
      */
     CodegenNeuronCppVisitor(std::string mod_filename,
                       const std::string& output_dir,

@@ -185,7 +185,7 @@ int main(int argc, const char* argv[]) {
     auto simulator_opt = app.add_subcommand("simulator", "NEURON/CoreNEURON code backends")->ignore_case();
     simulator_opt->add_flag("--neuron", neuron_code, "Generate C++ code for NEURON")
         ->ignore_case();
-    simulator_opt->add_flag("--coreneuron", coreneuron_code, "Generate C++ code for CoreNEURON")
+    simulator_opt->add_flag("--coreneuron", coreneuron_code, "Generate C++ code for CoreNEURON (Default)")
         ->ignore_case();
 
     auto host_opt = app.add_subcommand("host", "HOST/CPU code backends")->ignore_case();
@@ -541,7 +541,7 @@ int main(int argc, const char* argv[]) {
                 visitor.visit_program(*ast);
             }
 
-            else if (coreneuron_code && c_backend) {
+            else if (coreneuron_code && !neuron_code && c_backend) {
                 logger->info("Running C++ backend code generator for CoreNEURON");
                 CodegenCoreneuronCppVisitor visitor(modfile,
                                           output_dir,

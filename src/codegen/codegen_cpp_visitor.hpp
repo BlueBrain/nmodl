@@ -12,7 +12,7 @@
  * \brief Code generation backend implementations for CoreNEURON
  *
  * \file
- * \brief \copybrief nmodl::codegen::CodegenCoreneuronCppVisitor
+ * \brief \copybrief nmodl::codegen::CodegenCppVisitor
  */
 
 #include <algorithm>
@@ -198,6 +198,37 @@ protected:
      * Flag to indicate if visitor should avoid ion variable copies
      */
     bool optimize_ionvar_copies = true;
+
+    /**
+     * All ast information for code generation
+     */
+    codegen::CodegenInfo info;
+
+    /**
+     * Name of the simulator the code was generated for
+     */
+    virtual std::string simulator_name() = 0;
+
+    /**
+     * Check if function or procedure node has parameter with given name
+     *
+     * \tparam T Node type (either procedure or function)
+     * \param node AST node (either procedure or function)
+     * \param name Name of parameter
+     * \return True if argument with name exist
+     */
+    template <typename T>
+    bool has_parameter_of_name(const T& node, const std::string& name);
+
+    /**
+     * Rename function/procedure arguments that conflict with default arguments
+     */
+    void rename_function_arguments();
+
+    /**
+     * Arguments for "_threadargs_" macro in neuron implementation
+     */
+    virtual std::string nrn_thread_arguments() const = 0;
 
     /// This constructor is private, see the public section below to find how to create an instance
     /// of this class.

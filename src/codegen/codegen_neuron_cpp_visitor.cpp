@@ -451,12 +451,12 @@ int CodegenNeuronCppVisitor::position_of_int_var(const std::string& name) const 
  * representation (1e+20, 1E-15) then keep it as it is.
  */
 std::string CodegenNeuronCppVisitor::format_double_string(const std::string& s_value) {
-    return utils::format_double_string<CodegenCoreneuronCppVisitor>(s_value);
+    return utils::format_double_string<CodegenCppVisitor>(s_value);
 }
 
 
 std::string CodegenNeuronCppVisitor::format_float_string(const std::string& s_value) {
-    return utils::format_float_string<CodegenCoreneuronCppVisitor>(s_value);
+    return utils::format_float_string<CodegenCppVisitor>(s_value);
 }
 
 
@@ -1157,6 +1157,11 @@ void CodegenNeuronCppVisitor::print_backend_includes() {
 }
 
 
+std::string CodegenNeuronCppVisitor::simulator_name() {
+    return "NEURON";
+}
+
+
 std::string CodegenNeuronCppVisitor::backend_name() const {
     return "C++ (api-compatibility)";
 }
@@ -1324,32 +1329,6 @@ void CodegenNeuronCppVisitor::print_top_verbatim_blocks() {
     printing_top_verbatim_blocks = false;
     codegen = false;
     print_namespace_start();
-}
-
-
-/**
- * \todo Issue with verbatim renaming. e.g. pattern.mod has info struct with
- * index variable. If we use "index" instead of "indexes" as default argument
- * then during verbatim replacement we don't know the index is which one. This
- * is because verbatim renaming pass has already stripped out prefixes from
- * the text.
- */
-void CodegenNeuronCppVisitor::rename_function_arguments() {
-    const auto& default_arguments = stringutils::split_string(nrn_thread_arguments(), ',');
-    for (const auto& dirty_arg: default_arguments) {
-        const auto& arg = stringutils::trim(dirty_arg);
-        RenameVisitor v(arg, "arg_" + arg);
-        for (const auto& function: info.functions) {
-            if (has_parameter_of_name(function, arg)) {
-                function->accept(v);
-            }
-        }
-        for (const auto& function: info.procedures) {
-            if (has_parameter_of_name(function, arg)) {
-                function->accept(v);
-            }
-        }
-    }
 }
 
 
@@ -2427,6 +2406,7 @@ void CodegenNeuronCppVisitor::print_backend_info() {
     printer->fmt_line("Vectorized      : {}", info.vectorize);
     printer->fmt_line("Threadsafe      : {}", info.thread_safe);
     printer->add_line("Created         : ", stringutils::trim(data_time_str));
+    printer->add_line("Simulator       : ", simulator_name());
     printer->add_line("Backend         : ", backend_name());
     printer->add_line("NMODL Compiler  : ", version);
     printer->add_line("*********************************************************/");

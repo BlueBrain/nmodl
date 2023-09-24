@@ -134,11 +134,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
     int current_watch_statement = 0;
 
     /**
-     * All ast information for code generation
-     */
-    codegen::CodegenInfo info;
-
-    /**
      * Return Nmodl language version
      * \return A version
      */
@@ -393,6 +388,11 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      */
     std::string update_if_ion_variable_name(const std::string& name) const;
 
+    /**
+     * Name of the simulator the code was generated for
+     */
+    std::string simulator_name() override;
+
 
     /**
      * Name of the code generation backend
@@ -567,12 +567,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Rename function/procedure arguments that conflict with default arguments
-     */
-    void rename_function_arguments();
-
-
-    /**
      * For a given output block type, return statements for all read ion variables
      *
      * \param type The type of code block being generated
@@ -669,7 +663,7 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
     /**
      * Arguments for "_threadargs_" macro in neuron implementation
      */
-    std::string nrn_thread_arguments() const;
+    std::string nrn_thread_arguments() const override;
 
 
     /**
@@ -1436,7 +1430,7 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      * \brief Constructs the C++ code generator visitor
      *
      * This constructor instantiates an NMODL C++ code generator and allows writing generated code
-     * directly to a file in \c [output_dir]/[mod_filename].[extension].
+     * directly to a file in \c [output_dir]/[mod_filename].cpp.
      *
      * \note No code generation is performed at this stage. Since the code
      * generator classes are all based on \c AstVisitor the AST must be visited using e.g. \c
@@ -1668,25 +1662,6 @@ void CodegenCoreneuronCppVisitor::print_vector_elements(const std::vector<T>& el
             printer->add_text(separator);
         }
     }
-}
-
-
-/**
- * Check if function or procedure node has parameter with given name
- *
- * \tparam T Node type (either procedure or function)
- * \param node AST node (either procedure or function)
- * \param name Name of parameter
- * \return True if argument with name exist
- */
-template <typename T>
-bool has_parameter_of_name(const T& node, const std::string& name) {
-    auto parameters = node->get_parameters();
-    return std::any_of(parameters.begin(),
-                       parameters.end(),
-                       [&name](const decltype(*parameters.begin()) arg) {
-                           return arg->get_node_name() == name;
-                       });
 }
 
 
